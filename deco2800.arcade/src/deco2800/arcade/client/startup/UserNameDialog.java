@@ -1,4 +1,4 @@
-package deco2800.arcade.client.login;
+package deco2800.arcade.client.startup;
 
 import java.awt.Component;
 

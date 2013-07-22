@@ -1,8 +1,8 @@
 package deco2800.arcade.protocol.game;
 
-import deco2800.arcade.protocol.UserRequest;
 
-public class NewGameRequest extends UserRequest {
+public class NewGameRequest extends GameRequest {
 
-	public String gameId;
+	public GameRequestType requestType;
+	
 }

@@ -8,7 +8,9 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
+import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
 
@@ -29,7 +31,9 @@ public class Protocol {
 		
 		//Game messages
 		kryo.register(GameStatusUpdate.class);
+		kryo.register(GameStatusUpdateResponse.class);
 		kryo.register(NewGameRequest.class);
+		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
 	}
 	

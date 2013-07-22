@@ -1,9 +1,8 @@
 package deco2800.arcade.protocol.game;
 
-public enum NewGameResponse {
-
+public enum GameStatusUpdateResponse {
 	OK,
-	UNAVAILABLE,
 	REFUSED,
+	UNAVAILABLE,
 	ERROR;
 }

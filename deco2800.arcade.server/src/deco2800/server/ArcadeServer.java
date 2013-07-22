@@ -2,6 +2,7 @@ package deco2800.server;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -12,10 +13,11 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.server.listener.ConnectionListener;
 
 public class ArcadeServer {
 
-	private static HashSet<String> connectedUsers = new HashSet<String>();
+	private static Set<String> connectedUsers = new HashSet<String>();
 	
 	public static void main(String[] args) {
 		Server server = new Server();
@@ -30,6 +32,8 @@ public class ArcadeServer {
 		}
 		
 		Protocol.register(server.getKryo());
+		
+		server.addListener(new ConnectionListener(connectedUsers));
 		
 		server.addListener(new Listener() {
 			public void received(Connection connection, Object object) {

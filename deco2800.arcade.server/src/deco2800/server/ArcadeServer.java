@@ -3,16 +3,15 @@ package deco2800.server;
 import java.io.IOException;
 import java.util.HashSet;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-import deco2800.arcade.protocol.ConnectRequest;
-import deco2800.arcade.protocol.ConnectionOK;
-import deco2800.arcade.protocol.NewGameRequest;
-import deco2800.arcade.protocol.OKMessage;
 import deco2800.arcade.protocol.Protocol;
+import deco2800.arcade.protocol.connect.ConnectionRequest;
+import deco2800.arcade.protocol.connect.ConnectionResponse;
+import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.game.NewGameResponse;
 
 public class ArcadeServer {
 
@@ -32,12 +31,12 @@ public class ArcadeServer {
 		
 		server.addListener(new Listener() {
 			public void received(Connection connection, Object object) {
-				if (object instanceof ConnectRequest) {
-					ConnectRequest request = (ConnectRequest) object;
+				if (object instanceof ConnectionRequest) {
+					ConnectionRequest request = (ConnectionRequest) object;
 					connectedUsers.add(request.username);
-					connection.sendTCP(new ConnectionOK());
+					connection.sendTCP(ConnectionResponse.OK);
 				} else if (object instanceof NewGameRequest) {
-					connection.sendTCP(new OKMessage());
+					connection.sendTCP(NewGameResponse.OK);
 				}
 			}
 		});

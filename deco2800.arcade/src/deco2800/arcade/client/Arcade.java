@@ -10,9 +10,10 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import deco2800.arcade.protocol.ConnectRequest;
-import deco2800.arcade.protocol.ConnectionOK;
+import deco2800.arcade.client.login.UserNameDialog;
 import deco2800.arcade.protocol.Protocol;
+import deco2800.arcade.protocol.connect.ConnectionRequest;
+import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.tictactoe.TicTacToe;
 
 
@@ -36,14 +37,12 @@ public class Arcade extends JFrame {
 			
 			Protocol.register(client.getKryo());
 			
-			String username = null;
-			while (username == null || username.isEmpty()) {
-				username = JOptionPane.showInputDialog(arcade, "Enter Username");
-			}
+			//Get the username off the user
+			String username = UserNameDialog.getUsername(arcade);
 			
 			client.addListener(new Listener() {
 				public void received(Connection connection, Object object) {
-					if (object instanceof ConnectionOK) {
+					if (object instanceof ConnectionResponse) {
 						Object selectedGame = JOptionPane.showInputDialog(arcade, "Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,availableGames,availableGames[0]);
 						if (selectedGame.equals(availableGames[0])) {
 							LwjglCanvas canvas = new LwjglCanvas(new TicTacToe(), true);
@@ -54,7 +53,7 @@ public class Arcade extends JFrame {
 				}
 			});
 			
-			ConnectRequest creq = new ConnectRequest();
+			ConnectionRequest creq = new ConnectionRequest();
 			creq.username = username;
 			client.sendTCP(creq);
 			

@@ -1,7 +1,12 @@
 package deco2800.arcade.client.network.listener;
 
+import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.tictactoe.TicTacToe;
 
 public class GameListener extends NetworkListener {
 
@@ -23,6 +28,20 @@ public class GameListener extends NetworkListener {
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
+		
+		if (object instanceof NewGameResponse){
+			NewGameResponse newGameResponse = (NewGameResponse) object;
+			
+			switch (newGameResponse) {
+			case OK:
+				Arcade arcade = Arcade.getInstance();
+				arcade.startGame(new TicTacToe()); //TODO actual game
+			case REFUSED:
+				//TODO handle refused
+			case ERROR:
+				//TODO handle error
+			}
+		}
 	}
 
 	

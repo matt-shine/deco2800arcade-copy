@@ -2,7 +2,6 @@ package deco2800.arcade.tictactoe;
 
 import java.util.Iterator;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
@@ -17,7 +16,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class TicTacToe implements ApplicationListener {
+import deco2800.arcade.model.Game;
+
+public class TicTacToe extends Game {
 	   Texture dropImage;
 	   Texture bucketImage;
 	   Sound dropSound;
@@ -27,6 +28,10 @@ public class TicTacToe implements ApplicationListener {
 	   Rectangle bucket;
 	   Array<Rectangle> raindrops;
 	   long lastDropTime;
+	   
+	   public TicTacToe(){
+		   this.gameId = "TicTacToe";
+	   }
 	   
 	   @Override
 	   public void create() {

@@ -19,9 +19,11 @@ public class ArcadeServer {
 	
 	public static void main(String[] args) {
 		Server server = new Server();
+		System.out.println("Server starting");
 		server.start();
 		try {
 			server.bind(54555, 54777);
+			System.out.println("Server bound");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,8 +35,10 @@ public class ArcadeServer {
 			public void received(Connection connection, Object object) {
 				if (object instanceof ConnectionRequest) {
 					ConnectionRequest request = (ConnectionRequest) object;
+					System.out.println("Connection request for user: " + request.username);
 					connectedUsers.add(request.username);
 					connection.sendTCP(ConnectionResponse.OK);
+					System.out.println("Connection granted");
 				} else if (object instanceof NewGameRequest) {
 					connection.sendTCP(NewGameResponse.OK);
 				}

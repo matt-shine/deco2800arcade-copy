@@ -1,15 +1,19 @@
 package deco2800.arcade.client;
 import javax.swing.JFrame;
 
-import org.lwjgl.util.Dimension;
-
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
-import deco2800.arcade.client.model.Game;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
+import deco2800.arcade.client.network.listener.AchievementListener;
+import deco2800.arcade.client.network.listener.ConnectionListener;
+import deco2800.arcade.client.network.listener.CreditListener;
+import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.client.startup.UserNameDialog;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
+import deco2800.arcade.protocol.game.NewGameRequest;
 
 
 public class Arcade extends JFrame {
@@ -22,10 +26,12 @@ public class Arcade extends JFrame {
 	
 	private NetworkClient client;
 
+	private Player player;
+	
 	private int width, height;
 	
 	//private static String username = "Bob";
-	private String serverIPAddress = "10.33.1.133";
+	private String serverIPAddress = "127.0.0.1";
 	private Object[] availableGames = {"Tic Tac Toe"};
 
 	private LwjglCanvas canvas;
@@ -50,7 +56,10 @@ public class Arcade extends JFrame {
 	}
 	
 	private void addListeners(){
-		
+		this.client.addListener(new AchievementListener());
+		this.client.addListener(new ConnectionListener());
+		this.client.addListener(new CreditListener());
+		this.client.addListener(new GameListener());
 	}
 	
 	private void connectAsUser(String username){
@@ -58,14 +67,25 @@ public class Arcade extends JFrame {
 		connectionRequest.username = username;
 		
 		this.client.sendNetworkObject(connectionRequest);
+		
+		this.player = new Player();
+		this.player.setUsername(username);
 	}
 
-	public void startGame(Game game){
+	public void requestGameSession(Game game){
 		if (canvas != null){
 			this.remove(canvas.getCanvas());
 			//TODO anything else required to stop previous game
 		}
 		
+		NewGameRequest newGameRequest = new NewGameRequest();
+		newGameRequest.gameId = game.gameId;
+		newGameRequest.username = player.getUsername();
+		
+		this.client.sendNetworkObject(newGameRequest);
+	}
+	
+	public void startGame(Game game){
 		this.canvas = new LwjglCanvas(game, true);
 		this.canvas.getCanvas().setSize(width, height);
 		this.add(this.canvas.getCanvas());

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ArcadeServer
-Bundle-SymbolicName: deco2800.ArcadeServer
+Bundle-SymbolicName: deco2800.arcade.server
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: ArcadeServer.jar,
  libs/kryonet-2.18-all.jar

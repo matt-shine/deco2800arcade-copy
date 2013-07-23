@@ -13,6 +13,7 @@ import deco2800.arcade.client.startup.UserNameDialog;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
+import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.NewGameRequest;
 
 
@@ -67,6 +68,11 @@ public class Arcade extends JFrame {
 		connectionRequest.username = username;
 		
 		this.client.sendNetworkObject(connectionRequest);
+		
+		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
+		creditBalanceRequest.username = username;
+		
+		this.client.sendNetworkObject(creditBalanceRequest);
 		
 		this.player = new Player();
 		this.player.setUsername(username);

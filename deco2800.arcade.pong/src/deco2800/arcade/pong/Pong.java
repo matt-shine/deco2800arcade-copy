@@ -17,15 +17,19 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.protocol.NetworkObject;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.network.NetworkClient;
-
+/**
+ * A Pong game for use in the Arcade
+ * @author uqjstee8
+ *
+ */
 @ArcadeGame(id="pong")
 public class Pong extends Game {
 
 	{
+		// Set the attributes required by the Arcade
 		gameId = "pong";
 		name = "Pong";
 	}
@@ -42,7 +46,7 @@ public class Pong extends Game {
 	}
 	private GameState gameState;
 	private int[] scores = new int[2];
-	private String[] players = new String[2];
+	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
 	public static final int WINNINGSCORE = 5;
 	public static final int SCREENHEIGHT = 480;
@@ -54,6 +58,8 @@ public class Pong extends Game {
 	private BitmapFont font;
 
 	private String statusMessage;
+	
+	//Reusable list of achievements
 	private static Set<Achievement> achievements = new HashSet<Achievement>();
 	static {		
 		Achievement winPong = new Achievement("Win a game of Pong");
@@ -64,13 +70,20 @@ public class Pong extends Game {
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
 
+	/**
+	 * Basic constructor for the Pong game
+	 * @param userName The name of the player
+	 * @param client The network client for sending/receiving messages to/from the server
+	 */
 	public Pong(String userName, NetworkClient client) {
 		players[0] = userName;
-		players[1] = "Player 2";
+		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
 		this.networkClient = client;
 	}
 	
-	
+	/**
+	 * Create the game
+	 */
 	@Override
 	public void create() {
 		//Achievements
@@ -80,15 +93,20 @@ public class Pong extends Game {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
+		// Create the paddles
 		leftPaddle = new Paddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
 		rightPaddle = new Paddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
 		
+		//Create the ball
 		ball = new Ball();
 		
+		//Necessar for rendering
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setScale(2);
 		batch = new SpriteBatch();
+		
+		//Initialise the scores and game state
 		scores[0] = 0;
 		scores[1] = 0;
 		gameState = GameState.READY;
@@ -107,6 +125,9 @@ public class Pong extends Game {
 		
 	}
 
+	/**
+	 * Render the current state of the game and process updates
+	 */
 	@Override
 	public void render() {
 		//Black background
@@ -122,18 +143,15 @@ public class Pong extends Game {
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    shapeRenderer.setColor(1, 0, 0, 1);
 	    shapeRenderer.filledRect(leftPaddle.bounds.x, leftPaddle.bounds.y, leftPaddle.bounds.width, leftPaddle.bounds.height);
-	    //shapeRenderer.end();
 	    
 	    //render right paddle
-	    //shapeRenderer.begin(ShapeType.FilledRectangle);
 	    shapeRenderer.setColor(0, 0, 1, 1);
 	    shapeRenderer.filledRect(rightPaddle.bounds.x, rightPaddle.bounds.y, rightPaddle.bounds.width, rightPaddle.bounds.height);
-	    //shapeRenderer.end();
 	    
 	    //render ball
-	    //shapeRenderer.begin(ShapeType.FilledRectangle);
 	    shapeRenderer.setColor(1,1,1,1);
 	    shapeRenderer.filledRect(ball.bounds.x, ball.bounds.y, ball.bounds.width, ball.bounds.height);
+	    
 	    shapeRenderer.end();
 	    
 	    //render score
@@ -144,6 +162,8 @@ public class Pong extends Game {
 	    font.draw(batch, Integer.toString(scores[0]), SCREENWIDTH/2 - 50, SCREENHEIGHT-50);
 	    font.draw(batch, Integer.toString(scores[1]), SCREENWIDTH/2 + 75, SCREENHEIGHT-50);
 	    
+	    //If there is a current status message (i.e. if the game is in the ready or gameover state)
+	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
 	    	font.setColor(Color.WHITE);
 	    	font.draw(batch, statusMessage, SCREENWIDTH/2 - 100, SCREENHEIGHT-100);
@@ -152,19 +172,17 @@ public class Pong extends Game {
 	    	}
 	    }
 	    batch.end();
-		//TODO
 	    
-	    //shapeRenderer.end();
-	    
+	    // Respond to user input and move the ball depending on the game state
 	    switch(gameState) {
 	    
-	    case READY:
+	    case READY: //Ready to start a new point
 	    	if (Gdx.input.isTouched()) {
 	    		startPoint();
 	    	}
 	    	break;
 	    	
-	    case INPROGRESS:
+	    case INPROGRESS: //Point is underway, ball is moving
 	    	//Move the left paddle (mouse)
 	    	if (Gdx.input.isTouched()) {
 	    		Vector2 touchPos = new Vector2();
@@ -183,17 +201,26 @@ public class Pong extends Game {
 	    	//Move the ball
 	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
 	    	ball.move(Gdx.graphics.getDeltaTime());
+	    	//If the ball hits a paddle then bounce it
 	    	if (ball.bounds.overlaps(leftPaddle.bounds) || ball.bounds.overlaps(rightPaddle.bounds)) {
 	    		ball.bounceX();
 	    	}
+	    	//Bounce off the top or bottom of the screen
 	    	if (ball.bounds.y <= 0 || ball.bounds.y >= SCREENHEIGHT-Ball.WIDTH) {
 	    		ball.bounceY();
 	    	}
+	    	
+	    	//If the ball gets to the left edge then player 2 wins
 	    	if (ball.bounds.x <= 0) {
 	    		endPoint(1);
 	    	}
+	    	
+	    	//If the ball gets to the right edge then player 1 wins
+	    	if (ball.bounds.x + Ball.WIDTH > SCREENWIDTH) {
+	    		endPoint(0);
+	    	}
 	    	break;
-	    case GAMEOVER:
+	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
 	    		matchOver();
 	    	}
@@ -202,14 +229,21 @@ public class Pong extends Game {
 	    
 	}
 
+	/**
+	 * The point has ended: update scores, reset the ball, check for a winner and move the game state to ready or gameover
+	 * @param winner 0 for player 1, 1 for player 2
+	 */
 	private void endPoint(int winner) {
-		ball.setPosition(new Vector2(SCREENWIDTH/2 - Ball.WIDTH/2, SCREENHEIGHT/2 - Ball.WIDTH/2));
+		ball.reset();
 		scores[winner]++;
+		// If we've reached the victory point then update the display
 		if (scores[winner] == WINNINGSCORE) {	
-		    int loser = winner==1?0:1;
+		    int loser = winner==1?0:1; //The loser is the player who didn't win!
 		    statusMessage = players[winner] + " Wins " + scores[winner] + " - " + scores[loser] + "!";
 		    gameState = GameState.GAMEOVER;
+		    //Update the game state to the server
 		    networkClient.sendNetworkObject(createScoreUpdate());
+		    //If the local player has won, send an achievement
 		    if (winner == 0) {
 		    	AddAchievementRequest ach = new AddAchievementRequest();
 		    	ach.username = players[0];
@@ -217,11 +251,16 @@ public class Pong extends Game {
 		    	//TODO Should have more detail in the achievement message
 		    }
 		} else {
+			// No winner yet, get ready for another point
 			gameState = GameState.READY;
 			statusMessage = "Click to start!";
 		}
 	}
 	
+	/**
+	 * Create an update object to send to the server notifying of a score change or game outcome
+	 * @return
+	 */
 	private GameStatusUpdate createScoreUpdate() {
 		GameStatusUpdate update = new GameStatusUpdate();
 		update.gameId = gameId;
@@ -230,13 +269,18 @@ public class Pong extends Game {
 		return update;
 	}
 
-
+	/**
+	 * The game has been won. Do something!
+	 */
 	private void matchOver() {
 		//TODO
 	}
 
+	/**
+	 * Start a new point: start the ball moving and change the game state
+	 */
 	private void startPoint() {
-		ball.randomizeSpeed();
+		ball.randomizeVelocity();
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
 	}

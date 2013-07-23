@@ -2,36 +2,44 @@ package deco2800.arcade.pong;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-
+/**
+ * A basic implementation of a Paddle for the pong game.
+ * @author uqjstee8
+ *
+ */
 public class Paddle {
-
-	static final float WIDTH = 10f;
-	static final float INITHEIGHT = 64f;
 	
-	//Vector2 position = new Vector2();
-	Rectangle bounds = new Rectangle();
+	static final float WIDTH = 10f; // The width of the paddle
+	static final float INITHEIGHT = 64f; //The initial height of the paddle
 	
+	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the paddle
+	
+	/**
+	 * Basic constructor for paddle
+	 * @param position the initial position of the paddle
+	 */
 	public Paddle(Vector2 position) {
-//		this.position.x = position.x;
-//		this.position.y = position.y;
 		this.bounds.x = position.x;
 		this.bounds.y = position.y;
 		this.bounds.width = WIDTH;
 		this.bounds.height = INITHEIGHT;
 	}
 	
+	/**
+	 * Move the paddle up or down.
+	 * @param y distance to move the paddle up (y<0 for down)
+	 */
 	public void move(float y) {
 		bounds.y += y;
 	}
 	
+	/**
+	 * Set the position of the paddle
+	 * @param newPosition the new position of the paddle
+	 */
 	public void setPosition(Vector2 newPosition) {
 		bounds.x = newPosition.x;
 		bounds.y = newPosition.y;
-	}
-	
-	public void move(Vector2 delta) {
-		bounds.x += delta.x;
-		bounds.y += delta.y;
 	}
 	
 }

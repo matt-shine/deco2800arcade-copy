@@ -1,6 +1,4 @@
 package deco2800.arcade.client;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,7 +39,7 @@ public class Arcade extends JFrame {
 	
 	//private static String username = "Bob";
 	private String serverIPAddress = "127.0.0.1";
-	private Object[] availableGames = {"Tic Tac Toe"};
+	//private Object[] availableGames = {"Tic Tac Toe"};
 
 	private LwjglCanvas canvas;
 	

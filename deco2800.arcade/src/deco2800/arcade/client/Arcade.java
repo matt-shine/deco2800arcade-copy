@@ -1,5 +1,12 @@
 package deco2800.arcade.client;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.swing.JFrame;
+
+import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
@@ -11,6 +18,7 @@ import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.client.startup.UserNameDialog;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.game.NewGameRequest;
@@ -139,6 +147,28 @@ public class Arcade extends JFrame {
 //		}
 
 
+	}
+
+	private Map<String,Class<?>> gameMap;
+	
+	private Map<String,Class<?>> getGameMap() {
+		if (gameMap.isEmpty()) {
+			Reflections reflections = new Reflections("deco2800.arcade");
+			Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
+			for (Class<?> g : possibleGames) {
+				if (Game.class.isAssignableFrom(g)) {
+					String gameId = g.getAnnotation(ArcadeGame.class).id();
+					gameMap.put(gameId,g);
+				}
+			}
+			return gameMap;
+		} else {
+			return gameMap;
+		}
+	}
+	
+	private Set<String> findGameIds() {
+		return getGameMap().keySet();
 	}
 
 }

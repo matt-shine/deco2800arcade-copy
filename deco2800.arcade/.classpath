@@ -8,5 +8,7 @@
 	<classpathentry kind="lib" path="libs/gdx-natives.jar"/>
 	<classpathentry kind="lib" path="libs/kryonet-2.18-all.jar"/>
 	<classpathentry kind="lib" path="libs/reflections-0.9.9-RC1-uberjar.jar"/>
+	<classpathentry kind="lib" path="libs/guava-14.0.1.jar"/>
+	<classpathentry kind="lib" path="libs/javassist-3.18.0-GA.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

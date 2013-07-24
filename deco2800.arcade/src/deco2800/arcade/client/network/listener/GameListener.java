@@ -33,9 +33,11 @@ public class GameListener extends NetworkListener {
 			switch (newGameResponse) {
 			case OK:
 				Arcade arcade = Arcade.getInstance();
-				arcade.startGame(new TicTacToe()); //TODO actual game
+				arcade.startSelectedGame(); //TODO actual game
+				break;
 			case REFUSED:
-				//TODO handle refused
+				Arcade.getInstance().selectGame();
+				break;
 			case ERROR:
 				//TODO handle error
 			}

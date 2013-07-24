@@ -1,6 +1,7 @@
 package deco2800.arcade.pong;
 
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
@@ -17,8 +18,10 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 /**
  * A Pong game for use in the Arcade
@@ -26,13 +29,7 @@ import deco2800.arcade.client.network.NetworkClient;
  *
  */
 @ArcadeGame(id="pong")
-public class Pong extends Game {
-
-	{
-		// Set the attributes required by the Arcade
-		gameId = "pong";
-		name = "Pong";
-	}
+public class Pong extends GameClient {
 	
 	private OrthographicCamera camera;
 	
@@ -75,10 +72,11 @@ public class Pong extends Game {
 	 * @param userName The name of the player
 	 * @param client The network client for sending/receiving messages to/from the server
 	 */
-	public Pong(String userName, NetworkClient client) {
-		players[0] = userName;
+	public Pong(Player player, NetworkClient networkClient) {
+		super(player, networkClient);
+		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
-		this.networkClient = client;
+		this.networkClient = networkClient; //this is a bit of a hack
 	}
 	
 	/**
@@ -86,8 +84,6 @@ public class Pong extends Game {
 	 */
 	@Override
 	public void create() {
-		//Achievements
-		availableAchievements = achievements;
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
@@ -263,7 +259,7 @@ public class Pong extends Game {
 	 */
 	private GameStatusUpdate createScoreUpdate() {
 		GameStatusUpdate update = new GameStatusUpdate();
-		update.gameId = gameId;
+		update.gameId = game.gameId;
 		update.username = players[0];
 		//TODO Should also send the score!
 		return update;
@@ -295,6 +291,19 @@ public class Pong extends Game {
 	public void resume() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	
+	private static final Game game;
+	static {
+		game = new Game();
+		game.gameId = "pong";
+		game.name = "Pong";
+		game.availableAchievements = achievements;
+	}
+	
+	public Game getGame() {
+		return game;
 	}
 	
 }

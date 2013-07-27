@@ -3,6 +3,7 @@ package deco2800.arcade.pong;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -48,7 +49,6 @@ public class Pong extends GameClient {
 	public static final int WINNINGSCORE = 5;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
-	public static final int KBPADDLESPEED = 200;
 	
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
@@ -90,13 +90,22 @@ public class Pong extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		// Create the paddles
-		leftPaddle = new Paddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-		rightPaddle = new Paddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+		leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+		rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+		/**
+		 * TODO Allow network games
+		 * 1. Create local player (LOBBY)
+		 * 2. "Waiting for other players. Press '1' to play local game against the computer"
+		 * 3a. Receive game join request
+		 * 3b. "Player 'Bob' wishes to join the game. Press 'Y' to accept"
+		 * 3c1. ('Y') Create Network player, move to READY
+		 * 3c2. ('N') Go to 2.
+		 */
 		
 		//Create the ball
 		ball = new Ball();
 		
-		//Necessar for rendering
+		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setScale(2);
@@ -180,20 +189,11 @@ public class Pong extends GameClient {
 	    	
 	    case INPROGRESS: //Point is underway, ball is moving
 	    	//Move the left paddle (mouse)
-	    	if (Gdx.input.isTouched()) {
-	    		Vector2 touchPos = new Vector2();
-	    		touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-	    		//camera.unproject(touchPos);
-	    		leftPaddle.bounds.y = touchPos.y - leftPaddle.bounds.height / 2;
-	    	}
-
-	    	//Move the left paddle (keyboard)
-	    	if(Gdx.input.isKeyPressed(Keys.UP)) leftPaddle.move(KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.bounds.y += KBPADDLESPEED * Gdx.graphics.getDeltaTime();
-	    	if(Gdx.input.isKeyPressed(Keys.DOWN)) leftPaddle.move(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.position.y -= KBPADDLESPEED * Gdx.graphics.getDeltaTime();
-
+	    	leftPaddle.udpate(ball);
+	    	
 	    	//Move the right paddle (automatic)
-	    	rightPaddle.bounds.y = ball.bounds.y;
-
+	    	rightPaddle.udpate(ball);
+	    	
 	    	//Move the ball
 	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
 	    	ball.move(Gdx.graphics.getDeltaTime());
@@ -209,16 +209,14 @@ public class Pong extends GameClient {
 	    	//If the ball gets to the left edge then player 2 wins
 	    	if (ball.bounds.x <= 0) {
 	    		endPoint(1);
-	    	}
-	    	
-	    	//If the ball gets to the right edge then player 1 wins
-	    	if (ball.bounds.x + Ball.WIDTH > SCREENWIDTH) {
+	    	} else if (ball.bounds.x + Ball.WIDTH > SCREENWIDTH) { 
+	    		//If the ball gets to the right edge then player 1 wins
 	    		endPoint(0);
 	    	}
 	    	break;
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
-	    		matchOver();
+	    		gameOver();
 	    	}
 	    	break;
 	    }
@@ -264,14 +262,7 @@ public class Pong extends GameClient {
 		//TODO Should also send the score!
 		return update;
 	}
-
-	/**
-	 * The game has been won. Do something!
-	 */
-	private void matchOver() {
-		//TODO
-	}
-
+	
 	/**
 	 * Start a new point: start the ball moving and change the game state
 	 */

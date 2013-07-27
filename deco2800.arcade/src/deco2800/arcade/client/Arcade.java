@@ -105,6 +105,16 @@ public class Arcade extends JFrame {
 		this.canvas = new LwjglCanvas(selectedGame, true);
 		this.canvas.getCanvas().setSize(width, height);
 		this.add(this.canvas.getCanvas());
+		selectedGame.addGameOverListener(new GameOverListener() {
+
+			@Override
+			public void notify(GameClient client) {
+				canvas.stop();
+				remove(canvas.getCanvas());
+				selectGame();
+			}
+			
+		});
 	}
 	
 	public static void main(String[] args) {

@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author uqjstee8
  *
  */
-public class Paddle {
+public abstract class Paddle {
 	
 	static final float WIDTH = 10f; // The width of the paddle
 	static final float INITHEIGHT = 64f; //The initial height of the paddle
@@ -41,5 +41,11 @@ public class Paddle {
 		bounds.x = newPosition.x;
 		bounds.y = newPosition.y;
 	}
+	
+	/**
+	 * Handle in-point updating of the paddle
+	 * @param ball 
+	 */
+	public abstract void udpate(Ball ball);
 	
 }

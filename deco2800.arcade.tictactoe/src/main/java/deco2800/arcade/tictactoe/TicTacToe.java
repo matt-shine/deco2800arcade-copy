@@ -17,20 +17,23 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
 
+@ArcadeGame(id="tictactoe")
 public class TicTacToe extends Game {
-	   Texture dropImage;
-	   Texture bucketImage;
-	   Sound dropSound;
-	   Music rainMusic;
-	   SpriteBatch batch;
-	   OrthographicCamera camera;
-	   Rectangle bucket;
-	   Array<Rectangle> raindrops;
+	   private Texture dropImage;
+	   private Texture bucketImage;
+	   private Sound dropSound;
+	   private Music rainMusic;
+	   private SpriteBatch batch;
+	   private OrthographicCamera camera;
+	   private Rectangle bucket;
+	   private Array<Rectangle> raindrops;
 	   long lastDropTime;
 	   
 	   public TicTacToe(){
 		   this.gameId = "TicTacToe";
+		   this.name = "Tic Tac Toe";
 	   }
 	   
 	   @Override

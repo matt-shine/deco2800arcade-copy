@@ -1,5 +1,14 @@
 package deco2800.arcade.client;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
@@ -10,10 +19,11 @@ import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.client.startup.UserNameDialog;
-import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
+import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 
 
@@ -33,7 +43,7 @@ public class Arcade extends JFrame {
 	
 	//private static String username = "Bob";
 	private String serverIPAddress = "127.0.0.1";
-	private Object[] availableGames = {"Tic Tac Toe"};
+	//private Object[] availableGames = {"Tic Tac Toe"};
 
 	private LwjglCanvas canvas;
 	
@@ -78,23 +88,33 @@ public class Arcade extends JFrame {
 		this.player.setUsername(username);
 	}
 
-	public void requestGameSession(Game game){
+	public void requestGameSession(GameClient gameClient){
 		if (canvas != null){
 			this.remove(canvas.getCanvas());
 			//TODO anything else required to stop previous game
 		}
 		
 		NewGameRequest newGameRequest = new NewGameRequest();
-		newGameRequest.gameId = game.gameId;
+		newGameRequest.gameId = gameClient.getGame().gameId;
 		newGameRequest.username = player.getUsername();
-		
+		newGameRequest.requestType = GameRequestType.NEW;
 		this.client.sendNetworkObject(newGameRequest);
 	}
 	
-	public void startGame(Game game){
-		this.canvas = new LwjglCanvas(game, true);
+	public void startSelectedGame(){
+		this.canvas = new LwjglCanvas(selectedGame, true);
 		this.canvas.getCanvas().setSize(width, height);
 		this.add(this.canvas.getCanvas());
+		selectedGame.addGameOverListener(new GameOverListener() {
+
+			@Override
+			public void notify(GameClient client) {
+				canvas.stop();
+				remove(canvas.getCanvas());
+				selectGame();
+			}
+			
+		});
 	}
 	
 	public static void main(String[] args) {
@@ -145,6 +165,62 @@ public class Arcade extends JFrame {
 //		}
 
 
+	}
+
+	private Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
+
+	private GameClient selectedGame;
+	
+	private Map<String,Class<? extends GameClient>> getGameMap() {
+		if (gameMap.isEmpty()) {
+			Reflections reflections = new Reflections("deco2800.arcade");
+			Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
+			for (Class<?> g : possibleGames) {
+				if (GameClient.class.isAssignableFrom(g)) {
+					Class<? extends GameClient> game = g.asSubclass(GameClient.class);
+					ArcadeGame aGame = g.getAnnotation(ArcadeGame.class);
+					String gameId = aGame.id();
+					gameMap.put(gameId, game);
+				}
+			}
+			return gameMap;
+		} else {
+			return gameMap;
+		}
+	}
+	
+	private Set<String> findGameIds() {
+		return getGameMap().keySet();
+	}
+
+	public void selectGame() {
+		Object[] gameList = findGameIds().toArray();
+		String selectedGameId = (String) JOptionPane.showInputDialog(this,"Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,gameList,gameList[0]);
+		Class<? extends GameClient> gameClass = getGameMap().get(selectedGameId);
+		try {
+			Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
+			selectedGame = constructor.newInstance(player, client);
+			requestGameSession(selectedGame);
+			
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

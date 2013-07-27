@@ -7,4 +7,13 @@ public class Achievement {
 	//TODO icon?
 	
 	private String description;
+	
+	public Achievement(String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
 }

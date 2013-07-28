@@ -22,7 +22,7 @@ public class NetworkPaddle extends Paddle {
 	}
 
 	@Override
-	public void udpate(Ball ball) {
+	public void update(Ball ball) {
 		// TODO Auto-generated method stub
 
 	}

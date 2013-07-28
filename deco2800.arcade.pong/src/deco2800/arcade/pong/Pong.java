@@ -1,12 +1,9 @@
 package deco2800.arcade.pong;
 
 import java.util.HashSet;
-import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -91,7 +88,11 @@ public class Pong extends GameClient {
 		
 		// Create the paddles
 		leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+		leftPaddle.setColor(1, 0, 0, 1);
+		
 		rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+		rightPaddle.setColor(0, 0, 1, 1);
+		
 		/**
 		 * TODO Allow network games
 		 * 1. Create local player (LOBBY)
@@ -104,6 +105,7 @@ public class Pong extends GameClient {
 		
 		//Create the ball
 		ball = new Ball();
+		ball.setColor(1, 1, 1, 1);
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -143,20 +145,17 @@ public class Pong extends GameClient {
 	    
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
-
-		//render left paddle
+	        
+	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.setColor(1, 0, 0, 1);
-	    shapeRenderer.filledRect(leftPaddle.bounds.x, leftPaddle.bounds.y, leftPaddle.bounds.width, leftPaddle.bounds.height);
 	    
-	    //render right paddle
-	    shapeRenderer.setColor(0, 0, 1, 1);
-	    shapeRenderer.filledRect(rightPaddle.bounds.x, rightPaddle.bounds.y, rightPaddle.bounds.width, rightPaddle.bounds.height);
+	    leftPaddle.render(shapeRenderer);
 	    
-	    //render ball
-	    shapeRenderer.setColor(1,1,1,1);
-	    shapeRenderer.filledRect(ball.bounds.x, ball.bounds.y, ball.bounds.width, ball.bounds.height);
+	    rightPaddle.render(shapeRenderer);
 	    
+	    ball.render(shapeRenderer);
+	    
+	    //End drawing of shapes
 	    shapeRenderer.end();
 	    
 	    //render score
@@ -189,10 +188,10 @@ public class Pong extends GameClient {
 	    	
 	    case INPROGRESS: //Point is underway, ball is moving
 	    	//Move the left paddle (mouse)
-	    	leftPaddle.udpate(ball);
+	    	leftPaddle.update(ball);
 	    	
 	    	//Move the right paddle (automatic)
-	    	rightPaddle.udpate(ball);
+	    	rightPaddle.update(ball);
 	    	
 	    	//Move the ball
 	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();

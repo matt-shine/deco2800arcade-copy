@@ -28,6 +28,5 @@ Export-Package: .,
  org.lwjgl.util.jinput,
  org.lwjgl.util.mapped,
  org.lwjgl.util.vector
-Require-Bundle: deco2800.arcade.tictactoe;bundle-version="1.0.0",
- deco2800.arcade.protocol;bundle-version="1.0.0",
+Require-Bundle: deco2800.arcade.protocol;bundle-version="1.0.0",
  deco2800.arcade.model;bundle-version="1.0.0"

@@ -4,3 +4,8 @@ dependencies {
 
   compile group: "org.apache.derby", name: "derby", version: "10.7.1.1"
 }
+
+task(runServer, dependsOn: "classes", type: JavaExec) {
+   main = "deco2800.server.ArcadeServer"
+   classpath = sourceSets.main.runtimeClasspath
+}

@@ -2,7 +2,7 @@ subprojects {
   apply plugin: 'java'
   apply plugin: 'eclipse'
 
-  sourceCompatibility = 1.6
+  sourceCompatibility = 1.7
 
   repositories {
     maven {
@@ -24,3 +24,4 @@ subprojects {
   }
 
 }
+

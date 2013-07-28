@@ -1,2 +1,5 @@
+# Derby properties if run in this directory
+service.properties
+
 *.class
 /bin

@@ -11,6 +11,6 @@ public class GameSelector {
 	}
 	
 	public static Object selectGame(Component component, Object[] options, int selected){
-		 return JOptionPane.showInputDialog(component, "Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE, null, options, options[selected]);
+		 return JOptionPane.showInputDialog(component, "Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE, null, options, options.length > selected ? options[selected] : null);
 	}
 }

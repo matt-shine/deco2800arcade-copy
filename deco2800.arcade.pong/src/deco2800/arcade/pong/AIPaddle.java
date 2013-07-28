@@ -12,7 +12,7 @@ public class AIPaddle extends Paddle {
 	}
 	
 	@Override
-	public void udpate(Ball ball) {
+	public void update(Ball ball) {
 		// If the ball is above us, move up
 		float maxmove = AIPADDLESPEED*Gdx.graphics.getDeltaTime();
 		float diff = ball.bounds.y - bounds.y;

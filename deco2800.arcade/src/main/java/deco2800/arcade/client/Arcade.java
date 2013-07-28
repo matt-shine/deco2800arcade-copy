@@ -128,6 +128,13 @@ public class Arcade extends JFrame {
 				connected = true;
 			} catch (ArcadeException e) {
 				e.printStackTrace();
+				//Server unavailable - ask user whether or not to try again
+				int userInput = JOptionPane.showConfirmDialog(ARCADE, "Unable to connect to Arcade Server - Try Again?", "Network Error", JOptionPane.YES_NO_OPTION);
+				boolean keepTrying = (userInput == 0);
+				if (!keepTrying){
+					//Exit the program
+					System.exit(0);
+				}
 			}
 		}
 
@@ -195,7 +202,7 @@ public class Arcade extends JFrame {
 
 	public void selectGame() {
 		Object[] gameList = findGameIds().toArray();
-		String selectedGameId = (String) JOptionPane.showInputDialog(this,"Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,gameList,gameList[0]);
+		String selectedGameId = (String) JOptionPane.showInputDialog(this,"Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,gameList, (gameList.length == 0 ? null : gameList[0]));
 		Class<? extends GameClient> gameClass = getGameMap().get(selectedGameId);
 		try {
 			Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);

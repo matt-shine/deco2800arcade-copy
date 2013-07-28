@@ -8,26 +8,60 @@ import java.sql.Statement;
 
 public class CreditStorage {
 
-	
-	public static Integer getUserCredits(String username) throws DatabaseException{
-		
+	private static boolean initialised = false;
+
+	private static Connection getDatabaseConnection() throws DatabaseException{
 		Connection connection;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			connection = DriverManager.getConnection("jdbc:mysql://localhost/arcade?" + "user=arcadeserver&password=arcadeserver");
-			
+			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+			connection = DriverManager.getConnection("jdbc:derby:Arcade;user=server;password=server;create=true");
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to find MySQL driver", e);
+			throw new DatabaseException("Unable to find Derby driver", e);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to connect to the MySQL database", e);
+			throw new DatabaseException("Unable to connect to the Derby database", e);
 		}
+		return connection;
+	}
+
+	public static void initialise() throws DatabaseException{
+
+		//Get a connection to the database
+		Connection connection = getDatabaseConnection();
+
+		try {
+			ResultSet tableData = connection.getMetaData().getTables(null, null, "CREDITS", null);
+			if (!tableData.next()){
+				Statement statement = connection.createStatement();
+				statement.execute("CREATE TABLE CREDITS(id INT PRIMARY KEY," +
+						"USERNAME VARCHAR(30) NOT NULL," +
+						"CREDITS INT NOT NULL)");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to create credits table", e);
+		}
+		initialised = true;
+	}
+
+	public static Integer getUserCredits(String username) throws DatabaseException{
+
+		//Check whether or not the database has been intitialised
+		if (!initialised){
+			//Not initialised yet - initialise it
+			initialise();
+		}
+
+		//Get a connection to the database
+		Connection connection = getDatabaseConnection();
+
 		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from ARCADE.CREDITS");
+			resultSet = statement.executeQuery("SELECT * from CREDITS");
 			Integer result = findCreditsForUser(username, resultSet);
 			return result;
 		} catch (SQLException e) {
@@ -49,7 +83,7 @@ public class CreditStorage {
 			}
 		}
 	}
-	
+
 	private static Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;
 		while (results.next()){
@@ -59,7 +93,7 @@ public class CreditStorage {
 				break;
 			}
 		}
-		
+
 		return result;
 	}
 }

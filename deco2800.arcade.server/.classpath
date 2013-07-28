@@ -4,6 +4,6 @@
 	<classpathentry kind="lib" path="libs/kryonet-2.18-all.jar"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="libs/mysql-connector-java-5.1.25-bin.jar"/>
+	<classpathentry kind="lib" path="libs/derby.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

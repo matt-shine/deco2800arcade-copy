@@ -13,7 +13,7 @@ public class LocalUserPaddle extends Paddle {
 	}
 	
 	@Override
-	public void udpate(Ball ball) {
+	public void update(Ball ball) {
     	//Move the left paddle (mouse)
     	if (Gdx.input.isTouched()) {
     		Vector2 touchPos = new Vector2();

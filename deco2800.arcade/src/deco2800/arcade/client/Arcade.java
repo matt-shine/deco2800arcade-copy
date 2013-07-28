@@ -128,6 +128,13 @@ public class Arcade extends JFrame {
 				connected = true;
 			} catch (ArcadeException e) {
 				e.printStackTrace();
+				//Server unavailable - ask user whether or not to try again
+				int userInput = JOptionPane.showConfirmDialog(ARCADE, "Unable to connect to Arcade Server - Try Again?", "Network Error", JOptionPane.YES_NO_OPTION);
+				boolean keepTrying = (userInput == 0);
+				if (!keepTrying){
+					//Exit the program
+					System.exit(0);
+				}
 			}
 		}
 

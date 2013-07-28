@@ -202,7 +202,7 @@ public class Arcade extends JFrame {
 
 	public void selectGame() {
 		Object[] gameList = findGameIds().toArray();
-		String selectedGameId = (String) JOptionPane.showInputDialog(this,"Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,gameList,gameList[0]);
+		String selectedGameId = (String) JOptionPane.showInputDialog(this,"Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,gameList, (gameList.length == 0 ? null : gameList[0]));
 		Class<? extends GameClient> gameClass = getGameMap().get(selectedGameId);
 		try {
 			Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);

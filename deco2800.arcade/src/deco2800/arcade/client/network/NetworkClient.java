@@ -20,7 +20,6 @@ public class NetworkClient {
 			client.connect(5000, serverAddress, tcpPort, udpPort);
 			Protocol.register(client.getKryo());
 		} catch (IOException e) {
-			e.printStackTrace();
 			throw new NetworkException("Unable to connect to the server", e);
 		}
 	}

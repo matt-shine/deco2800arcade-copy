@@ -18,6 +18,7 @@ import deco2800.arcade.client.network.listener.AchievementListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.startup.GameSelector;
 import deco2800.arcade.client.startup.UserNameDialog;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -26,7 +27,10 @@ import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 
-
+/**
+ * The client application for running arcade games.
+ *
+ */
 public class Arcade extends JFrame {
 
 	private static Arcade ARCADE;
@@ -56,13 +60,18 @@ public class Arcade extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
+	/**
+	 * Attempt to initiate a connection with the server.
+	 * 
+	 * @throws ArcadeException if the connection failed.
+	 */
 	private void connectToServer() throws ArcadeException{
 		try {
+			// TODO allow server/port as optional runtime arguments xor user inputs.
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			addListeners();
 		} catch (NetworkException e) {
-			e.printStackTrace();
-			throw new ArcadeException("Unable to connect to Arcade Server", e);
+			throw new ArcadeException("Unable to connect to Arcade Server (" + serverIPAddress + ")", e);
 		}
 	}
 	
@@ -88,6 +97,11 @@ public class Arcade extends JFrame {
 		this.player.setUsername(username);
 	}
 
+	/**
+	 * Ask the server to play a given game.
+	 * 
+	 * @param gameClient the type of game to play
+	 */
 	public void requestGameSession(GameClient gameClient){
 		if (canvas != null){
 			this.remove(canvas.getCanvas());
@@ -101,6 +115,9 @@ public class Arcade extends JFrame {
 		this.client.sendNetworkObject(newGameRequest);
 	}
 	
+	/**
+	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 */
 	public void startSelectedGame(){
 		this.canvas = new LwjglCanvas(selectedGame, true);
 		this.canvas.getCanvas().setSize(width, height);
@@ -127,9 +144,10 @@ public class Arcade extends JFrame {
 				ARCADE.connectToServer();
 				connected = true;
 			} catch (ArcadeException e) {
-				e.printStackTrace();
 				//Server unavailable - ask user whether or not to try again
-				int userInput = JOptionPane.showConfirmDialog(ARCADE, "Unable to connect to Arcade Server - Try Again?", "Network Error", JOptionPane.YES_NO_OPTION);
+				int userInput = JOptionPane.showConfirmDialog(ARCADE,
+						e.getMessage() + "\nTry Again?", "Network Error",
+						JOptionPane.YES_NO_OPTION);
 				boolean keepTrying = (userInput == 0);
 				if (!keepTrying){
 					//Exit the program
@@ -200,9 +218,13 @@ public class Arcade extends JFrame {
 		return getGameMap().keySet();
 	}
 
+	/**
+	 * Ask the user to select a game, then call <tt>requestGameSession</tt> on
+	 * the selected game.
+	 */
 	public void selectGame() {
 		Object[] gameList = findGameIds().toArray();
-		String selectedGameId = (String) JOptionPane.showInputDialog(this,"Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,gameList, (gameList.length == 0 ? null : gameList[0]));
+		String selectedGameId = (String) GameSelector.selectGame(this, gameList);
 		Class<? extends GameClient> gameClass = getGameMap().get(selectedGameId);
 		try {
 			Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);

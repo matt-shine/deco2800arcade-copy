@@ -1,0 +1,4 @@
+
+dependencies {
+  compile group: "com.esotericsoftware.kryonet", name: "kryonet", version: "2.18", classifier: "all", transitive: true
+}

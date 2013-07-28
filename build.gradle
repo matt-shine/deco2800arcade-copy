@@ -1,16 +1,15 @@
 subprojects {
   apply plugin: 'java'
+  apply plugin: 'eclipse'
 
   sourceCompatibility = 1.6
 
   repositories {
     maven {
-      url 'http://deco2800.uqcloud.net/artifactory/plugins-release'
-      url 'http://deco2800.uqcloud.net/artifactory/libs-release'
+      url 'http://deco2800.uqcloud.net/artifactory/everything'
     }
     ivy {
-      url 'http://deco2800.uqcloud.net/artifactory/plugins-release'
-      url 'http://deco2800.uqcloud.net/artifactory/libs-release'
+      url 'http://deco2800.uqcloud.net/artifactory/everything'
     }
   }
 

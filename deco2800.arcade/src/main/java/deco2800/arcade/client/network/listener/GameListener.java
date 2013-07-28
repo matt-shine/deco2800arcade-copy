@@ -4,7 +4,6 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.protocol.game.NewGameResponse;
-import deco2800.arcade.tictactoe.TicTacToe;
 
 public class GameListener extends NetworkListener {
 

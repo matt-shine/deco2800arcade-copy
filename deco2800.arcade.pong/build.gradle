@@ -1,0 +1,6 @@
+
+dependencies {
+  compile project(":deco2800.arcade.model")
+
+  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.9-SNAPSHOT"
+}

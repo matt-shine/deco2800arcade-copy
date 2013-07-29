@@ -87,6 +87,9 @@ public class TicTacToe extends Game {
 	      lastDropTime = TimeUtils.nanoTime();
 	   }
 
+	   /**
+	    * Renders the raindrop.
+	    */
 	   @Override
 	   public void render() {
 	      // clear the screen with a dark blue color. The
@@ -144,6 +147,9 @@ public class TicTacToe extends Game {
 	      }
 	   }
 	   
+	   /**
+	    * Free the resources used in the class
+	    */
 	   @Override
 	   public void dispose() {
 	      // dispose of all the native resources

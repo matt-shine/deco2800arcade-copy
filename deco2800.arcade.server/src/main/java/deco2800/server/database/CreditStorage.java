@@ -10,7 +10,7 @@ public class CreditStorage {
 
 	private static boolean initialised = false;
 	
-	/*
+	/**
 	 * Create Java Database connection 
 	 * @ return connection (session) with deco2800.server.database. 
 	 */
@@ -30,7 +30,7 @@ public class CreditStorage {
 		return connection;
 	}
 	
-	/*
+	/**
 	 * Creates the Credits table and sets initialise to TRUE on completion
 	 */
 	public static void initialise() throws DatabaseException{

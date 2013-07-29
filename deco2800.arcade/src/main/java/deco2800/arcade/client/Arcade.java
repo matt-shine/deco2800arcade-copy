@@ -33,6 +33,11 @@ import deco2800.arcade.protocol.game.NewGameRequest;
  */
 public class Arcade extends JFrame {
 
+	/**
+	 * Only exists to stop warning
+	 */
+	private static final long serialVersionUID = 3609353264826109097L;
+
 	private static Arcade ARCADE;
 	
 	public static Arcade getInstance(){
@@ -51,6 +56,10 @@ public class Arcade extends JFrame {
 
 	private LwjglCanvas canvas;
 	
+	/**
+	 * 
+	 * @param args
+	 */
 	private Arcade(String[] args){
 		this.width = 640;
 		this.height = 480;
@@ -251,5 +260,6 @@ public class Arcade extends JFrame {
 			e.printStackTrace();
 		}
 	}
+	// testing code
 
 }

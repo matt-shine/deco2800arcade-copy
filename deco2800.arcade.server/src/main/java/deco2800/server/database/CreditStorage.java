@@ -29,7 +29,10 @@ public class CreditStorage {
 		}
 		return connection;
 	}
-
+	
+	/*
+	 * Creates the Credits table and sets initialise to TRUE on completion
+	 */
 	public static void initialise() throws DatabaseException{
 
 		//Get a connection to the database

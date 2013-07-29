@@ -52,7 +52,11 @@ public class CreditStorage {
 		}
 		initialised = true;
 	}
-
+	
+	/*
+	 * Check Users Credits
+	 * @param String username
+	 */
 	public static Integer getUserCredits(String username) throws DatabaseException{
 
 		//Check whether or not the database has been intitialised

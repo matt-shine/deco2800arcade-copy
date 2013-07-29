@@ -12,3 +12,5 @@ Thumbs.db
 # Gradle
 build
 .gradle
+
+.metadata/

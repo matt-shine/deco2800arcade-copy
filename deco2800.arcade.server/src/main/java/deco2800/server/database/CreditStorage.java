@@ -9,7 +9,11 @@ import java.sql.Statement;
 public class CreditStorage {
 
 	private static boolean initialised = false;
-
+	
+	/*
+	 * Create Java Database connection 
+	 * @ return connection (session) with deco2800.server.database. 
+	 */
 	private static Connection getDatabaseConnection() throws DatabaseException{
 		Connection connection;
 		try {

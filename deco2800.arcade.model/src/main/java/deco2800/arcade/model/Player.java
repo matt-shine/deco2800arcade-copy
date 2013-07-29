@@ -4,16 +4,22 @@ import java.util.Set;
 
 public class Player {
 
-	//TODO shared between server & client?
-	
+	// TODO shared between server & client?
+
 	private String username;
-	
+
 	private Set<Achievement> achievements;
 
-	public Player(){
-		
+	public Player() {
+
 	}
-	
+
+	/**
+	 * Creates a new player given a username parameter.
+	 * 
+	 * @param username
+	 *            The player's username.
+	 */
 	public Player(String username) {
 		this.username = username;
 	}
@@ -33,6 +39,5 @@ public class Player {
 	public void setAchievements(Set<Achievement> achievements) {
 		this.achievements = achievements;
 	}
-	
-	
+
 }

@@ -27,7 +27,8 @@ public class NetworkPaddle extends Paddle {
 
 	}
 	
-/*	private class NetworkPaddleListener extends NetworkListener {
+	/*
+	private class NetworkPaddleListener extends NetworkListener {
 		
 	}
 	*/

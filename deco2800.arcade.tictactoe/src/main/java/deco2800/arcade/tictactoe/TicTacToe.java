@@ -43,6 +43,12 @@ public class TicTacToe extends Game {
 		   this.name = "Tic Tac Toe";
 	   }
 	   
+	   /** 
+	    * The create method initialises images, sound effects, music, camera, bucket and raindrop arrays.
+	    * 
+	    * @param None
+	    * @return void
+	    */
 	   @Override
 	   public void create() {
 	      // load the images for the droplet and the bucket, 64x64 pixels each

@@ -8,6 +8,10 @@ public class LocalUserPaddle extends Paddle {
 
 	public static final int KBPADDLESPEED = 200;
 	
+	/**
+	 * Sets the user's paddle position
+	 * @param position
+	 */
 	public LocalUserPaddle(Vector2 position) {
 		super(position);
 	}

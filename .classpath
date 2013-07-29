@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="deco2800.arcade.model/src/main/java"/>
+	<classpathentry kind="src" path="deco2800.arcade.pong/src/main/java"/>
+	<classpathentry kind="src" path="deco2800.arcade.protocol/src/main/java"/>
+	<classpathentry kind="src" path="deco2800.arcade.server/src/main/java"/>
+	<classpathentry kind="src" path="deco2800.arcade.tictactoe/src/main/java"/>
+	<classpathentry kind="src" path="deco2800.arcade/src/main/java"/>
+	<classpathentry kind="lib" path="deco2800.arcade.model/libs/gdx.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.pong/libs/gdx-sources.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.pong/libs/gdx.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.protocol/libs/kryonet-2.18-all.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.server/libs/derby.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.server/libs/kryonet-2.18-all.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.server/libs/mysql-connector-java-5.1.25-bin.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.tictactoe/libs/gdx-sources.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade.tictactoe/libs/gdx.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/gdx-backend-lwjgl-natives.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/gdx-backend-lwjgl-sources.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/gdx-backend-lwjgl.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/gdx-natives.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/guava-14.0.1.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/javassist-3.18.0-GA.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/kryonet-2.18-all.jar"/>
+	<classpathentry kind="lib" path="deco2800.arcade/libs/reflections-0.9.9-RC1-uberjar.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

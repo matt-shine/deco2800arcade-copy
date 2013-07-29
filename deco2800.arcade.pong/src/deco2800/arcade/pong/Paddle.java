@@ -46,6 +46,6 @@ public abstract class Paddle {
 	 * Handle in-point updating of the paddle
 	 * @param ball 
 	 */
-	public abstract void udpate(Ball ball);
+	public abstract void update(Ball ball);
 	
 }

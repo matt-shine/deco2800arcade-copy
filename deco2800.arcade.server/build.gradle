@@ -2,7 +2,7 @@
 dependencies {
   compile project(":deco2800.arcade.protocol")
 
-  compile group: "org.apache.derby", name: "derby", version: "10.7.1.1"
+  compile group: "org.apache.derby", name: "derby", version: "10.10.1.1"
 }
 
 task(runServer, dependsOn: "classes", type: JavaExec) {

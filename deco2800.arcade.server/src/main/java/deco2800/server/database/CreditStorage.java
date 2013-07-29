@@ -6,13 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * Implements credits' storage of arcade games on web database server.
+ *
+ */
 public class CreditStorage {
 
 	private static boolean initialised = false;
 	
 	/**
 	 * Create Java Database connection 
-	 * @ return connection (session) with deco2800.server.database. 
+	 * 
+	 * @return	Connection, connection (session) with deco2800.server.database. 
 	 */
 	private static Connection getDatabaseConnection() throws DatabaseException{
 		Connection connection;
@@ -31,7 +36,9 @@ public class CreditStorage {
 	}
 	
 	/**
-	 * Creates the Credits table and sets initialise to TRUE on completion
+	 * Creates the Credits table and sets initialised to TRUE on completion
+	 * 
+	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
 	public static void initialise() throws DatabaseException{
 
@@ -53,9 +60,11 @@ public class CreditStorage {
 		initialised = true;
 	}
 	
-	/*
+	/**
 	 * Check Users Credits
-	 * @param String username
+	 * 
+	 * @param	username	String, username of arcade games
+	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
 	public static Integer getUserCredits(String username) throws DatabaseException{
 
@@ -95,11 +104,12 @@ public class CreditStorage {
 		}
 	}
 
-	/*
+	/**
 	 * Returns credits where username matches String username given
-	 * @param String username, ResultSet results
-	 * @throws SQLException
-	 * @return Integer result
+	 * 
+	 * @param	String username, ResultSet results
+	 * @throws	SQLException
+	 * @return	Integer result
 	 */
 	private static Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;

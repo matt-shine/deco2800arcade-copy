@@ -32,14 +32,29 @@ public class NetworkClient {
 		}
 	}
 	
+	/**
+	 * Sends a NetworkObject over TCP
+	 * 
+	 * @param object
+	 */
 	public void sendNetworkObject(NetworkObject object){
 		this.client.sendTCP(object);
 	}
 	
+	/**
+	 * Adds a listener to the network client
+	 * 
+	 * @param listener
+	 */
 	public void addListener(NetworkListener listener){
 		this.client.addListener(listener);
 	}
 	
+	/**
+	 * Removes a listener from the network client
+	 * 
+	 * @param listener
+	 */
 	public void removeListener(NetworkListener listener){
 		this.client.removeListener(listener);
 	}

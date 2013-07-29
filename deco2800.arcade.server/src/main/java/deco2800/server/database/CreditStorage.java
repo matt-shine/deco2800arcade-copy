@@ -95,6 +95,13 @@ public class CreditStorage {
 		}
 	}
 
+	/**
+	 * Returns the amount of credits a user has
+	 * @param username
+	 * @param results
+	 * @return
+	 * @throws SQLException
+	 */
 	private static Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;
 		while (results.next()){

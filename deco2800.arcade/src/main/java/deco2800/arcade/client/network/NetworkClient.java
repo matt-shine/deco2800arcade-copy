@@ -12,6 +12,14 @@ public class NetworkClient {
 
 	private Client client;
 	
+	/**
+	 * Creates a new network client
+	 * 
+	 * @param serverAddress
+	 * @param tcpPort
+	 * @param udpPort
+	 * @throws NetworkException
+	 */
 	public NetworkClient(String serverAddress, int tcpPort, int udpPort) throws NetworkException{
 		this.client = new Client();
 		this.client.start();

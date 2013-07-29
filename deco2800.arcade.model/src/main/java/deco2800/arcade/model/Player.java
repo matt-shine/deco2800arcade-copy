@@ -31,11 +31,15 @@ public class Player {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
+	
+	/*
+	 * Returns a set listing the achievements of the player.
+	 */
 	public Set<Achievement> getAchievements() {
 		return achievements;
 	}
-
+	
+	
 	public void setAchievements(Set<Achievement> achievements) {
 		this.achievements = achievements;
 	}

@@ -44,7 +44,7 @@ public class Player {
 	}
 
 	/**
-	 * Sets the supplied achievements for a player.
+	 * Sets g supplied achievements for a player.
 	 * @param achievements - Achievement to be set.
 	 */
 	public void setAchievements(Set<Achievement> achievements) {

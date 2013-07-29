@@ -7,6 +7,9 @@ public class AIPaddle extends Paddle {
 
 	public static final int AIPADDLESPEED = 150;
 	
+	/*
+	 * Calls Paddle's constructor with inputted position
+	 */
 	public AIPaddle(Vector2 position) {
 		super(position);
 	}

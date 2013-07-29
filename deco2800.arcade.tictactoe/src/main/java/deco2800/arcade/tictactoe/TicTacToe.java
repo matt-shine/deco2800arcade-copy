@@ -19,6 +19,13 @@ import com.badlogic.gdx.utils.TimeUtils;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 
+/**
+ * This is a broken implementation of tic-tac-toe.
+ * 
+ * @author s4266435
+ *
+ */
+
 @ArcadeGame(id="tictactoe")
 public class TicTacToe extends Game {
 	   private Texture dropImage;
@@ -67,6 +74,9 @@ public class TicTacToe extends Game {
 	      spawnRaindrop();
 	   }
 	   
+	   /**
+	    * Spawns a raindrop.
+	    */
 	   private void spawnRaindrop() {
 	      Rectangle raindrop = new Rectangle();
 	      raindrop.x = MathUtils.random(0, 800-64);

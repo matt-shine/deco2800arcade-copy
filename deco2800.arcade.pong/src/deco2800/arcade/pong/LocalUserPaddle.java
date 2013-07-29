@@ -4,16 +4,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * User paddle class
+ * @author s4291158
+ *
+ */
 public class LocalUserPaddle extends Paddle {
-
+	
+	//Base speed of user paddle
 	public static final int KBPADDLESPEED = 200;
 	
+	/**
+	 * Basic constructor for user paddle
+	 * @param position
+	 */
 	public LocalUserPaddle(Vector2 position) {
 		super(position);
 	}
 	
+	/**
+	 * Updates user paddle position
+	 * @param ball
+	 */
 	@Override
-	public void udpate(Ball ball) {
+	public void update(Ball ball) {
     	//Move the left paddle (mouse)
     	if (Gdx.input.isTouched()) {
     		Vector2 touchPos = new Vector2();

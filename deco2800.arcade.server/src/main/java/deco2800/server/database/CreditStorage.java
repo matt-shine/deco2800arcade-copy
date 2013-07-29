@@ -10,7 +10,7 @@ public class CreditStorage {
 
 	private static boolean initialised = false;
 	
-	/*
+	/**
 	 * Create Java Database connection 
 	 * @ return connection (session) with deco2800.server.database. 
 	 */
@@ -30,7 +30,7 @@ public class CreditStorage {
 		return connection;
 	}
 	
-	/*
+	/**
 	 * Creates the Credits table and sets initialise to TRUE on completion
 	 */
 	public static void initialise() throws DatabaseException{
@@ -95,6 +95,13 @@ public class CreditStorage {
 		}
 	}
 
+	/**
+	 * Returns the amount of credits a user has
+	 * @param username
+	 * @param results
+	 * @return
+	 * @throws SQLException
+	 */
 	private static Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;
 		while (results.next()){

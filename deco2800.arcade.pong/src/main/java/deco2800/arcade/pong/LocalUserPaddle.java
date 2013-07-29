@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Takes user input for paddle in pong.
+ * @see Paddle
+ */
 public class LocalUserPaddle extends Paddle {
 
 	public static final int KBPADDLESPEED = 200;

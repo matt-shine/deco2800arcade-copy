@@ -77,7 +77,7 @@ public class Pong extends GameClient {
 	}
 	
 	/**
-	 * Create the game
+	 * Creates the game
 	 */
 	@Override
 	public void create() {

@@ -14,7 +14,11 @@ import deco2800.server.listener.GameListener;
 public class ArcadeServer {
 
 	private static Set<String> connectedUsers = new HashSet<String>();
-	
+	/*
+	 * Initializes and starts Server
+	 * Binds Ports
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Server server = new Server();
 		System.out.println("Server starting"); //system output server starting

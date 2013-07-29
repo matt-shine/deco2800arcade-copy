@@ -95,12 +95,11 @@ public class CreditStorage {
 		}
 	}
 
-	/**
-	 * Returns the amount of credits a user has
-	 * @param username
-	 * @param results
-	 * @return
+	/*
+	 * Returns credits where username matches String username given
+	 * @param String username, ResultSet results
 	 * @throws SQLException
+	 * @return Integer result
 	 */
 	private static Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;

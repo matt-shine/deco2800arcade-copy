@@ -18,6 +18,10 @@ public class Player {
 		this.username = username;
 	}
 
+	/**
+	 * getUsername returns a string of the player created 
+	 * @return a string of the username 
+	 */
 	public String getUsername() {
 		return username;
 	}

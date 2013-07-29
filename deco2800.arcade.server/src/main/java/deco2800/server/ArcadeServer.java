@@ -46,7 +46,7 @@ public class ArcadeServer {
 		Protocol.register(server.getKryo());
 		
 		server.addListener(new ConnectionListener(connectedUsers)); //event listener for ConnectionListener
-		server.addListener(new CreditListener()); //event listener for CreditListener
+		server.addListener(new CreditListener()); 
 		server.addListener(new GameListener());
 	}
 	

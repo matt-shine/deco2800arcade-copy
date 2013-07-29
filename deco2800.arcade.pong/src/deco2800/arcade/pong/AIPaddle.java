@@ -10,7 +10,9 @@ public class AIPaddle extends Paddle {
 	public AIPaddle(Vector2 position) {
 		super(position);
 	}
-	
+	/**
+	 * Updates the position of the ball with regards to the paddle.
+	 */	
 	@Override
 	public void update(Ball ball) {
 		// If the ball is above us, move up

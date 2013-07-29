@@ -31,8 +31,8 @@ public class ArcadeServer {
 	 */
 	public static void main(String[] args) {
 		Server server = new Server();
-		System.out.println("Server starting"); //system output server starting
-		server.start(); //server start
+		System.out.println("Server starting");
+		server.start();
 		try {
 			server.bind(54555, 54777);
 			System.out.println("Server bound");
@@ -41,12 +41,12 @@ public class ArcadeServer {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		
 		Protocol.register(server.getKryo());
 		
-		server.addListener(new ConnectionListener(connectedUsers)); //event listener for ConnectionListener
-		server.addListener(new CreditListener()); 
+		server.addListener(new ConnectionListener(connectedUsers));
+		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 	}
 	

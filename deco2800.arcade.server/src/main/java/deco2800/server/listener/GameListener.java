@@ -23,6 +23,11 @@ public class GameListener extends Listener {
 	}
 	
 	@Override
+	/**
+	 * received takes a connection input and an object input and stores the data
+	 * in a userConnections map. 
+	 * @require inputs are connection and object 
+	 */
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		

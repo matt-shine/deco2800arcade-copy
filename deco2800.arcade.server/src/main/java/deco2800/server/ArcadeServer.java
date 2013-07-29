@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import java.net.BindException;
+
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
@@ -26,6 +28,8 @@ public class ArcadeServer {
 		try {
 			server.bind(54555, 54777);
 			System.out.println("Server bound");
+		} catch (BindException b) {
+			System.err.println("Error binding server: Address already in use");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

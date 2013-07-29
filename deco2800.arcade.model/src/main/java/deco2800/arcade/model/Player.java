@@ -13,7 +13,10 @@ public class Player {
 	public Player(){
 		
 	}
-	
+	/**
+	 * Sets the name of the Player
+	 * @param username
+	 */
 	public Player(String username) {
 		this.username = username;
 	}

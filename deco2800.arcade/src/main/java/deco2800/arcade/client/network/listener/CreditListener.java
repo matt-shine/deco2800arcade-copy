@@ -1,8 +1,6 @@
 package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
-
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
 

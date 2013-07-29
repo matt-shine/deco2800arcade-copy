@@ -236,10 +236,11 @@ public class Arcade extends JFrame {
 		String selectedGameId = (String) GameSelector.selectGame(this, gameList);
 		Class<? extends GameClient> gameClass = getGameMap().get(selectedGameId);
 		try {
-			Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
-			selectedGame = constructor.newInstance(player, client);
-			requestGameSession(selectedGame);
-			
+			if (gameClass != null) {
+				Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
+				selectedGame = constructor.newInstance(player, client);
+				requestGameSession(selectedGame);
+			}
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

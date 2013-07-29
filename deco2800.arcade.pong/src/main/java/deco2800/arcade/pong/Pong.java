@@ -52,7 +52,7 @@ public class Pong extends GameClient {
 	private BitmapFont font;
 
 	private String statusMessage;
-	
+
 	//Reusable list of achievements
 	private static Set<Achievement> achievements = new HashSet<Achievement>();
 	static {		
@@ -85,6 +85,7 @@ public class Pong extends GameClient {
 		//Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		System.out.println("At init");
 		
 		// Create the paddles
 		leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
@@ -118,6 +119,8 @@ public class Pong extends GameClient {
 		scores[1] = 0;
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
+		
+		detachOpenGL();
 	}
 
 	@Override
@@ -137,6 +140,9 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void render() {
+		
+		attachOpenGL();
+
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -145,7 +151,7 @@ public class Pong extends GameClient {
 	    
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
-	        
+	    
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    

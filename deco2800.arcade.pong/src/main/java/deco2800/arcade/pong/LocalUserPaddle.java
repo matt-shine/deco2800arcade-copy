@@ -19,6 +19,10 @@ public class LocalUserPaddle extends Paddle {
 	public LocalUserPaddle(Vector2 position) {
 		super(position);
 	}
+
+	/**
+	* Updates direction of ball based on the direction the paddle was moving
+	*/
 	
 	@Override
 	public void update(Ball ball) {

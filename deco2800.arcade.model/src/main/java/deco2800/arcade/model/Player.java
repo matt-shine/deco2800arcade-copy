@@ -30,6 +30,10 @@ public class Player {
 		return achievements;
 	}
 
+	/**
+	 * Sets the supplied achievements for a player.
+	 * @param achievements - Achievement to be set.
+	 */
 	public void setAchievements(Set<Achievement> achievements) {
 		this.achievements = achievements;
 	}

@@ -13,9 +13,14 @@ import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
 
+/* Implements the KryoNet server for arcade games which uses TCP and UDP
+ * transport layer protocols. 
+ * @see http://code.google.com/p/kryonet/ 
+ */
 public class ArcadeServer {
 
 	private static Set<String> connectedUsers = new HashSet<String>();
+	
 	/*
 	 * Initializes and starts Server
 	 * Binds Ports

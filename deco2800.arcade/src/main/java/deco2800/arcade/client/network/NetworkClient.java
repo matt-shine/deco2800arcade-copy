@@ -12,6 +12,14 @@ public class NetworkClient {
 
 	private Client client;
 	
+	/**
+	 * Creates a new network client
+	 * 
+	 * @param serverAddress
+	 * @param tcpPort
+	 * @param udpPort
+	 * @throws NetworkException
+	 */
 	public NetworkClient(String serverAddress, int tcpPort, int udpPort) throws NetworkException{
 		this.client = new Client();
 		this.client.start();
@@ -24,14 +32,29 @@ public class NetworkClient {
 		}
 	}
 	
+	/**
+	 * Sends a NetworkObject over TCP
+	 * 
+	 * @param object
+	 */
 	public void sendNetworkObject(NetworkObject object){
 		this.client.sendTCP(object);
 	}
 	
+	/**
+	 * Adds a listener to the network client
+	 * 
+	 * @param listener
+	 */
 	public void addListener(NetworkListener listener){
 		this.client.addListener(listener);
 	}
 	
+	/**
+	 * Removes a listener from the network client
+	 * 
+	 * @param listener
+	 */
 	public void removeListener(NetworkListener listener){
 		this.client.removeListener(listener);
 	}

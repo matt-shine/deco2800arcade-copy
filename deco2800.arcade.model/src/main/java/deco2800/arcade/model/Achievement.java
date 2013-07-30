@@ -10,17 +10,17 @@ import javax.imageio.ImageIO;
 public class Achievement {
 
 	// TODO shared between server & client?
-	
+
 	/*
 	 * Notes for testing and implementations:
 	 * 
 	 * Graphics g = <INSERT COONTAINER HERE>.getGraphics();
-	 *	
+	 * 
 	 * g.drawImage(Achievement.getIcon(), Xcoord, Ycoord, null);
 	 */
 
 	private String description;
-	
+
 	private final BufferedImage icon;
 
 	/**
@@ -33,7 +33,7 @@ public class Achievement {
 		this.description = description;
 		this.icon = null;
 	}
-	
+
 	/**
 	 * Creates a new Achievement given the description and icon.
 	 * 
@@ -57,6 +57,21 @@ public class Achievement {
 	}
 
 	/**
+	 * Creates an achievement identical to another.
+	 * 
+	 * @param achievement
+	 *            The original Achievement to be copied.
+	 */
+	public Achievement(Achievement achievement) {
+		/*
+		 * Preserving immutability.
+		 */
+		this.description = achievement.getDescription();
+		this.icon = achievement.getIcon();
+
+	}
+
+	/**
 	 * Access method for Achievement's description.
 	 * 
 	 * @return The Achievement's description.
@@ -64,7 +79,7 @@ public class Achievement {
 	public String getDescription() {
 		return description;
 	}
-	
+
 	/**
 	 * Access method for the Achievement's icon.
 	 * 

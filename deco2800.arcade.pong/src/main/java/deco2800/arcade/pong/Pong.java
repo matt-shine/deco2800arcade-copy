@@ -120,7 +120,6 @@ public class Pong extends GameClient {
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 		
-		detachOpenGL();
 	}
 
 	@Override
@@ -141,8 +140,6 @@ public class Pong extends GameClient {
 	@Override
 	public void render() {
 		
-		attachOpenGL();
-
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);

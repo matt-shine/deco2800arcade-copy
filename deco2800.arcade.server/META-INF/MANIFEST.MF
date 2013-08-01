@@ -28,3 +28,4 @@ Export-Package: com.esotericsoftware.jsonbeans,
  org.objenesis.instantiator.sun,
  org.objenesis.strategy
 Require-Bundle: deco2800.arcade.protocol;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

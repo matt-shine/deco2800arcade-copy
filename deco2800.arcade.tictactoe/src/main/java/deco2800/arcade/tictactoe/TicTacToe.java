@@ -85,8 +85,7 @@ public class TicTacToe extends GameClient {
   		// create the raindrops array and spawn the first raindrop
   		raindrops = new Array<Rectangle>();
   		spawnRaindrop();
-
-		detachOpenGL();
+  		
 	}
 
 	/**
@@ -108,8 +107,6 @@ public class TicTacToe extends GameClient {
 	@Override
 	public void render() {
 		
-		attachOpenGL();
-	   
 		// clear the screen with a dark blue color. The
 		// arguments to glClearColor are the red, green
 		// blue and alpha component in the range [0,1]

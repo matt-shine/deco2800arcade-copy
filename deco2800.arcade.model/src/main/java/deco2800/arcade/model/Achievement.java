@@ -1,27 +1,14 @@
 package deco2800.arcade.model;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 public class Achievement {
 
 	// TODO shared between server & client?
 
-	/*
-	 * Notes for testing and implementations:
-	 * 
-	 * Graphics g = <INSERT COONTAINER HERE>.getGraphics();
-	 * 
-	 * g.drawImage(Achievement.getIcon(), Xcoord, Ycoord, null);
-	 */
-
 	private String description;
 
-	private final BufferedImage icon;
+	private final Icon icon;
 
 	/**
 	 * Creates a new Achievement given the description.
@@ -52,7 +39,7 @@ public class Achievement {
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
 		this.description = description;
-		icon = ImageIO.read(new File(filepath));
+		icon = new Icon(filepath);
 
 	}
 
@@ -67,7 +54,7 @@ public class Achievement {
 		 * Preserving immutability.
 		 */
 		this.description = achievement.getDescription();
-		this.icon = achievement.getIcon();
+		this.icon = achievement.getIcon().clone();
 
 	}
 
@@ -85,24 +72,8 @@ public class Achievement {
 	 * 
 	 * @return The Achievement's icon.
 	 */
-	public BufferedImage getIcon() {
-		/*
-		 * This method clones the icon and then returns it, maintaining
-		 * immutability.
-		 * 
-		 * Creates a new empty BufferedImage with the same dimensions of the
-		 * Icon.
-		 */
-		BufferedImage clone = new BufferedImage(icon.getWidth(),
-				icon.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		/*
-		 * Creates a new graphics object on the new clone, and draws the icon
-		 * onto the clone, hence cloning it. Finally returns the clone.
-		 */
-
-		Graphics g = clone.createGraphics();
-		g.drawImage(icon, 0, 0, null);
-		return clone;
+	public Icon getIcon() {
+		return icon.clone();
 	}
 
 }

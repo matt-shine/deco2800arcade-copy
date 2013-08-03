@@ -11,7 +11,7 @@ DECO2800 project for semester 2 2013.
     
 ##### Dependencies
 
-[[Gradle Installation Instructions|Installing-Gradle]]
+[Gradle Installation Instructions](https://github.com/UQdeco2800/deco2800-2013/wiki/Installing-Gradle)
     
 ## Running
 
@@ -27,7 +27,7 @@ To see a list of all available gradle commands:
 
     gradle tasks
     
-Detailed run instructions: [[Running The Arcade|Running-the-arcade]]
+Detailed run instructions: [Running The Arcade](https://github.com/UQdeco2800/deco2800-2013/wiki/Running-the-arcade)
     
 ## Testing
 

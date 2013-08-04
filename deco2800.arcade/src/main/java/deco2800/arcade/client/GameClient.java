@@ -23,10 +23,17 @@ public abstract class GameClient implements ApplicationListener {
 	
 	public abstract Game getGame();
 
+	/**
+	 * Adds gameOverListener's to the GameClient
+	 * @param gameOverListener
+	 */
 	public void addGameOverListener(GameOverListener gameOverListener) {
 		gameOverListeners.add(gameOverListener);
 	}
 	
+	/**
+	 * Controls what happens when the game is over
+	 */
 	public void gameOver() {
 		for (GameOverListener listener : gameOverListeners) {
 			listener.notify(this);

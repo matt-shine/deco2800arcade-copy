@@ -40,6 +40,9 @@ public class Arcade extends JFrame {
 
 	private static Arcade ARCADE;
 	
+	/**
+	 * @return Returns an instance of the arcade
+	 */
 	public static Arcade getInstance(){
 		return ARCADE;
 	}
@@ -57,7 +60,7 @@ public class Arcade extends JFrame {
 	private LwjglCanvas canvas;
 	
 	/**
-	 * 
+	 * Sets the instance variables for the arcade
 	 * @param args
 	 */
 	private Arcade(String[] args){

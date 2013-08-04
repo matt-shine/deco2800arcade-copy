@@ -18,6 +18,9 @@ public class GameListener extends Listener {
 	
 	private Map<String, Map<String, Set<Connection>>> gameSessions;
 	
+	/**
+	 * Instantiates a HashMap of game sessions
+	 */
 	public GameListener(){
 		this.gameSessions = new HashMap<String, Map<String, Set<Connection>>>();
 	}

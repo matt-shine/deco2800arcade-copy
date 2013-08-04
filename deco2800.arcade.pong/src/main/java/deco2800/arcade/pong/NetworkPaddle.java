@@ -15,6 +15,12 @@ public class NetworkPaddle extends Paddle {
 
 	//private NetworkClient client;
 	
+	/**
+	 * Instantiates a new NetworkPaddle
+	 * @param position
+	 * @param client
+	 * @throws UnsupportedOperationException
+	 */
 	public NetworkPaddle(Vector2 position, NetworkClient client) {
 		super(position);
 		throw new UnsupportedOperationException();

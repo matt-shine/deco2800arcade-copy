@@ -26,6 +26,7 @@ public class LocalUserPaddle extends Paddle {
 	
 	@Override
 	public void update(Ball ball) {
+		super.update(ball);
     	//Move the left paddle (mouse)
     	if (Gdx.input.isTouched()) {
     		Vector2 touchPos = new Vector2();
@@ -37,11 +38,6 @@ public class LocalUserPaddle extends Paddle {
     	//Move the left paddle (keyboard)
     	if(Gdx.input.isKeyPressed(Keys.UP)) move(KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.bounds.y += KBPADDLESPEED * Gdx.graphics.getDeltaTime();
     	if(Gdx.input.isKeyPressed(Keys.DOWN)) move(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.position.y -= KBPADDLESPEED * Gdx.graphics.getDeltaTime();
-    	
-    	//Clamp paddle within screen boundaries
-    	if (bounds.y > Pong.SCREENHEIGHT - bounds.height) bounds.y = Pong.SCREENHEIGHT - bounds.height;
-    	if (bounds.y < 0) bounds.y = 0;
-
 	}
 
 }

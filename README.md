@@ -8,7 +8,16 @@ DECO2800 project for semester 2 2013.
     git clone git@github.com:UQdeco2800/deco2800-2013.git
     cd deco2800-2013
     gradle build
-    
+	
+	
+## Setting up Eclipse
+First, remove all the projects from your workspace, then run:
+
+    gradle cleanEclipse
+    gradle eclipse
+
+Then import the projects back into eclipse.    
+
 ##### Dependencies
 
 [Gradle Installation Instructions](https://github.com/UQdeco2800/deco2800-2013/wiki/Installing-Gradle)

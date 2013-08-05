@@ -1,4 +1,6 @@
 package deco2800.arcade.client;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -53,9 +55,7 @@ public class Arcade extends JFrame {
 	
 	private int width, height;
 	
-	//private static String username = "Bob";
 	private String serverIPAddress = "127.0.0.1";
-	//private Object[] availableGames = {"Tic Tac Toe"};
 
 	private LwjglCanvas canvas;
 	
@@ -67,8 +67,10 @@ public class Arcade extends JFrame {
 		this.width = 640;
 		this.height = 480;
 		
-		this.setSize(width, height);
+		this.setSize(new Dimension(width, height));
 		this.setVisible(true);
+		Insets insets = this.getInsets();
+		this.setSize(new Dimension(width + insets.left + insets.right, height + insets.bottom + insets.top));
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 
@@ -171,36 +173,6 @@ public class Arcade extends JFrame {
 		//Get the username off the user and connect to the server with it
 		String username = UserNameDialog.getUsername(ARCADE);
 		ARCADE.connectAsUser(username);
-		
-//		try {
-//
-//
-//
-//			client.addListener(new Listener() {
-//				public void received(Connection connection, Object object) {
-//					if (object instanceof ConnectionResponse) {
-//						Object selectedGame = JOptionPane.showInputDialog(arcade, "Select a game", "Cancel", JOptionPane.PLAIN_MESSAGE,null,availableGames,availableGames[0]);
-//						if (selectedGame.equals(availableGames[0])) {
-//							LwjglCanvas canvas = new LwjglCanvas(new TicTacToe(), true);
-//							canvas.getCanvas().setSize(640,480);
-//							arcade.add(canvas.getCanvas());
-//						}
-//					}
-//				}
-//			});
-//
-//			ConnectionRequest creq = new ConnectionRequest();
-//			creq.username = username;
-//			client.sendTCP(creq);
-//
-//
-//
-//
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
 
 	}
 

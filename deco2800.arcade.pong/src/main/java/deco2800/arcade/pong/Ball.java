@@ -43,14 +43,6 @@ public class Ball {
 	}
 	
 	/**
-	 * Get the x component of the velocity
-	 * @return the velocity in the x direction
-	 */
-	public float getXVelocity() {
-		return this.velocity.x;
-	}
-	
-	/**
 	 * Modify the position of the ball
 	 * @param newPosition the new position of the ball as x,y
 	 */

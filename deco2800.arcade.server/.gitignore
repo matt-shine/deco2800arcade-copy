@@ -1,5 +1,6 @@
 # Derby properties if run in this directory
 service.properties
+/Arcade
 
 *.class
 /bin

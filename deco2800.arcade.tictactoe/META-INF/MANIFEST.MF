@@ -37,5 +37,6 @@ Export-Package: com.badlogic,
  com.esotericsoftware,
  com.esotericsoftware.tablelayout,
  deco2800.arcade.tictactoe
-Require-Bundle: deco2800.arcade.model;bundle-version="1.0.0"
+Require-Bundle: deco2800.arcade.model;bundle-version="1.0.0",
+ deco2800.arcade
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

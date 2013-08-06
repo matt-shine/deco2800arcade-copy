@@ -43,7 +43,7 @@ public class Pong extends GameClient {
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
-	public static final int WINNINGSCORE = 5;
+	public static final int WINNINGSCORE = 1;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
@@ -119,10 +119,15 @@ public class Pong extends GameClient {
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 		
+		System.out.println("at pong create");
+		wakeArcadeThread();
+		
 	}
 
 	@Override
 	public void dispose() {
+		System.out.println("at pong die");
+		wakeArcadeThread();
 		// TODO Auto-generated method stub
 	}
 

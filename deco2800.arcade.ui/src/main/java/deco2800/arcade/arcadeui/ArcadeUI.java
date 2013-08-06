@@ -5,9 +5,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Achievement;
@@ -24,12 +21,12 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	   
-	private ShapeRenderer shapeRenderer;
-	private boolean isOverlay = false;
+	//private ShapeRenderer shapeRenderer;
+	//private boolean isOverlay = false;
 	
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
-		this.isOverlay = isOverlay;
+		//this.isOverlay = isOverlay;
 	}
 	
 	public ArcadeUI(Player player, NetworkClient networkClient){
@@ -38,8 +35,8 @@ public class ArcadeUI extends GameClient {
 
 	@Override
 	public void create() {
-		shapeRenderer = new ShapeRenderer();
-		System.out.println("at ui create");
+		//shapeRenderer = new ShapeRenderer();
+		wakeArcadeThread();
 	}
 
 	@Override
@@ -49,6 +46,7 @@ public class ArcadeUI extends GameClient {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    
 	    //Begin drawing of shapes
+	    /*
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
 	    shapeRenderer.filledRect(100,
@@ -58,12 +56,12 @@ public class ArcadeUI extends GameClient {
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
-	    
+	    */
 	}
 	
 	@Override
 	public void dispose() {
-		System.out.println("at ui die");
+		wakeArcadeThread();
 	}
 
 	@Override

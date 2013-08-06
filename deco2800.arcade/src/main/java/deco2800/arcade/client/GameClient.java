@@ -14,6 +14,7 @@ public abstract class GameClient implements ApplicationListener {
 	protected Player player; 
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
+	private Object mon = null;
 	
 	public GameClient(Player player, NetworkClient networkClient) {
 		this.player = player;
@@ -23,6 +24,7 @@ public abstract class GameClient implements ApplicationListener {
 	
 	public abstract Game getGame();
 
+	
 	/**
 	 * Adds gameOverListener's to the GameClient
 	 * @param gameOverListener
@@ -31,12 +33,46 @@ public abstract class GameClient implements ApplicationListener {
 		gameOverListeners.add(gameOverListener);
 	}
 	
+	
+	/**
+	 * Controls what happens when the game is over
+	 */
+	public void gameOver(boolean sync) {
+		for (GameOverListener listener : gameOverListeners) {
+			if (sync) {
+				listener.notifySync(this);
+			} else {
+				listener.notify(this);
+			}
+		}
+	}
+	
+	
 	/**
 	 * Controls what happens when the game is over
 	 */
 	public void gameOver() {
-		for (GameOverListener listener : gameOverListeners) {
-			listener.notify(this);
+		gameOver(false);
+	}
+	
+	
+	/**
+	 * Sets the object that controls waking up the main thread
+	 */
+	public void setArcadeThreadMonitor(Object mon) {
+		this.mon = mon;
+	}
+	
+	
+	/**
+	 * wakes up the main thread
+	 */
+	public void wakeArcadeThread() {
+		if (this.mon != null){ 
+			synchronized (mon) {
+				this.mon.notify();
+				this.mon = null;
+			}
 		}
 	}
 	

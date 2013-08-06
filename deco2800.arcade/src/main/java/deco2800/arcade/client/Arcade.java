@@ -1,4 +1,5 @@
 package deco2800.arcade.client;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
@@ -22,6 +23,7 @@ import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.client.startup.GameSelector;
+import deco2800.arcade.client.startup.UserNameDialog;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
@@ -73,14 +75,17 @@ public class Arcade extends JFrame {
 		this.setVisible(true);
 		Insets insets = this.getInsets();
 		this.setSize(new Dimension(width + insets.left + insets.right, height + insets.bottom + insets.top));
+		this.getContentPane().setBackground(Color.black);
 		
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    public void windowClosing(WindowEvent winEvt) {
-				if (mainUI != null) {
-					mainUI.gameOver();
-				} else if (selectedGame != null) {
-					selectedGame.gameOver();
-				}
+		    	
+				/* TODO: make the program shutdown properly. This line seems to 
+		    	 * cause a deadlock. Not calling it will leave the program running in
+		    	 * the background
+		    	 */
+		    	System.exit(0);
+		    	
 		    }
 		});
 	}
@@ -139,15 +144,13 @@ public class Arcade extends JFrame {
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
 	public void startSelectedGame(){
-		
 		stopDashboard();
-		
 		startGame(selectedGame);
 	}
 	
 	
 	/**
-	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 * Starts the dashboard
 	 */
 	public void startDashboard(){
 		mainUI = getInstanceOfGame("arcadeui");
@@ -156,28 +159,59 @@ public class Arcade extends JFrame {
 	
 	
 	/**
-	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 * Stops the dashboard
 	 */
 	public void stopDashboard(){
 		if (mainUI != null) {
-			mainUI.gameOver();
+			mainUI.gameOver(true);
 		}
 	}
 	
 	
 	/**
-	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 * Start a GameClient
 	 */
-	public void startGame(GameClient game){
+	public void startGame(final GameClient game){
 		this.canvas = new LwjglCanvas(game, true);
 		this.canvas.getCanvas().setSize(width, height);
-		this.add(this.canvas.getCanvas());
+		
+		
+		Object mon = new Object();
+		synchronized (mon) {
+			game.setArcadeThreadMonitor(mon);
+			this.add(this.canvas.getCanvas());
+			
+			try {
+				mon.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		game.addGameOverListener(new GameOverListener() {
 
 			@Override
 			public void notify(GameClient client) {
 				canvas.stop();
 				remove(canvas.getCanvas());
+			}
+
+			@Override
+			public void notifySync(GameClient client) {
+				canvas.stop();
+				
+				Object mon = new Object();
+				synchronized (mon) {
+					game.setArcadeThreadMonitor(mon);
+					remove(canvas.getCanvas());
+					
+					try {
+						mon.wait();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				
 			}
 			
 		});
@@ -200,7 +234,7 @@ public class Arcade extends JFrame {
 						e.getMessage() + "\nTry Again?", "Network Error",
 						JOptionPane.YES_NO_OPTION);
 				boolean keepTrying = (userInput == 0);
-				if (!keepTrying){
+				if (!keepTrying) {
 					//Exit the program
 					System.exit(0);
 				}
@@ -208,7 +242,7 @@ public class Arcade extends JFrame {
 		}
 
 		//Get the username off the user and connect to the server with it
-		String username = "debuguser";//UserNameDialog.getUsername(ARCADE);
+		String username = UserNameDialog.getUsername(ARCADE);
 		ARCADE.connectAsUser(username);
 
 	}
@@ -242,7 +276,7 @@ public class Arcade extends JFrame {
 	 * the selected game.
 	 */
 	public void selectGame() {
-		selectedGame = getInstanceOfGame("pong");
+		selectedGame = getUserGameSelection();
 		requestGameSession(selectedGame);
 	}
 	

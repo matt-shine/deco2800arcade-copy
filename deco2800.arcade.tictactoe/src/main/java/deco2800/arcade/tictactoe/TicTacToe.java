@@ -86,6 +86,8 @@ public class TicTacToe extends GameClient {
   		raindrops = new Array<Rectangle>();
   		spawnRaindrop();
   		
+  		wakeArcadeThread();
+  		
 	}
 
 	/**
@@ -173,6 +175,8 @@ public class TicTacToe extends GameClient {
 		dropSound.dispose();
 		rainMusic.dispose();
 		batch.dispose();
+		
+		wakeArcadeThread();
 	}
 
 	@Override

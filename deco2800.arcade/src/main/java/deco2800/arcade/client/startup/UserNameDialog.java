@@ -15,7 +15,7 @@ public class UserNameDialog {
 		String result = null;
 		
 		while (result == null || result.trim().isEmpty()){
-			result = JOptionPane.showInputDialog(component, "Enter Username");
+			result = JOptionPane.showInputDialog(component, "Enter Username", "debuguser");
 		}
 		
 		return result;

@@ -38,7 +38,6 @@ public abstract class GameClient implements ApplicationListener {
 		for (GameOverListener listener : gameOverListeners) {
 			listener.notify(this);
 		}
-		this.dispose();
 	}
 	
 }

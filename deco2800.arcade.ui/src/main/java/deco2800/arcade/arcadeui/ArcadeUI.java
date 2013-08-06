@@ -39,6 +39,7 @@ public class ArcadeUI extends GameClient {
 	@Override
 	public void create() {
 		shapeRenderer = new ShapeRenderer();
+		System.out.println("at ui create");
 	}
 
 	@Override
@@ -62,6 +63,7 @@ public class ArcadeUI extends GameClient {
 	
 	@Override
 	public void dispose() {
+		System.out.println("at ui die");
 	}
 
 	@Override

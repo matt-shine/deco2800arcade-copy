@@ -55,7 +55,7 @@ public class Pong extends GameClient {
 
 	//Reusable list of achievements
 	private static Set<Achievement> achievements = new HashSet<Achievement>();
-	static {		
+	static {
 		Achievement winPong = new Achievement("Win a game of Pong");
 		achievements.add(winPong);
 	}
@@ -124,7 +124,6 @@ public class Pong extends GameClient {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

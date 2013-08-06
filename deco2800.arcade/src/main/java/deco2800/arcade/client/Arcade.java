@@ -1,6 +1,7 @@
 package deco2800.arcade.client;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -21,7 +22,6 @@ import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.client.startup.GameSelector;
-import deco2800.arcade.client.startup.UserNameDialog;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
@@ -59,6 +59,8 @@ public class Arcade extends JFrame {
 
 	private LwjglCanvas canvas;
 	
+	private GameClient selectedGame = null;
+	private GameClient mainUI = null;
 	/**
 	 * Sets the instance variables for the arcade
 	 * @param args
@@ -71,7 +73,16 @@ public class Arcade extends JFrame {
 		this.setVisible(true);
 		Insets insets = this.getInsets();
 		this.setSize(new Dimension(width + insets.left + insets.right, height + insets.bottom + insets.top));
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
+		this.addWindowListener(new java.awt.event.WindowAdapter() {
+		    public void windowClosing(WindowEvent winEvt) {
+				if (mainUI != null) {
+					mainUI.gameOver();
+				} else if (selectedGame != null) {
+					selectedGame.gameOver();
+				}
+		    }
+		});
 	}
 
 	/**
@@ -117,11 +128,6 @@ public class Arcade extends JFrame {
 	 * @param gameClient the type of game to play
 	 */
 	public void requestGameSession(GameClient gameClient){
-		if (canvas != null){
-			this.remove(canvas.getCanvas());
-			//TODO anything else required to stop previous game
-		}
-		
 		NewGameRequest newGameRequest = new NewGameRequest();
 		newGameRequest.gameId = gameClient.getGame().gameId;
 		newGameRequest.username = player.getUsername();
@@ -133,16 +139,45 @@ public class Arcade extends JFrame {
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
 	public void startSelectedGame(){
-		this.canvas = new LwjglCanvas(selectedGame, true);
+		
+		stopDashboard();
+		
+		startGame(selectedGame);
+	}
+	
+	
+	/**
+	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 */
+	public void startDashboard(){
+		mainUI = getInstanceOfGame("arcadeui");
+		startGame(mainUI);
+	}
+	
+	
+	/**
+	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 */
+	public void stopDashboard(){
+		if (mainUI != null) {
+			mainUI.gameOver();
+		}
+	}
+	
+	
+	/**
+	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 */
+	public void startGame(GameClient game){
+		this.canvas = new LwjglCanvas(game, true);
 		this.canvas.getCanvas().setSize(width, height);
 		this.add(this.canvas.getCanvas());
-		selectedGame.addGameOverListener(new GameOverListener() {
+		game.addGameOverListener(new GameOverListener() {
 
 			@Override
 			public void notify(GameClient client) {
 				canvas.stop();
 				remove(canvas.getCanvas());
-				selectGame();
 			}
 			
 		});
@@ -151,6 +186,8 @@ public class Arcade extends JFrame {
 	public static void main(String[] args) {
 		ARCADE = new Arcade(args);
 
+		//ARCADE.startDashboard();
+		
 		//Try to connect to the server until successful
 		boolean connected = false;
 		while (!connected){
@@ -171,15 +208,13 @@ public class Arcade extends JFrame {
 		}
 
 		//Get the username off the user and connect to the server with it
-		String username = UserNameDialog.getUsername(ARCADE);
+		String username = "debuguser";//UserNameDialog.getUsername(ARCADE);
 		ARCADE.connectAsUser(username);
 
 	}
 
 	private Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
 
-	private GameClient selectedGame;
-	
 	private Map<String,Class<? extends GameClient>> getGameMap() {
 		if (gameMap.isEmpty()) {
 			Reflections reflections = new Reflections("deco2800.arcade");
@@ -207,14 +242,23 @@ public class Arcade extends JFrame {
 	 * the selected game.
 	 */
 	public void selectGame() {
+		selectedGame = getInstanceOfGame("pong");
+		requestGameSession(selectedGame);
+	}
+	
+	
+	public GameClient getUserGameSelection() {
 		Object[] gameList = findGameIds().toArray();
 		String selectedGameId = (String) GameSelector.selectGame(this, gameList);
-		Class<? extends GameClient> gameClass = getGameMap().get(selectedGameId);
+		return getInstanceOfGame(selectedGameId);
+	}
+	
+	public GameClient getInstanceOfGame(String id) {
+		Class<? extends GameClient> gameClass = getGameMap().get(id);
 		try {
 			if (gameClass != null) {
 				Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
-				selectedGame = constructor.newInstance(player, client);
-				requestGameSession(selectedGame);
+				return constructor.newInstance(player, client);
 			}
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
@@ -235,6 +279,9 @@ public class Arcade extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
+	
+	
 	
 }

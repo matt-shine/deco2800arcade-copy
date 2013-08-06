@@ -40,7 +40,7 @@ public class GameListener extends NetworkListener {
 			case ERROR:
 				//TODO handle error
 			case UNAVAILABLE:
-				//TODO handle error
+				//TODO handle UNAVAILABLE
 			}
 		}
 	}

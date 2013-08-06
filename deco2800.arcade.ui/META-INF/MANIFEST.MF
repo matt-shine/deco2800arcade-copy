@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: TicTacToe
-Bundle-SymbolicName: deco2800.arcade.tictactoe
+Bundle-Name: ArcadeUI
+Bundle-SymbolicName: deco2800.arcade.arcadeui
 Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: TicTacToe.jar,
+Bundle-ClassPath: ArcadeUI.jar,
  libs/gdx.jar
 Export-Package: com.badlogic,
  com.badlogic.gdx,
@@ -36,7 +36,6 @@ Export-Package: com.badlogic,
  com.badlogic.gdx.utils.compression.rangecoder,
  com.esotericsoftware,
  com.esotericsoftware.tablelayout,
- deco2800.arcade.tictactoe
-Require-Bundle: deco2800.arcade.model;bundle-version="1.0.0",
- deco2800.arcade
+Require-Bundle: deco2800.arcade.model;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Import-Package: deco2800.arcade.client

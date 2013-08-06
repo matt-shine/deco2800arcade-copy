@@ -43,7 +43,7 @@ public class Pong extends GameClient {
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
-	public static final int WINNINGSCORE = 5;
+	public static final int WINNINGSCORE = 3;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
@@ -55,7 +55,7 @@ public class Pong extends GameClient {
 
 	//Reusable list of achievements
 	private static Set<Achievement> achievements = new HashSet<Achievement>();
-	static {		
+	static {
 		Achievement winPong = new Achievement("Win a game of Pong");
 		achievements.add(winPong);
 	}
@@ -81,11 +81,11 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void create() {
+		super.create();
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		System.out.println("At init");
 		
 		// Create the paddles
 		leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
@@ -124,14 +124,12 @@ public class Pong extends GameClient {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
+		super.dispose();
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		super.pause();
 	}
 
 	/**
@@ -139,6 +137,7 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void render() {
+
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -223,6 +222,8 @@ public class Pong extends GameClient {
 	    	break;
 	    }
 	    
+		super.render();
+		
 	}
 
 	/**
@@ -276,14 +277,12 @@ public class Pong extends GameClient {
 
 	@Override
 	public void resize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
+		super.resize(arg0, arg1);
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
+		super.resume();
 	}
 
 	

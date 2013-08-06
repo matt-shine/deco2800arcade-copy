@@ -58,6 +58,8 @@ public class TicTacToe extends GameClient {
 	 */
 	@Override
 	public void create() {
+		super.create();
+		
 		// load the images for the droplet and the bucket, 64x64 pixels each
 		dropImage = new Texture(Gdx.files.classpath("resources/droplet.png"));
 		bucketImage = new Texture(Gdx.files.classpath("resources/bucket.png"));
@@ -86,8 +88,6 @@ public class TicTacToe extends GameClient {
   		raindrops = new Array<Rectangle>();
   		spawnRaindrop();
   		
-  		wakeArcadeThread();
-  		
 	}
 
 	/**
@@ -108,7 +108,7 @@ public class TicTacToe extends GameClient {
 	 */
 	@Override
 	public void render() {
-		
+
 		// clear the screen with a dark blue color. The
 		// arguments to glClearColor are the red, green
 		// blue and alpha component in the range [0,1]
@@ -162,6 +162,9 @@ public class TicTacToe extends GameClient {
 				iter.remove();
 			}
 		}
+		
+		super.render();
+		
 	}
    
 	/**
@@ -169,26 +172,31 @@ public class TicTacToe extends GameClient {
 	 */
 	@Override
 	public void dispose() {
+
 		// dispose of all the native resources
 		dropImage.dispose();
 		bucketImage.dispose();
 		dropSound.dispose();
 		rainMusic.dispose();
 		batch.dispose();
+
+		super.dispose();
 		
-		wakeArcadeThread();
 	}
 
 	@Override
 	public void resize(int width, int height) {
+		super.resize(width, height);
 	}
 
 	@Override
 	public void pause() {
+		super.pause();
 	}
 
 	@Override
 	public void resume() {
+		super.resume();
 	}
 
 	

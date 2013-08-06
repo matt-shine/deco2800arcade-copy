@@ -292,7 +292,19 @@ public class Arcade extends JFrame {
 		try {
 			if (gameClass != null) {
 				Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
-				return constructor.newInstance(player, client);
+				GameClient game = null;
+				
+				//add the overlay to the game
+				if (id != "arcadeui") {
+					game = constructor.newInstance(player, client);
+					game.addOverlay(getInstanceOfGame("arcadeui"));
+				} else {
+					//the overlay takes an extra param telling it that its the overlay
+					constructor = gameClass.getConstructor(Player.class, NetworkClient.class, Boolean.class);
+					game = constructor.newInstance(player, client, true);
+				}
+				
+				return game;
 			}
 		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block

@@ -43,7 +43,7 @@ public class Pong extends GameClient {
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
-	public static final int WINNINGSCORE = 1;
+	public static final int WINNINGSCORE = 3;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
@@ -81,6 +81,7 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void create() {
+		super.create();
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
@@ -119,22 +120,16 @@ public class Pong extends GameClient {
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 		
-		System.out.println("at pong create");
-		wakeArcadeThread();
-		
 	}
 
 	@Override
 	public void dispose() {
-		System.out.println("at pong die");
-		wakeArcadeThread();
-		// TODO Auto-generated method stub
+		super.dispose();
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		super.pause();
 	}
 
 	/**
@@ -142,6 +137,7 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void render() {
+
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -229,6 +225,8 @@ public class Pong extends GameClient {
 	    	break;
 	    }
 	    
+		super.render();
+		
 	}
 
 	/**
@@ -282,14 +280,12 @@ public class Pong extends GameClient {
 
 	@Override
 	public void resize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
+		super.resize(arg0, arg1);
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
+		super.resume();
 	}
 
 	

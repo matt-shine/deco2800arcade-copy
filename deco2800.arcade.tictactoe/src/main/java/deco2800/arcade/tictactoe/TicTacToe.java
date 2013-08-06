@@ -62,11 +62,11 @@ public class TicTacToe extends GameClient {
 		dropImage = new Texture(Gdx.files.classpath("resources/droplet.png"));
 		bucketImage = new Texture(Gdx.files.classpath("resources/bucket.png"));
 		
-		// Load the drop sound effect and the rain background "music"
+		// load the drop sound effect and the rain background "music"
 		dropSound = Gdx.audio.newSound(Gdx.files.internal("resources/drop.wav"));
 		rainMusic = Gdx.audio.newMusic(Gdx.files.internal("resources/rain.mp3"));
 
-		// Start the playback of the background music immediately
+		// start the playback of the background music immediately
 		rainMusic.setLooping(true);
 		rainMusic.play();
 

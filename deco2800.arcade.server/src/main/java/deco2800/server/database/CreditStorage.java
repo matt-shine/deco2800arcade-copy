@@ -1,7 +1,6 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,27 +14,6 @@ public class CreditStorage {
 	private static boolean initialised = false;
 	
 	/**
-	 * Create Java Database connection 
-	 * 
-	 * @return	Connection, connection (session) with deco2800.server.database. 
-	 */
-	private static Connection getDatabaseConnection() throws DatabaseException{
-		Connection connection;
-		try {
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			connection = DriverManager.getConnection("jdbc:derby:Arcade;user=server;password=server;create=true");
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to find Derby driver", e);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to connect to the Derby database", e);
-		}
-		return connection;
-	}
-	
-	/**
 	 * Creates the Credits table and sets initialised to TRUE on completion
 	 * 
 	 * @throws	DatabaseException	If SQLException occurs. 
@@ -43,7 +21,7 @@ public class CreditStorage {
 	public static void initialise() throws DatabaseException{
 
 		//Get a connection to the database
-		Connection connection = getDatabaseConnection();
+		Connection connection = Database.getConnection();
 
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "CREDITS", null);
@@ -75,7 +53,7 @@ public class CreditStorage {
 		}
 
 		//Get a connection to the database
-		Connection connection = getDatabaseConnection();
+		Connection connection = Database.getConnection();
 
 		Statement statement = null;
 		ResultSet resultSet = null;

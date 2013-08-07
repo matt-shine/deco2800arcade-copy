@@ -1,5 +1,9 @@
 package deco2800.server;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.GamePlayToken;
 import deco2800.arcade.model.Player;
@@ -25,8 +29,10 @@ public class PurchasingService {
 			return 1d;
 		} else if (numUnits < 10) {
 			return 0.6d;
-		} else {
+		} else if (numUnits < 25) {
 			return 0.5d;
+		} else {
+			return 0.4d;
 		}
 		
 	}
@@ -51,5 +57,30 @@ public class PurchasingService {
 		}
 	}
 	
+	public Set<GamePlayToken> teamBulkPurchase(
+			Set<Player> players,
+			Game g,
+			int numPlays) throws DatabaseException {
+		HashSet<GamePlayToken> tokens = new HashSet<GamePlayToken>();
+		int totalPrice = (int)(players.size() * g.pricePerPlay * numPlays * discountFactor(numPlays));
+		int requiredCredits = totalPrice/players.size();
+		boolean allCanAfford = true;
+		for (Player p: players) {
+
+			String username = p.getUsername();
+			int credits = creditStorage.getUserCredits(username);
+
+			if (credits < requiredCredits) {
+				allCanAfford = false;
+				return Collections.emptySet();
+			}
+		}
+		for (Player p: players) {
+			creditStorage.deductUserCredits(p.getUsername(), requiredCredits);
+			tokens.add( new GamePlayToken(g, numPlays));
+
+		}
+		return tokens;
+	}
 	
 }

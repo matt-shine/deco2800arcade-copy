@@ -2,6 +2,9 @@ package deco2800.arcade.server;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Test;
 import org.junit.Before;
 
@@ -18,11 +21,13 @@ public class BulkPurchasingTest {
 	Player algernon;
 	Game tiddlywinks;
 	CreditStorage mockCS = mock(CreditStorage.class);
+	private Player barnaby;
 	
 	@Before
 	public void setup() {
 		purchasingService = new PurchasingService();
 		algernon = new Player("Algernon");
+		barnaby = new Player("Barnaby");
 		tiddlywinks = new Game();
 		tiddlywinks.name = "tiddlywinks";
 		tiddlywinks.pricePerPlay = 1;
@@ -108,11 +113,39 @@ public class BulkPurchasingTest {
 		);
 		
 		verify(mockCS).getUserCredits("Algernon");
-		verify(mockCS).deductUserCredits("Algernon", 50);
+		verify(mockCS).deductUserCredits("Algernon", 40);
 		
 		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
 		assertEquals("Wrong number of plays",
 				100, gpt.getPlays());
-	}			
+	}
+	
+	@Test
+	public void testTwentyTeamPlay() throws Exception {
+		HashSet players = new HashSet<Player>();
+		players.add(algernon);
+		players.add(barnaby);
+		
+		when(mockCS.getUserCredits("Algernon")).thenReturn(50);
+		when(mockCS.getUserCredits("Barnaby")).thenReturn(50);
+
+		Set<GamePlayToken> gpts = purchasingService.teamBulkPurchase(players, 
+				tiddlywinks,
+				25
+		);
+		
+		verify(mockCS).getUserCredits("Algernon");
+		verify(mockCS).deductUserCredits("Algernon", 10);
+		verify(mockCS).getUserCredits("Barnaby");
+		verify(mockCS).deductUserCredits("Barnaby", 10);
+
+		for (GamePlayToken gpt : gpts) {
+			assertEquals("Wrong game", tiddlywinks, gpt.getGame());
+			assertEquals("Wrong number of plays",
+					25, gpt.getPlays());
+		}
+		
+	
+	}
 	
 }

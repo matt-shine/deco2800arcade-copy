@@ -17,7 +17,7 @@ public class Database {
 	 */
 	public static Connection getConnection() throws DatabaseException{
 		Connection connection;
-		String connectionAddress = "jdbc:derby:Arcade;user=" + username + "password=" + password + ";create=true";
+		String connectionAddress = "jdbc:derby:Arcade;user=" + username + ";password=" + password + ";create=true";
 		try {
 			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
 			connection = DriverManager.getConnection(connectionAddress);

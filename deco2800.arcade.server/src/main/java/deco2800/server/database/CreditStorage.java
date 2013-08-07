@@ -11,14 +11,14 @@ import java.sql.Statement;
  */
 public class CreditStorage {
 
-	private static boolean initialised = false;
+	private boolean initialised = false;
 	
 	/**
 	 * Creates the Credits table and sets initialised to TRUE on completion
 	 * 
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
-	public static void initialise() throws DatabaseException{
+	public  void initialise() throws DatabaseException{
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
@@ -44,7 +44,7 @@ public class CreditStorage {
 	 * @param	username	String, username of arcade games
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
-	public static Integer getUserCredits(String username) throws DatabaseException{
+	public Integer getUserCredits(String username) throws DatabaseException{
 
 		//Check whether or not the database has been intitialised
 		if (!initialised){
@@ -61,6 +61,7 @@ public class CreditStorage {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from CREDITS");
 			Integer result = findCreditsForUser(username, resultSet);
+
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -89,7 +90,7 @@ public class CreditStorage {
 	 * @throws	SQLException
 	 * @return	Integer result
 	 */
-	private static Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
+	private Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;
 		while (results.next()){
 			String user = results.getString("username");
@@ -100,5 +101,25 @@ public class CreditStorage {
 		}
 
 		return result;
+	}
+	
+	/**
+	 * Deduct a number of credits from the user's account
+	 * @param username The user from whose account the credits should be deducted
+	 * @param numCredits The number of credits to deduct
+	 */
+	public void deductUserCredits(String username, int numCredits) {
+		//TODO implement me!
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	/**
+	 * Add a number of credits to the user's account
+	 * @param username The user to whose account the credits should be added
+	 * @param numCredits The number of credits to add
+	 */
+	public void addUserCredits(String username, int numCredits) {
+		//TODO implement me!
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }

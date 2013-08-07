@@ -276,7 +276,9 @@ public class Arcade extends JFrame {
 	 * the selected game.
 	 */
 	public void selectGame() {
-		selectedGame = getUserGameSelection();
+		while(selectedGame == null) {
+			selectedGame = getUserGameSelection();
+		}
 		requestGameSession(selectedGame);
 	}
 	

@@ -26,4 +26,6 @@ public class Game {
 	
 	public Set<Achievement> availableAchievements;
 	
+	public int pricePerPlay = 1;
+	
 }

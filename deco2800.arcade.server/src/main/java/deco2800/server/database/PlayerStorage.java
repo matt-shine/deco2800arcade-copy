@@ -22,9 +22,6 @@ public class PlayerStorage {
 	
 	
 	
-
-
-	private boolean initialised = false;
 	/**
 	 * Creates the Credits table and sets initialised to TRUE on completion
 	 * 
@@ -52,7 +49,6 @@ public class PlayerStorage {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create players table", e);
 		}
-		//initialised = true;
 	}
 	
 	/**
@@ -62,11 +58,6 @@ public class PlayerStorage {
 	 * @throws DatabaseException
 	 */
 	public String getUsername(int playerID) throws DatabaseException{
-		//Check whether or not the database has been intitialised
-		if (!initialised){
-			//Not initialised yet - initialise it
-			initialise();
-		}
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
@@ -129,11 +120,6 @@ public class PlayerStorage {
 	 * @throws DatabaseException
 	 */
 	public String getEmail(int playerID) throws DatabaseException{
-		//Check whether or not the database has been intitialised
-		if (!initialised){
-			//Not initialised yet - initialise it
-			initialise();
-		}
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();

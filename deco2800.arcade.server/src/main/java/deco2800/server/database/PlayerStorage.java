@@ -143,7 +143,7 @@ public class PlayerStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from PLAYERS;");
-			String result = findUsername(playerID, resultSet);
+			String result = findEmail(playerID, resultSet);
 
 			return result;
 		} catch (SQLException e) {

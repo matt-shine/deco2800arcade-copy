@@ -7,8 +7,8 @@ import java.util.Set;
 public class Player {
 
 	// TODO shared between server & client?
-
-	// TODO player icons
+	
+	private int playerID;
 
 	private String username;
 
@@ -20,6 +20,7 @@ public class Player {
 
 	}
 
+	@Deprecated
 	/**
 	 * Sets the name of the Player
 	 * 
@@ -35,7 +36,9 @@ public class Player {
 
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
-	 * 
+	 *
+	 * @param playerID
+	 *            The Player's nameID
 	 * @param username
 	 *            The Player's name
 	 * @param achievments
@@ -46,9 +49,17 @@ public class Player {
 	 *             Throws exception when the image cannot be found at the
 	 *             designated filepath.
 	 */
-	public Player(String username, Set<Achievement> achievements, String filepath)
-			throws IOException {
+	public Player(int playerID, String username, Set<Achievement> achievements,
+			String filepath) throws IOException {
 		// TODO: Validate username input
+
+		// TODO validate filepath
+
+		// TODO validate achievements set
+		
+		// TODO validate playerID
+		
+		this.playerID = playerID;
 
 		this.username = username;
 		this.achievements = new HashSet<Achievement>(achievements);
@@ -58,7 +69,15 @@ public class Player {
 		 * cannot be loaded there is no way (other than changing the return type
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
-		icon = new Icon(filepath);
+		this.icon = new Icon(filepath);
+	}
+	
+	/**
+	 * Access method for  playerID
+	 * @return	Returns the playerID
+	 */
+	public int getPlayerID(){
+		return this.playerID;
 	}
 
 	/**
@@ -76,6 +95,7 @@ public class Player {
 	 * @param username
 	 */
 	public void setUsername(String username) {
+		//TODO Validate
 		this.username = username;
 	}
 
@@ -99,7 +119,7 @@ public class Player {
 	 *            The player's achievements.
 	 */
 	public void setAchievements(Set<Achievement> achievements) {
-		/*
+		/* TODO Validate not null
 		 * Preserving immutability
 		 */
 		this.achievements = new HashSet<Achievement>(achievements);
@@ -113,6 +133,7 @@ public class Player {
 	 * @ensure this.achievement.contains(achievement)
 	 */
 	public void addAchievement(Achievement achievement) {
+		//TODO Validate not null
 		this.achievements.add(new Achievement(achievement));
 	}
 

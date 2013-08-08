@@ -45,6 +45,8 @@ public class CreditStorage {
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
 	public Integer getUserCredits(String username) throws DatabaseException{
+		
+		// TODO: refactor to use playerID not username
 
 		//Check whether or not the database has been intitialised
 		if (!initialised){

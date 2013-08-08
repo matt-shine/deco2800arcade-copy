@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class PlayerStorage {
 
-	private static boolean initialised = false;
+	//private static boolean initialised = false;
 
 	/**
 	 * Creates the Credits table and sets initialised to TRUE on completion
@@ -36,7 +36,7 @@ public class PlayerStorage {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create players table", e);
 		}
-		initialised = true;
+		//initialised = true;
 	}
 
 }

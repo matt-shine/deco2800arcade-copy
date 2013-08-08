@@ -206,6 +206,9 @@ public class Arcade extends JFrame {
 					remove(canvas.getCanvas());
 					
 					try {
+						//if your code is stuck here you probably forgot to call
+						//super.create() or super.dispose() or you passed the wrong parameter
+						//into gameOver()
 						mon.wait();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -289,7 +292,12 @@ public class Arcade extends JFrame {
 		return getInstanceOfGame(selectedGameId);
 	}
 	
+	
 	public GameClient getInstanceOfGame(String id) {
+		return getInstanceOfGame(id, false);
+	}
+
+	public GameClient getInstanceOfGame(String id, boolean asOverlay) {
 		Class<? extends GameClient> gameClass = getGameMap().get(id);
 		try {
 			if (gameClass != null) {
@@ -299,32 +307,26 @@ public class Arcade extends JFrame {
 				//add the overlay to the game
 				if (id != "arcadeui") {
 					game = constructor.newInstance(player, client);
-					game.addOverlay(getInstanceOfGame("arcadeui"));
+					game.addOverlay(getInstanceOfGame("arcadeui", true));
 				} else {
 					//the overlay takes an extra param telling it that its the overlay
 					constructor = gameClass.getConstructor(Player.class, NetworkClient.class, Boolean.class);
-					game = constructor.newInstance(player, client, true);
+					game = constructor.newInstance(player, client, asOverlay);
 				}
 				
 				return game;
 			}
 		} catch (NoSuchMethodException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

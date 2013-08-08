@@ -65,12 +65,9 @@ public class ArcadeUI extends GameClient {
 			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		}
 	    
-		//this is a bit confusing, but basically it toggles isUIOpen on tab key down
-		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast) {
-			hasTabPressedLast = !hasTabPressedLast;
-			if (hasTabPressedLast) {
-				isUIOpen = !isUIOpen;
-			}
+		//toggles isUIOpen on tab key down
+		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
+			isUIOpen = !isUIOpen;
 		}
 		
 		//draw a placeholder shape

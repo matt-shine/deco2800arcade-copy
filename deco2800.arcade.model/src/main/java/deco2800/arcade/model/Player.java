@@ -95,6 +95,7 @@ public class Player {
 	 * @param username
 	 */
 	public void setUsername(String username) {
+		//TODO Validate
 		this.username = username;
 	}
 
@@ -118,7 +119,7 @@ public class Player {
 	 *            The player's achievements.
 	 */
 	public void setAchievements(Set<Achievement> achievements) {
-		/*
+		/* TODO Validate not null
 		 * Preserving immutability
 		 */
 		this.achievements = new HashSet<Achievement>(achievements);
@@ -132,6 +133,7 @@ public class Player {
 	 * @ensure this.achievement.contains(achievement)
 	 */
 	public void addAchievement(Achievement achievement) {
+		//TODO Validate not null
 		this.achievements.add(new Achievement(achievement));
 	}
 

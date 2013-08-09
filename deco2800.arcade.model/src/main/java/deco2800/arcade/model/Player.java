@@ -16,6 +16,10 @@ public class Player {
 	
 	private Set<Game> games;
 	
+	private Set<Player> friends;
+	
+	private Set<Player> friendInvites;
+	
 	private Icon icon;
 
 	public Player() {
@@ -66,6 +70,8 @@ public class Player {
 		this.username = username;
 		this.achievements = new HashSet<Achievement>(achievements);
 		this.games = new HashSet<Game>();
+		this.friends = new HashSet<Player>();
+		this.friendInvites = new HashSet<Player>();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
@@ -249,4 +255,140 @@ public class Player {
 	public boolean hasGame(Game game) {
 		return this.games.contains(game);
 	}
+	
+
+	
+	/**
+	 * Access method for player's friends list
+	 * @return A set containing the player's friends.
+	 */
+	public Set<Player> getFriends() {
+		Set<Player> clone = new HashSet<Player>(this.friends);
+		return clone;
+	}
+	
+	/**
+	 * Sets the player's friends to the set provided.
+	 * 
+	 * @param friends
+	 * 			A set containing the player's friends.
+	 */
+	public void setFriends(Set<Player> friends) {
+		if (friends != null) {
+			this.friends = new HashSet<Player>(friends);
+		}
+	}
+	
+	/**
+	 * Checks if the player is already friends with the specified player
+	 * 
+	 * @param friend
+	 * 			The player that is being verified as a friend.
+	 * @return
+	 * 		True if the player is friends with the specified player, 
+	 * 		false otherwise.
+	 */
+	public boolean isFriend(Player player) {
+		return this.friends.contains(player);
+	}
+	
+	/**
+	 * Adds a friend to the player's friends set.
+	 * 
+	 * @param friend
+	 * 			The friend to be added to the friends set.
+	 * @ensure this.friends.contains(friend)
+	 */
+	public void addFriend(Player friend) {
+		if (friend != null && !this.isFriend(friend)) {
+			this.friends.add(friend);
+		}
+		//TODO: throw exception if friend is already in friends list
+	}
+	
+	/**
+	 * Remove a friend from the player's friends list.
+	 * 
+	 * @param friend
+	 * 			Friend to be removed.
+	 * @ensure !this.friends.contains(friend)
+	 */
+	public void removeFriend(Player friend) {
+		//TODO: add option to add friend to block list
+		if (this.isFriend(friend)) {
+			this.friends.remove(friend);
+		}
+		//TODO: throw exception if friend is not in friend's list
+	}
+	
+	/**
+	 * Access method for player's invite list.
+	 * 
+	 * @return A set containing the player's invites.
+	 */
+	public Set<Player> getInvites() {
+		Set<Player> clone = new HashSet<Player>(this.friendInvites);
+		return clone;
+	}
+	
+	/**
+	 * Sets the player's invites to the set provided.
+	 * 
+	 * @param invites
+	 * 			A set containing the player's invites.
+	 */
+	public void setInvites(Set<Player> invites) {
+		if (invites != null) {
+			this.friendInvites = new HashSet<Player>(invites);
+		}
+	}
+	
+	/**
+	 * Checks if the player is already has an invite from the specified player.
+	 * 
+	 * @param player
+	 * 			The player that is sending the invite.
+	 * @return
+	 * 			True if the player already has an invite from the specified 
+	 * 			player, otherwise false.
+	 */
+	public boolean hasInvite(Player player) {
+		return this.friendInvites.contains(player);
+	}
+	
+	/**
+	 * Adds a player to the player's invite set.
+	 * 
+	 * @param player
+	 * 			The player to be added to the player's invite set.
+	 * 
+	 * @ensure this.friendInvites.contains(player)
+	 */
+	public void addInvite(Player player) {
+		if (player != null && !this.hasInvite(player)) {
+			this.friendInvites.add(player);
+		}
+		//TODO: throw exception if player is already in invites list
+	}
+	
+	/**
+	 * Remove an invite from the player's invite list.
+	 * 
+	 * @param friend
+	 * 			Friend to be removed.
+	 * @ensure
+	 * 			!this.friendInvites.contains(player)
+	 */
+	public void removeInvite(Player player) {
+		//TODO: add option to add friend to block list
+		if (this.hasInvite(player)) {
+			this.friendInvites.remove(player);
+		}
+		//TODO: throw exception if player is not in invite list
+	}
+	
+	
+	
+	
+	
 }

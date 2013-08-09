@@ -13,7 +13,9 @@ public class Player {
 	private String username;
 
 	private Set<Achievement> achievements;
-
+	
+	private Set<Game> games;
+	
 	private Icon icon;
 
 	public Player() {
@@ -63,7 +65,7 @@ public class Player {
 
 		this.username = username;
 		this.achievements = new HashSet<Achievement>(achievements);
-
+		this.games = new HashSet<Game>();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
@@ -179,5 +181,72 @@ public class Player {
 	public void setIcon(Icon icon) {
 		this.icon = icon.clone();
 	}
+	
+	/**
+	 * Access method for player's Games set.
+	 * 
+	 * @return Returns a set containing the player's games.
+	 */
+	public Set<Game> getGames() {
+		/*
+		 * Cloning this.games to preserve immutability
+		 */
+		Set<Game> clone = new HashSet<Game>(this.games);
+		return clone;
+	} 
+	
+	/**
+	 * Sets the Player's games to the set provided
+	 * 
+	 * @param games
+	 *            The player's games.
+	 */
+	public void setGames(Set<Game> games) {
+		/* 
+		 * Preserving immutability
+		 */
+		if (games != null) {
+			this.games = new HashSet<Game>(games);
+		}
+	}
 
+	/**
+	 * Adds an game to the player's games set.
+	 * 
+	 * @param game
+	 *            The game to be added to the set.
+	 * @ensure this.games.contains(game)
+	 */
+	public void addGame(Game game) {
+		if (game != null && !this.hasGame(game)) {
+			this.games.add(game);
+		}
+		/*TODO Throw exception if game already in game set */
+	}
+
+	/**
+	 * Removes a game from the player's games.
+	 * 
+	 * @param game
+	 *            The game to be removed
+	 * @ensure !this.games.contains(game)
+	 */
+	public void removeGame(Game game) {
+		if (this.hasGame(game)) {
+			this.games.remove(game);
+		}
+		/*TODO throw exception if game doesn't exist*/
+	}
+
+	/**
+	 * Checks if the player has a game in their set.
+	 * 
+	 * @param game
+	 *            The game which is being checked
+	 * @return Returns true if player has the specified game and false
+	 *         otherwise.
+	 */
+	public boolean hasGame(Game game) {
+		return this.games.contains(game);
+	}
 }

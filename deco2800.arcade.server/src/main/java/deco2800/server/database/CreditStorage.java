@@ -1,7 +1,6 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,38 +11,17 @@ import java.sql.Statement;
  */
 public class CreditStorage {
 
-	private static boolean initialised = false;
-	
-	/**
-	 * Create Java Database connection 
-	 * 
-	 * @return	Connection, connection (session) with deco2800.server.database. 
-	 */
-	private static Connection getDatabaseConnection() throws DatabaseException{
-		Connection connection;
-		try {
-			Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-			connection = DriverManager.getConnection("jdbc:derby:Arcade;user=server;password=server;create=true");
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to find Derby driver", e);
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to connect to the Derby database", e);
-		}
-		return connection;
-	}
+	private boolean initialised = false;
 	
 	/**
 	 * Creates the Credits table and sets initialised to TRUE on completion
 	 * 
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
-	public static void initialise() throws DatabaseException{
+	public  void initialise() throws DatabaseException{
 
 		//Get a connection to the database
-		Connection connection = getDatabaseConnection();
+		Connection connection = Database.getConnection();
 
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "CREDITS", null);
@@ -66,7 +44,7 @@ public class CreditStorage {
 	 * @param	username	String, username of arcade games
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
-	public static Integer getUserCredits(String username) throws DatabaseException{
+	public Integer getUserCredits(String username) throws DatabaseException{
 
 		//Check whether or not the database has been intitialised
 		if (!initialised){
@@ -75,7 +53,7 @@ public class CreditStorage {
 		}
 
 		//Get a connection to the database
-		Connection connection = getDatabaseConnection();
+		Connection connection = Database.getConnection();
 
 		Statement statement = null;
 		ResultSet resultSet = null;
@@ -83,6 +61,7 @@ public class CreditStorage {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from CREDITS");
 			Integer result = findCreditsForUser(username, resultSet);
+
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -111,7 +90,7 @@ public class CreditStorage {
 	 * @throws	SQLException
 	 * @return	Integer result
 	 */
-	private static Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
+	private Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;
 		while (results.next()){
 			String user = results.getString("username");
@@ -122,5 +101,25 @@ public class CreditStorage {
 		}
 
 		return result;
+	}
+	
+	/**
+	 * Deduct a number of credits from the user's account
+	 * @param username The user from whose account the credits should be deducted
+	 * @param numCredits The number of credits to deduct
+	 */
+	public void deductUserCredits(String username, int numCredits) {
+		//TODO implement me!
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+	
+	/**
+	 * Add a number of credits to the user's account
+	 * @param username The user to whose account the credits should be added
+	 * @param numCredits The number of credits to add
+	 */
+	public void addUserCredits(String username, int numCredits) {
+		//TODO implement me!
+		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }

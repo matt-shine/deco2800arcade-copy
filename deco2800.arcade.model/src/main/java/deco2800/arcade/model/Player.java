@@ -46,7 +46,7 @@ public class Player {
 	 *             Throws exception when the image cannot be found at the
 	 *             designated filepath.
 	 */
-	public Player(String username, Set<Achievement> achievments, String filepath)
+	public Player(String username, Set<Achievement> achievements, String filepath)
 			throws IOException {
 		// TODO: Validate username input
 

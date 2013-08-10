@@ -3,9 +3,11 @@ package deco2800.arcade.mixmaze;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -19,17 +21,27 @@ import deco2800.arcade.client.network.NetworkClient;
 
 @ArcadeGame(id="mixmaze")
 public class MixMaze extends GameClient {
+	// class name for logging
+	public static final String LOG = MixMaze.class.getSimpleName();
+
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
 	private int angle;
+	private FPSLogger fpsLogger;
 
 	public MixMaze(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		// TODO Auto-generated constructor stub
+
+		// System.out.println("LOG=" + LOG);
 	}
 
 	@Override
 	public void create() {
+		// set Application.LOG_NONE to mute all logging
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		Gdx.app.debug(MixMaze.LOG, "Creating game");
+		fpsLogger = new FPSLogger();
+
 		super.create();
 
 		// Initialise camera
@@ -47,20 +59,25 @@ public class MixMaze extends GameClient {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		Gdx.app.debug(MixMaze.LOG, "Disposing game");
 
+		super.dispose();
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		Gdx.app.debug(MixMaze.LOG, "Pausing game");
 
 	}
 
 	@Override
 	public void render() {
+		// super.render();
+
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+		fpsLogger.log();
 
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
@@ -79,13 +96,17 @@ public class MixMaze extends GameClient {
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
+	public void resize(int width, int height) {
+		Gdx.app.debug(MixMaze.LOG, "Resizing game to "
+				+ width + "x" + height);
 
+		// super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
+		Gdx.app.debug(MixMaze.LOG, "Resuming game");
+
 		// This method will never be called on the desktop.
 	}
 
@@ -102,7 +123,6 @@ public class MixMaze extends GameClient {
 
 	@Override
 	public Game getGame() {
-		// TODO Auto-generated method stub
 		return game;
 	}
 }

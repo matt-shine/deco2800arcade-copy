@@ -4,26 +4,34 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ * PlayerStorage deals with database access for player data.
+ * 
+ * @author Leggy (Lachlan Healey: lachlan.j.healey@gmail.com)
+ * 
+ */
 public class PlayerStorage {
-	
-	//TODO: Autonumbering of playerIDs
-	
-	//TODO: Prepared statements for queries
-	
-	//TODO: Username update
-	//TODO: Email update
-	
-	//TODO: Program get
-	//TODO: Program update
-	
-	//TODO: Bio get
-	//TODO: Bio update
-	
+
+	// TODO: Autonumbering of playerIDs
+
+	// TODO: Prepared statements for queries
+
+	// TODO: Username update
+	// TODO: name update
+	// TODO: Email update
+
+	// TODO: Program update
+
+	// TODO: Bio update
 	
 	
+	private boolean initialised = false;
+
 	/**
-	 * Creates the Credits table and sets initialised to TRUE on completion
+	 * Creates the PLAYERS table and sets initialised to TRUE on completion
 	 * 
 	 * @throws DatabaseException
 	 *             If SQLException occurs.
@@ -38,28 +46,38 @@ public class PlayerStorage {
 					null, "PLAYERS", null);
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
-						+ "USERNAME VARCHAR(30) NOT NULL,"
-						+ "NAME VARCHAR(30),"
-						+ "EMAIL VARCHAR(30),"
-						+ "PROGRAM VARCHAR(30),"
-						+ "BIO VARCHAR(200));");
+				statement
+						.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
+								+ "USERNAME VARCHAR(30) NOT NULL,"
+								+ "NAME VARCHAR(30),"
+								+ "EMAIL VARCHAR(30),"
+								+ "PROGRAM VARCHAR(30)," + "BIO VARCHAR(200));");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create players table", e);
 		}
+		initialised = true;
 	}
-	
+
 	/**
-	 * Searches for a player's username
-	 * @param playerID	The player's playerID
-	 * @return	Returns the player's username
+	 * Returns a list of player data given a playerID
+	 * 
+	 * @param playerID
+	 * @return Returns List of player data such that: List.get(0) -> username;
+	 *         List.get(1) -> name; List.get(2) -> email; List.get(3) ->
+	 *         program; List.get(4) -> bio;
+	 * 
 	 * @throws DatabaseException
 	 */
-	public String getUsername(int playerID) throws DatabaseException{
+	public List<String> getPlayerData(int playerID) throws DatabaseException {
+		List<String> data = new ArrayList<String>();
+		
+		if(!initialised){
+			initialise();
+		}
 
-		//Get a connection to the database
+		// Get a connection to the database
 		Connection connection = Database.getConnection();
 
 		Statement statement = null;
@@ -67,21 +85,26 @@ public class PlayerStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from PLAYERS;");
-			String result = findUsername(playerID, resultSet);
+			data.add(findPlayerInfo(playerID, resultSet, "username"));
+			data.add(findPlayerInfo(playerID, resultSet, "name"));
+			data.add(findPlayerInfo(playerID, resultSet, "email"));
+			data.add(findPlayerInfo(playerID, resultSet, "program"));
+			data.add(findPlayerInfo(playerID, resultSet, "bio"));
 
-			return result;
+			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to get username from database", e);
+			throw new DatabaseException("Unable to get player informtion from database",
+					e);
 		} finally {
 			try {
-				if (resultSet != null){
+				if (resultSet != null) {
 					resultSet.close();
 				}
-				if (statement != null){
+				if (statement != null) {
 					statement.close();
 				}
-				if (connection != null){
+				if (connection != null) {
 					connection.close();
 				}
 			} catch (SQLException e) {
@@ -89,21 +112,27 @@ public class PlayerStorage {
 			}
 		}
 	}
-	
-	
+
 	/**
-	 * Searches through a ResultSet for a player's username.
-	 * @param playerID	The player's playerID
-	 * @param results	The query result set
-	 * @return	Returns the player's username
+	 * Searches through a ResultSet for for a player's information.
+	 * 
+	 * @param playerID
+	 *            The player's playerID
+	 * @param results
+	 *            The query result set
+	 * @param field
+	 *            The field to search for (ie email, program, username, bio,
+	 *            program).
+	 * @return Returns the player's information.
 	 * @throws SQLException
 	 */
-	private String findUsername(int playerID, ResultSet results) throws SQLException{
+	private String findPlayerInfo(int playerID, ResultSet results, String field)
+			throws SQLException {
 		String result = null;
-		while (results.next()){
+		while (results.next()) {
 			String user = results.getString("playerID");
-			if (user.equals(playerID)){
-				result = results.getString("username");
+			if (user.equals(playerID)) {
+				result = results.getString(field);
 				break;
 			}
 		}
@@ -111,66 +140,46 @@ public class PlayerStorage {
 		return result;
 	}
 	
-	
-	
-	/**
-	 * Searches for a player's email
-	 * @param playerID	The player's playerID
-	 * @return	Returns the player's email
-	 * @throws DatabaseException
-	 */
-	public String getEmail(int playerID) throws DatabaseException{
-
-		//Get a connection to the database
-		Connection connection = Database.getConnection();
-
-		Statement statement = null;
-		ResultSet resultSet = null;
-		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from PLAYERS;");
-			String result = findEmail(playerID, resultSet);
-
-			return result;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to get email from database", e);
-		} finally {
-			try {
-				if (resultSet != null){
-					resultSet.close();
-				}
-				if (statement != null){
-					statement.close();
-				}
-				if (connection != null){
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	
-	/**
-	 * Searches through a ResultSet for a player's email.
-	 * @param playerID	The player's playerID
-	 * @param results	The query result set
-	 * @return	Returns the player's email
-	 * @throws SQLException
-	 */
-	private String findEmail(int playerID, ResultSet results) throws SQLException{
-		String result = null;
-		while (results.next()){
-			String user = results.getString("playerID");
-			if (user.equals(playerID)){
-				result = results.getString("email");
-				break;
-			}
-		}
-
-		return result;
-	}
+//	STILL WORKING ON THIS
+//	public boolean updateUsername(int playerID, String newValue){ 
+//		if(!initialised){
+//			initialise();
+//		}
+//
+//		// Get a connection to the database
+//		Connection connection = Database.getConnection();
+//
+//		Statement statement = null;
+//		ResultSet resultSet = null;
+//		try {
+//			statement = connection.createStatement();
+//			resultSet = statement.executeQuery("UPDATE PLAYER SET username * from PLAYERS;");
+//			data.add(findPlayerInfo(playerID, resultSet, "username"));
+//			data.add(findPlayerInfo(playerID, resultSet, "name"));
+//			data.add(findPlayerInfo(playerID, resultSet, "email"));
+//			data.add(findPlayerInfo(playerID, resultSet, "program"));
+//			data.add(findPlayerInfo(playerID, resultSet, "bio"));
+//
+//			return data;
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new DatabaseException("Unable to get player informtion from database",
+//					e);
+//		} finally {
+//			try {
+//				if (resultSet != null) {
+//					resultSet.close();
+//				}
+//				if (statement != null) {
+//					statement.close();
+//				}
+//				if (connection != null) {
+//					connection.close();
+//				}
+//			} catch (SQLException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 
 }

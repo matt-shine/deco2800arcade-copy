@@ -32,7 +32,7 @@ import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 
 /**
- * The client application for running arcade games.
+ * The client application for running arcade games. testing branches
  *
  */
 public class Arcade extends JFrame {

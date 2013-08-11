@@ -4,38 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
-public abstract class GameClient implements ApplicationListener {
+public abstract class GameClient extends Game{
 
-	protected Player player; 
+	protected Player player;
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private Object mon = null;
 	private ApplicationListener overlay = null;
 	private boolean overlayInitialised = false;
 	private int width, height;
-	
+
 	public GameClient(Player player, NetworkClient networkClient) {
 		this.player = player;
 		this.networkClient = networkClient;
 		gameOverListeners = new ArrayList<GameOverListener>();
 	}
-	
-	public abstract Game getGame();
 
-	
+	public abstract deco2800.arcade.model.Game getGame();
+
+
 	/**
 	 * Adds the in game overlay
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
 	}
-	
-	
+
+
 	/**
 	 * Updates the in game overlay
 	 */
@@ -48,8 +48,8 @@ public abstract class GameClient implements ApplicationListener {
 			overlay.render();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Adds gameOverListener's to the GameClient
 	 * @param gameOverListener
@@ -57,8 +57,8 @@ public abstract class GameClient implements ApplicationListener {
 	public void addGameOverListener(GameOverListener gameOverListener) {
 		gameOverListeners.add(gameOverListener);
 	}
-	
-	
+
+
 	/**
 	 * Controls what happens when the game is over
 	 */
@@ -71,29 +71,29 @@ public abstract class GameClient implements ApplicationListener {
 			}
 		}
 	}
-	
-	
+
+
 	/**
 	 * Controls what happens when the game is over
 	 */
 	public void gameOver() {
 		gameOver(false);
 	}
-	
-	
+
+
 	/**
 	 * Sets the object that controls waking up the main thread
 	 */
 	public void setArcadeThreadMonitor(Object mon) {
 		this.mon = mon;
 	}
-	
-	
+
+
 	/**
 	 * wakes up the main thread
 	 */
 	public void wakeArcadeThread() {
-		if (this.mon != null){ 
+		if (this.mon != null){
 			synchronized (mon) {
 				this.mon.notify();
 				this.mon = null;
@@ -113,21 +113,25 @@ public abstract class GameClient implements ApplicationListener {
 
 	@Override
 	public void pause() {
+		super.pause();
 	}
 
 	@Override
 	public void render() {
-	    processOverlay();
+		super.render();
+		// processOverlay();
 	}
 
 	@Override
 	public void resize(int width, int height) {
+		super.resize(width, height);
 		this.width = width;
 		this.height = height;
 	}
 
 	@Override
 	public void resume() {
+		super.resume();
 	}
-	
+
 }

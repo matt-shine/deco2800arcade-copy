@@ -6,9 +6,12 @@ import java.util.Set;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -24,10 +27,16 @@ public class MixMaze extends GameClient {
 	// class name for logging
 	public static final String LOG = MixMaze.class.getSimpleName();
 
+	public Screen menuScreen;
+	public Screen gameScreen;
+
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
 	private int angle;
 	private FPSLogger fpsLogger;
+
+	SpriteBatch batch;
+	BitmapFont font;
 
 	public MixMaze(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -44,55 +53,62 @@ public class MixMaze extends GameClient {
 
 		super.create();
 
-		// Initialise camera
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false);
+		batch = new SpriteBatch();
+		font = new BitmapFont();
 
-		shapeRenderer = new ShapeRenderer();
+		this.setScreen(new MenuScreen(this));
 
-		angle = 0;
+		//// Initialise camera
+		// camera = new OrthographicCamera();
+		// camera.setToOrtho(false);
 
-		System.out.println(Gdx.graphics.getHeight());
-		System.out.println(Gdx.graphics.getWidth());
+		// shapeRenderer = new ShapeRenderer();
+
+		// angle = 0;
+
+		// System.out.println(Gdx.graphics.getHeight());
+		// System.out.println(Gdx.graphics.getWidth());
 
 	}
 
 	@Override
 	public void dispose() {
 		Gdx.app.debug(MixMaze.LOG, "Disposing game");
-
 		super.dispose();
+		//shapeRenderer.dispose();
+		batch.dispose();
+		font.dispose();
 	}
 
 	@Override
 	public void pause() {
 		Gdx.app.debug(MixMaze.LOG, "Pausing game");
-
+		super.pause();
 	}
 
 	@Override
 	public void render() {
-		// super.render();
+		super.render();
 
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		// Gdx.gl.glClearColor(0, 0, 0, 1);
+		// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		fpsLogger.log();
+		// fpsLogger.log();
 
-		camera.update();
-		shapeRenderer.setProjectionMatrix(camera.combined);
+		// camera.update();
+		// shapeRenderer.setProjectionMatrix(camera.combined);
 
-		if (Gdx.input.isTouched()) {
-			angle = (angle + 15) % 360;
-			System.out.println("screen touched" + angle);
-		}
+		// if (Gdx.input.isTouched()) {
+		// 	angle = (angle + 15) % 360;
+		// 	System.out.println("screen touched" + angle);
+		// }
 
-		shapeRenderer.rotate(0, 0, 1, angle);
+		// shapeRenderer.rotate(0, 0, 1, angle);
 
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(1, 1, 0, 1);
-		shapeRenderer.line(10, 10, 630, 470);
-		shapeRenderer.end();
+		// shapeRenderer.begin(ShapeType.Line);
+		// shapeRenderer.setColor(1, 1, 0, 1);
+		// shapeRenderer.line(10, 10, 630, 470);
+		// shapeRenderer.end();
 	}
 
 	@Override
@@ -100,14 +116,14 @@ public class MixMaze extends GameClient {
 		Gdx.app.debug(MixMaze.LOG, "Resizing game to "
 				+ width + "x" + height);
 
-		// super.resize(width, height);
+		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
-		Gdx.app.debug(MixMaze.LOG, "Resuming game");
-
 		// This method will never be called on the desktop.
+		Gdx.app.debug(MixMaze.LOG, "Resuming game");
+		super.resume();
 	}
 
 	private static Set<Achievement> achievements =

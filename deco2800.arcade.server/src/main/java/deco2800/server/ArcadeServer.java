@@ -46,7 +46,6 @@ public class ArcadeServer {
 	private static Logger logger = LoggerFactory.getLogger(ArcadeServer.class);
 
 	// Keep track of which users are connected
-	// Test Nic Commit
 	private Set<String> connectedUsers = new HashSet<String>();
 	
 	//Replay data

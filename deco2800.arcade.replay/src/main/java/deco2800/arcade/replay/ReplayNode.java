@@ -9,18 +9,41 @@ public class ReplayNode {
 	//private List<ReplayItem> items;
 	private Map<String, ReplayItem> items;
 	
+	/* most constructors aren't used */
 	public ReplayNode( String type, Map<String, ReplayItem> items, long timeOffset ) {
 		this.nodeTime = timeOffset;
 		this.type = type;
 		this.items = items;
 	}
 	
+	/*
+	 * TODO: create from flattened string
+	 */
+	
+	/* get rid of this, but we still need the functionality. */
 	public ReplayNode( String type ) {
 		this.nodeTime = 0;
 		this.type = type;
 		
 		items = new HashMap<String, ReplayItem>();
 	}
+	
+	/*
+	 * TODO: flatten method
+	 * Converts to string
+	 * 		node: {
+	 * 			time: long,
+	 * 			type: String,
+	 * 			items: {
+	 * 				key: String
+	 * 				value: ReplayItem { (flattened version of replayItem)
+	 * 						type: Integer,
+	 * 						data: Integer/Float/String etc...
+	 * 					},
+	 * 				...
+	 * 			}
+	 * 		}
+	 */
 	
 	public ReplayNode( ReplayNode toCopy ) {
 		this.nodeTime = toCopy.getTime();

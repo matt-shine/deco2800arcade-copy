@@ -23,6 +23,7 @@ import deco2800.server.listener.GameListener;
 public class ArcadeServer {
 
 	// Keep track of which users are connected
+	// Test Nic Commit
 	private Set<String> connectedUsers = new HashSet<String>();
 	
 	//singleton pattern

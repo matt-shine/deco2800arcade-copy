@@ -103,20 +103,24 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	@Override
 	public void create() {
+		//super.create();
 		this.wakeArcadeThread();
 	}
 
 	@Override
 	public void dispose() {
+		super.dispose();
 		this.wakeArcadeThread();
 	}
 
 	@Override
 	public void pause() {
+		super.pause();
 	}
 
 	@Override
 	public void render() {
+		super.render();
 	    processOverlay();
 	}
 
@@ -124,10 +128,12 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public void resize(int width, int height) {
 		this.width = width;
 		this.height = height;
+		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
+		super.resume();
 	}
 	
 }

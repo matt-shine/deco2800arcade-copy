@@ -1,4 +1,4 @@
-package deco2800.arcade.blackjack;
+package deco2800.arcade.blackjack.client;
 
 import java.util.HashSet;
 import java.util.Set;

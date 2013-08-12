@@ -27,7 +27,7 @@ public class ReplayHandler {
 	public void pushEvent( ReplayNode eData ) {
 		ReplayNode toAdd = new ReplayNode( eData );
 		if ( startTime < 0 ) {
-			System.out.println( "Didn't start first" );
+			System.err.println( "Didn't start first" );
 		}
 		long timeOffset = System.currentTimeMillis() - startTime;
 		toAdd.setTime( timeOffset );
@@ -83,7 +83,7 @@ public class ReplayHandler {
 		final ReplayNode node = replayHistory.get( index );
 		long nodeTimeVal = node.getTime();
 		if ( nodeTimeVal == 0 ) {
-			System.out.println( "what" );
+			System.err.println( "what" );
 			nodeTimeVal = lastNodeTime;
 		} 
 		final long nodeTime = nodeTimeVal;

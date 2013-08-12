@@ -19,7 +19,7 @@ public class ReplayItem {
 		} else {
 			throw new ReplayItemDataInvalidException( "Type invalid, only Integer, Float or String allowed" );
 		}
-		/* deep copy */
+		/* TODO: deep copy */
 		this.data = data;
 	}
 	

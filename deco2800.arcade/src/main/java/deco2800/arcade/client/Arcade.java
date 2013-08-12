@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import org.reflections.Reflections;
 
@@ -22,8 +21,6 @@ import deco2800.arcade.client.network.listener.AchievementListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
-import deco2800.arcade.client.startup.GameSelector;
-import deco2800.arcade.client.startup.UserNameDialog;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
@@ -271,7 +268,7 @@ public class Arcade extends JFrame {
 		}
 	}
 	
-	private Set<String> findGameIds() {
+	public Set<String> findGameIds() {
 		return getGameMap().keySet();
 	}
 
@@ -284,13 +281,6 @@ public class Arcade extends JFrame {
 			selectedGame = getInstanceOfGame("pong");
 		}
 		//requestGameSession(selectedGame);
-	}
-	
-	
-	public GameClient getUserGameSelection() {
-		Object[] gameList = findGameIds().toArray();
-		String selectedGameId = (String) GameSelector.selectGame(this, gameList);
-		return getInstanceOfGame(selectedGameId);
 	}
 	
 	

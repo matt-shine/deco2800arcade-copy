@@ -9,7 +9,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
-public abstract class GameClient implements ApplicationListener {
+public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player; 
 	protected NetworkClient networkClient;

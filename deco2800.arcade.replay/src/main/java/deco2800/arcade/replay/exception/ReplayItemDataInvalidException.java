@@ -1,5 +1,6 @@
-package deco2800.arcade.replay;
+package deco2800.arcade.replay.exception;
 
+@SuppressWarnings("serial")
 public class ReplayItemDataInvalidException extends RuntimeException {
 	
     public ReplayItemDataInvalidException() {

@@ -16,6 +16,18 @@ public class ReplayNode {
 		this.items = items;
 	}
 	
+	/**
+	 * Create Replay Node from a set of data.
+	 * @param type The Event Type
+	 * @param items An Item List <DataName, DataValue>
+	 */
+	public ReplayNode( String type, Map<String, ReplayItem> items)
+	{
+	    this.nodeTime = 0;
+	    this.type = type;
+	    this.items = items;
+	}
+	
 	/*
 	 * TODO: create from flattened string
 	 */

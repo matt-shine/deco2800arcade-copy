@@ -1,5 +1,7 @@
 package deco2800.arcade.replay;
 
+import deco2800.arcade.replay.exception.ReplayItemDataInvalidException;
+
 public class ReplayItem {
 	
 	public static Integer TYPE_INTEGER = 1;

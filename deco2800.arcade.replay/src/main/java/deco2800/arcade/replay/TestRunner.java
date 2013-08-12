@@ -1,6 +1,5 @@
 package deco2800.arcade.replay;
 
-
 public class TestRunner {
 
 	public TestRunner() {
@@ -34,19 +33,37 @@ public class TestRunner {
 		
 
 		replayHandler.startRecording();
+		
+		//Declare an event to be registered in the factory, we can pass arrays.
+		ReplayNodeFactory.registerEvent("piece_move",
+		                                new String[]{"piece_id",
+		                                             "new_x",
+		                                             "new_y"}
+		                               );
+		
+		//Or just use varargs to pass a list, redefinitions silently overwrite.
+	    ReplayNodeFactory.registerEvent("piece_move",
+                                              "piece_id",
+                                              "new_x",
+                                              "new_y"
+                                        );
 
 		Thread.sleep( 500 );
 		
-		ReplayNode node = new ReplayNode( "piece_move" );
-		node.addItem( "piece_id", new ReplayItem( new Integer( 6 ) ) );
-		node.addItem( "new_x", new ReplayItem( new Integer( 8 ) ) );
-		node.addItem( "new_y", new ReplayItem( new Integer( 4 ) ) );
-		replayHandler.pushEvent( node );
+		//Recreate event from factory definition (once again, pass array or varargs.
+		replayHandler.pushEvent(
+		        ReplayNodeFactory.createReplayNode(
+		                "piece_move",
+		                6, 8, 4
+		        )
+		);
 
 		Thread.sleep( 1500 );
 		
+		//Can still create nodes the old way too.
+		ReplayNode node;
 		node = new ReplayNode( "piece_move" );
-		node.addItem( "piece_id", new ReplayItem( new Integer( 12 ) ) );
+		node.addItem( "piece_id", new ReplayItem( new Integer( 12 ) ) ); //New integer is unnecessary.
 		node.addItem( "new_x", new ReplayItem( new Integer( 3 ) ) );
 		node.addItem( "new_y", new ReplayItem( new Integer( 4 ) ) );
 		replayHandler.pushEvent( node );

@@ -50,7 +50,8 @@ public class Arcade extends JFrame {
 	private LwjglCanvas canvas;
 	
 	private GameClient selectedGame = null;
-	private GameClient mainUI = null;
+
+	private ProxyApplicationListener proxy;
 	
 	
 	/**
@@ -59,9 +60,10 @@ public class Arcade extends JFrame {
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
-
-		arcade.startDashboard();
 		
+		arcade.addCanvas();
+		
+		arcade.startGame("arcadeui");
 
 	}
 	
@@ -177,7 +179,6 @@ public class Arcade extends JFrame {
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
 	public void startGame(String gameid){
-		stopDashboard();
 		selectedGame = getInstanceOfGame(gameid);
 		startGame(selectedGame);
 	}
@@ -186,43 +187,34 @@ public class Arcade extends JFrame {
 	/**
 	 * Stop the current game
 	 */
-	public void stopSelectedGame(){
+	public void stopGame(){
 		if (selectedGame != null) {
-			selectedGame.gameOver(true);
+			selectedGame.gameOver();
 		}
+		proxy.setTarget(new DummyApplicationListener());
 	}
-	
-	
+
 	/**
-	 * Starts the dashboard
+	 * returns true if the player exists
 	 */
-	public void startDashboard(){
-		mainUI = getInstanceOfGame("arcadeui");
-		startGame(mainUI);
+	public boolean hasPlayer() {
+		return (this.player != null);
 	}
-	
-	
-	/**
-	 * Stops the dashboard
-	 */
-	public void stopDashboard(){
-		if (mainUI != null) {
-			mainUI.gameOver(false);
-		}
-	}
-	
 	
 	/**
 	 * Start a GameClient
 	 */
-	public void startGame(final GameClient game){
-		this.canvas = new LwjglCanvas(game, true);
+	public void addCanvas(){
+		this.proxy = new ProxyApplicationListener();
+		this.canvas = new LwjglCanvas(proxy, true);
 		this.canvas.getCanvas().setSize(width, height);
+		
+		proxy.setTarget(new DummyApplicationListener());
 		
 		
 		Object mon = new Object();
 		synchronized (mon) {
-			game.setArcadeThreadMonitor(mon);
+			proxy.setThreadMonitor(mon);
 			this.add(this.canvas.getCanvas());
 			
 			try {
@@ -231,34 +223,21 @@ public class Arcade extends JFrame {
 				e.printStackTrace();
 			}
 		}
+
+	}
+	
+	
+	
+	/**
+	 * Start a GameClient
+	 */
+	public void startGame(final GameClient game){
+		proxy.setTarget(game);
 		
 		game.addGameOverListener(new GameOverListener() {
 
 			@Override
 			public void notify(GameClient client) {
-				canvas.stop();
-				remove(canvas.getCanvas());
-			}
-
-			@Override
-			public void notifySync(GameClient client) {
-				canvas.stop();
-				
-				Object mon = new Object();
-				synchronized (mon) {
-					game.setArcadeThreadMonitor(mon);
-					remove(canvas.getCanvas());
-					
-					try {
-						//if your code is stuck here you probably forgot to call
-						//super.create() or super.dispose() or you passed the wrong parameter
-						//into gameOver()
-						mon.wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				
 			}
 			
 		});

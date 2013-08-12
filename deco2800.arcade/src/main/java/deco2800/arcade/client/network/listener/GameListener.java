@@ -26,18 +26,11 @@ public class GameListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof NewGameResponse){
+			
+			@SuppressWarnings("unused")
 			NewGameResponse newGameResponse = (NewGameResponse) object;
 			
-			switch (newGameResponse) {
-			case OK:
-
-			case REFUSED:
-
-			case ERROR:
-				//TODO handle error
-			case UNAVAILABLE:
-				//TODO handle UNAVAILABLE
-			}
+			//TODO something
 		}
 	}
 

@@ -26,15 +26,11 @@ public class ConnectionListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof ConnectionResponse){
+			
+			@SuppressWarnings("unused")
 			ConnectionResponse connectionResponse = (ConnectionResponse)object;
-			switch(connectionResponse){
-			case OK:
-
-			case REFUSED:
-				//TODO error message
-			case ERROR:
-				//TODO error message
-			}
+			
+			//TODO something
 		}
 	}
 

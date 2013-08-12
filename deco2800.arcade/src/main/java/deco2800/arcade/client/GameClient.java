@@ -14,7 +14,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	protected Player player; 
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
-	private Object mon = null;
 	private ApplicationListener overlay = null;
 	private boolean overlayInitialised = false;
 	private int width, height;
@@ -44,6 +43,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 			if (!overlayInitialised) {
 				overlay.resize(this.width, this.height);
 				overlay.create();
+				overlayInitialised = true;
 			}
 			overlay.render();
 		}
@@ -62,55 +62,20 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	/**
 	 * Controls what happens when the game is over
 	 */
-	public void gameOver(boolean sync) {
-		for (GameOverListener listener : gameOverListeners) {
-			if (sync) {
-				listener.notifySync(this);
-			} else {
-				listener.notify(this);
-			}
-		}
-	}
-	
-	
-	/**
-	 * Controls what happens when the game is over
-	 */
 	public void gameOver() {
-		gameOver(false);
-	}
-	
-	
-	/**
-	 * Sets the object that controls waking up the main thread
-	 */
-	public void setArcadeThreadMonitor(Object mon) {
-		this.mon = mon;
-	}
-	
-	
-	/**
-	 * wakes up the main thread
-	 */
-	public void wakeArcadeThread() {
-		if (this.mon != null){ 
-			synchronized (mon) {
-				this.mon.notify();
-				this.mon = null;
-			}
+		for (GameOverListener listener : gameOverListeners) {
+			listener.notify(this);
 		}
 	}
+	
 
 	@Override
 	public void create() {
-		//super.create();
-		this.wakeArcadeThread();
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		this.wakeArcadeThread();
 	}
 
 	@Override

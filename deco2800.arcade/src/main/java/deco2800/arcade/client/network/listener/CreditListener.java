@@ -26,8 +26,11 @@ public class CreditListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof CreditBalanceResponse){
+			
 			@SuppressWarnings("unused")
 			CreditBalanceResponse creditBalanceResponse = (CreditBalanceResponse) object;
+			
+			//TODO something
 		}
 	}
 

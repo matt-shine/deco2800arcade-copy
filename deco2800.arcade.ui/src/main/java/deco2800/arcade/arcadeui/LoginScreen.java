@@ -67,14 +67,17 @@ public class LoginScreen extends GameScreen {
 	    
 	    batch.begin();
 	    font.setColor(Color.BLACK);
-	    font.draw(batch, "This is the login screen. Press space to log in as 'debuguser'.", 100, 100);
+	    font.draw(batch, "This is the login screen. Press space to log in as 'debuguser'.", 110, 110);
 	    batch.end();
 	    
 	    if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 	    	ArcadeSystem.login("debuguser");
-	    	System.out.println("logged in");
-	    	//ArcadeSystem.goToGame("arcadeui");
 	    }
+	    
+	    if (ArcadeSystem.isLoggedIn()) {
+	    	ArcadeSystem.goToGame("arcadeui");
+	    }
+	    
 	    
 	}
 

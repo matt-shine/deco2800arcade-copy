@@ -11,16 +11,14 @@ public class ArcadeSystem {
 	}
 	
 	public static void goToGame(String gameid) {
-		arcade.stopDashboard();
+		arcade.stopGame();
 		arcade.startGame(gameid);
 	}
 	
 	public static void openConnection() {
 		try {
 			arcade.connectToServer();
-			System.out.println("connected");
 		} catch (ArcadeException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -33,5 +31,9 @@ public class ArcadeSystem {
 		arcade.connectAsUser(username);
 	}
 	
+	public static boolean isLoggedIn() {
+		return arcade.hasPlayer();
+	}
+
 	
 }

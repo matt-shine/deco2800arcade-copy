@@ -1,6 +1,9 @@
 package deco2800.arcade.arcadeui;
 
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameScreen;
 
 public class HomeScreen  extends GameScreen {
@@ -17,6 +21,7 @@ public class HomeScreen  extends GameScreen {
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
+	Set<String> games = null;
 	
 	public HomeScreen() {
 		
@@ -35,6 +40,9 @@ public class HomeScreen  extends GameScreen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, getWidth(), getHeight());
 		shapeRenderer = new ShapeRenderer();
+		
+		games = ArcadeSystem.getGamesList();
+	    
 	}
 	
 	@Override
@@ -59,8 +67,30 @@ public class HomeScreen  extends GameScreen {
 	    
 	    batch.begin();
 	    font.setColor(Color.BLACK);
-	    font.draw(batch, "This is the Home Screen. Game selection is NYI.", 100, 100);
+	    
+	    int h = 110;
+	    int index = 0;
+	    font.draw(batch, "Select a game by pressing a number key:", 110, h);
+	    h += 8;
+	    
+	    for (String game : games) {
+	    	h += 16;
+		    font.draw(batch, "" + index + ". " + game, 110, h);
+		    
+		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
+		    	ArcadeSystem.goToGame(game);
+		    }
+		    
+		    index++;
+		    
+	    }
+	    
 	    batch.end();
+	    
+	    
+	    //TODO implement this better
+	    
+	    
 		
 	}
 

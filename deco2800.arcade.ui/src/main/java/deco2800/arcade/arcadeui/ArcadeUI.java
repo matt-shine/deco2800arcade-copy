@@ -37,7 +37,6 @@ public class ArcadeUI extends GameClient {
 	@Override
 	public void create() {
 		
-		System.out.println("is overlay: " + isOverlay);
 		if (isOverlay) {
 			this.setScreen(new Overlay());
 		} else if (player == null) {
@@ -54,8 +53,7 @@ public class ArcadeUI extends GameClient {
 	public void dispose() {
 		super.dispose();
 	}
-
-
+	
 	@Override
 	public void pause() {
 		super.pause();

@@ -7,6 +7,7 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 
@@ -16,6 +17,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
  * @author Simon
  *
  */
+@InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	   
@@ -38,8 +40,8 @@ public class ArcadeUI extends GameClient {
 		System.out.println("is overlay: " + isOverlay);
 		if (isOverlay) {
 			this.setScreen(new Overlay());
-		} else if (true/*if not logged in*/) {
-			this.setScreen(new HomeScreen());
+		} else if (player == null) {
+			this.setScreen(new LoginScreen());
 		} else {
 			this.setScreen(new HomeScreen());
 		}

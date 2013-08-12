@@ -2,7 +2,6 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 
 public class ConnectionListener extends NetworkListener {
@@ -30,9 +29,7 @@ public class ConnectionListener extends NetworkListener {
 			ConnectionResponse connectionResponse = (ConnectionResponse)object;
 			switch(connectionResponse){
 			case OK:
-				Arcade arcade = Arcade.getInstance(); //Get the arcade instance
-				//arcade.requestGameSession(new TicTacToe()); //TODO start up with the actual game
-				arcade.selectGame();
+
 			case REFUSED:
 				//TODO error message
 			case ERROR:

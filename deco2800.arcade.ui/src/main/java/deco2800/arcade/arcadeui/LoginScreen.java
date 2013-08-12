@@ -1,6 +1,7 @@
 package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameScreen;
 
 public class LoginScreen extends GameScreen {
@@ -38,6 +40,9 @@ public class LoginScreen extends GameScreen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, getWidth(), getHeight());
 		shapeRenderer = new ShapeRenderer();
+		
+		ArcadeSystem.openConnection();
+		
 	}
 	
 	@Override
@@ -64,6 +69,13 @@ public class LoginScreen extends GameScreen {
 	    font.setColor(Color.BLACK);
 	    font.draw(batch, "This is the login screen. Press space to log in as 'debuguser'.", 100, 100);
 	    batch.end();
+	    
+	    if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+	    	ArcadeSystem.login("debuguser");
+	    	System.out.println("logged in");
+	    	//ArcadeSystem.goToGame("arcadeui");
+	    }
+	    
 	}
 
 	@Override

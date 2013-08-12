@@ -39,15 +39,6 @@ public class Arcade extends JFrame {
 	 */
 	private static final long serialVersionUID = 3609353264826109097L;
 
-	private static Arcade ARCADE;
-	
-	/**
-	 * @return Returns an instance of the arcade
-	 */
-	public static Arcade getInstance(){
-		return ARCADE;
-	}
-	
 	private NetworkClient client;
 
 	private Player player;
@@ -60,6 +51,20 @@ public class Arcade extends JFrame {
 	
 	private GameClient selectedGame = null;
 	private GameClient mainUI = null;
+	
+	
+	/**
+	 * ENTRY POINT
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Arcade arcade = new Arcade(args);
+
+		arcade.startDashboard();
+		
+
+	}
+	
 	/**
 	 * Sets the instance variables for the arcade
 	 * @param args
@@ -68,12 +73,23 @@ public class Arcade extends JFrame {
 		this.width = 640;
 		this.height = 480;
 		
+		ArcadeSystem.setArcadeInstance(this);
+		
+		initWindow();
+	}
+
+	/**
+	 * Configure the window
+	 */
+	private void initWindow() {
+		//create the main window
 		this.setSize(new Dimension(width, height));
 		this.setVisible(true);
 		Insets insets = this.getInsets();
 		this.setSize(new Dimension(width + insets.left + insets.right, height + insets.bottom + insets.top));
 		this.getContentPane().setBackground(Color.black);
 		
+		//set shutdown behaviour
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    public void windowClosing(WindowEvent winEvt) {
 		    	
@@ -86,13 +102,30 @@ public class Arcade extends JFrame {
 		    }
 		});
 	}
+	
 
+	public void startConnection() {
+		//Try to connect to the server until successful
+		boolean connected = false;
+		while (!connected){
+			try {
+				connectToServer();
+				connected = true;
+			} catch (ArcadeException e) {
+				//TODO: error on connection failure
+				System.out.println("Connection failed... Trying again.");
+			}
+		}
+		
+	}
+	
+	
 	/**
 	 * Attempt to initiate a connection with the server.
 	 * 
 	 * @throws ArcadeException if the connection failed.
 	 */
-	private void connectToServer() throws ArcadeException{
+	public void connectToServer() throws ArcadeException{
 		try {
 			// TODO allow server/port as optional runtime arguments xor user inputs.
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
@@ -102,6 +135,7 @@ public class Arcade extends JFrame {
 		}
 	}
 	
+	
 	private void addListeners(){
 		this.client.addListener(new AchievementListener());
 		this.client.addListener(new ConnectionListener());
@@ -109,7 +143,8 @@ public class Arcade extends JFrame {
 		this.client.addListener(new GameListener());
 	}
 	
-	private void connectAsUser(String username){
+
+	public void connectAsUser(String username){
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
 		
@@ -137,12 +172,24 @@ public class Arcade extends JFrame {
 		this.client.sendNetworkObject(newGameRequest);
 	}
 	
+	
 	/**
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
-	public void startSelectedGame(){
+	public void startGame(String gameid){
 		stopDashboard();
+		selectedGame = getInstanceOfGame(gameid);
 		startGame(selectedGame);
+	}
+	
+	
+	/**
+	 * Stop the current game
+	 */
+	public void stopSelectedGame(){
+		if (selectedGame != null) {
+			selectedGame.gameOver(true);
+		}
 	}
 	
 	
@@ -160,7 +207,7 @@ public class Arcade extends JFrame {
 	 */
 	public void stopDashboard(){
 		if (mainUI != null) {
-			mainUI.gameOver(true);
+			mainUI.gameOver(false);
 		}
 	}
 	
@@ -217,63 +264,28 @@ public class Arcade extends JFrame {
 		});
 	}
 	
-	public static void main(String[] args) {
-		ARCADE = new Arcade(args);
 
-		ARCADE.startDashboard();
-		
-		//Try to connect to the server until successful
-		boolean connected = false;
-		while (!connected){
-			try {
-				ARCADE.connectToServer();
-				connected = true;
-			} catch (ArcadeException e) {
-				//TODO: error on connection failure
-				System.exit(0);
-			}
-		}
-
-		//Get the username off the user and connect to the server with it
-		String username = "debuguser";//TODO: get username from login screen
-		ARCADE.connectAsUser(username);
-
-	}
-
-	private Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
 
 	private Map<String,Class<? extends GameClient>> getGameMap() {
-		if (gameMap.isEmpty()) {
-			Reflections reflections = new Reflections("deco2800.arcade");
-			Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
-			for (Class<?> g : possibleGames) {
-				if (GameClient.class.isAssignableFrom(g)) {
-					Class<? extends GameClient> game = g.asSubclass(GameClient.class);
-					ArcadeGame aGame = g.getAnnotation(ArcadeGame.class);
-					String gameId = aGame.id();
-					gameMap.put(gameId, game);
-				}
+		
+		Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
+		
+		Reflections reflections = new Reflections("deco2800.arcade");
+		Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
+		for (Class<?> g : possibleGames) {
+			if (GameClient.class.isAssignableFrom(g)) {
+				Class<? extends GameClient> game = g.asSubclass(GameClient.class);
+				ArcadeGame aGame = g.getAnnotation(ArcadeGame.class);
+				String gameId = aGame.id();
+				gameMap.put(gameId, game);
 			}
-			return gameMap;
-		} else {
-			return gameMap;
 		}
+		return gameMap;
 	}
 	
 	public Set<String> findGameIds() {
 		return getGameMap().keySet();
-	}
-
-	/**
-	 * Ask the user to select a game, then call <tt>requestGameSession</tt> on
-	 * the selected game.
-	 */
-	public void selectGame() {
-		//TODO: get target game from user
-		selectedGame = getInstanceOfGame("pong");
-		//TODO: confirm with the server that it is ok to play the game
-	}
-	
+	}	
 	
 	public GameClient getInstanceOfGame(String id) {
 		return getInstanceOfGame(id, false);
@@ -313,7 +325,8 @@ public class Arcade extends JFrame {
 		}
 		return null;
 	}
-	
+
+
 	
 	
 }

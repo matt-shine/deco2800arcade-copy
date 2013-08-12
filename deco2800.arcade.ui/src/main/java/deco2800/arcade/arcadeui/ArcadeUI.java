@@ -34,12 +34,12 @@ public class ArcadeUI extends GameClient {
 
 	@Override
 	public void create() {
-		isOverlay = true;
+		
 		System.out.println("is overlay: " + isOverlay);
 		if (isOverlay) {
 			this.setScreen(new Overlay());
 		} else if (true/*if not logged in*/) {
-			this.setScreen(new LoginScreen());
+			this.setScreen(new HomeScreen());
 		} else {
 			this.setScreen(new HomeScreen());
 		}

@@ -2,12 +2,13 @@ package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class Overlay implements Screen {
+import deco2800.arcade.client.GameScreen;
+
+public class Overlay  extends GameScreen {
 	
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
@@ -36,7 +37,8 @@ public class Overlay implements Screen {
 	public void render(float arg0) {
 		
 		camera.update();
-		
+	    shapeRenderer.setProjectionMatrix(camera.combined);
+
 		//toggles isUIOpen on tab key down
 		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
 			isUIOpen = !isUIOpen;
@@ -49,8 +51,8 @@ public class Overlay implements Screen {
 		    
 		    shapeRenderer.filledRect(100,
 		        100,
-		        width - 200,
-		        height - 200);
+		        getWidth() - 200,
+		        getHeight() - 200);
 		    
 		    shapeRenderer.end();
 		    
@@ -61,20 +63,13 @@ public class Overlay implements Screen {
 	@Override
 	public void dispose() {
 	}
-
+	
 	@Override
 	public void hide() {
 	}
 
 	@Override
 	public void pause() {
-	}
-
-	@Override
-	public void resize(int width, int height) {
-		this.width = width;
-		this.height = height;
-
 	}
 
 	@Override

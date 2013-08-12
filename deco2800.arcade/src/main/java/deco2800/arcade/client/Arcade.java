@@ -223,7 +223,7 @@ public class Arcade extends JFrame {
 	public static void main(String[] args) {
 		ARCADE = new Arcade(args);
 
-		//ARCADE.startDashboard();
+		ARCADE.startDashboard();
 		
 		//Try to connect to the server until successful
 		boolean connected = false;
@@ -233,19 +233,20 @@ public class Arcade extends JFrame {
 				connected = true;
 			} catch (ArcadeException e) {
 				//Server unavailable - ask user whether or not to try again
-				int userInput = JOptionPane.showConfirmDialog(ARCADE,
+				/*int userInput = JOptionPane.showConfirmDialog(ARCADE,
 						e.getMessage() + "\nTry Again?", "Network Error",
 						JOptionPane.YES_NO_OPTION);
 				boolean keepTrying = (userInput == 0);
 				if (!keepTrying) {
 					//Exit the program
-					System.exit(0);
-				}
+					
+				}*/
+				System.exit(0);
 			}
 		}
 
 		//Get the username off the user and connect to the server with it
-		String username = UserNameDialog.getUsername(ARCADE);
+		String username = "debuguser";//UserNameDialog.getUsername(ARCADE);
 		ARCADE.connectAsUser(username);
 
 	}
@@ -280,9 +281,9 @@ public class Arcade extends JFrame {
 	 */
 	public void selectGame() {
 		while(selectedGame == null) {
-			selectedGame = getUserGameSelection();
+			selectedGame = getInstanceOfGame("pong");
 		}
-		requestGameSession(selectedGame);
+		//requestGameSession(selectedGame);
 	}
 	
 	

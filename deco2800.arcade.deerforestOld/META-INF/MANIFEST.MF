@@ -3,10 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: DeerForest
 Bundle-SymbolicName: deco2800.arcade.deerforest
 Bundle-Version: 1.0.0.qualifier
-Bundle-ClassPath: TicTacToe.jar,
- libs/gdx.jar
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: 
  deco2800.arcade.deerforest
 Require-Bundle: deco2800.arcade.model;bundle-version="1.0.0",
- deco2800.arcade
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+ deco2800.arcade;bundle-version="1.0.0",
+ deco2800.arcade.protocol;bundle-version="1.0.0"

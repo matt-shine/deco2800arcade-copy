@@ -250,6 +250,7 @@ public class Arcade extends JFrame {
 		Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
 		
 		Reflections reflections = new Reflections("deco2800.arcade");
+		System.out.println("Possible Classes: " + reflections.getSubTypesOf(GameClient.class));
 		Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
 		for (Class<?> g : possibleGames) {
 			if (GameClient.class.isAssignableFrom(g)) {

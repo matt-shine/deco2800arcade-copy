@@ -1,4 +1,4 @@
-package deco2800.arcade.deerforest;
+package deco2800.arcade.deerforest.GUI;
 
 import java.util.HashSet;
 import java.util.Set;

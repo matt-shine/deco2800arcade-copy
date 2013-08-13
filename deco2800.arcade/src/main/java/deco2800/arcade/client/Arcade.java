@@ -43,24 +43,24 @@ public class Arcade extends JFrame {
 	private static final long serialVersionUID = 3609353264826109097L;
 
 	private static Arcade ARCADE;
-	
+
 	/**
 	 * @return Returns an instance of the arcade
 	 */
 	public static Arcade getInstance(){
 		return ARCADE;
 	}
-	
+
 	private NetworkClient client;
 
 	private Player player;
-	
+
 	private int width, height;
-	
+
 	private String serverIPAddress = "127.0.0.1";
 
 	private LwjglCanvas canvas;
-	
+
 	private GameClient selectedGame = null;
 	private GameClient mainUI = null;
 	/**
@@ -70,29 +70,29 @@ public class Arcade extends JFrame {
 	private Arcade(String[] args){
 		this.width = 640;
 		this.height = 480;
-		
+
 		this.setSize(new Dimension(width, height));
 		this.setVisible(true);
 		Insets insets = this.getInsets();
 		this.setSize(new Dimension(width + insets.left + insets.right, height + insets.bottom + insets.top));
 		this.getContentPane().setBackground(Color.black);
-		
+
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    public void windowClosing(WindowEvent winEvt) {
-		    	
-				/* TODO: make the program shutdown properly. This line seems to 
+
+				/* TODO: make the program shutdown properly. This line seems to
 		    	 * cause a deadlock. Not calling it will leave the program running in
 		    	 * the background
 		    	 */
 		    	System.exit(0);
-		    	
+
 		    }
 		});
 	}
 
 	/**
 	 * Attempt to initiate a connection with the server.
-	 * 
+	 *
 	 * @throws ArcadeException if the connection failed.
 	 */
 	private void connectToServer() throws ArcadeException{
@@ -104,32 +104,32 @@ public class Arcade extends JFrame {
 			throw new ArcadeException("Unable to connect to Arcade Server (" + serverIPAddress + ")", e);
 		}
 	}
-	
+
 	private void addListeners(){
 		this.client.addListener(new AchievementListener());
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 	}
-	
+
 	private void connectAsUser(String username){
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
-		
+
 		this.client.sendNetworkObject(connectionRequest);
-		
+
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
 		creditBalanceRequest.username = username;
-		
+
 		this.client.sendNetworkObject(creditBalanceRequest);
-		
+
 		this.player = new Player();
 		this.player.setUsername(username);
 	}
 
 	/**
 	 * Ask the server to play a given game.
-	 * 
+	 *
 	 * @param gameClient the type of game to play
 	 */
 	public void requestGameSession(GameClient gameClient){
@@ -139,7 +139,7 @@ public class Arcade extends JFrame {
 		newGameRequest.requestType = GameRequestType.NEW;
 		this.client.sendNetworkObject(newGameRequest);
 	}
-	
+
 	/**
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
@@ -147,8 +147,8 @@ public class Arcade extends JFrame {
 		stopDashboard();
 		startGame(selectedGame);
 	}
-	
-	
+
+
 	/**
 	 * Starts the dashboard
 	 */
@@ -156,8 +156,8 @@ public class Arcade extends JFrame {
 		mainUI = getInstanceOfGame("arcadeui");
 		startGame(mainUI);
 	}
-	
-	
+
+
 	/**
 	 * Stops the dashboard
 	 */
@@ -166,28 +166,28 @@ public class Arcade extends JFrame {
 			mainUI.gameOver(true);
 		}
 	}
-	
-	
+
+
 	/**
 	 * Start a GameClient
 	 */
 	public void startGame(final GameClient game){
 		this.canvas = new LwjglCanvas(game, true);
 		this.canvas.getCanvas().setSize(width, height);
-		
-		
+
+
 		Object mon = new Object();
 		synchronized (mon) {
 			game.setArcadeThreadMonitor(mon);
 			this.add(this.canvas.getCanvas());
-			
+
 			try {
 				mon.wait();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		game.addGameOverListener(new GameOverListener() {
 
 			@Override
@@ -199,29 +199,29 @@ public class Arcade extends JFrame {
 			@Override
 			public void notifySync(GameClient client) {
 				canvas.stop();
-				
+
 				Object mon = new Object();
 				synchronized (mon) {
 					game.setArcadeThreadMonitor(mon);
 					remove(canvas.getCanvas());
-					
+
 					try {
 						mon.wait();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-				
+
 			}
-			
+
 		});
 	}
-	
+
 	public static void main(String[] args) {
 		ARCADE = new Arcade(args);
 
 		//ARCADE.startDashboard();
-		
+
 		//Try to connect to the server until successful
 		boolean connected = false;
 		while (!connected){
@@ -266,7 +266,7 @@ public class Arcade extends JFrame {
 			return gameMap;
 		}
 	}
-	
+
 	private Set<String> findGameIds() {
 		return getGameMap().keySet();
 	}
@@ -279,21 +279,21 @@ public class Arcade extends JFrame {
 		selectedGame = getUserGameSelection();
 		requestGameSession(selectedGame);
 	}
-	
-	
+
+
 	public GameClient getUserGameSelection() {
 		Object[] gameList = findGameIds().toArray();
 		String selectedGameId = (String) GameSelector.selectGame(this, gameList);
 		return getInstanceOfGame(selectedGameId);
 	}
-	
+
 	public GameClient getInstanceOfGame(String id) {
 		Class<? extends GameClient> gameClass = getGameMap().get(id);
 		try {
 			if (gameClass != null) {
 				Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
 				GameClient game = null;
-				
+
 				//add the overlay to the game
 				if (id != "arcadeui") {
 					game = constructor.newInstance(player, client);
@@ -303,7 +303,9 @@ public class Arcade extends JFrame {
 					constructor = gameClass.getConstructor(Player.class, NetworkClient.class, Boolean.class);
 					game = constructor.newInstance(player, client, true);
 				}
-				
+
+				System.err.println("a new " + id + " returned");
+
 				return game;
 			}
 		} catch (NoSuchMethodException e) {
@@ -327,7 +329,7 @@ public class Arcade extends JFrame {
 		}
 		return null;
 	}
-	
-	
-	
+
+
+
 }

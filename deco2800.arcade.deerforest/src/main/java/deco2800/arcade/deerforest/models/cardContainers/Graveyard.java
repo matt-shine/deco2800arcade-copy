@@ -7,16 +7,36 @@ import java.util.List;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
-public class Deck implements CardStack {
+public class Graveyard implements CardStack {
 
-	//Initialise the deck with list of cards (gotten from user deck database)
-	public Deck(List<AbstractCard> cards) {
+	//Consider having a variable called "isSorted", this will allow searching
+	//be faster as you can check only a section of the card list
+	//Alternatively, have different holders (array, Linked list, etc) for each card type
+	
+	
+	//Initialize graveyard
+	public Graveyard() {
 		
 	}
-
-	//Draw a card from deck, null if not possible
-	public AbstractCard draw() {
-		return null;
+	
+	//check if grave only has spell cards
+	public boolean onlySpells() {
+		return false;
+	}
+	
+	//check if grave only has monsters
+	public boolean onlyMonsters() {
+		return false;
+	}
+	
+	//check if grave only has monsters of specific type
+	public boolean onlyMonsters(String type) {
+		return false;
+	}
+	
+	//Sort graveyard by cards
+	public void sort() {
+		
 	}
 	
 	@Override
@@ -62,13 +82,13 @@ public class Deck implements CardStack {
 	}
 
 	@Override
-	public boolean add(AbstractCard arg0) {
+	public boolean add(AbstractCard e) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends AbstractCard> arg0) {
+	public boolean addAll(Collection<? extends AbstractCard> c) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -76,17 +96,17 @@ public class Deck implements CardStack {
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	public boolean contains(Object arg0) {
+	public boolean contains(Object o) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean containsAll(Collection<?> arg0) {
+	public boolean containsAll(Collection<?> c) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -104,19 +124,19 @@ public class Deck implements CardStack {
 	}
 
 	@Override
-	public boolean remove(Object arg0) {
+	public boolean remove(Object o) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean removeAll(Collection<?> arg0) {
+	public boolean removeAll(Collection<?> c) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean retainAll(Collection<?> arg0) {
+	public boolean retainAll(Collection<?> c) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -134,7 +154,7 @@ public class Deck implements CardStack {
 	}
 
 	@Override
-	public <T> T[] toArray(T[] arg0) {
+	public <T> T[] toArray(T[] a) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -148,7 +168,7 @@ public class Deck implements CardStack {
 	@Override
 	public void shuffle() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

@@ -5,36 +5,39 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameScreen implements Screen {
+
+	public static final String LOG = GameScreen.class.getSimpleName();
+
 	final MixMaze game;
-	OrthographicCamera camera;
+
+	private final Stage stage;
+	private final PacMan pacman;
 
 	public GameScreen(final MixMaze game) {
 		this.game = game;
 		this.game.gameScreen = this;
 
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 720, 480);
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
+		pacman = new PacMan();
+		stage.addActor(pacman);
+		stage.setKeyboardFocus(pacman);
+
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0.2f, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-		camera.update();
-		game.batch.setProjectionMatrix(camera.combined);
-
-		game.batch.begin();
-		game.font.draw(game.batch, "This is game screen"
-				+ " (hold key T to go back main screen)",
-				200, 250);
-		game.batch.end();
-
 		if (Gdx.input.isKeyPressed(Input.Keys.T)) {
 			game.setScreen(game.menuScreen);
 		}
+
+		Gdx.gl20.glClearColor(0.2f, 0.2f, 0, 1);
+		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		stage.act(delta);
+		stage.draw();
 	}
 
 	@Override

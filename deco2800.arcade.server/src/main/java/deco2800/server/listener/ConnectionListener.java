@@ -29,11 +29,9 @@ public class ConnectionListener extends Listener {
 		
 		if (object instanceof ConnectionRequest) {
 			ConnectionRequest request = (ConnectionRequest) object;
-			System.out.println("Connection request for user: " + request.username);
 			connectedUsers.add(request.username);
 
 			connection.sendTCP(ConnectionResponse.OK);
-			System.out.println("Connection granted");
 		}
 	}
 

@@ -7,19 +7,26 @@ import java.util.Set;
 public class Player {
 
 	// TODO shared between server & client?
-
-	// TODO player icons
+	
+	private int playerID;
 
 	private String username;
 
 	private Set<Achievement> achievements;
-
+	
+	private Set<Game> games;
+	
+	private Set<Player> friends;
+	
+	private Set<Player> friendInvites;
+	
 	private Icon icon;
 
 	public Player() {
 
 	}
 
+	@Deprecated
 	/**
 	 * Sets the name of the Player
 	 * 
@@ -35,7 +42,9 @@ public class Player {
 
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
-	 * 
+	 *
+	 * @param playerID
+	 *            The Player's nameID
 	 * @param username
 	 *            The Player's name
 	 * @param achievments
@@ -46,19 +55,37 @@ public class Player {
 	 *             Throws exception when the image cannot be found at the
 	 *             designated filepath.
 	 */
-	public Player(String username, Set<Achievement> achievements, String filepath)
-			throws IOException {
+	public Player(int playerID, String username, Set<Achievement> achievements,
+			String filepath) throws IOException {
 		// TODO: Validate username input
+
+		// TODO validate filepath
+
+		// TODO validate achievements set
+		
+		// TODO validate playerID
+		
+		this.playerID = playerID;
 
 		this.username = username;
 		this.achievements = new HashSet<Achievement>(achievements);
-
+		this.games = new HashSet<Game>();
+		this.friends = new HashSet<Player>();
+		this.friendInvites = new HashSet<Player>();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
-		icon = new Icon(filepath);
+		this.icon = new Icon(filepath);
+	}
+	
+	/**
+	 * Access method for  playerID
+	 * @return	Returns the playerID
+	 */
+	public int getPlayerID(){
+		return this.playerID;
 	}
 
 	/**
@@ -76,6 +103,7 @@ public class Player {
 	 * @param username
 	 */
 	public void setUsername(String username) {
+		//TODO Validate
 		this.username = username;
 	}
 
@@ -99,7 +127,7 @@ public class Player {
 	 *            The player's achievements.
 	 */
 	public void setAchievements(Set<Achievement> achievements) {
-		/*
+		/* TODO Validate not null
 		 * Preserving immutability
 		 */
 		this.achievements = new HashSet<Achievement>(achievements);
@@ -113,6 +141,7 @@ public class Player {
 	 * @ensure this.achievement.contains(achievement)
 	 */
 	public void addAchievement(Achievement achievement) {
+		//TODO Validate not null
 		this.achievements.add(new Achievement(achievement));
 	}
 
@@ -158,5 +187,208 @@ public class Player {
 	public void setIcon(Icon icon) {
 		this.icon = icon.clone();
 	}
+	
+	/**
+	 * Access method for player's Games set.
+	 * 
+	 * @return Returns a set containing the player's games.
+	 */
+	public Set<Game> getGames() {
+		/*
+		 * Cloning this.games to preserve immutability
+		 */
+		Set<Game> clone = new HashSet<Game>(this.games);
+		return clone;
+	} 
+	
+	/**
+	 * Sets the Player's games to the set provided
+	 * 
+	 * @param games
+	 *            The player's games.
+	 */
+	public void setGames(Set<Game> games) {
+		/* 
+		 * Preserving immutability
+		 */
+		if (games != null) {
+			this.games = new HashSet<Game>(games);
+		}
+	}
 
+	/**
+	 * Adds an game to the player's games set.
+	 * 
+	 * @param game
+	 *            The game to be added to the set.
+	 * @ensure this.games.contains(game)
+	 */
+	public void addGame(Game game) {
+		if (game != null && !this.hasGame(game)) {
+			this.games.add(game);
+		}
+		/*TODO Throw exception if game already in game set */
+	}
+
+	/**
+	 * Removes a game from the player's games.
+	 * 
+	 * @param game
+	 *            The game to be removed
+	 * @ensure !this.games.contains(game)
+	 */
+	public void removeGame(Game game) {
+		if (this.hasGame(game)) {
+			this.games.remove(game);
+		}
+		/*TODO throw exception if game doesn't exist*/
+	}
+
+	/**
+	 * Checks if the player has a game in their set.
+	 * 
+	 * @param game
+	 *            The game which is being checked
+	 * @return Returns true if player has the specified game and false
+	 *         otherwise.
+	 */
+	public boolean hasGame(Game game) {
+		return this.games.contains(game);
+	}
+	
+
+	
+	/**
+	 * Access method for player's friends list
+	 * @return A set containing the player's friends.
+	 */
+	public Set<Player> getFriends() {
+		Set<Player> clone = new HashSet<Player>(this.friends);
+		return clone;
+	}
+	
+	/**
+	 * Sets the player's friends to the set provided.
+	 * 
+	 * @param friends
+	 * 			A set containing the player's friends.
+	 */
+	public void setFriends(Set<Player> friends) {
+		if (friends != null) {
+			this.friends = new HashSet<Player>(friends);
+		}
+	}
+	
+	/**
+	 * Checks if the player is already friends with the specified player
+	 * 
+	 * @param friend
+	 * 			The player that is being verified as a friend.
+	 * @return
+	 * 		True if the player is friends with the specified player, 
+	 * 		false otherwise.
+	 */
+	public boolean isFriend(Player player) {
+		return this.friends.contains(player);
+	}
+	
+	/**
+	 * Adds a friend to the player's friends set.
+	 * 
+	 * @param friend
+	 * 			The friend to be added to the friends set.
+	 * @ensure this.friends.contains(friend)
+	 */
+	public void addFriend(Player friend) {
+		if (friend != null && !this.isFriend(friend)) {
+			this.friends.add(friend);
+		}
+		//TODO: throw exception if friend is already in friends list
+	}
+	
+	/**
+	 * Remove a friend from the player's friends list.
+	 * 
+	 * @param friend
+	 * 			Friend to be removed.
+	 * @ensure !this.friends.contains(friend)
+	 */
+	public void removeFriend(Player friend) {
+		//TODO: add option to add friend to block list
+		if (this.isFriend(friend)) {
+			this.friends.remove(friend);
+		}
+		//TODO: throw exception if friend is not in friend's list
+	}
+	
+	/**
+	 * Access method for player's invite list.
+	 * 
+	 * @return A set containing the player's invites.
+	 */
+	public Set<Player> getInvites() {
+		Set<Player> clone = new HashSet<Player>(this.friendInvites);
+		return clone;
+	}
+	
+	/**
+	 * Sets the player's invites to the set provided.
+	 * 
+	 * @param invites
+	 * 			A set containing the player's invites.
+	 */
+	public void setInvites(Set<Player> invites) {
+		if (invites != null) {
+			this.friendInvites = new HashSet<Player>(invites);
+		}
+	}
+	
+	/**
+	 * Checks if the player is already has an invite from the specified player.
+	 * 
+	 * @param player
+	 * 			The player that is sending the invite.
+	 * @return
+	 * 			True if the player already has an invite from the specified 
+	 * 			player, otherwise false.
+	 */
+	public boolean hasInvite(Player player) {
+		return this.friendInvites.contains(player);
+	}
+	
+	/**
+	 * Adds a player to the player's invite set.
+	 * 
+	 * @param player
+	 * 			The player to be added to the player's invite set.
+	 * 
+	 * @ensure this.friendInvites.contains(player)
+	 */
+	public void addInvite(Player player) {
+		if (player != null && !this.hasInvite(player)) {
+			this.friendInvites.add(player);
+		}
+		//TODO: throw exception if player is already in invites list
+	}
+	
+	/**
+	 * Remove an invite from the player's invite list.
+	 * 
+	 * @param friend
+	 * 			Friend to be removed.
+	 * @ensure
+	 * 			!this.friendInvites.contains(player)
+	 */
+	public void removeInvite(Player player) {
+		//TODO: add option to add friend to block list
+		if (this.hasInvite(player)) {
+			this.friendInvites.remove(player);
+		}
+		//TODO: throw exception if player is not in invite list
+	}
+	
+	
+	
+	
+	
 }

@@ -6,7 +6,6 @@ import com.esotericsoftware.kryonet.Listener;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
 import deco2800.server.ArcadeServer;
-import deco2800.server.database.CreditStorage;
 import deco2800.server.database.DatabaseException;
 
 public class CreditListener extends Listener {

@@ -1,14 +1,14 @@
 package deco2800.arcade.deerforest.models.effects;
 
 import java.util.List;
+import java.util.Set;
 
 public class MonsterEffect extends AbstractEffect {
 
-	public MonsterEffect(List<String> typeEffects, String effectCategory,
-			List<Integer> effectParams) {
+	public MonsterEffect(Set<String> typeEffects, List<String> effectCategories,
+			List<List<Integer>> effectParams) throws IncorrectEffectException {
 		
-		super(typeEffects, effectCategory, effectParams);
-		// TODO Auto-generated constructor stub
+		super(typeEffects, effectCategories, effectParams);
 	}
 
 }

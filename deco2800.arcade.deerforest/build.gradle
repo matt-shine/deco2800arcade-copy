@@ -1,8 +1,13 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
 
 dependencies {
-  compile project(":deco2800.arcade.model")
-  compile project(":deco2800.arcade.protocol")
-  compile project(":deco2800.arcade")
+    compile project(":deco2800.arcade.model")
+    compile project(":deco2800.arcade.protocol")
+    compile project(":deco2800.arcade")
 
-  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
+    compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
 }

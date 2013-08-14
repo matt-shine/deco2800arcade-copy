@@ -11,8 +11,7 @@ import java.sql.Statement;
  */
 public class CreditStorage {
 
-	private boolean initialised = false;
-	
+
 	/**
 	 * Creates the Credits table and sets initialised to TRUE on completion
 	 * 
@@ -35,7 +34,6 @@ public class CreditStorage {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create credits table", e);
 		}
-		initialised = true;
 	}
 	
 	/**
@@ -45,12 +43,8 @@ public class CreditStorage {
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
 	public Integer getUserCredits(String username) throws DatabaseException{
-
-		//Check whether or not the database has been intitialised
-		if (!initialised){
-			//Not initialised yet - initialise it
-			initialise();
-		}
+		
+		// TODO: refactor to use playerID not username
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();

@@ -16,6 +16,7 @@ public class InputHandler implements InputProcessor{
 	Sword sword;
 	Vector3 touch = new Vector3();
 	Vector2 vec2Touch = new Vector2();
+	private boolean acceptInput;
 
 	//private static final float WALL_ATTACH_LENGTH = 4f;
 	//private float wallTime = 0;
@@ -24,6 +25,7 @@ public class InputHandler implements InputProcessor{
 		this.world=world;
 		this.ship = world.getShip();
 		this.sword = world.getSword();
+		acceptInput = true;
 	}
 	
 	@Override
@@ -40,23 +42,27 @@ public class InputHandler implements InputProcessor{
 			//if (ship.getState() == State.WALL) {
 				
 			//} else {
+			if (acceptInput) {
 				ship.getVelocity().x = -Ship.SPEED;
 				if (ship.getState() != State.WALL) {
 					ship.setState(State.WALK);
 					ship.setFacingRight(false);
 				}
+			}
 			//}
 			break;
 		case Keys.RIGHT:
-			ship.getVelocity().x = Ship.SPEED;
-			if (ship.getState() != State.WALL) {
-				ship.setState(State.WALK);
-				ship.setFacingRight(true);
+			if (acceptInput) {
+				ship.getVelocity().x = Ship.SPEED;
+				if (ship.getState() != State.WALL) {
+					ship.setState(State.WALK);
+					ship.setFacingRight(true);
+				}
 			}
 			break;
 		
 		case Keys.Z:
-			if (ship.getState() == State.IDLE || ship.getState() == State.WALK || ship.getState() == State.WALL){
+			if (acceptInput&&(ship.getState() == State.IDLE || ship.getState() == State.WALK || ship.getState() == State.WALL)){
 				if (ship.getState() == State.WALL) {
 					if (ship.getVelocity().x > 0) {
 						ship.setFacingRight(true);
@@ -73,7 +79,7 @@ public class InputHandler implements InputProcessor{
 			break;
 			
 		case Keys.X:
-			if (!sword.inProgress()) {
+			if (!sword.inProgress() && acceptInput) {
 				if (ship.getState() != State.WALL) {
 					sword.begin(ship.isFacingRight());
 				} else {
@@ -95,19 +101,19 @@ public class InputHandler implements InputProcessor{
 		//ship = world.getShip();
 		switch(keycode){
 		case Keys.UP:
-			if (ship.getVelocity().y == 1)
+			if (ship.getVelocity().y == 1 && acceptInput)
 			ship.getVelocity().y = 0;
 			break;
 		case Keys.DOWN:
-			if (ship.getVelocity().y == -1)
+			if (ship.getVelocity().y == -1 && acceptInput)
 			ship.getVelocity().y =0;
 			break;
 		case Keys.LEFT:
-			if (ship.getVelocity().x < -1)
+			if (ship.getVelocity().x < -1 && acceptInput)
 			ship.getVelocity().x = 0;
 			break;
 		case Keys.RIGHT:
-			if (ship.getVelocity().x > 1)
+			if (ship.getVelocity().x > 1 && acceptInput)
 			ship.getVelocity().x = 0;
 			break;
 		
@@ -120,6 +126,14 @@ public class InputHandler implements InputProcessor{
 		return true;
 	}
 
+	public void acceptInput() {
+		acceptInput = true;
+	}
+	
+	public void cancelInput() {
+		acceptInput = false;
+	}
+	
 	@Override
 	public boolean keyTyped(char character) {
 		return false;

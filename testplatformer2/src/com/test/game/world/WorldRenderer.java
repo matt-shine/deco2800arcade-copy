@@ -21,12 +21,21 @@ import com.badlogic.gdx.math.Vector3;
 
 import com.badlogic.gdx.utils.Array;
 import com.test.game.model.Bullet;
+import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
+import com.test.game.model.Follower;
+import com.test.game.model.MovableEntity;
 import com.test.game.model.Ship;
 import com.test.game.model.Sword;
+import com.test.game.model.Walker;
+import com.test.game.model.WalkerPart;
 
 
-
+/**World Renderer takes the object from the World class and draws them to the screen
+ * 
+ * @author Game Over
+ *
+ */
 public class WorldRenderer {
 
 	private static final float FOLLOWER_FRAME_DURATION = 0.06f;
@@ -38,9 +47,12 @@ public class WorldRenderer {
 	SpriteBatch batch;
 	Ship ship;
 	//Follower follower;
+	Walker walker;
 	OrthographicCamera cam;
-	Texture shipTexture, followerTexture, bulletTexture;
+	Texture shipTexture, followerTexture, bulletTexture, walkerTexture;
 	private TextureRegion followerFrame;
+	private TextureRegion walkerRegion;
+	private Array<AtlasRegion> walkerRegions;
 	private Animation followerAnimation; 
 	float width, height;
 	private Array<Bullet> bullets;
@@ -49,6 +61,7 @@ public class WorldRenderer {
 	Iterator<Enemy> eItr;
 	private Bullet b;
 	private Enemy e;
+	private Array<CutsceneObject> csObjects;
 	
 	//attempting to use maps
 	TiledMapRenderer tileMapRenderer;
@@ -107,8 +120,19 @@ public class WorldRenderer {
 			followerFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		followerAnimation = new Animation(FOLLOWER_FRAME_DURATION, followerFrames);
 		
+		//walkerTexture = new Texture("data/walker.png");
+		TextureAtlas walkerAtlas = new TextureAtlas(Gdx.files.internal("data/modular3.txt"));
+		walkerRegions = walkerAtlas.findRegions("a");
+		for (int i=0; i<walkerRegions.size; i++) {
+			walkerRegions.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+			
+		}
+		System.out.println("Found " + walkerRegions.size + " walker parts");
+		
 		bulletTexture = new Texture("data/bullet.png");
 		bulletTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		csObjects = new Array<CutsceneObject>();
 		
 		sr= new ShapeRenderer();
 		//testRegion = followerFrames[0];
@@ -120,6 +144,7 @@ public class WorldRenderer {
 		//follower = world.getFollower();
 		enemies = world.getEnemies();
 		bullets = world.getBullets();
+		csObjects = world.getCutsceneObjects();
 		
 		//System.out.println("Sxy: " + ship.getPosition().x+","+ship.getPosition().y+" Cwh: "+cam.viewportWidth+","+cam.viewportHeight);
 		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
@@ -168,15 +193,62 @@ public class WorldRenderer {
 					1f, 1f, 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
 					shipTexture.getHeight(), true, false);
 		}
-		
+		for (CutsceneObject csObj: csObjects) {
+			System.out.println("Texture: "+csObj.getTexture());
+			//batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y);
+			batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth() /2, csObj.getHeight()/2,
+					csObj.getWidth(),csObj.getHeight(), 1, 1, csObj.getRotation(), 0, 0, csObj.getTexture().getWidth(),
+					csObj.getTexture().getHeight(), false, false);
+		}
 		
 		eItr = enemies.iterator();
 		while (eItr.hasNext()) {
 			e = eItr.next();
-			followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
-			batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
-					e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
-			
+			if (e.getClass() == Follower.class) {
+				followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
+				batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
+						e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
+			} else if (e.getClass() == Walker.class){
+				//draw the parts in order
+				int i=7; 
+				while (i <8) {
+					MovableEntity mve = ((Walker)e).getPart(i);
+					
+					AtlasRegion ar = walkerRegions.get(i);
+					Texture tx = ar.getTexture();
+					batch.draw(tx, mve.getPosition().x, mve.getPosition().y, 0,
+							ar.getRegionHeight()/64f, ar.getRegionWidth()/64f, ar.getRegionHeight()/64f, 1, 1, mve.getRotation(), ar.getRegionX(), ar.getRegionY(),
+							ar.getRegionWidth(), ar.getRegionHeight(), false, false);
+					//batch.draw
+					switch(i) {
+					case 7:
+						i =3;
+						break;
+					case 3:
+						i=6;
+						break;
+					case 6:
+						i=5;
+						break;
+					case 5:
+						i=2;
+						break;
+					case 2:
+						i=1;
+						break;
+					case 1:
+						i=4;
+						break;
+					case 4:
+						i=0;
+						break;
+					case 0:
+					default:
+						i=8;
+						break;
+					}
+				}
+			}
 		}
 		bItr = bullets.iterator();
 		while(bItr.hasNext()) {
@@ -201,7 +273,20 @@ public class WorldRenderer {
 		while (eItr.hasNext()) {
 			e = eItr.next();
 			sr.rect(e.getBounds().x, e.getBounds().y, e.getBounds().width, e.getBounds().height);
+			if (e.getClass() == Walker.class) {
+				for (int i=0; i<8; i++) {
+					WalkerPart wp = ((Walker)e).getPart(i);
+					System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
+					System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
+					
+					sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
+					
+				}
+			}
 			
+		}
+		for (CutsceneObject csObj: csObjects) {
+			sr.rect(csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth(), csObj.getHeight());
 		}
 		bItr = bullets.iterator();
 		while(bItr.hasNext()) {

@@ -61,7 +61,6 @@ public class SplashScreen extends AbstractScreen {
 	}
 	
 	private void tweenCompleted() {
-		//MOVE ON, BITCH!!!
 		game.setScreen(new MainMenu(game));
 	}
 	

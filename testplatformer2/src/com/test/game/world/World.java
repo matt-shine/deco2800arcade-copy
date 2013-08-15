@@ -12,13 +12,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.test.game.TestGame2;
 import com.test.game.model.Bullet;
+import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
 import com.test.game.model.EnemySpawner;
 import com.test.game.model.Follower;
 import com.test.game.model.Ship;
 import com.test.game.model.Ship.State;
 import com.test.game.model.Sword;
+import com.test.game.model.Walker;
 
+/** World class controls all objects in the specified level including any collisions
+ * and links Object references where needed
+ * @author Game Over
+ *
+ */
 public class World {
 
 	Ship ship;
@@ -27,6 +34,7 @@ public class World {
 	Array<Enemy> enemies = new Array<Enemy>();
 	Array<Bullet> bullets = new Array<Bullet>();
 	Array<EnemySpawner> spawners = new Array<EnemySpawner>();
+	private Array<CutsceneObject> cutsceneObjects = new Array<CutsceneObject>();
 	Iterator<Bullet> bItr;
 	Iterator<Enemy> eItr;
 	Iterator<EnemySpawner> sItr;
@@ -34,11 +42,14 @@ public class World {
 	Bullet b;
 	EnemySpawner s;
 	
+	
+	
 	public Rectangle sRec;
 	
 	private LevelLayout levelLayout;
 	//private LevelObjects levelObjects;
-	//private InputHandler inputHandler;
+	private LevelScenes levelScenes;
+	private InputHandler inputHandler;
 	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
@@ -50,14 +61,15 @@ public class World {
 		//enemies.add(new Follower(5f, 0, new Vector2(1,1), 1, 1));
 		sword = new Sword(new Vector2(-1, -1));
 		
-		//inputHandler = new InputHandler(this);
-		Gdx.input.setInputProcessor(new InputHandler(this));
+		inputHandler = new InputHandler(this);
+		Gdx.input.setInputProcessor(inputHandler);
 		
 		levelLayout = new LevelLayout(level);
 		
 		Array<Object> objects = new Array<Object>();
 		if (level ==1) {
 			objects = Level1Objects.loadObjects(levelLayout.getMap());
+			levelScenes = new Level1Scenes(ship);
 			
 		}
 		for (Object o: objects) {
@@ -65,6 +77,8 @@ public class World {
 				spawners.add((EnemySpawner) o);
 			}
 		}
+		
+		enemies.add(new Walker(new Vector2 (5f, 9f)));
 		System.out.println("Found " + spawners.size+" enemy spawners");
 	}
 	
@@ -75,6 +89,8 @@ public class World {
 	public Sword getSword() {
 		return sword;
 	}
+	
+	
 	
 	public Array<Enemy> getEnemies() {
 		return enemies;
@@ -143,7 +159,10 @@ public class World {
 				}
 			}
 		}*/
-		
+		//add the cutsceneobjects or movable platforms to the collisions
+		for (CutsceneObject csObj: cutsceneObjects) {
+			tiles.add(csObj.getCollisionRectangle());
+		}
 		sRec = ship.getXProjectionRect();
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
@@ -201,6 +220,7 @@ public class World {
 		eItr = enemies.iterator();
 		while(eItr.hasNext()) {
 			e = eItr.next();
+			if (!levelScenes.isPlaying())
 			e.advance(Gdx.graphics.getDeltaTime(), ship);
 			
 			//SWORD COLLISIONS
@@ -277,7 +297,17 @@ public class World {
 				}
 			}
 		}
-		
+		if (levelScenes.isPlaying()) {
+			levelScenes.update(Gdx.graphics.getDeltaTime());
+		} else {
+			float[] scenePos = levelScenes.getStartValues();
+			if (ship.getPosition().x > scenePos[0]) {
+				inputHandler.cancelInput();
+				ship.getVelocity().x = 0;
+				Array<CutsceneObject> temp = levelScenes.start();
+				for (CutsceneObject c: temp) cutsceneObjects.add(c);
+			}
+		}
 	}
 	
 	public void addBullet(Bullet b) {
@@ -285,6 +315,9 @@ public class World {
 	}
 	public Array<Bullet> getBullets() {
 		return bullets;
+	}
+	public Array<CutsceneObject> getCutsceneObjects() {
+		return cutsceneObjects;
 	}
 	
 	public void setRenderer(WorldRenderer wr) {

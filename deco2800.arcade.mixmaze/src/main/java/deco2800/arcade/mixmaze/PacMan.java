@@ -19,6 +19,8 @@ final class PacMan extends Actor {
 
 	private Texture texture;
 	private TextureRegion region;
+	private int row;
+	private int col;
 
 	private class PacManInputListener extends InputListener {
 		@Override
@@ -28,20 +30,25 @@ final class PacMan extends Actor {
 			Gdx.app.debug(LOG, keycode + " pressed");
 			switch (keycode) {
 			case LEFT:
+				col--;
 				actor.addAction(moveBy(-128f, 0f));
 				break;
 			case RIGHT:
+				col++;
 				actor.addAction(moveBy(128f, 0f));
 				break;
 			case UP:
+				row++;
 				actor.addAction(moveBy(0f, 128f));
 				break;
 			case DOWN:
+				row--;
 				actor.addAction(moveBy(0f, -128f));
 				break;
 			default:
 				return false;	// event not handled
 			}
+			Gdx.app.debug(LOG, "row " + row + " col " + col);
 			return true;
 		}
 	}
@@ -49,8 +56,10 @@ final class PacMan extends Actor {
 	PacMan() {
 		texture = new Texture(Gdx.files.internal("pacman.png"));
 		region = new TextureRegion(texture, 0, 0, 512, 512);
-		setX(100f);
-		setY(100f);
+		row = 0;
+		col = 0;
+		setX(128f * col);
+		setY(128f * row);
 		addListener(new PacManInputListener());
 	}
 

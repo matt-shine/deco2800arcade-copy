@@ -123,9 +123,11 @@ public class CreditStorage {
 		
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			// first retrieve the current users's current balance
 			resultSet = stmt.executeQuery("SELECT * FROM CREDITS WHERE USERNAME='" + username + "'");
 			if (resultSet.next()) {
 				int oldBalance = resultSet.getInt("CREDITS");
+				// then increment it and set it
 				resultSet.updateInt("CREDITS", oldBalance + numCredits);
 				resultSet.updateRow();
 			} else {
@@ -138,6 +140,7 @@ public class CreditStorage {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
+			//clean up JDBC objects
 			try {
 				if (resultSet != null){
 					resultSet.close();

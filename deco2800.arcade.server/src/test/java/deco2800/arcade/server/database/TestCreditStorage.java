@@ -48,6 +48,7 @@ public class TestCreditStorage {
 	@Before
 	public void setUp() throws Exception {
 		creditStorage = new CreditStorage();
+		creditStorage.initialise();
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
 		databaseTester.onSetup();

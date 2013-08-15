@@ -144,10 +144,19 @@ public abstract class AbstractEffect {
 	private List<? extends List<Integer>> effectParams;
 	
 	/**
+	 * Initializes an abstract effect with the types it effects, the type of 
+	 * effect it is and how that effect is parameterized
 	 * 
-	 * @param typeEffects
-	 * @param effectCategory
-	 * @param effectParams
+	 * @param typeEffects Set of all the monster types that the effect affects
+	 * 			null if it can affect any type
+	 * 
+	 * @param effectCategory List of each effect category that this effect has
+	 * 			must be in same order as the parameters list
+	 * 
+	 * @param effectParams List of list of parameters, with one list for each 
+	 * 			effect category
+	 * 
+	 * @throws IncorrectEffectException if the inputed parameters are invalid
 	 */
 	public AbstractEffect(Set<String> typeEffects, List<String> effectCategories, 
 			List<? extends List<Integer>> effectParams) throws IncorrectEffectException {
@@ -175,33 +184,33 @@ public abstract class AbstractEffect {
 	}
 
 	/**
-	 * 
-	 * @return what type of cards it affects
+	 * @return shallow copy of the typeEffect set
 	 */
 	//
 	public Set<String> affectsTypes() {
+		//create a new instance of the set to return
 		HashSet<String> setToReturn = new HashSet<String>();
 		setToReturn.addAll(this.typeEffects);
 		return setToReturn;
 	}
 
-	/**
-	 * 
-	 * @return what category of effect the card has
+	/** 
+	 * @return shallow copy of the effectCategories List
 	 */
-	public Set<String> effectCategories() {
-		HashSet<String> setToReturn = new HashSet<String>();
+	public List<String> effectCategories() {
+		ArrayList<String> setToReturn = new ArrayList<String>();
 		setToReturn.addAll(this.effectCategories);
 		return setToReturn;
 	}
 		
 	/**
-	 * 
-	 * @return the parameters of the effect (different depending on the category)
+	 * @return copy of the effectParameters List of lists (Integers not copied)
 	 */
 	public List<? extends List<Integer>> effectParameter() {
 		
-		ArrayList<ArrayList<Integer>> paramsToReturn = new ArrayList<ArrayList<Integer>>();
+		ArrayList<ArrayList<Integer>> paramsToReturn = 
+				new ArrayList<ArrayList<Integer>>();
+		
 		for (List<Integer> singleList : effectParams) {
 			ArrayList<Integer> currentList = new ArrayList<Integer>();
 			currentList.addAll(singleList);
@@ -211,6 +220,12 @@ public abstract class AbstractEffect {
 		return paramsToReturn;
 	}
 	
+	/**
+	 * Checks whether the given set contains valid types or is null
+	 * 
+	 * @param setToCheck Set of strings to check validity of
+	 * @return true if types are valid
+	 */
 	private boolean checkTypes(Set<String> setToCheck) {
 		
 		//Define a set of valid types
@@ -229,7 +244,18 @@ public abstract class AbstractEffect {
 		return false;
 	}
 	
-	private boolean checkCategories(List<String> setToCheck) {
+	/**
+	 * Checks whether the given list contains valid categories
+	 * 
+	 * @param listToCheck List to check the validity of
+	 * @return true if list contains only valid categories
+	 */
+	private boolean checkCategories(List<String> listToCheck) {
+		
+		//Check not null
+		if(listToCheck == null) {
+			return false;
+		}
 		
 		//Define a set of valid types
 		Set<String> validCategories = new HashSet<String>();
@@ -240,15 +266,27 @@ public abstract class AbstractEffect {
 		validCategories.add("Player");
 		
 		//Check if given set is subset of valid types
-		if (setToCheck == null || validCategories.containsAll(setToCheck)) {
+		if (validCategories.containsAll(listToCheck)) {
 			return true;
 		}
 		
 		return false;
 	}
 	
+	/**
+	 * Checks each effect parameter list corresponds to valid parameters
+	 * 
+	 * @param effectCategories List of each effect categories
+	 * @param effectParams List of List of effect parameters
+	 * @return true if effect parameters are valid for given categories
+	 */
 	private boolean checkEffectParams(List<String> effectCategories, 
 			List<? extends List<Integer>> effectParams) {
+		
+		//check not null
+		if(effectCategories == null || effectParams == null) {
+			return false;
+		}
 		
 		//Check both lists are same size
 		if(effectCategories.size() != effectParams.size()) {
@@ -289,6 +327,12 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
+	/**
+	 * Checks whether given parameters are valid for a destroy effect
+	 * 
+	 * @param params list of parameters for effect
+	 * @return true if all parameters are valid for a destroy effect
+	 */
 	private boolean checkDestroy(List<Integer> params) {
 		
 		try {
@@ -323,6 +367,12 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
+	/**
+	 * Checks whether given parameters are valid for a draw effect
+	 * 
+	 * @param params list of parameters for effect
+	 * @return true if all parameters are valid for a draw effect
+	 */
 	private boolean checkDraw(List<Integer> params) {
 		
 		try {
@@ -345,6 +395,12 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
+	/**
+	 * Checks whether given parameters are valid for a monster effect
+	 * 
+	 * @param params list of parameters for effect
+	 * @return true if all parameters are valid for a monster effect
+	 */
 	private boolean checkMonster(List<Integer> params) {
 		
 		try {
@@ -375,6 +431,12 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
+	/**
+	 * Checks whether given parameters are valid for a search effect
+	 * 
+	 * @param params list of parameters for effect
+	 * @return true if all parameters are valid for a search effect
+	 */
 	private boolean checkSearch(List<Integer> params) {
 		
 		try {
@@ -417,6 +479,12 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
+	/**
+	 * Checks whether given parameters are valid for a player effect
+	 * 
+	 * @param params list of parameters for effect
+	 * @return true if all parameters are valid for a player effect
+	 */
 	private boolean checkPlayer(List<Integer> params) {
 		
 		try {

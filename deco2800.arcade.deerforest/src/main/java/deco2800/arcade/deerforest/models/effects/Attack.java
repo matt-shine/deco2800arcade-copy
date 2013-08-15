@@ -9,6 +9,24 @@ public class Attack extends AbstractEffect {
 	private int damage;
 	private String typeOfAttack;
 	
+	/**
+	 * Constructs an Attack, throwing an error if inputed data is incorrect
+	 * 
+	 * @param damage amount of damage that the attack does
+	 * 
+	 * @param typeOfAttack String representing the attack type
+	 * 
+	 * @param typeEffects Set of all the monster types that the effect affects
+	 * 			null if it can affect any type
+	 * 
+	 * @param effectCategory List of each effect category that this effect has
+	 * 			must be in same order as the parameters list
+	 * 
+	 * @param effectParams List of list of parameters, with one list for each 
+	 * 			effect category
+	 * 
+	 * @throws IncorrectEffectException if the inputed parameters are invalid
+	 */
 	public Attack(int damage, String typeOfAttack, Set<String> typeEffects, 
 			List<String> effectCategories, List<List<Integer>> effectParams) 
 					throws IncorrectEffectException {
@@ -27,7 +45,7 @@ public class Attack extends AbstractEffect {
 		validCategories.add("Search");
 		validCategories.add("Player");
 		
-		if(!validCategories.contains(typeOfAttack)) {
+		if(typeOfAttack == null || !validCategories.contains(typeOfAttack)) {
 			throw new IncorrectEffectException("Type of attack is invalid");
 		}
 		

@@ -20,7 +20,7 @@ public class SpellEffect extends AbstractEffect {
 	 * @throws IncorrectEffectException if the inputed parameters are invalid
 	 */
 	public SpellEffect(Set<String> typesEffect, List<String> effectCategories, 
-			List<List<Integer>> effectParams) throws IncorrectEffectException {
+			List<? extends List<Integer>> effectParams) throws IncorrectEffectException {
 		
 		super(typesEffect, effectCategories, effectParams);
 	}

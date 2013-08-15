@@ -20,7 +20,7 @@ public class MonsterEffect extends AbstractEffect {
 	 * @throws IncorrectEffectException if the inputed parameters are invalid
 	 */
 	public MonsterEffect(Set<String> typeEffects, List<String> effectCategories,
-			List<List<Integer>> effectParams) throws IncorrectEffectException {
+			List<? extends List<Integer>> effectParams) throws IncorrectEffectException {
 		
 		super(typeEffects, effectCategories, effectParams);
 	}

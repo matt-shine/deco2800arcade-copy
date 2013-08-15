@@ -188,6 +188,11 @@ public abstract class AbstractEffect {
 	 */
 	//
 	public Set<String> affectsTypes() {
+		//check null
+		if(this.typeEffects == null) {
+			return null;
+		}
+		
 		//create a new instance of the set to return
 		HashSet<String> setToReturn = new HashSet<String>();
 		setToReturn.addAll(this.typeEffects);

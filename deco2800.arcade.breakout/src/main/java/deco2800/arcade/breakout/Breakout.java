@@ -59,11 +59,13 @@ public class Breakout extends GameClient{
 	private SpriteBatch batch;
 	private BitmapFont font;
 	
+	Brick bricks[];
 	
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		 this.player = player.getUsername();
 		 this.nc = networkClient;
+		 bricks = new Brick[40];
 	}
 	
 	@Override
@@ -75,6 +77,14 @@ public class Breakout extends GameClient{
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH/2, 10));
 		ball = new PongBall();
 		ball.setColor(1,1,1,1);
+		
+		int index = 0;
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 8; j++) {
+				bricks[index] = new Brick(j * 80 + 80, SCREENHEIGHT - i * 20 - 40);
+				index++;
+			}
+		}
 		
 		
 		shapeRenderer = new ShapeRenderer();
@@ -119,6 +129,12 @@ public class Breakout extends GameClient{
 	    paddle.render(shapeRenderer);
 	    ball.render(shapeRenderer);
 	    
+	    for (Brick b : bricks) {
+	    	if (b.getState()) {
+	    		b.render(shapeRenderer);
+	    	}
+	    }
+	    
 	    shapeRenderer.end();
 	    
 	    batch.begin();
@@ -137,9 +153,24 @@ public class Breakout extends GameClient{
 	    	break;
 	    	
 	    case INPROGRESS:
-	    	paddle.update(ball);
-	    	
+	    	paddle.update(ball); 
 	    	ball.move(Gdx.graphics.getDeltaTime());
+	    	int index = 0;
+	    	// TODO: if it hits left/right side, only bounceX. if it hits top/bottom, only bounceY
+	    	for (Brick b : bricks) {
+	    		if (b.getState()) {
+		    		if ( ball.bounds.overlaps(b.getShape())) {
+		    			b.setState(false);
+		    			score++;
+		    			//ball.bounceX();
+		    			ball.bounceY();
+		    		}
+	    		}
+	    	}
+	    	
+	    	if (score == 40) {
+	    		roundOver();
+	    	}
 	    	
 	    	if ( ball.bounds.overlaps(paddle.paddleShape) && ball.getYVelocity() < 0 ) {
 	    		ball.bounceY();
@@ -186,11 +217,19 @@ public class Breakout extends GameClient{
 	}
 	
 	private void roundOver() {
+		if (score == 40) {
+			score += lives;
+			System.out.println("Congratulations " + player + 
+					" your final score is: " + score);
+			gameState = GameState.GAMEOVER;
+		}
 		if(lives > 0){
 			ball.reset();
 			lives--;
 			gameState = GameState.READY;
 		} else {
+			System.out.println("Bad luck " + player + 
+					" your final score is: " + score);
 			gameState = GameState.GAMEOVER;
 		}
 		

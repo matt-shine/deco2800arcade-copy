@@ -30,22 +30,23 @@ import deco2800.arcade.client.network.NetworkClient;
 
 public class Breakout extends GameClient{
 	
+	//Orthographic Camera is how the is displayed.
 	private OrthographicCamera camera;
+	
 	
 	private String player;
 	private NetworkClient nc;
-	//private int score;
 	private Paddle paddle;
 	private PongBall ball;
 	private int score;
 	private int lives;
 	private String status;
 	
-	
+	//Screen Parameters
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
-	//private Vector2 center = new Vector2(0f, SCREENWIDTH/2 - paddle.width/2);
 	
+	//Game States
 	private enum GameState {
 		READY,
 		INPROGRESS,

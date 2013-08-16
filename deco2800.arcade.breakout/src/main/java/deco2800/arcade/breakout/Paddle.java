@@ -31,6 +31,7 @@ public abstract class Paddle{
 		paddleShape.x += horizontal;
 	}
 	
+	
 	public void render(ShapeRenderer render){
 		render.setColor(Color.RED);
 		render.filledRect(paddleShape.x, paddleShape.y, paddleShape.width, paddleShape.height);

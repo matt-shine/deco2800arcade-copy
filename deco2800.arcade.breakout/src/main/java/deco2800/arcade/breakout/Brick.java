@@ -13,7 +13,7 @@ public class Brick {
 	private boolean state;
 	
 	public Brick(int x, int y) {
-		this.bricksImage = new Texture(Gdx.files.classpath("resources/bricks.png"));
+		this.bricksImage = new Texture(Gdx.files.classpath("resources/bricks.PNG"));
 		this.x = x;
 		this.y = y;
 		

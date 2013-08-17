@@ -9,6 +9,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 /**
  * A card game for use in the Arcade
  * @author uqjstee8
@@ -23,7 +24,11 @@ public class DeerForest extends GameClient {
 
 	@Override
 	public void create() {
-		
+		//start up main game
+		GameSystem tempSystem = new GameSystem(null, null);
+		MainGame gam = new MainGame(tempSystem);
+		gam.create();
+		this.setScreen(new MainGameScreen(gam));
 		super.create();
 	}
 

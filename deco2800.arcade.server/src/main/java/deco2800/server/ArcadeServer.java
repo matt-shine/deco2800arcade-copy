@@ -3,12 +3,13 @@ package deco2800.server;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
 import java.net.BindException;
 
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
+import deco2800.server.database.CreditStorage;
+import deco2800.server.database.DatabaseException;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
@@ -21,7 +22,22 @@ import deco2800.server.listener.GameListener;
  */
 public class ArcadeServer {
 
-	private static Set<String> connectedUsers = new HashSet<String>();
+	// Keep track of which users are connected
+	private Set<String> connectedUsers = new HashSet<String>();
+	
+	//singleton pattern
+	private static ArcadeServer instance;
+	
+	/**
+	 * Retrieve the singleton instance of the server
+	 * @return the game server
+	 */
+	public static ArcadeServer instance() {
+		if (instance == null) {
+			instance = new ArcadeServer();
+		}
+		return instance;
+	}
 	
 	/**
 	 * Initializes and starts Server
@@ -30,6 +46,45 @@ public class ArcadeServer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		ArcadeServer server = new ArcadeServer();
+		server.start();
+	}
+
+	// Credit storage service
+	private CreditStorage creditStorage;
+	//private PlayerStorage playerStorage;
+	
+	/**
+	 * Access the server's credit storage facility
+	 * @return
+	 */
+	public CreditStorage getCreditStorage() {
+		return this.creditStorage;
+	}
+	
+	/**
+	 * Create a new Arcade Server.
+	 * This should generally not be called.
+	 * @see ArcadeServer.instance()
+	 */
+	public ArcadeServer() {
+		this.creditStorage = new CreditStorage();
+		//this.playerStorage = new PlayerStorage();
+		
+		//initialize database classes
+		try {
+			creditStorage.initialise();
+			//playerStorage.initialise();
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Start the server running
+	 */
+	public void start() {
 		Server server = new Server();
 		System.out.println("Server starting");
 		server.start();

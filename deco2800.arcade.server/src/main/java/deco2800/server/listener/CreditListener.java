@@ -5,7 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
-import deco2800.server.database.CreditStorage;
+import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
 
 public class CreditListener extends Listener {
@@ -18,7 +18,7 @@ public class CreditListener extends Listener {
 			CreditBalanceRequest creditBalanceRequest = (CreditBalanceRequest) object;
 			String username = creditBalanceRequest.username;
 			try {
-				Integer result = CreditStorage.getUserCredits(username);
+				Integer result = ArcadeServer.instance().getCreditStorage().getUserCredits(username);
 
 				CreditBalanceResponse creditBalanceResponse = new CreditBalanceResponse();
 

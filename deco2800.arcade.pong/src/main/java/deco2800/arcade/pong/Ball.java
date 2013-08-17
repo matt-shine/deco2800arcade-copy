@@ -43,6 +43,14 @@ public class Ball {
 	}
 	
 	/**
+	 * Get the x component of the velocity
+	 * @return the velocity in the x direction
+	 */
+	public float getXVelocity() {
+		return this.velocity.x;
+	}
+	
+	/**
 	 * Modify the position of the ball
 	 * @param newPosition the new position of the ball as x,y
 	 */
@@ -128,7 +136,6 @@ public class Ball {
 		//TODO This is a bit of a hack. A better way would be to generate an angle then use sin/cos/tan to work out the X,Y components
 		int xFactor = (int) (100f + Math.random()*90f);
 		int yFactor = (int) Math.sqrt((200*200) - (xFactor*xFactor));
-		System.out.println("Velocity: " + xFactor + ", " + yFactor);
 		velocity.x = xFactor;
 		velocity.y = yFactor;
 	}

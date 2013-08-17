@@ -9,11 +9,14 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
-public abstract class GameClient implements ApplicationListener {
+public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player; 
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
+	private ApplicationListener overlay = null;
+	private boolean overlayInitialised = false;
+	private int width, height;
 	
 	public GameClient(Player player, NetworkClient networkClient) {
 		this.player = player;
@@ -23,6 +26,30 @@ public abstract class GameClient implements ApplicationListener {
 	
 	public abstract Game getGame();
 
+	
+	/**
+	 * Adds the in game overlay
+	 */
+	public void addOverlay(ApplicationListener overlay) {
+		this.overlay = overlay;
+	}
+	
+	
+	/**
+	 * Updates the in game overlay
+	 */
+	public void processOverlay() {
+		if (this.overlay != null) {
+			if (!overlayInitialised) {
+				overlay.resize(this.width, this.height);
+				overlay.create();
+				overlayInitialised = true;
+			}
+			overlay.render();
+		}
+	}
+	
+	
 	/**
 	 * Adds gameOverListener's to the GameClient
 	 * @param gameOverListener
@@ -31,6 +58,7 @@ public abstract class GameClient implements ApplicationListener {
 		gameOverListeners.add(gameOverListener);
 	}
 	
+	
 	/**
 	 * Controls what happens when the game is over
 	 */
@@ -38,7 +66,39 @@ public abstract class GameClient implements ApplicationListener {
 		for (GameOverListener listener : gameOverListeners) {
 			listener.notify(this);
 		}
-		this.dispose();
+	}
+	
+
+	@Override
+	public void create() {
+	}
+
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
+
+	@Override
+	public void pause() {
+		super.pause();
+	}
+
+	@Override
+	public void render() {
+		super.render();
+	    processOverlay();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		super.resize(width, height);
+	}
+
+	@Override
+	public void resume() {
+		super.resume();
 	}
 	
 }

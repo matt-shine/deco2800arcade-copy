@@ -7,4 +7,7 @@ public abstract class AbstractCard {
 		
 	}
 	
+	public String getPictureFilePath() {
+		return null;
+	}
 }

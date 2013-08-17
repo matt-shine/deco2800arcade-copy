@@ -1,5 +1,7 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -8,8 +10,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 public class MainGameScreen implements Screen {
 	
 	private final MainGame game;
-	
 	private OrthographicCamera camera;
+	
+	//Variables for Card locations and what they contain
+	private int p1DeckSize;
+	private int p2DeckSize;
 	
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;

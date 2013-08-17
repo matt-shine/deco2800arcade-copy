@@ -3,6 +3,8 @@ package deco2800.arcade.deerforest.GUI;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
+
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -24,11 +26,20 @@ public class DeerForest extends GameClient {
 
 	@Override
 	public void create() {
+		
 		//start up main game
 		GameSystem tempSystem = new GameSystem(null, null);
+		
+		//set and run game
 		MainGame gam = new MainGame(tempSystem);
 		gam.create();
-		this.setScreen(new MainGameScreen(gam));
+		MainGameScreen view = new MainGameScreen(gam);
+		this.setScreen(view);
+		
+		//set up input processor
+		MainInputProcessor inputProcessor = new MainInputProcessor(gam, view);
+		Gdx.input.setInputProcessor(inputProcessor);
+		
 		super.create();
 	}
 

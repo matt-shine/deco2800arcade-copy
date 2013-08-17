@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 
+//This class functions as sort of a higher level game system controller
+//As well as (most importantly) being an instance of a game (according to Gdx)
+//to run
 public class MainGame extends Game {
 
 	SpriteBatch batch;
@@ -36,4 +39,5 @@ public class MainGame extends Game {
 	public GameSystem getModel() {
 		return this.model;
 	}
+	
 }

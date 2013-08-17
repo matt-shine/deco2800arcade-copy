@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.models.gameControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
@@ -14,7 +15,6 @@ public class GameSystem {
 	private String currentPhase = null;
 	private Player currentPlayer = null;
 	private List<AbstractCard> selectionChoices = null;
-	private List<AbstractCard> currentSelection = null;
 	
 	//Initialize the game, should get player data from controller (note players own their deck)
 	public GameSystem(Player player1, Player player2) {
@@ -204,20 +204,15 @@ public class GameSystem {
 		
 	}
 	
-	//Set the currentSelection
-	public void setSelection(List<AbstractCard> selection) {
-		this.currentSelection = selection;
-	}
 	
 	//get the selection choices
 	public List<AbstractCard> getSelectionOptions() {
 		return this.selectionChoices;
 	}
 	
-	//clear selection options / current selection
+	//clear selection options
 	public void clearSelections() {
-		this.selectionChoices = null;
-		this.currentSelection = null;
+		this.selectionChoices = new ArrayList<AbstractCard>();
 	}
 	
 	//Sort graveyard

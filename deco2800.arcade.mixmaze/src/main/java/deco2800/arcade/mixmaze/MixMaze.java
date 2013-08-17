@@ -64,11 +64,17 @@ public final class MixMaze extends GameClient {
 	@Override
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");
+		menuScreen.dispose();
+		gameScreen.dispose();
 		super.dispose();
 	}
 
 	@Override
 	public void pause() {
+		/*
+		 * This method is called just before the application
+		 * is destroyed.
+		 */
 		Gdx.app.debug(LOG, "pausing");
 		super.pause();
 	}

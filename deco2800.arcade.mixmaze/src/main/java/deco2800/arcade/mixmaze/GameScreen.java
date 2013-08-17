@@ -25,7 +25,6 @@ final class GameScreen implements Screen {
 		this.game = game;
 
 		stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 
 		shapeRenderer = new ShapeRenderer();
 
@@ -55,18 +54,27 @@ final class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
+		Gdx.app.debug(LOG, "resizing");
+
+		stage.setViewport(640, 640, true);
+		stage.getCamera().translate(-stage.getGutterWidth(),
+				-stage.getGutterHeight(), 0);
 	}
 
 	@Override
 	public void dispose() {
+		stage.dispose();
+		shapeRenderer.dispose();
 	}
 
 	@Override
 	public void hide() {
+		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override
 	public void show() {
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override

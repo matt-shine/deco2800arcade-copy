@@ -69,7 +69,7 @@ public class AchievementClient {
      * @return An AchievementProgress instance with the player's progress.
      */
     public AchievementProgress progressForPlayer(Player player) {
-        return new AchievementProgress();
+        return new AchievementProgress(player);
     }
     
     /**

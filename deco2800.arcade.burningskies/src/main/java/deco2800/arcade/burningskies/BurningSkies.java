@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
@@ -21,6 +23,11 @@ import deco2800.arcade.client.network.NetworkClient;
  */
 @ArcadeGame(id="burningskies")
 public class BurningSkies extends GameClient {
+	
+	public static final int SCREENHEIGHT = 600;
+	public static final int SCREENWIDTH = 800;
+	
+	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
 	//Reusable list of achievements
 	private static Set<Achievement> achievements = new HashSet<Achievement>();
@@ -49,8 +56,8 @@ public class BurningSkies extends GameClient {
 	@Override
 	public void create() {
 		super.create();
-		// TODO: make the game
-		
+		Texture.setEnforcePotImages(false); // use images != power of 2 w&h
+		setScreen( new Splash(this) );
 	}
 
 	@Override
@@ -68,8 +75,8 @@ public class BurningSkies extends GameClient {
 	 */
 	@Override
 	public void render() {
-
-		// TODO: do this
+		super.render();
+		//TODO: do this
 		
 	}
 

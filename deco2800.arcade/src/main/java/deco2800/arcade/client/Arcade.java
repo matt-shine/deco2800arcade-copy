@@ -168,7 +168,7 @@ public class Arcade extends JFrame {
 	 */
 	public void requestGameSession(GameClient gameClient){
 		NewGameRequest newGameRequest = new NewGameRequest();
-		newGameRequest.gameId = gameClient.getGame().gameId;
+		newGameRequest.gameId = gameClient.getGame().id;
 		newGameRequest.username = player.getUsername();
 		newGameRequest.requestType = GameRequestType.NEW;
 		this.client.sendNetworkObject(newGameRequest);

@@ -32,10 +32,10 @@ public class Game {
 	}
 	
 
-	public String gameId; //A machine-processable identifier for the game
+	public String id; //A machine-processable identifier for the game
 	
 	public String name; //A human-readable name for the game
-	
-	public Set<Achievement> availableAchievements;
+		
+	public int pricePerPlay = 1;
 	
 }

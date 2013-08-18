@@ -88,14 +88,11 @@ public final class MixMaze extends GameClient {
 		super.resume();
 	}
 
-	private static Set<Achievement> achievements =
-			new HashSet<Achievement>();
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "mixmaze";
+		game.id = "mixmaze";
 		game.name = "Mix Maze";
-		game.availableAchievements = achievements;
 	}
 
 	@Override

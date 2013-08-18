@@ -1,5 +1,8 @@
 package deco2800.arcade.deerforest.models.cardContainers;
 
+import deco2800.arcade.deerforest.models.cards.*;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -8,16 +11,39 @@ import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public class Field implements CardCollection {
-
+	private final int MAX_CARDS_EFFECTS = 2;
+	private final int MAX_CARDS_MONSTER = 5;
+	private ArrayList<AbstractMonster> fieldMonster;
+	private ArrayList<AbstractSpell> fieldSpells;
+	
 	//Initialise field
 	public Field() {
-		
+		fieldMonster = new ArrayList<AbstractMonster>();
+		fieldSpells = new ArrayList<AbstractSpell>();
 	}
 	
 	@Override
 	public boolean add(AbstractCard e) {
-		// TODO Auto-generated method stub
+		//If card is a monster
+		if(e instanceof AbstractMonster) {
+			if(fieldMonster.size() < MAX_CARDS_MONSTER) {
+				fieldMonster.add((AbstractMonster)e);
+				return true;
+			} else { 
+				return false;
+			}
+		
+		//if card is a spell
+		} else if(e instanceof AbstractSpell) {
+			if(fieldSpells.size() < MAX_CARDS_EFFECTS) {
+				fieldSpells.add((AbstractSpell)e);
+			} else {
+				return false;
+			}
+		} 
+		
 		return false;
+		
 	}
 
 	@Override
@@ -79,21 +105,38 @@ public class Field implements CardCollection {
 		return false;
 	}
 
-	@Override
-	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+
+	public int sizeMonsters() {
+		return fieldMonster.size();
+	}
+	
+	public int sizeSpells() {
+		return fieldSpells.size();
 	}
 
 	@Override
+	public int size() {
+		return sizeMonsters() + sizeSpells();
+	}
+	
+	public Object[] monstersToArray() {
+		return fieldMonster.toArray();
+	}
+	
+	public Object[] spellsToArray() {
+		return fieldSpells.toArray();
+	}
+	
+	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		Object[] result = new Object[fieldMonster.toArray().length + fieldSpells.toArray().length];
+		System.arraycopy(fieldMonster.toArray(),0, result, 0, fieldMonster.toArray().length);
+		System.arraycopy(fieldSpells.toArray(),0, result,fieldMonster.toArray().length, fieldSpells.toArray().length);
+		return result;
 	}
 
 	@Override
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -120,7 +163,7 @@ public class Field implements CardCollection {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	@Override
 	public CardCollection destroyCardType(String type) {
 		// TODO Auto-generated method stub

@@ -1,5 +1,7 @@
 package deco2800.arcade.protocol.communication;
 
-public class textMessage {
+public class TextMessage {
+	
+	public String text;
 
 }

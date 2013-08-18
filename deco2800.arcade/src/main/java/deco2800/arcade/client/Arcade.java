@@ -18,11 +18,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.AchievementListener;
+import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
@@ -143,6 +145,7 @@ public class Arcade extends JFrame {
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
+		this.client.addListener(new CommunicationListener());
 	}
 	
 
@@ -151,6 +154,13 @@ public class Arcade extends JFrame {
 		connectionRequest.username = username;
 		
 		this.client.sendNetworkObject(connectionRequest);
+		
+		System.out.println("STARTING COMMUNICATION....");
+		
+		CommunicationRequest communicationRequest = new CommunicationRequest();
+		communicationRequest.username = username;
+		
+		this.client.sendNetworkObject(communicationRequest);
 		
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
 		creditBalanceRequest.username = username;

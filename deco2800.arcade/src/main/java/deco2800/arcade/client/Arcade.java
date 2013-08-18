@@ -54,8 +54,7 @@ public class Arcade extends JFrame {
 	private GameClient selectedGame = null;
 
 	private ProxyApplicationListener proxy;
-	
-	
+
 	/**
 	 * ENTRY POINT
 	 * @param args
@@ -155,8 +154,6 @@ public class Arcade extends JFrame {
 		
 		this.client.sendNetworkObject(connectionRequest);
 		
-		System.out.println("STARTING COMMUNICATION....");
-		
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.username = username;
 		
@@ -169,6 +166,7 @@ public class Arcade extends JFrame {
 		
 		this.player = new Player();
 		this.player.setUsername(username);
+
 	}
 
 	/**

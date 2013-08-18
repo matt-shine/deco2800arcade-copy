@@ -27,10 +27,8 @@ public class CommunicationListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof TextMessage){
-			
 			 TextMessage textMessage = (TextMessage) object;
 			 System.out.println(textMessage.text);
-
 		}
 	}
 	

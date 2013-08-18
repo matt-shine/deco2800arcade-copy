@@ -7,7 +7,7 @@ import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
-import deco2800.arcade.protocol.communication.voiceMessage;
+import deco2800.arcade.protocol.communication.VoiceMessage;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -44,7 +44,7 @@ public class Protocol {
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
 		kryo.register(TextMessage.class);
-		kryo.register(voiceMessage.class);
+		kryo.register(VoiceMessage.class);
 	}
 	
 }

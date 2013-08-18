@@ -28,6 +28,7 @@ public class CommunicationListener extends Listener {
 		
 		if(object instanceof TextMessage){
 			TextMessage textMessage = (TextMessage) object;
+			System.out.println(textMessage.text);
 			this.server.sendToAllTCP(textMessage.text);
 		}
 	}

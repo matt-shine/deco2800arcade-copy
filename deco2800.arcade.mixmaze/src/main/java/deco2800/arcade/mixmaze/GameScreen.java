@@ -38,7 +38,11 @@ final class GameScreen implements Screen {
 			}
 		}
 
-		pacman = new PacMan();
+		/*
+		 * FIXME: There should be a separate controller rather
+		 * than using PacMan as the acting one.
+		 */
+		pacman = new PacMan(boxes);
 		stage.addActor(pacman);
 		Gdx.app.debug(LOG, "pacman Z " + pacman.getZIndex());
 		stage.setKeyboardFocus(pacman);

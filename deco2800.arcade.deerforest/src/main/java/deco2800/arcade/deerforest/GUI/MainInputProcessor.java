@@ -1,6 +1,5 @@
 package deco2800.arcade.deerforest.GUI;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 //This class functions basically as the controller
@@ -8,6 +7,7 @@ public class MainInputProcessor implements InputProcessor {
 
 	private MainGame game;
 	private MainGameScreen view;
+	private ExtendedSprite currentSelection;
 	
 	public MainInputProcessor(MainGame game, MainGameScreen view) {
 		this.game = game;
@@ -15,62 +15,73 @@ public class MainInputProcessor implements InputProcessor {
 	}
 	
 	@Override
-	public boolean keyDown(int arg0) {
-		// TODO Auto-generated method stub
-		System.out.println("Key: " + arg0 + " was pressed");
-		if(arg0 == Keys.F) {
-			System.out.println("Game: " + game + " view: " + view);
-		}
-		return false;
-	}
+	public boolean keyDown (int keycode) {
+        return false;
+    }
 
-	@Override
-	public boolean keyTyped(char arg0) {
-		// TODO Auto-generated method stub
-		System.out.println("Key: " + arg0 + " was typed");
-		return false;
-	}
+    @Override
+    public boolean keyUp (int keycode) {
+        return false;
+    }
 
-	@Override
-	public boolean keyUp(int arg0) {
-		// TODO Auto-generated method stub
-		System.out.println("Key: " + arg0 + " was released");
-		return false;
-	}
+    @Override
+    public boolean keyTyped (char character) {
+        return false;
+    }
 
-	@Override
-	public boolean mouseMoved(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		System.out.println("Mouse moved to: " + arg0 + ", " + arg1);
-		return false;
-	}
+    @Override
+    public boolean touchDown (int x, int y, int pointer, int button) {
+    	currentSelection = checkIntersection(x, y);
+    	if(currentSelection != null) {
+    		return true;
+    	}
+        return false;
+    }
 
-	@Override
-	public boolean scrolled(int arg0) {
-		// TODO Auto-generated method stub
-		System.out.println("Scrolled in direction: " + arg0);
-		return false;
-	}
+    @Override
+    public boolean touchUp (int x, int y, int pointer, int button) {
+    	currentSelection = null;
+        return false;
+    }
 
-	@Override
-	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		System.out.println("Mouse click at: " + arg0 + ", " + arg1 + " with extra params: " + arg2 + " " + arg3);
-		return false;
-	}
+    @Override
+    public boolean touchDragged (int x, int y, int pointer) {
+    	if(currentSelection != null) {
+    		if(currentSelection == view.getS1()) {
+    			view.setS1(x, y);
+    		}
+    		if(currentSelection == view.getS2()) {
+    			view.setS2(x, y);
+    		}
+    	}
+        return false;
+    }
 
-	@Override
-	public boolean touchDragged(int arg0, int arg1, int arg2) {
-		// TODO Auto-generated method stub
-		System.out.println("Touch dragged");
-		return false;
-	}
+    @Override
+    public boolean mouseMoved (int x, int y) {
+        return false;
+    }
 
-	@Override
-	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		System.out.println("Mouse released at: " + arg0 + ", " + arg1 + " with extra params: " + arg2 + " " + arg3);
-		return false;
-	}
+    @Override
+    public boolean scrolled (int amount) {
+        return false;
+    }
 
+    /**
+     * returns the sprite at the point, if one exists
+     * 
+     * @param x
+     * @param y
+     * @return Sprite intersecting the 
+     */
+    private ExtendedSprite checkIntersection(int x, int y) {
+
+    	if(x > view.getS1Position()[0] && x < (view.getS1Position()[0] + view.getS1().getWidth()) && y > view.getS1Position()[1] && y < (view.getS1Position()[1] + view.getS1().getHeight())) {
+    		return view.getS1();
+    	}
+    	if(x > view.getS2Position()[0] && x < (view.getS2Position()[0] + view.getS2().getWidth()) && y > view.getS2Position()[1] && y < (view.getS2Position()[1] + view.getS2().getHeight())) {
+    		return view.getS2();
+    	}
+    	return null;
+    }
 }

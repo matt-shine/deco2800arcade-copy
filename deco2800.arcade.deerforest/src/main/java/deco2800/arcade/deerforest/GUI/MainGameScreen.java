@@ -6,6 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class MainGameScreen implements Screen {
 	
@@ -16,12 +18,22 @@ public class MainGameScreen implements Screen {
 	private int p1DeckSize;
 	private int p2DeckSize;
 	
+	//assets
+	private ExtendedSprite s1;
+	private int[] s1Position = {300, 300};
+	private ExtendedSprite s2;
+	private int[] s2Position = {200,200};
+	
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
 		
 		//create the camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, getWidth(), getHeight());
+		
+		//load some assets
+		s1 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/1.png")));
+	    s2 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/2.png")));
 	}
 
 	@Override
@@ -40,6 +52,9 @@ public class MainGameScreen implements Screen {
 		//draw some random text  
 	    game.batch.begin();
 
+	    game.batch.draw(s1, s1Position[0], s1Position[1]);
+	    game.batch.draw(s2, s2Position[0], s2Position[1]);
+	    
 	    game.font.draw(game.batch, "Welcome To Deer Forest", 100, Gdx.graphics.getHeight() - 100);
 	    game.font.draw(game.batch, "This is all we have", 100, Gdx.graphics.getHeight() - 150);
 	    game.font.draw(game.batch, "The loaded model: " + game.getModel(), 100, Gdx.graphics.getHeight() - 200);
@@ -68,7 +83,7 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void resize(int arg0, int arg1) {
-		camera.setToOrtho(false, getWidth(), getHeight());
+		camera.setToOrtho(true, getWidth(), getHeight());
 		
 	}
 
@@ -84,6 +99,32 @@ public class MainGameScreen implements Screen {
 		
 	}
 	
+	public int[] getS1Position() {
+		return s1Position;
+	}
+	
+	public int[] getS2Position() {
+		return s2Position;
+	}
+	
+	public ExtendedSprite getS1() {
+		return s1;
+	}
+	
+	public ExtendedSprite getS2() {
+		return s2;
+	}
+	
+	public void setS1(int x, int y) {
+		s1Position[0] = x;
+		s1Position[1] = y;
+	}
+	
+	public void setS2(int x, int y) {
+		s2Position[0] = x;
+		s2Position[1] = y;
+	}
+
 	public int getWidth() {
 		return Gdx.graphics.getWidth();
 	}

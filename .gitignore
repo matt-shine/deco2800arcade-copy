@@ -23,6 +23,7 @@ bin
 .classpath
 
 .metadata/
+*.eml
 
 # Intellij Idea IDE
 .idea/

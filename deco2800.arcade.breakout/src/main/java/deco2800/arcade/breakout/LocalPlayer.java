@@ -24,8 +24,8 @@ public class LocalPlayer extends Paddle{
 			paddleShape.x = touchPos.x - paddleShape.width/2;
 		}
 		
-		if(Gdx.input.isKeyPressed(Keys.RIGHT)) movement(KBPADDLESPEED * Gdx.graphics.getDeltaTime());
-		if(Gdx.input.isKeyPressed(Keys.LEFT)) movement(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+		if(Gdx.input.isKeyPressed(Keys.RIGHT)||Gdx.input.isKeyPressed(Keys.D)) movement(KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+		if(Gdx.input.isKeyPressed(Keys.LEFT)||Gdx.input.isKeyPressed(Keys.A)) movement(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());
 		
 	}
 }

@@ -20,7 +20,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -199,21 +198,11 @@ public class TicTacToe extends GameClient {
 		super.resume();
 	}
 
-	
-	//Reusable list of achievements
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-	static {
-		Achievement winGame = new Achievement("Win a game of Tic Tac Toe");
-		achievements.add(winGame);
-	}
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "tictactoe";
+		game.id = "tictactoe";
 		game.name = "Tic Tac Toe";
-		game.availableAchievements = achievements;
 	}
 
 	public Game getGame() {

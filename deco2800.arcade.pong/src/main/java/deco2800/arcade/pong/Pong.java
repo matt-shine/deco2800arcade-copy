@@ -13,11 +13,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -42,7 +40,7 @@ public class Pong extends GameClient {
 	private GameState gameState;
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
-	
+
 	public static final int WINNINGSCORE = 3;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
@@ -52,13 +50,6 @@ public class Pong extends GameClient {
 	private BitmapFont font;
 
 	private String statusMessage;
-
-	//Reusable list of achievements
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-	static {
-		Achievement winPong = new Achievement("Win a game of Pong");
-		achievements.add(winPong);
-	}
 	
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
@@ -73,7 +64,7 @@ public class Pong extends GameClient {
 		super(player, networkClient);
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
-		this.networkClient = networkClient; //this is a bit of a hack
+        this.networkClient = networkClient; //this is a bit of a hack
 	}
 	
 	/**
@@ -245,9 +236,7 @@ public class Pong extends GameClient {
 		    networkClient.sendNetworkObject(createScoreUpdate());
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
-		    	AddAchievementRequest ach = new AddAchievementRequest();
-		    	ach.username = players[0];
-		    	networkClient.sendNetworkObject(ach);
+                incrementAchievement("pong.winGame");
 		    	//TODO Should have more detail in the achievement message
 		    }
 		} else {
@@ -263,7 +252,7 @@ public class Pong extends GameClient {
 	 */
 	private GameStatusUpdate createScoreUpdate() {
 		GameStatusUpdate update = new GameStatusUpdate();
-		update.gameId = game.gameId;
+		update.gameId = game.id;
 		update.username = players[0];
 		//TODO Should also send the score!
 		return update;
@@ -292,9 +281,8 @@ public class Pong extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "pong";
+		game.id = "pong";
 		game.name = "Pong";
-		game.availableAchievements = achievements;
 	}
 	
 	public Game getGame() {

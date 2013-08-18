@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.ApplicationListener;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
@@ -17,15 +18,20 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	private ApplicationListener overlay = null;
 	private boolean overlayInitialised = false;
 	private int width, height;
+    private AchievementClient achievementClient;
 	
 	public GameClient(Player player, NetworkClient networkClient) {
 		this.player = player;
 		this.networkClient = networkClient;
+        this.achievementClient = new AchievementClient(networkClient);
 		gameOverListeners = new ArrayList<GameOverListener>();
 	}
 	
 	public abstract Game getGame();
 
+    public void incrementAchievement(String achievementID) {
+        achievementClient.incrementProgress(achievementID, player);
+    }
 	
 	/**
 	 * Adds the in game overlay

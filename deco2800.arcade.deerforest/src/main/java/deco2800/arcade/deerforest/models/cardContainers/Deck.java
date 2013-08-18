@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.models.cardContainers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -8,15 +9,27 @@ import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public class Deck implements CardStack {
+	
+	private List<AbstractCard> deckCards;
 
 	//Initialise the deck with list of cards (gotten from user deck database)
 	public Deck(List<AbstractCard> cards) {
 		
+		// Add all the cards to a new list
+		deckCards = new ArrayList<AbstractCard>();
+		deckCards.addAll(cards);
 	}
 
 	//Draw a card from deck, null if not possible
 	public AbstractCard draw() {
-		return null;
+		
+		// Return the first card is the deck isn't empty
+		if (!deckCards.isEmpty()) {
+			return deckCards.get(0);
+		} else {
+			// Otherwise return null
+			return null;
+		}
 	}
 	
 	@Override

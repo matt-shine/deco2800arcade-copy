@@ -1,5 +1,10 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 //This class functions basically as the controller
@@ -8,6 +13,10 @@ public class MainInputProcessor implements InputProcessor {
 	private MainGame game;
 	private MainGameScreen view;
 	private ExtendedSprite currentSelection;
+	private float xClickOffset;
+	private float yClickOffset;
+	
+	private final float scale = 0.25f;
 	
 	public MainInputProcessor(MainGame game, MainGameScreen view) {
 		this.game = game;
@@ -16,6 +25,15 @@ public class MainInputProcessor implements InputProcessor {
 	
 	@Override
 	public boolean keyDown (int keycode) {
+		if(keycode == Keys.SPACE) {
+			if(currentSelection != null) {
+				if (currentSelection.getScaleX() > scale || currentSelection.getScaleY() > scale) {
+					currentSelection.setScale(scale);
+				} else {
+					currentSelection.setScale(scale*2);
+				}
+			}
+		}
         return false;
     }
 
@@ -33,6 +51,8 @@ public class MainInputProcessor implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
     	currentSelection = checkIntersection(x, y);
     	if(currentSelection != null) {
+    		xClickOffset = x - currentSelection.getX();
+    		yClickOffset = y - currentSelection.getY();
     		return true;
     	}
         return false;
@@ -40,19 +60,13 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-    	currentSelection = null;
         return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
     	if(currentSelection != null) {
-    		if(currentSelection == view.getS1()) {
-    			view.setS1(x, y);
-    		}
-    		if(currentSelection == view.getS2()) {
-    			view.setS2(x, y);
-    		}
+    		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
     	}
         return false;
     }
@@ -75,13 +89,15 @@ public class MainInputProcessor implements InputProcessor {
      * @return Sprite intersecting the 
      */
     private ExtendedSprite checkIntersection(int x, int y) {
+    	Map<String,List<ExtendedSprite>> spriteMap = view.getSpriteMap();
+    	for(String key : spriteMap.keySet()) {
+	    	for(ExtendedSprite s : spriteMap.get(key)) {
+		    	if(s.containsPoint(x, y)) {
+		    		return s;
+		    	}
+		    }
+	    }
 
-    	if(x > view.getS1Position()[0] && x < (view.getS1Position()[0] + view.getS1().getWidth()) && y > view.getS1Position()[1] && y < (view.getS1Position()[1] + view.getS1().getHeight())) {
-    		return view.getS1();
-    	}
-    	if(x > view.getS2Position()[0] && x < (view.getS2Position()[0] + view.getS2().getWidth()) && y > view.getS2Position()[1] && y < (view.getS2Position()[1] + view.getS2().getHeight())) {
-    		return view.getS2();
-    	}
     	return null;
     }
 }

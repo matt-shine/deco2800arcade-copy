@@ -7,7 +7,7 @@ import java.util.List;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
-public class Hand implements CardCollection {
+public class Hand extends AbstractCardCollection {
 
 	//Initialize the hand
 	public Hand() {
@@ -110,12 +110,6 @@ public class Hand implements CardCollection {
 
 	@Override
 	public List<AbstractCard> cards() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<AbstractEffect> continuousEffects() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,28 +1,29 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class MainGameScreen implements Screen {
 	
 	private final MainGame game;
 	private OrthographicCamera camera;
+	private AssetManager manager;
 	
 	//Variables for Card locations and what they contain
 	private int p1DeckSize;
 	private int p2DeckSize;
 	
 	//assets
-	private ExtendedSprite s1;
-	private int[] s1Position = {300, 300};
-	private ExtendedSprite s2;
-	private int[] s2Position = {200,200};
+	private Map<String, List<ExtendedSprite>> spriteMap;
 	
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
@@ -32,8 +33,27 @@ public class MainGameScreen implements Screen {
 		camera.setToOrtho(false, getWidth(), getHeight());
 		
 		//load some assets
-		s1 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/1.png")));
-	    s2 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/2.png")));
+		manager = new AssetManager();
+		loadAssets();
+		
+		manager.finishLoading();
+		spriteMap = new HashMap<String, List<ExtendedSprite>>();
+		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
+		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/generalCard.png", Texture.class));
+		s1.setPosition(300, 300);
+		s1.flip(false, true);
+		p1Hand.add(s1);
+		s1.setScale(0.25f);
+		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/2.png", Texture.class));
+		s2.setPosition(200, 200);
+		s2.flip(false, true);
+	    p1Hand.add(s2);
+	    spriteMap.put("P1Hand", p1Hand);
+	}
+
+	private void loadAssets() {
+		manager.load("DeerForestAssets/generalCard.png", Texture.class);
+		manager.load("DeerForestAssets/2.png", Texture.class);
 	}
 
 	@Override
@@ -52,8 +72,11 @@ public class MainGameScreen implements Screen {
 		//draw some random text  
 	    game.batch.begin();
 
-	    game.batch.draw(s1, s1Position[0], s1Position[1]);
-	    game.batch.draw(s2, s2Position[0], s2Position[1]);
+	    for(String key : spriteMap.keySet()) {
+	    	for(ExtendedSprite s : spriteMap.get(key)) {
+		    	s.draw(game.batch);
+		    }
+	    }
 	    
 	    game.font.draw(game.batch, "Welcome To Deer Forest", 100, Gdx.graphics.getHeight() - 100);
 	    game.font.draw(game.batch, "This is all we have", 100, Gdx.graphics.getHeight() - 150);
@@ -82,7 +105,7 @@ public class MainGameScreen implements Screen {
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
+	public void resize(int x, int y) {
 		camera.setToOrtho(true, getWidth(), getHeight());
 		
 	}
@@ -98,33 +121,11 @@ public class MainGameScreen implements Screen {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public int[] getS1Position() {
-		return s1Position;
-	}
-	
-	public int[] getS2Position() {
-		return s2Position;
-	}
-	
-	public ExtendedSprite getS1() {
-		return s1;
-	}
-	
-	public ExtendedSprite getS2() {
-		return s2;
-	}
-	
-	public void setS1(int x, int y) {
-		s1Position[0] = x;
-		s1Position[1] = y;
-	}
-	
-	public void setS2(int x, int y) {
-		s2Position[0] = x;
-		s2Position[1] = y;
-	}
 
+	public Map<String, List<ExtendedSprite>> getSpriteMap() {
+		return spriteMap;
+	}
+	
 	public int getWidth() {
 		return Gdx.graphics.getWidth();
 	}

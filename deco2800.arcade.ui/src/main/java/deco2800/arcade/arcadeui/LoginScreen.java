@@ -18,10 +18,6 @@ import deco2800.arcade.client.GameScreen;
 public class LoginScreen extends GameScreen {
 	
 	
-	private OrthographicCamera camera;
-	private ShapeRenderer shapeRenderer;
-	private BitmapFont font;
-	private SpriteBatch batch;
     private Skin skin; // Move this somewhere appropriate
     private Stage stage;
 	
@@ -88,10 +84,7 @@ public class LoginScreen extends GameScreen {
 
 	@Override
 	public void firstResize() {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(true, getWidth(), getHeight());
-		shapeRenderer = new ShapeRenderer();
-		
+
 		ArcadeSystem.openConnection();
 		
 	}

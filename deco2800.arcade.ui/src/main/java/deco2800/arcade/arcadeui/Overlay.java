@@ -3,29 +3,76 @@ package deco2800.arcade.arcadeui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameScreen;
 
-public class Overlay  extends GameScreen {
+public class Overlay extends GameScreen {
 	
-	private OrthographicCamera camera;
-	private ShapeRenderer shapeRenderer;
-	private BitmapFont font;
-	private SpriteBatch batch;
+	
+    private Skin skin;
+    private Stage stage;
+    
+    private OverlayPopup popup = new OverlayPopup();
+	
+	
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
 
 	
 	
 	public Overlay() {
-		font = new BitmapFont(true);
-		batch = new SpriteBatch();
+
+		System.out.println(this.getWidth() + " " + this.getHeight());
+		
+        skin = new Skin();
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        skin.add("white", new Texture(pixmap));
+        skin.add("default", new BitmapFont());
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        skin.add("default", labelStyle);
+        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = skin.getFont("default");
+        skin.add("default", textFieldStyle);
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
+        
+        
+        stage = new Stage();
+        
+        
+        Gdx.input.setInputProcessor(stage);
+
+        Table table = new Table();
+        table.setFillParent(true);
+        
+        
+        Label quitLabel = new Label("Press escape to quit...", skin);
+        table.add(quitLabel);
+        
+        
+        stage.addActor(table);
+        //stage.addActor(popup);
+        
+        
+        //popup.setPosition(100, 100);
+        
 	}
 	
 	
@@ -37,20 +84,13 @@ public class Overlay  extends GameScreen {
 	
 	@Override
 	public void firstResize() {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(true, getWidth(), getHeight());
-		shapeRenderer = new ShapeRenderer();
+		
 	}
 	
 	@Override
 	public void render(float arg0) {
 		
 		
-		
-		camera.update();
-	    shapeRenderer.setProjectionMatrix(camera.combined);
-	    batch.setProjectionMatrix(camera.combined);
-	    
 		//toggles isUIOpen on tab key down
 		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
 			isUIOpen = !isUIOpen;
@@ -58,21 +98,11 @@ public class Overlay  extends GameScreen {
 		
 		if (isUIOpen) {
 			
-			//draw a placeholder shape
-		    shapeRenderer.begin(ShapeType.FilledRectangle);
-		    
-		    shapeRenderer.filledRect(100,
-		        100,
-		        getWidth() - 200,
-		        getHeight() - 200);
-		    
-		    shapeRenderer.end();
-		    
-		    
-		    batch.begin();
-		    font.setColor(Color.BLACK);
-		    font.draw(batch, "Press ESC to quit the game.", 110, 110);
-		    batch.end();
+			
+			stage.act();
+			stage.draw();
+			
+			
 		    
 		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 		    	ArcadeSystem.goToGame("arcadeui");

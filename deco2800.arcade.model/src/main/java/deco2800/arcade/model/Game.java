@@ -19,11 +19,23 @@ public class Game {
 	public @interface ArcadeGame {
 		 String id();
 	}
+	
+	/**
+	 * This annotation is for ArcadeGames that should not be listed in the games list
+	 * in release builds
+	 * @author Simon
+	 *
+	 */
+	@Target(ElementType.TYPE)
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface InternalGame {
+	}
+	
 
-	public String gameId; //A machine-processable identifier for the game
+	public String id; //A machine-processable identifier for the game
 	
 	public String name; //A human-readable name for the game
-	
-	public Set<Achievement> availableAchievements;
+		
+	public int pricePerPlay = 1;
 	
 }

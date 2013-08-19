@@ -7,12 +7,11 @@ import java.util.Set;
 public class Player {
 
 	// TODO shared between server & client?
+	// this is a comment.
 	
 	private int playerID;
 
 	private String username;
-
-	private Set<Achievement> achievements;
 	
 	private Set<Game> games;
 	
@@ -47,28 +46,23 @@ public class Player {
 	 *            The Player's nameID
 	 * @param username
 	 *            The Player's name
-	 * @param achievments
-	 *            The Player's achievements
 	 * @param filepath
 	 *            The Player's icon filepath
 	 * @throws IOException
 	 *             Throws exception when the image cannot be found at the
 	 *             designated filepath.
 	 */
-	public Player(int playerID, String username, Set<Achievement> achievements,
-			String filepath) throws IOException {
+	public Player(int playerID, String username, String filepath) 
+            throws IOException {
 		// TODO: Validate username input
 
 		// TODO validate filepath
-
-		// TODO validate achievements set
 		
 		// TODO validate playerID
 		
 		this.playerID = playerID;
 
 		this.username = username;
-		this.achievements = new HashSet<Achievement>(achievements);
 		this.games = new HashSet<Game>();
 		this.friends = new HashSet<Player>();
 		this.friendInvites = new HashSet<Player>();
@@ -105,67 +99,6 @@ public class Player {
 	public void setUsername(String username) {
 		//TODO Validate
 		this.username = username;
-	}
-
-	/**
-	 * Access method for player's achievements.
-	 * 
-	 * @return Returns a set containing the player's Achievements.
-	 */
-	public Set<Achievement> getAchievements() {
-		/*
-		 * Cloning this.achievements to preserve immutability
-		 */
-		Set<Achievement> clone = new HashSet<Achievement>(this.achievements);
-		return clone;
-	}
-
-	/**
-	 * Sets the Player's achievements to those supplied
-	 * 
-	 * @param achievements
-	 *            The player's achievements.
-	 */
-	public void setAchievements(Set<Achievement> achievements) {
-		/* TODO Validate not null
-		 * Preserving immutability
-		 */
-		this.achievements = new HashSet<Achievement>(achievements);
-	}
-
-	/**
-	 * Adds an achievement to the player's achievements.
-	 * 
-	 * @param achievement
-	 *            The achievement to be added.
-	 * @ensure this.achievement.contains(achievement)
-	 */
-	public void addAchievement(Achievement achievement) {
-		//TODO Validate not null
-		this.achievements.add(new Achievement(achievement));
-	}
-
-	/**
-	 * Removes and achievement from the player's achievements.
-	 * 
-	 * @param achievement
-	 *            The achievement to be removed
-	 * @ensure !this.achievement.contains(achievement)
-	 */
-	public void removeAchievement(Achievement achievement) {
-		this.achievements.remove(achievement);
-	}
-
-	/**
-	 * Checks if the player has an Achievement.
-	 * 
-	 * @param achievement
-	 *            The achievement to be checked.
-	 * @return Returns true if player has specified achievement, false
-	 *         otherwise.
-	 */
-	public boolean hasAchievement(Achievement achievement) {
-		return this.achievements.contains(achievement);
 	}
 
 	/**

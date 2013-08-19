@@ -24,8 +24,8 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="burningskies")
 public class BurningSkies extends GameClient {
 	
-	public static final int SCREENHEIGHT = 600;
-	public static final int SCREENWIDTH = 800;
+	public static final int SCREENHEIGHT = 768;
+	public static final int SCREENWIDTH = 1024;
 	
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 

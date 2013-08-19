@@ -1,14 +1,15 @@
 package deco2800.arcade.replay.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class ReplayHandlerTest {
 
     @Test
-    public void test() {
-        fail("Not yet implemented");
+    public void testFail()
+    {
+        assertEquals(false, true);
     }
 
 }

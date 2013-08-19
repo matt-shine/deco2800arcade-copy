@@ -1,4 +1,4 @@
-package deco2800.arcade.towerdefence;
+package main.java.deco2800.arcade.towerdefence;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -12,9 +12,11 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -27,6 +29,8 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 
+
+@ArcadeGame(id="towerdefence")
 public class TowerDefence extends GameClient {
 	public TowerDefence(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -37,9 +41,13 @@ public class TowerDefence extends GameClient {
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
+	private ShapeRenderer shapeRenderer;
+	private BitmapFont font;
 	
 	@Override
 	public void create() {		
+		super.create();
+		
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		
@@ -48,6 +56,12 @@ public class TowerDefence extends GameClient {
 		
 		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		//Necessary for rendering
+		shapeRenderer = new ShapeRenderer();
+		font = new BitmapFont();
+		font.setScale(2);
+		batch = new SpriteBatch();
 		
 		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
 		

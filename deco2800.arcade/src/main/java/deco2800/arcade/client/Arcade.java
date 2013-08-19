@@ -21,12 +21,14 @@ import deco2800.arcade.client.network.listener.AchievementListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.ReplayListener;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.replay.ReplayRequest;
 
 /**
  * The client application for running arcade games.
@@ -132,6 +134,7 @@ public class Arcade extends JFrame {
 			// TODO allow server/port as optional runtime arguments xor user inputs.
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			addListeners();
+	        client.sendNetworkObject(new ReplayRequest());
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server (" + serverIPAddress + ")", e);
 		}
@@ -142,6 +145,7 @@ public class Arcade extends JFrame {
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
+		this.client.addListener(new ReplayListener());
 	}
 
 
@@ -259,6 +263,7 @@ public class Arcade extends JFrame {
 	}
 
 	public Set<String> findGameIds() {
+	    
 		return getGameMap().keySet();
 	}
 

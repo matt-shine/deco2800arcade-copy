@@ -13,6 +13,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.replay.ReplayRequest;
 
 public class Protocol {
 
@@ -28,6 +29,9 @@ public class Protocol {
 		//Achievement messages
 		kryo.register(AchievementListRequest.class);
 		kryo.register(AddAchievementRequest.class);
+		
+		//Replay messages
+		kryo.register(ReplayRequest.class);
 		
 		//Game messages
 		kryo.register(GameStatusUpdate.class);

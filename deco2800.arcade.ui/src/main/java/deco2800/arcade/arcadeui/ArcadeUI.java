@@ -1,8 +1,5 @@
 package deco2800.arcade.arcadeui;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;

@@ -3,7 +3,7 @@ package deco2800.arcade.model;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.lang.Object*;
+import java.lang.Object.*;
 
 public class Player {
 
@@ -364,7 +364,7 @@ public class Player {
 	 * 			The player to be added to the blocked set.
 	 * @ensure this.blocked.contains(player)
 	 */
-	public void addBlocked(Player player) {
+	public void addBlocked(Player player) throws Exception {
 		if (player != null) {
 			if(this.isBlocked(player)){
 				throw new Exception("Player is already blocked"); }
@@ -380,7 +380,7 @@ public class Player {
 	 * 			player to be removed from blocked list.
 	 * @ensure !this.blocked.contains(player)
 	 */
-	public void removeBlocked(Player player) {
+	public void removeBlocked(Player player) throws Exception {
 		if (this.isBlocked(player)) {
 			this.blocked.remove(player); }
 		else {
@@ -388,5 +388,3 @@ public class Player {
 		}
 	}
 	
-	
-}

@@ -31,21 +31,17 @@ public class OverlayPopup extends WidgetGroup {
 				getStage().getCamera().combined);
 		
 		
-		shapeRenderer.begin(ShapeType.FilledRectangle);
-		//shapeRenderer.setColor(1f, 1f, 1f, 1f);
-		//shapeRenderer.rect(getX(), getY(), this.getWidth(), this.getHeight());
-		shapeRenderer.end();
-		
-		
+		this.getPrefWidth();
 	}
+
 	
 	@Override
-	public float getMinWidth() {
+	public float getPrefWidth() {
 		return 100;
 	}
 	
 	@Override
-	public float getMinHeight() {
+	public float getPrefHeight() {
 		return 100;
 	}
 	

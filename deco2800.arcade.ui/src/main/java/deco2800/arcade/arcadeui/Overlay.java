@@ -29,8 +29,6 @@ public class Overlay extends GameScreen {
 	
 	public Overlay() {
 
-		System.out.println(this.getWidth() + " " + this.getHeight());
-		
         skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -50,9 +48,9 @@ public class Overlay extends GameScreen {
         
         Label quitLabel = new Label("Press escape to quit...", skin);
         table.row();
-        table.add(quitLabel);
+        table.add(quitLabel).expand().top();
         table.row();
-        table.add(popup);
+        table.add(popup).bottom();
         
         table.layout();
         

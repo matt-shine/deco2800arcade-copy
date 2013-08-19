@@ -10,5 +10,8 @@ public class WaterMonster extends AbstractMonster {
 		super("Water", health, attacks);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public String toString() {
+		return super.toString();
+	}
 }

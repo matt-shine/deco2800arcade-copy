@@ -7,5 +7,4 @@ package deco2800.arcade.client;
  */
 public interface GameOverListener {
 	public void notify(GameClient client);
-	public void notifySync(GameClient client);
 }

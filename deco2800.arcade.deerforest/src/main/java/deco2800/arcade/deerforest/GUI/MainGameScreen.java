@@ -1,26 +1,29 @@
 package deco2800.arcade.deerforest.GUI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class MainGameScreen implements Screen {
 	
 	private final MainGame game;
 	private OrthographicCamera camera;
+	private AssetManager manager;
 	
 	//Variables for Card locations and what they contain
 	private int p1DeckSize;
 	private int p2DeckSize;
 	
 	//assets
-	private List<ExtendedSprite> p1Hand;
+	private Map<String, List<ExtendedSprite>> spriteMap;
 	
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
@@ -30,13 +33,24 @@ public class MainGameScreen implements Screen {
 		camera.setToOrtho(false, getWidth(), getHeight());
 		
 		//load some assets
-		p1Hand = new ArrayList<ExtendedSprite>();
-		ExtendedSprite s1 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/1.png")));
+		manager = new AssetManager();
+		loadAssets();
+		
+		manager.finishLoading();
+		spriteMap = new HashMap<String, List<ExtendedSprite>>();
+		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
+		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/1.png", Texture.class));
 		s1.setPosition(300, 300);
 		p1Hand.add(s1);
-		ExtendedSprite s2 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/2.png")));
+		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/2.png", Texture.class));
 		s2.setPosition(200, 200);
 	    p1Hand.add(s2);
+	    spriteMap.put("P1Hand", p1Hand);
+	}
+
+	private void loadAssets() {
+		manager.load("DeerForestAssets/1.png", Texture.class);
+		manager.load("DeerForestAssets/2.png", Texture.class);
 	}
 
 	@Override
@@ -55,8 +69,10 @@ public class MainGameScreen implements Screen {
 		//draw some random text  
 	    game.batch.begin();
 
-	    for(ExtendedSprite s : p1Hand) {
-	    	s.draw(game.batch);
+	    for(String key : spriteMap.keySet()) {
+	    	for(ExtendedSprite s : spriteMap.get(key)) {
+		    	s.draw(game.batch);
+		    }
 	    }
 	    
 	    game.font.draw(game.batch, "Welcome To Deer Forest", 100, Gdx.graphics.getHeight() - 100);
@@ -103,8 +119,8 @@ public class MainGameScreen implements Screen {
 		
 	}
 
-	public List<ExtendedSprite> getP1Hand() {
-		return p1Hand;
+	public Map<String, List<ExtendedSprite>> getSpriteMap() {
+		return spriteMap;
 	}
 	
 	public int getWidth() {

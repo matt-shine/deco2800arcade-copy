@@ -1,5 +1,9 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
@@ -18,7 +22,6 @@ public class MainInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyDown (int keycode) {
 		if(keycode == Keys.SPACE) {
-			System.out.println("Space pressed, current selection is: " + currentSelection);
 			if(currentSelection != null) {
 				if (currentSelection.getScaleX() > 1 || currentSelection.getScaleY() > 1) {
 					currentSelection.setScale(1);
@@ -80,11 +83,15 @@ public class MainInputProcessor implements InputProcessor {
      * @return Sprite intersecting the 
      */
     private ExtendedSprite checkIntersection(int x, int y) {
-    	for(ExtendedSprite s : view.getP1Hand()) {
-    		if(s.containsPoint(x, y)) {
-    			return s;
-    		}
-    	}
+    	Map<String,List<ExtendedSprite>> spriteMap = view.getSpriteMap();
+    	for(String key : spriteMap.keySet()) {
+	    	for(ExtendedSprite s : spriteMap.get(key)) {
+		    	if(s.containsPoint(x, y)) {
+		    		return s;
+		    	}
+		    }
+	    }
+
     	return null;
     }
 }

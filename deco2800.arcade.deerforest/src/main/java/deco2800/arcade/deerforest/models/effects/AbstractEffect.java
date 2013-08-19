@@ -117,10 +117,15 @@ public abstract class AbstractEffect {
 	 * 				1 = Spells
 	 * 				2 = Both
 	 * 			- Min attack (irrelevant if spell searching, still needs to exist)
+	 * 				-1 = N/A
 	 * 			- Max attack (irrelevant if spell searching, still needs to exist)
+	 * 				-1 = N/A
 	 * 			- Min health (irrelevant if spell searching, still needs to exist)
+	 * 				-1 = N/A
 	 * 			- Max health (irrelevant if spell searching, still needs to exist)
+	 * 				-1 = N/A
 	 * 			- Effect type
+	 * 				-1 = N/A
 	 * 				0 = Destroy
 	 * 				1 = Draw
 	 * 				2 = MonsterChanging
@@ -466,15 +471,15 @@ public abstract class AbstractEffect {
 				return false;
 			}
 			//check min/max attack is valid
-			if(params.get(5) < 0 || params.get(6) < params.get(5)) {
+			if(params.get(5) < -1 || (params.get(6) < params.get(5) && params.get(6) != -1)) {
 				return false;
 			}
 			//check min/max health is valid
-			if(params.get(7) < 0 || params.get(8) < params.get(7)) {
+			if(params.get(7) < -1 || (params.get(8) < params.get(7) && params.get(8) != -1)) {
 				return false;
 			}
 			//check effect type is valid
-			if(params.get(9) < 0 || params.get(9) > 4) {
+			if(params.get(9) < -1 || params.get(9) > 4) {
 				return false;
 			}
 		} catch(IndexOutOfBoundsException e) {

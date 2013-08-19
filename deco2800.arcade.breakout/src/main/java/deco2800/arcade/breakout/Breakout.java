@@ -69,14 +69,14 @@ public class Breakout extends GameClient{
 	
 	private static Set<Achievement> achievements = new HashSet<Achievement>();
 	static {
-		Achievement winBreakout = new Achievement("Win a game of Breakout");
-		Achievement perfect = new Achievement("Win a game of Breakout without losing a Life");
-		Achievement noob = new Achievement("Win a game of Breakout with a negative score");
-		Achievement closeOne = new Achievement("Win a game of Breakout with no lives remaining");
-		achievements.add(winBreakout);
-		achievements.add(perfect);
-		achievements.add(noob);
-		achievements.add(closeOne);
+		//Achievement winBreakout = new Achievement("Win a game of Breakout");
+		//Achievement perfect = new Achievement("Win a game of Breakout without losing a Life");
+		//Achievement noob = new Achievement("Win a game of Breakout with a negative score");
+		//Achievement closeOne = new Achievement("Win a game of Breakout with no lives remaining");
+		//achievements.add(winBreakout);
+		//achievements.add(perfect);
+		//achievements.add(noob);
+		//achievements.add(closeOne);
 		
 	}
 	
@@ -268,9 +268,9 @@ public class Breakout extends GameClient{
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "breakout";
+		//game.gameId = "breakout";
 		game.name = "Breakout";
-		game.availableAchievements = achievements;
+		//game.availableAchievements = achievements;
 	}
 	
 

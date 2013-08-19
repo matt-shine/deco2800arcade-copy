@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.GUI;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 //This class functions basically as the controller
@@ -16,6 +17,16 @@ public class MainInputProcessor implements InputProcessor {
 	
 	@Override
 	public boolean keyDown (int keycode) {
+		if(keycode == Keys.SPACE) {
+			System.out.println("Space pressed, current selection is: " + currentSelection);
+			if(currentSelection != null) {
+				if (currentSelection.getScaleX() > 1 || currentSelection.getScaleY() > 1) {
+					currentSelection.setScale(1);
+				} else {
+					currentSelection.setScale(2);
+				}
+			}
+		}
         return false;
     }
 
@@ -40,19 +51,13 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-    	currentSelection = null;
         return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
     	if(currentSelection != null) {
-    		if(currentSelection == view.getS1()) {
-    			view.setS1(x, y);
-    		}
-    		if(currentSelection == view.getS2()) {
-    			view.setS2(x, y);
-    		}
+    		currentSelection.setPosition(x, y);
     	}
         return false;
     }
@@ -75,12 +80,10 @@ public class MainInputProcessor implements InputProcessor {
      * @return Sprite intersecting the 
      */
     private ExtendedSprite checkIntersection(int x, int y) {
-
-    	if(x > view.getS1Position()[0] && x < (view.getS1Position()[0] + view.getS1().getWidth()) && y > view.getS1Position()[1] && y < (view.getS1Position()[1] + view.getS1().getHeight())) {
-    		return view.getS1();
-    	}
-    	if(x > view.getS2Position()[0] && x < (view.getS2Position()[0] + view.getS2().getWidth()) && y > view.getS2Position()[1] && y < (view.getS2Position()[1] + view.getS2().getHeight())) {
-    		return view.getS2();
+    	for(ExtendedSprite s : view.getP1Hand()) {
+    		if(s.containsPoint(x, y)) {
+    			return s;
+    		}
     	}
     	return null;
     }

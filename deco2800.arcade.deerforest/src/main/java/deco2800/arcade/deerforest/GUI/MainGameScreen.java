@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -19,10 +20,7 @@ public class MainGameScreen implements Screen {
 	private int p2DeckSize;
 	
 	//assets
-	private ExtendedSprite s1;
-	private int[] s1Position = {300, 300};
-	private ExtendedSprite s2;
-	private int[] s2Position = {200,200};
+	private List<ExtendedSprite> p1Hand;
 	
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
@@ -32,8 +30,13 @@ public class MainGameScreen implements Screen {
 		camera.setToOrtho(false, getWidth(), getHeight());
 		
 		//load some assets
-		s1 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/1.png")));
-	    s2 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/2.png")));
+		p1Hand = new ArrayList<ExtendedSprite>();
+		ExtendedSprite s1 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/1.png")));
+		s1.setPosition(300, 300);
+		p1Hand.add(s1);
+		ExtendedSprite s2 = new ExtendedSprite(new Texture(Gdx.files.internal("DeerForestAssets/2.png")));
+		s2.setPosition(200, 200);
+	    p1Hand.add(s2);
 	}
 
 	@Override
@@ -52,8 +55,9 @@ public class MainGameScreen implements Screen {
 		//draw some random text  
 	    game.batch.begin();
 
-	    game.batch.draw(s1, s1Position[0], s1Position[1]);
-	    game.batch.draw(s2, s2Position[0], s2Position[1]);
+	    for(ExtendedSprite s : p1Hand) {
+	    	s.draw(game.batch);
+	    }
 	    
 	    game.font.draw(game.batch, "Welcome To Deer Forest", 100, Gdx.graphics.getHeight() - 100);
 	    game.font.draw(game.batch, "This is all we have", 100, Gdx.graphics.getHeight() - 150);
@@ -82,7 +86,7 @@ public class MainGameScreen implements Screen {
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
+	public void resize(int x, int y) {
 		camera.setToOrtho(true, getWidth(), getHeight());
 		
 	}
@@ -98,33 +102,11 @@ public class MainGameScreen implements Screen {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public int[] getS1Position() {
-		return s1Position;
-	}
-	
-	public int[] getS2Position() {
-		return s2Position;
-	}
-	
-	public ExtendedSprite getS1() {
-		return s1;
-	}
-	
-	public ExtendedSprite getS2() {
-		return s2;
-	}
-	
-	public void setS1(int x, int y) {
-		s1Position[0] = x;
-		s1Position[1] = y;
-	}
-	
-	public void setS2(int x, int y) {
-		s2Position[0] = x;
-		s2Position[1] = y;
-	}
 
+	public List<ExtendedSprite> getP1Hand() {
+		return p1Hand;
+	}
+	
 	public int getWidth() {
 		return Gdx.graphics.getWidth();
 	}

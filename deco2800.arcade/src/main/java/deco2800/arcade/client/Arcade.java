@@ -1,6 +1,7 @@
 package deco2800.arcade.client;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
@@ -95,11 +96,13 @@ public class Arcade extends JFrame {
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    public void windowClosing(WindowEvent winEvt) {
 
-				/* TODO: make the program shutdown properly. This line seems to
-		    	 * cause a deadlock. Not calling it will leave the program running in
-		    	 * the background
-		    	 */
-		    	System.exit(0);
+		    	removeCanvas();
+		    	
+				EventQueue.invokeLater(new Runnable() {
+					public void run () {
+						System.exit(0);
+					}
+				});
 
 		    }
 		});
@@ -221,6 +224,15 @@ public class Arcade extends JFrame {
 				e.printStackTrace();
 			}
 		}
+
+	}
+	
+	
+	
+	
+	public void removeCanvas(){
+		
+		this.remove(this.canvas.getCanvas());
 
 	}
 

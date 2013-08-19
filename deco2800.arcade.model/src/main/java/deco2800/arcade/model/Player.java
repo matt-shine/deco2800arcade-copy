@@ -7,7 +7,6 @@ import java.util.Set;
 public class Player {
 
 	// TODO shared between server & client?
-	// this is a comment.
 	
 	private int playerID;
 

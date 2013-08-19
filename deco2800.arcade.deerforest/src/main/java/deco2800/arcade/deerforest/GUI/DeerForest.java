@@ -42,17 +42,11 @@ public class DeerForest extends GameClient {
 		super.resume();
 	}
 
-	
-	//there are no achievements for this
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "deerforest";
+		game.id = "deerforest";
 		game.name = "Deer Forest";
-		game.availableAchievements = achievements;
 	}
 
 	public Game getGame() {

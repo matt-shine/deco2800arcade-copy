@@ -39,17 +39,20 @@ public class MainGameScreen implements Screen {
 		manager.finishLoading();
 		spriteMap = new HashMap<String, List<ExtendedSprite>>();
 		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
-		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/1.png", Texture.class));
+		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/generalCard.png", Texture.class));
 		s1.setPosition(300, 300);
+		s1.flip(false, true);
 		p1Hand.add(s1);
+		s1.setScale(0.25f);
 		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/2.png", Texture.class));
 		s2.setPosition(200, 200);
+		s2.flip(false, true);
 	    p1Hand.add(s2);
 	    spriteMap.put("P1Hand", p1Hand);
 	}
 
 	private void loadAssets() {
-		manager.load("DeerForestAssets/1.png", Texture.class);
+		manager.load("DeerForestAssets/generalCard.png", Texture.class);
 		manager.load("DeerForestAssets/2.png", Texture.class);
 	}
 

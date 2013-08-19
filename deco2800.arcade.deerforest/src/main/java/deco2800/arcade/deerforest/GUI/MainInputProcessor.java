@@ -13,6 +13,10 @@ public class MainInputProcessor implements InputProcessor {
 	private MainGame game;
 	private MainGameScreen view;
 	private ExtendedSprite currentSelection;
+	private float xClickOffset;
+	private float yClickOffset;
+	
+	private final float scale = 0.25f;
 	
 	public MainInputProcessor(MainGame game, MainGameScreen view) {
 		this.game = game;
@@ -23,10 +27,10 @@ public class MainInputProcessor implements InputProcessor {
 	public boolean keyDown (int keycode) {
 		if(keycode == Keys.SPACE) {
 			if(currentSelection != null) {
-				if (currentSelection.getScaleX() > 1 || currentSelection.getScaleY() > 1) {
-					currentSelection.setScale(1);
+				if (currentSelection.getScaleX() > scale || currentSelection.getScaleY() > scale) {
+					currentSelection.setScale(scale);
 				} else {
-					currentSelection.setScale(2);
+					currentSelection.setScale(scale*2);
 				}
 			}
 		}
@@ -47,6 +51,8 @@ public class MainInputProcessor implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
     	currentSelection = checkIntersection(x, y);
     	if(currentSelection != null) {
+    		xClickOffset = x - currentSelection.getX();
+    		yClickOffset = y - currentSelection.getY();
     		return true;
     	}
         return false;
@@ -60,7 +66,7 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
     	if(currentSelection != null) {
-    		currentSelection.setPosition(x, y);
+    		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
     	}
         return false;
     }

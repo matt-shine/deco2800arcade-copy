@@ -10,4 +10,15 @@ public abstract class AbstractCard {
 	public String getPictureFilePath() {
 		return null;
 	}
+	
+	public String getCardType() {
+		if (this instanceof AbstractMonster) {
+			return "monster";
+		} else if (this instanceof AbstractSpell) {;
+			return "spell";
+		} else {
+			return "field";
+		}
+	}
+	
 }

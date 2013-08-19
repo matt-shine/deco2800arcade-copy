@@ -49,6 +49,7 @@ public abstract class AbstractMonster extends AbstractCard {
 		return null;
 	}
 
+	// Returns the element type of the card
 	public String getType() {
 		return type;
 	}

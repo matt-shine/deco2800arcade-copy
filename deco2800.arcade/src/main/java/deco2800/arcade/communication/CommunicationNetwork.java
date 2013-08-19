@@ -57,7 +57,7 @@ public class CommunicationNetwork {
 	
 	public void sendTextMessage(String message){
 		textMessage.text = message;
-		textMessage.username = player.getUsername();
+		textMessage.username = "";
 		this.networkClient.sendNetworkObject(textMessage);
 		this.input.setText("");
 	}
@@ -66,7 +66,7 @@ public class CommunicationNetwork {
 	}
 	
 	public void updateText(String message) {
-		this.textArea.append(player.getUsername() + ": " + message + "\n");	
+		this.textArea.append("Test" + ": " + message + "\n");	
 	}
 	
 

@@ -172,7 +172,7 @@ public class Breakout extends GameClient{
 	    switch(gameState) {
 	    
 	    case READY:
-	    	if (Gdx.input.isButtonPressed(Keys.SPACE) || Gdx.input.isTouched()){
+	    	if (Gdx.input.isKeyPressed(Keys.SPACE) || Gdx.input.isTouched()){
 	    		Start();
 	    	}
 	    	break;
@@ -180,7 +180,6 @@ public class Breakout extends GameClient{
 	    case INPROGRESS:
 	    	paddle.update(ball); 
 	    	ball.move(Gdx.graphics.getDeltaTime());
-	    	System.out.println(Gdx.input.isButtonPressed(Keys.SPACE));
 	    	//?int index = 0;
 	    	// TODO: if it hits left/right side, only bounceX. if it hits top/bottom, only bounceY
 	    	for (Brick b : bricks) {

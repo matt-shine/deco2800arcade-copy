@@ -22,6 +22,13 @@ public class Field extends AbstractCardCollection {
 		fieldSpells = new ArrayList<AbstractSpell>();
 	}
 	
+	/**
+	 * Method adds a card to its matching list, ie. Monsters -> fieldMonster
+	 * before adding however the method checks that the list isn't full.
+	 * 
+	 * @param AbstractCard e, The card to be added
+	 * @return Return true if card has been added successfully.
+	 */
 	@Override
 	public boolean add(AbstractCard e) {
 		//If card is a monster
@@ -43,19 +50,12 @@ public class Field extends AbstractCardCollection {
 		} 
 		
 		return false;
-		
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends AbstractCard> c) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -70,22 +70,21 @@ public class Field extends AbstractCardCollection {
 		return false;
 	}
 
+	/**
+	 * Returns true if field is empty.
+	 */
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
+		if(size() == 0) {
+			return true;
+		}
 		return false;
 	}
 
-	//check if full
 	public boolean isFull() {
 		return false;
 	}
 	
-	@Override
-	public Iterator<AbstractCard> iterator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public boolean remove(Object o) {
@@ -135,10 +134,6 @@ public class Field extends AbstractCardCollection {
 		return result;
 	}
 
-	@Override
-	public <T> T[] toArray(T[] a) {
-		return null;
-	}
 
 	@Override
 	public boolean moveCard(AbstractCard card, CardCollection moveLocation) {

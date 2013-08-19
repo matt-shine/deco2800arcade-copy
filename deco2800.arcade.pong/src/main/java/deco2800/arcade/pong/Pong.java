@@ -75,10 +75,6 @@ public class Pong extends GameClient {
 	public void create() {
 		super.create();
 		
-		ReplayRequest rr = new ReplayRequest();
-		rr.random = Math.random();
-        networkClient.sendNetworkObject(rr);
-		
 		//Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);

@@ -1,5 +1,8 @@
 package deco2800.arcade.replay;
 
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.ReplayListener;
+
 public class TestRunner {
 
 	public TestRunner() {
@@ -7,7 +10,14 @@ public class TestRunner {
 	}
 
 	public static void main(String[] argv) throws Exception {
-		ReplayHandler replayHandler = new ReplayHandler();
+	    
+	    //Set up a dummy network client to use for testing
+	    NetworkClient client = new NetworkClient("127.0.0.1", 54555, 54777);
+		ReplayHandler replayHandler = new ReplayHandler(client);
+		
+		//Set up our listener on this end
+	    client.addListener(new ReplayListener());
+		
 		replayHandler.addReplayEventListener( new ReplayEventListener() {
 			public void replayEventReceived( String eType, Object eData ) {
 				if ( eType == "node_pushed" ) {

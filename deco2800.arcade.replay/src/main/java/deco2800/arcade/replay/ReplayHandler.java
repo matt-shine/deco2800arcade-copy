@@ -1,6 +1,10 @@
 package deco2800.arcade.replay;
 
 import javax.swing.event.EventListenerList;
+
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.protocol.replay.ReplayRequest;
+
 import java.util.*;
 
 public class ReplayHandler {
@@ -9,10 +13,30 @@ public class ReplayHandler {
 	
 	private long startTime;
 	private List<ReplayNode> replayHistory;
+	private NetworkClient client;
+	
+	public ReplayHandler(NetworkClient client)
+	{
+	    this.client = client;
+	    
+	    ReplayRequest rr = new ReplayRequest();
+	    rr.random = Math.random();
+	    client.sendNetworkObject(rr);
+	    
+	    init();
+	}
 	
 	public ReplayHandler() {
-		this.startTime = -1;
-		this.replayHistory = new ArrayList<ReplayNode>();
+	    init();
+	}
+	
+	/**
+	 * Set up the default variables.
+	 */
+	private void init()
+	{
+	    this.startTime = -1;
+	    this.replayHistory = new ArrayList<ReplayNode>();
 	}
 	
 	public void startRecording() {

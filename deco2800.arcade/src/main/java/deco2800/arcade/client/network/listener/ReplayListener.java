@@ -1,11 +1,10 @@
 package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
-
 import deco2800.arcade.protocol.replay.ReplayResponse;
 
 public class ReplayListener extends NetworkListener {
-
+    
 	@Override
 	public void connected(Connection connection) {
 		super.connected(connection);

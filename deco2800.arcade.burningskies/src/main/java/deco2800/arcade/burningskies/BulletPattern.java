@@ -2,7 +2,7 @@ package deco2800.arcade.burningskies;
 
 public class BulletPattern {
 	
-	private int interval; // how often bullets are fired
+	private float interval; // how often bullets are fired
 	private Ship emitter; // who is firing these things
 	
 	public BulletPattern(Ship emitter) {
@@ -12,13 +12,21 @@ public class BulletPattern {
 	/**
 	 * Start firing our pattern of bullets
 	 */
-	public void fire() {
+	public void start() {
 	}
 	
 	/**
 	 * Stop our barrage, if an enemy/player dies or level complete etc
 	 */
 	public void stop() {
+		
+	}
+	
+	/**
+	 * Decides whether we need to fire a bullet or not
+	 * @param delta time difference
+	 */
+	public void onRender(float delta) {
 		
 	}
 	

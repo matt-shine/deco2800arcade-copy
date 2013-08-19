@@ -4,43 +4,23 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.replay.ReplayRequest;
-import deco2800.arcade.protocol.credit.CreditBalanceResponse;
-import deco2800.server.ArcadeServer;
-import deco2800.server.database.DatabaseException;
+import deco2800.arcade.protocol.replay.ReplayResponse;
 
 public class ReplayListener extends Listener {
 
     @Override
     public void received(Connection connection, Object object) {
         super.received(connection, object);
-        
-        System.out.println("Replay Listener got something");
 
         if (object instanceof ReplayRequest) {
-            ReplayRequest replayBalanceRequest = (ReplayRequest) object;
-            String username = replayBalanceRequest.username;
-            try {
-                Integer result = ArcadeServer.instance().getCreditStorage().getUserCredits(username);
-
-                CreditBalanceResponse creditBalanceResponse = new CreditBalanceResponse();
-
-                if (result == null){
-                    creditBalanceResponse.balance = -1;
-                    creditBalanceResponse.description = "No credit balance found";
-                } else {
-                    creditBalanceResponse.balance = result;
-                    creditBalanceResponse.description = "OK";
-                }
-                
-                connection.sendTCP(creditBalanceResponse);
-                
-            } catch (DatabaseException e) {
-                e.printStackTrace();
-                CreditBalanceResponse creditBalanceResponse = new CreditBalanceResponse();
-                creditBalanceResponse.balance = -1;
-                creditBalanceResponse.description = e.getMessage();
-                connection.sendTCP(creditBalanceResponse);
-            }
+            ReplayRequest replayRequest = (ReplayRequest) object;
+            
+            System.out.println("Replay Listener got something : " + replayRequest.random);
+            
+            ReplayResponse replayResponse = new ReplayResponse();
+            replayResponse.test = "HELLO! " + replayRequest.random;
+            
+            connection.sendTCP(replayResponse);
         }
     }
 

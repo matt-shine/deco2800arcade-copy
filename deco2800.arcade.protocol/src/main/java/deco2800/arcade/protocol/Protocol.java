@@ -14,6 +14,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
 import deco2800.arcade.protocol.replay.ReplayRequest;
+import deco2800.arcade.protocol.replay.ReplayResponse;
 
 public class Protocol {
 
@@ -32,6 +33,7 @@ public class Protocol {
 		
 		//Replay messages
 		kryo.register(ReplayRequest.class);
+		kryo.register(ReplayResponse.class);
 		
 		//Game messages
 		kryo.register(GameStatusUpdate.class);

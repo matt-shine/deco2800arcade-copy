@@ -17,6 +17,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.protocol.replay.ReplayRequest;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 /**
@@ -73,6 +74,10 @@ public class Pong extends GameClient {
 	@Override
 	public void create() {
 		super.create();
+		
+		ReplayRequest rr = new ReplayRequest();
+		rr.random = Math.random();
+        networkClient.sendNetworkObject(rr);
 		
 		//Initialise camera
 		camera = new OrthographicCamera();

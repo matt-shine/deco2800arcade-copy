@@ -134,7 +134,6 @@ public class Arcade extends JFrame {
 			// TODO allow server/port as optional runtime arguments xor user inputs.
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			addListeners();
-	        client.sendNetworkObject(new ReplayRequest());
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server (" + serverIPAddress + ")", e);
 		}

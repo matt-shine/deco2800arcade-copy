@@ -2,7 +2,7 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.protocol.credit.CreditBalanceResponse;
+import deco2800.arcade.protocol.replay.ReplayResponse;
 
 public class ReplayListener extends NetworkListener {
 
@@ -25,12 +25,9 @@ public class ReplayListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
-		if (object instanceof CreditBalanceResponse){
-			
-			@SuppressWarnings("unused")
-			CreditBalanceResponse creditBalanceResponse = (CreditBalanceResponse) object;
-			
-			//TODO something
+		if (object instanceof ReplayResponse) {
+		    ReplayResponse replayResponse = (ReplayResponse) object;
+			System.out.println(replayResponse.test);
 		}
 	}
 

@@ -24,7 +24,7 @@ import deco2800.arcade.client.network.NetworkClient;
  * @author uqjstee8
  *
  */
-@ArcadeGame(id="pong")
+@ArcadeGame(id="Pong")
 public class Pong extends GameClient {
 	
 	private OrthographicCamera camera;
@@ -190,10 +190,7 @@ public class Pong extends GameClient {
 	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
 	    	ball.move(Gdx.graphics.getDeltaTime());
 	    	//If the ball hits a paddle then bounce it
-	    	if ( ball.bounds.overlaps(leftPaddle.bounds) && ball.getXVelocity() < 0 ) {
-	    		ball.bounceX();
-	    	}
-	    	if ( ball.bounds.overlaps(rightPaddle.bounds) && ball.getXVelocity() > 0 ) {
+	    	if (ball.bounds.overlaps(leftPaddle.bounds) || ball.bounds.overlaps(rightPaddle.bounds)) {
 	    		ball.bounceX();
 	    	}
 	    	//Bounce off the top or bottom of the screen

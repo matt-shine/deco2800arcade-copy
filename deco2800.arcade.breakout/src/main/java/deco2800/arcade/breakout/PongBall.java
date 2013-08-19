@@ -1,4 +1,4 @@
-package deco2800.arcade.pong;
+package deco2800.arcade.breakout;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author uqjstee8
  *
  */
-public class Ball {
+public class PongBall {
 
 	public static final float WIDTH = 20f; //How big is the ball (its a square)
 	public static final float INITIALSPEED = 200; // How fast is the ball going at the start of a point
@@ -26,9 +26,9 @@ public class Ball {
 	/**
 	 * Basic constructor for Ball. Set position and dimensions to the default
 	 */
-	public Ball() {
-		bounds.x = Pong.SCREENWIDTH/2 - Ball.WIDTH/2;
-		bounds.y = Pong.SCREENHEIGHT/2 - Ball.WIDTH/2;
+	public PongBall() {
+		bounds.x = Breakout.SCREENWIDTH/2 - PongBall.WIDTH/2;
+		bounds.y = Breakout.SCREENHEIGHT/2 - PongBall.WIDTH/2;
 		bounds.height = WIDTH;
 		bounds.width = WIDTH;
 	}
@@ -43,6 +43,14 @@ public class Ball {
 	}
 	
 	/**
+	 * Get the x component of the velocity
+	 * @return the velocity in the x direction
+	 */
+	public float getYVelocity() {
+		return this.velocity.y;
+	}
+	
+	/**
 	 * Modify the position of the ball
 	 * @param newPosition the new position of the ball as x,y
 	 */
@@ -54,12 +62,12 @@ public class Ball {
 	/**
 	 * Reverse the X direction of the ball when bouncing off the left or right paddle.
 	 * Each bounce off a paddle changes the speed of the ball.
-	 * @see deco2800.arcade.pong.Ball.BOUNCEINCREMENT
+	 * @see deco2800.arcade.PongBall.Ball.BOUNCEINCREMENT
 	 */
 	public void bounceX() {
 		//This is naive
 		velocity.x *= -1;
-		velocity.mul(BOUNCEINCREMENT);
+		//velocity.mul(BOUNCEINCREMENT);
 	}
 
 	/**
@@ -85,8 +93,8 @@ public class Ball {
 	public void reset() {
 		velocity.x = 0;
 		velocity.y = 0;
-		bounds.x = Pong.SCREENWIDTH/2 - Ball.WIDTH/2;
-		bounds.y = Pong.SCREENHEIGHT/2 - Ball.WIDTH/2;
+		bounds.x = Breakout.SCREENWIDTH/2 - PongBall.WIDTH/2;
+		bounds.y = Breakout.SCREENHEIGHT/2 - PongBall.WIDTH/2;
 	}
 	
 	/**

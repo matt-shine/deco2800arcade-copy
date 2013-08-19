@@ -7,5 +7,6 @@ Export-Package: deco2800.arcade.protocol,
  deco2800.arcade.protocol.achievement,
  deco2800.arcade.protocol.connect,
  deco2800.arcade.protocol.credit,
- deco2800.arcade.protocol.game
+ deco2800.arcade.protocol.game,
+ lobby
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

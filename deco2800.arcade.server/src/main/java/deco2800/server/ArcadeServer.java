@@ -28,6 +28,8 @@ public class ArcadeServer {
 	//singleton pattern
 	private static ArcadeServer instance;
 	
+	private HashSet<String> lobbyUsers = new HashSet<String>();
+	
 	/**
 	 * Retrieve the singleton instance of the server
 	 * @return the game server
@@ -61,6 +63,26 @@ public class ArcadeServer {
 	public CreditStorage getCreditStorage() {
 		return this.creditStorage;
 	}
+	
+	
+	/**
+	 * Returns a set of the usernames of users in the lobby.
+	 * 
+	 * @return HashSet - the set of users currently connected to the
+	 * 	lobby.
+	 */
+	public HashSet<String> getLobbyUsers() {
+		return (HashSet<String>)lobbyUsers.clone();
+	}
+	
+	
+	/*
+	 * Adds a username to the set of users currently in the lobby.
+	 */
+	protected void addLobbyUser(String username) {
+		lobbyUsers.add(username);
+	}
+	
 	
 	/**
 	 * Create a new Arcade Server.

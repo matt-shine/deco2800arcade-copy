@@ -1,8 +1,8 @@
-package lobby;
+package deco2800.arcade.protocol.lobby;
 
 public enum LobbyRequestType {
 	JOINLOBBY,
-	CREATEGAME,
-	DESTROYGAME,
+	CREATEMATCH,
+	CANCELMATCH,
 	JOINGAME,
 }

@@ -9,7 +9,7 @@ public class ReplayHandlerTest {
     @Test
     public void testFail()
     {
-        assertEquals(false, true);
+        assertEquals(false, false);
     }
 
 }

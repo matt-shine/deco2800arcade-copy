@@ -1,1 +1,10 @@
+<<<<<<< HEAD
 include "deco2800.arcade.model", "deco2800.arcade.protocol", "deco2800.arcade.server", "deco2800.arcade.pong", "deco2800.arcade", "deco2800.arcade.tictactoe", "deco2800.arcade.ui", "deco2800.arcade.deerforest", "deco2800.arcade.mixmaze", "deco2800.arcade.breakout"
+=======
+<<<<<<< HEAD
+include "deco2800.arcade.model", "deco2800.arcade.protocol", "deco2800.arcade.server", "deco2800.arcade.pong", "deco2800.arcade", "deco2800.arcade.tictactoe", "deco2800.arcade.ui", "deco2800.arcade.breakout", "deco2800.arcade.deerforest"
+
+=======
+include "deco2800.arcade.model", "deco2800.arcade.protocol", "deco2800.arcade.server", "deco2800.arcade.pong", "deco2800.arcade"
+>>>>>>> Revert "Checked in empty project clone of Pong to begin work."
+>>>>>>> 045d60864fee3bb75e78f229355770c4ff0c1caa

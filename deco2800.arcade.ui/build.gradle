@@ -2,7 +2,6 @@
 dependencies {
   compile project(":deco2800.arcade.model")
   compile project(":deco2800.arcade")
-  compile project(":deco2800.arcade.communication")
 
   compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
 }

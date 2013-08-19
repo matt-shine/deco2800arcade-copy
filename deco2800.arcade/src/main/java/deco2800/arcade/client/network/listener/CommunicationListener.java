@@ -2,10 +2,19 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationListener extends NetworkListener {
 	
+	CommunicationNetwork communicationNetwork;
+	
+	public CommunicationListener(CommunicationNetwork communicationNetwork) {
+		// TODO Auto-generated constructor stub
+		this.communicationNetwork = communicationNetwork;
+		
+	}
+
 	@Override
 	public void connected(Connection connection) {
 		super.connected(connection);
@@ -28,7 +37,7 @@ public class CommunicationListener extends NetworkListener {
 		
 		if (object instanceof TextMessage){
 			 TextMessage textMessage = (TextMessage) object;
-			 System.out.println(textMessage.text);
+			 communicationNetwork.updateText(textMessage.text);
 		}
 	}
 	

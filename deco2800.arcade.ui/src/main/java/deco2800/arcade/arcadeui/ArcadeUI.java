@@ -5,7 +5,6 @@ import java.util.Set;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.InternalGame;
@@ -23,8 +22,6 @@ import deco2800.arcade.model.Game.ArcadeGame;
 public class ArcadeUI extends GameClient {
 	   
 	private boolean isOverlay = false;
-	private CommunicationNetwork communicationNetwork;
-	
 	
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
@@ -43,8 +40,6 @@ public class ArcadeUI extends GameClient {
 			this.setScreen(new LoginScreen());
 			
 		} else {
-			this.communicationNetwork = new CommunicationNetwork(player, networkClient);
-			this.communicationNetwork.createInterface();
 			this.setScreen(new HomeScreen());
 		}
 		

@@ -5,7 +5,6 @@ import java.util.Set;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
@@ -64,17 +63,11 @@ public class ArcadeUI extends GameClient {
 		super.resume();
 	}
 
-	
-	//there are no achievements for this
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "arcadeui";
+		game.id = "arcadeui";
 		game.name = "Arcade UI";
-		game.availableAchievements = achievements;
 	}
 
 	public Game getGame() {

@@ -1,8 +1,5 @@
 package deco2800.arcade.pong;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -17,6 +14,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 /**
@@ -209,6 +207,7 @@ public class Pong extends GameClient {
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
 	    		gameOver();
+	    		ArcadeSystem.goToGame("arcadeui");
 	    	}
 	    	break;
 	    }

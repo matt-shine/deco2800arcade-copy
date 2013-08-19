@@ -61,11 +61,11 @@ public class Arcade extends JFrame {
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
+		
+		ArcadeSystem.setArcadeInstance(arcade);
 
 		arcade.addCanvas();
-
 		arcade.startGame("arcadeui");
-
 	}
 
 	/**
@@ -75,8 +75,6 @@ public class Arcade extends JFrame {
 	private Arcade(String[] args){
 		this.width = 640;
 		this.height = 480;
-
-		ArcadeSystem.setArcadeInstance(this);
 
 		initWindow();
 	}

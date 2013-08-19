@@ -10,8 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameScreen;
 
@@ -20,9 +18,9 @@ public class Overlay extends GameScreen {
 	
     private Skin skin;
     private Stage stage;
+    Table table = new Table();
     
     private OverlayPopup popup = new OverlayPopup();
-	
 	
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
@@ -42,36 +40,23 @@ public class Overlay extends GameScreen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         skin.add("default", labelStyle);
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("default");
-        skin.add("default", textFieldStyle);
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
-        
-        
+
         stage = new Stage();
         
         
         Gdx.input.setInputProcessor(stage);
-
-        Table table = new Table();
+        
         table.setFillParent(true);
         
-        
         Label quitLabel = new Label("Press escape to quit...", skin);
+        table.row();
         table.add(quitLabel);
+        table.row();
+        table.add(popup);
         
+        table.layout();
         
         stage.addActor(table);
-        //stage.addActor(popup);
-        
-        
-        //popup.setPosition(100, 100);
         
 	}
 	
@@ -84,7 +69,6 @@ public class Overlay extends GameScreen {
 	
 	@Override
 	public void firstResize() {
-		
 	}
 	
 	@Override
@@ -98,10 +82,11 @@ public class Overlay extends GameScreen {
 		
 		if (isUIOpen) {
 			
-			
 			stage.act();
+			table.debug();
+			table.debugTable();
 			stage.draw();
-			
+			Table.drawDebug(stage);
 			
 		    
 		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {

@@ -14,9 +14,6 @@ public interface CardCollection extends Collection<AbstractCard> {
 	//list all cards in collection
 	public List<AbstractCard> cards();
 
-	//get all continuous effects currently in collection
-	public List<AbstractEffect> continuousEffects();
-
 	//destroy specific cards, returns cards destroyed
 	public CardCollection destroyCards(List<AbstractCard> cardsToDestroy) ;
 

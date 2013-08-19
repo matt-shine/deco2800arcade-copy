@@ -10,7 +10,7 @@ import java.util.List;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
-public class Field implements CardCollection {
+public class Field extends AbstractCardCollection {
 	private final int MAX_CARDS_EFFECTS = 2;
 	private final int MAX_CARDS_MONSTER = 5;
 	private ArrayList<AbstractMonster> fieldMonster;
@@ -148,12 +148,6 @@ public class Field implements CardCollection {
 
 	@Override
 	public List<AbstractCard> cards() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<AbstractEffect> continuousEffects() {
 		// TODO Auto-generated method stub
 		return null;
 	}

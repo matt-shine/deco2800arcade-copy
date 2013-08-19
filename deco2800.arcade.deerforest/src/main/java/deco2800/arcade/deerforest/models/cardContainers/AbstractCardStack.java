@@ -7,38 +7,8 @@ import java.util.List;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
-public class Graveyard implements CardStack {
+public abstract class AbstractCardStack implements CardStack {
 
-	//Consider having a variable called "isSorted", this will allow searching
-	//be faster as you can check only a section of the card list
-	//Alternatively, have different holders (array, Linked list, etc) for each card type
-	
-	
-	//Initialize graveyard
-	public Graveyard() {
-		
-	}
-	
-	//check if grave only has spell cards
-	public boolean onlySpells() {
-		return false;
-	}
-	
-	//check if grave only has monsters
-	public boolean onlyMonsters() {
-		return false;
-	}
-	
-	//check if grave only has monsters of specific type
-	public boolean onlyMonsters(String type) {
-		return false;
-	}
-	
-	//Sort graveyard by cards
-	public void sort() {
-		
-	}
-	
 	@Override
 	public boolean moveCard(AbstractCard card, CardCollection moveLocation) {
 		// TODO Auto-generated method stub
@@ -76,37 +46,19 @@ public class Graveyard implements CardStack {
 	}
 
 	@Override
-	public boolean add(AbstractCard e) {
+	public int size() {
 		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean addAll(Collection<? extends AbstractCard> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		return 0;
 	}
 
 	@Override
 	public boolean isEmpty() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean contains(Object o) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -118,7 +70,37 @@ public class Graveyard implements CardStack {
 	}
 
 	@Override
+	public Object[] toArray() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean add(AbstractCard e) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public boolean remove(Object o) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends AbstractCard> c) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -136,21 +118,9 @@ public class Graveyard implements CardStack {
 	}
 
 	@Override
-	public int size() {
+	public void clear() {
 		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
@@ -162,7 +132,7 @@ public class Graveyard implements CardStack {
 	@Override
 	public void shuffle() {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

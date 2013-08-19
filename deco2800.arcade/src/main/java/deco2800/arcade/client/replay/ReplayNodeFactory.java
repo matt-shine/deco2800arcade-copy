@@ -1,9 +1,9 @@
-package deco2800.arcade.replay;
+package deco2800.arcade.client.replay;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import deco2800.arcade.replay.exception.ReplayItemDataInvalidException;
+import deco2800.arcade.client.replay.exception.ReplayItemDataInvalidException;
 
 public class ReplayNodeFactory {
     

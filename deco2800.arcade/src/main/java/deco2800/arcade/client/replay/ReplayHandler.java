@@ -1,9 +1,10 @@
-package deco2800.arcade.replay;
+package deco2800.arcade.client.replay;
 
 import javax.swing.event.EventListenerList;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.replay.ReplayRequest;
+import deco2800.arcade.protocol.replay.ReplayResponse;
 
 import java.util.*;
 
@@ -18,11 +19,6 @@ public class ReplayHandler {
 	public ReplayHandler(NetworkClient client)
 	{
 	    this.client = client;
-	    
-	    ReplayRequest rr = new ReplayRequest();
-	    rr.random = Math.random();
-	    client.sendNetworkObject(rr);
-	    
 	    init();
 	}
 	
@@ -37,6 +33,25 @@ public class ReplayHandler {
 	{
 	    this.startTime = -1;
 	    this.replayHistory = new ArrayList<ReplayNode>();
+	}
+	
+	/**
+	 * Send a simple ping message to the server.
+	 */
+	public void sendSimpleMessageToServer()
+	{
+	    ReplayRequest rr = new ReplayRequest();
+	    rr.random = Math.random();
+	    client.sendNetworkObject(rr);
+	}
+	
+	/**
+	 * A simple method for demonstrating the networking flow.
+	 * @param rr
+	 */
+	public void printOutServerResponse(ReplayResponse rr)
+	{
+        System.out.println(rr.test);
 	}
 	
 	public void startRecording() {

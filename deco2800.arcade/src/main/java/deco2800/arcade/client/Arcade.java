@@ -28,7 +28,6 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
-import deco2800.arcade.protocol.replay.ReplayRequest;
 
 /**
  * The client application for running arcade games.

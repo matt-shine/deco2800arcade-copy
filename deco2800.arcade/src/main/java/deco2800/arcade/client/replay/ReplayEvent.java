@@ -1,4 +1,4 @@
-package deco2800.arcade.replay;
+package deco2800.arcade.client.replay;
 
 import java.util.EventObject;
 

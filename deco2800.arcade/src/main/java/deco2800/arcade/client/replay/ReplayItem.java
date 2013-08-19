@@ -1,6 +1,6 @@
-package deco2800.arcade.replay;
+package deco2800.arcade.client.replay;
 
-import deco2800.arcade.replay.exception.ReplayItemDataInvalidException;
+import deco2800.arcade.client.replay.exception.ReplayItemDataInvalidException;
 
 public class ReplayItem {
 	

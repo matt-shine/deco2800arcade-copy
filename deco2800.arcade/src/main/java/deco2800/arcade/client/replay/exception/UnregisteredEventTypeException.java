@@ -1,4 +1,4 @@
-package deco2800.arcade.replay.exception;
+package deco2800.arcade.client.replay.exception;
 
 @SuppressWarnings("serial")
 public class UnregisteredEventTypeException extends RuntimeException {

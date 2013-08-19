@@ -1,9 +1,29 @@
 package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
+
+import deco2800.arcade.client.replay.ReplayHandler;
+import deco2800.arcade.client.replay.exception.NoReplayHandlerException;
 import deco2800.arcade.protocol.replay.ReplayResponse;
 
 public class ReplayListener extends NetworkListener {
+    
+    private ReplayHandler replayHandler = null;
+    
+    public ReplayListener (ReplayHandler handler)
+    {
+        this.replayHandler = handler;
+    }
+    
+    public ReplayListener ()
+    {
+        
+    }
+    
+    public void setHandler(ReplayHandler rh)
+    {
+        replayHandler = rh;
+    }
     
 	@Override
 	public void connected(Connection connection) {
@@ -26,7 +46,10 @@ public class ReplayListener extends NetworkListener {
 		
 		if (object instanceof ReplayResponse) {
 		    ReplayResponse replayResponse = (ReplayResponse) object;
-			System.out.println(replayResponse.test);
+		    
+		    if (replayHandler == null) throw new NoReplayHandlerException();
+		    
+		    replayHandler.printOutServerResponse(replayResponse);
 		}
 	}
 

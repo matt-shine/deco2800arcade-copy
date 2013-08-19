@@ -1,4 +1,4 @@
-package com.me.towerdefence;
+package deco2800.arcade.towerdefence;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;

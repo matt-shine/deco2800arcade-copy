@@ -295,8 +295,6 @@ public class Arcade extends JFrame {
 					game = constructor.newInstance(player, client, asOverlay);
 				}
 
-				System.err.println("a new " + id + " returned");
-
 				return game;
 			}
 		} catch (NoSuchMethodException e) {

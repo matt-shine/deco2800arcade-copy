@@ -29,12 +29,7 @@ public class BurningSkies extends GameClient {
 	
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
-	//Reusable list of achievements
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-	static {
-		Achievement winGame = new Achievement("Win a game of Burning Skies");
-		achievements.add(winGame);
-	}
+	//TODO: ACHIEVEMENTS
 
 	private NetworkClient networkClient;
 
@@ -94,9 +89,7 @@ public class BurningSkies extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "burningskies";
 		game.name = "Burning Skies";
-		game.availableAchievements = achievements;
 	}
 	
 	public Game getGame() {

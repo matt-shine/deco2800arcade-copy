@@ -24,7 +24,7 @@ public class Splash implements Screen
     {
         logo = new Texture(Gdx.files.internal("images/splash.png"));
         spriteBatch = new SpriteBatch();
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/intro.ogg"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("sound/intro.ogg"));
         music.setLooping(true);
         music.play();
     }

@@ -10,7 +10,18 @@ import com.badlogic.gdx.Screen;
  */
 public interface UIOverlay {
 
+	
+	/**
+	 * Takes a GDX Screen object. The overlay is also implemented in terms of a
+	 * screen, and more-or-less just forwards the calls it gets on to the listener.
+	 * @param l
+	 */
 	void setListeners(Screen l);
+	
+	/**
+	 * For achievements, chat messages, etc.
+	 * @param s
+	 */
 	void addPopup(String s);
 	
 }

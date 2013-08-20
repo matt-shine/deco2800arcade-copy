@@ -1,6 +1,7 @@
 package deco2800.arcade.pong;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -63,6 +64,12 @@ public class Pong extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
+        
+
+        
+        
+        
+        
 	}
 	
 	/**
@@ -70,6 +77,45 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void create() {
+		
+        
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				//TODO: unpause pong
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				//TODO: unpause pong
+			}
+			
+        });
+        
+        
+		
 		super.create();
 		
 		//Initialise camera

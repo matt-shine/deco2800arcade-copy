@@ -2,6 +2,7 @@ package deco2800.arcade.tictactoe;
 
 import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -44,6 +45,7 @@ public class TicTacToe extends GameClient {
 		super(player, networkClient);
 		//this.gameId = "TicTacToe";
 		//this.name = "Tic Tac Toe";
+		
 	}
    
 	/** 
@@ -55,6 +57,43 @@ public class TicTacToe extends GameClient {
 	@Override
 	public void create() {
 		super.create();
+		
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				//TODO: unpause tictactoe
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				//TODO: unpause tictactoe
+			}
+			
+        });
+        
+		
 		
 		// load the images for the droplet and the bucket, 64x64 pixels each
 		dropImage = new Texture(Gdx.files.classpath("resources/droplet.png"));

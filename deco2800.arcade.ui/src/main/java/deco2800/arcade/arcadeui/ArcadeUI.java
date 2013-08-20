@@ -29,6 +29,9 @@ public class ArcadeUI extends GameClient implements UIOverlay {
 	private HomeScreen home = null;
 	private Screen current = null;
 	
+    private Screen lazyOverlayListener;
+    
+    
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
 		this.isOverlay = isOverlay;
@@ -43,6 +46,7 @@ public class ArcadeUI extends GameClient implements UIOverlay {
 		
 		if (isOverlay) {
 			current = overlay = new Overlay();
+			overlay.setCallbacks(lazyOverlayListener);
 		} else if (player == null) {
 			current = login = new LoginScreen();
 		} else {
@@ -84,6 +88,7 @@ public class ArcadeUI extends GameClient implements UIOverlay {
 
 	@Override
 	public void setListeners(Screen l) {
+		lazyOverlayListener = l;
 		if (this.overlay != null) {
 			this.overlay.setCallbacks(l);
 		}

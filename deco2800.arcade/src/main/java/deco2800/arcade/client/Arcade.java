@@ -315,7 +315,8 @@ public class Arcade extends JFrame {
 					game = constructor.newInstance(player, client);
 					GameClient overlay = getInstanceOfGame("arcadeui", true);
 					
-					//the overlay and the bridge are the same thing, but GameClient doesn't know that
+					//the overlay and the bridge are the same object, but
+					//GameClient doesn't know that and it mightn't be that way forever
 					game.addOverlay(overlay);
 					if (overlay instanceof UIOverlay) {
 						game.addOverlayBridge((UIOverlay) overlay);

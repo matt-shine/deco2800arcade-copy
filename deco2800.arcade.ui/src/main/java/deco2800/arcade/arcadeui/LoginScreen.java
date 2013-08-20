@@ -70,6 +70,12 @@ public class LoginScreen extends GameScreen {
                 ArcadeSystem.login("debuguser");
             }
         });
+        
+        exitButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                ArcadeSystem.close();
+            }
+        });
 	}
 
 

@@ -57,8 +57,8 @@ public class Pong extends GameClient {
 
 	/**
 	 * Basic constructor for the Pong game
-	 * @param userName The name of the player
-	 * @param client The network client for sending/receiving messages to/from the server
+	 * @param player The name of the player
+	 * @param networkClient The network client for sending/receiving messages to/from the server
 	 */
 	public Pong(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -245,7 +245,7 @@ public class Pong extends GameClient {
 	
 	/**
 	 * Create an update object to send to the server notifying of a score change or game outcome
-	 * @return
+	 * @return The Game Status Update.
 	 */
 	private GameStatusUpdate createScoreUpdate() {
 		GameStatusUpdate update = new GameStatusUpdate();
@@ -280,6 +280,7 @@ public class Pong extends GameClient {
 		game = new Game();
 		game.id = "pong";
 		game.name = "Pong";
+        game.description = "Tennis, without that annoying 3rd dimension!";
 	}
 	
 	public Game getGame() {

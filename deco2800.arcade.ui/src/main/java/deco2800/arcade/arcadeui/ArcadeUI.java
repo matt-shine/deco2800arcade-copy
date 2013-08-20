@@ -5,7 +5,6 @@ import java.util.Set;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
@@ -22,8 +21,6 @@ import deco2800.arcade.model.Game.ArcadeGame;
 public class ArcadeUI extends GameClient {
 	   
 	private boolean isOverlay = false;
-
-	
 	
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
@@ -36,11 +33,11 @@ public class ArcadeUI extends GameClient {
 
 	@Override
 	public void create() {
-		
 		if (isOverlay) {
 			this.setScreen(new Overlay());
 		} else if (player == null) {
 			this.setScreen(new LoginScreen());
+			
 		} else {
 			this.setScreen(new HomeScreen());
 		}
@@ -64,17 +61,11 @@ public class ArcadeUI extends GameClient {
 		super.resume();
 	}
 
-	
-	//there are no achievements for this
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "arcadeui";
+		game.id = "arcadeui";
 		game.name = "Arcade UI";
-		game.availableAchievements = achievements;
 	}
 
 	public Game getGame() {

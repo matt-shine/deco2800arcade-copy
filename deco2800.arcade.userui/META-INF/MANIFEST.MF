@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Userui
+Bundle-SymbolicName: deco2800.arcade.userui
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: deco2800.arcade.userui.Activator
+Require-Bundle: deco2800.arcade.model;bundle-version="1.0.0",
+ deco2800.arcade.protocol;bundle-version="1.0.0",
+ deco2800.arcade;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

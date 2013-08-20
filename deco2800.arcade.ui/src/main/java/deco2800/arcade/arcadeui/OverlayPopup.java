@@ -1,20 +1,13 @@
 package deco2800.arcade.arcadeui;
 
-import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Rectangle;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class OverlayPopup extends Group {
+public class OverlayPopup extends Actor {
 
-	private ShapeRenderer shapeRenderer;
-	
-	
+
 	public OverlayPopup() {
 		super();
-		
-		shapeRenderer = new ShapeRenderer();
 	}
 	
 	@Override
@@ -27,23 +20,11 @@ public class OverlayPopup extends Group {
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		shapeRenderer.setProjectionMatrix(
-				getStage().getCamera().combined);
 		
 		
-		shapeRenderer.begin(Rectangle);
-		shapeRenderer.setColor(1f, 1f, 1f, 1f);
-		shapeRenderer.rect(getX(), getY(), 128f, 128f);
-		shapeRenderer.end();
-
-		super.draw(batch, parentAlpha);
+		
 		
 	}
-	
-	
-	
-	
-	
 	
 	
 	

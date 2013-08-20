@@ -1,6 +1,9 @@
 package deco2800.arcade.arcadeui;
 
+import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.InternalGame;
@@ -15,12 +18,18 @@ import deco2800.arcade.model.Game.ArcadeGame;
  */
 @InternalGame
 @ArcadeGame(id="arcadeui")
-public class ArcadeUI extends GameClient {
+public class ArcadeUI extends GameClient implements UIOverlay {
 	   
 	private boolean isOverlay = false;
+	private Overlay overlay = null;
+	@SuppressWarnings("unused")
+	private LoginScreen login = null;
+	@SuppressWarnings("unused")
+	private HomeScreen home = null;
+	private Screen current = null;
+	
+    private Screen lazyOverlayListener;
 
-	
-	
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
 		this.isOverlay = isOverlay;
@@ -32,14 +41,16 @@ public class ArcadeUI extends GameClient {
 
 	@Override
 	public void create() {
-		
 		if (isOverlay) {
-			this.setScreen(new Overlay());
+			current = overlay = new Overlay();
+			overlay.setCallbacks(lazyOverlayListener);
 		} else if (player == null) {
-			this.setScreen(new LoginScreen());
+			current = login = new LoginScreen();
 		} else {
-			this.setScreen(new HomeScreen());
+			current = home = new HomeScreen();
 		}
+		
+		this.setScreen(current);
 		
 		
 		super.create();
@@ -69,6 +80,20 @@ public class ArcadeUI extends GameClient {
 
 	public Game getGame() {
 		return game;
+	}
+
+
+	@Override
+	public void setListeners(Screen l) {
+		lazyOverlayListener = l;
+		if (this.overlay != null) {
+			this.overlay.setCallbacks(l);
+		}
+	}
+
+	@Override
+	public void addPopup(String s) {
+		System.out.println("UI Popup: " + s);
 	}
 		
 }

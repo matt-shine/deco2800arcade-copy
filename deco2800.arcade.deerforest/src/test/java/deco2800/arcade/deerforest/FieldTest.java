@@ -1,8 +1,12 @@
 package deco2800.arcade.deerforest;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.junit.Test;
 
 import deco2800.arcade.deerforest.models.cardContainers.Field;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.DarkMonster;
 import deco2800.arcade.deerforest.models.cards.FireMonster;
 import deco2800.arcade.deerforest.models.cards.GeneralSpell;
@@ -121,6 +125,43 @@ public class FieldTest {
 		assertEquals(true, playerField.isEmpty());
 		
 		assertEquals(false, playerField.remove(monster1));
+	}
+	
+	@Test
+	public void TestContainsAll() {
+		Field player = new Field();
+		Collection<AbstractCard> c = new ArrayList<AbstractCard>();
+		
+		LightMonster monster = new LightMonster(100, null);
+		DarkMonster monster1 = new DarkMonster(10,null);
+		GeneralSpell spell = new GeneralSpell(null);
+		GeneralSpell spell1 = new GeneralSpell(null);
+		
+		c.add(monster);
+		c.add(monster1);
+		
+		assertEquals(false, player.containsAll(c));
+		
+		player.add(monster);
+		
+		assertEquals(false, player.containsAll(c));
+		
+		player.add(monster1);
+		
+		assertEquals(true, player.containsAll(c));
+		
+		c.add(spell);
+		
+		assertEquals(false, player.containsAll(c));
+		
+		player.add(spell);
+		
+		assertEquals(true, player.containsAll(c));
+		
+		player.remove(monster);
+		
+		assertEquals(false, player.containsAll(c));
+		
 	}
 	
 }

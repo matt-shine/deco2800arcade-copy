@@ -135,19 +135,6 @@ public class Field extends AbstractCardCollection {
 		return fieldSpells.size();
 	}
 	
-
-	@Override
-	public boolean addAll(Collection<? extends AbstractCard> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
 	@Override
 	public boolean remove(Object o) {
 		if(contains(o)) {
@@ -159,12 +146,43 @@ public class Field extends AbstractCardCollection {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		int size = 0;
+		for(Object card: c) {
+			if(!contains(card)) {
+				break;
+			} else {
+				size++;
+			}
+		}
+		if(size == c.size()) {
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
+		if(containsAll(c)) {
+			for(Object card: c) {
+				remove(card);
+			}
+			if(isEmpty()) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean addAll(Collection<? extends AbstractCard> c) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
@@ -176,12 +194,6 @@ public class Field extends AbstractCardCollection {
 	public boolean moveCard(AbstractCard card, CardCollection moveLocation) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public List<AbstractCard> cards() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

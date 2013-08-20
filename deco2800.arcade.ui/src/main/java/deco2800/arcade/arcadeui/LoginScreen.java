@@ -34,9 +34,9 @@ public class LoginScreen extends GameScreen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         skin.add("default", labelStyle);
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("default");
-        skin.add("default", textFieldStyle);
+        //TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        //textFieldStyle.font = skin.getFont("default");
+        //skin.add("default", textFieldStyle);
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
@@ -55,23 +55,28 @@ public class LoginScreen extends GameScreen {
 
         Label usernameLabel = new Label("Username:", skin);
         //TextField usernameText = new TextField("debuguser", skin);
-        Label passwordLabel = new Label("Password", skin);
+        Label passwordLabel = new Label("Password:", skin);
         //TextField passwordText = new TextField("", skin);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
-        table.add(usernameLabel);
+        table.add(usernameLabel).width(150);
         //table.add(usernameText).width(100);
         table.row();
-        table.add(passwordLabel);
+        table.add(passwordLabel).width(150);
         //table.add(passwordText).width(100);
         table.row();
-        table.add(loginButton);
-        table.add(exitButton);
+        table.add(loginButton).width(100).pad(20);
+        table.add(exitButton).width(100).pad(20);
 
         loginButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 ArcadeSystem.login("debuguser");
+            }
+        });
+        exitButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                ArcadeSystem.close();
             }
         });
 	}
@@ -94,6 +99,7 @@ public class LoginScreen extends GameScreen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+        Table.drawDebug(stage);
 
 	    if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");

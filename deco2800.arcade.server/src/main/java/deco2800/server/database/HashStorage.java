@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,6 +26,21 @@ import java.sql.Statement;
 public class HashStorage {
 
 	/**
+	 * Close a database connection.
+	 * 
+	 * @throws DatabaseException 
+	 */
+	private void close(Connection c) {
+		try {
+			if (c != null) {
+				c.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * Create the database.
 	 * 
 	 * @throws DatabaseException
@@ -39,18 +55,19 @@ public class HashStorage {
 					null, "AUTH", null);
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
+				statement.execute("CREATE TABLE AUTH(playerID INT PRIMARY KEY,"
 								+ "hash BINARY(512),"
 								+ "salt BINARY(8),"
 								+ "CONSTRAINT PLAYER_FK"
 								+ "FOREIGN KEY (playerID)"
-								+ "REFERENCES PLAYERS (playerID))");
+								+ "REFERENCES PLAYERS (playerID));");
 				//TODO: check datatypes of hash and salt
 			}
-			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create authentication table", e);
+		} finally {
+			close(connection);
 		}
 	}
 
@@ -66,8 +83,26 @@ public class HashStorage {
 	 */
 	public void registerPassword(String username, String password)
 			throws DatabaseException {
-		
-		/* Not yet implemented */
+		byte[] salt = generateSalt();
+		byte[] hash = generateHash(password, salt);
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection.prepareStatement("INSERT INTO AUTH "
+					+ "(playerID, hash, salt) values ("
+					+ "SELECT playerID FROM PLAYERS WHERE username = "
+					+ "?), ?, ?);");
+			statement.setString(1, username);
+			statement.setBytes(2, hash);
+			statement.setBytes(3, salt);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable register password", e);
+		} finally {
+			close(connection);
+		}
 	}
 
 	/**
@@ -162,9 +197,14 @@ public class HashStorage {
 	 * Generate a hash value using the given password prefixed with the salt.
 	 * 
 	 */
-	private byte[] generateHash(String password, byte[] salt)
-			throws NoSuchAlgorithmException {
-		MessageDigest digest = MessageDigest.getInstance("SHA-512");
+	private byte[] generateHash(String password, byte[] salt) {
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-512");
+		} catch (NoSuchAlgorithmException e) {
+			// This should never be thrown because SHA-512 is built into java
+			e.printStackTrace();
+		}
 
 		/* Prefix salt to digest */
 		digest.update(salt);
@@ -178,8 +218,14 @@ public class HashStorage {
 	 * Generate a random 64-bit salt.
 	 * 
 	 */
-	private byte[] generateSalt() throws NoSuchAlgorithmException {
-		SecureRandom random = SecureRandom.getInstance("SHA1PRNG");
+	private byte[] generateSalt() {
+		SecureRandom random = null;
+		try {
+			random = SecureRandom.getInstance("SHA1PRNG");
+		} catch (NoSuchAlgorithmException e) {
+			// This should never be thrown because SHA1PRNG is built into java
+			e.printStackTrace();
+		}
 
 		/* Generate 64-bit salt */
 		byte[] salt = new byte[64];

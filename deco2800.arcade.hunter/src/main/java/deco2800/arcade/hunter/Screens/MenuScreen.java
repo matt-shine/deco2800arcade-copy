@@ -1,30 +1,40 @@
-package deco2800.arcade.hunter;
+package deco2800.arcade.hunter.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+
+import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.MenuInput;
 
 /**
  * A Hunter game for use in the Arcade
  * @author Nessex
  *
  */
-public class GameScreen implements Screen {
+public class MenuScreen implements Screen {
 	private OrthographicCamera camera;
 	private Hunter parent;
 	
+	private MenuInput input = new MenuInput();
+	
 	private ShapeRenderer shapeRenderer;
 	
-	private float exampleCoordX, exampleCoordY;
-	private int speed = 100;
+	//Darryl's additions (feel free to delete or change them)
+	private Texture texture;
+	private Sprite menuTitle;
+	private SpriteBatch batch;
 	
-	public GameScreen(Hunter p){
+	
+	public MenuScreen(Hunter p){
 		parent = p;
 		//Initialise camera
 		camera = new OrthographicCamera();
@@ -32,9 +42,9 @@ public class GameScreen implements Screen {
 		
 		shapeRenderer = new ShapeRenderer();
 		
-		exampleCoordX = parent.screenWidth / 2 - 5;
-		exampleCoordY = parent.screenHeight / 2 - 5;
 		
+		//Darryl's Addition
+		batch = new SpriteBatch();
 	}
 
 	@Override
@@ -61,22 +71,8 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		//Poll for input
-		if (Gdx.input.isKeyPressed(Keys.UP)){
-			exampleCoordY += speed * delta;
-		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			exampleCoordY -= speed * delta;
-		}
-		
-		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			exampleCoordX -= speed * delta;
-		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			exampleCoordX += speed * delta;
-		}
-		
 		shapeRenderer.setProjectionMatrix(camera.combined);
 	    
-		//Draw the boxes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    shapeRenderer.setColor(Color.RED);
 	    shapeRenderer.filledRect(0, 0, 100, 100);
@@ -86,13 +82,10 @@ public class GameScreen implements Screen {
 	    
 	    shapeRenderer.end();
 	    
-	    //Draw the circle
-	    shapeRenderer.begin(ShapeType.FilledCircle);
-	    
-	    shapeRenderer.setColor(Color.GREEN);
-	    shapeRenderer.filledCircle(exampleCoordX, exampleCoordY, (float)5);
-	    shapeRenderer.end();
-		
+	  //Darryl's Addition
+	    batch.begin();
+	    menuTitle.draw(batch);
+		batch.end();
 	}
 
 	@Override
@@ -109,8 +102,14 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		//Darryl's Addition
+		texture = new Texture("res/huntergame.png");
+		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
+		menuTitle = new Sprite(texture);
+		menuTitle.setX(Gdx.graphics.getWidth()/2 - menuTitle.getWidth()/2);
+		menuTitle.setY(Gdx.graphics.getHeight() - (menuTitle.getHeight()+ 20));
+	
 	}
 	
 }

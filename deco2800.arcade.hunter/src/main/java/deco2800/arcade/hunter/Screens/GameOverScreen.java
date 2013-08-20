@@ -1,4 +1,4 @@
-package deco2800.arcade.hunter;
+package deco2800.arcade.hunter.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,12 +8,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.MenuInput;
+
 /**
  * A Hunter game for use in the Arcade
  * @author Nessex
  *
  */
-public class MenuScreen implements Screen {
+public class GameOverScreen implements Screen {
 	private OrthographicCamera camera;
 	private Hunter parent;
 	
@@ -21,7 +24,7 @@ public class MenuScreen implements Screen {
 	
 	private ShapeRenderer shapeRenderer;
 	
-	public MenuScreen(Hunter p){
+	public GameOverScreen(Hunter p){
 		parent = p;
 		//Initialise camera
 		camera = new OrthographicCamera();

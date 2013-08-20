@@ -2,6 +2,9 @@ package deco2800.arcade.hunter;
 
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 
+import deco2800.arcade.hunter.Screens.GameOverScreen;
+import deco2800.arcade.hunter.Screens.GameScreen;
+import deco2800.arcade.hunter.Screens.MenuScreen;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -19,7 +22,7 @@ public class Hunter extends GameClient {
 	private GameScreen gameScreen;
 	private GameOverScreen gameOverScreen;
 	
-	int screenWidth, screenHeight;
+	public int screenWidth, screenHeight;
 	
 	/**
 	 * Basic constructor for the Hunter game
@@ -44,7 +47,7 @@ public class Hunter extends GameClient {
 		gameOverScreen = new GameOverScreen(this);
 		
 		
-		setScreen(gameScreen);
+		setScreen(menuScreen);
 		super.create();
 	}
 

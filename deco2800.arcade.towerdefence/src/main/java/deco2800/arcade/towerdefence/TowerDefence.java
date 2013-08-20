@@ -1,4 +1,4 @@
-package main.java.deco2800.arcade.towerdefence;
+package deco2800.arcade.towerdefence;
 
 import java.util.HashSet;
 import java.util.Iterator;

@@ -5,70 +5,35 @@ import java.util.Iterator;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Application;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.towerdefence.SplashScreen;
 
 
 @ArcadeGame(id="towerdefence")
 public class TowerDefence extends GameClient {
+	Screen splashScreen;
+	
+	private static final String LOG = TowerDefence.class.getSimpleName();
+	
 	public TowerDefence(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		// TODO Auto-generated constructor stub
 	}
-
-	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	private Texture texture;
-	private Sprite sprite;
-	private ShapeRenderer shapeRenderer;
-	private BitmapFont font;
 	
 	@Override
 	public void create() {		
 		super.create();
 		
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
+		splashScreen = new SplashScreen(this);
+		setScreen(splashScreen);
 		
-		camera = new OrthographicCamera(1, h/w);
-		batch = new SpriteBatch();
-		
-		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		//Necessary for rendering
-		shapeRenderer = new ShapeRenderer();
-		font = new BitmapFont();
-		font.setScale(2);
-		batch = new SpriteBatch();
-		
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		
-		sprite = new Sprite(region);
-		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		sprite.setOrigin(sprite.getWidth()/2, sprite.getHeight()/2);
-		sprite.setPosition(-sprite.getWidth()/2, -sprite.getHeight()/2);
 	}
 
 	@Override

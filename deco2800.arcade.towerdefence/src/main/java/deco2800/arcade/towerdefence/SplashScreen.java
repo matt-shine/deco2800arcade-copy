@@ -7,6 +7,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Application;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Player;
+import deco2800.arcade.model.Game.ArcadeGame;
 
 
 public class SplashScreen implements Screen{
@@ -55,7 +66,7 @@ public class SplashScreen implements Screen{
 
 
 	@Override
-	public void resize(int arg0, int arg1) {
+	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -70,7 +81,7 @@ public class SplashScreen implements Screen{
 
 	@Override
 	public void show() {
-		splashTexture = new Texture("data/SampleSplash.png");
+		splashTexture = new Texture(Gdx.files.internal("SampleSplash1.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		splashSprite = new Sprite(splashTexture);

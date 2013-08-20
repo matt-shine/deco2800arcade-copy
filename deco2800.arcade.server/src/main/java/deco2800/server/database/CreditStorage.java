@@ -53,7 +53,9 @@ public class CreditStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from CREDITS");
+			resultSet = statement.executeQuery("SELECT * FROM CREDITS WHERE USERNAME='" + username + "'");
+//			statement = connection.prepareStatement("SELECT * from CREDITS WHERE username=?");
+//			statement.setString(1, username);
 			Integer result = findCreditsForUser(username, resultSet);
 
 			return result;
@@ -111,9 +113,47 @@ public class CreditStorage {
 	 * Add a number of credits to the user's account
 	 * @param username The user to whose account the credits should be added
 	 * @param numCredits The number of credits to add
+	 * @throws DatabaseException 
 	 */
-	public void addUserCredits(String username, int numCredits) {
-		//TODO implement me!
-		throw new UnsupportedOperationException("Not yet implemented");
+	public void addUserCredits(String username, int numCredits) throws DatabaseException {
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		
+		try {
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			// first retrieve the current users's current balance
+			resultSet = stmt.executeQuery("SELECT * FROM CREDITS WHERE USERNAME='" + username + "'");
+			if (resultSet.next()) {
+				int oldBalance = resultSet.getInt("CREDITS");
+				// then increment it and set it
+				resultSet.updateInt("CREDITS", oldBalance + numCredits);
+				resultSet.updateRow();
+			} else {
+				throw new DatabaseException("Username has no balance");
+			}
+			if (resultSet.next()) {
+				throw new DatabaseException("Two entries for username!");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			//clean up JDBC objects
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 }

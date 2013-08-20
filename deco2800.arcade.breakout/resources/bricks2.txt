@@ -1,0 +1,11 @@
+bricks2.PNG
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bricks
+  rotate: true
+  xy: 2, 2
+  size: 93, 40
+  orig: 93, 40
+  offset: 0, 0
+  index: -1

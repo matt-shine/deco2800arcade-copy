@@ -1,19 +1,12 @@
 package deco2800.arcade.arcadeui;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 
@@ -23,18 +16,20 @@ import deco2800.arcade.model.Game.ArcadeGame;
  * @author Simon
  *
  */
+@InternalGame
 @ArcadeGame(id="arcadeui")
-public class ArcadeUI extends GameClient {
+public class ArcadeUI extends GameClient implements UIOverlay {
 	   
-	private ShapeRenderer shapeRenderer;
 	private boolean isOverlay = false;
-	private OrthographicCamera camera;
-	private float width, height;
-	private boolean hasTabPressedLast = false;
-	private boolean isUIOpen = false;
+	private Overlay overlay = null;
+	@SuppressWarnings("unused")
+	private LoginScreen login = null;
+	@SuppressWarnings("unused")
+	private HomeScreen home = null;
+	private Screen current = null;
 	
-	
-	
+    private Screen lazyOverlayListener;
+
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
 		this.isOverlay = isOverlay;
@@ -46,56 +41,26 @@ public class ArcadeUI extends GameClient {
 
 	@Override
 	public void create() {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(true, width, height);
-		shapeRenderer = new ShapeRenderer();
+		if (isOverlay) {
+			current = overlay = new Overlay();
+			overlay.setCallbacks(lazyOverlayListener);
+		} else if (player == null) {
+			current = login = new LoginScreen();
+		} else {
+			current = home = new HomeScreen();
+		}
+		
+		this.setScreen(current);
+		
 		
 		super.create();
 	}
 
 	@Override
-	public void render() {
-		//no call to super.render intentionally
-		
-		camera.update();
-		
-		//we don't want to clear the screen if we're the overlay. We do if we're running on our own.
-		if (!isOverlay) {
-			Gdx.gl.glClearColor(0, 0, 0.2f, 1);
-			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		}
-	    
-		//toggles isUIOpen on tab key down
-		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
-			isUIOpen = !isUIOpen;
-		}
-		
-		//draw a placeholder shape
-		if (isUIOpen) {
-		    shapeRenderer.begin(ShapeType.FilledRectangle);
-		    
-		    shapeRenderer.filledRect(100,
-		        100,
-		        width - 200,
-		        height - 200);
-		    
-		    shapeRenderer.end();
-		    
-		}
-	}
-	
-	@Override
 	public void dispose() {
 		super.dispose();
 	}
-
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
-		this.width = width;
-		this.height = height;
-	}
-
+	
 	@Override
 	public void pause() {
 		super.pause();
@@ -106,21 +71,29 @@ public class ArcadeUI extends GameClient {
 		super.resume();
 	}
 
-	
-	//there are no achievements for this
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "arcadeui";
+		game.id = "arcadeui";
 		game.name = "Arcade UI";
-		game.availableAchievements = achievements;
 	}
 
 	public Game getGame() {
 		return game;
+	}
+
+
+	@Override
+	public void setListeners(Screen l) {
+		lazyOverlayListener = l;
+		if (this.overlay != null) {
+			this.overlay.setCallbacks(l);
+		}
+	}
+
+	@Override
+	public void addPopup(String s) {
+		System.out.println("UI Popup: " + s);
 	}
 		
 }

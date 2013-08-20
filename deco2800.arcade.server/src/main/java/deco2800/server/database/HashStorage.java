@@ -3,6 +3,10 @@ package deco2800.server.database;
 import java.security.SecureRandom;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * HashStorage is an abstraction to the password database. Passwords are not
@@ -26,7 +30,28 @@ public class HashStorage {
 	 * @throws DatabaseException
 	 */
 	public void initialise() throws DatabaseException {
-		/* Not yet implemented */
+		
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		try {
+			ResultSet tableData = connection.getMetaData().getTables(null,
+					null, "AUTH", null);
+			if (!tableData.next()) {
+				Statement statement = connection.createStatement();
+				statement.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
+								+ "hash BINARY(512),"
+								+ "salt BINARY(8),"
+								+ "CONSTRAINT PLAYER_FK"
+								+ "FOREIGN KEY (playerID)"
+								+ "REFERENCES PLAYERS (playerID))");
+				//TODO: check datatypes of hash and salt
+			}
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to create authentication table", e);
+		}
 	}
 
 	/**
@@ -41,6 +66,7 @@ public class HashStorage {
 	 */
 	public void registerPassword(String username, String password)
 			throws DatabaseException {
+		
 		/* Not yet implemented */
 	}
 

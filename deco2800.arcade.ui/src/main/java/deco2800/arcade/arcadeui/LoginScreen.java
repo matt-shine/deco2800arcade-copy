@@ -1,12 +1,8 @@
 package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -34,9 +30,9 @@ public class LoginScreen extends GameScreen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         skin.add("default", labelStyle);
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("default");
-        skin.add("default", textFieldStyle);
+        //TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+        //textFieldStyle.font = skin.getFont("default");
+        //skin.add("default", textFieldStyle);
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
@@ -72,6 +68,12 @@ public class LoginScreen extends GameScreen {
         loginButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 ArcadeSystem.login("debuguser");
+            }
+        });
+        loginButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                ArcadeSystem.close();
             }
         });
 	}

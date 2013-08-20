@@ -23,7 +23,7 @@ import deco2800.arcade.client.network.NetworkClient;
  * @author uqjstee8
  *
  */
-@ArcadeGame(id="pong")
+@ArcadeGame(id="Pong")
 public class Pong extends GameClient {
 	
 	private OrthographicCamera camera;

@@ -21,7 +21,6 @@ import deco2800.arcade.model.Game.ArcadeGame;
 public class ArcadeUI extends GameClient implements UIOverlay {
 	   
 	private boolean isOverlay = false;
-
 	private Overlay overlay = null;
 	@SuppressWarnings("unused")
 	private LoginScreen login = null;
@@ -30,8 +29,7 @@ public class ArcadeUI extends GameClient implements UIOverlay {
 	private Screen current = null;
 	
     private Screen lazyOverlayListener;
-    
-    
+
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
 		this.isOverlay = isOverlay;
@@ -43,7 +41,6 @@ public class ArcadeUI extends GameClient implements UIOverlay {
 
 	@Override
 	public void create() {
-		
 		if (isOverlay) {
 			current = overlay = new Overlay();
 			overlay.setCallbacks(lazyOverlayListener);

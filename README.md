@@ -52,9 +52,12 @@ That's a lie, not a question.
 
 ## Contributing
 
-Git best practices advise working on your own fork of a repository and utilising [Pull Requests](https://help.github.com/articles/using-pull-requests) in order to minimise clashes.
+We have very kindly been given some free private repositories by GitHub, however there is a limit on the number
+of repositories we are allowed to have, and forking uses up this allocation. 
 
-If you'd rather work directly on this repository please follow these steps to make everyone's life easier:
+Please do not fork the repository. We do not want to reach a situation where we have to delete forks out from under you.
+
+Please create a branch instead as explained below.
 
 1. Create your own branch to work on (`git checkout -b <branch_name>`). Choose a short but descriptive branch name.
     * For a long lived branch of your changes, your student number would make a good, unique name.

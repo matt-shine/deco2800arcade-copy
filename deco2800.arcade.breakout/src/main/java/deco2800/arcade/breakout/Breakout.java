@@ -243,12 +243,18 @@ public class Breakout extends GameClient{
 	}
 	
 	private void win() {
-		if (brickNum == 0) {
-			score += lives*5;
-			System.out.println("Congratulations " + player + 
-					" your final score is: " + score);
-			gameState = GameState.GAMEOVER;
+		score += lives*5;
+		System.out.println("Congratulations " + player + 
+				" your final score is: " + score);
+		if(lives == 3){
+			incrementAchievement("breakout.prefect");
+		}else if(lives == 0){
+			incrementAchievement("breakout.closeOne");
+		}else if(score < 0){
+			incrementAchievement("breakout.noob");
 		}
+		incrementAchievement("breakout.winGame");
+		gameState = GameState.GAMEOVER;
 	}
 		
 	private void roundOver() {

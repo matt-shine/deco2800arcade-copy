@@ -231,5 +231,15 @@ public class Arena extends Sprite {
 	public List<Rectangle> getAvailableZones(int player, boolean field, boolean monsters) {
 		return null;
 	}
+
+	public void removeSprite(ExtendedSprite s) {
+		for(String key : zones.keySet()) {
+			for(Rectangle zone : zones.get(key).keySet()) {
+				if(zones.get(key).get(zone) == s) {
+					zones.get(key).put(zone, null);
+				}
+			}
+		}
+	}
 	
 }

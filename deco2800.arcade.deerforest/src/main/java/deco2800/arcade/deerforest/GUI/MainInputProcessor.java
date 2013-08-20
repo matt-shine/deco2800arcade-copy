@@ -50,8 +50,8 @@ public class MainInputProcessor implements InputProcessor {
     public boolean touchDown (int x, int y, int pointer, int button) {
     	
     	if(currentSelection != null && view.getArena().emptyZoneAtPoint(x, y, 0, false) != null) {
+    		view.getArena().removeSprite(currentSelection);
     		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtPoint(x, y, 0, false), 0, false);
-    		currentSelection = null;
     		return true;
     	}
     	currentSelection = checkIntersection(x, y);
@@ -66,6 +66,7 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
     	if(currentSelection != null && view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 0, false) != null) {
+    		view.getArena().removeSprite(currentSelection);
     		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 0, false), 0, false);
     		return true;
     	}
@@ -75,6 +76,7 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
     	if(currentSelection != null) {
+    		view.getArena().removeSprite(currentSelection);
     		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
     	}
         return false;

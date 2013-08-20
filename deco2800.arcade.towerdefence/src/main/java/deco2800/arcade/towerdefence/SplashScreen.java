@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Application;
+import static com.badlogic.gdx.Input.*;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -62,6 +63,11 @@ public class SplashScreen implements Screen{
 		batch.begin();
 		splashSprite.draw(batch);
 		batch.end();
+		
+		//If LMB is pressed change to menuScreen
+		if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+			game.setScreen(game.menuScreen);
+		}
 	}
 
 
@@ -83,12 +89,14 @@ public class SplashScreen implements Screen{
 	public void show() {
 		splashTexture = new Texture(Gdx.files.internal("SampleSplash1.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
+				
 		splashSprite = new Sprite(splashTexture);
+		//moves sprite to centre of screen
+		splashSprite.setX(Gdx.graphics.getWidth() / 2 - (splashSprite.getWidth() / 2));
+        splashSprite.setY(Gdx.graphics.getHeight() / 2 - (splashSprite.getHeight() / 2));
 		
-		batch = new SpriteBatch();
-		
-		
+		batch = new SpriteBatch(); //batch for render
+	
 	}
 	
 }

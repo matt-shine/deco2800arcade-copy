@@ -19,6 +19,7 @@ import deco2800.arcade.towerdefence.SplashScreen;
 @ArcadeGame(id="towerdefence")
 public class TowerDefence extends GameClient {
 	Screen splashScreen;
+	Screen menuScreen;
 	
 	private static final String LOG = TowerDefence.class.getSimpleName();
 	
@@ -32,7 +33,10 @@ public class TowerDefence extends GameClient {
 		super.create();
 		
 		splashScreen = new SplashScreen(this);
+		menuScreen = new MenuScreen(this);
 		setScreen(splashScreen);
+		//set some sort of timer then setScreen to MenuScreen
+		
 		
 	}
 

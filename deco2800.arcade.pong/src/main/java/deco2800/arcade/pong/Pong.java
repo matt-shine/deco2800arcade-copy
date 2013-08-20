@@ -126,7 +126,6 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void render() {
-
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -207,7 +206,7 @@ public class Pong extends GameClient {
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
 	    		gameOver();
-	    		ArcadeSystem.goToGame("arcadeui");
+	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
 	    	}
 	    	break;
 	    }

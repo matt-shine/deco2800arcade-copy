@@ -4,6 +4,8 @@ import java.util.Set;
 
 public class ArcadeSystem {
 	
+	public static String UI = "arcadeui";
+	
 	private static Arcade arcade = null;
 	
 	public static void setArcadeInstance(Arcade a) {
@@ -24,7 +26,7 @@ public class ArcadeSystem {
 	}
 	
 	public static Set<String> getGamesList() {
-		return arcade.findGameIds();
+		return arcade.findPlayableIds();
 	}
 	
 	public static void login(String username) {

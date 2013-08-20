@@ -4,6 +4,10 @@ import com.esotericsoftware.kryo.Kryo;
 
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
+import deco2800.arcade.protocol.communication.ContactListUpdate;
+import deco2800.arcade.protocol.communication.CommunicationRequest;
+import deco2800.arcade.protocol.communication.TextMessage;
+import deco2800.arcade.protocol.communication.VoiceMessage;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -41,6 +45,12 @@ public class Protocol {
 		kryo.register(NewGameRequest.class);
 		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
+		
+		//Communication messages
+		kryo.register(CommunicationRequest.class);
+		kryo.register(ContactListUpdate.class);
+		kryo.register(TextMessage.class);
+		kryo.register(VoiceMessage.class);
 	}
 	
 }

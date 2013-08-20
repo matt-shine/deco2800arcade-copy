@@ -11,6 +11,10 @@ import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 public abstract class AbstractCardCollection implements CardCollection {
 	
 	private List<AbstractCard> cardList;
+	
+	public AbstractCardCollection() {
+		cardList = new ArrayList<AbstractCard>();
+	}
 
 	@Override
 	public int size() {
@@ -82,7 +86,6 @@ public abstract class AbstractCardCollection implements CardCollection {
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
 		cardList.clear();
 	}
 
@@ -127,19 +130,20 @@ public abstract class AbstractCardCollection implements CardCollection {
 	public CardCollection destroyCardType(String type) {
 		
 		// New empty list
-		CardCollectionList cardsDestroyed = new CardCollectionList();
+		List<AbstractCard> cardsToDestroy = new ArrayList<AbstractCard>();
+		// New empty list
+		CardCollection cardsDestroyed = new CardCollectionList();
 		
 		// For each card
 		for (AbstractCard card: cardList) {
 			// If the card is of the given type
 			if (card.getCardType().equals(type)) {
-				// Try and remove the card
-				if (cardList.remove(card)) {
-					// If it's removed add it to the list of removed cards
-					cardsDestroyed.add(card);
-				}
+				cardsToDestroy.add(card);
 			}
 		}
+		
+		cardsDestroyed = destroyCards(cardsToDestroy);
+		
 		// Return list of cards destroyed 
 		return cardsDestroyed;
 	}
@@ -175,6 +179,10 @@ public abstract class AbstractCardCollection implements CardCollection {
 		}
 		
 		return cardsDestroyed;
+	}
+	
+	public void setCardList(List<AbstractCard> cardList) {
+		this.cardList = cardList;
 	}
 
 }

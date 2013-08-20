@@ -1,6 +1,8 @@
 package deco2800.arcade.deerforest.models.cardContainers;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,131 +10,181 @@ import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public abstract class AbstractCardStack implements CardStack {
+	
+	protected List<AbstractCard> cardList;
+	
+	public AbstractCardStack() {
+		cardList = new ArrayList<AbstractCard>();
+	}
 
 	@Override
 	public boolean moveCard(AbstractCard card, CardCollection moveLocation) {
-		// TODO Auto-generated method stub
-		return false;
+		if (cardList.contains(card)) {
+			moveLocation.add(card);
+			cardList.remove(card);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public List<AbstractCard> cards() {
-		// TODO Auto-generated method stub
-		return null;
+		// Make a new list
+		List<AbstractCard> list = new ArrayList<AbstractCard>();
+		list.addAll(cardList);
+		return list;
 	}
 
 	@Override
 	public CardCollection destroyCards(List<AbstractCard> cardsToDestroy) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		// New empty list
+		CardCollectionList cardsDestroyed = new CardCollectionList();
+		
+		// For each card
+		for (AbstractCard card: cardsToDestroy) {
+			// Try and remove the card
+			if (cardList.remove(card)) {
+				// If it's removed add it to the list of removed cards
+				cardsDestroyed.add(card);
+			}
+		}
+		// The list of cards destroyed 
+		return cardsDestroyed;
 	}
 
 	@Override
 	public CardCollection destroyCardType(String type) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		// New empty list
+		CardCollectionList cardsDestroyed = new CardCollectionList();
+		
+		// For each card
+		for (AbstractCard card: cardList) {
+			// If the card is of the given type
+			if (card.getCardType().equals(type)) {
+				// Try and remove the card
+				if (cardList.remove(card)) {
+					// If it's removed add it to the list of removed cards
+					cardsDestroyed.add(card);
+				}
+			}
+		}
+		// Return list of cards destroyed 
+		return cardsDestroyed;
 	}
 
 	@Override
 	public CardCollection destroyAllCards() {
-		// TODO Auto-generated method stub
-		return null;
+		CardCollectionList cardsDestroyed = new CardCollectionList();
+		cardsDestroyed.addAll(cardList);
+		
+		cardList.clear();
+		return cardsDestroyed;
 	}
 
 	@Override
 	public CardCollection destroyRandom(int number) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		// New empty list
+		CardCollectionList cardsDestroyed = new CardCollectionList();
+		AbstractCard currentCard;
+		
+		for (int i = 0; i < number; i++) {
+			// Get a random number
+			
+			int min = 0;
+			int max = cardList.size();
+			
+			int n = min + (int)(Math.random() * ((max - min) + 1));
+			currentCard = cardList.get(n);
+			
+			if (currentCard != null) {
+				cardsDestroyed.add(currentCard);
+			}
+		}
+		
+		return cardsDestroyed;
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return cardList.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		return cardList.isEmpty();
 	}
 
 	@Override
 	public boolean contains(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		if (o instanceof AbstractCard) {
+			return cardList.contains(o);
+		} else {
+			return false;
+		}
 	}
 
 	@Override
 	public Iterator<AbstractCard> iterator() {
-		// TODO Auto-generated method stub
-		return null;
+		return cardList.iterator();
 	}
 
 	@Override
 	public Object[] toArray() {
-		// TODO Auto-generated method stub
-		return null;
+		return cardList.toArray();
 	}
 
 	@Override
 	public <T> T[] toArray(T[] a) {
-		// TODO Auto-generated method stub
-		return null;
+		return cardList.toArray(a);
 	}
 
 	@Override
 	public boolean add(AbstractCard e) {
-		// TODO Auto-generated method stub
-		return false;
+		return cardList.add(e);
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		// TODO Auto-generated method stub
-		return false;
+		return cardList.remove(o);
 	}
 
 	@Override
 	public boolean containsAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		return cardList.containsAll(c);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends AbstractCard> c) {
-		// TODO Auto-generated method stub
-		return false;
+		return cardList.addAll(c);
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		return cardList.removeAll(c);
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
+		return cardList.retainAll(c);
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		cardList.clear();
 	}
 
 	@Override
 	public int count() {
-		// TODO Auto-generated method stub
-		return 0;
+		return cardList.size();
 	}
 
 	@Override
 	public void shuffle() {
-		// TODO Auto-generated method stub
-		
+		Collections.shuffle(cardList);
 	}
 
 	@Override

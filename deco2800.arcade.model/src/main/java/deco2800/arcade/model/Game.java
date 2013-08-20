@@ -35,6 +35,10 @@ public class Game {
 	public String id; //A machine-processable identifier for the game
 	
 	public String name; //A human-readable name for the game
+
+    public String description; //A human-readable game description
+
+    public Icon icon; //A game Icon
 		
 	public int pricePerPlay = 1;
 	

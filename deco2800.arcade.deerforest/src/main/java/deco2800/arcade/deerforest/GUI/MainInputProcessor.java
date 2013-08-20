@@ -1,6 +1,5 @@
 package deco2800.arcade.deerforest.GUI;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +48,12 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
+    	
+    	if(currentSelection != null && view.getArena().emptyZoneAtPoint(x, y, 0, false) != null) {
+    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtPoint(x, y, 0, false), 0, false);
+    		currentSelection = null;
+    		return true;
+    	}
     	currentSelection = checkIntersection(x, y);
     	if(currentSelection != null) {
     		xClickOffset = x - currentSelection.getX();
@@ -60,6 +65,10 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
+    	if(currentSelection != null && view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 0, false) != null) {
+    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 0, false), 0, false);
+    		return true;
+    	}
         return false;
     }
 

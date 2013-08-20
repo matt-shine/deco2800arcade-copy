@@ -8,6 +8,8 @@ public class ExtendedSprite extends Sprite {
 
 	public ExtendedSprite(Texture t) {
 		super(t);
+		setOrigin(0,0);
+		this.flip(false, true);
 	}
 	
 	public boolean containsPoint(int x, int y) {

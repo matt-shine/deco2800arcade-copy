@@ -24,6 +24,7 @@ public class MainGameScreen implements Screen {
 	
 	//assets
 	private Map<String, List<ExtendedSprite>> spriteMap;
+	private Arena arena;
 	
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
@@ -35,18 +36,18 @@ public class MainGameScreen implements Screen {
 		//load some assets
 		manager = new AssetManager();
 		loadAssets();
-		
 		manager.finishLoading();
+		
+		arena = new Arena(manager.get("DeerForestAssets/background.png", Texture.class));
+		
 		spriteMap = new HashMap<String, List<ExtendedSprite>>();
 		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
 		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/generalCard.png", Texture.class));
-		s1.setPosition(300, 300);
-		s1.flip(false, true);
+		s1.setPosition(100, 100);
 		p1Hand.add(s1);
 		s1.setScale(0.25f);
 		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/2.png", Texture.class));
 		s2.setPosition(200, 200);
-		s2.flip(false, true);
 	    p1Hand.add(s2);
 	    spriteMap.put("P1Hand", p1Hand);
 	}
@@ -54,6 +55,7 @@ public class MainGameScreen implements Screen {
 	private void loadAssets() {
 		manager.load("DeerForestAssets/generalCard.png", Texture.class);
 		manager.load("DeerForestAssets/2.png", Texture.class);
+		manager.load("DeerForestAssets/background.png", Texture.class);
 	}
 
 	@Override
@@ -72,15 +74,13 @@ public class MainGameScreen implements Screen {
 		//draw some random text  
 	    game.batch.begin();
 
+	    arena.draw(game.batch);
+	    
 	    for(String key : spriteMap.keySet()) {
 	    	for(ExtendedSprite s : spriteMap.get(key)) {
 		    	s.draw(game.batch);
 		    }
 	    }
-	    
-	    game.font.draw(game.batch, "Welcome To Deer Forest", 100, Gdx.graphics.getHeight() - 100);
-	    game.font.draw(game.batch, "This is all we have", 100, Gdx.graphics.getHeight() - 150);
-	    game.font.draw(game.batch, "The loaded model: " + game.getModel(), 100, Gdx.graphics.getHeight() - 200);
 
 	    game.batch.end();
 		
@@ -106,6 +106,7 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void resize(int x, int y) {
+		arena.resize(x, y);
 		camera.setToOrtho(true, getWidth(), getHeight());
 		
 	}
@@ -124,6 +125,10 @@ public class MainGameScreen implements Screen {
 
 	public Map<String, List<ExtendedSprite>> getSpriteMap() {
 		return spriteMap;
+	}
+	
+	public Arena getArena() {
+		return arena;
 	}
 	
 	public int getWidth() {

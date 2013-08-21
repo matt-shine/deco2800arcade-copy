@@ -5,6 +5,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
+import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.client.network.NetworkClient;
 
 public class AchievementClient {
@@ -28,8 +29,12 @@ public class AchievementClient {
     public Achievement achievementForID(String achievementID) {
         ArrayList<String> achievementIDs = new ArrayList<String>();
         achievementIDs.add(achievementID);
+        //Because we do this this way we don't ever need to request data 
+        //from the server for just a single ID... so i guess this saves writing
+        //some packets and suchly.
         return achievementsForIDs(achievementIDs).get(0);
     }
+    
     
     /**
      * Returns a list of Achievements corresponding to the supplied list of
@@ -45,7 +50,7 @@ public class AchievementClient {
     public ArrayList<Achievement> achievementsForIDs(
             ArrayList<String> achievementIDs) {
         ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-
+        //see packet AchievementsForIDs in protocol
         return achievements;
     }
     

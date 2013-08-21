@@ -50,6 +50,9 @@ public class ArcadeServer {
 		server.start();
 	}
 
+	//Achievement storage service
+	private AchievementStorage achievementStorage;
+	
 	// Credit storage service
 	private CreditStorage creditStorage;
 	//private PlayerStorage playerStorage;
@@ -63,6 +66,14 @@ public class ArcadeServer {
 	}
 	
 	/**
+	 * Access the Serer's achievement storage facility
+	 * @return AchievementStorage currently in use by the arcade
+	 */
+	public AchievementStorage getAchievementStorage() {
+		return this.achievementStorage;
+	}
+	
+	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
@@ -71,10 +82,14 @@ public class ArcadeServer {
 		this.creditStorage = new CreditStorage();
 		//this.playerStorage = new PlayerStorage();
 		
+		//do achievement database initialisation
+		this.achievementStorage = new AchievementStorage();
+		
 		//initialize database classes
 		try {
 			creditStorage.initialise();
 			//playerStorage.initialise();
+			achievementStorage.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,6 +118,7 @@ public class ArcadeServer {
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
+		server.addListener(new achievementListener());
 	}
 	
 }

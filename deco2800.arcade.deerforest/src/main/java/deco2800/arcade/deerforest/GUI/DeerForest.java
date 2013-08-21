@@ -1,11 +1,11 @@
 package deco2800.arcade.deerforest.GUI;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
@@ -40,12 +40,13 @@ public class DeerForest extends GameClient implements UIOverlay {
 		
 		//set up input processor
 		inputProcessor = new MainInputProcessor(gam, view);
-		Gdx.input.setInputProcessor(inputProcessor);
+		ArcadeInputMux.getInstance().addProcessor(inputProcessor);
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
+		ArcadeInputMux.getInstance().removeProcessor(inputProcessor);
 	}
 	
 	@Override
@@ -60,7 +61,6 @@ public class DeerForest extends GameClient implements UIOverlay {
 
 	@Override
 	public void render() {
-		Gdx.input.setInputProcessor(inputProcessor);
 		super.render();
 	}
 	

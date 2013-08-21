@@ -1,19 +1,23 @@
 package deco2800.arcade.client;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.AchievementListener;
 
 public class AchievementClient {
 
     //private NetworkClient networkClient;
+    private HashSet<AchievementListener> listeners;
 
     public AchievementClient(NetworkClient networkClient) {
         //this.networkClient = networkClient;
+        this.listeners = new HashSet<AchievementListener>();
     }
 
     /**
@@ -29,9 +33,6 @@ public class AchievementClient {
     public Achievement achievementForID(String achievementID) {
         ArrayList<String> achievementIDs = new ArrayList<String>();
         achievementIDs.add(achievementID);
-        //Because we do this this way we don't ever need to request data 
-        //from the server for just a single ID... so i guess this saves writing
-        //some packets and suchly.
         return achievementsForIDs(achievementIDs).get(0);
     }
     
@@ -51,6 +52,11 @@ public class AchievementClient {
             ArrayList<String> achievementIDs) {
         ArrayList<Achievement> achievements = new ArrayList<Achievement>();
         //see packet AchievementsForIDs in protocol
+
+	// We should do some aggressive caching of Achievements here because
+	// they're immutable - once we've retrieved it from the server once
+	// we shouldn't ever need to ask for it again.
+
         return achievements;
     }
     
@@ -79,13 +85,35 @@ public class AchievementClient {
     
     /**
      * Increments the player's progress for the achievement with ID
-     * `achievementID`. 
+     * `achievementID`.
      *
      * @param achievementID The ID of the achievement.
      * @param player        The player whose progress should be incremented.
      */
     public void incrementProgress(String achievementID, Player player) {
+        
+    }
 
+    /**
+     * Adds a listener to be notified of achievement events. The listener is
+     * only notified of events after they've been confirmed by the server.
+     *
+     * (This is used to power GameClient's achievement overlay)
+     *
+     * @param listener The listener to add.
+     */
+    public void addListener(AchievementListener listener) {
+        listeners.add(listener);
+    }
+
+    /**
+     * Removes an achievement listener. If the listener is null or wasn't added
+     * in the first place, nothing happens.
+     *
+     * @param listener The listener to remove.
+     */
+    public void removeListener(AchievementListener listener) {
+        listeners.remove(listener);
     }
 
 }

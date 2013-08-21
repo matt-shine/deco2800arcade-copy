@@ -15,10 +15,19 @@ public class Pacman extends GameClient {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public Game getGame() {
-		// TODO Auto-generated method stub
-		return null;
+	// Game variable for Pacman- used by the arcade
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "pacman";
+		game.name = "Pac man";
+		game.description = "An implementation of the classic arcade game Pac "
+		+ "man." + System.lineSeparator() + "Still in progress- additional " + 
+		"features may be added later. Note: will not currently run.";
+		// game.icon- to be added later once the icon part is fully implemented
 	}
-
+	
+	public Game getGame() {
+		return game;
+	}
 }

@@ -4,10 +4,7 @@ public class TileModel {
 	private int tileX;
 	private int tileY;
 	
-	private WallModel westWall;
-	private WallModel northWall;
-	private WallModel eastWall;
-	private WallModel southWall;
+	private WallModel[] walls;
 	
 	private PlayerModel boxer;
 	private ItemModel spawnedItem;
@@ -20,24 +17,26 @@ public class TileModel {
 		return tileY;
 	}
 	
-	public WallModel getWestWall() {
-		return westWall;
+	public WallModel getWall(int direction) {
+		return walls[direction];
 	}
 	
-	public WallModel getNorthWall() {
-		return northWall;
+	public boolean hasWall(int direction) {
+		return walls[direction] != null;
 	}
 	
-	public WallModel getEastWall() {
-		return eastWall;
-	}
-	
-	public WallModel getSouthWall() {
-		return southWall;
+	public boolean buildWall(int direction) {
+		if(hasWall(direction)) {
+			return false;
+		}
+		
+		walls[direction] = new WallModel();
+		return true;
 	}
 	
 	public TileModel(int x, int y) {
 		tileX = x;
 		tileY = y;
+		walls = new WallModel[4];
 	}
 }

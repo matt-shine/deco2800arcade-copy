@@ -2,17 +2,17 @@ package deco2800.arcade.communication;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import deco2800.arcade.communication.CommunicationView;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationController {
 	
-	private ChatWindow window;
+	private CommunicationView window;
 	private NetworkClient networkClient;
 	private TextMessage textMessage;
 
-	public CommunicationController(ChatWindow window, NetworkClient networkClient){
+	public CommunicationController(CommunicationView window, NetworkClient networkClient){
 		this.window = window;
 		this.networkClient = networkClient;
 		
@@ -22,6 +22,7 @@ public class CommunicationController {
 	private class SendButtonActionListener implements ActionListener {
 		
 		public void actionPerformed(ActionEvent event) {
+			System.out.println("hello");
 			sendTextMessage("debuguser", window.getTextInput());
 		}
 	

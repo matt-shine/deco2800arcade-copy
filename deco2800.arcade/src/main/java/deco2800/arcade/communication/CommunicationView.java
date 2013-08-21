@@ -10,14 +10,14 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class ChatWindow {
+public class CommunicationView {
 	
 	List chatGroup;
 	JTextArea textArea;
 	JTextArea input;
 	JButton sendButton;
 	
-	public ChatWindow(){
+	public CommunicationView(){
 		//Create List of connected users.
 		chatGroup = new List();
 		

@@ -71,7 +71,6 @@ public class LoginScreen extends GameScreen {
             }
         });
         loginButton.addListener(new ChangeListener() {
-            @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 ArcadeSystem.close();
             }

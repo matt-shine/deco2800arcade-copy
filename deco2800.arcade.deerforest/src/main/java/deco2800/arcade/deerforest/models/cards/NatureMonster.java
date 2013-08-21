@@ -10,5 +10,8 @@ public class NatureMonster extends AbstractMonster {
 		super("Nature", health, attacks);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public String toString() {
+		return super.toString();
+	}
 }

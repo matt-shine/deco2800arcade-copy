@@ -52,12 +52,6 @@ public class Graveyard implements CardStack {
 	}
 
 	@Override
-	public List<AbstractEffect> continuousEffects() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public CardCollection destroyCards(List<AbstractCard> cardsToDestroy) {
 		// TODO Auto-generated method stub
 		return null;

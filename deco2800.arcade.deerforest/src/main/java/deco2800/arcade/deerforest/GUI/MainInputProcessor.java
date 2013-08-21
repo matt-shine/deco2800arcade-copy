@@ -1,5 +1,8 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
@@ -9,6 +12,10 @@ public class MainInputProcessor implements InputProcessor {
 	private MainGame game;
 	private MainGameScreen view;
 	private ExtendedSprite currentSelection;
+	private float xClickOffset;
+	private float yClickOffset;
+	
+	private final float scale = 0.25f;
 	
 	public MainInputProcessor(MainGame game, MainGameScreen view) {
 		this.game = game;
@@ -18,12 +25,11 @@ public class MainInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyDown (int keycode) {
 		if(keycode == Keys.SPACE) {
-			System.out.println("Space pressed, current selection is: " + currentSelection);
 			if(currentSelection != null) {
-				if (currentSelection.getScaleX() > 1 || currentSelection.getScaleY() > 1) {
-					currentSelection.setScale(1);
+				if (currentSelection.getScaleX() > scale || currentSelection.getScaleY() > scale) {
+					currentSelection.setScale(scale);
 				} else {
-					currentSelection.setScale(2);
+					currentSelection.setScale(scale*2);
 				}
 			}
 		}
@@ -42,8 +48,16 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
+    	
+    	if(currentSelection != null && view.getArena().emptyZoneAtPoint(x, y, 0, false) != null) {
+    		view.getArena().removeSprite(currentSelection);
+    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtPoint(x, y, 0, false), 0, false);
+    		return true;
+    	}
     	currentSelection = checkIntersection(x, y);
     	if(currentSelection != null) {
+    		xClickOffset = x - currentSelection.getX();
+    		yClickOffset = y - currentSelection.getY();
     		return true;
     	}
         return false;
@@ -51,13 +65,19 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp (int x, int y, int pointer, int button) {
+    	if(currentSelection != null && view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 0, false) != null) {
+    		view.getArena().removeSprite(currentSelection);
+    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 0, false), 0, false);
+    		return true;
+    	}
         return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
     	if(currentSelection != null) {
-    		currentSelection.setPosition(x, y);
+    		view.getArena().removeSprite(currentSelection);
+    		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
     	}
         return false;
     }
@@ -80,11 +100,15 @@ public class MainInputProcessor implements InputProcessor {
      * @return Sprite intersecting the 
      */
     private ExtendedSprite checkIntersection(int x, int y) {
-    	for(ExtendedSprite s : view.getP1Hand()) {
-    		if(s.containsPoint(x, y)) {
-    			return s;
-    		}
-    	}
+    	Map<String,List<ExtendedSprite>> spriteMap = view.getSpriteMap();
+    	for(String key : spriteMap.keySet()) {
+	    	for(ExtendedSprite s : spriteMap.get(key)) {
+		    	if(s.containsPoint(x, y)) {
+		    		return s;
+		    	}
+		    }
+	    }
+
     	return null;
     }
 }

@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.models.cardContainers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -7,20 +8,26 @@ import java.util.List;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
-public class Hand implements CardCollection {
-
+public class Hand extends AbstractCardCollection {
+	private int limit;
+	private ArrayList<AbstractCard> hand;
+	
 	//Initialize the hand
 	public Hand() {
-		
+		limit = 6;
+		hand = new ArrayList<AbstractCard>();
 	}
 	
 	//Change card limit
 	public void changeLimit(int newLimit) {
-		
+		limit = newLimit;
 	}
 		
 	//Check if over limit
 	public boolean overLimit() {
+		if(hand.size() > limit) {
+			return true;
+		}
 		return false;
 	}
 		
@@ -110,12 +117,6 @@ public class Hand implements CardCollection {
 
 	@Override
 	public List<AbstractCard> cards() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<AbstractEffect> continuousEffects() {
 		// TODO Auto-generated method stub
 		return null;
 	}

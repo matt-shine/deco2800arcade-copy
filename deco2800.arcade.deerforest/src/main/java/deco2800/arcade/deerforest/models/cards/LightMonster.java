@@ -10,5 +10,8 @@ public class LightMonster extends AbstractMonster {
 		super("Light", health, attacks);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public String toString() {
+		return super.toString();
+	}
 }

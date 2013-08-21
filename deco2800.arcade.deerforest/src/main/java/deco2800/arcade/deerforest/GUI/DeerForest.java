@@ -1,14 +1,13 @@
 package deco2800.arcade.deerforest.GUI;
 
-<<<<<<< HEAD
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 
-=======
->>>>>>> master
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 /**
@@ -17,14 +16,18 @@ import deco2800.arcade.deerforest.models.gameControl.GameSystem;
  *
  */
 @ArcadeGame(id="deerforest")
-public class DeerForest extends GameClient {
+public class DeerForest extends GameClient implements UIOverlay {
 	
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
 	}
-
+	
+	MainInputProcessor inputProcessor;
+	
 	@Override
 	public void create() {
+		
+		super.create();
 		
 		//start up main game
 		GameSystem tempSystem = new GameSystem(null, null);
@@ -36,10 +39,8 @@ public class DeerForest extends GameClient {
 		this.setScreen(view);
 		
 		//set up input processor
-		MainInputProcessor inputProcessor = new MainInputProcessor(gam, view);
+		inputProcessor = new MainInputProcessor(gam, view);
 		Gdx.input.setInputProcessor(inputProcessor);
-		
-		super.create();
 	}
 
 	@Override
@@ -57,6 +58,11 @@ public class DeerForest extends GameClient {
 		super.resume();
 	}
 
+	@Override
+	public void render() {
+		super.render();
+	}
+	
 	private static final Game game;
 	static {
 		game = new Game();
@@ -68,4 +74,13 @@ public class DeerForest extends GameClient {
 		return game;
 	}
 	
+	@Override
+	public void setListeners(Screen l) {
+		;
+	}
+
+	@Override
+	public void addPopup(String s) {
+		System.out.println("Message Popup: " + s);
+	}
 }

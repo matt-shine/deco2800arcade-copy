@@ -46,7 +46,6 @@ public class Hunter extends GameClient {
 		gameScreen = new GameScreen(this);
 		gameOverScreen = new GameOverScreen(this);
 		
-		
 		setScreen(menuScreen);
 		super.create();
 	}
@@ -78,6 +77,10 @@ public class Hunter extends GameClient {
 	@Override
 	public void resume() {
 		super.resume();
+	}
+	
+	public void startGame() {
+		setScreen(gameScreen);
 	}
 	
 	private static final Game game;

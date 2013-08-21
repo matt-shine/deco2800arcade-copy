@@ -2,54 +2,59 @@ package deco2800.arcade.hunter.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.MenuInput;
+/*import deco2800.arcade.client.ArcadeInputMux;*/
 
 /**
  * A Hunter game for use in the Arcade
- * @author Nessex
+ * @author Nessex, DLong94
  *
  */
 public class MenuScreen implements Screen {
-	private OrthographicCamera camera;
 	private Hunter parent;
-	
-	private MenuInput input = new MenuInput();
-	
-	private ShapeRenderer shapeRenderer;
-	
-	//Darryl's additions (feel free to delete or change them)
-	private Texture texture;
-	private Sprite menuTitle;
-	private SpriteBatch batch;
-	
+		
+	private Stage stage;
 	
 	public MenuScreen(Hunter p){
 		parent = p;
-		//Initialise camera
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, parent.screenWidth, parent.screenHeight);
 		
-		shapeRenderer = new ShapeRenderer();
+		//Set up stage
+		stage = new Stage();
+		/*ArcadeInputMux.getInstance().addProcessor(stage);*/
 		
+		Table table = new Table();
+		table.setFillParent(true);
+		stage.addActor(table);
 		
-		//Darryl's Addition
-		batch = new SpriteBatch();
+		TextureRegionDrawable playButtonImage = new TextureRegionDrawable(new TextureRegion(new Texture("textures/huntergame.png")));
+		
+		Button playButton = new Button(playButtonImage);
+		playButton.setSize(100, 100);
+		playButton.setPosition(0, 0);
+		
+		playButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				System.out.println("test");
+				/*parent.startGame();*/
+			}
+		});
+		
+		table.add(playButton);
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		stage.dispose();
 		
 	}
 
@@ -71,26 +76,13 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		shapeRenderer.setProjectionMatrix(camera.combined);
-	    
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.setColor(Color.RED);
-	    shapeRenderer.filledRect(0, 0, 100, 100);
-	    
-	    shapeRenderer.setColor(Color.BLUE);
-	    shapeRenderer.filledRect(parent.screenWidth - 100, parent.screenHeight - 100, 100, 100);
-	    
-	    shapeRenderer.end();
-	    
-	  //Darryl's Addition
-	    batch.begin();
-	    menuTitle.draw(batch);
-		batch.end();
+		stage.act(delta);
+		stage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		stage.setViewport(width, height, true);
 		
 	}
 
@@ -102,13 +94,9 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		//Darryl's Addition
-		texture = new Texture("res/huntergame.png");
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
-		menuTitle = new Sprite(texture);
+		/*menuTitle = new Sprite(texture);
 		menuTitle.setX(Gdx.graphics.getWidth()/2 - menuTitle.getWidth()/2);
-		menuTitle.setY(Gdx.graphics.getHeight() - (menuTitle.getHeight()+ 20));
+		menuTitle.setY(Gdx.graphics.getHeight() - (menuTitle.getHeight()+ 20));*/
 	
 	}
 	

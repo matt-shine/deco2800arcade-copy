@@ -13,7 +13,7 @@ import deco2800.arcade.hunter.Hunter;
 
 /**
  * A Hunter game for use in the Arcade
- * @author Nessex
+ * @author Nessex, DLong94
  *
  */
 public class GameScreen implements Screen {

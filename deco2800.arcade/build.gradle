@@ -18,6 +18,7 @@ task(runArcade, dependsOn: "classes", type: JavaExec) {
    //add additional games like this
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.tictactoe").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
+   classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.breakout").sourceSets.main.runtimeClasspath
 	classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.deerforest").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.mixmaze").sourceSets.main.runtimeClasspath
 }

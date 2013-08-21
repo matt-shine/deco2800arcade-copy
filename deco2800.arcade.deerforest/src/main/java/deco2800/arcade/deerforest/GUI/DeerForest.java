@@ -1,9 +1,5 @@
 package deco2800.arcade.deerforest.GUI;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;

@@ -1,7 +1,10 @@
 package deco2800.arcade.deerforest.GUI;
 
+<<<<<<< HEAD
 import com.badlogic.gdx.Gdx;
 
+=======
+>>>>>>> master
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;

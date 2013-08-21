@@ -4,6 +4,7 @@ public class PlayerModel {
 	private int playerID;
 	private int playerX;
 	private int playerY;
+	private int playerDirection;
 	
 	public int getPlayerID() {
 		return playerID;
@@ -20,6 +21,14 @@ public class PlayerModel {
 	public void moveTo(int x, int y) {
 		playerX = x;
 		playerY = y;
+	}
+	
+	public int getDirection() {
+		return playerDirection;
+	}
+	
+	public void setDirection(int dir) {
+		playerDirection = dir;
 	}
 	
 	public PlayerModel(int id) {

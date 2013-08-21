@@ -8,8 +8,8 @@ public class TileModel {
 	private WallModel northWall;
 	private WallModel eastWall;
 	private WallModel southWall;
-	private PlayerModel boxer;
 	
+	private PlayerModel boxer;
 	private ItemModel spawnedItem;
 	
 	public int getX() {

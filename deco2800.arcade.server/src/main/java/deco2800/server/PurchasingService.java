@@ -64,14 +64,14 @@ public class PurchasingService {
 		HashSet<GamePlayToken> tokens = new HashSet<GamePlayToken>();
 		int totalPrice = (int)(players.size() * g.pricePerPlay * numPlays * discountFactor(numPlays));
 		int requiredCredits = totalPrice/players.size();
-		boolean allCanAfford = true;
+		//boolean allCanAfford = true;
 		for (Player p: players) {
 
 			String username = p.getUsername();
 			int credits = creditStorage.getUserCredits(username);
 
 			if (credits < requiredCredits) {
-				allCanAfford = false;
+				//allCanAfford = false;
 				return Collections.emptySet();
 			}
 		}

@@ -165,4 +165,10 @@ public class ParentThread {
 		
 		return result;
 	}
+	/**
+	 * Return tags which this thread is attached to
+	 */
+	public String getTags() {
+		return this.tags;
+	}
 }

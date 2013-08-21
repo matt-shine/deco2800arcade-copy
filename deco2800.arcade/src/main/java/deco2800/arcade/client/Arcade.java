@@ -1,11 +1,13 @@
 package deco2800.arcade.client;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +26,7 @@ import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
@@ -65,11 +68,12 @@ public class Arcade extends JFrame {
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
+		
+		ArcadeSystem.setArcadeInstance(arcade);
 
 		arcade.addCanvas();
-
-		arcade.startGame("arcadeui");
-
+		
+		ArcadeSystem.goToGame(ArcadeSystem.UI);
 	}
 
 	/**
@@ -79,8 +83,6 @@ public class Arcade extends JFrame {
 	private Arcade(String[] args){
 		this.width = 640;
 		this.height = 480;
-
-		ArcadeSystem.setArcadeInstance(this);
 
 		initWindow();
 	}
@@ -99,16 +101,20 @@ public class Arcade extends JFrame {
 		//set shutdown behaviour
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    public void windowClosing(WindowEvent winEvt) {
-
-				/* TODO: make the program shutdown properly. This line seems to
-		    	 * cause a deadlock. Not calling it will leave the program running in
-		    	 * the background
-		    	 */
-		    	System.exit(0);
-
+                close();
 		    }
 		});
 	}
+
+    public void close() {
+        removeCanvas();
+
+        EventQueue.invokeLater(new Runnable() {
+            public void run () {
+                System.exit(0);
+            }
+        });
+    }
 
 
 	public void startConnection() {
@@ -237,6 +243,18 @@ public class Arcade extends JFrame {
 		}
 
 	}
+	
+	
+	
+	/**
+	 * Removes the canvas from the frame. Should be called before shutdown. Never elsewhere, as
+	 * there should only ever be one canvas.
+	 */
+	public void removeCanvas(){
+		
+		this.remove(this.canvas.getCanvas());
+
+	}
 
 
 
@@ -272,8 +290,27 @@ public class Arcade extends JFrame {
 		return gameMap;
 	}
 
-	public Set<String> findGameIds() {
-		return getGameMap().keySet();
+	/**
+	 * Returns all games except ones with the @InternalGame annotation
+	 * @return
+	 */
+	public Set<String> findPlayableIds() {
+		
+		Map<String,Class<? extends GameClient>> games =
+				new HashMap<String,Class<? extends GameClient>>(getGameMap());
+		
+		Iterator<Map.Entry<String,Class<? extends GameClient>>> it = games.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	
+	        Map.Entry<String,Class<? extends GameClient>> pair =
+	        		(Map.Entry<String,Class<? extends GameClient>>)it.next();
+	        
+	        if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+	        	it.remove();
+	        }
+	    }
+		
+		return games.keySet();
 	}
 
 	public GameClient getInstanceOfGame(String id) {
@@ -290,14 +327,20 @@ public class Arcade extends JFrame {
 				//add the overlay to the game
 				if (id != "arcadeui") {
 					game = constructor.newInstance(player, client);
-					game.addOverlay(getInstanceOfGame("arcadeui", true));
+					GameClient overlay = getInstanceOfGame("arcadeui", true);
+					
+					//the overlay and the bridge are the same object, but
+					//GameClient doesn't know that and it mightn't be that way forever
+					game.addOverlay(overlay);
+					if (overlay instanceof UIOverlay) {
+						game.addOverlayBridge((UIOverlay) overlay);
+					}
+					
 				} else {
 					//the overlay takes an extra param telling it that its the overlay
 					constructor = gameClass.getConstructor(Player.class, NetworkClient.class, Boolean.class);
 					game = constructor.newInstance(player, client, asOverlay);
 				}
-
-				System.err.println("a new " + id + " returned");
 
 				return game;
 			}

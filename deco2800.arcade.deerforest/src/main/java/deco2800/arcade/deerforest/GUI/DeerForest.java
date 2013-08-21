@@ -60,6 +60,7 @@ public class DeerForest extends GameClient implements UIOverlay {
 
 	@Override
 	public void render() {
+		Gdx.input.setInputProcessor(inputProcessor);
 		super.render();
 	}
 	

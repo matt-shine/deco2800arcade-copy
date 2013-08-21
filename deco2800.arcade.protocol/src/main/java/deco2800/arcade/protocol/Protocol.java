@@ -33,6 +33,12 @@ public class Protocol {
 		kryo.register(AddAchievementRequest.class);
 		kryo.register(AchievementsForIDsRequest.class);
 		kryo.register(AchievementsForIDsResponse.class);
+		kryo.register(AchievementsForGameRequest.class);
+		kryo.register(AchievementsForGameResponse.class);
+		kryo.register(IncrementProgressRequest.class);
+		kryo.register(IncrementProgressResponse.class);
+		kryo.register(ProgressForPlayerRequest.class);
+		kryo.register(ProgressForPlayerResponse.class);
 		
 		//Game messages
 		kryo.register(GameStatusUpdate.class);

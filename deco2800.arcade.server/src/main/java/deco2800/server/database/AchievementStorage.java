@@ -17,33 +17,6 @@ import deco2800.arcade.model.Game;
  * I added a comment here :)
  */
 public class AchievementStorage {
-	
-	/**
-	 * Creates the Achievements table and sets initialised to TRUE on completion
-	 * 
-	 * @throws	DatabaseException	If SQLException occurs. 
-	 */
-	public  void initialise() throws DatabaseException{
-
-		//Get a connection to the database
-		Connection connection = Database.getConnection();
-
-		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "ACHIEVEMENTS", null);
-			if (!tableData.next()){
-				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE ACHIEVEMENTS(id VARCHAR(255) PRIMARY KEY," +
-						"GAME_ID INT NOT NULL," +
-						"NAME VARCHAR(30) NOT NULL," +
-						"DESC VARCHAR(50) NOT NULL," + 
-						"ICON VARCHAR(255) NOT NULL," +
-						"AWARDPROGRESS INT NOT NULL)");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create achievements table", e);
-		}
-	}
 
 	/**
 	 * Creates the Achievement table and sets initialised to TRUE on completion
@@ -54,26 +27,12 @@ public class AchievementStorage {
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
+			
+		// TODO Peter this gets called when the server is started, called from
+		// server/server/ArcadeServer.java had to delete some code so it would 
+		//compile, refer to CreditStorage for an example of this code
+			
 
-		try {
-			
-			// TODO Peter this gets called when the server is started, called from
-			// server/server/ArcadeServer.java below is the creditstorage code
-			// (Copied this from credit storage)
-			
-			/*
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "CREDITS", null);
-			if (!tableData.next()){
-				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE CREDITS(id INT PRIMARY KEY," +
-						"USERNAME VARCHAR(30) NOT NULL," +
-						"CREDITS INT NOT NULL)");
-			}
-			*/
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create achievements table", e);
-		}
 	}
 	
     /**

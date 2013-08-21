@@ -26,11 +26,11 @@ public class AchievementListener extends Listener {
 			
 			//try {
 				//database look up
-				ArrayList<Achievement> achievements = ArcadeServer.instance().getAchievementStorage().achievementsForIDs(achievementIDs);
+//				ArrayList<Achievement> achievements = ArcadeServer.instance().getAchievementStorage().achievementsForIDs(achievementIDs);
 
 				AchievementsForIDsResponse achievementsForIDsResponse = new AchievementsForIDsResponse();
 
-				achievementsForIDsResponse.achievements = achievements;
+//				achievementsForIDsResponse.achievements = achievements;
 				/*
 				if (result == null){
 					creditBalanceResponse.balance = -1;

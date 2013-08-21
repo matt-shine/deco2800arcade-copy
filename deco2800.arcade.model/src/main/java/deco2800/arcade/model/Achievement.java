@@ -13,7 +13,7 @@ public class Achievement {
     public final String name;
 	public final String description;
     public final int awardThreshold;
-	public final Icon icon;
+	public final String icon;
     
     /**
      * Constructs an Achievement from the supplied arguments.
@@ -28,11 +28,26 @@ public class Achievement {
             String name, 
             String description,
             int awardThreshold, 
-            Icon icon) {
+            String icon //Temporarily changed to String
+            ) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.awardThreshold = awardThreshold;
         this.icon = icon;
     }
+	
+	/**
+	 * Returns the name of an Achievement
+	 * @author PeterHsieh 
+	 * 
+	 * @return String
+	 * 
+	 */
+	
+	// Just used for debugging purposes
+	
+	public String getName() {
+		return this.name;
+	}
 }

@@ -10,7 +10,7 @@ import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public abstract class AbstractCardCollection implements CardCollection {
 	
-	private List<AbstractCard> cardList;
+	protected List<AbstractCard> cardList;
 	
 	public AbstractCardCollection() {
 		cardList = new ArrayList<AbstractCard>();
@@ -165,24 +165,24 @@ public abstract class AbstractCardCollection implements CardCollection {
 		AbstractCard currentCard;
 		
 		for (int i = 0; i < number; i++) {
-			// Get a random number
-			
-			int min = 0;
-			int max = cardList.size();
-			
-			int n = min + (int)(Math.random() * ((max - min) + 1));
-			currentCard = cardList.get(n);
-			
-			if (currentCard != null) {
-				cardsDestroyed.add(currentCard);
+			if (!isEmpty()) {
+				// Get a random number
+				
+				int min = 0;
+				int max = cardList.size() - 1;
+				
+				int n = min + (int)(Math.random() * ((max - min) + 1));
+				currentCard = cardList.get(n);
+				
+				if (currentCard != null) {
+					if (remove(currentCard)) {
+						cardsDestroyed.add(currentCard);
+					}
+				}
 			}
 		}
 		
 		return cardsDestroyed;
-	}
-	
-	public void setCardList(List<AbstractCard> cardList) {
-		this.cardList = cardList;
 	}
 
 }

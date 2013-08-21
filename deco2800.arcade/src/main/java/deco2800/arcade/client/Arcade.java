@@ -171,7 +171,7 @@ public class Arcade extends JFrame {
 		this.player = new Player();
 		this.player.setUsername(username);
 
-		this.communicationNetwork.createInterface();
+		//this.communicationNetwork.createInterface();
 	}
 
 	/**

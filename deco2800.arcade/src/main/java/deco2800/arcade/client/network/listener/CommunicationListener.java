@@ -36,8 +36,8 @@ public class CommunicationListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof TextMessage){
-			 TextMessage textMessage = (TextMessage) object;
-			 communicationNetwork.updateText(textMessage.text);
+			 //TextMessage textMessage = (TextMessage) object;
+			 //communicationNetwork.updateText(textMessage.text);
 		}
 	}
 	

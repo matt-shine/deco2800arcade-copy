@@ -13,11 +13,22 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="raiden")
 public class raiden extends GameClient {
 	
+	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	//Network client for communicating with the server.
+	//Should games reuse the client of the arcade somehow? Probably!
+	private NetworkClient networkClient;
+	private enum GameState {
+		READY,
+		INPROGRESS,
+		GAMEOVER
+	}
+	
 	public raiden(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		// TODO Auto-generated constructor stub
+		players[0] = player.getUsername();
+		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
+        this.networkClient = networkClient; //this is a bit of a hack
 	}
-
 	/**
 	 * Creates the game
 	 */

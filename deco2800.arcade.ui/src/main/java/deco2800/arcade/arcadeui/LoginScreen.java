@@ -67,10 +67,15 @@ public class LoginScreen extends GameScreen {
 	    
 	    batch.begin();
 	    font.setColor(Color.BLACK);
-	    font.draw(batch, "This is the login screen. Press space to log in as 'debuguser'.", 110, 110);
+	    font.draw(batch, "Press 'm' for multiplayer, or 's' for single player", 110, 110);
+	    font.draw(batch, "NOTE: right now m and s do the same thing.", 110, 150);
 	    batch.end();
 	    
-	    if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+	    if (Gdx.input.isKeyPressed(Keys.M)) {
+	    	ArcadeSystem.login("debuguser");
+	    }
+	    
+	    if (Gdx.input.isKeyPressed(Keys.S)) {
 	    	ArcadeSystem.login("debuguser");
 	    }
 	    

@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.models.effects;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +144,7 @@ public abstract class AbstractEffect {
 	 * 			- Amount to affect by (can be negative for losing lifepoints / shield)
 	 * 
 	 */
-	
+
 	private Set<String> typeEffects;
 	private List<String> effectCategories;
 	private List<? extends List<Integer>> effectParams;
@@ -517,5 +518,44 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((effectCategories == null) ? 0 : effectCategories.hashCode());
+		result = prime * result
+				+ ((effectParams == null) ? 0 : effectParams.hashCode());
+		result = prime * result
+				+ ((typeEffects == null) ? 0 : typeEffects.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractEffect other = (AbstractEffect) obj;
+		if (effectCategories == null) {
+			if (other.effectCategories != null)
+				return false;
+		} else if (!effectCategories.equals(other.effectCategories))
+			return false;
+		if (effectParams == null) {
+			if (other.effectParams != null)
+				return false;
+		} else if (!effectParams.equals(other.effectParams))
+			return false;
+		if (typeEffects == null) {
+			if (other.typeEffects != null)
+				return false;
+		} else if (!typeEffects.equals(other.typeEffects))
+			return false;
+		return true;
+	}
 }

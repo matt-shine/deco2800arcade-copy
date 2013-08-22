@@ -25,6 +25,7 @@ import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
 import com.test.game.model.Follower;
 import com.test.game.model.MovableEntity;
+import com.test.game.model.MovablePlatform;
 import com.test.game.model.Ship;
 import com.test.game.model.Sword;
 import com.test.game.model.Walker;
@@ -62,6 +63,7 @@ public class WorldRenderer {
 	private Bullet b;
 	private Enemy e;
 	private Array<CutsceneObject> csObjects;
+	private Array<MovablePlatform> mvPlatforms;
 	
 	//attempting to use maps
 	TiledMapRenderer tileMapRenderer;
@@ -145,6 +147,7 @@ public class WorldRenderer {
 		enemies = world.getEnemies();
 		bullets = world.getBullets();
 		csObjects = world.getCutsceneObjects();
+		mvPlatforms = world.getMovablePlatforms();
 		
 		//System.out.println("Sxy: " + ship.getPosition().x+","+ship.getPosition().y+" Cwh: "+cam.viewportWidth+","+cam.viewportHeight);
 		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
@@ -199,6 +202,11 @@ public class WorldRenderer {
 			batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth() /2, csObj.getHeight()/2,
 					csObj.getWidth(),csObj.getHeight(), 1, 1, csObj.getRotation(), 0, 0, csObj.getTexture().getWidth(),
 					csObj.getTexture().getHeight(), false, false);
+		}
+		for (MovablePlatform mvPlat: mvPlatforms) {
+			batch.draw(mvPlat.getTexture(), mvPlat.getPosition().x, mvPlat.getPosition().y, mvPlat.getWidth() /2, mvPlat.getHeight()/2,
+					mvPlat.getWidth(), mvPlat.getHeight(), 1, 1, mvPlat.getRotation(), 0, 0, mvPlat.getTexture().getWidth(),
+					mvPlat.getTexture().getHeight(), false, false);
 		}
 		
 		eItr = enemies.iterator();
@@ -276,8 +284,8 @@ public class WorldRenderer {
 			if (e.getClass() == Walker.class) {
 				for (int i=0; i<8; i++) {
 					WalkerPart wp = ((Walker)e).getPart(i);
-					System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
-					System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
+					//System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
+					//System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
 					
 					sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
 					

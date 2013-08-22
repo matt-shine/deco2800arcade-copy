@@ -17,10 +17,10 @@ public class Ship extends MovableEntity{
 	//public static final float WIDTH = 1f;
 	//public static final float HEIGHT = 1f;
 	public static final float JUMP_TIME = 0.2f;
-	public final float GRAVITY = -1f;
-	public final float MAX_FALL_VELOCITY = 14f;
-	public final float MAX_WALL_VELOCITY = 3f;
-	public final float WALL_ATTACH_TIME = 0.13f;
+	public static final float GRAVITY = -1f;
+	public static final float MAX_FALL_VELOCITY = 14f;
+	public static final float MAX_WALL_VELOCITY = 3f;
+	public static final float WALL_ATTACH_TIME = 0.13f;
 	
 	private State state=State.IDLE;
 	boolean facingRight = false;

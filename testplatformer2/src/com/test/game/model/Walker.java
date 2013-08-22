@@ -57,7 +57,7 @@ public class Walker extends Enemy{
 			keyFrame++;
 			frameCount = 0f;
 			if (keyFrame == 1) {
-				System.out.println("Keyframe 1");
+				//System.out.println("Keyframe 1");
 				Tween.to(parts.get(0), PartTween.POSITION_ROTATION,FRAME_LENGTH).target(getPosition().x+6.09f/64f, getPosition().y-28.696f/64f, 26.565f).ease(
 						TweenEquations.easeNone).start(manager);
 				Tween.to(parts.get(1), PartTween.POSITION_ROTATION,FRAME_LENGTH).target(getPosition().x+0.2898f/64f, getPosition().y-20.0f/64f, 28.369f).ease(
@@ -91,7 +91,7 @@ public class Walker extends Enemy{
 				Tween.to(parts.get(7), PartTween.POSITION_ROTATION,0.2f).target(getPosition().x+3.7f/32f, getPosition().y+16f/32f, 48.814f).ease(
 						TweenEquations.easeNone).start(manager);*/
 			} else if (keyFrame == 2 || keyFrame == 4) {
-				System.out.println("Keyframe 2");
+				//System.out.println("Keyframe 2");
 				Tween.to(parts.get(0), PartTween.POSITION_ROTATION,FRAME_LENGTH).target(getPosition().x+2.0f/64f, getPosition().y-25.8f/64f, 0f).ease(
 						TweenEquations.easeNone).start(manager);
 				Tween.to(parts.get(1), PartTween.POSITION_ROTATION,FRAME_LENGTH).target(getPosition().x+1.2f/64f, getPosition().y-17.1f/64f, 0f).ease(
@@ -110,7 +110,7 @@ public class Walker extends Enemy{
 						TweenEquations.easeNone).start(manager);
 				if (keyFrame == 4) keyFrame = 0;
 			} else if (keyFrame == 3) {
-				System.out.println("Keyframe 3");
+				//System.out.println("Keyframe 3");
 				Tween.to(parts.get(0), PartTween.POSITION_ROTATION,FRAME_LENGTH).target(getPosition().x-0.3f/64f, getPosition().y-23.29f/64f, 329.8f-360f).ease(
 						TweenEquations.easeNone).start(manager);
 				Tween.to(parts.get(1), PartTween.POSITION_ROTATION,FRAME_LENGTH).target(getPosition().x+2.3f/64f, getPosition().y-13.0f/64f, 330.1f-360f).ease(

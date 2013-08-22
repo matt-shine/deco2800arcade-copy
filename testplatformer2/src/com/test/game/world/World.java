@@ -5,6 +5,8 @@ package com.test.game.world;
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,6 +18,8 @@ import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
 import com.test.game.model.EnemySpawner;
 import com.test.game.model.Follower;
+import com.test.game.model.MovableEntity;
+import com.test.game.model.MovablePlatform;
 import com.test.game.model.Ship;
 import com.test.game.model.Ship.State;
 import com.test.game.model.Sword;
@@ -35,6 +39,7 @@ public class World {
 	Array<Bullet> bullets = new Array<Bullet>();
 	Array<EnemySpawner> spawners = new Array<EnemySpawner>();
 	private Array<CutsceneObject> cutsceneObjects = new Array<CutsceneObject>();
+	private Array<MovablePlatform> movablePlatforms = new Array<MovablePlatform>();
 	Iterator<Bullet> bItr;
 	Iterator<Enemy> eItr;
 	Iterator<EnemySpawner> sItr;
@@ -80,6 +85,12 @@ public class World {
 		
 		enemies.add(new Walker(new Vector2 (5f, 9f)));
 		System.out.println("Found " + spawners.size+" enemy spawners");
+		Texture copterTex = new Texture("data/copter.png");
+		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(0, 1), 4f, 2f, new Vector2(0,11), 5f, true, 1.5f));
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
+		
 	}
 	
 	public Ship getShip() {
@@ -97,11 +108,40 @@ public class World {
 	}
 	
 	public void update() {
+		
+		
 		ship.update(ship);
 		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
-		//follower.update(ship);
+		
+		boolean onMovable = false;
+		MovablePlatform onPlat = null;
+		sRec = ship.getProjectionRect();
+		//Check moving platform collisions
+		for (MovablePlatform mp: movablePlatforms) {
+			mp.update(ship);
+			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
+			if (sRec.overlaps(mp.getCollisionRectangle())) {
+				//System.out.println("moving ship");
+				ship.getPosition().add(mp.getPositionDelta());
+				//ship.getVelocity().add(mp.getPositionDelta());
+				//ship.getPosition().y -= Ship.GRAVITY * Gdx.graphics.getDeltaTime();
+				
+				//stop falling through the floor when going up if on the top of platform
+				float top = mp.getPosition().y +mp.getCollisionRectangle().height;
+				//System.out.println("****Poo*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
+				//if (mp.getPositionDelta().y > 0 && ship.getPosition().y < top + 2/32f && ship.getPosition().y > top-2/32f) {
+				if (ship.getPosition().y < top + 12/32f && ship.getPosition().y > top-12/32f) {
+					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
+					ship.getPosition().y = mp.getPosition().y+mp.getCollisionRectangle().height;
+					onMovable = true;
+					onPlat= mp;
+				}
+			}
+			//mp.update(ship);
+		}
+		
 		
 		//Check player to tile collisions
 		//get tiles near player
@@ -160,12 +200,41 @@ public class World {
 			}
 		}*/
 		//add the cutsceneobjects or movable platforms to the collisions
-		for (CutsceneObject csObj: cutsceneObjects) {
-			tiles.add(csObj.getCollisionRectangle());
+		for (MovablePlatform mvPlat: movablePlatforms) {
+			tiles.add(mvPlat.getCollisionRectangle());
 		}
+		
+		
+		/*sRec = ship.getYProjectionRect();
+		boolean tileUnderShip = false;
+		for (Rectangle tile:tiles) {
+			if (sRec.overlaps(tile)) {
+			//if (ship.getBounds().overlaps(tile)) {
+				
+				//to the bottom of player
+				if (ship.getVelocity().y <0 ) {
+					//System.out.println("Velocity: "+ship.getVelocity().y);
+					//System.out.println("DownCollision: " + sRec +" " + tile);
+					//ship.getPosition().y = tile.y + ship.getHeight();
+					//BUG: this collision is getting detected at the height of a jump against a wall when it shouldn't
+					ship.getPosition().y = tile.y +tile.height;
+					ship.getVelocity().y = 0;
+					if (ship.getVelocity().x == 0) {
+						ship.setState(State.IDLE);
+						
+					} else {
+						ship.setState(State.WALK);
+					}
+					System.out.println("after y state="+ship.getState());
+					tileUnderShip = true;
+				}
+			}
+		}*/
+		
 		sRec = ship.getXProjectionRect();
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
+			//if (ship.getBounds().overlaps(tile)) {
 				//ship.getVelocity().x = 0;
 				//System.out.println("Get knocked back from "+ship.getPosition().x + " by " + ship.getVelocity().x);
 				/*ship.getPosition().x -= ship.getVelocity().scl(Gdx.graphics.getDeltaTime()).x;
@@ -179,12 +248,14 @@ public class World {
 				}
 				
 				if (ship.getVelocity().y < 0) {
-					if (ship.getState() != State.WALL) sword.cancel();
+				//if (tileUnderShip || ship.getVelocity().y < 0) {
+					if (ship.getState() != State.WALL) sword.cancel(); //BUG: sword is getting cancelled while on ground against wall
 					//inputHandler.resetWallTime();
 					ship.setState(State.WALL);
 					ship.resetWallTime();
 					
 				}
+				//System.out.println("after x state="+ship.getState());
 				
 				break;
 			}
@@ -200,23 +271,31 @@ public class World {
 					//System.out.println("Velocity: "+ship.getVelocity().y);
 					//System.out.println("DownCollision: " + sRec +" " + tile);
 					//ship.getPosition().y = tile.y + ship.getHeight();
+					if (!onMovable) {
 					ship.getPosition().y = tile.y +tile.height;
 					ship.getVelocity().y = 0;
+					}
 					if (ship.getVelocity().x == 0) {
 						ship.setState(State.IDLE);
 					} else {
 						ship.setState(State.WALK);
 					}
+					//System.out.println("after y state="+ship.getState());
 					tileUnderShip = true;
+				}
+				if (ship.getVelocity().y > 0) {
+					ship.getPosition().y = tile.y -Ship.HEIGHT;
+					ship.getVelocity().y = 0;
 				}
 			}
 		}
 		
-		
 		if (!tileUnderShip && (ship.getState() == State.IDLE || ship.getState() == State.WALK)) {
 			ship.setState(State.JUMP);
 		}
-		
+		//System.out.println("after both state="+ship.getState());
+		//ship.update(ship);
+		//follower.update(ship);
 		eItr = enemies.iterator();
 		while(eItr.hasNext()) {
 			e = eItr.next();
@@ -225,13 +304,13 @@ public class World {
 			
 			//SWORD COLLISIONS
 			if (e.getBounds().overlaps(sword.getBounds())) {
-				System.out.println("C");
+				//System.out.println("C");
 				eItr.remove();
-				System.out.println("removed enemy");
+				//System.out.println("removed enemy");
 				for (EnemySpawner spns: spawners) {
 					spns.removeEnemy(e);
 				}
-				System.out.println("cleaned arrays");
+				//System.out.println("cleaned arrays");
 			}
 		}
 		bItr = bullets.iterator();
@@ -248,15 +327,15 @@ public class World {
 				//e.advance(Gdx.graphics.getDeltaTime(), ship);
 			
 				if(e.getBounds().overlaps(b.getBounds())){
-					System.out.println("C");
+					//System.out.println("C");
 					eItr.remove();
-					System.out.println("removed enemy");
+					//System.out.println("removed enemy");
 					bItr.remove();
-					System.out.println("removed bullet");
+					//System.out.println("removed bullet");
 					for (EnemySpawner spns: spawners) {
 						spns.removeEnemy(e);
 					}
-					System.out.println("cleaned arrays");
+					//System.out.println("cleaned arrays");
 				}
 			}
 		}
@@ -304,8 +383,14 @@ public class World {
 			if (ship.getPosition().x > scenePos[0]) {
 				inputHandler.cancelInput();
 				ship.getVelocity().x = 0;
-				Array<CutsceneObject> temp = levelScenes.start();
-				for (CutsceneObject c: temp) cutsceneObjects.add(c);
+				Array<MovableEntity> temp = levelScenes.start();
+				for (MovableEntity ment: temp) {
+					if (ment.getClass() == CutsceneObject.class) {
+						cutsceneObjects.add((CutsceneObject)ment);
+					} else if (ment.getClass() == MovablePlatform.class) {
+						movablePlatforms.add((MovablePlatform)ment);
+					}
+				}
 			}
 		}
 	}
@@ -318,6 +403,9 @@ public class World {
 	}
 	public Array<CutsceneObject> getCutsceneObjects() {
 		return cutsceneObjects;
+	}
+	public Array<MovablePlatform> getMovablePlatforms() {
+		return movablePlatforms;
 	}
 	
 	public void setRenderer(WorldRenderer wr) {

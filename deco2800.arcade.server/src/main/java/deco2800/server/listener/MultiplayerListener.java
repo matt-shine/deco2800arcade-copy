@@ -31,17 +31,23 @@ public class MultiplayerListener extends Listener {
 		
 		//Fill out map
 		if (object instanceof NewMultiGameRequest) {
+			
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
 			String username = multiRequest.username;
 			String gameId = multiRequest.gameId;
 			GameRequestType requestType = multiRequest.requestType;
 			Connection connectTo = multiRequest.connectTo;
 			
-			switch (requestType){
+			switch (multiRequest.requestType){
 			case NEW:
 				handleNewMultiRequest(connection, username, gameId, connectTo);
+				break;
+			case JOIN:
+				handleJoinMultiRequest();
+				break;
+			default:
+				break;
 			}	
-			
 		}
 	}
 	
@@ -64,6 +70,10 @@ public class MultiplayerListener extends Listener {
 		}
 		
 		return;
+	}
+	
+	private void handleJoinMultiRequest() {
+		
 	}
 	
 	

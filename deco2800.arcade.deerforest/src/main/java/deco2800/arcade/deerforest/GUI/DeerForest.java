@@ -40,6 +40,7 @@ public class DeerForest extends GameClient implements UIOverlay {
 		
 		//set up input processor
 		inputProcessor = new MainInputProcessor(gam, view);
+		//ArcadeInputMux.getInstance().addProcessor(inputProcessor);
 		Gdx.input.setInputProcessor(inputProcessor);
 	}
 

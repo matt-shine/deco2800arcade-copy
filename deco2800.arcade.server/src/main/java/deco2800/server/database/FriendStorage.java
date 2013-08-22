@@ -113,4 +113,94 @@ public class FriendStorage {
 		}
 		return result;
 	}
+	
+	/**
+	 * Adds a player-friend relationship to the FRIENDS table
+	 * 
+	 * @param playerID
+	 * 			The playerID of the player adding the friend
+	 * @param friendID
+	 * 			The playerID of the friend who is being added
+	 * @throws DatabaseException
+	 */
+	public void addFriend(int playerID, int friendID) throws DatabaseException {
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		try {
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS");
+			// add friendID as a friend for playerID
+			resultSet.moveToInsertRow();
+			resultSet.updateInt("U1", playerID);
+			resultSet.updateInt("U2", friendID);
+			resultSet.insertRow();
+			
+			//add playerID as a friend for friendID
+			resultSet.moveToInsertRow();
+			resultSet.updateInt("U1", friendID);
+			resultSet.updateInt("U2", playerID);
+			resultSet.insertRow();
+			resultSet.moveToCurrentRow();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			//clean up JDBC objects
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void removeFriend(int playerID, int friendID) throws DatabaseException {
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		try {
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS");
+			while (resultSet.next()) {
+				int player = resultSet.getInt("U1");
+				int friend = resultSet.getInt("U2");
+				// delete the two way relationship between player and friend
+				if (player == playerID && friend == friendID) {
+					resultSet.deleteRow();
+				} if (friend == playerID && player == friendID){
+					resultSet.deleteRow();
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			//clean up JDBC objects
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 }

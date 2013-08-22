@@ -4,9 +4,9 @@ import deco2800.arcade.client.replay.exception.ReplayItemDataInvalidException;
 
 public class ReplayItem {
 	
-	public static final Integer TYPE_INTEGER = 1;
-	public static final Integer TYPE_FLOAT = 2;
-	public static final Integer TYPE_STRING = 3;
+	public static final int TYPE_INTEGER = 1;
+	public static final int TYPE_FLOAT = 2;
+	public static final int TYPE_STRING = 3;
 
 	private Integer type;
 	private Object data;

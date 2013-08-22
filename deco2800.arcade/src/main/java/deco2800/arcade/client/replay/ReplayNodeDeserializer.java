@@ -38,13 +38,13 @@ public class ReplayNodeDeserializer implements JsonDeserializer<ReplayNode> {
 	    	 * thats a massive no-no.
 	    	 */
 	    	switch( entryObject.get( "type" ).getAsInt() ) {
-	    	case 1:
+	    	case ReplayItem.TYPE_INTEGER:
 	    		item = new ReplayItem( entryObject.get( "data" ).getAsInt() );
 	    		break;
-	    	case 2:
+	    	case ReplayItem.TYPE_FLOAT:
 	    		item = new ReplayItem( entryObject.get( "data" ).getAsFloat() );
 	    		break;
-	    	case 3:
+	    	case ReplayItem.TYPE_STRING:
 	    		item = new ReplayItem( entryObject.get( "data" ).getAsString() );
 	    		break;
 	    	default:

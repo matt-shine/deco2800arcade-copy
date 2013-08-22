@@ -3,8 +3,6 @@ package deco2800.arcade.client.replay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
 
-import com.google.gson.*;
-
 public class ReplaySystemDemo {
 
 	public ReplaySystemDemo() {

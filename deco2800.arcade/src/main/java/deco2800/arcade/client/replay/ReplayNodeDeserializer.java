@@ -33,25 +33,40 @@ public class ReplayNodeDeserializer implements JsonDeserializer<ReplayNode> {
 	    	
 	    	JsonObject entryObject = entry.getValue().getAsJsonObject();
 
-	    	switch( entryObject.get( "type" ).getAsInt() ) {
-	    	case ReplayItem.TYPE_INTEGER:
-	    		item = new ReplayItem( entryObject.get( "data" ).getAsInt() );
-	    		break;
-	    	case ReplayItem.TYPE_FLOAT:
-	    		item = new ReplayItem( entryObject.get( "data" ).getAsFloat() );
-	    		break;
-	    	case ReplayItem.TYPE_STRING:
-	    		item = new ReplayItem( entryObject.get( "data" ).getAsString() );
-	    		break;
-	    	default:
-	    		// TODO: make our own exception
-	    		throw new ClassCastException( "Could not cast JSON string to ReplayNode" );
-	    	} 
+	    	item = getReplayItem( entryObject.get( "type" ).getAsInt(), entryObject );
 	    	
 	    	node.addItem( itemType, item );
 	    }
 	    
 	    return node;
+	}
+	
+	/**
+	 * Create a {@link ReplayItem} given the type expected and the Json representation.
+	 * @param type 
+	 * @param entryObject
+	 * @return
+	 */
+	private ReplayItem getReplayItem(int type, JsonObject entryObject)
+	{
+	    ReplayItem temp = null;
+	    
+        switch( type ) {
+        case ReplayItem.TYPE_INTEGER:
+            temp = new ReplayItem( entryObject.get( "data" ).getAsInt() );
+            break;
+        case ReplayItem.TYPE_FLOAT:
+            temp = new ReplayItem( entryObject.get( "data" ).getAsFloat() );
+            break;
+        case ReplayItem.TYPE_STRING:
+            temp = new ReplayItem( entryObject.get( "data" ).getAsString() );
+            break;
+        default:
+            // TODO: make our own exception
+            throw new ClassCastException( "Could not cast JSON string to ReplayNode" );
+        }
+        
+        return temp;
 	}
 	
 }

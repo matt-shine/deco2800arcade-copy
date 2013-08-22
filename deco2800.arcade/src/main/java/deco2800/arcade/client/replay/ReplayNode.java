@@ -28,6 +28,13 @@ public class ReplayNode {
 	    this.items = items;
 	}
 	
+	public ReplayNode( String type, long timeOffset ) {
+		this.nodeTime = timeOffset;
+		this.type = type;
+		
+		items = new HashMap<String, ReplayItem>();
+	}
+	
 	/*
 	 * TODO: create from flattened string
 	 */

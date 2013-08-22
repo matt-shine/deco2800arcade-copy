@@ -3,6 +3,8 @@ package deco2800.arcade.client.replay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
 
+import com.google.gson.*;
+
 public class ReplaySystemDemo {
 
 	public ReplaySystemDemo() {
@@ -13,22 +15,22 @@ public class ReplaySystemDemo {
 	{
 	    return new ReplayEventListener() {
             public void replayEventReceived( String eType, Object eData ) {
-                if ( eType == "node_pushed" ) {
+                if ( eType.equals( "node_pushed" ) ) {
                     System.out.println( eType );
                     System.out.println( eData );
                 }
-                if ( eType == "event_pushed" ) {
+                if ( eType.equals( "event_pushed" ) ) {
                     System.out.println( eType );
                     //System.out.println( eData );
                 }
-                if ( eType == "replay_reset" ) {
+                if ( eType.equals( "replay_reset" ) ) {
                     System.out.println( "replay reset" );
                 }
-                if ( eType == "playback_finished" ) {
+                if ( eType.equals( "playback_finished" ) ) {
                     System.out.println( "playback finished" );
                 }
                 
-                if ( eType == "piece_move" ) {
+                if ( eType.equals( "piece_move" ) ) {
                     System.out.println( "Move: " + eData );
                 }
             }

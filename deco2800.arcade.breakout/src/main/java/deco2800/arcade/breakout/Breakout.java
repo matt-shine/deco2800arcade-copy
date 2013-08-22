@@ -94,7 +94,7 @@ public class Breakout extends GameClient {
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 8; j++) {
 				bricks[index] = new Brick(j * 80 + 80, SCREENHEIGHT - i * 20
-						- 40);
+						- 80);
 				index++;
 			}
 		}
@@ -172,11 +172,11 @@ public class Breakout extends GameClient {
 		// Writes in the text information
 		batch.begin();
 		font.setColor(Color.GREEN);
-		font.draw(batch, player, SCREENWIDTH / 2, SCREENHEIGHT / 2);
-		font.draw(batch, "Life " + Integer.toString(lives),
-				SCREENWIDTH / 2 + 50, SCREENHEIGHT / 2 + 50);
+		font.draw(batch, "player " + player, 20,460);
+		font.draw(batch,"Life " + Integer.toString(lives),
+				SCREENWIDTH/2, 460);
 		font.draw(batch, "Score " + Integer.toString(score),
-				SCREENWIDTH / 2 - 50, SCREENHEIGHT / 2 - 50);
+				600, 460);
 		batch.end();
 
 		switch (gameState) {

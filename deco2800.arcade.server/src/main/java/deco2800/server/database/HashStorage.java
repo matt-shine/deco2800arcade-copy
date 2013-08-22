@@ -56,12 +56,10 @@ public class HashStorage {
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE AUTH(playerID INT PRIMARY KEY,"
-								+ "hash BINARY(512),"
-								+ "salt BINARY(8),"
-								+ "CONSTRAINT PLAYER_FK"
+								+ "hash BLOB(64),"
+								+ "salt BLOB(8),"
 								+ "FOREIGN KEY (playerID)"
-								+ "REFERENCES PLAYERS (playerID));");
-				//TODO: check datatypes of hash and salt
+								+ "REFERENCES PLAYERS (playerID))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -90,9 +88,9 @@ public class HashStorage {
 		try {
 			PreparedStatement statement = null;
 			statement = connection.prepareStatement("INSERT INTO AUTH "
-					+ "(playerID, hash, salt) values ("
+					+ "(playerID, hash, salt) values (("
 					+ "SELECT playerID FROM PLAYERS WHERE username = "
-					+ "?), ?, ?);");
+					+ "?), ?, ?)");
 			statement.setString(1, username);
 			statement.setBytes(2, hash);
 			statement.setBytes(3, salt);
@@ -228,7 +226,7 @@ public class HashStorage {
 		}
 
 		/* Generate 64-bit salt */
-		byte[] salt = new byte[64];
+		byte[] salt = new byte[8];
 		random.nextBytes(salt);
 
 		return salt;

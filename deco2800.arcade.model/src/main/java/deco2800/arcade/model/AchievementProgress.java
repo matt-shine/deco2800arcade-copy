@@ -1,17 +1,16 @@
 package deco2800.arcade.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Player;
 
 public class AchievementProgress {
     
-    private Player player;
-    private HashMap<String, Integer> progress;
+    //private Player player;
+    //private HashMap<String, Integer> progress;
 
     public AchievementProgress(Player player) {
-        this.player = player;
+        //this.player = player;
         //this.progress = progress;
     }
     

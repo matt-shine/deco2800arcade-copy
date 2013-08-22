@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
-import java.util.Set;
 
 public class Game {
 
@@ -36,7 +35,9 @@ public class Game {
 	public String name; //A human-readable name for the game
 	
 	public String description; //The description for the game
-		
+
+    public Icon icon; //A game Icon
+
 	public int pricePerPlay = 1;
 	
 	/**

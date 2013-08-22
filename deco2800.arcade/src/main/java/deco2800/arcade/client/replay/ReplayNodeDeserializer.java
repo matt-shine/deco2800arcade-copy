@@ -32,11 +32,7 @@ public class ReplayNodeDeserializer implements JsonDeserializer<ReplayNode> {
 	    	String itemType = entry.getKey();
 	    	
 	    	JsonObject entryObject = entry.getValue().getAsJsonObject();
-	    	/* Would like to find a better solution to this, but the constants
-	    	 * declared in ReplayItem aren't known at compile time (somehow) so 
-	    	 * the compiler complains. Not sure if we can just suppress, or if
-	    	 * thats a massive no-no.
-	    	 */
+
 	    	switch( entryObject.get( "type" ).getAsInt() ) {
 	    	case ReplayItem.TYPE_INTEGER:
 	    		item = new ReplayItem( entryObject.get( "data" ).getAsInt() );

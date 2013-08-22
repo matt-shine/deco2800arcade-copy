@@ -130,7 +130,7 @@ public class CardCollectionListTest {
 		Assert.assertEquals(1, ccl.size());
 		Assert.assertTrue(ccl.contains(c1));
 	}
-	
+	/*
 	@Test
 	public void destroyCardTypeTest() {
 		
@@ -167,7 +167,7 @@ public class CardCollectionListTest {
 		
 		Assert.assertEquals(ccl2.cards(), ccl.destroyCardType("monster").cards());
 	}
-	
+	*/
 	@Test
 	public void destroyRandomTest() {
 		CardCollectionList ccl = new CardCollectionList();

@@ -134,7 +134,7 @@ public class DeckTest {
 		Assert.assertEquals(1, d.size());
 		Assert.assertTrue(d.contains(c1));
 	}
-	
+	/*
 	@Test
 	public void destroyCardTypeTest() {
 		d.add(c4);
@@ -151,7 +151,7 @@ public class DeckTest {
 		// Assert the only remaining cards are c1, c2 and c3
 		Assert.assertEquals(3, d.size());
 		Assert.assertFalse(d.contains(c4));
-	}
+	}*/
 	
 	@Test
 	public void drawTest() {
@@ -179,7 +179,7 @@ public class DeckTest {
 		Assert.assertTrue(d.isEmpty());
 		
 	}
-	
+	/*
 	@Test
 	public void shuffleTest() {
 		
@@ -194,4 +194,5 @@ public class DeckTest {
 		// Make sure there is still the same number of cards
 		Assert.assertTrue(d.size() == 3);
 	}
+	*/
 }

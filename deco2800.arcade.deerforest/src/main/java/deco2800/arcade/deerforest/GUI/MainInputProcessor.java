@@ -78,6 +78,7 @@ public class MainInputProcessor implements InputProcessor {
     	if(currentSelection != null) {
     		view.getArena().removeSprite(currentSelection);
     		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
+    		return true;
     	}
         return false;
     }

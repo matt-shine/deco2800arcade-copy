@@ -3,6 +3,7 @@ package deco2800.arcade.deerforest.GUI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -142,19 +143,18 @@ public class Arena extends Sprite {
 		double rightSide;
 		double topSide;
 		double bottomSide;
-		
-		for(String key : zones.keySet()) {
-			for(Rectangle r : zones.get(key).keySet()) {
+		// TODO make it get correct map for player / field
+		Map<Rectangle, ExtendedSprite> mapToCheck = zones.get("P1MonsterZones");
+			for(Rectangle r : mapToCheck.keySet()) {
 				leftSide = r.getX();
 				rightSide = r.getX() + r.getWidth();
 				topSide = r.getY();
 				bottomSide = r.getY() + r.getHeight();
 				
-				if(x > leftSide && x < rightSide && y > topSide && y < bottomSide && zones.get(key).get(r) == null) {
+				if(x > leftSide && x < rightSide && y > topSide && y < bottomSide && mapToCheck.get(r) == null) {
 					return r;
 				}
 			}
-		}
 		
 		return null;
 	}

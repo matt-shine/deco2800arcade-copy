@@ -10,14 +10,14 @@ import deco2800.arcade.deerforest.models.effects.MonsterEffect;
 
 public class GameSystem {
 
-	private Player p1;
-	private Player p2;
+	private DeerForestPlayer p1;
+	private DeerForestPlayer p2;
 	private String currentPhase = null;
-	private Player currentPlayer = null;
+	private DeerForestPlayer currentPlayer = null;
 	private List<AbstractCard> selectionChoices = null;
 	
 	//Initialize the game, should get player data from controller (note players own their deck)
-	public GameSystem(Player player1, Player player2) {
+	public GameSystem(DeerForestPlayer player1, DeerForestPlayer player2) {
 		p1 = player1;
 		p2 = player2;
 	}
@@ -40,7 +40,7 @@ public class GameSystem {
 	}
 
 	//returns the player whose turn it is
-	public Player currentPlayer() {
+	public DeerForestPlayer currentPlayer() {
 		return currentPlayer;
 	}
 
@@ -88,7 +88,7 @@ public class GameSystem {
 	}
 
 	//Checks if either player has won, returns victor if exists
-	public Player checkVictory() {
+	public DeerForestPlayer checkVictory() {
 		return null;
 	}
 	
@@ -110,7 +110,7 @@ public class GameSystem {
 	 * @param p Player to summon monster to 
 	 * @return error code
 	 */
-	public int summon(AbstractMonster monster, Player p) {
+	public int summon(AbstractMonster monster, DeerForestPlayer p) {
 		return 0;
 	}
 	
@@ -129,7 +129,7 @@ public class GameSystem {
 	 * @param player player that activated the card
 	 * @return error code
 	 */
-	public int activate(FieldSpell fSpell, Player p) {
+	public int activate(FieldSpell fSpell, DeerForestPlayer p) {
 		return 0;
 	}
 
@@ -146,7 +146,7 @@ public class GameSystem {
 	 * @param p Player who activated card
 	 * @return error code
 	 */
-	public int activate(GeneralSpell gSpell, Player p) {
+	public int activate(GeneralSpell gSpell, DeerForestPlayer p) {
 		return 0;
 	}
 
@@ -163,7 +163,7 @@ public class GameSystem {
 	 * @param p Player who owns monster
 	 * @return error code
 	 */
-	public int activateMonsterEffect(MonsterEffect effect, Player p) {
+	public int activateMonsterEffect(MonsterEffect effect, DeerForestPlayer p) {
 		return 0;
 	}
 	
@@ -194,7 +194,7 @@ public class GameSystem {
 	}
 	
 	//Select card to destroy
-	public boolean destroyCard (Player p, CardCollection cardLocation, AbstractCard card) {
+	public boolean destroyCard (DeerForestPlayer p, CardCollection cardLocation, AbstractCard card) {
 		return false;
 	}
 
@@ -216,7 +216,7 @@ public class GameSystem {
 	}
 	
 	//Sort graveyard
-	public void sortGrave(Player p) {
+	public void sortGrave(DeerForestPlayer p) {
 		p.getGraveyard().sort();
 	}
 

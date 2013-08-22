@@ -6,9 +6,6 @@ public class TileModel {
 	
 	private WallModel[] walls;
 	
-	private PlayerModel boxer;
-	private ItemModel spawnedItem;
-	
 	public int getX() {
 		return tileX;
 	}
@@ -21,22 +18,14 @@ public class TileModel {
 		return walls[direction];
 	}
 	
-	public boolean hasWall(int direction) {
-		return walls[direction] != null;
-	}
-	
-	public boolean buildWall(int direction) {
-		if(hasWall(direction)) {
-			return false;
-		}
-		
-		walls[direction] = new WallModel();
-		return true;
-	}
-	
 	public TileModel(int x, int y) {
 		tileX = x;
 		tileY = y;
-		walls = new WallModel[4];
+		walls = new WallModel[] {
+			new WallModel(),
+			new WallModel(),
+			new WallModel(),
+			new WallModel()
+		};
 	}
 }

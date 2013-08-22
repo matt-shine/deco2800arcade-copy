@@ -21,4 +21,8 @@ public class Direction {
 	public static boolean isSouth(int direction) {
 		return direction == SOUTH;
 	}
+	
+	public static boolean isDirection(int direction) {
+		return isWest(direction) || isNorth(direction) || isEast(direction) || isSouth(direction);
+	}
 }

@@ -37,8 +37,7 @@ public class MixMazeViewModel implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.setViewport(800, 640, true);
-		stage.getCamera().translate(-stage.getGutterWidth(),
-				-stage.getGutterHeight(), 0);
+		stage.getCamera().translate(-stage.getGutterWidth(), -stage.getGutterHeight(), 0);
 	}
 
 	@Override
@@ -60,16 +59,25 @@ public class MixMazeViewModel implements Screen {
 		model = new MixMazeModel(5, 5);
 		stage = new Stage();
 		table = new Table();
-		table.setFillParent(true);
 		tileTable = new Table();
-		table.add(tileTable)
-			.bottom()
-			.left()
-			.expand()
-			.fill()
-			.width(640)
-			.height(640);
-		stage.addActor(table);
 		
+		// Initialize tiles
+		for(int i = 0; i < model.getBoardHeight(); ++i) {
+			for(int j = 0; j < model.getBoardWidth(); ++j) {
+				tileTable.add(new TileViewModel(model.getTile(i, j)))
+						.width(128)
+						.height(128);
+			}
+			tileTable.row();
+		}
+		table.setFillParent(true);
+		table.add(tileTable)
+				.bottom()
+				.left()
+				.expand()
+				.fill()
+				.width(640)
+				.height(640);
+		stage.addActor(table);
 	}
 }

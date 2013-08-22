@@ -3,7 +3,6 @@ package deco2800.arcade.mixmaze.domain;
 public class TileModel {
 	private int tileX;
 	private int tileY;
-	
 	private WallModel[] walls;
 	
 	public int getX() {
@@ -15,6 +14,9 @@ public class TileModel {
 	}
 	
 	public WallModel getWall(int direction) {
+		if(!Direction.isDirection(direction)) {
+			throw new IllegalArgumentException("The specified direction is out of range.");
+		}
 		return walls[direction];
 	}
 	

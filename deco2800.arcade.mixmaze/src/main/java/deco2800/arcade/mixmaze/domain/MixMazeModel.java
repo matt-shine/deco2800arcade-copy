@@ -16,8 +16,16 @@ public class MixMazeModel {
 		return player2;
 	}
 	
-	public TileModel[][] getTiles() {
-		return board;
+	public int getBoardWidth() {
+		return boardWidth;
+	}
+	
+	public int getBoardHeight() {
+		return boardHeight;
+	}
+	
+	public TileModel getTile(int row, int col) {
+		return board[row][col];
 	}
 	
 	public MixMazeModel(int width, int height) {

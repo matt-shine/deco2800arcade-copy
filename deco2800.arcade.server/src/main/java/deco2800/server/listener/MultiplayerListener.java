@@ -63,10 +63,15 @@ public class MultiplayerListener extends Listener {
 			queueSession.put(gameId, userConnection);
 			return;
 		} else {
-			connection.sendTCP(connectTo);
-			connection.sendTCP(NewMultiResponse.OK);
-			connectTo.sendTCP(connection);
+			Map<String, Connection[]> player2 = queueSession.get(gameId);
+			String player2Name = (String) player2.keySet().toArray()[0];
+			Connection[] player2Connections = player2.get(player2Name);
+			connectTo.sendTCP(connection);			
 			connectTo.sendTCP(NewMultiResponse.OK);
+			connection.sendTCP(NewMultiResponse.OK);
+			player2Connections[1].sendTCP(player2Connections[0]);
+			player2Connections[1].sendTCP(NewMultiResponse.OK);
+			player2Connections[0].sendTCP(NewMultiResponse.OK);
 		}
 		
 		return;

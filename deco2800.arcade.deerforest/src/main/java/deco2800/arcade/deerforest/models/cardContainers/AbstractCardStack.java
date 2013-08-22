@@ -58,19 +58,20 @@ public abstract class AbstractCardStack implements CardStack {
 	public CardCollection destroyCardType(String type) {
 		
 		// New empty list
-		CardCollectionList cardsDestroyed = new CardCollectionList();
+		List<AbstractCard> cardsToDestroy = new ArrayList<AbstractCard>();
+		// New empty list
+		CardCollection cardsDestroyed = new CardCollectionList();
 		
 		// For each card
 		for (AbstractCard card: cardList) {
 			// If the card is of the given type
 			if (card.getCardType().equals(type)) {
-				// Try and remove the card
-				if (cardList.remove(card)) {
-					// If it's removed add it to the list of removed cards
-					cardsDestroyed.add(card);
-				}
+				cardsToDestroy.add(card);
 			}
 		}
+		
+		cardsDestroyed = destroyCards(cardsToDestroy);
+		
 		// Return list of cards destroyed 
 		return cardsDestroyed;
 	}
@@ -92,16 +93,20 @@ public abstract class AbstractCardStack implements CardStack {
 		AbstractCard currentCard;
 		
 		for (int i = 0; i < number; i++) {
-			// Get a random number
-			
-			int min = 0;
-			int max = cardList.size();
-			
-			int n = min + (int)(Math.random() * ((max - min) + 1));
-			currentCard = cardList.get(n);
-			
-			if (currentCard != null) {
-				cardsDestroyed.add(currentCard);
+			if (!isEmpty()) {
+				// Get a random number
+				
+				int min = 0;
+				int max = cardList.size() - 1;
+				
+				int n = min + (int)(Math.random() * ((max - min) + 1));
+				currentCard = cardList.get(n);
+				
+				if (currentCard != null) {
+					if (remove(currentCard)) {
+						cardsDestroyed.add(currentCard);
+					}
+				}
 			}
 		}
 		

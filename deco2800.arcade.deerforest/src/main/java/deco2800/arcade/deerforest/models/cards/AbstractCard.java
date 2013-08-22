@@ -14,11 +14,11 @@ public abstract class AbstractCard {
 	public String getCardType() {
 		if (this instanceof AbstractMonster) {
 			return "monster";
-		} else if (this instanceof AbstractSpell) {;
+		} else {;
 			return "spell";
-		} else {
-			return "field";
 		}
 	}
+	
+	
 	
 }

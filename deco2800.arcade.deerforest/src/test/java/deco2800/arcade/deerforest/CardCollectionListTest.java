@@ -159,5 +159,32 @@ public class CardCollectionListTest {
 		// Assert the only remaining cards are c1, c2 and c3
 		Assert.assertEquals(3, ccl.size());
 		Assert.assertFalse(ccl.contains(c4));
+		
+		ccl2.remove(c4);
+		ccl2.add(c1);
+		ccl2.add(c2);
+		ccl2.add(c3);
+		
+		Assert.assertEquals(ccl2.cards(), ccl.destroyCardType("monster").cards());
+	}
+	
+	@Test
+	public void destroyRandomTest() {
+		CardCollectionList ccl = new CardCollectionList();
+		
+		AbstractCard c1 = new WaterMonster(100, null);
+		AbstractCard c2 = new FireMonster(100, null);
+		AbstractCard c3 = new DarkMonster(100, null);
+		
+		ccl.add(c1);
+		ccl.add(c2);
+		ccl.add(c3);
+		
+		Assert.assertTrue(ccl.destroyRandom(2).size() == 2);
+		Assert.assertTrue(ccl.size() == 1);
+		
+		Assert.assertTrue(ccl.destroyRandom(100000).size() == 1);
+		Assert.assertTrue(ccl.isEmpty());
+		
 	}
 }

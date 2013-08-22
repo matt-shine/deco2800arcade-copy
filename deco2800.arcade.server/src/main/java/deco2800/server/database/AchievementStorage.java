@@ -42,6 +42,11 @@ public class AchievementStorage {
 						"DESCRIPTION VARCHAR(100) NOT NULL," +
 						"ICON VARCHAR(255) NOT NULL," +
 						"THRESHOLD INT NOT NULL)");
+				statement.execute("CREATE TABLE PLAYER_ACHIEVEMENTS(id INT PRIMARY KEY," +
+						"playerID INT NOT NULL," +
+						"achievementID VARCHAR(255) NOT NULL," +
+						"PROGRESS INT NOT NULL," +
+						"FOREIGN KEY (achievementID) REFERENCES ACHIEVEMENT(id))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -157,6 +162,7 @@ public class AchievementStorage {
      */
     public ArrayList<Achievement> achievementsForGame(Game gameId) {
         ArrayList<Achievement> achievements = new ArrayList<Achievement>();
+        // TODO Need to sort out where gameID will be defined and stored 
 
         return achievements;
     }
@@ -186,9 +192,36 @@ public class AchievementStorage {
      * @throws DatabaseException
      */
     public void incrementProgress(String achievementID, Player playerID) throws DatabaseException {
-//    	Connection connection = Database.getConnection();
-//		Statement stmt = null;
-//		ResultSet resultSet = null;
+    	//Get a connection to the database
+    			Connection connection = Database.getConnection();
+
+    			Statement statement = null;
+    			ResultSet resultSet = null;
+    			try {
+					statement = connection.createStatement();
+					resultSet = statement.executeQuery("SELECT * FROM PLAYER_ACHIEVEMENTS " +
+							"WHERE playerID='" + playerID + "'" +
+							"AND achievementID='" + achievementID + "'");
+//    					statement = connection.prepareStatement("SELECT * from CREDITS WHERE username=?");
+//    					statement.setString(1, username);
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    				throw new DatabaseException("Unable to get achievements from database", e);
+    			} finally {
+    				try {
+    					if (resultSet != null){
+    						resultSet.close();
+    					}
+    					if (statement != null){
+    						statement.close();
+    					}
+    					if (connection != null){
+    						connection.close();
+    					}
+    				} catch (SQLException e) {
+    					e.printStackTrace();
+    				}
+    			}
     }
 	
 }

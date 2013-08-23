@@ -33,17 +33,13 @@ public class Breakout extends GameClient {
 	 * Creates private instance variables for each element of The
 	 */
 	private String player;
-	//private NetworkClient nc;
+	private NetworkClient nc;
 	private Paddle paddle;
 	private PongBall ball;
 	private int score;
 	private int lives;
-<<<<<<< HEAD
 	private String status;
 
-=======
-	//private String status;
->>>>>>> master
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
 
@@ -65,33 +61,12 @@ public class Breakout extends GameClient {
 
 	// Array of Brick
 	Brick bricks[];
-<<<<<<< HEAD
-
-	public Breakout(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-		this.player = player.getUsername();
-		this.nc = networkClient;
-		bricks = new Brick[40];
-=======
-	
-	static {
-		//Achievement winBreakout = new Achievement("Win a game of Breakout");
-		//Achievement perfect = new Achievement("Win a game of Breakout without losing a Life");
-		//Achievement noob = new Achievement("Win a game of Breakout with a negative score");
-		//Achievement closeOne = new Achievement("Win a game of Breakout with no lives remaining");
-		//achievements.add(winBreakout);
-		//achievements.add(perfect);
-		//achievements.add(noob);
-		//achievements.add(closeOne);
-		
-	}
 	
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		 this.player = player.getUsername();
 		 //this.nc = networkClient;
 		 bricks = new Brick[40];
->>>>>>> master
 	}
 
 	/**
@@ -127,13 +102,8 @@ public class Breakout extends GameClient {
 		score = 0;
 		lives = 3;
 		gameState = GameState.READY;
-<<<<<<< HEAD
 		status = "Start!";
 
-=======
-		//status = "Start!";
-		
->>>>>>> master
 	}
 
 	/**

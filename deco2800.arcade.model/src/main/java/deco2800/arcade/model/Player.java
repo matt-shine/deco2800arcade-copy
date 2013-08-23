@@ -22,23 +22,17 @@ public class Player {
 	private Set<Player> friendInvites;
 	
 	private Icon icon;
+	
+	private String realName;
+	
+	private String location;
+	
+	private String biography;
+	
+	private String onlineStatus;
 
 	public Player() {
 
-	}
-
-	@Deprecated
-	/**
-	 * Sets the name of the Player
-	 * 
-	 * @param username
-	 */
-	public Player(String username) {
-		/*
-		 * Do we want this to be mutable? If so we're going to want to have some
-		 * form of immutable playerID.
-		 */
-		this.username = username;
 	}
 
 	/**

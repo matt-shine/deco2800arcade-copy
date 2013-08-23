@@ -1,9 +1,9 @@
 package deco2800.arcade.model;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.lang.Object.*;
+
 
 public class Player {
 
@@ -62,6 +62,7 @@ public class Player {
 		this.games = new HashSet<Game>();
 		this.friends = new HashSet<Player>();
 		this.friendInvites = new HashSet<Player>();
+		this.blocked = new HashSet<Player>();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type

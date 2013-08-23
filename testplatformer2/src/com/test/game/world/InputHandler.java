@@ -14,15 +14,15 @@ public class InputHandler implements InputProcessor{
 	World world;
 	Ship ship;
 	Sword sword;
-	Vector3 touch = new Vector3();
 	Vector2 vec2Touch = new Vector2();
 	private boolean acceptInput;
+	Vector3 touch = new Vector3();
 
 	//private static final float WALL_ATTACH_LENGTH = 4f;
 	//private float wallTime = 0;
-	
+
 	public InputHandler(World world) {
-		this.world=world;
+		this.world = world;
 		this.ship = world.getShip();
 		this.sword = world.getSword();
 		acceptInput = true;
@@ -30,98 +30,93 @@ public class InputHandler implements InputProcessor{
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		//ship = world.getShip();
 		switch(keycode){
-		case Keys.UP:
-			//ship.getVelocity().y = 1;
-			break;
-		case Keys.DOWN:
-			//ship.getVelocity().y = -1;
-			break;
-		case Keys.LEFT:
-			//if (ship.getState() == State.WALL) {
-				
-			//} else {
-			if (acceptInput) {
-				ship.getVelocity().x = -Ship.SPEED;
-				if (ship.getState() != State.WALL) {
-					ship.setState(State.WALK);
-					ship.setFacingRight(false);
-				}
-			}
-			//}
-			break;
-		case Keys.RIGHT:
-			if (acceptInput) {
-				ship.getVelocity().x = Ship.SPEED;
-				if (ship.getState() != State.WALL) {
-					ship.setState(State.WALK);
-					ship.setFacingRight(true);
-				}
-			}
-			break;
-		
-		case Keys.Z:
-			if (acceptInput&&(ship.getState() == State.IDLE || ship.getState() == State.WALK || ship.getState() == State.WALL)){
-				if (ship.getState() == State.WALL) {
-					if (ship.getVelocity().x > 0) {
-						ship.setFacingRight(true);
-					} else if (ship.getVelocity().x < 0) {
+			case Keys.LEFT:
+				if (acceptInput) {
+					ship.getVelocity().x = -Ship.SPEED;
+					if (ship.getState() != State.WALL) {
+						ship.setState(State.WALK);
 						ship.setFacingRight(false);
-					} else {
-						ship.setFacingRight(!ship.isFacingRight());
 					}
 				}
-				ship.getVelocity().y = Ship.JUMP_VELOCITY;
-				ship.setState(Ship.State.JUMP);
-				ship.resetJumpTime();
-			}
-			break;
-			
-		case Keys.X:
-			if (!sword.inProgress() && acceptInput) {
-				if (ship.getState() != State.WALL) {
-					sword.begin(ship.isFacingRight());
-				} else {
-					sword.begin(!ship.isFacingRight());
+				break;
+
+			case Keys.RIGHT:
+				if (acceptInput) {
+					ship.getVelocity().x = Ship.SPEED;
+					if (ship.getState() != State.WALL) {
+						ship.setState(State.WALK);
+						ship.setFacingRight(true);
+					}
 				}
-			}
-			break;
-		case Keys.Q:
-			ship.setPosition(new Vector2(4, 10));
-			break;
-		default:
-			break;
+				break;
+
+			case Keys.Z:
+				if ( acceptInput && (ship.getState() == State.IDLE || ship.getState() == State.WALK || ship.getState() == State.WALL) ){
+					if (ship.getState() == State.WALL) {
+						if (ship.getVelocity().x > 0) {
+							ship.setFacingRight(true);
+						} else if (ship.getVelocity().x < 0) {
+							ship.setFacingRight(false);
+						} else {
+							ship.setFacingRight(!ship.isFacingRight());
+						}
+					}
+					ship.getVelocity().y = Ship.JUMP_VELOCITY;
+					ship.setState(Ship.State.JUMP);
+					ship.resetJumpTime();
+				}
+				break;
+
+			case Keys.X:
+				if (!sword.inProgress() && acceptInput) {
+					if (ship.getState() != State.WALL) {
+						sword.begin(ship.isFacingRight());
+					} else {
+						sword.begin(!ship.isFacingRight());
+					}
+				}
+				break;
+
+			case Keys.Q:
+				ship.setPosition(new Vector2(4, 10));
+				break;
+
+			default:
+				break;
 		}
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		//ship = world.getShip();
 		switch(keycode){
-		case Keys.UP:
-			if (ship.getVelocity().y == 1 && acceptInput)
-			ship.getVelocity().y = 0;
-			break;
-		case Keys.DOWN:
-			if (ship.getVelocity().y == -1 && acceptInput)
-			ship.getVelocity().y =0;
-			break;
-		case Keys.LEFT:
-			if (ship.getVelocity().x < -1 && acceptInput)
-			ship.getVelocity().x = 0;
-			break;
-		case Keys.RIGHT:
-			if (ship.getVelocity().x > 1 && acceptInput)
-			ship.getVelocity().x = 0;
-			break;
-		
-		case Keys.Z:
-			ship.clearJumpTime();
-			break;
-		default:
-			break;
+			case Keys.UP:
+				if (ship.getVelocity().y == 1 && acceptInput)
+				ship.getVelocity().y = 0;
+				break;
+
+			case Keys.DOWN:
+				if (ship.getVelocity().y == -1 && acceptInput)
+				ship.getVelocity().y = 0;
+				break;
+
+			case Keys.LEFT:
+				if (ship.getVelocity().x < -1 && acceptInput)
+				ship.getVelocity().x = 0;
+				break;
+
+			case Keys.RIGHT:
+				if (ship.getVelocity().x > 1 && acceptInput)
+				ship.getVelocity().x = 0;
+				break;
+
+			case Keys.Z:
+				ship.clearJumpTime();
+				break;
+
+			default:
+				break;
 		}
 		return true;
 	}

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
@@ -268,10 +269,13 @@ public class WorldRenderer {
 		
 		
 		
+		
 		batch.end();
 		
 		
 		//Debug stuff. Will slow game down!!
+		
+		
 		sr.setProjectionMatrix(cam.combined);
 		sr.begin(ShapeType.Line);
 		sr.setColor(Color.CYAN);

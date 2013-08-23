@@ -63,6 +63,7 @@ public class World {
 	public World(TestGame2 game, int level) {
 		//ship = new Ship(new Vector2(3, 3), 1, 1, 0, 6);
 		ship = new Ship(new Vector2(2.8f,16));
+		
 		//enemies.add(new Follower(5f, 0, new Vector2(1,1), 1, 1));
 		sword = new Sword(new Vector2(-1, -1));
 		
@@ -72,7 +73,7 @@ public class World {
 		levelLayout = new LevelLayout(level);
 		
 		Array<Object> objects = new Array<Object>();
-		if (level ==1) {
+		if (level == 1) {
 			objects = Level1Objects.loadObjects(levelLayout.getMap());
 			levelScenes = new Level1Scenes(ship);
 			
@@ -108,13 +109,12 @@ public class World {
 	}
 	
 	public void update() {
-		
-		
-		ship.update(ship);
-		
+
+		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
-		
+
+		/* MovablePlatform code */
 		boolean onMovable = false;
 		MovablePlatform onPlat = null;
 		sRec = ship.getProjectionRect();
@@ -142,7 +142,11 @@ public class World {
 			//mp.update(ship);
 		}
 		
-		
+
+
+
+
+		/* Tile collisions code */
 		//Check player to tile collisions
 		//get tiles near player
 		TiledMapTileLayer collisionLayer = levelLayout.getCollisionLayer();
@@ -267,7 +271,7 @@ public class World {
 			if (sRec.overlaps(tile)) {
 				
 				//to the bottom of player
-				if (ship.getVelocity().y <0 ) {
+				if (ship.getVelocity().y < 0 ) {
 					//System.out.println("Velocity: "+ship.getVelocity().y);
 					//System.out.println("DownCollision: " + sRec +" " + tile);
 					//ship.getPosition().y = tile.y + ship.getHeight();

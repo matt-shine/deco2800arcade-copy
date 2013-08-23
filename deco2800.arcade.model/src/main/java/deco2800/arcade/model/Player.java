@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-//import deco2800.arcade.server.database.*;
 
 
 public class Player {
@@ -211,12 +210,7 @@ public class Player {
 	 * 			A set containing the player's friends.
 	 */
 	public void setFriends(Set<Player> friends) {
-		ArrayList<Integer> players = new ArrayList<Integer>();
-		// players = FriendStorage.getFriendsList(this.playerID);
 		if (friends != null) {
-			for (int playerID : players) {
-				
-			}
 			this.friends = new HashSet<Player>(friends);
 		}
 	}

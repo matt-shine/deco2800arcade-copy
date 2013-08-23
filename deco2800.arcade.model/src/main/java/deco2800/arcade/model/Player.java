@@ -3,6 +3,7 @@ package deco2800.arcade.model;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.lang.Object.*;
 
 public class Player {
 
@@ -15,6 +16,8 @@ public class Player {
 	private Set<Game> games;
 	
 	private Set<Player> friends;
+	
+	private Set<Player> blocked; 
 	
 	private Set<Player> friendInvites;
 	
@@ -320,7 +323,68 @@ public class Player {
 	}
 	
 	
+	/**
+	 * Access method for player's blocked list
+	 * @return A set containing the player's blocked list.
+	 */
+	public Set<Player> getBlockedList() {
+		Set<Player> clone = new HashSet<Player>(this.blocked);
+		return clone;
+	}
 	
+	/**
+	 * Sets the player's blocked list to the set provided.
+	 * 
+	 * @param blocked
+	 * 			A set containing the player's blocked list.
+	 */
+	public void setBlockedList(Set<Player> blocked) {
+		if (blocked != null) {
+			this.blocked = new HashSet<Player>(blocked);
+		}
+	}
 	
+	/**
+	 * Checks if the player has already blocked the specified player
+	 * 
+	 * @param player
+	 * 			The player that is being verified as blocked.
+	 * @return
+	 * 		True if the player has blocked the specified player, 
+	 * 		false otherwise.
+	 */
+	public boolean isBlocked(Player player) {
+		return this.blocked.contains(player);
+	}
 	
-}
+	/**
+	 * Adds a player to the player's blocked set.
+	 * 
+	 * @param player
+	 * 			The player to be added to the blocked set.
+	 * @ensure this.blocked.contains(player)
+	 */
+	public void addBlocked(Player player) throws Exception {
+		if (player != null) {
+			if(this.isBlocked(player)){
+				throw new Exception("Player is already blocked"); }
+			else {
+				this.blocked.add(player); }
+		}
+	}
+	
+	/**
+	 * Remove a player from the player's blocked list.
+	 * 
+	 * @param player
+	 * 			player to be removed from blocked list.
+	 * @ensure !this.blocked.contains(player)
+	 */
+	public void removeBlocked(Player player) throws Exception {
+		if (this.isBlocked(player)) {
+			this.blocked.remove(player); }
+		else {
+			throw new Exception("Player is not in your blocked list"); }
+		}
+	}
+	

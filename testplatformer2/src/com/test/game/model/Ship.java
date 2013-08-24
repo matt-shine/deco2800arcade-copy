@@ -9,7 +9,6 @@ public class Ship extends MovableEntity{
 	public enum State {
 		IDLE, WALK, DASH, JUMP, FALL, DEATH, DASH_JUMP, WALL
 	}
-	
 	public static final float SPEED = 6f;
 	public static final float JUMP_VELOCITY = 13f;
 	public static final float WIDTH = 0.5f;

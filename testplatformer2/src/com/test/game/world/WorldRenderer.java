@@ -154,12 +154,18 @@ public class WorldRenderer {
 		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
 			cam.position.set(ship.getPosition().x, ship.getPosition().y, 0);
 		}*/
+		cam.position.x = ship.getPosition().x;
+		cam.position.y = ship.getPosition().y;
+		
+		/* Camera code needs to be fixed later on. Currently it's set to always
+		 * follow the sprite so that camera's updated properly when reset
 		if(ship.getPosition().x > cam.viewportWidth/2 ) {
 			cam.position.x = ship.getPosition().x;
 		}
 		if(ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) {
 			cam.position.y = ship.getPosition().y;
 		}
+		*/
 		
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);

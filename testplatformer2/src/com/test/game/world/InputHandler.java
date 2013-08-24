@@ -79,7 +79,7 @@ public class InputHandler implements InputProcessor{
 				break;
 
 			case Keys.Q:
-				ship.setPosition(new Vector2(4, 10));
+				world.resetLevel(world.getCurLevel());
 				break;
 
 			default:

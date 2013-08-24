@@ -32,18 +32,17 @@ import com.test.game.model.Walker;
  */
 public class World {
 
-	Ship ship;
-	Sword sword;
-	Array<Enemy> enemies = new Array<Enemy>();
-	Array<Bullet> bullets = new Array<Bullet>();
-	Array<EnemySpawner> spawners = new Array<EnemySpawner>();
-	private Array<CutsceneObject> cutsceneObjects = new Array<CutsceneObject>();
-	private Array<MovablePlatform> movablePlatforms = new Array<MovablePlatform>();
+	private Ship ship;
+	Rectangle sRec;
+	private Sword sword;
+	private Array<Enemy> enemies;
+	private Array<Bullet> bullets;
+	private Array<EnemySpawner> spawners;
+	private Array<CutsceneObject> cutsceneObjects; 
+	private Array<MovablePlatform> movablePlatforms;
 	
-	public Rectangle sRec;
-	
+	private int curLevel;
 	private LevelLayout levelLayout;
-	//private LevelObjects levelObjects;
 	private LevelScenes levelScenes;
 	private InputHandler inputHandler;
 	
@@ -52,16 +51,13 @@ public class World {
 	WorldRenderer wr;
 	
 	public World(TestGame2 game, int level) {
-		//ship = new Ship(new Vector2(3, 3), 1, 1, 0, 6);
-		ship = new Ship(new Vector2(2.8f,16));
-		//enemies.add(new Follower(5f, 0, new Vector2(1,1), 1, 1));
-		sword = new Sword(new Vector2(-1, -1));
-		levelLayout = new LevelLayout(level);
-
-		inputHandler = new InputHandler(this);
-		Gdx.input.setInputProcessor(inputHandler);
-
-		loadLevel(level);
+		curLevel = level;
+		
+		init();
+		loadLevel(curLevel);
+		
+		
+		
 	}
 	
 	
@@ -240,6 +236,8 @@ public class World {
 	}
 
 	private void loadLevel(int level) {
+		levelLayout = new LevelLayout(level);
+
 		//Load level objects
 		Array<Object> objects = new Array<Object>();
 		if (level == 1) {
@@ -391,16 +389,49 @@ public class World {
 		return levelLayout;
 	}
 	
+	public int getCurLevel() {
+		return curLevel;
+	}
+	
 
 	
 	
 	
 	/* ----- Setter methods ----- */
+	public void init() {
+		ship = new Ship(new Vector2(2.8f,16));
+		sword = new Sword(new Vector2(-1, -1));
+		enemies = new Array<Enemy>();
+		bullets = new Array<Bullet>();
+		spawners = new Array<EnemySpawner>();
+		cutsceneObjects = new Array<CutsceneObject>();
+		movablePlatforms = new Array<MovablePlatform>();
+		
+		inputHandler = new InputHandler(this);
+		Gdx.input.setInputProcessor(inputHandler);
+		return;
+	}
+	
 	public void setRenderer(WorldRenderer wr) {
 		this.wr = wr;
 	}
 
-	
+	public void resetLevel(int level) {
+		ship = null;
+		sword = null;
+		enemies = null;
+		bullets = null;
+		spawners = null;
+		cutsceneObjects = null;
+		movablePlatforms = null;
+		levelLayout = null;
+		levelScenes = null;
+		
+		init();
+		loadLevel(level);
+
+		return;
+	}
 	
 	
 	

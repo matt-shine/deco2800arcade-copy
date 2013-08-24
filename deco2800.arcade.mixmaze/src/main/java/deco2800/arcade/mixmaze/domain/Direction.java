@@ -1,10 +1,14 @@
 package deco2800.arcade.mixmaze.domain;
 
+/*
+ * Direction helper class to translate integers into their associated direction.
+ */
 public class Direction {
 	public static int WEST = 0;
 	public static int NORTH = 1;
 	public static int EAST = 2;
 	public static int SOUTH = 3;
+	public static IllegalArgumentException NOTADIRECTION = new IllegalArgumentException("Direction is invalid.");
 	
 	public static boolean isWest(int direction) {
 		return direction == WEST;

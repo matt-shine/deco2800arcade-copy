@@ -1,38 +1,32 @@
 package deco2800.arcade.mixmaze;
 
-import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.FilledRectangle;
-import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.Rectangle;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 
 import deco2800.arcade.mixmaze.domain.TileModel;
 
 public class TileViewModel extends Actor {
 	private TileModel model;
-	private ShapeRenderer shapeRenderer;
-	
-	@Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
-		batch.end();
-		shapeRenderer.begin(FilledRectangle);
-		shapeRenderer.setColor(1f, 1f, 0f, 1f);
-		shapeRenderer.end();
-		batch.begin();
-		System.out.println("Working");
-		super.draw(batch, parentAlpha);
-	}
+	private WallViewModel[] walls;
 	
 	public void dispose() {
-		shapeRenderer.dispose();
+		for(int i = 0; i < 4; ++i) {
+			walls[i].dispose();
+		}
 	}
 	
 	public TileViewModel(TileModel m) {
+		if(m == null) {
+			throw new IllegalArgumentException("m cannot be null.");
+		}
 		model = m;
-		shapeRenderer = new ShapeRenderer();
+		
+		// Initialize wall view models
+		walls = new WallViewModel[4];
+		for(int i = 0; i < 4; ++i) {
+			walls[i] = new WallViewModel(model.getWall(i));
+		}
+		
 		setX(128f * model.getX());
-		setX(128f * model.getY());
+		setY(128f * model.getY());
 	}
 }

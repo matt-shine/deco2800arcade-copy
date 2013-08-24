@@ -6,10 +6,14 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import deco2800.arcade.hunter.Hunter;
@@ -21,12 +25,12 @@ import deco2800.arcade.hunter.Hunter;
  *
  */
 public class MenuScreen implements Screen {
-	private Hunter parent;
+	private Hunter game;
 		
 	private Stage stage;
 	
 	public MenuScreen(Hunter p){
-		parent = p;
+		game = p;
 		
 		//Set up stage
 		stage = new Stage();
@@ -38,18 +42,66 @@ public class MenuScreen implements Screen {
 		
 		TextureRegionDrawable playButtonImage = new TextureRegionDrawable(new TextureRegion(new Texture("textures/huntergame.png")));
 		
-		Button playButton = new Button(playButtonImage);
-		playButton.setSize(100, 100);
-		playButton.setPosition(0, 0);
+//		Texture hunterGameImage = new Texture("textures/huntergame.png");
 		
+		
+		//Add play button to the table
+		Button playButton = new Button(playButtonImage);
+		playButton.setSize(200, 60);
+		//implement listener to the button
 		playButton.addListener(new ChangeListener() {
+
+			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("test");
-				/*parent.startGame();*/
+				game.setScreen(new GameScreen(game));
+			}
+
+		});
+		//add to the table
+		table.add(playButton).size(200,60).spaceBottom(20);
+		table.row();
+		
+		//Add options button to the table
+		TextButton optionsButton = new TextButton("Options", new Skin());
+		optionsButton.setSize(200,60);
+		
+		optionsButton.addListener(new ClickListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+				System.out.println("Options worked!");
 			}
 		});
 		
-		table.add(playButton);
+		table.add(optionsButton).size(200,60).spaceBottom(20);
+		table.row();
+		
+		
+		//Add highscore button to the table
+		TextButton highScoreButton = new TextButton("HighScore", new Skin());
+		highScoreButton.setSize(200, 60);
+		
+		highScoreButton.addListener(new ClickListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+				System.out.println("HighScore worked!");
+			}
+		});
+		
+		table.add(highScoreButton).size(200,60).spaceBottom(20);
+		table.row();
+		
+		TextButton exitButton = new TextButton("Exit", new Skin());
+		exitButton.setSize(200, 60);
+		
+		exitButton.addListener(new ClickListener(){
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+				System.out.println("Exit Works");
+				game.dispose();
+			}
+		});
+		
 	}
 
 	@Override

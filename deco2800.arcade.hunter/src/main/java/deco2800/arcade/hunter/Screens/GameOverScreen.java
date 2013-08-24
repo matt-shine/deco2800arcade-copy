@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.MenuInput;
 
 /**
  * A Hunter game for use in the Arcade
@@ -20,7 +19,7 @@ public class GameOverScreen implements Screen {
 	private OrthographicCamera camera;
 	private Hunter parent;
 	
-	private MenuInput input = new MenuInput();
+//	private MenuInput input = new MenuInput();
 	
 	private ShapeRenderer shapeRenderer;
 	

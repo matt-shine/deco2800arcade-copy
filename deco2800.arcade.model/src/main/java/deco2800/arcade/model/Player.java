@@ -1,8 +1,9 @@
 package deco2800.arcade.model;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+
 
 public class Player {
 
@@ -11,33 +12,32 @@ public class Player {
 	private int playerID;
 
 	private String username;
-
-	private Set<Achievement> achievements;
 	
 	private Set<Game> games;
 	
 	private Set<Player> friends;
 	
+	private Set<Player> blocked; 
+	
 	private Set<Player> friendInvites;
 	
 	private Icon icon;
+	
+	private String realName;
+	
+	private String location;
+	
+	private String biography;
+	
+	private String onlineStatus;
 
 	public Player() {
 
 	}
-
-	@Deprecated
-	/**
-	 * Sets the name of the Player
-	 * 
-	 * @param username
-	 */
+	
 	public Player(String username) {
-		/*
-		 * Do we want this to be mutable? If so we're going to want to have some
-		 * form of immutable playerID.
-		 */
-		this.username = username;
+		
+		username = username;
 	}
 
 	/**
@@ -47,31 +47,27 @@ public class Player {
 	 *            The Player's nameID
 	 * @param username
 	 *            The Player's name
-	 * @param achievments
-	 *            The Player's achievements
 	 * @param filepath
 	 *            The Player's icon filepath
 	 * @throws IOException
 	 *             Throws exception when the image cannot be found at the
 	 *             designated filepath.
 	 */
-	public Player(int playerID, String username, Set<Achievement> achievements,
-			String filepath) throws IOException {
+	public Player(int playerID, String username, String filepath) 
+            throws IOException {
 		// TODO: Validate username input
 
 		// TODO validate filepath
-
-		// TODO validate achievements set
 		
 		// TODO validate playerID
 		
 		this.playerID = playerID;
 
 		this.username = username;
-		this.achievements = new HashSet<Achievement>(achievements);
 		this.games = new HashSet<Game>();
 		this.friends = new HashSet<Player>();
 		this.friendInvites = new HashSet<Player>();
+		this.blocked = new HashSet<Player>();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
@@ -105,67 +101,6 @@ public class Player {
 	public void setUsername(String username) {
 		//TODO Validate
 		this.username = username;
-	}
-
-	/**
-	 * Access method for player's achievements.
-	 * 
-	 * @return Returns a set containing the player's Achievements.
-	 */
-	public Set<Achievement> getAchievements() {
-		/*
-		 * Cloning this.achievements to preserve immutability
-		 */
-		Set<Achievement> clone = new HashSet<Achievement>(this.achievements);
-		return clone;
-	}
-
-	/**
-	 * Sets the Player's achievements to those supplied
-	 * 
-	 * @param achievements
-	 *            The player's achievements.
-	 */
-	public void setAchievements(Set<Achievement> achievements) {
-		/* TODO Validate not null
-		 * Preserving immutability
-		 */
-		this.achievements = new HashSet<Achievement>(achievements);
-	}
-
-	/**
-	 * Adds an achievement to the player's achievements.
-	 * 
-	 * @param achievement
-	 *            The achievement to be added.
-	 * @ensure this.achievement.contains(achievement)
-	 */
-	public void addAchievement(Achievement achievement) {
-		//TODO Validate not null
-		this.achievements.add(new Achievement(achievement));
-	}
-
-	/**
-	 * Removes and achievement from the player's achievements.
-	 * 
-	 * @param achievement
-	 *            The achievement to be removed
-	 * @ensure !this.achievement.contains(achievement)
-	 */
-	public void removeAchievement(Achievement achievement) {
-		this.achievements.remove(achievement);
-	}
-
-	/**
-	 * Checks if the player has an Achievement.
-	 * 
-	 * @param achievement
-	 *            The achievement to be checked.
-	 * @return Returns true if player has specified achievement, false
-	 *         otherwise.
-	 */
-	public boolean hasAchievement(Achievement achievement) {
-		return this.achievements.contains(achievement);
 	}
 
 	/**
@@ -388,7 +323,68 @@ public class Player {
 	}
 	
 	
+	/**
+	 * Access method for player's blocked list
+	 * @return A set containing the player's blocked list.
+	 */
+	public Set<Player> getBlockedList() {
+		Set<Player> clone = new HashSet<Player>(this.blocked);
+		return clone;
+	}
 	
+	/**
+	 * Sets the player's blocked list to the set provided.
+	 * 
+	 * @param blocked
+	 * 			A set containing the player's blocked list.
+	 */
+	public void setBlockedList(Set<Player> blocked) {
+		if (blocked != null) {
+			this.blocked = new HashSet<Player>(blocked);
+		}
+	}
 	
+	/**
+	 * Checks if the player has already blocked the specified player
+	 * 
+	 * @param player
+	 * 			The player that is being verified as blocked.
+	 * @return
+	 * 		True if the player has blocked the specified player, 
+	 * 		false otherwise.
+	 */
+	public boolean isBlocked(Player player) {
+		return this.blocked.contains(player);
+	}
 	
-}
+	/**
+	 * Adds a player to the player's blocked set.
+	 * 
+	 * @param player
+	 * 			The player to be added to the blocked set.
+	 * @ensure this.blocked.contains(player)
+	 */
+	public void addBlocked(Player player) throws Exception {
+		if (player != null) {
+			if(this.isBlocked(player)){
+				throw new Exception("Player is already blocked"); }
+			else {
+				this.blocked.add(player); }
+		}
+	}
+	
+	/**
+	 * Remove a player from the player's blocked list.
+	 * 
+	 * @param player
+	 * 			player to be removed from blocked list.
+	 * @ensure !this.blocked.contains(player)
+	 */
+	public void removeBlocked(Player player) throws Exception {
+		if (this.isBlocked(player)) {
+			this.blocked.remove(player); }
+		else {
+			throw new Exception("Player is not in your blocked list"); }
+		}
+	}
+	

@@ -1,9 +1,5 @@
 package deco2800.arcade.deerforest.GUI;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -42,17 +38,11 @@ public class DeerForest extends GameClient {
 		super.resume();
 	}
 
-	
-	//there are no achievements for this
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
-
-
 	private static final Game game;
 	static {
 		game = new Game();
-		game.gameId = "deerforest";
+		game.id = "deerforest";
 		game.name = "Deer Forest";
-		game.availableAchievements = achievements;
 	}
 
 	public Game getGame() {

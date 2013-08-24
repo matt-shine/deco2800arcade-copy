@@ -137,7 +137,7 @@ public class WorldRenderer {
 		
 		csObjects = new Array<CutsceneObject>();
 		
-		sr= new ShapeRenderer();
+		sr = new ShapeRenderer();
 		//testRegion = followerFrames[0];
 		
 	}
@@ -279,13 +279,15 @@ public class WorldRenderer {
 		batch.end();
 		
 		
-		//Debug stuff. Will slow game down!!
+		/* ----- Debug stuff. Will slow game down!! ----- */
 		
 		
 		sr.setProjectionMatrix(cam.combined);
 		sr.begin(ShapeType.Line);
+		
 		sr.setColor(Color.CYAN);
 		sr.rect(ship.getBounds().x, ship.getBounds().y, ship.getBounds().width, ship.getBounds().height);
+		
 		sr.setColor(Color.RED);
 		eItr = enemies.iterator();
 		while (eItr.hasNext()) {
@@ -312,9 +314,20 @@ public class WorldRenderer {
 			sr.rect(b.getBounds().x, b.getBounds().y, b.getBounds().width, b.getBounds().height);
 		}
 		sr.rect(world.sRec.x, world.sRec.y, world.sRec.width, world.sRec.height);
-		sr.setColor(Color.YELLOW);
+		
+		
+		Iterator<MovablePlatform> mvPlatItr;
+		mvPlatItr = mvPlatforms.iterator();
+		sr.setColor(Color.GREEN);
+		while(mvPlatItr.hasNext()) {
+			MovablePlatform mvPlat = mvPlatItr.next();
+			sr.rect(mvPlat.getBounds().x, mvPlat.getBounds().y, mvPlat.getBounds().width, mvPlat.getBounds().height);
+		}
+		
 		Sword sword = world.getSword();
+		sr.setColor(Color.YELLOW);
 		sr.rect(sword.getBounds().x, sword.getBounds().y, sword.getBounds().width, sword.getBounds().height);
+		
 		sr.end();
 	}
 	

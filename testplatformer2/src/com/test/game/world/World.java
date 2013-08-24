@@ -67,8 +67,6 @@ public class World {
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
 
-
-
 		spawnEnemies();
 
 		checkTileCollision();
@@ -80,6 +78,9 @@ public class World {
 		
 		//System.out.println("End of World update " + ship.getVelocity().x);
 
+		if( (int)ship.getPosition().y < -1 ) {
+			resetLevel(curLevel);
+		}
 		
 
 		if (levelScenes.isPlaying()) {
@@ -137,31 +138,34 @@ public class World {
 	private void checkTileCollision() {
 		/* MovablePlatform code */
 		boolean onMovable = false;
-		MovablePlatform onPlat = null;
-		sRec = ship.getProjectionRect();
+		MovablePlatform onPlat;
+
 		//Check moving platform collisions
+		sRec = ship.getProjectionRect();
 		for (MovablePlatform mp: movablePlatforms) {
 			mp.update(ship);
 			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
 			if (sRec.overlaps(mp.getCollisionRectangle())) {
+				onMovable = true;
+				onPlat = mp;
 				//System.out.println("moving ship");
 				ship.getPosition().add(mp.getPositionDelta());
 				//ship.getVelocity().add(mp.getPositionDelta());
 				//ship.getPosition().y -= Ship.GRAVITY * Gdx.graphics.getDeltaTime();
 				
-				//stop falling through the floor when going up if on the top of platform
+				// Stop falling through the floor when going up if on the top of platform
 				float top = mp.getPosition().y + mp.getCollisionRectangle().height;
-				//System.out.println("****Poo*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
-				//if (mp.getPositionDelta().y > 0 && ship.getPosition().y < top + 2/32f && ship.getPosition().y > top-2/32f) {
-				if (ship.getPosition().y < top + 12/32f && ship.getPosition().y > top-12/32f) {
+				if (ship.getPosition().y < top + 12/32f && ship.getPosition().y > top - 12/32f) {
 					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
-					ship.getPosition().y = mp.getPosition().y+mp.getCollisionRectangle().height;
+					ship.getPosition().y = mp.getPosition().y + mp.getCollisionRectangle().height;
 					onMovable = true;
 					onPlat = mp;
 				}
 			}
 			//mp.update(ship);
 		}
+		
+		
 		
 		/* Tile collisions code */
 		//Check player to tile collisions
@@ -179,7 +183,7 @@ public class World {
 			for (float j = ship.getPosition().y - checkY; j < ship.getPosition().y + ship.getHeight() + checkY; j++) {
 				//System.out.println("chcking cell at " + (int)i + "," + (int)j + " and collisionlayer is " + collisionLayer);
 		
-				Cell cell = collisionLayer.getCell((int) i, (int)j);
+				Cell cell = collisionLayer.getCell((int) i, (int) j);
 				if (cell != null) {
 					//System.out.println("found cell at " + (int)i + "," + (int)j);
 					//System.out.println("floats were " + i +"," + j);
@@ -238,8 +242,8 @@ public class World {
 					//System.out.println("DownCollision: " + sRec +" " + tile);
 					//ship.getPosition().y = tile.y + ship.getHeight();
 					if (!onMovable) {
-					ship.getPosition().y = tile.y +tile.height;
-					ship.getVelocity().y = 0;
+						ship.getPosition().y = tile.y + tile.height;
+						ship.getVelocity().y = 0;
 					}
 					if (ship.getVelocity().x == 0) {
 						ship.setState(State.IDLE);
@@ -413,7 +417,7 @@ public class World {
 	
 	/* ----- Setter methods ----- */
 	public void init() {
-		ship = new Ship(new Vector2(2.8f,16));
+		ship = new Ship(new Vector2(2.8f, 10));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

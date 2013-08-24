@@ -8,6 +8,7 @@ public abstract class Entity {
 	protected float width;
 	protected float height;
 	protected Rectangle bounds;
+	protected boolean onMovPlatform;
 	
 	public Entity (Vector2 pos, float width, float height) {
 		this.position = pos;
@@ -26,6 +27,11 @@ public abstract class Entity {
 		this.position = pos;
 	}
 	
+	public void setOnMovPlatform(boolean isOnMovPlatform) {
+		onMovPlatform = isOnMovPlatform;
+		return;
+	}
+	
 	public Vector2 getPosition() {
 		return position;
 	}
@@ -36,5 +42,9 @@ public abstract class Entity {
 	
 	public float getHeight() {
 		return bounds.height;
+	}
+	
+	public boolean getOnMovPlatform() {
+		return onMovPlatform;
 	}
 }

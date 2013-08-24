@@ -2,7 +2,6 @@ package deco2800.arcade.communication;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.List;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -12,14 +11,11 @@ import javax.swing.JTextArea;
 
 public class CommunicationView {
 	
-	List chatGroup;
 	JTextArea textArea;
 	JTextArea input;
 	JButton sendButton;
 	
 	public CommunicationView(){
-		//Create List of connected users.
-		chatGroup = new List();
 		
 		//Create individual chat window.
 		JFrame chat = new JFrame("Testing Chat");
@@ -52,11 +48,6 @@ public class CommunicationView {
 		container.add(sendButton, BorderLayout.SOUTH);
 	}
 	
-	//Add another user to the chat group.
-	public void addUser(String username){
-		chatGroup.add(username);
-	}
-	
 	public void addSendButtonListener(ActionListener listener){
 		sendButton.addActionListener(listener);
 	}
@@ -65,8 +56,8 @@ public class CommunicationView {
 		input.setText(text);
 	}
 	
-	public void setTextArea(String text){
-		textArea.setText(text);
+	public void appendTextArea(String text){
+		textArea.append(text);
 	}
 	
 	public String getTextInput(){

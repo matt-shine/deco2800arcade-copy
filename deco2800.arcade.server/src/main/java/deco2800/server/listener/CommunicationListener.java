@@ -39,7 +39,7 @@ public class CommunicationListener extends Listener {
 		
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
-			this.server.sendToTCP(connectedUsers.get(textMessage.username), textMessage);
+			this.server.sendToTCP(connectedUsers.get(textMessage.recipient), textMessage);
 		}
 	}
 

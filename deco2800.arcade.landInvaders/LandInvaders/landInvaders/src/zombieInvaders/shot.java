@@ -9,10 +9,14 @@ public class Shot extends Sprites {
 	private final int HSpace = 6;
     private final int VSpace = 1;
 
+
+    public Shot() {
+    }
+    
     public Shot(int x, int y) {
 
-        ImageIcon ii = new ImageIcon(this.getClass().getResource(shot));
-        setImage(ii.getImage());
+        ImageIcon shotImage = new ImageIcon(this.getClass().getResource(shot));
+        setImage(shotImage.getImage());
         setX(x + HSpace);
         setY(y - VSpace);
     }

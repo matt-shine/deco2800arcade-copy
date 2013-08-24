@@ -1,18 +1,21 @@
 package zombieInvaders;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
+
 import javax.swing.ImageIcon;
 
 //Need to do up class Sprite
-public class tank extends Sprites implements Stats{
+public class Tank extends Sprites implements Stats{
     public final int START_Y = 300;
     public final int START_X = 300;
-    private final String player = "AngryRedBird.png";
+
     private int iconWidth;
+/*   private final String player = "/AngryRedBird.png";  
+*/  
     
-    public tank(){
+    public Tank(){
 
-
-    	ImageIcon playerImage = new ImageIcon(this.getClass().getResource(player));
+    	ImageIcon playerImage = new ImageIcon("Tank2.png");
     	iconWidth = playerImage.getImage().getWidth(null);
     	
     	setImage(playerImage.getImage());

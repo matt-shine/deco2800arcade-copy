@@ -21,8 +21,10 @@ public class Invaders extends JFrame implements Stats {
 	JPanel panel;
 
 	public Invaders() {
+		
 
-		super("Land Invaders");
+		//super("Land Invaders");
+		add(new Gamescape());
 		setTitle("Space Invaders");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		background = new javax.swing.ImageIcon("bgimage.jpg").getImage();

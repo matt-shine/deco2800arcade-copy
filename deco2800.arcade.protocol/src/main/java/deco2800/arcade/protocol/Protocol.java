@@ -17,6 +17,9 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
+
 
 public class Protocol {
 
@@ -45,6 +48,10 @@ public class Protocol {
 		kryo.register(ContactListUpdate.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
+		
+		//Multiplayer Messages
+		kryo.register(NewMultiGameRequest.class);
+		kryo.register(NewMultiResponse.class);
 	}
 	
 }

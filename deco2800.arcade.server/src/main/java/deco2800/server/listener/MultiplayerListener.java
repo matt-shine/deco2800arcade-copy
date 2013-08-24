@@ -31,7 +31,7 @@ public class MultiplayerListener extends Listener {
 		
 		//Fill out map
 		if (object instanceof NewMultiGameRequest) {
-			
+			System.out.println("Received connection");
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
 			String username = multiRequest.username;
 			String gameId = multiRequest.gameId;

@@ -20,7 +20,9 @@ public class LoginScreen extends GameScreen {
 	
 	
 	public LoginScreen() {
-        // Move skin stuff to an overall class
+
+	/*	
+		// Move skin stuff to an overall class
         skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -75,7 +77,7 @@ public class LoginScreen extends GameScreen {
             public void changed (ChangeEvent event, Actor actor) {
                 ArcadeSystem.close();
             }
-        });
+        });*/
 	}
 
 
@@ -86,14 +88,14 @@ public class LoginScreen extends GameScreen {
 
 	@Override
 	public void firstResize() {
-
+/*
 		ArcadeSystem.openConnection();
-		
+*/		
 	}
 	
 	@Override
 	public void render(float arg0) {
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+/*		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
@@ -125,14 +127,15 @@ public class LoginScreen extends GameScreen {
 	    
 	    if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");
-	    }
+	    }*/
 	}
 
 	@Override
 	public void dispose() {
-        stage.dispose();
-        skin.dispose();
+/*        stage.dispose();
+        skin.dispose();*/
 	}
+
 
 	@Override
 	public void hide() {
@@ -145,6 +148,5 @@ public class LoginScreen extends GameScreen {
 	@Override
 	public void resume() {
 	}
-	
-	
+		
 }

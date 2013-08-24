@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
@@ -31,6 +32,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 
@@ -67,6 +69,7 @@ public class Arcade extends JFrame {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
 		Arcade arcade = new Arcade(args);
 		
 		ArcadeSystem.setArcadeInstance(arcade);
@@ -74,6 +77,7 @@ public class Arcade extends JFrame {
 		arcade.addCanvas();
 		
 		ArcadeSystem.goToGame(ArcadeSystem.UI);
+		
 	}
 
 	/**
@@ -91,6 +95,14 @@ public class Arcade extends JFrame {
 	 * Configure the window
 	 */
 	private void initWindow() {
+		
+		//Added to test conectivity
+		try {
+			connectToServer();
+		} catch (ArcadeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//create the main window
 		this.setSize(new Dimension(width, height));
 		this.setVisible(true);
@@ -144,6 +156,13 @@ public class Arcade extends JFrame {
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
+			
+			//testing multiplayer connectivity
+			NewMultiGameRequest multiGameRequest = new NewMultiGameRequest(); 
+			this.client.sendNetworkObject(multiGameRequest);
+			System.out.println("Send Request");
+			//end test
+		
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server (" + serverIPAddress + ")", e);
 		}
@@ -178,6 +197,11 @@ public class Arcade extends JFrame {
 		this.player.setUsername(username);
 
 		this.communicationNetwork.createInterface();
+		
+		NewMultiGameRequest multiGameRequest = new NewMultiGameRequest(); 
+		
+		this.client.sendNetworkObject(multiGameRequest);
+		System.out.println("Send Request");
 	}
 
 	/**

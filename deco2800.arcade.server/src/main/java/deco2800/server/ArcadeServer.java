@@ -14,6 +14,7 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.listener.MultiplayerListener;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -126,5 +127,6 @@ public class ArcadeServer {
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new CommunicationListener(server));
+		server.addListener(new MultiplayerListener());
 	}
 }

@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameScreen;
@@ -22,17 +21,23 @@ public class LoginScreen extends GameScreen {
 	public LoginScreen() {
         // Move skin stuff to an overall class
         skin = new Skin();
+        
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         skin.add("white", new Texture(pixmap));
+        
         skin.add("default", new BitmapFont());
+        
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         skin.add("default", labelStyle);
+        
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = skin.getFont("default");
+        textFieldStyle.fontColor = Color.BLUE;
         skin.add("default", textFieldStyle);
+        
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
@@ -50,24 +55,25 @@ public class LoginScreen extends GameScreen {
         stage.addActor(table);
 
         Label usernameLabel = new Label("Username:", skin);
-        //TextField usernameText = new TextField("debuguser", skin);
-        Label passwordLabel = new Label("Password", skin);
-        //TextField passwordText = new TextField("", skin);
+        final TextField usernameText = new TextField("debuguser", skin);
+        final Label passwordLabel = new Label("Password:", skin);
+        TextField passwordText = new TextField("", skin);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         table.add(usernameLabel);
-        //table.add(usernameText).width(100);
+        table.add(usernameText).width(100);
         table.row();
         table.add(passwordLabel);
-        //table.add(passwordText).width(100);
+        table.add(passwordText).width(100);
         table.row();
         table.add(loginButton);
         table.add(exitButton);
 
+        
         loginButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                ArcadeSystem.login("debuguser");
+                ArcadeSystem.login(usernameText.getText());
             }
         });
         

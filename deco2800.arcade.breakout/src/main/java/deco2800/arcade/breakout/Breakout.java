@@ -40,7 +40,7 @@ public class Breakout extends GameClient{
 	private String player;
 	private NetworkClient nc;
 	private Paddle paddle;
-	private PongBall ball;
+	private Ball ball;
 	private int score;
 	private int lives;
 	private String status;
@@ -98,7 +98,7 @@ public class Breakout extends GameClient{
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH/2, 10));
-		ball = new PongBall();
+		ball = new Ball();
 		ball.setColor(1,1,1,1);
 		
 		//created the 40 Bricks
@@ -189,7 +189,7 @@ public class Breakout extends GameClient{
 		    			score++;
 		    			brickNum--;
 		    			//ball.bounceX();
-		    			ball.bounceY();
+		    			ball.bounceY(ball.getYVelocity());
 		    		}
 	    		}
 	    	}
@@ -199,11 +199,11 @@ public class Breakout extends GameClient{
 	    	}
 	    	
 	    	if ( ball.bounds.overlaps(paddle.paddleShape) && ball.getYVelocity() < 0 ) {
-	    		ball.bounceY();
+	    		ball.bounceY(ball.getYVelocity());
 	    	}
 	    	
 	    	if (ball.bounds.y >= SCREENHEIGHT-PongBall.WIDTH) {
-	    		ball.bounceY();
+	    		ball.bounceY(ball.getYVelocity());
 	    	}
 	    	
 	    	

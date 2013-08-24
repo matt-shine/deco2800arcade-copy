@@ -42,7 +42,7 @@ public abstract class Paddle{
 		paddleShape.y = iniPosition.y;
 	}
 	
-	public void update(PongBall ball){
+	public void update(Ball ball){
 		if(paddleShape.x > Breakout.SCREENWIDTH - paddleShape.width)
 			paddleShape.x = Breakout.SCREENWIDTH - paddleShape.width;
 		else if(paddleShape.x < 0)

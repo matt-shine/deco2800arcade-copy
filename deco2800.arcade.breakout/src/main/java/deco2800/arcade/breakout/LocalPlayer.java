@@ -16,7 +16,7 @@ public class LocalPlayer extends Paddle{
 		super(position);
 	}
 	
-	public void update(PongBall ball) {
+	public void update(Ball ball) {
 		super.update(ball);
 		if(Gdx.input.isTouched()) {
 			Vector2 touchPos = new Vector2();

@@ -22,12 +22,22 @@ public class ParentThread {
 	private User createdBy;
 	private Timestamp timestamp;
 	private String category;
-	private String tags;
+	private String[] tags;
 	
 	/**
-	 * Constructor:
+	 * Constructor: Create ParentThread
+	 * 
+	 * @param	id, non-negative integer of parent thread's id 
+	 * @param	topic, string of thread's topic which is less than 80 chars
+	 * @param	message, string of message (thread's content)
+	 * @param	createdBy, User Instance
+	 * @param	timestamp, Timestamp instance specified in SQL timestamp
+	 * @param	category, string of category which a parent thread is categorised into.
+	 * @param	tags, array of string of tags which are attached to the parent thread used for additional search.
+	 * @require	params != null except tags, id >= 0,  
+	 * @see	java.sql.Timestamp
 	 */
-	public ParentThread(int id, String topic, String message, User createdBy, Timestamp timestamp, String category, String tags) {
+	public ParentThread(int id, String topic, String message, User createdBy, Timestamp timestamp, String category, String[] tags) {
 		this.id = id;
 		this.topic = topic;
 		this.message = message;
@@ -48,6 +58,8 @@ public class ParentThread {
 	
 	/**
 	 * Return topic of parent thread
+	 * 
+	 * @return	string, parent thread's topic
 	 */
 	public String getTopic() {
 		return this.topic;
@@ -55,6 +67,8 @@ public class ParentThread {
 	
 	/**
 	 * Return message of parent thread
+	 * 
+	 * @return	string, parent thread's message
 	 */
 	public String getMessage() {
 		return this.message;
@@ -62,6 +76,8 @@ public class ParentThread {
 	
 	/**
 	 * Return User instance who created thread
+	 * 
+	 * @return	User, user who created the parent thread
 	 */
 	public User getCreatedBy() {
 		return this.createdBy;
@@ -69,6 +85,8 @@ public class ParentThread {
 	
 	/** 
 	 * Return timestamp when this thread is created
+	 * 
+	 * @return	Timestamp, timestamp when the parent thread is created, and timestamp follows the SQL standard.
 	 */
 	public Timestamp getTimestamp() {
 		return this.timestamp;
@@ -76,15 +94,75 @@ public class ParentThread {
 	
 	/**
 	 * Return category which this thread is selected
+	 * 
+	 * @return	string, category of parent thread
 	 */
 	public String getCategory() {
 		return this.category;
 	}
 	
 	/**
-	 * Return tags which this thread is attached to
+	 * Return tags which this thread is attached to.
+	 * 
+	 * @return	string[], tags of parent thread. 
 	 */
-	public String getTags() {
+	public String[] getTags() {
 		return this.tags;
+	}
+	
+	/**
+	 * Return string of tags which is separated by ';'.
+	 * Note; getTags() returns string array.
+	 * 
+	 * @return string, tags with ';' as separator.
+	 */
+	public String getTagsString() {
+		String result = "";
+		for (int i = 0; i < this.tags.length; i++) {
+			result.concat(this.tags[i]);
+			result.concat(";");
+		}
+		return result;
+	}
+	
+	@Override
+	/**
+	 * Return human-readable string representation of ParentThread instance
+	 * 
+	 * @return	string
+	 */
+	public String toString() {
+		return String.format("%d: %s, %s createdBy %s on %s as %s as %s"
+				, this.id, this.topic, this.message, this.createdBy.getName()
+				, this.timestamp.toString(), this.category, this.getTagsString());
+	}
+	
+	@Override
+	/**
+	 * Return true if the parameter object is equivalent to this.instance
+	 * 
+	 * @return	boolean, true if equals
+	 */
+	public boolean equals(Object pThread) {
+		if (pThread == null) {
+			return false;
+		}
+		if (!(pThread instanceof ParentThread)) {
+			return false;
+		}
+		if (!(this.toString().equals(((ParentThread)pThread).toString()))) {
+			return false;
+		}
+		
+		return true;
+	}
+
+	/**
+	 * Create a parent thread from DB retrieved data
+	 */
+	public static ParentThread getParentThread(int id) {
+		ParentThread result = null;
+		
+		return result;
 	}
 }

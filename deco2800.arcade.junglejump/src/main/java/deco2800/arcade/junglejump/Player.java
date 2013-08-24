@@ -8,6 +8,11 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+/**
+ * Player class representing player in Jungle Jump Game
+ * @author {TEAM-NAME}
+ *
+ */
 
 public class Player {
 	public enum STATE {
@@ -23,6 +28,28 @@ public class Player {
 	// Position Array
 	private static float posX = 0f;
 	private static float posY = 0f;
+	
+	public Player (World world, int startPosX, int startPosY) {
+		PolygonShape boxPoly = new PolygonShape();
+		boxPoly.setAsBox(1f, 5f);
+		BodyDef boxBodyDef = new BodyDef();
+		boxBodyDef.position.x = startPosX;
+		boxBodyDef.position.y = startPosY;
+		Body boxBody = world.createBody(boxBodyDef);
+		
+		boxBody.createFixture(boxPoly, 1);
+		body = boxBody;
+		body.setUserData(this);
+		boxPoly.dispose();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public float getPosX() {

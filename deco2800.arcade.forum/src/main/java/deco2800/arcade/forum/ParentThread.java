@@ -165,10 +165,60 @@ public class ParentThread {
 		
 		return result;
 	}
+	
 	/**
-	 * Return tags which this thread is attached to
+	 * Return string of tags which is separated by ';'.
+	 * Note; getTags() returns string array.
+	 * 
+	 * @return string, tags with ';' as separator.
 	 */
-	public String getTags() {
-		return this.tags;
+	public String getTagsString() {
+		String result = "";
+		for (int i = 0; i < this.tags.length; i++) {
+			result.concat(this.tags[i]);
+			result.concat(";");
+		}
+		return result;
+	}
+	
+	@Override
+	/**
+	 * Return human-readable string representation of ParentThread instance
+	 * 
+	 * @return	string
+	 */
+	public String toString() {
+		return String.format("%d: %s, %s createdBy %s on %s as %s as %s"
+				, this.id, this.topic, this.message, this.createdBy.getName()
+				, this.timestamp.toString(), this.category, this.getTagsString());
+	}
+	
+	@Override
+	/**
+	 * Return true if the parameter object is equivalent to this.instance
+	 * 
+	 * @return	boolean, true if equals
+	 */
+	public boolean equals(Object pThread) {
+		if (pThread == null) {
+			return false;
+		}
+		if (!(pThread instanceof ParentThread)) {
+			return false;
+		}
+		if (!(this.toString().equals(((ParentThread)pThread).toString()))) {
+			return false;
+		}
+		
+		return true;
+	}
+
+	/**
+	 * Create a parent thread from DB retrieved data
+	 */
+	public static ParentThread getParentThread(int id) {
+		ParentThread result = null;
+		
+		return result;
 	}
 }

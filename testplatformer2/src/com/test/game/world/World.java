@@ -34,20 +34,11 @@ public class World {
 
 	Ship ship;
 	Sword sword;
-	Follower follower;
 	Array<Enemy> enemies = new Array<Enemy>();
 	Array<Bullet> bullets = new Array<Bullet>();
 	Array<EnemySpawner> spawners = new Array<EnemySpawner>();
 	private Array<CutsceneObject> cutsceneObjects = new Array<CutsceneObject>();
 	private Array<MovablePlatform> movablePlatforms = new Array<MovablePlatform>();
-	Iterator<Bullet> bItr;
-	Iterator<Enemy> eItr;
-	Iterator<EnemySpawner> sItr;
-	Enemy e;
-	Bullet b;
-	EnemySpawner s;
-	
-	
 	
 	public Rectangle sRec;
 	
@@ -63,53 +54,19 @@ public class World {
 	public World(TestGame2 game, int level) {
 		//ship = new Ship(new Vector2(3, 3), 1, 1, 0, 6);
 		ship = new Ship(new Vector2(2.8f,16));
-		
 		//enemies.add(new Follower(5f, 0, new Vector2(1,1), 1, 1));
 		sword = new Sword(new Vector2(-1, -1));
-		
+		levelLayout = new LevelLayout(level);
+
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);
-		
-		levelLayout = new LevelLayout(level);
-		
-		Array<Object> objects = new Array<Object>();
-		if (level == 1) {
-			objects = Level1Objects.loadObjects(levelLayout.getMap());
-			levelScenes = new Level1Scenes(ship);
-			
-		}
-		for (Object o: objects) {
-			if (o instanceof EnemySpawner) {
-				spawners.add((EnemySpawner) o);
-			}
-		}
-		
-		enemies.add(new Walker(new Vector2 (5f, 9f)));
-		System.out.println("Found " + spawners.size+" enemy spawners");
-		Texture copterTex = new Texture("data/copter.png");
-		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(0, 1), 4f, 2f, new Vector2(0,11), 5f, true, 1.5f));
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
-		
-	}
-	
-	public Ship getShip() {
-		return ship;
-	}
-	
-	public Sword getSword() {
-		return sword;
+
+		loadLevel(level);
 	}
 	
 	
-	
-	public Array<Enemy> getEnemies() {
-		return enemies;
-	}
 	
 	public void update() {
-
 		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
@@ -129,14 +86,14 @@ public class World {
 				//ship.getPosition().y -= Ship.GRAVITY * Gdx.graphics.getDeltaTime();
 				
 				//stop falling through the floor when going up if on the top of platform
-				float top = mp.getPosition().y +mp.getCollisionRectangle().height;
+				float top = mp.getPosition().y + mp.getCollisionRectangle().height;
 				//System.out.println("****Poo*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
 				//if (mp.getPositionDelta().y > 0 && ship.getPosition().y < top + 2/32f && ship.getPosition().y > top-2/32f) {
 				if (ship.getPosition().y < top + 12/32f && ship.getPosition().y > top-12/32f) {
 					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
 					ship.getPosition().y = mp.getPosition().y+mp.getCollisionRectangle().height;
 					onMovable = true;
-					onPlat= mp;
+					onPlat = mp;
 				}
 			}
 			//mp.update(ship);
@@ -152,19 +109,21 @@ public class World {
 		TiledMapTileLayer collisionLayer = levelLayout.getCollisionLayer();
 		Array<Rectangle> tiles = new Array<Rectangle>();
 		tiles.clear();
+
 		int checkX, checkY;
 		if (ship.getVelocity().x != 0) {
 			checkX = 1; 
 		} else {
-			checkX=0;
+			checkX = 0;
 		}
 		if (ship.getVelocity().y != 0) {
-			checkY=2;
+			checkY = 2;
 		} else {
-			checkY=0;
+			checkY = 0;
 		}
-		for (float i=ship.getPosition().x -checkX; i < ship.getPosition().x + ship.getWidth() +1+ checkX; i++) {
-			for (float j=ship.getPosition().y - checkY; j < ship.getPosition().y + ship.getHeight() + checkY; j++) {
+
+		for (float i = ship.getPosition().x - checkX; i < ship.getPosition().x + ship.getWidth() + 1 + checkX; i++) {
+			for (float j = ship.getPosition().y - checkY; j < ship.getPosition().y + ship.getHeight() + checkY; j++) {
 				//System.out.println("chcking cell at " + (int)i + "," + (int)j + " and collisionlayer is " + collisionLayer);
 		
 				Cell cell = collisionLayer.getCell((int) i, (int)j);
@@ -178,63 +137,12 @@ public class World {
 				}
 			}
 		}
-		/*sRec = ship.getProjectionRect();
-		boolean tileUnderShip = false;
-		for (Rectangle tile:tiles) {
-			if (sRec.overlaps(tile)) {
-				//System.out.println("TileCollision: " + sRec +" " + tile);
-				//to right of player
-				if (ship.getVelocity().x > 0) {
-					
-				}
-				//to the bottom of player
-				if (ship.getVelocity().y <0 ) {
-					//System.out.println("Velocity: "+ship.getVelocity().y);
-					//System.out.println("DownCollision: " + sRec +" " + tile);
-					//ship.getPosition().y = tile.y + ship.getHeight();
-					ship.getPosition().y = tile.y +tile.height;
-					ship.getVelocity().y = 0;
-					if (ship.getVelocity().x == 0) {
-						ship.setState(State.IDLE);
-					} else {
-						ship.setState(State.WALK);
-					}
-					tileUnderShip = true;
-				}
-			}
-		}*/
+		
 		//add the cutsceneobjects or movable platforms to the collisions
 		for (MovablePlatform mvPlat: movablePlatforms) {
 			tiles.add(mvPlat.getCollisionRectangle());
 		}
-		
-		
-		/*sRec = ship.getYProjectionRect();
-		boolean tileUnderShip = false;
-		for (Rectangle tile:tiles) {
-			if (sRec.overlaps(tile)) {
-			//if (ship.getBounds().overlaps(tile)) {
-				
-				//to the bottom of player
-				if (ship.getVelocity().y <0 ) {
-					//System.out.println("Velocity: "+ship.getVelocity().y);
-					//System.out.println("DownCollision: " + sRec +" " + tile);
-					//ship.getPosition().y = tile.y + ship.getHeight();
-					//BUG: this collision is getting detected at the height of a jump against a wall when it shouldn't
-					ship.getPosition().y = tile.y +tile.height;
-					ship.getVelocity().y = 0;
-					if (ship.getVelocity().x == 0) {
-						ship.setState(State.IDLE);
-						
-					} else {
-						ship.setState(State.WALK);
-					}
-					System.out.println("after y state="+ship.getState());
-					tileUnderShip = true;
-				}
-			}
-		}*/
-		
+
 		sRec = ship.getXProjectionRect();
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
@@ -245,12 +153,13 @@ public class World {
 				ship.getVelocity().scl(1/Gdx.graphics.getDeltaTime());*/
 				
 				if (ship.getVelocity().x > 0) {
-					ship.getPosition().x = tile.getX()-ship.getWidth();
+					ship.getPosition().x = tile.getX() - ship.getWidth();
 						
 				} else {
 					ship.getPosition().x = tile.getX() + tile.getWidth();
 				}
 				
+				/* Wall slide */
 				if (ship.getVelocity().y < 0) {
 				//if (tileUnderShip || ship.getVelocity().y < 0) {
 					if (ship.getState() != State.WALL) sword.cancel(); //BUG: sword is getting cancelled while on ground against wall
@@ -287,68 +196,79 @@ public class World {
 					//System.out.println("after y state="+ship.getState());
 					tileUnderShip = true;
 				}
-				if (ship.getVelocity().y > 0) {
-					ship.getPosition().y = tile.y -Ship.HEIGHT;
-					ship.getVelocity().y = 0;
-				}
 			}
 		}
-		
 		if (!tileUnderShip && (ship.getState() == State.IDLE || ship.getState() == State.WALK)) {
 			ship.setState(State.JUMP);
 		}
 		//System.out.println("after both state="+ship.getState());
 		//ship.update(ship);
-		//follower.update(ship);
-		eItr = enemies.iterator();
-		while(eItr.hasNext()) {
-			e = eItr.next();
-			if (!levelScenes.isPlaying())
-			e.advance(Gdx.graphics.getDeltaTime(), ship);
-			
-			//SWORD COLLISIONS
-			if (e.getBounds().overlaps(sword.getBounds())) {
-				//System.out.println("C");
-				eItr.remove();
-				//System.out.println("removed enemy");
-				for (EnemySpawner spns: spawners) {
-					spns.removeEnemy(e);
-				}
-				//System.out.println("cleaned arrays");
-			}
-		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			b.update(ship);
-			
-			
 		
 		
-			eItr = enemies.iterator();
-			while(eItr.hasNext()) {
-				e = eItr.next();
-				//e.advance(Gdx.graphics.getDeltaTime(), ship);
-			
-				if(e.getBounds().overlaps(b.getBounds())){
-					//System.out.println("C");
-					eItr.remove();
-					//System.out.println("removed enemy");
-					bItr.remove();
-					//System.out.println("removed bullet");
-					for (EnemySpawner spns: spawners) {
-						spns.removeEnemy(e);
-					}
-					//System.out.println("cleaned arrays");
-				}
-			}
-		}
+		
+		
+		handleEnemies();
+		spawnEnemies();
 		//System.out.println("End of World update " + ship.getVelocity().x);
+
 		
+
+
+
+		if (levelScenes.isPlaying()) {
+			levelScenes.update(Gdx.graphics.getDeltaTime());
+		} else {
+			float[] scenePos = levelScenes.getStartValues();
+			if (ship.getPosition().x > scenePos[0]) {
+				inputHandler.cancelInput();
+				ship.getVelocity().x = 0;
+				Array<MovableEntity> temp = levelScenes.start();
+				for (MovableEntity ment: temp) {
+					if (ment.getClass() == CutsceneObject.class) {
+						cutsceneObjects.add( (CutsceneObject) ment );
+					} else if (ment.getClass() == MovablePlatform.class) {
+						movablePlatforms.add( (MovablePlatform) ment );
+					}
+				}
+			}
+		}
+		return;
+	}
+	
+	public void addBullet(Bullet b) {
+		bullets.add(b);
+	}
+
+	private void loadLevel(int level) {
+		//Load level objects
+		Array<Object> objects = new Array<Object>();
+		if (level == 1) {
+			objects = Level1Objects.loadObjects(levelLayout.getMap());
+			levelScenes = new Level1Scenes(ship);
+			
+		}
 		
-		
-		
-		
+		//Load objects to World
+		for (Object o: objects) {
+			if (o instanceof EnemySpawner) {
+				spawners.add((EnemySpawner) o);
+			}
+		}
+		System.out.println("Found " + spawners.size + " enemy spawners");
+		enemies.add( new Walker(new Vector2 (5f, 9f)) );
+
+		Texture copterTex = new Texture("data/copter.png");
+		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(0, 1), 4f, 2f, new Vector2(0,11), 5f, true, 1.5f));
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
+	}
+	
+	/* ----- Object handlers ----- */
+	private void spawnEnemies() {
+		Iterator<EnemySpawner> sItr;
+		EnemySpawner s;
+
 		sItr = spawners.iterator();
 		while (sItr.hasNext()) {
 			s = sItr.next();
@@ -380,42 +300,89 @@ public class World {
 				}
 			}
 		}
-		if (levelScenes.isPlaying()) {
-			levelScenes.update(Gdx.graphics.getDeltaTime());
-		} else {
-			float[] scenePos = levelScenes.getStartValues();
-			if (ship.getPosition().x > scenePos[0]) {
-				inputHandler.cancelInput();
-				ship.getVelocity().x = 0;
-				Array<MovableEntity> temp = levelScenes.start();
-				for (MovableEntity ment: temp) {
-					if (ment.getClass() == CutsceneObject.class) {
-						cutsceneObjects.add((CutsceneObject)ment);
-					} else if (ment.getClass() == MovablePlatform.class) {
-						movablePlatforms.add((MovablePlatform)ment);
+		return;
+	}
+	
+	private void handleEnemies() {
+		Iterator<Bullet> bItr;
+		Iterator<Enemy> eItr;
+		Bullet b;
+		Enemy e;
+		
+		eItr = enemies.iterator();
+		while(eItr.hasNext()) {
+			e = eItr.next();
+			// Get near player if scene is not playing
+			if (!levelScenes.isPlaying())
+				e.advance(Gdx.graphics.getDeltaTime(), ship);
+			
+			/* Sword collisions */
+			if (e.getBounds().overlaps(sword.getBounds())) {
+				//System.out.println("C");
+				eItr.remove();
+				//System.out.println("removed enemy");
+				for (EnemySpawner spns: spawners) {
+					spns.removeEnemy(e);
+				}
+				//System.out.println("cleaned arrays");
+			}
+		}
+		
+		bItr = bullets.iterator();
+		while(bItr.hasNext()) {
+			b = bItr.next();
+			b.update(ship);
+
+			eItr = enemies.iterator();
+			while(eItr.hasNext()) {
+				e = eItr.next();
+				//e.advance(Gdx.graphics.getDeltaTime(), ship);
+			
+				if(e.getBounds().overlaps(b.getBounds())){
+					//System.out.println("C");
+					eItr.remove();
+					//System.out.println("removed enemy");
+					bItr.remove();
+					//System.out.println("removed bullet");
+					for (EnemySpawner spns: spawners) {
+						spns.removeEnemy(e);
 					}
+					//System.out.println("cleaned arrays");
 				}
 			}
 		}
+		return;
+	}
+
+	
+	
+	
+	
+	/* ----- Getter methods ----- */
+	public Ship getShip() {
+		return ship;
 	}
 	
-	public void addBullet(Bullet b) {
-		bullets.add(b);
+	public Sword getSword() {
+		return sword;
 	}
+	
+	public Array<Enemy> getEnemies() {
+		return enemies;
+	}
+	
 	public Array<Bullet> getBullets() {
 		return bullets;
 	}
+
 	public Array<CutsceneObject> getCutsceneObjects() {
 		return cutsceneObjects;
 	}
+
 	public Array<MovablePlatform> getMovablePlatforms() {
 		return movablePlatforms;
 	}
-	
-	public void setRenderer(WorldRenderer wr) {
-		this.wr = wr;
-	}
-	
+
 	public WorldRenderer getRenderer() {
 		return wr;
 	}
@@ -423,6 +390,20 @@ public class World {
 	public LevelLayout getLevelLayout() {
 		return levelLayout;
 	}
+	
+
+	
+	
+	
+	/* ----- Setter methods ----- */
+	public void setRenderer(WorldRenderer wr) {
+		this.wr = wr;
+	}
+
+	
+	
+	
+	
 	public void dispose() {
 		
 	}

@@ -22,23 +22,16 @@ public class Ship extends MovableEntity{
 	public static final float MAX_WALL_VELOCITY = 3f;
 	public static final float WALL_ATTACH_TIME = 0.13f;
 	
-	private State state=State.IDLE;
-	boolean facingRight = false;
+	private State state = State.IDLE;
+	private boolean facingRight = false;
+	private boolean onMovable = false;
 	float jumpTime = 0;
 	float wallTime = WALL_ATTACH_TIME;
 	
 	public Ship(Vector2 pos) {
 		super (SPEED, 0, pos, WIDTH, HEIGHT);
 	}
-	
-	public State getState() {
-		return state;
-	}
-	
-	public void setState(State state) {
-		this.state = state;
-	}
-	
+
 	public void resetJumpTime() {
 		jumpTime = JUMP_TIME;
 		//System.out.println("jumptime RESET to " + JUMP_TIME);
@@ -52,8 +45,16 @@ public class Ship extends MovableEntity{
 	public void resetWallTime() {
 		wallTime = WALL_ATTACH_TIME;
 	}
+	
 	public void clearWallTime() {
 		wallTime = 0f;
+	}
+	
+	
+	
+	/* ----- Getter methods ----- */
+	public State getState() {
+		return state;
 	}
 	
 	public Rectangle getProjectionRect() {
@@ -78,13 +79,27 @@ public class Ship extends MovableEntity{
 		return rect;
 	}
 	
+	public boolean isFacingRight() {
+		return facingRight;
+	}
+	
+	public boolean isOnMovable() {
+		return onMovable;
+	}
+	
+	/* ----- Setter methods ----- */
+	public void setState(State state) {
+		this.state = state;
+	}
+	
 	public void setFacingRight(boolean right) {
 		facingRight = right;
 	}
 	
-	public boolean isFacingRight() {
-		return facingRight;
+	public void setOnMovable(boolean onMovable) {
+		this.onMovable = onMovable;
 	}
+	
 	
 	public void update(Ship ship) {
 		//System.out.println("Before suepr update " + velocity.x);

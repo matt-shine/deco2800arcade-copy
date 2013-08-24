@@ -80,17 +80,24 @@ public class TestAchievementStorage {
 	
 	/**
 	 * Simple test case to make sure our XML loading is working, and that retrieving a achievement's
-	 * threshold is OK.
+	 * name is OK.
 	 * @throws DatabaseException
 	 */
 	@Test
 	public void initialTotal() throws DatabaseException {
+		
+		// Create a test ArrayList<String> of AchievementIDs
 		ArrayList<String> test = new ArrayList<String>();
 		test.add("pong.winthreegames");
+		test.add("pong.winfivegames");
+		
+		// Create a test response from database
 		ArrayList<Achievement> achievementtest = new ArrayList<Achievement>();
 		achievementtest.add(new Achievement("pong.winthreegames", "3 Times Down",
 				"Win 3 games of Pong", 3, "master.png"));
-		System.out.println(achievementtest.get(0).getName());
+		
+		// Compare achievement's name
+		System.out.println(achievementStorage.achievementsForIDs(test).get(0).getName());
 		assertEquals(achievementtest.get(0).getName(), achievementStorage.achievementsForIDs(test).get(0).getName());
 	}
 //	

@@ -1,5 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dataset>
+<ACHIEVEMENTS id='pong.winfivegames' NAME='5 Times Down' DESCRIPTION='Win 5 games of Pong' ICON='master.png' THRESHOLD='5' />
 <ACHIEVEMENTS id='pong.winthreegames' NAME='3 Times Down' DESCRIPTION='Win 3 games of Pong' ICON='master.png' THRESHOLD='3' />
 </dataset>
+
+<!-- <dataset>
+	<ACHIEVEMENTS id='pong.winthreegames'>
+		<NAME>3 Times Down</NAME>
+		<DESCRIPTION>Win 3 games of Pong</DESCRIPTION>
+		<ICON>master.png</ICON>
+		<THRESHOLD>3</THRESHOLD>
+	</ACHIEVEMENTS>
+</dataset> -->

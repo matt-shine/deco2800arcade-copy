@@ -1,6 +1,8 @@
+package main.java.deco2800.arcade.junglejump;
+
 
 public class Gravity {
 
-	final float STRENGTH = 9.8;
+	final double STRENGTH = 9.8;
 	
 }

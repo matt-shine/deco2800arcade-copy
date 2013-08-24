@@ -1,6 +1,8 @@
+package main.java.deco2800.arcade.junglejump;
 
 
-import java.util.*;
+
+import java.util.ArrayList;
 
 public class Progress {
 	
@@ -9,9 +11,9 @@ public class Progress {
 	/**
 	 * Initialises progress variables
 	 */
-	public void Progress {
+	public Progress() {
 		int levelsComplete = 0;
-		bananas = new ArrayList<ArrayList<boolean>>;
+		bananas = new ArrayList();
 		int foundBananas = 0;
 		int lives = 3;
 	}

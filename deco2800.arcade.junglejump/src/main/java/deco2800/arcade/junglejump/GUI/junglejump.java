@@ -1,7 +1,9 @@
-package deco2800.arcade.junglejump.GUI;
+package main.java.deco2800.arcade.junglejump.GUI;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.badlogic.gdx.Gdx;
 
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
@@ -15,15 +17,21 @@ import deco2800.arcade.client.GameClient;
  *
  */
 @ArcadeGame(id="junglejump")
-public class JungleJump extends GameClient {
+public class junglejump extends GameClient {
+	public static final String messages = junglejump.class.getSimpleName();
 	
-	public JungleJump(Player player){
-		super(player);
+	
+	
+	
+	
+	public junglejump(Player player){
+		super(player, networkClient);
 	}
 
 	@Override
 	public void create() {	
 		super.create();
+		Gdx.app.log(junglejump.messages, "Launching Game");
 	}
 
 	@Override

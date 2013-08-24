@@ -1,18 +1,21 @@
 
-package deco2800.arcade.junglejump.platform;
+package main.java.deco2800.arcade.junglejump;
 
 public class Platform {
 	
+	private int width, height, xPos, yPos;
+	private boolean active;
+
 	/**
 	 * Platform constructor
 	 * Takes width, height and X and Y position as parameters
 	 */
 	public void platform(int pWidth, int pHeight, int pX, int pY) {
-		private int width = pWidth;
-		private int height = pHeight;
-		private int xPos = pX;
-		private int yPos = pY;
-		private bool active = false;
+		int width = pWidth;
+		int height = pHeight;
+		int xPos = pX;
+		int yPos = pY;
+		boolean active = false;
 	}
 	
 	/**

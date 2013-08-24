@@ -22,6 +22,7 @@ public class Ship extends MovableEntity{
 	public static final float WALL_ATTACH_TIME = 0.13f;
 	
 	private State state = State.IDLE;
+	private int hearts = 3;
 	private boolean facingRight = false;
 	private boolean onMovable = false;
 	float jumpTime = 0;
@@ -86,6 +87,10 @@ public class Ship extends MovableEntity{
 		return onMovable;
 	}
 	
+	public int getHearts() {
+		return hearts;
+	}
+	
 	/* ----- Setter methods ----- */
 	public void setState(State state) {
 		this.state = state;
@@ -97,6 +102,11 @@ public class Ship extends MovableEntity{
 	
 	public void setOnMovable(boolean onMovable) {
 		this.onMovable = onMovable;
+	}
+	
+	public void decrementHearts() {
+		hearts--;
+		return;
 	}
 	
 	

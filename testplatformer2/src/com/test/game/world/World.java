@@ -78,10 +78,14 @@ public class World {
 		
 		//System.out.println("End of World update " + ship.getVelocity().x);
 
+		// Check if sprite has gone out of level bounds to the bottom.
 		if( (int)ship.getPosition().y < -1 ) {
 			resetLevel(curLevel);
 		}
-		
+		// Reset if health = 0
+		if( ship.getHearts() == 0 ) {
+			resetLevel(curLevel);
+		}
 
 		if (levelScenes.isPlaying()) {
 			levelScenes.update(Gdx.graphics.getDeltaTime());
@@ -274,7 +278,13 @@ public class World {
 			
 			/* Collision with enemy */
 			if ( e.getBounds().overlaps(ship.getBounds()) ) {
-				resetLevel(curLevel);
+				ship.decrementHearts();
+				
+				if(e.getPosition().x >= ship.getPosition().x) {
+					ship.getPosition().x -= 1;
+				} else {
+					ship.getPosition().x += 1;
+				}
 			}
 		}
 		

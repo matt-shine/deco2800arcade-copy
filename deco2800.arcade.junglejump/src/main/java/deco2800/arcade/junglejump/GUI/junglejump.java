@@ -10,7 +10,8 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
 
 /**
- * A simple platformer
+ * Main class for Jungle Jump Game
+ * Instantiates game with scene, player and assets
  *
  */
 @ArcadeGame(id="junglejump")

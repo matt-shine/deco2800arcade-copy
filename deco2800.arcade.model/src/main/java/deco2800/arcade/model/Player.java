@@ -34,6 +34,11 @@ public class Player {
 	public Player() {
 
 	}
+	
+	public Player(String username) {
+		
+		username = username;
+	}
 
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.

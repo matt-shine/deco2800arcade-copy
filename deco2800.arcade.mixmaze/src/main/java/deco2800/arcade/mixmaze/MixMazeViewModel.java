@@ -32,6 +32,7 @@ public class MixMazeViewModel implements Screen {
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		stage.act(delta);
 		stage.draw();
+		Table.drawDebug(stage);
 	}
 
 	@Override
@@ -59,6 +60,7 @@ public class MixMazeViewModel implements Screen {
 		model = new MixMazeModel(5, 5);
 		stage = new Stage();
 		table = new Table();
+		table.debug();
 		tileTable = new Table();
 		
 		// Initialize tiles

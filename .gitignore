@@ -27,3 +27,4 @@ bin
 # Intellij Idea IDE
 .idea/
 *.iml
+*.eml

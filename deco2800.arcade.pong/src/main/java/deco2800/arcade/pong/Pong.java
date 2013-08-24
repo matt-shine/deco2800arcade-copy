@@ -1,5 +1,6 @@
 package deco2800.arcade.pong;
 
+import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +19,8 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.AchievementClient;
+
 /**
  * A Pong game for use in the Arcade
  * @author uqjstee8
@@ -53,6 +56,7 @@ public class Pong extends GameClient {
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
+	private AchievementClient achievementClient;
 
 	/**
 	 * Basic constructor for the Pong game
@@ -64,7 +68,8 @@ public class Pong extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
-        
+        this.achievementClient = new AchievementClient(networkClient);
+
 
         
         
@@ -277,7 +282,9 @@ public class Pong extends GameClient {
 		    networkClient.sendNetworkObject(createScoreUpdate());
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
-                incrementAchievement("pong.winGame");
+		    	//Will need to store instance of player rather then just username 
+		    	//to call incrementprogress.
+                //achievementClient.incrementProgress("pong.winGame", );
 		    	//TODO Should have more detail in the achievement message
 		    }
 		} else {

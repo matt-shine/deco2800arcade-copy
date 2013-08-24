@@ -3,6 +3,7 @@ package deco2800.arcade.protocol;
 import com.esotericsoftware.kryo.Kryo;
 
 import deco2800.arcade.protocol.achievement.*;
+import java.util.ArrayList;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -39,6 +40,7 @@ public class Protocol {
 		kryo.register(IncrementProgressResponse.class);
 		kryo.register(ProgressForPlayerRequest.class);
 		kryo.register(ProgressForPlayerResponse.class);
+		kryo.register(java.util.ArrayList.class);
 		
 		//Game messages
 		kryo.register(GameStatusUpdate.class);

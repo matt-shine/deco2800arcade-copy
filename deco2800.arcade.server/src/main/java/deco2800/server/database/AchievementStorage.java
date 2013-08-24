@@ -155,7 +155,7 @@ public class AchievementStorage {
      * @param gameId	The game to fetch achievements for.
      * @return			A list of Achievements for the supplied game.
      */
-    public ArrayList<Achievement> achievementsForGame(Game gameId) {
+    public ArrayList<Achievement> achievementsForGame(Game gameId) throws DatabaseException {
         ArrayList<Achievement> achievements = new ArrayList<Achievement>();
 
         return achievements;
@@ -169,7 +169,7 @@ public class AchievementStorage {
      * @param player The player to fetch achievement progress for.
      * @return An AchievementProgress instance with the player's progress.
      */ 
-    public AchievementProgress progressForPlayer(Player player) {
+    public AchievementProgress progressForPlayer(Player player) throws DatabaseException {
     	//Not sure exactly what this method will entail/does 
     	//focus on other methods for now
         

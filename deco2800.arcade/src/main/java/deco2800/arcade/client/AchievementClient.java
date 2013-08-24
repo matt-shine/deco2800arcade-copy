@@ -12,13 +12,25 @@ import deco2800.arcade.client.AchievementListener;
 
 public class AchievementClient {
 
-    //private NetworkClient networkClient;
+    private NetworkClient networkClient;
     private HashSet<AchievementListener> listeners;
 
     public AchievementClient(NetworkClient networkClient) {
-        //this.networkClient = networkClient;
+        this.networkClient = networkClient;
         this.listeners = new HashSet<AchievementListener>();
     }
+   
+   /**
+    * The Method below works to send things through the chat system... 
+    * now just to test ours...
+    
+   public void joshtest(String text){
+	    TextMessage textMessage = new TextMessage();
+	   textMessage.text = text;
+		textMessage.username = "";
+		networkClient.sendNetworkObject(textMessage);
+   }
+   */
 
     /**
      * Utility method for fetching a single achievement. This is just a wrapper
@@ -33,6 +45,7 @@ public class AchievementClient {
     public Achievement achievementForID(String achievementID) {
         ArrayList<String> achievementIDs = new ArrayList<String>();
         achievementIDs.add(achievementID);
+
         return achievementsForIDs(achievementIDs).get(0);
     }
     
@@ -50,12 +63,16 @@ public class AchievementClient {
      */
     public ArrayList<Achievement> achievementsForIDs(
             ArrayList<String> achievementIDs) {
-        ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-        //see packet AchievementsForIDs in protocol
+        
+        AchievementsForIDsRequest request = new AchievementsForIDsRequest();
+        request.achievementIDs = achievementIDs;
+        networkClient.sendNetworkObject(request);
+        
 
 	// We should do some aggressive caching of Achievements here because
 	// they're immutable - once we've retrieved it from the server once
 	// we shouldn't ever need to ask for it again.
+        ArrayList<Achievement> achievements = new ArrayList<Achievement>();
 
         return achievements;
     }
@@ -80,6 +97,12 @@ public class AchievementClient {
      * @return An AchievementProgress instance with the player's progress.
      */
     public AchievementProgress progressForPlayer(Player player) {
+    	
+    	ProgressForPlayerRequest request = new ProgressForPlayerRequest();
+    	request.player = player;
+    	
+    	networkClient.sendNetworkObject(request);
+    	
         return new AchievementProgress(player);
     }
     
@@ -91,6 +114,11 @@ public class AchievementClient {
      * @param player        The player whose progress should be incremented.
      */
     public void incrementProgress(String achievementID, Player player) {
+    	IncrementProgressRequest request = new IncrementProgressRequest();
+    	request.achievementID = achievementID;
+    	request.player = player;
+    	
+    	networkClient.sendNetworkObject(request);
         
     }
 

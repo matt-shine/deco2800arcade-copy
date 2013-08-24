@@ -21,8 +21,6 @@ import deco2800.arcade.model.Game.ArcadeGame;
 public class ArcadeUI extends GameClient {
 	   
 	private boolean isOverlay = false;
-
-	
 	
 	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
 		super(player, networkClient);
@@ -35,11 +33,11 @@ public class ArcadeUI extends GameClient {
 
 	@Override
 	public void create() {
-		
 		if (isOverlay) {
 			this.setScreen(new Overlay());
 		} else if (player == null) {
 			this.setScreen(new LoginScreen());
+			
 		} else {
 			this.setScreen(new HomeScreen());
 		}

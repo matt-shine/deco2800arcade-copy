@@ -37,7 +37,7 @@ public class Player {
 	
 	public Player(String username) {
 		
-		username = username;
+		this.username = username;
 	}
 
 	/**

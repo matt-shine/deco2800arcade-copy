@@ -2,21 +2,18 @@ package zombieInvaders;
 
 import javax.swing.ImageIcon;
 
-public class shot extends Sprite {
+public class Shot extends Sprites {
 
 	//TODO shot image, file location
 	private String shot = "";
-	private final int H_SPACE = 6;
-    private final int V_SPACE = 1;
-
-    public Shot() {
-    }
+	private final int HSpace = 6;
+    private final int VSpace = 1;
 
     public Shot(int x, int y) {
 
         ImageIcon ii = new ImageIcon(this.getClass().getResource(shot));
         setImage(ii.getImage());
-        setX(x + H_SPACE);
-        setY(y - V_SPACE);
+        setX(x + HSpace);
+        setY(y - VSpace);
     }
 }

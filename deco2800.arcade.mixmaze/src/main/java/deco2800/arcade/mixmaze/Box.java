@@ -20,8 +20,13 @@ final class Box extends Group {
 	 * A controller class would be the choice.
 	 */
 	private static final String LOG = Box.class.getSimpleName();
+	
+	//TODO fix these
+	@SuppressWarnings("unused")
 	private final int row;
+	@SuppressWarnings("unused")
 	private final int col;
+	
 	private final ShapeRenderer shapeRenderer;
 	private final Wall north;
 	private final Wall east;

@@ -31,8 +31,7 @@ public class LocalUserPaddle extends Paddle {
     	if (Gdx.input.isTouched()) {
     		Vector2 touchPos = new Vector2();
     		touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-    		//camera.unproject(touchPos);
-    		bounds.y = touchPos.y - bounds.height / 2;
+    		bounds.y = -touchPos.y - bounds.height / 2 + Pong.SCREENHEIGHT;
     	}
 
     	//Move the left paddle (keyboard)

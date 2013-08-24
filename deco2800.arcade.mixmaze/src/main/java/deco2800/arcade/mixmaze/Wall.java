@@ -3,7 +3,6 @@
  */
 package deco2800.arcade.mixmaze;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,7 +14,6 @@ final class Wall extends Actor {
 		NORTH, EAST, SOUTH, WEST
 	}
 
-	private static final String LOG = Wall.class.getSimpleName();
 	private final ShapeRenderer shapeRenderer;
 	private final Type type;
 

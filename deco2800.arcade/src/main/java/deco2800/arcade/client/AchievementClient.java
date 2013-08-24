@@ -9,10 +9,10 @@ import deco2800.arcade.client.network.NetworkClient;
 
 public class AchievementClient {
 
-    private NetworkClient networkClient;
+    //private NetworkClient networkClient;
 
     public AchievementClient(NetworkClient networkClient) {
-        this.networkClient = networkClient;
+        //this.networkClient = networkClient;
     }
 
     /**

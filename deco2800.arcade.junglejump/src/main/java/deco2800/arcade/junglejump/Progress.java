@@ -22,6 +22,9 @@ public class Progress {
 	 * Adds a banana to the total found
 	 */
 	public void addBanana(int level, int banana) {
+		ddfdfd.
+		kjlguibk
+		knlm,m
 	}
 
 }

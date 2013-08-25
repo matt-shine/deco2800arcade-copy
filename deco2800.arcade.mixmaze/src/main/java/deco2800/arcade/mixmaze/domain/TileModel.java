@@ -22,12 +22,19 @@ public class TileModel {
 		return walls[direction];
 	}
 	
+	public boolean isBox() {
+		return getWall(Direction.WEST).isBuilt() && 
+				getWall(Direction.NORTH).isBuilt() && 
+				getWall(Direction.EAST).isBuilt() && 
+				getWall(Direction.SOUTH).isBuilt();
+	}
+	
 	public TileModel(int x, int y) {
 		tileX = x;
 		tileY = y;
 		walls = new WallModel[4];
-		for(int i = 0; i < 4; ++i) {
-			walls[i] = new WallModel(i);
+		for(int direction = 0; direction < 4; ++direction) {
+			walls[direction] = new WallModel(direction);
 		}
 	}
 }

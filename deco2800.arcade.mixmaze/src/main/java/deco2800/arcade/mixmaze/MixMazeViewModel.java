@@ -14,6 +14,8 @@ public class MixMazeViewModel implements Screen {
 	private static final String LOG = MixMazeViewModel.class.getSimpleName();
 	
 	private MixMazeModel model;
+	private TileViewModel[][] board;
+	
 	private Stage stage;
 	private Table table;
 	private Table tileTable;
@@ -64,15 +66,18 @@ public class MixMazeViewModel implements Screen {
 	public MixMazeViewModel() {
 		Gdx.app.debug(LOG, "Initializing");
 		
+		// Initialize model and UI elements
 		model = new MixMazeModel(5, 5);
 		stage = new Stage();
 		table = new Table();
 		tileTable = new Table();
 		
 		// Initialize tiles
-		for(int i = 0; i < model.getBoardHeight(); ++i) {
-			for(int j = 0; j < model.getBoardWidth(); ++j) {
-				tileTable.add(new TileViewModel(model.getTile(i, j)))
+		board = new TileViewModel[model.getBoardHeight()][model.getBoardWidth()];
+		for(int row = 0; row < model.getBoardHeight(); ++row) {
+			for(int column = 0; column < model.getBoardWidth(); ++column) {
+				board[row][column] = new TileViewModel(model.getTile(column, row));
+				tileTable.add(board[row][column])
 						.width(128)
 						.height(128);
 			}

@@ -12,10 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Logger;
+
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameScreen;
 
 public class Overlay extends GameScreen {
+
+	private Logger logger = new Logger("Overlay");
 	
 	private Screen callbacks = null;
 	private boolean notifiedForMissingCallbacks = false;
@@ -49,7 +54,7 @@ public class Overlay extends GameScreen {
         stage = new Stage();
         
         
-        Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
         
         table.setFillParent(true);
         
@@ -116,8 +121,14 @@ public class Overlay extends GameScreen {
 		
 		if (callbacks == null && !notifiedForMissingCallbacks) {
 	    	notifiedForMissingCallbacks = true;
-	    	System.err.println("Overlay event listeners are not set.");
+	    	logger.error("No overlay listener is set");
 	    }
+
+	    if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance()) {
+	    	logger.error("Something has stolen the inputlistener");
+	    }
+
+
 	}
 
 	@Override
@@ -125,6 +136,11 @@ public class Overlay extends GameScreen {
 	    if (callbacks != null) {
 	    	callbacks.dispose();
 	    }
+
+	    stage.dispose();
+	    skin.dispose();
+
+	    ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override

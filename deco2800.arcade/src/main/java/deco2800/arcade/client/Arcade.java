@@ -81,8 +81,8 @@ public class Arcade extends JFrame {
 	 * @param args
 	 */
 	private Arcade(String[] args){
-		this.width = 640;
-		this.height = 480;
+		this.width = 1280;
+		this.height = 720;
 
 		initWindow();
 	}
@@ -177,7 +177,7 @@ public class Arcade extends JFrame {
 		this.player = new Player();
 		this.player.setUsername(username);
 
-		this.communicationNetwork.createInterface();
+		//this.communicationNetwork.createNewChat(username);
 	}
 
 	/**

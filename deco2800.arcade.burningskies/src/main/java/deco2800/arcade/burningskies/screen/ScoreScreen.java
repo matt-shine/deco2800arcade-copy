@@ -1,8 +1,8 @@
-package deco2800.arcade.burningskies;
+package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Screen;
 
-public class HelpMenu implements Screen {
+public class ScoreScreen implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub

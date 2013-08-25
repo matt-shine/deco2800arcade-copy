@@ -1,8 +1,9 @@
-package deco2800.arcade.burningskies;
+package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Screen;
 
-public class ScoreScreen implements Screen {
+public class Menu implements Screen {
+
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -22,13 +23,13 @@ public class ScoreScreen implements Screen {
 	}
 
 	@Override
-	public void render(float delta) {
+	public void render(float arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void resize(int width, int height) {
+	public void resize(int arg0, int arg1) {
 		// TODO Auto-generated method stub
 
 	}
@@ -44,4 +45,5 @@ public class ScoreScreen implements Screen {
 		// TODO Auto-generated method stub
 
 	}
+
 }

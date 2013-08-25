@@ -13,6 +13,8 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.burningskies.screen.Menu;
+import deco2800.arcade.burningskies.screen.Splash;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 /**
@@ -33,8 +35,8 @@ public class BurningSkies extends GameClient {
 
 	private NetworkClient networkClient;
 	
-	Splash splashScreen;
-	Menu menuScreen;
+	public Splash splashScreen;
+	public Menu menuScreen;
 
 	/**
 	 * Basic constructor for the Burning Skies game

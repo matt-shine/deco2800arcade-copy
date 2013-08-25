@@ -1,9 +1,17 @@
-package deco2800.arcade.burningskies;
+package deco2800.arcade.burningskies.screen;
+
+import java.util.*;
 
 import com.badlogic.gdx.Screen;
 
-public class Menu implements Screen {
-
+public class OptionsMenu implements Screen {
+	
+	private int masterVolume;
+	private int bgmVolume;
+	private int sfxVolume;
+	private int difficulty;
+	private TreeMap<String, String> keybindings;
+	
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -23,13 +31,13 @@ public class Menu implements Screen {
 	}
 
 	@Override
-	public void render(float arg0) {
+	public void render(float delta) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
+	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
 
 	}
@@ -45,5 +53,5 @@ public class Menu implements Screen {
 		// TODO Auto-generated method stub
 
 	}
-
+	
 }

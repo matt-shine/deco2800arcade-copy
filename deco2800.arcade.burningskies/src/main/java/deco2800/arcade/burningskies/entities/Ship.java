@@ -1,4 +1,4 @@
-package deco2800.arcade.burningskies;
+package deco2800.arcade.burningskies.entities;
 
 public class Ship {
 	

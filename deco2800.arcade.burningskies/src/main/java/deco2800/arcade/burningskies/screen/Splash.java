@@ -1,4 +1,4 @@
-package deco2800.arcade.burningskies;
+package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import deco2800.arcade.burningskies.BurningSkies;
  
 public class Splash implements Screen
 {

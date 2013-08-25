@@ -13,9 +13,10 @@ import deco2800.arcade.model.Player;
 public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
-	protected NetworkClient networkClient;
+	protected static NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private ApplicationListener overlay = null;
+	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
 	private int width, height;
     private AchievementClient achievementClient;
@@ -35,9 +36,25 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	/**
 	 * Adds the in game overlay
+	 * @param overlay
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
+	}
+
+	/**
+	 * Adds the in game overlay
+	 * @param overlay
+	 */
+	public void addOverlayBridge(UIOverlay overlay) {
+		this.overlayBridge = overlay;
+	}
+
+	/**
+	 * @return The overlay
+	 */
+	public UIOverlay getOverlay() {
+		return overlayBridge;
 	}
 
 

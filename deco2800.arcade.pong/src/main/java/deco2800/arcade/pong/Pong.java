@@ -1,9 +1,7 @@
 package deco2800.arcade.pong;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +15,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 /**
@@ -57,14 +56,20 @@ public class Pong extends GameClient {
 
 	/**
 	 * Basic constructor for the Pong game
-	 * @param userName The name of the player
-	 * @param client The network client for sending/receiving messages to/from the server
+	 * @param player The name of the player
+	 * @param networkClient The network client for sending/receiving messages to/from the server
 	 */
 	public Pong(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
+        
+
+        
+        
+        
+        
 	}
 	
 	/**
@@ -72,6 +77,45 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void create() {
+		
+        
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				//TODO: unpause pong
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				//TODO: unpause pong
+			}
+			
+        });
+        
+        
+		
 		super.create();
 		
 		//Initialise camera
@@ -128,7 +172,6 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void render() {
-
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -209,6 +252,7 @@ public class Pong extends GameClient {
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
 	    		gameOver();
+	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
 	    	}
 	    	break;
 	    }
@@ -245,7 +289,7 @@ public class Pong extends GameClient {
 	
 	/**
 	 * Create an update object to send to the server notifying of a score change or game outcome
-	 * @return
+	 * @return The Game Status Update.
 	 */
 	private GameStatusUpdate createScoreUpdate() {
 		GameStatusUpdate update = new GameStatusUpdate();
@@ -280,6 +324,7 @@ public class Pong extends GameClient {
 		game = new Game();
 		game.id = "pong";
 		game.name = "Pong";
+        game.description = "Tennis, without that annoying 3rd dimension!";
 	}
 	
 	public Game getGame() {

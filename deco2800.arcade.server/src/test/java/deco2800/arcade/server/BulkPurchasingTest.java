@@ -23,11 +23,15 @@ public class BulkPurchasingTest {
 	CreditStorage mockCS = mock(CreditStorage.class);
 	private Player barnaby;
 	
+	@SuppressWarnings("deprecation")
 	@Before
 	public void setup() {
 		purchasingService = new PurchasingService();
+		
+		//TODO: Chnage this to the other constructor
 		algernon = new Player("Algernon");
 		barnaby = new Player("Barnaby");
+		
 		tiddlywinks = new Game();
 		tiddlywinks.name = "tiddlywinks";
 		tiddlywinks.pricePerPlay = 1;
@@ -122,7 +126,7 @@ public class BulkPurchasingTest {
 	
 	@Test
 	public void testTwentyTeamPlay() throws Exception {
-		HashSet players = new HashSet<Player>();
+		HashSet<Player> players = new HashSet<Player>();
 		players.add(algernon);
 		players.add(barnaby);
 		

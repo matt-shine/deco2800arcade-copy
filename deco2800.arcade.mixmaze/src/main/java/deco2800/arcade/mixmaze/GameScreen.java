@@ -19,7 +19,11 @@ import static com.badlogic.gdx.graphics.GL20.*;
 
 final class GameScreen implements Screen {
 	private static final String LOG = GameScreen.class.getSimpleName();
+	
+	//TODO use this
+	@SuppressWarnings("unused")
 	private final MixMaze game;
+	
 	private final Stage stage;
 	private final ShapeRenderer shapeRenderer;
 	private final Box[][] boxes;

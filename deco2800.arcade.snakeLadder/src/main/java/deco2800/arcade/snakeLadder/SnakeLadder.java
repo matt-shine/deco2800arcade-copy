@@ -105,7 +105,7 @@ public class SnakeLadder extends GameClient {
 		//loading game map
 		tileList = new ArrayList<Tile>();
 		loadMap(tileList,"assets/lvl1.txt");
-		
+		System.out.println("success");
 	}
 	
 
@@ -148,12 +148,13 @@ public class SnakeLadder extends GameClient {
 
 	private boolean loadMap(List<Tile> tileList, String filePath) {
 		FileHandle handle = Gdx.files.classpath(filePath);
-		BufferedReader file = handle.reader(1024);
+		BufferedReader file = handle.reader(2048);
+		
 		int counter = 0;
 		try {
-			while(file.read()!=1)
+			String line = "";
+			while((line = file.readLine()) != null)
 			{
-				String line = file.readLine();
 				for(int i=0;i<line.length();i++)
 				{
 					int index =0;
@@ -163,7 +164,7 @@ public class SnakeLadder extends GameClient {
 					}
 					else
 					{
-						index = (10-counter-1)*10+i;
+						index = (10-counter-1)*10+i+1;
 					}
 					Tile t = new TileLvl1(index,60,line.charAt(i));
 					if(t.getRule()!='.')
@@ -172,6 +173,7 @@ public class SnakeLadder extends GameClient {
 					}
 					tileList.add(t);
 				}
+				counter++;
 			}
 			file.close();
 		} catch (IOException e) {

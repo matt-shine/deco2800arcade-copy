@@ -14,12 +14,14 @@ import deco2800.arcade.client.ArcadeSystem;
 public class LoginScreen implements Screen {
 	
 	
-    private Skin skin; // Move this somewhere appropriate
+    private Skin skin;
     private Stage stage;
 	
 	
 	
 	public LoginScreen() {
+        //skin = new Skin(Gdx.files.internal("loginSkin.json"));
+
         // Move skin stuff to an overall class
         skin = new Skin();
         
@@ -51,8 +53,8 @@ public class LoginScreen implements Screen {
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
 
-
         stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -78,9 +80,6 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(loginButton).width(100).pad(10);
         table.add(exitButton).width(100).pad(10);
-
-        stage.addActor(usernameText);
-        Gdx.input.setInputProcessor(stage);
         
         loginButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
@@ -106,7 +105,6 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        Gdx.input.setInputProcessor(stage);
         Table.drawDebug(stage);
 
 	    if (ArcadeSystem.isLoggedIn()) {

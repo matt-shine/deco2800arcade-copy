@@ -276,10 +276,15 @@ public class Arcade extends JFrame {
 		});
 	}
 
+	private Map<String,Class<? extends GameClient>> gameMap = null;
+	
 	private Map<String,Class<? extends GameClient>> getGameMap() {
 
-		Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
-
+		if (gameMap != null) {
+			return gameMap;
+		}
+		
+		gameMap = new HashMap<String,Class<? extends GameClient>>();
 		Reflections reflections = new Reflections("deco2800.arcade");
 		Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
 		for (Class<?> g : possibleGames) {

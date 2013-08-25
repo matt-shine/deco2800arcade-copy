@@ -7,33 +7,35 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.UIOverlay.PopupMessage;
 
 public class OverlayScreen implements Screen {
+	
 	
 	private Screen callbacks = null;
 	private boolean notifiedForMissingCallbacks = false;
 		
+	
     private Skin skin;
     private Stage stage;
     Table table = new Table();
     
-    private OverlayPopup popup = new OverlayPopup();
-	
+    
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
-	private SpriteBatch batch;
+	
+	private Overlay overlay;
 
 	
-	
-	public OverlayScreen() {
+	public OverlayScreen(Overlay overlay) {
 
-		batch = new SpriteBatch();
+		
+		this.overlay = overlay;
 		
         skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -54,7 +56,7 @@ public class OverlayScreen implements Screen {
         
         Label quitLabel = new Label("Press escape to quit...", skin);
         table.row();
-        table.add(quitLabel).expand().space(40).top();
+        table.add(quitLabel).expand().space(100).top();
         table.layout();
         
         stage.addActor(table);
@@ -82,6 +84,14 @@ public class OverlayScreen implements Screen {
 				}
 			}
 			
+			
+			if (isUIOpen) {
+				overlay.addPopup(new PopupMessage() {
+					public String getMessage() {
+						return "Test overlay popup message.";
+					}
+				});
+			}
 		}
 		
 		if (isUIOpen) {
@@ -93,10 +103,6 @@ public class OverlayScreen implements Screen {
 			Table.drawDebug(stage);
 			
 			
-			
-			popup.act(d);
-			popup.draw(batch, 1);
-		    
 		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 		    	ArcadeSystem.goToGame(ArcadeSystem.UI);
 		    }

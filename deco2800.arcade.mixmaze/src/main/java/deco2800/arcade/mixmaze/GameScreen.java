@@ -19,11 +19,11 @@ import static com.badlogic.gdx.graphics.GL20.*;
 
 final class GameScreen implements Screen {
 	private static final String LOG = GameScreen.class.getSimpleName();
-	
+
 	//TODO use this
 	@SuppressWarnings("unused")
 	private final MixMaze game;
-	
+
 	private final Stage stage;
 	private final ShapeRenderer shapeRenderer;
 	private final Box[][] boxes;
@@ -40,6 +40,7 @@ final class GameScreen implements Screen {
 	 * This constructor associate GameScreen with MixMaze.
 	 */
 	GameScreen(final MixMaze game) {
+		Table container;
 
 		this.game = game;
 
@@ -54,13 +55,27 @@ final class GameScreen implements Screen {
 		table.debug();
 		stage.addActor(table);
 
-		timerLabel = new Label("Timer", 
+		/* header */
+		timerLabel = new Label("Timer",
 				new Label.LabelStyle(new BitmapFont(),
 				CYAN));
-		table.add(timerLabel).width(160);
+		table.add(timerLabel).width(960).height(80);
+		table.row();
+
+		/* container contains side panels and gameboard */
+		container = new Table();
+		table.add(container);
+
+		/* left side panel */
+		container.add(new Label("left", new Label.LabelStyle(new BitmapFont(), RED))).width(160).height(640).bottom().left();
+
+		/* game board */
 		gameBoard = new Table();
-		table.add(gameBoard).bottom().left().expand().fill()
+		container.add(gameBoard).bottom().left()
 				.width(640).height(640);
+
+		/* right side panel */
+		container.add(new Label("right", new Label.LabelStyle(new BitmapFont(), RED))).width(160).height(640).bottom().left();
 
 		boxes = new Box[5][5];
 		for (int i = 4; i >= 0; i--) {
@@ -73,7 +88,6 @@ final class GameScreen implements Screen {
 			}
 			gameBoard.row();
 		}
-		//gameBoard.invalidate();
 
 		/*
 		 * FIXME: There should be a separate controller rather
@@ -101,7 +115,7 @@ final class GameScreen implements Screen {
 	public void resize(int width, int height) {
 		Gdx.app.debug(LOG, "resizing");
 
-		stage.setViewport(800, 640, true);
+		stage.setViewport(960, 720, true);
 		stage.getCamera().translate(-stage.getGutterWidth(),
 				-stage.getGutterHeight(), 0);
 	}
@@ -124,8 +138,9 @@ final class GameScreen implements Screen {
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				elapsed += 1;
-				Gdx.app.debug(LOG, "3 seconds passed");
-				timerLabel.setText("Timer: " 
+				//Gdx.app.debug(LOG,
+				//	"" + elapsed +" seconds passed");
+				timerLabel.setText("Timer: "
 						 + elapsed);
 			}
 		}, 1, 1, 60);

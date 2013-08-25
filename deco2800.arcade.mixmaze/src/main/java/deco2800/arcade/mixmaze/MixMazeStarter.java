@@ -13,7 +13,7 @@ public class MixMazeStarter{
 
 		cfg.title = "Mix Maze (developing)";
 		cfg.useGL20 = true;
-		cfg.width = 720;
+		cfg.width = 960;
 		cfg.height = 720;
 
 		new LwjglApplication(new MixMaze(null, null), cfg);

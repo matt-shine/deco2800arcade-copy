@@ -1,7 +1,5 @@
 package deco2800.arcade.hunter;
 
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-
 import deco2800.arcade.hunter.Screens.GameOverScreen;
 import deco2800.arcade.hunter.Screens.GameScreen;
 import deco2800.arcade.hunter.Screens.MenuScreen;

@@ -9,9 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -58,7 +56,6 @@ public class MenuScreen implements Screen {
 		table.row();
 		
 		//Add options button to the table
-//		TextButton optionsButton = new TextButton("Options");
 		Button optionsButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/optionsbutton.png"))));
 		optionsButton.setSize(200,60);
 		
@@ -66,6 +63,8 @@ public class MenuScreen implements Screen {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("Options worked!");
+//				game.setScreen(new OptionScreen(game));
+				/*TODO fix the broken options screen, then re-enable this*/
 			}
 		});
 		
@@ -74,7 +73,6 @@ public class MenuScreen implements Screen {
 		
 		
 		//Add highscore button to the table
-//		TextButton highScoreButton = new TextButton("HighScore", new Skin());
 		Button highScoreButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/highscorebutton.png"))));
 		highScoreButton.setSize(200, 60);
 		
@@ -82,13 +80,14 @@ public class MenuScreen implements Screen {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("HighScore worked!");
+//				game.setScreen(new HighScoreScreen(game));
+				/*TODO Fix the broken High Score screen, then re-enable this*/
 			}
 		});
 		
 		table.add(highScoreButton).size(200,60).spaceBottom(20);
 		table.row();
 		
-//		TextButton exitButton = new TextButton("Exit", new Skin());
 		Button exitButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/exitbutton.png"))));
 		exitButton.setSize(200, 60);
 		
@@ -96,7 +95,7 @@ public class MenuScreen implements Screen {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("Exit Works");
-				game.dispose();
+				/*TODO Get this to quit properly, maybe take a look at how it is implemented in the Overlay to get back to the menu*/
 			}
 		});
 		
@@ -107,7 +106,6 @@ public class MenuScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		
 	}
 
 	@Override

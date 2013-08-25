@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameScreen;
 
@@ -32,10 +33,14 @@ public class LoginScreen extends GameScreen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         skin.add("default", labelStyle);
-        
+
+        // Specify font, fontColor, cursor, selection, and background
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = skin.getFont("default");
-        textFieldStyle.fontColor = Color.BLUE;
+        textFieldStyle.fontColor = Color.WHITE;
+        //textFieldStyle.cursor = ;
+        //textFieldStyle.selection = ;
+        //textFieldStyle.background = ;
         skin.add("default", textFieldStyle);
         
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -48,28 +53,34 @@ public class LoginScreen extends GameScreen {
 
 
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
         Label usernameLabel = new Label("Username:", skin);
-        final TextField usernameText = new TextField("debuguser", skin);
-        final Label passwordLabel = new Label("Password:", skin);
-        TextField passwordText = new TextField("", skin);
+        final TextField usernameText = new TextField("", skin);
+        usernameText.setMessageText("Enter Username");
+        Label passwordLabel = new Label("Password:", skin);
+        final TextField passwordText = new TextField("", skin);
+        passwordText.setMessageText("Enter Password");
         TextButton loginButton = new TextButton("Login", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
-        table.add(usernameLabel);
-        table.add(usernameText).width(100);
+        table.debug();
+        usernameLabel.setAlignment(Align.right);
+        table.add(usernameLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.add(usernameText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
         table.row();
-        table.add(passwordLabel);
-        table.add(passwordText).width(100);
+        passwordLabel.setAlignment(Align.right);
+        table.add(passwordLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.add(passwordText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
         table.row();
-        table.add(loginButton);
-        table.add(exitButton);
+        table.add(loginButton).width(100).pad(10);
+        table.add(exitButton).width(100).pad(10);
 
+        stage.addActor(usernameText);
+        Gdx.input.setInputProcessor(stage);
         
         loginButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
@@ -102,6 +113,8 @@ public class LoginScreen extends GameScreen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+        Gdx.input.setInputProcessor(stage);
+        Table.drawDebug(stage);
 
 	    if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");

@@ -29,4 +29,16 @@ public class Direction {
 	public static boolean isDirection(int direction) {
 		return isWest(direction) || isNorth(direction) || isEast(direction) || isSouth(direction);
 	}
+	
+	public static boolean isXDirection(int direction) {
+		return isWest(direction) || isEast(direction);
+	}
+	
+	public static boolean isYDirection(int direction) {
+		return isNorth(direction) || isSouth(direction);
+	}
+	
+	public static boolean isPositiveDirection(int direction) {
+		return isEast(direction) || isSouth(direction);
+	}
 }

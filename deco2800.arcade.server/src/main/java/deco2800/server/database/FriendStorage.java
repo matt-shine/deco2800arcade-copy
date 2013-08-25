@@ -51,10 +51,10 @@ public class FriendStorage {
 	 * 
 	 * @param playerID
 	 * @return 
-	 * 		Returns List of friends
+	 * 		Returns a list of playerIDs which represent the player's friends. 
 	 * @throws DatabaseException
 	 */
-	public List<Integer> getFriendsList(int playerID) throws DatabaseException {
+	public ArrayList<Integer> getFriendsList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -90,16 +90,16 @@ public class FriendStorage {
 	}
 	
 	/**
-	 * Returns a list of unconfirmed friend requests for the given playerID
+	 * Returns a list of friend invites for the given playerID.
 	 * 
 	 * @param playerID
-	 * 			The playerID of the player whose friend request list is being returned.
+	 * 			The playerID of the player whose friend invite list is being returned.
 	 * @return 
-	 * 		Returns a list of playerIDs of players who have sent friend requests
+	 * 		Returns a list of playerIDs of players who have sent friend invites
 	 * 		which the player has not yet responded to.
 	 * @throws DatabaseException
 	 */
-	public List<Integer> getFriendRequestList(int playerID) throws DatabaseException {
+	public List<Integer> getFriendInviteList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -116,7 +116,7 @@ public class FriendStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
-					"Unable to get to get friend request information from database", e);
+					"Unable to get to get friend invite information from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -257,7 +257,7 @@ public class FriendStorage {
 	
 	/**
 	 * Remove the specified player-friend relationship from the database.
-	 * Can be used to remove either confirmed friends or pending requests.
+	 * Can be used to remove either confirmed friends or pending invites.
 	 * 
 	 * @param playerID
 	 * 			The playerID of the player who is removing their friend/friend request.

@@ -13,7 +13,7 @@ import deco2800.arcade.model.Player;
 public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
-	protected NetworkClient networkClient;
+	protected static NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;

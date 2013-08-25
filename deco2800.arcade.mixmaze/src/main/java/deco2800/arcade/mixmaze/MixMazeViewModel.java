@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 
 public class MixMazeViewModel implements Screen {
+	private static final String LOG = MixMazeViewModel.class.getSimpleName();
+	
 	private MixMazeModel model;
 	private Stage stage;
 	private Table table;
@@ -18,11 +20,13 @@ public class MixMazeViewModel implements Screen {
 	
 	@Override
 	public void show() {
+		Gdx.app.debug(LOG, "Showing");
 		Gdx.input.setInputProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+		Gdx.app.debug(LOG, "Hiding");
 		Gdx.input.setInputProcessor(null);
 	}
 	
@@ -36,26 +40,30 @@ public class MixMazeViewModel implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
+		Gdx.app.debug(LOG, String.format("Resizing %d*%d", width, height));
 		stage.setViewport(800, 640, true);
 		stage.getCamera().translate(-stage.getGutterWidth(), -stage.getGutterHeight(), 0);
 	}
 
 	@Override
 	public void pause() {
-		
+		Gdx.app.debug(LOG, "Pausing");
 	}
 
 	@Override
 	public void resume() {
-		
+		Gdx.app.debug(LOG, "Resuming");
 	}
 	
 	@Override
 	public void dispose() {
+		Gdx.app.debug(LOG, "Disposing");
 		stage.dispose();
 	}
 	
 	public MixMazeViewModel() {
+		Gdx.app.debug(LOG, "Initializing");
+		
 		model = new MixMazeModel(5, 5);
 		stage = new Stage();
 		table = new Table();

@@ -46,8 +46,8 @@ public class MixMazeModel {
 		player2 = new PlayerModel(2);
 		
 		// Initialize board
-		width = boardWidth;
-		height = boardHeight;
+		boardWidth = width;
+		boardHeight = height;
 		board = new TileModel[height][width];
 		for(int row = 0; row < height; ++row) {
 			for(int column = 0; column < width; ++column) {

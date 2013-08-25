@@ -3,15 +3,9 @@
  */
 package deco2800.arcade.mixmaze;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.FPSLogger;
-
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -24,7 +18,6 @@ public final class MixMaze extends GameClient {
 	Screen gameScreen;
 
 	private static final String LOG = MixMaze.class.getSimpleName();
-	private static final FPSLogger fpsLogger = new FPSLogger();
 
 	public MixMaze(Player player, NetworkClient networkClient) {
 		/*

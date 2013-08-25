@@ -24,6 +24,7 @@ final class GameScreen implements Screen {
 	private final ShapeRenderer shapeRenderer;
 	private final Box[][] boxes;
 	private final PacMan pacman;
+	private final Brick brick;
 	private final Table table;
 	private final Table gameBoard;
 	private final Label timerLabel;
@@ -75,9 +76,10 @@ final class GameScreen implements Screen {
 		 * than using PacMan as the acting one.
 		 */
 		pacman = new PacMan(boxes);
-
+		brick = new Brick();
 
 		gameBoard.add(pacman).bottom().left();
+		gameBoard.add(brick).bottom().right();
 		Gdx.app.debug(LOG, "pacman Z " + pacman.getZIndex());
 		stage.setKeyboardFocus(pacman);
 	}

@@ -6,11 +6,13 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.crypto.KeyGenerator;
 import javax.swing.JFrame;
 
 import org.reflections.Reflections;
@@ -28,6 +30,7 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -157,10 +160,19 @@ public class Arcade extends JFrame {
 		this.client.addListener(new CommunicationListener(communicationNetwork));
 	}
 
-
 	public void connectAsUser(String username){
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
+		byte[] key = connectionRequest.getKey();
+		try {
+			key = KeyGenerator.getInstance("Blowfish").generateKey()
+					.getEncoded();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		connectionRequest.key = key;
+		
+		Protocol.registerEncrypted(connectionRequest);
 
 		this.client.sendNetworkObject(connectionRequest);
 

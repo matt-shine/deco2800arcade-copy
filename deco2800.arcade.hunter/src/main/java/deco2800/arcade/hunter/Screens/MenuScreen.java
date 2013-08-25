@@ -40,13 +40,8 @@ public class MenuScreen implements Screen {
 		table.setFillParent(true);
 		stage.addActor(table);
 		
-		TextureRegionDrawable playButtonImage = new TextureRegionDrawable(new TextureRegion(new Texture("textures/huntergame.png")));
-		
-//		Texture hunterGameImage = new Texture("textures/huntergame.png");
-		
-		
 		//Add play button to the table
-		Button playButton = new Button(playButtonImage);
+		Button playButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/playbutton.png"))));
 		playButton.setSize(200, 60);
 		//implement listener to the button
 		playButton.addListener(new ChangeListener() {
@@ -63,7 +58,8 @@ public class MenuScreen implements Screen {
 		table.row();
 		
 		//Add options button to the table
-		TextButton optionsButton = new TextButton("Options", new Skin());
+//		TextButton optionsButton = new TextButton("Options");
+		Button optionsButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/optionsbutton.png"))));
 		optionsButton.setSize(200,60);
 		
 		optionsButton.addListener(new ClickListener(){
@@ -78,7 +74,8 @@ public class MenuScreen implements Screen {
 		
 		
 		//Add highscore button to the table
-		TextButton highScoreButton = new TextButton("HighScore", new Skin());
+//		TextButton highScoreButton = new TextButton("HighScore", new Skin());
+		Button highScoreButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/highscorebutton.png"))));
 		highScoreButton.setSize(200, 60);
 		
 		highScoreButton.addListener(new ClickListener(){
@@ -91,7 +88,8 @@ public class MenuScreen implements Screen {
 		table.add(highScoreButton).size(200,60).spaceBottom(20);
 		table.row();
 		
-		TextButton exitButton = new TextButton("Exit", new Skin());
+//		TextButton exitButton = new TextButton("Exit", new Skin());
+		Button exitButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/exitbutton.png"))));
 		exitButton.setSize(200, 60);
 		
 		exitButton.addListener(new ClickListener(){
@@ -101,6 +99,8 @@ public class MenuScreen implements Screen {
 				game.dispose();
 			}
 		});
+		
+		table.add(exitButton).size(200,60).spaceBottom(20);
 		
 	}
 

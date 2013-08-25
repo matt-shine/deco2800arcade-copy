@@ -51,7 +51,6 @@ public class Player {
 	
 	
 	
-	
 	public float getPosX() {
 		return this.posX;
 	}

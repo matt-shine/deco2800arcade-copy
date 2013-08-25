@@ -1,19 +1,33 @@
 package main.java.deco2800.arcade.junglejump;
 
+import java.util.*;
 
 
-import java.util.ArrayList;
-
+/**
+ * Class which keeps track of the progress of the game.
+ * Lives, levels and collectables will be written into this
+ * when loading a game.
+ * 
+ * @author Cameron
+ *
+ */
 public class Progress {
 	
-	ArrayList<ArrayList> bananas; // List of each level with a list of which bananas were found
+	 // bananas should be List of each level with a list of which bananas were found
 	
 	/**
 	 * Initialises progress variables
 	 */
-	public Progress() {
+	public Progress(int levels, int bananas, int life) {
+		int levelsComplete = levels;
+		//bananas = 0;
+		int foundBananas = bananas;
+		int lives = life;
+	}
+	
+	public resetProgress() {
 		int levelsComplete = 0;
-		bananas = new ArrayList();
+		bananas = 0;
 		int foundBananas = 0;
 		int lives = 3;
 	}
@@ -22,9 +36,6 @@ public class Progress {
 	 * Adds a banana to the total found
 	 */
 	public void addBanana(int level, int banana) {
-		ddfdfd.
-		kjlguibk
-		knlm,m
 	}
 
 }

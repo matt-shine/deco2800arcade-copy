@@ -136,6 +136,7 @@ public class Breakout extends GameClient {
 	public void render() {
 		// Clears Frame
 		Gdx.gl.glClearColor(0, 0, 0, 1);
+<<<<<<< HEAD
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// TODO Find out what camera.update does.
@@ -146,6 +147,98 @@ public class Breakout extends GameClient {
 
 		// renders the rectangles that are filled.
 		shapeRenderer.begin(ShapeType.FilledRectangle);
+=======
+	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	    
+	    camera.update();
+	    
+	    shapeRenderer.setProjectionMatrix(camera.combined);
+	    batch.setProjectionMatrix(camera.combined);
+	    
+	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    
+	    paddle.render(shapeRenderer);
+	    ball.render(shapeRenderer);
+	    
+	    for (Brick b : bricks) {
+	    	if (b.getState()) {
+	    		b.render(shapeRenderer);
+	    	}
+	    }
+	    
+	    shapeRenderer.end();
+	    
+	    batch.begin();
+	    font.setColor(Color.GREEN);
+	    font.draw(batch, player, SCREENWIDTH/2, SCREENHEIGHT/2);
+	    //font.draw(batch, Integer.toString(score), SCREENWIDTH/2 - 50, SCREENHEIGHT/2 - 50);
+	    font.draw(batch,"Life " + Integer.toString(lives), SCREENWIDTH/2 + 50, SCREENHEIGHT/2 + 50);
+	    font.draw(batch,"Score " + Integer.toString(score), SCREENWIDTH/2 - 50, SCREENHEIGHT/2 - 50);
+	    batch.end();
+	    
+	    switch(gameState) {
+	    
+	    case READY:
+	    	if (Gdx.input.isKeyPressed(Keys.SPACE) || Gdx.input.isTouched()){
+	    		Start();
+	    	}
+	    	break;
+	    	
+	    case INPROGRESS:
+	    	paddle.update(ball); 
+	    	ball.move(Gdx.graphics.getDeltaTime());
+	    	//?int index = 0;
+	    	// TODO: if it hits left/right side, only bounceX. if it hits top/bottom, only bounceY
+	    	for (Brick b : bricks) {
+	    		if (b.getState()) {
+		    		if ( ball.bounds.overlaps(b.getShape())) {
+		    			b.setState(false);
+		    			score++;
+		    			brickNum--;
+		    			//ball.bounceX();
+		    			ball.bounceY();
+		    		}
+	    		}
+	    	}
+	    	
+	    	if (brickNum == 0) {
+	    		win();
+	    	}
+	    	
+	    	if ( ball.bounds.overlaps(paddle.paddleShape) && ball.getYVelocity() < 0 ) {
+	    		ball.bounceY();
+	    	}
+	    	
+	    	if (ball.bounds.y >= SCREENHEIGHT-PongBall.WIDTH) {
+	    		ball.bounceY();
+	    	}
+	    	
+	    	
+	    	if (ball.bounds.x <= 0 || ball.bounds.x + PongBall.WIDTH > SCREENWIDTH) {
+	    		ball.bounceX();
+	    	}
+	    	
+	    	if (ball.bounds.y <= 0) {
+	    		roundOver();
+	    	}
+	    	
+	    	break;
+	    	
+	    case GAMEOVER:
+	    	if (Gdx.input.isTouched()){
+	    		gameOver();
+	    	}
+	    	
+	    	break;
+	    	
+	    
+	    }
+	    
+	    super.render();
+	    
+	    
+	}
+>>>>>>> master
 
 		paddle.render(shapeRenderer);
 		// TODO Make the Ball a Circle

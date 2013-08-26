@@ -1,11 +1,11 @@
 package deco2800.arcade.model;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
 
-public class Player {
+public class Player extends Observable {
 
 	// TODO shared between server & client?
 	
@@ -23,13 +23,13 @@ public class Player {
 	
 	private Icon icon;
 	
-	private String realName;
+	//private String realName;
 	
-	private String location;
+	//private String location;
 	
-	private String biography;
+	//private String biography;
 	
-	private String onlineStatus;
+	//private String onlineStatus;
 
 	public Player() {
 
@@ -37,7 +37,7 @@ public class Player {
 	
 	public Player(String username) {
 		
-		username = username;
+		this.username = username;
 	}
 
 	/**

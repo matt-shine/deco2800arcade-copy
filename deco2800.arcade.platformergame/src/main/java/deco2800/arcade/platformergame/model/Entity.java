@@ -4,15 +4,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
-	protected Vector2 position;
-	protected float width;
-	protected float height;
 	protected Rectangle bounds;
 	
 	public Entity (Vector2 pos, float width, float height) {
-		this.position = pos;
-		this.width = width;
-		this.height = height;
 		bounds = new Rectangle(pos.x, pos.y, width, height);
 	}
 	public Rectangle getBounds() {
@@ -23,11 +17,12 @@ public abstract class Entity {
 	}
 	
 	public void setPosition(Vector2 pos) {
-		this.position = pos;
+		this.bounds.setX(pos.x);
+		this.bounds.setY(pos.y);
 	}
 	
 	public Vector2 getPosition() {
-		return position;
+		return new Vector2(bounds.getX(), bounds.getY());
 	}
 	
 	public float getWidth() {

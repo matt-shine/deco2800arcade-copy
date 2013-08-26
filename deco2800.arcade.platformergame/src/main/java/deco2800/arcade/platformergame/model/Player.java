@@ -36,7 +36,7 @@ public abstract class Player extends MovableEntity{
 	
 	/* ----- Getter methods ----- */
 	public Rectangle getProjectionRect() {
-		Rectangle rect = new Rectangle (position.x, position.y, width, height);
+		Rectangle rect = new Rectangle (bounds.x, bounds.y, bounds.width, bounds.height);
 		rect.x += velocity.x*Gdx.graphics.getDeltaTime();
 		rect.y += velocity.y*Gdx.graphics.getDeltaTime();
 
@@ -44,14 +44,14 @@ public abstract class Player extends MovableEntity{
 	}
 	
 	public Rectangle getXProjectionRect() {
-		Rectangle rect = new Rectangle (position.x, position.y, width, height);
+		Rectangle rect = new Rectangle (bounds.x, bounds.y, bounds.width, bounds.height);
 		rect.x += velocity.x*Gdx.graphics.getDeltaTime();
 
 		return rect;
 	}
 	
 	public Rectangle getYProjectionRect() {
-		Rectangle rect = new Rectangle (position.x, position.y, width, height);
+		Rectangle rect = new Rectangle (bounds.x, bounds.y, bounds.width, bounds.height);
 		rect.y += velocity.y*Gdx.graphics.getDeltaTime();
 	
 		return rect;

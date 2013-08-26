@@ -32,8 +32,6 @@ public abstract class MovableEntity extends Entity {
 	}
 	
 	public void update() {
-		bounds.x = position.x;
-		bounds.y = position.y;
 		
 	}
 }

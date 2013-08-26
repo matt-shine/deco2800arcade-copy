@@ -56,8 +56,7 @@ public class ReplaySystemDemo {
 	    client.addListener(replayListener);
 	    
 	    //Ping the server
-	    replayHandler.sendSimpleMessageToServer();
-	    
+	    replayHandler.startSession(123, "wtf");
 	    
 		//Our replay handler has to know about all the different functions
 		replayHandler.addReplayEventListener(initReplayEventListener());
@@ -105,7 +104,7 @@ public class ReplaySystemDemo {
 		node.addItem( "new_y", new ReplayItem( new Integer( 4 ) ) );
 		replayHandler.pushEvent( node );
 		
-		
+		replayHandler.endSession(replayHandler.getSessionId());
 		
 		System.out.println( "Recording complete" );
 		Thread.sleep( 2000 );

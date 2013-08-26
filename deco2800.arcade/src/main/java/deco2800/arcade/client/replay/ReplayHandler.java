@@ -4,6 +4,8 @@ import javax.swing.event.EventListenerList;
 import com.google.gson.*;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.protocol.replay.EndSessionRequest;
+import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
@@ -18,12 +20,18 @@ public class ReplayHandler {
 	private NetworkClient client;
 	Gson serializer;
 	Gson deserializer;
+	private Integer sessionId;
 	
 	
 	public ReplayHandler(NetworkClient client)
 	{
-	    this.client = client;
+	    setClient(client);
 	    init();
+	}
+	
+	public void setClient(NetworkClient client)
+	{
+	    this.client = client;
 	}
 	
 	public ReplayHandler() {
@@ -44,6 +52,45 @@ public class ReplayHandler {
 		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 		gsonBuilder.registerTypeAdapter(ReplayNode.class, new ReplayNodeDeserializer());
 		deserializer = gsonBuilder.create();
+	}
+	
+	/**
+	 * Start a recording session with the server.
+	 * @param gameId
+	 * @param username
+	 */
+	public void startSession(Integer gameId, String username)
+	{
+	    StartSessionRequest ssr = new StartSessionRequest();
+	    ssr.gameId = gameId;
+	    ssr.username = username;
+	    client.sendNetworkObject(ssr);
+	}
+	
+	/**
+	 * Terminate the current recording session.
+	 * @param sessionId
+	 */
+	public void endSession(Integer sessionId)
+	{
+	    EndSessionRequest esr = new EndSessionRequest();
+	    esr.sessionId = sessionId;
+	    client.sendNetworkObject(esr);
+	}
+	
+	/**
+	 * Set the handler's session id.
+	 * @param id
+	 */
+	public void setSessionId(Integer id)
+	{
+	    sessionId = id;
+	    System.out.println("Session Id: " + sessionId);
+	}
+	
+	public Integer getSessionId()
+	{
+	    return sessionId;
 	}
 	
 	/**

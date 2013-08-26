@@ -1,5 +1,6 @@
 package deco2800.arcade.raiden;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import deco2800.arcade.model.Game;
@@ -25,6 +26,9 @@ public class Raiden extends GameClient {
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
+
+	public static final int SCREENHEIGHT = 480;
+	public static final int SCREENWIDTH = 800;
 	
 	private enum GameState {
 		READY,
@@ -32,6 +36,7 @@ public class Raiden extends GameClient {
 		GAMEOVER
 	}
 	
+	private GameState gameState;
 	/**
 	 * The constructor for game raiden.
 	 * @param player
@@ -52,9 +57,45 @@ public class Raiden extends GameClient {
 	 */
 	@Override
 	public void create() {
+		//add the overlay listeners
+		this.getOverlay().setListeners(new Screen() {
 
-		super.create();
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				//TODO: unpause raiden.
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				//TODO: unpause pong
+			}
+			
+        });
 		
+		super.create();
+		//initialize the camera 
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 	}
 
 	@Override

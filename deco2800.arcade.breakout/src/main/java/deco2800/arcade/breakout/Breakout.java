@@ -1,8 +1,5 @@
 package deco2800.arcade.breakout;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -14,13 +11,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.breakout.PongBall;
-import deco2800.arcade.protocol.achievement.AddAchievementRequest;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
@@ -38,12 +32,12 @@ public class Breakout extends GameClient{
 	
 	
 	private String player;
-	private NetworkClient nc;
+	//private NetworkClient nc;
 	private Paddle paddle;
 	private PongBall ball;
 	private int score;
 	private int lives;
-	private String status;
+	//private String status;
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
 	
@@ -67,7 +61,6 @@ public class Breakout extends GameClient{
 	//Array of Brick
 	Brick bricks[];
 	
-	private static Set<Achievement> achievements = new HashSet<Achievement>();
 	static {
 		//Achievement winBreakout = new Achievement("Win a game of Breakout");
 		//Achievement perfect = new Achievement("Win a game of Breakout without losing a Life");
@@ -83,7 +76,7 @@ public class Breakout extends GameClient{
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		 this.player = player.getUsername();
-		 this.nc = networkClient;
+		 //this.nc = networkClient;
 		 bricks = new Brick[40];
 	}
 	
@@ -119,7 +112,7 @@ public class Breakout extends GameClient{
 		score = 0;
 		lives = 3;
 		gameState = GameState.READY;
-		status = "Start!";
+		//status = "Start!";
 		
 	}
 	
@@ -226,6 +219,8 @@ public class Breakout extends GameClient{
 	    	
 	    
 	    }
+	    
+	    super.render();
 	    
 	    
 	}

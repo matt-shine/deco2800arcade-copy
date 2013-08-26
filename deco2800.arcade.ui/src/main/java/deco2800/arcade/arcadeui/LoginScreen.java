@@ -1,6 +1,7 @@
 package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -8,9 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameScreen;
 
-public class LoginScreen extends GameScreen {
+public class LoginScreen implements Screen {
 	
 	
     private Skin skin; // Move this somewhere appropriate
@@ -91,13 +91,6 @@ public class LoginScreen extends GameScreen {
 	
 
 	@Override
-	public void firstResize() {
-
-		ArcadeSystem.openConnection();
-		
-	}
-	
-	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
@@ -124,6 +117,13 @@ public class LoginScreen extends GameScreen {
 
 	@Override
 	public void resume() {
+	}
+
+
+	@Override
+	public void resize(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

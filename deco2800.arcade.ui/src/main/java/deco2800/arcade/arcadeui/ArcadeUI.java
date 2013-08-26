@@ -1,8 +1,8 @@
 package deco2800.arcade.arcadeui;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.badlogic.gdx.Screen;
 
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
@@ -11,8 +11,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 
 /**
- * This class is the main interface for the arcade. It can be run as a game,
- * but normally it will be run in parallel with another game as an overlay.
+ * This class is the main interface for the arcade.
  * @author Simon
  *
  */
@@ -20,29 +19,29 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	   
-	private boolean isOverlay = false;
+	@SuppressWarnings("unused")
+	private LoginScreen login = null;
+	@SuppressWarnings("unused")
+	private HomeScreen home = null;
+	
+	private Screen current = null;
 
-	
-	
-	public ArcadeUI(Player player, NetworkClient networkClient, Boolean isOverlay){
+	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		this.isOverlay = isOverlay;
 	}
 	
-	public ArcadeUI(Player player, NetworkClient networkClient){
-		this(player, networkClient, false);
-	}
-
 	@Override
 	public void create() {
 		
-		if (isOverlay) {
-			this.setScreen(new Overlay());
-		} else if (player == null) {
-			this.setScreen(new LoginScreen());
+		ArcadeSystem.openConnection();
+		
+		if (player == null) {
+			current = login = new LoginScreen();
 		} else {
-			this.setScreen(new HomeScreen());
+			current = home = new HomeScreen();
 		}
+		
+		this.setScreen(current);
 		
 		
 		super.create();
@@ -56,6 +55,11 @@ public class ArcadeUI extends GameClient {
 	@Override
 	public void pause() {
 		super.pause();
+	}
+	
+	@Override
+	public void render() {
+		super.render();
 	}
 
 	@Override

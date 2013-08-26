@@ -16,6 +16,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private ApplicationListener overlay = null;
+	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
 	private int width, height;
     private AchievementClient achievementClient;
@@ -35,9 +36,25 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	/**
 	 * Adds the in game overlay
+	 * @param overlay
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
+	}
+
+	/**
+	 * Adds the in game overlay
+	 * @param overlay
+	 */
+	public void addOverlayBridge(UIOverlay overlay) {
+		this.overlayBridge = overlay;
+	}
+
+	/**
+	 * @return The overlay
+	 */
+	public UIOverlay getOverlay() {
+		return overlayBridge;
 	}
 
 
@@ -98,12 +115,24 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public void resize(int width, int height) {
 		this.width = width;
 		this.height = height;
+		if (overlay != null) {
+			overlay.resize(width, height);
+		}
 		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
 		super.resume();
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	
+	public int getHeight() {
+		return height;
 	}
 
 }

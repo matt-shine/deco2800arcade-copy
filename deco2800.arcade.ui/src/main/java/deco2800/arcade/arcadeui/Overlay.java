@@ -1,101 +1,87 @@
 package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameScreen;
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Game.InternalGame;
+import deco2800.arcade.model.Player;
 
-public class Overlay  extends GameScreen {
+@InternalGame
+@ArcadeGame(id="arcadeoverlay")
+public class Overlay extends GameClient implements UIOverlay {
 	
-	private OrthographicCamera camera;
-	private ShapeRenderer shapeRenderer;
-	private BitmapFont font;
-	private SpriteBatch batch;
-	private boolean isUIOpen = false;
-	private boolean hasTabPressedLast = false;
+	private OverlayScreen screen = new OverlayScreen(this);
+	private OverlayPopup popup = new OverlayPopup(this);
+	private SpriteBatch batch = new SpriteBatch();
+	
+	public Overlay(Player player, NetworkClient networkClient) {
+		super(player, networkClient);
 
-	
-	
-	public Overlay() {
-		font = new BitmapFont(true);
-		batch = new SpriteBatch();
-	}
-	
-	
+		this.setScreen(screen);
 
-	@Override
-	public void show() {
-	}
-	
-	
-	@Override
-	public void firstResize() {
-		camera = new OrthographicCamera();
-		camera.setToOrtho(true, getWidth(), getHeight());
-		shapeRenderer = new ShapeRenderer();
 	}
 	
 	@Override
-	public void render(float arg0) {
-		
-		
-		
-		camera.update();
-	    shapeRenderer.setProjectionMatrix(camera.combined);
-	    batch.setProjectionMatrix(camera.combined);
-	    
-		//toggles isUIOpen on tab key down
-		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
-			isUIOpen = !isUIOpen;
-		}
-		
-		if (isUIOpen) {
-			
-			//draw a placeholder shape
-		    shapeRenderer.begin(ShapeType.FilledRectangle);
-		    
-		    shapeRenderer.filledRect(100,
-		        100,
-		        getWidth() - 200,
-		        getHeight() - 200);
-		    
-		    shapeRenderer.end();
-		    
-		    
-		    batch.begin();
-		    font.setColor(Color.BLACK);
-		    font.draw(batch, "Press ESC to quit the game.", 110, 110);
-		    batch.end();
-		    
-		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-		    	ArcadeSystem.goToGame("arcadeui");
-		    }
-		    
-		}
-		
+	public void setListeners(Screen l) {
+		screen.setListeners(l);
 	}
 
+	@Override
+	public void addPopup(PopupMessage s) {
+		popup.addMessageToQueue(s);
+	}
+
+	@Override
+	public void render() {
+		
+		super.render();
+		
+		popup.act(Gdx.graphics.getDeltaTime());
+		batch.begin();
+		popup.draw(batch, 1f);
+		batch.end();
+		
+		
+	}
+	
 	@Override
 	public void dispose() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	@Override
-	public void hide() {
+	public void pause() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void pause() {
+	public void resize(int width, int height) {
+		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Game getGame() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public void create() {
+		this.setScreen(screen);
 	}
 
 

@@ -1,5 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import java.util.LinkedList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,13 +10,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.sun.jmx.remote.internal.ArrayQueue;
 
 import deco2800.arcade.client.UIOverlay.PopupMessage;
 
 public class OverlayPopup extends Actor {
 
-	private ArrayQueue<PopupMessage> msgs = new ArrayQueue<PopupMessage>(100);
+	private LinkedList<PopupMessage> msgs = new LinkedList<PopupMessage>();
 	
 	private PopupMessage current = null;
 	

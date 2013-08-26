@@ -4,7 +4,7 @@ package deco2800.arcade.forum;
  * User models user or player of the arcade.
  * Note: We may replace this to the similar class made by others when integrating.
  * 
- * @author Whatever??? (forgot the name)
+ * @author Team-Forum
  *
  */
 public class User {

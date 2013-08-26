@@ -13,7 +13,11 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.burningskies.screen.BSGame;
+import deco2800.arcade.burningskies.screen.HelpMenu;
 import deco2800.arcade.burningskies.screen.Menu;
+import deco2800.arcade.burningskies.screen.OptionsMenu;
+import deco2800.arcade.burningskies.screen.ScoreScreen;
 import deco2800.arcade.burningskies.screen.Splash;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -26,8 +30,8 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="burningskies")
 public class BurningSkies extends GameClient {
 	
-	public static final int SCREENWIDTH = 1024;
-	public static final int SCREENHEIGHT = 768;
+	public static final int SCREENWIDTH = 1280;
+	public static final int SCREENHEIGHT = 720;
 	
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
@@ -37,6 +41,10 @@ public class BurningSkies extends GameClient {
 	
 	public Splash splashScreen;
 	public Menu menuScreen;
+	public OptionsMenu optionsScreen;
+	public HelpMenu helpScreen;
+	public ScoreScreen scoreScreen;
+	public BSGame gameScreen;
 
 	/**
 	 * Basic constructor for the Burning Skies game

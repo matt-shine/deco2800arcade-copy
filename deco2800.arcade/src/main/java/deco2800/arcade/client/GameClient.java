@@ -115,12 +115,24 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public void resize(int width, int height) {
 		this.width = width;
 		this.height = height;
+		if (overlay != null) {
+			overlay.resize(width, height);
+		}
 		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
 		super.resume();
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	
+	public int getHeight() {
+		return height;
 	}
 
 }

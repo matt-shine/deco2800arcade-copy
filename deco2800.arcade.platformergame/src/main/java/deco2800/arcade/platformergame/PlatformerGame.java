@@ -42,6 +42,7 @@ public abstract class PlatformerGame extends GameClient {
 	public void render() {
 		super.render();
 		if (screen != null) screen.render(Gdx.graphics.getDeltaTime());
+		super.render();
 	}
 
 	@Override

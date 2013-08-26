@@ -13,6 +13,9 @@ Thumbs.db
 build
 .gradle
 
+# emacs stuff
+*~
+
 # Compiled
 *.class
 bin

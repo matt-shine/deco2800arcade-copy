@@ -2,14 +2,9 @@ package deco2800.arcade.protocol;
 
 import com.esotericsoftware.kryo.Kryo;
 
-<<<<<<< HEAD
 import deco2800.arcade.protocol.achievement.*;
 import java.util.ArrayList;
-=======
-import deco2800.arcade.protocol.achievement.AchievementListRequest;
-import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.communication.ChatRequest;
->>>>>>> master
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -36,8 +31,7 @@ public class Protocol {
 		kryo.register(CreditBalanceResponse.class);
 		
 		//Achievement messages
-		kryo.register(AchievementListRequest.class);
-		kryo.register(AddAchievementRequest.class);
+
 		kryo.register(AchievementsForIDsRequest.class);
 		kryo.register(AchievementsForIDsResponse.class);
 		kryo.register(AchievementsForGameRequest.class);

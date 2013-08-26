@@ -25,19 +25,24 @@ public class CommunicationListener extends Listener {
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
+		
 
 		if (object instanceof CommunicationRequest){
+			System.out.println("there is a communication request to the server");
+			
 			//Add users connectionID to list of connected users.
 			CommunicationRequest contact = (CommunicationRequest) object;
 			connectedUsers.put(contact.username, connection.getID());
 			
 			//Send Message to everyone telling them user has connected.
 			textMessage.text = contact.username + " connected!";
-			this.server.sendToAllExceptTCP(connection.getID(), textMessage);
+			//this.server.sendToAllExceptTCP(connection.getID(), textMessage);
 		}
 		
 		
 		if(object instanceof TextMessage){
+			System.out.println("textmessage object to server");
+			
 			textMessage = (TextMessage) object;
 			this.server.sendToTCP(connectedUsers.get(textMessage.recipient), textMessage);
 		}

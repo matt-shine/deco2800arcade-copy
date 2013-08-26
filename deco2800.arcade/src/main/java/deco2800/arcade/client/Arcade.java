@@ -166,7 +166,7 @@ public class Arcade extends JFrame {
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.username = username;
-		
+				
 		this.client.sendNetworkObject(communicationRequest);
 
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
@@ -177,7 +177,7 @@ public class Arcade extends JFrame {
 		this.player = new Player();
 		this.player.setUsername(username);
 
-		//this.communicationNetwork.createNewChat(username);
+		this.communicationNetwork.createNewChat("debuguser");
 	}
 
 	/**

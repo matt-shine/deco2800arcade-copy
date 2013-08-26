@@ -30,7 +30,7 @@ public class CommunicationNetwork {
 		public ChatWindow(String username){
 			window = new CommunicationView();
 			model = new CommunicationModel(username);
-			controller = new CommunicationController(window, model, networkClient);
+			controller = new CommunicationController(window, model, networkClient, player);
 		}
 		
 		public void updateChat(TextMessage textMessage){

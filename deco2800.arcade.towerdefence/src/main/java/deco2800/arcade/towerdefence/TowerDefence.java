@@ -34,6 +34,7 @@ public class TowerDefence extends GameClient {
 		
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
+		//gameScreen = new Game(this);
 		setScreen(splashScreen);
 		//set some sort of timer then setScreen to MenuScreen
 		

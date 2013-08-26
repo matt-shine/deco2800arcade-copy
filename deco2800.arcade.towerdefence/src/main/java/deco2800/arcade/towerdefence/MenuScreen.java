@@ -5,6 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -21,7 +23,8 @@ public class MenuScreen implements Screen{
 	TextureAtlas atlas;
 	Skin skin;
 	SpriteBatch batch;
-	TextButton button;
+	TextButton playButton;
+	TextButton optionsButton;
 	
 	
 	public MenuScreen(final TowerDefence game) {
@@ -75,13 +78,33 @@ public class MenuScreen implements Screen{
 		style.down = skin.getDrawable("buttonpressed");
 		style.font = black;
 		
-		button = new TextButton("Press me!", style);
-		button.setWidth(400);
-		button.setHeight(100);
-		button.setX(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2);
-        button.setY(Gdx.graphics.getHeight() / 2 - button.getHeight() / 2);
+		playButton = new TextButton("PLAY!", style);
+		playButton.setWidth(400);
+		playButton.setHeight(100);
+		playButton.setX(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2);
+        playButton.setY(Gdx.graphics.getHeight() - playButton.getHeight() - 20);
         
-        stage.addActor(button);
+        playButton.addListener(new InputListener() {
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		game.setScreen(game.splashScreen); //Set to gameScreen when implemented
+        	}
+        	
+        });
+        
+        optionsButton = new TextButton("Options", style);
+        optionsButton.setWidth(400);
+        optionsButton.setHeight(100);
+        optionsButton.setX(Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2);
+        optionsButton.setY(Gdx.graphics.getHeight() / 2 - optionsButton.getHeight() / 2);
+        	
+      
+        
+        stage.addActor(playButton);
+        stage.addActor(optionsButton);
 		
 	}
 

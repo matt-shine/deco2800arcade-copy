@@ -220,6 +220,8 @@ public class Breakout extends GameClient{
 	    
 	    }
 	    
+	    super.render();
+	    
 	    
 	}
 

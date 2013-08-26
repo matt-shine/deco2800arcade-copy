@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,9 +14,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameScreen;
 
-public class HomeScreen  extends GameScreen {
+public class HomeScreen implements Screen {
 
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
@@ -33,12 +33,8 @@ public class HomeScreen  extends GameScreen {
 	public void show() {
 		font = new BitmapFont(true);
 		batch = new SpriteBatch();
-	}
-	
-	@Override
-	public void firstResize() {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(true, getWidth(), getHeight());
+		camera.setToOrtho(true, 1280, 720);
 		shapeRenderer = new ShapeRenderer();
 		
 		games = ArcadeSystem.getGamesList();
@@ -60,8 +56,8 @@ public class HomeScreen  extends GameScreen {
 	    
 	    shapeRenderer.filledRect(100,
 	        100,
-	        getWidth() - 200,
-	        getHeight() - 200);
+	        1280 - 200,
+	        720 - 200);
 	    
 	    shapeRenderer.end();
 	    
@@ -108,6 +104,14 @@ public class HomeScreen  extends GameScreen {
 
 	@Override
 	public void resume() {
+	}
+
+
+
+	@Override
+	public void resize(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -27,6 +27,7 @@ final class MenuScreen implements Screen {
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 
 		if (Gdx.input.isButtonPressed(Buttons.LEFT)) {
+			// Start a game from the user's view.
 			Gdx.app.debug(LOG, "switching to game screen");
 			game.setScreen(game.gameScreen);
 		}

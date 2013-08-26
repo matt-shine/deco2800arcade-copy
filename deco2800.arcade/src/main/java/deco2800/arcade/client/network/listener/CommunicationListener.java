@@ -37,7 +37,12 @@ public class CommunicationListener extends NetworkListener {
 		
 		if (object instanceof TextMessage){
 			 TextMessage textMessage = (TextMessage) object;
-			 communicationNetwork.updateText(textMessage.text);
+			 if(textMessage.username == ""){
+				 System.out.println(textMessage.text);
+			 }else{
+				 System.out.println(textMessage.username);
+				 communicationNetwork.updateChat(textMessage.username, textMessage);
+			 }
 		}
 	}
 	

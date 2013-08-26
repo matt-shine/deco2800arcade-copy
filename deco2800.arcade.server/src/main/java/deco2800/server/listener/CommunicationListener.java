@@ -7,12 +7,19 @@ import com.esotericsoftware.kryonet.Server;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class CommunicationListener extends Listener {
 	
 	private Server server;
+	private Map<String, Integer> connectedUsers;
+	private TextMessage textMessage;
 	
 	public CommunicationListener(Server server) {
 		this.server = server;
+		textMessage = new TextMessage();
+		connectedUsers = new HashMap<String, Integer>();
 	}
 	
 	@Override
@@ -20,16 +27,19 @@ public class CommunicationListener extends Listener {
 		super.received(connection, object);
 
 		if (object instanceof CommunicationRequest){
+			//Add users connectionID to list of connected users.
 			CommunicationRequest contact = (CommunicationRequest) object;
-			TextMessage message = new TextMessage();
-			message.text = contact.username + " connected!";
-			this.server.sendToAllExceptTCP(connection.getID(), message);
+			connectedUsers.put(contact.username, connection.getID());
+			
+			//Send Message to everyone telling them user has connected.
+			textMessage.text = contact.username + " connected!";
+			this.server.sendToAllExceptTCP(connection.getID(), textMessage);
 		}
 		
+		
 		if(object instanceof TextMessage){
-			TextMessage textMessage = (TextMessage) object;
-			System.out.println(textMessage.text);
-			this.server.sendToAllTCP(textMessage);
+			textMessage = (TextMessage) object;
+			this.server.sendToTCP(connectedUsers.get(textMessage.recipient), textMessage);
 		}
 	}
 

@@ -23,7 +23,6 @@ public class BulkPurchasingTest {
 	CreditStorage mockCS = mock(CreditStorage.class);
 	private Player barnaby;
 	
-	@SuppressWarnings("deprecation")
 	@Before
 	public void setup() {
 		purchasingService = new PurchasingService();

@@ -1,7 +1,5 @@
 package main.java.deco2800.arcade.junglejump;
 
-import java.util.*;
-
 
 /**
  * Class which keeps track of the progress of the game.

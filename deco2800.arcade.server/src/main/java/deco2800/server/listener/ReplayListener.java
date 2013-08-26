@@ -3,8 +3,8 @@ package deco2800.server.listener;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import deco2800.arcade.protocol.replay.ReplayRequest;
-import deco2800.arcade.protocol.replay.ReplayResponse;
+import deco2800.arcade.protocol.replay.demo.ReplayRequest;
+import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
 public class ReplayListener extends Listener {
 

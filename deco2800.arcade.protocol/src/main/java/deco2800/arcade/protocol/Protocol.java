@@ -18,8 +18,8 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
-import deco2800.arcade.protocol.replay.ReplayRequest;
-import deco2800.arcade.protocol.replay.ReplayResponse;
+import deco2800.arcade.protocol.replay.demo.ReplayRequest;
+import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
 public class Protocol {
 

@@ -1,4 +1,4 @@
-package deco2800.arcade.protocol.replay;
+package deco2800.arcade.protocol.replay.demo;
 
 /**
  * Testing class, redundant.

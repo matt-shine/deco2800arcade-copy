@@ -4,7 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.client.replay.exception.NoReplayHandlerException;
-import deco2800.arcade.protocol.replay.ReplayResponse;
+import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
 public class ReplayListener extends NetworkListener {
     

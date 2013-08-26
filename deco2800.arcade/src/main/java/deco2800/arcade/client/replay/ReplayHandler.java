@@ -4,8 +4,8 @@ import javax.swing.event.EventListenerList;
 import com.google.gson.*;
 
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.protocol.replay.ReplayRequest;
-import deco2800.arcade.protocol.replay.ReplayResponse;
+import deco2800.arcade.protocol.replay.demo.ReplayRequest;
+import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
 import java.util.*;
 

@@ -14,9 +14,17 @@ import deco2800.arcade.client.UIOverlay.PopupMessage;
 public class OverlayPopup extends Actor {
 
 	private ArrayQueue<PopupMessage> msgs = new ArrayQueue<PopupMessage>(100);
+	
+	private PopupMessage current = null;
+	
+	private int state = 0;
+	
 	private static float YPOS_GOAL = 100;
-	private static float YPOS_START = -200;
+	private static float YPOS_START = -100;
+	
 	private float ypos = 0;
+	private float yvel = 0;
+	
 	private float expandedTime = 0;
 	private Texture texture;
 	private TextureRegion region;
@@ -46,27 +54,45 @@ public class OverlayPopup extends Actor {
 	public void act(float d) {
 		super.act(d);
 
-		if (msgs.size() != 0) {
+		if (state == 0) {
 			
-			if (ypos < YPOS_GOAL) {
-				ypos += 5;
-			} else {
-				expandedTime += d;
-				
-				if (expandedTime > 2) {
-					msgs.remove(0);
-					ypos = YPOS_START;
-					expandedTime = 0;
-				}
-				
+			yvel = 0;
+			ypos = YPOS_START;
+			if (msgs.size() != 0) {
+				current = msgs.remove(0);
+				state = 1;
 			}
 			
+		} else if (state == 1) {
 			
+			if (ypos > YPOS_GOAL) {
+				yvel = 0;
+				state = 2;
+			} else {
+				yvel += 0.4;
+			}
 			
+		} else if (state == 2) {
+			
+			expandedTime += d;
+			if (expandedTime > 1.2) {
+				expandedTime = 0;
+				state = 3;
+			}
+			
+		} else if (state == 3) {
+			
+			if (ypos < YPOS_START) {
+				yvel = 0;
+				state = 0;
+			} else {
+				yvel -= 0.4;
+			}
 			
 		}
 		
-		this.setX(overlay.getWidth() / 2);
+		ypos += yvel;
+		this.setX(overlay.getWidth() / 2 - 32);
 		this.setY(ypos);
 		
 	}
@@ -74,11 +100,14 @@ public class OverlayPopup extends Actor {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		
-		batch.draw(region, getX(), getY(), 64, 64);
-		font.setColor(Color.WHITE);
-		if (msgs.size() != 0) {
-			font.draw(batch, msgs.get(0).getMessage(), getX(), getY());
+		if (state != 0) {
+			batch.draw(region, getX(), getY(), 64, 64);
+			font.setColor(Color.WHITE);
+			if (current != null) {
+				font.draw(batch, current.getMessage(), getX() + 32, getY() + 32);
+			}
 		}
+		
 	}
 	
 	

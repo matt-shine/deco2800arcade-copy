@@ -6,13 +6,14 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Player extends MovableEntity{
 	
-	public static final float SPEED;
-	public static final float JUMP_VELOCITY;
-	public static final float WIDTH;
-	public static final float HEIGHT;
-	public static final float JUMP_TIME;
-	public static final float GRAVITY;
-	public static final float MAX_FALL_VELOCITY;
+	/*Need to initialise these? TODO*/
+	public static final float SPEED = 0;
+	public static final float JUMP_VELOCITY = 0;
+	public static final float WIDTH = 0;
+	public static final float HEIGHT = 0;
+	public static final float JUMP_TIME = 0;
+	public static final float GRAVITY = 0;
+	public static final float MAX_FALL_VELOCITY = 0;
 	
 	private static float rotation;
 	private boolean facingRight;

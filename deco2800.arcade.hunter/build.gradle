@@ -1,0 +1,6 @@
+
+dependencies {
+  compile project(":deco2800.arcade.platformergame")
+
+  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
+}

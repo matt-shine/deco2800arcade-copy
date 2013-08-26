@@ -20,15 +20,19 @@ public class OverlayPopup extends Actor {
 	
 	private int state = 0;
 	
-	private static float YPOS_GOAL = 100;
-	private static float YPOS_START = -100;
-	private static float EXPAND_GOAL = 300;
-	private static float EXPAND_START = 64;
+	private static float MINSIZE = 140;
+	private static float YPOS_GOAL = 40;
+	private static float YPOS_START = -MINSIZE;
+	private static float EXPAND_GOAL = 400;
+	private static float EXPAND_START = MINSIZE;
+	private static float EXPAND_ACC = 1;
+	private static float YPOS_ACC = 1;
 	
 	private float ypos = 0;
 	private float yvel = 0;
 	private float expandedTime = 0;
-	private float expandedAmt = 0;
+	private float expandedAmt = EXPAND_START;
+	private float expandedVel = 0;
 	
 	private NinePatch texture;
 	private BitmapFont font;
@@ -40,7 +44,7 @@ public class OverlayPopup extends Actor {
 		font = new BitmapFont(false);
 		this.overlay = overlay;
 		
-		texture = new NinePatch(new Texture(Gdx.files.internal("pacman.png")), 60, 60, 60, 60);
+		texture = new NinePatch(new Texture(Gdx.files.classpath("popupbg.png")), 60, 60, 60, 60);
 		
 		ypos = YPOS_START;
 		
@@ -71,15 +75,17 @@ public class OverlayPopup extends Actor {
 				yvel = 0;
 				state++;
 			} else {
-				yvel += 0.4;
+				yvel += YPOS_ACC;
 			}
 			
 		} else if (state == 2) {
 			
-			expandedAmt += 12;
+			expandedVel += EXPAND_ACC;
+			expandedAmt += expandedVel;
 			if (expandedAmt > EXPAND_GOAL) {
 				
 				expandedAmt = EXPAND_GOAL;
+				expandedVel = 0;
 				state++;
 				
 			}
@@ -94,10 +100,12 @@ public class OverlayPopup extends Actor {
 			
 		} else if (state == 4) {
 			
-			expandedAmt -= 12;
+			expandedVel -= EXPAND_ACC;
+			expandedAmt += expandedVel;
 			if (expandedAmt < EXPAND_START) {
 				
 				expandedAmt = EXPAND_START;
+				expandedVel = 0;
 				
 				if (msgs.size() == 0) {
 					state++;
@@ -114,7 +122,7 @@ public class OverlayPopup extends Actor {
 				yvel = 0;
 				state = 0;
 			} else {
-				yvel -= 0.4;
+				yvel -= YPOS_ACC;
 			}
 			
 		}
@@ -129,11 +137,11 @@ public class OverlayPopup extends Actor {
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		
 		if (state != 0) {
-			texture.draw(batch, getX(), getY(), expandedAmt, 64);
+			texture.draw(batch, getX(), getY(), expandedAmt, MINSIZE);
 			font.setColor(Color.WHITE);
 			if (current != null && expandedAmt == EXPAND_GOAL) {
 				TextBounds b = font.getBounds(current.getMessage());
-				font.draw(batch, current.getMessage(), getX() + expandedAmt / 2 - b.width / 2, getY() + 32 + b.height / 2);
+				font.draw(batch, current.getMessage(), getX() + expandedAmt / 2 - b.width / 2, getY() + MINSIZE / 2 + b.height / 2);
 				
 			}
 		}

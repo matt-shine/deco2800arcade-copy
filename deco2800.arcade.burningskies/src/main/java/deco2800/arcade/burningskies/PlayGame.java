@@ -28,11 +28,12 @@ public class PlayGame implements Screen
 	
 	public PlayGame( BurningSkies game){
 		this.game = game;		
-	}
-	
-	public void create()
-	{
-		texture = new Texture( Gdx.files.internal("maps/test2.png"));
+	}	
+	 
+    @Override
+    public void show()
+    {
+    	texture = new Texture( Gdx.files.internal("maps/test2.png"));
 		
 		//texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
@@ -41,13 +42,6 @@ public class PlayGame implements Screen
 		//sprite.setPosition(200, 100);
 		
 		batch = new SpriteBatch();
-			
-	}
-	
-	 
-    @Override
-    public void show()
-    {
     	camera = new OrthographicCamera();
     	camera.setToOrtho(false, game.SCREENWIDTH, game.SCREENHEIGHT);
     	camera.update();
@@ -81,7 +75,7 @@ public class PlayGame implements Screen
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
-    	create();
+    	//create();
     	
     	//Gdx.gl.glDisable(GL10.GL_CULL_FACE);
     	

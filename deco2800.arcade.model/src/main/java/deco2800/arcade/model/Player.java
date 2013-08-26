@@ -5,12 +5,10 @@ import java.util.Observable;
 import java.util.Set;
 
 
-public class Player extends Observable {
+public class Player extends User {
 
 	// TODO shared between server & client?
 	
-	private int playerID;
-
 	private String username;
 	
 	private Set<Game> games;

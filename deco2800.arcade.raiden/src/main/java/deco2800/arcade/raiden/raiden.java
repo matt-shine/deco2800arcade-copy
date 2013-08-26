@@ -13,8 +13,8 @@ import deco2800.arcade.client.network.NetworkClient;
  * @author team lion
  *
  */
-@ArcadeGame(id="raiden")
-public class raiden extends GameClient {
+@ArcadeGame(id="Raiden")
+public class Raiden extends GameClient {
 	
 	private OrthographicCamera camera;
 	
@@ -37,14 +37,12 @@ public class raiden extends GameClient {
 	 * @param player
 	 * @param networkClient
 	 */
-	public raiden(Player player, NetworkClient networkClient) {
+	public Raiden(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
 	}
-	
-	
 	
 	
 	
@@ -93,8 +91,8 @@ public class raiden extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		game.id = "raiden";
-		game.name = "raiden";
+		game.id = "Raiden";
+		game.name = "Raiden";
         game.description = "Flight Fighter";
 	}
 	

@@ -1,6 +1,5 @@
 package deco2800.arcade.model;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,13 +22,13 @@ public class Player {
 	
 	private Icon icon;
 	
-	private String realName;
+	//private String realName;
 	
-	private String location;
+	//private String location;
 	
-	private String biography;
+	//private String biography;
 	
-	private String onlineStatus;
+	//private String onlineStatus;
 
 	public Player() {
 

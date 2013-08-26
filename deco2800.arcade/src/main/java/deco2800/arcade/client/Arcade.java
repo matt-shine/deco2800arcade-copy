@@ -163,17 +163,9 @@ public class Arcade extends JFrame {
 	public void connectAsUser(String username){
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
-		byte[] key = connectionRequest.getKey();
-		try {
-			key = KeyGenerator.getInstance("Blowfish").generateKey()
-					.getEncoded();
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		connectionRequest.key = key;
 		
 		Protocol.registerEncrypted(connectionRequest);
-
+		
 		this.client.sendNetworkObject(connectionRequest);
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();

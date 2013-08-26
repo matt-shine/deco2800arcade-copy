@@ -60,11 +60,13 @@ public class Protocol {
 		kryo.register(VoiceMessage.class);
 	}
 	
-	public static void registerEncrypted(ConnectionRequest connectionRequest) {
-		// TODO ClassSerializer below causes crash, not sure which Serializer
-		// to use though
-		Protocol.kryo.register(ConnectionRequest.class, new BlowfishSerializer(
-				new DefaultSerializers.ClassSerializer(), connectionRequest.key));
+	public static void registerEncrypted(ConnectionRequest connectionRequest) {		
+		kryo.register(byte[].class);
+		
+		connectionRequest.setKey();
+		
+		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
+				new FieldSerializer(kryo, ConnectionRequest.class), connectionRequest.key));
 	}
 
 }

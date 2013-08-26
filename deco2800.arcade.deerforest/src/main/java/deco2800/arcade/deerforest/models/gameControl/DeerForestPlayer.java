@@ -1,8 +1,11 @@
 package deco2800.arcade.deerforest.models.gameControl;
 
-import deco2800.arcade.deerforest.models.cardContainers.*;
+import java.util.List;
 
-public class Player {
+import deco2800.arcade.deerforest.models.cardContainers.*;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
+
+public class DeerForestPlayer {
 
 	//Have variables for field, deck, graveyard and hand
 	private Hand hand;
@@ -13,7 +16,7 @@ public class Player {
 	private int currentShield;
 	
 	//Initialise the player with deck
-	public Player(Deck playerDeck) {
+	public DeerForestPlayer(Deck playerDeck) {
 		this.deck = playerDeck;
 		this.hand = new Hand();
 		this.graveyard = new Graveyard();
@@ -24,21 +27,36 @@ public class Player {
 
 	//draw n cards from deck to hand
 	public boolean draw(int no) {
-		return false;
+		while(no > 0) {
+			if(!draw()) return false;
+			no--;
+		}
+		return true;
 	}
 
 	//draw 1 card from deck to hand
 	public boolean draw() {
+		if (addCard(this.deck.draw(), this.hand)) return true;
 		return false;
 	}
 	
-	//move n cards from location to location
-	public boolean moveCards(int n, CardCollection loc1, CardCollection loc2) {
+	//move card to location
+	public boolean addCard(AbstractCard card, CardCollection dest) {
+		if(card == null || dest == null) return false;
+		if(dest.add(card)) return true;
 		return false;
+	}
+	
+	//move cards from location to location
+	public boolean moveCards(List<AbstractCard> cardsToMove, CardCollection locSrc, CardCollection locDest) {
+		for(AbstractCard card: cardsToMove) {
+			if(!locSrc.remove(card) || !locDest.add(card)) return false;
+		}
+		return true;
 	}
 	
 	public void inflictDamage(int damage) {
-		//If shield exists decriment it
+		//If shield exists decrement it
 		if(currentShield > 0 && currentShield >= damage) {
 			currentShield -= damage;
 			damage = 0;
@@ -47,7 +65,7 @@ public class Player {
 			currentShield = 0;
 		}
 		
-		//Infict Life point damage
+		//Inflict Life point damage
 		currentLife -= damage;
 		if(currentLife < 0) {
 			currentLife = 0;

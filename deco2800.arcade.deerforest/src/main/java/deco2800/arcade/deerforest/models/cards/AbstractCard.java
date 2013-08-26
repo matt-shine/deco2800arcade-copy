@@ -13,9 +13,9 @@ public abstract class AbstractCard {
 	
 	public String getCardType() {
 		if (this instanceof AbstractMonster) {
-			return "monster";
+			return "Monster";
 		} else {;
-			return "spell";
+			return "Spell";
 		}
 	}
 	

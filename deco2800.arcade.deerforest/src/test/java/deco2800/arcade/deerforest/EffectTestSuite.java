@@ -4,10 +4,15 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
+import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import deco2800.arcade.deerforest.models.effects.*;
 
 public class EffectTestSuite {
@@ -126,6 +131,37 @@ public class EffectTestSuite {
 			fail("Attack bounds was considered an incorrect effect");
 		}
 		
+	}
+	
+	@Test
+	public void equalsTest() {
+		// Define a bunch of lists and stuff
+//		Set<String> typeEffects1 = new HashSet<String>();
+//		typeEffects1.add("Water");
+//		
+//		Set<String> typeEffects2 = new HashSet<String>();
+//		typeEffects2.add("Fire");
+//		
+//		List<String> effectCategories1 = new ArrayList<String>();
+//		effectCategories1.add("Draw");
+//		
+//		List<? extends List<Integer>> effectParams1 = null;
+//		
+//		
+//		try {
+//			// Make 3 SpellEffects. The first two the same and the third different
+////			SpellEffect attack1 = new SpellEffect(typeEffects1, effectCategories1, effectParams1);
+////			SpellEffect attack2 = new SpellEffect(typeEffects1, effectCategories1, effectParams1);
+////			SpellEffect attack3 = new SpellEffect(typeEffects2, effectCategories1, effectParams1);
+//			
+//			// Make sure the first two are equal
+//			assertEquals(attack1, attack2);
+//			// Make sure the last two are not equal
+//			assertNotEquals(attack1, attack3);
+//			
+//		} catch (IncorrectEffectException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 }

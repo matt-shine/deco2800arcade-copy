@@ -162,6 +162,12 @@ public class FieldTest {
 		
 		assertEquals(false, player.containsAll(c));
 		
+		player.add(monster);
+		player.add(monster);
+		
+//		assertFalse(player.containsAll(c));
+//		assertFalse(c.containsAll(player));
+		
 	}
 	
 }

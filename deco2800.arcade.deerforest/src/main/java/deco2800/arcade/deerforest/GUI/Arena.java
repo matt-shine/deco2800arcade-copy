@@ -1,10 +1,9 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -138,23 +137,38 @@ public class Arena extends Sprite {
 	 * @param y
 	 * @return
 	 */
-	public Rectangle emptyZoneAtPoint(int x, int y, int player, boolean field) {
+	public Rectangle emptyZoneAtPoint(int x, int y, int player, boolean field, boolean monster) {
 		double leftSide;
 		double rightSide;
 		double topSide;
 		double bottomSide;
-		// TODO make it get correct map for player / field
-		Map<Rectangle, ExtendedSprite> mapToCheck = zones.get("P1MonsterZones");
-			for(Rectangle r : mapToCheck.keySet()) {
-				leftSide = r.getX();
-				rightSide = r.getX() + r.getWidth();
-				topSide = r.getY();
-				bottomSide = r.getY() + r.getHeight();
-				
-				if(x > leftSide && x < rightSide && y > topSide && y < bottomSide && mapToCheck.get(r) == null) {
-					return r;
-				}
+		
+		Map<Rectangle, ExtendedSprite> mapToCheck;
+		
+		if(player == 1 && field && monster) {
+			mapToCheck = zones.get("P1MonsterZones");
+		} else if(player == 1 && field && !monster) {
+			mapToCheck = zones.get("P1SpellZones");
+		} else if(player == 1) {
+			mapToCheck = zones.get("P1HandZones");
+		} else if(player == 2 && field && monster) {
+			mapToCheck = zones.get("P2MonsterZones");
+		} else if(player == 2 && field && !monster) {
+			mapToCheck = zones.get("P2SpellZones");
+		} else {
+			mapToCheck = zones.get("P2HandZones");
+		}
+		
+		for(Rectangle r : mapToCheck.keySet()) {
+			leftSide = r.getX();
+			rightSide = r.getX() + r.getWidth();
+			topSide = r.getY();
+			bottomSide = r.getY() + r.getHeight();
+			
+			if(x > leftSide && x < rightSide && y > topSide && y < bottomSide && mapToCheck.get(r) == null) {
+				return r;
 			}
+		}
 		
 		return null;
 	}
@@ -166,20 +180,34 @@ public class Arena extends Sprite {
 	 * @param r
 	 * @return
 	 */
-	public Rectangle emptyZoneAtRectangle(Rectangle r, int player, boolean field) {
+	public Rectangle emptyZoneAtRectangle(Rectangle r, int player, boolean field, boolean monster) {
 		
-		for(String key : zones.keySet()) {
-			for(Rectangle zone : zones.get(key).keySet()) {
-				//If no overlap then skip
-				if(!zone.overlaps(r)) {
-					continue;
-				}
-				//check amount of overlap
-				double area = rectangleIntersectionArea(r, zone);
-				
-				if(area > r.getWidth()*r.getHeight()/3 || area > zone.getWidth()*zone.getHeight()/3 && zones.get(key).get(r) == null) {
-					return zone;
-				}
+		Map<Rectangle, ExtendedSprite> mapToCheck;
+		
+		if(player == 1 && field && monster) {
+			mapToCheck = zones.get("P1MonsterZones");
+		} else if(player == 1 && field && !monster) {
+			mapToCheck = zones.get("P1SpellZones");
+		} else if(player == 1) {
+			mapToCheck = zones.get("P1HandZones");
+		} else if(player == 2 && field && monster) {
+			mapToCheck = zones.get("P2MonsterZones");
+		} else if(player == 2 && field && !monster) {
+			mapToCheck = zones.get("P2SpellZones");
+		} else {
+			mapToCheck = zones.get("P2HandZones");
+		}
+		
+		for(Rectangle zone : mapToCheck.keySet()) {
+			//If no overlap then skip
+			if(!zone.overlaps(r)) {
+				continue;
+			}
+			//check amount of overlap
+			double area = rectangleIntersectionArea(r, zone);
+			
+			if(area > r.getWidth()*r.getHeight()/3 || area > zone.getWidth()*zone.getHeight()/3 && mapToCheck.get(r) == null) {
+				return zone;
 			}
 		}
 		return null;
@@ -229,7 +257,31 @@ public class Arena extends Sprite {
 	}
 
 	public List<Rectangle> getAvailableZones(int player, boolean field, boolean monsters) {
-		return null;
+		List<Rectangle> freeZones = new ArrayList<Rectangle>();
+		
+		Map<Rectangle, ExtendedSprite> mapToCheck;
+		
+		if(player == 1 && field && monsters) {
+			mapToCheck = zones.get("P1MonsterZones");
+		} else if(player == 1 && field && !monsters) {
+			mapToCheck = zones.get("P1SpellZones");
+		} else if(player == 1) {
+			mapToCheck = zones.get("P1HandZones");
+		} else if(player == 2 && field && monsters) {
+			mapToCheck = zones.get("P2MonsterZones");
+		} else if(player == 2 && field && !monsters) {
+			mapToCheck = zones.get("P2SpellZones");
+		} else {
+			mapToCheck = zones.get("P2HandZones");
+		}
+		
+		for(Rectangle zone : mapToCheck.keySet()) {
+			if(mapToCheck.get(zone) == null) {
+				freeZones.add(zone);
+			}
+		}
+		
+		return freeZones;
 	}
 
 	public void removeSprite(ExtendedSprite s) {

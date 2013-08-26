@@ -54,7 +54,8 @@ public class BurningSkies extends GameClient {
 	@Override
 	public void create() {
 		super.create();
-		setScreen( new Splash(this) );
+		//setScreen( new Splash(this) );
+		setScreen( new PlayGame(this) );
 	}
 
 	@Override

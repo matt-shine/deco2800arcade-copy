@@ -97,6 +97,8 @@ public class Chess extends GameClient {
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
+	    batch.begin();
+	    
 	    batch.end();
 	    
 	    super.render();

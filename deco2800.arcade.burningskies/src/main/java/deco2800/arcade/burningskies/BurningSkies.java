@@ -1,18 +1,8 @@
 package deco2800.arcade.burningskies;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.achievement.AddAchievementRequest;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.burningskies.screen.BSGame;
 import deco2800.arcade.burningskies.screen.HelpMenu;
 import deco2800.arcade.burningskies.screen.Menu;

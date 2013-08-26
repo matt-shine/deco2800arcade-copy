@@ -33,13 +33,13 @@ public class Breakout extends GameClient {
 	 * Creates private instance variables for each element of The
 	 */
 	private String player;
-	//private NetworkClient nc;
+	// private NetworkClient nc;
 	private Paddle paddle;
 	private PongBall ball;
 	private int score;
 	private int lives;
 
-	//private String status;
+	// private String status;
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
 
@@ -62,11 +62,10 @@ public class Breakout extends GameClient {
 	// Array of Brick
 	Brick bricks[];
 
-
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.player = player.getUsername();
-		//this.nc = networkClient;
+		// this.nc = networkClient;
 		bricks = new Brick[40];
 
 	}
@@ -104,8 +103,7 @@ public class Breakout extends GameClient {
 		score = 0;
 		lives = 3;
 		gameState = GameState.READY;
-		
-		
+
 	}
 
 	/**
@@ -168,11 +166,10 @@ public class Breakout extends GameClient {
 		// Writes in the text information
 		batch.begin();
 		font.setColor(Color.GREEN);
-		font.draw(batch, "player " + player, 20,460);
-		font.draw(batch,"Life " + Integer.toString(lives),
-				SCREENWIDTH/2, 460);
-		font.draw(batch, "Score " + Integer.toString(score),
-				600, 460);
+		font.draw(batch, "player " + player, 20, 460);
+		font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
+				460);
+		font.draw(batch, "Score " + Integer.toString(score), 600, 460);
 		batch.end();
 
 		switch (gameState) {

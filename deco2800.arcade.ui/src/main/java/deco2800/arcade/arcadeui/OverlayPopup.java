@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.sun.jmx.remote.internal.ArrayQueue;
 
@@ -21,13 +22,15 @@ public class OverlayPopup extends Actor {
 	
 	private static float YPOS_GOAL = 100;
 	private static float YPOS_START = -100;
+	private static float EXPAND_GOAL = 300;
+	private static float EXPAND_START = 64;
 	
 	private float ypos = 0;
 	private float yvel = 0;
-	
 	private float expandedTime = 0;
-	private Texture texture;
-	private TextureRegion region;
+	private float expandedAmt = 0;
+	
+	private NinePatch texture;
 	private BitmapFont font;
 	private Overlay overlay;
 
@@ -37,8 +40,7 @@ public class OverlayPopup extends Actor {
 		font = new BitmapFont(false);
 		this.overlay = overlay;
 		
-		texture = new Texture(Gdx.files.internal("pacman.png"));
-		region = new TextureRegion(texture, 0, 0, 512, 512);
+		texture = new NinePatch(new Texture(Gdx.files.internal("pacman.png")), 60, 60, 60, 60);
 		
 		ypos = YPOS_START;
 		
@@ -60,27 +62,53 @@ public class OverlayPopup extends Actor {
 			ypos = YPOS_START;
 			if (msgs.size() != 0) {
 				current = msgs.remove(0);
-				state = 1;
+				state++;
 			}
 			
 		} else if (state == 1) {
 			
 			if (ypos > YPOS_GOAL) {
 				yvel = 0;
-				state = 2;
+				state++;
 			} else {
 				yvel += 0.4;
 			}
 			
 		} else if (state == 2) {
 			
-			expandedTime += d;
-			if (expandedTime > 1.2) {
-				expandedTime = 0;
-				state = 3;
+			expandedAmt += 12;
+			if (expandedAmt > EXPAND_GOAL) {
+				
+				expandedAmt = EXPAND_GOAL;
+				state++;
+				
 			}
 			
 		} else if (state == 3) {
+			
+			expandedTime += d;
+			if (expandedTime > 0.8) {
+				expandedTime = 0;
+				state++;
+			}
+			
+		} else if (state == 4) {
+			
+			expandedAmt -= 12;
+			if (expandedAmt < EXPAND_START) {
+				
+				expandedAmt = EXPAND_START;
+				
+				if (msgs.size() == 0) {
+					state++;
+				} else {
+					state = 2;
+					current = msgs.remove(0);
+				}
+				
+			}
+			
+		} else if (state == 5) {
 			
 			if (ypos < YPOS_START) {
 				yvel = 0;
@@ -92,7 +120,7 @@ public class OverlayPopup extends Actor {
 		}
 		
 		ypos += yvel;
-		this.setX(overlay.getWidth() / 2 - 32);
+		this.setX(overlay.getWidth() / 2 - expandedAmt / 2);
 		this.setY(ypos);
 		
 	}
@@ -101,10 +129,12 @@ public class OverlayPopup extends Actor {
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		
 		if (state != 0) {
-			batch.draw(region, getX(), getY(), 64, 64);
+			texture.draw(batch, getX(), getY(), expandedAmt, 64);
 			font.setColor(Color.WHITE);
-			if (current != null) {
-				font.draw(batch, current.getMessage(), getX() + 32, getY() + 32);
+			if (current != null && expandedAmt == EXPAND_GOAL) {
+				TextBounds b = font.getBounds(current.getMessage());
+				font.draw(batch, current.getMessage(), getX() + expandedAmt / 2 - b.width / 2, getY() + 32 + b.height / 2);
+				
 			}
 		}
 		

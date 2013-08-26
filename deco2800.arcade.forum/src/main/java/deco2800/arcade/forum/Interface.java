@@ -10,7 +10,7 @@ import java.awt.Font;
 import javax.swing.JPanel;
 
 
-public class interf {
+public class Interface {
 
    public static void main(String[] args) {
       

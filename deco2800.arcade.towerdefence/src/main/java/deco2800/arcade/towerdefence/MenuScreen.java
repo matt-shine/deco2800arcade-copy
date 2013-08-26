@@ -23,8 +23,11 @@ public class MenuScreen implements Screen{
 	TextureAtlas atlas;
 	Skin skin;
 	SpriteBatch batch;
-	TextButton playButton;
-	TextButton optionsButton;
+	TextButton newGameButton, continueButton, multiplayerButton,  optionsButton, 
+			creditsButton, loreButton, quitButton;
+	int buttonSpacing = 10;
+	int buttonHeight = 50;
+	int buttonWidth = 200;
 	
 	
 	public MenuScreen(final TowerDefence game) {
@@ -54,9 +57,7 @@ public class MenuScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
-		
-		//add buttons with action listeners for options/starting game etc
-		
+				
 		stage.act(delta);
 		
 		batch.begin();
@@ -73,39 +74,75 @@ public class MenuScreen implements Screen{
 		
 		Gdx.input.setInputProcessor(stage);
 		
+		//Setting the "Style of a TextButton", 
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonnormal");
 		style.down = skin.getDrawable("buttonpressed");
 		style.font = black;
 		
-		playButton = new TextButton("PLAY!", style);
-		playButton.setWidth(400);
-		playButton.setHeight(100);
-		playButton.setX(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2);
-        playButton.setY(Gdx.graphics.getHeight() - playButton.getHeight() - 20);
+		//Instantiating new Text buttons and setting properties		
+		newGameButton = new TextButton("PLAY!", style);
+		newGameButton.setWidth(buttonWidth);
+		newGameButton.setHeight(buttonHeight);
+		newGameButton.setX(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2);
+        newGameButton.setY(Gdx.graphics.getHeight() - newGameButton.getHeight() - buttonSpacing);
         
-        playButton.addListener(new InputListener() {
+        newGameButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
         		return true; //do nothing
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-        		game.setScreen(game.splashScreen); //Set to gameScreen when implemented
+        		game.setScreen(game.splashScreen); //Set to gameScreen when implemented instead of splashScreen.
         	}
         	
         });
         
-        optionsButton = new TextButton("Options", style);
-        optionsButton.setWidth(400);
-        optionsButton.setHeight(100);
-        optionsButton.setX(Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2);
-        optionsButton.setY(Gdx.graphics.getHeight() / 2 - optionsButton.getHeight() / 2);
-        	
-      
+        continueButton = new TextButton("Continue", style);
+        continueButton.setWidth(buttonWidth);
+        continueButton.setHeight(buttonHeight);
+        continueButton.setX(Gdx.graphics.getWidth() / 2 - continueButton.getWidth() / 2);
+        continueButton.setY(newGameButton.getY() - newGameButton.getHeight() - buttonSpacing);
         
-        stage.addActor(playButton);
+        multiplayerButton = new TextButton("CO-OP", style);
+        multiplayerButton.setWidth(buttonWidth);
+        multiplayerButton.setHeight(buttonHeight);
+        multiplayerButton.setX(Gdx.graphics.getWidth() / 2 - multiplayerButton.getWidth() / 2);
+        multiplayerButton.setY(continueButton.getY() - continueButton.getHeight() - buttonSpacing);
+        
+        optionsButton = new TextButton("Options", style);
+        optionsButton.setWidth(buttonWidth);
+        optionsButton.setHeight(buttonHeight);
+        optionsButton.setX(Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2);
+        optionsButton.setY(multiplayerButton.getY() - multiplayerButton.getHeight() - buttonSpacing);
+        
+        loreButton = new TextButton("Lore", style);
+        loreButton.setWidth(buttonWidth);
+        loreButton.setHeight(buttonHeight);
+        loreButton.setX(Gdx.graphics.getWidth() / 2 - loreButton.getWidth() / 2);
+        loreButton.setY(optionsButton.getY() - optionsButton.getHeight() - buttonSpacing);
+        
+        creditsButton = new TextButton("Credits", style);
+        creditsButton.setWidth(buttonWidth);
+        creditsButton.setHeight(buttonHeight);
+        creditsButton.setX(Gdx.graphics.getWidth() / 2 - creditsButton.getWidth() / 2);
+        creditsButton.setY(loreButton.getY() - loreButton.getHeight() - buttonSpacing);
+        
+        quitButton = new TextButton("Quit", style);
+        quitButton.setWidth(buttonWidth);
+        quitButton.setHeight(buttonHeight);
+        quitButton.setX(Gdx.graphics.getWidth() / 2 - quitButton.getWidth() / 2);
+        quitButton.setY(creditsButton.getY() - creditsButton.getHeight() - buttonSpacing); 
+      
+        //adding the buttons to the stage
+        stage.addActor(newGameButton);
+        stage.addActor(continueButton);
+        stage.addActor(multiplayerButton);
         stage.addActor(optionsButton);
-		
+        stage.addActor(loreButton);
+        stage.addActor(creditsButton);
+        stage.addActor(quitButton); 
+
 	}
 
 	@Override

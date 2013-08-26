@@ -24,7 +24,7 @@ public class StoreScreen implements Screen {
 		
 	}
 	
-	
+	// THIS IS A COMMENT
 
 	@Override
 	public void show() {

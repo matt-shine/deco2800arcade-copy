@@ -10,9 +10,11 @@ import com.esotericsoftware.kryonet.Server;
 import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.listener.MultiplayerListener;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -121,10 +123,10 @@ public class ArcadeServer {
 		}
 		
 		Protocol.register(server.getKryo());
-		
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
+		server.addListener(new CommunicationListener(server));
+		server.addListener(new MultiplayerListener());
 	}
-	
 }

@@ -85,7 +85,7 @@ public class MenuScreen implements Screen{
 		newGameButton.setWidth(buttonWidth);
 		newGameButton.setHeight(buttonHeight);
 		newGameButton.setX(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2);
-        newGameButton.setY(Gdx.graphics.getHeight() - newGameButton.getHeight() - buttonSpacing);
+        newGameButton.setY(Gdx.graphics.getHeight() - newGameButton.getHeight() - buttonSpacing); //FOR ALL setY: need to figure out better algorithm to space buttons.
         
         newGameButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
@@ -93,7 +93,7 @@ public class MenuScreen implements Screen{
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-        		game.setScreen(game.splashScreen); //Set to gameScreen when implemented instead of splashScreen.
+        		game.setScreen(game.gameScreen); //Set to gameScreen when implemented instead of splashScreen.
         	}
         	
         });

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import deco2800.arcade.burningskies.BurningSkies;
 
@@ -20,13 +21,15 @@ public class PlayScreen implements Screen
 	
 	private Sprite sprite;
 	private Texture texture;
+	private Stage stage;
 	
 	private int x = 0;
 	private float y = 0;
 	private int speed = 40;
 	
 	public PlayScreen( BurningSkies game){
-		this.game = game;		
+		this.game = game;
+		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true );
 	}	
 	 
     @Override
@@ -74,17 +77,13 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
-    	//create();
-    	
-    	//Gdx.gl.glDisable(GL10.GL_CULL_FACE);
-    	
     	// Draws the map
     	batch.begin();
     	batch.draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight() );
     	batch.end();
-
-    	//Gdx.gl.glEnable(GL10.GL_CULL_FACE);
     	
+    	stage.act( delta );
+    	stage.draw();    	
     }
     
     @Override

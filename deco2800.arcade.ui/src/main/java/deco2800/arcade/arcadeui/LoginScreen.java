@@ -22,7 +22,6 @@ public class LoginScreen implements Screen {
 	public LoginScreen() {
         //skin = new Skin(Gdx.files.internal("loginSkin.json"));
 
-        // Move skin stuff to an overall class
         skin = new Skin();
         
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -40,7 +39,7 @@ public class LoginScreen implements Screen {
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = skin.getFont("default");
         textFieldStyle.fontColor = Color.WHITE;
-        //textFieldStyle.cursor = ;
+        textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
         //textFieldStyle.selection = ;
         //textFieldStyle.background = ;
         skin.add("default", textFieldStyle);
@@ -69,7 +68,7 @@ public class LoginScreen implements Screen {
         TextButton loginButton = new TextButton("Login", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
-        table.debug();
+        //table.debug();  // Shows table debug lines.  Remove for final product.
         usernameLabel.setAlignment(Align.right);
         table.add(usernameLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
         table.add(usernameText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
@@ -105,7 +104,7 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        Table.drawDebug(stage);
+        //Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
 
 	    if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");

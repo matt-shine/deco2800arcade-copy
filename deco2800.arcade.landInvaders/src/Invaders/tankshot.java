@@ -1,0 +1,23 @@
+package Invaders;
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class tankshot {
+
+	private int p_x;
+	private int p_y;
+
+	public tankshot(int x, int y) {
+		p_x = x;
+		p_y = y;
+
+	}
+	
+	public void drawshot(Graphics g){
+		
+		g.setColor(Color.green);
+		
+		g.fillRect(p_x, p_y,10,10);
+	}
+
+}

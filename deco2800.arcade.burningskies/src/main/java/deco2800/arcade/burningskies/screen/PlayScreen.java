@@ -1,18 +1,17 @@
-package deco2800.arcade.burningskies;
+package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import deco2800.arcade.burningskies.BurningSkies;
 
-public class PlayGame implements Screen
+
+public class PlayScreen implements Screen
 {
 	private BurningSkies game;
 	
@@ -26,7 +25,7 @@ public class PlayGame implements Screen
 	private float y = 0;
 	private int speed = 40;
 	
-	public PlayGame( BurningSkies game){
+	public PlayScreen( BurningSkies game){
 		this.game = game;		
 	}	
 	 
@@ -43,7 +42,7 @@ public class PlayGame implements Screen
 		
 		batch = new SpriteBatch();
     	camera = new OrthographicCamera();
-    	camera.setToOrtho(false, game.SCREENWIDTH, game.SCREENHEIGHT);
+    	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
     }
     

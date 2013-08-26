@@ -3,12 +3,12 @@ package deco2800.arcade.burningskies;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.burningskies.screen.BSGame;
-import deco2800.arcade.burningskies.screen.HelpMenu;
-import deco2800.arcade.burningskies.screen.Menu;
-import deco2800.arcade.burningskies.screen.OptionsMenu;
+import deco2800.arcade.burningskies.screen.HelpScreen;
+import deco2800.arcade.burningskies.screen.MenuScreen;
+import deco2800.arcade.burningskies.screen.OptionsScreen;
+import deco2800.arcade.burningskies.screen.PlayScreen;
 import deco2800.arcade.burningskies.screen.ScoreScreen;
-import deco2800.arcade.burningskies.screen.Splash;
+import deco2800.arcade.burningskies.screen.SplashScreen;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 /**
@@ -29,12 +29,12 @@ public class BurningSkies extends GameClient {
 
 	private NetworkClient networkClient;
 	
-	public Splash splashScreen;
-	public Menu menuScreen;
-	public OptionsMenu optionsScreen;
-	public HelpMenu helpScreen;
+	public SplashScreen splashScreen;
+	public MenuScreen menuScreen;
+	public OptionsScreen optionsScreen;
+	public HelpScreen helpScreen;
 	public ScoreScreen scoreScreen;
-	public BSGame gameScreen;
+	public PlayScreen gameScreen;
 
 	/**
 	 * Basic constructor for the Burning Skies game
@@ -46,6 +46,11 @@ public class BurningSkies extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
 		this.networkClient = networkClient;
+		splashScreen = new SplashScreen(this);
+		menuScreen = new MenuScreen(this);
+		optionsScreen = new OptionsScreen(this);
+		helpScreen = new HelpScreen(this);
+		scoreScreen = new ScoreScreen(this);
 	}
 	
 	/**
@@ -55,7 +60,7 @@ public class BurningSkies extends GameClient {
 	public void create() {
 		super.create();
 		//setScreen( new Splash(this) );
-		setScreen( new PlayGame(this) );
+		setScreen( new PlayScreen(this) );
 	}
 
 	@Override

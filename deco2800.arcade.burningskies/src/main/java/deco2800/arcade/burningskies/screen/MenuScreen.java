@@ -2,7 +2,15 @@ package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Screen;
 
-public class Menu implements Screen {
+import deco2800.arcade.burningskies.BurningSkies;
+
+public class MenuScreen implements Screen {
+	
+	private BurningSkies game;
+	
+	public MenuScreen( BurningSkies game){
+		this.game = game;		
+	}
 
 	@Override
 	public void dispose() {

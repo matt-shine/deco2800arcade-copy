@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import deco2800.arcade.burningskies.BurningSkies;
  
-public class Splash implements Screen
+public class SplashScreen implements Screen
 {
     private Texture logo;
     private SpriteBatch spriteBatch;
@@ -18,7 +18,7 @@ public class Splash implements Screen
     private Music music;
     private OrthographicCamera camera;
  
-    public Splash( BurningSkies game )
+    public SplashScreen( BurningSkies game )
     {
     	this.game = game;
     }

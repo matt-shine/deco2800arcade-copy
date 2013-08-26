@@ -2,7 +2,16 @@ package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Screen;
 
+import deco2800.arcade.burningskies.BurningSkies;
+
 public class ScoreScreen implements Screen {
+	
+	private BurningSkies game;
+	
+	public ScoreScreen(BurningSkies game) {
+		this.game = game;
+	}
+
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub

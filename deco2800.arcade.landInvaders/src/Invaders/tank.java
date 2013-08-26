@@ -19,7 +19,7 @@ public class tank implements KeyListener {
 		p_y = 400;
 
 	}
-
+	// testing
 	public void drawTank(Graphics g, JFrame p) {
 		g.setColor(Color.green);
 		im = new javax.swing.ImageIcon("Tank2.png").getImage();

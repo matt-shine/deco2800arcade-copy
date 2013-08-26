@@ -38,7 +38,6 @@ public class Breakout extends GameClient {
 	private PongBall ball;
 	private int score;
 	private int lives;
-	private String status;
 
 	//private String status;
 	// Keeps track of the number of bricks on screen.
@@ -67,7 +66,7 @@ public class Breakout extends GameClient {
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.player = player.getUsername();
-		this.nc = networkClient;
+		//this.nc = networkClient;
 		bricks = new Brick[40];
 
 	}
@@ -105,8 +104,7 @@ public class Breakout extends GameClient {
 		score = 0;
 		lives = 3;
 		gameState = GameState.READY;
-		status = "Start!";
-		//status = "Start!";
+		
 		
 	}
 

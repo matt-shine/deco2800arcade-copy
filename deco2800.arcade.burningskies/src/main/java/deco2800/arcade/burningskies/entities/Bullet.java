@@ -35,6 +35,18 @@ public abstract class Bullet extends Image {
 		return damage;
 	}
 	
+	// Just in case the parent class wants to check
+	public boolean getAffinity(){
+		return affinity;
+	}
+	
+	// Updates the positions of the bullet. Using the getDeltaTime from parent class to pass through
+	public void update(float delta){
+		position.x += delta * velocity.x;
+		position.y += delta * velocity.y;
+		
+	}
+	
 	abstract void moveBullet(float delta);
 
 }

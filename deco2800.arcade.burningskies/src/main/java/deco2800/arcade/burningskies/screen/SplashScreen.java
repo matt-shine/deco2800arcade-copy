@@ -15,8 +15,9 @@ public class SplashScreen implements Screen
     private Texture logo;
     private SpriteBatch spriteBatch;
     private BurningSkies game;
-    private Music music;
-    private OrthographicCamera camera;
+    // Unused for now
+    //private Music music;
+    //private OrthographicCamera camera;
  
     public SplashScreen( BurningSkies game )
     {

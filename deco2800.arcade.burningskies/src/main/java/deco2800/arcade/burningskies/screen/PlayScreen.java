@@ -35,16 +35,13 @@ public class PlayScreen implements Screen
     @Override
     public void show()
     {
+    	// Initialising variables
     	texture = new Texture( Gdx.files.internal("maps/test2.png"));
-		
-		//texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		
 		sprite = new Sprite(texture);
-		//sprite.setSize(200, 400); //1280);
-		//sprite.setPosition(200, 100);
-		
 		batch = new SpriteBatch();
-    	camera = new OrthographicCamera();
+
+		// Setting up the camera view for the game
+		camera = new OrthographicCamera();
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
     }
@@ -57,7 +54,7 @@ public class PlayScreen implements Screen
     @Override
     public void render(float delta)
     {
-    	// Reading the up or down arrow key to move the map in that direction
+    	// Reading the input key up or down arrow key to move the map in that direction
     	/*
     	if(Gdx.input.isKeyPressed(Keys.DPAD_UP)){
     		y -= (float) Gdx.graphics.getDeltaTime() * speed;

@@ -74,7 +74,7 @@ public class HomeScreen implements Screen {
 	    for (GameClient gameClient : games) {
             Game game = gameClient.getGame();
 	    	h += 16;
-		    font.draw(batch, "" + index + ". " + game.name + " : " + game.description, 110, h);
+		    font.draw(batch, "" + index + ". " + game.name + " : " + (game.description == null ? "No Description Found" : game.description), 110, h);
 		    
 		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
 		    	ArcadeSystem.goToGame(gameClient);

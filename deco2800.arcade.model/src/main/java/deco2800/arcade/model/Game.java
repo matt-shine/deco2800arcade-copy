@@ -36,17 +36,16 @@ public class Game {
 	
 	public String description; //The description for the game
 
-    public Icon icon; //A game Icon
+	public Icon icon; //A game Icon
 
 	public int pricePerPlay = 1;
 	
 	/**
 	 * Sets the description for a game
-	 * @param description
+	 * @param description Game description
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-		return;
 	}
 	
 	/**
@@ -59,11 +58,10 @@ public class Game {
 	
 	/**
 	 * Sets the name of a game
-	 * @param name
+	 * @param name Game name
 	 */
 	public void setName(String name) {
 		this.name = name;
-		return;
 	}
 	
 	/**
@@ -73,6 +71,22 @@ public class Game {
 	public String getName() {
 		return name;
 	}
+
+    /**
+     * Set Icon
+     * @param icon Game Icon
+     */
+    public void setIcon(Icon icon) {
+        this.icon = icon;
+    }
+
+    /**
+     * Get Icon
+     * @return icon
+     */
+    public Icon getIcon() {
+        return this.icon;
+    }
 	
 	
 }

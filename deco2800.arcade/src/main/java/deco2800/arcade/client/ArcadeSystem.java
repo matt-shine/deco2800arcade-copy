@@ -1,6 +1,7 @@
 package deco2800.arcade.client;
 
 import java.util.Set;
+import deco2800.arcade.model.Game;
 
 public class ArcadeSystem {
 	
@@ -29,6 +30,10 @@ public class ArcadeSystem {
 	public static Set<String> getGamesList() {
 		return arcade.findPlayableIds();
 	}
+
+    public static Set<Game> getGameList() {
+        return arcade.findPlayableGames();
+    }
 	
 	public static void login(String username) {
 		arcade.connectAsUser(username);

@@ -6,13 +6,11 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.JFrame;
 
+import deco2800.arcade.model.Game;
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -64,7 +62,7 @@ public class Arcade extends JFrame {
 
 	/**
 	 * ENTRY POINT
-	 * @param args
+	 * @param args Program Arguments
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
@@ -78,7 +76,7 @@ public class Arcade extends JFrame {
 
 	/**
 	 * Sets the instance variables for the arcade
-	 * @param args
+	 * @param args Arcade Arguments
 	 */
 	private Arcade(String[] args){
 		this.width = 1280;
@@ -197,9 +195,7 @@ public class Arcade extends JFrame {
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
 	public void startGame(String gameid){
-
 		selectedGame = getInstanceOfGame(gameid);
-
 		startGame(selectedGame);
 	}
 
@@ -208,7 +204,6 @@ public class Arcade extends JFrame {
 	 * Stop the current game
 	 */
 	public void stopGame(){
-
 		if (selectedGame != null) {
 			selectedGame.gameOver();
 		}
@@ -276,15 +271,10 @@ public class Arcade extends JFrame {
 		});
 	}
 
-	private Map<String,Class<? extends GameClient>> gameMap = null;
-	
 	private Map<String,Class<? extends GameClient>> getGameMap() {
 
-		if (gameMap != null) {
-			return gameMap;
-		}
-		
-		gameMap = new HashMap<String,Class<? extends GameClient>>();
+		Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
+
 		Reflections reflections = new Reflections("deco2800.arcade");
 		Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
 		for (Class<?> g : possibleGames) {
@@ -300,7 +290,7 @@ public class Arcade extends JFrame {
 
 	/**
 	 * Returns all games except ones with the @InternalGame annotation
-	 * @return
+	 * @return names of playable games
 	 */
 	public Set<String> findPlayableIds() {
 		
@@ -310,8 +300,7 @@ public class Arcade extends JFrame {
 		Iterator<Map.Entry<String,Class<? extends GameClient>>> it = games.entrySet().iterator();
 	    while (it.hasNext()) {
 	    	
-	        Map.Entry<String,Class<? extends GameClient>> pair =
-	        		(Map.Entry<String,Class<? extends GameClient>>)it.next();
+	        Map.Entry<String,Class<? extends GameClient>> pair = it.next();
 	        
 	        if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
 	        	it.remove();
@@ -321,6 +310,28 @@ public class Arcade extends JFrame {
 		return games.keySet();
 	}
 
+    /**
+     * Return all playable games
+     * @return Set of Playable Games
+     */
+    public Set<Game> findPlayableGames() {
+        Map<String, Class<? extends GameClient>> games = getGameMap();
+
+        Set<Game> gameSet = new HashSet<Game>();
+
+        Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, Class<? extends GameClient>> pair = it.next();
+            if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+                it.remove();
+            } else {
+                gameSet.add(getInstanceOfGame(pair.getKey()).getGame());
+            }
+
+        }
+        return gameSet;
+    }
 
 	public GameClient getInstanceOfGame(String id) {
 		

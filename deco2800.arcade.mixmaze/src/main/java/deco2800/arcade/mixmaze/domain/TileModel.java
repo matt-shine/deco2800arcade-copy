@@ -1,10 +1,18 @@
 package deco2800.arcade.mixmaze.domain;
 
+import java.util.Random;
+
 public class TileModel {
 	// Tile data
 	private int tileX;
 	private int tileY;
 	private WallModel[] walls;
+	
+	private PlayerModel boxer;
+	
+	private Random spawner = new Random();
+	private ItemModel spawnedItem;
+	private long lastSpawned;
 	
 	public int getX() {
 		return tileX;
@@ -27,6 +35,15 @@ public class TileModel {
 				getWall(Direction.NORTH).isBuilt() && 
 				getWall(Direction.EAST).isBuilt() && 
 				getWall(Direction.SOUTH).isBuilt();
+	}
+	
+	public void spawnItem() {
+		if((System.currentTimeMillis() - lastSpawned) >= (10 * 1000)) {
+			if(spawner.nextDouble() <= 0.2) {
+				// Spawn item
+			}
+			lastSpawned = System.currentTimeMillis();
+		}
 	}
 	
 	public TileModel(int x, int y) {

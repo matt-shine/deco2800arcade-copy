@@ -40,11 +40,13 @@ public class MixMazeModel {
 		if(!Direction.isDirection(direction)) {
 			throw Direction.NOTADIRECTION;
 		}
-		player.setDirection(direction);
 		
-		// Check the player can move and their next position is valid.
-		if(player.canMove() && checkCoordinates(player.getNextX(), player.getNextY())) {
-			player.move();
+		if(player.canMove()) {
+			if(player.getDirection() != direction) {
+				player.setDirection(direction);
+			} else if(checkCoordinates(player.getNextX(), player.getNextY())) {
+				player.move();
+			}
 		}
 	}
 	

@@ -10,17 +10,21 @@ public abstract class Bullet extends Image {
 	private Vector2 velocity;
 	private Vector2 position;
 	private Player player;
+	private Ship parent;
 	
 	/**
 	 * Creates a new bullet
 	 * @param affinity
-	 * @param type
-	 * @param initialSpeed
+	 * @param damage
+	 * @param initialPosition
+	 * @param parent
+	 * @param player
 	 */
-	public Bullet(boolean affinity, int damage, Vector2 initialPosition, Player player) {
+	public Bullet(boolean affinity, int damage, Vector2 initialPosition, Ship parent, Player player) {
 		this.affinity = affinity;
 		this.damage = damage;
 		this.player = player; // in case of homing
+		this.parent = parent; // in case of bullets sticking close
 		velocity = new Vector2();
 		position = initialPosition;
 	}
@@ -31,22 +35,27 @@ public abstract class Bullet extends Image {
         moveBullet(delta);
     }
 	
+	/**
+	 * @return The damage this bullet will inflict
+	 */
 	public int getDamage() {
 		return damage;
 	}
 	
-	// Just in case the parent class wants to check
+	/**
+	 * Checks whether the bullet is friend or foe.
+	 * 
+	 * @return true if an enemy bullet, false if a friendly bullet
+	 */
 	public boolean getAffinity(){
 		return affinity;
 	}
 	
-	// Updates the positions of the bullet. Using the getDeltaTime from parent class to pass through
-	public void update(float delta){
-		position.x += delta * velocity.x;
-		position.y += delta * velocity.y;
-		
-	}
-	
+	/**
+	 * Move the bullet as the scene is rendered.
+	 * Cannot be catch all in case bullet direction changes over time.
+	 * @param delta the change of time since last render
+	 */
 	abstract void moveBullet(float delta);
 
 }

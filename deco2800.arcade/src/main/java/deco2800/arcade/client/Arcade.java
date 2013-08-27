@@ -373,7 +373,10 @@ public class Arcade extends JFrame {
 		return null;
 	}
 
-
+    /**
+     * Set selected game client
+     * @param gameClient GameClient
+     */
     public void setGame(GameClient gameClient) {
         selectedGame = gameClient;
     }

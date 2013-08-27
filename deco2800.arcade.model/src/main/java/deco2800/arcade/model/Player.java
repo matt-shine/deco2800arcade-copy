@@ -2,7 +2,6 @@ package deco2800.arcade.model;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Observable;
 import java.util.Set;
 
 public class Player extends User {
@@ -29,15 +28,7 @@ public class Player extends User {
 
 	// private String onlineStatus;
 
-	public Player() {
-
-	}
-
-	public Player(String username) {
-
-		this.username = username;
-	}
-
+	
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
 	 * 
@@ -53,11 +44,7 @@ public class Player extends User {
 	 */
 	public Player(int playerID, String username, String filepath)
 			throws IOException {
-		// TODO: Validate username input
-
 		// TODO validate filepath
-
-		// TODO validate playerID
 
 		this.username = username;
 		this.games = new HashSet<Game>();
@@ -87,8 +74,9 @@ public class Player extends User {
 	 * @param username
 	 */
 	public void setUsername(String username) {
-		// TODO Validate
-		this.username = username;
+		if(username != null){
+			this.username = username;
+		}
 	}
 
 	/**
@@ -124,6 +112,7 @@ public class Player extends User {
 		return clone;
 	}
 
+	@Deprecated
 	/**
 	 * Sets the Player's games to the set provided
 	 * 
@@ -147,10 +136,9 @@ public class Player extends User {
 	 * @ensure this.games.contains(game)
 	 */
 	public void addGame(Game game) {
-		if (game != null && !this.hasGame(game)) {
+		if (game != null) {
 			this.games.add(game);
 		}
-		/* TODO Throw exception if game already in game set */
 	}
 
 	/**
@@ -161,10 +149,7 @@ public class Player extends User {
 	 * @ensure !this.games.contains(game)
 	 */
 	public void removeGame(Game game) {
-		if (this.hasGame(game)) {
 			this.games.remove(game);
-		}
-		/* TODO throw exception if game doesn't exist */
 	}
 
 	/**
@@ -189,6 +174,7 @@ public class Player extends User {
 		return clone;
 	}
 
+	@Deprecated
 	/**
 	 * Sets the player's friends to the set provided.
 	 * 
@@ -247,6 +233,7 @@ public class Player extends User {
 		return clone;
 	}
 
+	@Deprecated
 	/**
 	 * Sets the player's invites to the set provided.
 	 * 
@@ -279,11 +266,10 @@ public class Player extends User {
 	 * 
 	 * @ensure this.friendInvites.contains(player)
 	 */
-	public void addInvite(Player player) {
-		if (player != null && !this.hasInvite(player)) {
+	public void addInvite(User player) {
+		if (player != null) {
 			this.friendInvites.add(player);
 		}
-		// TODO: throw exception if player is already in invites list
 	}
 
 	/**
@@ -293,12 +279,8 @@ public class Player extends User {
 	 *            Friend to be removed.
 	 * @ensure !this.friendInvites.contains(player)
 	 */
-	public void removeInvite(Player player) {
-		// TODO: add option to add friend to block list
-		if (this.hasInvite(player)) {
+	public void removeInvite(User player) {
 			this.friendInvites.remove(player);
-		}
-		// TODO: throw exception if player is not in invite list
 	}
 
 	/**
@@ -311,6 +293,7 @@ public class Player extends User {
 		return clone;
 	}
 
+	@Deprecated
 	/**
 	 * Sets the player's blocked list to the set provided.
 	 * 

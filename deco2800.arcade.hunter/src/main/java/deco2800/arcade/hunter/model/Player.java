@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.platformergame.model.Entity;
 
 public class Player extends Entity {
-	private final int JUMP_VELOCITY = 20;
+	private static final int JUMP_VELOCITY = 20;
 	//Is the player standing on something
 	private boolean grounded;
 	private float jumpVelocity;

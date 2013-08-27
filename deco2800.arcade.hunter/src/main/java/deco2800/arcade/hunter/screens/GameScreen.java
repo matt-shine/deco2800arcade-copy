@@ -8,8 +8,12 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.model.EntityCollection;
+import deco2800.arcade.hunter.model.Player;
+import deco2800.arcade.platformergame.model.Entity;
 
 /**
  * A Hunter game for use in the Arcade
@@ -20,10 +24,10 @@ public class GameScreen implements Screen {
 	private OrthographicCamera camera;
 	private Hunter parent;
 	
-	private ShapeRenderer shapeRenderer;
+	private EntityCollection entities = new EntityCollection();
+	private Player player;
 	
-	private float exampleCoordX, exampleCoordY;
-	private int speed = 100;
+	private ShapeRenderer shapeRenderer;
 	
 	public GameScreen(Hunter p){
 		parent = p;
@@ -33,9 +37,8 @@ public class GameScreen implements Screen {
 		
 		shapeRenderer = new ShapeRenderer();
 		
-		exampleCoordX = parent.screenWidth / 2 - 5;
-		exampleCoordY = parent.screenHeight / 2 - 5;
-		
+		player = new Player(new Vector2(0, 0), 64, 128);
+		entities.add(player);
 	}
 
 	@Override
@@ -63,35 +66,28 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		//Poll for input
-		if (Gdx.input.isKeyPressed(Keys.UP)){
-			exampleCoordY += speed * delta;
-		} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-			exampleCoordY -= speed * delta;
+		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
+			//Attack
+			
 		}
 		
-		if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-			exampleCoordX -= speed * delta;
-		} else if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-			exampleCoordX += speed * delta;
+		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && player.isGrounded()) {
+			//Jump
+			player.jump();
 		}
+		
+		player.update(delta);
 		
 		shapeRenderer.setProjectionMatrix(camera.combined);
 	    
-		//Draw the boxes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    shapeRenderer.setColor(Color.RED);
-	    shapeRenderer.filledRect(0, 0, 100, 100);
 	    
-	    shapeRenderer.setColor(Color.BLUE);
-	    shapeRenderer.filledRect(parent.screenWidth - 100, parent.screenHeight - 100, 100, 100);
+	    for (Entity e : entities) {	
+	    	//Draw each entity
+	    	shapeRenderer.filledRect(e.getX(), e.getY(), e.getWidth(), e.getHeight());
+	    }
 	    
-	    shapeRenderer.end();
-	    
-	    //Draw the circle
-	    shapeRenderer.begin(ShapeType.FilledCircle);
-	    
-	    shapeRenderer.setColor(Color.GREEN);
-	    shapeRenderer.filledCircle(exampleCoordX, exampleCoordY, (float)5);
 	    shapeRenderer.end();
 		
 	}

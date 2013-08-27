@@ -28,8 +28,8 @@ public class BulkPurchasingTest {
 		purchasingService = new PurchasingService();
 		
 		//TODO: Chnage this to the other constructor
-		algernon = new Player("Algernon");
-		barnaby = new Player("Barnaby");
+		algernon = new Player(0, "Algernon", null);
+		barnaby = new Player(0, "Barnaby", null);
 		
 		tiddlywinks = new Game();
 		tiddlywinks.name = "tiddlywinks";

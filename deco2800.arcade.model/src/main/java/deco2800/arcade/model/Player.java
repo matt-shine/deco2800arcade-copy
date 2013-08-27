@@ -1,6 +1,5 @@
 package deco2800.arcade.model;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +27,6 @@ public class Player extends User {
 
 	// private String onlineStatus;
 
-	
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
 	 * 
@@ -38,12 +36,8 @@ public class Player extends User {
 	 *            The Player's name
 	 * @param filepath
 	 *            The Player's icon filepath
-	 * @throws IOException
-	 *             Throws exception when the image cannot be found at the
-	 *             designated filepath.
 	 */
-	public Player(int playerID, String username, String filepath)
-			throws IOException {
+	public Player(int playerID, String username, String filepath) {
 		// TODO validate filepath
 
 		this.username = username;
@@ -56,7 +50,15 @@ public class Player extends User {
 		 * cannot be loaded there is no way (other than changing the return type
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
-		this.icon = new Icon(filepath);
+
+		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFUALT TO
+		// PLACEHOLDER
+		// this.icon = new Icon(filepath);
+		/*
+		 * @throws IOException Throws exception when the image cannot be found
+		 * at the designated filepath.
+		 */
+		this.icon = null;
 	}
 
 	/**
@@ -74,7 +76,7 @@ public class Player extends User {
 	 * @param username
 	 */
 	public void setUsername(String username) {
-		if(username != null){
+		if (username != null) {
 			this.username = username;
 		}
 	}
@@ -149,7 +151,7 @@ public class Player extends User {
 	 * @ensure !this.games.contains(game)
 	 */
 	public void removeGame(Game game) {
-			this.games.remove(game);
+		this.games.remove(game);
 	}
 
 	/**
@@ -280,7 +282,7 @@ public class Player extends User {
 	 * @ensure !this.friendInvites.contains(player)
 	 */
 	public void removeInvite(User player) {
-			this.friendInvites.remove(player);
+		this.friendInvites.remove(player);
 	}
 
 	/**

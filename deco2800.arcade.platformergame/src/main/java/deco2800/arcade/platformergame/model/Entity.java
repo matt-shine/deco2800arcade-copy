@@ -32,4 +32,12 @@ public abstract class Entity {
 	public float getHeight() {
 		return bounds.height;
 	}
+	
+	public float getX() {
+		return bounds.x;
+	}
+	
+	public float getY() {
+		return bounds.y;
+	}
 }

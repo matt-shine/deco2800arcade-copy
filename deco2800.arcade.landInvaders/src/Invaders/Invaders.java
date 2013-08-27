@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Invaders extends JFrame implements Runnable {
 
@@ -16,10 +17,13 @@ public class Invaders extends JFrame implements Runnable {
 	private tank tank;
 	private int move;
 	private int direction;
+	
+	private ArrayList<tankshot> shots;
 
 	public Invaders() {
 
 		super("Land Invaders");
+		shots = new ArrayList<tankshot>();
 		enemyG = new enemyGroup(3, 6);
 		tank = new tank();
 		addKeyListener(tank);
@@ -58,6 +62,15 @@ public class Invaders extends JFrame implements Runnable {
 	public void update(Graphics g) {
 		paint(g);
 	}
+	
+	public void enemyMove(int count){
+		if(count%10 ==0){
+			if(move==130)direction =-1;
+			if(move==-30)direction=1;
+				move+= 10*direction;
+		}
+	}
+	
 
 	public static void main(String[] args) {
 		Invaders invader = new Invaders();
@@ -71,11 +84,12 @@ public class Invaders extends JFrame implements Runnable {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {
 			}
-			if(count%10 ==0){
-				if(move==130)direction =-1;
-				if(move==-30)direction=1;
-					move+= 10*direction;
+			
+			if(tank.shotCheck() == true){
+				shots.add(new tankshot(tank.PositionX(),tank.PositionY()));
 			}
+			
+			enemyMove(count);
 			repaint();
 			count++;
 		}

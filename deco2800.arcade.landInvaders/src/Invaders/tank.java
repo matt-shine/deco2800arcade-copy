@@ -13,6 +13,7 @@ public class tank implements KeyListener {
 	private int p_x;
 	private int p_y;
 	private Image im =null;
+	private boolean shotState = false;
 
 	public tank() {
 		p_x = 370;
@@ -40,8 +41,7 @@ public class tank implements KeyListener {
 		}
 		
 		if(key == KeyEvent.VK_SPACE){
-			
-			
+			shotState = true;
 		}
 
 	}
@@ -56,6 +56,23 @@ public class tank implements KeyListener {
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public boolean shotCheck(){
+		return shotState;
+		
+	}
+	
+	public int PositionX(){
+		return p_x;
+	}
+	
+	public int PositionY(){
+		return p_y;
+	}
+	
+	public void finishShot(){
+		shotState = false;
 	}
 
 }

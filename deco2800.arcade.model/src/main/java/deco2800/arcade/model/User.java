@@ -12,11 +12,19 @@ public class User extends Observable{
 	
 	
 	private int playerID;
+	
+	public User(){
+		
+	}
 
 	public User(int id){
 		this.playerID = id;
 	}
 	
+	/**
+	 * Access method for playerID
+	 * @return	Returns the playerID
+	 */
 	public int getID(){
 		return playerID;
 	}

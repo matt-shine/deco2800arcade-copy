@@ -1,4 +1,4 @@
-package main.java.deco2800.arcade.junglejump;
+package deco2800.arcade.junglejump;
 
 
 
@@ -14,6 +14,7 @@ public class Progress {
 	public Progress() {
 		int levelsComplete = 0;
 		bananas = new ArrayList();
+		
 		int foundBananas = 0;
 		int lives = 3;
 	}
@@ -22,9 +23,6 @@ public class Progress {
 	 * Adds a banana to the total found
 	 */
 	public void addBanana(int level, int banana) {
-		ddfdfd.
-		kjlguibk
-		knlm,m
 	}
 
 }

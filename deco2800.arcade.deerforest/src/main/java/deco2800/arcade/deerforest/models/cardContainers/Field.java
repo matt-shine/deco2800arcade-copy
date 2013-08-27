@@ -178,20 +178,20 @@ public class Field extends AbstractCardCollection {
 	
 	@Override
 	public boolean addAll(Collection<? extends AbstractCard> c) {
-		// TODO Auto-generated method stub
-		return false;
+		for(AbstractCard card:c) {
+			if (card instanceof AbstractMonster && !monsterIsFull()) {
+				fieldMonster.add((AbstractMonster) card);
+			} else if(card instanceof AbstractSpell && !spellIsFull()) {
+				fieldMonster.add((AbstractMonster) card);
+			} else {
+				return false;
+			}
+		}
+		return true;
 	}
-
-	
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean moveCard(AbstractCard card, CardCollection moveLocation) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -210,8 +210,16 @@ public class Field extends AbstractCardCollection {
 
 	@Override
 	public CardCollection destroyAllCards() {
-		// TODO Auto-generated method stub
-		return null;
+		CardCollection c = (CardCollection) new ArrayList<AbstractCard>();
+		for(AbstractCard card:fieldMonster) {
+			c.add(card);
+		}
+		for(AbstractCard card:fieldSpells) {
+			c.add(card);
+		}
+		fieldMonster.clear();
+		fieldSpells.clear();
+		return c;
 	}
 
 	@Override

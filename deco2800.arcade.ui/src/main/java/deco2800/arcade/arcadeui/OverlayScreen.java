@@ -3,63 +3,34 @@ package deco2800.arcade.arcadeui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.UIOverlay.PopupMessage;
 
+/**
+ * Create a sidebar on the left side of the screen
+ * @author s4266321
+ *
+ */
 public class OverlayScreen implements Screen {
-	
 	
 	private Screen callbacks = null;
 	private boolean notifiedForMissingCallbacks = false;
-		
 	
-    private Skin skin;
     private Stage stage;
-    Table table = new Table();
-    
+    Sidebar sidebar = null;
     
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
 	
 	private Overlay overlay;
-
 	
 	public OverlayScreen(Overlay overlay) {
-
 		
-		this.overlay = overlay;
+		sidebar = new Sidebar(overlay);
 		
-        skin = new Skin();
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("white", new Texture(pixmap));
-        skin.add("default", new BitmapFont());
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        skin.add("default", labelStyle);
-
-        stage = new Stage();
+        stage.addActor(sidebar);
         
-        
-        Gdx.input.setInputProcessor(stage);
-        
-        table.setFillParent(true);
-        
-        Label quitLabel = new Label("Press escape to quit...", skin);
-        table.row();
-        table.add(quitLabel).expand().space(100).top();
-        table.layout();
-        
-        stage.addActor(table);
 	}
 	
 	
@@ -96,11 +67,7 @@ public class OverlayScreen implements Screen {
 		if (isUIOpen) {
 			
 			stage.act();
-			table.debug();
-			table.debugTable();
 			stage.draw();
-			Table.drawDebug(stage);
-			
 			
 		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 		    	ArcadeSystem.goToGame(ArcadeSystem.UI);

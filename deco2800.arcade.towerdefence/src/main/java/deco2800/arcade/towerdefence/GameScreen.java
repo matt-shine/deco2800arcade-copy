@@ -1,11 +1,13 @@
 package deco2800.arcade.towerdefence;
 
+import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 import static com.badlogic.gdx.graphics.GL20.GL_DEPTH_BUFFER_BIT;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -22,9 +24,15 @@ public class GameScreen implements Screen{
 	private Table gameTable;
 	private Table topStatus;
 	private Table bottomBar;
-	float statusHeight = 200;
-	float bottomHeight = 200;
+	private static float STATUS_HEIGHT = 50f;
+	private static float BOTTOM_HEIGHT = 100f;
+	private Label randomLabel;
+	private Label randomLabel2;
+	private Label randomLabel3;
 	
+	/*
+	 * Constructor for GameScreen, creates the platform for which the game will be played.
+	 */
 	public GameScreen(TowerDefence game){
 		this.game = game;
 		stage = new Stage();
@@ -34,18 +42,25 @@ public class GameScreen implements Screen{
 		table.debug();
 		stage.addActor(table);
 		
-		topStatus = new Table();
-		topStatus.setColor(Color.BLUE);
+		randomLabel = new Label("Imagine this is a status bar", 
+				new Label.LabelStyle(new BitmapFont(),
+				CYAN));
 		
-		bottomBar = new Table();
-		bottomBar.setColor(Color.PINK);
+		randomLabel2 = new Label("BOTTOM BAR!", 
+				new Label.LabelStyle(new BitmapFont(),
+				RED));
+		
+		randomLabel3 = new Label("Game screen here?", 
+				new Label.LabelStyle(new BitmapFont(),
+				MAGENTA));
 		
 		gameTable = new Table();
-		gameTable.setColor(Color.YELLOW);
 		
-		table.add(topStatus).top().height(statusHeight).expand().fill();
-		table.add(bottomBar).bottom().height(bottomHeight).fill();
-		table.add(gameTable).expandY().fill();
+		table.add(randomLabel).top().height(STATUS_HEIGHT).expandX().fill(); //row for top status bar
+		table.row();
+		table.add(randomLabel3).center().expandY().fill(); //row for gameTable
+		table.row();
+		table.add(randomLabel2).bottom().height(BOTTOM_HEIGHT).fill(); //row for bottomBar
 	}
 
 	@Override

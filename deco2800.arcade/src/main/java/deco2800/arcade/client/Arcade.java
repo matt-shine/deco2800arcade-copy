@@ -314,10 +314,10 @@ public class Arcade extends JFrame {
      * Return all playable games
      * @return Set of Playable Games
      */
-    public Set<Game> findPlayableGames() {
+    public Set<GameClient> findPlayableGames() {
         Map<String, Class<? extends GameClient>> games = getGameMap();
 
-        Set<Game> gameSet = new HashSet<Game>();
+        Set<GameClient> gameSet = new HashSet<GameClient>();
 
         Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games.entrySet().iterator();
 
@@ -326,7 +326,7 @@ public class Arcade extends JFrame {
             if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
                 it.remove();
             } else {
-                gameSet.add(getInstanceOfGame(pair.getKey()).getGame());
+                gameSet.add(getInstanceOfGame(pair.getKey()));
             }
 
         }
@@ -374,4 +374,7 @@ public class Arcade extends JFrame {
 	}
 
 
+    public void setGame(GameClient gameClient) {
+        selectedGame = gameClient;
+    }
 }

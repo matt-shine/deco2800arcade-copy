@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Game;
 
 public class HomeScreen implements Screen {
@@ -22,7 +23,7 @@ public class HomeScreen implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
-	Set<Game> games = null;
+	Set<GameClient> games = null;
 	
 	public HomeScreen() {
 		
@@ -70,12 +71,13 @@ public class HomeScreen implements Screen {
 	    font.draw(batch, "Select a game by pressing a number key:", 110, h);
 	    h += 8;
 	    
-	    for (Game game : games) {
+	    for (GameClient gameClient : games) {
+            Game game = gameClient.getGame();
 	    	h += 16;
 		    font.draw(batch, "" + index + ". " + game.name + " : " + game.description, 110, h);
 		    
 		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
-		    	ArcadeSystem.goToGame(game.id);
+		    	ArcadeSystem.goToGame(gameClient);
 		    }
 		    
 		    index++;

@@ -18,6 +18,12 @@ public class ArcadeSystem {
 		arcade.stopGame();
 		arcade.startGame(gameid);
 	}
+
+    public static void goToGame(GameClient gameClient) {
+        arcade.stopGame();
+        arcade.setGame(gameClient);
+        arcade.startGame(gameClient);
+    }
 	
 	public static void openConnection() {
 		try {
@@ -31,7 +37,7 @@ public class ArcadeSystem {
 		return arcade.findPlayableIds();
 	}
 
-    public static Set<Game> getGameList() {
+    public static Set<GameClient> getGameList() {
         return arcade.findPlayableGames();
     }
 	

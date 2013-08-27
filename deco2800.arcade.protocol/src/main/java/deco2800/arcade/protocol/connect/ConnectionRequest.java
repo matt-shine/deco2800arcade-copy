@@ -10,7 +10,10 @@ public class ConnectionRequest extends UserRequest {
 	public String password;
 	public byte[] key;
 	
-	public void setKey() {
+	/**
+	 * Generates the symmetric key used by both the server and client 
+	 */
+	public void generateKey() {
 		try {
 			key = KeyGenerator.getInstance("Blowfish").generateKey()
 					.getEncoded();

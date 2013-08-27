@@ -32,6 +32,11 @@ public class Protocol {
 		Protocol.kryo = kryo;
 	}
 
+	/**
+	 * Registers the classes that will be sent over the network. Classes 
+	 * registered in this method will not be encrypted.
+	 * @param kryo
+	 */
 	public static void register(Kryo kryo) {
 		Protocol.setKryo(kryo);
 		
@@ -58,13 +63,21 @@ public class Protocol {
 		kryo.register(ContactListUpdate.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
+		
+		// Register miscellaneous classes
+		kryo.register(byte[].class);
 	}
 	
+	/**
+	 * Sends ConnectionRequest over network using encryption rather than 
+	 * plaintext
+	 * @param connectionRequest
+	 */
 	public static void registerEncrypted(ConnectionRequest connectionRequest) {		
-		kryo.register(byte[].class);
+		connectionRequest.generateKey();
 		
-		connectionRequest.setKey();
-		
+		// Ensures any ConnectionRequests are sent over the network using the 
+		// Blowfish encryption algorithm
 		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
 				new FieldSerializer(kryo, ConnectionRequest.class), connectionRequest.key));
 	}

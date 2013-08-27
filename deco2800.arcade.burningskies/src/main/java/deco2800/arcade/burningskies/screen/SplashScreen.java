@@ -17,7 +17,6 @@ public class SplashScreen implements Screen
     private BurningSkies game;
     // Unused for now
     //private Music music;
-    //private OrthographicCamera camera;
  
     public SplashScreen( BurningSkies game )
     {

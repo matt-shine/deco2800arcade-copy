@@ -1,4 +1,5 @@
 package Invaders;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
@@ -18,19 +19,19 @@ public class Invaders extends JFrame implements Runnable {
 	private int move;
 	private int direction;
 	private Robot r;
-	
+
 	private ArrayList<tankshot> shots;
 
-	public Invaders() throws Exception{
+	public Invaders() throws Exception {
 
 		super("Land Invaders");
 		shots = new ArrayList<tankshot>();
 		enemyG = new enemyGroup(3, 6);
 		tank = new tank();
 		addKeyListener(tank);
-		move =0;
-		direction =1;
-		r=new Robot();
+		move = 0;
+		direction = 1;
+		r = new Robot();
 		background = new javax.swing.ImageIcon("bgimage.jpg").getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
@@ -54,14 +55,14 @@ public class Invaders extends JFrame implements Runnable {
 	public void paint(Graphics g) {
 
 		mains.clearRect(0, 0, Width, Height);
-		
+
 		mains.drawImage(background, 0, 0, Width, Height, panel);
-		for(int i = 0; i<shots.size();i++){
+		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
-			
+
 		}
-		enemyG.drawGroup(mains,move);
-		tank.drawTank(mains,this);
+		enemyG.drawGroup(mains);
+		tank.drawTank(mains, this);
 		g.drawImage(bg, 0, 0, this);
 
 	}
@@ -69,27 +70,39 @@ public class Invaders extends JFrame implements Runnable {
 	public void update(Graphics g) {
 		paint(g);
 	}
-	
-	public void shotUpdate(){
-		for(int i = 0; i<shots.size();i++){
+
+	public void shotUpdate() {
+		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).Update();
-			if(shots.get(i).positionY()<0){
+			if (shots.get(i).positionY() < 0) {
 				shots.remove(i);
 			}
-			
-		}
-	}
-	
-	public void enemyMove(int count){
-		if(count%10 ==0){
-			if(move==130)direction =-1;
-			if(move==-30)direction=1;
-				move+= 10*direction;
-		}
-	}
-	
 
-	public static void main(String[] args) throws Exception{
+		}
+	}
+
+	public void hitEnemy() {
+
+		for (int i = 0; i < shots.size(); i++) {
+			if (enemyG.checkHit(shots.get(i)) == true) {
+				shots.remove(i);
+			}
+
+		}
+	}
+
+	public void enemyMove(int count) {
+		if (count % 10 == 0) {
+			if (move == 130)
+				direction = -1;
+			if (move == -30)
+				direction = 1;
+			move += 10 * direction;
+			enemyG.moveUpdate(10*direction);
+		}
+	}
+
+	public static void main(String[] args) throws Exception {
 		Invaders invader = new Invaders();
 	}
 
@@ -97,25 +110,27 @@ public class Invaders extends JFrame implements Runnable {
 	public void run() {
 		int count = 0;
 		while (true) {
-			if(tank.moveLeft()==true)r.keyPress(KeyEvent.VK_LEFT);
-			if(tank.moveRight()==true)r.keyPress(KeyEvent.VK_RIGHT);
+			if (tank.moveLeft() == true)
+				r.keyPress(KeyEvent.VK_LEFT);
+			if (tank.moveRight() == true)
+				r.keyPress(KeyEvent.VK_RIGHT);
+
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {
 			}
-			
-			
-			if(tank.shotCheck() == true){
-				shots.add(new tankshot(tank.PositionX(),tank.PositionY()));
+
+			if (tank.shotCheck() == true) {
+				shots.add(new tankshot(tank.PositionX(), tank.PositionY()));
 				tank.finishShot();
 			}
-			
+
 			shotUpdate();
 			enemyMove(count);
+			hitEnemy();
 			repaint();
 			count++;
 		}
-		
 
 	}
 

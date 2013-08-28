@@ -89,11 +89,6 @@ public class DeerForest extends GameClient implements UIOverlay {
 	public void setListeners(Screen l) {
 		;
 	}
-
-	@Override
-	public void addPopup(String s) {
-		System.out.println("Message Popup: " + s);
-	}
 	
 	private DeerForestPlayer createDeerForestPlayer() {
 		ArrayList<AbstractCard> cardList = new ArrayList<AbstractCard>();
@@ -126,5 +121,11 @@ public class DeerForest extends GameClient implements UIOverlay {
 		Deck deck = new Deck(cardList);
 		DeerForestPlayer p = new DeerForestPlayer(deck);
 		return p;
+	}
+
+	@Override
+	public void addPopup(PopupMessage p) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -8,12 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-<<<<<<< HEAD
-
 import deco2800.arcade.client.ArcadeInputMux;
-=======
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
->>>>>>> master
 import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {

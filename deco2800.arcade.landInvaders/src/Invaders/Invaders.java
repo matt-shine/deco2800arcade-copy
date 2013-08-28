@@ -52,7 +52,12 @@ public class Invaders extends JFrame implements Runnable {
 	public void paint(Graphics g) {
 
 		mains.clearRect(0, 0, Width, Height);
+		
 		mains.drawImage(background, 0, 0, Width, Height, panel);
+		for(int i = 0; i<shots.size();i++){
+			shots.get(i).drawshot(mains);
+			
+		}
 		enemyG.drawGroup(mains,move);
 		tank.drawTank(mains,this);
 		g.drawImage(bg, 0, 0, this);
@@ -87,6 +92,7 @@ public class Invaders extends JFrame implements Runnable {
 			
 			if(tank.shotCheck() == true){
 				shots.add(new tankshot(tank.PositionX(),tank.PositionY()));
+				tank.finishShot();
 			}
 			
 			enemyMove(count);

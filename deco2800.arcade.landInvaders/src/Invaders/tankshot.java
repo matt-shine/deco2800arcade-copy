@@ -17,7 +17,7 @@ public class tankshot {
 		
 		g.setColor(Color.green);
 		
-		g.fillRect(p_x, p_y,10,10);
+		g.fillRect(p_x, p_y,30,30);
 	}
 
 }

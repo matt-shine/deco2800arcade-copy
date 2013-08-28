@@ -35,20 +35,22 @@ public class tank implements KeyListener {
 		if (key == KeyEvent.VK_LEFT && p_x > 10) {
 			p_x -= 7;
 		}
+		
 
 		if (key == KeyEvent.VK_RIGHT && p_x < 750) {
 			p_x += 7;
 		}
 		
-		if(key == KeyEvent.VK_SPACE){
-			shotState = true;
-		}
+		
 
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
+		if(key == KeyEvent.VK_SPACE){
+			shotState = true;
+		}
 
 	}
 

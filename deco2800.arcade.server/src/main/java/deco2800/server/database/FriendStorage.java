@@ -4,9 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
-
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 
 /**
  * FriendStorage handles database access for Friends and Friend Request data

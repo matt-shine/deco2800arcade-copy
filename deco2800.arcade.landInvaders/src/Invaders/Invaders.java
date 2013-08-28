@@ -17,10 +17,11 @@ public class Invaders extends JFrame implements Runnable {
 	private tank tank;
 	private int move;
 	private int direction;
+	private Robot r;
 	
 	private ArrayList<tankshot> shots;
 
-	public Invaders() {
+	public Invaders() throws Exception{
 
 		super("Land Invaders");
 		shots = new ArrayList<tankshot>();
@@ -29,6 +30,7 @@ public class Invaders extends JFrame implements Runnable {
 		addKeyListener(tank);
 		move =0;
 		direction =1;
+		r=new Robot();
 		background = new javax.swing.ImageIcon("bgimage.jpg").getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
@@ -77,7 +79,7 @@ public class Invaders extends JFrame implements Runnable {
 	}
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		Invaders invader = new Invaders();
 	}
 
@@ -85,6 +87,8 @@ public class Invaders extends JFrame implements Runnable {
 	public void run() {
 		int count = 0;
 		while (true) {
+			if(tank.moveLeft()==true)r.keyPress(KeyEvent.VK_LEFT);
+			if(tank.moveRight()==true)r.keyPress(KeyEvent.VK_RIGHT);
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {

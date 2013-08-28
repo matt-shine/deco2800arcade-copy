@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class tank implements KeyListener {
 
@@ -14,6 +13,9 @@ public class tank implements KeyListener {
 	private int p_y;
 	private Image im =null;
 	private boolean shotState = false;
+	private boolean Mleft=false;
+	private boolean Mright=false;
+	private boolean Fshot =false;
 
 	public tank() {
 		p_x = 370;
@@ -32,14 +34,20 @@ public class tank implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 
-		if (key == KeyEvent.VK_LEFT && p_x > 10) {
-			p_x -= 7;
+		if (key == KeyEvent.VK_LEFT) {
+			Mleft = true;
+			
 		}
 		
 
-		if (key == KeyEvent.VK_RIGHT && p_x < 750) {
-			p_x += 7;
+		if (key == KeyEvent.VK_RIGHT ) {
+			Mright =true;
 		}
+		
+			if(Mleft == true && p_x > 10)p_x -= 7;
+			if(Mright == true&& p_x < 750)p_x += 7;
+		
+		
 		
 		
 
@@ -50,14 +58,34 @@ public class tank implements KeyListener {
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_SPACE){
 			shotState = true;
+			Fshot=true;
+		}
+		if (key == KeyEvent.VK_LEFT) {
+			Mleft =false;
+			Fshot=false;
+			
+		}
+		
+
+		if (key == KeyEvent.VK_RIGHT ) {
+			Mright=false;
+			Fshot=false;
 		}
 
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyTyped(KeyEvent e) {
 
+	}
+	
+	
+	public boolean moveLeft(){
+		return Mleft&&Fshot;
+	}
+	
+	public boolean moveRight(){
+		return Mright&&Fshot;
 	}
 	
 	public boolean shotCheck(){

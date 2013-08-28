@@ -27,7 +27,6 @@ public class BulkPurchasingTest {
 	public void setup() {
 		purchasingService = new PurchasingService();
 		
-		//TODO: Chnage this to the other constructor
 		algernon = new Player(0, "Algernon", null);
 		barnaby = new Player(0, "Barnaby", null);
 		

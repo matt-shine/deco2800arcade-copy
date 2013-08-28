@@ -38,7 +38,6 @@ public class Player extends User {
 	 *            The Player's icon filepath
 	 */
 	public Player(int playerID, String username, String filepath) {
-		// TODO validate filepath
 
 		this.username = username;
 		this.games = new HashSet<Game>();

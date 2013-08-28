@@ -1,4 +1,4 @@
-package java.deco2800.arcade.library;
+package deco2800.arcade.gamelibrary;
 
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.client.ArcadeSystem;
@@ -70,7 +70,7 @@ public class GameLibrary extends GameClient {
     }
 
     /**
-     * Loads games on the server available to the user into the library
+     * Loads games on the server available to the user into the gamelibrary
      */
     private void loadGameList() {
         Set<Game> playerGames = player.getGames();

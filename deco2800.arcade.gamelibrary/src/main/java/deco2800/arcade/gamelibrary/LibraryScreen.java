@@ -1,4 +1,4 @@
-package java.deco2800.arcade.library;
+package deco2800.arcade.gamelibrary;
 
 
 import com.badlogic.gdx.Screen;

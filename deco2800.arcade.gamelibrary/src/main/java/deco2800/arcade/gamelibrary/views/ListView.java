@@ -1,4 +1,4 @@
-package java.deco2800.arcade.library.views;
+package deco2800.arcade.gamelibrary.views;
 
 /**
  * @author Aaron Hayes

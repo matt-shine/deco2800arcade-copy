@@ -8,17 +8,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.DefaultCaret;
 
 public class CommunicationView {
 	
 	JTextArea textArea;
 	JTextArea input;
 	JButton sendButton;
+	JFrame chat = new JFrame("Chat Window");
 	
 	public CommunicationView(){
-		
 		//Create individual chat window.
-		JFrame chat = new JFrame("Testing Chat");
+		//JFrame chat = new JFrame("Testing Chat");
+		
 		chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container container = chat.getContentPane();
 		
@@ -28,12 +30,16 @@ public class CommunicationView {
 		
 		chat.pack();
 		chat.setVisible(true);
-		
 	}
 	
 	private void addTextArea(Container container){
-		textArea = new JTextArea(5,20);
+		textArea = new JTextArea(8,20);
 		textArea.setEditable(false);
+		
+		//This makes the scroll bar always at the bottom
+		DefaultCaret caret = (DefaultCaret)textArea.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		container.add(scrollPane, BorderLayout.NORTH);
 	}
@@ -62,6 +68,14 @@ public class CommunicationView {
 	
 	public String getTextInput(){
 		return input.getText();
+	}
+	
+	public void setWindowSize(int width, int height){
+		chat.setSize(width, height);
+	}
+	
+	public void setWindowTitle(String title){
+		chat.setTitle(title);
 	}
 
 }

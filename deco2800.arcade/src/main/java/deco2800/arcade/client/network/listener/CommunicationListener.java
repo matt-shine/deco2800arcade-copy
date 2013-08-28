@@ -3,6 +3,7 @@ package deco2800.arcade.client.network.listener;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.communication.CommunicationNetwork;
+import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationListener extends NetworkListener {
@@ -37,16 +38,18 @@ public class CommunicationListener extends NetworkListener {
 		
 		if (object instanceof TextMessage){
 			 TextMessage textMessage = (TextMessage) object;
-			 
-			 System.out.println("We're in received listener, this is username: ");
-			 System.out.println(textMessage.username);
-			 
+
 			 if(textMessage.username == ""){
-				 System.out.println(textMessage.text);
+				 System.out.println("Username was null!");
 			 }else{
-				 System.out.println(textMessage.username);
+				 //System.out.println(textMessage.username);
 				 communicationNetwork.updateChat(textMessage.username, textMessage);
 			 }
+		}
+		
+		if (object instanceof ChatRequest){
+			ChatRequest chatRequest = (ChatRequest) object;
+			communicationNetwork.createNewChat(chatRequest.sender);
 		}
 	}
 	

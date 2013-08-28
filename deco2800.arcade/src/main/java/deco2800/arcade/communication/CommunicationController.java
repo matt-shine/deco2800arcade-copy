@@ -22,15 +22,12 @@ public class CommunicationController {
 		this.window = window;
 		this.model = model;
 		this.networkClient = networkClient;
-		//this.player = player;
-		this.player = new Player();
+		this.player = player;
 		textMessage = new TextMessage();
-		
 		window.addSendButtonListener(new SendButtonActionListener());
 	}
 	
 	private class SendButtonActionListener implements ActionListener {
-		
 		public void actionPerformed(ActionEvent event) {
 			sendTextMessage(window.getTextInput());
 		}
@@ -39,30 +36,24 @@ public class CommunicationController {
 	private void sendTextMessage(String message){
 		ArrayList<String> participants = model.getParticipants();
 		textMessage.text = message;
-		
-		System.out.println("I want to send: ");
-		System.out.println(textMessage.text);
-		
-		player.setUsername("debuguser1");
 		textMessage.username = player.getUsername();
-		
+
 		for(String username : participants){
 			textMessage.recipient = username;
-			
-			System.out.println("I want to send to: ");
-			System.out.println(textMessage.recipient);
-			
-			System.out.println("I am sending from: ");
-			System.out.println(textMessage.username);
-			
 			this.networkClient.sendNetworkObject(textMessage);
 		}
 		
 		window.setTextInput("");
+		window.appendTextArea(player.getUsername() + ": " + message + "\n");
+		window.input.requestFocus();
 	}
 	
 	public void updateChat(String message){
 		window.appendTextArea(message);
+	}
+
+	public void setFocus() {
+		window.input.requestFocus();
 	}
 	
 }

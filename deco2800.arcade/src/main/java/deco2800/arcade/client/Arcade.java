@@ -28,6 +28,7 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -176,8 +177,18 @@ public class Arcade extends JFrame {
 
 		this.player = new Player();
 		this.player.setUsername(username);
+		this.communicationNetwork.updatePlayer(this.player);
 
-		this.communicationNetwork.createNewChat("debuguser");
+		// For testing chat:
+		if (!username.equals("debuguser")){
+			if (this.communicationNetwork.checkIfChatExists("debuguser") == false){
+				this.communicationNetwork.createNewChat("debuguser");
+				ChatRequest chatRequest = new ChatRequest();
+				chatRequest.username = "debuguser";
+				chatRequest.sender = username;
+				this.client.sendNetworkObject(chatRequest);
+			}
+		}
 	}
 
 	/**

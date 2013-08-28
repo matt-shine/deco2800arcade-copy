@@ -6,6 +6,7 @@ import java.util.Map;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
 import deco2800.arcade.protocol.communication.VoiceMessage;
 
@@ -19,7 +20,6 @@ public class CommunicationNetwork {
 	private VoiceMessage voiceMessage;
 	
 	
-	
 	/************************************************************/
 	
 	public class ChatWindow {
@@ -29,37 +29,47 @@ public class CommunicationNetwork {
 		
 		public ChatWindow(String username){
 			window = new CommunicationView();
+			window.setWindowSize(500, 250);
+			window.setWindowTitle("Chatting with: " + username);
 			model = new CommunicationModel(username);
 			controller = new CommunicationController(window, model, networkClient, player);
+			controller.setFocus();
 		}
 		
 		public void updateChat(TextMessage textMessage){
-			controller.updateChat(textMessage.username + ": " + textMessage.text);
+			controller.updateChat(textMessage.username + ": " + textMessage.text + "\n");
 		}
+		
 	}
 	
 	/***********************************************************/
 	
+	public void updatePlayer(Player player){
+		this.player = player;
+	}
 	
-
 	public CommunicationNetwork(Player player, NetworkClient networkClient){
 		this.player = player;
 		this.networkClient = networkClient;
 		currentChats = new HashMap<String, ChatWindow>();
 	}
-	
+		
+	// This is client-side, so we need a way for the server to tell a user, "Someone wants to create a chat with you, so createNewChat with them"
 	public void createNewChat(String username){
 		currentChats.put(username, new ChatWindow(username));
 	}
 	
 	public void updateChat(String username, TextMessage message){
-		ChatWindow tempWindow = currentChats.get(username);
-		tempWindow.updateChat(message);
+		currentChats.get(username).updateChat(message);
 	}
 	
-	//TODO Check if chat exists before making new window.
-	public void checkIfChatExists(){
-		
+	//Check if chat exists before making new window.
+	public boolean checkIfChatExists(String username){
+		if (currentChats.get(username) != null){
+			return true;
+		} else {
+			return false;
+		}		
 	}
 	
 }

@@ -5,9 +5,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 
-public class Game {
+public class Game implements Comparable<Game> {
 
-	//TODO shared between server & client?
+    //TODO shared between server & client?
 
 	/**
 	 * @author uqjstee8
@@ -87,6 +87,12 @@ public class Game {
     public Icon getIcon() {
         return this.icon;
     }
-	
-	
+
+    /**
+     *  Compare Games based on names
+     */
+    @Override
+    public int compareTo(Game g) {
+        return name.compareTo(g.name);
+    }
 }

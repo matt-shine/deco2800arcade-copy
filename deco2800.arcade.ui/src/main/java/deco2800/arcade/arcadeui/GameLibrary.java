@@ -20,7 +20,7 @@ public class GameLibrary implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
-	Set<String> games = null;
+	Set<GameClient> games = null;
 	
 	public GameLibrary() {
 		
@@ -34,11 +34,13 @@ public class GameLibrary implements Screen {
 		camera.setToOrtho(true, 1280, 720);
 		shapeRenderer = new ShapeRenderer();
 		
-		games = ArcadeSystem.getGamesList();
+		games = ArcadeSystem.getGameList();
 	}
-	
+
 	@Override
 	public void render(float arg0) {
+
+
 		camera.update();
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
@@ -64,12 +66,13 @@ public class GameLibrary implements Screen {
 	    font.draw(batch, "Select a game by pressing a number key:", 110, h);
 	    h += 8;
 	    
-	    for (String game : games) {
+	    for (GameClient gameClient : games) {
+            Game game = gameClient.getGame();
 	    	h += 16;
-		    font.draw(batch, "" + index + ". " + game, 110, h);
+		    font.draw(batch, "" + index + ". " + game.name + " : " + (game.description == null ? "No Description Found" : game.description), 110, h);
 		    
 		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
-		    	ArcadeSystem.goToGame(game);
+		    	ArcadeSystem.goToGame(gameClient);
 		    }
 		    
 		    index++;

@@ -1,4 +1,4 @@
-package deco2800.arcade.chess;
+package deco2800.arcade.chess.pieces;
 
 import java.util.ArrayList;
 import java.util.Arrays;

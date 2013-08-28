@@ -2,6 +2,8 @@ package deco2800.arcade.chess;
 
 import java.util.*;
 
+import deco2800.arcade.chess.pieces.*;
+
 public class Board {
 
 	FixedSizeList<FixedSizeList<Piece>> Board_State;

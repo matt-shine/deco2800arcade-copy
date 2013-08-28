@@ -23,5 +23,12 @@ public class tankshot {
 	public void Update(){
 		p_y -=7;
 	}
+	
+	public int positionX(){
+		return p_x;
+	}
+	public int positionY(){
+		return p_y;
+	}
 
 }

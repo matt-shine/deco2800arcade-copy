@@ -73,6 +73,9 @@ public class Invaders extends JFrame implements Runnable {
 	public void shotUpdate(){
 		for(int i = 0; i<shots.size();i++){
 			shots.get(i).Update();
+			if(shots.get(i).positionY()<0){
+				shots.remove(i);
+			}
 			
 		}
 	}

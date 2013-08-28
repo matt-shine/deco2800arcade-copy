@@ -14,6 +14,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.model.Game;
 
 public class GameLibrary implements Screen {
 	private OrthographicCamera camera;

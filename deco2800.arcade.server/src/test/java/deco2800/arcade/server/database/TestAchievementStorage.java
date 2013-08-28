@@ -130,12 +130,14 @@ public class TestAchievementStorage {
 					"- Increment x2 Player2 with achievement Pong Win3Games\n" +
 					"- Increment Player1 with achievement Pong Win5Games\n================\n");
 			achievementStorage.returnPlayersAchievement();
+			
+			System.out.print("TEST: Testing Over Increment\n");
+			achievementStorage.incrementProgress(testplayer, "pong.winfivegames");
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		assertEquals(new Integer(5), achievementStorage.getUserCredits("Bob"));
 	}
 	
 }

@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
@@ -245,54 +244,64 @@ public class AchievementStorage {
     public void incrementProgress(Player player, String achievementID)
     		throws DatabaseException {
     	
-    	//TODO Check if player achievement exists
-    	initialiseProgress(player.getPlayerID(), achievementID);
-    	//TODO Check if player's achievement has hit threshold else..
+    	int progress = 0;
     	
-    	//Get a connection to the database
-    	Connection connection = Database.getConnection();
-    	
-		Statement statement = null;
-		ResultSet resultSet = null;
-		//Connect to table and select Achievement and increment
-		try {
-			int playerID = player.getPlayerID();
-			statement = connection.createStatement();
-			statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENT " +
-					"SET PROGRESS = PROGRESS + 1 " +
-					"WHERE playerID=" + playerID + " " +
-					"AND achievementID='" + achievementID + "'");
+    	progress = initialiseProgress(player.getPlayerID(), achievementID);
+    	if(checkThreshold(achievementID, progress)) {
+    		System.err.print("\nBIGERROR - ACHIEVEMENT ALREADY AWARDED\n");
+    	} else {
+    		//Get a connection to the database
+        	Connection connection = Database.getConnection();
+        	
+    		Statement statement = null;
+    		ResultSet resultSet = null;
+    		//Connect to table and select Achievement and increment
+    		try {
+    			int playerID = player.getPlayerID();
+    			statement = connection.createStatement();
+    			statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENT " +
+    					"SET PROGRESS = PROGRESS + 1 " +
+    					"WHERE playerID=" + playerID + " " +
+    					"AND achievementID='" + achievementID + "'");
+    			if (checkThreshold(achievementID, progress + 1)) {
+    				System.out.print("ACHIEVEMENTS: THRESHOLD REACHED\n");
+    			};
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to get achievements from database", e);
-		} finally {
-			try {
-				if (resultSet != null){
-					resultSet.close();
-				}
-				if (statement != null){
-					statement.close();
-				}
-				if (connection != null){
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+    		} catch (SQLException e) {
+    			e.printStackTrace();
+    			throw new DatabaseException("Unable to get achievements from database", e);
+    		} finally {
+    			try {
+    				if (resultSet != null){
+    					resultSet.close();
+    				}
+    				if (statement != null){
+    					statement.close();
+    				}
+    				if (connection != null){
+    					connection.close();
+    				}
+    			} catch (SQLException e) {
+    				e.printStackTrace();
+    			}
+    		}
+    	}
     }
     
     /**
      * Checks if player's achievement exists in the database. If not, achievement is
      * initialised and created.
+     * 
+     * @param playerID The player's ID to check against DB
+     * @param achievementID To check which achievement is being initialised
      */
-	private void initialiseProgress(int playerID, String achievementID)
+	private int initialiseProgress(int playerID, String achievementID)
 			throws DatabaseException {
 		
 		//Get a connection to the database
     	Connection connection = Database.getConnection();
-		
+    	
+		int progress = 0;
 		Statement statement = null;
 		ResultSet resultSet = null;
 		
@@ -308,8 +317,10 @@ public class AchievementStorage {
 				statement.executeUpdate("INSERT INTO PLAYER_ACHIEVEMENT(" +
 						"playerID, achievementID, PROGRESS) " +
 						"VALUES(" + playerID + ", '" + achievementID + "', 0)");
+				progress = 1;
 			} else {
-				System.out.print("DB: Existing progresss found. Increment progress continue.\n");
+				System.out.print("DB: Existing progress found. Increment progress continue.\n");
+				progress = resultSet.getInt("progress");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -329,5 +340,56 @@ public class AchievementStorage {
 				e.printStackTrace();
 			}
 		}
+		return progress;
+	}
+	
+	/**
+	 * Check progress with the achievement threshold.
+	 * 
+	 * @param achievementID
+	 * @param progress
+	 * @return
+	 * @throws DatabaseException
+	 */
+	private boolean checkThreshold(String achievementID, int progress) 
+			throws DatabaseException{
+		//Get a connection to the database
+    	Connection connection = Database.getConnection();
+		
+		Statement stmt = null;
+		ResultSet data = null;
+		
+		try {
+			stmt = connection.createStatement();
+			data = stmt.executeQuery("SELECT * FROM ACHIEVEMENTS " +
+					"WHERE id = '" + achievementID + "' AND " +
+							"THRESHOLD = " + progress);
+			if(data.next()) {
+				System.out.print("DB: Threshold has been reached.\n");
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get PLAYER_ACHIEVEMENT from database", e);
+		} finally {
+			try {
+				if (data != null){
+					data.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
+
+

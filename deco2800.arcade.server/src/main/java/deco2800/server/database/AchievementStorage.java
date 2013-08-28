@@ -191,6 +191,49 @@ public class AchievementStorage {
     }
     
     
+    /**
+     * Return the PLAYERS_ACHIEVEMENT table.
+     * 
+     * @throws DatabaseException
+     */
+    public void returnPlayersAchievement() throws DatabaseException {
+    	// Get a connection to the database
+    	Connection connection = Database.getConnection();
+    	
+    	Statement statement = null;
+    	ResultSet resultSet = null;
+    	
+    	try {
+    		statement = connection.createStatement();
+    		resultSet = statement.executeQuery("SELECT * FROM PLAYER_ACHIEVEMENT");
+    		
+    		while(resultSet.next()) {
+    			System.out.print("PlayerID: "+ resultSet.getString("playerID") 
+    					+ " Achievement: " + resultSet.getString("achievementID") 
+    					+ " Progress: " + resultSet.getString("progress") + "\n");
+    		}
+  
+    	} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get achievements from database", e);
+		} finally {
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+    	
+    }
+    
     
     /**
      * Increments the player's progress for the achievement with ID
@@ -210,7 +253,7 @@ public class AchievementStorage {
     			try {
     				int playerID = player.getPlayerID();
 					statement = connection.createStatement();
-					statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENTS " +
+					statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENT " +
 							"SET PROGRESS = PROGRESS + 1 " +
 							"WHERE playerID=" + playerID + " " +
 							"AND achievementID='" + achievementID + "'");

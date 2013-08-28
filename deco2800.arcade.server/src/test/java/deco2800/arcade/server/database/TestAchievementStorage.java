@@ -85,20 +85,26 @@ public class TestAchievementStorage {
 	 */
 	@Test
 	public void testAchievementsForIDs() throws DatabaseException {
-		
+		System.out.print("Testing AchievementsForIDs method.\n================\n" +
+				"Create a test ArrayList of AchievementIDs.\n");
 		// Create a test ArrayList<String> of AchievementIDs
 		ArrayList<String> test = new ArrayList<String>();
 		test.add("pong.winthreegames");
 		test.add("pong.winfivegames");
-		
+		System.out.print("Create a test example response from database " +
+				"- ArrayList<Achievement>.\n");
 		// Create a test response from database
 		ArrayList<Achievement> achievementtest = new ArrayList<Achievement>();
 		achievementtest.add(new Achievement("pong.winthreegames", "3 Times Down",
 				"Win 3 games of Pong", 3, "master.png"));
 		
 		// Compare achievement's name
-		System.out.println(achievementStorage.achievementsForIDs(test).get(0).getName());
-		assertEquals(achievementtest.get(0).getName(), achievementStorage.achievementsForIDs(test).get(0).getName());
+		System.out.print("Test ArrayList<Achievement>: ");
+		System.out.print(achievementtest);
+		System.out.print("\nFrom Method ArrayList<Achievement>: ");
+		System.out.print(achievementStorage.achievementsForIDs(test));
+		assertEquals(achievementtest.get(0), achievementStorage.achievementsForIDs(test).get(0));
+		System.out.print("\nAchievementsForIDs method: PASSED\n\n\n");
 	}
 	
 	
@@ -109,9 +115,21 @@ public class TestAchievementStorage {
 	@Test
 	public void testIncrementAchievement() throws DatabaseException {
 		Player testplayer;
+		Player testplayer2;
 		try {
+			System.out.print("Returning initial PLAYER_ACHIEVEMENT table." +
+					"\n================\n");
+			achievementStorage.returnPlayersAchievement();
 			testplayer = new Player(1, "Bob", "default.png");
+			testplayer2 = new Player(2, "Bobbie", "default.png");
 			achievementStorage.incrementProgress(testplayer, "pong.winthreegames");
+			achievementStorage.incrementProgress(testplayer2, "pong.winthreegames");
+			achievementStorage.incrementProgress(testplayer2, "pong.winthreegames");
+			achievementStorage.incrementProgress(testplayer, "pong.winfivegames");
+			System.out.print("\n- Increment Player1 with achievement Pong Win3Games\n" +
+					"- Increment x2 Player2 with achievement Pong Win3Games\n" +
+					"- Increment Player1 with achievement Pong Win5Games\n================\n");
+			achievementStorage.returnPlayersAchievement();
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

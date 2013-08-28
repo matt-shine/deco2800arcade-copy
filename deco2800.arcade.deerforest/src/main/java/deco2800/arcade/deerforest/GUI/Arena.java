@@ -121,12 +121,12 @@ public class Arena extends Sprite {
 		p2HandZones.put(new Rectangle(x*HandZone5X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
 		p2HandZones.put(new Rectangle(x*HandZone6X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
 		
-		zones.put("P1MonsterZones", p1MonsterZones);
-		zones.put("P2MonsterZones", p2MonsterZones);
-		zones.put("P1SpellZones", p1SpellZones);
-		zones.put("P2SpellZones", p2SpellZones);
-		zones.put("P1HandZones", p1HandZones);
-		zones.put("P2HandZones", p2HandZones);
+		zones.put("P1MonsterZone", p1MonsterZones);
+		zones.put("P2MonsterZone", p2MonsterZones);
+		zones.put("P1SpellZone", p1SpellZones);
+		zones.put("P2SpellZone", p2SpellZones);
+		zones.put("P1HandZone", p1HandZones);
+		zones.put("P2HandZone", p2HandZones);
 	}
 
 	/**
@@ -146,17 +146,17 @@ public class Arena extends Sprite {
 		Map<Rectangle, ExtendedSprite> mapToCheck;
 		
 		if(player == 1 && field && monster) {
-			mapToCheck = zones.get("P1MonsterZones");
+			mapToCheck = zones.get("P1MonsterZone");
 		} else if(player == 1 && field && !monster) {
-			mapToCheck = zones.get("P1SpellZones");
+			mapToCheck = zones.get("P1SpellZone");
 		} else if(player == 1) {
-			mapToCheck = zones.get("P1HandZones");
+			mapToCheck = zones.get("P1HandZone");
 		} else if(player == 2 && field && monster) {
-			mapToCheck = zones.get("P2MonsterZones");
+			mapToCheck = zones.get("P2MonsterZone");
 		} else if(player == 2 && field && !monster) {
-			mapToCheck = zones.get("P2SpellZones");
+			mapToCheck = zones.get("P2SpellZone");
 		} else {
-			mapToCheck = zones.get("P2HandZones");
+			mapToCheck = zones.get("P2HandZone");
 		}
 		
 		for(Rectangle r : mapToCheck.keySet()) {
@@ -185,17 +185,17 @@ public class Arena extends Sprite {
 		Map<Rectangle, ExtendedSprite> mapToCheck;
 		
 		if(player == 1 && field && monster) {
-			mapToCheck = zones.get("P1MonsterZones");
+			mapToCheck = zones.get("P1MonsterZone");
 		} else if(player == 1 && field && !monster) {
-			mapToCheck = zones.get("P1SpellZones");
+			mapToCheck = zones.get("P1SpellZone");
 		} else if(player == 1) {
-			mapToCheck = zones.get("P1HandZones");
+			mapToCheck = zones.get("P1HandZone");
 		} else if(player == 2 && field && monster) {
-			mapToCheck = zones.get("P2MonsterZones");
+			mapToCheck = zones.get("P2MonsterZone");
 		} else if(player == 2 && field && !monster) {
-			mapToCheck = zones.get("P2SpellZones");
+			mapToCheck = zones.get("P2SpellZone");
 		} else {
-			mapToCheck = zones.get("P2HandZones");
+			mapToCheck = zones.get("P2HandZone");
 		}
 		
 		for(Rectangle zone : mapToCheck.keySet()) {
@@ -206,7 +206,7 @@ public class Arena extends Sprite {
 			//check amount of overlap
 			double area = rectangleIntersectionArea(r, zone);
 			
-			if(area > r.getWidth()*r.getHeight()/3 || area > zone.getWidth()*zone.getHeight()/3 && mapToCheck.get(r) == null) {
+			if(area > r.getWidth()*r.getHeight()/3 || area > zone.getWidth()*zone.getHeight()/3 && mapToCheck.get(zone) == null) {
 				return zone;
 			}
 		}
@@ -233,18 +233,19 @@ public class Arena extends Sprite {
 	}
 	
 	//Sets the sprite to fit within the given rectangle
-	public boolean setSpriteToZone(ExtendedSprite s, Rectangle r, int player, boolean field) {
+	//Returns the area that the sprite was set to
+	public String setSpriteToZone(ExtendedSprite s, Rectangle r, int player) {
 		
 		for(String key : zones.keySet()) {
 			for(Rectangle zone : zones.get(key).keySet()) {
-				if(r.equals(zone)) {
+				if(zone.equals(r)) {
 					zones.get(key).put(zone, s);
 					setSpriteToRectangleSize(zone,s);
-					return true;
+					return key;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	private void setSpriteToRectangleSize(Rectangle r, ExtendedSprite s) {
@@ -262,17 +263,17 @@ public class Arena extends Sprite {
 		Map<Rectangle, ExtendedSprite> mapToCheck;
 		
 		if(player == 1 && field && monsters) {
-			mapToCheck = zones.get("P1MonsterZones");
+			mapToCheck = zones.get("P1MonsterZone");
 		} else if(player == 1 && field && !monsters) {
-			mapToCheck = zones.get("P1SpellZones");
+			mapToCheck = zones.get("P1SpellZone");
 		} else if(player == 1) {
-			mapToCheck = zones.get("P1HandZones");
+			mapToCheck = zones.get("P1HandZone");
 		} else if(player == 2 && field && monsters) {
-			mapToCheck = zones.get("P2MonsterZones");
+			mapToCheck = zones.get("P2MonsterZone");
 		} else if(player == 2 && field && !monsters) {
-			mapToCheck = zones.get("P2SpellZones");
+			mapToCheck = zones.get("P2SpellZone");
 		} else {
-			mapToCheck = zones.get("P2HandZones");
+			mapToCheck = zones.get("P2HandZone");
 		}
 		
 		for(Rectangle zone : mapToCheck.keySet()) {
@@ -289,6 +290,16 @@ public class Arena extends Sprite {
 			for(Rectangle zone : zones.get(key).keySet()) {
 				if(zones.get(key).get(zone) == s) {
 					zones.get(key).put(zone, null);
+				}
+			}
+		}
+	}
+	
+	public void printZoneInfo() {
+		for(String key : zones.keySet()) {
+			for(Rectangle zone : zones.get(key).keySet()) {
+				if(zones.get(key).get(zone) != null) {
+					System.out.println("key is: " + key + "Map is: " + zones.get(key).get(zone));
 				}
 			}
 		}

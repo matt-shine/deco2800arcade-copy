@@ -1,10 +1,12 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Rectangle;
 
 //This class functions basically as the controller
 public class MainInputProcessor implements InputProcessor {
@@ -12,26 +14,30 @@ public class MainInputProcessor implements InputProcessor {
 	private MainGame game;
 	private MainGameScreen view;
 	private ExtendedSprite currentSelection;
+	private Rectangle currentSelectionOriginZone;
+	private int currentSelectionPlayer;
+	private boolean currentSelectionField;
+	private boolean currentSelectionMonster;
+	private String currentSelectionArea;
 	private float xClickOffset;
 	private float yClickOffset;
-	
-	private final float scale = 0.25f;
+	private boolean dragged;
 	
 	public MainInputProcessor(MainGame game, MainGameScreen view) {
 		this.game = game;
 		this.view = view;
+		dragged = false;
 	}
 	
 	@Override
 	public boolean keyDown (int keycode) {
 		if(keycode == Keys.SPACE) {
-			if(currentSelection != null) {
-				if (currentSelection.getScaleX() > scale || currentSelection.getScaleY() > scale) {
-					currentSelection.setScale(scale);
-				} else {
-					currentSelection.setScale(scale*2);
-				}
-			}
+			game.changeTurns();
+			view.printSpriteMap();
+			System.out.println();
+			view.getArena().printZoneInfo();
+			System.out.println();
+			System.out.println();
 		}
         return false;
     }
@@ -48,36 +54,109 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
+    	//TODO FIGURE OUT WHY IN THE TURKEY QUENCHING DEATH MONKEY'S GALBLADDER THE LISTS AREN'T UPDATING CORRECTLY
     	
-    	if(currentSelection != null && view.getArena().emptyZoneAtPoint(x, y, 1, true, true) != null) {
-    		view.getArena().removeSprite(currentSelection);
-    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtPoint(x, y, 1, true, true), 0, false);
-    		return true;
-    	}
-    	currentSelection = checkIntersection(x, y);
+    	Rectangle emptyZone = null;
+    	
     	if(currentSelection != null) {
+    		//get the empty zone at point (only check zones allowed)
+        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, currentSelectionMonster);
+        	//if current zone is a hand zone then check for empty zone at that point
+        	if(!currentSelectionField && emptyZone == null) {
+        		emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, false, currentSelectionMonster);
+        	}
+       		//print the empty zone
+        	System.out.println("touch down empty zone is: " + emptyZone);
+        	System.out.println("currentPlayer: " + currentSelectionPlayer + " Field: " + currentSelectionField +  " monster: " + currentSelectionMonster);
+        	
+        	if(emptyZone != null) {
+            	//reassign the currentSelection to the emptyZone in arena
+        		view.getArena().removeSprite(currentSelection);
+        		String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone, currentSelectionPlayer);
+        		
+        		//reassign the currentSelection to emptyZone in the view
+        		System.out.println("NewArea was: " + newArea);
+        		boolean successRemove = view.removeSpriteFromArea(currentSelection, currentSelectionArea);
+	    		boolean successAdd = view.setSpriteToArea(currentSelection, newArea);
+	    		System.out.println("removed: " + successRemove + " Added:" + successAdd);
+	    		
+        		view.setHighlightedZones(new ArrayList<Rectangle>());
+        		return true;
+        	}
+    	}
+    	    	
+    	currentSelection = checkIntersection(x, y);
+    	
+    	if(currentSelection != null) {
+    		
+    		//Get all relevant data about the current selection
+    		Rectangle r = currentSelection.getBoundingRectangle();
+    		currentSelectionOriginZone = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+    		currentSelectionPlayer = view.getSpritePlayer(currentSelection);
+    		boolean[] b = view.getSpriteZoneType(currentSelection);
+    		currentSelectionField = b[0];
+    		currentSelectionMonster = b[1];
+    		currentSelectionArea = getCurrentSelectionArea(currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
+    		
+    		//Set the correct zones to highlight based on selection
+    		setHighlightedZones();
+    		
+    		//Get the offset of where the user clicked on the card compared to its actual position
     		xClickOffset = x - currentSelection.getX();
     		yClickOffset = y - currentSelection.getY();
     		return true;
-    	}
-        return false;
-    }
-
-    @Override
-    public boolean touchUp (int x, int y, int pointer, int button) {
-    	if(currentSelection != null && view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 1, false, true) != null) {
-    		view.getArena().removeSprite(currentSelection);
-    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtRectangle(currentSelection.getBoundingRectangle(), 1, false, true), 0, false);
+    		
+    	} else {
+    		view.setHighlightedZones(new ArrayList<Rectangle>());
     		return true;
     	}
+    }
+
+	@Override
+    public boolean touchUp (int x, int y, int pointer, int button) {
+		
+		Rectangle emptyZone = null;
+		
+		if(currentSelection != null) {
+			Rectangle currentSpriteRect = currentSelection.getBoundingRectangle();
+			emptyZone = view.getArena().emptyZoneAtRectangle(currentSpriteRect, currentSelectionPlayer, true, currentSelectionMonster);
+			//If current Selection is in hand check if dragged to a hand zone
+			if(!currentSelectionField && emptyZone == null) {
+				view.getArena().emptyZoneAtRectangle(currentSpriteRect, currentSelectionPlayer, false, currentSelectionMonster);
+			}
+			
+        	System.out.println("touch up empty zone is: " + emptyZone);
+
+			if(emptyZone != null) {
+				//reassign the currentSelection to the emptyZone in arena
+				view.getArena().removeSprite(currentSelection);
+	    		String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone, currentSelectionPlayer);
+        		System.out.println("NewArea was: " + newArea);
+	    		//reassign the currentSelection to emptyZone in the view
+	    		boolean successRemove = view.removeSpriteFromArea(currentSelection, currentSelectionArea);
+	    		boolean successAdd = view.setSpriteToArea(currentSelection, newArea);
+	    		System.out.println("removed: " + successRemove + " Added:" + successAdd);
+	    		
+	    		if(dragged) {
+	    			view.setHighlightedZones(new ArrayList<Rectangle>());
+	    			dragged = false;
+	    		}
+	    		return true;
+	    		
+			} else {
+				//No right zone, set back to its original zone
+	    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtRectangle(currentSelectionOriginZone, 1, true, true), currentSelectionPlayer);
+	    		return true;
+			}
+		}
         return false;
     }
 
     @Override
     public boolean touchDragged (int x, int y, int pointer) {
     	if(currentSelection != null) {
-    		view.getArena().removeSprite(currentSelection);
     		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
+    		dragged = true;
     		return true;
     	}
         return false;
@@ -112,4 +191,67 @@ public class MainInputProcessor implements InputProcessor {
 
     	return null;
     }
+    
+    private void setHighlightedZones() {
+		//find out where this sprite is stored
+		Map<String, List<ExtendedSprite>> sprites = view.getSpriteMap();
+		String spriteArea = "";
+		for(String key: sprites.keySet()) {
+			if(sprites.get(key).contains(currentSelection)) {
+				spriteArea = key;
+			}
+		}
+		
+		//Show all the available zones the card can go to
+		if(spriteArea.equals("P1HandZone")) {
+			List<Rectangle> availableZones = new ArrayList<Rectangle>();
+			availableZones.addAll(view.getArena().getAvailableZones(1, true, true));
+			availableZones.addAll(view.getArena().getAvailableZones(1, false, true));
+			view.setHighlightedZones(availableZones);
+			
+		} else if(spriteArea.equals("P1SpellZone")) {
+			view.setHighlightedZones(view.getArena().getAvailableZones(1, true, false));
+			
+		} else if(spriteArea.equals("P1MonsterZone")) {
+			view.setHighlightedZones(view.getArena().getAvailableZones(1, true, true));
+			
+		} else if(spriteArea.equals("P2HandZone")) {
+			List<Rectangle> availableZones = new ArrayList<Rectangle>();
+			availableZones.addAll(view.getArena().getAvailableZones(2, true, true));
+			availableZones.addAll(view.getArena().getAvailableZones(2, false, true));
+			view.setHighlightedZones(availableZones);
+			
+		} else if(spriteArea.equals("P2MonsterZone")) {
+			view.setHighlightedZones(view.getArena().getAvailableZones(1, true, true));
+			
+		} else if(spriteArea.equals("P2SpellZone")) {
+			view.setHighlightedZones(view.getArena().getAvailableZones(1, true, false));
+			
+		}
+    }
+
+    private String getCurrentSelectionArea(int player, boolean field, boolean monster) {
+    	
+		if(player == 1) {
+			if(field) {
+				if(monster) {
+					return "P1MonsterZone";
+				} else {
+					return "P1SpellZone";
+				}
+			} else {
+				return "P1HandZone";
+			}
+		} else {
+			if(field) {
+				if(monster) {
+					return "P2MonsterZone";
+				} else {
+					return "P2SpellZone";
+				}
+			} else {
+				return "P2HandZone";
+			}
+		}
+	}
 }

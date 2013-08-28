@@ -14,9 +14,11 @@ public class MainGame extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 	final private GameSystem model;
+	private int playerTurn;
 	
 	public MainGame(GameSystem model) {
 		this.model = model;
+		playerTurn = 1;
 	}
 	
 	@Override
@@ -38,6 +40,14 @@ public class MainGame extends Game {
 	
 	public GameSystem getModel() {
 		return this.model;
+	}
+	
+	public void changeTurns() {
+		playerTurn = playerTurn == 1?2:1;
+	}
+	
+	public void nextPhase() {
+		model.getPhase();
 	}
 	
 }

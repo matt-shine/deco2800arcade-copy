@@ -24,9 +24,9 @@ public class MainGameScreen implements Screen {
 	private ShapeRenderer shapeRenderer;
 
 	//Variables for Card locations and what they contain
-	private int p1DeckSize;
-	private int p2DeckSize;
-	
+//	private int p1DeckSize;
+//	private int p2DeckSize;
+//	
 	private float glowSize;
 	private boolean glowDirection;
 	
@@ -57,18 +57,27 @@ public class MainGameScreen implements Screen {
 		
 		//create map of sprites
 		spriteMap = new HashMap<String, List<ExtendedSprite>>();
+		//create P1Hand
 		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
 		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/generalCard.png", Texture.class));
 		s1.setPosition(100, 100);
 		p1Hand.add(s1);
 		s1.setScale(0.25f);
+		//create P2Monster
+		List<ExtendedSprite> p2Monster = new ArrayList<ExtendedSprite>();
 		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/2.png", Texture.class));
 		s2.setPosition(200, 200);
-	    p1Hand.add(s2);
-	    spriteMap.put("P1Hand", p1Hand);
+	    p2Monster.add(s2);
+	    
+	    spriteMap.put("P1HandZone", p1Hand);
+	    spriteMap.put("P1MonsterZone", new ArrayList<ExtendedSprite>());
+	    spriteMap.put("P1SpellZone", new ArrayList<ExtendedSprite>());
+	    spriteMap.put("P2HandZone", new ArrayList<ExtendedSprite>());
+	    spriteMap.put("P2MonsterZone", p2Monster);
+	    spriteMap.put("P2SpellZone", new ArrayList<ExtendedSprite>());
 	    
 	    //list of highlighted zones
-	    highlightedZones = arena.getAvailableZones(1, true, true);
+	    highlightedZones = new ArrayList<Rectangle>();
 	}
 
 	private void loadAssets() {
@@ -95,7 +104,7 @@ public class MainGameScreen implements Screen {
 		
 		//Draw game board
 	    arena.draw(game.batch);
-
+	    
 	    //draw the sprites currently in map 
 	    for(String key : spriteMap.keySet()) {
 	    	for(ExtendedSprite s : spriteMap.get(key)) {
@@ -104,7 +113,14 @@ public class MainGameScreen implements Screen {
 	    }
 	    
 	    //draw highlighted zone
-	    if(!highlightedZones.isEmpty()) {
+	    highlightZones();
+	    
+	    game.batch.end();
+		
+	}
+	
+	private void highlightZones() {
+		if(!highlightedZones.isEmpty()) {
 	    	Gdx.gl.glEnable(GL10.GL_BLEND);
 		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -126,11 +142,7 @@ public class MainGameScreen implements Screen {
 		    shapeRenderer.end();
 		    Gdx.gl.glDisable(GL10.GL_BLEND);
 	    }
-	    
-	    game.batch.end();
-		
 	}
-	
 	@Override
 	public void dispose() {
 		manager.dispose();
@@ -185,5 +197,62 @@ public class MainGameScreen implements Screen {
 //			highlightedZones.add(new Rectangle(r));
 //		}
 		highlightedZones = highlight;
+	}
+	
+	public boolean setSpriteToArea(ExtendedSprite s, String area) {
+		List<ExtendedSprite> listToAddTo = spriteMap.get(area);
+		if(listToAddTo != null) {
+			return listToAddTo.add(s);
+		}
+		return false;
+	}
+	
+	public boolean removeSpriteFromArea(ExtendedSprite s, String area) {
+		List<ExtendedSprite> listToAddTo = spriteMap.get(area);
+		if(listToAddTo != null) {
+			return listToAddTo.remove(s);
+		}
+		return false;
+	}
+	
+	public int getSpritePlayer(ExtendedSprite s) {
+		for(String key : spriteMap.keySet()) {
+			if(spriteMap.get(key).contains(s)) {
+				if(key.startsWith("P1")) {
+					return 1;
+				} else {
+					return 2;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	public boolean[] getSpriteZoneType(ExtendedSprite s) {
+		
+		boolean[] b = new boolean[2];
+		
+		for(String key : spriteMap.keySet()) {
+			if(spriteMap.get(key).contains(s)) {
+				if(key.contains("Hand")) {
+					b[0] = false;
+					b[1] = false;
+				} else if(key.contains("Monster")) {
+					b[0] = true;
+					b[1] = true;
+				} else {
+					b[0] = true;
+					b[1] = false;
+				}
+				return b;
+			}
+		}
+		return null;
+	}
+	
+	public void printSpriteMap() {
+		for(String key : spriteMap.keySet()) {
+			System.out.println("Key: " + key + " list: " + spriteMap.get(key));
+		}
 	}
 }

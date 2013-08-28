@@ -1,7 +1,7 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
+//import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
-import deco2800.arcade.model.Icon;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game;
 
@@ -34,7 +33,8 @@ public class AchievementStorage {
 		//compile, refer to CreditStorage for an example of this code
 		
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "ACHIEVEMENTS", null);
+			ResultSet tableData = connection.getMetaData().getTables(null, null,
+					"ACHIEVEMENTS", null);
 			if (!tableData.next()){
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE ACHIEVEMENTS(id VARCHAR(255) PRIMARY KEY," +
@@ -42,15 +42,23 @@ public class AchievementStorage {
 						"DESCRIPTION VARCHAR(100) NOT NULL," +
 						"ICON VARCHAR(255) NOT NULL," +
 						"THRESHOLD INT NOT NULL)");
-				statement.execute("CREATE TABLE PLAYER_ACHIEVEMENTS(id INT PRIMARY KEY," +
+			}
+			ResultSet playerAchievementData = connection.getMetaData().getTables(null, null,
+					"PLAYER_ACHIEVEMENT", null);
+			if (!playerAchievementData.next()){
+				Statement playerAchievementStatement = connection.createStatement();
+				playerAchievementStatement.execute("CREATE TABLE PLAYER_ACHIEVEMENT(" +
+						"id INT PRIMARY KEY " +
+							"GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
 						"playerID INT NOT NULL," +
 						"achievementID VARCHAR(255) NOT NULL," +
 						"PROGRESS INT NOT NULL," +
-						"FOREIGN KEY (achievementID) REFERENCES ACHIEVEMENT(id))");
+						"FOREIGN KEY (achievementID) REFERENCES ACHIEVEMENTS(id))");
 			}
-		} catch (SQLException e) {
+		}
+		 catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to create achievements table", e);
+			throw new DatabaseException("Unable to create achievements tableS", e);
 		}
 			
 
@@ -183,6 +191,7 @@ public class AchievementStorage {
     }
     
     
+    
     /**
      * Increments the player's progress for the achievement with ID
      * `achievementID`. 
@@ -191,16 +200,19 @@ public class AchievementStorage {
      * @param playerID The player whose progress should be incremented.
      * @throws DatabaseException
      */
-    public void incrementProgress(String achievementID, Player playerID) throws DatabaseException {
+    public void incrementProgress(Player player, String achievementID) throws DatabaseException {
     	//Get a connection to the database
     			Connection connection = Database.getConnection();
 
     			Statement statement = null;
     			ResultSet resultSet = null;
+    			//Connect to table and select Achievement and increment
     			try {
+    				int playerID = player.getPlayerID();
 					statement = connection.createStatement();
-					resultSet = statement.executeQuery("SELECT * FROM PLAYER_ACHIEVEMENTS " +
-							"WHERE playerID='" + playerID + "'" +
+					statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENTS " +
+							"SET PROGRESS = PROGRESS + 1 " +
+							"WHERE playerID=" + playerID + " " +
 							"AND achievementID='" + achievementID + "'");
 //    					statement = connection.prepareStatement("SELECT * from CREDITS WHERE username=?");
 //    					statement.setString(1, username);

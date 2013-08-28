@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.Player;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.database.DatabaseException;
 
@@ -79,12 +80,11 @@ public class TestAchievementStorage {
 	}
 	
 	/**
-	 * Simple test case to make sure our XML loading is working, and that retrieving a achievement's
-	 * name is OK.
+	 * Test for AchievementsForIDs method
 	 * @throws DatabaseException
 	 */
 	@Test
-	public void initialTotal() throws DatabaseException {
+	public void testAchievementsForIDs() throws DatabaseException {
 		
 		// Create a test ArrayList<String> of AchievementIDs
 		ArrayList<String> test = new ArrayList<String>();
@@ -100,16 +100,25 @@ public class TestAchievementStorage {
 		System.out.println(achievementStorage.achievementsForIDs(test).get(0).getName());
 		assertEquals(achievementtest.get(0).getName(), achievementStorage.achievementsForIDs(test).get(0).getName());
 	}
-//	
-//	/**
-//	 * Check that a simple addition to a zero balance works
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void basecase() throws DatabaseException {
-//		achievementStorage.addUserCredits("Bob", 5);
+	
+	
+	/**
+	 * Test incrementing an achievement
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void testIncrementAchievement() throws DatabaseException {
+		Player testplayer;
+		try {
+			testplayer = new Player(1, "Bob", "default.png");
+			achievementStorage.incrementProgress(testplayer, "pong.winthreegames");
+		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 //		assertEquals(new Integer(5), achievementStorage.getUserCredits("Bob"));
-//	}
+	}
 	
 }
 

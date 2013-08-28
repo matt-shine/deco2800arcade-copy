@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Library
-Bundle-SymbolicName: deco2800.arcade.library
+Bundle-SymbolicName: deco2800.arcade.gamelibrary
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: library.jar,
  libs/gdx.jar

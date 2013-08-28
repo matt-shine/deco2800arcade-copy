@@ -106,9 +106,8 @@ public class AchievementStorage {
 		try {
 			for ( String id : achievementIDs) {
 				statement = connection.createStatement();
-				resultSet = statement.executeQuery("SELECT * FROM ACHIEVEMENTS WHERE ID='" + id + "'");
-//				statement = connection.prepareStatement("SELECT * from CREDITS WHERE username=?");
-//				statement.setString(1, username);
+				resultSet = statement.executeQuery("SELECT * FROM ACHIEVEMENTS" +
+						" WHERE ID='" + id + "'");
 				Achievement result = findAchievementFromId(id, resultSet);
 				achievements.add(result);
 
@@ -243,40 +242,92 @@ public class AchievementStorage {
      * @param playerID The player whose progress should be incremented.
      * @throws DatabaseException
      */
-    public void incrementProgress(Player player, String achievementID) throws DatabaseException {
+    public void incrementProgress(Player player, String achievementID)
+    		throws DatabaseException {
+    	
+    	//TODO Check if player achievement exists
+    	initialiseProgress(player.getPlayerID(), achievementID);
+    	//TODO Check if player's achievement has hit threshold else..
+    	
     	//Get a connection to the database
-    			Connection connection = Database.getConnection();
+    	Connection connection = Database.getConnection();
+    	
+		Statement statement = null;
+		ResultSet resultSet = null;
+		//Connect to table and select Achievement and increment
+		try {
+			int playerID = player.getPlayerID();
+			statement = connection.createStatement();
+			statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENT " +
+					"SET PROGRESS = PROGRESS + 1 " +
+					"WHERE playerID=" + playerID + " " +
+					"AND achievementID='" + achievementID + "'");
 
-    			Statement statement = null;
-    			ResultSet resultSet = null;
-    			//Connect to table and select Achievement and increment
-    			try {
-    				int playerID = player.getPlayerID();
-					statement = connection.createStatement();
-					statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENT " +
-							"SET PROGRESS = PROGRESS + 1 " +
-							"WHERE playerID=" + playerID + " " +
-							"AND achievementID='" + achievementID + "'");
-//    					statement = connection.prepareStatement("SELECT * from CREDITS WHERE username=?");
-//    					statement.setString(1, username);
-    			} catch (SQLException e) {
-    				e.printStackTrace();
-    				throw new DatabaseException("Unable to get achievements from database", e);
-    			} finally {
-    				try {
-    					if (resultSet != null){
-    						resultSet.close();
-    					}
-    					if (statement != null){
-    						statement.close();
-    					}
-    					if (connection != null){
-    						connection.close();
-    					}
-    				} catch (SQLException e) {
-    					e.printStackTrace();
-    				}
-    			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get achievements from database", e);
+		} finally {
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
     }
-	
+    
+    /**
+     * Checks if player's achievement exists in the database. If not, achievement is
+     * initialised and created.
+     */
+	private void initialiseProgress(int playerID, String achievementID)
+			throws DatabaseException {
+		
+		//Get a connection to the database
+    	Connection connection = Database.getConnection();
+		
+		Statement statement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			statement = connection.createStatement();
+			//Check for any existing Achievement Progress
+			resultSet = statement.executeQuery("SELECT * FROM PLAYER_ACHIEVEMENT " +
+					"WHERE playerID = " + playerID + 
+					" AND achievementID = '"+ achievementID + "'");
+			if(!resultSet.next()) {
+				//If no Progress is found, insert the player initial achievement
+				System.out.print("DB: Insert new player achievement record.\n");
+				statement.executeUpdate("INSERT INTO PLAYER_ACHIEVEMENT(" +
+						"playerID, achievementID, PROGRESS) " +
+						"VALUES(" + playerID + ", '" + achievementID + "', 0)");
+			} else {
+				System.out.print("DB: Existing progresss found. Increment progress continue.\n");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get PLAYER_ACHIEVEMENT from database", e);
+		} finally {
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

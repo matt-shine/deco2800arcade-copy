@@ -70,6 +70,13 @@ public class Invaders extends JFrame implements Runnable {
 		paint(g);
 	}
 	
+	public void shotUpdate(){
+		for(int i = 0; i<shots.size();i++){
+			shots.get(i).Update();
+			
+		}
+	}
+	
 	public void enemyMove(int count){
 		if(count%10 ==0){
 			if(move==130)direction =-1;
@@ -94,11 +101,13 @@ public class Invaders extends JFrame implements Runnable {
 			} catch (InterruptedException ie) {
 			}
 			
+			
 			if(tank.shotCheck() == true){
 				shots.add(new tankshot(tank.PositionX(),tank.PositionY()));
 				tank.finishShot();
 			}
 			
+			shotUpdate();
 			enemyMove(count);
 			repaint();
 			count++;

@@ -17,6 +17,15 @@ public class MapPane {
 	private MapType type;
 	private TextureRegion rendered;
 	
+	/**
+	 * 
+	 * @param data map data
+	 * @param startOffset The first tile from the bottom on the left hand
+	 * 		  side of the map, which is a space where the player can stand.
+	 * @param endOffset The first tile from the bottom on the right hand
+	 * 		  side of the map, which is a space where the player can stand.
+	 * @param type the current map type
+	 */
 	public MapPane(int[][] data, int startOffset, int endOffset, MapType type) {
 		this.data = data;
 		this.startOffset = startOffset;
@@ -28,22 +37,42 @@ public class MapPane {
 		
 	}
 	
+	/**
+	 * Getter for map data array
+	 * @return map data
+	 */
 	public int[][] getData() {
 		return data;
 	}
 	
+	/**
+	 * Getter for startOffset
+	 * @return start offset
+	 */
 	public int getStartOffset() {
 		return startOffset;
 	}
 	
+	/**
+	 * Getter for end offset
+	 * @return end offset
+	 */
 	public int getEndOffset() {
 		return endOffset;
 	}
 	
+	/**
+	 * Getter for type
+	 * @return MapType
+	 */
 	public MapType getType() {
 		return type;
 	}
 	
+	/**
+	 * Getter for rendered version of the map
+	 * @return rendered version of the map
+	 */
 	public TextureRegion getRendered() {
 		return rendered;
 	}

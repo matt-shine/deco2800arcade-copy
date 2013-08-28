@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.UIOverlay.PopupMessage;
 
@@ -18,7 +20,8 @@ public class OverlayScreen implements Screen {
 	private boolean notifiedForMissingCallbacks = false;
 	
     private Stage stage;
-    Sidebar sidebar = null;
+    private Sidebar sidebar = null;
+    private OverlayWindow window = null;
     
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
@@ -27,9 +30,13 @@ public class OverlayScreen implements Screen {
 	
 	public OverlayScreen(Overlay overlay) {
 		
+		this.overlay = overlay;
 		sidebar = new Sidebar(overlay);
+		window = new OverlayWindow(overlay);
 		
-        stage.addActor(sidebar);
+		stage = new Stage();
+		stage.addActor(sidebar);
+		stage.addActor(window);
         
 	}
 	
@@ -68,6 +75,7 @@ public class OverlayScreen implements Screen {
 			
 			stage.act();
 			stage.draw();
+			Table.drawDebug(stage);
 			
 		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 		    	ArcadeSystem.goToGame(ArcadeSystem.UI);
@@ -75,7 +83,7 @@ public class OverlayScreen implements Screen {
 		    
 		    if (callbacks != null) {
 		    	callbacks.render(d);
-		    } 
+		    }
 		    
 		}
 		
@@ -123,6 +131,7 @@ public class OverlayScreen implements Screen {
 	    if (callbacks != null) {
 	    	callbacks.resize(arg0, arg1);
 	    }
+	    sidebar.resize(arg0, arg1);
 	}
 	
 

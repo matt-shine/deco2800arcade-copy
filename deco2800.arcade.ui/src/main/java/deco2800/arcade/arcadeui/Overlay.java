@@ -3,7 +3,7 @@ package deco2800.arcade.arcadeui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+<<<<<<< HEAD
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,7 +30,7 @@ public class Overlay extends GameScreen {
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
 	private SpriteBatch batch;
-}
+=======
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
@@ -39,6 +39,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+>>>>>>> master
 
 @InternalGame
 @ArcadeGame(id="arcadeoverlay")
@@ -53,6 +54,7 @@ public class Overlay extends GameClient implements UIOverlay {
 
 		this.setScreen(screen);
 
+<<<<<<< HEAD
         stage = new Stage();
         
         
@@ -67,6 +69,8 @@ public class Overlay extends GameClient implements UIOverlay {
         
         stage.addActor(table);
         
+=======
+>>>>>>> master
 	}
 	
 	@Override
@@ -90,6 +94,8 @@ public class Overlay extends GameClient implements UIOverlay {
 		batch.end();
 		
 		
+<<<<<<< HEAD
+		
 		if (callbacks == null && !notifiedForMissingCallbacks) {
 	    	notifiedForMissingCallbacks = true;
 	    	logger.error("No overlay listener is set");
@@ -99,10 +105,14 @@ public class Overlay extends GameClient implements UIOverlay {
 			logger.error("Something has stolen the inputlistener");
 		}
 		
+		
+=======
+>>>>>>> master
 	}
 	
 	@Override
 	public void dispose() {
+<<<<<<< HEAD
 	    if (callbacks != null) {
 	    	callbacks.dispose();
 	    }
@@ -111,7 +121,10 @@ public class Overlay extends GameClient implements UIOverlay {
         skin.dispose();
         
 	    ArcadeInputMux.getInstance().removeProcessor(stage);
-
+=======
+		// TODO Auto-generated method stub
+		
+>>>>>>> master
 	}
 	
 	@Override

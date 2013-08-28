@@ -8,6 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+
+import com.sun.org.apache.xml.internal.utils.Hashtree2Node;
 
 /**
  * HashStorage is an abstraction to the password database. Passwords are not
@@ -113,7 +116,7 @@ public class HashStorage {
 	 */
 	public void updatePassword(String username, String password)
 			throws DatabaseException {
-		/* Not yet implemented */
+		
 	}
 
 	/**
@@ -128,8 +131,10 @@ public class HashStorage {
 	 */
 	public Boolean checkPassword(String username, String password)
 			throws DatabaseException {
-		/* Not yet implemented */
-		return null;
+		byte[] salt = getSalt(username);
+		byte[] hash = generateHash(password, salt);
+		byte[] hash2 = generateHash(password, salt);
+		return Arrays.equals(hash, getHash(username));
 	}
 
 	/**
@@ -140,8 +145,24 @@ public class HashStorage {
 	 * @throws DatabaseException
 	 */
 	private byte[] getHash(String username) throws DatabaseException {
-		/* Not yet implemented */
-		return null;
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection.prepareStatement("SELECT hash FROM AUTH,"
+					+ " PLAYERS WHERE AUTH.playerid = PLAYERS.playerid "
+					+ "AND PLAYERS.username = ?");
+			statement.setString(1, username);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			return result.getBytes("hash");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get hash", e);
+		} finally {
+			close(connection);
+		}
 	}
 
 	/**
@@ -152,8 +173,23 @@ public class HashStorage {
 	 * @throws DatabaseException
 	 */
 	private byte[] getSalt(String username) throws DatabaseException {
-		/* Not yet implemented */
-		return null;
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection.prepareStatement("SELECT salt FROM AUTH,"
+					+ " PLAYERS WHERE AUTH.playerid = PLAYERS.playerid "
+					+ "AND PLAYERS.username = ?");
+			statement.setString(1, username);
+			ResultSet result = statement.executeQuery();
+			result.next();
+			return result.getBytes("salt");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get salt", e);
+		} finally {
+			close(connection);
+		}
 	}
 
 	/**
@@ -196,20 +232,21 @@ public class HashStorage {
 	 * 
 	 */
 	private byte[] generateHash(String password, byte[] salt) {
-		MessageDigest digest = null;
+		MessageDigest sha512 = null;
 		try {
-			digest = MessageDigest.getInstance("SHA-512");
+			sha512 = MessageDigest.getInstance("SHA-512");
 		} catch (NoSuchAlgorithmException e) {
 			// This should never be thrown because SHA-512 is built into java
 			e.printStackTrace();
 		}
 
+
 		/* Prefix salt to digest */
-		digest.update(salt);
-		digest.update(password.getBytes());
+		sha512.update(salt);
+		sha512.update(password.getBytes());
 
 		/* Generate the hash value from the salt & password combination */
-		return digest.digest();
+		return sha512.digest();
 	}
 
 	/**

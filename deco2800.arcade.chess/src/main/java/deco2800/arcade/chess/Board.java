@@ -20,6 +20,8 @@ public class Board {
 	King whiteKing, blackKing;
 	Queen whiteQueen, blackQueen;
 	Null nullPiece;
+	
+	String NEWLINE = System.getProperty("line.separator");
 
 	/**
 	 * Initialises board to the default setup.
@@ -46,7 +48,8 @@ public class Board {
 				row.add(d, nullPiece);
 			}
 		}
-
+		
+		System.out.println(Board_State);
 
 	}
 
@@ -453,12 +456,7 @@ public class Board {
 	}
 
 	public String toString() {
-		String toString = "";
-		for (int i = 0; i <= 8; i++) {
-			toString += Board_State.get(i).toString();
-		}
-		return toString;
-
+		return Board_State.toString();
 	}
 
 	/**

@@ -11,6 +11,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -45,6 +46,8 @@ public class Chess extends GameClient {
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
+	
+	private Texture texture;
 
 	/**
 	 * Initialises a new game 
@@ -86,7 +89,8 @@ public class Chess extends GameClient {
 	 */
 	@Override
 	public void render() {
-
+		
+		texture = new Texture(Gdx.files.internal("/imgs/chess_board.png"));
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -98,7 +102,7 @@ public class Chess extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    batch.begin();
-	    
+	    //batch.draw(texture, 10, 10);
 	    batch.end();
 	    
 	    super.render();

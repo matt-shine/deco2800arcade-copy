@@ -2,12 +2,8 @@ package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+<<<<<<< HEAD
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -34,23 +30,31 @@ public class Overlay extends GameScreen {
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
 	private SpriteBatch batch;
+=======
 
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Game.InternalGame;
+import deco2800.arcade.model.Player;
+>>>>>>> master
+
+@InternalGame
+@ArcadeGame(id="arcadeoverlay")
+public class Overlay extends GameClient implements UIOverlay {
 	
+	private OverlayScreen screen = new OverlayScreen(this);
+	private OverlayPopup popup = new OverlayPopup(this);
+	private SpriteBatch batch = new SpriteBatch();
 	
-	public Overlay() {
+	public Overlay(Player player, NetworkClient networkClient) {
+		super(player, networkClient);
 
-		batch = new SpriteBatch();
-		
-        skin = new Skin();
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("white", new Texture(pixmap));
-        skin.add("default", new BitmapFont());
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        skin.add("default", labelStyle);
+		this.setScreen(screen);
 
+<<<<<<< HEAD
         stage = new Stage();
         
         
@@ -65,60 +69,32 @@ public class Overlay extends GameScreen {
         
         stage.addActor(table);
         
+=======
+>>>>>>> master
 	}
 	
-	
+	@Override
+	public void setListeners(Screen l) {
+		screen.setListeners(l);
+	}
 
 	@Override
-	public void show() {
+	public void addPopup(PopupMessage s) {
+		popup.addMessageToQueue(s);
 	}
-	
-	
+
 	@Override
-	public void firstResize() {
-	}
-	
-	@Override
-	public void render(float d) {
+	public void render() {
+		
+		super.render();
+		
+		popup.act(Gdx.graphics.getDeltaTime());
+		batch.begin();
+		popup.draw(batch, 1f);
+		batch.end();
 		
 		
-		//toggles isUIOpen on tab key down
-		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
-			isUIOpen = !isUIOpen;
-			
-			if (callbacks != null) {
-				if (isUIOpen) {
-					callbacks.show();
-				} else {
-					callbacks.hide();
-				}
-			}
-			
-		}
-		
-		if (isUIOpen) {
-			
-			stage.act();
-			table.debug();
-			table.debugTable();
-			stage.draw();
-			Table.drawDebug(stage);
-			
-			
-			
-			popup.act(d);
-			popup.draw(batch, 1);
-		    
-		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-		    	ArcadeSystem.goToGame(ArcadeSystem.UI);
-		    }
-		    
-		    if (callbacks != null) {
-		    	callbacks.render(d);
-		    } 
-		    
-		}
-		
+<<<<<<< HEAD
 		
 		if (callbacks == null && !notifiedForMissingCallbacks) {
 	    	notifiedForMissingCallbacks = true;
@@ -130,10 +106,13 @@ public class Overlay extends GameScreen {
 		}
 		
 		
+=======
+>>>>>>> master
 	}
-
+	
 	@Override
 	public void dispose() {
+<<<<<<< HEAD
 	    if (callbacks != null) {
 	    	callbacks.dispose();
 	    }
@@ -142,30 +121,39 @@ public class Overlay extends GameScreen {
         skin.dispose();
         
 	    ArcadeInputMux.getInstance().removeProcessor(stage);
+=======
+		// TODO Auto-generated method stub
+		
+>>>>>>> master
 	}
 	
 	@Override
-	public void hide() {
+	public void pause() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
-	public void pause() {
-	    if (callbacks != null) {
-	    	callbacks.pause();
-	    }
+	public void resize(int width, int height) {
+		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
-	    if (callbacks != null) {
-	    	callbacks.resume();
-	    }
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Game getGame() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
-	public void setCallbacks(Screen s) {
-		this.callbacks = s;
+	@Override
+	public void create() {
+		this.setScreen(screen);
 	}
-	
 
 
 }

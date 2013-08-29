@@ -51,28 +51,51 @@ public class MainGameScreen implements Screen {
 		manager = new AssetManager();
 		loadAssets();
 		manager.finishLoading();
+		System.out.println("All loaded");
 		
 		//create game arena
 		arena = new Arena(manager.get("DeerForestAssets/background.png", Texture.class));
 		
 		//create map of sprites
 		spriteMap = new HashMap<String, List<ExtendedSprite>>();
+		
 		//create P1Hand
 		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
-		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/generalCard.png", Texture.class));
-		s1.setPosition(100, 100);
-		p1Hand.add(s1);
-		s1.setScale(0.25f);
+		ExtendedSprite P1MonsterHandSprite = new ExtendedSprite(manager.get("DeerForestAssets/LightMonsterShell.png", Texture.class));
+		P1MonsterHandSprite.setPosition(100, 100);
+		p1Hand.add(P1MonsterHandSprite);
+		P1MonsterHandSprite.setScale(0.25f);
+		//Add spell to hand
+		ExtendedSprite P1SpellhandSprite = new ExtendedSprite(manager.get("DeerForestAssets/GeneralSpellShell.png", Texture.class));
+		P1SpellhandSprite.setPosition(150, 150);
+		p1Hand.add(P1SpellhandSprite);
+		P1SpellhandSprite.setScale(0.25f);
+		
+		//create P1Monster
+		List<ExtendedSprite> p1Monster = new ArrayList<ExtendedSprite>();
+		ExtendedSprite P1MonsterSprite = new ExtendedSprite(manager.get("DeerForestAssets/DarkMonsterShell.png", Texture.class));
+		P1MonsterSprite.setPosition(250, 250);
+		p1Monster.add(P1MonsterSprite);
+		P1MonsterSprite.setScale(0.25f);
+
+		//create P2Hand
+		List<ExtendedSprite> p2Hand = new ArrayList<ExtendedSprite>();
+		ExtendedSprite P2MonsterHandSprite = new ExtendedSprite(manager.get("DeerForestAssets/NatureMonsterShell.png", Texture.class));
+		P2MonsterHandSprite.setPosition(350, 350);
+		p2Hand.add(P2MonsterHandSprite);
+		P2MonsterHandSprite.setScale(0.25f);
+		
 		//create P2Monster
 		List<ExtendedSprite> p2Monster = new ArrayList<ExtendedSprite>();
-		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/2.png", Texture.class));
+		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/WaterMonsterShell.png", Texture.class));
 		s2.setPosition(200, 200);
+		s2.setScale(0.25f);
 	    p2Monster.add(s2);
 	    
 	    spriteMap.put("P1HandZone", p1Hand);
-	    spriteMap.put("P1MonsterZone", new ArrayList<ExtendedSprite>());
+	    spriteMap.put("P1MonsterZone", p1Monster);
 	    spriteMap.put("P1SpellZone", new ArrayList<ExtendedSprite>());
-	    spriteMap.put("P2HandZone", new ArrayList<ExtendedSprite>());
+	    spriteMap.put("P2HandZone", p2Hand);
 	    spriteMap.put("P2MonsterZone", p2Monster);
 	    spriteMap.put("P2SpellZone", new ArrayList<ExtendedSprite>());
 	    
@@ -81,14 +104,18 @@ public class MainGameScreen implements Screen {
 	}
 
 	private void loadAssets() {
-		manager.load("DeerForestAssets/generalCard.png", Texture.class);
-		manager.load("DeerForestAssets/2.png", Texture.class);
+		manager.load("DeerForestAssets/LightMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/DarkMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/FireMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/WaterMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/NatureMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/GeneralSpellShell.png", Texture.class);
 		manager.load("DeerForestAssets/background.png", Texture.class);
 	}
 
 	@Override
 	public void render(float delta) {
-		//clear the screen with a dark blue colour
+		//clear the screen with a dark blue color
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -235,8 +262,14 @@ public class MainGameScreen implements Screen {
 		for(String key : spriteMap.keySet()) {
 			if(spriteMap.get(key).contains(s)) {
 				if(key.contains("Hand")) {
-					b[0] = false;
-					b[1] = false;
+					//check what type of card the sprite is
+					if(manager.getAssetFileName(s.getTexture()).contains("Monster")) {
+						b[0] = false;
+						b[1] = true;
+					} else {
+						b[0] = false;
+						b[1] = false;
+					}
 				} else if(key.contains("Monster")) {
 					b[0] = true;
 					b[1] = true;

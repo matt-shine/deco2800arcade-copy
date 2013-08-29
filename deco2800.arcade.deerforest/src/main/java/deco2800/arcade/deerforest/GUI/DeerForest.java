@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.model.Game;
@@ -71,6 +72,7 @@ public class DeerForest extends GameClient implements UIOverlay {
 
 	@Override
 	public void render() {
+		Gdx.input.setInputProcessor(inputProcessor);
 		super.render();
 	}
 	

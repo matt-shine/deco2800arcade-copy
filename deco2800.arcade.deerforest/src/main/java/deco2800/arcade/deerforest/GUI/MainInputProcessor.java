@@ -54,8 +54,7 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
-    	//TODO FIGURE OUT WHY IN THE TURKEY QUENCHING DEATH MONKEY'S GALBLADDER THE LISTS AREN'T UPDATING CORRECTLY
-    	
+
     	Rectangle emptyZone = null;
     	
     	if(currentSelection != null) {
@@ -146,6 +145,7 @@ public class MainInputProcessor implements InputProcessor {
 			} else {
 				//No right zone, set back to its original zone
 	    		view.getArena().setSpriteToZone(currentSelection, view.getArena().emptyZoneAtRectangle(currentSelectionOriginZone, 1, true, true), currentSelectionPlayer);
+	    		view.setHighlightedZones(new ArrayList<Rectangle>());
 	    		return true;
 			}
 		}

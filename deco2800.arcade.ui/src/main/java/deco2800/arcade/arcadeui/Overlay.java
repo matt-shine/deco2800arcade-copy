@@ -12,25 +12,6 @@ import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameScreen;
-
-public class Overlay extends GameScreen {
-	
-	private Logger logger = new Logger("Overlay");
-	
-	private Screen callbacks = null;
-	private boolean notifiedForMissingCallbacks = false;
-		
-    private Skin skin;
-    private Stage stage;
-    Table table = new Table();
-    
-    private OverlayPopup popup = new OverlayPopup();
-	
-	private boolean isUIOpen = false;
-	private boolean hasTabPressedLast = false;
-	private SpriteBatch batch;
-}
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
@@ -43,6 +24,18 @@ import deco2800.arcade.model.Player;
 @InternalGame
 @ArcadeGame(id="arcadeoverlay")
 public class Overlay extends GameClient implements UIOverlay {
+	
+	private Logger logger = new Logger("Overlay");
+	
+	private Screen callbacks = null;
+	private boolean notifiedForMissingCallbacks = false;
+		
+    private Skin skin;
+    private Stage stage;
+    Table table = new Table();
+    
+	private boolean isUIOpen = false;
+	private boolean hasTabPressedLast = false;
 	
 	private OverlayScreen screen = new OverlayScreen(this);
 	private OverlayPopup popup = new OverlayPopup(this);
@@ -60,11 +53,10 @@ public class Overlay extends GameClient implements UIOverlay {
         
         table.setFillParent(true);
         
-        Label quitLabel = new Label("Press escape to quit...", skin);
-        table.row();
-        table.add(quitLabel).expand().space(40).top();
-        table.layout();
-        
+//        Label quitLabel = new Label("Press escape to quit...", skin);
+//        table.row();
+//        table.add(quitLabel).expand().space(40).top();
+//        table.layout();       
         stage.addActor(table);
         
 	}
@@ -95,9 +87,9 @@ public class Overlay extends GameClient implements UIOverlay {
 	    	logger.error("No overlay listener is set");
 	    }
 		
-		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance()) {
-			logger.error("Something has stolen the inputlistener");
-		}
+//		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance()) {
+//			logger.error("Something has stolen the inputlistener");
+//		}
 		
 	}
 	

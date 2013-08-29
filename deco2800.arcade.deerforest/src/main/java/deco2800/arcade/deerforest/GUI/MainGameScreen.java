@@ -125,8 +125,7 @@ public class MainGameScreen implements Screen {
 		//tell the SpriteBatch to render in the
 		//coordinate system specified by the camera
 		game.batch.setProjectionMatrix(camera.combined);
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		 
+	 
 		game.batch.begin();
 		
 		//Draw game board
@@ -139,14 +138,17 @@ public class MainGameScreen implements Screen {
 		    }
 	    }
 	    
+	    game.batch.end();
+	    
 	    //draw highlighted zone
 	    highlightZones();
-	    
-	    game.batch.end();
 		
 	}
 	
 	private void highlightZones() {
+		
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		
 		if(!highlightedZones.isEmpty()) {
 	    	Gdx.gl.glEnable(GL10.GL_BLEND);
 		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -170,6 +172,7 @@ public class MainGameScreen implements Screen {
 		    Gdx.gl.glDisable(GL10.GL_BLEND);
 	    }
 	}
+	
 	@Override
 	public void dispose() {
 		manager.dispose();

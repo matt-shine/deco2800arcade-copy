@@ -1,7 +1,7 @@
 package deco2800.arcade.deerforest.GUI;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Arena extends Sprite {
+	
+	//current width / height (used for when resizing windows to scale sprites
+
 	
 	//Zone widths / heights (ratio to window size)
 	final private float monsterZoneWidth = 0.09844f;
@@ -30,15 +33,19 @@ public class Arena extends Sprite {
 	final private float MonsterZone3X = 0.4578f; //constant for all Zone 3 monsters
 	final private float MonsterZone4X = 0.5703f; //constant for all Zone 4 monsters
 	final private float MonsterZone5X = 0.6828f; //constant for all Zone 5 monsters
+	final private float[] MonsterZonesX = {MonsterZone1X, MonsterZone2X, MonsterZone3X, MonsterZone4X, MonsterZone5X};
 	
 	//Spell zones
 	final private float P1SpellZone1Y = 0.5916667f; 
 	final private float P1SpellZone2Y = 0.6354167f;
 	final private float P2SpellZone1Y = 0.2166667f;
 	final private float P2SpellZone2Y = 0.2625f;
+	final private float[] P1SpellZonesY = {P1SpellZone1Y, P1SpellZone2Y};
+	final private float[] P2SpellZonesY = {P2SpellZone1Y, P2SpellZone2Y};
 	
 	final private float SpellZone1X = 0.084375f;
 	final private float SpellZone2X = 0.128125f;
+	final private float[] SpellZonesX = {SpellZone1X, SpellZone2X};
 	
 	//Hand zones
 	final private float P1HandZoneY = 0.8270833f;
@@ -50,15 +57,16 @@ public class Arena extends Sprite {
 	final private float HandZone4X = 0.59375f;
 	final private float HandZone5X = 0.6875f;
 	final private float HandZone6X = 0.78125f;
+	final private float[] HandZonesX = {HandZone1X, HandZone2X, HandZone3X, HandZone4X, HandZone5X, HandZone6X};
 	
 	private Map<String, Map<Rectangle, ExtendedSprite>> zones;
 	
 	public Arena(Texture texture) {
 		super(texture);
-		zones = new HashMap<String, Map<Rectangle, ExtendedSprite>>();
-
+		
 		this.flip(false, true);
-		this.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		this.firstResize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//		this.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		this.setOrigin(0, 0);
 		this.setPosition(0, 0);
 	}
@@ -74,52 +82,118 @@ public class Arena extends Sprite {
 	}
 	
 	private void resizeZones(int x, int y) {
-		//clear zones list
-		zones = new HashMap<String, Map<Rectangle, ExtendedSprite>>();
-		
+
 		//create new p1Monster zones
-		Map<Rectangle, ExtendedSprite> p1MonsterZones = new HashMap<Rectangle, ExtendedSprite>();
-		p1MonsterZones.put(new Rectangle(x*MonsterZone1X, y*P1MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p1MonsterZones.put(new Rectangle(x*MonsterZone2X, y*P1MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p1MonsterZones.put(new Rectangle(x*MonsterZone3X, y*P1MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p1MonsterZones.put(new Rectangle(x*MonsterZone4X, y*P1MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p1MonsterZones.put(new Rectangle(x*MonsterZone5X, y*P1MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
+		Map<Rectangle, ExtendedSprite> p1MonsterZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		
+		//Resize currently placed sprites and rectangles
+		int i = 0;
+		for(Map.Entry<Rectangle, ExtendedSprite> e : zones.get("P1MonsterZone").entrySet()) {
+			//get this zones sprite
+			ExtendedSprite s = zones.get("P1MonsterZone").get(e.getKey());
+			//define new rectangle to insert
+			Rectangle r2 = new Rectangle(x*MonsterZonesX[i], y*P1MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight);
+			//insert zone
+			p1MonsterZones.put(r2, s);
+			//if sprite was at zone, set it to new size
+			if(s != null) setSpriteToRectangleSize(r2, s);
+			//increment counter
+			i++;
+		}
 		
 		//create new p2Monster zones
-		Map<Rectangle, ExtendedSprite> p2MonsterZones = new HashMap<Rectangle, ExtendedSprite>();
-		p2MonsterZones.put(new Rectangle(x*MonsterZone1X, y*P2MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p2MonsterZones.put(new Rectangle(x*MonsterZone2X, y*P2MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p2MonsterZones.put(new Rectangle(x*MonsterZone3X, y*P2MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p2MonsterZones.put(new Rectangle(x*MonsterZone4X, y*P2MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
-		p2MonsterZones.put(new Rectangle(x*MonsterZone5X, y*P2MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
+		Map<Rectangle, ExtendedSprite> p2MonsterZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
 		
-		//create new p1Spell zones
-		Map<Rectangle, ExtendedSprite> p1SpellZones = new HashMap<Rectangle, ExtendedSprite>();
-		p1SpellZones.put(new Rectangle(x*SpellZone1X, y*P1SpellZone1Y, x*spellZoneWidth, y*spellZoneHeight), null);
-		p1SpellZones.put(new Rectangle(x*SpellZone2X, y*P1SpellZone2Y, x*spellZoneWidth, y*spellZoneHeight), null);
-		
-		//create new p1Spell zones
-		Map<Rectangle, ExtendedSprite> p2SpellZones = new HashMap<Rectangle, ExtendedSprite>();
-		p2SpellZones.put(new Rectangle(x*SpellZone1X, y*P2SpellZone1Y, x*spellZoneWidth, y*spellZoneHeight), null);
-		p2SpellZones.put(new Rectangle(x*SpellZone2X, y*P2SpellZone2Y, x*spellZoneWidth, y*spellZoneHeight), null);
-		
+		//Resize currently placed sprites and rectangles
+		i = 0;
+		for(Map.Entry<Rectangle, ExtendedSprite> e : zones.get("P2MonsterZone").entrySet()) {
+			//get this zones sprite
+			ExtendedSprite s = zones.get("P2MonsterZone").get(e.getKey());
+			//define new rectangle to insert
+			Rectangle r2 = new Rectangle(x*MonsterZonesX[i], y*P2MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight);
+			//insert zone
+			p2MonsterZones.put(r2, s);
+			//if sprite was at zone, set it to new size
+			if(s != null) setSpriteToRectangleSize(r2, s);
+			//increment counter
+			i++;
+		}
+
 		//create new p1HandZones
-		Map<Rectangle, ExtendedSprite> p1HandZones = new HashMap<Rectangle, ExtendedSprite>();
-		p1HandZones.put(new Rectangle(x*HandZone1X, y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p1HandZones.put(new Rectangle(x*HandZone2X, y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p1HandZones.put(new Rectangle(x*HandZone3X, y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p1HandZones.put(new Rectangle(x*HandZone4X, y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p1HandZones.put(new Rectangle(x*HandZone5X, y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p1HandZones.put(new Rectangle(x*HandZone6X, y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
+		Map<Rectangle, ExtendedSprite> p1HandZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
 		
-		//create new p1HandZones
-		Map<Rectangle, ExtendedSprite> p2HandZones = new HashMap<Rectangle, ExtendedSprite>();
-		p2HandZones.put(new Rectangle(x*HandZone1X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p2HandZones.put(new Rectangle(x*HandZone2X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p2HandZones.put(new Rectangle(x*HandZone3X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p2HandZones.put(new Rectangle(x*HandZone4X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p2HandZones.put(new Rectangle(x*HandZone5X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
-		p2HandZones.put(new Rectangle(x*HandZone6X, y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
+		//Resize currently placed sprites and rectangles
+		i = 0;
+		for(Map.Entry<Rectangle, ExtendedSprite> e : zones.get("P1HandZone").entrySet()) {
+			//get this zones sprite
+			ExtendedSprite s = zones.get("P1HandZone").get(e.getKey());
+			//define new rectangle to insert
+			Rectangle r2 = new Rectangle(x*HandZonesX[i], y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight);
+			//insert zone
+			p1HandZones.put(r2, s);
+			//if sprite was at zone, set it to new size
+			if(s != null) setSpriteToRectangleSize(r2, s);
+			//increment counter
+			i++;
+		}
+
+		//create new p2HandZones
+		Map<Rectangle, ExtendedSprite> p2HandZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		
+		//Resize currently placed sprites and rectangles
+		i = 0;
+		for(Map.Entry<Rectangle, ExtendedSprite> e : zones.get("P2HandZone").entrySet()) {
+			//get this zones sprite
+			ExtendedSprite s = zones.get("P2HandZone").get(e.getKey());
+			//define new rectangle to insert
+			Rectangle r2 = new Rectangle(x*HandZonesX[i], y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight);
+			//insert zone
+			p2HandZones.put(r2, s);
+			//if sprite was at zone, set it to new size
+			if(s != null) setSpriteToRectangleSize(r2, s);
+			//increment counter
+			i++;
+		}
+
+
+		//create new p1Spell zones
+		Map<Rectangle, ExtendedSprite> p1SpellZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		
+		//Resize currently placed sprites and rectangles
+		i = 0;
+		for(Map.Entry<Rectangle, ExtendedSprite> e : zones.get("P1SpellZone").entrySet()) {
+			//get this zones sprite
+			ExtendedSprite s = zones.get("P1SpellZone").get(e.getKey());
+			//define new rectangle to insert
+			Rectangle r2 = new Rectangle(x*SpellZonesX[i], y*P1SpellZonesY[i], x*spellZoneWidth, y*spellZoneHeight);
+			//insert zone
+			p1SpellZones.put(r2, s);
+			//if sprite was at zone, set it to new size
+			if(s != null) setSpriteToRectangleSize(r2, s);
+			//increment counter
+			i++;
+		}
+
+		//create new p2Spell zones
+		Map<Rectangle, ExtendedSprite> p2SpellZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		
+		//Resize currently placed sprites and rectangles
+		i = 0;
+		for(Map.Entry<Rectangle, ExtendedSprite> e : zones.get("P2SpellZone").entrySet()) {
+			//get this zones sprite
+			ExtendedSprite s = zones.get("P2SpellZone").get(e.getKey());
+			//define new rectangle to insert
+			Rectangle r2 = new Rectangle(x*SpellZonesX[i], y*P2SpellZonesY[i], x*spellZoneWidth, y*spellZoneHeight);
+			//insert zone
+			p2SpellZones.put(r2, s);
+			//if sprite was at zone, set it to new size
+			if(s != null) setSpriteToRectangleSize(r2, s);
+			//increment counter
+			i++;
+		}
+		
+		//clear zones list
+		zones = new LinkedHashMap<String, Map<Rectangle, ExtendedSprite>>();
 		
 		zones.put("P1MonsterZone", p1MonsterZones);
 		zones.put("P2MonsterZone", p2MonsterZones);
@@ -129,6 +203,50 @@ public class Arena extends Sprite {
 		zones.put("P2HandZone", p2HandZones);
 	}
 
+	private void firstResize(int x, int y) {
+		
+		//Set scale
+		float xScale = x / this.getWidth();
+		float yScale = y / this.getHeight();
+		this.setScale(xScale, yScale);
+		
+		zones = new LinkedHashMap<String, Map<Rectangle, ExtendedSprite>>();
+		
+		//Create zones
+		Map<Rectangle, ExtendedSprite> p1MonsterZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		Map<Rectangle, ExtendedSprite> p2MonsterZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		Map<Rectangle, ExtendedSprite> p1SpellZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		Map<Rectangle, ExtendedSprite> p2SpellZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		Map<Rectangle, ExtendedSprite> p1HandZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		Map<Rectangle, ExtendedSprite> p2HandZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
+		
+		//Put monster rectangles into zones
+		for(int i = 0; i < 5; i++) {
+			p1MonsterZones.put(new Rectangle(x*MonsterZonesX[i], y*P1MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
+			p2MonsterZones.put(new Rectangle(x*MonsterZonesX[i], y*P2MonsterZoneY, x*monsterZoneWidth, y*monsterZoneHeight), null);
+		}
+		
+		//Put hand rectangles into zones
+		for(int i = 0; i < 6; i++) {
+			p1HandZones.put(new Rectangle(x*HandZonesX[i], y*P1HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
+			p2HandZones.put(new Rectangle(x*HandZonesX[i], y*P2HandZoneY, x*handZoneWidth, y*handZoneHeight), null);
+		}
+		
+		//Put spell rectangles into zones
+		p1SpellZones.put(new Rectangle(x*SpellZone1X, y*P1SpellZone1Y, x*spellZoneWidth, y*spellZoneHeight), null);
+		p1SpellZones.put(new Rectangle(x*SpellZone2X, y*P1SpellZone2Y, x*spellZoneWidth, y*spellZoneHeight), null);
+		p2SpellZones.put(new Rectangle(x*SpellZone1X, y*P2SpellZone1Y, x*spellZoneWidth, y*spellZoneHeight), null);
+		p2SpellZones.put(new Rectangle(x*SpellZone2X, y*P2SpellZone2Y, x*spellZoneWidth, y*spellZoneHeight), null);
+		
+		//Add each map to zones map
+		zones.put("P1MonsterZone", p1MonsterZones);
+		zones.put("P2MonsterZone", p2MonsterZones);
+		zones.put("P1SpellZone", p1SpellZones);
+		zones.put("P2SpellZone", p2SpellZones);
+		zones.put("P1HandZone", p1HandZones);
+		zones.put("P2HandZone", p2HandZones);
+	}
+	
 	/**
 	 * Returns the zone at point x,y if one exists that belongs to given player
 	 * and is either a field (true) or hand (false) zone as well as being empty

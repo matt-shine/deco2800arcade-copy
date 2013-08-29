@@ -318,6 +318,7 @@ public class Arcade extends JFrame {
 	        }
 	    }
 		
+	    System.out.println(games.keySet());
 		return games.keySet();
 	}
 

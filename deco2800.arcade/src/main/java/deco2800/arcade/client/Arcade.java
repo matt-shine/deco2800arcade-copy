@@ -177,15 +177,15 @@ public class Arcade extends JFrame {
 
 		this.player = new Player();
 		this.player.setUsername(username);
-		this.communicationNetwork.updatePlayer(this.player);
-
+		this.communicationNetwork.setPlayer(this.player);
+		
 		// For testing chat:
-		if (!username.equals("debuguser")){
+		// At least one client must login as "debuguser" to open the chat window
+		// Use /invite username and /kick username to add and remove users to the conversation
+		if (username.equals("debuguser")){
 			if (this.communicationNetwork.checkIfChatExists("debuguser") == false){
-				this.communicationNetwork.createNewChat("debuguser");
 				ChatRequest chatRequest = new ChatRequest();
-				chatRequest.username = "debuguser";
-				chatRequest.sender = username;
+				chatRequest.participants = "debuguser";
 				this.client.sendNetworkObject(chatRequest);
 			}
 		}

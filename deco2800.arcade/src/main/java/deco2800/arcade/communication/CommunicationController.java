@@ -3,7 +3,6 @@ package deco2800.arcade.communication;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import deco2800.arcade.communication.CommunicationView;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
@@ -16,7 +15,6 @@ public class CommunicationController {
 	private TextMessage textMessage;
 	private CommunicationModel model;
 	private Player player;
-	
 
 	public CommunicationController(CommunicationView window, CommunicationModel model, NetworkClient networkClient, Player player){
 		this.window = window;
@@ -35,8 +33,17 @@ public class CommunicationController {
 	
 	private void sendTextMessage(String message){
 		ArrayList<String> participants = model.getParticipants();
+		
 		textMessage.text = message;
 		textMessage.username = player.getUsername();
+		
+		textMessage.chatID = "";
+		for(String username : participants){
+			textMessage.chatID = textMessage.chatID + username + ",";
+		}
+		if (textMessage.chatID.endsWith(",")){
+			textMessage.chatID = textMessage.chatID.substring(0, textMessage.chatID.length()-1);
+		}
 
 		for(String username : participants){
 			textMessage.recipient = username;
@@ -44,7 +51,6 @@ public class CommunicationController {
 		}
 		
 		window.setTextInput("");
-		window.appendTextArea(player.getUsername() + ": " + message + "\n");
 		window.input.requestFocus();
 	}
 	

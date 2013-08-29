@@ -5,6 +5,7 @@ package com.test.game.world;
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -20,6 +21,7 @@ import com.test.game.model.EnemySpawner;
 import com.test.game.model.Follower;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
+import com.test.game.model.MovablePlatformSpawner;
 import com.test.game.model.Ship;
 import com.test.game.model.Ship.State;
 import com.test.game.model.Sword;
@@ -31,15 +33,20 @@ import com.test.game.model.Walker;
  *
  */
 public class World {
-
+	private static final float WORLD_WIDTH = 90f;
+	private static final float WORLD_HEIGHT = 59f;
+	
+	private Boolean firstUpdate;
 	private Ship ship;
 	Rectangle sRec;
 	private Sword sword;
 	private Array<Enemy> enemies;
 	private Array<Bullet> bullets;
 	private Array<EnemySpawner> spawners;
+	private Array<MovablePlatformSpawner> movablePlatformSpawners;
 	private Array<CutsceneObject> cutsceneObjects; 
 	private Array<MovablePlatform> movablePlatforms;
+	private OrthographicCamera cam;
 	
 	private int curLevel;
 	private LevelLayout levelLayout;
@@ -48,10 +55,11 @@ public class World {
 	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
-	WorldRenderer wr;
+	//WorldRenderer wr;
 	
-	public World(TestGame2 game, int level) {
+	public World(TestGame2 game, int level, OrthographicCamera cam) {
 		curLevel = level;
+		this.cam = cam;
 		
 		init();
 		loadLevel(curLevel);
@@ -63,11 +71,13 @@ public class World {
 	
 	
 	public void update() {
+		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
 		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
 
 		spawnEnemies();
+		spawnMovablePlatforms();
 
 		checkTileCollision();
 
@@ -75,6 +85,12 @@ public class World {
 
 		handleEnemies();
 
+		if (firstUpdate) {
+			resetCamera();
+			firstUpdate = false;
+		} else {
+			updateCamera();
+		}
 		
 		//System.out.println("End of World update " + ship.getVelocity().x);
 
@@ -120,19 +136,25 @@ public class World {
 			objects = Level1Objects.loadObjects(levelLayout.getMap());
 			levelScenes = new Level1Scenes(ship);
 			
+		} else {
+			objects = Level2Objects.loadObjects(levelLayout.getMap());
+			levelScenes = new Level2Scenes(ship);
 		}
 		
 		//Load objects to World
 		for (Object o: objects) {
 			if (o instanceof EnemySpawner) {
 				spawners.add((EnemySpawner) o);
+			} else if (o instanceof MovablePlatformSpawner) {
+				movablePlatformSpawners.add((MovablePlatformSpawner) o);
 			}
 		}
 		System.out.println("Found " + spawners.size + " enemy spawners");
+		System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
 		enemies.add( new Walker(new Vector2 (5f, 9f)) );
 
 		Texture copterTex = new Texture("data/copter.png");
-		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(0, 1), 4f, 2f, new Vector2(0,11), 5f, true, 1.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
@@ -142,7 +164,7 @@ public class World {
 	private void checkTileCollision() {
 		/* MovablePlatform code */
 		boolean onMovable = false;
-		MovablePlatform onPlat;
+		//MovablePlatform onPlat;
 
 		//Check moving platform collisions
 		sRec = ship.getProjectionRect();
@@ -151,7 +173,7 @@ public class World {
 			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
 			if (sRec.overlaps(mp.getCollisionRectangle())) {
 				onMovable = true;
-				onPlat = mp;
+				//onPlat = mp;
 				//System.out.println("moving ship");
 				ship.getPosition().add(mp.getPositionDelta());
 				//ship.getVelocity().add(mp.getPositionDelta());
@@ -159,12 +181,20 @@ public class World {
 				
 				// Stop falling through the floor when going up if on the top of platform
 				float top = mp.getPosition().y + mp.getCollisionRectangle().height;
-				if (ship.getPosition().y < top + 12/32f && ship.getPosition().y > top - 12/32f) {
+				if (ship.getPosition().y < top + 24/32f && ship.getPosition().y > top - 24/32f) {
 					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
 					ship.getPosition().y = mp.getPosition().y + mp.getCollisionRectangle().height;
 					onMovable = true;
-					onPlat = mp;
+					//onPlat = mp;
 				}
+			}
+			
+			//Remove moving platforms that leave the bottom of the map
+			if (mp.getPosition().y + mp.getHeight()<0) {
+				for (MovablePlatformSpawner mps: movablePlatformSpawners) {
+					mps.removePlatform(mp);
+				}
+				movablePlatforms.removeValue(mp, true);
 			}
 			//mp.update(ship);
 		}
@@ -329,6 +359,19 @@ public class World {
 		return;
 	}
 	
+	private void spawnMovablePlatforms() {
+		for (MovablePlatformSpawner mps: movablePlatformSpawners) {
+			
+			//Check if spawner is in the range of 2 blocks out of viewport. NOT USING VIEWPORT ATM> SHOULD PROBS CHAGNE
+			
+			if (mps.increment()) {
+				movablePlatforms.add(mps.spawnNew());
+			}
+				
+		}
+		return;
+	}
+	
 	private void handleEnemies() {
 		Iterator<Bullet> bItr;
 		Iterator<Enemy> eItr;
@@ -380,8 +423,40 @@ public class World {
 		return;
 	}
 
+	public void updateCamera() {
+		float boxX=3.5f;
+		//float boxY=6f;
+		//if(ship.getPosition().x - boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
+		//System.out.println("shipX="+ship.getPosition().x+" camviewwidth/2="+cam.viewportWidth/2+" camX="+cam.position.x);
+		if(ship.getPosition().x + boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
+			if (ship.getVelocity().x > 0.5f) {
+			cam.position.x = ship.getPosition().x - boxX;
+			} else if (ship.getVelocity().x < -0.5f){
+				cam.position.x = ship.getPosition().x + boxX;
+			}
+		}
+		if(ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) {
+			cam.position.y = ship.getPosition().y;
+		}
+	}
 	
-	
+	public void resetCamera() {
+		if(ship.getPosition().x > cam.viewportWidth/2 ) {
+			cam.position.x = ship.getPosition().x;
+			
+		} else {
+			cam.position.x = cam.viewportWidth/2;
+		}
+		if(ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) {
+			cam.position.y = ship.getPosition().y;
+		} else if (ship.getPosition().y <= cam.viewportHeight/2){
+			cam.position.y = cam.viewportHeight/2;
+		} else {
+			cam.position.y = WORLD_HEIGHT - cam.viewportHeight/2;
+		}
+			
+		
+	}
 	
 	
 	/* ----- Getter methods ----- */
@@ -409,9 +484,7 @@ public class World {
 		return movablePlatforms;
 	}
 
-	public WorldRenderer getRenderer() {
-		return wr;
-	}
+	
 	
 	public LevelLayout getLevelLayout() {
 		return levelLayout;
@@ -427,22 +500,24 @@ public class World {
 	
 	/* ----- Setter methods ----- */
 	public void init() {
-		ship = new Ship(new Vector2(2.8f, 10));
+		firstUpdate = true;
+		ship = new Ship(new Vector2(4f, 5));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();
 		spawners = new Array<EnemySpawner>();
+		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
 		cutsceneObjects = new Array<CutsceneObject>();
 		movablePlatforms = new Array<MovablePlatform>();
+		//resetCamera();
+		
 		
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);
 		return;
 	}
 	
-	public void setRenderer(WorldRenderer wr) {
-		this.wr = wr;
-	}
+	
 
 	public void resetLevel(int level) {
 		ship = null;
@@ -454,6 +529,7 @@ public class World {
 		movablePlatforms = null;
 		levelLayout = null;
 		levelScenes = null;
+		
 		
 		init();
 		loadLevel(level);

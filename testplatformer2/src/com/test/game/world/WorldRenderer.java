@@ -42,8 +42,7 @@ public class WorldRenderer {
 
 	private static final float FOLLOWER_FRAME_DURATION = 0.06f;
 	
-	private static final float WORLD_WIDTH = 90f;
-	private static final float WORLD_HEIGHT = 15f;
+	
 	
 	World world;
 	SpriteBatch batch;
@@ -51,7 +50,7 @@ public class WorldRenderer {
 	//Follower follower;
 	Walker walker;
 	OrthographicCamera cam;
-	Texture shipTexture, followerTexture, bulletTexture, walkerTexture;
+	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example;
 	private TextureRegion followerFrame;
 	private TextureRegion walkerRegion;
 	private Array<AtlasRegion> walkerRegions;
@@ -79,11 +78,12 @@ public class WorldRenderer {
 	ShapeRenderer sr;
 	TextureRegion testRegion;
 	
-	public WorldRenderer(World world) {
+	public WorldRenderer(World world, OrthographicCamera cam) {
 		this.world = world;
 		
+		
 		//not good
-		world.setRenderer(this);
+		//world.setRenderer(this);
 		
 		//make the map NOT SURE IF GOOD
 		/*map = TiledLoader.createMap(Gdx.files.internal("data/level.tmx"));
@@ -93,11 +93,11 @@ public class WorldRenderer {
 		tileMapRenderer = world.getLevelLayout().getRenderer();
 		
 		
-		cam = new OrthographicCamera();
+		this.cam = cam;
 		
 		//was using 100 here originally
-		width = Gdx.graphics.getWidth()/100;
-		height = Gdx.graphics.getHeight()/100;
+		width = Gdx.graphics.getWidth()/45;
+		height = Gdx.graphics.getHeight()/45;
 		
 		//this is important for different phone sizes. about cutting off stuff on smaller screens etc
 		cam.setToOrtho(false, width, height);
@@ -106,7 +106,8 @@ public class WorldRenderer {
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(cam.combined);
 		
-		
+		example = new Texture("data/enemysprite1-small.png");
+		example.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		shipTexture = new Texture("data/ship.png");
 		shipTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -154,18 +155,13 @@ public class WorldRenderer {
 		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
 			cam.position.set(ship.getPosition().x, ship.getPosition().y, 0);
 		}*/
-		cam.position.x = ship.getPosition().x;
-		cam.position.y = ship.getPosition().y;
+		//cam.position.x = ship.getPosition().x;
+		//cam.position.y = ship.getPosition().y;
 		
 		/* Camera code needs to be fixed later on. Currently it's set to always
-		 * follow the sprite so that camera's updated properly when reset
-		if(ship.getPosition().x > cam.viewportWidth/2 ) {
-			cam.position.x = ship.getPosition().x;
-		}
-		if(ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) {
-			cam.position.y = ship.getPosition().y;
-		}
-		*/
+		 * follow the sprite so that camera's updated properly when reset*/
+		
+		
 		
 		cam.update();
 		batch.setProjectionMatrix(cam.combined);
@@ -192,15 +188,15 @@ public class WorldRenderer {
 		
 		//0,0 origin will be offcenter
 		if (ship.isFacingRight()) {
-			batch.draw(shipTexture, ship.getPosition().x-ship.getWidth()/2, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
+			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
+					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
 					shipTexture.getHeight(), false, false);
 		/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
 				ship.getWidth(), ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
 				shipTexture.getHeight(), false, false);*/
 		} else {
-			batch.draw(shipTexture, ship.getPosition().x-ship.getWidth()/2, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
+			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
+					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
 					shipTexture.getHeight(), true, false);
 		}
 		for (CutsceneObject csObj: csObjects) {
@@ -273,7 +269,9 @@ public class WorldRenderer {
 					bulletTexture.getHeight(), false, false);
 		}
 		
-		
+		batch.draw(example, 3, 5, 0,
+				0, 3, 3, 2, 2, 0, 0, 0,
+				256, 256, false, false);
 		
 		
 		batch.end();
@@ -334,6 +332,7 @@ public class WorldRenderer {
 	public OrthographicCamera getCamera() {
 		return cam;
 	}
+	
 	
 	public void dispose() {
 		batch.dispose();

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="300" height="60" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="testtiles" tilewidth="32" tileheight="32" spacing="2">
+  <image source="level.png" width="32" height="128"/>
+ </tileset>
+ <layer name="Inline" width="300" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt3bGOAjEQREH4/5++BDJ02Cxrdy9V0oToxgK/gEPa2w34BffHXOXvABylV0ALvQJa6BXQQq+AFnoFne6Bcza9gk6726RXQCu9AlroCNBCr4AWegW00CughV4BLa70uwng2vQKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgGM9uA1roFZBq5tm4np0LJNEjoIVeAS30CmihV8BOM9+T6xXQYub/hasl7QLsl9yE5N2A9ZKbkLwbsF5yE5J3A84x8xv2mdee7Uq9evc94RXOCGdLuS+vdkhu6YzRViWfARIk35fk3UbNtKr1jLBK8n1J3m3EbKsazwgrJd+X5N3e+aRVbWeE1ZLvS/Ju//m0VU1n/DVH3lNjvjkjknZhvd2fUWOeMyJpF9bb/Rk15jkjknZhvT/6jAOu
+  </data>
+ </layer>
+ <layer name="Collision" width="300" height="60" opacity="0.26">
+  <data encoding="base64" compression="zlib">
+   eJzt3cGqwjAURVHp/3/0mzgSX5sqTc6pa0HAmTcUNyUqfTyAX7A9113eB+BbegW00CughV4BLfQKaKFX0GkLXFfTK+i0uk16BbTSK6CFjgAt9ApooVdAC70CWugV0OJOv5sA7k2vAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvuPZbUCL7Z/XAKvtPQ/3tVeenQskcX8FtNAroIVeAS30CljpzDm5XgEtXnuV9H1g0izAesn3V8mzAfMlNyF5NmC+5CYkzwZcY+8c6KgJK8+Q7tSrd2eDaeeFkC6lCUf/D0pr6RmjsyXvARKk9Oqd5NlGnZm7dY8wS3ITkmcbcXbmxj3CTMlNSJ7tyCfztu0RZktuQvJsez6dtWmPv2b0+xLr+pV8TWbMNmL2fsni2pDgTK+u5jORy7UhgV4x4g949gOZ
+  </data>
+ </layer>
+ <layer name="Foreground" width="300" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T+1vBqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACANxlPAAE=
+  </data>
+ </layer>
+</map>

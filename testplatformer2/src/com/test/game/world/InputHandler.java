@@ -137,11 +137,11 @@ public class InputHandler implements InputProcessor{
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		//pointer is how many fingers on your touchpad
-		touch.set(screenX, screenY, 0);
+		/*touch.set(screenX, screenY, 0);
 		world.getRenderer().getCamera().unproject(touch);
 		vec2Touch.set(touch.x, touch.y);
 		world.addBullet(new Bullet(Bullet.BULLET_SPEED, 0, new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.BULLET_SIZE/2, ship.getPosition().y+ship.getHeight()/2),
-				Bullet.BULLET_SIZE, Bullet.BULLET_SIZE, new Vector2(vec2Touch.sub(ship.getPosition()).nor())));
+				Bullet.BULLET_SIZE, Bullet.BULLET_SIZE, new Vector2(vec2Touch.sub(ship.getPosition()).nor())));*/
 		return true;
 	}
 

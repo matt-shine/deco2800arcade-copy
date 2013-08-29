@@ -19,8 +19,14 @@ public class MovablePlatform extends MovableEntity{
 	private float waitCount;
 	private boolean firstFrameOfWait;
 	
-	public MovablePlatform(Texture texture, Vector2 pos, float width, float height) {
-		this(texture, pos, width, height, pos, 0, false, 0);
+	public MovablePlatform(MovablePlatform platform) {
+		this(platform.getTexture(), new Vector2(platform.getPosition().x, platform.getPosition().y), platform.getWidth(), platform.getHeight(),
+				new Vector2(platform.getTargetPosition().x, platform.getTargetPosition().y), platform.getSpeed(), platform.getRebound(), 
+				platform.getWait());
+	}
+	
+	public MovablePlatform(Texture texture, Vector2 pos, float width, float height, float speed) {
+		this(texture, pos, width, height, pos, speed, false, 0);
 	}
 	
 	public MovablePlatform(Texture texture, Vector2 pos, float width, float height, Vector2 targetPos, float speed, boolean rebound, float wait) {
@@ -47,6 +53,17 @@ public class MovablePlatform extends MovableEntity{
 		} else {
 			return true;
 		}
+	}
+	
+	public boolean getRebound() {
+		return rebound;
+	}
+	
+	public float getWait() {
+		return wait;
+	}
+	public Vector2 getTargetPosition() {
+		return targetPos;
 	}
 	public void setTargetPosition(Vector2 targetPos) {
 		this.targetPos = targetPos;
@@ -100,7 +117,7 @@ public class MovablePlatform extends MovableEntity{
 				waitCount += delta;
 				//System.out.println(waitCount);
 				if (waitCount > wait) {
-					System.out.println("Rebound time. positiondump:"+targetPos.x+targetPos.y+initialPos.x+initialPos.y+" waitCount: "+waitCount+" wait: "+wait);
+					//System.out.println("Rebound time. positiondump:"+targetPos.x+targetPos.y+initialPos.x+initialPos.y+" waitCount: "+waitCount+" wait: "+wait);
 					float tmpX = targetPos.x;
 					float tmpY = targetPos.y;
 					targetPos.x = initialPos.x;

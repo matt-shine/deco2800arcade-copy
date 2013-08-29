@@ -17,7 +17,9 @@ public abstract class MovableEntity extends Entity {
 	
 	//abstract void advance(float delta);
 	
-	
+	public float getSpeed() {
+		return speed;
+	}
 	
 	public Vector2 getVelocity() {
 		return velocity;

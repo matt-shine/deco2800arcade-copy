@@ -41,7 +41,7 @@ public class EnemySpawner {
 	public Enemy spawnNew() {
 		try {
 			Enemy e = (Enemy) objClass.newInstance();
-			e.setPosition(pos);
+			e.setPosition(new Vector2(pos.x, pos.y));
 			enemies.add(e);
 			//enemyCount++;
 			spawnCount++;

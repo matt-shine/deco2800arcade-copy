@@ -20,7 +20,7 @@ public class LevelLayout {
 		renderer = new TiledMapRenderer(map, mapAtlas, 32, 32, 1, 1);
 		collisionLayer = (TiledLayer)map.layers.get(1);*/
 		renderer = new OrthogonalTiledMapRenderer(map, 1/32f); //Will also need to change stuff in the level objects classes
-		collisionLayer = (TiledMapTileLayer)map.getLayers().get(1);
+		collisionLayer = (TiledMapTileLayer)map.getLayers().get("Collision");
 	}
 	/*
 	public TileMapRenderer getRenderer() {

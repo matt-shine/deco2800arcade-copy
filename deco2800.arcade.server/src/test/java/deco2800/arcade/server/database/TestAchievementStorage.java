@@ -116,28 +116,22 @@ public class TestAchievementStorage {
 	public void testIncrementAchievement() throws DatabaseException {
 		Player testplayer;
 		Player testplayer2;
-		try {
-			System.out.print("Returning initial PLAYER_ACHIEVEMENT table." +
-					"\n================\n");
-			achievementStorage.returnPlayersAchievement();
-			testplayer = new Player(1, "Bob", "default.png");
-			testplayer2 = new Player(2, "Bobbie", "default.png");
-			achievementStorage.incrementProgress(testplayer, "pong.winthreegames");
-			achievementStorage.incrementProgress(testplayer2, "pong.winthreegames");
-			achievementStorage.incrementProgress(testplayer2, "pong.winthreegames");
-			achievementStorage.incrementProgress(testplayer, "pong.winfivegames");
-			System.out.print("\n- Increment Player1 with achievement Pong Win3Games\n" +
-					"- Increment x2 Player2 with achievement Pong Win3Games\n" +
-					"- Increment Player1 with achievement Pong Win5Games\n================\n");
-			achievementStorage.returnPlayersAchievement();
-			
-			System.out.print("TEST: Testing Over Increment\n");
-			achievementStorage.incrementProgress(testplayer, "pong.winfivegames");
+		System.out.print("Returning initial PLAYER_ACHIEVEMENT table." +
+				"\n================\n");
+		achievementStorage.returnPlayersAchievement();
+		testplayer = new Player(1, "Bob", "default.png");
+		testplayer2 = new Player(2, "Bobbie", "default.png");
+		achievementStorage.incrementProgress(testplayer, "pong.winthreegames");
+		achievementStorage.incrementProgress(testplayer2, "pong.winthreegames");
+		achievementStorage.incrementProgress(testplayer2, "pong.winthreegames");
+		achievementStorage.incrementProgress(testplayer, "pong.winfivegames");
+		System.out.print("\n- Increment Player1 with achievement Pong Win3Games\n" +
+				"- Increment x2 Player2 with achievement Pong Win3Games\n" +
+				"- Increment Player1 with achievement Pong Win5Games\n================\n");
+		achievementStorage.returnPlayersAchievement();
 		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.print("TEST: Testing Over Increment\n");
+		achievementStorage.incrementProgress(testplayer, "pong.winfivegames");
 	}
 	
 }

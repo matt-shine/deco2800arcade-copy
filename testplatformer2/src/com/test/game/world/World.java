@@ -33,8 +33,8 @@ import com.test.game.model.Walker;
  *
  */
 public class World {
-	private static final float WORLD_WIDTH = 90f;
-	private static final float WORLD_HEIGHT = 59f;
+	public static final float WORLD_WIDTH = 220f;
+	public static final float WORLD_HEIGHT = 59f;
 	
 	private Boolean firstUpdate;
 	private Ship ship;
@@ -72,15 +72,17 @@ public class World {
 	
 	public void update() {
 		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
+		System.out.println("State before ship = "+ship.getState());
 		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
-
+		System.out.println("State after ship = "+ship.getState());
 		spawnEnemies();
 		spawnMovablePlatforms();
 
+		
 		checkTileCollision();
-
+		System.out.println("State after tiles = "+ship.getState());
 		checkDamage();
 
 		handleEnemies();
@@ -164,7 +166,7 @@ public class World {
 	private void checkTileCollision() {
 		/* MovablePlatform code */
 		boolean onMovable = false;
-		//MovablePlatform onPlat;
+		MovablePlatform onPlat = null;
 
 		//Check moving platform collisions
 		sRec = ship.getProjectionRect();
@@ -173,8 +175,8 @@ public class World {
 			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
 			if (sRec.overlaps(mp.getCollisionRectangle())) {
 				onMovable = true;
-				//onPlat = mp;
-				//System.out.println("moving ship");
+				onPlat = mp;
+				System.out.println("moving ship");
 				ship.getPosition().add(mp.getPositionDelta());
 				//ship.getVelocity().add(mp.getPositionDelta());
 				//ship.getPosition().y -= Ship.GRAVITY * Gdx.graphics.getDeltaTime();
@@ -182,11 +184,14 @@ public class World {
 				// Stop falling through the floor when going up if on the top of platform
 				float top = mp.getPosition().y + mp.getCollisionRectangle().height;
 				if (ship.getPosition().y < top + 24/32f && ship.getPosition().y > top - 24/32f) {
-					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
-					ship.getPosition().y = mp.getPosition().y + mp.getCollisionRectangle().height;
-					onMovable = true;
+					System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
+					ship.getPosition().y = mp.getPosition().y + mp.getCollisionRectangle().height+1/32f;
+					//onMovable = true;
 					//onPlat = mp;
 				}
+				
+				//If in wall state and hit bottom of platform, fall off
+				//if (ship.getState() == State.WALL && ship.getPosition().y <  
 			}
 			
 			//Remove moving platforms that leave the bottom of the map
@@ -213,7 +218,7 @@ public class World {
 		if (ship.getVelocity().x != 0) checkX = 1;
 		if (ship.getVelocity().y != 0) checkY = 2;
 
-		for (float i = ship.getPosition().x - checkX; i < ship.getPosition().x + ship.getWidth() + 1 + checkX; i++) {
+		for (float i = ship.getPosition().x - checkX; i < ship.getPosition().x + 1+ ship.getWidth() + checkX; i++) {
 			for (float j = ship.getPosition().y - checkY; j < ship.getPosition().y + ship.getHeight() + checkY; j++) {
 				//System.out.println("chcking cell at " + (int)i + "," + (int)j + " and collisionlayer is " + collisionLayer);
 		
@@ -235,6 +240,7 @@ public class World {
 		}
 
 		sRec = ship.getXProjectionRect();
+		System.out.println("Number of tiles checking: "+tiles.size);
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
 			//if (ship.getBounds().overlaps(tile)) {
@@ -242,11 +248,11 @@ public class World {
 				//System.out.println("Get knocked back from "+ship.getPosition().x + " by " + ship.getVelocity().x);
 				/*ship.getPosition().x -= ship.getVelocity().scl(Gdx.graphics.getDeltaTime()).x;
 				ship.getVelocity().scl(1/Gdx.graphics.getDeltaTime());*/
-				
-				if (ship.getVelocity().x > 0) {
+				System.out.println("@@@@@@@@@@@@@@@@X-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height+"    @@@@@@@@@@@@@@");
+				if (ship.getVelocity().x > 0.4) {
 					ship.getPosition().x = tile.getX() - ship.getWidth();
 						
-				} else {
+				} else if (ship.getVelocity().x < -0.4){
 					ship.getPosition().x = tile.getX() + tile.getWidth();
 				}
 				
@@ -269,12 +275,15 @@ public class World {
 		boolean tileUnderShip = false;
 		for (Rectangle tile:tiles) {
 			if (sRec.overlaps(tile)) {
-				
+				System.out.println("Y-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height);
 				//to the bottom of player
 				if (ship.getVelocity().y < 0 ) {
-					//System.out.println("Velocity: "+ship.getVelocity().y);
-					//System.out.println("DownCollision: " + sRec +" " + tile);
+					System.out.println("Velocity: "+ship.getVelocity().y);
+					System.out.println("DownCollision: " + sRec +" " + tile);
 					//ship.getPosition().y = tile.y + ship.getHeight();
+					if (onMovable) {
+						ship.getVelocity().y = -onPlat.getSpeed();
+					}
 					if (!onMovable) {
 						ship.getPosition().y = tile.y + tile.height;
 						ship.getVelocity().y = 0;
@@ -284,8 +293,17 @@ public class World {
 					} else {
 						ship.setState(State.WALK);
 					}
-					//System.out.println("after y state="+ship.getState());
+					//ship.getVelocity().y = 0;
+					System.out.println("after y state="+ship.getState());
 					tileUnderShip = true;
+					
+				} else if (ship.getVelocity().y > 0) {
+					if (onMovable) {
+						ship.getVelocity().y = -onPlat.getSpeed();
+					} else {
+						ship.getVelocity().y = 0;
+					}
+					ship.getPosition().y = tile.y - ship.getHeight();
 				}
 			}
 		}
@@ -501,7 +519,8 @@ public class World {
 	/* ----- Setter methods ----- */
 	public void init() {
 		firstUpdate = true;
-		ship = new Ship(new Vector2(4f, 5));
+		//ship = new Ship(new Vector2(220f, 60));
+		ship = new Ship(new Vector2(3f, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

@@ -49,8 +49,8 @@ public class WorldRenderer {
 	Ship ship;
 	//Follower follower;
 	Walker walker;
-	OrthographicCamera cam;
-	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example;
+	private ParallaxCamera cam;
+	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg;
 	private TextureRegion followerFrame;
 	private TextureRegion walkerRegion;
 	private Array<AtlasRegion> walkerRegions;
@@ -78,7 +78,7 @@ public class WorldRenderer {
 	ShapeRenderer sr;
 	TextureRegion testRegion;
 	
-	public WorldRenderer(World world, OrthographicCamera cam) {
+	public WorldRenderer(World world, ParallaxCamera cam) {
 		this.world = world;
 		
 		
@@ -95,12 +95,13 @@ public class WorldRenderer {
 		
 		this.cam = cam;
 		
-		//was using 100 here originally
-		width = Gdx.graphics.getWidth()/45;
-		height = Gdx.graphics.getHeight()/45;
+		//was using number of tiles to show each direction
+		
+		/*width = 24;
+		height = 15;*/
 		
 		//this is important for different phone sizes. about cutting off stuff on smaller screens etc
-		cam.setToOrtho(false, width, height);
+		//cam.setToOrtho(false, width, height);
 		cam.update();
 		
 		batch = new SpriteBatch();
@@ -108,6 +109,9 @@ public class WorldRenderer {
 		
 		example = new Texture("data/enemysprite1-small.png");
 		example.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		
+		bg = new Texture("data/bg2.png");
+		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		shipTexture = new Texture("data/ship.png");
 		shipTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -164,7 +168,7 @@ public class WorldRenderer {
 		
 		
 		cam.update();
-		batch.setProjectionMatrix(cam.combined);
+		//batch.setProjectionMatrix(cam.combined);
 		
 		//ANIMATIONS
 		//followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
@@ -175,14 +179,26 @@ public class WorldRenderer {
 		System.out.println(testRegion);*/
 		
 		//tileMapRenderer.render(cam);
-		tileMapRenderer.setView(cam);
+		//draw background layers
+		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0, 0));
+		batch.begin();
+		batch.draw(bg, -cam.viewportWidth/2, -cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
+		batch.end();
+		
+		//draw tiled layers
+		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
 		tileMapRenderer.render(new int[]{0});
+		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
+		tileMapRenderer.render(new int[]{1});
+		tileMapRenderer.setView(cam.calculateParallaxMatrix(1, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
+		tileMapRenderer.render(new int[]{2});
+		
 		/*Vector3 tmp = new Vector3();
 		tmp.set(0, 0, 0);
 		cam.unproject(tmp);
 		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), layersList);
 		*/
-		
+		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
 		//batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y);
 		

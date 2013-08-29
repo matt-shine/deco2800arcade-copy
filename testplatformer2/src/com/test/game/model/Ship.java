@@ -17,8 +17,8 @@ public class Ship extends MovableEntity{
 	//public static final float HEIGHT = 1f;
 	public static final float JUMP_TIME = 0.2f;
 	public static final float GRAVITY = -1.8f;
-	public static final float MAX_FALL_VELOCITY = 42f;
-	public static final float MAX_WALL_VELOCITY = 6f;
+	public static final float MAX_FALL_VELOCITY = 30f;
+	public static final float MAX_WALL_VELOCITY = 6.2f; //note that any movable platform falling at speed greater than this will have bugged moving
 	public static final float WALL_ATTACH_TIME = 0.13f;
 	
 	private State state = State.IDLE;

@@ -1,6 +1,8 @@
 package com.test.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.test.game.world.ParallaxCamera;
 import com.test.game.world.World;
 import com.test.game.world.WorldRenderer;
 
@@ -14,7 +16,9 @@ public class GameScreen extends AbstractScreen {
 	
 	public GameScreen(TestGame2 game) {
 		super(game);
-		OrthographicCamera cam = new OrthographicCamera();
+		float width = Gdx.graphics.getWidth()/45;
+		float height = Gdx.graphics.getHeight()/45;
+		ParallaxCamera cam = new ParallaxCamera(width, height);
 		world = new World(game, level, cam);
 		render = new WorldRenderer(world, cam);
 		

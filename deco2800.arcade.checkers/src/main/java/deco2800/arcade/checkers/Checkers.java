@@ -18,19 +18,12 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-/**
- * A Pong game for use in the Arcade
- * @author uqjstee8
- *
- */
+
 @ArcadeGame(id="Checkers")
 public class Checkers extends GameClient {
 	
 	private OrthographicCamera camera;
 	
-	private Paddle leftPaddle;
-	private Paddle rightPaddle;
-	private Ball ball;
 	private enum GameState {
 		READY,
 		INPROGRESS,
@@ -121,27 +114,6 @@ public class Checkers extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
-		// Create the paddles
-		leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-		leftPaddle.setColor(1, 0, 0, 1);
-		
-		rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-		rightPaddle.setColor(0, 0, 1, 1);
-		
-		/**
-		 * TODO Allow network games
-		 * 1. Create local player (LOBBY)
-		 * 2. "Waiting for other players. Press '1' to play local game against the computer"
-		 * 3a. Receive game join request
-		 * 3b. "Player 'Bob' wishes to join the game. Press 'Y' to accept"
-		 * 3c1. ('Y') Create Network player, move to READY
-		 * 3c2. ('N') Go to 2.
-		 */
-		
-		//Create the ball
-		ball = new Ball();
-		ball.setColor(1, 1, 1, 1);
-		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
@@ -181,15 +153,6 @@ public class Checkers extends GameClient {
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
-	    //Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    
-	    leftPaddle.render(shapeRenderer);
-	    
-	    rightPaddle.render(shapeRenderer);
-	    
-	    ball.render(shapeRenderer);
-	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
 	    
@@ -211,101 +174,9 @@ public class Checkers extends GameClient {
 	    	}
 	    }
 	    batch.end();
-	    
-	    // Respond to user input and move the ball depending on the game state
-	    switch(gameState) {
-	    
-	    case READY: //Ready to start a new point
-	    	if (Gdx.input.isTouched()) {
-	    		startPoint();
-	    	}
-	    	break;
-	    	
-	    case INPROGRESS: //Point is underway, ball is moving
-	    	//Move the left paddle (mouse)
-	    	leftPaddle.update(ball);
-	    	
-	    	//Move the right paddle (automatic)
-	    	rightPaddle.update(ball);
-	    	
-	    	//Move the ball
-	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
-	    	ball.move(Gdx.graphics.getDeltaTime());
-	    	//If the ball hits a paddle then bounce it
-	    	if (ball.bounds.overlaps(leftPaddle.bounds) || ball.bounds.overlaps(rightPaddle.bounds)) {
-	    		ball.bounceX();
-	    	}
-	    	//Bounce off the top or bottom of the screen
-	    	if (ball.bounds.y <= 0 || ball.bounds.y >= SCREENHEIGHT-Ball.WIDTH) {
-	    		ball.bounceY();
-	    	}
-	    	
-	    	//If the ball gets to the left edge then player 2 wins
-	    	if (ball.bounds.x <= 0) {
-	    		endPoint(1);
-	    	} else if (ball.bounds.x + Ball.WIDTH > SCREENWIDTH) { 
-	    		//If the ball gets to the right edge then player 1 wins
-	    		endPoint(0);
-	    	}
-	    	break;
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	if (Gdx.input.isTouched()) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
-	    }
-	    
-		super.render();
 		
 	}
-
-	/**
-	 * The point has ended: update scores, reset the ball, check for a winner and move the game state to ready or gameover
-	 * @param winner 0 for player 1, 1 for player 2
-	 */
-	private void endPoint(int winner) {
-		ball.reset();
-		scores[winner]++;
-		// If we've reached the victory point then update the display
-		if (scores[winner] == WINNINGSCORE) {	
-		    int loser = winner==1?0:1; //The loser is the player who didn't win!
-		    statusMessage = players[winner] + " Wins " + scores[winner] + " - " + scores[loser] + "!";
-		    gameState = GameState.GAMEOVER;
-		    //Update the game state to the server
-		    networkClient.sendNetworkObject(createScoreUpdate());
-		    //If the local player has won, send an achievement
-		    if (winner == 0) {
-                incrementAchievement("pong.winGame");
-		    	//TODO Should have more detail in the achievement message
-		    }
-		} else {
-			// No winner yet, get ready for another point
-			gameState = GameState.READY;
-			statusMessage = "Click to start!";
-		}
-	}
 	
-	/**
-	 * Create an update object to send to the server notifying of a score change or game outcome
-	 * @return The Game Status Update.
-	 */
-	private GameStatusUpdate createScoreUpdate() {
-		GameStatusUpdate update = new GameStatusUpdate();
-		update.gameId = game.id;
-		update.username = players[0];
-		//TODO Should also send the score!
-		return update;
-	}
-	
-	/**
-	 * Start a new point: start the ball moving and change the game state
-	 */
-	private void startPoint() {
-		ball.randomizeVelocity();
-		gameState = GameState.INPROGRESS;
-		statusMessage = null;
-	}
 
 	@Override
 	public void resize(int arg0, int arg1) {

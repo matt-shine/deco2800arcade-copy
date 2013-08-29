@@ -43,6 +43,8 @@ public class Chess extends GameClient {
 
 	private String statusMessage;
 	
+	private Texture chessBoard;
+	
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
@@ -72,6 +74,13 @@ public class Chess extends GameClient {
 		font = new BitmapFont();
 		font.setScale(2);
 		batch = new SpriteBatch();
+		
+		Texture.setEnforcePotImages(false);
+		
+		
+		/////Can't find this files directory to load/////
+		// load the images for the droplet and the bucket, 512x512 pixels each
+		chessBoard = new Texture(Gdx.files.classpath("resources/chessboard.png"));
 	}
 
 	@Override
@@ -90,19 +99,19 @@ public class Chess extends GameClient {
 	@Override
 	public void render() {
 		
-		texture = new Texture(Gdx.files.internal("/imgs/chess_board.png"));
 		
-		//Black background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		//White background
+		Gdx.gl.glClearColor(255, 255, 255, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+	    // tell the camera to update its matrices.
 	    camera.update();
 	    
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    batch.begin();
-	    //batch.draw(texture, 10, 10);
+	    batch.draw(chessBoard, 0, 0);
 	    batch.end();
 	    
 	    super.render();

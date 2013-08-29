@@ -22,6 +22,7 @@ public class Board {
 	Null nullPiece;
 	
 	String NEWLINE = System.getProperty("line.separator");
+	
 
 	/**
 	 * Initialises board to the default setup.
@@ -48,8 +49,6 @@ public class Board {
 				row.add(d, nullPiece);
 			}
 		}
-		
-		System.out.println(Board_State);
 
 	}
 

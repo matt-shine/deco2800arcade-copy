@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.platformergame.model.Entity;
 
 public class Player extends Entity {
-	private static final int JUMP_VELOCITY = 20;
+	private static final int JUMP_VELOCITY = 5;
 	//Is the player standing on something
 	private boolean grounded;
 	private float jumpVelocity;
@@ -63,10 +63,10 @@ public class Player extends Entity {
 		}
 		
 		//Move the player vertically, horizontally controlled by map
-		setJumpVelocity(getJumpVelocity() - 1);
+		setJumpVelocity((float) (getJumpVelocity() - delta * 9.81));
 		if (jumpVelocity > 0 || !grounded) {
 			//JUMP UP
-			setY((float) (getY() + getJumpVelocity() * delta * 9.81)); //9.81 is gravity.
+			setY(getY() + getJumpVelocity()); //9.81 is gravity.
 		}
 		
 		//Need to check for the player moving past the edge of a tile in the physics step above TODO

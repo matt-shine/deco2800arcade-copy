@@ -6,12 +6,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.model.EntityCollection;
+import deco2800.arcade.hunter.model.Map;
+import deco2800.arcade.hunter.model.MapPane;
 import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.platformergame.model.Entity;
 
@@ -26,8 +29,12 @@ public class GameScreen implements Screen {
 	
 	private EntityCollection entities = new EntityCollection();
 	private Player player;
+	private Map foreground;
+	
+	private float gameSpeed = 64;
 	
 	private ShapeRenderer shapeRenderer;
+	private SpriteBatch batch = new SpriteBatch();
 	
 	public GameScreen(Hunter p){
 		parent = p;
@@ -39,6 +46,8 @@ public class GameScreen implements Screen {
 		
 		player = new Player(new Vector2(0, 0), 64, 128);
 		entities.add(player);
+		
+		foreground = new Map((parent.screenWidth / 16 / 64)+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
 	}
 
 	@Override
@@ -77,6 +86,17 @@ public class GameScreen implements Screen {
 		}
 		
 		player.update(delta);
+		foreground.update(delta, gameSpeed);
+		
+		batch.begin();
+		
+		int paneCount = 0;
+		for (MapPane p : foreground.getPanes()) {
+			batch.draw(p.getRendered(), foreground.getXOffset()+(paneCount * Map.TILE_SIZE * Map.PANE_SIZE), delta);
+			paneCount++;
+		}
+		batch.end();
+		
 		
 		shapeRenderer.setProjectionMatrix(camera.combined);
 	    

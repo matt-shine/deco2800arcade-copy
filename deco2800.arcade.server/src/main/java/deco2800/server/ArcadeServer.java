@@ -14,6 +14,7 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.arcade.packman.PackageServer;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -28,6 +29,9 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
+	
+	// Package manager
+	private PackageServer packServ;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -74,6 +78,8 @@ public class ArcadeServer {
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
+		this.packServ = new PackageServer();
+		
 		//initialize database classes
 		try {
 			creditStorage.initialise();
@@ -100,6 +106,9 @@ public class ArcadeServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		// THIS IS #TEST CODE, AND CAN BE REMOVED
+		System.out.println("Packman in: " + this.packServ.doubleNum(10));
 		
 		Protocol.register(server.getKryo());
 		server.addListener(new ConnectionListener(connectedUsers));

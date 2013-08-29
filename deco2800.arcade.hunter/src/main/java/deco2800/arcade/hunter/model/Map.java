@@ -40,7 +40,7 @@ public class Map {
 	public void update(float delta, float gameSpeed) {
 		xOffset -= delta * gameSpeed * speedModifier;
 		
-		if (xOffset > PANE_SIZE * TILE_SIZE) {
+		if (xOffset < -(PANE_SIZE * TILE_SIZE)) {
 			//Remove the first MapPane and add in another one
 			panes.poll();
 			xOffset += PANE_SIZE * TILE_SIZE;

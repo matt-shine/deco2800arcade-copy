@@ -47,7 +47,7 @@ public class GameScreen implements Screen {
 		player = new Player(new Vector2(0, 0), 64, 128);
 		entities.add(player);
 		
-		foreground = new Map((parent.screenWidth / 16 / 64)+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
+		foreground = new Map((int) (Math.ceil((parent.screenWidth / (float)(Map.PANE_SIZE * Map.TILE_SIZE))))+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
 	}
 
 	@Override

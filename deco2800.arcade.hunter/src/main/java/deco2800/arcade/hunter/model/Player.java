@@ -22,6 +22,7 @@ public class Player extends Entity {
 
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
+		setX(128); //starting X offset
 	}
 	
 	public boolean isGrounded() {
@@ -46,10 +47,6 @@ public class Player extends Entity {
 	
 	public State getState() {
 		return state;
-	}
-	
-	public void setY(float y) {
-		this.setPosition(new Vector2(this.getX(), y));
 	}
 	
 	public void update(float delta) {

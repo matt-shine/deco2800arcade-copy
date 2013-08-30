@@ -5,6 +5,7 @@ package com.test.game.world;
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -35,6 +36,7 @@ import com.test.game.model.Walker;
 public class World {
 	public static final float WORLD_WIDTH = 220f;
 	public static final float WORLD_HEIGHT = 59f;
+	
 	
 	private Boolean firstUpdate;
 	private Ship ship;
@@ -72,17 +74,29 @@ public class World {
 	
 	public void update() {
 		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
-		System.out.println("State before ship = "+ship.getState());
+		//System.out.println("State before ship = "+ship.getState());
 		ship.update(ship);		
 		//if (sword.inProgress()) sword.update(ship);
 		sword.update(ship);
-		System.out.println("State after ship = "+ship.getState());
+		//System.out.println("State after ship = "+ship.getState());
 		spawnEnemies();
 		spawnMovablePlatforms();
 
+		for (int i = -1; i < enemies.size + bullets.size; i++) {
+			MovableEntity mve;
+			if (i == -1) {
+				mve = ship;
+			} else if (i > -1 && i < enemies.size){
+				mve = enemies.get(i);
+			} else {
+				mve = bullets.get(i - enemies.size);
+			}
+			if (mve.isSolid()) {
+				checkTileCollision(mve);
+			}
+		}
 		
-		checkTileCollision();
-		System.out.println("State after tiles = "+ship.getState());
+		//System.out.println("State after tiles = "+ship.getState());
 		checkDamage();
 
 		handleEnemies();
@@ -151,9 +165,9 @@ public class World {
 				movablePlatformSpawners.add((MovablePlatformSpawner) o);
 			}
 		}
-		System.out.println("Found " + spawners.size + " enemy spawners");
-		System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
-		enemies.add( new Walker(new Vector2 (5f, 9f)) );
+		//System.out.println("Found " + spawners.size + " enemy spawners");
+		//System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
+		enemies.add( new Walker(new Vector2 (10f, 9f)) );
 
 		Texture copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -163,29 +177,32 @@ public class World {
 	}
 	
 	/* ----- Object handlers ----- */	
-	private void checkTileCollision() {
+	private void checkTileCollision(MovableEntity mve) {
+		
+		
 		/* MovablePlatform code */
 		boolean onMovable = false;
 		MovablePlatform onPlat = null;
 
 		//Check moving platform collisions
-		sRec = ship.getProjectionRect();
+		sRec = mve.getProjectionRect();
 		for (MovablePlatform mp: movablePlatforms) {
 			mp.update(ship);
 			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
 			if (sRec.overlaps(mp.getCollisionRectangle())) {
 				onMovable = true;
 				onPlat = mp;
-				System.out.println("moving ship");
-				ship.getPosition().add(mp.getPositionDelta());
+				//System.out.println("moving ship");
+				mve.getPosition().add(mp.getPositionDelta());
 				//ship.getVelocity().add(mp.getPositionDelta());
 				//ship.getPosition().y -= Ship.GRAVITY * Gdx.graphics.getDeltaTime();
 				
 				// Stop falling through the floor when going up if on the top of platform
 				float top = mp.getPosition().y + mp.getCollisionRectangle().height;
-				if (ship.getPosition().y < top + 24/32f && ship.getPosition().y > top - 24/32f) {
-					System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
-					ship.getPosition().y = mp.getPosition().y + mp.getCollisionRectangle().height+1/32f;
+				if (mve.getPosition().y < top + 24/32f && mve.getPosition().y > top - 24/32f) {
+					//System.out.println("****Fixing position on platform*****. Top: "+top+" Ship ypos: "+ship.getPosition().y);
+					mve.handleTopOfMovingPlatform(mp);
+					
 					//onMovable = true;
 					//onPlat = mp;
 				}
@@ -215,11 +232,11 @@ public class World {
 		tiles.clear();
 
 		int checkX = 0, checkY = 0;
-		if (ship.getVelocity().x != 0) checkX = 1;
-		if (ship.getVelocity().y != 0) checkY = 2;
+		if (mve.getVelocity().x != 0) checkX = 1;
+		if (mve.getVelocity().y != 0) checkY = 2;
 
-		for (float i = ship.getPosition().x - checkX; i < ship.getPosition().x + 1+ ship.getWidth() + checkX; i++) {
-			for (float j = ship.getPosition().y - checkY; j < ship.getPosition().y + ship.getHeight() + checkY; j++) {
+		for (float i = mve.getPosition().x - checkX; i < mve.getPosition().x + 1+ mve.getWidth() + checkX; i++) {
+			for (float j = mve.getPosition().y - checkY; j < mve.getPosition().y + mve.getHeight() + checkY; j++) {
 				//System.out.println("chcking cell at " + (int)i + "," + (int)j + " and collisionlayer is " + collisionLayer);
 		
 				Cell cell = collisionLayer.getCell((int) i, (int) j);
@@ -239,8 +256,8 @@ public class World {
 			tiles.add(mvPlat.getCollisionRectangle());
 		}
 
-		sRec = ship.getXProjectionRect();
-		System.out.println("Number of tiles checking: "+tiles.size);
+		sRec = mve.getXProjectionRect();
+		//System.out.println("Number of tiles checking: "+tiles.size);
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
 			//if (ship.getBounds().overlaps(tile)) {
@@ -249,66 +266,30 @@ public class World {
 				/*ship.getPosition().x -= ship.getVelocity().scl(Gdx.graphics.getDeltaTime()).x;
 				ship.getVelocity().scl(1/Gdx.graphics.getDeltaTime());*/
 				System.out.println("@@@@@@@@@@@@@@@@X-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height+"    @@@@@@@@@@@@@@");
-				if (ship.getVelocity().x > 0.4) {
-					ship.getPosition().x = tile.getX() - ship.getWidth();
-						
-				} else if (ship.getVelocity().x < -0.4){
-					ship.getPosition().x = tile.getX() + tile.getWidth();
-				}
+				mve.handleXCollision(tile);
 				
-				/* Wall slide */
-				if (ship.getVelocity().y < 0) {
-				//if (tileUnderShip || ship.getVelocity().y < 0) {
-					if (ship.getState() != State.WALL) sword.cancel(); //BUG: sword is getting cancelled while on ground against wall
-					//inputHandler.resetWallTime();
-					ship.setState(State.WALL);
-					ship.resetWallTime();
-					
-				}
-				//System.out.println("after x state="+ship.getState());
 				
 				break;
 			}
 		}
 		
 		sRec = ship.getYProjectionRect();
-		boolean tileUnderShip = false;
+		boolean tileUnderMve = false;
 		for (Rectangle tile:tiles) {
 			if (sRec.overlaps(tile)) {
-				System.out.println("Y-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height);
+				//System.out.println("Y-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height);
 				//to the bottom of player
-				if (ship.getVelocity().y < 0 ) {
-					System.out.println("Velocity: "+ship.getVelocity().y);
-					System.out.println("DownCollision: " + sRec +" " + tile);
-					//ship.getPosition().y = tile.y + ship.getHeight();
-					if (onMovable) {
-						ship.getVelocity().y = -onPlat.getSpeed();
-					}
-					if (!onMovable) {
-						ship.getPosition().y = tile.y + tile.height;
-						ship.getVelocity().y = 0;
-					}
-					if (ship.getVelocity().x == 0) {
-						ship.setState(State.IDLE);
-					} else {
-						ship.setState(State.WALK);
-					}
+				mve.handleYCollision(tile, onMovable, onPlat);
+				
 					//ship.getVelocity().y = 0;
-					System.out.println("after y state="+ship.getState());
-					tileUnderShip = true;
+					//System.out.println("after y state="+ship.getState());
+					tileUnderMve = true;
 					
-				} else if (ship.getVelocity().y > 0) {
-					if (onMovable) {
-						ship.getVelocity().y = -onPlat.getSpeed();
-					} else {
-						ship.getVelocity().y = 0;
-					}
-					ship.getPosition().y = tile.y - ship.getHeight();
-				}
+				
 			}
 		}
-		if (!tileUnderShip && (ship.getState() == State.IDLE || ship.getState() == State.WALK)) {
-			ship.setState(State.JUMP);
+		if (!tileUnderMve) {
+			mve.handleNoTileUnderneath();
 		}
 		//System.out.println("after both state="+ship.getState());
 		//ship.update(ship);
@@ -442,20 +423,33 @@ public class World {
 	}
 
 	public void updateCamera() {
-		float boxX=3.5f;
+		float boxX=2.5f;
 		//float boxY=6f;
 		//if(ship.getPosition().x - boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
 		//System.out.println("shipX="+ship.getPosition().x+" camviewwidth/2="+cam.viewportWidth/2+" camX="+cam.position.x);
 		if(ship.getPosition().x + boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
-			if (ship.getVelocity().x > 0.5f) {
-			cam.position.x = ship.getPosition().x - boxX;
-			} else if (ship.getVelocity().x < -0.5f){
-				cam.position.x = ship.getPosition().x + boxX;
+			//if (ship.getVelocity().x > 0.5f) {
+			float lerp = 0.03f;
+			if (ship.isFacingRight()) {
+			//cam.position.x = ship.getPosition().x - boxX;
+				cam.position.x += (ship.getPosition().x + boxX- cam.position.x) * lerp;
+				
+			//} else if (ship.getVelocity().x < -0.5f){
+			} else if (!ship.isFacingRight()) {
+				cam.position.x += (ship.getPosition().x - boxX - cam.position.x) * lerp;
+			} else {
+				cam.position.x += (ship.getPosition().x - cam.position.x) * lerp;
 			}
 		}
-		if(ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) {
-			cam.position.y = ship.getPosition().y;
-		}
+		if((ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) || 
+				(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT)) {
+		//if(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT) {
+			float lerp = 0.035f;
+			cam.position.y += (ship.getPosition().y - cam.position.y) * lerp;
+		} /*else {
+			cam.position.y = (cam.viewportHeight/2);
+			System.out.println("posY "+cam.position.y+" viewportHeight="+cam.viewportHeight);
+		}*/
 	}
 	
 	public void resetCamera() {

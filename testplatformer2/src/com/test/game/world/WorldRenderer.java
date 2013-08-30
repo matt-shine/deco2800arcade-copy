@@ -5,6 +5,7 @@ import java.util.Iterator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -77,6 +78,7 @@ public class WorldRenderer {
 	//debug
 	ShapeRenderer sr;
 	TextureRegion testRegion;
+	private FPSLogger fpsLogger;
 	
 	public WorldRenderer(World world, ParallaxCamera cam) {
 		this.world = world;
@@ -131,6 +133,7 @@ public class WorldRenderer {
 		//walkerTexture = new Texture("data/walker.png");
 		TextureAtlas walkerAtlas = new TextureAtlas(Gdx.files.internal("data/modular3.txt"));
 		walkerRegions = walkerAtlas.findRegions("a");
+		
 		for (int i=0; i<walkerRegions.size; i++) {
 			walkerRegions.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 			
@@ -144,6 +147,7 @@ public class WorldRenderer {
 		
 		sr = new ShapeRenderer();
 		//testRegion = followerFrames[0];
+		fpsLogger = new FPSLogger();
 		
 	}
 	
@@ -186,9 +190,9 @@ public class WorldRenderer {
 		batch.end();
 		
 		//draw tiled layers
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{0});
 		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
+		tileMapRenderer.render(new int[]{0});
+		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
 		tileMapRenderer.render(new int[]{1});
 		tileMapRenderer.setView(cam.calculateParallaxMatrix(1, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
 		tileMapRenderer.render(new int[]{2});
@@ -243,6 +247,7 @@ public class WorldRenderer {
 					
 					AtlasRegion ar = walkerRegions.get(i);
 					Texture tx = ar.getTexture();
+					tx.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 					batch.draw(tx, mve.getPosition().x, mve.getPosition().y, 0,
 							ar.getRegionHeight()/64f, ar.getRegionWidth()/64f, ar.getRegionHeight()/64f, 1, 1, mve.getRotation(), ar.getRegionX(), ar.getRegionY(),
 							ar.getRegionWidth(), ar.getRegionHeight(), false, false);
@@ -343,6 +348,7 @@ public class WorldRenderer {
 		sr.rect(sword.getBounds().x, sword.getBounds().y, sword.getBounds().width, sword.getBounds().height);
 		
 		sr.end();
+		fpsLogger.log();
 	}
 	
 	public OrthographicCamera getCamera() {

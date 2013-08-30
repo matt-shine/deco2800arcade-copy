@@ -83,4 +83,35 @@ public class Sword extends MovableEntity {
 		
 	}
 
+	@Override
+	public boolean isSolid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void handleTopOfMovingPlatform(MovablePlatform movablePlatform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleXCollision(Rectangle tile) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleYCollision(Rectangle tile, boolean onMovablePlatform,
+			MovablePlatform movablePlatform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleNoTileUnderneath() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

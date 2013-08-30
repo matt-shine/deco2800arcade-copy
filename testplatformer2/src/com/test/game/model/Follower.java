@@ -1,6 +1,7 @@
 package com.test.game.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Follower extends Enemy {
@@ -45,6 +46,42 @@ public class Follower extends Enemy {
 		
 		super.update(ship);
 		stateTime += delta;
+		
+	}
+
+
+	@Override
+	public boolean isSolid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void handleTopOfMovingPlatform(MovablePlatform movablePlatform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void handleXCollision(Rectangle tile) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void handleYCollision(Rectangle tile, boolean onMovablePlatform,
+			MovablePlatform movablePlatform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void handleNoTileUnderneath() {
+		// TODO Auto-generated method stub
 		
 	}
 

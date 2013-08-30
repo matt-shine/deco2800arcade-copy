@@ -57,27 +57,7 @@ public class Ship extends MovableEntity{
 		return state;
 	}
 	
-	public Rectangle getProjectionRect() {
-		Rectangle rect = new Rectangle (position.x, position.y, width, height);
-		rect.x += velocity.x*Gdx.graphics.getDeltaTime();
-		rect.y += velocity.y*Gdx.graphics.getDeltaTime();
-		//System.out.println("projrect "+rect.x+","+rect.y);
-		return rect;
-	}
 	
-	public Rectangle getXProjectionRect() {
-		Rectangle rect = new Rectangle (position.x, position.y, width, height);
-		rect.x += velocity.x*Gdx.graphics.getDeltaTime();
-		//System.out.println("projrect "+rect.x+","+rect.y);
-		return rect;
-	}
-	
-	public Rectangle getYProjectionRect() {
-		Rectangle rect = new Rectangle (position.x, position.y, width, height);
-		rect.y += velocity.y*Gdx.graphics.getDeltaTime();
-		//System.out.println("projrect "+rect.x+","+rect.y);
-		return rect;
-	}
 	
 	public boolean isFacingRight() {
 		return facingRight;
@@ -109,7 +89,78 @@ public class Ship extends MovableEntity{
 		return;
 	}
 	
+	@Override
+	public boolean isSolid() {
+		return true;
+	}
 	
+	@Override
+	public void handleTopOfMovingPlatform(MovablePlatform movablePlatform) {
+		getPosition().y = movablePlatform.getPosition().y + 
+				movablePlatform.getCollisionRectangle().height+1/32f;
+	}
+	
+	@Override
+	public void handleXCollision(Rectangle tile) {
+		if (velocity.x > 0.01f) {
+			position.x = tile.getX() - getWidth();
+				
+		} else if (velocity.x < -0.01f){
+			position.x = tile.getX() + tile.getWidth();
+		}
+		
+		/* Wall slide */
+		if (velocity.y < 0) {
+		//if (tileUnderShip || ship.getVelocity().y < 0) {
+			
+			//NOTE: WILL PROBABLY NEED TO INCLUDE SWORD AS A PART OF THE SHIP CLASS NOT IN THE WORLD
+			
+			//if (getState() != State.WALL) sword.cancel(); //BUG: sword is getting cancelled while on ground against wall
+			
+			//inputHandler.resetWallTime();
+			setState(State.WALL);
+			resetWallTime();
+			
+		}
+	}
+	
+	@Override
+	public void handleYCollision(Rectangle tile, boolean onMovablePlatform, MovablePlatform movablePlatform) {
+		if (velocity.y < 0 ) {
+			//System.out.println("Velocity: "+ship.getVelocity().y);
+			//System.out.println("DownCollision: " + sRec +" " + tile);
+			//ship.getPosition().y = tile.y + ship.getHeight();
+			if (onMovablePlatform) {
+				velocity.y = -movablePlatform.getSpeed();
+			}
+			if (!onMovablePlatform) {
+				position.y = tile.y + tile.height;
+				velocity.y = 0;
+			}
+			if (velocity.x == 0) {
+				setState(State.IDLE);
+			} else {
+				setState(State.WALK);
+			}
+			//ship.getVelocity().y = 0;
+			//System.out.println("after y state="+ship.getState());
+			
+			
+		} else if (velocity.y > 0) {
+			if (onMovablePlatform) {
+				velocity.y = -movablePlatform.getSpeed();
+			} else {
+				velocity.y = 0;
+			}
+			position.y = tile.y - getHeight();
+		}
+	}
+	
+	public void handleNoTileUnderneath() {
+		if (getState() == State.IDLE || getState() == State.WALK) {
+			setState(State.JUMP);
+		}
+	}
 	public void update(Ship ship) {
 		//System.out.println("Before suepr update " + velocity.x);
 		super.update(ship);

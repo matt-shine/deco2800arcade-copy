@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.test.game.SpriteTween;
@@ -133,6 +134,37 @@ public class Walker extends Enemy{
 		for (WalkerPart wp: parts) {
 			wp.update(ship);
 		}
+	}
+
+	@Override
+	public boolean isSolid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void handleTopOfMovingPlatform(MovablePlatform movablePlatform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleXCollision(Rectangle tile) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleYCollision(Rectangle tile, boolean onMovablePlatform,
+			MovablePlatform movablePlatform) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void handleNoTileUnderneath() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

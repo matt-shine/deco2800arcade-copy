@@ -121,12 +121,14 @@ public class Checkers extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
-		// Create the paddles
-		leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-		leftPaddle.setColor(1, 0, 0, 1);
+		// Create the board
 		
-		rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-		rightPaddle.setColor(0, 0, 1, 1);
+		
+	//	leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+	//	leftPaddle.setColor(1, 0, 0, 1);
+		
+	//	rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+	//	rightPaddle.setColor(0, 0, 1, 1);
 		
 		/**
 		 * TODO Allow network games

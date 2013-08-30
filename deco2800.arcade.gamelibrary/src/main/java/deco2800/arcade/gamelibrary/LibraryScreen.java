@@ -4,18 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+
 
 import java.util.Set;
 import deco2800.arcade.client.ArcadeSystem;
@@ -41,33 +41,29 @@ public class LibraryScreen implements Screen {
     private GameClient currentClient;
     private Stage stage;
     private int x = 10;
-    private int y = 100;
+    private int y = 325;
     private Actor button;
     private Skin skin;
     private String description;
-    private OrthographicCamera camera;
     private Label label;
 
 
     public LibraryScreen(GameLibrary gl) {
         gameSelected = false;
         gameLibrary = gl;
+        styleSetup();
         setupUI();
     }
-
-    private void setupUI() {
-        camera = new OrthographicCamera();
-        camera.setToOrtho(true, 1280, 720);
-        stage = new Stage();
-        font = new BitmapFont(true);
+    
+    private void styleSetup() {
+    	font = new BitmapFont(true);
         font.setColor(Color.BLACK);
         skin = new Skin();
-        batch = new SpriteBatch();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
+       
         skin.add("white", new Texture(pixmap));
-
         skin.add("default", new BitmapFont());
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -90,10 +86,17 @@ public class LibraryScreen implements Screen {
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
+    	
+    }
+
+    private void setupUI() {
+
+        stage = new Stage();
+        batch = new SpriteBatch();
 
         Actor exitButton = new TextButton("Exit", skin);
-        exitButton.setWidth(300);
-        exitButton.setHeight(50);
+        exitButton.setWidth(200);
+        exitButton.setHeight(40);
         exitButton.setX(x+300);
         exitButton.setY(y);
 
@@ -110,10 +113,10 @@ public class LibraryScreen implements Screen {
             final Game game = gameClient.getGame();
             button = new TextButton("" + game.name, skin);
             button.setWidth(200);
-            button.setHeight(50);
+            button.setHeight(40);
             button.setX(x);
             button.setY(y);
-            y+= 80;
+            y+= 50;
 
             button.addListener(new GameButtonActionHandler(this, gameClient));
 
@@ -123,31 +126,29 @@ public class LibraryScreen implements Screen {
 
         Actor playButton = new TextButton("Play", skin);
         playButton.setWidth(200);
-        playButton.setHeight(50);
+        playButton.setHeight(40);
         playButton.setX(x);
-        playButton.setY(y);
+        playButton.setY(y + 50);
 
         playButton.addListener(new PlayButtonActionHandler(this));
-
-        stage.addActor(playButton);
         label = new Label(description, skin);
         label.setWidth(200);
-        label.setHeight(50);
-        label.setY(300);
-        label.setX(200);
+        label.setHeight(40);
+        label.setY(550);
+        label.setX(400);
         stage.addActor(label);
+        stage.addActor(playButton);
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void render(float v) {
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
         Gdx.gl.glClearColor(0.2f, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        
         stage.act(Gdx.graphics.getDeltaTime());
         batch.begin();
-        stage.draw();
+        stage.draw();      
         batch.end();
 
         if (gameSelected) play();
@@ -159,7 +160,6 @@ public class LibraryScreen implements Screen {
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -190,5 +190,8 @@ public class LibraryScreen implements Screen {
 
     public void setSelectedGame(final GameClient gameClient) {
         currentClient = gameClient;
+        Game game = gameClient.getGame();
+        description = game.name;
     }
+ 
 }

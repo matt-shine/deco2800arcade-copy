@@ -7,13 +7,12 @@ import com.badlogic.gdx.math.Vector2;
  * A basic implementation of the player class, responsible for the behaviour of the player
  * including movement,behaviors and positioning
  * @author wang qi
- *
+ * @author s43146884
  */
 public class Player {
 
-	
 	public static final float INITIALSPEED = 0; // How fast is the player going at the start of a point
-	public static final float SPEEDINCREMENT = 1; // How much does the player speed up each time it throw the dice
+	public static final float SPEEDINCREMENT = 60; // How much does the player speed up each time it throw the dice
 	
 	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
 	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
@@ -25,9 +24,9 @@ public class Player {
 	 */
 	public Player() {
 		bounds.x = 0;
-		bounds.y = 800;
-		bounds.height = 0;
-		bounds.width = 0;
+		bounds.y = 600;
+		bounds.height = 50;
+		bounds.width = 35;
 	}
 
 	/**
@@ -48,6 +47,7 @@ public class Player {
 		bounds.y = newPosition.y;
 	}
 	
+
 	
 	/**
 	 * Move the player according to its current velocity over the given time period.
@@ -56,6 +56,12 @@ public class Player {
 	public void move(float time) {
 		bounds.x += time*velocity.x;
 		bounds.y += time*velocity.y;
+		
+		if ((bounds.x == 0 && bounds.y != 600 && bounds.y != 0) || (bounds.x == 600))
+		{
+			velocity.x *= -1;
+			bounds.y = bounds.y - 60; 
+		}
 	}
 
 	
@@ -67,7 +73,7 @@ public class Player {
 		velocity.x = 0;
 		velocity.y = 0;
 		bounds.x = 0;
-		bounds.y = 800;
+		bounds.y = 600;
 	}
 	
 	

@@ -94,7 +94,7 @@ public class SnakeLadder extends GameClient {
 		
 		//loading of background game board
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
-		player =new Texture(Gdx.files.classpath("assets/player.jpg"));
+		player =new Texture(Gdx.files.classpath("assets/player.png"));
 		
 		//initialise rule texture mapping
 		ruleTextureMapping = new HashMap<Character,String>();
@@ -130,7 +130,7 @@ public class SnakeLadder extends GameClient {
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
 		}
-		batch.draw(player,0,0);
+		batch.draw(player,0,600);
 		
 		batch.end();
    

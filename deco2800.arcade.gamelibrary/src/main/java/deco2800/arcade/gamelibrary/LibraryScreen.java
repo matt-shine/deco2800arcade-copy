@@ -192,6 +192,9 @@ public class LibraryScreen implements Screen {
         currentClient = gameClient;
         Game game = gameClient.getGame();
         description = game.name;
+        label.remove();
+        label.setText(description);
+        stage.addActor(label);
     }
  
 }

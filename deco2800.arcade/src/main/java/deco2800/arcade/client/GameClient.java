@@ -13,7 +13,7 @@ import deco2800.arcade.model.Player;
 public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
-	protected static NetworkClient networkClient;
+	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
@@ -115,12 +115,24 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public void resize(int width, int height) {
 		this.width = width;
 		this.height = height;
+		if (overlay != null) {
+			overlay.resize(width, height);
+		}
 		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
 		super.resume();
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	
+	public int getHeight() {
+		return height;
 	}
 
 }

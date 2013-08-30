@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Timer;
 
 import static com.badlogic.gdx.graphics.Color.*;
@@ -32,7 +30,7 @@ final class GameScreen implements Screen {
 	private final Table table;
 	private final Table gameBoard;
 	private final Label timerLabel;
-	private final Skin skin;
+	//private final Skin skin;
 
 	private int elapsed;
 
@@ -47,7 +45,7 @@ final class GameScreen implements Screen {
 		elapsed = 0;
 
 		shapeRenderer = new ShapeRenderer();
-		skin = new Skin();
+		//skin = new Skin();
 
 		stage = new Stage();
 		table = new Table();

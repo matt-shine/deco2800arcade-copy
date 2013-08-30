@@ -1,5 +1,6 @@
 package deco2800.arcade.chess.pieces;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,5 +141,6 @@ public class Queen implements Piece {
 		}
 		return moves;
 	}
+
 
 }

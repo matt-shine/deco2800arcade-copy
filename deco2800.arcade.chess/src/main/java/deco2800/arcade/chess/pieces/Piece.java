@@ -1,7 +1,7 @@
 package deco2800.arcade.chess.pieces;
 
 import java.util.*;
-
+import java.awt.Graphics;
 public interface Piece {
 	
 	/**
@@ -21,7 +21,6 @@ public interface Piece {
 	 * Add the piece back into gameplay and remove from the graveyard
 	 */
 	public void reActivate();
-	
 	/**
 	 * Takes in a piece and returns it's team as a boolean
 	 * 		- False = white team

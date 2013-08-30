@@ -1,10 +1,12 @@
 package deco2800.arcade.chess;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 
 import deco2800.arcade.chess.pieces.*;
 
-public class Board {
+public class Board{
 
 	FixedSizeList<FixedSizeList<Piece>> Board_State;
 	ArrayList<Piece> whiteGraveyard, blackGraveyard;
@@ -28,7 +30,7 @@ public class Board {
 	 * Initialises board to the default setup.
 	 */
 	public Board() {
-
+		
 		Board_State = new FixedSizeList<FixedSizeList<Piece>>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
@@ -49,6 +51,7 @@ public class Board {
 				row.add(d, nullPiece);
 			}
 		}
+		
 
 	}
 
@@ -1058,4 +1061,6 @@ public class Board {
 		System.out.println(whiteGraveyard);
 		
 	}
+
+	
 }

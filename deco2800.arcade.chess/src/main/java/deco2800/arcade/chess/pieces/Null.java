@@ -1,5 +1,6 @@
 package deco2800.arcade.chess.pieces;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class Null implements Piece {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 
 }

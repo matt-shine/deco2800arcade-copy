@@ -9,9 +9,11 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -19,16 +21,19 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.pong.Ball;
+import deco2800.arcade.pong.Pong.GameState;
 import deco2800.arcade.snakeLadderModel.*;
 
 /**
  * This is the main class for game snake&Ladder
- * @author s4310055
+ * @author s4310055,s43146400,s43146884
  *
  */
 
@@ -41,9 +46,23 @@ public class SnakeLadder extends GameClient {
 	private List<Tile> tileList; 
 	private HashMap<Character,String> ruleTextureMapping;
 	private Texture player;
+    private Player Player;
+    private enum GameState {
+		READY,
+		INPROGRESS,
+		GAMEOVER
+	}
+	private GameState gameState;
+	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+
+	private BitmapFont font;
+	private String statusMessage;
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
+		players[0] = player.getUsername();
+		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
+        this.networkClient = networkClient; //this is a bit of a hack
 	}
 
 	/**
@@ -60,7 +79,7 @@ public class SnakeLadder extends GameClient {
 
 			@Override
 			public void hide() {
-				//TODO: unpause pong
+				
 			}
 
 			@Override
@@ -81,7 +100,7 @@ public class SnakeLadder extends GameClient {
 
 			@Override
 			public void show() {
-				//TODO: unpause pong
+				
 			}
         });
         
@@ -94,7 +113,8 @@ public class SnakeLadder extends GameClient {
 		
 		//loading of background game board
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
-		player =new Texture(Gdx.files.classpath("assets/player.png"));
+		//loading player icon
+		player =new Texture(Gdx.files.classpath("assets/player.jpg"));
 		
 		//initialise rule texture mapping
 		ruleTextureMapping = new HashMap<Character,String>();
@@ -108,8 +128,26 @@ public class SnakeLadder extends GameClient {
 		tileList = new ArrayList<Tile>();
 		loadMap(tileList,"assets/lvl1.txt");
 		System.out.println("success");
+		
+		// create the player
+		Player = new Player();
+		
+		font = new BitmapFont();
+		font.setScale(2);
+		//Initialise the game state
+				gameState = GameState.READY;
+				statusMessage = "Click to start!";
 	}
 	
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
+
+	@Override
+	public void pause() {
+		super.pause();
+	}
 
 	@Override
 	public void render() {
@@ -130,15 +168,46 @@ public class SnakeLadder extends GameClient {
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
 		}
-		batch.draw(player,0,600);
-		
+		batch.draw(player,0,0);
+		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
+	    // then show it in the middle of the screen
+	    if (statusMessage != null) {
+	    	font.setColor(Color.WHITE);
+	    	font.draw(batch, statusMessage, 200, 300);
+	    	if (gameState == GameState.GAMEOVER) {
+	    		font.draw(batch, "Click to exit", 200, 300);
+	    	}
+	    }
 		batch.end();
-   
+		 switch(gameState) {
+		    
+		    case READY: //Ready to start a new point
+		    	if (Gdx.input.isTouched()) {
+		    		startPoint();
+		    	}
+		    	break;
+		    	
+		    case INPROGRESS: 
+		    	
+		    	
+		    	break;
+		    case GAMEOVER: //The game has been won, wait to exit
+		    	if (Gdx.input.isTouched()) {
+		    		gameOver();
+		    		ArcadeSystem.goToGame(ArcadeSystem.UI);
+		    	}
+		    	break;
+		    }
 		
 		super.render();
 		
 	}
 	
+	private void startPoint() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public Game getGame() {
 		// TODO Auto-generated method stub

@@ -109,7 +109,7 @@ public class LoginScreen implements Screen {
         //Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
 
 	    if (ArcadeSystem.isLoggedIn()) {
-	    	ArcadeSystem.goToGame("arcadeui");
+	    	ArcadeSystem.goToGame("gamelibrary");
 	    }
 	}
 

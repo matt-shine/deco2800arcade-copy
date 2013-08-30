@@ -7,10 +7,7 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.JFrame;
 
@@ -64,8 +61,7 @@ public class Arcade extends JFrame {
 
 	/**
 	 * ENTRY POINT
-	 * 
-	 * @param args
+	 * @param args Args
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
@@ -79,8 +75,7 @@ public class Arcade extends JFrame {
 
 	/**
 	 * Sets the instance variables for the arcade
-	 * 
-	 * @param args
+	 * @param args Args
 	 */
 	private Arcade(String[] args) {
 		this.width = 1280;
@@ -302,8 +297,7 @@ public class Arcade extends JFrame {
 
 	/**
 	 * Returns all games except ones with the @InternalGame annotation
-	 * 
-	 * @return
+	 * @return String of Game Ids
 	 */
 	public Set<String> findPlayableIds() {
 
@@ -367,4 +361,34 @@ public class Arcade extends JFrame {
 		return null;
 	}
 
+    /**
+     * Set selected game client
+     * @param gameClient GameClient
+     */
+    public void setGame(GameClient gameClient) {
+        selectedGame = gameClient;
+    }
+
+    /**
+     * Return all playable games
+     * @return Set of Playable Games
+     */
+    public Set<GameClient> findPlayableGames() {
+        Map<String, Class<? extends GameClient>> games = getGameMap();
+
+        Set<GameClient> gameSet = new HashSet<GameClient>();
+
+        Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, Class<? extends GameClient>> pair = it.next();
+            if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+                it.remove();
+            } else {
+                gameSet.add(getInstanceOfGame(pair.getKey()));
+            }
+
+        }
+        return gameSet;
+    }
 }

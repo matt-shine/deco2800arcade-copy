@@ -80,7 +80,8 @@ public class Chess extends GameClient {
 		
 		/////Can't find this files directory to load/////
 		// load the images for the droplet and the bucket, 512x512 pixels each
-		chessBoard = new Texture(Gdx.files.classpath("resources/chessboard.png"));
+		//texture = new Texture(Gdx.files.classpath("srcPictures/chessboard.png"));
+		chessBoard = new Texture(Gdx.files.classpath("imgs/chessboard.png"));
 	}
 
 	@Override

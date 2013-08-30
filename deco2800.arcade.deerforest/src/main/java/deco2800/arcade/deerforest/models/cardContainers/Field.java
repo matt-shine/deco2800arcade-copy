@@ -4,11 +4,9 @@ import deco2800.arcade.deerforest.models.cards.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
-import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public class Field extends AbstractCardCollection {
 	private final int MAX_CARDS_EFFECTS = 2;

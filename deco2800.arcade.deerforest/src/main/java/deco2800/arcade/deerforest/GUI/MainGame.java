@@ -14,11 +14,10 @@ public class MainGame extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 	final private GameSystem model;
-	private int playerTurn;
+
 	
 	public MainGame(GameSystem model) {
 		this.model = model;
-		playerTurn = 1;
 	}
 	
 	@Override
@@ -27,6 +26,7 @@ public class MainGame extends Game {
 		//Use LibGDX's default Arial font
 		font = new BitmapFont(true);
 		this.setScreen(new MainGameScreen(this));	
+		model.startgame(true);
 	}
 	
 	public void render() {
@@ -43,11 +43,34 @@ public class MainGame extends Game {
 	}
 	
 	public void changeTurns() {
-		playerTurn = playerTurn == 1?2:1;
+		
+		//check to see if we are on start phase already
+		if(model.getPhase().equals("StartPhase")) model.nextPhase();
+		
+		//Go to next phases till end of turn
+		while(!model.getPhase().equals("StartPhase")) {
+			model.nextPhase();
+		}
 	}
 	
 	public void nextPhase() {
-		model.getPhase();
+		model.nextPhase();
 	}
 	
+	public String getPhase() {
+		return model.getPhase();
+	}
+	
+	public int getCurrentPlayer() {
+		return model.currentPlayer()==model.player1()?1:2;
+	}
+	
+	public boolean getSummoned() {
+		return model.getSummoned();
+	}
+	
+	public void setSummoned(boolean b) {
+		model.setSummoned(b);
+	}
+
 }

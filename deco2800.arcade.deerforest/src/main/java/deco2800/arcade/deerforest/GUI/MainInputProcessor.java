@@ -24,6 +24,10 @@ public class MainInputProcessor implements InputProcessor {
 	private float yClickOffset;
 	private boolean dragged;
 	
+	//define array of keys for P1 / P2 zones
+	final String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
+	final String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};
+	
 	public MainInputProcessor(MainGame game, MainGameScreen view) {
 		this.game = game;
 		this.view = view;
@@ -32,8 +36,24 @@ public class MainInputProcessor implements InputProcessor {
 	
 	@Override
 	public boolean keyDown (int keycode) {
-		if(keycode == Keys.SPACE) {
+		
+		if(keycode == Keys.SPACE && game.getPhase() != null) {
+			game.nextPhase();
+			if(game.getPhase().equals("StartPhase")) {
+				currentSelection = null;
+				view.setHighlightedZones(new ArrayList<Rectangle>());
+			}
+			return true;
+		} 
+		
+		if(keycode == Keys.ALT_LEFT) {
 			game.changeTurns();
+			currentSelection = null;
+			view.setHighlightedZones(new ArrayList<Rectangle>());
+			return true;
+		}
+		
+		if(keycode == Keys.ALT_RIGHT) {
 			view.printSpriteMap();
 			System.out.println();
 			view.getArena().printZoneInfo();
@@ -42,7 +62,9 @@ public class MainInputProcessor implements InputProcessor {
 					+ " monster: " + currentSelectionMonster + " field" + currentSelectionField + " area: " + currentSelectionArea);
 			System.out.println();
 			System.out.println();
+			return true;
 		}
+		
         return false;
     }
 
@@ -138,21 +160,38 @@ public class MainInputProcessor implements InputProcessor {
     }
 
     /**
-     * returns the sprite at the point, if one exists
+     * returns the sprite at the point, if one exists and belongs to the
+     * current player
      * 
      * @param x
      * @param y
      * @return Sprite intersecting the 
      */
     private ExtendedSprite checkIntersection(int x, int y) {
+    	
     	Map<String,List<ExtendedSprite>> spriteMap = view.getSpriteMap();
-    	for(String key : spriteMap.keySet()) {
-	    	for(ExtendedSprite s : spriteMap.get(key)) {
-		    	if(s.containsPoint(x, y)) {
-		    		return s;
-		    	}
-		    }
-	    }
+
+    	//check maps according to whose turn it is
+    	if(game.getCurrentPlayer() == 1) {
+    		//Check each zone in sprite map P1Keys
+    		for(String key : P1Keys) {
+    			for(ExtendedSprite s : spriteMap.get(key)) {
+    		    	if(s.containsPoint(x, y)) {
+    		    		return s;
+    		    	}
+    		    }
+    		}
+    		
+    	} else {
+    		//Check each zone in sprite map P2Keys
+    		for(String key : P2Keys) {
+    			for(ExtendedSprite s : spriteMap.get(key)) {
+    		    	if(s.containsPoint(x, y)) {
+    		    		return s;
+    		    	}
+    		    }
+    		}
+    	}
 
     	return null;
     }
@@ -179,8 +218,15 @@ public class MainInputProcessor implements InputProcessor {
     private boolean setCurrentSelectionToPoint(int x, int y) {
     	
     	Rectangle emptyZone = null;
-		//get the empty zone at point (only check zones allowed)
-    	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, currentSelectionMonster);
+		//get the empty zone at point (only check zones allowed) 
+    	//Hand can only go to field if main phase and no summoned (if monster)
+    	if(!currentSelectionField && !game.getSummoned() && currentSelectionMonster && game.getPhase().equals("MainPhase")) {
+        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, true);
+    	} else if(!currentSelectionField && !currentSelectionMonster && game.getPhase().equals("MainPhase")) {
+        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, false);
+    	} else if(currentSelectionField) {
+        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, currentSelectionMonster);
+    	}
     	//if current zone is a hand zone then check for empty zone at that point
     	if(!currentSelectionField && emptyZone == null) {
     		emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, false, currentSelectionMonster);
@@ -190,6 +236,17 @@ public class MainInputProcessor implements InputProcessor {
         	//reassign the currentSelection to the emptyZone in arena
     		view.getArena().removeSprite(currentSelection);
     		String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone, currentSelectionPlayer);
+    		
+    		//if moved from hand to field set summoned to be true
+    		if(currentSelectionPlayer == 1) {
+        		if(newArea.equals("P1MonsterZone") && currentSelectionArea.equals("P1HandZone")) {
+        			game.setSummoned(true);
+        		}
+    		} else {
+        		if(newArea.equals("P2MonsterZone") && currentSelectionArea.equals("P2HandZone")) {
+        			game.setSummoned(true);
+        		}
+    		}
     		
     		//reassign the currentSelection to emptyZone in the view
     		view.removeSpriteFromArea(currentSelection, currentSelectionArea);
@@ -205,8 +262,15 @@ public class MainInputProcessor implements InputProcessor {
     private boolean setCurrentSelectionToRectangle(Rectangle r) {
 		
     	Rectangle emptyZone = null;
-		//get the empty zone at point (only check zones allowed)
-    	emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, true, currentSelectionMonster);
+		//get the empty zone at rectangle (only check zones allowed)
+    	//Hand can only go to field if main phase and no summoned (if monster)
+    	if(!currentSelectionField && !game.getSummoned() && currentSelectionMonster && game.getPhase().equals("MainPhase")) {
+        	emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, true, true);
+    	} else if(!currentSelectionField && !currentSelectionMonster && game.getPhase().equals("MainPhase")) {
+        	emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, true, false);
+    	} else if(currentSelectionField) {
+        	emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, true, currentSelectionMonster);
+    	}
     	//if current zone is a hand zone then check for empty zone at that point
     	if(!currentSelectionField && emptyZone == null) {
     		emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, false, currentSelectionMonster);
@@ -216,6 +280,17 @@ public class MainInputProcessor implements InputProcessor {
         	//reassign the currentSelection to the emptyZone in arena
     		view.getArena().removeSprite(currentSelection);
     		String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone, currentSelectionPlayer);
+    		
+    		//if moved from hand to field set summoned to be true
+    		if(currentSelectionPlayer == 1) {
+        		if(newArea.equals("P1MonsterZone") && currentSelectionArea.equals("P1HandZone")) {
+        			game.setSummoned(true);
+        		}
+    		} else {
+        		if(newArea.equals("P2MonsterZone") && currentSelectionArea.equals("P2HandZone")) {
+        			game.setSummoned(true);
+        		}
+    		}
     		
     		//reassign the currentSelection to emptyZone in the view
     		view.removeSpriteFromArea(currentSelection, currentSelectionArea);
@@ -242,10 +317,11 @@ public class MainInputProcessor implements InputProcessor {
 		if(spriteArea.equals("P1HandZone")) {
 			//Card is in hand, find out if spell / monster
 			List<Rectangle> availableZones = new ArrayList<Rectangle>();
-			if(currentSelectionMonster) {
+			//Add monster / spell zones if in main phase and not summoned (if monster)
+			if(currentSelectionMonster && !game.getSummoned() && game.getPhase().equals("MainPhase")) {
 				availableZones.addAll(view.getArena().getAvailableZones(1, true, true));
 			}
-			else {
+			else if(!currentSelectionMonster && game.getPhase().equals("MainPhase")){
 				availableZones.addAll(view.getArena().getAvailableZones(1, true, false));
 			}
 			//add all the hand zones (as they can rearrange their hand)
@@ -263,9 +339,10 @@ public class MainInputProcessor implements InputProcessor {
 		} else if(spriteArea.equals("P2HandZone")) {
 			//card is in p2 hand, find out if spell / monster
 			List<Rectangle> availableZones = new ArrayList<Rectangle>();
-			if(currentSelectionMonster) {
+			//Add monster / spell zones if in main phase and not summoned (if monster)
+			if(currentSelectionMonster && !game.getSummoned() && game.getPhase().equals("MainPhase")) {
 				availableZones.addAll(view.getArena().getAvailableZones(2, true, true));
-			} else {
+			} else if(!currentSelectionMonster && game.getPhase().equals("MainPhase")){
 				availableZones.addAll(view.getArena().getAvailableZones(2, true, false));
 			}
 			//add all the hnad zones (as they can rearrange)

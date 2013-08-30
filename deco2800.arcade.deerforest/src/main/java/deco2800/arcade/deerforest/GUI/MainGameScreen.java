@@ -65,6 +65,10 @@ public class MainGameScreen implements Screen {
 		P1MonsterHandSprite.setPosition(100, 100);
 		p1Hand.add(P1MonsterHandSprite);
 		P1MonsterHandSprite.setScale(0.25f);
+		ExtendedSprite P1MonsterHandSprite2 = new ExtendedSprite(manager.get("DeerForestAssets/FireMonsterShell.png", Texture.class));
+		P1MonsterHandSprite2.setPosition(400, 400);
+		p1Hand.add(P1MonsterHandSprite2);
+		P1MonsterHandSprite2.setScale(0.25f);
 		//Add spell to hand
 		ExtendedSprite P1SpellhandSprite = new ExtendedSprite(manager.get("DeerForestAssets/GeneralSpellShell.png", Texture.class));
 		P1SpellhandSprite.setPosition(150, 150);
@@ -126,6 +130,7 @@ public class MainGameScreen implements Screen {
 		//coordinate system specified by the camera
 		game.batch.setProjectionMatrix(camera.combined);
 	 
+		//Begin drawing the sprites
 		game.batch.begin();
 		
 		//Draw game board
@@ -138,6 +143,11 @@ public class MainGameScreen implements Screen {
 		    }
 	    }
 	    
+	    //Print the model / game data (for debugging)
+	    game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.20f*getHeight());
+	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.25f*getHeight());
+	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.30f*getHeight());
+
 	    game.batch.end();
 	    
 	    //draw highlighted zone

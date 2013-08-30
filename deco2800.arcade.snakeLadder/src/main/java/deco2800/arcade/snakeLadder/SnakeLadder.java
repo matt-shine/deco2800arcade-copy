@@ -40,6 +40,7 @@ public class SnakeLadder extends GameClient {
 	private Texture backgroundBoard;
 	private List<Tile> tileList; 
 	private HashMap<Character,String> ruleTextureMapping;
+	private Texture player;
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -93,6 +94,7 @@ public class SnakeLadder extends GameClient {
 		
 		//loading of background game board
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
+		player =new Texture(Gdx.files.classpath("assets/player.jpg"));
 		
 		//initialise rule texture mapping
 		ruleTextureMapping = new HashMap<Character,String>();
@@ -128,8 +130,10 @@ public class SnakeLadder extends GameClient {
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
 		}
+		batch.draw(player,0,0);
+		
 		batch.end();
-  
+   
 		
 		super.render();
 		

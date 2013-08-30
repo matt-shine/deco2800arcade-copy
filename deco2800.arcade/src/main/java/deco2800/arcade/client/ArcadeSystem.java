@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class ArcadeSystem {
 	
-	public static String UI = "snakeLadder";
+	public static String UI = "arcadeui";
 	
 	private static Arcade arcade = null;
 	

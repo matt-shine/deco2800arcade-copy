@@ -199,7 +199,7 @@ public class Chess extends GameClient implements MouseListener{
 	    batch.draw(whiteQueen, 205, 25);
 	    batch.draw(whiteKing, 260, 25);
 	    batch.draw(whiteBishop2, 320, 25);	
-	    batch.draw(whitePawn0, 380, 25);
+	    batch.draw(whiteKnight2, 380, 25);
 	    batch.draw(whiteRook2, 435, 25);
 	    
 	    

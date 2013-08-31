@@ -1,4 +1,4 @@
-package main.java.deco2800.arcade.junglejump.GUI;
+package deco2800.arcade.junglejump.GUI;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,13 +21,14 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.network.NetworkClient;
 
 /**
- * Main class for Jungle Jump Game
- * Instantiates game with scene, player and assets
- *
+ * Main class for Jungle Jump Game Instantiates game with scene, player and
+ * assets
+ * 
  */
-@ArcadeGame(id="junglejump")
+@ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
 	PerspectiveCamera cam;
 	Frustum camGone = new Frustum();
@@ -37,11 +38,15 @@ public class junglejump extends GameClient implements InputProcessor {
 	// FPS Animation helper
 	private FPSLogger fpsLogger;
 	private Player player;
-	
+
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
 
-	public junglejump(Player player){
+	/*
+	 * I've added NetworkClient to the signature of your constructor, as you
+	 * cannot reference it if you do not. - Leggy
+	 */
+	public junglejump(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
@@ -51,27 +56,27 @@ public class junglejump extends GameClient implements InputProcessor {
 			themeMusic.setLooping(true);
 			themeMusic.play();
 		} catch (Exception e) {
-			Gdx.app.log(junglejump.messages, "Audio File for Theme Music Not Found");
-		} 
-		// TODO: Additional sound files will be loaded here (jump, die, levelup etc)
-		
+			Gdx.app.log(junglejump.messages,
+					"Audio File for Theme Music Not Found");
+		}
+		// TODO: Additional sound files will be loaded here (jump, die, levelup
+		// etc)
+
 		createWorld();
-		
-		
-		
+
 	}
+
 	/*
-	 * World for holding the Jungle Jump Game
-	 * Includes Physics for handling movement and gravity
-	 * 
+	 * World for holding the Jungle Jump Game Includes Physics for handling
+	 * movement and gravity
 	 */
 	private void createWorld() {
-		world = new World(new Vector2(0,0), false);
+		world = new World(new Vector2(0, 0), false);
 		// TODO: Add vectors for containing the world and its players/assets
 	}
 
 	@Override
-	public void create() {	
+	public void create() {
 		super.create();
 		Gdx.app.log(junglejump.messages, "Launching Game");
 	}
@@ -80,16 +85,20 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void dispose() {
 		super.dispose();
 	}
+
 	public void resize(int w, int h) {
-		Gdx.app.log(junglejump.messages, "Resizing game width " + w + " height " + h); 
+		Gdx.app.log(junglejump.messages, "Resizing game width " + w
+				+ " height " + h);
 	}
+
 	public void render() {
 		// Clears the screen - not sure if this is needed
-		Gdx.gl.glClearColor(0f, 1f, 0f, 1f); 
+		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		// Logs current FPS
 		fpsLogger.log();
 	}
+
 	@Override
 	public void pause() {
 		super.pause();
@@ -112,8 +121,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	public Game getGame() {
 		return game;
 	}
+
 	private void processInput() {
-		
+
 	}
 
 	@Override
@@ -163,5 +173,5 @@ public class junglejump extends GameClient implements InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 }

@@ -38,7 +38,7 @@ public class Player extends User {
 	 *            The Player's icon filepath
 	 */
 	public Player(int playerID, String username, String filepath) {
-
+		super(playerID);
 		this.username = username;
 		this.games = new HashSet<Game>();
 		this.friends = new HashSet<User>();

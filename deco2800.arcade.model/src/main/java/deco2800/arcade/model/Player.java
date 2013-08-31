@@ -159,7 +159,6 @@ public class Player extends User {
 		return friends.getSet();
 	}
 
-
 	/**
 	 * Checks if the player is already friends with the specified player
 	 * 

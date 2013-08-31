@@ -5,8 +5,9 @@ import java.util.Set;
 
 /**
  * Friends is an abstraction of a Player's Friends List.
+ * 
  * @author Leggy
- *
+ * 
  */
 public class Friends {
 
@@ -50,7 +51,9 @@ public class Friends {
 
 	/**
 	 * Removes a User from this.
-	 * @param user	The User to be removed.
+	 * 
+	 * @param user
+	 *            The User to be removed.
 	 */
 	public void remove(User user) {
 		this.friends.remove(new User(user));
@@ -58,8 +61,10 @@ public class Friends {
 
 	/**
 	 * Checks if a User is in this.
-	 * @param user	The User to check.
-	 * @return	Returns true if the User is in this, false otherwise.
+	 * 
+	 * @param user
+	 *            The User to check.
+	 * @return Returns true if the User is in this, false otherwise.
 	 */
 	public boolean contains(User user) {
 		return this.friends.contains(new User(user));

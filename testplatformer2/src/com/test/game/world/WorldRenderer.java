@@ -72,6 +72,8 @@ public class WorldRenderer {
 	//TiledMap map;
 	//TileAtlas mapAtlas;
 	
+	private boolean blinkShip;
+	
 	private static final int[] layersList = { 0 };
 	
 	
@@ -207,18 +209,23 @@ public class WorldRenderer {
 		//batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y);
 		
 		//0,0 origin will be offcenter
-		if (ship.isFacingRight()) {
-			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), false, false);
-		/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
-				ship.getWidth(), ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-				shipTexture.getHeight(), false, false);*/
+
+		
+		/* Draw ship */
+		if(ship.isInvincible()) {
+			if(blinkShip) {
+				drawShip();
+				blinkShip = !blinkShip;
+			} else {
+				blinkShip = !blinkShip;
+			}
 		} else {
-			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
-					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), true, false);
+			drawShip();
 		}
+
+
+
+
 		for (CutsceneObject csObj: csObjects) {
 			System.out.println("Texture: "+csObj.getTexture());
 			//batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y);
@@ -349,6 +356,21 @@ public class WorldRenderer {
 		
 		sr.end();
 		fpsLogger.log();
+	}
+	
+	private void drawShip() {
+		if (ship.isFacingRight()) {
+			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
+					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
+					shipTexture.getHeight(), false, false);
+		/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
+				ship.getWidth(), ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
+				shipTexture.getHeight(), false, false);*/
+		} else {
+			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
+					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
+					shipTexture.getHeight(), true, false);
+		}
 	}
 	
 	public OrthographicCamera getCamera() {

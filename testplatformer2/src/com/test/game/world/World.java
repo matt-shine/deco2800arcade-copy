@@ -306,13 +306,17 @@ public class World {
 			e = eItr.next();
 			
 			/* Collision with enemy */
-			if ( e.getBounds().overlaps(ship.getBounds()) ) {
-				ship.decrementHearts();
-				
-				if(e.getPosition().x >= ship.getPosition().x) {
-					ship.getPosition().x -= 1;
-				} else {
-					ship.getPosition().x += 1;
+			if(!ship.isInvincible()) {
+				if ( e.getBounds().overlaps(ship.getBounds()) ) {
+					ship.decrementHearts();
+					
+					if(e.getPosition().x >= ship.getPosition().x) {
+						ship.getPosition().x -= 1;
+					} else {
+						ship.getPosition().x += 1;
+					}
+					
+					ship.setInvincibility(true);
 				}
 			}
 		}

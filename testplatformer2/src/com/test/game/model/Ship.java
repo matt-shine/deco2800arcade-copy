@@ -20,11 +20,14 @@ public class Ship extends MovableEntity{
 	public static final float MAX_FALL_VELOCITY = 30f;
 	public static final float MAX_WALL_VELOCITY = 6.2f; //note that any movable platform falling at speed greater than this will have bugged moving
 	public static final float WALL_ATTACH_TIME = 0.13f;
+	public static final float MAX_INVINCIBLE_TIME = 3f;
 	
 	private State state = State.IDLE;
 	private int hearts = 3;
 	private boolean facingRight = false;
 	private boolean onMovable = false;
+	private boolean invincible = false;
+	private float invincibleTime = 0;
 	float jumpTime = 0;
 	float wallTime = WALL_ATTACH_TIME;
 	
@@ -57,7 +60,9 @@ public class Ship extends MovableEntity{
 		return state;
 	}
 	
-	
+	public boolean isInvincible() {
+		return invincible;
+	}
 	
 	public boolean isFacingRight() {
 		return facingRight;
@@ -87,6 +92,10 @@ public class Ship extends MovableEntity{
 	public void decrementHearts() {
 		hearts--;
 		return;
+	}
+	
+	public void setInvincibility(boolean invisibility) {
+		invincible = invisibility;
 	}
 	
 	@Override
@@ -226,5 +235,19 @@ public class Ship extends MovableEntity{
 		}
 		//System.out.println("Endo f Ship.update " + velocity.x);
 		
+		
+		
+		
+		
+		
+		/* Handle Invincibility */
+		if(invincible) {
+			invincibleTime += Gdx.graphics.getDeltaTime();
+		}
+		
+		if(invincibleTime > MAX_INVINCIBLE_TIME) {
+			setInvincibility(false);
+			invincibleTime = 0;
+		}
 	}
 }

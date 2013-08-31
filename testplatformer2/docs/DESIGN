@@ -1,0 +1,17 @@
+Design Document
+
+==============
+Classes design
+==============
+
+|--World (Model)
+|    |--Level Handle
+|    |--Ship
+|    |    |--State
+|    |
+|    |--Walls
+|
+|--WorldRenderer (View)
+|
+|--InputHandler (Controller)
+

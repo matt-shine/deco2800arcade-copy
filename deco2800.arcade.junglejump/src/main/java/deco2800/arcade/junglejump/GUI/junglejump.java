@@ -1,4 +1,4 @@
-package main.java.deco2800.arcade.junglejump.GUI;
+package deco2800.arcade.junglejump.GUI;
 
 import java.util.HashSet;
 import java.util.Set;

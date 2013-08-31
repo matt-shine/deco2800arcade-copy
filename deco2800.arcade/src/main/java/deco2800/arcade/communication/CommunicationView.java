@@ -17,10 +17,7 @@ public class CommunicationView {
 	JButton sendButton;
 	JFrame chat = new JFrame("Chat Window");
 	
-	public CommunicationView(){
-		//Create individual chat window.
-		//JFrame chat = new JFrame("Testing Chat");
-		
+	public CommunicationView(){	
 		chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container container = chat.getContentPane();
 		
@@ -36,9 +33,8 @@ public class CommunicationView {
 		textArea = new JTextArea(8,20);
 		textArea.setEditable(false);
 		
-		//This makes the scroll bar always at the bottom
 		DefaultCaret caret = (DefaultCaret)textArea.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE); //This makes the scroll bar always at the bottom
 		
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		container.add(scrollPane, BorderLayout.NORTH);
@@ -63,6 +59,7 @@ public class CommunicationView {
 	}
 	
 	public void appendTextArea(String text){
+		//
 		textArea.append(text);
 	}
 	

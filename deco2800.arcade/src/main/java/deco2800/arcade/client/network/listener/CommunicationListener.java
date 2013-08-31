@@ -4,8 +4,8 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.protocol.communication.ChatRequest;
+import deco2800.arcade.protocol.communication.ChatResponse;
 import deco2800.arcade.protocol.communication.TextMessage;
-import deco2800.arcade.protocol.communication.UserQuery;
 
 public class CommunicationListener extends NetworkListener {
 	
@@ -39,12 +39,7 @@ public class CommunicationListener extends NetworkListener {
 		
 		if (object instanceof TextMessage){
 			 TextMessage textMessage = (TextMessage) object;
-
-			 if(textMessage.chatID == ""){
-				 System.out.println("Chat ID not found!");
-			 }else{
-				 communicationNetwork.updateChat(textMessage.chatID, textMessage);
-			 }
+			 communicationNetwork.updateChat(textMessage.chatID, textMessage);
 		}
 		
 		if (object instanceof ChatRequest){
@@ -52,14 +47,11 @@ public class CommunicationListener extends NetworkListener {
 			communicationNetwork.createNewChat(chatRequest.participants);
 		}
 		
-		if (object instanceof UserQuery){
-			UserQuery userQuery = (UserQuery) object;
-			if (userQuery.response == true){
-				communicationNetwork.userQuery(true);
-			} else {
-				communicationNetwork.userQuery(false);
-			}
+		if (object instanceof ChatResponse){
+			ChatResponse chatResponse = (ChatResponse) object;
+			communicationNetwork.inviteUser(chatResponse);
 		}
+		
 	}
 	
 }

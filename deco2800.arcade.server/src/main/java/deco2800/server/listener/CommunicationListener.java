@@ -1,8 +1,6 @@
 package deco2800.server.listener;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -10,9 +8,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.communication.ChatRequest;
+import deco2800.arcade.protocol.communication.ChatResponse;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
-import deco2800.arcade.protocol.communication.UserQuery;
 
 public class CommunicationListener extends Listener {
 	
@@ -44,28 +42,36 @@ public class CommunicationListener extends Listener {
 		
 		if(object instanceof ChatRequest){
 			ChatRequest chatRequest = (ChatRequest) object;
-			List<String> participants = Arrays.asList(chatRequest.participants.split(","));
-
+			ChatResponse chatResponse = new ChatResponse();
+			
 			if (chatRequest.invite != null){
-				this.server.sendToTCP(connectedUsers.get(chatRequest.invite), chatRequest);
+				if (connectedUsers.containsKey(chatRequest.invite)){	//Check if the invited user is online
+					chatResponse.response = "available";
+					chatResponse.invite = chatRequest.invite;
+					chatResponse.chatID = chatRequest.chatID;
+					chatResponse.sender = chatRequest.sender;
+					this.server.sendToTCP(connectedUsers.get(chatRequest.invite), chatRequest);	//Send the chatRequest to the invited user
+					chatRequest.participants.remove(chatRequest.invite);	//Don't send the response to the person you are inviting
+					for (String participant : chatRequest.participants){
+						this.server.sendToTCP(connectedUsers.get(participant), chatResponse);	//Send the chatResponse to the chat participants
+					}
+				} else {
+					chatResponse.response = "unavailable";
+					chatResponse.invite = chatRequest.invite;
+					chatResponse.chatID = chatRequest.chatID;
+					chatResponse.sender = chatRequest.sender;
+					chatRequest.participants.remove(chatRequest.invite);	//Remove the invited person from the participants as they are unavailable
+					for (String participant : chatRequest.participants){
+						this.server.sendToTCP(connectedUsers.get(participant), chatResponse); //Send the chatResponse to the chat participants
+					}
+				}
 			} else {
-				for (String participant : participants){
+				for (String participant : chatRequest.participants){
 					this.server.sendToTCP(connectedUsers.get(participant), chatRequest);
 				}
 			}
 		}
-		
-		if (object instanceof UserQuery){
-			// Check if a user is online
-			UserQuery userQuery = (UserQuery) object;
-			if (connectedUsers.containsKey(userQuery.username)){
-				userQuery.response = true;
-			} else {
-				userQuery.response = false;
-			}
-			this.server.sendToTCP(connectedUsers.get(userQuery.sender), userQuery);
-		}
-		
+				
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
 			this.server.sendToTCP(connectedUsers.get(textMessage.recipient), textMessage);

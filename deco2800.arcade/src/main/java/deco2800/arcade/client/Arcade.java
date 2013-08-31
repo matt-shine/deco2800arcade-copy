@@ -183,9 +183,9 @@ public class Arcade extends JFrame {
 		// At least one client must login as "debuguser" to open the chat window
 		// Use /invite username and /kick username to add and remove users to the conversation
 		if (username.equals("debuguser")){
-			if (this.communicationNetwork.checkIfChatExists("debuguser") == false){
-				ChatRequest chatRequest = new ChatRequest();
-				chatRequest.participants = "debuguser";
+			ChatRequest chatRequest = new ChatRequest();
+			chatRequest.participants.add("debuguser");
+			if (this.communicationNetwork.checkIfChatExists(chatRequest.participants.hashCode()) == false){
 				this.client.sendNetworkObject(chatRequest);
 			}
 		}

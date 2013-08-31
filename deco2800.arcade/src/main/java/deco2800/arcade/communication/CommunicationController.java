@@ -36,17 +36,10 @@ public class CommunicationController {
 		
 		textMessage.text = message;
 		textMessage.username = player.getUsername();
-		
-		textMessage.chatID = "";
-		for(String username : participants){
-			textMessage.chatID = textMessage.chatID + username + ",";
-		}
-		if (textMessage.chatID.endsWith(",")){
-			textMessage.chatID = textMessage.chatID.substring(0, textMessage.chatID.length()-1);
-		}
-
-		for(String username : participants){
-			textMessage.recipient = username;
+		textMessage.chatID = participants.hashCode();
+				
+		for(String participant : participants){
+			textMessage.recipient = participant;
 			this.networkClient.sendNetworkObject(textMessage);
 		}
 		
@@ -57,7 +50,7 @@ public class CommunicationController {
 	public void updateChat(String message){
 		window.appendTextArea(message);
 	}
-
+	
 	public void setFocus() {
 		window.input.requestFocus();
 	}

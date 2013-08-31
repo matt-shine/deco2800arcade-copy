@@ -2,10 +2,11 @@ package deco2800.arcade.protocol.communication;
 
 import deco2800.arcade.protocol.UserRequest;
 
-public class UserQuery  extends UserRequest {
+public class ChatResponse  extends UserRequest {
 
-	public String username;
+	public String response;
+	public String invite;
 	public String sender;
-	public boolean response;
+	public int chatID;
 	
 }

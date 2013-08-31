@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.Kryo;
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.communication.ChatRequest;
+import deco2800.arcade.protocol.communication.ChatResponse;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -47,6 +48,8 @@ public class Protocol {
 		kryo.register(ChatRequest.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
+		kryo.register(ChatResponse.class);
+		kryo.register(java.util.ArrayList.class);
 	}
 	
 }

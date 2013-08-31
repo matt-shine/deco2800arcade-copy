@@ -1,23 +1,17 @@
 package deco2800.arcade.communication;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class CommunicationModel {
 	
 	private ArrayList<String> participants;
 	
-	public CommunicationModel(String chatID){
+	public CommunicationModel(ArrayList<String> requestParticipants){
 		participants = new ArrayList<String>();
-		
-		List<String> participantString = Arrays.asList(chatID.split(","));
-		
-		for (String participant : participantString){
+		for (String participant : requestParticipants){
 			participants.add(participant);
 		}
-		
 	}
 	
 	public void addParticipant(String username){
@@ -26,6 +20,10 @@ public class CommunicationModel {
 	
 	public void removeParticipant(String username){
 		participants.remove(username);
+	}
+		
+	public String getParticipant(String username){
+		return participants.get(participants.indexOf(username));
 	}
 	
 	public ArrayList<String> getParticipants(){

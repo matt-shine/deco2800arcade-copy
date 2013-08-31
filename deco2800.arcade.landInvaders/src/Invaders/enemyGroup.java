@@ -71,8 +71,8 @@ public class enemyGroup {
 					
 					if ((((shot.positionX() > lists[n][i].positionX() && shot.positionX() < lists[n][i].positionX()+ lists[n][i].width())
 							|| ((shot.positionX()+shot.width() > lists[n][i].positionX() && shot.positionX() + shot.width() < lists[n][i].positionX() + lists[n][i].width())))
-							&& shot.positionY() < lists[n][i].positionY()
-									+ lists[n][i].height())) {
+							&&( shot.positionY() < lists[n][i].positionY()
+									+ lists[n][i].height()&&  shot.positionY()> lists[n][i].positionY()))) {
 
 						lists[n][i] = null;
 						return true;

@@ -1,6 +1,7 @@
 package Invaders;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class enemyGroup {
 
@@ -8,11 +9,15 @@ public class enemyGroup {
 	private int rowEnemyNum;
 	private enemy[] temp;
 	private enemy[][] lists;
+	private boolean shot;
+	private int shotRow;
 
 	public enemyGroup(int rowNum, int rowEnemyNum) {
 
 		this.rowNum = rowNum;
 		this.rowEnemyNum = rowEnemyNum;
+		shot =false;
+		shotRow= 1;
 		lists = new enemy[rowNum][rowEnemyNum];
 
 		createGroup();
@@ -80,6 +85,26 @@ public class enemyGroup {
 			}
 		}
 		return false;
+	}
+	public ArrayList<enemyShot> enemyShot(int count){
+		ArrayList<enemyShot> shots =new ArrayList<enemyShot>();
+		if(count%50==0){
+			
+			for (int i = 0; i < rowEnemyNum; i++) {
+				if (lists[shotRow-1][i] != null) {
+					shots.add(new enemyShot(lists[shotRow-1][i].positionX(),lists[shotRow-1][i].positionY()));
+					
+				}
+				
+
+			}
+			if(shotRow != 3){
+				shotRow ++;
+			}else{
+				shotRow =1;
+			}
+		}
+		return shots;
 	}
 
 }

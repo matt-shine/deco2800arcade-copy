@@ -16,7 +16,9 @@ public class tank implements KeyListener {
 	private boolean Mleft=false;
 	private boolean Mright=false;
 	private boolean Fshot =false;
-
+/**
+ * Tank initial starting point
+ */
 	public tank() {
 		p_x = 370;
 		p_y = 400;

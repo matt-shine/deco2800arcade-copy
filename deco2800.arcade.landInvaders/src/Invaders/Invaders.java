@@ -19,13 +19,20 @@ public class Invaders extends JFrame implements Runnable {
 	private int move;
 	private int direction;
 	private Robot r;
+	private int shotsNmb;
+	private int level;
 
 	private ArrayList<tankshot> shots;
+	private ArrayList<enemyShot> Eshots;
 
 	public Invaders() throws Exception {
 
 		super("Land Invaders");
+
+		shotsNmb = 6;
+		level = 2;
 		shots = new ArrayList<tankshot>();
+		Eshots = new ArrayList<enemyShot>();
 		enemyG = new enemyGroup(3, 6);
 		tank = new tank();
 		addKeyListener(tank);
@@ -61,6 +68,10 @@ public class Invaders extends JFrame implements Runnable {
 			shots.get(i).drawshot(mains);
 
 		}
+		for (int n = 0; n < Eshots.size(); n++) {
+			Eshots.get(n).drawshot(mains);
+
+		}
 		enemyG.drawGroup(mains);
 		tank.drawTank(mains, this);
 		g.drawImage(bg, 0, 0, this);
@@ -76,6 +87,13 @@ public class Invaders extends JFrame implements Runnable {
 			shots.get(i).Update();
 			if (shots.get(i).positionY() < 0) {
 				shots.remove(i);
+			}
+
+		}
+		for (int i = 0; i < Eshots.size(); i++) {
+			Eshots.get(i).Update();
+			if (Eshots.get(i).positionY() < 0) {
+				Eshots.remove(i);
 			}
 
 		}
@@ -98,8 +116,27 @@ public class Invaders extends JFrame implements Runnable {
 			if (move == -30)
 				direction = 1;
 			move += 10 * direction;
-			enemyG.moveUpdate(10*direction);
+			enemyG.moveUpdate(10 * direction);
 		}
+	}
+
+	public void levelSelect(int count) {
+
+		switch (level) {
+
+		case 1:
+			enemyMove(count);
+		case 2:
+			enemyMove(count);
+			levelTwo(count);
+			
+
+		}
+	}
+	
+	public void levelTwo(int count){
+		
+		Eshots.addAll(enemyG.enemyShot(count));
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -121,12 +158,13 @@ public class Invaders extends JFrame implements Runnable {
 			}
 
 			if (tank.shotCheck() == true) {
-				shots.add(new tankshot(tank.PositionX(), tank.PositionY()));
+				if (shots.size() < shotsNmb)
+					shots.add(new tankshot(tank.PositionX(), tank.PositionY()));
 				tank.finishShot();
 			}
 
 			shotUpdate();
-			enemyMove(count);
+			levelSelect(count);
 			hitEnemy();
 			repaint();
 			count++;

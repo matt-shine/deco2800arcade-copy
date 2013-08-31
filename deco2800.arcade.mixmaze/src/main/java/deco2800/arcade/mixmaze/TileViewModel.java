@@ -22,21 +22,19 @@ public class TileViewModel extends Group {
 	private final TileModel model;
 	private final ShapeRenderer renderer;
 	private final WallViewModel[] walls;
-
-	/* position relative to the game board */
-	private Vector2 localPos;
+	private final int tileSize;
 
 	/**
 	 * Constructor
 	 */
-	public TileViewModel(TileModel model, ShapeRenderer renderer) {
+	public TileViewModel(TileModel model, ShapeRenderer renderer,
+			int tileSize) {
 		Gdx.app.debug(LOG, String.format("initializing (%d, %d)",
 				model.getRow(), model.getColumn()));
 
 		this.model = model;
 		this.renderer = renderer;
-		localPos = new Vector2(128f * model.getColumn(),
-				128f * model.getRow());
+		this.tileSize = tileSize;
 
 		/* initialize wall view models */
 		walls = new WallViewModel[4];
@@ -52,22 +50,25 @@ public class TileViewModel extends Group {
 		Vector2 stagePos;
 
 		batch.end();
+
+		/*
+		 * FIXME: we should be able to use the transform matrix
+		 * in batch.
+		 */
 		renderer.setProjectionMatrix(getStage().getCamera().combined);
-		//stagePos = localToStageCoordinates(localPos);
 		stagePos = localToStageCoordinates(new Vector2(0f, 0f));
 
-		//if (model.isBox()) {
-		if (true) {
+		if (model.isBox()) {
 			renderer.begin(FilledRectangle);
 			renderer.setColor(1f, 0f, 0f, 1f);
 			renderer.filledRect(stagePos.x, stagePos.y,
-					128f, 128f);
+					tileSize, tileSize);
 			renderer.end();
 		}
 
 		renderer.begin(Rectangle);
 		renderer.setColor(0f, 0f, 0f, 1f);
-		renderer.rect(stagePos.x, stagePos.y, 128f, 128f);
+		renderer.rect(stagePos.x, stagePos.y, tileSize, tileSize);
 		renderer.end();
 
 		batch.begin();

@@ -40,8 +40,7 @@ public final class MixMaze extends GameClient {
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
 		setScreen(menuScreen);
-		Gdx.app.debug(LOG, "Use arrows to move and h, j, k, l "
-				   + "to build/destroy walls");
+		Gdx.app.debug(LOG, "Use arrows to move");
 	}
 
 	@Override

@@ -10,13 +10,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Timer;
 
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 /**
  * GameScreen draws all elements in a game session.
@@ -27,19 +30,16 @@ final class GameScreen implements Screen {
 	//TODO use this
 	@SuppressWarnings("unused")
 	private final MixMaze game;
-
 	private final Stage stage;
 	private final ShapeRenderer renderer;
-	//private final Brick brick;
-
 	private final MixMazeModel model;
 
-	private Table gameBoard;
 	private Label timerLabel;
 	private int elapsed;
+	private PlayerViewModel p1;
 
 	/**
-	 * This constructor associate GameScreen with MixMaze.
+	 * Constructor
 	 */
 	GameScreen(final MixMaze game) {
 		this.game = game;
@@ -47,30 +47,17 @@ final class GameScreen implements Screen {
 		elapsed = 0;
 
 		/*
-		 * This should be only ShapeRender used in this
+		 * This should be the only ShapeRender used in this
 		 * stage.
 		 */
 		renderer = new ShapeRenderer();
 
 		/* FIXME: game size should be passed from UI */
-		model = new MixMazeModel(5, 5);
+		model = new MixMazeModel(3, 3);
 
 		stage = new Stage();
+
 		setupLayout();
-
-		/*
-		 * FIXME: There should be a separate controller rather
-		 * than using PacMan as the acting one.
-		 */
-		/*
-		pacman = new PacMan(boxes);
-		brick = new Brick();
-
-		gameBoard.add(pacman).bottom().left();
-		gameBoard.add(brick).bottom().right();
-		Gdx.app.debug(LOG, "pacman Z " + pacman.getZIndex());
-		stage.setKeyboardFocus(pacman);
-		*/
 	}
 
 	/**
@@ -78,9 +65,12 @@ final class GameScreen implements Screen {
 	 */
 	private void setupLayout() {
 		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+		Stack gameBoard = new Stack();
 		Table root = new Table();
 		Table left = new Table();
 		Table right = new Table();
+		Table tileTable = new Table();
+		Group gameArea = new Group();
 		Label[] userLabels = new Label[2];
 		Label[] scoreLabels = new Label[2];
 
@@ -90,7 +80,6 @@ final class GameScreen implements Screen {
 		scoreLabels[1] = new Label("user 2 score 0", skin);
 
 		timerLabel = new Label("timer", skin);
-		gameBoard = new Table();
 
 		root.setFillParent(true);
 		root.debug();
@@ -104,18 +93,39 @@ final class GameScreen implements Screen {
 		root.row();
 
 		root.add(left);
-		root.add(gameBoard).size(640, 640).colspan(3);
+		root.add(gameBoard).colspan(3);
 		root.add(right);
 
-		for (int i = 4; i >= 0; i--) {
-			for (int j = 0; j < 5; j++) {
-				gameBoard.add(new TileViewModel(
+		/*
+		 * gameBoard has two layers. The bottom one is
+		 * the tileTable and the top is gameArea.
+		 *
+		 * gameArea is used as a place holder as Stack
+		 * always places its children at (0, 0), but
+		 * children of gameArea can move freely in stage.
+		 */
+		int tileSize = 640 / model.getBoardHeight();
+		for (int j = 0; j < model.getBoardHeight(); j++) {
+			for (int i = 0; i < model.getBoardWidth(); i++) {
+				tileTable.add(new TileViewModel(
 						model.getTile(i, j),
-						renderer))
-						.size(128f, 128f);
+						renderer,
+						tileSize))
+						.size(tileSize, tileSize);
 			}
-			gameBoard.row();
+
+			/*
+			 * Luran:
+			 * Not sure if an extra row() after boardHeight
+			 * will cause problem, but it is easy to check.
+			 */
+			if (j < model.getBoardHeight())
+				tileTable.row();
 		}
+		gameBoard.add(tileTable);
+		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize);
+		gameArea.addActor(p1);
+		gameBoard.add(gameArea);
 	}
 
 	@Override
@@ -150,6 +160,8 @@ final class GameScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
+		stage.setKeyboardFocus(p1);
+
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				elapsed += 1;

@@ -26,18 +26,20 @@ public class WallViewModel extends Actor {
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		batch.end();
 
-		renderer.begin(FilledRectangle);
-		renderer.setColor(1f, 1f, 0f, 1f);
-		if (model.getDirection() == Direction.WEST) {
-			renderer.filledRect(-8f, 0f, 16f, 128f);
-		} else if(model.getDirection() == Direction.NORTH) {
-			renderer.filledRect(0f, 120f, 128f, 16f);
-		} else if(model.getDirection() == Direction.EAST) {
-			renderer.filledRect(120f, 0f, 16f, 128f);
-		} else {
-			renderer.filledRect(0f, -8f, 128f, 16f);
+		if (model.isBuilt()) {
+			renderer.begin(FilledRectangle);
+			renderer.setColor(1f, 1f, 0f, 1f);
+			if (model.getDirection() == Direction.WEST) {
+				renderer.filledRect(-8f, 0f, 16f, 128f);
+			} else if(model.getDirection() == Direction.NORTH) {
+				renderer.filledRect(0f, 120f, 128f, 16f);
+			} else if(model.getDirection() == Direction.EAST) {
+				renderer.filledRect(120f, 0f, 16f, 128f);
+			} else {
+				renderer.filledRect(0f, -8f, 128f, 16f);
+			}
+			renderer.end();
 		}
-		renderer.end();
 
 		batch.begin();
 		super.draw(batch, parentAlpha);

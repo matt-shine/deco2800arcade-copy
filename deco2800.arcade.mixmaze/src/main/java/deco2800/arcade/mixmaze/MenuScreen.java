@@ -20,34 +20,12 @@ final class MenuScreen implements Screen {
 	private static final String LOG = MenuScreen.class.getSimpleName();
 
 	private final MixMaze game;
-	private final Stage stage;
 
 	/**
 	 * This constructor associate MenuScreen with MixMaze.
 	 */
 	MenuScreen(final MixMaze game) {
 		this.game = game;
-
-		stage = new Stage();
-		Table rootTable = new Table();
-		rootTable.setFillParent(true);
-		rootTable.debug();
-
-		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-
-		Label nameLabel = new Label("Name:", skin);
-		TextField nameText = new TextField("name text", skin);
-		Label addressLabel = new Label("Address:", skin);
-		TextField addressText = new TextField("address text", skin);
-
-		rootTable.add(nameLabel).uniform();
-		rootTable.add(nameText).uniform();
-		rootTable.row();
-		rootTable.add(addressLabel);
-		rootTable.add(addressText).space(10);
-
-		stage.addActor(rootTable);
-
 	}
 
 	@Override
@@ -60,9 +38,6 @@ final class MenuScreen implements Screen {
 			Gdx.app.debug(LOG, "switching to game screen");
 			game.setScreen(game.gameScreen);
 		}
-
-		stage.draw();
-		Table.drawDebug(stage);
 	}
 
 	@Override

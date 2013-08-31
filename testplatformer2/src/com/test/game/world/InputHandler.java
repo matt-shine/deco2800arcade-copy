@@ -93,22 +93,22 @@ public class InputHandler implements InputProcessor{
 		switch(keycode){
 			case Keys.UP:
 				if (ship.getVelocity().y == 1 && acceptInput)
-				ship.getVelocity().y = 0;
+					ship.getVelocity().y = 0;
 				break;
 
 			case Keys.DOWN:
 				if (ship.getVelocity().y == -1 && acceptInput)
-				ship.getVelocity().y = 0;
+					ship.getVelocity().y = 0;
 				break;
 
 			case Keys.LEFT:
 				if (ship.getVelocity().x < -1 && acceptInput)
-				ship.getVelocity().x = 0;
+					ship.getVelocity().x = 0;
 				break;
 
 			case Keys.RIGHT:
 				if (ship.getVelocity().x > 1 && acceptInput)
-				ship.getVelocity().x = 0;
+					ship.getVelocity().x = 0;
 				break;
 
 			case Keys.Z:

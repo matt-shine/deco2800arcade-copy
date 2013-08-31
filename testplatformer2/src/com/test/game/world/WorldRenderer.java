@@ -51,7 +51,7 @@ public class WorldRenderer {
 	//Follower follower;
 	Walker walker;
 	private ParallaxCamera cam;
-	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg;
+	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg, heartsTexture;
 	private TextureRegion followerFrame;
 	private TextureRegion walkerRegion;
 	private Array<AtlasRegion> walkerRegions;
@@ -78,6 +78,7 @@ public class WorldRenderer {
 	
 	
 	//debug
+	private boolean debugMode = false;
 	ShapeRenderer sr;
 	TextureRegion testRegion;
 	private FPSLogger fpsLogger;
@@ -119,6 +120,9 @@ public class WorldRenderer {
 		
 		shipTexture = new Texture("data/ship.png");
 		shipTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		heartsTexture = new Texture("data/heart.png");
+		heartsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
 		//followerTexture = new Texture("data/follower.png");
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/follower.txt"));
@@ -185,13 +189,13 @@ public class WorldRenderer {
 		System.out.println(testRegion);*/
 		
 		//tileMapRenderer.render(cam);
-		//draw background layers
+		/* Draw background layers */
 		batch.setProjectionMatrix(cam.calculateParallaxMatrix(0, 0));
 		batch.begin();
 		batch.draw(bg, -cam.viewportWidth/2, -cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
 		batch.end();
 		
-		//draw tiled layers
+		/* Draw tiled layers */
 		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
 		tileMapRenderer.render(new int[]{0});
 		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
@@ -199,11 +203,7 @@ public class WorldRenderer {
 		tileMapRenderer.setView(cam.calculateParallaxMatrix(1, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
 		tileMapRenderer.render(new int[]{2});
 		
-		/*Vector3 tmp = new Vector3();
-		tmp.set(0, 0, 0);
-		cam.unproject(tmp);
-		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), layersList);
-		*/
+		/* Draw game layer */
 		batch.setProjectionMatrix(cam.combined);
 		batch.begin();
 		//batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y);
@@ -260,31 +260,31 @@ public class WorldRenderer {
 							ar.getRegionWidth(), ar.getRegionHeight(), false, false);
 					//batch.draw
 					switch(i) {
-					case 7:
-						i =3;
-						break;
-					case 3:
-						i=6;
-						break;
-					case 6:
-						i=5;
-						break;
-					case 5:
-						i=2;
-						break;
-					case 2:
-						i=1;
-						break;
-					case 1:
-						i=4;
-						break;
-					case 4:
-						i=0;
-						break;
-					case 0:
-					default:
-						i=8;
-						break;
+						case 7:
+							i =3;
+							break;
+						case 3:
+							i=6;
+							break;
+						case 6:
+							i=5;
+							break;
+						case 5:
+							i=2;
+							break;
+						case 2:
+							i=1;
+							break;
+						case 1:
+							i=4;
+							break;
+						case 4:
+							i=0;
+							break;
+						case 0:
+						default:
+							i=8;
+							break;
 					}
 				}
 			}
@@ -306,56 +306,58 @@ public class WorldRenderer {
 		
 		
 		/* ----- Debug stuff. Will slow game down!! ----- */
-		
-		
-		sr.setProjectionMatrix(cam.combined);
-		sr.begin(ShapeType.Line);
-		
-		sr.setColor(Color.CYAN);
-		sr.rect(ship.getBounds().x, ship.getBounds().y, ship.getBounds().width, ship.getBounds().height);
-		
-		sr.setColor(Color.RED);
-		eItr = enemies.iterator();
-		while (eItr.hasNext()) {
-			e = eItr.next();
-			sr.rect(e.getBounds().x, e.getBounds().y, e.getBounds().width, e.getBounds().height);
-			if (e.getClass() == Walker.class) {
-				for (int i=0; i<8; i++) {
-					WalkerPart wp = ((Walker)e).getPart(i);
-					//System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
-					//System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
-					
-					sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
-					
+		if(debugMode) {
+			sr.setProjectionMatrix(cam.combined);
+			sr.begin(ShapeType.Line);
+			
+			sr.setColor(Color.CYAN);
+			sr.rect(ship.getBounds().x, ship.getBounds().y, ship.getBounds().width, ship.getBounds().height);
+			
+			sr.setColor(Color.RED);
+			eItr = enemies.iterator();
+			while (eItr.hasNext()) {
+				e = eItr.next();
+				sr.rect(e.getBounds().x, e.getBounds().y, e.getBounds().width, e.getBounds().height);
+				if (e.getClass() == Walker.class) {
+					for (int i=0; i<8; i++) {
+						WalkerPart wp = ((Walker)e).getPart(i);
+						//System.out.println("Id: " + wp.getId() + ", (x,y): " + wp.getPosition().x + ","+wp.getPosition().y+")");
+						//System.out.println("Bounds: "+wp.getBounds().x+","+wp.getBounds().y+","+wp.getBounds().width+","+wp.getBounds().height);
+						
+						sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
+						
+					}
 				}
+				
+			}
+			for (CutsceneObject csObj: csObjects) {
+				sr.rect(csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth(), csObj.getHeight());
+			}
+			bItr = bullets.iterator();
+			while(bItr.hasNext()) {
+				b = bItr.next();
+				sr.rect(b.getBounds().x, b.getBounds().y, b.getBounds().width, b.getBounds().height);
+			}
+			sr.rect(world.sRec.x, world.sRec.y, world.sRec.width, world.sRec.height);
+			
+			
+			Iterator<MovablePlatform> mvPlatItr;
+			mvPlatItr = mvPlatforms.iterator();
+			sr.setColor(Color.GREEN);
+			while(mvPlatItr.hasNext()) {
+				MovablePlatform mvPlat = mvPlatItr.next();
+				sr.rect(mvPlat.getBounds().x, mvPlat.getBounds().y, mvPlat.getBounds().width, mvPlat.getBounds().height);
 			}
 			
-		}
-		for (CutsceneObject csObj: csObjects) {
-			sr.rect(csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth(), csObj.getHeight());
-		}
-		bItr = bullets.iterator();
-		while(bItr.hasNext()) {
-			b = bItr.next();
-			sr.rect(b.getBounds().x, b.getBounds().y, b.getBounds().width, b.getBounds().height);
-		}
-		sr.rect(world.sRec.x, world.sRec.y, world.sRec.width, world.sRec.height);
-		
-		
-		Iterator<MovablePlatform> mvPlatItr;
-		mvPlatItr = mvPlatforms.iterator();
-		sr.setColor(Color.GREEN);
-		while(mvPlatItr.hasNext()) {
-			MovablePlatform mvPlat = mvPlatItr.next();
-			sr.rect(mvPlat.getBounds().x, mvPlat.getBounds().y, mvPlat.getBounds().width, mvPlat.getBounds().height);
+			Sword sword = world.getSword();
+			sr.setColor(Color.YELLOW);
+			sr.rect(sword.getBounds().x, sword.getBounds().y, sword.getBounds().width, sword.getBounds().height);
+			
+			sr.end();
+			fpsLogger.log();
 		}
 		
-		Sword sword = world.getSword();
-		sr.setColor(Color.YELLOW);
-		sr.rect(sword.getBounds().x, sword.getBounds().y, sword.getBounds().width, sword.getBounds().height);
-		
-		sr.end();
-		fpsLogger.log();
+		drawHUD(batch);
 	}
 	
 	private void drawShip() {
@@ -377,6 +379,27 @@ public class WorldRenderer {
 		return cam;
 	}
 	
+	private void drawHUD(SpriteBatch batch) {
+		batch.begin();
+		
+		float heartX = cam.position.x - 13;
+		float heartY = cam.position.y + 7;
+		
+		for(int i = 0; i<ship.getHearts(); i++) {
+			heartX += 0.5f;
+			batch.draw(heartsTexture,		//good
+					heartX, heartY,			//good
+					0, 0,				//doesn't matter
+					1f, 1f,			//not sure
+					1, 1,			//not sure
+					0, 						//good
+					0, 0,			//not sure
+					heartsTexture.getWidth(), heartsTexture.getHeight(), //good
+					false, false); 			//good
+		}
+		
+		batch.end();
+	}
 	
 	public void dispose() {
 		batch.dispose();

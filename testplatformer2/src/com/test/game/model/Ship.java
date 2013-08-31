@@ -189,9 +189,11 @@ public class Ship extends MovableEntity{
 		//System.out.println("Velocity before scl " + velocity.x+","+velocity.y);
 		
 		position.add(velocity.scl(Gdx.graphics.getDeltaTime()));
+		velocity.scl(1/(Gdx.graphics.getDeltaTime()));
+
 		//System.out.println("Velocity after scl " + velocity.x+","+velocity.y);
 		//tmp1.scl(Gdx.graphics.getDeltaTime());
-		velocity.scl(1/(Gdx.graphics.getDeltaTime()));
+
 		//System.out.println("Velocity after invert scl " + velocity.x+","+velocity.y);
 		//position.x += velocity.x*Gdx.graphics.getDeltaTime();
 		//position.y += velocity.y*Gdx.graphics.getDeltaTime();

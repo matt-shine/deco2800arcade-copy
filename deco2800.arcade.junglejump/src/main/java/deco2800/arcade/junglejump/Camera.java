@@ -1,4 +1,4 @@
-package main.java.deco2800.arcade.junglejump;
+package deco2800.arcade.junglejump;
 
 
 public class Camera {

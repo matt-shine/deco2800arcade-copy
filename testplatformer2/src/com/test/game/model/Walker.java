@@ -51,7 +51,7 @@ public class Walker extends Enemy{
 	}
 	
 	@Override
-	public void advance(float delta, Ship ship) {
+	public void advance(float delta, Ship ship, float rank) {
 		//walking animation test
 		frameCount += delta;
 		if (frameCount > FRAME_LENGTH) {

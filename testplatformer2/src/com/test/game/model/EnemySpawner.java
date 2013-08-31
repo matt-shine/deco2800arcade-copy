@@ -38,6 +38,14 @@ public class EnemySpawner {
 		}
 	}
 	
+	public Enemy spawnNewIfPossible() {
+		if (enemies.size < maxSpawnAtOnce && spawnCount < maxSpawn) {
+			return spawnNew();
+		} else {
+			return null;
+		}
+	}
+	
 	public Enemy spawnNew() {
 		try {
 			Enemy e = (Enemy) objClass.newInstance();
@@ -76,5 +84,9 @@ public class EnemySpawner {
 	
 	public Vector2 getPosition() {
 		return pos;
+	}
+	
+	public void setPosition(Vector2 pos) {
+		this.pos = pos;
 	}
 }

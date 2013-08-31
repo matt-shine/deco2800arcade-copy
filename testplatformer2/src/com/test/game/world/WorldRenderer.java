@@ -29,6 +29,7 @@ import com.test.game.model.Follower;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
 import com.test.game.model.Ship;
+import com.test.game.model.SoldierEnemy;
 import com.test.game.model.Sword;
 import com.test.game.model.Walker;
 import com.test.game.model.WalkerPart;
@@ -246,6 +247,10 @@ public class WorldRenderer {
 				followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
 				batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
 						e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
+			} else if (e.getClass() == SoldierEnemy.class){
+				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
+						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
+						shipTexture.getHeight(), false, false);
 			} else if (e.getClass() == Walker.class){
 				//draw the parts in order
 				int i=7; 

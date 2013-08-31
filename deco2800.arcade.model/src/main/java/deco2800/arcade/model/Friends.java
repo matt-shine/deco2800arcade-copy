@@ -11,12 +11,24 @@ public class Friends {
 		this.friends = new HashSet<User>();
 	}
 	
-	public Friends(Friends friends){
-		this.friends = new Hashset<User>(friends.getSet);
+	public Friends(Friends f){
+		this.friends = new HashSet<User>(f.friends);
 	}
 	
-	private Set<User> getSet(){
-		return friends;
+	public Set<User> getSet(){
+		return new HashSet<User>(friends);
+	}
+	
+	public void add(User user){
+		this.friends.add(new User(user));
+	}
+	
+	public void remove(User user){
+		this.friends.remove(new User(user));
+	}
+	
+	public boolean contains(User user){
+		return this.friends.contains(new User(user));
 	}
 	
 	

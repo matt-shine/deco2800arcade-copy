@@ -19,6 +19,17 @@ public class MatchmakerQueue {
 		this.queuedUsers = new HashMap<String, Map<String, Connection>>();
 		}
 	
+	/**
+	 * Get the singleton Matchmaker instance
+	 * @return - the matchmaker instance
+	 */
+	public static MatchmakerQueue instance() {
+		if (instance == null) {
+			instance = new MatchmakerQueue();
+		}
+		return instance;
+	}
+		
 	
 	/**
 	 * Returns a copy of the (complete) current queue.
@@ -45,7 +56,7 @@ public class MatchmakerQueue {
 	 * @param connection - the players connection
 	 */
 	public void add(NewMatchmakingRequest request, Connection connection) {
-		//TODO: handle players already in queue? allow multiple game queue placement?
+		//TODO: handle players already in queue? allow multi-game queue placement?
 		if (!this.queuedUsers.containsKey(request.gameId)) {
 			Map<String, Connection> player = new HashMap<String, Connection>();
 			player.put(request.username, connection);
@@ -86,16 +97,6 @@ public class MatchmakerQueue {
 	}
 	
 	
-	/**
-	 * Get the singleton Matchmaker instance
-	 * @return - the matchmaker instance
-	 */
-	public static MatchmakerQueue instance() {
-		if (instance == null) {
-			instance = new MatchmakerQueue();
-		}
-		return instance;
-	}
-	
+
 	
 }

@@ -29,7 +29,6 @@ public class MultiplayerListener extends Listener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
-		//Fill out map
 		if (object instanceof NewMultiGameRequest) {
 			System.out.println("Received connection");
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
@@ -43,6 +42,7 @@ public class MultiplayerListener extends Listener {
 				handleNewMultiRequest(connection, username, gameId, connectTo);
 				break;
 			case JOIN:
+				//TODO: 2+ player games
 				handleJoinMultiRequest();
 				break;
 			default:
@@ -78,7 +78,7 @@ public class MultiplayerListener extends Listener {
 	}
 	
 	private void handleJoinMultiRequest() {
-		
+		//TODO: this method. 
 	}
 	
 	

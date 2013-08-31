@@ -5,15 +5,20 @@ import java.util.Map;
 import java.util.Set;
 
 import deco2800.arcade.protocol.lobby.*;
-
 import deco2800.server.ArcadeServer;
+import deco2800.server.Lobby;
+import deco2800.server.LobbyMatch;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 public class LobbyListener extends Listener {
-
+	
+	/* Holds the users currently in the lobby */
 	private Map<String, Map<String, Set<Connection>>> lobbyUsers;
+
+	
+	Lobby lobby = Lobby.instance();
 	
 	@Override
 	public void received(Connection connection, Object object) {
@@ -26,23 +31,30 @@ public class LobbyListener extends Listener {
 			NewLobbyRequest newLobbyRequest = (NewLobbyRequest) object;
 			String username = newLobbyRequest.username;
 			LobbyRequestType requestType = newLobbyRequest.requestType;
+			String gameId = newLobbyRequest.gameId;
 			
 			switch (requestType)
 			{
 			case JOINLOBBY:
-				handleJoinLobbyRequest(connection, username);
+				handleJoinLobbyRequest(username, connection);
+				break;
 			case CREATEMATCH:
-				
+				handleCreateMatchRequest(gameId, username, connection);
+				break;
 			case CANCELMATCH:
-			case JOINGAME:
-			
+				handleCancelMatchRequest(username);
+				break;
+			case JOINMATCH:
+				LobbyMatch match = newLobbyRequest.match;
+				handleJoinMatchRequest(username, connection, match);
+				
 			}
 		}
 			
 	}
 	
 
-	private void handleJoinLobbyRequest(Connection connection, String username){
+	private void handleJoinLobbyRequest(String username, Connection connection){
 		
 		Map<String, Set<Connection>> userConnections;
 		
@@ -65,5 +77,23 @@ public class LobbyListener extends Listener {
 		}
 		
 	}
+	
+	private void handleCreateMatchRequest(String gameId, String username, Connection connection) {
+		if (lobby.userHasMatch(username)) {
+			connection.sendTCP(JoinLobbyResponse.CREATE_MATCH_FAILED);
+		} else {
+			lobby.createMatch(gameId, username, connection);
+			connection.sendTCP(JoinLobbyResponse.OK);
+		}
+	}
+	
+	private void handleCancelMatchRequest(String username) {
+		lobby.destroyMatch(username);
+	}
+	
+	private void handleJoinMatchRequest(String username, Connection connection, LobbyMatch match) {
+		
+	}
+ 	
 	
 }

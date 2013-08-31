@@ -23,8 +23,10 @@ import com.test.game.model.Follower;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
 import com.test.game.model.MovablePlatformSpawner;
+import com.test.game.model.RandomizedEnemySpawner;
 import com.test.game.model.Ship;
 import com.test.game.model.Ship.State;
+import com.test.game.model.SoldierEnemy;
 import com.test.game.model.Sword;
 import com.test.game.model.Walker;
 
@@ -45,11 +47,13 @@ public class World {
 	private Array<Enemy> enemies;
 	private Array<Bullet> bullets;
 	private Array<EnemySpawner> spawners;
+	private Array<RandomizedEnemySpawner> randomSpawners;
 	private Array<MovablePlatformSpawner> movablePlatformSpawners;
 	private Array<CutsceneObject> cutsceneObjects; 
 	private Array<MovablePlatform> movablePlatforms;
 	private OrthographicCamera cam;
 	
+	private float rank;
 	private int curLevel;
 	private LevelLayout levelLayout;
 	private LevelScenes levelScenes;
@@ -163,12 +167,17 @@ public class World {
 				spawners.add((EnemySpawner) o);
 			} else if (o instanceof MovablePlatformSpawner) {
 				movablePlatformSpawners.add((MovablePlatformSpawner) o);
+			} else if (o instanceof RandomizedEnemySpawner) {
+				randomSpawners.add((RandomizedEnemySpawner) o);
 			}
 		}
-		//System.out.println("Found " + spawners.size + " enemy spawners");
-		//System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
+		System.out.println("Found " + spawners.size + " enemy spawners");
+		System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
+		System.out.println("Found " + randomSpawners.size + " randomizd enemy spawners");
+		
+		//Test objects
 		enemies.add( new Walker(new Vector2 (10f, 9f)) );
-
+		enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(0, 1), 4f, 2f, new Vector2(0,11), 5f, true, 1.5f));
@@ -179,7 +188,7 @@ public class World {
 	/* ----- Object handlers ----- */	
 	private void checkTileCollision(MovableEntity mve) {
 		
-		
+		System.out.println("Checking the mve: "+ mve.getClass()+ " at ("+mve.getPosition().x+","+mve.getPosition().y+")");
 		/* MovablePlatform code */
 		boolean onMovable = false;
 		MovablePlatform onPlat = null;
@@ -257,6 +266,7 @@ public class World {
 		}
 
 		sRec = mve.getXProjectionRect();
+		System.out.println("XProjectionRec="+sRec);
 		//System.out.println("Number of tiles checking: "+tiles.size);
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
@@ -273,7 +283,8 @@ public class World {
 			}
 		}
 		
-		sRec = ship.getYProjectionRect();
+		sRec = mve.getYProjectionRect();
+		System.out.println("YProjectionRec="+sRec);
 		boolean tileUnderMve = false;
 		for (Rectangle tile:tiles) {
 			if (sRec.overlaps(tile)) {
@@ -359,6 +370,15 @@ public class World {
 				}
 			}
 		}
+		
+		for (RandomizedEnemySpawner res: randomSpawners) {
+			Enemy newEnemy = res.update(Gdx.graphics.getDeltaTime(), cam, rank);
+			
+			if (newEnemy != null) {
+				enemies.add(newEnemy);
+			}
+		}
+		
 		return;
 	}
 	
@@ -386,7 +406,7 @@ public class World {
 			e = eItr.next();
 			// Get near player if scene is not playing
 			if (!levelScenes.isPlaying())
-				e.advance(Gdx.graphics.getDeltaTime(), ship);
+				e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
 			
 			/* Sword collisions */
 			if (e.getBounds().overlaps(sword.getBounds())) {
@@ -524,10 +544,11 @@ public class World {
 		bullets = new Array<Bullet>();
 		spawners = new Array<EnemySpawner>();
 		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
+		randomSpawners = new Array<RandomizedEnemySpawner>();
 		cutsceneObjects = new Array<CutsceneObject>();
 		movablePlatforms = new Array<MovablePlatform>();
 		//resetCamera();
-		
+		rank = 20;
 		
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);

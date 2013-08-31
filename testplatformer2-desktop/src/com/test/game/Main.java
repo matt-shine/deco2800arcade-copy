@@ -9,7 +9,7 @@ public class Main {
 		cfg.title = "testplatformer2";
 		cfg.useGL20 = false;
 		cfg.width = 1280;
-		cfg.height = 800;
+		cfg.height = 720;
 		
 		new LwjglApplication(new TestGame2(), cfg);
 	}

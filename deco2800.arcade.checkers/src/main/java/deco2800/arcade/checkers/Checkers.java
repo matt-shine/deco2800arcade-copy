@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -26,11 +25,9 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="Checkers")
 public class Checkers extends GameClient {
 	
+	
 	private OrthographicCamera camera;
 	
-	private Paddle leftPaddle;
-	private Paddle rightPaddle;
-	private Ball ball;
 	private enum GameState {
 		READY,
 		INPROGRESS,
@@ -55,21 +52,15 @@ public class Checkers extends GameClient {
 	private NetworkClient networkClient;
 
 	/**
-	 * Basic constructor for the Pong game
+	 * Basic constructor for the game
 	 * @param player The name of the player
 	 * @param networkClient The network client for sending/receiving messages to/from the server
 	 */
 	public Checkers(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		players[0] = player.getUsername();
-		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
+		players[1] = "Computer"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
-        
-
-        
-        
-        
-        
 	}
 	
 	/**
@@ -87,7 +78,6 @@ public class Checkers extends GameClient {
 
 			@Override
 			public void hide() {
-				//TODO: unpause pong
 			}
 
 			@Override
@@ -108,7 +98,6 @@ public class Checkers extends GameClient {
 
 			@Override
 			public void show() {
-				//TODO: unpause pong
 			}
 			
         });
@@ -121,7 +110,7 @@ public class Checkers extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
-		// Create the board
+		System.out.println("this is running");
 		
 		
 	//	leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
@@ -141,8 +130,8 @@ public class Checkers extends GameClient {
 		 */
 		
 		//Create the ball
-		ball = new Ball();
-		ball.setColor(1, 1, 1, 1);
+		//ball = new Ball();
+		//ball.setColor(1, 1, 1, 1);
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -186,11 +175,7 @@ public class Checkers extends GameClient {
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
-	    leftPaddle.render(shapeRenderer);
-	    
-	    rightPaddle.render(shapeRenderer);
-	    
-	    ball.render(shapeRenderer);
+	    //leftPaddle.render(shapeRenderer);
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
@@ -224,31 +209,7 @@ public class Checkers extends GameClient {
 	    	break;
 	    	
 	    case INPROGRESS: //Point is underway, ball is moving
-	    	//Move the left paddle (mouse)
-	    	leftPaddle.update(ball);
-	    	
-	    	//Move the right paddle (automatic)
-	    	rightPaddle.update(ball);
-	    	
-	    	//Move the ball
-	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
-	    	ball.move(Gdx.graphics.getDeltaTime());
-	    	//If the ball hits a paddle then bounce it
-	    	if (ball.bounds.overlaps(leftPaddle.bounds) || ball.bounds.overlaps(rightPaddle.bounds)) {
-	    		ball.bounceX();
-	    	}
-	    	//Bounce off the top or bottom of the screen
-	    	if (ball.bounds.y <= 0 || ball.bounds.y >= SCREENHEIGHT-Ball.WIDTH) {
-	    		ball.bounceY();
-	    	}
-	    	
-	    	//If the ball gets to the left edge then player 2 wins
-	    	if (ball.bounds.x <= 0) {
-	    		endPoint(1);
-	    	} else if (ball.bounds.x + Ball.WIDTH > SCREENWIDTH) { 
-	    		//If the ball gets to the right edge then player 1 wins
-	    		endPoint(0);
-	    	}
+	    
 	    	break;
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
@@ -267,7 +228,7 @@ public class Checkers extends GameClient {
 	 * @param winner 0 for player 1, 1 for player 2
 	 */
 	private void endPoint(int winner) {
-		ball.reset();
+		//ball.reset();
 		scores[winner]++;
 		// If we've reached the victory point then update the display
 		if (scores[winner] == WINNINGSCORE) {	
@@ -304,7 +265,7 @@ public class Checkers extends GameClient {
 	 * Start a new point: start the ball moving and change the game state
 	 */
 	private void startPoint() {
-		ball.randomizeVelocity();
+		//ball.randomizeVelocity();
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
 	}

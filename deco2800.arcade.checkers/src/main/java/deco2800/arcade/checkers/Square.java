@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 /**
- * A basic implementation of a Paddle for the pong game.
- * @author uqjstee8
+ * A basic implementation of a Square for the checkers game.
+ * @author shewwiii
  *
  */
-public abstract class Paddle {
+public abstract class Square {
 	
-	static final float WIDTH = 10f; // The width of the paddle
-	static final float INITHEIGHT = 64f; //The initial height of the paddle
+	static final float WIDTH = 64f; // The width of the paddle
+	static final float HEIGHT = 64f; //The initial height of the paddle
 	
 	private float renderColourRed;
 	private float renderColourGreen;
@@ -21,26 +21,18 @@ public abstract class Paddle {
 	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the paddle
 	
 	/**
-	 * Basic constructor for paddle
+	 * Basic constructor for squares
 	 * @param position the initial position of the paddle
 	 */
-	public Paddle(Vector2 position) {
+	public Square(Vector2 position) {
 		this.bounds.x = position.x;
 		this.bounds.y = position.y;
 		this.bounds.width = WIDTH;
-		this.bounds.height = INITHEIGHT;
+		this.bounds.height = HEIGHT;
 	}
 	
 	/**
-	 * Move the paddle up or down.
-	 * @param y distance to move the paddle up (y<0 for down)
-	 */
-	public void move(float y) {
-		bounds.y += y;
-	}
-	
-	/**
-	 * Set the colour of the rendered paddle.
+	 * Set the colour of the rendered square.
 	 * @param r Red (0-1)
 	 * @param g Green (0-1)
 	 * @param b Blue (0-1)
@@ -55,7 +47,7 @@ public abstract class Paddle {
 	}
 	
 	/**
-	 * Render the paddle.
+	 * Render the square.
 	 * @param shapeRenderer The current {@link ShapeRenderer} instance.
 	 */
 	public void render(ShapeRenderer shapeRenderer)
@@ -71,22 +63,12 @@ public abstract class Paddle {
 	}
 	
 	/**
-	 * Set the position of the paddle
+	 * Set the position of the square
 	 * @param newPosition the new position of the paddle
 	 */
 	public void setPosition(Vector2 newPosition) {
 		bounds.x = newPosition.x;
 		bounds.y = newPosition.y;
 	}
-	
-	/**
-	 * Handle in-point updating of the paddle
-	 * @param ball 
-	 */
-	public void update(Ball ball) {
-		//Clamp paddle within screen boundaries
-    	if (bounds.y > Checkers.SCREENHEIGHT - bounds.height) bounds.y = Checkers.SCREENHEIGHT - bounds.height;
-    	if (bounds.y < 0) bounds.y = 0;
-	}
-	
+
 }

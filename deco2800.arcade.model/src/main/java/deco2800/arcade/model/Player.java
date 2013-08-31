@@ -1,8 +1,8 @@
 package deco2800.arcade.model;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
 
 public class Player {
 
@@ -16,25 +16,26 @@ public class Player {
 	
 	private Set<Player> friends;
 	
+	private Set<Player> blocked; 
+	
 	private Set<Player> friendInvites;
 	
 	private Icon icon;
+	
+	//private String realName;
+	
+	//private String location;
+	
+	//private String biography;
+	
+	//private String onlineStatus;
 
 	public Player() {
 
 	}
-
-	@Deprecated
-	/**
-	 * Sets the name of the Player
-	 * 
-	 * @param username
-	 */
+	
 	public Player(String username) {
-		/*
-		 * Do we want this to be mutable? If so we're going to want to have some
-		 * form of immutable playerID.
-		 */
+		
 		this.username = username;
 	}
 
@@ -65,6 +66,7 @@ public class Player {
 		this.games = new HashSet<Game>();
 		this.friends = new HashSet<Player>();
 		this.friendInvites = new HashSet<Player>();
+		this.blocked = new HashSet<Player>();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
@@ -320,7 +322,68 @@ public class Player {
 	}
 	
 	
+	/**
+	 * Access method for player's blocked list
+	 * @return A set containing the player's blocked list.
+	 */
+	public Set<Player> getBlockedList() {
+		Set<Player> clone = new HashSet<Player>(this.blocked);
+		return clone;
+	}
 	
+	/**
+	 * Sets the player's blocked list to the set provided.
+	 * 
+	 * @param blocked
+	 * 			A set containing the player's blocked list.
+	 */
+	public void setBlockedList(Set<Player> blocked) {
+		if (blocked != null) {
+			this.blocked = new HashSet<Player>(blocked);
+		}
+	}
 	
+	/**
+	 * Checks if the player has already blocked the specified player
+	 * 
+	 * @param player
+	 * 			The player that is being verified as blocked.
+	 * @return
+	 * 		True if the player has blocked the specified player, 
+	 * 		false otherwise.
+	 */
+	public boolean isBlocked(Player player) {
+		return this.blocked.contains(player);
+	}
 	
-}
+	/**
+	 * Adds a player to the player's blocked set.
+	 * 
+	 * @param player
+	 * 			The player to be added to the blocked set.
+	 * @ensure this.blocked.contains(player)
+	 */
+	public void addBlocked(Player player) throws Exception {
+		if (player != null) {
+			if(this.isBlocked(player)){
+				throw new Exception("Player is already blocked"); }
+			else {
+				this.blocked.add(player); }
+		}
+	}
+	
+	/**
+	 * Remove a player from the player's blocked list.
+	 * 
+	 * @param player
+	 * 			player to be removed from blocked list.
+	 * @ensure !this.blocked.contains(player)
+	 */
+	public void removeBlocked(Player player) throws Exception {
+		if (this.isBlocked(player)) {
+			this.blocked.remove(player); }
+		else {
+			throw new Exception("Player is not in your blocked list"); }
+		}
+	}
+	

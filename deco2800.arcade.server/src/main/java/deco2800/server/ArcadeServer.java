@@ -57,6 +57,7 @@ public class ArcadeServer {
 	// Credit storage service
 	private CreditStorage creditStorage;
 	//private PlayerStorage playerStorage;
+	//private FriendStorage friendStorage;
 	
 	/**
 	 * Access the server's credit storage facility
@@ -94,6 +95,7 @@ public class ArcadeServer {
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
 		//this.playerStorage = new PlayerStorage();
+		//this.friendStorage = new FriendStorage();
 		
 		//initialize database classes
 		try {

@@ -85,8 +85,8 @@ public class Arcade extends JFrame {
 	 * @param args
 	 */
 	private Arcade(String[] args){
-		this.width = 640;
-		this.height = 480;
+		this.width = 1280;
+		this.height = 720;
 
 		initWindow();
 	}
@@ -196,12 +196,16 @@ public class Arcade extends JFrame {
 		this.player = new Player();
 		this.player.setUsername(username);
 
+
 		this.communicationNetwork.createInterface();
 		
 		NewMultiGameRequest multiGameRequest = new NewMultiGameRequest(); 
 		
 		this.client.sendNetworkObject(multiGameRequest);
 		System.out.println("Send Request");
+
+		//this.communicationNetwork.createNewChat(username);
+
 	}
 
 	/**
@@ -221,7 +225,9 @@ public class Arcade extends JFrame {
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
 	public void startGame(String gameid){
+
 		selectedGame = getInstanceOfGame(gameid);
+
 		startGame(selectedGame);
 	}
 
@@ -230,6 +236,7 @@ public class Arcade extends JFrame {
 	 * Stop the current game
 	 */
 	public void stopGame(){
+
 		if (selectedGame != null) {
 			selectedGame.gameOver();
 		}
@@ -337,21 +344,19 @@ public class Arcade extends JFrame {
 		return games.keySet();
 	}
 
-	public GameClient getInstanceOfGame(String id) {
-		return getInstanceOfGame(id, false);
-	}
 
-	public GameClient getInstanceOfGame(String id, boolean asOverlay) {
+	public GameClient getInstanceOfGame(String id) {
+		
 		Class<? extends GameClient> gameClass = getGameMap().get(id);
 		try {
 			if (gameClass != null) {
 				Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
-				GameClient game = null;
+				GameClient game = constructor.newInstance(player, client);
 
 				//add the overlay to the game
-				if (id != "arcadeui") {
-					game = constructor.newInstance(player, client);
-					GameClient overlay = getInstanceOfGame("arcadeui", true);
+				if (!gameClass.isAnnotationPresent(InternalGame.class)) {
+					
+					GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 					
 					//the overlay and the bridge are the same object, but
 					//GameClient doesn't know that and it mightn't be that way forever
@@ -360,10 +365,6 @@ public class Arcade extends JFrame {
 						game.addOverlayBridge((UIOverlay) overlay);
 					}
 					
-				} else {
-					//the overlay takes an extra param telling it that its the overlay
-					constructor = gameClass.getConstructor(Player.class, NetworkClient.class, Boolean.class);
-					game = constructor.newInstance(player, client, asOverlay);
 				}
 
 				return game;

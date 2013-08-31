@@ -118,6 +118,9 @@ public class Player extends User {
 	public void addGame(Game game) {
 		if (game != null) {
 			this.games.add(game);
+			setChanged();
+			notifyObservers(games);
+			clearChanged();
 		}
 	}
 
@@ -130,6 +133,9 @@ public class Player extends User {
 	 */
 	public void removeGame(Game game) {
 		this.games.remove(game);
+		setChanged();
+		notifyObservers(games);
+		clearChanged();
 	}
 
 	/**
@@ -176,6 +182,9 @@ public class Player extends User {
 	public void addFriend(User friend) {
 		if (friend != null) {
 			this.friends.add(friend);
+			setChanged();
+			notifyObservers(friends);
+			clearChanged();
 		}
 	}
 
@@ -187,7 +196,12 @@ public class Player extends User {
 	 * @ensure !this.friends.contains(friend)
 	 */
 	public void removeFriend(Player friend) {
-		this.friends.remove(friend);
+		if (friend != null) {
+			this.friends.remove(friend);
+			setChanged();
+			notifyObservers(friends);
+			clearChanged();
+		}
 	}
 
 	/**
@@ -222,6 +236,9 @@ public class Player extends User {
 	public void addInvite(User player) {
 		if (player != null) {
 			this.friendInvites.add(player);
+			setChanged();
+			notifyObservers(friendInvites);
+			clearChanged();
 		}
 	}
 
@@ -233,7 +250,12 @@ public class Player extends User {
 	 * @ensure !this.friendInvites.contains(player)
 	 */
 	public void removeInvite(User player) {
-		this.friendInvites.remove(player);
+		if (player != null) {
+			this.friendInvites.remove(player);
+			setChanged();
+			notifyObservers(friendInvites);
+			clearChanged();
+		}
 	}
 
 	/**
@@ -267,6 +289,9 @@ public class Player extends User {
 	public void blockPlayer(User player) {
 		if (player != null) {
 			this.blocked.add(player);
+			setChanged();
+			notifyObservers(blocked);
+			clearChanged();
 		}
 	}
 
@@ -278,6 +303,11 @@ public class Player extends User {
 	 * @ensure !this.blocked.contains(player)
 	 */
 	public void removeBlocked(User player) throws Exception {
-		this.blocked.remove(player);
+		if (player != null) {
+			this.blocked.remove(player);
+			setChanged();
+			notifyObservers(blocked);
+			clearChanged();
+		}
 	}
 }

@@ -79,7 +79,7 @@ public class WorldRenderer {
 	
 	
 	//debug
-	private boolean debugMode = false;
+	private boolean debugMode = true;
 	ShapeRenderer sr;
 	TextureRegion testRegion;
 	private FPSLogger fpsLogger;

@@ -1,6 +1,5 @@
 package deco2800.arcade.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public class Player extends User {
@@ -9,13 +8,13 @@ public class Player extends User {
 
 	private String username;
 
-	private Set<Game> games;
+	private Games games;
 
-	private Set<User> friends;
+	private Friends friends;
 
-	private Set<User> blocked;
+	private Blocked blocked;
 
-	private Set<User> friendInvites;
+	private FriendInvites friendInvites;
 
 	private Icon icon;
 
@@ -40,10 +39,10 @@ public class Player extends User {
 	public Player(int playerID, String username, String filepath) {
 		super(playerID);
 		this.username = username;
-		this.games = new HashSet<Game>();
-		this.friends = new HashSet<User>();
-		this.friendInvites = new HashSet<User>();
-		this.blocked = new HashSet<User>();
+		this.games = new Games();
+		this.friends = new Friends();
+		this.friendInvites = new FriendInvites();
+		this.blocked = new Blocked();
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
@@ -106,27 +105,7 @@ public class Player extends User {
 	 * @return Returns a set containing the player's games.
 	 */
 	public Set<Game> getGames() {
-		/*
-		 * Cloning this.games to preserve immutability
-		 */
-		Set<Game> clone = new HashSet<Game>(this.games);
-		return clone;
-	}
-
-	@Deprecated
-	/**
-	 * Sets the Player's games to the set provided
-	 * 
-	 * @param games
-	 *            The player's games.
-	 */
-	public void setGames(Set<Game> games) {
-		/*
-		 * Preserving immutability
-		 */
-		if (games != null) {
-			this.games = new HashSet<Game>(games);
-		}
+		return games.getSet();
 	}
 
 	/**
@@ -171,22 +150,9 @@ public class Player extends User {
 	 * @return A set containing the player's friends.
 	 */
 	public Set<User> getFriends() {
-		Set<User> clone = new HashSet<User>(this.friends);
-		return clone;
+		return friends.getSet();
 	}
 
-	@Deprecated
-	/**
-	 * Sets the player's friends to the set provided.
-	 * 
-	 * @param friends
-	 *            A set containing the player's friends.
-	 */
-	public void setFriends(Set<User> friends) {
-		if (friends != null) {
-			this.friends = new HashSet<User>(friends);
-		}
-	}
 
 	/**
 	 * Checks if the player is already friends with the specified player
@@ -230,21 +196,7 @@ public class Player extends User {
 	 * @return A set containing the player's invites.
 	 */
 	public Set<User> getInvites() {
-		Set<User> clone = new HashSet<User>(this.friendInvites);
-		return clone;
-	}
-
-	@Deprecated
-	/**
-	 * Sets the player's invites to the set provided.
-	 * 
-	 * @param invites
-	 *            A set containing the player's invites.
-	 */
-	public void setInvites(Set<User> invites) {
-		if (invites != null) {
-			this.friendInvites = new HashSet<User>(invites);
-		}
+		return this.friendInvites.getSet();
 	}
 
 	/**
@@ -290,21 +242,7 @@ public class Player extends User {
 	 * @return A set containing the player's blocked list.
 	 */
 	public Set<User> getBlockedList() {
-		Set<User> clone = new HashSet<User>(this.blocked);
-		return clone;
-	}
-
-	@Deprecated
-	/**
-	 * Sets the player's blocked list to the set provided.
-	 * 
-	 * @param blocked
-	 *            A set containing the player's blocked list.
-	 */
-	public void setBlockedList(Set<User> blocked) {
-		if (blocked != null) {
-			this.blocked = new HashSet<User>(blocked);
-		}
+		return this.blocked.getSet();
 	}
 
 	/**

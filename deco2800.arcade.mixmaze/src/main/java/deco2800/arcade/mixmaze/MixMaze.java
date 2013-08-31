@@ -6,6 +6,7 @@ package deco2800.arcade.mixmaze;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -52,7 +53,6 @@ public final class MixMaze extends GameClient {
 
 	@Override
 	public void render() {
-		//fpsLogger.log();
 		super.render();
 	}
 

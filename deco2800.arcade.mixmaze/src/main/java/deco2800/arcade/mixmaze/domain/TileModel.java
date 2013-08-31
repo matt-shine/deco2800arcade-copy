@@ -7,21 +7,21 @@ public class TileModel {
 	private int tileX;
 	private int tileY;
 	private WallModel[] walls;
-	
+
 	private PlayerModel boxer;
-	
+
 	private Random spawner = new Random();
 	private ItemModel spawnedItem;
 	private long lastSpawned;
-	
-	public int getX() {
+
+	public int getRow() {
 		return tileX;
 	}
-	
-	public int getY() {
+
+	public int getColumn() {
 		return tileY;
 	}
-	
+
 	public WallModel getWall(int direction) {
 		// Check the specified direction is in range.
 		if(!Direction.isDirection(direction)) {
@@ -29,14 +29,14 @@ public class TileModel {
 		}
 		return walls[direction];
 	}
-	
+
 	public boolean isBox() {
-		return getWall(Direction.WEST).isBuilt() && 
-				getWall(Direction.NORTH).isBuilt() && 
-				getWall(Direction.EAST).isBuilt() && 
+		return getWall(Direction.WEST).isBuilt() &&
+				getWall(Direction.NORTH).isBuilt() &&
+				getWall(Direction.EAST).isBuilt() &&
 				getWall(Direction.SOUTH).isBuilt();
 	}
-	
+
 	public void spawnItem() {
 		if((System.currentTimeMillis() - lastSpawned) >= (10 * 1000)) {
 			if(spawner.nextDouble() <= 0.2) {
@@ -45,7 +45,7 @@ public class TileModel {
 			lastSpawned = System.currentTimeMillis();
 		}
 	}
-	
+
 	public TileModel(int x, int y) {
 		tileX = x;
 		tileY = y;

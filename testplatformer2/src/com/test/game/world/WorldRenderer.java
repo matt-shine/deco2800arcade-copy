@@ -388,7 +388,7 @@ public class WorldRenderer {
 		batch.begin();
 		
 		float heartX = cam.position.x - 13;
-		float heartY = cam.position.y + 7;
+		float heartY = cam.position.y + 6.5f;
 		
 		for(int i = 0; i<ship.getHearts(); i++) {
 			heartX += 0.5f;

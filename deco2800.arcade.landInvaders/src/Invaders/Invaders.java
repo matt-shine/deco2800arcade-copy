@@ -21,6 +21,8 @@ public class Invaders extends JFrame implements Runnable {
 	private Robot r;
 	private int shotsNmb;
 	private int level;
+	private blockWall blockWall;
+	private ArrayList<blockWall> WallList;
 
 	private ArrayList<tankshot> shots;
 	private ArrayList<enemyShot> Eshots;
@@ -28,7 +30,10 @@ public class Invaders extends JFrame implements Runnable {
 	public Invaders() throws Exception {
 
 		super("Land Invaders");
-
+		WallList = new ArrayList<blockWall>();
+		WallList.add(new blockWall(180, 350, 4, 8));
+		WallList.add(new blockWall(380, 350, 4, 8));
+		WallList.add(new blockWall(580, 350, 4, 8));
 		shotsNmb = 6;
 		level = 2;
 		shots = new ArrayList<tankshot>();
@@ -72,6 +77,9 @@ public class Invaders extends JFrame implements Runnable {
 			Eshots.get(n).drawshot(mains);
 
 		}
+		for (int e = 0; e < WallList.size(); e++) {
+		WallList.get(e).drawWall(mains);
+		}
 		enemyG.drawGroup(mains);
 		tank.drawTank(mains, this);
 		g.drawImage(bg, 0, 0, this);
@@ -107,6 +115,24 @@ public class Invaders extends JFrame implements Runnable {
 			}
 
 		}
+
+	}
+
+	public void hitwall() {
+		for (int n = 0; n < WallList.size(); n++) {
+			blockWall = WallList.get(n);
+			for (int i = 0; i < shots.size(); i++) {
+				if (blockWall.checkHit(shots.get(i)) == true) {
+					shots.remove(i);
+				}
+			}
+
+			for (int i = 0; i < Eshots.size(); i++) {
+				if (blockWall.checkEnemyHit(Eshots.get(i)) == true) {
+					Eshots.remove(i);
+				}
+			}
+		}
 	}
 
 	public void enemyMove(int count) {
@@ -129,14 +155,14 @@ public class Invaders extends JFrame implements Runnable {
 		case 2:
 			enemyMove(count);
 			levelTwo(count);
-			
 
 		}
 	}
-	
-	public void levelTwo(int count){
-		
+
+	public void levelTwo(int count) {
+
 		Eshots.addAll(enemyG.enemyShot(count));
+
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -166,6 +192,7 @@ public class Invaders extends JFrame implements Runnable {
 			shotUpdate();
 			levelSelect(count);
 			hitEnemy();
+			hitwall();
 			repaint();
 			count++;
 		}

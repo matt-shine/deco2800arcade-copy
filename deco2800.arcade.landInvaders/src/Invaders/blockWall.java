@@ -1,33 +1,32 @@
 package Invaders;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 
-public class enemyGroup {
-
+public class blockWall {
 	private int rowNum;
 	private int rowEnemyNum;
 	private enemy[] temp;
 	private enemy[][] lists;
-	private int shotRow;
+	private int px;
+	private int py;
 
-	public enemyGroup(int rowNum, int rowEnemyNum) {
-
+	public blockWall(int px, int py, int rowNum, int rowEnemyNum) {
 		this.rowNum = rowNum;
 		this.rowEnemyNum = rowEnemyNum;
-		shotRow= 1;
 		lists = new enemy[rowNum][rowEnemyNum];
-
-		createGroup();
+		this.px=px;
+		this.py=py;
+		createWall();
+		
 
 	}
 
-	public void createGroup() {
+	public void createWall() {
 
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(100 + i * 100, 100 + n * 40, 30, 30);
+				temp[i] = new enemy(px+i*10, py + n * 10, 10, 10);
 
 			}
 			lists[n] = temp;
@@ -35,7 +34,7 @@ public class enemyGroup {
 
 	}
 
-	public void drawGroup(Graphics g) {
+	public void drawWall(Graphics g) {
 
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
@@ -47,21 +46,37 @@ public class enemyGroup {
 		}
 
 	}
-	
-	public void moveUpdate(int move){
+
+
+
+	public boolean checkHit(tankshot shot) {
+
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
 				if (lists[n][i] != null) {
-					lists[n][i].moveUpdate(move);
-				}
 
+					if ((((shot.positionX() > lists[n][i].positionX() && shot
+							.positionX() < lists[n][i].positionX()
+							+ lists[n][i].width()) || ((shot.positionX()
+							+ shot.width() > lists[n][i].positionX() && shot
+							.positionX() + shot.width() < lists[n][i]
+							.positionX() + lists[n][i].width()))) && (shot
+							.positionY() < lists[n][i].positionY()
+							+ lists[n][i].height() && shot.positionY() > lists[n][i]
+							.positionY()))) {
+
+						lists[n][i] = null;
+						return true;
+
+					}
+
+				}
 			}
 		}
-		
-		
+		return false;
 	}
-
-	public boolean checkHit(tankshot shot) {
+	
+	public boolean checkEnemyHit(enemyShot shot) {
 
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
@@ -69,8 +84,8 @@ public class enemyGroup {
 					
 					if ((((shot.positionX() > lists[n][i].positionX() && shot.positionX() < lists[n][i].positionX()+ lists[n][i].width())
 							|| ((shot.positionX()+shot.width() > lists[n][i].positionX() && shot.positionX() + shot.width() < lists[n][i].positionX() + lists[n][i].width())))
-							&&( shot.positionY() < lists[n][i].positionY()
-									+ lists[n][i].height()&&  shot.positionY()> lists[n][i].positionY()))) {
+							&&( (shot.positionY()+shot.height()) <= lists[n][i].positionY()
+									+ lists[n][i].height()&&  (shot.positionY() +shot.width()) > lists[n][i].positionY()))) {
 
 						lists[n][i] = null;
 						return true;
@@ -84,29 +99,4 @@ public class enemyGroup {
 		}
 		return false;
 	}
-	
-	
-	
-	
-	public ArrayList<enemyShot> enemyShot(int count){
-		ArrayList<enemyShot> shots =new ArrayList<enemyShot>();
-		if(count%50==0){
-			
-			for (int i = 0; i < rowEnemyNum; i++) {
-				if (lists[shotRow-1][i] != null) {
-					shots.add(new enemyShot(lists[shotRow-1][i].positionX(),lists[shotRow-1][i].positionY()));
-					
-				}
-				
-
-			}
-			if(shotRow != 3){
-				shotRow ++;
-			}else{
-				shotRow =1;
-			}
-		}
-		return shots;
-	}
-
 }

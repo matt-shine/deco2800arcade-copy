@@ -26,7 +26,7 @@ public class enemyShot {
 	}
 
 	public void Update() {
-		p_y += 7;
+		p_y += 6;
 	}
 
 	public int positionX() {

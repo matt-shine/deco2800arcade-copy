@@ -17,13 +17,35 @@ public enemy(int Px,int Py,int SizeW, int SizeH){
 	height=SizeH;
 }
 
-public void drawEnemy(Graphics g,int move){
+public void drawEnemy(Graphics g){
 	g.setColor(Color.red);
-	g.fillRect(position_x+move, position_y, width, height);
+	g.fillRect(position_x, position_y, width, height);
 	
 	
 }
+
+public void moveUpdate(int move){
 	
+	position_x += move;
+}
+
+public int positionX(){
+	
+	return position_x;
+}
+
+public int positionY(){
+	
+	return position_y;
+}
+
+public int width(){
+	return width;
+}
+
+public int height(){
+	return height;
+}
 
 
 

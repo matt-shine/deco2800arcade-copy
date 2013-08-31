@@ -194,7 +194,7 @@ public class Player extends User {
 	 *            Friend to be removed.
 	 * @ensure !this.friends.contains(friend)
 	 */
-	public void removeFriend(Player friend) {
+	public void removeFriend(User friend) {
 		if (friend != null) {
 			this.friends.remove(friend);
 			setChanged();

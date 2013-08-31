@@ -423,4 +423,41 @@ public class Arena extends Sprite {
 		}
 	}
 	
+	//Returns the zone (p1hand, p2field, etc) that the point lies inside 
+	public String getAreaAtPoint(int x, int y) {
+		
+		float width = Gdx.graphics.getWidth();
+		float height = Gdx.graphics.getHeight();
+
+		//Check if in a monster Zone
+		if(width*MonsterZone1X <= x && width*(MonsterZone5X+monsterZoneWidth) >= x) {
+			//check what player
+			if(height*P1MonsterZoneY < y && (height*(P1MonsterZoneY+monsterZoneHeight)) > y) {
+				return "P1MonsterZone";
+			} else if(height*P2MonsterZoneY < y && (height*(P2MonsterZoneY+monsterZoneHeight)) > y) {
+				return "P2MonsterZone";
+			}
+		}
+		//Check if in a monster Zone
+		if(width*HandZone1X <= x && width*(HandZone6X+handZoneWidth) >= x) {
+			//check what player
+			if(height*P1HandZoneY < y && (height*(P1HandZoneY+handZoneHeight)) > y) {
+				return "P1HandZone";
+			} else if(height*P2HandZoneY < y && (height*(P2HandZoneY+handZoneHeight)) > y) {
+				return "P2HandZone";
+			}
+		}
+		//Check if in a spell zone
+		if(width*SpellZone1X <= x && width*(SpellZone2X+spellZoneWidth) >= x) {
+			//check what player
+			if(height*P1SpellZone1Y < y && (height*(P1SpellZone2Y+spellZoneHeight)) > y) {
+				return "P1SpellZone";
+			} else if(height*P2SpellZone1Y < y && (height*(P2SpellZone2Y+spellZoneHeight)) > y) {
+				return "P2SpellZone";
+			}
+		}
+		
+		return null;
+	}
+	
 }

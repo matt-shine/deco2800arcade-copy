@@ -20,7 +20,7 @@ public class MainGameScreen implements Screen {
 	
 	private final MainGame game;
 	private OrthographicCamera camera;
-	private AssetManager manager;
+	AssetManager manager;
 	private ShapeRenderer shapeRenderer;
 
 	//Variables for Card locations and what they contain
@@ -51,7 +51,6 @@ public class MainGameScreen implements Screen {
 		manager = new AssetManager();
 		loadAssets();
 		manager.finishLoading();
-		System.out.println("All loaded");
 		
 		//create game arena
 		arena = new Arena(manager.get("DeerForestAssets/background.png", Texture.class));
@@ -61,40 +60,15 @@ public class MainGameScreen implements Screen {
 		
 		//create P1Hand
 		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
-		ExtendedSprite P1MonsterHandSprite = new ExtendedSprite(manager.get("DeerForestAssets/LightMonsterShell.png", Texture.class));
-		P1MonsterHandSprite.setPosition(100, 100);
-		p1Hand.add(P1MonsterHandSprite);
-		P1MonsterHandSprite.setScale(0.25f);
-		ExtendedSprite P1MonsterHandSprite2 = new ExtendedSprite(manager.get("DeerForestAssets/FireMonsterShell.png", Texture.class));
-		P1MonsterHandSprite2.setPosition(400, 400);
-		p1Hand.add(P1MonsterHandSprite2);
-		P1MonsterHandSprite2.setScale(0.25f);
-		//Add spell to hand
-		ExtendedSprite P1SpellhandSprite = new ExtendedSprite(manager.get("DeerForestAssets/GeneralSpellShell.png", Texture.class));
-		P1SpellhandSprite.setPosition(150, 150);
-		p1Hand.add(P1SpellhandSprite);
-		P1SpellhandSprite.setScale(0.25f);
 		
 		//create P1Monster
 		List<ExtendedSprite> p1Monster = new ArrayList<ExtendedSprite>();
-		ExtendedSprite P1MonsterSprite = new ExtendedSprite(manager.get("DeerForestAssets/DarkMonsterShell.png", Texture.class));
-		P1MonsterSprite.setPosition(250, 250);
-		p1Monster.add(P1MonsterSprite);
-		P1MonsterSprite.setScale(0.25f);
 
 		//create P2Hand
 		List<ExtendedSprite> p2Hand = new ArrayList<ExtendedSprite>();
-		ExtendedSprite P2MonsterHandSprite = new ExtendedSprite(manager.get("DeerForestAssets/NatureMonsterShell.png", Texture.class));
-		P2MonsterHandSprite.setPosition(350, 350);
-		p2Hand.add(P2MonsterHandSprite);
-		P2MonsterHandSprite.setScale(0.25f);
 		
 		//create P2Monster
 		List<ExtendedSprite> p2Monster = new ArrayList<ExtendedSprite>();
-		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/WaterMonsterShell.png", Texture.class));
-		s2.setPosition(200, 200);
-		s2.setScale(0.25f);
-	    p2Monster.add(s2);
 	    
 	    spriteMap.put("P1HandZone", p1Hand);
 	    spriteMap.put("P1MonsterZone", p1Monster);
@@ -114,6 +88,7 @@ public class MainGameScreen implements Screen {
 		manager.load("DeerForestAssets/WaterMonsterShell.png", Texture.class);
 		manager.load("DeerForestAssets/NatureMonsterShell.png", Texture.class);
 		manager.load("DeerForestAssets/GeneralSpellShell.png", Texture.class);
+		manager.load("DeerForestAssets/FieldSpellShell.png", Texture.class);
 		manager.load("DeerForestAssets/background.png", Texture.class);
 	}
 
@@ -144,10 +119,15 @@ public class MainGameScreen implements Screen {
 	    }
 	    
 	    //Print the model / game data (for debugging)
-	    game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.20f*getHeight());
-	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.25f*getHeight());
-	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.30f*getHeight());
-
+	    game.font.draw(game.batch, "Press SPACE for next phase", 0.80f*getWidth(), 0.2f*getHeight());
+	    game.font.draw(game.batch, "Press RIGHT_ALT for debug info", 0.80f*getWidth(), 0.25f*getHeight());
+	    game.font.draw(game.batch, "Press LEFT_ALT for next turn", 0.80f*getWidth(), 0.3f*getHeight());
+	    game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.35f*getHeight());
+	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.4f*getHeight());
+	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.45f*getHeight());
+	    game.font.draw(game.batch, "P1 LP: " + game.getPlayerLP(1), 0.80f*getWidth(), 0.5f*getHeight());
+	    game.font.draw(game.batch, "P2 LP: " + game.getPlayerLP(2), 0.80f*getWidth(), 0.55f*getHeight());
+	    
 	    game.batch.end();
 	    
 	    //draw highlighted zone

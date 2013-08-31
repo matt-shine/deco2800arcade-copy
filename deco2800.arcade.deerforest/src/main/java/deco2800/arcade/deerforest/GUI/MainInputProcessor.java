@@ -1,13 +1,19 @@
 package deco2800.arcade.deerforest.GUI;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+
+import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
+import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 //This class functions basically as the controller
 public class MainInputProcessor implements InputProcessor {
@@ -37,38 +43,73 @@ public class MainInputProcessor implements InputProcessor {
 	@Override
 	public boolean keyDown (int keycode) {
 		
+		//Go to next phase
 		if(keycode == Keys.SPACE && game.getPhase() != null) {
 			game.nextPhase();
+			//Set stuff up at the start phase
 			if(game.getPhase().equals("StartPhase")) {
 				currentSelection = null;
 				view.setHighlightedZones(new ArrayList<Rectangle>());
+				game.nextPhase();
+			} 
+			//draw a card
+			if(game.getPhase().equals("DrawPhase")) {
+				//TODO DRAW ALL THE CARDS!!!
+				doDraw();
 			}
+			currentSelection = null;
 			return true;
 		} 
 		
+		//Change player turns
 		if(keycode == Keys.ALT_LEFT) {
 			game.changeTurns();
+			game.nextPhase();
+			doDraw();
+			currentSelection = null;
 			currentSelection = null;
 			view.setHighlightedZones(new ArrayList<Rectangle>());
 			return true;
 		}
 		
+		//Print debug stuff
 		if(keycode == Keys.ALT_RIGHT) {
+			System.out.println("Screen data");
 			view.printSpriteMap();
 			System.out.println();
+			System.out.println("Arena data");
 			view.getArena().printZoneInfo();
 			System.out.println();
 			System.out.println("CurrentSelection: " + currentSelection + " player: " + currentSelectionPlayer 
 					+ " monster: " + currentSelectionMonster + " field" + currentSelectionField + " area: " + currentSelectionArea);
 			System.out.println();
+	    	
+	    	//Print out data about hand / deck / field
+			System.out.println("Model data");
+			CardCollection p1Hand = game.getCardCollection(1, "Hand");
+			System.out.println("P1Hand: " + Arrays.toString(p1Hand.toArray()));
 			System.out.println();
+			
+			CardCollection p2Hand = game.getCardCollection(2, "Hand");
+			System.out.println("P2Hand: " + Arrays.toString(p2Hand.toArray()));
+			System.out.println();
+			
+			CardCollection p1Field = game.getCardCollection(1, "Field");
+			System.out.println("P1Field: " + Arrays.toString(p1Field.toArray()));
+			System.out.println();
+			
+			CardCollection p2Field = game.getCardCollection(2, "Field");
+			System.out.println("P2Field: " + Arrays.toString(p2Field.toArray()));
+			System.out.println();
+			System.out.println();
+			
 			return true;
 		}
 		
         return false;
     }
 
-    @Override
+	@Override
     public boolean keyUp (int keycode) {
         return false;
     }
@@ -89,8 +130,15 @@ public class MainInputProcessor implements InputProcessor {
     	if(currentSelection != null) {
     		//completed successfully, so set current to null
     		if(setCurrentSelectionToPoint(x,y)) {
-    			//Successfully moved card
-    			//Do stuff with model here
+    			//Successfully moved card, update model
+    			String oldArea = currentSelectionArea;
+    			String newArea = view.getArena().getAreaAtPoint(x, y);
+    			List<AbstractCard> cards = new ArrayList<AbstractCard>();
+    			AbstractCard c = getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
+    			cards.add(c);
+    			System.out.println("Moved from: " + oldArea + " to: " + newArea);
+    			System.out.println("cards is:" + Arrays.toString(cards.toArray()) + " Old area: " + oldArea + " newArea: " + newArea);
+    			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
     		}
     		//clear available zones and currentSelection
     		currentSelection = null;
@@ -124,6 +172,13 @@ public class MainInputProcessor implements InputProcessor {
 			if(setCurrentSelectionToRectangle(currentSelection.getBoundingRectangle())) {
 				//successfully moved card
 				//Do stuff with model here
+				String oldArea = currentSelectionArea;
+    			String newArea = view.getArena().getAreaAtPoint((int)currentSelection.getX()+10, (int)currentSelection.getY()+10);
+    			List<AbstractCard> cards = new ArrayList<AbstractCard>();
+    			AbstractCard c = getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
+    			cards.add(c);
+    			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
+    			System.out.println("Moved from: " + oldArea + " to: " + newArea);
 			} else {
 				//card was not moved, set it back to original position
 				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelectionOriginZone, currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
@@ -159,6 +214,37 @@ public class MainInputProcessor implements InputProcessor {
         return false;
     }
 
+
+    private void doDraw() {
+    	
+    	//Get current hand
+    	int player = game.getCurrentPlayer();
+    	CardCollection currentHand = game.getCardCollection(player, "Hand");
+    	
+    	//Check that the hand is not already full
+    	if(currentHand.size() >= 6) {
+    		System.out.println("hand is full");
+    		return;
+    	}
+    	
+    	//Draw a card
+    	AbstractCard c = game.draw(player);
+
+		//Add card to the hand (in view, already added to player hand in model)
+		
+		//update currentSelection to be the drawn card
+		currentSelection = new ExtendedSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
+		//set the current selection data
+		currentSelectionField = false;
+		currentSelectionMonster = false; //doesn't matter as in hand
+		currentSelectionPlayer = player;
+		currentSelectionArea = this.getCurrentSelectionArea(currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
+		
+		//Set to hand rectangle
+		Rectangle r = view.getArena().getAvailableZones(player, false, false).get(0);
+		setCurrentSelectionToRectangle(r);
+	}
+    
     /**
      * returns the sprite at the point, if one exists and belongs to the
      * current player
@@ -221,10 +307,13 @@ public class MainInputProcessor implements InputProcessor {
 		//get the empty zone at point (only check zones allowed) 
     	//Hand can only go to field if main phase and no summoned (if monster)
     	if(!currentSelectionField && !game.getSummoned() && currentSelectionMonster && game.getPhase().equals("MainPhase")) {
+    		//Monster in hand
         	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, true);
     	} else if(!currentSelectionField && !currentSelectionMonster && game.getPhase().equals("MainPhase")) {
+    		//Spell Card in hand
         	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, false);
     	} else if(currentSelectionField) {
+    		//On field
         	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, currentSelectionMonster);
     	}
     	//if current zone is a hand zone then check for empty zone at that point
@@ -383,5 +472,24 @@ public class MainInputProcessor implements InputProcessor {
 				return "P2HandZone";
 			}
 		}
+	}
+
+    //returns the AbstractCard based on the given sprite and what area it is in (area based on model)
+	private AbstractCard getCardModelFromSprite(ExtendedSprite sprite, int player, String area) {
+		
+		CardCollection collection = new CardCollectionList();
+		
+		if(area.contains("Hand")) collection = game.getCardCollection(player, "Hand");
+		else if(area.contains("Deck")) collection = game.getCardCollection(player, "Deck");
+		else if(area.contains("Field")) collection = game.getCardCollection(player, "Field");
+		else if(area.contains("Graveyard")) collection = game.getCardCollection(player, "Graveyard");
+		
+		for(AbstractCard card : collection) {
+			if(card.getPictureFilePath().equals(view.manager.getAssetFileName(sprite.getTexture()))) {
+				return card;
+			}
+		}
+		
+		return null;
 	}
 }

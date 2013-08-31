@@ -21,8 +21,8 @@ public class HandTest {
 	@Test
 	public void testDestroyAllCards() {
 		Hand hand = new Hand();
-		LightMonster light = new LightMonster(180,null);
-		DarkMonster dark = new DarkMonster(190,null);
+		LightMonster light = new LightMonster(180,null, null);
+		DarkMonster dark = new DarkMonster(190,null, null);
 		Collection c = new ArrayList<AbstractCard>();
 		
 		hand.add(light);

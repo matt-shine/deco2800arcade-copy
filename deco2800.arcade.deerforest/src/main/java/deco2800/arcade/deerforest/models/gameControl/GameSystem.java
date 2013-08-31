@@ -280,4 +280,31 @@ public class GameSystem {
 	public void setSummoned(boolean b) {
 		summoned = b;
 	}
+	
+	public int playerLP(int player) {
+		return player==1?p1.getLifePoints():p2.getLifePoints();
+	}
+	
+	public CardCollection getCardCollection(int player, String area) {
+		
+		if(area.equals("Hand")) {
+			return player==1?p1.getHand():p2.getHand();
+		} else if(area.equals("Deck")) {
+			return player==1?p1.getDeck():p2.getDeck();
+		} else if(area.equals("Field")) {
+			return player==1?p1.getField():p2.getField();
+		} else if(area.equals("Graveyard")) {
+			return player==1?p1.getGraveyard():p2.getGraveyard();
+		}
+		
+		return null;
+	}
+	
+	public AbstractCard draw(int player) {
+		return player==1?p1.draw():p2.draw();
+	}
+
+	public boolean moveCards(int player, List<AbstractCard> cards, CardCollection oldLocation, CardCollection newLocation) {
+		return player==1?p1.moveCards(cards, oldLocation, newLocation):p2.moveCards(cards, oldLocation, newLocation);
+	}
 }

@@ -1,9 +1,13 @@
 package deco2800.arcade.deerforest.GUI;
 
+import java.util.List;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 
 //This class functions as sort of a higher level game system controller
@@ -73,4 +77,45 @@ public class MainGame extends Game {
 		model.setSummoned(b);
 	}
 
+	public int getPlayerLP(int player) {
+		return model.playerLP(player);
+	}
+	
+	public CardCollection getCardCollection(int player, String area) {
+		return model.getCardCollection(player, area);
+	}
+	
+	public AbstractCard draw(int player) {
+		return model.draw(player);
+	}
+	
+	public boolean moveCards(int player, List<AbstractCard> cards, String oldLocation, String newLocation) {
+		
+		CardCollection srcCards = null;
+		CardCollection destCards = null;
+		
+		if(oldLocation.contains("Hand")) {
+			srcCards = model.getCardCollection(player, "Hand");
+		} else if(oldLocation.contains("Deck")) {
+			srcCards = model.getCardCollection(player, "Deck");
+		} else if(oldLocation.contains("Field") || oldLocation.contains("Monster") 
+				|| oldLocation.contains("Spell")) {
+			srcCards = model.getCardCollection(player, "Field");
+		} else if(oldLocation.contains("Graveyard")) {
+			srcCards = model.getCardCollection(player, "Graveyard");
+		}
+		
+		if(newLocation.contains("Hand")) {
+			destCards = model.getCardCollection(player, "Hand");
+		} else if(newLocation.contains("Deck")) {
+			destCards = model.getCardCollection(player, "Deck");
+		} else if(newLocation.contains("Field") || newLocation.contains("Monster") 
+				|| newLocation.contains("Spell")) {
+			destCards = model.getCardCollection(player, "Field");
+		} else if(newLocation.contains("Graveyard")) {
+			destCards = model.getCardCollection(player, "Graveyard");
+		}
+		
+		return model.moveCards(player, cards, srcCards, destCards);
+	}
 }

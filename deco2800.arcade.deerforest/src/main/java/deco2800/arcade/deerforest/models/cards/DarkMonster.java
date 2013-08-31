@@ -6,8 +6,9 @@ import deco2800.arcade.deerforest.models.effects.Attack;
 
 public class DarkMonster extends AbstractMonster {
 
-	public DarkMonster(int health, List<Attack> attacks) {
-		super("Dark", health, attacks);
+	public DarkMonster(int health, List<Attack> attacks, String cardFilePath) {
+		super("Dark", health, attacks, cardFilePath);
+		this.cardFilePath = cardFilePath;
 		// TODO Auto-generated constructor stub
 	}
 	

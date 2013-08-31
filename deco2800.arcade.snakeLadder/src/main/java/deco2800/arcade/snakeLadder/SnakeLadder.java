@@ -27,8 +27,6 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.pong.Ball;
-import deco2800.arcade.pong.Pong.GameState;
 import deco2800.arcade.snakeLadderModel.*;
 
 /**

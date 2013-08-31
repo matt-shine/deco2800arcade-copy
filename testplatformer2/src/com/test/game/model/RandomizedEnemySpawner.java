@@ -35,6 +35,12 @@ public class RandomizedEnemySpawner {
 		this.active = active;
 	}
 	
+	public void removeEnemy(Enemy e) {
+		for (EnemySpawner es: enemySpawners) {
+			es.removeEnemy(e);
+		}
+	}
+	
 	public Enemy update(float delta, Camera cam, float rank) {
 		//System.out.println(active +" "+ cam.position.x+ " "+ startRange+ " "+endRange);
 		if (active && cam.position.x > startRange && cam.position.x < endRange) {
@@ -49,13 +55,14 @@ public class RandomizedEnemySpawner {
 					//pick an enemy spawner at random to spawn from
 					int rand = MathUtils.random(enemySpawners.size-1);
 					EnemySpawner es = enemySpawners.get(rand);
-					System.out.println("Spawning new from randomized at "+ es.getPosition());
+					
 					//adjust position to just outside camera (WILL NEED TO ALSO ADJUST HEIGHT BUT I DON'T KNOW HOW YET)
 					if (rightSideOfScreen[rand]) {
-						es.setPosition(new Vector2 (cam.position.x + cam.viewportWidth, es.getPosition().y));
+						es.setPosition(new Vector2 (cam.position.x + cam.viewportWidth/2 + 2f, es.getPosition().y));
 					} else {
-						es.setPosition(new Vector2 (cam.position.x, es.getPosition().y));
+						es.setPosition(new Vector2 (cam.position.x - cam.viewportWidth/2 - 2f, es.getPosition().y));
 					}
+					System.out.println("Spawning new from randomized at "+ es.getPosition() + "campos="+cam.position.x+" camview="+cam.viewportWidth);
 					output = es.spawnNewIfPossible();
 					if (output != null) {
 						System.out.println("Spawning!!!!");

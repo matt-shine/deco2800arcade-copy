@@ -27,13 +27,13 @@ public final class Level2Objects {
 		//Add popcorn enemy spawners
 		Class<SoldierEnemy> c = SoldierEnemy.class;
 		Array<EnemySpawner> spawners = new Array<EnemySpawner>();
-		spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
-		spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 1)); 
-		spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
-		spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 1)); 
+		spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 2)); 
+		spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 2)); 
+		spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 2)); 
+		spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 2)); 
 		boolean[] sides = {true, true, false, false};
 		
-		RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, 4f, 0f, 200f);
+		RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, 1.5f, 0f, 200f);
 		res.setActive(true);
 		
 		objects.add(logS0);

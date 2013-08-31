@@ -8,10 +8,12 @@ import com.test.game.model.Ship.State;
 
 public class SoldierEnemy extends Enemy {
 	
-	private static final float SPEED = 6f;
+	private static final float SPEED = 11f;
 	private static final float WIDTH = 2f;
 	private static final float HEIGHT = 2f;
 	private static final float GRAVITY = -1.8f;
+	public static final float JUMP_TIME = 0.4f;
+	public static final float JUMP_VELOCITY = 14f;
 	
 	boolean facingRight;
 	boolean startOnRight;
@@ -19,6 +21,7 @@ public class SoldierEnemy extends Enemy {
 	private State state;
 	private Boolean performingTell;
 	private float stateTime;
+	private float jumpTime;
 	
 	private enum State {
 		INIT, WALK, WAIT, JUMP, SHOOT, BOMB, SWORD, CHARGE, DEATH
@@ -36,7 +39,8 @@ public class SoldierEnemy extends Enemy {
 		facingRight = !startOnRight;
 		state = State.INIT;
 		performingTell = false;
-		stateTime = 4f;
+		stateTime = 0.33f;
+		jumpTime = 0;
 		
 		if (startOnRight) {
 			velocity.x = -SPEED;
@@ -47,15 +51,30 @@ public class SoldierEnemy extends Enemy {
 
 	@Override
 	public void advance(float delta, Ship ship, float rank) {
+		super.update(ship);
+		
+		if (Math.abs(velocity.x) < 1) {
+			velocity.x = 0;
+		}
 		
 		if (notYetDeterminedStartOnRight) {
 			notYetDeterminedStartOnRight = false;
-			if (ship.getPosition().x > position.x) {
+			if (ship.getPosition().x < position.x) {
 				startOnRight = true;
-				velocity.x = -SPEED;
+				if (ship.getVelocity().x >= 0) {
+					velocity.x = -SPEED;
+				} else {
+					velocity.x = -SPEED * 1.8f;
+				}
+				//System.out.println("Determined to start on right");
 			} else {
 				startOnRight = false;
-				velocity.x = SPEED;
+				if (ship.getVelocity().x <= 0) {
+					velocity.x = SPEED;
+				} else {
+					velocity.x = SPEED * 1.8f;
+				}
+				//System.out.println("Determined to NOT start on right");
 			}
 		}
 		
@@ -67,17 +86,19 @@ public class SoldierEnemy extends Enemy {
 		
 		
 		stateTime -= delta;
-		if (stateTime == 0) {
+		if (stateTime < 0) {
 			if (performingTell) {
 				switch (state) {
 				//Will be used for states JUMP, SHOOT, BOMB, SWORD and CHARGE
 				case JUMP:
-					velocity.y = 14f;
+					velocity.y = JUMP_VELOCITY;
 					if (facingRight) {
-						velocity.x = SPEED * 2;
+						velocity.x = SPEED * 1.5f;
 					} else {
-						velocity.x = -SPEED * 2;
+						velocity.x = -SPEED * 1.5f;
 					}
+					jumpTime = JUMP_TIME;
+					stateTime = 3f;
 					break;
 				}
 				
@@ -88,31 +109,42 @@ public class SoldierEnemy extends Enemy {
 				pickNewState(ship);
 			}
 		}
-		System.out.println("Velocity after soldier advance = "+velocity+ "    Position after soldier advance ="+position);
+		//System.out.println("Velocity after soldier advance = "+velocity+ "    Position after soldier advance ="+position);
 		
+		if (state == State.JUMP && !performingTell) {
+			jumpTime -= delta;
+			//System.out.println("jumpTime= "+jumpTime);
+			if (jumpTime < 0) {
+				//state = State.WAIT;
+				//velocity.x = 0;
+			} else {
+				velocity.y = JUMP_VELOCITY;
+			}
+		}
 	}
 
 	public void pickNewState(Ship ship) {
 		float rand = MathUtils.random(1f);
+		//will need to make it so the same state doesn't get picked twice
 		float walkChance = 0.4f;
-		float jumpChance = 0.5f;
+		float jumpChance = 0.9f;
 		float waitChance = 1f;
 		if (rand < walkChance) {
 			state = State.WALK;
-			stateTime = 4f;
+			stateTime = 2f;
 			performingTell = false;
 			float directionChance;
 			if (ship.getPosition().x > position.x) {
-				directionChance = walkChance * 0.77f;  
+				directionChance = walkChance * 0.85f;  
 			} else {
-				directionChance = walkChance * 23f;
+				directionChance = walkChance * 0.15f;
 			}
 			if (rand < directionChance) {
 				facingRight = true;
-				velocity.x = SPEED;
+				velocity.x = SPEED *0.6f;
 			} else {
 				facingRight = false;
-				velocity.x = -SPEED;
+				velocity.x = -SPEED *0.6f;
 			}
 		} else if (rand < jumpChance) {
 			state = State.JUMP;
@@ -125,11 +157,14 @@ public class SoldierEnemy extends Enemy {
 				facingRight = false;
 				
 			}
+			velocity.x = 0;
 		} else if (rand < waitChance) {
 			state = State.WAIT;
-			stateTime = 4f;
+			stateTime = 1f;
+			velocity.x = 0;
 			performingTell = false;
 		}
+		System.out.println("Picked new state: "+ state);
 	}
 	
 	
@@ -142,11 +177,22 @@ public class SoldierEnemy extends Enemy {
 
 	
 
-	
+	@Override
+	public void handleYCollision(Rectangle tile, boolean onMovablePlatform,
+			MovablePlatform movablePlatform) {
+		
+		if (velocity.y < 0 && state == State.JUMP && !performingTell) {
+			state = State.WAIT;
+			velocity.x = 0;
+			System.out.println("hit ground");
+		}
+		super.handleYCollision(tile, onMovablePlatform, movablePlatform);
+		
+	}
 
 	@Override
 	public void handleNoTileUnderneath() {
-		if (state != State.JUMP) {
+		/*if (state != State.JUMP) {
 			//velocity.y = 14f;
 			state = State.JUMP;
 			performingTell = true;
@@ -157,7 +203,7 @@ public class SoldierEnemy extends Enemy {
 			}
 			velocity.x = 0;
 			stateTime = 1f;
-		}
+		}*/
 		
 	}
 

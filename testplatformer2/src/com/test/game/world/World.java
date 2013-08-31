@@ -86,6 +86,10 @@ public class World {
 		spawnEnemies();
 		spawnMovablePlatforms();
 
+		for (MovablePlatform mp: movablePlatforms) {
+			mp.update(ship);
+		}
+		
 		for (int i = -1; i < enemies.size + bullets.size; i++) {
 			MovableEntity mve;
 			if (i == -1) {
@@ -177,7 +181,7 @@ public class World {
 		
 		//Test objects
 		enemies.add( new Walker(new Vector2 (10f, 9f)) );
-		enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
+		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(0, 1), 4f, 2f, new Vector2(0,11), 5f, true, 1.5f));
@@ -188,7 +192,7 @@ public class World {
 	/* ----- Object handlers ----- */	
 	private void checkTileCollision(MovableEntity mve) {
 		
-		System.out.println("Checking the mve: "+ mve.getClass()+ " at ("+mve.getPosition().x+","+mve.getPosition().y+")");
+		//System.out.println("Checking the mve: "+ mve.getClass()+ " at ("+mve.getPosition().x+","+mve.getPosition().y+")");
 		/* MovablePlatform code */
 		boolean onMovable = false;
 		MovablePlatform onPlat = null;
@@ -196,7 +200,7 @@ public class World {
 		//Check moving platform collisions
 		sRec = mve.getProjectionRect();
 		for (MovablePlatform mp: movablePlatforms) {
-			mp.update(ship);
+			
 			//System.out.println("sRec: "+sRec.x+","+sRec.y+","+sRec.width+","+sRec.height+" mp: "+mp.getCollisionRectangle().x+","+mp.getCollisionRectangle().y+","+mp.getCollisionRectangle().width+","+mp.getCollisionRectangle().height);
 			if (sRec.overlaps(mp.getCollisionRectangle())) {
 				onMovable = true;
@@ -266,7 +270,7 @@ public class World {
 		}
 
 		sRec = mve.getXProjectionRect();
-		System.out.println("XProjectionRec="+sRec);
+		//System.out.println("XProjectionRec="+sRec);
 		//System.out.println("Number of tiles checking: "+tiles.size);
 		for (Rectangle tile: tiles) {
 			if (sRec.overlaps(tile)) {
@@ -275,7 +279,7 @@ public class World {
 				//System.out.println("Get knocked back from "+ship.getPosition().x + " by " + ship.getVelocity().x);
 				/*ship.getPosition().x -= ship.getVelocity().scl(Gdx.graphics.getDeltaTime()).x;
 				ship.getVelocity().scl(1/Gdx.graphics.getDeltaTime());*/
-				System.out.println("@@@@@@@@@@@@@@@@X-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height+"    @@@@@@@@@@@@@@");
+				//System.out.println("@@@@@@@@@@@@@@@@X-Collision with tile at "+tile.x+", "+tile.y+ "   (w,h): "+tile.width+","+tile.height+"    @@@@@@@@@@@@@@");
 				mve.handleXCollision(tile);
 				
 				
@@ -284,7 +288,7 @@ public class World {
 		}
 		
 		sRec = mve.getYProjectionRect();
-		System.out.println("YProjectionRec="+sRec);
+		//System.out.println("YProjectionRec="+sRec);
 		boolean tileUnderMve = false;
 		for (Rectangle tile:tiles) {
 			if (sRec.overlaps(tile)) {
@@ -416,7 +420,23 @@ public class World {
 				for (EnemySpawner spns: spawners) {
 					spns.removeEnemy(e);
 				}
+				for (RandomizedEnemySpawner res: randomSpawners) {
+					res.removeEnemy(e);
+				}
 				//System.out.println("cleaned arrays");
+				
+			} 
+			
+			//Remove enemies too far outside of camera view
+			if (e.getPosition().x > cam.position.x + cam.viewportWidth * 1.5 ||
+					e.getPosition().x < cam.position.x - cam.viewportWidth * 1.5) {
+				eItr.remove();
+				for (EnemySpawner spns: spawners) {
+					spns.removeEnemy(e);
+				}
+				for (RandomizedEnemySpawner res: randomSpawners) {
+					res.removeEnemy(e);
+				}
 			}
 		}
 		
@@ -494,7 +514,9 @@ public class World {
 		
 	}
 	
-	
+	public float getLowestClearPosition(float x) {
+		return 0f;
+	}
 	/* ----- Getter methods ----- */
 	public Ship getShip() {
 		return ship;
@@ -538,7 +560,7 @@ public class World {
 	public void init() {
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Ship(new Vector2(3f, 6));
+		ship = new Ship(new Vector2(20f, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

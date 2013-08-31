@@ -43,7 +43,7 @@ public class Sword extends MovableEntity {
 		
 		//1st rectangle
 		if (frame < FRAME_LENGTH) {
-			setBounds(new Rectangle(position.x, position.y, 0.4f, 0.3f));
+			setBounds(new Rectangle(position.x, position.y, 0.8f, 0.6f));
 			if (facingRight) {
 				position = new Vector2(ship.getPosition().x + 0.4f, ship.getPosition().y + ship.getHeight() + 0.12f);
 			}
@@ -54,7 +54,7 @@ public class Sword extends MovableEntity {
 			
 		//2nd rectangle	
 		} else if (frame < 2f * FRAME_LENGTH) {
-			setBounds(new Rectangle(position.x, position.y, 0.8f, 0.8f));
+			setBounds(new Rectangle(position.x, position.y, 1.6f, 1.6f));
 			if (facingRight) {
 				position = new Vector2(ship.getPosition().x + 0.58f, ship.getPosition().y + 0.25f);
 			} else {
@@ -64,7 +64,7 @@ public class Sword extends MovableEntity {
 			
 		//3rd rectangle
 		} else if (frame < 3f * FRAME_LENGTH) {
-			setBounds(new Rectangle(position.x, position.y, 0.4f, 0.3f));
+			setBounds(new Rectangle(position.x, position.y, 0.8f, 0.6f));
 			if (facingRight) {
 				position = new Vector2(ship.getPosition().x + 0.4f, ship.getPosition().y - 0.25f);
 			} else {

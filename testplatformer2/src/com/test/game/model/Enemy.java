@@ -27,7 +27,7 @@ public abstract class Enemy extends MovableEntity{
 	
 	@Override
 	public void handleXCollision(Rectangle tile) {
-		System.out.println("enemy had x collision");
+		//System.out.println("enemy had x collision");
 		if (velocity.x > 0.01f) {
 			position.x = tile.getX() - getWidth();
 				
@@ -42,7 +42,7 @@ public abstract class Enemy extends MovableEntity{
 	@Override
 	public void handleYCollision(Rectangle tile, boolean onMovablePlatform,
 			MovablePlatform movablePlatform) {
-		System.out.println("enemy had y collision");
+		//System.out.println("enemy had y collision");
 		if (velocity.y < 0 ) {
 			if (onMovablePlatform) {
 				velocity.y = -movablePlatform.getSpeed();

@@ -206,13 +206,6 @@ public class Arcade extends JFrame{
 
 
 
-		
-		NewMultiGameRequest multiGameRequest = new NewMultiGameRequest(); 
-		multiGameRequest.requestType = MultiGameRequestType.NEW;
-		
-		this.client.sendNetworkObject(multiGameRequest);
-		System.out.println("Send Request");
-
 		//this.communicationNetwork.createNewChat(username);
 
 

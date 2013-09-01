@@ -21,7 +21,7 @@ public class LoginScreen implements Screen {
 	
 	public LoginScreen() {
 
-	/*	
+	
 		// Move skin stuff to an overall class
 
         //skin = new Skin(Gdx.files.internal("loginSkin.json"));
@@ -97,7 +97,7 @@ public class LoginScreen implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
                 ArcadeSystem.close();
             }
-        });*/
+        });
 	}
 
 
@@ -114,46 +114,20 @@ public class LoginScreen implements Screen {
 	
 	@Override
 	public void render(float arg0) {
-/*		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
         //Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
 
-
-		
-		//draw a placeholder shape
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    
-	    shapeRenderer.filledRect(100,
-	        100,
-	        getWidth() - 200,
-	        getHeight() - 200);
-	    
-	    shapeRenderer.end();
-	    
-	    batch.begin();
-	    font.setColor(Color.BLACK);
-	    font.draw(batch, "Press 'm' for multiplayer, or 's' for single player", 110, 110);
-	    font.draw(batch, "NOTE: right now m and s do the same thing.", 110, 150);
-	    batch.end();
-	    
-	    if (Gdx.input.isKeyPressed(Keys.M)) {
-	    	ArcadeSystem.login("debuguser");
-	    }
-	    
-	    if (Gdx.input.isKeyPressed(Keys.S)) {
-	    	ArcadeSystem.login("debuguser");
-	    }
-	    
 	    if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");
-	    }*/
+	    }
 	}
 
 	@Override
 	public void dispose() {
-/*        stage.dispose();
-        skin.dispose();*/
+        stage.dispose();
+        skin.dispose();
 	}
 
 

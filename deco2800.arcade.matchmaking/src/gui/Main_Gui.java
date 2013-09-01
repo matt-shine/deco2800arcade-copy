@@ -256,7 +256,6 @@ exitmode.addActionListener(new ActionListener() {
 f.setSize(800, 600);
 f.setResizable(false);
 f.setVisible(true);
-
 	}
 	
 }

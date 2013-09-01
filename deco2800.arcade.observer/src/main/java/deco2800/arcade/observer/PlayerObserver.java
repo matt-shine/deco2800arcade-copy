@@ -8,12 +8,14 @@ import deco2800.arcade.model.FriendInvites;
 import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Games;
 import deco2800.arcade.model.Player;
-// import deco2800.arcade.server.*;
+import deco2800.server.database.FriendStorage;
 
 public class PlayerObserver implements Observer{
 
 	@Override
 	public void update(Observable observable, Object object) {
+		
+		
 		
 		/*
 		 * Checking if observable is an instance of Player

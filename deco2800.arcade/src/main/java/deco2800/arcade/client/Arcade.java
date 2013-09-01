@@ -1,4 +1,5 @@
 package deco2800.arcade.client;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -36,10 +37,10 @@ import deco2800.arcade.protocol.game.NewGameRequest;
 
 /**
  * The client application for running arcade games.
- *
+ * 
  */
-public class Arcade extends JFrame {
-
+public class Arcade extends JFrame{
+	
 	/**
 	 * Only exists to stop warning
 	 */
@@ -61,29 +62,30 @@ public class Arcade extends JFrame {
 
 	private CommunicationNetwork communicationNetwork;
 
-
 	/**
 	 * ENTRY POINT
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Arcade arcade = new Arcade(args);
-		
+
 		ArcadeSystem.setArcadeInstance(arcade);
 
 		arcade.addCanvas();
-		
+
 		ArcadeSystem.goToGame(ArcadeSystem.UI);
 	}
 
 	/**
 	 * Sets the instance variables for the arcade
+	 * 
 	 * @param args
 	 */
-	private Arcade(String[] args){
+	private Arcade(String[] args) {
+		
 		this.width = 1280;
 		this.height = 720;
-
 		initWindow();
 	}
 
@@ -91,74 +93,76 @@ public class Arcade extends JFrame {
 	 * Configure the window
 	 */
 	private void initWindow() {
-		//create the main window
+		// create the main window
 		this.setSize(new Dimension(width, height));
 		this.setVisible(true);
 		Insets insets = this.getInsets();
-		this.setSize(new Dimension(width + insets.left + insets.right, height + insets.bottom + insets.top));
+		this.setSize(new Dimension(width + insets.left + insets.right, height
+				+ insets.bottom + insets.top));
 		this.getContentPane().setBackground(Color.black);
 
-		//set shutdown behaviour
+		// set shutdown behaviour
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
-		    public void windowClosing(WindowEvent winEvt) {
-                close();
-		    }
+			public void windowClosing(WindowEvent winEvt) {
+				close();
+			}
 		});
 	}
 
-    public void close() {
-        removeCanvas();
+	public void close() {
+		removeCanvas();
 
-        EventQueue.invokeLater(new Runnable() {
-            public void run () {
-                System.exit(0);
-            }
-        });
-    }
-
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				System.exit(0);
+			}
+		});
+	}
 
 	public void startConnection() {
-		//Try to connect to the server until successful
+		// Try to connect to the server until successful
 		boolean connected = false;
-		while (!connected){
+		while (!connected) {
 			try {
 				connectToServer();
 				connected = true;
 			} catch (ArcadeException e) {
-				//TODO: error on connection failure
+				// TODO: error on connection failure
 				System.out.println("Connection failed... Trying again.");
 			}
 		}
 
 	}
 
-
 	/**
 	 * Attempt to initiate a connection with the server.
-	 *
-	 * @throws ArcadeException if the connection failed.
+	 * 
+	 * @throws ArcadeException
+	 *             if the connection failed.
 	 */
-	public void connectToServer() throws ArcadeException{
+	public void connectToServer() throws ArcadeException {
 		try {
-			// TODO allow server/port as optional runtime arguments xor user inputs.
+			// TODO allow server/port as optional runtime arguments xor user
+			// inputs.
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
 		} catch (NetworkException e) {
-			throw new ArcadeException("Unable to connect to Arcade Server (" + serverIPAddress + ")", e);
+			throw new ArcadeException("Unable to connect to Arcade Server ("
+					+ serverIPAddress + ")", e);
 		}
 	}
 
-	private void addListeners(){
+	private void addListeners() {
 		this.client.addListener(new AchievementListener());
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
-		this.client.addListener(new CommunicationListener(communicationNetwork));
+		this.client
+				.addListener(new CommunicationListener(communicationNetwork));
 	}
 
-
-	public void connectAsUser(String username){
+	public void connectAsUser(String username) {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
 
@@ -166,7 +170,7 @@ public class Arcade extends JFrame {
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.username = username;
-		
+
 		this.client.sendNetworkObject(communicationRequest);
 
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
@@ -174,18 +178,20 @@ public class Arcade extends JFrame {
 
 		this.client.sendNetworkObject(creditBalanceRequest);
 
-		this.player = new Player();
+		this.player = new Player(0, username,
+				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
 		this.player.setUsername(username);
 
-		//this.communicationNetwork.createNewChat(username);
+		// this.communicationNetwork.createNewChat(username);
 	}
 
 	/**
 	 * Ask the server to play a given game.
-	 *
-	 * @param gameClient the type of game to play
+	 * 
+	 * @param gameClient
+	 *            the type of game to play
 	 */
-	public void requestGameSession(GameClient gameClient){
+	public void requestGameSession(GameClient gameClient) {
 		NewGameRequest newGameRequest = new NewGameRequest();
 		newGameRequest.gameId = gameClient.getGame().id;
 		newGameRequest.username = player.getUsername();
@@ -196,18 +202,17 @@ public class Arcade extends JFrame {
 	/**
 	 * Begin playing the game in the <tt>selectedGame</tt> field.
 	 */
-	public void startGame(String gameid){
+	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
 
 		startGame(selectedGame);
 	}
 
-
 	/**
 	 * Stop the current game
 	 */
-	public void stopGame(){
+	public void stopGame() {
 
 		if (selectedGame != null) {
 			selectedGame.gameOver();
@@ -225,13 +230,12 @@ public class Arcade extends JFrame {
 	/**
 	 * Start a GameClient
 	 */
-	public void addCanvas(){
+	public void addCanvas() {
 		this.proxy = new ProxyApplicationListener();
 		this.canvas = new LwjglCanvas(proxy, true);
 		this.canvas.getCanvas().setSize(width, height);
 
 		proxy.setTarget(new DummyApplicationListener());
-
 
 		Object mon = new Object();
 		synchronized (mon) {
@@ -246,25 +250,21 @@ public class Arcade extends JFrame {
 		}
 
 	}
-	
-	
-	
+
 	/**
-	 * Removes the canvas from the frame. Should be called before shutdown. Never elsewhere, as
-	 * there should only ever be one canvas.
+	 * Removes the canvas from the frame. Should be called before shutdown.
+	 * Never elsewhere, as there should only ever be one canvas.
 	 */
-	public void removeCanvas(){
-		
+	public void removeCanvas() {
+
 		this.remove(this.canvas.getCanvas());
 
 	}
 
-
-
 	/**
 	 * Start a GameClient
 	 */
-	public void startGame(final GameClient game){
+	public void startGame(final GameClient game) {
 		proxy.setTarget(game);
 
 		game.addGameOverListener(new GameOverListener() {
@@ -276,15 +276,22 @@ public class Arcade extends JFrame {
 		});
 	}
 
-	private Map<String,Class<? extends GameClient>> getGameMap() {
+	private Map<String, Class<? extends GameClient>> gameMap = null;
 
-		Map<String,Class<? extends GameClient>> gameMap = new HashMap<String,Class<? extends GameClient>>();
+	private Map<String, Class<? extends GameClient>> getGameMap() {
 
+		if (gameMap != null) {
+			return gameMap;
+		}
+
+		gameMap = new HashMap<String, Class<? extends GameClient>>();
 		Reflections reflections = new Reflections("deco2800.arcade");
-		Set<Class<?>> possibleGames = reflections.getTypesAnnotatedWith(ArcadeGame.class);
+		Set<Class<?>> possibleGames = reflections
+				.getTypesAnnotatedWith(ArcadeGame.class);
 		for (Class<?> g : possibleGames) {
 			if (GameClient.class.isAssignableFrom(g)) {
-				Class<? extends GameClient> game = g.asSubclass(GameClient.class);
+				Class<? extends GameClient> game = g
+						.asSubclass(GameClient.class);
 				ArcadeGame aGame = g.getAnnotation(ArcadeGame.class);
 				String gameId = aGame.id();
 				gameMap.put(gameId, game);
@@ -295,48 +302,51 @@ public class Arcade extends JFrame {
 
 	/**
 	 * Returns all games except ones with the @InternalGame annotation
+	 * 
 	 * @return
 	 */
 	public Set<String> findPlayableIds() {
-		
-		Map<String,Class<? extends GameClient>> games =
-				new HashMap<String,Class<? extends GameClient>>(getGameMap());
-		
-		Iterator<Map.Entry<String,Class<? extends GameClient>>> it = games.entrySet().iterator();
-	    while (it.hasNext()) {
-	    	
-	        Map.Entry<String,Class<? extends GameClient>> pair =
-	        		(Map.Entry<String,Class<? extends GameClient>>)it.next();
-	        
-	        if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
-	        	it.remove();
-	        }
-	    }
-		
+
+		Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
+				getGameMap());
+
+		Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games
+				.entrySet().iterator();
+		while (it.hasNext()) {
+
+			Map.Entry<String, Class<? extends GameClient>> pair = (Map.Entry<String, Class<? extends GameClient>>) it
+					.next();
+
+			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+				it.remove();
+			}
+		}
+
 		return games.keySet();
 	}
 
-
 	public GameClient getInstanceOfGame(String id) {
-		
+
 		Class<? extends GameClient> gameClass = getGameMap().get(id);
 		try {
 			if (gameClass != null) {
-				Constructor<? extends GameClient> constructor = gameClass.getConstructor(Player.class, NetworkClient.class);
+				Constructor<? extends GameClient> constructor = gameClass
+						.getConstructor(Player.class, NetworkClient.class);
 				GameClient game = constructor.newInstance(player, client);
 
-				//add the overlay to the game
+				// add the overlay to the game
 				if (!gameClass.isAnnotationPresent(InternalGame.class)) {
-					
+
 					GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
-					
-					//the overlay and the bridge are the same object, but
-					//GameClient doesn't know that and it mightn't be that way forever
+
+					// the overlay and the bridge are the same object, but
+					// GameClient doesn't know that and it mightn't be that way
+					// forever
 					game.addOverlay(overlay);
 					if (overlay instanceof UIOverlay) {
 						game.addOverlayBridge((UIOverlay) overlay);
 					}
-					
+
 				}
 
 				return game;
@@ -356,6 +366,4 @@ public class Arcade extends JFrame {
 		}
 		return null;
 	}
-
-
 }

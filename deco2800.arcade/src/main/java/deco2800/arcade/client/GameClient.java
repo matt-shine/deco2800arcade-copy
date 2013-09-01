@@ -1,5 +1,6 @@
 package deco2800.arcade.client;
 
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import deco2800.arcade.model.Player;
 public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
-	protected NetworkClient networkClient;
+	protected static NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
@@ -22,6 +23,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
     private AchievementClient achievementClient;
 
 	public GameClient(Player player, NetworkClient networkClient) {
+		
 		this.player = player;
 		this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
@@ -115,12 +117,24 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public void resize(int width, int height) {
 		this.width = width;
 		this.height = height;
+		if (overlay != null) {
+			overlay.resize(width, height);
+		}
 		super.resize(width, height);
 	}
 
 	@Override
 	public void resume() {
 		super.resume();
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	
+	public int getHeight() {
+		return height;
 	}
 
 }

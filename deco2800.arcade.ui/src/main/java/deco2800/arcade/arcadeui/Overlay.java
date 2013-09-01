@@ -1,6 +1,9 @@
 package deco2800.arcade.arcadeui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
@@ -13,26 +16,40 @@ import deco2800.arcade.model.Player;
 @ArcadeGame(id="arcadeoverlay")
 public class Overlay extends GameClient implements UIOverlay {
 	
-	private OverlayScreen screen = new OverlayScreen();
+	private OverlayScreen screen = new OverlayScreen(this);
+	private OverlayPopup popup = new OverlayPopup(this);
+	private SpriteBatch batch = new SpriteBatch();
 	
 	public Overlay(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 
 		this.setScreen(screen);
-		
+
 	}
 	
-
 	@Override
 	public void setListeners(Screen l) {
 		screen.setListeners(l);
 	}
 
 	@Override
-	public void addPopup(String s) {
-		//TODO: popups
+	public void addPopup(PopupMessage s) {
+		popup.addMessageToQueue(s);
 	}
 
+	@Override
+	public void render() {
+		
+		super.render();
+		
+		popup.act(Gdx.graphics.getDeltaTime());
+		batch.begin();
+		popup.draw(batch, 1f);
+		batch.end();
+		
+		
+	}
+	
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
@@ -46,9 +63,8 @@ public class Overlay extends GameClient implements UIOverlay {
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
+	public void resize(int width, int height) {
+		super.resize(width, height);
 	}
 
 	@Override

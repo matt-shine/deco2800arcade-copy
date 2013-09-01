@@ -4,11 +4,11 @@ import java.util.Set;
 
 public class Player extends User {
 	
-	private static final int USERNAME_ID = 1;
-	private static final int NAME_ID = 1;
-	private static final int EMAIL_ID = 1;
-	private static final int PROGRAM_ID = 1;
-	private static final int BIO_ID = 1;
+	public static final int USERNAME_ID = 1;
+	public static final int NAME_ID = 2;
+	public static final int EMAIL_ID = 3;
+	public static final int PROGRAM_ID = 4;
+	public static final int BIO_ID = 5;
 	
 	
 

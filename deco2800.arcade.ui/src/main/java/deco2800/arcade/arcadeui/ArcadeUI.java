@@ -23,6 +23,8 @@ public class ArcadeUI extends GameClient {
 	private LoginScreen login = null;
 	@SuppressWarnings("unused")
 	private HomeScreen home = null;
+	@SuppressWarnings("unused")
+	private MultiplayerLobby Lobby = null;
 	
 	private Screen current = null;
 
@@ -38,7 +40,11 @@ public class ArcadeUI extends GameClient {
 		if (player == null) {
 			current = login = new LoginScreen();
 		} else {
-			current = home = new HomeScreen();
+			if(ArcadeSystem.isMultiplayerEnabled()){
+				current = Lobby = new MultiplayerLobby();
+			}else{
+				current = home = new HomeScreen();
+			}
 		}
 		
 		this.setScreen(current);

@@ -11,4 +11,6 @@
 #deco2800.arcade.breakout
 #deco2800.arcade.deerforest
 #deco2800.arcade.mixmaze
+#deco2800.arcade.chess
+#deco2800.arcade.junglejump
 ../deco2800.arcade.pong/build/libs/deco2800.arcade.pong-1.0.jar

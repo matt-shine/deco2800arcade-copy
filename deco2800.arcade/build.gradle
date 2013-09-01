@@ -23,5 +23,4 @@ task(runArcade, dependsOn: "classes", type: JavaExec) {
             //sourceSets.main.runtimeClasspath.plus project(":" + game).sourceSets.main.runtimeClasspath
         }
     }
-    println(classpath.getFiles())
 }

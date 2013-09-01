@@ -6,6 +6,7 @@ package deco2800.arcade.mixmaze;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -39,8 +40,7 @@ public final class MixMaze extends GameClient {
 		menuScreen = new MenuScreen(this);
 		gameScreen = new MixMazeViewModel();
 		setScreen(menuScreen);
-		Gdx.app.debug(LOG, "Use arrows to move and h, j, k, l "
-				   + "to build/destroy walls");
+		Gdx.app.debug(LOG, "Use arrows to move");
 	}
 
 	@Override
@@ -52,7 +52,6 @@ public final class MixMaze extends GameClient {
 
 	@Override
 	public void render() {
-		//fpsLogger.log();
 		super.render();
 	}
 

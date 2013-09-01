@@ -3,101 +3,129 @@
  */
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.mixmaze.domain.MixMazeModel;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Timer;
 
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
+/**
+ * GameScreen draws all elements in a game session.
+ */
 final class GameScreen implements Screen {
 	private static final String LOG = GameScreen.class.getSimpleName();
 
 	//TODO use this
 	@SuppressWarnings("unused")
 	private final MixMaze game;
-
 	private final Stage stage;
-	private final ShapeRenderer shapeRenderer;
-	private final Box[][] boxes;
-	private final PacMan pacman;
-	private final Brick brick;
-	private final Table table;
-	private final Table gameBoard;
-	private final Label timerLabel;
-	//private final Skin skin;
+	private final ShapeRenderer renderer;
+	private final MixMazeModel model;
 
+	private Label timerLabel;
 	private int elapsed;
+	private PlayerViewModel p1;
 
 	/**
-	 * This constructor associate GameScreen with MixMaze.
+	 * Constructor
 	 */
 	GameScreen(final MixMaze game) {
-		Table container;
-
 		this.game = game;
 
 		elapsed = 0;
 
-		shapeRenderer = new ShapeRenderer();
-		//skin = new Skin();
+		/*
+		 * This should be the only ShapeRender used in this
+		 * stage.
+		 */
+		renderer = new ShapeRenderer();
+
+		/* FIXME: game size should be passed from UI */
+		model = new MixMazeModel(3, 3);
 
 		stage = new Stage();
-		table = new Table();
-		table.setFillParent(true);
-		table.debug();
-		stage.addActor(table);
 
-		/* header */
-		timerLabel = new Label("Timer",
-				new Label.LabelStyle(new BitmapFont(),
-				CYAN));
-		table.add(timerLabel).width(960).height(80);
-		table.row();
+		setupLayout();
+	}
 
-		/* container contains side panels and gameboard */
-		container = new Table();
-		table.add(container);
+	/**
+	 * Set up the layout on stage.
+	 */
+	private void setupLayout() {
+		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+		Stack gameBoard = new Stack();
+		Table root = new Table();
+		Table left = new Table();
+		Table right = new Table();
+		Table tileTable = new Table();
+		Group gameArea = new Group();
+		Label[] userLabels = new Label[2];
+		Label[] scoreLabels = new Label[2];
 
-		/* left side panel */
-		container.add(new Label("left", new Label.LabelStyle(new BitmapFont(), RED))).width(160).height(640).bottom().left();
+		userLabels[0] = new Label("user 1", skin);
+		userLabels[1] = new Label("user 2", skin);
+		scoreLabels[0] = new Label("user 1 score 0", skin);
+		scoreLabels[1] = new Label("user 2 score 0", skin);
 
-		/* game board */
-		gameBoard = new Table();
-		container.add(gameBoard).bottom().left()
-				.width(640).height(640);
+		timerLabel = new Label("timer", skin);
 
-		/* right side panel */
-		container.add(new Label("right", new Label.LabelStyle(new BitmapFont(), RED))).width(160).height(640).bottom().left();
+		root.setFillParent(true);
+		root.debug();
+		stage.addActor(root);
 
-		boxes = new Box[5][5];
-		for (int i = 4; i >= 0; i--) {
-			for (int j = 0; j < 5; j++) {
-				boxes[i][j] = new Box(i, j, shapeRenderer);
-				gameBoard.add(boxes[i][j])
-						.width(128).height(128);
-				//Gdx.app.debug(LOG, ""
-				//		+ boxes[i][j].getZIndex());
-			}
-			gameBoard.row();
-		}
+		root.add(userLabels[0]).width(160);
+		root.add(scoreLabels[0]);
+		root.add(timerLabel).expandX();
+		root.add(scoreLabels[1]);
+		root.add(userLabels[1]).width(160);
+		root.row();
+
+		root.add(left);
+		root.add(gameBoard).colspan(3);
+		root.add(right);
 
 		/*
-		 * FIXME: There should be a separate controller rather
-		 * than using PacMan as the acting one.
+		 * gameBoard has two layers. The bottom one is
+		 * the tileTable and the top is gameArea.
+		 *
+		 * gameArea is used as a place holder as Stack
+		 * always places its children at (0, 0), but
+		 * children of gameArea can move freely in stage.
 		 */
-		pacman = new PacMan(boxes);
-		brick = new Brick();
+		int tileSize = 640 / model.getBoardHeight();
+		for (int j = 0; j < model.getBoardHeight(); j++) {
+			for (int i = 0; i < model.getBoardWidth(); i++) {
+				tileTable.add(new TileViewModel(
+						model.getTile(i, j),
+						renderer,
+						tileSize))
+						.size(tileSize, tileSize);
+			}
 
-		gameBoard.add(pacman).bottom().left();
-		gameBoard.add(brick).bottom().right();
-		Gdx.app.debug(LOG, "pacman Z " + pacman.getZIndex());
-		stage.setKeyboardFocus(pacman);
+			/*
+			 * Luran:
+			 * Not sure if an extra row() after boardHeight
+			 * will cause problem, but it is easy to check.
+			 */
+			if (j < model.getBoardHeight())
+				tileTable.row();
+		}
+		gameBoard.add(tileTable);
+		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize);
+		gameArea.addActor(p1);
+		gameBoard.add(gameArea);
 	}
 
 	@Override
@@ -120,9 +148,8 @@ final class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		timerLabel.getStyle().font.dispose();
+		renderer.dispose();
 		stage.dispose();
-		shapeRenderer.dispose();
 	}
 
 	@Override
@@ -133,6 +160,8 @@ final class GameScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
+		stage.setKeyboardFocus(p1);
+
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				elapsed += 1;

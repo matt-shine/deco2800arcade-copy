@@ -372,7 +372,8 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		// TODO Auto-generated method stub
-		System.out.println("" + x + " " + y);
+		//System.out.println("" + x + " " + y);
+		Piece onSquare = checkSquare(x, y);
 		return false;
 	}
 
@@ -400,7 +401,56 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 	 * 		Piece on the square that was clicked on
 	 */
 	private Piece checkSquare(int x, int y) {
-		// TODO 
+		int xSquare = x/55 - x%55;
+		int ySquare = y/73 - y%73;
+		
+		//Determine x square
+		for(int i=0; i<8; i++) {
+			int j=i;
+			if((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) ))) {
+				xSquare = i;
+			}
+		}
+		
+		//Determine y square
+		for(int i=0; i<8; i++) {
+			if((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) ))) {
+				ySquare = i;
+			}
+		}
+		
+		switch(xSquare) {
+			case 0:
+				xSquare = 7;
+				break;
+			case 1:
+				xSquare = 6;
+				break;
+			case 2:
+				xSquare = 5;
+				break;
+			case 3:
+				xSquare = 4;
+				break;
+			case 4:
+				xSquare = 3;
+				break;
+			case 5:
+				xSquare = 2;
+				break;
+			case 6:
+				xSquare = 1;
+				break;
+			case 7:
+				xSquare = 0;
+				break;
+			default:
+				xSquare = -1;
+				break;
+		}
+		
+		System.out.println("Square clicked was: " + xSquare + " " + ySquare);
+		
 		return null;
 	}
 	

@@ -8,7 +8,7 @@ public class Direction {
 	public static int NORTH = 1;
 	public static int EAST = 2;
 	public static int SOUTH = 3;
-	public static IllegalArgumentException NOTADIRECTION = new IllegalArgumentException("Direction is invalid.");
+	public final static IllegalArgumentException NOTADIRECTION = new IllegalArgumentException("Direction is invalid.");
 	
 	public static boolean isWest(int direction) {
 		return direction == WEST;
@@ -30,6 +30,13 @@ public class Direction {
 		return isWest(direction) || isNorth(direction) || isEast(direction) || isSouth(direction);
 	}
 	
+	public static int getPolarDirection(int direction) {
+		if(!isDirection(direction)) {
+			throw NOTADIRECTION;
+		}
+		return isPositiveDirection(direction) ? (direction - 2) : (direction + 2);
+	}
+	
 	public static boolean isXDirection(int direction) {
 		return isWest(direction) || isEast(direction);
 	}
@@ -40,5 +47,9 @@ public class Direction {
 	
 	public static boolean isPositiveDirection(int direction) {
 		return isEast(direction) || isSouth(direction);
+	}
+	
+	public static boolean isNegativeDirection(int direction) {
+		return isWest(direction) || isNorth(direction);
 	}
 }

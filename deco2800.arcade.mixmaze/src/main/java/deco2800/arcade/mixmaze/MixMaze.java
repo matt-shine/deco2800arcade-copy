@@ -37,7 +37,7 @@ public final class MixMaze extends GameClient {
 		super.create();
 
 		menuScreen = new MenuScreen(this);
-		gameScreen = new GameScreen(this);
+		gameScreen = new MixMazeViewModel();
 		setScreen(menuScreen);
 		Gdx.app.debug(LOG, "Use arrows to move and h, j, k, l "
 				   + "to build/destroy walls");

@@ -1,21 +1,68 @@
 package deco2800.arcade.mixmaze.domain;
 
 public class MixMazeModel {
+	public enum MixMazeDifficulty {
+		Beginner,
+		Intermediate,
+		Advanced
+	}
+	
+	// Exceptions
+	public final static IllegalStateException NOTSTARTED = new IllegalStateException("The game has not started.");
+	public final static IllegalArgumentException COORDSOUTOFRANGE = new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
+	
+	// Game state
+	private boolean running = false;
+	private boolean ended = false;
+	
 	// Board data
-	private int boardWidth;
-	private int boardHeight;
+	private int boardSize;
 	private TileModel[][] board;
+	private Thread spawnerThread;
+	
+	// Game settings
+	private MixMazeDifficulty gameDifficulty;
+	private int gameMaxTime;
+	private long gameStartTime = -1;
+	private long gameEndTime = -1;
 	
 	// Player data
 	private PlayerModel player1;
 	private PlayerModel player2;
 	
-	public int getBoardWidth() {
-		return boardWidth;
+	public boolean isRunning() {
+		return running;
 	}
 	
-	public int getBoardHeight() {
-		return boardHeight;
+	public boolean isEnded() {
+		return ended;
+	}
+	
+	public int getBoardSize() {
+		return boardSize;
+	}
+	
+	public TileModel getBoardTile(int x, int y) {
+		if(!checkCoordinates(x, y)) {
+			throw COORDSOUTOFRANGE;
+		}
+		return board[y][x];
+	}
+	
+	public MixMazeDifficulty getGameDifficulty() {
+		return gameDifficulty;
+	}
+	
+	public int getGameMaxTime() {
+		return gameMaxTime;
+	}
+	
+	public long getGameStartTime() {
+		return gameStartTime;
+	}
+	
+	public long getGameEndTime() {
+		return gameEndTime;
 	}
 	
 	public PlayerModel getPlayer1() {
@@ -26,11 +73,78 @@ public class MixMazeModel {
 		return player2;
 	}
 	
+	public int getPlayerScore(PlayerModel player) {
+		int boxes = 0;
+		for(int row = 0; row < boardSize; ++row) {
+			for(int column = 0; column < boardSize; ++column) {
+				TileModel tile = getBoardTile(column, row);
+				if(tile.isBox() && tile.getBoxer() == player) {
+					boxes++;
+				}
+			}
+		}
+		return boxes;
+	}
+	
 	private boolean checkCoordinates(int x, int y) {
-		return x >= 0 && x < boardWidth && y >= 0 && y < boardHeight;
+		return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
+	}
+	
+	private boolean isPlayerAtPosition(int x, int y) {
+		if(!checkCoordinates(x, y)) {
+			throw COORDSOUTOFRANGE;
+		}
+		return (player1.getX() == x && player1.getY() == y) || (player2.getX() == x && player2.getY() == y);
+	}
+	
+	public void startGame() {
+		if(running || ended) {
+			throw new IllegalStateException("The game has already been started.");
+		}
+		
+		spawnerThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while(!ended) {
+					try {
+						for(int row = 0; row < boardSize; ++row) {
+							for(int column = 0; column < boardSize; ++column) {
+								getBoardTile(column, row).spawnItem();
+							}
+						}
+						Thread.sleep(1000);
+					} catch (InterruptedException e) { }
+				}
+			}
+		});
+		spawnerThread.start();
+		
+		running = true;
+		gameStartTime = System.currentTimeMillis();
+	}
+	
+	public PlayerModel endGame() {
+		if(!running || ended) {
+			throw new IllegalStateException("The game has not been started or has already ended.");
+		}
+		running = false;
+		ended = true;
+		gameEndTime = System.currentTimeMillis();
+		
+		int player1Score = getPlayerScore(player1);
+		int player2Score = getPlayerScore(player2);
+		if(player1Score != player2Score) {
+			return (player1Score > player2Score) ? player1 : player2;
+		} else {
+			return null;
+		}
 	}
 	
 	public void movePlayer(PlayerModel player, int direction) {
+		if(!running) {
+			throw NOTSTARTED;
+		}
+		
 		// Player is not null
 		if(player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
@@ -41,35 +155,49 @@ public class MixMazeModel {
 			throw Direction.NOTADIRECTION;
 		}
 		
+		int nextX = player.getNextX(), nextY = player.getNextY();
 		if(player.canMove()) {
 			if(player.getDirection() != direction) {
 				player.setDirection(direction);
-			} else if(checkCoordinates(player.getNextX(), player.getNextY())) {
+			} else if(checkCoordinates(nextX, nextY) && !isPlayerAtPosition(nextX, nextY)) {
 				player.move();
+				getBoardTile(player.getX(), player.getY()).onPlayerEnter(player);
 			}
 		}
 	}
 	
-	public TileModel getTile(int row, int column) {
-		// Check arguments are in range.
-		if(!checkCoordinates(column, row)) {
-			throw new IllegalArgumentException("Specified row or column is out of range.");
+	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxMinutes) {
+		if(size < 5 || size > 10) {
+			throw new IllegalArgumentException("size must be between 5 and 10.");
 		}
 		
-		// Return tile at the specified position
-		return board[row][column];
-	}
-	
-	public MixMazeModel(int width, int height) {
+		if(maxMinutes < 2 || maxMinutes > 15) {
+			throw new IllegalArgumentException("maxMinutes must be between 2 and 15.");
+		}
+		
 		// Initialize board
-		boardWidth = width;
-		boardHeight = height;
-		board = new TileModel[height][width];
-		for(int row = 0; row < boardHeight; ++row) {
-			for(int column = 0; column < boardWidth; ++column) {
-				board[row][column] = new TileModel(column, row);
+		boardSize = size;
+		board = new TileModel[boardSize][boardSize];
+		for(int row = 0; row < boardSize; ++row) {
+			for(int column = 0; column < boardSize; ++column) {
+				WallModel[] adjWalls = new WallModel[4];
+				int[] xChecks = new int[] { (column - 1), column, (column + 1), column };
+				int[] yChecks = new int[] { row, (row - 1), row, (row + 1) };
+				for(int tileDir = 0; tileDir < 4; ++tileDir) {
+					if(checkCoordinates(xChecks[tileDir], yChecks[tileDir])) {
+						TileModel adjTile = getBoardTile(xChecks[tileDir], yChecks[tileDir]);
+						if(adjTile != null) {
+							adjWalls[tileDir] = adjTile.getWall(Direction.getPolarDirection(tileDir));
+						}
+					}
+				}
+				board[row][column] = new TileModel(column, row, adjWalls);
 			}
 		}
+		
+		// Set game settings
+		gameDifficulty = difficulty;
+		gameMaxTime = maxMinutes;
 		
 		// Initialize player 1
 		player1 = new PlayerModel(1);
@@ -79,8 +207,8 @@ public class MixMazeModel {
 		
 		// Initialize player 2
 		player2 = new PlayerModel(2);
-		player2.setX(boardWidth - 1);
-		player2.setY(boardHeight - 1);
+		player2.setX(boardSize - 1);
+		player2.setY(boardSize - 1);
 		player2.setDirection(Direction.WEST);
 	}
 }

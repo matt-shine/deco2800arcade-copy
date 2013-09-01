@@ -12,7 +12,9 @@ import java.util.Set;
 public class FriendInvites {
 
 	private Set<User> friendInvites;
-
+	private int updatedID;
+	private boolean added;
+	
 	/**
 	 * Creates a new FriendInvites.
 	 */
@@ -48,6 +50,8 @@ public class FriendInvites {
 	 */
 	public void add(User user) {
 		this.friendInvites.add(new User(user));
+		updatedID = user.getID();
+		added = true;
 	}
 
 	/**
@@ -58,6 +62,8 @@ public class FriendInvites {
 	 */
 	public void remove(User user) {
 		this.friendInvites.remove(new User(user));
+		updatedID = user.getID();
+		added = false;
 	}
 
 	/**

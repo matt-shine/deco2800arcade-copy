@@ -12,6 +12,8 @@ import java.util.Set;
 public class Games {
 
 	private Set<Game> games;
+	private String updatedID;
+	private boolean added;
 
 	/**
 	 * Creates a new Games.
@@ -47,6 +49,8 @@ public class Games {
 	 */
 	public void add(Game game) {
 		this.games.add(game);
+		updatedID = game.id;
+		added = true;
 	}
 
 	/**
@@ -57,6 +61,8 @@ public class Games {
 	 */
 	public void remove(Game game) {
 		this.games.remove(game);
+		updatedID = game.id;
+		added = false;
 	}
 
 	/**

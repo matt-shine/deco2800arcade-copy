@@ -11,6 +11,8 @@ import java.util.Set;
  */
 public class Blocked {
 	private Set<User> blocked;
+	private int updatedID;
+	private boolean added;
 	
 	/**
 	 * Creates a new Blocked.
@@ -46,6 +48,8 @@ public class Blocked {
 	 */
 	public void add(User user) {
 		this.blocked.add(new User(user));
+		updatedID = user.getID();
+		added = true;
 	}
 	
 	/**
@@ -56,6 +60,8 @@ public class Blocked {
 	 */
 	public void remove(User user) {
 		this.blocked.remove(new User(user));
+		updatedID = user.getID();
+		added = false;
 	}
 	
 	/**

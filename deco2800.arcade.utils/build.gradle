@@ -1,0 +1,3 @@
+dependencies {
+  testCompile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
+}

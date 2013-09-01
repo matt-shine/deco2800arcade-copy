@@ -21,6 +21,14 @@ public class User extends Observable{
 		this.playerID = id;
 	}
 	
+	public User(User user) {
+		this.playerID = user.playerID;
+	}
+	
+	public User(Player player) {
+		this.playerID = player.getID();
+	}
+	
 	/**
 	 * Access method for playerID
 	 * @return	Returns the playerID
@@ -28,5 +36,7 @@ public class User extends Observable{
 	public int getID(){
 		return playerID;
 	}
+	
+
 
 }

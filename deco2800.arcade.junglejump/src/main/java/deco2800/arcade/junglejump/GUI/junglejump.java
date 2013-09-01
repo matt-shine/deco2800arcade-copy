@@ -1,4 +1,4 @@
-package main.java.deco2800.arcade.junglejump.GUI;
+package deco2800.arcade.junglejump.GUI;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,10 +7,12 @@ import javax.security.auth.login.Configuration;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
@@ -21,13 +23,14 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.network.NetworkClient;
 
 /**
- * Main class for Jungle Jump Game
- * Instantiates game with scene, player and assets
- *
+ * Main class for Jungle Jump Game Instantiates game with scene, player and
+ * assets
+ * 
  */
-@ArcadeGame(id="junglejump")
+@ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
 	PerspectiveCamera cam;
 	Frustum camGone = new Frustum();
@@ -37,11 +40,14 @@ public class junglejump extends GameClient implements InputProcessor {
 	// FPS Animation helper
 	private FPSLogger fpsLogger;
 	private Player player;
-	
+	private OrthographicCamera camera;
+	public static final int SCREENHEIGHT = 480;
+	public static final int SCREENWIDTH = 800;
+
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
 
-	public junglejump(Player player){
+	public junglejump(Player player) {
 		super(player, networkClient);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
@@ -51,27 +57,27 @@ public class junglejump extends GameClient implements InputProcessor {
 			themeMusic.setLooping(true);
 			themeMusic.play();
 		} catch (Exception e) {
-			Gdx.app.log(junglejump.messages, "Audio File for Theme Music Not Found");
-		} 
-		// TODO: Additional sound files will be loaded here (jump, die, levelup etc)
-		
+			Gdx.app.log(junglejump.messages,
+					"Audio File for Theme Music Not Found");
+		}
+		// TODO: Additional sound files will be loaded here (jump, die, levelup
+		// etc)
+
 		createWorld();
-		
-		
-		
+
 	}
+
 	/*
-	 * World for holding the Jungle Jump Game
-	 * Includes Physics for handling movement and gravity
-	 * 
+	 * World for holding the Jungle Jump Game Includes Physics for handling
+	 * movement and gravity
 	 */
 	private void createWorld() {
-		world = new World(new Vector2(0,0), false);
-		// TODO: Add vectors for containing the world and its players/assets
+		
+		
 	}
 
 	@Override
-	public void create() {	
+	public void create() {
 		super.create();
 		Gdx.app.log(junglejump.messages, "Launching Game");
 	}
@@ -80,19 +86,66 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void dispose() {
 		super.dispose();
 	}
+
 	public void resize(int w, int h) {
-		Gdx.app.log(junglejump.messages, "Resizing game width " + w + " height " + h); 
+		Gdx.app.log(junglejump.messages, "Resizing game width " + w
+				+ " height " + h);
 	}
+
 	public void render() {
 		// Clears the screen - not sure if this is needed
-		Gdx.gl.glClearColor(0f, 1f, 0f, 1f); 
+		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		camera.update();
 		// Logs current FPS
 		fpsLogger.log();
+		super.render();
 	}
+
 	@Override
 	public void pause() {
-		super.pause();
+		//add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				//TODO: unpause pong
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				//TODO: unpause pong
+			}
+			
+        });
+        
+        
+		
+		super.create();
+		
+		//Initialise camera
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		Gdx.app.log(junglejump.messages, "Pause");
 	}
 
@@ -112,8 +165,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	public Game getGame() {
 		return game;
 	}
+
 	private void processInput() {
-		
+
 	}
 
 	@Override
@@ -163,5 +217,5 @@ public class junglejump extends GameClient implements InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 }

@@ -44,10 +44,6 @@ public class LobbyListener extends Listener {
 			case CANCELMATCH:
 				handleCancelMatchRequest(username);
 				break;
-			case JOINMATCH:
-				LobbyMatch match = newLobbyRequest.match;
-				handleJoinMatchRequest(username, connection, match);
-				
 			}
 		}
 			

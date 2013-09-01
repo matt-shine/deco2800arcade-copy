@@ -4,5 +4,4 @@ public enum LobbyRequestType {
 	JOINLOBBY,
 	CREATEMATCH,
 	CANCELMATCH,
-	JOINMATCH,
 }

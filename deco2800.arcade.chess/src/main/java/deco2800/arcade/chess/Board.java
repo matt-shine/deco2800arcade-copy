@@ -990,8 +990,8 @@ public class Board{
 		row.add(0, whiteRook1);
 		row.add(1, whiteKnight1);
 		row.add(2, whiteBishop1);
-		row.add(3, whiteKing);
-		row.add(4, whiteQueen);
+		row.add(3, whiteQueen);
+		row.add(4, whiteKing);
 		row.add(5, whiteBishop2);
 		row.add(6, whiteKnight2);
 		row.add(7, whiteRook2);
@@ -1012,8 +1012,8 @@ public class Board{
 		row.add(0, blackRook1);
 		row.add(1, blackKnight1);
 		row.add(2, blackBishop1);
-		row.add(3, blackKing);
-		row.add(4, blackQueen);
+		row.add(3, blackQueen);
+		row.add(4, blackKing);
 		row.add(5, blackBishop2);
 		row.add(6, blackKnight2);
 		row.add(7, blackRook2);

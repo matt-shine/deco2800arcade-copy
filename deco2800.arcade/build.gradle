@@ -2,7 +2,6 @@
 dependencies {
   compile project(":deco2800.arcade.model")
   compile project(":deco2800.arcade.protocol")
-  compile project(":deco2800.arcade")
 
   compile group: "org.reflections", name: "reflections", version: "0.9.9-RC1"
   compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
@@ -20,8 +19,8 @@ task(runArcade, dependsOn: "classes", type: JavaExec) {
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.tictactoe").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.breakout").sourceSets.main.runtimeClasspath
-	classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.deerforest").sourceSets.main.runtimeClasspath
+   classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.deerforest").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.mixmaze").sourceSets.main.runtimeClasspath
+   classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.chess").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.junglejump").sourceSets.main.runtimeClasspath
-   
 }

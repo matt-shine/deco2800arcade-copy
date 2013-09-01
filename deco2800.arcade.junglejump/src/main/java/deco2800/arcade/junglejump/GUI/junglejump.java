@@ -23,13 +23,14 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.network.NetworkClient;
 
 /**
- * Main class for Jungle Jump Game
- * Instantiates game with scene, player and assets
- *
+ * Main class for Jungle Jump Game Instantiates game with scene, player and
+ * assets
+ * 
  */
-@ArcadeGame(id="junglejump")
+@ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
 	PerspectiveCamera cam;
 	Frustum camGone = new Frustum();
@@ -56,19 +57,19 @@ public class junglejump extends GameClient implements InputProcessor {
 			themeMusic.setLooping(true);
 			themeMusic.play();
 		} catch (Exception e) {
-			Gdx.app.log(junglejump.messages, "Audio File for Theme Music Not Found");
-		} 
-		// TODO: Additional sound files will be loaded here (jump, die, levelup etc)
-		
+			Gdx.app.log(junglejump.messages,
+					"Audio File for Theme Music Not Found");
+		}
+		// TODO: Additional sound files will be loaded here (jump, die, levelup
+		// etc)
+
 		createWorld();
-		
-		
-		
+
 	}
+
 	/*
-	 * World for holding the Jungle Jump Game
-	 * Includes Physics for handling movement and gravity
-	 * 
+	 * World for holding the Jungle Jump Game Includes Physics for handling
+	 * movement and gravity
 	 */
 	private void createWorld() {
 		
@@ -76,7 +77,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	}
 
 	@Override
-	public void create() {	
+	public void create() {
 		super.create();
 		Gdx.app.log(junglejump.messages, "Launching Game");
 	}
@@ -85,18 +86,22 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void dispose() {
 		super.dispose();
 	}
+
 	public void resize(int w, int h) {
-		Gdx.app.log(junglejump.messages, "Resizing game width " + w + " height " + h); 
+		Gdx.app.log(junglejump.messages, "Resizing game width " + w
+				+ " height " + h);
 	}
+
 	public void render() {
 		// Clears the screen - not sure if this is needed
-		Gdx.gl.glClearColor(0f, 1f, 0f, 1f); 
+		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 		// Logs current FPS
 		fpsLogger.log();
 		super.render();
 	}
+
 	@Override
 	public void pause() {
 		//add the overlay listeners
@@ -160,8 +165,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	public Game getGame() {
 		return game;
 	}
+
 	private void processInput() {
-		
+
 	}
 
 	@Override
@@ -211,5 +217,5 @@ public class junglejump extends GameClient implements InputProcessor {
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
+
 }

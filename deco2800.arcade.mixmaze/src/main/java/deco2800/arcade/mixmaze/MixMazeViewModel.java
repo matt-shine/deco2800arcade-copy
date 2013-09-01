@@ -77,7 +77,7 @@ public class MixMazeViewModel implements Screen {
 		board = new TileViewModel[model.getBoardSize()][model.getBoardSize()];
 		for(int row = 0; row < model.getBoardSize(); ++row) {
 			for(int column = 0; column < model.getBoardSize(); ++column) {
-				board[row][column] = new TileViewModel(model.getBoardTile(column, row));
+				//board[row][column] = new TileViewModel(model.getBoardTile(column, row));
 				tileTable.add(board[row][column])
 						.width(128)
 						.height(128);

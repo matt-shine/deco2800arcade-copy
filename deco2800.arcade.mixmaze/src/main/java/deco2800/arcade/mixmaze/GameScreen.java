@@ -4,6 +4,7 @@
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
+import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -53,7 +54,7 @@ final class GameScreen implements Screen {
 		renderer = new ShapeRenderer();
 
 		/* FIXME: game size should be passed from UI */
-		model = new MixMazeModel(3, 3);
+		model = new MixMazeModel(3, MixMazeDifficulty.Beginner, 3);
 
 		stage = new Stage();
 
@@ -104,11 +105,11 @@ final class GameScreen implements Screen {
 		 * always places its children at (0, 0), but
 		 * children of gameArea can move freely in stage.
 		 */
-		int tileSize = 640 / model.getBoardHeight();
-		for (int j = 0; j < model.getBoardHeight(); j++) {
-			for (int i = 0; i < model.getBoardWidth(); i++) {
+		int tileSize = 640 / model.getBoardSize();
+		for (int j = 0; j < model.getBoardSize(); j++) {
+			for (int i = 0; i < model.getBoardSize(); i++) {
 				tileTable.add(new TileViewModel(
-						model.getTile(i, j),
+						model.getBoardTile(i, j),
 						renderer,
 						tileSize))
 						.size(tileSize, tileSize);
@@ -119,7 +120,7 @@ final class GameScreen implements Screen {
 			 * Not sure if an extra row() after boardHeight
 			 * will cause problem, but it is easy to check.
 			 */
-			if (j < model.getBoardHeight())
+			if (j < model.getBoardSize())
 				tileTable.row();
 		}
 		gameBoard.add(tileTable);

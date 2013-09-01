@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -25,8 +26,24 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="Checkers")
 public class Checkers extends GameClient {
 	
-	
 	private OrthographicCamera camera;
+	
+	private Square whiteSquare11;
+	private Square whiteSquare12;
+	private Square whiteSquare13;
+	private Square whiteSquare14;
+	private Square whiteSquare21;
+	private Square whiteSquare22;
+	private Square whiteSquare23;
+	private Square whiteSquare24;
+	private Square whiteSquare31;
+	private Square whiteSquare32;
+	private Square whiteSquare33;
+	private Square whiteSquare34;
+	private Square whiteSquare41;
+	private Square whiteSquare42;
+	private Square whiteSquare43;
+	private Square whiteSquare44;
 	
 	private enum GameState {
 		READY,
@@ -110,10 +127,39 @@ public class Checkers extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
+		//making grids with the most stupid way ever, but arrays somehow make the game not run so yeah
+		
+		whiteSquare11 = new Square(new Vector2(20,SCREENHEIGHT - 80));
+		whiteSquare12 = new Square(new Vector2(20,SCREENHEIGHT - 180));
+		whiteSquare13 = new Square(new Vector2(20,SCREENHEIGHT - 280));
+		whiteSquare21 = new Square(new Vector2(70,SCREENHEIGHT - 130));
+		whiteSquare22 = new Square(new Vector2(70,SCREENHEIGHT - 230));
+		whiteSquare23 = new Square(new Vector2(70,SCREENHEIGHT - 330));
+		whiteSquare31 = new Square(new Vector2(120,SCREENHEIGHT - 80));
+		whiteSquare32 = new Square(new Vector2(120,SCREENHEIGHT - 180));
+		whiteSquare33 = new Square(new Vector2(120,SCREENHEIGHT - 280));
+		whiteSquare41 = new Square(new Vector2(170,SCREENHEIGHT - 130));
+		whiteSquare42 = new Square(new Vector2(170,SCREENHEIGHT - 230));
+		whiteSquare43 = new Square(new Vector2(170,SCREENHEIGHT - 330));
+		
+		whiteSquare11.setColor(1, 0, 0, 1);
+		whiteSquare12.setColor(1, 0, 0, 1);
+		whiteSquare13.setColor(1, 0, 0, 1);
+		whiteSquare21.setColor(1, 0, 0, 1);
+		whiteSquare22.setColor(1, 0, 0, 1);
+		whiteSquare23.setColor(1, 0, 0, 1);
+		whiteSquare31.setColor(1, 0, 0, 1);
+		whiteSquare32.setColor(1, 0, 0, 1);
+		whiteSquare33.setColor(1, 0, 0, 1);
+		whiteSquare41.setColor(1, 0, 0, 1);
+		whiteSquare42.setColor(1, 0, 0, 1);
+		whiteSquare43.setColor(1, 0, 0, 1);
+		
+		
 		System.out.println("this is running");
 		
 		
-	//	leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+	//	leftPaddle = new LocalUserPaddle(new (20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
 	//	leftPaddle.setColor(1, 0, 0, 1);
 		
 	//	rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
@@ -175,7 +221,18 @@ public class Checkers extends GameClient {
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
-	    //leftPaddle.render(shapeRenderer);
+	    whiteSquare11.render(shapeRenderer);
+	    whiteSquare12.render(shapeRenderer);
+	    whiteSquare13.render(shapeRenderer);
+	    whiteSquare21.render(shapeRenderer);
+	    whiteSquare22.render(shapeRenderer);
+	    whiteSquare23.render(shapeRenderer);
+	    whiteSquare31.render(shapeRenderer);
+	    whiteSquare32.render(shapeRenderer);
+	    whiteSquare33.render(shapeRenderer);
+	    whiteSquare41.render(shapeRenderer);
+	    whiteSquare42.render(shapeRenderer);
+	    whiteSquare43.render(shapeRenderer);
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();

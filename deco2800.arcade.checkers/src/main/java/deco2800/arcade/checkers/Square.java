@@ -3,26 +3,27 @@ package deco2800.arcade.checkers;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
 /**
  * A basic implementation of a Square for the checkers game.
  * @author shewwiii
  *
  */
-public abstract class Square {
+public class Square {
 	
-	static final float WIDTH = 64f; // The width of the paddle
-	static final float HEIGHT = 64f; //The initial height of the paddle
+	static final float WIDTH = 50f; // The width of the square
+	static final float HEIGHT = 50f; //The initial height of the square
 	
 	private float renderColourRed;
 	private float renderColourGreen;
 	private float renderColourBlue;
 	private float renderColourAlpha;
 	
-	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the paddle
+	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the square
 	
 	/**
 	 * Basic constructor for squares
-	 * @param position the initial position of the paddle
+	 * @param position the initial position of the square
 	 */
 	public Square(Vector2 position) {
 		this.bounds.x = position.x;
@@ -64,7 +65,7 @@ public abstract class Square {
 	
 	/**
 	 * Set the position of the square
-	 * @param newPosition the new position of the paddle
+	 * @param newPosition the new position of the square
 	 */
 	public void setPosition(Vector2 newPosition) {
 		bounds.x = newPosition.x;

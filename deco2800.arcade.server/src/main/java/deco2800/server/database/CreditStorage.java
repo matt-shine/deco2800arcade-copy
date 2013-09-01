@@ -10,6 +10,8 @@ import java.sql.Statement;
  *
  */
 public class CreditStorage {
+	
+	private boolean initialised = false;
 
 
 	/**
@@ -34,6 +36,7 @@ public class CreditStorage {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create credits table", e);
 		}
+		initialised = true;
 	}
 	
 	/**
@@ -43,6 +46,10 @@ public class CreditStorage {
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
 	public Integer getUserCredits(int playerID) throws DatabaseException{
+		
+		if(!initialised){
+			initialise();
+		}
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();

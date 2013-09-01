@@ -13,6 +13,11 @@ public class Disc {
 	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the ball
 	Vector2 velocity = new Vector2(); // The current velocity of the ball as x,y
 	
+	public int currentPos = 0;
+	
+	public boolean isSetPlayer1 = false;
+	public boolean isSetPlayer2 = false;
+	
 	private float renderColourRed;
     private float renderColourGreen;
     private float renderColourBlue;
@@ -22,8 +27,10 @@ public class Disc {
 	 * Basic constructor for Ball. Set position and dimensions to the default
 	 */
 	public Disc() {
-		bounds.x = Connect4.SCREENWIDTH/2 - Disc.WIDTH/2;
-		bounds.y = Connect4.SCREENHEIGHT/2 - Disc.WIDTH/2;
+		bounds.x = 10;
+		bounds.y = 10;
+		//bounds.x = Connect4.SCREENWIDTH/2 - Disc.WIDTH/2;
+		//bounds.y = Connect4.SCREENHEIGHT/2 - Disc.WIDTH/2;
 		bounds.height = WIDTH;
 		bounds.width = WIDTH;
 	}
@@ -32,9 +39,9 @@ public class Disc {
 	 * Modify the position of the ball
 	 * @param newPosition the new position of the ball as x,y
 	 */
-	public void setPosition(Vector2 newPosition) {
-		bounds.x = newPosition.x;
-		bounds.y = newPosition.y;
+	public void setPosition(float newx, float newy) {
+		bounds.x = newx;
+		bounds.y = newy;
 	}
 
 	/**
@@ -42,24 +49,29 @@ public class Disc {
 	 * @param time the time elapsed in seconds
 	 */
 	public void moveLeft(float time) {
-		bounds.x -= 1;
-		//bounds.y += time*velocity.y;
+		if (currentPos > 0) {
+			bounds.x -= bounds.width*2 + 5;
+			currentPos -= 1;
+		} else {
+			//cannot move left - at position 0 (leftmost position)
+		}
 	}
 	
 	public void moveRight(float time){
-		bounds.x += 1;
-	}
-	
-	public void moveDown(float time){
-		bounds.y -= 1;
+		if (currentPos < (Connect4.TABLECOLS - 1)) {
+			bounds.x += bounds.width*2 + 5;
+			currentPos += 1;
+		} else {
+			//cannot move right - at max position (rightmost position)
+		}
 	}
 	
 	/**
 	 * Reset the ball to its initial position and velocity
 	 */
 	public void reset() {
-		bounds.x = Connect4.SCREENWIDTH/2 - Disc.WIDTH/2;
-		bounds.y = Connect4.SCREENHEIGHT/2 - Disc.WIDTH/2;
+		bounds.x = 20;
+		bounds.y = 20;
 	}
 	
 	/**

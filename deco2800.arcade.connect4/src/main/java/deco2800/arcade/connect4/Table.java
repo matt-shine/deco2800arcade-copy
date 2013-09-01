@@ -18,6 +18,7 @@ public class Table {
 	
 	ArrayList<ArrayList<Disc>> discArray = new ArrayList<ArrayList<Disc>>(6);
 	
+	
 	private float renderColourRed;
     private float renderColourGreen;
     private float renderColourBlue;
@@ -65,6 +66,60 @@ public class Table {
         renderColourGreen = g;
         renderColourBlue = b;
         renderColourAlpha = a;
+    }
+    
+    /** 
+     * Find the position to place the next disc
+     */
+    public boolean placeDisc(int colNo, int playerTurn) {
+    	int rowToSet = 0;
+    	
+    	for (int i = (Connect4.TABLEROWS - 1); i >= 0; i--) {
+    		if (discArray.get(i).get(colNo).isSetPlayer1 || discArray.get(i).get(colNo).isSetPlayer2) {
+    			if (i == (Connect4.TABLEROWS - 1)) {
+    				return false;
+    			} else {
+    				rowToSet = i + 1;//i+1
+    			}
+    			break;
+    		} else {
+    			if ( i == 0) {
+    				rowToSet = 0;
+    			}
+    		}
+    	}
+    	
+    	if (playerTurn == 0){
+    		discArray.get(rowToSet).get(colNo).isSetPlayer1 = true;
+    		discArray.get(rowToSet).get(colNo).setColor(1,0,0,1);
+    	} else {
+    		discArray.get(rowToSet).get(colNo).isSetPlayer2 = true;
+    		discArray.get(rowToSet).get(colNo).setColor(0,0,1,1);
+    	}
+    	return true; //successful
+    }
+    
+    /**
+     * Check field for winning combination
+     * Takes -> the current player to check
+     * Returns -> wether the player has won
+     */
+    
+    public boolean checkFieldWinner(int playerToCheck){
+    	for (int i = (Connect4.TABLEROWS - 1); i >= 0; i--) {
+    		for (int j = (Connect4.TABLECOLS - 1); i >= 0; i--) {
+    			if (playerToCheck == 0) {
+    				if (discArray.get(i).get(j).isSetPlayer1) {
+    					//check surrounding disks
+    				}
+    			} else if (playerToCheck == 1){
+    				if (discArray.get(i).get(j).isSetPlayer2) {
+    					//check surrounding disks
+    				}
+    			}
+    		}
+    	}
+    	return true;
     }
     
     /**

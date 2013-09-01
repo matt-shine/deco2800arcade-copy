@@ -19,6 +19,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import java.util.*;
 /**
  * A Connect4 game for use in the Arcade
  * 
@@ -29,7 +30,7 @@ public class Connect4 extends GameClient {
 	
 	private OrthographicCamera camera;
 	
-	private Disc disc;
+	private Disc cursorDisc;
 	private Table table;
 	private enum GameState {
 		READY,
@@ -39,10 +40,15 @@ public class Connect4 extends GameClient {
 	private GameState gameState;
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
-
+	private int playerTurn = 0;
+	
+	private int[] keyCodes = new int[3];
+	
 	public static final int WINNINGSCORE = 3;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
+	public static final int TABLECOLS = 7;
+	public static final int TABLEROWS = 6;
 	
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
@@ -63,7 +69,48 @@ public class Connect4 extends GameClient {
 		super(player, networkClient);
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; 
+		
+		keyCodes[0] = 0; //Left Key
+		keyCodes[1] = 0; //Right Key
+		keyCodes[2] = 0; //Enter Key
+		
         this.networkClient = networkClient; //this is a bit of a hack   
+	}
+	
+	/**
+	 * Returns random integer
+	 */
+	
+	public static int randInt(int min, int max) {
+
+	    // Usually this can be a field rather than a method variable
+	    Random rand = new Random();
+
+	    // nextInt is normally exclusive of the top value,
+	    // so add 1 to make it inclusive
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
+	}
+	
+	public void checkKeysPressed(){
+		if (Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[0] == 0) {
+			keyCodes[0] = 1;
+		} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && keyCodes[1] == 0) {
+			keyCodes[1] = 1;
+		} else if (Gdx.input.isKeyPressed(Keys.ENTER) && keyCodes[2] == 0) {
+			keyCodes[2] = 1;
+		}
+	}
+	
+	public void checkKeysReleased(){
+		if (!Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[0] == 1) {
+			keyCodes[0] = 2;
+		} else if (!Gdx.input.isKeyPressed(Keys.RIGHT) && keyCodes[1] == 1) {
+			keyCodes[1] = 2;
+		} else if (!Gdx.input.isKeyPressed(Keys.ENTER) && keyCodes[2] == 1) {
+			keyCodes[2] = 2;
+		}
 	}
 	
 	/**
@@ -109,18 +156,22 @@ public class Connect4 extends GameClient {
 		
 		super.create();
 		
+		//Set the current player's turn
+		playerTurn = 0;
+		
 		//Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		
-		//Create the disc
-		disc = new Disc();
-		disc.setColor(1, 0, 0, 1);
 		
 		//Create the table
 		table = new Table();
 		table.bounds.x = SCREENWIDTH/2 - table.WIDTH/2;
 		table.SetupDiscs();
+		
+		//Create the disc
+		cursorDisc = new Disc();
+		cursorDisc.setColor(1, 0, 0, 1);
+		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -145,6 +196,27 @@ public class Connect4 extends GameClient {
 	public void pause() {
 		super.pause();
 	}
+	
+	/**
+	 * Render the cursor disc - takes current player
+	 * and renders the appropriate colour.
+	 */
+	
+	public void renderCursorDisc(int currentPlayer) {
+		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
+		cursorDisc.currentPos = 0;
+		if (currentPlayer == 0) {
+			cursorDisc.setColor(1, 0, 0, 1);
+			
+		} else if (currentPlayer == 1) {
+			cursorDisc.setColor(0, 0, 1, 1);
+		}
+		
+		//Render the cursor Disc for player 1
+	    shapeRenderer.begin(ShapeType.FilledCircle);
+	    cursorDisc.render(shapeRenderer);
+	    shapeRenderer.end();
+	}
 
 	/**
 	 * Render the current state of the game and process updates
@@ -161,12 +233,9 @@ public class Connect4 extends GameClient {
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
-	    //Begin drawing of shapes
+	    //Render the cursor Disc
 	    shapeRenderer.begin(ShapeType.FilledCircle);
-	    
-	    disc.render(shapeRenderer);
-	    
-	    //End drawing of shapes
+	    cursorDisc.render(shapeRenderer);
 	    shapeRenderer.end();
 	    
 	    //Render the table
@@ -208,13 +277,50 @@ public class Connect4 extends GameClient {
 	    	}
 	    	break;
 	    	
-	    case INPROGRESS: //Point is underway, ball is moving
-	    	if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
-	    		disc.moveRight(0);
-	    	} else if(Gdx.input.isKeyPressed(Keys.LEFT)) {
-	    		disc.moveLeft(0);
-	    	} else if(Gdx.input.isKeyPressed(Keys.DOWN)) {
-	    		disc.moveDown(0);
+	    case INPROGRESS: //Game is underway, players can make their move's
+	    	if (playerTurn == 0) {
+	    		
+	    		checkKeysPressed();
+	    		checkKeysReleased();
+	    		
+	    		if(keyCodes[1] == 2) {
+	    			cursorDisc.moveRight(0);
+	    			keyCodes[1] = 0;
+	    		} else if(keyCodes[0] == 2) {
+	    			cursorDisc.moveLeft(0);
+	    			keyCodes[0] = 0;
+	    		} else if(keyCodes[2] == 2) {
+	    			//do some funky stuff here
+	    			//move the disc the lowest position and render table discs
+	    			if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
+	    				
+	    				//render the table discs
+	    				shapeRenderer.begin(ShapeType.FilledCircle);
+	    			    table.renderDiscs(shapeRenderer);
+	    			    shapeRenderer.end();
+	    				playerTurn = 1;
+	    				renderCursorDisc(1);
+	    			} else {
+	    				System.out.println("cant place disc here");
+	    				//can't place a disc in desired position - do something else
+	    			}
+	    			keyCodes[2] = 0;
+	    		}
+	    	} else if (playerTurn == 1) {
+	    		cursorDisc.currentPos = randInt(0,TABLECOLS - 1);
+	    		
+	    		if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
+    				
+    				//render the table discs
+    				shapeRenderer.begin(ShapeType.FilledCircle);
+    			    table.renderDiscs(shapeRenderer);
+    			    shapeRenderer.end();
+    			    playerTurn = 0;
+    	    		renderCursorDisc(0);
+    			} else {
+    				System.out.println("cant place disc here");
+    			}
+	    		
 	    	}
 	    	
 	    	
@@ -236,7 +342,7 @@ public class Connect4 extends GameClient {
 	 * @param winner 0 for player 1, 1 for player 2
 	 */
 	private void endPoint(int winner) {
-		disc.reset();
+		cursorDisc.reset();
 		scores[winner]++;
 		// If we've reached the victory point then update the display
 		if (scores[winner] == WINNINGSCORE) {	
@@ -273,7 +379,7 @@ public class Connect4 extends GameClient {
 	 * Start a new point: start the ball moving and change the game state
 	 */
 	private void startPoint() {
-		//ball.randomizeVelocity();
+		
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
 	}

@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
+import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
 import deco2800.arcade.deerforest.models.cardContainers.Deck;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
@@ -134,7 +135,7 @@ public class DeckTest {
 		Assert.assertEquals(1, d.size());
 		Assert.assertTrue(d.contains(c1));
 	}
-	/*
+	
 	@Test
 	public void destroyCardTypeTest() {
 		d.add(c4);
@@ -145,13 +146,12 @@ public class DeckTest {
 		ccl.add(c4);
 		
 		// Assert that the method returned the cards destroyed
-		// TODO Make an equals method for CardCollection so we don't need to resort to comparing the internal array?
-		Assert.assertEquals(ccl.cards(), d.destroyCardType("spell").cards());
+		Assert.assertEquals(ccl.cards(), d.destroyCardType("Spell").cards());
 		
 		// Assert the only remaining cards are c1, c2 and c3
 		Assert.assertEquals(3, d.size());
 		Assert.assertFalse(d.contains(c4));
-	}*/
+	}
 	
 	@Test
 	public void drawTest() {
@@ -179,7 +179,7 @@ public class DeckTest {
 		Assert.assertTrue(d.isEmpty());
 		
 	}
-	/*
+	
 	@Test
 	public void shuffleTest() {
 		
@@ -189,10 +189,30 @@ public class DeckTest {
 		// Shuffle the deck
 		d.shuffle();
 		
-		// Make sure the cards are in a different order
-		Assert.assertNotEquals(list, d.cards());
 		// Make sure there is still the same number of cards
 		Assert.assertTrue(d.size() == 3);
 	}
-	*/
+	
+	@Test
+	public void searchCardTest() {
+		CardCollection cc = new CardCollectionList();
+		cc.add(c3);
+		
+		// Test searching for the card when there's only one in the deck
+		Assert.assertEquals(cc.cards(), d.searchCard(c3).cards());
+		
+		cc.add(c3);
+		d.add(c3);
+		
+		// Test searching for the card when the deck contains two
+		Assert.assertEquals(cc.cards(), d.searchCard(c3).cards());
+	
+		cc.remove(c3);
+		cc.remove(c3);
+		
+		// Test searching for the card when the deck contains none
+		Assert.assertEquals(cc.cards(), d.searchCard(c4).cards());
+	}
+	
+//	public void searchTest();
 }

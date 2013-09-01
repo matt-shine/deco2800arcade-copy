@@ -7,10 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
+import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public abstract class AbstractCardStack implements CardStack {
-	
+
 	protected List<AbstractCard> cardList;
 	
 	public AbstractCardStack() {
@@ -65,6 +66,7 @@ public abstract class AbstractCardStack implements CardStack {
 		// For each card
 		for (AbstractCard card: cardList) {
 			// If the card is of the given type
+			
 			if (card.getCardType().equals(type)) {
 				cardsToDestroy.add(card);
 			}
@@ -194,15 +196,42 @@ public abstract class AbstractCardStack implements CardStack {
 
 	@Override
 	public CardCollection searchCard(AbstractCard card) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		CardCollectionList cardsFound = new CardCollectionList();
+		
+		for (AbstractCard cardFromStack: cardList) {
+			if (cardFromStack.equals(card)) {
+				cardsFound.add(cardFromStack);
+			}
+		}
+		
+		return cardsFound;
 	}
 
 	@Override
 	public CardCollection searchMonster(String type, int minHealth,
-			int maxHealth, int minAttack, int MaxAttack) {
-		// TODO Auto-generated method stub
-		return null;
+			int maxHealth, int minAttack, int maxAttack) {
+		
+		CardCollectionList cardsFound = new CardCollectionList();
+		
+		// For each card
+		for (AbstractCard card: cardList) {
+			if (card.getCardType() == "Monster") {
+				
+				AbstractMonster monster = (AbstractMonster)card;
+				
+				if ((type == null || monster.getType() == type) &&
+						(minHealth == -1 || minHealth <= monster.getTotalHealth()) &&
+						(maxHealth == -1 || maxHealth >= monster.getTotalHealth()) &&
+						(minAttack == -1 || minAttack <= monster.getHighestAttack().getDamage()) &&
+						(maxAttack == -1 || maxAttack >= monster.getHighestAttack().getDamage())) {
+					// Add the card
+					cardsFound.add(card);
+				}
+			}
+		}
+		
+		return cardsFound;
 	}
 
 	@Override
@@ -228,6 +257,32 @@ public abstract class AbstractCardStack implements CardStack {
 	public CardCollection searchSpell(String type) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((cardList == null) ? 0 : cardList.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractCardStack other = (AbstractCardStack) obj;
+		if (cardList == null) {
+			if (other.cardList != null)
+				return false;
+		} else if (!cardList.equals(other.cardList))
+			return false;
+		return true;
 	}
 
 }

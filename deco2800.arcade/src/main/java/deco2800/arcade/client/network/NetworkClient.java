@@ -58,6 +58,7 @@ public class NetworkClient {
 	public void removeListener(NetworkListener listener){
 		this.client.removeListener(listener);
 	}
+
 	
 	
 }

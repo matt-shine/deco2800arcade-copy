@@ -7,7 +7,7 @@ import deco2800.arcade.protocol.game.GameRequestType;
 
 public class NewMultiGameRequest extends GameRequest {
 
-	public GameRequestType requestType;
+	public MultiGameRequestType requestType;
 	public Connection connectTo;
 	
 }

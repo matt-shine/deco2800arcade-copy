@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.game.GameRequestType;
+import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 
@@ -34,7 +35,7 @@ public class MultiplayerListener extends Listener {
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
 			String username = multiRequest.username;
 			String gameId = multiRequest.gameId;
-			GameRequestType requestType = multiRequest.requestType;
+			MultiGameRequestType requestType = multiRequest.requestType;
 			Connection connectTo = multiRequest.connectTo;
 			
 			switch (multiRequest.requestType){

@@ -20,14 +20,13 @@ public class LoginScreen implements Screen {
 	
 	
 	public LoginScreen() {
-<<<<<<< HEAD
 
 	/*	
 		// Move skin stuff to an overall class
-=======
+
         //skin = new Skin(Gdx.files.internal("loginSkin.json"));
 
->>>>>>> origin/master
+
         skin = new Skin();
         
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -107,8 +106,6 @@ public class LoginScreen implements Screen {
 	}
 	
 
-	@Override
-<<<<<<< HEAD
 	public void firstResize() {
 /*
 		ArcadeSystem.openConnection();
@@ -116,8 +113,6 @@ public class LoginScreen implements Screen {
 	}
 	
 	@Override
-=======
->>>>>>> origin/master
 	public void render(float arg0) {
 /*		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
@@ -173,9 +168,7 @@ public class LoginScreen implements Screen {
 	@Override
 	public void resume() {
 	}
-<<<<<<< HEAD
-		
-=======
+
 
 
 	@Override
@@ -183,7 +176,5 @@ public class LoginScreen implements Screen {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	
->>>>>>> origin/master
+
 }

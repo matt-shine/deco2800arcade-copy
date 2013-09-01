@@ -26,6 +26,7 @@ import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.MultiplayerListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
@@ -33,6 +34,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
+import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
@@ -71,6 +73,7 @@ public class Arcade extends JFrame{
 	 */
 	public static void main(String[] args) {
 		
+		
 		Arcade arcade = new Arcade(args);
 
 		ArcadeSystem.setArcadeInstance(arcade);
@@ -78,6 +81,8 @@ public class Arcade extends JFrame{
 		arcade.addCanvas();
 
 		ArcadeSystem.goToGame(ArcadeSystem.UI);
+		
+		
 		
 	}
 
@@ -97,7 +102,6 @@ public class Arcade extends JFrame{
 	 * Configure the window
 	 */
 	private void initWindow() {
-<<<<<<< HEAD
 		
 		//Added to test conectivity
 		try {
@@ -107,9 +111,9 @@ public class Arcade extends JFrame{
 			e.printStackTrace();
 		}
 		//create the main window
-=======
+
 		// create the main window
->>>>>>> origin/master
+
 		this.setSize(new Dimension(width, height));
 		this.setVisible(true);
 		Insets insets = this.getInsets();
@@ -163,12 +167,6 @@ public class Arcade extends JFrame{
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
-			
-			//testing multiplayer connectivity
-			NewMultiGameRequest multiGameRequest = new NewMultiGameRequest(); 
-			this.client.sendNetworkObject(multiGameRequest);
-			System.out.println("Send Request");
-			//end test
 		
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server ("
@@ -181,6 +179,7 @@ public class Arcade extends JFrame{
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
+		this.client.addListener(new MultiplayerListener());
 		this.client
 				.addListener(new CommunicationListener(communicationNetwork));
 	}
@@ -205,20 +204,20 @@ public class Arcade extends JFrame{
 				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
 		this.player.setUsername(username);
 
-<<<<<<< HEAD
 
-		this.communicationNetwork.createInterface();
+
 		
 		NewMultiGameRequest multiGameRequest = new NewMultiGameRequest(); 
+		multiGameRequest.requestType = MultiGameRequestType.NEW;
 		
 		this.client.sendNetworkObject(multiGameRequest);
 		System.out.println("Send Request");
 
 		//this.communicationNetwork.createNewChat(username);
 
-=======
+
 		// this.communicationNetwork.createNewChat(username);
->>>>>>> origin/master
+
 	}
 
 	/**

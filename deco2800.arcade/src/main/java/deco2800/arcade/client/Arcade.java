@@ -101,12 +101,12 @@ public class Arcade extends JFrame {
 		//set shutdown behaviour
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    public void windowClosing(WindowEvent winEvt) {
-                close();
+                arcadeExit();
 		    }
 		});
 	}
 
-    public void close() {
+    public void arcadeExit() {
         removeCanvas();
 
         EventQueue.invokeLater(new Runnable() {

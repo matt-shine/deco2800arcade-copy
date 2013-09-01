@@ -2,8 +2,12 @@ package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Screen;
 
-public class RegisterScreen implements Screen {
+public class AccMgtScreen implements Screen {
 
+
+    public void AccMgtScreen() {
+
+    }
 
     @Override
     public void show() {

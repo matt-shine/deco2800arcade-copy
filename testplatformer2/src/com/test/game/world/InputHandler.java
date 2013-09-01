@@ -81,6 +81,26 @@ public class InputHandler implements InputProcessor{
 			case Keys.Q:
 				world.resetLevel(world.getCurLevel());
 				break;
+				
+			case Keys.SPACE:
+				if (acceptInput) {
+							/*
+							float speed,
+							float rotation,
+							Vector2 pos,
+							float width, float height,
+							Vector2 velocity
+							*/
+					int shootDir = 1;
+					if (!ship.isFacingRight()) shootDir = -1; 
+					world.addBullet(new Bullet(
+							Bullet.BULLET_SPEED,
+							0,
+							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.BULLET_SIZE/2, ship.getPosition().y+ship.getHeight()/2),
+							Bullet.BULLET_SIZE, Bullet.BULLET_SIZE,
+							new Vector2( shootDir ,0) ));
+				}
+				break;
 
 			default:
 				break;

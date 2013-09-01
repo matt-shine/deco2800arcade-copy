@@ -402,7 +402,7 @@ public class WorldRenderer {
 		heartsTexture = new Texture("data/heart.png");
 		heartsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
-		bulletTexture = new Texture("data/bullet.png");
+		bulletTexture = new Texture("data/projectiles/lightningball.png");
 		bulletTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 			/* Load follower texture */

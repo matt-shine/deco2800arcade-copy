@@ -462,6 +462,10 @@ public class World {
 					//System.out.println("cleaned arrays");
 				}
 			}
+			
+			if(b.getExistTime() > b.MAX_EXIST_TIME) {
+				bItr.remove();
+			}
 		}
 		return;
 	}

@@ -1,13 +1,13 @@
 package deco2800.arcade.mixmaze.domain;
 
 public abstract class ItemModel {
-	private int amount;
+	private TileModel tileSpawned;
 	
-	public int getAmount() {
-		return amount;
+	public void pickUpItem() {
+		tileSpawned.pickUpItem();
 	}
 	
-	public ItemModel(int amnt) {
-		amount = amnt;
+	protected ItemModel(TileModel spawnedOn) {
+		tileSpawned = spawnedOn;
 	}
 }

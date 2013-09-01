@@ -20,7 +20,7 @@ public final class MixMaze extends GameClient {
 
 	Screen splashScreen;
 	Screen menuScreen;
-	Screen gameScreen;
+	Screen gameScreen;	/** game screen */
 	Skin skin;
 
 	public MixMaze(Player player, NetworkClient networkClient) {
@@ -43,8 +43,9 @@ public final class MixMaze extends GameClient {
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
-		gameScreen = new GameScreen(this);
-		setScreen(splashScreen);
+		gameScreen = new MixMazeViewModel();
+		setScreen(menuScreen);
+
 		Gdx.app.debug(LOG, "Use arrows to move");
 	}
 

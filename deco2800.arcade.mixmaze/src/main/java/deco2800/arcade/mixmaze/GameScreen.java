@@ -33,6 +33,7 @@ final class GameScreen implements Screen {
 	private final Stage stage;
 	private final ShapeRenderer renderer;
 	private final MixMazeModel model;
+	private final Skin skin;
 
 	private Label timerLabel;
 	private int elapsed;
@@ -43,6 +44,7 @@ final class GameScreen implements Screen {
 	 */
 	GameScreen(final MixMaze game) {
 		this.game = game;
+		this.skin = game.skin;
 
 		elapsed = 0;
 
@@ -64,7 +66,6 @@ final class GameScreen implements Screen {
 	 * Set up the layout on stage.
 	 */
 	private void setupLayout() {
-		Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 		Stack gameBoard = new Stack();
 		Table root = new Table();
 		Table left = new Table();

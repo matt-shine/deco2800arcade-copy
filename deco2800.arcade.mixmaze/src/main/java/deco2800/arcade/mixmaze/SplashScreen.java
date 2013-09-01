@@ -51,12 +51,12 @@ final class SplashScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		texture.dispose();
+		batch.dispose();
 	}
 
 	@Override
 	public void hide() {
-		texture.dispose();
-		batch.dispose();
 	}
 
 	@Override

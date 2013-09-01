@@ -305,7 +305,7 @@ public class Player extends User {
 	 *            player to be removed from blocked list.
 	 * @ensure !this.blocked.contains(player)
 	 */
-	public void removeBlocked(User player) throws Exception {
+	public void removeBlocked(User player) {
 		if (player != null) {
 			this.blocked.remove(player);
 			setChanged();

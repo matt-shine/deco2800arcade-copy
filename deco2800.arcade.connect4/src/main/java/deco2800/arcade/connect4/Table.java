@@ -107,19 +107,189 @@ public class Table {
     
     public boolean checkFieldWinner(int playerToCheck){
     	for (int i = (Connect4.TABLEROWS - 1); i >= 0; i--) {
-    		for (int j = (Connect4.TABLECOLS - 1); i >= 0; i--) {
+    		for (int j = (Connect4.TABLECOLS - 1); j >= 0; j--) {
     			if (playerToCheck == 0) {
     				if (discArray.get(i).get(j).isSetPlayer1) {
-    					//check surrounding disks
+    					//check down
+    					if (i >= 3) {
+    						//check straight down
+    						if (discArray.get(i-1).get(j).isSetPlayer1) {
+    							if (discArray.get(i-2).get(j).isSetPlayer1) {
+    								if (discArray.get(i-3).get(j).isSetPlayer1) {
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    						//check left diagonal
+    						if (j >= 3) {
+    							if (discArray.get(i-1).get(j-1).isSetPlayer1) {
+    								if (discArray.get(i-2).get(j-2).isSetPlayer1) {
+    									if (discArray.get(i-3).get(j-3).isSetPlayer1) {
+    										return true;
+    									}
+    								}
+    							}
+    						}
+    						//check right diagonal
+    						if (j <= (Connect4.TABLEROWS) - 4) {
+        						if (discArray.get(i-1).get(j+1).isSetPlayer1) {
+        							if (discArray.get(i-2).get(j+2).isSetPlayer1) {
+        								if (discArray.get(i-3).get(j+3).isSetPlayer1) {
+        									return true;
+        								}
+        							}
+        						}
+    						}
+    					}
+    					//check up
+    					if (i <= (Connect4.TABLEROWS - 4)) {
+    						//check straight up
+    						if (discArray.get(i+1).get(j).isSetPlayer1) {
+    							if (discArray.get(i+2).get(j).isSetPlayer1) {
+    								if (discArray.get(i+3).get(j).isSetPlayer1) {
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    						//check left diagonal
+    						if (j >= 3) {
+    							if (discArray.get(i+1).get(j-1).isSetPlayer1) {
+    								if (discArray.get(i+2).get(j-2).isSetPlayer1) {
+    									if (discArray.get(i+3).get(j-3).isSetPlayer1) {
+    										return true;
+    									}
+    								}
+    							}
+    						}
+    						//check right diagonal
+    						if (j <= (Connect4.TABLEROWS) - 4) {
+        						if (discArray.get(i+1).get(j+1).isSetPlayer1) {
+        							if (discArray.get(i+2).get(j+2).isSetPlayer1) {
+        								if (discArray.get(i+3).get(j+3).isSetPlayer1) {
+        									return true;
+        								}
+        							}
+        						}
+    						}
+    					}
+    					//check left
+    					if (j >= 3) {
+    						if (discArray.get(i).get(j-1).isSetPlayer1) {
+    							if (discArray.get(i).get(j-2).isSetPlayer1){
+    								if (discArray.get(i).get(j-3).isSetPlayer1){
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    					}
+    					//check right
+    					if (j <= (Connect4.TABLEROWS) - 4) {
+    						if (discArray.get(i).get(j+1).isSetPlayer1) {
+    							if (discArray.get(i).get(j+2).isSetPlayer1){
+    								if (discArray.get(i).get(j+3).isSetPlayer1){
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    					}
     				}
-    			} else if (playerToCheck == 1){
+    			} else if (playerToCheck == 1) {
     				if (discArray.get(i).get(j).isSetPlayer2) {
-    					//check surrounding disks
+    					//check down
+    					if (i >= 3) {
+    						//check straight down
+    						if (discArray.get(i-1).get(j).isSetPlayer2) {
+    							if (discArray.get(i-2).get(j).isSetPlayer2) {
+    								if (discArray.get(i-3).get(j).isSetPlayer2) {
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    						//check left diagonal
+    						if (j >= 3) {
+    							if (discArray.get(i-1).get(j-1).isSetPlayer2) {
+    								if (discArray.get(i-2).get(j-2).isSetPlayer2) {
+    									if (discArray.get(i-3).get(j-3).isSetPlayer2) {
+    										return true;
+    									}
+    								}
+    							}
+    						}
+    						//check right diagonal
+    						if (j <= (Connect4.TABLEROWS) - 4) {
+        						if (discArray.get(i-1).get(j+1).isSetPlayer2) {
+        							if (discArray.get(i-2).get(j+2).isSetPlayer2) {
+        								if (discArray.get(i-3).get(j+3).isSetPlayer2) {
+        									return true;
+        								}
+        							}
+        						}
+    						}
+    					}
+    					//check up
+    					if (i <= (Connect4.TABLEROWS - 4)) {
+    						//check straight up
+    						if (discArray.get(i+1).get(j).isSetPlayer2) {
+    							if (discArray.get(i+2).get(j).isSetPlayer2) {
+    								if (discArray.get(i+3).get(j).isSetPlayer2) {
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    						//check left diagonal
+    						if (j >= 3) {
+    							if (discArray.get(i+1).get(j-1).isSetPlayer2) {
+    								if (discArray.get(i+2).get(j-2).isSetPlayer2) {
+    									if (discArray.get(i+3).get(j-3).isSetPlayer2) {
+    										return true;
+    									}
+    								}
+    							}
+    						}
+    						//check right diagonal
+    						if (j <= (Connect4.TABLEROWS) - 4) {
+        						if (discArray.get(i+1).get(j+1).isSetPlayer2) {
+        							if (discArray.get(i+2).get(j+2).isSetPlayer2) {
+        								if (discArray.get(i+3).get(j+3).isSetPlayer2) {
+        									return true;
+        								}
+        							}
+        						}
+    						}
+    					}
+    					//check left
+    					if (j >= 3) {
+    						if (discArray.get(i).get(j-1).isSetPlayer2) {
+    							if (discArray.get(i).get(j-2).isSetPlayer2){
+    								if (discArray.get(i).get(j-3).isSetPlayer2){
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    					}
+    					//check right
+    					if (j <= (Connect4.TABLEROWS) - 4) {
+    						if (discArray.get(i).get(j+1).isSetPlayer2) {
+    							if (discArray.get(i).get(j+2).isSetPlayer2){
+    								if (discArray.get(i).get(j+3).isSetPlayer2){
+    									//player 1 won the game - 4 connected
+    									return true;
+    								}
+    							}
+    						}
+    					}
     				}
     			}
     		}
     	}
-    	return true;
+    	return false;
     }
     
     /**

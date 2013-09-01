@@ -298,6 +298,10 @@ public class Connect4 extends GameClient {
 	    				shapeRenderer.begin(ShapeType.FilledCircle);
 	    			    table.renderDiscs(shapeRenderer);
 	    			    shapeRenderer.end();
+	    			    System.out.println("checking player0 has won");
+	    			    if (table.checkFieldWinner(0)) {
+	    			    	gameState = GameState.GAMEOVER;
+	    			    }
 	    				playerTurn = 1;
 	    				renderCursorDisc(1);
 	    			} else {
@@ -315,6 +319,9 @@ public class Connect4 extends GameClient {
     				shapeRenderer.begin(ShapeType.FilledCircle);
     			    table.renderDiscs(shapeRenderer);
     			    shapeRenderer.end();
+    			    if (table.checkFieldWinner(1)) {
+    			    	System.out.println("player1 has won");
+    			    }
     			    playerTurn = 0;
     	    		renderCursorDisc(0);
     			} else {

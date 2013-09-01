@@ -176,7 +176,6 @@ public class PlayerTest {
 		Player p3 = new Player(123, "Nice Guy", "String filepath");
 		p1.blockPlayer(p2);
 		p1.blockPlayer(p3);
-		p1.removeBlocked(p2);
 		Assert.assertEquals("Incorrect Blocked List", "Nice Guy", p1.getBlockedList());
 	}
 	
@@ -184,3 +183,4 @@ public class PlayerTest {
 	
 
 }
+

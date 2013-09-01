@@ -56,7 +56,7 @@ final class GameScreen implements Screen {
 		renderer = new ShapeRenderer();
 
 		/* FIXME: game size should be passed from UI */
-		model = new MixMazeModel(3, MixMazeDifficulty.Beginner, 3);
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 2);
 
 		stage = new Stage();
 
@@ -173,6 +173,8 @@ final class GameScreen implements Screen {
 						 + elapsed);
 			}
 		}, 1, 1, 60);
+
+		model.startGame();
 	}
 
 	@Override

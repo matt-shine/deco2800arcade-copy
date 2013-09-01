@@ -3,28 +3,32 @@ package deco2800.arcade.model;
 import java.util.Set;
 
 public class Player extends User {
+	
+	private static final int USERNAME_ID = 1;
+	private static final int NAME_ID = 1;
+	private static final int EMAIL_ID = 1;
+	private static final int PROGRAM_ID = 1;
+	private static final int BIO_ID = 1;
+	
+	
 
 	// TODO shared between server & client?
 
-	private String username;
+	private Field username;
+	
+	//TODO Implement these
+	private Field name;
+	private Field email;
+	private Field program;
+	private Field bio;
 
 	private Games games;
-
 	private Friends friends;
-
 	private Blocked blocked;
-
 	private FriendInvites friendInvites;
 
 	private Icon icon;
 
-	// private String realName;
-
-	// private String location;
-
-	// private String biography;
-
-	// private String onlineStatus;
 
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
@@ -38,7 +42,7 @@ public class Player extends User {
 	 */
 	public Player(int playerID, String username, String filepath) {
 		super(playerID);
-		this.username = username;
+		this.username = new Field(USERNAME_ID, username);
 		this.games = new Games();
 		this.friends = new Friends();
 		this.friendInvites = new FriendInvites();
@@ -65,7 +69,7 @@ public class Player extends User {
 	 * @return a string of the username
 	 */
 	public String getUsername() {
-		return username;
+		return username.getValue();
 	}
 
 	/**
@@ -75,7 +79,7 @@ public class Player extends User {
 	 */
 	public void setUsername(String username) {
 		if (username != null) {
-			this.username = username;
+			this.username.setValue(username);
 		}
 	}
 

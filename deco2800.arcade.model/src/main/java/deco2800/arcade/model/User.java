@@ -37,6 +37,22 @@ public class User extends Observable{
 		return playerID;
 	}
 	
+	public String toString(){
+		return "" + this.playerID;
+	}
+	
+	public boolean equals(Object o){
+		if (o instanceof User){
+			return ((User)o).getID() == this.playerID;
+		}
+		return false;
+		
+	}
+	
+	public int hashCode(){
+		return this.playerID;
+	}
+	
 
 
 }

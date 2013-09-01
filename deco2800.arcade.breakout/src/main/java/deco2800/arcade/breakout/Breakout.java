@@ -2,6 +2,7 @@ package deco2800.arcade.breakout;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -38,14 +39,18 @@ public class Breakout extends GameClient {
 	private PongBall ball;
 	private int score;
 	private int lives;
+	int[] sequence = {19, 19, 20, 20, 21, 22, 21, 22, 30, 29};
+	int currentButton = 0;
+	
+	//public static Sound breaking = Gdx.audio.newSound(Gdx.files.internal("resources/break.wav"));
 
 	// private String status;
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
 
 	// Screen Parameters
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;
+	public static final int SCREENHEIGHT = 720;
+	public static final int SCREENWIDTH = 1280;
 
 	// Game States
 	private enum GameState {
@@ -76,7 +81,7 @@ public class Breakout extends GameClient {
 	@Override
 	public void create() {
 		super.create();
-		// Sets the display sizw
+		// Sets the display size
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 
@@ -166,10 +171,10 @@ public class Breakout extends GameClient {
 		// Writes in the text information
 		batch.begin();
 		font.setColor(Color.GREEN);
-		font.draw(batch, "player " + player, 20, 460);
+		font.draw(batch, "player " + player, SCREENWIDTH/4, SCREENHEIGHT - 20);
 		font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
-				460);
-		font.draw(batch, "Score " + Integer.toString(score), 600, 460);
+				SCREENHEIGHT - 20);
+		font.draw(batch, "Score " + Integer.toString(score), SCREENWIDTH*3/4, SCREENHEIGHT-20);
 		batch.end();
 
 		switch (gameState) {
@@ -177,13 +182,23 @@ public class Breakout extends GameClient {
 		case READY:
 			if (Gdx.input.isKeyPressed(Keys.SPACE) || Gdx.input.isTouched()) {
 				Start();
+			} else if(sequence != null) {
+				if(Gdx.input.isKeyPressed(sequence[currentButton])){
+					currentButton++;
+					System.out.println("WORKED!!!"+currentButton);
+				}
+				if(sequence.length == currentButton){
+					currentButton = 0;
+					bonusLives();
+					System.out.println("SCORE UPDATE!");
+				}
 			}
 			break;
 
 		case INPROGRESS:
 			paddle.update(ball);
 			ball.move(Gdx.graphics.getDeltaTime());
-			// ?int index = 0;
+			// int index = 0;
 			// TODO: if it hits left/right side, only bounceX. if it hits
 			// top/bottom, only bounceY
 			for (Brick b : bricks) {
@@ -192,8 +207,9 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
-						// ball.bounceX();
 						ball.bounceY();
+						//breaking.play();
+						//breaking.dispose();
 					}
 				}
 			}
@@ -262,6 +278,11 @@ public class Breakout extends GameClient {
 		incrementAchievement("breakout.winGame");
 		gameState = GameState.GAMEOVER;
 	}
+	
+	private void bonusLives() {
+		lives = lives +2;
+		sequence = null;
+	}
 
 	/**
 	 * Resets games area or sets the gameState to GAMEOVER
@@ -292,5 +313,5 @@ public class Breakout extends GameClient {
 		game.name = "Breakout";
 		// game.availableAchievements = achievements;
 	}
-
 }
+

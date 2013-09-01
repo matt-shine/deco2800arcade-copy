@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class LocalPlayer extends Paddle {
 
-	public int KBPADDLESPEED = 400;
+	public int KBPADDLESPEED = 600;
+	public static final int SCREENWIDTH = 1280;
 
 	/**
 	 * 
@@ -21,12 +22,18 @@ public class LocalPlayer extends Paddle {
 		if (Gdx.input.isTouched()) {
 			Vector2 touchPos = new Vector2();
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY());
-			paddleShape.x = touchPos.x - paddleShape.width / 2;
+
+			if (touchPos.x > SCREENWIDTH / 2)
+				movement(KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+
+			if (touchPos.x < SCREENWIDTH / 2)
+				movement(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)
 				|| Gdx.input.isKeyPressed(Keys.D))
 			movement(KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+
 		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A))
 			movement(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());
 

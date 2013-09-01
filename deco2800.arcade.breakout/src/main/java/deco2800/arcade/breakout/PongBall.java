@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 public class PongBall {
 
 	public static final float WIDTH = 20f; // How big is the ball (its a square)
-	public static final float INITIALSPEED = 200; // How fast is the ball going
+	public static final float INITIALSPEED = 400; // How fast is the ball going
 													// at the start of a point
 	public static final float BOUNCEINCREMENT = 1.1f; // How much does the ball
 														// speed up each time it

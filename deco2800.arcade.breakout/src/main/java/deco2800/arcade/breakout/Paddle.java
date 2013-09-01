@@ -15,7 +15,7 @@ public abstract class Paddle {
 
 	// public static float width = 64f;
 	public static float width = 128f;
-	public static float height = 10f;
+	public static float height = 20f;
 
 	Rectangle paddleShape = new Rectangle();
 

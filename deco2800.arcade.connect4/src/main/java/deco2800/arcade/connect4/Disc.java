@@ -18,6 +18,12 @@ public class Disc {
 	public boolean isSetPlayer1 = false;
 	public boolean isSetPlayer2 = false;
 	
+	public static final int EMPTY = 0;
+	public static final int PLAYER1 = 1;
+	public static final int PLAYER2 = 2;
+	
+	private int state = Disc.EMPTY;
+	
 	private float renderColourRed;
     private float renderColourGreen;
     private float renderColourBlue;
@@ -33,6 +39,25 @@ public class Disc {
 		//bounds.y = Connect4.SCREENHEIGHT/2 - Disc.WIDTH/2;
 		bounds.height = WIDTH;
 		bounds.width = WIDTH;
+	}
+	
+	public void setState( int state ) {
+		this.state = state;
+		switch ( this.state ) {
+			case Disc.EMPTY: 
+				setColor(0,0,0,1);
+				break;
+			case Disc.PLAYER1: 
+				setColor(1,0,0,1);
+				break;
+			case Disc.PLAYER2: 
+				setColor(0,0,1,1);
+				break;
+		}
+	}
+	
+	public int getState() {
+		return this.state;
 	}
 	
 	/**
@@ -58,7 +83,7 @@ public class Disc {
 	}
 	
 	public void moveRight(float time){
-		if (currentPos < (Connect4.TABLECOLS - 1)) {
+		if (currentPos < (Table.TABLECOLS - 1)) {
 			bounds.x += bounds.width*2 + 5;
 			currentPos += 1;
 		} else {

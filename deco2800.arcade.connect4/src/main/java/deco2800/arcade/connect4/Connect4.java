@@ -47,8 +47,10 @@ public class Connect4 extends GameClient {
 	public static final int WINNINGSCORE = 3;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
-	public static final int TABLECOLS = 7;
-	public static final int TABLEROWS = 6;
+	
+	private final int KEY_LEFT = 0;
+	private final int KEY_RIGHT = 1;
+	private final int KEY_ENTER = 2;
 	
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
@@ -70,9 +72,9 @@ public class Connect4 extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; 
 		
-		keyCodes[0] = 0; //Left Key
-		keyCodes[1] = 0; //Right Key
-		keyCodes[2] = 0; //Enter Key
+		keyCodes[KEY_LEFT] = 0; //Left Key
+		keyCodes[KEY_RIGHT] = 0; //Right Key
+		keyCodes[KEY_ENTER] = 0; //Enter Key
 		
         this.networkClient = networkClient; //this is a bit of a hack   
 	}
@@ -94,21 +96,21 @@ public class Connect4 extends GameClient {
 	}
 	
 	public void checkKeysPressed(){
-		if (Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[0] == 0) {
+		if (Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[KEY_LEFT] == 0) {
 			keyCodes[0] = 1;
-		} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && keyCodes[1] == 0) {
+		} else if (Gdx.input.isKeyPressed(Keys.RIGHT) && keyCodes[KEY_RIGHT] == 0) {
 			keyCodes[1] = 1;
-		} else if (Gdx.input.isKeyPressed(Keys.ENTER) && keyCodes[2] == 0) {
+		} else if (Gdx.input.isKeyPressed(Keys.ENTER) && keyCodes[KEY_ENTER] == 0) {
 			keyCodes[2] = 1;
 		}
 	}
 	
 	public void checkKeysReleased(){
-		if (!Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[0] == 1) {
+		if (!Gdx.input.isKeyPressed(Keys.LEFT) && keyCodes[KEY_LEFT] == 1) {
 			keyCodes[0] = 2;
-		} else if (!Gdx.input.isKeyPressed(Keys.RIGHT) && keyCodes[1] == 1) {
+		} else if (!Gdx.input.isKeyPressed(Keys.RIGHT) && keyCodes[KEY_RIGHT] == 1) {
 			keyCodes[1] = 2;
-		} else if (!Gdx.input.isKeyPressed(Keys.ENTER) && keyCodes[2] == 1) {
+		} else if (!Gdx.input.isKeyPressed(Keys.ENTER) && keyCodes[KEY_ENTER] == 1) {
 			keyCodes[2] = 2;
 		}
 	}
@@ -156,21 +158,26 @@ public class Connect4 extends GameClient {
 		
 		super.create();
 		
-		//Set the current player's turn
-		playerTurn = 0;
-		
 		//Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
+		init();
+	}
+	
+	public void init() {
+
+		//Set the current player's turn
+		playerTurn = 0;
+		
 		//Create the table
 		table = new Table();
-		table.bounds.x = SCREENWIDTH/2 - table.WIDTH/2;
+		table.bounds.x = SCREENWIDTH/2 - Table.WIDTH/2;
 		table.SetupDiscs();
 		
-		//Create the disc
+		//Create the cursor disc
 		cursorDisc = new Disc();
-		cursorDisc.setColor(1, 0, 0, 1);
+		cursorDisc.setState( Disc.PLAYER1 );
 		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
 		
 		//Necessary for rendering
@@ -185,6 +192,22 @@ public class Connect4 extends GameClient {
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 		
+	}
+	
+	public void reset() {
+		table.resetDiscs();
+		this.playerTurn = 0;
+		cursorDisc.setState( Disc.PLAYER1 );
+		
+		//Need to somehow clear the display
+	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    table.render(shapeRenderer);
+	    shapeRenderer.end();
+		/*
+		shapeRenderer.begin(ShapeType.FilledCircle);
+	    table.renderDiscs(shapeRenderer);
+	    shapeRenderer.end();
+	    */
 	}
 
 	@Override
@@ -206,10 +229,10 @@ public class Connect4 extends GameClient {
 		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
 		cursorDisc.currentPos = 0;
 		if (currentPlayer == 0) {
-			cursorDisc.setColor(1, 0, 0, 1);
+			cursorDisc.setState( Disc.PLAYER1 );
 			
 		} else if (currentPlayer == 1) {
-			cursorDisc.setColor(0, 0, 1, 1);
+			cursorDisc.setState( Disc.PLAYER2 );
 		}
 		
 		//Render the cursor Disc for player 1
@@ -254,7 +277,7 @@ public class Connect4 extends GameClient {
 	    font.draw(batch, "Connect 4!", 10, SCREENHEIGHT - 20);
 	    font.draw(batch, players[0], SCREENWIDTH/2 - 100, SCREENHEIGHT - 20);
 	    font.draw(batch, players[1], SCREENWIDTH/2 + 50, SCREENHEIGHT - 20);
-	    font.draw(batch, Integer.toString(scores[0]), SCREENWIDTH/2 - 50, SCREENHEIGHT-50);
+	    font.draw(batch, Integer.toString(scores[0]), SCREENWIDTH/2, SCREENHEIGHT-50);
 	    font.draw(batch, Integer.toString(scores[1]), SCREENWIDTH/2 + 75, SCREENHEIGHT-50);
 	    
 	    //If there is a current status message (i.e. if the game is in the ready or gameover state)
@@ -270,74 +293,77 @@ public class Connect4 extends GameClient {
 	    
 	    // Respond to user input and move the ball depending on the game state
 	    switch(gameState) {
-	    
-	    case READY: //Ready to start a new point
-	    	if (Gdx.input.isTouched()) {
-	    		startPoint();
-	    	}
-	    	break;
-	    	
-	    case INPROGRESS: //Game is underway, players can make their move's
-	    	if (playerTurn == 0) {
-	    		
-	    		checkKeysPressed();
-	    		checkKeysReleased();
-	    		
-	    		if(keyCodes[1] == 2) {
-	    			cursorDisc.moveRight(0);
-	    			keyCodes[1] = 0;
-	    		} else if(keyCodes[0] == 2) {
-	    			cursorDisc.moveLeft(0);
-	    			keyCodes[0] = 0;
-	    		} else if(keyCodes[2] == 2) {
-	    			//do some funky stuff here
-	    			//move the disc the lowest position and render table discs
-	    			if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
+		    
+		    case READY: //Ready to start a new game
+		    	if (Gdx.input.isTouched()) {
+		    		reset();
+		    		startPoint();
+		    	}
+		    	break;
+		    	
+		    case INPROGRESS: //Game is underway, players can make their moves
+		    	if (playerTurn == 0) {
+		    		
+		    		checkKeysPressed();
+		    		checkKeysReleased();
+		    		
+		    		if(keyCodes[KEY_RIGHT] == 2) {
+		    			cursorDisc.moveRight(0);
+		    			keyCodes[1] = 0;
+		    		} else if(keyCodes[KEY_LEFT] == 2) {
+		    			cursorDisc.moveLeft(0);
+		    			keyCodes[0] = 0;
+		    		} else if(keyCodes[KEY_ENTER] == 2) {
+		    			//do some funky stuff here
+		    			//move the disc the lowest position and render table discs
+		    			if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
+		    				
+		    				//render the table discs
+		    				shapeRenderer.begin(ShapeType.FilledCircle);
+		    			    table.renderDiscs(shapeRenderer);
+		    			    shapeRenderer.end();
+		    			    System.out.println("checking player0 has won");
+		    			    if (table.checkFieldWinner( Disc.PLAYER1 )) {
+		    			    	gameState = GameState.GAMEOVER;
+		    			    	endPoint( 0 );
+		    			    }
+		    				playerTurn = 1;
+		    				renderCursorDisc(1);
+		    			} else {
+		    				System.out.println("cant place disc here");
+		    				//can't place a disc in desired position - do something else
+		    			}
+		    			keyCodes[KEY_ENTER] = 0;
+		    		}
+		    	} else if (playerTurn == 1) {
+		    		// Let the computer make a move
+		    		
+		    		cursorDisc.currentPos = randInt(0,Table.TABLECOLS - 1);
+		    		
+		    		if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
 	    				
 	    				//render the table discs
 	    				shapeRenderer.begin(ShapeType.FilledCircle);
 	    			    table.renderDiscs(shapeRenderer);
 	    			    shapeRenderer.end();
-	    			    System.out.println("checking player0 has won");
-	    			    if (table.checkFieldWinner(0)) {
-	    			    	gameState = GameState.GAMEOVER;
+	    			    if (table.checkFieldWinner( Disc.PLAYER2 )) {
+	    			    	System.out.println("player1 has won");
+	    			    	endPoint( 1 );
 	    			    }
-	    				playerTurn = 1;
-	    				renderCursorDisc(1);
+	    			    playerTurn = 0;
+	    	    		renderCursorDisc(0);
 	    			} else {
 	    				System.out.println("cant place disc here");
-	    				//can't place a disc in desired position - do something else
 	    			}
-	    			keyCodes[2] = 0;
-	    		}
-	    	} else if (playerTurn == 1) {
-	    		cursorDisc.currentPos = randInt(0,TABLECOLS - 1);
-	    		
-	    		if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
-    				
-    				//render the table discs
-    				shapeRenderer.begin(ShapeType.FilledCircle);
-    			    table.renderDiscs(shapeRenderer);
-    			    shapeRenderer.end();
-    			    if (table.checkFieldWinner(1)) {
-    			    	System.out.println("player1 has won");
-    			    }
-    			    playerTurn = 0;
-    	    		renderCursorDisc(0);
-    			} else {
-    				System.out.println("cant place disc here");
-    			}
-	    		
-	    	}
-	    	
-	    	
-	    	break;
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	if (Gdx.input.isTouched()) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
+		    		
+		    	}
+		    	break;
+		    case GAMEOVER: //The game has been won, wait to exit
+		    	if (Gdx.input.isTouched()) {
+		    		gameOver();
+		    		ArcadeSystem.goToGame(ArcadeSystem.UI);
+		    	}
+		    	break;
 	    }
 	    
 		super.render();

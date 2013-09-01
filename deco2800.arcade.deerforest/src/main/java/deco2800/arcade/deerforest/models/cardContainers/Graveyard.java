@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
-import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public class Graveyard implements CardStack {
 

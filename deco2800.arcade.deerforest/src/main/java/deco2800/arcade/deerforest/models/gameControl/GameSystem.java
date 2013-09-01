@@ -15,6 +15,8 @@ public class GameSystem {
 	private String currentPhase = null;
 	private DeerForestPlayer currentPlayer = null;
 	private List<AbstractCard> selectionChoices = null;
+	//define if summon has happened this turn
+	private boolean summoned;
 	
 	//Initialize the game, should get player data from controller (note players own their deck)
 	public GameSystem(DeerForestPlayer player1, DeerForestPlayer player2) {
@@ -28,7 +30,8 @@ public class GameSystem {
 			//set correct current player
 			currentPlayer = player1ToStart?p1:p2;
 			//start phase
-			startPhase();
+			currentPhase = "StartPhase";
+			summoned = false;
 		}
 		//game already started
 		return false;
@@ -44,6 +47,11 @@ public class GameSystem {
 		return currentPlayer;
 	}
 
+	//returns the first player
+	public DeerForestPlayer player1() {
+		return p1;
+	}
+	
 	//do AI turn
 	public boolean AITurn() {
 		return false;
@@ -54,26 +62,65 @@ public class GameSystem {
 
 	//go to the next phase
 	public boolean nextPhase() {
+		
+		if(currentPhase.equals("EndPhase")) {
+			startPhase();
+		} else if(currentPhase.equals("StartPhase")) {
+			drawPhase();
+		} else if(currentPhase.equals("DrawPhase")) {
+			mainPhase();
+		} else if(currentPhase.equals("MainPhase")) {
+			battlePhase();
+		} else if(currentPhase.equals("BattlePhase")) {
+			endPhase();
+		}
+		
 		return false;
 	}
 	
 	//Start the turn, returns true if succeed
 	public boolean startPhase() {
+		
+		if(currentPhase.equals("EndPhase")) {
+			currentPhase = "StartPhase";
+			currentPlayer = currentPlayer==p1?p2:p1;
+			summoned = false;
+			return true;
+		}
+		
 		return false;
 	}
 
 	//sets to draw phase, returns true if succeed
 	public boolean drawPhase() {
+		
+		if(currentPhase.equals("StartPhase")) {
+			currentPhase = "DrawPhase";
+			return true;
+		}
+		
 		return false;
 	}
 
 	//sets to main phase, returns true if succeed
 	public boolean mainPhase() {
+		
+		if(currentPhase.equals("DrawPhase")) {
+			currentPhase = "MainPhase";
+			return true;
+		}
+		
 		return false;
 	}
 
 	//sets to battle phase, returns true if succeed
 	public boolean battlePhase() {
+		
+		if(currentPhase.equals("MainPhase")) {
+			currentPhase = "BattlePhase";
+			return true;
+		}
+		
 		return false;
 	}
 	
@@ -84,6 +131,12 @@ public class GameSystem {
 
 	//sets to end phase, returns true if succeed, changes current player
 	public boolean endPhase() {
+		
+		if(currentPhase.equals("BattlePhase")) {
+			currentPhase = "EndPhase";
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -220,4 +273,38 @@ public class GameSystem {
 		p.getGraveyard().sort();
 	}
 
+	public boolean getSummoned() {
+		return summoned;
+	}
+	
+	public void setSummoned(boolean b) {
+		summoned = b;
+	}
+	
+	public int playerLP(int player) {
+		return player==1?p1.getLifePoints():p2.getLifePoints();
+	}
+	
+	public CardCollection getCardCollection(int player, String area) {
+		
+		if(area.equals("Hand")) {
+			return player==1?p1.getHand():p2.getHand();
+		} else if(area.equals("Deck")) {
+			return player==1?p1.getDeck():p2.getDeck();
+		} else if(area.equals("Field")) {
+			return player==1?p1.getField():p2.getField();
+		} else if(area.equals("Graveyard")) {
+			return player==1?p1.getGraveyard():p2.getGraveyard();
+		}
+		
+		return null;
+	}
+	
+	public AbstractCard draw(int player) {
+		return player==1?p1.draw():p2.draw();
+	}
+
+	public boolean moveCards(int player, List<AbstractCard> cards, CardCollection oldLocation, CardCollection newLocation) {
+		return player==1?p1.moveCards(cards, oldLocation, newLocation):p2.moveCards(cards, oldLocation, newLocation);
+	}
 }

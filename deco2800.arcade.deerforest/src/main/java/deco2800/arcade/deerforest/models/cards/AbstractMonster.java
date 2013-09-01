@@ -48,7 +48,7 @@ public abstract class AbstractMonster extends AbstractCard {
 	//Variables for current effects affecting the monster
 
 	//Initialise the card, note attacks map damage to effect
-	public AbstractMonster(String type, int health, List<Attack> attacks) {
+	public AbstractMonster(String type, int health, List<Attack> attacks, String cardFilePath) {
 		this.type = type;
 		this.health = health;
 		this.attackList = attacks;

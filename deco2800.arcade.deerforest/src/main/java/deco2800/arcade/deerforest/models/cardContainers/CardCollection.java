@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
-import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public interface CardCollection extends Collection<AbstractCard> {
 

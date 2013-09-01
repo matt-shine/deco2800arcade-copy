@@ -20,13 +20,13 @@ public class MainGameScreen implements Screen {
 	
 	private final MainGame game;
 	private OrthographicCamera camera;
-	private AssetManager manager;
+	AssetManager manager;
 	private ShapeRenderer shapeRenderer;
 
 	//Variables for Card locations and what they contain
-	private int p1DeckSize;
-	private int p2DeckSize;
-	
+//	private int p1DeckSize;
+//	private int p2DeckSize;
+//	
 	private float glowSize;
 	private boolean glowDirection;
 	
@@ -57,29 +57,44 @@ public class MainGameScreen implements Screen {
 		
 		//create map of sprites
 		spriteMap = new HashMap<String, List<ExtendedSprite>>();
+		
+		//create P1Hand
 		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
-		ExtendedSprite s1 = new ExtendedSprite(manager.get("DeerForestAssets/generalCard.png", Texture.class));
-		s1.setPosition(100, 100);
-		p1Hand.add(s1);
-		s1.setScale(0.25f);
-		ExtendedSprite s2 = new ExtendedSprite(manager.get("DeerForestAssets/2.png", Texture.class));
-		s2.setPosition(200, 200);
-	    p1Hand.add(s2);
-	    spriteMap.put("P1Hand", p1Hand);
+		
+		//create P1Monster
+		List<ExtendedSprite> p1Monster = new ArrayList<ExtendedSprite>();
+
+		//create P2Hand
+		List<ExtendedSprite> p2Hand = new ArrayList<ExtendedSprite>();
+		
+		//create P2Monster
+		List<ExtendedSprite> p2Monster = new ArrayList<ExtendedSprite>();
+	    
+	    spriteMap.put("P1HandZone", p1Hand);
+	    spriteMap.put("P1MonsterZone", p1Monster);
+	    spriteMap.put("P1SpellZone", new ArrayList<ExtendedSprite>());
+	    spriteMap.put("P2HandZone", p2Hand);
+	    spriteMap.put("P2MonsterZone", p2Monster);
+	    spriteMap.put("P2SpellZone", new ArrayList<ExtendedSprite>());
 	    
 	    //list of highlighted zones
-	    highlightedZones = arena.getAvailableZones(1, true, true);
+	    highlightedZones = new ArrayList<Rectangle>();
 	}
 
 	private void loadAssets() {
-		manager.load("DeerForestAssets/generalCard.png", Texture.class);
-		manager.load("DeerForestAssets/2.png", Texture.class);
+		manager.load("DeerForestAssets/LightMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/DarkMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/FireMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/WaterMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/NatureMonsterShell.png", Texture.class);
+		manager.load("DeerForestAssets/GeneralSpellShell.png", Texture.class);
+		manager.load("DeerForestAssets/FieldSpellShell.png", Texture.class);
 		manager.load("DeerForestAssets/background.png", Texture.class);
 	}
 
 	@Override
 	public void render(float delta) {
-		//clear the screen with a dark blue colour
+		//clear the screen with a dark blue color
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
@@ -89,13 +104,13 @@ public class MainGameScreen implements Screen {
 		//tell the SpriteBatch to render in the
 		//coordinate system specified by the camera
 		game.batch.setProjectionMatrix(camera.combined);
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		 
+	 
+		//Begin drawing the sprites
 		game.batch.begin();
 		
 		//Draw game board
 	    arena.draw(game.batch);
-
+	    
 	    //draw the sprites currently in map 
 	    for(String key : spriteMap.keySet()) {
 	    	for(ExtendedSprite s : spriteMap.get(key)) {
@@ -103,8 +118,28 @@ public class MainGameScreen implements Screen {
 		    }
 	    }
 	    
+	    //Print the model / game data (for debugging)
+	    game.font.draw(game.batch, "Press SPACE for next phase", 0.80f*getWidth(), 0.2f*getHeight());
+	    game.font.draw(game.batch, "Press RIGHT_ALT for debug info", 0.80f*getWidth(), 0.25f*getHeight());
+	    game.font.draw(game.batch, "Press LEFT_ALT for next turn", 0.80f*getWidth(), 0.3f*getHeight());
+	    game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.35f*getHeight());
+	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.4f*getHeight());
+	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.45f*getHeight());
+	    game.font.draw(game.batch, "P1 LP: " + game.getPlayerLP(1), 0.80f*getWidth(), 0.5f*getHeight());
+	    game.font.draw(game.batch, "P2 LP: " + game.getPlayerLP(2), 0.80f*getWidth(), 0.55f*getHeight());
+	    
+	    game.batch.end();
+	    
 	    //draw highlighted zone
-	    if(!highlightedZones.isEmpty()) {
+	    highlightZones();
+		
+	}
+	
+	private void highlightZones() {
+		
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		
+		if(!highlightedZones.isEmpty()) {
 	    	Gdx.gl.glEnable(GL10.GL_BLEND);
 		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -126,9 +161,6 @@ public class MainGameScreen implements Screen {
 		    shapeRenderer.end();
 		    Gdx.gl.glDisable(GL10.GL_BLEND);
 	    }
-	    
-	    game.batch.end();
-		
 	}
 	
 	@Override
@@ -185,5 +217,68 @@ public class MainGameScreen implements Screen {
 //			highlightedZones.add(new Rectangle(r));
 //		}
 		highlightedZones = highlight;
+	}
+	
+	public boolean setSpriteToArea(ExtendedSprite s, String area) {
+		List<ExtendedSprite> listToAddTo = spriteMap.get(area);
+		if(listToAddTo != null) {
+			return listToAddTo.add(s);
+		}
+		return false;
+	}
+	
+	public boolean removeSpriteFromArea(ExtendedSprite s, String area) {
+		List<ExtendedSprite> listToAddTo = spriteMap.get(area);
+		if(listToAddTo != null) {
+			return listToAddTo.remove(s);
+		}
+		return false;
+	}
+	
+	public int getSpritePlayer(ExtendedSprite s) {
+		for(String key : spriteMap.keySet()) {
+			if(spriteMap.get(key).contains(s)) {
+				if(key.startsWith("P1")) {
+					return 1;
+				} else {
+					return 2;
+				}
+			}
+		}
+		return 0;
+	}
+	
+	public boolean[] getSpriteZoneType(ExtendedSprite s) {
+		
+		boolean[] b = new boolean[2];
+		
+		for(String key : spriteMap.keySet()) {
+			if(spriteMap.get(key).contains(s)) {
+				if(key.contains("Hand")) {
+					//check what type of card the sprite is
+					if(manager.getAssetFileName(s.getTexture()).contains("Monster")) {
+						b[0] = false;
+						b[1] = true;
+					} else {
+						b[0] = false;
+						b[1] = false;
+					}
+				} else if(key.contains("Monster")) {
+					b[0] = true;
+					b[1] = true;
+				} else {
+					b[0] = true;
+					b[1] = false;
+				}
+				return b;
+			}
+		}
+		return null;
+	}
+	
+	public void printSpriteMap() {
+		for(String key : spriteMap.keySet()) {
+			System.out.println("Key: " + key + " list: " + spriteMap.get(key));
+		}
 	}
 }

@@ -20,9 +20,9 @@ public class FieldTest {
 	
 	@Test
 	public void testAdd() {
-		DarkMonster monster1 = new DarkMonster(10,null);
+		DarkMonster monster1 = new DarkMonster(10,null, null);
 		Field playerField = new Field();
-		GeneralSpell spell = new GeneralSpell(null);
+		GeneralSpell spell = new GeneralSpell(null, null);
 		
 		playerField.add(monster1);
 		playerField.add(spell);
@@ -37,7 +37,7 @@ public class FieldTest {
 	    Field playerField = new Field();
 		assertEquals(true, playerField.isEmpty());
 		
-		GeneralSpell spell = new GeneralSpell(null);
+		GeneralSpell spell = new GeneralSpell(null, null);
 		//DarkMonster monster1 = new DarkMonster(10,null);
 		playerField.add(spell);
 		
@@ -48,8 +48,8 @@ public class FieldTest {
 	public void TestContains() {
 		Field playerField = new Field();
 		
-		LightMonster monster = new LightMonster(100, null);
-		GeneralSpell spell = new GeneralSpell(null);
+		LightMonster monster = new LightMonster(100, null, null);
+		GeneralSpell spell = new GeneralSpell(null, null);
 		
 		assertEquals(false, playerField.contains(monster));
 		assertEquals(false, playerField.contains(spell));
@@ -67,11 +67,11 @@ public class FieldTest {
 		
 		assertEquals(false, playerField.isFull());
 		
-		LightMonster monster = new LightMonster(100, null);
-		DarkMonster monster1 = new DarkMonster(10,null);
-		NatureMonster monster2 = new NatureMonster(90,null);
-		WaterMonster monster3 = new WaterMonster(40, null);
-		FireMonster monster4 = new FireMonster(50,null);
+		LightMonster monster = new LightMonster(100, null, null);
+		DarkMonster monster1 = new DarkMonster(10,null, null);
+		NatureMonster monster2 = new NatureMonster(90,null, null);
+		WaterMonster monster3 = new WaterMonster(40, null, null);
+		FireMonster monster4 = new FireMonster(50,null, null);
 		
 		playerField.add(monster);
 		playerField.add(monster1);
@@ -82,8 +82,8 @@ public class FieldTest {
 		assertEquals(false, playerField.isFull());
 		assertEquals(true, playerField.monsterIsFull());
 		
-		GeneralSpell spell = new GeneralSpell(null);
-		GeneralSpell spell1 = new GeneralSpell(null);
+		GeneralSpell spell = new GeneralSpell(null, null);
+		GeneralSpell spell1 = new GeneralSpell(null, null);
 		
 		playerField.add(spell);
 		playerField.add(spell1);
@@ -96,8 +96,8 @@ public class FieldTest {
 	public void TestRemove() {
 		Field playerField = new Field();
 		
-		LightMonster monster = new LightMonster(100, null);
-		DarkMonster monster1 = new DarkMonster(10,null);
+		LightMonster monster = new LightMonster(100, null, null);
+		DarkMonster monster1 = new DarkMonster(10,null, null);
 		
 		playerField.add(monster);
 		playerField.add(monster1);
@@ -110,8 +110,8 @@ public class FieldTest {
 		playerField.remove(monster);
 		assertEquals(true, playerField.isEmpty());
 		
-		GeneralSpell spell = new GeneralSpell(null);
-		GeneralSpell spell1 = new GeneralSpell(null);
+		GeneralSpell spell = new GeneralSpell(null, null);
+		GeneralSpell spell1 = new GeneralSpell(null, null);
 		
 		playerField.add(spell);
 		playerField.add(spell1);
@@ -132,10 +132,10 @@ public class FieldTest {
 		Field player = new Field();
 		Collection<AbstractCard> c = new ArrayList<AbstractCard>();
 		
-		LightMonster monster = new LightMonster(100, null);
-		DarkMonster monster1 = new DarkMonster(10,null);
-		GeneralSpell spell = new GeneralSpell(null);
-		GeneralSpell spell1 = new GeneralSpell(null);
+		LightMonster monster = new LightMonster(100, null, null);
+		DarkMonster monster1 = new DarkMonster(10,null, null);
+		GeneralSpell spell = new GeneralSpell(null, null);
+		GeneralSpell spell1 = new GeneralSpell(null, null);
 		
 		c.add(monster);
 		c.add(monster1);

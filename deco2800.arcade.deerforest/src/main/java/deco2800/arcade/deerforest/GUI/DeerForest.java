@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.model.Game;
@@ -18,6 +19,7 @@ import deco2800.arcade.deerforest.models.cardContainers.Deck;
 import deco2800.arcade.deerforest.models.cards.*;
 import deco2800.arcade.deerforest.models.effects.Attack;
 import deco2800.arcade.deerforest.models.effects.IncorrectEffectException;
+import deco2800.arcade.deerforest.models.effects.SpellEffect;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 import deco2800.arcade.deerforest.models.gameControl.DeerForestPlayer;
 /**
@@ -28,11 +30,13 @@ import deco2800.arcade.deerforest.models.gameControl.DeerForestPlayer;
 @ArcadeGame(id="deerforest")
 public class DeerForest extends GameClient implements UIOverlay {
 	
+	private MainGameScreen view;
+	private MainGame gam;
+	private MainInputProcessor inputProcessor;
+	
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
 	}
-	
-	MainInputProcessor inputProcessor;
 	
 	@Override
 	public void create() {
@@ -43,9 +47,9 @@ public class DeerForest extends GameClient implements UIOverlay {
 		GameSystem tempSystem = new GameSystem(createDeerForestPlayer(), createDeerForestPlayer());
 		
 		//set and run game
-		MainGame gam = new MainGame(tempSystem);
+		gam = new MainGame(tempSystem);
 		gam.create();
-		MainGameScreen view = new MainGameScreen(gam);
+		view = new MainGameScreen(gam);
 		this.setScreen(view);
 		
 		//set up input processor
@@ -71,6 +75,7 @@ public class DeerForest extends GameClient implements UIOverlay {
 
 	@Override
 	public void render() {
+		Gdx.input.setInputProcessor(inputProcessor);
 		super.render();
 	}
 	
@@ -89,20 +94,16 @@ public class DeerForest extends GameClient implements UIOverlay {
 	public void setListeners(Screen l) {
 		;
 	}
-
-	@Override
-	public void addPopup(String s) {
-		System.out.println("Message Popup: " + s);
-	}
 	
 	private DeerForestPlayer createDeerForestPlayer() {
 		ArrayList<AbstractCard> cardList = new ArrayList<AbstractCard>();
+		//add monsters
 		for(int i = 0; i < 15; i++) {
 			Attack a;
 			try {
-				Set<String> effect = new HashSet<String>();
-				effect.add("Water");
-				a = new Attack(100, "Fire", effect, null, null);
+				Set<String> typeEffects = new HashSet<String>();
+				typeEffects.add("Water");
+				a = new Attack(100, "Fire", typeEffects, null, null);
 			} catch (IncorrectEffectException e) {
 				a = null;
 			}
@@ -111,20 +112,41 @@ public class DeerForest extends GameClient implements UIOverlay {
 			double rand = Math.random();
 			AbstractCard card;
 			if(rand > 0.8) {
-				card = new WaterMonster(100, atkList);
+				card = new WaterMonster(100, atkList, "DeerForestAssets/WaterMonsterShell.png");
 			} else if(rand > 0.6) {
-				card = new FireMonster(100, atkList);
+				card = new FireMonster(100, atkList, "DeerForestAssets/FireMonsterShell.png");
 			} else if(rand > 0.4) {
-				card = new NatureMonster(100, atkList);
+				card = new NatureMonster(100, atkList, "DeerForestAssets/NatureMonsterShell.png");
 			} else if(rand > 0.2) {
-				card = new DarkMonster(100, atkList);
+				card = new DarkMonster(100, atkList, "DeerForestAssets/DarkMonsterShell.png");
 			} else {
-				card = new LightMonster(100, atkList);
+				card = new LightMonster(100, atkList, "DeerForestAssets/LightMonsterShell.png");
 			}
 			cardList.add(card);
 		}
+		//Add general spells
+		for(int i = 0; i < 6; i++) {
+			SpellEffect spellEffect = null;
+			String filePath = "DeerForestAssets/GeneralSpellShell.png";
+			AbstractCard spell = new GeneralSpell(spellEffect, filePath);
+			cardList.add(spell);
+		}
+		//add field Spells
+		for(int i = 0; i < 6; i++) {
+			SpellEffect spellEffect = null;
+			String filePath = "DeerForestAssets/FieldSpellShell.png";
+			AbstractCard spell = new FieldSpell(spellEffect, filePath);
+			cardList.add(spell);
+		}
 		Deck deck = new Deck(cardList);
+		deck.shuffle();
 		DeerForestPlayer p = new DeerForestPlayer(deck);
 		return p;
+	}
+
+	@Override
+	public void addPopup(PopupMessage p) {
+		// TODO Auto-generated method stub
+		
 	}
 }

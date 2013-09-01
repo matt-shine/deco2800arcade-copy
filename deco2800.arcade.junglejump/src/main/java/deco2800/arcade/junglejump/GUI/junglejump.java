@@ -7,10 +7,13 @@ import javax.security.auth.login.Configuration;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
@@ -38,15 +41,14 @@ public class junglejump extends GameClient implements InputProcessor {
 	// FPS Animation helper
 	private FPSLogger fpsLogger;
 	private Player player;
+	private OrthographicCamera camera;
+	public static final int SCREENHEIGHT = 480;
+	public static final int SCREENWIDTH = 800;
 
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
 
-	/*
-	 * I've added NetworkClient to the signature of your constructor, as you
-	 * cannot reference it if you do not. - Leggy
-	 */
-	public junglejump(Player player, NetworkClient networkClient) {
+	public junglejump(Player player) {
 		super(player, networkClient);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
@@ -71,8 +73,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	 * movement and gravity
 	 */
 	private void createWorld() {
-		world = new World(new Vector2(0, 0), false);
-		// TODO: Add vectors for containing the world and its players/assets
+		
+		
 	}
 
 	@Override
@@ -95,13 +97,56 @@ public class junglejump extends GameClient implements InputProcessor {
 		// Clears the screen - not sure if this is needed
 		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		camera.update();
 		// Logs current FPS
 		fpsLogger.log();
+		super.render();
 	}
 
 	@Override
 	public void pause() {
-		super.pause();
+		//add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				
+			}
+			
+        });
+        
+        
+		
+		super.create();
+		
+		//Initialise camera
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		Gdx.app.log(junglejump.messages, "Pause");
 	}
 
@@ -127,21 +172,41 @@ public class junglejump extends GameClient implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int arg0) {
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.LEFT) {
+			// Move left
+		} if (keycode == Keys.RIGHT) {
+			// Move right
+		} if (keycode == Keys.SPACE) {
+			// Jump
+		} if (keycode == Keys.UP) {
+			// Climb
+		} if (keycode == Keys.DOWN) {
+			// Climb down
+		}
+		return true;
+	}
+
+	@Override
+	public boolean keyTyped(char keycode) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean keyTyped(char arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean keyUp(int keycode) {
+		if (keycode == Keys.LEFT) {
+			// Move left STOP
+		} if (keycode == Keys.RIGHT) {
+			// Move right STOP
+		} if (keycode == Keys.SPACE) {
+			// Jump STOP
+		} if (keycode == Keys.UP) {
+			// Climb STOP
+		} if (keycode == Keys.DOWN) {
+			// Climb down STOP
+		}
+		return true;
 	}
 
 	@Override

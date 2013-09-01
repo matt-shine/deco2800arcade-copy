@@ -314,7 +314,7 @@ public class Arcade extends JFrame {
 		while (it.hasNext()) {
 
 			Map.Entry<String, Class<? extends GameClient>> pair = (Map.Entry<String, Class<? extends GameClient>>) it
-					.next();
+					.next();  // Note:  I (abbjohn) am getting a redundant type cast warning here
 
 			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
 				it.remove();

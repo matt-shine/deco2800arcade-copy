@@ -5,7 +5,7 @@ import com.badlogic.gdx.Screen;
 public class AccMgtScreen implements Screen {
 
 
-    public void AccMgtScreen() {
+    public AccMgtScreen() {
 
     }
 

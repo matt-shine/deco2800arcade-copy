@@ -411,6 +411,8 @@ public class Board{
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
 		}
+		
+		System.out.println(Board_State);
 	}
 
 	/**
@@ -885,6 +887,13 @@ public class Board{
 		return possible;
 
 	}
+	
+	public Piece getPiece(int[] pos) {
+		FixedSizeList<Piece> row = Board_State.get(pos[0]);
+		
+		return row.get(pos[1]);
+	}
+	
 
 	/**
 	 * Checks all active pieces on the board to see whether any pieces can
@@ -903,6 +912,7 @@ public class Board{
 		}
 		return canMove;
 	}
+
 	
 	/**
 	 * Takes in a piece and returns true if that pieces team can perform the

@@ -47,6 +47,9 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="chess")
 public class Chess extends GameClient implements MouseListener, InputProcessor{
 
+	//This shows whether a piece is selected and ready to move.
+	boolean moving = false;
+	Piece movingPiece = null;
 	
 	//Sprite offsets
     int horizOff = SCREENWIDTH/2-206;
@@ -63,7 +66,7 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 	int[] blackPawn0Pos, blackPawn1Pos, blackPawn2Pos, blackPawn3Pos, blackPawn4Pos, blackPawn5Pos, 
 		blackPawn6Pos, blackPawn7Pos;
 	
-    
+	Board board;
 	
 	boolean players_move;
 	boolean playing;
@@ -104,7 +107,7 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 		
 		super(player, networkClient);
 		initPiecePos();
-		Board board = new Board();
+		board = new Board();
 		this.networkClient = networkClient; //this is a bit of a hack
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
@@ -139,19 +142,19 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 		chessBoard = new Texture(Gdx.files.classpath("imgs/chessboard.png"));
 		
 		//Pieces
-		blackBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/Black B.png")));
-		blackRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/Black R.png")));
-		blackKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/Black N.png")));
-		blackKing = new Sprite(new Texture(Gdx.files.classpath("imgs/Black K.png")));
-		blackQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/Black Q.png")));
-		blackPawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/Black P.png")));
+		blackBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/Black B.png")));
+		blackRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/Black R.png")));
+		blackKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/Black N.png")));
+		blackKing = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/Black K.png")));
+		blackQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/Black Q.png")));
+		blackPawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/Black P.png")));
 		
-		whiteBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/White B.png")));
-		whiteRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/White R.png")));
-		whiteKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/White N.png")));
-		whiteKing = new Sprite(new Texture(Gdx.files.classpath("imgs/White K.png")));
-		whiteQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/White Q.png")));
-		whitePawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/White P.png")));
+		whiteBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/White B.png")));
+		whiteRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/White R.png")));
+		whiteKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/White N.png")));
+		whiteKing = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/White K.png")));
+		whiteQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/White Q.png")));
+		whitePawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/try2/White P.png")));
 		
 		whiteRook2 = whiteRook1;
 		whiteBishop2= whiteBishop1;
@@ -371,10 +374,20 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		// TODO Auto-generated method stub
-		//System.out.println("" + x + " " + y);
-		Piece onSquare = checkSquare(x, y);
-		return false;
+		System.out.println("Co-ords: " + x + ", " + y);
+		
+		if(!moving) {
+			movingPiece = checkSquare(x, y);
+			moving = true;
+			return true;
+		} else {
+			int[] newPos = determineSquare(x, y);
+			board.movePiece(movingPiece, newPos);
+			movePieceGraphic();
+			moving = false;
+			return true;
+		}
+		
 	}
 
 	@Override
@@ -401,57 +414,19 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 	 * 		Piece on the square that was clicked on
 	 */
 	private Piece checkSquare(int x, int y) {
-		int xSquare = x/55 - x%55;
-		int ySquare = y/73 - y%73;
 		
-		//Determine x square
-		for(int i=0; i<8; i++) {
-			int j=i;
-			if((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) ))) {
-				xSquare = i;
-			}
+		int[] square = determineSquare(x,y);		
+		Piece onSquare;
+		
+		try {
+			onSquare = board.getPiece(square);
+		} catch (IndexOutOfBoundsException e) {
+			return null;
 		}
 		
-		//Determine y square
-		for(int i=0; i<8; i++) {
-			if((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) ))) {
-				ySquare = i;
-			}
-		}
+		System.out.println("Square clicked was: " + square[0] + " " + square[1]);
 		
-		switch(xSquare) {
-			case 0:
-				xSquare = 7;
-				break;
-			case 1:
-				xSquare = 6;
-				break;
-			case 2:
-				xSquare = 5;
-				break;
-			case 3:
-				xSquare = 4;
-				break;
-			case 4:
-				xSquare = 3;
-				break;
-			case 5:
-				xSquare = 2;
-				break;
-			case 6:
-				xSquare = 1;
-				break;
-			case 7:
-				xSquare = 0;
-				break;
-			default:
-				xSquare = -1;
-				break;
-		}
-		
-		System.out.println("Square clicked was: " + xSquare + " " + ySquare);
-		
-		return null;
+		return onSquare;
 	}
 	
 	/**
@@ -495,9 +470,9 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 		
 		int[] pos16 = {25 + horizOff, 90 + verticOff};
 		whitePawn0Pos = pos16;
-		int[] pos17 = {145 + horizOff, 90 + verticOff};
+		int[] pos17 = {85 + horizOff, 90 + verticOff};
 		whitePawn1Pos = pos17;
-		int[] pos18 = {85 + horizOff, 90 + verticOff};
+		int[] pos18 = {145 + horizOff, 90 + verticOff};
 		whitePawn2Pos = pos18;
 		int[] pos19 = {205 + horizOff, 90 + verticOff};
 		whitePawn3Pos = pos19; 
@@ -512,9 +487,9 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 		
 		int[] pos24 = {25 + horizOff, 380 + verticOff};
 		blackPawn0Pos = pos24;
-		int[] pos25 = {145 + horizOff, 380 + verticOff};
+		int[] pos25 = {85 + horizOff, 380 + verticOff};
 		blackPawn1Pos = pos25;
-		int[] pos26 = {85 + horizOff, 380 + verticOff};
+		int[] pos26 = {145 + horizOff, 380 + verticOff};
 		blackPawn2Pos = pos26;
 		int[] pos27 = {205 + horizOff, 380 + verticOff};
 		blackPawn3Pos = pos27;
@@ -526,6 +501,141 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 		blackPawn6Pos = pos30;
 		int[] pos31 = {435 + horizOff, 380 + verticOff};
 		blackPawn7Pos = pos31;
+	}
+	
+	/**
+	 * Moves all the pieces to their correct places on the board
+	 */
+	void movePieceGraphic() {
+		
+		for (FixedSizeList<Piece> row : board.Board_State) {
+			for (Piece piece : row) {
+				if(piece.equals(board.whiteRook1)) {
+					int[] correctPos = board.findPiece(board.whiteRook1);
+					whiteRook1Pos[0] = (30 + horizOff + (583/8)*correctPos[1]);
+					whiteRook1Pos[1] =  (20 + verticOff + (437/8)*correctPos[0]);
+				} else if(piece.equals(board.whiteKnight1)) {
+					int[] correctPos = board.findPiece(board.whiteKnight1);
+					whiteKnight1Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whiteKnight1Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whiteBishop1)) {
+					int[] correctPos = board.findPiece(board.whiteBishop1);
+					whiteBishop1Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whiteBishop1Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whiteQueen)) {
+					int[] correctPos = board.findPiece(board.whiteQueen);
+					whiteQueenPos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whiteQueenPos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whiteKing)) {
+					int[] correctPos = board.findPiece(board.whiteKing);
+					whiteKingPos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whiteKingPos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whiteBishop2)) {
+					int[] correctPos = board.findPiece(board.whiteBishop2);
+					whiteBishop2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whiteBishop2Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whiteKnight2)) {
+					int[] correctPos = board.findPiece(board.whiteKnight2);
+					whiteKnight2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whiteKnight2Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whiteRook2)) {
+					int[] correctPos = board.findPiece(board.whiteRook2);
+					whiteRook2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whiteRook2Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whitePawn1)) {
+					int[] correctPos = board.findPiece(board.whitePawn1);
+					whitePawn0Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn0Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whitePawn2)) {
+					int[] correctPos = board.findPiece(board.whitePawn2);
+					whitePawn1Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn1Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whitePawn3)) {
+					int[] correctPos = board.findPiece(board.whitePawn3);
+					whitePawn2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn2Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whitePawn4)) {
+					int[] correctPos = board.findPiece(board.whitePawn4);
+					whitePawn3Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn3Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whitePawn5)) {
+					int[] correctPos = board.findPiece(board.whitePawn5);
+					whitePawn4Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn4Pos[1] = (25 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whitePawn6)) {
+					int[] correctPos = board.findPiece(board.whitePawn6);
+					whitePawn5Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn5Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+				} else if(piece.equals(board.whitePawn7)) {
+					int[] correctPos = board.findPiece(board.whitePawn7);
+					whitePawn6Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn6Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+				}  else if(piece.equals(board.whitePawn8)) {
+					int[] correctPos = board.findPiece(board.whitePawn8);
+					whitePawn7Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
+					whitePawn7Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+				}
+			}
+			
+		}
+		
+		
+		
+		//((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) )))
+		//((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) )))
+	}
+	
+	private int[] determineSquare(int x, int y) {
+		int xSquare = -1;
+		int ySquare = -1;
+		
+		//Determine x square
+		for(int i=0; i<8; i++) {
+			int j=i;
+			if((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) ))) {
+				xSquare = i;
+			}
+		}
+		
+		//Determine y square
+		for(int i=0; i<8; i++) {
+			if((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) ))) {
+				ySquare = i;
+			}
+		}
+		
+		switch(xSquare) {
+		case 0:
+			xSquare = 7;
+			break;
+		case 1:
+			xSquare = 6;
+			break;
+		case 2:
+			xSquare = 5;
+			break;
+		case 3:
+			xSquare = 4;
+			break;
+		case 4:
+			xSquare = 3;
+			break;
+		case 5:
+			xSquare = 2;
+			break;
+		case 6:
+			xSquare = 1;
+			break;
+		case 7:
+			xSquare = 0;
+			break;
+		default:
+			xSquare = -1;
+			break;
+	}
+		
+		int[] returnValue = {xSquare, ySquare};
+		return returnValue;
 	}
 
 }

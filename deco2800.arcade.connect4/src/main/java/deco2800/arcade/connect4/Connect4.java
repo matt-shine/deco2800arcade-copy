@@ -313,47 +313,15 @@ public class Connect4 extends GameClient {
 		    			cursorDisc.moveLeft(0);
 		    			keyCodes[0] = 0;
 		    		} else if(keyCodes[KEY_ENTER] == 2) {
-		    			//do some funky stuff here
 		    			//move the disc the lowest position and render table discs
-		    			if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
-		    				
-		    				//render the table discs
-		    				shapeRenderer.begin(ShapeType.FilledCircle);
-		    			    table.renderDiscs(shapeRenderer);
-		    			    shapeRenderer.end();
-		    			    System.out.println("checking player0 has won");
-		    			    if (table.checkFieldWinner( Disc.PLAYER1 )) {
-		    			    	gameState = GameState.GAMEOVER;
-		    			    	endPoint( 0 );
-		    			    }
-		    				playerTurn = 1;
-		    				renderCursorDisc(1);
-		    			} else {
-		    				System.out.println("cant place disc here");
-		    				//can't place a disc in desired position - do something else
-		    			}
+		    			doMove(playerTurn, cursorDisc.currentPos);
 		    			keyCodes[KEY_ENTER] = 0;
 		    		}
 		    	} else if (playerTurn == 1) {
 		    		// Let the computer make a move
 		    		
 		    		cursorDisc.currentPos = randInt(0,Table.TABLECOLS - 1);
-		    		
-		    		if (table.placeDisc(cursorDisc.currentPos, playerTurn)) {
-	    				
-	    				//render the table discs
-	    				shapeRenderer.begin(ShapeType.FilledCircle);
-	    			    table.renderDiscs(shapeRenderer);
-	    			    shapeRenderer.end();
-	    			    if (table.checkFieldWinner( Disc.PLAYER2 )) {
-	    			    	System.out.println("player1 has won");
-	    			    	endPoint( 1 );
-	    			    }
-	    			    playerTurn = 0;
-	    	    		renderCursorDisc(0);
-	    			} else {
-	    				System.out.println("cant place disc here");
-	    			}
+		    		doMove(playerTurn, cursorDisc.currentPos);
 		    		
 		    	}
 		    	break;
@@ -367,6 +335,35 @@ public class Connect4 extends GameClient {
 	    
 		super.render();
 		
+	}
+	
+	private void doMove(int player, int currentPosition) {
+		if (table.placeDisc(currentPosition, player)) {
+			
+			//render the table discs
+			shapeRenderer.begin(ShapeType.FilledCircle);
+		    table.renderDiscs(shapeRenderer);
+		    shapeRenderer.end();
+		   
+		    if (player == 0){
+		    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
+		    		gameState = GameState.GAMEOVER;
+		    		endPoint( 0 );
+		    	}
+		    	playerTurn = 1;
+		    	renderCursorDisc(1);
+		    } else {
+		    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
+		    		gameState = GameState.GAMEOVER;
+		    		endPoint( 1 );
+		    	}
+		    	playerTurn = 0;
+		    	renderCursorDisc(0);
+		    }
+			
+		} else {
+			//can't place a disc in desired position - do nothing
+		}
 	}
 
 	/**

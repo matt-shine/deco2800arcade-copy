@@ -30,7 +30,7 @@ public class Disc {
     private float renderColourAlpha;
 	
 	/**
-	 * Basic constructor for Ball. Set position and dimensions to the default
+	 * Basic constructor for Disc. Set position and dimensions to the default
 	 */
 	public Disc() {
 		bounds.x = 10;
@@ -60,19 +60,11 @@ public class Disc {
 		return this.state;
 	}
 	
-	/**
-	 * Modify the position of the ball
-	 * @param newPosition the new position of the ball as x,y
-	 */
 	public void setPosition(float newx, float newy) {
 		bounds.x = newx;
 		bounds.y = newy;
 	}
-
-	/**
-	 * Move the ball according to its current velocity over the given time period.
-	 * @param time the time elapsed in seconds
-	 */
+	
 	public void moveLeft(float time) {
 		if (currentPos > 0) {
 			bounds.x -= bounds.width*2 + 5;
@@ -99,13 +91,6 @@ public class Disc {
 		bounds.y = 20;
 	}
 	
-	/**
-     * Set the colour of the rendered ball.
-     * @param r Red (0-1)
-     * @param g Green (0-1)
-     * @param b Blue (0-1)
-     * @param a Alpha (0-1)
-     */
     public void setColor(float r, float g, float b, float a)
     {
         renderColourRed = r;
@@ -113,11 +98,7 @@ public class Disc {
         renderColourBlue = b;
         renderColourAlpha = a;
     }
-    
-    /**
-     * Render the ball.
-     * @param shapeRenderer The current {@link ShapeRenderer} instance.
-     */
+
     public void render(ShapeRenderer shapeRenderer)
     {
         shapeRenderer.setColor(renderColourRed,

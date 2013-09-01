@@ -28,22 +28,9 @@ public class Checkers extends GameClient {
 	
 	private OrthographicCamera camera;
 	
-	private Square whiteSquare11;
-	private Square whiteSquare12;
-	private Square whiteSquare13;
-	private Square whiteSquare14;
-	private Square whiteSquare21;
-	private Square whiteSquare22;
-	private Square whiteSquare23;
-	private Square whiteSquare24;
-	private Square whiteSquare31;
-	private Square whiteSquare32;
-	private Square whiteSquare33;
-	private Square whiteSquare34;
-	private Square whiteSquare41;
-	private Square whiteSquare42;
-	private Square whiteSquare43;
-	private Square whiteSquare44;
+	private Square[][] squares;
+	private Pieces[] myPieces;
+	private Pieces[] theirPieces;
 	
 	private enum GameState {
 		READY,
@@ -127,55 +114,36 @@ public class Checkers extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
-		//making grids with the most stupid way ever, but arrays somehow make the game not run so yeah
+		//making grids
 		
-		whiteSquare11 = new Square(new Vector2(20,SCREENHEIGHT - 80));
-		whiteSquare12 = new Square(new Vector2(20,SCREENHEIGHT - 180));
-		whiteSquare13 = new Square(new Vector2(20,SCREENHEIGHT - 280));
-		whiteSquare21 = new Square(new Vector2(70,SCREENHEIGHT - 130));
-		whiteSquare22 = new Square(new Vector2(70,SCREENHEIGHT - 230));
-		whiteSquare23 = new Square(new Vector2(70,SCREENHEIGHT - 330));
-		whiteSquare31 = new Square(new Vector2(120,SCREENHEIGHT - 80));
-		whiteSquare32 = new Square(new Vector2(120,SCREENHEIGHT - 180));
-		whiteSquare33 = new Square(new Vector2(120,SCREENHEIGHT - 280));
-		whiteSquare41 = new Square(new Vector2(170,SCREENHEIGHT - 130));
-		whiteSquare42 = new Square(new Vector2(170,SCREENHEIGHT - 230));
-		whiteSquare43 = new Square(new Vector2(170,SCREENHEIGHT - 330));
+		squares = new Square[3][4];
 		
-		whiteSquare11.setColor(1, 0, 0, 1);
-		whiteSquare12.setColor(1, 0, 0, 1);
-		whiteSquare13.setColor(1, 0, 0, 1);
-		whiteSquare21.setColor(1, 0, 0, 1);
-		whiteSquare22.setColor(1, 0, 0, 1);
-		whiteSquare23.setColor(1, 0, 0, 1);
-		whiteSquare31.setColor(1, 0, 0, 1);
-		whiteSquare32.setColor(1, 0, 0, 1);
-		whiteSquare33.setColor(1, 0, 0, 1);
-		whiteSquare41.setColor(1, 0, 0, 1);
-		whiteSquare42.setColor(1, 0, 0, 1);
-		whiteSquare43.setColor(1, 0, 0, 1);
+		int height = SCREENHEIGHT - 80;
+		int width = 20;
+		for (int j=0; j<4; j++) {
+			width += 50;
+			if (width%20 == 0){
+				height = SCREENHEIGHT - 80;
+			} else {
+				height = SCREENHEIGHT - 30;
+			}
+			for (int i=0; i<3; i++) {
+				height = height - 100;
+				squares[i][j] = new Square(new Vector2(width, height));
+				squares[i][j].setColor(1, 1, 1, 1); //white
+			}
+		}
 		
-		
-		System.out.println("this is running");
-		
-		
-	//	leftPaddle = new LocalUserPaddle(new (20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-	//	leftPaddle.setColor(1, 0, 0, 1);
-		
-	//	rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-	//	rightPaddle.setColor(0, 0, 1, 1);
-		
-		/**
-		 * TODO Allow network games
-		 * 1. Create local player (LOBBY)
-		 * 2. "Waiting for other players. Press '1' to play local game against the computer"
-		 * 3a. Receive game join request
-		 * 3b. "Player 'Bob' wishes to join the game. Press 'Y' to accept"
-		 * 3c1. ('Y') Create Network player, move to READY
-		 * 3c2. ('N') Go to 2.
-		 */
-		
-		//Create the ball
+		//Create the pieces
+		myPieces = new UserPieces[4];
+		theirPieces = new AIPieces[4];
+		for (int i=0; i<4; i++) {
+			myPieces[i] = new UserPieces(new Vector2(squares[2][i].bounds.x + 10, squares[2][i].bounds.y +10));
+			theirPieces[i] = new AIPieces(new Vector2(squares[0][i].bounds.x + 10, squares[0][i].bounds.y +10));
+			myPieces[i].setColor(1, 0, 0, 1); //red
+			theirPieces[i].setColor(0, 0, 1, 1); //
+
+		}
 		//ball = new Ball();
 		//ball.setColor(1, 1, 1, 1);
 		
@@ -221,18 +189,15 @@ public class Checkers extends GameClient {
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
-	    whiteSquare11.render(shapeRenderer);
-	    whiteSquare12.render(shapeRenderer);
-	    whiteSquare13.render(shapeRenderer);
-	    whiteSquare21.render(shapeRenderer);
-	    whiteSquare22.render(shapeRenderer);
-	    whiteSquare23.render(shapeRenderer);
-	    whiteSquare31.render(shapeRenderer);
-	    whiteSquare32.render(shapeRenderer);
-	    whiteSquare33.render(shapeRenderer);
-	    whiteSquare41.render(shapeRenderer);
-	    whiteSquare42.render(shapeRenderer);
-	    whiteSquare43.render(shapeRenderer);
+	    for (int j=0; j<4; j++) {
+	    	for (int i=0; i<3; i++) {
+	    		squares[i][j].render(shapeRenderer);
+	    	}
+		}
+	    for (int i=0; i<4; i++) {
+	   		myPieces[i].render(shapeRenderer);
+	   		theirPieces[i].render(shapeRenderer);
+		}
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();

@@ -15,6 +15,7 @@ import deco2800.arcade.client.network.NetworkClient;
 
 @ArcadeGame(id="mixmaze")
 public final class MixMaze extends GameClient {
+	Screen splashScreen;
 	Screen menuScreen;
 	Screen gameScreen;
 
@@ -37,9 +38,10 @@ public final class MixMaze extends GameClient {
 
 		super.create();
 
+		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
-		setScreen(menuScreen);
+		setScreen(splashScreen);
 		Gdx.app.debug(LOG, "Use arrows to move");
 	}
 
@@ -58,6 +60,7 @@ public final class MixMaze extends GameClient {
 	@Override
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");
+		splashScreen.dispose();
 		menuScreen.dispose();
 		gameScreen.dispose();
 		super.dispose();

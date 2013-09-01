@@ -85,11 +85,11 @@ final class GameScreen implements Screen {
 		root.debug();
 		stage.addActor(root);
 
-		root.add(userLabels[0]).width(160);
+		root.add(userLabels[0]).width(320);
 		root.add(scoreLabels[0]);
 		root.add(timerLabel).expandX();
 		root.add(scoreLabels[1]);
-		root.add(userLabels[1]).width(160);
+		root.add(userLabels[1]).width(320);
 		root.row();
 
 		root.add(left);
@@ -141,7 +141,7 @@ final class GameScreen implements Screen {
 	public void resize(int width, int height) {
 		Gdx.app.debug(LOG, "resizing");
 
-		stage.setViewport(960, 720, true);
+		stage.setViewport(1280, 720, true);
 		stage.getCamera().translate(-stage.getGutterWidth(),
 				-stage.getGutterHeight(), 0);
 	}

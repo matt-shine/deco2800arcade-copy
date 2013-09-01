@@ -26,7 +26,7 @@ public class PlayerGameStorage {
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT PRIMARY KEY," 
-				+ "gameID INT PRIMARY KEY," 
+				+ "gameID VARCHAR(30) PRIMARY KEY," 
 				+ "Rating INT));");
 				//Check if need anything for foreign keys
 			}
@@ -108,7 +108,7 @@ public class PlayerGameStorage {
 	 * 				The ID for the player and game to be removed
 	 * @throws DatabaseException
 	 */
-	public void removeGame(int playerID, int gameID) throws DatabaseException {
+	public void removeGame(int playerID, String gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
 		ResultSet resultSet = null;
@@ -117,7 +117,7 @@ public class PlayerGameStorage {
 			resultSet = stmt.executeQuery("SELECT * FROM PLAYERGAMES");
 			while (resultSet.next()) {
 				int player = resultSet.getInt("playerID");
-				int game = resultSet.getInt("gameID");
+				String game = resultSet.getString("gameID");
 				if (player ==playerID && game ==gameID) {
 					resultSet.deleteRow();
 				}
@@ -152,7 +152,7 @@ public class PlayerGameStorage {
 	 * 				the IDs for the player and game to be added
 	 * @throws DatabaseException
 	 */
-	public void addPlayerGames(int playerID, int gameID) throws DatabaseException {
+	public void addPlayerGames(int playerID, String gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
 		ResultSet resultSet = null;
@@ -161,7 +161,7 @@ public class PlayerGameStorage {
 			resultSet = stmt.executeQuery("SELECT * FROM PLAYERGAMES");
 			resultSet.moveToInsertRow();
 			resultSet.updateInt("playerID", playerID);
-			resultSet.updateInt("gameID", gameID);
+			resultSet.updateString("gameID", gameID);
 			resultSet.insertRow();
 		} catch (SQLException e) {
 			//TODO Auto-generated catch block

@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.player.*;
+import deco2800.server.database.PlayerDatabaseManager;
 
 public class PlayerListener extends Listener{
 	
@@ -19,31 +20,40 @@ public class PlayerListener extends Listener{
 		super.received(connection, object);
 		
 		if (object instanceof BioUpdateRequest) {
-			BioUpdateRequest bioUpdateRequest = (BioUpdateRequest) object;
+			BioUpdateRequest request = (BioUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof BlockedUpdateRequest) {
-			BlockedUpdateRequest blockedUpdateRequest  = (BlockedUpdateRequest) object;
+			BlockedUpdateRequest request  = (BlockedUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof EmailUpdateRequest) {
-			EmailUpdateRequest emailUpdateRequest = (EmailUpdateRequest) object;
+			EmailUpdateRequest request = (EmailUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof FriendInvitesUpdateRequest) {
-			FriendInvitesUpdateRequest friendInviteUpdateRequest = (FriendInvitesUpdateRequest) object;
+			FriendInvitesUpdateRequest request = (FriendInvitesUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof FriendsUpdateRequest) {
-			FriendsUpdateRequest friendsUpdateRequest = (FriendsUpdateRequest) object;
+			FriendsUpdateRequest request = (FriendsUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof GamesUpdateRequest) {
-			GamesUpdateRequest gamesUpdateRequest = (GamesUpdateRequest) object;
+			GamesUpdateRequest request = (GamesUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof NameUpdateRequest) {
-			NameUpdateRequest nameUpdateRequest = (NameUpdateRequest) object;
+			NameUpdateRequest request = (NameUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof ProgramUpdateRequest) {
-			ProgramUpdateRequest programUpdateRequest = (ProgramUpdateRequest) object;
+			ProgramUpdateRequest request = (ProgramUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof UsernameUpdateRequest) {
-			UsernameUpdateRequest usernameUpdateRequest = (UsernameUpdateRequest) object;
+			UsernameUpdateRequest request = (UsernameUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 		}
 	}
 }

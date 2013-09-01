@@ -114,7 +114,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void hide() {
-				//TODO: unpause pong
+				
 			}
 
 			@Override
@@ -135,7 +135,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void show() {
-				//TODO: unpause pong
+				
 			}
 			
         });

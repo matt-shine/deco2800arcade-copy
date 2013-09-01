@@ -8,6 +8,7 @@ import javax.security.auth.login.Configuration;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -113,7 +114,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void hide() {
-				//TODO: unpause pong
+				
 			}
 
 			@Override
@@ -134,7 +135,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void show() {
-				//TODO: unpause pong
+				
 			}
 			
         });
@@ -171,21 +172,41 @@ public class junglejump extends GameClient implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int arg0) {
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.LEFT) {
+			// Move left
+		} if (keycode == Keys.RIGHT) {
+			// Move right
+		} if (keycode == Keys.SPACE) {
+			// Jump
+		} if (keycode == Keys.UP) {
+			// Climb
+		} if (keycode == Keys.DOWN) {
+			// Climb down
+		}
+		return true;
+	}
+
+	@Override
+	public boolean keyTyped(char keycode) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean keyTyped(char arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean keyUp(int keycode) {
+		if (keycode == Keys.LEFT) {
+			// Move left STOP
+		} if (keycode == Keys.RIGHT) {
+			// Move right STOP
+		} if (keycode == Keys.SPACE) {
+			// Jump STOP
+		} if (keycode == Keys.UP) {
+			// Climb STOP
+		} if (keycode == Keys.DOWN) {
+			// Climb down STOP
+		}
+		return true;
 	}
 
 	@Override

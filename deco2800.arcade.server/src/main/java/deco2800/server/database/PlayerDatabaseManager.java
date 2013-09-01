@@ -6,12 +6,22 @@ public class PlayerDatabaseManager {
 
 	}
 
-	public void updateBio(int playerID, String username) {
+	public void updateBio(int playerID, String bio) {
 
 	}
 
-	public void updateEmail(int playerID, String username) {
+	public void updateEmail(int playerID, String email) {
 
 	}
+	
+	public void updateProgram(int playerID, String program) {
+
+	}
+	
+	public void updateName(int playerID, String name) {
+
+	}
+	
+	
 
 }

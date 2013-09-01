@@ -1,5 +1,9 @@
 package deco2800.arcade.hunter.model;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.platformergame.model.Entity;
@@ -10,6 +14,8 @@ public class Player extends Entity {
 	private boolean grounded;
 	private float jumpVelocity;
 	
+	
+	private Animation currAnim;
 	//States used to determine how to draw the player
 	private enum State {
 		RUNNING,
@@ -72,10 +78,65 @@ public class Player extends Entity {
 		//Pretending the DEAD state doesn't exist for now... TODO
 		if (grounded) {
 			this.state = State.RUNNING;
+			currAnim = runAnimation();
 		} else if (jumpVelocity > 0) {
 			this.state = State.JUMPING;
+			currAnim = jumpAnimation();
 		} else if (jumpVelocity <= 0) {
 			this.state = State.FALLING;
+			currAnim = fallAnimation();
 		}
 	}
+	
+	public Animation getAnimation(){
+		return currAnim;
+	}
+	
+	public Animation hurtAnimation(){
+		return null;
+	}
+	
+	public Animation deathAnimation(){
+		return null;
+	}
+	
+	public Animation attackAnimation(){
+		return null;
+	}
+	
+	public Animation jumpAnimation(){
+		Texture jumpSheet = new Texture("textures/jumpSheet.png");
+		TextureRegion[][] jumpRegion = TextureRegion.split(jumpSheet,jumpSheet.getWidth()/2, jumpSheet.getHeight());
+		TextureRegion jumpFrame = jumpRegion[0][1];
+		Animation jumpAnim = new Animation(1f,jumpFrame);
+		return jumpAnim;
+	}
+	
+	public Animation fallAnimation(){
+		Texture fallSheet = new Texture("textures/jumpSheet.png");
+		TextureRegion[][] fallRegion = TextureRegion.split(fallSheet,fallSheet.getWidth()/2, fallSheet.getHeight());
+		TextureRegion fallFrame = fallRegion[0][0];
+		Animation fallAnim = new Animation(1f,fallFrame);
+		return fallAnim;
+	}
+	
+	public Animation runAnimation(){
+		Animation runAnim;
+		Texture runSheet;
+		TextureRegion[] runFrames;
+		
+		int RUN_FRAMES = 3;
+		runSheet = new Texture("textures/runSheet.png");
+		TextureRegion[][] tmp = TextureRegion.split(runSheet, runSheet.getWidth()/RUN_FRAMES, runSheet.getHeight());
+		runFrames = new TextureRegion[RUN_FRAMES];
+		int i = 0;
+		int index = 0;
+		for (int j = 0; j < RUN_FRAMES; j++){
+			runFrames[index++] = tmp[i][j];
+		}
+		runAnim = new Animation(0.1f, runFrames);
+		
+		return runAnim;
+	}
+	
 }

@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -33,8 +37,11 @@ public class GameScreen implements Screen {
 	
 	private float gameSpeed = 64;
 	
-	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch = new SpriteBatch();
+	
+	private float stateTime;
+	private TextureRegion currFrame;
+	private Animation runAnim;
 	
 	public GameScreen(Hunter p){
 		parent = p;
@@ -42,7 +49,6 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, parent.screenWidth, parent.screenHeight);
 		
-		shapeRenderer = new ShapeRenderer();
 		
 		player = new Player(new Vector2(0, 0), 64, 128);
 		entities.add(player);
@@ -77,7 +83,6 @@ public class GameScreen implements Screen {
 		//Poll for input
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
 			//Attack
-			
 		}
 		
 		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && player.isGrounded()) {
@@ -95,20 +100,18 @@ public class GameScreen implements Screen {
 			batch.draw(p.getRendered(), foreground.getXOffset()+(paneCount * Map.TILE_SIZE * Map.PANE_SIZE), delta);
 			paneCount++;
 		}
-		batch.end();
 		
-		
-		shapeRenderer.setProjectionMatrix(camera.combined);
-	    
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.setColor(Color.RED);
-	    
+			    
+	    runAnim = player.getAnimation();
+	    stateTime += Gdx.graphics.getDeltaTime();
+	    currFrame = runAnim.getKeyFrame(stateTime,true);
+	    currFrame.flip(true, false);
 	    for (Entity e : entities) {	
 	    	//Draw each entity
-	    	shapeRenderer.filledRect(e.getX(), e.getY(), e.getWidth(), e.getHeight());
+	    	batch.draw(currFrame, e.getX(), e.getY(), currFrame.getRegionWidth()/3, currFrame.getRegionHeight()/3);
+//	    	shapeRenderer.filledRect(e.getX(), e.getY(), e.getWidth(), e.getHeight());
 	    }
-	    
-	    shapeRenderer.end();
+	    batch.end();
 		
 	}
 

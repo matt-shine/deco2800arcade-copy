@@ -129,7 +129,7 @@ public class HighscoreDatabase {
 					type + "' AND Username='" + Username + "';");
 			while(resultSet.next())
 			{
-				data = resultSet.getString("USERNAME");
+				data = resultSet.getString("SCORE");
 			}
 
 			return data;

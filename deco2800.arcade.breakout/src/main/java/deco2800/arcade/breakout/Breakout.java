@@ -42,7 +42,7 @@ public class Breakout extends GameClient {
 	int[] sequence = {19, 19, 20, 20, 21, 22, 21, 22, 30, 29};
 	int currentButton = 0;
 	
-	//public static Sound breaking = Gdx.audio.newSound(Gdx.files.internal("resources/break.wav"));
+	public Sound breaking;
 
 	// private String status;
 	// Keeps track of the number of bricks on screen.
@@ -84,6 +84,8 @@ public class Breakout extends GameClient {
 		// Sets the display size
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		
+		//breaking = Gdx.audio.newSound(Gdx.files.classpath("resources/break.wav"));
 
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
 		ball = new PongBall();
@@ -207,6 +209,8 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
+						//breaking.play();
+						//breaking.dispose();
 						ball.bounceX();
 						break;
 					}
@@ -214,6 +218,8 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
+						//breaking.play();
+						//breaking.dispose();
 						ball.bounceX();
 						break;
 					}
@@ -221,6 +227,8 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
+						//breaking.play();
+						//breaking.dispose();
 						ball.bounceY();
 						break;
 					}
@@ -228,6 +236,8 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
+						//breaking.play();
+						//breaking.dispose();
 						ball.bounceY();
 						break;
 					}

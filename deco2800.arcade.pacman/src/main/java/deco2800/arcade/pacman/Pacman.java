@@ -39,10 +39,10 @@ public class Pacman extends GameClient {
 	
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
-	private BitmapFont font;
+	private PacChar player;
 	
-	private NetworkClient networkClient;
-	private String statusMessage;
+	//not used yet
+	//private NetworkClient networkClient;
 	
 	
 	
@@ -51,25 +51,14 @@ public class Pacman extends GameClient {
 		// TODO Auto-generated constructor stub
 	}
 
-	// Game variable for Pacman- used by the arcade
-	private static final Game game;
-	static {
-		game = new Game();
-		game.id = "pacman";
-		game.name = "Pac man";
-		game.description = "An implementation of the classic arcade game Pac "
-		+ "man." + System.lineSeparator() + "Still in progress- additional " + 
-		"features may be added later. Note: will not currently run.";
-		// game.icon- to be added later once the icon part is fully implemented
-	}
+	
 	
 	/**
 	 * Creates the game
 	 */
 	@Override
 	public void create() {
-		
-        
+		        
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
@@ -79,7 +68,7 @@ public class Pacman extends GameClient {
 
 			@Override
 			public void hide() {
-				//TODO: unpause pong
+
 			}
 
 			@Override
@@ -100,33 +89,24 @@ public class Pacman extends GameClient {
 
 			@Override
 			public void show() {
-				//TODO: unpause pong
-			}
-			
-        });
+
+			}			
+        });   
         
-        
-		
-		super.create();
-		
+		super.create();		
 		//Initialize camera
 		camera = new OrthographicCamera();
+		// set resolution
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		
-		// This area is used for creating objects (sprites and user controlled thingies)
-		
-		
-		
+				
 		//Necessary for rendering
-		shapeRenderer = new ShapeRenderer();
-		font = new BitmapFont();
-		font.setScale(2);
+//		shapeRenderer = new ShapeRenderer();
+//		font = new BitmapFont();
+//		font.setScale(2);
 		batch = new SpriteBatch();
 		
-		//Initialise the scores and game state
-		gameState = GameState.READY;
-		
-		
+		//Initialise game state
+		gameState = GameState.READY;		
 	}
 	
 	@Override
@@ -146,42 +126,27 @@ public class Pacman extends GameClient {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+	    // updating camera is something we should do once per frame
 	    camera.update();
-	    
+	    //tell these things to use the coordinate system of the camera
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
-	    //Begin drawing of shapes
+	    //Begin drawing of shapes- first shape should be first argument
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    
-	    
-	    
+	    	       
 	    //End drawing of shapes
 	    shapeRenderer.end();
 	    
-	    //render score
+	    //render sprites- put between begin and end
 	    batch.begin();
-	    font.setColor(Color.YELLOW);
-	    //font.draw(batch, players[0], SCREENWIDTH/2 - 100, SCREENHEIGHT - 20);
-	    //font.draw(batch, players[1], SCREENWIDTH/2 + 50, SCREENHEIGHT - 20);
-	    //font.draw(batch, Integer.toString(scores[0]), SCREENWIDTH/2 - 50, SCREENHEIGHT-50);
-	    //font.draw(batch, Integer.toString(scores[1]), SCREENWIDTH/2 + 75, SCREENHEIGHT-50);
-	    
-	    //If there is a current status message (i.e. if the game is in the ready or gameover state)
-	    // then show it in the middle of the screen
-	    if (statusMessage != null) {
-	    	font.setColor(Color.WHITE);
-	    	font.draw(batch, statusMessage, SCREENWIDTH/2 - 100, SCREENHEIGHT-100);
-	    	if (gameState == GameState.GAMEOVER) {
-	    		font.draw(batch, "Click to exit", SCREENWIDTH/2 - 100, SCREENHEIGHT - 200);
-	    	}
-	    }
+	    player = new PacChar();
 	    batch.end();
 	    
-	    // Respond to user input and move the ball depending on the game state
+	    // Respond to user input depending on the game state
 	    switch(gameState) {
 	    
-	    case READY: //Ready to start a new point
+	    case READY: //Ready to initialise the game
 	    	if (Gdx.input.isTouched()) {
 	    		startPoint();
 	    	}
@@ -203,8 +168,8 @@ public class Pacman extends GameClient {
 	}
 	
 	private void startPoint() {
+		
 		gameState = GameState.INPROGRESS;
-		statusMessage = null;
 	}
 	
 	@Override
@@ -217,6 +182,17 @@ public class Pacman extends GameClient {
 		super.resume();
 	}
 	
+	// Game variable for Pacman- used by the arcade
+	private static final Game game; 
+	static {
+			game = new Game();
+			game.id = "pacman";
+			game.name = "Pac man";
+			game.description = "An implementation of the classic arcade game Pac "
+			+ "man." + System.lineSeparator() + "Still in progress- additional " + 
+			"features may be added later. Note: currently only displays blank screen";
+			// game.icon- to be added later once the icon part is fully implemented
+		}
 	
 	public Game getGame() {
 		return game;

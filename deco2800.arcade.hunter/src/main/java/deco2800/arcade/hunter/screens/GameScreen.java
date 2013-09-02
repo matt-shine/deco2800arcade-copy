@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
 			//Attack
 		}
 		
-		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT) && player.isGrounded()) {
+		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
 			//Jump
 			player.jump();
 		}
@@ -105,7 +105,6 @@ public class GameScreen implements Screen {
 	    runAnim = player.getAnimation();
 	    stateTime += Gdx.graphics.getDeltaTime();
 	    currFrame = runAnim.getKeyFrame(stateTime,true);
-	    currFrame.flip(true, false);
 	    for (Entity e : entities) {	
 	    	//Draw each entity
 	    	batch.draw(currFrame, e.getX(), e.getY(), currFrame.getRegionWidth()/3, currFrame.getRegionHeight()/3);

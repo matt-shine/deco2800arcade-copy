@@ -1,8 +1,9 @@
 package deco2800.arcade.hunter.model;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,6 +17,8 @@ public class Player extends Entity {
 	
 	
 	private Animation currAnim;
+	
+	private HashMap<String, Animation> animationList = new HashMap<String,Animation>();
 	//States used to determine how to draw the player
 	private enum State {
 		RUNNING,
@@ -29,6 +32,47 @@ public class Player extends Entity {
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
 		setX(128); //starting X offset
+		loadAnimations();
+	}
+	
+	private void loadAnimations() {
+		Texture jumpSheet = new Texture("textures/jumpSheet.png");
+		TextureRegion[][] jumpRegion = TextureRegion.split(jumpSheet,jumpSheet.getWidth()/2, jumpSheet.getHeight());
+		TextureRegion jumpFrame = jumpRegion[0][1];
+		jumpFrame.flip(true, false);
+		animationList.put("Jump", new Animation(1f,jumpFrame));
+		
+		Texture fallSheet = new Texture("textures/jumpSheet.png");
+		TextureRegion[][] fallRegion = TextureRegion.split(fallSheet,fallSheet.getWidth()/2, fallSheet.getHeight());
+		TextureRegion fallFrame = fallRegion[0][0];
+		fallFrame.flip(true, false);
+		animationList.put("Fall", new Animation(1f,fallFrame));
+		
+		animationList.put("Run", createAnimation(3,new Texture("textures/runSheet.png")));
+		animationList.put("RunSpear", createAnimation(3,new Texture("textures/playerAnim/GensijinRun spear.png")));
+		animationList.put("RunKnF", createAnimation(3,new Texture("textures/playerAnim/GensijinRun kf.png")));
+		animationList.put("RunTrident", createAnimation(3,new Texture("textures/playerAnim/GensijinRun df.png")));
+		animationList.put("AttackKnF", createAnimation(2,new Texture("textures/playerAnim/Gensijinattack kf.png")));
+		animationList.put("AttackTrident", createAnimation(2,new Texture("textures/playerAnim/Gensijinattack df.png")));
+		animationList.put("AttackSpear", createAnimation(2,new Texture("textures/playerAnim/Gensijinattack spear.png")));
+		animationList.put("DamageSpear", createAnimation(1,new Texture("textures/playerAnim/GensijinDamage spear.png")));
+		animationList.put("DamageKnF", createAnimation(1, new Texture("textures/playerAnim/GensijinDamage kf.png")));
+		animationList.put("DamageTrident", createAnimation(1,new Texture("textures/playerAnim/GensijinDamage df.png")));
+		animationList.put("GameOverSpear", createAnimation(1,new Texture("textures/playerAnim/GensijinGameOverspear.png")));
+		animationList.put("GameOverKnF", createAnimation(1,new Texture("textures/playerAnim/GensijinGameOver kf.png")));
+		animationList.put("GameOverTrident", createAnimation(1,new Texture("textures/playerAnim/GensijinGameOver df.png")));
+		
+		
+	}
+
+	private Animation createAnimation(int frames, Texture text){
+		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()/frames, text.getHeight());
+		TextureRegion[] animFrames = new TextureRegion[frames];
+		int index = 0;
+		for (int j = 0; j<frames; j++){
+			animFrames[index++] = tmp[0][j];
+		}
+		return new Animation(0.1f,animFrames);
 	}
 	
 	public boolean isGrounded() {
@@ -105,38 +149,15 @@ public class Player extends Entity {
 	}
 	
 	public Animation jumpAnimation(){
-		Texture jumpSheet = new Texture("textures/jumpSheet.png");
-		TextureRegion[][] jumpRegion = TextureRegion.split(jumpSheet,jumpSheet.getWidth()/2, jumpSheet.getHeight());
-		TextureRegion jumpFrame = jumpRegion[0][1];
-		Animation jumpAnim = new Animation(1f,jumpFrame);
-		return jumpAnim;
+		return animationList.get("Jump");
 	}
 	
 	public Animation fallAnimation(){
-		Texture fallSheet = new Texture("textures/jumpSheet.png");
-		TextureRegion[][] fallRegion = TextureRegion.split(fallSheet,fallSheet.getWidth()/2, fallSheet.getHeight());
-		TextureRegion fallFrame = fallRegion[0][0];
-		Animation fallAnim = new Animation(1f,fallFrame);
-		return fallAnim;
+		return animationList.get("Fall");
 	}
 	
 	public Animation runAnimation(){
-		Animation runAnim;
-		Texture runSheet;
-		TextureRegion[] runFrames;
-		
-		int RUN_FRAMES = 3;
-		runSheet = new Texture("textures/runSheet.png");
-		TextureRegion[][] tmp = TextureRegion.split(runSheet, runSheet.getWidth()/RUN_FRAMES, runSheet.getHeight());
-		runFrames = new TextureRegion[RUN_FRAMES];
-		int i = 0;
-		int index = 0;
-		for (int j = 0; j < RUN_FRAMES; j++){
-			runFrames[index++] = tmp[i][j];
-		}
-		runAnim = new Animation(0.1f, runFrames);
-		
-		return runAnim;
+		return animationList.get("RunKnF");
 	}
 	
 }

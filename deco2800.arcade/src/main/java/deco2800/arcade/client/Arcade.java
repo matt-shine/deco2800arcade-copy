@@ -39,8 +39,8 @@ import deco2800.arcade.protocol.game.NewGameRequest;
  * The client application for running arcade games.
  * 
  */
-public class Arcade extends JFrame{
-	
+public class Arcade extends JFrame {
+
 	/**
 	 * Only exists to stop warning
 	 */
@@ -103,14 +103,14 @@ public class Arcade extends JFrame{
 
 		// set shutdown behaviour
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(WindowEvent winEvt) {
-				close();
-			}
+		    public void windowClosing(WindowEvent winEvt) {
+                arcadeExit();
+		    }
 		});
 	}
 
-	public void close() {
-		removeCanvas();
+    public void arcadeExit() {
+        removeCanvas();
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -122,7 +122,7 @@ public class Arcade extends JFrame{
 	public void startConnection() {
 		// Try to connect to the server until successful
 		boolean connected = false;
-		while (!connected) {
+		while (!connected){
 			try {
 				connectToServer();
 				connected = true;
@@ -158,8 +158,7 @@ public class Arcade extends JFrame{
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
-		this.client
-				.addListener(new CommunicationListener(communicationNetwork));
+		this.client.addListener(new CommunicationListener(communicationNetwork));
 	}
 
 	public void connectAsUser(String username) {
@@ -315,7 +314,7 @@ public class Arcade extends JFrame{
 		while (it.hasNext()) {
 
 			Map.Entry<String, Class<? extends GameClient>> pair = (Map.Entry<String, Class<? extends GameClient>>) it
-					.next();
+					.next();  // Note:  I (abbjohn) am getting a redundant type cast warning here
 
 			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
 				it.remove();

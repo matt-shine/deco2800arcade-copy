@@ -149,4 +149,8 @@ public class DeerForest extends GameClient implements UIOverlay {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public int getCurrentPlayer() {
+		return mainGame.getCurrentPlayer();
+	}
 }

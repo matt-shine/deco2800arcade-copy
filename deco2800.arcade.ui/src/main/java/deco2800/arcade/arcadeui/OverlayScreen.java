@@ -60,7 +60,6 @@ public class OverlayScreen implements Screen {
         table.layout();
         
         stage.addActor(table);
-        
 	}
 	
 	

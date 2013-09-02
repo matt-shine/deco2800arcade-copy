@@ -116,7 +116,24 @@ public class HashStorage {
 	 */
 	public void updatePassword(String username, String password)
 			throws DatabaseException {
-		
+		byte[] salt = generateSalt();
+		byte[] hash = generateHash(password, salt);
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection.prepareStatement("UPDATE AU "
+					+ "SET AU.hash = ?, AU.salt = ? FROM AUTH As AU, "
+					+ "PLAYERS WHERE AU.username = PLAYERS.username");
+			statement.setBytes(1, hash);
+			statement.setBytes(2, salt);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable register password", e);
+		} finally {
+			close(connection);
+		}
 	}
 
 	/**
@@ -126,7 +143,7 @@ public class HashStorage {
 	 * @param username
 	 * @param password
 	 *            the password to be compared with the database version
-	 * @return
+	 * @return true if password == the set password for the user
 	 * @throws DatabaseException
 	 */
 	public Boolean checkPassword(String username, String password)
@@ -190,30 +207,6 @@ public class HashStorage {
 		} finally {
 			close(connection);
 		}
-	}
-
-	/**
-	 * Update the value of the salt in the database.
-	 * 
-	 * @param username
-	 * @param salt
-	 * @throws DatabaseException
-	 */
-	private void updateSalt(String username, byte[] salt)
-			throws DatabaseException {
-		/* Not yet implemented */
-	}
-
-	/**
-	 * Update the value of the salted password hash in the database.
-	 * 
-	 * @param username
-	 * @param hash
-	 * @throws DatabaseException
-	 */
-	private void updateHash(String username, byte[] hash)
-			throws DatabaseException {
-		/* Not yet implemented */
 	}
 
 	/**

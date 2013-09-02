@@ -63,7 +63,7 @@ public class MenuScreen implements Screen {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("Options worked!");
-//				game.setScreen(new OptionScreen(game));
+				hunter.setScreen(new OptionScreen(hunter));
 				/*TODO fix the broken options screen, then re-enable this*/
 			}
 		});
@@ -80,7 +80,7 @@ public class MenuScreen implements Screen {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("HighScore worked!");
-//				game.setScreen(new HighScoreScreen(game));
+				hunter.setScreen(new HighScoreScreen(hunter));
 				/*TODO Fix the broken High Score screen, then re-enable this*/
 			}
 		});
@@ -95,6 +95,7 @@ public class MenuScreen implements Screen {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("Exit Works");
+				dispose();
 				/*TODO Get this to quit properly, maybe take a look at how it is implemented in the Overlay to get back to the menu*/
 			}
 		});

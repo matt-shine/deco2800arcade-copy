@@ -23,5 +23,11 @@ public class walls extends Actor {
 		this.built = false;
 	}
 	
+	@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		
+	}
+	
+	
 	// Add draw function. Look at mixmaze.Wall.java
 }

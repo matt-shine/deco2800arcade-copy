@@ -2,6 +2,7 @@ package deco2800.arcade.deerforest.models.cardContainers;
 
 import java.util.List;
 
+import deco2800.arcade.deerforest.GUI.DeerForestSingletonGetter;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 public class Deck extends AbstractCardStack {
@@ -26,6 +27,11 @@ public class Deck extends AbstractCardStack {
 			 *  deerForest.incrementAchievement("deerforest.drawMaster");	
 			 */
 			// ACHIEVEMENT
+			
+			if (DeerForestSingletonGetter.getDeerForest() != null) {
+				DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.drawMaster");
+			}
+
 			
 			return card;
 			

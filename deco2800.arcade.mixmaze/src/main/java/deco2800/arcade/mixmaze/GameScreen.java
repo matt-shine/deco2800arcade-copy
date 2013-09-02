@@ -44,6 +44,9 @@ final class GameScreen implements Screen {
 	private Group gameArea;
 	private PlayerViewModel p1;
 	private PlayerViewModel p2;
+	private Label[] userLabels;
+	private Label[] scoreLabels;
+	private Label[] itemLabels;
 
 	/**
 	 * Constructor
@@ -92,13 +95,20 @@ final class GameScreen implements Screen {
 		Table left = new Table();
 		Table right = new Table();
 		Table tileTable = new Table();
-		Label[] userLabels = new Label[2];
-		Label[] scoreLabels = new Label[2];
+		userLabels = new Label[2];
+		scoreLabels = new Label[2];
+		itemLabels = new Label[6];
 
-		userLabels[0] = new Label("user 1", skin);
-		userLabels[1] = new Label("user 2", skin);
-		scoreLabels[0] = new Label("user 1 box: 0", skin);
-		scoreLabels[1] = new Label("user 2 box: 0", skin);
+		userLabels[0] = new Label("Player 1", skin);
+		userLabels[1] = new Label("Player 2", skin);
+		scoreLabels[0] = new Label("Player 1 box: 0", skin);
+		scoreLabels[1] = new Label("Player 2 box: 0", skin);
+		itemLabels[0] = new Label("brick: 0", skin);
+		itemLabels[1] = new Label("brick: 0", skin);
+		itemLabels[2] = new Label("pick: 0", skin);
+		itemLabels[3] = new Label("pick: 0", skin);
+		itemLabels[4] = new Label("TNT: 0", skin);
+		itemLabels[5] = new Label("TNT: 0", skin);
 
 		timerLabel = new Label("timer", skin);
 		gameArea = new Group();
@@ -113,6 +123,17 @@ final class GameScreen implements Screen {
 		root.add(scoreLabels[1]);
 		root.add(userLabels[1]).width(320);
 		root.row();
+
+		left.add(itemLabels[0]);
+		left.row();
+		left.add(itemLabels[2]);
+		left.row();
+		left.add(itemLabels[4]);
+		right.add(itemLabels[1]);
+		right.row();
+		right.add(itemLabels[3]);
+		right.row();
+		right.add(itemLabels[5]);
 
 		root.add(left);
 		root.add(gameBoard).colspan(3);
@@ -158,6 +179,12 @@ final class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		itemLabels[0].setText("bricks: "
+				+ model.getPlayerBrick(1));
+		itemLabels[1].setText("bricks: "
+				+ model.getPlayerBrick(2));
+
 		stage.act(delta);
 		stage.draw();
 		Table.drawDebug(stage);

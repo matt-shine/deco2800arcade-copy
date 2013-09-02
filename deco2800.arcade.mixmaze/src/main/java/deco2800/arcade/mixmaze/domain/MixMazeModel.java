@@ -78,6 +78,14 @@ public class MixMazeModel {
 		return player2;
 	}
 
+	public int getPlayerScore(int pid) {
+		if (pid == 1) {
+			return getPlayerScore(player1);
+		} else {
+			return getPlayerScore(player2);
+		}
+	}
+
 	public int getPlayerScore(PlayerModel player) {
 		int boxes = 0;
 		for(int row = 0; row < boardSize; ++row) {
@@ -89,6 +97,18 @@ public class MixMazeModel {
 			}
 		}
 		return boxes;
+	}
+
+	/**
+	 * Returns the number of bricks the specified player has.
+	 *
+	 * @param pid the player id, can be either 1 or 2
+	 * @return the number of bricks
+	 */
+	public int getPlayerBrick(int pid) {
+		PlayerModel p = (pid == 1) ? player1 : player2;
+
+		return p.getBrick().getAmount();
 	}
 
 	private boolean checkCoordinates(int x, int y) {

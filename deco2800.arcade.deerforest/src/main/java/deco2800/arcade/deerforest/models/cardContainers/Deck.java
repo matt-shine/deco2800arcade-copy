@@ -19,6 +19,14 @@ public class Deck extends AbstractCardStack {
 		if (!cardList.isEmpty()) {
 			AbstractCard card = cardList.get(0);
 			remove(card);
+			
+			// ACHIEVEMENT
+			/*
+			 *  TODO Once we can get access of DeerForest.Class
+			 *  deerForest.incrementAchievement("deerforest.drawMaster");	
+			 */
+			// ACHIEVEMENT
+			
 			return card;
 			
 		} else {

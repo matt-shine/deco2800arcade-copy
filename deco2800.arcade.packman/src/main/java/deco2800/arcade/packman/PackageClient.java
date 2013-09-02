@@ -28,4 +28,26 @@ public class PackageClient {
 		}
 	}
 	
+	/**
+	 * Gets the games class name from its ID.
+	 * 
+	 * If the game exists on the clients file system, this method will retrieve
+	 * the game's class name and return it. If the game does not exist on the 
+	 * client's file system, the method will return null.
+	 */
+	public String getClassName(int gameID) {
+		
+		return null;
+	}
+	
+	/**
+	 * Download the game
+	 * 
+	 * This will delete the game if it exists on the client file system, and 
+	 * will then download the game from the servers file system to the 'Games'
+	 * directory. 
+	 */
+	public void getGame(int gameID) {
+		
+	}
 }

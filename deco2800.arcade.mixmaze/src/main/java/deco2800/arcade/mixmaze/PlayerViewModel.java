@@ -7,6 +7,7 @@ import deco2800.arcade.mixmaze.domain.BrickModel;
 import deco2800.arcade.mixmaze.domain.ItemModel;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
+import deco2800.arcade.mixmaze.domain.TileModel;
 import deco2800.arcade.utils.KeyManager;
 
 import com.badlogic.gdx.Gdx;
@@ -62,6 +63,19 @@ final class PlayerViewModel extends Actor {
 			case DOWN:
 				gameModel.movePlayer(model, SOUTH);
 				break;
+			case NUM_5:
+				Gdx.app.debug(LOG, "changing action");
+				break;
+			case NUM_6:
+				Gdx.app.debug(LOG, "invoking action");
+				Gdx.app.debug(LOG, "player: " + model.getX()
+						+ "\t" + model.getY());
+				TileModel tile = gameModel.getBoardTile(
+						model.getX(), model.getY());
+				Gdx.app.debug(LOG, "tile: " + tile.getX()
+						+ "\t" + tile.getY());
+				tile.buildWall(model, model.getDirection());
+				break;
 			default:
 				return false;	// event not handled
 			}
@@ -94,6 +108,8 @@ final class PlayerViewModel extends Actor {
 			mapping.put(S, DOWN);
 			mapping.put(A, LEFT);
 			mapping.put(D, RIGHT);
+			mapping.put(G, NUM_5);
+			mapping.put(H, NUM_6);
 		}
 		km = new KeyManager(mapping);
 

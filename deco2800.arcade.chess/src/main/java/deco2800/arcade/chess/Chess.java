@@ -211,6 +211,8 @@ public class Chess extends GameClient implements InputProcessor{
 	    // Board
 	    batch.draw(chessBoard, horizOff, verticOff);
 	    
+	    //monkey balls
+	    
 	    
 	    //black pieces
 	    batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);

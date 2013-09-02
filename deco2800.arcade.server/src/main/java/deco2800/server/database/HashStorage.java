@@ -122,11 +122,14 @@ public class HashStorage {
 		Connection connection = Database.getConnection();
 		try {
 			PreparedStatement statement = null;
-			statement = connection.prepareStatement("UPDATE AU "
-					+ "SET AU.hash = ?, AU.salt = ? FROM AUTH As AU, "
-					+ "PLAYERS WHERE AU.username = PLAYERS.username");
+			statement = connection.prepareStatement("UPDATE AUTH AU "
+					+ "SET AU.hash = ?, AU.salt = ? "
+					+ "WHERE EXISTS ( SELECT * "
+					+ "FROM PLAYERS "
+					+ "WHERE PLAYERS.username = ? AND AU.playerID = PLAYERS.playerID)");
 			statement.setBytes(1, hash);
 			statement.setBytes(2, salt);
+			statement.setString(3, username);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -150,7 +153,6 @@ public class HashStorage {
 			throws DatabaseException {
 		byte[] salt = getSalt(username);
 		byte[] hash = generateHash(password, salt);
-		byte[] hash2 = generateHash(password, salt);
 		return Arrays.equals(hash, getHash(username));
 	}
 
@@ -207,17 +209,6 @@ public class HashStorage {
 		} finally {
 			close(connection);
 		}
-	}
-
-	/**
-	 * Find the hash value for the salt and password and check that it matches
-	 * the given hash.
-	 * 
-	 */
-	private Boolean checkPassword(String password, byte[] salt, byte[] hash)
-			throws NoSuchAlgorithmException {
-		byte[] loginHash = generateHash(password, salt);
-		return java.util.Arrays.equals(loginHash, hash);
 	}
 
 	/**

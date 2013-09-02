@@ -14,6 +14,7 @@ import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ReplayListener;
+import deco2800.server.database.ForumStorage;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
@@ -88,6 +89,9 @@ public class ArcadeServer {
 	// Highscore database storage service
 	private HighscoreDatabase highscoreDatabase;
 	
+	/* Forum strage service */
+	private ForumStorage forumStorage;
+	
 	/**
 	 * Access the server's credit storage facility
 	 * @return
@@ -140,7 +144,11 @@ public class ArcadeServer {
         this.gameStorage = new GameStorage();
 
 		this.creditStorage = new CreditStorage();
+
 		this.replayStorage = new ReplayStorage();
+
+		this.forumStorage = new ForumStorage();
+
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
@@ -164,6 +172,9 @@ public class ArcadeServer {
 			achievementStorage.initialise();
 			
 			highscoreDatabase.initialise();
+
+			this.forumStorage.initialise();
+
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HighscoreDatabase {
 	private boolean initialised = false;
@@ -55,9 +57,48 @@ public class HighscoreDatabase {
 	/** Displays an amount of top players for a specified game
 	 * @param Game_ID
 	 * @param top - number of top players to display
+	 * @throws DatabaseException 
 	 */
-	void getGameTopPlayers(String Game_ID, int top){
-		
+	public List<String> getGameTopPlayers(String Game_ID, int top) throws DatabaseException{
+		List<String> data = new ArrayList<String>();
+
+		if (!initialised) {
+			initialise();
+		}
+
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT USERNAME from HIGHSCORES WHERE GameId='" + Game_ID + "' LIMIT " + top + ";");
+			while(resultSet.next())
+			{
+				data.add(resultSet.getString("USERNAME"));
+			}
+
+			return data;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player informtion from database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**

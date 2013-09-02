@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import static com.badlogic.gdx.Input.Keys.ANY_KEY;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
+import static com.badlogic.gdx.utils.TimeUtils.millis;
 
 /**
  * This is the entry of the game application, and the next
@@ -22,6 +23,8 @@ final class SplashScreen implements Screen {
 	private final SpriteBatch batch;
 	private final Texture texture;
 
+	private long startTime;
+
 	/**
 	 * Constructor
 	 */
@@ -33,7 +36,8 @@ final class SplashScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		if (Gdx.input.isKeyPressed(ANY_KEY)) {
+		if (millis() - startTime > 500
+				&& Gdx.input.isKeyPressed(ANY_KEY)) {
 			Gdx.app.debug(LOG, "switching to menu screen");
 			game.setScreen(game.menuScreen);
 		}
@@ -61,6 +65,7 @@ final class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
+		startTime = millis();
 	}
 
 	@Override

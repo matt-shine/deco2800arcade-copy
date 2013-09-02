@@ -46,7 +46,9 @@ public final class MixMaze extends GameClient {
 		gameScreen = new GameScreen(this);
 		setScreen(splashScreen);
 
-		Gdx.app.debug(LOG, "Use arrows to move");
+		Gdx.app.debug(LOG, "Default keys to move");
+		Gdx.app.debug(LOG, "Player 1: W, S, A, D");
+		Gdx.app.debug(LOG, "Player 2: arrow keys");
 	}
 
 	@Override

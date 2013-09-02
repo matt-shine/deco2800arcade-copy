@@ -25,13 +25,14 @@ public class MenuScreen implements Screen{
 	SpriteBatch batch;
 	TextButton newGameButton, continueButton, multiplayerButton,  optionsButton, 
 			creditsButton, loreButton, quitButton;
-	int buttonSpacing = 10;
-	int buttonHeight = 50;
-	int buttonWidth = 200;
+	float buttonSpacing = 10f;
+	float buttonHeight = 50f;
+	float buttonWidth = 200f;
 	
 	
 	public MenuScreen(final TowerDefence game) {
 		this.game = game;
+		buttonSpacing = (Gdx.graphics.getHeight() - 7*buttonHeight)/6;
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class MenuScreen implements Screen{
 		stage.clear();
 		
 		Gdx.input.setInputProcessor(stage);
-		
+				
 		//Setting the "Style of a TextButton", 
 		TextButtonStyle style = new TextButtonStyle();
 		style.up = skin.getDrawable("buttonnormal");
@@ -85,7 +86,7 @@ public class MenuScreen implements Screen{
 		newGameButton.setWidth(buttonWidth);
 		newGameButton.setHeight(buttonHeight);
 		newGameButton.setX(Gdx.graphics.getWidth() / 2 - newGameButton.getWidth() / 2);
-        newGameButton.setY(Gdx.graphics.getHeight() - newGameButton.getHeight() - buttonSpacing); //FOR ALL setY: need to figure out better algorithm to space buttons.
+        newGameButton.setY(Gdx.graphics.getHeight() - newGameButton.getHeight());
         
         newGameButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
@@ -141,9 +142,10 @@ public class MenuScreen implements Screen{
         stage.addActor(optionsButton);
         stage.addActor(loreButton);
         stage.addActor(creditsButton);
-        stage.addActor(quitButton); 
-
+        stage.addActor(quitButton);
+        buttonSpacing = (Gdx.graphics.getHeight() - 7*quitButton.getHeight())/6;
 	}
+	
 
 	@Override
 	public void resume() {
@@ -158,7 +160,5 @@ public class MenuScreen implements Screen{
         skin.addRegions(atlas);
         white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
-		
 	}
-
 }

@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 
 
 import java.util.Set;
+import java.util.HashSet;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Game;
@@ -42,7 +43,8 @@ public class LibraryScreen implements Screen {
     private Stage stage;
     private int x = 10;
     private int y = 325;
-    private Actor button;
+    private Button button;
+	private Button currentButton;
     private Skin skin;
     private String description;
     private Label label;
@@ -108,7 +110,6 @@ public class LibraryScreen implements Screen {
         stage.addActor(exitButton);
 
         games = ArcadeSystem.getGameList();
-
         for (final GameClient gameClient : games) {
             final Game game = gameClient.getGame();
             button = new TextButton("" + game.name, skin);
@@ -118,7 +119,7 @@ public class LibraryScreen implements Screen {
             button.setY(y);
             y+= 50;
 
-            button.addListener(new GameButtonActionHandler(this, gameClient));
+            button.addListener(new GameButtonActionHandler(this, gameClient, button));
 
             stage.addActor(button);
 
@@ -183,6 +184,14 @@ public class LibraryScreen implements Screen {
     public void setGameSeletcted() {
         gameSelected = true;
     }
+	
+	public void setCurrentButton(Button b) {
+		currentButton = b;
+	}
+	
+	public Button getCurrentButton() {
+		return currentButton;
+	}
 
     private void play() {
         ArcadeSystem.goToGame(currentClient);

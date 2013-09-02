@@ -11,9 +11,13 @@ import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
+<<<<<<< HEAD
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ReplayListener;
+=======
+import deco2800.server.database.ForumStorage;
+>>>>>>> Create and set the ForumStorage
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
@@ -83,6 +87,9 @@ public class ArcadeServer {
 	// Highscore database storage service
 	private HighscoreDatabase highscoreDatabase;
 	
+	/* Forum strage service */
+	private ForumStorage forumStorage;
+	
 	/**
 	 * Access the server's credit storage facility
 	 * @return
@@ -122,7 +129,11 @@ public class ArcadeServer {
 	 */
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
+<<<<<<< HEAD
 		this.replayStorage = new ReplayStorage();
+=======
+		this.forumStorage = new ForumStorage();
+>>>>>>> Create and set the ForumStorage
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
@@ -139,10 +150,14 @@ public class ArcadeServer {
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
+<<<<<<< HEAD
             
 			achievementStorage.initialise();
 			
 			highscoreDatabase.initialise();
+=======
+			this.forumStorage.initialise();
+>>>>>>> Create and set the ForumStorage
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

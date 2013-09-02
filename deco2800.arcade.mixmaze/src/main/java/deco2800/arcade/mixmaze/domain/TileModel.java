@@ -8,6 +8,9 @@ import static deco2800.arcade.mixmaze.domain.Direction.*;
  * TileModel represents a tile on game board.
  */
 public class TileModel {
+
+	private static final String LOG = "TileModel: ";
+
 	// Tile data
 	private int tileX;
 	private int tileY;
@@ -115,11 +118,14 @@ public class TileModel {
 		double spawnFactor = spawner.nextDouble();
 
 		if(spawnFactor <= 0.1) {
+			System.err.println(LOG + "spawning TNT");
 			return new TNTModel(this);
 		} else if(spawnFactor <= 0.2) {
+			System.err.println(LOG + "spawning pick");
 			return new PickModel(this);
 		} else {
 			int amount = spawner.nextInt(5) + 1;
+			System.err.println(LOG + "spawning brick");
 			return new BrickModel(this, amount);
 		}
 	}

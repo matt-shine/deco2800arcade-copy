@@ -3,6 +3,7 @@
  */
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.mixmaze.domain.ItemModel;
 import deco2800.arcade.mixmaze.domain.TileModel;
 
 import com.badlogic.gdx.Gdx;
@@ -58,6 +59,7 @@ public class TileViewModel extends Group {
 		renderer.setProjectionMatrix(getStage().getCamera().combined);
 		stagePos = localToStageCoordinates(new Vector2(0f, 0f));
 
+		/* draw box */
 		renderer.begin(FilledRectangle);
 		if (model.isBox()) {
 			renderer.setColor(1f, 0f, 0f, 1f);
@@ -68,6 +70,17 @@ public class TileViewModel extends Group {
 				tileSize, tileSize);
 		renderer.end();
 
+		/* draw item */
+		ItemModel item = model.getSpawnedItem();
+		if (item != null) {
+			renderer.begin(FilledRectangle);
+			renderer.setColor(0f, 1f, 0f, 1f);
+			renderer.filledRect(stagePos.x, stagePos.y,
+					tileSize, tileSize);
+			renderer.end();
+		}
+
+		/* draw frame */
 		renderer.begin(Rectangle);
 		renderer.setColor(0f, 0f, 0f, 1f);
 		renderer.rect(stagePos.x, stagePos.y, tileSize, tileSize);

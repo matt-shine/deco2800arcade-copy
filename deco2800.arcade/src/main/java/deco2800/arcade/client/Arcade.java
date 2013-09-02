@@ -366,11 +366,8 @@ public class Arcade extends JFrame{
 		}
 		return null;
 	}
-<<<<<<< HEAD
-
 	public GameClient getCurrentGame() {
 		return selectedGame;
 	}
-=======
->>>>>>> master
+
 }

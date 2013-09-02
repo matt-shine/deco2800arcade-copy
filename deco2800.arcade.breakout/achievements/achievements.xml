@@ -1,0 +1,23 @@
+<achievement id="breakout.winGame">
+  <name>Winner!</name>
+  <description>Win a game of Breakout.</description>
+  <awardThreshold>1</awardThreshold>
+</achievement>
+
+<achievement id="breakout.perfect">
+	<name>Prefectionist</name>
+	<description>Win a game of Breakout without losing a Life.</description>
+	<awardThreshold>1</awardThreshold>
+</achievement>
+
+<achievement id="breakout.noob">
+	<name>n00b</name>
+	<description>Win a game of Breakout with a negative score</description>
+	<awardThreshold>1</awardThreshold>
+</achievement>
+
+<achievement id="breakout.closeOne">
+	<name>Close One!</name>
+	<description>Win a game of Breakout with no lives remaining<description>
+	<awardThreshold>1</awardThreshold>
+</achievement>

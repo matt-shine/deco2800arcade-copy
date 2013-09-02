@@ -7,11 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
-<<<<<<< HEAD
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 import deco2800.arcade.deerforest.models.effects.AbstractEffect;
-=======
->>>>>>> f950abcaec6e7847a92fbcff9952957b83915eef
+
 
 public abstract class AbstractCardStack implements CardStack {
 

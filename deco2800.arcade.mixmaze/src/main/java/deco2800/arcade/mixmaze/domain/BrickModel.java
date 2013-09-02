@@ -55,6 +55,17 @@ public class BrickModel extends ItemModel {
 		amount = addedAmount;
 	}
 
+	public void removeAmount(int number) {
+		int minusAmount = amount - number;
+		if (minusAmount < 0 || minusAmount > MAX_BRICKS) {
+			throw new IllegalArgumentException(
+					"number must result in a amount that is"
+					+ " positive and less than or equal to "
+					+ "MAX_BRICKS.");
+		}
+		amount = minusAmount;
+	}
+	
 	@Override
 	public Type getType() {
 		return ItemModel.Type.BRICK;

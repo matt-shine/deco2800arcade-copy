@@ -125,15 +125,15 @@ public class TileModel {
 			System.err.println(LOG + "spawning pick");
 			return new PickModel(this);
 		} else {
-			int amount = spawner.nextInt(5) + 1;
+			int amount = spawner.nextInt(3) + 1;
 			System.err.println(LOG + "spawning brick");
 			return new BrickModel(this, amount);
 		}
 	}
 
 	public void spawnItem() {
-		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (10 * 1000)) {
-			if(spawner.nextDouble() <= 0.2) {
+		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (25 * 1000)) {
+			if(spawner.nextDouble() <= 0.15) {
 				spawnedItem = getRandomItem();
 			}
 			lastSpawned = System.currentTimeMillis();

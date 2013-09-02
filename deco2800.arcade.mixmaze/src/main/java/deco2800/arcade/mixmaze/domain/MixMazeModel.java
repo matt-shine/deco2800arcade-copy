@@ -169,13 +169,11 @@ public class MixMazeModel {
 		}
 
 		int nextX = player.getNextX(), nextY = player.getNextY();
-		if(player.canMove()) {
-			if(player.getDirection() != direction) {
-				player.setDirection(direction);
-			} else if(checkCoordinates(nextX, nextY) && !isPlayerAtPosition(nextX, nextY)) {
-				player.move();
-				getBoardTile(player.getX(), player.getY()).onPlayerEnter(player);
-			}
+		if(player.getDirection() != direction) {
+			player.setDirection(direction);
+		} else if(player.canMove() && checkCoordinates(nextX, nextY) && !isPlayerAtPosition(nextX, nextY)) {
+			player.move();
+			getBoardTile(player.getX(), player.getY()).onPlayerEnter(player);
 		}
 	}
 

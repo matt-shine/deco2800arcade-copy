@@ -117,6 +117,7 @@ final class GameScreen implements Screen {
 		root.debug();
 		stage.addActor(root);
 
+		/* header */
 		root.add(userLabels[0]).width(320);
 		root.add(scoreLabels[0]);
 		root.add(timerLabel).expandX();
@@ -124,6 +125,7 @@ final class GameScreen implements Screen {
 		root.add(userLabels[1]).width(320);
 		root.row();
 
+		/* side panels */
 		left.add(itemLabels[0]);
 		left.row();
 		left.add(itemLabels[2]);
@@ -135,6 +137,7 @@ final class GameScreen implements Screen {
 		right.row();
 		right.add(itemLabels[5]);
 
+		/* body */
 		root.add(left);
 		root.add(gameBoard).colspan(3);
 		root.add(right);

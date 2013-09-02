@@ -5,4 +5,9 @@ public class TNTModel extends ItemModel {
 	protected TNTModel(TileModel spawnedOn) {
 		super(spawnedOn);
 	}
+
+	@Override
+	public Type getType() {
+		return ItemModel.Type.TNT;
+	}
 }

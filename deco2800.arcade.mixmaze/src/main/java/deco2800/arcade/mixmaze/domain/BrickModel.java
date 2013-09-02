@@ -55,6 +55,11 @@ public class BrickModel extends ItemModel {
 		amount = addedAmount;
 	}
 
+	@Override
+	public Type getType() {
+		return ItemModel.Type.BRICK;
+	}
+
 	/**
 	 * Constructor.
 	 */

@@ -3,20 +3,18 @@ package deco2800.arcade.model;
 import java.util.Set;
 
 public class Player extends User {
-	
+
 	public static final int USERNAME_ID = 1;
 	public static final int NAME_ID = 2;
 	public static final int EMAIL_ID = 3;
 	public static final int PROGRAM_ID = 4;
 	public static final int BIO_ID = 5;
-	
-	
 
 	// TODO shared between server & client?
 
 	private Field username;
-	
-	//TODO Implement these
+
+	// TODO Implement these
 	private Field name;
 	private Field email;
 	private Field program;
@@ -28,7 +26,6 @@ public class Player extends User {
 	private FriendInvites friendInvites;
 
 	private Icon icon;
-
 
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
@@ -176,14 +173,15 @@ public class Player extends User {
 	}
 
 	/**
-	 * Adds a friend to the player's friends set.
+	 * Adds a friend to the player's friends set, given that
+	 * player.hasInvite(friend).
 	 * 
 	 * @param friend
 	 *            The friend to be added to the friends set.
 	 * @ensure this.friends.contains(friend)
 	 */
 	public void addFriend(User friend) {
-		if (friend != null) {
+		if (friend != null && this.hasInvite(friend)) {
 			this.friends.add(friend);
 			setChanged();
 			notifyObservers(friends);

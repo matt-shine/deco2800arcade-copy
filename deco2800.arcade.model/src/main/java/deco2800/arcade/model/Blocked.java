@@ -13,14 +13,14 @@ public class Blocked {
 	private Set<User> blocked;
 	private int updatedID;
 	private boolean added;
-	
+
 	/**
 	 * Creates a new Blocked.
 	 */
 	public Blocked() {
 		this.blocked = new HashSet<User>();
 	}
-	
+
 	/**
 	 * Created a new Blocked given an existing Blocked, copying the entries.
 	 * 
@@ -30,7 +30,7 @@ public class Blocked {
 	public Blocked(Blocked b) {
 		this.blocked = new HashSet<User>(b.blocked);
 	}
-	
+
 	/**
 	 * Access method for a Set representation of this.
 	 * 
@@ -39,7 +39,7 @@ public class Blocked {
 	public Set<User> getSet() {
 		return new HashSet<User>(blocked);
 	}
-	
+
 	/**
 	 * Adds a User to this.
 	 * 
@@ -47,11 +47,13 @@ public class Blocked {
 	 *            The User to be added.
 	 */
 	public void add(User user) {
-		this.blocked.add(new User(user));
-		updatedID = user.getID();
-		added = true;
+		if (!contains(user)) {
+			this.blocked.add(new User(user));
+			updatedID = user.getID();
+			added = true;
+		}
 	}
-	
+
 	/**
 	 * Removes a User from this.
 	 * 
@@ -59,11 +61,13 @@ public class Blocked {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		this.blocked.remove(new User(user));
-		updatedID = user.getID();
-		added = false;
+		if (!contains(user)) {
+			this.blocked.remove(new User(user));
+			updatedID = user.getID();
+			added = false;
+		}
 	}
-	
+
 	/**
 	 * Checks if a User is in this.
 	 * 

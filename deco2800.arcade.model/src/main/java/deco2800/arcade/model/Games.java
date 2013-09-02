@@ -48,9 +48,11 @@ public class Games {
 	 *            The Game to be added.
 	 */
 	public void add(Game game) {
-		this.games.add(game);
-		updatedID = game.id;
-		added = true;
+		if (!contains(game)) {
+			this.games.add(game);
+			updatedID = game.id;
+			added = true;
+		}
 	}
 
 	/**
@@ -60,9 +62,11 @@ public class Games {
 	 *            The Game to be removed.
 	 */
 	public void remove(Game game) {
-		this.games.remove(game);
-		updatedID = game.id;
-		added = false;
+		if (!contains(game)) {
+			this.games.remove(game);
+			updatedID = game.id;
+			added = false;
+		}
 	}
 
 	/**

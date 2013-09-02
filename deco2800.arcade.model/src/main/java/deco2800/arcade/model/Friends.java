@@ -48,9 +48,11 @@ public class Friends {
 	 *            The User to be added.
 	 */
 	public void add(User user) {
-		this.friends.add(new User(user));
-		updatedID = user.getID();
-		added = true;
+		if (!contains(user)) {
+			this.friends.add(new User(user));
+			updatedID = user.getID();
+			added = true;
+		}
 	}
 
 	/**
@@ -60,9 +62,11 @@ public class Friends {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		this.friends.remove(new User(user));
-		updatedID = user.getID();
-		added = false;
+		if (!contains(user)) {
+			this.friends.remove(new User(user));
+			updatedID = user.getID();
+			added = false;
+		}
 	}
 
 	/**

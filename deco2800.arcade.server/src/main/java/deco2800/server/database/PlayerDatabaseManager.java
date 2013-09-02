@@ -12,16 +12,12 @@ public class PlayerDatabaseManager {
 	private FriendStorage friendStorage;
 	private PlayerGameStorage playerGameStorage;
 	private PlayerPrivacy playerPrivacy;
-	
-	
-	public PlayerDatabaseManager(){
+
+	public PlayerDatabaseManager() {
 		this.playerStorage = new PlayerStorage();
 		this.friendStorage = new FriendStorage();
 		this.playerGameStorage = new PlayerGameStorage();
 		this.playerPrivacy = new PlayerPrivacy();
-		
-		
-		
 	}
 
 	/**
@@ -32,10 +28,14 @@ public class PlayerDatabaseManager {
 	 * @param username
 	 *            The Player's new username.
 	 * @require Username is valid, that is it obeys all restrictions imposed by
-	 *          the Player class.
+	 *          the Player class. Player with playerID exists.
 	 */
 	public void updateUsername(int playerID, String username) {
-
+		try {
+			playerStorage.updateUsername(playerID, username);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -46,10 +46,14 @@ public class PlayerDatabaseManager {
 	 * @param bio
 	 *            The Player's new bio.
 	 * @require Bio is valid, that is it obeys all restrictions imposed by the
-	 *          Player class.
+	 *          Player class. Player with playerID exists.
 	 */
 	public void updateBio(int playerID, String bio) {
-
+		try {
+			playerStorage.updateBio(playerID, bio);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -60,10 +64,14 @@ public class PlayerDatabaseManager {
 	 * @param email
 	 *            The Player's new email.
 	 * @require Email is valid, that is it obeys all restrictions imposed by the
-	 *          Player class.
+	 *          Player class. Player with playerID exists.
 	 */
 	public void updateEmail(int playerID, String email) {
-
+		try {
+			playerStorage.updateEmail(playerID, email);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -74,10 +82,14 @@ public class PlayerDatabaseManager {
 	 * @param program
 	 *            The Player's new program.
 	 * @require Program is valid, that is it obeys all restrictions imposed by
-	 *          the Player class.
+	 *          the Player class. Player with playerID exists.
 	 */
 	public void updateProgram(int playerID, String program) {
-
+		try {
+			playerStorage.updateProgram(playerID, program);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -88,10 +100,14 @@ public class PlayerDatabaseManager {
 	 * @param name
 	 *            The Player's new name.
 	 * @require Name is valid, that is it obeys all restrictions imposed by the
-	 *          Player class.
+	 *          Player class. Player with playerID exists.
 	 */
 	public void updateName(int playerID, String name) {
-
+		try {
+			playerStorage.updateName(playerID, name);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -101,10 +117,16 @@ public class PlayerDatabaseManager {
 	 *            The Player's playerID.
 	 * @param friendID
 	 *            The friend's playerID.
-	 * @require Player and Friend are not already friends.
+	 * @require Player and Friend are not already friends. Players with playerID
+	 *          and friendID exist.
 	 */
 	public void addFriend(int playerID, int friendID) {
-
+		try {
+			// TODO verify that this is the correct method
+			friendStorage.acceptFriendRequest(playerID, friendID);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -114,10 +136,16 @@ public class PlayerDatabaseManager {
 	 *            The Player's playerID.
 	 * @param friendID
 	 *            The friend's playerID.
-	 * @require Player and Friend are friends.
+	 * @require Player and Friend are friends. Players with playerID and
+	 *          friendID exist.
 	 */
 	public void removeFriend(int playerID, int friendID) {
-
+		try {
+			// TODO verify that this is the correct method
+			friendStorage.removeFriend(playerID, friendID);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -127,10 +155,16 @@ public class PlayerDatabaseManager {
 	 *            The Player's playerID.
 	 * @param playerID2
 	 *            The blocked Player's playerID.
-	 * @require Player does not already have Player (playerID2) blocked.
+	 * @require Player does not already have Player (playerID2) blocked. Players
+	 *          with playerID and playerID2 exist.
 	 */
 	public void addBlocked(int playerID, int playerID2) {
-
+		try {
+			// TODO verify that this is the correct method
+			friendStorage.blockPlayer(playerID, playerID2);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -140,10 +174,16 @@ public class PlayerDatabaseManager {
 	 *            The Player's playerID.
 	 * @param playerID2
 	 *            The blocked Player's playerID.
-	 * @require Player already has Player (playerID2) blocked.
+	 * @require Player already has Player (playerID2) blocked. Players with
+	 *          playerID and playerID2 exist.
 	 */
 	public void removeBlocked(int playerID, int playerID2) {
-
+		try {
+			// TODO verify that this is the correct method
+			friendStorage.blockPlayer(playerID, playerID2);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -153,10 +193,15 @@ public class PlayerDatabaseManager {
 	 *            The Player's playerID.
 	 * @param gameID
 	 *            The Game's ID.
-	 * @require Player does not already have the Game.
+	 * @require Player does not already have the Game. Players with playerID
+	 *          exists, and Game with gameID exists.
 	 */
 	public void addGame(int playerID, String gameID) {
-
+		try {
+			playerGameStorage.addPlayerGames(playerID, gameID);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
 	}
 
 	/**
@@ -166,10 +211,117 @@ public class PlayerDatabaseManager {
 	 *            The Player's playerID.
 	 * @param gameID
 	 *            The Game's ID.
-	 * @require Player already has the Game.
+	 * @require Player already has the Game. Players with playerID exists, and
+	 *          Game with gameID exists.
 	 */
 	public void removeGame(int playerID, String gameID) {
+		try {
+			playerGameStorage.removeGame(playerID, gameID);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
+	}
 
+	/**
+	 * Updates a Player's Bio field privacy setting.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param privacySetting
+	 *            True if field is to be publicly visible, false for friends
+	 *            access only
+	 */
+	public void updateBioPrivacy(int playerID, boolean privacySetting) {
+		try {
+			playerPrivacy.updateBio(playerID, privacySetting);
+		} catch (DatabaseException e) {
+			// TODO Error catch
+		}
+	}
+
+	/**
+	 * Updates a Player's Name field privacy setting.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param privacySetting
+	 *            True if field is to be publicly visible, false for friends
+	 *            access only
+	 */
+	public void updateNamePrivacy(int playerID, boolean privacySetting) {
+		try {
+			playerPrivacy.updateName(playerID, privacySetting);
+		} catch (DatabaseException e) {
+			// TODO Error catch
+		}
+	}
+
+	/**
+	 * Updates a Player's Email field privacy setting.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param privacySetting
+	 *            True if field is to be publicly visible, false for friends
+	 *            access only
+	 */
+	public void updateEmailPrivacy(int playerID, boolean privacySetting) {
+		try {
+			playerPrivacy.updateEmail(playerID, privacySetting);
+		} catch (DatabaseException e) {
+			// TODO Error catch
+		}
+	}
+
+	/**
+	 * Updates a Player's Program field privacy setting.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param privacySetting
+	 *            True if field is to be publicly visible, false for friends
+	 *            access only
+	 */
+	public void updateProgramPrivacy(int playerID, boolean privacySetting) {
+		try {
+			playerPrivacy.updateProgram(playerID, privacySetting);
+		} catch (DatabaseException e) {
+			// TODO Error catch
+		}
+	}
+
+	/**
+	 * Updates a Player's Games field privacy setting.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param privacySetting
+	 *            True if field is to be publicly visible, false for friends
+	 *            access only
+	 */
+	public void updateGamesPrivacy(int playerID, boolean privacySetting) {
+		try {
+			playerPrivacy.updateGames(playerID, privacySetting);
+		} catch (DatabaseException e) {
+			// TODO Error catch
+		}
+	}
+
+	/**
+	 * Updates a Player's Achievements field privacy setting.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param privacySetting
+	 *            True if field is to be publicly visible, false for friends
+	 *            access only
+	 */
+	public void updateAchievementsPrivacy(int playerID, boolean privacySetting) {
+		try {
+			playerPrivacy.updateAchievements(playerID, privacySetting);
+		} catch (DatabaseException e) {
+			// TODO Error catch
+		}
 	}
 
 }

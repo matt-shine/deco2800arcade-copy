@@ -24,9 +24,11 @@ public void drawEnemy(Graphics g){
 	
 }
 
-public void moveUpdate(int move){
+public void moveUpdate(int move,boolean moveDown){
 	
 	position_x += move;
+	
+	if(moveDown == true)position_y += 10;
 }
 
 public int positionX(){

@@ -22,8 +22,9 @@ public class Invaders extends JFrame implements Runnable {
 	private int shotsNmb;
 	private int level;
 	private blockWall blockWall;
-	private ArrayList<blockWall> WallList;
+	private boolean moveDown;
 
+	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
 	private ArrayList<enemyShot> Eshots;
 
@@ -43,6 +44,7 @@ public class Invaders extends JFrame implements Runnable {
 		addKeyListener(tank);
 		move = 0;
 		direction = 1;
+		moveDown = false;
 		r = new Robot();
 		background = new javax.swing.ImageIcon("bgimage.jpg").getImage();
 
@@ -78,7 +80,7 @@ public class Invaders extends JFrame implements Runnable {
 
 		}
 		for (int e = 0; e < WallList.size(); e++) {
-		WallList.get(e).drawWall(mains);
+			WallList.get(e).drawWall(mains);
 		}
 		enemyG.drawGroup(mains);
 		tank.drawTank(mains, this);
@@ -135,14 +137,22 @@ public class Invaders extends JFrame implements Runnable {
 		}
 	}
 
-	public void enemyMove(int count) {
+	public void enemyMove(int count, boolean moveD) {
+		System.out.println(moveD); 
 		if (count % 10 == 0) {
-			if (move == 130)
+			if (move == 130) {
 				direction = -1;
-			if (move == -30)
+				if (moveD == true)
+					moveDown = true;
+			}
+			if (move == -30) {
 				direction = 1;
+				if (moveD == true)
+					moveDown = true;
+			}
 			move += 10 * direction;
-			enemyG.moveUpdate(10 * direction);
+			enemyG.moveUpdate(10 * direction, moveDown);
+			moveDown = false;
 		}
 	}
 
@@ -151,10 +161,16 @@ public class Invaders extends JFrame implements Runnable {
 		switch (level) {
 
 		case 1:
-			enemyMove(count);
+			enemyMove(count, false); 
+			break;
 		case 2:
-			enemyMove(count);
+			enemyMove(count, false);
+			levelTwo(count); 
+			break;
+		case 3:
+			enemyMove(count, true);
 			levelTwo(count);
+			break;
 
 		}
 	}

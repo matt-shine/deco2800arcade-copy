@@ -48,11 +48,11 @@ public class enemyGroup {
 
 	}
 	
-	public void moveUpdate(int move){
+	public void moveUpdate(int move, boolean moveDown){
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
 				if (lists[n][i] != null) {
-					lists[n][i].moveUpdate(move);
+					lists[n][i].moveUpdate(move,moveDown);
 				}
 
 			}

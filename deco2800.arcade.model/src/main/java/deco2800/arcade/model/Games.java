@@ -72,7 +72,7 @@ public class Games {
 	/**
 	 * Checks if a Game is in this.
 	 * 
-	 * @param gamer
+	 * @param game
 	 *            The Game to check.
 	 * @return Returns true if the Game is in this, false otherwise.
 	 */

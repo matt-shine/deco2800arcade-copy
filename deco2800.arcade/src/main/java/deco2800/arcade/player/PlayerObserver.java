@@ -46,6 +46,11 @@ public class PlayerObserver implements Observer {
 		if (observable instanceof Player) {
 			Player p = (Player) observable;
 
+			/*
+			 * Here we are checking if the object is an instance of any of the
+			 * classes that we expect to change in Player. We then encapsulate
+			 * the changes in a request, and send it to the server.
+			 */
 			if (object instanceof Friends) {
 				Friends f = (Friends) object;
 				/*
@@ -90,42 +95,47 @@ public class PlayerObserver implements Observer {
 				Field field = (Field) object;
 				String value = field.getValue();
 				switch (field.getID()) {
-				
+
 				case Player.USERNAME_ID:
 					/*
-					 * Encapsulating Player change data for transmission for server.
+					 * Encapsulating Player change data for transmission for
+					 * server.
 					 */
 					usernameUpdateRequest.playerID = p.getID();
 					usernameUpdateRequest.username = value;
 					networkClient.sendNetworkObject(usernameUpdateRequest);
-					
+
 				case Player.NAME_ID:
 					/*
-					 * Encapsulating Player change data for transmission for server.
+					 * Encapsulating Player change data for transmission for
+					 * server.
 					 */
 					nameUpdateRequest.playerID = p.getID();
 					nameUpdateRequest.name = value;
 					networkClient.sendNetworkObject(nameUpdateRequest);
-					
+
 				case Player.EMAIL_ID:
 					/*
-					 * Encapsulating Player change data for transmission for server.
+					 * Encapsulating Player change data for transmission for
+					 * server.
 					 */
 					emailUpdateRequest.playerID = p.getID();
 					emailUpdateRequest.email = value;
 					networkClient.sendNetworkObject(emailUpdateRequest);
-					
+
 				case Player.PROGRAM_ID:
 					/*
-					 * Encapsulating Player change data for transmission for server.
+					 * Encapsulating Player change data for transmission for
+					 * server.
 					 */
 					programUpdateRequest.playerID = p.getID();
 					programUpdateRequest.program = value;
 					networkClient.sendNetworkObject(programUpdateRequest);
-					
+
 				case Player.BIO_ID:
 					/*
-					 * Encapsulating Player change data for transmission for server.
+					 * Encapsulating Player change data for transmission for
+					 * server.
 					 */
 					bioUpdateRequest.playerID = p.getID();
 					bioUpdateRequest.bio = value;

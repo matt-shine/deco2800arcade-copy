@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.models.gameControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cardContainers.*;
@@ -26,18 +27,21 @@ public class DeerForestPlayer {
 	}
 
 	//draw n cards from deck to hand
-	public boolean draw(int no) {
+	public List<AbstractCard> draw(int no) {
+		List<AbstractCard> cardsDrawn = new ArrayList<AbstractCard>();
 		while(no > 0) {
-			if(!draw()) return false;
+			AbstractCard c = draw();
+			if(c != null) cardsDrawn.add(c);
 			no--;
 		}
-		return true;
+		return cardsDrawn;
 	}
 
 	//draw 1 card from deck to hand
-	public boolean draw() {
-		if (addCard(this.deck.draw(), this.hand)) return true;
-		return false;
+	public AbstractCard draw() {
+		AbstractCard c = this.deck.draw();
+		if(c!=null && addCard(c, this.hand)) return c;
+		return null;
 	}
 	
 	//move card to location

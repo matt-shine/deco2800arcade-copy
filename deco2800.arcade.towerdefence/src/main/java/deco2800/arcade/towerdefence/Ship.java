@@ -9,15 +9,12 @@ package deco2800.arcade.towerdefence;
  *
  */
 public interface Ship {
-	//TO DO: Constructor
-	
 	//current resources of the ship.
 	//may need to be split into types later.
 	public int resources();
 	
 	//current score for the player.
 	//perhaps a formula of units killed, wave and ship health?
-	//N.B. breaks the 4th wall. Should be in own class?
 	public int score();
 	
 	//current wave the player is on.
@@ -31,5 +28,8 @@ public interface Ship {
 	
 	//increment the wave, keep to units of 1 don't be cute.
 	public void nextWave();
+	
+	//Jump forward to wave n, useful for save/load.
+	public void setWave(int n);
 
 }

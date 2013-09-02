@@ -8,8 +8,6 @@ package deco2800.arcade.towerdefence;
  *
  */
 public interface Divine extends GridObject {
-	//TO DO: Constructor
-	
 	//Starts any on death behaviour. Possibly ends by calling destroy to remove from grid view and from game model.
 	public void die();
 	

@@ -6,8 +6,6 @@ package deco2800.arcade.towerdefence;
  *
  */
 public interface GridObject {
-	//TO DO: Constructor
-	
 	//Returns whether the object has a health characteristic. Great for determining divine objects that can't die or potentially whether something should move or not.
 	public boolean isLiving();
 

@@ -3,46 +3,46 @@ package deco2800.arcade.towerdefence;
 import java.util.UUID;
 
 /**
- * A unique identifier for a generated Isometric Grid.
+ * Grid object to store attributes of a generated Isometric Grid.
  * @author hadronn
- *
+ * 
  */
 public class Grid {
 	//fields
 	private final UUID id;
 	private String name;
-	private int x = 0;
-	private int y = 0;
+	private int width = 0;
+	private int depth = 0;
 	
 	//constructor
 	/**
 	 * Instantiates a grid with a unique UUID, length, width and name.
-	 * @param x
-	 * @param y
+	 * @param width
+	 * @param depth
 	 * @param name
 	 */
-	public Grid(int x, int y, String name){
+	public Grid(int width, int depth, String name){
 		id = UUID.randomUUID();
-		this.x = x;
-		this.y = y;
+		this.width = width;
+		this.depth = depth;
 		this.name = name;
 	}
 	
 	//Getters
 	/**
-	 * Returns the max x of the grid
+	 * Returns the max width of the grid
 	 * @return int
 	 */
 	public int width(){
-		return this.x;
+		return this.width;
 	}
 	
 	/**
-	 * Returns the max y of the grid
+	 * Returns the max depth of the grid
 	 * @return int
 	 */
 	public int depth(){
-		return this.y;
+		return this.depth;
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class Grid {
 	 * @param a
 	 */
 	public void width(int a){
-		this.x = a;
+		this.width = a;
 	}
 	
 	/**
@@ -74,7 +74,7 @@ public class Grid {
 	 * @param a
 	 */
 	public void depth(int a){
-		this.y = a;
+		this.depth = a;
 	}
 	
 	/**

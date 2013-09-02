@@ -9,25 +9,24 @@ package deco2800.arcade.towerdefence;
  *
  */
 public interface Mortal extends GridObject {
-	//TO DO: Constructor
-	
 	//Return the current health of the mortal, nonnegative.
 	public int health();
 	
 	//Return the maximum health of the mortal, nonnegative.
 	public int maxHealth();
 	
-	//Return the current armour of the mortal, nonnegative.
+	//Return the armour of the mortal, nonnegative.
 	public int armour();
-	
-	//Return the maximum armour of the mortal, nonnegative.
-	public int maxArmour();
 	
 	//Increase the current health, not beyond maxHealth().
 	public void heal(int amount);
 	
+	////Decrease the current health, not below 0.
+	public void damage(int amount);
+	
 	//Decrease the current health, not below 0.
-	public void damage(int amount); //Michael, what's int pen?
+	//Penetration is a direct armour debuff for that attack alone.
+	public void damage(int amount, int penetration);
 	
 	//Starts any on death behaviour. Possibly ends by calling destroy to remove from grid view and from game model.
 	public void die();

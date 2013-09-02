@@ -8,6 +8,5 @@ package deco2800.arcade.towerdefence;
  *
  */
 public interface Controllable {
-	//TO DO: Constructor
 	
 }

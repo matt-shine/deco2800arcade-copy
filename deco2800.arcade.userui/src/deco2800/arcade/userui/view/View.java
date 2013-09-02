@@ -41,7 +41,7 @@ public class View extends JFrame implements ActionListener {
 	private JScrollPane sidescroll;
 	private JScrollPane contentscroll;
 	
-	//Declare buttons here
+	//Declare Buttons here
 	
 	//Declare Labels here
 	private JLabel avatar;
@@ -60,13 +60,14 @@ public class View extends JFrame implements ActionListener {
 	private ImageIcon picfriendbar;
 	private ImageIcon picaddfriend;
 
-	//Use a MigLayout to these sections
+	//Use a MigLayout for the different sections
 	private MigLayout pagelayout = new MigLayout();
 	private MigLayout contentlayout = new MigLayout();
 	private MigLayout menulayout = new MigLayout();
 	private MigLayout sidelayout = new MigLayout();
 		
 	public View(Model model) throws HeadlessException {
+		
 		super("User Profile");
 		
 		this.model = model;
@@ -86,8 +87,9 @@ public class View extends JFrame implements ActionListener {
 		parentContainer = new JPanel(pagelayout);
 	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
 	    menupanel.setLayout(menulayout);
-	    sidepanel = new JPanel(sidelayout);
-	    contentpanel = new JPanel(contentlayout);
+	    //Change to Image panels when have new backgrounds
+	    sidepanel = new JPanel();
+	    contentpanel = new JPanel();
 	    
         sidescroll = new JScrollPane(sidepanel);
         
@@ -117,21 +119,18 @@ public class View extends JFrame implements ActionListener {
         */
             
 	    //Add panels to Main Panel	               
-		add(menupanel, BorderLayout.NORTH);
-				
-		add(sidepanel, BorderLayout.WEST);
-
-		add(contentpanel, BorderLayout.CENTER);
+		parentContainer.add(menupanel, "dock north");
+		sidepanel.setBackground(Color.GRAY);
+		parentContainer.add(sidepanel, "east, width :900, height :700");
+		contentpanel.setBackground(Color.darkGray);
+		parentContainer.add(contentpanel, "west, width :400, height :700");
 		
-		//Add the main panel to JFrame				
-		this.pack();
-		
-		//Note: need to fix problem 2 JPanels are overlapping
-		sidepanel.setBackground(Color.cyan);
-		
-		contentpanel.setBackground(Color.blue);
+		//Add the main panel to JFrame
+		add(parentContainer);
+		pack();
 	
 		// Set the  view window constraints
+
 		setSize(1280,800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);

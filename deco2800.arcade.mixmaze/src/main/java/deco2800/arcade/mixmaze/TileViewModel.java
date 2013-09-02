@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
+import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer
@@ -37,9 +38,9 @@ public class TileViewModel extends Group {
 		UNKNOWN_REGION = new TextureRegion(texture, 768, 0, 256, 256);
 	}
 
+	/** The tile model. */
 	private final TileModel model;
 	private final ShapeRenderer renderer;
-	private final WallViewModel[] walls;
 	private final int tileSize;
 
 	/**
@@ -53,14 +54,6 @@ public class TileViewModel extends Group {
 		this.model = model;
 		this.renderer = renderer;
 		this.tileSize = tileSize;
-
-		/* initialize wall view models */
-		walls = new WallViewModel[4];
-		for (int i = 0; i < 4; ++i) {
-			walls[i] = new WallViewModel(model.getWall(i), i,
-					renderer);
-			this.addActor(walls[i]);
-		}
 	}
 
 	@Override
@@ -69,6 +62,9 @@ public class TileViewModel extends Group {
 
 		batch.end();
 
+		/*
+		 * Begin shape renderer drawing.
+		 */
 		/*
 		 * FIXME: we should be able to use the transform matrix
 		 * in batch.
@@ -93,6 +89,24 @@ public class TileViewModel extends Group {
 		renderer.rect(stagePos.x, stagePos.y, tileSize, tileSize);
 		renderer.end();
 
+		/* draw wall */
+		renderer.begin(FilledRectangle);
+		renderer.setColor(1f, 1f, 0f, 1f);
+		if (model.getWall(WEST).isBuilt())
+			renderer.filledRect(stagePos.x, stagePos.y, 4f, 128f);
+		if (model.getWall(NORTH).isBuilt())
+			renderer.filledRect(stagePos.x, stagePos.y + 124f,
+					128f, 4f);
+		if (model.getWall(EAST).isBuilt())
+			renderer.filledRect(stagePos.x + 124f, stagePos.y,
+					4f, 128f);
+		if (model.getWall(SOUTH).isBuilt())
+			renderer.filledRect(stagePos.x, stagePos.y, 128f, 4f);
+		renderer.end();
+
+		/*
+		 * Begin batch drawing.
+		 */
 		batch.begin();
 		applyTransform(batch, computeTransform());
 
@@ -117,13 +131,6 @@ public class TileViewModel extends Group {
 			batch.draw(region, 0, 0, tileSize, tileSize);
 		}
 
-		/*
-		 * Set transform for the children, and the default
-		 * draw() will call drawChildren().
-		 */
-		renderer.setTransformMatrix(computeTransform());
-		drawChildren(batch, parentAlpha);
-		renderer.identity();
 		resetTransform(batch);
 	}
 }

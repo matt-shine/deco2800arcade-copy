@@ -17,14 +17,18 @@ import java.util.Date;
  * @see java.sql
  */
 public class ForumStorage {
-	/**
-	 * TODO Create method to retrieve the DB data
-	 * TODO Coordinate methods with forum classes.
-	 * TODO Create test case for delete
-	 */
 	/* Fields */
 	private boolean initialized = false;
 	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
+	
+	/**
+	 * Return initialized flag
+	 * 
+	 * @return boolean, initialized flag
+	 */
+	public boolean getInitialized() {
+		return this.initialized;
+	}
 	
 	/**
 	 * Return initialized flag
@@ -376,8 +380,7 @@ public class ForumStorage {
 		String result = "";
 		for (int i = 0; i < tags.length; i++) {
 			result += tags[i];
-			result += ";";
-		}
+			result += "#";
 		return result;
 	}
 	

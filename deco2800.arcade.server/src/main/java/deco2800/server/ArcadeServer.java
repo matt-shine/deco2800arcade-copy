@@ -142,25 +142,16 @@ public class ArcadeServer {
         instance = this;
 
         this.gameStorage = new GameStorage();
-
 		this.creditStorage = new CreditStorage();
-
 		this.replayStorage = new ReplayStorage();
-
 		this.forumStorage = new ForumStorage();
-
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
-		
         this.imageStorage = new ImageStorage();
-
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
 		this.highscoreDatabase = new HighscoreDatabase();
-		
 		this.packServ = new PackageServer();
-
-
 		
 		//initialize database classes
 		try {
@@ -168,13 +159,9 @@ public class ArcadeServer {
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
-            
 			achievementStorage.initialise();
-			
 			highscoreDatabase.initialise();
-
 			this.forumStorage.initialise();
-
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

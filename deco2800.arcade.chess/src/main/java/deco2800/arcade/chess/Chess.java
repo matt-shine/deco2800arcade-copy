@@ -45,7 +45,7 @@ import deco2800.arcade.client.network.NetworkClient;
 
 
 @ArcadeGame(id="chess")
-public class Chess extends GameClient implements MouseListener, InputProcessor{
+public class Chess extends GameClient implements InputProcessor{
 
 	//This shows whether a piece is selected and ready to move.
 	boolean moving = false;
@@ -298,45 +298,6 @@ public class Chess extends GameClient implements MouseListener, InputProcessor{
 		// TODO Auto-generated method stub
 	}
 
-
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println("Hello");
-		
-	}
-
-
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
 	public void paint(Graphics g){
 		
 		

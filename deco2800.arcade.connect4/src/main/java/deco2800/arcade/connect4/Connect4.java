@@ -34,6 +34,7 @@ public class Connect4 extends GameClient {
 	private enum GameState {
 		READY,
 		INPROGRESS,
+		REPLAY,
 		GAMEOVER
 	}
 	private GameState gameState;
@@ -325,10 +326,18 @@ public class Connect4 extends GameClient {
 		    		
 		    	}
 		    	break;
+		    case REPLAY: //Replaying last game
+		    	System.out.println("replay mode");
+		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
 		    	if (Gdx.input.isTouched()) {
 		    		gameOver();
 		    		ArcadeSystem.goToGame(ArcadeSystem.UI);
+		    	}
+		    	if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+		    		//Replay the last played game.
+		    		reset();
+		    		gameState = GameState.REPLAY;
 		    	}
 		    	break;
 	    }

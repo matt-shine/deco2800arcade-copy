@@ -112,7 +112,9 @@ public class SnakeLadder extends GameClient {
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
 		gamePlayer.render();
 		//loading player icon
-		//gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
+
+		gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
+
 		
 		//initialise rule texture mapping
 		ruleTextureMapping = new HashMap<Character,String>();
@@ -127,8 +129,10 @@ public class SnakeLadder extends GameClient {
 		loadMap(tileList,"assets/lvl1.txt");
 		System.out.println("success");
 		
+
 		// create the player
 		gamePlayer = new GamePlayer();
+
 		
 		font = new BitmapFont();
 		font.setScale(2);

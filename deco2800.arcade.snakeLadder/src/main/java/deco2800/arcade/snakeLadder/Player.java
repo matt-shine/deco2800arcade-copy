@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  * A basic implementation of the player class, responsible for the behaviour of the player
  * including movement,behaviors and positioning
- * @author wang qi
+ * @author s43146400
  * @author s43146884
  */
 public class Player {

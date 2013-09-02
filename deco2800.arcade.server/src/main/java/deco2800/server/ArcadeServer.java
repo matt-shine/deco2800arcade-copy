@@ -14,6 +14,8 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.database.HighscoreDatabase;
+
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -56,6 +58,9 @@ public class ArcadeServer {
 	//private PlayerStorage playerStorage;
 	//private FriendStorage friendStorage;
 	
+	// Highscore database storage service
+	private HighscoreDatabase highscoreDatabase;
+	
 	/**
 	 * Access the server's credit storage facility
 	 * @return
@@ -74,10 +79,14 @@ public class ArcadeServer {
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
+		this.highscoreDatabase = new HighscoreDatabase();
+		
 		//initialize database classes
 		try {
 			creditStorage.initialise();
 			//playerStorage.initialise();
+			
+			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

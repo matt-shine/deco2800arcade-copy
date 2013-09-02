@@ -14,7 +14,7 @@ public class ReplayStorage {
 			ResultSet sessionsTable = connection.getMetaData().getTables(null, null, "SESSIONS", null);
 			if ( !sessionsTable.next() ){
 				sessionsState = connection.createStatement();
-				sessionsState.execute("CREATE TABLE SESSIONS(SessionID INT PRIMARY KEY," +
+				sessionsState.execute("CREATE TABLE SESSIONS(SessionID INT PRIMARY KEY AUTO_INCREMENT," +
 						"GameID INT NOT NULL"+
 						"Recording BOOLEAN NOT NULL" +
 						"User VARCHAR(30) NOT NULL," +
@@ -25,9 +25,10 @@ public class ReplayStorage {
 			ResultSet eventsTable = connection.getMetaData().getTables(null,null,"EVENTS", null);
 			if ( !eventsTable.next() ){
 				eventsState = connection.createStatement();
-				eventsState.execute("CREATE TABLE EVENTS(EventID INT PRIMARY KEY," +
+				eventsState.execute("CREATE TABLE EVENTS(EventID INT PRIMARY KEY AUTO_INCREMENT," +
 							"SessionID INT NOT NULL," +
-							"Event STRING NOT NULL)");
+							"EventIndex INT NOT NULL" + //Index of the most recent event
+						    "Event STRING NOT NULL)");
 			}
 			
 		}catch( Exception e ){
@@ -53,9 +54,16 @@ public class ReplayStorage {
 			}
 		}	
 	}
+	
+
+	//create sessionID?
+	//set recording = true
+	
 	/**
 	 * Sets recording = FALSE for given session.
+	 * 
 	 * @param sessionID
+	 * @throws DatabaseException
 	 */
 	public void endRecording( int sessionID ) throws DatabaseException{
 		Connection connection = null;
@@ -112,7 +120,7 @@ public class ReplayStorage {
 			
 			while ( results.next() ){
 				int sessionID = results.getInt( "SessionID" );
-				boolean recording = results.getBoolean( "Recording" ); //getBool or getBoolean?
+				boolean recording = results.getBoolean( "Recording" );
 				String user = results.getString( "User" );
 				long dateTime = results.getLong( "DateTime" );
 				String comments = results.getString( "Comments" );
@@ -153,12 +161,12 @@ public class ReplayStorage {
 	 * @param sessionID
 	 * @return
 	 */
-	public HashMap <Integer, String> getReplay( int sessionID ) throws DatabaseException{ //Want EventIDs too?
+	public  HashMap<Integer, String> getReplay( int sessionID ) throws DatabaseException{ //Want EventIDs too?
 		
 		Connection connection = null;
 		Statement state = null;
 		//String [] events;
-		HashMap <Integer, String> events = new HashMap<Integer, String>();
+		 HashMap <Integer, String> events =  new HashMap <Integer, String>();
 	
 		
 		try{
@@ -166,16 +174,15 @@ public class ReplayStorage {
 			state = connection.createStatement();
 			
 			ResultSet results = state.executeQuery
-					("SELECT EventID, Event FROM EVENT WHERE SessionID =" + sessionID);
+					("SELECT EventIndex, Event FROM EVENT WHERE SessionID =" + sessionID);
 			//int rows = results.last() ? results.getRow() : 0; //get number of rows from output\
 			//might have to set cursor to beforeFirst() row
 			
 		//	events = new String[rows];
 			while( results.next() ){
-				int eventID = results.getInt("EventID");
+				int eventIndex = results.getInt("EventIndex");
 				String event = results.getString("Event");
-				events.put(eventID, event);
-				//events.add(event);
+				events.put(eventIndex, event);
 			}
 		}catch( Exception e ){
 			e.printStackTrace();
@@ -248,7 +255,7 @@ public class ReplayStorage {
 	 * @param sessionID
 	 * @param event
 	 */
-	public void insertEvent( int eventID, int sessionID, String event ) throws DatabaseException{
+	public void insertEvent( int eventID, int sessionID, int eventIndex, String event ) throws DatabaseException{
 		Statement state = null;
 		Connection connection = null;
 		
@@ -256,8 +263,8 @@ public class ReplayStorage {
 			connection = Database.getConnection();
 			state = connection.createStatement();
 			
-			String insert = "INSERT INTO EVENTS " + "VALUES (" + eventID + ", " + sessionID + ", '"
-							+ event + "')";
+			String insert = "INSERT INTO EVENTS " + "VALUES (" + eventID + ", " + sessionID + ", "
+							+ eventIndex +", '" +event + "')";
 					
 			state.executeUpdate(insert);
 		
@@ -332,7 +339,7 @@ public class ReplayStorage {
 	 * @throws DatabaseException 
 	 */
 	//for spectator mode
-	public HashMap<Integer, String> getMissedEvents( int sessionID, long dateTime ) throws DatabaseException{ //need eventid in return array?
+	public HashMap<Integer, String> getMissedEvents( int sessionID, long dateTime ) throws DatabaseException{ 
 		Statement state = null;
 		Connection connection = null;
 		HashMap <Integer, String> events = new HashMap<Integer, String>();
@@ -342,7 +349,7 @@ public class ReplayStorage {
 			state = connection.createStatement();
 			
 			String insert = 
-					"SELECT EVENTS.EventID, SESSION.SessionID EVENTS.Event, SESSIONS.DateTime"
+					"SELECT EVENTS.EventIndex, SESSION.SessionID EVENTS.Event, SESSIONS.DateTime"
 					+ "FROM EVENTS"
 					+ "INNER JOIN SESSIONS" 
 					+ "ON EVENTS.SessionID = SESSIONS.SessionID"
@@ -358,10 +365,10 @@ public class ReplayStorage {
 		//	events = new String[rows];
 			
 			while( results.next() ){
-				String event = results.getString("event");
-				int eventID = results.getInt("EventID");
+				String event = results.getString("Event");
+				int eventIndex = results.getInt("EventIndex");
 				//events.add(event);
-				events.put(eventID, event);
+				events.put(eventIndex, event);
 			}
 			
 		}catch( Exception e ){

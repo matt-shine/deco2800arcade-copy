@@ -6,6 +6,8 @@ package deco2800.arcade.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.badlogic.gdx.Input.Keys.UNKNOWN;
+
 public class KeyManager {
 	private final Map<Integer, Integer> mapping;
 
@@ -17,8 +19,11 @@ public class KeyManager {
 	 */
 	public KeyManager(Map<Integer, Integer> mapping) {
 		this.mapping = new HashMap<Integer, Integer>();
-		if (mapping != null)
+		if (mapping != null) {
 			this.mapping.putAll(mapping);
+			for (Integer binded : mapping.values())
+				this.mapping.put(binded, UNKNOWN);
+		}
 	}
 
 	/**

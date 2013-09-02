@@ -10,23 +10,23 @@ import org.mockito.MockitoAnnotations;
 public class WallModelTest {
 	@Mock
 	private PlayerModel mockedPlayer;
-	
+
 	@Before
 	public void Initialize() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test(expected=IllegalArgumentException.class)
 	public void wallDirectionOutOfRange() {
 		new WallModel(-1);
 	}
-	
+
 	@Test
 	public void wallInitialization() {
 		WallModel wall = new WallModel(Direction.WEST);
 		assertEquals(Direction.WEST, wall.getDirection());
 	}
-	
+
 	@Test
 	public void buildWall() {
 		WallModel wall = new WallModel(Direction.WEST);
@@ -34,7 +34,7 @@ public class WallModelTest {
 		assertTrue(wall.isBuilt());
 		assertEquals(mockedPlayer, wall.getBuilder());
 	}
-	
+
 	@Test
 	public void destroyWall() {
 		WallModel wall = new WallModel(Direction.WEST);

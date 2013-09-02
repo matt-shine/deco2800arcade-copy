@@ -60,7 +60,6 @@ public class WallModel {
 
 		built = true;
 		builder = player;
-		player.getBrick().removeOne();
 		checkTiles(player);
 	}
 

@@ -87,6 +87,7 @@ public class TileModel {
 				|| player.getPlayerAction() != USE_BRICK) {
 			return false;
 		} else {
+			player.getBrick().removeOne();
 			wall.build(player);
 			return true;
 		}

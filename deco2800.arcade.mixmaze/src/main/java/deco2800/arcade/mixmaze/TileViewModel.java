@@ -57,7 +57,7 @@ public class TileViewModel extends Group {
 		/* initialize wall view models */
 		walls = new WallViewModel[4];
 		for (int i = 0; i < 4; ++i) {
-			walls[i] = new WallViewModel(model.getWall(i),
+			walls[i] = new WallViewModel(model.getWall(i), i,
 					renderer);
 			this.addActor(walls[i]);
 		}

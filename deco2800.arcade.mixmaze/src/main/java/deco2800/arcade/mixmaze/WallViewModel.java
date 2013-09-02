@@ -16,6 +16,7 @@ import static com.badlogic.gdx.graphics.glutils.ShapeRenderer
 public class WallViewModel extends Actor {
 	private WallModel model;
 	private ShapeRenderer renderer;
+	private int dir;
 
 	/**
 	 * Constructor.
@@ -23,8 +24,9 @@ public class WallViewModel extends Actor {
 	 * @param model		the {@link WallModel}
 	 * @param renderer	the <code>ShapeRenderer</code> for drawing
 	 */
-	public WallViewModel(WallModel model, ShapeRenderer renderer) {
+	public WallViewModel(WallModel model, int dir, ShapeRenderer renderer) {
 		this.model = model;
+		this.dir = dir;
 		this.renderer = renderer;
 	}
 
@@ -35,7 +37,7 @@ public class WallViewModel extends Actor {
 		if (model.isBuilt()) {
 			renderer.begin(FilledRectangle);
 			renderer.setColor(1f, 1f, 0f, 1f);
-			switch (model.getDirection()) {
+			switch (dir) {
 			case WEST:
 				renderer.filledRect(0f, 0f, 4f, 128f);
 				break;

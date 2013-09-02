@@ -288,7 +288,7 @@ public class MainInputProcessor implements InputProcessor {
 		Rectangle r = currentSelection.getBoundingRectangle();
 		currentSelectionOriginZone = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 		currentSelectionPlayer = view.getSpritePlayer(currentSelection);
-		boolean[] b = view.getSpriteZoneType(currentSelection);
+		boolean[] b = getSpriteZoneType(currentSelection);
 		currentSelectionField = b[0];
 		currentSelectionMonster = b[1];
 		currentSelectionArea = getCurrentSelectionArea(currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
@@ -490,6 +490,41 @@ public class MainInputProcessor implements InputProcessor {
 			}
 		}
 		
+		return null;
+	}
+	
+	public boolean[] getSpriteZoneType(ExtendedSprite s) {
+		
+		boolean[] b = new boolean[2];
+		Map<String, List<ExtendedSprite>> spriteMap = view.getSpriteMap();
+		
+		for(String key : spriteMap.keySet()) {
+			if(spriteMap.get(key).contains(s)) {
+				if(key.contains("Hand")) {
+					//check what type of card the sprite is
+					String filepath = view.manager.getAssetFileName(s.getTexture());
+					//iterate over selection to find what card model this corresponds to
+					for(AbstractCard c : game.getCardCollection(currentSelectionPlayer, "Hand")) {
+						if(c.getPictureFilePath().equals(filepath)) {
+							if(c.getCardType().equals("Monster")) {
+								b[0] = false;
+								b[1] = true;
+							} else {
+								b[0] = false;
+								b[1] = false;
+							}
+						}
+					}
+				} else if(key.contains("Monster")) {
+					b[0] = true;
+					b[1] = true;
+				} else {
+					b[0] = true;
+					b[1] = false;
+				}
+				return b;
+			}
+		}
 		return null;
 	}
 }

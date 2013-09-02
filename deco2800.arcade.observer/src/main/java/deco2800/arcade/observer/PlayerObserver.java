@@ -9,7 +9,7 @@ import deco2800.arcade.model.FriendInvites;
 import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Games;
 import deco2800.arcade.model.Player;
-import deco2800.server.database.FriendStorage;
+
 
 import deco2800.arcade.model.*;
 

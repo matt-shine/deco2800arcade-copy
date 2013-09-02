@@ -24,3 +24,4 @@ task(runArcade, dependsOn: "classes", type: JavaExec) {
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.towerdefence").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.chess").sourceSets.main.runtimeClasspath
    classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.junglejump").sourceSets.main.runtimeClasspath
+   }

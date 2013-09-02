@@ -26,7 +26,7 @@ public class SplashScreen implements Screen
     @Override
     public void show()
     {
-        logo = new Texture(Gdx.files.internal("images/splash.png"));
+        logo = new Texture(Gdx.files.internal("/resources/images/splash.png"));
         spriteBatch = new SpriteBatch();
         //TODO: reenable this when we need it
         //music = Gdx.audio.newMusic(Gdx.files.internal("sound/intro.ogg"));

@@ -36,7 +36,7 @@ public class PlayScreen implements Screen
     public void show()
     {
     	// Initialising variables
-    	texture = new Texture( Gdx.files.internal("maps/test2.png"));
+    	texture = new Texture( Gdx.files.internal("/resources/maps/test2.png"));
 		sprite = new Sprite(texture);
 		batch = new SpriteBatch();
 

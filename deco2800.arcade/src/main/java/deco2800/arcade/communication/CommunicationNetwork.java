@@ -69,8 +69,9 @@ public class CommunicationNetwork {
 				this.invite = textMessage.text.substring(8);
 				
 				if (!model.getParticipants().contains(this.invite)){ //Make sure the person you are inviting isn't already in the conversation
-					ChatRequest chatRequest = new ChatRequest();
+					
 					if (textMessage.username.equals(player.getUsername())){ //Only the person who typed /invite should send the chatRequest
+						ChatRequest chatRequest = new ChatRequest();
 						chatRequest.invite = this.invite;
 						chatRequest.chatID = textMessage.chatID;
 						chatRequest.sender = player.getUsername();
@@ -95,7 +96,8 @@ public class CommunicationNetwork {
 			date = new Date();
 			if (chatResponse.response.equals("available")){
 				model.addParticipant(chatResponse.invite);
-				controller.updateChat(dateFormat.format(date) + " - " + chatResponse.invite + " was added to the conversation by " + chatResponse.sender + "\n");
+				//controller.updateChat(dateFormat.format(date) + " - " + chatResponse.invite + " was added to the conversation by " + chatResponse.sender + "\n");
+				controller.systemChat(dateFormat.format(date) + " - " + chatResponse.invite + " was added to the conversation by " + chatResponse.sender + "\n");
 				
 				this.chatTitle = model.getParticipants().toString();
 				ArrayList<String> otherParticipants = new ArrayList<String>();
@@ -131,6 +133,8 @@ public class CommunicationNetwork {
 					model.removeParticipant(kick);		
 					controller.updateChat(dateFormat.format(date) + " - " + kick + " was kicked from the conversation by " + textMessage.username + "\n");
 					currentChats.put(model.getParticipants().hashCode(), currentChats.get(textMessage.chatID));
+					
+					//currentChats.remove()
 					
 					this.chatTitle = model.getParticipants().toString();
 					ArrayList<String> otherParticipants = new ArrayList<String>();

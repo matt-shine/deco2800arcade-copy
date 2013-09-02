@@ -51,6 +51,10 @@ public class CommunicationController {
 		window.appendTextArea(message);
 	}
 	
+	public void systemChat(String message){
+		window.systemChat(message);
+	}
+	
 	public void setFocus() {
 		window.input.requestFocus();
 	}

@@ -1,6 +1,7 @@
 package deco2800.arcade.communication;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionListener;
 
@@ -8,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.text.DefaultCaret;
 
 public class CommunicationView {
@@ -18,7 +20,8 @@ public class CommunicationView {
 	JFrame chat = new JFrame("Chat Window");
 	
 	public CommunicationView(){	
-		chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		chat.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		Container container = chat.getContentPane();
 		
 		addTextArea(container);
@@ -59,8 +62,13 @@ public class CommunicationView {
 	}
 	
 	public void appendTextArea(String text){
-		//
 		textArea.append(text);
+	}
+	
+	public void systemChat(String text){
+		textArea.setForeground(Color.RED);
+		textArea.append(text);
+		textArea.setForeground(Color.BLACK);
 	}
 	
 	public String getTextInput(){

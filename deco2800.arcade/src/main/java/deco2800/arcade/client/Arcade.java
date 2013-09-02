@@ -171,11 +171,7 @@ public class Arcade extends JFrame{
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.username = username;
-<<<<<<< HEAD
-				
-=======
 
->>>>>>> origin/master
 		this.client.sendNetworkObject(communicationRequest);
 
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
@@ -186,23 +182,22 @@ public class Arcade extends JFrame{
 		this.player = new Player(0, username,
 				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
 		this.player.setUsername(username);
-<<<<<<< HEAD
 		this.communicationNetwork.setPlayer(this.player);
-		
+				
 		// For testing chat:
 		// At least one client must login as "debuguser" to open the chat window
 		// Use /invite username and /kick username to add and remove users to the conversation
-		if (username.equals("debuguser")){
+		if (username.equals("debuguser2")){
 			ChatRequest chatRequest = new ChatRequest();
 			chatRequest.participants.add("debuguser");
+			chatRequest.participants.add("debuguser1");
+			chatRequest.participants.add("debuguser2");
 			if (this.communicationNetwork.checkIfChatExists(chatRequest.participants.hashCode()) == false){
 				this.client.sendNetworkObject(chatRequest);
 			}
 		}
-=======
 
 		// this.communicationNetwork.createNewChat(username);
->>>>>>> origin/master
 	}
 
 	/**

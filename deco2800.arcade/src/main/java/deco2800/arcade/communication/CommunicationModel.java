@@ -8,10 +8,11 @@ public class CommunicationModel {
 	private ArrayList<String> participants;
 	
 	public CommunicationModel(ArrayList<String> requestParticipants){
-		participants = new ArrayList<String>();
-		for (String participant : requestParticipants){
-			participants.add(participant);
-		}
+		participants = new ArrayList<String>(requestParticipants);
+		
+		//for (String participant : requestParticipants){
+		//	participants.add(participant);
+		//}
 	}
 	
 	public void addParticipant(String username){

@@ -42,11 +42,5 @@ public class ArcadeSystem {
         arcade.close();
     }
 
-	public static void setMultiplayerEnabled(boolean b) {
-		arcade.setMultiplayerEnabled(b);
-	}
-	public static boolean isMultiplayerEnabled() {
-		return arcade.isMultiplayerEnabled();
-	}
 	
 }

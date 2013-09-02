@@ -112,7 +112,7 @@ public class Bishop implements Piece{
 		}*/
 		return moves;
 	}
-
+//monkey balls
 	@Override
 	public int hashCode() {
 		final int prime = 31;

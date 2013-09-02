@@ -19,6 +19,7 @@ public class PlayerModel {
 	private int playerDirection;
 	private PlayerAction playerAction;
 	private long lastMoved;
+	private long lastAction;
 
 	// Item data
 	private BrickModel brick;
@@ -60,7 +61,7 @@ public class PlayerModel {
 	}
 
 	public boolean canMove() {
-		return (System.currentTimeMillis() - lastMoved) >= (0.5 * 1000);
+		return (System.currentTimeMillis() - lastMoved) >= (0.3 * 1000);
 	}
 
 	public void move() {
@@ -88,6 +89,27 @@ public class PlayerModel {
 		playerAction = action;
 	}
 
+	public boolean canUseAction() {
+		return (System.currentTimeMillis() - lastAction) >= (3 * 1000);
+	}
+	
+	public void useAction(TileModel tile) {
+		if(playerAction == PlayerAction.UseBrick) {
+			if(brick != null) {
+				tile.getWall(playerDirection).build(this);
+				brick.removeAmount(1);
+				if(brick.getAmount() == 0) {
+					brick = null;
+				}
+			}
+		} else if(playerAction == PlayerAction.UseBrick) {
+			
+		} else {
+			
+		}
+		lastAction = System.currentTimeMillis();
+	}
+	
 	public void pickUpItem(ItemModel item) {
 		if(item instanceof BrickModel) {
 			BrickModel tileBrick = (BrickModel)item;
@@ -151,6 +173,6 @@ public class PlayerModel {
 	public PlayerModel(int id) {
 		playerID = id;
 		playerAction = PlayerAction.UseBrick;
-		brick = new BrickModel(null, 0);
+		brick = new BrickModel(null, 4);
 	}
 }

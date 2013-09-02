@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class Grid {
 	//fields
-	private UUID id;
+	private final UUID id;
 	private String name;
 	private int x = 0;
 	private int y = 0;
@@ -58,5 +58,30 @@ public class Grid {
 	 */
 	public UUID id(){
 		return this.id;
+	}
+	
+	//Setters
+	/**
+	 * Sets the width of the grid to be drawn as integer a.
+	 * @param a
+	 */
+	public void width(int a){
+		this.x = a;
+	}
+	
+	/**
+	 * Sets the depth of the grid to be drawn as integer a.
+	 * @param a
+	 */
+	public void depth(int a){
+		this.y = a;
+	}
+	
+	/**
+	 * Renames the grid to newName. Not for use as a unique identifier use the UUID id.
+	 * @param newName
+	 */
+	public void name(String newName){
+		this.name = newName;
 	}
 }

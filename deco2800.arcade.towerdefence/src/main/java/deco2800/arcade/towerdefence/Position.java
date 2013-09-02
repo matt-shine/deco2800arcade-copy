@@ -9,10 +9,6 @@ public class Position {
 	//fields
 	private int x;
 	private int y;
-	/**
-	 * The grid the position belongs to, is unique.
-	 */
-	private final Grid grid;
 
 	//constructor
 	/**
@@ -24,7 +20,6 @@ public class Position {
 	public Position(int x, int y, Grid grid){
 		this.x = x;
 		this.y = y;
-		this.grid = grid;
 	}
 	
 	//Getters
@@ -42,14 +37,6 @@ public class Position {
 	 */
 	public int y(){
 		return y;
-	}
-	
-	/**
-	 * Returns the unique id of the grid this position is on. Important for multiplayer.
-	 * @return String
-	 */
-	public Grid grid(){
-		return this.grid;
 	}
 	
 	//Setters

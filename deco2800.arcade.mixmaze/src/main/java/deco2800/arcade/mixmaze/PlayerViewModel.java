@@ -171,7 +171,7 @@ final class PlayerViewModel extends Actor {
 	}
 
 	/**
-	 * Returns if the specified player has a pick.
+	 * Returns if this player has a pick.
 	 *
 	 * @param pid the player id, can be either 1 or 2
 	 * @return true if the player has pick, otherwise false
@@ -181,13 +181,22 @@ final class PlayerViewModel extends Actor {
 	}
 
 	/**
-	 * Returns if the specified player has a TNT.
+	 * Returns if this player has a TNT.
 	 *
 	 * @param pid the player id, can be either 1 or 2
 	 * @return true if the player has TNT, otherwise false
 	 */
 	public boolean hasTNT() {
 		return hasItem(TNT);
+	}
+
+	/**
+	 * Returns the number of boxes this player has.
+	 *
+	 * @return the number of boxes
+	 */
+	public int getScore() {
+		return gameModel.getPlayerScore(model);
 	}
 
 }

@@ -78,14 +78,6 @@ public class MixMazeModel {
 		return player2;
 	}
 
-	public int getPlayerScore(int pid) {
-		if (pid == 1) {
-			return getPlayerScore(player1);
-		} else {
-			return getPlayerScore(player2);
-		}
-	}
-
 	public int getPlayerScore(PlayerModel player) {
 		int boxes = 0;
 		for(int row = 0; row < boardSize; ++row) {

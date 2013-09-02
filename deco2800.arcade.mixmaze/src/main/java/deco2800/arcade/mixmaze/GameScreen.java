@@ -183,6 +183,8 @@ final class GameScreen implements Screen {
 		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		scoreLabels[0].setText("boxes: " + p1.getScore());
+		scoreLabels[1].setText("boxes: " + p2.getScore());
 		itemLabels[0].setText("bricks: "
 				+ p1.getBrickAmount());
 		itemLabels[1].setText("bricks: "

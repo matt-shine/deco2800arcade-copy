@@ -87,8 +87,14 @@ public class WallModel {
 
 	@Override
 	public String toString() {
-		return "WallModel: " + tiles.get(0) + "\t" + tiles.get(1)
-				+ "\tdirection: " + direction;
+		StringBuilder str = new StringBuilder("WallModel: ");
+
+		for (TileModel tile : tiles) {
+			str.append(tile);
+			str.append(", ");
+		}
+
+		return str.toString();
 	}
 
 	/**

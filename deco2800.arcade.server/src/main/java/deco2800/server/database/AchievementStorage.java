@@ -243,12 +243,12 @@ public class AchievementStorage {
      */
     public void incrementProgress(Player player, String achievementID)
     		throws DatabaseException {
-    	
+    	//TODO Check the return value
     	int progress = 0;
     	
     	progress = initialiseProgress(player.getPlayerID(), achievementID);
     	if(checkThreshold(achievementID, progress)) {
-    		System.err.print("\nBIGERROR - ACHIEVEMENT ALREADY AWARDED\n");
+    		System.out.print("\nACHIEVEMENT ALREADY AWARDED\n");
     	} else {
     		//Get a connection to the database
         	Connection connection = Database.getConnection();
@@ -263,9 +263,6 @@ public class AchievementStorage {
     					"SET PROGRESS = PROGRESS + 1 " +
     					"WHERE playerID=" + playerID + " " +
     					"AND achievementID='" + achievementID + "'");
-    			if (checkThreshold(achievementID, progress + 1)) {
-    				System.out.print("ACHIEVEMENTS: THRESHOLD REACHED\n");
-    			};
 
     		} catch (SQLException e) {
     			e.printStackTrace();

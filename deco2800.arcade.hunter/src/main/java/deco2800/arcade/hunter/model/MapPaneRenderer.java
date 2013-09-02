@@ -11,6 +11,12 @@ import deco2800.arcade.hunter.model.MapPane.MapType;
 public class MapPaneRenderer {
 	private static Pixmap tilemap = new Pixmap(Gdx.files.internal("textures/tilemap.png"));
 	
+	/**
+	 * Render the given map pane to a TextureRegion for drawing to the screen
+	 * @param pane map pane to be drawn
+	 * @param type current map type
+	 * @return rendered texture version of the map
+	 */
 	public static TextureRegion renderPane(MapPane pane, MapType type) {
 		int tilemapRow = type.ordinal() * Map.TILE_SIZE; //Tilemap row to draw from
 		int[][] data = pane.getData();

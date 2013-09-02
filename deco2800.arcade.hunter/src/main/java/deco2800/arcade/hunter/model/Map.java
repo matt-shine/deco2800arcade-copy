@@ -16,12 +16,10 @@ public class Map {
 	private float xOffset = 0;
 	private float speedModifier = 1; //Used to control parallax effect, 1 for the primary map layer etc
 	
-	public Map(int paneCount) {
-		/**
-		 * @param width map panes to keep loaded at a time
-		 */
-		
-		
+	/**
+	 * @param width map panes to keep loaded at a time
+	 */
+	public Map(int paneCount) {	
 		this.paneCount = paneCount;
 		panes = new ArrayBlockingQueue<MapPane>(paneCount);
 		while (panes.size() < this.paneCount) {
@@ -29,14 +27,26 @@ public class Map {
 		}
 	}
 	
+	/**
+	 * @param speedModifier
+	 */
 	public void setSpeedModifier(float speedModifier) {
 		this.speedModifier = speedModifier;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public Queue<MapPane> getPanes() {
 		return panes;
 	}
 	
+	/**
+	 * Update the state of the map, should be called each time the main render loop is called
+	 * @param delta delta time of the render loop
+	 * @param gameSpeed current game speed
+	 */
 	public void update(float delta, float gameSpeed) {
 		xOffset -= delta * gameSpeed * speedModifier;
 		
@@ -48,6 +58,12 @@ public class Map {
 		}
 	}
 	
+	/**
+	 * Get a random map pane of the requested type
+	 * Loads the map from a CSV file in the resources/maps/ folder
+	 * @param type map type
+	 * @return new MapPane
+	 */
 	public MapPane getRandomPane(MapType type) {
 		int [][] paneData = new int[Map.PANE_SIZE][Map.PANE_SIZE];
 		//This should pull a random map from a file/cache
@@ -68,6 +84,9 @@ public class Map {
 		return new MapPane(paneData, 3, 2, type); //Fixed start/end offset should be read from a file
 	}
 	
+	/**
+	 * @return xOffset
+	 */
 	public float getXOffset() {
 		return xOffset;
 	}

@@ -62,7 +62,7 @@ public class Games {
 	 *            The Game to be removed.
 	 */
 	public void remove(Game game) {
-		if (!contains(game)) {
+		if (contains(game)) {
 			this.games.remove(game);
 			updatedID = game.id;
 			added = false;

@@ -61,7 +61,7 @@ public class Blocked {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		if (!contains(user)) {
+		if (contains(user)) {
 			this.blocked.remove(new User(user));
 			updatedID = user.getID();
 			added = false;

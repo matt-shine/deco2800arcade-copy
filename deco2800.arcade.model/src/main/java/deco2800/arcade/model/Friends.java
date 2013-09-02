@@ -62,7 +62,7 @@ public class Friends {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		if (!contains(user)) {
+		if (contains(user)) {
 			this.friends.remove(new User(user));
 			updatedID = user.getID();
 			added = false;

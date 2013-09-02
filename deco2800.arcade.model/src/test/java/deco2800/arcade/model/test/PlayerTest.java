@@ -142,6 +142,7 @@ public class PlayerTest {
 		Player p2 = new Player(112, "FriendlyJoe", "String filepath");
 		Player p3 = new Player(113, "FriendlyMoe", "String filepath");
 		Player p4 = new Player(114, "FriendlyBoe", "String filepath");
+		
 		p1.addFriend(p2);
 		p1.addFriend(p3);
 		p1.addFriend(p4);

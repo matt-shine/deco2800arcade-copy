@@ -181,7 +181,7 @@ public class Player extends User {
 	 * @ensure this.friends.contains(friend)
 	 */
 	public void addFriend(User friend) {
-		if (friend != null && this.hasInvite(friend)) {
+		if (friend != null /*&& this.hasInvite(friend)*/) {
 			this.friends.add(friend);
 			setChanged();
 			notifyObservers(friends);

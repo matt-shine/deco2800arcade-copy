@@ -80,4 +80,23 @@ public class FriendInvites {
 	public boolean contains(User user) {
 		return this.friendInvites.contains(new User(user));
 	}
+	
+	/**
+	 * Access method for the most recent change ID.
+	 * 
+	 * @return Returns the ID of the field in the most recent change.
+	 */
+	public int getUpdatedID() {
+		return updatedID;
+	}
+
+	/**
+	 * Access method for most recent change flag.
+	 * 
+	 * @return Returns true if the last change was an addition, and false if it
+	 *         was a deletion.
+	 */
+	public boolean getAdded() {
+		return added;
+	}
 }

@@ -29,6 +29,7 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.player.PlayerObserver;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -146,6 +147,10 @@ public class Arcade extends JFrame{
 			// inputs.
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
+			/*
+			 * Initialise the PlayerObserver so any instances of the class can send
+			 */
+			PlayerObserver.initialise(this.client);
 			addListeners();
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server ("

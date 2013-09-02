@@ -73,7 +73,8 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT USERNAME from HIGHSCORES WHERE GameId='" + Game_ID + "' ORDER BY Rating desc LIMIT " + top + ";");
+			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES h INNER JOIN " +
+					"SCORES s on h.HID = s.HID WHERE GameId='" + Game_ID + "' ORDER BY s.Score desc LIMIT " + top + ";");
 			while(resultSet.next())
 			{
 				data.add(resultSet.getString("USERNAME"));

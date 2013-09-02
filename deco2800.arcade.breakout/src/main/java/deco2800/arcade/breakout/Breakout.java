@@ -93,8 +93,8 @@ public class Breakout extends GameClient {
 		int index = 0;
 		for (int i = 0; i < 5; i++) {
 			for (int j = 0; j < 8; j++) {
-				bricks[index] = new Brick(j * 80 + 80, SCREENHEIGHT - i * 20
-						- 80);
+				bricks[index] = new Brick(j * 125 + 120, SCREENHEIGHT - i * 45
+						- 110);
 				index++;
 			}
 		}
@@ -203,14 +203,42 @@ public class Breakout extends GameClient {
 			// top/bottom, only bounceY
 			for (Brick b : bricks) {
 				if (b.getState()) {
-					if (ball.bounds.overlaps(b.getShape())) {
+					if (b.checkLeftCollision(ball.bounds)) {
+						b.setState(false);
+						score++;
+						brickNum--;
+						ball.bounceX();
+						break;
+					}
+					if (b.checkRightCollision(ball.bounds)) {
+						b.setState(false);
+						score++;
+						brickNum--;
+						ball.bounceX();
+						break;
+					}
+					if (b.checkTopCollision(ball.bounds)) {
 						b.setState(false);
 						score++;
 						brickNum--;
 						ball.bounceY();
-						//breaking.play();
-						//breaking.dispose();
+						break;
 					}
+					if (b.checkBottomCollision(ball.bounds)) {
+						b.setState(false);
+						score++;
+						brickNum--;
+						ball.bounceY();
+						break;
+					}
+//					if (ball.bounds.overlaps(b.getShape())) {
+//						b.setState(false);
+//						score++;
+//						brickNum--;
+//						ball.bounceY();
+//						//breaking.play();
+//						//breaking.dispose();
+//					}
 				}
 			}
 

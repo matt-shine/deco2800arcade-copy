@@ -14,8 +14,9 @@ public class Brick {
 	// protected int x;
 	// protected int y;
 
-	private final float width = 80f;
-	private final float height = 20f;
+	private final float width = 120f;
+	private final float height = 40f;
+	private final float E = 0.00001f;
 	private boolean state;
 	private Rectangle brickShape;
 
@@ -55,6 +56,42 @@ public class Brick {
 		return this.height;
 	}
 
+	public boolean checkLeftCollision(Rectangle ball) {
+		Rectangle leftSide = new Rectangle();
+		leftSide.x = this.brickShape.x;
+		leftSide.y = this.brickShape.y - this.E;
+		leftSide.width = this.E;
+		leftSide.height = this.height - this.E;
+		return ball.overlaps(leftSide);
+	}
+	
+	public boolean checkRightCollision(Rectangle ball) {
+		Rectangle rightSide = new Rectangle();
+		rightSide.x = this.brickShape.x + this.width - this.E;
+		rightSide.y = this.brickShape.y - this.E;
+		rightSide.width = this.E;
+		rightSide.height = this.height - this.E;
+		return ball.overlaps(rightSide);
+	}
+	
+	public boolean checkTopCollision(Rectangle ball) {
+		Rectangle topSide = new Rectangle();
+		topSide.x = this.brickShape.x;
+		topSide.y = this.brickShape.y;
+		topSide.width = this.width;
+		topSide.height = this.E;
+		return ball.overlaps(topSide);
+	}
+	
+	public boolean checkBottomCollision(Rectangle ball) {
+		Rectangle bottomSide = new Rectangle();
+		bottomSide.x = this.brickShape.x;
+		bottomSide.y = this.brickShape.y + this.height - this.E;
+		bottomSide.width = this.width;
+		bottomSide.height = this.E;
+		return ball.overlaps(bottomSide);
+	}
+	
 	public void render(ShapeRenderer render) {
 		render.setColor(Color.GREEN);
 		render.filledRect(brickShape.x, brickShape.y, brickShape.width,

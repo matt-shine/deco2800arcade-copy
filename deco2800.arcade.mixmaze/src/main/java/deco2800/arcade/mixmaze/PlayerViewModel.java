@@ -31,6 +31,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
  * PlayerViewModel draws the character of the player.
  */
 final class PlayerViewModel extends Actor {
+
 	private static final String LOG = PlayerViewModel.class.getSimpleName();
 
 	private final PlayerModel model;
@@ -44,6 +45,7 @@ final class PlayerViewModel extends Actor {
 	 * Handles movement input.
 	 */
 	private class PlayerInputListener extends InputListener {
+
 		@Override
 		public boolean keyDown(InputEvent event, int keycode) {
 			Gdx.app.debug(LOG, "player " + id);

@@ -48,18 +48,19 @@ public class WallModel {
 	}
 
 	public void build(PlayerModel player) {
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalArgumentException(
 					"player cannot be null.");
 		}
 
-		if(built) {
+		if (built) {
 			throw new IllegalStateException(
 					"The wall is already built.");
 		}
 
 		built = true;
 		builder = player;
+		player.getBrick().removeOne();
 		checkTiles(player);
 	}
 
@@ -74,8 +75,14 @@ public class WallModel {
 		checkTiles(player);
 	}
 
+	/**
+	 * Check if any of the tiles incident on this wall has its box
+	 * built.
+	 *
+	 * @param player the owner of the box if built
+	 */
 	private void checkTiles(PlayerModel player) {
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalArgumentException(
 					"player cannot be null.");
 		}

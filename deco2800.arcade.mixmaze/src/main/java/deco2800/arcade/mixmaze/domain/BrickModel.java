@@ -65,7 +65,14 @@ public class BrickModel extends ItemModel {
 		}
 		amount = minusAmount;
 	}
-	
+
+	/**
+	 * Removes one brick from this brick collection.
+	 */
+	public void removeOne() {
+		removeAmount(1);
+	}
+
 	@Override
 	public Type getType() {
 		return ItemModel.Type.BRICK;

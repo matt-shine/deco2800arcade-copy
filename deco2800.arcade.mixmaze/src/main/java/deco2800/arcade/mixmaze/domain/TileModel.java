@@ -59,18 +59,30 @@ public class TileModel {
 		return walls[direction];
 	}
 
+	/**
+	 * Tries to build the wall on the <code>player</code>'s facing
+	 * direction.
+	 *
+	 * @param player
+	 * @param direction
+	 * @throws IllegalArgumentException If <code>player</code> is
+	 * 				    <code>null</code>
+	 * @return <code>true</code> if the wall is built,
+	 * 	   <code>false</code> otherwise
+	 */
 	public boolean buildWall(PlayerModel player, int direction) {
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
 
-		WallModel wall = getWall(direction);
-		System.err.println(this + "building" + wall);
-		if(wall.isBuilt()) {
+		WallModel wall = getWall(player.getDirection());
+
+		if (wall.isBuilt() || player.getBrick().getAmount() <= 0) {
 			return false;
+		} else {
+			wall.build(player);
+			return true;
 		}
-		wall.build(player);
-		return true;
 	}
 
 	public boolean destroyWall(PlayerModel player, int direction) {

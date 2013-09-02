@@ -110,7 +110,6 @@ public class SnakeLadder extends GameClient {
 		
 		//loading of background game board
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
-		gamePlayer.render();
 		//loading player icon
 		//gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
 		
@@ -148,14 +147,13 @@ public class SnakeLadder extends GameClient {
 	}
 
 	@Override
-	public void render() {
-		
+	public void render() {		
 		// tell the camera to update its matrices.
 		camera.update();
-  
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
+		gamePlayer.render();
 		batch.begin();
 		batch.draw(backgroundBoard,0,0);
 		for(Tile t:tileList)
@@ -165,6 +163,7 @@ public class SnakeLadder extends GameClient {
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
 		}
+		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {

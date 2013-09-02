@@ -45,11 +45,11 @@ public class PurchasingService {
 		
 		int price = (int)(g.pricePerPlay * numPlays * discountFactor(numPlays));
 		
-		int playerID = p.getID();
-		int credits = creditStorage.getUserCredits(playerID);
+		String username = p.getUsername();
+		int credits = creditStorage.getUserCredits(username);
 		
 		if (credits >= price) {
-			creditStorage.deductUserCredits(playerID, price);
+			creditStorage.deductUserCredits(username, price);
 			return new GamePlayToken(g, numPlays);
 		} else {
 			// TODO: This isn't a nice thing to return!
@@ -67,8 +67,8 @@ public class PurchasingService {
 		//boolean allCanAfford = true;
 		for (Player p: players) {
 
-			int playerID = p.getID();
-			int credits = creditStorage.getUserCredits(playerID);
+			String username = p.getUsername();
+			int credits = creditStorage.getUserCredits(username);
 
 			if (credits < requiredCredits) {
 				//allCanAfford = false;
@@ -76,7 +76,7 @@ public class PurchasingService {
 			}
 		}
 		for (Player p: players) {
-			creditStorage.deductUserCredits(p.getID(), requiredCredits);
+			creditStorage.deductUserCredits(p.getUsername(), requiredCredits);
 			tokens.add( new GamePlayToken(g, numPlays));
 
 		}

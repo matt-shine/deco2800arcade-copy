@@ -1,17 +1,13 @@
 package deco2800.arcade.mixmaze.domain;
 
-/**
- * Abstraction of items in mixmaze.
- */
 public abstract class ItemModel {
-
-	private TileModel tileSpawned;
-
-	public void pickUpItem() {
-		tileSpawned.pickUpItem();
+	private int amount;
+	
+	public int getAmount() {
+		return amount;
 	}
-
-	protected ItemModel(TileModel spawnedOn) {
-		tileSpawned = spawnedOn;
+	
+	public ItemModel(int amnt) {
+		amount = amnt;
 	}
 }

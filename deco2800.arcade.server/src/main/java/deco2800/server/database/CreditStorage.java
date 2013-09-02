@@ -39,10 +39,12 @@ public class CreditStorage {
 	/**
 	 * Check Users Credits
 	 * 
-	 * @param	playerID	Int, playerID of player
+	 * @param	username	String, username of arcade games
 	 * @throws	DatabaseException	If SQLException occurs. 
 	 */
-	public Integer getUserCredits(int playerID) throws DatabaseException{
+	public Integer getUserCredits(String username) throws DatabaseException{
+		
+		// TODO: refactor to use playerID not username
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
@@ -51,10 +53,10 @@ public class CreditStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM CREDITS WHERE id=" + playerID + "");
+			resultSet = statement.executeQuery("SELECT * FROM CREDITS WHERE USERNAME='" + username + "'");
 //			statement = connection.prepareStatement("SELECT * from CREDITS WHERE username=?");
 //			statement.setString(1, username);
-			Integer result = findCreditsForUser(playerID, resultSet);
+			Integer result = findCreditsForUser(username, resultSet);
 
 			return result;
 		} catch (SQLException e) {
@@ -78,17 +80,17 @@ public class CreditStorage {
 	}
 
 	/**
-	 * Returns credits where id matches int playerID given
+	 * Returns credits where username matches String username given
 	 * 
-	 * @param	int playerID, ResultSet results
+	 * @param	String username, ResultSet results
 	 * @throws	SQLException
 	 * @return	Integer result
 	 */
-	private Integer findCreditsForUser(int playerID, ResultSet results) throws SQLException{
+	private Integer findCreditsForUser(String username, ResultSet results) throws SQLException{
 		Integer result = null;
 		while (results.next()){
-			int id = results.getInt("id");
-			if (id == playerID){
+			String user = results.getString("username");
+			if (user.equals(username)){
 				result = results.getInt("credits");
 				break;
 			}
@@ -99,21 +101,21 @@ public class CreditStorage {
 	
 	/**
 	 * Deduct a number of credits from the user's account
-	 * @param playerID The user from whose account the credits should be deducted
+	 * @param username The user from whose account the credits should be deducted
 	 * @param numCredits The number of credits to deduct
 	 */
-	public void deductUserCredits(int playerID, int numCredits) {
+	public void deductUserCredits(String username, int numCredits) {
 		//TODO implement me!
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 	
 	/**
 	 * Add a number of credits to the user's account
-	 * @param playerID The user to whose account the credits should be added
+	 * @param username The user to whose account the credits should be added
 	 * @param numCredits The number of credits to add
 	 * @throws DatabaseException 
 	 */
-	public void addUserCredits(int playerID, int numCredits) throws DatabaseException {
+	public void addUserCredits(String username, int numCredits) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
 		ResultSet resultSet = null;
@@ -121,14 +123,14 @@ public class CreditStorage {
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			// first retrieve the current users's current balance
-			resultSet = stmt.executeQuery("SELECT * FROM CREDITS WHERE id=" + playerID + "");
+			resultSet = stmt.executeQuery("SELECT * FROM CREDITS WHERE USERNAME='" + username + "'");
 			if (resultSet.next()) {
 				int oldBalance = resultSet.getInt("CREDITS");
 				// then increment it and set it
 				resultSet.updateInt("CREDITS", oldBalance + numCredits);
 				resultSet.updateRow();
 			} else {
-				throw new DatabaseException("playerID has no balance");
+				throw new DatabaseException("Username has no balance");
 			}
 			if (resultSet.next()) {
 				throw new DatabaseException("Two entries for username!");

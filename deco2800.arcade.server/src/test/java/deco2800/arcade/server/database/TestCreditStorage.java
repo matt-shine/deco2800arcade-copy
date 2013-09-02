@@ -82,7 +82,7 @@ public class TestCreditStorage {
 	 */
 	@Test
 	public void initialTotal() throws DatabaseException {
-		assertEquals(0, (int) creditStorage.getUserCredits(1));
+		assertEquals(0, (int) creditStorage.getUserCredits("Bob"));
 	}
 	
 	/**
@@ -91,8 +91,8 @@ public class TestCreditStorage {
 	 */
 	@Test
 	public void basecase() throws DatabaseException {
-		creditStorage.addUserCredits(1, 5);
-		assertEquals(new Integer(5), creditStorage.getUserCredits(1));
+		creditStorage.addUserCredits("Bob", 5);
+		assertEquals(new Integer(5), creditStorage.getUserCredits("Bob"));
 	}
 	
 }

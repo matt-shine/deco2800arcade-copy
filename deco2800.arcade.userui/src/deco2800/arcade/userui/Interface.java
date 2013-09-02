@@ -4,6 +4,7 @@ import javax.swing.SwingUtilities;
 
 import deco2800.arcade.userui.controller.Controller;
 import deco2800.arcade.userui.model.Model;
+import deco2800.arcade.userui.view.EditProfile;
 import deco2800.arcade.userui.view.View;
 
 public class Interface {
@@ -22,8 +23,10 @@ public class Interface {
 	
 	public static void runApp() {
 		Model model = new Model();
+		Model m = new Model();
 		
 		View view = new View(model);
+		//EditProfile v = new EditProfile(m);
 		
 		Controller controller = new Controller(model,view);
 		

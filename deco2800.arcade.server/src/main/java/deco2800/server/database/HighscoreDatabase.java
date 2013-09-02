@@ -59,7 +59,7 @@ public class HighscoreDatabase {
 	 * @param top - number of top players to display
 	 * @throws DatabaseException 
 	 */
-	public List<String> getGameTopPlayers(String Game_ID, int top) throws DatabaseException{
+	public List<String> getGameTopPlayers(String Game_ID, int top, String type) throws DatabaseException{
 		List<String> data = new ArrayList<String>();
 
 		if (!initialised) {
@@ -74,7 +74,8 @@ public class HighscoreDatabase {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES h INNER JOIN " +
-					"SCORES s on h.HID = s.HID WHERE GameId='" + Game_ID + "' ORDER BY s.Score desc LIMIT " + top + ";");
+					"SCORES s on h.HID = s.HID WHERE GameId='" + Game_ID + "' AND Score_Type='" + type +
+					"' ORDER BY s.Score desc LIMIT " + top + ";");
 			while(resultSet.next())
 			{
 				data.add(resultSet.getString("USERNAME"));
@@ -107,9 +108,50 @@ public class HighscoreDatabase {
 	 * @param User_ID
 	 * @param Game_ID
 	 * @param type
+	 * @throws DatabaseException 
 	 */
-	void getUserHighScore(String User_ID, String Game_ID, String type){
-		
+	public String getUserHighScore(String Username, String Game_ID, String type) throws DatabaseException{
+		String data = null;
+
+		if (!initialised) {
+			initialise();
+		}
+
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT s.SCORE from HIGHSCORES h INNER JOIN " +
+					"SCORES s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
+					type + "' AND Username='" + Username + "';");
+			while(resultSet.next())
+			{
+				data = resultSet.getString("USERNAME");
+			}
+
+			return data;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player informtion from database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**

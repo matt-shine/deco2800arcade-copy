@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Server;
 import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.database.ForumStorage;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
@@ -54,6 +55,9 @@ public class ArcadeServer {
 	private CreditStorage creditStorage;
 	//private PlayerStorage playerStorage;
 	
+	/* Forum strage service */
+	private ForumStorage forumStorage;
+	
 	/**
 	 * Access the server's credit storage facility
 	 * @return
@@ -69,12 +73,14 @@ public class ArcadeServer {
 	 */
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
+		this.forumStorage = new ForumStorage();
 		//this.playerStorage = new PlayerStorage();
 		
 		//initialize database classes
 		try {
 			creditStorage.initialise();
 			//playerStorage.initialise();
+			this.forumStorage.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

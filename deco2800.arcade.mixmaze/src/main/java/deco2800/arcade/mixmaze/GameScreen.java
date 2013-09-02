@@ -187,6 +187,14 @@ final class GameScreen implements Screen {
 				+ model.getPlayerBrick(1));
 		itemLabels[1].setText("bricks: "
 				+ model.getPlayerBrick(2));
+		itemLabels[2].setText("pick: "
+				+ ((model.hasPick(1)) ? "YES" : "NO"));
+		itemLabels[3].setText("pick: "
+				+ ((model.hasPick(2)) ? "YES" : "NO"));
+		itemLabels[4].setText("TNT: "
+				+ ((model.hasTNT(1)) ? "YES" : "NO"));
+		itemLabels[5].setText("TNT: "
+				+ ((model.hasTNT(2)) ? "YES" : "NO"));
 
 		stage.act(delta);
 		stage.draw();

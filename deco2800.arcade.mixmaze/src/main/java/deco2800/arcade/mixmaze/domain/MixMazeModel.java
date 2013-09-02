@@ -1,6 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
+import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
 
 /**
  * Mix maze model represents the running game state.
@@ -109,6 +110,42 @@ public class MixMazeModel {
 		PlayerModel p = (pid == 1) ? player1 : player2;
 
 		return p.getBrick().getAmount();
+	}
+
+	private boolean hasItem(int pid, ItemModel.Type type) {
+		PlayerModel p = (pid == 1) ? player1 : player2;
+		ItemModel item = null;
+
+		switch (type) {
+		case PICK:
+			item = p.getPick();
+			break;
+		case TNT:
+			item = p.getTNT();
+			break;
+		}
+
+		return (item == null) ? false : true;
+	}
+
+	/**
+	 * Returns if the specified player has a pick.
+	 *
+	 * @param pid the player id, can be either 1 or 2
+	 * @return true if the player has pick, otherwise false
+	 */
+	public boolean hasPick(int pid) {
+		return hasItem(pid, PICK);
+	}
+
+	/**
+	 * Returns if the specified player has a TNT.
+	 *
+	 * @param pid the player id, can be either 1 or 2
+	 * @return true if the player has TNT, otherwise false
+	 */
+	public boolean hasTNT(int pid) {
+		return hasItem(pid, TNT);
 	}
 
 	private boolean checkCoordinates(int x, int y) {

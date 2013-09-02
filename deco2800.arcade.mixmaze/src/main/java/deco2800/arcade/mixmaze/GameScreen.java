@@ -183,6 +183,12 @@ final class GameScreen implements Screen {
 		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		/*
+		 * TODO: these status updates should be encapsulated
+		 * in a method or a class.
+		 */
+		userLabels[0].setText("player 1: " + p1.getActionName());
+		userLabels[1].setText("player 2: " + p2.getActionName());
 		scoreLabels[0].setText("boxes: " + p1.getScore());
 		scoreLabels[1].setText("boxes: " + p2.getScore());
 		itemLabels[0].setText("bricks: "

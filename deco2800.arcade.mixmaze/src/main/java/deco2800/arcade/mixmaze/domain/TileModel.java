@@ -3,6 +3,7 @@ package deco2800.arcade.mixmaze.domain;
 import java.util.Random;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
+import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.USE_BRICK;
 
 /**
  * TileModel represents a tile on game board.
@@ -61,7 +62,12 @@ public class TileModel {
 
 	/**
 	 * Tries to build the wall on the <code>player</code>'s facing
-	 * direction.
+	 * direction. A wall is built if these conditions are satisfied:
+	 * <ul>
+	 *   <li>the wall is not built yet
+	 *   <li>the player has at least one brick
+	 *   <li>the player's active action is to use brick
+	 * </ul>
 	 *
 	 * @param player
 	 * @param direction
@@ -77,7 +83,8 @@ public class TileModel {
 
 		WallModel wall = getWall(player.getDirection());
 
-		if (wall.isBuilt() || player.getBrick().getAmount() <= 0) {
+		if (wall.isBuilt() || player.getBrick().getAmount() <= 0
+				|| player.getPlayerAction() != USE_BRICK) {
 			return false;
 		} else {
 			wall.build(player);
@@ -85,17 +92,35 @@ public class TileModel {
 		}
 	}
 
+	/**
+	 * Tries to destroy the wall on the specified direction of
+	 * the <code>player</code>.
+	 * A wall is destroyed if these conditions are satisfied:
+	 * <ul>
+	 *   <li>the wall is built
+	 *   <li>the player is using a pick or TNT.
+	 * </ul>
+	 *
+	 * @param player
+	 * @param direction
+	 * @throws IllegalArgumentException If <code>player</code> is
+	 * 				    <code>null</code>
+	 * @return <code>true</code> if the wall is built,
+	 * 	   <code>false</code> otherwise
+	 */
 	public boolean destroyWall(PlayerModel player, int direction) {
-		if(player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
+		if (player == null) {
+			throw new IllegalArgumentException(
+					"player cannot be null.");
 		}
 
 		WallModel wall = getWall(direction);
-		if(!wall.isBuilt()) {
+		if (!wall.isBuilt() || player.getPlayerAction() == USE_BRICK) {
 			return false;
+		} else {
+			wall.destroy(player);
+			return true;
 		}
-		wall.destroy(player);
-		return true;
 	}
 
 	/**
@@ -106,9 +131,10 @@ public class TileModel {
 	 * @param player the player to check
 	 */
 	public void checkBox(PlayerModel player) {
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
+
 		boxer = isBox() ? player : null;
 	}
 

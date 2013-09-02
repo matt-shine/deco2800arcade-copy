@@ -7,9 +7,9 @@ import static deco2800.arcade.mixmaze.domain.Direction.*;
  */
 public class PlayerModel {
 	public enum PlayerAction {
-		UseBrick,
-		UsePick,
-		UseTNT
+		USE_BRICK,
+		USE_PICK,
+		USE_TNT
 	}
 
 	// Player data
@@ -81,10 +81,20 @@ public class PlayerModel {
 		playerDirection = direction;
 	}
 
+	/**
+	 * Returns the acitve action of this player.
+	 *
+	 * @return one of USE_BRICK, USE_PICK, and USE_TNT
+	 */
 	public PlayerAction getPlayerAction() {
 		return playerAction;
 	}
 
+	/**
+	 * Sets the acitve action of this player.
+	 *
+	 * @param action Possible values are USE_BRICK, USE_PICK, and USE_TNT.
+	 */
 	public void setPlayerAction(PlayerAction action) {
 		playerAction = action;
 	}
@@ -92,9 +102,9 @@ public class PlayerModel {
 	public boolean canUseAction() {
 		return (System.currentTimeMillis() - lastAction) >= (3 * 1000);
 	}
-	
+
 	public void useAction(TileModel tile) {
-		if(playerAction == PlayerAction.UseBrick) {
+		if(playerAction == PlayerAction.USE_BRICK) {
 			if(brick != null) {
 				tile.getWall(playerDirection).build(this);
 				brick.removeAmount(1);
@@ -102,14 +112,14 @@ public class PlayerModel {
 					brick = null;
 				}
 			}
-		} else if(playerAction == PlayerAction.UseBrick) {
-			
+		} else if(playerAction == PlayerAction.USE_BRICK) {
+
 		} else {
-			
+
 		}
 		lastAction = System.currentTimeMillis();
 	}
-	
+
 	public void pickUpItem(ItemModel item) {
 		if(item instanceof BrickModel) {
 			BrickModel tileBrick = (BrickModel)item;
@@ -159,7 +169,7 @@ public class PlayerModel {
 
 	public PlayerModel(int id) {
 		playerID = id;
-		playerAction = PlayerAction.UseBrick;
+		playerAction = PlayerAction.USE_BRICK;
 		brick = new BrickModel(null, 4);
 	}
 }

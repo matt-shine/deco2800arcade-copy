@@ -76,10 +76,10 @@ public class WallModel {
 	}
 
 	/**
-	 * Check if any of the tiles incident on this wall has its box
-	 * built.
+	 * Check if any of the tiles incident on this wall has its boxer
+	 * changed.
 	 *
-	 * @param player the owner of the box if built
+	 * @param player the player to check
 	 */
 	private void checkTiles(PlayerModel player) {
 		if (player == null) {

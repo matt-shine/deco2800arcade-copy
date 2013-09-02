@@ -7,6 +7,7 @@ import deco2800.arcade.mixmaze.domain.BrickModel;
 import deco2800.arcade.mixmaze.domain.ItemModel;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
+import deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction;
 import deco2800.arcade.mixmaze.domain.TileModel;
 import deco2800.arcade.utils.KeyManager;
 
@@ -23,6 +24,7 @@ import java.util.HashMap;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
+import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -49,8 +51,10 @@ final class PlayerViewModel extends Actor {
 		@Override
 		public boolean keyDown(InputEvent event, int keycode) {
 			Gdx.app.debug(LOG, "player " + id);
+			/*
 			Gdx.app.debug(LOG, keycode + " pressed");
 			Gdx.app.debug(LOG, km.get(keycode) + " mapped");
+			*/
 
 			switch (km.get(keycode)) {
 			case LEFT:
@@ -67,16 +71,15 @@ final class PlayerViewModel extends Actor {
 				break;
 			case NUM_5:
 				Gdx.app.debug(LOG, "changing action");
+				switchAction();
 				break;
 			case NUM_6:
+				/*
 				Gdx.app.debug(LOG, "invoking action");
 				Gdx.app.debug(LOG, "player: " + model.getX()
 						+ "\t" + model.getY());
-				TileModel tile = gameModel.getBoardTile(
-						model.getX(), model.getY());
-				Gdx.app.debug(LOG, "tile: " + tile.getX()
-						+ "\t" + tile.getY());
-				tile.buildWall(model, model.getDirection());
+				*/
+				invokeAction();
 				break;
 			default:
 				return false;	// event not handled
@@ -199,6 +202,77 @@ final class PlayerViewModel extends Actor {
 	 */
 	public int getScore() {
 		return gameModel.getPlayerScore(model);
+	}
+
+	/**
+	 * Returns the name of the active action of this player.
+	 *
+	 * @return a String representing the active action
+	 */
+	public String getActionName() {
+		PlayerAction act = model.getPlayerAction();
+
+		switch (act) {
+		case USE_BRICK:
+			return "using brick";
+		case USE_PICK:
+			return "using pick";
+		case USE_TNT:
+			return "using TNT";
+		default:
+			return "unknown";
+		}
+	}
+
+	/*
+	 * Switch to the next action, in this order
+	 * USE_BRICK -> USE_PICK -> USE_TNT -> USE_BRICK
+	 * Skip an action if this player does not have the associated item.
+	 */
+	private void switchAction() {
+		PlayerAction act = model.getPlayerAction();
+
+		switch (act) {
+		case USE_BRICK:
+			if (hasPick()) {
+				model.setPlayerAction(USE_PICK);
+			} else if (hasTNT()) {
+				model.setPlayerAction(USE_TNT);
+			}
+			break;
+		case USE_PICK:
+			if (hasTNT()) {
+				model.setPlayerAction(USE_TNT);
+			} else {
+				model.setPlayerAction(USE_BRICK);
+			}
+			break;
+		case USE_TNT:
+			model.setPlayerAction(USE_BRICK);
+			break;
+		}
+	}
+
+	/*
+	 * Invokes the active action of this player.
+	 */
+	private void invokeAction() {
+		TileModel tile = gameModel.getBoardTile(
+				model.getX(), model.getY());
+		PlayerAction act = model.getPlayerAction();
+
+		switch (act) {
+		case USE_BRICK:
+			tile.buildWall(model, model.getDirection());
+			break;
+		case USE_PICK:
+			tile.destroyWall(model, model.getDirection());
+			break;
+		case USE_TNT:
+			for (int dir = 0; dir < 4; dir++)
+				tile.destroyWall(model, dir);
+			break;
+		}
 	}
 
 }

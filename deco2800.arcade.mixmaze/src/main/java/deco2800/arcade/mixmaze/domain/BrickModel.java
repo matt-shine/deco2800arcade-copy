@@ -66,10 +66,10 @@ public class BrickModel extends ItemModel {
 		amount = minusAmount;
 	}
 
-	/**
+	/*
 	 * Removes one brick from this brick collection.
 	 */
-	public void removeOne() {
+	void removeOne() {
 		removeAmount(1);
 	}
 

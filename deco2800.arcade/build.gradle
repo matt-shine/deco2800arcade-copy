@@ -13,15 +13,13 @@ dependencies {
 
 task(runArcade, dependsOn: "classes", type: JavaExec) {
     main = "deco2800.arcade.client.Arcade"
-    FileCollection classpath = sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
+    classpath = sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
    
     String contents = file('games.txt').getText('UTF-8')
     List games = contents.split("\n")
     for (String game : games) {
         if (game.charAt(0) != '#' && game.charAt(0) != '\n') {
-            classpath += files(game)
-            //sourceSets.main.runtimeClasspath.plus project(":" + game).sourceSets.main.runtimeClasspath
+            classpath += sourceSets.main.runtimeClasspath.plus project(":" + game).sourceSets.main.runtimeClasspath
         }
     }
-    println(classpath.getFiles())
 }

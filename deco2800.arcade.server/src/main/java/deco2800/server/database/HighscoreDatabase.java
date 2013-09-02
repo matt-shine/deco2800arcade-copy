@@ -1,22 +1,53 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class HighscoreDatabase {
-
+	private boolean initialised = false;
+	
 	/* Create the highscore database if it does not exist */
 	public  void initialise() throws DatabaseException{
+		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		
+		//Create high scores base table
 		try {
-			Statement statement = connection.createStatement();
-			statement.execute("[INSERT CREATE TABLE QUERY HERE]");
-		}catch (SQLException e) {
+			ResultSet tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES", null);
+			if (!tableData.next()) {
+				Statement statement = connection.createStatement();
+				statement.execute("CREATE TABLE HIGHSCORES(HID int NOT NULL AUTO_INCREMENT," 
+				+ "Username VARCHAR(30) NOT NULL, "
+				+ "GameID int NOT NULL, "
+				+ "Date TIMESTAMP, "
+				+ "PRIMARY KEY (HID)" 
+				+ "Rating INT));");
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to create credits table", e);
+			throw new DatabaseException("Unable to create highscores table", e);
 		}
+		
+		//Create game scores table 
+		try {
+			ResultSet tableData = connection.getMetaData().getTables(null, null, "SCORES", null);
+			if (!tableData.next()) {
+				Statement statement = connection.createStatement();
+				statement.execute("CREATE TABLE IF NOT EXISTS SCORES(ID int NOT NULL AUTO_INCREMENT, "
+				+ "Score_Type VARCHAR(255), "
+				+ "HID int NOT NULL, "
+				+ "Score Long NOT NULL, "
+				+ "PRIMARY KEY (ID), "
+				+ "FOREIGN KEY (HID) REFERENCES HIGHSCORES(HID));");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to create scores table", e);
+		}
+		
+		initialised = true;
 	}
 	
 	/* User Interface to Database Methods */
@@ -38,6 +69,7 @@ public class HighscoreDatabase {
 	void getUserHighScore(String User_ID, String Game_ID, String type){
 		
 	}
+	
 	/**
 	 * 
 	 * @param User_ID

@@ -27,9 +27,6 @@ public class AchievementStorage {
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
 			
-		// TODO Peter this gets called when the server is started, called from
-		// server/server/ArcadeServer.java had to delete some code so it would 
-		//compile, refer to CreditStorage for an example of this code
 		
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null,
@@ -241,15 +238,14 @@ public class AchievementStorage {
      * @param playerID The player whose progress should be incremented.
      * @throws DatabaseException
      */
-    public void incrementProgress(Player player, String achievementID)
+    public AchievementProgress incrementProgress(Player player, String achievementID)
     		throws DatabaseException {
-    	//TODO Check the return value
     	int progress = 0;
-    	
+    	AchievementProgress result = null;
+    	//TODO AchievementProgress is returning Player. Need to change to return an ID and
+    	//progress
     	progress = initialiseProgress(player.getID(), achievementID);
-    	if(checkThreshold(achievementID, progress)) {
-    		System.out.print("\nACHIEVEMENT ALREADY AWARDED\n");
-    	} else {
+    	if(!checkThreshold(achievementID, progress)) {
     		//Get a connection to the database
         	Connection connection = Database.getConnection();
         	
@@ -263,7 +259,7 @@ public class AchievementStorage {
     					"SET PROGRESS = PROGRESS + 1 " +
     					"WHERE playerID=" + playerID + " " +
     					"AND achievementID='" + achievementID + "'");
-
+    			result = new AchievementProgress(player);
     		} catch (SQLException e) {
     			e.printStackTrace();
     			throw new DatabaseException("Unable to get achievements from database", e);
@@ -278,11 +274,13 @@ public class AchievementStorage {
     				if (connection != null){
     					connection.close();
     				}
+    				return result;
     			} catch (SQLException e) {
     				e.printStackTrace();
     			}
     		}
     	}
+		return result;
     }
     
     /**

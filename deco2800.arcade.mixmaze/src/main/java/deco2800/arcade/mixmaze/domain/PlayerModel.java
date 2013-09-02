@@ -127,19 +127,6 @@ public class PlayerModel {
 		return brick;
 	}
 
-	/**
-	 * Returns the amount of bricks this player has.
-	 *
-	 * @return the amount of bricks
-	 */
-	public int getBrickAmount() {
-		if (brick == null) {
-			return 0;
-		} else {
-			return brick.getAmount();
-		}
-	}
-
 	public PickModel getPick() {
 		return pick;
 	}

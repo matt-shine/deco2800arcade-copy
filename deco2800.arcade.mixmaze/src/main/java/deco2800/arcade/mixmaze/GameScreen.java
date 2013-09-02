@@ -184,17 +184,17 @@ final class GameScreen implements Screen {
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		itemLabels[0].setText("bricks: "
-				+ model.getPlayerBrick(1));
+				+ p1.getBrickAmount());
 		itemLabels[1].setText("bricks: "
-				+ model.getPlayerBrick(2));
+				+ p2.getBrickAmount());
 		itemLabels[2].setText("pick: "
-				+ ((model.hasPick(1)) ? "YES" : "NO"));
+				+ ((p1.hasPick()) ? "YES" : "NO"));
 		itemLabels[3].setText("pick: "
-				+ ((model.hasPick(2)) ? "YES" : "NO"));
+				+ ((p2.hasPick()) ? "YES" : "NO"));
 		itemLabels[4].setText("TNT: "
-				+ ((model.hasTNT(1)) ? "YES" : "NO"));
+				+ ((p1.hasTNT()) ? "YES" : "NO"));
 		itemLabels[5].setText("TNT: "
-				+ ((model.hasTNT(2)) ? "YES" : "NO"));
+				+ ((p2.hasTNT()) ? "YES" : "NO"));
 
 		stage.act(delta);
 		stage.draw();

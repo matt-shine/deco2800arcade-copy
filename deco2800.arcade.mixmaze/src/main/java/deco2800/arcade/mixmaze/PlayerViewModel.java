@@ -3,6 +3,8 @@
  */
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.mixmaze.domain.BrickModel;
+import deco2800.arcade.mixmaze.domain.ItemModel;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.utils.KeyManager;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import java.util.HashMap;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
+import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -120,4 +123,55 @@ final class PlayerViewModel extends Actor {
 				640 - (model.getY() + 1) * tileSize,
 				tileSize, tileSize);
 	}
+
+	/**
+	 * Returns the amount of bricks this player has.
+	 *
+	 * @return the amount of bricks
+	 */
+	public int getBrickAmount() {
+		BrickModel brick = model.getBrick();
+
+		if (brick == null) {
+			return 0;
+		} else {
+			return brick.getAmount();
+		}
+	}
+
+	private boolean hasItem(ItemModel.Type type) {
+		ItemModel item = null;
+
+		switch (type) {
+		case PICK:
+			item = model.getPick();
+			break;
+		case TNT:
+			item = model.getTNT();
+			break;
+		}
+
+		return (item == null) ? false : true;
+	}
+
+	/**
+	 * Returns if the specified player has a pick.
+	 *
+	 * @param pid the player id, can be either 1 or 2
+	 * @return true if the player has pick, otherwise false
+	 */
+	public boolean hasPick() {
+		return hasItem(PICK);
+	}
+
+	/**
+	 * Returns if the specified player has a TNT.
+	 *
+	 * @param pid the player id, can be either 1 or 2
+	 * @return true if the player has TNT, otherwise false
+	 */
+	public boolean hasTNT() {
+		return hasItem(TNT);
+	}
+
 }

@@ -85,7 +85,7 @@ public class HighscoreDatabase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
-					"Unable to get player informtion from database", e);
+					"Unable to get player information from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -136,7 +136,7 @@ public class HighscoreDatabase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
-					"Unable to get player informtion from database", e);
+					"Unable to get player information from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -187,7 +187,7 @@ public class HighscoreDatabase {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
-					"Unable to get player informtion from database", e);
+					"Unable to get player information from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -212,9 +212,45 @@ public class HighscoreDatabase {
 	 * @param User_ID
 	 * @param type
 	 * @param score - the players score to store in the database
+	 * @throws DatabaseException 
 	 */
-	void updateScore(String Game_ID, String User_ID, String type, float score){
-		
+	void updateScore(String Game_ID, String Username, String type, float score) throws DatabaseException{
+		String data = null;
+
+		if (!initialised) {
+			initialise();
+		}
+
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			statement.executeQuery("UPDATE SCORES SET Score='" + score + "' WHERE ID="
+					+ "(SELECT h.ID FROM HIGHSCORES h INNER JOIN SCORES s on h.HID = s.HID"
+					+ "WHERE h.GameId='" + Game_ID + "' AND h.Username='" + Username + "' AND s.Score_Type='" + type + "');");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player information from database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	

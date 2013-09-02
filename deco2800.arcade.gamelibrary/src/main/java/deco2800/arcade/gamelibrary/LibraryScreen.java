@@ -200,7 +200,12 @@ public class LibraryScreen implements Screen {
     public void setSelectedGame(final GameClient gameClient) {
         currentClient = gameClient;
         Game game = gameClient.getGame();
-        description = game.name;
+        description = game.name + "\n";
+		if(game.getDescription() == null) {
+			description += "No Description";
+		} else {
+			description += game.getDescription();
+		}
         label.remove();
         label.setText(description);
         stage.addActor(label);

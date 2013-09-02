@@ -5,6 +5,7 @@ package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
+import deco2800.arcade.utils.KeyManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+
+import java.util.HashMap;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
@@ -30,6 +33,8 @@ final class PlayerViewModel extends Actor {
 	private final MixMazeModel gameModel;
 	private final int tileSize;
 	private final TextureRegion[] region;
+	private final KeyManager km;
+	private final int id;
 
 	/**
 	 * Handles movement input.
@@ -37,10 +42,11 @@ final class PlayerViewModel extends Actor {
 	private class PlayerInputListener extends InputListener {
 		@Override
 		public boolean keyDown(InputEvent event, int keycode) {
-			Actor actor = event.getListenerActor();
-
+			Gdx.app.debug(LOG, "player " + id);
 			Gdx.app.debug(LOG, keycode + " pressed");
-			switch (keycode) {
+			Gdx.app.debug(LOG, km.get(keycode) + " mapped");
+
+			switch (km.get(keycode)) {
 			case LEFT:
 				gameModel.movePlayer(model, WEST);
 				break;
@@ -59,6 +65,7 @@ final class PlayerViewModel extends Actor {
 			Gdx.app.debug(LOG, "directon: " + model.getDirection());
 			Gdx.app.debug(LOG, "pos: " + model.getX() + "\t"
 					+ model.getY());
+			event.cancel();
 			return true;
 		}
 	}
@@ -67,16 +74,29 @@ final class PlayerViewModel extends Actor {
 	 * Constructor
 	 */
 	PlayerViewModel(PlayerModel model, MixMazeModel gameModel,
-			int tileSize) {
+			int tileSize, int id) {
 		Vector2 stagePos;
 		Texture texture;
+		HashMap<Integer, Integer> mapping =
+				new HashMap<Integer, Integer>();
 
 		this.model = model;
 		this.gameModel = gameModel;
 		this.tileSize = tileSize;
+		this.id = id;
+
+		/* Player 1 uses W, S, A, D to move. */
+		if (id == 1) {
+			mapping.put(W, UP);
+			mapping.put(S, DOWN);
+			mapping.put(A, LEFT);
+			mapping.put(D, RIGHT);
+		}
+		km = new KeyManager(mapping);
 
 		/* load texture */
-		texture = new Texture(Gdx.files.internal("devil.png"));
+		texture = new Texture(Gdx.files.internal(
+					(id == 1) ? "devil.png" : "angel.png"));
 		region = new TextureRegion[4];
 
 		/* index should be consistent with domain.Direction */

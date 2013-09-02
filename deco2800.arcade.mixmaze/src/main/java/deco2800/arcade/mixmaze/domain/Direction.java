@@ -15,7 +15,8 @@ public class Direction {
 	 * when an integer is not one of <code>WEST</code>, <code>NORTH</code>,
 	 * <code>EAST</code>, or <code>SOUTH</code>.
 	 */
-	public static final IllegalArgumentException NOTADIRECTION = new IllegalArgumentException("Direction is invalid.");
+	public static final IllegalArgumentException NOT_A_DIRECTION =
+			new IllegalArgumentException("Direction is invalid.");
 
 	public static boolean isWest(int direction) {
 		return direction == WEST;
@@ -40,7 +41,7 @@ public class Direction {
 
 	public static int getPolarDirection(int direction) {
 		if(!isDirection(direction)) {
-			throw NOTADIRECTION;
+			throw NOT_A_DIRECTION;
 		}
 		return isPositiveDirection(direction) ? (direction - 2) : (direction + 2);
 	}

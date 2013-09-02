@@ -10,8 +10,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -38,7 +41,9 @@ final class GameScreen implements Screen {
 
 	private Label timerLabel;
 	private int elapsed;
+	private Group gameArea;
 	private PlayerViewModel p1;
+	private PlayerViewModel p2;
 
 	/**
 	 * Constructor
@@ -61,6 +66,21 @@ final class GameScreen implements Screen {
 		stage = new Stage();
 
 		setupLayout();
+
+		gameArea.addListener(new InputListener() {
+			public boolean keyDown(InputEvent event, int keycode) {
+				Actor actor = event.getListenerActor();
+
+				for (Actor child : gameArea.getChildren()) {
+					if (child.notify(event, false))
+						return true;
+				}
+				Gdx.app.debug(LOG, "no children handles this"
+						+ " down");
+
+				return false;
+			}
+		});
 	}
 
 	/**
@@ -72,16 +92,16 @@ final class GameScreen implements Screen {
 		Table left = new Table();
 		Table right = new Table();
 		Table tileTable = new Table();
-		Group gameArea = new Group();
 		Label[] userLabels = new Label[2];
 		Label[] scoreLabels = new Label[2];
 
 		userLabels[0] = new Label("user 1", skin);
 		userLabels[1] = new Label("user 2", skin);
-		scoreLabels[0] = new Label("user 1 score 0", skin);
-		scoreLabels[1] = new Label("user 2 score 0", skin);
+		scoreLabels[0] = new Label("user 1 box: 0", skin);
+		scoreLabels[1] = new Label("user 2 box: 0", skin);
 
 		timerLabel = new Label("timer", skin);
+		gameArea = new Group();
 
 		root.setFillParent(true);
 		root.debug();
@@ -125,14 +145,18 @@ final class GameScreen implements Screen {
 				tileTable.row();
 		}
 		gameBoard.add(tileTable);
-		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize);
+		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
+				1);
+		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
+				2);
 		gameArea.addActor(p1);
+		gameArea.addActor(p2);
 		gameBoard.add(gameArea);
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl20.glClearColor(0.2f, 0.2f, 0, 1);
+		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		stage.act(delta);
 		stage.draw();
@@ -162,7 +186,7 @@ final class GameScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		stage.setKeyboardFocus(p1);
+		stage.setKeyboardFocus(gameArea);
 
 		Timer.schedule(new Timer.Task() {
 			public void run() {

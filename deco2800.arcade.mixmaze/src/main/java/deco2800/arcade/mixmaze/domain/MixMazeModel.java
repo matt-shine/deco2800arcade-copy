@@ -1,7 +1,9 @@
 package deco2800.arcade.mixmaze.domain;
 
+import static deco2800.arcade.mixmaze.domain.Direction.*;
+
 /**
- * Represents the running game state.
+ * Mix maze model represents the running game state.
  */
 public class MixMazeModel {
 	public enum MixMazeDifficulty {
@@ -11,7 +13,7 @@ public class MixMazeModel {
 	}
 
 	// Exceptions
-	public final static IllegalStateException NOTSTARTED = new IllegalStateException("The game has not started.");
+	public final static IllegalStateException NOT_STARTED = new IllegalStateException("The game has not started.");
 	public final static IllegalArgumentException COORDSOUTOFRANGE = new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
 
 	// Game state
@@ -145,7 +147,7 @@ public class MixMazeModel {
 
 	public void movePlayer(PlayerModel player, int direction) {
 		if(!running) {
-			throw NOTSTARTED;
+			throw NOT_STARTED;
 		}
 
 		// Player is not null
@@ -154,8 +156,8 @@ public class MixMazeModel {
 		}
 
 		// Check specified direction is valid
-		if(!Direction.isDirection(direction)) {
-			throw Direction.NOTADIRECTION;
+		if(!isDirection(direction)) {
+			throw NOT_A_DIRECTION;
 		}
 
 		int nextX = player.getNextX(), nextY = player.getNextY();
@@ -171,6 +173,14 @@ public class MixMazeModel {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param size 		the size of the game board
+	 * @param difficulty	the game difficulty
+	 * @param maxMinutes	the time of a game session in minutes
+	 * @throws IllegalArgumentException If <code>size</code> is not in range
+	 * 				    from 5 to 10, or
+	 * 				    <code>maxMinutes</code> is not in
+	 * 				    range from 2 to 15.
 	 */
 	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxMinutes) {
 		if(size < 5 || size > 10) {
@@ -193,7 +203,7 @@ public class MixMazeModel {
 					if(checkCoordinates(xChecks[tileDir], yChecks[tileDir])) {
 						TileModel adjTile = getBoardTile(xChecks[tileDir], yChecks[tileDir]);
 						if(adjTile != null) {
-							adjWalls[tileDir] = adjTile.getWall(Direction.getPolarDirection(tileDir));
+							adjWalls[tileDir] = adjTile.getWall(getPolarDirection(tileDir));
 						}
 					}
 				}
@@ -209,12 +219,12 @@ public class MixMazeModel {
 		player1 = new PlayerModel(1);
 		player1.setX(0);
 		player1.setY(0);
-		player1.setDirection(Direction.EAST);
+		player1.setDirection(EAST);
 
 		// Initialize player 2
 		player2 = new PlayerModel(2);
 		player2.setX(boardSize - 1);
 		player2.setY(boardSize - 1);
-		player2.setDirection(Direction.WEST);
+		player2.setDirection(WEST);
 	}
 }

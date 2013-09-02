@@ -58,13 +58,15 @@ public class TileViewModel extends Group {
 		renderer.setProjectionMatrix(getStage().getCamera().combined);
 		stagePos = localToStageCoordinates(new Vector2(0f, 0f));
 
+		renderer.begin(FilledRectangle);
 		if (model.isBox()) {
-			renderer.begin(FilledRectangle);
 			renderer.setColor(1f, 0f, 0f, 1f);
-			renderer.filledRect(stagePos.x, stagePos.y,
-					tileSize, tileSize);
-			renderer.end();
+		} else {
+			renderer.setColor(.8f, .8f, .8f, 1f);
 		}
+		renderer.filledRect(stagePos.x, stagePos.y,
+				tileSize, tileSize);
+		renderer.end();
 
 		renderer.begin(Rectangle);
 		renderer.setColor(0f, 0f, 0f, 1f);

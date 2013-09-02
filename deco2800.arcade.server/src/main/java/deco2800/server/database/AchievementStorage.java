@@ -246,7 +246,7 @@ public class AchievementStorage {
     	//TODO Check the return value
     	int progress = 0;
     	
-    	progress = initialiseProgress(player.getPlayerID(), achievementID);
+    	progress = initialiseProgress(player.getID(), achievementID);
     	if(checkThreshold(achievementID, progress)) {
     		System.out.print("\nACHIEVEMENT ALREADY AWARDED\n");
     	} else {
@@ -257,7 +257,7 @@ public class AchievementStorage {
     		ResultSet resultSet = null;
     		//Connect to table and select Achievement and increment
     		try {
-    			int playerID = player.getPlayerID();
+    			int playerID = player.getID();
     			statement = connection.createStatement();
     			statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENT " +
     					"SET PROGRESS = PROGRESS + 1 " +

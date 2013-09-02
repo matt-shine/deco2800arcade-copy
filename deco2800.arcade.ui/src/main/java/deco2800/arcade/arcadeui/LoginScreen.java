@@ -40,14 +40,18 @@ public class LoginScreen implements Screen {
         textFieldStyle.font = skin.getFont("default");
         textFieldStyle.fontColor = Color.WHITE;
         textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
+<<<<<<< HEAD
         //textFieldStyle.selection = ;
+=======
+        textFieldStyle.selection = skin.newDrawable("white", Color.WHITE);
+>>>>>>> origin/master
         //textFieldStyle.background = ;
         skin.add("default", textFieldStyle);
         
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.BLUE);
+        textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
@@ -65,6 +69,11 @@ public class LoginScreen implements Screen {
         Label passwordLabel = new Label("Password:", skin);
         final TextField passwordText = new TextField("", skin);
         passwordText.setMessageText("Enter Password");
+<<<<<<< HEAD
+=======
+        passwordText.setPasswordMode(true);
+        passwordText.setPasswordCharacter('*');
+>>>>>>> origin/master
         TextButton loginButton = new TextButton("Login", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 

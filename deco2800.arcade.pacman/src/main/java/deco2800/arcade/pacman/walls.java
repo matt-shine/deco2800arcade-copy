@@ -31,3 +31,4 @@ public class walls extends Actor {
 	
 	// Add draw function. Look at mixmaze.Wall.java
 }
+

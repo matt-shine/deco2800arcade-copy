@@ -65,7 +65,7 @@ public class LoginScreen implements Screen {
         TextButton loginButton = new TextButton("Login", skin2);
         TextButton exitButton = new TextButton("Exit", skin2);
 
-        table.debug();  // Shows table debug lines.  Remove for final product.
+        //table.debug();  // Shows table debug lines.  Remove for final product.
         usernameLabel.setAlignment(Align.right);
         table.add(usernameLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
         table.add(usernameText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
@@ -101,7 +101,7 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
+        //Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
 
 	    if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");

@@ -41,6 +41,8 @@ public class PacChar {
 		spriteBatch = new SpriteBatch();
 		stateTime = 0f;
 	}
+	
+	
 
 	public void render() {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);

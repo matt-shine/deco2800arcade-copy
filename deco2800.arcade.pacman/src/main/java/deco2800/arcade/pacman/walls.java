@@ -1,23 +1,27 @@
 package deco2800.arcade.pacman;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Walls {
+import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
-	private final float width;
-	private final float height;
-	private int state;
-	
-	public Walls() {
-		
-		
+public class walls extends Actor {
+
+	static enum WallType {
+		OUTER_HOR, OUTER_VERT, OUTER_CORN_1
 	}
 	
-	public int getState() {
-		
+	private final ShapeRenderer shapeRenderer;
+	private final WallType type;
+	
+	private boolean built;
+	
+	walls(WallType type, ShapeRenderer shapeRenderer) {
+		this.shapeRenderer = shapeRenderer;
+		this.type = type;
+		this.built = false;
 	}
 	
-	
+	// Add draw function. Look at mixmaze.Wall.java
 }

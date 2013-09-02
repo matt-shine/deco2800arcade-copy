@@ -3,6 +3,7 @@ package deco2800.arcade.burningskies.entities;
 import deco2800.arcade.burningskies.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player extends Ship {
@@ -11,8 +12,8 @@ public class Player extends Ship {
 	 * Construct a playable ship for the user(s).
 	 * @ensure health && hitbox1 && hitbox2 > 0
 	 */
-	public Player(int health, Vector2 hitbox1, Vector2 hitbox2) {
-		super(health, hitbox1, hitbox2);
+	public Player(int health, Texture image, Vector2 hitbox1, Vector2 hitbox2) {
+		super(health, image, hitbox1, hitbox2);
 	}
 
 	/**

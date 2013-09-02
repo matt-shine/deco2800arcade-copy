@@ -6,6 +6,7 @@ import deco2800.arcade.burningskies.BurningSkies;
 
 public class MenuScreen implements Screen {
 	
+	@SuppressWarnings("unused")
 	private BurningSkies game;
 	
 	public MenuScreen( BurningSkies game){

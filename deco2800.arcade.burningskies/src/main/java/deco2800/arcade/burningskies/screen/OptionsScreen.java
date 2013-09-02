@@ -8,11 +8,17 @@ import deco2800.arcade.burningskies.BurningSkies;
 
 public class OptionsScreen implements Screen {
 	
+	@SuppressWarnings("unused")
 	private int masterVolume;
+	@SuppressWarnings("unused")
 	private int bgmVolume;
+	@SuppressWarnings("unused")
 	private int sfxVolume;
+	@SuppressWarnings("unused")
 	private int difficulty;
+	@SuppressWarnings("unused")
 	private TreeMap<String, String> keybindings;
+	@SuppressWarnings("unused")
 	private BurningSkies game;
 	
 	public OptionsScreen(BurningSkies game) {

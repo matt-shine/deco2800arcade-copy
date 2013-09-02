@@ -1,15 +1,19 @@
 package deco2800.arcade.burningskies.entities;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+
 
 public abstract class BulletPattern {
 	
-	private float interval; // how often bullets are fired
-	private float timer;
-	private Ship emitter; // who is firing these things
-	private boolean firing;
+	protected float interval; // how often bullets are fired
+	protected float timer;
+	protected Ship emitter; // who is firing these things
+	protected Stage stage; // so we can spawn things
+	protected boolean firing;
 	
-	public BulletPattern(Ship emitter) {
+	public BulletPattern(Stage stage, Ship emitter) {
 		this.emitter = emitter;
+		this.stage = stage;
 		firing = false;
 	}
 	

@@ -6,6 +6,7 @@ import deco2800.arcade.burningskies.BurningSkies;
 
 public class HelpScreen implements Screen {
 	
+	@SuppressWarnings("unused")
 	private BurningSkies game;
 	
 	public HelpScreen(BurningSkies game) {

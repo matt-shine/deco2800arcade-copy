@@ -27,6 +27,7 @@ public class BurningSkies extends GameClient {
 
 	//TODO: ACHIEVEMENTS
 
+	@SuppressWarnings("unused")
 	private NetworkClient networkClient;
 	
 	public SplashScreen splashScreen;

@@ -1,19 +1,23 @@
 package deco2800.arcade.burningskies.entities;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public abstract class Bullet extends Image {
 	
-	private boolean affinity; // enemy == True friendly == False?
-	private int damage;
-	private Vector2 velocity;
-	private Vector2 position;
-	private Vector2 acceleration;
-	@SuppressWarnings("unused")
-	private Player player;
-	@SuppressWarnings("unused")
-	private Ship parent;
+	public enum Affinity {
+		PLAYER,
+		ENEMY
+	}
+	protected Affinity affinity;
+	protected int damage;
+	protected Vector2 velocity;
+	protected Vector2 position;
+	protected Vector2 acceleration;
+	protected float direction;
+	protected Player player;
+	protected Ship parent;
 	
 	/**
 	 * Creates a new bullet
@@ -23,7 +27,8 @@ public abstract class Bullet extends Image {
 	 * @param parent
 	 * @param player
 	 */
-	public Bullet(boolean affinity, int damage, Vector2 initialPosition, Ship parent, Player player) {
+	public Bullet(Affinity affinity, int damage, Ship parent, Player player, Vector2 initialPosition, float initialDirection, Texture image) {
+		super(image);
 		this.affinity = affinity;
 		this.damage = damage;
 		this.player = player; // in case of homing
@@ -31,12 +36,13 @@ public abstract class Bullet extends Image {
 		velocity = new Vector2(0,0);
 		acceleration = new Vector2(0,0);
 		position = initialPosition;
+		direction = initialDirection;
 	}
 	
 	@Override
     public void act(float delta) {
+		moveBullet(delta);
         super.act(delta);
-        moveBullet(delta);
     }
 	
 	/**
@@ -51,7 +57,7 @@ public abstract class Bullet extends Image {
 	 * 
 	 * @return true if an enemy bullet, false if a friendly bullet
 	 */
-	public boolean getAffinity(){
+	public Affinity getAffinity(){
 		return affinity;
 	}
 	
@@ -62,6 +68,7 @@ public abstract class Bullet extends Image {
 	 */
 	void moveBullet(float delta) {
 		velocity.add( acceleration.x * delta, acceleration.y * delta );
+		velocity.setAngle(direction);
 		position.add( velocity.x * delta, velocity.y * delta );
 		setX(position.x);
 		setY(position.y);

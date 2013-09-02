@@ -37,14 +37,16 @@ public class ParentThread {
 	 * @require	params != null except tags, id >= 0,  
 	 * @see	java.sql.Timestamp
 	 */
-	public ParentThread(int id, String topic, String message, User createdBy, Timestamp timestamp, String category, String[] tags) {
+	public ParentThread(int id, String topic, String message,
+			User createdBy, Timestamp timestamp, String category,
+			String tagString) {
 		this.id = id;
 		this.topic = topic;
 		this.message = message;
 		this.createdBy = createdBy;
 		this.timestamp = timestamp;
 		this.category = category;
-		this.tags = tags;
+		this.tags = tagsStrToArray(tagString);
 	}
 	
 	/**
@@ -110,6 +112,14 @@ public class ParentThread {
 		return this.tags;
 	}
 	
+	public String[] tagsStrToArray(String message) {
+		String[] list;
+		list = message.split("#");
+		for (String s: list){
+			s.trim();
+		}
+		return list;
+	}
 	/**
 	 * Return string of tags which is separated by ';'.
 	 * Note; getTags() returns string array.
@@ -118,9 +128,9 @@ public class ParentThread {
 	 */
 	public String getTagsString() {
 		String result = "";
-		for (int i = 0; i < this.tags.length; i++) {
-			result.concat(this.tags[i]);
-			result.concat(";");
+		for (String s: this.tags) {
+			result.concat(s);
+			result.concat("# ");
 		}
 		return result;
 	}

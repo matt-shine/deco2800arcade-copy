@@ -30,9 +30,9 @@ import deco2800.arcade.deerforest.models.gameControl.DeerForestPlayer;
 @ArcadeGame(id="deerforest")
 public class DeerForest extends GameClient implements UIOverlay {
 	
-	private MainGameScreen view;
-	private MainGame gam;
-	private MainInputProcessor inputProcessor;
+	MainGameScreen view;
+	MainGame mainGame;
+	MainInputProcessor inputProcessor;
 	
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
@@ -47,13 +47,13 @@ public class DeerForest extends GameClient implements UIOverlay {
 		GameSystem tempSystem = new GameSystem(createDeerForestPlayer(), createDeerForestPlayer());
 		
 		//set and run game
-		gam = new MainGame(tempSystem);
-		gam.create();
-		view = new MainGameScreen(gam);
+		mainGame = new MainGame(tempSystem);
+		mainGame.create();
+		view = new MainGameScreen(mainGame);
 		this.setScreen(view);
 		
 		//set up input processor
-		inputProcessor = new MainInputProcessor(gam, view);
+		inputProcessor = new MainInputProcessor(mainGame, view);
 		ArcadeInputMux.getInstance().addProcessor(inputProcessor);
 	}
 

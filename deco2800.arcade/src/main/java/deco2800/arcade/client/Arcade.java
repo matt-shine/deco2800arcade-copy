@@ -367,4 +367,7 @@ public class Arcade extends JFrame {
 		return null;
 	}
 
+	public GameClient getCurrentGame() {
+		return selectedGame;
+	}
 }

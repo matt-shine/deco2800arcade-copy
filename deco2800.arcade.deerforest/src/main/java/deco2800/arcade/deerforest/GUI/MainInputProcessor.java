@@ -106,6 +106,9 @@ public class MainInputProcessor implements InputProcessor {
 			return true;
 		}
 		
+		if(keycode == Keys.CONTROL_LEFT) {
+			System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelectionPlayer, currentSelectionArea));
+		}
         return false;
     }
 
@@ -136,8 +139,6 @@ public class MainInputProcessor implements InputProcessor {
     			List<AbstractCard> cards = new ArrayList<AbstractCard>();
     			AbstractCard c = getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
     			cards.add(c);
-    			System.out.println("Moved from: " + oldArea + " to: " + newArea);
-    			System.out.println("cards is:" + Arrays.toString(cards.toArray()) + " Old area: " + oldArea + " newArea: " + newArea);
     			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
     		}
     		//clear available zones and currentSelection
@@ -178,7 +179,6 @@ public class MainInputProcessor implements InputProcessor {
     			AbstractCard c = getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
     			cards.add(c);
     			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
-    			System.out.println("Moved from: " + oldArea + " to: " + newArea);
 			} else {
 				//card was not moved, set it back to original position
 				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelectionOriginZone, currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
@@ -222,10 +222,7 @@ public class MainInputProcessor implements InputProcessor {
     	CardCollection currentHand = game.getCardCollection(player, "Hand");
     	
     	//Check that the hand is not already full
-    	if(currentHand.size() >= 6) {
-    		System.out.println("hand is full");
-    		return;
-    	}
+    	if(currentHand.size() >= 6) return;
     	
     	//Draw a card
     	AbstractCard c = game.draw(player);

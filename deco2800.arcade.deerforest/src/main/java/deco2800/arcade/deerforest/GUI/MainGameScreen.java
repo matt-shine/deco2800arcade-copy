@@ -82,6 +82,7 @@ public class MainGameScreen implements Screen {
 	}
 
 	private void loadAssets() {
+		manager.load("DeerForestAssets/BLARG!.png", Texture.class);
 		manager.load("DeerForestAssets/LightMonsterShell.png", Texture.class);
 		manager.load("DeerForestAssets/DarkMonsterShell.png", Texture.class);
 		manager.load("DeerForestAssets/FireMonsterShell.png", Texture.class);
@@ -246,34 +247,6 @@ public class MainGameScreen implements Screen {
 			}
 		}
 		return 0;
-	}
-	
-	public boolean[] getSpriteZoneType(ExtendedSprite s) {
-		
-		boolean[] b = new boolean[2];
-		
-		for(String key : spriteMap.keySet()) {
-			if(spriteMap.get(key).contains(s)) {
-				if(key.contains("Hand")) {
-					//check what type of card the sprite is
-					if(manager.getAssetFileName(s.getTexture()).contains("Monster")) {
-						b[0] = false;
-						b[1] = true;
-					} else {
-						b[0] = false;
-						b[1] = false;
-					}
-				} else if(key.contains("Monster")) {
-					b[0] = true;
-					b[1] = true;
-				} else {
-					b[0] = true;
-					b[1] = false;
-				}
-				return b;
-			}
-		}
-		return null;
 	}
 	
 	public void printSpriteMap() {

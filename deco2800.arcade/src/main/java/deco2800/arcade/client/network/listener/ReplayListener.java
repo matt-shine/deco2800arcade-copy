@@ -7,8 +7,11 @@ import deco2800.arcade.client.replay.exception.NoReplayHandlerException;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
+import deco2800.arcade.protocol.replay.GetEventsResponse;
 import deco2800.arcade.protocol.replay.ListSessionsRequest;
+import deco2800.arcade.protocol.replay.ListSessionsResponse;
 import deco2800.arcade.protocol.replay.PushEventRequest;
+import deco2800.arcade.protocol.replay.PushEventResponse;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
@@ -55,28 +58,38 @@ public class ReplayListener extends NetworkListener {
 		    
 		    if (replayHandler == null) throw new NoReplayHandlerException();
 		    
-		    replayHandler.printOutServerResponse(replayResponse);
+		    System.out.println(replayResponse);
 		} else if (object instanceof StartSessionResponse)
 		{
 		    StartSessionResponse ssr = (StartSessionResponse) object;
 		    
-		    replayHandler.setSessionId(ssr.sessionId);
+		    replayHandler.sessionStarted(ssr);
+		    System.out.println(ssr);
 		} else if (object instanceof EndSessionResponse)
 		{
 		    EndSessionResponse esr = (EndSessionResponse) object;
+
+		    replayHandler.sessionEnded(esr);
+		    System.out.println(esr);
 		    
-		    //TODO this is probably bad
-		    replayHandler.setSessionId(null);
+		} else if (object instanceof ListSessionsResponse)
+		{
+		    ListSessionsResponse lsr = (ListSessionsResponse) object;
 		    
-		} else if (object instanceof ListSessionsRequest)
+		    replayHandler.sessionListReceived(lsr);
+		    System.out.println(lsr);
+		} else if (object instanceof PushEventResponse)
 		{
-		    ListSessionsRequest lsr = (ListSessionsRequest) object;
-		} else if (object instanceof PushEventRequest)
+		    PushEventResponse per = (PushEventResponse) object;
+		    
+		    replayHandler.eventPushed(per);
+		    System.out.println(per);
+		} else if (object instanceof GetEventsResponse)
 		{
-		    PushEventRequest per = (PushEventRequest) object;
-		} else if (object instanceof GetEventsRequest)
-		{
-		    GetEventsRequest ger = (GetEventsRequest) object;
+		    GetEventsResponse ger = (GetEventsResponse) object;
+		    
+		    replayHandler.eventsForSessionReceived(ger);
+		    System.out.println(ger);
 		}
 	}
 

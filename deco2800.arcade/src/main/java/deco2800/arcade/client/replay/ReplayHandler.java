@@ -2,10 +2,19 @@ package deco2800.arcade.client.replay;
 
 import javax.swing.event.EventListenerList;
 import com.google.gson.*;
+import com.sun.tools.example.debug.bdi.SessionListener;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
+import deco2800.arcade.protocol.replay.EndSessionResponse;
+import deco2800.arcade.protocol.replay.GetEventsRequest;
+import deco2800.arcade.protocol.replay.GetEventsResponse;
+import deco2800.arcade.protocol.replay.ListSessionsRequest;
+import deco2800.arcade.protocol.replay.ListSessionsResponse;
+import deco2800.arcade.protocol.replay.PushEventRequest;
+import deco2800.arcade.protocol.replay.PushEventResponse;
 import deco2800.arcade.protocol.replay.StartSessionRequest;
+import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
@@ -67,6 +76,12 @@ public class ReplayHandler {
 	    client.sendNetworkObject(ssr);
 	}
 	
+	public void sessionStarted(StartSessionResponse ssr)
+	{
+	    //TODO Implement
+	    setSessionId(ssr.sessionId);
+	}
+	
 	/**
 	 * Terminate the current recording session.
 	 * @param sessionId
@@ -76,6 +91,61 @@ public class ReplayHandler {
 	    EndSessionRequest esr = new EndSessionRequest();
 	    esr.sessionId = sessionId;
 	    client.sendNetworkObject(esr);
+	}
+	
+	public void sessionEnded(EndSessionResponse esr)
+	{
+	    //TODO Implement
+	    setSessionId(null); //bad
+	}
+	
+	/**
+	 * Request the list of sessions available to replay from the server.
+	 * @param gameId
+	 */
+	public void requestSessionList(Integer gameId)
+	{
+	    ListSessionsRequest lsr = new ListSessionsRequest();
+	    lsr.gameId = gameId;
+	    client.sendNetworkObject(lsr);
+	}
+	
+	public void sessionListReceived(ListSessionsResponse lsr)
+	{
+	  //TODO Implement
+	}
+	
+	/**
+	 * Send a node as a string to the server for storage
+	 * @param node
+	 */
+	public void pushEventToServer(String node, Integer sessionId)
+	{
+	    PushEventRequest per = new PushEventRequest();
+	    per.nodeString = node;
+	    per.sessionId = sessionId;
+	    client.sendNetworkObject(per);
+	}
+	
+	public void eventPushed(PushEventResponse per)
+	{
+	  //TODO Implement
+	}
+	
+	/**
+	 * Request all the events for a given session.
+	 * @param sessionId
+	 */
+	public void requestEventsForSession(Integer sessionId)
+	{
+	    GetEventsRequest ger = new GetEventsRequest();
+	    ger.sessionId = sessionId;
+	    client.sendNetworkObject(ger);
+	}
+	
+	public void eventsForSessionReceived(GetEventsResponse ger)
+	{
+	  //TODO Implement
 	}
 	
 	/**
@@ -110,7 +180,7 @@ public class ReplayHandler {
 	public void printOutServerResponse(ReplayResponse rr)
 	{
 		System.out.println( "Response:" );
-        System.out.println(rr.test);
+        System.out.println(rr);
 	}
 	
 	public void startRecording() {

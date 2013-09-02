@@ -33,6 +33,14 @@ public class ReplayItem {
 		return this.data;
 	}
 	
+	public Integer intVal() {
+		if ( this.type == TYPE_INTEGER ) {
+			return (Integer)this.data;
+		} else {
+			throw new RuntimeException( "Invalid cast" );
+		}
+	}
+	
 	public String toString() {
 		//return "ReplayItem: " + this.data.toString();
 		return this.data.toString();

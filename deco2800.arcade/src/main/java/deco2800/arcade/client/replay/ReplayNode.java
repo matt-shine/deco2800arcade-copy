@@ -91,8 +91,13 @@ public class ReplayNode {
 		return new HashMap<String, ReplayItem>( this.items );
 	}
 	
+	public ReplayItem getItemForString( String key ) {
+		// Don't care about errors yet
+		return this.items.get( key );
+	}
+	
 	public String toString() {
-		String repr = "ReplayNode at " + this.nodeTime + "\n";
+		String repr = "ReplayNode at " + this.nodeTime;
 		return repr;
 	}
 }

@@ -114,6 +114,9 @@ public class ReplayHandler {
 	}
 	
 	public void startRecording() {
+		this.startTime = -1;
+	    this.replayHistory = new ArrayList<String>();
+	    
 		this.startTime = System.currentTimeMillis();
 	}
 	
@@ -131,7 +134,7 @@ public class ReplayHandler {
 		toAdd.setTime( timeOffset );
 		replayHistory.add( serializer.toJson( toAdd ) );
 		// probably get rid of this, kind of useless
-		dispatchReplayEvent( "event_pushed", toAdd.getType() );
+		dispatchReplayEvent( "event_pushed", null );
 	}
 	
 	/*
@@ -176,6 +179,28 @@ public class ReplayHandler {
 	
 	public void startPlayback() {
 		playbackItem( 0, 0 );
+		//playbackItem();
+	}
+	
+	private void playbackItem( ) {
+		
+		for ( int i = 0; i < replayHistory.size(); i++ ) {
+			final ReplayNode node = deserializer.fromJson(
+					replayHistory.get( i ),
+					ReplayNode.class );
+			
+			long nodeTimeVal = node.getTime();
+			
+			dispatchReplayEvent( node.getType(), node );
+			
+			try {
+				Thread.sleep( 500 );
+			} catch ( Exception e ) {
+				
+			}
+		}
+		
+		dispatchReplayEvent( "playback_finished", null );
 	}
 	
 	private void playbackItem( final int index, long lastNodeTime ) {
@@ -193,7 +218,7 @@ public class ReplayHandler {
 		        new java.util.TimerTask() {
 		            @Override
 		            public void run() {
-		            	dispatchReplayEvent( node.getType(), node.getItems() );
+		            	dispatchReplayEvent( node.getType(), node );
 		            	if ( index < replayHistory.size()-1 ) {
 		            		playbackItem( index+1, nodeTime );
 		            	} else {
@@ -212,7 +237,7 @@ public class ReplayHandler {
 		listenerList.remove( ReplayEventListener.class, listener );
 	}
 	
-	private void dispatchReplayEvent( String eType, Object eData  ) {
+	private void dispatchReplayEvent( String eType, ReplayNode eData  ) {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i++ ) {
 			if ( listeners[i] == ReplayEventListener.class ) {

@@ -1,5 +1,8 @@
 package deco2800.arcade.connect4;
 
+import deco2800.arcade.client.replay.*;
+import deco2800.arcade.client.network.listener.ReplayListener;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
@@ -52,15 +55,20 @@ public class Connect4 extends GameClient {
 	private final int KEY_RIGHT = 1;
 	private final int KEY_ENTER = 2;
 	
-	private ShapeRenderer shapeRenderer;
+	public ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
 
 	private String statusMessage;
 	
+	private ReplayHandler replayHandler;
+	private ReplayListener replayListener;
+	
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
+	
+	long nextComputerMove;
 
 	/**
 	 * Basic constructor for the Checkers game
@@ -76,7 +84,48 @@ public class Connect4 extends GameClient {
 		keyCodes[KEY_RIGHT] = 0; //Right Key
 		keyCodes[KEY_ENTER] = 0; //Enter Key
 		
-        this.networkClient = networkClient; //this is a bit of a hack   
+        this.networkClient = networkClient; //this is a bit of a hack  
+        
+        replayHandler = new ReplayHandler( this.networkClient );
+		replayListener = new ReplayListener(replayHandler);
+		
+		this.networkClient.addListener(replayListener);
+
+		replayHandler.addReplayEventListener(initReplayEventListener());
+		
+		//Declare an event to be registered in the factory, we can pass arrays.
+		ReplayNodeFactory.registerEvent("do_move",
+				                          	new String[]{"player_id",
+				                                             "col"}
+				                               );
+	}
+	
+
+	private ReplayEventListener initReplayEventListener() {
+	    return new ReplayEventListener() {
+            public void replayEventReceived( String eType, ReplayNode eData ) {
+                if ( eType.equals( "node_pushed" ) ) {
+                    System.out.println( eType );
+                    System.out.println( eData );
+                }
+                if ( eType.equals( "event_pushed" ) ) {
+                    System.out.println( eType );
+                }
+                if ( eType.equals( "replay_reset" ) ) {
+                    System.out.println( "replay reset" );
+                }
+                if ( eType.equals( "playback_finished" ) ) {
+                    System.out.println( "playback finished" );
+                }
+                
+                if ( eType.equals( "do_move" ) ) {
+                	if ( gameState == GameState.REPLAY ) {
+                		doMove(eData.getItemForString( "player_id" ).intVal(), eData.getItemForString( "col" ).intVal() );   
+                        System.out.println( "Move: " + eData );
+                	}
+                }
+            }
+        }; 
 	}
 	
 	/**
@@ -297,6 +346,7 @@ public class Connect4 extends GameClient {
 		    case READY: //Ready to start a new game
 		    	if (Gdx.input.isTouched()) {
 		    		reset();
+		    		replayHandler.startRecording();
 		    		startPoint();
 		    	}
 		    	break;
@@ -315,30 +365,56 @@ public class Connect4 extends GameClient {
 		    			keyCodes[0] = 0;
 		    		} else if(keyCodes[KEY_ENTER] == 2) {
 		    			//move the disc the lowest position and render table discs
-		    			doMove(playerTurn, cursorDisc.currentPos);
+		    			replayHandler.pushEvent(
+		    			        ReplayNodeFactory.createReplayNode(
+		    			                "do_move",
+		    			                playerTurn, cursorDisc.currentPos
+		    			        )
+		    			);
+		    			
+		    			if ( doMove(playerTurn, cursorDisc.currentPos) ) {
+		    				checkForWinner( playerTurn );
+		    			}
+		    			
+		    			nextComputerMove = System.currentTimeMillis() + 500;
+		    			
 		    			keyCodes[KEY_ENTER] = 0;
 		    		}
 		    	} else if (playerTurn == 1) {
 		    		// Let the computer make a move
+
+		    		if ( System.currentTimeMillis() < nextComputerMove ) {
+		    			break;
+		    		}
 		    		
 		    		cursorDisc.currentPos = randInt(0,Table.TABLECOLS - 1);
-		    		doMove(playerTurn, cursorDisc.currentPos);
 		    		
+		    		replayHandler.pushEvent(
+	    			        ReplayNodeFactory.createReplayNode(
+	    			                "do_move",
+	    			                playerTurn, cursorDisc.currentPos
+	    			        )
+	    			);
+		    		
+		    		if ( doMove(playerTurn, cursorDisc.currentPos) ) {
+		    			checkForWinner( playerTurn );
+		    		}
 		    	}
-		    	break;
-		    case REPLAY: //Replaying last game
-		    	System.out.println("replay mode");
 		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
-		    	if (Gdx.input.isTouched()) {
-		    		gameOver();
-		    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-		    	}
-		    	if (Gdx.input.isKeyPressed(Keys.ENTER)) {
-		    		//Replay the last played game.
-		    		reset();
-		    		gameState = GameState.REPLAY;
-		    	}
+			    	if (Gdx.input.isTouched()) {
+			    		gameOver();
+			    		ArcadeSystem.goToGame(ArcadeSystem.UI);
+			    	}
+			    	if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+			    		//Replay the last played game.
+			    		reset();
+			    		gameState = GameState.REPLAY;
+			    		replayHandler.startPlayback();
+			    	}
+			    	break;
+		    case REPLAY: //Replaying last game
+	    		//gameState = GameState.GAMEOVER;
 		    	break;
 	    }
 	    
@@ -346,33 +422,26 @@ public class Connect4 extends GameClient {
 		
 	}
 	
-	private void doMove(int player, int currentPosition) {
-		if (table.placeDisc(currentPosition, player)) {
-			
-			//render the table discs
-			shapeRenderer.begin(ShapeType.FilledCircle);
-		    table.renderDiscs(shapeRenderer);
-		    shapeRenderer.end();
-		   
-		    if (player == 0){
-		    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
-		    		gameState = GameState.GAMEOVER;
-		    		endPoint( 0 );
-		    	}
-		    	playerTurn = 1;
-		    	renderCursorDisc(1);
-		    } else {
-		    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
-		    		gameState = GameState.GAMEOVER;
-		    		endPoint( 1 );
-		    	}
-		    	playerTurn = 0;
-		    	renderCursorDisc(0);
-		    }
-			
-		} else {
-			//can't place a disc in desired position - do nothing
-		}
+	public void checkForWinner( int player ) {
+		if (player == 0){
+	    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
+	    		gameState = GameState.GAMEOVER;
+	    		endPoint( 0 );
+	    	}
+	    	renderCursorDisc(1);
+	    } else {
+	    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
+	    		gameState = GameState.GAMEOVER;
+	    		endPoint( 1 );
+	    	}
+	    	renderCursorDisc(0);
+	    }
+		
+	}
+	
+	public boolean doMove(int player, int currentPosition) {
+		playerTurn = ( playerTurn == 1 ) ? 0 : 1;
+		return table.placeDisc(currentPosition, player);
 	}
 
 	/**
@@ -380,6 +449,11 @@ public class Connect4 extends GameClient {
 	 * @param winner 0 for player 1, 1 for player 2
 	 */
 	private void endPoint(int winner) {
+		replayHandler.finishRecording();
+		
+		statusMessage = "Click to quit, Enter to view replay";
+		gameState = GameState.GAMEOVER;
+		/*
 		cursorDisc.reset();
 		scores[winner]++;
 		// If we've reached the victory point then update the display
@@ -399,6 +473,7 @@ public class Connect4 extends GameClient {
 			gameState = GameState.READY;
 			statusMessage = "Click to start!";
 		}
+		*/
 	}
 	
 	/**

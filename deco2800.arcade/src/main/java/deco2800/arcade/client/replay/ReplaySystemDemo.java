@@ -12,7 +12,7 @@ public class ReplaySystemDemo {
 	private static ReplayEventListener initReplayEventListener()
 	{
 	    return new ReplayEventListener() {
-            public void replayEventReceived( String eType, Object eData ) {
+            public void replayEventReceived( String eType, ReplayNode eData ) {
                 if ( eType.equals( "node_pushed" ) ) {
                     System.out.println( eType );
                     System.out.println( eData );
@@ -60,6 +60,7 @@ public class ReplaySystemDemo {
 	    
 		//Our replay handler has to know about all the different functions
 		replayHandler.addReplayEventListener(initReplayEventListener());
+		
 		replayHandler.startRecording();
 		
 		//Declare an event to be registered in the factory, we can pass arrays.

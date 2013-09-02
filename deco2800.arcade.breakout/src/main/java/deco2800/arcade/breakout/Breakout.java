@@ -112,6 +112,7 @@ public class Breakout extends GameClient {
 		gameState = GameState.READY;
 
 	}
+	
 	public void updateGameState(int bounce) {
 		if (bounce == 0) {
 			ball.bounceX();
@@ -220,11 +221,6 @@ public class Breakout extends GameClient {
 				if (b.getState()) {
 					if (b.checkLeftCollision(ball.bounds)) {
 						b.setState(false);
-						score++;
-						brickNum--;
-						//breaking.play();
-						//breaking.dispose();
-						ball.bounceX();
 						updateGameState(0);
 						//score++;
 						//brickNum--;
@@ -234,11 +230,6 @@ public class Breakout extends GameClient {
 					}
 					if (b.checkRightCollision(ball.bounds)) {
 						b.setState(false);
-						score++;
-						brickNum--;
-						//breaking.play();
-						//breaking.dispose();
-						ball.bounceX();
 						updateGameState(0);
 						//score++;
 						//brickNum--;
@@ -248,11 +239,6 @@ public class Breakout extends GameClient {
 					}
 					if (b.checkTopCollision(ball.bounds)) {
 						b.setState(false);
-						score++;
-						brickNum--;
-						//breaking.play();
-						//breaking.dispose();
-						ball.bounceY();
 						updateGameState(1);
 						//score++;
 						//brickNum--;
@@ -262,11 +248,6 @@ public class Breakout extends GameClient {
 					}
 					if (b.checkBottomCollision(ball.bounds)) {
 						b.setState(false);
-						score++;
-						brickNum--;
-						//breaking.play();
-						//breaking.dispose();
-						ball.bounceY();
 						updateGameState(1);
 						//score++;
 						//brickNum--;

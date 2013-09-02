@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import net.miginfocom.swing.MigLayout;
 import deco2800.arcade.userui.model.Model;
 
 public class View extends JFrame implements ActionListener {
@@ -33,7 +34,7 @@ public class View extends JFrame implements ActionListener {
 	 */
 	private Model model;
 	
-	private JPanel mainpanel;
+	private JPanel parentContainer;
 	private ImagePanel menupanel;
 	private JPanel sidepanel;
 	private JPanel contentpanel;
@@ -59,12 +60,12 @@ public class View extends JFrame implements ActionListener {
 	private ImageIcon picfriendbar;
 	private ImageIcon picaddfriend;
 
-	//User a GridBagLayout to these sections
-	private GridBagLayout pagelayout = new GridBagLayout();
-	private GridBagLayout menulayout = new GridBagLayout();
-	private GridBagLayout sidelayout = new GridBagLayout();
-	private GridBagLayout mainlayout = new GridBagLayout();
-	
+	//Use a MigLayout to these sections
+	private MigLayout pagelayout = new MigLayout();
+	private MigLayout contentlayout = new MigLayout();
+	private MigLayout menulayout = new MigLayout();
+	private MigLayout sidelayout = new MigLayout();
+		
 	public View(Model model) throws HeadlessException {
 		super("User Profile");
 		
@@ -82,15 +83,15 @@ public class View extends JFrame implements ActionListener {
 
 		
 		//Panels and ScrollPanes
-		mainpanel = new JPanel(new GridLayout());
+		parentContainer = new JPanel(pagelayout);
 	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
-	    menupanel.setLayout(new GridBagLayout());
-	    sidepanel = new JPanel(new GridBagLayout());
-	    contentpanel = new JPanel(new GridBagLayout());
+	    menupanel.setLayout(menulayout);
+	    sidepanel = new JPanel(sidelayout);
+	    contentpanel = new JPanel(contentlayout);
 	    
         sidescroll = new JScrollPane(sidepanel);
         
-        //Buttons
+        //Buttons and Image Buttons
 
         
         //Labels
@@ -105,30 +106,30 @@ public class View extends JFrame implements ActionListener {
         friendbar.setIcon(picfriendbar);
         playerlevel = new JLabel("Level 20");
 
-		//Add objects to panels     
+		//Add objects to panels 
+        /*
         sidepanel.add(avatar);
         sidepanel.add(playername);       
         sidepanel.add(playerlevel);        
         sidepanel.add(addfriend);        
         sidepanel.add(aboutbar);       
         sidepanel.add(friendbar);
+        */
             
 	    //Add panels to Main Panel	               
 		add(menupanel, BorderLayout.NORTH);
 				
-		mainpanel.add(sidepanel);
+		add(sidepanel, BorderLayout.WEST);
 
-		mainpanel.add(contentpanel);
+		add(contentpanel, BorderLayout.CENTER);
 		
-		//Add the main panel to JFrame		
-		add(mainpanel);
-		
+		//Add the main panel to JFrame				
 		this.pack();
 		
 		//Note: need to fix problem 2 JPanels are overlapping
-		sidepanel.setBackground(Color.darkGray);
-        
-		contentpanel.setBackground(Color.gray);
+		sidepanel.setBackground(Color.cyan);
+		
+		contentpanel.setBackground(Color.blue);
 	
 		// Set the  view window constraints
 		setSize(1280,800);

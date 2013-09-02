@@ -3,7 +3,6 @@ package deco2800.arcade.arcadeui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -20,6 +19,9 @@ public class LoginScreen implements Screen {
 	
 	
 	public LoginScreen() {
+        // skin is the skin loaded from loginSkin.json
+        // skin2 is for the skin created programatically
+        // skin2 will eventually disappear
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin2 = new Skin();
         

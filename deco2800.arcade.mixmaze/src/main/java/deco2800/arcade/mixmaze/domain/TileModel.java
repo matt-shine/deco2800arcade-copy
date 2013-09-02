@@ -65,6 +65,7 @@ public class TileModel {
 		}
 
 		WallModel wall = getWall(direction);
+		System.err.println(this + "building" + wall);
 		if(wall.isBuilt()) {
 			return false;
 		}
@@ -154,6 +155,11 @@ public class TileModel {
 		if(spawnedItem != null) {
 			player.pickUpItem(spawnedItem);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return LOG + "row: " + tileY + "\tcolumn: " + tileX;
 	}
 
 	/**

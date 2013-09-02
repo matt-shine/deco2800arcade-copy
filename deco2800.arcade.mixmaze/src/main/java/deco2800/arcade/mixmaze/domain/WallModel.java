@@ -22,8 +22,9 @@ public class WallModel {
 	}
 
 	public void addTile(TileModel tile) {
-		if(tiles.contains(tile)) {
-			throw new IllegalStateException("The tile is already present.");
+		if (tiles.contains(tile)) {
+			throw new IllegalStateException(
+					"The tile is already present.");
 		}
 		tiles.add(tile);
 	}
@@ -48,11 +49,13 @@ public class WallModel {
 
 	public void build(PlayerModel player) {
 		if(player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
+			throw new IllegalArgumentException(
+					"player cannot be null.");
 		}
 
 		if(built) {
-			throw new IllegalStateException("The wall is already built.");
+			throw new IllegalStateException(
+					"The wall is already built.");
 		}
 
 		built = true;
@@ -61,8 +64,9 @@ public class WallModel {
 	}
 
 	public void destroy(PlayerModel player) {
-		if(!built) {
-			throw new IllegalStateException("The wall is not built.");
+		if (!built) {
+			throw new IllegalStateException(
+					"The wall is not built.");
 		}
 
 		built = false;
@@ -72,12 +76,19 @@ public class WallModel {
 
 	private void checkTiles(PlayerModel player) {
 		if(player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
+			throw new IllegalArgumentException(
+					"player cannot be null.");
 		}
 
-		for(TileModel tile : tiles) {
+		for (TileModel tile : tiles) {
 			tile.checkBox(player);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "WallModel: " + tiles.get(0) + "\t" + tiles.get(1)
+				+ "\tdirection: " + direction;
 	}
 
 	/**

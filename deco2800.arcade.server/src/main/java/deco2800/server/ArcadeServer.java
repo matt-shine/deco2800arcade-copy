@@ -107,9 +107,6 @@ public class ArcadeServer {
 			e.printStackTrace();
 		}
 		
-		// THIS IS #TEST CODE, AND CAN BE REMOVED
-		System.out.println("Packman in: " + this.packServ.doubleNum(10));
-		
 		Protocol.register(server.getKryo());
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());

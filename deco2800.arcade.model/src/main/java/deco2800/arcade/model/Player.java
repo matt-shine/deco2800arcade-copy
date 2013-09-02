@@ -59,6 +59,7 @@ public class Player extends User {
 		this.icon = null;
 	}
 
+
 	/**
 	 * getUsername returns a string of the player created
 	 * 

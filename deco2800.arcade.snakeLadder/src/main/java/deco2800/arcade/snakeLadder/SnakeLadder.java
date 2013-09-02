@@ -43,8 +43,7 @@ public class SnakeLadder extends GameClient {
 	private Texture backgroundBoard;
 	private List<Tile> tileList; 
 	private HashMap<Character,String> ruleTextureMapping;
-	private Texture player;
-    private Player Player;
+    private GamePlayer gamePlayer;
     private enum GameState {
 		READY,
 		INPROGRESS,
@@ -106,13 +105,14 @@ public class SnakeLadder extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 600, 800);
+		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
 		
 		//loading of background game board
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
+		gamePlayer.render();
 		//loading player icon
-		player =new Texture(Gdx.files.classpath("assets/player.jpg"));
+		//gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
 		
 		//initialise rule texture mapping
 		ruleTextureMapping = new HashMap<Character,String>();
@@ -128,7 +128,7 @@ public class SnakeLadder extends GameClient {
 		System.out.println("success");
 		
 		// create the player
-		Player = new Player();
+		gamePlayer = new GamePlayer();
 		
 		font = new BitmapFont();
 		font.setScale(2);
@@ -156,7 +156,6 @@ public class SnakeLadder extends GameClient {
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
 		batch.setProjectionMatrix(camera.combined);
-
 		batch.begin();
 		batch.draw(backgroundBoard,0,0);
 		for(Tile t:tileList)
@@ -166,7 +165,6 @@ public class SnakeLadder extends GameClient {
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
 		}
-		batch.draw(player,0,0);
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
@@ -186,7 +184,7 @@ public class SnakeLadder extends GameClient {
 		    	break;
 		    	
 		    case INPROGRESS: 
-		    	
+		    	gamePlayer.move(Gdx.graphics.getDeltaTime());
 		    	
 		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
@@ -201,9 +199,15 @@ public class SnakeLadder extends GameClient {
 		
 	}
 	
+	private void endPoint(int winner) {
+		gamePlayer.reset();
+	}
+	
 	private void startPoint() {
 		// TODO Auto-generated method stub
-		
+		gamePlayer.randomizeVelocity();
+		gameState = GameState.INPROGRESS;
+		statusMessage = null;
 	}
 
 	@Override

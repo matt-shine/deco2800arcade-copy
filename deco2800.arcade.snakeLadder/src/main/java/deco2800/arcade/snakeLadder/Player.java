@@ -1,5 +1,7 @@
 package deco2800.arcade.snakeLadder;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +12,6 @@ import com.badlogic.gdx.math.Vector2;
  * @author s43146884
  */
 public class Player {
-
 	public static final float INITIALSPEED = 0; // How fast is the player going at the start of a point
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
 	
@@ -24,7 +25,7 @@ public class Player {
 	 */
 	public Player() {
 		bounds.x = 0;
-		bounds.y = 600;
+		bounds.y = 0;
 		bounds.height = 50;
 		bounds.width = 35;
 	}
@@ -66,7 +67,7 @@ public class Player {
 		  //if player reaches left or right bound, it goes up one row and changes X direction
 		  if ((bounds.x == 0 && bounds.y != 600) || (bounds.x == 600))
 		  {
-			  bounds.y = bounds.y - 60; 
+			  bounds.y = bounds.y + 60; 
 			  velocity.x *= -1;		
 		  }
 	  }
@@ -94,7 +95,6 @@ public class Player {
      */
     public void render(ShapeRenderer shapeRenderer)
     {
-       
         shapeRenderer.filledRect(this.bounds.x,
                                  this.bounds.y,
                                  this.bounds.width,

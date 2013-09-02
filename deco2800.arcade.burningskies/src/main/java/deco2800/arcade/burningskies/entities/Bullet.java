@@ -9,7 +9,10 @@ public abstract class Bullet extends Image {
 	private int damage;
 	private Vector2 velocity;
 	private Vector2 position;
+	private Vector2 acceleration;
+	@SuppressWarnings("unused")
 	private Player player;
+	@SuppressWarnings("unused")
 	private Ship parent;
 	
 	/**
@@ -25,7 +28,8 @@ public abstract class Bullet extends Image {
 		this.damage = damage;
 		this.player = player; // in case of homing
 		this.parent = parent; // in case of bullets sticking close
-		velocity = new Vector2();
+		velocity = new Vector2(0,0);
+		acceleration = new Vector2(0,0);
 		position = initialPosition;
 	}
 	
@@ -53,9 +57,14 @@ public abstract class Bullet extends Image {
 	
 	/**
 	 * Move the bullet as the scene is rendered.
-	 * Cannot be catch all in case bullet direction changes over time.
+	 * Override this if the bullet direction changes over time.
 	 * @param delta the change of time since last render
 	 */
-	abstract void moveBullet(float delta);
+	void moveBullet(float delta) {
+		velocity.add( acceleration.x * delta, acceleration.y * delta );
+		position.add( velocity.x * delta, velocity.y * delta );
+		setX(position.x);
+		setY(position.y);
+	}
 
 }

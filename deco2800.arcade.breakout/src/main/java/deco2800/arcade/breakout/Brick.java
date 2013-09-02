@@ -55,7 +55,12 @@ public class Brick {
 	public float getHeight() {
 		return this.height;
 	}
-
+	/*
+	 * Creates a small rectangle on the left of the brick to 
+	 * detect whether the ball hits the brick. This is so
+	 * we can then determine the appropriate way to handle the velocity
+	 * of the ball 
+	 */
 	public boolean checkLeftCollision(Rectangle ball) {
 		Rectangle leftSide = new Rectangle();
 		leftSide.x = this.brickShape.x;
@@ -64,7 +69,12 @@ public class Brick {
 		leftSide.height = this.height - this.E;
 		return ball.overlaps(leftSide);
 	}
-	
+	/*
+	 * Creates a small rectangle on the right of the brick to 
+	 * detect whether the ball hits the brick. This is so
+	 * we can then determine the appropriate way to handle the velocity
+	 * of the ball 
+	 */
 	public boolean checkRightCollision(Rectangle ball) {
 		Rectangle rightSide = new Rectangle();
 		rightSide.x = this.brickShape.x + this.width - this.E;
@@ -73,7 +83,12 @@ public class Brick {
 		rightSide.height = this.height - this.E;
 		return ball.overlaps(rightSide);
 	}
-	
+	/*
+	 * Creates a small rectangle on the top of the brick to 
+	 * detect whether the ball hits the brick. This is so
+	 * we can then determine the appropriate way to handle the velocity
+	 * of the ball 
+	 */
 	public boolean checkTopCollision(Rectangle ball) {
 		Rectangle topSide = new Rectangle();
 		topSide.x = this.brickShape.x;
@@ -82,7 +97,12 @@ public class Brick {
 		topSide.height = this.E;
 		return ball.overlaps(topSide);
 	}
-	
+	/*
+	 * Creates a small rectangle on the bottom of the brick to 
+	 * detect whether the ball hits the brick. This is so
+	 * we can then determine the appropriate way to handle the velocity
+	 * of the ball 
+	 */
 	public boolean checkBottomCollision(Rectangle ball) {
 		Rectangle bottomSide = new Rectangle();
 		bottomSide.x = this.brickShape.x;

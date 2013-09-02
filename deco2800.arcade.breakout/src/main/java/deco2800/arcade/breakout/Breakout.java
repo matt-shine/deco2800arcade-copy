@@ -112,6 +112,19 @@ public class Breakout extends GameClient {
 		gameState = GameState.READY;
 
 	}
+	public void updateGameState(int bounce) {
+		if (bounce == 0) {
+			ball.bounceX();
+		} else {
+			ball.bounceY();
+		}
+		score++;
+		brickNum--;
+		try { 
+			Thread.currentThread().sleep(25); 
+			} 
+		catch(Exception e) { }
+	}
 
 	/**
 	 * Closes Application
@@ -207,38 +220,70 @@ public class Breakout extends GameClient {
 				if (b.getState()) {
 					if (b.checkLeftCollision(ball.bounds)) {
 						b.setState(false);
+<<<<<<< HEAD
 						score++;
 						brickNum--;
 						//breaking.play();
 						//breaking.dispose();
 						ball.bounceX();
+=======
+						updateGameState(0);
+						//score++;
+						//brickNum--;
+						//ball.bounceX();
+						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
+>>>>>>> Code refactoring and commenting
 						break;
 					}
 					if (b.checkRightCollision(ball.bounds)) {
 						b.setState(false);
+<<<<<<< HEAD
 						score++;
 						brickNum--;
 						//breaking.play();
 						//breaking.dispose();
 						ball.bounceX();
+=======
+						updateGameState(0);
+						//score++;
+						//brickNum--;
+						//ball.bounceX();
+						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
+>>>>>>> Code refactoring and commenting
 						break;
 					}
 					if (b.checkTopCollision(ball.bounds)) {
 						b.setState(false);
+<<<<<<< HEAD
 						score++;
 						brickNum--;
 						//breaking.play();
 						//breaking.dispose();
 						ball.bounceY();
+=======
+						updateGameState(1);
+						//score++;
+						//brickNum--;
+						//ball.bounceY();
+						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
+>>>>>>> Code refactoring and commenting
 						break;
 					}
 					if (b.checkBottomCollision(ball.bounds)) {
 						b.setState(false);
+<<<<<<< HEAD
 						score++;
 						brickNum--;
 						//breaking.play();
 						//breaking.dispose();
 						ball.bounceY();
+=======
+						updateGameState(1);
+						//score++;
+						//brickNum--;
+						//ball.bounceY();
+						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
+>>>>>>> Code refactoring and commenting
 						break;
 					}
 //					if (ball.bounds.overlaps(b.getShape())) {

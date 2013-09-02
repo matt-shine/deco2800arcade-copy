@@ -16,9 +16,9 @@ public class CreditListener extends Listener {
 
 		if (object instanceof CreditBalanceRequest){
 			CreditBalanceRequest creditBalanceRequest = (CreditBalanceRequest) object;
-			String username = creditBalanceRequest.username;
+			int playerID = creditBalanceRequest.playerID;
 			try {
-				Integer result = ArcadeServer.instance().getCreditStorage().getUserCredits(username);
+				Integer result = ArcadeServer.instance().getCreditStorage().getUserCredits(playerID);
 
 				CreditBalanceResponse creditBalanceResponse = new CreditBalanceResponse();
 

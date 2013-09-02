@@ -122,32 +122,32 @@ public class BulkPurchasingTest {
 				100, gpt.getPlays());
 	}
 	
-//	@Test
-//	public void testTwentyTeamPlay() throws Exception {
-//		HashSet<Player> players = new HashSet<Player>();
-//		players.add(algernon);
-//		players.add(barnaby);
-//		
-//		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
-//		when(mockCS.getUserCredits(barnaby.getID())).thenReturn(50);
-//
-//		Set<GamePlayToken> gpts = purchasingService.teamBulkPurchase(players, 
-//				tiddlywinks,
-//				25
-//		);
-//		
-//		verify(mockCS).getUserCredits(algernon.getID());
-//		verify(mockCS).deductUserCredits(algernon.getID(), 10);
-//		verify(mockCS).getUserCredits(barnaby.getID());
-//		verify(mockCS).deductUserCredits(barnaby.getID(), 10);
-//
-//		for (GamePlayToken gpt : gpts) {
-//			assertEquals("Wrong game", tiddlywinks, gpt.getGame());
-//			assertEquals("Wrong number of plays",
-//					25, gpt.getPlays());
-//		}
-//		
-//	
-//	}
+	@Test
+	public void testTwentyTeamPlay() throws Exception {
+		HashSet<Player> players = new HashSet<Player>();
+		players.add(algernon);
+		players.add(barnaby);
+		
+		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
+		when(mockCS.getUserCredits(barnaby.getID())).thenReturn(50);
+
+		Set<GamePlayToken> gpts = purchasingService.teamBulkPurchase(players, 
+				tiddlywinks,
+				25
+		);
+
+		verify(mockCS).getUserCredits(algernon.getID());
+		verify(mockCS).deductUserCredits(algernon.getID(), 10);
+		verify(mockCS).getUserCredits(barnaby.getID());
+		verify(mockCS).deductUserCredits(barnaby.getID(), 10);
+
+		for (GamePlayToken gpt : gpts) {
+			assertEquals("Wrong game", tiddlywinks, gpt.getGame());
+			assertEquals("Wrong number of plays",
+					25, gpt.getPlays());
+		}
+		
+	
+	}
 	
 }

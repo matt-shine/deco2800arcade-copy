@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
-import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 //This class functions basically as the controller
@@ -106,6 +105,9 @@ public class MainInputProcessor implements InputProcessor {
 			return true;
 		}
 		
+		if(keycode == Keys.CONTROL_LEFT) {
+			System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelectionPlayer, currentSelectionArea));
+		}
         return false;
     }
 
@@ -134,10 +136,8 @@ public class MainInputProcessor implements InputProcessor {
     			String oldArea = currentSelectionArea;
     			String newArea = view.getArena().getAreaAtPoint(x, y);
     			List<AbstractCard> cards = new ArrayList<AbstractCard>();
-    			AbstractCard c = getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
+    			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
     			cards.add(c);
-    			System.out.println("Moved from: " + oldArea + " to: " + newArea);
-    			System.out.println("cards is:" + Arrays.toString(cards.toArray()) + " Old area: " + oldArea + " newArea: " + newArea);
     			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
     		}
     		//clear available zones and currentSelection
@@ -147,7 +147,7 @@ public class MainInputProcessor implements InputProcessor {
     	}
     	
     	//Get the current Selection at point if it exists
-    	currentSelection = checkIntersection(x, y);
+    	currentSelection = SpriteLogic.checkIntersection(x, y);
     	
     	//There is a new currentSelection, set its parameters accordingly
     	if(currentSelection != null) {
@@ -175,10 +175,9 @@ public class MainInputProcessor implements InputProcessor {
 				String oldArea = currentSelectionArea;
     			String newArea = view.getArena().getAreaAtPoint((int)currentSelection.getX()+10, (int)currentSelection.getY()+10);
     			List<AbstractCard> cards = new ArrayList<AbstractCard>();
-    			AbstractCard c = getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
+    			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
     			cards.add(c);
     			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
-    			System.out.println("Moved from: " + oldArea + " to: " + newArea);
 			} else {
 				//card was not moved, set it back to original position
 				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelectionOriginZone, currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
@@ -222,10 +221,7 @@ public class MainInputProcessor implements InputProcessor {
     	CardCollection currentHand = game.getCardCollection(player, "Hand");
     	
     	//Check that the hand is not already full
-    	if(currentHand.size() >= 6) {
-    		System.out.println("hand is full");
-    		return;
-    	}
+    	if(currentHand.size() >= 6) return;
     	
     	//Draw a card
     	AbstractCard c = game.draw(player);
@@ -245,50 +241,13 @@ public class MainInputProcessor implements InputProcessor {
 		setCurrentSelectionToRectangle(r);
 	}
     
-    /**
-     * returns the sprite at the point, if one exists and belongs to the
-     * current player
-     * 
-     * @param x
-     * @param y
-     * @return Sprite intersecting the 
-     */
-    private ExtendedSprite checkIntersection(int x, int y) {
-    	
-    	Map<String,List<ExtendedSprite>> spriteMap = view.getSpriteMap();
-
-    	//check maps according to whose turn it is
-    	if(game.getCurrentPlayer() == 1) {
-    		//Check each zone in sprite map P1Keys
-    		for(String key : P1Keys) {
-    			for(ExtendedSprite s : spriteMap.get(key)) {
-    		    	if(s.containsPoint(x, y)) {
-    		    		return s;
-    		    	}
-    		    }
-    		}
-    		
-    	} else {
-    		//Check each zone in sprite map P2Keys
-    		for(String key : P2Keys) {
-    			for(ExtendedSprite s : spriteMap.get(key)) {
-    		    	if(s.containsPoint(x, y)) {
-    		    		return s;
-    		    	}
-    		    }
-    		}
-    	}
-
-    	return null;
-    }
-    
     private void setCurrentSelectionData(int x, int y) {
     	
 		//Get all relevant data about the current selection
 		Rectangle r = currentSelection.getBoundingRectangle();
 		currentSelectionOriginZone = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 		currentSelectionPlayer = view.getSpritePlayer(currentSelection);
-		boolean[] b = getSpriteZoneType(currentSelection);
+		boolean[] b = SpriteLogic.getSpriteZoneType(currentSelection);
 		currentSelectionField = b[0];
 		currentSelectionMonster = b[1];
 		currentSelectionArea = getCurrentSelectionArea(currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
@@ -474,57 +433,4 @@ public class MainInputProcessor implements InputProcessor {
 		}
 	}
 
-    //returns the AbstractCard based on the given sprite and what area it is in (area based on model)
-	private AbstractCard getCardModelFromSprite(ExtendedSprite sprite, int player, String area) {
-		
-		CardCollection collection = new CardCollectionList();
-		
-		if(area.contains("Hand")) collection = game.getCardCollection(player, "Hand");
-		else if(area.contains("Deck")) collection = game.getCardCollection(player, "Deck");
-		else if(area.contains("Field")) collection = game.getCardCollection(player, "Field");
-		else if(area.contains("Graveyard")) collection = game.getCardCollection(player, "Graveyard");
-		
-		for(AbstractCard card : collection) {
-			if(card.getPictureFilePath().equals(view.manager.getAssetFileName(sprite.getTexture()))) {
-				return card;
-			}
-		}
-		
-		return null;
-	}
-	
-	public boolean[] getSpriteZoneType(ExtendedSprite s) {
-		
-		boolean[] b = new boolean[2];
-		Map<String, List<ExtendedSprite>> spriteMap = view.getSpriteMap();
-		
-		for(String key : spriteMap.keySet()) {
-			if(spriteMap.get(key).contains(s)) {
-				if(key.contains("Hand")) {
-					//check what type of card the sprite is
-					String filepath = view.manager.getAssetFileName(s.getTexture());
-					//iterate over selection to find what card model this corresponds to
-					for(AbstractCard c : game.getCardCollection(currentSelectionPlayer, "Hand")) {
-						if(c.getPictureFilePath().equals(filepath)) {
-							if(c.getCardType().equals("Monster")) {
-								b[0] = false;
-								b[1] = true;
-							} else {
-								b[0] = false;
-								b[1] = false;
-							}
-						}
-					}
-				} else if(key.contains("Monster")) {
-					b[0] = true;
-					b[1] = true;
-				} else {
-					b[0] = true;
-					b[1] = false;
-				}
-				return b;
-			}
-		}
-		return null;
-	}
 }

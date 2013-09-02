@@ -1,6 +1,13 @@
 package deco2800.arcade.towerdefence;
 
+/**
+ * The interface for an object to effect a grid, required to be unique when instantiated.
+ * @author hadronn
+ *
+ */
 public interface GridObject {
+	//TO DO: Constructor
+	
 	//Returns whether the object has a health characteristic. Great for determining divine objects that can't die or potentially whether something should move or not.
 	public boolean isLiving();
 
@@ -26,5 +33,6 @@ public interface GridObject {
 	public boolean isPhysical();
 	
 	//All grid objects must have an opaqueness value for drawing.
-	public void setOpaqueness();
+	public void getOpaqueness();
+	
 }

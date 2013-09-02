@@ -1,7 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 /**
- * An x,y,Grid entry tuple for determining location within the game system.
+ * An x,y entry pair for determining location within the game system.
  * @author hadronn
  *
  */
@@ -12,12 +12,11 @@ public class Position {
 
 	//constructor
 	/**
-	 * Instantiates a position with an x, y and Grid.
+	 * Instantiates a position with an x, y.
 	 * @param x
 	 * @param y
-	 * @param grid
 	 */
-	public Position(int x, int y, Grid grid){
+	public Position(int x, int y){
 		this.x = x;
 		this.y = y;
 	}

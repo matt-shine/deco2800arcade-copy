@@ -65,7 +65,7 @@ public class GamePlayer {
 //		  //horizontally move the player to position according to time(dice number)
 //		  bounds.x += time*velocity.x;
 //		
-//		  //if player reaches left or right bound, it goes up one row and changes X direction
+		  //if player reaches left or right bound, it goes up one row and changes X direction
 //		  if ((bounds.x == 0 && bounds.y != 0) || (bounds.x == 600))
 //		  {
 //			  bounds.y = bounds.y + 60; 
@@ -76,6 +76,11 @@ public class GamePlayer {
 //	  //reset player's velocity when it reaches the position
 //	  velocity.x = 0;
 //	  velocity.y = 0;
+	}
+	
+	public void moveUp() {
+		velocity.x *= -1;
+		bounds.y = bounds.y + 60;
 	}
 	
 	/**
@@ -107,9 +112,9 @@ public class GamePlayer {
     
     public void randomizeVelocity() {
 		//TODO This is a bit of a hack. A better way would be to generate an angle then use sin/cos/tan to work out the X,Y components
-		int xFactor = (int) (100f + Math.random()*90f);
-		int yFactor = (int) Math.sqrt((200*200) - (xFactor*xFactor));
-		velocity.x = xFactor;
-		velocity.y = yFactor;
+		//int xFactor = (int) (100f + Math.random()*90f);
+		//int yFactor = (int) Math.sqrt((200*200) - (xFactor*xFactor));
+		velocity.x = 60;
+		//velocity.y = yFactor;
 	}
 }

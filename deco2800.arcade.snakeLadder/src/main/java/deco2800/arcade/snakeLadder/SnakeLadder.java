@@ -187,7 +187,7 @@ public class SnakeLadder extends GameClient {
 	    	font.setColor(Color.WHITE);
 	    	font.draw(batch, statusMessage, 200, 300);
 	    	if (gameState == GameState.GAMEOVER) {
-	    		font.draw(batch, "Click to exit", 200, 300);
+	    		font.draw(batch, statusMessage+" Click to exit", 200, 300);
 	    	}
 	    }
 		batch.end();
@@ -214,8 +214,10 @@ public class SnakeLadder extends GameClient {
 		    	//If the ball gets to the left edge then player 2 wins
 		    	if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {
 		    		gamePlayer.reset();
+		    		statusMessage = "You Win! ";
 		    		gameState = GameState.GAMEOVER;
-		    		statusMessage = "Click to exit!";
+		    		//statusMessage = "Win!";
+		    				//+ "Click to exit!";
 		    		//endPoint(1);
 		    	}
 		    	break;

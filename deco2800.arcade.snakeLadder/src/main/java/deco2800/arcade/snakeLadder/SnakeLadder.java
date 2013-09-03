@@ -169,13 +169,10 @@ public class SnakeLadder extends GameClient {
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
 		
-//		 //Begin drawing of shapes
-//	    shapeRenderer.begin(ShapeType.FilledRectangle);
-//		gamePlayer.render(shapeRenderer);
-//		 //End drawing of shapes
-//	    shapeRenderer.end();
-//	    
-		batch.begin();
+		 //Begin drawing of shapes
+	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    //Begin batch
+	    batch.begin();
 		batch.draw(backgroundBoard,0,0);
 		for(Tile t:tileList)
 		{
@@ -183,14 +180,7 @@ public class SnakeLadder extends GameClient {
 			{
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
-		}
-		
-		//Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-		gamePlayer.render(shapeRenderer);
-		 //End drawing of shapes
-	    shapeRenderer.end();
-	    
+		}	    
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
@@ -201,6 +191,12 @@ public class SnakeLadder extends GameClient {
 	    	}
 	    }
 		batch.end();
+		//Render gamePlayer 
+		gamePlayer.render(shapeRenderer);
+		 //End drawing of shapes
+	    shapeRenderer.end();
+
+		
 		 switch(gameState) {
 		    
 		    case READY: //Ready to start a new point

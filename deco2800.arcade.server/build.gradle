@@ -1,8 +1,15 @@
 
 dependencies {
   compile project(":deco2800.arcade.protocol")
+  compile project(":deco2800.arcade.model")
+  compile project(":deco2800.arcade.packman")
 
   compile group: "org.apache.derby", name: "derby", version: "10.10.1.1"
+
+  testCompile group: "org.slf4j", name: "slf4j-api", version: "1.7.5"
+  testCompile group: "org.slf4j", name: "slf4j-simple", version: "1.7.5"
+
+  testCompile group: "org.dbunit", name: "dbunit", version: "2.4.9"
 }
 
 task(runServer, dependsOn: "classes", type: JavaExec) {

@@ -10,9 +10,11 @@ import com.esotericsoftware.kryonet.Server;
 import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.arcade.packman.PackageServer;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -27,6 +29,9 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
+	
+	// Package manager
+	private PackageServer packServ;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -53,6 +58,7 @@ public class ArcadeServer {
 	// Credit storage service
 	private CreditStorage creditStorage;
 	//private PlayerStorage playerStorage;
+	//private FriendStorage friendStorage;
 	
 	/**
 	 * Access the server's credit storage facility
@@ -70,6 +76,9 @@ public class ArcadeServer {
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
 		//this.playerStorage = new PlayerStorage();
+		//this.friendStorage = new FriendStorage();
+		
+		this.packServ = new PackageServer();
 		
 		//initialize database classes
 		try {
@@ -99,10 +108,9 @@ public class ArcadeServer {
 		}
 		
 		Protocol.register(server.getKryo());
-		
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
+		server.addListener(new CommunicationListener(server));
 	}
-	
 }

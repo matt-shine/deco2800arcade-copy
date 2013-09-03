@@ -15,19 +15,14 @@ import java.util.List;
  */
 public class PlayerStorage {
 
-	// TODO: Autonumbering of playerIDs
+	/*
+	 * TODO: Autonumbering of playerIDs
+	 * 
+	 * TODO: Prepared statements for queries
+	 * 
+	 * TODO: Unit Tests.
+	 */
 
-	// TODO: Prepared statements for queries
-
-	// TODO: Username update
-	// TODO: name update
-	// TODO: Email update
-
-	// TODO: Program update
-
-	// TODO: Bio update
-	
-	
 	private boolean initialised = false;
 
 	/**
@@ -48,10 +43,10 @@ public class PlayerStorage {
 				Statement statement = connection.createStatement();
 				statement
 						.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
-								+ "USERNAME VARCHAR(30) NOT NULL,"
-								+ "NAME VARCHAR(30),"
-								+ "EMAIL VARCHAR(30),"
-								+ "PROGRAM VARCHAR(30)," + "BIO VARCHAR(200));");
+								+ "username VARCHAR(30) NOT NULL,"
+								+ "name VARCHAR(30),"
+								+ "email VARCHAR(30),"
+								+ "program VARCHAR(30)," + "bio VARCHAR(200))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -72,8 +67,8 @@ public class PlayerStorage {
 	 */
 	public List<String> getPlayerData(int playerID) throws DatabaseException {
 		List<String> data = new ArrayList<String>();
-		
-		if(!initialised){
+
+		if (!initialised) {
 			initialise();
 		}
 
@@ -94,8 +89,8 @@ public class PlayerStorage {
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to get player informtion from database",
-					e);
+			throw new DatabaseException(
+					"Unable to get player informtion from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -114,7 +109,7 @@ public class PlayerStorage {
 	}
 
 	/**
-	 * Searches through a ResultSet for for a player's information.
+	 * Searches through a ResultSet for a player's information.
 	 * 
 	 * @param playerID
 	 *            The player's playerID
@@ -133,53 +128,129 @@ public class PlayerStorage {
 			String user = results.getString("playerID");
 			if (user.equals(playerID)) {
 				result = results.getString(field);
-				break;
+				return result;
 			}
 		}
 
 		return result;
 	}
-	
-//	STILL WORKING ON THIS
-//	public boolean updateUsername(int playerID, String newValue){ 
-//		if(!initialised){
-//			initialise();
-//		}
-//
-//		// Get a connection to the database
-//		Connection connection = Database.getConnection();
-//
-//		Statement statement = null;
-//		ResultSet resultSet = null;
-//		try {
-//			statement = connection.createStatement();
-//			resultSet = statement.executeQuery("UPDATE PLAYER SET username * from PLAYERS;");
-//			data.add(findPlayerInfo(playerID, resultSet, "username"));
-//			data.add(findPlayerInfo(playerID, resultSet, "name"));
-//			data.add(findPlayerInfo(playerID, resultSet, "email"));
-//			data.add(findPlayerInfo(playerID, resultSet, "program"));
-//			data.add(findPlayerInfo(playerID, resultSet, "bio"));
-//
-//			return data;
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			throw new DatabaseException("Unable to get player informtion from database",
-//					e);
-//		} finally {
-//			try {
-//				if (resultSet != null) {
-//					resultSet.close();
-//				}
-//				if (statement != null) {
-//					statement.close();
-//				}
-//				if (connection != null) {
-//					connection.close();
-//				}
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 
+	/**
+	 * Sets a player's username to the provided name.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new username.
+	 * @throws DatabaseException
+	 */
+	public void updateUsername(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "username");
+	}
+
+	/**
+	 * Sets a player's email to the provided address.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new email.
+	 * @throws DatabaseException
+	 */
+	public void updateEmail(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "email");
+	}
+
+	/**
+	 * Sets a player's program to the provided string.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new program.
+	 * @throws DatabaseException
+	 */
+	public void updateProgram(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "program");
+	}
+
+	/**
+	 * Sets a player's bio to the provided string.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new bio.
+	 * @throws DatabaseException
+	 */
+	public void updateBio(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "bio");
+	}
+
+	/**
+	 * Sets a player's name to the provided name.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new name.
+	 * @throws DatabaseException
+	 */
+	public void updateName(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "name");
+	}
+
+	/**
+	 * Updates a database field, given a playerID, the field to be updated and
+	 * the new value for that field.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The field's new value.
+	 * @param field
+	 *            The player's field to be updated.
+	 * @throws DatabaseException
+	 */
+	private void updateField(int playerID, String newValue, String field)
+			throws DatabaseException {
+		if (!initialised) {
+			initialise();
+		}
+
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("UPDATE PLAYER SET " + field
+					+ " = " + newValue + " WHERE playerID = " + playerID + ";");
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to update player username in database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

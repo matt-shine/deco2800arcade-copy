@@ -1,7 +1,7 @@
 package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
-import deco2800.arcade.client.Arcade;
+
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
 
 public class CreditListener extends NetworkListener {
@@ -26,9 +26,11 @@ public class CreditListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof CreditBalanceResponse){
+			
+			@SuppressWarnings("unused")
 			CreditBalanceResponse creditBalanceResponse = (CreditBalanceResponse) object;
-			Arcade arcade = Arcade.getInstance();
-			arcade.setTitle("Credit Balance: " + Integer.toString(creditBalanceResponse.balance));
+			
+			//TODO something
 		}
 	}
 

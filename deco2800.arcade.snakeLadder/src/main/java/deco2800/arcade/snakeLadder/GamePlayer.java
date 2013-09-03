@@ -81,6 +81,7 @@ public class GamePlayer {
 	public void moveUp() {
 		velocity.x *= -1;
 		bounds.y = bounds.y + 60;
+		
 	}
 	
 	/**
@@ -115,6 +116,7 @@ public class GamePlayer {
 		//int xFactor = (int) (100f + Math.random()*90f);
 		//int yFactor = (int) Math.sqrt((200*200) - (xFactor*xFactor));
 		velocity.x = 60;
+		velocity.y=0;
 		//velocity.y = yFactor;
 	}
 }

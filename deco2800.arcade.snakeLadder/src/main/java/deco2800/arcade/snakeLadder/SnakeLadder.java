@@ -207,8 +207,8 @@ public class SnakeLadder extends GameClient {
 		    	
 		    case INPROGRESS: 
 		    	gamePlayer.move(Gdx.graphics.getDeltaTime());
-		    	//If the ball hits a paddle then bounce it
-		    	if ((gamePlayer.bounds.x == 0 && gamePlayer.bounds.y != 0) || (gamePlayer.bounds.x == 600f)) {
+		    	//If the player reaches the end of each line , move up to another line
+		    	if (gamePlayer.bounds.x >= (600-20f) || gamePlayer.bounds.x <=0){
 		    		gamePlayer.moveUp();
 		    	}	    	
 		    	//If the ball gets to the left edge then player 2 wins

@@ -76,7 +76,7 @@ public class GameStorage {
 	
 	/**
 	 * Returns the game name when gameID matches the ID given
-	 * @param	String gameID
+	 * @param	gameID
 	 * @param 	results
 	 * @return String game name
 	 * @throws SQLException

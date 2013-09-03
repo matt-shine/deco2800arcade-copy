@@ -10,7 +10,7 @@ public class BrickModel extends ItemModel {
 	private int amount;
 
 	/**
-	 * Returns the amount of bricks.
+	 * Returns the amount of bricks in this <code>BrickModel</code>.
 	 *
 	 * @return the number of bricks
 	 */
@@ -55,19 +55,26 @@ public class BrickModel extends ItemModel {
 		amount = addedAmount;
 	}
 
+	/**
+	 * Removes the specified number of bricks from this <code>BrickModel</code>
+	 * @param number amount of bricks to be removed.This must be a positive number
+	 * @throws IllegalArgumentException If the amount after the deletion
+	 * 				    is be negative.
+	 */
 	public void removeAmount(int number) {
-		int minusAmount = amount - number;
-		if (minusAmount < 0 || minusAmount > MAX_BRICKS) {
+		int balance = amount - number;
+		// why do we check if its >Max, this only removes bricks? dumindu
+		if (balance < 0 || balance > MAX_BRICKS) {
 			throw new IllegalArgumentException(
 					"number must result in a amount that is"
 					+ " positive and less than or equal to "
 					+ "MAX_BRICKS.");
 		}
-		amount = minusAmount;
+		amount = balance;
 	}
 
-	/*
-	 * Removes one brick from this brick collection.
+	/**
+	 * Remove one brick from this <code>BrickModel</code>
 	 */
 	void removeOne() {
 		removeAmount(1);
@@ -79,7 +86,11 @@ public class BrickModel extends ItemModel {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructs a new <code>BrickModel</code> by setting the
+	 * Specified <code>tileModel</code> and the <code>amount</code> of bricks.
+	 * 
+	 * @param spawnedOn the tileModel on which the brick is spawned
+	 * @param number amount of bricks spawned
 	 */
 	public BrickModel(TileModel spawnedOn, int number) {
 		super(spawnedOn);

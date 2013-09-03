@@ -16,25 +16,26 @@ import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
 import deco2800.arcade.packman.PackageServer;
 
-/** 
+/**
  * Implements the KryoNet server for arcade games which uses TCP and UDP
- * transport layer protocols. 
+ * transport layer protocols.
  * 
- * @see http://code.google.com/p/kryonet/ 
+ * @see http://code.google.com/p/kryonet/
  */
 public class ArcadeServer {
 
 	// Keep track of which users are connected
 	private Set<String> connectedUsers = new HashSet<String>();
-	
-	//singleton pattern
+
+	// singleton pattern
 	private static ArcadeServer instance;
-	
+
 	// Package manager
 	private PackageServer packServ;
-	
+
 	/**
 	 * Retrieve the singleton instance of the server
+	 * 
 	 * @return the game server
 	 */
 	public static ArcadeServer instance() {
@@ -43,10 +44,9 @@ public class ArcadeServer {
 		}
 		return instance;
 	}
-	
+
 	/**
-	 * Initializes and starts Server
-	 * Binds Ports
+	 * Initializes and starts Server Binds Ports
 	 * 
 	 * @param args
 	 */
@@ -57,39 +57,38 @@ public class ArcadeServer {
 
 	// Credit storage service
 	private CreditStorage creditStorage;
-	//private PlayerStorage playerStorage;
-	//private FriendStorage friendStorage;
-	
+
+	// private PlayerStorage playerStorage;
+	// private FriendStorage friendStorage;
+
 	/**
 	 * Access the server's credit storage facility
+	 * 
 	 * @return
 	 */
 	public CreditStorage getCreditStorage() {
 		return this.creditStorage;
 	}
-	
+
 	/**
-	 * Create a new Arcade Server.
-	 * This should generally not be called.
+	 * Create a new Arcade Server. This should generally not be called.
+	 * 
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
-		this.creditStorage = new CreditStorage();
-		//this.playerStorage = new PlayerStorage();
-		//this.friendStorage = new FriendStorage();
-		
-		this.packServ = new PackageServer();
-		
-		//initialize database classes
 		try {
-			creditStorage.initialise();
-			//playerStorage.initialise();
-		} catch (DatabaseException e) {
+			this.creditStorage = new CreditStorage();
+		} catch (DatabaseException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
+		// this.playerStorage = new PlayerStorage();
+		// this.friendStorage = new FriendStorage();
+
+		this.packServ = new PackageServer();
+
 	}
-	
+
 	/**
 	 * Start the server running
 	 */
@@ -106,7 +105,7 @@ public class ArcadeServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		Protocol.register(server.getKryo());
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());

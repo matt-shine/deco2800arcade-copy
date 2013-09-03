@@ -50,8 +50,8 @@ final class PlayerViewModel extends Actor {
 
 		@Override
 		public boolean keyDown(InputEvent event, int keycode) {
-			Gdx.app.debug(LOG, "player " + id);
 			/*
+			Gdx.app.debug(LOG, "player " + id);
 			Gdx.app.debug(LOG, keycode + " pressed");
 			Gdx.app.debug(LOG, km.get(keycode) + " mapped");
 			*/
@@ -84,9 +84,11 @@ final class PlayerViewModel extends Actor {
 			default:
 				return false;	// event not handled
 			}
+			/*
 			Gdx.app.debug(LOG, "directon: " + model.getDirection());
 			Gdx.app.debug(LOG, "pos: " + model.getX() + "\t"
 					+ model.getY());
+			*/
 			event.cancel();
 			return true;
 		}

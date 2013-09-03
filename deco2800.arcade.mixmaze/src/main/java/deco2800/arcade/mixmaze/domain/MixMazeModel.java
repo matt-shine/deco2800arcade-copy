@@ -137,6 +137,12 @@ public class MixMazeModel {
 		}
 		running = false;
 		ended = true;
+
+		try {
+			spawnerThread.join();
+		} catch (InterruptedException e) {
+		}
+
 		gameEndTime = System.currentTimeMillis();
 
 		int player1Score = getPlayerScore(player1);

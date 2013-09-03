@@ -212,8 +212,11 @@ public class SnakeLadder extends GameClient {
 		    		gamePlayer.moveUp();
 		    	}	    	
 		    	//If the ball gets to the left edge then player 2 wins
-		    	if (gamePlayer.bounds.x == 0 && gamePlayer.bounds.y == 600) {
-		    		endPoint(1);
+		    	if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {
+		    		gamePlayer.reset();
+		    		gameState = GameState.GAMEOVER;
+		    		statusMessage = "Click to exit!";
+		    		//endPoint(1);
 		    	}
 		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
@@ -234,7 +237,7 @@ public class SnakeLadder extends GameClient {
 	
 	private void startPoint() {
 		// TODO Auto-generated method stub
-		gamePlayer.randomizeVelocity();
+		gamePlayer.initializeVelocity();
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
 	}

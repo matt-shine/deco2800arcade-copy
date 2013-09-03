@@ -80,8 +80,7 @@ public class GamePlayer {
 	
 	public void moveUp() {
 		velocity.x *= -1;
-		bounds.y = bounds.y + 60;
-		
+		bounds.y = bounds.y + 60;		
 	}
 	
 	/**
@@ -90,8 +89,8 @@ public class GamePlayer {
 	public void reset() {
 		velocity.x = 0;
 		velocity.y = 0;
-		bounds.x = 0;
-		bounds.y = 0;
+//		bounds.x = 0;
+//		bounds.y = 0;
 	}
 	
 	
@@ -111,11 +110,11 @@ public class GamePlayer {
     	
     }
     
-    public void randomizeVelocity() {
+    public void initializeVelocity() {
 		//TODO This is a bit of a hack. A better way would be to generate an angle then use sin/cos/tan to work out the X,Y components
 		//int xFactor = (int) (100f + Math.random()*90f);
 		//int yFactor = (int) Math.sqrt((200*200) - (xFactor*xFactor));
-		velocity.x = 60;
+		velocity.x = 120;
 		velocity.y=0;
 		//velocity.y = yFactor;
 	}

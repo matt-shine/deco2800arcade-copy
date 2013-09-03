@@ -8,10 +8,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class GamePlayer {
+	public static final float WIDTH = 20f; //How big is the player (its a square)
 	public static final float INITIALSPEED = 0; // How fast is the player going at the start of a point
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
-	private Texture player;
-	private SpriteBatch batch;
+	//private Texture player;
+	
 	
 	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
 	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
@@ -24,8 +25,8 @@ public class GamePlayer {
 	public GamePlayer() {
 		bounds.x = 0;
 		bounds.y = 0;
-		bounds.height = 50;
-		bounds.width = 35;
+		bounds.height = WIDTH;
+		bounds.width = WIDTH;
 	}
 
 	/**
@@ -55,24 +56,26 @@ public class GamePlayer {
 	 */	
 	public void move(float time) {
 	  //every time throw a dice, player get a speed of 60
-	  velocity.x = 60;
+	 // velocity.x = 60;
+	  bounds.x += time*velocity.x;
+	  bounds.y += time*velocity.y;
 	  
-	  //while player not reaches the end point
-	  while((bounds.x == 0 && bounds.y == 600) == false){
-		  //horizontally move the player to position according to time(dice number)
-		  bounds.x += time*velocity.x;
-		
-		  //if player reaches left or right bound, it goes up one row and changes X direction
-		  if ((bounds.x == 0 && bounds.y != 0) || (bounds.x == 600))
-		  {
-			  bounds.y = bounds.y + 60; 
-			  velocity.x *= -1;		
-		  }
-	  }
-	  
-	  //reset player's velocity when it reaches the position
-	  velocity.x = 0;
-	  velocity.y = 0;
+//	  //while player not reaches the end point
+//	  while((bounds.x == 0 && bounds.y == 600) == false){
+//		  //horizontally move the player to position according to time(dice number)
+//		  bounds.x += time*velocity.x;
+//		
+//		  //if player reaches left or right bound, it goes up one row and changes X direction
+//		  if ((bounds.x == 0 && bounds.y != 0) || (bounds.x == 600))
+//		  {
+//			  bounds.y = bounds.y + 60; 
+//			  velocity.x *= -1;		
+//		  }
+//	  }
+//	  
+//	  //reset player's velocity when it reaches the position
+//	  velocity.x = 0;
+//	  velocity.y = 0;
 	}
 	
 	/**
@@ -82,7 +85,7 @@ public class GamePlayer {
 		velocity.x = 0;
 		velocity.y = 0;
 		bounds.x = 0;
-		bounds.y = 600;
+		bounds.y = 0;
 	}
 	
 	
@@ -91,11 +94,15 @@ public class GamePlayer {
      * Render the player.
      * @param 
      */
-    public void render()
+    public void render(ShapeRenderer shapeRenderer)
     {
     	//loading player icon
-    	player =new Texture(Gdx.files.classpath("assets/player.png"));
-    	batch.draw(player,0,0);
+    	//player =new Texture(Gdx.files.classpath("assets/player.png"));
+    	shapeRenderer.filledRect(this.bounds.x,
+                this.bounds.y,
+                this.bounds.width,
+                this.bounds.height);
+    	
     }
     
     public void randomizeVelocity() {

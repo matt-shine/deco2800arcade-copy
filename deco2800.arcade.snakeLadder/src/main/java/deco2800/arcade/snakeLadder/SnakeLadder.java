@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -52,8 +54,13 @@ public class SnakeLadder extends GameClient {
 	private GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
+	private ShapeRenderer shapeRenderer;
 	private BitmapFont font;
 	private String statusMessage;
+	
+	//Network client for communicating with the server.
+	//Should games reuse the client of the arcade somehow? Probably!
+	private NetworkClient networkClient;
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -112,7 +119,7 @@ public class SnakeLadder extends GameClient {
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
 		//loading player icon
 
-		gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
+//		gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
 
 		
 		//initialise rule texture mapping
@@ -129,15 +136,15 @@ public class SnakeLadder extends GameClient {
 		System.out.println("success");
 		
 
-		// create the player
+		// create the game player
 		gamePlayer = new GamePlayer();
 
-		
+		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setScale(2);
 		//Initialise the game state
-				gameState = GameState.READY;
-				statusMessage = "Click to start!";
+		gameState = GameState.READY;
+		statusMessage = "Click to start!";
 	}
 	
 	@Override
@@ -151,13 +158,23 @@ public class SnakeLadder extends GameClient {
 	}
 
 	@Override
-	public void render() {		
+	public void render() {	
+		//Black background
+				Gdx.gl.glClearColor(0, 0, 0, 1);
+			    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		// tell the camera to update its matrices.
 		camera.update();
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
+		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
-		gamePlayer.render();
+		
+//		 //Begin drawing of shapes
+//	    shapeRenderer.begin(ShapeType.FilledRectangle);
+//		gamePlayer.render(shapeRenderer);
+//		 //End drawing of shapes
+//	    shapeRenderer.end();
+//	    
 		batch.begin();
 		batch.draw(backgroundBoard,0,0);
 		for(Tile t:tileList)
@@ -168,6 +185,12 @@ public class SnakeLadder extends GameClient {
 			}
 		}
 		
+		//Begin drawing of shapes
+	    shapeRenderer.begin(ShapeType.FilledRectangle);
+		gamePlayer.render(shapeRenderer);
+		 //End drawing of shapes
+	    shapeRenderer.end();
+	    
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
@@ -224,6 +247,11 @@ public class SnakeLadder extends GameClient {
 		super.resize(width*2, height*2);
 	}
 
+	@Override
+	public void resume() {
+		super.resume();
+	}
+	
 	private boolean loadMap(List<Tile> tileList, String filePath) {
 		FileHandle handle = Gdx.files.classpath(filePath);
 		BufferedReader file = handle.reader(2048);

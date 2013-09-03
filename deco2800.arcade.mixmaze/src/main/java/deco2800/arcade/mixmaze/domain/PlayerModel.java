@@ -1,6 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
+import static deco2800.arcade.mixmaze.domain.BrickModel.MAX_BRICKS;
 
 /**
  * Player model represents a player.
@@ -175,6 +176,7 @@ public class PlayerModel {
 		}
 		lastAction = System.currentTimeMillis();
 	}
+
 	
 	/**
 	 * Pickup an item from a tile in the gameboard. If the item is a a collection of bricks,
@@ -184,34 +186,29 @@ public class PlayerModel {
 	 * @param item an <code>ItemModel</code> object which to be picked up by this player
 	 */
 	public void pickUpItem(ItemModel item) {
-		if(item instanceof BrickModel) {
+		if (item instanceof BrickModel) {
 			BrickModel tileBrick = (BrickModel)item;
-			if(brick == null) {
-				brick = tileBrick;
-				brick.pickUpItem();
+
+			if (brick.getAmount() + tileBrick.getAmount()
+					<= MAX_BRICKS) {
+				/* pick up all bricks */
+				brick.addAmount(tileBrick.getAmount());
+				tileBrick.pickUpItem();
 			} else {
-				int maxConsume = BrickModel.MAX_BRICKS - brick.getAmount();
-				int remainer = tileBrick.getAmount() - maxConsume;
-				if(remainer < 0) {
-					brick.addAmount(maxConsume + remainer);
-					tileBrick.pickUpItem();
-				} else if(remainer == 0) {
-					brick.addAmount(maxConsume);
-					tileBrick.pickUpItem();
-				} else {
-					brick.addAmount(maxConsume);
-					tileBrick.setAmount(remainer);
-				}
+				/* pick up to the maximum number */
+				tileBrick.removeAmount(MAX_BRICKS
+						- brick.getAmount());
+				brick.setAmount(MAX_BRICKS);
 			}
-		} else if(item instanceof PickModel) {
+		} else if (item instanceof PickModel) {
 			PickModel tilePick = (PickModel)item;
-			if(pick == null) {
+			if (pick == null) {
 				pick = tilePick;
 				pick.pickUpItem();
 			}
-		} else {
+		} else if (item instanceof TNTModel) {
 			TNTModel tileTNT = (TNTModel)item;
-			if(tnt == null) {
+			if (tnt == null) {
 				tnt = tileTNT;
 				tnt.pickUpItem();
 			}
@@ -242,4 +239,5 @@ public class PlayerModel {
 		// why do we create brickmodel here? dumindu 
 		brick = new BrickModel(null, 4);
 	}
+
 }

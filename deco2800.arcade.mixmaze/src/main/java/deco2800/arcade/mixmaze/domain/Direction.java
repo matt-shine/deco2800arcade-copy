@@ -75,7 +75,7 @@ public class Direction {
 	}
 
 	/**
-	 * compares the specified direction to check if it lies horizontally 
+	 * compares the specified direction to check if it lies horizontally
 	 * in the X-axis
 	 * @param direction a integer representation of the direction
 	 * @return true if the specified direction is <code>West</code> or
@@ -88,6 +88,7 @@ public class Direction {
 	/**
 	 * compares the specified <code>direction</code> to check if it lies vertically 
 	 * in the Y-axis
+	 *
 	 * @param direction a integer representation of the direction
 	 * @return true if the specified direction is <code>North</code> or
 	 *  "<code>South</code>, false otherwise
@@ -96,6 +97,7 @@ public class Direction {
 		return isNorth(direction) || isSouth(direction);
 	}
 
+
 	/**
 	 * compares the specified <code>direction</code> to check if it faces the <code>Positive Direction</code>.
 	 * <code>Positive Direction</code> means if it faces <code>South</> or <code>East</>
@@ -103,6 +105,7 @@ public class Direction {
 	 * @return true if the specified direction is <code>East</code> or
 	 *  <code>South</code>, false otherwise
 	 */
+
 	public static boolean isPositiveDirection(int direction) {
 		return isEast(direction) || isSouth(direction);
 	}

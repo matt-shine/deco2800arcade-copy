@@ -71,7 +71,7 @@ final class PlayerViewModel extends Actor {
 				break;
 			case NUM_5:
 				Gdx.app.debug(LOG, "changing action");
-				switchAction();
+				model.switchAction();
 				break;
 			case NUM_6:
 				/*
@@ -79,7 +79,9 @@ final class PlayerViewModel extends Actor {
 				Gdx.app.debug(LOG, "player: " + model.getX()
 						+ "\t" + model.getY());
 				*/
-				invokeAction();
+				TileModel tile = gameModel.getBoardTile(
+						model.getX(), model.getY());
+				model.useAction(tile);
 				break;
 			default:
 				return false;	// event not handled
@@ -223,57 +225,6 @@ final class PlayerViewModel extends Actor {
 			return "using TNT";
 		default:
 			return "unknown";
-		}
-	}
-
-	/*
-	 * Switch to the next action, in this order
-	 * USE_BRICK -> USE_PICK -> USE_TNT -> USE_BRICK
-	 * Skip an action if this player does not have the associated item.
-	 */
-	private void switchAction() {
-		PlayerAction act = model.getPlayerAction();
-
-		switch (act) {
-		case USE_BRICK:
-			if (hasPick()) {
-				model.setPlayerAction(USE_PICK);
-			} else if (hasTNT()) {
-				model.setPlayerAction(USE_TNT);
-			}
-			break;
-		case USE_PICK:
-			if (hasTNT()) {
-				model.setPlayerAction(USE_TNT);
-			} else {
-				model.setPlayerAction(USE_BRICK);
-			}
-			break;
-		case USE_TNT:
-			model.setPlayerAction(USE_BRICK);
-			break;
-		}
-	}
-
-	/*
-	 * Invokes the active action of this player.
-	 */
-	private void invokeAction() {
-		TileModel tile = gameModel.getBoardTile(
-				model.getX(), model.getY());
-		PlayerAction act = model.getPlayerAction();
-
-		switch (act) {
-		case USE_BRICK:
-			tile.buildWall(model, model.getDirection());
-			break;
-		case USE_PICK:
-			tile.destroyWall(model, model.getDirection());
-			break;
-		case USE_TNT:
-			for (int dir = 0; dir < 4; dir++)
-				tile.destroyWall(model, dir);
-			break;
 		}
 	}
 

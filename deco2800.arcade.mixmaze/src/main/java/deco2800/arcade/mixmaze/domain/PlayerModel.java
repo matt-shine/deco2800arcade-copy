@@ -2,6 +2,7 @@ package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.BrickModel.MAX_BRICKS;
+import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
 
 /**
  * Player model represents a player.
@@ -36,9 +37,9 @@ public class PlayerModel {
 	}
 
 	/**
-	 * Returns the x-coordinates for this player. The x-coordinate's orgin is at 
+	 * Returns the x-coordinates for this player. The x-coordinate's orgin is at
 	 * the top left.
-	 * 
+	 *
 	 * @return the x-coordinate of this player
 	 */
 	public int getX() {
@@ -47,7 +48,7 @@ public class PlayerModel {
 
 	/**
 	 * Returns the next x-coordinate.
-	 * 
+	 *
 	 * @return the next x-coordinate in relative to the direction facing.
 	 */
 	public int getNextX() {
@@ -58,19 +59,19 @@ public class PlayerModel {
 	}
 
 	/**
-	 * Sets the x-coordinates for this player. The x-coordinate's orgin is at 
+	 * Sets the x-coordinates for this player. The x-coordinate's orgin is at
 	 * the top left.
-	 * 
+	 *
 	 * @param x the x-coordinate of this player
 	 */
 	public void setX(int x) {
 		playerX = x;
 	}
-	
+
 	/**
-	 * Returns the y-coordinates for this player. The y-coordinate's orgin is at 
+	 * Returns the y-coordinates for this player. The y-coordinate's orgin is at
 	 * the top left.
-	 * 
+	 *
 	 * @return the y-coordinate of this player
 	 */
 	public int getY() {
@@ -85,9 +86,9 @@ public class PlayerModel {
 	}
 
 	/**
-	 * Sets the y-coordinates for this player. The y-coordinate's orgin is at 
+	 * Sets the y-coordinates for this player. The y-coordinate's orgin is at
 	 * the top left.
-	 * 
+	 *
 	 * @param x the y-coordinate of this player
 	 */
 	public void setY(int y) {
@@ -96,7 +97,7 @@ public class PlayerModel {
 
 	/** Checks if this player can move. The player can only make a move after 0.3
 	 * seconds after the previous move
-	 * 
+	 *
 	 * @return true if the player can move, false otherwise
 	 */
 	public boolean canMove() {
@@ -105,7 +106,7 @@ public class PlayerModel {
 
 	/**
 	 * Moves the player. This player is moved one <code>tile</> forward in the direction facing.
-	 * 
+	 *
 	 */
 	public void move() {
 		playerX = getNextX();
@@ -115,7 +116,7 @@ public class PlayerModel {
 
 	/**
 	 * Returns the <code>direction</> of this player.
-	 * 
+	 *
 	 * @return the facing <code>direction</> of this player
 	 */
 	public int getDirection() {
@@ -152,38 +153,21 @@ public class PlayerModel {
 	}
 
 	/**Checks of this player can perform a action.
-	 * 
+	 *
 	 * @return true if this player can use any action, false otherwise
 	 */
 	public boolean canUseAction() {
 		return (System.currentTimeMillis() - lastAction) >= (3 * 1000);
 	}
 
-	//redundant method,havent been used anywhere in the workspace?dumi
-	public void useAction(TileModel tile) {
-		if(playerAction == PlayerAction.USE_BRICK) {
-			if(brick != null) {
-				tile.getWall(playerDirection).build(this);
-				brick.removeAmount(1);
-				if(brick.getAmount() == 0) {
-					brick = null;
-				}
-			}
-		} else if(playerAction == PlayerAction.USE_BRICK) {
-
-		} else {
-
-		}
-		lastAction = System.currentTimeMillis();
-	}
-
-	
 	/**
-	 * Pickup an item from a tile in the gameboard. If the item is a a collection of bricks,
-	 *  it will pick up as many brick as this player can until it reach the <code>MAX_BRICKS</code>
-	 *  In case of pick or tnt, player will pickup only if the the player doesn't already own the item.
-	 * 
-	 * @param item an <code>ItemModel</code> object which to be picked up by this player
+	 * Picks up an item on a tile of the gameboard.
+	 * <p>
+	 * This player will pick up as many bricks as possible until reaching
+	 * <code>MAX_BRICKS</code>.  In the case of pick or TNT, the item will
+	 * be only picked up if this player does not possess one.
+	 *
+	 * @param item the item to be picked up by this player
 	 */
 	public void pickUpItem(ItemModel item) {
 		if (item instanceof BrickModel) {
@@ -229,14 +213,65 @@ public class PlayerModel {
 	}
 
 	/**
+	 * Switches to the next action, in this order
+	 * USE_BRICK - USE_PICK - USE_TNT - USE_BRICK.
+	 * An action is skipped if this player does not have
+	 * the associated item.
+	 */
+	public void switchAction() {
+		/* brick is never null */
+		switch (playerAction) {
+		case USE_BRICK:
+			if (pick != null) {
+				setPlayerAction(USE_PICK);
+			} else if (tnt != null) {
+				setPlayerAction(USE_TNT);
+			}
+			break;
+		case USE_PICK:
+			if (tnt != null) {
+				setPlayerAction(USE_TNT);
+			} else {
+				setPlayerAction(USE_BRICK);
+			}
+			break;
+		case USE_TNT:
+			setPlayerAction(USE_BRICK);
+			break;
+		}
+	}
+
+	/**
+	 * Uses the active action of this player.
+	 *
+	 * @param tile the tile where this player is
+	 */
+	public void useAction(TileModel tile) {
+		switch (playerAction) {
+		case USE_BRICK:
+			tile.buildWall(this, playerDirection);
+			break;
+		case USE_PICK:
+			if (tile.destroyWall(this, playerDirection))
+				pick = null;
+			break;
+		case USE_TNT:
+			tnt = null;	// exploded
+			for (int dir = 0; dir < 4; dir++)
+				tile.destroyWall(this, dir);
+			break;
+		}
+	}
+
+	/**
 	 * Constructs a new Player with the specified <code>id</code>
-	 * 
+	 *
 	 * @param id the playerID of this player
 	 */
 	public PlayerModel(int id) {
 		playerID = id;
 		playerAction = PlayerAction.USE_BRICK;
-		// why do we create brickmodel here? dumindu 
+		// why do we create brickmodel here? dumindu
 		brick = new BrickModel(null, 4);
 	}
 

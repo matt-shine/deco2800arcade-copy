@@ -17,31 +17,28 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="Raiden")
 public class Raiden extends GameClient {
 	
-	private OrthographicCamera camera;
-	
+	//private OrthographicCamera camera;
 	// The names of the players: the local player is always players[0]
 	private String[] players = new String[2]; 
-	
 	
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
 
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;
-	
-	private enum GameState {
-		READY,
-		INPROGRESS,
-		GAMEOVER
-	}
-	
-	private GameState gameState;
+	//public static final int SCREENHEIGHT = 480;
+	//public static final int SCREENWIDTH = 800;
+	//private enum GameState {
+	//	READY,
+	//	INPROGRESS,
+	//}
+	//private GameState gameState;
 	/**
 	 * The constructor for game raiden.
 	 * @param player
 	 * @param networkClient
 	 */
+	//private String statusMessage;
+	
 	public Raiden(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		players[0] = player.getUsername();
@@ -49,53 +46,15 @@ public class Raiden extends GameClient {
         this.networkClient = networkClient; //this is a bit of a hack
 	}
 	
-	
-	
-	
 	/**
 	 * Creates the game
 	 */
 	@Override
 	public void create() {
 		//add the overlay listeners
-		this.getOverlay().setListeners(new Screen() {
-
-			@Override
-			public void dispose() {
-			}
-
-			@Override
-			public void hide() {
-				//TODO: unpause raiden.
-			}
-
-			@Override
-			public void pause() {
-			}
-
-			@Override
-			public void render(float arg0) {
-			}
-
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
-
-			@Override
-			public void resume() {
-			}
-
-			@Override
-			public void show() {
-				//TODO: unpause pong
-			}
-			
-        });
-		
+		new GameFrame();
 		super.create();
-		//initialize the camera 
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		
 	}
 
 	@Override
@@ -113,9 +72,8 @@ public class Raiden extends GameClient {
 	 */
 	@Override
 	public void render() {
-		
+		//new GameFrame();
 		super.render();
-		
 	}
 
 	@Override
@@ -140,5 +98,4 @@ public class Raiden extends GameClient {
 	public Game getGame() {
 		return game;
 	}
-	
 }

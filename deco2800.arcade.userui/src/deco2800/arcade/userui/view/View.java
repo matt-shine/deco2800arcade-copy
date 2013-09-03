@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -38,10 +39,16 @@ public class View extends JFrame implements ActionListener {
 	private ImagePanel menupanel;
 	private JPanel sidepanel;
 	private JPanel contentpanel;
-	private JScrollPane sidescroll;
-	private JScrollPane contentscroll;
+	private JPanel dropdownpanel;
+	
+	private JPanel playerpanel;
+	private JPanel friendpanel;
+	private JPanel aboutpanel;
+	private JPanel achievementpanel;
+	private JPanel historypanel;
 	
 	//Declare Buttons here
+	private JButton addfriendbutton;
 	
 	//Declare Labels here
 	private JLabel avatar;
@@ -50,6 +57,8 @@ public class View extends JFrame implements ActionListener {
 	private JLabel playerlevel;
 	private JLabel aboutbar;
 	private JLabel friendbar;
+	private JLabel historybar;
+	private JLabel achievementbar;
 	
 	//Declare Text Areas
 	
@@ -59,12 +68,10 @@ public class View extends JFrame implements ActionListener {
 	private ImageIcon picaboutbar;
 	private ImageIcon picfriendbar;
 	private ImageIcon picaddfriend;
-
-	//Use a MigLayout for the different sections
-	private MigLayout pagelayout = new MigLayout();
-	private MigLayout contentlayout = new MigLayout();
-	private MigLayout menulayout = new MigLayout();
-	private MigLayout sidelayout = new MigLayout();
+	private ImageIcon pichistorybar;
+	private ImageIcon picachievementbar;
+	private ImageIcon piclocked;
+	private ImageIcon picunlocked;
 		
 	public View(Model model) throws HeadlessException {
 		
@@ -77,24 +84,42 @@ public class View extends JFrame implements ActionListener {
 		 */
 		
 		//Image Icons
-		picavatar = new ImageIcon("assets/images/avatar_mockup.png");
+		picavatar = new ImageIcon("assets/images/stark.png");
 		picaboutbar = new ImageIcon("assets/images/about_bar.png");
 		picfriendbar = new ImageIcon("assets/images/friend_bar.png");
 		picaddfriend = new ImageIcon("assets/images/add_friend.png");
-
+		pichistorybar = new ImageIcon("assets/images/history_bar.png");
+		picachievementbar = new ImageIcon("assets/images/achievement_bar.png");
+		piclocked = new ImageIcon("assets/images/achievement_locked.png");
+		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		
+	
 		//Panels and ScrollPanes
-		parentContainer = new JPanel(pagelayout);
+		parentContainer = new JPanel(new MigLayout());
+		
 	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
-	    menupanel.setLayout(menulayout);
-	    //Change to Image panels when have new backgrounds
-	    sidepanel = new JPanel();
-	    contentpanel = new JPanel();
+	    menupanel.setLayout(new MigLayout());
+	    dropdownpanel = new JPanel(new MigLayout());
+	    //dropdownpanel.setOpaque(false);
 	    
-        sidescroll = new JScrollPane(sidepanel);
-        
+	    sidepanel = new JPanel(new MigLayout());
+	    playerpanel = new JPanel(new MigLayout());
+	    friendpanel = new JPanel(new MigLayout());
+	    aboutpanel = new JPanel(new MigLayout());
+	    //playerpanel.setOpaque(false);
+	    //friendpanel.setOpaque(false);
+	    //aboutpanel.setOpaque(false);
+	    
+	    contentpanel = new JPanel(new MigLayout());
+	    historypanel = new JPanel(new MigLayout());
+	    achievementpanel = new JPanel(new MigLayout());
+	    //historypanel.setOpaque(false);
+	    //achievementpanel.setOpaque(false);
+	               
         //Buttons and Image Buttons
-
+	    addfriendbutton = new JButton(picaddfriend);
+	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
+	    addfriendbutton.setContentAreaFilled(false);
         
         //Labels
         avatar = new JLabel();
@@ -107,33 +132,46 @@ public class View extends JFrame implements ActionListener {
         friendbar = new JLabel();
         friendbar.setIcon(picfriendbar);
         playerlevel = new JLabel("Level 20");
+        historybar = new JLabel();
+        historybar.setIcon(pichistorybar);
+        achievementbar = new JLabel();
+        achievementbar.setIcon(picachievementbar);
 
 		//Add objects to panels 
-        /*
-        sidepanel.add(avatar);
-        sidepanel.add(playername);       
-        sidepanel.add(playerlevel);        
-        sidepanel.add(addfriend);        
-        sidepanel.add(aboutbar);       
-        sidepanel.add(friendbar);
-        */
+        playerpanel.add(avatar);
+        playerpanel.add(playername);       
+        playerpanel.add(playerlevel); 
+        playerpanel.add(addfriendbutton);
+        friendpanel.add(friendbar, "north");
+        aboutpanel.add(aboutbar, "north");
+        
+        sidepanel.add(playerpanel, "wrap, center, width :300, height :300");
+        sidepanel.add(aboutpanel, "wrap, center, width :300, height :300");
+        sidepanel.add(friendpanel, "center, width :300, height :300");
+        
+        historypanel.add(historybar, "north");
+        achievementpanel.add(achievementbar, "north");
+        
+        contentpanel.add(historypanel, "wrap, center, height :320");
+        contentpanel.add(achievementpanel, "center, height :320");
             
 	    //Add panels to Main Panel	               
 		parentContainer.add(menupanel, "dock north");
-		sidepanel.setBackground(Color.GRAY);
-		parentContainer.add(sidepanel, "east, width :900, height :700");
-		contentpanel.setBackground(Color.darkGray);
-		parentContainer.add(contentpanel, "west, width :400, height :700");
+		sidepanel.setBackground(Color.darkGray);
+		parentContainer.add(sidepanel, "west, width :500, height :700");
+		contentpanel.setBackground(Color.gray);
+		parentContainer.add(contentpanel, "east, width :800, height :700");
 		
 		//Add the main panel to JFrame
 		add(parentContainer);
-		pack();
 	
 		// Set the  view window constraints
 
 		setSize(1280,800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		pack();
 		setVisible(true);
+		setResizable(false);
 		
 	}
 

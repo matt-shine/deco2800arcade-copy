@@ -48,9 +48,6 @@ public class TileViewModel extends Group {
 	 */
 	public TileViewModel(TileModel model, ShapeRenderer renderer,
 			int tileSize) {
-		Gdx.app.debug(LOG, String.format("initializing (%d, %d)",
-				model.getY(), model.getX()));
-
 		this.model = model;
 		this.renderer = renderer;
 		this.tileSize = tileSize;

@@ -5,6 +5,7 @@ package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.PlayerModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 
 import static com.badlogic.gdx.graphics.Color.*;
@@ -31,22 +33,25 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 final class GameScreen implements Screen {
 	private static final String LOG = GameScreen.class.getSimpleName();
 
-	//TODO use this
-	@SuppressWarnings("unused")
 	private final MixMaze game;
 	private final Stage stage;
 	private final ShapeRenderer renderer;
-	private final MixMazeModel model;
 	private final Skin skin;
 
 	private Label timerLabel;
 	private int elapsed;
+	private Table tileTable;
 	private Group gameArea;
+	private Table endGameTable;
 	private PlayerViewModel p1;
 	private PlayerViewModel p2;
 	private Label[] userLabels;
 	private Label[] scoreLabels;
 	private Label[] itemLabels;
+	private MixMazeModel model;
+	private int timeLimit;
+	private TextButton backMenu;
+	private Label resultLabel;
 
 	/**
 	 * Constructor
@@ -55,35 +60,16 @@ final class GameScreen implements Screen {
 		this.game = game;
 		this.skin = game.skin;
 
-		elapsed = 0;
-
 		/*
 		 * This should be the only ShapeRender used in this
 		 * stage.
 		 */
 		renderer = new ShapeRenderer();
 
-		/* FIXME: game size should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 2);
-
 		stage = new Stage();
 
 		setupLayout();
 
-		gameArea.addListener(new InputListener() {
-			public boolean keyDown(InputEvent event, int keycode) {
-				Actor actor = event.getListenerActor();
-
-				for (Actor child : gameArea.getChildren()) {
-					if (child.notify(event, false))
-						return true;
-				}
-				Gdx.app.debug(LOG, "no children handles this"
-						+ " down");
-
-				return false;
-			}
-		});
 	}
 
 	/**
@@ -94,7 +80,7 @@ final class GameScreen implements Screen {
 		Table root = new Table();
 		Table left = new Table();
 		Table right = new Table();
-		Table tileTable = new Table();
+
 		userLabels = new Label[2];
 		scoreLabels = new Label[2];
 		itemLabels = new Label[6];
@@ -111,7 +97,16 @@ final class GameScreen implements Screen {
 		itemLabels[5] = new Label("TNT: 0", skin);
 
 		timerLabel = new Label("timer", skin);
+		tileTable = new Table();
 		gameArea = new Group();
+		endGameTable = new Table();
+
+		endGameTable.setVisible(false);
+		resultLabel = new Label("result", skin);
+		backMenu = new TextButton("back to menu", skin);
+		endGameTable.add(resultLabel);
+		endGameTable.row();
+		endGameTable.add(backMenu);
 
 		root.setFillParent(true);
 		root.debug();
@@ -150,7 +145,14 @@ final class GameScreen implements Screen {
 		 * always places its children at (0, 0), but
 		 * children of gameArea can move freely in stage.
 		 */
+		gameBoard.add(tileTable);
+		gameBoard.add(gameArea);
+		gameBoard.add(endGameTable);
+	}
+
+	private void setupGameBoard() {
 		int tileSize = 640 / model.getBoardSize();
+
 		for (int j = 0; j < model.getBoardSize(); j++) {
 			for (int i = 0; i < model.getBoardSize(); i++) {
 				tileTable.add(new TileViewModel(
@@ -168,14 +170,13 @@ final class GameScreen implements Screen {
 			if (j < model.getBoardSize())
 				tileTable.row();
 		}
-		gameBoard.add(tileTable);
+
 		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
 				1);
 		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
 				2);
 		gameArea.addActor(p1);
 		gameArea.addActor(p2);
-		gameBoard.add(gameArea);
 	}
 
 	@Override
@@ -207,6 +208,14 @@ final class GameScreen implements Screen {
 		stage.act(delta);
 		stage.draw();
 		Table.drawDebug(stage);
+
+		if (endGameTable.isVisible() && backMenu.isChecked()) {
+			backMenu.toggle();
+			endGameTable.setVisible(false);
+			tileTable.clear();
+			gameArea.clear();
+			game.setScreen(game.menuScreen);
+		}
 	}
 
 	@Override
@@ -226,24 +235,62 @@ final class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
+		Gdx.app.debug(LOG, "hiding");
 		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
-		stage.setKeyboardFocus(gameArea);
+		Gdx.app.debug(LOG, "showing");
 
+		/* FIXME: game size and time limit should be passed from UI */
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 2);
+		timeLimit = 30;
+		setupGameBoard();
+
+		/* set timer */
+		elapsed = 0;
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				elapsed += 1;
-				//Gdx.app.debug(LOG,
-				//	"" + elapsed +" seconds passed");
 				timerLabel.setText("Timer: "
 						 + elapsed);
 			}
-		}, 1, 1, 60);
+		}, 1, 1, timeLimit);
+		Timer.schedule(new Timer.Task() {
+			public void run() {
+				PlayerModel winner;
 
+				stage.setKeyboardFocus(null);
+				winner = model.endGame();
+				if (winner == null) {
+					/* draw */
+					resultLabel.setText("Draw");
+				} else {
+					/* winner */
+					resultLabel.setText("Player "
+							+ winner.getPlayerID()
+							+ " win");
+				}
+				endGameTable.setVisible(true);
+			}
+		}, timeLimit);
+
+		/* start game */
+		Gdx.input.setInputProcessor(stage);
+		gameArea.addListener(new InputListener() {
+			public boolean keyDown(InputEvent event, int keycode) {
+				Actor actor = event.getListenerActor();
+
+				for (Actor child : gameArea.getChildren()) {
+					if (child.notify(event, false))
+						return true;
+				}
+
+				return false;
+			}
+		});
+		stage.setKeyboardFocus(gameArea);
 		model.startGame();
 	}
 

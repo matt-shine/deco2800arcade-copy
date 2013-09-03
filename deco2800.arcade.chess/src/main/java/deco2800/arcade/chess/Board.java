@@ -136,7 +136,7 @@ public class Board{
 	/**
 	 * Deactivates the piece from play and adds it to the graveyard
 	 * 
-	 * @param piece
+	 * @param removalPiece
 	 *            Piece to be removed from play
 	 */
 	private void removePiece(Piece removalPiece) {
@@ -146,7 +146,7 @@ public class Board{
 	/**
 	 * Reactivates the piece into play and removes it from the graveyard
 	 * 
-	 * @param piece
+	 * @param retrievalPiece
 	 *            Piece to be retrieved into play
 	 */
 	private void retrievePiece(Piece retrievalPiece) {

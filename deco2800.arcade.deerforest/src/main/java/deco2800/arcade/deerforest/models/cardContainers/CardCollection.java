@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.List;
 
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
-import deco2800.arcade.deerforest.models.effects.AbstractEffect;
 
 public interface CardCollection extends Collection<AbstractCard> {
 
@@ -13,9 +12,6 @@ public interface CardCollection extends Collection<AbstractCard> {
 
 	//list all cards in collection
 	public List<AbstractCard> cards();
-
-	//get all continuous effects currently in collection
-	public List<AbstractEffect> continuousEffects();
 
 	//destroy specific cards, returns cards destroyed
 	public CardCollection destroyCards(List<AbstractCard> cardsToDestroy) ;

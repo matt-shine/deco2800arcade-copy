@@ -14,6 +14,7 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.arcade.packman.PackageServer;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.listener.AchievementListener;
 
@@ -30,6 +31,9 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
+	
+	// Package manager
+	private PackageServer packServ;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -89,6 +93,8 @@ public class ArcadeServer {
 		
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage();
+		
+		this.packServ = new PackageServer();
 		
 		//initialize database classes
 		try {

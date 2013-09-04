@@ -3,21 +3,25 @@
  */
 package deco2800.arcade.mixmaze;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 @ArcadeGame(id="mixmaze")
 public final class MixMaze extends GameClient {
+	private static final String LOG = MixMaze.class.getSimpleName();
+
+	Screen splashScreen;
 	Screen menuScreen;
 	Screen gameScreen;
-
-	private static final String LOG = MixMaze.class.getSimpleName();
+	Skin skin;
 
 	public MixMaze(Player player, NetworkClient networkClient) {
 		/*
@@ -36,11 +40,17 @@ public final class MixMaze extends GameClient {
 
 		super.create();
 
+		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
-		setScreen(menuScreen);
-		Gdx.app.debug(LOG, "Use arrows to move and h, j, k, l "
-				   + "to build/destroy walls");
+		setScreen(splashScreen);
+
+		Gdx.app.debug(LOG, "Default key bindings");
+		Gdx.app.debug(LOG, "Player 1: W, S, A, D to move, "
+				+ "G switch action, H use action");
+		Gdx.app.debug(LOG, "Player 2: arrow keys to move"
+				+ "NUM_5 switch action, NUM_6 use action");
 	}
 
 	@Override
@@ -52,13 +62,13 @@ public final class MixMaze extends GameClient {
 
 	@Override
 	public void render() {
-		//fpsLogger.log();
 		super.render();
 	}
 
 	@Override
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");
+		splashScreen.dispose();
 		menuScreen.dispose();
 		gameScreen.dispose();
 		super.dispose();

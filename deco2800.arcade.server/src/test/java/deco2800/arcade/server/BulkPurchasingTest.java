@@ -135,7 +135,7 @@ public class BulkPurchasingTest {
 				tiddlywinks,
 				25
 		);
-		
+
 		verify(mockCS).getUserCredits(algernon.getID());
 		verify(mockCS).deductUserCredits(algernon.getID(), 10);
 		verify(mockCS).getUserCredits(barnaby.getID());

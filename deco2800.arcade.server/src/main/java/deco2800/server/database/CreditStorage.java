@@ -80,7 +80,8 @@ public class CreditStorage {
 	/**
 	 * Returns credits where id matches int playerID given
 	 * 
-	 * @param	int playerID, ResultSet results
+	 * @param	playerID
+     * @param   results
 	 * @throws	SQLException
 	 * @return	Integer result
 	 */

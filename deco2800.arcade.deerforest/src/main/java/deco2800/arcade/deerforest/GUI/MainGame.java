@@ -91,6 +91,8 @@ public class MainGame extends Game {
 	
 	public boolean moveCards(int player, List<AbstractCard> cards, String oldLocation, String newLocation) {
 		
+		if(cards == null || oldLocation == null || newLocation == null) return false;
+		
 		CardCollection srcCards = null;
 		CardCollection destCards = null;
 		

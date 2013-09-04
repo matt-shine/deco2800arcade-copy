@@ -147,7 +147,7 @@ public class MainGameScreen implements Screen {
 		    shapeRenderer.begin(ShapeType.FilledRectangle);
 		    
 		    for(Rectangle r: highlightedZones) {
-		    	shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.BLUE, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+		    	shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
 		    	
 		    	if(glowSize > 10 && glowDirection == true) {
 		    		glowDirection = false;

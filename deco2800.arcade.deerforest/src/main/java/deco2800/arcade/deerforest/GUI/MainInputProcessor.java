@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -47,7 +48,6 @@ public class MainInputProcessor implements InputProcessor {
 			} 
 			//draw a card
 			if(game.getPhase().equals("DrawPhase")) {
-				//TODO DRAW ALL THE CARDS!!!
 				doDraw();
 			}
 			currentSelection = null;
@@ -121,6 +121,8 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
+    	System.out.println("x,y: " + x + "," + y + " width,height: " + Gdx.graphics.getWidth() + "," + Gdx.graphics.getHeight());
+    	System.out.println("Ratio (x,y): " + ((float)x)/Gdx.graphics.getWidth() + "," + ((float)y)/Gdx.graphics.getHeight());
     	//Check it was a single click
     	if(button != Buttons.LEFT) return false;
     	

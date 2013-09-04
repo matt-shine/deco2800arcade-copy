@@ -15,48 +15,48 @@ public class Arena extends Sprite {
 
 	
 	//Zone widths / heights (ratio to window size)
-	final private float monsterZoneWidth = 0.09844f;
-	final private float monsterZoneHeight = 0.17708f;
-	final private float handZoneWidth = 0.078125f;
-	final private float handZoneHeight = 0.141666f;
-	final private float spellZoneWidth = 0.08125f;
-	final private float spellZoneHeight = 0.145833f;
+	final private float monsterZoneWidth = 0.0738095f;
+	final private float monsterZoneHeight = 0.1407185f;
+	final private float handZoneWidth = 0.06093755f;
+	final private float handZoneHeight = 0.1127744f;
+	final private float spellZoneWidth = 0.06093749f;
+	final private float spellZoneHeight = 0.11388894f;
 	
 	//Zone points (ratio to window size)
 	
 	//Monster zones
-	final private float P1MonsterZoneY = 0.51667f; //constant for all P1 monster zones
-	final private float P2MonsterZoneY = 0.3f; //constant for all P2 monster zones
+	final private float P1MonsterZoneY = 0.5419162f; //constant for all P1 monster zones
+	final private float P2MonsterZoneY = 0.36327344f; //constant for all P2 monster zones
 	
-	final private float MonsterZone1X = 0.22969f; //constant for all Zone 1 monsters
-	final private float MonsterZone2X = 0.3421875f; //constant for all Zone 2 monsters
-	final private float MonsterZone3X = 0.4578f; //constant for all Zone 3 monsters
-	final private float MonsterZone4X = 0.5703f; //constant for all Zone 4 monsters
-	final private float MonsterZone5X = 0.6828f; //constant for all Zone 5 monsters
+	final private float MonsterZone1X = 0.32440478f; //constant for all Zone 1 monsters
+	final private float MonsterZone2X = 0.41309524f; //constant for all Zone 2 monsters
+	final private float MonsterZone3X = 0.5005952f; //constant for all Zone 3 monsters
+	final private float MonsterZone4X = 0.58928573f; //constant for all Zone 4 monsters
+	final private float MonsterZone5X = 0.6785714f; //constant for all Zone 5 monsters
 	final private float[] MonsterZonesX = {MonsterZone1X, MonsterZone2X, MonsterZone3X, MonsterZone4X, MonsterZone5X};
 	
 	//Spell zones
-	final private float P1SpellZone1Y = 0.5916667f; 
-	final private float P1SpellZone2Y = 0.6354167f;
-	final private float P2SpellZone1Y = 0.2166667f;
-	final private float P2SpellZone2Y = 0.2625f;
+	final private float P1SpellZone1Y = 0.56527776f; 
+	final private float P1SpellZone2Y = 0.5833333f;
+	final private float P2SpellZone1Y = 0.35972223f;
+	final private float P2SpellZone2Y = 0.34166667f;
 	final private float[] P1SpellZonesY = {P1SpellZone1Y, P1SpellZone2Y};
 	final private float[] P2SpellZonesY = {P2SpellZone1Y, P2SpellZone2Y};
 	
-	final private float SpellZone1X = 0.084375f;
-	final private float SpellZone2X = 0.128125f;
+	final private float SpellZone1X = 0.19140625f;
+	final private float SpellZone2X = 0.240625f;
 	final private float[] SpellZonesX = {SpellZone1X, SpellZone2X};
 	
 	//Hand zones
-	final private float P1HandZoneY = 0.8270833f;
-	final private float P2HandZoneY = 0.0333333f;
+	final private float P1HandZoneY = 0.7714571f;
+	final private float P2HandZoneY = 0.17964073f;
 	
-	final private float HandZone1X = 0.3125f;
-	final private float HandZone2X = 0.40625f;
-	final private float HandZone3X = 0.5f;
-	final private float HandZone4X = 0.59375f;
-	final private float HandZone5X = 0.6875f;
-	final private float HandZone6X = 0.78125f;
+	final private float HandZone1X = 0.32023808f;
+	final private float HandZone2X = 0.39285713f;
+	final private float HandZone3X = 0.46547619f;
+	final private float HandZone4X = 0.53869045f;
+	final private float HandZone5X = 0.61071426f;
+	final private float HandZone6X = 0.68273807f;
 	final private float[] HandZonesX = {HandZone1X, HandZone2X, HandZone3X, HandZone4X, HandZone5X, HandZone6X};
 	
 	private Map<String, Map<Rectangle, ExtendedSprite>> zones;

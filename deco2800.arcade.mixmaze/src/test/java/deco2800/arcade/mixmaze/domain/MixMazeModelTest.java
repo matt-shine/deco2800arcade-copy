@@ -9,7 +9,7 @@ import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
 public class MixMazeModelTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void mixMazeSizeOutOfRange() {
-		new MixMazeModel(-1, MixMazeDifficulty.Beginner, 2);
+		new MixMazeModel(-1, MixMazeDifficulty.Beginner, 60);
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

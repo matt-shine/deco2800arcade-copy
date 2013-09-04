@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import java.util.HashMap;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
+import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
 import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
 
 import static com.badlogic.gdx.Input.Keys.*;
@@ -164,7 +164,7 @@ final class PlayerViewModel extends Actor {
 		}
 	}
 
-	private boolean hasItem(ItemModel.Type type) {
+	private boolean hasItem(ItemModel.ItemType type) {
 		ItemModel item = null;
 
 		switch (type) {

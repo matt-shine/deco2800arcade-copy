@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
+import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer
 		.ShapeType.FilledRectangle;

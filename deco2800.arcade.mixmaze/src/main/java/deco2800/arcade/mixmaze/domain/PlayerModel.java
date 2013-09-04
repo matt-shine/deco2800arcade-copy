@@ -272,7 +272,7 @@ public class PlayerModel {
 		playerID = id;
 		playerAction = PlayerAction.USE_BRICK;
 		// why do we create brickmodel here? dumindu
-		brick = new BrickModel(null, 4);
+		brick = new BrickModel(4);
 	}
 
 }

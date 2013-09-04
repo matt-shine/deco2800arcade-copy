@@ -6,14 +6,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.deerforest.models.cardContainers.Deck;
 import deco2800.arcade.deerforest.models.cards.*;
@@ -28,7 +25,7 @@ import deco2800.arcade.deerforest.models.gameControl.DeerForestPlayer;
  *
  */
 @ArcadeGame(id="deerforest")
-public class DeerForest extends GameClient implements UIOverlay {
+public class DeerForest extends GameClient {
 	
 	MainGameScreen view;
 	MainGame mainGame;
@@ -90,11 +87,6 @@ public class DeerForest extends GameClient implements UIOverlay {
 		return game;
 	}
 	
-	@Override
-	public void setListeners(Screen l) {
-		;
-	}
-	
 	private DeerForestPlayer createDeerForestPlayer() {
 		ArrayList<AbstractCard> cardList = new ArrayList<AbstractCard>();
 		//add monsters
@@ -144,11 +136,6 @@ public class DeerForest extends GameClient implements UIOverlay {
 		return p;
 	}
 
-	@Override
-	public void addPopup(PopupMessage p) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public int getCurrentPlayer() {
 		return mainGame.getCurrentPlayer();

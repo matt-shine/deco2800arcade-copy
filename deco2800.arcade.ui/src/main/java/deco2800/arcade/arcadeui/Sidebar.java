@@ -75,7 +75,6 @@ public class Sidebar extends Group {
         		
 				@Override
 				public boolean handle(Event e) {
-					System.out.println(e);
 					if (buttonNum == 0 && e.toString() == "touchDown") {
 						addAchievemntsWindow();
 					}
@@ -146,7 +145,6 @@ public class Sidebar extends Group {
 	
 	public void addAchievemntsWindow() {
 		window.setContent(new AchievementList(overlay));
-		System.out.println("test");
 	}
 	
 	

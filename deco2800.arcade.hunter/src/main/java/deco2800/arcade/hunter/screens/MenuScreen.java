@@ -49,6 +49,7 @@ public class MenuScreen implements Screen {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("test");
 				hunter.setScreen(new GameScreen(hunter));
+				stage.clear(); //Stops buttons being clickable when you move out of this screen. See: http://stackoverflow.com/questions/13890472/ligbdx-touch-listener-on-wrong-screen for a potentially better way TODO
 			}
 
 		});

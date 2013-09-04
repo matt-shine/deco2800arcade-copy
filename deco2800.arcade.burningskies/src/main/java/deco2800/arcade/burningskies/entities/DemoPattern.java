@@ -18,10 +18,13 @@ public class DemoPattern extends BulletPattern {
 	}
 	
 	public void fire(float lag) {
-		int x = 0, y = 0;
+		float x = 0, y = 0;
 		if(emitter == null) {
-			x = (int) (stage.getWidth()/2);
-			y = (int) (stage.getHeight()/2);
+			x = stage.getWidth()/2;
+			y = stage.getHeight()/2;
+		} else {
+			x = emitter.getX();
+			y = emitter.getY();
 		}
 		DemoBullet bullet = new DemoBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle, image);
 		stage.addActor(bullet);

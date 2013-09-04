@@ -27,9 +27,13 @@ public class MenuScreen implements Screen {
     private BitmapFont black;
     private BitmapFont white;
     private TextureAtlas atlas;
-    private  Skin skin;
+    private Skin skin;
     private SpriteBatch batch;
-    private TextButton button;
+    private TextButton startButton;
+    private TextButton optionsButton;
+    private TextButton scoresButton;
+    private TextButton helpButton;
+    private TextButton exitButton;
     private Label label;
 	
 	public MenuScreen( BurningSkies game){
@@ -85,20 +89,41 @@ public class MenuScreen implements Screen {
 	    style.down = skin.getDrawable("buttonpressed");
 	    style.font = black;
 	
-	    button = new TextButton("Start", style);
-	    button.setWidth(400);
-	    button.setHeight(100);
-	    button.setX(Gdx.graphics.getWidth() / 2 - button.getWidth() / 2);
-	    button.setY(Gdx.graphics.getHeight() / 2 - button.getHeight() / 2);
+	    startButton = new TextButton("Start", style);
+	    optionsButton = new TextButton("Options", style);
+	    scoresButton = new TextButton("Scores", style);
+	    helpButton = new TextButton("Help", style);
+	    exitButton = new TextButton("Exit", style);
+	    
+	    startButton.setWidth(200);
+	    startButton.setHeight(50);
+	    optionsButton.setWidth(200);
+	    optionsButton.setHeight(50);
+	    scoresButton.setWidth(200);
+	    scoresButton.setHeight(50);
+	    helpButton.setWidth(200);
+	    helpButton.setHeight(50);
+	    exitButton.setWidth(200);
+	    exitButton.setHeight(50);
+	    
+	    startButton.setX(Gdx.graphics.getWidth() / 2 - startButton.getWidth() / 2);
+	    optionsButton.setX(Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2);
+	    scoresButton.setX(Gdx.graphics.getWidth() / 2 - scoresButton.getWidth() / 2);
+	    helpButton.setX(Gdx.graphics.getWidth() / 2 - helpButton.getWidth() / 2);
+	    exitButton.setX(Gdx.graphics.getWidth() / 2 - exitButton.getWidth() / 2);
+	    
+	    optionsButton.setY(Gdx.graphics.getHeight() / 2 - optionsButton.getHeight() / 2);
+	    startButton.setY(optionsButton.getY() + (2 * (startButton.getHeight() + 10)));
+	    scoresButton.setY(optionsButton.getY() + (startButton.getHeight() + 10));
+	    helpButton.setY(optionsButton.getY() - (startButton.getHeight() + 10));
+	    exitButton.setY(optionsButton.getY() - (2 * (startButton.getHeight() + 10)));
 	
-	    button.addListener(new InputListener() {
-	            public boolean touchDown(InputEvent event, float x, float y,
-	                            int pointer, int button) {
+	    startButton.addListener(new InputListener() {
+	            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 	                    return true;
 	            }
 	
-	            public void touchUp(InputEvent event, float x, float y,
-	                            int pointer, int button) {
+	            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 	                    game.setScreen(new PlayScreen(game));
 	            }
 	    });
@@ -106,11 +131,15 @@ public class MenuScreen implements Screen {
 	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
 	    label = new Label("Burning Skies", ls);
 	    label.setX(0);
-	    label.setY(Gdx.graphics.getHeight() / 2 + 100);
+	    label.setY(startButton.getY() + startButton.getHeight() + 10);
 	    label.setWidth(width);
 	    label.setAlignment(Align.center);
 	
-	    stage.addActor(button);
+	    stage.addActor(startButton);
+	    stage.addActor(optionsButton);
+	    stage.addActor(scoresButton);
+	    stage.addActor(helpButton);
+	    stage.addActor(exitButton);
 	    stage.addActor(label);
 
 	}

@@ -23,7 +23,7 @@ public interface UIOverlay {
 		String getMessage();
 		//TODO: icon
 		//TODO: onclick behaviour
-	};
+	}
 	
 	
 	/**

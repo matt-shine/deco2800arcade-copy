@@ -42,5 +42,7 @@ public class ArcadeSystem {
         arcade.arcadeExit();
     }
 
-	
+	public static GameClient getCurrentGame() {
+		return arcade.getCurrentGame();
+	}
 }

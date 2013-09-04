@@ -46,6 +46,7 @@ public class Connect4 extends GameClient {
 	private int playerTurn = 0;
 	
 	private int[] keyCodes = new int[3];
+	private boolean isReplaying = false;
 	
 	public static final int WINNINGSCORE = 3;
 	public static final int SCREENHEIGHT = 480;
@@ -82,7 +83,7 @@ public class Connect4 extends GameClient {
 	public Connect4(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		players[0] = player.getUsername();
-		players[1] = "Player 2"; 
+		players[1] = "Computer"; 
 		
 		keyCodes[KEY_LEFT] = 0; //Left Key
 		keyCodes[KEY_RIGHT] = 0; //Right Key
@@ -124,8 +125,9 @@ public class Connect4 extends GameClient {
                 if ( eType.equals( "replay_reset" ) ) {
                     System.out.println( "replay reset" );
                 }
-                if ( eType.equals( "playback_finished" ) ) {
+                if ( eType.equals( "playback_complete" ) ) {
                     System.out.println( "playback finished" );
+                    isReplaying = false;
                 }
                 
                 if ( eType.equals( "do_move" ) ) {
@@ -268,16 +270,6 @@ public class Connect4 extends GameClient {
 		this.playerTurn = 0;
 		cursorDisc.setState( Disc.PLAYER1 );
 		cursorDisc.currentPos = 0;
-		
-		//Need to somehow clear the display
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    table.render(shapeRenderer);
-	    shapeRenderer.end();
-		/*
-		shapeRenderer.begin(ShapeType.FilledCircle);
-	    table.renderDiscs(shapeRenderer);
-	    shapeRenderer.end();
-	    */
 	}
 
 	@Override
@@ -336,6 +328,27 @@ public class Connect4 extends GameClient {
 		}
 	}
 
+	public void renderScreenText() {
+		//render player names
+	    batch.begin();
+	    font.setColor(Color.RED);
+	    font.draw(batch, "Red: " + ( players[0].equals( "" ) ? "User" : players[0] ), 10, SCREENHEIGHT - 20);
+	    font.setColor(Color.BLUE);
+	    font.draw(batch, "Blue: " + players[1], 10, SCREENHEIGHT - 50);
+	    
+	    //render connect4 text
+	    font.setColor(Color.YELLOW);
+	    font.draw(batch, "Connect 4", SCREENWIDTH/2 - 80, SCREENHEIGHT - 20);
+	    
+	    //If there is a current status message (i.e. if the game is in the ready or gameover state)
+	    // then show it in the middle of the screen
+	    if (statusMessage != null) {
+	    	font.setColor(Color.WHITE);
+	    	font.draw(batch, statusMessage, SCREENWIDTH/2 - 100, SCREENHEIGHT-100);
+	    }
+	    batch.end();
+	}
+	
 	/**
 	 * Render the current state of the game and process updates
 	 */
@@ -351,43 +364,10 @@ public class Connect4 extends GameClient {
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
-	    //Render the cursor Disc
+	    //Render everything
 	    renderCursorDisc();
-	    /*
-	    shapeRenderer.begin(ShapeType.FilledCircle);
-	    cursorDisc.render(shapeRenderer);
-	    shapeRenderer.end();
-	    */
-	    
-	    //Render the table
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    table.render(shapeRenderer);
-	    shapeRenderer.end();
-	    
-	    //Render the tablediscs
-	    shapeRenderer.begin(ShapeType.FilledCircle);
-	    table.renderDiscs(shapeRenderer);
-	    shapeRenderer.end();
-	    
-	    //render score
-	    batch.begin();
-	    font.setColor(Color.YELLOW);
-	    font.draw(batch, "Connect 4!", 10, SCREENHEIGHT - 20);
-	    font.draw(batch, players[0], SCREENWIDTH/2 - 100, SCREENHEIGHT - 20);
-	    font.draw(batch, players[1], SCREENWIDTH/2 + 50, SCREENHEIGHT - 20);
-	    font.draw(batch, Integer.toString(scores[0]), SCREENWIDTH/2, SCREENHEIGHT-50);
-	    font.draw(batch, Integer.toString(scores[1]), SCREENWIDTH/2 + 75, SCREENHEIGHT-50);
-	    
-	    //If there is a current status message (i.e. if the game is in the ready or gameover state)
-	    // then show it in the middle of the screen
-	    if (statusMessage != null) {
-	    	font.setColor(Color.WHITE);
-	    	font.draw(batch, statusMessage, SCREENWIDTH/2 - 100, SCREENHEIGHT-100);
-	    	if (gameState == GameState.GAMEOVER) {
-	    		font.draw(batch, "Click to exit", SCREENWIDTH/2 - 100, SCREENHEIGHT - 200);
-	    	}
-	    }
-	    batch.end();
+	    renderScreenText();
 	    
 	    // Respond to user input and move the ball depending on the game state
 	    switch(gameState) {
@@ -396,7 +376,7 @@ public class Connect4 extends GameClient {
 		    	if (Gdx.input.isTouched()) {
 		    		reset();
 		    		replayHandler.startRecording();
-		    		startPoint();
+		    		startGame();
 		    	}
 		    	break;
 		    	
@@ -414,7 +394,6 @@ public class Connect4 extends GameClient {
 		    			keyCodes[0] = 0;
 		    		} else if(keyCodes[KEY_ENTER] == 2) {
 		    			//move the disc the lowest position and render table discs
-		    			
 		    			
 		    			if ( doMove(playerTurn, cursorDisc.currentPos) ) {
 		    				
@@ -473,18 +452,26 @@ public class Connect4 extends GameClient {
 		    	}
 		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
-			    	if (Gdx.input.isTouched()) {
-			    		gameOver();
-			    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-			    	}
-			    	if (Gdx.input.isKeyPressed(Keys.ENTER)) {
-			    		//Replay the last played game.
-			    		reset();
-			    		gameState = GameState.REPLAY;
-			    		replayHandler.startPlayback();
-			    	}
-			    	break;
+		    	statusMessage = "Click to quit, Enter to view replay";
+			    if (Gdx.input.isTouched()) {
+			   		gameOver();
+			   		ArcadeSystem.goToGame(ArcadeSystem.UI);
+			   	}
+			   	if (Gdx.input.isKeyPressed(Keys.ENTER)) {
+			   		//Replay the last played game.
+			    	reset();
+			    	gameState = GameState.REPLAY;
+			    	replayHandler.startPlayback();
+			    	isReplaying = true;
+			   	}
+			   	break;
 		    case REPLAY: //Replaying last game
+		    	if (isReplaying) {
+		    		statusMessage = "REPLAYING";
+		    	} else {
+		    		statusMessage = "Replay over";
+		    		gameState = GameState.GAMEOVER;
+		    	}
 	    		replayHandler.runLoop();
 		    	break;
 	    }
@@ -497,13 +484,13 @@ public class Connect4 extends GameClient {
 		if (player == 0){
 	    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
 	    		gameState = GameState.GAMEOVER;
-	    		endPoint( 0 );
+	    		endGame( 0 );
 	    	}
 	    	//renderCursorDisc(1);
 	    } else {
 	    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
 	    		gameState = GameState.GAMEOVER;
-	    		endPoint( 1 );
+	    		endGame( 1 );
 	    	}
 	    	//renderCursorDisc(0);
 	    }
@@ -514,36 +501,9 @@ public class Connect4 extends GameClient {
 		return table.placeDisc(currentPosition, player);
 	}
 
-	/**
-	 * The point has ended: update scores, reset the ball, check for a winner and move the game state to ready or gameover
-	 * @param winner 0 for player 1, 1 for player 2
-	 */
-	private void endPoint(int winner) {
+	private void endGame(int winner) {
 		replayHandler.finishRecording();
-		
-		statusMessage = "Click to quit, Enter to view replay";
 		gameState = GameState.GAMEOVER;
-		/*
-		cursorDisc.reset();
-		scores[winner]++;
-		// If we've reached the victory point then update the display
-		if (scores[winner] == WINNINGSCORE) {	
-		    int loser = winner==1?0:1; //The loser is the player who didn't win!
-		    statusMessage = players[winner] + " Wins " + scores[winner] + " - " + scores[loser] + "!";
-		    gameState = GameState.GAMEOVER;
-		    //Update the game state to the server
-		    networkClient.sendNetworkObject(createScoreUpdate());
-		    //If the local player has won, send an achievement
-		    if (winner == 0) {
-                incrementAchievement("pong.winGame");
-		    	//TODO Should have more detail in the achievement message
-		    }
-		} else {
-			// No winner yet, get ready for another point
-			gameState = GameState.READY;
-			statusMessage = "Click to start!";
-		}
-		*/
 	}
 	
 	/**
@@ -558,10 +518,7 @@ public class Connect4 extends GameClient {
 		return update;
 	}
 	
-	/**
-	 * Start a new point: start the ball moving and change the game state
-	 */
-	private void startPoint() {
+	private void startGame() {
 		
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
@@ -577,7 +534,6 @@ public class Connect4 extends GameClient {
 		super.resume();
 	}
 
-	
 	private static final Game game;
 	static {
 		game = new Game();

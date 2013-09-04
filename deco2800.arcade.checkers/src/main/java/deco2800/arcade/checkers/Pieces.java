@@ -35,7 +35,8 @@ public abstract class Pieces {
 	 * Move the pieces
 	 * @param y distance to move the pieces up (y<0 for down)
 	 */
-	public void move(float y) {
+	public void move(float x, float y) {
+		bounds.x += x;
 		bounds.y += y;
 	}
 	

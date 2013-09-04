@@ -14,6 +14,13 @@ public class AIPieces extends Pieces {
 		super(position);
 	}
 	
+	/**
+	 * AI makes a move
+	 */
+	public void move() {
+		
+	}
+	
 /*	@Override
 	public void update(Ball ball) {
 		super.update(ball);

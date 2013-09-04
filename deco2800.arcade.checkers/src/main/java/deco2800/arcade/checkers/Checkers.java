@@ -11,6 +11,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.*;
+
+import javax.swing.*;
+import java.awt.event.*;
+import java.util.*;
+import java.io.*;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -27,21 +36,26 @@ import deco2800.arcade.client.network.NetworkClient;
 public class Checkers extends GameClient {
 	
 	private OrthographicCamera camera;
-	
+
+	private int chosen = 50;
+	private float chosenx = 0;
+	private float choseny = 0;
 	private Square[][] squares;
 	private Pieces[] myPieces;
 	private Pieces[] theirPieces;
+	ClickListener pushed;
 	
 	private enum GameState {
 		READY,
-		INPROGRESS,
+		AIGO,
+		USERGO,
 		GAMEOVER
 	}
 	private GameState gameState;
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
-	public static final int WINNINGSCORE = 3;
+	public static final int WINNINGSCORE = 4;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
@@ -55,6 +69,10 @@ public class Checkers extends GameClient {
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
 
+	private final int MOUSE_UP = 0;
+	private final int MOUSE_DOWN = 1;
+	private int mouseState = MOUSE_UP;
+	
 	/**
 	 * Basic constructor for the game
 	 * @param player The name of the player
@@ -117,6 +135,7 @@ public class Checkers extends GameClient {
 		//making grids
 		
 		squares = new Square[3][4];
+		pushed = new ClickListener();
 		
 		int height = SCREENHEIGHT - 80;
 		int width = 20;
@@ -131,6 +150,7 @@ public class Checkers extends GameClient {
 				height = height - 100;
 				squares[i][j] = new Square(new Vector2(width, height));
 				squares[i][j].setColor(1, 1, 1, 1); //white
+				squares[i][j].addActionListener(pushed);
 			}
 		}
 		
@@ -144,8 +164,6 @@ public class Checkers extends GameClient {
 			theirPieces[i].setColor(0, 0, 1, 1); //
 
 		}
-		//ball = new Ball();
-		//ball.setColor(1, 1, 1, 1);
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -226,12 +244,51 @@ public class Checkers extends GameClient {
 	    
 	    case READY: //Ready to start a new point
 	    	if (Gdx.input.isTouched()) {
-	    		startPoint();
+	    		gameState = GameState.AIGO;
 	    	}
 	    	break;
 	    	
-	    case INPROGRESS: //Point is underway, ball is moving
-	    
+	    case AIGO: //AI go
+	    	startPoint();
+	    	if (scores[1] == WINNINGSCORE) {
+				statusMessage = players[1] + " Wins " + scores[1] + " - " + scores[0] + "!";
+				gameState = GameState.GAMEOVER;
+			} else if (scores[0] == WINNINGSCORE) {
+				statusMessage = players[0] + " Wins " + scores[0] + " - " + scores[1] + "!";
+				gameState = GameState.GAMEOVER;
+			}
+	    	break;
+	    case USERGO: //User go
+			if (Gdx.input.isTouched()) {
+				if ( this.mouseState == MOUSE_UP ) {
+					// gone from up to down, click event here
+					this.mouseState = MOUSE_DOWN;
+				} else {
+					// still down
+				}
+			} else {
+				if ( this.mouseState == MOUSE_DOWN ) {
+					// gone from down to up
+					mouseReleased();
+					this.mouseState = MOUSE_UP;
+				} else {
+					// mouse still up
+				}
+			}
+			
+			//follows mouse if clicked on
+			if (chosen != 50) {
+				myPieces[chosen].bounds.set(clickToScreenX(Gdx.input.getX()) - 15, clickToScreenY(Gdx.input.getY()) - 15, 30, 30);
+			}
+			
+			if (scores[1] == WINNINGSCORE) {
+				statusMessage = players[1] + " Wins " + scores[1] + " - " + scores[0] + "!";
+				gameState = GameState.GAMEOVER;
+			} else if (scores[0] == WINNINGSCORE) {
+				statusMessage = players[0] + " Wins " + scores[0] + " - " + scores[1] + "!";
+				gameState = GameState.GAMEOVER;
+			}
+			
 	    	break;
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
@@ -261,7 +318,7 @@ public class Checkers extends GameClient {
 		    networkClient.sendNetworkObject(createScoreUpdate());
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
-                incrementAchievement("pong.winGame");
+                incrementAchievement("checkers.winGame");
 		    	//TODO Should have more detail in the achievement message
 		    }
 		} else {
@@ -284,12 +341,302 @@ public class Checkers extends GameClient {
 	}
 	
 	/**
-	 * Start a new point: start the ball moving and change the game state
+	 * AI makes a move, and change game state to player making move
 	 */
 	private void startPoint() {
-		//ball.randomizeVelocity();
-		gameState = GameState.INPROGRESS;
+		int toMoveNum = 0;
+		int direction = 0;
+		int leftEdible = 0;
+		int rightEdible = 0;
+		Pieces toMove = theirPieces[toMoveNum];
+		//80 left, 230 right
+		for (int i=0; i<4; i++) {
+			if (toMove.bounds.y == 110) { //last row
+				toMoveNum += 1;
+				toMove = theirPieces[toMoveNum];
+				i = 0;
+				direction = 0;
+			} else if (toMove.bounds.y == -90) {
+				//eaten
+				toMoveNum += 1;
+				toMove = theirPieces[toMoveNum];
+				i = 0;
+				direction = 0;
+			} else if (rightEdible == 1) {
+				for (int j=0; j<4; j++) {
+			    	for (int k=0; k<3; k++) {
+			    		if (squares[k][j].bounds.contains(toMove.bounds.x + 100, toMove.bounds.y - 100)) {
+			    			//after position is a square
+			    			for (int m=0; m<4; m++) {
+								if (toMove.bounds.y - 100 == myPieces[m].bounds.y && toMove.bounds.x + 100 == myPieces[m].bounds.x) {
+									//blocked by user piece
+									if (toMove.bounds.x != 80) { //not furthest left
+										direction = 1;
+										i = 0;
+										rightEdible = 0;
+									} else {
+										toMoveNum += 1;
+										toMove = theirPieces[toMoveNum];
+										i = 0;
+										direction = 0;
+										rightEdible = 0;
+									}
+								} else if (toMove.bounds.y - 100 == theirPieces[m].bounds.y && toMove.bounds.x + 100 == theirPieces[m].bounds.x) {
+									//blocked by AI piece
+									if (toMove.bounds.x != 80) { //not furthest left
+										direction = 1;
+										i = 0;
+										rightEdible = 0;
+									} else {
+										toMoveNum += 1;
+										toMove = theirPieces[toMoveNum];
+										i = 0;
+										direction = 0;
+										rightEdible = 0;
+									}
+								} else {
+									// not blocked, free to eat
+									rightEdible = 2;
+									for (int a=0; a<4; a++) {
+										if (toMove.bounds.y - 50 == myPieces[a].bounds.y && toMove.bounds.x + 50 == myPieces[a].bounds.x) {
+											myPieces[a].bounds.y = -90;
+										}
+									}
+								}
+			    			}
+			    		}
+			    	}	
+				}// after position is not a square
+    			if (rightEdible == 1) {
+    				if (toMove.bounds.x != 80) { //not furthest left
+						direction = 1;
+						i = 0;
+						rightEdible = 0;
+					}
+    			}
+			} else if (leftEdible == 1) {
+				for (int j=0; j<4; j++) {
+			    	for (int k=0; k<3; k++) {
+			    		if (squares[k][j].bounds.contains(toMove.bounds.x - 100, toMove.bounds.y - 100)) {
+			    			//after position is a square
+			    			for (int m=0; m<4; m++) {
+								if (toMove.bounds.y - 100 == myPieces[m].bounds.y && toMove.bounds.x - 100 == myPieces[m].bounds.x) {
+									//blocked by user piece
+									toMoveNum += 1;
+									toMove = theirPieces[toMoveNum];
+									i = 0;
+									direction = 0;
+									leftEdible = 0;
+									break;
+								} else if (toMove.bounds.y - 100 == theirPieces[m].bounds.y && toMove.bounds.x - 100 == theirPieces[m].bounds.x) {
+									//blocked by AI piece
+									toMoveNum += 1;
+									toMove = theirPieces[toMoveNum];
+									i = 0;
+									direction = 0;
+									leftEdible = 0;
+									break;
+								} else {
+									// not blocked, free to eat
+									leftEdible = 2;
+									for (int a=0; a<4; a++) {
+										if (toMove.bounds.y - 50 == myPieces[a].bounds.y && toMove.bounds.x - 50 == myPieces[a].bounds.x) {
+											myPieces[a].bounds.y = -90;
+										}
+									}
+								}
+			    			}
+
+			    		}
+			    	}
+				}// after position not a square
+				if (leftEdible == 1) {
+    				toMoveNum += 1;
+    				toMove = theirPieces[toMoveNum];
+    				i = 0;
+    				direction = 0;
+    				leftEdible = 0;
+    			}
+			} else if (toMove.bounds.x == 80) { //furthest left
+				if (toMove.bounds.y - 50 == theirPieces[i].bounds.y && toMove.bounds.x + 50 == theirPieces[i].bounds.x) {
+					toMoveNum += 1;
+					toMove = theirPieces[toMoveNum];
+					i = 0;
+					direction = 0;
+				} else if (toMove.bounds.y - 50 == myPieces[i].bounds.y && toMove.bounds.x + 50 == myPieces[i].bounds.x) {
+					rightEdible = 1;
+					i = 0;
+				}
+			} else if (toMove.bounds.x == 230) { //furthest right
+				direction = 1;
+				if (toMove.bounds.y - 50 == theirPieces[i].bounds.y && toMove.bounds.x - 50 == theirPieces[i].bounds.x) {
+					toMoveNum += 1;
+					toMove = theirPieces[toMoveNum];
+					i = 0;
+					direction = 0;
+				} else if (toMove.bounds.y - 50 == myPieces[i].bounds.y && toMove.bounds.x - 50 == myPieces[i].bounds.x) {
+					leftEdible = 1;
+					i = 0;
+				}
+			} 
+			else { // not furthest left or right
+				if (direction == 1) {
+					//right diagonal is blocked already
+					if (toMove.bounds.y-50 == theirPieces[i].bounds.y && toMove.bounds.x-50 == theirPieces[i].bounds.x) {
+						//left diagonal is also blocked
+						toMoveNum += 1;
+						toMove = theirPieces[toMoveNum];
+						i = 0;
+						direction = 0;
+					} else if (toMove.bounds.y-50 == myPieces[i].bounds.y && toMove.bounds.x-50 == myPieces[i].bounds.x) {
+						leftEdible = 1;
+						i = 0;
+					}
+				} else if (toMove.bounds.y-50 == theirPieces[i].bounds.y && toMove.bounds.x+50 == theirPieces[i].bounds.x) {
+					//piece at right diagonal
+					direction = 1;
+					i = 0;
+				} else if (toMove.bounds.y-50 == myPieces[i].bounds.y && toMove.bounds.x+50 == myPieces[i].bounds.x && rightEdible != 2) {
+					//piece at right diagonal
+					rightEdible = 1;
+					i = 0;
+				}
+			}
+		}
+		try{
+    	    Thread.sleep(1500);
+    	}catch(InterruptedException e){
+    	    System.out.println("got interrupted!");
+    	}
+		if (leftEdible == 2){
+			toMove.move(-100f, -100f);
+			scores[1] += 1;
+		} else if (rightEdible == 2) {
+			toMove.move(100f, -100f);
+			scores[1] += 1;
+		} else if (direction == 1) { //left diagonal
+			toMove.move(-50f, -50f);
+		} else {
+			toMove.move(50f, -50f);
+		}
+		direction = 0;
+		leftEdible = 0;
+		for (int h=0; h<4; h++) {
+			if (toMove.bounds.y == 110) { //last row
+				try{
+		    	    Thread.sleep(1500);
+		    	}catch(InterruptedException e){
+		    	    System.out.println("got interrupted!");
+		    	}
+				scores[1] += 1;
+				toMove.bounds.y = -90;
+			}
+		}
+		
+		gameState = GameState.USERGO;
 		statusMessage = null;
+	}
+
+
+	
+	private void mouseReleased() {
+
+		int x = Gdx.input.getX();
+		int y = Gdx.input.getY();
+		int realX = clickToScreenX(x);
+		int realY = clickToScreenY(y);
+		
+		if (chosen == 50) { // no piece selected
+			System.out.println(theirPieces[2].bounds.y);
+			for (int i = 0; i<4; i++) {
+				if (myPieces[i].bounds.contains(realX, realY)) {
+					chosen = i;
+					chosenx = myPieces[i].bounds.x;
+					choseny = myPieces[i].bounds.y;
+				}
+			}
+		} else { // piece already selected
+			for (int j=0; j<4; j++) {
+		    	for (int i=0; i<3; i++) {
+		    		if (squares[i][j].bounds.contains(realX, realY)) { //is a square
+		    			if (squares[i][j].bounds.contains(chosenx+50, choseny+50) || squares[i][j].bounds.contains(chosenx-50, choseny+50)) { //diagonal square
+		    					myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
+				    					squares[i][j].bounds.y + 10, 30, 30);
+		    					if (squares[i][j].bounds.y == 350) {//reached end
+		    						try{
+		    				    	    Thread.sleep(1500);
+		    				    	}catch(InterruptedException e){
+		    				    	    System.out.println("got interrupted!");
+		    				    	}
+		    						scores[0] += 1;
+		    						myPieces[chosen].bounds.y = -90;
+		    					}
+				    			chosen = 50;
+				    			chosenx = choseny = 0;
+				    			gameState = GameState.AIGO;
+		    			} else if (squares[i][j].bounds.contains(chosenx+100, choseny+100)) { //diagonal square
+	    					for (int k=0; k<4; k++) {
+	    						if (squares[i][j].bounds.contains(theirPieces[k].bounds.x+50, theirPieces[k].bounds.y+50)) {
+	    							//noms
+	    							scores[0] += 1;
+	    							theirPieces[k].bounds.y = -90;
+	    							myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
+	    			    					squares[i][j].bounds.y + 10, 30, 30);
+	    							if (squares[i][j].bounds.y == 350) {//reached end
+			    						try{
+			    				    	    Thread.sleep(1500);
+			    				    	}catch(InterruptedException e){
+			    				    	    System.out.println("got interrupted!");
+			    				    	}
+			    						scores[0] += 1;
+			    						myPieces[chosen].bounds.y = -90;
+			    					}
+	    			    			chosen = 50;
+	    			    			chosenx = choseny = 0;
+	    			    			gameState = GameState.AIGO;
+	    						}
+	    					}
+		    			} else if (squares[i][j].bounds.contains(chosenx-100, choseny+100)) { //diagonal square
+	    					for (int k=0; k<4; k++) {
+	    						if (squares[i][j].bounds.contains(theirPieces[k].bounds.x-50, theirPieces[k].bounds.y+50)) {
+	    							//noms
+	    							scores[0] += 1;
+	    							theirPieces[k].bounds.y = -90;
+	    							myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
+	    			    					squares[i][j].bounds.y + 10, 30, 30);
+	    							if (squares[i][j].bounds.y == 350) {//reached end
+			    						try{
+			    				    	    Thread.sleep(1500);
+			    				    	}catch(InterruptedException e){
+			    				    	    System.out.println("got interrupted!");
+			    				    	}
+			    						scores[0] += 1;
+			    						myPieces[chosen].bounds.y = -90;
+			    					}
+	    			    			chosen = 50;
+	    			    			chosenx = choseny = 0;
+	    			    			gameState = GameState.AIGO;
+	    						}
+	    					}
+		    				
+		    			} else if (squares[i][j].bounds.contains(chosenx, choseny)) { //put back
+		    				myPieces[chosen].bounds.set(squares[i][j].bounds.x + 10,
+			    					squares[i][j].bounds.y + 10, 30, 30);
+			    			chosen = 50;
+			    			chosenx = choseny = 0;
+		    			}
+		    		}
+		    	}
+			}
+		}
+	}
+	
+	private int clickToScreenX(int clickX) {
+		return clickX * SCREENWIDTH / Gdx.graphics.getWidth();
+	}
+
+	private int clickToScreenY(int clickY) {
+		return SCREENHEIGHT - (clickY * SCREENHEIGHT / Gdx.graphics.getHeight());
 	}
 
 	@Override

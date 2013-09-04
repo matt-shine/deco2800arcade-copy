@@ -1,5 +1,11 @@
 package deco2800.arcade.checkers;
 
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -9,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author shewwiii
  *
  */
-public class Square {
+public class Square extends JButton implements ActionListener{
 	
 	static final float WIDTH = 50f; // The width of the square
 	static final float HEIGHT = 50f; //The initial height of the square
@@ -71,5 +77,16 @@ public class Square {
 		bounds.x = newPosition.x;
 		bounds.y = newPosition.y;
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object square = e.getSource();
+		
+		
+		
+		System.out.println("a button has been pushed");
+		
+	}
+
 
 }

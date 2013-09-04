@@ -312,15 +312,7 @@ public class Board{
 
 			this.removeJumpsRook(possibleMoves, currentPos, piece);
 
-			// allowableMoves.addAll(this.removeJumpsRook(possibleMoves,
-			// currentPos, piece));
 		}
-		/* Dont need to print this out, clogs console
-		for (int i = 0; i < allowableMoves.size(); i++) {
-			System.out.println(piece + " "
-					+ Arrays.toString(allowableMoves.get(i)));
-		}
-		*/
 		return allowableMoves;
 	}
 
@@ -411,8 +403,7 @@ public class Board{
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
 		}
-		
-		System.out.println(Board_State);
+
 	}
 
 	/**
@@ -687,13 +678,11 @@ public class Board{
 	
 	private List<int[]> removeJumpsRook(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
-		// System.out.print("this is the piece" + " " + piece);
 		int x = currentPos[0];
 		int y = currentPos[1];
 		int xCheck;
 		int yCheck;
 		List<int[]> possible = new ArrayList<int[]>(possibleMoves);
-		// public boolean checkSpace(Piece piece, int [] currentPos){
 
 		// remove jumps for moving UP
 		for (int i = 1; i <= 7; i++) {
@@ -702,7 +691,6 @@ public class Board{
 			if ((up[0] >= 0) && (up[0] <= 7) && (up[1] >= 0) && (up[1] <= 7)) {
 				
 			 if (!occupiedSpace(up)) {
-					//System.out.println("up" + " "+ occupiedSpace( up)); Can we remove to stop redundancy in console
 					continue;
 				
 				} else {
@@ -716,10 +704,8 @@ public class Board{
 						for (int j = 1; j <= 7; j++) {
 							for (int k = 0; k < possible.size(); k++) {
 								xCheck = possible.get(k)[0];
-								//System.out.println("xCheck" + " " +xCheck); Can you remove this kieren?
 								
 								yCheck = possible.get(k)[1];
-								//System.out.println("yCheck" + " " + yCheck); Can you remove this kieren?
 								if ((xCheck == (x + i + j)) && (yCheck == (y))) {
 									possible.remove(k);
 
@@ -733,9 +719,7 @@ public class Board{
 						for (int j = 0; j <= 7; j++) {
 							for (int k = 0; k < possible.size(); k++) {
 								xCheck = possible.get(k)[0];
-								//System.out.println("xCheck" + " " +xCheck);
 								yCheck = possible.get(k)[1];
-								//System.out.println("yCheck" + " " + yCheck);
 								if ((xCheck == (x + i + j)) && (yCheck == (y))) {
 									possible.remove(k);
 								
@@ -756,7 +740,6 @@ public class Board{
 					&& (Left[1] <= 7)) {
 				// if space is not occupied continue
 				if (!occupiedSpace(Left)) {
-					//System.out.println("Left:" + " " + occupiedSpace(Left)); Can we remove to stop redundancy in console
 					continue;
 				} else {
 					List<Piece> row = Board_State.get(x);
@@ -799,7 +782,6 @@ public class Board{
 					&& (Right[1] <= 7)) {
 				// if space is not occupied continue
 				if (!occupiedSpace(Right)) {
-					//System.out.println("Right:" + " " + occupiedSpace(Right)); Can we remove to stop redundancy in console
 					continue;
 				} else {
 					List<Piece> row = Board_State.get(x);
@@ -844,7 +826,6 @@ public class Board{
 
 				// if space is not occupied continue
 				if (!occupiedSpace(down)) {
-					//System.out.println("Down:" + " " + occupiedSpace(down)); Can we remove to stop redundancy in console
 					continue;
 				} else {
 					List<Piece> row = Board_State.get(x - i);

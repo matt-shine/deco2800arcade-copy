@@ -340,8 +340,7 @@ public class Chess extends GameClient implements InputProcessor{
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		System.out.println("Co-ords: " + x + ", " + y);
-		/*
+		
 		if(!moving) {
 			movingPiece = checkSquare(x, y);
 			moving = true;
@@ -353,9 +352,6 @@ public class Chess extends GameClient implements InputProcessor{
 			moving = false;
 			return true;
 		}
-		*/
-		movePieceGraphic();
-		return true;
 	}
 
 	@Override
@@ -391,9 +387,7 @@ public class Chess extends GameClient implements InputProcessor{
 		} catch (IndexOutOfBoundsException e) {
 			return null;
 		}
-		
-		System.out.println("Square clicked was: " + square[0] + " " + square[1]);
-		
+				
 		return onSquare;
 	}
 	
@@ -404,14 +398,14 @@ public class Chess extends GameClient implements InputProcessor{
 		//Determine x square
 		for(int i=0; i<8; i++) {
 			int j=i;
-			if((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) ))) {
+			if((y >= (verticOff + pieceVerticOff + (59)*i )) && (y <= (verticOff + pieceVerticOff + (59)*(j+1) ))) {
 				xSquare = i;
 			}
 		}
 		
 		//Determine y square
 		for(int i=0; i<8; i++) {
-			if((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) ))) {
+			if((x >= (horizOff + pieceHorizOff + (59)*i )) && (x <= (horizOff + pieceHorizOff + (59)*(i+1) ))) {
 				ySquare = i;
 			}
 		}
@@ -535,12 +529,10 @@ public class Chess extends GameClient implements InputProcessor{
 					int[] correctPos = board.findPiece(board.whiteRook1);
 					whiteRook1Pos[0] = (pieceHorizOff + horizOff + (59)*correctPos[1]);
 					whiteRook1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
-					System.out.println(whiteRook1Pos[0] + 59);
 				} else if(piece.equals(board.whiteKnight1)) {
 					int[] correctPos = board.findPiece(board.whiteKnight1);
 					whiteKnight1Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
 					whiteKnight1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
-					System.out.println(whiteKnight1Pos[0]);
 				} else if(piece.equals(board.whiteBishop1)) {
 					int[] correctPos = board.findPiece(board.whiteBishop1);
 					whiteBishop1Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
@@ -597,6 +589,70 @@ public class Chess extends GameClient implements InputProcessor{
 					int[] correctPos = board.findPiece(board.whitePawn8);
 					whitePawn7Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
 					whitePawn7Pos[1] = (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackRook1)) {
+					int[] correctPos = board.findPiece(board.blackRook1);
+					blackRook1Pos[0] = (pieceHorizOff + horizOff + (59)*correctPos[1]);
+					blackRook1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackKnight1)) {
+					int[] correctPos = board.findPiece(board.blackKnight1);
+					blackKnight1Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackKnight1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackBishop1)) {
+					int[] correctPos = board.findPiece(board.blackBishop1);
+					blackBishop1Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackBishop1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackQueen)) {
+					int[] correctPos = board.findPiece(board.blackQueen);
+					blackQueenPos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackQueenPos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackKing)) {
+					int[] correctPos = board.findPiece(board.blackKing);
+					blackKingPos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackKingPos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackBishop2)) {
+					int[] correctPos = board.findPiece(board.blackBishop2);
+					blackBishop2Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackBishop2Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackKnight2)) {
+					int[] correctPos = board.findPiece(board.blackKnight2);
+					blackKnight2Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackKnight2Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackRook2)) {
+					int[] correctPos = board.findPiece(board.blackRook2);
+					blackRook2Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackRook2Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackPawn1)) {
+					int[] correctPos = board.findPiece(board.blackPawn1);
+					blackPawn0Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn0Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackPawn2)) {
+					int[] correctPos = board.findPiece(board.blackPawn2);
+					blackPawn1Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackPawn3)) {
+					int[] correctPos = board.findPiece(board.blackPawn3);
+					blackPawn2Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn2Pos[1] = (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackPawn4)) {
+					int[] correctPos = board.findPiece(board.blackPawn4);
+					blackPawn3Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn3Pos[1] = (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackPawn5)) {
+					int[] correctPos = board.findPiece(board.blackPawn5);
+					blackPawn4Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn4Pos[1] = (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackPawn6)) {
+					int[] correctPos = board.findPiece(board.blackPawn6);
+					blackPawn5Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn5Pos[1] = (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				} else if(piece.equals(board.blackPawn7)) {
+					int[] correctPos = board.findPiece(board.blackPawn7);
+					blackPawn6Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn6Pos[1] = (pieceVerticOff + verticOff + (59)*correctPos[0]);
+				}  else if(piece.equals(board.blackPawn8)) {
+					int[] correctPos = board.findPiece(board.blackPawn8);
+					blackPawn7Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
+					blackPawn7Pos[1] = (pieceVerticOff + verticOff + (59)*correctPos[0]);
 				}
 			}
 			

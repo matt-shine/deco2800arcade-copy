@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import deco2800.arcade.client.ArcadeInputMux;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import deco2800.arcade.client.ArcadeSystem;
 
@@ -48,7 +49,7 @@ public class LoginScreen implements Screen {
         skin2.add("default", textButtonStyle);
 
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -112,6 +113,9 @@ public class LoginScreen implements Screen {
 	public void dispose() {
         stage.dispose();
         skin.dispose();
+        
+        ArcadeInputMux.getInstance().removeProcessor(stage);
+        
 	}
 
 	@Override

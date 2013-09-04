@@ -7,6 +7,9 @@ public class IncorrectEffectException extends Exception {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * @param errorMessage string to display on error
+	 */
 	public IncorrectEffectException(String errorMessage) {
 		super(errorMessage);
 	}

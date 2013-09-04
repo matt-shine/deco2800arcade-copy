@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.UIOverlay.PopupMessage;
 
 /**
  * Create a sidebar on the left side of the screen
@@ -17,7 +17,6 @@ import deco2800.arcade.client.UIOverlay.PopupMessage;
 public class OverlayScreen implements Screen {
 	
 	private Screen callbacks = null;
-	private boolean notifiedForMissingCallbacks = false;
 	
     private Stage stage;
     private Sidebar sidebar = null;
@@ -26,18 +25,20 @@ public class OverlayScreen implements Screen {
 	private boolean isUIOpen = false;
 	private boolean hasTabPressedLast = false;
 	
+	@SuppressWarnings("unused")
 	private Overlay overlay;
 	
 	public OverlayScreen(Overlay overlay) {
 		
 		this.overlay = overlay;
-		sidebar = new Sidebar(overlay);
 		window = new OverlayWindow(overlay);
+		sidebar = new Sidebar(overlay, window);
 		
 		stage = new Stage();
-		stage.addActor(sidebar);
 		stage.addActor(window);
-        
+		stage.addActor(sidebar);
+		ArcadeInputMux.getInstance().addProcessor(stage);
+		
 	}
 	
 	

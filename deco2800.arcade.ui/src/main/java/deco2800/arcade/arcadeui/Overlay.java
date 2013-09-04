@@ -36,6 +36,8 @@ public class Overlay extends GameClient implements UIOverlay {
 	private OverlayPopup popup = new OverlayPopup(this);
 	private SpriteBatch batch = new SpriteBatch();
 	
+	private GameClient host = null;
+	
 	public Overlay(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 
@@ -82,7 +84,7 @@ public class Overlay extends GameClient implements UIOverlay {
 		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance() && !notifiedForMissingInput) {
 			notifiedForMissingInput = true;
 			logger.error("Something has stolen the inputlistener. " +
-					"See: src/main/java/deco2800/arcade/client/ArcadeInputMux.java");
+					"See src/main/java/deco2800/arcade/client/ArcadeInputMux.java");
 		}
 		
 	}
@@ -128,5 +130,15 @@ public class Overlay extends GameClient implements UIOverlay {
 		this.setScreen(screen);
 	}
 
-
+	public GameClient getHost() {
+		return host;
+	}
+	
+	
+	public void setHost(GameClient host) {
+		this.host = host;
+	}
+	
+	
+	
 }

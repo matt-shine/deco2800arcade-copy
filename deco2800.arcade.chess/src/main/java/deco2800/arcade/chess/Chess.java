@@ -1,31 +1,18 @@
 package deco2800.arcade.chess;
 
-import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.ImageObserver;
-import java.util.*;
-import java.awt.image.BufferedImage;
-import java.awt.Image;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.chess.*;
 import deco2800.arcade.chess.pieces.King;
 import deco2800.arcade.chess.pieces.Piece;
 
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,15 +20,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-
-import deco2800.arcade.model.Game;
-import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.network.NetworkClient;
 
 
 @ArcadeGame(id="chess")

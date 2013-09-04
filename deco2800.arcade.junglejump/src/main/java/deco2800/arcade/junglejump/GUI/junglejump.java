@@ -48,7 +48,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
 
-	public junglejump(Player player) {
+	public junglejump(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);

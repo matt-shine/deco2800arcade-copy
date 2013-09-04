@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -31,12 +33,13 @@ public class Sidebar extends Group {
     private static float OUTER_POS = 100;
     private boolean isUIOpen = false;
     private boolean hasTabPressedLast = false;
-	
-    public Sidebar(Overlay overlay) {
-    	
+    OverlayWindow window;
+    
+    public Sidebar(Overlay overlay, OverlayWindow window) {
 		
 		this.overlay = overlay;
-		texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 60, 60, 60, 60);
+		this.window = window;
+		texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 30, 30, 30, 30);
 		
         skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -66,8 +69,22 @@ public class Sidebar extends Group {
     	for (int i = 0; i < 6; i++) {
     		SidebarMenuItem item = new SidebarMenuItem(skin);
         	item.setText("Option " + i);
+        	final int buttonNum = i;
+            
+        	item.addListener(new EventListener() {
+        		
+				@Override
+				public boolean handle(Event e) {
+					System.out.println(e);
+					if (buttonNum == 0 && e.toString() == "touchDown") {
+						addAchievemntsWindow();
+					}
+					return true;
+				}
+        		
+        	});
         	table.row();
-        	table.add(item).top().left().space(40);
+        	table.add(item).top().left().pad(20, 20, 0, 0);
     	}
     	
     	table.setFillParent(true);
@@ -121,10 +138,15 @@ public class Sidebar extends Group {
 	
 	
 	public void resize(int x, int y) {
-		System.out.println("resize");
 		table.setX(100);
 		table.setY(y - 300);
 		
+	}
+	
+	
+	public void addAchievemntsWindow() {
+		window.setContent(new AchievementList(overlay));
+		System.out.println("test");
 	}
 	
 	

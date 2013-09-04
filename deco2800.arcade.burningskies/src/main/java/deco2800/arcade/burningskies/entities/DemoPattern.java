@@ -29,4 +29,10 @@ public class DemoPattern extends BulletPattern {
 		bullet.act(lag);
 	}
 
+	@Override
+	public void onRender(float delta) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

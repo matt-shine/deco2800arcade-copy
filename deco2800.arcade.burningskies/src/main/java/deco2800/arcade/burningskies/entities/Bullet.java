@@ -16,7 +16,7 @@ public abstract class Bullet extends Image {
 	protected Vector2 position;
 	protected Vector2 acceleration;
 	protected float direction;
-	protected Player player;
+	protected PlayerShip player;
 	protected Ship parent;
 	
 	/**
@@ -27,7 +27,7 @@ public abstract class Bullet extends Image {
 	 * @param parent
 	 * @param player
 	 */
-	public Bullet(Affinity affinity, int damage, Ship parent, Player player, Vector2 initialPosition, float initialDirection, Texture image) {
+	public Bullet(Affinity affinity, int damage, Ship parent, PlayerShip player, Vector2 initialPosition, float initialDirection, Texture image) {
 		super(image);
 		this.affinity = affinity;
 		this.damage = damage;

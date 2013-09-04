@@ -3,6 +3,7 @@ package deco2800.arcade.breakout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -42,6 +43,8 @@ public class Breakout extends GameClient {
 	int[] sequence = {19, 19, 20, 20, 21, 22, 21, 22, 30, 29};
 	int currentButton = 0;
 	
+	private Texture background;
+	
 	public Sound breaking;
 
 	// private String status;
@@ -71,7 +74,7 @@ public class Breakout extends GameClient {
 		super(player, networkClient);
 		this.player = player.getUsername();
 		// this.nc = networkClient;
-		bricks = new Brick[40];
+		bricks = new Brick[48];
 
 	}
 
@@ -81,6 +84,8 @@ public class Breakout extends GameClient {
 	@Override
 	public void create() {
 		super.create();
+		Texture.setEnforcePotImages(false);
+		background = new Texture(Gdx.files.classpath("imgs/background.png"));
 		// Sets the display size
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
@@ -91,9 +96,9 @@ public class Breakout extends GameClient {
 		ball = new PongBall();
 		ball.setColor(1, 1, 1, 1);
 
-		// created the 40 Bricks
+		// created the 48 Bricks
 		int index = 0;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 6; i++) {
 			for (int j = 0; j < 8; j++) {
 				bricks[index] = new Brick(j * 125 + 120, SCREENHEIGHT - i * 45
 						- 110);
@@ -164,6 +169,11 @@ public class Breakout extends GameClient {
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
+		
+		// Draw a background
+		batch.begin();
+		batch.draw(background, 0, 0);
+		batch.end();
 
 		// renders the rectangles that are filled.
 		shapeRenderer.begin(ShapeType.FilledRectangle);
@@ -172,19 +182,19 @@ public class Breakout extends GameClient {
 		// TODO Make the Ball a Circle
 		ball.render(shapeRenderer);
 
+		shapeRenderer.end();
+
+		// Writes in the text information
 		/*
 		 * Iterates through the array check whether brick's status is true,
 		 * which will then render the individual brick.
 		 */
 		for (Brick b : bricks) {
 			if (b.getState()) {
-				b.render(shapeRenderer);
+				// originally sent shapeRenderer 
+				b.render(batch);
 			}
 		}
-
-		shapeRenderer.end();
-
-		// Writes in the text information
 		batch.begin();
 		font.setColor(Color.GREEN);
 		font.draw(batch, "player " + player, SCREENWIDTH/4, SCREENHEIGHT - 20);

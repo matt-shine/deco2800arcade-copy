@@ -1,7 +1,10 @@
 package deco2800.arcade.breakout;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,6 +13,8 @@ public class Brick {
 
 	private Texture bricksImage;
 	private TextureRegion bricksImageRegion;
+	private Sprite brickImg;
+	private SpriteBatch sBatch;
 
 	// protected int x;
 	// protected int y;
@@ -112,11 +117,21 @@ public class Brick {
 		return ball.overlaps(bottomSide);
 	}
 	
-	public void render(ShapeRenderer render) {
-		render.setColor(Color.GREEN);
-		render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-				brickShape.height, Color.YELLOW, Color.BLUE, Color.PINK,
-				Color.RED);
+	public void create() {
+		sBatch = new SpriteBatch();
+	}
+	
+	public void render(SpriteBatch batch) {
+		brickImg = new Sprite(new Texture(Gdx.files.classpath("imgs/brick.png")));
+		brickImg.setSize(width, height);
+		sBatch = batch;
+		sBatch.begin();
+		sBatch.draw(brickImg, brickShape.x, brickShape.y);
+		sBatch.end();
+//		render.setColor(Color.GREEN);
+//		render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+//				brickShape.height, Color.YELLOW, Color.BLUE, Color.PINK,
+//				Color.RED);
 	}
 
 	public String toString() {

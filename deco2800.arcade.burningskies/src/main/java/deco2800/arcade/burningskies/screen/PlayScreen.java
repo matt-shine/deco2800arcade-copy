@@ -2,11 +2,11 @@ package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import deco2800.arcade.burningskies.BurningSkies;
@@ -15,12 +15,11 @@ import deco2800.arcade.burningskies.entities.DemoPattern;
 
 public class PlayScreen implements Screen
 {
-	@SuppressWarnings("unused")
 	private BurningSkies game;
+	private Music music;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	
 	private Texture texture;
 	private Stage stage;
 	
@@ -47,6 +46,8 @@ public class PlayScreen implements Screen
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
     	
+        game.playSong("level1");
+    	
     	// TO MAKE THINGS PRETTY FOR DEMO
     	test = new DemoPattern(stage, null);
     	test.start();
@@ -54,7 +55,7 @@ public class PlayScreen implements Screen
     
     @Override
     public void hide() {
-    	
+    	music.stop();
     } 
     
     @Override
@@ -87,17 +88,7 @@ public class PlayScreen implements Screen
     	batch.draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight() );
     	batch.end();
     	
-    	stage.act( delta );
-    	// Remove entities outside the screen, we don't need them any more
-    	float left, right;
-    	for(Actor actor: stage.getActors()) {
-    		left = actor.getX() + actor.getWidth();
-    		right = actor.getY() + actor.getHeight();
-    		if(left < 0 || right < 0 || actor.getX() > BurningSkies.SCREENWIDTH || actor.getY() > BurningSkies.SCREENHEIGHT) {
-    			//TODO: Only remove bullets here, enemies maybe not
-    			actor.remove();
-    		}
-    	}
+    	stage.act(delta);
     	stage.draw();    	
     }
     
@@ -110,16 +101,13 @@ public class PlayScreen implements Screen
     
     @Override
     public void pause() {
-    	
     }
     
     @Override
     public void resume() {
-    	
     }
     
     @Override
     public void dispose() {
-    	
     }
 }

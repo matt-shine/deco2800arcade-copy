@@ -13,8 +13,6 @@ public class SplashScreen implements Screen
     private Texture logo;
     private SpriteBatch spriteBatch;
     private BurningSkies game;
-    // Unused for now
-    //private Music music;
  
     public SplashScreen( BurningSkies game )
     {
@@ -26,10 +24,7 @@ public class SplashScreen implements Screen
     {
         logo = new Texture(Gdx.files.internal("images/splash.png"));
         spriteBatch = new SpriteBatch();
-        //TODO: reenable this when we need it
-        //music = Gdx.audio.newMusic(Gdx.files.internal("sound/intro.ogg"));
-        //music.setLooping(true);
-        //music.play();
+        game.playSong("intro");
     }
     @Override
     public void hide() {
@@ -61,6 +56,5 @@ public class SplashScreen implements Screen
     
     @Override
     public void dispose() {	
-    	//music.dispose();
     }
 }

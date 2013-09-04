@@ -123,7 +123,7 @@ public class SnakeLadder extends GameClient {
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
 		//loading player icon
 
-//		gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
+       //gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
 
 		
 		//initialise rule texture mapping
@@ -207,9 +207,7 @@ public class SnakeLadder extends GameClient {
 		    
 		    case READY: //Ready to start a new point
 		    	if (Gdx.input.isTouched()) {
-		    		//getDiceNumber();
 		    		startPoint();
-		    		
 		    	}
 		    	break;
 		    	
@@ -250,8 +248,7 @@ public class SnakeLadder extends GameClient {
 	
 	private int getDiceNumber() {
 		// TODO Auto-generated method 
-		//int diceNummber=9;
-		
+		//manually give a dice number: diceNummber=9;
 		int diceNumber=9;
 		return diceNumber;
 	}
@@ -282,7 +279,6 @@ public class SnakeLadder extends GameClient {
 	private void startPoint() {
 		// TODO Auto-generated method stub
 		gamePlayer.initializeVelocity();
-		getDiceNumber();
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
 	}

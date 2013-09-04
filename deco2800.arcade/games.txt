@@ -13,3 +13,5 @@ deerforest
 mixmaze
 chess
 junglejump
+burningskies
+checkers

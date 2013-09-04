@@ -3,11 +3,15 @@ package deco2800.arcade.mixmaze.domain;
 import java.util.Random;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
+import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.USE_BRICK;
 
 /**
  * TileModel represents a tile on game board.
  */
 public class TileModel {
+
+	private static final String LOG = "TileModel: ";
+
 	// Tile data
 	private int tileX;
 	private int tileY;
@@ -56,30 +60,68 @@ public class TileModel {
 		return walls[direction];
 	}
 
+	/**
+	 * Tries to build the wall on the <code>player</code>'s facing
+	 * direction. A wall is built if these conditions are satisfied:
+	 * <ul>
+	 *   <li>the wall is not built yet
+	 *   <li>the player has at least one brick
+	 *   <li>the player's active action is to use brick
+	 * </ul>
+	 *
+	 * @param player
+	 * @param direction
+	 * @throws IllegalArgumentException If <code>player</code> is
+	 * 				    <code>null</code>
+	 * @return <code>true</code> if the wall is built,
+	 * 	   <code>false</code> otherwise
+	 */
 	public boolean buildWall(PlayerModel player, int direction) {
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
 
-		WallModel wall = getWall(direction);
-		if(wall.isBuilt()) {
+		WallModel wall = getWall(player.getDirection());
+
+		if (wall.isBuilt() || player.getBrick().getAmount() <= 0
+				|| player.getPlayerAction() != USE_BRICK) {
 			return false;
+		} else {
+			player.getBrick().removeOne();
+			wall.build(player);
+			return true;
 		}
-		wall.build(player);
-		return true;
 	}
 
+	/**
+	 * Tries to destroy the wall on the specified direction of
+	 * the <code>player</code>.
+	 * A wall is destroyed if these conditions are satisfied:
+	 * <ul>
+	 *   <li>the wall is built
+	 *   <li>the player is using a pick or TNT.
+	 * </ul>
+	 *
+	 * @param player
+	 * @param direction
+	 * @throws IllegalArgumentException If <code>player</code> is
+	 * 				    <code>null</code>
+	 * @return <code>true</code> if the wall is built,
+	 * 	   <code>false</code> otherwise
+	 */
 	public boolean destroyWall(PlayerModel player, int direction) {
-		if(player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
+		if (player == null) {
+			throw new IllegalArgumentException(
+					"player cannot be null.");
 		}
 
 		WallModel wall = getWall(direction);
-		if(!wall.isBuilt()) {
+		if (!wall.isBuilt() || player.getPlayerAction() == USE_BRICK) {
 			return false;
+		} else {
+			wall.destroy(player);
+			return true;
 		}
-		wall.destroy(player);
-		return true;
 	}
 
 	/**
@@ -90,9 +132,10 @@ public class TileModel {
 	 * @param player the player to check
 	 */
 	public void checkBox(PlayerModel player) {
-		if(player == null) {
+		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
+
 		boxer = isBox() ? player : null;
 	}
 
@@ -115,18 +158,21 @@ public class TileModel {
 		double spawnFactor = spawner.nextDouble();
 
 		if(spawnFactor <= 0.1) {
+			//System.err.println(LOG + "spawning TNT");
 			return new TNTModel(this);
 		} else if(spawnFactor <= 0.2) {
+			//System.err.println(LOG + "spawning pick");
 			return new PickModel(this);
 		} else {
-			int amount = spawner.nextInt(5) + 1;
+			int amount = spawner.nextInt(3) + 1;
+			//System.err.println(LOG + "spawning brick");
 			return new BrickModel(this, amount);
 		}
 	}
 
 	public void spawnItem() {
-		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (10 * 1000)) {
-			if(spawner.nextDouble() <= 0.2) {
+		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (25 * 1000)) {
+			if(spawner.nextDouble() <= 0.15) {
 				spawnedItem = getRandomItem();
 			}
 			lastSpawned = System.currentTimeMillis();
@@ -148,6 +194,11 @@ public class TileModel {
 		if(spawnedItem != null) {
 			player.pickUpItem(spawnedItem);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return LOG + "row: " + tileY + "\tcolumn: " + tileX;
 	}
 
 	/**

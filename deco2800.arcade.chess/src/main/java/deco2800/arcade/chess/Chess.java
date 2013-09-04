@@ -52,8 +52,10 @@ public class Chess extends GameClient implements InputProcessor{
 	Piece movingPiece = null;
 	
 	//Sprite offsets
-    int horizOff = SCREENWIDTH/2-206;
-    int verticOff = SCREENHEIGHT/2-206;
+    int horizOff = SCREENWIDTH/2-256;
+    int verticOff = SCREENHEIGHT/2-256;
+    int pieceHorizOff = 24;
+    int pieceVerticOff = 24;
 	
 	//Piece positions
 	//x-co-ords
@@ -77,8 +79,8 @@ public class Chess extends GameClient implements InputProcessor{
 	
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
 	
-	public static final int SCREENHEIGHT = 768;
-	public static final int SCREENWIDTH = 1024;
+	public static final int SCREENHEIGHT = 720;
+	public static final int SCREENWIDTH = 1280;
 	
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
@@ -124,7 +126,7 @@ public class Chess extends GameClient implements InputProcessor{
 		super.create();
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		camera.setToOrtho(false);
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -338,7 +340,7 @@ public class Chess extends GameClient implements InputProcessor{
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		System.out.println("Co-ords: " + x + ", " + y);
-		
+		/*
 		if(!moving) {
 			movingPiece = checkSquare(x, y);
 			moving = true;
@@ -350,7 +352,9 @@ public class Chess extends GameClient implements InputProcessor{
 			moving = false;
 			return true;
 		}
-		
+		*/
+		movePieceGraphic();
+		return true;
 	}
 
 	@Override
@@ -390,6 +394,59 @@ public class Chess extends GameClient implements InputProcessor{
 		System.out.println("Square clicked was: " + square[0] + " " + square[1]);
 		
 		return onSquare;
+	}
+	
+	private int[] determineSquare(int x, int y) {
+		int xSquare = -1;
+		int ySquare = -1;
+		
+		//Determine x square
+		for(int i=0; i<8; i++) {
+			int j=i;
+			if((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) ))) {
+				xSquare = i;
+			}
+		}
+		
+		//Determine y square
+		for(int i=0; i<8; i++) {
+			if((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) ))) {
+				ySquare = i;
+			}
+		}
+		
+		switch(xSquare) {
+		case 0:
+			xSquare = 7;
+			break;
+		case 1:
+			xSquare = 6;
+			break;
+		case 2:
+			xSquare = 5;
+			break;
+		case 3:
+			xSquare = 4;
+			break;
+		case 4:
+			xSquare = 3;
+			break;
+		case 5:
+			xSquare = 2;
+			break;
+		case 6:
+			xSquare = 1;
+			break;
+		case 7:
+			xSquare = 0;
+			break;
+		default:
+			xSquare = -1;
+			break;
+	}
+		
+		int[] returnValue = {xSquare, ySquare};
+		return returnValue;
 	}
 	
 	/**
@@ -475,130 +532,76 @@ public class Chess extends GameClient implements InputProcessor{
 			for (Piece piece : row) {
 				if(piece.equals(board.whiteRook1)) {
 					int[] correctPos = board.findPiece(board.whiteRook1);
-					whiteRook1Pos[0] = (30 + horizOff + (583/8)*correctPos[1]);
-					whiteRook1Pos[1] =  (20 + verticOff + (437/8)*correctPos[0]);
+					whiteRook1Pos[0] = (pieceHorizOff + horizOff + (583/8)*correctPos[1]);
+					whiteRook1Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
+					System.out.println(whiteRook1Pos[0] + 59);
 				} else if(piece.equals(board.whiteKnight1)) {
 					int[] correctPos = board.findPiece(board.whiteKnight1);
-					whiteKnight1Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whiteKnight1Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whiteKnight1Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whiteKnight1Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
+					System.out.println(whiteKnight1Pos[0]);
 				} else if(piece.equals(board.whiteBishop1)) {
 					int[] correctPos = board.findPiece(board.whiteBishop1);
-					whiteBishop1Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whiteBishop1Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whiteBishop1Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whiteBishop1Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whiteQueen)) {
 					int[] correctPos = board.findPiece(board.whiteQueen);
-					whiteQueenPos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whiteQueenPos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whiteQueenPos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whiteQueenPos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whiteKing)) {
 					int[] correctPos = board.findPiece(board.whiteKing);
-					whiteKingPos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whiteKingPos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whiteKingPos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whiteKingPos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whiteBishop2)) {
 					int[] correctPos = board.findPiece(board.whiteBishop2);
-					whiteBishop2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whiteBishop2Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whiteBishop2Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whiteBishop2Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whiteKnight2)) {
 					int[] correctPos = board.findPiece(board.whiteKnight2);
-					whiteKnight2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whiteKnight2Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whiteKnight2Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whiteKnight2Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whiteRook2)) {
 					int[] correctPos = board.findPiece(board.whiteRook2);
-					whiteRook2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whiteRook2Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whiteRook2Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whiteRook2Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whitePawn1)) {
 					int[] correctPos = board.findPiece(board.whitePawn1);
-					whitePawn0Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn0Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn0Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn0Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whitePawn2)) {
 					int[] correctPos = board.findPiece(board.whitePawn2);
-					whitePawn1Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn1Pos[1] =  (20 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn1Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn1Pos[1] =  (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whitePawn3)) {
 					int[] correctPos = board.findPiece(board.whitePawn3);
-					whitePawn2Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn2Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn2Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn2Pos[1] = (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whitePawn4)) {
 					int[] correctPos = board.findPiece(board.whitePawn4);
-					whitePawn3Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn3Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn3Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn3Pos[1] = (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whitePawn5)) {
 					int[] correctPos = board.findPiece(board.whitePawn5);
-					whitePawn4Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn4Pos[1] = (25 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn4Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn4Pos[1] = (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whitePawn6)) {
 					int[] correctPos = board.findPiece(board.whitePawn6);
-					whitePawn5Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn5Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn5Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn5Pos[1] = (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				} else if(piece.equals(board.whitePawn7)) {
 					int[] correctPos = board.findPiece(board.whitePawn7);
-					whitePawn6Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn6Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn6Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn6Pos[1] = (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				}  else if(piece.equals(board.whitePawn8)) {
 					int[] correctPos = board.findPiece(board.whitePawn8);
-					whitePawn7Pos[0] = (30 + horizOff + (583/8)*(correctPos[1]));
-					whitePawn7Pos[1] = (20 + verticOff + (437/8)*(correctPos[0]));
+					whitePawn7Pos[0] = (pieceHorizOff + horizOff + (583/8)*(correctPos[1]));
+					whitePawn7Pos[1] = (pieceVerticOff + verticOff + (437/8)*correctPos[0]);
 				}
 			}
 			
 		}
-		
-		
-		
-		//((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) )))
-		//((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) )))
+
 	}
 	
-	private int[] determineSquare(int x, int y) {
-		int xSquare = -1;
-		int ySquare = -1;
-		
-		//Determine x square
-		for(int i=0; i<8; i++) {
-			int j=i;
-			if((y >= (97 + (437/8)*i )) && (y <= (97 + (437/8)*(j+1) ))) {
-				xSquare = i;
-			}
-		}
-		
-		//Determine y square
-		for(int i=0; i<8; i++) {
-			if((x >= (412 + (583/8)*i )) && (x <= (412 + (583/8)*(i+1) ))) {
-				ySquare = i;
-			}
-		}
-		
-		switch(xSquare) {
-		case 0:
-			xSquare = 7;
-			break;
-		case 1:
-			xSquare = 6;
-			break;
-		case 2:
-			xSquare = 5;
-			break;
-		case 3:
-			xSquare = 4;
-			break;
-		case 4:
-			xSquare = 3;
-			break;
-		case 5:
-			xSquare = 2;
-			break;
-		case 6:
-			xSquare = 1;
-			break;
-		case 7:
-			xSquare = 0;
-			break;
-		default:
-			xSquare = -1;
-			break;
-	}
-		
-		int[] returnValue = {xSquare, ySquare};
-		return returnValue;
-	}
 
 }

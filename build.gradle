@@ -23,13 +23,23 @@ sonar {
     name = "DECO2800 Arcade"
   }
   server {
-    url = sonarServerURL
+    if (hasProperty('sonarServerURL')) {
+      url = sonarServerURL
+    }
   }
   database {
-    url = sonarDatabaseURL
-    driverClassName = sonarDatabaseDriver
-    username = sonarDatabaseLogin
-    password = sonarDatabasePassword
+    if (hasProperty('sonarDatabaseURL')) {
+      url = sonarDatabaseURL 
+    }
+    if (hasProperty('sonarDatabaseDriver')) {
+      driverClassName = sonarDatabaseDriver 
+    }
+    if (hasProperty('sonarDatabaseLogin')) {
+      username = sonarDatabaseLogin 
+    }
+    if (hasProperty('sonarDatabasePassword')) {
+      password = sonarDatabasePassword 
+    }
   }
 }
 

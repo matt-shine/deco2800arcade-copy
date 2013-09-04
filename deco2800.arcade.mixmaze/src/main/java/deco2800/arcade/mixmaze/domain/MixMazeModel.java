@@ -103,8 +103,9 @@ public class MixMazeModel {
 	}
 
 	public void startGame() {
-		if(running || ended) {
-			throw new IllegalStateException("The game has already been started.");
+		if (running || ended) {
+			throw new IllegalStateException("The game has already "
+					+ "been started.");
 		}
 
 		spawnerThread = new Thread(new Runnable() {
@@ -129,11 +130,19 @@ public class MixMazeModel {
 	}
 
 	public PlayerModel endGame() {
-		if(!running || ended) {
-			throw new IllegalStateException("The game has not been started or has already ended.");
+		if (!running || ended) {
+			throw new IllegalStateException(
+					"The game has not been started or has "
+					+ "already ended.");
 		}
 		running = false;
 		ended = true;
+
+		try {
+			spawnerThread.join();
+		} catch (InterruptedException e) {
+		}
+
 		gameEndTime = System.currentTimeMillis();
 
 		int player1Score = getPlayerScore(player1);
@@ -161,13 +170,11 @@ public class MixMazeModel {
 		}
 
 		int nextX = player.getNextX(), nextY = player.getNextY();
-		if(player.canMove()) {
-			if(player.getDirection() != direction) {
-				player.setDirection(direction);
-			} else if(checkCoordinates(nextX, nextY) && !isPlayerAtPosition(nextX, nextY)) {
-				player.move();
-				getBoardTile(player.getX(), player.getY()).onPlayerEnter(player);
-			}
+		if(player.getDirection() != direction) {
+			player.setDirection(direction);
+		} else if(player.canMove() && checkCoordinates(nextX, nextY) && !isPlayerAtPosition(nextX, nextY)) {
+			player.move();
+			getBoardTile(player.getX(), player.getY()).onPlayerEnter(player);
 		}
 	}
 

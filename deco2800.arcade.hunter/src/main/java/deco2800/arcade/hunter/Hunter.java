@@ -19,6 +19,6 @@ public class Hunter extends PlatformerGame {
 	
 	@Override
 	public void create() {
-		setScreen(new GameScreen(this));
+		setScreen(new SplashScreen(this));
 	}
 }

@@ -39,7 +39,7 @@ public class GameScreen implements Screen {
 	
 	private SpriteBatch batch = new SpriteBatch();
 	
-	private int firstPaneOffset;
+	private boolean paused = false;
 	
 	private float stateTime;
 	private TextureRegion currFrame;
@@ -80,25 +80,27 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		pollInput();
-		
-		player.update(delta);
-		foreground.update(delta, gameSpeed);
-		
-		batch.begin();
-		
-		drawBackground();
-		drawMapPanes(delta);
-		
-	    runAnim = player.getAnimation();
-	    stateTime += Gdx.graphics.getDeltaTime();
-	    currFrame = runAnim.getKeyFrame(stateTime,true);
-	    for (Entity e : entities) {	
-	    	//Draw each entity
-	    	batch.draw(currFrame, e.getX(), e.getY(), currFrame.getRegionWidth()/3, currFrame.getRegionHeight()/3);
-//	    	shapeRenderer.filledRect(e.getX(), e.getY(), e.getWidth(), e.getHeight());
-	    }
-	    batch.end();
+		if (!paused) {
+			pollInput();
+			
+			player.update(delta);
+			foreground.update(delta, gameSpeed);
+			
+			batch.begin();
+			
+			drawBackground();
+			drawMapPanes(delta);
+			
+		    runAnim = player.getAnimation();
+		    stateTime += Gdx.graphics.getDeltaTime();
+		    currFrame = runAnim.getKeyFrame(stateTime,true);
+		    for (Entity e : entities) {	
+		    	//Draw each entity
+		    	batch.draw(currFrame, e.getX(), e.getY(), currFrame.getRegionWidth()/3, currFrame.getRegionHeight()/3);
+	//	    	shapeRenderer.filledRect(e.getX(), e.getY(), e.getWidth(), e.getHeight());
+		    }
+		    batch.end();
+		}
 		
 	}
 	

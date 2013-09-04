@@ -1,7 +1,7 @@
 package deco2800.arcade.burningskies.entities;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.graphics.Texture;
 
@@ -9,19 +9,19 @@ public abstract class Ship  extends Image {
 
 	private int health;	
 	float velocity;
-	Rectangle bounds = new Rectangle();
+	public Rectangle bounds = new Rectangle();
 	
 	/**
 	 * Basic constructor for a ship.
 	 * @ensure health && velocity > 0
 	 */
-	public Ship(int health, Texture image, Vector2 hitbox1, Vector2 hitbox2) {
+	public Ship(int health, Texture image, Vector2 pos, Vector2 size) {
 		super(image);
 		this.health = health;
-		this.bounds.x = hitbox1.x;
-		this.bounds.y = hitbox1.y;
-		this.bounds.width = hitbox2.x;
-		this.bounds.width = hitbox2.y;
+		this.bounds.x = pos.x;
+		this.bounds.y = pos.y;
+		this.bounds.width = size.x;
+		this.bounds.width = size.y;
 	}
 	/**
 	 * Checks if the current ship is alive.

@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Enemy extends Ship {
 
-	public Enemy(int health, Texture image, Vector2 hitbox1, Vector2 hitbox2) {
-		super(health, image, hitbox1, hitbox2);
+	public Enemy(int health, Texture image, Vector2 pos, Vector2 size) {
+		super(health, image, pos, size);
 		// TODO Auto-generated constructor stub
 	}
 	//TODO: write this

@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GamePlayer {
 	public static final float WIDTH = 20f; //How big is the player (its a square)
-	public static final float INITIALSPEED = 0; // How fast is the player going at the start of a point
+	public static final float INITIALSPEED = 60; // How fast is the player going at the start of a point
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
 	//private Texture player;
 	
@@ -114,7 +114,7 @@ public class GamePlayer {
 		//TODO This is a bit of a hack. A better way would be to generate an angle then use sin/cos/tan to work out the X,Y components
 		//int xFactor = (int) (100f + Math.random()*90f);
 		//int yFactor = (int) Math.sqrt((200*200) - (xFactor*xFactor));
-		velocity.x = 120;
+		velocity.x = 60;
 		velocity.y=0;
 		//velocity.y = yFactor;
 	}

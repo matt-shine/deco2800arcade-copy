@@ -29,6 +29,9 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+//import deco2800.arcade.pong.Pong.GameState;
+import deco2800.arcade.protocol.game.GameStatusUpdate;
+//import deco2800.arcade.snakeLadder.SnakeLadder.GameState;
 import deco2800.arcade.snakeLadderModel.*;
 
 /**
@@ -46,6 +49,7 @@ public class SnakeLadder extends GameClient {
 	private List<Tile> tileList; 
 	private HashMap<Character,String> ruleTextureMapping;
     private GamePlayer gamePlayer;
+//  private int[] scores = new int[2];
     private enum GameState {
 		READY,
 		INPROGRESS,
@@ -143,6 +147,8 @@ public class SnakeLadder extends GameClient {
 		font = new BitmapFont();
 		font.setScale(2);
 		//Initialise the game state
+//		scores[0] = 0;
+//		scores[1] = 0;
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 	}
@@ -201,17 +207,25 @@ public class SnakeLadder extends GameClient {
 		    
 		    case READY: //Ready to start a new point
 		    	if (Gdx.input.isTouched()) {
+		    		//getDiceNumber();
 		    		startPoint();
+		    		
 		    	}
 		    	break;
 		    	
-		    case INPROGRESS: 
-		    	gamePlayer.move(Gdx.graphics.getDeltaTime());
+		    case INPROGRESS: 	
+		   // float diceNumber=9;
+			gamePlayer.move(Gdx.graphics.getDeltaTime());
+			if(gamePlayer.bounds.x>=(getDiceNumber()*gamePlayer.velocity.x))
+			    {
+			    	stopPoint();
+			    }
 		    	//If the player reaches the end of each line , move up to another line
 		    	if (gamePlayer.bounds.x >= (600-20f) || gamePlayer.bounds.x <=0){
 		    		gamePlayer.moveUp();
 		    	}	    	
 		    	//If the ball gets to the left edge then player 2 wins
+
 		    	if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {
 		    		gamePlayer.reset();
 		    		statusMessage = "You Win! ";
@@ -219,6 +233,7 @@ public class SnakeLadder extends GameClient {
 		    		//statusMessage = "Win!";
 		    				//+ "Click to exit!";
 		    		//endPoint(1);
+
 		    	}
 		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
@@ -233,13 +248,41 @@ public class SnakeLadder extends GameClient {
 		
 	}
 	
-	private void endPoint(int winner) {
-		gamePlayer.reset();
+	private int getDiceNumber() {
+		// TODO Auto-generated method 
+		//int diceNummber=9;
+		
+		int diceNumber=9;
+		return diceNumber;
+	}
+
+	private void stopPoint() {
+		gamePlayer.reset();	
+		// If we've reached the victory point then update the display
+		if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {	
+		   
+		    gameState = GameState.GAMEOVER;
+		    //Update the game state to the server
+		    //networkClient.sendNetworkObject(createScoreUpdate());
+		   
+		} else {
+			// No winner yet, get ready for another point
+			gameState = GameState.READY;
+			statusMessage = "Throw the dice again";
+		}
 	}
 	
+	private GameStatusUpdate createScoreUpdate() {
+		GameStatusUpdate update = new GameStatusUpdate();
+		update.gameId = "snakeLadder";
+		update.username = players[0];
+		//TODO Should also send the score!
+		return update;
+	}
 	private void startPoint() {
 		// TODO Auto-generated method stub
 		gamePlayer.initializeVelocity();
+		getDiceNumber();
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
 	}

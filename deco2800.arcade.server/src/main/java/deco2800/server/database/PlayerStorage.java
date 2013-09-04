@@ -46,7 +46,7 @@ public class PlayerStorage {
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
-								+ "program VARCHAR(30)," + "bio VARCHAR(200));");
+								+ "program VARCHAR(30)," + "bio VARCHAR(200))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

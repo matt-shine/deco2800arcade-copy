@@ -87,10 +87,9 @@ public class PlayScreen implements Screen
     	batch.begin();
     	batch.draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight() );
     	batch.end();
-
+    	
     	stage.act(delta);
-    	stage.draw();   
-    
+    	stage.draw();
     }
     
     @Override

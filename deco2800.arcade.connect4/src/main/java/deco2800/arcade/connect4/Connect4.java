@@ -51,6 +51,8 @@ public class Connect4 extends GameClient {
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
+	private final int AI_DELAY = 500;
+	
 	private final int KEY_LEFT = 0;
 	private final int KEY_RIGHT = 1;
 	private final int KEY_ENTER = 2;
@@ -69,6 +71,8 @@ public class Connect4 extends GameClient {
 	private NetworkClient networkClient;
 	
 	long nextComputerMove;
+	
+	int nextComputerCol = -1;
 
 	/**
 	 * Basic constructor for the Checkers game
@@ -98,6 +102,10 @@ public class Connect4 extends GameClient {
 				                          	new String[]{"player_id",
 				                                             "col"}
 				                               );
+		//Declare an event to be registered in the factory, we can pass arrays.
+		ReplayNodeFactory.registerEvent("cursor_move",
+						                    new String[]{"col"}
+						                       );
 	}
 	
 
@@ -120,8 +128,18 @@ public class Connect4 extends GameClient {
                 
                 if ( eType.equals( "do_move" ) ) {
                 	if ( gameState == GameState.REPLAY ) {
-                		doMove(eData.getItemForString( "player_id" ).intVal(), eData.getItemForString( "col" ).intVal() );   
-                        System.out.println( "Move: " + eData );
+                		int player = eData.getItemForString( "player_id" ).intVal();
+                		doMove(player, eData.getItemForString( "col" ).intVal() );   
+
+		    			playerTurn = ( player == 1 ) ? 0 : 1;
+                		System.out.println( "Move: " + eData );
+                	}
+                }
+                
+                if ( eType.equals( "cursor_move" ) ) {
+                	if ( gameState == GameState.REPLAY ) {
+                		cursorDisc.currentPos = eData.getItemForString( "col" ).intVal();  
+                        System.out.println( "Cursor move: " + cursorDisc.currentPos );
                 	}
                 }
             }
@@ -247,6 +265,7 @@ public class Connect4 extends GameClient {
 		table.resetDiscs();
 		this.playerTurn = 0;
 		cursorDisc.setState( Disc.PLAYER1 );
+		cursorDisc.currentPos = 0;
 		
 		//Need to somehow clear the display
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
@@ -274,13 +293,14 @@ public class Connect4 extends GameClient {
 	 * and renders the appropriate colour.
 	 */
 	
-	public void renderCursorDisc(int currentPlayer) {
-		cursorDisc.setPosition((table.bounds.x + cursorDisc.bounds.width + 5), (table.bounds.y + table.bounds.height + 25));
-		cursorDisc.currentPos = 0;
-		if (currentPlayer == 0) {
+	public void renderCursorDisc() {
+		cursorDisc.setPosition(
+				(table.bounds.x + cursorDisc.bounds.width + cursorDisc.currentPos * ( 5 + 2 * Table.DISCRADIUS ) + 5 ), 
+				(table.bounds.y + table.bounds.height + 25));
+		if (playerTurn == 0) {
 			cursorDisc.setState( Disc.PLAYER1 );
 			
-		} else if (currentPlayer == 1) {
+		} else if (playerTurn == 1) {
 			cursorDisc.setState( Disc.PLAYER2 );
 		}
 		
@@ -288,6 +308,30 @@ public class Connect4 extends GameClient {
 	    shapeRenderer.begin(ShapeType.FilledCircle);
 	    cursorDisc.render(shapeRenderer);
 	    shapeRenderer.end();
+	}
+	
+	public void moveCursorRight() {
+		int rightMove = cursorDisc.moveRight();
+		if ( rightMove >= 0 ) {
+			replayHandler.pushEvent(
+			        ReplayNodeFactory.createReplayNode(
+			                "cursor_move",
+			                rightMove
+			        )
+			);
+		}
+	}
+	
+	public void moveCursorLeft() {
+		int leftMove = cursorDisc.moveLeft();
+		if ( leftMove >= 0 ) {
+			replayHandler.pushEvent(
+			        ReplayNodeFactory.createReplayNode(
+			                "cursor_move",
+			                leftMove
+			        )
+			);
+		}
 	}
 
 	/**
@@ -306,9 +350,12 @@ public class Connect4 extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    //Render the cursor Disc
+	    renderCursorDisc();
+	    /*
 	    shapeRenderer.begin(ShapeType.FilledCircle);
 	    cursorDisc.render(shapeRenderer);
 	    shapeRenderer.end();
+	    */
 	    
 	    //Render the table
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
@@ -358,25 +405,30 @@ public class Connect4 extends GameClient {
 		    		checkKeysReleased();
 		    		
 		    		if(keyCodes[KEY_RIGHT] == 2) {
-		    			cursorDisc.moveRight(0);
+		    			moveCursorRight();
 		    			keyCodes[1] = 0;
 		    		} else if(keyCodes[KEY_LEFT] == 2) {
-		    			cursorDisc.moveLeft(0);
+		    			moveCursorLeft();
 		    			keyCodes[0] = 0;
 		    		} else if(keyCodes[KEY_ENTER] == 2) {
 		    			//move the disc the lowest position and render table discs
-		    			replayHandler.pushEvent(
-		    			        ReplayNodeFactory.createReplayNode(
-		    			                "do_move",
-		    			                playerTurn, cursorDisc.currentPos
-		    			        )
-		    			);
+		    			
 		    			
 		    			if ( doMove(playerTurn, cursorDisc.currentPos) ) {
+		    				
+		    				replayHandler.pushEvent(
+			    			        ReplayNodeFactory.createReplayNode(
+			    			                "do_move",
+			    			                playerTurn, cursorDisc.currentPos
+			    			        )
+			    			);
+		    				
 		    				checkForWinner( playerTurn );
+
+			    			playerTurn = ( playerTurn == 1 ) ? 0 : 1;
 		    			}
 		    			
-		    			nextComputerMove = System.currentTimeMillis() + 500;
+		    			nextComputerMove = System.currentTimeMillis() + AI_DELAY + randInt( -AI_DELAY/2, AI_DELAY/2 );
 		    			
 		    			keyCodes[KEY_ENTER] = 0;
 		    		}
@@ -387,18 +439,35 @@ public class Connect4 extends GameClient {
 		    			break;
 		    		}
 		    		
-		    		cursorDisc.currentPos = randInt(0,Table.TABLECOLS - 1);
+		    		if ( nextComputerCol < 0 ) {
+		    			nextComputerCol = randInt(0,Table.TABLECOLS - 1);
+		    		} 
 		    		
-		    		replayHandler.pushEvent(
-	    			        ReplayNodeFactory.createReplayNode(
-	    			                "do_move",
-	    			                playerTurn, cursorDisc.currentPos
-	    			        )
-	    			);
+		    		if ( cursorDisc.currentPos > nextComputerCol ) {
+		    			moveCursorLeft();
+		    			nextComputerMove = System.currentTimeMillis() + AI_DELAY + randInt( -AI_DELAY/2, AI_DELAY/2 );
+		    			break;
+		    		} else if ( cursorDisc.currentPos < nextComputerCol ) {
+		    			moveCursorRight();
+		    			nextComputerMove = System.currentTimeMillis() + AI_DELAY + randInt( -AI_DELAY/2, AI_DELAY/2 );
+		    			break;
+		    		}
 		    		
 		    		if ( doMove(playerTurn, cursorDisc.currentPos) ) {
+		    			
+			    		replayHandler.pushEvent(
+		    			        ReplayNodeFactory.createReplayNode(
+		    			                "do_move",
+		    			                playerTurn, cursorDisc.currentPos
+		    			        )
+		    			);
+			    		
 		    			checkForWinner( playerTurn );
+
+		    			playerTurn = ( playerTurn == 1 ) ? 0 : 1;
 		    		}
+		    		
+		    		nextComputerCol = -1;
 		    	}
 		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
@@ -414,7 +483,7 @@ public class Connect4 extends GameClient {
 			    	}
 			    	break;
 		    case REPLAY: //Replaying last game
-	    		//gameState = GameState.GAMEOVER;
+	    		replayHandler.runLoop();
 		    	break;
 	    }
 	    
@@ -428,19 +497,18 @@ public class Connect4 extends GameClient {
 	    		gameState = GameState.GAMEOVER;
 	    		endPoint( 0 );
 	    	}
-	    	renderCursorDisc(1);
+	    	//renderCursorDisc(1);
 	    } else {
 	    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
 	    		gameState = GameState.GAMEOVER;
 	    		endPoint( 1 );
 	    	}
-	    	renderCursorDisc(0);
+	    	//renderCursorDisc(0);
 	    }
 		
 	}
 	
 	public boolean doMove(int player, int currentPosition) {
-		playerTurn = ( playerTurn == 1 ) ? 0 : 1;
 		return table.placeDisc(currentPosition, player);
 	}
 

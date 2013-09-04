@@ -65,20 +65,24 @@ public class Disc {
 		bounds.y = newy;
 	}
 	
-	public void moveLeft(float time) {
+	public Integer moveLeft() {
 		if (currentPos > 0) {
-			bounds.x -= bounds.width*2 + 5;
+			//bounds.x -= bounds.width*2 + 5;
 			currentPos -= 1;
+			return currentPos;
 		} else {
+			return -1;
 			//cannot move left - at position 0 (leftmost position)
 		}
 	}
 	
-	public void moveRight(float time){
+	public Integer moveRight(){
 		if (currentPos < (Table.TABLECOLS - 1)) {
-			bounds.x += bounds.width*2 + 5;
+			//bounds.x += bounds.width*2 + 5;
 			currentPos += 1;
+			return currentPos;
 		} else {
+			return -1;
 			//cannot move right - at max position (rightmost position)
 		}
 	}

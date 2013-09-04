@@ -9,9 +9,9 @@ import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.USE_BRICK;
  * TileModel represents a tile on game board.
  */
 public class TileModel {
-
 	private static final String LOG = "TileModel: ";
-
+	private static int ITEMSCOUNT = 0;
+	
 	// Tile data
 	private int tileX;
 	private int tileY;
@@ -189,9 +189,10 @@ public class TileModel {
 	 *  collection of <code>Bricks</code>
 	 */
 	public void spawnItem() {
-		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (25 * 1000)) {
-			if(spawner.nextDouble() <= 0.15) {
+		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (10 * 1000)) {
+			if(spawner.nextDouble() <= 0.15 && ITEMSCOUNT < 3) {
 				spawnedItem = getRandomItem();
+				ITEMSCOUNT++;
 			}
 			lastSpawned = System.currentTimeMillis();
 		}
@@ -210,6 +211,7 @@ public class TileModel {
 			throw new IllegalStateException("No spawnedItem to consume.");
 		}
 		spawnedItem = null;
+		ITEMSCOUNT--;
 	}
 
 	/**

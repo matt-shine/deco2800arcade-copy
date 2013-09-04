@@ -2,6 +2,8 @@ package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
+import java.util.Random;
+
 /**
  * Mix maze model represents the running game state.
  */
@@ -109,13 +111,17 @@ public class MixMazeModel {
 		}
 
 		spawnerThread = new Thread(new Runnable() {
+			private final Random tileSelector = new Random();
+			
 			@Override
 			public void run() {
 				while(!ended) {
 					try {
 						for(int row = 0; row < boardSize; ++row) {
+							int randRow = tileSelector.nextInt(boardSize);
 							for(int column = 0; column < boardSize; ++column) {
-								getBoardTile(column, row).spawnItem();
+								int randColumn = tileSelector.nextInt(boardSize);
+								getBoardTile(randColumn, randRow).spawnItem();
 							}
 						}
 						Thread.sleep(1000);

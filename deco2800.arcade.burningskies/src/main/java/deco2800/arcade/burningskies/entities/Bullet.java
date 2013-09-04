@@ -41,8 +41,15 @@ public abstract class Bullet extends Image {
 	
 	@Override
     public void act(float delta) {
+		float left, right;
 		moveBullet(delta);
         super.act(delta);
+        // Check we're in bounds, if not goodbye
+		left = getX() + getWidth();
+		right = getY() + getHeight();
+		if(left < 0 || right < 0 || getX() > getStage().getWidth() || getY() > getStage().getHeight()) {
+			remove();
+		}
     }
 	
 	/**

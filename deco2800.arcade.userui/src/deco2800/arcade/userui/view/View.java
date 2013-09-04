@@ -1,22 +1,14 @@
 package deco2800.arcade.userui.view;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -46,9 +38,11 @@ public class View extends JFrame implements ActionListener {
 	private JPanel aboutpanel;
 	private JPanel achievementpanel;
 	private JPanel historypanel;
+	private JPanel playerinfopanel;
 	
 	//Declare Buttons here
 	private JButton addfriendbutton;
+	private JButton editbutton;
 	
 	//Declare Labels here
 	private JLabel avatar;
@@ -72,6 +66,12 @@ public class View extends JFrame implements ActionListener {
 	private ImageIcon picachievementbar;
 	private ImageIcon piclocked;
 	private ImageIcon picunlocked;
+	private ImageIcon piceditbutton;
+	
+	//Declare Fonts to use here
+	Font font = new Font("Verdana", Font.BOLD, 12);
+	//Font font = Font.createFont(Font.TRUETYPE_FONT, new File("A.ttf"));
+	//return font.deriveFont(12f);
 		
 	public View(Model model) throws HeadlessException {
 		
@@ -86,12 +86,13 @@ public class View extends JFrame implements ActionListener {
 		//Image Icons
 		picavatar = new ImageIcon("assets/images/stark.png");
 		picaboutbar = new ImageIcon("assets/images/about_bar.png");
-		picfriendbar = new ImageIcon("assets/images/friend_bar.png");
+		picfriendbar = new ImageIcon("assets/images/friendbar.png");
 		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		pichistorybar = new ImageIcon("assets/images/history_bar.png");
 		picachievementbar = new ImageIcon("assets/images/achievement_bar.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
+		piceditbutton = new ImageIcon("assets/images/edit_button.png");
 		
 	
 		//Panels and ScrollPanes
@@ -106,6 +107,7 @@ public class View extends JFrame implements ActionListener {
 	    playerpanel = new JPanel(new MigLayout());
 	    friendpanel = new JPanel(new MigLayout());
 	    aboutpanel = new JPanel(new MigLayout());
+	    playerinfopanel = new JPanel(new MigLayout());
 	    //playerpanel.setOpaque(false);
 	    //friendpanel.setOpaque(false);
 	    //aboutpanel.setOpaque(false);
@@ -120,6 +122,9 @@ public class View extends JFrame implements ActionListener {
 	    addfriendbutton = new JButton(picaddfriend);
 	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    addfriendbutton.setContentAreaFilled(false);
+	    editbutton = new JButton(piceditbutton);
+	    editbutton.setBorder(BorderFactory.createEmptyBorder());
+	    editbutton.setContentAreaFilled(false);
         
         //Labels
         avatar = new JLabel();
@@ -139,11 +144,13 @@ public class View extends JFrame implements ActionListener {
 
 		//Add objects to panels 
         playerpanel.add(avatar);
-        playerpanel.add(playername);       
-        playerpanel.add(playerlevel); 
-        playerpanel.add(addfriendbutton);
+        playerinfopanel.add(playername,"wrap, align 50% 50%");       
+        playerinfopanel.add(playerlevel,"wrap, align 50% 50%"); 
+        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%");
+        playerinfopanel.add(editbutton,"align 50% 50%");
+        playerpanel.add(playerinfopanel);
         friendpanel.add(friendbar, "north");
-        aboutpanel.add(aboutbar, "north");
+        aboutpanel.add(aboutbar,"north");
         
         sidepanel.add(playerpanel, "wrap, center, width :300, height :300");
         sidepanel.add(aboutpanel, "wrap, center, width :300, height :300");
@@ -152,15 +159,15 @@ public class View extends JFrame implements ActionListener {
         historypanel.add(historybar, "north");
         achievementpanel.add(achievementbar, "north");
         
-        contentpanel.add(historypanel, "wrap, center, height :320");
-        contentpanel.add(achievementpanel, "center, height :320");
+        contentpanel.add(historypanel, "wrap, center, height :320, width :810");
+        contentpanel.add(achievementpanel, "center, height :320, width :810");
             
 	    //Add panels to Main Panel	               
 		parentContainer.add(menupanel, "dock north");
 		sidepanel.setBackground(Color.darkGray);
-		parentContainer.add(sidepanel, "west, width :500, height :700");
+		parentContainer.add(sidepanel, "west, width :350, height :700");
 		contentpanel.setBackground(Color.gray);
-		parentContainer.add(contentpanel, "east, width :800, height :700");
+		parentContainer.add(contentpanel, "east, width :950, height :700");
 		
 		//Add the main panel to JFrame
 		add(parentContainer);

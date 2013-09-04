@@ -49,7 +49,6 @@ final class GameScreen implements Screen {
 	private Label[] scoreLabels;
 	private Label[] itemLabels;
 	private MixMazeModel model;
-	private int timeLimit;
 	private TextButton backMenu;
 	private Label resultLabel;
 
@@ -170,7 +169,8 @@ final class GameScreen implements Screen {
 			if (j < model.getBoardSize())
 				tileTable.row();
 		}
-
+		
+		// Might rcommend not passing the entire model to the PlayerViewModel, just to keep good seperation
 		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
 				1);
 		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
@@ -244,8 +244,7 @@ final class GameScreen implements Screen {
 		Gdx.app.debug(LOG, "showing");
 
 		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 2);
-		timeLimit = 30;
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60);
 		setupGameBoard();
 
 		/* set timer */
@@ -256,7 +255,7 @@ final class GameScreen implements Screen {
 				timerLabel.setText("Timer: "
 						 + elapsed);
 			}
-		}, 1, 1, timeLimit);
+		}, 1, 1, model.getGameMaxTime());
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				PlayerModel winner;
@@ -274,7 +273,7 @@ final class GameScreen implements Screen {
 				}
 				endGameTable.setVisible(true);
 			}
-		}, timeLimit);
+		}, model.getGameMaxTime());
 
 		/* start game */
 		Gdx.input.setInputProcessor(stage);

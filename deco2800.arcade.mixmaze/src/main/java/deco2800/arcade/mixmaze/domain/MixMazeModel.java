@@ -189,12 +189,12 @@ public class MixMazeModel {
 	 * 				    <code>maxMinutes</code> is not in
 	 * 				    range from 2 to 15.
 	 */
-	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxMinutes) {
+	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxSeconds) {
 		if(size < 5 || size > 10) {
 			throw new IllegalArgumentException("size must be between 5 and 10.");
 		}
 
-		if(maxMinutes < 2 || maxMinutes > 15) {
+		if(maxSeconds < 30 || maxSeconds > 900) {
 			throw new IllegalArgumentException("maxMinutes must be between 2 and 15.");
 		}
 
@@ -220,7 +220,7 @@ public class MixMazeModel {
 
 		// Set game settings
 		gameDifficulty = difficulty;
-		gameMaxTime = maxMinutes;
+		gameMaxTime = maxSeconds;
 
 		// Initialize player 1
 		player1 = new PlayerModel(1);

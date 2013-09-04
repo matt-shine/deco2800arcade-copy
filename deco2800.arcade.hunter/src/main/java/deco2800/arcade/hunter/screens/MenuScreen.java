@@ -32,6 +32,7 @@ public class MenuScreen implements Screen {
 		
 		//Set up stage
 		stage = new Stage();
+		
 		ArcadeInputMux.getInstance().addProcessor(stage);
 		
 		Table table = new Table();
@@ -127,6 +128,12 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		/*
+		 * Ok, this makes the menu buttons work, but it seems a bit hacky.
+		 * Idea from commit: 2f0af56c549a297981b566b74bb4c9ac464363f3
+		 * FIX UP/REPLACE if necessary TODO
+		 */
+		Gdx.input.setInputProcessor(stage);
 		stage.act(delta);
 		stage.draw();
 	}

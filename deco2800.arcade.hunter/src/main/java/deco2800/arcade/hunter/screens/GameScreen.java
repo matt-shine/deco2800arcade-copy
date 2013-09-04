@@ -1,7 +1,6 @@
 package deco2800.arcade.hunter.screens;
 
 import java.util.ArrayList;
-import java.util.Queue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

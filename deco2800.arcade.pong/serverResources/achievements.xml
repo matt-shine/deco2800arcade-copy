@@ -1,6 +1,17 @@
-<achievement id="pong.winGame">
-  <name>Winner!</name>
-  <description>Win a game of Pong.</description>
-  <awardThreshold>1</awardThreshold>
-  <icon>winner.png</icon>
-</achievement>
+<achievements>
+  <achievement id="pong.winGame">
+    <name>Winner!</name>
+    <description>Win a game of Pong.</description>
+    <awardThreshold>1</awardThreshold>
+    <icon>winner.png</icon>
+  </achievement>
+  <achievement id="pong.slider">
+    <name>Slider</name>
+    <description>Hit the ball while moving the paddle up as well as down</description>
+    <icon>winner.png</icon>
+    <components>
+      <component id="pong.slider.moveUp" awardThreshold="1" />
+      <component id="pong.slider.moveDown" awardThreshold="1" />
+    </components>
+  </achievement>
+</achievements>

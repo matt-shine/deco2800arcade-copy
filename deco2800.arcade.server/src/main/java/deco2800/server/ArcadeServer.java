@@ -105,6 +105,9 @@ public class ArcadeServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// once the db is fine, load in achievement data from disk
+		this.achievementStorage.loadAchievementData();
 	}
 	
 	/**

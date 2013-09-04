@@ -6,16 +6,129 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.regex.Pattern;
+import java.io.File;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.server.ResourceLoader;
+import deco2800.arcade.server.ResourceHandler;
+import org.w3c.dom.Document;
+import org.w3c.dom.*;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Implements Achievement storage on database.
  * I added a comment here :)
  */
 public class AchievementStorage {
+
+	private class AchievementComponent {
+		public String id;
+		public int awardThreshold;
+	}
+
+	private void loadAchievement(Element achElem, String achFolder) {
+		String id = achElem.getAttribute("id");
+		
+		// query DB to see if we already have this id?
+
+		String name = null;
+		String description = null;
+		String iconPath = null;
+		int awardThreshold = -1;
+		LinkedList<AchievementComponent> components = new LinkedList<AchievementComponent>();
+		System.out.println("loading " + id + "...");
+		NodeList achInfo = achElem.getChildNodes();
+		int n = achInfo.getLength();
+		for(int j = 0; j < n; ++j) {
+			Node infNode = achInfo.item(j);
+			if(infNode.getNodeType() != Node.ELEMENT_NODE) {
+				continue;
+			}
+			Element infElem = (Element)infNode;
+			String elemName = infElem.getTagName();
+			
+			if (elemName.equals("name")) {
+				name = infElem.getTextContent();
+			} else if (elemName.equals("description")) {
+				description = infElem.getTextContent();
+			} else if (elemName.equals("awardThreshold")) {
+				awardThreshold = Integer.decode(infElem.getTextContent());
+			} else if (elemName.equals("icon")) {
+				iconPath = achFolder + File.separator + infElem.getTextContent();
+			} else if (elemName.equals("components")) {
+				NodeList componentNodes = infElem.getChildNodes();
+				for(int k = 0; k < componentNodes.getLength(); ++k) {
+					Node cmpNode = componentNodes.item(k);
+					if(cmpNode.getNodeType() != Node.ELEMENT_NODE) {
+						continue;
+					}
+					Element cmpElem = (Element)cmpNode;
+					AchievementComponent component = new AchievementComponent();
+					component.id = cmpElem.getAttribute("id");
+					component.awardThreshold = Integer.decode(cmpElem.getAttribute("awardThreshold"));
+					components.addLast(component);
+				}
+			} else {
+				throw new RuntimeException("Unsupported tag: " + elemName);
+			}
+		}
+
+		if(awardThreshold != -1 && components.size() > 0) {
+			throw new RuntimeException("Achievements can't have an award threshold as well as components");
+		}
+
+		System.out.println("... loaded. {");
+		System.out.println("  name: " + name);
+		System.out.println("  description: " + description);
+		if (awardThreshold != -1) System.out.println("  award threshold: " + awardThreshold);
+		System.out.println("  icon path: " + iconPath);
+		if (components.size() > 0) {
+			System.out.println("  components : {");
+			for(AchievementComponent c : components) {
+				System.out.println("    " + c.id + ", " + c.awardThreshold);
+			}
+			System.out.println("  }");
+		}
+		System.out.println("}");
+
+		// load into DB
+	}
+
+	public void loadAchievementData() {
+		ResourceLoader.loadFilesMatchingPattern(Pattern.compile("achievements\\.xml"),
+				1, new ResourceHandler() {
+			public void handleFile(File f) {
+				try {
+					String folder = f.getParentFile().getName();
+					System.out.println(f.getPath());
+					DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+					Document doc = docBuilder.parse(f);
+					
+					NodeList achievementNodes = doc.getElementsByTagName("achievement");
+					int numAchievements = achievementNodes.getLength();
+					for (int i = 0; i < numAchievements; ++i) {
+						Node achNode = achievementNodes.item(i);
+						if (achNode.getNodeType() != Node.ELEMENT_NODE) {
+							continue;
+						}
+
+						loadAchievement((Element)achNode, folder);
+					}
+				} catch(Exception e) {
+					System.out.println("Couldn't parse achievements file at " + f.getPath());
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
 	/**
 	 * Creates the Achievement table and sets initialised to TRUE on completion

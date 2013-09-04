@@ -29,7 +29,6 @@ final class MenuScreen implements Screen {
 		this.game = game;
 		this.skin = game.skin;
 		this.stage = new Stage();
-		Gdx.input.setInputProcessor(stage);
 
 		rootTable.setFillParent(true);
 		stage.addActor(rootTable);
@@ -42,6 +41,7 @@ final class MenuScreen implements Screen {
 	public void render(float delta) {
 		if (startButton.isChecked()) {
 			// Start a game from the user's view.
+			startButton.toggle();	// set back to unchecked
 			Gdx.app.debug(LOG, "switching to game screen");
 			game.setScreen(game.gameScreen);
 		}
@@ -68,6 +68,7 @@ final class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	@Override

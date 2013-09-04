@@ -13,10 +13,5 @@
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
         default: { font: default, fontColor: white }
     },
-    com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
-        default: { font: default, fontColor: white }
-    },
-    com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-        default: { up: button, down: button-down, over: button-over, font: default, fontColor: white }
-    }
+
 }

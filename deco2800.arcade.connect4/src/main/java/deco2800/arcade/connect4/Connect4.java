@@ -106,6 +106,8 @@ public class Connect4 extends GameClient {
 		ReplayNodeFactory.registerEvent("cursor_move",
 						                    new String[]{"col"}
 						                       );
+		
+		replayHandler.startSession( 1, "replayers" );
 	}
 	
 

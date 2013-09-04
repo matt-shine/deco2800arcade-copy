@@ -299,6 +299,13 @@ public class ReplayHandler {
 		dispatchReplayEvent( node.getType(), node );
 	}
 	
+	/*
+	 * This is temporary, will probably remove it later. Just for the demo.
+	 */
+	public void playbackCurrentSession() {
+		this.replayHistory = null;
+		requestEventsForSession( sessionId );
+	}
 	
 	public void startPlayback() {
 		playbackStartTime = System.currentTimeMillis();

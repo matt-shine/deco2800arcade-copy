@@ -136,8 +136,6 @@ public class ReplayListener extends Listener {
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
-            
-            System.out.println( "resing here" );
 
             connection.sendTCP(response);
             

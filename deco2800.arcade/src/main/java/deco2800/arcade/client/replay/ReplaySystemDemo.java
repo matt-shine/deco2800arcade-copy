@@ -102,11 +102,13 @@ public class ReplaySystemDemo {
 
 		Thread.sleep( 500 );
 
+		Integer session = replayHandler.getSessionId();
+		
 		replayHandler.endSession(replayHandler.getSessionId());
 		
 		Thread.sleep( 1000 );
 		
-		replayHandler.requestEventsForSession( 1 );
+		replayHandler.requestEventsForSession( session );
 	
 		playbackFinished = false;
 		while (!playbackFinished) {

@@ -44,7 +44,7 @@ public class SnakeLadder extends GameClient {
 	private SpriteBatch batch;
 	private Texture backgroundBoard;
 	private List<Tile> tileList; 
-	private HashMap<Character,String> ruleTextureMapping;
+	private HashMap<String,String> ruleTextureMapping;
     private GamePlayer gamePlayer;
     private enum GameState {
 		READY,
@@ -123,12 +123,12 @@ public class SnakeLadder extends GameClient {
 
 		
 		//initialise rule texture mapping
-		ruleTextureMapping = new HashMap<Character,String>();
-		ruleTextureMapping.put('+',"plus_10.png");
-		ruleTextureMapping.put('*', "plus_20.png");
-		ruleTextureMapping.put('-', "minus_10.png");
-		ruleTextureMapping.put('/', "minus_20.png");
-		ruleTextureMapping.put('#', "stop.png");
+		ruleTextureMapping = new HashMap<String,String>();
+		ruleTextureMapping.put("+","plus_10.png");
+		ruleTextureMapping.put("*", "plus_20.png");
+		ruleTextureMapping.put("-", "minus_10.png");
+		ruleTextureMapping.put("/", "minus_20.png");
+		ruleTextureMapping.put("#", "stop.png");
 		
 		//loading game map
 		tileList = new ArrayList<Tile>();
@@ -176,7 +176,7 @@ public class SnakeLadder extends GameClient {
 		batch.draw(backgroundBoard,0,0);
 		for(Tile t:tileList)
 		{
-			if(t.getRule()!='.')
+			if(!t.getRule().equals("."))
 			{
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
@@ -269,7 +269,8 @@ public class SnakeLadder extends GameClient {
 			String line = "";
 			while((line = file.readLine()) != null)
 			{
-				for(int i=0;i<line.length();i++)
+				String[] tiles = line.split(";");
+				for(int i=0;i<tiles.length;i++)
 				{
 					int index =0;
 					if(counter%2==0)
@@ -280,8 +281,8 @@ public class SnakeLadder extends GameClient {
 					{
 						index = (10-counter-1)*10+i+1;
 					}
-					Tile t = new TileLvl1(index,60,line.charAt(i));
-					if(t.getRule()!='.')
+					Tile t = new TileLvl1(index,60,tiles[i]);
+					if(!t.getRule().equals("."))
 					{
 						t.setTexture(new Texture(Gdx.files.classpath("assets/"+ruleTextureMapping.get(t.getRule()))));
 					}

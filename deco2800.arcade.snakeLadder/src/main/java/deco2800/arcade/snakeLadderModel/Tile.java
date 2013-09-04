@@ -8,11 +8,11 @@ public abstract class Tile {
 	
 	protected int index;
 	protected Point coordinate; 
-	protected char rule;
+	protected String rule;
 	protected int dimension;
 	protected Texture tileTexture; 
 	
-	public Tile(int index, int dimension, char rule)
+	public Tile(int index, int dimension, String rule)
 	{
 		this.index = index;
 		this.rule = rule;
@@ -22,8 +22,8 @@ public abstract class Tile {
 	
 	public void setIndex(int n){this.index = n;}
     public int getIndex(){return index; }
-    public void setRule(char rule) { this.rule = rule;}
-	public char getRule() { return rule;	}
+    public void setRule(String rule) { this.rule = rule;}
+	public String getRule() { return rule;	}
 	public void setDimension(int dimension){this.dimension = dimension;}
     public int getDimension(){return dimension; }
     public void setTexture(Texture t){this.tileTexture = t; }

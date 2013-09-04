@@ -4,7 +4,7 @@ import java.awt.Point;
 
 public class TileLvl1 extends Tile {
 
-	public TileLvl1(int index, int dimension, char c)
+	public TileLvl1(int index, int dimension, String c)
 	{
 		super(index,dimension,c);
 	}

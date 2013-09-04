@@ -121,8 +121,6 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
-    	System.out.println("x,y: " + x + "," + y + " width,height: " + Gdx.graphics.getWidth() + "," + Gdx.graphics.getHeight());
-    	System.out.println("Ratio (x,y): " + ((float)x)/Gdx.graphics.getWidth() + "," + ((float)y)/Gdx.graphics.getHeight());
     	//Check it was a single click
     	if(button != Buttons.LEFT) return false;
     	

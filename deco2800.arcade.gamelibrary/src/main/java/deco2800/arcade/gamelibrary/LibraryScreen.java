@@ -41,13 +41,18 @@ public class LibraryScreen implements Screen {
     Set<GameClient> games = null;
     private GameClient currentClient;
     private Stage stage;
-    private int x = 10;
-    private int y = 325;
+    private int x = 0;
+    private int y = 580;
     private Button button;
+    private Button storeButton;
+    private Button gridViewButton;
+    private Button userProfileButton;
 	private Button currentButton;
     private Skin skin;
     private String description;
     private Label label;
+    private Texture splashTexture;
+    private Actor image;
 
 
     public LibraryScreen(GameLibrary gl) {
@@ -82,7 +87,7 @@ public class LibraryScreen implements Screen {
         skin.add("default", textFieldStyle);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        //textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
@@ -95,12 +100,16 @@ public class LibraryScreen implements Screen {
 
         stage = new Stage();
         batch = new SpriteBatch();
+        splashTexture = new Texture("Assets/splashscreen.jpg");
+        image = new Image(splashTexture);
+        stage.addActor(image);
+        
 
         Actor exitButton = new TextButton("Exit", skin);
         exitButton.setWidth(200);
         exitButton.setHeight(40);
-        exitButton.setX(x+300);
-        exitButton.setY(y);
+        exitButton.setX(900);
+        exitButton.setY(50);
 
         exitButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
@@ -113,11 +122,11 @@ public class LibraryScreen implements Screen {
         for (final GameClient gameClient : games) {
             final Game game = gameClient.getGame();
             button = new TextButton("" + game.name, skin);
-            button.setWidth(200);
-            button.setHeight(40);
+            button.setWidth(275);
+            button.setHeight(33);
             button.setX(x);
             button.setY(y);
-            y+= 50;
+            y-= 35;
 
             button.addListener(new GameButtonActionHandler(this, gameClient, button));
 
@@ -126,18 +135,35 @@ public class LibraryScreen implements Screen {
         }
 
         Actor playButton = new TextButton("Play", skin);
-        playButton.setWidth(200);
+        playButton.setWidth(50);
         playButton.setHeight(40);
-        playButton.setX(x);
-        playButton.setY(y + 50);
-
+        playButton.setX(280);
+        playButton.setY(580);
         playButton.addListener(new PlayButtonActionHandler(this));
+        
         label = new Label(description, skin);
-        label.setWidth(200);
+        label.setWidth(150);
         label.setHeight(40);
-        label.setY(550);
-        label.setX(400);
+        label.setY(530);
+        label.setX(290);
+        
+        storeButton = new TextButton("Game Store", skin);
+        storeButton.setWidth(200);
+        storeButton.setHeight(40);
+        storeButton.setX(x);
+        storeButton.setY(650);
+        storeButton.addListener(new PlayButtonActionHandler(this));
+        
+        userProfileButton = new TextButton("User Profile", skin);
+        userProfileButton.setWidth(200);
+        userProfileButton.setHeight(40);
+        userProfileButton.setX(300);
+        userProfileButton.setY(650);
+        userProfileButton.addListener(new PlayButtonActionHandler(this));
+        
         stage.addActor(label);
+        stage.addActor(storeButton);
+        stage.addActor(userProfileButton);
         stage.addActor(playButton);
         Gdx.input.setInputProcessor(stage);
     }

@@ -19,7 +19,7 @@ public class MixMazeModelTest {
 	
 	@Test
 	public void mixMazeInitialization() {
-		MixMazeModel mixMaze = new MixMazeModel(5, MixMazeDifficulty.Beginner, 2);
+		MixMazeModel mixMaze = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60);
 		assertEquals(5, mixMaze.getBoardSize());
 		for(int row = 0; row < mixMaze.getBoardSize(); ++row) {
 			for(int column = 0; column < mixMaze.getBoardSize(); ++column) {
@@ -30,7 +30,7 @@ public class MixMazeModelTest {
 			}
 		}
 		assertEquals(MixMazeDifficulty.Beginner, mixMaze.getGameDifficulty());
-		assertEquals(2, mixMaze.getGameMaxTime());
+		assertEquals(60, mixMaze.getGameMaxTime());
 		assertEquals(-1, mixMaze.getGameStartTime());
 		assertEquals(-1, mixMaze.getGameEndTime());
 		assertNotNull(mixMaze.getPlayer1());

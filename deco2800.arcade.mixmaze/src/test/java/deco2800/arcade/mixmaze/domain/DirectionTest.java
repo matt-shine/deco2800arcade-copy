@@ -35,6 +35,14 @@ public class DirectionTest {
 	}
 	
 	@Test
+	public void getPolarDirection() {
+		assertEquals(Direction.WEST, Direction.getPolarDirection(Direction.EAST));
+		assertEquals(Direction.NORTH, Direction.getPolarDirection(Direction.SOUTH));
+		assertEquals(Direction.EAST, Direction.getPolarDirection(Direction.WEST));
+		assertEquals(Direction.SOUTH, Direction.getPolarDirection(Direction.NORTH));
+	}
+	
+	@Test
 	public void isXDirection() {
 		assertTrue(Direction.isXDirection(Direction.WEST));
 		assertTrue(Direction.isXDirection(Direction.EAST));
@@ -56,5 +64,13 @@ public class DirectionTest {
 		assertTrue(Direction.isPositiveDirection(Direction.SOUTH));
 		assertFalse(Direction.isPositiveDirection(Direction.WEST));
 		assertFalse(Direction.isPositiveDirection(Direction.NORTH));
+	}
+	
+	@Test
+	public void isNegativeDirection() {
+		assertFalse(Direction.isNegativeDirection(Direction.EAST));
+		assertFalse(Direction.isNegativeDirection(Direction.SOUTH));
+		assertTrue(Direction.isNegativeDirection(Direction.WEST));
+		assertTrue(Direction.isNegativeDirection(Direction.NORTH));
 	}
 }

@@ -1,5 +1,6 @@
 package deco2800.arcade.hunter.model;
 
+import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -42,6 +43,11 @@ public class Map {
 		return panes;
 	}
 	
+	public ArrayList<MapPane> getPaneArray() {
+		ArrayList<MapPane> paneArray = new ArrayList<MapPane>(panes);
+		return paneArray;
+	}
+	
 	/**
 	 * Update the state of the map, should be called each time the main render loop is called
 	 * @param delta delta time of the render loop
@@ -67,7 +73,7 @@ public class Map {
 	public MapPane getRandomPane(MapType type) {
 		int [][] paneData = new int[Map.PANE_SIZE][Map.PANE_SIZE];
 		//This should pull a random map from a file/cache
-		FileHandle mapFile = Gdx.files.internal("maps/basicMap.csv"); //Fixed map file should instead be selected from a list in another file
+		FileHandle mapFile = Gdx.files.internal("maps/exampleMap.csv"); //Fixed map file should instead be selected from a list in another file
 		String mapDataString = mapFile.readString();
 		String[] dataArray = mapDataString.split(",");
 		
@@ -81,7 +87,7 @@ public class Map {
 			}
 		}
 		
-		return new MapPane(paneData, 3, 2, type); //Fixed start/end offset should be read from a file
+		return new MapPane(paneData, 5, 6, type); //Fixed start/end offset should be read from a file
 	}
 	
 	/**

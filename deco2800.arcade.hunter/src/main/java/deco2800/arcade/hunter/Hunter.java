@@ -1,6 +1,7 @@
 package deco2800.arcade.hunter;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.hunter.screens.GameScreen;
 import deco2800.arcade.hunter.screens.SplashScreen;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -18,6 +19,6 @@ public class Hunter extends PlatformerGame {
 	
 	@Override
 	public void create() {
-		setScreen(new SplashScreen(this));
+		setScreen(new GameScreen(this));
 	}
 }

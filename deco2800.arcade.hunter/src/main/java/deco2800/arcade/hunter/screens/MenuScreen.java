@@ -101,12 +101,12 @@ public class MenuScreen implements Screen {
 		});
 		
 		table.add(exitButton).size(200,60).spaceBottom(20);
-		
 	}
 
 	@Override
 	public void dispose() {
 		stage.dispose();
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override

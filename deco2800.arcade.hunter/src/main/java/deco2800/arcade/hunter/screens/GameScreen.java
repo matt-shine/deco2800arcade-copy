@@ -1,18 +1,17 @@
 package deco2800.arcade.hunter.screens;
 
+import java.util.ArrayList;
+import java.util.Queue;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
@@ -34,10 +33,13 @@ public class GameScreen implements Screen {
 	private EntityCollection entities = new EntityCollection();
 	private Player player;
 	private Map foreground;
+	private TextureRegion background;
 	
 	private float gameSpeed = 64;
 	
 	private SpriteBatch batch = new SpriteBatch();
+	
+	private int firstPaneOffset;
 	
 	private float stateTime;
 	private TextureRegion currFrame;
@@ -49,6 +51,8 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, parent.screenWidth, parent.screenHeight);
 		
+		//Load in background
+		background = new TextureRegion(new Texture("textures/background.png"));
 		
 		player = new Player(new Vector2(0, 0), 64, 128);
 		entities.add(player);
@@ -76,32 +80,16 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		//Black background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		//Poll for input
-		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
-			//Attack
-		}
-		
-		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
-			//Jump
-			player.jump();
-		}
+		pollInput();
 		
 		player.update(delta);
 		foreground.update(delta, gameSpeed);
 		
 		batch.begin();
 		
-		int paneCount = 0;
-		for (MapPane p : foreground.getPanes()) {
-			batch.draw(p.getRendered(), foreground.getXOffset()+(paneCount * Map.TILE_SIZE * Map.PANE_SIZE), delta);
-			paneCount++;
-		}
+		drawBackground();
+		drawMapPanes(delta);
 		
-			    
 	    runAnim = player.getAnimation();
 	    stateTime += Gdx.graphics.getDeltaTime();
 	    currFrame = runAnim.getKeyFrame(stateTime,true);
@@ -112,6 +100,38 @@ public class GameScreen implements Screen {
 	    }
 	    batch.end();
 		
+	}
+	
+	private void drawMapPanes(float delta) {
+		//Still no good, needs to use some sort of world space coordinates for offsets TODO
+		ArrayList<MapPane> panes = foreground.getPaneArray();
+		int offset = 0;
+		
+		for (int i = 0; i < panes.size(); i++) {
+			if (i != 0) {
+				offset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * Map.TILE_SIZE;
+			}
+			
+			batch.draw(panes.get(i).getRendered(), foreground.getXOffset() + (i * Map.TILE_SIZE * Map.PANE_SIZE), offset);
+		}
+	}
+	
+	private void drawBackground() {
+		//Black background, replace with image
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		batch.draw(background, 0, 0, parent.screenWidth, parent.screenHeight);
+	}
+	
+	private void pollInput() {
+		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
+			//Attack
+		}
+		
+		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
+			//Jump
+			player.jump();
+		}
 	}
 
 	@Override

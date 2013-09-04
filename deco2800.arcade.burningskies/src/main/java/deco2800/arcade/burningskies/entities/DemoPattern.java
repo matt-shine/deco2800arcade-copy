@@ -31,11 +31,4 @@ public class DemoPattern extends BulletPattern {
 		angle = (angle+5)%360;
 		bullet.act(lag);
 	}
-
-	@Override
-	public void onRender(float delta) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -14,8 +14,12 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+<<<<<<< HEAD
 import deco2800.server.database.HighscoreDatabase;
 
+=======
+import deco2800.arcade.packman.PackageServer;
+>>>>>>> master
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -30,6 +34,9 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
+	
+	// Package manager
+	private PackageServer packServ;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -79,7 +86,11 @@ public class ArcadeServer {
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
+<<<<<<< HEAD
 		this.highscoreDatabase = new HighscoreDatabase();
+=======
+		this.packServ = new PackageServer();
+>>>>>>> master
 		
 		//initialize database classes
 		try {

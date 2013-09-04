@@ -23,14 +23,12 @@ public class BulkPurchasingTest {
 	CreditStorage mockCS = mock(CreditStorage.class);
 	private Player barnaby;
 	
-	@SuppressWarnings("deprecation")
 	@Before
 	public void setup() {
 		purchasingService = new PurchasingService();
 		
-		//TODO: Chnage this to the other constructor
-		algernon = new Player("Algernon");
-		barnaby = new Player("Barnaby");
+		algernon = new Player(0, "Algernon", null);
+		barnaby = new Player(1, "Barnaby", null);
 		
 		tiddlywinks = new Game();
 		tiddlywinks.name = "tiddlywinks";
@@ -40,7 +38,7 @@ public class BulkPurchasingTest {
 	
 	@Test
 	public void canAffordIt() throws Exception {		
-		when(mockCS.getUserCredits("Algernon")).thenReturn(50);
+		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
 		
 		GamePlayToken gpt = purchasingService.bulkPurchase(
 				algernon,
@@ -48,7 +46,7 @@ public class BulkPurchasingTest {
 				1
 		);
 		
-		verify(mockCS).getUserCredits("Algernon");
+		verify(mockCS).getUserCredits(algernon.getID());
 		
 		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
 		assertEquals("Wrong number of plays",
@@ -57,7 +55,7 @@ public class BulkPurchasingTest {
 	
 	@Test
 	public void cannotAffordIt() throws Exception {		
-		when(mockCS.getUserCredits("Algernon")).thenReturn(0);
+		when(mockCS.getUserCredits(algernon.getID())).thenReturn(0);
 		
 		GamePlayToken gpt = purchasingService.bulkPurchase(
 				algernon,
@@ -65,14 +63,14 @@ public class BulkPurchasingTest {
 				1
 		);
 		
-		verify(mockCS).getUserCredits("Algernon");
+		verify(mockCS).getUserCredits(algernon.getID());
 		
 		assertEquals("Wrong game", null, gpt);
 	}
 	
 	@Test
 	public void discountOnFive() throws Exception {		
-		when(mockCS.getUserCredits("Algernon")).thenReturn(50);
+		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
 		
 		GamePlayToken gpt = purchasingService.bulkPurchase(
 				algernon,
@@ -80,8 +78,8 @@ public class BulkPurchasingTest {
 				5
 		);
 		
-		verify(mockCS).getUserCredits("Algernon");
-		verify(mockCS).deductUserCredits("Algernon", 3);
+		verify(mockCS).getUserCredits(algernon.getID());
+		verify(mockCS).deductUserCredits(algernon.getID(), 3);
 		
 		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
 		assertEquals("Wrong number of plays",
@@ -90,7 +88,7 @@ public class BulkPurchasingTest {
 	
 	@Test
 	public void discountOnTen() throws Exception {		
-		when(mockCS.getUserCredits("Algernon")).thenReturn(50);
+		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
 		
 		GamePlayToken gpt = purchasingService.bulkPurchase(
 				algernon,
@@ -98,8 +96,8 @@ public class BulkPurchasingTest {
 				10
 		);
 		
-		verify(mockCS).getUserCredits("Algernon");
-		verify(mockCS).deductUserCredits("Algernon", 5);
+		verify(mockCS).getUserCredits(algernon.getID());
+		verify(mockCS).deductUserCredits(algernon.getID(), 5);
 		
 		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
 		assertEquals("Wrong number of plays",
@@ -108,7 +106,7 @@ public class BulkPurchasingTest {
 	
 	@Test
 	public void discountOnHundred() throws Exception {		
-		when(mockCS.getUserCredits("Algernon")).thenReturn(50);
+		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
 		
 		GamePlayToken gpt = purchasingService.bulkPurchase(
 				algernon,
@@ -116,8 +114,8 @@ public class BulkPurchasingTest {
 				100
 		);
 		
-		verify(mockCS).getUserCredits("Algernon");
-		verify(mockCS).deductUserCredits("Algernon", 40);
+		verify(mockCS).getUserCredits(algernon.getID());
+		verify(mockCS).deductUserCredits(algernon.getID(), 40);
 		
 		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
 		assertEquals("Wrong number of plays",
@@ -130,18 +128,18 @@ public class BulkPurchasingTest {
 		players.add(algernon);
 		players.add(barnaby);
 		
-		when(mockCS.getUserCredits("Algernon")).thenReturn(50);
-		when(mockCS.getUserCredits("Barnaby")).thenReturn(50);
+		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
+		when(mockCS.getUserCredits(barnaby.getID())).thenReturn(50);
 
 		Set<GamePlayToken> gpts = purchasingService.teamBulkPurchase(players, 
 				tiddlywinks,
 				25
 		);
-		
-		verify(mockCS).getUserCredits("Algernon");
-		verify(mockCS).deductUserCredits("Algernon", 10);
-		verify(mockCS).getUserCredits("Barnaby");
-		verify(mockCS).deductUserCredits("Barnaby", 10);
+
+		verify(mockCS).getUserCredits(algernon.getID());
+		verify(mockCS).deductUserCredits(algernon.getID(), 10);
+		verify(mockCS).getUserCredits(barnaby.getID());
+		verify(mockCS).deductUserCredits(barnaby.getID(), 10);
 
 		for (GamePlayToken gpt : gpts) {
 			assertEquals("Wrong game", tiddlywinks, gpt.getGame());

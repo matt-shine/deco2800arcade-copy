@@ -46,7 +46,7 @@ public class PlayerStorage {
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
-								+ "program VARCHAR(30)," + "bio VARCHAR(200));");
+								+ "program VARCHAR(30)," + "bio VARCHAR(200))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -109,7 +109,7 @@ public class PlayerStorage {
 	}
 
 	/**
-	 * Searches through a ResultSet for for a player's information.
+	 * Searches through a ResultSet for a player's information.
 	 * 
 	 * @param playerID
 	 *            The player's playerID

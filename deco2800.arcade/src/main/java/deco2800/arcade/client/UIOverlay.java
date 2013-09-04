@@ -18,10 +18,18 @@ public interface UIOverlay {
 	 */
 	void setListeners(Screen l);
 	
+	
+	public static interface PopupMessage {
+		String getMessage();
+		//TODO: icon
+		//TODO: onclick behaviour
+	}
+	
+	
 	/**
 	 * For achievements, chat messages, etc.
 	 * @param s
 	 */
-	void addPopup(String s);
+	void addPopup(PopupMessage p);
 	
 }

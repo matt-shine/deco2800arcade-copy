@@ -72,7 +72,6 @@ public class Pong extends GameClient {
 	@Override
 	public void create() {
 		
-        
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 

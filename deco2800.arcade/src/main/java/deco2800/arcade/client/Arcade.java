@@ -7,13 +7,11 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.crypto.KeyGenerator;
 import javax.swing.JFrame;
 
 import org.reflections.Reflections;
@@ -85,7 +83,7 @@ public class Arcade extends JFrame {
 	 * 
 	 * @param args
 	 */
-	private Arcade(String[] args) {
+	public Arcade(String[] args) {
 		
 		this.width = 1280;
 		this.height = 720;
@@ -318,8 +316,7 @@ public class Arcade extends JFrame {
 				.entrySet().iterator();
 		while (it.hasNext()) {
 
-			Map.Entry<String, Class<? extends GameClient>> pair = (Map.Entry<String, Class<? extends GameClient>>) it
-					.next();  // Note:  I (abbjohn) am getting a redundant type cast warning here
+			Map.Entry<String, Class<? extends GameClient>> pair = it.next();
 
 			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
 				it.remove();

@@ -3,12 +3,14 @@ package deco2800.arcade.arcadeui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import deco2800.arcade.client.ArcadeInputMux;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+
 import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
@@ -31,6 +33,7 @@ public class LoginScreen implements Screen {
         pixmap.fill();
 		
         skin.add("white", new Texture(pixmap));
+        skin2.add("white", new Texture(pixmap));
         
         skin.add("default", new BitmapFont());
         
@@ -63,11 +66,7 @@ public class LoginScreen implements Screen {
         stage.addActor(table);
 
         Label usernameLabel = new Label("Username:", skin);
-<<<<<<< HEAD
-        final TextField usernameText = new TextField("", skin);
-=======
         final TextField usernameText = new TextField("", skin2);
->>>>>>> origin/master
         usernameText.setMessageText("Enter Username");
         Label passwordLabel = new Label("Password:", skin);
         final TextField passwordText = new TextField("", skin2);
@@ -83,15 +82,10 @@ public class LoginScreen implements Screen {
         table.add(passwordLabel);
         //table.add(passwordText).width(100);
         table.row();
-<<<<<<< HEAD
-        table.add(loginButton);
-        table.add(exitButton);
-
-=======
+        
         table.add(loginButton).width(100).pad(10);
         table.add(exitButton).width(100).pad(10);
         
->>>>>>> origin/master
         loginButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 ArcadeSystem.login(usernameText.getText());

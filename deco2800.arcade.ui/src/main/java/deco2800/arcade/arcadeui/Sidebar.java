@@ -80,7 +80,6 @@ public class Sidebar extends Group {
 		//toggles isUIOpen on tab key down
 		if (Gdx.input.isKeyPressed(Keys.SPACE) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
 			isUIOpen = !isUIOpen;
-			System.out.println("space pressed");
 		}
 		
 		if (isUIOpen) {

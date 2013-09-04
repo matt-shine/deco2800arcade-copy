@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
 public class SidebarAvatar extends Widget {
 
 	private NinePatch texture;
 	private BitmapFont font;
+	@SuppressWarnings("unused")
 	private Overlay overlay;
 
 	public SidebarAvatar(Overlay overlay) {
@@ -27,9 +27,6 @@ public class SidebarAvatar extends Widget {
 	@Override
 	public void act(float d) {
 		super.act(d);
-		
-
-		
 	}
 	
 	@Override
@@ -37,7 +34,6 @@ public class SidebarAvatar extends Widget {
 		
 		texture.draw(batch, getX(), getY(), 200, 200);
 		font.setColor(Color.WHITE);
-		TextBounds b = font.getBounds("text");
 		font.draw(batch, "text", 0, 0);
 	}
 

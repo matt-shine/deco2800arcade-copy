@@ -62,13 +62,6 @@ public class OverlayScreen implements Screen {
 			}
 			
 			
-			if (isUIOpen) {
-				overlay.addPopup(new PopupMessage() {
-					public String getMessage() {
-						return "Test overlay popup message.";
-					}
-				});
-			}
 		}
 		
 		if (isUIOpen) {
@@ -88,10 +81,6 @@ public class OverlayScreen implements Screen {
 		}
 		
 		
-		if (callbacks == null && !notifiedForMissingCallbacks) {
-	    	notifiedForMissingCallbacks = true;
-	    	System.err.println("Overlay event listeners are not set. See https://github.com/UQdeco2800/deco2800-2013/wiki/Overlay");
-	    }
 	}
 
 	@Override

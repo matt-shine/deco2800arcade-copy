@@ -1,6 +1,5 @@
 package deco2800.arcade.client;
 
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 

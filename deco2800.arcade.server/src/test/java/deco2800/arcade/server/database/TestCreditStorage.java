@@ -1,7 +1,5 @@
 package deco2800.arcade.server.database;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.net.URL;
 
@@ -13,10 +11,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-
 import deco2800.server.database.CreditStorage;
-import deco2800.server.database.DatabaseException;
 
 /**
  * Test class for CreditStorage

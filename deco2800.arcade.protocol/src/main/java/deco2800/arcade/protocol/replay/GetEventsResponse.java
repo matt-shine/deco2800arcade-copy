@@ -1,6 +1,6 @@
 package deco2800.arcade.protocol.replay;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The list of all events in a session, returned upon request.
@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class GetEventsResponse {
 
-    public ArrayList<String> nodes;
+    public List<String> nodes;
     public Integer serverOffset;
     
 }

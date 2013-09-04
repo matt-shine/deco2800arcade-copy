@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -25,7 +26,15 @@ import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
 
 public class ReplayListener extends Listener {
-    
+	
+	public ReplayListener() {
+		try {
+			ArcadeServer.instance().getReplayStorage().initialise();
+		} catch( DatabaseException e ) {
+			// ouch
+		}
+	}
+	
     @Override
     public void received(Connection connection, Object object) {
         super.received(connection, object);
@@ -40,6 +49,7 @@ public class ReplayListener extends Listener {
             replayResponse.test = "HELLO! " + replayRequest.random;
             
             connection.sendTCP(replayResponse);
+            
         } else if (object instanceof StartSessionRequest)
         {
             StartSessionRequest ssr = (StartSessionRequest) object;
@@ -49,23 +59,28 @@ public class ReplayListener extends Listener {
             Date date = new Date();
             System.out.println(dateFormat.format(date));
             
+            int sessionID = -1;
+            
             try {
                 //TODO, DB should sent US the sessionId, also date format is wrong.
-                ArcadeServer.instance().getReplayStorage().insertSession(1234, ssr.gameId.intValue(), true, ssr.username, 000, "");
+                sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId.intValue(), ssr.username, 000, "");
             } catch (DatabaseException e) {
                 e.printStackTrace();
+            }
+            
+            if ( sessionID < 0 ) {
+            	// something went wrong
             }
             
             log("Got a StartSessionRequest: " + ssr.gameId + ", " + ssr.username);
             
             //TODO Generate Session ID
-            response.sessionId = 1234;
+            response.sessionId = sessionID;
             connection.sendTCP(response);
         } else if (object instanceof EndSessionRequest)
         {
             EndSessionRequest esr = (EndSessionRequest) object;
             EndSessionResponse response = new EndSessionResponse();
-            
             try {
                 ArcadeServer.instance().getReplayStorage().endRecording(esr.sessionId);
             } catch (DatabaseException e) {
@@ -98,9 +113,10 @@ public class ReplayListener extends Listener {
             PushEventRequest per = (PushEventRequest) object;
             PushEventResponse response = new PushEventResponse();
             
-            //TODO extract eventId from the per
+            System.out.println( "Got event request " + per.eventIndex );
+            
             try {
-                ArcadeServer.instance().getReplayStorage().insertEvent(1234, per.sessionId, 0, per.nodeString); //3rd arg is the eventindex
+                ArcadeServer.instance().getReplayStorage().insertEvent( per.sessionId, per.eventIndex, per.nodeString); 
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
@@ -116,10 +132,14 @@ public class ReplayListener extends Listener {
             
             //TODO wtf hashmap wtf? --- i so sorry
             try {
-                ArcadeServer.instance().getReplayStorage().getReplay(ger.sessionId);
+                response.nodes = ArcadeServer.instance().getReplayStorage().getReplay(ger.sessionId);
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
+            
+            System.out.println( "resing here" );
+
+            connection.sendTCP(response);
             
             //TODO deal with the data that comes back.
         }

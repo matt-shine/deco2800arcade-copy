@@ -11,24 +11,39 @@ public class ReplayStorage {
 		Statement sessionsState = null;
 		Statement eventsState = null;
 		try{
+			
+			sessionsState = connection.createStatement();
+			try {
+				sessionsState.execute( "DROP TABLE SESSIONS" );
+			} catch ( Exception e ) {
+				
+			}
+			try {
+				sessionsState.execute( "DROP TABLE EVENTS" );
+			} catch ( Exception e ) {
+				
+			}
+			
 			ResultSet sessionsTable = connection.getMetaData().getTables(null, null, "SESSIONS", null);
 			if ( !sessionsTable.next() ){
+				
 				sessionsState = connection.createStatement();
-				sessionsState.execute("CREATE TABLE SESSIONS(SessionID INT PRIMARY KEY AUTO_INCREMENT," +
-						"GameID INT NOT NULL"+
-						"Recording BOOLEAN NOT NULL" +
-						"User VARCHAR(30) NOT NULL," +
-						"DateTime LONG NOT NULL" +
-						"Comments VARCHAR(255) NOT NULL)");
+				sessionsState.execute( "CREATE TABLE SESSIONS(SessionID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+						+ "GameID INT NOT NULL,"
+						+ "Recording BOOLEAN NOT NULL, "
+						+ "UserName VARCHAR(30) NOT NULL,"
+						+ "DateTime BIGINT NOT NULL, "
+						+ "Comments VARCHAR(255) NOT NULL)");
+			    
 			}
 			
 			ResultSet eventsTable = connection.getMetaData().getTables(null,null,"EVENTS", null);
 			if ( !eventsTable.next() ){
 				eventsState = connection.createStatement();
-				eventsState.execute("CREATE TABLE EVENTS(EventID INT PRIMARY KEY AUTO_INCREMENT," +
-							"SessionID INT NOT NULL," +
-							"EventIndex INT NOT NULL" + //Index of the most recent event
-						    "Event STRING NOT NULL)");
+				eventsState.execute("CREATE TABLE EVENTS(EventID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+							+ "SessionID INT NOT NULL,"
+							+ "EventIndex INT NOT NULL," 	//Index of the most recent event
+						    + "Event VARCHAR(255) NOT NULL)");
 			}
 			
 		}catch( Exception e ){
@@ -72,8 +87,8 @@ public class ReplayStorage {
 		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
-			state.executeUpdate("UPDATE SESSIONS"
-					  + "SET Recording = false"
+			state.executeUpdate("UPDATE SESSIONS "
+					  + "SET Recording = false "
 					  + "WHERE SessionID = " + sessionID);
 			
 		}catch( Exception e ){
@@ -161,28 +176,30 @@ public class ReplayStorage {
 	 * @param sessionID
 	 * @return
 	 */
-	public  HashMap<Integer, String> getReplay( int sessionID ) throws DatabaseException{ //Want EventIDs too?
+	public List<String> getReplay( int sessionID ) throws DatabaseException{ //Want EventIDs too?
 		
 		Connection connection = null;
 		Statement state = null;
 		//String [] events;
-		 HashMap <Integer, String> events =  new HashMap <Integer, String>();
-	
+		// HashMap <Integer, String> events =  new HashMap <Integer, String>();
+		 
+		List<String> events = new ArrayList<String>();
 		
 		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
+
 			
 			ResultSet results = state.executeQuery
-					("SELECT EventIndex, Event FROM EVENT WHERE SessionID =" + sessionID);
+					("SELECT Event FROM EVENTS WHERE SessionID =" + sessionID + " ORDER BY EventIndex");
+			
 			//int rows = results.last() ? results.getRow() : 0; //get number of rows from output\
 			//might have to set cursor to beforeFirst() row
 			
 		//	events = new String[rows];
 			while( results.next() ){
-				int eventIndex = results.getInt("EventIndex");
 				String event = results.getString("Event");
-				events.put(eventIndex, event);
+				events.add( event);
 			}
 		}catch( Exception e ){
 			e.printStackTrace();
@@ -203,27 +220,41 @@ public class ReplayStorage {
 				throw new DatabaseException("Something went awry.", e);
 			}
 		}
-	return events;	
-}	
+		
+		return events;	
+	}	
 	
 	/**
 	 * Insert new entry into Sessions table.
 	 * 
 	 */
-	public void insertSession( int sessionID, int gameID, boolean recording,
+	public int insertSession( int gameID, 
 			String userName, long dateTime, String comment ) throws DatabaseException{
 		
 		Connection connection = null;
 		Statement state = null;
 		
+		int sessionID = -1;
+		
 		try{
 			connection = Database.getConnection();
+			
 			state = connection.createStatement();
-			String insert = "INSERT INTO SESSIONS " + "VALUES ("+ sessionID +", " + gameID + ", "
-							+ recording + ", '" + userName + "', " + dateTime + ", '" + comment 
+			String insert = "INSERT INTO SESSIONS (GameID, Recording, UserName, DateTime, Comments) " 
+							+ "VALUES (" + gameID + ", true, '" 
+							+ userName + "', " + dateTime + ", '" + comment 
 							+ "')";
 			state.executeUpdate(insert);
 			
+			state = connection.createStatement();
+			String getSession = "SELECT MAX(SessionID) AS SID FROM SESSIONS";
+			ResultSet results = state.executeQuery(getSession);
+			
+			if( results.next() ){
+				sessionID = results.getInt("SID");
+			} else {
+				// something's pretty wrong here, couldn't get the new session ID
+			}
 			
 		}catch( Exception e ){
 			e.printStackTrace();
@@ -246,6 +277,8 @@ public class ReplayStorage {
 				
 			}			
 		}
+		
+		return sessionID;
 	}
 	
 	/**
@@ -255,7 +288,7 @@ public class ReplayStorage {
 	 * @param sessionID
 	 * @param event
 	 */
-	public void insertEvent( int eventID, int sessionID, int eventIndex, String event ) throws DatabaseException{
+	public void insertEvent( int sessionID, int eventIndex, String event ) throws DatabaseException{
 		Statement state = null;
 		Connection connection = null;
 		
@@ -263,8 +296,10 @@ public class ReplayStorage {
 			connection = Database.getConnection();
 			state = connection.createStatement();
 			
-			String insert = "INSERT INTO EVENTS " + "VALUES (" + eventID + ", " + sessionID + ", "
-							+ eventIndex +", '" +event + "')";
+			String insert = "INSERT INTO EVENTS (SessionID, EventIndex, Event) " 
+						+ "VALUES (" + sessionID 
+							+ ", " + eventIndex 
+							+ ", '" +event + "')";
 					
 			state.executeUpdate(insert);
 		

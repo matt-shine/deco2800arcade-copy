@@ -9,6 +9,7 @@ import deco2800.arcade.protocol.UserRequest;
  */
 public class PushEventRequest extends UserRequest {
 
+	public Integer eventIndex;;
     public Integer sessionId;
     public String nodeString;
 

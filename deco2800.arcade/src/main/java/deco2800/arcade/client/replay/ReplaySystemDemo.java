@@ -4,6 +4,8 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
 
 public class ReplaySystemDemo {
+	
+	static boolean playbackFinished;
 
 	public ReplaySystemDemo() {
 		// TODO Auto-generated constructor stub
@@ -24,8 +26,9 @@ public class ReplaySystemDemo {
                 if ( eType.equals( "replay_reset" ) ) {
                     System.out.println( "replay reset" );
                 }
-                if ( eType.equals( "playback_finished" ) ) {
+                if ( eType.equals( "playback_complete" ) ) {
                     System.out.println( "playback finished" );
+                    playbackFinished = true;
                 }
                 
                 if ( eType.equals( "piece_move" ) ) {
@@ -58,6 +61,8 @@ public class ReplaySystemDemo {
 	    //Ping the server
 	    replayHandler.startSession(123, "wtf");
 	    
+	    Thread.sleep( 1000 );
+	    
 		//Our replay handler has to know about all the different functions
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		
@@ -75,10 +80,8 @@ public class ReplaySystemDemo {
                                               "piece_id",
                                               "new_x",
                                               "new_y"
-                                        );
-
-		Thread.sleep( 500 );
-		
+                                    );
+		 
 		//Recreate event from factory definition (once again, pass array or varargs.
 		replayHandler.pushEvent(
 		        ReplayNodeFactory.createReplayNode(
@@ -87,8 +90,32 @@ public class ReplaySystemDemo {
 		        )
 		);
 
-		Thread.sleep( 1500 );
+		Thread.sleep( 500 );
+
+		//Recreate event from factory definition (once again, pass array or varargs.
+		replayHandler.pushEvent(
+		        ReplayNodeFactory.createReplayNode(
+		                "piece_move",
+		                2, 3, 4
+		        )
+		);
+
+		Thread.sleep( 500 );
+
+		replayHandler.endSession(replayHandler.getSessionId());
 		
+		Thread.sleep( 1000 );
+		
+		replayHandler.requestEventsForSession( 1 );
+	
+		playbackFinished = false;
+		while (!playbackFinished) {
+			replayHandler.runLoop();
+		}
+		
+		System.out.println( "Exiting demo." );
+		/*
+		 
 		//Can still create nodes the old way too.
 		ReplayNode node;
 		node = new ReplayNode( "piece_move" );
@@ -105,13 +132,13 @@ public class ReplaySystemDemo {
 		node.addItem( "new_y", new ReplayItem( new Integer( 4 ) ) );
 		replayHandler.pushEvent( node );
 		
-		replayHandler.endSession(replayHandler.getSessionId());
 		
 		System.out.println( "Recording complete" );
 		Thread.sleep( 2000 );
 		System.out.println( "Starting playback" );
 		
 		replayHandler.startPlayback();
-
+		
+		*/
 	}
 }

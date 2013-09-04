@@ -2,6 +2,8 @@ package deco2800.arcade.protocol;
 
 import com.esotericsoftware.kryo.Kryo;
 
+import java.util.ArrayList;
+
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.communication.ChatRequest;
@@ -73,6 +75,9 @@ public class Protocol {
 		kryo.register(ChatRequest.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
+		
+
+		kryo.register(ArrayList.class);
 	}
 	
 }

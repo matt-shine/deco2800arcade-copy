@@ -26,10 +26,14 @@ public class ReplayHandler {
 	protected EventListenerList listenerList = new EventListenerList();
 	
 	private long startTime;
+	
+	private int replayIndex;
+	
 	private List<String> replayHistory;
 	private NetworkClient client;
 	private Gson serializer;
 	private Gson deserializer;
+	
 	private Integer sessionId;
 	
 	private long playbackStartTime = -1;
@@ -124,9 +128,10 @@ public class ReplayHandler {
 	 * Send a node as a string to the server for storage
 	 * @param node
 	 */
-	public void pushEventToServer(String node, Integer sessionId)
+	public void pushEventToServer(Integer eventIndex, String node, Integer sessionId)
 	{
 	    PushEventRequest per = new PushEventRequest();
+	    per.eventIndex = eventIndex;
 	    per.nodeString = node;
 	    per.sessionId = sessionId;
 	    client.sendNetworkObject(per);
@@ -134,6 +139,9 @@ public class ReplayHandler {
 	
 	public void eventPushed(PushEventResponse per)
 	{
+		if ( !per.success ) {
+			// well then...
+		}
 	  //TODO Implement
 	}
 	
@@ -150,7 +158,8 @@ public class ReplayHandler {
 	
 	public void eventsForSessionReceived(GetEventsResponse ger)
 	{
-	  //TODO Implement
+		replayHistory = ger.nodes;
+		startPlayback();
 	}
 	
 	/**
@@ -190,6 +199,7 @@ public class ReplayHandler {
 	
 	public void startRecording() {
 		this.startTime = -1;
+		this.replayIndex = 0;
 	    this.replayHistory = new ArrayList<String>();
 	    
 		this.startTime = System.currentTimeMillis();
@@ -207,7 +217,13 @@ public class ReplayHandler {
 		}
 		long timeOffset = System.currentTimeMillis() - startTime;
 		toAdd.setTime( timeOffset );
-		replayHistory.add( serializer.toJson( toAdd ) );
+		String nodeString = serializer.toJson( toAdd );
+		replayHistory.add( nodeString );
+		
+		System.out.println( nodeString );
+		pushEventToServer( replayIndex, nodeString, sessionId );
+		replayIndex ++;
+		
 		// probably get rid of this, kind of useless
 		dispatchReplayEvent( "event_pushed", null );
 	}
@@ -298,6 +314,7 @@ public class ReplayHandler {
 		//playbackItem();
 	}
 	
+	/*
 	private void playbackItem( final int index, long lastNodeTime ) {
 		final ReplayNode node = deserializer.fromJson(
 				replayHistory.get( index ),
@@ -324,7 +341,8 @@ public class ReplayHandler {
 		        nodeTime - lastNodeTime
 		);
 	}
-
+	*/
+	
 	public void addReplayEventListener( ReplayEventListener listener ) {
 		listenerList.add( ReplayEventListener.class, listener );
 	}

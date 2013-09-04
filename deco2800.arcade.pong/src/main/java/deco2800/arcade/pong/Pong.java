@@ -108,8 +108,6 @@ public class Pong extends GameClient {
 			
         });
         
-        
-		
 		super.create();
 		
 		//Initialise camera

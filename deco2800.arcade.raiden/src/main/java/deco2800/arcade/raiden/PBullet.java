@@ -38,10 +38,10 @@ public class PBullet extends Bullet{
 	}
 
 	public int isPbulletHitEplane(){		
-		for(int j=0;j < Controller.eplanes.size();j++){
+		for(int j = 0; j < Controller.eplanes.size(); j++){
 			Rectangle recPbullet = new Rectangle(x, y, width, heigth);
 			Rectangle recEplane = new Rectangle(Controller.eplanes.elementAt(j).x,
-			Controller.eplanes.elementAt(j).y,Controller.eplanes.elementAt(j).w,
+			Controller.eplanes.elementAt(j).y, Controller.eplanes.elementAt(j).w,
 			Controller.eplanes.elementAt(j).h);
 			if(recPbullet.intersects(recEplane)) 
 			{

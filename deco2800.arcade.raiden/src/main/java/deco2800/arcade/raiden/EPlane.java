@@ -31,7 +31,7 @@ public class EPlane extends Plane{
 	}
 	
 	public void eplaneMove(){
-		this.y+=3;
+		this.y += 3;
 	}
 
 }

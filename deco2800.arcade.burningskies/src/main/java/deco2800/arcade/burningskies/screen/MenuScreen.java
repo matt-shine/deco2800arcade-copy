@@ -77,9 +77,27 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		if (stage == null)
-            stage = new Stage(width, height, true);
-	    stage.clear();
+	}
+
+	@Override
+	public void resume() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void show() {
+		batch = new SpriteBatch();
+        atlas = new TextureAtlas("images/button.pack");
+        skin = new Skin();
+        skin.addRegions(atlas);
+        white = new BitmapFont(Gdx.files.internal("images/whitefont.fnt"), false);
+        black = new BitmapFont(Gdx.files.internal("images/font.fnt"), false);
+        
+        int width = BurningSkies.SCREENWIDTH;
+        int height = BurningSkies.SCREENHEIGHT;
+        
+        stage = new Stage(width, height, true);
 	
 	    Gdx.input.setInputProcessor(stage);
 	
@@ -105,13 +123,13 @@ public class MenuScreen implements Screen {
 	    exitButton.setWidth(200);
 	    exitButton.setHeight(50);
 	    
-	    startButton.setX(Gdx.graphics.getWidth() / 2 - startButton.getWidth() / 2);
-	    optionsButton.setX(Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2);
-	    scoresButton.setX(Gdx.graphics.getWidth() / 2 - scoresButton.getWidth() / 2);
-	    helpButton.setX(Gdx.graphics.getWidth() / 2 - helpButton.getWidth() / 2);
-	    exitButton.setX(Gdx.graphics.getWidth() / 2 - exitButton.getWidth() / 2);
+	    startButton.setX(width / 2 - startButton.getWidth() / 2);
+	    optionsButton.setX(width / 2 - optionsButton.getWidth() / 2);
+	    scoresButton.setX(width / 2 - scoresButton.getWidth() / 2);
+	    helpButton.setX(width / 2 - helpButton.getWidth() / 2);
+	    exitButton.setX(width / 2 - exitButton.getWidth() / 2);
 	    
-	    optionsButton.setY(Gdx.graphics.getHeight() / 2 - optionsButton.getHeight() / 2);
+	    optionsButton.setY(height / 2 - optionsButton.getHeight() / 2);
 	    startButton.setY(optionsButton.getY() + (2 * (startButton.getHeight() + 10)));
 	    scoresButton.setY(optionsButton.getY() + (startButton.getHeight() + 10));
 	    helpButton.setY(optionsButton.getY() - (startButton.getHeight() + 10));
@@ -181,23 +199,6 @@ public class MenuScreen implements Screen {
 	    stage.addActor(helpButton);
 	    stage.addActor(exitButton);
 	    stage.addActor(label);
-
-	}
-
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void show() {
-		batch = new SpriteBatch();
-        atlas = new TextureAtlas("images/button.pack");
-        skin = new Skin();
-        skin.addRegions(atlas);
-        white = new BitmapFont(Gdx.files.internal("images/whitefont.fnt"), false);
-        black = new BitmapFont(Gdx.files.internal("images/font.fnt"), false);
 
 	}
 

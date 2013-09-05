@@ -23,6 +23,8 @@ public class ArcadeUI extends GameClient {
 	private LoginScreen login = null;
 	@SuppressWarnings("unused")
 	private HomeScreen home = null;
+    @SuppressWarnings("unused")
+    private AccMgtScreen accMgt = null;
 	
 	private Screen current = null;
 

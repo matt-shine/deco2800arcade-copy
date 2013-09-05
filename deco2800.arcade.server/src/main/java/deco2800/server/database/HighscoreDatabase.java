@@ -11,13 +11,14 @@ public class HighscoreDatabase {
 	private boolean initialised = false;
 	
 	/* Create the highscore database if it does not exist */
-	public  void initialise() throws DatabaseException{
+	public void initialise() throws DatabaseException{
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		
 		//Create high scores base table
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES", null);
+			
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE HIGHSCORES(HID int NOT NULL AUTO_INCREMENT," 
@@ -27,6 +28,7 @@ public class HighscoreDatabase {
 				+ "PRIMARY KEY (HID)" 
 				+ "Rating INT));");
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create highscores table", e);
@@ -35,6 +37,7 @@ public class HighscoreDatabase {
 		//Create game scores table 
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "SCORES", null);
+			
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE IF NOT EXISTS SCORES(ID int NOT NULL AUTO_INCREMENT, "
@@ -44,6 +47,7 @@ public class HighscoreDatabase {
 				+ "PRIMARY KEY (ID), "
 				+ "FOREIGN KEY (HID) REFERENCES HIGHSCORES(HID));");
 			}
+	
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to create scores table", e);

@@ -91,7 +91,6 @@ public class Breakout extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		//breaking = Gdx.audio.newSound(Gdx.files.classpath("resources/break.wav"));
-
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
 		ball = new PongBall();
 		ball.setColor(1, 1, 1, 1);
@@ -117,7 +116,10 @@ public class Breakout extends GameClient {
 		gameState = GameState.READY;
 
 	}
-	
+	/*
+	 * Decrements bricks and increments score once ball hits 
+	 * brick. Gives time for processing
+	 */
 	public void updateGameState(int bounce) {
 		if (bounce == 0) {
 			ball.bounceX();
@@ -182,8 +184,7 @@ public class Breakout extends GameClient {
 		// TODO Make the Ball a Circle
 		ball.render(shapeRenderer);
 
-		shapeRenderer.end();
-
+		
 		// Writes in the text information
 		/*
 		 * Iterates through the array check whether brick's status is true,
@@ -192,9 +193,10 @@ public class Breakout extends GameClient {
 		for (Brick b : bricks) {
 			if (b.getState()) {
 				// originally sent shapeRenderer 
-				b.render(batch);
+				b.render(shapeRenderer);
 			}
 		}
+		shapeRenderer.end();
 		batch.begin();
 		font.setColor(Color.GREEN);
 		font.draw(batch, "player " + player, SCREENWIDTH/4, SCREENHEIGHT - 20);
@@ -232,47 +234,23 @@ public class Breakout extends GameClient {
 					if (b.checkLeftCollision(ball.bounds)) {
 						b.setState(false);
 						updateGameState(0);
-						//score++;
-						//brickNum--;
-						//ball.bounceX();
-						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
 						break;
 					}
 					if (b.checkRightCollision(ball.bounds)) {
 						b.setState(false);
 						updateGameState(0);
-						//score++;
-						//brickNum--;
-						//ball.bounceX();
-						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
 						break;
 					}
 					if (b.checkTopCollision(ball.bounds)) {
 						b.setState(false);
 						updateGameState(1);
-						//score++;
-						//brickNum--;
-						//ball.bounceY();
-						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
 						break;
 					}
 					if (b.checkBottomCollision(ball.bounds)) {
 						b.setState(false);
 						updateGameState(1);
-						//score++;
-						//brickNum--;
-						//ball.bounceY();
-						//try { Thread.currentThread().sleep(50); } catch(Exception e) { }
 						break;
 					}
-//					if (ball.bounds.overlaps(b.getShape())) {
-//						b.setState(false);
-//						score++;
-//						brickNum--;
-//						ball.bounceY();
-//						//breaking.play();
-//						//breaking.dispose();
-//					}
 				}
 			}
 

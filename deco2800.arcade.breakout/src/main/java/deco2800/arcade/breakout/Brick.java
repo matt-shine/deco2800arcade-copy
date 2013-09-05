@@ -21,7 +21,7 @@ public class Brick {
 
 	private final float width = 120f;
 	private final float height = 40f;
-	private final float E = 0.00001f;
+	private final float E = 0.001f;
 	private boolean state;
 	private Rectangle brickShape;
 
@@ -121,17 +121,16 @@ public class Brick {
 		sBatch = new SpriteBatch();
 	}
 	
-	public void render(SpriteBatch batch) {
-		brickImg = new Sprite(new Texture(Gdx.files.classpath("imgs/brick.png")));
-		brickImg.setSize(width, height);
-		sBatch = batch;
-		sBatch.begin();
-		sBatch.draw(brickImg, brickShape.x, brickShape.y);
-		sBatch.end();
-//		render.setColor(Color.GREEN);
-//		render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-//				brickShape.height, Color.YELLOW, Color.BLUE, Color.PINK,
-//				Color.RED);
+	public void render(ShapeRenderer render) {
+//		brickImg = new Sprite(new Texture(Gdx.files.classpath("imgs/brick.png")));
+//		brickImg.setSize(width, height);
+//		sBatch = batch;
+//		sBatch.begin();
+//		sBatch.draw(brickImg, brickShape.x, brickShape.y);
+//		sBatch.end();
+		render.setColor(Color.GREEN);
+		render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+				brickShape.height, Color.LIGHT_GRAY, Color.GRAY, Color.GRAY, Color.LIGHT_GRAY);
 	}
 
 	public String toString() {

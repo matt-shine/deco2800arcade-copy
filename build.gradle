@@ -23,21 +23,21 @@ sonar {
     name = "DECO2800 Arcade"
   }
   server {
-    if (hasProperty('sonarServerURL')) {
+    if (rootProject.hasProperty('sonarServerURL')) {
       url = sonarServerURL
     }
   }
   database {
-    if (hasProperty('sonarDatabaseURL')) {
+    if (rootProject.hasProperty('sonarDatabaseURL')) {
       url = sonarDatabaseURL 
     }
-    if (hasProperty('sonarDatabaseDriver')) {
+    if (rootProject.hasProperty('sonarDatabaseDriver')) {
       driverClassName = sonarDatabaseDriver 
     }
-    if (hasProperty('sonarDatabaseLogin')) {
+    if (rootProject.hasProperty('sonarDatabaseLogin')) {
       username = sonarDatabaseLogin 
     }
-    if (hasProperty('sonarDatabasePassword')) {
+    if (rootProject.hasProperty('sonarDatabasePassword')) {
       password = sonarDatabasePassword 
     }
   }

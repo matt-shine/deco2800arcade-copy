@@ -12,9 +12,9 @@ import com.esotericsoftware.kryonet.Listener;
 public class SealedListenerProxy extends Listener {
 
 	private List<Listener> listeners;
-	private Sealer sealer;
+	private SymmetricSealer sealer;
 	
-	public SealedListenerProxy(Sealer sealer) {
+	public SealedListenerProxy(SymmetricSealer sealer) {
 		listeners = new ArrayList<Listener>();
 		this.sealer = sealer;
 	}

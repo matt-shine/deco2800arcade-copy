@@ -12,7 +12,6 @@ import deco2800.arcade.protocol.connect.SessionKeyExchange;
 
 public class ConnectionListener extends NetworkListener {
 	private SessionModel session;
-	private String algorithm = "RSA";
 
 	public ConnectionListener(SessionModel session) {
 		this.session = session;
@@ -51,7 +50,7 @@ public class ConnectionListener extends NetworkListener {
 			// Check certificate / unseal
 			PublicKey serverKey = null;
 			try {
-				serverKey = keyExchange.extractServerKey(session.getServerCert());
+				serverKey = keyExchange.getServerKey(session.getServerCert());
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO: handle this. E.g resend our connection request.
@@ -72,7 +71,7 @@ public class ConnectionListener extends NetworkListener {
 			
 			Key secret = null;
 			try {
-				secret = keyExchange.extractSessionKey(session
+				secret = keyExchange.getSessionKey(session
 						.getClientPrivateKey());
 			} catch (Exception e) {
 				e.printStackTrace();

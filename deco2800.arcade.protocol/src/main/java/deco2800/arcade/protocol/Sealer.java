@@ -1,20 +1,16 @@
 package deco2800.arcade.protocol;
 
+import java.io.Serializable;
 import java.security.Key;
 
 import javax.crypto.Cipher;
 import javax.crypto.SealedObject;
 
-public class Sealer {
+public abstract class Sealer {
+	protected String algorithm;
+	protected Key secret;
 	
-	private Key secret;
-	private String algorithm = "AES";
-	
-	public Sealer(Key secret) {
-		this.secret = secret;
-	}
-
-	public SealedObject seal(NetworkObject object) throws Exception {
+	public SealedObject seal(Serializable object) throws Exception {
 		Cipher cipher = Cipher.getInstance(algorithm);
 		cipher.init(Cipher.ENCRYPT_MODE, secret);
 
@@ -26,9 +22,8 @@ public class Sealer {
 		Cipher cipher = Cipher.getInstance(algorithm);
 		cipher.init(Cipher.DECRYPT_MODE, secret);
 
-		Object object = sealedObject.getObject(cipher);
+		NetworkObject object = (NetworkObject) sealedObject.getObject(cipher);
 
 		return object;
 	}
-
 }

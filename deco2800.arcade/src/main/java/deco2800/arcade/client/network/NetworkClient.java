@@ -17,7 +17,7 @@ import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.protocol.NetworkObject;
 import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.SealedListenerProxy;
-import deco2800.arcade.protocol.Sealer;
+import deco2800.arcade.protocol.SymmetricSealer;
 
 // FIXME extending Listener may /not/ be the best way to go
 // since java supports only linear inheritance
@@ -25,7 +25,7 @@ public class NetworkClient {
 
 	private Client client;
 	private SealedListenerProxy sealedListener;
-	private Sealer sealer;
+	private SymmetricSealer sealer;
 	private SessionModel session;
 
 	// Shared secret for this session
@@ -54,7 +54,7 @@ public class NetworkClient {
 		
 		// Use sealed listener as proxy layer to encrypt/decrypt transmissions
 		// FIXME need to support adding key later
-		sealer = new Sealer(null);
+		sealer = new SymmetricSealer(null);
 		sealedListener = new SealedListenerProxy(sealer);
 
 		// Create session

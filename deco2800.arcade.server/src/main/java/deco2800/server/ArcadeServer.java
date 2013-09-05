@@ -1,7 +1,9 @@
 package deco2800.server;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.net.BindException;
 
@@ -14,7 +16,7 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
-import deco2800.arcade.packman.PackageServer;
+//import deco2800.arcade.packman.PackageServer;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -25,13 +27,13 @@ import deco2800.arcade.packman.PackageServer;
 public class ArcadeServer {
 
 	// Keep track of which users are connected
-	private Set<String> connectedUsers = new HashSet<String>();
+	SessionManager sessionManager = new SessionManager();
 	
 	//singleton pattern
 	private static ArcadeServer instance;
 	
 	// Package manager
-	private PackageServer packServ;
+	//private PackageServer packServ;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -78,7 +80,7 @@ public class ArcadeServer {
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
-		this.packServ = new PackageServer();
+//		this.packServ = new PackageServer();
 		
 		//initialize database classes
 		try {
@@ -103,12 +105,11 @@ public class ArcadeServer {
 		} catch (BindException b) {
 			System.err.println("Error binding server: Address already in use");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		Protocol.register(server.getKryo());
-		server.addListener(new ConnectionListener(connectedUsers));
+		server.addListener(new ConnectionListener(sessionManager));
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new CommunicationListener(server));

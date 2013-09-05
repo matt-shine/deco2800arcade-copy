@@ -1,7 +1,9 @@
 package deco2800.server.listener;
 
+import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.Set;
+
+import javax.crypto.SecretKey;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -9,13 +11,18 @@ import com.esotericsoftware.kryonet.Listener;
 import deco2800.arcade.protocol.connect.ClientKeyExchange;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
+import deco2800.arcade.protocol.connect.ServerKeyExchange;
+import deco2800.arcade.protocol.connect.SessionKeyExchange;
+import deco2800.server.SecretGenerator;
+import deco2800.server.Session;
+import deco2800.server.SessionManager;
 
 public class ConnectionListener extends Listener {
 	//list of all connected users
-	private Set<String> connectedUsers;
+	private SessionManager connectedSessions;
 	
-	public ConnectionListener(Set<String> connectedUsers){
-		this.connectedUsers = connectedUsers;
+	public ConnectionListener(SessionManager sessionManager){
+		this.connectedSessions = sessionManager;
 	}
 	
 	@Override
@@ -31,12 +38,18 @@ public class ConnectionListener extends Listener {
 
 		if (object instanceof ConnectionRequest) {
 			ConnectionRequest request = (ConnectionRequest) object;
-			connectedUsers.add(request.username);
 
 			connection.sendTCP(ConnectionResponse.OK);
 			
 			// TODO send ServerKeyExchange encrypted/signed with
 			// our server certificate
+			ServerKeyExchange serverKeyExchange = new ServerKeyExchange();
+			try {
+				// FIXME add key values
+				serverKeyExchange.setServerKey(null, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if (object instanceof ClientKeyExchange) {
@@ -44,13 +57,31 @@ public class ConnectionListener extends Listener {
 			
 			PublicKey clientPublicKey = null;
 			try {
-				clientPublicKey = request.extractClientKey(null);
+				// FIXME get server private key
+				PrivateKey serverPrivateKey = null;
+				clientPublicKey = request.getClientKey(serverPrivateKey);
 			} catch (Exception e) {
 				e.printStackTrace();
 				// TODO it failed so ask client to resend
 			}
 			
-			// TODO add client public key to some sessionId/playerId/sessionInfo mapping
+			if(clientPublicKey != null) {
+				SecretKey sessionKey = SecretGenerator.generateSecret();
+				
+				// Store session details
+				Session session = new Session(sessionKey, clientPublicKey);
+				this.connectedSessions.add(session);
+				
+				// Send session key to client
+				SessionKeyExchange sessionKeyExchange = new SessionKeyExchange();
+				try {
+					sessionKeyExchange.setSessionKey(sessionKey, clientPublicKey);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				connection.sendTCP(sessionKeyExchange);
+			}
 		}
 	}
 

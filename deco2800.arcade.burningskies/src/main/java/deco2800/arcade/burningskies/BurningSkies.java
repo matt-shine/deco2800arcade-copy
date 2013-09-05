@@ -23,7 +23,7 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="burningskies")
 public class BurningSkies extends GameClient {
 	
-	static final boolean ENABLEMUSIC = true;
+	static final boolean ENABLEMUSIC = false;
 	
 	public static final int SCREENWIDTH = 1280;
 	public static final int SCREENHEIGHT = 720;

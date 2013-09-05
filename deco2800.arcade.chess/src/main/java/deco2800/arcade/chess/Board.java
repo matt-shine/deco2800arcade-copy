@@ -25,6 +25,8 @@ public class Board{
 	
 	String NEWLINE = System.getProperty("line.separator");
 	
+	boolean blackCheck, whiteCheck;
+	
 
 	/**
 	 * Initialises board to the default setup.
@@ -35,6 +37,9 @@ public class Board{
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
 		nullPiece = new Null();
+		
+		blackCheck = false;
+		whiteCheck = false;
 		
 		//Add 8 rows to the board
 		for (int a = 0; a < 8; a++) {
@@ -316,7 +321,7 @@ public class Board{
 		return allowableMoves;
 	}
 
-	public void movePiece(Piece piece, int[] newPosition) {
+	public boolean movePiece(Piece piece, int[] newPosition) {
 		int[] oldPos = findPiece(piece);
 		int x = newPosition[0];
 		int y = newPosition[1];
@@ -353,6 +358,7 @@ public class Board{
 						Board_State.get(castleSwapPos[0]).add(castleSwapPos[1], blackRook1);
 						allowed = true;
 						kingCastleSwap = true;
+						return true;
 					}
 				}
 				//Allow white teams move
@@ -371,6 +377,7 @@ public class Board{
 						Board_State.get(castleSwapPos[0]).add(castleSwapPos[1], whiteRook1);
 						allowed = true;
 						kingCastleSwap = true;
+						return true;
 					}
 					
 				}
@@ -379,7 +386,7 @@ public class Board{
 
 		if (!allowed) {
 			System.err.println("not allowable move for " + piece + ":" + newPosition[0] + ", " + newPosition[1]);
-			return;
+			return false;
 		}
 
 		/*
@@ -399,9 +406,11 @@ public class Board{
 			}
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
+			return true;
 		} else {
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
+			return true;
 		}
 
 	}

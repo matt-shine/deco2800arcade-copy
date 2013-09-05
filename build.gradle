@@ -1,3 +1,4 @@
+apply plugin: 'sonar'
 
 configurations {
   doclet
@@ -15,6 +16,31 @@ repositories {
 dependencies {
   doclet group: 'org.jboss.apiviz', name: 'apiviz', version: '1.3.2.GA'
   //doclet group: 'org.yworks', name: 'ydoc', version: '3.0.02'
+}
+
+sonar {
+  project {
+    name = "DECO2800 Arcade"
+  }
+  server {
+    if (hasProperty('sonarServerURL')) {
+      url = sonarServerURL
+    }
+  }
+  database {
+    if (hasProperty('sonarDatabaseURL')) {
+      url = sonarDatabaseURL 
+    }
+    if (hasProperty('sonarDatabaseDriver')) {
+      driverClassName = sonarDatabaseDriver 
+    }
+    if (hasProperty('sonarDatabaseLogin')) {
+      username = sonarDatabaseLogin 
+    }
+    if (hasProperty('sonarDatabasePassword')) {
+      password = sonarDatabasePassword 
+    }
+  }
 }
 
 subprojects {

@@ -35,6 +35,9 @@ public class LoginScreen implements Screen {
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = skin.getFont("default");
         textFieldStyle.fontColor = Color.WHITE;
+        textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
+        //textFieldStyle.selection = ;
+        textFieldStyle.selection = skin.newDrawable("white", Color.WHITE);
         textFieldStyle.cursor = skin2.newDrawable("white", Color.WHITE);
         textFieldStyle.selection = skin2.newDrawable("white", Color.WHITE);
         //textFieldStyle.background = ;
@@ -63,8 +66,10 @@ public class LoginScreen implements Screen {
         passwordText.setMessageText("Enter Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
-        TextButton loginButton = new TextButton("Login", skin2);
-        TextButton exitButton = new TextButton("Exit", skin2);
+        TextButton loginButton = new TextButton("Login", skin);
+        TextButton exitButton = new TextButton("Exit", skin);
+        //TextButton loginButton = new TextButton("Login", skin2);
+        //TextButton exitButton = new TextButton("Exit", skin2);
 
         //table.debug();  // Shows table debug lines.  Remove for final product.
         usernameLabel.setAlignment(Align.right);

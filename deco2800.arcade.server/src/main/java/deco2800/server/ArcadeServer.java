@@ -31,11 +31,12 @@ public class ArcadeServer {
 	private static ArcadeServer instance;
 	
 	// Package manager
+	@SuppressWarnings("unused")
 	private PackageServer packServ;
 	
 	/**
 	 * Retrieve the singleton instance of the server
-	 * @return the game server
+	 * @return game server instance
 	 */
 	public static ArcadeServer instance() {
 		if (instance == null) {
@@ -46,7 +47,6 @@ public class ArcadeServer {
 	
 	/**
 	 * Initializes and starts Server
-	 * Binds Ports
 	 * 
 	 * @param args
 	 */
@@ -61,8 +61,7 @@ public class ArcadeServer {
 	//private FriendStorage friendStorage;
 	
 	/**
-	 * Access the server's credit storage facility
-	 * @return
+	 * @return creditStorage service
 	 */
 	public CreditStorage getCreditStorage() {
 		return this.creditStorage;
@@ -73,7 +72,7 @@ public class ArcadeServer {
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
 	 */
-	public ArcadeServer() {
+	private ArcadeServer() {
 		this.creditStorage = new CreditStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
@@ -91,7 +90,8 @@ public class ArcadeServer {
 	}
 	
 	/**
-	 * Start the server running
+	 * Binds TCP/UDP ports to the server instance, registers classes and 
+	 * adds listeners
 	 */
 	public void start() {
 		Server server = new Server();

@@ -50,6 +50,7 @@ public class MainInputProcessor implements InputProcessor {
 			if(game.getPhase().equals("DrawPhase")) {
 				doDraw();
 			}
+            view.setPhaseDisplayed(false);
 			currentSelection = null;
 			return true;
 		} 
@@ -61,6 +62,7 @@ public class MainInputProcessor implements InputProcessor {
 			doDraw();
 			currentSelection = null;
 			currentSelection = null;
+            view.setPhaseDisplayed(false);
 			view.setHighlightedZones(new ArrayList<Rectangle>());
 			return true;
 		}
@@ -103,8 +105,13 @@ public class MainInputProcessor implements InputProcessor {
 		}
 		
 		if(keycode == Keys.CONTROL_LEFT) {
-			System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), currentSelection.getArea()));
+            if(currentSelection != null) {
+                System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), currentSelection.getArea()));
+            }
 		}
+        if(keycode == Keys.A) {
+            System.out.println("IntelliJ Is Good!");
+        }
         return false;
     }
 

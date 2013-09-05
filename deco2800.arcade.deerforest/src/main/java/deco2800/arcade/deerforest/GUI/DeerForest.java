@@ -24,7 +24,7 @@ import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 import deco2800.arcade.deerforest.models.gameControl.DeerForestPlayer;
 /**
  * A card game for use in the Arcade
- * @author uqjstee8
+ * @author deerforest
  *
  */
 @ArcadeGame(id="deerforest")

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 public class MainGameScreen implements Screen {
 	
@@ -26,7 +27,12 @@ public class MainGameScreen implements Screen {
 	//Variables for Card locations and what they contain
 //	private int p1DeckSize;
 //	private int p2DeckSize;
-//	
+//
+    //boolean for phase displayed
+    private boolean displayedPhaseMessage;
+    private final int timeToDisplay = 100;
+    private int currentDisplayTime;
+
 	private float glowSize;
 	private boolean glowDirection;
 	
@@ -79,10 +85,13 @@ public class MainGameScreen implements Screen {
 	    
 	    //list of highlighted zones
 	    highlightedZones = new ArrayList<Rectangle>();
+
+        //set displayPhase to false
+        displayedPhaseMessage = false;
+        currentDisplayTime = 0;
 	}
 
 	private void loadAssets() {
-		manager.load("DeerForestAssets/BLARG!.png", Texture.class);
 		manager.load("DeerForestAssets/LightMonsterShell.png", Texture.class);
 		manager.load("DeerForestAssets/DarkMonsterShell.png", Texture.class);
 		manager.load("DeerForestAssets/FireMonsterShell.png", Texture.class);
@@ -91,6 +100,9 @@ public class MainGameScreen implements Screen {
 		manager.load("DeerForestAssets/GeneralSpellShell.png", Texture.class);
 		manager.load("DeerForestAssets/FieldSpellShell.png", Texture.class);
 		manager.load("DeerForestAssets/background.png", Texture.class);
+        manager.load("DeerForestAssets/MainPhase.png", Texture.class);
+        manager.load("DeerForestAssets/BattlePhase.png", Texture.class);
+        manager.load("DeerForestAssets/EndPhase.png", Texture.class);
 	}
 
 	@Override
@@ -118,7 +130,33 @@ public class MainGameScreen implements Screen {
 		    	s.draw(game.batch);
 		    }
 	    }
-	    
+
+        //Draw the phase image if it hasn't already been drawn
+        if(!displayedPhaseMessage) {
+            if(timeToDisplay < currentDisplayTime) {
+                displayedPhaseMessage = true;
+                currentDisplayTime = 0;
+            }
+            currentDisplayTime++;
+            if(manager.isLoaded("DeerForestAssets/" + game.getPhase()+".png")) {
+                Gdx.gl.glEnable(GL10.GL_BLEND);
+                Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+                ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/" + game.getPhase()+".png",Texture.class));
+                //Set fade in / out
+                if(currentDisplayTime < timeToDisplay/4) {
+                    s.setColor(1.0f, 1.0f, 1.0f, ((float)currentDisplayTime*4)/timeToDisplay);
+                } else if(currentDisplayTime > 3*timeToDisplay/4) {
+                   s.setColor(1.0f, 1.0f, 1.0f, 1-((float)4*currentDisplayTime - 3*timeToDisplay/4)/timeToDisplay);
+                }
+                s.setScale(Gdx.graphics.getWidth()/(3*s.getWidth()/2), Gdx.graphics.getHeight()/(2*s.getHeight()));
+                s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
+                s.draw(game.batch);
+
+                Gdx.gl.glDisable(GL10.GL_BLEND);
+            }
+        }
+
 	    //Print the model / game data (for debugging)
 	    game.font.draw(game.batch, "Press SPACE for next phase", 0.80f*getWidth(), 0.2f*getHeight());
 	    game.font.draw(game.batch, "Press RIGHT_ALT for debug info", 0.80f*getWidth(), 0.25f*getHeight());
@@ -254,4 +292,8 @@ public class MainGameScreen implements Screen {
 			System.out.println("Key: " + key + " list: " + spriteMap.get(key));
 		}
 	}
+
+    public void setPhaseDisplayed(boolean b) {
+        displayedPhaseMessage = b;
+    }
 }

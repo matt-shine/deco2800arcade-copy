@@ -3,6 +3,10 @@ package deco2800.arcade.deerforest.GUI;
 import java.util.List;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -18,6 +22,8 @@ public class MainGame extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 	final private GameSystem model;
+    private Music bgLoop;
+    private Sound soundEffect;
 
 	
 	public MainGame(GameSystem model) {
@@ -31,6 +37,11 @@ public class MainGame extends Game {
 		font = new BitmapFont(true);
 		this.setScreen(new MainGameScreen(this));	
 		model.startgame(true);
+        //Play music
+        FileHandle audioPath = new FileHandle("DeerForestAssets/QuickSilver.wav");
+        bgLoop = Gdx.audio.newMusic(audioPath);
+        bgLoop.setLooping(true);
+        bgLoop.play();
 	}
 	
 	public void render() {
@@ -58,6 +69,13 @@ public class MainGame extends Game {
 	}
 	
 	public void nextPhase() {
+        //dispose previous sound
+        if(soundEffect != null) {
+            soundEffect.dispose();
+        }
+        //Play sound
+        soundEffect = Gdx.audio.newSound(new FileHandle("DeerForestAssets/PhaseChange.wav"));
+        soundEffect.play();
 		model.nextPhase();
 	}
 	

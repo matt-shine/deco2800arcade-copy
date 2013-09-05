@@ -9,7 +9,6 @@ public class DemoBullet extends Bullet {
 			PlayerShip player, Vector2 initialPosition, float direction, Texture image) {
 		super(affinity, damage, parent, player, initialPosition, direction, image);
 		velocity = new Vector2(150,150);
-		setRotation(direction);
 	}
 
 }

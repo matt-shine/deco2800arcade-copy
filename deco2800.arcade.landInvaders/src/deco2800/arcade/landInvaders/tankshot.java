@@ -1,18 +1,18 @@
-package Invaders;
+package deco2800.arcade.landInvaders;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class enemyShot {
-	
+public class tankshot {
+
 	private int p_x;
 	private int p_y;
 	private int width;
 	private int height;
 
-	public enemyShot(int x, int y) {
-		p_x = x +15;
-		p_y = y+30;
+	public tankshot(int x, int y) {
+		p_x = x +20;
+		p_y = y;
 		width = 5;
 		height = 10;
 
@@ -20,13 +20,13 @@ public class enemyShot {
 
 	public void drawshot(Graphics g) {
 
-		g.setColor(Color.red);
+		g.setColor(Color.green);
 
 		g.fillRect(p_x, p_y, width, height);
 	}
 
 	public void Update() {
-		p_y += 6;
+		p_y -= 7;
 	}
 
 	public int positionX() {
@@ -46,10 +46,5 @@ public class enemyShot {
 
 		return height;
 	}
-	
-	
 
 }
-
-
-

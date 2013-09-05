@@ -1,4 +1,4 @@
-package Invaders;
+package deco2800.arcade.landInvaders;
 
 import java.awt.Graphics;
 

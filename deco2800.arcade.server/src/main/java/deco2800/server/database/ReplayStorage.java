@@ -5,6 +5,9 @@ import java.util.*;
 
 public class ReplayStorage {
 	
+    private final String sessions = "REPLAY_SESSIONS";
+    private final String events = "REPLAY_EVENTS";
+    
 	public void initialise() throws DatabaseException {
 		
 		Connection connection = Database.getConnection();
@@ -14,21 +17,21 @@ public class ReplayStorage {
 			
 			sessionsState = connection.createStatement();
 			try {
-				sessionsState.execute( "DROP TABLE SESSIONS" );
+				sessionsState.execute( "DROP TABLE " + sessions );
 			} catch ( Exception e ) {
 				
 			}
 			try {
-				sessionsState.execute( "DROP TABLE EVENTS" );
+				sessionsState.execute( "DROP TABLE " + events );
 			} catch ( Exception e ) {
 				
 			}
 			
-			ResultSet sessionsTable = connection.getMetaData().getTables(null, null, "SESSIONS", null);
+			ResultSet sessionsTable = connection.getMetaData().getTables(null, null, sessions, null);
 			if ( !sessionsTable.next() ){
 				
 				sessionsState = connection.createStatement();
-				sessionsState.execute( "CREATE TABLE SESSIONS(SessionID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+				sessionsState.execute( "CREATE TABLE " + sessions + "(SessionID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
 						+ "GameID INT NOT NULL,"
 						+ "Recording BOOLEAN NOT NULL, "
 						+ "UserName VARCHAR(30) NOT NULL,"
@@ -37,10 +40,10 @@ public class ReplayStorage {
 			    
 			}
 			
-			ResultSet eventsTable = connection.getMetaData().getTables(null,null,"EVENTS", null);
+			ResultSet eventsTable = connection.getMetaData().getTables(null, null, events, null);
 			if ( !eventsTable.next() ){
 				eventsState = connection.createStatement();
-				eventsState.execute("CREATE TABLE EVENTS(EventID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
+				eventsState.execute("CREATE TABLE " + events + "(EventID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
 							+ "SessionID INT NOT NULL,"
 							+ "EventIndex INT NOT NULL," 	//Index of the most recent event
 						    + "Event VARCHAR(255) NOT NULL)");
@@ -87,7 +90,7 @@ public class ReplayStorage {
 		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
-			state.executeUpdate("UPDATE SESSIONS "
+			state.executeUpdate("UPDATE " + sessions +  " "
 					  + "SET Recording = false "
 					  + "WHERE SessionID = " + sessionID);
 			
@@ -130,7 +133,7 @@ public class ReplayStorage {
 			connection = Database.getConnection();
 			state = connection.createStatement();
 			ResultSet results = state.executeQuery( "SELECT SessionID, "
-					+ "Recording, User, DateTime, Comments FROM SESSIONS WHERE"
+					+ "Recording, User, DateTime, Comments FROM " + sessions + " WHERE"
 					+ "GameID =" + gameID );
 			
 			while ( results.next() ){
@@ -191,7 +194,7 @@ public class ReplayStorage {
 
 			
 			ResultSet results = state.executeQuery
-					("SELECT Event FROM EVENTS WHERE SessionID =" + sessionID + " ORDER BY EventIndex");
+					("SELECT Event FROM " + events + " WHERE SessionID =" + sessionID + " ORDER BY EventIndex");
 			
 			//int rows = results.last() ? results.getRow() : 0; //get number of rows from output\
 			//might have to set cursor to beforeFirst() row
@@ -240,14 +243,14 @@ public class ReplayStorage {
 			connection = Database.getConnection();
 			
 			state = connection.createStatement();
-			String insert = "INSERT INTO SESSIONS (GameID, Recording, UserName, DateTime, Comments) " 
+			String insert = "INSERT INTO " + sessions + " (GameID, Recording, UserName, DateTime, Comments) " 
 							+ "VALUES (" + gameID + ", true, '" 
 							+ userName + "', " + dateTime + ", '" + comment 
 							+ "')";
 			state.executeUpdate(insert);
 			
 			state = connection.createStatement();
-			String getSession = "SELECT MAX(SessionID) AS SID FROM SESSIONS";
+			String getSession = "SELECT MAX(SessionID) AS SID FROM " + sessions;
 			ResultSet results = state.executeQuery(getSession);
 			
 			if( results.next() ){
@@ -258,7 +261,7 @@ public class ReplayStorage {
 			
 		}catch( Exception e ){
 			e.printStackTrace();
-			throw new DatabaseException("Failed to insert into SESSIONS", e);
+			throw new DatabaseException("Failed to insert into " + sessions, e);
 		}finally{
 			//free resources
 			
@@ -296,7 +299,7 @@ public class ReplayStorage {
 			connection = Database.getConnection();
 			state = connection.createStatement();
 			
-			String insert = "INSERT INTO EVENTS (SessionID, EventIndex, Event) " 
+			String insert = "INSERT INTO " + events + " (SessionID, EventIndex, Event) " 
 						+ "VALUES (" + sessionID 
 							+ ", " + eventIndex 
 							+ ", '" +event + "')";
@@ -305,7 +308,7 @@ public class ReplayStorage {
 		
 		}catch( Exception e ){
 			e.printStackTrace();
-			throw new DatabaseException("Failed to insert into EVENTS", e);
+			throw new DatabaseException("Failed to insert into " + events, e);
 		}finally{
 			//free resources
 			try{
@@ -334,13 +337,13 @@ public class ReplayStorage {
 			state = connection.createStatement();
 			
 			
-			String insert = "DELETE FROM SESSIONS" 
+			String insert = "DELETE FROM " + sessions + " "
 					      + "WHERE SessionID =" + sessionID;
 			state.executeUpdate(insert);
 			
 			//need to remove from both like so?	
 				
-			insert = "DELETE FROM EVENTS " 
+			insert = "DELETE FROM " + events + " " 
 				   + "WHERE SessionID =" + sessionID;
 			state.executeUpdate(insert);
 			
@@ -384,10 +387,10 @@ public class ReplayStorage {
 			state = connection.createStatement();
 			
 			String insert = 
-					"SELECT EVENTS.EventIndex, SESSION.SessionID EVENTS.Event, SESSIONS.DateTime"
-					+ "FROM EVENTS"
-					+ "INNER JOIN SESSIONS" 
-					+ "ON EVENTS.SessionID = SESSIONS.SessionID"
+					"SELECT " + events + ".EventIndex, " + sessions + ".SessionID " + events + ".Event, " + sessions + ".DateTime"
+					+ "FROM " + events
+					+ "INNER JOIN " + sessions 
+					+ "ON " + events + ".SessionID = " + sessions + ".SessionID"
 					+ "WHERE SessionID = "+ sessionID
 					+ "AND DateTime <=" + dateTime
 					+ ")";

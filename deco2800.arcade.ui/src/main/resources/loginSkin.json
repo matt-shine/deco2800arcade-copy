@@ -1,7 +1,6 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        default: { file: fonts/default.fnt },
-        PressStart2P_20: { file: fonts/press-start-2p/PressStart2P_20.fnt }
+        PressStart2P_16: { file: fonts/press-start-2p/PressStart2P_16.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
         red:    { a: 1, r: 1, g: 0, b: 0 },
@@ -12,6 +11,6 @@
         grey:   { a: 1, r: 0.5, g: 0.5, b: 0.5 }
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-        default: { font: PressStart2P_20, fontColor: white }
+        default: { font: PressStart2P_16, fontColor: white }
     },
 }

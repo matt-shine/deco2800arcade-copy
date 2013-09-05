@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GamePlayer {
 	public static final float WIDTH = 20f; //How big is the player (its a square)
-	public static final float INITIALSPEED = 0; // How fast is the player going at the start of a point
+	public static final float INITIALSPEED = 60; // How fast is the player going at the start of a point
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
 	//private Texture player;
 	
@@ -55,30 +55,12 @@ public class GamePlayer {
 	 * seconds of time = numbers of dice
 	 */	
 	public void move(float time) {
-	  //every time throw a dice, player get a speed of 60
-	 // velocity.x = 60;
 	  bounds.x += time*velocity.x;
 	  bounds.y += time*velocity.y;
-	  
-//	  //while player not reaches the end point
-//	  while((bounds.x == 0 && bounds.y == 600) == false){
-//		  //horizontally move the player to position according to time(dice number)
-//		  bounds.x += time*velocity.x;
-//		
-		  //if player reaches left or right bound, it goes up one row and changes X direction
-//		  if ((bounds.x == 0 && bounds.y != 0) || (bounds.x == 600))
-//		  {
-//			  bounds.y = bounds.y + 60; 
-//			  velocity.x *= -1;		
-//		  }
-//	  }
-//	  
-//	  //reset player's velocity when it reaches the position
-//	  velocity.x = 0;
-//	  velocity.y = 0;
 	}
 	
 	public void moveUp() {
+		//if player reacher left/right edge, it moves up one row
 		velocity.x *= -1;
 		bounds.y = bounds.y + 60;		
 	}
@@ -89,8 +71,6 @@ public class GamePlayer {
 	public void reset() {
 		velocity.x = 0;
 		velocity.y = 0;
-//		bounds.x = 0;
-//		bounds.y = 0;
 	}
 	
 	
@@ -111,11 +91,7 @@ public class GamePlayer {
     }
     
     public void initializeVelocity() {
-		//TODO This is a bit of a hack. A better way would be to generate an angle then use sin/cos/tan to work out the X,Y components
-		//int xFactor = (int) (100f + Math.random()*90f);
-		//int yFactor = (int) Math.sqrt((200*200) - (xFactor*xFactor));
-		velocity.x = 120;
+		velocity.x = 60;
 		velocity.y=0;
-		//velocity.y = yFactor;
 	}
 }

@@ -1,13 +1,7 @@
 package deco2800.arcade.protocol;
 
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.KeyGenerator;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.*;
-import com.esotericsoftware.kryo.serializers.DefaultSerializers.*;
-
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.communication.ChatRequest;
@@ -81,7 +75,7 @@ public class Protocol {
 		// Ensures any ConnectionRequests are sent over the network using the 
 		// Blowfish encryption algorithm
 		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
-				new FieldSerializer(kryo, ConnectionRequest.class), connectionRequest.key));
+				new FieldSerializer(kryo, ConnectionRequest.class), connectionRequest.getKey()));
 	}
 
 }

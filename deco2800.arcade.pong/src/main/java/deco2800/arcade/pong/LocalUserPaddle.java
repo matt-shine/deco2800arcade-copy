@@ -35,8 +35,13 @@ public class LocalUserPaddle extends Paddle {
     	}
 
     	//Move the left paddle (keyboard)
-    	if(Gdx.input.isKeyPressed(Keys.UP)) move(KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.bounds.y += KBPADDLESPEED * Gdx.graphics.getDeltaTime();
-    	if(Gdx.input.isKeyPressed(Keys.DOWN)) move(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.position.y -= KBPADDLESPEED * Gdx.graphics.getDeltaTime();
+    	if(Gdx.input.isKeyPressed(Keys.UP)) {
+    		move(KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.bounds.y += KBPADDLESPEED * Gdx.graphics.getDeltaTime();
+    	}
+    	
+    	if(Gdx.input.isKeyPressed(Keys.DOWN)) {
+    		move(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.position.y -= KBPADDLESPEED * Gdx.graphics.getDeltaTime();
+    	}
 	}
 
 }

@@ -85,8 +85,13 @@ public abstract class Paddle {
 	 */
 	public void update(Ball ball) {
 		//Clamp paddle within screen boundaries
-    	if (bounds.y > Pong.SCREENHEIGHT - bounds.height) bounds.y = Pong.SCREENHEIGHT - bounds.height;
-    	if (bounds.y < 0) bounds.y = 0;
+    	if (bounds.y > Pong.SCREENHEIGHT - bounds.height) {
+    		bounds.y = Pong.SCREENHEIGHT - bounds.height;
+    	}
+    	
+    	if (bounds.y < 0) {
+    		bounds.y = 0;
+    	}
 	}
 	
 }

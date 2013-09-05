@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Enemy extends Ship {
 
-	public Enemy(int health, Texture image, Vector2 pos, Vector2 size) {
-		super(health, image, pos, size);
+	public Enemy(int health, Texture image, Vector2 pos) {
+		super(health, image, pos);
 		// TODO Auto-generated constructor stub
 	}
 	//TODO: write this
@@ -19,7 +19,7 @@ public class Enemy extends Ship {
 	}
 
 	@Override
-	void outBounds() {
+	void outBounds(float delta) {
 		// TODO Auto-generated method stub
 		
 	}

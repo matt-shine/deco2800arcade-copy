@@ -26,7 +26,6 @@ import org.xml.sax.SAXParseException;
 
 /**
  * Implements Achievement storage on database.
- * I added a comment here :)
  */
 public class AchievementStorage { 
 

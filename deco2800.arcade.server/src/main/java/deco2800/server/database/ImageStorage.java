@@ -1,6 +1,6 @@
 package deco2800.server.database;
 
-import deco2800.model.EncodedImage;
+import deco2800.arcade.model.EncodedImage;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

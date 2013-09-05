@@ -35,17 +35,11 @@ public class LoginScreen implements Screen {
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = skin.getFont("default");
         textFieldStyle.fontColor = Color.WHITE;
-<<<<<<< HEAD
         textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
-<<<<<<< HEAD
         //textFieldStyle.selection = ;
-=======
         textFieldStyle.selection = skin.newDrawable("white", Color.WHITE);
->>>>>>> origin/master
-=======
         textFieldStyle.cursor = skin2.newDrawable("white", Color.WHITE);
         textFieldStyle.selection = skin2.newDrawable("white", Color.WHITE);
->>>>>>> master
         //textFieldStyle.background = ;
         skin2.add("default", textFieldStyle);
         
@@ -70,18 +64,12 @@ public class LoginScreen implements Screen {
         Label passwordLabel = new Label("Password:", skin);
         final TextField passwordText = new TextField("", skin2);
         passwordText.setMessageText("Enter Password");
-<<<<<<< HEAD
-=======
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
-<<<<<<< HEAD
->>>>>>> origin/master
         TextButton loginButton = new TextButton("Login", skin);
         TextButton exitButton = new TextButton("Exit", skin);
-=======
-        TextButton loginButton = new TextButton("Login", skin2);
-        TextButton exitButton = new TextButton("Exit", skin2);
->>>>>>> master
+        //TextButton loginButton = new TextButton("Login", skin2);
+        //TextButton exitButton = new TextButton("Exit", skin2);
 
         //table.debug();  // Shows table debug lines.  Remove for final product.
         usernameLabel.setAlignment(Align.right);

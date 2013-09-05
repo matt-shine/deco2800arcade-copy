@@ -26,9 +26,12 @@ public class DemoPattern extends BulletPattern {
 			x = emitter.getX();
 			y = emitter.getY();
 		}
-		SpiralBullet bullet = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle, image);
+		SpiralBullet bullet = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle, 1,  image);
 		stage.addActor(bullet);
+		SpiralBullet bullet2 = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle+180, -1, image);
+		stage.addActor(bullet2);
 		bullet.act(lag);
-		angle = (angle+5)%360;
+		bullet2.act(lag);
+		angle = (angle+5);
 	}
 }

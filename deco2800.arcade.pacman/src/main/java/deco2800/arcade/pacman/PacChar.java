@@ -14,12 +14,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class PacChar extends Actor{
+	
+	// Describes the current state of pacman
+	private enum State {
+		IDLE, WALKING, DEAD
+	}
+	
+	// Static variables for handling pacman's animation
 	private static final int FRAME_COLS = 2;
 	private static final int FRAME_ROWS = 4;
 	@SuppressWarnings("unused")
 	private int facing = 1; // 1: Right, 3: Left
 							// 3: Up, 4: Down
 
+	// Sprite stuff??? TODO: comment properly later
 	Sprite sprite;
 	private Stage stage;
 	@SuppressWarnings("unused")
@@ -32,7 +40,11 @@ public class PacChar extends Actor{
 	TextureRegion currentFrame;
 
 	float stateTime;
-
+	
+	/*
+	 * create() is called when PacChar is instantiated.
+	 * Handles loading of stages, actors etc.
+	 */
 	public void create() {
 		
 		
@@ -42,8 +54,9 @@ public class PacChar extends Actor{
         //stage.addActor(actor);
        
         // Create textures
-        texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-        TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);    
+        texture = new Texture(Gdx.files.internal("pacmove.png"));
+        region = new TextureRegion(texture, 0, 0, 16, 16);    
+        
        
 
 		
@@ -69,15 +82,29 @@ public class PacChar extends Actor{
 		spriteBatch = new SpriteBatch();
 		stateTime = 0f;
 	}
-
-	public void render() {
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		stateTime += Gdx.graphics.getDeltaTime();
-		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-		spriteBatch.begin();
-		spriteBatch.draw(currentFrame, 50, 50);
-		spriteBatch.end();
+	
+	/*
+	 * Essentially an infinite for loop. Called continuously until
+	 * 'game over'.
+	 */
+//	 public void render(SpriteBatch batch) {
+//	        batch.draw(texture, 0f, 0);
+//	    }
+	
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		//batch.setColor(0f, 1f, 1f, 1f);
+		batch.draw(region, getX(), getY(), 128, 128);
 	}
+	
+//	public void render() {
+//		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+//		stateTime += Gdx.graphics.getDeltaTime();
+//		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+//		spriteBatch.begin();
+//		spriteBatch.draw(currentFrame, 50, 50);
+//		spriteBatch.end();
+//		stage.draw();
+//	}
 
 
 }

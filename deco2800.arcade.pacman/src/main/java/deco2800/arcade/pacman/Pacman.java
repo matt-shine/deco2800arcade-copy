@@ -104,6 +104,7 @@ public class Pacman extends GameClient {
 //		font = new BitmapFont();
 //		font.setScale(2);
 		batch = new SpriteBatch();
+
 		
 		//Initialise game state
 		gameState = GameState.READY;		
@@ -129,14 +130,14 @@ public class Pacman extends GameClient {
 	    // updating camera is something we should do once per frame
 	    camera.update();
 	    //tell these things to use the coordinate system of the camera
-	    shapeRenderer.setProjectionMatrix(camera.combined);
+	    //shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    //Begin drawing of shapes- first shape should be first argument
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    //shapeRenderer.begin(ShapeType.FilledRectangle);
 	    	       
 	    //End drawing of shapes
-	    shapeRenderer.end();
+	    //shapeRenderer.end();
 	    
 	    //render sprites- put between begin and end
 	    batch.begin();

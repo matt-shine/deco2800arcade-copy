@@ -538,8 +538,13 @@ public class Chess extends GameClient implements InputProcessor{
 			for (Piece piece : row) {
 				if(piece.equals(board.whiteRook1)) {
 					int[] correctPos = board.findPiece(board.whiteRook1);
-					whiteRook1Pos[0] = (pieceHorizOff + horizOff + (59)*correctPos[1]);
-					whiteRook1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+					if (correctPos == null) {
+						whiteRook1Pos[0] = (pieceHorizOff + horizOff - 100);
+						whiteRook1Pos[1] =  (pieceVerticOff + verticOff - 100);
+					} else {
+						whiteRook1Pos[0] = (pieceHorizOff + horizOff + (59)*correctPos[1]);
+						whiteRook1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+					}
 				} else if(piece.equals(board.whiteKnight1)) {
 					int[] correctPos = board.findPiece(board.whiteKnight1);
 					whiteKnight1Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
@@ -576,6 +581,7 @@ public class Chess extends GameClient implements InputProcessor{
 					int[] correctPos = board.findPiece(board.whitePawn2);
 					whitePawn1Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));
 					whitePawn1Pos[1] =  (pieceVerticOff + verticOff + (59)*correctPos[0]);
+					System.out.println("whitePawn1Pos = " + correctPos[0] + ", " + correctPos[1]);
 				} else if(piece.equals(board.whitePawn3)) {
 					int[] correctPos = board.findPiece(board.whitePawn3);
 					whitePawn2Pos[0] = (pieceHorizOff + horizOff + (59)*(correctPos[1]));

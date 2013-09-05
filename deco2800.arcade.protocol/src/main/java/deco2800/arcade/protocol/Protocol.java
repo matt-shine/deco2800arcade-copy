@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.crypto.KeyGenerator;
+import javax.crypto.SealedObject;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.*;
@@ -29,51 +30,53 @@ import deco2800.arcade.protocol.game.NewGameResponse;
 
 public class Protocol {
 
-	private static List<Class<?>> registeredClasses = new ArrayList<Class<?>>();
+//	private static List<Class<?>> registeredClasses = new ArrayList<Class<?>>();
+	
 	/**
 	 * Registers the classes that will be sent over the network. Classes 
 	 * registered in this method will not be encrypted.
 	 * @param kryo
 	 */
-	public static void register() {
+	public static void register(Kryo kryo) {
+		kryo.register(SealedObject.class);
 		
-		// Connection messages
-		register(ConnectionResponse.class);
-
-		// Credit messages
-		register(CreditBalanceRequest.class);
-		register(CreditBalanceResponse.class);
-
-		// Achievement messages
-		register(AchievementListRequest.class);
-		register(AddAchievementRequest.class);
-
-		// Game messages
-		register(GameStatusUpdate.class);
-		register(GameStatusUpdateResponse.class);
-		register(NewGameRequest.class);
-		register(GameRequestType.class);
-		register(NewGameResponse.class);
-
-		// Communication messages
-		register(CommunicationRequest.class);
-		register(ContactListUpdate.class);
-		register(ChatRequest.class);
-		register(TextMessage.class);
-		register(VoiceMessage.class);
-		
-		// Register miscellaneous classes
-		register(byte[].class);
+//		// Connection messages
+//		register(ConnectionResponse.class);
+//
+//		// Credit messages
+//		register(CreditBalanceRequest.class);
+//		register(CreditBalanceResponse.class);
+//
+//		// Achievement messages
+//		register(AchievementListRequest.class);
+//		register(AddAchievementRequest.class);
+//
+//		// Game messages
+//		register(GameStatusUpdate.class);
+//		register(GameStatusUpdateResponse.class);
+//		register(NewGameRequest.class);
+//		register(GameRequestType.class);
+//		register(NewGameResponse.class);
+//
+//		// Communication messages
+//		register(CommunicationRequest.class);
+//		register(ContactListUpdate.class);
+//		register(ChatRequest.class);
+//		register(TextMessage.class);
+//		register(VoiceMessage.class);
+//		
+//		// Register miscellaneous classes
+//		register(byte[].class);
 	}
 	
-	public static Boolean contains(Class<?> type) {
-		return registeredClasses.contains(type);
-	}
-	
-	private static void register(Class<?> type) {
-		if(!registeredClasses.contains(type))
-		registeredClasses.add(type);
-	}
+//	public static Boolean contains(Class<?> type) {
+//		return registeredClasses.contains(type);
+//	}
+//	
+//	private static void register(Class<?> type) {
+//		if(!registeredClasses.contains(type))
+//		registeredClasses.add(type);
+//	}
 	
 //	/**
 //	 * Sends ConnectionRequest over network using encryption rather than 

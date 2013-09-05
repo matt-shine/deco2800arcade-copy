@@ -158,7 +158,6 @@ public class Arcade extends JFrame {
 
 	private void addListeners() {
 		this.client.addListener(new AchievementListener());
-		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
@@ -168,7 +167,7 @@ public class Arcade extends JFrame {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
 		
-		Protocol.registerEncrypted(connectionRequest);
+//		Protocol.registerEncrypted(connectionRequest);
 		
 		this.client.sendNetworkObject(connectionRequest);
 

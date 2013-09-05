@@ -12,6 +12,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.protocol.NetworkObject;
 import deco2800.arcade.protocol.Protocol;
@@ -25,6 +26,7 @@ public class NetworkClient {
 	private Client client;
 	private SealedListenerProxy sealedListener;
 	private Sealer sealer;
+	private SessionModel session;
 
 	// Shared secret for this session
 	private Key secret;
@@ -45,8 +47,7 @@ public class NetworkClient {
 		try {
 			client.connect(5000, serverAddress, tcpPort, udpPort);
 			
-			client.getKryo().register(SealedObject.class);
-			Protocol.register();
+			Protocol.register(client.getKryo());
 		} catch (IOException e) {
 			throw new NetworkException("Unable to connect to the server", e);
 		}
@@ -56,7 +57,12 @@ public class NetworkClient {
 		sealer = new Sealer(null);
 		sealedListener = new SealedListenerProxy(sealer);
 
+		// Create session
+		// FIXME get keys
+		session = new SessionModel(null, null);
+		
 		// Add this as listener
+		this.client.addListener(new ConnectionListener(session));
 		this.client.addListener(sealedListener);
 	}
 
@@ -66,11 +72,10 @@ public class NetworkClient {
 	 * @param object
 	 * @throws NotAuthenticatedException
 	 */
-	public void sendNetworkObject(NetworkObject object)
-			throws NotAuthenticatedException {
+	public void sendNetworkObject(NetworkObject object) {
 		// Check whether we have an authenticated session yet
 		if (secret == null) {
-			throw new NotAuthenticatedException();
+//			throw new NotAuthenticatedException();
 		}
 
 		// Encrypt the object

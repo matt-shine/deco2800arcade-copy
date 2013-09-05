@@ -47,7 +47,8 @@ public abstract class Bullet extends Image {
         // Check we're in bounds, if not goodbye
 		left = getX() + getWidth();
 		right = getY() + getHeight();
-		if(left < 0 || right < 0 || getX() > getStage().getWidth() || getY() > getStage().getHeight()) {
+		// 10 pixels in case they're flying off the sides
+		if(left < -10 || right < -10 || getX() > getStage().getWidth() + 10 || getY() > getStage().getHeight() + 10) {
 			remove();
 		}
     }
@@ -79,6 +80,7 @@ public abstract class Bullet extends Image {
 		position.add( velocity.x * delta, velocity.y * delta );
 		setX(position.x);
 		setY(position.y);
+		setRotation(direction);
 	}
 
 }

@@ -69,9 +69,9 @@ public class View extends JFrame implements ActionListener {
 	private ImageIcon piceditbutton;
 	
 	//Declare Fonts to use here
-	Font font = new Font("Verdana", Font.BOLD, 12);
+	Font font = new Font("Verdana", Font.BOLD, 16);
+	Font normal = new Font("Verdana", Font.PLAIN, 14);
 	//Font font = Font.createFont(Font.TRUETYPE_FONT, new File("A.ttf"));
-	//return font.deriveFont(12f);
 		
 	public View(Model model) throws HeadlessException {
 		
@@ -108,7 +108,8 @@ public class View extends JFrame implements ActionListener {
 	    friendpanel = new JPanel(new MigLayout());
 	    aboutpanel = new JPanel(new MigLayout());
 	    playerinfopanel = new JPanel(new MigLayout());
-	    //playerpanel.setOpaque(false);
+	    playerpanel.setOpaque(false);
+	    playerinfopanel.setOpaque(false);
 	    //friendpanel.setOpaque(false);
 	    //aboutpanel.setOpaque(false);
 	    
@@ -132,11 +133,15 @@ public class View extends JFrame implements ActionListener {
         addfriend = new JLabel();
         addfriend.setIcon(picaddfriend);
         playername = new JLabel("Stark");
+        playername.setForeground(Color.white);
+        playername.setFont(font);
         aboutbar = new JLabel();
         aboutbar.setIcon(picaboutbar);
         friendbar = new JLabel();
         friendbar.setIcon(picfriendbar);
         playerlevel = new JLabel("Level 20");
+        playerlevel.setFont(normal);
+        playerlevel.setForeground(Color.white);
         historybar = new JLabel();
         historybar.setIcon(pichistorybar);
         achievementbar = new JLabel();
@@ -159,8 +164,8 @@ public class View extends JFrame implements ActionListener {
         historypanel.add(historybar, "north");
         achievementpanel.add(achievementbar, "north");
         
-        contentpanel.add(historypanel, "wrap, center, height :320, width :810");
-        contentpanel.add(achievementpanel, "center, height :320, width :810");
+        contentpanel.add(historypanel, "wrap, height :320, width :810");
+        contentpanel.add(achievementpanel, "height :320, width :810");
             
 	    //Add panels to Main Panel	               
 		parentContainer.add(menupanel, "dock north");

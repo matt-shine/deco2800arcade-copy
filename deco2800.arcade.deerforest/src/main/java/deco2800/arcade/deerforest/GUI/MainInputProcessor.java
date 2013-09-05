@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
+import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 //This class functions basically as the controller
@@ -20,9 +21,16 @@ public class MainInputProcessor implements InputProcessor {
 	private MainGame game;
 	private MainGameScreen view;
 	private ExtendedSprite currentSelection;
+    private ExtendedSprite currentZoomed;
+    private ExtendedSprite zoomSelection;
+    private float currentScaleX;
+    private float currentScaleY;
+    private float currentX;
+    private float currentY;
 	private float xClickOffset;
 	private float yClickOffset;
 	private boolean dragged;
+    private boolean zoomed;
 	
 	//define array of keys for P1 / P2 zones
 	final String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
@@ -36,7 +44,36 @@ public class MainInputProcessor implements InputProcessor {
 	
 	@Override
 	public boolean keyDown (int keycode) {
-		
+
+        //Zoom in on card
+        if(keycode == Keys.SHIFT_LEFT) {
+            //Check if zoom selection
+            if(zoomSelection != null) {
+                if(!zoomed) {
+                    currentScaleX = zoomSelection.getScaleX();
+                    currentScaleY = zoomSelection.getScaleY();
+                    currentX = zoomSelection.getX();
+                    currentY = zoomSelection.getY();
+                    zoomSelection.setScale(Gdx.graphics.getHeight()/(2*zoomSelection.getHeight()));
+                    float x = Gdx.graphics.getWidth()/2 - zoomSelection.getBoundingRectangle().getWidth()/2;
+                    float y = Gdx.graphics.getHeight()/2 - zoomSelection.getBoundingRectangle().getHeight()/2;
+                    zoomSelection.setPosition(x, y);
+                    zoomed = true;
+                    currentZoomed = zoomSelection;
+                } else {
+                    zoomSelection.setPosition(currentX, currentY);
+                    zoomSelection.setScale(currentScaleX, currentScaleY);
+                    currentZoomed = null;
+                    zoomed = false;
+                }
+            }
+
+            return true;
+        }
+
+        //If currently zoomed return
+        if(zoomed) return false;
+
 		//Go to next phase
 		if(keycode == Keys.SPACE && game.getPhase() != null) {
 			game.nextPhase();
@@ -45,14 +82,17 @@ public class MainInputProcessor implements InputProcessor {
 				currentSelection = null;
 				view.setHighlightedZones(new ArrayList<Rectangle>());
 				game.nextPhase();
+                //reset hasAttacked
+                SpriteLogic.resetHasAttacked();
 			} 
 			//draw a card
 			if(game.getPhase().equals("DrawPhase")) {
 				doDraw();
 			}
             view.setPhaseDisplayed(false);
-			currentSelection = null;
-			return true;
+            currentSelection = null;
+            view.setHighlightedZones(new ArrayList<Rectangle>());
+            return true;
 		} 
 		
 		//Change player turns
@@ -61,9 +101,8 @@ public class MainInputProcessor implements InputProcessor {
 			game.nextPhase();
 			doDraw();
 			currentSelection = null;
-			currentSelection = null;
             view.setPhaseDisplayed(false);
-			view.setHighlightedZones(new ArrayList<Rectangle>());
+            view.setHighlightedZones(new ArrayList<Rectangle>());
 			return true;
 		}
 		
@@ -100,6 +139,14 @@ public class MainInputProcessor implements InputProcessor {
 			System.out.println("P2Field: " + Arrays.toString(p2Field.toArray()));
 			System.out.println();
 			System.out.println();
+
+            CardCollection p1Grave = game.getCardCollection(1, "Graveyard");
+            System.out.println("P1Grave: " + Arrays.toString(p1Grave.toArray()));
+            System.out.println();
+
+            CardCollection p2Grave = game.getCardCollection(2, "Graveyard");
+            System.out.println("P2Grave: " + Arrays.toString(p2Grave.toArray()));
+            System.out.println();
 			
 			return true;
 		}
@@ -109,9 +156,7 @@ public class MainInputProcessor implements InputProcessor {
                 System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), currentSelection.getArea()));
             }
 		}
-        if(keycode == Keys.A) {
-            System.out.println("IntelliJ Is Good!");
-        }
+
         return false;
     }
 
@@ -128,12 +173,22 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
+        //If currently zoomed return
+        if(zoomed) return false;
+
+        //get zoomSelection
+        zoomSelection = SpriteLogic.checkIntersection(1, x, y);
+        if(zoomSelection == null) {
+            zoomSelection = SpriteLogic.checkIntersection(2, x, y);
+        }
+
     	//Check it was a single click
     	if(button != Buttons.LEFT) return false;
     	
     	//If there is already a current selected card then try to move it to
     	// the clicked space, set currentSelection to null then return
-    	if(currentSelection != null) {
+        //Can't move cards during battle phase, can only attack with cards on field
+    	if(currentSelection != null && (!game.getPhase().equals("BattlePhase") || !currentSelection.isField())) {
     		//completed successfully, so set current to null
     		if(SpriteLogic.setCurrentSelectionToPoint(x,y)) {
     			//Successfully moved card, update model
@@ -149,9 +204,14 @@ public class MainInputProcessor implements InputProcessor {
     		view.setHighlightedZones(new ArrayList<Rectangle>());
         	return true;
     	}
-    	
+
+        //Handle battle phase attack selection
+        if(currentSelection != null && game.getPhase().equals("BattlePhase") && currentSelection.isField()) {
+            PhaseLogic.battlePhaseSelection(x,y);
+        }
+
     	//Get the current Selection at point if it exists
-    	currentSelection = SpriteLogic.checkIntersection(x, y);
+    	currentSelection = SpriteLogic.checkIntersection(game.getCurrentPlayer(),x, y);
     	
     	//There is a new currentSelection, set its parameters accordingly
     	if(currentSelection != null) {
@@ -168,8 +228,11 @@ public class MainInputProcessor implements InputProcessor {
 
 	@Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-		
-		//Only perform action if card has been dragged and left button was released
+
+        //If currently zoomed return
+        if(zoomed) return false;
+
+        //Only perform action if card has been dragged and left button was released
 		//Note that dragged can only be true if there is a current selection
 		if(dragged && button == Buttons.LEFT) {
 			
@@ -199,7 +262,11 @@ public class MainInputProcessor implements InputProcessor {
 
 	@Override
     public boolean touchDragged (int x, int y, int pointer) {
-    	//move card to where it was dragged
+
+        //If currently zoomed return
+        if(zoomed) return false;
+
+        //move card to where it was dragged
     	if(currentSelection != null) {
     		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
     		dragged = true;
@@ -226,7 +293,11 @@ public class MainInputProcessor implements InputProcessor {
     	xClickOffset = x;
     	yClickOffset = y;
     }
-    
+
+    public ExtendedSprite getCurrentZoomed() {
+        return currentZoomed;
+    }
+
     private void doDraw() {
     	
     	//Get current hand
@@ -243,6 +314,7 @@ public class MainInputProcessor implements InputProcessor {
 		
 		//update currentSelection to be the drawn card
 		currentSelection = new ExtendedSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
+        currentSelection.setCard(c);
 		//set the current selection data
 		currentSelection.setField(false);
 		currentSelection.setMonster(false); //doesn't matter as in hand

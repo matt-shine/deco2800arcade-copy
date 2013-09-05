@@ -99,28 +99,19 @@ public class DeerForest extends GameClient implements UIOverlay {
 		ArrayList<AbstractCard> cardList = new ArrayList<AbstractCard>();
 		//add monsters
 		for(int i = 0; i < 15; i++) {
-			Attack a;
-			try {
-				Set<String> typeEffects = new HashSet<String>();
-				typeEffects.add("Water");
-				a = new Attack(100, "Fire", typeEffects, null, null);
-			} catch (IncorrectEffectException e) {
-				a = null;
-			}
-			List<Attack> atkList = new ArrayList<Attack>();
-			atkList.add(a);
+		    int attack = (int)(Math.random()*30) + 20;
 			double rand = Math.random();
 			AbstractCard card;
 			if(rand > 0.8) {
-				card = new WaterMonster(100, atkList, "DeerForestAssets/WaterMonsterShell.png");
+				card = new WaterMonster((int)(Math.random()*50) + 50, attack, "DeerForestAssets/WaterMonsterShell.png");
 			} else if(rand > 0.6) {
-				card = new FireMonster(100, atkList, "DeerForestAssets/FireMonsterShell.png");
+				card = new FireMonster((int)(Math.random()*50) + 50, attack, "DeerForestAssets/FireMonsterShell.png");
 			} else if(rand > 0.4) {
-				card = new NatureMonster(100, atkList, "DeerForestAssets/NatureMonsterShell.png");
+				card = new NatureMonster((int)(Math.random()*50) + 50, attack, "DeerForestAssets/NatureMonsterShell.png");
 			} else if(rand > 0.2) {
-				card = new DarkMonster(100, atkList, "DeerForestAssets/DarkMonsterShell.png");
+				card = new DarkMonster((int)(Math.random()*50) + 50, attack, "DeerForestAssets/DarkMonsterShell.png");
 			} else {
-				card = new LightMonster(100, atkList, "DeerForestAssets/LightMonsterShell.png");
+				card = new LightMonster((int)(Math.random()*50) + 50, attack, "DeerForestAssets/LightMonsterShell.png");
 			}
 			cardList.add(card);
 		}

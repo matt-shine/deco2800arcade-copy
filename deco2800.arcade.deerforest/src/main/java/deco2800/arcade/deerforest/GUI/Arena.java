@@ -403,14 +403,16 @@ public class Arena extends Sprite {
 		return freeZones;
 	}
 
-	public void removeSprite(ExtendedSprite s) {
+	public boolean removeSprite(ExtendedSprite s) {
 		for(String key : zones.keySet()) {
 			for(Rectangle zone : zones.get(key).keySet()) {
 				if(zones.get(key).get(zone) == s) {
 					zones.get(key).put(zone, null);
+                    return true;
 				}
 			}
 		}
+        return false;
 	}
 	
 	public void printZoneInfo() {
@@ -459,5 +461,26 @@ public class Arena extends Sprite {
 		
 		return null;
 	}
-	
+
+    public List<Rectangle> getFilledMonsterZones(int player) {
+
+        List<Rectangle> filledZones = new ArrayList<Rectangle>();
+
+        Map<Rectangle, ExtendedSprite> mapToCheck;
+
+        if(player == 1) {
+            mapToCheck = zones.get("P1MonsterZone");
+        } else {
+            mapToCheck = zones.get("P2MonsterZone");
+        }
+
+        for(Rectangle zone : mapToCheck.keySet()) {
+            if(mapToCheck.get(zone) != null) {
+                filledZones.add(zone);
+            }
+        }
+
+        return filledZones;
+    }
+
 }

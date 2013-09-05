@@ -7,11 +7,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
+import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 
 //This class functions as sort of a higher level game system controller
@@ -23,7 +27,10 @@ public class MainGame extends Game {
 	BitmapFont font;
 	final private GameSystem model;
     private Music bgLoop;
-    private Sound soundEffect;
+    private Sound battleSoundEffect;
+    private Sound phaseSoundEffect;
+    private boolean effectsMuted;
+    private boolean musicMuted;
 
 	
 	public MainGame(GameSystem model) {
@@ -33,19 +40,30 @@ public class MainGame extends Game {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
+
 		//Use LibGDX's default Arial font
-		font = new BitmapFont(true);
+        Texture texture = new Texture(Gdx.files.internal("DeerForestAssets/Deco_0.tga"), true); // true enables mipmaps
+        texture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
+        font = new BitmapFont(Gdx.files.internal("DeerForestAssets/Deco.fnt"), true);
+        font.setScale(0.5f);
+
 		this.setScreen(new MainGameScreen(this));	
 		model.startgame(true);
+
         //Play music
         FileHandle audioPath = new FileHandle("DeerForestAssets/QuickSilver.wav");
         bgLoop = Gdx.audio.newMusic(audioPath);
         bgLoop.setLooping(true);
+        bgLoop.setVolume(0.5f);
         bgLoop.play();
+        battleSoundEffect = null;
+        phaseSoundEffect = null;
 	}
 	
 	public void render() {
-		super.render();
+        if(musicMuted) bgLoop.stop();
+        else bgLoop.play();
+        super.render();
 	}
 	
 	public void dispose() {
@@ -69,13 +87,7 @@ public class MainGame extends Game {
 	}
 	
 	public void nextPhase() {
-        //dispose previous sound
-        if(soundEffect != null) {
-            soundEffect.dispose();
-        }
-        //Play sound
-        soundEffect = Gdx.audio.newSound(new FileHandle("DeerForestAssets/PhaseChange.wav"));
-        soundEffect.play();
+        playPhaseSound();
 		model.nextPhase();
 	}
 	
@@ -138,4 +150,44 @@ public class MainGame extends Game {
 		
 		return model.moveCards(player, cards, srcCards, destCards);
 	}
+
+    public void setMuted(boolean bgMusic, boolean effects) {
+        this.effectsMuted = effects;
+        this.musicMuted = bgMusic;
+    }
+
+    public void toggleMuted() {
+        this.effectsMuted = !effectsMuted;
+        this.musicMuted = !musicMuted;
+    }
+
+    public void playBattleSound() {
+        //dispose previous sound
+        if(battleSoundEffect != null) {
+            battleSoundEffect.dispose();
+        }
+        //Play sound
+        if(!effectsMuted) {
+            battleSoundEffect = Gdx.audio.newSound(new FileHandle("DeerForestAssets/Battle.mp3"));
+            long id = battleSoundEffect.play();
+            battleSoundEffect.setVolume(id, 1.0f);
+        }
+    }
+
+    public void playPhaseSound() {
+//        //dispose previous sound
+//        if(phaseSoundEffect != null) {
+//            phaseSoundEffect.dispose();
+//        }
+//        //Play sound
+//        if(!effectsMuted) {
+//            phaseSoundEffect = Gdx.audio.newSound(new FileHandle("DeerForestAssets/PhaseChange.wav"));
+//            long id = phaseSoundEffect.play();
+//            phaseSoundEffect.setVolume(id, 1.0f);
+//        }
+    }
+
+    public void inflictDamage(int player, int amount) {
+        model.inflictDamage(player, amount);
+    }
 }

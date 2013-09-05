@@ -7,31 +7,29 @@ import deco2800.arcade.deerforest.models.effects.MonsterEffect;
 
 public abstract class AbstractMonster extends AbstractCard {
 
-	String type;
-	int health;
-	List<Attack> attackList;
+	private String type;
+	private int health;
+	private int attack;
+    private int currentHealth;
+
 	//Variables for current effects affecting the monster
 
 	//Initialise the card, note attacks map damage to effect
-	public AbstractMonster(String type, int health, List<Attack> attacks, String cardFilePath) {
+	public AbstractMonster(String type, int health, int attack, String cardFilePath) {
 		this.type = type;
 		this.health = health;
-		this.attackList = attacks;
+        this.currentHealth = health;
+		this.attack = attack;
 	}
 
 	//Get attacks (make sure to not return part of private class)
-	public List<Attack> getAttacks() {
-		return attackList;
+	public int getAttack() {
+		return attack;
 	}
 
 	//Get highest atk (not taking current effects into consideration)
-	public Attack getHighestAttack() {
-		return null;
-	}
-	
-	//Get lowest atk (not taking current effects into consideration)
-	public Attack getLowestAttack() {
-		return null;
+	public int getHighestAttack() {
+		return attack;
 	}
 
 	//Get total Health (not taking current effects into consideration)
@@ -39,11 +37,10 @@ public abstract class AbstractMonster extends AbstractCard {
 		return health;
 	}
 
-	//Get current Health (taking current effects into consideration)
-	public int getCurrentHealth() {
-		return 0;
-	}
-	
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
 	//get weakness
 	public String getWeakness() {
 		return null;
@@ -61,23 +58,36 @@ public abstract class AbstractMonster extends AbstractCard {
 
 	//Get damaged (taking into account effects affecting the monster currently), true if dead
 	public boolean takeDamage(int damage, String typeOfAttack) {
-		return false;
-	}
 
-	//add buffing / weakening effect to monster, true if succeeded
-	public boolean addEffect(MonsterEffect effect) {
-		return false;
-	}
+        double damageMultiplier = 1;
 
-	//remove effect from monster, true if succeeded
-	public boolean removeEffect(MonsterEffect effect) {
+        if(this.type.equals(typeOfAttack)) {
+            damageMultiplier = 0.5;
+        } else if(this.type.equals("Fire") && typeOfAttack.equals("Water")) {
+            damageMultiplier = 2;
+        } else if(this.type.equals("Water") && typeOfAttack.equals("Nature")) {
+            damageMultiplier = 2;
+        } else if(this.type.equals("Nature") && typeOfAttack.equals("Fire")) {
+            damageMultiplier = 2;
+        } else if(this.type.equals("Dark") && typeOfAttack.equals("Light")) {
+            damageMultiplier = 2;
+        } else if(this.type.equals("Light") && typeOfAttack.equals("Dark")) {
+            damageMultiplier = 2;
+        }
+
+        this.currentHealth -= damage*damageMultiplier;
+
+        if(this.currentHealth <= 0) {
+            return true;
+        }
+
 		return false;
 	}
 	
 	public String toString() {
 		String s;
-		s = "Type: " + getType() + ", Health: " + getTotalHealth() 
-				+ ", Attacks: " + getAttacks(); 
+		s = "Type: " + getType() + ", Health: " + getCurrentHealth()
+				+ ", Attack: " + getAttack();
 		return s;
 	}
 
@@ -85,8 +95,7 @@ public abstract class AbstractMonster extends AbstractCard {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                + ((attackList == null) ? 0 : attackList.hashCode());
+        result = prime * result + attack;
         result = prime * result + health;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         return result;
@@ -101,10 +110,7 @@ public abstract class AbstractMonster extends AbstractCard {
         if (getClass() != obj.getClass())
             return false;
         AbstractMonster other = (AbstractMonster) obj;
-        if (attackList == null) {
-            if (other.attackList != null)
-                return false;
-        } else if (!attackList.equals(other.attackList))
+        if (attack != other.attack)
             return false;
         if (health != other.health)
             return false;

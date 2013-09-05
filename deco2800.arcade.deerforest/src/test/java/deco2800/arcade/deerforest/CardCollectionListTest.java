@@ -25,9 +25,9 @@ public class CardCollectionListTest {
 		// Create a new CardCollectionList
 		CardCollectionList ccl = new CardCollectionList();
 		// Create a new Card
-		AbstractCard c1 = new WaterMonster(100, null, null);
-		AbstractCard c2 = new FireMonster(100, null, null);
-		AbstractCard c3 = new DarkMonster(100, null, null);
+		AbstractCard c1 = new WaterMonster(100, 20, null);
+		AbstractCard c2 = new FireMonster(100, 20, null);
+		AbstractCard c3 = new DarkMonster(100, 20, null);
 		
 		// Add a card
 		ccl.add(c1);
@@ -56,7 +56,7 @@ public class CardCollectionListTest {
 		// Create a new CardCollectionList
 		CardCollectionList ccl = new CardCollectionList();
 		// Create a new Card
-		AbstractCard c1 = new WaterMonster(100, null, null);
+		AbstractCard c1 = new WaterMonster(100, 20, null);
 		
 		// Add card to the first CardCollectionList
 		ccl.add(c1);
@@ -75,9 +75,9 @@ public class CardCollectionListTest {
 		// Create a new CardCollectionList
 		CardCollectionList ccl = new CardCollectionList();
 		// Create a new Card
-		AbstractCard c1 = new WaterMonster(100, null, null);
-		AbstractCard c2 = new FireMonster(100, null, null);
-		AbstractCard c3 = new DarkMonster(100, null, null);
+		AbstractCard c1 = new WaterMonster(100, 20, null);
+		AbstractCard c2 = new FireMonster(100, 20, null);
+		AbstractCard c3 = new DarkMonster(100, 20, null);
 		
 		// Add a cards
 		ccl.add(c1);
@@ -103,9 +103,9 @@ public class CardCollectionListTest {
 		CardCollectionList ccl2 = new CardCollectionList();
 		
 		// Create a new Card
-		AbstractCard c1 = new WaterMonster(100, null, null);
-		AbstractCard c2 = new FireMonster(100, null, null);
-		AbstractCard c3 = new DarkMonster(100, null, null);
+		AbstractCard c1 = new WaterMonster(100, 20, null);
+		AbstractCard c2 = new FireMonster(100, 20, null);
+		AbstractCard c3 = new DarkMonster(100, 20, null);
 		
 		// Add a cards
 		ccl.add(c1);
@@ -172,9 +172,9 @@ public class CardCollectionListTest {
 	public void destroyRandomTest() {
 		CardCollectionList ccl = new CardCollectionList();
 		
-		AbstractCard c1 = new WaterMonster(100, null, null);
-		AbstractCard c2 = new FireMonster(100, null, null);
-		AbstractCard c3 = new DarkMonster(100, null, null);
+		AbstractCard c1 = new WaterMonster(100, 20, null);
+		AbstractCard c2 = new FireMonster(100, 20, null);
+		AbstractCard c3 = new DarkMonster(100, 20, null);
 		
 		ccl.add(c1);
 		ccl.add(c2);

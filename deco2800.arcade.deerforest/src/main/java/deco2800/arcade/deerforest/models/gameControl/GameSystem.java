@@ -86,8 +86,7 @@ public class GameSystem {
 			currentPlayer = currentPlayer==p1?p2:p1;
 			summoned = false;
 			return true;
-		}
-		
+        }
 		return false;
 	}
 
@@ -179,7 +178,7 @@ public class GameSystem {
 	 * 3: error
 	 * 
 	 * @param fSpell spell card to activate
-	 * @param player player that activated the card
+	 * @param p player that activated the card
 	 * @return error code
 	 */
 	public int activate(FieldSpell fSpell, DeerForestPlayer p) {
@@ -272,6 +271,15 @@ public class GameSystem {
 	public void sortGrave(DeerForestPlayer p) {
 		p.getGraveyard().sort();
 	}
+
+    public void inflictDamage(int player, int amount) {
+
+        if(player == 1) {
+            p1.inflictDamage(amount);
+        } else if(player == 2) {
+            p2.inflictDamage(amount);
+        }
+    }
 
 	public boolean getSummoned() {
 		return summoned;

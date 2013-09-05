@@ -1,9 +1,6 @@
 package deco2800.arcade.deerforest.GUI;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -27,17 +24,28 @@ public class MainGameScreen implements Screen {
 	//Variables for Card locations and what they contain
 //	private int p1DeckSize;
 //	private int p2DeckSize;
-//
+
     //boolean for phase displayed
     private boolean displayedPhaseMessage;
-    private final int timeToDisplay = 100;
+    private final int timeToDisplay = 150;
     private int currentDisplayTime;
 
+    //
 	private float glowSize;
 	private boolean glowDirection;
-	
+
+    //Variables for extra sprites
+    private ExtendedSprite p1Health;
+    private ExtendedSprite p2Health;
+    private ExtendedSprite cardBack;
+    private final static float healthBarX = 0.065625f;
+    private final static float healthBarWidth = 0.01875f;
+    private final static float P1HealthBarY = 0.65833336f;
+    private final static float P2HealthBarY = 0.093055554f;
+    private final static float healthBarHeight = 0.247222246f;
+
 	//assets
-	private Map<String, List<ExtendedSprite>> spriteMap;
+	private Map<String, Set<ExtendedSprite>> spriteMap;
 	private Arena arena;
 	private List<Rectangle> highlightedZones;
 	
@@ -62,28 +70,21 @@ public class MainGameScreen implements Screen {
 		arena = new Arena(manager.get("DeerForestAssets/background.png", Texture.class));
 		
 		//create map of sprites
-		spriteMap = new HashMap<String, List<ExtendedSprite>>();
-		
-		//create P1Hand
-		List<ExtendedSprite> p1Hand = new ArrayList<ExtendedSprite>();
-		
-		//create P1Monster
-		List<ExtendedSprite> p1Monster = new ArrayList<ExtendedSprite>();
+		spriteMap = new HashMap<String, Set<ExtendedSprite>>();
 
-		//create P2Hand
-		List<ExtendedSprite> p2Hand = new ArrayList<ExtendedSprite>();
-		
-		//create P2Monster
-		List<ExtendedSprite> p2Monster = new ArrayList<ExtendedSprite>();
-	    
-	    spriteMap.put("P1HandZone", p1Hand);
-	    spriteMap.put("P1MonsterZone", p1Monster);
-	    spriteMap.put("P1SpellZone", new ArrayList<ExtendedSprite>());
-	    spriteMap.put("P2HandZone", p2Hand);
-	    spriteMap.put("P2MonsterZone", p2Monster);
-	    spriteMap.put("P2SpellZone", new ArrayList<ExtendedSprite>());
-	    
-	    //list of highlighted zones
+	    spriteMap.put("P1HandZone", new HashSet<ExtendedSprite>());
+	    spriteMap.put("P1MonsterZone", new HashSet<ExtendedSprite>());
+	    spriteMap.put("P1SpellZone", new HashSet<ExtendedSprite>());
+	    spriteMap.put("P2HandZone", new HashSet<ExtendedSprite>());
+	    spriteMap.put("P2MonsterZone", new HashSet<ExtendedSprite>());
+	    spriteMap.put("P2SpellZone", new HashSet<ExtendedSprite>());
+
+        //Load extra stuff
+        p1Health = new ExtendedSprite(manager.get("DeerForestAssets/HealthBar.png", Texture.class));
+        p2Health = new ExtendedSprite(manager.get("DeerForestAssets/HealthBar.png", Texture.class));
+        cardBack = new ExtendedSprite(manager.get("DeerForestAssets/CardBack.png", Texture.class));
+
+        //list of highlighted zones
 	    highlightedZones = new ArrayList<Rectangle>();
 
         //set displayPhase to false
@@ -103,6 +104,10 @@ public class MainGameScreen implements Screen {
         manager.load("DeerForestAssets/MainPhase.png", Texture.class);
         manager.load("DeerForestAssets/BattlePhase.png", Texture.class);
         manager.load("DeerForestAssets/EndPhase.png", Texture.class);
+        manager.load("DeerForestAssets/Player1.png", Texture.class);
+        manager.load("DeerForestAssets/Player2.png", Texture.class);
+        manager.load("DeerForestAssets/HealthBar.png", Texture.class);
+        manager.load("DeerForestAssets/CardBack.png", Texture.class);
 	}
 
 	@Override
@@ -124,12 +129,21 @@ public class MainGameScreen implements Screen {
 		//Draw game board
 	    arena.draw(game.batch);
 	    
-	    //draw the sprites currently in map 
+	    //draw the sprites currently in map (if not players turn their hand is cardBack)
 	    for(String key : spriteMap.keySet()) {
 	    	for(ExtendedSprite s : spriteMap.get(key)) {
-		    	s.draw(game.batch);
+                if((game.getCurrentPlayer() == 1 && key.equals("P2HandZone")) ||
+                        (game.getCurrentPlayer() == 2 && key.equals("P1HandZone"))) {
+                    cardBack.setPosition(s.getX(), s.getY());
+                    cardBack.setScale(s.getScaleX(), s.getScaleY());
+                    cardBack.draw(game.batch);
+                } else {
+                    s.draw(game.batch);
+                }
 		    }
 	    }
+
+        game.batch.flush();
 
         //Draw the phase image if it hasn't already been drawn
         if(!displayedPhaseMessage) {
@@ -138,17 +152,33 @@ public class MainGameScreen implements Screen {
                 currentDisplayTime = 0;
             }
             currentDisplayTime++;
-            if(manager.isLoaded("DeerForestAssets/" + game.getPhase()+".png")) {
+            if(manager.isLoaded("DeerForestAssets/" + game.getPhase()+".png") ||
+                    game.getPhase().equals("DrawPhase")) {
                 Gdx.gl.glEnable(GL10.GL_BLEND);
                 Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-                ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/" + game.getPhase()+".png",Texture.class));
+                ExtendedSprite s;
+                if(game.getPhase().equals("DrawPhase")) {
+                    if(game.getCurrentPlayer()==1) {
+                        s = new ExtendedSprite(manager.get("DeerForestAssets/Player1.png",Texture.class));
+                    } else {
+                        s = new ExtendedSprite(manager.get("DeerForestAssets/Player2.png",Texture.class));
+                    }
+                } else {
+                    s = new ExtendedSprite(manager.get("DeerForestAssets/" + game.getPhase()+".png",Texture.class));
+                }
+
                 //Set fade in / out
                 if(currentDisplayTime < timeToDisplay/4) {
                     s.setColor(1.0f, 1.0f, 1.0f, ((float)currentDisplayTime*4)/timeToDisplay);
                 } else if(currentDisplayTime > 3*timeToDisplay/4) {
-                   s.setColor(1.0f, 1.0f, 1.0f, 1-((float)4*currentDisplayTime - 3*timeToDisplay/4)/timeToDisplay);
+                    if(4*(1-(float)currentDisplayTime/timeToDisplay) > 0) {
+                        s.setColor(1.0f, 1.0f, 1.0f, 4*(1-(float)currentDisplayTime/timeToDisplay));
+                    } else {
+                        s.setColor(1.0f, 1.0f, 1.0f, 0);
+                    }
                 }
+
                 s.setScale(Gdx.graphics.getWidth()/(3*s.getWidth()/2), Gdx.graphics.getHeight()/(2*s.getHeight()));
                 s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
                 s.draw(game.batch);
@@ -166,14 +196,45 @@ public class MainGameScreen implements Screen {
 	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.45f*getHeight());
 	    game.font.draw(game.batch, "P1 LP: " + game.getPlayerLP(1), 0.80f*getWidth(), 0.5f*getHeight());
 	    game.font.draw(game.batch, "P2 LP: " + game.getPlayerLP(2), 0.80f*getWidth(), 0.55f*getHeight());
-	    
+
+        // draw health bars
+        drawHealthBars();
+
+        game.batch.flush();
+
+        //draw highlighted zone
+        highlightZones();
+
 	    game.batch.end();
-	    
-	    //draw highlighted zone
-	    highlightZones();
-		
+
+        //Draw zoomed sprite
+        ExtendedSprite zoomed = DeerForestSingletonGetter.getDeerForest().inputProcessor.getCurrentZoomed();
+        if(zoomed != null) {
+            game.batch.begin();
+            zoomed.draw(game.batch);
+            game.batch.end();
+        }
+
 	}
-	
+
+    private void drawHealthBars() {
+
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
+
+        float p1HealthRatio = (float)game.getPlayerLP(1)/200;
+        float p2HealthRatio = (float)game.getPlayerLP(2)/200;
+
+        p1Health.setPosition(x*healthBarX, y*P1HealthBarY);
+        p1Health.setScale(x*healthBarWidth/ p1Health.getWidth(), p1HealthRatio*y*healthBarHeight/p1Health.getHeight());
+
+        p2Health.setPosition(x*healthBarX, y*P2HealthBarY);
+        p2Health.setScale(x*healthBarWidth/ p2Health.getWidth(), p2HealthRatio*y*healthBarHeight/p2Health.getHeight());
+
+        p1Health.draw(game.batch);
+        p2Health.draw(game.batch);
+    }
+
 	private void highlightZones() {
 		
 		shapeRenderer.setProjectionMatrix(camera.combined);
@@ -185,8 +246,12 @@ public class MainGameScreen implements Screen {
 		    shapeRenderer.begin(ShapeType.FilledRectangle);
 		    
 		    for(Rectangle r: highlightedZones) {
-		    	shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
-		    	
+                if(game.getPhase().equals("BattlePhase")) {
+                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.RED, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+                } else {
+                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+                }
+
 		    	if(glowSize > 10 && glowDirection == true) {
 		    		glowDirection = false;
 		    	} else if(glowSize < 0 && glowDirection == false) {
@@ -234,7 +299,7 @@ public class MainGameScreen implements Screen {
 
 	}
 
-	public Map<String, List<ExtendedSprite>> getSpriteMap() {
+	public Map<String, Set<ExtendedSprite>> getSpriteMap() {
 		return spriteMap;
 	}
 	
@@ -251,23 +316,28 @@ public class MainGameScreen implements Screen {
 	}
 	
 	public void setHighlightedZones(List<Rectangle> highlight) {
-//		highlightedZones.clear();
-//		for(Rectangle r: highlight) {
-//			highlightedZones.add(new Rectangle(r));
-//		}
 		highlightedZones = highlight;
 	}
 	
 	public boolean setSpriteToArea(ExtendedSprite s, String area) {
-		List<ExtendedSprite> listToAddTo = spriteMap.get(area);
+		Set<ExtendedSprite> listToAddTo = spriteMap.get(area);
 		if(listToAddTo != null) {
 			return listToAddTo.add(s);
 		}
 		return false;
 	}
+
+    public boolean removeSprite(ExtendedSprite s) {
+        for(String key : spriteMap.keySet()) {
+            if(spriteMap.get(key).contains(s)) {
+                return spriteMap.get(key).remove(s);
+            }
+        }
+        return false;
+    }
 	
 	public boolean removeSpriteFromArea(ExtendedSprite s, String area) {
-		List<ExtendedSprite> listToAddTo = spriteMap.get(area);
+		Set<ExtendedSprite> listToAddTo = spriteMap.get(area);
 		if(listToAddTo != null) {
 			return listToAddTo.remove(s);
 		}

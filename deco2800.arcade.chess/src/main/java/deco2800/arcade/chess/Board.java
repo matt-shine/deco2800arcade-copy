@@ -10,6 +10,8 @@ public class Board{
 
 	FixedSizeList<FixedSizeList<Piece>> Board_State;
 	ArrayList<Piece> whiteGraveyard, blackGraveyard;
+	//true = blacks turn false = whites turn
+	private boolean turn;
 
 	// Initialise pieces
 	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
@@ -30,7 +32,7 @@ public class Board{
 	 * Initialises board to the default setup.
 	 */
 	public Board() {
-		
+		turn = false;
 		Board_State = new FixedSizeList<FixedSizeList<Piece>>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
@@ -301,8 +303,8 @@ public class Board{
 		}
 		// Queen
 		if (piece.getClass() == whiteQueen.getClass()) {
-			// this.removeJumpsBishop(possibleMoves, currentPos, piece);
-			// this.removeJumpsRook(possibleMoves, currentPos, piece);
+			//this.removeJumpsBishop(possibleMoves, currentPos, piece);
+			//this.removeJumpsRook(possibleMoves, currentPos, piece);
 			allowableMoves = new ArrayList<int[]>();
 
 			allowableMoves.addAll(this.removeJumpsRook(possibleMoves,
@@ -310,7 +312,6 @@ public class Board{
 			allowableMoves.addAll(this.removeJumpsBishop(possibleMoves,
 					currentPos, piece));
 
-			this.removeJumpsRook(possibleMoves, currentPos, piece);
 
 		}
 		return allowableMoves;
@@ -403,7 +404,10 @@ public class Board{
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
 		}
-
+		if (piece.getClass() == whitePawn1.getClass()) {
+			piece.hasMoved();
+		}
+		this.nextTurn();
 	}
 
 	/**
@@ -873,6 +877,21 @@ public class Board{
 		FixedSizeList<Piece> row = Board_State.get(pos[0]);
 		
 		return row.get(pos[1]);
+	}
+	
+	public boolean isNullPiece(Piece piece) {
+		if (piece.getClass() == nullPiece.getClass()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean whoseTurn() {
+		return turn;
+	}
+	
+	public void nextTurn() {
+		turn = !turn;
 	}
 	
 

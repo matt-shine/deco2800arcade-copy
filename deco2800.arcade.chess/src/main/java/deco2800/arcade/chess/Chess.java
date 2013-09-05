@@ -47,8 +47,6 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="chess")
 public class Chess extends GameClient implements InputProcessor{
 	
-	//True if black turn to move, false if white turn
-	boolean move = false;
 
 	//This shows whether a piece is selected and ready to move.
 	boolean moving = false;
@@ -347,9 +345,11 @@ public class Chess extends GameClient implements InputProcessor{
 		if(!moving) {
 			movingPiece = checkSquare(x, y);
 			try {
-			if (movingPiece.getTeam() == move) {
+			if (board.isNullPiece(movingPiece)) {
+				return false;
+			}
+			if (movingPiece.getTeam() == board.whoseTurn()) {
 				moving = true;
-				move = !move;
 				return true;
 			}
 			} catch (NullPointerException e) {

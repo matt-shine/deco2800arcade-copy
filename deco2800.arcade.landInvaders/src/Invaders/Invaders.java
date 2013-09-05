@@ -36,7 +36,7 @@ public class Invaders extends JFrame implements Runnable {
 		WallList.add(new blockWall(380, 350, 4, 8));
 		WallList.add(new blockWall(580, 350, 4, 8));
 		shotsNmb = 6;
-		level = 2;
+		level = 3;
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
 		enemyG = new enemyGroup(3, 6);
@@ -117,6 +117,7 @@ public class Invaders extends JFrame implements Runnable {
 			}
 
 		}
+		levelCheck();
 
 	}
 
@@ -138,7 +139,7 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	public void enemyMove(int count, boolean moveD) {
-		System.out.println(moveD); 
+ 
 		if (count % 10 == 0) {
 			if (move == 130) {
 				direction = -1;
@@ -173,6 +174,29 @@ public class Invaders extends JFrame implements Runnable {
 			break;
 
 		}
+	}
+	
+	public void levelCheck(){
+		if(enemyG.isEmpty() ==true){
+			if(level != 3){
+				level++;
+			}else{
+				level =1;
+			}
+			restart();
+		
+		}
+	}
+	
+	public void restart(){
+		shots = new ArrayList<tankshot>();
+		Eshots = new ArrayList<enemyShot>();
+		enemyG = new enemyGroup(3, 6);
+		tank = new tank();
+		addKeyListener(tank);
+		move = 0;
+		direction = 1;
+		moveDown = false;
 	}
 
 	public void levelTwo(int count) {

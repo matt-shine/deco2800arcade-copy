@@ -12,6 +12,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,6 +21,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -33,7 +43,7 @@ import deco2800.arcade.snakeLadderModel.*;
 
 /**
  * This is the main class for game snake&Ladder
- * @author s4310055,s43146400,s43146884
+ * @author s4310055,s43146400,s43146884,s4243072
  *
  */
 
@@ -55,12 +65,21 @@ public class SnakeLadder extends GameClient {
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
 	private ShapeRenderer shapeRenderer;
+	private Stage stage;
+	private Skin skin;
 	private BitmapFont font;
+	private TextButton diceButton;
 	private String statusMessage;
+	
+	private Label diceLabel;
 	
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
+	
+	// haku add
+	public static final int SCREENHEIGHT = 480;
+	public static final int SCREENWIDTH = 800;
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -135,6 +154,81 @@ public class SnakeLadder extends GameClient {
 		//Initialise the game state
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
+		
+		//setting up the skin for the layout
+		skin = new Skin();
+		Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        skin.add("white", new Texture(pixmap));
+        
+		skin.add("default", new BitmapFont());
+		//skin for label
+		Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        skin.add("default", labelStyle);		
+		
+        //skin for textbutton or dice button
+		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.font = skin.getFont("default");
+        skin.add("default", textButtonStyle);
+        
+        //setting the dice button
+        diceButton = new TextButton("Roll the dice", skin);
+        
+        ArrayList<Label> userLabels = new ArrayList<Label>();
+        ArrayList<Label> scoreLabels = new ArrayList<Label>();
+        
+        //setting players name and score
+        for(int i = 0; i < players.length; i++){
+        	userLabels.add(new Label (players[i], skin));
+        	scoreLabels.add(new Label (""+0, skin)); //initial score is 0
+	    }
+        
+        //creating the stage
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+        
+        //table to place all the GUI
+        Table table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
+        table.right();
+        
+        //adding header
+        table.add(new Label("Players' Name", skin)).width(200).top().right();
+        table.add(new Label("Players' Score", skin)).width(200).top().right();
+        table.row();
+        
+        //adding player name and score to GUI
+        for(int i = 0; i < players.length; i++){
+        	table.add(userLabels.get(i)).width(200).top().right();
+        	table.add(scoreLabels.get(i)).width(200).top().right();
+        	table.row();
+	    }        
+        //adding dice button to GUI
+        table.add(diceButton).width(100).height(50).pad(10);
+        table.row();
+        
+        //label for the dice roll
+        diceLabel = new Label ("x",skin);        
+        table.add(diceLabel).width(100).height(50).pad(10);
+        
+        //TODO: button should be disabled when its others player turn
+        //diceButton listener for when the button is pressed
+        diceButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	Random randomGenerator = new Random();
+            	int randomInt = randomGenerator.nextInt(6)+1;
+            	diceLabel.setText(""+randomInt);
+            }
+        });
+ 
+    
 	}
 	
 	@Override
@@ -152,6 +246,10 @@ public class SnakeLadder extends GameClient {
 		//Black background
 				Gdx.gl.glClearColor(0, 0, 0, 1);
 			    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			    
+			    //adding stage
+			    stage.act(Gdx.graphics.getDeltaTime());
+		        stage.draw();
 		// tell the camera to update its matrices.
 		camera.update();
 		// tell the SpriteBatch to render in the
@@ -167,6 +265,8 @@ public class SnakeLadder extends GameClient {
 		lvl.renderMap(tileList, batch);
 		//test
 		batch.draw(ladder,tileList[5].getCoorX(), tileList[5].getCoorY());
+
+		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
@@ -245,4 +345,5 @@ public class SnakeLadder extends GameClient {
 	public void resume() {
 		super.resume();
 	}
+	
 }

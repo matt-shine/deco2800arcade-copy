@@ -39,11 +39,12 @@ public abstract class BulletPattern {
 		if(!firing) return;
 		timer += delta;
 		if(timer < interval) return;
+		// Compensate for frame drops - it happens always, bloody java
 		int loop = (int) Math.floor(timer / interval) - 1;
-		timer = timer % interval;
-		for(int i=0;i<=loop;i++) { // this is in case of frame drops
-			fire((float) ((loop-i)*interval+timer));
+		for(int i=0;i<=loop;i++) {
+			fire((float) (timer-delta-(i)*interval));
 		}
+		timer = timer % interval;
 	}
 	
 	/**

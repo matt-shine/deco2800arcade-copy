@@ -1,5 +1,6 @@
 package deco2800.arcade.raiden;
-import java.awt.Graphics;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 abstract public class Plane {
@@ -17,5 +18,5 @@ abstract public class Plane {
 		this.w = w;
 		this.h = h;
 	}
-	public abstract void drawMe(Graphics g);
+	public abstract void drawMe(SpriteBatch batch);
 }

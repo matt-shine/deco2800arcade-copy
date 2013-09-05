@@ -1,37 +1,26 @@
 package deco2800.arcade.raiden;
-import java.awt.Graphics;
-import java.awt.Image;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
-public class EPlane extends Plane{
+public abstract class EPlane extends Plane{
 
-	private Image img;
-	private JPanel jpanel;
-	
-	public JPanel getJpanel() {
-		return jpanel;
-	}
-
-	public void setJpanel(JPanel jpanel) {
-		this.jpanel = jpanel;
-	}
+	private Texture Eplane;
+	private SpriteBatch batch;
 
 	public EPlane(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		img = new ImageIcon("Image/enemy.png").getImage();
 		// TODO Auto-generated constructor stub
-	}
-
-	public void drawMe(Graphics g) {
-		// TODO Auto-generated method stub
-		
-		g.drawImage(img, this.x, this.y, this.w, this.h, jpanel);
 	}
 	
 	public void eplaneMove(){
 		this.y += 3;
 	}
-
+	public void drawMe() {
+		// TODO Auto-generated method stub
+		Eplane = new Texture(Gdx.files.classpath("resources/enemy.png"));
+		batch.draw(Eplane, this.x, this.y);
+	}
 }

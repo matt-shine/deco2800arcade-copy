@@ -9,7 +9,7 @@ import deco2800.arcade.client.network.NetworkClient;
 
 /**
  * A raiden game for use in the Arcade
- * @author team lion
+ * @author Team lion
  *
  */
 @ArcadeGame(id="Raiden")

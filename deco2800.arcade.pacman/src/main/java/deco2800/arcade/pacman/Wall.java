@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
-public class walls extends Actor {
+public class Wall extends Actor {
 
 	static enum WallType {
 		OUTER_HOR, OUTER_VERT, OUTER_CORN_1
@@ -17,7 +17,7 @@ public class walls extends Actor {
 	
 	private boolean built;
 	
-	walls(WallType type, ShapeRenderer shapeRenderer) {
+	Wall(WallType type, ShapeRenderer shapeRenderer) {
 		this.shapeRenderer = shapeRenderer;
 		this.type = type;
 		this.built = false;

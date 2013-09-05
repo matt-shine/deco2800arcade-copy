@@ -157,7 +157,81 @@ public class Player extends User {
 			this.username.setValue(username);
 		}
 	}
-
+	
+	/**
+	 *  getEmail is an access method for the players email
+	 *  
+	 * @return a string of email
+	 */
+	public String getEmail() {
+		return email.getValue();
+	}
+	
+	/**
+	 * Sets the email of the player
+	 * 
+	 * @param email
+	 */
+	public void setEmail(String email) {
+		this.email.setValue(email);
+		//TODO 
+		// Do we want to add in any checking for valid email format here?
+	}
+	
+	/**
+	 * getBio is an access method for the players biography
+	 * 
+	 * @return a string of the players biography
+	 */
+	public String getBio() {
+		return bio.getValue();
+	}
+	
+	/**
+	 * Sets the biography of the player
+	 * 
+	 * @param bio
+	 */
+	public void setBio(String bio) {
+		this.bio.setValue(bio);
+	}
+	
+	/**
+	 * An access method for the players name
+	 * 
+	 * @return a String of the players name
+	 */
+	public String getName() {
+		return name.getValue();
+	}
+	
+	/**
+	 * Sets the name of the player
+	 * 
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name.setValue(name);
+	}
+	
+	/**
+	 * An access method for the players program
+	 * 
+	 * @return a String of the players program
+	 */
+	public String getProgram() {
+		return program.getValue();
+	}
+	
+	/**
+	 * Sets the players program
+	 * 
+	 * @param program
+	 */
+	public void setProgram(String program) {
+		this.program.setValue(program);
+	}
+	
 	/**
 	 * Access method for the Player's icon
 	 * 

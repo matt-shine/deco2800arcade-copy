@@ -9,9 +9,19 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
 public class Level1 extends Level {
+	
+	@Override
+	public Tile[] iniMapSize()
+	{
+		return new Tile[100];
+	}
 
 	@Override
-	public boolean loadMap(List<Tile> tileList, String filePath) {
+	public boolean loadMap(Tile[] tileList, String filePath) {
+//		//initialize arraylist with size x
+//		tileList = new Tile[gameboardSize];
+		
+		//reading file
 		FileHandle handle = Gdx.files.classpath(filePath);
 		BufferedReader file = handle.reader(2048);
 		
@@ -37,7 +47,7 @@ public class Level1 extends Level {
 					{
 						t.setTexture(new Texture(Gdx.files.classpath("assets/"+ruleTextureMapping.get(t.getRule()))));
 					}
-					tileList.add(t);
+					tileList[index-1]=t;
 				}
 				counter++;
 			}

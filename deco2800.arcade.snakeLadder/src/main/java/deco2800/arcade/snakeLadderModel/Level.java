@@ -21,25 +21,31 @@ public abstract class Level {
 		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
 		//initialise rule texture mapping
 		ruleTextureMapping = new HashMap<String,String>();
-		ruleTextureMapping.put("+","plus_10.png");
-		ruleTextureMapping.put("*", "plus_20.png");
-		ruleTextureMapping.put("-", "minus_10.png");
-		ruleTextureMapping.put("/", "minus_20.png");
+		ruleTextureMapping.put("+10","plus_10.png");
+		ruleTextureMapping.put("+20", "plus_20.png");
+		ruleTextureMapping.put("+50", "plus_50.png");
+		ruleTextureMapping.put("+100", "plus_100.png");
+		ruleTextureMapping.put("-10", "minus_10.png");
+		ruleTextureMapping.put("-20", "minus_20.png");
+		ruleTextureMapping.put("-50", "minus_50.png");
+		ruleTextureMapping.put("-100", "minus_100.png");
 		ruleTextureMapping.put("#", "stop.png");
 	}
 	
-	public void renderMap(List<Tile> tileList, SpriteBatch batch)
+	public void renderMap(Tile[] tileList, SpriteBatch batch)
 	{
 		batch.draw(backgroundBoard,0,0);
 		for(Tile t:tileList)
 		{
-			if(!t.getRule().equals("."))
+			if(!t.getRule().equals(".")&&!t.getRule().equals("S")&&!t.getRule().equals("E"))
 			{
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}
 		}	   
 	}
 	
-	public abstract boolean loadMap(List<Tile> tileList, String filePath);
+	public abstract Tile[] iniMapSize();
+	
+	public abstract boolean loadMap(Tile[] tileList, String filePath);
 
 }

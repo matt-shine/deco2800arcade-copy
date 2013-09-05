@@ -42,9 +42,10 @@ public class SnakeLadder extends GameClient {
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	private List<Tile> tileList; 
+	private Tile[] tileList; 
     private GamePlayer gamePlayer;
     private Level lvl;
+    private Texture ladder;
     private enum GameState {
 		READY,
 		INPROGRESS,
@@ -113,12 +114,15 @@ public class SnakeLadder extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
+		//test
+		ladder =  new Texture(Gdx.files.classpath("assets/arrow.png"));
 		
-		tileList = new ArrayList<Tile>();
-		//creating level and initialize the rule mapping
+		//creating level loading background board and initializing the rule mapping
 		lvl =new Level1();
 		lvl.ini();
 	
+		//initialize the map size for this level 
+		tileList = lvl.iniMapSize();
 		//loading game map
 		lvl.loadMap(tileList, "assets/lvl1.txt");
 	
@@ -161,6 +165,8 @@ public class SnakeLadder extends GameClient {
 	    batch.begin();
 		// render map for this level
 		lvl.renderMap(tileList, batch);
+		//test
+		batch.draw(ladder,tileList[5].getCoorX(), tileList[5].getCoorY());
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {

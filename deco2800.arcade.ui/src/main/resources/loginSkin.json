@@ -1,5 +1,6 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
+        default: { file: default.fnt },
         FreeSans_16: { file: FreeSans_16.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
@@ -11,6 +12,6 @@
         grey:   { a: 1, r: 0.5, g: 0.5, b: 0.5 }
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
-        default: { font: FreeSans_16, fontColor: white }
+        default: { font: default, fontColor: white }
     },
 }

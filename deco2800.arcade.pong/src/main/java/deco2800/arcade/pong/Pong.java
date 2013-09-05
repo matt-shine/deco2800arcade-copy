@@ -236,7 +236,12 @@ public class Pong extends GameClient {
 	    	//Move the ball
 	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
 	    	ball.move(Gdx.graphics.getDeltaTime());
-	    	//If the ball hits a paddle then bounce it
+	    	// checking code for the slider achievement
+            if (ball.bounds.overlaps(leftPaddle.bounds)) {
+                if (leftPaddle.direction == -1) incrementAchievement("pong.slider.moveUp");
+                if (leftPaddle.direction == 1) incrementAchievement("pong.slider.moveDown");
+            }
+            //If the ball hits a paddle then bounce it
 	    	if (ball.bounds.overlaps(leftPaddle.bounds) || ball.bounds.overlaps(rightPaddle.bounds)) {
 	    		ball.bounceX();
 	    	}
@@ -281,10 +286,8 @@ public class Pong extends GameClient {
 		    networkClient.sendNetworkObject(createScoreUpdate());
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
-		    	//Will need to store instance of player rather then just username 
-		    	//to call incrementprogress.
-                //achievementClient.incrementProgress("pong.winGame", );
-		    	//TODO Should have more detail in the achievement message
+		    	incrementAchievement("pong.winGame");
+                incrementAchievement("pong.master");
 		    }
 		} else {
 			// No winner yet, get ready for another point

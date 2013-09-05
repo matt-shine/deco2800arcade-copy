@@ -1,4 +1,4 @@
-package deco2800.arcade.server;
+package deco2800.server;
 
 import java.io.File;
 

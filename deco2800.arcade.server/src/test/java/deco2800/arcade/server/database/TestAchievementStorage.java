@@ -20,6 +20,7 @@ import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Player;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.database.ImageStorage;
 
 /**
  * Test class for AchievementStorage
@@ -63,7 +64,9 @@ public class TestAchievementStorage {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		achievementStorage = new AchievementStorage();
+        ImageStorage imageStorage = new ImageStorage();
+		achievementStorage = new AchievementStorage(imageStorage);
+        imageStorage.initialise();
 		achievementStorage.initialise();
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);

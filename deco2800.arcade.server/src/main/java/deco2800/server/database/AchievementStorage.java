@@ -7,14 +7,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.io.File;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game;
-import deco2800.arcade.server.ResourceLoader;
-import deco2800.arcade.server.ResourceHandler;
+import deco2800.server.ResourceLoader;
+import deco2800.server.ResourceHandler;
+import deco2800.server.database.ImageStorage;
 import org.w3c.dom.Document;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,7 +28,13 @@ import org.xml.sax.SAXParseException;
  * Implements Achievement storage on database.
  * I added a comment here :)
  */
-public class AchievementStorage {
+public class AchievementStorage { 
+
+    private ImageStorage imageStorage;
+
+    public AchievementStorage(ImageStorage imageStorage) {
+        this.imageStorage = imageStorage;
+    }
 
 	private class AchievementComponent {
 		public String id;
@@ -37,6 +45,7 @@ public class AchievementStorage {
 		String id = achElem.getAttribute("id");
 		
 		// query DB to see if we already have this id?
+        // still need to bring in icon
 
 		String name = null;
 		String description = null;
@@ -99,10 +108,12 @@ public class AchievementStorage {
 		System.out.println("}");
 
 		// load into DB
+        File icon = ResourceLoader.load(iconPath);
+        imageStorage.set(iconPath, icon);
 	}
 
 	public void loadAchievementData() {
-		ResourceLoader.loadFilesMatchingPattern(Pattern.compile("achievements\\.xml"),
+		ResourceLoader.handleFilesMatchingPattern(Pattern.compile("achievements\\.xml"),
 				1, new ResourceHandler() {
 			public void handleFile(File f) {
 				try {
@@ -292,10 +303,19 @@ public class AchievementStorage {
      * @return An AchievementProgress instance with the player's progress.
      */ 
     public AchievementProgress progressForPlayer(Player player) throws DatabaseException {
-    	//Not sure exactly what this method will entail/does 
-    	//focus on other methods for now
+        // TODO: implement me!
+
+        // just map achievement IDs to the player's progress if they have any
+        // (if they have no progress leave it out)
+        HashMap<String, Integer> progress = new HashMap<String, Integer>();
+
+        // and we also need to tell the progress what's been awarded so that we
+        // can implement the inProgressAchievementIDs and awardedAchievementIDs
+        // without needing to hit the server again to ask for the awardThresholds
+        // of the achievements to do comparisons
+        HashMap<String, Boolean> awarded = new HashMap<String, Boolean>();
         
-        return new AchievementProgress(player);
+        return new AchievementProgress(progress, awarded);
     }
     
     
@@ -349,14 +369,16 @@ public class AchievementStorage {
      *
      * @param achievementID The ID of the achievement.
      * @param playerID The player whose progress should be incremented.
+     * @return The new progress for the player, or -1 if they already have been awarded
+     *           the achievement.
      * @throws DatabaseException
      */
-    public AchievementProgress incrementProgress(Player player, String achievementID)
+    public int incrementProgress(Player player, String achievementID)
     		throws DatabaseException {
+        // note that AchievementProgress represents a player's progress in *every*
+        // achievement and not just one so it's a bit inefficient for this method.
+        // simpler to just return the new progress or -1 if nothing needs doing
     	int progress = 0;
-    	AchievementProgress result = null;
-    	//TODO AchievementProgress is returning Player. Need to change to return an ID and
-    	//progress
     	progress = initialiseProgress(player.getID(), achievementID);
     	if(!checkThreshold(achievementID, progress)) {
     		//Get a connection to the database
@@ -372,7 +394,6 @@ public class AchievementStorage {
     					"SET PROGRESS = PROGRESS + 1 " +
     					"WHERE playerID=" + playerID + " " +
     					"AND achievementID='" + achievementID + "'");
-    			result = new AchievementProgress(player);
     		} catch (SQLException e) {
     			e.printStackTrace();
     			throw new DatabaseException("Unable to get achievements from database", e);
@@ -387,13 +408,16 @@ public class AchievementStorage {
     				if (connection != null){
     					connection.close();
     				}
-    				return result;
+
+                    // return the new progress
+    				return progress + 1;
     			} catch (SQLException e) {
     				e.printStackTrace();
     			}
     		}
     	}
-		return result;
+        // already have this achievement
+        return -1;
     }
     
     /**

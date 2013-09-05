@@ -58,14 +58,16 @@ public class AchievementListener extends Listener {
 			
 			try {
 				//update database
-				ArcadeServer.instance().getAchievementStorage().incrementProgress(player, achievementID);
+				int newProgress = ArcadeServer.instance().getAchievementStorage().incrementProgress(player, achievementID);
 				//will need to get a return value when I figure out how to return stuff
 				//to the client
 					
-				IncrementProgressResponse incrementProgressResponse = new IncrementProgressResponse();
-			   		
-				connection.sendTCP(incrementProgressResponse);
-				
+                if (newProgress != -1) {
+                    IncrementProgressResponse resp = new IncrementProgressResponse();
+                    resp.newProgress = newProgress;
+                    resp.achievementID = achievementID;
+                    connection.sendTCP(resp);
+                }
 			} catch (DatabaseException e) {
 				e.printStackTrace();
 				

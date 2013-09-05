@@ -2,6 +2,7 @@ package deco2800.arcade.client;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.HashMap;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
@@ -103,7 +104,9 @@ public class AchievementClient {
     	
     	networkClient.sendNetworkObject(request);
     	
-        return new AchievementProgress(player);
+        HashMap<String, Integer> progress = new HashMap<String, Integer>();
+        HashMap<String, Boolean> awarded = new HashMap<String, Boolean>();
+        return new AchievementProgress(progress, awarded);
     }
     
     /**

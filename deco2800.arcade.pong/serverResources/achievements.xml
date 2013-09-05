@@ -5,9 +5,17 @@
     <awardThreshold>1</awardThreshold>
     <icon>winner.png</icon>
   </achievement>
+
+  <achievement id="pong.master">
+    <name>Master of Boredom</name>
+    <description>Win 10 games of Pong.</description>
+    <awardThreshold>10</awardThreshold>
+    <icon>winner.png</icon>
+  </achievement>
+
   <achievement id="pong.slider">
     <name>Slider</name>
-    <description>Hit the ball while moving the paddle up as well as down</description>
+    <description>Hit the ball while moving the paddle in both directions.</description>
     <icon>winner.png</icon>
     <components>
       <component id="pong.slider.moveUp" awardThreshold="1" />

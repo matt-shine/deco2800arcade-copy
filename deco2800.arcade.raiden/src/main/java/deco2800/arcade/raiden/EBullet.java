@@ -1,5 +1,9 @@
 package deco2800.arcade.raiden;
 
+import java.awt.Rectangle;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class EBullet extends Bullet{
 
 	
@@ -20,13 +24,17 @@ public class EBullet extends Bullet{
 
 	public boolean isEBulletHitPPlane(){
 		
-//		int x = Controller.pplane.x; 
-//		int y = Controller.pplane.y;
-//		int w = Controller.pplane.w;
-//		int h = Controller.pplane.h;
-//		Rectangle recEbullet = new Rectangle(this.x, this.y, width, heigth);
-//		Rectangle recPplane = new Rectangle(x, y, w, h);
-//		return recEbullet.intersects(recPplane) && !isUsed;
-		return true;
+		int x = Raiden.pplane.x; 
+		int y = Raiden.pplane.y;
+		int w = Raiden.pplane.w;
+		int h = Raiden.pplane.h;
+		Rectangle recEbullet = new Rectangle(this.x, this.y, width, heigth);
+		Rectangle recPplane = new Rectangle(x, y, w, h);
+		return recEbullet.intersects(recPplane) && !isUsed;
+	}
+
+	public void drawMe(SpriteBatch batch) {
+		// TODO Auto-generated method stub
+		
 	}
 }

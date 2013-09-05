@@ -1,8 +1,12 @@
 package deco2800.arcade.raiden;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 
 public class PBullet extends Bullet{
-
+	private Texture bullet;
 
 	public PBullet(int x, int y, int width, int heigth) {
 		super(x, y, width, heigth);
@@ -26,5 +30,11 @@ public class PBullet extends Bullet{
 //			 }
 //		}
 		return -1;
+	}
+
+	public void drawMe(SpriteBatch batch) {
+		bullet =  new Texture(Gdx.files.classpath("resources/fire.png"));
+		batch.draw(bullet, x, y);
+		
 	}
 }

@@ -22,7 +22,11 @@ import deco2800.arcade.client.network.NetworkClient;
  */
 @ArcadeGame(id="Raiden")
 public class Raiden extends GameClient {
-	private PPlane pplane = new PPlane(250, 400, 50, 50);
+	public static Vector<Bang> bangs ;
+	public static Vector<EBullet> ebullets ;
+	public static Vector<PBullet> pbullets;
+	public static Vector<EPlane> eplanes;
+	public static PPlane pplane; 
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	// The names of the players: the local player is always players[0]
@@ -30,8 +34,8 @@ public class Raiden extends GameClient {
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;
+	public static final int SCREENHEIGHT = 800;
+	public static final int SCREENWIDTH = 1280;
 	private enum GameState {
 		READY,
 		INPROGRESS,
@@ -98,8 +102,12 @@ public class Raiden extends GameClient {
 		super.create();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		pplane = new PPlane();
 		batch = new SpriteBatch();
+		pplane = new PPlane(580, 0, 40, 40);
+		eplanes = new Vector<EPlane>();
+		pbullets = new Vector<PBullet>();
+		ebullets = new Vector<EBullet>();
+		bangs = new Vector<Bang>();
 	}
 
 	@Override

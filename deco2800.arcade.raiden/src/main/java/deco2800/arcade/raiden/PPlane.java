@@ -7,8 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 public class PPlane extends Plane{
-
+	private int direction;
+	public static boolean UP;
+	public static boolean DOWN;
+	public static boolean LEFT;
+	public static boolean RIGHT;
 	public static int life = 100;
+	public static boolean isFired;
 	private Texture Plane;
 	public PPlane(){
 		
@@ -25,6 +30,29 @@ public class PPlane extends Plane{
 		batch.draw(Plane, x, y);
 	}
 
+	public int getDirection() {
+		return direction;
+	}
+	
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+	
+	public void changeDirection(int direction){
+		this.direction = direction;
+	}
+	
+	public void pplaneMove(){
+		if (UP)
+			y -= Global.SPEED;
+		if (DOWN)
+			y += Global.SPEED;
+		if (LEFT)
+			x -= Global.SPEED;
+		if (RIGHT)
+			x += Global.SPEED;
+	}
+	
 	public boolean isAlive(){
 		if(PPlane.life <= 0){
 			PPlane.life = 0;
@@ -33,6 +61,4 @@ public class PPlane extends Plane{
 		else
 			return true;
 	}
-
-
 }

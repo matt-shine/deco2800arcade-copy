@@ -1,11 +1,7 @@
 package deco2800.arcade.raiden;
-import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
@@ -15,10 +11,8 @@ public class Bang {
 	private int y;
 	private int w;
 	private int h;
-	private JPanel jpanel;
 	public boolean isBang = false;
 	private int xpic;
-	private Image img = new ImageIcon("Image/flame.png").getImage();
 	
 	public Bang(int x, int y, int w, int h) {
 		super();
@@ -39,18 +33,7 @@ public class Bang {
 		timer.start();
 	}
 
-	
-	public JPanel getJpanel() {
-		return jpanel;
-	}
-
-
-	public void setJpanel(JPanel jpanel) {
-		this.jpanel = jpanel;
-	}
-
-
-	public void drawMe(Graphics g){
-		g.drawImage(img, x, y, x + w, y + h, xpic, 0, xpic + 66, 66, jpanel);
-	}
+//	public void drawMe(Graphics g){
+//		g.drawImage(img, x, y, x + w, y + h, xpic, 0, xpic + 66, 66);
+//	}
 }

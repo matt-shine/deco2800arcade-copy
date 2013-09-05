@@ -42,10 +42,9 @@ public class SnakeLadder extends GameClient {
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	private Texture backgroundBoard;
 	private List<Tile> tileList; 
-	private HashMap<String,String> ruleTextureMapping;
     private GamePlayer gamePlayer;
+    private Level lvl;
     private enum GameState {
 		READY,
 		INPROGRESS,
@@ -115,27 +114,14 @@ public class SnakeLadder extends GameClient {
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
 		
-		//loading of background game board
-		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
-		//loading player icon
-
-//		gamePlayer =new Texture(Gdx.files.classpath("assets/player.png"));
-
-		
-		//initialise rule texture mapping
-		ruleTextureMapping = new HashMap<String,String>();
-		ruleTextureMapping.put("+","plus_10.png");
-		ruleTextureMapping.put("*", "plus_20.png");
-		ruleTextureMapping.put("-", "minus_10.png");
-		ruleTextureMapping.put("/", "minus_20.png");
-		ruleTextureMapping.put("#", "stop.png");
-		
-		//loading game map
 		tileList = new ArrayList<Tile>();
-		loadMap(tileList,"assets/lvl1.txt");
-		System.out.println("success");
-		
-
+		//creating level and initialize the rule mapping
+		lvl =new Level1();
+		lvl.ini();
+	
+		//loading game map
+		lvl.loadMap(tileList, "assets/lvl1.txt");
+	
 		// create the game player
 		gamePlayer = new GamePlayer();
 
@@ -173,14 +159,8 @@ public class SnakeLadder extends GameClient {
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    //Begin batch
 	    batch.begin();
-		batch.draw(backgroundBoard,0,0);
-		for(Tile t:tileList)
-		{
-			if(!t.getRule().equals("."))
-			{
-				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
-			}
-		}	    
+		// render map for this level
+		lvl.renderMap(tileList, batch);
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
@@ -258,43 +238,5 @@ public class SnakeLadder extends GameClient {
 	@Override
 	public void resume() {
 		super.resume();
-	}
-	
-	private boolean loadMap(List<Tile> tileList, String filePath) {
-		FileHandle handle = Gdx.files.classpath(filePath);
-		BufferedReader file = handle.reader(2048);
-		
-		int counter = 0;
-		try {
-			String line = "";
-			while((line = file.readLine()) != null)
-			{
-				String[] tiles = line.split(";");
-				for(int i=0;i<tiles.length;i++)
-				{
-					int index =0;
-					if(counter%2==0)
-					{
-						index = (10-counter)*10-i;
-					}
-					else
-					{
-						index = (10-counter-1)*10+i+1;
-					}
-					Tile t = new TileLvl1(index,60,tiles[i]);
-					if(!t.getRule().equals("."))
-					{
-						t.setTexture(new Texture(Gdx.files.classpath("assets/"+ruleTextureMapping.get(t.getRule()))));
-					}
-					tileList.add(t);
-				}
-				counter++;
-			}
-			file.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
 	}
 }

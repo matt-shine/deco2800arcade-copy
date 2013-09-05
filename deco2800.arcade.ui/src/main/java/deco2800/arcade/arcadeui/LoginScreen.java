@@ -33,7 +33,7 @@ public class LoginScreen implements Screen {
 
         // Specify font, fontColor, cursor, selection, and background
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("PressStart2P_16");
+        textFieldStyle.font = skin.getFont("FreeSans_16");
         textFieldStyle.fontColor = Color.WHITE;
         textFieldStyle.cursor = skin2.newDrawable("white", Color.WHITE);
         textFieldStyle.selection = skin2.newDrawable("white", Color.WHITE);
@@ -45,7 +45,7 @@ public class LoginScreen implements Screen {
         textButtonStyle.down = skin2.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.checked = skin2.newDrawable("white", Color.WHITE);
         textButtonStyle.over = skin2.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("PressStart2P_16");
+        textButtonStyle.font = skin.getFont("FreeSans_16");
         skin2.add("default", textButtonStyle);
 
         stage = new Stage();

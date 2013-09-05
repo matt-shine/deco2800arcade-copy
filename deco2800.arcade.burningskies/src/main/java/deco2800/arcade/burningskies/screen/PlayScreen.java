@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.burningskies.entities.DemoPattern;
+import deco2800.arcade.burningskies.entities.PlayerShip;
 
 
 public class PlayScreen implements Screen
@@ -28,6 +30,7 @@ public class PlayScreen implements Screen
 	private int speed = 40;
 	
 	private DemoPattern test;
+	private PlayerShip player;
 	
 	public PlayScreen( BurningSkies game){
 		this.game = game;
@@ -51,6 +54,10 @@ public class PlayScreen implements Screen
     	// TO MAKE THINGS PRETTY FOR DEMO
     	test = new DemoPattern(stage, null);
     	test.start();
+    	
+    	Texture shiptext = new Texture(Gdx.files.internal("images/Jet1.png"));
+    	player = new PlayerShip(100, shiptext, new Vector2(400, 100));
+    	player.velocity(200);
     }
     
     @Override
@@ -89,6 +96,8 @@ public class PlayScreen implements Screen
     	batch.end();
     	
     	stage.act(delta);
+    	stage.addActor(player);
+    	player.act(delta);
     	stage.draw();
     }
     

@@ -12,8 +12,8 @@ public class PlayerShip extends Ship {
 	 * Construct a playable ship for the user(s).
 	 * @ensure health && hitbox1 && hitbox2 > 0
 	 */
-	public PlayerShip(int health, Texture image, Vector2 pos, Vector2 size) {
-		super(health, image, pos, size);
+	public PlayerShip(int health, Texture image, Vector2 pos) {
+		super(health, image, pos);
 	}
 	
 	/**
@@ -28,43 +28,57 @@ public class PlayerShip extends Ship {
 	 * Moves the player ship in the X direction.
 	 */
 	void moveX(float x) {
-		bounds.x += x;
+		position.x += x;
 	}
 	
 	/**
 	 * Moves the player ship in the Y direction.
 	 */
 	void moveY(float y) {
-		bounds.y += y;
+		position.y += y;
+	}
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		outBounds(delta);
 	}
 	
 	@Override
 	/**
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */
-	public void outBounds() {
-		System.out.println(bounds.x + "and" + bounds.y + "velo" + this.velocity);
-		if (bounds.x > BurningSkies.SCREENWIDTH - bounds.width) {
-			bounds.x = BurningSkies.SCREENWIDTH - bounds.width;
+	public void outBounds(float delta) {
+		if (position.x > BurningSkies.SCREENWIDTH + getImageWidth()) {
+			position.x = BurningSkies.SCREENWIDTH - getImageWidth();
 		}
-    	if (bounds.x < 0) bounds.x = 0;
+    	if (position.x < 0) position.x = 0;
     	
-		if (bounds.y > BurningSkies.SCREENHEIGHT - bounds.height) {
-			bounds.y = BurningSkies.SCREENHEIGHT - bounds.height;
+		if (position.y > BurningSkies.SCREENHEIGHT - getImageHeight()) {
+			position.y = BurningSkies.SCREENHEIGHT - getImageHeight();
 		}
-    	if (bounds.y < 0) bounds.y = 0;
+    	if (position.y < 0) position.y = 0;
     	
     	if(Gdx.input.isKeyPressed(Keys.UP)) {
-    		moveY(this.velocity * Gdx.graphics.getDeltaTime());
+    		moveY(this.velocity * delta);
     	}
     	if(Gdx.input.isKeyPressed(Keys.DOWN)) {
-    		moveY(-this.velocity * Gdx.graphics.getDeltaTime());
+    		moveY(-this.velocity * delta);
     	}
     	if(Gdx.input.isKeyPressed(Keys.LEFT)) {
-    		moveX(this.velocity * Gdx.graphics.getDeltaTime());
+    		moveX(this.velocity * delta);
     	}
     	if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
-    		moveX(-this.velocity * Gdx.graphics.getDeltaTime());
+    		moveX(-this.velocity * delta);
     	}
+	}
+	
+	/**
+	 * Fire a shot.
+	 */
+	public void shot(float delta) {
+		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+			//BulletPattern PBullet = new PBullet(stage, null)?? 
+		}
 	}
 }

@@ -137,6 +137,10 @@ public class ReplayListener extends Listener {
                 e.printStackTrace();
             }
 
+            System.out.println(response.nodes);
+            
+            response.serverOffset = 0;
+            
             connection.sendTCP(response);
             
             //TODO deal with the data that comes back.

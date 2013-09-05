@@ -14,6 +14,7 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
 
 /** 
@@ -60,6 +61,9 @@ public class ArcadeServer {
 	//private PlayerStorage playerStorage;
 	//private FriendStorage friendStorage;
 	
+	// Highscore database storage service
+	private HighscoreDatabase highscoreDatabase;
+	
 	/**
 	 * @return creditStorage service
 	 */
@@ -77,12 +81,15 @@ public class ArcadeServer {
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
+		this.highscoreDatabase = new HighscoreDatabase();
 		this.packServ = new PackageServer();
 		
 		//initialize database classes
 		try {
 			creditStorage.initialise();
 			//playerStorage.initialise();
+			
+			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -17,10 +17,9 @@ task(runArcade, dependsOn: "classes", type: JavaExec) {
    
     String contents = file('games.txt').getText('UTF-8');
     List games = contents.split('[\\r\\n]+');
-    System.out.println(games);
     for (String game : games) {
-        if (game.charAt(0) != "#" && game.charAt(0) != "\n") {
-            //Classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade." + game).sourceSets.main.runtimeClasspath
+        if (game.charAt(0) != "#" && game.charAt(0) != "[\\r\\n]+") {
+            classpath += sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade." + game).sourceSets.main.runtimeClasspath
         }
     }
 }

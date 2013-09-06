@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Image;
 
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -25,6 +26,7 @@ import javax.imageio.ImageIO;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -44,7 +46,7 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
 @ArcadeGame(id = "chess")
-public class Chess extends GameClient implements InputProcessor {
+public class Chess extends GameClient implements InputProcessor, UIOverlay {
 
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
@@ -1045,6 +1047,18 @@ public class Chess extends GameClient implements InputProcessor {
 			batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
 			batch.end();
 		}
+	}
+
+	@Override
+	public void setListeners(Screen l) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addPopup(PopupMessage p) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

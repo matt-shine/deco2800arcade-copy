@@ -293,6 +293,11 @@ public class SnakeLadder extends GameClient {
 		    	
 		    case INPROGRESS: 
 		    	gamePlayer.move(Gdx.graphics.getDeltaTime());
+				if(gamePlayer.bounds.x>=(6*gamePlayer.velocity.x))
+			    {
+				    	stopPoint();
+			    }
+
 		    	//If the player reaches the end of each line , move up to another line
 		    	if (gamePlayer.bounds.x >= (600-20f) || gamePlayer.bounds.x <=0){
 		    		gamePlayer.moveUp();
@@ -319,8 +324,21 @@ public class SnakeLadder extends GameClient {
 		
 	}
 	
-	private void endPoint(int winner) {
+	private void stopPoint() {
 		gamePlayer.reset();
+		// If we've reached the victory point then update the display
+		if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {	
+		   
+		    gameState = GameState.GAMEOVER;
+		    //Update the game state to the server
+		    //networkClient.sendNetworkObject(createScoreUpdate());
+		   
+		} else {
+			// No winner yet, get ready for another point
+			gameState = GameState.READY;
+			statusMessage = "Throw the dice again";
+		}
+
 	}
 	
 	private void startPoint() {

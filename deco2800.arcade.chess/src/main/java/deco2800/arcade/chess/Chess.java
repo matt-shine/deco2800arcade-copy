@@ -802,7 +802,7 @@ public class Chess extends GameClient implements InputProcessor {
 						.indexOf(board.whiteBishop2));
 			} else if (piece.equals(board.whiteKnight2)) {
 				int gravePos = board.whiteGraveyard.indexOf(whiteKnight2);
-				whiteKnight2Pos[0] = (horizOff - 59);
+				whiteKnight2Pos[0] = (horizOff + 512);
 				whiteKnight2Pos[1] = (verticOff + pieceVerticOff + 59 * board.whiteGraveyard
 						.indexOf(board.whiteKnight2));
 			} else if (piece.equals(board.whiteRook2)) {

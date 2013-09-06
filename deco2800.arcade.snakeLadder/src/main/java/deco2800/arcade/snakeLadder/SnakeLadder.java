@@ -72,6 +72,7 @@ public class SnakeLadder extends GameClient {
 	private String statusMessage;
 	
 	private Label diceLabel;
+	private Dice dice;
 	
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
@@ -197,34 +198,34 @@ public class SnakeLadder extends GameClient {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        table.right();
+        table.top().left();
         
-        //adding header
-        table.add(new Label("Players' Name", skin)).width(200).top().right();
-        table.add(new Label("Players' Score", skin)).width(200).top().right();
-        table.row();
-        
-        //adding player name and score to GUI
+        //adding player name
+        table.add(new Label("Players' Name", skin)).width(200).top().left();
         for(int i = 0; i < players.length; i++){
-        	table.add(userLabels.get(i)).width(200).top().right();
-        	table.add(scoreLabels.get(i)).width(200).top().right();
-        	table.row();
-	    }        
+        	table.add(userLabels.get(i)).width(200).top().left();
+	    } 
+        table.row();
+        //add player score
+        table.add(new Label("Players' Score", skin)).width(200).top().left();
+        for(int i = 0; i < players.length; i++){
+        	table.add(scoreLabels.get(i)).width(200).top().left();
+	    } 
+        table.row();     
         //adding dice button to GUI
         table.add(diceButton).width(100).height(50).pad(10);
         table.row();
         
         //label for the dice roll
-        diceLabel = new Label ("x",skin);        
-        table.add(diceLabel).width(100).height(50).pad(10);
+        //diceLabel = new Label ("x",skin);        
+        //table.add(diceLabel).width(100).height(50).pad(10);
+        dice = new Dice();
         
-        //TODO: button should be disabled when its others player turn
+        //TODO: button should be disabled when its others player turn or when player is on the move
         //diceButton listener for when the button is pressed
         diceButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-            	Random randomGenerator = new Random();
-            	int randomInt = randomGenerator.nextInt(6)+1;
-            	diceLabel.setText(""+randomInt);
+            	dice.rollDice();
             }
         });
  
@@ -265,6 +266,7 @@ public class SnakeLadder extends GameClient {
 		lvl.renderMap(tileList, batch);
 		//test
 		batch.draw(ladder,tileList[5].getCoorX(), tileList[5].getCoorY());
+		dice.renderDice(batch);
 
 		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)

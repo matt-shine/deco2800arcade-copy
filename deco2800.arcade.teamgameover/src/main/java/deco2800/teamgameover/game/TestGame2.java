@@ -1,6 +1,9 @@
 package deco2800.teamgameover.game;
 
-import com.badlogic.gdx.Game;
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Player;
 
 /** The extension of Game class that is opened by the desktop application.
  * Will need to be altered to extend GameClient instead.
@@ -9,10 +12,16 @@ import com.badlogic.gdx.Game;
  * @author Game Over
  *
  */
-public class TestGame2 extends Game {
+@ArcadeGame(id = "teamgameover")
+public class TestGame2 extends GameClient {
 
       
-    public SplashScreen getSplashScreen() {
+    public TestGame2(Player player, NetworkClient networkClient) {
+		super(player, networkClient);
+		// TODO Auto-generated constructor stub
+	}
+
+	public SplashScreen getSplashScreen() {
     	return new SplashScreen(this);
     }
 	
@@ -49,5 +58,11 @@ public class TestGame2 extends Game {
 
 	@Override
 	public void resume() {
+	}
+
+	@Override
+	public deco2800.arcade.model.Game getGame() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

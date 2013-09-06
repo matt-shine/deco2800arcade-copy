@@ -23,20 +23,23 @@ import static com.badlogic.gdx.graphics.glutils.ShapeRenderer
 		.ShapeType.Rectangle;
 
 public class TileViewModel extends Group {
-	private static final String LOG = TileViewModel.class.getSimpleName();
-	private static final TextureRegion BRICK_REGION;
-	private static final TextureRegion PICK_REGION;
-	private static final TextureRegion TNT_REGION;
-	private static final TextureRegion UNKNOWN_REGION;
+	static final TextureRegion PILE_BRICK_REGION;
+	static final TextureRegion PICK_REGION;
+	static final TextureRegion TNT_REGION;
+	static final TextureRegion UNKNOWN_REGION;
+	static final TextureRegion BRICK_REGION;
 
 	static {
 		Texture texture = new Texture(Gdx.files.internal("item.png"));
 
-		BRICK_REGION = new TextureRegion(texture, 0, 0, 256, 256);
+		PILE_BRICK_REGION = new TextureRegion(texture, 0, 0, 256, 256);
 		PICK_REGION = new TextureRegion(texture, 256, 0, 256, 256);
 		TNT_REGION = new TextureRegion(texture, 512, 0, 256, 256);
 		UNKNOWN_REGION = new TextureRegion(texture, 768, 0, 256, 256);
+		BRICK_REGION = new TextureRegion(texture, 1024, 0, 256, 256);
 	}
+
+	private static final String LOG = TileViewModel.class.getSimpleName();
 
 	/** The tile model. */
 	private final TileModel model;
@@ -114,7 +117,7 @@ public class TileViewModel extends Group {
 
 			switch (item.getType()) {
 			case BRICK:
-				region = BRICK_REGION;
+				region = PILE_BRICK_REGION;
 				break;
 			case PICK:
 				region = PICK_REGION;

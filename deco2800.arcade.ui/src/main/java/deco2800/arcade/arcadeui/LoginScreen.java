@@ -32,7 +32,6 @@ public class LoginScreen implements Screen {
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin2.newDrawable("white", Color.DARK_GRAY);
         textButtonStyle.down = skin2.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin2.newDrawable("white", Color.WHITE);
         textButtonStyle.over = skin2.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
         skin2.add("default", textButtonStyle);

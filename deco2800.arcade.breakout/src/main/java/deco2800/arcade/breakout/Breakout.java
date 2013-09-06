@@ -21,6 +21,7 @@ import deco2800.arcade.breakout.PongBall;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.ArcadeSystem;
 
 /**
  * 
@@ -42,10 +43,14 @@ public class Breakout extends GameClient {
 	private PongBall ball;
 	private int score;
 	private int lives;
+
 	private int[] sequence = { 19, 19, 20, 20, 21, 22, 21, 22, 30, 29 };
 	private int currentButton = 0;
 	public int bumpCount = 0;
 	public int brickBreak = 0;
+
+	private String gameoverstatus;
+
 
 	private Texture background;
 
@@ -131,6 +136,9 @@ public class Breakout extends GameClient {
 		score = 0;
 		lives = 3;
 		gameState = GameState.READY;
+		gameState = GameState.READY;
+		status = "Click to start!";
+
 
 	}
 
@@ -227,11 +235,25 @@ public class Breakout extends GameClient {
 		font.draw(batch, "player " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);
 		font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
 				SCREENHEIGHT - 20);
-		font.draw(batch, "Score " + Integer.toString(score),
-				SCREENWIDTH * 3 / 4, SCREENHEIGHT - 20);
-		if (status != null) {
-			font.draw(batch, status, SCREENWIDTH / 2, SCREENHEIGHT / 2);
+
+		font.draw(batch, "Score " + Integer.toString(score), SCREENWIDTH*3/4, SCREENHEIGHT-20);
+		if (gameoverstatus!= null) {
+	    	font.setColor(Color.WHITE);
+	    	
+	    	font.draw(batch, gameoverstatus, SCREENWIDTH/2-250, SCREENHEIGHT/2);
 		}
+		
+		
+		
+		if (status != null) {
+	    	font.setColor(Color.WHITE);
+	    	
+	    	font.draw(batch, status, SCREENWIDTH/2-80, SCREENHEIGHT/2-60);
+	    	}
+	    	if (gameState == GameState.GAMEOVER) {
+	    		font.draw(batch, "Click to exit", SCREENWIDTH/2 - 80, SCREENHEIGHT/2 - 60);
+	    	}
+	    
 		batch.end();
 
 		switch (gameState) {
@@ -322,7 +344,6 @@ public class Breakout extends GameClient {
 				bump.dispose();
 				bumpCount++;
 				ArcadeSystem.goToGame(ArcadeSystem.UI);
-
 			}
 
 			break;
@@ -340,6 +361,7 @@ public class Breakout extends GameClient {
 		ball.randomizeVelocity();
 		status = null;
 		gameState = GameState.INPROGRESS;
+		status=null;
 
 	}
 
@@ -351,6 +373,10 @@ public class Breakout extends GameClient {
 		score += lives * 5;
 		status = "Congratulations! " + player + " your final score is: "
 				+ score;
+		gameoverstatus="Congratulations " + player
+				+ " your final score is: " + score;
+		System.out.println("Congratulations " + player
+				+ " your final score is: " + score);
 		if (lives == 3) {
 			incrementAchievement("breakout.prefect");
 		} else if (lives == 0) {
@@ -383,6 +409,10 @@ public class Breakout extends GameClient {
 			gameState = GameState.READY;
 		} else {
 			status = "Bad luck " + player + " your final score is: " + score;
+			gameoverstatus="Bad luck " + player + " your final score is: "
+					+ score;
+			System.out.println("Bad luck " + player + " your final score is: "
+					+ score);
 			gameState = GameState.GAMEOVER;
 		}
 

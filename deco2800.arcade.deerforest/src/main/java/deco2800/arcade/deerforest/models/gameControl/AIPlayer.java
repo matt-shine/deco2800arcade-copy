@@ -3,7 +3,7 @@ package deco2800.arcade.deerforest.models.gameControl;
 import deco2800.arcade.deerforest.models.cardContainers.Deck;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
-public class AIPlayer extends Player {
+public class AIPlayer extends DeerForestPlayer {
 
 	//Clearly have all methods of Player just implemented slightly differently
 

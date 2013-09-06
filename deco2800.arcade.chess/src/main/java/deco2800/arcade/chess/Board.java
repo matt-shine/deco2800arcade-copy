@@ -9,9 +9,14 @@ import deco2800.arcade.chess.pieces.*;
 public class Board{
 
 	FixedSizeList<FixedSizeList<Piece>> Board_State;
+	//used to check if moves will move you into check without altering actual board
 	ArrayList<Piece> whiteGraveyard, blackGraveyard;
+	//stores all moves pieces have made
+	ArrayList<int[]> moves;
+	ArrayList<Piece> pieceMoved;
 	//true = blacks turn false = whites turn
 	private boolean turn;
+	
 
 	// Initialise pieces
 	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
@@ -36,6 +41,8 @@ public class Board{
 	public Board() {
 		turn = false;
 		Board_State = new FixedSizeList<FixedSizeList<Piece>>();
+		moves = new ArrayList<int[]>();
+		pieceMoved = new ArrayList<Piece>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
 		nullPiece = new Null();
@@ -58,7 +65,6 @@ public class Board{
 				row.add(d, nullPiece);
 			}
 		}
-		
 	}
 
 	/**
@@ -197,6 +203,7 @@ public class Board{
 	 */
 	public List<int[]> allowedMoves(Piece piece) {
 		int[] currentPos = findPiece(piece);
+		
 
 		List<int[]> possibleMoves = piece.possibleMoves(currentPos);
 		List<int[]> allowableMoves = new ArrayList<int[]>();
@@ -327,8 +334,12 @@ public class Board{
 		int x = newPosition[0];
 		int y = newPosition[1];
 		boolean kingCastleSwap = false;
+		boolean inCheck;
+		
+		inCheck = checkForCheck(whoseTurn());
 
 		List<int[]> allowedMoves = allowedMoves(piece);
+		
 
 		boolean allowed = false;
 		for (int i = 0; i < allowedMoves.size(); i++) {
@@ -412,11 +423,37 @@ public class Board{
 			}
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
+			moves.add(newPosition);
+			pieceMoved.add(piece);
+			inCheck = checkForCheck(whoseTurn());
+			//revert the move if in check
+			if (inCheck) {
+				onSquare.reActivate();
+				if (onSquare.getTeam()) {
+					blackGraveyard.remove(onSquare);
+				} else {
+					whiteGraveyard.remove(onSquare);
+				}
+				Board_State.get(oldPos[0]).add(oldPos[1], piece);
+				Board_State.get(x).add(y, onSquare);
+				removeMove();
+				return false;
+			}
 			this.nextTurn();
 			return true;
 		} else {
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
+			moves.add(newPosition);
+			pieceMoved.add(piece);
+			inCheck = checkForCheck(whoseTurn());
+			if (inCheck) {
+				//revert move if in check
+				Board_State.get(oldPos[0]).add(oldPos[1], piece);
+				Board_State.get(x).add(y, nullPiece);
+				removeMove();
+				return false;
+			}
 			this.nextTurn();
 			return true;
 		}
@@ -441,6 +478,14 @@ public class Board{
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Undos last move
+	 */
+	private void removeMove() {
+		moves.remove(moves.size()-1);
+		pieceMoved.remove(pieceMoved.size()-1);
 	}
 
 	/**
@@ -961,6 +1006,7 @@ public class Board{
 		return false;
 	}
 	
+	
 	/**
 	 * Initialises all pieces on the board
 	 */
@@ -1050,6 +1096,7 @@ public class Board{
 		row.add(6, blackPawn7);
 		row.add(7, blackPawn8);
 	}
+
 
 	/**
 	 * Basic test that moves pieces for to compare to actual board

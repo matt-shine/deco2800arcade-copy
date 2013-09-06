@@ -41,7 +41,7 @@ public class ArcadeUI extends GameClient {
 		if (player == null) {
 			current = login = new LoginScreen();
 		} else {
-			current = home = new HomeScreen();
+			current = store = new StoreScreen();
 		}
 		
 		this.setScreen(current);

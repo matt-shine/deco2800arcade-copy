@@ -3,11 +3,11 @@ package deco2800.teamgameover.world;
 import com.badlogic.gdx.utils.Array;
 
 import deco2800.teamgameover.model.MovableEntity;
-import deco2800.teamgameover.model.Ship;
+import deco2800.teamgameover.model.Player;
 
 public abstract class LevelScenes {
-	protected Ship ship;
-	public LevelScenes(Ship ship) {
+	protected Player ship;
+	public LevelScenes(Player ship) {
 		this.ship = ship;
 		
 	}

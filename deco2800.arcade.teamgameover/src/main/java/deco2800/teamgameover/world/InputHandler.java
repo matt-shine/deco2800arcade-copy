@@ -6,15 +6,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import deco2800.teamgameover.model.Bullet;
-import deco2800.teamgameover.model.Ship;
-import deco2800.teamgameover.model.Ship.State;
+import deco2800.teamgameover.model.Player;
+import deco2800.teamgameover.model.Player.State;
 import deco2800.teamgameover.model.Sword;
 
 
 public class InputHandler implements InputProcessor{
 
 	World world;
-	Ship ship;
+	Player ship;
 	Sword sword;
 	Vector2 vec2Touch = new Vector2();
 	private boolean acceptInput;
@@ -35,7 +35,7 @@ public class InputHandler implements InputProcessor{
 		switch(keycode){
 			case Keys.LEFT:
 				if (acceptInput) {
-					ship.getVelocity().x = -Ship.SPEED;
+					ship.getVelocity().x = -Player.SPEED;
 					if (ship.getState() != State.WALL) {
 						ship.setState(State.WALK);
 						ship.setFacingRight(false);
@@ -45,7 +45,7 @@ public class InputHandler implements InputProcessor{
 
 			case Keys.RIGHT:
 				if (acceptInput) {
-					ship.getVelocity().x = Ship.SPEED;
+					ship.getVelocity().x = Player.SPEED;
 					if (ship.getState() != State.WALL) {
 						ship.setState(State.WALK);
 						ship.setFacingRight(true);
@@ -64,8 +64,8 @@ public class InputHandler implements InputProcessor{
 							ship.setFacingRight(!ship.isFacingRight());
 						}
 					}
-					ship.getVelocity().y = Ship.JUMP_VELOCITY;
-					ship.setState(Ship.State.JUMP);
+					ship.getVelocity().y = Player.JUMP_VELOCITY;
+					ship.setState(Player.State.JUMP);
 					ship.resetJumpTime();
 				}
 				break;

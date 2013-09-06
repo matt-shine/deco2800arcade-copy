@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Ship extends MovableEntity{
+public class Player extends MovableEntity{
 	
 	public enum State {
 		IDLE, WALK, DASH, JUMP, FALL, DEATH, DASH_JUMP, WALL
@@ -31,7 +31,7 @@ public class Ship extends MovableEntity{
 	float jumpTime = 0;
 	float wallTime = WALL_ATTACH_TIME;
 	
-	public Ship(Vector2 pos) {
+	public Player(Vector2 pos) {
 		super (SPEED, 0, pos, WIDTH, HEIGHT);
 	}
 
@@ -170,7 +170,7 @@ public class Ship extends MovableEntity{
 			setState(State.JUMP);
 		}
 	}
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		//System.out.println("Before suepr update " + velocity.x);
 		super.update(ship);
 		//System.out.println("After super update " + velocity.x);

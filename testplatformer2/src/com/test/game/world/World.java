@@ -59,6 +59,8 @@ public class World {
 	private LevelScenes levelScenes;
 	private InputHandler inputHandler;
 	
+	private boolean isPaused;
+	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
 	//WorldRenderer wr;
@@ -77,6 +79,8 @@ public class World {
 	
 	
 	public void update() {
+		//If game is in paused state immediately return
+		if (isPaused) return;
 		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
 		//System.out.println("State before ship = "+ship.getState());
 		ship.update(ship);		
@@ -518,6 +522,15 @@ public class World {
 		
 	}
 	
+	public boolean isPaused() {
+		return isPaused;
+	}
+	
+	public void togglePause() {
+		if (isPaused) isPaused = false;
+		else isPaused = true;
+	}
+	
 	public float getLowestClearPosition(float x) {
 		return 0f;
 	}
@@ -575,6 +588,8 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		//resetCamera();
 		rank = 20;
+		
+		isPaused = false;
 		
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);

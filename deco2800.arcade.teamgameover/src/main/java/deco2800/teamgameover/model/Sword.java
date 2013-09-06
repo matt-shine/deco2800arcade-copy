@@ -36,7 +36,7 @@ public class Sword extends MovableEntity {
 	}
 	
 	@Override
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		super.update(ship);
 		
 		frame += Gdx.graphics.getDeltaTime();

@@ -24,7 +24,7 @@ import deco2800.teamgameover.model.Enemy;
 import deco2800.teamgameover.model.Follower;
 import deco2800.teamgameover.model.MovableEntity;
 import deco2800.teamgameover.model.MovablePlatform;
-import deco2800.teamgameover.model.Ship;
+import deco2800.teamgameover.model.Player;
 import deco2800.teamgameover.model.SoldierEnemy;
 import deco2800.teamgameover.model.Sword;
 import deco2800.teamgameover.model.Walker;
@@ -44,7 +44,7 @@ public class WorldRenderer {
 	
 	World world;
 	SpriteBatch batch;
-	Ship ship;
+	Player ship;
 	//Follower follower;
 	Walker walker;
 	private ParallaxCamera cam;

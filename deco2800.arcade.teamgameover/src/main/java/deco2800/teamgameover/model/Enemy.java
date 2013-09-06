@@ -63,6 +63,6 @@ public abstract class Enemy extends MovableEntity{
 		
 	}
 	
-	public abstract void advance(float delta, Ship ship, float rank);
+	public abstract void advance(float delta, Player ship, float rank);
 
 }

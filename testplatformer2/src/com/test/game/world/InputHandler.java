@@ -101,6 +101,10 @@ public class InputHandler implements InputProcessor{
 							new Vector2( shootDir ,0) ));
 				}
 				break;
+				
+			case Keys.P:
+				world.togglePause();
+				break;
 
 			default:
 				break;

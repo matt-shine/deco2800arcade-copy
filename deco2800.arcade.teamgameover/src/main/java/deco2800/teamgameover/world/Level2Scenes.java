@@ -3,11 +3,11 @@ package deco2800.teamgameover.world;
 import com.badlogic.gdx.utils.Array;
 
 import deco2800.teamgameover.model.MovableEntity;
-import deco2800.teamgameover.model.Ship;
+import deco2800.teamgameover.model.Player;
 
 public class Level2Scenes extends LevelScenes {
 
-	public Level2Scenes(Ship ship) {
+	public Level2Scenes(Player ship) {
 		super(ship);
 		// TODO Auto-generated constructor stub
 	}

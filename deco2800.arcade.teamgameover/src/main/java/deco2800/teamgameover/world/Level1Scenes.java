@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 import deco2800.teamgameover.model.MovableEntity;
 import deco2800.teamgameover.model.MovablePlatform;
-import deco2800.teamgameover.model.Ship;
+import deco2800.teamgameover.model.Player;
 
 public class Level1Scenes extends LevelScenes{
 	private Texture copterTex;
@@ -21,7 +21,7 @@ public class Level1Scenes extends LevelScenes{
 	
 	private int playState;
 	
-	public Level1Scenes (Ship ship) {
+	public Level1Scenes (Player ship) {
 		super(ship);
 		copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -67,13 +67,13 @@ public class Level1Scenes extends LevelScenes{
 		if (playState == 0) {
 			if (!copter.isMoving()) {
 				playState = 1;
-				ship.getVelocity().x = Ship.SPEED;
+				ship.getVelocity().x = Player.SPEED;
 			}
 		}
 		if (playState == 1 && ship.getPosition().x > 48.5f) {
 			playState =2;
-			ship.getVelocity().y = Ship.JUMP_VELOCITY;
-			ship.setState(Ship.State.JUMP);
+			ship.getVelocity().y = Player.JUMP_VELOCITY;
+			ship.setState(Player.State.JUMP);
 			ship.resetJumpTime();
 		}
 		

@@ -16,6 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import deco2800.teamgameover.world.Sounds;
 
+/**
+ * The main menu screen. 
+ *
+ */
 public class MainMenu extends AbstractScreen{
 	
 	Stage stage;
@@ -68,13 +72,13 @@ public class MainMenu extends AbstractScreen{
 			style.up = skin.getDrawable("buttonopen");
 			style.down = skin.getDrawable("buttonclose" + buttonframe/3);
 			style.font = blackFont;
-			button.setStyle(style);
-			
+			button.setStyle(style);	
 		}
-		
-		
 	}
 	
+	/**
+	 * 
+	 */
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
@@ -115,12 +119,6 @@ public class MainMenu extends AbstractScreen{
 		label.setAlignment(Align.center);
 		
 		stage.addActor(button);
-		stage.addActor(label);
-		
-		
-		
+		stage.addActor(label);	
 	}
-	
-	
-
 }

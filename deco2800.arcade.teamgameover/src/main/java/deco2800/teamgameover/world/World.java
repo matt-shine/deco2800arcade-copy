@@ -23,7 +23,7 @@ import deco2800.teamgameover.model.MovableEntity;
 import deco2800.teamgameover.model.MovablePlatform;
 import deco2800.teamgameover.model.MovablePlatformSpawner;
 import deco2800.teamgameover.model.RandomizedEnemySpawner;
-import deco2800.teamgameover.model.Ship;
+import deco2800.teamgameover.model.Player;
 import deco2800.teamgameover.model.Sword;
 import deco2800.teamgameover.model.Walker;
 
@@ -38,7 +38,7 @@ public class World {
 	
 	
 	private Boolean firstUpdate;
-	private Ship ship;
+	private Player ship;
 	Rectangle sRec;
 	private Sword sword;
 	private Array<Enemy> enemies;
@@ -519,7 +519,7 @@ public class World {
 		return 0f;
 	}
 	/* ----- Getter methods ----- */
-	public Ship getShip() {
+	public Player getShip() {
 		return ship;
 	}
 	
@@ -561,7 +561,7 @@ public class World {
 	public void init() {
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Ship(new Vector2(20f, 6));
+		ship = new Player(new Vector2(20f, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

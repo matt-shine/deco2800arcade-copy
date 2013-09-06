@@ -320,6 +320,10 @@ public class WorldRenderer {
 		}
 		
 		batch.end();
+		//If game is paused render pause overlay
+		if (world.isPaused()) {
+			
+		}
 	}
 	
 	private void drawDebugAids() {

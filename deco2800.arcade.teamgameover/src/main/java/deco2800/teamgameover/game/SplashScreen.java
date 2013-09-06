@@ -11,7 +11,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
+/**
+ * Splash screen displayed when game is started.
+ * @author Brendan
+ *
+ */
 public class SplashScreen extends AbstractScreen {
 	private Texture splashTex;
 	private TextureRegion splashTexRegion;

@@ -19,7 +19,7 @@ public class Bullet extends MovableEntity {
 	}
 	
 	@Override
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		velocity.y = (float)Math.cos(position.x);
 		//position.add(velocity.tmp().mul(Gdx.graphics.getDeltaTime() * speed));
 		position.add(velocity.scl(Gdx.graphics.getDeltaTime() * speed));

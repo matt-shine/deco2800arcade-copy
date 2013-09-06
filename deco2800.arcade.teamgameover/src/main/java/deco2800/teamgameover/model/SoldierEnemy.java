@@ -48,7 +48,7 @@ public class SoldierEnemy extends Enemy {
 	}
 
 	@Override
-	public void advance(float delta, Ship ship, float rank) {
+	public void advance(float delta, Player ship, float rank) {
 		super.update(ship);
 		
 		if (Math.abs(velocity.x) < 1) {
@@ -121,7 +121,7 @@ public class SoldierEnemy extends Enemy {
 		}
 	}
 
-	public void pickNewState(Ship ship) {
+	public void pickNewState(Player ship) {
 		float rand = MathUtils.random(1f);
 		//will need to make it so the same state doesn't get picked twice
 		float walkChance = 0.4f;

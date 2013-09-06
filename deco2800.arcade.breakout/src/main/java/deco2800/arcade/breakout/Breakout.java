@@ -19,6 +19,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.breakout.PongBall;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.ArcadeSystem;
 
 /**
  * 
@@ -40,6 +41,9 @@ public class Breakout extends GameClient {
 	private PongBall ball;
 	private int score;
 	private int lives;
+	private String status;
+	private String gameoverstatus;
+
 	int[] sequence = {19, 19, 20, 20, 21, 22, 21, 22, 30, 29};
 	int currentButton = 0;
 	
@@ -114,6 +118,9 @@ public class Breakout extends GameClient {
 		score = 0;
 		lives = 3;
 		gameState = GameState.READY;
+		gameState = GameState.READY;
+		status = "Click to start!";
+
 
 	}
 	/*
@@ -203,6 +210,23 @@ public class Breakout extends GameClient {
 		font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
 				SCREENHEIGHT - 20);
 		font.draw(batch, "Score " + Integer.toString(score), SCREENWIDTH*3/4, SCREENHEIGHT-20);
+		if (gameoverstatus!= null) {
+	    	font.setColor(Color.WHITE);
+	    	
+	    	font.draw(batch, gameoverstatus, SCREENWIDTH/2-250, SCREENHEIGHT/2);
+		}
+		
+		
+		
+		if (status != null) {
+	    	font.setColor(Color.WHITE);
+	    	
+	    	font.draw(batch, status, SCREENWIDTH/2-80, SCREENHEIGHT/2-60);
+	    	}
+	    	if (gameState == GameState.GAMEOVER) {
+	    		font.draw(batch, "Click to exit", SCREENWIDTH/2 - 80, SCREENHEIGHT/2 - 60);
+	    	}
+	    
 		batch.end();
 
 		switch (gameState) {
@@ -281,6 +305,7 @@ public class Breakout extends GameClient {
 		case GAMEOVER:
 			if (Gdx.input.isTouched()) {
 				gameOver();
+				ArcadeSystem.goToGame(ArcadeSystem.UI);
 			}
 
 			break;
@@ -297,6 +322,7 @@ public class Breakout extends GameClient {
 	private void Start() {
 		ball.randomizeVelocity();
 		gameState = GameState.INPROGRESS;
+		status=null;
 
 	}
 
@@ -306,6 +332,8 @@ public class Breakout extends GameClient {
 	 */
 	private void win() {
 		score += lives * 5;
+		gameoverstatus="Congratulations " + player
+				+ " your final score is: " + score;
 		System.out.println("Congratulations " + player
 				+ " your final score is: " + score);
 		if (lives == 3) {
@@ -339,6 +367,8 @@ public class Breakout extends GameClient {
 			score -= 10;
 			gameState = GameState.READY;
 		} else {
+			gameoverstatus="Bad luck " + player + " your final score is: "
+					+ score;
 			System.out.println("Bad luck " + player + " your final score is: "
 					+ score);
 			gameState = GameState.GAMEOVER;

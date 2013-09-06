@@ -252,13 +252,16 @@ public class PlayerModel {
 			tile.buildWall(this, playerDirection);
 			break;
 		case USE_PICK:
-			if (tile.destroyWall(this, playerDirection))
+			if (tile.destroyWall(this, playerDirection)) {
 				pick = null;
+				switchAction();
+			}
 			break;
 		case USE_TNT:
 			tnt = null;	// exploded
 			for (int dir = 0; dir < 4; dir++)
 				tile.destroyWall(this, dir);
+			switchAction();
 			break;
 		}
 	}

@@ -52,7 +52,7 @@ public abstract class Ship  extends Image {
 	}
 	
 	/**
-	 * What do do every frame. Perhaps bounds checking etc.
+	 * What to do every frame. Perhaps bounds checking etc.
 	 * You really want to override this.
 	 */
 	void onRender(float delta) {

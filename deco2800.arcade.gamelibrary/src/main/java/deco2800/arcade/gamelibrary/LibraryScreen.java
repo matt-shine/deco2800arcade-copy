@@ -69,7 +69,7 @@ public class LibraryScreen implements Screen {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
-       
+
         skin.add("white", new Texture(pixmap));
         skin.add("default", new BitmapFont());
 
@@ -93,6 +93,14 @@ public class LibraryScreen implements Screen {
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
         skin.add("default", textButtonStyle);
+
+        TextButton.TextButtonStyle playButtonStyle = new TextButton.TextButtonStyle();
+        playButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
+        playButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
+        playButtonStyle.over = skin.newDrawable("white", Color.DARK_GRAY);
+        playButtonStyle.up = skin.newDrawable("white", new Color(135, 103, 140, 100));
+        playButtonStyle.font = skin.getFont("default");
+        skin.add("playButton", playButtonStyle);
     	
     }
 
@@ -134,18 +142,18 @@ public class LibraryScreen implements Screen {
 
         }
 
-        Actor playButton = new TextButton("Play", skin);
+        Actor playButton = new TextButton("Play", skin, "playButton");
         playButton.setWidth(50);
         playButton.setHeight(40);
-        playButton.setX(280);
+        playButton.setX(380);
         playButton.setY(580);
         playButton.addListener(new PlayButtonActionHandler(this));
         
         label = new Label(description, skin);
         label.setWidth(150);
         label.setHeight(40);
-        label.setY(530);
         label.setX(290);
+        label.setY(530);
         
         storeButton = new TextButton("Game Store", skin);
         storeButton.setWidth(200);

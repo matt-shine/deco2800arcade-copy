@@ -171,6 +171,7 @@ public class ForumStorage {
 		if (pid < 0) {
 			return null;
 		}
+
 		/* SELECT query */
 		try {
 			con.setAutoCommit(true);
@@ -304,7 +305,6 @@ public class ForumStorage {
 		} catch (Exception e) {
 			return null;
 		}
-		/* Retrieve all parent threads from DB */
 		try {
 			PreparedStatement st = con.prepareStatement(selectAll);
 			ResultSet rs = st.executeQuery();

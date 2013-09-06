@@ -17,6 +17,7 @@ public class GamePlayer {
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
 	//private Texture player;
 	private int coordinate=-1;
+	private int[] scores = new int[2];
 	
 	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
 	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
@@ -98,28 +99,46 @@ public class GamePlayer {
     }
     
     public void initializeVelocity() {
-    	int n=0;
+//    	int n=0;
+//    	
+//    	if(bounds.y==120*n)
+//    	{
+//		velocity.x = 60f;
+//		velocity.y=0;
+//		n++;
+//    	}
+//    	else
+//    	{
+//    		velocity.x=-60f;
+//    		velocity.y=0;
+//    	}
     	
-    	if(bounds.y==120*n)
-    	{
-		velocity.x = 60f;
-		velocity.y=0;
-		n++;
-    	}
-    	else
-    	{
-    		velocity.x=-60f;
-    		velocity.y=0;
-    	}
+    	if(bounds.y==0 || bounds.y==120 || bounds.y==240 || bounds.y==360 || bounds.y==480){
+			velocity.x = 60;
+		}
+		else if(bounds.y==60 || bounds.y==180 || bounds.y==300 || bounds.y==420 || bounds.y==540)
+		{
+			velocity.x = -60;
+		}
     	
 	}
+    
    public int getDnumber(int diceNumber){
     	coordinate+=diceNumber;
     	return coordinate;
     }
+   
    public int newposition()
    {
 	   return coordinate;
    }
    
+   public void score(int winner){
+		scores[winner]++;
+	}
+
+	public void initialScore(){
+		scores[0] = 0;
+		scores[1] = 0;
+	}
 }

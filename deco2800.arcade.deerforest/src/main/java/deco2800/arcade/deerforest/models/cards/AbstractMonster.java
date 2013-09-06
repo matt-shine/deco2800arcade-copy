@@ -10,6 +10,7 @@ public abstract class AbstractMonster extends AbstractCard {
 	private String type;
 	private int health;
 	private int attack;
+    private int originalAttack;
     private int currentHealth;
 
 	//Variables for current effects affecting the monster
@@ -20,6 +21,7 @@ public abstract class AbstractMonster extends AbstractCard {
 		this.health = health;
         this.currentHealth = health;
 		this.attack = attack;
+        this.originalAttack = attack;
 	}
 
 	//Get attacks (make sure to not return part of private class)
@@ -41,6 +43,11 @@ public abstract class AbstractMonster extends AbstractCard {
         return currentHealth;
     }
 
+    public void resetStats() {
+        this.attack = this.originalAttack;
+        this.currentHealth = this.health;
+    }
+
 	//get weakness
 	public String getWeakness() {
 		return null;
@@ -59,6 +66,18 @@ public abstract class AbstractMonster extends AbstractCard {
 	//Get damaged (taking into account effects affecting the monster currently), true if dead
 	public boolean takeDamage(int damage, String typeOfAttack) {
 
+        this.currentHealth -= modifiedDamage(damage, typeOfAttack);
+
+        if(this.currentHealth <= 0) {
+            return true;
+        }
+
+		return false;
+	}
+
+    public int modifiedDamage(int damage, String typeOfAttack) {
+
+        int modifiedDamage = damage;
         double damageMultiplier = 1;
 
         if(this.type.equals(typeOfAttack)) {
@@ -75,15 +94,10 @@ public abstract class AbstractMonster extends AbstractCard {
             damageMultiplier = 2;
         }
 
-        this.currentHealth -= damage*damageMultiplier;
+        return (int)(damageMultiplier*modifiedDamage);
+    }
 
-        if(this.currentHealth <= 0) {
-            return true;
-        }
 
-		return false;
-	}
-	
 	public String toString() {
 		String s;
 		s = "Type: " + getType() + ", Health: " + getCurrentHealth()

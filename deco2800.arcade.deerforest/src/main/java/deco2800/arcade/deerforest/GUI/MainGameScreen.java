@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
+import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
 public class MainGameScreen implements Screen {
 	
@@ -30,7 +31,7 @@ public class MainGameScreen implements Screen {
     private final int timeToDisplay = 150;
     private int currentDisplayTime;
 
-    //
+    //variables for highlighting zones
 	private float glowSize;
 	private boolean glowDirection;
 
@@ -43,12 +44,24 @@ public class MainGameScreen implements Screen {
     private final static float P1HealthBarY = 0.65833336f;
     private final static float P2HealthBarY = 0.093055554f;
     private final static float healthBarHeight = 0.247222246f;
+    private final static float lifePointsX = 0.103f;
+    private final static float lifePointsP1Y = 0.65055555f;
+    private final static float lifePointsP2Y = 0.089277776f;
 
 	//assets
 	private Map<String, Set<ExtendedSprite>> spriteMap;
 	private Arena arena;
 	private List<Rectangle> highlightedZones;
-	
+
+    //Battling animation variables
+    private boolean showBattle;
+    private ExtendedSprite cardAttacking;
+    private ExtendedSprite cardDefending;
+    private int attackAmount;
+    private final int battleDisplayTime = 150;
+    private int currentBattleDisplayTime;
+    private final int battleFadeRatio = 5;
+
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
 		
@@ -108,6 +121,8 @@ public class MainGameScreen implements Screen {
         manager.load("DeerForestAssets/Player2.png", Texture.class);
         manager.load("DeerForestAssets/HealthBar.png", Texture.class);
         manager.load("DeerForestAssets/CardBack.png", Texture.class);
+        manager.load("DeerForestAssets/Player1Victory.png", Texture.class);
+        manager.load("DeerForestAssets/Player2Victory.png", Texture.class);
 	}
 
 	@Override
@@ -134,17 +149,149 @@ public class MainGameScreen implements Screen {
 	    	for(ExtendedSprite s : spriteMap.get(key)) {
                 if((game.getCurrentPlayer() == 1 && key.equals("P2HandZone")) ||
                         (game.getCurrentPlayer() == 2 && key.equals("P1HandZone"))) {
-                    cardBack.setPosition(s.getX(), s.getY());
-                    cardBack.setScale(s.getScaleX(), s.getScaleY());
-                    cardBack.draw(game.batch);
+                    drawCardBack(s);
                 } else {
                     s.draw(game.batch);
                 }
 		    }
 	    }
 
+	    //Print the model / game data (for debugging)
+	    game.font.draw(game.batch, "Press SPACE for next phase", 0.80f*getWidth(), 0.2f*getHeight());
+	    game.font.draw(game.batch, "Press RIGHT_ALT for debug info", 0.80f*getWidth(), 0.25f*getHeight());
+	    game.font.draw(game.batch, "Press LEFT_ALT for next turn", 0.80f*getWidth(), 0.3f*getHeight());
+        game.font.draw(game.batch, "Press LEFT_SHIFT for zoom", 0.80f*getWidth(), 0.35f*getHeight());
+        game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.4f*getHeight());
+	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.45f*getHeight());
+	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.5f*getHeight());
+
+        // draw health bars / print LP
+        drawHealthBars();
+        game.font.draw(game.batch,String.valueOf(game.getPlayerLP(1)), lifePointsX*getWidth(), lifePointsP1Y*getHeight());
+        game.font.draw(game.batch, String.valueOf(game.getPlayerLP(2)), lifePointsX * getWidth(), lifePointsP2Y * getHeight());
+
         game.batch.flush();
 
+        //draw highlighted zone
+        highlightZones();
+
+        game.batch.flush();
+
+        //Draw the phase message if needed
+        drawPhaseMessage();
+
+	    game.batch.end();
+
+        //Draw zoomed sprite
+        ExtendedSprite zoomed = DeerForestSingletonGetter.getDeerForest().inputProcessor.getCurrentZoomed();
+        if(zoomed != null) {
+            game.batch.begin();
+            //Check if zoomed is in opponents hand
+            if(game.getCurrentPlayer() != zoomed.getPlayer() && !zoomed.isField()) {
+                zoomed = cardBack;
+                drawCardBack(zoomed);
+            } else {
+                zoomed.draw(game.batch);
+            }
+            game.batch.end();
+        }
+
+        //Draw battling cards
+        if(showBattle) {
+            drawBattle();
+            if(battleDisplayTime < currentBattleDisplayTime) {
+                showBattle = false;
+                currentBattleDisplayTime = 0;
+            } else {
+                currentBattleDisplayTime++;
+            }
+        }
+
+        //Show victorious player if exists
+        if(game.getPlayerLP(1) <= 0) {
+            game.batch.begin();
+            ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player2Victory.png", Texture.class));
+            s.setScale(Gdx.graphics.getWidth()/(2*s.getWidth()), Gdx.graphics.getHeight() / (2*s.getHeight()));
+            s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,
+                    Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
+            s.draw(game.batch);
+            DeerForestSingletonGetter.getDeerForest().inputProcessor.setGameFinished(true);
+            game.batch.end();
+        } else if(game.getPlayerLP(2) <= 0) {
+            game.batch.begin();
+            ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player1Victory.png", Texture.class));
+            s.setScale(Gdx.graphics.getWidth()/(2*s.getWidth()), Gdx.graphics.getHeight() / (2*s.getHeight()));
+            s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,
+                    Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
+            s.draw(game.batch);
+            DeerForestSingletonGetter.getDeerForest().inputProcessor.setGameFinished(true);
+            game.batch.end();
+        }
+
+	}
+
+    private void drawHealthBars() {
+
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
+
+        float p1HealthRatio = (float)game.getPlayerLP(1)/200;
+        float p2HealthRatio = (float)game.getPlayerLP(2)/200;
+
+        p1Health.setPosition(x*healthBarX, y*P1HealthBarY);
+        p1Health.setScale(x*healthBarWidth/ p1Health.getWidth(), p1HealthRatio*y*healthBarHeight/p1Health.getHeight());
+
+        p2Health.setPosition(x*healthBarX, y*P2HealthBarY);
+        p2Health.setScale(x*healthBarWidth/ p2Health.getWidth(), p2HealthRatio*y*healthBarHeight/p2Health.getHeight());
+
+        p1Health.draw(game.batch);
+        p2Health.draw(game.batch);
+    }
+
+    private void drawCardBack(ExtendedSprite s) {
+
+        cardBack.setPosition(s.getX(), s.getY());
+
+        float xScale = s.getBoundingRectangle().getWidth() / cardBack.getWidth();
+        float yScale = s.getBoundingRectangle().getHeight() / cardBack.getHeight();
+
+        cardBack.setScale(xScale, yScale);
+        cardBack.draw(game.batch);
+    }
+
+	private void highlightZones() {
+		
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		
+		if(!highlightedZones.isEmpty()) {
+	    	Gdx.gl.glEnable(GL10.GL_BLEND);
+		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+		    shapeRenderer.begin(ShapeType.FilledRectangle);
+		    
+		    for(Rectangle r: highlightedZones) {
+                if(game.getPhase().equals("BattlePhase")) {
+                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.RED, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+                } else {
+                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+                }
+
+		    	if(glowSize > 10 && glowDirection == true) {
+		    		glowDirection = false;
+		    	} else if(glowSize < 0 && glowDirection == false) {
+		    		glowDirection = true;
+		    	}
+		    	
+		    	if(glowDirection) glowSize += 0.05;
+		    	else glowSize -= 0.05;
+		    }
+		    
+		    shapeRenderer.end();
+		    Gdx.gl.glDisable(GL10.GL_BLEND);
+	    }
+	}
+
+    private void drawPhaseMessage() {
         //Draw the phase image if it hasn't already been drawn
         if(!displayedPhaseMessage) {
             if(timeToDisplay < currentDisplayTime) {
@@ -186,90 +333,61 @@ public class MainGameScreen implements Screen {
                 Gdx.gl.glDisable(GL10.GL_BLEND);
             }
         }
-
-	    //Print the model / game data (for debugging)
-	    game.font.draw(game.batch, "Press SPACE for next phase", 0.80f*getWidth(), 0.2f*getHeight());
-	    game.font.draw(game.batch, "Press RIGHT_ALT for debug info", 0.80f*getWidth(), 0.25f*getHeight());
-	    game.font.draw(game.batch, "Press LEFT_ALT for next turn", 0.80f*getWidth(), 0.3f*getHeight());
-	    game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.35f*getHeight());
-	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.4f*getHeight());
-	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.45f*getHeight());
-	    game.font.draw(game.batch, "P1 LP: " + game.getPlayerLP(1), 0.80f*getWidth(), 0.5f*getHeight());
-	    game.font.draw(game.batch, "P2 LP: " + game.getPlayerLP(2), 0.80f*getWidth(), 0.55f*getHeight());
-
-        // draw health bars
-        drawHealthBars();
-
-        game.batch.flush();
-
-        //draw highlighted zone
-        highlightZones();
-
-	    game.batch.end();
-
-        //Draw zoomed sprite
-        ExtendedSprite zoomed = DeerForestSingletonGetter.getDeerForest().inputProcessor.getCurrentZoomed();
-        if(zoomed != null) {
-            game.batch.begin();
-            zoomed.draw(game.batch);
-            game.batch.end();
-        }
-
-	}
-
-    private void drawHealthBars() {
-
-        float x = Gdx.graphics.getWidth();
-        float y = Gdx.graphics.getHeight();
-
-        float p1HealthRatio = (float)game.getPlayerLP(1)/200;
-        float p2HealthRatio = (float)game.getPlayerLP(2)/200;
-
-        p1Health.setPosition(x*healthBarX, y*P1HealthBarY);
-        p1Health.setScale(x*healthBarWidth/ p1Health.getWidth(), p1HealthRatio*y*healthBarHeight/p1Health.getHeight());
-
-        p2Health.setPosition(x*healthBarX, y*P2HealthBarY);
-        p2Health.setScale(x*healthBarWidth/ p2Health.getWidth(), p2HealthRatio*y*healthBarHeight/p2Health.getHeight());
-
-        p1Health.draw(game.batch);
-        p2Health.draw(game.batch);
     }
 
-	private void highlightZones() {
-		
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		
-		if(!highlightedZones.isEmpty()) {
-	    	Gdx.gl.glEnable(GL10.GL_BLEND);
-		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+    private void drawBattle() {
 
-		    shapeRenderer.begin(ShapeType.FilledRectangle);
-		    
-		    for(Rectangle r: highlightedZones) {
-                if(game.getPhase().equals("BattlePhase")) {
-                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.RED, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+        game.batch.begin();
+
+        //Draw attacking card
+        if(cardAttacking != null) {
+
+            //Set fade in / out
+            if(currentBattleDisplayTime < battleDisplayTime/battleFadeRatio) {
+                cardAttacking.setColor(1.0f, 1.0f, 1.0f, ((float)currentBattleDisplayTime*battleFadeRatio)/battleDisplayTime);
+            } else if(currentBattleDisplayTime > (battleFadeRatio-1)*battleDisplayTime/battleFadeRatio) {
+                if(battleFadeRatio*(1-(float)currentBattleDisplayTime/battleDisplayTime) > 0) {
+                    cardAttacking.setColor(1.0f, 1.0f, 1.0f, battleFadeRatio*(1-(float)currentBattleDisplayTime/battleDisplayTime));
                 } else {
-                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+                    cardAttacking.setColor(1.0f, 1.0f, 1.0f, 0);
                 }
+            }
 
-		    	if(glowSize > 10 && glowDirection == true) {
-		    		glowDirection = false;
-		    	} else if(glowSize < 0 && glowDirection == false) {
-		    		glowDirection = true;
-		    	}
-		    	
-		    	if(glowDirection) glowSize += 0.05;
-		    	else glowSize -= 0.05;
-		    }
-		    
-		    shapeRenderer.end();
-		    Gdx.gl.glDisable(GL10.GL_BLEND);
-	    }
-	}
-	
+            cardAttacking.draw(game.batch);
+        }
+
+        //Draw defending card
+        if(cardDefending != null) {
+
+            //Set fade in / out
+            if(currentBattleDisplayTime < battleDisplayTime/battleFadeRatio) {
+                cardDefending.setColor(1.0f, 1.0f, 1.0f, ((float)currentBattleDisplayTime*battleFadeRatio)/battleDisplayTime);
+            } else if(currentBattleDisplayTime > (battleFadeRatio-1)*battleDisplayTime/battleFadeRatio) {
+                if(battleFadeRatio*(1-(float)currentBattleDisplayTime/battleDisplayTime) > 0) {
+                    cardDefending.setColor(1.0f, 1.0f, 1.0f, battleFadeRatio*(1-(float)currentBattleDisplayTime/battleDisplayTime));
+                } else {
+                    cardDefending.setColor(1.0f, 1.0f, 1.0f, 0);
+                }
+            }
+            cardDefending.draw(game.batch);
+        }
+
+        //Draw attack damage
+        if(currentBattleDisplayTime > battleDisplayTime/6 && currentBattleDisplayTime < 5*battleDisplayTime/6) {
+            game.font.setColor(Color.RED);
+            game.font.setScale(2.0f);
+            game.font.draw(game.batch, "-" + String.valueOf(attackAmount), 15*Gdx.graphics.getWidth()/24, 2*Gdx.graphics.getHeight()/5);
+            game.font.setScale(0.5f);
+            game.font.setColor(Color.WHITE);
+        }
+
+        game.batch.end();
+    }
+
 	@Override
 	public void dispose() {
 		manager.dispose();
+        manager.dispose();
 	}
 
 	@Override
@@ -366,4 +484,37 @@ public class MainGameScreen implements Screen {
     public void setPhaseDisplayed(boolean b) {
         displayedPhaseMessage = b;
     }
+
+    public void setBattleSprites(ExtendedSprite attackingCard, ExtendedSprite defendingCard, int damage) {
+
+        //Set up attacking card
+        if(attackingCard != null) {
+            this.cardAttacking = new ExtendedSprite(attackingCard);
+            this.cardAttacking.setScale(Gdx.graphics.getHeight()/(2*this.cardAttacking.getHeight()));
+            float x = Gdx.graphics.getWidth()/3 - this.cardAttacking.getBoundingRectangle().getWidth()/2;
+            float y = Gdx.graphics.getHeight()/2 - this.cardAttacking.getBoundingRectangle().getHeight()/2;
+            this.cardAttacking.setPosition(x, y);
+        }
+
+        //Set up defending card
+        if(defendingCard != null) {
+            this.cardDefending = new ExtendedSprite(defendingCard);
+            this.cardDefending.setScale(Gdx.graphics.getHeight()/(2*this.cardDefending.getHeight()));
+            float x = 2*Gdx.graphics.getWidth()/3 - this.cardDefending.getBoundingRectangle().getWidth()/2;
+            float y = Gdx.graphics.getHeight()/2 - this.cardDefending.getBoundingRectangle().getHeight()/2;
+            this.cardDefending.setPosition(x, y);
+        } else {
+            this.cardDefending = null;
+        }
+
+        //Calculate correct damage to show
+        if(defendingCard != null) {
+            this.attackAmount = ((AbstractMonster)defendingCard.getCard()).modifiedDamage(damage, ((AbstractMonster)attackingCard.getCard()).getType());
+        } else {
+            this.attackAmount = damage;
+        }
+
+        this.showBattle = true;
+    }
+
 }

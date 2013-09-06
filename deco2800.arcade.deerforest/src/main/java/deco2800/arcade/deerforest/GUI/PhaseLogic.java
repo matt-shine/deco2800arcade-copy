@@ -22,6 +22,7 @@ public class PhaseLogic {
 
         //Check if card has already battled
         if(currentSelection.hasAttacked()) {
+            System.out.println("Already Battled");
             return;
         }
 
@@ -68,14 +69,20 @@ public class PhaseLogic {
             List<AbstractCard> cardToMove = new ArrayList<AbstractCard>();
             cardToMove.add(s2.getCard());
             int defendingPlayer = game.getCurrentPlayer()==1?2:1;
-            System.out.println("Moved cards: " + game.moveCards(defendingPlayer, cardToMove, "Field", "Graveyard"));
+
+            if(!game.moveCards(defendingPlayer, cardToMove, "Field", "Graveyard")) {
+                System.out.println("Didn't Move, cardToMove was: " + cardToMove + " defendingPlayer: " + defendingPlayer);
+            } else {
+                System.out.println("Did Move, cardToMove was: " + cardToMove + " defendingPlayer: " + defendingPlayer);
+            }
 
             //Remove card from view
-            System.out.println("Removed from view: " + view.removeSprite(s2));
-            System.out.println("Removed from arena: " + view.getArena().removeSprite(s2));
-
-            System.out.println("CARD DIED");
+            view.removeSprite(s2);
+            view.getArena().removeSprite(s2);
         }
+
+        //Show battle
+        view.setBattleSprites(s1, s2, m1.getAttack());
 
         System.out.println("Card health: " + m2.getCurrentHealth());
 
@@ -87,13 +94,18 @@ public class PhaseLogic {
         System.out.println("Direct attack Player: " + player + " s1: " + s1);
 
         MainGame game = DeerForestSingletonGetter.getDeerForest().mainGame;
+        MainGameScreen view = DeerForestSingletonGetter.getDeerForest().view;
 
         System.out.println("Card attached to sprite: " + s1.getCard());
 
+        AbstractMonster m = null;
+
         if(s1.getCard() instanceof AbstractMonster) {
-            AbstractMonster m = (AbstractMonster) s1.getCard();
+            m = (AbstractMonster) s1.getCard();
             int defendingPlayer = game.getCurrentPlayer()==1?2:1;
             game.inflictDamage(defendingPlayer, m.getAttack());
+            //Show attack
+            view.setBattleSprites(s1, null, m.getAttack());
         }
 
         s1.setHasAttacked(true);

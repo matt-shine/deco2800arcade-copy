@@ -176,7 +176,7 @@ public class SpriteLogic {
 
             if(currentSelection.hasAttacked()) {
                 view.setHighlightedZones(new ArrayList<Rectangle>());
-            } else if(game.getCardCollection(defendingPlayer, "Field").isEmpty()) {
+            } else if(((Field)game.getCardCollection(defendingPlayer, "Field")).sizeMonsters() == 0) {
                 view.setHighlightedZones(view.getArena().getAvailableZones(defendingPlayer, true, true));
             } else {
                 view.setHighlightedZones(view.getArena().getFilledMonsterZones(defendingPlayer));

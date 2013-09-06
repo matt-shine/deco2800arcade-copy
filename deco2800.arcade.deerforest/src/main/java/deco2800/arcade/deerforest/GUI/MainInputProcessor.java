@@ -31,6 +31,7 @@ public class MainInputProcessor implements InputProcessor {
 	private float yClickOffset;
 	private boolean dragged;
     private boolean zoomed;
+    private boolean gameFinished;
 	
 	//define array of keys for P1 / P2 zones
 	final String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
@@ -40,10 +41,20 @@ public class MainInputProcessor implements InputProcessor {
 		this.game = game;
 		this.view = view;
 		dragged = false;
+        this.gameFinished = false;
 	}
 	
 	@Override
 	public boolean keyDown (int keycode) {
+
+        //Check for new game
+        if(keycode == Keys.N) {
+            this.newGame();
+        }
+
+        if(gameFinished) {
+            return false;
+        }
 
         //Zoom in on card
         if(keycode == Keys.SHIFT_LEFT) {
@@ -173,13 +184,23 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
-        //If currently zoomed return
-        if(zoomed) return false;
+        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
+
+        //If currently zoomed / gamefinished return
+        if(zoomed || gameFinished) return false;
 
         //get zoomSelection
         zoomSelection = SpriteLogic.checkIntersection(1, x, y);
         if(zoomSelection == null) {
+            //must be in P2
             zoomSelection = SpriteLogic.checkIntersection(2, x, y);
+            if(zoomSelection != null) zoomSelection.setPlayer(2);
+        } else {
+            zoomSelection.setPlayer(1);
+        }
+        //Set zoom selection data
+        if(zoomSelection != null) {
+            zoomSelection.setField(SpriteLogic.getSpriteZoneType(zoomSelection)[0]);
         }
 
     	//Check it was a single click
@@ -229,8 +250,8 @@ public class MainInputProcessor implements InputProcessor {
 	@Override
     public boolean touchUp (int x, int y, int pointer, int button) {
 
-        //If currently zoomed return
-        if(zoomed) return false;
+        //If currently zoomed / game finished return
+        if(zoomed || gameFinished) return false;
 
         //Only perform action if card has been dragged and left button was released
 		//Note that dragged can only be true if there is a current selection
@@ -263,8 +284,8 @@ public class MainInputProcessor implements InputProcessor {
 	@Override
     public boolean touchDragged (int x, int y, int pointer) {
 
-        //If currently zoomed return
-        if(zoomed) return false;
+        //If currently zoomed / game finshed return
+        if(zoomed || gameFinished) return false;
 
         //move card to where it was dragged
     	if(currentSelection != null) {
@@ -326,4 +347,24 @@ public class MainInputProcessor implements InputProcessor {
 		SpriteLogic.setCurrentSelectionToRectangle(r);
 	}
 
+    public void intialDraw(int n) {
+        //Draw initial cards
+        for(int i = 0; i < n; i++) {
+             this.doDraw();
+        }
+        game.setCurrentPlayer(2);
+        for(int i = 0; i < n; i++) {
+            this.doDraw();
+        }
+        game.setCurrentPlayer(1);
+    }
+
+    public void newGame() {
+        DeerForestSingletonGetter.getDeerForest().dispose();
+        DeerForestSingletonGetter.getDeerForest().create();
+    }
+
+    public void setGameFinished(boolean b) {
+        this.gameFinished = b;
+    }
 }

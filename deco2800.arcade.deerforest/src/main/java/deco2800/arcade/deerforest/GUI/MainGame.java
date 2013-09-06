@@ -31,6 +31,7 @@ public class MainGame extends Game {
     private Sound phaseSoundEffect;
     private boolean effectsMuted;
     private boolean musicMuted;
+    private final boolean muted = false;
 
 	
 	public MainGame(GameSystem model) {
@@ -55,7 +56,9 @@ public class MainGame extends Game {
         bgLoop = Gdx.audio.newMusic(audioPath);
         bgLoop.setLooping(true);
         bgLoop.setVolume(0.5f);
-        bgLoop.play();
+        if(!muted) {
+            bgLoop.play();
+        }
         battleSoundEffect = null;
         phaseSoundEffect = null;
 	}
@@ -69,6 +72,7 @@ public class MainGame extends Game {
 	public void dispose() {
 		batch.dispose();
 		font.dispose();
+        bgLoop.dispose();
 	}
 	
 	public GameSystem getModel() {
@@ -133,6 +137,7 @@ public class MainGame extends Game {
 		} else if(oldLocation.contains("Field") || oldLocation.contains("Monster") 
 				|| oldLocation.contains("Spell")) {
 			srcCards = model.getCardCollection(player, "Field");
+            resetMonsters(cards);
 		} else if(oldLocation.contains("Graveyard")) {
 			srcCards = model.getCardCollection(player, "Graveyard");
 		}
@@ -147,8 +152,14 @@ public class MainGame extends Game {
 		} else if(newLocation.contains("Graveyard")) {
 			destCards = model.getCardCollection(player, "Graveyard");
 		}
-		
-		return model.moveCards(player, cards, srcCards, destCards);
+
+        boolean b = model.moveCards(player, cards, srcCards, destCards);
+        if(!b) {
+            System.out.println("Error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+        } else {
+            System.out.println("No error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+        }
+		return b;
 	}
 
     public void setMuted(boolean bgMusic, boolean effects) {
@@ -167,7 +178,7 @@ public class MainGame extends Game {
             battleSoundEffect.dispose();
         }
         //Play sound
-        if(!effectsMuted) {
+        if(!muted) {
             battleSoundEffect = Gdx.audio.newSound(new FileHandle("DeerForestAssets/Battle.mp3"));
             long id = battleSoundEffect.play();
             battleSoundEffect.setVolume(id, 1.0f);
@@ -189,5 +200,19 @@ public class MainGame extends Game {
 
     public void inflictDamage(int player, int amount) {
         model.inflictDamage(player, amount);
+    }
+
+    private void resetMonsters(List<AbstractCard> cards) {
+        for(AbstractCard c : cards) {
+            if(c instanceof AbstractMonster) {
+                ((AbstractMonster)c).resetStats();
+            }
+        }
+    }
+
+    public void setCurrentPlayer(int player) {
+        if(player == 1 || player == 2) {
+            this.model.setCurrentPlayer(player);
+        }
     }
 }

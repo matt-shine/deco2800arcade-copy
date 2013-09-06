@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.model.Game;
@@ -42,25 +43,39 @@ public class DeerForest extends GameClient implements UIOverlay {
 	public void create() {
 		
 		super.create();
-		
+
+        System.out.println("Super created");
 		//start up main game
 		GameSystem tempSystem = new GameSystem(createDeerForestPlayer(), createDeerForestPlayer());
-		
-		//set and run game
+        System.out.println("Game system");
+
+        //set and run game
 		mainGame = new MainGame(tempSystem);
 		mainGame.create();
-		view = new MainGameScreen(mainGame);
+        System.out.println("Main Game created");
+
+        view = new MainGameScreen(mainGame);
 		this.setScreen(view);
-		
-		//set up input processor
+        System.out.println("View created");
+
+
+        //set up input processor
 		inputProcessor = new MainInputProcessor(mainGame, view);
 		ArcadeInputMux.getInstance().addProcessor(inputProcessor);
-	}
+
+        System.out.println("Processor created");
+
+        inputProcessor.intialDraw(4);
+        System.out.println("Drawn created");
+
+    }
 
 	@Override
 	public void dispose() {
 		super.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(inputProcessor);
+        mainGame.dispose();
+        view.dispose();
 	}
 	
 	@Override
@@ -98,7 +113,7 @@ public class DeerForest extends GameClient implements UIOverlay {
 	private DeerForestPlayer createDeerForestPlayer() {
 		ArrayList<AbstractCard> cardList = new ArrayList<AbstractCard>();
 		//add monsters
-		for(int i = 0; i < 15; i++) {
+		for(int i = 0; i < 20; i++) {
 		    int attack = (int)(Math.random()*30) + 20;
 			double rand = Math.random();
 			AbstractCard card;
@@ -116,14 +131,14 @@ public class DeerForest extends GameClient implements UIOverlay {
 			cardList.add(card);
 		}
 		//Add general spells
-		for(int i = 0; i < 6; i++) {
+		for(int i = 0; i < 5; i++) {
 			SpellEffect spellEffect = null;
 			String filePath = "DeerForestAssets/GeneralSpellShell.png";
 			AbstractCard spell = new GeneralSpell(spellEffect, filePath);
 			cardList.add(spell);
 		}
 		//add field Spells
-		for(int i = 0; i < 6; i++) {
+		for(int i = 0; i < 5; i++) {
 			SpellEffect spellEffect = null;
 			String filePath = "DeerForestAssets/FieldSpellShell.png";
 			AbstractCard spell = new FieldSpell(spellEffect, filePath);

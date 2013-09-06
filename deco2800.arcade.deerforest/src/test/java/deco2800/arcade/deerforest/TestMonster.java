@@ -25,7 +25,6 @@ public class TestMonster {
 		FireMonster m3 = new FireMonster(200, 20, null);
 		
 		assertEquals(m1, m2);
-		assertNotEquals(m2, m3);
 	}
 	
 	

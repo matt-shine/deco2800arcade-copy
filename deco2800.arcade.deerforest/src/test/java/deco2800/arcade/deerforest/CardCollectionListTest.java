@@ -3,7 +3,7 @@ package deco2800.arcade.deerforest;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
+import junit.framework.Assert;
 import org.junit.Test;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;

@@ -1,5 +1,6 @@
 package deco2800.arcade.deerforest.GUI;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,7 +32,23 @@ public class ExtendedSprite extends Sprite {
         this.card = null;
         game = DeerForestSingletonGetter.getDeerForest().mainGame;
 	}
-	
+
+    //Create a duplicate extended sprite from given extended sprite
+    public ExtendedSprite(ExtendedSprite s) {
+        super(s.getTexture());
+        setOrigin(0, 0);
+        this.flip(false, true);
+        originZone = s.getOriginZone();
+        setPlayer(s.getPlayer());
+        setField(s.isField());
+        setMonster(s.isMonster());
+        setArea(s.getArea());
+        this.hasAttacked = s.hasAttacked;
+        this.card = s.getCard();
+        this.setPosition(s.getX(), s.getY());
+        game = DeerForestSingletonGetter.getDeerForest().mainGame;
+    }
+
 	public boolean containsPoint(int x, int y) {
 		
 		Rectangle r = this.getBoundingRectangle();
@@ -50,13 +67,25 @@ public class ExtendedSprite extends Sprite {
     //Override the draw method to also draw atk / health
     @Override
     public void draw(SpriteBatch batch) {
+
+        //Grey out card if it has attacked
+        if(this.getCard() != null && this.getCard() instanceof AbstractMonster) {
+            if(this.hasAttacked() && game.getPhase().equals("BattlePhase")) {
+                this.setColor(0.5f, 0.5f, 0.5f, 1.0f);
+            } if(this.hasAttacked() && game.getPhase().equals("EndPhase")) {
+                this.setColor(Color.WHITE);
+            }
+        }
+
         super.draw(batch);
         if(this.card instanceof AbstractMonster) {
             AbstractMonster m = (AbstractMonster) this.getCard();
             Rectangle r = this.getBoundingRectangle();
             float x = r.getX() + 39*r.getWidth()/50;
             float y = r.getY() + r.getHeight()/2;
+
             game.font.setScale(this.getScaleX()*1.1f);
+            game.font.setColor(this.getColor());
             if(String.valueOf(m.getAttack()).length() == 3) {
                 game.font.draw(batch, String.valueOf(m.getAttack()), x, y);
             } else {
@@ -69,6 +98,7 @@ public class ExtendedSprite extends Sprite {
                 game.font.draw(batch, String.valueOf(m.getCurrentHealth()), x+r.getWidth()/20, y+r.getHeight()/5);
             }
 
+            game.font.setColor(Color.WHITE);
             game.font.setScale(0.5f);
         }
     }

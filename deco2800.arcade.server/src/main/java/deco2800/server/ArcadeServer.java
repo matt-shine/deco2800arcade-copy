@@ -34,6 +34,10 @@ public class ArcadeServer {
 	// Package manager
 	private PackageServer packServ;
 	
+	// Server will communicate over these ports
+	private static final int TCP_PORT = 54555;
+	private static final int UDP_PORT = 54777;
+	
 	/**
 	 * Retrieve the singleton instance of the server
 	 * @return the game server
@@ -105,7 +109,7 @@ public class ArcadeServer {
 		System.out.println("Server starting");
 		server.start();
 		try {
-			server.bind(54555, 54777);
+			server.bind(TCP_PORT, UDP_PORT);
 			System.out.println("Server bound");
 		} catch (BindException b) {
 			System.err.println("Error binding server: Address already in use");

@@ -184,6 +184,12 @@ public class Rook implements Piece {
 		return true;
 	}
 
+	@Override
+	public void hasMoved() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 }

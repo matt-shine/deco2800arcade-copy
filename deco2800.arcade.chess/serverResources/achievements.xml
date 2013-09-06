@@ -1,0 +1,6 @@
+<achievement id="chess.winGame">
+  <name>Winner!</name>
+  <description>Win a game of Chess</description>
+  <awardThreshold>1</awardThreshold>
+  <icon>winner.png</icon>
+</achievement>

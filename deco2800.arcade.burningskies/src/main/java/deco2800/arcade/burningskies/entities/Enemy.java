@@ -10,17 +10,4 @@ public class Enemy extends Ship {
 		super(health, image, pos);
 		// TODO Auto-generated constructor stub
 	}
-	//TODO: write this
-
-	@Override
-	void velocity(float speed) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	void outBounds(float delta) {
-		// TODO Auto-generated method stub
-		
-	}
 }

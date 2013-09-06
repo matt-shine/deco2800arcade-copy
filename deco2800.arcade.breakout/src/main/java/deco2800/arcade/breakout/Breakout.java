@@ -27,6 +27,7 @@ import deco2800.arcade.client.ArcadeSystem;
  * 
  * 
  * 
+ * 
  */
 @ArcadeGame(id = "Breakout")
 public class Breakout extends GameClient {
@@ -247,7 +248,7 @@ public class Breakout extends GameClient {
 		if (status != null) {
 	    	font.setColor(Color.WHITE);
 	    	
-	    	font.draw(batch, status, SCREENWIDTH/2-80, SCREENHEIGHT/2-60);
+	    	font.draw(batch, status, SCREENWIDTH/2-250, SCREENHEIGHT/2-60);
 	    	}
 	    	if (gameState == GameState.GAMEOVER) {
 	    		font.draw(batch, "Click to exit", SCREENWIDTH/2 - 80, SCREENHEIGHT/2 - 60);
@@ -371,8 +372,7 @@ public class Breakout extends GameClient {
 	 */
 	private void win() {
 		score += lives * 5;
-		status = "Congratulations! " + player + " your final score is: "
-				+ score;
+		
 		gameoverstatus="Congratulations " + player
 				+ " your final score is: " + score;
 		System.out.println("Congratulations " + player
@@ -408,7 +408,7 @@ public class Breakout extends GameClient {
 			score -= 5;
 			gameState = GameState.READY;
 		} else {
-			status = "Bad luck " + player + " your final score is: " + score;
+		
 			gameoverstatus="Bad luck " + player + " your final score is: "
 					+ score;
 			System.out.println("Bad luck " + player + " your final score is: "

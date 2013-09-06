@@ -1,6 +1,6 @@
 <achievement id="pong.winGame">
   <name>Winner!</name>
-  <description>Win a game of Pong.</description>
+  <description>Win a game of Pong</description>
   <awardThreshold>1</awardThreshold>
   <icon>winner.png</icon>
 </achievement>

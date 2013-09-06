@@ -6,6 +6,7 @@ import java.security.PublicKey;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.network.SessionModel;
+import deco2800.arcade.protocol.connect.ClientKeyExchange;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.connect.ServerKeyExchange;
 import deco2800.arcade.protocol.connect.SessionKeyExchange;
@@ -41,7 +42,7 @@ public class ConnectionListener extends NetworkListener {
 			@SuppressWarnings("unused")
 			ConnectionResponse connectionResponse = (ConnectionResponse) object;
 
-			// TODO something
+			// Do nothing. Wait for ServerKeyExchange.
 		}
 
 		if (object instanceof ServerKeyExchange) {
@@ -56,13 +57,26 @@ public class ConnectionListener extends NetworkListener {
 				// TODO: handle this. E.g resend our connection request.
 			}
 			
-			// Store the server key
 			if(serverKey != null) {
+				// Store the server key
 				session.setServerKey(serverKey);
-				// TODO: Send the client's public key to the server
-				// (1) first we need a (plain text right now) send method
-				// (2) we need to prepare the Exchange
-				// (3) send the exchange
+				
+				// We've received the server key so lets send our key back
+				// FIXME should check that we actually have these keys
+				PublicKey clientPublicKey = session.getClientPublicKey();
+				PublicKey serverPublicKey = session.getServerKey();
+				
+				// Set up the message
+				ClientKeyExchange clientKeyExchange = new ClientKeyExchange();
+				try {
+					clientKeyExchange.setClientKey(clientPublicKey, serverPublicKey);
+				} catch (Exception e) {
+					e.printStackTrace();
+					// FIXME handle error
+				}
+
+				// Send the message
+				connection.sendTCP(clientKeyExchange);
 			}
 		}
 

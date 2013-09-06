@@ -1,5 +1,6 @@
 package deco2800.server.listener;
 
+import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 
@@ -8,6 +9,7 @@ import javax.crypto.SecretKey;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import deco2800.arcade.protocol.CertificateHandler;
 import deco2800.arcade.protocol.connect.ClientKeyExchange;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
@@ -18,11 +20,13 @@ import deco2800.server.Session;
 import deco2800.server.SessionManager;
 
 public class ConnectionListener extends Listener {
-	//list of all connected users
+	// Maintain a collection of the sessions
 	private SessionManager connectedSessions;
+	private KeyPair serverKeyPair;
 	
-	public ConnectionListener(SessionManager sessionManager){
+	public ConnectionListener(SessionManager sessionManager, KeyPair keyPair){
 		this.connectedSessions = sessionManager;
+		this.serverKeyPair = keyPair;
 	}
 	
 	@Override
@@ -41,15 +45,15 @@ public class ConnectionListener extends Listener {
 
 			connection.sendTCP(ConnectionResponse.OK);
 			
-			// TODO send ServerKeyExchange encrypted/signed with
-			// our server certificate
+			// Send server public key certified with the server certificate
+			PublicKey serverCert = CertificateHandler.getServerCertificate();
 			ServerKeyExchange serverKeyExchange = new ServerKeyExchange();
 			try {
-				// FIXME add key values
-				serverKeyExchange.setServerKey(null, null);
+				serverKeyExchange.setServerKey(serverKeyPair.getPublic(), serverCert);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			connection.sendTCP(serverKeyExchange);
 		}
 		
 		if (object instanceof ClientKeyExchange) {

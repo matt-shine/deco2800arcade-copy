@@ -62,6 +62,10 @@ public class SessionModel {
 		this.serverKey = serverKey;
 	}
 	
+	public PublicKey getServerKey() {
+		return this.serverKey;
+	}
+	
 	public PublicKey getClientPublicKey() {
 		return this.clientKeyPair.getPublic();
 	}

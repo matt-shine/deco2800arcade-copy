@@ -1,6 +1,9 @@
 package deco2800.server;
 
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -31,6 +34,10 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
+	
+	// Public and private key pair help handshake with clients
+	private KeyPair keyPair;
+	private String algorithm = "RSA";
 	
 	// Package manager
 	//private PackageServer packServ;
@@ -108,10 +115,30 @@ public class ArcadeServer {
 			e.printStackTrace();
 		}
 		
+		generateKeyPair();
+		
 		Protocol.register(server.getKryo());
-		server.addListener(new ConnectionListener(sessionManager));
+		server.addListener(new ConnectionListener(sessionManager, keyPair));
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new CommunicationListener(server));
+	}
+	
+	private void generateKeyPair() {
+		KeyPairGenerator kpg = null;
+		try {
+			kpg = KeyPairGenerator.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		if(kpg != null) {
+			kpg.initialize(2048);
+			KeyPair keyPair = kpg.generateKeyPair();
+			
+			this.keyPair = keyPair;
+		} else {
+			// Something went wrong
+			this.keyPair = null;
+		}
 	}
 }

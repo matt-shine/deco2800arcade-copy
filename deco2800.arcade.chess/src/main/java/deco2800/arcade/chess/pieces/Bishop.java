@@ -1,11 +1,9 @@
-package deco2800.arcade.chess;
+package deco2800.arcade.chess.pieces;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import deco2800.arcade.chess.pieces.Piece;
 
 
 public class Bishop implements Piece{
@@ -112,7 +110,7 @@ public class Bishop implements Piece{
 		}*/
 		return moves;
 	}
-
+//monkey balls
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -145,6 +143,12 @@ public class Bishop implements Piece{
 		if (team != other.team)
 			return false;
 		return true;
+	}
+
+	@Override
+	public void hasMoved() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

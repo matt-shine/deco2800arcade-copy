@@ -142,5 +142,11 @@ public class Queen implements Piece {
 		return moves;
 	}
 
+	@Override
+	public void hasMoved() {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

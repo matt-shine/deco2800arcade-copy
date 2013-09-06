@@ -10,6 +10,8 @@ public class Board{
 
 	FixedSizeList<FixedSizeList<Piece>> Board_State;
 	ArrayList<Piece> whiteGraveyard, blackGraveyard;
+	//true = blacks turn false = whites turn
+	private boolean turn;
 
 	// Initialise pieces
 	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
@@ -25,16 +27,21 @@ public class Board{
 	
 	String NEWLINE = System.getProperty("line.separator");
 	
+	boolean blackCheck, whiteCheck;
+	
 
 	/**
 	 * Initialises board to the default setup.
 	 */
 	public Board() {
-		
+		turn = false;
 		Board_State = new FixedSizeList<FixedSizeList<Piece>>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
 		nullPiece = new Null();
+		
+		blackCheck = false;
+		whiteCheck = false;
 		
 		//Add 8 rows to the board
 		for (int a = 0; a < 8; a++) {
@@ -52,7 +59,6 @@ public class Board{
 			}
 		}
 		
-
 	}
 
 	/**
@@ -302,8 +308,8 @@ public class Board{
 		}
 		// Queen
 		if (piece.getClass() == whiteQueen.getClass()) {
-			// this.removeJumpsBishop(possibleMoves, currentPos, piece);
-			// this.removeJumpsRook(possibleMoves, currentPos, piece);
+			//this.removeJumpsBishop(possibleMoves, currentPos, piece);
+			//this.removeJumpsRook(possibleMoves, currentPos, piece);
 			allowableMoves = new ArrayList<int[]>();
 
 			allowableMoves.addAll(this.removeJumpsRook(possibleMoves,
@@ -311,21 +317,12 @@ public class Board{
 			allowableMoves.addAll(this.removeJumpsBishop(possibleMoves,
 					currentPos, piece));
 
-			this.removeJumpsRook(possibleMoves, currentPos, piece);
 
-			// allowableMoves.addAll(this.removeJumpsRook(possibleMoves,
-			// currentPos, piece));
 		}
-		/* Dont need to print this out, clogs console
-		for (int i = 0; i < allowableMoves.size(); i++) {
-			System.out.println(piece + " "
-					+ Arrays.toString(allowableMoves.get(i)));
-		}
-		*/
 		return allowableMoves;
 	}
 
-	public void movePiece(Piece piece, int[] newPosition) {
+	public boolean movePiece(Piece piece, int[] newPosition) {
 		int[] oldPos = findPiece(piece);
 		int x = newPosition[0];
 		int y = newPosition[1];
@@ -362,6 +359,8 @@ public class Board{
 						Board_State.get(castleSwapPos[0]).add(castleSwapPos[1], blackRook1);
 						allowed = true;
 						kingCastleSwap = true;
+						this.nextTurn();
+						return true;
 					}
 				}
 				//Allow white teams move
@@ -380,6 +379,8 @@ public class Board{
 						Board_State.get(castleSwapPos[0]).add(castleSwapPos[1], whiteRook1);
 						allowed = true;
 						kingCastleSwap = true;
+						this.nextTurn();
+						return true;
 					}
 					
 				}
@@ -388,7 +389,7 @@ public class Board{
 
 		if (!allowed) {
 			System.err.println("not allowable move for " + piece + ":" + newPosition[0] + ", " + newPosition[1]);
-			return;
+			return false;
 		}
 
 		/*
@@ -408,9 +409,13 @@ public class Board{
 			}
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
+			this.nextTurn();
+			return true;
 		} else {
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
+			this.nextTurn();
+			return true;
 		}
 	}
 
@@ -686,13 +691,11 @@ public class Board{
 	
 	private List<int[]> removeJumpsRook(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
-		// System.out.print("this is the piece" + " " + piece);
 		int x = currentPos[0];
 		int y = currentPos[1];
 		int xCheck;
 		int yCheck;
 		List<int[]> possible = new ArrayList<int[]>(possibleMoves);
-		// public boolean checkSpace(Piece piece, int [] currentPos){
 
 		// remove jumps for moving UP
 		for (int i = 1; i <= 7; i++) {
@@ -701,7 +704,6 @@ public class Board{
 			if ((up[0] >= 0) && (up[0] <= 7) && (up[1] >= 0) && (up[1] <= 7)) {
 				
 			 if (!occupiedSpace(up)) {
-					//System.out.println("up" + " "+ occupiedSpace( up)); Can we remove to stop redundancy in console
 					continue;
 				
 				} else {
@@ -715,10 +717,8 @@ public class Board{
 						for (int j = 1; j <= 7; j++) {
 							for (int k = 0; k < possible.size(); k++) {
 								xCheck = possible.get(k)[0];
-								//System.out.println("xCheck" + " " +xCheck); Can you remove this kieren?
 								
 								yCheck = possible.get(k)[1];
-								//System.out.println("yCheck" + " " + yCheck); Can you remove this kieren?
 								if ((xCheck == (x + i + j)) && (yCheck == (y))) {
 									possible.remove(k);
 
@@ -732,9 +732,7 @@ public class Board{
 						for (int j = 0; j <= 7; j++) {
 							for (int k = 0; k < possible.size(); k++) {
 								xCheck = possible.get(k)[0];
-								//System.out.println("xCheck" + " " +xCheck);
 								yCheck = possible.get(k)[1];
-								//System.out.println("yCheck" + " " + yCheck);
 								if ((xCheck == (x + i + j)) && (yCheck == (y))) {
 									possible.remove(k);
 								
@@ -755,7 +753,6 @@ public class Board{
 					&& (Left[1] <= 7)) {
 				// if space is not occupied continue
 				if (!occupiedSpace(Left)) {
-					//System.out.println("Left:" + " " + occupiedSpace(Left)); Can we remove to stop redundancy in console
 					continue;
 				} else {
 					List<Piece> row = Board_State.get(x);
@@ -798,7 +795,6 @@ public class Board{
 					&& (Right[1] <= 7)) {
 				// if space is not occupied continue
 				if (!occupiedSpace(Right)) {
-					//System.out.println("Right:" + " " + occupiedSpace(Right)); Can we remove to stop redundancy in console
 					continue;
 				} else {
 					List<Piece> row = Board_State.get(x);
@@ -843,7 +839,6 @@ public class Board{
 
 				// if space is not occupied continue
 				if (!occupiedSpace(down)) {
-					//System.out.println("Down:" + " " + occupiedSpace(down)); Can we remove to stop redundancy in console
 					continue;
 				} else {
 					List<Piece> row = Board_State.get(x - i);
@@ -886,6 +881,28 @@ public class Board{
 		return possible;
 
 	}
+	
+	public Piece getPiece(int[] pos) {
+		FixedSizeList<Piece> row = Board_State.get(pos[0]);
+		
+		return row.get(pos[1]);
+	}
+	
+	public boolean isNullPiece(Piece piece) {
+		if (piece.getClass() == nullPiece.getClass()) {
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean whoseTurn() {
+		return turn;
+	}
+	
+	public void nextTurn() {
+		turn = !turn;
+	}
+	
 
 	/**
 	 * Checks all active pieces on the board to see whether any pieces can
@@ -904,6 +921,7 @@ public class Board{
 		}
 		return canMove;
 	}
+
 	
 	/**
 	 * Takes in a piece and returns true if that pieces team can perform the

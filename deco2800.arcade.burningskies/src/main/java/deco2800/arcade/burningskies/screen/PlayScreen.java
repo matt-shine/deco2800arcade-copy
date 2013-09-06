@@ -29,7 +29,6 @@ public class PlayScreen implements Screen
 	private float y = 0;
 	private int speed = 40;
 	
-	private DemoPattern test;
 	private PlayerShip player;
 	
 	public PlayScreen( BurningSkies game){
@@ -51,13 +50,9 @@ public class PlayScreen implements Screen
     	
         game.playSong("level1");
     	
-    	// TO MAKE THINGS PRETTY FOR DEMO
-    	test = new DemoPattern(stage, null);
-    	test.start();
-    	
     	Texture shiptext = new Texture(Gdx.files.internal("images/Jet1.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100));
-    	player.velocity(200);
+    	stage.addActor(player);
     }
     
     @Override
@@ -67,28 +62,12 @@ public class PlayScreen implements Screen
     
     @Override
     public void render(float delta)
-    {
-    	// Reading the input key up or down arrow key to move the map in that direction
-    	/*
-    	if(Gdx.input.isKeyPressed(Keys.DPAD_UP)){
-    		y -= (float) Gdx.graphics.getDeltaTime() * speed;
-    		System.out.println("Key up pressed");
-    		System.out.print("Current y value: ");
-    		System.out.println(y);
-    	}
-    	if(Gdx.input.isKeyPressed(Keys.DPAD_DOWN)){
-    		y += (float) Gdx.graphics.getDeltaTime() * speed;
-    		System.out.println("Key down pressed");
-    	}
-    	*/
-    	
+    {    	
     	// auto scroll
     	y -= (float) Gdx.graphics.getDeltaTime() * speed;
     	
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-    	
-    	test.onRender(delta);
     	
     	// Draws the map
     	batch.begin();
@@ -96,8 +75,6 @@ public class PlayScreen implements Screen
     	batch.end();
     	
     	stage.act(delta);
-    	stage.addActor(player);
-    	player.act(delta);
     	stage.draw();
     }
     

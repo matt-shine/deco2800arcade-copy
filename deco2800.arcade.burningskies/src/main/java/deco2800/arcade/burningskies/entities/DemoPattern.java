@@ -23,8 +23,8 @@ public class DemoPattern extends BulletPattern {
 			x = stage.getWidth()/2;
 			y = stage.getHeight()/2;
 		} else {
-			x = emitter.getX();
-			y = emitter.getY();
+			x = emitter.getX() + emitter.getWidth()/2;
+			y = emitter.getY() + emitter.getHeight()/2;
 		}
 		SpiralBullet bullet = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle, 1,  image);
 		stage.addActor(bullet);

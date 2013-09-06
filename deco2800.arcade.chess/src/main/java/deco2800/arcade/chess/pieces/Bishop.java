@@ -3,53 +3,53 @@ package deco2800.arcade.chess.pieces;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
-public class Rook implements Piece {
+
+public class Bishop implements Piece{
 
 	boolean team;
 	boolean firstMove;
 	boolean active;
 	int preference;
 	int pieceNo;
-
+	
 	/**
 	 * Initialises the piece
 	 * 
 	 * @param team
 	 */
-	public Rook(boolean team, int pieceNo) {
+	public Bishop(boolean team, int pieceNo) {
 		this.team = team;
 		this.firstMove = false;
 		this.active = true;
-		this.preference = 3;
+		this.preference = 2;
 		this.pieceNo = pieceNo;
 	}
 
 	@Override
 	public void deActivate() {
 		active = false;
-
+		
 	}
 
 	@Override
 	public void reActivate() {
 		active = true;
-
+		
 	}
-
+	
 	public String toString() {
 		String toString = "";
-
-		if (!team) {
-			toString += "white ";
+		
+		if(!team) {
+			toString+="white ";
 		} else {
-			toString += "black ";
+			toString+="black ";
 		}
-
-		toString += "Rook";
-
+		
+		toString+="Bishop";
+		
 		return toString;
 	}
 
@@ -73,83 +73,44 @@ public class Rook implements Piece {
 		return this.preference;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<int[]> possibleMoves(int[] currentPos) {
 		List<int[]> moves = new ArrayList<int[]>();
-		int x = currentPos[0];// current row position
-		int y = currentPos[1];// current column position
-
-		// int [] castle = {x, y+2};
-		
-		// moves.add(castle);
+		int x = currentPos[0];
+		int y = currentPos[1];
+		//add all moves
 		for (int i = 1; i <= 7; i++) {
-
-			int[] a = { x + i, y };// move up i spaces
-			int[] b = { x - i, y };// move down i spaces
-			int[] c = { x, y + i };// move right
-			int[] d = { x, y - i };// move left
-			moves.add(a);
-			moves.add(b);
-			moves.add(c);
-			moves.add(d);
-			if ((x + i) > 7) {
-				// don't add this move
-				moves.remove(a);
-
-			}
-
-			if ((x - i) < 0) {
-				// break;
-				moves.remove(b);
-
-			}
-
-			if ((y + i) > 7) {
-				// break;
-				moves.remove(c);
-			}
-
-			if ((y - i) < 0) {
-				// break;
-				moves.remove(d);
-			}
-
-			if (x == 0) {
-
-				moves.remove(b);
-			}
-			if (y == 0) {
-
-				moves.remove(d);
-			}
-			if (y == 7) {
-
-				moves.remove(c);
-			}
-			if (x == 7) {
-
-				moves.remove(a);
-			}
-			
-
-		
-			
-		// if (!firstMove){
-		// moves.remove(castle);
-		// }
+			int[] upRight = {x+i,y+i};
+			int[] upLeft = {x+i,y-i};
+			int[] downRight = {x-i,y+i};
+			int[] downLeft = {x-i,y-i};
+			moves.add(upRight);
+			moves.add(upLeft);
+			moves.add(downRight);
+			moves.add(downLeft);
 		}
-		HashSet<int []> hs = new HashSet<int []>();
-		hs.addAll(moves);
-		moves.clear();
-		moves.addAll(hs);
-		//for(int v =0; v<moves.size(); v++){
-			//System.out.println(Arrays.toString(moves.get(v)));
-		//}
-		
+		//remove impossible moves
+		//iterate over all moves in moves List
+		for (int j=0; j<moves.size();j++) {
+			int[] coords = moves.get(j);
+			//remove the move if coordinate is out of bounds
+			if ((coords[0] < 0) || (coords[0] > 7)) {
+				moves.remove(coords);
+				j--;
+			}
+			if ((coords[1] < 0) || (coords[1] > 7)) {
+				moves.remove(coords);
+				j--;
+			}
+			
+		}
+		/*for (int f = 0; f<moves.size(); f++){
+			
+		System.out.println(Arrays.toString((moves).get(f)));
+		}*/
 		return moves;
 	}
-
+//monkey balls
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -170,7 +131,7 @@ public class Rook implements Piece {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Rook other = (Rook) obj;
+		Bishop other = (Bishop) obj;
 		if (active != other.active)
 			return false;
 		if (firstMove != other.firstMove)
@@ -190,6 +151,7 @@ public class Rook implements Piece {
 		
 	}
 
-
+	
+	
 
 }

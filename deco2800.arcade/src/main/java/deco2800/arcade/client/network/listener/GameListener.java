@@ -2,7 +2,6 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.protocol.game.NewGameResponse;
 
 public class GameListener extends NetworkListener {
@@ -27,21 +26,11 @@ public class GameListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof NewGameResponse){
+			
+			@SuppressWarnings("unused")
 			NewGameResponse newGameResponse = (NewGameResponse) object;
 			
-			switch (newGameResponse) {
-			case OK:
-				Arcade arcade = Arcade.getInstance();
-				arcade.startSelectedGame(); //TODO actual game
-				break;
-			case REFUSED:
-				Arcade.getInstance().selectGame();
-				break;
-			case ERROR:
-				//TODO handle error
-			case UNAVAILABLE:
-				//TODO handle UNAVAILABLE
-			}
+			//TODO something
 		}
 	}
 

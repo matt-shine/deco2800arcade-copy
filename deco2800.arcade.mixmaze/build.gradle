@@ -1,0 +1,15 @@
+
+dependencies {
+  compile project(":deco2800.arcade.model")
+  compile project(":deco2800.arcade.protocol")
+  compile project(":deco2800.arcade.utils")
+  compile project(":deco2800.arcade")
+
+  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
+  compile group: "com.badlogicgames.gdx", name: "gdx-backend-lwjgl", version: "0.9.7"
+}
+
+task(runMixMaze, dependsOn: classes, type: JavaExec) {
+  main = "deco2800.arcade.mixmaze.MixMazeStarter"
+  classpath = sourceSets.main.runtimeClasspath
+}

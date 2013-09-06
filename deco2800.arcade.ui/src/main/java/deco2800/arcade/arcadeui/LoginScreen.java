@@ -28,14 +28,6 @@ public class LoginScreen implements Screen {
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
         skin2.add("white", new Texture(pixmap));
-
-        // Specify font, fontColor, cursor, selection, and background
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("default");
-        textFieldStyle.fontColor = Color.WHITE;
-        textFieldStyle.cursor = skin2.newDrawable("white", Color.WHITE);
-        textFieldStyle.selection = skin2.newDrawable("white", Color.WHITE);
-        skin2.add("default", textFieldStyle);
         
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.up = skin2.newDrawable("white", Color.DARK_GRAY);
@@ -56,10 +48,10 @@ public class LoginScreen implements Screen {
         stage.addActor(table);
 
         Label usernameLabel = new Label("Username:", skin);
-        final TextField usernameText = new TextField("", skin2);
+        final TextField usernameText = new TextField("", skin);
         usernameText.setMessageText("Enter Username");
         Label passwordLabel = new Label("Password:", skin);
-        final TextField passwordText = new TextField("", skin2);
+        final TextField passwordText = new TextField("", skin);
         passwordText.setMessageText("Enter Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');

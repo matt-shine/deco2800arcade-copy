@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class LocalPlayer extends Paddle {
 
-	public int KBPADDLESPEED = 600;
+	public int KBPADDLESPEED = 550;
 	public static final int SCREENWIDTH = 1280;
 
 	/**

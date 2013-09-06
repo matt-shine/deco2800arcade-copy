@@ -3,6 +3,7 @@ package deco2800.arcade.breakout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -17,6 +18,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.breakout.PongBall;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
@@ -40,14 +42,19 @@ public class Breakout extends GameClient {
 	private PongBall ball;
 	private int score;
 	private int lives;
-	int[] sequence = {19, 19, 20, 20, 21, 22, 21, 22, 30, 29};
-	int currentButton = 0;
-	
-	private Texture background;
-	
-	public Sound breaking;
+	private int[] sequence = { 19, 19, 20, 20, 21, 22, 21, 22, 30, 29 };
+	private int currentButton = 0;
+	public int bumpCount = 0;
+	public int brickBreak = 0;
 
-	// private String status;
+	private Texture background;
+
+	public Sound breaking;
+	public Music music;
+	public Sound bump;
+
+	private String status = null;
+
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
 
@@ -89,11 +96,21 @@ public class Breakout extends GameClient {
 		// Sets the display size
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		
-		//breaking = Gdx.audio.newSound(Gdx.files.classpath("resources/break.wav"));
+
+		// access the file location of the sounds
+		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
+		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
+		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
+
+		// setting and playing the background music
+		music.setLooping(true);
+		music.setVolume(0.3f);
+		music.play();
+
+		// setting the ball and paddle
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
 		ball = new PongBall();
-		ball.setColor(1, 1, 1, 1);
+		ball.setColor(0, 1, 0, 1);
 
 		// created the 48 Bricks
 		int index = 0;
@@ -116,9 +133,10 @@ public class Breakout extends GameClient {
 		gameState = GameState.READY;
 
 	}
+
 	/*
-	 * Decrements bricks and increments score once ball hits 
-	 * brick. Gives time for processing
+	 * Decrements bricks and increments score once ball hits brick. Gives time
+	 * for processing
 	 */
 	public void updateGameState(int bounce) {
 		if (bounce == 0) {
@@ -126,12 +144,15 @@ public class Breakout extends GameClient {
 		} else {
 			ball.bounceY();
 		}
+
+		breaking.play();
+		brickBreak++;
 		score++;
 		brickNum--;
-		try { 
-			Thread.currentThread().sleep(25); 
-			} 
-		catch(Exception e) { }
+		try {
+			Thread.currentThread().sleep(25);
+		} catch (Exception e) {
+		}
 	}
 
 	/**
@@ -140,6 +161,9 @@ public class Breakout extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
+		breaking.dispose();
+		music.dispose();
+		bump.dispose();
 	}
 
 	/**
@@ -162,6 +186,8 @@ public class Breakout extends GameClient {
 	 * Renders game mechanics.
 	 */
 	public void render() {
+		//super.render();
+		
 		// Clears Frame
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -171,7 +197,7 @@ public class Breakout extends GameClient {
 
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
-		
+
 		// Draw a background
 		batch.begin();
 		batch.draw(background, 0, 0);
@@ -184,7 +210,6 @@ public class Breakout extends GameClient {
 		// TODO Make the Ball a Circle
 		ball.render(shapeRenderer);
 
-		
 		// Writes in the text information
 		/*
 		 * Iterates through the array check whether brick's status is true,
@@ -192,30 +217,35 @@ public class Breakout extends GameClient {
 		 */
 		for (Brick b : bricks) {
 			if (b.getState()) {
-				// originally sent shapeRenderer 
+				// originally sent shapeRenderer
 				b.render(shapeRenderer);
 			}
 		}
 		shapeRenderer.end();
 		batch.begin();
 		font.setColor(Color.GREEN);
-		font.draw(batch, "player " + player, SCREENWIDTH/4, SCREENHEIGHT - 20);
+		font.draw(batch, "player " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);
 		font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
 				SCREENHEIGHT - 20);
-		font.draw(batch, "Score " + Integer.toString(score), SCREENWIDTH*3/4, SCREENHEIGHT-20);
+		font.draw(batch, "Score " + Integer.toString(score),
+				SCREENWIDTH * 3 / 4, SCREENHEIGHT - 20);
+		if (status != null) {
+			font.draw(batch, status, SCREENWIDTH / 2, SCREENHEIGHT / 2);
+		}
 		batch.end();
 
 		switch (gameState) {
 
 		case READY:
+			status = "Press Space or Touch the screen to Start!";
 			if (Gdx.input.isKeyPressed(Keys.SPACE) || Gdx.input.isTouched()) {
 				Start();
-			} else if(sequence != null) {
-				if(Gdx.input.isKeyPressed(sequence[currentButton])){
+			} else if (sequence != null) {
+				if (Gdx.input.isKeyPressed(sequence[currentButton])) {
 					currentButton++;
-					System.out.println("WORKED!!!"+currentButton);
+					System.out.println("WORKED!!!" + currentButton);
 				}
-				if(sequence.length == currentButton){
+				if (sequence.length == currentButton) {
 					currentButton = 0;
 					bonusLives();
 					System.out.println("SCORE UPDATE!");
@@ -260,7 +290,9 @@ public class Breakout extends GameClient {
 
 			if (ball.bounds.overlaps(paddle.paddleShape)
 					&& ball.getYVelocity() < 0) {
+				bump.play();
 				ball.bounceY();
+
 			}
 
 			if (ball.bounds.y >= SCREENHEIGHT - PongBall.WIDTH) {
@@ -276,11 +308,21 @@ public class Breakout extends GameClient {
 				roundOver();
 			}
 
+			if (Gdx.input.isButtonPressed(Keys.ESCAPE)) {
+				pause();
+			}
+
 			break;
 
 		case GAMEOVER:
-			if (Gdx.input.isTouched()) {
+			if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Keys.SPACE)) {
 				gameOver();
+				breaking.dispose();
+				music.dispose();
+				bump.dispose();
+				bumpCount++;
+				ArcadeSystem.goToGame(ArcadeSystem.UI);
+
 			}
 
 			break;
@@ -296,6 +338,7 @@ public class Breakout extends GameClient {
 
 	private void Start() {
 		ball.randomizeVelocity();
+		status = null;
 		gameState = GameState.INPROGRESS;
 
 	}
@@ -306,8 +349,8 @@ public class Breakout extends GameClient {
 	 */
 	private void win() {
 		score += lives * 5;
-		System.out.println("Congratulations " + player
-				+ " your final score is: " + score);
+		status = "Congratulations! " + player + " your final score is: "
+				+ score;
 		if (lives == 3) {
 			incrementAchievement("breakout.prefect");
 		} else if (lives == 0) {
@@ -318,9 +361,9 @@ public class Breakout extends GameClient {
 		incrementAchievement("breakout.winGame");
 		gameState = GameState.GAMEOVER;
 	}
-	
+
 	private void bonusLives() {
-		lives = lives +2;
+		lives = lives + 2;
 		sequence = null;
 	}
 
@@ -336,11 +379,10 @@ public class Breakout extends GameClient {
 		if (lives > 0) {
 			ball.reset();
 			lives--;
-			score -= 10;
+			score -= 5;
 			gameState = GameState.READY;
 		} else {
-			System.out.println("Bad luck " + player + " your final score is: "
-					+ score);
+			status = "Bad luck " + player + " your final score is: " + score;
 			gameState = GameState.GAMEOVER;
 		}
 
@@ -349,9 +391,8 @@ public class Breakout extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		// game.gameId = "breakout";
+		game.id = "breakout";
 		game.name = "Breakout";
-		// game.availableAchievements = achievements;
+		game.description = "Bounce the ball off your paddle to keep it from falling off the bottom of the screen.";
 	}
 }
-

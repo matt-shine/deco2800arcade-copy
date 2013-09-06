@@ -2,7 +2,6 @@ package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -17,7 +16,6 @@ import deco2800.arcade.burningskies.entities.PlayerShip;
 public class PlayScreen implements Screen
 {
 	private BurningSkies game;
-	private Music music;
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -56,7 +54,9 @@ public class PlayScreen implements Screen
     
     @Override
     public void hide() {
-    	music.stop();
+    	//TODO: Make sure this resets properly
+    	stage.dispose();
+    	batch.dispose();
     } 
     
     @Override
@@ -73,6 +73,7 @@ public class PlayScreen implements Screen
     	batch.draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight() );
     	batch.end();
     	
+    	//TODO: toggle on pause
     	stage.act(delta);
     	stage.draw();
     }

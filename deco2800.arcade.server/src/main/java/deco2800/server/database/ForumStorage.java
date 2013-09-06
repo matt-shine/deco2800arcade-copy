@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -17,8 +18,8 @@ import java.util.Date;
  */
 public class ForumStorage {
 	/**
-	 * TODO 1. Create Initialization with test
-	 * Note; only initialization with parent_thread is implemented.
+	 * TODO Create method to retrieve the DB data
+	 * TODO Coordinate methods with forum classes.
 	 */
 	/* Fields */
 	private boolean initialized = false;
@@ -46,7 +47,7 @@ public class ForumStorage {
 				+ ", content long varchar NOT NULL"
 				+ ", created_by integer NOT NULL"
 				+ ", timestamp timestamp"
-				+ ", category varchar(10) DEFAULT 'General Admin'"
+				+ ", category varchar(30) DEFAULT 'General Admin'"
 				+ ", tags long varchar)";
 		String createChkCategory = "ALTER TABLE parent_thread ADD CHECK (category IN ('General Admin', 'Game Bug', 'Others'))";
 		/* Create database connection */
@@ -70,15 +71,18 @@ public class ForumStorage {
 			st.close();
 			initialized = true;
 		} catch (SQLException e) {
+			try {
+				con.rollback();
+			} catch (SQLException er) {
+				throw new DatabaseException("Fail to rollback: ", er);
+			}
 			throw new DatabaseException("Fail to create table: " + e);
-		} catch (Exception e) {
-			throw new DatabaseException("Unhandled error: " + e);
 		} finally {
 			try {
 				con.setAutoCommit(true);
 				con.close();
 			} catch (Exception e) {
-				throw new DatabaseException("Failt to set autocommit");
+				throw new DatabaseException("Fail to set autocommit");
 			}
 		}
 	}
@@ -90,12 +94,23 @@ public class ForumStorage {
 	 * 
 	 */
 	public int insertParentThread(String topic, String content
-			, int createdBy, String category, String[] tags) throws DatabaseException {
+			, int createdBy, String category, String tags) throws DatabaseException {
 		int result = -1;
 		
 		String insertParentThread = "INSERT INTO parent_thread"
 				+ " (topic, content, created_by, timestamp, category, tags)"
 				+ " VALUES(?, ?, ?, ?, ?, ?)";
+		
+		/* Check parameters */
+		if (topic == "" || topic.length() > 30) {
+			return result;
+		} else if (content == "") {
+			return result;
+		} else if (createdBy < 0) {
+			return result;
+		} else if (category == "") {
+			return result;
+		}
 		
 		/* Create database connection */
 		Connection con = null;
@@ -115,14 +130,17 @@ public class ForumStorage {
 			st.setInt(3, createdBy);
 			st.setTimestamp(4, this.getNow());
 			st.setString(5, category);
-			st.setString(6, this.getTagsString(tags));
+			st.setString(6, tags);
 			/* Execute */
 			st.executeUpdate();
 			con.commit();
 		} catch (SQLException e) {
+			try {
+				con.rollback();
+			} catch (SQLException er) {
+				throw new DatabaseException("Fail to rollback: ", er);
+			}
 			throw new DatabaseException("InsertError: " + e);
-		} catch (Exception e) {
-			throw new DatabaseException(e);
 		} finally {
 			try {
 				con.setAutoCommit(true);
@@ -134,11 +152,108 @@ public class ForumStorage {
 		return result;
 	}
 	
+	/**
+	 * Retrieve parent thread data from given pid from DB.
+	 * Return String[] for success and null for failure
+	 * 
+	 * @param pid, int, unique id of parent thread
+	 * @return String[], contains the result set {pid, topic, content
+	 * 					, createdBy, timestamp, category, tags}
+	 */
+	public String[] getParentThread(int pid) {
+		String selectPid = "SELECT * FROM parent_thread WHERE pid=?";
+		String[] result = new String[7];
+		Connection con = null;
+		
+		if (pid < 0) {
+			return null;
+		}
+		/* Create DB Connection */
+		try {
+			con = Database.getConnection();
+		} catch (Exception e) {
+			return null;
+		}
+		/* SELECT query */
+		try {
+			con.setAutoCommit(true);
+			PreparedStatement st = con.prepareStatement(selectPid);
+			st.setInt(1, pid);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				result[0] = rs.getString("pid");
+				result[1] = rs.getString("topic");
+				result[2] = rs.getString("content");
+				result[3] = rs.getString("created_by");
+				result[4] = rs.getString("timestamp");
+				result[5] = rs.getString("category");
+				result[6] = rs.getString("tags");
+			}
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		} finally {
+			try {
+				con.close();
+			} catch (Exception e) {
+				return result;
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Retrieve all parent threads data from DB. Return String[][] for result
+	 * , and return null for failure. 
+	 * 
+	 * @return	String[][],	{pthread = {pid, topic, content, createdBy
+	 * 						, timestamp, category, tags}}
+	 */
+	public String[][] getAllParentThread() {
+		String selectAll = "SELECT * FROM parent_thread";
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		String[] strArray;
+		Connection con = null;
+		try {
+			con = Database.getConnection();
+		} catch (Exception e) {
+			return null;
+		}
+		try {
+			PreparedStatement st = con.prepareStatement(selectAll);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				strArray = new String[7];
+				strArray[0] = rs.getString("pid");
+				strArray[1] = rs.getString("topic");
+				strArray[2] = rs.getString("content");
+				strArray[3] = rs.getString("created_by");
+				strArray[4] = rs.getString("timestamp");
+				strArray[5] = rs.getString("category");
+				strArray[6] = rs.getString("tags");
+				result.add(strArray);
+			}
+		} catch (SQLException e) {
+			return null;
+		} finally {
+			try {
+				con.close();
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		/* Convert ArrayList to String[][] */
+		String[][] result2 = new String[result.size()][7];
+		result2 = result.toArray(result2);
+		return result2;
+	}
+	
 	private String getTagsString(String[] tags) {
 		String result = "";
 		for (int i = 0; i < tags.length; i++) {
 			result += tags[i];
-			result += ":";
+			result += ";";
 		}
 		return result;
 	}

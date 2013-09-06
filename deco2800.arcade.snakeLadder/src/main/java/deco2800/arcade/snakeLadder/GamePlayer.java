@@ -7,12 +7,16 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+//import deco2800.arcade.snakeLadderModel.Dice;
+
+
+
 public class GamePlayer {
 	public static final float WIDTH = 20f; //How big is the player (its a square)
 	public static final float INITIALSPEED = 60; // How fast is the player going at the start of a point
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
 	//private Texture player;
-	
+	private int coordinate=-1;
 	
 	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
 	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
@@ -57,7 +61,10 @@ public class GamePlayer {
 	public void move(float time) {
 	  bounds.x += time*velocity.x;
 	  bounds.y += time*velocity.y;
+	 
+//      setCoordinate(diceNumber);
 	}
+	
 	
 	public void moveUp() {
 		//if player reacher left/right edge, it moves up one row
@@ -91,7 +98,28 @@ public class GamePlayer {
     }
     
     public void initializeVelocity() {
+    	int n=0;
+    	
+    	if(bounds.y==120*n)
+    	{
 		velocity.x = 60f;
 		velocity.y=0;
+		n++;
+    	}
+    	else
+    	{
+    		velocity.x=-60f;
+    		velocity.y=0;
+    	}
+    	
 	}
+   public int getDnumber(int diceNumber){
+    	coordinate+=diceNumber;
+    	return coordinate;
+    }
+   public int newposition()
+   {
+	   return coordinate;
+   }
+   
 }

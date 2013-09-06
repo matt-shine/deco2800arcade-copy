@@ -61,7 +61,7 @@ public class SnakeLadder extends GameClient {
 		INPROGRESS,
 		GAMEOVER
 	}
-	private GameState gameState;
+	GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
 	private ShapeRenderer shapeRenderer;
@@ -222,12 +222,12 @@ public class SnakeLadder extends GameClient {
         dice = new Dice();
         
         //TODO: button should be disabled when its others player turn or when player is on the move
-        //diceButton listener for when the button is pressed
-        diceButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-            	dice.rollDice();
-            }
-        });
+       // diceButton listener for when the button is pressed
+//        diceButton.addListener(new ChangeListener() {
+//            public void changed (ChangeEvent event, Actor actor) {
+//            	dice.rollDice();
+//            }
+//        });
  
     
 	}
@@ -290,12 +290,20 @@ public class SnakeLadder extends GameClient {
 		    case READY: //Ready to start a new point
 		    	if (Gdx.input.isTouched()) {
 		    		startPoint();
+		    		gamePlayer.getDnumber(dice.getDiceNumber());
 		    	}
 		    	break;
 		    	
 		    case INPROGRESS: 
 		    	gamePlayer.move(Gdx.graphics.getDeltaTime());
-				if(Math.abs(tileList[12].getCoorX() - gamePlayer.bounds.x) <(1f)&&Math.abs(tileList[12].getCoorY() - gamePlayer.bounds.y) <(1f))
+//		    	int a= dice.getDiceNumber();
+//		    	int position=0;
+//		    	while(0<=gamePlayer.bounds.x &&gamePlayer.bounds.x<=(600-20f)&&gamePlayer.bounds.y<=540)
+//		    	{
+//		    		
+//		    		position+=a;
+//		    	}
+				if(Math.abs(tileList[gamePlayer.newposition()].getCoorX() - gamePlayer.bounds.x) <(1f)&&Math.abs(tileList[gamePlayer.newposition()].getCoorY() - gamePlayer.bounds.y) <(1f))
 			    {
 				    	stopPoint();
 			    }
@@ -326,7 +334,7 @@ public class SnakeLadder extends GameClient {
 		
 	}
 	
-	private void stopPoint() {
+	public void stopPoint() {
 		gamePlayer.reset();
 		// If we've reached the victory point then update the display
 		if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {	
@@ -346,6 +354,7 @@ public class SnakeLadder extends GameClient {
 	private void startPoint() {
 		// TODO Auto-generated method stub
 		gamePlayer.initializeVelocity();
+		dice.rollDice();	
 		gameState = GameState.INPROGRESS;
 		statusMessage = null;
 	}

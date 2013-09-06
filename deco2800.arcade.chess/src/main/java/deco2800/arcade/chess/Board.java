@@ -397,6 +397,9 @@ public class Board{
 		 * deactivate the piece, add it to the graveyard and move new piece to
 		 * that square
 		 */
+		if (piece.getClass() == whitePawn1.getClass()) {
+			piece.hasMoved();
+		}
 		if (occupiedSpace(newPosition) && !kingCastleSwap) {
 			// Remove enemy piece on the newPosition
 			Piece onSquare = Board_State.get(x).get(y);

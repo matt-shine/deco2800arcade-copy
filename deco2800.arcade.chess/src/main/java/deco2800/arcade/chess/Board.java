@@ -316,13 +316,15 @@ public class Board{
 		// Queen
 		if (piece.getClass() == whiteQueen.getClass()) {
 			//this.removeJumpsBishop(possibleMoves, currentPos, piece);
-			//this.removeJumpsRook(possibleMoves, currentPos, piece);
-			allowableMoves = new ArrayList<int[]>();
-
-			allowableMoves.addAll(this.removeJumpsRook(possibleMoves,
-					currentPos, piece));
-			allowableMoves.addAll(this.removeJumpsBishop(possibleMoves,
-					currentPos, piece));
+			this.removeJumpsQueen(possibleMoves, currentPos, piece);
+			//allowableMoves = new ArrayList<int[]>();
+			//this.removeJumpsBishop(possibleMoves, currentPos, piece);
+			allowableMoves = new ArrayList<int[]>(
+					this.removeJumpsQueen(possibleMoves, currentPos, piece));
+			//allowableMoves.addAll(this.removeJumpsRook(possibleMoves,
+					//currentPos, piece));
+			//allowableMoves.addAll(this.removeJumpsBishop(possibleMoves,
+					//currentPos, piece));
 
 
 		}
@@ -929,6 +931,384 @@ public class Board{
 		return possible;
 
 	}
+	private List<int []> removeJumpsQueen(List<int[]> possibleMoves,
+			int[] currentPos, Piece piece){
+		
+			int x = currentPos[0];
+			int y = currentPos[1];
+			int xCheck;
+			int yCheck;
+			List<int[]> possible = new ArrayList<int[]>(possibleMoves);
+
+			// remove jumps for moving UP
+			for (int i = 1; i <= 7; i++) {
+
+				int[] up = { x + i, y };
+				if ((up[0] >= 0) && (up[0] <= 7) && (up[1] >= 0) && (up[1] <= 7)) {
+					
+				 if (!occupiedSpace(up)) {
+						continue;
+					
+					} else {
+						
+						List<Piece> row = Board_State.get(x + i);
+						Piece onSquare = row.get(y);
+
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+						if (piece.getTeam() != onSquare.getTeam()) {
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x + i + j)) && (yCheck == (y))) {
+										possible.remove(k);
+
+									}
+								}
+							}
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x + i + j)) && (yCheck == (y))) {
+										possible.remove(k);
+									
+									}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+
+			// remove jumps for moving LEFT
+			for (int i = 1; i <= 7; i++) {
+
+				int[] Left = { x, y - i };
+				if ((Left[0] >= 0) && (Left[0] <= 7) && (Left[1] >= 0)
+						&& (Left[1] <= 7)) {
+					// if space is not occupied continue
+					if (!occupiedSpace(Left)) {
+						continue;
+					} else {
+						List<Piece> row = Board_State.get(x);
+						Piece onSquare = row.get(y - i);
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+						if (piece.getTeam() != onSquare.getTeam()) {
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x) && (yCheck == (y - i - j)))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x) && (yCheck == (y - i - j)))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+
+			// remove jumps for moving RIGHT
+			for (int i = 1; i <= 7; i++) {
+				int[] Right = { x, y + i };
+				if ((Right[0] >= 0) && (Right[0] <= 7) && (Right[1] >= 0)
+						&& (Right[1] <= 7)) {
+					// if space is not occupied continue
+					if (!occupiedSpace(Right)) {
+						continue;
+					} else {
+						List<Piece> row = Board_State.get(x);
+						Piece onSquare = row.get(y + i);
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+						if (piece.getTeam() != onSquare.getTeam()) {
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x) && (yCheck == (y + i + j)))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x) && (yCheck == (y + i + j)))) {
+										possible.remove(k);
+
+									}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+
+			// remove jumps for moving DOWN
+			for (int i = 1; i <= 7; i++) {
+				int[] down = { x - i, y };
+				if ((down[0] >= 0) && (down[0] <= 7) && (down[1] >= 0)
+						&& (down[1] <= 7)) {
+
+					// if space is not occupied continue
+					if (!occupiedSpace(down)) {
+						continue;
+					} else {
+						List<Piece> row = Board_State.get(x - i);
+						Piece onSquare = row.get(y);
+
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+						if (piece.getTeam() != onSquare.getTeam()) {
+
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x - i - j)) && (yCheck == (y))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x - i - j)) && (yCheck == (y))) {
+										possible.remove(k);
+
+									}
+								}
+							}
+
+							break;
+						}
+					}
+				}
+			}
+			for (int i = 1; i <= 7; i++) {
+				int[] upRight = { x + i, y + i };
+				if ((upRight[0] >= 0) && (upRight[0] <= 7) && (upRight[1] >= 0)
+						&& (upRight[1] <= 7)) {
+
+					// int g = possibleMoves.get(i)[0];
+					// int f = possibleMoves.get(i)[1];
+					// if space is not occupied continue
+					if (!occupiedSpace(upRight)) {
+						continue;
+					
+					} else {
+						List<Piece> row = Board_State.get(x + i);
+						Piece onSquare = row.get(y + i);
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+						if (piece.getTeam() != onSquare.getTeam()) {
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x + i + j))
+											&& (yCheck == (y + i + j))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x + i + j))
+											&& (yCheck == (y + i + j))) {
+										possible.remove(k);
+									}
+								}
+							}
+
+							break;
+						}
+					}
+				}
+			}
+
+			// remove jumps for moving UP and LEFT
+			for (int i = 1; i <= 7; i++) {
+
+				int[] upLeft = { x + i, y - i };
+				if ((upLeft[0] >= 0) && (upLeft[0] <= 7) && (upLeft[1] >= 0)
+						&& (upLeft[1] <= 7)) {
+					// if space is not occupied continue
+					if (!occupiedSpace(upLeft)) {
+						continue;
+					} else {
+						List<Piece> row = Board_State.get(x + i);
+						Piece onSquare = row.get(y - i);
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+						if (piece.getTeam() != onSquare.getTeam()) {
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x + i + j))
+											&& (yCheck == (y - i -j))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x + i + j))
+											&& (yCheck == (y - i -j))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+
+			// remove jumps for moving DOWN and RIGHT
+			for (int i = 1; i <= 7; i++) {
+				/**/
+
+				int[] downRight = { x - i, y + i };
+				if ((downRight[0] >= 0) && (downRight[0] <= 7)
+						&& (downRight[1] >= 0) && (downRight[1] <= 7)) {
+					// if space is not occupied continue
+					if (!occupiedSpace(downRight)) {
+						continue;
+					} else {
+						List<Piece> row = Board_State.get(x - i);
+						Piece onSquare = row.get(y + i);
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+
+						if (piece.getTeam() != onSquare.getTeam()) {
+
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x - i - j))
+											&& (yCheck == (y + i + j))) {
+										possible.remove(k);
+									}
+								}
+							}
+
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x - i - j))
+											&& (yCheck == (y + i + j))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+
+			// remove jumps for moving DOWN and LEFT
+			for (int i = 1; i <= 7; i++) {
+
+				int[] downLeft = { x - i, y - i };
+				if ((downLeft[0] >= 0) && (downLeft[0] <= 7) && (downLeft[1] >= 0)
+						&& (downLeft[1] <= 7)) {
+					// if space is not occupied continue
+					if (!occupiedSpace(downLeft)) {
+						continue;
+					} else {
+						List<Piece> row = Board_State.get(x - i);
+						Piece onSquare = row.get(y - i);
+						// remove possible moves AFTER enemy piece onwards in
+						// direction
+						if (piece.getTeam() != onSquare.getTeam()) {
+							for (int j = 1; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x - i - j))
+											&& (yCheck == (y - i - j))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+							// remove possible moves FROM ally piece onwards in
+							// direction
+						} else {
+							for (int j = 0; j <= 7; j++) {
+								for (int k = 0; k < possible.size(); k++) {
+									xCheck = possible.get(k)[0];
+									yCheck = possible.get(k)[1];
+									if ((xCheck == (x - i - j))
+											&& (yCheck == (y - i - j))) {
+										possible.remove(k);
+									}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+			return possible;
+		}
+
 	
 	public Piece getPiece(int[] pos) {
 		FixedSizeList<Piece> row = Board_State.get(pos[0]);
@@ -1129,6 +1509,8 @@ public class Board{
 		System.out.println(whiteGraveyard);
 		
 	}
+	
+	
 
 	
 }

@@ -1,7 +1,12 @@
 package deco2800.server;
 
 import java.io.IOException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.net.BindException;
 
@@ -17,26 +22,31 @@ import deco2800.server.listener.GameListener;
 import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
 
-/** 
+/**
  * Implements the KryoNet server for arcade games which uses TCP and UDP
- * transport layer protocols. 
+ * transport layer protocols.
  * 
- * @see http://code.google.com/p/kryonet/ 
+ * @see http://code.google.com/p/kryonet/
  */
 public class ArcadeServer {
 
 	// Keep track of which users are connected
-	private Set<String> connectedUsers = new HashSet<String>();
-	
-	//singleton pattern
+	SessionManager sessionManager = new SessionManager();
+
+	// singleton pattern
 	private static ArcadeServer instance;
-	
+
+	// Public and private key pair help handshake with clients
+	private KeyPair keyPair;
+	private String algorithm = "RSA";
+
 	// Package manager
 	@SuppressWarnings("unused")
 	private PackageServer packServ;
-	
+
 	/**
 	 * Retrieve the singleton instance of the server
+	 * 
 	 * @return game server instance
 	 */
 	public static ArcadeServer instance() {
@@ -45,7 +55,7 @@ public class ArcadeServer {
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Initializes and starts Server
 	 * 
@@ -58,47 +68,47 @@ public class ArcadeServer {
 
 	// Credit storage service
 	private CreditStorage creditStorage;
-	//private PlayerStorage playerStorage;
-	//private FriendStorage friendStorage;
-	
+	// private PlayerStorage playerStorage;
+	// private FriendStorage friendStorage;
+
 	// Highscore database storage service
 	private HighscoreDatabase highscoreDatabase;
-	
+
 	/**
 	 * @return creditStorage service
 	 */
 	public CreditStorage getCreditStorage() {
 		return this.creditStorage;
 	}
-	
+
 	/**
-	 * Create a new Arcade Server.
-	 * This should generally not be called.
+	 * Create a new Arcade Server. This should generally not be called.
+	 * 
 	 * @see ArcadeServer.instance()
 	 */
 	private ArcadeServer() {
 		this.creditStorage = new CreditStorage();
-		//this.playerStorage = new PlayerStorage();
-		//this.friendStorage = new FriendStorage();
-		
+		// this.playerStorage = new PlayerStorage();
+		// this.friendStorage = new FriendStorage();
+
 		this.highscoreDatabase = new HighscoreDatabase();
 		this.packServ = new PackageServer();
-		
-		//initialize database classes
+
+		// initialize database classes
 		try {
 			creditStorage.initialise();
-			//playerStorage.initialise();
-			
+			// playerStorage.initialise();
+
 			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Binds TCP/UDP ports to the server instance, registers classes and 
-	 * adds listeners
+	 * Binds TCP/UDP ports to the server instance, registers classes and adds
+	 * listeners
 	 */
 	public void start() {
 		Server server = new Server();
@@ -110,14 +120,42 @@ public class ArcadeServer {
 		} catch (BindException b) {
 			System.err.println("Error binding server: Address already in use");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		generateKeyPair();
+
 		Protocol.register(server.getKryo());
-		server.addListener(new ConnectionListener(connectedUsers));
+
+		// Connection listener manages the handshake process and associates
+		// clients with a shared secret key.
+		server.addListener(new ConnectionListener(sessionManager, keyPair));
+
+		// FIXME these need to be behind a proxy that unseals messages
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new CommunicationListener(server));
+	}
+
+	/**
+	 * Generate the server public and private key that is used to handshake with
+	 * the client.
+	 */
+	private void generateKeyPair() {
+		KeyPairGenerator kpg = null;
+		try {
+			kpg = KeyPairGenerator.getInstance(algorithm);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		if (kpg != null) {
+			kpg.initialize(2048);
+			KeyPair keyPair = kpg.generateKeyPair();
+
+			this.keyPair = keyPair;
+		} else {
+			// Something went wrong
+			this.keyPair = null;
+		}
 	}
 }

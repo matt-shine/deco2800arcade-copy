@@ -1,13 +1,11 @@
-package deco2800.server;
+package deco2800.arcade.protocol;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.KeyFactory;
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -15,40 +13,25 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * Helper class for reading server certificate key pair from file.
+ * 
+ * @author Team Mashup
+ * @see CertificateGenerator for generating the certificates
+ * 
+ */
 public class CertificateHandler {
 
-	private String algorithm;
-	private String pathClient;
-	private String pathServer;
-
-	public CertificateHandler() {
-		algorithm = "RSA";
-		pathClient = "client.cert";
-		pathServer = "server.cert";
-	}
-
-	/**
-	 * Generate server and client certificates
-	 */
-	public KeyPair generateCertificates() {
-		KeyPairGenerator kpg = null;
-		try {
-			kpg = KeyPairGenerator.getInstance(algorithm);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		KeyPair keyPair = kpg.generateKeyPair();
-
-		writeKeyPair(keyPair);
-		
-		return keyPair;
-	}
+	private static String algorithm = "RSA";
+	private static String pathClient = "client.cert";
+	private static String pathServer = "server.cert";
 
 	/**
 	 * Get client certificate from file if it exists
+	 * 
 	 * @return PrivateKey client certificate
 	 */
-	public PrivateKey getClientCertificate() {
+	public static PrivateKey getClientCertificate() {
 		KeyPair keyPair = null;
 		try {
 			keyPair = readKeyPair();
@@ -62,9 +45,10 @@ public class CertificateHandler {
 
 	/**
 	 * Get server certificate from file if it exists
+	 * 
 	 * @return PublicKey server certificate
 	 */
-	public PublicKey getServerCertificate() {
+	public static PublicKey getServerCertificate() {
 		KeyPair keyPair = null;
 		try {
 			keyPair = readKeyPair();
@@ -76,35 +60,7 @@ public class CertificateHandler {
 		return keyPair.getPublic();
 	}
 
-	private void writeKeyPair(KeyPair keyPair) {
-		PrivateKey privateKey = keyPair.getPrivate();
-		PublicKey publicKey = keyPair.getPublic();
-
-		// Write the server certificate to file
-		X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(
-				publicKey.getEncoded());
-		writeEncodedKeySpec(publicKeySpec.getEncoded(), pathServer);
-
-		// Write the client certificate to file
-		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(
-				privateKey.getEncoded());
-		writeEncodedKeySpec(privateKeySpec.getEncoded(), pathClient);
-	}
-
-	private void writeEncodedKeySpec(byte[] encodedKeySpec, String path) {
-		FileOutputStream stream;
-		try {
-			stream = new FileOutputStream(path);
-			stream.write(encodedKeySpec);
-			stream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private KeyPair readKeyPair() throws InvalidKeySpecException,
+	private static KeyPair readKeyPair() throws InvalidKeySpecException,
 			FileNotFoundException {
 		byte[] encodedPublicKey = readEncodedKey(pathServer);
 		byte[] encodedPrivateKey = readEncodedKey(pathClient);
@@ -127,7 +83,8 @@ public class CertificateHandler {
 		return new KeyPair(publicKey, privateKey);
 	}
 
-	private byte[] readEncodedKey(String path) throws FileNotFoundException {
+	private static byte[] readEncodedKey(String path)
+			throws FileNotFoundException {
 		File file = new File(path);
 		FileInputStream stream = new FileInputStream(path);
 		byte[] encodedKey = new byte[(int) file.length()];

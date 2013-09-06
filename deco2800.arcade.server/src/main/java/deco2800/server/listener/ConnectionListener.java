@@ -1,19 +1,32 @@
 package deco2800.server.listener;
 
-import java.util.Set;
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
+import javax.crypto.SecretKey;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
+import deco2800.arcade.protocol.CertificateHandler;
+import deco2800.arcade.protocol.connect.ClientKeyExchange;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
+import deco2800.arcade.protocol.connect.ServerKeyExchange;
+import deco2800.arcade.protocol.connect.SessionKeyExchange;
+import deco2800.server.SecretGenerator;
+import deco2800.server.Session;
+import deco2800.server.SessionManager;
 
 public class ConnectionListener extends Listener {
-	//list of all connected users
-	private Set<String> connectedUsers;
+	// Maintain a collection of the sessions
+	private SessionManager connectedSessions;
+	private KeyPair serverKeyPair;
 	
-	public ConnectionListener(Set<String> connectedUsers){
-		this.connectedUsers = connectedUsers;
+	public ConnectionListener(SessionManager sessionManager, KeyPair keyPair){
+		this.connectedSessions = sessionManager;
+		this.serverKeyPair = keyPair;
 	}
 	
 	@Override
@@ -26,14 +39,54 @@ public class ConnectionListener extends Listener {
 	 */
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
-		
+
 		if (object instanceof ConnectionRequest) {
 			ConnectionRequest request = (ConnectionRequest) object;
-			connectedUsers.add(request.username);
 
 			connection.sendTCP(ConnectionResponse.OK);
+			
+			// Send server public key certified with the server certificate
+			PublicKey serverCert = CertificateHandler.getServerCertificate();
+			ServerKeyExchange serverKeyExchange = new ServerKeyExchange();
+			try {
+				serverKeyExchange.setServerKey(serverKeyPair.getPublic(), serverCert);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			connection.sendTCP(serverKeyExchange);
+		}
+		
+		if (object instanceof ClientKeyExchange) {
+			ClientKeyExchange request = (ClientKeyExchange) object;
+			
+			PublicKey clientPublicKey = null;
+			try {
+				// FIXME get server private key
+				PrivateKey serverPrivateKey = null;
+				clientPublicKey = request.getClientKey(serverPrivateKey);
+			} catch (Exception e) {
+				e.printStackTrace();
+				// TODO it failed so ask client to resend
+			}
+			
+			if(clientPublicKey != null) {
+				SecretKey sessionKey = SecretGenerator.generateSecret();
+				
+				// Store session details
+				Session session = new Session(sessionKey, clientPublicKey);
+				this.connectedSessions.add(session);
+				
+				// Send session key to client
+				SessionKeyExchange sessionKeyExchange = new SessionKeyExchange();
+				try {
+					sessionKeyExchange.setSessionKey(sessionKey, clientPublicKey);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				connection.sendTCP(sessionKeyExchange);
+			}
 		}
 	}
 
-	
 }

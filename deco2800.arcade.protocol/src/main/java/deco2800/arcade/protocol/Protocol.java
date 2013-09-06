@@ -1,7 +1,10 @@
 package deco2800.arcade.protocol;
 
+import javax.crypto.SealedObject;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.*;
+
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.communication.ChatRequest;
@@ -20,62 +23,58 @@ import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
 
 public class Protocol {
-	
-	private static Kryo kryo;
-	
-	public static void setKryo(Kryo kryo) {
-		Protocol.kryo = kryo;
-	}
 
+//	private static List<Class<?>> registeredClasses = new ArrayList<Class<?>>();
+	
 	/**
 	 * Registers the classes that will be sent over the network. Classes 
 	 * registered in this method will not be encrypted.
 	 * @param kryo
 	 */
 	public static void register(Kryo kryo) {
-		Protocol.setKryo(kryo);
+		kryo.register(SealedObject.class);
 		
-		// Connection messages
-		kryo.register(ConnectionResponse.class);
-
-		// Credit messages
-		kryo.register(CreditBalanceRequest.class);
-		kryo.register(CreditBalanceResponse.class);
-
-		// Achievement messages
-		kryo.register(AchievementListRequest.class);
-		kryo.register(AddAchievementRequest.class);
-
-		// Game messages
-		kryo.register(GameStatusUpdate.class);
-		kryo.register(GameStatusUpdateResponse.class);
-		kryo.register(NewGameRequest.class);
-		kryo.register(GameRequestType.class);
-		kryo.register(NewGameResponse.class);
-
-		// Communication messages
-		kryo.register(CommunicationRequest.class);
-		kryo.register(ContactListUpdate.class);
-		kryo.register(ChatRequest.class);
-		kryo.register(TextMessage.class);
-		kryo.register(VoiceMessage.class);
-		
-		// Register miscellaneous classes
-		kryo.register(byte[].class);
+//		// Connection messages
+//		register(ConnectionResponse.class);
+//
+//		// Credit messages
+//		register(CreditBalanceRequest.class);
+//		register(CreditBalanceResponse.class);
+//
+//		// Achievement messages
+//		register(AchievementListRequest.class);
+//		register(AddAchievementRequest.class);
+//
+//		// Game messages
+//		register(GameStatusUpdate.class);
+//		register(GameStatusUpdateResponse.class);
+//		register(NewGameRequest.class);
+//		register(GameRequestType.class);
+//		register(NewGameResponse.class);
+//
+//		// Communication messages
+//		register(CommunicationRequest.class);
+//		register(ContactListUpdate.class);
+//		register(ChatRequest.class);
+//		register(TextMessage.class);
+//		register(VoiceMessage.class);
+//		
+//		// Register miscellaneous classes
+//		register(byte[].class);
 	}
 	
-	/**
-	 * Sends ConnectionRequest over network using encryption rather than 
-	 * plaintext
-	 * @param connectionRequest
-	 */
-	public static void registerEncrypted(ConnectionRequest connectionRequest) {		
-		connectionRequest.generateKey();
-		
-		// Ensures any ConnectionRequests are sent over the network using the 
-		// Blowfish encryption algorithm
-		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
-				new FieldSerializer(kryo, ConnectionRequest.class), connectionRequest.getKey()));
-	}
+//	/**
+//	 * Sends ConnectionRequest over network using encryption rather than 
+//	 * plaintext
+//	 * @param connectionRequest
+//	 */
+//	public static void registerEncrypted(ConnectionRequest connectionRequest) {		
+//		connectionRequest.generateKey();
+//		
+//		// Ensures any ConnectionRequests are sent over the network using the 
+//		// Blowfish encryption algorithm
+//		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
+//				new FieldSerializer(kryo, ConnectionRequest.class), connectionRequest.getKey()));
+//	}
 
 }

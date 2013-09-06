@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import deco2800.arcade.client.ArcadeInputMux;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
@@ -16,9 +16,7 @@ public class LoginScreen implements Screen {
 	private Skin skin;
     private Skin skin2;
     private Stage stage;
-	
-	
-	
+
 	public LoginScreen() {
         // skin is the skin loaded from loginSkin.json
         // skin2 is for the skin created programatically
@@ -37,7 +35,6 @@ public class LoginScreen implements Screen {
         textFieldStyle.fontColor = Color.WHITE;
         textFieldStyle.cursor = skin2.newDrawable("white", Color.WHITE);
         textFieldStyle.selection = skin2.newDrawable("white", Color.WHITE);
-        //textFieldStyle.background = ;
         skin2.add("default", textFieldStyle);
         
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -66,6 +63,7 @@ public class LoginScreen implements Screen {
         passwordText.setMessageText("Enter Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
+        Label errorLabel = new Label("login/server errors go here", skin, "error");
         TextButton loginButton = new TextButton("Login", skin2);
         TextButton exitButton = new TextButton("Exit", skin2);
 
@@ -77,6 +75,8 @@ public class LoginScreen implements Screen {
         passwordLabel.setAlignment(Align.right);
         table.add(passwordLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
         table.add(passwordText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.row();
+        table.add(errorLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
         table.row();
         table.add(loginButton).width(100).pad(10);
         table.add(exitButton).width(100).pad(10);
@@ -118,7 +118,6 @@ public class LoginScreen implements Screen {
         skin.dispose();
         
         ArcadeInputMux.getInstance().removeProcessor(stage);
-        
 	}
 
 	@Override
@@ -133,12 +132,7 @@ public class LoginScreen implements Screen {
 	public void resume() {
 	}
 
-
 	@Override
 	public void resize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
 	}
-	
-	
 }

@@ -9,8 +9,10 @@ public class Controller {
 	private Model model;
 	
 	public Controller(Model model2, View view2) {
-		
-		
+		/**
+		 * 
+		 */
+				
 	}
 	
 

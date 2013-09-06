@@ -8,6 +8,12 @@ import deco2800.arcade.userui.view.EditProfile;
 import deco2800.arcade.userui.view.View;
 
 public class Interface {
+	
+	/**
+	 * 
+	 * This class calls model, view and controller classes
+	 * 
+	 */
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {

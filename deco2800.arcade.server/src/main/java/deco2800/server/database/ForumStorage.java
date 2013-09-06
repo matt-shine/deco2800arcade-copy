@@ -20,6 +20,7 @@ public class ForumStorage {
 	/**
 	 * TODO Create method to retrieve the DB data
 	 * TODO Coordinate methods with forum classes.
+	 * TODO Create test case for delete
 	 */
 	/* Fields */
 	private boolean initialized = false;
@@ -51,12 +52,7 @@ public class ForumStorage {
 				+ ", tags long varchar)";
 		String createChkCategory = "ALTER TABLE parent_thread ADD CHECK (category IN ('General Admin', 'Game Bug', 'Others'))";
 		/* Create database connection */
-		try {
-			con = Database.getConnection();
-		} catch (Exception e) {
-			throw new DatabaseException(e);
-		}
-		
+		con = Database.getConnection();
 		/* Create tables */
 		try {
 			Statement st = con.createStatement();
@@ -81,8 +77,8 @@ public class ForumStorage {
 			try {
 				con.setAutoCommit(true);
 				con.close();
-			} catch (Exception e) {
-				throw new DatabaseException("Fail to set autocommit");
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close DB connectoin: " + e);
 			}
 		}
 	}
@@ -113,12 +109,7 @@ public class ForumStorage {
 		}
 		
 		/* Create database connection */
-		Connection con = null;
-		try {
-			con = Database.getConnection();
-		} catch (Exception e) {
-			throw new DatabaseException(e);
-		} 
+		Connection con = Database.getConnection();
 		
 		/* Insert value */
 		try {
@@ -160,18 +151,15 @@ public class ForumStorage {
 	 * @return String[], contains the result set {pid, topic, content
 	 * 					, createdBy, timestamp, category, tags}
 	 */
-	public String[] getParentThread(int pid) {
+	public String[] getParentThread(int pid) throws DatabaseException {
 		String selectPid = "SELECT * FROM parent_thread WHERE pid=?";
 		String[] result = new String[7];
-		Connection con = null;
 		
+		/* Create database connection */
+		Connection con = Database.getConnection();
+		
+		/* Check parameter */
 		if (pid < 0) {
-			return null;
-		}
-		/* Create DB Connection */
-		try {
-			con = Database.getConnection();
-		} catch (Exception e) {
 			return null;
 		}
 		/* SELECT query */
@@ -189,14 +177,13 @@ public class ForumStorage {
 				result[5] = rs.getString("category");
 				result[6] = rs.getString("tags");
 			}
-		} catch (Exception e) {
-			System.out.println(e);
-			return null;
+		} catch (SQLException e) {
+			throw new DatabaseException("Fail to retrieve parent thread: " + e);
 		} finally {
 			try {
 				con.close();
-			} catch (Exception e) {
-				return result;
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close DB connection: " + e);
 			}
 		}
 		
@@ -210,16 +197,18 @@ public class ForumStorage {
 	 * @return	String[][],	{pthread = {pid, topic, content, createdBy
 	 * 						, timestamp, category, tags}}
 	 */
-	public String[][] getAllParentThread() {
+	public String[][] getAllParentThread() throws DatabaseException {
 		String selectAll = "SELECT * FROM parent_thread";
 		ArrayList<String[]> result = new ArrayList<String[]>();
 		String[] strArray;
 		Connection con = null;
+		/* Get DB connection */
 		try {
 			con = Database.getConnection();
 		} catch (Exception e) {
 			return null;
 		}
+		/* Retrieve all parent threads from DB */
 		try {
 			PreparedStatement st = con.prepareStatement(selectAll);
 			ResultSet rs = st.executeQuery();
@@ -235,18 +224,48 @@ public class ForumStorage {
 				result.add(strArray);
 			}
 		} catch (SQLException e) {
-			return null;
+			throw new DatabaseException("Fail to retrieve parent threads: " + e);
 		} finally {
 			try {
 				con.close();
-			} catch (Exception e) {
-				return null;
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close DB connection: " + e);
 			}
 		}
 		/* Convert ArrayList to String[][] */
 		String[][] result2 = new String[result.size()][7];
 		result2 = result.toArray(result2);
 		return result2;
+	}
+	
+	public void deleteParentThread(int pid) throws DatabaseException {
+		String deleteParentThread = "DELETE FROM parent_thread WHERE pid=?";
+		Connection con;
+		
+		/* Check parameter */
+		if (pid < 0) {
+			return;
+		}
+		/* Get DB connection */
+		try {
+			con = Database.getConnection();
+		} catch (Exception e) {
+			return;
+		}
+		/* Delete parent thread having pid */
+		try {
+			PreparedStatement st = con.prepareStatement(deleteParentThread);
+			st.setInt(1, pid);
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DatabaseException("Fail to delete parent thread: " + e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close DB connection: " + e);
+			}
+		}
 	}
 	
 	private String getTagsString(String[] tags) {

@@ -51,7 +51,7 @@ public abstract class BulletPattern extends Actor {
 		// Compensate for frame drops - it happens always, bloody java
 		int loop = (int) Math.floor(timer / interval) - 1;
 		for(int i=0;i<=loop;i++) {
-			fire((float) (timer-delta-(i)*interval));
+			fire((float) (timer-delta-i*interval));
 		}
 		timer = timer % interval;
 	}

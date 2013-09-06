@@ -34,5 +34,9 @@ public class Map extends Actor {
 	public float getMapTime() {
 		return mapTime;
 	}
+	
+	public float getMapSpeed() {
+		return mapSpeed;
+	}
 
 }

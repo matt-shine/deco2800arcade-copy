@@ -1,9 +1,9 @@
 package deco2800.arcade.burningskies.entities;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-
-public abstract class BulletPattern {
+public abstract class BulletPattern extends Actor {
 	
 	protected float interval; // how often bullets are fired
 	protected float timer;
@@ -14,7 +14,14 @@ public abstract class BulletPattern {
 	public BulletPattern(Stage stage, Ship emitter) {
 		this.emitter = emitter;
 		this.stage = stage;
+		stage.addActor(this);
 		firing = false;
+	}
+	
+	@Override
+    public void act(float delta) {
+		onRender(delta);
+        super.act(delta);
 	}
 	
 	/**
@@ -22,20 +29,37 @@ public abstract class BulletPattern {
 	 */
 	public void start() {
 		timer = 0;
+		firing = true;
 	}
 	
 	/**
 	 * Stop our barrage, if an enemy/player dies or level complete etc
 	 */
 	public void stop() {
-		
+		timer = 0;
+		firing = false;
 	}
 	
 	/**
 	 * Decides whether we need to fire a bullet or not
 	 * @param delta time difference
 	 */
-	public abstract void onRender(float delta);
+	public void onRender(float delta) {
+		if(!firing) return;
+		timer += delta;
+		if(timer < interval) return;
+		// Compensate for frame drops - it happens always, bloody java
+		int loop = (int) Math.floor(timer / interval) - 1;
+		for(int i=0;i<=loop;i++) {
+			fire((float) (timer-delta-(i)*interval));
+		}
+		timer = timer % interval;
+	}
+	
+	/**
+	 * When our interval has been reached, fire our bullet
+	 */
+	public abstract void fire(float lag);
 	
 	/**
 	 * 

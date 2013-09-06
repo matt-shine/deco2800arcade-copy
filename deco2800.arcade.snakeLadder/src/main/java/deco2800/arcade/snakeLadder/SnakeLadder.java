@@ -295,7 +295,7 @@ public class SnakeLadder extends GameClient {
 		    	
 		    case INPROGRESS: 
 		    	gamePlayer.move(Gdx.graphics.getDeltaTime());
-				if(gamePlayer.bounds.x>=(6*gamePlayer.velocity.x))
+				if(Math.abs(tileList[12].getCoorX() - gamePlayer.bounds.x) <(1f)&&Math.abs(tileList[12].getCoorY() - gamePlayer.bounds.y) <(1f))
 			    {
 				    	stopPoint();
 			    }

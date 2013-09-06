@@ -62,7 +62,7 @@ public class GamePlayer {
 	public void moveUp() {
 		//if player reacher left/right edge, it moves up one row
 		velocity.x *= -1;
-		bounds.y = bounds.y + 60;		
+		bounds.y = bounds.y + 60f;		
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class GamePlayer {
     }
     
     public void initializeVelocity() {
-		velocity.x = 60;
+		velocity.x = 60f;
 		velocity.y=0;
 	}
 }

@@ -48,11 +48,14 @@ public class LoginScreen implements Screen {
         textButtonStyle.font = skin.getFont("default");
         skin2.add("default", textButtonStyle);
 
+        skin2.add("background", new Texture("homescreen_bg.png"));
+
         stage = new Stage();
         ArcadeInputMux.getInstance().addProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
+        table.setBackground(skin2.getDrawable("background"));
         stage.addActor(table);
 
         Label usernameLabel = new Label("Username:", skin);

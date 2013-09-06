@@ -54,7 +54,7 @@ public class Breakout extends GameClient {
 
 	private Texture background;
 
-//	public Sound breaking;
+	public Sound breaking;
 //	public Music music;
 //	public Sound bump;
 
@@ -103,7 +103,7 @@ public class Breakout extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 
 		// access the file location of the sounds
-//		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
+		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
 //		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
 //		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
 
@@ -153,7 +153,7 @@ public class Breakout extends GameClient {
 			ball.bounceY();
 		}
 
-//		breaking.play();
+		breaking.play();
 		brickBreak++;
 		score++;
 		brickNum--;
@@ -169,7 +169,7 @@ public class Breakout extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
-//		breaking.dispose();
+		breaking.dispose();
 //		music.dispose();
 //		bump.dispose();
 	}
@@ -338,7 +338,8 @@ public class Breakout extends GameClient {
 		case GAMEOVER:
 			if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Keys.SPACE)) {
 				gameOver();
-//				breaking.dispose();
+				// call dispose() method.
+				breaking.dispose();
 //				music.dispose();
 //				bump.dispose();
 				bumpCount++;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
@@ -21,7 +22,8 @@ import deco2800.arcade.model.Player;
 
 
 
-
+//note: no 'implements ApplicationListener is relevant anywhere in our program,
+// as GameClient extends Game which implements it. As far as I can tell
 @ArcadeGame(id="pacman")
 public class Pacman extends GameClient {
 
@@ -99,12 +101,9 @@ public class Pacman extends GameClient {
 		// set resolution
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 				
-		//Necessary for rendering
-//		shapeRenderer = new ShapeRenderer();
 //		font = new BitmapFont();
 //		font.setScale(2);
 		batch = new SpriteBatch();
-
 		
 		//Initialise game state
 		gameState = GameState.READY;		
@@ -120,6 +119,7 @@ public class Pacman extends GameClient {
 		super.pause();
 	}
 	
+	//render apparently continually being called unless we specifically tell it not to be
 	@Override
 	public void render() {
 		
@@ -138,11 +138,16 @@ public class Pacman extends GameClient {
 	    	       
 	    //End drawing of shapes
 	    //shapeRenderer.end();
-	    
+
+	    /** tried to get this to work to at least draw something. It doesn't. 
+	     * I'm gonna have another look at it later, it's throwing a nullpointerexception at the batch.draw line
+	    player = new PacChar();
+	    TextureRegion[] walkFrames = player.getWalkFrames();
+	    TextureRegion pac = walkFrames[0];
 	    //render sprites- put between begin and end
 	    batch.begin();
-	    player = new PacChar();
-	    batch.end();
+	    batch.draw(pac, 100, 100);
+        batch.end();*/
 	    
 	    // Respond to user input depending on the game state
 	    switch(gameState) {

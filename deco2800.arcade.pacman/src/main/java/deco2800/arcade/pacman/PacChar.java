@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class PacChar extends Actor{
 	
+	
+
 	// Describes the current state of pacman
 	private enum State {
 		IDLE, WALKING, DEAD
@@ -49,18 +51,15 @@ public class PacChar extends Actor{
 		
 		
 		// Create a stage, create Pacman actor. 
-		stage = new Stage(800, 800, false);
-        Gdx.input.setInputProcessor(stage);
-        //stage.addActor(actor);
+//		stage = new Stage(800, 800, false);
+//        Gdx.input.setInputProcessor(stage);
+//        //stage.addActor(actor);
        
         // Create textures
         texture = new Texture(Gdx.files.internal("pacmove.png"));
         region = new TextureRegion(texture, 0, 0, 16, 16);    
         
        
-
-		
-//		shapeRenderer = new ShapeRenderer();
 		
 		// TODO: Need to modify this to work with our current sprites
 		sprite = new Sprite(new Texture(Gdx.files.internal("pacmove.png")));
@@ -106,5 +105,8 @@ public class PacChar extends Actor{
 //		stage.draw();
 //	}
 
+	public TextureRegion[] getWalkFrames() {
+		return walkFrames;
+	}
 
 }

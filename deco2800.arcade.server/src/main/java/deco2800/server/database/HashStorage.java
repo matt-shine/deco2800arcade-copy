@@ -10,8 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
 
-import com.sun.org.apache.xml.internal.utils.Hashtree2Node;
-
 /**
  * HashStorage is an abstraction to the password database. Passwords are not
  * stored in plain text, instead they are put through a hashing function after

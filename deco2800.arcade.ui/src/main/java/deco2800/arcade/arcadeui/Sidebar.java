@@ -1,5 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
@@ -8,12 +10,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 /**
@@ -23,17 +25,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  */
 public class Sidebar extends Group {
 
-	private Table table = new Table();
 	private Skin skin = null;
 	private Overlay overlay;
     private NinePatch texture;
-    private float pos = 0;
+    private static float INNER_POS = -180;
+    private static float OUTER_POS = 0;
+    private float pos = OUTER_POS;
     private float vel = 0;
-    private static float INNER_POS = -80;
-    private static float OUTER_POS = 100;
-    private boolean isUIOpen = false;
+    private boolean isUIOpen = true;
     private boolean hasTabPressedLast = false;
-    OverlayWindow window;
+    private OverlayWindow window;
     
     public Sidebar(Overlay overlay, OverlayWindow window) {
 		
@@ -60,21 +61,24 @@ public class Sidebar extends Group {
         skin.add("default", textButtonStyle);
         
         
-
-    	table.setFillParent(true);
-    	this.addActor(table);
-    	table.row();
-    	table.add(new SidebarAvatar(overlay)).top();
+        this.setBounds(0, 0, 1280, 720);
+        
+        SidebarAvatar avatar = new SidebarAvatar(overlay);
+        avatar.setPosition(40, 550);
+    	this.addActor(avatar);
     	
-    	for (int i = 0; i < 6; i++) {
+    	int numItems = 5;
+    	for (int i = 0; i < 5; i++) {
     		SidebarMenuItem item = new SidebarMenuItem(skin);
         	item.setText("Option " + i);
+        	item.setPosition(50, (numItems - i) * 60 + 50);
+        	item.setSize(120, 40);
         	final int buttonNum = i;
             
         	item.addListener(new EventListener() {
         		
 				@Override
-				public boolean handle(Event e) {
+				public boolean handle(Event e) { 
 					if (buttonNum == 0 && e.toString() == "touchDown") {
 						addAchievemntsWindow();
 					}
@@ -82,11 +86,12 @@ public class Sidebar extends Group {
 				}
         		
         	});
-        	table.row();
-        	table.add(item).top().left().pad(20, 20, 0, 0);
+        	
+        	this.addActor(item);
+        	
     	}
     	
-    	table.setFillParent(true);
+    	
     }
 
 	
@@ -114,37 +119,29 @@ public class Sidebar extends Group {
 			pos = INNER_POS;
 			vel = 0;
 		}
-		if (vel != 0) {
-			table.layout();
-		}
 
 		
-		table.setX(pos);
+		this.setX(pos);
 		
 		super.act(d);
-		table.act(d);
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		
-		texture.draw(batch, 0, -50, pos + 150, overlay.getHeight() + 50);
-		table.debug();
-		table.debugTable();
-		table.draw(batch, parentAlpha);
+		texture.draw(batch, -30, 0, pos + 260, overlay.getHeight());
+		super.draw(batch, parentAlpha);
 		
 	}
 	
 	
 	public void resize(int x, int y) {
-		table.setX(100);
-		table.setY(y - 300);
-		
+
 	}
 	
 	
 	public void addAchievemntsWindow() {
-		window.setContent(new AchievementList(overlay));
+		window.setContent(new AchievementList(overlay, skin));
 	}
 	
 	

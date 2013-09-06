@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 
 public class OverlayWindow extends Group {
-
+	
 	
 	private WidgetGroup windowContent = null;
 	private NinePatch texture;
@@ -29,6 +29,7 @@ public class OverlayWindow extends Group {
 		
 		windowContent = g;
 		this.addActor(windowContent);
+		windowContent.setBounds(160, 100, overlay.getWidth() - 320, overlay.getHeight() - 200);
 		
 	}
 	
@@ -38,6 +39,16 @@ public class OverlayWindow extends Group {
 		
 		texture.draw(batch, 160, 100, overlay.getWidth() - 320, overlay.getHeight() - 200);
 		super.draw(batch, parentAlpha);
+		
+	}
+	
+	@Override
+	public void act(float d) {
+		super.act(d);
+		
+		if (windowContent != null) {
+			windowContent.act(d);
+		}
 		
 	}
 	

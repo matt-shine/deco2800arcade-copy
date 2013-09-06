@@ -6,15 +6,10 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cardContainers.Hand;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.DarkMonster;
-import deco2800.arcade.deerforest.models.cards.FireMonster;
-import deco2800.arcade.deerforest.models.cards.GeneralSpell;
 import deco2800.arcade.deerforest.models.cards.LightMonster;
-import deco2800.arcade.deerforest.models.cards.NatureMonster;
-import deco2800.arcade.deerforest.models.cards.WaterMonster;
 
 
 public class HandTest {

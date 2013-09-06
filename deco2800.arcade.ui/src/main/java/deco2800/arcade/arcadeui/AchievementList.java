@@ -2,7 +2,10 @@ package deco2800.arcade.arcadeui;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
@@ -14,7 +17,7 @@ public class AchievementList extends Table {
 	AchievementProgress playerProgress;
 	ArrayList<String> awardedIDs;
 	
-	public AchievementList(Overlay overlay) {
+	public AchievementList(Overlay overlay, Skin skin) {
 		achClient = new AchievementClient(overlay.getNetworkClient());
 		achievements = achClient.achievementsForGame(overlay.getHost().getGame());
 		playerProgress = achClient.progressForPlayer(overlay.getPlayer());
@@ -27,14 +30,25 @@ public class AchievementList extends Table {
 		// getting a list of the achievements a player has been awarded
 		awardedIDs = playerProgress.awardedAchievementIDs();
 		achievements = achClient.achievementsForIDs(awardedIDs);
-
-		for(Achievement ach : achievements) {
-		    System.out.println(ach.name);
+		
+		
+		
+		for (int i = 0; i < 4; i++) {
+			
+			TextButton l = new TextButton("Test Achievement", skin);
+			l.setSize(this.getWidth(), 60);
+			
+			this.add(l).space(20).top().left();
+			this.row();
 		}
 		
-		System.out.println(achievements);
 		
 		
+	}
+	
+	@Override
+	public void act(float d) {
+		super.act(d);
 	}
 	
 }

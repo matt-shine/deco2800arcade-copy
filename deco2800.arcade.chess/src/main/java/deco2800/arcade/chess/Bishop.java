@@ -1,8 +1,6 @@
 package deco2800.arcade.chess;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import deco2800.arcade.chess.pieces.Piece;

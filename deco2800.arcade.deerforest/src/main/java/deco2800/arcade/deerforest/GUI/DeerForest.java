@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.badlogic.gdx.Gdx;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -72,7 +71,6 @@ public class DeerForest extends GameClient {
 
 	@Override
 	public void render() {
-		Gdx.input.setInputProcessor(inputProcessor);
 		super.render();
 	}
 	

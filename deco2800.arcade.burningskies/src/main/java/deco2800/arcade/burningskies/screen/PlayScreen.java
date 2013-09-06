@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
-import deco2800.arcade.burningskies.entities.DemoPattern;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 
 

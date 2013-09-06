@@ -4,11 +4,3 @@
   <awardThreshold>1</awardThreshold>
   <icon>winner.png</icon>
 </achievement>
-
-<achievements>
-    <achievement id="chess.master">
-        <name>Master</name>
-        <description>Win 50 games of chess.</description>
-        <awardThreshold>50</awardThreshold>
-        <icon>master.png</icon>
-    </achievement>

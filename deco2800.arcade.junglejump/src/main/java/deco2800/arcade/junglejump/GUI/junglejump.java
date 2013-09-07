@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -35,6 +36,8 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
 	PerspectiveCamera cam;
+    private SpriteBatch batch;
+
 	Frustum camGone = new Frustum();
 	private World world;
 	// Store details about the activity of junglejump and the players
@@ -100,6 +103,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		// Clears the screen - not sure if this is needed
 		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(texture, 0, 0);
+		batch.end();
+		
 		camera.update();
 		// Logs current FPS
 		fpsLogger.log();

@@ -7,8 +7,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+
 public class Invaders extends JFrame implements Runnable {
-	JFrame appFrame;
+	
 	public static int Width = 800;
 	public static int Height = 500;
 	private Image background = null;
@@ -47,7 +48,7 @@ public class Invaders extends JFrame implements Runnable {
 		direction = 1;
 		moveDown = false;
 		r = new Robot();
-		background = new javax.swing.ImageIcon("image/bgimage.jpg").getImage();
+		background = new javax.swing.ImageIcon("image/city.jpg").getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 

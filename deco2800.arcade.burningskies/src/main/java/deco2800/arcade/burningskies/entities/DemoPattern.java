@@ -17,15 +17,7 @@ public class DemoPattern extends BulletPattern {
 		interval = (float) 0.01;
 	}
 	
-	public void fire(float lag) {
-		float x = 0, y = 0;
-		if(emitter == null) {
-			x = stage.getWidth()/2;
-			y = stage.getHeight()/2;
-		} else {
-			x = emitter.getX() + emitter.getWidth()/2;
-			y = emitter.getY() + emitter.getHeight()/2;
-		}
+	public void fire(float lag, float x, float y) {
 		SpiralBullet bullet = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle, 1,  image);
 		stage.addActor(bullet);
 		SpiralBullet bullet2 = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle+180, -1, image);

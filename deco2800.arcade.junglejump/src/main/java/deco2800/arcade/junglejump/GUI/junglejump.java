@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -23,6 +25,8 @@ import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
@@ -34,6 +38,8 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
 	PerspectiveCamera cam;
+    private SpriteBatch batch;
+
 	Frustum camGone = new Frustum();
 	private World world;
 	// Store details about the activity of junglejump and the players
@@ -44,9 +50,14 @@ public class junglejump extends GameClient implements InputProcessor {
 	private OrthographicCamera camera;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
+	Texture texture;
 
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
+	
+	public static void main (String [] args) {
+		ArcadeSystem.goToGame("junglejump");
+	}
 
 	public junglejump(Player player) {
 		super(player, networkClient);
@@ -80,6 +91,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
+		texture = new Texture(Gdx.files.internal("data/cat.jpg"));
 		Gdx.app.log(junglejump.messages, "Launching Game");
 	}
 
@@ -97,6 +109,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		// Clears the screen - not sure if this is needed
 		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(texture, 0, 0);
+		batch.end();
+		
 		camera.update();
 		// Logs current FPS
 		fpsLogger.log();

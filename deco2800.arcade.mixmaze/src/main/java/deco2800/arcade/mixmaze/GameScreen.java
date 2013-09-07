@@ -6,6 +6,7 @@ package deco2800.arcade.mixmaze;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
+import deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,12 +17,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
+
+import static deco2800.arcade.mixmaze.TileViewModel.*;
+import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
 
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
@@ -47,11 +52,11 @@ final class GameScreen implements Screen {
 	private PlayerViewModel p2;
 	private Label[] userLabels;
 	private Label[] scoreLabels;
-	private Label[] itemLabels;
 	private MixMazeModel model;
-	private int timeLimit;
 	private TextButton backMenu;
 	private Label resultLabel;
+	private SidePanel left;
+	private SidePanel right;
 
 	/**
 	 * Constructor
@@ -78,23 +83,17 @@ final class GameScreen implements Screen {
 	private void setupLayout() {
 		Stack gameBoard = new Stack();
 		Table root = new Table();
-		Table left = new Table();
-		Table right = new Table();
+
+		left = new SidePanel();
+		right = new SidePanel();
 
 		userLabels = new Label[2];
 		scoreLabels = new Label[2];
-		itemLabels = new Label[6];
 
 		userLabels[0] = new Label("Player 1", skin);
 		userLabels[1] = new Label("Player 2", skin);
 		scoreLabels[0] = new Label("Player 1 box: 0", skin);
 		scoreLabels[1] = new Label("Player 2 box: 0", skin);
-		itemLabels[0] = new Label("brick: 0", skin);
-		itemLabels[1] = new Label("brick: 0", skin);
-		itemLabels[2] = new Label("pick: 0", skin);
-		itemLabels[3] = new Label("pick: 0", skin);
-		itemLabels[4] = new Label("TNT: 0", skin);
-		itemLabels[5] = new Label("TNT: 0", skin);
 
 		timerLabel = new Label("timer", skin);
 		tileTable = new Table();
@@ -119,18 +118,6 @@ final class GameScreen implements Screen {
 		root.add(scoreLabels[1]);
 		root.add(userLabels[1]).width(320);
 		root.row();
-
-		/* side panels */
-		left.add(itemLabels[0]);
-		left.row();
-		left.add(itemLabels[2]);
-		left.row();
-		left.add(itemLabels[4]);
-		right.add(itemLabels[1]);
-		right.row();
-		right.add(itemLabels[3]);
-		right.row();
-		right.add(itemLabels[5]);
 
 		/* body */
 		root.add(left);
@@ -171,12 +158,14 @@ final class GameScreen implements Screen {
 				tileTable.row();
 		}
 
+		// Might rcommend not passing the entire model to the PlayerViewModel, just to keep good seperation
 		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
 				1);
 		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
 				2);
 		gameArea.addActor(p1);
 		gameArea.addActor(p2);
+
 	}
 
 	@Override
@@ -188,22 +177,13 @@ final class GameScreen implements Screen {
 		 * TODO: these status updates should be encapsulated
 		 * in a method or a class.
 		 */
+		left.update(p1);
+		right.update(p2);
+
 		userLabels[0].setText("player 1: " + p1.getActionName());
 		userLabels[1].setText("player 2: " + p2.getActionName());
 		scoreLabels[0].setText("boxes: " + p1.getScore());
 		scoreLabels[1].setText("boxes: " + p2.getScore());
-		itemLabels[0].setText("bricks: "
-				+ p1.getBrickAmount());
-		itemLabels[1].setText("bricks: "
-				+ p2.getBrickAmount());
-		itemLabels[2].setText("pick: "
-				+ ((p1.hasPick()) ? "YES" : "NO"));
-		itemLabels[3].setText("pick: "
-				+ ((p2.hasPick()) ? "YES" : "NO"));
-		itemLabels[4].setText("TNT: "
-				+ ((p1.hasTNT()) ? "YES" : "NO"));
-		itemLabels[5].setText("TNT: "
-				+ ((p2.hasTNT()) ? "YES" : "NO"));
 
 		stage.act(delta);
 		stage.draw();
@@ -244,8 +224,7 @@ final class GameScreen implements Screen {
 		Gdx.app.debug(LOG, "showing");
 
 		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 2);
-		timeLimit = 30;
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60);
 		setupGameBoard();
 
 		/* set timer */
@@ -256,7 +235,7 @@ final class GameScreen implements Screen {
 				timerLabel.setText("Timer: "
 						 + elapsed);
 			}
-		}, 1, 1, timeLimit);
+		}, 1, 1, model.getGameMaxTime());
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				PlayerModel winner;
@@ -274,7 +253,7 @@ final class GameScreen implements Screen {
 				}
 				endGameTable.setVisible(true);
 			}
-		}, timeLimit);
+		}, model.getGameMaxTime());
 
 		/* start game */
 		Gdx.input.setInputProcessor(stage);
@@ -300,5 +279,70 @@ final class GameScreen implements Screen {
 
 	@Override
 	public void resume() {
+	}
+
+	/*
+	 * Draw the player item status on side panel.
+	 */
+	private class SidePanel extends Table {
+		private Image[] frameImages;
+		private Image[] brickImages;
+		private Image pickImage;
+		private Image tntImage;
+
+		SidePanel() {
+			Table brickTable = new Table();
+			Stack[] itemStacks = new Stack[3];
+
+			frameImages = new Image[3];
+			brickImages = new Image[10];
+			pickImage = new Image(PICK_REGION);
+			tntImage = new Image(TNT_REGION);
+
+			/* layout */
+			for (int i = 0; i < 3; i++) {
+				itemStacks[i] = new Stack();
+				this.add(itemStacks[i]);
+				if (i < 2)
+					this.row();
+
+				frameImages[i] = new Image(UNKNOWN_REGION);
+				itemStacks[i].add(frameImages[i]);
+			}
+
+			itemStacks[0].add(brickTable);
+			itemStacks[1].add(pickImage);
+			itemStacks[2].add(tntImage);
+
+			/* bricks */
+			for (int i = 0; i < 10; i++) {
+				brickImages[i] = new Image(BRICK_REGION);
+				brickTable.add(brickImages[i]).size(64, 64);
+				if ((i + 1) % 4 == 0)
+					brickTable.row();
+			}
+		}
+
+		void update(PlayerViewModel p) {
+			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
+				brickImages[i].setVisible(i < n);
+			pickImage.setVisible(p.hasPick());
+			tntImage.setVisible(p.hasTNT());
+
+			for (int i = 0; i < 3; i++)
+				frameImages[i].setVisible(false);
+
+			switch (p.getAction()) {
+			case USE_BRICK:
+				frameImages[0].setVisible(true);
+				break;
+			case USE_PICK:
+				frameImages[1].setVisible(true);
+				break;
+			case USE_TNT:
+				frameImages[2].setVisible(true);
+				break;
+			}
+		}
 	}
 }

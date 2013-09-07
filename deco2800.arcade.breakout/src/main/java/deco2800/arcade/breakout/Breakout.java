@@ -45,16 +45,19 @@ public class Breakout extends GameClient {
 	private int score;
 	private int lives;
 
+	// Cheat Code
 	private int[] sequence = { 19, 19, 20, 20, 21, 22, 21, 22, 30, 29 };
 	private int currentButton = 0;
+
+	// The counting of random statistics
 	public int bumpCount = 0;
 	public int brickBreak = 0;
 
 	private String gameoverstatus;
 
-
 	private Texture background;
 
+	// Sounds and Music constructors
 	public Sound breaking;
 	public Music music;
 	public Sound bump;
@@ -140,7 +143,6 @@ public class Breakout extends GameClient {
 		gameState = GameState.READY;
 		status = "Click to start!";
 
-
 	}
 
 	/*
@@ -195,8 +197,8 @@ public class Breakout extends GameClient {
 	 * Renders game mechanics.
 	 */
 	public void render() {
-		//super.render();
-		
+		// super.render();
+
 		// Clears Frame
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -236,28 +238,35 @@ public class Breakout extends GameClient {
 		font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
 				SCREENHEIGHT - 20);
 
-		font.draw(batch, "Score " + Integer.toString(score), SCREENWIDTH*3/4, SCREENHEIGHT-20);
-		if (gameoverstatus!= null) {
-	    	font.setColor(Color.WHITE);
-	    	
-	    	font.draw(batch, gameoverstatus, SCREENWIDTH/2-250, SCREENHEIGHT/2);
+		font.draw(batch, "Score " + Integer.toString(score),
+				SCREENWIDTH * 3 / 4, SCREENHEIGHT - 20);
+		if (gameoverstatus != null) {
+			font.setColor(Color.WHITE);
+
+			font.draw(batch, gameoverstatus, SCREENWIDTH / 2 - 250,
+					SCREENHEIGHT / 2);
 		}
-		
-		
-		
+
 		if (status != null) {
-	    	font.setColor(Color.WHITE);
-	    	
-	    	font.draw(batch, status, SCREENWIDTH/2-250, SCREENHEIGHT/2-60);
-	    	}
-	    	if (gameState == GameState.GAMEOVER) {
-	    		font.draw(batch, "Click to exit", SCREENWIDTH/2 - 80, SCREENHEIGHT/2 - 60);
-	    	}
-	    
+			font.setColor(Color.WHITE);
+
+			font.draw(batch, status, SCREENWIDTH / 2 - 250,
+					SCREENHEIGHT / 2 - 60);
+		}
+		if (gameState == GameState.GAMEOVER) {
+			font.draw(batch, "Click to exit", SCREENWIDTH / 2 - 80,
+					SCREENHEIGHT / 2 - 60);
+		}
+
 		batch.end();
 
 		switch (gameState) {
 
+		/*
+		 * The systems will wait until the player has either touch the
+		 * screen(mouse click) or pressed the space bar. The Player also at this
+		 * point has the opportunity to enter any cheat codes.
+		 */
 		case READY:
 			status = "Press Space or Touch the screen to Start!";
 			if (Gdx.input.isKeyPressed(Keys.SPACE) || Gdx.input.isTouched()) {
@@ -265,12 +274,10 @@ public class Breakout extends GameClient {
 			} else if (sequence != null) {
 				if (Gdx.input.isKeyPressed(sequence[currentButton])) {
 					currentButton++;
-					System.out.println("WORKED!!!" + currentButton);
 				}
 				if (sequence.length == currentButton) {
 					currentButton = 0;
 					bonusLives();
-					System.out.println("SCORE UPDATE!");
 				}
 			}
 			break;
@@ -278,7 +285,6 @@ public class Breakout extends GameClient {
 		case INPROGRESS:
 			paddle.update(ball);
 			ball.move(Gdx.graphics.getDeltaTime());
-			// int index = 0;
 			// TODO: if it hits left/right side, only bounceX. if it hits
 			// top/bottom, only bounceY
 			for (Brick b : bricks) {
@@ -340,9 +346,7 @@ public class Breakout extends GameClient {
 			if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Keys.SPACE)) {
 				gameOver();
 				// call dispose() method.
-				breaking.dispose();
-			music.dispose();
-				bump.dispose();
+				dispose();
 				bumpCount++;
 				ArcadeSystem.goToGame(ArcadeSystem.UI);
 			}
@@ -362,7 +366,7 @@ public class Breakout extends GameClient {
 		ball.randomizeVelocity();
 		status = null;
 		gameState = GameState.INPROGRESS;
-		status=null;
+		status = null;
 
 	}
 
@@ -372,9 +376,9 @@ public class Breakout extends GameClient {
 	 */
 	private void win() {
 		score += lives * 5;
-		
-		gameoverstatus="Congratulations " + player
-				+ " your final score is: " + score;
+
+		gameoverstatus = "Congratulations " + player + " your final score is: "
+				+ score;
 		System.out.println("Congratulations " + player
 				+ " your final score is: " + score);
 		if (lives == 3) {
@@ -388,6 +392,10 @@ public class Breakout extends GameClient {
 		gameState = GameState.GAMEOVER;
 	}
 
+	/**
+	 * Rewards the Player 2 extra lives and makes the sequence null, so that the
+	 * Player can not re-use the cheat
+	 */
 	private void bonusLives() {
 		lives = lives + 2;
 		sequence = null;
@@ -408,8 +416,8 @@ public class Breakout extends GameClient {
 			score -= 5;
 			gameState = GameState.READY;
 		} else {
-		
-			gameoverstatus="Bad luck " + player + " your final score is: "
+
+			gameoverstatus = "Bad luck " + player + " your final score is: "
 					+ score;
 			System.out.println("Bad luck " + player + " your final score is: "
 					+ score);
@@ -418,6 +426,9 @@ public class Breakout extends GameClient {
 
 	}
 
+	/**
+	 * Provides details about the game to the Arcade system.
+	 */
 	private static final Game game;
 	static {
 		game = new Game();

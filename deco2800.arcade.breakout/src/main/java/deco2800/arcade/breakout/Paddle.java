@@ -13,12 +13,15 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Paddle {
 
-	// public static float width = 64f;
+	// Sets the size of the paddle
 	public static float width = 128f;
 	public static float height = 20f;
 
 	Rectangle paddleShape = new Rectangle();
 
+	/**
+	 * Stores the details of the paddle's size and current position
+	 */
 	public Paddle(Vector2 position) {
 		this.paddleShape.x = position.x;
 		this.paddleShape.y = position.y;
@@ -26,21 +29,39 @@ public abstract class Paddle {
 		this.paddleShape.height = height;
 	}
 
+	/**
+	 * Moves the paddle horizontally
+	 */
 	public void movement(float horizontal) {
 		paddleShape.x += horizontal;
 	}
 
+	/**
+	 * 
+	 * @param render
+	 */
 	public void render(ShapeRenderer render) {
 		render.setColor(Color.RED);
 		render.filledRect(paddleShape.x, paddleShape.y, paddleShape.width,
 				paddleShape.height);
 	}
 
+	/**
+	 * Sets the Position of the Paddle
+	 * 
+	 * @param iniPosition
+	 */
 	public void setPosition(Vector2 iniPosition) {
 		paddleShape.x = iniPosition.x;
 		paddleShape.y = iniPosition.y;
 	}
 
+	/**
+	 * Stops the paddle from going outside the right and left side of the
+	 * screens
+	 * 
+	 * @param ball
+	 */
 	public void update(PongBall ball) {
 		if (paddleShape.x > Breakout.SCREENWIDTH - paddleShape.width)
 			paddleShape.x = Breakout.SCREENWIDTH - paddleShape.width;

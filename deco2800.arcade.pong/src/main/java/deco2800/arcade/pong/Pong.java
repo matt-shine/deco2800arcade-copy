@@ -28,6 +28,8 @@ public class Pong extends GameClient {
 	
 	private OrthographicCamera camera;
 	
+	private static final Game GAME;
+	
 	private Paddle leftPaddle;
 	private Paddle rightPaddle;
 	private Ball ball;
@@ -65,11 +67,6 @@ public class Pong extends GameClient {
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
         
-
-        
-        
-        
-        
 	}
 	
 	/**
@@ -78,7 +75,6 @@ public class Pong extends GameClient {
 	@Override
 	public void create() {
 		
-        
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
@@ -113,8 +109,6 @@ public class Pong extends GameClient {
 			}
 			
         });
-        
-        
 		
 		super.create();
 		
@@ -123,10 +117,13 @@ public class Pong extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		// Create the paddles
-		leftPaddle = new LocalUserPaddle(new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+		leftPaddle = new LocalUserPaddle(
+				new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
 		leftPaddle.setColor(1, 0, 0, 1);
 		
-		rightPaddle = new AIPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
+		rightPaddle = new AIPaddle(
+				new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - 
+						Paddle.INITHEIGHT/2));
 		rightPaddle.setColor(0, 0, 1, 1);
 		
 		/**
@@ -293,7 +290,7 @@ public class Pong extends GameClient {
 	 */
 	private GameStatusUpdate createScoreUpdate() {
 		GameStatusUpdate update = new GameStatusUpdate();
-		update.gameId = game.id;
+		update.gameId = GAME.id;
 		update.username = players[0];
 		//TODO Should also send the score!
 		return update;
@@ -318,17 +315,15 @@ public class Pong extends GameClient {
 		super.resume();
 	}
 
-	
-	private static final Game game;
 	static {
-		game = new Game();
-		game.id = "pong";
-		game.name = "Pong";
-        game.description = "Tennis, without that annoying 3rd dimension!";
+		GAME = new Game();
+		GAME.id = "pong";
+		GAME.name = "Pong";
+		GAME.description = "Tennis, without that annoying 3rd dimension!";
 	}
 	
 	public Game getGame() {
-		return game;
+		return GAME;
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.util.Set;
 public class ArcadeSystem {
 	
 	public static String UI = "arcadeui";
+	public static String OVERLAY = "arcadeoverlay";
 	
 	private static Arcade arcade = null;
 	
@@ -38,8 +39,10 @@ public class ArcadeSystem {
 	}
 
     public static void close() {
-        arcade.close();
+        arcade.arcadeExit();
     }
 
-	
+	public static GameClient getCurrentGame() {
+		return arcade.getCurrentGame();
+	}
 }

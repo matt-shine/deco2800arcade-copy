@@ -269,7 +269,7 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 * @throws SQLException 
 	 */
-	void updateScore(String Game_ID, String Username, String type, float score) throws DatabaseException, SQLException{
+	public void updateScore(String Game_ID, String Username, String type, float score) throws DatabaseException, SQLException{
 		String data = null;
 		int hid = addHighscore(Game_ID, Username);
 
@@ -325,6 +325,23 @@ public class HighscoreDatabase {
 		return dateFormat.format(today.getTime());
  
 	}
+	
+	/**** 
+	public void main() throws DatabaseException {
+		 
+		try {
+ 
+			updateScore("Pong", "Haydn", "Win", 66);
+			System.out.println("Highscore: " + getUserHighScore("Haydn", "Pong", "Win"));
+ 
+		} catch (SQLException e) {
+ 
+			
+ 
+		}
+ 
+	}
+	**/
 	
 	
 }

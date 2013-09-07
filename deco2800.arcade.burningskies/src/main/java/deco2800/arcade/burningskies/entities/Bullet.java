@@ -16,7 +16,7 @@ public abstract class Bullet extends Image {
 	protected Vector2 position;
 	protected Vector2 acceleration;
 	protected float direction;
-	protected Player player;
+	protected PlayerShip player;
 	protected Ship parent;
 	
 	/**
@@ -27,7 +27,7 @@ public abstract class Bullet extends Image {
 	 * @param parent
 	 * @param player
 	 */
-	public Bullet(Affinity affinity, int damage, Ship parent, Player player, Vector2 initialPosition, float initialDirection, Texture image) {
+	public Bullet(Affinity affinity, int damage, Ship parent, PlayerShip player, Vector2 initialPosition, float initialDirection, Texture image) {
 		super(image);
 		this.affinity = affinity;
 		this.damage = damage;
@@ -41,8 +41,16 @@ public abstract class Bullet extends Image {
 	
 	@Override
     public void act(float delta) {
+		float left, right;
 		moveBullet(delta);
         super.act(delta);
+        // Check we're in bounds, if not goodbye
+		left = getX() + getWidth();
+		right = getY() + getHeight();
+		// 10 pixels in case they're flying off the sides
+		if(left < -10 || right < -10 || getX() > getStage().getWidth() + 10 || getY() > getStage().getHeight() + 10) {
+			remove();
+		}
     }
 	
 	/**
@@ -72,6 +80,7 @@ public abstract class Bullet extends Image {
 		position.add( velocity.x * delta, velocity.y * delta );
 		setX(position.x);
 		setY(position.y);
+		setRotation(direction);
 	}
 
 }

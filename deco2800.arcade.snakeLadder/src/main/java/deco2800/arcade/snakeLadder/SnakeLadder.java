@@ -181,13 +181,13 @@ public class SnakeLadder extends GameClient {
         //setting the dice button
         diceButton = new TextButton("Roll the dice", skin);
         
-        ArrayList<Label> userLabels = new ArrayList<Label>();
-        ArrayList<Label> scoreLabels = new ArrayList<Label>();
+        ArrayList<Label> userLabels = new ArrayList<Label>(); //labels for users
+        ArrayList<Label> scoreLabels = new ArrayList<Label>(); //labels for scores of each user
         
         //setting players name and score
         for(int i = 0; i < players.length; i++){
         	userLabels.add(new Label (players[i], skin));
-        	scoreLabels.add(new Label (""+0, skin)); //initial score is 0
+        	scoreLabels.add(new Label (""+gamePlayer.getScore(), skin)); //This is just returning player 1 score
 	    }
         
         //creating the stage
@@ -214,6 +214,7 @@ public class SnakeLadder extends GameClient {
         table.row();     
         //adding dice button to GUI
         table.add(diceButton).width(100).height(50).pad(10);
+        
         table.row();
         
         //label for the dice roll

@@ -17,7 +17,8 @@ public class GamePlayer {
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
 	//private Texture player;
 	private int coordinate=-1;
-	private int[] scores = new int[2];
+	//private int[] scores = new int[2];
+	private int score;
 	
 	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
 	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
@@ -32,6 +33,7 @@ public class GamePlayer {
 		bounds.y = 0;
 		bounds.height = WIDTH;
 		bounds.width = WIDTH;
+		score = 0; //initial score of the player
 	}
 
 	/**
@@ -133,6 +135,7 @@ public class GamePlayer {
 	   return coordinate;
    }
    
+   /*
    public void score(int winner){
 		scores[winner]++;
 	}
@@ -140,5 +143,21 @@ public class GamePlayer {
 	public void initialScore(){
 		scores[0] = 0;
 		scores[1] = 0;
-	}
+	}*/
+   
+   /**
+    * Calling the score of this player
+    * @return the score of the player
+    */
+   public int getScore(){
+	   return this.score;
+   }
+   
+   /**
+    * Updating the score of this player based on the tile command
+    * @param score the score gain after each move
+    */
+   public void setScore(int score){
+	   this.score += score;
+   }
 }

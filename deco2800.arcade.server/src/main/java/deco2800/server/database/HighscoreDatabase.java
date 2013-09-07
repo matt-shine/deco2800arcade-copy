@@ -213,12 +213,49 @@ public class HighscoreDatabase {
 		}
 	}
 	
+	public String getTopPlayers() throws DatabaseException, SQLException{
+		String data = null;
+		
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		
+		String selectTableSQL = "SELECT * FROM HIGHSCORE";
+		
+		try {
+			// Get a connection to the database
+			connection = Database.getConnection();		
+			resultSet = statement.executeQuery(selectTableSQL);
+			
+			while(resultSet.next())
+			{
+				data = data.concat(resultSet.getString("Username")+ ",");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to add highscore information to database", e);
+		} finally {
+ 
+			if (statement != null) {
+				statement.close();
+			}
+ 
+			if (connection != null) {
+				connection.close();
+			}
+ 
+		}
+		
+		return data;
+	}
+	
 	
 	/* Game to Database Methods */
 	
 	private int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
 		int hid = 0;
-		String[] returnColumn = {"HID"};
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;

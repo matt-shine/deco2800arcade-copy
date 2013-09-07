@@ -31,7 +31,7 @@ public abstract class BulletPattern extends Actor {
 	 * Start firing our pattern of bullets
 	 */
 	public void start() {
-		timer = 0;
+		timer = interval; //for instant start time, also rewards player for keyboard spam
 		firing = true;
 		lastEmit = null;
 	}
@@ -40,7 +40,6 @@ public abstract class BulletPattern extends Actor {
 	 * Stop our barrage, if an enemy/player dies or level complete etc
 	 */
 	public void stop() {
-		timer = 0;
 		firing = false;
 	}
 	

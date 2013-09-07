@@ -43,11 +43,11 @@ public class LibraryScreen implements Screen {
     private Stage stage;
     private int x = 0;
     private int y = 580;
-    private Button button;
-    private Button storeButton;
+    private TextButton button;
+    private TextButton storeButton;
     private Button gridViewButton;
-    private Button userProfileButton;
-    private Button currentButton;
+    private TextButton userProfileButton;
+    private TextButton currentButton;
     private Skin skin;
     private String description;
     private String gameTitle;
@@ -155,24 +155,27 @@ public class LibraryScreen implements Screen {
         games = ArcadeSystem.getGameList();
         int count = 0;
         for (final GameClient gameClient : games) {
-            final Game game = gameClient.getGame();
-            button = new TextButton("" + game.name, skin);
-            button.setWidth(275);
-            button.setHeight(33);
-            button.setX(x);
-            button.setY(y);
-            y-= 35;
+            if (gameClient != null) {
+                final Game game = gameClient.getGame();
+                if (game != null) {
+                    button = new TextButton("" + game.name, skin);
+                    button.setWidth(275);
+                    button.setHeight(33);
+                    button.setX(x);
+                    button.setY(y);
+                    y-= 35;
 
-            button.addListener(new GameButtonActionHandler(this, gameClient, button));
+                    button.addListener(new GameButtonActionHandler(this, gameClient, button));
 
-            if (count++ == 0) {
-                button.setChecked(true);
-                setCurrentButton(button);
-                setSelectedGame(gameClient);
+                    if (count++ == 0) {
+                        button.setChecked(true);
+                        setCurrentButton(button);
+                        setSelectedGame(gameClient);
+                    }
+
+                    stage.addActor(button);
+                }
             }
-
-            stage.addActor(button);
-
         }
 
         Actor playButton = new TextButton("Play", skin, "playButton");
@@ -247,7 +250,7 @@ public class LibraryScreen implements Screen {
         gameSelected = true;
     }
 
-    public void setCurrentButton(Button b) {
+    public void setCurrentButton(TextButton b) {
         currentButton = b;
     }
 
@@ -256,6 +259,7 @@ public class LibraryScreen implements Screen {
     }
 
     private void play() {
+        dispose();
         ArcadeSystem.goToGame(currentClient);
     }
 

@@ -41,7 +41,7 @@ public class GameLibrary extends GameClient {
         player = player1;
         networkClient = networkClient1;
         gameList = new ArrayList<Game>();
-        loadGameList();
+        //loadGameList();
     }
 
 

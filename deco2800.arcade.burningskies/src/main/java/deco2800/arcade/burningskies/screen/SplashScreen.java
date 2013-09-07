@@ -40,7 +40,6 @@ public class SplashScreen implements Screen
         spriteBatch.begin();
         spriteBatch.draw(logo, 0, 0, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
         spriteBatch.end();
-        game.render();
     }
     
     @Override

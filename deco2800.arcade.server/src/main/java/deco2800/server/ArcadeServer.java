@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.net.BindException;
 
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;

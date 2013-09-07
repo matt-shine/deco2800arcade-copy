@@ -18,6 +18,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 
@@ -54,6 +55,7 @@ public class Protocol {
 		//Multiplayer Messages
 		kryo.register(NewMultiGameRequest.class);
 		kryo.register(NewMultiResponse.class);
+		kryo.register(MultiGameRequestType.class);
 	}
 	
 }

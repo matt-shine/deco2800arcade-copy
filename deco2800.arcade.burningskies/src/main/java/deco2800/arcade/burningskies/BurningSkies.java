@@ -32,6 +32,7 @@ public class BurningSkies extends GameClient {
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
 	private Music nowPlaying;
+	private boolean isPaused = false;
 
 	//TODO: ACHIEVEMENTS
 
@@ -98,12 +99,12 @@ public class BurningSkies extends GameClient {
 		this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
-				//Pause the game here
+				isPaused = false;
 			}
 		
 			@Override
 			public void show() {
-				//Unpause the game here
+				isPaused = true;
 			}
 			
 			@Override
@@ -117,6 +118,14 @@ public class BurningSkies extends GameClient {
 			@Override
 			public void dispose() {}
 		});
+	}
+	
+	public boolean isPaused() {
+		return isPaused;
+	}
+	
+	public void setPause(boolean pause) {
+		isPaused = pause;
 	}
 
 	@Override

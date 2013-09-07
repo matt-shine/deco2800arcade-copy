@@ -62,19 +62,17 @@ public class PlayScreen implements Screen
     @Override
     public void render(float delta)
     {    	
-    	// auto scroll
-    	y -= (float) Gdx.graphics.getDeltaTime() * speed;
-    	
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-    	
+
+    	if(!game.isPaused()) {
+    		stage.act(delta);
+    		y -= (float) Gdx.graphics.getDeltaTime() * speed;
+    	}
     	// Draws the map
     	batch.begin();
     	batch.draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight() );
     	batch.end();
-    	
-    	//TODO: toggle on pause
-    	stage.act(delta);
     	stage.draw();
     }
     

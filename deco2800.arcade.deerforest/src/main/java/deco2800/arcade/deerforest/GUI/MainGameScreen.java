@@ -175,9 +175,6 @@ public class MainGameScreen implements Screen {
         //draw highlighted zone
         highlightZones();
 
-        //Draw outline on selected card
-        outlineSelectedCard();
-
         game.batch.flush();
 
         //Draw the phase message if needed
@@ -392,19 +389,6 @@ public class MainGameScreen implements Screen {
         }
     }
 
-    public void outlineSelectedCard() {
-        ExtendedSprite selectedSprite = DeerForestSingletonGetter.getDeerForest().inputProcessor.getSelection();
-
-        if(selectedSprite!= null) {
-            selectedSprite.setColor(1.0f-glowSize/20, 1.0f-glowSize/20, 1.0f-glowSize/20,1.0f);
-            Rectangle outline = selectedSprite.getBoundingRectangle();
-            shapeRenderer.begin(ShapeType.Rectangle);
-            shapeRenderer.setColor(Color.WHITE);
-            shapeRenderer.rect(outline.getX(), outline.getY(),outline.getWidth(),outline.getHeight());
-            shapeRenderer.end();
-        }
-    }
-
 	@Override
 	public void dispose() {
 		manager.dispose();
@@ -515,6 +499,7 @@ public class MainGameScreen implements Screen {
             float x = Gdx.graphics.getWidth()/3 - this.cardAttacking.getBoundingRectangle().getWidth()/2;
             float y = Gdx.graphics.getHeight()/2 - this.cardAttacking.getBoundingRectangle().getHeight()/2;
             this.cardAttacking.setPosition(x, y);
+            this.cardAttacking.setCard(null);
         }
 
         //Set up defending card
@@ -524,6 +509,7 @@ public class MainGameScreen implements Screen {
             float x = 2*Gdx.graphics.getWidth()/3 - this.cardDefending.getBoundingRectangle().getWidth()/2;
             float y = Gdx.graphics.getHeight()/2 - this.cardDefending.getBoundingRectangle().getHeight()/2;
             this.cardDefending.setPosition(x, y);
+            this.cardDefending.setCard(null);
         } else {
             this.cardDefending = null;
         }

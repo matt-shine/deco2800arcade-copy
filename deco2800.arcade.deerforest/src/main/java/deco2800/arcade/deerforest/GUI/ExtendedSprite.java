@@ -16,8 +16,11 @@ public class ExtendedSprite extends Sprite {
 	private boolean monster;
 	private String area;
     private boolean hasAttacked;
+    private boolean isSelected;
     private AbstractCard card;
     private MainGame game;
+    private float glow;
+    private boolean glowDirection;
 	
 	public ExtendedSprite(Texture t) {
 		super(t);
@@ -30,6 +33,9 @@ public class ExtendedSprite extends Sprite {
 		setArea(null);
         this.hasAttacked = false;
         this.card = null;
+        this.isSelected = false;
+        glow = 0;
+        glowDirection = true;
         game = DeerForestSingletonGetter.getDeerForest().mainGame;
 	}
 
@@ -68,8 +74,24 @@ public class ExtendedSprite extends Sprite {
     @Override
     public void draw(SpriteBatch batch) {
 
-        //Grey out card if it has attacked
-        if(this.getCard() != null && this.getCard() instanceof AbstractMonster) {
+        //Make color selected card (if it is a card
+        if(this.getCard() != null) {
+            if(this.isSelected) {
+                this.setColor(1.0f-glow, 1.0f-glow, 1.0f-glow, 1.0f);
+                glow = glowDirection?glow+0.01f:glow-0.01f;
+            } else {
+                this.setColor(Color.WHITE);
+                glow = 0;
+                glowDirection = true;
+            }
+
+            //Adjust glow direction
+            if(glow >= 0.5f) glowDirection = false;
+            else if(glow <= 0) glowDirection = true;
+        }
+
+        //Grey out card if it has attacked and is not selected
+        if(this.getCard() != null && this.isSelected == false && this.getCard() instanceof AbstractMonster) {
             if(this.hasAttacked() && game.getPhase().equals("BattlePhase")) {
                 this.setColor(0.5f, 0.5f, 0.5f, 1.0f);
             } if(this.hasAttacked() && game.getPhase().equals("EndPhase")) {
@@ -78,6 +100,8 @@ public class ExtendedSprite extends Sprite {
         }
 
         super.draw(batch);
+
+        //Draw card attack / health
         if(this.card instanceof AbstractMonster) {
             AbstractMonster m = (AbstractMonster) this.getCard();
             Rectangle r = this.getBoundingRectangle();
@@ -158,5 +182,9 @@ public class ExtendedSprite extends Sprite {
 	public void setArea(String area) {
 		this.area = area;
 	}
+
+    public void setSelected(boolean b) {
+        this.isSelected = b;
+    }
 	
 }

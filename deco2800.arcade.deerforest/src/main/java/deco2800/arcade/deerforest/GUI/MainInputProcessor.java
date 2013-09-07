@@ -196,20 +196,23 @@ public class MainInputProcessor implements InputProcessor {
         if(zoomed || gameFinished) return false;
 
         //Reset zoomSelection color
-        if(zoomSelection != null) zoomSelection.setColor(Color.WHITE);
+        if(zoomSelection != null) zoomSelection.setSelected(false);
 
         //get zoomSelection
         zoomSelection = SpriteLogic.checkIntersection(1, x, y);
         if(zoomSelection == null) {
             //must be in P2
             zoomSelection = SpriteLogic.checkIntersection(2, x, y);
-            if(zoomSelection != null) zoomSelection.setPlayer(2);
+            if(zoomSelection != null) {
+                zoomSelection.setPlayer(2);
+            }
         } else {
             zoomSelection.setPlayer(1);
         }
         //Set zoom selection data
         if(zoomSelection != null) {
             zoomSelection.setField(SpriteLogic.getSpriteZoneType(zoomSelection)[0]);
+            zoomSelection.setSelected(true);
         }
 
     	//Check it was a single click

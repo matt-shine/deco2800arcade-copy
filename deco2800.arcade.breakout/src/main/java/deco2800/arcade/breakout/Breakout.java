@@ -56,8 +56,8 @@ public class Breakout extends GameClient {
 	private Texture background;
 
 	public Sound breaking;
-//	public Music music;
-//	public Sound bump;
+	public Music music;
+	public Sound bump;
 
 	private String status = null;
 
@@ -105,13 +105,13 @@ public class Breakout extends GameClient {
 
 		// access the file location of the sounds
 		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
-//		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
-//		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
+		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
+		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
 
 		// setting and playing the background music
-//		music.setLooping(true);
-//		music.setVolume(0.3f);
-//		music.play();
+		music.setLooping(true);
+		music.setVolume(0.3f);
+		music.play();
 
 		// setting the ball and paddle
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
@@ -171,8 +171,8 @@ public class Breakout extends GameClient {
 	public void dispose() {
 		super.dispose();
 		breaking.dispose();
-//		music.dispose();
-//		bump.dispose();
+		music.dispose();
+		bump.dispose();
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class Breakout extends GameClient {
 
 			if (ball.bounds.overlaps(paddle.paddleShape)
 					&& ball.getYVelocity() < 0) {
-//				bump.play();
+				bump.play();
 				ball.bounceY();
 
 			}
@@ -341,8 +341,8 @@ public class Breakout extends GameClient {
 				gameOver();
 				// call dispose() method.
 				breaking.dispose();
-//				music.dispose();
-//				bump.dispose();
+				music.dispose();
+				bump.dispose();
 				bumpCount++;
 				ArcadeSystem.goToGame(ArcadeSystem.UI);
 			}

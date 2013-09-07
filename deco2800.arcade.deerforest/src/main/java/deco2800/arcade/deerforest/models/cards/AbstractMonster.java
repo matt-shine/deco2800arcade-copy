@@ -81,17 +81,17 @@ public abstract class AbstractMonster extends AbstractCard {
         double damageMultiplier = 1;
 
         if(this.type.equals(typeOfAttack)) {
-            damageMultiplier = 0.5;
+            damageMultiplier = 0.75;
         } else if(this.type.equals("Fire") && typeOfAttack.equals("Water")) {
-            damageMultiplier = 2;
+            damageMultiplier = 1.5;
         } else if(this.type.equals("Water") && typeOfAttack.equals("Nature")) {
-            damageMultiplier = 2;
+            damageMultiplier = 1.5;
         } else if(this.type.equals("Nature") && typeOfAttack.equals("Fire")) {
-            damageMultiplier = 2;
+            damageMultiplier = 1.5;
         } else if(this.type.equals("Dark") && typeOfAttack.equals("Light")) {
-            damageMultiplier = 2;
+            damageMultiplier = 1.5;
         } else if(this.type.equals("Light") && typeOfAttack.equals("Dark")) {
-            damageMultiplier = 2;
+            damageMultiplier = 1.5;
         }
 
         return (int)(damageMultiplier*modifiedDamage);

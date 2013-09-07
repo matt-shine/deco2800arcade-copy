@@ -175,6 +175,9 @@ public class MainGameScreen implements Screen {
         //draw highlighted zone
         highlightZones();
 
+        //Draw outline on selected card
+        outlineSelectedCard();
+
         game.batch.flush();
 
         //Draw the phase message if needed
@@ -207,26 +210,8 @@ public class MainGameScreen implements Screen {
             }
         }
 
-        //Show victorious player if exists
-        if(game.getPlayerLP(1) <= 0) {
-            game.batch.begin();
-            ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player2Victory.png", Texture.class));
-            s.setScale(Gdx.graphics.getWidth()/(2*s.getWidth()), Gdx.graphics.getHeight() / (2*s.getHeight()));
-            s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,
-                    Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
-            s.draw(game.batch);
-            DeerForestSingletonGetter.getDeerForest().inputProcessor.setGameFinished(true);
-            game.batch.end();
-        } else if(game.getPlayerLP(2) <= 0) {
-            game.batch.begin();
-            ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player1Victory.png", Texture.class));
-            s.setScale(Gdx.graphics.getWidth()/(2*s.getWidth()), Gdx.graphics.getHeight() / (2*s.getHeight()));
-            s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,
-                    Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
-            s.draw(game.batch);
-            DeerForestSingletonGetter.getDeerForest().inputProcessor.setGameFinished(true);
-            game.batch.end();
-        }
+        //Draw victorious players
+        drawVictory();
 
 	}
 
@@ -382,6 +367,42 @@ public class MainGameScreen implements Screen {
         }
 
         game.batch.end();
+    }
+
+    private void drawVictory() {
+        //Show victorious player if exists
+        if(game.getPlayerLP(1) <= 0) {
+            game.batch.begin();
+            ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player2Victory.png", Texture.class));
+            s.setScale(Gdx.graphics.getWidth()/(2*s.getWidth()), Gdx.graphics.getHeight() / (2*s.getHeight()));
+            s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,
+                    Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
+            s.draw(game.batch);
+            DeerForestSingletonGetter.getDeerForest().inputProcessor.setGameFinished(true);
+            game.batch.end();
+        } else if(game.getPlayerLP(2) <= 0) {
+            game.batch.begin();
+            ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player1Victory.png", Texture.class));
+            s.setScale(Gdx.graphics.getWidth()/(2*s.getWidth()), Gdx.graphics.getHeight() / (2*s.getHeight()));
+            s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,
+                    Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
+            s.draw(game.batch);
+            DeerForestSingletonGetter.getDeerForest().inputProcessor.setGameFinished(true);
+            game.batch.end();
+        }
+    }
+
+    public void outlineSelectedCard() {
+        ExtendedSprite selectedSprite = DeerForestSingletonGetter.getDeerForest().inputProcessor.getSelection();
+
+        if(selectedSprite!= null) {
+            selectedSprite.setColor(1.0f-glowSize/20, 1.0f-glowSize/20, 1.0f-glowSize/20,1.0f);
+            Rectangle outline = selectedSprite.getBoundingRectangle();
+            shapeRenderer.begin(ShapeType.Rectangle);
+            shapeRenderer.setColor(Color.WHITE);
+            shapeRenderer.rect(outline.getX(), outline.getY(),outline.getWidth(),outline.getHeight());
+            shapeRenderer.end();
+        }
     }
 
 	@Override

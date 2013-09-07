@@ -76,6 +76,19 @@ public class PhaseLogic {
                 System.out.println("Did Move, cardToMove was: " + cardToMove + " defendingPlayer: " + defendingPlayer);
             }
 
+            //TODO make this not be a hack way of fixing movement problem
+            //if field is empty in view, remove all model stuff
+            String area = null;
+            if(defendingPlayer==1) {
+                area = "P1MonsterZone";
+            } else {
+                area = "P2MonsterZone";
+            }
+            if(view.getSpriteMap().get(area).isEmpty()) {
+                System.out.println("Wiped monsters");
+                ((Field) game.getCardCollection(defendingPlayer, "Field")).destroyAllMonsters();
+            }
+
             //Remove card from view
             view.removeSprite(s2);
             view.getArena().removeSprite(s2);

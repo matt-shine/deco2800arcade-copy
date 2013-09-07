@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -50,6 +51,11 @@ public class MainInputProcessor implements InputProcessor {
         //Check for new game
         if(keycode == Keys.N) {
             this.newGame();
+        }
+
+        //Check for muted
+        if(keycode == Keys.M) {
+            game.toggleMuted();
         }
 
         if(gameFinished) {
@@ -184,10 +190,13 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
-        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
+//        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
 
         //If currently zoomed / gamefinished return
         if(zoomed || gameFinished) return false;
+
+        //Reset zoomSelection color
+        if(zoomSelection != null) zoomSelection.setColor(Color.WHITE);
 
         //get zoomSelection
         zoomSelection = SpriteLogic.checkIntersection(1, x, y);
@@ -366,5 +375,9 @@ public class MainInputProcessor implements InputProcessor {
 
     public void setGameFinished(boolean b) {
         this.gameFinished = b;
+    }
+
+    public ExtendedSprite getSelection() {
+        return this.zoomSelection;
     }
 }

@@ -64,8 +64,6 @@ public class MainGame extends Game {
 	}
 	
 	public void render() {
-        if(musicMuted) bgLoop.stop();
-        else bgLoop.play();
         super.render();
 	}
 	
@@ -162,13 +160,15 @@ public class MainGame extends Game {
 		return b;
 	}
 
-    public void setMuted(boolean bgMusic, boolean effects) {
-        this.effectsMuted = effects;
-        this.musicMuted = bgMusic;
-    }
-
     public void toggleMuted() {
+
         this.effectsMuted = !effectsMuted;
+        if(bgLoop.isPlaying()) {
+            bgLoop.pause();
+        } else {
+            bgLoop.play();
+        }
+
         this.musicMuted = !musicMuted;
     }
 
@@ -178,7 +178,7 @@ public class MainGame extends Game {
             battleSoundEffect.dispose();
         }
         //Play sound
-        if(!muted) {
+        if(!muted && !effectsMuted) {
             battleSoundEffect = Gdx.audio.newSound(new FileHandle("DeerForestAssets/Battle.mp3"));
             long id = battleSoundEffect.play();
             battleSoundEffect.setVolume(id, 1.0f);

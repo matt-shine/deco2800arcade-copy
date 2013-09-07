@@ -105,7 +105,7 @@ public class Breakout extends GameClient {
 
 		// access the file location of the sounds
 		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
-		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
+		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.ogg"));
 		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
 
 		// setting and playing the background music
@@ -341,7 +341,7 @@ public class Breakout extends GameClient {
 				gameOver();
 				// call dispose() method.
 				breaking.dispose();
-				music.dispose();
+			music.dispose();
 				bump.dispose();
 				bumpCount++;
 				ArcadeSystem.goToGame(ArcadeSystem.UI);

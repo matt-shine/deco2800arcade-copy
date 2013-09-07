@@ -1,20 +1,27 @@
 package deco2800.arcade.burningskies.entities;
 
 import java.util.ArrayList;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-
-public class Map extends Actor {
+public class GameMap extends Image {
 	
-	public float timer;
+	// Our map timer
+	public float timer = 0;
+	// How long the map lasts
 	private final float mapTime;
+	// How fast the map travels across the screen
 	private final float mapSpeed;
+	// A list of enemy spawn times
 	private ArrayList<Float> spawnTimes;
 	
-	public Map(String filename) {
+	public GameMap(String filename) {
+		//TODO: Remove this and make it dynamic
+		super(new Texture(Gdx.files.internal("maps/test2.png")));
 		//TODO: load mapfile, initialise TileMap and textures etc
 		mapTime = 0; //TODO: load from map file
-		mapSpeed = 0;
+		mapSpeed = 40; //TODO: load from map file
 		//TODO: Load spawn times
 		spawnTimes = new ArrayList<Float>();
 	}
@@ -29,6 +36,7 @@ public class Map extends Actor {
 				spawnTimes.remove(time);
 			}
 		}
+		setY(getY() - delta*mapSpeed);
 	}
 	
 	public float getMapTime() {

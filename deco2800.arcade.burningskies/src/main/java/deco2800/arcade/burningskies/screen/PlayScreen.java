@@ -5,11 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.entities.GameMap;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 
 
@@ -18,15 +18,10 @@ public class PlayScreen implements Screen
 	private BurningSkies game;
 	
 	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	private Texture texture;
 	private Stage stage;
 	
-	private int x = 0;
-	private float y = 0;
-	private int speed = 40;
-	
 	private PlayerShip player;
+	private GameMap map;
 	
 	public PlayScreen( BurningSkies game){
 		this.game = game;
@@ -36,9 +31,7 @@ public class PlayScreen implements Screen
     public void show()
     {
     	// Initialising variables
-    	texture = new Texture( Gdx.files.internal("maps/test2.png"));
-		batch = new SpriteBatch();
-		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true , batch);
+		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true);
 
 		// Setting up the camera view for the game
 		camera = (OrthographicCamera) stage.getCamera();
@@ -49,14 +42,15 @@ public class PlayScreen implements Screen
     	
     	Texture shiptext = new Texture(Gdx.files.internal("images/Jet1.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100));
+    	map = new GameMap("fixme");
     	stage.addActor(player);
+    	stage.addActor(map);
     }
     
     @Override
     public void hide() {
     	//TODO: Make sure this resets properly
     	stage.dispose();
-    	batch.dispose();
     } 
     
     @Override
@@ -67,12 +61,8 @@ public class PlayScreen implements Screen
 
     	if(!game.isPaused()) {
     		stage.act(delta);
-    		y -= (float) Gdx.graphics.getDeltaTime() * speed;
     	}
     	// Draws the map
-    	batch.begin();
-    	batch.draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight() );
-    	batch.end();
     	stage.draw();
     }
     

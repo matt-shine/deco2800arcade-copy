@@ -4,11 +4,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HighscoreDatabase {
 	private boolean initialised = false;
+	private static final DateFormat dateFormat = new SimpleDateFormat(
+			"yyyy/MM/dd HH:mm:ss");
 	
 	/* Create the highscore database if it does not exist */
 	public void initialise() throws DatabaseException{
@@ -25,8 +29,8 @@ public class HighscoreDatabase {
 				+ "Username VARCHAR(30) NOT NULL, "
 				+ "GameID int NOT NULL, "
 				+ "Date TIMESTAMP, "
-				+ "PRIMARY KEY (HID)" 
-				+ "Rating INT));");
+				+ "Rating INT, " 
+				+ "PRIMARY KEY (HID));");
 			}
 			
 		} catch (SQLException e) {
@@ -209,7 +213,53 @@ public class HighscoreDatabase {
 		}
 	}
 	
+	
 	/* Game to Database Methods */
+	
+	private int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
+		int hid = 0;
+		String[] returnColumn = {"HID"};
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
+		
+		String insertTableSQL = "INSERT INTO HIGHSCORES"
+				+ "(Username, GameID, Date, Rating) VALUES"
+				+ "(" + Username + "," + Game_ID +  ", to_date('"
+				+ getCurrentTimeStamp() + "', 'yyyy/mm/dd hh24:mi:ss'), 0)";
+		
+		try {
+			// Get a connection to the database
+			connection = Database.getConnection();
+			
+			statement.executeUpdate(insertTableSQL);
+			
+			resultSet = statement.getGeneratedKeys();
+	        if (resultSet.next()) {
+	            hid = resultSet.getInt(1);
+	        }
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to add highscore information to database", e);
+		} finally {
+ 
+			if (statement != null) {
+				statement.close();
+			}
+ 
+			if (connection != null) {
+				connection.close();
+			}
+ 
+		}
+		
+		
+		return hid;
+	}
+	
+	
 	/**
 	 * 
 	 * @param Game_ID
@@ -217,9 +267,11 @@ public class HighscoreDatabase {
 	 * @param type
 	 * @param score - the players score to store in the database
 	 * @throws DatabaseException 
+	 * @throws SQLException 
 	 */
-	void updateScore(String Game_ID, String Username, String type, float score) throws DatabaseException{
+	void updateScore(String Game_ID, String Username, String type, float score) throws DatabaseException, SQLException{
 		String data = null;
+		int hid = addHighscore(Game_ID, Username);
 
 		if (!initialised) {
 			initialise();
@@ -232,9 +284,19 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			statement.executeQuery("UPDATE SCORES SET Score='" + score + "' WHERE ID="
+			
+			String insertTableSQL = "INSERT INTO SCORES"
+					+ "(Score_Type, HID, Score) VALUES"
+					+ "(" + type + "," + hid +  ", " + score + ")";
+			
+			statement.executeUpdate(insertTableSQL);
+			
+			/************
+			 statement.executeQuery("UPDATE SCORES SET Score='" + score + "' WHERE ID="
+			 
 					+ "(SELECT h.ID FROM HIGHSCORES h INNER JOIN SCORES s on h.HID = s.HID"
 					+ "WHERE h.GameId='" + Game_ID + "' AND h.Username='" + Username + "' AND s.Score_Type='" + type + "');");
+			*/
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -255,6 +317,13 @@ public class HighscoreDatabase {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private static String getCurrentTimeStamp() {
+		 
+		java.util.Date today = new java.util.Date();
+		return dateFormat.format(today.getTime());
+ 
 	}
 	
 	

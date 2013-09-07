@@ -96,38 +96,27 @@ public class BurningSkies extends GameClient {
 		super.create();
 		setScreen( new SplashScreen(this) );
 		this.getOverlay().setListeners(new Screen() {
-
-			@Override
-			public void dispose() {
-			}
-
 			@Override
 			public void hide() {
-				//TODO: unpause pong
+				//Pause the game here
 			}
-
-			@Override
-			public void pause() {
-			}
-
-			@Override
-			public void render(float arg0) {
-			}
-
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
-
-			@Override
-			public void resume() {
-			}
-
+		
 			@Override
 			public void show() {
-				//TODO: unpause pong
+				//Unpause the game here
 			}
 			
-        });
+			@Override
+			public void pause() {}
+			@Override
+			public void render(float arg0) {}
+			@Override
+			public void resize(int arg0, int arg1) {}
+			@Override
+			public void resume() {}
+			@Override
+			public void dispose() {}
+		});
 	}
 
 	@Override

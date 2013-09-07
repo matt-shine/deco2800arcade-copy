@@ -24,7 +24,6 @@ public class Overlay extends GameClient implements UIOverlay {
 	
 	private Logger logger = new Logger("Overlay");
 	
-	private Screen callbacks = null;
 	private boolean notifiedForMissingCallbacks = false;
 	private boolean notifiedForMissingInput = false;
 	
@@ -75,7 +74,7 @@ public class Overlay extends GameClient implements UIOverlay {
 		batch.end();
 		
 		
-		if (callbacks == null && !notifiedForMissingCallbacks) {
+		if (screen.getListeners() == null && !notifiedForMissingCallbacks) {
 	    	notifiedForMissingCallbacks = true;
 	    	logger.error("Overlay event listeners are not set. " + 
 	    			"See https://github.com/UQdeco2800/deco2800-2013/wiki/Overlay");
@@ -91,9 +90,6 @@ public class Overlay extends GameClient implements UIOverlay {
 	
 	@Override
 	public void dispose() {
-	    if (callbacks != null) {
-	    	callbacks.dispose();
-	    }
 	    
 	    stage.dispose();
         skin.dispose();

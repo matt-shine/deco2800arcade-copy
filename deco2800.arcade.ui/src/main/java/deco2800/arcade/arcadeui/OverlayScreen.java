@@ -124,6 +124,8 @@ public class OverlayScreen implements Screen {
 	    sidebar.resize(arg0, arg1);
 	}
 	
-
+	public Screen getListeners() {
+		return this.callbacks;
+	}
 
 }

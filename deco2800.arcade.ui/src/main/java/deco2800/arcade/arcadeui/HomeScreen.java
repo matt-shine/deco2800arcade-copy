@@ -19,6 +19,7 @@ public class HomeScreen implements Screen {
 
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
+	private SpriteBatch batch;
 	private BitmapFont font;
 	Set<String> games = null;
 	

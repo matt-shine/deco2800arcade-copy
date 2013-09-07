@@ -8,7 +8,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Invaders extends JFrame implements Runnable {
-
+	JFrame appFrame;
 	public static int Width = 800;
 	public static int Height = 500;
 	private Image background = null;

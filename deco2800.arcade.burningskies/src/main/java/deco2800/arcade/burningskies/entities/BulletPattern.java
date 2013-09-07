@@ -9,7 +9,7 @@ public abstract class BulletPattern extends Actor {
 	protected Ship emitter; // who is firing these things
 	protected Stage stage; // so we can spawn things
 	protected boolean firing;
-	private float interval; // how often bullets are fired
+	protected float interval; // how often bullets are fired
 	private float timer;
 	private Vector2 lastEmit; // lag compensation on movement of emitter
 	private Vector2 thisEmit = new Vector2();

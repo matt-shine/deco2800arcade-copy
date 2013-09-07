@@ -13,8 +13,8 @@ import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
 	
-	private Skin skin;
-    private Skin skin2;
+	
+    private Skin skin;
     private Stage stage;
 	
 	
@@ -35,8 +35,8 @@ public class LoginScreen implements Screen {
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = skin.getFont("default");
         textFieldStyle.fontColor = Color.WHITE;
-        textFieldStyle.cursor = skin2.newDrawable("white", Color.WHITE);
-        textFieldStyle.selection = skin2.newDrawable("white", Color.WHITE);
+        textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
+        textFieldStyle.selection = skin.newDrawable("white", Color.WHITE);
         //textFieldStyle.background = ;
         skin2.add("default", textFieldStyle);
         

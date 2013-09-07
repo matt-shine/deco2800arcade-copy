@@ -26,6 +26,7 @@ public class GameLibrary extends GameClient {
     static {
         game = new Game();
         game.name = "Game Library";
+        game.id = "gamelibrary";
         game.description = "Library for available games";
     }
 

@@ -21,7 +21,25 @@ public class HomeScreen implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
+	private Texture texture;
 	Set<String> games = null;
+	
+	
+	public void create () {
+		batch = new SpriteBatch();
+	}
+	
+	public void render () {
+	
+		texture = newTexture(Gdx.files.internal("main/resources/homescreen_bg.png"));
+	
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT); //clears screen
+		batch.begin();
+		batch.draw(texture, 10,10);
+		batch.end();
+	
+	}
+	
 	
 	public HomeScreen() {
 		

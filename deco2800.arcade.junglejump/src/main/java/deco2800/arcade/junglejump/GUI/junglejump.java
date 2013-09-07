@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -44,6 +45,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	private OrthographicCamera camera;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
+	Texture texture;
 
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
@@ -80,6 +82,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
+		texture = new Texture(Gdx.files.internal("data/cat.jpg"));
 		Gdx.app.log(junglejump.messages, "Launching Game");
 	}
 

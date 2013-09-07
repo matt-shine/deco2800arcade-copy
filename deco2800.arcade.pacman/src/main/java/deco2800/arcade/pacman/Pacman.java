@@ -2,7 +2,6 @@ package deco2800.arcade.pacman;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -26,8 +25,6 @@ import deco2800.arcade.model.Player;
 // as GameClient extends Game which implements it. As far as I can tell
 @ArcadeGame(id="pacman")
 public class Pacman extends GameClient {
-
-	private OrthographicCamera camera;
 	
 	private enum GameState {
 		READY,
@@ -35,12 +32,12 @@ public class Pacman extends GameClient {
 		GAMEOVER
 	}
 	
+	private OrthographicCamera camera;			
 	private GameState gameState;
 	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;
-	
-	private ShapeRenderer shapeRenderer;
+	public static final int SCREENWIDTH = 800;	
 	private SpriteBatch batch;
+	private ShapeRenderer shaper;
 	private PacChar player;
 	
 	//not used yet
@@ -50,27 +47,24 @@ public class Pacman extends GameClient {
 	
 	public Pacman(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		// TODO Auto-generated constructor stub
-	}
-
-	
+		// TODO is there stuff we need to happen here?
+	}	
 	
 	/**
 	 * Creates the game
 	 */
 	@Override
 	public void create() {
-		        
+		
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
 			@Override
-			public void dispose() {
+			public void dispose() {				
 			}
 
 			@Override
 			public void hide() {
-
 			}
 
 			@Override
@@ -100,18 +94,21 @@ public class Pacman extends GameClient {
 		camera = new OrthographicCamera();
 		// set resolution
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-				
-//		font = new BitmapFont();
-//		font.setScale(2);
-		batch = new SpriteBatch();
-		
+		// initialise spriteBatch for drawing things
+		batch = new SpriteBatch();		
+		shaper = new ShapeRenderer();
 		//Initialise game state
 		gameState = GameState.READY;		
 	}
 	
+	/**
+	 * Called when application is closed, helps tidy things up
+	 */
 	@Override
 	public void dispose() {
 		super.dispose();
+		batch.dispose();
+		shaper.dispose();
 	}
 
 	@Override
@@ -119,62 +116,64 @@ public class Pacman extends GameClient {
 		super.pause();
 	}
 	
-	//render apparently continually being called unless we specifically tell it not to be
+	/**
+	 * Called continually to draw the screen unless specifically told not to be
+	 */
 	@Override
-	public void render() {
-		
+	public void render() {		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
 	    // updating camera is something we should do once per frame
 	    camera.update();
-	    //tell these things to use the coordinate system of the camera
-	    //shapeRenderer.setProjectionMatrix(camera.combined);
+	    //tell the spritebatch to use the coordinate system of the camera
 	    batch.setProjectionMatrix(camera.combined);
-	    
-	    //Begin drawing of shapes- first shape should be first argument
-	    //shapeRenderer.begin(ShapeType.FilledRectangle);
-	    	       
-	    //End drawing of shapes
-	    //shapeRenderer.end();
-
-	    /** tried to get this to work to at least draw something. It doesn't. 
-	     * I'm gonna have another look at it later, it's throwing a nullpointerexception at the batch.draw line
+	    //initialise and render player pacman (should we just give the constructor 
+	    // the sprite batch rather than sending it in the render method everytime?
 	    player = new PacChar();
-	    TextureRegion[] walkFrames = player.getWalkFrames();
-	    TextureRegion pac = walkFrames[0];
-	    //render sprites- put between begin and end
+	    // start the drawing
 	    batch.begin();
-	    batch.draw(pac, 100, 100);
-        batch.end();*/
+	    player.render(batch);
+	    //end the drawing
+	    batch.end();
+	    //initialise walls and draw them 
+	    // note, this method only allows single pixel width lines, as far as I can tell.
+	    // shouldn't be super difficult to make them thicker, but will need a different approach 
+	    // (filled shapes probably)
+	    // just testing walls at the moment, haven't arranged any
+	    Wall test1 = new Wall(1, 200, 200, 30);
+	    Wall test2 = new Wall(2, 200, 200, 30);
+	    Wall test3 = new Wall(3, 200, 200, 30);
+	    Wall test4 = new Wall(4, 200, 200, 30);
+	    shaper.begin(ShapeType.Line);
+	    test1.render(shaper);
+	    test2.render(shaper);
+	    test3.render(shaper);
+	    test4.render(shaper);
+	    shaper.end();	    
 	    
 	    // Respond to user input depending on the game state
-	    switch(gameState) {
-	    
+	    switch(gameState) {	    
 	    case READY: //Ready to initialise the game
 	    	if (Gdx.input.isTouched()) {
 	    		startPoint();
 	    	}
-	    	break;
-	    	
+	    	break;	    	
 	    case INPROGRESS: 
-	    	break;
-	    	
+	    	break;	    	
 	    case GAMEOVER: //The game has been won, wait to exit
 	    	if (Gdx.input.isTouched()) {
 	    		gameOver();
 	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
 	    	}
 	    	break;
-	    }
-	    
+	    }	    
+	    //do any stuff the superclass normally does for rendering
 		super.render();
 		
 	}
 	
-	private void startPoint() {
-		
+	private void startPoint() {		
 		gameState = GameState.INPROGRESS;
 	}
 	

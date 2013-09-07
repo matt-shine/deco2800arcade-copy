@@ -25,6 +25,8 @@ import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
@@ -52,6 +54,10 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
+	
+	public static void main (String [] args) {
+		ArcadeSystem.goToGame("junglejump");
+	}
 
 	public junglejump(Player player) {
 		super(player, networkClient);

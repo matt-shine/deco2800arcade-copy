@@ -28,7 +28,7 @@ public class tank implements KeyListener {
 	public void drawTank(Graphics g, JFrame p) {
 		g.setColor(Color.green);
 		im = new javax.swing.ImageIcon("image/Tank.png").getImage();
-		g.drawImage(im,p_x, p_y,45,90,p);
+		g.drawImage(im,p_x, p_y,40,80,p);
 
 	}
 

@@ -9,7 +9,7 @@ public class blockWall {
 	private enemy[][] lists;
 	private int px;
 	private int py;
-	
+
 	public blockWall(int px, int py, int rowNum, int rowEnemyNum) {
 		this.rowNum = rowNum;
 		this.rowEnemyNum = rowEnemyNum;

@@ -15,4 +15,3 @@ chess
 junglejump
 burningskies
 checkers
-landInvaders

@@ -113,7 +113,7 @@ public class ReplayListener extends Listener {
             PushEventRequest per = (PushEventRequest) object;
             PushEventResponse response = new PushEventResponse();
             
-            System.out.println( "Got event request " + per.eventIndex );
+            System.out.println( "Got push event: " + per.eventIndex );
             
             try {
                 ArcadeServer.instance().getReplayStorage().insertEvent( per.sessionId, per.eventIndex, per.nodeString); 
@@ -130,7 +130,8 @@ public class ReplayListener extends Listener {
             GetEventsRequest ger = (GetEventsRequest) object;
             GetEventsResponse response = new GetEventsResponse();
             
-            //TODO wtf hashmap wtf? --- i so sorry
+            System.out.println("Served replay of session: " + ger.sessionId);
+            
             try {
                 response.nodes = ArcadeServer.instance().getReplayStorage().getReplay(ger.sessionId);
             } catch (DatabaseException e) {

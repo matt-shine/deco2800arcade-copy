@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -40,7 +42,7 @@ public class Breakout extends GameClient {
 	private String player;
 	// private NetworkClient nc;
 	private Paddle paddle;
-	private PongBall ball;
+	private Ball ball;
 	private int score;
 	private int lives;
 
@@ -59,6 +61,9 @@ public class Breakout extends GameClient {
 //	public Sound bump;
 
 	private String status = null;
+	
+	// Integer to determine what the current level is
+	private int level = 1;
 
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
@@ -78,6 +83,9 @@ public class Breakout extends GameClient {
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
+	
+	private float lastHitX;
+	private float lastHitY;
 
 	// Array of Brick
 	Brick bricks[];
@@ -85,9 +93,9 @@ public class Breakout extends GameClient {
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.player = player.getUsername();
+		score = 0;
+		lives = 3;
 		// this.nc = networkClient;
-		bricks = new Brick[48];
-
 	}
 
 	/**
@@ -104,25 +112,54 @@ public class Breakout extends GameClient {
 
 		// access the file location of the sounds
 		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
-//		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
-//		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
+		// Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
+		// bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
 
 		// setting and playing the background music
-//		music.setLooping(true);
-//		music.setVolume(0.3f);
-//		music.play();
+		// music.setLooping(true);
+		// music.setVolume(0.3f);
+		// music.play();
 
 		// setting the ball and paddle
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
-		ball = new PongBall();
+		ball = new Ball();
 		ball.setColor(0, 1, 0, 1);
 
-		// created the 48 Bricks
-		int index = 0;
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 8; j++) {
-				bricks[index] = new Brick(j * 125 + 120, SCREENHEIGHT - i * 45
-						- 110);
+		int index;
+		if (level == 1) {
+			// create 48 Bricks in a rectangle formation
+			index = 0;
+			bricks = new Brick[48];
+			for (int i = 0; i < 6; i++) {
+				for (int j = 0; j < 8; j++) {
+					bricks[index] = new Brick(j * 125 + 120, SCREENHEIGHT - i
+							* 45 - 110);
+					index++;
+				}
+			}
+		} else if (level == 2) {
+			index = 0;
+			bricks = new Brick[20];
+			for (int i = 0; i < 4; i++) {
+				for (int j = 0; j < 5; j++) {
+					bricks[index] = new Brick(j * 125 + index * 10 + 120,
+							SCREENHEIGHT - (4 * index) - (i * 40) - 110);
+					index++;
+				}
+			}
+		} else if (level == 3) {
+			index = 0;
+			bricks = new Brick[20];
+			while (index < 20) {
+				int shift = 0;
+				double yPos = Math.sin(18 * index);
+				if (yPos < 0) {
+					shift = -40;
+				} else if (yPos > 0) {
+					shift = 40;
+				}
+				bricks[index] = new Brick((float)(640 + 225*Math.cos(18*index)),
+						(float)(360 + shift + 225*yPos));
 				index++;
 			}
 		}
@@ -133,12 +170,9 @@ public class Breakout extends GameClient {
 		font.setScale(2);
 		batch = new SpriteBatch();
 
-		score = 0;
-		lives = 3;
 		gameState = GameState.READY;
 		gameState = GameState.READY;
 		status = "Click to start!";
-
 
 	}
 
@@ -147,18 +181,23 @@ public class Breakout extends GameClient {
 	 * for processing
 	 */
 	public void updateGameState(int bounce) {
+		System.out.println("ball's x velocity: " + ball.getXVelocity());
 		if (bounce == 0) {
 			ball.bounceX();
+		} else if (bounce == 1) {
+			ball.bounceY();
 		} else {
+			ball.bounceX();
 			ball.bounceY();
 		}
-
+		lastHitX = ball.getX();
+		lastHitY = ball.getY();
 		breaking.play();
 		brickBreak++;
-		score++;
+		score += this.level*2;
 		brickNum--;
 		try {
-			Thread.currentThread().sleep(25);
+			Thread.currentThread().sleep(35);
 		} catch (Exception e) {
 		}
 	}
@@ -216,6 +255,8 @@ public class Breakout extends GameClient {
 		paddle.render(shapeRenderer);
 		// TODO Make the Ball a Circle
 		ball.render(shapeRenderer);
+		
+		
 
 		// Writes in the text information
 		/*
@@ -277,18 +318,23 @@ public class Breakout extends GameClient {
 		case INPROGRESS:
 			paddle.update(ball);
 			ball.move(Gdx.graphics.getDeltaTime());
-			// int index = 0;
-			// TODO: if it hits left/right side, only bounceX. if it hits
-			// top/bottom, only bounceY
 			for (Brick b : bricks) {
 				if (b.getState()) {
 					if (b.checkLeftCollision(ball.bounds)) {
 						b.setState(false);
+						if (Math.abs(ball.getXVelocity()) < 60) {
+							updateGameState(2);
+							break;
+						}
 						updateGameState(0);
 						break;
 					}
 					if (b.checkRightCollision(ball.bounds)) {
 						b.setState(false);
+						if (Math.abs(ball.getXVelocity()) < 60) {
+							updateGameState(2);
+							break;
+						}
 						updateGameState(0);
 						break;
 					}
@@ -306,22 +352,32 @@ public class Breakout extends GameClient {
 			}
 
 			if (brickNum == 0) {
-				win();
+				level++;
+				if (level > 3) {
+					win();
+				} else {
+					create();
+				}
 			}
 
 			if (ball.bounds.overlaps(paddle.paddleShape)
 					&& ball.getYVelocity() < 0) {
 //				bump.play();
+				ball.updateVelocity(lastHitX, lastHitY, paddle);
 				ball.bounceY();
 
 			}
 
-			if (ball.bounds.y >= SCREENHEIGHT - PongBall.WIDTH) {
+			if (ball.bounds.y >= SCREENHEIGHT - Ball.WIDTH) {
+				lastHitX = ball.getX();
+				lastHitY = ball.getY();
 				ball.bounceY();
 			}
 
 			if (ball.bounds.x <= 0
-					|| ball.bounds.x + PongBall.WIDTH > SCREENWIDTH) {
+					|| ball.bounds.x + Ball.WIDTH > SCREENWIDTH) {
+				lastHitX = ball.getX();
+				lastHitY = ball.getY();
 				ball.bounceX();
 			}
 
@@ -403,7 +459,7 @@ public class Breakout extends GameClient {
 		 * gameState is set to READY
 		 */
 		if (lives > 0) {
-			ball.reset();
+			ball.reset(new Vector2(paddle.getPaddleX(), paddle.getPaddleY()));
 			lives--;
 			score -= 5;
 			gameState = GameState.READY;

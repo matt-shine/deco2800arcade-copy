@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * Brick class for the breakout game
+ * @author Carlie Smits
+ *
+ */
 public class Brick {
 
-	private Texture bricksImage;
-	private TextureRegion bricksImageRegion;
-	private Sprite brickImg;
 	private SpriteBatch sBatch;
 
 	// protected int x;
@@ -25,7 +27,12 @@ public class Brick {
 	private boolean state;
 	private Rectangle brickShape;
 
-	public Brick(int x, int y) {
+	/**
+	 * Create the brick at the given x and y co-ordinates
+	 * @param x
+	 * @param y
+	 */
+	public Brick(float x, float y) {
 		// TextureAtlas myTextures = new TextureAtlas("packed.txt");
 		// Pixmap pixels = new Pixmap("data/libgdx.png");
 		// bricksImage = new Texture(Gdx.files.absolute("C:/Users/Owner/Desktop/
@@ -41,22 +48,27 @@ public class Brick {
 		this.state = true;
 	}
 
+	// Check if the brick has already been hit or not
 	public boolean getState() {
 		return this.state;
 	}
 
+	// Getter method for the brick's rectangular form
 	public Rectangle getShape() {
 		return this.brickShape;
 	}
 
+	// Set the state of the brick (if hit -> false)
 	public void setState(boolean state) {
 		this.state = state;
 	}
 
+	// Getter method for bricks width
 	public float getWidth() {
 		return this.width;
 	}
 
+	// Getter method for the bricks height
 	public float getHeight() {
 		return this.height;
 	}
@@ -118,7 +130,7 @@ public class Brick {
 	}
 	
 	public void create() {
-		sBatch = new SpriteBatch();
+//		sBatch = new SpriteBatch();
 	}
 	
 	public void render(ShapeRenderer render) {
@@ -133,6 +145,7 @@ public class Brick {
 				brickShape.height, Color.LIGHT_GRAY, Color.GRAY, Color.GRAY, Color.LIGHT_GRAY);
 	}
 
+	// return string representation of the bricks position
 	public String toString() {
 		return "brickpos: " + this.brickShape.x + ", " + this.brickShape.y;
 	}

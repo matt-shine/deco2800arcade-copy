@@ -6,8 +6,8 @@ import deco2800.arcade.deerforest.models.effects.Attack;
 
 public class WaterMonster extends AbstractMonster {
 
-	public WaterMonster(int health, List<Attack> attacks, String cardFilePath) {
-		super("Water", health, attacks, cardFilePath);
+	public WaterMonster(int health, int attack, String cardFilePath) {
+		super("Water", health, attack, cardFilePath);
 		this.cardFilePath = cardFilePath;
 		// TODO Auto-generated constructor stub
 	}

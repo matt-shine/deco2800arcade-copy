@@ -106,6 +106,15 @@ final class PlayerViewModel extends Actor {
 	}
 
 	/**
+	 * Returns the ID of this player.
+	 *
+	 * @return this player's ID
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
 	 * Returns the amount of bricks this player has.
 	 *
 	 * @return the amount of bricks

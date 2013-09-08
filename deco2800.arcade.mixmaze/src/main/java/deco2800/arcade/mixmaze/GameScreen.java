@@ -37,6 +37,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
  * GameScreen draws all elements in a game session.
  */
 final class GameScreen implements Screen {
+
 	private static final String LOG = GameScreen.class.getSimpleName();
 
 	private final MixMaze game;
@@ -51,7 +52,6 @@ final class GameScreen implements Screen {
 	private Table endGameTable;
 	private PlayerViewModel p1;
 	private PlayerViewModel p2;
-	private Label[] userLabels;
 	private MixMazeModel model;
 	private TextButton backMenu;
 	private Label resultLabel;
@@ -87,11 +87,8 @@ final class GameScreen implements Screen {
 		left = new SidePanel();
 		right = new SidePanel();
 
-		userLabels = new Label[2];
-		userLabels[0] = new Label("Player 1", skin);
-		userLabels[1] = new Label("Player 2", skin);
-
 		timerLabel = new Label("timer", skin, "timer-white");
+		timerLabel.setFontScale(2f);
 		tileTable = new Table();
 		gameArea = new Group();
 		endGameTable = new Table();
@@ -108,9 +105,7 @@ final class GameScreen implements Screen {
 		stage.addActor(root);
 
 		/* header */
-		root.add(userLabels[0]).width(320);
-		root.add(timerLabel).expandX();
-		root.add(userLabels[1]).width(320);
+		root.add(timerLabel).expandX().colspan(3);
 		root.row();
 
 		/* body */
@@ -174,9 +169,6 @@ final class GameScreen implements Screen {
 		left.update(p1);
 		right.update(p2);
 
-		userLabels[0].setText("player 1: " + p1.getActionName());
-		userLabels[1].setText("player 2: " + p2.getActionName());
-
 		stage.act(delta);
 		stage.draw();
 		//Table.drawDebug(stage);
@@ -220,6 +212,10 @@ final class GameScreen implements Screen {
 		setupGameBoard();
 
 		/* set timer */
+		Label.LabelStyle style = timerLabel.getStyle();
+		style.fontColor = WHITE;
+		timerLabel.setStyle(style);
+
 		countdown = model.getGameMaxTime();
 		Timer.schedule(new Timer.Task() {
 			public void run() {
@@ -310,7 +306,7 @@ final class GameScreen implements Screen {
 
 			for (int i = 0; i < 3; i++) {
 				itemStacks[i] = new Stack();
-				this.add(itemStacks[i]);
+				this.add(itemStacks[i]).size(210, 210);
 				if (i < 2)
 					this.row();
 
@@ -325,14 +321,15 @@ final class GameScreen implements Screen {
 			/* bricks */
 			for (int i = 0; i < 10; i++) {
 				brickImages[i] = new Image(BRICK_REGION);
-				brickTable.add(brickImages[i]).size(64, 64);
+				brickTable.add(brickImages[i]).size(52, 52);
 				if ((i + 1) % 4 == 0)
 					brickTable.row();
 			}
 		}
 
 		void update(PlayerViewModel p) {
-			scoreLabel.setText("boxes: " + p.getScore());
+			scoreLabel.setText("Player" + p.getId()
+					+ " boxes " + p.getScore());
 
 			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
 				brickImages[i].setVisible(i < n);

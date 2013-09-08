@@ -1,4 +1,6 @@
 package deco2800.arcade.landInvaders;
+
+
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
@@ -8,7 +10,7 @@ import deco2800.arcade.model.Player;
 //Main Class
 @ArcadeGame(id = "LandInvaders")
 public class LandInvaders extends GameClient  {
-	
+
 	private static final Game GAME;
 
 	public LandInvaders(Player player, NetworkClient networkClient) {

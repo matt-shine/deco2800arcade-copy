@@ -12,6 +12,9 @@ public class NetworkClient {
 
 	private Client client;
 	
+	// Time before the connection is aborted
+	private static final int TIMEOUT = 5000;
+	
 	/**
 	 * Creates a new network client
 	 * 
@@ -20,12 +23,13 @@ public class NetworkClient {
 	 * @param udpPort
 	 * @throws NetworkException
 	 */
-	public NetworkClient(String serverAddress, int tcpPort, int udpPort) throws NetworkException{
+	public NetworkClient(String serverAddress, int tcpPort, int udpPort) 
+			throws NetworkException{
 		this.client = new Client();
 		this.client.start();
 		
 		try {
-			client.connect(5000, serverAddress, tcpPort, udpPort);
+			client.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
 			Protocol.register(client.getKryo());
 		} catch (IOException e) {
 			throw new NetworkException("Unable to connect to the server", e);

@@ -31,6 +31,7 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -43,8 +44,8 @@ import deco2800.arcade.protocol.game.NewGameRequest;
  * The client application for running arcade games.
  * 
  */
-public class Arcade extends JFrame{
-	
+public class Arcade extends JFrame {
+
 	/**
 	 * Only exists to stop warning
 	 */
@@ -67,6 +68,10 @@ public class Arcade extends JFrame{
 	private ProxyApplicationListener proxy;
 
 	private CommunicationNetwork communicationNetwork;
+	
+	// Width and height of the Arcade window
+	private static final int ARCADE_HEIGHT = 720;
+	private static final int ARCADE_WIDTH = 1280;
 
 	
 	/**
@@ -94,10 +99,10 @@ public class Arcade extends JFrame{
 	 * 
 	 * @param args
 	 */
-	private Arcade(String[] args) {
+	public Arcade(String[] args) {
 		
-		this.width = 1280;
-		this.height = 720;
+		this.width = ARCADE_WIDTH;
+		this.height = ARCADE_HEIGHT;
 		initWindow();
 	}
 
@@ -126,14 +131,17 @@ public class Arcade extends JFrame{
 
 		// set shutdown behaviour
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(WindowEvent winEvt) {
-				close();
-			}
+		    public void windowClosing(WindowEvent winEvt) {
+                arcadeExit();
+		    }
 		});
 	}
 
-	public void close() {
-		removeCanvas();
+	/**
+	 * Completely exits arcade. The status code is always set to 0.
+	 */
+    public void arcadeExit() {
+        removeCanvas();
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -142,10 +150,13 @@ public class Arcade extends JFrame{
 		});
 	}
 
+	/**
+	 * Attempts to connect to the server
+	 */
 	public void startConnection() {
 		// Try to connect to the server until successful
 		boolean connected = false;
-		while (!connected) {
+		while (!connected){
 			try {
 				connectToServer();
 				connected = true;
@@ -182,15 +193,21 @@ public class Arcade extends JFrame{
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
+<<<<<<< HEAD
 		this.client.addListener(new MultiplayerListener());
 		this.client
 				.addListener(new CommunicationListener(communicationNetwork));
+=======
+		this.client.addListener(new CommunicationListener(communicationNetwork));
+>>>>>>> origin/master
 	}
 
 	public void connectAsUser(String username) {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
-
+		
+		Protocol.registerEncrypted(connectionRequest);
+		
 		this.client.sendNetworkObject(connectionRequest);
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
@@ -345,8 +362,7 @@ public class Arcade extends JFrame{
 				.entrySet().iterator();
 		while (it.hasNext()) {
 
-			Map.Entry<String, Class<? extends GameClient>> pair = (Map.Entry<String, Class<? extends GameClient>>) it
-					.next();
+			Map.Entry<String, Class<? extends GameClient>> pair = it.next();
 
 			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
 				it.remove();
@@ -397,6 +413,7 @@ public class Arcade extends JFrame{
 		}
 		return null;
 	}
+<<<<<<< HEAD
 	
 	public boolean isMultiplayerEnabled() {
 		return multiplayerEnabled;
@@ -405,4 +422,10 @@ public class Arcade extends JFrame{
 	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
 		Arcade.multiplayerEnabled = multiplayerEnabled;
 	}
+=======
+	public GameClient getCurrentGame() {
+		return selectedGame;
+	}
+
+>>>>>>> origin/master
 }

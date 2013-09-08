@@ -19,13 +19,20 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
-	   
-	@SuppressWarnings("unused")
+	
 	private LoginScreen login = null;
 	@SuppressWarnings("unused")
+	private StoreScreen store = null;
+	@SuppressWarnings("unused")
 	private HomeScreen home = null;
+<<<<<<< HEAD
 	@SuppressWarnings("unused")
 	private MultiplayerLobby Lobby = null;
+=======
+    @SuppressWarnings("unused")
+    private AccMgtScreen accMgt = null;
+	
+>>>>>>> origin/master
 	private Screen current = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
@@ -40,6 +47,7 @@ public class ArcadeUI extends GameClient {
 		if (player == null) {
 			current = login = new LoginScreen();
 		} else {
+<<<<<<< HEAD
 			if(ArcadeSystem.isMultiplayerEnabled()){
 				current = Lobby = new MultiplayerLobby();
 				new MultiplayerTest(networkClient);
@@ -47,6 +55,10 @@ public class ArcadeUI extends GameClient {
 				current = home = new HomeScreen();
 			}
 
+=======
+			current = home = new HomeScreen();
+			//current = store = new StoreScreen();
+>>>>>>> origin/master
 		}
 		
 		this.setScreen(current);

@@ -24,6 +24,10 @@ public class HomeScreen implements Screen {
 	boolean multiplayerEnabled;
 	Set<String> games = null;
 	
+	
+	
+	
+	
 	public HomeScreen() {
 		
 	}

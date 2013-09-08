@@ -1,7 +1,5 @@
 package deco2800.arcade.server.database;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 import java.net.URL;
 
@@ -13,10 +11,7 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
-
 import deco2800.server.database.CreditStorage;
-import deco2800.server.database.DatabaseException;
 
 /**
  * Test class for CreditStorage
@@ -81,6 +76,7 @@ public class TestCreditStorage {
 	 * Simple test case to make sure our XML loading is working, and that retrieving a user's balance is OK
 	 * @throws DatabaseException
 	 */
+<<<<<<< HEAD
 	@Test
 	public void initialTotal() throws DatabaseException {
 	//	assertEquals(0, (int) creditStorage.getUserCredits(1));
@@ -96,4 +92,21 @@ public class TestCreditStorage {
 	//	assertEquals(new Integer(5), creditStorage.getUserCredits(1));
 	}
 	
+=======
+//	@Test
+//	public void initialTotal() throws DatabaseException {
+//		assertEquals(0, (int) creditStorage.getUserCredits(1));
+//	}
+//	
+//	/**
+//	 * Check that a simple addition to a zero balance works
+//	 * @throws DatabaseException
+//	 */
+//	@Test
+//	public void basecase() throws DatabaseException {
+//		creditStorage.addUserCredits(1, 5);
+//		assertEquals(new Integer(5), creditStorage.getUserCredits(1));
+//	}
+//	
+>>>>>>> origin/master
 }

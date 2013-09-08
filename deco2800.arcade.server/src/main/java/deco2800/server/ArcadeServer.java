@@ -15,7 +15,12 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+<<<<<<< HEAD
 import deco2800.server.listener.MultiplayerListener;
+=======
+import deco2800.server.database.HighscoreDatabase;
+import deco2800.arcade.packman.PackageServer;
+>>>>>>> origin/master
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -31,7 +36,17 @@ public class ArcadeServer {
 	//singleton pattern
 	private static ArcadeServer instance;
 	
+<<<<<<< HEAD
 	private HashSet<String> lobbyUsers = new HashSet<String>();
+=======
+	// Package manager
+	@SuppressWarnings("unused")
+	private PackageServer packServ;
+	
+	// Server will communicate over these ports
+	private static final int TCP_PORT = 54555;
+	private static final int UDP_PORT = 54777;
+>>>>>>> origin/master
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -59,6 +74,9 @@ public class ArcadeServer {
 	private CreditStorage creditStorage;
 	//private PlayerStorage playerStorage;
 	//private FriendStorage friendStorage;
+	
+	// Highscore database storage service
+	private HighscoreDatabase highscoreDatabase;
 	
 	/**
 	 * Access the server's credit storage facility
@@ -98,10 +116,15 @@ public class ArcadeServer {
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
+		this.highscoreDatabase = new HighscoreDatabase();
+		this.packServ = new PackageServer();
+		
 		//initialize database classes
 		try {
 			creditStorage.initialise();
 			//playerStorage.initialise();
+			
+			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,7 +139,7 @@ public class ArcadeServer {
 		System.out.println("Server starting");
 		server.start();
 		try {
-			server.bind(54555, 54777);
+			server.bind(TCP_PORT, UDP_PORT);
 			System.out.println("Server bound");
 		} catch (BindException b) {
 			System.err.println("Error binding server: Address already in use");

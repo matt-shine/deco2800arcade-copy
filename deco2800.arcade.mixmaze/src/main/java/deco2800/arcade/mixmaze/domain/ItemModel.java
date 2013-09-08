@@ -1,13 +1,43 @@
 package deco2800.arcade.mixmaze.domain;
 
+/**
+ * Abstraction of items in mixmaze.
+ */
 public abstract class ItemModel {
-	private int amount;
-	
-	public int getAmount() {
-		return amount;
+
+	/**
+	 * Item types.
+	 */
+	public enum ItemType {
+		BRICK, PICK, TNT, UNKNOWN
+	}
+
+	private ItemType itemType;
+	private TileModel tileSpawned;
+
+	protected ItemModel(ItemType type) {
+		itemType = type;
 	}
 	
-	public ItemModel(int amnt) {
-		amount = amnt;
+	protected ItemModel(ItemType type, TileModel spawnedOn) {
+		if(spawnedOn == null) {
+			throw new IllegalArgumentException("spawnedOn cannot be null.");
+		}
+		itemType = type;
+		tileSpawned = spawnedOn;
+	}
+
+	public void pickUpItem() {
+		tileSpawned.pickUpItem();
+	}
+
+	/**
+	 * Returns the type of this item.
+	 *
+	 * @return the type
+	 */
+	public ItemType getType()
+	{
+		return itemType;
 	}
 }

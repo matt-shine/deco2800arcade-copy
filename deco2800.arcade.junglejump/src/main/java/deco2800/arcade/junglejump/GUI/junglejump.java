@@ -8,12 +8,15 @@ import javax.security.auth.login.Configuration;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -22,6 +25,8 @@ import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
@@ -33,6 +38,8 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
 	PerspectiveCamera cam;
+    private SpriteBatch batch;
+
 	Frustum camGone = new Frustum();
 	private World world;
 	// Store details about the activity of junglejump and the players
@@ -43,11 +50,16 @@ public class junglejump extends GameClient implements InputProcessor {
 	private OrthographicCamera camera;
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
+	Texture texture;
 
 	Music themeMusic;
 	Sound jump, die, levelup, loselife, collect;
+	
+	public static void main (String [] args) {
+		ArcadeSystem.goToGame("junglejump");
+	}
 
-	public junglejump(Player player) {
+	public junglejump(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
@@ -79,6 +91,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
+		texture = new Texture(Gdx.files.internal("data/cat.jpg"));
 		Gdx.app.log(junglejump.messages, "Launching Game");
 	}
 
@@ -96,6 +109,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		// Clears the screen - not sure if this is needed
 		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(texture, 0, 0);
+		batch.end();
+		
 		camera.update();
 		// Logs current FPS
 		fpsLogger.log();
@@ -113,7 +130,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void hide() {
-				//TODO: unpause pong
+				
 			}
 
 			@Override
@@ -134,7 +151,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void show() {
-				//TODO: unpause pong
+				
 			}
 			
         });
@@ -171,21 +188,41 @@ public class junglejump extends GameClient implements InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int arg0) {
+	public boolean keyDown(int keycode) {
+		if (keycode == Keys.LEFT) {
+			// Move left
+		} if (keycode == Keys.RIGHT) {
+			// Move right
+		} if (keycode == Keys.SPACE) {
+			// Jump
+		} if (keycode == Keys.UP) {
+			// Climb
+		} if (keycode == Keys.DOWN) {
+			// Climb down
+		}
+		return true;
+	}
+
+	@Override
+	public boolean keyTyped(char keycode) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean keyTyped(char arg0) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean keyUp(int arg0) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean keyUp(int keycode) {
+		if (keycode == Keys.LEFT) {
+			// Move left STOP
+		} if (keycode == Keys.RIGHT) {
+			// Move right STOP
+		} if (keycode == Keys.SPACE) {
+			// Jump STOP
+		} if (keycode == Keys.UP) {
+			// Climb STOP
+		} if (keycode == Keys.DOWN) {
+			// Climb down STOP
+		}
+		return true;
 	}
 
 	@Override

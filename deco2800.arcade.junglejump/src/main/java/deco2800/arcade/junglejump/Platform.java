@@ -5,17 +5,18 @@ public class Platform {
 	
 	private int width, height, xPos, yPos;
 	private boolean active;
+	private boolean climbable = false;
 
 	/**
 	 * Platform constructor
 	 * Takes width, height and X and Y position as parameters
 	 */
-	public void platform(int pWidth, int pHeight, int pX, int pY) {
-		int width = pWidth;
-		int height = pHeight;
-		int xPos = pX;
-		int yPos = pY;
-		boolean active = false;
+	public Platform(int pX, int pY, int pWidth, int pHeight) {
+		width = pWidth;
+		height = pHeight;
+		xPos = pX;
+		yPos = pY;
+		active = false;
 	}
 	
 	/**
@@ -94,6 +95,14 @@ public class Platform {
 	 */
 	public void setInactive() {
 		this.active = false;
+	}
+	
+	/**
+	 * What happens each frame when platform is active.
+	 * Does nothing on standard platform
+	 */
+	public void onActive() {
+		return;
 	}
 	
 }

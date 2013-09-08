@@ -1,6 +1,7 @@
 package deco2800.arcade.protocol;
 
 import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.*;
 
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
@@ -24,38 +25,73 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 
 
 public class Protocol {
+	
+	private static Kryo kryo;
+	
+	/**
+	 * Keeps the kryo instance for use with registerEncrypted()
+	 * @param kryo
+	 */
+	public static void setKryo(Kryo kryo) {
+		Protocol.kryo = kryo;
+	}
 
+	/**
+	 * Registers the classes that will be sent over the network. Classes 
+	 * registered in this method will not be encrypted.
+	 * @param kryo
+	 */
 	public static void register(Kryo kryo) {
-		//Connection messages
-		kryo.register(ConnectionRequest.class);
+		Protocol.setKryo(kryo);
+		
+		// Connection messages
 		kryo.register(ConnectionResponse.class);
 
-		//Credit messages
+		// Credit messages
 		kryo.register(CreditBalanceRequest.class);
 		kryo.register(CreditBalanceResponse.class);
-		
-		//Achievement messages
+
+		// Achievement messages
 		kryo.register(AchievementListRequest.class);
 		kryo.register(AddAchievementRequest.class);
-		
-		//Game messages
+
+		// Game messages
 		kryo.register(GameStatusUpdate.class);
 		kryo.register(GameStatusUpdateResponse.class);
 		kryo.register(NewGameRequest.class);
 		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
-		
-		//Communication messages
+
+		// Communication messages
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
 		kryo.register(ChatRequest.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
 		
+
 		//Multiplayer Messages
 		kryo.register(NewMultiGameRequest.class);
 		kryo.register(NewMultiResponse.class);
 		kryo.register(MultiGameRequestType.class);
+
+		// Register miscellaneous classes
+		kryo.register(byte[].class);
+
 	}
 	
+	/**
+	 * Sends ConnectionRequest over network using encryption rather than 
+	 * plaintext
+	 * @param connectionRequest
+	 */
+	public static void registerEncrypted(ConnectionRequest connectionRequest) {		
+		connectionRequest.generateKey();
+		
+		// Ensures any ConnectionRequests are sent over the network using the 
+		// Blowfish encryption algorithm
+		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
+				new FieldSerializer<Object>(kryo, ConnectionRequest.class), connectionRequest.key));
+	}
+
 }

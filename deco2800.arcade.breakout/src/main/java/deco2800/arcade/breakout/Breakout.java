@@ -284,6 +284,8 @@ public class Breakout extends GameClient {
 			break;
 
 		}
+		
+		super.render();
 
 	}
 

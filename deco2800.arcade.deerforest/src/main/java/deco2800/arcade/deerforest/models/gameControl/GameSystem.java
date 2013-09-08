@@ -324,4 +324,8 @@ public class GameSystem {
     public void setCurrentPlayer(int player) {
         this.currentPlayer = player==1?p1:p2;
     }
+
+    public void setFirstTurn(boolean b) {
+        this.firstTurn = b;
+    }
 }

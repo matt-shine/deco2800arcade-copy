@@ -21,7 +21,19 @@ public class ExtendedSprite extends Sprite {
     private MainGame game;
     private float glow;
     private boolean glowDirection;
-	
+
+    //Variables for moving sprite
+    private float deltaX;
+    private float deltaY;
+    private float timeToMove;
+    private float currentMoveTime;
+
+    //Variables for scaling sprite
+    private float scaleDeltaX;
+    private float scaleDeltaY;
+    private float scaleTimeToMove;
+    private float scaleCurrentMoveTime;
+
 	public ExtendedSprite(Texture t) {
 		super(t);
 		setOrigin(0,0);
@@ -37,6 +49,11 @@ public class ExtendedSprite extends Sprite {
         glow = 0;
         glowDirection = true;
         game = DeerForestSingletonGetter.getDeerForest().mainGame;
+
+        this.deltaX = 0;
+        this.deltaY = 0;
+        this.timeToMove = 0;
+        this.currentMoveTime = 0;
 	}
 
     //Create a duplicate extended sprite from given extended sprite
@@ -125,6 +142,33 @@ public class ExtendedSprite extends Sprite {
             game.font.setColor(Color.WHITE);
             game.font.setScale(0.5f);
         }
+
+        //Update moving to point
+        if(currentMoveTime < timeToMove) {
+            this.setPosition(this.getX()+deltaX/timeToMove, this.getY()+deltaY/timeToMove);
+            currentMoveTime++;
+        }
+
+        //Update scaling
+        if(scaleCurrentMoveTime < scaleTimeToMove) {
+            this.setScale(this.getScaleX()+scaleDeltaX/scaleTimeToMove, this.getScaleY()+scaleDeltaY/scaleTimeToMove);
+            scaleCurrentMoveTime++;
+        }
+    }
+
+    //Moves the sprite to the point over given time t
+    public void moveTo(float x, float y, int time) {
+        this.deltaX = x - this.getX();
+        this.deltaY = y - this.getY();
+        this.timeToMove = time;
+        this.currentMoveTime = 0;
+    }
+
+    public void scaleTo(float xScale, float yScale, int time) {
+        this.scaleDeltaX = xScale - this.getScaleX();
+        this.scaleDeltaY = yScale - this.getScaleY();
+        this.scaleTimeToMove = time;
+        this.scaleCurrentMoveTime = 0;
     }
 
     public void setCard(AbstractCard c) {

@@ -215,4 +215,8 @@ public class MainGame extends Game {
             this.model.setCurrentPlayer(player);
         }
     }
+
+    public void setFirstTurn(boolean b) {
+        model.setFirstTurn(b);
+    }
 }

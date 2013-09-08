@@ -39,6 +39,8 @@ public class MainGameScreen implements Screen {
     private ExtendedSprite p1Health;
     private ExtendedSprite p2Health;
     private ExtendedSprite cardBack;
+    private ExtendedSprite p1Deck;
+    private ExtendedSprite p2Deck;
     private final static float healthBarX = 0.065625f;
     private final static float healthBarWidth = 0.01875f;
     private final static float P1HealthBarY = 0.65833336f;
@@ -47,6 +49,11 @@ public class MainGameScreen implements Screen {
     private final static float lifePointsX = 0.103f;
     private final static float lifePointsP1Y = 0.65055555f;
     private final static float lifePointsP2Y = 0.089277776f;
+    private final static float deckX = 0.21471875f;
+    private final static float deckWidth = 0.07265625f;
+    private final static float deckHeight = 0.1375f;
+    private final static float P1DeckY = 0.7361111f;
+    private final static float P2DeckY = 0.16527778f;
 
 	//assets
 	private Map<String, Set<ExtendedSprite>> spriteMap;
@@ -96,6 +103,8 @@ public class MainGameScreen implements Screen {
         p1Health = new ExtendedSprite(manager.get("DeerForestAssets/HealthBar.png", Texture.class));
         p2Health = new ExtendedSprite(manager.get("DeerForestAssets/HealthBar.png", Texture.class));
         cardBack = new ExtendedSprite(manager.get("DeerForestAssets/CardBack.png", Texture.class));
+        p1Deck = new ExtendedSprite(manager.get("DeerForestAssets/Deck.png", Texture.class));
+        p2Deck = new ExtendedSprite(manager.get("DeerForestAssets/Deck.png", Texture.class));
 
         //list of highlighted zones
 	    highlightedZones = new ArrayList<Rectangle>();
@@ -123,6 +132,7 @@ public class MainGameScreen implements Screen {
         manager.load("DeerForestAssets/CardBack.png", Texture.class);
         manager.load("DeerForestAssets/Player1Victory.png", Texture.class);
         manager.load("DeerForestAssets/Player2Victory.png", Texture.class);
+        manager.load("DeerForestAssets/Deck.png", Texture.class);
 	}
 
 	@Override
@@ -169,6 +179,9 @@ public class MainGameScreen implements Screen {
         drawHealthBars();
         game.font.draw(game.batch,String.valueOf(game.getPlayerLP(1)), lifePointsX*getWidth(), lifePointsP1Y*getHeight());
         game.font.draw(game.batch, String.valueOf(game.getPlayerLP(2)), lifePointsX * getWidth(), lifePointsP2Y * getHeight());
+
+        //Draw deck images
+        drawDeckImages();
 
         game.batch.flush();
 
@@ -230,6 +243,33 @@ public class MainGameScreen implements Screen {
         p2Health.draw(game.batch);
     }
 
+    private void drawDeckImages() {
+
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
+
+        p1Deck.setPosition(x*deckX, y*P1DeckY);
+        p1Deck.setScale(x*deckWidth/ p1Deck.getWidth(), y*deckHeight/p1Deck.getHeight());
+
+        p2Deck.setPosition(x*deckX, y*P2DeckY);
+        p2Deck.setScale(x*deckWidth/ p2Deck.getWidth(), y*deckHeight/p2Deck.getHeight());
+
+        //If draw phase make deck glow if haven't drawn
+        if(game.getPhase().equals("DrawPhase") && !DeerForestSingletonGetter.getDeerForest().inputProcessor.hasDrawn()) {
+            if(game.getCurrentPlayer()==1) {
+                p1Deck.setColor(1.0f - glowSize/20, 1.0f - glowSize/20, 1.0f - glowSize/20, 1.0f);
+            } else {
+                p2Deck.setColor(1.0f - glowSize/20, 1.0f - glowSize/20, 1.0f - glowSize/20, 1.0f);
+            }
+        } else {
+            p1Deck.setColor(Color.WHITE);
+            p2Deck.setColor(Color.WHITE);
+        }
+
+        p1Deck.draw(game.batch);
+        p2Deck.draw(game.batch);
+    }
+
     private void drawCardBack(ExtendedSprite s) {
 
         cardBack.setPosition(s.getX(), s.getY());
@@ -258,19 +298,21 @@ public class MainGameScreen implements Screen {
                     shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
                 }
 
-		    	if(glowSize > 10 && glowDirection == true) {
-		    		glowDirection = false;
-		    	} else if(glowSize < 0 && glowDirection == false) {
-		    		glowDirection = true;
-		    	}
-		    	
-		    	if(glowDirection) glowSize += 0.05;
-		    	else glowSize -= 0.05;
 		    }
 		    
 		    shapeRenderer.end();
 		    Gdx.gl.glDisable(GL10.GL_BLEND);
 	    }
+
+        //Adjust glow
+        if(glowSize > 10 && glowDirection == true) {
+            glowDirection = false;
+        } else if(glowSize <= 0 && glowDirection == false) {
+            glowDirection = true;
+        }
+
+        if(glowDirection) glowSize += 0.07;
+        else glowSize -= 0.07;
 	}
 
     private void drawPhaseMessage() {
@@ -524,4 +566,21 @@ public class MainGameScreen implements Screen {
         this.showBattle = true;
     }
 
+    //Checks if there is a deck at the given point
+    public boolean deckAtPoint(int x, int y) {
+        if(p1Deck.containsPoint(x, y) || p2Deck.containsPoint(x, y)) return true;
+        return false;
+    }
+
+    public void setSpriteToDeck(int player, ExtendedSprite s) {
+        if(player == 1) {
+            Rectangle r = p1Deck.getBoundingRectangle();
+            s.setPosition(r.getX(), r.getY());
+            s.setScale(r.getWidth()/s.getWidth(), r.getHeight()/s.getHeight());
+        } else {
+            Rectangle r = p2Deck.getBoundingRectangle();
+            s.setPosition(r.getX(), r.getY());
+            s.setScale(r.getWidth()/s.getWidth(), r.getHeight()/s.getHeight());
+        }
+    }
 }

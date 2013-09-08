@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Arena extends Sprite {
-	
-	//current width / height (used for when resizing windows to scale sprites
 
+    //time time to move / scale sprites
+    final private int timeToMove = 20;
 	
 	//Zone widths / heights (ratio to window size)
 	final private float monsterZoneWidth = 0.0738095f;
@@ -371,8 +371,8 @@ public class Arena extends Sprite {
 		float yScale = r.getHeight() / s.getHeight();
 		float xPoint = r.getX();
 		float yPoint = r.getY();
-		s.setScale(xScale, yScale);
-		s.setPosition(xPoint, yPoint);
+		s.scaleTo(xScale, yScale, timeToMove);
+        s.moveTo(xPoint, yPoint, timeToMove);
 	}
 
 	public List<Rectangle> getAvailableZones(int player, boolean field, boolean monsters) {

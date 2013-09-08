@@ -33,7 +33,9 @@ public class MainInputProcessor implements InputProcessor {
 	private boolean dragged;
     private boolean zoomed;
     private boolean gameFinished;
-	
+    private boolean drawn;
+    private boolean gameStarted;
+
 	//define array of keys for P1 / P2 zones
 	final String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
 	final String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};
@@ -43,10 +45,19 @@ public class MainInputProcessor implements InputProcessor {
 		this.view = view;
 		dragged = false;
         this.gameFinished = false;
+        this.drawn = false;
+        this.gameStarted = false;
 	}
 	
 	@Override
 	public boolean keyDown (int keycode) {
+
+        if(!gameStarted) {
+            this.initialDraw(4);
+            gameStarted = true;
+            game.nextPhase();
+            return true;
+        }
 
         //Check for new game
         if(keycode == Keys.N) {
@@ -93,6 +104,10 @@ public class MainInputProcessor implements InputProcessor {
 
 		//Go to next phase
 		if(keycode == Keys.SPACE && game.getPhase() != null) {
+
+            //Don't let go to next phase until drawn
+            if(game.getPhase().equals("DrawPhase") && !drawn) return true;
+
 			game.nextPhase();
 			//Set stuff up at the start phase
 			if(game.getPhase().equals("StartPhase")) {
@@ -101,10 +116,8 @@ public class MainInputProcessor implements InputProcessor {
 				game.nextPhase();
                 //reset hasAttacked
                 SpriteLogic.resetHasAttacked();
-			} 
-			//draw a card
-			if(game.getPhase().equals("DrawPhase")) {
-				doDraw();
+                //reset drawn
+                this.drawn = false;
 			}
             view.setPhaseDisplayed(false);
             currentSelection = null;
@@ -190,7 +203,7 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
-//        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
+        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
 
         //If currently zoomed / gamefinished return
         if(zoomed || gameFinished) return false;
@@ -217,7 +230,15 @@ public class MainInputProcessor implements InputProcessor {
 
     	//Check it was a single click
     	if(button != Buttons.LEFT) return false;
-    	
+
+        //Check if click was on deck and try to draw
+        if(!drawn && game.getPhase().equals("DrawPhase")) {
+            if(view.deckAtPoint(x, y)) {
+                doDraw();
+                this.drawn = true;
+            }
+        }
+
     	//If there is already a current selected card then try to move it to
     	// the clicked space, set currentSelection to null then return
         //Can't move cards during battle phase, can only attack with cards on field
@@ -353,22 +374,22 @@ public class MainInputProcessor implements InputProcessor {
 		currentSelection.setMonster(false); //doesn't matter as in hand
 		currentSelection.setPlayer(player);
 		currentSelection.setArea(SpriteLogic.getCurrentSelectionArea(currentSelection.getPlayer(), currentSelection.isField(), currentSelection.isMonster()));
-		
+
+        //Set origin and scale to be that of the players deck (makes for nicer transition
+        view.setSpriteToDeck(player, currentSelection);
+
 		//Set to hand rectangle
 		Rectangle r = view.getArena().getAvailableZones(player, false, false).get(0);
 		SpriteLogic.setCurrentSelectionToRectangle(r);
 	}
 
-    public void intialDraw(int n) {
+    public void initialDraw(int n) {
         //Draw initial cards
-        for(int i = 0; i < n; i++) {
-             this.doDraw();
-        }
-        game.setCurrentPlayer(2);
-        for(int i = 0; i < n; i++) {
+        for(int i = 0; i < 2*n; i++) {
             this.doDraw();
+            game.changeTurns();
         }
-        game.setCurrentPlayer(1);
+        game.setFirstTurn(true);
     }
 
     public void newGame() {
@@ -382,5 +403,9 @@ public class MainInputProcessor implements InputProcessor {
 
     public ExtendedSprite getSelection() {
         return this.zoomSelection;
+    }
+
+    public boolean hasDrawn() {
+        return drawn;
     }
 }

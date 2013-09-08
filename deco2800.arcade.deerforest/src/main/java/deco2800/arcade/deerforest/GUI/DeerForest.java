@@ -65,9 +65,6 @@ public class DeerForest extends GameClient implements UIOverlay {
 
         System.out.println("Processor created");
 
-        inputProcessor.intialDraw(4);
-        System.out.println("Drawn created");
-
     }
 
 	@Override

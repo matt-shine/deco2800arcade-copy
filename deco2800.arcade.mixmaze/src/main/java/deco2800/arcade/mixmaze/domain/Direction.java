@@ -67,6 +67,14 @@ public class Direction {
 				|| isEast(direction) || isSouth(direction);
 	}
 
+	/**
+	 * Gets the polar opposite of the specified direction.
+	 * @param direction a integer representation of the direction
+	 * @return <code>WEST</code> if <code>EAST</code> is specified.
+	 * <code>NORTH</code> if <code>SOUTH</code> is specified.
+	 * <code>EAST</code> if <code>WEST</code> is specified.
+	 * <code>SOUTH</code> if <code>NORTH</code> is specified.
+	 */
 	public static int getPolarDirection(int direction) {
 		if(!isDirection(direction)) {
 			throw NOT_A_DIRECTION;
@@ -117,7 +125,6 @@ public class Direction {
 	 * @return true if the specified direction is <code>North</code> or
 	 *  <code>West</code>, false otherwise
 	 */
-	// This method is not used anywhere? dumindu
 	public static boolean isNegativeDirection(int direction) {
 		return isWest(direction) || isNorth(direction);
 	}

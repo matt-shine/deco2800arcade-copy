@@ -1,6 +1,14 @@
-<achievement id="pong.winGame">
+<achievement id="chess.winGame">
   <name>Winner!</name>
-  <description>Win a game of Pong</description>
+  <description>Win a game of chess.</description>
   <awardThreshold>1</awardThreshold>
   <icon>winner.png</icon>
 </achievement>
+
+<achievements>
+    <achievement id="chess.master">
+        <name>Master</name>
+        <description>Win 50 games of chess.</description>
+        <awardThreshold>50</awardThreshold>
+        <icon>master.png</icon>
+    </achievement>

@@ -41,7 +41,7 @@ public class ArcadeSystem {
     public static void close() {
         arcade.arcadeExit();
     }
-<<<<<<< HEAD
+
     
     public static void setMultiplayerEnabled(boolean b) {
     	arcade.setMultiplayerEnabled(b);
@@ -51,10 +51,10 @@ public class ArcadeSystem {
     	return arcade.isMultiplayerEnabled();
     }
 	
-=======
+
 
 	public static GameClient getCurrentGame() {
 		return arcade.getCurrentGame();
 	}
->>>>>>> origin/master
+
 }

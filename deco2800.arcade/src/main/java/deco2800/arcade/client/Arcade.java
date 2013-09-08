@@ -193,13 +193,13 @@ public class Arcade extends JFrame {
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
-<<<<<<< HEAD
+
 		this.client.addListener(new MultiplayerListener());
 		this.client
 				.addListener(new CommunicationListener(communicationNetwork));
-=======
+
 		this.client.addListener(new CommunicationListener(communicationNetwork));
->>>>>>> origin/master
+
 	}
 
 	public void connectAsUser(String username) {
@@ -413,7 +413,7 @@ public class Arcade extends JFrame {
 		}
 		return null;
 	}
-<<<<<<< HEAD
+
 	
 	public boolean isMultiplayerEnabled() {
 		return multiplayerEnabled;
@@ -422,10 +422,10 @@ public class Arcade extends JFrame {
 	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
 		Arcade.multiplayerEnabled = multiplayerEnabled;
 	}
-=======
+
 	public GameClient getCurrentGame() {
 		return selectedGame;
 	}
 
->>>>>>> origin/master
+
 }

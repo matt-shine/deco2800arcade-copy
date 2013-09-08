@@ -15,12 +15,12 @@ import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
-<<<<<<< HEAD
+
 import deco2800.server.listener.MultiplayerListener;
-=======
+
 import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
->>>>>>> origin/master
+
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -36,9 +36,9 @@ public class ArcadeServer {
 	//singleton pattern
 	private static ArcadeServer instance;
 	
-<<<<<<< HEAD
+
 	private HashSet<String> lobbyUsers = new HashSet<String>();
-=======
+
 	// Package manager
 	@SuppressWarnings("unused")
 	private PackageServer packServ;
@@ -46,7 +46,7 @@ public class ArcadeServer {
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
 	private static final int UDP_PORT = 54777;
->>>>>>> origin/master
+
 	
 	/**
 	 * Retrieve the singleton instance of the server

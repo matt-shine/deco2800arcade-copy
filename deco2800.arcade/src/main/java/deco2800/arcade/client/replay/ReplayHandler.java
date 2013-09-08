@@ -145,6 +145,13 @@ public class ReplayHandler {
 	  //TODO Implement
 	}
 	
+	/*
+	 * TODO make this take a gameID too, so you can only get 
+	 * replays for the current game. Shouldn't be a problem if 
+	 * the user interface is implemented properly, but makes it
+	 * derp-proof.
+	 */
+	
 	/**
 	 * Request all the events for a given session.
 	 * @param sessionId

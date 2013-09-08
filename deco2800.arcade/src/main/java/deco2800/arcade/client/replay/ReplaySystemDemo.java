@@ -58,14 +58,14 @@ public class ReplaySystemDemo {
 		//Our client needs to know about this listener
 	    client.addListener(replayListener);
 	    
+		//Our replay handler has to know about all the different functions
+		replayHandler.addReplayEventListener(initReplayEventListener());
+	    
+	    Thread.sleep( 1000 );
+	
 	    //Ping the server
 	    replayHandler.startSession(123, "wtf");
 	    
-	    Thread.sleep( 1000 );
-	    
-		//Our replay handler has to know about all the different functions
-		replayHandler.addReplayEventListener(initReplayEventListener());
-		
 		replayHandler.startRecording();
 		
 		//Declare an event to be registered in the factory, we can pass arrays.
@@ -104,7 +104,7 @@ public class ReplaySystemDemo {
 
 		Integer session = replayHandler.getSessionId();
 		
-		replayHandler.endSession(replayHandler.getSessionId());
+		replayHandler.endSession( replayHandler.getSessionId() );
 		
 		Thread.sleep( 1000 );
 		

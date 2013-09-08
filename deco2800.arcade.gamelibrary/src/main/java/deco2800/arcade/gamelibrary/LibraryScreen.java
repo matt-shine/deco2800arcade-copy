@@ -246,7 +246,7 @@ public class LibraryScreen implements Screen {
         batch.dispose();
     }
 
-    public void setGameSeletcted() {
+    public void setGameSelected() {
         gameSelected = true;
     }
 

@@ -19,6 +19,6 @@ public class PlayButtonActionHandler extends ChangeListener {
     @Override
     public void changed(ChangeEvent changeEvent, Actor actor) {
         down = !down;
-        screen.setGameSeletcted();
+        screen.setGameSelected();
     }
 }

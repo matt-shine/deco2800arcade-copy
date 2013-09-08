@@ -23,6 +23,7 @@ import java.util.Set;
 public class GameLibrary extends GameClient {
 
     private static final Game game;
+
     static {
         game = new Game();
         game.name = "Game Library";
@@ -112,5 +113,7 @@ public class GameLibrary extends GameClient {
         gameList = arrayList;
     }
 
-
+    public Player getPlayer() {
+        return player;
+    }
 }

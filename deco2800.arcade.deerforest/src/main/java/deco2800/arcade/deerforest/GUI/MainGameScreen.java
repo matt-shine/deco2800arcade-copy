@@ -204,7 +204,9 @@ public class MainGameScreen implements Screen {
                 zoomed = cardBack;
                 drawCardBack(zoomed);
             } else {
+                zoomed.setSelected(false);
                 zoomed.draw(game.batch);
+                zoomed.setSelected(true);
             }
             game.batch.end();
         }

@@ -64,7 +64,11 @@ public class junglejump extends GameClient implements InputProcessor {
 		ArcadeSystem.goToGame("junglejump");
 	}
 
+<<<<<<< HEAD
 	public junglejump(Player player, NetworkClient networkclient) {
+=======
+	public junglejump(Player player, NetworkClient networkClient) {
+>>>>>>> master
 		super(player, networkClient);
         this.networkClient = networkClient; //this is a bit of a hack
 		Gdx.input.setCatchBackKey(true);

@@ -17,6 +17,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Square extends JButton implements ActionListener{
 	
+	private static final long serialVersionUID = -7360289500068417023L;
+	
 	static final float WIDTH = 50f; // The width of the square
 	static final float HEIGHT = 50f; //The initial height of the square
 	
@@ -81,10 +83,6 @@ public class Square extends JButton implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object square = e.getSource();
-		
-		
-		
-		System.out.println("a button has been pushed");
 		
 	}
 

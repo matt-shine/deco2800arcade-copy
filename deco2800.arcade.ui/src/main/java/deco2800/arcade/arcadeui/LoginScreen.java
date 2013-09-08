@@ -3,12 +3,14 @@ package deco2800.arcade.arcadeui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import deco2800.arcade.client.ArcadeInputMux;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+
 import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
@@ -29,7 +31,15 @@ public class LoginScreen implements Screen {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
+		
+        skin.add("white", new Texture(pixmap));
         skin2.add("white", new Texture(pixmap));
+        
+        skin.add("default", new BitmapFont());
+        
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = skin.getFont("default");
+        skin.add("default", labelStyle);
 
         // Specify font, fontColor, cursor, selection, and background
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
@@ -66,15 +76,13 @@ public class LoginScreen implements Screen {
         TextButton loginButton = new TextButton("Login", skin2);
         TextButton exitButton = new TextButton("Exit", skin2);
 
-        //table.debug();  // Shows table debug lines.  Remove for final product.
-        usernameLabel.setAlignment(Align.right);
-        table.add(usernameLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
-        table.add(usernameText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.add(usernameLabel);
+        //table.add(usernameText).width(100);
         table.row();
-        passwordLabel.setAlignment(Align.right);
-        table.add(passwordLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
-        table.add(passwordText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.add(passwordLabel);
+        //table.add(passwordText).width(100);
         table.row();
+        
         table.add(loginButton).width(100).pad(10);
         table.add(exitButton).width(100).pad(10);
         

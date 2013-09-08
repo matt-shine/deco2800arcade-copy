@@ -51,7 +51,6 @@ final class GameScreen implements Screen {
 	private PlayerViewModel p1;
 	private PlayerViewModel p2;
 	private Label[] userLabels;
-	private Label[] scoreLabels;
 	private MixMazeModel model;
 	private TextButton backMenu;
 	private Label resultLabel;
@@ -88,12 +87,8 @@ final class GameScreen implements Screen {
 		right = new SidePanel();
 
 		userLabels = new Label[2];
-		scoreLabels = new Label[2];
-
 		userLabels[0] = new Label("Player 1", skin);
 		userLabels[1] = new Label("Player 2", skin);
-		scoreLabels[0] = new Label("Player 1 box: 0", skin);
-		scoreLabels[1] = new Label("Player 2 box: 0", skin);
 
 		timerLabel = new Label("timer", skin);
 		tileTable = new Table();
@@ -113,15 +108,13 @@ final class GameScreen implements Screen {
 
 		/* header */
 		root.add(userLabels[0]).width(320);
-		root.add(scoreLabels[0]);
 		root.add(timerLabel).expandX();
-		root.add(scoreLabels[1]);
 		root.add(userLabels[1]).width(320);
 		root.row();
 
 		/* body */
 		root.add(left);
-		root.add(gameBoard).colspan(3);
+		root.add(gameBoard);
 		root.add(right);
 
 		/*
@@ -182,12 +175,10 @@ final class GameScreen implements Screen {
 
 		userLabels[0].setText("player 1: " + p1.getActionName());
 		userLabels[1].setText("player 2: " + p2.getActionName());
-		scoreLabels[0].setText("boxes: " + p1.getScore());
-		scoreLabels[1].setText("boxes: " + p2.getScore());
 
 		stage.act(delta);
 		stage.draw();
-		Table.drawDebug(stage);
+		//Table.drawDebug(stage);
 
 		if (endGameTable.isVisible() && backMenu.isChecked()) {
 			backMenu.toggle();
@@ -293,6 +284,7 @@ final class GameScreen implements Screen {
 		private Image[] brickImages;
 		private Image pickImage;
 		private Image tntImage;
+		private Label scoreLabel;
 
 		SidePanel() {
 			Table brickTable = new Table();
@@ -303,7 +295,12 @@ final class GameScreen implements Screen {
 			pickImage = new Image(PICK_REGION);
 			tntImage = new Image(TNT_REGION);
 
+			scoreLabel = new Label("", skin);
+
 			/* layout */
+			this.add(scoreLabel);
+			this.row();
+
 			for (int i = 0; i < 3; i++) {
 				itemStacks[i] = new Stack();
 				this.add(itemStacks[i]);
@@ -328,6 +325,8 @@ final class GameScreen implements Screen {
 		}
 
 		void update(PlayerViewModel p) {
+			scoreLabel.setText("boxes: " + p.getScore());
+
 			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
 				brickImages[i].setVisible(i < n);
 			pickImage.setVisible(p.hasPick());

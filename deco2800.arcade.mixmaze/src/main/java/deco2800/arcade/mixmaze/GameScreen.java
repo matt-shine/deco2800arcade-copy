@@ -44,7 +44,7 @@ final class GameScreen implements Screen {
 	private final Skin skin;
 
 	private Label timerLabel;
-	private int elapsed;
+	private int countdown;
 	private Table tileTable;
 	private Group gameArea;
 	private Table endGameTable;
@@ -224,18 +224,22 @@ final class GameScreen implements Screen {
 		Gdx.app.debug(LOG, "showing");
 
 		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60);
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 90);
 		setupGameBoard();
 
 		/* set timer */
-		elapsed = 0;
+		countdown = model.getGameMaxTime();
 		Timer.schedule(new Timer.Task() {
 			public void run() {
-				elapsed += 1;
-				timerLabel.setText("Timer: "
-						 + elapsed);
+				int min = countdown / 60;
+				int sec = countdown % 60;
+
+				timerLabel.setText(String.format("%s%d:%s%d",
+						(min < 10) ? "0" : "", min,
+						(sec < 10) ? "0" : "", sec));
+				countdown -= 1;
 			}
-		}, 1, 1, model.getGameMaxTime());
+		}, 0, 1, model.getGameMaxTime());
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				PlayerModel winner;

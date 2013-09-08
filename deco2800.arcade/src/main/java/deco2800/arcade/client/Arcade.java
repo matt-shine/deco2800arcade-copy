@@ -120,8 +120,6 @@ public class Arcade extends JFrame {
 		}
 		//create the main window
 
-		// create the main window
-
 		this.setSize(new Dimension(width, height));
 		this.setVisible(true);
 		Insets insets = this.getInsets();

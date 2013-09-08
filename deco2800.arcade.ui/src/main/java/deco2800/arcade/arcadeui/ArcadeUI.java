@@ -53,7 +53,7 @@ public class ArcadeUI extends GameClient {
 				current = home = new HomeScreen();
 			}
 
-			current = home = new HomeScreen();
+			//current = home = new HomeScreen();
 			//current = store = new StoreScreen();
 		}
 		

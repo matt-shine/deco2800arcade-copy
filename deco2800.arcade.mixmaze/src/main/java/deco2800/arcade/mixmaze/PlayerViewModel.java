@@ -24,10 +24,7 @@ import java.util.HashMap;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
-import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
-
 import static com.badlogic.gdx.Input.Keys.*;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 /**
  * PlayerViewModel draws the character of the player.

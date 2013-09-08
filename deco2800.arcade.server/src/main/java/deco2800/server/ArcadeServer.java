@@ -37,6 +37,7 @@ public class ArcadeServer {
 	private static ArcadeServer instance;
 	
 	// Package manager
+	@SuppressWarnings("unused")
 	private PackageServer packServ;
 	
 	// Server will communicate over these ports

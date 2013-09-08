@@ -1,5 +1,6 @@
 package deco2800.arcade.landInvaders;
 
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
@@ -7,7 +8,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Invaders extends JFrame implements Runnable {
-
+	JFrame appFrame;
 	public static int Width = 800;
 	public static int Height = 500;
 	private Image background = null;
@@ -28,7 +29,7 @@ public class Invaders extends JFrame implements Runnable {
 	private ArrayList<tankshot> shots;
 	private ArrayList<enemyShot> Eshots;
 
-	public Invaders() throws Exception {
+	public Invaders() {
 
 		super("Land Invaders");
 		WallList = new ArrayList<blockWall>();
@@ -36,7 +37,7 @@ public class Invaders extends JFrame implements Runnable {
 		WallList.add(new blockWall(380, 350, 4, 8));
 		WallList.add(new blockWall(580, 350, 4, 8));
 		shotsNmb = 6;
-		level = 3;
+		level = 1;
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
 		enemyG = new enemyGroup(3, 6);
@@ -45,8 +46,8 @@ public class Invaders extends JFrame implements Runnable {
 		move = 0;
 		direction = 1;
 		moveDown = false;
-		r = new Robot();
-		background = new javax.swing.ImageIcon("bgimage.jpg").getImage();
+		
+		background = new javax.swing.ImageIcon(this.getClass().getResource("/image/city.jpg")).getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 
@@ -80,9 +81,9 @@ public class Invaders extends JFrame implements Runnable {
 
 		}
 		for (int e = 0; e < WallList.size(); e++) {
-			WallList.get(e).drawWall(mains);
+			WallList.get(e).drawWall(mains,this);
 		}
-		enemyG.drawGroup(mains);
+		enemyG.drawGroup(mains, this);
 		tank.drawTank(mains, this);
 		g.drawImage(bg, 0, 0, this);
 
@@ -213,11 +214,7 @@ public class Invaders extends JFrame implements Runnable {
 	public void run() {
 		int count = 0;
 		while (true) {
-			if (tank.moveLeft() == true)
-				r.keyPress(KeyEvent.VK_LEFT);
-			if (tank.moveRight() == true)
-				r.keyPress(KeyEvent.VK_RIGHT);
-
+			tank.tankMove();
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {

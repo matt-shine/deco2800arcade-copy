@@ -6,11 +6,11 @@ package deco2800.arcade.towerdefence;
  *
  */
 public class Position {
-	//fields
+	//Fields
 	private int x;
 	private int y;
 
-	//constructor
+	//Constructor
 	/**
 	 * Instantiates a position with an x, y.
 	 * @param x

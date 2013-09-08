@@ -8,7 +8,7 @@ import java.util.UUID;
  * 
  */
 public class Grid {
-	//fields
+	//Fields
 	//The unique id of the Grid.
 	private final UUID id;
 	//The grid's name, for making human recognisable variations if necessary.
@@ -18,7 +18,7 @@ public class Grid {
 	//The grid's max depth.
 	private int depth = 0;
 	
-	//constructor
+	//Constructor
 	/**
 	 * Instantiates a grid with a unique UUID, length, width and name.
 	 * @param width

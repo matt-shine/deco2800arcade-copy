@@ -8,7 +8,7 @@ package deco2800.arcade.towerdefence;
 public enum TowerType {
 		/**
 		 * Progression category of tower. 
-		 * e.g. FROST cannot upgrade to FIRE
+		 * e.g. FROST cannot upgrade to FIRE.
 		 */
 		FROST,
 		FIRE,

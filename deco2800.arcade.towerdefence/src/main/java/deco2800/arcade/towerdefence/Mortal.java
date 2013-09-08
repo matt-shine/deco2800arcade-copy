@@ -20,18 +20,15 @@ public interface Mortal extends GridObject {
 	//Increase the current health, not beyond maxHealth().
 	public void heal(int amount);
 	
-	////Decrease the current health, not below 0.
-	public void damage(int amount);
-	
 	//Decrease the current health, not below 0.
+	public void takeDamage(int amount);
+	
+	//Decrease the current health, not below 0. Using penetration calculations.
 	//Penetration is a direct armour debuff for that attack alone.
-	public void damage(int amount, int penetration);
+	public void takeDamage(int health, int penetration);
 	
 	//Starts any on death behaviour. Possibly ends by calling destroy to remove from grid view and from game model.
 	public void die();
-	
-	//Return the position pair of the mortal
-	public Position position();
 	
 	//Return the grid the mortal occupies.
 	public Grid grid();

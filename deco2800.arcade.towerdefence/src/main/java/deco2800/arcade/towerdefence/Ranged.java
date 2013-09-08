@@ -14,6 +14,6 @@ public interface Ranged {
 	public float range();
 	//Returns the projectile that the GridObject currently fires.
 	public Projectile projectile();
-	//Returns the target the Tower is currently focused on.
+	//Returns the target the GridObject is currently focused on.
 	public GridObject target();
 }

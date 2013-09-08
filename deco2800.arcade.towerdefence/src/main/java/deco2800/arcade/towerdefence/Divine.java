@@ -11,9 +11,6 @@ public interface Divine extends GridObject {
 	//Starts any on death behaviour. Possibly ends by calling destroy to remove from grid view and from game model.
 	public void die();
 	
-	//Return the position pair of the divine.
-	public Position position();
-	
 	//Return the grid the divine occupies.
 	public Grid grid();
 }

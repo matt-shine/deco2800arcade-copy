@@ -59,6 +59,7 @@ public class World {
 	private LevelScenes levelScenes;
 	private InputHandler inputHandler;
 	
+	private float time;
 	private boolean isPaused;
 	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
@@ -79,6 +80,8 @@ public class World {
 	
 	
 	public void update() {
+		time += Gdx.graphics.getDeltaTime();
+
 		//If game is in paused state immediately return
 		if (isPaused) return;
 		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
@@ -156,6 +159,7 @@ public class World {
 	}
 
 	private void loadLevel(int level) {
+		time = 0;
 		levelLayout = new LevelLayout(level);
 
 		//Load level objects
@@ -188,7 +192,6 @@ public class World {
 		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(0, 1), 4f, 2f, new Vector2(0,11), 5f, true, 1.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
 	}
@@ -541,6 +544,10 @@ public class World {
 	
 	public Sword getSword() {
 		return sword;
+	}
+	
+	public float getTime() {
+		return time;
 	}
 	
 	public Array<Enemy> getEnemies() {

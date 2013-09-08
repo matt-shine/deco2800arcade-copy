@@ -48,10 +48,12 @@ public class WorldRenderer {
 	
 	World world;
 	SpriteBatch batch;
+	SpriteBatch textBatch;
 	Ship ship;
 	//Follower follower;
 	Walker walker;
 	private ParallaxCamera cam;
+	private BitmapFont font;
 	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg, heartsTexture;
 	private TextureRegion followerFrame;
 	private TextureRegion walkerRegion;
@@ -318,8 +320,19 @@ public class WorldRenderer {
 					heartsTexture.getWidth(), heartsTexture.getHeight(), //good
 					false, false); 			//good
 		}
-		
+
 		batch.end();
+		
+		
+		
+		
+		textBatch.begin();
+		
+		CharSequence str = "Time: " + (int)world.getTime();
+		font.draw(textBatch, str, 1110, 688);
+		
+		textBatch.end();
+		
 		//If game is paused render pause overlay
 		if (world.isPaused()) {
 			
@@ -382,6 +395,10 @@ public class WorldRenderer {
 	private void init() {
 		csObjects = new Array<CutsceneObject>();
 
+		textBatch = new SpriteBatch();
+		font = new BitmapFont();
+		font.scale(1f);
+		
 		sr = new ShapeRenderer();
 		tileMapRenderer = world.getLevelLayout().getRenderer();
 		batch = new SpriteBatch();

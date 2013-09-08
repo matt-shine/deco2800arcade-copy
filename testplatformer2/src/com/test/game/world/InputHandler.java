@@ -98,7 +98,17 @@ public class InputHandler implements InputProcessor{
 							0,
 							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.BULLET_SIZE/2, ship.getPosition().y+ship.getHeight()/2),
 							Bullet.BULLET_SIZE, Bullet.BULLET_SIZE,
-							new Vector2( shootDir ,0) ));
+							new Vector2( shootDir, 0),
+							false
+							));
+					world.addBullet(new Bullet(
+							Bullet.BULLET_SPEED,
+							0,
+							new Vector2(ship.getPosition().x+ship.getWidth()/2-Bullet.BULLET_SIZE/2, ship.getPosition().y+ship.getHeight()/2),
+							Bullet.BULLET_SIZE, Bullet.BULLET_SIZE,
+							new Vector2( shootDir, 0),
+							true
+							));
 				}
 				break;
 				

@@ -86,10 +86,11 @@ public class LoginScreen implements Screen {
         TextButton exitButton = new TextButton("Exit", skin2);
 
         table.add(usernameLabel);
-        //table.add(usernameText).width(100);
+        table.add(usernameText).width(100);
+        
         table.row();
         table.add(passwordLabel);
-        //table.add(passwordText).width(100);
+        table.add(passwordText).width(100);
         table.row();
         
         table.add(loginButton).width(100).pad(10);

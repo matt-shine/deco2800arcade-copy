@@ -152,9 +152,9 @@ public class SettingsScreen implements Screen {
 	private void setTableLayout() {
 		float celHeight = Gdx.graphics.getHeight();
 		float cellWidth = Gdx.graphics.getWidth()/3;
-		//Drawable background = skin.getDrawable("background");
+		Drawable background = skin.getDrawable("background");
 		rootTable.setFillParent(true);
-		rootTable.setBackground(background);
+		//rootTable.setBackground(background);
 		rootTable.add(settingsPanel).width(cellWidth).height(celHeight);
 		rootTable.add(playerOnePanel).width(cellWidth).height(celHeight);	
 		rootTable.add(playerTwoPanel).width(cellWidth).height(celHeight);

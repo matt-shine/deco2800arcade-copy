@@ -50,6 +50,7 @@ public class OverlayScreen implements Screen {
 	
 	@Override
 	public void render(float d) {
+		
 		//toggles isUIOpen on tab key down
 		if (Gdx.input.isKeyPressed(Keys.TAB) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
 			isUIOpen = !isUIOpen;

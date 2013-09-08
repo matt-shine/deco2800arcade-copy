@@ -27,7 +27,7 @@ public class Sidebar extends Group {
     private NinePatch texture;
     private static float INNER_POS = -180;
     private static float OUTER_POS = 0;
-    private float pos = OUTER_POS;
+    private float pos = INNER_POS;
     private float vel = 0;
     private boolean isUIOpen = true;
     private boolean hasTabPressedLast = false;
@@ -100,6 +100,11 @@ public class Sidebar extends Group {
 			isUIOpen = !isUIOpen;
 		}
 		
+		if (Gdx.input.getX() < 30) {
+			isUIOpen = true;
+		}
+		
+		
 		if (isUIOpen) {
 			vel += 1;
 		}
@@ -139,6 +144,7 @@ public class Sidebar extends Group {
 	
 	public void addAchievemntsWindow() {
 		window.setContent(new AchievementList(overlay, skin));
+		this.isUIOpen = false;
 	}
 	
 	

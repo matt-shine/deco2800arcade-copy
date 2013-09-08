@@ -1,5 +1,6 @@
 package deco2800.arcade.junglejump.GUI;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -59,8 +61,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		ArcadeSystem.goToGame("junglejump");
 	}
 
-	public junglejump(Player player) {
+	public junglejump(Player player, NetworkClient networkclient) {
 		super(player, networkClient);
+        this.networkClient = networkClient; //this is a bit of a hack
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
 		// Replace "file" with chosen music
@@ -91,8 +94,13 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
-		texture = new Texture(Gdx.files.internal("data/cat.jpg"));
+		System.out.println(System.getProperty("user.dir"));
+		texture = new Texture(("junglejumpassets/mainscreen.png"));
 		Gdx.app.log(junglejump.messages, "Launching Game");
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		batch = new SpriteBatch();
+
 	}
 
 	@Override
@@ -109,13 +117,14 @@ public class junglejump extends GameClient implements InputProcessor {
 		// Clears the screen - not sure if this is needed
 		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(texture, 0, 0);
 		batch.end();
 		
 		camera.update();
 		// Logs current FPS
-		fpsLogger.log();
+		//fpsLogger.log();
 		super.render();
 	}
 

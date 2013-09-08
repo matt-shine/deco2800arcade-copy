@@ -1,5 +1,8 @@
 package deco2800.arcade.burningskies;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -20,10 +23,14 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="burningskies")
 public class BurningSkies extends GameClient {
 	
+	static final boolean ENABLEMUSIC = false;
+	
 	public static final int SCREENWIDTH = 1280;
 	public static final int SCREENHEIGHT = 720;
 	
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	
+	private Music nowPlaying;
 
 	//TODO: ACHIEVEMENTS
 
@@ -54,14 +61,40 @@ public class BurningSkies extends GameClient {
 		scoreScreen = new ScoreScreen(this);
 	}
 	
+	public void playSong(String songName, boolean loop) {
+		if(!ENABLEMUSIC) return;
+		if(nowPlaying != null) {
+			nowPlaying.dispose();
+		}
+		nowPlaying = Gdx.audio.newMusic(Gdx.files.internal("sound/music/" + songName + ".ogg"));
+		nowPlaying.setLooping(loop);
+		nowPlaying.play();
+	}
+	
+	public void playSong(String songName) {
+		playSong(songName, true);
+	}
+	
+	public void pauseSong() {
+		if(nowPlaying != null) nowPlaying.pause();
+	}
+	
+	public void resumeSong() {
+		if(nowPlaying != null) nowPlaying.play();
+	}
+	
+	public void stopSong() {
+		if(nowPlaying != null) nowPlaying.stop();
+	}
+	
 	/**
 	 * Creates the game
 	 */
 	@Override
 	public void create() {
 		super.create();
-		//setScreen( new Splash(this) );
-		setScreen( new PlayScreen(this) );
+		setScreen( new SplashScreen(this) );
+		//setScreen( new PlayScreen(this) );
 	}
 
 	@Override

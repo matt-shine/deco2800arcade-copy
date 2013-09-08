@@ -46,6 +46,7 @@ public class SettingsScreen implements Screen {
 	private Table settingsPanel = new Table();
 	private Table playerOnePanel = new Table();
 	private Table playerTwoPanel = new Table();
+	private Table buttonPanel = new Table();
 	private TextField pOneSwitchActionText;
 	private TextField pOneUseActionText;
 	private TextField pTwoSwitchActionText;
@@ -65,6 +66,7 @@ public class SettingsScreen implements Screen {
 		createPlayerPanel(new Label("PLayer 2", skin),playerTwoPanel,
 				pTwoSwitchActionText,pTwoUseActionText);
 		stage.addActor(rootTable);		
+		buttonPanel.add(playButton).colspan(3);
 		
 		playButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
@@ -77,7 +79,8 @@ public class SettingsScreen implements Screen {
 	private void initialize() {
 		this.skin = game.skin;
 		this.stage = new Stage();
-		playButton = new TextButton("Play", skin);		
+		playButton = new TextButton("Play", skin);	
+		playButton.pad(20);
 		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
 		
 		list = new List(new String [] {"Beginner", "Intermediate","Advanced"}, skin);
@@ -89,8 +92,8 @@ public class SettingsScreen implements Screen {
 	}
 
 	private void createPlayerPanel(Label playerLabel, Table panel,TextField swithAction,TextField useAction) {
-		Label switchActionLabel = new Label("Swith Action: ", skin);
-		Label useActionLabel = new Label("Use Action: ", skin);
+		Label switchActionLabel = new Label("Switch Action:       ", skin);
+		Label useActionLabel = new Label("Use Action:         ", skin);
 		Label forwardLabel = new Label("Forward: ",skin);
 		Label backwordLabel = new Label("Backword: ",skin);
 		Label rightLabel = new Label("Right: ",skin);
@@ -100,16 +103,15 @@ public class SettingsScreen implements Screen {
 		
 		playerLabel.setFontScale(2);		
 		controlLabel.setFontScale(2);
-		panel.add(playerLabel).padTop(70).padBottom(100);
+		panel.add(playerLabel).padTop(70).padBottom(100).colspan(4);
 		panel.row();
-		panel.add(controlLabel).expandX();
-		panel.row().pad(10);
-		panel.add(switchActionLabel).padRight(20);
-		panel.add(swithAction);
-		panel.row().pad(10);
-		panel.add(useActionLabel).padRight(20);
-		panel.add(useAction);
-		panel.row().pad(10);
+		panel.add(controlLabel).expandX().colspan(4);
+		panel.row();
+		panel.add(switchActionLabel).right().expandX();
+		panel.add(swithAction).left().expandX();
+		panel.row();
+		panel.add(useActionLabel).padRight(20).right().expandX();;
+		panel.add(useAction).left().expandX();	
 		
 		
 	}
@@ -123,22 +125,22 @@ public class SettingsScreen implements Screen {
 		
 		difficultyLabel.setFontScale(2);
 		settingsLabel.setFontScale(2);
-		sizeLabel.setFontScale(2);
-		settingsPanel.defaults();
-		settingsPanel.add(settingsLabel).padTop(70).padBottom(100);
+		sizeLabel.setFontScale(2);		
+		settingsPanel.add(settingsLabel).padTop(70).padBottom(100).colspan(4);
 		settingsPanel.row();
-		settingsPanel.add(difficultyLabel);
+		settingsPanel.add(difficultyLabel).colspan(4);
 		settingsPanel.row();
-		settingsPanel.add(list).width(200);
+		settingsPanel.add(list).colspan(4);
 		settingsPanel.row();
-		settingsPanel.add(sizeLabel).padTop(30);
+		settingsPanel.add(sizeLabel).padTop(30).colspan(4);
 		settingsPanel.row();
-		settingsPanel.add(new Label("# of rows: ", skin));
-		settingsPanel.add(rows);		
-		settingsPanel.add(new Label("  # of columns: ", skin)).expandX();
-		settingsPanel.add(columns);
+		settingsPanel.add(new Label("#of rows: ", skin)).right().expandX();
+		settingsPanel.add(rows).left().expandX();	
 		settingsPanel.row();
-		settingsPanel.add(playButton).padTop(30);
+		settingsPanel.add(new Label("# of columns:  ", skin)).right().expandX();
+		settingsPanel.add(columns).left().expandX();
+		
+		
 		
 	}
 
@@ -150,17 +152,28 @@ public class SettingsScreen implements Screen {
 	}
 
 	private void setTableLayout() {
-		float celHeight = Gdx.graphics.getHeight();
+		float celHeight = Gdx.graphics.getHeight()-100;
 		float cellWidth = Gdx.graphics.getWidth()/3;
 		Drawable background = skin.getDrawable("background");
 		rootTable.setFillParent(true);
 		//rootTable.setBackground(background);
+		rootTable.row().padBottom(10);
+		rootTable.top(); // so that cells are added from the top instead of center
 		rootTable.add(settingsPanel).width(cellWidth).height(celHeight);
 		rootTable.add(playerOnePanel).width(cellWidth).height(celHeight);	
 		rootTable.add(playerTwoPanel).width(cellWidth).height(celHeight);
-		settingsPanel.top();
-		playerOnePanel.top();
-		playerTwoPanel.top();
+		rootTable.row();
+		rootTable.add(buttonPanel).expand().colspan(3);
+		
+		
+		settingsPanel.top().columnDefaults(4);
+		playerOnePanel.top().columnDefaults(4);
+		playerTwoPanel.top().columnDefaults(4);
+		
+		settingsPanel.defaults().padBottom(10);
+		playerOnePanel.defaults().padBottom(10);
+		playerTwoPanel.defaults().padBottom(10);
+
 		
 	}
 

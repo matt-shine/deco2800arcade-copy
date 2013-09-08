@@ -180,6 +180,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			
         });
+        // Game begins at Main Menu
+        gameState = GameState.AT_MENU;
 	}
 
 	@Override
@@ -194,43 +196,31 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	public void render() {
 		// Clears the screen - not sure if this is needed
-		Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.setProjectionMatrix(camera.combined);
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		batch.begin();
-		batch.draw(texture, 0, 0, 800, 480);
-		batch.end();
-		Gdx.gl.glEnable(GL10.GL_BLEND);
-		Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.filledRect (butX, butY, 232, 30, Color.CLEAR, Color.RED, Color.CLEAR, Color.RED);
-	    
-	    shapeRenderer.end();
-	    Gdx.gl.glDisable(GL10.GL_BLEND);
-//		if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-//		    shapeRenderer.setProjectionMatrix(camera.combined);
-//		    
-//		   
-//		    shapeRenderer.begin(ShapeType.FilledRectangle);
-//		      shapeRenderer.filledRect(-25f, -25f, 50, 50);
-//		    shapeRenderer.end();
-//		    System.out.println("Menu Select");
-//		}
+		switch (gameState) {
+		case AT_MENU:
+			Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.setProjectionMatrix(camera.combined);
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			batch.begin();
+			batch.draw(texture, 0, 0, 800, 480);
+			batch.end();
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			shapeRenderer.begin(ShapeType.FilledRectangle);
+		    shapeRenderer.filledRect (butX, butY, 232, 30, Color.CLEAR, Color.RED, Color.CLEAR, Color.RED);
+		    shapeRenderer.end();
+		    Gdx.gl.glDisable(GL10.GL_BLEND);
+			camera.update();
+			super.render();
+			break;
+		case INPROGRESS:
+			break;
+		case GAMEOVER:
+			break;
+		}
 		
-		camera.update();
-		// Logs current FPS
-		//fpsLogger.log();
-		super.render();
 	}
-//	public boolean keyDown(int keycode) {
-//		if (keycode == Input.Keys.SPACE) {
-//			shapeRenderer.begin(ShapeType.FilledRectangle);
-//		    shapeRenderer.filledRect(-25f, -25f, 50, 50);
-//		    shapeRenderer.end();
-//		    return true;
-//		} return false;
-//	}
 	@Override
 	public void pause() {
 		//add the overlay listeners
@@ -303,7 +293,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Move left
 		} if (keycode == Keys.ENTER) {
 			if (butY == QUIT) {
-				// exit to arcade
+				super.dispose();
+			} if (butY == NEW_GAME) {
+				gameState = GameState.INPROGRESS;
 			}
 		} if (keycode == Keys.RIGHT) {
 			// Move right

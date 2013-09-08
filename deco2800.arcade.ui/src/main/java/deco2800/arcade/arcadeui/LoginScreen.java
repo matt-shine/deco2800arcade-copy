@@ -14,73 +14,63 @@ import deco2800.arcade.client.ArcadeSystem;
 public class LoginScreen implements Screen {
 	
 	private Skin skin;
-    private Skin skin2;
     private Stage stage;
 
 	public LoginScreen() {
-        // skin is the skin loaded from loginSkin.json
-        // skin2 is for the skin created programatically
-        // skin2 will eventually disappear
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
-        skin2 = new Skin();
+        skin.add("background", new Texture("homescreen_bg.png"));
         
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
-        skin2.add("white", new Texture(pixmap));
+        skin.add("white", new Texture(pixmap));
         
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin2.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin2.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.over = skin2.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
-        skin2.add("default", textButtonStyle);
-
-        skin2.add("background", new Texture("homescreen_bg.png"));
+        skin.add("default", textButtonStyle);
 
         stage = new Stage();
         ArcadeInputMux.getInstance().addProcessor(stage);
 
         Table table = new Table();
         table.setFillParent(true);
-        table.setBackground(skin2.getDrawable("background"));
+        table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        Label usernameLabel = new Label("Username:", skin);
+        Label errorLabel = new Label("login/server errors go here", skin, "error");
         final TextField usernameText = new TextField("", skin);
-        usernameText.setMessageText("Enter Username");
-        Label passwordLabel = new Label("Password:", skin);
+        usernameText.setMessageText("Username");
         final TextField passwordText = new TextField("", skin);
-        passwordText.setMessageText("Enter Password");
+        passwordText.setMessageText("Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
-        Label errorLabel = new Label("login/server errors go here", skin, "error");
-        TextButton loginButton = new TextButton("Login", skin2);
-        TextButton exitButton = new TextButton("Exit", skin2);
+        final TextField serverText = new TextField("", skin);
+        serverText.setMessageText("Server") ;
+        //CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        TextButton loginButton = new TextButton("Login", skin);
+        TextButton forgotLogButton = new TextButton("Forgot Login?", skin);
+        TextButton registerButton = new TextButton("Register", skin);
 
-        //table.debug();  // Shows table debug lines.  Remove for final product.
-        usernameLabel.setAlignment(Align.right);
-        table.add(usernameLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
-        table.add(usernameText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.debug();  // Shows table debug lines.  Remove for final product.
+        table.add(errorLabel).colspan(2);
         table.row();
-        passwordLabel.setAlignment(Align.right);
-        table.add(passwordLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
-        table.add(passwordText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.add(usernameText).width(400).colspan(2);
         table.row();
-        table.add(errorLabel).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
+        table.add(passwordText).width(400).colspan(2);
         table.row();
-        table.add(loginButton).width(100).pad(10);
-        table.add(exitButton).width(100).pad(10);
-        
+        table.add(serverText).width(400).colspan(2);
+        table.row();
+        table.add(loginButton).width(200);
+        table.add(registerButton).width(200);
+        table.row();
+        table.add(forgotLogButton);
+
         loginButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 ArcadeSystem.login(usernameText.getText());
-            }
-        });
-        
-        exitButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-                ArcadeSystem.close();
             }
         });
 	}
@@ -96,10 +86,10 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        //Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
+        Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
 
 	    if (ArcadeSystem.isLoggedIn()) {
-	    	dispose(); // <-- Sorry to screw with your code, but this needs to be done.
+	    	dispose();
 	    	ArcadeSystem.goToGame("arcadeui");
 	    }
 	}

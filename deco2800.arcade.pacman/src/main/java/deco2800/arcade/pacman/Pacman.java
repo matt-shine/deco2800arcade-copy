@@ -1,7 +1,9 @@
 package deco2800.arcade.pacman;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,13 +12,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Logger;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.pacman.PacChar.PacState;
 
 
 
@@ -28,7 +33,7 @@ public class Pacman extends GameClient {
 	
 	private enum GameState {
 		READY,
-		INPROGRESS,
+		RUNNING,
 		GAMEOVER
 	}
 	
@@ -39,10 +44,14 @@ public class Pacman extends GameClient {
 	private SpriteBatch batch;
 	private ShapeRenderer shaper;
 	private PacChar player;
+	//takes keyboard input
+	private InputProcessor controller;
 	
 	//not used yet
 	//private NetworkClient networkClient;
 	
+	//lets us log stuff, doesn't seem to work yet
+	private Logger logger = new Logger("Pacman");
 	
 	
 	public Pacman(Player player, NetworkClient networkClient) {
@@ -89,7 +98,9 @@ public class Pacman extends GameClient {
 			}			
         });   
         
-		super.create();		
+		super.create();	
+		// this guy doesn't show up either. 
+		logger.info("Hey, I'm a log message");
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
@@ -97,6 +108,12 @@ public class Pacman extends GameClient {
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
 		shaper = new ShapeRenderer();
+		//initialise pacman
+		player = new PacChar();
+		//initialise receiver for input- use the multiplexer from Arcade
+		// because overlay group said to in log messages
+		controller = new PacController(player);
+		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
 		gameState = GameState.READY;		
 	}
@@ -107,8 +124,7 @@ public class Pacman extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
-		batch.dispose();
-		shaper.dispose();
+		ArcadeInputMux.getInstance().removeProcessor(controller);
 	}
 
 	@Override
@@ -116,23 +132,52 @@ public class Pacman extends GameClient {
 		super.pause();
 	}
 	
+	private void makeChanges() {
+		 // Respond to user input depending on the game state
+	    switch(gameState) {	    
+	    //TODO BLARH apparently this commented bit of code isn't even being reached
+	    // (certainly none of my log statements are coming up, not sure if that's 
+	    // cause I set it up wrongly- can't get them to show up anywhere. But yeah, so
+	    // i can't get it to change gamestate
+	    case READY: //Ready to initialise the game
+//	    	if (controller.keyDown(Keys.ANY_KEY)) {
+//	    		startGame();
+//	    	}
+	    	break;	    	
+	    case RUNNING: 
+	    	logger.debug("Still running");	
+	    	if (controller.keyDown(Keys.ESCAPE)) {
+	    		gameState = GameState.GAMEOVER;
+	    	}
+	    	break;	    	
+	    case GAMEOVER: //The game has been won, wait to exit
+	    	logger.debug("Game over man, game over!");	
+	    	if (controller.keyDown(Keys.ANY_KEY)) {
+	    		gameOver();
+	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
+	    	}
+	    	break;
+	    }	    
+	}
+	
 	/**
 	 * Called continually to draw the screen unless specifically told not to be
 	 */
 	@Override
 	public void render() {		
+		//make changes to location of object etc, then draw
+		makeChanges();
+		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    // updating camera is something we should do once per frame
 	    camera.update();
 	    //tell the spritebatch to use the coordinate system of the camera
-	    batch.setProjectionMatrix(camera.combined);
-	    //initialise and render player pacman (should we just give the constructor 
-	    // the sprite batch rather than sending it in the render method everytime?
-	    player = new PacChar();
+	    batch.setProjectionMatrix(camera.combined);	    
 	    // start the drawing
 	    batch.begin();
+	    // render player pacman 
 	    player.render(batch);
 	    //end the drawing
 	    batch.end();
@@ -151,32 +196,16 @@ public class Pacman extends GameClient {
 	    test3.render(shaper);
 	    test4.render(shaper);
 	    shaper.end();	    
-	    
-	    // Respond to user input depending on the game state
-	    switch(gameState) {	    
-	    case READY: //Ready to initialise the game
-	    	if (Gdx.input.isTouched()) {
-	    		startPoint();
-	    	}
-	    	break;	    	
-	    case INPROGRESS: 
-	    	break;	    	
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	if (Gdx.input.isTouched()) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
-	    }	    
 	    //do any stuff the superclass normally does for rendering
 		super.render();
 		
 	}
 	
-	private void startPoint() {		
-		gameState = GameState.INPROGRESS;
+	private void startGame() {	
+		logger.debug("Game is now running");		
+		gameState = GameState.RUNNING;	
 	}
-	
+		
 	@Override
 	public void resize(int arg0, int arg1) {
 		super.resize(arg0, arg1);
@@ -201,5 +230,13 @@ public class Pacman extends GameClient {
 	
 	public Game getGame() {
 		return game;
+	}
+
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public void setGameState(GameState gameState) {
+		this.gameState = gameState;
 	}
 }

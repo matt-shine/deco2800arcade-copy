@@ -27,7 +27,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        Label errorLabel = new Label("login/server errors go here", skin, "error");
+        Label errorLabel = new Label("Placeholder Error Message", skin, "error");
         final TextField usernameText = new TextField("", skin);
         usernameText.setMessageText("Username");
         final TextField passwordText = new TextField("", skin);
@@ -41,7 +41,6 @@ public class LoginScreen implements Screen {
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin);
         TextButton registerButton = new TextButton("Register", skin);
 
-        //table.debug();  // Shows table debug lines.  Remove for final product.
         table.add(errorLabel).colspan(2);
         table.row();
         table.add(usernameText).width(400).pad(5).colspan(2);
@@ -62,33 +61,37 @@ public class LoginScreen implements Screen {
                 ArcadeSystem.login(usernameText.getText());
             }
         });
+        registerButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+            }
+        });
+        forgotLogButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+            }
+        });
 	}
-
 
 	@Override
 	public void show() {
-	}
-	
+    }
 
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        //Table.drawDebug(stage);  // Shows table debug lines.  Remove for final product.
 
 	    if (ArcadeSystem.isLoggedIn()) {
-	    	dispose();
+	    	this.dispose();
 	    	ArcadeSystem.goToGame("arcadeui");
 	    }
 	}
 
 	@Override
 	public void dispose() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
         stage.dispose();
         skin.dispose();
-        
-        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override

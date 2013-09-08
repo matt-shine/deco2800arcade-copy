@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -19,9 +20,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 
 import java.util.Set;
+
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.LibraryStyle;
+import deco2800.arcade.model.Player;
 
 /**
  * GDX Screen class for the game Library
@@ -45,7 +50,6 @@ public class LibraryScreen implements Screen {
     private int y = 580;
     private TextButton button;
     private TextButton storeButton;
-    private Button gridViewButton;
     private TextButton userProfileButton;
     private TextButton currentButton;
     private Skin skin;
@@ -54,14 +58,22 @@ public class LibraryScreen implements Screen {
     private Label label;
     private Label titleLabel;
     private Texture splashTexture;
+    private Texture gridTexture;
     private Actor image;
+
+
+    private Texture listIconTexture;
+    private Texture gridIconTexture;
+    private ImageButton listImageButton;
+    private ImageButton gridImageButton;
+
 
 
     public LibraryScreen(GameLibrary gl) {
         gameSelected = false;
         gameLibrary = gl;
         styleSetup();
-        setupUI();
+        selectView();
     }
 
     private void styleSetup() {
@@ -85,8 +97,6 @@ public class LibraryScreen implements Screen {
         //titleFont.setScale(1.5f);
         titleLabelStyle.font = titleFont;
         skin.add("titleStyle", titleLabelStyle);
-
-
 
 
         // Specify font, fontColor, cursor, selection, and background
@@ -116,13 +126,29 @@ public class LibraryScreen implements Screen {
 
     }
 
-    private void setupUI() {
+    private void setupListUI() {
 
         stage = new Stage();
         batch = new SpriteBatch();
         splashTexture = new Texture("Assets/splashscreen.jpg");
         image = new Image(splashTexture);
         stage.addActor(image);
+
+        listIconTexture = new Texture("Assets/list-icon.jpg");
+        gridIconTexture = new Texture("Assets/grid-icon.jpg");
+        listImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(listIconTexture)));
+        gridImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(gridIconTexture)));
+
+        listImageButton.setX(1000);
+        gridImageButton.setX(1050);
+        listImageButton.setY(650);
+        gridImageButton.setY(650);
+
+        listImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.LIST_VIEW));
+        gridImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.GRID_VIEW));
+
+        stage.addActor(listImageButton);
+        stage.addActor(gridImageButton);
 
 
         Actor exitButton = new TextButton("Exit", skin);
@@ -207,6 +233,105 @@ public class LibraryScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    private void setupGridUI() {
+
+        stage = new Stage();
+        batch = new SpriteBatch();
+        splashTexture = new Texture("Assets/splashscreen-grid.jpg");
+        gridTexture = new Texture("Assets/gridbk.jpg");
+        image = new Image(splashTexture);
+        stage.addActor(image);
+
+        listIconTexture = new Texture("Assets/list-icon.jpg");
+        gridIconTexture = new Texture("Assets/grid-icon.jpg");
+        listImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(listIconTexture)));
+        gridImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(gridIconTexture)));
+
+        listImageButton.setX(1000);
+        gridImageButton.setX(1050);
+        listImageButton.setY(650);
+        gridImageButton.setY(650);
+
+        listImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.LIST_VIEW));
+        gridImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.GRID_VIEW));
+
+        stage.addActor(listImageButton);
+        stage.addActor(gridImageButton);
+
+        Actor exitButton = new TextButton("Exit", skin);
+        exitButton.setWidth(200);
+        exitButton.setHeight(40);
+        exitButton.setX(1000);
+        exitButton.setY(50);
+
+        exitButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
+                ArcadeSystem.close();
+            }
+        });
+        stage.addActor(exitButton);
+
+        games = ArcadeSystem.getGameList();
+        int gridX = 25;
+        int gridY = 435;
+        int count = 0;
+        for (final GameClient gameClient : games) {
+            if (gameClient != null) {
+                final Game game = gameClient.getGame();
+                if (game != null) {
+
+                    Actor background = new Image(gridTexture);
+                    background.setX(gridX);
+                    background.setY(gridY);
+
+                    Label gridLabel = new Label(game.name, skin, "titleStyle");
+                    gridLabel.setWidth(background.getWidth());
+                    gridLabel.setHeight(40);
+                    gridLabel.setX(gridX + background.getWidth()/4);
+                    gridLabel.setY(gridY + background.getHeight() - 40);
+
+                    TextButton gamePlay = new TextButton("Play", skin);
+                    gamePlay.setWidth(150);
+                    gamePlay.setHeight(30);
+                    gamePlay.setX(gridX + 5);
+                    gamePlay.setY(gridY + 50 - gridLabel.getHeight());
+                    gamePlay.addListener(new PlayButtonActionHandler(this, gameClient));
+
+                    if (++count % 7 == 0) {
+                        gridX = 20;
+                        gridY -= (background.getHeight() + 15);
+                    } else {
+                        gridX += (background.getWidth() + 15);
+                    }
+
+                    //y = gridY - 80;
+
+                    stage.addActor(background);
+                    stage.addActor(gridLabel);
+                    stage.addActor(gamePlay);
+                }
+            }
+        }
+
+        storeButton = new TextButton("Game Store", skin);
+        storeButton.setWidth(200);
+        storeButton.setHeight(40);
+        storeButton.setX(x);
+        storeButton.setY(650);
+        storeButton.addListener(new PlayButtonActionHandler(this));
+
+        userProfileButton = new TextButton("User Profile", skin);
+        userProfileButton.setWidth(200);
+        userProfileButton.setHeight(40);
+        userProfileButton.setX(300);
+        userProfileButton.setY(650);
+        userProfileButton.addListener(new PlayButtonActionHandler(this));
+
+        stage.addActor(storeButton);
+        stage.addActor(userProfileButton);
+        Gdx.input.setInputProcessor(stage);
+    }
+
     @Override
     public void render(float v) {
         Gdx.gl.glClearColor(0.2f, 0, 0, 1);
@@ -264,7 +389,7 @@ public class LibraryScreen implements Screen {
     }
 
     public void setSelectedGame(final GameClient gameClient) {
-        currentClient = gameClient;
+        updateGame(gameClient);
         Game game = gameClient.getGame();
         gameTitle = game.name;
         description = "Game Details: " + "\n";
@@ -282,4 +407,35 @@ public class LibraryScreen implements Screen {
         stage.addActor(titleLabel);
     }
 
+    public void updateGame(final GameClient gameClient) {
+        currentClient = gameClient;
+    }
+
+    public Player getPlayer() {
+        return gameLibrary.getPlayer();
+    }
+
+    public void changeView() {
+        gameSelected = false;
+        stage.clear();
+        dispose();
+        selectView();
+        y = 580;
+        x = 0;
+        render(0f);
+    }
+
+    private void selectView() {
+        switch (getPlayer().getLibraryStyle().getLayout()) {
+            case LibraryStyle.LIST_VIEW:
+                setupListUI();
+                break;
+            case LibraryStyle.GRID_VIEW:
+                setupGridUI();
+                break;
+            default:
+                setupListUI();
+                break;
+        }
+    }
 }

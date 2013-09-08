@@ -5,7 +5,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 
-
+//Main Class
 @ArcadeGame(id = "LandInvaders")
 public class LandInvaders extends GameClient  {
 	

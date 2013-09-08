@@ -46,12 +46,14 @@ public class Breakout extends GameClient {
 	private Ball ball;
 	private int score;
 	private int lives;
+	
 
 	// Cheat Code
 	private int[] sequence = { 19, 19, 20, 20, 21, 22, 21, 22, 30, 29 };
 	private int currentButton = 0;
 
 	// The counting of random statistics
+	public int highScore = 0;
 	public int bumpCount = 0;
 	public int brickBreak = 0;
 
@@ -211,10 +213,10 @@ public class Breakout extends GameClient {
 	 */
 	@Override
 	public void dispose() {
-		super.dispose();
 		breaking.dispose();
 		music.dispose();
 		bump.dispose();
+		super.dispose();
 	}
 
 	/**
@@ -237,7 +239,7 @@ public class Breakout extends GameClient {
 	 * Renders game mechanics.
 	 */
 	public void render() {
-		// super.render();
+		 super.render();
 
 		// Clears Frame
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -365,6 +367,7 @@ public class Breakout extends GameClient {
 				if (level > 3) {
 					win();
 				} else {
+					dispose();
 					create();
 				}
 			}
@@ -435,8 +438,16 @@ public class Breakout extends GameClient {
 	private void win() {
 		score += lives * 5;
 
-		gameoverstatus = "Congratulations " + player + " your final score is: "
-				+ score;
+		if (highScore < score){
+			highScore = score;
+			gameoverstatus = "Congratulations " + player + " you have a new HighScore: "
+					+ score;
+			
+		}else{
+			gameoverstatus = "Congratulations " + player + " your final score is: "
+					+ score;
+		}
+		
 		System.out.println("Congratulations " + player
 				+ " your final score is: " + score);
 		if (lives == 3) {
@@ -446,6 +457,7 @@ public class Breakout extends GameClient {
 		} else if (score < 0) {
 			incrementAchievement("breakout.noob");
 		}
+		
 		incrementAchievement("breakout.winGame");
 		gameState = GameState.GAMEOVER;
 	}
@@ -483,6 +495,7 @@ public class Breakout extends GameClient {
 		}
 
 	}
+	
 
 	/**
 	 * Provides details about the game to the Arcade system.

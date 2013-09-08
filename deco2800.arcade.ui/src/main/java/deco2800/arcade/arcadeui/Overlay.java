@@ -73,17 +73,25 @@ public class Overlay extends GameClient implements UIOverlay {
 		popup.draw(batch, 1f);
 		batch.end();
 		
+		//Check nobody is being selfish, keeping all the precious inputs for themselves
+		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance() && !notifiedForMissingInput) {
+			notifiedForMissingInput = true;
+			logger.error("Something has stolen the inputlistener. " +
+					"See src/main/java/deco2800/arcade/client/ArcadeInputMux.java");
+		}
 		
+		//Check that people love me
 		if (screen.getListeners() == null && !notifiedForMissingCallbacks) {
 	    	notifiedForMissingCallbacks = true;
 	    	logger.error("Overlay event listeners are not set. " + 
 	    			"See https://github.com/UQdeco2800/deco2800-2013/wiki/Overlay");
 	    }
-		
-		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance() && !notifiedForMissingInput) {
-			notifiedForMissingInput = true;
-			logger.error("Something has stolen the inputlistener. " +
-					"See src/main/java/deco2800/arcade/client/ArcadeInputMux.java");
+
+		//Check that I'm not being run on top of myself.
+		//Why would anyone do that?
+		if (this.getHost() instanceof UIOverlay) {
+			logger.error("The overlay is being run on top of another overlay." + 
+	    			" What??? Why???");
 		}
 		
 	}

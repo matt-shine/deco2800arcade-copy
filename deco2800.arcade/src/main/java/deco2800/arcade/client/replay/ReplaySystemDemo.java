@@ -15,16 +15,8 @@ public class ReplaySystemDemo {
 	{
 	    return new ReplayEventListener() {
             public void replayEventReceived( String eType, ReplayNode eData ) {
-                if ( eType.equals( "node_pushed" ) ) {
-                    System.out.println( eType );
-                    System.out.println( eData );
-                }
                 if ( eType.equals( "event_pushed" ) ) {
-                    System.out.println( eType );
-                    //System.out.println( eData );
-                }
-                if ( eType.equals( "replay_reset" ) ) {
-                    System.out.println( "replay reset" );
+                	System.out.println("Called when an event is successfully pushed");
                 }
                 if ( eType.equals( "playback_complete" ) ) {
                     System.out.println( "playback finished" );
@@ -63,8 +55,8 @@ public class ReplaySystemDemo {
 	    
 	    Thread.sleep( 1000 );
 	
-	    //Ping the server
-	    replayHandler.startSession(123, "wtf");
+	    //Start the session with a game id and username
+	    replayHandler.startSession(123, "max_koopman");
 	    
 		replayHandler.startRecording();
 		
@@ -75,14 +67,14 @@ public class ReplaySystemDemo {
 		                                             "new_y"}
 		                               );
 		
-		//Or just use varargs to pass a list, redefinitions silently overwrite.
+		//Register an event piece_move with parameters piece_id, new_x and new_y
 	    ReplayNodeFactory.registerEvent("piece_move",
                                               "piece_id",
                                               "new_x",
                                               "new_y"
                                     );
 		 
-		//Recreate event from factory definition (once again, pass array or varargs.
+		//Recreate event from factory definition, parameters passed in order
 		replayHandler.pushEvent(
 		        ReplayNodeFactory.createReplayNode(
 		                "piece_move",

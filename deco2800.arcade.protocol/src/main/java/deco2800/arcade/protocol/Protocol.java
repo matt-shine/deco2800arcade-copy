@@ -95,6 +95,7 @@ public class Protocol {
 
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
+		kryo.register(ArrayList.class);
 	}
 	
 	/**

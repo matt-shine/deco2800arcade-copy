@@ -58,37 +58,37 @@ public class ReplayListener extends NetworkListener {
 		    
 		    if (replayHandler == null) throw new NoReplayHandlerException();
 		    
-		    System.out.println(replayResponse);
+		    //System.out.println(replayResponse);
 		} else if (object instanceof StartSessionResponse)
 		{
 		    StartSessionResponse ssr = (StartSessionResponse) object;
 		    
 		    replayHandler.sessionStarted(ssr);
-		    System.out.println(ssr);
+		    //System.out.println(ssr);
 		} else if (object instanceof EndSessionResponse)
 		{
 		    EndSessionResponse esr = (EndSessionResponse) object;
 
 		    replayHandler.sessionEnded(esr);
-		    System.out.println(esr);
+		    //System.out.println(esr);
 		    
 		} else if (object instanceof ListSessionsResponse)
 		{
 		    ListSessionsResponse lsr = (ListSessionsResponse) object;
 		    
 		    replayHandler.sessionListReceived(lsr);
-		    System.out.println(lsr);
+		    //System.out.println(lsr);
 		} else if (object instanceof PushEventResponse)
 		{
 		    PushEventResponse per = (PushEventResponse) object;
 		    
 		    replayHandler.eventPushed(per);
-		    System.out.println(per);
+		    //System.out.println(per);
 		} else if (object instanceof GetEventsResponse)
 		{
 		    GetEventsResponse ger = (GetEventsResponse) object;
 		    replayHandler.eventsForSessionReceived(ger);
-		    System.out.println(ger);
+		    //System.out.println(ger);
 		}
 	}
 

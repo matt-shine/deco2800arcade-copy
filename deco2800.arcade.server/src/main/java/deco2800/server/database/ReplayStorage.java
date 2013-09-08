@@ -186,7 +186,7 @@ public class ReplayStorage {
 		//String [] events;
 		// HashMap <Integer, String> events =  new HashMap <Integer, String>();
 		 
-		List<String> events = new ArrayList<String>();
+		List<String> eventList = new ArrayList<String>();
 		
 		try{
 			connection = Database.getConnection();
@@ -202,7 +202,7 @@ public class ReplayStorage {
 		//	events = new String[rows];
 			while( results.next() ){
 				String event = results.getString("Event");
-				events.add( event);
+				eventList.add( event);
 			}
 		}catch( Exception e ){
 			e.printStackTrace();
@@ -224,7 +224,7 @@ public class ReplayStorage {
 			}
 		}
 		
-		return events;	
+		return eventList;	
 	}	
 	
 	/**

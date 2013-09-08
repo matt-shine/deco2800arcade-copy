@@ -14,6 +14,7 @@ import java.awt.Color;
 public class ForumLogin {
 	private static JTextField textField;
 	private static JTextField textField_1;
+	
 
    public static void main(String[] args) {
       

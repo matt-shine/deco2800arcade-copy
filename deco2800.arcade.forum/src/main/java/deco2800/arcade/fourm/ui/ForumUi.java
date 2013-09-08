@@ -115,6 +115,7 @@ public class ForumUi {
 	      txtpnFacingBugIssue.setFont(new Font("Tahoma", Font.ITALIC, 13));
 	      txtpnFacingBugIssue.setBounds(14, 461, 520, 73);
 	      f.getContentPane().add(txtpnFacingBugIssue);
+
 	      JPanel panel = new JPanel();
 	      panel.setBackground(Color.ORANGE);
 	      panel.setBounds(0, 59, 1006, 57);

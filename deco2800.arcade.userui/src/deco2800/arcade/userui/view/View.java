@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 import deco2800.arcade.userui.model.Model;
@@ -66,15 +67,9 @@ public class View extends JFrame implements ActionListener {
 	private JLabel achievementbar;
 	
 	//Declare Text Areas
-	private JTextArea achivementarea;
+	private JTextArea achievementarea;
 	private JTextArea aboutarea;
-	private JTextArea friendarea;
-	private JTextArea histroyarea;
-	
-	private JScrollPane aboutpane;
-	private JScrollPane friendpane;
-	private JScrollPane historypane;
-	private JScrollPane achivementpane;
+	private JTextArea historyarea;
 	
 	//Declare Images here
 	private ImageIcon picavatar;
@@ -111,6 +106,26 @@ public class View extends JFrame implements ActionListener {
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
+		
+		//Text Areas
+		aboutarea = new JTextArea("Player information goes here");
+		aboutarea.setLineWrap(true);
+		aboutarea.setFont(normal);
+		achievementarea = new JTextArea();
+		JPanel friendarea = new JPanel();
+		historyarea = new JTextArea();
+		aboutarea.setLineWrap(true);
+		
+		JScrollPane aboutscroll = new JScrollPane(aboutarea);
+		aboutscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		aboutscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		JScrollPane achievementscroll = new JScrollPane(achievementarea);
+		JScrollPane friendscroll = new JScrollPane(friendarea);
+		friendscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		JScrollPane historyscroll = new JScrollPane(historyarea);
+		historyscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		historyscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		//Panels and ScrollPanes
 		parentContainer = new JPanel(new MigLayout());
@@ -161,6 +176,34 @@ public class View extends JFrame implements ActionListener {
         playerlevel.setForeground(Color.white);
         historybar = new JLabel();
         historybar.setIcon(pichistorybar);
+        JLabel history1 = new JLabel();
+        JLabel history2 = new JLabel();
+        JLabel history3 = new JLabel();
+        JLabel history4 = new JLabel();
+        JLabel history5 = new JLabel();
+        JLabel history6 = new JLabel();
+
+        history1.setIcon(piclocked);
+        history2.setIcon(piclocked);
+        history3.setIcon(piclocked);
+        history4.setIcon(piclocked);
+        history5.setIcon(piclocked);
+        history6.setIcon(piclocked);
+
+        JPanel historytext1 = new JPanel(new MigLayout());
+        JPanel historytext2 = new JPanel(new MigLayout());
+        JPanel historytext3 = new JPanel(new MigLayout());
+        JPanel historytext4 = new JPanel(new MigLayout());
+        JPanel historytext5 = new JPanel(new MigLayout());
+        JPanel historytext6 = new JPanel(new MigLayout());
+
+        historytext1.setBackground(Color.BLUE);
+        historytext2.setBackground(Color.BLUE);
+        historytext3.setBackground(Color.BLUE);
+        historytext4.setBackground(Color.BLUE);
+        historytext5.setBackground(Color.BLUE);
+        historytext6.setBackground(Color.BLUE);
+
         achievementbar = new JLabel();
         achievementbar.setIcon(picachievementbar);
         JLabel achievement1 = new JLabel();
@@ -171,6 +214,10 @@ public class View extends JFrame implements ActionListener {
         JLabel achievement6 = new JLabel();
         JLabel achievement7 = new JLabel();
         JLabel achievement8 = new JLabel();
+        JLabel achievement9 = new JLabel();
+        JLabel achievement10 = new JLabel();
+        JLabel achievement11 = new JLabel();
+        JLabel achievement12 = new JLabel();
         achievement1.setIcon(piclocked);
         achievement2.setIcon(piclocked);
         achievement3.setIcon(piclocked);
@@ -179,17 +226,38 @@ public class View extends JFrame implements ActionListener {
         achievement6.setIcon(piclocked);
         achievement7.setIcon(piclocked);
         achievement8.setIcon(piclocked);
-        JTextArea achivementtext1 = new JTextArea();
-        JTextArea achivementtext2 = new JTextArea();
-        JTextArea achivementtext3 = new JTextArea();
-        JTextArea achivementtext4 = new JTextArea();
-        JTextArea achivementtext5 = new JTextArea();
-        JTextArea achivementtext6 = new JTextArea();
-        JTextArea achivementtext7 = new JTextArea();
-        JTextArea achivementtext8 = new JTextArea();
+        achievement9.setIcon(piclocked);
+        achievement10.setIcon(piclocked);
+        achievement11.setIcon(piclocked);
+        achievement12.setIcon(piclocked);
+        JPanel achievementtext1 = new JPanel(new MigLayout());
+        JPanel achievementtext2 = new JPanel(new MigLayout());
+        JPanel achievementtext3 = new JPanel(new MigLayout());
+        JPanel achievementtext4 = new JPanel(new MigLayout());
+        JPanel achievementtext5 = new JPanel(new MigLayout());
+        JPanel achievementtext6 = new JPanel(new MigLayout());
+        JPanel achievementtext7 = new JPanel(new MigLayout());
+        JPanel achievementtext8 = new JPanel(new MigLayout());
+        JPanel achievementtext9 = new JPanel(new MigLayout());
+        JPanel achievementtext10 = new JPanel(new MigLayout());
+        JPanel achievementtext11 = new JPanel(new MigLayout());
+        JPanel achievementtext12 = new JPanel(new MigLayout());
+        achievementtext1.setBackground(Color.BLUE);
+        achievementtext2.setBackground(Color.BLUE);
+        achievementtext3.setBackground(Color.BLUE);
+        achievementtext4.setBackground(Color.BLUE);
+        achievementtext5.setBackground(Color.BLUE);
+        achievementtext6.setBackground(Color.BLUE);
+        achievementtext7.setBackground(Color.BLUE);
+        achievementtext8.setBackground(Color.BLUE);
+        achievementtext9.setBackground(Color.BLUE);
+        achievementtext10.setBackground(Color.BLUE);
+        achievementtext11.setBackground(Color.BLUE);
+        achievementtext12.setBackground(Color.BLUE);
 
 		//Add objects and position panels
-        menupanel.add(dropdownpanel,"east");
+        
+        //menupanel.add(dropdownpanel,"east");
         
         playerpanel.add(avatar);
         playerinfopanel.add(playername,"wrap, align 50% 50%");       
@@ -198,23 +266,54 @@ public class View extends JFrame implements ActionListener {
         playerinfopanel.add(editbutton,"align 50% 50%");
         playerpanel.add(playerinfopanel);
         friendpanel.add(friendbar, "north");
+        friendpanel.add(friendscroll,"width :100%, height :100%");
         aboutpanel.add(aboutbar,"north");
+        aboutpanel.add(aboutscroll, "width :100%, height :100%");
         
         sidepanel.add(playerpanel, "wrap, center, width :300, height :300");
         sidepanel.add(aboutpanel, "wrap, center, width :300, height :300");
         sidepanel.add(friendpanel, "center, width :300, height :300");
         
         historypanel.add(historybar, "north");
+        historypanel.add(history1,"gapbefore 5px, pad 10 10 10 10");
+        historypanel.add(historytext1,"pad 10 10 10 10, growy, width :110");
+        historypanel.add(history2,"pad 10 10 10 10");
+        historypanel.add(historytext2,"pad 10 10 10 10, growy, width :110");
+        historypanel.add(history3,"pad 10 10 10 10");
+        historypanel.add(historytext3,"pad 10 10 10 10, growy, width :110");
+        historypanel.add(history4,"pad 10 10 10 10");
+        historypanel.add(historytext4,"wrap,pad 10 10 10 10, growy, width :110");
+        historypanel.add(history5,"gapbefore 5px, pad 10 10 10 10");
+        historypanel.add(historytext5,"pad 10 10 10 10, growy, width :110");
+        historypanel.add(history6,"pad 10 10 10 10");
+        historypanel.add(achievementtext6,"pad 10 10 10 10, growy, width :110");
+        
         achievementpanel.add(achievementbar, "north");
-        achievementpanel.add(achievement1);
-        achievementpanel.add(achievement2);
-        achievementpanel.add(achievement3);
-        achievementpanel.add(achievement4, "wrap");
-        achievementpanel.add(achievement5);
-        achievementpanel.add(achievement6);
-        achievementpanel.add(achievement7);
-        achievementpanel.add(achievement8);
-    
+        achievementpanel.add(achievement1,"gapbefore 5px, pad 10 10 10 10");
+        achievementpanel.add(achievementtext1,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement2,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext2,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement3,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext3,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement4,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext4,"wrap,pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement5,"gapbefore 5px, pad 10 10 10 10");
+        achievementpanel.add(achievementtext5,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement6,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext6,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement7,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext7,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement8,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext8,"wrap, pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement9,"gapbefore 5px, pad 10 10 10 10");
+        achievementpanel.add(achievementtext9,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement10,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext10,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement11,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext11,"pad 10 10 10 10, growy, width :110");
+        achievementpanel.add(achievement12,"pad 10 10 10 10");
+        achievementpanel.add(achievementtext12,"pad 10 10 10 10, growy, width :110");
+
         contentpanel.add(historypanel, "wrap, height :320, width :810, gapbefore 30px");
         contentpanel.add(achievementpanel, "height :320, width :810, gapbefore 30px");
             

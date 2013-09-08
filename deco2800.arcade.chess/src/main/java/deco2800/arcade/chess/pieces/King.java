@@ -191,4 +191,10 @@ public class King implements Piece {
 		return null;
 
 	}
+
+	@Override
+	public void hasMoved() {
+		// TODO Auto-generated method stub
+		
+	}
 }

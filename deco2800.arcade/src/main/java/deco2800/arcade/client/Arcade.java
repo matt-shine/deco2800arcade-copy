@@ -62,6 +62,10 @@ public class Arcade extends JFrame {
 	private ProxyApplicationListener proxy;
 
 	private CommunicationNetwork communicationNetwork;
+	
+	// Width and height of the Arcade window
+	private static final int ARCADE_HEIGHT = 720;
+	private static final int ARCADE_WIDTH = 1280;
 
 	/**
 	 * ENTRY POINT
@@ -85,8 +89,8 @@ public class Arcade extends JFrame {
 	 */
 	public Arcade(String[] args) {
 		
-		this.width = 1280;
-		this.height = 720;
+		this.width = ARCADE_WIDTH;
+		this.height = ARCADE_HEIGHT;
 		initWindow();
 	}
 
@@ -110,6 +114,9 @@ public class Arcade extends JFrame {
 		});
 	}
 
+	/**
+	 * Completely exits arcade. The status code is always set to 0.
+	 */
     public void arcadeExit() {
         removeCanvas();
 
@@ -120,6 +127,9 @@ public class Arcade extends JFrame {
 		});
 	}
 
+	/**
+	 * Attempts to connect to the server
+	 */
 	public void startConnection() {
 		// Try to connect to the server until successful
 		boolean connected = false;

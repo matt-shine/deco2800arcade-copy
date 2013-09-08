@@ -64,6 +64,8 @@ public interface Piece {
 	 */
 	public int getPreference();
 
-	
-	
+	/**
+	 * Updates piece to say it has moved
+	 */
+	public void hasMoved();	
 }

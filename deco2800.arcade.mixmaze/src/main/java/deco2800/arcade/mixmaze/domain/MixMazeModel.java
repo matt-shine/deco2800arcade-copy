@@ -2,6 +2,8 @@ package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
+import java.util.Random;
+
 /**
  * Mix maze model represents the running game state.
  */
@@ -16,9 +18,14 @@ public class MixMazeModel {
 	public final static IllegalStateException NOT_STARTED = new IllegalStateException("The game has not started.");
 	public final static IllegalArgumentException COORDSOUTOFRANGE = new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
 
+	private enum GameState {
+		NOT_STARTED,
+		RUNNING,
+		END
+	}
+
 	// Game state
-	private boolean running = false;
-	private boolean ended = false;
+	private GameState state;
 
 	// Board data
 	private int boardSize;
@@ -36,11 +43,11 @@ public class MixMazeModel {
 	private PlayerModel player2;
 
 	public boolean isRunning() {
-		return running;
+		return state == GameState.RUNNING;
 	}
 
 	public boolean isEnded() {
-		return ended;
+		return state == GameState.END;
 	}
 
 	public int getBoardSize() {
@@ -103,18 +110,25 @@ public class MixMazeModel {
 	}
 
 	public void startGame() {
-		if(running || ended) {
-			throw new IllegalStateException("The game has already been started.");
+		if (state != GameState.NOT_STARTED) {
+			throw new IllegalStateException("The game has already "
+					+ "been started.");
 		}
 
+		state = GameState.RUNNING;
+
 		spawnerThread = new Thread(new Runnable() {
+			private final Random tileSelector = new Random();
+
 			@Override
 			public void run() {
-				while(!ended) {
+				while (state == GameState.RUNNING) {
 					try {
 						for(int row = 0; row < boardSize; ++row) {
+							int randRow = tileSelector.nextInt(boardSize);
 							for(int column = 0; column < boardSize; ++column) {
-								getBoardTile(column, row).spawnItem();
+								int randColumn = tileSelector.nextInt(boardSize);
+								getBoardTile(randColumn, randRow).spawnItem();
 							}
 						}
 						Thread.sleep(1000);
@@ -124,16 +138,23 @@ public class MixMazeModel {
 		});
 		spawnerThread.start();
 
-		running = true;
 		gameStartTime = System.currentTimeMillis();
 	}
 
 	public PlayerModel endGame() {
-		if(!running || ended) {
-			throw new IllegalStateException("The game has not been started or has already ended.");
+		if (state != GameState.RUNNING) {
+			throw new IllegalStateException(
+					"The game has not been started or has "
+					+ "already ended.");
 		}
-		running = false;
-		ended = true;
+
+		state = GameState.END;
+
+		try {
+			spawnerThread.join();
+		} catch (InterruptedException e) {
+		}
+
 		gameEndTime = System.currentTimeMillis();
 
 		int player1Score = getPlayerScore(player1);
@@ -146,7 +167,7 @@ public class MixMazeModel {
 	}
 
 	public void movePlayer(PlayerModel player, int direction) {
-		if(!running) {
+		if(state != GameState.RUNNING) {
 			throw NOT_STARTED;
 		}
 
@@ -161,13 +182,11 @@ public class MixMazeModel {
 		}
 
 		int nextX = player.getNextX(), nextY = player.getNextY();
-		if(player.canMove()) {
-			if(player.getDirection() != direction) {
-				player.setDirection(direction);
-			} else if(checkCoordinates(nextX, nextY) && !isPlayerAtPosition(nextX, nextY)) {
-				player.move();
-				getBoardTile(player.getX(), player.getY()).onPlayerEnter(player);
-			}
+		if(player.getDirection() != direction) {
+			player.setDirection(direction);
+		} else if(player.canMove() && checkCoordinates(nextX, nextY) && !isPlayerAtPosition(nextX, nextY)) {
+			player.move();
+			getBoardTile(player.getX(), player.getY()).onPlayerEnter(player);
 		}
 	}
 
@@ -182,12 +201,12 @@ public class MixMazeModel {
 	 * 				    <code>maxMinutes</code> is not in
 	 * 				    range from 2 to 15.
 	 */
-	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxMinutes) {
+	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxSeconds) {
 		if(size < 5 || size > 10) {
 			throw new IllegalArgumentException("size must be between 5 and 10.");
 		}
 
-		if(maxMinutes < 2 || maxMinutes > 15) {
+		if(maxSeconds < 30 || maxSeconds > 900) {
 			throw new IllegalArgumentException("maxMinutes must be between 2 and 15.");
 		}
 
@@ -213,7 +232,7 @@ public class MixMazeModel {
 
 		// Set game settings
 		gameDifficulty = difficulty;
-		gameMaxTime = maxMinutes;
+		gameMaxTime = maxSeconds;
 
 		// Initialize player 1
 		player1 = new PlayerModel(1);
@@ -226,5 +245,7 @@ public class MixMazeModel {
 		player2.setX(boardSize - 1);
 		player2.setY(boardSize - 1);
 		player2.setDirection(WEST);
+
+		state = GameState.NOT_STARTED;
 	}
 }

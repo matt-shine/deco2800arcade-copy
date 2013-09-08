@@ -23,7 +23,7 @@ public interface UIOverlay {
 		String getMessage();
 		//TODO: icon
 		//TODO: onclick behaviour
-	};
+	}
 	
 	
 	/**
@@ -31,5 +31,12 @@ public interface UIOverlay {
 	 * @param s
 	 */
 	void addPopup(PopupMessage p);
+	
+	GameClient getHost();
+	
+	
+	void setHost(GameClient host);
+	
+	
 	
 }

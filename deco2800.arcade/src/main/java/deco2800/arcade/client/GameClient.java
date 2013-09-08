@@ -1,6 +1,5 @@
 package deco2800.arcade.client;
 
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import deco2800.arcade.model.Player;
 public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
-	protected static NetworkClient networkClient;
+	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
@@ -34,6 +33,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 
     public void incrementAchievement(String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
+        this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+			
+			@Override
+			public String getMessage() {
+				return "ACHIEVEMENT GET";
+			}
+        	
+        });
     }
 
 	/**
@@ -42,6 +49,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
+		overlay.resize(width, height);
 	}
 
 	/**
@@ -50,6 +58,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	 */
 	public void addOverlayBridge(UIOverlay overlay) {
 		this.overlayBridge = overlay;
+		overlay.setHost(this);
 	}
 
 	/**
@@ -137,4 +146,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 		return height;
 	}
 
+	public NetworkClient getNetworkClient() {
+		return this.networkClient;
+	}
+	
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	
 }

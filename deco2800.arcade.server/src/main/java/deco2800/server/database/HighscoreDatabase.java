@@ -75,7 +75,7 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES h INNER JOIN " +
+			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES_PLAYER h INNER JOIN " +
 					"HIGHSCORES_DATA s on h.HID = s.HID WHERE GameId='" + Game_ID + "' AND Score_Type='" + type +
 					"' ORDER BY s.Score desc LIMIT " + top + ";");
 			while(resultSet.next())
@@ -126,7 +126,7 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT s.SCORE from HIGHSCORES h INNER JOIN " +
+			resultSet = statement.executeQuery("SELECT s.SCORE from HIGHSCORES_PLAYER h INNER JOIN " +
 					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
 					type + "' AND Username='" + Username + "';");
 			while(resultSet.next())
@@ -177,8 +177,8 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT s2.RANK FROM (SELECT h.Username, RANK() OVER (ORDER BY s.SCORE DESC) AS 'RANK' from HIGHSCORES h INNER JOIN " +
-					"SCORES s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
+			resultSet = statement.executeQuery("SELECT s2.RANK FROM (SELECT h.Username, RANK() OVER (ORDER BY s.SCORE DESC) AS 'RANK' from HIGHSCORES_PLAYER h INNER JOIN " +
+					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
 					type + "' ORDER BY s.SCORE desc) s2 WHERE s2.Username='" + Username + "';");
 			while(resultSet.next())
 			{
@@ -214,7 +214,7 @@ public class HighscoreDatabase {
 		Statement statement = null;
 		ResultSet resultSet = null;
 		
-		String selectTableSQL = "SELECT * FROM HIGHSCORE";
+		String selectTableSQL = "SELECT * FROM HIGHSCORES_PLAYER";
 		
 		try {
 			// Get a connection to the database
@@ -254,7 +254,7 @@ public class HighscoreDatabase {
 		Statement statement = null;
 		ResultSet resultSet = null;
 		
-		String insertTableSQL = "INSERT INTO HIGHSCORES"
+		String insertTableSQL = "INSERT INTO HIGHSCORES_PLAYER"
 				+ "(Username, GameID, Date, Rating) VALUES"
 				+ "(" + Username + "," + Game_ID +  ", to_date('"
 				+ getCurrentTimeStamp() + "', 'yyyy/mm/dd hh24:mi:ss'), 0)";

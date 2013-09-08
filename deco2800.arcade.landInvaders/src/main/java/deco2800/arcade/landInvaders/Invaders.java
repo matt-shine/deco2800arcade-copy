@@ -37,7 +37,7 @@ public class Invaders extends JFrame implements Runnable {
 		WallList.add(new blockWall(380, 350, 4, 8));
 		WallList.add(new blockWall(580, 350, 4, 8));
 		shotsNmb = 6;
-		level = 3;
+		level = 1;
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
 		enemyG = new enemyGroup(3, 6);
@@ -47,7 +47,7 @@ public class Invaders extends JFrame implements Runnable {
 		direction = 1;
 		moveDown = false;
 		
-		background = new javax.swing.ImageIcon((this.getClass().getResource("/image/city.jpg"))).getImage();
+		background = new javax.swing.ImageIcon(this.getClass().getResource("/image/city.jpg")).getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 
@@ -81,9 +81,9 @@ public class Invaders extends JFrame implements Runnable {
 
 		}
 		for (int e = 0; e < WallList.size(); e++) {
-			WallList.get(e).drawWall(mains);
+			WallList.get(e).drawWall(mains,this);
 		}
-		enemyG.drawGroup(mains);
+		enemyG.drawGroup(mains, this);
 		tank.drawTank(mains, this);
 		g.drawImage(bg, 0, 0, this);
 

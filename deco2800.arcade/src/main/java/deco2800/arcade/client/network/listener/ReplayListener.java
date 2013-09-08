@@ -4,13 +4,9 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.client.replay.exception.NoReplayHandlerException;
-import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
-import deco2800.arcade.protocol.replay.GetEventsRequest;
 import deco2800.arcade.protocol.replay.GetEventsResponse;
-import deco2800.arcade.protocol.replay.ListSessionsRequest;
 import deco2800.arcade.protocol.replay.ListSessionsResponse;
-import deco2800.arcade.protocol.replay.PushEventRequest;
 import deco2800.arcade.protocol.replay.PushEventResponse;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;

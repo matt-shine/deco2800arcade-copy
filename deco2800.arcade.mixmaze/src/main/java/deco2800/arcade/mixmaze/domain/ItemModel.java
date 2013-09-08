@@ -8,13 +8,22 @@ public abstract class ItemModel {
 	/**
 	 * Item types.
 	 */
-	public enum Type {
+	public enum ItemType {
 		BRICK, PICK, TNT, UNKNOWN
 	}
 
+	private ItemType itemType;
 	private TileModel tileSpawned;
 
-	protected ItemModel(TileModel spawnedOn) {
+	protected ItemModel(ItemType type) {
+		itemType = type;
+	}
+	
+	protected ItemModel(ItemType type, TileModel spawnedOn) {
+		if(spawnedOn == null) {
+			throw new IllegalArgumentException("spawnedOn cannot be null.");
+		}
+		itemType = type;
 		tileSpawned = spawnedOn;
 	}
 
@@ -27,5 +36,8 @@ public abstract class ItemModel {
 	 *
 	 * @return the type
 	 */
-	public abstract Type getType();
+	public ItemType getType()
+	{
+		return itemType;
+	}
 }

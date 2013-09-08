@@ -104,8 +104,7 @@ public class Pawn implements Piece {
 
 	@Override
 	public boolean getFirstMove() {
-		// TODO Auto-generated method stub
-		return false;
+		return firstMove;
 	}
 
 	@Override
@@ -151,6 +150,12 @@ public class Pawn implements Piece {
 		if (team != other.team)
 			return false;
 		return true;
+	}
+
+	@Override
+	public void hasMoved() {
+		firstMove = true;
+		
 	}
 
 

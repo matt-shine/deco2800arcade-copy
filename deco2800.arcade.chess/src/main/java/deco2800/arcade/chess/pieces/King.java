@@ -2,11 +2,7 @@ package deco2800.arcade.chess.pieces;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Graphics;
 import deco2800.arcade.chess.Board;
-import java.awt.Color;
-import java.awt.Font;
-import java.util.*;
 public class King implements Piece {
 
 	

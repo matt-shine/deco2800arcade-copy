@@ -1,7 +1,5 @@
 package deco2800.arcade.chess;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 
 import deco2800.arcade.chess.pieces.*;

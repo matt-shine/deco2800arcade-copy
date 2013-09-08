@@ -1,6 +1,5 @@
 package deco2800.arcade.checkers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
 public class AIPieces extends Pieces {

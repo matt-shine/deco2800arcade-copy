@@ -33,6 +33,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 
     public void incrementAchievement(String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
+        this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+			
+			@Override
+			public String getMessage() {
+				return "ACHIEVEMENT GET";
+			}
+        	
+        });
     }
 
 	/**

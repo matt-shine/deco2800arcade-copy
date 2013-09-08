@@ -124,6 +124,22 @@ final class GameScreen implements Screen {
 		gameBoard.add(tileTable);
 		gameBoard.add(gameArea);
 		gameBoard.add(endGameTable);
+
+		/*
+		 * This listener should be added only once.
+		 */
+		gameArea.addListener(new InputListener() {
+			public boolean keyDown(InputEvent event, int keycode) {
+				Actor actor = event.getListenerActor();
+
+				for (Actor child : gameArea.getChildren()) {
+					if (child.notify(event, false))
+						return true;
+				}
+
+				return false;
+			}
+		});
 	}
 
 	private void setupGameBoard() {
@@ -162,10 +178,7 @@ final class GameScreen implements Screen {
 		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		/*
-		 * TODO: these status updates should be encapsulated
-		 * in a method or a class.
-		 */
+		/* update player status on side panels */
 		left.update(p1);
 		right.update(p2);
 
@@ -174,6 +187,7 @@ final class GameScreen implements Screen {
 		//Table.drawDebug(stage);
 
 		if (endGameTable.isVisible() && backMenu.isChecked()) {
+			/* clean up this session and go to menu screen */
 			backMenu.toggle();
 			endGameTable.setVisible(false);
 			tileTable.clear();
@@ -208,7 +222,7 @@ final class GameScreen implements Screen {
 		Gdx.app.debug(LOG, "showing");
 
 		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 90);
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 30);
 		setupGameBoard();
 
 		/* set timer */
@@ -251,22 +265,16 @@ final class GameScreen implements Screen {
 				}
 				endGameTable.setVisible(true);
 			}
-		}, model.getGameMaxTime());
+		/*
+		 * FIXME: this does not look like a good solution.
+		 * It takes some time for timerLabel to change text,
+		 * and therefore, without the extra 1, the game will end
+		 * before the timer showing up 00:00.
+		 */
+		}, model.getGameMaxTime() + 1);
 
 		/* start game */
 		Gdx.input.setInputProcessor(stage);
-		gameArea.addListener(new InputListener() {
-			public boolean keyDown(InputEvent event, int keycode) {
-				Actor actor = event.getListenerActor();
-
-				for (Actor child : gameArea.getChildren()) {
-					if (child.notify(event, false))
-						return true;
-				}
-
-				return false;
-			}
-		});
 		stage.setKeyboardFocus(gameArea);
 		model.startGame();
 	}

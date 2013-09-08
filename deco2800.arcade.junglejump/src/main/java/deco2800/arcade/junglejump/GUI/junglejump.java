@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.security.auth.login.Configuration;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -68,9 +71,18 @@ public class junglejump extends GameClient implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		// Replace "file" with chosen music
 		try {
-			themeMusic = Gdx.audio.newMusic(Gdx.files.internal(("file")));
-			themeMusic.setLooping(true);
-			themeMusic.play();
+			File file = new File("junglejumpassets/soundtrack.wav");
+			FileHandle fileh = new FileHandle(file);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.start();
+			clip.loop(clip.LOOP_CONTINUOUSLY);
+			
+//			System.out.println(file.getCanonicalPath());
+//			themeMusic = Gdx.audio.newMusic(fileh);
+//			themeMusic.setLooping(true);
+//			themeMusic.play();
 		} catch (Exception e) {
 			Gdx.app.log(junglejump.messages,
 					"Audio File for Theme Music Not Found");
@@ -119,7 +131,8 @@ public class junglejump extends GameClient implements InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(texture, 0, 0);
+		batch.draw(texture, 0, 0, 800, 480);
+		
 		batch.end();
 		
 		camera.update();

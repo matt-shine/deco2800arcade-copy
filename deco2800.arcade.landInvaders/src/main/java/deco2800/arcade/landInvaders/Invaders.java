@@ -47,7 +47,7 @@ public class Invaders extends JFrame implements Runnable {
 		direction = 1;
 		moveDown = false;
 		r = new Robot();
-		background = new javax.swing.ImageIcon("image/bgimage.jpg").getImage();
+		background = new javax.swing.ImageIcon("src/main/resources/image/city.jpg").getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 

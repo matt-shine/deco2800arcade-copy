@@ -64,11 +64,8 @@ public class junglejump extends GameClient implements InputProcessor {
 		ArcadeSystem.goToGame("junglejump");
 	}
 
-<<<<<<< HEAD
-	public junglejump(Player player, NetworkClient networkclient) {
-=======
 	public junglejump(Player player, NetworkClient networkClient) {
->>>>>>> master
+
 		super(player, networkClient);
         this.networkClient = networkClient; //this is a bit of a hack
 		Gdx.input.setCatchBackKey(true);
@@ -117,6 +114,40 @@ public class junglejump extends GameClient implements InputProcessor {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		batch = new SpriteBatch();
 
+		//add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				
+			}
+			
+        });
 	}
 
 	@Override

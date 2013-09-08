@@ -15,7 +15,6 @@ public class tank implements KeyListener {
 	private boolean shotState = false;
 	private boolean Mleft=false;
 	private boolean Mright=false;
-	private boolean Fshot =false;
 /**
  * Tank initial starting point
  */
@@ -46,8 +45,12 @@ public class tank implements KeyListener {
 			Mright =true;
 		}
 		
-			if(Mleft == true && p_x > 10)p_x -= 7;
-			if(Mright == true&& p_x < 750)p_x += 7;
+		if(key == KeyEvent.VK_SPACE){
+			shotState = true;
+			
+		}
+		
+			
 		
 		
 		
@@ -58,20 +61,17 @@ public class tank implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-		if(key == KeyEvent.VK_SPACE){
-			shotState = true;
-			Fshot=true;
-		}
+		
 		if (key == KeyEvent.VK_LEFT) {
 			Mleft =false;
-			Fshot=false;
+			
 			
 		}
 		
 
 		if (key == KeyEvent.VK_RIGHT ) {
 			Mright=false;
-			Fshot=false;
+			
 		}
 
 	}
@@ -82,12 +82,12 @@ public class tank implements KeyListener {
 	}
 	
 	
-	public boolean moveLeft(){
-		return Mleft&&Fshot;
-	}
 	
-	public boolean moveRight(){
-		return Mright&&Fshot;
+	
+	public void moveTank(){
+		
+		if(Mleft == true && p_x > 10)p_x -= 7;
+		if(Mright == true&& p_x < 750)p_x += 7;
 	}
 	
 	public boolean shotCheck(){

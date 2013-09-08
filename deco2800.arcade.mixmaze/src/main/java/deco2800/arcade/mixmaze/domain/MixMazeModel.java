@@ -118,7 +118,7 @@ public class MixMazeModel {
 		state = GameState.RUNNING;
 
 		spawnerThread = new Thread(new Runnable() {
-			private final Random tileSelector = new Random();
+			private final Random tileSelector = new Random(2800);
 
 			@Override
 			public void run() {
@@ -202,6 +202,8 @@ public class MixMazeModel {
 	 * 				    range from 2 to 15.
 	 */
 	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxSeconds) {
+		Random spawner = new Random(3);
+
 		if(size < 5 || size > 10) {
 			throw new IllegalArgumentException("size must be between 5 and 10.");
 		}
@@ -226,7 +228,7 @@ public class MixMazeModel {
 						}
 					}
 				}
-				board[row][column] = new TileModel(column, row, adjWalls);
+				board[row][column] = new TileModel(column, row, adjWalls, spawner);
 			}
 		}
 

@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -90,7 +91,7 @@ final class GameScreen implements Screen {
 		userLabels[0] = new Label("Player 1", skin);
 		userLabels[1] = new Label("Player 2", skin);
 
-		timerLabel = new Label("timer", skin);
+		timerLabel = new Label("timer", skin, "timer-white");
 		tileTable = new Table();
 		gameArea = new Group();
 		endGameTable = new Table();
@@ -225,6 +226,12 @@ final class GameScreen implements Screen {
 				int min = countdown / 60;
 				int sec = countdown % 60;
 
+				if (countdown == 10) {
+					Label.LabelStyle style = timerLabel
+							.getStyle();
+					style.fontColor = RED;
+					timerLabel.setStyle(style);
+				}
 				timerLabel.setText(String.format("%s%d:%s%d",
 						(min < 10) ? "0" : "", min,
 						(sec < 10) ? "0" : "", sec));

@@ -49,6 +49,8 @@ public class Arcade extends JFrame{
 	 * Only exists to stop warning
 	 */
 	private static final long serialVersionUID = 3609353264826109097L;
+	
+	private static boolean multiplayerEnabled;
 
 	private NetworkClient client;
 
@@ -66,6 +68,7 @@ public class Arcade extends JFrame{
 
 	private CommunicationNetwork communicationNetwork;
 
+	
 	/**
 	 * ENTRY POINT
 	 * 
@@ -393,5 +396,13 @@ public class Arcade extends JFrame{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public boolean isMultiplayerEnabled() {
+		return multiplayerEnabled;
+	}
+	
+	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
+		Arcade.multiplayerEnabled = multiplayerEnabled;
 	}
 }

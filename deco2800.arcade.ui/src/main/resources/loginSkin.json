@@ -16,9 +16,12 @@
         error: { font: default, fontColor: red }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
-        default: { font: default, fontColor: white }
+        default: { font: default, fontColor: white, selection: selection, cursor: cursor, background: textfield }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-        default: { font: default, fontColor: white }
+        default: { font: default, fontColor: white, up: default-round, down: default-round-down }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+        default: { checkboxOn: check-on, checkboxOff: check-off, font: default, fontColor: white }
     }
 }

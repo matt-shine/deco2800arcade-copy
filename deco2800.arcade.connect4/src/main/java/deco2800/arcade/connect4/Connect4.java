@@ -34,6 +34,7 @@ public class Connect4 extends GameClient {
 	
 	private Disc cursorDisc;
 	private Table table;
+	private Buttons buttons;
 	private enum GameState {
 		READY,
 		INPROGRESS,
@@ -246,6 +247,12 @@ public class Connect4 extends GameClient {
 		table.bounds.x = SCREENWIDTH/2 - Table.WIDTH/2;
 		table.SetupDiscs();
 		
+		//Create the buttons and setup
+		buttons = new Buttons();
+		buttons.setX(Gdx.graphics.getWidth());
+		buttons.setY(Gdx.graphics.getHeight() - 20);
+		buttons.hide();
+		
 		//Create the cursor disc
 		cursorDisc = new Disc();
 		cursorDisc.setState( Disc.PLAYER1 );
@@ -354,6 +361,8 @@ public class Connect4 extends GameClient {
 	 */
 	@Override
 	public void render() {
+		int mouseX;
+		int mouseY;
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -368,6 +377,7 @@ public class Connect4 extends GameClient {
 	    renderCursorDisc();
 	    table.render(shapeRenderer);
 	    renderScreenText();
+	    buttons.render();
 	    
 	    // Respond to user input and move the ball depending on the game state
 	    switch(gameState) {
@@ -452,17 +462,27 @@ public class Connect4 extends GameClient {
 		    	}
 		    	break;
 		    case GAMEOVER: //The game has been won, wait to exit
-		    	statusMessage = "Click to quit, Enter to view replay";
-			    if (Gdx.input.isTouched()) {
-			   		gameOver();
-			   		ArcadeSystem.goToGame(ArcadeSystem.UI);
-			   	}
-			   	if (Gdx.input.isKeyPressed(Keys.ENTER)) {
-			   		//Replay the last played game.
-			    	reset();
-			    	gameState = GameState.REPLAY;
-			    	replayHandler.startPlayback();
-			    	isReplaying = true;
+		    	statusMessage = "Game Over!";
+		    	buttons.display();
+		    	mouseX = (int)getMouseX();
+		   		mouseY = (int)getMouseY();
+		   		buttons.checkHovered(mouseX, mouseY);
+			   	
+			   	if (Gdx.input.isTouched()) {
+			   		
+			   		if (buttons.checkButtonsPressed(mouseX, mouseY) == 1) {
+			   			//Quit button has been pressed
+			   			gameOver();
+				   		ArcadeSystem.goToGame(ArcadeSystem.UI);
+				   		buttons.hide();
+			   		} else if (buttons.checkButtonsPressed(mouseX, mouseY) == 2){
+			   			//Replay button has been pressed
+			   			reset();
+				    	gameState = GameState.REPLAY;
+				    	replayHandler.startPlayback();
+				    	isReplaying = true;
+				    	buttons.hide();
+			   		}
 			   	}
 			   	break;
 		    case REPLAY: //Replaying last game
@@ -504,6 +524,24 @@ public class Connect4 extends GameClient {
 	private void endGame(int winner) {
 		replayHandler.finishRecording();
 		gameState = GameState.GAMEOVER;
+	}
+	
+	private int getMouseX(){
+		int tempx = Gdx.input.getX();
+		return clickToScreenX(tempx);
+	}
+	
+	private int getMouseY(){
+		int tempy = Gdx.input.getY();
+		return clickToScreenY(tempy);
+	}
+	
+	private int clickToScreenX(int clickX) {
+		return clickX * SCREENWIDTH / Gdx.graphics.getWidth();
+	}
+
+	private int clickToScreenY(int clickY) {
+		return SCREENHEIGHT - (clickY * SCREENHEIGHT / Gdx.graphics.getHeight());
 	}
 	
 	/**

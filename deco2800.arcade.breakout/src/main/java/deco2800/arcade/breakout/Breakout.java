@@ -116,15 +116,6 @@ public class Breakout extends GameClient {
 
 		// access the file location of the sounds
 		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
-<<<<<<< HEAD
-		// Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.wav"));
-		// bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
-
-		// setting and playing the background music
-		// music.setLooping(true);
-		// music.setVolume(0.3f);
-		// music.play();
-=======
 		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.ogg"));
 		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
 
@@ -132,7 +123,6 @@ public class Breakout extends GameClient {
 		music.setLooping(true);
 		music.setVolume(0.3f);
 		music.play();
->>>>>>> 1b74204fa1d74e176c155243f8756694379c2594
 
 		// setting the ball and paddle
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
@@ -337,11 +327,6 @@ public class Breakout extends GameClient {
 		case INPROGRESS:
 			paddle.update(ball);
 			ball.move(Gdx.graphics.getDeltaTime());
-<<<<<<< HEAD
-=======
-			// TODO: if it hits left/right side, only bounceX. if it hits
-			// top/bottom, only bounceY
->>>>>>> 1b74204fa1d74e176c155243f8756694379c2594
 			for (Brick b : bricks) {
 				if (b.getState()) {
 					if (b.checkLeftCollision(ball.bounds)) {
@@ -386,12 +371,8 @@ public class Breakout extends GameClient {
 
 			if (ball.bounds.overlaps(paddle.paddleShape)
 					&& ball.getYVelocity() < 0) {
-<<<<<<< HEAD
-//				bump.play();
 				ball.updateVelocity(lastHitX, lastHitY, paddle);
-=======
 				bump.play();
->>>>>>> 1b74204fa1d74e176c155243f8756694379c2594
 				ball.bounceY();
 
 			}

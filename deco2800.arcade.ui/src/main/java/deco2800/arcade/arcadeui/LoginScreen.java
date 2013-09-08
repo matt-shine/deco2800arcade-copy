@@ -22,7 +22,6 @@ public class LoginScreen implements Screen {
 	
 	
 	public LoginScreen() {
-<<<<<<< HEAD
 
 	
 		// Move skin stuff to an overall class
@@ -31,13 +30,12 @@ public class LoginScreen implements Screen {
 
 
         skin = new Skin();
-=======
+
         // skin is the skin loaded from loginSkin.json
         // skin2 is for the skin created programatically
         // skin2 will eventually disappear
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin2 = new Skin();
->>>>>>> origin/master
         
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);

@@ -6,8 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class LocalPlayer extends Paddle {
 
-	public int KBPADDLESPEED = 550;
-	public static final int SCREENWIDTH = 1280;
+	public int paddleSpeed = 550;
 
 	/**
 	 * 
@@ -17,25 +16,36 @@ public class LocalPlayer extends Paddle {
 		super(position);
 	}
 
+<<<<<<< HEAD
 	public void update(Ball ball) {
+=======
+	/**
+	 * Retrieves the X and Y positions of the touched position. Based on whether
+	 * the position is on the left or right side of the screen the paddle will
+	 * move towards that side at a paddleSpeed. Alternatively the Paddle
+	 * operation will also look for LEFT and RIGHT arrows as well as A and D to
+	 * move the paddle.
+	 */
+	public void update(PongBall ball) {
+>>>>>>> 1b74204fa1d74e176c155243f8756694379c2594
 		super.update(ball);
 		if (Gdx.input.isTouched()) {
 			Vector2 touchPos = new Vector2();
 			touchPos.set(Gdx.input.getX(), Gdx.input.getY());
 
-			if (touchPos.x > SCREENWIDTH / 2)
-				movement(KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+			if (touchPos.x > Breakout.SCREENWIDTH / 2)
+				movement(paddleSpeed * Gdx.graphics.getDeltaTime());
 
-			if (touchPos.x < SCREENWIDTH / 2)
-				movement(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+			if (touchPos.x < Breakout.SCREENWIDTH / 2)
+				movement(-paddleSpeed * Gdx.graphics.getDeltaTime());
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)
 				|| Gdx.input.isKeyPressed(Keys.D))
-			movement(KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+			movement(paddleSpeed * Gdx.graphics.getDeltaTime());
 
 		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A))
-			movement(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());
+			movement(-paddleSpeed * Gdx.graphics.getDeltaTime());
 
 	}
 }

@@ -1,33 +1,35 @@
 package deco2800.arcade.guesstheword.GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Toolkit;
+import java.awt.Image;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.GroupLayout.ParallelGroup;
-import javax.swing.GroupLayout.SequentialGroup;
+
+import deco2800.arcade.guesstheword.gameplay.WordShuffler;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 
 
 public class GuessTheWordGUI extends JFrame {
 
-	
 	private JLabel gameTitle; 
 
 	public  JTextArea gameInfoTextArea;
 	
 	private JScrollPane gameInfoScp;
 
-	
+	private static JPanel gamepanel;
+
+	private JPanel mainPanel;
 	/**
 	 * Button for User Login
 	 * */
@@ -41,19 +43,30 @@ public class GuessTheWordGUI extends JFrame {
 	 * Button for Help
 	 * */
 	public JButton helpButton;
+	private Graphics g;
+	private Image backgroundImage = null;
+	
+	  public void paint( Graphics g ) { 
+	    super.paint(g);
+	    g.drawImage(backgroundImage, 0, 0, null);
+	  }
 	
 	public GuessTheWordGUI(){
 		
 		createMainGUI();
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new GridBagLayout());
 		
 		Container c = getContentPane();
+		
 		createGameTitleLabel(c);
 		createGameDetailArea(c);
 		createUserLoginButton(c);
 		createAchieveMentButton(c);
 		createHelpButton(c);
-
-		pack();
+		c.add(mainPanel);
+		addGamePanel(c);
+		//pack();
 	}
 	
 	private void createMainGUI(){
@@ -61,7 +74,7 @@ public class GuessTheWordGUI extends JFrame {
 		setLayout(new GridBagLayout());
 		setTitle("Guess the Word"); 
 		setResizable(false);
-		setBounds(300,100,800,600);
+		setBounds(300,100,700,600);
 		
 		//setSize(800, 600);
 		//setSize(screenSize.width, screenSize.height);
@@ -71,6 +84,17 @@ public class GuessTheWordGUI extends JFrame {
 		
 	}
 	
+	private void addGamePanel(Container c){
+		gamepanel = new GamePage();
+		gamepanel.setVisible(false);
+		c.add(gamepanel);
+	}
+	
+	public void openGamePanel(){
+		mainPanel.setVisible(false);
+		gamepanel.setPreferredSize(new java.awt.Dimension(700, 500)); 
+		gamepanel.setVisible(true);
+	}
 	private void createGameTitleLabel(Container c){
 
 		JPanel titlePanel = new JPanel();
@@ -82,7 +106,7 @@ public class GuessTheWordGUI extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		
-		c.add(titlePanel,gbc);
+		mainPanel.add(titlePanel,gbc);
 	}
 	
 	private void createGameDetailArea(Container c){
@@ -104,12 +128,12 @@ public class GuessTheWordGUI extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		
-		c.add(gameDetailPanel,gbc);
+		mainPanel.add(gameDetailPanel,gbc);
 	}
 	
 	private void createUserLoginButton(Container c){
 		JPanel loginPanel = new JPanel();
-		loginButton = new JButton("Login");
+		loginButton = new JButton("Play Game");
 		loginButton.setPreferredSize(new Dimension(200 , 50));
 		
 		loginPanel.add(loginButton);
@@ -118,7 +142,7 @@ public class GuessTheWordGUI extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 2;
 		
-		c.add(loginPanel,gbc);
+		mainPanel.add(loginPanel,gbc);
 	}
 	
 	private void createAchieveMentButton(Container c){
@@ -133,7 +157,7 @@ public class GuessTheWordGUI extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 3;
 		
-		c.add(achievePanel,gbc);
+		mainPanel.add(achievePanel,gbc);
 	}
 	
 	private void createHelpButton(Container c){
@@ -148,7 +172,7 @@ public class GuessTheWordGUI extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 4;
 		
-		c.add(helpPanel,gbc);
+		mainPanel.add(helpPanel,gbc);
 	}
 	
 	private String getGameInfo(){
@@ -190,8 +214,28 @@ public class GuessTheWordGUI extends JFrame {
 		helpButton.addActionListener(pl);
 	}
 	
+	
 	public static void main(String[] args){
-		new GuessTheWordGUI();
+
+	     try {
+	            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+	                if ("Nimbus".equals(info.getName())) {
+	                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+	                    break;
+	                }
+	            }
+	        } catch (ClassNotFoundException ex) {
+	            java.util.logging.Logger.getLogger(GuessTheWordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (InstantiationException ex) {
+	            java.util.logging.Logger.getLogger(GuessTheWordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (IllegalAccessException ex) {
+	            java.util.logging.Logger.getLogger(GuessTheWordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+	            java.util.logging.Logger.getLogger(GuessTheWordGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	        }
+		
+		new GuessTheWordController(new GuessTheWordGUI());
+		
 	}
 
 }

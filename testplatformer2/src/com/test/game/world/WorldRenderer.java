@@ -22,6 +22,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 
 import com.badlogic.gdx.utils.Array;
+import com.test.game.model.Block;
+import com.test.game.model.BlockMaker;
 import com.test.game.model.Bullet;
 import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
@@ -68,6 +70,7 @@ public class WorldRenderer {
 	private Enemy e;
 	private Array<CutsceneObject> csObjects;
 	private Array<MovablePlatform> mvPlatforms;
+	private Array<BlockMaker> blockMakers;
 	
 	//attempting to use maps
 	TiledMapRenderer tileMapRenderer;
@@ -124,6 +127,7 @@ public class WorldRenderer {
 		bullets = world.getBullets();
 		csObjects = world.getCutsceneObjects();
 		mvPlatforms = world.getMovablePlatforms();
+		blockMakers = world.getBlockMakers();
 		
 		//System.out.println("Sxy: " + ship.getPosition().x+","+ship.getPosition().y+" Cwh: "+cam.viewportWidth+","+cam.viewportHeight);
 		/*if(ship.getPosition().x > cam.viewportWidth/2 && ship.getPosition().y > cam.viewportHeight/2) {
@@ -203,6 +207,15 @@ public class WorldRenderer {
 		//batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y);
 		
 		//0,0 origin will be offcenter
+		
+		/* Draw BlockMaker Blocks */
+		for (BlockMaker bm: blockMakers) {
+			Array<Block> blocks = bm.getBlocks();
+			for (Block b: blocks) {
+				TextureRegion tr = b.getAtlas().findRegion("level", b.getAtlasIndex());
+				batch.draw(tr, b.getPosition().x, b.getPosition().y, 1f, 1f);
+			}
+		}
 		
 		/* Draw Moveable Platform */
 		for (MovablePlatform mvPlat: mvPlatforms) {

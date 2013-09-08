@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.test.game.TestGame2;
+import com.test.game.model.Block;
+import com.test.game.model.BlockMaker;
 import com.test.game.model.Bullet;
 import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
@@ -36,7 +38,7 @@ import com.test.game.model.Walker;
  *
  */
 public class World {
-	public static final float WORLD_WIDTH = 220f;
+	public static final float WORLD_WIDTH = 400f;
 	public static final float WORLD_HEIGHT = 59f;
 	
 	
@@ -51,7 +53,8 @@ public class World {
 	private Array<MovablePlatformSpawner> movablePlatformSpawners;
 	private Array<CutsceneObject> cutsceneObjects; 
 	private Array<MovablePlatform> movablePlatforms;
-	private OrthographicCamera cam;
+	private Array<BlockMaker> blockMakers;
+	private ParallaxCamera cam;
 	
 	private float rank;
 	private int curLevel;
@@ -61,12 +64,13 @@ public class World {
 	
 	private float time;
 	private boolean isPaused;
+	private int scenePosition;
 	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
 	//WorldRenderer wr;
 	
-	public World(TestGame2 game, int level, OrthographicCamera cam) {
+	public World(TestGame2 game, int level, ParallaxCamera cam) {
 		curLevel = level;
 		this.cam = cam;
 		
@@ -136,21 +140,29 @@ public class World {
 
 		if (levelScenes.isPlaying()) {
 			levelScenes.update(Gdx.graphics.getDeltaTime());
+			inputHandler.acceptInput();
 		} else {
-			float[] scenePos = levelScenes.getStartValues();
-			if (ship.getPosition().x > scenePos[0]) {
+			float[] sceneStartValues = levelScenes.getStartValues();
+			if (ship.getPosition().x > sceneStartValues[scenePosition]) {
 				inputHandler.cancelInput();
 				ship.getVelocity().x = 0;
-				Array<MovableEntity> temp = levelScenes.start();
-				for (MovableEntity ment: temp) {
-					if (ment.getClass() == CutsceneObject.class) {
-						cutsceneObjects.add( (CutsceneObject) ment );
-					} else if (ment.getClass() == MovablePlatform.class) {
-						movablePlatforms.add( (MovablePlatform) ment );
+				Array<Object> temp = levelScenes.start(rank);
+				for (Object obj: temp) {
+					if (obj.getClass() == CutsceneObject.class) {
+						cutsceneObjects.add( (CutsceneObject) obj );
+					} else if (obj.getClass() == MovablePlatform.class) {
+						movablePlatforms.add( (MovablePlatform) obj );
+					} else if (obj instanceof BlockMaker) {
+						System.out.println("adding blockmaker");
+						blockMakers.add( (BlockMaker) obj);
 					}
 				}
+				scenePosition++;
 			}
 		}
+		
+		updateBlockMakers();
+		
 		return;
 	}
 	
@@ -166,11 +178,11 @@ public class World {
 		Array<Object> objects = new Array<Object>();
 		if (level == 1) {
 			objects = Level1Objects.loadObjects(levelLayout.getMap());
-			levelScenes = new Level1Scenes(ship);
+			levelScenes = new Level1Scenes(ship, cam);
 			
 		} else {
 			objects = Level2Objects.loadObjects(levelLayout.getMap());
-			levelScenes = new Level2Scenes(ship);
+			levelScenes = new Level2Scenes(ship, cam);
 		}
 		
 		//Load objects to World
@@ -271,9 +283,15 @@ public class World {
 			}
 		}
 		
-		//add the cutsceneobjects or movable platforms to the collisions
+		//add the movable platforms and BlockMaker blocks to the collisions
 		for (MovablePlatform mvPlat: movablePlatforms) {
 			tiles.add(mvPlat.getCollisionRectangle());
+		}
+		for (BlockMaker blockMaker: blockMakers) {
+			Array<Block> bmb = blockMaker.getBlocks();
+			for (Block b: bmb) {
+				tiles.add(b.getBounds());
+			}
 		}
 
 		sRec = mve.getXProjectionRect();
@@ -478,33 +496,39 @@ public class World {
 	}
 
 	public void updateCamera() {
-		float boxX=2.5f;
-		//float boxY=6f;
-		//if(ship.getPosition().x - boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
-		//System.out.println("shipX="+ship.getPosition().x+" camviewwidth/2="+cam.viewportWidth/2+" camX="+cam.position.x);
-		if(ship.getPosition().x + boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
-			//if (ship.getVelocity().x > 0.5f) {
-			float lerp = 0.03f;
-			if (ship.isFacingRight()) {
-			//cam.position.x = ship.getPosition().x - boxX;
-				cam.position.x += (ship.getPosition().x + boxX- cam.position.x) * lerp;
-				
-			//} else if (ship.getVelocity().x < -0.5f){
-			} else if (!ship.isFacingRight()) {
-				cam.position.x += (ship.getPosition().x - boxX - cam.position.x) * lerp;
-			} else {
-				cam.position.x += (ship.getPosition().x - cam.position.x) * lerp;
+		//can now move this method and resetCamera() into ParralaxCamera class
+		if (cam.isFollowingShip()) {
+			
+			float boxX=2.5f;
+			//float boxY=6f;
+			//if(ship.getPosition().x - boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
+			//System.out.println("shipX="+ship.getPosition().x+" camviewwidth/2="+cam.viewportWidth/2+" camX="+cam.position.x);
+			if(ship.getPosition().x + boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
+				//if (ship.getVelocity().x > 0.5f) {
+				float lerp = 0.03f;
+				if (ship.isFacingRight()) {
+				//cam.position.x = ship.getPosition().x - boxX;
+					cam.position.x += (ship.getPosition().x + boxX- cam.position.x) * lerp;
+					
+				//} else if (ship.getVelocity().x < -0.5f){
+				} else if (!ship.isFacingRight()) {
+					cam.position.x += (ship.getPosition().x - boxX - cam.position.x) * lerp;
+				} else {
+					cam.position.x += (ship.getPosition().x - cam.position.x) * lerp;
+				}
 			}
+			if((ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) || 
+					(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT)) {
+			//if(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT) {
+				float lerp = 0.035f;
+				cam.position.y += (ship.getPosition().y - cam.position.y) * lerp;
+			} /*else {
+				cam.position.y = (cam.viewportHeight/2);
+				System.out.println("posY "+cam.position.y+" viewportHeight="+cam.viewportHeight);
+			}*/
+		} else {
+			
 		}
-		if((ship.getPosition().y > cam.viewportHeight/2 && ship.getPosition().y + cam.viewportHeight/2< WORLD_HEIGHT) || 
-				(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT)) {
-		//if(cam.position.y > cam.viewportHeight/2 && cam.position.y + cam.viewportHeight/2< WORLD_HEIGHT) {
-			float lerp = 0.035f;
-			cam.position.y += (ship.getPosition().y - cam.position.y) * lerp;
-		} /*else {
-			cam.position.y = (cam.viewportHeight/2);
-			System.out.println("posY "+cam.position.y+" viewportHeight="+cam.viewportHeight);
-		}*/
 	}
 	
 	public void resetCamera() {
@@ -523,6 +547,12 @@ public class World {
 		}
 			
 		
+	}
+	
+	public void updateBlockMakers() {
+		for (BlockMaker bm: blockMakers) {
+			bm.update(Gdx.graphics.getDeltaTime(), cam);
+		}
 	}
 	
 	public boolean isPaused() {
@@ -565,6 +595,10 @@ public class World {
 	public Array<MovablePlatform> getMovablePlatforms() {
 		return movablePlatforms;
 	}
+	
+	public Array<BlockMaker> getBlockMakers() {
+		return blockMakers;
+	}
 
 	
 	
@@ -583,8 +617,8 @@ public class World {
 	/* ----- Setter methods ----- */
 	public void init() {
 		firstUpdate = true;
-		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Ship(new Vector2(20f, 6));
+		ship = new Ship(new Vector2(220f, 60));
+		//ship = new Ship(new Vector2(20f, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();
@@ -593,8 +627,10 @@ public class World {
 		randomSpawners = new Array<RandomizedEnemySpawner>();
 		cutsceneObjects = new Array<CutsceneObject>();
 		movablePlatforms = new Array<MovablePlatform>();
+		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
 		rank = 20;
+		scenePosition = 0;
 		
 		isPaused = false;
 		
@@ -615,6 +651,7 @@ public class World {
 		movablePlatforms = null;
 		levelLayout = null;
 		levelScenes = null;
+		cam.setFollowShip(true);
 		
 		
 		init();

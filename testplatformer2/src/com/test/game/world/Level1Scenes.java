@@ -25,13 +25,13 @@ public class Level1Scenes extends LevelScenes{
 	private float count = 0f;
 	private int keyframe = 0;
 	//private float[] startPositions;
-	private boolean isPlaying = false;
+	//private boolean isPlaying = false;
 	//private TweenManager manager;
 	
 	private int playState;
 	
-	public Level1Scenes (Ship ship) {
-		super(ship);
+	public Level1Scenes (Ship ship, ParallaxCamera cam) {
+		super(ship, cam);
 		copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
@@ -41,7 +41,7 @@ public class Level1Scenes extends LevelScenes{
 		
 	}
 	
-	public Array<MovableEntity> start() {
+	public Array<Object> start(float rank) {
 		playState=0;
 		copter = new MovablePlatform(copterTex, new Vector2(50, 1), 4f, 2f, new Vector2(52f,10f), 2f, false, 0f);
 		//copter.setCollisionRectangle(0,0,4f,1f);
@@ -62,7 +62,7 @@ public class Level1Scenes extends LevelScenes{
 		Tween.to(copter, PartTween.POSITION,1.5f).target(52f,10f).ease(
 				TweenEquations.easeNone).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 		*/
-		Array<MovableEntity> out = new Array<MovableEntity>();
+		Array<Object> out = new Array<Object>();
 		out.add(copter);
 		return out;
 	}

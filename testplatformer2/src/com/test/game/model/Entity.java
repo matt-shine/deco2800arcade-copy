@@ -17,10 +17,15 @@ public abstract class Entity {
 		bounds = new Rectangle(pos.x, pos.y, width, height);
 	}
 	public Rectangle getBounds() {
-		return bounds;
+		//return bounds;
+		return new Rectangle(position.x, position.y, width, height);
 	}
 	public void setBounds(Rectangle bounds) {
 		this.bounds = bounds;
+		position.x = bounds.x;
+		position.y = bounds.y;
+		width = bounds.width;
+		height = bounds.height;
 	}
 	
 	public void setPosition(Vector2 pos) {

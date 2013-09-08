@@ -1,7 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 /**
- * The interface for an object to effect a grid, required to be unique when instantiated.
+ * The interface for an object that can be created on a grid, required to be unique when instantiated.
  * @author hadronn
  *
  */
@@ -32,5 +32,8 @@ public interface GridObject {
 	
 	//All grid objects must have an opaqueness value for drawing.
 	public void getOpaqueness();
+	
+	//Returns the direction the object is facing, for determining sprite to use.
+	public Direction facing();
 	
 }

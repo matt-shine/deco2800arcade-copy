@@ -1,10 +1,10 @@
 package deco2800.arcade.towerdefence;
 
 /**
- * The interface for the creation of a ship.
+ * The interface for the creation of a player ship.
  * For single player games one ship per player only.
- * For co-op play one ship only and n(2?) players.
- * For head-to-head m ships, m players.
+ * For cooperative play one ship only and n(starting with 2) players.
+ * For head-to-head m ships, m players(starting with 2).
  * @author hadronn
  *
  */
@@ -31,5 +31,4 @@ public interface Ship {
 	
 	//Jump forward to wave n, useful for save/load.
 	public void setWave(int n);
-
 }

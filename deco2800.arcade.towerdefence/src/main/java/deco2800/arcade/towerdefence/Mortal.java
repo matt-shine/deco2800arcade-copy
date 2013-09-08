@@ -1,10 +1,9 @@
 package deco2800.arcade.towerdefence;
 
 /**
- * 
  * The interface for mortal objects.
  * Will be the majority of interesting objects.
- * Can die and have curious attributes such as health.
+ * Can die through game mechanics and have curious attributes such as health.
  * @author hadronn
  *
  */

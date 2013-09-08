@@ -9,9 +9,13 @@ import java.util.UUID;
  */
 public class Grid {
 	//fields
+	//The unique id of the Grid.
 	private final UUID id;
+	//The grid's name, for making human recognisable variations if necessary.
 	private String name;
+	//The grid's max width.
 	private int width = 0;
+	//The grid's max depth.
 	private int depth = 0;
 	
 	//constructor

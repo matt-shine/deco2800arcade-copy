@@ -76,7 +76,19 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static final int SCREENWIDTH = 800;
 	float butX;
 	float butY;
+	float monkeyX;
+	float monkeyY, monkeyYoriginal;
+	boolean movingLeft, movingRight;
+	int monkeyRun = 0;
+	boolean leap = true;
+	boolean sit = false;
+	boolean jumping = false;
+	float velocity = 5.0f;
+	boolean correct = false;
+	
 	Texture texture;
+	Texture monkeySit, monkeyRun1, monkeyRun2;
+	Texture gameBackground;
 	ShapeRenderer shapeRenderer;
 
 	Music themeMusic;
@@ -95,6 +107,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		butX = 488f;
 		butY = 242f;
+		monkeyX = 0f;
+		monkeyY = 0f;
+		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
 			File file = new File("junglejumpassets/soundtrack.wav");
@@ -140,6 +155,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		super.create();
 		System.out.println(System.getProperty("user.dir"));
 		texture = new Texture(("junglejumpassets/mainscreen.png"));
+		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));
+		monkeyRun1 = new Texture(("junglejumpassets/monkeyRun1.png"));
+		monkeyRun2 = new Texture(("junglejumpassets/monkeyRun2.png"));
+		gameBackground = new Texture(("junglejumpassets/gameBackground.png"));
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
@@ -215,6 +234,56 @@ public class junglejump extends GameClient implements InputProcessor {
 			super.render();
 			break;
 		case INPROGRESS:
+			Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.setProjectionMatrix(camera.combined);
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			if (movingLeft) {
+				monkeyX-=2;
+				monkeyRun--;
+			} if (movingRight) {
+				monkeyX+=2;
+				monkeyRun++;
+			} if (jumping) {
+				velocity = (velocity - 9.8f/100f);			
+				if (monkeyY > monkeyYoriginal) {
+					monkeyY += velocity;
+					if (correct) {
+						monkeyYoriginal += 1.3f;
+						correct = false;
+					}
+				} else {
+					jumping = false;
+				}
+			}
+			batch.begin();
+			batch.draw(gameBackground, 0, 0, 800, 480);
+			if ((!movingLeft && !movingRight) || (movingLeft && movingRight)) {
+				batch.draw(monkeySit, monkeyX, monkeyY, 50, 50);
+			} else if (monkeyRun % 10 == 0) {
+				if (leap && sit) {
+					sit = false;
+				} else if (leap && !sit) {
+					//leap = true;
+					leap = false;
+				} else if (!leap && sit) {
+					sit = false;
+				} else if (!leap && !sit) {
+					sit = true;
+					leap = true;
+				} else {
+					sit = true;
+				}
+			} else if (sit) {
+				batch.draw(monkeySit, monkeyX, monkeyY, 50, 50);
+			} else if (leap && !sit) {
+				batch.draw(monkeyRun2, monkeyX, monkeyY, 50, 50);
+			} else if (!leap && !sit){
+				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
+			}
+			batch.end();
+			camera.update();
+			super.render();
 			break;
 		case GAMEOVER:
 			break;
@@ -290,6 +359,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.LEFT) {
+			movingLeft = true;
 			// Move left
 		} if (keycode == Keys.ENTER) {
 			if (butY == QUIT) {
@@ -299,10 +369,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 		} if (keycode == Keys.RIGHT) {
 			// Move right
+			movingRight = true;
 		} if (keycode == Keys.SPACE) {
-//			System.out.println("SPACE DOWN");
-//			butX += 10f;
 			// Jump
+			velocity = 5.0f;
+			monkeyYoriginal = monkeyY - 1f;
+			correct = true;
+			jumping = true;
+			
 		} if (keycode == Keys.UP) {
 			if (butY < NEW_GAME) {
 				menuSound.start();
@@ -330,8 +404,10 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public boolean keyUp(int keycode) {
 		if (keycode == Keys.LEFT) {
+			movingLeft = false;
 			// Move left STOP
 		} if (keycode == Keys.RIGHT) {
+			movingRight = false;
 			// Move right STOP
 		} if (keycode == Keys.SPACE) {
 //			System.out.println("SPACE UP");

@@ -80,7 +80,7 @@ public class SettingsScreen implements Screen {
 		this.skin = game.skin;
 		this.stage = new Stage();
 		playButton = new TextButton("Play", skin);	
-		playButton.pad(20);
+		//playButton.pad(20);
 		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
 		
 		list = new List(new String [] {"Beginner", "Intermediate","Advanced"}, skin);
@@ -128,17 +128,19 @@ public class SettingsScreen implements Screen {
 		sizeLabel.setFontScale(2);		
 		settingsPanel.add(settingsLabel).padTop(70).padBottom(100).colspan(4);
 		settingsPanel.row();
-		settingsPanel.add(difficultyLabel).colspan(4);
-		settingsPanel.row();
-		settingsPanel.add(list).colspan(4);
-		settingsPanel.row();
+		
 		settingsPanel.add(sizeLabel).padTop(30).colspan(4);
 		settingsPanel.row();
 		settingsPanel.add(new Label("#of rows: ", skin)).right().expandX();
 		settingsPanel.add(rows).left().expandX();	
 		settingsPanel.row();
-		settingsPanel.add(new Label("# of columns:  ", skin)).right().expandX();
-		settingsPanel.add(columns).left().expandX();
+		settingsPanel.add(difficultyLabel).colspan(4);
+		settingsPanel.row();
+		settingsPanel.add(list).colspan(4);
+		settingsPanel.row();
+		settingsPanel.add(playButton).colspan(3);
+		
+		
 		
 		
 		
@@ -152,7 +154,7 @@ public class SettingsScreen implements Screen {
 	}
 
 	private void setTableLayout() {
-		float celHeight = Gdx.graphics.getHeight()-100;
+		float celHeight = Gdx.graphics.getHeight();
 		float cellWidth = Gdx.graphics.getWidth()/3;
 		Drawable background = skin.getDrawable("background");
 		rootTable.setFillParent(true);
@@ -162,10 +164,8 @@ public class SettingsScreen implements Screen {
 		rootTable.add(settingsPanel).width(cellWidth).height(celHeight);
 		rootTable.add(playerOnePanel).width(cellWidth).height(celHeight);	
 		rootTable.add(playerTwoPanel).width(cellWidth).height(celHeight);
-		rootTable.row();
-		rootTable.add(buttonPanel).expand().colspan(3);
 		
-		
+				
 		settingsPanel.top().columnDefaults(4);
 		playerOnePanel.top().columnDefaults(4);
 		playerTwoPanel.top().columnDefaults(4);
@@ -202,7 +202,7 @@ public class SettingsScreen implements Screen {
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
 		stage.draw();		
-		//Table.drawDebug(stage);
+		Table.drawDebug(stage);
 	}
 
 	@Override

@@ -318,7 +318,6 @@ public class Arcade extends JFrame {
 	 * @return
 	 */
 	public Set<String> findPlayableIds() {
-
 		Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
 				getGameMap());
 

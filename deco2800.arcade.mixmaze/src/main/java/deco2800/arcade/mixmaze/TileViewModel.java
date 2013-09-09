@@ -78,12 +78,6 @@ public class TileViewModel extends Group {
 		renderer.filledRect(0, 0, tileSize, tileSize);
 		renderer.end();
 
-		/* draw frame */
-		renderer.begin(Rectangle);
-		renderer.setColor(0f, 0f, 0f, 1f);
-		renderer.rect(0, 0, tileSize, tileSize);
-		renderer.end();
-
 		/* draw wall */
 		renderer.begin(FilledRectangle);
 		renderer.setColor(1f, 1f, 0f, 1f);
@@ -95,6 +89,15 @@ public class TileViewModel extends Group {
 			renderer.filledRect(124f, 0, 4f, 128f);
 		if (model.getWall(SOUTH).isBuilt())
 			renderer.filledRect(0, 0, 128f, 4f);
+		renderer.end();
+
+		/* draw dots */
+		renderer.begin(FilledRectangle);
+		renderer.setColor(0f, 0f, 0f, 1f);
+		renderer.filledRect(0, 0, 4f, 4f);
+		renderer.filledRect(0, 124f, 4f, 4f);
+		renderer.filledRect(124f, 124f, 4f, 4f);
+		renderer.filledRect(124f, 0, 4f, 4f);
 		renderer.end();
 
 		renderer.identity();

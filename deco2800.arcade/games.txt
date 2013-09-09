@@ -12,7 +12,8 @@ breakout
 deerforest
 mixmaze
 chess
+landInvaders
 junglejump
 burningskies
 checkers
-landInvaders
+connect4

@@ -24,6 +24,7 @@ public class NetworkPaddle extends Paddle {
 	public NetworkPaddle(Vector2 position, NetworkClient client) {
 		super(position);
 		throw new UnsupportedOperationException();
+		
 		//client.addListener(new NetworkPaddleListener());
 	}
 

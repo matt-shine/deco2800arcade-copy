@@ -15,10 +15,10 @@ public class WordShuffler {
 			 char addWord = (char)(r.nextInt(26) + 'A');
 			 s += addWord;
 		  }
-		 
+		  
 		//split string into string array
 		 String[] solutionArray = s.split("");
-		 
+		 //List<String> solutionArray = Arrays.asList(Arrays.copyOfRange(solutionArray, 1, solutionArray.length))
 		 //call shuffleArray method
 		 shuffleWord(solutionArray);
 		 

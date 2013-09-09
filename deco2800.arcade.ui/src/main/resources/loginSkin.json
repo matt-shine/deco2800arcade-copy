@@ -1,6 +1,7 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        default: { file: CenturyGothic_18.fnt },
+        alt: { file: CenturyGothic_18.fnt },
+        default: { file: Manteka_18.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
         red:    { a: 1, r: 1, g: 0, b: 0 },

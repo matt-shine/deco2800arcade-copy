@@ -23,11 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import java.util.HashMap;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
-import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
-
+import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
 import static com.badlogic.gdx.Input.Keys.*;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 /**
  * PlayerViewModel draws the character of the player.
@@ -42,59 +39,6 @@ final class PlayerViewModel extends Actor {
 	private final TextureRegion[] region;
 	private final KeyManager km;
 	private final int id;
-
-	/**
-	 * Handles movement input.
-	 */
-	private class PlayerInputListener extends InputListener {
-
-		@Override
-		public boolean keyDown(InputEvent event, int keycode) {
-			/*
-			Gdx.app.debug(LOG, "player " + id);
-			Gdx.app.debug(LOG, keycode + " pressed");
-			Gdx.app.debug(LOG, km.get(keycode) + " mapped");
-			*/
-
-			switch (km.get(keycode)) {
-			case LEFT:
-				gameModel.movePlayer(model, WEST);
-				break;
-			case RIGHT:
-				gameModel.movePlayer(model, EAST);
-				break;
-			case UP:
-				gameModel.movePlayer(model, NORTH);
-				break;
-			case DOWN:
-				gameModel.movePlayer(model, SOUTH);
-				break;
-			case NUM_5:
-				Gdx.app.debug(LOG, "changing action");
-				model.switchAction();
-				break;
-			case NUM_6:
-				/*
-				Gdx.app.debug(LOG, "invoking action");
-				Gdx.app.debug(LOG, "player: " + model.getX()
-						+ "\t" + model.getY());
-				*/
-				TileModel tile = gameModel.getBoardTile(
-						model.getX(), model.getY());
-				model.useAction(tile);
-				break;
-			default:
-				return false;	// event not handled
-			}
-			/*
-			Gdx.app.debug(LOG, "directon: " + model.getDirection());
-			Gdx.app.debug(LOG, "pos: " + model.getX() + "\t"
-					+ model.getY());
-			*/
-			event.cancel();
-			return true;
-		}
-	}
 
 	/**
 	 * Constructor
@@ -164,7 +108,7 @@ final class PlayerViewModel extends Actor {
 		}
 	}
 
-	private boolean hasItem(ItemModel.Type type) {
+	private boolean hasItem(ItemModel.ItemType type) {
 		ItemModel item = null;
 
 		switch (type) {
@@ -209,6 +153,16 @@ final class PlayerViewModel extends Actor {
 	}
 
 	/**
+	 * Returns the active action of this player.
+	 *
+	 * @return one of <code>USE_BRICK</code>, <code>USE_PICK</code>, or
+	 * 	   <code>USE_TNT</code>
+	 */
+	public PlayerAction getAction() {
+		return model.getPlayerAction();
+	}
+
+	/**
 	 * Returns the name of the active action of this player.
 	 *
 	 * @return a String representing the active action
@@ -225,6 +179,43 @@ final class PlayerViewModel extends Actor {
 			return "using TNT";
 		default:
 			return "unknown";
+		}
+	}
+
+	/*
+	 * Handles movement input.
+	 */
+	private class PlayerInputListener extends InputListener {
+
+		@Override
+		public boolean keyDown(InputEvent event, int keycode) {
+			switch (km.get(keycode)) {
+			case LEFT:
+				gameModel.movePlayer(model, WEST);
+				break;
+			case RIGHT:
+				gameModel.movePlayer(model, EAST);
+				break;
+			case UP:
+				gameModel.movePlayer(model, NORTH);
+				break;
+			case DOWN:
+				gameModel.movePlayer(model, SOUTH);
+				break;
+			case NUM_5:
+				model.switchAction();
+				break;
+			case NUM_6:
+				TileModel tile = gameModel.getBoardTile(
+						model.getX(), model.getY());
+				model.useAction(tile);
+				break;
+			default:
+				return false;	// event not handled
+			}
+
+			event.cancel();
+			return true;
 		}
 	}
 

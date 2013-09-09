@@ -87,7 +87,7 @@ public class Arcade extends JFrame {
 	 * 
 	 * @param args
 	 */
-	private Arcade(String[] args) {
+	public Arcade(String[] args) {
 		
 		this.width = ARCADE_WIDTH;
 		this.height = ARCADE_HEIGHT;
@@ -115,7 +115,7 @@ public class Arcade extends JFrame {
 	}
 
 	/**
-	 * Completely exits arcade. If successful, will return 0.
+	 * Completely exits arcade. The status code is always set to 0.
 	 */
     public void arcadeExit() {
         removeCanvas();
@@ -326,8 +326,7 @@ public class Arcade extends JFrame {
 				.entrySet().iterator();
 		while (it.hasNext()) {
 
-			Map.Entry<String, Class<? extends GameClient>> pair = (Map.Entry<String, Class<? extends GameClient>>) it
-					.next();  // Note:  I (abbjohn) am getting a redundant type cast warning here
+			Map.Entry<String, Class<? extends GameClient>> pair = it.next();
 
 			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
 				it.remove();

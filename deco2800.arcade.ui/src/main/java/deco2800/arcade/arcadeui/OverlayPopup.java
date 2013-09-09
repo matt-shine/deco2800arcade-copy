@@ -21,7 +21,7 @@ public class OverlayPopup extends Actor {
 	
 	private int state = 0;
 	
-	private static float MINSIZE = 140;
+	private static float MINSIZE = 90;
 	private static float YPOS_GOAL = 40;
 	private static float YPOS_START = -MINSIZE;
 	private static float EXPAND_GOAL = 400;
@@ -45,7 +45,7 @@ public class OverlayPopup extends Actor {
 		font = new BitmapFont(false);
 		this.overlay = overlay;
 		
-		texture = new NinePatch(new Texture(Gdx.files.internal("popupbg.png")), 60, 60, 60, 60);
+		texture = new NinePatch(new Texture(Gdx.files.internal("popupbg.png")), 30, 30, 30, 30);
 		
 		ypos = YPOS_START;
 		

@@ -16,9 +16,7 @@ landInvaders
 junglejump
 burningskies
 checkers
-<<<<<<< HEAD
 landInvaders 
-=======
 pacman
 connect4
 

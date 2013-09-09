@@ -27,7 +27,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        Label errorLabel = new Label("Placeholder Error Message", skin, "error");
+        final Label errorLabel = new Label("Placeholder Error Message", skin, "error");
         final TextField usernameText = new TextField("", skin);
         usernameText.setMessageText("Username");
         final TextField passwordText = new TextField("", skin);
@@ -58,7 +58,14 @@ public class LoginScreen implements Screen {
 
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                ArcadeSystem.login(usernameText.getText());
+                if (usernameText.getText().equals("")){
+                    // no username entered, throw error
+                    errorLabel.setText("No Username Supplied");
+                }
+                else {
+                    // username supplied, try to login
+                    ArcadeSystem.login(usernameText.getText());
+                }
             }
         });
         registerButton.addListener(new ChangeListener() {

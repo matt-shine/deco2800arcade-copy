@@ -27,21 +27,17 @@ public class ForumUi {
 	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
 	      
+	      //Header
 	      JLabel lblArcadeForum = new JLabel("ARCADE FORUM");
 	      lblArcadeForum.setForeground(Color.WHITE);
 	      lblArcadeForum.setFont(new Font("Tahoma", Font.BOLD, 16));
 	      lblArcadeForum.setBounds(12, 13, 141, 28);
-	      f.getContentPane().add(lblArcadeForum);
-	      
-	      JButton btnSignUp = new JButton("SIGN UP");
-	      btnSignUp.setBounds(905, 16, 89, 25);
-	      f.getContentPane().add(btnSignUp);
-	      
+	      f.getContentPane().add(lblArcadeForum); 
 	      JButton btnLogIn = new JButton("LOG IN");
-	   	      
-	      btnLogIn.setBounds(796, 16, 97, 25);
-	      f.getContentPane().add(btnLogIn);
-	      
+	      btnLogIn.setBounds(897, 16, 97, 25);
+	      f.getContentPane().add(btnLogIn);	      
+
+	      //Menu bar 
 	      JLabel lblHome = new JLabel("HOME");
 	      lblHome.setFont(new Font("Cambria", Font.BOLD, 15));
 	      lblHome.setBounds(26, 76, 56, 16);
@@ -61,6 +57,7 @@ public class ForumUi {
 	      f.getContentPane().add(textField);
 	      textField.setColumns(10);
 	      
+	      //Body
 	      JTextArea textArea = new JTextArea();
 	      textArea.setBackground(new Color(192, 192, 192));
 	      textArea.setBounds(776, 152, 218, 220);

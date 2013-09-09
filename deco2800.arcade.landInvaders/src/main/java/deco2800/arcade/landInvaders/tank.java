@@ -26,7 +26,7 @@ public class tank implements KeyListener {
 	// testing
 	public void drawTank(Graphics g, JFrame p) {
 		g.setColor(Color.green);
-		im = new javax.swing.ImageIcon("image/Tank.png").getImage();
+		im = new javax.swing.ImageIcon(this.getClass().getResource("/image/tank.png")).getImage();
 		g.drawImage(im,p_x, p_y,40,80,p);
 
 	}
@@ -45,12 +45,7 @@ public class tank implements KeyListener {
 			Mright =true;
 		}
 		
-		if(key == KeyEvent.VK_SPACE){
-			shotState = true;
-			
-		}
 		
-			
 		
 		
 		
@@ -61,7 +56,10 @@ public class tank implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-		
+		if(key == KeyEvent.VK_SPACE){
+			shotState = true;
+			
+		}
 		if (key == KeyEvent.VK_LEFT) {
 			Mleft =false;
 			
@@ -78,14 +76,13 @@ public class tank implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-
+		
 	}
 	
 	
 	
 	
-	public void moveTank(){
-		
+	public void tankMove(){
 		if(Mleft == true && p_x > 10)p_x -= 7;
 		if(Mright == true&& p_x < 750)p_x += 7;
 	}

@@ -19,6 +19,7 @@ public class Invaders extends JFrame implements Runnable {
 	private tank tank;
 	private int move;
 	private int direction;
+	private Robot r;
 	private int shotsNmb;
 	private int level;
 	private blockWall blockWall;
@@ -36,7 +37,7 @@ public class Invaders extends JFrame implements Runnable {
 		WallList.add(new blockWall(380, 350, 4, 8));
 		WallList.add(new blockWall(580, 350, 4, 8));
 		shotsNmb = 6;
-		level = 3;
+		level = 1;
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
 		enemyG = new enemyGroup(3, 6);
@@ -45,7 +46,8 @@ public class Invaders extends JFrame implements Runnable {
 		move = 0;
 		direction = 1;
 		moveDown = false;
-		background = new javax.swing.ImageIcon("src/main/resources/city.jpg").getImage();
+		
+		background = new javax.swing.ImageIcon(this.getClass().getResource("/image/city.jpg")).getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 
@@ -79,9 +81,9 @@ public class Invaders extends JFrame implements Runnable {
 
 		}
 		for (int e = 0; e < WallList.size(); e++) {
-			WallList.get(e).drawWall(mains);
+			WallList.get(e).drawWall(mains,this);
 		}
-		enemyG.drawGroup(mains);
+		enemyG.drawGroup(mains, this);
 		tank.drawTank(mains, this);
 		g.drawImage(bg, 0, 0, this);
 
@@ -204,7 +206,7 @@ public class Invaders extends JFrame implements Runnable {
 
 	}
 
-	public static void main(String[] args)  {
+	public static void main(String[] args) throws Exception {
 		Invaders invader = new Invaders();
 	}
 
@@ -212,8 +214,7 @@ public class Invaders extends JFrame implements Runnable {
 	public void run() {
 		int count = 0;
 		while (true) {
-			tank.moveTank();
-
+			tank.tankMove();
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {

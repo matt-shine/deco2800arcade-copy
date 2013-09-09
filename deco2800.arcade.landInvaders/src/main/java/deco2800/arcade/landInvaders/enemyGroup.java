@@ -3,8 +3,6 @@ package deco2800.arcade.landInvaders;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-
 public class enemyGroup {
 
 	private int rowNum;
@@ -29,7 +27,7 @@ public class enemyGroup {
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(100 + i * 100, 100 + n * 40, 30, 30,"/image/flies.png");
+				temp[i] = new enemy(100 + i * 100, 100 + n * 40, 30, 30);
 
 			}
 			lists[n] = temp;
@@ -37,12 +35,12 @@ public class enemyGroup {
 
 	}
 
-	public void drawGroup(Graphics g,JFrame p) {
+	public void drawGroup(Graphics g) {
 
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
 				if (lists[n][i] != null) {
-					lists[n][i].drawEnemy(g,p);
+					lists[n][i].drawEnemy(g);
 				}
 
 			}

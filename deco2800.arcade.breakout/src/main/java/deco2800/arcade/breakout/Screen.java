@@ -43,8 +43,8 @@ public final class Screen extends GameClient {
 		super.create();
 
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		splashScreen = new SplashScreen(this);		
-		setScreen(splashScreen);
+		//splashScreen = new SplashScreen(this);		
+		//setScreen(splashScreen);
 
 		/*Gdx.app.debug(LOG, "Default key bindings");
 		Gdx.app.debug(LOG, "Player 1: W, S, A, D to move, "

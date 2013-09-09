@@ -15,9 +15,9 @@ public class MultiplayerTest {
 		newRequest.requestType = MultiGameRequestType.NEW;
 		newRequest.gameId = "1";
 		newRequest.playerID = 1;
-		System.out.println("sending");
+		System.out.println("Sending new multiplayer request");
 		client.sendNetworkObject(newRequest);
-		System.out.println("Sent");
+		System.out.println("Sent new multiplayer request");
 		
 		
 	}

@@ -100,7 +100,6 @@ public class World {
 		for (MovablePlatform mp: movablePlatforms) {
 			mp.update(ship);
 		}
-		
 		for (int i = -1; i < enemies.size + bullets.size; i++) {
 			MovableEntity mve;
 			if (i == -1) {
@@ -113,12 +112,17 @@ public class World {
 			if (mve.isSolid()) {
 				checkTileCollision(mve);
 			}
+			
 		}
 		
 		//System.out.println("State after tiles = "+ship.getState());
-		checkDamage();
+		
 
 		handleEnemies();
+		
+		if (!levelScenes.isPlaying()) {
+			checkDamage();
+		}
 
 		if (firstUpdate) {
 			resetCamera();
@@ -155,6 +159,8 @@ public class World {
 					} else if (obj instanceof BlockMaker) {
 						System.out.println("adding blockmaker");
 						blockMakers.add( (BlockMaker) obj);
+					} else if (obj instanceof Enemy) {
+						enemies.add( (Enemy) obj);
 					}
 				}
 				scenePosition++;
@@ -617,8 +623,8 @@ public class World {
 	/* ----- Setter methods ----- */
 	public void init() {
 		firstUpdate = true;
-		ship = new Ship(new Vector2(220f, 60));
-		//ship = new Ship(new Vector2(20f, 6));
+		//ship = new Ship(new Vector2(220f, 60));
+		ship = new Ship(new Vector2(20f, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

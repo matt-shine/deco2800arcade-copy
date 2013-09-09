@@ -27,6 +27,7 @@ import com.test.game.model.BlockMaker;
 import com.test.game.model.Bullet;
 import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
+import com.test.game.model.EnemySpiderBoss;
 import com.test.game.model.Follower;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
@@ -247,6 +248,10 @@ public class WorldRenderer {
 				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
+			} else if (e.getClass() == EnemySpiderBoss.class) {
+				batch.draw(example, e.getPosition().x, e.getPosition().y, 0,
+						0, e.getWidth(), e.getHeight(), 1, 1, 0, 0, 0,
+						256, 256, true, false);
 			} else if (e.getClass() == Walker.class){
 				//draw the parts in order
 				int i=7; 
@@ -306,9 +311,7 @@ public class WorldRenderer {
 					csObj.getTexture().getHeight(), false, false);
 		}
 		
-		batch.draw(example, 3, 5, 0,
-				0, 3, 3, 2, 2, 0, 0, 0,
-				256, 256, false, false);
+		
 		
 
 		batch.end();

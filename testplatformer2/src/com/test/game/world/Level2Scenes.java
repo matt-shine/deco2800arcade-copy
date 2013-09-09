@@ -6,8 +6,10 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.test.game.model.BlockMakerSpiderBoss;
+import com.test.game.model.EnemySpiderBoss;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.PartTween;
 import com.test.game.model.Ship;
@@ -18,6 +20,9 @@ public class Level2Scenes extends LevelScenes {
 	//private ParallaxCamera cam;
 	private TweenManager manager;
 	BlockMakerSpiderBoss blockMaker;
+	private EnemySpiderBoss boss;
+	
+	private float targetPos;
 	
 	public Level2Scenes(Ship ship, ParallaxCamera cam) {
 		super(ship, cam);
@@ -51,6 +56,10 @@ public class Level2Scenes extends LevelScenes {
 		blockMaker = new BlockMakerSpiderBoss(rank, movingEntities);
 		output.add(blockMaker);
 		blockMaker.setActive(true);
+		boss = new EnemySpiderBoss(new Vector2(319f - cam.viewportWidth/2 - EnemySpiderBoss.WIDTH, 5f), rank, cam);
+		output.add(boss);
+		
+		targetPos = 0f;
 		return output;
 	}
 
@@ -58,6 +67,10 @@ public class Level2Scenes extends LevelScenes {
 	public void update(float delta) {
 		manager.update(delta);
 		ship.getVelocity().x = Ship.SPEED / 1.5f;
+		
+		float lerp = 0.8f;
+		targetPos -= delta * 1.5;
+		boss.getPosition().x += delta* (ship.getPosition().x - 0f - boss.getPosition().x + targetPos)* lerp;
 		
 	}
 

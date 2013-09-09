@@ -19,8 +19,7 @@ public class RegisterScreen implements Screen {
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new Stage();
-        ArcadeInputMux.getInstance().addProcessor(stage);
-
+        
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
@@ -63,6 +62,7 @@ public class RegisterScreen implements Screen {
 
     @Override
     public void show() {
+    	ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
     @Override

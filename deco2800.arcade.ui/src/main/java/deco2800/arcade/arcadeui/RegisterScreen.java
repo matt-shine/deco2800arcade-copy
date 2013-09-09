@@ -38,19 +38,25 @@ public class RegisterScreen implements Screen {
         passwordTextCheck.setPasswordMode(true);
         passwordTextCheck.setPasswordCharacter('*');
         TextButton registerButton = new TextButton("Register", skin);
+        TextButton cancelButton = new TextButton("Cancel", skin);
 
-        table.add(errorLabel);
+        table.add(errorLabel).colspan(2);
         table.row();
-        table.add(usernameText).width(400).pad(5);
+        table.add(usernameText).width(400).pad(5).colspan(2);
         table.row();
-        table.add(passwordText).width(400).pad(5);
+        table.add(passwordText).width(400).pad(5).colspan(2);
         table.row();
-        table.add(passwordTextCheck).width(400).pad(5);
+        table.add(passwordTextCheck).width(400).pad(5).colspan(2);
         table.row();
         table.add(registerButton).width(200).pad(5);
+        table.add(cancelButton).width(200).pad(5);
 
         registerButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
+            }
+        });
+        cancelButton.addListener(new ChangeListener() {
+            public void changed(ChangeEvent event, Actor actor) {
             }
         });
     }

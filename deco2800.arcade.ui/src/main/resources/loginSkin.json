@@ -1,6 +1,6 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        FreeSans_16: { file: FreeSans_16.fnt },
+        alt: { file: FreeSans_16.fnt },
         default: { file: manteka_18.fnt }
     },
     com.badlogic.gdx.graphics.Color: {

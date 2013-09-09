@@ -38,16 +38,15 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
         achievementClient.incrementProgress(achievementID, player);
         
         
-        /*
-         * if (achievementClient.progressForPlayer(player).progressForAchievement(achievementClient.achievementForID(achievementID)) >= achievementClient.achievementForID(achievementID).awardThreshold) {
-         */
+        //if (achievementClient.progressForPlayer(player).progressForAchievement(achievementClient.achievementForID(achievementID)) >= achievementClient.achievementForID(achievementID).awardThreshold) {
+        
         
         	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 				
 				@Override
 				public String getMessage() {
 					//return achievementClient.achievementForID(achievementID).name;
-					return "Achievement Get!";
+					return achievementID;
 				}
 	        	
 	        });

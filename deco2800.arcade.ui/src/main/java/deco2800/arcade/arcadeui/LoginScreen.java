@@ -7,8 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.model.Game;
 
 public class LoginScreen implements Screen {
 	
@@ -34,12 +36,14 @@ public class LoginScreen implements Screen {
         passwordText.setMessageText("Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
+
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
         CheckBox rememberBox = new CheckBox("Remember Me", skin);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin);
         TextButton registerButton = new TextButton("Register", skin);
+        TextButton storeButton = new TextButton("Store", skin);
 
         table.add(errorLabel).colspan(2);
         table.row();
@@ -55,18 +59,28 @@ public class LoginScreen implements Screen {
         table.add(registerButton).width(200).pad(5);
         table.row();
         table.add(forgotLogButton).pad(5);
-
+        table.add(storeButton).pad(5);
+        
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 ArcadeSystem.login(usernameText.getText());
             }
         });
+        
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
             }
         });
+        
         forgotLogButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+            }
+        });
+            	
+        storeButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	ArcadeSystem.login("store");
+            	// Please find a way to fix this. I'm so tired. -Addison(GameHost)
             }
         });
 	}

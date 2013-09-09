@@ -6,9 +6,9 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.Game.ArcadeGame;
 
 /**
  * This class is the main interface for the arcade.
@@ -20,7 +20,6 @@ import deco2800.arcade.model.Game.ArcadeGame;
 public class ArcadeUI extends GameClient {
 	
 	private LoginScreen login = null;
-	@SuppressWarnings("unused")
 	private StoreScreen store = null;
 	private HomeScreen home = null;
     @SuppressWarnings("unused")
@@ -33,13 +32,14 @@ public class ArcadeUI extends GameClient {
 	}
 
     private void chooseScreen() {
-        if (player == null) {
-            current = login;
-            //current = register; // for testing only... this breaks the client
-        } else {
-            current = home;
-            //current = store; // for testing only... this breaks the client
-        }
+		if (player == null) {
+			current = login;
+		} else if (player.getUsername() == "store") {
+			current = store;
+			// Guys, I have no freaking clue, soz. -Addison(GameHost)
+		} else {
+			current = home;
+		}
     }
 	
 	@Override

@@ -190,7 +190,7 @@ public class Chess extends GameClient implements InputProcessor {
 		// Pieces
 
 		// White background
-		Gdx.gl.glClearColor(255, 255, 255, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// tell the camera to update its matrices.

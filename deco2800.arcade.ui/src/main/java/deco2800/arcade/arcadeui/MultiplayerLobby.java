@@ -42,7 +42,7 @@ public class MultiplayerLobby implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, 1280, 720);
 		shapeRenderer = new ShapeRenderer();
-Main_Gui();		
+		Main_Gui();	
 	}
 	@Override
 	public void render(float arg0) {
@@ -55,11 +55,8 @@ Main_Gui();
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		//draw a placeholder shape
-		/*
+		
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    
-		
-		
 	    
 		shapeRenderer.filledRect(1280,
 	       720,
@@ -68,20 +65,15 @@ Main_Gui();
 	    
 	    shapeRenderer.end();
 		
-	    
-		
 	    batch.begin();
-		*/
-	    //font.setColor(Color.Black);
 		
-		
-		
-
-		
+	    font.setColor(Color.BLACK);
 
 	    int h = 110;
 	    font.draw(batch, "Multiplayer Lobby", 110, h);
 	    batch.end();
+	    
+	    
 	}
 	
 	
@@ -208,6 +200,7 @@ topmenu.add(about);
 
 JMenuItem aboutbutton = new JMenuItem("About");
 about.add(aboutbutton);
+
 
 // About Button Event Listener
 aboutbutton.addActionListener(new ActionListener() {

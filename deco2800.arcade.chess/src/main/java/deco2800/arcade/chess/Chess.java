@@ -8,10 +8,11 @@ import deco2800.arcade.chess.pieces.King;
 import deco2800.arcade.chess.pieces.Piece;
 
 import java.awt.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -169,8 +170,33 @@ public class Chess extends GameClient implements InputProcessor {
 		blackPawn5 = blackPawn0;
 		blackPawn6 = blackPawn0;
 		blackPawn7 = blackPawn0;
+		
+		this.getOverlay().setListeners(new Screen() {
+			@Override
+			public void hide() {
+			}
+		
+			@Override
+			public void show() {
+			}
+			
+			@Override
+			public void pause() {}
+			@Override
+			public void render(float arg0) {}
+			@Override
+			public void resize(int arg0, int arg1) {}
+			@Override
+			public void resume() {}
+			@Override
+			public void dispose() {}
+		});
 
+		
+		
 	}
+	
+	
 
 	@Override
 	public void dispose() {
@@ -190,7 +216,7 @@ public class Chess extends GameClient implements InputProcessor {
 		// Pieces
 
 		// White background
-		Gdx.gl.glClearColor(255, 255, 255, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// tell the camera to update its matrices.

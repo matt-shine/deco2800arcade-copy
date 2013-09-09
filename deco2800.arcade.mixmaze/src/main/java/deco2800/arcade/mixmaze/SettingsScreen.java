@@ -2,8 +2,8 @@ package deco2800.arcade.mixmaze;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
-//I've commented this line out as it was causing the build to break.
-//import java.nio.channels.SeekableByteChannel;
+// the import below doesn't work in Java 1.6
+// import java.nio.channels.SeekableByteChannel;
 
 import javax.swing.text.Style;
 

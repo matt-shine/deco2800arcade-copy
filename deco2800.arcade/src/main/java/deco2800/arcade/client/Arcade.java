@@ -104,6 +104,7 @@ public class Arcade extends JFrame {
 		Insets insets = this.getInsets();
 		this.setSize(new Dimension(width + insets.left + insets.right, height
 				+ insets.bottom + insets.top));
+		this.setMinimumSize(new Dimension(640, 480));
 		this.getContentPane().setBackground(Color.black);
 
 		// set shutdown behaviour

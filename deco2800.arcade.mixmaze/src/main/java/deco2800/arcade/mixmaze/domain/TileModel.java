@@ -10,7 +10,7 @@ import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.USE_BRICK;
  */
 public class TileModel {
 	private static final String LOG = "TileModel: ";
-	private static int ITEMSCOUNT = 0;
+	static int ITEMSCOUNT = 0;
 
 	// Tile data
 	private int tileX;

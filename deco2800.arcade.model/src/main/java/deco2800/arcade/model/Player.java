@@ -137,70 +137,7 @@ public class Player extends User {
 		 */
 		this.icon = null;
 	}
-	
-	/**
-	 * Creates a new Player given a username, achievement set, icon filename,
-	 * name, email, bio and program
-	 * 
-	 * @param playerID
-	 *            The Player's nameID
-	 * @param username
-	 *            The Player's username
-	 * @param filepath
-	 *            The Player's icon filepath
-	 * @param privacy
-	 *            A boolean array of privacy settings.
-	 * @param name
-	 * 			The players actual name
-	 * @param email
-	 * 			The players email address
-	 * @param bio
-	 * 			The players biography
-	 * @param program
-	 * 			The players university program
-	 * @require There are at least 7 elements in privacy array. Elements 1
-	 *          through 7 (indexes 0 through 6) represent name, email, program,
-	 *          bio, friends, games and achievements' privacy settings
-	 *          respectively.
-	 */
-	public Player(int playerID, String username, String filepath,
-			boolean[] privacy, String name, String email, String bio, String program) {
-		super(playerID);
-		this.username = new Field(USERNAME_ID, username);
-		this.name = new Field(NAME_ID, name);
-		this.email = new Field(EMAIL_ID, email);
-		this.bio = new Field(BIO_ID, bio);
-		this.program = new Field(PROGRAM_ID, program);
-		this.games = new Games();
-		this.friends = new Friends();
-		this.friendInvites = new FriendInvites();
-		this.blocked = new Blocked();
 
-		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
-		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
-				privacy[1]);
-		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, privacy[2]);
-		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, privacy[3]);
-		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, privacy[4]);
-		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
-		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
-				privacy[6]);
-
-		/*
-		 * Note that exception handling could be done in-method, however if it
-		 * cannot be loaded there is no way (other than changing the return type
-		 * to boolean/int and specifying error range) to communicate this.
-		 */
-
-		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFUALT TO
-		// PLACEHOLDER
-		// this.icon = new Icon(filepath);
-		/*
-		 * @throws IOException Throws exception when the image cannot be found
-		 * at the designated filepath.
-		 */
-		this.icon = null;
-	}
 	/**
 	 * getUsername returns a string of the player created
 	 * 
@@ -214,15 +151,10 @@ public class Player extends User {
 	 * Sets the name of the user.
 	 * 
 	 * @param username
-	 * 
-	 * @throws PlayerException
-	 * 			username cannot be null
 	 */
-	public void setUsername(String username) throws PlayerException {
+	public void setUsername(String username) {
 		if (username != null) {
 			this.username.setValue(username);
-		} else {
-			throw new PlayerException("Username cannot be null");
 		}
 	}
 	
@@ -239,17 +171,11 @@ public class Player extends User {
 	 * Sets the email of the player
 	 * 
 	 * @param email
-	 * 
-	 * @throws PlayerException
-	 * 			throws exception if the email is not a valid format 
-	 * 			i.e. does not contain the @ symbol
 	 */
-	public void setEmail(String email) throws PlayerException {
-		if (!(email.contains("@"))) {
-			throw new PlayerException("Invalid email address entered");
-		} else {
-			this.email.setValue(email);
-		}
+	public void setEmail(String email) {
+		this.email.setValue(email);
+		//TODO 
+		// Do we want to add in any checking for valid email format here?
 	}
 	
 	/**
@@ -265,16 +191,9 @@ public class Player extends User {
 	 * Sets the biography of the player
 	 * 
 	 * @param bio
-	 * 			A players biography
-	 * @throws PlayerException
-	 * 			The biography must be less then 200 chars long
 	 */
-	public void setBio(String bio) throws PlayerException {
-		if (bio.length() > 200) {
-			throw new PlayerException("Biography cannot be greater then 200 chars");
-		} else {
-			this.bio.setValue(bio);
-		}
+	public void setBio(String bio) {
+		this.bio.setValue(bio);
 	}
 	
 	/**

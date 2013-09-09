@@ -7,10 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.model.Game;
 
 public class LoginScreen implements Screen {
 	
@@ -58,8 +56,8 @@ public class LoginScreen implements Screen {
         table.add(loginButton).width(200).pad(5);
         table.add(registerButton).width(200).pad(5);
         table.row();
-        table.add(forgotLogButton).pad(5);
-        table.add(storeButton).pad(5);
+        table.add(forgotLogButton).width(200).pad(5);
+        table.add(storeButton).width(200).pad(5);
         
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {

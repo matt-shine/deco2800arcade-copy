@@ -15,9 +15,9 @@ import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.model.EntityCollection;
-import deco2800.arcade.hunter.model.Map;
 import deco2800.arcade.hunter.model.MapPane;
 import deco2800.arcade.hunter.model.Player;
+import deco2800.arcade.hunter.model.TileMap;
 import deco2800.arcade.platformergame.model.Entity;
 
 /**
@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
 	
 	private EntityCollection entities = new EntityCollection();
 	private Player player;
-	private Map foreground;
+	private TileMap foreground;
 	private TextureRegion background;
 	
 	private float gameSpeed = 64;
@@ -43,6 +43,11 @@ public class GameScreen implements Screen {
 	private float stateTime;
 	private TextureRegion currFrame;
 	private Animation runAnim;
+	
+	private class Config {
+		public static final int TILE_SIZE = 64;
+		public static final int PANE_SIZE = 16;
+	}
 	
 	public GameScreen(Hunter p){
 		parent = p;
@@ -56,7 +61,7 @@ public class GameScreen implements Screen {
 		player = new Player(new Vector2(0, 0), 64, 128);
 		entities.add(player);
 		
-		foreground = new Map((int) (Math.ceil((parent.screenWidth / (float)(Map.PANE_SIZE * Map.TILE_SIZE))))+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
+		foreground = new TileMap((int) (Math.ceil((parent.screenWidth / (float)(TileMap.PANE_SIZE * TileMap.TILE_SIZE))))+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
 	}
 
 	@Override
@@ -110,10 +115,10 @@ public class GameScreen implements Screen {
 		
 		for (int i = 0; i < panes.size(); i++) {
 			if (i != 0) {
-				offset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * Map.TILE_SIZE;
+				offset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * TileMap.TILE_SIZE;
 			}
 			
-			batch.draw(panes.get(i).getRendered(), foreground.getXOffset() + (i * Map.TILE_SIZE * Map.PANE_SIZE), offset);
+			batch.draw(panes.get(i).getRendered(), foreground.getXOffset() + (i * TileMap.TILE_SIZE * TileMap.PANE_SIZE), offset);
 		}
 	}
 	

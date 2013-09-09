@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 package deco2800.arcade.lunarlander;
-=======
-package deco2800.arcade.LunarLander;
->>>>>>> master
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

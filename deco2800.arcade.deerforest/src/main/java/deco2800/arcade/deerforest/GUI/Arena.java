@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Arena extends Sprite {
-	
-	//current width / height (used for when resizing windows to scale sprites
 
+    //time time to move / scale sprites
+    final private int timeToMove = 20;
 	
 	//Zone widths / heights (ratio to window size)
 	final private float monsterZoneWidth = 0.0738095f;
@@ -371,8 +371,8 @@ public class Arena extends Sprite {
 		float yScale = r.getHeight() / s.getHeight();
 		float xPoint = r.getX();
 		float yPoint = r.getY();
-		s.setScale(xScale, yScale);
-		s.setPosition(xPoint, yPoint);
+		s.scaleTo(xScale, yScale, timeToMove);
+        s.moveTo(xPoint, yPoint, timeToMove);
 	}
 
 	public List<Rectangle> getAvailableZones(int player, boolean field, boolean monsters) {
@@ -403,14 +403,16 @@ public class Arena extends Sprite {
 		return freeZones;
 	}
 
-	public void removeSprite(ExtendedSprite s) {
+	public boolean removeSprite(ExtendedSprite s) {
 		for(String key : zones.keySet()) {
 			for(Rectangle zone : zones.get(key).keySet()) {
 				if(zones.get(key).get(zone) == s) {
 					zones.get(key).put(zone, null);
+                    return true;
 				}
 			}
 		}
+        return false;
 	}
 	
 	public void printZoneInfo() {
@@ -459,5 +461,26 @@ public class Arena extends Sprite {
 		
 		return null;
 	}
-	
+
+    public List<Rectangle> getFilledMonsterZones(int player) {
+
+        List<Rectangle> filledZones = new ArrayList<Rectangle>();
+
+        Map<Rectangle, ExtendedSprite> mapToCheck;
+
+        if(player == 1) {
+            mapToCheck = zones.get("P1MonsterZone");
+        } else {
+            mapToCheck = zones.get("P2MonsterZone");
+        }
+
+        for(Rectangle zone : mapToCheck.keySet()) {
+            if(mapToCheck.get(zone) != null) {
+                filledZones.add(zone);
+            }
+        }
+
+        return filledZones;
+    }
+
 }

@@ -20,7 +20,7 @@ public class FieldTest {
 	
 	@Test
 	public void testAdd() {
-		DarkMonster monster1 = new DarkMonster(10,null, null);
+		DarkMonster monster1 = new DarkMonster(10, 20, null);
 		Field playerField = new Field();
 		GeneralSpell spell = new GeneralSpell(null, null);
 		
@@ -48,7 +48,7 @@ public class FieldTest {
 	public void TestContains() {
 		Field playerField = new Field();
 		
-		LightMonster monster = new LightMonster(100, null, null);
+		LightMonster monster = new LightMonster(100, 20, null);
 		GeneralSpell spell = new GeneralSpell(null, null);
 		
 		assertEquals(false, playerField.contains(monster));
@@ -67,11 +67,11 @@ public class FieldTest {
 		
 		assertEquals(false, playerField.isFull());
 		
-		LightMonster monster = new LightMonster(100, null, null);
-		DarkMonster monster1 = new DarkMonster(10,null, null);
-		NatureMonster monster2 = new NatureMonster(90,null, null);
-		WaterMonster monster3 = new WaterMonster(40, null, null);
-		FireMonster monster4 = new FireMonster(50,null, null);
+		LightMonster monster = new LightMonster(100, 20, null);
+		DarkMonster monster1 = new DarkMonster(10, 20, null);
+		NatureMonster monster2 = new NatureMonster(90, 20, null);
+		WaterMonster monster3 = new WaterMonster(40, 20, null);
+		FireMonster monster4 = new FireMonster(50, 20, null);
 		
 		playerField.add(monster);
 		playerField.add(monster1);
@@ -96,8 +96,8 @@ public class FieldTest {
 	public void TestRemove() {
 		Field playerField = new Field();
 		
-		LightMonster monster = new LightMonster(100, null, null);
-		DarkMonster monster1 = new DarkMonster(10,null, null);
+		LightMonster monster = new LightMonster(100, 20, null);
+		DarkMonster monster1 = new DarkMonster(10, 20, null);
 		
 		playerField.add(monster);
 		playerField.add(monster1);
@@ -132,8 +132,8 @@ public class FieldTest {
 		Field player = new Field();
 		Collection<AbstractCard> c = new ArrayList<AbstractCard>();
 		
-		LightMonster monster = new LightMonster(100, null, null);
-		DarkMonster monster1 = new DarkMonster(10,null, null);
+		LightMonster monster = new LightMonster(100, 20, null);
+		DarkMonster monster1 = new DarkMonster(10, 20, null);
 		GeneralSpell spell = new GeneralSpell(null, null);
 		GeneralSpell spell1 = new GeneralSpell(null, null);
 		

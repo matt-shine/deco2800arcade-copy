@@ -23,6 +23,10 @@ public class HomeScreen implements Screen {
 	private BitmapFont font;
 	Set<String> games = null;
 	
+	
+	
+	
+	
 	public HomeScreen() {
 		
 	}
@@ -71,9 +75,9 @@ public class HomeScreen implements Screen {
 	    
 	    for (String game : games) {
 	    	h += 16;
-		    font.draw(batch, "" + index + ". " + game, 110, h);
+		    font.draw(batch, "" + (char)(index + 65) + ". " + game, 110, h);
 		    
-		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
+		    if (Gdx.input.isKeyPressed(Keys.A + index)) {
 		    	ArcadeSystem.goToGame(game);
 		    }
 		    

@@ -45,12 +45,11 @@ public class Invaders extends JFrame implements Runnable {
 		move = 0;
 		direction = 1;
 		moveDown = false;
-<<<<<<< HEAD
-		background = new javax.swing.ImageIcon("src/main/resources/city.jpg").getImage();
-=======
+
+
 		
 		background = new javax.swing.ImageIcon(this.getClass().getResource("/image/city.jpg")).getImage();
->>>>>>> origin/master
+
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 
@@ -217,12 +216,11 @@ public class Invaders extends JFrame implements Runnable {
 	public void run() {
 		int count = 0;
 		while (true) {
-<<<<<<< HEAD
-			tank.moveTank();
 
-=======
+
+
 			tank.tankMove();
->>>>>>> origin/master
+
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {

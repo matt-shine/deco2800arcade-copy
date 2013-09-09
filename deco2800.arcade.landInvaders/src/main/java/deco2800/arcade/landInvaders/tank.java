@@ -45,16 +45,14 @@ public class tank implements KeyListener {
 			Mright =true;
 		}
 		
-<<<<<<< HEAD
+
 		if(key == KeyEvent.VK_SPACE){
 			shotState = true;
 			
 		}
 		
 			
-=======
-		
->>>>>>> origin/master
+
 		
 		
 		
@@ -65,14 +63,14 @@ public class tank implements KeyListener {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-<<<<<<< HEAD
+
 		
-=======
+
 		if(key == KeyEvent.VK_SPACE){
 			shotState = true;
 			
 		}
->>>>>>> origin/master
+
 		if (key == KeyEvent.VK_LEFT) {
 			Mleft =false;
 			
@@ -95,12 +93,9 @@ public class tank implements KeyListener {
 	
 	
 	
-<<<<<<< HEAD
-	public void moveTank(){
-		
-=======
+
 	public void tankMove(){
->>>>>>> origin/master
+
 		if(Mleft == true && p_x > 10)p_x -= 7;
 		if(Mright == true&& p_x < 750)p_x += 7;
 	}

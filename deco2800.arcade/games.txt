@@ -16,7 +16,6 @@ landInvaders
 junglejump
 burningskies
 checkers
-landInvaders 
 pacman
 connect4
 

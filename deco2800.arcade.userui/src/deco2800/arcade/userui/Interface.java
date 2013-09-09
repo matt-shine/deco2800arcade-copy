@@ -32,9 +32,10 @@ public class Interface {
 		Model m = new Model();
 		
 		View view = new View(model);
-		//EditProfile v = new EditProfile(m);
+		EditProfile v = new EditProfile(m);
 		
 		Controller controller = new Controller(model,view);
+		
 		
 	}
 

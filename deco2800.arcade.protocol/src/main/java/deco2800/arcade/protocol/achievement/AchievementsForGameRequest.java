@@ -1,10 +1,10 @@
 package deco2800.arcade.protocol.achievement;
 
 import deco2800.arcade.protocol.UserRequest;
-import deco2800.arcade.model.Game;
+import deco2800.arcade.protocol.BlockingMessage;
 
-public class AchievementsForGameRequest extends UserRequest {
+public class AchievementsForGameRequest extends BlockingMessage {
 
-	public Game game;
+	public String gameID;
 	
 }

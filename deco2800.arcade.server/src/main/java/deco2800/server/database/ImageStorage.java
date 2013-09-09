@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ImageStorage {
     
@@ -33,12 +35,13 @@ public class ImageStorage {
      * @param id The id to associate the image with
      * @param imgFile The file containing the image to store
      */
-    public void set(String id, File imgFile) {
+    public void set(String id, File imgFile) throws FileNotFoundException {
         // Read in the data and create an EncodedImage
-        
-        
-        // use our set(String,EncodedImage) overload to do the DB work
+        FileInputStream is = new FileInputStream(imgFile);
+        EncodedImage img = new EncodedImage();
 
+        // use our set(String,EncodedImage) overload to do the DB work
+        set(id, img);
     }
     
     /**
@@ -52,7 +55,7 @@ public class ImageStorage {
     /**
      * Returns the image associated with the given id.
      */
-    public EncodedImage get(String id) {
+    public EncodedImage get(String id) throws DatabaseException {
         //Get a connection to the database
 		Connection connection = Database.getConnection();
 
@@ -73,7 +76,6 @@ public class ImageStorage {
   				if (connection != null)	connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
-                throw new DatabaseException("Couldn't close resultSet/statement/connection", e);
 			}
 		}
 

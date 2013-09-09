@@ -13,12 +13,15 @@ import deco2800.arcade.model.Icon;
 
 public class Achievement {
     
-	public final String id;
-	public final String name;
-	public final String description;
-    public final int awardThreshold;
-	public final String icon; //Temporarily using string for debugging
+	public String id;
+	public String name;
+	public String description;
+    public int awardThreshold;
+	public String icon; //Temporarily using string for debugging
     
+    // USED BY KRYONET - don't use it yourself
+    public Achievement() {}
+
         /**
 	 * Constructs an Achievement from the supplied arguments.
 	 * 
@@ -71,4 +74,19 @@ public class Achievement {
 		// need to hash the rest
 		return id.hashCode();
 	}
+
+    @Override
+    public String toString() {
+        return "(" + id + ", " + name + ", " + description + ", " + awardThreshold + ")";
+    }
+
+    // Static helper stuff
+    public static String idForComponentID(String componentID) {
+        String[] parts = componentID.split("\\.");
+        return parts[0] + "." + parts[1];
+    }
+
+    public static boolean isComponentID(String componentID) {
+        return (componentID.split("\\.").length == 3);
+    }
 }

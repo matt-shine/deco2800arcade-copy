@@ -10,10 +10,9 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.io.File;
+import java.io.FileNotFoundException;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
-import deco2800.arcade.model.Player;
-import deco2800.arcade.model.Game;
 import deco2800.server.ResourceLoader;
 import deco2800.server.ResourceHandler;
 import deco2800.server.database.ImageStorage;
@@ -152,6 +151,7 @@ public class AchievementStorage {
 						System.out.println("    " + c.id + ", " + c.awardThreshold);
 					}
 					System.out.println("  }");
+                    awardThreshold = -1;
 				}
 				System.out.println("}");
 
@@ -159,13 +159,21 @@ public class AchievementStorage {
 				statement.executeUpdate("INSERT INTO ACHIEVEMENTS " +
 						"VALUES('" + id + "','" + name + "','" + description + "','" 
 						+ iconPath + "'," + awardThreshold + ")");
+                // also bring in the components
+                for(AchievementComponent c : components) {
+                    statement.executeUpdate("INSERT INTO ACHIEVEMENTS " +
+						"VALUES('" + c.id + "','__component','__component','__component'," + c.awardThreshold + ")");
+                }
 		        File icon = ResourceLoader.load(iconPath);
 		        imageStorage.set(iconPath, icon);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Error in loading achievements.", e);
-		} finally {
+		} catch (FileNotFoundException e) {
+            e.printStackTrace();
+            throw new DatabaseException("Couldn't find file", e);
+        } finally {
 			try {
 				if (resultSet != null){
 					resultSet.close();
@@ -262,6 +270,13 @@ public class AchievementStorage {
 				resultSet = statement.executeQuery("SELECT * FROM ACHIEVEMENTS" +
 						" WHERE ID='" + id + "'");
 				Achievement result = findAchievementFromId(id, resultSet);
+                if(Achievement.isComponentID(result.id)) continue;
+                if(result.awardThreshold == -1) { // this achievement has components
+                    result.awardThreshold = 0;
+                    for(Achievement c : componentsForAchievement(result.id)) {
+                        result.awardThreshold += c.awardThreshold;
+                    }
+                }
 				achievements.add(result);
 
 				
@@ -320,11 +335,119 @@ public class AchievementStorage {
      * @param gameId	The game to fetch achievements for.
      * @return			A list of Achievements for the supplied game.
      */
-    public ArrayList<Achievement> achievementsForGame(Game gameId) throws DatabaseException {
+    public ArrayList<Achievement> achievementsForGame(String gameId) throws DatabaseException {
+        
         ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-        // TODO Need to sort out where gameID will be defined and stored 
+    	
+		//Get a connection to the database
+		Connection connection = Database.getConnection();
 
-        return achievements;
+		Statement statement = null;
+		ResultSet results = null;
+		try {
+			
+            statement = connection.createStatement();
+            results = statement.executeQuery("SELECT * FROM ACHIEVEMENTS" +
+                                             " WHERE ID LIKE '" + gameId + "%'" +
+                                             " AND NAME != '__component'");
+            while (results.next()) {
+                Achievement ach = null;
+                if(results.getString("threshold").equals("-1")) {
+                    // it's a component achievement, we need to find its components
+                    ArrayList<Achievement> components = componentsForAchievement(results.getString("id"));
+                    int totalThreshold = 0;
+                    for(Achievement c : components) {
+                        totalThreshold += c.awardThreshold;
+                    }
+                    
+                    ach = new Achievement(results.getString("id"),
+                                          results.getString("name"),
+                                          results.getString("description"),
+                                          totalThreshold,
+                                          results.getString("icon"));
+                } else {
+                    // regular achievement, we're solid
+                    ach = new Achievement(results.getString("id"),
+                                          results.getString("name"),
+                                          results.getString("description"),
+                                          results.getInt("threshold"),
+                                          results.getString("icon"));
+                }
+
+                achievements.add(ach);
+            }
+			
+			return achievements;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get achievements from database", e);
+		} finally {
+			try {
+				if (results != null){
+					results.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+    }
+
+    /**
+     * Returns an unsorted list of a game's achievements.
+     *
+     * @param gameId	The game to fetch achievements for.
+     * @return			A list of Achievements for the supplied game.
+     */
+    public ArrayList<Achievement> componentsForAchievement(String achID) throws DatabaseException {
+        
+        ArrayList<Achievement> components = new ArrayList<Achievement>();
+    	
+		//Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet results = null;
+		try {
+			
+            statement = connection.createStatement();
+            results = statement.executeQuery("SELECT * FROM ACHIEVEMENTS" +
+                                             " WHERE ID LIKE '" + achID + "%'" +
+                                             " AND NAME = '__component'");
+            while (results.next()) {
+                Achievement ach = new Achievement(results.getString("id"),
+                                                  results.getString("name"),
+                                                  results.getString("description"),
+                                                  results.getInt("threshold"),
+                                                  results.getString("icon"));
+
+                components.add(ach);
+            }
+			
+			return components;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get components from database", e);
+		} finally {
+			try {
+				if (results != null){
+					results.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
     }
 
     
@@ -335,7 +458,7 @@ public class AchievementStorage {
      * @param player The player to fetch achievement progress for.
      * @return An AchievementProgress instance with the player's progress.
      */ 
-    public AchievementProgress progressForPlayer(Player player) throws DatabaseException {
+    public AchievementProgress progressForPlayer(int playerID) throws DatabaseException {
         // TODO: implement me!
 
         // just map achievement IDs to the player's progress if they have any
@@ -351,6 +474,42 @@ public class AchievementStorage {
         return new AchievementProgress(progress, awarded);
     }
     
+    public int progressForAchievement(int playerID, String achievementID) throws DatabaseException {
+        // Get a connection to the database
+    	Connection connection = Database.getConnection();
+    	
+    	Statement statement = null;
+    	ResultSet resultSet = null;
+    	
+    	try {
+    		statement = connection.createStatement();
+    		resultSet = statement.executeQuery("SELECT * FROM PLAYER_ACHIEVEMENT" + 
+                                               " WHERE achievementID = '" + achievementID + "'" + 
+                                               " AND playerID = " + playerID);
+    		int progress = 0;
+    		if(resultSet.next()) {
+                progress = resultSet.getInt("PROGRESS");
+    		}
+            return progress;
+    	} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get achievements from database", e);
+		} finally {
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+    }
     
     /**
      * Return the PLAYERS_ACHIEVEMENT table.
@@ -406,13 +565,14 @@ public class AchievementStorage {
      *           the achievement.
      * @throws DatabaseException
      */
-    public int incrementProgress(Player player, String achievementID)
+    public int incrementProgress(int playerID, String achievementID)
     		throws DatabaseException {
+
         // note that AchievementProgress represents a player's progress in *every*
         // achievement and not just one so it's a bit inefficient for this method.
         // simpler to just return the new progress or -1 if nothing needs doing
     	int progress = 0;
-    	progress = initialiseProgress(player.getID(), achievementID);
+    	progress = initialiseProgress(playerID, achievementID);
     	if(!checkThreshold(achievementID, progress)) {
     		//Get a connection to the database
         	Connection connection = Database.getConnection();
@@ -421,7 +581,6 @@ public class AchievementStorage {
     		ResultSet resultSet = null;
     		//Connect to table and select Achievement and increment
     		try {
-    			int playerID = player.getID();
     			statement = connection.createStatement();
     			statement.executeUpdate("UPDATE PLAYER_ACHIEVEMENT " +
     					"SET PROGRESS = PROGRESS + 1 " +
@@ -441,14 +600,27 @@ public class AchievementStorage {
     				if (connection != null){
     					connection.close();
     				}
-
-                    // return the new progress
-    				return progress + 1;
     			} catch (SQLException e) {
     				e.printStackTrace();
     			}
     		}
+
+            if(Achievement.isComponentID(achievementID)) {
+                String overallID = Achievement.idForComponentID(achievementID);
+                // need to get the components and figure out the overall progress
+                ArrayList<Achievement> components = componentsForAchievement(overallID);
+                int totalProgress = 0;
+                for(Achievement c : components) {
+                    totalProgress += progressForAchievement(playerID, c.id);
+                }
+                
+                return totalProgress;
+            } else {
+                // return new progress
+                return progressForAchievement(playerID, achievementID);
+            }
     	}
+        
         // already have this achievement
         return -1;
     }
@@ -477,15 +649,15 @@ public class AchievementStorage {
 					"WHERE playerID = " + playerID + 
 					" AND achievementID = '"+ achievementID + "'");
 			if(!resultSet.next()) {
-				//If no Progress is found,  the player initial achievement
+				//If no Progress is found, add an entry
 				System.out.print("DB: Insert new player achievement record.\n");
 				statement.executeUpdate("INSERT INTO PLAYER_ACHIEVEMENT(" +
 						"playerID, achievementID, PROGRESS) " +
 						"VALUES(" + playerID + ", '" + achievementID + "', 0)");
-				progress = 1;
+				progress = 0;
 			} else {
 				System.out.print("DB: Existing progress found. Increment progress continue.\n");
-				progress = resultSet.getInt("progress");
+				progress = resultSet.getInt("PROGRESS");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -22,7 +22,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
-import deco2800.arcade.client.network.listener.AchievementListener;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
@@ -147,6 +146,7 @@ public class Arcade extends JFrame {
 		try {
 			// TODO allow server/port as optional runtime arguments xor user
 			// inputs.
+            System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
@@ -157,7 +157,6 @@ public class Arcade extends JFrame {
 	}
 
 	private void addListeners() {
-		this.client.addListener(new AchievementListener());
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
@@ -209,7 +208,7 @@ public class Arcade extends JFrame {
 	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
-
+        selectedGame.setNetworkClient(this.client);
 		startGame(selectedGame);
 	}
 

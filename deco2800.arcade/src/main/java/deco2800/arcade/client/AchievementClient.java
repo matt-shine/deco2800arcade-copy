@@ -8,17 +8,55 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.protocol.achievement.*;
+import deco2800.arcade.protocol.*;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementListener;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Connection;
+import deco2800.arcade.client.network.listener.NetworkListener;
 
-public class AchievementClient {
+public class AchievementClient extends NetworkListener {
 
     private NetworkClient networkClient;
     private HashSet<AchievementListener> listeners;
 
     public AchievementClient(NetworkClient networkClient) {
-        this.networkClient = networkClient;
         this.listeners = new HashSet<AchievementListener>();
+    }
+
+    public void setNetworkClient(NetworkClient client) {
+        if(this.networkClient != null) {
+            this.networkClient.removeListener(this);
+        }
+        this.networkClient = client;
+        if(this.networkClient != null) {
+            this.networkClient.addListener(this);
+        }
+    }
+
+    @Override
+    public void received(Connection connection, Object object) {
+        super.received(connection, object);
+
+        if(object instanceof IncrementProgressResponse) {
+            final IncrementProgressResponse resp = (IncrementProgressResponse)object;
+            // need to do this in a different thread as this method is going to stop other network
+            // requests from being served
+            new Thread(new Runnable() {
+                    public void run() {
+                        Achievement ach = achievementForID(resp.achievementID);
+                        if(resp.newProgress == ach.awardThreshold) {
+                            for(AchievementListener l : listeners) {
+                                l.achievementAwarded(ach);
+                            }
+                        } else {
+                            for(AchievementListener l : listeners) {
+                                l.progressIncremented(ach, resp.newProgress);
+                            }
+                        }
+                    }
+            }).start();
+        }
     }
    
    /**
@@ -46,7 +84,6 @@ public class AchievementClient {
     public Achievement achievementForID(String achievementID) {
         ArrayList<String> achievementIDs = new ArrayList<String>();
         achievementIDs.add(achievementID);
-
         return achievementsForIDs(achievementIDs).get(0);
     }
     
@@ -67,15 +104,16 @@ public class AchievementClient {
         
         AchievementsForIDsRequest request = new AchievementsForIDsRequest();
         request.achievementIDs = achievementIDs;
-        networkClient.sendNetworkObject(request);
+        BlockingMessage r = BlockingMessage.request(networkClient.kryoClient(),
+                                                           request);
         
+        AchievementsForIDsResponse resp = (AchievementsForIDsResponse)r;
 
 	// We should do some aggressive caching of Achievements here because
 	// they're immutable - once we've retrieved it from the server once
 	// we shouldn't ever need to ask for it again.
-        ArrayList<Achievement> achievements = new ArrayList<Achievement>();
 
-        return achievements;
+        return resp.achievements;
     }
     
     /**
@@ -85,9 +123,12 @@ public class AchievementClient {
      * @return A list of Achievements for the supplied game.
      */
     public ArrayList<Achievement> achievementsForGame(Game game) {
-        ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-
-        return achievements;
+        AchievementsForGameRequest req = new AchievementsForGameRequest();
+        req.gameID = game.id;
+        BlockingMessage r = BlockingMessage.request(networkClient.kryoClient(),
+                                                       req);
+        AchievementsForGameResponse resp = (AchievementsForGameResponse)r;
+        return resp.achievements;
     }
 
     /**
@@ -100,7 +141,7 @@ public class AchievementClient {
     public AchievementProgress progressForPlayer(Player player) {
     	
     	ProgressForPlayerRequest request = new ProgressForPlayerRequest();
-    	request.player = player;
+    	request.playerID = player.getID();
     	
     	networkClient.sendNetworkObject(request);
     	
@@ -119,7 +160,7 @@ public class AchievementClient {
     public void incrementProgress(String achievementID, Player player) {
     	IncrementProgressRequest request = new IncrementProgressRequest();
     	request.achievementID = achievementID;
-    	request.player = player;
+    	request.playerID = player.getID();
     	
     	networkClient.sendNetworkObject(request);
         

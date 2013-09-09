@@ -22,4 +22,11 @@
       <component id="pong.slider.moveDown" awardThreshold="1" />
     </components>
   </achievement>
+
+  <achievement id="pong.win5Points">
+    <name>Win 5 points</name>
+    <description>Win 5 points, because 5 is such a magic number</description>
+    <icon>winner.png</icon>
+    <awardThreshold>5</awardThreshold>
+  </achievement>
 </achievements>

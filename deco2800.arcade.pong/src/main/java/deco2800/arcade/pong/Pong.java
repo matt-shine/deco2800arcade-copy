@@ -21,6 +21,10 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
+
+import java.util.ArrayList;
+import deco2800.arcade.model.Achievement;
+
 /**
  * A Pong game for use in the Arcade
  * @author uqjstee8
@@ -159,6 +163,12 @@ public class Pong extends GameClient {
 		gameState = GameState.READY;
 		statusMessage = "Click to start!";
 		
+        // achievements demo
+        AchievementClient achClient = getAchievementClient();
+        ArrayList<Achievement> achievements = achClient.achievementsForGame(getGame());
+        for(Achievement ach : achievements) {
+            System.out.println(ach.toString());
+        }
 	}
 
 	@Override
@@ -231,7 +241,7 @@ public class Pong extends GameClient {
 	    	leftPaddle.update(ball);
 	    	
 	    	//Move the right paddle (automatic)
-	    	rightPaddle.update(ball);
+	    	if(!Gdx.input.isTouched()) rightPaddle.update(ball);
 	    	
 	    	//Move the ball
 	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
@@ -256,6 +266,7 @@ public class Pong extends GameClient {
 	    	} else if (ball.bounds.x + Ball.WIDTH > SCREENWIDTH) { 
 	    		//If the ball gets to the right edge then player 1 wins
 	    		endPoint(0);
+                incrementAchievement("pong.win5Points");
 	    	}
 	    	break;
 	    case GAMEOVER: //The game has been won, wait to exit

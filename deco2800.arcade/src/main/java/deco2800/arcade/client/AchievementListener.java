@@ -8,9 +8,8 @@ public interface AchievementListener {
 	 * Called when an achievement is awarded to a player.
 	 *
 	 * @param achievement The achievement awarded.
-	 * @param player      The player it was awarded to.
 	 */
-	public void achivementAwarded(Achievement achievement, Player player);
+	public void achievementAwarded(Achievement achievement);
     
 	/**
 	 * Called when a player's progress in an achievement is incremented
@@ -18,9 +17,8 @@ public interface AchievementListener {
 	 * reached the threshold for that achievement).
 	 *
 	 * @param achievement The achievement progress was incremented for.
-	 * @param player      The player whose progress was incremented.
 	 * @param progress    The player's new progress (saves a call to
 	 *                    AchievementClient.progressForPlayer).
 	 */
-	public void progressIncremented(Achievement achievement, Player player, int progress);
+	public void progressIncremented(Achievement achievement, int progress);
 }

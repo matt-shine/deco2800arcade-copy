@@ -57,16 +57,16 @@ public class LoginScreen implements Screen {
         table.add(forgotLogButton).pad(5);
 
         loginButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 ArcadeSystem.login(usernameText.getText());
             }
         });
         registerButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
             }
         });
         forgotLogButton.addListener(new ChangeListener() {
-            public void changed(ChangeEvent changeEvent, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
             }
         });
 	}

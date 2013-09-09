@@ -183,7 +183,8 @@ public class Chess extends GameClient implements InputProcessor {
 			@Override
 			public void pause() {}
 			@Override
-			public void render(float arg0) {}
+			public void render(float arg0) {
+			}
 			@Override
 			public void resize(int arg0, int arg1) {}
 			@Override

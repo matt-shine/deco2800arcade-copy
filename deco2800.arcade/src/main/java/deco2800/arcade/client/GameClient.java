@@ -22,6 +22,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
     private AchievementClient achievementClient;
 
 	public GameClient(Player player, NetworkClient networkClient) {
+		
 		this.player = player;
 		this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
@@ -32,6 +33,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 
     public void incrementAchievement(String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
+        this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+			
+			@Override
+			public String getMessage() {
+				return "ACHIEVEMENT GET";
+			}
+        	
+        });
     }
 
 	/**
@@ -40,6 +49,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
+		overlay.resize(width, height);
 	}
 
 	/**
@@ -48,6 +58,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	 */
 	public void addOverlayBridge(UIOverlay overlay) {
 		this.overlayBridge = overlay;
+		overlay.setHost(this);
 	}
 
 	/**
@@ -135,4 +146,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 		return height;
 	}
 
+	public NetworkClient getNetworkClient() {
+		return this.networkClient;
+	}
+	
+	
+	public Player getPlayer() {
+		return player;
+	}
+	
+	
 }

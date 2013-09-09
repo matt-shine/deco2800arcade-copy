@@ -19,7 +19,11 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 /**
+<<<<<<< HEAD
  * A Pong game for use in the Arcade
+=======
+ * A Pong game in the Arcade
+>>>>>>> master
  * @author uqjstee8
  *
  */

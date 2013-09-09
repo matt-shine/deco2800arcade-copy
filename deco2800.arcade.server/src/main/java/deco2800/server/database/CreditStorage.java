@@ -51,7 +51,7 @@ public class CreditStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM CREDITS WHERE id='" + playerID + "'");
+			resultSet = statement.executeQuery("SELECT * FROM CREDITS WHERE id=" + playerID + "");
 //			statement = connection.prepareStatement("SELECT * from CREDITS WHERE username=?");
 //			statement.setString(1, username);
 			Integer result = findCreditsForUser(playerID, resultSet);
@@ -80,7 +80,8 @@ public class CreditStorage {
 	/**
 	 * Returns credits where id matches int playerID given
 	 * 
-	 * @param	int playerID, ResultSet results
+	 * @param	playerID
+     * @param   results
 	 * @throws	SQLException
 	 * @return	Integer result
 	 */
@@ -121,7 +122,7 @@ public class CreditStorage {
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			// first retrieve the current users's current balance
-			resultSet = stmt.executeQuery("SELECT * FROM CREDITS WHERE id='" + playerID + "'");
+			resultSet = stmt.executeQuery("SELECT * FROM CREDITS WHERE id=" + playerID + "");
 			if (resultSet.next()) {
 				int oldBalance = resultSet.getInt("CREDITS");
 				// then increment it and set it

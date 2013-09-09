@@ -2,6 +2,8 @@ package deco2800.arcade.landInvaders;
 
 import java.awt.Graphics;
 
+import javax.swing.JFrame;
+
 public class blockWall {
 	private int rowNum;
 	private int rowEnemyNum;
@@ -26,7 +28,7 @@ public class blockWall {
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(px+i*10, py + n * 10, 10, 10);
+				temp[i] = new enemy(px+i*10, py + n * 10, 10, 10,"/image/brick.jpg");
 
 			}
 			lists[n] = temp;
@@ -34,12 +36,12 @@ public class blockWall {
 
 	}
 
-	public void drawWall(Graphics g) {
+	public void drawWall(Graphics g,JFrame p) {
 
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
 				if (lists[n][i] != null) {
-					lists[n][i].drawEnemy(g);
+					lists[n][i].drawEnemy(g,p);
 				}
 
 			}

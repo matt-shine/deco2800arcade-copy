@@ -12,7 +12,13 @@ breakout
 deerforest
 mixmaze
 chess
+landInvaders
 junglejump
 burningskies
 checkers
+<<<<<<< HEAD
 landInvaders 
+=======
+pacman
+connect4
+>>>>>>> origin/master

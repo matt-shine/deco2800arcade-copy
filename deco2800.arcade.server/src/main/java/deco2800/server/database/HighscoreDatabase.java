@@ -19,45 +19,39 @@ public class HighscoreDatabase {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		
-		//Create high scores base table
-		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES", null);
-			
-			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE HIGHSCORES(HID int NOT NULL AUTO_INCREMENT," 
-				+ "Username VARCHAR(30) NOT NULL, "
-				+ "GameID int NOT NULL, "
-				+ "Date TIMESTAMP, "
-				+ "Rating INT, " 
-				+ "PRIMARY KEY (HID));");
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create highscores table", e);
-		}
 		
-		//Create game scores table 
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "SCORES", null);
+			Statement statement = connection.createStatement();
+			
+			//Create high scores base table
+			ResultSet tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_PLAYER", null);
 			
 			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE IF NOT EXISTS SCORES(ID int NOT NULL AUTO_INCREMENT, "
-				+ "Score_Type VARCHAR(255), "
-				+ "HID int NOT NULL, "
-				+ "Score Long NOT NULL, "
-				+ "PRIMARY KEY (ID), "
-				+ "FOREIGN KEY (HID) REFERENCES HIGHSCORES(HID));");
+				statement.execute("CREATE TABLE HIGHSCORES_PLAYER(HID INT PRIMARY KEY," + 
+							"Username VARCHAR(30) NOT NULL," +
+							"GameID INT NOT NULL," +
+							"Date TIMESTAMP," +
+							"Rating INT)");
 			}
 	
+			//Create game scores table 
+			tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_DATA", null);
+			
+			if (!tableData.next()) {
+				statement.execute("CREATE TABLE HIGHSCORES_DATA(ID INT PRIMARY KEY," +
+							"Score_Type VARCHAR(255)," +
+							"HID INT," +
+							"Score INT," +
+							"FOREIGN KEY(HID) REFERENCES HIGHSCORES_PLAYER(HID))");
+			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create scores table", e);
+			//e.printStackTrace();
+			throw new DatabaseException("Unable to create highscores tables", e);
 		}
 		
 		initialised = true;
+		
+		
 	}
 	
 	/* User Interface to Database Methods */
@@ -81,8 +75,8 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES h INNER JOIN " +
-					"SCORES s on h.HID = s.HID WHERE GameId='" + Game_ID + "' AND Score_Type='" + type +
+			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES_PLAYER h INNER JOIN " +
+					"HIGHSCORES_DATA s on h.HID = s.HID WHERE GameId='" + Game_ID + "' AND Score_Type='" + type +
 					"' ORDER BY s.Score desc LIMIT " + top + ";");
 			while(resultSet.next())
 			{
@@ -132,8 +126,8 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT s.SCORE from HIGHSCORES h INNER JOIN " +
-					"SCORES s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
+			resultSet = statement.executeQuery("SELECT s.SCORE from HIGHSCORES_PLAYER h INNER JOIN " +
+					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
 					type + "' AND Username='" + Username + "';");
 			while(resultSet.next())
 			{
@@ -183,8 +177,8 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT s2.RANK FROM (SELECT h.Username, RANK() OVER (ORDER BY s.SCORE DESC) AS 'RANK' from HIGHSCORES h INNER JOIN " +
-					"SCORES s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
+			resultSet = statement.executeQuery("SELECT s2.RANK FROM (SELECT h.Username, RANK() OVER (ORDER BY s.SCORE DESC) AS 'RANK' from HIGHSCORES_PLAYER h INNER JOIN " +
+					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
 					type + "' ORDER BY s.SCORE desc) s2 WHERE s2.Username='" + Username + "';");
 			while(resultSet.next())
 			{
@@ -220,7 +214,7 @@ public class HighscoreDatabase {
 		Statement statement = null;
 		ResultSet resultSet = null;
 		
-		String selectTableSQL = "SELECT * FROM HIGHSCORE";
+		String selectTableSQL = "SELECT * FROM HIGHSCORES_PLAYER";
 		
 		try {
 			// Get a connection to the database
@@ -260,7 +254,7 @@ public class HighscoreDatabase {
 		Statement statement = null;
 		ResultSet resultSet = null;
 		
-		String insertTableSQL = "INSERT INTO HIGHSCORES"
+		String insertTableSQL = "INSERT INTO HIGHSCORES_PLAYER"
 				+ "(Username, GameID, Date, Rating) VALUES"
 				+ "(" + Username + "," + Game_ID +  ", to_date('"
 				+ getCurrentTimeStamp() + "', 'yyyy/mm/dd hh24:mi:ss'), 0)";
@@ -322,7 +316,7 @@ public class HighscoreDatabase {
 		try {
 			statement = connection.createStatement();
 			
-			String insertTableSQL = "INSERT INTO SCORES"
+			String insertTableSQL = "INSERT INTO HIGHSCORES_DATA"
 					+ "(Score_Type, HID, Score) VALUES"
 					+ "(" + type + "," + hid +  ", " + score + ")";
 			

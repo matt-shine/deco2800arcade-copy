@@ -27,7 +27,7 @@ public class Wall {
 	public Wall(int wallType, float xpos, float ypos, float length) {
 		this.wallType = wallType;
 		x = xpos;
-		y = xpos;
+		y = ypos;
 		this.length = length;
 	}
 	

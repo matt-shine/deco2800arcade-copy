@@ -134,8 +134,8 @@ public class SnakeLadder extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
-		//test
-		ladder =  new Texture(Gdx.files.classpath("assets/arrow.png"));
+//		//test
+//		ladder =  new Texture(Gdx.files.classpath("assets/arrow.png"));
 		
 		//creating level loading background board and initializing the rule mapping
 		lvl =new Level1();
@@ -265,8 +265,8 @@ public class SnakeLadder extends GameClient {
 	    batch.begin();
 		// render map for this level
 		lvl.renderMap(tileList, batch);
-		//test
-		batch.draw(ladder,tileList[5].getCoorX(), tileList[5].getCoorY());
+//		//test
+//		batch.draw(ladder,tileList[5].getCoorX(), tileList[5].getCoorY());
 		dice.renderDice(batch);
 
 		
@@ -304,17 +304,17 @@ public class SnakeLadder extends GameClient {
 //		    		
 //		    		position+=a;
 //		    	}
-				if(Math.abs(tileList[gamePlayer.newposition()].getCoorX() - gamePlayer.bounds.x) <(1f)&&Math.abs(tileList[gamePlayer.newposition()].getCoorY() - gamePlayer.bounds.y) <(1f))
+				if(Math.abs(tileList[gamePlayer.newposition()].getCoorX() - gamePlayer.getBounds().x) <(1f)&&Math.abs(tileList[gamePlayer.newposition()].getCoorY() - gamePlayer.getBounds().y) <(1f))
 			    {
 				    	stopPoint();
 			    }
 
 		    	//If the player reaches the end of each line , move up to another line
-		    	if (gamePlayer.bounds.x >= (600-20f) || gamePlayer.bounds.x <=0){
+		    	if (gamePlayer.getBounds().x >= (600-20f) || gamePlayer.getBounds().x <=0){
 		    		gamePlayer.moveUp();
 		    	}	    	
 		    	//If the ball gets to the left edge then player 2 wins
-		    	if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {
+		    	if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {
 		    		gamePlayer.reset();
 		    		statusMessage = "You Win! ";
 		    		gameState = GameState.GAMEOVER;
@@ -338,7 +338,7 @@ public class SnakeLadder extends GameClient {
 	public void stopPoint() {
 		gamePlayer.reset();
 		// If we've reached the victory point then update the display
-		if (gamePlayer.bounds.x <= (60-20f) && gamePlayer.bounds.y >= (540)) {	
+		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {	
 		   
 		    gameState = GameState.GAMEOVER;
 		    //Update the game state to the server

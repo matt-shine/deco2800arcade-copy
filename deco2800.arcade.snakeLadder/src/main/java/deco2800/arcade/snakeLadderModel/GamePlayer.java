@@ -1,4 +1,4 @@
-package deco2800.arcade.snakeLadder;
+package deco2800.arcade.snakeLadderModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,7 +20,7 @@ public class GamePlayer {
 	//private int[] scores = new int[2];
 	private int score;
 	
-	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
+	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
 	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
 	
 	
@@ -29,13 +29,21 @@ public class GamePlayer {
 	 * Basic constructor for player. Set position and dimensions to the default
 	 */
 	public GamePlayer() {
-		bounds.x = 0;
-		bounds.y = 0;
-		bounds.height = WIDTH;
-		bounds.width = WIDTH;
+		getBounds().x = 0;
+		getBounds().y = 0;
+		getBounds().height = WIDTH;
+		getBounds().width = WIDTH;
 		score = 0; //initial score of the player
 	}
 
+	public Rectangle getBounds() {
+		return bounds;
+	}
+
+	public void setBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
+	
 	/**
 	 * Modify the velocity of the player
 	 * @param newVelocity the new velocity of player as x,y
@@ -50,8 +58,8 @@ public class GamePlayer {
 	 * @param newPosition the new position of the player as x,y
 	 */
 	public void setPosition(Vector2 newPosition) {
-		bounds.x = newPosition.x;
-		bounds.y = newPosition.y;
+		getBounds().x = newPosition.x;
+		getBounds().y = newPosition.y;
 	}
 	
 
@@ -62,8 +70,8 @@ public class GamePlayer {
 	 * seconds of time = numbers of dice
 	 */	
 	public void move(float time) {
-	  bounds.x += time*velocity.x;
-	  bounds.y += time*velocity.y;
+	  getBounds().x += time*velocity.x;
+	  getBounds().y += time*velocity.y;
 	 
 //      setCoordinate(diceNumber);
 	}
@@ -72,7 +80,7 @@ public class GamePlayer {
 	public void moveUp() {
 		//if player reacher left/right edge, it moves up one row
 		velocity.x *= -1;
-		bounds.y = bounds.y + 60f;		
+		getBounds().y = getBounds().y + 60f;		
 	}
 	
 	/**
@@ -93,10 +101,10 @@ public class GamePlayer {
     {
     	//loading player icon
     	//player =new Texture(Gdx.files.classpath("assets/player.png"));
-    	shapeRenderer.filledRect(this.bounds.x,
-                this.bounds.y,
-                this.bounds.width,
-                this.bounds.height);
+    	shapeRenderer.filledRect(this.getBounds().x,
+                this.getBounds().y,
+                this.getBounds().width,
+                this.getBounds().height);
     	
     }
     
@@ -115,10 +123,10 @@ public class GamePlayer {
 //    		velocity.y=0;
 //    	}
     	
-    	if(bounds.y==0 || bounds.y==120 || bounds.y==240 || bounds.y==360 || bounds.y==480){
+    	if(getBounds().y==0 || getBounds().y==120 || getBounds().y==240 || getBounds().y==360 || getBounds().y==480){
 			velocity.x = 60;
 		}
-		else if(bounds.y==60 || bounds.y==180 || bounds.y==300 || bounds.y==420 || bounds.y==540)
+		else if(getBounds().y==60 || getBounds().y==180 || getBounds().y==300 || getBounds().y==420 || getBounds().y==540)
 		{
 			velocity.x = -60;
 		}
@@ -160,4 +168,6 @@ public class GamePlayer {
    public void setScore(int score){
 	   this.score += score;
    }
+
+
 }

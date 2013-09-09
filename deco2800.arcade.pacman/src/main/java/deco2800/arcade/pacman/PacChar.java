@@ -75,7 +75,10 @@ public class PacChar {
     		} else if (facing == 4){ 
     			y -= moveDist;
     		} else {
-    			// do nothing since this should be impossible
+    			currentState = PacState.IDLE;
+    			x = 300;
+    			y = 300;
+    			facing =1;
     		}
     	}
 		//draw pacman facing the appropriate direction

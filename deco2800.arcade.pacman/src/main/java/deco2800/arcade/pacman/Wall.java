@@ -27,21 +27,11 @@ public class Wall {
 	public Wall(int wallType, float xpos, float ypos, float length) {
 		this.wallType = wallType;
 		x = xpos;
-		y = xpos;
+		y = ypos;
 		this.length = length;
 	}
 	
-//	public void create() {
-//		wallTexture = new Texture(Gdx.files.internal("testwall.png"));
-//		wallSprite = new Sprite(wallTexture);
-//	}
-	
-	// This is no longer necessary, since we're not using sprites anymore
-	// or at least I'm not
-//	public void render(SpriteBatch batch) {
-//		//batch.draw(wallTexture,100,100);
-//	}
-	
+
 	
 	/**
 	 * Render the wall

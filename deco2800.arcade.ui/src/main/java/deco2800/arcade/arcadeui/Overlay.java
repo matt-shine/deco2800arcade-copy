@@ -3,7 +3,6 @@ package deco2800.arcade.arcadeui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -48,7 +47,7 @@ public class Overlay extends GameClient implements UIOverlay {
         ArcadeInputMux.getInstance().addProcessor(stage);
         
         table.setFillParent(true);
-              
+        
         stage.addActor(table);
         
 	}
@@ -65,8 +64,9 @@ public class Overlay extends GameClient implements UIOverlay {
 
 	@Override
 	public void render() {
-		
 		super.render();
+		
+
 		
 		popup.act(Gdx.graphics.getDeltaTime());
 		batch.begin();

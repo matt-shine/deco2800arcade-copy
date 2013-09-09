@@ -19,36 +19,39 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	
-	@SuppressWarnings("unused")
 	private LoginScreen login = null;
 	@SuppressWarnings("unused")
 	private StoreScreen store = null;
-	@SuppressWarnings("unused")
 	private HomeScreen home = null;
     @SuppressWarnings("unused")
-    private AccMgtScreen accMgt = null;
+    private RegisterScreen register = null;
 	
 	private Screen current = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
+
+    private void chooseScreen() {
+        if (player == null) {
+            current = login;
+            //current = register; // for testing only... this breaks the client
+        } else {
+            current = home;
+            //current = store; // for testing only... this breaks the client
+        }
+    }
 	
 	@Override
 	public void create() {
-		
 		ArcadeSystem.openConnection();
-		
-		if (player == null) {
-			current = login = new LoginScreen();
-		} else {
-			current = home = new HomeScreen();
-			//current = store = new StoreScreen();
-		}
-		
+        login = new LoginScreen();
+        home = new HomeScreen();
+        store = new StoreScreen();
+        register = new RegisterScreen();
+
+        chooseScreen();
 		this.setScreen(current);
-		
-		
 		super.create();
 	}
 

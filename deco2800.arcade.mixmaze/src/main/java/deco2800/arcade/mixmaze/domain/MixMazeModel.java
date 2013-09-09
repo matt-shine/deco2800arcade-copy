@@ -149,6 +149,7 @@ public class MixMazeModel {
 		}
 
 		state = GameState.END;
+		TileModel.ITEMSCOUNT = 0;
 
 		try {
 			spawnerThread.join();

@@ -40,7 +40,7 @@ public class Sidebar extends Group {
 		
 		this.overlay = overlay;
 		this.window = window;
-		texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 30, 30, 30, 30);
+		texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 10, 20, 10, 10);
 		
         skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);

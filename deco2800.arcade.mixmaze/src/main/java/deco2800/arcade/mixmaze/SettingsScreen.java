@@ -81,7 +81,7 @@ public class SettingsScreen implements Screen {
 		this.stage = new Stage();
 		playButton = new TextButton("Play", skin);	
 		//playButton.pad(20);
-		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
+		//skin.add("background", new Texture(Gdx.files.internal("settings.png")));
 		
 		list = new List(new String [] {"Beginner", "Intermediate","Advanced"}, skin);
 		
@@ -156,7 +156,7 @@ public class SettingsScreen implements Screen {
 	private void setTableLayout() {
 		float celHeight = Gdx.graphics.getHeight();
 		float cellWidth = Gdx.graphics.getWidth()/3;
-		Drawable background = skin.getDrawable("background");
+		//Drawable background = skin.getDrawable("background");
 		rootTable.setFillParent(true);
 		//rootTable.setBackground(background);
 		rootTable.row().padBottom(10);

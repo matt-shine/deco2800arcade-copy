@@ -1,7 +1,6 @@
 package deco2800.arcade.chess.pieces;
 
 import java.util.*;
-import java.awt.Graphics;
 public interface Piece {
 	
 	/**

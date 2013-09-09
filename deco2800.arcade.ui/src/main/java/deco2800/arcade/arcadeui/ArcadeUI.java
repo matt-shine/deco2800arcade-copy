@@ -18,11 +18,12 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
-	   
+	
 	@SuppressWarnings("unused")
 	private LoginScreen login = null;
 	@SuppressWarnings("unused")
 	private StoreScreen store = null;
+	@SuppressWarnings("unused")
 	private HomeScreen home = null;
     @SuppressWarnings("unused")
     private AccMgtScreen accMgt = null;
@@ -42,6 +43,7 @@ public class ArcadeUI extends GameClient {
 			current = login = new LoginScreen();
 		} else {
 			current = home = new HomeScreen();
+			//current = store = new StoreScreen();
 		}
 		
 		this.setScreen(current);

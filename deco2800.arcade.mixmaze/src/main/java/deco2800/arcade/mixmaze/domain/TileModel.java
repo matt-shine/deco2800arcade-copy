@@ -9,8 +9,8 @@ import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.USE_BRICK;
  * TileModel represents a tile on game board.
  */
 public class TileModel {
-
 	private static final String LOG = "TileModel: ";
+	private static int ITEMSCOUNT = 0;
 
 	// Tile data
 	private int tileX;
@@ -19,12 +19,13 @@ public class TileModel {
 
 	private PlayerModel boxer;
 
-	private Random spawner = new Random();
+	//private Random spawner = new Random(1);
+	private Random spawner;
 	private ItemModel spawnedItem;
 	private long lastSpawned;
 
 	/**
-	 * Returns the column number of this tile on game board.
+	 * Returns the column number of this tile on game board. origin is at the top left corner.
 	 *
 	 * @return the column number
 	 */
@@ -33,7 +34,7 @@ public class TileModel {
 	}
 
 	/**
-	 * Returns the row number of this tile on game board.
+	 * Returns the row number of this tile on game board.origin is at the top left corner.
 	 *
 	 * @return the row number
 	 */
@@ -42,10 +43,10 @@ public class TileModel {
 	}
 
 	/**
-	 * Returns the wall specified by <code>direction</code>.
+	 * Returns the adjacent wall specified by <code>direction</code>.
 	 *
-	 * @param direction specifying the wall to get
-	 * @return the specified wall
+	 * @param direction a direction specifying the adjacent wall this tile.
+	 * @return the adjacent wall in the specified <code>direction</code>
 	 * @throws IllegalArgumentException If <code>direction</code> is not one
 	 * 				    of <code>WEST</code>,
 	 * 				    <code>NORTH</code>,
@@ -61,20 +62,19 @@ public class TileModel {
 	}
 
 	/**
-	 * Tries to build the wall on the <code>player</code>'s facing
-	 * direction. A wall is built if these conditions are satisfied:
+	 * Tries to build a wall on this tile facing the specified <code>direction</code>.
+	 * A wall is built if these conditions are satisfied:
 	 * <ul>
-	 *   <li>the wall is not built yet
-	 *   <li>the player has at least one brick
-	 *   <li>the player's active action is to use brick
+	 *   <li>there is no wall already in the specified <code>direction</code>
+	 *   <li>the <code>player</code> has at least one brick
+	 *   <li>the <code>player</code>'s active action is to use brick
 	 * </ul>
 	 *
-	 * @param player
-	 * @param direction
+	 * @param player the player in this tile
+	 * @param direction the direction which the wall needs to be built.
 	 * @throws IllegalArgumentException If <code>player</code> is
 	 * 				    <code>null</code>
-	 * @return <code>true</code> if the wall is built,
-	 * 	   <code>false</code> otherwise
+	 * @return <code>true</code> if the wall is built,<code>false</code> otherwise
 	 */
 	public boolean buildWall(PlayerModel player, int direction) {
 		if (player == null) {
@@ -94,20 +94,18 @@ public class TileModel {
 	}
 
 	/**
-	 * Tries to destroy the wall on the specified direction of
-	 * the <code>player</code>.
+	 * Tries to destroy the wall on the specified <code>direction</code> of this tile.
 	 * A wall is destroyed if these conditions are satisfied:
 	 * <ul>
-	 *   <li>the wall is built
-	 *   <li>the player is using a pick or TNT.
+	 *   <li>the wall is already built
+	 *   <li>the <code>player</code> is using a pick or TNT.
 	 * </ul>
 	 *
-	 * @param player
-	 * @param direction
+	 * @param player the player in this tile
+	 * @param direction the direction which the wall needs to be destroyed.
 	 * @throws IllegalArgumentException If <code>player</code> is
 	 * 				    <code>null</code>
-	 * @return <code>true</code> if the wall is built,
-	 * 	   <code>false</code> otherwise
+	 * @return <code>true</code> if the wall is destroyed,<code>false</code> otherwise
 	 */
 	public boolean destroyWall(PlayerModel player, int direction) {
 		if (player == null) {
@@ -125,12 +123,13 @@ public class TileModel {
 	}
 
 	/**
-	 * Checks if the box on this tile should be built.
-	 * If so, <code>player</code> is set to be the boxer of this tile.
+	 * Assign this tile's boxer to the specified <code>player</code>.
+	 * Boxer is only assign to this tile given that this tile is a complete box.
 	 * Otherwise, the boxer is set to <code>null</code>.
 	 *
-	 * @param player the player to check
+	 * @param player the player in this tile
 	 */
+	//probably good if the method name can be changed to something like assignBoxer
 	public void checkBox(PlayerModel player) {
 		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
@@ -139,6 +138,11 @@ public class TileModel {
 		boxer = isBox() ? player : null;
 	}
 
+	/**
+	 * Checks if this tile is a complete box.
+	 *
+	 * @return <code>true</code> if this tile is a complete box, <code>false</code> otherwise.
+	 */
 	public boolean isBox() {
 		return getWall(WEST).isBuilt()
 				&& getWall(NORTH).isBuilt()
@@ -146,10 +150,21 @@ public class TileModel {
 				&& getWall(SOUTH).isBuilt();
 	}
 
+	/**
+	 * Returns the boxer of this tile.
+	 *
+	 * @return the <code>player</code>, if there is a complete box, <code>null</code> otherwise
+	 */
 	public PlayerModel getBoxer() {
 		return boxer;
 	}
 
+	/**
+	 * Returns the current <code>item</code> on this tile.The item can be one of <code>Brick</code>,
+	 * <code>Pick</code>,<code> TNT</code>
+	 *
+	 * @return the <code>item</item> if it's present, <code>null</code> otherwise.
+	 */
 	public ItemModel getSpawnedItem() {
 		return spawnedItem;
 	}
@@ -170,22 +185,44 @@ public class TileModel {
 		}
 	}
 
+	/**
+	 * Spawns a item on this tile. The item can be a <code>Pick</code>,<code> TNT</code> or a
+	 *  collection of <code>Bricks</code>
+	 */
 	public void spawnItem() {
-		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (25 * 1000)) {
-			if(spawner.nextDouble() <= 0.15) {
+		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (10 * 1000)) {
+			if(spawner.nextDouble() <= 0.15 && ITEMSCOUNT < 3) {
 				spawnedItem = getRandomItem();
+				ITEMSCOUNT++;
 			}
 			lastSpawned = System.currentTimeMillis();
 		}
 	}
 
+	/**
+	 * Destroy the <code>item</code> on this tile. If there is no spawned item in this tile, an
+	 * <code>IllegalStateException</code> is thrown
+	 *
+	 * @throws IllegalStateException if there is no item present in this tile
+	 */
+	//probably a good idea to change the method name to destroyItem. coz this method get confused
+	// with the playermodel.pickUpItem and also it destroy rhe spawned item? dumi
 	public void pickUpItem() {
 		if(spawnedItem == null) {
 			throw new IllegalStateException("No spawnedItem to consume.");
 		}
 		spawnedItem = null;
+		ITEMSCOUNT--;
 	}
 
+	/**
+	 * checks if the an <code>item</code> is present in this tile.If so,
+	 * <code>player</code> picks up the item.
+	 *
+	 * @param player the player in this tile
+	 *
+	 * @throws IllegalStateException if the <code>player's</code> coordinates doesn't match up with this tile's coordinates
+	 */
 	public void onPlayerEnter(PlayerModel player) {
 		if(player.getX() != tileX || player.getY() != tileY) {
 			throw new IllegalStateException("The player did not enter the tile.");
@@ -202,13 +239,14 @@ public class TileModel {
 	}
 
 	/**
-	 * Constructor.
+	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
+	 * surrouding the this <code>TileModel</>
 	 *
-	 * @param x		the column number on game board
-	 * @param y		the row number on game board
+	 * @param x		the column number on game board. origin starts at top left
+	 * @param y		the row number on game board.origin starts at top left
 	 * @param adjWalls	the wall adjacent to this tile
 	 */
-	public TileModel(int x, int y, WallModel[] adjWalls) {
+	public TileModel(int x, int y, WallModel[] adjWalls, Random spawner) {
 		tileX = x;
 		tileY = y;
 		walls = new WallModel[4];
@@ -220,5 +258,7 @@ public class TileModel {
 			}
 			walls[direction].addTile(this);
 		}
+
+		this.spawner = spawner;
 	}
 }

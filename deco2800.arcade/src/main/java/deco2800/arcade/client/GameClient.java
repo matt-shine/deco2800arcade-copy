@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -20,7 +22,8 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	private boolean overlayInitialised = false;
 	private int width, height;
     private AchievementClient achievementClient;
-
+    private boolean hasF11PressedLast = false;
+    
 	public GameClient(Player player, NetworkClient networkClient) {
 		
 		this.player = player;
@@ -31,16 +34,25 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	public abstract Game getGame();
 
-    public void incrementAchievement(String achievementID) {
+    public void incrementAchievement(final String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
-        this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
-			
-			@Override
-			public String getMessage() {
-				return "ACHIEVEMENT GET";
-			}
+        
+        
+        /*
+         * if (achievementClient.progressForPlayer(player).progressForAchievement(achievementClient.achievementForID(achievementID)) >= achievementClient.achievementForID(achievementID).awardThreshold) {
+         */
+        
+        	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+				
+				@Override
+				public String getMessage() {
+					//return achievementClient.achievementForID(achievementID).name;
+					return "Achievement Get!";
+				}
+	        	
+	        });
         	
-        });
+    	//}
     }
 
 	/**
@@ -120,10 +132,18 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public void render() {
 		super.render();
 	    processOverlay();
+	    
+
+		//toggles fullscreen on F11
+		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast && (hasF11PressedLast = !hasF11PressedLast)) {
+			Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, !Gdx.graphics.isFullscreen());
+		}
+		
 	}
 
 	@Override
 	public void resize(int width, int height) {
+		
 		this.width = width;
 		this.height = height;
 		if (overlay != null) {

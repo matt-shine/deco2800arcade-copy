@@ -1,7 +1,5 @@
 package deco2800.arcade.chess.pieces;
 
-import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Null implements Piece {
@@ -72,6 +70,12 @@ public class Null implements Piece {
 	public List<int[]> possibleMoves(int[] currentPos) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void hasMoved() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

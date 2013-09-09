@@ -226,4 +226,7 @@ public class Field extends AbstractCardCollection {
 		return null;
 	}
 
+    public void destroyAllMonsters() {
+        this.fieldMonster = new ArrayList<AbstractMonster>();
+    }
 }

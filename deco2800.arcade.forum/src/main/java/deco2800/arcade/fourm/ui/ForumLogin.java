@@ -18,7 +18,7 @@ public class ForumLogin {
 
    public static void main(String[] args) {
       
-      JFrame f = new JFrame("A JFrame");
+      JFrame f = new JFrame("Login");
       f.setSize(423, 295);
       f.setLocation(300,200);
       f.getContentPane().setLayout(null);

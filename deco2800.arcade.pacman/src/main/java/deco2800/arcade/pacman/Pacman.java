@@ -233,9 +233,7 @@ public class Pacman extends GameClient {
 	    Wall eastWall15 = new Wall(3, 770, 455, 125);
 	    Wall eastWall16 = new Wall(1, 895, 455, 190);
 	    
-	    //Wall test2 = new Wall(2, 200, 200, 30);
-	    //Wall test3 = new Wall(3, 200, 200, 30);
-	    //Wall test4 = new Wall(4, 200, 200, 30);
+	    
 	    shaper.begin(ShapeType.Line);
 	    westWall1.render(shaper);
 	    westWall2.render(shaper);
@@ -276,9 +274,7 @@ public class Pacman extends GameClient {
 	    eastWall15.render(shaper);
 	    eastWall16.render(shaper);
 	    
-	    //test2.render(shaper);
-	   // test3.render(shaper);
-	    //test4.render(shaper);
+	   
 	    shaper.end();
 	    //do any stuff the superclass normally does for rendering
 		super.render();

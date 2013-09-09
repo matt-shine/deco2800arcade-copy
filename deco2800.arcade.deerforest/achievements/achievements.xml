@@ -1,6 +1,8 @@
-<achievement id="deerforest.drawMaster">
-  <name>Draw Master (test)</name>
-  <description>Draw 5 cards from the deck in a single game.</description>
-  <awardThreshold>5</awardThreshold>
-  <icon>deerforest.drawMaster.png</icon>
-</achievement>
+<achievements>
+	<achievement id="deerforest.drawMaster">
+		  <name>Draw Master (test)</name>
+		  <description>Draw 5 cards from the deck in a single game.</description>
+		  <awardThreshold>5</awardThreshold>
+		  <icon>deerforest.drawMaster.png</icon>
+	</achievement>
+</achievements>

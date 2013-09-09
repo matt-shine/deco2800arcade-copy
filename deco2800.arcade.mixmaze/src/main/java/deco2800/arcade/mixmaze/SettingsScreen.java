@@ -107,7 +107,6 @@ public class SettingsScreen implements Screen {
 		p2Texts[3] = new TextField("LEFT", skin);
 		p2Texts[4] = new TextField("DOWN", skin);
 		p2Texts[5] = new TextField("RIGHT", skin);	
-		
 	}
 
 	private void createPlayerPanel(Table panel,TextField[] playerDetails) {

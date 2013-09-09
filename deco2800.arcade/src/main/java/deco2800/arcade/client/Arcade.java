@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
+import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
@@ -35,6 +37,7 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 
 /**
  * The client application for running arcade games.
@@ -170,6 +173,7 @@ public class Arcade extends JFrame {
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
+        this.client.addListener(new PackmanListener());
 	}
 
 	public void connectAsUser(String username) {
@@ -195,6 +199,12 @@ public class Arcade extends JFrame {
 		this.player.setUsername(username);
 
 		// this.communicationNetwork.createNewChat(username);
+
+        // TODO move this call to be internal to Packman class
+        GameUpdateCheckRequest gameUpdateCheckRequest = new
+                GameUpdateCheckRequest();
+
+        this.client.sendNetworkObject(gameUpdateCheckRequest);
 	}
 
 	/**

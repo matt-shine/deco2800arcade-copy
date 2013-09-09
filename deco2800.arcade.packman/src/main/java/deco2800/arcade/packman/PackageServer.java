@@ -1,6 +1,7 @@
 package deco2800.arcade.packman;
 
 import java.io.File;
+import java.lang.System;
 
 public class PackageServer {
 	
@@ -24,4 +25,11 @@ public class PackageServer {
 			}
 		}
 	}
+
+    /**
+     * Print confirmation of successful connection by client to package server
+     */
+    public void printSuccess() {
+        System.out.println("PACKMAN: Client connection success");
+    }
 }

@@ -1,7 +1,7 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        alt: { file: FreeSans_16.fnt },
-        default: { file: manteka_18.fnt }
+        alt: { file: CenturyGothic_18.fnt },
+        default: { file: Manteka_18.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
         red:    { a: 1, r: 1, g: 0, b: 0 },
@@ -13,7 +13,7 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
         default: { font: default, fontColor: white },
-        error: { font: default, fontColor: red }
+        error: { font: alt, fontColor: red }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: default, fontColor: white, selection: selection, cursor: cursor, background: textfield }

@@ -104,6 +104,7 @@ public class Arcade extends JFrame {
 		Insets insets = this.getInsets();
 		this.setSize(new Dimension(width + insets.left + insets.right, height
 				+ insets.bottom + insets.top));
+		this.setMinimumSize(new Dimension(640, 480));
 		this.getContentPane().setBackground(Color.black);
 
 		// set shutdown behaviour
@@ -318,7 +319,6 @@ public class Arcade extends JFrame {
 	 * @return
 	 */
 	public Set<String> findPlayableIds() {
-
 		Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
 				getGameMap());
 

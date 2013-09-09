@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.model.BackgroundSprite;
 import deco2800.arcade.hunter.model.EntityCollection;
 import deco2800.arcade.hunter.model.MapPane;
 import deco2800.arcade.hunter.model.Player;
@@ -30,6 +31,7 @@ public class GameScreen implements Screen {
 	private Hunter parent;
 	
 	private EntityCollection entities = new EntityCollection();
+	private EntityCollection backgroundSprites = new EntityCollection();
 	private Player player;
 	private TileMap foreground;
 	private TextureRegion background;
@@ -61,6 +63,10 @@ public class GameScreen implements Screen {
 		player = new Player(new Vector2(0, 0), 64, 128);
 		entities.add(player);
 		
+		for (int i = 0; i < 10; i++) {
+			backgroundSprites.add(new BackgroundSprite(new Vector2((float) (parent.screenWidth / 2 + parent.screenWidth * Math.random()), (float) Math.random() * parent.screenHeight), 147, 86));
+		}
+		
 		foreground = new TileMap((int) (Math.ceil((parent.screenWidth / (float)(TileMap.PANE_SIZE * TileMap.TILE_SIZE))))+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
 	}
 
@@ -87,12 +93,17 @@ public class GameScreen implements Screen {
 		if (!paused) {
 			pollInput();
 			
+			for (Entity e : backgroundSprites) {
+				e.setX(e.getX() - 64 * delta);
+			}
+			
 			player.update(delta);
 			foreground.update(delta, gameSpeed);
 			
 			batch.begin();
 			
 			drawBackground();
+			drawBackgroundSprites();
 			drawMapPanes(delta);
 			
 		    runAnim = player.getAnimation();
@@ -127,6 +138,14 @@ public class GameScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		batch.draw(background, 0, 0, parent.screenWidth, parent.screenHeight);
+	}
+	
+	private void drawBackgroundSprites() {
+		TextureRegion cloud = new TextureRegion(new Texture("textures/cloud.png"));
+		
+		for (Entity e : backgroundSprites) {
+			batch.draw(cloud, e.getX(), e.getY());
+		}
 	}
 	
 	private void pollInput() {

@@ -223,10 +223,10 @@ public class Pacman extends GameClient {
 			game.id = "pacman";
 			game.name = "Pac man";
 			game.description = "An implementation of the classic arcade game Pac "
-			+ "man." + System.lineSeparator() + "Still in progress- additional " + 
+			+ "man." + System.getProperty("line.separator") + "Still in progress- additional " + 
 			"features may be added later. Note: currently only displays blank screen";
 			// game.icon- to be added later once the icon part is fully implemented
-		}
+		} //System.getProperty("line.separator")
 	
 	public Game getGame() {
 		return game;

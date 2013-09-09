@@ -223,8 +223,8 @@ public abstract class AbstractCardStack implements CardStack {
 				if ((type == null || monster.getType() == type) &&
 						(minHealth == -1 || minHealth <= monster.getTotalHealth()) &&
 						(maxHealth == -1 || maxHealth >= monster.getTotalHealth()) &&
-						(minAttack == -1 || minAttack <= monster.getHighestAttack().getDamage()) &&
-						(maxAttack == -1 || maxAttack >= monster.getHighestAttack().getDamage())) {
+						(minAttack == -1 || minAttack <= monster.getHighestAttack()) &&
+						(maxAttack == -1 || maxAttack >= monster.getHighestAttack())) {
 					// Add the card
 					cardsFound.add(card);
 				}

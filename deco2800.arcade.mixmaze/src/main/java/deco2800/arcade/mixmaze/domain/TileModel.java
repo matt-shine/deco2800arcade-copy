@@ -11,7 +11,7 @@ import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.USE_BRICK;
 public class TileModel {
 	private static final String LOG = "TileModel: ";
 	private static int ITEMSCOUNT = 0;
-	
+
 	// Tile data
 	private int tileX;
 	private int tileY;
@@ -19,7 +19,8 @@ public class TileModel {
 
 	private PlayerModel boxer;
 
-	private Random spawner = new Random();
+	//private Random spawner = new Random(1);
+	private Random spawner;
 	private ItemModel spawnedItem;
 	private long lastSpawned;
 
@@ -61,7 +62,7 @@ public class TileModel {
 	}
 
 	/**
-	 * Tries to build a wall on this tile facing the specified <code>direction</code>. 
+	 * Tries to build a wall on this tile facing the specified <code>direction</code>.
 	 * A wall is built if these conditions are satisfied:
 	 * <ul>
 	 *   <li>there is no wall already in the specified <code>direction</code>
@@ -122,7 +123,7 @@ public class TileModel {
 	}
 
 	/**
-	 * Assign this tile's boxer to the specified <code>player</code>. 
+	 * Assign this tile's boxer to the specified <code>player</code>.
 	 * Boxer is only assign to this tile given that this tile is a complete box.
 	 * Otherwise, the boxer is set to <code>null</code>.
 	 *
@@ -139,7 +140,7 @@ public class TileModel {
 
 	/**
 	 * Checks if this tile is a complete box.
-	 * 
+	 *
 	 * @return <code>true</code> if this tile is a complete box, <code>false</code> otherwise.
 	 */
 	public boolean isBox() {
@@ -150,8 +151,8 @@ public class TileModel {
 	}
 
 	/**
-	 * Returns the boxer of this tile. 
-	 * 
+	 * Returns the boxer of this tile.
+	 *
 	 * @return the <code>player</code>, if there is a complete box, <code>null</code> otherwise
 	 */
 	public PlayerModel getBoxer() {
@@ -161,7 +162,7 @@ public class TileModel {
 	/**
 	 * Returns the current <code>item</code> on this tile.The item can be one of <code>Brick</code>,
 	 * <code>Pick</code>,<code> TNT</code>
-	 * 
+	 *
 	 * @return the <code>item</item> if it's present, <code>null</code> otherwise.
 	 */
 	public ItemModel getSpawnedItem() {
@@ -185,7 +186,7 @@ public class TileModel {
 	}
 
 	/**
-	 * Spawns a item on this tile. The item can be a <code>Pick</code>,<code> TNT</code> or a 
+	 * Spawns a item on this tile. The item can be a <code>Pick</code>,<code> TNT</code> or a
 	 *  collection of <code>Bricks</code>
 	 */
 	public void spawnItem() {
@@ -199,12 +200,12 @@ public class TileModel {
 	}
 
 	/**
-	 * Destroy the <code>item</code> on this tile. If there is no spawned item in this tile, an 
+	 * Destroy the <code>item</code> on this tile. If there is no spawned item in this tile, an
 	 * <code>IllegalStateException</code> is thrown
-	 * 
+	 *
 	 * @throws IllegalStateException if there is no item present in this tile
 	 */
-	//probably a good idea to change the method name to destroyItem. coz this method get confused 
+	//probably a good idea to change the method name to destroyItem. coz this method get confused
 	// with the playermodel.pickUpItem and also it destroy rhe spawned item? dumi
 	public void pickUpItem() {
 		if(spawnedItem == null) {
@@ -215,11 +216,11 @@ public class TileModel {
 	}
 
 	/**
-	 * checks if the an <code>item</code> is present in this tile.If so, 
+	 * checks if the an <code>item</code> is present in this tile.If so,
 	 * <code>player</code> picks up the item.
-	 * 
+	 *
 	 * @param player the player in this tile
-	 * 
+	 *
 	 * @throws IllegalStateException if the <code>player's</code> coordinates doesn't match up with this tile's coordinates
 	 */
 	public void onPlayerEnter(PlayerModel player) {
@@ -238,14 +239,14 @@ public class TileModel {
 	}
 
 	/**
-	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code> 
+	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
 	 * surrouding the this <code>TileModel</>
 	 *
 	 * @param x		the column number on game board. origin starts at top left
 	 * @param y		the row number on game board.origin starts at top left
 	 * @param adjWalls	the wall adjacent to this tile
 	 */
-	public TileModel(int x, int y, WallModel[] adjWalls) {
+	public TileModel(int x, int y, WallModel[] adjWalls, Random spawner) {
 		tileX = x;
 		tileY = y;
 		walls = new WallModel[4];
@@ -257,5 +258,7 @@ public class TileModel {
 			}
 			walls[direction].addTile(this);
 		}
+
+		this.spawner = spawner;
 	}
 }

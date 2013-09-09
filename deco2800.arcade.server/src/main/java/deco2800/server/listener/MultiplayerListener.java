@@ -15,6 +15,7 @@ import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 import deco2800.server.MultiplayerServer;
 
 public class MultiplayerListener extends Listener {
@@ -37,14 +38,13 @@ public class MultiplayerListener extends Listener {
 		super.received(connection, object);
 		
 		if (object instanceof NewMultiGameRequest) {
-			System.out.println("Received connection");
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
 			String username = multiRequest.username;
 			String gameId = multiRequest.gameId;
 			MultiGameRequestType requestType = multiRequest.requestType;
 			//Connection connectTo = multiRequest.connectTo;
 			
-			switch (multiRequest.requestType){
+			switch (requestType){
 			case NEW:
 				System.out.println("Connection Received");
 				connection.sendTCP(NewMultiResponse.OK);
@@ -61,7 +61,7 @@ public class MultiplayerListener extends Listener {
 			//Sends update to server to broadcast
 			GameStateUpdateRequest request = (GameStateUpdateRequest) object;
 			MultiplayerServer server = activeServers.get(request.gameSession);
-			server.stateUpdate(request.username, request.stateChange);
+			server.stateUpdate(request);
 		}
 	}
 	
@@ -82,14 +82,18 @@ public class MultiplayerListener extends Listener {
 			if (connection.equals(player2Connection)) {
 				System.out.println("Connections identical");
 			}
-			connection.sendTCP(new NewMultiGameRequest()); //testing
-			connection.sendTCP("Game Found");
-			player2Connection.sendTCP(new NewMultiGameRequest()); //testing
-			player2Connection.sendTCP("Game Found");
+			
 			MultiplayerServer gameServer =  new MultiplayerServer(username, player2Name, connection, 
 					player2Connection, gameId, activeServers.size());
+
 			activeServers.add(gameServer);
 			queueSession.remove(gameId);
+			NewMultiSessionResponse session = new NewMultiSessionResponse();
+			session.sessionId = activeServers.size()-1;
+			session.gameId = gameId;
+			//session.playerID = username; STRINGS OR INTS
+			connection.sendTCP(session);
+			player2Connection.sendTCP(session);
 		}
 		
 		return;

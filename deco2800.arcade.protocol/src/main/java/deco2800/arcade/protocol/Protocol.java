@@ -19,9 +19,12 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
+import deco2800.arcade.protocol.multiplayerGame.NewMatchmakingRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 
 public class Protocol {
@@ -74,7 +77,10 @@ public class Protocol {
 		kryo.register(NewMultiGameRequest.class);
 		kryo.register(NewMultiResponse.class);
 		kryo.register(MultiGameRequestType.class);
-
+		kryo.register(GameStateUpdateRequest.class);
+		kryo.register(NewMultiSessionResponse.class);
+		kryo.register(NewMatchmakingRequest.class);
+		
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 

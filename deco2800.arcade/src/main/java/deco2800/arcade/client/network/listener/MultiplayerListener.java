@@ -2,8 +2,10 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 public class MultiplayerListener extends NetworkListener {
 
@@ -35,9 +37,17 @@ public class MultiplayerListener extends NetworkListener {
 				System.out.println("Connect OK");
 			}
 		}
-		else if (object instanceof String) {
+		else if (object instanceof NewMultiSessionResponse) {
 			System.out.println("Game Found");
-		} 
+			GameStateUpdateRequest stateUpdate = new GameStateUpdateRequest();
+			stateUpdate.gameId = ((NewMultiSessionResponse) object).gameId;
+			stateUpdate.gameSession = ((NewMultiSessionResponse) object).sessionId;
+			stateUpdate.stateChange = "Update Game State";
+			connection.sendTCP(stateUpdate);
+			System.out.println("Game state update request sent");
+		} else if (object instanceof GameStateUpdateRequest) {
+			System.out.println("Game State Updated");
+		}
 	}
 	
 }

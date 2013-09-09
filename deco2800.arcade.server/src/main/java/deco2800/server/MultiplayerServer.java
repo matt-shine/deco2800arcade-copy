@@ -2,6 +2,8 @@ package deco2800.server;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
+
 public class MultiplayerServer {
 	
 	private String player1Id;
@@ -12,6 +14,7 @@ public class MultiplayerServer {
 	private int sessionId;
 	
 	public MultiplayerServer(String player1Id, String player2Id, Connection player1, Connection player2, String gameId, int sessionId) {
+		System.out.println("Multiplayer server started");
 		this.player1Id = player1Id;
 		this.player2Id = player2Id;;
 		this.player1 = player1;
@@ -38,10 +41,10 @@ public class MultiplayerServer {
 		return sessionId;
 	}
 	
-	public void stateUpdate(String playerId, Object update) {
-		if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
-			player1.sendTCP(update);	
-			player2.sendTCP(update);
-		}
+	public void stateUpdate(GameStateUpdateRequest request) {
+		//if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
+			player1.sendTCP(request);	
+			player2.sendTCP(request);
+		//}
 	}
 }

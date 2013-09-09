@@ -82,6 +82,8 @@ public class LunarLander extends GameClient {
 	@Override
 	public void create() {
 		
+		System.out.print("LunarLander lives!"); 
+		
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 

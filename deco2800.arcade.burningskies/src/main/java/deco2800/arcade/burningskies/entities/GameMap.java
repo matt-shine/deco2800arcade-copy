@@ -19,7 +19,7 @@ public class GameMap extends Image {
 	
 	public GameMap(String filename) {
 		//TODO: Remove this and make it dynamic
-		super(new Texture(Gdx.files.internal("maps/test2.png")));
+		super(new Texture(Gdx.files.internal("maps/demomap.png")));
 		//TODO: load mapfile, initialise TileMap and textures etc
 		mapTime = 0; //TODO: load from map file
 		mapSpeed = 40; //TODO: load from map file
@@ -41,23 +41,6 @@ public class GameMap extends Image {
 		}
 		setY(getY() - delta*mapSpeed);
 	}
-
-	/*
-	@Override
-	public void draw(SpriteBatch batch, float alpha){
-		//TODO edit this to work with the game seemelessly
-//		batch.end();
-		
-		// This is called when stage.draw is called
-//		batch.begin();
-//		batch.draw(t, xPos, yPos, 0, 0, t.getWidth(), t.getHeight() );
-		batch.draw(t, xPos, yPos);
-		
-		
-//		batch.end();
-		
-	}
-	*/
 	
 	public float getMapTime() {
 		return mapTime;

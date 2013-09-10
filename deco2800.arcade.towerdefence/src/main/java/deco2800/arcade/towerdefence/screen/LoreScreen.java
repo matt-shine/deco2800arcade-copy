@@ -28,7 +28,7 @@ public class LoreScreen implements Screen{
 	SpriteBatch batch;
 	TextureAtlas atlas;
 	Button backButton;
-	BitmapFont black;
+	BitmapFont black, white;
 	Skin skin;
 	Label words;
 	
@@ -49,7 +49,7 @@ public class LoreScreen implements Screen{
 		batch.dispose();
 		skin.dispose();
 		atlas.dispose();
-		//white.dispose();
+		white.dispose();
 		black.dispose();
 		stage.dispose();
 	}
@@ -108,8 +108,7 @@ public class LoreScreen implements Screen{
         	
         });
 		
-		words = new Label("", new Label.LabelStyle(new BitmapFont(),
-				WHITE));
+		words = new Label("", new Label.LabelStyle(white, WHITE));
 		words.setWrap(true);
 		words.setText("LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
 				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
@@ -136,7 +135,7 @@ public class LoreScreen implements Screen{
 		atlas = new TextureAtlas(Gdx.files.internal("button.pack"));
 		skin = new Skin();
         skin.addRegions(atlas);
-        //white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
+        white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
 		
 	}

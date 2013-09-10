@@ -2,6 +2,8 @@ package deco2800.arcade.towerdefence.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -26,17 +28,21 @@ public class MenuScreen implements Screen{
 	TextureAtlas atlas;
 	Skin skin;
 	SpriteBatch batch;
+	Music music;
+	Sound click;
 	Button newGameButton, continueButton, multiplayerButton,  optionsButton, 
 			creditsButton, loreButton, quitButton;
 	float buttonSpacing = 10f;
 	float buttonHeight = 50f;
 	float buttonWidth = 200f;
+	long id;
 	
 	
 	public MenuScreen(final TowerDefence game) {
 		this.game = game;
 		buttonSpacing = (Gdx.graphics.getHeight() - 7*buttonHeight)/6;
-	}
+		click = Gdx.audio.newSound(Gdx.files.internal("menu_click.wav"));
+		}
 
 	@Override
 	public void dispose() {
@@ -46,6 +52,8 @@ public class MenuScreen implements Screen{
 		white.dispose();
 		black.dispose();
 		stage.dispose();
+		music.dispose();
+		click.dispose();
 	}
 
 	@Override
@@ -93,11 +101,13 @@ public class MenuScreen implements Screen{
         
         newGameButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		music.stop();
         		return true; //do nothing
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-        		Gdx.app.debug(LOG, "switching to game screen");
+           		Gdx.app.debug(LOG, "switching to game screen");
+           		click.play(1.0f);
         		game.setScreen(game.gameScreen); //Set to gameScreen
         	}
         	
@@ -122,10 +132,12 @@ public class MenuScreen implements Screen{
         optionsButton.setY(multiplayerButton.getY() - multiplayerButton.getHeight() - buttonSpacing);
         optionsButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		music.stop();
         		return true; //do nothing
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		click.play(1.0f);
         		game.setScreen(game.optionsScreen);
         	}
         	
@@ -139,10 +151,12 @@ public class MenuScreen implements Screen{
         
         loreButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		music.stop();
         		return true; //do nothing
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		click.play(1.0f);
         		game.setScreen(game.loreScreen);
         	}
         	
@@ -156,10 +170,12 @@ public class MenuScreen implements Screen{
         
         creditsButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		music.stop();
         		return true; //do nothing
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		click.play(1.0f);
         		game.setScreen(game.creditsScreen); 
         	}
         	
@@ -196,5 +212,8 @@ public class MenuScreen implements Screen{
         skin.addRegions(atlas);
         white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
+        music = Gdx.audio.newMusic(Gdx.files.internal("space_menu_sound.wav")); //new music
+    	music.play(); //start playing music. Comment this out if you are sick of the music...
+    	music.setLooping(true); //once finished loops to start
 	}
 }

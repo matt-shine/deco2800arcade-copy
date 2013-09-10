@@ -1,9 +1,10 @@
 package deco2800.arcade.hunter.model;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class Map {
-	protected float xOffset = 0;
+	protected Vector2 offset = new Vector2();
 	protected float speedModifier;
 	
 	protected Map(float speedModifier) {
@@ -17,7 +18,11 @@ public abstract class Map {
 	 * @return xOffset
 	 */
 	public float getXOffset() {
-		return xOffset;
+		return offset.x;
+	}
+	
+	public float getYOffset() {
+		return offset.y;
 	}
 	
 	/**

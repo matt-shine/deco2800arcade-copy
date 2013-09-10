@@ -3,6 +3,7 @@ package deco2800.arcade.hunter.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -32,14 +33,18 @@ public class GameScreen implements Screen {
 	private ForegroundLayer foregroundLayer;
 	
 	private float gameSpeed = 64;
-	private SpriteBatch batch = new SpriteBatch();
 	private boolean paused = false;
+	
+	private SpriteBatch batch = new SpriteBatch();
+	private SpriteBatch backgroundBatch = new SpriteBatch();
 	
 	public GameScreen(Hunter hunter){
 		this.hunter = hunter;
 		//Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
 		
 		backgroundLayer = new BackgroundLayer(0);
 		spriteLayer = new SpriteLayer((float) 0.6);
@@ -75,16 +80,24 @@ public class GameScreen implements Screen {
 		if (!paused) {
 			pollInput();
 			
+			camera.position.set(player.getX() - (player.getWidth() / 2) + Config.screenWidth / 3, 
+								player.getY() - (player.getHeight() / 2) + Config.screenHeight / 3,
+								0);
+			camera.update();
+			batch.setProjectionMatrix(camera.combined);
+			
 			entities.updateAll(delta);
 			checkCollisions();
 			
 			backgroundLayer.update(delta, gameSpeed);
 			spriteLayer.update(delta, gameSpeed);
-			foregroundLayer.update(delta, gameSpeed);
+			foregroundLayer.update(delta, camera.position.x);
+			
+			backgroundBatch.begin();
+			backgroundLayer.draw(backgroundBatch);
+			backgroundBatch.end();
 			
 			batch.begin();
-			
-			backgroundLayer.draw(batch);
 			spriteLayer.draw(batch);
 			foregroundLayer.draw(batch);
 			
@@ -100,10 +113,10 @@ public class GameScreen implements Screen {
 			//Attack
 		}
 		
-//		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
-//			//Jump
-//			player.jump();
-//		}
+		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
+			//Jump
+			player.jump();
+		}
 	}
 	
 	private void checkCollisions() {

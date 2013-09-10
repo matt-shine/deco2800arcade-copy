@@ -110,6 +110,8 @@ public class Player extends Entity {
 			grounded = false;
 		}
 		
+		setX(getX() + delta * 100);
+		
 		//Move the player vertically, horizontally controlled by map
 		setJumpVelocity((float) (getJumpVelocity() - delta * 9.81));
 		if (jumpVelocity > 0 || !grounded) {

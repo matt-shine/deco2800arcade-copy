@@ -1,4 +1,5 @@
 package deco2800.arcade.raiden;
+import java.awt.Graphics;
 
 
 public abstract class Bullet {
@@ -17,5 +18,6 @@ public abstract class Bullet {
 		this.heigth = heigth;
 	}
 	public abstract void bulletMove();
+	public abstract void drawMe(Graphics g);
 	
 }

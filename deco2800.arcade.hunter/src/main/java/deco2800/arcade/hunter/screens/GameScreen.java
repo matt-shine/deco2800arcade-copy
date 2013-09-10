@@ -67,7 +67,7 @@ public class GameScreen implements Screen {
 			backgroundSprites.add(new BackgroundSprite(new Vector2((float) (parent.screenWidth / 2 + parent.screenWidth * Math.random()), (float) Math.random() * parent.screenHeight), 147, 86));
 		}
 		
-		foreground = new TileMap((int) (Math.ceil((parent.screenWidth / (float)(TileMap.PANE_SIZE * TileMap.TILE_SIZE))))+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
+		foreground = new TileMap((int) (Math.ceil((parent.screenWidth / (float)(Config.PANE_SIZE * Config.TILE_SIZE))))+1); //Screen width / map pane width in tiles / tile width in pixels, plus one
 	}
 
 	@Override
@@ -126,10 +126,10 @@ public class GameScreen implements Screen {
 		
 		for (int i = 0; i < panes.size(); i++) {
 			if (i != 0) {
-				offset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * TileMap.TILE_SIZE;
+				offset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * Config.TILE_SIZE;
 			}
 			
-			batch.draw(panes.get(i).getRendered(), foreground.getXOffset() + (i * TileMap.TILE_SIZE * TileMap.PANE_SIZE), offset);
+			batch.draw(panes.get(i).getRendered(), foreground.getXOffset() + (i * Config.TILE_SIZE * Config.PANE_SIZE), offset);
 		}
 	}
 	

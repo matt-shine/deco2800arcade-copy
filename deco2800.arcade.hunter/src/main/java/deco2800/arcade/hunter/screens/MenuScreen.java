@@ -47,7 +47,6 @@ public class MenuScreen implements Screen {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("test");
 				hunter.setScreen(new GameScreen(hunter));
 				stage.clear(); //Stops buttons being clickable when you move out of this screen. See: http://stackoverflow.com/questions/13890472/ligbdx-touch-listener-on-wrong-screen for a potentially better way TODO
 			}
@@ -107,8 +106,8 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		stage.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(stage);
+		stage.dispose();
 	}
 
 	@Override
@@ -129,12 +128,6 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		/*
-		 * Ok, this makes the menu buttons work, but it seems a bit hacky.
-		 * Idea from commit: 2f0af56c549a297981b566b74bb4c9ac464363f3
-		 * FIX UP/REPLACE if necessary TODO
-		 */
-		Gdx.input.setInputProcessor(stage);
 		stage.act(delta);
 		stage.draw();
 	}
@@ -153,10 +146,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		/*menuTitle = new Sprite(texture);
-		menuTitle.setX(Gdx.graphics.getWidth()/2 - menuTitle.getWidth()/2);
-		menuTitle.setY(Gdx.graphics.getHeight() - (menuTitle.getHeight()+ 20));*/
-	
+			
 	}
 	
 }

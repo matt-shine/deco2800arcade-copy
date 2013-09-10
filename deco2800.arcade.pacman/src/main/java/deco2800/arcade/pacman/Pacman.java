@@ -47,6 +47,8 @@ public class Pacman extends GameClient {
 	//takes keyboard input
 	private InputProcessor controller;
 	
+	private GameMap map;
+	
 	//not used yet
 	//private NetworkClient networkClient;
 	

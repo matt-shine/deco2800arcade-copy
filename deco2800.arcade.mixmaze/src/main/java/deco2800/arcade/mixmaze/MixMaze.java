@@ -44,7 +44,7 @@ public final class MixMaze extends GameClient {
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
-		setScreen(splashScreen);
+		setScreen(menuScreen);
 
 		Gdx.app.debug(LOG, "Default key bindings");
 		Gdx.app.debug(LOG, "Player 1: W, S, A, D to move, "
@@ -69,7 +69,7 @@ public final class MixMaze extends GameClient {
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");
 		splashScreen.dispose();
-		menuScreen.dispose();
+		//menuScreen.dispose();
 		gameScreen.dispose();
 		super.dispose();
 	}

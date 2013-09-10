@@ -12,6 +12,10 @@ breakout
 deerforest
 mixmaze
 chess
+landInvaders
 junglejump
 burningskies
 checkers
+pacman
+connect4
+raiden

@@ -17,6 +17,7 @@ public class WallModel {
 	 *
 	 * @return the direction
 	 */
+	// i dnt understand the meaning if this method?dumi
 	public int getDirection() {
 		return direction;
 	}

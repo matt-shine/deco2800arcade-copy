@@ -1,6 +1,5 @@
 package deco2800.arcade.chess.pieces;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,6 +138,12 @@ public class Knight implements Piece {
 		if (team != other.team)
 			return false;
 		return true;
+	}
+
+	@Override
+	public void hasMoved() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

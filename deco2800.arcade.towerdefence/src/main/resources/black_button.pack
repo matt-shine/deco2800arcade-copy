@@ -7,7 +7,7 @@ black_button1
   rotate: false
   xy: 1, 1
   size: 39, 36
-  split: 20, 21, 14, 15 
+  split: 18, 20, 12, 14 
   orig: 39, 36
   offset: 0, 0
   index: -1
@@ -15,7 +15,7 @@ black_button2
   rotate: false
   xy: 42, 1
   size: 39, 36
-  split: 20, 21, 14, 15 
+  split: 18, 20, 12, 14 
   orig: 39, 36
   offset: 0, 0
   index: -1

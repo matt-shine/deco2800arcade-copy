@@ -42,7 +42,7 @@ public class GameScreen implements Screen{
 	private Table bottomBar, bottomBarRight, bottomBarLeft;
 	private static float STATUS_HEIGHT = 50f;
 	private static float BOTTOM_HEIGHT = 128f;
-	Button frostB, fireB, holyB, darknessB, piercingB, auraB, testB; //TowerButtons
+	Button frostB, fireB, holyB, darknessB, piercingB, auraB, backB; //TowerButtons
 	private Label randomLabel3, towerInfo;
 	BitmapFont black;
     BitmapFont white;
@@ -107,6 +107,7 @@ public class GameScreen implements Screen{
 		white.dispose();
 		black.dispose();
 		stage.dispose();
+		game.gameScreen.dispose();
 	}
 
 	@Override
@@ -127,7 +128,9 @@ public class GameScreen implements Screen{
 		stage.act(delta);
 		stage.draw();
 		Table.drawDebug(stage);
-		
+		if(!game.isPaused()) {
+			stage.act(delta);
+		}		
 	}
 
 	@Override
@@ -228,22 +231,22 @@ public class GameScreen implements Screen{
         	}
 		 });
 		
-		testB = new TextButton("T", style); //button for testing various things
-		testB.setWidth(BUTTON_WIDTH);
-		testB.setHeight(BUTTON_HEIGHT);
-		testB.addListener(new InputListener() { 
+		backB = new TextButton("Back", style);
+		backB.setWidth(BUTTON_WIDTH);
+		backB.setHeight(BUTTON_HEIGHT);
+		backB.addListener(new InputListener() { 
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
         		return true; //do nothing
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-        		resource++; //increment resource
+        		game.setScreen(game.menuScreen); 
         	}
         });
 		
 		//Tables for layout of gamescreen
 		topStatus.add(resourceTF).expandX().fill();
-		topStatus.add(testB).right();
+		topStatus.add(backB).right();
 		
 		table.add(topStatus).height(STATUS_HEIGHT).expandX().fill();
 		table.row();

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -16,6 +17,7 @@ import deco2800.arcade.towerdefence.TowerDefence;
 import static com.badlogic.gdx.graphics.GL20.*;
 
 public class MenuScreen implements Screen{
+	private static final String LOG = MenuScreen.class.getSimpleName();
 
 	private final TowerDefence game;
 	Stage stage;
@@ -24,7 +26,7 @@ public class MenuScreen implements Screen{
 	TextureAtlas atlas;
 	Skin skin;
 	SpriteBatch batch;
-	TextButton newGameButton, continueButton, multiplayerButton,  optionsButton, 
+	Button newGameButton, continueButton, multiplayerButton,  optionsButton, 
 			creditsButton, loreButton, quitButton;
 	float buttonSpacing = 10f;
 	float buttonHeight = 50f;
@@ -48,7 +50,7 @@ public class MenuScreen implements Screen{
 
 	@Override
 	public void hide() {
-		dispose();
+		//dispose(); Why is this here?
 	}
 
 	@Override
@@ -95,7 +97,8 @@ public class MenuScreen implements Screen{
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-        		game.setScreen(game.gameScreen); //Set to gameScreen when implemented instead of splashScreen.
+        		Gdx.app.debug(LOG, "switching to game screen");
+        		game.setScreen(game.gameScreen); //Set to gameScreen
         	}
         	
         });
@@ -117,6 +120,16 @@ public class MenuScreen implements Screen{
         optionsButton.setHeight(buttonHeight);
         optionsButton.setX(Gdx.graphics.getWidth() / 2 - optionsButton.getWidth() / 2);
         optionsButton.setY(multiplayerButton.getY() - multiplayerButton.getHeight() - buttonSpacing);
+        optionsButton.addListener(new InputListener() { //adding listener to newGameButton
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		game.setScreen(game.optionsScreen);
+        	}
+        	
+        });
         
         loreButton = new TextButton("Lore", style);
         loreButton.setWidth(buttonWidth);
@@ -124,11 +137,33 @@ public class MenuScreen implements Screen{
         loreButton.setX(Gdx.graphics.getWidth() / 2 - loreButton.getWidth() / 2);
         loreButton.setY(optionsButton.getY() - optionsButton.getHeight() - buttonSpacing);
         
+        loreButton.addListener(new InputListener() { //adding listener to newGameButton
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		game.setScreen(game.loreScreen);
+        	}
+        	
+        });
+        
         creditsButton = new TextButton("Credits", style);
         creditsButton.setWidth(buttonWidth);
         creditsButton.setHeight(buttonHeight);
         creditsButton.setX(Gdx.graphics.getWidth() / 2 - creditsButton.getWidth() / 2);
         creditsButton.setY(loreButton.getY() - loreButton.getHeight() - buttonSpacing);
+        
+        creditsButton.addListener(new InputListener() { //adding listener to newGameButton
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		game.setScreen(game.creditsScreen); 
+        	}
+        	
+        });
         
         quitButton = new TextButton("Quit", style);
         quitButton.setWidth(buttonWidth);

@@ -1,7 +1,6 @@
 package deco2800.arcade.chess.pieces;
 
 import java.util.*;
-import java.awt.Graphics;
 public interface Piece {
 	
 	/**
@@ -65,6 +64,8 @@ public interface Piece {
 	 */
 	public int getPreference();
 
-	
-	
+	/**
+	 * Updates piece to say it has moved
+	 */
+	public void hasMoved();	
 }

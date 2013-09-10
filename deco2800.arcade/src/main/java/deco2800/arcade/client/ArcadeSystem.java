@@ -38,9 +38,11 @@ public class ArcadeSystem {
 		return arcade.hasPlayer();
 	}
 
-    public static void close() {
-        arcade.close();
+    public static void exit() {
+        arcade.arcadeExit();
     }
 
-	
+	public static GameClient getCurrentGame() {
+		return arcade.getCurrentGame();
+	}
 }

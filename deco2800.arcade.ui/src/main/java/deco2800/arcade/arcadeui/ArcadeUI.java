@@ -6,9 +6,9 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.Game.ArcadeGame;
 
 /**
  * This class is the main interface for the arcade.
@@ -18,45 +18,54 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
-
-	@SuppressWarnings("unused")
+	
 	private LoginScreen login = null;
-	@SuppressWarnings("unused")
+	private StoreScreen store = null;
 	private HomeScreen home = null;
-
+    @SuppressWarnings("unused")
+    private RegisterScreen register = null;
+	
 	private Screen current = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
 
+    private void chooseScreen() {
+		if (player == null) {
+			current = login;
+		} else if (player.getUsername() == "store") {
+			current = store;
+			// Guys, I have no freaking clue, soz. -Addison(GameHost)
+		} else {
+			current = home;
+		}
+    }
+	
 	@Override
 	public void create() {
-
 		ArcadeSystem.openConnection();
+        login = new LoginScreen();
+        home = new HomeScreen();
+        store = new StoreScreen();
+        register = new RegisterScreen();
 
-		if (player == null) {
-			current = login = new LoginScreen();
-		} else {
-			current = home = new HomeScreen();
-		}
-
+        chooseScreen();
 		this.setScreen(current);
-
-
 		super.create();
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
+		current.dispose();
 	}
-
+	
 	@Override
 	public void pause() {
 		super.pause();
 	}
-
+	
 	@Override
 	public void render() {
 		super.render();
@@ -77,5 +86,5 @@ public class ArcadeUI extends GameClient {
 	public Game getGame() {
 		return game;
 	}
-
+		
 }

@@ -1,0 +1,27 @@
+{
+    com.badlogic.gdx.graphics.g2d.BitmapFont: {
+        alt: { file: FreeSans_16.fnt },
+        default: { file: manteka_18.fnt }
+    },
+    com.badlogic.gdx.graphics.Color: {
+        red:    { a: 1, r: 1, g: 0, b: 0 },
+        green:  { a: 1, r: 0, g: 1, b: 0 },
+        blue:   { a: 1, r: 0, g: 0, b: 1 },
+        white:  { a: 1, r: 1, g: 1, b: 1 },
+        black:  { a: 1, r: 0, g: 0, b: 0 },
+        grey:   { a: 1, r: 0.5, g: 0.5, b: 0.5 }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+        default: { font: default, fontColor: white },
+        error: { font: default, fontColor: red }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+        default: { font: default, fontColor: white, selection: selection, cursor: cursor, background: textfield }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+        default: { font: default, fontColor: white, up: default-round, down: default-round-down }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+        default: { checkboxOn: check-on, checkboxOff: check-off, font: default, fontColor: white }
+    }
+}

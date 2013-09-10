@@ -163,7 +163,7 @@ public class Player extends User {
 	/**
 	 * Checks if the player is already friends with the specified player
 	 * 
-	 * @param friend
+	 * @param player
 	 *            The player that is being verified as a friend.
 	 * @return True if the player is friends with the specified player, false
 	 *         otherwise.
@@ -245,7 +245,7 @@ public class Player extends User {
 	/**
 	 * Remove an invite from the player's invite list.
 	 * 
-	 * @param friend
+	 * @param player
 	 *            Friend to be removed.
 	 * @ensure !this.friendInvites.contains(player)
 	 */

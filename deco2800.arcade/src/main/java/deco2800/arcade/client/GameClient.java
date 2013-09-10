@@ -37,7 +37,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
     public void incrementAchievement(final String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
         
-        
+        //FIXME gigantic line? Indentation?
         //if (achievementClient.progressForPlayer(player).progressForAchievement(achievementClient.achievementForID(achievementID)) >= achievementClient.achievementForID(achievementID).awardThreshold) {
         
         
@@ -137,6 +137,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	    
 
 		//toggles fullscreen on F11
+	    //FIXME big lines
 		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast && (hasF11PressedLast = !hasF11PressedLast)) {
 			Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, !Gdx.graphics.isFullscreen());
 		}

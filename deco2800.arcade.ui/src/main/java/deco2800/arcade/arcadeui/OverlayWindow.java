@@ -11,10 +11,11 @@ import deco2800.arcade.client.ArcadeInputMux;
 
 public class OverlayWindow extends Group {
 	
-	
+	private class OverlayWindowStage extends Stage {}
+
 	private NinePatch texture;
 	private Overlay overlay;
-	private Stage contentStage = new Stage();
+	private OverlayWindowStage contentStage = new OverlayWindowStage();
 	private Group contentGroup = new Group();
 	private OverlayWindowContent windowContent = null;
 	private float delta = 0;
@@ -73,4 +74,8 @@ public class OverlayWindow extends Group {
 	}
 	
 
+	public void destroy() {
+		ArcadeInputMux.getInstance().removeProcessor(contentStage);
+	}
+	
 }

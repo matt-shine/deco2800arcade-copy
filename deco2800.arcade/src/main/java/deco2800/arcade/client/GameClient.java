@@ -120,6 +120,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+		if (this.overlay != null) {
+			overlay.dispose();
+		}
 	}
 
 	@Override

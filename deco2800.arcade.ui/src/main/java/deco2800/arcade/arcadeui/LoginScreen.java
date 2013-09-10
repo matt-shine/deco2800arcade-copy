@@ -12,16 +12,17 @@ import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
 	
+	private class LoginScreenStage extends Stage {}
+	
 	private Skin skin;
-    private Stage stage;
+    private LoginScreenStage stage;
 
 	public LoginScreen() {
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
-        stage = new Stage();
-        ArcadeInputMux.getInstance().addProcessor(stage);
-
+        stage = new LoginScreenStage();
+        
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
@@ -85,6 +86,7 @@ public class LoginScreen implements Screen {
 
 	@Override
 	public void show() {
+		ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
 	@Override
@@ -94,7 +96,6 @@ public class LoginScreen implements Screen {
         stage.draw();
 
 	    if (ArcadeSystem.isLoggedIn()) {
-	    	this.dispose();
 	    	ArcadeSystem.goToGame("arcadeui");
 	    }
 	}

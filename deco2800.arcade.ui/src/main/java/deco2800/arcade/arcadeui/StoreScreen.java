@@ -35,7 +35,6 @@ public class StoreScreen implements Screen {
     public StoreScreen() {
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         stage = new Stage();
-        ArcadeInputMux.getInstance().addProcessor(stage);
         
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
@@ -208,6 +207,7 @@ public class StoreScreen implements Screen {
     
 	@Override
 	public void show() {
+		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override

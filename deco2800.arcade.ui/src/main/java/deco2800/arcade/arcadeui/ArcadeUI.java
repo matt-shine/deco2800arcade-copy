@@ -58,6 +58,7 @@ public class ArcadeUI extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
+		current.dispose();
 	}
 	
 	@Override

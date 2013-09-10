@@ -300,7 +300,6 @@ public class Chess extends GameClient implements InputProcessor {
 			
 			setPiecePics();
 			drawPieces();
-			System.out.println("HI");
 		}
 		return true;
 	}

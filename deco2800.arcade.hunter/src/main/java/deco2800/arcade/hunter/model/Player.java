@@ -99,6 +99,7 @@ public class Player extends Entity {
 		return state;
 	}
 	
+	@Override
 	public void update(float delta) {
 		//Everything depends on everything else here, may have to rearrange, or even double up on checks
 		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO

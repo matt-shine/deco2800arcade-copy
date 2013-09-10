@@ -10,9 +10,14 @@ import deco2800.arcade.platformergame.PlatformerGame;
 
 @ArcadeGame(id="hunter")
 public class Hunter extends PlatformerGame {
-	
-	public int screenWidth = 1280;
-	public int screenHeight = 720;
+	public enum Config {
+		INSTANCE;
+		public static int screenWidth = 1280;
+		public static int screenHeight = 720;
+		public final static int TILE_SIZE = 64;
+		public final static int PANE_SIZE = 16;
+		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
+	}
 
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);

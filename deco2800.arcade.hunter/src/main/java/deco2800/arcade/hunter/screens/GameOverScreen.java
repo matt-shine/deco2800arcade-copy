@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.Hunter.Config;
 
 /**
  * A Hunter game for use in the Arcade
@@ -27,7 +28,7 @@ public class GameOverScreen implements Screen {
 		parent = p;
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, parent.screenWidth, parent.screenHeight);
+		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
 		
 		shapeRenderer = new ShapeRenderer();
 	}
@@ -63,7 +64,7 @@ public class GameOverScreen implements Screen {
 	    shapeRenderer.filledRect(0, 0, 100, 100);
 	    
 	    shapeRenderer.setColor(Color.BLUE);
-	    shapeRenderer.filledRect(parent.screenWidth - 100, parent.screenHeight - 100, 100, 100);
+	    shapeRenderer.filledRect(Config.screenWidth - 100, Config.screenHeight - 100, 100, 100);
 	    
 	    shapeRenderer.end();
 		

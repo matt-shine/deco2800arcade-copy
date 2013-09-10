@@ -48,4 +48,8 @@ public abstract class Entity {
 	public void setY(float y) {
 		this.bounds.y = y;
 	}
+	
+	public void update(float delta) {}
+	
+	public void draw() {}
 }

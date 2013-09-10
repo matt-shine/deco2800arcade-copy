@@ -8,10 +8,10 @@ public class BackgroundSprite extends Entity {
 
 	public BackgroundSprite(Vector2 pos, float width, float height) {
 		super(pos, width, height);
-		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
 	public void update(float delta) {
-		setX(getX() - 10);
+		setX(getX() - 64 * delta);
 	}
 }

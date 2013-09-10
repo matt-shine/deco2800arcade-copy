@@ -34,4 +34,16 @@ public class EntityCollection implements Iterable<Entity> {
 	public Iterator<Entity> iterator() {
 		return entities.values().iterator();
 	}
+	
+	public void updateAll(float delta) {
+		for (Entity e : this) {
+			e.update(delta);
+		}
+	}
+	
+	public void drawAll() {
+		for (Entity e : this) {
+			e.draw();
+		}
+	}
 }

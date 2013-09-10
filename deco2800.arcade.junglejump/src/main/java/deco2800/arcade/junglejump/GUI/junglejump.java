@@ -87,13 +87,13 @@ public class junglejump extends GameClient implements InputProcessor {
 	boolean jumping = false;
 	float velocity = 5.0f;
 	boolean correct = false;
-	boolean onPlatform = false;
+	boolean onPlatform, isFalling = false;
 
 	Texture texture;
 	Texture monkeySit, monkeyRun1, monkeyRun2;
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
-	Texture gameBackground;
+	Texture gameBackground, platform;
 	ShapeRenderer shapeRenderer;
 
 	Music themeMusic;
@@ -168,6 +168,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
 		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
 		gameBackground = new Texture(("junglejumpassets/gameBackground.png"));
+		platform = new Texture("junglejumpassets/platform.png");
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
@@ -251,20 +252,35 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (movingLeft) {
 				monkeyX -= 2;
 				monkeyRun--;
+				if (!isOnPlatform(monkeyX, monkeyY)) {
+					isFalling = true;
+				} else isFalling = false;
 			}
 			if (movingRight) {
 				monkeyX += 2;
 				monkeyRun++;
+				if (!isOnPlatform(monkeyX, monkeyY)) {
+					isFalling = true;
+				} else isFalling = false;
+			}
+			if ((monkeyY > -3) && (monkeyY < 3)) {
+				isFalling = false;
+			}
+			if (isFalling) {
+				if (isOnPlatform(monkeyX, monkeyY)) {
+					isFalling = false;
+				} else monkeyY += -9.8f / 2f;
 			}
 			if (jumping) {
-				velocity = (velocity - 9.8f / 50f);
-				if (monkeyY > monkeyYoriginal) {
+				velocity = (velocity - 9.8f / 75f);
+				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, monkeyY))) {
 					monkeyY += velocity;
 					if (correct) {
 						monkeyYoriginal += 1.3f;
 						correct = false;
 					}
 				} else {
+					isFalling = false;
 					jumping = false;
 				}
 			}
@@ -293,6 +309,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			} else if (!leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
+			// Add platforms from platform coordinate array
+			batch.draw(platform, 100, 50);
+
 			batch.end();
 			camera.update();
 			super.render();
@@ -301,6 +320,13 @@ public class junglejump extends GameClient implements InputProcessor {
 			break;
 		}
 
+	}
+	public boolean isOnPlatform(float x, float y) {
+		// Place holder for checking through platform array
+		// Consider data structure for efficiency
+		System.out.print(y);
+		if (x > 100 && x < 170 && y > 50 && y < 75 ) return true;
+		else return false;
 	}
 
 	@Override

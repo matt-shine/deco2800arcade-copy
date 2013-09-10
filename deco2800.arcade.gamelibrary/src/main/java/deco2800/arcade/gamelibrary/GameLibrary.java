@@ -7,6 +7,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class GameLibrary extends GameClient {
     @Override
     public void create() {
         ArcadeSystem.openConnection();
-        updateScreen(new LibraryScreen(this));
+        switchViews();
         super.create();
     }
 
@@ -57,6 +58,7 @@ public class GameLibrary extends GameClient {
      * Update the current screen being display
      */
     public void updateScreen(Screen screen) {
+        //if (curentScreen != null) curentScreen.dispose();
         curentScreen = screen;
         setScreen(curentScreen);
     }
@@ -115,5 +117,19 @@ public class GameLibrary extends GameClient {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void switchViews() {
+        switch (player.getLibraryStyle().getLayout()) {
+            case LibraryStyle.LIST_VIEW:
+                updateScreen(new ListScreen(this));
+                break;
+            case LibraryStyle.GRID_VIEW:
+                updateScreen(new GridScreen(this));
+                break;
+            default:
+                updateScreen(new ListScreen(this));
+                break;
+        }
     }
 }

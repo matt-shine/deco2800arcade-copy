@@ -16,7 +16,7 @@ import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
 public class MainGameScreen implements Screen {
-	
+	//FIXME some big methods that could use whitespace or shrinking to be more readable
 	private final MainGame game;
 	private OrthographicCamera camera;
 	AssetManager manager;

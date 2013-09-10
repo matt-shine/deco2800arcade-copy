@@ -15,7 +15,7 @@ import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
 public class SpriteLogic {
-
+	//FIXME some big methods that may warrant shrinking
 	//define array of keys for P1 / P2 zones
 	final static String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
 	final static String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};

@@ -51,7 +51,7 @@ public class MainInputProcessor implements InputProcessor {
 	
 	@Override
 	public boolean keyDown (int keycode) {
-
+		//FIXME big method
         if(!gameStarted) {
             this.initialDraw(4);
             gameStarted = true;
@@ -202,7 +202,7 @@ public class MainInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
-
+    	//FIXME big method
         System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
 
         //If currently zoomed / gamefinished return

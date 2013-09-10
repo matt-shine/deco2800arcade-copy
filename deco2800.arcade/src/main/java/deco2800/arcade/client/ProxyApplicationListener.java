@@ -6,15 +6,14 @@ import com.badlogic.gdx.ApplicationListener;
 
 public class ProxyApplicationListener implements ApplicationListener {
 
-	//FIXME why the name abbreviation?
-	private Object mon = null;
+	private Object monitor = null;
 	private boolean created = false;
 	private int width = 0, height = 0;
 	private ApplicationListener target = null;
 	
 	
 	public void setThreadMonitor(Object mon) {
-		this.mon = mon;
+		this.monitor = mon;
 	}
 	
 	public void setTarget(ApplicationListener target) {
@@ -38,14 +37,14 @@ public class ProxyApplicationListener implements ApplicationListener {
 	@Override
 	public void create() {
 		//So I wrote this a while ago and I can't remember how it works...
-		if (mon != null) {
+		if (monitor != null) {
 			target.resize(width, height);
 			target.create();
 			this.created = true;
 			
-			synchronized (mon) {
-				this.mon.notify();
-				this.mon = null;
+			synchronized (monitor) {
+				this.monitor.notify();
+				this.monitor = null;
 			}
 		}
 	}

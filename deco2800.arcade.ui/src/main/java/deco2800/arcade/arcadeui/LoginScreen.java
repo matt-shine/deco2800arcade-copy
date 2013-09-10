@@ -12,16 +12,17 @@ import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
 	
+	private class LoginScreenStage extends Stage {}
+	
 	private Skin skin;
-    private Stage stage;
+    private LoginScreenStage stage;
 
 	public LoginScreen() {
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
-        stage = new Stage();
-        ArcadeInputMux.getInstance().addProcessor(stage);
-
+        stage = new LoginScreenStage();
+        
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
@@ -34,12 +35,14 @@ public class LoginScreen implements Screen {
         passwordText.setMessageText("Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
+
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
         CheckBox rememberBox = new CheckBox("Remember Me", skin);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin);
         TextButton registerButton = new TextButton("Register", skin);
+        TextButton storeButton = new TextButton("Store", skin);
 
         table.add(errorLabel).colspan(2);
         table.row();
@@ -54,25 +57,36 @@ public class LoginScreen implements Screen {
         table.add(loginButton).width(200).pad(5);
         table.add(registerButton).width(200).pad(5);
         table.row();
-        table.add(forgotLogButton).pad(5);
-
+        table.add(forgotLogButton).width(200).pad(5);
+        table.add(storeButton).width(200).pad(5);
+        
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 ArcadeSystem.login(usernameText.getText());
             }
         });
+        
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
             }
         });
+        
         forgotLogButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+            }
+        });
+            	
+        storeButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	ArcadeSystem.login("store");
+            	// Please find a way to fix this. I'm so tired. -Addison(GameHost)
             }
         });
 	}
 
 	@Override
 	public void show() {
+		ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
 	@Override
@@ -82,7 +96,6 @@ public class LoginScreen implements Screen {
         stage.draw();
 
 	    if (ArcadeSystem.isLoggedIn()) {
-	    	this.dispose();
 	    	ArcadeSystem.goToGame("arcadeui");
 	    }
 	}

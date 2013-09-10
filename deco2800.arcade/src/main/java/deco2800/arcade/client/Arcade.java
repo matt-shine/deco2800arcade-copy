@@ -229,6 +229,7 @@ public class Arcade extends JFrame {
 
 		if (selectedGame != null) {
 			selectedGame.gameOver();
+			proxy.dispose();
 		}
 		proxy.setTarget(new DummyApplicationListener());
 	}

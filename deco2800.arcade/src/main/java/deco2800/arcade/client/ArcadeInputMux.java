@@ -9,13 +9,10 @@ public class ArcadeInputMux extends InputMultiplexer {
 	
 	public static InputMultiplexer getInstance() {
 		if (inst == null) {
-			inst = new InputMultiplexer();
+			inst = new ArcadeInputMux();
 			Gdx.input.setInputProcessor(inst);
 		}
 		return inst;
 	}
-	
-	
-	
 	
 }

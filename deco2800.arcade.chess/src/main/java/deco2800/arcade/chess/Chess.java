@@ -1,33 +1,25 @@
 package deco2800.arcade.chess;
 
-import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.ImageObserver;
-import java.util.*;
-import java.awt.image.BufferedImage;
-import java.awt.Image;
-
 import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.chess.*;
 import deco2800.arcade.chess.pieces.King;
 import deco2800.arcade.chess.pieces.Piece;
 
 import java.awt.*;
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.net.URL;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -35,19 +27,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-
-import deco2800.arcade.model.Game;
-import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.network.NetworkClient;
+import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
-public class Chess extends GameClient implements InputProcessor, UIOverlay {
-
+public class Chess extends GameClient implements InputProcessor {
+	//FIXME class needs tidying up
+	
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
 	Piece movingPiece = null;
@@ -70,7 +55,7 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 			blackPawn4Pos, blackPawn5Pos, blackPawn6Pos, blackPawn7Pos;
 
 	Board board;
-
+	
 	boolean players_move;
 	boolean playing;
 	Piece piece = new King(false);
@@ -84,15 +69,10 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
-	public static final int NUM_1 = 8;
-	public static final int NUM_2 = 9;
-	public static final int NUM_3 = 10;
-	public static final int NUM_4 = 11;
+	public static final int NUM_1 = 8, NUM_2 = 9, NUM_3 = 10, NUM_4 = 11;
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
-
-	private String statusMessage;
 
 	private Texture chessBoard;
 
@@ -103,12 +83,13 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 			whiteRook2, whiteKnight1, whiteKnight2, whiteKing, whiteQueen,
 			whitePawn0, whitePawn1, whitePawn2, whitePawn3, whitePawn4,
 			whitePawn5, whitePawn6, whitePawn7;
+	
+	private int loadedStyle;
+	private ArrayList<String> styles;
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
-	private NetworkClient networkClient;
-
-	private Texture texture;
+	private NetworkClient networkClient;	
 
 	/**
 	 * Initialises a new game
@@ -123,6 +104,32 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; // TODO eventually the server may send back the
 									// opponent's actual username
+		
+		URL resource = this.getClass().getResource("/");
+		
+		String path = resource.toString().replace(".arcade/build/classes/main/", 
+				".arcade.chess/src/main/").replace("file:", "") + 
+				"resources/imgs/styles.txt";
+		
+		styles = new ArrayList<String>();
+		
+	    try {
+	    	BufferedReader br = new BufferedReader(new FileReader(path));
+	        String line = br.readLine();
+
+	        while (line != null) {
+	            styles.add(line);
+	            line = br.readLine();
+	        }
+	        br.close();
+	    } catch (FileNotFoundException e) {
+	    	System.out.println(e.getMessage());
+	    } catch (IOException e) {
+	    	System.out.println(e.getMessage());
+		}
+	    
+	    loadedStyle = 0;	    
+
 	}
 
 	@Override
@@ -144,34 +151,34 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 		Gdx.input.setInputProcessor(inputMultiplexer);
 
 		// load the images for the droplet and the bucket, 512x512 pixels each
-		chessBoard = new Texture(Gdx.files.classpath("imgs/chessboard.png"));
+		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
 
 		// Pieces
 		blackBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black B.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black B.png")));
 		blackRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black R.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black R.png")));
 		blackKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black N.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black N.png")));
 		blackKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black K.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black K.png")));
 		blackQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black Q.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black Q.png")));
 		blackPawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black P.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black P.png")));
 
 		whiteBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White B.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White B.png")));
 		whiteRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White R.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White R.png")));
 		whiteKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White N.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White N.png")));
 		whiteKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White K.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White K.png")));
 		whiteQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White Q.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White Q.png")));
 		whitePawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White P.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White P.png")));
 
 		whiteRook2 = whiteRook1;
 		whiteBishop2 = whiteBishop1;
@@ -194,17 +201,31 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 		blackPawn5 = blackPawn0;
 		blackPawn6 = blackPawn0;
 		blackPawn7 = blackPawn0;
+		
+		this.getOverlay().setListeners(new Screen() {
+			@Override
+			public void hide() {
+			}
+		
+			@Override
+			public void show() {
+			}
+			
+			@Override
+			public void pause() {}
+			@Override
+			public void render(float arg0) {
+			}
+			@Override
+			public void resize(int arg0, int arg1) {}
+			@Override
+			public void resume() {}
+			@Override
+			public void dispose() {}
+		});
 
-	}
-
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
-
-	@Override
-	public void pause() {
-		super.pause();
+		
+		
 	}
 
 	/**
@@ -215,7 +236,7 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 		// Pieces
 
 		// White background
-		Gdx.gl.glClearColor(255, 255, 255, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		// tell the camera to update its matrices.
@@ -223,53 +244,7 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
 
-		batch.begin();
-
-		// Board
-		batch.draw(chessBoard, horizOff, verticOff);
-
-		// monkey balls
-
-		// black pieces
-		batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
-		batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
-		batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
-		batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
-		batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
-		batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
-		batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
-		batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
-
-		// whitepieces
-		batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
-		batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
-		batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
-		batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
-		batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
-		batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
-		batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
-		batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
-
-		// pawns white
-		batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
-		batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
-		batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
-		batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
-		batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
-		batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
-		batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
-		batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
-		// pawns black
-		batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
-		batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
-		batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
-		batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
-		batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
-		batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
-		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
-		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
-
-		batch.end();
+		drawPieces();
 
 		super.render();
 
@@ -316,13 +291,15 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 	@Override
 	public boolean keyDown(int arg0) {
 
-		if (arg0 == NUM_2) {
-			colorChange("blue");
-		} else if (arg0 == NUM_3) {
-			colorChange("brown");
-		} else if (arg0 == NUM_1) {
-			create();
-			render();
+		if(arg0 == Keys.SHIFT_LEFT) {
+			if(loadedStyle == styles.size()-1) {
+				loadedStyle = 0;
+			} else {
+				loadedStyle++;
+			}
+			
+			setPiecePics();
+			drawPieces();
 		}
 		return true;
 	}
@@ -857,208 +834,104 @@ public class Chess extends GameClient implements InputProcessor, UIOverlay {
 
 	}
 
-	public void colorChange(String color) {
-		if (color == "blue") {
-			blackBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue B.png")));
-			blackRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue R.png")));
-			blackKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue N.png")));
-			blackKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue K.png")));
-			blackQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue Q.png")));
-			blackPawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue P.png")));
-			whiteBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 B.png")));
-			whiteRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 R.png")));
-			whiteKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 N.png")));
-			whiteKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 K.png")));
-			whiteQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 Q.png")));
-			whitePawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 P.png")));
-			whiteRook2 = whiteRook1;
-			whiteBishop2 = whiteBishop1;
-			whiteKnight2 = whiteKnight1;
-			blackBishop2 = blackBishop1;
-			blackKnight2 = blackKnight1;
-			blackRook2 = blackRook1;
-			whitePawn1 = whitePawn0;
-			whitePawn2 = whitePawn0;
-			whitePawn3 = whitePawn0;
-			whitePawn4 = whitePawn0;
-			whitePawn5 = whitePawn0;
-			whitePawn6 = whitePawn0;
-			whitePawn7 = whitePawn0;
-			blackPawn1 = blackPawn0;
-			blackPawn2 = blackPawn0;
-			blackPawn3 = blackPawn0;
-			blackPawn4 = blackPawn0;
-			blackPawn5 = blackPawn0;
-			blackPawn6 = blackPawn0;
-			blackPawn7 = blackPawn0;
-			chessBoard = new Texture(Gdx.files.classpath("imgs/Board_blue.png"));
-			camera.update();
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.setProjectionMatrix(camera.combined);
-			batch.begin();
-
-			// Board - blue
-			batch.draw(chessBoard, horizOff, verticOff);
-
-			// monkey balls
-
-			// black pieces - dark blue
-			batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
-			batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
-			batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
-			batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
-			batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
-			batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
-			batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
-			batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
-			// whitepieces - light blue
-			batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
-			batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
-			batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
-			batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
-			batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
-			batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
-			batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
-			batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
-			// pawns white
-			batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
-			batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
-			batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
-			batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
-			batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
-			batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
-			batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
-			batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
-			// pawns black
-			batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
-			batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
-			batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
-			batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
-			batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
-			batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
-			batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
-			batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
-			batch.end();
-		} else if (color == "brown") {
-
-			blackBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown B.png")));
-			blackRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown R.png")));
-			blackKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown N.png")));
-			blackKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown K.png")));
-			blackQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown Q.png")));
-			blackPawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown P.png")));
-			whiteBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow B.png")));
-			whiteRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow R.png")));
-			whiteKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow N.png")));
-			whiteKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow K.png")));
-			whiteQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow Q.png")));
-			whitePawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow P.png")));
-			whiteRook2 = whiteRook1;
-			whiteBishop2 = whiteBishop1;
-			whiteKnight2 = whiteKnight1;
-			blackBishop2 = blackBishop1;
-			blackKnight2 = blackKnight1;
-			blackRook2 = blackRook1;
-			whitePawn1 = whitePawn0;
-			whitePawn2 = whitePawn0;
-			whitePawn3 = whitePawn0;
-			whitePawn4 = whitePawn0;
-			whitePawn5 = whitePawn0;
-			whitePawn6 = whitePawn0;
-			whitePawn7 = whitePawn0;
-			blackPawn1 = blackPawn0;
-			blackPawn2 = blackPawn0;
-			blackPawn3 = blackPawn0;
-			blackPawn4 = blackPawn0;
-			blackPawn5 = blackPawn0;
-			blackPawn6 = blackPawn0;
-			blackPawn7 = blackPawn0;
-			chessBoard = new Texture(
-					Gdx.files.classpath("imgs/Board_brown.png"));
-			camera.update();
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.setProjectionMatrix(camera.combined);
-			batch.begin();
-
-			// Board - blue
-			batch.draw(chessBoard, horizOff, verticOff);
-
-			// monkey balls
-
-			// black pieces - dark blue
-			batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
-			batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
-			batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
-			batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
-			batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
-			batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
-			batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
-			batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
-			// whitepieces - light blue
-			batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
-			batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
-			batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
-			batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
-			batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
-			batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
-			batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
-			batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
-			// pawns white
-			batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
-			batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
-			batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
-			batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
-			batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
-			batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
-			batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
-			batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
-			// pawns black
-			batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
-			batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
-			batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
-			batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
-			batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
-			batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
-			batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
-			batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
-			batch.end();
-		}
-	}
-
-	@Override
-	public void setListeners(Screen l) {
-		// TODO Auto-generated method stub
+	private void drawPieces() {
+		whiteRook2 = whiteRook1; whiteBishop2 = whiteBishop1; 
+		whiteKnight2 = whiteKnight1; blackBishop2 = blackBishop1;
+		blackKnight2 = blackKnight1; blackRook2 = blackRook1;
+		whitePawn1 = whitePawn0; whitePawn2 = whitePawn0;
+		whitePawn3 = whitePawn0; whitePawn4 = whitePawn0;
+		whitePawn5 = whitePawn0; whitePawn6 = whitePawn0;
+		whitePawn7 = whitePawn0; blackPawn1 = blackPawn0;
+		blackPawn2 = blackPawn0; blackPawn3 = blackPawn0;
+		blackPawn4 = blackPawn0; blackPawn5 = blackPawn0;
+		blackPawn6 = blackPawn0; blackPawn7 = blackPawn0;
 		
-	}
+		camera.update();
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
 
-	@Override
-	public void addPopup(PopupMessage p) {
-		// TODO Auto-generated method stub
-		
+		// Board - blue
+		batch.draw(chessBoard, horizOff, verticOff);
+
+		// black pieces - dark blue
+		batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
+		batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
+		batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
+		batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
+		batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
+		batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
+		batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
+		batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
+		// whitepieces - light blue
+		batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
+		batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
+		batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
+		batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
+		batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
+		batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
+		batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
+		batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
+		// pawns white
+		batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
+		batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
+		batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
+		batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
+		batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
+		batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
+		batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
+		batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
+		// pawns black
+		batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
+		batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
+		batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
+		batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
+		batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
+		batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
+		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
+		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
+		batch.end();
 	}
+	
+	private void setPiecePics() {
+		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
+		
+		blackBishop1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black B.png")));
+		blackRook1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black R.png")));
+		blackKnight1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black N.png")));
+		blackKing = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black K.png")));
+		blackQueen = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black Q.png")));
+		blackPawn0 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black P.png")));
+		whiteBishop1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White B.png")));
+		whiteRook1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White R.png")));
+		whiteKnight1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White N.png")));
+		whiteKing = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White K.png")));
+		whiteQueen = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White Q.png")));
+		whitePawn0 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White P.png")));
+	}
+	
+	private String[] readLines(String filename) throws IOException {
+        FileReader fileReader = new FileReader(filename);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        ArrayList<String> lines = new ArrayList<String>();
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+            lines.add(line);
+        }
+        bufferedReader.close();
+        return lines.toArray(new String[lines.size()]);
+    }
 
 }

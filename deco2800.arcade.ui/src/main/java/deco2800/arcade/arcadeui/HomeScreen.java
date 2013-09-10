@@ -13,9 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.model.Game;
 
 public class HomeScreen implements Screen {
 
@@ -23,9 +22,23 @@ public class HomeScreen implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
-	Set<GameClient> games = null;
+	Set<String> games = null;
+	
+	
+	
+	
 	
 	public HomeScreen() {
+		
+		//check that no input listeners are left
+		if (ArcadeInputMux.getInstance().getProcessors().size != 0) {
+			System.err.println("Home Screen: Input listener leak detected. The following " +
+					ArcadeInputMux.getInstance().getProcessors().size + " listener(s) remain:");
+			
+			for (int i = ArcadeInputMux.getInstance().getProcessors().size - 1; i >= 0; i--) {
+				System.err.println("Home Screen: " + ArcadeInputMux.getInstance().getProcessors().get(i));
+			}
+		}
 		
 	}
 	
@@ -39,13 +52,13 @@ public class HomeScreen implements Screen {
 		camera.setToOrtho(true, 1280, 720);
 		shapeRenderer = new ShapeRenderer();
 		
-		games = ArcadeSystem.getGameList();
+		games = ArcadeSystem.getGamesList();
+	    
 	}
-
+	
 	@Override
 	public void render(float arg0) {
-
-
+		
 		camera.update();
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
@@ -71,13 +84,12 @@ public class HomeScreen implements Screen {
 	    font.draw(batch, "Select a game by pressing a number key:", 110, h);
 	    h += 8;
 	    
-	    for (GameClient gameClient : games) {
-            Game game = gameClient.getGame();
+	    for (String game : games) {
 	    	h += 16;
-		    font.draw(batch, "" + index + ". " + game.name + " : " + (game.description == null ? "No Description Found" : game.description), 110, h);
+		    font.draw(batch, "" + (char)(index + 65) + ". " + game, 110, h);
 		    
-		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
-		    	ArcadeSystem.goToGame(gameClient);
+		    if (Gdx.input.isKeyPressed(Keys.A + index)) {
+		    	ArcadeSystem.goToGame(game);
 		    }
 		    
 		    index++;

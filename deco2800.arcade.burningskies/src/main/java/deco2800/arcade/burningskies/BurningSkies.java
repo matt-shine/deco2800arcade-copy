@@ -1,6 +1,7 @@
 package deco2800.arcade.burningskies;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 
 import deco2800.arcade.model.Game;
@@ -31,6 +32,7 @@ public class BurningSkies extends GameClient {
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
 	private Music nowPlaying;
+	private boolean isPaused = false;
 
 	//TODO: ACHIEVEMENTS
 
@@ -94,7 +96,36 @@ public class BurningSkies extends GameClient {
 	public void create() {
 		super.create();
 		setScreen( new SplashScreen(this) );
-		//setScreen( new PlayScreen(this) );
+		this.getOverlay().setListeners(new Screen() {
+			@Override
+			public void hide() {
+				isPaused = false;
+			}
+		
+			@Override
+			public void show() {
+				isPaused = true;
+			}
+			
+			@Override
+			public void pause() {}
+			@Override
+			public void render(float arg0) {}
+			@Override
+			public void resize(int arg0, int arg1) {}
+			@Override
+			public void resume() {}
+			@Override
+			public void dispose() {}
+		});
+	}
+	
+	public boolean isPaused() {
+		return isPaused;
+	}
+	
+	public void setPause(boolean pause) {
+		isPaused = pause;
 	}
 
 	@Override

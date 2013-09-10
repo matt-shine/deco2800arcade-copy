@@ -76,15 +76,22 @@ public class BrickModel extends ItemModel {
 	/**
 	 * Remove one brick from this <code>BrickModel</code>
 	 */
-	void removeOne() {
+	public void removeOne() {
 		removeAmount(1);
 	}
-
-	@Override
-	public Type getType() {
-		return ItemModel.Type.BRICK;
+	
+	public BrickModel(int number) {
+		super(ItemType.BRICK);
+		
+		if (number < 0 || number > MAX_BRICKS) {
+			throw new IllegalArgumentException(
+					"number must result in a amount that is"
+					+ " positive and less than or equal to "
+					+ "MAX_BRICKS.");
+		}
+		amount = number;
 	}
-
+	
 	/**
 	 * Constructs a new <code>BrickModel</code> by setting the
 	 * Specified <code>tileModel</code> and the <code>amount</code> of bricks.
@@ -93,7 +100,14 @@ public class BrickModel extends ItemModel {
 	 * @param number amount of bricks spawned
 	 */
 	public BrickModel(TileModel spawnedOn, int number) {
-		super(spawnedOn);
+		super(ItemType.BRICK, spawnedOn);
+		
+		if (number < 0 || number > MAX_BRICKS) {
+			throw new IllegalArgumentException(
+					"number must result in a amount that is"
+					+ " positive and less than or equal to "
+					+ "MAX_BRICKS.");
+		}
 		amount = number;
 	}
 }

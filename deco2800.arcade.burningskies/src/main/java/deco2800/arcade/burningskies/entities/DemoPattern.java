@@ -10,25 +10,19 @@ public class DemoPattern extends BulletPattern {
 	
 	private int angle = 0;
 	private Texture image;
+	private Texture image2;
 	
 	public DemoPattern(Stage stage, Ship emitter) {
 		super(stage, emitter);
-		image = new Texture(Gdx.files.internal("images/placeholder_bullet.png"));
+		image = new Texture(Gdx.files.internal("images/energy_ball_1.png"));
+		image2 = new Texture(Gdx.files.internal("images/energy_ball_2.png"));
 		interval = (float) 0.01;
 	}
 	
-	public void fire(float lag) {
-		float x = 0, y = 0;
-		if(emitter == null) {
-			x = stage.getWidth()/2;
-			y = stage.getHeight()/2;
-		} else {
-			x = emitter.getX() + emitter.getWidth()/2;
-			y = emitter.getY() + emitter.getHeight()/2;
-		}
+	public void fire(float lag, float x, float y) {
 		SpiralBullet bullet = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle, 1,  image);
 		stage.addActor(bullet);
-		SpiralBullet bullet2 = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle+180, -1, image);
+		SpiralBullet bullet2 = new SpiralBullet(Affinity.PLAYER, 10, null, null, new Vector2(x,y), angle+180, -1, image2);
 		stage.addActor(bullet2);
 		bullet.act(lag);
 		bullet2.act(lag);

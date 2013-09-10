@@ -2,86 +2,224 @@ package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 
 public class StoreScreen implements Screen {
 	
-	private Skin skin;
-    private Skin skin2;
+    private Skin skin;
     private Stage stage;
 	
+    private float funds;
+    private int tokens;
+    
+    Texture bg;
+    Sprite bgSprite;
+    SpriteBatch batch;
+    
     public StoreScreen() {
+    	//FIXME big method
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
-        skin2 = new Skin();
+        stage = new Stage();
         
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
-        skin2.add("white", new Texture(pixmap));
+        skin.add("white", new Texture(pixmap));
         
-        // THIS IS THE CODE THAT SPECIFYS TEXT FIELD STYLES
         TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
         textFieldStyle.font = skin.getFont("default");
         textFieldStyle.fontColor = Color.WHITE;
-        textFieldStyle.cursor = skin2.newDrawable("white", Color.WHITE);
-        textFieldStyle.selection = skin2.newDrawable("white", Color.WHITE);
-        //textFieldStyle.background = ;
-        skin2.add("default", textFieldStyle);
+        textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
+        textFieldStyle.selection = skin.newDrawable("white", Color.WHITE);
+        skin.add("default", textFieldStyle);
         
-        // THIS IS THE CODE THAT SPECIFYS TEXT BUTTON STYLES
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin2.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin2.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin2.newDrawable("white", Color.WHITE);
-        textButtonStyle.over = skin2.newDrawable("white", Color.LIGHT_GRAY);
+        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        //textButtonStyle.checked = skin2.newDrawable("white", Color.WHITE);
+        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
-        skin2.add("default", textButtonStyle);
+        skin.add("default", textButtonStyle);
         
-        stage = new Stage();
-        ArcadeInputMux.getInstance().addProcessor(stage);
+        bg = new Texture("homescreen_bg.png");
+        bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        bgSprite = new Sprite(bg);
+        batch = new SpriteBatch();
         
-        Table table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
+        final Table leftBox = new Table();
+        final Table featuredBox = new Table();		// 'featured' box at top left of screen
+        final Table leftButtonBox = new Table();	// buttons to cycle through featured games
+        final Table rightButtonBox = new Table();	// ...
+        final Table topBox = new Table();
+        final Table botBox = new Table();
+        final Table transactions = new Table();
+        final Table search = new Table();
         
-        Label labelName = new Label("Label:", skin); // Label for Text Field
-        final TextField labelText = new TextField("", skin2); // Text Field
-        labelText.setMessageText("Message Prompt"); // Shadow Text for Text Field
-        labelName.setAlignment(Align.left);
-
-        TextButton buttonName = new TextButton("Login", skin2); // Button
+        leftBox.setSize(680, 500);
+        leftBox.setPosition(20, 20);
+        featuredBox.setSize(540, 160);
+        featuredBox.setPosition(90, 540);
+        leftButtonBox.setSize(50, 160);
+        leftButtonBox.setPosition(20, 540);
+        rightButtonBox.setSize(50, 160);
+        rightButtonBox.setPosition(650, 540);
+        topBox.setSize(540, 160);
+        topBox.setPosition(720, 540);
+        botBox.setSize(540, 500);
+        botBox.setPosition(720, 20);
         
-        // Stuff below adds the things that you've created up there^.
-        table.debug();  // Shows table debug lines
-        table.add(labelName).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
-        table.row();
-        table.add(labelText).width(150).padBottom(5).padTop(5).padLeft(10).padRight(10);
-        table.row();
-        table.add(buttonName).width(100).pad(10);
+        stage.addActor(leftBox);
+        stage.addActor(featuredBox);
+        stage.addActor(leftButtonBox);
+        stage.addActor(rightButtonBox);
+        stage.addActor(topBox);
+        stage.addActor(botBox);
+        
+        final Label searchLabel = new Label("Search:", skin);
+        final TextField searchField = new TextField("", skin);
+        final TextButton searchButton = new TextButton("Search", skin);
+        searchField.setMessageText("Search");
+        
+        final TextButton transactionsButton = new TextButton("Transactions", skin);
+        final TextButton buyGameButton = new TextButton("Buy Game", skin);
+        final TextButton buyTokenButton = new TextButton("Buy Tokens", skin);
+        final TextButton addFundsButton = new TextButton("Add Funds", skin);
+        final TextField buyField = new TextField("0", skin);
+        final Label fundLabel = new Label("$" + funds, skin);
+        final Label tokenLabel = new Label(tokens + " Tokens", skin);
+        
+        leftBox.debug(); // Shows table debug lines
+        featuredBox.debug();
+        leftButtonBox.debug();
+        rightButtonBox.debug();
+        topBox.debug();
+        botBox.debug();
+        
+        leftBox.add(search);
+        search.add(searchLabel).width(65);
+        search.add(searchField).width(135);
+        search.add(searchButton);
+        
+        // 'Featured games' box
+        final Label featuredLabel = new Label("Featured games!", skin);
+        
+        featuredBox.add(featuredLabel);
         
         
-        buttonName.addListener(new ChangeListener() {
+        // Left and right button boxes
+        final TextButton prevFeatButton = new TextButton("<<", skin);
+        final TextButton nextFeatButton = new TextButton(">>", skin);
+        leftButtonBox.add(prevFeatButton).width(50);
+        rightButtonBox.add(nextFeatButton).width(50);
+        
+        
+        // Transactions Tab
+        botBox.add(transactionsButton).width(200);
+        botBox.row();
+        botBox.add(transactions);
+        transactions.add(buyGameButton).width(100);
+        transactions.add(buyTokenButton).width(100);
+        transactions.row();
+        transactions.add(addFundsButton).width(100);
+        transactions.add(buyField).width(100);
+        
+        topBox.add(fundLabel).width(100);
+        topBox.add(tokenLabel).width(100);
+        
+        searchButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                System.out.println(labelText.getText());
+                System.out.println("Searching For: " + searchField.getText());
+            }
+        });
+        transactionsButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("toggle");
+                if(transactions.isVisible()) {
+                	transactions.setVisible(false);
+                } else {
+                	transactions.setVisible(true);
+                }
+            }
+        });
+        buyGameButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("bought game");
+            }
+        });
+        buyTokenButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	if (isInteger(buyField.getText())) {
+            		tokens += Integer.parseInt(buyField.getText());
+                    tokenLabel.setText(tokens + " Tokens");
+                    System.out.println("bought " + buyField.getText() + " tokens\nNow have " + tokens);
+            	}
+            	else {
+            		System.out.println("please enter positive integers only");
+            	}
+                
+            }
+        });
+        addFundsButton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	if (Float.parseFloat(buyField.getText()) < 0) {
+            		// prevent users from subtracting from their funds
+            		System.out.println("please enter positive values only");
+            	}
+            	else {
+            		// add funds
+            		funds += Float.parseFloat(buyField.getText());
+                    fundLabel.setText("$" + funds);
+                    System.out.println("added " + buyField.getText() + " funds\nNow have $" + funds);
+            	}
+                
             }
         });
 	}
     
+    
+    
+    public static boolean isInteger(String s) {
+        try { 
+            Integer.parseInt(s); 
+        } catch(NumberFormatException e) { 
+            return false; 
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+    
+    
+    
 	@Override
 	public void show() {
+		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	@Override
 	public void render(float arg0) {
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
+		batch.begin();
+		bgSprite.draw(batch);
+		batch.end();
+		
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
         Table.drawDebug(stage);  // Shows table debug lines
@@ -108,6 +246,5 @@ public class StoreScreen implements Screen {
 	
 	@Override
 	public void resize(int arg0, int arg1) {
-		// TODO Auto-generated method stub
 	}
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.burningskies.entities.GameMap;
 import deco2800.arcade.burningskies.entities.PlayerShip;
+import deco2800.arcade.burningskies.entities.PowerUp;
 
 
 public class PlayScreen implements Screen
@@ -43,8 +44,17 @@ public class PlayScreen implements Screen
     	Texture shiptext = new Texture(Gdx.files.internal("images/Jet1.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100));
     	map = new GameMap("fixme");
-    	stage.addActor(player);
+    	
+    	// Test code
+    	PowerUp test = new PowerUp();
+
+    	
+    	//System.out.println("The maps width: " + map.getImageWidth());
     	stage.addActor(map);
+    	stage.addActor(player);
+    	
+    	// Test code
+    	stage.addActor(test);
     }
     
     @Override

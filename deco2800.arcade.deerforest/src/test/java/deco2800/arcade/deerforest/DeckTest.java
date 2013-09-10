@@ -31,9 +31,9 @@ public class DeckTest {
 		List<AbstractCard> list = new ArrayList<AbstractCard>();
 		
 		// Create a new Card
-		c1 = new WaterMonster(100, null, null);
-		c2 = new FireMonster(100, null, null);
-		c3 = new DarkMonster(100, null, null);
+		c1 = new WaterMonster(100, 20, null);
+		c2 = new FireMonster(100, 20, null);
+		c3 = new DarkMonster(100, 20, null);
 		c4 = new GeneralSpell(null, null);
 		
 		list.add(c1);

@@ -6,6 +6,7 @@ import com.badlogic.gdx.ApplicationListener;
 
 public class ProxyApplicationListener implements ApplicationListener {
 
+	//FIXME why the name abbreviation?
 	private Object mon = null;
 	private boolean created = false;
 	private int width = 0, height = 0;

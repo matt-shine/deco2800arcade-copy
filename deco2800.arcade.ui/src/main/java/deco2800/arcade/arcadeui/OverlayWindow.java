@@ -11,13 +11,17 @@ import deco2800.arcade.client.ArcadeInputMux;
 
 public class OverlayWindow extends Group {
 	
-	
+	private class OverlayWindowStage extends Stage {}
+
 	private NinePatch texture;
 	private Overlay overlay;
-	private Stage contentStage = new Stage();
+	private OverlayWindowStage contentStage = new OverlayWindowStage();
 	private Group contentGroup = new Group();
-	private Group windowContent = null;
+	private OverlayWindowContent windowContent = null;
 	private float delta = 0;
+	private int height = 0;
+	private int width = 0;
+	
 	
 	public OverlayWindow(Overlay overlay) {
 		
@@ -27,7 +31,7 @@ public class OverlayWindow extends Group {
 		ArcadeInputMux.getInstance().addProcessor(contentStage);
 	}
 	
-	public void setContent(Group g) {
+	public void setContent(OverlayWindowContent g) {
 		
 		if (this.windowContent != null) {
 			contentGroup.removeActor(windowContent);
@@ -47,6 +51,16 @@ public class OverlayWindow extends Group {
 		super.draw(batch, parentAlpha);
 		
 		//weird stuff
+		if (overlay.getWidth() != width || overlay.getHeight() != height) {
+			width = overlay.getWidth();
+			height = overlay.getHeight();
+			if (windowContent != null) {
+				windowContent.resize(width, height);
+				windowContent.setBounds(160, 100, overlay.getWidth() - 320, overlay.getHeight() - 200);
+			}
+			contentStage.setViewport(width, height, true);
+			contentStage.getCamera().position.set(width / 2, height / 2, 0);
+		}
 		batch.end();
 		contentStage.act(delta);
 		contentStage.draw();
@@ -60,4 +74,8 @@ public class OverlayWindow extends Group {
 	}
 	
 
+	public void destroy() {
+		ArcadeInputMux.getInstance().removeProcessor(contentStage);
+	}
+	
 }

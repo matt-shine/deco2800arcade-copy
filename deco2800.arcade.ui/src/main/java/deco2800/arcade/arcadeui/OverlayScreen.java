@@ -16,9 +16,11 @@ import deco2800.arcade.client.ArcadeSystem;
  */
 public class OverlayScreen implements Screen {
 	
+	private class OverlayScreenStage extends Stage {}
+	
 	private Screen callbacks = null;
 	
-    private Stage stage;
+    private OverlayScreenStage stage;
     private Sidebar sidebar = null;
     private OverlayWindow window = null;
     
@@ -34,10 +36,9 @@ public class OverlayScreen implements Screen {
 		window = new OverlayWindow(overlay);
 		sidebar = new Sidebar(overlay, window);
 		
-		stage = new Stage();
+		stage = new OverlayScreenStage();
 		stage.addActor(window);
 		stage.addActor(sidebar);
-		ArcadeInputMux.getInstance().addProcessor(stage);
 		
 	}
 	
@@ -45,6 +46,7 @@ public class OverlayScreen implements Screen {
 
 	@Override
 	public void show() {
+		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	
@@ -66,16 +68,17 @@ public class OverlayScreen implements Screen {
 			
 		}
 		
+	    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+	    	ArcadeSystem.goToGame(ArcadeSystem.UI);
+	    }
+	    
+		
 		if (isUIOpen) {
 			
 			stage.act();
 			stage.draw();
 			Table.drawDebug(stage);
 			
-		    if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-		    	ArcadeSystem.goToGame(ArcadeSystem.UI);
-		    }
-		    
 		    if (callbacks != null) {
 		    	callbacks.render(d);
 		    }
@@ -90,6 +93,8 @@ public class OverlayScreen implements Screen {
 	    if (callbacks != null) {
 	    	callbacks.dispose();
 	    }
+	    ArcadeInputMux.getInstance().removeProcessor(stage);
+	    this.window.destroy();
 	}
 	
 	@Override
@@ -118,11 +123,13 @@ public class OverlayScreen implements Screen {
 
 
 	@Override
-	public void resize(int arg0, int arg1) {
-	    if (callbacks != null) {
-	    	callbacks.resize(arg0, arg1);
+	public void resize(int width, int height) {
+		stage.setViewport(width, height, true);
+		stage.getCamera().position.set(width / 2, height / 2, 0);
+		if (callbacks != null) {
+	    	callbacks.resize(width, height);
 	    }
-	    sidebar.resize(arg0, arg1);
+	    sidebar.resize(width, height);
 	}
 	
 	public Screen getListeners() {

@@ -53,16 +53,18 @@ public class junglejump extends GameClient implements InputProcessor {
 	// MENU ENUMS
 	public float NEW_GAME = 242;
 	public float CONTINUE = (float) (242 - 37.5);
-	public float LEVEL_SELECT = (float) (242 - 37.5*2);
-	public float ACHIEVEMENTS = (float) (242 - 37.5*3);
-	public float OPTIONS = (float) (242 - 37.5*4);
-	public float QUIT = (float) (242 - 37.5*5);
+	public float LEVEL_SELECT = (float) (242 - 37.5 * 2);
+	public float ACHIEVEMENTS = (float) (242 - 37.5 * 3);
+	public float OPTIONS = (float) (242 - 37.5 * 4);
+	public float QUIT = (float) (242 - 37.5 * 5);
+
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER
 	}
+
 	private GameState gameState;
 	PerspectiveCamera cam;
-    private SpriteBatch batch;
+	private SpriteBatch batch;
 
 	Frustum camGone = new Frustum();
 	private World world;
@@ -85,24 +87,26 @@ public class junglejump extends GameClient implements InputProcessor {
 	boolean jumping = false;
 	float velocity = 5.0f;
 	boolean correct = false;
-	
+	boolean onPlatform, isFalling = false;
+
 	Texture texture;
 	Texture monkeySit, monkeyRun1, monkeyRun2;
-	Texture gameBackground;
+	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
+	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
+	Texture gameBackground, platform;
 	ShapeRenderer shapeRenderer;
 
 	Music themeMusic;
 	Clip menuSound, jump, die, levelup, loselife, collect;
-	
-	
-	public static void main (String [] args) {
+
+	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
 	}
 
 	public junglejump(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
-        this.networkClient = networkClient; //this is a bit of a hack
+		this.networkClient = networkClient; // this is a bit of a hack
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
 		butX = 488f;
@@ -119,11 +123,11 @@ public class junglejump extends GameClient implements InputProcessor {
 			clip.open(audioIn);
 			clip.start();
 			clip.loop(clip.LOOP_CONTINUOUSLY);
-			
-//			System.out.println(file.getCanonicalPath());
-//			themeMusic = Gdx.audio.newMusic(fileh);
-//			themeMusic.setLooping(true);
-//			themeMusic.play();
+
+			// System.out.println(file.getCanonicalPath());
+			// themeMusic = Gdx.audio.newMusic(fileh);
+			// themeMusic.setLooping(true);
+			// themeMusic.play();
 		} catch (Exception e) {
 			Gdx.app.log(junglejump.messages,
 					"Audio File for Theme Music Not Found");
@@ -146,8 +150,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	 * movement and gravity
 	 */
 	private void createWorld() {
-		
-		
+
 	}
 
 	@Override
@@ -156,17 +159,24 @@ public class junglejump extends GameClient implements InputProcessor {
 		System.out.println(System.getProperty("user.dir"));
 		texture = new Texture(("junglejumpassets/mainscreen.png"));
 		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));
+		monkeySitRIGHT = new Texture(("junglejumpassets/monkeySit.png"));
+		monkeySitLEFT = new Texture(("junglejumpassets/monkeySitLEFT.png"));
 		monkeyRun1 = new Texture(("junglejumpassets/monkeyRun1.png"));
+		monkeyRun1RIGHT = new Texture(("junglejumpassets/monkeyRun1.png"));
+		monkeyRun1LEFT = new Texture(("junglejumpassets/monkeyRun1LEFT.png"));
 		monkeyRun2 = new Texture(("junglejumpassets/monkeyRun2.png"));
+		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
+		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
 		gameBackground = new Texture(("junglejumpassets/gameBackground.png"));
+		platform = new Texture("junglejumpassets/platform.png");
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		batch = new SpriteBatch();
-	    shapeRenderer = new ShapeRenderer();
-
-		//add the overlay listeners
-        this.getOverlay().setListeners(new Screen() {
+		shapeRenderer = new ShapeRenderer();
+		
+		// add the overlay listeners
+		this.getOverlay().setListeners(new Screen() {
 
 			@Override
 			public void dispose() {
@@ -174,7 +184,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void hide() {
-				
+
 			}
 
 			@Override
@@ -195,12 +205,12 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void show() {
-				
+
 			}
-			
-        });
-        // Game begins at Main Menu
-        gameState = GameState.AT_MENU;
+
+		});
+		// Game begins at Main Menu
+		gameState = GameState.AT_MENU;
 	}
 
 	@Override
@@ -227,9 +237,10 @@ public class junglejump extends GameClient implements InputProcessor {
 			Gdx.gl.glEnable(GL10.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 			shapeRenderer.begin(ShapeType.FilledRectangle);
-		    shapeRenderer.filledRect (butX, butY, 232, 30, Color.CLEAR, Color.RED, Color.CLEAR, Color.RED);
-		    shapeRenderer.end();
-		    Gdx.gl.glDisable(GL10.GL_BLEND);
+			shapeRenderer.filledRect(butX, butY, 232, 30, Color.CLEAR,
+					Color.RED, Color.CLEAR, Color.RED);
+			shapeRenderer.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
 			camera.update();
 			super.render();
 			break;
@@ -239,20 +250,37 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.setProjectionMatrix(camera.combined);
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			if (movingLeft) {
-				monkeyX-=2;
+				monkeyX -= 2;
 				monkeyRun--;
-			} if (movingRight) {
-				monkeyX+=2;
+				if (!isOnPlatform(monkeyX, monkeyY)) {
+					isFalling = true;
+				} else isFalling = false;
+			}
+			if (movingRight) {
+				monkeyX += 2;
 				monkeyRun++;
-			} if (jumping) {
-				velocity = (velocity - 9.8f/100f);			
-				if (monkeyY > monkeyYoriginal) {
+				if (!isOnPlatform(monkeyX, monkeyY)) {
+					isFalling = true;
+				} else isFalling = false;
+			}
+			if ((monkeyY > -3) && (monkeyY < 3)) {
+				isFalling = false;
+			}
+			if (isFalling) {
+				if (isOnPlatform(monkeyX, monkeyY)) {
+					isFalling = false;
+				} else monkeyY += -9.8f / 2f;
+			}
+			if (jumping) {
+				velocity = (velocity - 9.8f / 75f);
+				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, monkeyY))) {
 					monkeyY += velocity;
 					if (correct) {
 						monkeyYoriginal += 1.3f;
 						correct = false;
 					}
 				} else {
+					isFalling = false;
 					jumping = false;
 				}
 			}
@@ -264,7 +292,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				if (leap && sit) {
 					sit = false;
 				} else if (leap && !sit) {
-					//leap = true;
+					// leap = true;
 					leap = false;
 				} else if (!leap && sit) {
 					sit = false;
@@ -274,13 +302,16 @@ public class junglejump extends GameClient implements InputProcessor {
 				} else {
 					sit = true;
 				}
-			} else if (sit) {
+			} if (sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeySit, monkeyX, monkeyY, 50, 50);
-			} else if (leap && !sit) {
+			} else if (leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun2, monkeyX, monkeyY, 50, 50);
-			} else if (!leap && !sit){
+			} else if (!leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
+			// Add platforms from platform coordinate array
+			batch.draw(platform, 100, 50);
+
 			batch.end();
 			camera.update();
 			super.render();
@@ -288,12 +319,20 @@ public class junglejump extends GameClient implements InputProcessor {
 		case GAMEOVER:
 			break;
 		}
-		
+
 	}
+	public boolean isOnPlatform(float x, float y) {
+		// Place holder for checking through platform array
+		// Consider data structure for efficiency
+		System.out.print(y);
+		if (x > 100 && x < 170 && y > 50 && y < 75 ) return true;
+		else return false;
+	}
+
 	@Override
 	public void pause() {
-		//add the overlay listeners
-        this.getOverlay().setListeners(new Screen() {
+		// add the overlay listeners
+		this.getOverlay().setListeners(new Screen() {
 
 			@Override
 			public void dispose() {
@@ -301,7 +340,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void hide() {
-				
+
 			}
 
 			@Override
@@ -322,16 +361,14 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void show() {
-				
+
 			}
-			
-        });
-        
-        
-		
+
+		});
+
 		super.create();
-		
-		//Initialise camera
+
+		// Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		Gdx.app.log(junglejump.messages, "Pause");
@@ -354,43 +391,61 @@ public class junglejump extends GameClient implements InputProcessor {
 		return game;
 	}
 
-//	 
+	//
 
 	@Override
 	public boolean keyDown(int keycode) {
 		if (keycode == Keys.LEFT) {
+			monkeySit = monkeySitLEFT;
+			monkeyRun1 = monkeyRun1LEFT;
+			monkeyRun2 = monkeyRun2LEFT;
 			movingLeft = true;
 			// Move left
-		} if (keycode == Keys.ENTER) {
+		}
+		if (keycode == Keys.ENTER) {
 			if (butY == QUIT) {
 				super.dispose();
-			} if (butY == NEW_GAME) {
+			}
+			if (butY == NEW_GAME) {
 				gameState = GameState.INPROGRESS;
 			}
-		} if (keycode == Keys.RIGHT) {
+		}
+		if (keycode == Keys.RIGHT) {
 			// Move right
+			monkeySit = monkeySitRIGHT;
+			monkeyRun1 = monkeyRun1RIGHT;
+			monkeyRun2 = monkeyRun2RIGHT;
 			movingRight = true;
-		} if (keycode == Keys.SPACE) {
+		}
+		if (keycode == Keys.SPACE) {
 			// Jump
-			velocity = 5.0f;
-			monkeyYoriginal = monkeyY - 1f;
-			correct = true;
-			jumping = true;
+			if (!jumping) {
+				velocity = 5.0f;
+				monkeyYoriginal = monkeyY - 1f;
+				correct = true;
+				jumping = true;
+			}
+		}
+		if (keycode == Keys.UP) {
+			if (gameState != GameState.INPROGRESS) {
+				if (butY < NEW_GAME) {
+					menuSound.start();
+					butY += 37.5;
+					menuSound.stop();
+				}
+			}
 			
-		} if (keycode == Keys.UP) {
-			if (butY < NEW_GAME) {
-				menuSound.start();
-				butY += 37.5;
-				menuSound.stop();
-			}
 			// Climb
-		} if (keycode == Keys.DOWN) {
-			if (butY > QUIT) {
-				menuSound.start();
-				butY -= 37.5;
-				menuSound.stop();
-			}
+		}
+		if (keycode == Keys.DOWN) {
 			// Climb down
+			if (gameState != GameState.INPROGRESS) {
+				if (butY > QUIT) {
+					menuSound.start();
+					butY -= 37.5;
+					menuSound.stop();
+				}
+			}
 		}
 		return true;
 	}
@@ -406,16 +461,20 @@ public class junglejump extends GameClient implements InputProcessor {
 		if (keycode == Keys.LEFT) {
 			movingLeft = false;
 			// Move left STOP
-		} if (keycode == Keys.RIGHT) {
+		}
+		if (keycode == Keys.RIGHT) {
 			movingRight = false;
 			// Move right STOP
-		} if (keycode == Keys.SPACE) {
-//			System.out.println("SPACE UP");
-//			butX += 10f;
+		}
+		if (keycode == Keys.SPACE) {
+			// System.out.println("SPACE UP");
+			// butX += 10f;
 			// Jump STOP
-		} if (keycode == Keys.UP) {
+		}
+		if (keycode == Keys.UP) {
 			// Climb STOP
-		} if (keycode == Keys.DOWN) {
+		}
+		if (keycode == Keys.DOWN) {
 			// Climb down STOP
 		}
 		return true;

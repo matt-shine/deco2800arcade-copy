@@ -17,6 +17,10 @@ public class PlayerShip extends Ship {
 	 */
 	public PlayerShip(int health, Texture image, Vector2 position) {
 		super(health, image, position);
+		
+		// Sets the ship to 75 x 75, most suitable size
+//		this.setWidth(75);
+//		this.setHeight(75);
 	}
 	
 	/**

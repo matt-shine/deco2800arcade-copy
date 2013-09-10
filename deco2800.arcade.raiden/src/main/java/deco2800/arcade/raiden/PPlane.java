@@ -1,7 +1,6 @@
 package deco2800.arcade.raiden;
 import java.awt.Graphics;
 import java.awt.Image;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 
@@ -22,7 +21,7 @@ public class PPlane extends Plane{
 	}
 	public PPlane(int x, int y, int width, int height) {
 		super(x, y, width, height);
-		img = new ImageIcon("/Image/boss1.png").getImage();
+		img = new javax.swing.ImageIcon(this.getClass().getResource("/Image/Boss1.png")).getImage();
 		// TODO Auto-generated constructor stub
 	}
 	public JPanel getJpanel() {

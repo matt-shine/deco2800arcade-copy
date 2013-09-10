@@ -284,6 +284,8 @@ public class Breakout extends GameClient {
 			break;
 
 		}
+		
+		super.render();
 
 	}
 
@@ -352,4 +354,3 @@ public class Breakout extends GameClient {
 		// game.availableAchievements = achievements;
 	}
 }
-

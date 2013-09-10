@@ -21,6 +21,7 @@ public final class MixMaze extends GameClient {
 	Screen splashScreen;
 	Screen menuScreen;
 	Screen gameScreen;
+	Screen settingsScreen;
 	Skin skin;
 
 	public MixMaze(Player player, NetworkClient networkClient) {
@@ -44,6 +45,8 @@ public final class MixMaze extends GameClient {
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
+		settingsScreen = new SettingsScreen(this);
+		
 		setScreen(splashScreen);
 
 		Gdx.app.debug(LOG, "Default key bindings");

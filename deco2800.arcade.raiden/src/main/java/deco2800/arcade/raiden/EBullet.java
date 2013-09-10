@@ -2,7 +2,6 @@ package deco2800.arcade.raiden;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 
@@ -25,7 +24,7 @@ public class EBullet extends Bullet{
 
 	public EBullet(int x, int y, int width, int heigth) {
 		super(x, y, width, heigth);
-		img = new ImageIcon("/Image/fire.png").getImage();
+		img = new javax.swing.ImageIcon(this.getClass().getResource("/Image/fire.png")).getImage();
 		// TODO Auto-generated constructor stub
 	}
 

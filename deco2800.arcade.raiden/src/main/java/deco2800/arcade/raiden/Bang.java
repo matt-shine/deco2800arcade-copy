@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -18,7 +17,7 @@ public class Bang {
 	private JPanel jpanel;
 	public boolean isBang = false;
 	private int xpic;
-	private Image img = new ImageIcon("/Image/flame.png").getImage();
+	private Image img = new javax.swing.ImageIcon(this.getClass().getResource("/Image/flame.png")).getImage();
 	
 	public Bang(int x, int y, int w, int h) {
 		super();

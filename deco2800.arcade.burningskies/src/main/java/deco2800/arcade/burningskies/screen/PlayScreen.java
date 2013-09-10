@@ -48,8 +48,6 @@ public class PlayScreen implements Screen
     	// Test code
     	PowerUp test = new PowerUp();
 
-    	
-    	//System.out.println("The maps width: " + map.getImageWidth());
     	stage.addActor(map);
     	stage.addActor(player);
     	

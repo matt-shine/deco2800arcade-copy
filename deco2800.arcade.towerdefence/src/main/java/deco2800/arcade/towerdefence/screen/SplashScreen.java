@@ -1,4 +1,4 @@
-package deco2800.arcade.towerdefence;
+package deco2800.arcade.towerdefence.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Application;
+
 import static com.badlogic.gdx.Input.*;
 
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.towerdefence.TowerDefence;
 
 
 public class SplashScreen implements Screen{

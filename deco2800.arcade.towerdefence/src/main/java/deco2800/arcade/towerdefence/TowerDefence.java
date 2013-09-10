@@ -13,14 +13,16 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.towerdefence.SplashScreen;
+import deco2800.arcade.towerdefence.screen.GameScreen;
+import deco2800.arcade.towerdefence.screen.MenuScreen;
+import deco2800.arcade.towerdefence.screen.SplashScreen;
 
 
 @ArcadeGame(id="towerdefence")
 public class TowerDefence extends GameClient {
 	Screen splashScreen;
-	Screen menuScreen;
-	Screen gameScreen;
+	public Screen menuScreen;
+	public Screen gameScreen;
 	
 	private static final String LOG = TowerDefence.class.getSimpleName();
 	

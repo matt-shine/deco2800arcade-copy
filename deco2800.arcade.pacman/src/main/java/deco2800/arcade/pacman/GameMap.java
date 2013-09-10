@@ -58,7 +58,8 @@ public class GameMap {
 		for (int i = 0; i < map.size(); i++){
 			char[] s = map.get(i);
 			for (int j = 0; j < s.length; j++){
-				Wall wall = new Wall(Character.getNumericValue(s[j]), j, j, j);
+				Wall wall = new Wall(Character.getNumericValue(s[j]), 100*i, 100*j, 300); //Modify these later
+				//wall.render(shaper); 
 			}
 		}
 	}

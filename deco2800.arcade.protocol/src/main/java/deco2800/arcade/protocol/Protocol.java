@@ -21,6 +21,18 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.replay.EndSessionRequest;
+import deco2800.arcade.protocol.replay.EndSessionResponse;
+import deco2800.arcade.protocol.replay.GetEventsRequest;
+import deco2800.arcade.protocol.replay.GetEventsResponse;
+import deco2800.arcade.protocol.replay.ListSessionsRequest;
+import deco2800.arcade.protocol.replay.ListSessionsResponse;
+import deco2800.arcade.protocol.replay.PushEventRequest;
+import deco2800.arcade.protocol.replay.PushEventResponse;
+import deco2800.arcade.protocol.replay.StartSessionRequest;
+import deco2800.arcade.protocol.replay.StartSessionResponse;
+import deco2800.arcade.protocol.replay.demo.ReplayRequest;
+import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 
 public class Protocol {
 

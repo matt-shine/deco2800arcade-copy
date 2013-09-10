@@ -43,6 +43,9 @@ public class NetworkClient {
 	// Shared secret for this session
 	private Key secret;
 
+	// Time before the connection is aborted
+	private static final int TIMEOUT = 5000;
+	
 	/**
 	 * Creates a new network client
 	 * 
@@ -57,8 +60,7 @@ public class NetworkClient {
 		this.client.start();
 
 		try {
-			client.connect(5000, serverAddress, tcpPort, udpPort);
-
+			client.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
 			Protocol.register(client.getKryo());
 		} catch (IOException e) {
 			throw new NetworkException("Unable to connect to the server", e);

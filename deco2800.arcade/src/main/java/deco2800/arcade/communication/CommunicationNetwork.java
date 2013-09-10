@@ -1,6 +1,5 @@
 package deco2800.arcade.communication;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +38,6 @@ public class CommunicationNetwork {
 	}
 	
 	/***********************************************************/
-	
 	
 
 	public CommunicationNetwork(Player player, NetworkClient networkClient){

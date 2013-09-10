@@ -45,7 +45,7 @@ public class Level1 extends Level {
 					Tile t = new TileLvl1(index,60,tiles[i]);
 					if(!t.getRule().equals("."))
 					{
-						t.setTexture(new Texture(Gdx.files.classpath("assets/"+ruleTextureMapping.get(t.getRule()))));
+						t.setTexture(new Texture(Gdx.files.classpath("images/"+ruleTextureMapping.get(t.getRule()))));
 					}
 					tileList[index-1]=t;
 				}

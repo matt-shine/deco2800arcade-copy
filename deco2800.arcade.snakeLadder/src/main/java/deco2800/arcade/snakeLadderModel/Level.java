@@ -18,7 +18,7 @@ public abstract class Level {
 	public void ini()
 	{
 		//loading of background game board
-		backgroundBoard = new Texture(Gdx.files.classpath("assets/board.png"));
+		backgroundBoard = new Texture(Gdx.files.classpath("images/board.png"));
 		//initialise rule texture mapping
 		ruleTextureMapping = new HashMap<String,String>();
 		ruleTextureMapping.put("+10","plus_10.png");

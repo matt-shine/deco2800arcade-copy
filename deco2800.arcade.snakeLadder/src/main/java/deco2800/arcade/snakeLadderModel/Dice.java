@@ -20,12 +20,12 @@ public class Dice {
 	 */
 	public Dice(){
 		this.num = 0;
-		this.diceOne = new Texture(Gdx.files.classpath("assets/dice1.png"));
-		this.diceTwo = new Texture(Gdx.files.classpath("assets/dice2.png"));
-		this.diceThree = new Texture(Gdx.files.classpath("assets/dice3.png"));
-		this.diceFour = new Texture(Gdx.files.classpath("assets/dice4.png"));
-		this.diceFive = new Texture(Gdx.files.classpath("assets/dice5.png"));
-		this.diceSix = new Texture(Gdx.files.classpath("assets/dice6.png"));
+		this.diceOne = new Texture(Gdx.files.classpath("images/dice1.png"));
+		this.diceTwo = new Texture(Gdx.files.classpath("images/dice2.png"));
+		this.diceThree = new Texture(Gdx.files.classpath("images/dice3.png"));
+		this.diceFour = new Texture(Gdx.files.classpath("images/dice4.png"));
+		this.diceFive = new Texture(Gdx.files.classpath("images/dice5.png"));
+		this.diceSix = new Texture(Gdx.files.classpath("images/dice6.png"));
 	}
 	
 	/**

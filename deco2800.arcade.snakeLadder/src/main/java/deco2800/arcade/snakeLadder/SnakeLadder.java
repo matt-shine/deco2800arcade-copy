@@ -135,7 +135,7 @@ public class SnakeLadder extends GameClient {
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
 //		//test
-//		ladder =  new Texture(Gdx.files.classpath("assets/arrow.png"));
+//		ladder =  new Texture(Gdx.files.classpath("images/arrow.png"));
 		
 		//creating level loading background board and initializing the rule mapping
 		lvl =new Level1();
@@ -144,7 +144,7 @@ public class SnakeLadder extends GameClient {
 		//initialize the map size for this level 
 		tileList = lvl.iniMapSize();
 		//loading game map
-		lvl.loadMap(tileList, "assets/lvl1.txt");
+		lvl.loadMap(tileList, "maps/lvl1.txt");
 	
 		// create the game player
 		gamePlayer = new GamePlayer();

@@ -91,6 +91,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	boolean onPlatform, isFalling = false;
 
 	Texture texture;
+	Clip clip;
 	Texture monkeySit, monkeyRun1, monkeyRun2;
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
@@ -185,7 +186,6 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void hide() {
-
 			}
 
 			@Override
@@ -253,18 +253,18 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (movingLeft) {
 				monkeyX -= 2;
 				monkeyRun--;
-				if (!isOnPlatform(monkeyX, monkeyY)) {
+				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
 			if (movingRight) {
 				monkeyX += 2;
 				monkeyRun++;
-				if (!isOnPlatform(monkeyX, monkeyY)) {
+				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
-			if ((monkeyY > -3) && (monkeyY < 3)) {
+			if ((monkeyY < 3)) {
 				isFalling = false;
 			}
 			if (isFalling) {
@@ -274,13 +274,22 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			if (jumping) {
 				velocity = (velocity - 9.8f / 75f);
-				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, monkeyY))) {
-					monkeyY += velocity;
+				//System.out.println("monkeyY " + monkeyY + " monkeyYor " + monkeyYoriginal + " == " + (monkeyY > monkeyYoriginal) +(monkeyY + velocity < 1f) + velocity + " " + monkeyY);
+				System.out.println(monkeyY > monkeyYoriginal);
+				System.out.println(!isOnPlatform(monkeyX, monkeyY)); //this is false :(
+				System.out.println(monkeyY + " " + monkeyYoriginal);
+				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, ++monkeyY))) {
+					if (monkeyY + velocity < 1f) {
+						monkeyY = 0;
+					} else {
+						monkeyY += velocity;
+					}
 					if (correct) {
 						monkeyYoriginal += 1.3f;
 						correct = false;
 					}
 				} else {
+					System.out.println(true);
 					isFalling = false;
 					jumping = false;
 				}
@@ -325,8 +334,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public boolean isOnPlatform(float x, float y) {
 		// Place holder for checking through platform array
 		// Consider data structure for efficiency
-		System.out.print(y);
-		if (x > 100 && x < 170 && y > 50 && y < 75 ) return true;
+		if (x > 78 && x < 170 && y < 76 ) return true;
 		else return false;
 	}
 
@@ -378,6 +386,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void resume() {
 		super.resume();
+		clip.start();
 		Gdx.app.log(junglejump.messages, "Resume");
 	}
 
@@ -423,6 +432,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (!jumping) {
 				velocity = 5.0f;
 				monkeyYoriginal = monkeyY - 1f;
+				monkeyY+=1.1f;
 				correct = true;
 				jumping = true;
 			}
@@ -477,6 +487,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.DOWN) {
 			// Climb down STOP
+		}
+		if (keycode == Keys.ESCAPE) {
+			clip.stop();
 		}
 		return true;
 	}

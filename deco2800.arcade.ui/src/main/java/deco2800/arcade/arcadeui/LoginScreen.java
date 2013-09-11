@@ -129,4 +129,3 @@ public class LoginScreen implements Screen {
 	public void resize(int arg0, int arg1) {
 	}
 }
-}

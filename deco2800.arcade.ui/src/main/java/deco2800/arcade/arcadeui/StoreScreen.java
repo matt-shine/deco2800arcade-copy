@@ -33,6 +33,7 @@ public class StoreScreen implements Screen {
     SpriteBatch batch;
     
     public StoreScreen() {
+    	//FIXME big method
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         stage = new Stage();
         

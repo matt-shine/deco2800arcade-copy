@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -31,7 +30,7 @@ import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor {
-
+	//FIXME class needs tidying up
 	
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;

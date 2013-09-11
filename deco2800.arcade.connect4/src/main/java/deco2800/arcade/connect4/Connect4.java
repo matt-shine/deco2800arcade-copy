@@ -96,7 +96,7 @@ public class Connect4 extends GameClient {
 		replayListener = new ReplayListener(replayHandler);
 		
 		this.networkClient.addListener(replayListener);
-
+		
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		
 		//Declare an event to be registered in the factory, we can pass arrays.

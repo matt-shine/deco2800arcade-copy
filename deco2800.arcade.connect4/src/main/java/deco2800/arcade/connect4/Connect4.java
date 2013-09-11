@@ -29,7 +29,7 @@ import java.util.*;
  */
 @ArcadeGame(id="Connect4")
 public class Connect4 extends GameClient {
-	
+	//FIXME some big methods in this class
 	private OrthographicCamera camera;
 	
 	private Disc cursorDisc;

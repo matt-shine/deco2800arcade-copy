@@ -191,6 +191,93 @@ public class ForumStorage {
 	}
 	
 	/**
+	 * Return array of strings that contains parent threads data retrieved
+	 * from DB with specifying id range. See param specification for 
+	 * how to set the id range. All params must be non-negative.
+	 * Query to be executed =	SELECT * FROM parent_thread
+	 * 							WHERE [pid <= start [AND end <= pid]]
+	 * 							[FETCH FIRST limit ROWS ONLY]
+	 * 
+	 * @param start	int, starting pid of parent thread to be retrieved, 
+	 * 				if start = 0, it starts from first parent thread in table.
+	 * 				(inclusive)
+	 * @param end	int, ending pid of parent thread to be retrieved, 
+	 * 				if end = 0, it does not specify the ending parent thread
+	 * 				in table.
+	 * 				(inclusive)
+	 * @param limit	int, limit to number of parent threads to be returned, 
+	 * 				if limit = 0 it does not specify the limit. 
+	 * @return	String[][], 3D String array {{pid, topic, content, createdBy, 
+	 * 			category, tags}}, return null if no result or failed
+	 * @throws	DatabaseException
+	 */
+	public String[][] getParentThreads(int start, int end, int limit) throws DatabaseException {
+		String query1 = "SELECT * FROM parent_thread WHERE ? <= pid AND pid <= ?";
+		String query2 = "SELECT * FROM parent_thread WHERE ? <= pid";
+		String query;
+		ArrayList<String[]> result = new ArrayList<String[]>();
+		String[] strArray;
+		
+		/* Check params */
+		if (start < 0 || end < 0 || limit < 0) {
+			return null;
+		}
+		
+		/* Get DB connection */
+		Connection con = Database.getConnection();
+		
+		/* Begin query */
+		if (end == 0) {
+			query = query2;
+		} else {
+			query = query1;
+		}
+		if (limit != 0) {
+			query += "FETCH FIRST " + String.valueOf(limit) + " ROWS ONLY";
+		}
+		try {
+			/* Prepare st */
+			PreparedStatement st = con.prepareStatement(query);
+			if (end == 0) {
+				st.setInt(1, start);
+			} else {
+				st.setInt(1, start);
+				st.setInt(2, end);
+			}
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				strArray = new String[7];
+				strArray[0] = rs.getString("pid");
+				strArray[1] = rs.getString("topic");
+				strArray[2] = rs.getString("content");
+				strArray[3] = rs.getString("created_by");
+				strArray[4] = rs.getString("timestamp");
+				strArray[5] = rs.getString("category");
+				strArray[6] = rs.getString("tags");
+				result.add(strArray);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to retrieve parent threads: " + e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close DB connection: " + e);
+			}
+		}
+		if (result.size() == 0) {
+			return null;
+		} else {
+			/* Convert ArrayList to String[][] */
+			String[][] result2 = new String[result.size()][7];
+			result2 = result.toArray(result2);
+			return result2;
+		}
+	}
+	
+	/**
 	 * Retrieve all parent threads data from DB. Return String[][] for result
 	 * , and return null for failure. 
 	 * 

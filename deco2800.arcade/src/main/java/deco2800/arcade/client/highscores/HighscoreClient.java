@@ -45,11 +45,11 @@ public class HighscoreClient {
 	 * between client and database.
 	 */
 	public void testMessage() {
-		System.out.println("Create Test Message To Send");
+		
+		//Create the test message that will be sent
 		AddScoreRequest asr = new AddScoreRequest();
 		
 		//Send a test message to the server
-		System.out.println("Sending Test Message");
 		this.client.sendNetworkObject(asr);	
 	}
 	

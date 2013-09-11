@@ -61,7 +61,7 @@ public class LoginScreen implements Screen {
         table.add(loginButton).width(190).height(50).pad(5);
         table.add(registerButton).width(190).height(50).pad(5);
         table.row();
-        table.add(forgotLogButton).width(400).height(50).pad(5).colspan(2);
+        table.add(forgotLogButton).width(400).height(35).pad(5).colspan(2);
         
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {

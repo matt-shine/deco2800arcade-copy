@@ -111,7 +111,7 @@ public class Protocol {
         kryo.register(GameLibraryResponse.class);
         kryo.register(Game.class);
         kryo.register(Icon.class);
-
+		
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);

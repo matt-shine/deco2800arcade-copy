@@ -24,6 +24,7 @@ public class ForumStorage {
 	 */
 	/* Fields */
 	private boolean initialized = false;
+	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
 	
 	/**
 	 * Return initialized flag
@@ -50,7 +51,6 @@ public class ForumStorage {
 				+ ", timestamp timestamp"
 				+ ", category varchar(30) DEFAULT 'General Admin'"
 				+ ", tags long varchar)";
-		String createChkCategory = "ALTER TABLE parent_thread ADD CHECK (category IN ('General Admin', 'Game Bug', 'Others'))";
 		/* Create database connection */
 		con = Database.getConnection();
 		/* Create tables */
@@ -61,7 +61,7 @@ public class ForumStorage {
 			if (!tables.next()) {
 				st.execute(dropParentThreadTable);
 				st.execute(createParentThreadTable);
-				st.execute(createChkCategory);
+				st.execute(this.getCategoryConstraint());
 			}
 			con.commit();
 			st.close();
@@ -84,10 +84,15 @@ public class ForumStorage {
 	}
 	
 	/**
-	 * Insert new parent thread.
-	 * Return pid for success, otherwise -1.
+	 * Insert new parent thread
 	 * 
-	 * 
+	 * @param topic	String, topic
+	 * @param content	String, content
+	 * @param createdBy	int, user or player id who creates it
+	 * @param category	String, category which thread is in that is specified in this.category
+	 * @param tags	tags, tags that are attached to this thread
+	 * @return	int, pid of new parent thread, -1 if failed.
+	 * @throws DatabaseException
 	 */
 	public int insertParentThread(String topic, String content
 			, int createdBy, String category, String tags) throws DatabaseException {
@@ -353,6 +358,18 @@ public class ForumStorage {
 				throw new DatabaseException("Fail to close DB connection: " + e);
 			}
 		}
+	}
+	
+	private String getCategoryConstraint() {
+		String result = "ALTER TABLE parent_thread ADD CHECK (category IN (";
+		for (int i = 0; i < this.category.length; i++) {
+			result += "'" + this.category[i] + "'";
+			if (i != this.category.length-1) {
+				result += ", ";
+			}
+		}
+		result += "))";
+		return result;
 	}
 	
 	private String getTagsString(String[] tags) {

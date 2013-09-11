@@ -405,7 +405,6 @@ public class Arcade extends JFrame {
                 GameClient gameClient = getInstanceOfGame(pair.getKey());
                 if (gameClient != null) {
                     gameSet.add(gameClient);
-                    gameClient.pause();
                 }
 
             }

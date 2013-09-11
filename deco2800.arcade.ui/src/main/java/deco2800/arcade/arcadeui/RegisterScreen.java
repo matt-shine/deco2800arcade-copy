@@ -15,7 +15,7 @@ public class RegisterScreen implements Screen {
     private Stage stage;
 
     public RegisterScreen() {
-        skin = new Skin(Gdx.files.internal("loginSkinNew.json"));
+        skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new Stage();

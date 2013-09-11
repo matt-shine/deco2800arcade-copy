@@ -18,7 +18,7 @@ public class LoginScreen implements Screen {
     private LoginScreenStage stage;
 
 	public LoginScreen() {
-        skin = new Skin(Gdx.files.internal("loginSkinNew.json"));
+        skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new LoginScreenStage();

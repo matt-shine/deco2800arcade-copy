@@ -20,7 +20,7 @@ public class ForumStorage {
 	/* Fields */
 	private boolean initialized = false;
 	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
-	
+
 	/**
 	 * Return initialized flag
 	 * 

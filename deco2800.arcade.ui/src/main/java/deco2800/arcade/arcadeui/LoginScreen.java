@@ -18,7 +18,7 @@ public class LoginScreen implements Screen {
     private LoginScreenStage stage;
 
 	public LoginScreen() {
-        skin = new Skin(Gdx.files.internal("loginSkin.json"));
+        skin = new Skin(Gdx.files.internal("loginSkinNew.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new LoginScreenStage();
@@ -28,6 +28,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
+        final Label tempLabel = new Label("To access the store\nlogin with username: store", skin);  // Temporary label to display a message
         final Label errorLabel = new Label("", skin, "error");
         final TextField usernameText = new TextField("", skin);
         usernameText.setMessageText("Username");
@@ -37,33 +38,38 @@ public class LoginScreen implements Screen {
         passwordText.setPasswordCharacter('*');
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
-        CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        //CheckBox rememberBox = new CheckBox("Remember Me", skin);
         TextButton loginButton = new TextButton("Login", skin);
-        TextButton forgotLogButton = new TextButton("Forgot Login?", skin);
         TextButton registerButton = new TextButton("Register", skin);
-        TextButton storeButton = new TextButton("Store", skin);
+        TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
 
-        table.add(errorLabel).colspan(2);
+        //table.debug();
+        table.add(tempLabel).colspan(2);  // Temporary label to display a message
         table.row();
-        table.add(usernameText).width(400).pad(5).colspan(2);
+        table.add(errorLabel).width(400).colspan(2);
         table.row();
-        table.add(passwordText).width(400).pad(5).colspan(2);
+        table.add(usernameText).width(400).colspan(2);
         table.row();
-        table.add(serverText).width(400).pad(5).colspan(2);
+        table.add(passwordText).width(400).colspan(2);
         table.row();
-        table.add(rememberBox);
+        table.add(serverText).width(400).colspan(2);
         table.row();
-        table.add(loginButton).width(200).pad(5);
-        table.add(registerButton).width(200).pad(5);
+        //table.add(rememberBox);
+        //table.row();
+        table.add(loginButton).width(200).height(50).pad(5);
+        table.add(registerButton).width(200).height(50).pad(5);
         table.row();
-        table.add(forgotLogButton).width(200).pad(5);
-        table.add(storeButton).width(200).pad(5);
+        table.add(forgotLogButton).width(400).height(30).pad(5).colspan(2);
         
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                if (usernameText.getText().equals("")){
+                if (usernameText.getText().equals("")) {
                     // no username entered, throw error
                     errorLabel.setText("No Username Supplied");
+                }
+                else if (usernameText.getText().toLowerCase().equals("store")) {
+                    // temporary direct access to store until a proper solution is found
+                    ArcadeSystem.login("store");
                 }
                 else {
                     // username supplied, try to login
@@ -81,13 +87,6 @@ public class LoginScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
             }
         });
-            	
-        storeButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-            	ArcadeSystem.login("store");
-            	// Please find a way to fix this. I'm so tired. -Addison(GameHost)
-            }
-        });
 	}
 
 	@Override
@@ -100,6 +99,7 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+        //Table.drawDebug(stage);
 
 	    if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");

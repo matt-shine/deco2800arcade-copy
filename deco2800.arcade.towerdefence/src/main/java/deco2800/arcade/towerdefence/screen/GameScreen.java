@@ -41,7 +41,7 @@ public class GameScreen implements Screen{
 	private Table topStatus;
 	private Table bottomBar, bottomBarRight, bottomBarLeft;
 	private static float STATUS_HEIGHT = 50f;
-	private static float BOTTOM_HEIGHT = 128f;
+	private static float BOTTOM_HEIGHT = 150f;
 	Button frostB, fireB, holyB, darknessB, piercingB, auraB, backB; //TowerButtons
 	private Label randomLabel3, towerInfo;
 	BitmapFont black;
@@ -148,8 +148,8 @@ public class GameScreen implements Screen{
 				
 		// Setting the "Style of a TextButton",
 		TextButtonStyle style = new TextButtonStyle();
-		style.up = skin.getDrawable("black_button1");
-		style.down = skin.getDrawable("black_button2");
+		style.up = skin.getDrawable("buttonnormal");
+		style.down = skin.getDrawable("buttonpressed");
 		style.font = white;
 
 		//tower buttons will probably change to Image button once we have mini-button-sized sprites.
@@ -253,11 +253,11 @@ public class GameScreen implements Screen{
 		table.add(randomLabel3).center().expandY().fill(); // row for gameTable
 		table.row();
 		
-		bottomBarLeft.add(frostB).left().expandY(); //adding buttons
+		bottomBarLeft.add(frostB).left(); //adding buttons
 		bottomBarLeft.add(fireB);
 		bottomBarLeft.add(holyB);
 		bottomBarLeft.row();
-		bottomBarLeft.add(darknessB).left().expandY();
+		bottomBarLeft.add(darknessB).left();
 		bottomBarLeft.add(piercingB);
 		bottomBarLeft.add(auraB);
 		
@@ -266,7 +266,7 @@ public class GameScreen implements Screen{
 		bottomBar.add(bottomBarLeft).left().fill();
 		bottomBar.add(bottomBarRight).right().expand().fill();
 		
-		table.add(bottomBar).bottom().height(BOTTOM_HEIGHT).expandX().fill(); // row for bottomBar 
+		table.add(bottomBar).bottom().expandX().fill(); // row for bottomBar .height(BOTTOM_HEIGHT) 
 		
 		stage.addActor(table);
 		stage.addActor(bottomBar);

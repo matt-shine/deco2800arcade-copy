@@ -84,6 +84,7 @@ public class LoreScreen implements Screen{
 			stage = new Stage(width, height, true);
 		}
 		stage.clear();
+		table.clear();
 		
 		Gdx.input.setInputProcessor(stage);
 
@@ -125,8 +126,6 @@ public class LoreScreen implements Screen{
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

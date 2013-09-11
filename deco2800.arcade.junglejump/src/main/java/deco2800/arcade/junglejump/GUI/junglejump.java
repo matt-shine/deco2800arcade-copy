@@ -274,9 +274,10 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (jumping) {
 				velocity = (velocity - 9.8f / 75f);
 				//System.out.println("monkeyY " + monkeyY + " monkeyYor " + monkeyYoriginal + " == " + (monkeyY > monkeyYoriginal) +(monkeyY + velocity < 1f) + velocity + " " + monkeyY);
-				System.out.println(((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, monkeyY))));
-				System.out.print(monkeyY + " " + monkeyYoriginal);
-				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, monkeyY))) {
+				System.out.println(monkeyY > monkeyYoriginal);
+				System.out.println(!isOnPlatform(monkeyX, monkeyY)); //this is false :(
+				System.out.println(monkeyY + " " + monkeyYoriginal);
+				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, ++monkeyY))) {
 					if (monkeyY + velocity < 1f) {
 						monkeyY = 0;
 					} else {
@@ -430,6 +431,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (!jumping) {
 				velocity = 5.0f;
 				monkeyYoriginal = monkeyY - 1f;
+				monkeyY+=1.1f;
 				correct = true;
 				jumping = true;
 			}

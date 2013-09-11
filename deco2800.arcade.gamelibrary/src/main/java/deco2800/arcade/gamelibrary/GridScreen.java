@@ -20,6 +20,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -37,7 +38,7 @@ public class GridScreen implements Screen, LibraryScreen {
      */
     private SpriteBatch batch;
     private BitmapFont font;
-    private Set<GameClient> games = null;
+    private ArrayList<GameClient> games = null;
     private GameClient currentClient;
     private Stage stage;
     private int x = 0;
@@ -149,18 +150,18 @@ public class GridScreen implements Screen, LibraryScreen {
 
         exitButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                ArcadeSystem.close();
+                ArcadeSystem.exit();
             }
         });
         stage.addActor(exitButton);
 
-        games = ArcadeSystem.getGameList();
+        games = gameLibrary.getAvailableGames();
         int gridX = 25;
         int gridY = 435;
         int count = 0;
         for (final GameClient gameClient : games) {
             if (gameClient != null) {
-                final Game game = gameClient.getGame();
+                Game game = gameClient.getGame();
                 if (game != null) {
 
                     Actor background = new Image(gridTexture);
@@ -271,8 +272,8 @@ public class GridScreen implements Screen, LibraryScreen {
         ArcadeSystem.goToGame(currentClient);
     }
 
-    public void setSelectedGame(final GameClient gameClient) {
-        currentClient = gameClient;
+    public void setSelectedGame(final GameClient game) {
+        currentClient = game;
     }
 
     public Player getPlayer() {

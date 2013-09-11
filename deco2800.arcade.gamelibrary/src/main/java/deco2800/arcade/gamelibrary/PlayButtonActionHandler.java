@@ -10,31 +10,31 @@ import deco2800.arcade.client.GameClient;
 public class PlayButtonActionHandler extends ChangeListener {
 
     private LibraryScreen screen;
-    private GameClient game;
+    private GameClient gameClient;
     private boolean down = false;
 
     public PlayButtonActionHandler(LibraryScreen libraryScreen) {
         screen = libraryScreen;
-        game = null;
+        gameClient = null;
     }
 
 
     /**
      * Grid View Play Buttons
      * @param libraryScreen library screen
-     * @param gameClient Game
+     * @param game Game
      */
-    public PlayButtonActionHandler(LibraryScreen libraryScreen, GameClient gameClient) {
+    public PlayButtonActionHandler(LibraryScreen libraryScreen, GameClient game) {
         screen = libraryScreen;
-        game = gameClient;
+        gameClient = game;
     }
 
 
     @Override
     public void changed(ChangeEvent changeEvent, Actor actor) {
         down = !down;
-        if (game != null) {
-            screen.setSelectedGame(game);
+        if (gameClient != null) {
+            screen.setSelectedGame(gameClient);
         }
 
         screen.setGameSelected();

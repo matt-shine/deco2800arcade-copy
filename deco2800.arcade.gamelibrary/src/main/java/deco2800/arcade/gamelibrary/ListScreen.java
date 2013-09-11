@@ -20,6 +20,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -37,7 +38,7 @@ public class ListScreen implements Screen, LibraryScreen {
      */
     private SpriteBatch batch;
     private BitmapFont font;
-    private Set<GameClient> games = null;
+    private ArrayList<GameClient> games = null;
     private GameClient currentClient;
     private Stage stage;
     private int x = 0;
@@ -152,7 +153,7 @@ public class ListScreen implements Screen, LibraryScreen {
 
         exitButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                ArcadeSystem.close();
+                ArcadeSystem.exit();
             }
         });
         stage.addActor(exitButton);
@@ -171,11 +172,12 @@ public class ListScreen implements Screen, LibraryScreen {
         titleLabel.setX(290);
         titleLabel.setY(530);
 
-        games = ArcadeSystem.getGameList();
+        games = gameLibrary.getAvailableGames();
         int count = 0;
         for (final GameClient gameClient : games) {
             if (gameClient != null) {
-                final Game game = gameClient.getGame();
+                Game game = gameClient.getGame();
+
                 if (game != null) {
                     button = new TextButton("" + game.name, skin);
                     button.setWidth(275);

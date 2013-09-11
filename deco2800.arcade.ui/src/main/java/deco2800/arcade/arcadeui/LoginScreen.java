@@ -96,7 +96,7 @@ public class LoginScreen implements Screen {
         stage.draw();
 
 	    if (ArcadeSystem.isLoggedIn()) {
-	    	ArcadeSystem.goToGame("arcadeui");
+	    	ArcadeSystem.goToGame("gamelibrary");
 	    }
 	}
 

@@ -15,9 +15,9 @@ public class GameButtonActionHandler extends ChangeListener {
     private final GameClient gameClient;
 	private TextButton button;
 	
-    public GameButtonActionHandler(LibraryScreen libraryScreen, final GameClient gameClient1, TextButton b) {
+    public GameButtonActionHandler(LibraryScreen libraryScreen, final GameClient game, TextButton b) {
         screen = libraryScreen;
-        gameClient = gameClient1;
+        gameClient = game;
 		button = b;
     }
 

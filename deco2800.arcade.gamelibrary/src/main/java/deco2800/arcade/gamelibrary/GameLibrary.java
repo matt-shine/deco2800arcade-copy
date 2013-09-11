@@ -3,6 +3,7 @@ package deco2800.arcade.gamelibrary;
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.InternalGame;
@@ -36,14 +37,14 @@ public class GameLibrary extends GameClient {
     private NetworkClient networkClient;
 
     private Screen curentScreen;
-    private ArrayList<Game> gameList;
+    private ArrayList<GameClient> gameList;
 
     public GameLibrary(Player player1, NetworkClient networkClient1) {
         super(player1, networkClient1);
         player = player1;
         networkClient = networkClient1;
-        gameList = new ArrayList<Game>();
-        //loadGameList();
+        gameList = new ArrayList<GameClient>();
+        loadGameList();
     }
 
 
@@ -52,6 +53,39 @@ public class GameLibrary extends GameClient {
         ArcadeSystem.openConnection();
         switchViews();
         super.create();
+
+        /*this.getOverlay().setListeners(new Screen() {
+            @Override
+            public void hide() {
+                //Unpause your game here
+            }
+
+            @Override
+            public void show() {
+                //Pause your game here
+            }
+
+            @Override
+            public void pause() {}
+            @Override
+            public void render(float arg0) {}
+            @Override
+            public void resize(int arg0, int arg1) {}
+            @Override
+            public void resume() {}
+            @Override
+            public void dispose() {}
+        });   */
+    }
+
+    @Override
+    public void render() {
+        super.render();
+    }
+
+    @Override
+    public UIOverlay getOverlay() {
+        return super.getOverlay();
     }
 
     /**
@@ -76,7 +110,7 @@ public class GameLibrary extends GameClient {
      * @param forceUpdate Force the Game Library
      * @return gameSet
      */
-    public ArrayList<Game> getAvailableGames(boolean forceUpdate) {
+    private ArrayList<GameClient> getAvailableGames(boolean forceUpdate) {
         if (forceUpdate) loadGameList();
         return getAvailableGames();
     }
@@ -85,7 +119,7 @@ public class GameLibrary extends GameClient {
      * Get lists of games available to users on the server
      * @return gameSet
      */
-    public ArrayList<Game> getAvailableGames() {
+    public ArrayList<GameClient> getAvailableGames() {
         return gameList;
     }
 
@@ -94,24 +128,24 @@ public class GameLibrary extends GameClient {
      * Loads games on the server available to the user into the gamelibrary
      */
     private void loadGameList() {
-        Set<Game> playerGames = player.getGames();
-        Set<GameClient> serverGameClients = ArcadeSystem.getGameList();
+        //Set<Game> playerGames = player.getGames();
+        Set<GameClient> serverGameClients = ArcadeSystem.getGameClientList();
 
-        for (GameClient gameClient : serverGameClients) {
-            Game game = gameClient.getGame();
-            if (!playerGames.contains(game)) playerGames.remove(game);
-        }
+        //for (GameClient gameClient : serverGameClients) {
+        //    Game game = gameClient.getGame();
+        //    if (!playerGames.contains(game)) serverGameClients.remove(gameClient);
+        //}
 
-        orderGameSet(playerGames);
+        orderGameSet(serverGameClients);
     }
 
     /**
      * Order a set of Games
      * @param set Set of Games
      */
-    private void orderGameSet(Set<Game> set) {
-        ArrayList<Game> arrayList = new ArrayList<Game>(set);
-        Collections.sort(arrayList);
+    private void orderGameSet(Set<GameClient> set) {
+        ArrayList<GameClient> arrayList = new ArrayList<GameClient>(set);
+        //Collections.sort(arrayList);
         gameList = arrayList;
     }
 

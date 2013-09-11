@@ -12,7 +12,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
-public abstract class GameClient extends com.badlogic.gdx.Game {
+public abstract class GameClient extends com.badlogic.gdx.Game implements Comparable<GameClient> {
 
 	protected Player player;
 	protected NetworkClient networkClient;
@@ -61,7 +61,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
-		overlay.resize(width, height);
+        if (this.overlay != null) overlay.resize(width, height);
 	}
 
 	/**
@@ -183,6 +183,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public Player getPlayer() {
 		return player;
 	}
+
+    /**
+     *  Compare Games based on names
+     */
+    @Override
+    public int compareTo(GameClient gameClient) {
+        return this.getGame().compareTo(gameClient.getGame());
+    }
 	
 	
 }

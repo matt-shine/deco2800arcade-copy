@@ -302,7 +302,9 @@ public class Arcade extends JFrame {
 				Class<? extends GameClient> game = g
 						.asSubclass(GameClient.class);
 				ArcadeGame aGame = g.getAnnotation(ArcadeGame.class);
+
 				String gameId = aGame.id();
+
 				gameMap.put(gameId, game);
 			}
 		}
@@ -400,7 +402,12 @@ public class Arcade extends JFrame {
             if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
                 it.remove();
             } else {
-                gameSet.add(getInstanceOfGame(pair.getKey()));
+                GameClient gameClient = getInstanceOfGame(pair.getKey());
+                if (gameClient != null) {
+                    gameSet.add(gameClient);
+                    gameClient.pause();
+                }
+
             }
 
         }

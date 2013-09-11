@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 
-public class Game {
+public class Game implements Comparable<Game> {
 
 	//TODO shared between server & client?
 
@@ -35,7 +35,8 @@ public class Game {
 	public String name; //A human-readable name for the game
 	
 	public String description; //The description for the game
-    public Icon icon; //A game Icon
+
+	public Icon icon; //A game Icon
 
 	public int pricePerPlay = 1;
 	
@@ -58,7 +59,7 @@ public class Game {
 	
 	/**
 	 * Sets the name of a game
-	 * @param name
+	 * @param name Game name
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -73,5 +74,27 @@ public class Game {
 		return name;
 	}
 	
-	
+    /**
+     * Set Icon
+     * @param icon Game Icon
+     */
+    public void setIcon(Icon icon) {
+        this.icon = icon;
+    }
+
+    /**
+     * Get Icon
+     * @return icon
+     */
+    public Icon getIcon() {
+        return this.icon;
+    }
+
+    /**
+     *  Compare Games based on names
+     */
+    @Override
+    public int compareTo(Game g) {
+        return name.compareTo(g.name);
+    }
 }

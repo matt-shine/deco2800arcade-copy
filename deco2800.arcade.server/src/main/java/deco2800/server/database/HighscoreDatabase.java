@@ -14,18 +14,19 @@ public class HighscoreDatabase {
 	private static final DateFormat dateFormat = new SimpleDateFormat(
 			"yyyy/MM/dd HH:mm:ss");
 	
-	/* Create the highscore database if it does not exist */
+	
+	/** 
+	 * Create the highscore database if it does not exist 
+	 */
 	public void initialise() throws DatabaseException{
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
-		
 		
 		try {
 			Statement statement = connection.createStatement();
 			
 			//Create high scores base table
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_PLAYER", null);
-			
 			if (!tableData.next()) {
 				statement.execute("CREATE TABLE HIGHSCORES_PLAYER(HID INT PRIMARY KEY," + 
 							"Username VARCHAR(30) NOT NULL," +
@@ -36,7 +37,6 @@ public class HighscoreDatabase {
 	
 			//Create game scores table 
 			tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_DATA", null);
-			
 			if (!tableData.next()) {
 				statement.execute("CREATE TABLE HIGHSCORES_DATA(ID INT PRIMARY KEY," +
 							"Score_Type VARCHAR(255)," +
@@ -44,17 +44,19 @@ public class HighscoreDatabase {
 							"Score INT," +
 							"FOREIGN KEY(HID) REFERENCES HIGHSCORES_PLAYER(HID))");
 			}
+			
 		} catch (SQLException e) {
 			//e.printStackTrace();
 			throw new DatabaseException("Unable to create highscores tables", e);
 		}
 		
 		initialised = true;
-		
-		
 	}
 	
-	/* User Interface to Database Methods */
+	
+	/*================================================
+	 *  Database to Game/UI Methods
+	 *================================================*/
 	
 	/** Displays an amount of top players for a specified game
 	 * @param Game_ID
@@ -246,7 +248,9 @@ public class HighscoreDatabase {
 	}
 	
 	
-	/* Game to Database Methods */
+	/*================================================
+	 *  Game to Database Methods 
+	 *================================================*/
 	
 	private int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
 		int hid = 0;

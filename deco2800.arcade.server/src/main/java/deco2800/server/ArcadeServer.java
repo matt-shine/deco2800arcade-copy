@@ -16,6 +16,7 @@ import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.listener.HighscoreListener;
 import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
 
@@ -92,6 +93,13 @@ public class ArcadeServer {
 	}
 	
 	/**
+	 * Access the server's high score storage
+	 */
+	public HighscoreDatabase getHighscoreDatabase() {
+		return this.highscoreDatabase;
+	}
+	
+	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
@@ -101,8 +109,8 @@ public class ArcadeServer {
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
-		
 		this.highscoreDatabase = new HighscoreDatabase();
+		
 		this.packServ = new PackageServer();
 		
 		//initialize database classes
@@ -139,6 +147,8 @@ public class ArcadeServer {
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new ReplayListener());
+		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
+		
 	}
 }

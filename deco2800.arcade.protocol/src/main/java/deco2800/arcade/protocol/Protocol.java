@@ -16,6 +16,8 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
+import deco2800.arcade.protocol.forum.ForumTestRequest;
+import deco2800.arcade.protocol.forum.ForumTestResponse;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
@@ -101,6 +103,7 @@ public class Protocol {
 		kryo.register(NewGameRequest.class);
 		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
+<<<<<<< HEAD
 
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
@@ -112,6 +115,12 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
+=======
+		
+		// Forum Protocols
+		kryo.register(ForumTestResponse.class);
+		kryo.register(ForumTestRequest.class);
+>>>>>>> Add listener and protocol with test materials
 	}
 	
 	/**

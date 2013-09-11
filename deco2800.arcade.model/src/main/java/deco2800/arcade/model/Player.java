@@ -313,6 +313,20 @@ public class Player extends User {
 		}
 	}
 
+    public void updateLibraryLayout(int style) {
+        libraryStyle.setLayout(style);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
+    public void updateLibraryColour(int colour) {
+        libraryStyle.setColourScheme(colour);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
     public LibraryStyle getLibraryStyle() {
         return libraryStyle;
     }

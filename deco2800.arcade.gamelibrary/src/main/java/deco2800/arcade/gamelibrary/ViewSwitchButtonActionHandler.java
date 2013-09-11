@@ -22,7 +22,7 @@ public class ViewSwitchButtonActionHandler extends ChangeListener {
     public void changed(ChangeEvent changeEvent, Actor actor) {
         down = !down;
 
-        screen.getPlayer().getLibraryStyle().setLayout(style);
+        screen.getPlayer().updateLibraryLayout(style);
         screen.changeView();
     }
 }

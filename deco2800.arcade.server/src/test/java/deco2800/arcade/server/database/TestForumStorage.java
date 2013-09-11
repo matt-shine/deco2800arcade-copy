@@ -38,6 +38,9 @@ public class TestForumStorage {
 		forumStorage = new ForumStorage();
 		forumStorage.initialise();
 		forumStorage.insertParentThread("Test topic 1", "Test content this is.", 1, "General Admin", "tag1;tag2");
+		forumStorage.insertParentThread("Test topic 2", "Test content this is.", 1, "General Admin", "tag1;tag2");
+		forumStorage.insertParentThread("Test topic 3", "Test content this is.", 1, "General Admin", "tag1;tag2");
+		forumStorage.insertParentThread("Test topic 4", "Test content this is.", 1, "General Admin", "tag1;tag2");
 	}
 	
 	@Test
@@ -48,5 +51,13 @@ public class TestForumStorage {
 	@Test
 	public void selectAllTest() throws Exception {
 		assertEquals("Test topic 1", forumStorage.getAllParentThread()[0][1]);
+	}
+	
+	@Test
+	public void selectRangeTest() throws Exception {
+		assertEquals(4, forumStorage.getParentThreads(0, 0, 0).length);
+		assertEquals(2, forumStorage.getParentThreads(0, 3, 2).length);
+		assertEquals(3, forumStorage.getParentThreads(2, 4, 0).length);
+		assertEquals(2, forumStorage.getParentThreads(1, 4, 2).length);
 	}
 }

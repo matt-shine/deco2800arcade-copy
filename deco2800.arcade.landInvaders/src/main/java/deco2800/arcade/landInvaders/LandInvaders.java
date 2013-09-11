@@ -8,18 +8,18 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 
 //Main Class
-@ArcadeGame(id = "LandInvaders")
-public class LandInvaders extends GameClient  {
-
+//@ArcadeGame(id = "LandInvaders")
+//public class LandInvaders extends GameClient  {
+public class LandInvaders {
 	private static final Game GAME;
 
 	public LandInvaders(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
+		//super(player, networkClient);
 		Invaders invader = new Invaders();
 	}
 
 	public void resume() {
-		super.resume();
+		//super.resume();
 	}
 
 	static {
@@ -28,7 +28,7 @@ public class LandInvaders extends GameClient  {
 		GAME.name = "LandInvaders";
 		GAME.description = "funny game!";
 	}
-	@Override
+	//@Override
 	public Game getGame() {
 		
 		return GAME;

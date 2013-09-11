@@ -33,6 +33,13 @@ import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
+import deco2800.arcade.protocol.forum.ForumTestRequest;
+import deco2800.arcade.protocol.forum.ForumTestResponse;
+import deco2800.arcade.protocol.game.GameRequestType;
+import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
+import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.game.NewGameResponse;
 
 public class Protocol {
 	
@@ -121,6 +128,10 @@ public class Protocol {
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
+		
+		// Forum Protocols
+		kryo.register(ForumTestResponse.class);
+		kryo.register(ForumTestRequest.class);
 	}
 	
 	/**

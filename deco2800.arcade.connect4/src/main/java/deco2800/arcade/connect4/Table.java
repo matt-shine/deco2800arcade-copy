@@ -114,7 +114,7 @@ public class Table {
     
 
     public boolean checkFieldWinner(int playerToCheck) {
-    	
+    	//FIXME combination of tiny variable names and no comments makes this method confusing
     	for ( int r = 0; r < Table.TABLEROWS; r++ ) {
     		for ( int c = 0; c < Table.TABLECOLS; c++ ) {
     			

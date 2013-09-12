@@ -90,7 +90,7 @@ public class ExtendedSprite extends Sprite {
     //Override the draw method to also draw atk / health
     @Override
     public void draw(SpriteBatch batch) {
-
+    	//FIXME big method
         //Make color selected card (if it is a card
         if(this.getCard() != null) {
             if(this.isSelected) {

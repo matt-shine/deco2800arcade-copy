@@ -33,11 +33,11 @@ public class Pong extends GameClient {
 	private Paddle leftPaddle;
 	private Paddle rightPaddle;
 	private Ball ball;
-	private enum GameState {
-		READY,
-		INPROGRESS,
-		GAMEOVER
-	}
+//	private enum GameState {
+//		READY,
+//		INPROGRESS,
+//		GAMEOVER
+//	}
 	private GameState gameState;
 	private int[] scores = new int[2];
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
@@ -117,14 +117,14 @@ public class Pong extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		// Create the paddles
-		leftPaddle = new LocalUserPaddle(
-				new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2));
-		leftPaddle.setColor(1, 0, 0, 1);
+		setLeftPaddle(new LocalUserPaddle(
+				new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2)));
+		getLeftPaddle().setColor(1, 0, 0, 1);
 		
-		rightPaddle = new AIPaddle(
+		setRightPaddle(new AIPaddle(
 				new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - 
-						Paddle.INITHEIGHT/2));
-		rightPaddle.setColor(0, 0, 1, 1);
+						Paddle.INITHEIGHT/2)));
+		getRightPaddle().setColor(0, 0, 1, 1);
 		
 		/**
 		 * TODO Allow network games
@@ -137,8 +137,8 @@ public class Pong extends GameClient {
 		 */
 		
 		//Create the ball
-		ball = new Ball();
-		ball.setColor(1, 1, 1, 1);
+		setBall(new Ball());
+		getBall().setColor(1, 1, 1, 1);
 		
 		//Necessary for rendering
 		shapeRenderer = new ShapeRenderer();
@@ -149,7 +149,8 @@ public class Pong extends GameClient {
 		//Initialise the scores and game state
 		scores[0] = 0;
 		scores[1] = 0;
-		gameState = GameState.READY;
+		//gameState = GameState.READY;
+		gameState = new ReadyState();
 		statusMessage = "Click to start!";
 		
 	}
@@ -182,11 +183,11 @@ public class Pong extends GameClient {
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
-	    leftPaddle.render(shapeRenderer);
+	    getLeftPaddle().render(shapeRenderer);
 	    
-	    rightPaddle.render(shapeRenderer);
+	    getRightPaddle().render(shapeRenderer);
 	    
-	    ball.render(shapeRenderer);
+	    getBall().render(shapeRenderer);
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
@@ -204,72 +205,38 @@ public class Pong extends GameClient {
 	    if (statusMessage != null) {
 	    	font.setColor(Color.WHITE);
 	    	font.draw(batch, statusMessage, SCREENWIDTH/2 - 100, SCREENHEIGHT-100);
-	    	if (gameState == GameState.GAMEOVER) {
+	    	if (gameState instanceof GameOverState) {
 	    		font.draw(batch, "Click to exit", SCREENWIDTH/2 - 100, SCREENHEIGHT - 200);
 	    	}
 	    }
 	    batch.end();
 	    
-	    // Respond to user input and move the ball depending on the game state
-	    switch(gameState) {
-	    
-	    case READY: //Ready to start a new point
-	    	if (Gdx.input.isTouched()) {
-	    		startPoint();
-	    	}
-	    	break;
-	    	
-	    case INPROGRESS: //Point is underway, ball is moving
-	    	//Move the left paddle (mouse)
-	    	leftPaddle.update(ball);
-	    	
-	    	//Move the right paddle (automatic)
-	    	rightPaddle.update(ball);
-	    	
-	    	//Move the ball
-	    	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
-	    	ball.move(Gdx.graphics.getDeltaTime());
-	    	//If the ball hits a paddle then bounce it
-	    	if (ball.bounds.overlaps(leftPaddle.bounds) || ball.bounds.overlaps(rightPaddle.bounds)) {
-	    		ball.bounceX();
-	    	}
-	    	//Bounce off the top or bottom of the screen
-	    	if (ball.bounds.y <= 0 || ball.bounds.y >= SCREENHEIGHT-Ball.WIDTH) {
-	    		ball.bounceY();
-	    	}
-	    	
-	    	//If the ball gets to the left edge then player 2 wins
-	    	if (ball.bounds.x <= 0) {
-	    		endPoint(1);
-	    	} else if (ball.bounds.x + Ball.WIDTH > SCREENWIDTH) { 
-	    		//If the ball gets to the right edge then player 1 wins
-	    		endPoint(0);
-	    	}
-	    	break;
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	if (Gdx.input.isTouched()) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
-	    }
+	    handleInput();
 	    
 		super.render();
 		
 	}
 
 	/**
+	 * Handle user input from keyboard or mouse
+	 */
+	private void handleInput() {
+		// Respond to user input and move the ball depending on the game state
+	   gameState.handleInput(this);
+	}
+
+	/**
 	 * The point has ended: update scores, reset the ball, check for a winner and move the game state to ready or gameover
 	 * @param winner 0 for player 1, 1 for player 2
 	 */
-	private void endPoint(int winner) {
-		ball.reset();
+	void endPoint(int winner) {
+		getBall().reset();
 		scores[winner]++;
 		// If we've reached the victory point then update the display
 		if (scores[winner] == WINNINGSCORE) {	
 		    int loser = winner==1?0:1; //The loser is the player who didn't win!
 		    statusMessage = players[winner] + " Wins " + scores[winner] + " - " + scores[loser] + "!";
-		    gameState = GameState.GAMEOVER;
+		    gameState = new GameOverState();
 		    //Update the game state to the server
 		    networkClient.sendNetworkObject(createScoreUpdate());
 		    //If the local player has won, send an achievement
@@ -279,7 +246,7 @@ public class Pong extends GameClient {
 		    }
 		} else {
 			// No winner yet, get ready for another point
-			gameState = GameState.READY;
+			gameState = new ReadyState();
 			statusMessage = "Click to start!";
 		}
 	}
@@ -299,9 +266,9 @@ public class Pong extends GameClient {
 	/**
 	 * Start a new point: start the ball moving and change the game state
 	 */
-	private void startPoint() {
-		ball.randomizeVelocity();
-		gameState = GameState.INPROGRESS;
+	void startPoint() {
+		getBall().randomizeVelocity();
+		gameState = new InProgressState();
 		statusMessage = null;
 	}
 
@@ -324,6 +291,30 @@ public class Pong extends GameClient {
 	
 	public Game getGame() {
 		return GAME;
+	}
+
+	public Paddle getLeftPaddle() {
+		return leftPaddle;
+	}
+
+	public void setLeftPaddle(Paddle leftPaddle) {
+		this.leftPaddle = leftPaddle;
+	}
+
+	public Ball getBall() {
+		return ball;
+	}
+
+	public void setBall(Ball ball) {
+		this.ball = ball;
+	}
+
+	public Paddle getRightPaddle() {
+		return rightPaddle;
+	}
+
+	public void setRightPaddle(Paddle rightPaddle) {
+		this.rightPaddle = rightPaddle;
 	}
 	
 }

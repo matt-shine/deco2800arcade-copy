@@ -1,5 +1,8 @@
 package deco2800.arcade.pacman;
 
+import java.io.*;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -46,6 +49,8 @@ public class Pacman extends GameClient {
 	private PacChar player;
 	//takes keyboard input
 	private InputProcessor controller;
+	private GameMap map1;
+	private ArrayList<char[]> map1Array;
 	
 	//not used yet
 	//private NetworkClient networkClient;
@@ -115,7 +120,9 @@ public class Pacman extends GameClient {
 		controller = new PacController(player);
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
-		gameState = GameState.READY;		
+		gameState = GameState.READY;
+		map1 = new GameMap();
+		map1Array = map1.readMap(file); // Nick, you know what to fix here
 	}
 	
 	/**
@@ -188,93 +195,13 @@ public class Pacman extends GameClient {
 	    // just testing walls at the moment, haven't arranged any
 	    
 	    // Outer Exterior West Walls
-	    Wall westWall1 = new Wall(1, 300, 50, 200);
-	    Wall westWall2 = new Wall(3, 300, 250, 125);
-	    Wall westWall3 = new Wall(1, 425, 250, 75);
-	    Wall westWall4 = new Wall(3, 300, 325, 125);
-	    Wall westWall5 = new Wall(3, 300, 375, 125);
-	    Wall westWall6 = new Wall(1, 425, 375, 75);
-	    Wall westWall7 = new Wall(3, 300, 450, 125);
-	    Wall westWall8 = new Wall(1, 300, 450, 200);
-	    
-	    // Inner Exterior West Walls
-	    Wall westWall9 = new Wall(1, 305, 55, 190);
-	    Wall westWall10 = new Wall(3, 305, 245, 125);
-	    Wall westWall11 = new Wall(1, 430, 245, 85);
-	    Wall westWall12 = new Wall(3, 300, 330, 130);
-	    Wall westWall13 = new Wall(3, 300, 370, 130);
-	    Wall westWall14 = new Wall(1, 430, 370, 85);
-	    Wall westWall15 = new Wall(3, 305, 455, 125);
-	    Wall westWall16 = new Wall(1, 305, 455, 190);
-	    
-	    // North and South Walls
-	    Wall southWall1 = new Wall(3, 300, 50, 600);
-	    Wall southWall2 = new Wall(3, 305, 55, 590);
-	    Wall northWall1 = new Wall(3, 300, 650, 600);
-	    Wall northWall2 = new Wall(3, 305, 645, 590);
-	    
-	    // Outer Exterior East Walls
-	    Wall eastWall1 = new Wall(1, 900, 50, 200);
-	    Wall eastWall2 = new Wall(3, 775, 250, 125);
-	    Wall eastWall3 = new Wall(1, 775, 250, 75);
-	    Wall eastWall4 = new Wall(3, 775, 325, 125);
-	    Wall eastWall5 = new Wall(3, 775, 375, 125);
-	    Wall eastWall6 = new Wall(1, 775, 375, 75);
-	    Wall eastWall7 = new Wall(3, 775, 450, 125);
-	    Wall eastWall8 = new Wall(1, 900, 450, 200);
-	    
-	    // Inner Exterior East Walls
-	    Wall eastWall9 = new Wall(1, 895, 55, 190);
-	    Wall eastWall10 = new Wall(3, 770, 245, 125);
-	    Wall eastWall11 = new Wall(1, 770, 245, 85);
-	    Wall eastWall12 = new Wall(3, 770, 330, 130);
-	    Wall eastWall13 = new Wall(3, 770, 370, 130);
-	    Wall eastWall14 = new Wall(1, 770, 370, 85);
-	    Wall eastWall15 = new Wall(3, 770, 455, 125);
-	    Wall eastWall16 = new Wall(1, 895, 455, 190);
+	   
 	    
 	    
 	    shaper.begin(ShapeType.Line);
-	    westWall1.render(shaper);
-	    westWall2.render(shaper);
-	    westWall3.render(shaper);
-	    westWall4.render(shaper);
-	    westWall5.render(shaper);
-	    westWall6.render(shaper);
-	    westWall7.render(shaper);
-	    westWall8.render(shaper);
-	    westWall9.render(shaper);
-	    westWall10.render(shaper);
-	    westWall11.render(shaper);
-	    westWall12.render(shaper);
-	    westWall13.render(shaper);
-	    westWall14.render(shaper);
-	    westWall15.render(shaper);
-	    westWall16.render(shaper);
-	    
-	    southWall1.render(shaper);
-	    southWall2.render(shaper);
-	    northWall1.render(shaper);
-	    northWall2.render(shaper);
-	    
-	    eastWall1.render(shaper);
-	    eastWall2.render(shaper);
-	    eastWall3.render(shaper);
-	    eastWall4.render(shaper);
-	    eastWall5.render(shaper);
-	    eastWall6.render(shaper);
-	    eastWall7.render(shaper);
-	    eastWall8.render(shaper);
-	    eastWall9.render(shaper);
-	    eastWall10.render(shaper);
-	    eastWall11.render(shaper);
-	    eastWall12.render(shaper);
-	    eastWall13.render(shaper);
-	    eastWall14.render(shaper);
-	    eastWall15.render(shaper);
-	    eastWall16.render(shaper);
-	    
-	   
+	    	   
+		map1.drawMap(map1Array, shaper);
+	     
 	    shaper.end();
 	    //do any stuff the superclass normally does for rendering
 		super.render();

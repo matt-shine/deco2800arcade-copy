@@ -12,7 +12,7 @@ public class Wall {
 
 	//private Texture wallTexture;
 	//private Sprite wallSprite;
-	private int wallType; //1:|, 2:/, 3:-, 4:\
+	private int wallType; //1:|, 2: -
 	private float length; // The length of the wall
 	//the coordinates of the bottom left corner of the wall
 	private float x; 
@@ -47,22 +47,22 @@ public class Wall {
 	    // initial coords, end coords, and the line is drawn between. Currently 
 	    // not sure how to do width of line, might need different approach like a Rectangle
 	    // if it's a diagonal wall type
-	    if (wallType == 2 || wallType == 4) {
+	    /**if (wallType == 2 || wallType == 4) {
 	    	// calculate location of end x and y coords based on rearranged pythagoras
 	    	float diagDist = ((Double)(Math.sqrt(Math.pow(length, 2)/2))).floatValue();	    	
 	    	if (wallType == 2) {
 	    		shapeRenderer.line(x, y, x + diagDist, y + diagDist);
 	    	} else {
 	    		shapeRenderer.line(x, y, x + diagDist, y - diagDist);
-	    	}
+	    	} **/
 	    // if it's a horizontal or vertical wall
-	    } else {
-	    	if (wallType == 1) {
-	    		shapeRenderer.line(x, y, x, y + length);
-	    	} else {
-	    		shapeRenderer.line(x, y, x + length, y);
-	    	}
+	    //} else {
+	    if (wallType == 1) {
+	    	shapeRenderer.line(x, y, x, y + length);
+	    } else if (wallType == 2) {
+	    	shapeRenderer.line(x, y, x + length, y);
 	    }
+	    
 	}	
 }
 

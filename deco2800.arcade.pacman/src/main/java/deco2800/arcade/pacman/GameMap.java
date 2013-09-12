@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 /*
  * Probably just replace this with a method in Pacman.java later, but for now
  * this is just a thinking space :).
@@ -25,6 +27,8 @@ public class GameMap {
 	 * 
 	 * Later on we can just have a loop to generate all our walls.
 	 */
+	
+	
 	
 	ArrayList<char[]> readMap(File file) throws IOException {
 
@@ -54,11 +58,13 @@ public class GameMap {
 	/*
 	 * Generate and draw walls as specified by the map ArrayList.
 	 */
-	void drawMap(ArrayList<char[]> map){
+	void drawMap(ArrayList<char[]> map, ShapeRenderer shaper){
+		// using a unit length for the walls as 25 pixels. This means by the standard grid we are working at
+		// at the moment, the txt files must be 24x24.
 		for (int i = 0; i < map.size(); i++){
 			char[] s = map.get(i);
 			for (int j = 0; j < s.length; j++){
-				Wall wall = new Wall(Character.getNumericValue(s[j]), 100*i, 100*j, 300); //Modify these later
+				Wall wall = new Wall(Character.getNumericValue(s[j]), (900-24*i), (650-24*j), 25);
 				//wall.render(shaper); 
 			}
 		}

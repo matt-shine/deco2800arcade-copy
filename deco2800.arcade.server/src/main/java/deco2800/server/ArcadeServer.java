@@ -12,12 +12,16 @@ import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ReplayListener;
 =======
 import deco2800.server.database.ForumStorage;
 >>>>>>> Create and set the ForumStorage
+=======
+import deco2800.server.database.ForumStorage;
+>>>>>>> 46312212c36dc595c8ad19091266df746449560c
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
@@ -90,6 +94,9 @@ public class ArcadeServer {
 	/* Forum strage service */
 	private ForumStorage forumStorage;
 	
+	/* Forum strage service */
+	private ForumStorage forumStorage;
+	
 	/**
 	 * Access the server's credit storage facility
 	 * @return
@@ -130,10 +137,14 @@ public class ArcadeServer {
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
 <<<<<<< HEAD
+<<<<<<< HEAD
 		this.replayStorage = new ReplayStorage();
 =======
 		this.forumStorage = new ForumStorage();
 >>>>>>> Create and set the ForumStorage
+=======
+		this.forumStorage = new ForumStorage();
+>>>>>>> 46312212c36dc595c8ad19091266df746449560c
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
@@ -151,6 +162,7 @@ public class ArcadeServer {
             imageStorage.initialise();
 			//playerStorage.initialise();
 <<<<<<< HEAD
+<<<<<<< HEAD
             
 			achievementStorage.initialise();
 			
@@ -158,6 +170,9 @@ public class ArcadeServer {
 =======
 			this.forumStorage.initialise();
 >>>>>>> Create and set the ForumStorage
+=======
+			this.forumStorage.initialise();
+>>>>>>> 46312212c36dc595c8ad19091266df746449560c
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

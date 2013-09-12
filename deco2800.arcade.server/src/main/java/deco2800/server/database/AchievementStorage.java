@@ -532,6 +532,14 @@ public class AchievementStorage {
         return new AchievementProgress(progress, awarded);
     }
     
+    /**
+     * Returns the achievement progress of a particular player.
+     * 
+     * @param playerID
+     * @param achievementID
+     * @return progress
+     * @throws DatabaseException
+     */
     public int progressForAchievement(int playerID, String achievementID) throws DatabaseException {
         // Get a connection to the database
     	Connection connection = Database.getConnection();

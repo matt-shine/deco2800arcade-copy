@@ -1,6 +1,9 @@
 package deco2800.arcade.burningskies.entities;
 
 import deco2800.arcade.burningskies.*;
+import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
+import deco2800.arcade.burningskies.entities.bullets.DemoPattern;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;

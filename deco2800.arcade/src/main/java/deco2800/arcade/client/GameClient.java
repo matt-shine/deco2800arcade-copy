@@ -37,9 +37,10 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
     public void incrementAchievement(final String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
         
-        
-        //if (achievementClient.progressForPlayer(player).progressForAchievement(achievementClient.achievementForID(achievementID)) >= achievementClient.achievementForID(achievementID).awardThreshold) {
-        
+        /*if (achievementClient.progressForPlayer(player).
+        		progressForAchievement(achievementClient.achievementForID(achievementID)) >= 
+        		achievementClient.achievementForID(achievementID).awardThreshold) {
+        */
         
         	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 				
@@ -120,6 +121,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	@Override
 	public void dispose() {
 		super.dispose();
+		if (this.overlay != null) {
+			overlay.dispose();
+		}
 	}
 
 	@Override
@@ -134,8 +138,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	    
 
 		//toggles fullscreen on F11
-		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast && (hasF11PressedLast = !hasF11PressedLast)) {
-			Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, !Gdx.graphics.isFullscreen());
+		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast &&
+				(hasF11PressedLast = !hasF11PressedLast)) {
+			
+			Gdx.graphics.setDisplayMode(
+					Gdx.graphics.getDesktopDisplayMode().width,
+					Gdx.graphics.getDesktopDisplayMode().height,
+					!Gdx.graphics.isFullscreen()
+			);
 		}
 		
 	}

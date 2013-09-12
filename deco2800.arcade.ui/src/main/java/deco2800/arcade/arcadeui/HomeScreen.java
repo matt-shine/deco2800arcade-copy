@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class HomeScreen implements Screen {
@@ -28,6 +29,16 @@ public class HomeScreen implements Screen {
 	
 	
 	public HomeScreen() {
+		
+		//check that no input listeners are left
+		if (ArcadeInputMux.getInstance().getProcessors().size != 0) {
+			System.err.println("Home Screen: Input listener leak detected. The following " +
+					ArcadeInputMux.getInstance().getProcessors().size + " listener(s) remain:");
+			
+			for (int i = ArcadeInputMux.getInstance().getProcessors().size - 1; i >= 0; i--) {
+				System.err.println("Home Screen: " + ArcadeInputMux.getInstance().getProcessors().get(i));
+			}
+		}
 		
 	}
 	

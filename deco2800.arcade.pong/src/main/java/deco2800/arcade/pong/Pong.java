@@ -65,7 +65,7 @@ public class Pong extends GameClient {
 		super(player, networkClient);
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
-        this.networkClient = networkClient; //this is a bit of a hack
+        this.networkClient = networkClient;
         
 	}
 	
@@ -109,7 +109,7 @@ public class Pong extends GameClient {
 			}
 			
         });
-		
+
 		super.create();
 		
 		//Initialise camera

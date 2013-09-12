@@ -16,9 +16,11 @@ import deco2800.arcade.client.ArcadeSystem;
  */
 public class OverlayScreen implements Screen {
 	
+	private class OverlayScreenStage extends Stage {}
+	
 	private Screen callbacks = null;
 	
-    private Stage stage;
+    private OverlayScreenStage stage;
     private Sidebar sidebar = null;
     private OverlayWindow window = null;
     
@@ -34,10 +36,9 @@ public class OverlayScreen implements Screen {
 		window = new OverlayWindow(overlay);
 		sidebar = new Sidebar(overlay, window);
 		
-		stage = new Stage();
+		stage = new OverlayScreenStage();
 		stage.addActor(window);
 		stage.addActor(sidebar);
-		ArcadeInputMux.getInstance().addProcessor(stage);
 		
 	}
 	
@@ -45,6 +46,7 @@ public class OverlayScreen implements Screen {
 
 	@Override
 	public void show() {
+		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 	
 	
@@ -91,6 +93,8 @@ public class OverlayScreen implements Screen {
 	    if (callbacks != null) {
 	    	callbacks.dispose();
 	    }
+	    ArcadeInputMux.getInstance().removeProcessor(stage);
+	    this.window.destroy();
 	}
 	
 	@Override

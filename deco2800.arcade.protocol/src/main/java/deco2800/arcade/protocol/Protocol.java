@@ -107,11 +107,15 @@ public class Protocol {
 		kryo.register(NewGameRequest.class);
 		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
+<<<<<<< HEAD
         kryo.register(GameLibraryRequest.class);
         kryo.register(GameLibraryResponse.class);
         kryo.register(Game.class);
         kryo.register(Icon.class);
 		
+=======
+
+>>>>>>> Delete unremoved git diff comment
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
@@ -125,9 +129,12 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
+<<<<<<< HEAD
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
+=======
+>>>>>>> Delete unremoved git diff comment
 		
 		// Forum Protocols
 		kryo.register(ForumTestResponse.class);

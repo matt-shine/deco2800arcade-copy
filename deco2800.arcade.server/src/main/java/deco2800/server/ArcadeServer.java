@@ -15,6 +15,10 @@ import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ReplayListener;
 import deco2800.server.database.ForumStorage;
+<<<<<<< HEAD
+=======
+import deco2800.server.database.ForumStorage;
+>>>>>>> Delete unremoved git diff comment
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
@@ -145,6 +149,10 @@ public class ArcadeServer {
 		this.creditStorage = new CreditStorage();
 		this.replayStorage = new ReplayStorage();
 		this.forumStorage = new ForumStorage();
+<<<<<<< HEAD
+=======
+		this.forumStorage = new ForumStorage();
+>>>>>>> Delete unremoved git diff comment
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
         this.imageStorage = new ImageStorage();
@@ -159,9 +167,20 @@ public class ArcadeServer {
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
+<<<<<<< HEAD
+=======
+          
+>>>>>>> Delete unremoved git diff comment
 			achievementStorage.initialise();
 			highscoreDatabase.initialise();
+<<<<<<< HEAD
 			this.forumStorage.initialise();
+=======
+
+			this.forumStorage.initialise();
+
+			this.forumStorage.initialise();
+>>>>>>> Delete unremoved git diff comment
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

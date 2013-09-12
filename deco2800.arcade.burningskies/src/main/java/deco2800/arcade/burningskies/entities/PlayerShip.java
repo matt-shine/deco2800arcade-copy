@@ -2,7 +2,7 @@ package deco2800.arcade.burningskies.entities;
 
 import deco2800.arcade.burningskies.*;
 import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
-import deco2800.arcade.burningskies.entities.bullets.DemoPattern;
+import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
-	private final float MAXVELOCITY = 400;
+	private final float MAXVELOCITY = 600;
 
 	/**
 	 * Construct a playable ship for the user(s).
@@ -20,10 +20,6 @@ public class PlayerShip extends Ship {
 	 */
 	public PlayerShip(int health, Texture image, Vector2 position) {
 		super(health, image, position);
-		
-		// Sets the ship to 75 x 75, most suitable size
-//		this.setWidth(75);
-//		this.setHeight(75);
 	}
 	
 	/**
@@ -65,7 +61,7 @@ public class PlayerShip extends Ship {
 	 */
 	public void shoot(float delta) {
 		if(playerBullets == null) {
-			playerBullets = new DemoPattern(getStage(),this);
+			playerBullets = new PlayerPattern(getStage(),this);
 		}
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			if(!playerBullets.isFiring()) {

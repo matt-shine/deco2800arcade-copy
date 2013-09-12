@@ -1,10 +1,12 @@
-package deco2800.arcade.burningskies.entities;
+package deco2800.arcade.burningskies.entities.bullets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import deco2800.arcade.burningskies.entities.Bullet.Affinity;
+
+import deco2800.arcade.burningskies.entities.Ship;
+import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 
 public class DemoPattern extends BulletPattern {
 	

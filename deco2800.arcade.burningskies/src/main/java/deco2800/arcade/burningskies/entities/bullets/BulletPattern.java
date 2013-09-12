@@ -1,8 +1,10 @@
-package deco2800.arcade.burningskies.entities;
+package deco2800.arcade.burningskies.entities.bullets;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+
+import deco2800.arcade.burningskies.entities.Ship;
 
 public abstract class BulletPattern extends Actor {
 	

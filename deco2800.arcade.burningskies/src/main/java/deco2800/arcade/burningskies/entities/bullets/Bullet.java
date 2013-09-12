@@ -1,8 +1,11 @@
-package deco2800.arcade.burningskies.entities;
+package deco2800.arcade.burningskies.entities.bullets;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+import deco2800.arcade.burningskies.entities.PlayerShip;
+import deco2800.arcade.burningskies.entities.Ship;
 
 public abstract class Bullet extends Image {
 	

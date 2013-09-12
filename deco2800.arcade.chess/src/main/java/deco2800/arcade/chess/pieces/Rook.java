@@ -1,8 +1,6 @@
 package deco2800.arcade.chess.pieces;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -73,7 +71,6 @@ public class Rook implements Piece {
 		return this.preference;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<int[]> possibleMoves(int[] currentPos) {
 		List<int[]> moves = new ArrayList<int[]>();
@@ -182,6 +179,12 @@ public class Rook implements Piece {
 		if (team != other.team)
 			return false;
 		return true;
+	}
+
+	@Override
+	public void hasMoved() {
+		// TODO Auto-generated method stub
+		
 	}
 
 

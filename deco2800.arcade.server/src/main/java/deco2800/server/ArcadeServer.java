@@ -11,10 +11,14 @@ import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.listener.HighscoreListener;
+import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.listener.AchievementListener;
@@ -30,11 +34,19 @@ public class ArcadeServer {
 	// Keep track of which users are connected
 	private Set<String> connectedUsers = new HashSet<String>();
 	
+	//Replay data
+	private ReplayStorage replayStorage;
+	
 	//singleton pattern
 	private static ArcadeServer instance;
 	
 	// Package manager
+	@SuppressWarnings("unused")
 	private PackageServer packServ;
+	
+	// Server will communicate over these ports
+	private static final int TCP_PORT = 54555;
+	private static final int UDP_PORT = 54777;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -68,6 +80,9 @@ public class ArcadeServer {
 
     private ImageStorage imageStorage;
 	
+	// Highscore database storage service
+	private HighscoreDatabase highscoreDatabase;
+	
 	/**
 	 * Access the server's credit storage facility
 	 * @return
@@ -77,11 +92,27 @@ public class ArcadeServer {
 	}
 	
 	/**
-	 * Access the Serer's achievement storage facility
+	 * * Access the Serer's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
 	 */
 	public AchievementStorage getAchievementStorage() {
 		return this.achievementStorage;
+	}
+	
+	/**
+	 * Access the replay records.
+	 * @return
+	 */
+	public ReplayStorage getReplayStorage()
+	{
+	    return this.replayStorage;
+	}
+	
+	/**
+	 * Access the server's high score storage
+	 */
+	public HighscoreDatabase getHighscoreDatabase() {
+		return this.highscoreDatabase;
 	}
 	
 	/**
@@ -91,12 +122,15 @@ public class ArcadeServer {
 	 */
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
+		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
+		
         this.imageStorage = new ImageStorage();
 
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
+		this.highscoreDatabase = new HighscoreDatabase();
 		
 		this.packServ = new PackageServer();
 		
@@ -105,7 +139,10 @@ public class ArcadeServer {
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
+            
 			achievementStorage.initialise();
+			
+			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -123,7 +160,7 @@ public class ArcadeServer {
 		System.out.println("Server starting");
 		server.start();
 		try {
-			server.bind(54555, 54777);
+			server.bind(TCP_PORT, UDP_PORT);
 			System.out.println("Server bound");
 		} catch (BindException b) {
 			System.err.println("Error binding server: Address already in use");
@@ -137,6 +174,9 @@ public class ArcadeServer {
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new AchievementListener());
+		server.addListener(new ReplayListener());
+		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
+		
 	}
 }

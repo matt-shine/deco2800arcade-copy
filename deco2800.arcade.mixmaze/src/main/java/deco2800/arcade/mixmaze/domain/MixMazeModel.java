@@ -149,6 +149,7 @@ public class MixMazeModel {
 		}
 
 		state = GameState.END;
+		TileModel.ITEMSCOUNT = 0;
 
 		try {
 			spawnerThread.join();
@@ -211,7 +212,7 @@ public class MixMazeModel {
 		if(maxSeconds < 30 || maxSeconds > 900) {
 			throw new IllegalArgumentException("maxMinutes must be between 2 and 15.");
 		}
-
+		//TODO commenting?
 		// Initialize board
 		boardSize = size;
 		board = new TileModel[boardSize][boardSize];

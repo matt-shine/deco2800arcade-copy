@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
@@ -137,6 +138,12 @@ public class OverlayPopup extends Actor {
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		
+		OrthographicCamera camera = new OrthographicCamera();
+		camera.setToOrtho(false, overlay.getWidth(), overlay.getHeight());
+		camera.update();
+	    batch.setProjectionMatrix(camera.combined);
+	    
+	    
 		if (state != 0) {
 			texture.draw(batch, getX(), getY(), expandedAmt, MINSIZE);
 			font.setColor(Color.WHITE);

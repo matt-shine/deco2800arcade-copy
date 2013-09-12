@@ -103,8 +103,6 @@ public class Protocol {
 		kryo.register(NewGameRequest.class);
 		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
@@ -116,17 +114,10 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
-=======
-=======
->>>>>>> 46312212c36dc595c8ad19091266df746449560c
 		
 		// Forum Protocols
 		kryo.register(ForumTestResponse.class);
 		kryo.register(ForumTestRequest.class);
-<<<<<<< HEAD
->>>>>>> Add listener and protocol with test materials
-=======
->>>>>>> 46312212c36dc595c8ad19091266df746449560c
 	}
 	
 	/**

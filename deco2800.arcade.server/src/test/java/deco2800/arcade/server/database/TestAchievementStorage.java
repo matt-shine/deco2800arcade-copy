@@ -17,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Player;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.database.DatabaseException;
@@ -27,6 +28,7 @@ import deco2800.server.database.ImageStorage;
  * @author PeterHsieh via uqjstee8(CreditStorage)
  * @see deco2800.arcade.server.database.AchievementStorage
  */
+
 public class TestAchievementStorage {
 
 	private static IDatabaseTester databaseTester; //manage connections to the database
@@ -82,6 +84,10 @@ public class TestAchievementStorage {
 		databaseTester.onTearDown();
 	}
 	
+
+	Player testplayer = new Player(1, "Bob", "default.png");
+	Player testplayer2 = new Player(2, "Bobbie", "default.png");
+	
 	/**
 	 * Test for AchievementsForIDs method
 	 * @throws DatabaseException
@@ -117,13 +123,9 @@ public class TestAchievementStorage {
 	 */
 	@Test
 	public void testIncrementAchievement() throws DatabaseException {
-		Player testplayer;
-		Player testplayer2;
 		System.out.print("Returning initial PLAYER_ACHIEVEMENT table." +
 				"\n================\n");
 		achievementStorage.returnPlayersAchievement();
-		testplayer = new Player(1, "Bob", "default.png");
-		testplayer2 = new Player(2, "Bobbie", "default.png");
 		achievementStorage.incrementProgress(testplayer.getID(), "pong.winthreegames");
 		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
 		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
@@ -137,5 +139,31 @@ public class TestAchievementStorage {
 		achievementStorage.incrementProgress(testplayer.getID(), "pong.winfivegames");
 	}
 	
+	/**
+	 * Test progressForPlayer() function
+	 * @throws DatabaseException
+	 */
+	@Test
+	public void testProgressForPlayer() throws DatabaseException {
+		System.out.println("Testing progressForPlayer method.\n================\n");
+		achievementStorage.incrementProgress(testplayer.getID(), "pong.winthreegames");
+		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
+		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winthreegames");
+		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
+		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
+		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
+		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
+		achievementStorage.incrementProgress(testplayer2.getID(), "pong.winfivegames");
+		
+		AchievementProgress testResult = achievementStorage.progressForPlayer(1);
+		System.out.println("Player 1 Progress\n" +
+				"inProgress: " + testResult.inProgressAchievementIDs() + 
+				"\nAwarded: " + testResult.awardedAchievementIDs() + "\n");
+		AchievementProgress testResult2 = achievementStorage.progressForPlayer(2);
+		System.out.println("Player 2 Progress\n" +
+				"inProgress: " + testResult2.inProgressAchievementIDs() + 
+				"\nAwarded: " + testResult2.awardedAchievementIDs() + "\n\n");
+		
+	}
 }
 

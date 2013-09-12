@@ -19,8 +19,6 @@ import deco2800.server.database.ImageStorage;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * Implements Achievement storage on database.
@@ -459,7 +457,6 @@ public class AchievementStorage {
      * @return An AchievementProgress instance with the player's progress.
      */ 
     public AchievementProgress progressForPlayer(int playerID) throws DatabaseException {
-        // TODO: implement me!
 
         // just map achievement IDs to the player's progress if they have any
         // (if they have no progress leave it out)
@@ -470,6 +467,67 @@ public class AchievementStorage {
         // without needing to hit the server again to ask for the awardThresholds
         // of the achievements to do comparisons
         HashMap<String, Boolean> awarded = new HashMap<String, Boolean>();
+        
+        // Get a connection to the database
+    	Connection connection = Database.getConnection();
+    	
+    	Statement statement = null;
+    	Statement achievementStmt = null;
+    	ResultSet progressSet = null;
+    	ResultSet achievementSet = null;
+    	
+    	try {
+    		statement = connection.createStatement();
+    		achievementStmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+    		progressSet = statement.executeQuery("SELECT * FROM PLAYER_ACHIEVEMENT" + 
+                                               " WHERE playerID = " + playerID );
+    		achievementSet = achievementStmt.executeQuery("SELECT id, threshold FROM " +
+    				"ACHIEVEMENTS");
+    		while(progressSet.next()) {
+    			System.out.println("CHECK1[PlayerProgress] Check Fired: " + progressSet.getString("achievementID"));
+    			String achievementID = progressSet.getString("achievementID");
+    			int achievementProgress = progressSet.getInt("progress");
+    			// Check players progress against threshold.
+    			while(achievementSet.next()) {
+    				// Find achievement to compare threshold.
+    				System.out.println("CHECK2[ProgressFindAchievement] " + achievementSet.getString("id"));
+    				if(achievementSet.getString("id").equals(achievementID)) {
+    					// If threshold is reached i.e. awarded..
+    					System.out.println("CHECK3[ProgressOrAward]");
+    					if(achievementSet.getInt("threshold") == achievementProgress) {
+    						awarded.put(achievementID, true);
+    						break;
+    					}
+    					// Else threshold has not reached i.e. progress..
+    					else {
+    						progress.put(achievementID, achievementProgress);
+    						break;
+    					}
+    				}
+    			}
+				achievementSet.beforeFirst();
+    		}
+    	} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get achievements from database", e);
+		} finally {
+			try {
+				if (progressSet != null){
+					progressSet.close();
+				}
+				if (achievementSet != null){
+					achievementSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
         
         return new AchievementProgress(progress, awarded);
     }

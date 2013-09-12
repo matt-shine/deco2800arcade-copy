@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.Player;
 
 public class AchievementProgress {
     
@@ -37,7 +36,7 @@ public class AchievementProgress {
      * particular order.
      */
     public ArrayList<String> awardedAchievementIDs() {
-        return new ArrayList(awarded.keySet());
+        return new ArrayList<String>(awarded.keySet());
     }
     
     /**
@@ -46,7 +45,7 @@ public class AchievementProgress {
      * been awarded with yet.
      */
     public ArrayList<String> inProgressAchievementIDs() {
-        ArrayList<String> list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         for(Map.Entry<String, Integer> e : progress.entrySet()) {
             if(!awarded.containsKey(e.getKey())) {
                 list.add(e.getKey());

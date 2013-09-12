@@ -30,7 +30,7 @@ public class GameMap {
 	
 	
 	
-	ArrayList<char[]> readMap(File file) throws IOException {
+	ArrayList<char[]> readMap(String file) throws IOException {
 
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);

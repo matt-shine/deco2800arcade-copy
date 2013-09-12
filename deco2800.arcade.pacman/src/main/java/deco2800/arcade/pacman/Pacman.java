@@ -53,6 +53,7 @@ public class Pacman extends GameClient {
 	private GameMap map1;
 	private ArrayList<char[]> map1Array;
 	
+	
 	//not used yet
 	//private NetworkClient networkClient;
 	
@@ -106,7 +107,10 @@ public class Pacman extends GameClient {
 			}			
         });   
         
+        
 		super.create();	
+		// Just use a set file for the time being!
+		String file = "testmap";
 		// this guy doesn't show up either. 
 		logger.info("Hey, I'm a log message");
 		//Initialize camera
@@ -125,7 +129,11 @@ public class Pacman extends GameClient {
 		//Initialise game state
 		gameState = GameState.READY;
 		map1 = new GameMap();
-		map1Array = map1.readMap(file); // Nick, you know what to fix here
+		try {
+			map1Array = map1.readMap(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // Hope this is fixed!
 	}
 	
 	/**

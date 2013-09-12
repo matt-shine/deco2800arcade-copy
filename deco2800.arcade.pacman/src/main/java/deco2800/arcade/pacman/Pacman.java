@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -28,7 +29,7 @@ import deco2800.arcade.pacman.PacChar.PacState;
 
 //note: no 'implements ApplicationListener is relevant anywhere in our program,
 // as GameClient extends Game which implements it. As far as I can tell
-@ArcadeGame(id="pacman")
+@ArcadeGame(id="Pacman")
 public class Pacman extends GameClient {
 	
 	private enum GameState {
@@ -52,6 +53,8 @@ public class Pacman extends GameClient {
 	
 	//lets us log stuff, doesn't seem to work yet
 	private Logger logger = new Logger("Pacman");
+	// gonna test using this, doesn't do anything yet.
+	private Stage testStage;
 	
 	
 	public Pacman(Player player, NetworkClient networkClient) {
@@ -303,7 +306,7 @@ public class Pacman extends GameClient {
 	private static final Game game; 
 	static {
 			game = new Game();
-			game.id = "pacman";
+			game.id = "Pacman";
 			game.name = "Pac man";
 			game.description = "An implementation of the classic arcade game Pac "
 			+ "man." + System.getProperty("line.separator") + "Still in progress- additional " + 

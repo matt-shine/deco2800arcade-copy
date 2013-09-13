@@ -345,7 +345,7 @@ public class WorldRenderer {
 		textBatch.begin();
 		
 		CharSequence str = "Time: " + (int)world.getTime();
-		font.draw(textBatch, str, 1110, 688);
+		font.draw(textBatch, str, 1057, 710);
 		
 		textBatch.end();
 		
@@ -412,8 +412,8 @@ public class WorldRenderer {
 		csObjects = new Array<CutsceneObject>();
 
 		textBatch = new SpriteBatch();
-		font = new BitmapFont();
-		font.scale(1f);
+		font = new BitmapFont(Gdx.files.internal("data/font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		
 		
 		sr = new ShapeRenderer();
 		tileMapRenderer = world.getLevel().getRenderer();

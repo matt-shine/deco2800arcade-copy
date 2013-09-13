@@ -9,6 +9,7 @@ import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -28,7 +29,6 @@ import com.badlogic.gdx.utils.Timer;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
 import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
-
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
@@ -165,9 +165,9 @@ final class GameScreen implements Screen {
 
 		// Might rcommend not passing the entire model to the PlayerViewModel, just to keep good seperation
 		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
-				1);
+				1,new Settings().p1Controls);
 		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
-				2);
+				2,new Settings().p2Controls);
 		gameArea.addActor(p1);
 		gameArea.addActor(p2);
 
@@ -222,7 +222,7 @@ final class GameScreen implements Screen {
 		Gdx.app.debug(LOG, "showing");
 
 		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 30);
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60*2);
 		setupGameBoard();
 
 		/* set timer */
@@ -358,6 +358,20 @@ final class GameScreen implements Screen {
 				frameImages[2].setVisible(true);
 				break;
 			}
+		}
+	}
+	
+	public class Settings{
+		private int[] p1Controls = {Keys.W,Keys.S,Keys.A,Keys.D,Keys.G,Keys.H};
+		private int[] p2Controls = {Keys.UP,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.O,Keys.P};
+		
+		public Settings(int[] p1Controls,int[] p2Controls){
+			this.p1Controls = p1Controls;
+			this.p2Controls = p2Controls;
+		}
+		
+		public Settings(){
+			
 		}
 	}
 }

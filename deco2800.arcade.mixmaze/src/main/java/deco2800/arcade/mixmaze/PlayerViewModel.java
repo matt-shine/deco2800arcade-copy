@@ -45,9 +45,10 @@ final class PlayerViewModel extends Actor {
 
 	/**
 	 * Constructor
+	 * @param playerControls 
 	 */
 	PlayerViewModel(PlayerModel model, MixMazeModel gameModel,
-			int tileSize, int id) {
+			int tileSize, int id, int[] playerControls) {
 		Vector2 stagePos;
 		Texture texture;
 		HashMap<Integer, Integer> mapping =
@@ -58,18 +59,13 @@ final class PlayerViewModel extends Actor {
 		this.tileSize = tileSize;
 		this.id = id;
 
-		/* Player 1 uses W, S, A, D to move. */
-		if (id == 1) {
-			mapping.put(W, UP);
-			mapping.put(S, DOWN);
-			mapping.put(A, LEFT);
-			mapping.put(D, RIGHT);
-			mapping.put(G, NUM_5);
-			mapping.put(H, NUM_6);
-		} else if (id == 2) {
-			mapping.put(O, NUM_5);
-			mapping.put(P, NUM_6);
-		}
+	if(playerControls[0] != UP) mapping.put(playerControls[0], UP);
+	if(playerControls[1] != DOWN) mapping.put(playerControls[1], DOWN);
+	if(playerControls[2] != LEFT) mapping.put(playerControls[2], LEFT);
+	if(playerControls[3] != RIGHT) mapping.put(playerControls[3], RIGHT);
+	if(playerControls[4] != NUM_5) mapping.put(playerControls[4], NUM_5);
+	if(playerControls[5] != NUM_6) mapping.put(playerControls[5], NUM_6);
+		
 		km = new KeyManager(mapping);
 
 		/* load texture */

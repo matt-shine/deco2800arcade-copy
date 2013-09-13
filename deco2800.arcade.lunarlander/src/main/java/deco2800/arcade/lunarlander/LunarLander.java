@@ -143,7 +143,7 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(texture, 0, 0, 1200, 800);
-	    batch.draw(lander, 550, initPosition - acceleration, 50, 50);
+	    batch.draw(lander, 550, (initPosition - acceleration), 50, 50);
 	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
@@ -198,7 +198,7 @@ public class LunarLander extends GameClient {
 	    speed = speed + 1;
 	    
 	    if(!(acceleration < 0)){
-	    	acceleration = (acceleration - (speed * 2));
+	    	acceleration = acceleration + 1;
 	    }
 	    
 		super.render();

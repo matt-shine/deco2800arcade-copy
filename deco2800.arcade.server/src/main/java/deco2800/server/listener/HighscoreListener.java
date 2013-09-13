@@ -18,7 +18,9 @@ public class HighscoreListener extends Listener {
     public void received(Connection connection, Object object) {
 		 if (object instanceof AddScoreRequest) {
 			 AddScoreRequest asr = (AddScoreRequest)object;
-			 System.out.println("Recieved message");
+			 
+			 System.out.println("Recieved add score request for username:" 
+					 + asr.Username +" and Game_ID:" + asr.Game_ID);
 		 }
 	}
 }

@@ -36,12 +36,22 @@ public class LunarLander extends GameClient {
 	private BitmapFont font;
 	
 	private Texture lander;
-	private int acceleration;
 	private int initPosition;
+	private double angle;
+	private double speed;
+	private double scaleX;
+	private double scaleY;
+	private double velocityX;
+	private double velocityY;
+	private int acceleration;
+	private int finalX;
+	private int finalY;
+	private int gravity;
+	private boolean moving;
 	
 	private int score;
 	private int fuel;
-	private int speed;
+	//private int speed;
 	private int time;
 	private float pixelsPerSecond = 10.0f;
 	
@@ -70,20 +80,25 @@ public class LunarLander extends GameClient {
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 
-		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		initPosition= 600;
-		acceleration=0;
+		angle = -10;
+		speed = 5;
+		acceleration = -4;
+		scaleX = Math.cos(angle);
+		scaleY = Math.sin(angle);
+		velocityX = (speed*scaleX);
+		velocityY = (speed*scaleY);
+		gravity = 2;
+		moving = true;
+		
 		score = 0;
 		fuel = 1000;
-		speed = 0;
+		//speed = 0;
 		time = 0;
 		timer = new Timer();
-		
-		//ball = new Ball();
-		//ball.setColor(1, 1, 1, 1);
 		
         /*//add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
@@ -117,7 +132,6 @@ public class LunarLander extends GameClient {
 			public void show() {
 				//TODO: unpause pong
 			}
-			
         }*/
         
         
@@ -127,13 +141,13 @@ public class LunarLander extends GameClient {
 	public void dispose() {
 		super.dispose();
 	}
-
 	@Override
 	public void pause() {
 		super.pause();
 	}
 
-	*//**
+	*/
+	/**
 	 * Render the current state of the game and process updates
 	 */
 	@Override
@@ -143,12 +157,17 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(texture, 0, 0, 1200, 800);
-	    batch.draw(lander, 550, (initPosition - acceleration), 50, 50);
+	    
+	    
+	    /////////
+	    batch.draw(lander, finalY, (initPosition - finalX), 50, 50);
+	    /////////
+	    
 	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
 	    font.draw(batch, "Remaining fuel: " + Integer.toString(fuel), SCREENWIDTH - 200, SCREENHEIGHT - 60);
-	    font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
+	    //font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
 	    font.draw(batch, "Time spent: " + Integer.toString(time), SCREENWIDTH - 200, SCREENHEIGHT - 100);
 	    
 	    batch.end();
@@ -160,45 +179,23 @@ public class LunarLander extends GameClient {
 	    
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	 
-	    //ball.render(shapeRenderer);
-	    
-	    //End drawing of shapes
 	    shapeRenderer.end();
 	    
-	    //ball.update(ball);
-
-	    /*	    
-	    shapeRenderer.setProjectionMatrix(camera.combined);
+	    //Slightly more complicated gravity function, hopefully this will increase logarithmically
 	    
+	    if(moving == true){
+	    	velocityY = velocityY - gravity;
+	    }
+	    speed = speed + acceleration;
 	    
-	    //End drawing of shapes
-	    shapeRenderer.end();
-	    */
+	    finalX = (int) (speed * scaleX);
+	    finalY = (int) (speed * scaleY);
 	    
-	   /* switch(gameState) {
+	    finalX = (int) (finalX + velocityX);
+	    finalY = (int) (finalY + velocityY);
 	    
-	    case READY: //Ready to start a new point
-	    	if (Gdx.input.isTouched()) {
-	    		startPoint();
-	    	}
-	    	break;
-	    	
-	    case INPROGRESS: //Point is underway, ball is moving
-	    	
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	if (Gdx.input.isTouched()) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
-	    }*/
-	    
-	    //Simple gravity function, hopefully this will increase logarithmically
-	    speed = speed + 1;
-	    
-	    if(!(initPosition - acceleration < 0)){
-	    	acceleration = acceleration + 1;
+	    if (finalY < 0){
+	    	moving = false;
 	    }
 	    
 		super.render();

@@ -1,7 +1,5 @@
 package deco2800.arcade.chess;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 
 import deco2800.arcade.chess.pieces.*;
@@ -200,6 +198,7 @@ public class Board {
 	 * @return A list of all allowed moves the piece can make
 	 */
 	public List<int[]> allowedMoves(Piece piece) {
+		//FIXME big method
 		int[] currentPos = findPiece(piece);
 
 		List<int[]> possibleMoves = piece.possibleMoves(currentPos);
@@ -302,6 +301,7 @@ public class Board {
 	}
 
 	public boolean movePiece(Piece piece, int[] newPosition) {
+		//FIXME big method
 		int[] oldPos = findPiece(piece);
 		int x = newPosition[0];
 		int y = newPosition[1];
@@ -495,6 +495,7 @@ public class Board {
 	 */
 	private List<int[]> removeJumpsBishop(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
+		//FIXME big method
 		int x = currentPos[0];
 		int y = currentPos[1];
 		int xCheck;
@@ -713,6 +714,7 @@ public class Board {
 
 	private List<int[]> removeJumpsRook(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
+		//FIXME big method
 		int x = currentPos[0];
 		int y = currentPos[1];
 		int xCheck;
@@ -906,7 +908,7 @@ public class Board {
 
 	private List<int[]> removeJumpsQueen(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
-
+		//FIXME big method
 		int x = currentPos[0];
 		int y = currentPos[1];
 		int xCheck;

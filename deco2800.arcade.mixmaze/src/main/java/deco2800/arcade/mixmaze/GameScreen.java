@@ -6,13 +6,10 @@ package deco2800.arcade.mixmaze;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -28,10 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
+
 import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 /**
  * GameScreen draws all elements in a game session.

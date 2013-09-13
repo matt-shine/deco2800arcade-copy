@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.client.ArcadeSystem;
 
 public class MenuScreen implements Screen {
 	
@@ -87,6 +88,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
+		//FIXME gigantic method
 		batch = new SpriteBatch();
         atlas = new TextureAtlas("images/button.pack");
         skin = new Skin();
@@ -181,8 +183,7 @@ public class MenuScreen implements Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            	Gdx.app.exit();
-            	
+            	ArcadeSystem.goToGame(ArcadeSystem.UI);
             }
 	    });
 	    

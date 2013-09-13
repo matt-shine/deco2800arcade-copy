@@ -3,6 +3,7 @@ package deco2800.arcade.burningskies.entities;
 import deco2800.arcade.burningskies.*;
 import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
 import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
+import deco2800.arcade.burningskies.screen.PlayScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -13,13 +14,16 @@ public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
 	private final float MAXVELOCITY = 600;
+	private PlayScreen screen;
 
 	/**
 	 * Construct a playable ship for the user(s).
 	 * @ensure health && hitbox1 && hitbox2 > 0
 	 */
-	public PlayerShip(int health, Texture image, Vector2 position) {
+	public PlayerShip(int health, Texture image, Vector2 position, PlayScreen screen) {
 		super(health, image, position);
+		this.screen = screen;
+		hitboxScale = 0.25f; // lets the player 'just miss' bullets
 	}
 	
 	/**
@@ -61,7 +65,8 @@ public class PlayerShip extends Ship {
 	 */
 	public void shoot(float delta) {
 		if(playerBullets == null) {
-			playerBullets = new PlayerPattern(getStage(),this);
+			playerBullets = new PlayerPattern(this,screen);
+			getStage().addActor(playerBullets);
 		}
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 			if(!playerBullets.isFiring()) {

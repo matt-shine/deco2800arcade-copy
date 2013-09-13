@@ -5,9 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-public class PowerUp extends Image { // change Image to Actor
+public class PowerUp extends Entity {
 
 	// Set up constant variable for the number of frame horizontal & vertical 
 	private static final int FRAME_COLS = 10;

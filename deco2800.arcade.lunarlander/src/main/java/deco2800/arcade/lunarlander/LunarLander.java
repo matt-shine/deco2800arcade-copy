@@ -84,9 +84,9 @@ public class LunarLander extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		initPosition= 600;
-		angle = -10;
-		speed = 5;
-		acceleration = -4;
+		angle = 5;
+		speed = .1;
+		acceleration = 1;
 		scaleX = Math.cos(angle);
 		scaleY = Math.sin(angle);
 		velocityX = (speed*scaleX);
@@ -160,7 +160,7 @@ public class LunarLander extends GameClient {
 	    
 	    
 	    /////////
-	    batch.draw(lander, finalY, (initPosition - finalX), 50, 50);
+	    batch.draw(lander, (initPosition + finalX), (initPosition + finalY), 50, 50);
 	    /////////
 	    
 	    
@@ -185,16 +185,18 @@ public class LunarLander extends GameClient {
 	    
 	    if(moving == true){
 	    	velocityY = velocityY - gravity;
+	    }else{
+	    	velocityY = 0;
 	    }
 	    speed = speed + acceleration;
 	    
-	    finalX = (int) (speed * scaleX);
-	    finalY = (int) (speed * scaleY);
+	    velocityX = (int) (speed * scaleX);
+	    velocityY = (int) (speed * scaleY);
 	    
 	    finalX = (int) (finalX + velocityX);
 	    finalY = (int) (finalY + velocityY);
 	    
-	    if (finalY < 0){
+	    if ((initPosition < 0) || (finalX < 0) || (finalY < 0)){
 	    	moving = false;
 	    }
 	    

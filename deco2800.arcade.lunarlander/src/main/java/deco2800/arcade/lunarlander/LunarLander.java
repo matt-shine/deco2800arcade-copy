@@ -35,7 +35,7 @@ public class LunarLander extends GameClient {
 	private Texture texture;
 	private BitmapFont font;
 	
-	//private Ball ball;
+	private Texture lander;
 	
 	private int score;
 	private int fuel;
@@ -64,6 +64,7 @@ public class LunarLander extends GameClient {
 				
 		batch = new SpriteBatch();		
 		texture = new Texture(Gdx.files.internal("lunarlanderassets/stars.png"));
+		lander = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 
@@ -138,6 +139,8 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(texture, 0, 0, 1200, 800);
+	    
+	    batch.draw(lander, 0, 0, 500, 500);
 	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);

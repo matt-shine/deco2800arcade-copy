@@ -132,8 +132,12 @@ public class World {
 		
 		//System.out.println("End of World update " + ship.getVelocity().x);
 
+		
+		// Check if sprite has reached left level boundary.
+		// if( (int)(ship.getPosition().x) < 1 ) ship.getVelocity().x = 0;
+		
 		// Check if sprite has gone out of level bounds to the bottom.
-		if( (int)ship.getPosition().y < -1 ) {
+		if( (int)(ship.getPosition().y) < -1 ) {
 			resetLevel();
 		}
 		// Reset if health = 0
@@ -317,11 +321,7 @@ public class World {
 				if ( e.getBounds().overlaps(ship.getBounds()) ) {
 					ship.decrementHearts();
 					
-					if(e.getPosition().x >= ship.getPosition().x) {
-						ship.getPosition().x -= 1;
-					} else {
-						ship.getPosition().x += 1;
-					}
+					ship.bounceBack(true);
 					
 					ship.setInvincibility(true);
 				}

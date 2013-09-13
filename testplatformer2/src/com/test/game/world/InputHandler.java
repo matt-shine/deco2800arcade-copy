@@ -32,39 +32,16 @@ public class InputHandler implements InputProcessor{
 	public boolean keyDown(int keycode) {
 		switch(keycode){
 			case Keys.LEFT:
-				if (acceptInput) {
-					ship.getVelocity().x = -Ship.SPEED;
-					if (ship.getState() != State.WALL) {
-						ship.setState(State.WALK);
-						ship.setFacingRight(false);
-					}
-				}
+				if (acceptInput) ship.moveLeft();
 				break;
 
 			case Keys.RIGHT:
-				if (acceptInput) {
-					ship.getVelocity().x = Ship.SPEED;
-					if (ship.getState() != State.WALL) {
-						ship.setState(State.WALK);
-						ship.setFacingRight(true);
-					}
-				}
+				if (acceptInput) ship.moveRight();
 				break;
 
 			case Keys.Z:
 				if ( acceptInput && (ship.getState() == State.IDLE || ship.getState() == State.WALK || ship.getState() == State.WALL) ){
-					if (ship.getState() == State.WALL) {
-						if (ship.getVelocity().x > 0) {
-							ship.setFacingRight(true);
-						} else if (ship.getVelocity().x < 0) {
-							ship.setFacingRight(false);
-						} else {
-							ship.setFacingRight(!ship.isFacingRight());
-						}
-					}
-					ship.getVelocity().y = Ship.JUMP_VELOCITY;
-					ship.setState(Ship.State.JUMP);
-					ship.resetJumpTime();
+					ship.jump();
 				}
 				break;
 

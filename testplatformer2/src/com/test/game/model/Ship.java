@@ -15,6 +15,7 @@ public class Ship extends MovableEntity{
 	public static final float HEIGHT = 1.7f;
 	//public static final float WIDTH = 1f;
 	//public static final float HEIGHT = 1f;
+	public static final float MAX_BOUNCEBACK_TIME = 0.06f;
 	public static final float JUMP_TIME = 0.2f;
 	public static final float GRAVITY = -1.8f;
 	public static final float MAX_FALL_VELOCITY = 30f;
@@ -28,6 +29,8 @@ public class Ship extends MovableEntity{
 	private boolean onMovable = false;
 	private boolean invincible = false;
 	private float invincibleTime = 0;
+	private boolean bouncingBack = false;
+	private float bounceBackTime = 0;
 	float jumpTime = 0;
 	float wallTime = WALL_ATTACH_TIME;
 	
@@ -64,6 +67,10 @@ public class Ship extends MovableEntity{
 		return invincible;
 	}
 	
+	public boolean isBouncingBack() {
+		return bouncingBack;
+	}
+	
 	public boolean isFacingRight() {
 		return facingRight;
 	}
@@ -77,6 +84,50 @@ public class Ship extends MovableEntity{
 	}
 	
 	/* ----- Setter methods ----- */
+	public void jump() {
+		if (getState() == State.WALL) {
+			if (getVelocity().x > 0) {
+				setFacingRight(true);
+			} else if (getVelocity().x < 0) {
+				setFacingRight(false);
+			} else {
+				setFacingRight(!isFacingRight());
+			}
+		}
+		getVelocity().y = Ship.JUMP_VELOCITY;
+		setState(Ship.State.JUMP);
+		resetJumpTime();
+	}
+	
+	public void moveRight() {
+		getVelocity().x = SPEED;
+		if (getState() != State.WALL) {
+			setState(State.WALK);
+			setFacingRight(true);
+		}
+		bounceBack(false);
+	}
+	
+	public void moveLeft() {
+		getVelocity().x = -1 * SPEED;
+		if (getState() != State.WALL) {
+			setState(State.WALK);
+			setFacingRight(false);
+		}
+		bounceBack(false);
+	}
+	
+	public void bounceBack(boolean bounce) {
+		bouncingBack = bounce;
+		if(bounce) {
+			if(isFacingRight()) {
+				getVelocity().x = -2 * SPEED;
+			} else {
+				getVelocity().x = 2 * SPEED;
+			}
+		}
+	}
+	
 	public void setState(State state) {
 		this.state = state;
 	}
@@ -240,7 +291,16 @@ public class Ship extends MovableEntity{
 		
 		
 		
+		/* Handle Bounceback */
+		if(bouncingBack) {
+			bounceBackTime += Gdx.graphics.getDeltaTime();
+		}
 		
+		if(bounceBackTime > MAX_BOUNCEBACK_TIME) {
+			bounceBack(false);
+			bounceBackTime = 0;
+			getVelocity().x = 0;
+		}
 		
 		/* Handle Invincibility */
 		if(invincible) {

@@ -21,7 +21,11 @@ import deco2800.arcade.client.ArcadeInputMux;
 
 import deco2800.arcade.client.ArcadeSystem;
 
-
+/**
+ * 
+ * @author Kieran Burke
+ *
+ */
 
 public class MultiplayerLobby implements Screen {
 
@@ -40,12 +44,13 @@ public void show() {
 		ArcadeInputMux.getInstance().addProcessor(stage);
                 
 		skin = new Skin();
-        Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
+        final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
         Label label = new Label("Matchmaking Lobby", skin);
 		Label label2 = new Label("Chat:", skin);
+		
 	    skin2 = new Skin();
 		
-		Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+		final Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
 	
@@ -94,6 +99,11 @@ public void show() {
 				final Table table3 = new Table();
 				
 				
+				final Table table5 = new Table();
+				
+				stage.addActor(table5);
+				table5.setFillParent(true);
+				
 				
 				Table chattable = new Table();
 				
@@ -108,9 +118,16 @@ public void show() {
 				chattable.setFillParent(true);
 				table4.setFillParent(true);
                 
+				/*
+				// Add Scroll Bar
+				Table table5 = new Table();
+				stage.addActor(table5);
+				table5.setFillParent(true);
 				
-				
-				
+				ScrollPane scroll = new ScrollPane(table2);
+				table5.add(scroll).expand();
+				*/
+			
 				
 				chattable.add(label2).padTop(480).padLeft(610);
                 //table.defaults().space(6);
@@ -129,6 +146,8 @@ public void show() {
 				
 				
 	
+        
+    
 				
 				
 				
@@ -153,11 +172,24 @@ public void show() {
 			
         		for(int i= anArray[0]; i < anArray.length +1; i++) {
 				
-				
+				Label avatars = new Label("<Insert User Avatar Here>" + i, skin);
+				Label players = new Label("Player: " + i, skin);
 				final TextButton button4 = new TextButton("Join Game: " + i, skin2);
 				button4.setName(""+ i);
+				players.setName(""+ i);
+				avatars.setName(""+ i);
+				
+				
+				
+				table2.center().left();
+				table2.add(avatars).width(130).padTop(20).padLeft(150);
+				table2.add(players).width(130).padTop(20).padLeft(130);
 				table2.add(button4).width(130).padTop(20);
 				table2.row();
+				
+			
+				
+				
 				
 				System.out.println(button4.getName());
                 System.out.println("Element:" + i);
@@ -192,6 +224,11 @@ public void show() {
         });
 		
 		
+		
+    
+		
+		
+		
 		 button2.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 
@@ -203,8 +240,16 @@ public void show() {
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 
+				
 				chatfield.getText();
 				System.out.println("You Said: " + chatfield.getText());
+				
+				Label chat = new Label(chatfield.getText(), skin);
+				
+				table5.clear();
+				table5.center().right();
+				table5.add(chat).padRight(200);
+				table5.row();
 				chatfield.setText("");
 				
 				

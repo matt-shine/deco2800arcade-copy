@@ -416,7 +416,7 @@ public class WorldRenderer {
 		font.scale(1f);
 		
 		sr = new ShapeRenderer();
-		tileMapRenderer = world.getLevelLayout().getRenderer();
+		tileMapRenderer = world.getLevel().getRenderer();
 		batch = new SpriteBatch();
 		batch.setProjectionMatrix(cam.combined);
 		

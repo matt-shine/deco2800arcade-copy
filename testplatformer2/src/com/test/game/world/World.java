@@ -48,17 +48,13 @@ public class World {
 	private Sword sword;
 	private Array<Enemy> enemies;
 	private Array<Bullet> bullets;
-	private Array<EnemySpawner> spawners;
-	private Array<RandomizedEnemySpawner> randomSpawners;
-	private Array<MovablePlatformSpawner> movablePlatformSpawners;
 	private Array<CutsceneObject> cutsceneObjects; 
 	private Array<MovablePlatform> movablePlatforms;
 	private Array<BlockMaker> blockMakers;
 	private ParallaxCamera cam;
 	
 	private float rank;
-	private int curLevel;
-	private LevelLayout levelLayout;
+	private Level curLevel;
 	private LevelScenes levelScenes;
 	private InputHandler inputHandler;
 	
@@ -71,14 +67,17 @@ public class World {
 	//WorldRenderer wr;
 	
 	public World(TestGame2 game, int level, ParallaxCamera cam) {
-		curLevel = level;
+		curLevel = new Level(level);
 		this.cam = cam;
 		
 		init();
-		loadLevel(curLevel);
 		
-		
-		
+		//hardcode
+		if(level == 1) {
+			levelScenes = new Level1Scenes(ship, cam);
+		} else {
+			levelScenes = new Level2Scenes(ship, cam);
+		}
 	}
 	
 	
@@ -135,11 +134,11 @@ public class World {
 
 		// Check if sprite has gone out of level bounds to the bottom.
 		if( (int)ship.getPosition().y < -1 ) {
-			resetLevel(curLevel);
+			resetLevel();
 		}
 		// Reset if health = 0
 		if( ship.getHearts() == 0 ) {
-			resetLevel(curLevel);
+			resetLevel();
 		}
 
 		if (levelScenes.isPlaying()) {
@@ -174,44 +173,6 @@ public class World {
 	
 	public void addBullet(Bullet b) {
 		bullets.add(b);
-	}
-
-	private void loadLevel(int level) {
-		time = 0;
-		levelLayout = new LevelLayout(level);
-
-		//Load level objects
-		Array<Object> objects = new Array<Object>();
-		if (level == 1) {
-			objects = Level1Objects.loadObjects(levelLayout.getMap());
-			levelScenes = new Level1Scenes(ship, cam);
-			
-		} else {
-			objects = Level2Objects.loadObjects(levelLayout.getMap());
-			levelScenes = new Level2Scenes(ship, cam);
-		}
-		
-		//Load objects to World
-		for (Object o: objects) {
-			if (o instanceof EnemySpawner) {
-				spawners.add((EnemySpawner) o);
-			} else if (o instanceof MovablePlatformSpawner) {
-				movablePlatformSpawners.add((MovablePlatformSpawner) o);
-			} else if (o instanceof RandomizedEnemySpawner) {
-				randomSpawners.add((RandomizedEnemySpawner) o);
-			}
-		}
-		System.out.println("Found " + spawners.size + " enemy spawners");
-		System.out.println("Found " + movablePlatformSpawners.size + " platform spawners");
-		System.out.println("Found " + randomSpawners.size + " randomizd enemy spawners");
-		
-		//Test objects
-		enemies.add( new Walker(new Vector2 (10f, 9f)) );
-		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
-		Texture copterTex = new Texture("data/copter.png");
-		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
 	}
 	
 	/* ----- Object handlers ----- */	
@@ -251,7 +212,7 @@ public class World {
 			
 			//Remove moving platforms that leave the bottom of the map
 			if (mp.getPosition().y + mp.getHeight()<0) {
-				for (MovablePlatformSpawner mps: movablePlatformSpawners) {
+				for (MovablePlatformSpawner mps: curLevel.getMovablePlatformSpawners() ) {
 					mps.removePlatform(mp);
 				}
 				movablePlatforms.removeValue(mp, true);
@@ -264,7 +225,7 @@ public class World {
 		/* Tile collisions code */
 		//Check player to tile collisions
 		//get tiles near player
-		TiledMapTileLayer collisionLayer = levelLayout.getCollisionLayer();
+		TiledMapTileLayer collisionLayer = curLevel.getCollisionLayer();
 		
 		Array<Rectangle> tiles = new Array<Rectangle>();
 		tiles.clear();
@@ -374,7 +335,7 @@ public class World {
 		Iterator<EnemySpawner> sItr;
 		EnemySpawner s;
 
-		sItr = spawners.iterator();
+		sItr = curLevel.getEnemySpawners().iterator();
 		while (sItr.hasNext()) {
 			s = sItr.next();
 			//Check if spawner is in the range of 2 blocks out of viewport. NOT USING VIEWPORT ATM> SHOULD PROBS CHAGNE
@@ -406,7 +367,7 @@ public class World {
 			}
 		}
 		
-		for (RandomizedEnemySpawner res: randomSpawners) {
+		for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
 			Enemy newEnemy = res.update(Gdx.graphics.getDeltaTime(), cam, rank);
 			
 			if (newEnemy != null) {
@@ -418,7 +379,7 @@ public class World {
 	}
 	
 	private void spawnMovablePlatforms() {
-		for (MovablePlatformSpawner mps: movablePlatformSpawners) {
+		for (MovablePlatformSpawner mps: curLevel.getMovablePlatformSpawners() ) {
 			
 			//Check if spawner is in the range of 2 blocks out of viewport. NOT USING VIEWPORT ATM> SHOULD PROBS CHAGNE
 			
@@ -448,10 +409,10 @@ public class World {
 				//System.out.println("C");
 				eItr.remove();
 				//System.out.println("removed enemy");
-				for (EnemySpawner spns: spawners) {
+				for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 					spns.removeEnemy(e);
 				}
-				for (RandomizedEnemySpawner res: randomSpawners) {
+				for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
 					res.removeEnemy(e);
 				}
 				//System.out.println("cleaned arrays");
@@ -462,10 +423,10 @@ public class World {
 			if (e.getPosition().x > cam.position.x + cam.viewportWidth * 1.5 ||
 					e.getPosition().x < cam.position.x - cam.viewportWidth * 1.5) {
 				eItr.remove();
-				for (EnemySpawner spns: spawners) {
+				for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 					spns.removeEnemy(e);
 				}
-				for (RandomizedEnemySpawner res: randomSpawners) {
+				for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
 					res.removeEnemy(e);
 				}
 			}
@@ -487,7 +448,7 @@ public class World {
 					//System.out.println("removed enemy");
 					bItr.remove();
 					//System.out.println("removed bullet");
-					for (EnemySpawner spns: spawners) {
+					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 						spns.removeEnemy(e);
 					}
 					//System.out.println("cleaned arrays");
@@ -608,11 +569,7 @@ public class World {
 
 	
 	
-	public LevelLayout getLevelLayout() {
-		return levelLayout;
-	}
-	
-	public int getCurLevel() {
+	public Level getLevel() {
 		return curLevel;
 	}
 	
@@ -622,15 +579,13 @@ public class World {
 	
 	/* ----- Setter methods ----- */
 	public void init() {
+		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
 		ship = new Ship(new Vector2(20f, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();
-		spawners = new Array<EnemySpawner>();
-		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
-		randomSpawners = new Array<RandomizedEnemySpawner>();
 		cutsceneObjects = new Array<CutsceneObject>();
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
@@ -642,27 +597,30 @@ public class World {
 		
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);
+		
+		//Test objects
+		enemies.add( new Walker(new Vector2 (10f, 9f)) );
+		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
+		Texture copterTex = new Texture("data/copter.png");
+		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
 		return;
 	}
 	
 	
 
-	public void resetLevel(int level) {
+	public void resetLevel() {
 		ship = null;
 		sword = null;
 		enemies = null;
 		bullets = null;
-		spawners = null;
 		cutsceneObjects = null;
 		movablePlatforms = null;
-		levelLayout = null;
-		levelScenes = null;
 		cam.setFollowShip(true);
 		
 		
 		init();
-		loadLevel(level);
-
 		return;
 	}
 	

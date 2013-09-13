@@ -79,7 +79,7 @@ public class InputHandler implements InputProcessor{
 				break;
 
 			case Keys.Q:
-				world.resetLevel(world.getCurLevel());
+				world.resetLevel();
 				break;
 				
 			case Keys.SPACE:

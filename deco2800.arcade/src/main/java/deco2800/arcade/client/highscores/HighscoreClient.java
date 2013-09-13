@@ -1,6 +1,5 @@
 package deco2800.arcade.client.highscores;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 import deco2800.arcade.client.network.NetworkClient;
@@ -22,7 +21,10 @@ public class HighscoreClient {
 	 * - None of the following methods have been implemented on the server-side
 	 * 
 	 * - Using a HashMap for storing multiple scores probably isn't a good idea 
-	 * 	 as the order that the scores are logged will matter.
+	 * 	 as the order that the scores are logged will matter. In addition to 
+	 * 	 this, Kryonet doesn't seem to like sending a HashMap across the 
+	 * 	 network. I shall migrate this to an array of arrays by tomorrow 
+	 *   afternoon, hopefully (14/9/2013).
 	 * 
 	 * - Need to build tests for all of the methods that can be tested locally.
 	 */

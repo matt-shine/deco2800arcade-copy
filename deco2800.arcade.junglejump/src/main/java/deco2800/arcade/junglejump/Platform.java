@@ -1,11 +1,16 @@
 
 package deco2800.arcade.junglejump;
 
+import com.badlogic.gdx.graphics.Texture;
+
+import deco2800.arcade.junglejump.GUI.junglejump;
+
 public class Platform {
 	
 	private int width, height, xPos, yPos;
 	private boolean active;
 	private boolean climbable = false;
+	private Texture platText;
 
 	/**
 	 * Platform constructor
@@ -24,6 +29,15 @@ public class Platform {
 	 */
 	public int getWidth() {
 		return this.width;
+	}
+	
+	public Texture getTexture() {
+		// Texture changes depending on world
+		switch(junglejump.currentWorld) {
+		case 0:
+			platText = new Texture("junglejumpassets/platform.png");
+		}
+		return this.platText;
 	}
 	
 	/**

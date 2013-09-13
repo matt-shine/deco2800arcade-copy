@@ -13,12 +13,20 @@ import java.util.*;
 public class Level {
 	private int length;
 	private int height;
-	private ArrayList<Object> objects; // list of all objects available to be rendered
+	private ArrayList<Platform> platforms; // list of all objects available to be rendered
 	private ArrayList<Collectable> bananas;
 	
 	public Level() {
-		objects = new ArrayList<Object>();
+		platforms = new ArrayList<Platform>();
 		bananas = new ArrayList<Collectable>();
+	}
+	
+	public ArrayList<Platform> getPlatforms() {
+		return platforms;
+	}
+	
+	public int platformAmount() {
+		return platforms.size();
 	}
 	
 	/**
@@ -34,11 +42,10 @@ public class Level {
 	 * @param thing
 	 */
 	public void addPlatform(Platform thing) {
-		objects.add(thing);
+		platforms.add(thing);
 	}
 	
 	public void addBanana(Collectable banana) {
-		objects.add(banana);
 		bananas.add(banana);
 	}
 	

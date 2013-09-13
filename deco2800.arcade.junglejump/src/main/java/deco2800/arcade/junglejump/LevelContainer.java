@@ -45,6 +45,10 @@ public class LevelContainer {
 		levels.add(level);
 	}
 	
+	public static Level getLevel(int i) {
+		return levels.get(i);
+	}
+	
 	/**
 	 * Returns the index of a level
 	 * @param level

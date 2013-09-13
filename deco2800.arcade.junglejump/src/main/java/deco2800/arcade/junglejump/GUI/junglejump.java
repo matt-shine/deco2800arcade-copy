@@ -33,6 +33,9 @@ import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
+import deco2800.arcade.junglejump.Level;
+import deco2800.arcade.junglejump.LevelContainer;
+import deco2800.arcade.junglejump.Platform;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -88,6 +91,10 @@ public class junglejump extends GameClient implements InputProcessor {
 	float velocity = 5.0f;
 	boolean correct = false;
 	boolean onPlatform, isFalling = false;
+	
+	public int currentLevelIndex = 0;
+	Level currentLevel = new Level();
+	public static int currentWorld = 0;
 
 	Texture texture;
 	Clip clip;
@@ -319,6 +326,14 @@ public class junglejump extends GameClient implements InputProcessor {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
 			// Add platforms from platform coordinate array
+			currentLevel = LevelContainer.getLevel(currentLevelIndex);
+			for(int i=0; i<currentLevel.platformAmount(); i++) {
+				Platform p = currentLevel.getPlatforms().get(i);
+				float platY = p.getY() + (currentLevelIndex * SCREENHEIGHT); // Because levels are stacked on each other
+				batch.draw(p.getTexture(), p.getX(), platY);
+			}
+			
+			
 			batch.draw(platform, 100, 50);
 
 			batch.end();
@@ -333,8 +348,17 @@ public class junglejump extends GameClient implements InputProcessor {
 	public boolean isOnPlatform(float x, float y) {
 		// Place holder for checking through platform array
 		// Consider data structure for efficiency
-		if (x > 78 && x < 170 && y < 76 ) return true;
-		else return false;
+		
+		// Gonna do it the easy way until it causes problems
+		currentLevel = LevelContainer.getLevel(currentLevelIndex);
+		for(int i=0; i<currentLevel.platformAmount(); i++) {
+			Platform p = currentLevel.getPlatforms().get(i);
+			if(x > p.getX() && x < p.getX() + p.getWidth() &&
+					y < p.getY()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

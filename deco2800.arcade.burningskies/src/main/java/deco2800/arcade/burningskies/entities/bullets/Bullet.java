@@ -2,12 +2,12 @@ package deco2800.arcade.burningskies.entities.bullets;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.Ship;
 
-public abstract class Bullet extends Image {
+public abstract class Bullet extends Entity {
 	
 	/*
 	 * TODO I often wonder about nested public classes. 
@@ -50,16 +50,8 @@ public abstract class Bullet extends Image {
 	
 	@Override
     public void act(float delta) {
-		float left, right;
 		moveBullet(delta);
         super.act(delta);
-        // Check we're in bounds, if not goodbye
-		left = getX() + getWidth();
-		right = getY() + getHeight();
-		// 10 pixels in case they're flying off the sides
-		if(left < -10 || right < -10 || getX() > getStage().getWidth() + 10 || getY() > getStage().getHeight() + 10) {
-			remove();
-		}
     }
 	
 	/**

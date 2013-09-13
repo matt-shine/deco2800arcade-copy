@@ -36,7 +36,7 @@ public class LunarLander extends GameClient {
 	private BitmapFont font;
 	
 	private Texture lander;
-	private int spawnpoint;
+	private int acceleration;
 	private boolean gravity;
 	
 	private int score;
@@ -75,7 +75,7 @@ public class LunarLander extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		gravity=true;
-		spawnpoint=500;
+		acceleration=0;
 		score = 0;
 		fuel = 1000;
 		speed = 0;
@@ -143,7 +143,7 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(texture, 0, 0, 1200, 800);
-	    batch.draw(lander, 500, (spawnpoint - speed), 50, 50);
+	    batch.draw(lander, 500, (600 - acceleration), 50, 50);
 	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
@@ -194,7 +194,7 @@ public class LunarLander extends GameClient {
 	    	break;
 	    }*/
 	    if (gravity == true){
-	    	speed = speed + 1;
+	    	acceleration = (acceleration * 2);
 	    	gravity = false;
 	    }else if(gravity == false){
 	    	gravity = true;

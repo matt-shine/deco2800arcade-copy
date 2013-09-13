@@ -197,7 +197,7 @@ public class LunarLander extends GameClient {
 	    //Simple gravity function, hopefully this will increase logarithmically
 	    speed = speed + 1;
 	    
-	    if(!(acceleration < 0)){
+	    if(!(initPosition - acceleration < 0)){
 	    	acceleration = acceleration + 1;
 	    }
 	    

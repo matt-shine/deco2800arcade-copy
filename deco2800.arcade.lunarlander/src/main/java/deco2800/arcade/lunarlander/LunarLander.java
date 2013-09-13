@@ -53,7 +53,7 @@ public class LunarLander extends GameClient {
 	
 	public LunarLander(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-        this.networkClient = networkClient; //this is a bit of a hack     
+        this.networkClient = networkClient;  
 	}
 	
 	/**
@@ -61,8 +61,7 @@ public class LunarLander extends GameClient {
 	 */
 	@Override
 	public void create() {
-		
-		System.out.print("LunarLander lives!"); 		
+				
 		batch = new SpriteBatch();		
 		texture = new Texture(Gdx.files.internal("lunarlanderassets/stars.png"));
 		font = new BitmapFont();

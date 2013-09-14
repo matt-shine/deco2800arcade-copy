@@ -85,13 +85,13 @@ public class LunarLander extends GameClient {
 		
 		initPosition= 600;
 		angle = 5;
-		speed = .1;
-		acceleration = 1;
+		speed = 0;
+		acceleration = 2;
 		scaleX = Math.cos(angle);
 		scaleY = Math.sin(angle);
 		velocityX = (speed*scaleX);
 		velocityY = (speed*scaleY);
-		gravity = 2;
+		gravity = 3;
 		moving = true;
 		
 		score = 0;
@@ -99,6 +99,8 @@ public class LunarLander extends GameClient {
 		//speed = 0;
 		time = 0;
 		timer = new Timer();
+		
+		
 		
         /*//add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
@@ -152,17 +154,13 @@ public class LunarLander extends GameClient {
 	 */
 	@Override
 	public void render() {
-		 
+		
 		// clear screen, create background using texture
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(texture, 0, 0, 1200, 800);
 	    
-	    
-	    /////////
-	    batch.draw(lander, (initPosition + finalX), (initPosition + finalY), 50, 50);
-	    /////////
-	    
+	    batch.draw(lander, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
 	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
@@ -183,21 +181,19 @@ public class LunarLander extends GameClient {
 	    
 	    //Slightly more complicated gravity function, hopefully this will increase logarithmically
 	    
-	    if(moving == true){
+	    if(!(initPosition + finalY <= 20) && moving == true){
+	    	
 	    	velocityY = velocityY - gravity;
-	    }else{
-	    	velocityY = 0;
-	    }
-	    speed = speed + acceleration;
-	    
-	    velocityX = (int) (speed * scaleX);
-	    velocityY = (int) (speed * scaleY);
-	    
-	    finalX = (int) (finalX + velocityX);
-	    finalY = (int) (finalY + velocityY);
-	    
-	    if ((initPosition < 0) || (finalX < 0) || (finalY < 0)){
-	    	moving = false;
+	    	speed = speed + acceleration;
+		    velocityX = (int) (speed * scaleX);
+		    velocityY = (int) (speed * scaleY);
+		    finalX = (int) (finalX + velocityX);
+		    finalY = (int) (finalY + velocityY);
+		    moving = false;
+		    
+	    }else {
+	    	//"moving" is only used here to slow the lander down, otherwise the infinite loop is too fast.
+	    	moving = true;
 	    }
 	    
 		super.render();

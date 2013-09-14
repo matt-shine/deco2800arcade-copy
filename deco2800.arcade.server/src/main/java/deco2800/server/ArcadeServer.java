@@ -13,6 +13,7 @@ import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.PlayerListener;
 import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
@@ -75,8 +76,6 @@ public class ArcadeServer {
 	
 	// Credit storage service
 	private CreditStorage creditStorage;
-	//private PlayerStorage playerStorage;
-	//private FriendStorage friendStorage;
 
     private ImageStorage imageStorage;
 	
@@ -124,8 +123,6 @@ public class ArcadeServer {
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
 		this.replayStorage = new ReplayStorage();
-		//this.playerStorage = new PlayerStorage();
-		//this.friendStorage = new FriendStorage();
 		
         this.imageStorage = new ImageStorage();
 
@@ -139,7 +136,6 @@ public class ArcadeServer {
 		try {
 			creditStorage.initialise();
             imageStorage.initialise();
-			//playerStorage.initialise();
             
 			achievementStorage.initialise();
 			
@@ -178,6 +174,6 @@ public class ArcadeServer {
 		server.addListener(new ReplayListener());
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
-		
+		server.addListener(new PlayerListener());
 	}
 }

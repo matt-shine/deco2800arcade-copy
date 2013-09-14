@@ -70,14 +70,13 @@ public class PlayerListener extends Listener{
             
             try {
 				//update database
-            	response.player =
-						ArcadeServer.instance().getAchievementStorage().achievementsForGame(gameID);
-                BlockingMessage.respond(connection, req, resp);
+            	response.player = pdm.loadPlayer(playerID);
+                BlockingMessage.respond(connection, request, response);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
                 // can't let the client keep blocking, just send an empty list
-                resp.achievements = new ArrayList<Achievement>();
-                BlockingMessage.respond(connection, req, resp);
+				response.player = null;;
+                BlockingMessage.respond(connection, request, response);
             }
 		}
 	}

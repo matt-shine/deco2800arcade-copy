@@ -83,6 +83,7 @@ public class HighscoreClient {
 		sendScoresToServer();
 	}
 	
+	
 	//--------------------
 	//Multi-Valued Scores
 	//--------------------
@@ -103,7 +104,8 @@ public class HighscoreClient {
 			scoreQueue.add(type);
 			scoreQueue.add(Integer.toString(value));
 		} else {
-			//TODO Throw an UnsupportedScoreTypeException; "`type` is not a valid score type."
+			throw new UnsupportedScoreTypeException(type + 
+					" is not a valid score type");
 		}
 	}
 	
@@ -116,10 +118,10 @@ public class HighscoreClient {
 	 * thrown.
 	 */
 	public void sendMultiScoreItems() {
-		if (scoreQueue.size() > 0) {
+		if (scoreQueue.size() > 0) { //If at least 1 score has been added
 			sendScoresToServer();
 		} else {
-			//TODO Throw NoQueuedScoresException
+			throw new NoQueuedScoresException();
 		}
 	}
 	
@@ -166,7 +168,9 @@ public class HighscoreClient {
 			//Send the request
 			this.client.sendNetworkObject(asr);
 		} else {
-			//TODO Throw a NoUsernameAvailableException; "HighscoreClient must be instantiated with a username in order to be able to add scores".
+			throw new NoUsernameAvailableException("HighscoreClient must be" +
+					" instantiated with a username in order to be able to" + 
+					" add scores");
 		}
 		
 		clearMultiScoreQueue();
@@ -195,10 +199,16 @@ public class HighscoreClient {
 	//--------------------
 	//Win/Loss Scores
 	//--------------------
+	/**
+	 * Logs a win in the the database for the current user and game
+	 */
 	public void logWin() {
 		sendWinLoss(1);
 	}
 	
+	/**
+	 * Logs a loss in the the database for the current user and game
+	 */
 	public void logLoss() {
 		sendWinLoss(-1);
 	}

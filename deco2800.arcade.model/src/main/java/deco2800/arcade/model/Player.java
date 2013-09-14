@@ -87,6 +87,7 @@ public class Player extends User {
 		this.icon = null;
 	}
 
+	@Deprecated
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
 	 * 
@@ -111,6 +112,73 @@ public class Player extends User {
 		this.friends = new Friends();
 		this.friendInvites = new FriendInvites();
 		this.blocked = new Blocked();
+	
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
+				privacy[1]);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, privacy[2]);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, privacy[3]);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, privacy[4]);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				privacy[6]);
+
+		/*
+		 * Note that exception handling could be done in-method, however if it
+		 * cannot be loaded there is no way (other than changing the return type
+		 * to boolean/int and specifying error range) to communicate this.
+		 */
+
+		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFUALT TO
+		// PLACEHOLDER
+		// this.icon = new Icon(filepath);
+		/*
+		 * @throws IOException Throws exception when the image cannot be found
+		 * at the designated filepath.
+		 */
+		this.icon = null;
+	}
+
+	/**
+	 * Creates a new Player given a name, achievement set and icon filename.
+	 * 
+	 * @param playerID
+	 *          The Player's nameID
+	 * @param filepath
+	 *          The Player's icon filepath
+	 * @param details
+	 * 			An array of strings containing the player's username, name,
+	 * 			email, program and bio.  
+	 * @param privacy
+	 *            A boolean array of privacy settings.
+	 * @require There are at least 7 elements in privacy array. Elements 1
+	 *          through 7 (indexes 0 through 6) represent name, email, program,
+	 *          bio, friends, games and achievements' privacy settings
+	 *          respectively.
+	 * 
+	 *          There are 5 elements in the details array. Elements 1 through 5
+	 *          (indexes 0 to 4) represent username, name, email, program and
+	 *          bio of the player.
+	 */
+	public Player(int playerID, String filepath, String details[],
+			Set<User> friendsList, Set<User> friendRequestsList, Set<User> blockedList,
+			Set<Game> gamesList, boolean[] privacy) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, details[0]);
+		this.name = new Field(NAME_ID, details[1]);
+		this.email = new Field(EMAIL_ID, details[2]);
+		this.program = new Field(PROGRAM_ID, details[3]);
+		this.bio = new Field(BIO_ID,details[4]);
+		
+		this.games = new Games();
+		this.games.addAll(gamesList);
+		this.friends = new Friends();
+		this.friends.addAll(friendsList);
+		this.friendInvites = new FriendInvites();
+		this.friendInvites.addAll(friendRequestsList);
+		this.blocked = new Blocked();
+		this.blocked.addAll(blockedList);
+
 
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
@@ -157,16 +225,16 @@ public class Player extends User {
 			this.username.setValue(username);
 		}
 	}
-	
+
 	/**
-	 *  getEmail is an access method for the players email
-	 *  
+	 * getEmail is an access method for the players email
+	 * 
 	 * @return a string of email
 	 */
 	public String getEmail() {
 		return email.getValue();
 	}
-	
+
 	/**
 	 * Sets the email of the player
 	 * 
@@ -174,10 +242,10 @@ public class Player extends User {
 	 */
 	public void setEmail(String email) {
 		this.email.setValue(email);
-		//TODO 
+		// TODO
 		// Do we want to add in any checking for valid email format here?
 	}
-	
+
 	/**
 	 * getBio is an access method for the players biography
 	 * 
@@ -186,7 +254,7 @@ public class Player extends User {
 	public String getBio() {
 		return bio.getValue();
 	}
-	
+
 	/**
 	 * Sets the biography of the player
 	 * 
@@ -195,7 +263,7 @@ public class Player extends User {
 	public void setBio(String bio) {
 		this.bio.setValue(bio);
 	}
-	
+
 	/**
 	 * An access method for the players name
 	 * 
@@ -204,7 +272,7 @@ public class Player extends User {
 	public String getName() {
 		return name.getValue();
 	}
-	
+
 	/**
 	 * Sets the name of the player
 	 * 
@@ -213,7 +281,7 @@ public class Player extends User {
 	public void setName(String name) {
 		this.name.setValue(name);
 	}
-	
+
 	/**
 	 * An access method for the players program
 	 * 
@@ -222,7 +290,7 @@ public class Player extends User {
 	public String getProgram() {
 		return program.getValue();
 	}
-	
+
 	/**
 	 * Sets the players program
 	 * 
@@ -231,7 +299,7 @@ public class Player extends User {
 	public void setProgram(String program) {
 		this.program.setValue(program);
 	}
-	
+
 	/**
 	 * Access method for the Player's icon
 	 * 
@@ -488,13 +556,13 @@ public class Player extends User {
 	public boolean getNamePrivacy() {
 		return namePrivacy.getValue();
 	}
-	
+
 	/**
 	 * Set's a Player's email privacy setting
 	 * 
 	 * @param v
-	 *            True if the Player's email is to be publicly visible, false for
-	 *            friends only.
+	 *            True if the Player's email is to be publicly visible, false
+	 *            for friends only.
 	 */
 	public void setEmailPrivacy(boolean v) {
 		emailPrivacy.setValue(v);
@@ -514,13 +582,13 @@ public class Player extends User {
 	public boolean getEmailPrivacy() {
 		return emailPrivacy.getValue();
 	}
-	
+
 	/**
 	 * Set's a Player's email program setting
 	 * 
 	 * @param v
-	 *            True if the Player's program is to be publicly visible, false for
-	 *            friends only.
+	 *            True if the Player's program is to be publicly visible, false
+	 *            for friends only.
 	 */
 	public void setProgramPrivacy(boolean v) {
 		programPrivacy.setValue(v);
@@ -540,7 +608,7 @@ public class Player extends User {
 	public boolean getProgramPrivacy() {
 		return programPrivacy.getValue();
 	}
-	
+
 	/**
 	 * Set's a Player's bio program setting
 	 * 
@@ -566,13 +634,13 @@ public class Player extends User {
 	public boolean getBioPrivacy() {
 		return bioPrivacy.getValue();
 	}
-	
+
 	/**
 	 * Set's a Player's friends privacy setting
 	 * 
 	 * @param v
-	 *            True if the Player's friends is to be publicly visible, false for
-	 *            friends only.
+	 *            True if the Player's friends is to be publicly visible, false
+	 *            for friends only.
 	 */
 	public void setFriendsPrivacy(boolean v) {
 		friendsPrivacy.setValue(v);
@@ -592,13 +660,13 @@ public class Player extends User {
 	public boolean getFriendsPrivacy() {
 		return friendsPrivacy.getValue();
 	}
-	
+
 	/**
 	 * Set's a Player's games privacy setting
 	 * 
 	 * @param v
-	 *            True if the Player's games is to be publicly visible, false for
-	 *            friends only.
+	 *            True if the Player's games is to be publicly visible, false
+	 *            for friends only.
 	 */
 	public void setGamesPrivacy(boolean v) {
 		gamesPrivacy.setValue(v);
@@ -618,13 +686,13 @@ public class Player extends User {
 	public boolean getGamesPrivacy() {
 		return gamesPrivacy.getValue();
 	}
-	
+
 	/**
 	 * Set's a Player's achievements privacy setting
 	 * 
 	 * @param v
-	 *            True if the Player's achievements is to be publicly visible, false for
-	 *            friends only.
+	 *            True if the Player's achievements is to be publicly visible,
+	 *            false for friends only.
 	 */
 	public void setAchievementsPrivacy(boolean v) {
 		achievementsPrivacy.setValue(v);
@@ -638,8 +706,8 @@ public class Player extends User {
 	/**
 	 * Access method for the Player's achievements privacy setting.
 	 * 
-	 * @return True if the Player's achievements is to be publicly visible, false for
-	 *         friends only.
+	 * @return True if the Player's achievements is to be publicly visible,
+	 *         false for friends only.
 	 */
 	public boolean getAchievementsPrivacy() {
 		return achievementsPrivacy.getValue();

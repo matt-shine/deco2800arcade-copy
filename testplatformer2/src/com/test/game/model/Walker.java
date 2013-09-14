@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.test.game.SpriteTween;
 
-public class Walker extends Enemy{
+public class Walker extends Enemy {
 	public final static float WALKER_WIDTH = 0.3f;
 	public final static float WALKER_HEIGHT = 0.5f;
 	public final static float FRAME_LENGTH = 0.5f;

@@ -31,6 +31,7 @@ import com.test.game.model.Ship.State;
 import com.test.game.model.SoldierEnemy;
 import com.test.game.model.Sword;
 import com.test.game.model.Walker;
+import com.test.game.model.Zombie;
 
 /** World class controls all objects in the specified level including any collisions
  * and links Object references where needed
@@ -599,6 +600,7 @@ public class World {
 		Gdx.input.setInputProcessor(inputHandler);
 		
 		//Test objects
+		enemies.add( new Zombie(new Vector2(12f,12f)) );
 		enemies.add( new Walker(new Vector2 (10f, 9f)) );
 		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture("data/copter.png");

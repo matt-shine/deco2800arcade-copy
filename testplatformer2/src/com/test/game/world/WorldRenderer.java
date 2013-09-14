@@ -36,7 +36,7 @@ import com.test.game.model.SoldierEnemy;
 import com.test.game.model.Sword;
 import com.test.game.model.Walker;
 import com.test.game.model.WalkerPart;
-
+import com.test.game.model.Zombie;
 
 /**World Renderer takes the object from the World class and draws them to the screen
  * 
@@ -245,6 +245,10 @@ public class WorldRenderer {
 				batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
 						e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
 			} else if (e.getClass() == SoldierEnemy.class){
+				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
+						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
+						shipTexture.getHeight(), false, false);
+			} else if (e.getClass() == Zombie.class){
 				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);

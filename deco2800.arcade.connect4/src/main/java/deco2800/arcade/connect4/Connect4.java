@@ -21,6 +21,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.highscores.*;
 import java.util.*;
 /**
  * A Connect4 game for use in the Arcade

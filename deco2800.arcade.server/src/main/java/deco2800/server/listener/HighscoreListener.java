@@ -20,7 +20,14 @@ public class HighscoreListener extends Listener {
 			 AddScoreRequest asr = (AddScoreRequest)object;
 			 
 			 System.out.println("Recieved add score request for username:" 
-					 + asr.Username +" and Game_ID:" + asr.Game_ID);
+					 + asr.Username +" and Game_ID:" + asr.Game_ID + ". Scores: "); 
+			 
+			 //Convert the scoreQueue back to an array.
+			 String[] scoreQueue = asr.scoreQueue.split(",");
+			 
+			 for (int i = 0; i < scoreQueue.length; i+=2) {
+				 System.out.println("    Type: " + scoreQueue[i] + "; Value: " + scoreQueue[i+1] + ".");
+			 }
 		 }
 	}
 }

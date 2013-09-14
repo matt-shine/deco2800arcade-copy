@@ -1,31 +1,28 @@
 package deco2800.arcade.client.highscores;
 
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
 
 public class HighscoreClient {
-	String Username;
-	String Game_ID;
+	private String Username;
+	private String Game_ID;
 	private NetworkClient client;
-	private HashMap<String, Integer> scoreMap;
+	
+	/*Used for queuing up scores that will be sent to the server. Even elements 
+	 *are score types, odd elements are score values. Score values are stored 
+	 *as strings.*/
+	private LinkedList<String> scoreQueue;
 	
 	//All of the valid score types, excluding WinLoss
 	private final String validScoreTypes[] = 
 		{"Time", "Number", "Distance"} ;
 	
 	/*NOTES!
-	 * 
 	 * - None of the following methods have been tested.
 	 * - None of the following methods have been implemented on the server-side
-	 * 
-	 * - Using a HashMap for storing multiple scores probably isn't a good idea 
-	 * 	 as the order that the scores are logged will matter. In addition to 
-	 * 	 this, Kryonet doesn't seem to like sending a HashMap across the 
-	 * 	 network. I shall migrate this to an array of arrays by tomorrow 
-	 *   afternoon, hopefully (14/9/2013).
-	 * 
 	 * - Need to build tests for all of the methods that can be tested locally.
 	 */
 	
@@ -46,14 +43,8 @@ public class HighscoreClient {
 		this.Game_ID = Game_ID;
 		this.client = client;
 		
-		//Init the score map that is used for multi-valued scores
-		scoreMap = new HashMap<String, Integer>();
-		
-		
-		
-		//!!!!!The following shows how to send messages to the server.
-		AddScoreRequest asr = new AddScoreRequest(); //Create the test message that will be sent
-		this.client.sendNetworkObject(asr);	 //Send a test message to the server
+		//Init the score list that is used for sending scores
+		scoreQueue = new LinkedList<String>();
 	}
 
 	/**
@@ -88,7 +79,7 @@ public class HighscoreClient {
 	 */
 	public void storeScore(String type, int value) {
 		clearMultiScoreQueue(); //Clear the map as it's used by the scores
-		addMultiScoreItem(type, value); //Add the item to the map, checking type
+		addMultiScoreItem(type, value); //Add item to the array, checking type
 		sendScoresToServer();
 	}
 	
@@ -109,7 +100,8 @@ public class HighscoreClient {
 	 */
 	public void addMultiScoreItem(String type, int value) {
 		if (typeIsValid(type)) {
-			scoreMap.put(type, value);
+			scoreQueue.add(type);
+			scoreQueue.add(Integer.toString(value));
 		} else {
 			//TODO Throw an UnsupportedScoreTypeException; "`type` is not a valid score type."
 		}
@@ -119,11 +111,16 @@ public class HighscoreClient {
 	 * Stores all of the currently queued scores to the database and stores 
 	 * them as a multi-valued score entity. When called, this method clears all 
 	 * of the scores that are currently queued.
+	 * 
+	 * If no scores have been queued, a NoQueuedScoresException will be 
+	 * thrown.
 	 */
 	public void sendMultiScoreItems() {
-		/*This method simply points to another method in order to make the 
-		 *API look nicer and have nicer names.*/
-		sendScoresToServer();
+		if (scoreQueue.size() > 0) {
+			sendScoresToServer();
+		} else {
+			//TODO Throw NoQueuedScoresException
+		}
 	}
 	
 	/**
@@ -134,14 +131,14 @@ public class HighscoreClient {
 		 * ensure that the map is not cleared before it is sent off to the 
 		 * server. The garbage collector will, obviously, clean up any stray 
 		 * maps.*/
-		this.scoreMap = new HashMap<String, Integer>();
+		this.scoreQueue = new LinkedList<String>();
 	}
 	
 	/**
 	 * Checks string type to ensure that it is a valid score type. Returns true 
 	 * if it is, and false if it isn't.
 	 * 
-	 * @param type: The type this is to be validated.
+	 * @param type: The type this is to be checked.
 	 */
 	private boolean typeIsValid(String type) {
 		//Check if type is in validScoreTypes
@@ -155,8 +152,8 @@ public class HighscoreClient {
 	/**
 	 * Sends the current map of scores to the server so that they can be stored 
 	 * in the database. If the class was instantiated without a username,
-	 * scores cannot be sent to the server and a UserRequiredException will be 
-	 * thrown.
+	 * scores cannot be sent to the server and a NoUsernameAvailableException
+	 * will be thrown.
 	 */
 	private void sendScoresToServer() {
 		if (Username != null) { //If the class was instantiated with a user
@@ -164,15 +161,34 @@ public class HighscoreClient {
 			AddScoreRequest asr = new AddScoreRequest();
 			asr.Username = Username;
 			asr.Game_ID = Game_ID;
-			asr.scoreMap = scoreMap;
+			asr.scoreQueue = serialisedScores();
 			
 			//Send the request
 			this.client.sendNetworkObject(asr);
 		} else {
-			//TODO Throw a UsernameRequiredException; "HighscoreClient must be instantiated with a username in order to be able to add scores".
+			//TODO Throw a NoUsernameAvailableException; "HighscoreClient must be instantiated with a username in order to be able to add scores".
 		}
 		
 		clearMultiScoreQueue();
+	}
+	
+	/**
+	 * Turns the scoreQueue list into a single string of comma separated values 
+	 * so that it can be send across the network.
+	 * 
+	 * @return A string of comma separated values representing the values in 
+	 * the scoreQueue list.
+	 */
+	private String serialisedScores() {
+		String output = "";
+		Iterator<String> scoreIterator = scoreQueue.iterator();
+		
+		//Traverse through the scoreQueue, adding values to output
+		while (scoreIterator.hasNext()) {
+			output = output + scoreIterator.next() + ",";
+		}
+		
+		return output;
 	}
 	
 	
@@ -194,7 +210,11 @@ public class HighscoreClient {
 	 */
 	private void sendWinLoss(int val) {
 		clearMultiScoreQueue();
-		scoreMap.put("WinLoss", val);
+		
+		//Not using addMultiScoreItem as type doesn't need to be validated
+		scoreQueue.add("WinLoss");
+		scoreQueue.add(Integer.toString(val));
+		
 		sendScoresToServer();
 	}
 	

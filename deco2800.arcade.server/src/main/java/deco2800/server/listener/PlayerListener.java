@@ -1,19 +1,13 @@
 package deco2800.server.listener;
 
-import java.util.ArrayList;
-
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.protocol.BlockingMessage;
-import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
-import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
 import deco2800.arcade.protocol.player.*;
-import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.PlayerDatabaseManager;
+import deco2800.arcade.model.*;
 
 public class PlayerListener extends Listener{
 	
@@ -75,7 +69,7 @@ public class PlayerListener extends Listener{
 			} catch (DatabaseException e) {
 				e.printStackTrace();
                 // can't let the client keep blocking, just send an empty list
-				response.player = null;;
+				response.player = null;
                 BlockingMessage.respond(connection, request, response);
             }
 		}

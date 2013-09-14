@@ -334,7 +334,7 @@ public class PlayerDatabaseManager {
 	 * @return Returns the player with the provided playerID, given that it
 	 *         exists.
 	 */
-	public Player loadPlayer(int playerID) {
+	public Player loadPlayer(int playerID) throws DatabaseException {
 		// TODO Implement me!
 		return null;
 	}

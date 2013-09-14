@@ -1,10 +1,18 @@
 package deco2800.server.listener;
 
+import java.util.ArrayList;
+
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.protocol.BlockingMessage;
+import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
+import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
 import deco2800.arcade.protocol.player.*;
+import deco2800.server.ArcadeServer;
+import deco2800.server.database.DatabaseException;
 import deco2800.server.database.PlayerDatabaseManager;
 
 public class PlayerListener extends Listener{
@@ -54,6 +62,23 @@ public class PlayerListener extends Listener{
 		} else if (object instanceof UsernameUpdateRequest) {
 			UsernameUpdateRequest request = (UsernameUpdateRequest) object;
 			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+		} else if (object instanceof PlayerRequest) {
+			PlayerRequest request = (PlayerRequest)object;
+            PlayerResponse response = new PlayerResponse();
+            int playerID =  request.playerID;
+            PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+            
+            try {
+				//update database
+            	response.player =
+						ArcadeServer.instance().getAchievementStorage().achievementsForGame(gameID);
+                BlockingMessage.respond(connection, req, resp);
+			} catch (DatabaseException e) {
+				e.printStackTrace();
+                // can't let the client keep blocking, just send an empty list
+                resp.achievements = new ArrayList<Achievement>();
+                BlockingMessage.respond(connection, req, resp);
+            }
 		}
 	}
 }

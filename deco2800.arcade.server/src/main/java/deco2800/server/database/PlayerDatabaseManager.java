@@ -1,5 +1,7 @@
 package deco2800.server.database;
 
+import deco2800.arcade.model.Player;
+
 /**
  * PlayerDatabaseMangager is the interface through which the Server's Listeners
  * update the Player database fields.
@@ -322,6 +324,19 @@ public class PlayerDatabaseManager {
 		} catch (DatabaseException e) {
 			// TODO Error catch
 		}
+	}
+
+	/**
+	 * Loads a player from the database.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @return Returns the player with the provided playerID, given that it
+	 *         exists.
+	 */
+	public Player loadPlayer(int playerID) {
+		// TODO Implement me!
+		return null;
 	}
 
 }

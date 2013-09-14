@@ -146,7 +146,7 @@ public class ArcadeServer {
 			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 
 		// once the db is fine, load in achievement data from disk

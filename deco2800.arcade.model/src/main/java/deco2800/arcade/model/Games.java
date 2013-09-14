@@ -54,6 +54,16 @@ public class Games {
 			added = true;
 		}
 	}
+	
+	/**
+	 * Adds a Set of Games to this.
+	 * 
+	 * @param games
+	 *            The Set of Games to be added.
+	 */
+	public void addAll(Set<Game> games) {
+		this.games.addAll(games);
+	}
 
 	/**
 	 * Removes a Game from this.

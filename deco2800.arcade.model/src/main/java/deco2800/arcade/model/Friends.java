@@ -54,6 +54,16 @@ public class Friends {
 			added = true;
 		}
 	}
+	
+	/**
+	 * Adds a Set of Users to this.
+	 * 
+	 * @param user
+	 *            The Set of Users to be added.
+	 */
+	public void addAll(Set<User> user) {
+		this.friends.addAll(user);
+	}
 
 	/**
 	 * Removes a User from this.

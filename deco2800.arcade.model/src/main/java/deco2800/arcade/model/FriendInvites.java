@@ -55,6 +55,16 @@ public class FriendInvites {
 			added = true;
 		}
 	}
+	
+	/**
+	 * Adds a Set of Users to this.
+	 * 
+	 * @param user
+	 *            The Set of Users to be added.
+	 */
+	public void addAll(Set<User> user) {
+		this.friendInvites.addAll(user);
+	}
 
 	/**
 	 * Removes a User from this.

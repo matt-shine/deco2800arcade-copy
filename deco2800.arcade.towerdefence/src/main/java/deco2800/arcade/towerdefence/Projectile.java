@@ -23,7 +23,13 @@ public class Projectile extends Mobile implements Divine {
 
 	// Getters
 	public int damage() {
-		return 0;
+		//Return the damage this projectile does if it hits.
+		return damage;
+	}
+	
+	public int penetration(){
+		//Return the amount of armor this projectile ignores.
+		return penetration;
 	}
 
 	// Setters

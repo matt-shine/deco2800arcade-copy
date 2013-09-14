@@ -29,7 +29,4 @@ public interface Mortal {
 	
 	//Starts any on death behaviour. Possibly ends by calling destroy to remove from grid view and from game model.
 	public void die();
-	
-	//Return the grid the mortal occupies.
-	public Grid grid();
 }

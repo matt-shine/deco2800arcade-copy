@@ -24,69 +24,76 @@ public class Alien extends Mobile implements Mortal, Melee {
 	private int armour;
 	//the amount of armour the alien's attack ignores
 	private int penetration;
+	//the current target
+	private GridObject target;
 	
 	//Constructor
 	
 	
 	//Getters
-	@Override
 	public int health() {
-		// TODO Auto-generated method stub
-		return 0;
+		return health;
 	}
 
-	@Override
 	public int maxHealth() {
-		// TODO Auto-generated method stub
-		return 0;
+		return maxHealth;
 	}
 
-	@Override
 	public int armour() {
-		// TODO Auto-generated method stub
-		return 0;
+		return armour;
 	}
 	
-	@Override
 	public float attackRate() {
-		// TODO Auto-generated method stub
-		return 0;
+		return attackRate;
 	}
 
-	@Override
 	public int damage() {
-		// TODO Auto-generated method stub
-		return 0;
+		return damage;
 	}
 
-	@Override
 	public GridObject target() {
-		// TODO Auto-generated method stub
-		return null;
+		return target;
 	}
 	
-	@Override
 	public int penetration() {
-		// TODO Auto-generated method stub
-		return 0;
+		return penetration;
 	}
 	
 	//Methods
-	@Override
 	public void heal(int amount) {
-		// TODO Auto-generated method stub
+		health += amount;
+		if(health > maxHealth){
+			health = maxHealth;
+		}
 		
 	}
 
-	@Override
 	public void takeDamage(int amount) {
-		// TODO Auto-generated method stub
+		amount -= armour;
+		if (amount <= 0){
+			return;
+		}
+		health -= amount;
+		if (health <= 0){
+			die();
+		}
 		
 	}
 
 	@Override
 	public void takeDamage(int amount, int penetration) {
-		// TODO Auto-generated method stub
+		if (penetration >= armour){
+			takeDamage(amount);
+			return;
+		}
+		amount -= (armour - penetration);
+		if (amount <= 0){
+			return;
+		}
+		health -= amount;
+		if (health <= 0){
+			die();
+		}
 		
 	}
 

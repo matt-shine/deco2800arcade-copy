@@ -29,7 +29,6 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
@@ -63,6 +62,7 @@ public class Arcade extends JFrame {
 	private ProxyApplicationListener proxy;
 
 	private CommunicationNetwork communicationNetwork;
+
 	
 	// Width and height of the Arcade window
 	private static final int ARCADE_HEIGHT = 720;
@@ -196,21 +196,7 @@ public class Arcade extends JFrame {
 				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
 		this.player.setUsername(username);
 		this.communicationNetwork.setPlayer(this.player);
-				
-		// For testing chat:
-		// At least one client must login as "debuguser" to open the chat window
-		// Use /invite username and /kick username to add and remove users to the conversation
-		if (username.equals("debuguser2")){
-			ChatRequest chatRequest = new ChatRequest();
-			chatRequest.participants.add("debuguser");
-			chatRequest.participants.add("debuguser1");
-			chatRequest.participants.add("debuguser2");
-			if (this.communicationNetwork.checkIfChatExists(chatRequest.participants.hashCode()) == false){
-				this.client.sendNetworkObject(chatRequest);
-			}
-		}
 
-		// this.communicationNetwork.createNewChat(username);
 	}
 
 	/**

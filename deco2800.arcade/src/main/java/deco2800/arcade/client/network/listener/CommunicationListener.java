@@ -39,17 +39,19 @@ public class CommunicationListener extends NetworkListener {
 		
 		if (object instanceof TextMessage){
 			 TextMessage textMessage = (TextMessage) object;
-			 communicationNetwork.updateChat(textMessage.chatID, textMessage);
 		}
 		
 		if (object instanceof ChatRequest){
 			ChatRequest chatRequest = (ChatRequest) object;
-			communicationNetwork.createNewChat(chatRequest.participants);
+			communicationNetwork.joinExistingChat(chatRequest);
 		}
 		
 		if (object instanceof ChatResponse){
 			ChatResponse chatResponse = (ChatResponse) object;
-			communicationNetwork.inviteUser(chatResponse);
+			if(chatResponse.response == "offline"){
+				communicationNetwork.leaveChat(chatResponse.chatID, chatResponse.sender);
+				System.out.println(chatResponse.sender + "has left the conversation");
+			}
 		}
 		
 	}

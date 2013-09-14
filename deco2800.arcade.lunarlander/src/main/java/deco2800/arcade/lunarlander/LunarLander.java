@@ -1,5 +1,6 @@
 package deco2800.arcade.lunarlander;
 
+import java.awt.Point;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -35,6 +36,7 @@ public class LunarLander extends GameClient {
 	private Texture texture;
 	private BitmapFont font;
 	
+	//physics
 	private Texture lander;
 	private int initPosition;
 	private double angle;
@@ -49,6 +51,12 @@ public class LunarLander extends GameClient {
 	private int gravity;
 	private boolean moving;
 	
+	//terrain generation
+	private Point[] terrainCoords;
+	private float coord0X;
+	private float coord0Y;
+	
+	//info
 	private int score;
 	private int fuel;
 	//private int speed;
@@ -83,6 +91,7 @@ public class LunarLander extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
+		//physics
 		initPosition= 600;
 		angle = 5;
 		speed = 0;
@@ -94,6 +103,23 @@ public class LunarLander extends GameClient {
 		gravity = 3;
 		moving = true;
 		
+		//terrain generation, not working at the moment
+		terrainCoords[0] = new Point(500,500);
+		terrainCoords[1] = new Point(200,200);
+		terrainCoords[2] = new Point(300,300);
+		terrainCoords[3] = new Point(400,200);
+		terrainCoords[4] = new Point(500,100);
+		
+		coord0X = (float) terrainCoords[0].getX();
+		coord0Y = (float) terrainCoords[0].getY();
+		System.out.println("----------------");
+		System.out.println(coord0X);
+		System.out.println(coord0Y);
+		
+		shapeRenderer.line(coord0X, coord0Y, coord0X, coord0Y);
+	
+		
+		//info
 		score = 0;
 		fuel = 1000;
 		//speed = 0;
@@ -180,7 +206,7 @@ public class LunarLander extends GameClient {
 	    shapeRenderer.end();
 	    
 	    //Slightly more complicated gravity function, hopefully this will increase logarithmically
-	    
+	    //When the lander is at or lower than 20 pixels, it stops, otherwise it calculates the next position.
 	    if(!(initPosition + finalY <= 20) && moving == true){
 	    	
 	    	velocityY = velocityY - gravity;

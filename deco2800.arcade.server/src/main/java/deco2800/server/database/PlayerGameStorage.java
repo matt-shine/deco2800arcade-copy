@@ -184,4 +184,36 @@ public class PlayerGameStorage {
 			}
 		}
 	}
+	
+	public boolean hasGame(int playerID, String gameID) throws DatabaseException {
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		try {
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			resultSet = stmt.executeQuery("SELECT * FROM PLAYERGAMES"
+											+ "WHERE playerID=" + playerID
+											+ "AND gameID=" + gameID);
+			return (resultSet.next()) ? true : false;
+		} catch (SQLException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DatabaseException("Unable to add player game to database", e);
+		} finally {
+			//clean up JDBC objects
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }

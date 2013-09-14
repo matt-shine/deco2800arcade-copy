@@ -2,6 +2,9 @@ package deco2800.arcade.deerforest.GUI;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -25,7 +28,14 @@ public class DeerForest extends GameClient {
 	
 	MainGameScreen view;
 	MainGame mainGame;
+	MainMenuScreen menuView;
+	MainMenu mainMenu;
+	MainMenuInputProcessor menuInputProcessor;
 	MainInputProcessor inputProcessor;
+	boolean inMenu;
+	DeckBuilder deckBuilder;
+	private DeckBuilderScreen deckBuilderView;
+	private DeckBuilderInputProcessor deckInputProcessor;
 	
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
@@ -35,36 +45,37 @@ public class DeerForest extends GameClient {
 	public void create() {
 		
 		super.create();
-
-        System.out.println("Super created");
-		//start up main game
-		GameSystem tempSystem = new GameSystem(createDeerForestPlayer(), createDeerForestPlayer());
-        System.out.println("Game system");
-
-        //set and run game
-		mainGame = new MainGame(tempSystem);
-		mainGame.create();
-        System.out.println("Main Game created");
-
-        view = new MainGameScreen(mainGame);
-		this.setScreen(view);
-        System.out.println("View created");
-
-
-        //set up input processor
-		inputProcessor = new MainInputProcessor(mainGame, view);
-		ArcadeInputMux.getInstance().addProcessor(inputProcessor);
-
-        System.out.println("Processor created");
-
+		
+		this.inMenu = true;
+        
+        // set up and run the menu
+        mainMenu = new MainMenu(null);
+        mainMenu.create();
+        System.out.println("Main Menu created");
+        
+        menuView = new MainMenuScreen(mainMenu);
+        this.setScreen(menuView);
+        System.out.println("Menu view created");
+        
+        // set up input processor
+        menuInputProcessor = new MainMenuInputProcessor(mainMenu, menuView);
+        ArcadeInputMux.getInstance().addProcessor(menuInputProcessor);
+        
     }
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		ArcadeInputMux.getInstance().removeProcessor(inputProcessor);
-        mainGame.dispose();
-        view.dispose();
+		ArcadeInputMux.getInstance().removeProcessor((inMenu) ? menuInputProcessor : inputProcessor);
+		
+		if (inMenu) {
+			mainMenu.dispose();
+			menuView.dispose();
+		} else {
+			mainGame.dispose();	
+	        view.dispose();
+		}
+		
 	}
 	
 	@Override
@@ -91,6 +102,50 @@ public class DeerForest extends GameClient {
 
 	public Game getGame() {
 		return game;
+	}
+	
+	// Changes the scene. Eg menu -> game
+	public void changeScreen(String scene) {
+		if (scene.equals("game")) {
+			this.inMenu = false;
+
+			
+			// Construct the main game
+			GameSystem tempSystem = new GameSystem(createDeerForestPlayer(), createDeerForestPlayer());
+	        System.out.println("Game system constructed");
+	        
+	        //set and run game
+			mainGame = new MainGame(tempSystem);
+			mainGame.create();
+	        System.out.println("Main Game created");
+
+	        view = new MainGameScreen(mainGame);
+	        System.out.println("View created (game)");
+	        
+			this.setScreen(view);
+
+
+	        // Set the input processor to the main menu
+			inputProcessor = new MainInputProcessor(mainGame, view);
+			
+			ArcadeInputMux.getInstance().addProcessor(inputProcessor);
+			
+		} else if (scene.equals("deck builder")) {
+			this.inMenu = false;
+			
+			this.deckBuilder = new DeckBuilder(null);
+			this.deckBuilder.create();
+			
+			this.deckBuilderView = new DeckBuilderScreen(deckBuilder);
+			
+			this.setScreen(deckBuilderView);
+			
+			this.deckInputProcessor = new DeckBuilderInputProcessor(deckBuilder, deckBuilderView);
+			ArcadeInputMux.getInstance().addProcessor(deckInputProcessor);
+			
+			
+		}
+		
 	}
 	
 	private DeerForestPlayer createDeerForestPlayer() {
@@ -136,5 +191,6 @@ public class DeerForest extends GameClient {
 	
 	public int getCurrentPlayer() {
 		return mainGame.getCurrentPlayer();
+		
 	}
 }

@@ -11,17 +11,21 @@ public class Platform {
 	private boolean active;
 	private boolean climbable = false;
 	private Texture platText;
-
+	private enum world {
+		WORLD_ONE, WORLD_TWO, WORLD_THREE
+	}
+	private world currentWorld;
 	/**
 	 * Platform constructor
 	 * Takes width, height and X and Y position as parameters
 	 */
 	public Platform(int pX, int pY, int pWidth, int pHeight) {
-		width = pWidth;
-		height = pHeight;
-		xPos = pX;
-		yPos = pY;
-		active = false;
+		this.width = pWidth;
+		this.height = pHeight;
+		this.xPos = pX;
+		this.yPos = pY;
+		this.active = false;
+		currentWorld = world.WORLD_ONE; // Placeholder 
 	}
 	
 	/**
@@ -33,9 +37,16 @@ public class Platform {
 	
 	public Texture getTexture() {
 		// Texture changes depending on world
-		switch(junglejump.currentWorld) {
-		case 0:
+		switch(currentWorld) {
+		case WORLD_ONE:
 			platText = new Texture("junglejumpassets/platform.png");
+			break;
+		case WORLD_TWO:
+			// World 2 texture
+			break;
+		case WORLD_THREE:
+			// World 3 texture
+			break;
 		}
 		return this.platText;
 	}

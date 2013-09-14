@@ -93,7 +93,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	boolean onPlatform, isFalling = false;
 	
 //	public int currentLevelIndex = 0;
-//	Level currentLevel = new Level();
+	LevelContainer currentCont = new LevelContainer();
+	Level currentLevel = currentCont.getLevel(0);
 //	public static int currentWorld = 0;
 
 	Texture texture;
@@ -332,9 +333,10 @@ public class junglejump extends GameClient implements InputProcessor {
 //				float platY = p.getY() + (currentLevelIndex * SCREENHEIGHT); // Because levels are stacked on each other
 //				batch.draw(p.getTexture(), p.getX(), platY);
 //			}
-			
-			
-			batch.draw(platform, 100, 50);
+			for (Platform p : currentLevel.getPlatforms()) {
+				batch.draw(platform, p.getX(), p.getY(), p.getWidth(), p.getHeight());
+			}
+			//batch.draw(platform, 100, 50);
 
 			batch.end();
 			camera.update();
@@ -348,9 +350,14 @@ public class junglejump extends GameClient implements InputProcessor {
 	public boolean isOnPlatform(float x, float y) {
 		// Place holder for checking through platform array
 		// Consider data structure for efficiency
-		if (x > 78 && x < 170 && y < 76 ) return true;
-		    else return false;
-	
+		for (Platform p : currentLevel.getPlatforms()) {
+			if (x > p.getX()-5 && x < p.getX()+p.getWidth() && y < p.getY()+p.getHeight()) {
+				return true;
+			}
+		} return false;
+//		if (x > 78 && x < 170 && y < 76 ) return true;
+//		    else return false;
+//	
 		// Gonna do it the easy way until it causes problems
 //		currentLevel = LevelContainer.getLevel(currentLevelIndex);
 //		for(int i=0; i<currentLevel.platformAmount(); i++) {

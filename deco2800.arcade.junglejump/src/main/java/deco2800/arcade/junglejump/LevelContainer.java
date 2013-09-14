@@ -19,9 +19,12 @@ public class LevelContainer {
 		levels = new ArrayList<Level>();
 		
 		Level level1 = new Level(); // Creating and adding to a test level
-		Platform testPlatform = new Platform(0,0,10,10);
+		
+		Platform platform = new Platform(300,50,100,25);
+		Platform platform2 = new Platform(50,100,100,25);
 		Collectable testBanana = new Collectable();
-		level1.addPlatform(testPlatform);
+		level1.addPlatform(platform);
+		level1.addPlatform(platform2);
 		level1.addBanana(testBanana);
 		addLevel(level1);	
 	}

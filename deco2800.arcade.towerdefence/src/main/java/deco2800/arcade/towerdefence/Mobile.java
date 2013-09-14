@@ -7,7 +7,10 @@ import com.badlogic.gdx.math.Vector2;
  * @author hadronn
  *
  */
-public abstract class Mobile implements GridObject {
+public abstract class Mobile extends GridObject {
+	//The object's speed in moves per second
+	private Vector2 vector = new Vector2();
+	
 	//Move the GridObject one unit in the vector specified.
 	public void move(Vector2 vector) {
 		/**
@@ -15,8 +18,14 @@ public abstract class Mobile implements GridObject {
 		 */
 	}
 	//Returns the GridObject's speed in moves per second.
-	public abstract float speed();
+	public float speed(){
+		return vector.len();
+	}
 	
 	//Move the GridObject some speed calculated units in the direction specified over one second.
-	public abstract void moving(Vector2 vector);
+	public void moving(Vector2 vector){
+		/**
+		 * TODO implement position modifier based on vector given.
+		 */
+	}
 }

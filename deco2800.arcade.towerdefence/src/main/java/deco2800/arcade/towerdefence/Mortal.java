@@ -7,7 +7,7 @@ package deco2800.arcade.towerdefence;
  * @author hadronn
  *
  */
-public interface Mortal extends GridObject {
+public interface Mortal {
 	//Return the current health of the mortal, nonnegative.
 	public int health();
 	

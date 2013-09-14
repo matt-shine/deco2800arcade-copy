@@ -7,6 +7,6 @@ package deco2800.arcade.towerdefence;
  * @author hadronn
  *
  */
-public interface Controllable extends GridObject {
+public interface Controllable {
 	
 }

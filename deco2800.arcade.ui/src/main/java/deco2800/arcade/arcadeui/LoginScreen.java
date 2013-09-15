@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -28,23 +29,26 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        Label errorLabel = new Label("Placeholder Error Message", skin, "error");
+        final Label tempLabel = new Label("To access the store\nlogin with username: store", skin);  // Temporary label to display a message
+        tempLabel.setAlignment(Align.center);
+        final Label errorLabel = new Label("", skin, "error");
+        errorLabel.setAlignment(Align.center);
         final TextField usernameText = new TextField("", skin);
         usernameText.setMessageText("Username");
         final TextField passwordText = new TextField("", skin);
         passwordText.setMessageText("Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
-
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
-        CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        //CheckBox rememberBox = new CheckBox("Remember Me", skin);
         TextButton loginButton = new TextButton("Login", skin);
-        TextButton forgotLogButton = new TextButton("Forgot Login?", skin);
         TextButton registerButton = new TextButton("Register", skin);
-        TextButton storeButton = new TextButton("Store", skin);
+        TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
 
-        table.add(errorLabel).colspan(2);
+        table.add(tempLabel).colspan(2);  // Temporary label to display a message
+        table.row();
+        table.add(errorLabel).width(400).pad(5).colspan(2);
         table.row();
         table.add(usernameText).width(400).pad(5).colspan(2);
         table.row();
@@ -52,17 +56,27 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(serverText).width(400).pad(5).colspan(2);
         table.row();
-        table.add(rememberBox);
+        //table.add(rememberBox);
+        //table.row();
+        table.add(loginButton).width(190).height(50).pad(5);
+        table.add(registerButton).width(190).height(50).pad(5);
         table.row();
-        table.add(loginButton).width(200).pad(5);
-        table.add(registerButton).width(200).pad(5);
-        table.row();
-        table.add(forgotLogButton).width(200).pad(5);
-        table.add(storeButton).width(200).pad(5);
+        table.add(forgotLogButton).width(400).height(35).pad(5).colspan(2);
         
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                ArcadeSystem.login(usernameText.getText());
+                if (usernameText.getText().equals("")) {
+                    // no username entered, throw error
+                    errorLabel.setText("No Username Supplied");
+                }
+                else if (usernameText.getText().toLowerCase().equals("store")) {
+                    // temporary direct access to store until a proper solution is found
+                    ArcadeSystem.login("store");
+                }
+                else {
+                    // username supplied, try to login
+                    ArcadeSystem.login(usernameText.getText());
+                }
             }
         });
         
@@ -73,13 +87,6 @@ public class LoginScreen implements Screen {
         
         forgotLogButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-            }
-        });
-            	
-        storeButton.addListener(new ChangeListener() {
-            public void changed (ChangeEvent event, Actor actor) {
-            	ArcadeSystem.login("store");
-            	// Please find a way to fix this. I'm so tired. -Addison(GameHost)
             }
         });
 	}

@@ -5,23 +5,33 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+
 
 public class DeckBuilderScreen implements Screen {
 	
+	private ShapeRenderer shapeRenderer;
+	
 	private final DeckBuilder deckBuilder;
 	private OrthographicCamera camera;
+	private Map<String, Map<Rectangle, ExtendedSprite>> all;
 	AssetManager manager;
 
 	//assets
 	private Map<String, Set<ExtendedSprite>> spriteMap;
-	private Arena arena;
+	private BuilderArena arena;
 
 	public DeckBuilderScreen(final DeckBuilder dec) {
 		this.deckBuilder = dec;
+	    
+		//initialise shapeRender / glowSize
+		shapeRenderer = new ShapeRenderer();
 		
 		//create the camera
 		camera = new OrthographicCamera();
@@ -29,10 +39,17 @@ public class DeckBuilderScreen implements Screen {
 		
 		//load some assets
 		manager = new AssetManager();
+		loadAssets();
 		manager.finishLoading();
+		
+		arena = new BuilderArena(manager.get("DeerForestAssets/builderBackground.png", Texture.class));
 		
 	}
 
+	private void loadAssets() {
+		manager.load("DeerForestAssets/builderBackground.png", Texture.class);
+	}
+	
 	@Override
 	public void render(float delta) {
 		
@@ -51,11 +68,28 @@ public class DeckBuilderScreen implements Screen {
 		deckBuilder.batch.begin();
 
 	    // Print menu text
-	    deckBuilder.font.draw(deckBuilder.batch, "This is the deck builder!", 200, 200);
+		arena.draw(deckBuilder.batch);
 
 	    deckBuilder.batch.end();
-
+	    
+	    Map<String, Map<Rectangle, ExtendedSprite>> map = BuilderArena.getMap();
+	    
+	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    
+	    for (String key : map.keySet()) {
+	    	for(Rectangle r : map.get(key).keySet()) {
+	    		if(key == "cardZone"){
+	    			shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.GREEN, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+	    		} else if (key =="zoomZone") {
+	    			shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.RED, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+	    		} else {
+	    			shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.BLUE, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+	    		}
+	    	}
+	    }
+	    shapeRenderer.end();
 	}
+	
 
 	@Override
 	public void dispose() {
@@ -75,6 +109,7 @@ public class DeckBuilderScreen implements Screen {
 
 	@Override
 	public void resize(int x, int y) {
+		arena.resize(x, y);
 		camera.setToOrtho(true, getWidth(), getHeight());
 	}
 
@@ -92,7 +127,7 @@ public class DeckBuilderScreen implements Screen {
 		return spriteMap;
 	}
 	
-	public Arena getArena() {
+	public BuilderArena getArena() {
 		return arena;
 	}
 	

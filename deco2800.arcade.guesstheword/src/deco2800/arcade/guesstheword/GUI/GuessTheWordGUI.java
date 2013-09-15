@@ -9,19 +9,18 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import deco2800.arcade.guesstheword.gameplay.WordShuffler;
-
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class GuessTheWordGUI extends JFrame {
 
 	private JLabel gameTitle; 
+	
+	private Label gameLabel;
 
 	public  JTextArea gameInfoTextArea;
 	
@@ -34,15 +33,21 @@ public class GuessTheWordGUI extends JFrame {
 	 * Button for User Login
 	 * */
 	public JButton loginButton;
+	public TextButton play;
 
 	/**
 	 * Button for Achievement
 	 * */
 	public JButton achieveButton;
+	public TextButton achieve;
 	/**
 	 * Button for Help
 	 * */
 	public JButton helpButton;
+	public TextButton help;
+	
+	
+	
 	private Graphics g;
 	private Image backgroundImage = null;
 	

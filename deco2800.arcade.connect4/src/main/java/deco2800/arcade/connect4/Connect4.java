@@ -378,7 +378,7 @@ public class Connect4 extends GameClient {
 	    table.render(shapeRenderer);
 	    renderScreenText();
 	    buttons.render();
-	    
+
 	    // Respond to user input and move the ball depending on the game state
 	    switch(gameState) {
 		    

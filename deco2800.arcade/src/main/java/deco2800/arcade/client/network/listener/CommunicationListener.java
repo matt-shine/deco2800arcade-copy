@@ -12,9 +12,7 @@ public class CommunicationListener extends NetworkListener {
 	CommunicationNetwork communicationNetwork;
 	
 	public CommunicationListener(CommunicationNetwork communicationNetwork) {
-		// TODO Auto-generated constructor stub
 		this.communicationNetwork = communicationNetwork;
-		
 	}
 
 	@Override
@@ -37,15 +35,28 @@ public class CommunicationListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
+		/*
+		 * If a text message is received the message is added to the
+		 * corresponding chat instance.
+		 */
 		if (object instanceof TextMessage){
 			 TextMessage textMessage = (TextMessage) object;
+			 communicationNetwork.recieveTextMesage(textMessage);
 		}
 		
+		/*
+		 * If a chat request is received the player will join the
+		 * existing chat.
+		 */
 		if (object instanceof ChatRequest){
 			ChatRequest chatRequest = (ChatRequest) object;
 			communicationNetwork.joinExistingChat(chatRequest);
 		}
 		
+		/*
+		 * If a chat response is received and the participant is offline, 
+		 * the participant is removed from the chat instance.
+		 */
 		if (object instanceof ChatResponse){
 			ChatResponse chatResponse = (ChatResponse) object;
 			if(chatResponse.response == "offline"){

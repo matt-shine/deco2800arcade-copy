@@ -1,34 +1,77 @@
 package deco2800.arcade.communication;
 
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
-public class ChatNode {
+import javax.swing.JLabel;
+
+/**
+ * A ChatNode is a single chat instance. It contains the participants of 
+ * the chat and a queue containing the chat history.
+ *
+ */
+public class ChatNode extends JLabel{
 
 	private List<String> participants;
+	private Queue<String> chatHistory;
 
 	
+	/**
+	 * Creates a chat with a list of participants.
+	 * @param chatParticipants
+	 */
 	public ChatNode(List<String> chatParticipants){
 		participants = new ArrayList<String>(chatParticipants);
+		chatHistory = new ArrayDeque<String>();
 	}
 	
+	/**
+	 * Creates a chat with a single participant.
+	 * @param participant
+	 */
 	public ChatNode(String participant){
 		participants = new ArrayList<String>();
 		addParticipant(participant);
 	}
 	
+	public int getID(){
+		return participants.hashCode();
+	}
+	
+	/**
+	 * Removes the participant with PlayerID from the chat instance.
+	 * @param playerId
+	 */
 	public void removeParticipant(String playerId){
 		participants.remove(playerId);
 	}
 	
+	/**
+	 * Adds the participant with PlayerID to the chat instance.
+	 * @param playerId
+	 */
 	public void addParticipant(String playerId){
 		participants.add(playerId);
 	}
 	
+	/**
+	 * Returns the participants of the chat instance.
+	 */
 	public List<String> getParticipants(){
 		return participants;
 	}
+	
+	/**
+	 * Adds a message to the chat instance.
+	 * @param message
+	 */
+	public void addMessage(String message){
+		chatHistory.add(message);
+	}
+	
 	
 }
 

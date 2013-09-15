@@ -74,6 +74,23 @@ subprojects {
     manifest.attributes provider: 'gradle'
   }
 
+  // server resource copying - could be made a seperate task but works fine for now
+  build << {
+    def projComponents = project.name.split('\\.')
+    def projName = projComponents[projComponents.size() - 1]
+    def sep = File.separator
+    def serverResourcesDir = file(project.projectDir.getPath() + sep + "serverResources")
+    def targetDir = file(project(':deco2800.arcade.server').projectDir.getPath() + sep + "build" + sep + "resources" + sep + "main" + sep + projName)
+    if(serverResourcesDir.exists()) {
+      println projName + " has server resources"
+      targetDir.mkdirs()
+      project.copy {
+        from serverResourcesDir.getPath()
+        into targetDir.getPath()
+      }
+    }
+  }
+
 }
 
 task alldocs(type: Javadoc) {

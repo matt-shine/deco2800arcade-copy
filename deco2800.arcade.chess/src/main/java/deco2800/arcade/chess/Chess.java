@@ -1,10 +1,20 @@
 package deco2800.arcade.chess;
 
+//import deco2800.arcade.chess.screen.HelpScreen;
+//import deco2800.arcade.chess.MenuScreen;
+////import deco2800.arcade.burningskies.screen.OptionsScreen;
+///import deco2800.arcade.burningskies.screen.PlayScreen;
+///import deco2800.arcade.burningskies.screen.ScoreScreen;
+//import deco2800.arcade.chess.SplashScreen;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
-import deco2800.arcade.client.UIOverlay.PopupMessage;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.ReplayListener;
+import deco2800.arcade.client.replay.ReplayEventListener;
+import deco2800.arcade.client.replay.ReplayHandler;
+import deco2800.arcade.client.replay.ReplayNode;
+import deco2800.arcade.client.replay.ReplayNodeFactory;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.chess.pieces.King;
@@ -33,19 +43,19 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
-public class Chess extends GameClient implements InputProcessor {
+public class Chess extends GameClient implements Screen, InputProcessor{
 	//FIXME class needs tidying up
 	
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
 	Piece movingPiece = null;
-
+	boolean isReplaying = false;
 	// Sprite offsets
 	int horizOff = SCREENWIDTH / 2 - 256;
 	int verticOff = SCREENHEIGHT / 2 - 256;
 	int pieceHorizOff = 24;
 	int pieceVerticOff = 24;
-
+	boolean flag = true;
 	// Piece positions
 	// x-co-ords
 	int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
@@ -96,21 +106,29 @@ public class Chess extends GameClient implements InputProcessor {
 	//Tracks whether the game is paused
 	boolean paused = false;
 	
-	//Stores the possible pieces to show
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;	
+	
+	public SplashScreen splashScreen;
+	//public MenuScreen menuScreen;
 
+
+	
 	/**
 	 * Initialises a new game
 	 */
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
+		
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
+		//splashScreen = new SplashScreen(this);
+		//menuScreen = new MenuScreen(this);
+		//setScreen(splashScreen);
 		this.networkClient = networkClient; // this is a bit of a hack
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; // TODO eventually the server may send back the
@@ -140,12 +158,11 @@ public class Chess extends GameClient implements InputProcessor {
 		}
 	    
 	    loadedStyle = 0;	    
-
 	}
-
 	@Override
 	public void create() {
 		super.create();
+		
 		// Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false);
@@ -159,11 +176,12 @@ public class Chess extends GameClient implements InputProcessor {
 		Texture.setEnforcePotImages(false);
 
 		inputMultiplexer.addProcessor(this);
+
 		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
 		
 		Overlay = this.getOverlay();
 
-		// load the first chess board image
+		// load the images for the droplet and the bucket, 512x512 pixels each
 		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
 
 		// Pieces
@@ -227,34 +245,28 @@ public class Chess extends GameClient implements InputProcessor {
 			@Override
 			public void pause() {}
 			@Override
+			public void render(float arg0) {
+			}
+			@Override
 			public void resize(int arg0, int arg1) {}
 			@Override
 			public void resume() {}
 			@Override
 			public void dispose() {}
-
-			@Override
-			public void render(float arg0) {}
 		});
 
-		
-		
-	}
+		}
+	
 
 	/**
 	 * Render the current state of the game and process updates
 	 */
 	@Override
 	public void render() {
+
 			// White background
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-			// tell the camera to update its matrices.
-			camera.update();
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.setProjectionMatrix(camera.combined);
-
 			drawPieces();
 			
 			if(moving) {
@@ -263,6 +275,26 @@ public class Chess extends GameClient implements InputProcessor {
 
 			super.render();
 
+		// tell the camera to update its matrices.
+		camera.update();
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
+
+		drawPieces();
+
+
+		super.render();
+
+	}
+
+	@Override
+	public void resize(int arg0, int arg1) {
+		//super.resize(arg0, arg1);
+	}
+
+	@Override
+	public void resume() {
+		super.resume();
 	}
 
 	/**
@@ -295,8 +327,10 @@ public class Chess extends GameClient implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int arg0) {
-
-		if(arg0 == Keys.CONTROL_LEFT) {
+		/*if(arg0 == NUM_3){
+			gameState = GameState.REPLAY;
+		}*/
+		if(arg0 == Keys.SHIFT_LEFT) {
 			if(loadedStyle == styles.size()-1) {
 				loadedStyle = 0;
 			} else {
@@ -312,7 +346,6 @@ public class Chess extends GameClient implements InputProcessor {
 			System.out.println(paused);
 			onPause();
 		}
-		
 		return true;
 	}
 
@@ -357,24 +390,24 @@ public class Chess extends GameClient implements InputProcessor {
 				} catch (NullPointerException e) {
 					System.err.println("No valid square selected");
 				}
-				return false;
-			} else {
-				int[] newPos = determineSquare(x, y);
-				if (board.movePiece(movingPiece, newPos)) {
-					movePieceGraphic();
-					moving = false;
-					board.checkForCheckmate((board.whoseTurn()));
-					board.checkForCheckmate(!(board.whoseTurn()));
-					return true;
-				}
-				board.checkForCheckmate((board.whoseTurn()));
-				board.checkForCheckmate(!(board.whoseTurn()));
-				movingPiece = board.nullPiece;
-				moving = false;
-				return false;
 			}
-		} 
-		return false;
+			return false;
+		} else {
+			int[] newPos = determineSquare(x, y);
+			if (board.movePiece(movingPiece, newPos)) {
+				movePieceGraphic();
+				moving = false;
+				/*replayHandler.pushEvent(
+    			        ReplayNodeFactory.createReplayNode(
+    			                "move_piece",
+    			                movingPiece, newPos
+    			        ));
+				return true;*/
+			}
+			movingPiece = board.nullPiece;
+			moving = false;
+			return false;
+		}
 
 	}
 
@@ -400,7 +433,7 @@ public class Chess extends GameClient implements InputProcessor {
 	 *            Y co-ordinate of mouse click
 	 * @return Piece on the square that was clicked on
 	 */
-	private Piece checkSquare(int x, int y) {
+	Piece checkSquare(int x, int y) {
 
 		int[] square = determineSquare(x, y);
 		Piece onSquare;
@@ -414,7 +447,7 @@ public class Chess extends GameClient implements InputProcessor {
 		return onSquare;
 	}
 
-	private int[] determineSquare(int x, int y) {
+	int[] determineSquare(int x, int y) {
 		int xSquare = -1;
 		int ySquare = -1;
 
@@ -875,7 +908,7 @@ public class Chess extends GameClient implements InputProcessor {
 
 	}
 
-	private void drawPieces() {
+	void drawPieces() {
 		whiteRook2 = whiteRook1; whiteBishop2 = whiteBishop1; 
 		whiteKnight2 = whiteKnight1; blackBishop2 = blackBishop1;
 		blackKnight2 = blackKnight1; blackRook2 = blackRook1;
@@ -994,5 +1027,20 @@ public class Chess extends GameClient implements InputProcessor {
 		});
 	}
 	
-
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void render(float arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void show() {
+		create();
+		render();
+		
+	}
 }

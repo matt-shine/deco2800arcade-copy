@@ -23,7 +23,7 @@ public class PlayScreen implements Screen
 	private PlayerShip player;
 	private GameMap map;
 	
-	public PlayScreen( BurningSkies game){
+	public PlayScreen(BurningSkies game){
 		this.game = game;
 	}	
 	 

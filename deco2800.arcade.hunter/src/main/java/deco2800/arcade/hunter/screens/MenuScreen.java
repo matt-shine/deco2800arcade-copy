@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 
 /**
  * A Hunter game for use in the Arcade
@@ -60,11 +61,13 @@ public class MenuScreen implements Screen {
 		Button optionsButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/optionsbutton.png"))));
 		optionsButton.setSize(200,60);
 		
-		optionsButton.addListener(new ClickListener(){
+		optionsButton.addListener(new ChangeListener() {
+
 			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("Options worked!");
 				hunter.setScreen(new OptionScreen(hunter));
+				stage.clear();
 				/*TODO fix the broken options screen, then re-enable this*/
 			}
 		});
@@ -82,6 +85,7 @@ public class MenuScreen implements Screen {
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("HighScore worked!");
 				hunter.setScreen(new HighScoreScreen(hunter));
+				stage.clear();
 				/*TODO Fix the broken High Score screen, then re-enable this*/
 			}
 		});
@@ -96,7 +100,8 @@ public class MenuScreen implements Screen {
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button){
 				System.out.println("Exit Works");
-				dispose();
+				ArcadeSystem.goToGame(ArcadeSystem.UI);
+				stage.clear();
 				/*TODO Get this to quit properly, maybe take a look at how it is implemented in the Overlay to get back to the menu*/
 			}
 		});
@@ -128,6 +133,7 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		Gdx.input.setInputProcessor(stage);
 		stage.act(delta);
 		stage.draw();
 	}

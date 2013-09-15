@@ -3,19 +3,24 @@ package deco2800.arcade.hunter.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
 
 public class HighScoreScreen implements Screen {
 
 	private Hunter hunter;
 	private Stage stage;
+	private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 	
 	private int highScore1;
 	private int highScore2;
@@ -23,13 +28,14 @@ public class HighScoreScreen implements Screen {
 	
 	public HighScoreScreen(Hunter h){
 		hunter = h;
-		Stage stage= new Stage();
+		stage= new Stage();
+		ArcadeInputMux.getInstance().addProcessor(stage);
+
 		
-		Table table = new Table();
+		Table table = new Table(skin);
 		table.setFillParent(true);
 		stage.addActor(table);
-		
-		
+				
 		//set table defaults
 		table.defaults().spaceBottom(20);
 		table.columnDefaults(0).colspan(2);
@@ -48,16 +54,20 @@ public class HighScoreScreen implements Screen {
 		
 		table.add("Number 3: ");
 		table.add(String.valueOf(highScore3)).colspan(2);
+		table.row();
 		
-		TextButton backButton = new TextButton("Back to main menu", new Skin());
-        backButton.addListener(new ClickListener(){
-        	@Override
-            public void touchUp(InputEvent event,float x,float y,int pointer,int button ){
+		TextButton backButton = new TextButton("Back to main menu", skin);
+        backButton.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
         		System.out.println("Going back to the main menu!");
+        		hunter.setScreen(new MenuScreen(hunter));
+        		stage.clear();
         	}
         });
         
-        table.add("backButton").size(300,70);
+        table.add(backButton).size(300,70);
         table.row();
 		
 		
@@ -73,6 +83,7 @@ public class HighScoreScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		Gdx.input.setInputProcessor(stage);
 		stage.act(delta);
 		stage.draw();
 		
@@ -111,8 +122,7 @@ public class HighScoreScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		hunter.dispose();
-		
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 }

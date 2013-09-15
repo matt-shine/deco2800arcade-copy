@@ -49,7 +49,6 @@ public class MenuScreen implements Screen {
         white.dispose();
         black.dispose();
         stage.dispose();
-
 	}
 
 	@Override
@@ -59,8 +58,6 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -73,7 +70,6 @@ public class MenuScreen implements Screen {
         batch.begin();
         stage.draw();
         batch.end();
-
 	}
 
 	@Override
@@ -82,8 +78,6 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -189,10 +183,10 @@ public class MenuScreen implements Screen {
 	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
 	    label = new Label("Burning Skies", ls);
 	    label.setX(0);
-	    label.setY(startButton.getY() + startButton.getHeight() + 10);
+	    label.setY((float)(height*0.95));
 	    label.setWidth(width);
 	    label.setAlignment(Align.center);
-	
+	   	
 	    stage.addActor(startButton);
 	    stage.addActor(optionsButton);
 	    stage.addActor(scoresButton);

@@ -169,6 +169,7 @@ public class Pong extends GameClient {
         for(Achievement ach : achievements) {
             System.out.println(ach.toString());
         }
+        
 	}
 
 	@Override

@@ -76,6 +76,7 @@ public class AchievementStorage {
 		public int awardThreshold;
 	}
 
+	
 	private void loadAchievement(Element achElem, String achFolder) throws DatabaseException {
 		String id = achElem.getAttribute("id");
 		Statement statement = null;
@@ -221,29 +222,10 @@ public class AchievementStorage {
 		});
 	}
 
-	
-	
-    /**
-     * Utility method for fetching a single achievement. This is just a wrapper
-     * around achievementsForIDs, which is a more efficient method for
-     * fetching many achievements.
-     * 
-     * @param  achievementID            The unique ID for the achievement.
-     * @throws IllegalArgumentException If an achievement with the provided ID
-     *                                  doesn't exist.
-     * @return The Achievement matching the provided ID.
-     * @throws DatabaseException 
-     */
-    public Achievement achievementForID(String achievementID) throws DatabaseException {
-        ArrayList<String> achievementIDs = new ArrayList<String>();
-        achievementIDs.add(achievementID);
-        return achievementsForIDs(achievementIDs).get(0);
-    }
     
     /**
-     * Returns a list of Achievements corresponding to the supplied list of
-     * IDs. The ordering of the returned Achievements matches that of the
-     * supplied list of IDs.
+     * Quries database for each of the specified achievement ID's and returns
+     * each achievement in a list.
      *
      * @param achievementIDs            The list of unique achievement IDs to
      *                                  fetch data for from the server.

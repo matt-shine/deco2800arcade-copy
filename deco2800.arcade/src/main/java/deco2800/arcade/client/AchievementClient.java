@@ -19,9 +19,11 @@ public class AchievementClient extends NetworkListener {
 
     private NetworkClient networkClient;
     private HashSet<AchievementListener> listeners;
+    private HashMap<String, Achievement> achievementsForIDsCache;
 
     public AchievementClient(NetworkClient networkClient) {
         this.listeners = new HashSet<AchievementListener>();
+        this.achievementsForIDsCache = new HashMap<String, Achievement>();
     }
 
     public void setNetworkClient(NetworkClient client) {
@@ -59,17 +61,6 @@ public class AchievementClient extends NetworkListener {
         }
     }
    
-   /**
-    * The Method below works to send things through the chat system... 
-    * now just to test ours...
-    
-   public void joshtest(String text){
-	    TextMessage textMessage = new TextMessage();
-	   textMessage.text = text;
-		textMessage.username = "";
-		networkClient.sendNetworkObject(textMessage);
-   }
-   */
 
     /**
      * Utility method for fetching a single achievement. This is just a wrapper
@@ -101,19 +92,32 @@ public class AchievementClient extends NetworkListener {
      */
     public ArrayList<Achievement> achievementsForIDs(
             ArrayList<String> achievementIDs) {
+    	ArrayList<String> nonCached = new ArrayList<String>();
+    	ArrayList<Achievement> result = new ArrayList<Achievement>();
+    	
+    	//Only do query for non cached achievements (filter out already cached)
+    	for(String ID:achievementIDs){
+    		if(!achievementsForIDsCache.containsKey(ID)){
+    			nonCached.add(ID);
+    		}else{
+    			result.add(achievementsForIDsCache.get(ID));
+    		}
+    	}
         
+    	//Actually get the non-cached achievements from database
         AchievementsForIDsRequest request = new AchievementsForIDsRequest();
-        request.achievementIDs = achievementIDs;
+        request.achievementIDs = nonCached;
         BlockingMessage r = BlockingMessage.request(networkClient.kryoClient(),
                                                            request);
+        AchievementsForIDsResponse response = (AchievementsForIDsResponse)r;
         
-        AchievementsForIDsResponse resp = (AchievementsForIDsResponse)r;
+        //Add newly retrieved achievements to cache and to return result
+        for(Achievement achievement: response.achievements){
+        	achievementsForIDsCache.put(achievement.id, achievement);
+        	result.add(achievementsForIDsCache.get(achievement.id));
+        }
 
-	// We should do some aggressive caching of Achievements here because
-	// they're immutable - once we've retrieved it from the server once
-	// we shouldn't ever need to ask for it again.
-
-        return resp.achievements;
+        return result;
     }
     
     /**
@@ -125,6 +129,7 @@ public class AchievementClient extends NetworkListener {
     public ArrayList<Achievement> achievementsForGame(Game game) {
         AchievementsForGameRequest req = new AchievementsForGameRequest();
         req.gameID = game.id;
+        
         BlockingMessage r = BlockingMessage.request(networkClient.kryoClient(),
                                                        req);
         AchievementsForGameResponse resp = (AchievementsForGameResponse)r;
@@ -139,15 +144,17 @@ public class AchievementClient extends NetworkListener {
      * @return An AchievementProgress instance with the player's progress.
      */
     public AchievementProgress progressForPlayer(Player player) {
-    	
     	ProgressForPlayerRequest request = new ProgressForPlayerRequest();
     	request.playerID = player.getID();
     	
-    	networkClient.sendNetworkObject(request);
+    	BlockingMessage r = BlockingMessage.request(networkClient.kryoClient(),
+                request);
     	
-        HashMap<String, Integer> progress = new HashMap<String, Integer>();
-        HashMap<String, Boolean> awarded = new HashMap<String, Boolean>();
-        return new AchievementProgress(progress, awarded);
+    	ProgressForPlayerResponse response = (ProgressForPlayerResponse) r;
+    	
+        //HashMap<String, Integer> progress = new HashMap<String, Integer>();
+        //HashMap<String, Boolean> awarded = new HashMap<String, Boolean>();
+        return response.achievementProgress;
     }
     
     /**

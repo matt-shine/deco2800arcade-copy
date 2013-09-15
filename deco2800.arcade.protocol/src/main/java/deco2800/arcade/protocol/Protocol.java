@@ -75,8 +75,6 @@ public class Protocol {
 		kryo.register(ProgressForPlayerRequest.class);
 		kryo.register(ProgressForPlayerResponse.class);
 		kryo.register(java.util.ArrayList.class);
-		kryo.register(AchievementListRequest.class);
-		kryo.register(AddAchievementRequest.class);
 		
 		// High Score Messages
 		kryo.register(AddScoreRequest.class);

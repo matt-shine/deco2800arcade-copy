@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Logger;
 
@@ -21,13 +20,14 @@ import deco2800.arcade.model.Player;
 @ArcadeGame(id="arcadeoverlay")
 public class Overlay extends GameClient implements UIOverlay {
 	
+	private class PermanentOverlayStage extends Stage {}
+	
 	private Logger logger = new Logger("Overlay");
 	
 	private boolean notifiedForMissingCallbacks = false;
 	private boolean notifiedForMissingInput = false;
 	
-    private Skin skin;
-    private Stage stage;
+    private PermanentOverlayStage stage;
     Table table = new Table();
     
 	private OverlayScreen screen = new OverlayScreen(this);
@@ -39,12 +39,9 @@ public class Overlay extends GameClient implements UIOverlay {
 	public Overlay(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 
-		this.setScreen(screen);
-
-        stage = new Stage();
+        stage = new PermanentOverlayStage();
         
         
-        ArcadeInputMux.getInstance().addProcessor(stage);
         
         table.setFillParent(true);
         
@@ -60,6 +57,12 @@ public class Overlay extends GameClient implements UIOverlay {
 	@Override
 	public void addPopup(PopupMessage s) {
 		popup.addMessageToQueue(s);
+	}
+	
+	@Override
+	public void create() {
+		this.setScreen(screen);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 	}
 
 	@Override
@@ -99,11 +102,12 @@ public class Overlay extends GameClient implements UIOverlay {
 	@Override
 	public void dispose() {
 	    
-	    stage.dispose();
-        skin.dispose();
+		ArcadeInputMux.getInstance().removeProcessor(stage);
+		
+		stage.dispose();
         
-	    ArcadeInputMux.getInstance().removeProcessor(stage);
-
+        screen.dispose();
+	    
 	}
 	
 	@Override
@@ -129,11 +133,6 @@ public class Overlay extends GameClient implements UIOverlay {
 		return null;
 	}
 	
-	@Override
-	public void create() {
-		this.setScreen(screen);
-	}
-
 	public GameClient getHost() {
 		return host;
 	}

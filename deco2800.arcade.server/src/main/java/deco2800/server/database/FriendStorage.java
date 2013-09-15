@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 
 public class FriendStorage {
-	
+	//FIXME seems to be a lot of repeated code through the methods
 	private boolean initialised = false;
 	
 	/**

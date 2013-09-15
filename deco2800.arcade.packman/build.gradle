@@ -1,3 +1,23 @@
 dependencies {
  
 }
+
+List games = []
+
+task(listGames) {
+    String contents = file('games.txt').getText('UTF-8')
+    List file_contents = contents.split("\n")
+    for (String game : file_contents) {
+        if (game.charAt(0) != '#' && game.charAt(0) != '\n') {
+            games.add(game)
+        }
+    }
+}
+
+task(pack, dependsOn: "listGames") {
+
+}
+
+// Add dependencies
+for (String game : games)
+    pack.dependsOn(":" + game + ":jar")

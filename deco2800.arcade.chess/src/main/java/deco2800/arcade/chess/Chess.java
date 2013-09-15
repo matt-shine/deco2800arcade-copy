@@ -44,7 +44,6 @@ import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements Screen, InputProcessor{
-	//FIXME class needs tidying up
 	
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
@@ -79,6 +78,7 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 	private OrthographicCamera camera;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
+	
 
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;

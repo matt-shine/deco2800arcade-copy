@@ -1,6 +1,9 @@
 package deco2800.arcade.chess;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
+import deco2800.arcade.client.UIOverlay.PopupMessage;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -85,6 +88,12 @@ public class Chess extends GameClient implements InputProcessor {
 	
 	private int loadedStyle;
 	private ArrayList<String> styles;
+	
+	//Stores the instance of the UIOverlay
+	private UIOverlay Overlay;
+	
+	//Tracks whether the game is paused
+	boolean paused = false;
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
@@ -147,9 +156,9 @@ public class Chess extends GameClient implements InputProcessor {
 		Texture.setEnforcePotImages(false);
 
 		inputMultiplexer.addProcessor(this);
-		Gdx.input.setInputProcessor(inputMultiplexer);
+		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
 
-		// load the images for the droplet and the bucket, 512x512 pixels each
+		// load the first chess board image
 		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
 
 		// Pieces
@@ -213,14 +222,14 @@ public class Chess extends GameClient implements InputProcessor {
 			@Override
 			public void pause() {}
 			@Override
-			public void render(float arg0) {
-			}
-			@Override
 			public void resize(int arg0, int arg1) {}
 			@Override
 			public void resume() {}
 			@Override
 			public void dispose() {}
+
+			@Override
+			public void render(float arg0) {}
 		});
 
 		
@@ -232,31 +241,23 @@ public class Chess extends GameClient implements InputProcessor {
 	 */
 	@Override
 	public void render() {
-		// Pieces
+		if(!paused) {
+			// White background
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		// White background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+			// tell the camera to update its matrices.
+			camera.update();
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			batch.setProjectionMatrix(camera.combined);
 
-		// tell the camera to update its matrices.
-		camera.update();
-		shapeRenderer.setProjectionMatrix(camera.combined);
-		batch.setProjectionMatrix(camera.combined);
+			drawPieces();
 
-		drawPieces();
+			super.render();
+		} else {
+			pause();
+		}
 
-		super.render();
-
-	}
-
-	@Override
-	public void resize(int arg0, int arg1) {
-		super.resize(arg0, arg1);
-	}
-
-	@Override
-	public void resume() {
-		super.resume();
 	}
 
 	/**
@@ -290,7 +291,7 @@ public class Chess extends GameClient implements InputProcessor {
 	@Override
 	public boolean keyDown(int arg0) {
 
-		if(arg0 == Keys.SHIFT_LEFT) {
+		if(arg0 == Keys.CONTROL_LEFT) {
 			if(loadedStyle == styles.size()-1) {
 				loadedStyle = 0;
 			} else {
@@ -300,6 +301,11 @@ public class Chess extends GameClient implements InputProcessor {
 			setPiecePics();
 			drawPieces();
 		}
+		
+		if(arg0 == Keys.T) {
+			paused = !paused;
+		}
+		
 		return true;
 	}
 
@@ -329,35 +335,38 @@ public class Chess extends GameClient implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		if (!moving) {
-			movingPiece = checkSquare(x, y);
-			try {
-				if (board.isNullPiece(movingPiece)) {
-					return false;
+		if(!paused) {
+			if (!moving) {
+				movingPiece = checkSquare(x, y);
+				try {
+					if (board.isNullPiece(movingPiece)) {
+						return false;
+					}
+					if (movingPiece.getTeam() == board.whoseTurn()) {
+						moving = true;
+						return true;
+					}
+				} catch (NullPointerException e) {
+					System.err.println("No valid square selected");
 				}
-				if (movingPiece.getTeam() == board.whoseTurn()) {
-					moving = true;
+				return false;
+			} else {
+				int[] newPos = determineSquare(x, y);
+				if (board.movePiece(movingPiece, newPos)) {
+					movePieceGraphic();
+					moving = false;
+					board.checkForCheckmate((board.whoseTurn()));
+					board.checkForCheckmate(!(board.whoseTurn()));
 					return true;
 				}
-			} catch (NullPointerException e) {
-				System.err.println("No valid square selected");
-			}
-			return false;
-		} else {
-			int[] newPos = determineSquare(x, y);
-			if (board.movePiece(movingPiece, newPos)) {
-				movePieceGraphic();
-				moving = false;
 				board.checkForCheckmate((board.whoseTurn()));
 				board.checkForCheckmate(!(board.whoseTurn()));
-				return true;
+				movingPiece = board.nullPiece;
+				moving = false;
+				return false;
 			}
-			board.checkForCheckmate((board.whoseTurn()));
-			board.checkForCheckmate(!(board.whoseTurn()));
-			movingPiece = board.nullPiece;
-			moving = false;
-			return false;
-		}
+		} 
+		return false;
 
 	}
 

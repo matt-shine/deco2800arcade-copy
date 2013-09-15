@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class MenuScreen implements Screen {
@@ -54,7 +55,7 @@ public class MenuScreen implements Screen {
 	@Override
 	public void hide() {
 		game.stopSong();
-		Gdx.input.setInputProcessor(null);
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 		this.dispose();
 	}
 
@@ -96,7 +97,7 @@ public class MenuScreen implements Screen {
         
         stage = new Stage(width, height, true);
 	
-	    Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 	
 	    TextButtonStyle style = new TextButtonStyle();
 	    style.up = skin.getDrawable("buttonnormal");

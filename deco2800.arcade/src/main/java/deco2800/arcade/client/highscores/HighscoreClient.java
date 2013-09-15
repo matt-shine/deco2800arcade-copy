@@ -36,15 +36,22 @@ public class HighscoreClient {
 	 * inserting and retrieving high score information from the database.
 	 * 
 	 * @param Username The username of the user who the scores are for.
+	 *
 	 * @param Game_ID The game that the scores are for.
+	 * 
+	 * @param client The network client for the game; a handle on the database
 	 */
 	public HighscoreClient(String Username, String Game_ID, NetworkClient client) {
-		this.Username = Username;
-		this.Game_ID = Game_ID;
-		this.client = client;
-		
-		//Init the score list that is used for sending scores
-		scoreQueue = new LinkedList<String>();
+		if (Game_ID != null && client != null) {
+			this.Username = Username;
+			this.Game_ID = Game_ID;
+			this.client = client;
+			
+			//Init the score list that is used for sending scores
+			scoreQueue = new LinkedList<String>();
+		} else {
+			throw new NullPointerException("Game_ID and client can't be null");
+		}
 	}
 
 	/**
@@ -53,6 +60,8 @@ public class HighscoreClient {
 	 * that require a user are called, they will fail throwing an exception.
 	 * 
 	 * @param Game_ID The game that scores are being retrieved for.
+	 * 
+	 * @param client The network client for the game; a handle on the database.
 	 */
 	public HighscoreClient(String Game_ID, NetworkClient client) {
 		this(null, Game_ID, client);
@@ -70,11 +79,11 @@ public class HighscoreClient {
 	 * Stores a single-valued score - attached to the current user and game - 
 	 * in the database.
 	 * 
-	 * @param type: The type of the score that is being stored. For information 
+	 * @param type The type of the score that is being stored. For information 
 	 * on what types are available, refer to the documentation. If an invalid 
 	 * type is provided, an UnsupportedScoreTypeException will be thrown.
 	 * 
-	 * @param value: The value of the score that is being stored. The database 
+	 * @param value The value of the score that is being stored. The database 
 	 * only supports integers.
 	 */
 	public void storeScore(String type, int value) {
@@ -92,11 +101,11 @@ public class HighscoreClient {
 	 * Queues up a new score item to be added to a multi-score entity. Note
 	 * that when storeScore, sendMultiScoreItems, 
 	 * 
-	 * @param type: The type of the score that is being stored. For information 
+	 * @param type The type of the score that is being stored. For information 
 	 * on what types are available, refer to the documentation. If an invalid 
 	 * type is provided, an UnsupportedScoreTypeException will be thrown.
 	 * 
-	 * @param value: The value of the score that is being stored. The database 
+	 * @param value The value of the score that is being stored. The database 
 	 * only supports integers.
 	 */
 	public void addMultiScoreItem(String type, int value) {
@@ -140,7 +149,7 @@ public class HighscoreClient {
 	 * Checks string type to ensure that it is a valid score type. Returns true 
 	 * if it is, and false if it isn't.
 	 * 
-	 * @param type: The type this is to be checked.
+	 * @param type The type this is to be checked.
 	 */
 	private boolean typeIsValid(String type) {
 		//Check if type is in validScoreTypes
@@ -216,7 +225,7 @@ public class HighscoreClient {
 	/**
 	 * Sends a Win/Loss score to the database.
 	 * 
-	 * @param val: 1 for a win, -1 for a loss.
+	 * @param val 1 for a win, -1 for a loss.
 	 */
 	private void sendWinLoss(int val) {
 		clearMultiScoreQueue();

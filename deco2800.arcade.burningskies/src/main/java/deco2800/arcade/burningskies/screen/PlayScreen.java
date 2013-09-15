@@ -17,6 +17,7 @@ import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
+import deco2800.arcade.client.ArcadeInputMux;
 
 
 public class PlayScreen implements Screen
@@ -25,6 +26,7 @@ public class PlayScreen implements Screen
 	
 	private OrthographicCamera camera;
 	private Stage stage;
+	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -52,24 +54,25 @@ public class PlayScreen implements Screen
     	Texture shiptext = new Texture(Gdx.files.internal("images/jet_debug.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
     	map = new GameMap("fixme");
-    	
-    	Texture testText = new Texture(Gdx.files.internal("enemies/enemy1.png"));
-    	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
-    	
-    	// Test code
-    	PowerUp test = new PowerUp();
 
     	stage.addActor(map);
     	stage.addActor(player);
     	
+    	processor = new PlayerInputProcessor(player);
+    	ArcadeInputMux.getInstance().addProcessor(processor);
+    	
     	// Test code
+    	PowerUp test = new PowerUp();
     	stage.addActor(test);
+    	Texture testText = new Texture(Gdx.files.internal("enemies/enemy1.png"));
+    	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
     	addEnemy(e);
     }
     
     @Override
     public void hide() {
     	//TODO: Make sure this resets properly
+    	ArcadeInputMux.getInstance().removeProcessor(processor);
     	stage.dispose();
     }
     

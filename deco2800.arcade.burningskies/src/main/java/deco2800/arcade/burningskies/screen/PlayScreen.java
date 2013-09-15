@@ -53,6 +53,9 @@ public class PlayScreen implements Screen
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
     	map = new GameMap("fixme");
     	
+    	Texture testText = new Texture(Gdx.files.internal("enemies/enemy1.png"));
+    	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
+    	
     	// Test code
     	PowerUp test = new PowerUp();
 
@@ -61,6 +64,7 @@ public class PlayScreen implements Screen
     	
     	// Test code
     	stage.addActor(test);
+    	addEnemy(e);
     }
     
     @Override

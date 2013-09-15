@@ -57,7 +57,8 @@ public class PlayerShip extends Ship {
 		setX(position.x);
 		setY(position.y);
 		this.setZIndex(getStage().getActors().size); // this is silly, but no better way
-    	shoot(delta);
+		shoot(delta);
+		
 	}
 	
 	/**

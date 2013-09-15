@@ -49,6 +49,8 @@ public class ScoreScreen implements Screen {
 	@Override
 	public void hide() {
 		game.stopSong();
+		Gdx.input.setInputProcessor(null);
+		this.dispose();
 	}
 
 	@Override

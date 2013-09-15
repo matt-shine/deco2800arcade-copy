@@ -349,8 +349,12 @@ public class Chess extends GameClient implements InputProcessor {
 			if (board.movePiece(movingPiece, newPos)) {
 				movePieceGraphic();
 				moving = false;
+				board.checkForCheckmate((board.whoseTurn()));
+				board.checkForCheckmate(!(board.whoseTurn()));
 				return true;
 			}
+			board.checkForCheckmate((board.whoseTurn()));
+			board.checkForCheckmate(!(board.whoseTurn()));
 			movingPiece = board.nullPiece;
 			moving = false;
 			return false;

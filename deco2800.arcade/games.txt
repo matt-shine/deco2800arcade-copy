@@ -17,5 +17,8 @@ junglejump
 burningskies
 hunter
 checkers
+landInvaders
+towerdefence
 pacman
 connect4
+raiden

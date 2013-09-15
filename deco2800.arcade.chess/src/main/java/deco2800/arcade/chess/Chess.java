@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -94,6 +95,8 @@ public class Chess extends GameClient implements InputProcessor {
 	
 	//Tracks whether the game is paused
 	boolean paused = false;
+	
+	//Stores the possible pieces to show
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
@@ -157,6 +160,8 @@ public class Chess extends GameClient implements InputProcessor {
 
 		inputMultiplexer.addProcessor(this);
 		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
+		
+		Overlay = this.getOverlay();
 
 		// load the first chess board image
 		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
@@ -241,7 +246,6 @@ public class Chess extends GameClient implements InputProcessor {
 	 */
 	@Override
 	public void render() {
-		if(!paused) {
 			// White background
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -252,11 +256,12 @@ public class Chess extends GameClient implements InputProcessor {
 			batch.setProjectionMatrix(camera.combined);
 
 			drawPieces();
+			
+			if(moving) {
+				showPossibleMoves(movingPiece);
+			}
 
 			super.render();
-		} else {
-			pause();
-		}
 
 	}
 
@@ -264,7 +269,7 @@ public class Chess extends GameClient implements InputProcessor {
 	 * Ends the game
 	 */
 	private void finishGame() {
-
+		this.incrementAchievement("chess.winGame");
 	}
 
 	/**
@@ -304,6 +309,8 @@ public class Chess extends GameClient implements InputProcessor {
 		
 		if(arg0 == Keys.T) {
 			paused = !paused;
+			System.out.println(paused);
+			onPause();
 		}
 		
 		return true;
@@ -344,6 +351,7 @@ public class Chess extends GameClient implements InputProcessor {
 					}
 					if (movingPiece.getTeam() == board.whoseTurn()) {
 						moving = true;
+						showPossibleMoves(movingPiece);
 						return true;
 					}
 				} catch (NullPointerException e) {
@@ -459,6 +467,27 @@ public class Chess extends GameClient implements InputProcessor {
 
 		int[] returnValue = { xSquare, ySquare };
 		return returnValue;
+	}
+	
+	private void showPossibleMoves(Piece piece) {
+		List<int[]> possibleMoves = board.allowedMoves(movingPiece);
+		Sprite allowedSquare = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/spot.png")));
+		List<Sprite> neededPics = new ArrayList<Sprite>();
+		
+		for(int i=0; i<possibleMoves.size(); i++) {
+			neededPics.add(allowedSquare);
+			int xcoord = pieceHorizOff + horizOff + (59) * possibleMoves.get(i)[1];
+			int ycoord = pieceVerticOff + verticOff + (59) * possibleMoves.get(i)[0];
+			batch.begin();
+			batch.draw(neededPics.get(i), xcoord, ycoord);
+			batch.end();
+		}
+		/*
+		 * whiteRook1Pos[0] = (pieceHorizOff + horizOff + (59) * correctPos[1]);
+					whiteRook1Pos[1] = (pieceVerticOff + verticOff + (59) * correctPos[0]);
+		 */
+		
 	}
 
 	/**
@@ -945,5 +974,25 @@ public class Chess extends GameClient implements InputProcessor {
         bufferedReader.close();
         return lines.toArray(new String[lines.size()]);
     }
+	
+	private void onPause() {
+		if(paused) {
+			createPopup("Game is paused");
+		} else {
+			createPopup("Game is active");
+		}
+	}
+	
+	private void createPopup(final String message) {
+		Overlay.addPopup(new UIOverlay.PopupMessage() {
+
+			@Override
+			public String getMessage() {
+				return message;
+			}
+
+		});
+	}
+	
 
 }

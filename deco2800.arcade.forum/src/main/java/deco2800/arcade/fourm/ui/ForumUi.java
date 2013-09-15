@@ -128,4 +128,8 @@ public class ForumUi {
 	      f.setVisible(true);
 	      
 	    }
+	   
+	public void addListener(ActionListener dummy, JButton button) {
+		button.addActionListener(dummy);
+		}
 	}

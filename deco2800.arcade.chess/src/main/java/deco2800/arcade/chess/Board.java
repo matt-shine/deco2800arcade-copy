@@ -15,6 +15,9 @@ public class Board {
 	ArrayList<Piece> pieceMoved;
 	// true = blacks turn false = whites turn
 	private boolean turn;
+	//
+	boolean checkmateFlag;
+	boolean teamCheckmate;
 
 	// Initialise pieces
 	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
@@ -42,6 +45,8 @@ public class Board {
 		pieceMoved = new ArrayList<Piece>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
+		checkmateFlag = false;
+		teamCheckmate = false;
 		nullPiece = new Null();
 
 		blackCheck = false;
@@ -124,11 +129,113 @@ public class Board {
 	 * @param Team
 	 *            The team who is being checked for being in 'Checkmate'. -
 	 *            False is for White - True is for Black
-	 * @return True if the team is in 'Checkmate', false otherwise.
+	 * @return true if the team is in checkmate false otherwise
 	 */
-	public boolean checkForCheckmate(boolean Team) {
-
-		return true; // Change when implemented
+	public boolean checkForCheckmate(boolean team) {
+		boolean teamTurn = this.whoseTurn();
+		List<Piece> activePieces = this.findActivePieces();
+		List<Piece> activeBlack = new ArrayList<Piece>();
+		List<Piece> activeWhite = new ArrayList<Piece>();
+		boolean inCheck = this.checkForCheck(team);
+		if (!inCheck) {
+			return false;
+		}
+		//get active pieces on each team
+		for (Piece piece: activePieces) {
+			if (piece.getTeam()) {
+				activeBlack.add(piece);
+			} else {
+				activeWhite.add(piece);
+			}
+		}
+		//check if black is in checkmate
+		if (team) {
+			for (Piece piece: activeBlack) {
+				int[] currentPos = this.findPiece(piece);
+				List<int[]> moves = this.allowedMoves(piece);
+				//check if this piece can move
+				for (int[] moveTo: moves) {
+					Piece onSquare = this.getPiece(moveTo);
+					this.movePiece(piece, moveTo);
+					int currentx = currentPos[0];
+					int currenty = currentPos[1];
+					int movex = this.findPiece(piece)[0];
+					int movey = this.findPiece(piece)[1];
+					//if this piece can move then not checkmate
+					if ((currentx != movex) || (currenty != movey)) {
+						//revert the move
+						if (this.isNullPiece(onSquare)) {
+							Board_State.get(currentPos[0]).
+								add(currentPos[1], piece);
+							Board_State.get(movex).add(movey, nullPiece);
+						} else {
+							onSquare.reActivate();
+							if (onSquare.getTeam()) {
+								blackGraveyard.remove(onSquare);
+							} else {
+								whiteGraveyard.remove(onSquare);
+							}
+							Board_State.get(currentPos[0]).
+								add(currentPos[1], piece);
+							Board_State.get(movex).add(movey, onSquare);
+						}
+						//remove the move
+						removeMove();
+						//update teams turn
+						this.turn = teamTurn;
+						return false;
+					}
+				}
+			}
+		//check if white is in checkmate
+		} else {
+			for (Piece piece: activeWhite) {
+				int[] currentPos = this.findPiece(piece);
+				List<int[]> moves = this.allowedMoves(piece);
+				//check if this piece can move
+				for (int[] moveTo: moves) {
+					Piece onSquare = this.getPiece(moveTo);
+					this.movePiece(piece, moveTo);
+					int currentx = currentPos[0];
+					int currenty = currentPos[1];
+					int movex = this.findPiece(piece)[0];
+					int movey = this.findPiece(piece)[1];
+					//if this piece can move then not checkmate
+					if ((currentx != movex) || (currenty != movey)) {
+						//revert the move
+						if (this.isNullPiece(onSquare)) {
+							Board_State.get(currentPos[0]).
+								add(currentPos[1], piece);
+							Board_State.get(movex).add(movey, nullPiece);
+						} else {
+							onSquare.reActivate();
+							if (onSquare.getTeam()) {
+								blackGraveyard.remove(onSquare);
+							} else {
+								whiteGraveyard.remove(onSquare);
+							}
+							Board_State.get(currentPos[0]).
+								add(currentPos[1], piece);
+							Board_State.get(movex).add(movey, onSquare);
+						}
+						//remove the move
+						removeMove();
+						//update teams turn
+						this.turn = teamTurn;
+						return false;
+					}
+				}
+			}
+		}
+		//if this is reached, team is in checkmate
+		this.turn = teamTurn;
+		System.err.println("CHECKMATE FLAG SET");
+		if (team) {
+			System.err.println("White team wins");
+		} else {
+			System.err.println("Black team wins");
+		}
+		return true;
 	}
 
 	private boolean checkForStaleMate(boolean Team) {

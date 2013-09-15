@@ -15,7 +15,6 @@ public class Player extends Entity {
 	private boolean grounded;
 	private float jumpVelocity;
 	
-	
 	private Animation currAnim;
 	
 	private HashMap<String, Animation> animationList = new HashMap<String,Animation>();
@@ -28,13 +27,16 @@ public class Player extends Entity {
 	};
 	
 	private State state = State.RUNNING;
-
+	
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
 		setX(128); //starting X offset
 		loadAnimations();
 	}
 	
+	/**
+	 * Loads all the animations and puts it into the HashMap of Animations
+	 */
 	private void loadAnimations() {
 		Texture jumpSheet = new Texture("textures/jumpSheet.png");
 		TextureRegion[][] jumpRegion = TextureRegion.split(jumpSheet,jumpSheet.getWidth()/2, jumpSheet.getHeight());
@@ -64,7 +66,13 @@ public class Player extends Entity {
 		
 		
 	}
-
+	
+	/**
+	 * Creates an animation
+	 * @param frames Determines how many frames there are in the texture
+	 * @param text The texture to be created into an animation
+	 * @return Animation of the Texture
+	 */
 	private Animation createAnimation(int frames, Texture text){
 		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()/frames, text.getHeight());
 		TextureRegion[] animFrames = new TextureRegion[frames];
@@ -75,14 +83,26 @@ public class Player extends Entity {
 		return new Animation(0.1f,animFrames);
 	}
 	
+	/**
+	 * Returns whether the player is grounded
+	 * @return grounded
+	 */
 	public boolean isGrounded() {
 		return grounded;
 	}
 	
+	/**
+	 * Sets whether the player is grounded
+	 * @param grounded Boolean value of whether its grounded
+	 */
 	public void setGrounded(boolean grounded) {
 		this.grounded = grounded;
 	}
-
+	
+	/**
+	 * Gets the jump velocity
+	 * @return float value of the JumpVelocity
+	 */
 	public float getJumpVelocity() {
 		return jumpVelocity;
 	}

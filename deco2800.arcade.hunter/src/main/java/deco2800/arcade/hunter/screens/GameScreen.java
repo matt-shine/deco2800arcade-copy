@@ -3,7 +3,6 @@ package deco2800.arcade.hunter.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,9 +10,11 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.BackgroundLayer;
+import deco2800.arcade.hunter.model.Enemy;
 import deco2800.arcade.hunter.model.EntityCollection;
-import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.hunter.model.ForegroundLayer;
+import deco2800.arcade.hunter.model.Player;
+import deco2800.arcade.platformergame.model.Entity;
 
 /**
  * A Hunter game for use in the Arcade
@@ -54,7 +55,9 @@ public class GameScreen implements Screen {
 
 
 		player = new Player(new Vector2(0, 0), 64, 128);
+		Enemy enemy = new Enemy(new Vector2(200,10),128,128,false,"hippo");
 		entities.add(player);
+		entities.add(enemy);
 	}
 
 	@Override
@@ -117,10 +120,20 @@ public class GameScreen implements Screen {
 			//Jump
 			player.jump();
 		}
+		
+		if (Gdx.input.isKeyPressed(Keys.P)){
+			//Pause the game
+		}
 	}
 	
 	private void checkCollisions() {
-		
+		for(Entity e :entities){
+			for (Entity i : entities){
+				if (e != i && e.getBounds().overlaps(i.getBounds())){
+					System.out.println("COLLISION!");
+				}
+			}
+		}
 	}
 
 	@Override

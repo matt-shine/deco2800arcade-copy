@@ -27,8 +27,10 @@ public class OptionScreen implements Screen {
 
 	private boolean music;
 	private boolean sound;
-	private int volume;
+	private float volume;
 	private Skin skin;
+	
+	
 	
 	public OptionScreen(Hunter p){
 		game = p;
@@ -51,10 +53,13 @@ public class OptionScreen implements Screen {
 		
 		//Add a music checkbox to the table		
 		final CheckBox musicCheckBox = new CheckBox("", skin);
+		musicCheckBox.setChecked(music);
 		musicCheckBox.addListener(new ChangeListener(){
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				music = musicCheckBox.isChecked();
+				game.getPreferencesManager().setMusicEnabled(music);
 				System.out.println("Change music preference!");
 			}
 			
@@ -64,11 +69,14 @@ public class OptionScreen implements Screen {
 		table.row();
 		
 		//adds a sound checkbox to the table
-		CheckBox soundCheckBox = new CheckBox("",skin);
+		final CheckBox soundCheckBox = new CheckBox("",skin);
+		soundCheckBox.setChecked(sound);
 		soundCheckBox.addListener(new ChangeListener(){
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				sound = soundCheckBox.isChecked();
+				game.getPreferencesManager().setSoundEnabled(sound);
 				System.out.println("Changed sound preference!");
 			}
 		});
@@ -79,14 +87,16 @@ public class OptionScreen implements Screen {
 		
 		//adds a slider for volume
 		Slider volumeSlider = new Slider( 0f, 1f, 0.1f, false, skin);
+		volumeSlider.setValue(volume);
         volumeSlider.addListener( new ChangeListener() {
             @Override
             public void changed(
                 ChangeEvent event,
                 Actor actor )
             {
-                float value = ( (Slider) actor ).getValue();
-                System.out.println("Volume is changed to"  + value);
+                volume = ( (Slider) actor ).getValue();
+                game.getPreferencesManager().setVolume(volume);
+                System.out.println("Volume is changed to"  + volume);
             }
         } );
         
@@ -112,9 +122,12 @@ public class OptionScreen implements Screen {
 
 	private void getPreferences() {
 		/* Loads the preferences from a file */
-		music = false;
-		sound = false;
-		volume = 100;
+		music = game.getPreferencesManager().isMusicEnabled();
+		System.out.println(music);
+		sound = game.getPreferencesManager().isSoundEnabled();
+		System.out.println(sound);
+		volume = game.getPreferencesManager().getVolume();
+		System.out.println(volume);
 	}
 
 	@Override

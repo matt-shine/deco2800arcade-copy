@@ -10,6 +10,8 @@ import deco2800.arcade.platformergame.PlatformerGame;
 
 @ArcadeGame(id="hunter")
 public class Hunter extends PlatformerGame {
+	private PreferencesManager prefManage;
+	
 	public enum Config {
 		INSTANCE;
 		public static int screenWidth = 1280;
@@ -21,6 +23,11 @@ public class Hunter extends PlatformerGame {
 
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
+		prefManage = new PreferencesManager();
+	}
+	
+	public PreferencesManager getPreferencesManager(){
+		return prefManage;
 	}
 	
 	@Override

@@ -49,10 +49,13 @@ public class CommunicationNetwork {
 		chatRequest.chatID = chatParticipants.hashCode();
 		chatRequest.sender = player.getUsername();
 		
-		chatNodes.put(chatRequest.chatID,new ChatNode(chatParticipants));
+		ChatNode node = new ChatNode(chatParticipants);
+		chatNodes.put(chatRequest.chatID,node);
+		currentChat = node;
+		view.addChatNode(node);
 
 		for(String participant : chatParticipants){
-			if(participant != player.getUsername()){
+			if(!participant.equals(player.getUsername())){
 				chatRequest.invite = participant;
 				networkClient.sendNetworkObject(chatRequest);
 			}
@@ -65,7 +68,10 @@ public class CommunicationNetwork {
 	 * @param request
 	 */
 	public void joinExistingChat(ChatRequest request){
-		chatNodes.put(request.chatID, new ChatNode(request.participants));
+		ChatNode node = new ChatNode(request.participants);
+		chatNodes.put(request.chatID, node);
+		currentChat = node;
+		view.addChatNode(node);
 	}
 	
 	/**
@@ -77,6 +83,7 @@ public class CommunicationNetwork {
 		int chatID = textMessage.chatID;
 		ChatNode node = chatNodes.get(chatID);
 		node.addMessage(textMessage.text);
+		System.out.println(textMessage.text);
 	}
 	
 	

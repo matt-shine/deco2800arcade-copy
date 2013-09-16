@@ -26,7 +26,4 @@ public interface Mortal {
 	//Decrease the current health, not below 0. Using penetration calculations.
 	//Penetration is a direct armour debuff for that attack alone.
 	public void takeDamage(int health, int penetration);
-	
-	//Starts any on death behaviour. Possibly ends by calling destroy to remove from grid view and from game model.
-	public void die();
 }

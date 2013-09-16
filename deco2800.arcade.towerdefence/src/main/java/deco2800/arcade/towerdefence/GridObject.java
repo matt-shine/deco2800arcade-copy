@@ -97,5 +97,7 @@ public abstract class GridObject {
 	public Team team(){
 		return team;
 	}
+	
+	public abstract void die();
 
 }

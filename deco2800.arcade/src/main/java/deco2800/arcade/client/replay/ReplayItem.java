@@ -21,18 +21,35 @@ public class ReplayItem {
 		} else {
 			throw new ReplayItemDataInvalidException( "Type invalid, only Integer, Float or String allowed" );
 		}
-		/* TODO: deep copy */
+		
 		this.data = data;
 	}
 	
+	/**
+	 * Gets the type of the replay item.
+	 * 
+	 * @return 	the type of the object, as a constant defined statically on
+	 * 			ReplayItem
+	 */
 	public Integer getType() {
 		return this.type;
 	}
 	
+	/**
+	 * Gets the value stored in the replay item.
+	 * 
+	 * @return 	value stored, type corresponds to item.getType()
+	 */
 	public Object getData() {
 		return this.data;
 	}
 	
+	/**
+	 * Gets the integer value of the replay item, iff the value stored is
+	 * an integer.
+	 * 
+	 * @return	the integer value stored in the item
+	 */
 	public Integer intVal() {
 		if ( this.type == TYPE_INTEGER ) {
 			return (Integer)this.data;
@@ -41,11 +58,48 @@ public class ReplayItem {
 		}
 	}
 	
+	/**
+	 * Gets the float value of the replay item, iff the value stored is
+	 * a float.
+	 * 
+	 * @return	the float value stored in the item
+	 */
+	public Float floatVal() {
+		if ( this.type == TYPE_FLOAT ) {
+			return (Float)this.data;
+		} else {
+			throw new RuntimeException( "Invalid cast" );
+		}
+	}
+
+	/**
+	 * Gets the string value of the replay item, iff the value stored is
+	 * an string.
+	 * 
+	 * @return	the string value stored in the item
+	 */
+	public String stringVal() {
+		if ( this.type == TYPE_STRING ) {
+			return (String)this.data;
+		} else {
+			throw new RuntimeException( "Invalid cast" );
+		}
+	}
+	
+	/**
+	 * Gets a string representation of the data stored in the item.
+	 * 
+	 * @return 	string representation of the item
+	 */
 	public String toString() {
-		//return "ReplayItem: " + this.data.toString();
 		return this.data.toString();
 	}
 	
+	/**
+	 * Basic hashcode function
+	 * 
+	 * @return	hash of the item
+	 */
 	public int hashCode() {
 		return ( 17 * this.type.hashCode() ) * ( 7 * this.data.hashCode() );
 	}

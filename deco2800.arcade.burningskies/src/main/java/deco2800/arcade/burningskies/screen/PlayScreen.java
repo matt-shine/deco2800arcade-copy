@@ -105,12 +105,17 @@ public class PlayScreen implements Screen
     				for(Enemy e : enemies) {
     					if(b.hasCollided(e)) {
     						//TODO: HANDLE DAMAGE FROM THIS YA MUPPETS
+    						e.setHealth(b.getDamage());
+    						if (!e.isAlive()) removeEnemy(e);
     						removeBullet(b);
     						continue;
     					}
     				}
     			} else if(b.hasCollided(player)) {
     				//TODO: DAMAGE THE PLAYER YOU NUGGET
+    				player.setHealth(b.getDamage());
+    				//TODO: Player death
+    				//if (!player.isAlive()) { }
     				removeBullet(b);
     				continue;
     			}

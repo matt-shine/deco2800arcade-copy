@@ -62,7 +62,7 @@ public class ForegroundLayer extends Map {
 		// TODO Auto-generated method stub
 		
 		float yOffset = this.offset.y;
-		
+		//REPLACE TODO with getPaneOffset()
 		for (int i = 0; i < panes.size(); i++) {
 			if (i != 0) {
 				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * Config.TILE_SIZE;
@@ -70,5 +70,60 @@ public class ForegroundLayer extends Map {
 			
 			batch.draw(panes.get(i).getRendered(), i * Config.PANE_SIZE_PX + offset.x * Config.PANE_SIZE_PX, yOffset);
 		}		
+	}
+	
+	public int getPaneAt(int x, int y) {
+		if (x / Config.PANE_SIZE >= offset.x && 
+			x / Config.PANE_SIZE < offset.x + Config.PANE_SIZE * paneCount) {
+			
+		}
+		
+		return -1;
+	}
+	
+	/*
+	 * Pane y offset relative to the main map offset
+	 */
+	private float getPaneOffset(int paneIndex) {
+		float yOffset = this.offset.y;
+		
+		if (paneIndex == 0) {
+			return yOffset;
+		} else if (paneIndex > 0 && paneIndex <= paneCount) {
+			for (int i = 1; i <= paneIndex; i++) {
+				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * Config.TILE_SIZE;
+			}
+			
+			return yOffset;
+		}
+		return -1;
+	}
+	
+	/**
+	 * Get the collision tile at a given world-space coordinate
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public int getCollisionTileAt(int x, int y) {
+		float tileOffsetX = x - offset.x * Config.PANE_SIZE_PX;
+		float paneOffsetY;
+		int tileX, tileY;
+		int pane = (int) (tileOffsetX / Config.PANE_SIZE_PX);
+		
+		if (pane >= 0 && pane < paneCount) {
+			
+			tileX = Config.PANE_SIZE - (int) (tileOffsetX / Config.TILE_SIZE);
+			
+			paneOffsetY = getPaneOffset(pane);
+			
+			if (y >= paneOffsetY && y <= paneOffsetY + Config.PANE_SIZE_PX){
+				tileY = Config.PANE_SIZE - (int) ((y + paneOffsetY) / Config.TILE_SIZE);
+				
+				int tile = panes.get(pane).getCollisionTile(tileX, tileY);
+				return tile;
+			}
+		}
+		return -1;
 	}
 }

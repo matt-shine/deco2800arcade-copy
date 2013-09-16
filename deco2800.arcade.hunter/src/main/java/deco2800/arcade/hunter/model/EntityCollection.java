@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import deco2800.arcade.platformergame.model.Entity;
 
 public class EntityCollection implements Iterable<Entity> {
@@ -41,9 +43,9 @@ public class EntityCollection implements Iterable<Entity> {
 		}
 	}
 	
-	public void drawAll() {
+	public void drawAll(SpriteBatch batch) {
 		for (Entity e : this) {
-			e.draw();
+			e.draw(batch);
 		}
 	}
 }

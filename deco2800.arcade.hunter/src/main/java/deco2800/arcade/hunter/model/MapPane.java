@@ -11,8 +11,9 @@ public class MapPane {
 	 * Stores a fixed size 2D array of integers which represent the map tiles
 	 */
 	
-	private int[][] background;
-	private int[][] foreground;
+	private int[][] background = new int[Config.PANE_SIZE][Config.PANE_SIZE];
+	private int[][] foreground = new int[Config.PANE_SIZE][Config.PANE_SIZE];
+	private int[][] collision = new int[Config.PANE_SIZE][Config.PANE_SIZE];
 	private int startOffset;
 	private int endOffset;
 	public enum MapType {
@@ -38,10 +39,9 @@ public class MapPane {
 		 * [startOffset, endOffset]
 		 * [backgroundLayerData]
 		 * [foregroundLayerData]
+		 * [collisionLayerData]
 		 */
 		
-		this.background = new int[Config.PANE_SIZE][Config.PANE_SIZE];
-		this.foreground = new int[Config.PANE_SIZE][Config.PANE_SIZE];
 		this.type = type;
 		
 		loadPane(filename);
@@ -70,12 +70,14 @@ public class MapPane {
 		
 		String[] backgroundData = dataArray[1].split(",");
 		String[] foregroundData = dataArray[2].split(",");
+		String[] collisionData = dataArray[3].split(",");
 		
 		//Parse map data
 		for (int row = 0; row < Config.PANE_SIZE; row++) {
 			for (int col = 0; col < Config.PANE_SIZE; col++) {
 				background[row][col] = Integer.parseInt(backgroundData[row*Config.PANE_SIZE + col]);
 				foreground[row][col] = Integer.parseInt(foregroundData[row*Config.PANE_SIZE + col]);
+				collision[row][col] = Integer.parseInt(collisionData[row*Config.PANE_SIZE + col]);
 			}
 		}
 		
@@ -123,5 +125,13 @@ public class MapPane {
 	 */
 	public TextureRegion getRendered() {
 		return rendered;
+	}
+	
+	public int getCollisionTile(int x, int y) {
+		if (x >= 0 && x < Config.PANE_SIZE &&
+			y >= 0 && y < Config.PANE_SIZE) {
+			return collision[x][y];
+		}
+		return -1;
 	}
 }

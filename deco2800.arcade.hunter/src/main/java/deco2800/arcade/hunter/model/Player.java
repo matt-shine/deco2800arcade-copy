@@ -1,19 +1,24 @@
 package deco2800.arcade.hunter.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.hunter.model.EntityCollision.CollisionType;
 import deco2800.arcade.platformergame.model.Entity;
 
 public class Player extends Entity {
-	private static final int JUMP_VELOCITY = 8;
+	private static final int JUMP_VELOCITY = 1;
 	//Is the player standing on something
 	private boolean grounded;
 	private float jumpVelocity;
+	
+	private TextureRegion img = new TextureRegion(new Texture("textures/playerAnim/GensijinRun kf.png"));
 	
 	private Animation currAnim;
 	
@@ -123,12 +128,14 @@ public class Player extends Entity {
 	public void update(float delta) {
 		//Everything depends on everything else here, may have to rearrange, or even double up on checks
 		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
-		if (getY() <= 0) {
-			setY(0);
-			grounded = true;
-		} else {
-			grounded = false;
-		}
+//		if (getY() <= 0) {
+//			setY(0);
+//			grounded = true;
+//		} else {
+//			grounded = false;
+//		}
+		
+		grounded = true;
 		
 		setX(getX() + delta * 100);
 		
@@ -183,4 +190,16 @@ public class Player extends Entity {
 		return animationList.get("RunKnF");
 	}
 	
+	@Override
+	public void draw(SpriteBatch batch) {
+		batch.draw(img, getX(), getY(), getWidth(), getHeight());
+	}
+	
+//	@Override
+//	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
+//		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+//		if player is colliding with the left edge of the screen
+//			collisions.add(new EntityCollision(CollisionType.PLAYER_C_LEFT_EDGE));
+//		return collisions;
+//	}
 }

@@ -30,7 +30,7 @@ public class Enemy extends Entity {
 	}
 
 	private Animation loadAnimations(String filepath) {
-		Texture text = new Texture("textures/Animals/"+filepath+"IDLE");
+		Texture text = new Texture("textures/Animals/"+filepath+"IDLE.png");
 		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()/2, text.getHeight());
 		TextureRegion[] animFrames = new TextureRegion[2];
 		int index = 0;

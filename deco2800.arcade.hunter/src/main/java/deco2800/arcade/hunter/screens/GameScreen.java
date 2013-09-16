@@ -1,5 +1,8 @@
 package deco2800.arcade.hunter.screens;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -14,6 +17,9 @@ import deco2800.arcade.hunter.model.Enemy;
 import deco2800.arcade.hunter.model.EntityCollection;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.model.Player;
+import deco2800.arcade.hunter.model.EntityCollision;
+import deco2800.arcade.hunter.model.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.model.SpriteLayer;
 import deco2800.arcade.platformergame.model.Entity;
 
 /**
@@ -53,9 +59,10 @@ public class GameScreen implements Screen {
 		int numPanes = (int) (Math.ceil(Config.screenWidth / Config.PANE_SIZE_PX) + 1);
 		foregroundLayer = new ForegroundLayer(1, numPanes);
 
-
-		player = new Player(new Vector2(0, 0), 64, 128);
+		
+		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
 		Enemy enemy = new Enemy(new Vector2(200,10),128,128,false,"hippo");
+
 		entities.add(player);
 		entities.add(enemy);
 	}
@@ -83,14 +90,12 @@ public class GameScreen implements Screen {
 		if (!paused) {
 			pollInput();
 			
-			camera.position.set(player.getX() - (player.getWidth() / 2) + Config.screenWidth / 3, 
-								player.getY() - (player.getHeight() / 2) + Config.screenHeight / 3,
-								0);
-			camera.update();
-			batch.setProjectionMatrix(camera.combined);
+			moveCamera();
 			
 			entities.updateAll(delta);
-			checkCollisions();
+			
+			checkMapCollisions();
+			checkEntityCollisions();
 			
 			backgroundLayer.update(delta, gameSpeed);
 			spriteLayer.update(delta, gameSpeed);
@@ -104,7 +109,7 @@ public class GameScreen implements Screen {
 			spriteLayer.draw(batch);
 			foregroundLayer.draw(batch);
 			
-			entities.drawAll();
+			entities.drawAll(batch);
 		    
 			batch.end();
 		}
@@ -126,14 +131,96 @@ public class GameScreen implements Screen {
 		}
 	}
 	
-	private void checkCollisions() {
-		for(Entity e :entities){
-			for (Entity i : entities){
-				if (e != i && e.getBounds().overlaps(i.getBounds())){
-					System.out.println("COLLISION!");
+	private void moveCamera() {
+		camera.position.set(player.getX() - (player.getWidth() / 2) + Config.screenWidth / 3, 
+				player.getY() - (player.getHeight() / 2) + Config.screenHeight / 3,
+				0);
+		
+		camera.update();
+		batch.setProjectionMatrix(camera.combined);
+	}
+	
+	private void checkMapCollisions() {
+		//Check map collisions for every entity that can collide with the map (should be player, animals & projectiles)
+		
+		//Move the item so that it no longer intersects with the map
+		
+		int i;
+		
+		for (Entity e : entities) {		
+			//Right edge
+			
+			float right = e.getX() + e.getWidth();
+			//float top = e.getY() + e.getHeight();
+			
+//			for (i = (int) e.getY(); i <= top; i += Config.TILE_SIZE) {
+//				if (foregroundLayer.getCollisionTileAt((int) right, i) != 0) {
+//					e.setX((float) ((Math.floor(right / Config.TILE_SIZE) * Config.TILE_SIZE) - e.getWidth()));
+//				}
+//			}
+//			
+			//Top edge
+//			for (i = (int) e.getX(); i <= right; i += Config.TILE_SIZE) {
+//				if (foregroundLayer.getCollisionTileAt(i, (int) top) != 0) {
+//					e.setY((float) ((Math.floor(top / Config.TILE_SIZE) * Config.TILE_SIZE) - e.getHeight()));
+//				}
+//			}
+			
+			
+			//Bottom edge
+			for (i = (int) e.getX(); i <= right; i += Config.TILE_SIZE) {
+				int tile = foregroundLayer.getCollisionTileAt(i, (int) e.getY());
+				if (tile != 0) {
+					System.out.println("collBot: " + tile);
+					e.setY((float) ((Math.ceil(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE)));
 				}
 			}
 		}
+		
+	}
+	
+	private void checkEntityCollisions() {
+		//Make a list of collision events
+		//At the end process them all one after another
+		/*
+		 * precedence should be
+		 * 
+		 * 
+		 * Player ->| left edge of screen
+		 * Prey ->| left edge of screen
+		 * Predator ->| left edge of screen
+		 * Item ->| Player
+		 * PlayerProjectile ->| Animal   (player melee attacks also PlayerProjectiles)
+		 * WorldProjectile ->| Player    (animal melee attacks also WorldProjectiles)
+		 * MapEntity ->| Animal
+		 * MapEntity ->| WorldProjectile
+		 * MapEntity ->| PlayerProjectile
+		 * MapEntity ->| Player
+		 * 
+		 * use an enum for collision types and iterate through a sorted list
+		 */
+		
+		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+		
+		for (Entity e : entities) {
+//			collisions.add(new EntityCollision(e, e, CollisionType.PLAYER_C_LEFT_EDGE)); //EXAMPLE, REMOVEME TODO
+//			ArrayList<EntityCollision> ec = e.getCollisions();
+//			for (EntityCollision c : ec) {
+//				collisions.add(c);
+//			}
+		}
+		//Add events here
+		
+		Collections.sort(collisions);
+		
+		for (EntityCollision c : collisions) {
+			//Handle the collision
+			c.getEntityOne().handleCollision(c.getEntityTwo());
+		}
+	}
+	
+	public ForegroundLayer getForeground() {
+		return foregroundLayer;
 	}
 
 	@Override
@@ -153,5 +240,4 @@ public class GameScreen implements Screen {
 		// TODO Auto-generated method stub
 		
 	}
-	
 }

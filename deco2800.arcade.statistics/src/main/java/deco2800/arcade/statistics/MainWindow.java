@@ -12,13 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jfree.chart.ChartFactory;
+/*import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;*/
 
 
 public class MainWindow  extends JFrame{
@@ -85,13 +85,13 @@ public class MainWindow  extends JFrame{
 		/*
 		 * user line chart panel
 		 */
-		CategoryDataset lineDataset = createLineDataset();
+	/*	CategoryDataset lineDataset = createLineDataset();
 		JFreeChart lineChart = createLineChart(lineDataset, "Previous & Current Player","Date","Number of Player");
 		ChartPanel lineChartPanel = new ChartPanel(lineChart);
 		lineChartPanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		mainPanel.add(lineChartPanel);
 		lineChartPanel.setBounds(500, 20,420, 200);
-		lineChartPanel.setBackground(Color.red);
+		lineChartPanel.setBackground(Color.red);*/
 		
 		/*
 		 * News feed panel
@@ -130,7 +130,7 @@ public class MainWindow  extends JFrame{
 		this.add(mainPanel);
 	}
 	
-	private CategoryDataset createLineDataset() {
+/*	private CategoryDataset createLineDataset() {
 		DefaultCategoryDataset result = new DefaultCategoryDataset();
 		result.setValue(80, "Number of users", "1");
 		result.setValue(80, "Number of users", "2");
@@ -160,5 +160,5 @@ public class MainWindow  extends JFrame{
 		    CategoryPlot plot = lineChart.getCategoryPlot();
 		    plot.setRangeGridlinePaint(Color.blue);
 		    return lineChart;
-	    }
+	    }*/
 }

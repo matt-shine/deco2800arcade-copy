@@ -156,7 +156,7 @@ public class ArcadeServer {
 	 * Start the server running
 	 */
 	public void start() {
-		Server server = new Server();
+		Server server = new Server(131072, 2048);
 		System.out.println("Server starting");
 		server.start();
 		try {

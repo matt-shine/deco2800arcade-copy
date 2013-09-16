@@ -130,15 +130,13 @@ public class ReplayListener extends Listener {
             GetEventsRequest ger = (GetEventsRequest) object;
             GetEventsResponse response = new GetEventsResponse();
             
-            System.out.println("Served replay of session: " + ger.sessionId);
-            
             try {
                 response.nodes = ArcadeServer.instance().getReplayStorage().getReplay(ger.sessionId);
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
 
-            System.out.println(response.nodes);
+            System.out.println("Served " + response.nodes.size() + " events for session " + ger.sessionId);
             
             response.serverOffset = 0;
             

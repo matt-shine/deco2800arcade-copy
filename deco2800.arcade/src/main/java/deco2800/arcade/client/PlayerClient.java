@@ -1,14 +1,32 @@
 package deco2800.arcade.client;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.player.PlayerRequest;
 
-public class PlayerClient {
-	private NetworkClient networkClient = null;
+
+public class PlayerClient extends NetworkListener {
+	private NetworkClient networkClient;
+	
+	
+	public PlayerClient(NetworkClient networkClient) {
+		//TODO
+	}
+
+	public void setNetworkClient(NetworkClient client) {
+        if(this.networkClient != null) {
+            this.networkClient.removeListener(this);
+        }
+        this.networkClient = client;
+        if(this.networkClient != null) {
+            this.networkClient.addListener(this);
+        }
+    }
 	
     /**
      * Returns a list of Achievements corresponding to the supplied list of
@@ -28,13 +46,13 @@ public class PlayerClient {
         BlockingMessage response = BlockingMessage.request(networkClient.kryoClient(),
                                                            request);
         
-        AchievementsForIDsResponse resp = (AchievementsForIDsResponse)r;
+       // AchievementsForIDsResponse resp = (AchievementsForIDsResponse)r;
 
 	// We should do some aggressive caching of Achievements here because
 	// they're immutable - once we've retrieved it from the server once
 	// we shouldn't ever need to ask for it again.
 
-        return resp.achievements;
+        return null;
     }
 
 }

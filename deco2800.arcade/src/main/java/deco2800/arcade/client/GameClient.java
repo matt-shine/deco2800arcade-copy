@@ -10,6 +10,7 @@ import com.badlogic.gdx.Input.Keys;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.PlayerClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
@@ -24,12 +25,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	private boolean overlayInitialised = false;
 	private int width, height;
     private AchievementClient achievementClient;
+    private PlayerClient playerClient;
     private boolean hasF11PressedLast = false;
     
 	public GameClient(Player player, NetworkClient networkClient) {
 		
 		this.player = player;
 		this.networkClient = networkClient;
+		this.playerClient = new PlayerClient(networkClient);
         this.achievementClient = new AchievementClient(networkClient);
         this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
@@ -48,6 +51,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
     public void setNetworkClient(NetworkClient client) {
         achievementClient.setNetworkClient(client);
+        playerClient.setNetworkClient(client);
     }
 
     public void incrementAchievement(final String achievementID) {
@@ -73,6 +77,10 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
     public AchievementClient getAchievementClient() {
         return this.achievementClient;
+    }
+    
+    public PlayerClient getPlayerClient() {
+    	return this.playerClient;
     }
 
 	/**

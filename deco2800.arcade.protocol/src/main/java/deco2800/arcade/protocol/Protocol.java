@@ -5,8 +5,15 @@ import javax.crypto.SealedObject;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.*;
 
+<<<<<<< HEAD
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
+=======
+import java.util.ArrayList;
+
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.protocol.achievement.*;
+>>>>>>> origin/master
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
@@ -21,6 +28,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
@@ -44,6 +52,7 @@ public class Protocol {
 	 * @param kryo
 	 */
 	public static void register(Kryo kryo) {
+<<<<<<< HEAD
 		kryo.register(SealedObject.class);
 		
 //		// Connection messages
@@ -73,6 +82,67 @@ public class Protocol {
 //		
 //		// Register miscellaneous classes
 //		register(byte[].class);
+=======
+		//Connection messages
+		kryo.register(ConnectionRequest.class);
+		Protocol.setKryo(kryo);
+		
+		// Connection messages
+		kryo.register(ConnectionResponse.class);
+
+		// Credit messages
+		kryo.register(CreditBalanceRequest.class);
+		kryo.register(CreditBalanceResponse.class);
+
+		// Achievement messages
+		kryo.register(Achievement.class);
+		kryo.register(AchievementsForIDsRequest.class);
+		kryo.register(AchievementsForIDsResponse.class);
+		kryo.register(AchievementsForGameRequest.class);
+		kryo.register(AchievementsForGameResponse.class);
+		kryo.register(IncrementProgressRequest.class);
+		kryo.register(IncrementProgressResponse.class);
+		kryo.register(ProgressForPlayerRequest.class);
+		kryo.register(ProgressForPlayerResponse.class);
+		kryo.register(java.util.ArrayList.class);
+		kryo.register(AchievementListRequest.class);
+		kryo.register(AddAchievementRequest.class);
+		
+		// High Score Messages
+		kryo.register(AddScoreRequest.class);
+		
+		//Replay messages
+		kryo.register(ReplayRequest.class);
+		kryo.register(ReplayResponse.class);
+		kryo.register(StartSessionRequest.class);
+		kryo.register(StartSessionResponse.class);
+		kryo.register(EndSessionRequest.class);
+		kryo.register(EndSessionResponse.class);
+		kryo.register(ListSessionsRequest.class);
+		kryo.register(ListSessionsResponse.class);
+		kryo.register(PushEventRequest.class);
+		kryo.register(PushEventResponse.class);
+		kryo.register(GetEventsRequest.class);
+		kryo.register(GetEventsResponse.class);
+		
+		//Game messages
+		kryo.register(GameStatusUpdate.class);
+		kryo.register(GameStatusUpdateResponse.class);
+		kryo.register(NewGameRequest.class);
+		kryo.register(GameRequestType.class);
+		kryo.register(NewGameResponse.class);
+
+		// Communication messages
+		kryo.register(CommunicationRequest.class);
+		kryo.register(ContactListUpdate.class);
+		kryo.register(ChatRequest.class);
+		kryo.register(TextMessage.class);
+		kryo.register(VoiceMessage.class);
+
+		// Register miscellaneous classes
+		kryo.register(byte[].class);
+		kryo.register(ArrayList.class);
+>>>>>>> origin/master
 	}
 	
 //	/**

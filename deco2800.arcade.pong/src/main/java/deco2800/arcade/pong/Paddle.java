@@ -19,7 +19,11 @@ public abstract class Paddle {
 	private float renderColourAlpha;
 	
 	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the paddle
-	
+    
+    // we use this to keep track of what way we're moving so that
+    // we can award the Slider achievement
+    public int direction = 0;
+
 	/**
 	 * Basic constructor for paddle
 	 * @param position the initial position of the paddle

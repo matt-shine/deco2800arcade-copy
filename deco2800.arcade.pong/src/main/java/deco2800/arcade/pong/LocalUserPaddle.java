@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 public class LocalUserPaddle extends Paddle {
 
 	public static final int KBPADDLESPEED = 200;
-	
+    
 	/**
 	 * Sets the user's paddle position
 	 * @param position
@@ -20,6 +20,12 @@ public class LocalUserPaddle extends Paddle {
 		super(position);
 	}
 
+    private static int sign(double x) {
+        if(x == 0) return 0;
+        else if(x > 0) return 1;
+        else return -1;
+    }
+
 	/**
 	* Updates direction of ball based on the direction the paddle was moving
 	*/
@@ -27,21 +33,35 @@ public class LocalUserPaddle extends Paddle {
 	@Override
 	public void update(Ball ball) {
 		super.update(ball);
+        direction = 0;
     	//Move the left paddle (mouse)
     	if (Gdx.input.isTouched()) {
     		Vector2 touchPos = new Vector2();
     		touchPos.set(Gdx.input.getX(), Gdx.input.getY());
+            double prevY = bounds.y;
     		bounds.y = -touchPos.y - bounds.height / 2 + Pong.SCREENHEIGHT;
-    	}
+            direction += sign(bounds.y - prevY);
+        }
 
     	//Move the left paddle (keyboard)
     	if(Gdx.input.isKeyPressed(Keys.UP)) {
+<<<<<<< HEAD
     		move(KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.bounds.y += KBPADDLESPEED * Gdx.graphics.getDeltaTime();
     	}
     	
     	if(Gdx.input.isKeyPressed(Keys.DOWN)) {
     		move(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.position.y -= KBPADDLESPEED * Gdx.graphics.getDeltaTime();
     	}
+=======
+            move(KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.bounds.y += KBPADDLESPEED * Gdx.graphics.getDeltaTime();
+            direction -= 1;
+        }
+
+    	if(Gdx.input.isKeyPressed(Keys.DOWN)) {
+            move(-KBPADDLESPEED * Gdx.graphics.getDeltaTime());//leftPaddle.position.y -= KBPADDLESPEED * Gdx.graphics.getDeltaTime();
+            direction += 1;
+        }
+>>>>>>> origin/master
 	}
 
 }

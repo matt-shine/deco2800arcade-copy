@@ -3,7 +3,7 @@ package deco2800.arcade.protocol;
 import java.io.Serializable;
 
 /**
- * An network object
+ * A network object
  */
 public abstract class NetworkObject implements Serializable {
 	// FIXME should subclasses have a distinct UID? 

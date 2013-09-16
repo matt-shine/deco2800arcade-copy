@@ -21,6 +21,14 @@ import deco2800.arcade.client.ArcadeInputMux;
 
 import deco2800.arcade.client.ArcadeSystem;
 
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.MultiplayerTest;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.InternalGame;
+import deco2800.arcade.model.Player;
+import deco2800.arcade.model.Game.ArcadeGame;
+
 /**
  * 
  * @author Kieran Burke
@@ -43,6 +51,7 @@ public void show() {
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
                 
+		// Gui button & label Styles 		
 		skin = new Skin();
         final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
         Label label = new Label("Matchmaking Lobby", skin);
@@ -83,9 +92,9 @@ public void show() {
 		skin2.add("default", textButtonStyle);
 				
 				
-				
+				//Create buttons, labels and tables for layout purposes
                 TextButton button = new TextButton("Match Me!", skin2);
-				TextButton button2 = new TextButton("Return Menu", skin2);
+				TextButton button2 = new TextButton("Return to Menu", skin2);
 				
 				TextButton button3 = new TextButton(">>", skin2);
                 
@@ -128,14 +137,8 @@ public void show() {
 				table5.add(scroll).expand();
 				*/
 			
-				
 				chattable.add(label2).padTop(480).padLeft(610);
-                //table.defaults().space(6);
-                //table2.add(label).padBottom(620);
-				//table.row();
-				
-				
-				
+           
 				table3.add(chatfield).width(150).padLeft(850).padTop(480);
 				
 				table3.add(button3).width(30).padLeft(3).padTop(480);
@@ -143,16 +146,12 @@ public void show() {
                 table.add(button).width(300).height(40).padRight(80).padTop(600);
 				
 				table.add(button2).width(300).height(40).padLeft(80).padTop(600);
-				
-				
-	
-        
-    
-				
-				
-				
-		//.padBottom(5).padTop(5).padLeft(10).padRight(10)
+
 		
+		/* "Match Me!" Button Event Listener. 
+		The "Match Me!" button Looks through an array and returns the number of elements; 
+		in the form of buttons with unique ids as well as avatars and player info etc.
+		*/
 		 button.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 
@@ -167,9 +166,7 @@ public void show() {
         	};
  
         if (anArray.length > 0){
-        	//for(int i : anArray){
-        		
-			
+ 
         		for(int i= anArray[0]; i < anArray.length +1; i++) {
 				
 				Label avatars = new Label("<Insert User Avatar Here>" + i, skin);
@@ -186,17 +183,11 @@ public void show() {
 				table2.add(players).width(130).padTop(20).padLeft(130);
 				table2.add(button4).width(130).padTop(20);
 				table2.row();
-				
-			
-				
-				
+
 				
 				System.out.println(button4.getName());
                 System.out.println("Element:" + i);
-				
-			
-				
-				
+
 				 button4.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 System.out.println("You Clicked: " + button4.getName());
@@ -205,9 +196,7 @@ public void show() {
             
         });
 				
-				
-				
-				
+	
 				}
 				
 				
@@ -224,20 +213,18 @@ public void show() {
         });
 		
 		
-		
-    
-		
-		
-		
+		// "Return to Menu" Button Event Listener
 		 button2.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 
+				dispose();
             	ArcadeSystem.setMultiplayerEnabled(false);
 	    		ArcadeSystem.goToGame("arcadeui");
 				
             }
         });
 		
+		// "Chat" [>>] Button Event Listener
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 

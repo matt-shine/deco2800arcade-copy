@@ -21,7 +21,9 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
-import deco2800.arcade.protocol.highscore.*;
+import deco2800.arcade.protocol.highscore.AddScoreRequest;
+import deco2800.arcade.protocol.highscore.GetScoreRequest;
+import deco2800.arcade.protocol.highscore.GetScoreResponse;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
@@ -81,6 +83,7 @@ public class Protocol {
 		// High Score Messages
 		kryo.register(AddScoreRequest.class);
 		kryo.register(GetScoreRequest.class);
+		kryo.register(GetScoreResponse.class);
 		
 		//Replay messages
 		kryo.register(ReplayRequest.class);

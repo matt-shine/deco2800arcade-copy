@@ -77,5 +77,19 @@ public class ChildThread {
 		return this.like;
 	}
 	
+//	public getThread() {
+		
+//	}
+	
+//	public submitThread() {
+		
+//	}
+	
+//	public editThread() {
+		
+//	}
+	
+	
+	
 
 }

@@ -24,7 +24,7 @@ public class Ship extends MovableEntity{
 	public static final float MAX_INVINCIBLE_TIME = 3f;
 	
 	private State state = State.IDLE;
-	private int hearts = 3;
+	private int hearts = 4;
 	private boolean facingRight = false;
 	private boolean onMovable = false;
 	private boolean invincible = false;

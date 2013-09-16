@@ -30,6 +30,10 @@ public class Level {
 	
 	public Level(int levelNum) {
 		this.levelNum = levelNum;
+		init();
+	}
+	
+	private void init() {
 		enemySpawners = new Array<EnemySpawner>();
 		randomEnemySpawners = new Array<RandomizedEnemySpawner>();
 		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
@@ -93,11 +97,19 @@ public class Level {
 		System.out.println("Found " + randomEnemySpawners.size + " randomizd enemy spawners");
 	}
 	
-	/* Getter methods */
-	public int getLevelNum() {
-		return levelNum;
+	public void reloadLevel() {
+		renderer = null;
+		map = null;
+		collisionLayer = null;
+		
+		enemySpawners = null;
+		randomEnemySpawners = null;
+		movablePlatformSpawners = null;
+		
+		init();
 	}
 	
+	/* Getter methods */
 	public Array<EnemySpawner> getEnemySpawners() {
 		return enemySpawners;
 	}

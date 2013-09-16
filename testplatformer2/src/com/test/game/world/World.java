@@ -137,6 +137,7 @@ public class World {
 		// Check if sprite has reached left level boundary.
 		// if( (int)(ship.getPosition().x) < 1 ) ship.getVelocity().x = 0;
 		
+		
 		// Check if sprite has gone out of level bounds to the bottom.
 		if( (int)(ship.getPosition().y) < -1 ) {
 			resetLevel();
@@ -619,10 +620,12 @@ public class World {
 		bullets = null;
 		cutsceneObjects = null;
 		movablePlatforms = null;
+		levelScenes = null;
 		cam.setFollowShip(true);
-		
-		
+
+		curLevel.reloadLevel();
 		init();
+		levelScenes = new Level2Scenes(ship, cam);
 		return;
 	}
 	

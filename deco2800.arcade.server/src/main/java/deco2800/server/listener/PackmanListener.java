@@ -11,6 +11,11 @@ import java.lang.System;
 
 public class PackmanListener extends Listener {
 
+    /**
+     * Initializer
+     */
+    public PackmanListener(){}
+
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);

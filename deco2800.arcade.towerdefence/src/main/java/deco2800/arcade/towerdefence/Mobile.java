@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author hadronn
  *
  */
-public abstract class Mobile extends GridObject {
+public abstract class Mobile extends Mortal {
 	//The object's speed in moves per second
 	private Vector2 vector = new Vector2();
 	

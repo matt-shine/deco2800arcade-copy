@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author hadronn
  * 
  */
-public class Projectile extends Mobile {
+public class Projectile extends GridObject {
 	// Fields
 	// The amount of damage this projectile does if it collides.
 	private int damage;

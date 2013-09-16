@@ -70,9 +70,9 @@ public class GameScreen implements Screen  {
 	public static final int SCREENWIDTH = 1280;
 
 	// Game States
-	private enum GameState {
-		READY, INPROGRESS, GAMEOVER
-	}
+//	private enum GameState {
+//		READY, INPROGRESS, GAMEOVER;
+//	}
 
 	private GameState gameState;
 
@@ -119,14 +119,14 @@ public class GameScreen implements Screen  {
 		music.play();
 
 		// setting the ball and paddle
-		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
-		ball = new Ball();
-		ball.setColor(0, 1, 0, 1);
+		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
+		setBall(new Ball());
+		getBall().setColor(0, 1, 0, 1);
 		
 		
 
 		int index;
-		if (level == 1) {
+		if (getLevel() == 1) {
 			// create 48 Bricks in a rectangle formation
 			index = 0;
 			bricks = new Brick[48];
@@ -139,7 +139,7 @@ public class GameScreen implements Screen  {
 					index++;
 				}
 			}
-		} else if (level == 2) {
+		} else if (getLevel() == 2) {
 			index = 0;
 			bricks = new Brick[20];
 			outer = 4;
@@ -151,7 +151,7 @@ public class GameScreen implements Screen  {
 					index++;
 				}
 			}
-		} else if (level == 3) {
+		} else if (getLevel() == 3) {
 			index = 0;
 			bricks = new Brick[20];
 			outer = 4;
@@ -169,16 +169,16 @@ public class GameScreen implements Screen  {
 				index++;
 			}
 		}
-		brickNum = bricks.length;
+		setBrickNum(bricks.length);
 
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setScale(2);
 		batch = new SpriteBatch();
 
-		gameState = GameState.READY;
-		gameState = GameState.READY;
-		status = "Click to start!";
+		gameState = new ReadyState();
+//		gameState = GameState.READY;
+		setStatus("Click to start!");
 
 	}
 	/*
@@ -186,21 +186,21 @@ public class GameScreen implements Screen  {
 	 * for processing
 	 */
 	public void updateGameState(int bounce) {
-		System.out.println("ball's x velocity: " + ball.getXVelocity());
+		System.out.println("ball's x velocity: " + getBall().getXVelocity());
 		if (bounce == 0) {
-			ball.bounceX();
+			getBall().bounceX();
 		} else if (bounce == 1) {
-			ball.bounceY();
+			getBall().bounceY();
 		} else {
-			ball.bounceX();
-			ball.bounceY();
+			getBall().bounceX();
+			getBall().bounceY();
 		}
-		lastHitX = ball.getX();
-		lastHitY = ball.getY();
+		setLastHitX(getBall().getX());
+		setLastHitY(getBall().getY());
 		breaking.play();
 		brickBreak++;
-		score += this.level*2;
-		brickNum--;
+		score += this.getLevel()*2;
+		setBrickNum(getBrickNum() - 1);
 		try {
 			Thread.currentThread().sleep(35);
 		} catch (Exception e) {
@@ -228,9 +228,9 @@ public class GameScreen implements Screen  {
 			// renders the rectangles that are filled.
 			shapeRenderer.begin(ShapeType.FilledRectangle);
 
-			paddle.render(shapeRenderer);
+			getPaddle().render(shapeRenderer);
 			// TODO Make the Ball a Circle
-			ball.render(shapeRenderer);
+			getBall().render(shapeRenderer);
 			
 			
 
@@ -239,7 +239,7 @@ public class GameScreen implements Screen  {
 			for (int i=0; i < outer; i++) {
 				for (int j = 0; j < inner; j++) {
 					if (bricks[index].getState()) {
-						bricks[index].render(shapeRenderer, i, level);
+						bricks[index].render(shapeRenderer, i, getLevel());
 					}
 					index++;
 				}
@@ -273,144 +273,41 @@ public class GameScreen implements Screen  {
 						SCREENHEIGHT / 2);
 			}
 
-			if (status != null) {
+			if (getStatus() != null) {
 				font.setColor(Color.WHITE);
 
-				font.draw(batch, status, SCREENWIDTH / 2 - 250,
+				font.draw(batch, getStatus(), SCREENWIDTH / 2 - 250,
 						SCREENHEIGHT / 2 - 60);
 			}
-			if (gameState == GameState.GAMEOVER) {
+			if (gameState instanceof GameOverState) {
 				font.draw(batch, "Click to exit", SCREENWIDTH / 2 - 80,
 						SCREENHEIGHT / 2 - 60);
 			}
 
 			batch.end();
-
-			switch (gameState) {
-
-			/*
-			 * The systems will wait until the player has either touch the
-			 * screen(mouse click) or pressed the space bar. The Player also at this
-			 * point has the opportunity to enter any cheat codes.
-			 */
-			case READY:
-				status = "Press Space or Touch the screen to Start!";
-				if (Gdx.input.isKeyPressed(Keys.SPACE) || Gdx.input.isTouched()) {
-					Start();
-				} else if (sequence != null) {
-					if (Gdx.input.isKeyPressed(sequence[currentButton])) {
-						currentButton++;
-					}
-					if (sequence.length == currentButton) {
-						currentButton = 0;
-						bonusLives();
-					}
-				}
-				break;
-
-			case INPROGRESS:
-				paddle.update(ball);
-				ball.move(Gdx.graphics.getDeltaTime());
-				for (Brick b : bricks) {
-					if (b.getState()) {
-						if (b.checkLeftCollision(ball.bounds)) {
-							b.setState(false);
-							if (Math.abs(ball.getXVelocity()) < 60) {
-								updateGameState(2);
-								break;
-							}
-							updateGameState(0);
-							break;
-						}
-						if (b.checkRightCollision(ball.bounds)) {
-							b.setState(false);
-							if (Math.abs(ball.getXVelocity()) < 60) {
-								updateGameState(2);
-								break;
-							}
-							updateGameState(0);
-							break;
-						}
-						if (b.checkTopCollision(ball.bounds)) {
-							b.setState(false);
-							updateGameState(1);
-							break;
-						}
-						if (b.checkBottomCollision(ball.bounds)) {
-							b.setState(false);
-							updateGameState(1);
-							break;
-						}
-					}
-				}
-
-				if (brickNum == 0) {
-					level++;
-					if (level > 3) {
-						win();
-					} else {
-						dispose();
-						gamearea();
-					}
-				}
-
-				if (ball.bounds.overlaps(paddle.paddleShape)
-						&& ball.getYVelocity() < 0) {
-					ball.updateVelocity(lastHitX, lastHitY, paddle);
-					bump.play();
-					ball.bounceY();
-
-				}
-
-				if (ball.bounds.y >= SCREENHEIGHT - Ball.WIDTH) {
-					lastHitX = ball.getX();
-					lastHitY = ball.getY();
-					ball.bounceY();
-				}
-
-				if (ball.bounds.x <= 0
-						|| ball.bounds.x + Ball.WIDTH > SCREENWIDTH) {
-					lastHitX = ball.getX();
-					lastHitY = ball.getY();
-					ball.bounceX();
-				}
-
-				if (ball.bounds.y <= 0) {
-					roundOver();
-				}
-
-				if (Gdx.input.isButtonPressed(Keys.ESCAPE)) {
-					pause();
-				}
-
-				break;
-
-			case GAMEOVER:
-				if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Keys.SPACE)) {
-					// gameOver();
-					// call dispose() method.
-					dispose();
-					bumpCount++;
-					ArcadeSystem.goToGame(ArcadeSystem.UI);
-				}
-
-				break;
-			}
+			handleState();
  }
+	
+	 /**
+	 * 
+	 */
+	private void handleState() {
+		gameState.handleState(this);
+	}
 
 	
-	 private void Start() {
-			ball.randomizeVelocity();
-			status = null;
-			gameState = GameState.INPROGRESS;
-			status = null;
+	 void Start() {
+			getBall().randomizeVelocity();
+			setStatus(null);
+			gameState = new InProgressState();
+			setStatus(null);
 
 		}
 	 /**
 		 * Adds the remaining lives as a score and checks whether any achievement
 		 * criteria has been met. Also sets the gameState to GAMEOVER.
 		 */
-		private void win() {
+		void win() {
 			score += lives * 5;
 
 			if (highScore < score){
@@ -442,32 +339,32 @@ public class GameScreen implements Screen  {
 		 * Rewards the Player 2 extra lives and makes the sequence null, so that the
 		 * Player can not re-use the cheat
 		 */
-		private void bonusLives() {
+		void bonusLives() {
 			lives = lives + 2;
-			sequence = null;
+			setSequence(null);
 		}
 
 		/**
 		 * Resets games area or sets the gameState to GAMEOVER
 		 */
-		private void roundOver() {
+		void roundOver() {
 			/*
 			 * Checks whether the lives have fallen below 0 If true then the
 			 * gameState is set to GAMEOVER, Otherwise a lives is decremented and
 			 * gameState is set to READY
 			 */
 			if (lives > 0) {
-				ball.reset(new Vector2(paddle.getPaddleX(), paddle.getPaddleY()));
+				getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
 				lives--;
 				score -= 5;
-				gameState = GameState.READY;
+				gameState = new ReadyState();
 			} else {
 
 				gameoverstatus = "Bad luck " + player + " your final score is: "
 						+ score;
 				System.out.println("Bad luck " + player + " your final score is: "
 						+ score);
-				gameState = GameState.GAMEOVER;
+				gameState = new GameOverState();
 			}
 
 		}
@@ -514,6 +411,114 @@ public class GameScreen implements Screen  {
 	public void show() {
 		// TODO Auto-generated method stub
 		
+	}
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	/**
+	 * @return the sequence
+	 */
+	public int[] getSequence() {
+		return sequence;
+	}
+	/**
+	 * @param sequence the sequence to set
+	 */
+	public void setSequence(int[] sequence) {
+		this.sequence = sequence;
+	}
+	/**
+	 * @return the currentButton
+	 */
+	public int getCurrentButton() {
+		return currentButton;
+	}
+	/**
+	 * @param currentButton the currentButton to set
+	 */
+	public void setCurrentButton(int currentButton) {
+		this.currentButton = currentButton;
+	}
+	/**
+	 * @return the paddle
+	 */
+	public Paddle getPaddle() {
+		return paddle;
+	}
+	/**
+	 * @param paddle the paddle to set
+	 */
+	public void setPaddle(Paddle paddle) {
+		this.paddle = paddle;
+	}
+	/**
+	 * @return the ball
+	 */
+	public Ball getBall() {
+		return ball;
+	}
+	/**
+	 * @param ball the ball to set
+	 */
+	public void setBall(Ball ball) {
+		this.ball = ball;
+	}
+	/**
+	 * @return the brickNum
+	 */
+	public int getBrickNum() {
+		return brickNum;
+	}
+	/**
+	 * @param brickNum the brickNum to set
+	 */
+	public void setBrickNum(int brickNum) {
+		this.brickNum = brickNum;
+	}
+	/**
+	 * @return the level
+	 */
+	public int getLevel() {
+		return level;
+	}
+	/**
+	 * @param level the level to set
+	 */
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	/**
+	 * @return the lastHitX
+	 */
+	public float getLastHitX() {
+		return lastHitX;
+	}
+	/**
+	 * @param lastHitX the lastHitX to set
+	 */
+	public void setLastHitX(float lastHitX) {
+		this.lastHitX = lastHitX;
+	}
+	/**
+	 * @return the lastHitY
+	 */
+	public float getLastHitY() {
+		return lastHitY;
+	}
+	/**
+	 * @param lastHitY the lastHitY to set
+	 */
+	public void setLastHitY(float lastHitY) {
+		this.lastHitY = lastHitY;
 	}
 
 }

@@ -158,10 +158,7 @@ public class Arcade extends JFrame {
 		try {
 			// TODO allow server/port as optional runtime arguments xor user
 			// inputs.
-<<<<<<< HEAD
-            
-            
-            
+
             if (communicationNetwork == null && client == null){
             	System.out.println("connecting to server");
             	client = new NetworkClient(serverIPAddress, 54555, 54777);
@@ -169,15 +166,6 @@ public class Arcade extends JFrame {
     			addListeners();
             }
             
-            
-			
-=======
-            System.out.println("connecting to server");
-            
-			client = new NetworkClient(serverIPAddress, 54555, 54777);
-			communicationNetwork = new CommunicationNetwork(player, this.client);
-			addListeners();
->>>>>>> 7af50698cf7a72000916f13baff13343f9059d3b
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server ("
 					+ serverIPAddress + ")", e);
@@ -214,22 +202,10 @@ public class Arcade extends JFrame {
 		this.player.setUsername(username);
 		this.communicationNetwork.setPlayer(this.player);
 		
-<<<<<<< HEAD
 		if (player.getUsername().equals("debug1")){
 			List<String> chat = new ArrayList<String>();
 			chat.add("debug");
 			chat.add("debug1");
-=======
-		System.out.println("My username is: " + player.getUsername());
-		
-		//Chat test
-		if (player.getUsername().equals("debuguser1")){
-			System.out.println("I am debuguser1 in Arcade.java");
-			
-			List<String> chat = new ArrayList<String>();
-			chat.add("debuguser");
-			chat.add("debuguser1");
->>>>>>> 7af50698cf7a72000916f13baff13343f9059d3b
 			this.communicationNetwork.createChat(chat);
 		}
 	}

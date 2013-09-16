@@ -1,0 +1,32 @@
+<achievements>
+  <achievement id="junglejump.bananaking">
+    <name>Banana King</name>
+    <description>Collect all of the bananas in all of the worlds.</description>
+    <awardThreshold>150</awardThreshold>
+    <icon>banana_king.png</icon>
+  </achievement>
+  <achievement id="junglejump.worldchampion">
+    <name>World Champion</name>
+    <description>Get through all of the worlds and defeat Gym's Steels leader.</description>
+    <icon>world_champion.png</icon>
+    <components>
+      <component id="junglejump.worldchampion.finishWorld1" awardThreshold="1" />
+      <component id="junglejump.worldchampion.finishWorld2" awardThreshold="2" />
+      <component id="junglejump.worldchampion.finishWorld3" awardThreshold="3" />
+      <component id="junglejump.worldchampion.finishWorld4" awardThreshold="4" />
+      <component id="junglejump.worldchampion.finishWorld5" awardThreshold="5" />
+    </components>
+  </achievement>
+  <achievement id="junglejump.hax">
+    <name>Hax</name>
+    <description>Jump off the top of the screen.</description>
+    <awardThreshold>1</awardThreshold>
+    <icon>hax.png</icon>
+  </achievement>
+  <achievement id="junglejump.zombiemonkey">
+    <name>Zombiemonkey</name>
+    <description>Die 200 times.</description>
+    <awardThreshold>200</awardThreshold>
+    <icon>zombiemonkey.png</icon>
+  </achievement>
+</achievements>

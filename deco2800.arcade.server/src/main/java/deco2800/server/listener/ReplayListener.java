@@ -97,15 +97,44 @@ public class ReplayListener extends Listener {
         {
             ListSessionsRequest lsr = (ListSessionsRequest) object;
             ListSessionsResponse response = new ListSessionsResponse();
+            response.sessions = new ArrayList<Session>();
+            
+            System.out.println("Got list sessions request");
+
+            ArrayList<String> sessionStrings = null;
             
             try {
-                ArrayList<String> sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);
+                sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);
+                System.out.println(sessionStrings);
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
             
-            //TODO convert session strings into actual sessions?
-            response.sessions = new ArrayList<Session>();
+            //Convert back to sessions
+            if (sessionStrings != null)
+            {
+                for (String s : sessionStrings)
+                {
+                    String[] tokens = s.split(",");
+
+                    int sessionId = Integer.parseInt(tokens[0].replaceAll("\\s+",""));
+                    boolean recording = Boolean.parseBoolean(tokens[1]);
+                    String user = tokens[2];
+                    long dateTime = Long.parseLong(tokens[3].replaceAll("\\s+",""));
+                    String comments = tokens[4];
+                    
+                    Session session = new Session();
+                    session.gameId = lsr.gameId;
+                    session.sessionId = sessionId;
+                    session.time = dateTime;
+                    session.username = user;
+                    session.recording = recording;
+                    session.comments = comments;
+                    
+                    response.sessions.add(session);
+                }
+            }
+            
             connection.sendTCP(response);
             
         } else if (object instanceof PushEventRequest)

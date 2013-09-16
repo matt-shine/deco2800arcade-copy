@@ -106,6 +106,7 @@ public class ReplayHandler {
 	public void sessionEnded(EndSessionResponse esr)
 	{
 	    //TODO Implement
+	    System.out.println("Session ended");
 	    setSessionId(null); //bad
 	}
 	
@@ -130,12 +131,14 @@ public class ReplayHandler {
 	        return;
 	    }
 	    
-	    System.out.println("Sessions for game: " + sessions.get(0).gameId);
+	    System.out.println("Sessions for game: " + sessions.get(0).gameId + "\n {");
 	    
 	    for (Session s : sessions)
 	    {
 	        System.out.println(s.sessionId);
 	    }
+	    
+	    System.out.println("}");
 	    
 	  //TODO Implement
 	}

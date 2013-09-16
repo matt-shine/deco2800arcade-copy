@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -57,5 +58,14 @@ public class CommunicationView extends JFrame {
 	public void addChatNode(ChatNode node){
 		scrollablePanel.add(node);
 	}
+
+	public void addSendListener(ActionListener listener) {
+		sendButton.addActionListener(listener);
+	}
+	
+	public String getMessage(){
+		return inputArea.getText();
+	}
+	
 
 }

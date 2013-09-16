@@ -23,6 +23,7 @@ public class CommunicationNetwork {
 	private TextMessage textMessage;
 	private ChatRequest chatRequest;
 	private CommunicationView view;
+	private ChatNode currentChat;
 
 	/**
 	 * Initialises an empty list of chat instances.
@@ -112,6 +113,14 @@ public class CommunicationNetwork {
 	 */
 	public Map<Integer, ChatNode> getCurrentChats(){
 		return chatNodes;
+	}
+	
+	public ChatNode getCurrentChat(){
+		return currentChat;
+	}
+	
+	public void setCurrentChat(ChatNode chat){
+		currentChat = chat;
 	}
 	
 	/**

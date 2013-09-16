@@ -23,21 +23,13 @@ public class GameMap {
 	 * more nicely but for now it's just convenient because ArrayLists are
 	 * dynamically sized so there's no need to pre-compute the size of the map
 	 * beforehand.
-	 * 
-	 * I'm thinking that we just have a specific character representing each
-	 * type of wall.
-	 * 
-	 * Later on we can just have a loop to generate all our walls.
 	 */
 
 	public ArrayList<char[]> readMap(String file) throws IOException {
 
-		file = "src\\main\\resources\\testmap.png";
-		FileHandle fh = Gdx.files.internal(file);
-		file = fh.toString();
-
-		File absoluteFile = fh.file();
-		String absolutePath = absoluteFile.getAbsolutePath();
+		// Pre-process 'file' to get it to point to the correct directory
+		file = "src\\main\\resources\\" + file;		
+		String absolutePath = Gdx.files.internal(file).file().getAbsolutePath();
 		absolutePath = absolutePath.replace("arcade", "arcade.pacman");
 
 		BufferedReader br = null;
@@ -45,7 +37,6 @@ public class GameMap {
 			FileReader fr = new FileReader(absolutePath);
 			br = new BufferedReader(fr);
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -69,20 +60,25 @@ public class GameMap {
 
 	}
 
+	/*
+	 * Alternate implementation of readMap. Given that map files
+	 * have relatively small dimensions, it shouldn't be an issue to simply
+	 * read the entire text file into memory all at once. So for this purpose,
+	 * we can just use libgdx's functions to read our file.
+	 */
 	public ArrayList<char[]> readMap2(String file) {
+//		FileHandle filePath = Gdx.files.internal(file);
+		
+		file = "src\\main\\resources\\" + file;
 		FileHandle filePath = Gdx.files.internal(file);
 		String mapstr = filePath.readString();
-		String[] stringarray;
-		ArrayList<char[]> mapp = new ArrayList<char[]>();
-		// Split file by newlines.
-		stringarray = mapstr.split(System.getProperty("line.separator"));
-
+		
+		ArrayList<char[]> mapp = new ArrayList<char[]>();	
+		String[] stringarray = mapstr.split(System.getProperty("line.separator"));
 		for (int i = 0; i < stringarray.length; i++) {
 			mapp.add(stringarray[i].toCharArray());
 		}
-
 		return mapp;
-
 	}
 
 	/*

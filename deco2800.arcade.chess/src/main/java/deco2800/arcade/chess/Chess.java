@@ -402,6 +402,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
     			        ));
 				return true;*/
 				}
+				board.checkForCheckmate(board.whoseTurn());
 				movingPiece = board.nullPiece;
 				moving = false;
 				return false;
@@ -503,7 +504,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	}
 	
 	private void showPossibleMoves(Piece piece) {
-		List<int[]> possibleMoves = board.allowedMoves(movingPiece);
+		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
 		Sprite allowedSquare = new Sprite(new Texture(
 				Gdx.files.classpath("imgs/spot.png")));
 		List<Sprite> neededPics = new ArrayList<Sprite>();

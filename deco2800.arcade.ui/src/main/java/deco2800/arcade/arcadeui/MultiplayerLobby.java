@@ -85,7 +85,7 @@ public void show() {
 				
 				
                 TextButton button = new TextButton("Match Me!", skin2);
-				TextButton button2 = new TextButton("Return to Menu", skin2);
+				TextButton button2 = new TextButton("Return Menu", skin2);
 				
 				TextButton button3 = new TextButton(">>", skin2);
                 
@@ -232,7 +232,8 @@ public void show() {
 		 button2.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
                 
-				
+            	ArcadeSystem.setMultiplayerEnabled(false);
+	    		ArcadeSystem.goToGame("arcadeui");
 				
             }
         });

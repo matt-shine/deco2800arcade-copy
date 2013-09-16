@@ -85,7 +85,7 @@ public class Breakout extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
-		breaking = Gdx.audio.newSound(Gdx.files.classpath("resources/break.wav"));
+		//breaking = Gdx.audio.newSound(Gdx.files.classpath("resources/break.wav"));
 
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
 		ball = new PongBall();
@@ -210,8 +210,8 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
-						breaking.play();
-						breaking.dispose();
+						//breaking.play();
+						//breaking.dispose();
 						ball.bounceX();
 						break;
 					}
@@ -219,8 +219,8 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
-						breaking.play();
-						breaking.dispose();
+						//breaking.play();
+						//breaking.dispose();
 						ball.bounceX();
 						break;
 					}
@@ -228,8 +228,8 @@ public class Breakout extends GameClient {
 						b.setState(false);
 						score++;
 						brickNum--;
-						breaking.play();
-						breaking.dispose();
+						//breaking.play();
+						//breaking.dispose();
 						ball.bounceY();
 						break;
 					}

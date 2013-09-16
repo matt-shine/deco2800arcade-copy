@@ -1,14 +1,16 @@
-package deco2800.arcade.pong;
+package deco2800.arcade.wl6;
 
 import java.util.ArrayList;
 
-public class WL6Map {
+public class Level {
 
 	private ArrayList<Integer> terrain = new ArrayList<Integer>();
 	private ArrayList<Integer> doodads = new ArrayList<Integer>();
 	
-	public WL6Map(String jsonArray) {
-		terrain.add(10);
+	public Level(String jsonArray) {
+		for (int i = 0; i < 64 * 64; i++) {
+			terrain.add((int)Math.round(Math.random() * 4));
+		}
 	}
 	
 	public int getTerrainAt(int x, int y) {

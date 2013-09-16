@@ -288,6 +288,8 @@ public class Arcade extends JFrame {
 
 		});
 	}
+	
+
 
 	private Map<String, Class<? extends GameClient>> gameMap = null;
 

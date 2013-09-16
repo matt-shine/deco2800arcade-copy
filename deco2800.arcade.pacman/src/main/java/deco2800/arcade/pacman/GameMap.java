@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -58,13 +59,13 @@ public class GameMap {
 	/*
 	 * Generate and draw walls as specified by the map ArrayList.
 	 */
-	void drawMap(ArrayList<char[]> map, ShapeRenderer shaper){
+	void drawMap(List<Object> colList, ArrayList<char[]> map, ShapeRenderer shaper){
 		// using a unit length for the walls as 25 pixels. This means by the standard grid we are working at
 		// at the moment, the txt files must be 24x24.
 		for (int i = 0; i < map.size(); i++){
 			char[] s = map.get(i);
 			for (int j = 0; j < s.length; j++){
-				Wall wall = new Wall(Character.getNumericValue(s[j]), (900-24*i), (650-24*j), 25);
+				//Wall wall = new Wall(Character.getNumericValue(s[j]), (900-24*i), (650-24*j), 25);
 				//wall.render(shaper); 
 			}
 		}

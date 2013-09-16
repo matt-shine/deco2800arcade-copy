@@ -20,8 +20,5 @@ landInvaders
 towerdefence
 pacman
 connect4
-<<<<<<< HEAD
-
-=======
 raiden
->>>>>>> master
+

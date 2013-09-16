@@ -133,7 +133,7 @@ public class Brick {
 //		sBatch = new SpriteBatch();
 	}
 	
-	public void render(ShapeRenderer render) {
+	public void render(ShapeRenderer render, int num, int level) {
 //		brickImg = new Sprite(new Texture(Gdx.files.classpath("imgs/brick.png")));
 //		brickImg.setSize(width, height);
 //		sBatch = batch;
@@ -141,10 +141,47 @@ public class Brick {
 //		sBatch.draw(brickImg, brickShape.x, brickShape.y);
 //		sBatch.end();
 		render.setColor(Color.GREEN);
-		render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-				brickShape.height, Color.LIGHT_GRAY, Color.GRAY, Color.GRAY, Color.LIGHT_GRAY);
-	}
-
+		if (level == 1) {
+			num = num%6;
+			if (num == 1) {
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
+			} else if (num == 2){
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+			} else if (num == 3){
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+			} else if (num == 4){
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE);
+			} else if (num == 5){
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
+			} else {
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+			}
+		}
+		if (level == 2 || level == 3) {
+			num = num%4;
+			if (num == 1) {
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+			} else if (num == 2) {
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
+			} else if (num == 3) {
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
+			} else {
+				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+						brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+			}
+		}
+		
+	}	
+		
 	// return string representation of the bricks position
 	public String toString() {
 		return "brickpos: " + this.brickShape.x + ", " + this.brickShape.y;

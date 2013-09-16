@@ -108,15 +108,15 @@ public class Ball {
 			angle = angle + 1/2 * angle;
 		}
 		float pX = paddle.getPaddleX();
-//		float pWidth = paddle.getWidth();
+		float pWidth = paddle.getWidth();
 		float bX = this.bounds.x;
 		float newVelocity = 0f;
 		// Handles the ball if it hits the left end of the paddle
-		if (bX < pX + 20) {
+		if (bX < pX + pWidth/7) {
 			newVelocity = - (Math.abs(getXVelocity()) + 100 + 80
 					* (float) Math.cos(angle));
 		// Handles the ball if it hits between the left end and the middle	
-		} else if (bX >= pX + 20 && bX < pX + 58) {
+		} else if (bX >= pX + pWidth/7 && bX < pX + 3*pWidth/7) {
 			if (getXVelocity() < 0) {
 				newVelocity = (getXVelocity() + 40
 					* (float) Math.cos(angle));
@@ -125,11 +125,11 @@ public class Ball {
 						* (float) Math.cos(angle));
 			}
 		// Handles the ball if it hit in the middle of the paddle	
-		} else if (bX >= pX + 58 && bX < pX + 70) {
+		} else if (bX >= pX + 3*pWidth/7 && bX < pX + 4*pWidth/7) {
 			newVelocity = (getXVelocity()
 					* (float) Math.cos(angle));
 		// Handles the ball if it hits between the right end and the middle
-		} else if (bX >= pX + 70 && bX < pX + 108) {
+		} else if (bX >= pX + 4*pWidth/7 && bX < pX + 6*pWidth/7) {
 			if (getXVelocity() < 0) {
 				newVelocity = (getXVelocity() + 40
 					* (float) Math.cos(angle));
@@ -138,7 +138,7 @@ public class Ball {
 						* (float) Math.cos(angle));
 			}
 		// Handles the ball if it hits the right end of the paddle
-		} else if (bX >= pX + 108 && bX <= pX + 128) {
+		} else if (bX >= pX + 6*pWidth/7 && bX <= pX + pWidth) {
 			newVelocity = 100 + (Math.abs(getXVelocity()) + 80
 					* (float) Math.cos(angle));
 		}

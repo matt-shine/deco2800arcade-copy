@@ -87,6 +87,10 @@ public class GameScreen implements Screen  {
 	// Array of Brick
 	Brick bricks[];
 	
+	// test variables for rendering colours
+	private int outer = 0;
+	private int inner = 0;
+	
 	GameScreen(final Breakout game) {
 		score = 0;
 		lives = 3;
@@ -118,12 +122,16 @@ public class GameScreen implements Screen  {
 		paddle = new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10));
 		ball = new Ball();
 		ball.setColor(0, 1, 0, 1);
+		
+		
 
 		int index;
 		if (level == 1) {
 			// create 48 Bricks in a rectangle formation
 			index = 0;
 			bricks = new Brick[48];
+			outer = 6;
+			inner = 8;
 			for (int i = 0; i < 6; i++) {
 				for (int j = 0; j < 8; j++) {
 					bricks[index] = new Brick(j * 125 + 120, SCREENHEIGHT - i
@@ -134,6 +142,8 @@ public class GameScreen implements Screen  {
 		} else if (level == 2) {
 			index = 0;
 			bricks = new Brick[20];
+			outer = 4;
+			inner = 5;
 			for (int i = 0; i < 4; i++) {
 				for (int j = 0; j < 5; j++) {
 					bricks[index] = new Brick(j * 125 + index * 10 + 120,
@@ -144,6 +154,8 @@ public class GameScreen implements Screen  {
 		} else if (level == 3) {
 			index = 0;
 			bricks = new Brick[20];
+			outer = 4;
+			inner = 5;
 			while (index < 20) {
 				int shift = 0;
 				double yPos = Math.sin(18 * index);
@@ -223,16 +235,28 @@ public class GameScreen implements Screen  {
 			
 
 			// Writes in the text information
+			int index = 0;
+			for (int i=0; i < outer; i++) {
+				for (int j = 0; j < inner; j++) {
+					if (bricks[index].getState()) {
+						bricks[index].render(shapeRenderer, i, level);
+					}
+					index++;
+				}
+			}
+			
+			
 			/*
 			 * Iterates through the array check whether brick's status is true,
 			 * which will then render the individual brick.
 			 */
-			for (Brick b : bricks) {
-				if (b.getState()) {
-					// originally sent shapeRenderer
-					b.render(shapeRenderer);
-				}
-			}
+//			int num = 0;
+//			for (Brick b : bricks) {
+//				if (b.getState()) {
+//					b.render(shapeRenderer, num % 2);
+//				}
+//				num++;
+//			}
 			shapeRenderer.end();
 			batch.begin();
 			font.setColor(Color.GREEN);

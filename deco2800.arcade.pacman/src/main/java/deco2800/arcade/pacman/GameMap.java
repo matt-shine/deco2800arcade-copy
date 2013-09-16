@@ -30,16 +30,6 @@ public class GameMap {
 	 * Later on we can just have a loop to generate all our walls.
 	 */
 
-	public static void main(String[] args) {
-		System.out.println("first");
-		FileHandle fh = Gdx.files.internal("testmap");
-		System.out.println("before 2string");
-		String file = fh.toString();
-		System.out.println("test!");
-		System.out.println(file);
-
-	}
-
 	public ArrayList<char[]> readMap(String file) throws IOException {
 
 		file = "src\\main\\resources\\testmap.png";

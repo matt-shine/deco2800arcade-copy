@@ -2,6 +2,7 @@ package deco2800.arcade.pacman;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -53,21 +54,23 @@ public class Pacman extends GameClient {
 	private GameMap map1;
 	private ArrayList<char[]> map1Array;
 	
+	private Wall testWall;
+	private Wall testWall2;
+	
+	private List<Object> colList;	
 	
 	//not used yet
 	//private NetworkClient networkClient;
 	
 	//lets us log stuff, doesn't seem to work yet
 	private Logger logger = new Logger("Pacman");
-	// gonna test using this, doesn't do anything yet.
-	private Stage testStage;
 	
 	
 	public Pacman(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		// TODO is there stuff we need to happen here?
 	}	
-	
+		
 	/**
 	 * Creates the game
 	 */
@@ -111,6 +114,8 @@ public class Pacman extends GameClient {
 		super.create();	
 		// Just use a set file for the time being!
 		String file = "testmap";
+		//initialise collision list
+		colList = new ArrayList<Object>();
 		// this guy doesn't show up either. 
 		logger.info("Hey, I'm a log message");
 		//Initialize camera
@@ -121,7 +126,10 @@ public class Pacman extends GameClient {
 		batch = new SpriteBatch();		
 		shaper = new ShapeRenderer();
 		//initialise pacman
-		player = new PacChar();
+		player = new PacChar(colList);
+		testWall = new Wall(colList, 1, 350, 350, 25);
+		testWall2 = new Wall(colList, 2, 350, 350, 25);
+		System.out.println(colList.toString());
 		//initialise receiver for input- use the multiplexer from Arcade
 		// because overlay group said to in log messages
 		controller = new PacController(player);
@@ -195,6 +203,14 @@ public class Pacman extends GameClient {
 	    camera.update();
 	    //tell the spritebatch to use the coordinate system of the camera
 	    batch.setProjectionMatrix(camera.combined);	    
+
+	    //check collisions here, using x,y,width, height against the two walls
+//	    for (int i=1; i < colList.size(); i++) {
+//	    	if (player.getX() < ( (Collideable) colList.get(i)).getX() && player.getX() ) {
+//	    		
+//	    	}
+//	    }
+		
 	    // start the drawing
 	    batch.begin();
 	    // render player pacman 
@@ -204,16 +220,12 @@ public class Pacman extends GameClient {
 	    //initialise walls and draw them 
 	    // note, this method only allows single pixel width lines, as far as I can tell.
 	    // shouldn't be super difficult to make them thicker, but will need a different approach 
-	    // (filled shapes probably)
-	    // just testing walls at the moment, haven't arranged any
-	    
-	    // Outer Exterior West Walls
-	   
-	    
-	    
+	    // (filled shapes probably)	    
 	    shaper.begin(ShapeType.Line);
-	    	   
-		map1.drawMap(map1Array, shaper);
+
+	    testWall.render(shaper);
+	    testWall2.render(shaper);
+		//map1.drawMap(colList, map1Array, shaper);
 	     
 	    shaper.end();
 	    //do any stuff the superclass normally does for rendering

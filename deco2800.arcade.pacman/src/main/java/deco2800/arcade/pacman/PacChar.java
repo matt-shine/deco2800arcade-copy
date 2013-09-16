@@ -1,5 +1,8 @@
 package deco2800.arcade.pacman;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class PacChar {
+public class PacChar extends Collideable{
 	
 	// Describes the current state of pacman- starts IDLE
 	public enum PacState {
@@ -19,9 +22,7 @@ public class PacChar {
 	private static final int FRAME_ROWS = 4;
 	private int facing; // 1: Right, 2: Left
 							// 3: Up, 4: Down
-	//the coordinates of the bottom left corner of pacman
-	private float x; 
-	private float y;
+
 	// the distance pacman moves each frame
 	private float moveDist;
 
@@ -32,8 +33,8 @@ public class PacChar {
 	// amount of time spent in this state of animation?
 	float stateTime;
 	
-	public PacChar() {
-		super();
+	public PacChar(List<Object> colList) {
+		super(colList);
 		//grabs file
 		walkSheet = new Texture(Gdx.files.internal("pacmove.png"));
 		// splits into columns and rows then puts them into one array in order
@@ -53,6 +54,8 @@ public class PacChar {
 		//set initial position to be (x,y)
 		x = 300;
 		y = 300;
+		width = walkFrames[1].getRegionWidth();
+		height = walkFrames[1].getRegionHeight();
 		moveDist = 1;
 //		animation not necessary unless Pacman moving		
 //		walkAnimation = new Animation(0.025f, walkFrames);
@@ -99,22 +102,6 @@ public class PacChar {
 
 	public void setCurrentState(PacState currentState) {
 		this.currentState = currentState;
-	}
-
-	public float getX() {
-		return x;
-	}
-
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	public float getY() {
-		return y;
-	}
-
-	public void setY(float y) {
-		this.y = y;
 	}
 
 	public float getMoveDist() {

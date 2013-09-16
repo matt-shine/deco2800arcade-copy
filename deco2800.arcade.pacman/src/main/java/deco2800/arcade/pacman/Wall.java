@@ -1,5 +1,7 @@
 package deco2800.arcade.pacman;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,15 +10,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-public class Wall {
+public class Wall extends Collideable{
 
 	//private Texture wallTexture;
 	//private Sprite wallSprite;
 	private int wallType; //1:|, 2: -
 	private float length; // The length of the wall
-	//the coordinates of the bottom left corner of the wall
-	private float x; 
-	private float y;
 	
 	//colour for wall
 	private static final float renderColourRed = 0f;;
@@ -24,10 +23,19 @@ public class Wall {
 	private static final float renderColourBlue = 1f;
 	private static final float renderColourAlpha = 1f;
 	
-	public Wall(int wallType, float xpos, float ypos, float length) {
+	public Wall(List<Object> colList, int wallType, float xpos, float ypos, float length) {
+		super(colList);
 		this.wallType = wallType;
 		x = xpos;
 		y = ypos;
+		if (wallType == 1) {
+			width = 1;
+			height = (int) length;
+		} else {
+			width = (int) length;
+			height = 1;
+		}
+		// for wall drawing method
 		this.length = length;
 	}
 	

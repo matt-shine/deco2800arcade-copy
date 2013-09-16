@@ -94,7 +94,7 @@ public class LunarLander extends GameClient {
 		//physics
 		initPosition= 600;
 		angle = 5;
-		speed = 0;
+		speed = 1;
 		acceleration = 2;
 		scaleX = Math.cos(angle);
 		scaleY = Math.sin(angle);

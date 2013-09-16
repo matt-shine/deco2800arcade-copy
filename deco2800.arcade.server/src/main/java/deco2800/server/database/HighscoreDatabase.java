@@ -22,19 +22,22 @@ public class HighscoreDatabase {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		
+		
+		
 		try {
 			Statement statement = connection.createStatement();
 			
 			//Create high scores base table
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_PLAYER", null);
+			
+			
 			if (!tableData.next()) {
-				statement.execute("CREATE TABLE HIGHSCORES_PLAYER(HID INT PRIMARY KEY," + 
+				statement.execute("CREATE TABLE HIGHSCORES_PLAYER(HID INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)," + 
 							"Username VARCHAR(30) NOT NULL," +
 							"GameID INT NOT NULL," +
-							"Date TIMESTAMP," +
-							"Rating INT)");
+							"Date TIMESTAMP, " +
+							"CONSTRAINT primary_key PRIMARY KEY (HID))");
 			}
-	
 			//Create game scores table 
 			tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_DATA", null);
 			if (!tableData.next()) {
@@ -47,9 +50,8 @@ public class HighscoreDatabase {
 			
 		} catch (SQLException e) {
 			//e.printStackTrace();
-			throw new DatabaseException("Unable to create highscores tables", e);
+			throw new DatabaseException("Unable to create highscores tables\n", e);
 		}
-		
 		initialised = true;
 	}
 	
@@ -72,7 +74,6 @@ public class HighscoreDatabase {
 
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
-
 		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
@@ -120,7 +121,7 @@ public class HighscoreDatabase {
 		if (!initialised) {
 			initialise();
 		}
-
+		
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 
@@ -258,6 +259,7 @@ public class HighscoreDatabase {
 		Statement statement = null;
 		ResultSet resultSet = null;
 		
+		
 		String insertTableSQL = "INSERT INTO HIGHSCORES_PLAYER"
 				+ "(Username, GameID, Date, Rating) VALUES"
 				+ "(" + Username + "," + Game_ID +  ", to_date('"
@@ -295,7 +297,7 @@ public class HighscoreDatabase {
 	}
 	
 	
-	/**
+	/** Used for games 
 	 * 
 	 * @param Game_ID
 	 * @param User_ID

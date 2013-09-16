@@ -1,0 +1,12 @@
+# These are the version numbers for the package manager.
+# If VERSION is the same as RELEASE_VERSION then the current build
+# will be copied into the Release directory on the server. This will
+# release the game.
+# If the VERSION is different to the RELEASE_VERSION then nothing will
+# be copied.
+# If VERSION and RELEASE_VERSION are 0.0.0 (defaults) then nothing
+# will be copied.
+# If RELEASE_VERSION is greater than VERSION then nothing will be copied.
+
+VERSION=0.0.1
+RELEASE_VERSION=0.0.1

@@ -14,10 +14,11 @@ task(listGames) {
     }
 }
 
-task(pack, dependsOn: "listGames") {
-
+task(pack, dependsOn: "listGames", type: JavaExec) {
+    main = "deco2800.arcade.packman.Pack"
+    classpath = sourceSets.main.runtimeClasspath
 }
 
 // Add dependencies
 for (String game : games)
-    pack.dependsOn(":" + game + ":jar")
+    pack.dependsOn(":deco2800.arcade." + game + ":jar")

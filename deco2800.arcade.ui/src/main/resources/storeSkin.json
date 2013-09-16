@@ -1,6 +1,6 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        default: { file: default.fnt },
+        default: { file: Manteka18.fnt },
     },
     com.badlogic.gdx.graphics.Color: {
         red:    { a: 1, r: 1, b: 0, g: 0 },

@@ -118,8 +118,8 @@ public class Arcade extends JFrame {
 	 * Completely exits arcade. The status code is always set to 0.
 	 */
     public void arcadeExit() {
-        removeCanvas();
-
+    	removeCanvas();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				System.exit(0);

@@ -24,6 +24,9 @@ public class WL6 extends GameClient {
 	@SuppressWarnings("unused")
 	private AchievementClient achievementClient;
 
+	private WL6Map currentMap = null;
+	private int currentLevel = 0;
+	
 	public WL6(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.networkClient = networkClient; //this is a bit of a hack
@@ -35,6 +38,8 @@ public class WL6 extends GameClient {
 	 */
 	@Override
 	public void create() {
+		
+		currentMap = new WL6Map("[0]");
 		
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
@@ -94,6 +99,7 @@ public class WL6 extends GameClient {
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	    
 	    
 	    
 		super.render();

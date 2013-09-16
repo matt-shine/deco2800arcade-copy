@@ -24,7 +24,7 @@ public class GameStorage {
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE GAMES(gameID INT PRIMARY KEY," 
-				+ "NAME VARCHAR(30));");
+						+ "NAME VARCHAR(30)," + "DESCRIPTION VARCHAR(200)," + "ICONPATH VARCHAR(40));");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -74,6 +74,76 @@ public class GameStorage {
 		}
 	}
 	
+	public String getGameDescription(int gameID) throws DatabaseException {
+		if (!initialised) {
+			initialise();
+		}
+		
+		Connection connection = Database.getConnection();
+		
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * from GAMES");
+			String result = findGameDescription(gameID, resultSet);
+			
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get game description from database", e);
+		} finally {
+			try {
+				if (resultSet !=null) {
+					resultSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public String getIconPath(int gameID) throws DatabaseException {
+		if (!initialised) {
+			initialise();
+		}
+		
+		Connection connection = Database.getConnection();
+		
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * from GAMES");
+			String result = findIconPath(gameID, resultSet);
+			
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get game iconpath from database", e);
+		} finally {
+			try {
+				if (resultSet !=null) {
+					resultSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * Returns the game name when gameID matches the ID given
 	 * @param	gameID
@@ -87,6 +157,30 @@ public class GameStorage {
 			String user = results.getString("gameID");
 			if (user.equals(gameID)) {
 				result = results.getString("name");
+				break;
+			}
+		}
+		return result;
+	}
+	
+	private String findGameDescription(int gameID, ResultSet results) throws SQLException {
+		String result = null;
+		while (results.next()) {
+			String user = results.getString("gameID");
+			if (user.equals(gameID)) {
+				result = results.getString("DESCRIPTION");
+				break;
+			}
+		}
+		return result;
+	}
+	
+	private String findIconPath(int gameID, ResultSet results) throws SQLException {
+		String result = null;
+		while (results.next()) {
+			String user = results.getString("gameID");
+			if (user.equals(gameID)) {
+				result = results.getString("ICONPATH");
 				break;
 			}
 		}

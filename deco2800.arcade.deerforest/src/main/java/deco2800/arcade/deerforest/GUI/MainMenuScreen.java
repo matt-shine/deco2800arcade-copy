@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -28,8 +29,18 @@ public class MainMenuScreen implements Screen {
 		camera.setToOrtho(false, getWidth(), getHeight());
 		
 		//load some assets
+		//load some assets
 		manager = new AssetManager();
+		loadAssets();
 		manager.finishLoading();
+		
+		arena = new Arena(manager.get("DeerForestAssets/MenuScreen.png", Texture.class));
+		
+		
+	}
+
+	private void loadAssets() {
+		manager.load("DeerForestAssets/MenuScreen.png", Texture.class);
 		
 	}
 
@@ -49,6 +60,8 @@ public class MainMenuScreen implements Screen {
 	 
 		//Begin drawing the sprites
 		menu.batch.begin();
+		
+		arena.draw(menu.batch);
 
 	    // Print menu text
 	    menu.font.draw(menu.batch, "We have a main menu!", 200, 200);
@@ -77,6 +90,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void resize(int x, int y) {
+		arena.resize(x, y);
 		camera.setToOrtho(true, getWidth(), getHeight());
 	}
 

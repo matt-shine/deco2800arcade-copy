@@ -1,5 +1,6 @@
 package deco2800.arcade.lunarlander;
 
+import java.awt.Point;
 import java.util.*;
 import java.lang.*;
 
@@ -25,7 +26,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.network.NetworkClient;
+network.NetworkClient;
 
 @ArcadeGame(id="LunarLander")
 public class LunarLander extends GameClient {
@@ -40,16 +41,36 @@ public class LunarLander extends GameClient {
 	private Texture backgroundTexture;
 	private BitmapFont font;
 	
+	//physics
 	private Texture landerTexture;
 	private float landerX;
 	private float landerY;
 	private float acceleration;
 	private float initialPositionX;
 	private float initialPositionY;
+	private Texture lander;
+	private int initPosition;
+	private double angle;
+	private double speed;
+	private double scaleX;
+	private double scaleY;
+	private double velocityX;
+	private double velocityY;
+	private int acceleration;
+	private int finalX;
+	private int finalY;
+	private int gravity;
+	private boolean moving;
 	
+	//terrain generation
+	private Point[] terrainCoords;
+	private float coord0X;
+	private float coord0Y;
+	
+	//info
 	private int score;
 	private int fuel;
-	private int speed;
+	//private int speed;
 	private int time;
 	private float pixelsPerSecond = 40.0f;
 	private float downwardSpeed = 30.0f;
@@ -79,21 +100,52 @@ public class LunarLander extends GameClient {
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 
-		
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
+		//physics
 		initialPositionY = 600;
 		initialPositionX = 400;
 		acceleration = 0;
+		initPosition= 600;
+		angle = 5;
+		speed = 0;
+		acceleration = 2;
+		scaleX = Math.cos(angle);
+		scaleY = Math.sin(angle);
+		velocityX = (speed*scaleX);
+		velocityY = (speed*scaleY);
+		gravity = 3;
+		moving = true;
+		
+		//terrain generation, not working at the moment
+		terrainCoords[0] = new Point(500,500);
+		terrainCoords[1] = new Point(200,200);
+		terrainCoords[2] = new Point(300,300);
+		terrainCoords[3] = new Point(400,200);
+		terrainCoords[4] = new Point(500,100);
+		
+		coord0X = (float) terrainCoords[0].getX();
+		coord0Y = (float) terrainCoords[0].getY();
+		System.out.println("----------------");
+		System.out.println(coord0X);
+		System.out.println(coord0Y);
+		
+		shapeRenderer.line(coord0X, coord0Y, coord0X, coord0Y);
+	
+		
+		//info
+		//physics
 		score = 0;
 		fuel = 1000;
-		speed = 0;
+		//speed = 0;
 		time = 0;
 		
 		landerX = 60;
 		landerY = 50;
 		// = new Stopwatch();
+		
+		
 		
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
@@ -127,7 +179,6 @@ public class LunarLander extends GameClient {
 			public void show() {
 				//TODO: unpause pong
 			}
-			
         });
         
         
@@ -137,13 +188,13 @@ public class LunarLander extends GameClient {
 	public void dispose() {
 		super.dispose();
 	}
-
 	@Override
 	public void pause() {
 		super.pause();
 	}
 
-	*//**
+	*/
+	/**
 	 * Render the current state of the game and process updates
 	 */
 	@Override
@@ -165,17 +216,21 @@ public class LunarLander extends GameClient {
 		if(Gdx.input.isKeyPressed(Keys.S)) {
 			initialPositionY -= Gdx.graphics.getDeltaTime() * pixelsPerSecond;
 		}
-		 
+		
 		// clear screen, create background using texture
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(backgroundTexture, 0, 0, 1200, 800);
 	    batch.draw(landerTexture, initialPositionX, initialPositionY, landerX, landerY);
 	    
+	    batch.draw(lander, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
+	    
+	    batch.draw(lander, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
+	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
 	    font.draw(batch, "Remaining fuel: " + Integer.toString(fuel), SCREENWIDTH - 200, SCREENHEIGHT - 60);
-	    font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
+	    //font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
 	    font.draw(batch, "Time spent: " + Integer.toString(time), SCREENWIDTH - 200, SCREENHEIGHT - 100);
 	    
 	    batch.end();
@@ -193,25 +248,12 @@ public class LunarLander extends GameClient {
 	    //shapeRenderer.line(SCREENWIDTH/2, SCREENHEIGHT/2, 50, 50);
 	 	    
 	    //End drawing of shapes
+	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    shapeRenderer.end();
 	    
-	    //ball.update(ball);
-
-	    /*	    
-	    shapeRenderer.setProjectionMatrix(camera.combined);
-	    
-	    
-	    //End drawing of shapes
-	    shapeRenderer.end();
-	    */
-	    
-	   /* switch(gameState) {
-	    
-	    case READY: //Ready to start a new point
-	    	if (Gdx.input.isTouched()) {
-	    		startPoint();
-	    	}
-	    	break;
+	    //Slightly more complicated gravity function, hopefully this will increase logarithmically
+	    //When the lander is at or lower than 20 pixels, it stops, otherwise it calculates the next position.
+	    if(!(initPosition + finalY <= 20) && moving == true){
 	    	
 	    case INPROGRESS: //Point is underway, ball is moving
 	    	
@@ -233,6 +275,18 @@ public class LunarLander extends GameClient {
 	    /*while(initialPositionY > 0) {
 	    	initialPositionY = initialPositionY + 1;
 	    }*/
+	    	velocityY = velocityY - gravity;
+	    	speed = speed + acceleration;
+		    velocityX = (int) (speed * scaleX);
+		    velocityY = (int) (speed * scaleY);
+		    finalX = (int) (finalX + velocityX);
+		    finalY = (int) (finalY + velocityY);
+		    moving = false;
+		    
+	    }else {
+	    	//"moving" is only used here to slow the lander down, otherwise the infinite loop is too fast.
+	    	moving = true;
+	    }
 	    
 		super.render();
 		

@@ -1,5 +1,7 @@
 package deco2800.arcade.packman;
 
+import java.lang.String;
+import java.lang.System;
 import java.util.ArrayList;
 import java.util.Set;
 import java.io.File;
@@ -7,6 +9,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**
@@ -59,12 +65,41 @@ public class Pack {
                     System.out.println("VERSION > RELEASE_VERSION. Not releasing: " + game);
                 } else if (version.equals(releaseVersion)) {
                     System.out.println("Copying JAR to Releases: " + game);
-                    // TODO copy game to release folder
+
+                    File src = null;
+                    File dest = null;
+                    String srcPath = "../deco2800.arcade." + game +
+                            "/build/libs/deco2800.arcade." + game + "-" + version + ".jar";
+                    String destPath = "../deco2800.arcade.server/Release/" + game + "-" +
+                            version + ".jar";
+
+                    src = new File(srcPath);
+                    dest = new File(destPath);
+
+                    if (src != null && dest != null) {
+                        try {
+                            copyFile(src, dest);
+                        } catch (IOException e) {
+                            System.err.println("[Packman] Failed to copy JAR to Releases directory");
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }
     }
 
+    private void copyFile(File src, File dest) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dest);
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
 
     private ArrayList<String> getVersions(String game) {
         ArrayList<String> versions = new ArrayList<String>(2);

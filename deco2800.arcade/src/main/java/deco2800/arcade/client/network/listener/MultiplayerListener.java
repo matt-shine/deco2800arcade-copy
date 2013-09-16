@@ -28,17 +28,17 @@ public class MultiplayerListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
-		if (object instanceof NewMultiGameRequest){
-			
+		if (object instanceof NewMultiGameRequest){ //TESTING
 			System.out.println("Recieved message from server.");
-		} else if (object instanceof NewMultiResponse) {
+		} else if (object instanceof NewMultiResponse) { //Connected to Server
 			NewMultiResponse response = (NewMultiResponse) object;
 			if (response.OK == NewMultiResponse.OK) {
 				System.out.println("Connect OK");
 			}
 		}
-		else if (object instanceof NewMultiSessionResponse) {
+		else if (object instanceof NewMultiSessionResponse) { //Game Found
 			System.out.println("Game Found");
+			//Testing
 			GameStateUpdateRequest stateUpdate = new GameStateUpdateRequest();
 			stateUpdate.gameId = ((NewMultiSessionResponse) object).gameId;
 			stateUpdate.gameSession = ((NewMultiSessionResponse) object).sessionId;

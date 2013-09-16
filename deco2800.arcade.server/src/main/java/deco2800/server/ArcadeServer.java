@@ -1,25 +1,21 @@
 package deco2800.server;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.util.HashSet;
 import java.util.Set;
-import java.net.BindException;
 
-import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.database.HighscoreDatabase;
 import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
-
 import deco2800.server.listener.MultiplayerListener;
-
-import deco2800.server.database.HighscoreDatabase;
-import deco2800.arcade.packman.PackageServer;
 
 
 /** 
@@ -36,12 +32,13 @@ public class ArcadeServer {
 	//singleton pattern
 	private static ArcadeServer instance;
 	
+	private MatchmakerQueue matchmakerQueue;
 
 	private HashSet<String> lobbyUsers = new HashSet<String>();
 
 	// Package manager
 	@SuppressWarnings("unused")
-	private PackageServer packServ;
+//	private PackageServer packServ;
 	
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
@@ -117,7 +114,9 @@ public class ArcadeServer {
 		//this.friendStorage = new FriendStorage();
 		
 		this.highscoreDatabase = new HighscoreDatabase();
-		this.packServ = new PackageServer();
+//		this.packServ = new PackageServer();
+		
+		this.matchmakerQueue = new MatchmakerQueue();
 		
 		//initialize database classes
 		try {
@@ -153,6 +152,6 @@ public class ArcadeServer {
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new CommunicationListener(server));
-		server.addListener(new MultiplayerListener());
+		server.addListener(new MultiplayerListener(matchmakerQueue));
 	}
 }

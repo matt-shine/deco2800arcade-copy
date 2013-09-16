@@ -1,22 +1,28 @@
 package deco2800.server;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.protocol.multiplayerGame.NewMatchmakingRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 public class MatchmakerQueue {
 
 	/* Players currently in the matchmaking queue - gameId, map of usernames/connections */
 	private Map<String, Map<String, Connection>> queuedUsers;
 	
+	private ArrayList<MultiplayerServer> activeServers;
+	
 	/* Singleton */
 	private static MatchmakerQueue instance;
 	
 	
-	private MatchmakerQueue() {
+	public MatchmakerQueue() {
 		this.queuedUsers = new HashMap<String, Map<String, Connection>>();
+		this.activeServers = new ArrayList<MultiplayerServer>();
 		}
 	
 	/**
@@ -55,7 +61,7 @@ public class MatchmakerQueue {
 	 * @param username - the players username
 	 * @param connection - the players connection
 	 */
-	public void add(NewMatchmakingRequest request, Connection connection) {
+	private void add(NewMultiGameRequest request, Connection connection) {
 		//TODO: handle players already in queue? allow multi-game queue placement?
 		if (!this.queuedUsers.containsKey(request.gameId)) {
 			Map<String, Connection> player = new HashMap<String, Connection>();
@@ -64,6 +70,7 @@ public class MatchmakerQueue {
 		} else {
 			this.queuedUsers.get(request.gameId).put(request.username, connection);
 		}
+		
 	}
 	
 	/**
@@ -96,7 +103,37 @@ public class MatchmakerQueue {
 		}
 	}
 	
-	
+	public void checkForGame(NewMultiGameRequest request, Connection connection) {
+		String username = request.username;
+		String gameId = request.gameId;
+		System.out.println("gameID: " + gameId);
+		System.out.println("size: " + queuedUsers.size());
+		if (queuedUsers.get(gameId) == null) {
+			Map<String, Connection> userConnection = new HashMap<String, Connection>();
+			userConnection.put(username, connection);
+			queuedUsers.put(gameId, userConnection);
+			return;
+		} else {
+			Map<String, Connection> player2 = queuedUsers.get(gameId);
+			String player2Name = (String) player2.keySet().toArray()[0];
+			Connection player2Connection = player2.get(player2Name);			
+			MultiplayerServer gameServer =  new MultiplayerServer(username, player2Name, connection, 
+					player2Connection, gameId, activeServers.size());
 
+			activeServers.add(gameServer);
+			queuedUsers.remove(gameId);
+			NewMultiSessionResponse session = new NewMultiSessionResponse();
+			session.sessionId = activeServers.size()-1;
+			session.gameId = gameId;
+			//session.playerID = username; STRINGS OR INTS
+			connection.sendTCP(session);
+			player2Connection.sendTCP(session);
+		}
+		
+	}
+
+	public ArrayList<MultiplayerServer> getActiveServers() {
+		return activeServers;
+	}
 	
 }

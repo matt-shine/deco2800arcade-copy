@@ -43,6 +43,7 @@ public class MultiplayerServer {
 	
 	public void stateUpdate(GameStateUpdateRequest request) {
 		//if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
+		System.out.println(request.playerID);
 			player1.sendTCP(request);	
 			player2.sendTCP(request);
 		//}

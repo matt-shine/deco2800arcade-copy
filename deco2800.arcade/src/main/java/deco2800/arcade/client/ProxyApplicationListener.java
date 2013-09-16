@@ -7,6 +7,8 @@ import com.badlogic.gdx.ApplicationListener;
 public class ProxyApplicationListener implements ApplicationListener {
 
 	private Object mon = null;
+	private boolean created = false;
+	private int width = 0, height = 0;
 	private ApplicationListener target = null;
 	
 	
@@ -16,11 +18,14 @@ public class ProxyApplicationListener implements ApplicationListener {
 	
 	public void setTarget(ApplicationListener target) {
 		this.target = target;
+		this.created = false;
 		
 		final ApplicationListener t = target;
 		EventQueue.invokeLater(new Runnable() {
 			public void run () {
+				t.resize(width, height);
 				t.create();
+				created = true;
 			}
 		});
 	}
@@ -31,10 +36,12 @@ public class ProxyApplicationListener implements ApplicationListener {
 	
 	@Override
 	public void create() {
+		//So I wrote this a while ago and I can't remember how it works...
 		if (mon != null) {
+			target.resize(width, height);
 			target.create();
-		}
-		if (this.mon != null){
+			this.created = true;
+			
 			synchronized (mon) {
 				this.mon.notify();
 				this.mon = null;
@@ -54,11 +61,15 @@ public class ProxyApplicationListener implements ApplicationListener {
 
 	@Override
 	public void render() {
-		target.render();
+		if (this.created) {
+			target.render();
+		}
 	}
 
 	@Override
 	public void resize(int w, int h) {
+		width = w;
+		height = h;
 		target.resize(w, h);
 	}
 

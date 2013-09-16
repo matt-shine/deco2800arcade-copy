@@ -5,14 +5,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
@@ -27,19 +24,18 @@ public class Overlay extends GameClient implements UIOverlay {
 	
 	private Logger logger = new Logger("Overlay");
 	
-	private Screen callbacks = null;
 	private boolean notifiedForMissingCallbacks = false;
-		
+	private boolean notifiedForMissingInput = false;
+	
     private Skin skin;
     private Stage stage;
     Table table = new Table();
     
-	private boolean isUIOpen = false;
-	private boolean hasTabPressedLast = false;
-	
 	private OverlayScreen screen = new OverlayScreen(this);
 	private OverlayPopup popup = new OverlayPopup(this);
 	private SpriteBatch batch = new SpriteBatch();
+	
+	private GameClient host = null;
 	
 	public Overlay(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -52,11 +48,7 @@ public class Overlay extends GameClient implements UIOverlay {
         ArcadeInputMux.getInstance().addProcessor(stage);
         
         table.setFillParent(true);
-        
-//        Label quitLabel = new Label("Press escape to quit...", skin);
-//        table.row();
-//        table.add(quitLabel).expand().space(40).top();
-//        table.layout();       
+              
         stage.addActor(table);
         
 	}
@@ -81,23 +73,31 @@ public class Overlay extends GameClient implements UIOverlay {
 		popup.draw(batch, 1f);
 		batch.end();
 		
+		//Check nobody is being selfish, keeping all the precious inputs for themselves
+		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance() && !notifiedForMissingInput) {
+			notifiedForMissingInput = true;
+			logger.error("Something has stolen the inputlistener. " +
+					"See src/main/java/deco2800/arcade/client/ArcadeInputMux.java");
+		}
 		
-		if (callbacks == null && !notifiedForMissingCallbacks) {
+		//Check that people love me
+		if (screen.getListeners() == null && !notifiedForMissingCallbacks) {
 	    	notifiedForMissingCallbacks = true;
-	    	logger.error("No overlay listener is set");
+	    	logger.error("Overlay event listeners are not set. " + 
+	    			"See https://github.com/UQdeco2800/deco2800-2013/wiki/Overlay");
 	    }
-		
-//		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance()) {
-//			logger.error("Something has stolen the inputlistener");
-//		}
+
+		//Check that I'm not being run on top of myself.
+		//Why would anyone do that?
+		if (this.getHost() instanceof UIOverlay) {
+			logger.error("The overlay is being run on top of another overlay." + 
+	    			" What??? Why???");
+		}
 		
 	}
 	
 	@Override
 	public void dispose() {
-	    if (callbacks != null) {
-	    	callbacks.dispose();
-	    }
 	    
 	    stage.dispose();
         skin.dispose();
@@ -134,5 +134,15 @@ public class Overlay extends GameClient implements UIOverlay {
 		this.setScreen(screen);
 	}
 
-
+	public GameClient getHost() {
+		return host;
+	}
+	
+	
+	public void setHost(GameClient host) {
+		this.host = host;
+	}
+	
+	
+	
 }

@@ -3,15 +3,17 @@ package deco2800.arcade.deerforest.GUI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
+import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 //This class functions basically as the controller
@@ -20,15 +22,20 @@ public class MainInputProcessor implements InputProcessor {
 	private MainGame game;
 	private MainGameScreen view;
 	private ExtendedSprite currentSelection;
-	private Rectangle currentSelectionOriginZone;
-	private int currentSelectionPlayer;
-	private boolean currentSelectionField;
-	private boolean currentSelectionMonster;
-	private String currentSelectionArea;
+    private ExtendedSprite currentZoomed;
+    private ExtendedSprite zoomSelection;
+    private float currentScaleX;
+    private float currentScaleY;
+    private float currentX;
+    private float currentY;
 	private float xClickOffset;
 	private float yClickOffset;
 	private boolean dragged;
-	
+    private boolean zoomed;
+    private boolean gameFinished;
+    private boolean drawn;
+    private boolean gameStarted;
+
 	//define array of keys for P1 / P2 zones
 	final String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
 	final String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};
@@ -37,27 +44,85 @@ public class MainInputProcessor implements InputProcessor {
 		this.game = game;
 		this.view = view;
 		dragged = false;
+        this.gameFinished = false;
+        this.drawn = false;
+        this.gameStarted = false;
 	}
 	
 	@Override
 	public boolean keyDown (int keycode) {
-		
+
+        if(!gameStarted) {
+            this.initialDraw(4);
+            gameStarted = true;
+            game.nextPhase();
+            return true;
+        }
+
+        //Check for new game
+        if(keycode == Keys.N) {
+            this.newGame();
+        }
+
+        //Check for muted
+        if(keycode == Keys.M) {
+            game.toggleMuted();
+        }
+
+        if(gameFinished) {
+            return false;
+        }
+
+        //Zoom in on card
+        if(keycode == Keys.SHIFT_LEFT) {
+            //Check if zoom selection
+            if(zoomSelection != null) {
+                if(!zoomed) {
+                    currentScaleX = zoomSelection.getScaleX();
+                    currentScaleY = zoomSelection.getScaleY();
+                    currentX = zoomSelection.getX();
+                    currentY = zoomSelection.getY();
+                    zoomSelection.setScale(Gdx.graphics.getHeight()/(2*zoomSelection.getHeight()));
+                    float x = Gdx.graphics.getWidth()/2 - zoomSelection.getBoundingRectangle().getWidth()/2;
+                    float y = Gdx.graphics.getHeight()/2 - zoomSelection.getBoundingRectangle().getHeight()/2;
+                    zoomSelection.setPosition(x, y);
+                    zoomed = true;
+                    currentZoomed = zoomSelection;
+                } else {
+                    zoomSelection.setPosition(currentX, currentY);
+                    zoomSelection.setScale(currentScaleX, currentScaleY);
+                    currentZoomed = null;
+                    zoomed = false;
+                }
+            }
+
+            return true;
+        }
+
+        //If currently zoomed return
+        if(zoomed) return false;
+
 		//Go to next phase
 		if(keycode == Keys.SPACE && game.getPhase() != null) {
+
+            //Don't let go to next phase until drawn
+            if(game.getPhase().equals("DrawPhase") && !drawn) return true;
+
 			game.nextPhase();
 			//Set stuff up at the start phase
 			if(game.getPhase().equals("StartPhase")) {
 				currentSelection = null;
 				view.setHighlightedZones(new ArrayList<Rectangle>());
 				game.nextPhase();
-			} 
-			//draw a card
-			if(game.getPhase().equals("DrawPhase")) {
-				//TODO DRAW ALL THE CARDS!!!
-				doDraw();
+                //reset hasAttacked
+                SpriteLogic.resetHasAttacked();
+                //reset drawn
+                this.drawn = false;
 			}
-			currentSelection = null;
-			return true;
+            view.setPhaseDisplayed(false);
+            currentSelection = null;
+            view.setHighlightedZones(new ArrayList<Rectangle>());
+            return true;
 		} 
 		
 		//Change player turns
@@ -66,8 +131,8 @@ public class MainInputProcessor implements InputProcessor {
 			game.nextPhase();
 			doDraw();
 			currentSelection = null;
-			currentSelection = null;
-			view.setHighlightedZones(new ArrayList<Rectangle>());
+            view.setPhaseDisplayed(false);
+            view.setHighlightedZones(new ArrayList<Rectangle>());
 			return true;
 		}
 		
@@ -76,11 +141,14 @@ public class MainInputProcessor implements InputProcessor {
 			System.out.println("Screen data");
 			view.printSpriteMap();
 			System.out.println();
+			
 			System.out.println("Arena data");
 			view.getArena().printZoneInfo();
 			System.out.println();
-			System.out.println("CurrentSelection: " + currentSelection + " player: " + currentSelectionPlayer 
-					+ " monster: " + currentSelectionMonster + " field" + currentSelectionField + " area: " + currentSelectionArea);
+			if(currentSelection != null) {
+				System.out.println("CurrentSelection: " + currentSelection + " player: " + currentSelection.getPlayer() 
+						+ " monster: " + currentSelection.isMonster() + " field" + currentSelection.isField() + " area: " + currentSelection.getArea());
+			}
 			System.out.println();
 	    	
 	    	//Print out data about hand / deck / field
@@ -101,13 +169,24 @@ public class MainInputProcessor implements InputProcessor {
 			System.out.println("P2Field: " + Arrays.toString(p2Field.toArray()));
 			System.out.println();
 			System.out.println();
+
+            CardCollection p1Grave = game.getCardCollection(1, "Graveyard");
+            System.out.println("P1Grave: " + Arrays.toString(p1Grave.toArray()));
+            System.out.println();
+
+            CardCollection p2Grave = game.getCardCollection(2, "Graveyard");
+            System.out.println("P2Grave: " + Arrays.toString(p2Grave.toArray()));
+            System.out.println();
 			
 			return true;
 		}
 		
 		if(keycode == Keys.CONTROL_LEFT) {
-			System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelectionPlayer, currentSelectionArea));
+            if(currentSelection != null) {
+                System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), currentSelection.getArea()));
+            }
 		}
+
         return false;
     }
 
@@ -124,34 +203,73 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
 
+        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
+
+        //If currently zoomed / gamefinished return
+        if(zoomed || gameFinished) return false;
+
+        //Reset zoomSelection color
+        if(zoomSelection != null) zoomSelection.setSelected(false);
+
+        //get zoomSelection
+        zoomSelection = SpriteLogic.checkIntersection(1, x, y);
+        if(zoomSelection == null) {
+            //must be in P2
+            zoomSelection = SpriteLogic.checkIntersection(2, x, y);
+            if(zoomSelection != null) {
+                zoomSelection.setPlayer(2);
+            }
+        } else {
+            zoomSelection.setPlayer(1);
+        }
+        //Set zoom selection data
+        if(zoomSelection != null) {
+            zoomSelection.setField(SpriteLogic.getSpriteZoneType(zoomSelection)[0]);
+            zoomSelection.setSelected(true);
+        }
+
     	//Check it was a single click
     	if(button != Buttons.LEFT) return false;
-    	
+
+        //Check if click was on deck and try to draw
+        if(!drawn && game.getPhase().equals("DrawPhase")) {
+            if(view.deckAtPoint(x, y)) {
+                doDraw();
+                this.drawn = true;
+            }
+        }
+
     	//If there is already a current selected card then try to move it to
     	// the clicked space, set currentSelection to null then return
-    	if(currentSelection != null) {
+        //Can't move cards during battle phase, can only attack with cards on field
+    	if(currentSelection != null && (!game.getPhase().equals("BattlePhase") || !currentSelection.isField())) {
     		//completed successfully, so set current to null
-    		if(setCurrentSelectionToPoint(x,y)) {
+    		if(SpriteLogic.setCurrentSelectionToPoint(x,y)) {
     			//Successfully moved card, update model
-    			String oldArea = currentSelectionArea;
+    			String oldArea = currentSelection.getArea();
     			String newArea = view.getArena().getAreaAtPoint(x, y);
     			List<AbstractCard> cards = new ArrayList<AbstractCard>();
-    			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
+    			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), oldArea);
     			cards.add(c);
-    			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
+    			game.moveCards(currentSelection.getPlayer(), cards, oldArea, newArea);
     		}
     		//clear available zones and currentSelection
     		currentSelection = null;
     		view.setHighlightedZones(new ArrayList<Rectangle>());
         	return true;
     	}
-    	
+
+        //Handle battle phase attack selection
+        if(currentSelection != null && game.getPhase().equals("BattlePhase") && currentSelection.isField()) {
+            PhaseLogic.battlePhaseSelection(x,y);
+        }
+
     	//Get the current Selection at point if it exists
-    	currentSelection = SpriteLogic.checkIntersection(x, y);
+    	currentSelection = SpriteLogic.checkIntersection(game.getCurrentPlayer(),x, y);
     	
     	//There is a new currentSelection, set its parameters accordingly
     	if(currentSelection != null) {
-    		setCurrentSelectionData(x,y);
+    		SpriteLogic.setCurrentSelectionData(x,y);
     		return true;
     		
     	} else {
@@ -164,24 +282,28 @@ public class MainInputProcessor implements InputProcessor {
 
 	@Override
     public boolean touchUp (int x, int y, int pointer, int button) {
-		
-		//Only perform action if card has been dragged and left button was released
+
+        //If currently zoomed / game finished return
+        if(zoomed || gameFinished) return false;
+
+        //Only perform action if card has been dragged and left button was released
 		//Note that dragged can only be true if there is a current selection
 		if(dragged && button == Buttons.LEFT) {
 			
-			if(setCurrentSelectionToRectangle(currentSelection.getBoundingRectangle())) {
+			if(SpriteLogic.setCurrentSelectionToRectangle(currentSelection.getBoundingRectangle())) {
 				//successfully moved card
 				//Do stuff with model here
-				String oldArea = currentSelectionArea;
+				String oldArea = currentSelection.getArea();
     			String newArea = view.getArena().getAreaAtPoint((int)currentSelection.getX()+10, (int)currentSelection.getY()+10);
     			List<AbstractCard> cards = new ArrayList<AbstractCard>();
-    			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelectionPlayer, oldArea);
+    			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), oldArea);
     			cards.add(c);
-    			game.moveCards(currentSelectionPlayer, cards, oldArea, newArea);
+    			game.moveCards(currentSelection.getPlayer(), cards, oldArea, newArea);
 			} else {
 				//card was not moved, set it back to original position
-				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelectionOriginZone, currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
-	    		view.getArena().setSpriteToZone(currentSelection, r, currentSelectionPlayer);
+				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelection.getOriginZone(), currentSelection.getPlayer(), 
+						currentSelection.isField(), currentSelection.isMonster());
+	    		view.getArena().setSpriteToZone(currentSelection, r, currentSelection.getPlayer());
 	    		view.setHighlightedZones(new ArrayList<Rectangle>());
 			}
 			//Reset current selection and highlighted zones
@@ -194,7 +316,11 @@ public class MainInputProcessor implements InputProcessor {
 
 	@Override
     public boolean touchDragged (int x, int y, int pointer) {
-    	//move card to where it was dragged
+
+        //If currently zoomed / game finshed return
+        if(zoomed || gameFinished) return false;
+
+        //move card to where it was dragged
     	if(currentSelection != null) {
     		currentSelection.setPosition(x - xClickOffset, y - yClickOffset);
     		dragged = true;
@@ -213,6 +339,18 @@ public class MainInputProcessor implements InputProcessor {
         return false;
     }
 
+    public ExtendedSprite getCurrentSelection() {
+    	return currentSelection;
+    }
+    
+    public void setOffset(float x, float y) {
+    	xClickOffset = x;
+    	yClickOffset = y;
+    }
+
+    public ExtendedSprite getCurrentZoomed() {
+        return currentZoomed;
+    }
 
     private void doDraw() {
     	
@@ -230,207 +368,44 @@ public class MainInputProcessor implements InputProcessor {
 		
 		//update currentSelection to be the drawn card
 		currentSelection = new ExtendedSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
+        currentSelection.setCard(c);
 		//set the current selection data
-		currentSelectionField = false;
-		currentSelectionMonster = false; //doesn't matter as in hand
-		currentSelectionPlayer = player;
-		currentSelectionArea = this.getCurrentSelectionArea(currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
-		
+		currentSelection.setField(false);
+		currentSelection.setMonster(false); //doesn't matter as in hand
+		currentSelection.setPlayer(player);
+		currentSelection.setArea(SpriteLogic.getCurrentSelectionArea(currentSelection.getPlayer(), currentSelection.isField(), currentSelection.isMonster()));
+
+        //Set origin and scale to be that of the players deck (makes for nicer transition
+        view.setSpriteToDeck(player, currentSelection);
+
 		//Set to hand rectangle
 		Rectangle r = view.getArena().getAvailableZones(player, false, false).get(0);
-		setCurrentSelectionToRectangle(r);
-	}
-    
-    private void setCurrentSelectionData(int x, int y) {
-    	
-		//Get all relevant data about the current selection
-		Rectangle r = currentSelection.getBoundingRectangle();
-		currentSelectionOriginZone = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-		currentSelectionPlayer = view.getSpritePlayer(currentSelection);
-		boolean[] b = SpriteLogic.getSpriteZoneType(currentSelection);
-		currentSelectionField = b[0];
-		currentSelectionMonster = b[1];
-		currentSelectionArea = getCurrentSelectionArea(currentSelectionPlayer, currentSelectionField, currentSelectionMonster);
-		
-		//Set the correct zones to highlight based on selection
-		setHighlightedZones();
-		
-		//Get the offset of where the user clicked on the card compared to its actual position
-		xClickOffset = x - currentSelection.getX();
-		yClickOffset = y - currentSelection.getY();
-    }
-    
-    private boolean setCurrentSelectionToPoint(int x, int y) {
-    	
-    	Rectangle emptyZone = null;
-		//get the empty zone at point (only check zones allowed) 
-    	//Hand can only go to field if main phase and no summoned (if monster)
-    	if(!currentSelectionField && !game.getSummoned() && currentSelectionMonster && game.getPhase().equals("MainPhase")) {
-    		//Monster in hand
-        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, true);
-    	} else if(!currentSelectionField && !currentSelectionMonster && game.getPhase().equals("MainPhase")) {
-    		//Spell Card in hand
-        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, false);
-    	} else if(currentSelectionField) {
-    		//On field
-        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, true, currentSelectionMonster);
-    	}
-    	//if current zone is a hand zone then check for empty zone at that point
-    	if(!currentSelectionField && emptyZone == null) {
-    		emptyZone = view.getArena().emptyZoneAtPoint(x, y, currentSelectionPlayer, false, currentSelectionMonster);
-    	}
-
-    	if(emptyZone != null) {
-        	//reassign the currentSelection to the emptyZone in arena
-    		view.getArena().removeSprite(currentSelection);
-    		String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone, currentSelectionPlayer);
-    		
-    		//if moved from hand to field set summoned to be true
-    		if(currentSelectionPlayer == 1) {
-        		if(newArea.equals("P1MonsterZone") && currentSelectionArea.equals("P1HandZone")) {
-        			game.setSummoned(true);
-        		}
-    		} else {
-        		if(newArea.equals("P2MonsterZone") && currentSelectionArea.equals("P2HandZone")) {
-        			game.setSummoned(true);
-        		}
-    		}
-    		
-    		//reassign the currentSelection to emptyZone in the view
-    		view.removeSpriteFromArea(currentSelection, currentSelectionArea);
-    		view.setSpriteToArea(currentSelection, newArea);
-    		
-    		view.setHighlightedZones(new ArrayList<Rectangle>());
-    		return true;
-    	}
-    	return false;
-    }
-    
-
-    private boolean setCurrentSelectionToRectangle(Rectangle r) {
-		
-    	Rectangle emptyZone = null;
-		//get the empty zone at rectangle (only check zones allowed)
-    	//Hand can only go to field if main phase and no summoned (if monster)
-    	if(!currentSelectionField && !game.getSummoned() && currentSelectionMonster && game.getPhase().equals("MainPhase")) {
-        	emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, true, true);
-    	} else if(!currentSelectionField && !currentSelectionMonster && game.getPhase().equals("MainPhase")) {
-        	emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, true, false);
-    	} else if(currentSelectionField) {
-        	emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, true, currentSelectionMonster);
-    	}
-    	//if current zone is a hand zone then check for empty zone at that point
-    	if(!currentSelectionField && emptyZone == null) {
-    		emptyZone = view.getArena().emptyZoneAtRectangle(r, currentSelectionPlayer, false, currentSelectionMonster);
-    	}
-
-    	if(emptyZone != null) {
-        	//reassign the currentSelection to the emptyZone in arena
-    		view.getArena().removeSprite(currentSelection);
-    		String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone, currentSelectionPlayer);
-    		
-    		//if moved from hand to field set summoned to be true
-    		if(currentSelectionPlayer == 1) {
-        		if(newArea.equals("P1MonsterZone") && currentSelectionArea.equals("P1HandZone")) {
-        			game.setSummoned(true);
-        		}
-    		} else {
-        		if(newArea.equals("P2MonsterZone") && currentSelectionArea.equals("P2HandZone")) {
-        			game.setSummoned(true);
-        		}
-    		}
-    		
-    		//reassign the currentSelection to emptyZone in the view
-    		view.removeSpriteFromArea(currentSelection, currentSelectionArea);
-    		view.setSpriteToArea(currentSelection, newArea);
-    		
-    		view.setHighlightedZones(new ArrayList<Rectangle>());
-    		return true;
-    	}
-    	
-    	return false;
-	}
-    
-    private void setHighlightedZones() {
-		//find out where this sprite is stored
-		Map<String, List<ExtendedSprite>> sprites = view.getSpriteMap();
-		String spriteArea = "";
-		for(String key: sprites.keySet()) {
-			if(sprites.get(key).contains(currentSelection)) {
-				spriteArea = key;
-			}
-		}
-		
-		//Show all the available zones the card can go to
-		if(spriteArea.equals("P1HandZone")) {
-			//Card is in hand, find out if spell / monster
-			List<Rectangle> availableZones = new ArrayList<Rectangle>();
-			//Add monster / spell zones if in main phase and not summoned (if monster)
-			if(currentSelectionMonster && !game.getSummoned() && game.getPhase().equals("MainPhase")) {
-				availableZones.addAll(view.getArena().getAvailableZones(1, true, true));
-			}
-			else if(!currentSelectionMonster && game.getPhase().equals("MainPhase")){
-				availableZones.addAll(view.getArena().getAvailableZones(1, true, false));
-			}
-			//add all the hand zones (as they can rearrange their hand)
-			availableZones.addAll(view.getArena().getAvailableZones(1, false, true));
-			view.setHighlightedZones(availableZones);
-			
-		} else if(spriteArea.equals("P1SpellZone")) {
-			//Card is in P1SpellZone, thus can only be rearranged in hand
-			view.setHighlightedZones(view.getArena().getAvailableZones(1, true, false));
-			
-		} else if(spriteArea.equals("P1MonsterZone")) {
-			//Card in monsterZone, can only rearrange
-			view.setHighlightedZones(view.getArena().getAvailableZones(1, true, true));
-			
-		} else if(spriteArea.equals("P2HandZone")) {
-			//card is in p2 hand, find out if spell / monster
-			List<Rectangle> availableZones = new ArrayList<Rectangle>();
-			//Add monster / spell zones if in main phase and not summoned (if monster)
-			if(currentSelectionMonster && !game.getSummoned() && game.getPhase().equals("MainPhase")) {
-				availableZones.addAll(view.getArena().getAvailableZones(2, true, true));
-			} else if(!currentSelectionMonster && game.getPhase().equals("MainPhase")){
-				availableZones.addAll(view.getArena().getAvailableZones(2, true, false));
-			}
-			//add all the hnad zones (as they can rearrange)
-			availableZones.addAll(view.getArena().getAvailableZones(2, false, true));
-			view.setHighlightedZones(availableZones);
-			
-		} else if(spriteArea.equals("P2MonsterZone")) {
-			//In monster zone, can only be rearranged in place
-			view.setHighlightedZones(view.getArena().getAvailableZones(2, true, true));
-			
-		} else if(spriteArea.equals("P2SpellZone")) {
-			//in spell zone, can only be rearranged
-			view.setHighlightedZones(view.getArena().getAvailableZones(2, true, false));
-			
-		}
-    }
-
-    private String getCurrentSelectionArea(int player, boolean field, boolean monster) {
-    	
-		if(player == 1) {
-			if(field) {
-				if(monster) {
-					return "P1MonsterZone";
-				} else {
-					return "P1SpellZone";
-				}
-			} else {
-				return "P1HandZone";
-			}
-		} else {
-			if(field) {
-				if(monster) {
-					return "P2MonsterZone";
-				} else {
-					return "P2SpellZone";
-				}
-			} else {
-				return "P2HandZone";
-			}
-		}
+		SpriteLogic.setCurrentSelectionToRectangle(r);
 	}
 
+    public void initialDraw(int n) {
+        //Draw initial cards
+        for(int i = 0; i < 2*n; i++) {
+            this.doDraw();
+            game.changeTurns();
+        }
+        game.setFirstTurn(true);
+    }
+
+    public void newGame() {
+        DeerForestSingletonGetter.getDeerForest().dispose();
+        DeerForestSingletonGetter.getDeerForest().create();
+    }
+
+    public void setGameFinished(boolean b) {
+        this.gameFinished = b;
+    }
+
+    public ExtendedSprite getSelection() {
+        return this.zoomSelection;
+    }
+
+    public boolean hasDrawn() {
+        return drawn;
+    }
 }

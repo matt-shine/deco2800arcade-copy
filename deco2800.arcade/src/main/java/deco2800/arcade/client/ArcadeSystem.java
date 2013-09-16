@@ -39,7 +39,7 @@ public class ArcadeSystem {
 	}
 
     public static void close() {
-        arcade.close();
+        arcade.arcadeExit();
     }
 
 	public static GameClient getCurrentGame() {

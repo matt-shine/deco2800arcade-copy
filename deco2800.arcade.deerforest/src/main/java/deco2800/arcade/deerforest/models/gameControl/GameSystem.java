@@ -17,7 +17,8 @@ public class GameSystem {
 	private List<AbstractCard> selectionChoices = null;
 	//define if summon has happened this turn
 	private boolean summoned;
-	
+    private boolean firstTurn;
+
 	//Initialize the game, should get player data from controller (note players own their deck)
 	public GameSystem(DeerForestPlayer player1, DeerForestPlayer player2) {
 		p1 = player1;
@@ -32,6 +33,7 @@ public class GameSystem {
 			//start phase
 			currentPhase = "StartPhase";
 			summoned = false;
+            firstTurn = true;
 		}
 		//game already started
 		return false;
@@ -69,9 +71,11 @@ public class GameSystem {
 			drawPhase();
 		} else if(currentPhase.equals("DrawPhase")) {
 			mainPhase();
-		} else if(currentPhase.equals("MainPhase")) {
-			battlePhase();
-		} else if(currentPhase.equals("BattlePhase")) {
+		} else if(currentPhase.equals("MainPhase") && !firstTurn) {
+            battlePhase();
+        } else if(currentPhase.equals("MainPhase") && firstTurn) {
+            endPhase();
+        } else if(currentPhase.equals("BattlePhase")) {
 			endPhase();
 		}
 		
@@ -86,8 +90,7 @@ public class GameSystem {
 			currentPlayer = currentPlayer==p1?p2:p1;
 			summoned = false;
 			return true;
-		}
-		
+        }
 		return false;
 	}
 
@@ -132,8 +135,9 @@ public class GameSystem {
 	//sets to end phase, returns true if succeed, changes current player
 	public boolean endPhase() {
 		
-		if(currentPhase.equals("BattlePhase")) {
+		if(currentPhase.equals("BattlePhase") || (currentPhase.equals("MainPhase") && firstTurn)) {
 			currentPhase = "EndPhase";
+            firstTurn = false;
 			return true;
 		}
 		
@@ -179,7 +183,7 @@ public class GameSystem {
 	 * 3: error
 	 * 
 	 * @param fSpell spell card to activate
-	 * @param player player that activated the card
+	 * @param p player that activated the card
 	 * @return error code
 	 */
 	public int activate(FieldSpell fSpell, DeerForestPlayer p) {
@@ -273,6 +277,15 @@ public class GameSystem {
 		p.getGraveyard().sort();
 	}
 
+    public void inflictDamage(int player, int amount) {
+
+        if(player == 1) {
+            p1.inflictDamage(amount);
+        } else if(player == 2) {
+            p2.inflictDamage(amount);
+        }
+    }
+
 	public boolean getSummoned() {
 		return summoned;
 	}
@@ -307,4 +320,12 @@ public class GameSystem {
 	public boolean moveCards(int player, List<AbstractCard> cards, CardCollection oldLocation, CardCollection newLocation) {
 		return player==1?p1.moveCards(cards, oldLocation, newLocation):p2.moveCards(cards, oldLocation, newLocation);
 	}
+
+    public void setCurrentPlayer(int player) {
+        this.currentPlayer = player==1?p1:p2;
+    }
+
+    public void setFirstTurn(boolean b) {
+        this.firstTurn = b;
+    }
 }

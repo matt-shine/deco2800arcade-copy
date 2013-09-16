@@ -5,8 +5,6 @@ import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
 import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -30,6 +31,9 @@ public class PlayScreen implements Screen
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
+	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
+	private ArrayList<PowerUp> powerupsToRemove = new ArrayList<PowerUp>();
 	
 	private PlayerShip player;
 	private GameMap map;
@@ -63,7 +67,7 @@ public class PlayScreen implements Screen
     	
     	// Test code
     	PowerUp test = new PowerUp();
-    	stage.addActor(test);
+    	addPowerup(test);
     	Texture testText = new Texture(Gdx.files.internal("enemies/enemy1.png"));
     	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
     	addEnemy(e);
@@ -79,9 +83,15 @@ public class PlayScreen implements Screen
     @Override
     public void render(float delta)
     {
+    	Gdx.gl.glClearColor(0, 0, 0, 1);
+    	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	//concurrency whoooo!
     	bullets.removeAll(bulletsToRemove);
     	bulletsToRemove.clear();
+    	enemies.removeAll(enemiesToRemove);
+    	enemiesToRemove.clear();
+    	powerups.removeAll(powerupsToRemove);
+    	powerupsToRemove.clear();
     	
     	if(!game.isPaused()) {
     		stage.act(delta);
@@ -105,6 +115,13 @@ public class PlayScreen implements Screen
     				continue;
     			}
     		}
+			for(PowerUp p: powerups) {
+				if(p.hasCollidedUnscaled(player)) {
+					//TODO: POWERUPS WOO
+					removePowerup(p);
+					continue;
+				}
+			}
     	}
     	// Draws the map
     	stage.draw();
@@ -150,5 +167,20 @@ public class PlayScreen implements Screen
     public void addEnemy(Enemy enemy) {
     	stage.addActor(enemy);
     	enemies.add(enemy);
+    }
+    
+    public void removeEnemy(Enemy e) {
+    	enemiesToRemove.add(e);
+    	e.remove();
+    }
+    
+    public void addPowerup(PowerUp p) {
+    	stage.addActor(p);
+    	powerups.add(p);
+    }
+    
+    public void removePowerup(PowerUp p) {
+    	powerupsToRemove.add(p);
+    	p.remove();
     }
 }

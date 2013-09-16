@@ -56,7 +56,7 @@ public class ReplaySystemDemo {
 	    Thread.sleep( 1000 );
 	
 	    //Start the session with a game id and username
-	    replayHandler.startSession(123, "max_koopman");
+	    replayHandler.startSession("replay_handler_demo", "max_koopman");
 	    
 		replayHandler.startRecording();
 		

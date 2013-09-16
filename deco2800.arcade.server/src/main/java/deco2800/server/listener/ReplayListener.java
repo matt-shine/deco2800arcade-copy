@@ -63,7 +63,7 @@ public class ReplayListener extends Listener {
             
             try {
                 //TODO, DB should sent US the sessionId, also date format is wrong.
-                sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId.intValue(), ssr.username, 000, "");
+                sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId, ssr.username, 000, "");
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
@@ -99,7 +99,7 @@ public class ReplayListener extends Listener {
             ListSessionsResponse response = new ListSessionsResponse();
             
             try {
-                ArrayList<String> sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId.intValue());
+                ArrayList<String> sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }

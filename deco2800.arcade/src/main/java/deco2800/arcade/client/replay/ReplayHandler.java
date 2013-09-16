@@ -18,6 +18,7 @@ import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
+import deco2800.arcade.protocol.replay.types.Session;
 
 import java.util.*;
 
@@ -77,7 +78,7 @@ public class ReplayHandler {
 	 * @param gameId
 	 * @param username
 	 */
-	public void startSession(Integer gameId, String username)
+	public void startSession(String gameId, String username)
 	{
 	    StartSessionRequest ssr = new StartSessionRequest();
 	    ssr.gameId = gameId;
@@ -112,7 +113,7 @@ public class ReplayHandler {
 	 * Request the list of sessions available to replay from the server.
 	 * @param gameId
 	 */
-	public void requestSessionList(Integer gameId)
+	public void requestSessionList(String gameId)
 	{
 	    ListSessionsRequest lsr = new ListSessionsRequest();
 	    lsr.gameId = gameId;
@@ -121,6 +122,21 @@ public class ReplayHandler {
 	
 	public void sessionListReceived(ListSessionsResponse lsr)
 	{
+	    ArrayList<Session> sessions = lsr.sessions;
+	    
+	    if (sessions.size() == 0)
+	    {
+	        System.out.println("No sessions for game.");
+	        return;
+	    }
+	    
+	    System.out.println("Sessions for game: " + sessions.get(0).gameId);
+	    
+	    for (Session s : sessions)
+	    {
+	        System.out.println(s.sessionId);
+	    }
+	    
 	  //TODO Implement
 	}
 	

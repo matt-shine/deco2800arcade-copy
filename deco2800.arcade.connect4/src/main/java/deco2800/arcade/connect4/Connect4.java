@@ -91,7 +91,7 @@ public class Connect4 extends GameClient {
 		keyCodes[KEY_RIGHT] = 0; //Right Key
 		keyCodes[KEY_ENTER] = 0; //Enter Key
 		
-        this.networkClient = networkClient; //this is a bit of a hack  
+        this.networkClient = networkClient; //this is a bit of a hack 
         
         replayHandler = new ReplayHandler( this.networkClient );
 		replayListener = new ReplayListener(replayHandler);
@@ -110,7 +110,9 @@ public class Connect4 extends GameClient {
 						                    new String[]{"col"}
 						                       );
 		
-		replayHandler.startSession( 1, "replayers" );
+		replayHandler.requestSessionList(getGame().id);
+		
+		replayHandler.startSession( getGame().id, "replayers" );
 	}
 	
 

@@ -32,7 +32,7 @@ public class ReplayStorage {
 				
 				sessionsState = connection.createStatement();
 				sessionsState.execute( "CREATE TABLE " + sessions + "(SessionID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
-						+ "GameID INT NOT NULL,"
+						+ "GameID VARCHAR(255) NOT NULL,"
 						+ "Recording BOOLEAN NOT NULL, "
 						+ "UserName VARCHAR(30) NOT NULL,"
 						+ "DateTime BIGINT NOT NULL, "
@@ -121,10 +121,10 @@ public class ReplayStorage {
 	 * @param gameID
 	 * @return
 	 */
-	public ArrayList<String> getSessionsForGame( int gameID ) throws DatabaseException{
+	public ArrayList<String> getSessionsForGame( String gameID ) throws DatabaseException{
 		//return list of everything from sessions table for that ID
 		
-		ArrayList<String> sessions = new ArrayList <String>();
+		ArrayList<String> sessionsList = new ArrayList <String>();
 		Connection connection = null;
 		Statement state = null;
 		String concat;
@@ -132,21 +132,24 @@ public class ReplayStorage {
 		try{
 			connection = Database.getConnection();
 			state = connection.createStatement();
+
 			ResultSet results = state.executeQuery( "SELECT SessionID, "
-					+ "Recording, User, DateTime, Comments FROM " + sessions + " WHERE"
-					+ "GameID =" + gameID );
+					+ "Recording, UserName, DateTime, Comments FROM " + sessions + " WHERE"
+					+ " GameID = '" + gameID + "'");
+			
+
 			
 			while ( results.next() ){
 				int sessionID = results.getInt( "SessionID" );
 				boolean recording = results.getBoolean( "Recording" );
-				String user = results.getString( "User" );
+				String user = results.getString( "UserName" );
 				long dateTime = results.getLong( "DateTime" );
 				String comments = results.getString( "Comments" );
 				
 				concat = sessionID + ", " + recording + ", " + user + ", " +
 				dateTime + ", " + comments; 
 				
-				sessions.add( concat );//.add?
+				sessionsList.add( concat );//.add?
 				concat = "";
 			}
 			
@@ -169,7 +172,7 @@ public class ReplayStorage {
 				throw new DatabaseException("Something went awry.", e);
 			}			
 		}
-		return sessions;	
+		return sessionsList;	
 	}
 	
 	
@@ -231,7 +234,7 @@ public class ReplayStorage {
 	 * Insert new entry into Sessions table.
 	 * 
 	 */
-	public int insertSession( int gameID, 
+	public int insertSession( String gameID, 
 			String userName, long dateTime, String comment ) throws DatabaseException{
 		
 		Connection connection = null;
@@ -244,7 +247,7 @@ public class ReplayStorage {
 			
 			state = connection.createStatement();
 			String insert = "INSERT INTO " + sessions + " (GameID, Recording, UserName, DateTime, Comments) " 
-							+ "VALUES (" + gameID + ", true, '" 
+							+ "VALUES ('" + gameID + "', true, '" 
 							+ userName + "', " + dateTime + ", '" + comment 
 							+ "')";
 			state.executeUpdate(insert);

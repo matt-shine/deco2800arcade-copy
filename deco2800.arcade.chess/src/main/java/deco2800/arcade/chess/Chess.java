@@ -6,6 +6,7 @@ import deco2800.arcade.chess.SplashScreen;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
+import deco2800.arcade.client.UIOverlay.PopupMessage;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
 import deco2800.arcade.client.replay.ReplayEventListener;
@@ -40,7 +41,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
-public class Chess extends GameClient implements Screen, InputProcessor{
+public class Chess extends GameClient implements InputProcessor, Screen {
 	
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
@@ -149,9 +150,9 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 	        }
 	        br.close();
 	    } catch (FileNotFoundException e) {
-	    	System.out.println(e.getMessage());
+	    	System.err.println(e.getMessage());
 	    } catch (IOException e) {
-	    	System.out.println(e.getMessage());
+	    	System.err.println(e.getMessage());
 		}
 	    
 	    loadedStyle = 0;	    
@@ -238,9 +239,10 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 			@Override
 			public void show() {
 			}
-			
 			@Override
-			public void pause() {}
+			public void pause() {
+				int a=0;
+			}
 			@Override
 			public void render(float arg0) {
 			}
@@ -261,16 +263,10 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 	@Override
 	public void render() {
 
-			// White background
-			Gdx.gl.glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-			drawPieces();
-			
-			if(moving) {
-				showPossibleMoves(movingPiece);
-			}
-
-			super.render();
+		// White background
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		drawPieces();
 
 		// tell the camera to update its matrices.
 		camera.update();
@@ -278,7 +274,10 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 		batch.setProjectionMatrix(camera.combined);
 
 		drawPieces();
-
+		
+		if(moving) {
+			showPossibleMoves(movingPiece);
+		}
 
 		super.render();
 
@@ -327,7 +326,7 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 		/*if(arg0 == NUM_3){
 			gameState = GameState.REPLAY;
 		}*/
-		if(arg0 == Keys.SHIFT_LEFT) {
+		if(arg0 == Keys.CONTROL_LEFT) {
 			if(loadedStyle == styles.size()-1) {
 				loadedStyle = 0;
 			} else {
@@ -340,8 +339,11 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 		
 		if(arg0 == Keys.T) {
 			paused = !paused;
-			System.out.println(paused);
 			onPause();
+		}
+		
+		if(arg0 == Keys.G) {
+			createPopup("WORKING");
 		}
 		return true;
 	}
@@ -372,17 +374,14 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		System.out.println(paused);
 		if(!paused) {
 			if (!moving) {
-				System.out.println(2);
 				movingPiece = checkSquare(x, y);
 				try {
 					if (board.isNullPiece(movingPiece)) {
 						return false;
 					}
 					if (movingPiece.getTeam() == board.whoseTurn()) {
-						System.out.println(3);
 						moving = true;
 						showPossibleMoves(movingPiece);
 						return true;
@@ -517,10 +516,6 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 			batch.draw(neededPics.get(i), xcoord, ycoord);
 			batch.end();
 		}
-		/*
-		 * whiteRook1Pos[0] = (pieceHorizOff + horizOff + (59) * correctPos[1]);
-					whiteRook1Pos[1] = (pieceVerticOff + verticOff + (59) * correctPos[0]);
-		 */
 		
 	}
 
@@ -1010,13 +1005,13 @@ public class Chess extends GameClient implements Screen, InputProcessor{
     }
 	
 	private void onPause() {
-		/*
+		
 		if(paused) {
 			createPopup("Game is paused");
 		} else {
 			createPopup("Game is active");
 		}
-		*/
+		
 	}
 	
 	private void createPopup(final String message) {
@@ -1046,4 +1041,6 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 		render();
 		
 	}
+	
+
 }

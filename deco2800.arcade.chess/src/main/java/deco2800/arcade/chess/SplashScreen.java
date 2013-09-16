@@ -173,6 +173,7 @@ public class SplashScreen implements Screen, UIOverlay, InputProcessor {
 
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
+		//Skips menuscreen
 		game.setScreen(game);
 		return false;
 	}

@@ -11,14 +11,19 @@ import deco2800.arcade.client.ArcadeInputMux;
 
 public class RegisterScreen implements Screen {
 
-    private Skin skin;
-    private Stage stage;
+    private class RegisterScreenStage extends Stage {}
 
-    public RegisterScreen() {
+    private Skin skin;
+    private RegisterScreenStage stage;
+    private ArcadeUI arcadeUI;
+
+    public RegisterScreen(ArcadeUI ui) {
+        arcadeUI = ui;
+
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
-        stage = new Stage();
+        stage = new RegisterScreenStage();
         
         Table table = new Table();
         table.setFillParent(true);
@@ -37,7 +42,7 @@ public class RegisterScreen implements Screen {
         passwordTextCheck.setPasswordMode(true);
         passwordTextCheck.setPasswordCharacter('*');
         TextButton registerButton = new TextButton("Register", skin);
-        TextButton cancelButton = new TextButton("Cancel", skin);
+        TextButton cancelButton = new TextButton("Cancel", skin, "alt");
 
         table.add(errorLabel).colspan(2);
         table.row();
@@ -56,6 +61,7 @@ public class RegisterScreen implements Screen {
         });
         cancelButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+
             }
         });
     }

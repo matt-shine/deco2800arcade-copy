@@ -1,6 +1,7 @@
 package deco2800.arcade.lunarlander;
 
 import java.util.*;
+import java.lang.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -10,9 +11,13 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Input.Keys;
+
+
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -32,20 +37,24 @@ public class LunarLander extends GameClient {
 	
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
-	private Texture texture;
+	private Texture backgroundTexture;
 	private BitmapFont font;
 	
-	private Texture lander;
-	private int acceleration;
-	private int initPosition;
+	private Texture landerTexture;
+	private float landerX;
+	private float landerY;
+	private float acceleration;
+	private float initialPositionX;
+	private float initialPositionY;
 	
 	private int score;
 	private int fuel;
 	private int speed;
 	private int time;
-	private float pixelsPerSecond = 10.0f;
+	private float pixelsPerSecond = 40.0f;
+	private float downwardSpeed = 30.0f;
 	
-	Timer timer;
+	//topwatch stopwatch;
 	
 	/**
 	 * Basic constructor for Lunar Lander 
@@ -65,8 +74,8 @@ public class LunarLander extends GameClient {
 	public void create() {
 				
 		batch = new SpriteBatch();		
-		texture = new Texture(Gdx.files.internal("lunarlanderassets/stars.png"));
-		lander = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/stars.png"));
+		landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 
@@ -74,18 +83,19 @@ public class LunarLander extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
-		initPosition= 600;
-		acceleration=0;
+		initialPositionY = 600;
+		initialPositionX = 400;
+		acceleration = 0;
 		score = 0;
 		fuel = 1000;
 		speed = 0;
 		time = 0;
-		timer = new Timer();
 		
-		//ball = new Ball();
-		//ball.setColor(1, 1, 1, 1);
+		landerX = 60;
+		landerY = 50;
+		// = new Stopwatch();
 		
-        /*//add the overlay listeners
+        //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
 			@Override
@@ -118,7 +128,7 @@ public class LunarLander extends GameClient {
 				//TODO: unpause pong
 			}
 			
-        }*/
+        });
         
         
 	}	
@@ -138,12 +148,29 @@ public class LunarLander extends GameClient {
 	 */
 	@Override
 	public void render() {
+				
+		if(Gdx.input.isKeyPressed(Keys.A)) { //working
+			//System.out.println("D pressed");
+			initialPositionX -= Gdx.graphics.getDeltaTime() * pixelsPerSecond;
+		}
+		
+	    if(Gdx.input.isKeyPressed(Keys.D)) {
+	    	initialPositionX += Gdx.graphics.getDeltaTime() * pixelsPerSecond;
+	    }
+	    
+		if(Gdx.input.isKeyPressed(Keys.W)) {
+			initialPositionY += Gdx.graphics.getDeltaTime() * pixelsPerSecond;
+		}
+		
+		if(Gdx.input.isKeyPressed(Keys.S)) {
+			initialPositionY -= Gdx.graphics.getDeltaTime() * pixelsPerSecond;
+		}
 		 
 		// clear screen, create background using texture
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
-	    batch.draw(texture, 0, 0, 1200, 800);
-	    batch.draw(lander, 550, (initPosition - acceleration), 50, 50);
+	    batch.draw(backgroundTexture, 0, 0, 1200, 800);
+	    batch.draw(landerTexture, initialPositionX, initialPositionY, landerX, landerY);
 	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
@@ -159,10 +186,12 @@ public class LunarLander extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    //Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	 
-	    //ball.render(shapeRenderer);
+	    shapeRenderer.begin(ShapeType.Line);
 	    
+	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
+	    // and ends with the shapeRenderer.end
+	    //shapeRenderer.line(SCREENWIDTH/2, SCREENHEIGHT/2, 50, 50);
+	 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
 	    
@@ -195,11 +224,15 @@ public class LunarLander extends GameClient {
 	    }*/
 	    
 	    //Simple gravity function, hopefully this will increase logarithmically
-	    speed = speed + 1;
+	    // I think the speed will only increase if the player presses a key that
+	    // will make the lander speed up, so I've just commented this out until we
+	    // work out how to do that! 
+	    //speed = speed + 1;
 	    
-	    if(!(initPosition - acceleration < 0)){
-	    	acceleration = acceleration + 1;
-	    }
+	    //if(!(initialPositionY - acceleration < 0) && initPositionY != 0){
+	    /*while(initialPositionY > 0) {
+	    	initialPositionY = initialPositionY + 1;
+	    }*/
 	    
 		super.render();
 		

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import deco2800.arcade.client.ArcadeInputMux;
 
 public class RegisterScreen implements Screen {
@@ -15,7 +16,8 @@ public class RegisterScreen implements Screen {
 
     private Skin skin;
     private RegisterScreenStage stage;
-    private ArcadeUI arcadeUI;
+    @SuppressWarnings("unused")
+	private ArcadeUI arcadeUI;
 
     public RegisterScreen(ArcadeUI ui) {
         arcadeUI = ui;

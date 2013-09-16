@@ -87,13 +87,10 @@ public class NetworkClient {
 		this.client.addListener(sealedListener);
 	}
 
-<<<<<<< HEAD
-=======
     public Client kryoClient() {
         return client;
     }
 	
->>>>>>> origin/master
 	/**
 	 * Sends a NetworkObject over TCP
 	 * 

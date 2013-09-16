@@ -87,17 +87,12 @@ public class ArcadeServer {
 	
 	// Credit storage service
 	private CreditStorage creditStorage;
-<<<<<<< HEAD
-	// private PlayerStorage playerStorage;
-	// private FriendStorage friendStorage;
-
-=======
+	
 	//private PlayerStorage playerStorage;
 	//private FriendStorage friendStorage;
 
     private ImageStorage imageStorage;
 	
->>>>>>> origin/master
 	// Highscore database storage service
 	private HighscoreDatabase highscoreDatabase;
 
@@ -142,15 +137,11 @@ public class ArcadeServer {
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
-<<<<<<< HEAD
-
-=======
 		
         this.imageStorage = new ImageStorage();
 
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
->>>>>>> origin/master
 		this.highscoreDatabase = new HighscoreDatabase();
 		
 		this.packServ = new PackageServer();
@@ -158,16 +149,11 @@ public class ArcadeServer {
 		// initialize database classes
 		try {
 			creditStorage.initialise();
-<<<<<<< HEAD
-			// playerStorage.initialise();
-
-=======
             imageStorage.initialise();
 			//playerStorage.initialise();
             
 			achievementStorage.initialise();
 			
->>>>>>> origin/master
 			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block

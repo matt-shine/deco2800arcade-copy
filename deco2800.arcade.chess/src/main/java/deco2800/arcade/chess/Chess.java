@@ -1,11 +1,8 @@
 package deco2800.arcade.chess;
 
 //import deco2800.arcade.chess.screen.HelpScreen;
-//import deco2800.arcade.chess.MenuScreen;
-////import deco2800.arcade.burningskies.screen.OptionsScreen;
-///import deco2800.arcade.burningskies.screen.PlayScreen;
-///import deco2800.arcade.burningskies.screen.ScoreScreen;
-//import deco2800.arcade.chess.SplashScreen;
+import deco2800.arcade.chess.MenuScreen;
+import deco2800.arcade.chess.SplashScreen;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
@@ -112,7 +109,7 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 	private NetworkClient networkClient;	
 	
 	public SplashScreen splashScreen;
-	//public MenuScreen menuScreen;
+	public MenuScreen menuScreen;
 
 
 	
@@ -126,9 +123,9 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
-		//splashScreen = new SplashScreen(this);
-		//menuScreen = new MenuScreen(this);
-		//setScreen(splashScreen);
+		splashScreen = new SplashScreen(this);
+		menuScreen = new MenuScreen(this);
+		setScreen(splashScreen);
 		this.networkClient = networkClient; // this is a bit of a hack
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; // TODO eventually the server may send back the
@@ -175,8 +172,8 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 
 		Texture.setEnforcePotImages(false);
 
+		//Add in correct multiplexer
 		inputMultiplexer.addProcessor(this);
-
 		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
 		
 		Overlay = this.getOverlay();
@@ -375,14 +372,17 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
+		System.out.println(paused);
 		if(!paused) {
 			if (!moving) {
+				System.out.println(2);
 				movingPiece = checkSquare(x, y);
 				try {
 					if (board.isNullPiece(movingPiece)) {
 						return false;
 					}
 					if (movingPiece.getTeam() == board.whoseTurn()) {
+						System.out.println(3);
 						moving = true;
 						showPossibleMoves(movingPiece);
 						return true;
@@ -390,24 +390,25 @@ public class Chess extends GameClient implements Screen, InputProcessor{
 				} catch (NullPointerException e) {
 					System.err.println("No valid square selected");
 				}
-			}
-			return false;
-		} else {
-			int[] newPos = determineSquare(x, y);
-			if (board.movePiece(movingPiece, newPos)) {
-				movePieceGraphic();
-				moving = false;
-				/*replayHandler.pushEvent(
+				return false;
+			} else {
+				int[] newPos = determineSquare(x, y);
+				if (board.movePiece(movingPiece, newPos)) {
+					movePieceGraphic();
+					moving = false;
+					/*replayHandler.pushEvent(
     			        ReplayNodeFactory.createReplayNode(
     			                "move_piece",
     			                movingPiece, newPos
     			        ));
 				return true;*/
+				}
+				movingPiece = board.nullPiece;
+				moving = false;
+				return false;
 			}
-			movingPiece = board.nullPiece;
-			moving = false;
-			return false;
 		}
+		return true;
 
 	}
 
@@ -1009,11 +1010,13 @@ public class Chess extends GameClient implements Screen, InputProcessor{
     }
 	
 	private void onPause() {
+		/*
 		if(paused) {
 			createPopup("Game is paused");
 		} else {
 			createPopup("Game is active");
 		}
+		*/
 	}
 	
 	private void createPopup(final String message) {

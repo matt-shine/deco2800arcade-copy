@@ -34,6 +34,8 @@ public class GameMap {
 	
 	public ArrayList<char[]> readMap(String file) throws IOException {
 
+		FileHandle fh = Gdx.files.internal(file);
+		file = fh.toString();
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
 

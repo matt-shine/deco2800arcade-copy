@@ -134,6 +134,7 @@ public class Pacman extends GameClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} // Hope this is fixed!
+		map1.drawMap(map1Array, shaper);
 	}
 	
 	/**

@@ -30,16 +30,6 @@ public class ArcadeUI extends GameClient {
 		super(player, networkClient);
 	}
 
-    /*
-     * ArcadeUI called when starting the arcade, or exiting a game
-     * Checks to see whether a user is logged in.
-     * If not, changes screen to login screen
-     * If a user is logged in, go to the home screen.
-     * If register is called from the login screen, go to the register screen
-     * If store is called from the home screen, go to the store screen.
-     * Whenever you wish to go bck to the home screen, just call arcadeUI and it will sort it out
-     */
-
     @Override
     public void create() {
         ArcadeSystem.openConnection(); // Move this to somewhere more appropriate.

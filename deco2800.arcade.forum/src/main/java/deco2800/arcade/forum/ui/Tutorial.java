@@ -1,4 +1,4 @@
-package deco2800.arcade.fourm.ui;
+package deco2800.arcade.forum.ui;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
@@ -17,7 +17,7 @@ import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class MainPage {
+public class Tutorial {
 	private static JTextField textField;
 
 	   public static void main(String[] args) {
@@ -35,6 +35,10 @@ public class MainPage {
 	      JButton btnSearch = new JButton("Search");
 	      btnSearch.setBounds(897, 73, 97, 25);
 	      f.getContentPane().add(btnSearch);
+	      
+	      JButton btnNewButton = new JButton("New Thread");
+	      btnNewButton.setBounds(7, 194, 116, 25);
+	      f.getContentPane().add(btnNewButton);
 	      
 	      JLabel lblArcadeForum = new JLabel("ARCADE FORUM");
 	      lblArcadeForum.setForeground(Color.WHITE);
@@ -62,7 +66,7 @@ public class MainPage {
 	      lblTag.setBounds(546, 129, 97, 16);
 	      f.getContentPane().add(lblTag);
 	      
-	      JLabel lblNewLabel = new JLabel("General Discussion");
+	      JLabel lblNewLabel = new JLabel("Tutorial");
 	      lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 	      lblNewLabel.setBounds(12, 155, 163, 26);
 	      f.getContentPane().add(lblNewLabel);
@@ -91,40 +95,6 @@ public class MainPage {
 	      panel_1.setBackground(Color.DARK_GRAY);
 	      panel_1.setBounds(0, 0, 1006, 57);
 	      f.getContentPane().add(panel_1);
-	      
-	      JTextPane textPane = new JTextPane();
-	      textPane.setEnabled(false);
-	      textPane.setEditable(false);
-	      textPane.setText("For discussion of non technical stuff");
-	      textPane.setFont(new Font("Tahoma", Font.ITALIC, 13));
-	      textPane.setBounds(12, 194, 520, 73);
-	      f.getContentPane().add(textPane);
-	      
-	      JLabel lblTutorial = new JLabel("Tutorial ");
-	      lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 15));
-	      lblTutorial.setBounds(12, 303, 89, 16);
-	      f.getContentPane().add(lblTutorial);
-	      
-	      JTextPane txtpnTipsAndTrick = new JTextPane();
-	      txtpnTipsAndTrick.setEditable(false);
-	      txtpnTipsAndTrick.setEnabled(false);
-	      txtpnTipsAndTrick.setText("Tips and trick of doing your work");
-	      txtpnTipsAndTrick.setFont(new Font("Tahoma", Font.ITALIC, 13));
-	      txtpnTipsAndTrick.setBounds(12, 332, 520, 73);
-	      f.getContentPane().add(txtpnTipsAndTrick);
-	      
-	      JLabel lblReportBug = new JLabel("Report Bug");
-	      lblReportBug.setFont(new Font("Tahoma", Font.BOLD, 15));
-	      lblReportBug.setBounds(12, 444, 97, 16);
-	      f.getContentPane().add(lblReportBug);
-	      
-	      JTextPane txtpnSpotABug = new JTextPane();
-	      txtpnSpotABug.setEnabled(false);
-	      txtpnSpotABug.setEditable(false);
-	      txtpnSpotABug.setText("Spot a bug? Report here");
-	      txtpnSpotABug.setFont(new Font("Tahoma", Font.ITALIC, 13));
-	      txtpnSpotABug.setBounds(12, 473, 520, 73);
-	      f.getContentPane().add(txtpnSpotABug);
 	      f.setVisible(true);
 	      
 	    }

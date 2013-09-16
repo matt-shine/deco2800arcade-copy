@@ -1,4 +1,4 @@
-package deco2800.arcade.fourm.ui;
+package deco2800.arcade.forum.ui;
 
 
 import java.awt.BorderLayout;

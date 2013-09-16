@@ -34,8 +34,8 @@ public class DeerForest extends GameClient {
 	MainInputProcessor inputProcessor;
 	boolean inMenu;
 	DeckBuilder deckBuilder;
-	private DeckBuilderScreen deckBuilderView;
-	private DeckBuilderInputProcessor deckInputProcessor;
+	DeckBuilderScreen deckBuilderView;
+	DeckBuilderInputProcessor deckInputProcessor;
 	
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);

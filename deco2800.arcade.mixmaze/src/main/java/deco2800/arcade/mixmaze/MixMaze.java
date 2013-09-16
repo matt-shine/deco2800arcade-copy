@@ -45,7 +45,6 @@ public final class MixMaze extends GameClient {
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
-
 		settingsScreen = new SettingsScreen(this);
 		
 		setScreen(splashScreen);
@@ -73,7 +72,7 @@ public final class MixMaze extends GameClient {
 	public void dispose() {
 		Gdx.app.debug(LOG, "disposing");
 		splashScreen.dispose();
-		//menuScreen.dispose();
+		menuScreen.dispose();
 		gameScreen.dispose();
 		super.dispose();
 	}

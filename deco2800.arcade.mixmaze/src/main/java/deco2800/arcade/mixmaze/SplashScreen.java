@@ -17,13 +17,13 @@ import static com.badlogic.gdx.utils.TimeUtils.millis;
  * should be the menu screen.
  */
 final class SplashScreen implements Screen {
-	//private static final String LOG = SplashScreen.class.getSimpleName();
+	private static final String LOG = SplashScreen.class.getSimpleName();
 
 	private final MixMaze game;
 	private final SpriteBatch batch;
 	private final Texture texture;
 
-	private long startTime; 
+	private long startTime;
 
 	/**
 	 * Constructor
@@ -31,20 +31,21 @@ final class SplashScreen implements Screen {
 	SplashScreen(final MixMaze game) {
 		this.game = game;
 		batch = new SpriteBatch();
-		texture = new Texture(Gdx.files.internal("background.png"));
+		texture = new Texture(Gdx.files.internal("splash.png"));
 	}
 
 	@Override
 	public void render(float delta) {
-		//if (millis() - startTime > 500
-		//		&& Gdx.input.isKeyPressed(ANY_KEY)) {
-		//	Gdx.app.debug(LOG, "switching to menu screen");
-		//	game.setScreen(game.menuScreen);
-		
-		//Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
+		if (millis() - startTime > 500
+				&& Gdx.input.isKeyPressed(ANY_KEY)) {
+			Gdx.app.debug(LOG, "switching to menu screen");
+			game.setScreen(game.menuScreen);
+		}
+
+		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.draw(texture, 0, 0, Gdx.graphics.getWidth(),
-			Gdx.graphics.getHeight());
+				Gdx.graphics.getHeight());
 		batch.end();
 	}
 

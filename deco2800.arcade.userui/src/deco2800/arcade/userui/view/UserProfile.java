@@ -22,17 +22,13 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 import deco2800.arcade.userui.model.Model;
 
-public class View extends JFrame implements ActionListener {
+public class UserProfile extends JFrame implements ActionListener {
 	
 	/**
 	 * 
 	 * The view class for the main page of the user profile page
 	 * 
-	 */
-	
-	/*
-	 * Declaration of Elements 
-	 */
+	 **/
 	
 	private Model model;
 	
@@ -40,7 +36,6 @@ public class View extends JFrame implements ActionListener {
 	private JPanel parentContainer;
 	
 	private ImagePanel menupanel;
-	private JPanel dropdownpanel;
 	
 	private JPanel contentpanel;
 	private JPanel achievementpanel;
@@ -55,6 +50,10 @@ public class View extends JFrame implements ActionListener {
 	//Declare Buttons here
 	private JButton addfriendbutton;
 	private JButton editbutton;
+	private JButton myprofilelink;
+	private JButton homelink;
+	private JButton storelink;
+	private JButton gameslink;
 	
 	//Declare Labels here
 	private JLabel avatar;
@@ -83,20 +82,25 @@ public class View extends JFrame implements ActionListener {
 	private ImageIcon piceditbutton;
 	
 	//Declare Fonts to use here
-	Font font = new Font("Verdana", Font.BOLD, 16);
-	Font normal = new Font("Verdana", Font.PLAIN, 14);
+	Font blackbold = new Font("Verdana", Font.BOLD, 16);
+	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
+	
 		
-	public View(Model model) throws HeadlessException {
+	public UserProfile(Model model) throws HeadlessException {
 		
 		super("User Profile");
 		
 		this.model = model;
 		
-		/*
+		/**
 		 * Add elements here to window
+		 **/
+		
+		/* 
+		 * Create Image Icons
+		 * 
 		 */
 		
-		// Create Image Icons
 		picavatar = new ImageIcon("assets/images/stark.png");
 		picaboutbar = new ImageIcon("assets/images/about_bar.png");
 		picfriendbar = new ImageIcon("assets/images/friendbar.png");
@@ -107,10 +111,14 @@ public class View extends JFrame implements ActionListener {
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
 		
-		//Text Areas
+		/*
+		 * Text Areas
+		 * 
+		 */
+		
 		aboutarea = new JTextArea("Player information goes here");
 		aboutarea.setLineWrap(true);
-		aboutarea.setFont(normal);
+		aboutarea.setFont(blacknormal);
 		achievementarea = new JTextArea();
 		JPanel friendarea = new JPanel();
 		historyarea = new JTextArea();
@@ -127,13 +135,15 @@ public class View extends JFrame implements ActionListener {
 		historyscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		historyscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		//Panels and ScrollPanes
+		/*
+		 * Panels and ScrollPanes
+		 * 
+		 */
 		parentContainer = new JPanel(new MigLayout());
 		
 	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
 	    menupanel.setLayout(new MigLayout());
-	    dropdownpanel = new JPanel(new MigLayout());
-	    //dropdownpanel.setOpaque(false);
+	    menupanel.setBackground(Color.red);
 	    
 	    sidepanel = new JPanel(new MigLayout());
 	    playerpanel = new JPanel(new MigLayout());
@@ -151,28 +161,51 @@ public class View extends JFrame implements ActionListener {
 	    //historypanel.setOpaque(false);
 	    //achievementpanel.setOpaque(false);
 	               
-        //Buttons and Image Buttons
+        /*
+         * Buttons and Image Buttons
+         * 
+         */
+	    
 	    addfriendbutton = new JButton(picaddfriend);
 	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    addfriendbutton.setContentAreaFilled(false);
 	    editbutton = new JButton(piceditbutton);
 	    editbutton.setBorder(BorderFactory.createEmptyBorder());
 	    editbutton.setContentAreaFilled(false);
+	    
+	    myprofilelink = new JButton("My Profile");
+	    //myprofilelink.setBorder(BorderFactory.createEmptyBorder());
+	    //myprofilelink.setContentAreaFilled(false);
+	    myprofilelink.setBackground(Color.CYAN);
+
+	    homelink = new JButton("Home");
+	    //homelink.setBorder(BorderFactory.createEmptyBorder());
+	    //homelink.setContentAreaFilled(false);
+	    gameslink = new JButton("MyGames");
+	    //gameslink.setBorder(BorderFactory.createEmptyBorder());
+	    //gameslink.setContentAreaFilled(false);
+	    storelink = new JButton("Game-Store");
+	    //storelink.setBorder(BorderFactory.createEmptyBorder());
+	    //storelink.setContentAreaFilled(false);
+	    
         
-        //Labels
+        /*Labels
+         * 
+         */
+	    
         avatar = new JLabel();
         avatar.setIcon(picavatar);
         addfriend = new JLabel();
         addfriend.setIcon(picaddfriend);
         playername = new JLabel("Stark");
         playername.setForeground(Color.white);
-        playername.setFont(font);
+        playername.setFont(blackbold);
         aboutbar = new JLabel();
         aboutbar.setIcon(picaboutbar);
         friendbar = new JLabel();
         friendbar.setIcon(picfriendbar);
         playerlevel = new JLabel("Level 20");
-        playerlevel.setFont(normal);
+        playerlevel.setFont(blacknormal);
         playerlevel.setForeground(Color.white);
         historybar = new JLabel();
         historybar.setIcon(pichistorybar);
@@ -255,10 +288,14 @@ public class View extends JFrame implements ActionListener {
         achievementtext11.setBackground(Color.BLUE);
         achievementtext12.setBackground(Color.BLUE);
 
-		//Add objects and position panels
-        
-        //menupanel.add(dropdownpanel,"east");
-        
+		/*Add objects and position panels
+		 * 
+		 */
+        menupanel.add(homelink, "center, gapbefore 250px");
+        menupanel.add(storelink, "center, gapbefore 60px");
+        menupanel.add(gameslink, "center, gapbefore 60px");
+        menupanel.add(myprofilelink,"center, gapbefore 440px");
+
         playerpanel.add(avatar);
         playerinfopanel.add(playername,"wrap, align 50% 50%");       
         playerinfopanel.add(playerlevel,"wrap, align 50% 50%"); 
@@ -317,17 +354,23 @@ public class View extends JFrame implements ActionListener {
         contentpanel.add(historypanel, "wrap, height :320, width :810, gapbefore 30px");
         contentpanel.add(achievementpanel, "height :320, width :810, gapbefore 30px");
             
-	    //Add panels to Main Panel	               
+	    /*Add panels to Main Panel	
+	     *                
+	     */
 		parentContainer.add(menupanel, "dock north");
 		sidepanel.setBackground(Color.darkGray);
 		parentContainer.add(sidepanel, "west, width :350, height :700");
 		contentpanel.setBackground(Color.gray);
 		parentContainer.add(contentpanel, "east, width :950, height :700");
 		
-		//Add the main panel to JFrame
+		/*Add the main panel to JFrame
+		 * 
+		 */
 		add(parentContainer);
 	
-		// Set the  view window constraints
+		/*Set the  view window constraints
+		 * 
+		 */
 		setSize(1280,800);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		pack();

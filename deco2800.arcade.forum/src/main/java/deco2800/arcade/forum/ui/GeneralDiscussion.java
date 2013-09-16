@@ -1,4 +1,4 @@
-package deco2800.arcade.fourm.ui;
+package deco2800.arcade.forum.ui;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
@@ -17,7 +17,7 @@ import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Tutorial {
+public class GeneralDiscussion {
 	private static JTextField textField;
 
 	   public static void main(String[] args) {
@@ -66,7 +66,7 @@ public class Tutorial {
 	      lblTag.setBounds(546, 129, 97, 16);
 	      f.getContentPane().add(lblTag);
 	      
-	      JLabel lblNewLabel = new JLabel("Tutorial");
+	      JLabel lblNewLabel = new JLabel("General Discussion");
 	      lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
 	      lblNewLabel.setBounds(12, 155, 163, 26);
 	      f.getContentPane().add(lblNewLabel);

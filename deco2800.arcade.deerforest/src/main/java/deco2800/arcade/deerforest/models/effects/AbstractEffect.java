@@ -1,6 +1,5 @@
 package deco2800.arcade.deerforest.models.effects;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;

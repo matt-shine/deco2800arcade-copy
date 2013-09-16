@@ -1,7 +1,5 @@
 package deco2800.arcade.deerforest;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
 import deco2800.arcade.deerforest.models.cardContainers.Deck;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.DarkMonster;
-import deco2800.arcade.deerforest.models.cards.FieldSpell;
 import deco2800.arcade.deerforest.models.cards.FireMonster;
 import deco2800.arcade.deerforest.models.cards.GeneralSpell;
 import deco2800.arcade.deerforest.models.cards.WaterMonster;
@@ -31,9 +28,9 @@ public class DeckTest {
 		List<AbstractCard> list = new ArrayList<AbstractCard>();
 		
 		// Create a new Card
-		c1 = new WaterMonster(100, null, null);
-		c2 = new FireMonster(100, null, null);
-		c3 = new DarkMonster(100, null, null);
+		c1 = new WaterMonster(100, 20, null);
+		c2 = new FireMonster(100, 20, null);
+		c3 = new DarkMonster(100, 20, null);
 		c4 = new GeneralSpell(null, null);
 		
 		list.add(c1);

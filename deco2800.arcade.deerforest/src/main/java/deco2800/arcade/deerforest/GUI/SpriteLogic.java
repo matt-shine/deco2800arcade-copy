@@ -3,35 +3,37 @@ package deco2800.arcade.deerforest.GUI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
+import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 
 public class SpriteLogic {
-
+	//FIXME some big methods that may warrant shrinking
 	//define array of keys for P1 / P2 zones
 	final static String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
 	final static String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};
-	
+
     /**
      * returns the sprite at the point, if one exists and belongs to the
-     * current player
+     * player
      * 
      * @param x
      * @param y
      * @return Sprite intersecting the 
      */
-    public static ExtendedSprite checkIntersection(int x, int y) {
+    public static ExtendedSprite checkIntersection(int player, int x, int y) {
     	
 		DeerForest deerForest = DeerForestSingletonGetter.getDeerForest();
 
-    	Map<String,List<ExtendedSprite>> spriteMap = deerForest.view.getSpriteMap();
+    	Map<String,Set<ExtendedSprite>> spriteMap = deerForest.view.getSpriteMap();
 
     	//check maps according to whose turn it is
-    	if(deerForest.mainGame.getCurrentPlayer() == 1) {
+    	if(player == 1) {
     		//Check each zone in sprite map P1Keys
     		for(String key : P1Keys) {
     			for(ExtendedSprite s : spriteMap.get(key)) {
@@ -40,7 +42,6 @@ public class SpriteLogic {
     		    	}
     		    }
     		}
-    		
     	} else {
     		//Check each zone in sprite map P2Keys
     		for(String key : P2Keys) {
@@ -54,7 +55,7 @@ public class SpriteLogic {
 
     	return null;
     }
-    
+
 	//returns the AbstractCard based on the given sprite and what area it is in (area based on model) 
 	public static AbstractCard getCardModelFromSprite(ExtendedSprite sprite, int player, String area) {
 		
@@ -80,7 +81,7 @@ public class SpriteLogic {
 		
 		boolean[] b = new boolean[2];
 		DeerForest deerForest = DeerForestSingletonGetter.getDeerForest();
-		Map<String, List<ExtendedSprite>> spriteMap = deerForest.view.getSpriteMap();
+		Map<String, Set<ExtendedSprite>> spriteMap = deerForest.view.getSpriteMap();
 		
 		for(String key : spriteMap.keySet()) {
 			if(spriteMap.get(key).contains(s)) {
@@ -165,11 +166,27 @@ public class SpriteLogic {
     	ExtendedSprite currentSelection = DeerForestSingletonGetter.getDeerForest().inputProcessor.getCurrentSelection();
     	MainGameScreen view = DeerForestSingletonGetter.getDeerForest().view;
     	MainGame game = DeerForestSingletonGetter.getDeerForest().mainGame;
-    	
+
+        //Check if in battle phase
+        if(game.getPhase().equals("BattlePhase") && currentSelection.isField() && currentSelection.isMonster()) {
+
+            int defendingPlayer = game.getCurrentPlayer()==1?2:1;
+
+            if(currentSelection.hasAttacked()) {
+                view.setHighlightedZones(new ArrayList<Rectangle>());
+            } else if(((Field)game.getCardCollection(defendingPlayer, "Field")).sizeMonsters() == 0) {
+                view.setHighlightedZones(view.getArena().getAvailableZones(defendingPlayer, true, true));
+            } else {
+                view.setHighlightedZones(view.getArena().getFilledMonsterZones(defendingPlayer));
+            }
+
+            return;
+        }
+
     	boolean currentSelectionMonster = currentSelection.isMonster();
     	
 		//find out where this sprite is stored
-		Map<String, List<ExtendedSprite>> sprites = view.getSpriteMap();
+		Map<String, Set<ExtendedSprite>> sprites = view.getSpriteMap();
 		String spriteArea = "";
 		for(String key: sprites.keySet()) {
 			if(sprites.get(key).contains(currentSelection)) {
@@ -331,4 +348,21 @@ public class SpriteLogic {
     	
     	return false;
 	}
+
+    public static void resetHasAttacked() {
+
+        //Reset both players fields
+        Map<String, Set<ExtendedSprite>> spriteMap = DeerForestSingletonGetter.getDeerForest().view.getSpriteMap();
+
+        Set<ExtendedSprite> p1Field = spriteMap.get("P1MonsterZone");
+        Set<ExtendedSprite> p2Field = spriteMap.get("P2MonsterZone");
+
+        for(ExtendedSprite s : p1Field) {
+            s.setHasAttacked(false);
+        }
+
+        for(ExtendedSprite s: p2Field) {
+            s.setHasAttacked(false);
+        }
+    }
 }

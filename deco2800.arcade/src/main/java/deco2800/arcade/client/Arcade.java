@@ -7,13 +7,11 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.crypto.KeyGenerator;
 import javax.swing.JFrame;
 
 import org.reflections.Reflections;
@@ -22,7 +20,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
-import deco2800.arcade.client.network.listener.AchievementListener;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
@@ -64,6 +61,10 @@ public class Arcade extends JFrame {
 	private ProxyApplicationListener proxy;
 
 	private CommunicationNetwork communicationNetwork;
+	
+	// Width and height of the Arcade window
+	private static final int ARCADE_HEIGHT = 720;
+	private static final int ARCADE_WIDTH = 1280;
 
 	/**
 	 * ENTRY POINT
@@ -85,10 +86,10 @@ public class Arcade extends JFrame {
 	 * 
 	 * @param args
 	 */
-	private Arcade(String[] args) {
+	public Arcade(String[] args) {
 		
-		this.width = 1280;
-		this.height = 720;
+		this.width = ARCADE_WIDTH;
+		this.height = ARCADE_HEIGHT;
 		initWindow();
 	}
 
@@ -102,6 +103,7 @@ public class Arcade extends JFrame {
 		Insets insets = this.getInsets();
 		this.setSize(new Dimension(width + insets.left + insets.right, height
 				+ insets.bottom + insets.top));
+		this.setMinimumSize(new Dimension(640, 480));
 		this.getContentPane().setBackground(Color.black);
 
 		// set shutdown behaviour
@@ -112,6 +114,9 @@ public class Arcade extends JFrame {
 		});
 	}
 
+	/**
+	 * Completely exits arcade. The status code is always set to 0.
+	 */
     public void arcadeExit() {
         removeCanvas();
 
@@ -122,6 +127,9 @@ public class Arcade extends JFrame {
 		});
 	}
 
+	/**
+	 * Attempts to connect to the server
+	 */
 	public void startConnection() {
 		// Try to connect to the server until successful
 		boolean connected = false;
@@ -147,6 +155,7 @@ public class Arcade extends JFrame {
 		try {
 			// TODO allow server/port as optional runtime arguments xor user
 			// inputs.
+            System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
@@ -157,7 +166,6 @@ public class Arcade extends JFrame {
 	}
 
 	private void addListeners() {
-		this.client.addListener(new AchievementListener());
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
@@ -209,7 +217,11 @@ public class Arcade extends JFrame {
 	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
-
+		if (selectedGame == null) {
+			System.err.println("No game with ID " + gameid + " exists.");
+			return;
+		}
+        selectedGame.setNetworkClient(this.client);
 		startGame(selectedGame);
 	}
 
@@ -220,6 +232,7 @@ public class Arcade extends JFrame {
 
 		if (selectedGame != null) {
 			selectedGame.gameOver();
+			proxy.dispose();
 		}
 		proxy.setTarget(new DummyApplicationListener());
 	}
@@ -310,7 +323,6 @@ public class Arcade extends JFrame {
 	 * @return
 	 */
 	public Set<String> findPlayableIds() {
-
 		Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
 				getGameMap());
 
@@ -318,8 +330,7 @@ public class Arcade extends JFrame {
 				.entrySet().iterator();
 		while (it.hasNext()) {
 
-			Map.Entry<String, Class<? extends GameClient>> pair = (Map.Entry<String, Class<? extends GameClient>>) it
-					.next();  // Note:  I (abbjohn) am getting a redundant type cast warning here
+			Map.Entry<String, Class<? extends GameClient>> pair = it.next();
 
 			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
 				it.remove();

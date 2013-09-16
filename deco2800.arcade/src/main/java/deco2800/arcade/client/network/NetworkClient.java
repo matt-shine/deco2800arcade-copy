@@ -35,6 +35,10 @@ public class NetworkClient {
 			throw new NetworkException("Unable to connect to the server", e);
 		}
 	}
+
+    public Client kryoClient() {
+        return client;
+    }
 	
 	/**
 	 * Sends a NetworkObject over TCP

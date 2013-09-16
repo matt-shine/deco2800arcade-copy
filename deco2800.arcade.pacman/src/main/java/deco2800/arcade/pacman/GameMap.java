@@ -29,15 +29,35 @@ public class GameMap {
 	 * 
 	 * Later on we can just have a loop to generate all our walls.
 	 */
-	
-	
-	
+
+	public static void main(String[] args) {
+		System.out.println("first");
+		FileHandle fh = Gdx.files.internal("testmap");
+		System.out.println("before 2string");
+		String file = fh.toString();
+		System.out.println("test!");
+		System.out.println(file);
+
+	}
+
 	public ArrayList<char[]> readMap(String file) throws IOException {
 
+		file = "src\\main\\resources\\testmap.png";
 		FileHandle fh = Gdx.files.internal(file);
 		file = fh.toString();
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
+
+		File absoluteFile = fh.file();
+		String absolutePath = absoluteFile.getAbsolutePath();
+		absolutePath = absolutePath.replace("arcade", "arcade.pacman");
+
+		BufferedReader br = null;
+		try {
+			FileReader fr = new FileReader(absolutePath);
+			br = new BufferedReader(fr);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		ArrayList<char[]> resultArray = new ArrayList<char[]>();
 		try {
@@ -58,35 +78,36 @@ public class GameMap {
 		return resultArray;
 
 	}
-	
-	public ArrayList<char[]> readMap2(String file){
+
+	public ArrayList<char[]> readMap2(String file) {
 		FileHandle filePath = Gdx.files.internal(file);
 		String mapstr = filePath.readString();
 		String[] stringarray;
-		ArrayList<char[]> mapp = new ArrayList<char[]>() ;
+		ArrayList<char[]> mapp = new ArrayList<char[]>();
 		// Split file by newlines.
 		stringarray = mapstr.split(System.getProperty("line.separator"));
-		
-		for(int i = 0; i < stringarray.length; i++){
+
+		for (int i = 0; i < stringarray.length; i++) {
 			mapp.add(stringarray[i].toCharArray());
 		}
-		
+
 		return mapp;
-		
+
 	}
-	
-	
+
 	/*
 	 * Generate and draw walls as specified by the map ArrayList.
 	 */
-	public void drawMap(ArrayList<char[]> map, ShapeRenderer shaper){
-		// using a unit length for the walls as 25 pixels. This means by the standard grid we are working at
+	public void drawMap(ArrayList<char[]> map, ShapeRenderer shaper) {
+		// using a unit length for the walls as 25 pixels. This means by the
+		// standard grid we are working at
 		// at the moment, the txt files must be 24x24.
-		for (int i = 0; i < map.size(); i++){
+		for (int i = 0; i < map.size(); i++) {
 			char[] s = map.get(i);
-			for (int j = 0; j < s.length; j++){
-				Wall wall = new Wall(Character.getNumericValue(s[j]), (900-24*i), (650-24*j), 25);
-				wall.render(shaper); 
+			for (int j = 0; j < s.length; j++) {
+				Wall wall = new Wall(Character.getNumericValue(s[j]),
+						(900 - 24 * i), (650 - 24 * j), 25);
+				wall.render(shaper);
 			}
 		}
 	}

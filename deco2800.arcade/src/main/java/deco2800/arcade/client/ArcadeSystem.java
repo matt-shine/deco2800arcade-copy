@@ -20,11 +20,14 @@ public class ArcadeSystem {
 	}
 	
 	public static void openConnection() {
-		try {
+		arcade.startConnection();
+		/*
+		try {		
 			arcade.connectToServer();
 		} catch (ArcadeException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	public static Set<String> getGamesList() {

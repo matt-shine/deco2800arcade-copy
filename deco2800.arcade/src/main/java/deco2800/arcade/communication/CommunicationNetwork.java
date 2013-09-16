@@ -31,12 +31,16 @@ public class CommunicationNetwork {
 	 * @param networkClient
 	 */
 	public CommunicationNetwork(Player player, NetworkClient networkClient){
+		System.out.println("Creating a CommunicationNetwork");
+		
 		this.player = player;
 		this.networkClient = networkClient;
 		this.chatNodes = new HashMap<Integer, ChatNode>();
 		this.textMessage = new TextMessage();
 		this.chatRequest = new ChatRequest();
 		this.view = new CommunicationView();
+		
+		System.out.println(this.networkClient);
 	}
 	
 	/**

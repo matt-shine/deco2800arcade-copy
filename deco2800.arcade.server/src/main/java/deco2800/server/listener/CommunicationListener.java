@@ -28,14 +28,19 @@ public class CommunicationListener extends Listener {
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
+		
+		System.out.println("Server received SOMETHING");
 
 		if (object instanceof CommunicationRequest){
 			CommunicationRequest contact = (CommunicationRequest) object;
 			connectedUsers.put(contact.username, connection.getID());
+			System.out.println("Server just added: " + contact.username);
 		}
 		
 		if(object instanceof ChatRequest){
 			ChatRequest chatRequest = (ChatRequest) object;
+			
+			System.out.println("Received chatRequest for: " + chatRequest.invite + " from: " + chatRequest.sender);
 			
 			chatResponse.response = "offline";
 			chatResponse.chatID = chatRequest.chatID;

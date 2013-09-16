@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /*
@@ -31,8 +33,10 @@ public class GameMap {
 	
 	
 	
-	ArrayList<char[]> readMap(String file) throws IOException {
+	public ArrayList<char[]> readMap(String file) throws IOException {
 
+		FileHandle fh = Gdx.files.internal(file);
+		file = fh.toString();
 		FileReader fr = new FileReader(file);
 		BufferedReader br = new BufferedReader(fr);
 
@@ -56,10 +60,27 @@ public class GameMap {
 
 	}
 	
+	public ArrayList<char[]> readMap2(String file){
+		FileHandle filePath = Gdx.files.internal(file);
+		String mapstr = filePath.readString();
+		String[] stringarray;
+		ArrayList<char[]> mapp = new ArrayList<char[]>() ;
+		// Split file by newlines.
+		stringarray = mapstr.split(System.getProperty("line.separator"));
+		
+		for(int i = 0; i < stringarray.length; i++){
+			mapp.add(stringarray[i].toCharArray());
+		}
+		
+		return mapp;
+		
+	}
+	
+	
 	/*
 	 * Generate and draw walls as specified by the map ArrayList.
 	 */
-	void drawMap(List<Object> colList, ArrayList<char[]> map, ShapeRenderer shaper){
+	public void drawMap(ArrayList<char[]> map, ShapeRenderer shaper){
 		// using a unit length for the walls as 25 pixels. This means by the standard grid we are working at
 		// at the moment, the txt files must be 24x24.
 		for (int i = 0; i < map.size(); i++){

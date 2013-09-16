@@ -136,12 +136,13 @@ public class Pacman extends GameClient {
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
 		gameState = GameState.READY;
-//		map1 = new GameMap();
-//		try {
-//			map1Array = map1.readMap(file);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} // Hope this is fixed!
+		map1 = new GameMap();
+		try {
+			map1Array = map1.readMap(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // Hope this is fixed!
+		map1.drawMap(map1Array, shaper);
 	}
 	
 	/**

@@ -1,34 +1,42 @@
 package deco2800.arcade.model;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.Player;
 
 public class AchievementProgress {
     
-    //private Player player;
-    //private HashMap<String, Integer> progress;
+    private HashMap<String, Boolean> awarded;
+    private HashMap<String, Integer> progress;
 
-    public AchievementProgress(Player player) {
-        //this.player = player;
-        //this.progress = progress;
+    public AchievementProgress(HashMap<String, Integer> progress,
+                               HashMap<String, Boolean> awarded) {
+        // ok to just clone - Strings, Integers and Booleans are immutable
+        this.progress = (HashMap<String, Integer>)progress.clone();
+        this.awarded = (HashMap<String, Boolean>)awarded.clone();
     }
     
     /**
      * Returns the progress of this instance's player for the given achievement.
      *
-     * 
+     * @param achievement  The achievement of question
      */
     public int progressForAchievement(Achievement achievement) {
-        return 0;
+        if(!progress.containsKey(achievement.id)) {
+            return 0;
+        } else {
+            return progress.get(achievement.id);
+        }
     }
 
     /**
      * Returns a list of achievement IDs corresponding to all of the
-     * achievements that the player has been awarded.
+     * achievements that the player has been awarded. The list is in no
+     * particular order.
      */
     public ArrayList<String> awardedAchievementIDs() {
-        return null;
+        return new ArrayList<String>(awarded.keySet());
     }
     
     /**
@@ -37,7 +45,13 @@ public class AchievementProgress {
      * been awarded with yet.
      */
     public ArrayList<String> inProgressAchievementIDs() {
-        return null;
+        ArrayList<String> list = new ArrayList<String>();
+        for(Map.Entry<String, Integer> e : progress.entrySet()) {
+            if(!awarded.containsKey(e.getKey())) {
+                list.add(e.getKey());
+            }
+        }
+        return list;
     }
 
 }

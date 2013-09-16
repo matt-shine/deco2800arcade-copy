@@ -1,7 +1,7 @@
 package deco2800.arcade.protocol;
 
 /**
- * An network object
+ * A network object
  */
 public abstract class NetworkObject {
 

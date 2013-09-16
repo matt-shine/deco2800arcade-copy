@@ -164,7 +164,8 @@ public class Pacman extends GameClient {
 	 * Called continually to draw the screen unless specifically told not to be
 	 */
 	@Override
-	public void render() {		
+	public void render() {	
+		//FIXME big method
 		//make changes to location of object etc, then draw
 		makeChanges();
 		

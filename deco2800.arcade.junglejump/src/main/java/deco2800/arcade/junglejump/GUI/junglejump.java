@@ -53,6 +53,7 @@ import deco2800.arcade.client.network.NetworkClient;
  */
 @ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
+	//FIXME difficult to read - add some whitespace etc. and some methods need shrinking
 	// MENU ENUMS
 	public float NEW_GAME = 242;
 	public float CONTINUE = (float) (242 - 37.5);

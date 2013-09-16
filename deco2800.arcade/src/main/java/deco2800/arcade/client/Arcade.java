@@ -7,8 +7,10 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -157,6 +159,7 @@ public class Arcade extends JFrame {
 			// TODO allow server/port as optional runtime arguments xor user
 			// inputs.
             System.out.println("connecting to server");
+            
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
@@ -195,7 +198,18 @@ public class Arcade extends JFrame {
 				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
 		this.player.setUsername(username);
 		this.communicationNetwork.setPlayer(this.player);
-
+		
+		System.out.println("My username is: " + player.getUsername());
+		
+		//Chat test
+		if (player.getUsername().equals("debuguser1")){
+			System.out.println("I am debuguser1 in Arcade.java");
+			
+			List<String> chat = new ArrayList<String>();
+			chat.add("debuguser");
+			chat.add("debuguser1");
+			this.communicationNetwork.createChat(chat);
+		}
 	}
 
 	/**

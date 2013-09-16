@@ -35,10 +35,6 @@ public class CommunicationView extends JFrame {
 		
 		scrollablePanel = new JPanel();
 		scrollablePanel.setLayout(new BoxLayout(scrollablePanel, BoxLayout.Y_AXIS));
-		testLabel = new JLabel("John, Fred, Jeff");
-		testLabel2 = new JLabel("Jenny, Kenny");
-		scrollablePanel.add(testLabel);
-		scrollablePanel.add(testLabel2);
 		
 		scrollPane = new JScrollPane(scrollablePanel);
 		scrollPane.setPreferredSize(new Dimension(100, 400));
@@ -56,7 +52,7 @@ public class CommunicationView extends JFrame {
 	}
 	
 	public void addChatNode(ChatNode node){
-		scrollablePanel.add(node);
+		//scrollablePanel.add(node);
 	}
 
 	public void addSendListener(ActionListener listener) {

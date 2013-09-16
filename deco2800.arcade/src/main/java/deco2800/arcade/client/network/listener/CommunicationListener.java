@@ -49,6 +49,8 @@ public class CommunicationListener extends NetworkListener {
 		 * existing chat.
 		 */
 		if (object instanceof ChatRequest){
+			System.out.println(communicationNetwork.getPlayer().getUsername() + " received chatRequest");
+			
 			ChatRequest chatRequest = (ChatRequest) object;
 			communicationNetwork.joinExistingChat(chatRequest);
 		}
@@ -58,6 +60,8 @@ public class CommunicationListener extends NetworkListener {
 		 * the participant is removed from the chat instance.
 		 */
 		if (object instanceof ChatResponse){
+			System.out.println(communicationNetwork.getPlayer().getUsername() + " received chatResponse");
+			
 			ChatResponse chatResponse = (ChatResponse) object;
 			if(chatResponse.response == "offline"){
 				communicationNetwork.leaveChat(chatResponse.chatID, chatResponse.sender);

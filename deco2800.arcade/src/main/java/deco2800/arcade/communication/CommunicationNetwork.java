@@ -31,12 +31,16 @@ public class CommunicationNetwork {
 	 * @param networkClient
 	 */
 	public CommunicationNetwork(Player player, NetworkClient networkClient){
+		System.out.println("Creating a CommunicationNetwork");
+		
 		this.player = player;
 		this.networkClient = networkClient;
 		this.chatNodes = new HashMap<Integer, ChatNode>();
 		this.textMessage = new TextMessage();
 		this.chatRequest = new ChatRequest();
 		this.view = new CommunicationView();
+		
+		System.out.println(this.networkClient);
 	}
 	
 	/**
@@ -49,10 +53,16 @@ public class CommunicationNetwork {
 		chatRequest.chatID = chatParticipants.hashCode();
 		chatRequest.sender = player.getUsername();
 		
-		chatNodes.put(chatRequest.chatID,new ChatNode(chatParticipants));
+		ChatNode node = new ChatNode(chatParticipants);
+		chatNodes.put(chatRequest.chatID,node);
+		view.addChatNode(node);
+		
+		currentChat = node;
 
 		for(String participant : chatParticipants){
-			if(participant != player.getUsername()){
+			if(!participant.equals(player.getUsername())){
+				System.out.println("About to send networkObject to this networkClient: " + networkClient);
+				
 				chatRequest.invite = participant;
 				networkClient.sendNetworkObject(chatRequest);
 			}
@@ -65,7 +75,11 @@ public class CommunicationNetwork {
 	 * @param request
 	 */
 	public void joinExistingChat(ChatRequest request){
-		chatNodes.put(request.chatID, new ChatNode(request.participants));
+		ChatNode node = new ChatNode(request.participants);
+		chatNodes.put(request.chatID, node);
+		view.addChatNode(node);
+		
+		currentChat = node;
 	}
 	
 	/**
@@ -77,6 +91,7 @@ public class CommunicationNetwork {
 		int chatID = textMessage.chatID;
 		ChatNode node = chatNodes.get(chatID);
 		node.addMessage(textMessage.text);
+		System.out.println(textMessage.text);
 	}
 	
 	

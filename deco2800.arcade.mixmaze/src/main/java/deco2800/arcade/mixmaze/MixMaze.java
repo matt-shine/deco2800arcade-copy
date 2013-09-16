@@ -45,13 +45,10 @@ public final class MixMaze extends GameClient {
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		gameScreen = new GameScreen(this);
-<<<<<<< HEAD
-		setScreen(menuScreen);
-=======
+
 		settingsScreen = new SettingsScreen(this);
 		
 		setScreen(splashScreen);
->>>>>>> master
 
 		Gdx.app.debug(LOG, "Default key bindings");
 		Gdx.app.debug(LOG, "Player 1: W, S, A, D to move, "

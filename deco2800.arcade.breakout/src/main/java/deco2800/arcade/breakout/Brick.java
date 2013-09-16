@@ -16,14 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
  */
 public class Brick {
 
-<<<<<<< HEAD
 	private SpriteBatch sBatch;
-=======
-	@SuppressWarnings("unused")
-	private Texture bricksImage;
-	@SuppressWarnings("unused")
-	private TextureRegion bricksImageRegion;
->>>>>>> master
 
 	// protected int x;
 	// protected int y;

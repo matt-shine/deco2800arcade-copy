@@ -22,7 +22,6 @@ public class ArcadeUI extends GameClient {
 	private LoginScreen login = null;
 	private StoreScreen store = null;
 	private HomeScreen home = null;
-    @SuppressWarnings("unused")
     private RegisterScreen register = null;
 	
 	private Screen current = null;
@@ -31,29 +30,35 @@ public class ArcadeUI extends GameClient {
 		super(player, networkClient);
 	}
 
-    private void chooseScreen() {
-		if (player == null) {
-			current = login;
-		} else if (player.getUsername() == "store") {
-			current = store;
-			// Guys, I have no freaking clue, soz. -Addison(GameHost)
-		} else {
-			current = home;
-		}
-    }
-	
-	@Override
-	public void create() {
-		ArcadeSystem.openConnection();
-        login = new LoginScreen();
+    @Override
+    public void create() {
+        ArcadeSystem.openConnection(); // Move this to somewhere more appropriate.
+
+        // Initialise the different screens.
+        login = new LoginScreen(this);
         home = new HomeScreen();
         store = new StoreScreen();
-        register = new RegisterScreen();
+        register = new RegisterScreen(this);
 
-        chooseScreen();
-		this.setScreen(current);
-		super.create();
-	}
+        // Check to see if a user is logged in.
+        if (player == null) {
+            current = login; // No user, go to login screen
+        } else {
+            current = home;  // There is a user, go to home screen
+        }
+        this.setScreen(current);
+
+        super.create();
+    }
+
+    public void requestScreen(String screen) {
+        if (screen.equals("register")) {
+            current = register;
+        } else if (screen.equals("store")) {
+            current = store;
+        }
+        this.setScreen(current);
+    }
 
 	@Override
 	public void dispose() {

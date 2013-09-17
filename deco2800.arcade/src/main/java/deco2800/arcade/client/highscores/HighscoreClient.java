@@ -2,6 +2,7 @@ package deco2800.arcade.client.highscores;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Timer;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.HighscoreClientListener;
@@ -273,12 +274,7 @@ public class HighscoreClient {
 		this.waitingForResponse = true;
 		this.client.sendNetworkObject(gsReq); //Send the request
 		
-		System.out.println("Preparing to block");
-		
-		//Block until a response is recieved.
-		while (waitingForResponse) {}
-		
-		System.out.println("Finished blocking");
+		//Block until responseRecieved is called.
 	}
 	
 	/**
@@ -288,8 +284,12 @@ public class HighscoreClient {
 	 * @param gsRes The response that was recieved
 	 */
 	public void responseRecieved(GetScoreResponse gsRes) {
+		System.out.println("Begin Response received");
+		
 		this.waitingForResponse = false; //No longer waiting
 		this.gsRes = gsRes; //Store the response so it can be used
+		
+		System.out.println("Finish Response received");
 	}
 	
 	/**

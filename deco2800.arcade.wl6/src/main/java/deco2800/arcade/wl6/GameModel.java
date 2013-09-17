@@ -42,13 +42,23 @@ public class GameModel {
 	 * @param level
 	 */
 	public void goToLevel(String level) {
+		//create the map
 		if (currentLevel != level) {
 			currentMap = new Level(loadFile("wl6maps/" + level + ".json"));
 		}
+		
 		currentLevel = level;
+		
+		//remove the old player and create a new one
+		if (doodads.contains(player)) {
+			destroyDoodad(player);
+		}
+		
 		MapProcessor.processEverything(this);
+		
 		player = new Player();
 		player.setPos(spawn);
+		this.addDoodad(player);
 	}
 	
 	

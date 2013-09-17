@@ -313,4 +313,13 @@ public class Renderer {
 		return m;
 	}
 	
+	
+	/**
+	 * True if the render is in debug
+	 * @return
+	 */
+	public boolean isDebugMode() {
+		return this.debugMode;
+	}
+	
 }

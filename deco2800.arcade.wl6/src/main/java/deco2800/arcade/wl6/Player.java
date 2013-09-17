@@ -9,7 +9,9 @@ public class Player extends LOSableDoodad {
 	
 	
 	public void draw(Renderer renderer) {
-		//do nothing
+		if (renderer.isDebugMode()) {
+			super.draw(renderer);
+		}
 	}
 	
 	

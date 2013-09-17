@@ -12,6 +12,7 @@ public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
 	private final float MAXVELOCITY = 600;
+	private int maxHealth; //For health powerups.
 	private PlayScreen screen;
 	
 	//direction handling
@@ -25,7 +26,19 @@ public class PlayerShip extends Ship {
 	public PlayerShip(int health, Texture image, Vector2 position, PlayScreen screen) {
 		super(health, image, position);
 		this.screen = screen;
+		this.maxHealth = health;
 		hitboxScale = 0.25f; // lets the player 'just miss' bullets
+	}
+	
+	@Override
+	public void setHealth(int healthchange) {
+		this.health += healthchange;
+		//Just for the sake of the health bar being consistent.
+		//This probably will have to be changed if we plan to be able to heal over the maxHealth
+		//though.
+		if (health > maxHealth) {
+			this.health = maxHealth;
+		}
 	}
 	
 	/**

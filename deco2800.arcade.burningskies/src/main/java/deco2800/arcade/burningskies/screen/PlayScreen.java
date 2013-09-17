@@ -99,11 +99,22 @@ public class PlayScreen implements Screen
     					Enemy e = enemies.get(j);
     					if(b.hasCollided(e)) {
     						//TODO: HANDLE DAMAGE FROM THIS YA MUPPETS
+    						e.setHealth(b.getDamage());
+    						if (!e.isAlive()) e.remove(); //I assume this will be changed to
+    						b.remove();					  //an array number too. enemies.remove(i)
+    	        			bullets.remove(i);
+    	        			i--;
     						continue;
     					}
     				}
     			} else if(b.hasCollided(player)) {
     				//TODO: DAMAGE THE PLAYER YOU NUGGET
+    				player.setHealth(b.getDamage());
+    				//TODO: Player death/respawn checker.
+    				//if (!player.isAlive()) { }
+    				b.remove();
+        			bullets.remove(i);
+        			i--;
     				continue;
     			}
     		}

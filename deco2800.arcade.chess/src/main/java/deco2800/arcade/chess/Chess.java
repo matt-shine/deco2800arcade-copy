@@ -530,10 +530,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	void initPiecePos() {
 		int[] pos = { 25 + horizOff, 25 + verticOff };
 		whiteRook1Pos = pos;
-		pieceMaps.put(board.whiteRook1, whiteRook1Pos);
 		int[] pos1 = { 85 + horizOff, 25 + verticOff };
 		whiteKnight1Pos = pos1;
-		pieceMaps.put(board.whiteKnight1, whiteKnight1Pos);
 		int[] pos2 = { 145 + horizOff, 25 + verticOff };
 		whiteBishop1Pos = pos2;
 		int[] pos3 = { 260 + horizOff, 25 + verticOff };

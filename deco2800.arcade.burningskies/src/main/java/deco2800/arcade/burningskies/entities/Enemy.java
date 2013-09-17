@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
-
+//TODO abstract?
 public class Enemy extends Ship {
 
 	private float xPos;

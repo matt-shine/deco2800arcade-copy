@@ -29,11 +29,8 @@ public class PlayScreen implements Screen
 	private Stage stage;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-	private ArrayList<Bullet> bulletsToRemove = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-	private ArrayList<Enemy> enemiesToRemove = new ArrayList<Enemy>();
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
-	private ArrayList<PowerUp> powerupsToRemove = new ArrayList<PowerUp>();
 	
 	private PlayerShip player;
 	private GameMap map;
@@ -85,45 +82,38 @@ public class PlayScreen implements Screen
     {
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-    	//concurrency whoooo!
-    	bullets.removeAll(bulletsToRemove);
-    	bulletsToRemove.clear();
-    	enemies.removeAll(enemiesToRemove);
-    	enemiesToRemove.clear();
-    	powerups.removeAll(powerupsToRemove);
-    	powerupsToRemove.clear();
     	
     	if(!game.isPaused()) {
     		stage.act(delta);
-    		for(Bullet b : bullets) {
+    		for(int i=0; i<bullets.size(); i++) {
+    			Bullet b = bullets.get(i);
         		if(outOfBounds(b)) {
-        			removeBullet(b);
+        			b.remove();
+        			bullets.remove(i);
+        			i--;
         			continue;
         		}
         		//deal with collisions
     			if(b.getAffinity() == Affinity.PLAYER) {
-    				for(Enemy e : enemies) {
+    				for(int j=0; j<enemies.size(); j++) {
+    					Enemy e = enemies.get(j);
     					if(b.hasCollided(e)) {
     						//TODO: HANDLE DAMAGE FROM THIS YA MUPPETS
-    						e.setHealth(b.getDamage());
-    						if (!e.isAlive()) removeEnemy(e);
-    						removeBullet(b);
     						continue;
     					}
     				}
     			} else if(b.hasCollided(player)) {
     				//TODO: DAMAGE THE PLAYER YOU NUGGET
-    				player.setHealth(b.getDamage());
-    				//TODO: Player death
-    				//if (!player.isAlive()) { }
-    				removeBullet(b);
     				continue;
     			}
     		}
-			for(PowerUp p: powerups) {
+			for(int i=0; i<powerups.size(); i++) {
+				PowerUp p = powerups.get(i);
 				if(p.hasCollidedUnscaled(player)) {
 					//TODO: POWERUPS WOO
-					removePowerup(p);
+					p.remove();
+					powerups.remove(i);
+					i--;
 					continue;
 				}
 			}
@@ -164,28 +154,13 @@ public class PlayScreen implements Screen
     	bullets.add(bullet);
     }
     
-    public void removeBullet(Bullet bullet) {
-    	bulletsToRemove.add(bullet);
-    	bullet.remove();
-    }
-    
     public void addEnemy(Enemy enemy) {
     	stage.addActor(enemy);
     	enemies.add(enemy);
     }
     
-    public void removeEnemy(Enemy e) {
-    	enemiesToRemove.add(e);
-    	e.remove();
-    }
-    
     public void addPowerup(PowerUp p) {
     	stage.addActor(p);
     	powerups.add(p);
-    }
-    
-    public void removePowerup(PowerUp p) {
-    	powerupsToRemove.add(p);
-    	p.remove();
     }
 }

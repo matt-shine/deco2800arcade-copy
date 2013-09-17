@@ -9,10 +9,16 @@ import deco2800.arcade.burningskies.entities.Ship;
 
 public abstract class Bullet extends Entity {
 	
+	/*
+	 * TODO I often wonder about nested public classes. 
+	 * I tend to prefer to either define them as private, or define them in their own class
+	 * (just a thought)
+	 */
 	public enum Affinity {
 		PLAYER,
 		ENEMY
 	}
+	
 	protected Affinity affinity;
 	protected int damage; 
 	protected Vector2 velocity;

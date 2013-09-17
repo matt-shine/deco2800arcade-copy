@@ -5,8 +5,8 @@ import com.esotericsoftware.kryo.serializers.*;
 
 import java.util.ArrayList;
 
-import deco2800.arcade.protocol.achievement.AchievementListRequest;
-import deco2800.arcade.protocol.achievement.AddAchievementRequest;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
@@ -21,6 +21,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
@@ -52,6 +53,8 @@ public class Protocol {
 	 * @param kryo
 	 */
 	public static void register(Kryo kryo) {
+		//Connection messages
+		kryo.register(ConnectionRequest.class);
 		Protocol.setKryo(kryo);
 		
 		// Connection messages
@@ -62,8 +65,21 @@ public class Protocol {
 		kryo.register(CreditBalanceResponse.class);
 
 		// Achievement messages
+		kryo.register(Achievement.class);
+		kryo.register(AchievementsForIDsRequest.class);
+		kryo.register(AchievementsForIDsResponse.class);
+		kryo.register(AchievementsForGameRequest.class);
+		kryo.register(AchievementsForGameResponse.class);
+		kryo.register(IncrementProgressRequest.class);
+		kryo.register(IncrementProgressResponse.class);
+		kryo.register(ProgressForPlayerRequest.class);
+		kryo.register(ProgressForPlayerResponse.class);
+		kryo.register(java.util.ArrayList.class);
 		kryo.register(AchievementListRequest.class);
 		kryo.register(AddAchievementRequest.class);
+		
+		// High Score Messages
+		kryo.register(AddScoreRequest.class);
 		
 		//Replay messages
 		kryo.register(ReplayRequest.class);

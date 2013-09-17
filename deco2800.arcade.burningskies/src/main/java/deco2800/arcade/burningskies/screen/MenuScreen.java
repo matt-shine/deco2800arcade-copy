@@ -85,6 +85,7 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
+		//FIXME gigantic method
 		batch = new SpriteBatch();
         atlas = new TextureAtlas("images/button.pack");
         skin = new Skin();

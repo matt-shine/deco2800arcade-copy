@@ -217,6 +217,10 @@ public class Arcade extends JFrame {
 	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
+		if (selectedGame == null) {
+			System.err.println("No game with ID " + gameid + " exists.");
+			return;
+		}
         selectedGame.setNetworkClient(this.client);
 		startGame(selectedGame);
 	}

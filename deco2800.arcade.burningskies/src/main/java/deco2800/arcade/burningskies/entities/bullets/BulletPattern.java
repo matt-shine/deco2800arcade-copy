@@ -1,23 +1,24 @@
-package deco2800.arcade.burningskies.entities;
+package deco2800.arcade.burningskies.entities.bullets;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+
+import deco2800.arcade.burningskies.entities.Ship;
+import deco2800.arcade.burningskies.screen.PlayScreen;
 
 public abstract class BulletPattern extends Actor {
 	
 	protected Ship emitter; // who is firing these things
-	protected Stage stage; // so we can spawn things
 	protected boolean firing;
 	protected float interval; // how often bullets are fired
+	protected PlayScreen screen; // so we can spawn things
 	private float timer;
 	private Vector2 lastEmit; // lag compensation on movement of emitter
 	private Vector2 thisEmit = new Vector2();
 	
-	public BulletPattern(Stage stage, Ship emitter) {
+	public BulletPattern(Ship emitter, PlayScreen screen) {
 		this.emitter = emitter;
-		this.stage = stage;
-		stage.addActor(this);
+		this.screen = screen;
 		firing = false;
 	}
 	
@@ -52,12 +53,8 @@ public abstract class BulletPattern extends Actor {
 		timer += delta;
 		if(timer < interval) return;
 		float x = 0, y = 0, timeDiff;
-		if(emitter == null) {
-			thisEmit.set(stage.getWidth()/2, stage.getHeight()/2);
-		} else {
-			thisEmit.x = emitter.getX() + emitter.getWidth()/2;
-			thisEmit.y = emitter.getY() + emitter.getHeight()/2;
-		}
+		thisEmit.x = emitter.getX() + emitter.getWidth()/2;
+		thisEmit.y = emitter.getY() + emitter.getHeight()/2;
 		if(lastEmit == null) lastEmit = new Vector2(thisEmit);
 		// Compensate for frame drops - it happens always, bloody java
 		int loop = (int) Math.floor(timer / interval) - 1;

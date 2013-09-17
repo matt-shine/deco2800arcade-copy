@@ -27,7 +27,6 @@ public class Renderer {
 	private Matrix4 model = new Matrix4();
 	private Matrix4 combined = new Matrix4();
 	private GameModel game = null;
-	private float cycle = 0;
 
 	public Renderer() {
 	}
@@ -63,7 +62,6 @@ public class Renderer {
 	
 
 	public void draw(boolean debug) {
-		cycle += 1;
 		
 		shader.begin();
 		

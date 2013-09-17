@@ -45,7 +45,7 @@ public class WL6 extends GameClient {
 
 			@Override
 			public void hide() {
-				//TODO: unpause wl6
+				gameScreen.setOverlayPause(false);
 			}
 
 			@Override
@@ -66,7 +66,7 @@ public class WL6 extends GameClient {
 
 			@Override
 			public void show() {
-				//TODO: unpause wl6
+				gameScreen.setOverlayPause(true);
 			}
 			
         });
@@ -80,7 +80,7 @@ public class WL6 extends GameClient {
 
 	@Override
 	public void dispose() {
-		super.dispose();
+		//super.dispose();
 	}
 
 	@Override

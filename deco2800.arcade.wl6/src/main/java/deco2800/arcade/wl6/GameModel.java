@@ -4,6 +4,7 @@ public class GameModel {
 	
 	private Level currentMap = null;
 	private int currentLevel = 0;
+	private Player player = null;
 	
 	public GameModel(int level) {
 		currentLevel = level;
@@ -23,11 +24,15 @@ public class GameModel {
 	 */
 	public void reset() {
 		currentMap = new Level("[0,1,2,3]");
+		player = new Player();
 	}
 	
 	public Level getMap() {
 		return this.currentMap;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
 	
 }

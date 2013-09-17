@@ -1,6 +1,7 @@
+attribute vec3 a_position;
+uniform mat4 uMVPMatrix;
+
 void main(void)
 {
-    vec4 a = gl_Vertex;
-    
-    gl_Position = gl_ModelViewProjectionMatrix * a;
+   gl_Position = uMVPMatrix * vec4(a_position, 1.0);
 }

@@ -6,8 +6,10 @@ import com.badlogic.gdx.InputProcessor;
 public class WL6InputProcessor implements InputProcessor {
 
 	private WL6 game = null;
-	@SuppressWarnings("unused")
 	private GameModel model = null;
+	
+	
+	
 	public WL6InputProcessor(WL6 game, GameModel model) {
 		this.game = game;
 		this.model = model;
@@ -18,6 +20,18 @@ public class WL6InputProcessor implements InputProcessor {
 	public boolean keyDown(int arg0) {
 		if (arg0 == Keys.NUM_1) {
 			game.toggleDebugMode();
+		}
+		if (arg0 == Keys.W) {
+			model.getPlayer().setX(model.getPlayer().getX() + 1);
+		}
+		if (arg0 == Keys.S) {
+			model.getPlayer().setX(model.getPlayer().getX() - 1);
+		}
+		if (arg0 == Keys.A) {
+			model.getPlayer().setY(model.getPlayer().getY() - 1);
+		}
+		if (arg0 == Keys.D) {
+			model.getPlayer().setY(model.getPlayer().getY() + 1);
 		}
 		return false;
 	}
@@ -36,7 +50,7 @@ public class WL6InputProcessor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int arg0, int arg1) {
-		// TODO Auto-generated method stub
+		model.getPlayer().setAngle(arg0);
 		return false;
 	}
 

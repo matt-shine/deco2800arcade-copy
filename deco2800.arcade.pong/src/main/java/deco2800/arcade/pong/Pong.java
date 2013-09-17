@@ -18,6 +18,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
@@ -77,6 +78,11 @@ public class Pong extends GameClient {
         this.achievementClient = new AchievementClient(networkClient);
 
         
+        //These methods are just used for testing HighscoreClient 
+        HighscoreClient hsd = new HighscoreClient("Dylan", "Connect4", networkClient);
+		hsd.storeScore("Number", 1290193);
+		
+		System.out.println("Request ID: " + hsd.responseTest());
 	}
 	
 	/**

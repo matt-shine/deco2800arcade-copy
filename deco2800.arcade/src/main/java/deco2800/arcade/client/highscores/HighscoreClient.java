@@ -4,12 +4,20 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.HighscoreClientListener;
 import deco2800.arcade.protocol.highscore.*;
 
 public class HighscoreClient {
 	private String Username;
 	private String Game_ID;
 	private NetworkClient client;
+	
+	/*Used for blocking the client when waiting for a response from the 
+	 *server*/
+	private boolean waitingForResponse = true;
+	
+	/*Stores the response that the server sends back*/
+	private GetScoreResponse gsRes;
 	
 	/*Used for queuing up scores that will be sent to the server. Even elements 
 	 *are score types, odd elements are score values. Score values are stored 
@@ -46,6 +54,9 @@ public class HighscoreClient {
 			this.Username = Username;
 			this.Game_ID = Game_ID;
 			this.client = client;
+			
+			//Allow responses to be received
+			this.client.addListener(new HighscoreClientListener(this));
 			
 			//Init the score list that is used for sending scores
 			scoreQueue = new LinkedList<String>();
@@ -243,6 +254,53 @@ public class HighscoreClient {
 	//Fetching Score Methods
 	//======================
 	
+	/**
+	 * Creates and sends a new GetScoreRequest to the server of type 
+	 * requestType and waits until a response is received. Once the response 
+	 * is received it is stored in this.gsReq.
+	 * 
+	 * @param requestType An integer representing the request that is being 
+	 * sent.
+	 */
+	private void sendScoreRequest(int requestType) {
+		//Build the request
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.Username = this.Username;
+		gsReq.Game_ID = this.Game_ID;
+		gsReq.requestType = requestType;
+		
+		//Send the response, and wait for a reply
+		this.waitingForResponse = true;
+		this.client.sendNetworkObject(gsReq); //Send the request
+		
+		System.out.println("Preparing to block");
+		
+		//Block until a response is recieved.
+		while (waitingForResponse) {}
+		
+		System.out.println("Finished blocking");
+	}
+	
+	/**
+	 * Called by HighscoreClientListener whenever a GetScoreResponse is 
+	 * received from the server.
+	 * 
+	 * @param gsRes The response that was recieved
+	 */
+	public void responseRecieved(GetScoreResponse gsRes) {
+		this.waitingForResponse = false; //No longer waiting
+		this.gsRes = gsRes; //Store the response so it can be used
+	}
+	
+	/**
+	 * Returns the number of columns that is returned 
+	 * @return
+	 */
+	public int responseTest() {
+		sendScoreRequest(1);
+		
+		return this.gsRes.columnNumbers;
+	}
 	
 	
 	

@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.Timer;
 
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.network.listener.HighscoreClientListener;
 import deco2800.arcade.protocol.highscore.*;
 
 public class HighscoreClient {
@@ -125,8 +124,7 @@ public class HighscoreClient {
 			scoreQueue.add(type);
 			scoreQueue.add(Integer.toString(value));
 		} else {
-			throw new UnsupportedScoreTypeException(type + 
-					" is not a valid score type");
+			throw new UnsupportedScoreTypeException(type + " is not a valid score type");
 		}
 	}
 	
@@ -255,6 +253,10 @@ public class HighscoreClient {
 	//Fetching Score Methods
 	//======================
 	
+	//--------------------
+	//Utility Methods
+	//--------------------
+	
 	/**
 	 * Creates and sends a new GetScoreRequest to the server of type 
 	 * requestType and waits until a response is received. Once the response 
@@ -271,36 +273,46 @@ public class HighscoreClient {
 		gsReq.requestType = requestType;
 		
 		//Send the response, and wait for a reply
-		this.waitingForResponse = true;
+		this.gsRes = null;
 		this.client.sendNetworkObject(gsReq); //Send the request
 		
-		//Block until responseRecieved is called.
+		//Wait until a response has been received from the server. Only check every 20ms.
+		while (gsRes == null) {
+			try { Thread.sleep(20); } 
+			catch (InterruptedException e) { break; }
+		}
 	}
 	
 	/**
 	 * Called by HighscoreClientListener whenever a GetScoreResponse is 
 	 * received from the server.
 	 * 
-	 * @param gsRes The response that was recieved
+	 * @param gsRes The response that was received
 	 */
-	public void responseRecieved(GetScoreResponse gsRes) {
-		System.out.println("Begin Response received");
-		
-		this.waitingForResponse = false; //No longer waiting
+	protected void responseRecieved(GetScoreResponse gsRes) {
 		this.gsRes = gsRes; //Store the response so it can be used
-		
-		System.out.println("Finish Response received");
 	}
 	
 	/**
 	 * Returns the number of columns that is returned 
-	 * @return
+	 * @return the number of columns that is returned.
 	 */
-	public int responseTest() {
-		sendScoreRequest(1);
+	public int responseTest(int num) {
+		//This will block until this.gsRes is updated with the correct information.
+		sendScoreRequest(num);
 		
-		return this.gsRes.columnNumbers;
+		if (this.gsRes != null) {
+			//gsRes has been updated, so information from it can be returned.
+			return this.gsRes.columnNumbers;
+		} else {
+			return 0; //This is bad. This shouldn't happen.
+		}
 	}
+	
+	
+	//--------------------
+	//Public Methods
+	//--------------------
 	
 	
 	

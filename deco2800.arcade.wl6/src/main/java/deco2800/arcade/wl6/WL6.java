@@ -10,7 +10,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
 
-@ArcadeGame(id="wolfenstein")
+@ArcadeGame(id="Wolfenstein 3D")
 public class WL6 extends GameClient {
 
 	private static Game GAME = null;
@@ -112,8 +112,8 @@ public class WL6 extends GameClient {
 
 	static {
 		GAME = new Game();
-		GAME.id = "wolfenstein";
-		GAME.name = "Wolfenstein";
+		GAME.id = "Wolfenstein 3D";
+		GAME.name = "Wolfenstein 3D";
 		GAME.description = "Killin' Natzis";
 	}
 	

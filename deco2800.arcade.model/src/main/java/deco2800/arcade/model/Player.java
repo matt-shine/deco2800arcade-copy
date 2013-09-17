@@ -1,5 +1,6 @@
 package deco2800.arcade.model;
 
+import java.util.List;
 import java.util.Set;
 
 public class Player extends User {
@@ -112,7 +113,7 @@ public class Player extends User {
 		this.friends = new Friends();
 		this.friendInvites = new FriendInvites();
 		this.blocked = new Blocked();
-	
+
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
 				privacy[1]);
@@ -143,12 +144,12 @@ public class Player extends User {
 	 * Creates a new Player given a name, achievement set and icon filename.
 	 * 
 	 * @param playerID
-	 *          The Player's nameID
+	 *            The Player's nameID
 	 * @param filepath
-	 *          The Player's icon filepath
+	 *            The Player's icon filepath
 	 * @param details
-	 * 			An array of strings containing the player's username, name,
-	 * 			email, program and bio.  
+	 *            An array of strings containing the player's username, name,
+	 *            email, program and bio.
 	 * @param privacy
 	 *            A boolean array of privacy settings.
 	 * @require There are at least 7 elements in privacy array. Elements 1
@@ -160,16 +161,16 @@ public class Player extends User {
 	 *          (indexes 0 to 4) represent username, name, email, program and
 	 *          bio of the player.
 	 */
-	public Player(int playerID, String filepath, String details[],
-			Set<User> friendsList, Set<User> friendRequestsList, Set<User> blockedList,
-			Set<Game> gamesList, boolean[] privacy) {
+	public Player(int playerID, String filepath, List<String> details,
+			Set<User> friendsList, Set<User> friendRequestsList,
+			Set<User> blockedList, Set<Game> gamesList, boolean[] privacy) {
 		super(playerID);
-		this.username = new Field(USERNAME_ID, details[0]);
-		this.name = new Field(NAME_ID, details[1]);
-		this.email = new Field(EMAIL_ID, details[2]);
-		this.program = new Field(PROGRAM_ID, details[3]);
-		this.bio = new Field(BIO_ID,details[4]);
-		
+		this.username = new Field(USERNAME_ID, details.get(0));
+		this.name = new Field(NAME_ID, details.get(1));
+		this.email = new Field(EMAIL_ID, details.get(2));
+		this.program = new Field(PROGRAM_ID, details.get(3));
+		this.bio = new Field(BIO_ID, details.get(4));
+
 		this.games = new Games();
 		this.games.addAll(gamesList);
 		this.friends = new Friends();
@@ -178,7 +179,6 @@ public class Player extends User {
 		this.friendInvites.addAll(friendRequestsList);
 		this.blocked = new Blocked();
 		this.blocked.addAll(blockedList);
-
 
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,

@@ -1,8 +1,12 @@
 package deco2800.server.database;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.model.User;
 
 /**
  * PlayerDatabaseMangager is the interface through which the Server's Listeners
@@ -339,11 +343,47 @@ public class PlayerDatabaseManager {
 	public Player loadPlayer(int playerID) throws DatabaseException {
 		List<String> playerData = playerStorage.getPlayerData(playerID);
 		List<Integer> friends = friendStorage.getFriendsList(playerID);
-		List<Integer> friendInvites = friendStorage.getFriendInviteList(playerID);
+		List<Integer> friendInvites = friendStorage
+				.getFriendInviteList(playerID);
 		List<Integer> blocked = friendStorage.getBlockedList(playerID);
 		List<Integer> privacyData = playerPrivacy.getPlayerData(playerID);
-		// TODO Implement me!
-		return null;
+		Set<String> gameData = playerGameStorage.getPlayerGames(playerID);
+
+		Set<User> friendsSet = new HashSet<User>();
+		Set<User> invitesSet = new HashSet<User>();
+		Set<User> blockedSet = new HashSet<User>();
+		Set<Game> gameSet = new HashSet<Game>();
+		boolean[] privacy = {false, false, false, false, false, false, false};
+		privacy[0] = false;
+
+		for (int i : friends) {
+			friendsSet.add(new User(i));
+		}
+
+		for (int i : friendInvites) {
+			invitesSet.add(new User(i));
+		}
+
+		for (int i : blocked) {
+			blockedSet.add(new User(i));
+		}
+
+		for (String i : gameData) {
+			gameSet.add(new Game(i));
+		}
+
+		for (int i = 0; i < privacyData.size(); i++) {
+			if (privacyData.get(i) == 1) {
+				privacy[i] = true;
+			} else {
+				privacy[i] = false;
+			}
+		}
+
+		Player player = new Player(playerID, null, playerData, friendsSet,
+				invitesSet, blockedSet, gameSet, privacy);
+
+		return player;
 	}
 
 }

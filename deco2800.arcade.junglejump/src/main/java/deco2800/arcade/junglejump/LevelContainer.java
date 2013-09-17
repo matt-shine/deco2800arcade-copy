@@ -1,6 +1,9 @@
 package deco2800.arcade.junglejump;
 
+import java.io.*;
 import java.util.*;
+
+import deco2800.arcade.junglejump.GUI.junglejump;
 
 /**
  * Class holding a list of all the levels in the game
@@ -13,18 +16,51 @@ public class LevelContainer {
 	
 	/**
 	 * Constructor where levels are created and placed
-	 * into the list.
+	 * into the list.]
 	 */
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
 		
 		Level level1 = new Level(); // Creating and adding to a test level
 		
-		Platform platform = new Platform(300,50,100,25);
-		Platform platform2 = new Platform(50,100,100,25);
+		// Read level from file
+		BufferedReader br;
+		try {
+			br = new BufferedReader(new FileReader("junglejumpassets/levels/level1.txt"));
+		} catch (FileNotFoundException e1) {
+			System.out.println("No file");
+			return;
+		}
+	    try {
+	        String line = br.readLine();
+	        
+	        int xLength = 40;
+	        int yLength = 20;
+	        
+	        int y = junglejump.SCREENHEIGHT/yLength;
+	        while (line != null) {
+	        	for(int x=0; x<junglejump.SCREENWIDTH/xLength; x++) {
+	        		char c = line.charAt(x);
+	        		if(c != '*') {
+	        			Platform p = new Platform(c, false, (x*xLength), (y*yLength), xLength, yLength);
+	        			level1.addPlatform(p);
+	        		}
+	        	}
+	        	line = br.readLine();
+	        	y--;
+	        }
+	    } catch (IOException e) {
+			return;
+		} finally {
+	        try {
+				br.close();
+			} catch (IOException e) {
+				return;
+			}
+	    }
+		
+	    
 		Collectable testBanana = new Collectable();
-		level1.addPlatform(platform);
-		level1.addPlatform(platform2);
 		level1.addBanana(testBanana);
 		addLevel(level1);	
 	}
@@ -60,5 +96,6 @@ public class LevelContainer {
 	public static int getLevelIndex(Level level) {
 		return levels.indexOf(level);
 	}
+	
 
 }

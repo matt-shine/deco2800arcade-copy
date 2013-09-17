@@ -335,7 +335,7 @@ public class junglejump extends GameClient implements InputProcessor {
 //				batch.draw(p.getTexture(), p.getX(), platY);
 //			}
 			for (Platform p : currentLevel.getPlatforms()) {
-				batch.draw(platform, p.getX(), p.getY(), p.getWidth(), p.getHeight());
+				batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 			}
 			//batch.draw(platform, 100, 50);
 
@@ -352,7 +352,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		// Place holder for checking through platform array
 		// Consider data structure for efficiency
 		for (Platform p : currentLevel.getPlatforms()) {
-			if (x > p.getX()-5 && x < p.getX()+p.getWidth() && y < p.getY()+p.getHeight()) {
+			if (x > p.getX() && x < p.getX()+p.getWidth() && y < p.getY()+p.getHeight() && y > p.getY()-p.getHeight()) {
 				return true;
 			}
 		} return false;

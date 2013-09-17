@@ -9,8 +9,9 @@ public class Platform {
 	
 	private int width, height, xPos, yPos;
 	private boolean active;
-	private boolean climbable = false;
+	public boolean climbable = false;
 	private Texture platText;
+	private boolean inverted;
 	private enum world {
 		WORLD_ONE, WORLD_TWO, WORLD_THREE
 	}
@@ -19,13 +20,27 @@ public class Platform {
 	 * Platform constructor
 	 * Takes width, height and X and Y position as parameters
 	 */
-	public Platform(int pX, int pY, int pWidth, int pHeight) {
+	public Platform(int type, boolean flipped, int pX, int pY, int pWidth, int pHeight) {
 		this.width = pWidth;
 		this.height = pHeight;
 		this.xPos = pX;
 		this.yPos = pY;
 		this.active = false;
+		this.inverted = flipped;
 		currentWorld = world.WORLD_ONE; // Placeholder 
+		setTexture(type);
+	}
+	
+	public void setTexture(int type) {
+		switch(type) {
+		case '-': 
+			platText = new Texture("junglejumpassets/branch.png");
+			break;
+		default:
+			platText = new Texture("junglejumpassets/branch_short.png");
+			break;
+		}
+		
 	}
 	
 	/**
@@ -37,9 +52,9 @@ public class Platform {
 	
 	public Texture getTexture() {
 		// Texture changes depending on world
-		switch(currentWorld) {
+		/* switch(currentWorld) {
 		case WORLD_ONE:
-			platText = new Texture("junglejumpassets/platform.png");
+			platText = new Texture("junglejumpassets/branch.png");
 			break;
 		case WORLD_TWO:
 			// World 2 texture
@@ -47,7 +62,7 @@ public class Platform {
 		case WORLD_THREE:
 			// World 3 texture
 			break;
-		}
+		} */
 		return this.platText;
 	}
 	

@@ -267,7 +267,11 @@ public class Renderer {
 	 * TODO dispose wl6 renderer
 	 */
 	public void dispose() {
-		
+		Gdx.gl20.glDisable(GL20.GL_DEPTH_TEST);
+		this.doodadShader.dispose();
+		this.terrainShader.dispose();
+		this.quadMesh.dispose();
+		this.terrainMesh.dispose();
 	}
 	
 	

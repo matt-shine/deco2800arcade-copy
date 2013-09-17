@@ -15,6 +15,8 @@ public class MainGameScreen implements Screen {
 	private boolean debugMode = false;
 	@SuppressWarnings("unused")
 	private boolean overlayPause = false;
+	private WL6InputProcessor input = null;
+	
 	
 	Renderer b = new Renderer();
 	
@@ -26,7 +28,8 @@ public class MainGameScreen implements Screen {
 		//atlas = new Texture(Gdx.files.internal("wl6atlas.png"));
 		//unknown = new TextureRegion(atlas);
 		
-		ArcadeInputMux.getInstance().addProcessor(new WL6InputProcessor(game, model));
+		input = new WL6InputProcessor(game, model);
+		ArcadeInputMux.getInstance().addProcessor(input);
 		
 		b.setGame(model);
 		b.generateTerrain(model.getMap(), false);
@@ -36,6 +39,8 @@ public class MainGameScreen implements Screen {
 	
 	@Override
 	public void dispose() {
+		b.dispose();
+		ArcadeInputMux.getInstance().removeProcessor(input);
 	}
 
 	@Override

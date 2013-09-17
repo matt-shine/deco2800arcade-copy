@@ -80,7 +80,8 @@ public class WL6 extends GameClient {
 
 	@Override
 	public void dispose() {
-		//super.dispose();
+		currentScreen.dispose();
+		super.dispose();
 	}
 
 	@Override

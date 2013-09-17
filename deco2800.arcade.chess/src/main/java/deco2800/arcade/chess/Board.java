@@ -132,15 +132,15 @@ public class Board {
 	 * @return true if the team is in checkmate false otherwise
 	 */
 	public boolean checkForCheckmate(boolean team) {
-		boolean teamTurn = this.whoseTurn();
+		List<int[]> checkMoves;
 		List<Piece> activePieces = this.findActivePieces();
-		List<Piece> activeBlack = new ArrayList<Piece>();
 		List<Piece> activeWhite = new ArrayList<Piece>();
-		boolean inCheck = this.checkForCheck(team);
-		if (!inCheck) {
+		List<Piece> activeBlack = new ArrayList<Piece>();
+		//can't be in checkmate if not in check
+		if (!(this.checkForCheck(team))) {
 			return false;
 		}
-		//get active pieces on each team
+		//find active pieces on team
 		for (Piece piece: activePieces) {
 			if (piece.getTeam()) {
 				activeBlack.add(piece);
@@ -148,94 +148,66 @@ public class Board {
 				activeWhite.add(piece);
 			}
 		}
-		//check if black is in checkmate
 		if (team) {
 			for (Piece piece: activeBlack) {
-				int[] currentPos = this.findPiece(piece);
-				List<int[]> moves = this.allowedMoves(piece);
-				//check if this piece can move
-				for (int[] moveTo: moves) {
-					Piece onSquare = this.getPiece(moveTo);
-					this.movePiece(piece, moveTo);
-					int currentx = currentPos[0];
-					int currenty = currentPos[1];
-					int movex = this.findPiece(piece)[0];
-					int movey = this.findPiece(piece)[1];
-					//if this piece can move then not checkmate
-					if ((currentx != movex) || (currenty != movey)) {
-						//revert the move
-						if (this.isNullPiece(onSquare)) {
-							Board_State.get(currentPos[0]).
-								add(currentPos[1], piece);
-							Board_State.get(movex).add(movey, nullPiece);
-						} else {
-							onSquare.reActivate();
-							if (onSquare.getTeam()) {
-								blackGraveyard.remove(onSquare);
-							} else {
-								whiteGraveyard.remove(onSquare);
-							}
-							Board_State.get(currentPos[0]).
-								add(currentPos[1], piece);
-							Board_State.get(movex).add(movey, onSquare);
-						}
-						//remove the move
-						removeMove();
-						//update teams turn
-						this.turn = teamTurn;
-						return false;
-					}
+				checkMoves = this.removeCheckMoves(piece);
+				//if a piece can move, not in checkmate
+				if (!(checkMoves.isEmpty())) {
+					return false;
 				}
 			}
-		//check if white is in checkmate
 		} else {
 			for (Piece piece: activeWhite) {
-				int[] currentPos = this.findPiece(piece);
-				List<int[]> moves = this.allowedMoves(piece);
-				//check if this piece can move
-				for (int[] moveTo: moves) {
-					Piece onSquare = this.getPiece(moveTo);
-					this.movePiece(piece, moveTo);
-					int currentx = currentPos[0];
-					int currenty = currentPos[1];
-					int movex = this.findPiece(piece)[0];
-					int movey = this.findPiece(piece)[1];
-					//if this piece can move then not checkmate
-					if ((currentx != movex) || (currenty != movey)) {
-						//revert the move
-						if (this.isNullPiece(onSquare)) {
-							Board_State.get(currentPos[0]).
-								add(currentPos[1], piece);
-							Board_State.get(movex).add(movey, nullPiece);
-						} else {
-							onSquare.reActivate();
-							if (onSquare.getTeam()) {
-								blackGraveyard.remove(onSquare);
-							} else {
-								whiteGraveyard.remove(onSquare);
-							}
-							Board_State.get(currentPos[0]).
-								add(currentPos[1], piece);
-							Board_State.get(movex).add(movey, onSquare);
-						}
-						//remove the move
-						removeMove();
-						//update teams turn
-						this.turn = teamTurn;
-						return false;
-					}
+				checkMoves = this.removeCheckMoves(piece);
+				//if a piece can move not in checkmate
+				if (!(checkMoves.isEmpty())) {
+					return false;
 				}
 			}
 		}
-		//if this is reached, team is in checkmate
-		this.turn = teamTurn;
-		System.err.println("CHECKMATE FLAG SET");
-		if (team) {
-			System.err.println("White team wins");
-		} else {
-			System.err.println("Black team wins");
-		}
+		//no pieces can move, in checkmate
+		System.err.println("In checkmate");
 		return true;
+	}
+	
+	public List<int[]> removeCheckMoves(Piece piece) {
+		int index = 0;
+		List<int[]> allowedMoves = this.allowedMoves(piece);
+		List<int[]> allowedMovesCopy = new ArrayList<int[]>();
+		for (int i = 0; i < allowedMoves.size(); i++) {
+			allowedMovesCopy.add(allowedMoves.get(i));
+		}
+		boolean inCheck;
+		boolean team = piece.getTeam();
+		int currentx = this.findPiece(piece)[0];
+		int currenty = this.findPiece(piece)[1];
+		for (int[] moveTo: allowedMoves) {
+			Piece onSquare = this.getPiece(moveTo);
+			Board_State.get(moveTo[0]).add(moveTo[1], piece);
+			Board_State.get(currentx).add(currenty, nullPiece);
+			inCheck = this.checkForCheck(team);
+			if (inCheck) {
+				allowedMovesCopy.remove(index);
+				index--;
+			}
+			if (this.isNullPiece(onSquare)) {
+				Board_State.get(currentx).
+					add(currenty, piece);
+				Board_State.get(moveTo[0]).add(moveTo[1], nullPiece);
+			} else {
+				onSquare.reActivate();
+				if (onSquare.getTeam()) {
+					blackGraveyard.remove(onSquare);
+				} else {
+					whiteGraveyard.remove(onSquare);
+				}
+				Board_State.get(currentx).
+					add(currenty, piece);
+				Board_State.get(moveTo[0]).add(moveTo[1], onSquare);
+			}
+			index++;
+		}
+		return allowedMovesCopy;
 	}
 
 	private boolean checkForStaleMate(boolean Team) {
@@ -413,11 +385,11 @@ public class Board {
 		int x = newPosition[0];
 		int y = newPosition[1];
 		boolean kingCastleSwap = false;
-		boolean inCheck;
+		//boolean inCheck;
 
-		inCheck = checkForCheck(whoseTurn());
+		//inCheck = checkForCheck(whoseTurn());
 
-		List<int[]> allowedMoves = allowedMoves(piece);
+		List<int[]> allowedMoves = removeCheckMoves(piece);
 
 		boolean allowed = false;
 		for (int i = 0; i < allowedMoves.size(); i++) {
@@ -517,20 +489,6 @@ public class Board {
 			Board_State.get(x).add(y, piece);
 			moves.add(newPosition);
 			pieceMoved.add(piece);
-			inCheck = checkForCheck(whoseTurn());
-			// revert the move if in check
-			if (inCheck) {
-				onSquare.reActivate();
-				if (onSquare.getTeam()) {
-					blackGraveyard.remove(onSquare);
-				} else {
-					whiteGraveyard.remove(onSquare);
-				}
-				Board_State.get(oldPos[0]).add(oldPos[1], piece);
-				Board_State.get(x).add(y, onSquare);
-				removeMove();
-				return false;
-			}
 			this.nextTurn();
 			return true;
 		} else {
@@ -538,18 +496,12 @@ public class Board {
 			Board_State.get(x).add(y, piece);
 			moves.add(newPosition);
 			pieceMoved.add(piece);
-			inCheck = checkForCheck(whoseTurn());
-			if (inCheck) {
-				// revert move if in check
-				Board_State.get(oldPos[0]).add(oldPos[1], piece);
-				Board_State.get(x).add(y, nullPiece);
-				removeMove();
-				return false;
-			}
 			this.nextTurn();
 			return true;
 		}
 	}
+	
+	
 
 	/**
 	 * Finds and returns the board co-ordinates for the given piece
@@ -1587,6 +1539,7 @@ public class Board {
 		movePiece(blackQueen, h);
 		movePiece(whiteKing, i);
 		movePiece(blackQueen, j);
+		
 
 		System.out.println(Board_State);
 		System.out.println(blackGraveyard);

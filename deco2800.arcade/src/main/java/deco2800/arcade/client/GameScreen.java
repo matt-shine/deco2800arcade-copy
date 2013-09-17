@@ -31,6 +31,7 @@ public abstract class GameScreen implements Screen {
 	}
 	
 	public void firstResize() {
+		//TODO method contents? abstract?
 	}
 
 }

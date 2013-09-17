@@ -1,5 +1,7 @@
 package deco2800.server.database;
 
+import java.util.List;
+
 import deco2800.arcade.model.Player;
 
 /**
@@ -335,6 +337,11 @@ public class PlayerDatabaseManager {
 	 *         exists.
 	 */
 	public Player loadPlayer(int playerID) throws DatabaseException {
+		List<String> playerData = playerStorage.getPlayerData(playerID);
+		List<Integer> friends = friendStorage.getFriendsList(playerID);
+		List<Integer> friendInvites = friendStorage.getFriendInviteList(playerID);
+		List<Integer> blocked = friendStorage.getBlockedList(playerID);
+		List<Integer> privacyData = playerPrivacy.getPlayerData(playerID);
 		// TODO Implement me!
 		return null;
 	}

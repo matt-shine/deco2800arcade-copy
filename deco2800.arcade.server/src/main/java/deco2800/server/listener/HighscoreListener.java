@@ -61,7 +61,7 @@ public class HighscoreListener extends Listener {
 			 
 			 //Create the response
 			 GetScoreResponse gsRes = new GetScoreResponse();
-			 gsRes.columnNumbers = 5;
+			 gsRes.columnNumbers = gsReq.requestType;
 			 gsRes.data = "Pants"; //This will be the string of values
 			 
 			 //Send the response

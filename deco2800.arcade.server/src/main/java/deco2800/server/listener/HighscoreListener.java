@@ -48,21 +48,20 @@ public class HighscoreListener extends Listener {
 			 for (int i = 0; i < scoreQueue.length; i+=2) {
 				 System.out.println("    Type: " + scoreQueue[i] + "; Value: " + scoreQueue[i+1] + ".");
 			 }
-			 
+		 
 		 } else if (object instanceof GetScoreRequest) {
 			 GetScoreRequest gsReq = (GetScoreRequest)object;
+
+			 //Get the data that's needed
 			 
-			 System.out.println("Recieved get score request for username:" 
-					 + gsReq.Username +" and Game_ID:" + gsReq.Game_ID + ". RequestNum: " + gsReq.requestType);
-			 
-			 //Get the data corresponding to the response
 			 
 			 //Turn the data into a string of values
+			 String data = "Pants";
 			 
 			 //Create the response
 			 GetScoreResponse gsRes = new GetScoreResponse();
-			 gsRes.columnNumbers = gsReq.requestType;
-			 gsRes.data = "Pants"; //This will be the string of values
+			 gsRes.columnNumbers = 0;
+			 gsRes.data = data;
 			 
 			 //Send the response
 			 connection.sendTCP(gsRes);

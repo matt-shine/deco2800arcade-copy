@@ -15,6 +15,10 @@ public class HighscoreDatabase {
 			"yyyy/MM/dd HH:mm:ss");
 	
 	
+	//======================
+	//Database Setup Methods
+	//======================
+	
 	/** 
 	 * Create the highscore database if it does not exist 
 	 */
@@ -56,9 +60,9 @@ public class HighscoreDatabase {
 	}
 	
 	
-	/*================================================
-	 *  Database to Game/UI Methods
-	 *================================================*/
+	//======================
+	//Fetching Score Methods
+	//======================	
 	
 	/** Displays an amount of top players for a specified game
 	 * @param Game_ID
@@ -249,9 +253,9 @@ public class HighscoreDatabase {
 	}
 	
 	
-	/*================================================
-	 *  Game to Database Methods 
-	 *================================================*/
+	//======================
+	//Adding Score Methods
+	//======================
 	
 	private int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
 		int hid = 0;
@@ -268,6 +272,8 @@ public class HighscoreDatabase {
 		try {
 			// Get a connection to the database
 			connection = Database.getConnection();
+			
+			//Do we need a statement = connection.createStatement() here?
 			
 			statement.executeUpdate(insertTableSQL);
 			
@@ -355,6 +361,7 @@ public class HighscoreDatabase {
 			}
 		}
 	}
+	
 	
 	private static String getCurrentTimeStamp() {
 		 

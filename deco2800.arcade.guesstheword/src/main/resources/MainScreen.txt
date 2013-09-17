@@ -1,0 +1,9 @@
+debug
+* spacing:10 padding:0 align:center
+'Welcome to Guess The Word!' spacingBottom:20
+---
+[startButton] width:300 height:60
+---
+[settingsButton] width:300 height:60
+---
+[achieveButton] width:300 height:60

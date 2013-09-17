@@ -53,14 +53,14 @@ public class SnakeLadder extends GameClient {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Tile[] tileList; 
-    private GamePlayer gamePlayer;
+    GamePlayer gamePlayer;
     private Level lvl;
     private Texture ladder;
-    private enum GameState {
-		READY,
-		INPROGRESS,
-		GAMEOVER
-	}
+//    public enum GameState {
+//		READY,
+//		INPROGRESS,
+//		GAMEOVER
+//	}
 	GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
@@ -69,7 +69,7 @@ public class SnakeLadder extends GameClient {
 	private Skin skin;
 	private BitmapFont font;
 	private TextButton diceButton;
-	private String statusMessage;
+	String statusMessage;
 	
 	private Label diceLabel;
 	private Dice dice;
@@ -142,9 +142,9 @@ public class SnakeLadder extends GameClient {
 		lvl.ini();
 	
 		//initialize the map size for this level 
-		tileList = lvl.iniMapSize();
+		setTileList(lvl.iniMapSize());
 		//loading game map
-		lvl.loadMap(tileList, "maps/lvl1.txt");
+		lvl.loadMap(getTileList(), "maps/lvl1.txt");
 	
 		// create the game player
 		gamePlayer = new GamePlayer();
@@ -153,7 +153,8 @@ public class SnakeLadder extends GameClient {
 		font = new BitmapFont();
 		font.setScale(2);
 		//Initialise the game state
-		gameState = GameState.READY;
+		//gameState = GameState.READY;
+		gameState = new ReadyState();
 		statusMessage = "Click to start!";
 		
 		//setting up the skin for the layout
@@ -220,7 +221,7 @@ public class SnakeLadder extends GameClient {
         //label for the dice roll
         //diceLabel = new Label ("x",skin);        
         //table.add(diceLabel).width(100).height(50).pad(10);
-        dice = new Dice();
+        setDice(new Dice());
         
         //TODO: button should be disabled when its others player turn or when player is on the move
        // diceButton listener for when the button is pressed
@@ -264,10 +265,10 @@ public class SnakeLadder extends GameClient {
 	    //Begin batch
 	    batch.begin();
 		// render map for this level
-		lvl.renderMap(tileList, batch);
+		lvl.renderMap(getTileList(), batch);
 //		//test
 //		batch.draw(ladder,tileList[5].getCoorX(), tileList[5].getCoorY());
-		dice.renderDice(batch);
+		getDice().renderDice(batch);
 
 		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
@@ -275,7 +276,8 @@ public class SnakeLadder extends GameClient {
 	    if (statusMessage != null) {
 	    	font.setColor(Color.WHITE);
 	    	font.draw(batch, statusMessage, 200, 300);
-	    	if (gameState == GameState.GAMEOVER) {
+	    	if (gameState instanceof GameOverState) 
+	    	{
 	    		font.draw(batch, statusMessage+" Click to exit", 200, 300);
 	    	}
 	    }
@@ -286,53 +288,22 @@ public class SnakeLadder extends GameClient {
 	    shapeRenderer.end();
 
 		
-		 switch(gameState) {
-		    
-		    case READY: //Ready to start a new point
-		    	if (Gdx.input.isTouched()) {
-		    		startPoint();
-		    		gamePlayer.getDnumber(dice.getDiceNumber());
-		    	}
-		    	break;
-		    	
-		    case INPROGRESS: 
-		    	gamePlayer.move(Gdx.graphics.getDeltaTime());
-//		    	int a= dice.getDiceNumber();
-//		    	int position=0;
-//		    	while(0<=gamePlayer.bounds.x &&gamePlayer.bounds.x<=(600-20f)&&gamePlayer.bounds.y<=540)
-//		    	{
-//		    		
-//		    		position+=a;
-//		    	}
-				if(Math.abs(tileList[gamePlayer.newposition()].getCoorX() - gamePlayer.getBounds().x) <(1f)&&Math.abs(tileList[gamePlayer.newposition()].getCoorY() - gamePlayer.getBounds().y) <(1f))
-			    {
-				    	stopPoint();
-			    }
-
-		    	//If the player reaches the end of each line , move up to another line
-		    	if (gamePlayer.getBounds().x >= (600-20f) || gamePlayer.getBounds().x <=0){
-		    		gamePlayer.moveUp();
-		    	}	    	
-		    	//If the ball gets to the left edge then player 2 wins
-		    	if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {
-		    		gamePlayer.reset();
-		    		statusMessage = "You Win! ";
-		    		gameState = GameState.GAMEOVER;
-		    		//statusMessage = "Win!";
-		    				//+ "Click to exit!";
-		    		//endPoint(1);
-		    	}
-		    	break;
-		    case GAMEOVER: //The game has been won, wait to exit
-		    	if (Gdx.input.isTouched()) {
-		    		gameOver();
-		    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-		    	}
-		    	break;
-		    }
+		 handleInput();
 		
 		super.render();
 		
+	}
+
+	/**
+	 * Handle player input from mouse click
+	 */
+	private void handleInput() {
+//		switch(gameState) {		    
+//		    case READY: //Ready to start a new point		    			    	
+//		    case INPROGRESS: 		    	
+//		    case GAMEOVER: //The game has been won, wait to exit		    	
+//		    }
+		gameState.handleInput(this);
 	}
 	
 	public void stopPoint() {
@@ -340,23 +311,26 @@ public class SnakeLadder extends GameClient {
 		// If we've reached the victory point then update the display
 		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {	
 		   
-		    gameState = GameState.GAMEOVER;
+		    //gameState = GameState.GAMEOVER;
+			gameState = new GameOverState();
 		    //Update the game state to the server
 		    //networkClient.sendNetworkObject(createScoreUpdate());
 		   
 		} else {
 			// No winner yet, get ready for another point
-			gameState = GameState.READY;
+			//gameState = GameState.READY;
+			gameState = new ReadyState();
 			statusMessage = "Throw the dice again";
 		}
 
 	}
 	
-	private void startPoint() {
+	void startPoint() {
 		// TODO Auto-generated method stub
 		gamePlayer.initializeVelocity();
-		dice.rollDice();	
-		gameState = GameState.INPROGRESS;
+		getDice().rollDice();	
+		//gameState = GameState.INPROGRESS;
+		gameState = new InProgressState();
 		statusMessage = null;
 	}
 
@@ -375,5 +349,21 @@ public class SnakeLadder extends GameClient {
 	public void resume() {
 		super.resume();
 	}
-	
+
+	public Dice getDice() {
+		return dice;
+	}
+
+	public void setDice(Dice dice) {
+		this.dice = dice;
+	}
+
+	public Tile[] getTileList() {
+		return tileList;
+	}
+
+	public void setTileList(Tile[] tileList) {
+		this.tileList = tileList;
+	}
+
 }

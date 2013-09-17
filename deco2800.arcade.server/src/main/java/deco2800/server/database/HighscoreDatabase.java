@@ -238,15 +238,7 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to add highscore information to database", e);
 		} finally {
- 
-			if (statement != null) {
-				statement.close();
-			}
- 
-			if (connection != null) {
-				connection.close();
-			}
- 
+			connectionCleanup(connection, statement, resultSet);
 		}
 		
 		return data;
@@ -287,15 +279,7 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to add highscore information to database", e);
 		} finally {
- 
-			if (statement != null) {
-				statement.close();
-			}
- 
-			if (connection != null) {
-				connection.close();
-			}
- 
+			connectionCleanup(connection, statement, resultSet);
 		}
 		
 		
@@ -346,28 +330,59 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			connectionCleanup(connection, statement, resultSet);
 		}
 	}
 	
 	
+	
+	//======================
+	//General Utility Methods
+	//======================
+	
+	/**
+	 * Creates a String representation of the current date and time.
+	 * 
+	 * @return A string representation of the current date and time.
+	 */
 	private static String getCurrentTimeStamp() {
 		 
 		java.util.Date today = new java.util.Date();
 		return dateFormat.format(today.getTime());
  
+	}
+	
+	/**
+	 * Attempts to close c, s and r and silently fails if they can't be.
+	 * 
+	 * If there is no need to clean up any of the parameters, simply pass null 
+	 * for that parameter.
+	 * 
+	 * @param c - A Connection that is to be closed
+	 * @param s - A Statement that is to be closed
+	 * @param r - A ResultSet that is to be closed
+	 */
+	private void connectionCleanup(Connection c, Statement s, ResultSet r) {
+		//Close the Connection
+		try {
+			if (c != null) c.close();
+		} catch (SQLException e) {
+			//Silently fail
+		}
+		
+		//Close the Statement
+		try {
+			if (s != null) s.close();
+		} catch (SQLException e) {
+			//Silently fail
+		}
+		
+		//Close the ResultSet
+		try {
+			if (r != null) r.close();
+		} catch (SQLException e) {
+			//Silently fail
+		}
 	}
 	
 	/**** 

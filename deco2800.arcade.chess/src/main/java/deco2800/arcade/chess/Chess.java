@@ -25,6 +25,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -111,6 +112,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	
 	public SplashScreen splashScreen;
 	public MenuScreen menuScreen;
+	
+	private HashMap<Piece, int[]> pieceMaps = new HashMap<Piece, int[]>();
 
 
 	
@@ -526,8 +529,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	void initPiecePos() {
 		int[] pos = { 25 + horizOff, 25 + verticOff };
 		whiteRook1Pos = pos;
+		pieceMaps.put(board.whiteRook1, whiteRook1Pos);
 		int[] pos1 = { 85 + horizOff, 25 + verticOff };
 		whiteKnight1Pos = pos1;
+		pieceMaps.put(board.whiteKnight1, whiteKnight1Pos);
 		int[] pos2 = { 145 + horizOff, 25 + verticOff };
 		whiteBishop1Pos = pos2;
 		int[] pos3 = { 260 + horizOff, 25 + verticOff };
@@ -597,7 +602,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 * Moves all the pieces to their correct places on the board
 	 */
 	void movePieceGraphic() {
-
+		
 		for (FixedSizeList<Piece> row : board.Board_State) {
 			for (Piece piece : row) {
 				if (piece.equals(board.whiteRook1)) {
@@ -904,6 +909,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	}
 
+	private void getPieceCoords(Piece piece) {
+		
+	}
+	
 	void drawPieces() {
 		whiteRook2 = whiteRook1; whiteBishop2 = whiteBishop1; 
 		whiteKnight2 = whiteKnight1; blackBishop2 = blackBishop1;

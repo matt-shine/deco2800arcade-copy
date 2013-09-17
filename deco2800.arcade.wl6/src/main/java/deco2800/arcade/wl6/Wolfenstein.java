@@ -8,6 +8,10 @@ import deco2800.arcade.client.ArcadeSystem;
 
 public class Wolfenstein {
 	
+	/**
+	 * For convenience.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		final Arcade arcade = new Arcade(args);
 

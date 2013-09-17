@@ -1,8 +1,11 @@
 package deco2800.arcade.wl6;
 
+import java.util.Iterator;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+
 import deco2800.arcade.client.ArcadeInputMux;
 
 public class MainGameScreen implements Screen {
@@ -16,7 +19,8 @@ public class MainGameScreen implements Screen {
 	Renderer b = new Renderer();
 	
 	public MainGameScreen(WL6 game) {
-		this.model = new GameModel(1);
+		this.model = new GameModel();
+		model.goToLevel("e1l1");
 		this.game = game;
 		
 		//atlas = new Texture(Gdx.files.internal("wl6atlas.png"));
@@ -45,11 +49,20 @@ public class MainGameScreen implements Screen {
 	@Override
 	public void render(float arg0) {
 		
+		//iterate over all game objects
+		Iterator<Doodad> itr = model.getDoodadIterator();
+		while (itr.hasNext()) {
+			Doodad d = itr.next();
+			d.tick(model);
+		}
+		
+		
 		Gdx.gl20.glViewport(0, 0, game.getWidth(), game.getHeight());
 
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		    
+		   
+	    
 		b.draw(this.debugMode);
 		
 	}

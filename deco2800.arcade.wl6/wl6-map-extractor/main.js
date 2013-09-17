@@ -69,7 +69,7 @@ Array.prototype.transpose = function() {
                 res.end(data);
             });
         } else if (req.url === "/get") {
-            res.end(get());
+            res.end(JSON.stringify(get()));
         }
         
     }).listen(8000);
@@ -108,7 +108,7 @@ Array.prototype.transpose = function() {
         
         
 
-        return JSON.stringify(content);
+        return content;
         
         
     }
@@ -125,10 +125,10 @@ Array.prototype.transpose = function() {
         return "e" + (episode + 1) + levelNames[level];
     }
     
-    var d = JSON.parse(get());
+    var d = get();
     for (var level in d) {
         if (d.hasOwnProperty(level)) {
-            fs.writeFile(level + ".json", d[level]);
+            fs.writeFile("out/" + level + ".json", JSON.stringify(d[level]));
         }
     }
       

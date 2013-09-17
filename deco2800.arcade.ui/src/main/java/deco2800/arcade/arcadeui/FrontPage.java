@@ -1,3 +1,4 @@
+package deco2800.arcade.arcadeui; 
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -20,7 +21,7 @@ public class FrontPage {
     public FrontPage() {
     	
     	skin = new Skin(Gdx.files.internal("loginSkin.json")); //<-- dafuq is this
-        skin.add("background", new Texture("background.png"));
+        skin.add("background", new Texture("homescreen_bg.png")); 
 
         stage = new LoginScreenStage();
         

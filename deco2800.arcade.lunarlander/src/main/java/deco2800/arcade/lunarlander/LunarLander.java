@@ -26,13 +26,13 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
-network.NetworkClient;
+import deco2800.arcade.client.network.NetworkClient;
+
 
 @ArcadeGame(id="LunarLander")
 public class LunarLander extends GameClient {
-	
+		
 	private OrthographicCamera camera;
-	//private GameState gameState;
 	public static final int SCREENHEIGHT = 800;
 	public static final int SCREENWIDTH = 1200; 
 	
@@ -40,6 +40,7 @@ public class LunarLander extends GameClient {
 	private SpriteBatch batch;
 	private Texture backgroundTexture;
 	private BitmapFont font;
+	Texture[] backgroundTextures;
 	
 	//physics
 	private Texture landerTexture;
@@ -51,12 +52,11 @@ public class LunarLander extends GameClient {
 	private Texture lander;
 	private int initPosition;
 	private double angle;
-	private double speed;
+	//private double speed;
 	private double scaleX;
 	private double scaleY;
 	private double velocityX;
 	private double velocityY;
-	private int acceleration;
 	private int finalX;
 	private int finalY;
 	private int gravity;
@@ -70,12 +70,16 @@ public class LunarLander extends GameClient {
 	//info
 	private int score;
 	private int fuel;
-	//private int speed;
+	private int speed;
 	private int time;
-	private float pixelsPerSecond = 40.0f;
-	private float downwardSpeed = 30.0f;
+	// speed of movement when lander is moved left or right 
+	private float sideSpeed = 40.0f;
+	// speed of movement when lander is moved downwards
+	private float downwardSpeed = 60.0f;
+	// speed of movement when lander is moving downwards of its own accord
+	private float downwardDrift = 20.0f;
 	
-	//topwatch stopwatch;
+	private NetworkClient networkClient;
 	
 	/**
 	 * Basic constructor for Lunar Lander 
@@ -118,7 +122,7 @@ public class LunarLander extends GameClient {
 		gravity = 3;
 		moving = true;
 		
-		//terrain generation, not working at the moment
+		/*//terrain generation, not working at the moment
 		terrainCoords[0] = new Point(500,500);
 		terrainCoords[1] = new Point(200,200);
 		terrainCoords[2] = new Point(300,300);
@@ -131,21 +135,18 @@ public class LunarLander extends GameClient {
 		System.out.println(coord0X);
 		System.out.println(coord0Y);
 		
-		shapeRenderer.line(coord0X, coord0Y, coord0X, coord0Y);
+		shapeRenderer.line(coord0X, coord0Y, coord0X, coord0Y);*/
 	
 		
 		//info
 		//physics
 		score = 0;
 		fuel = 1000;
-		//speed = 0;
+		speed = 0;
 		time = 0;
 		
 		landerX = 60;
-		landerY = 50;
-		// = new Stopwatch();
-		
-		
+		landerY = 50;		
 		
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
@@ -202,20 +203,17 @@ public class LunarLander extends GameClient {
 				
 		if(Gdx.input.isKeyPressed(Keys.A)) { //working
 			//System.out.println("D pressed");
-			initialPositionX -= Gdx.graphics.getDeltaTime() * pixelsPerSecond;
+			initialPositionX -= Gdx.graphics.getDeltaTime() * sideSpeed;
 		}
 		
 	    if(Gdx.input.isKeyPressed(Keys.D)) {
-	    	initialPositionX += Gdx.graphics.getDeltaTime() * pixelsPerSecond;
+	    	initialPositionX += Gdx.graphics.getDeltaTime() * downwardSpeed;
 	    }
-	    
-		if(Gdx.input.isKeyPressed(Keys.W)) {
-			initialPositionY += Gdx.graphics.getDeltaTime() * pixelsPerSecond;
-		}
 		
 		if(Gdx.input.isKeyPressed(Keys.S)) {
-			initialPositionY -= Gdx.graphics.getDeltaTime() * pixelsPerSecond;
+			initialPositionY -= Gdx.graphics.getDeltaTime() * sideSpeed;
 		}
+		// make W booster key
 		
 		// clear screen, create background using texture
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -223,14 +221,14 @@ public class LunarLander extends GameClient {
 	    batch.draw(backgroundTexture, 0, 0, 1200, 800);
 	    batch.draw(landerTexture, initialPositionX, initialPositionY, landerX, landerY);
 	    
-	    batch.draw(lander, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
+	    //batch.draw(landerTexture, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
 	    
-	    batch.draw(lander, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
+	    //batch.draw(landerTexture, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
 	    
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
 	    font.draw(batch, "Remaining fuel: " + Integer.toString(fuel), SCREENWIDTH - 200, SCREENHEIGHT - 60);
-	    //font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
+	    font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
 	    font.draw(batch, "Time spent: " + Integer.toString(time), SCREENWIDTH - 200, SCREENHEIGHT - 100);
 	    
 	    batch.end();
@@ -241,19 +239,19 @@ public class LunarLander extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    //Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.Line);
+	    //shapeRenderer.begin(ShapeType.Line);
 	    
 	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
 	    // and ends with the shapeRenderer.end
 	    //shapeRenderer.line(SCREENWIDTH/2, SCREENHEIGHT/2, 50, 50);
 	 	    
 	    //End drawing of shapes
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.end();
+	    //shapeRenderer.begin(ShapeType.FilledRectangle);
+	    //shapeRenderer.end();
 	    
 	    //Slightly more complicated gravity function, hopefully this will increase logarithmically
 	    //When the lander is at or lower than 20 pixels, it stops, otherwise it calculates the next position.
-	    if(!(initPosition + finalY <= 20) && moving == true){
+	    /*if(!(initPosition + finalY <= 20) && moving == true){
 	    	
 	    case INPROGRESS: //Point is underway, ball is moving
 	    	
@@ -271,11 +269,10 @@ public class LunarLander extends GameClient {
 	    // work out how to do that! 
 	    //speed = speed + 1;
 	    
-	    //if(!(initialPositionY - acceleration < 0) && initPositionY != 0){
-	    /*while(initialPositionY > 0) {
-	    	initialPositionY = initialPositionY + 1;
-	    }*/
-	    	velocityY = velocityY - gravity;
+	    if(!((initialPositionY - 0.25) < 0)) {
+	    	initialPositionY -= 0.25;
+	    }
+	/*    	velocityY = velocityY - gravity;
 	    	speed = speed + acceleration;
 		    velocityX = (int) (speed * scaleX);
 		    velocityY = (int) (speed * scaleY);
@@ -286,7 +283,7 @@ public class LunarLander extends GameClient {
 	    }else {
 	    	//"moving" is only used here to slow the lander down, otherwise the infinite loop is too fast.
 	    	moving = true;
-	    }
+	    }*/
 	    
 		super.render();
 		

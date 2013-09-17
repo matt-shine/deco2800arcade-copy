@@ -1,7 +1,10 @@
 package deco2800.arcade.server.database;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -11,7 +14,10 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
+import deco2800.arcade.model.Player;
+import deco2800.server.database.DatabaseException;
 import deco2800.server.database.FriendStorage;
 
 
@@ -66,5 +72,23 @@ public class TestFriendStorage {
 	public void  tearDown() throws Exception {
 		databaseTester.onTearDown();
 	}
+	
+	Player testPlayer0 = new Player(0, null, null, null, null, null, null, null);
+	Player testPlayer1 = new Player(1, null, null, null, null, null, null, null);
+	Player testPlayer2 = new Player(2, null, null, null, null, null, null, null);
+	
+/*	@Test
+	public void testFriendRequest() throws DatabaseException {
+		// create a test ArrayList<Integer> of playerIDs
+		ArrayList<Integer> testFriendRequests = new ArrayList<Integer>();
+		testFriendRequests.add(1);
+		testFriendRequests.add(2);
+		// create a test response from the database
+		
+		// compare playerIDs
+		friendStorage.addFriendRequest(0, 1);
+		friendStorage.addFriendRequest(0, 2);
+		assertEquals(testFriendRequests, friendStorage.getFriendInviteList(0));
+	}*/
 	
 }

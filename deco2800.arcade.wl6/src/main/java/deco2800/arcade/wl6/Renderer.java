@@ -48,6 +48,8 @@ public class Renderer {
 	public void load() {
 		if (terrainShader == null) {
 
+			Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
+			
 			String vertexShader = loadFile("wl6TerrainVertShader.glsl");
 			String fragmentShader = loadFile("wl6TerrainFragShader.glsl");
 
@@ -81,7 +83,7 @@ public class Renderer {
 		//projection
 		float aspect = Gdx.graphics.getWidth() / (float)Gdx.graphics.getHeight();
 		Matrix4 projection = new Matrix4();
-		projection.setToProjection(0.001f, 200.0f, 60.0f, aspect);
+		projection.setToProjection(0.01f, 200.0f, 60.0f, aspect);
 		
 		//view
 		Matrix4 view = debugMode ? getDebugCameraTransform() : getCameraTransform();

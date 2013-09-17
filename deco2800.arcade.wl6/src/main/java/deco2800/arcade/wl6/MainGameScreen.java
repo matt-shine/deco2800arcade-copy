@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 
 import deco2800.arcade.client.ArcadeInputMux;
 
@@ -60,7 +60,7 @@ public class MainGameScreen implements Screen {
 		Gdx.gl20.glViewport(0, 0, game.getWidth(), game.getHeight());
 
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		   
 	    
 		b.draw(this.debugMode);

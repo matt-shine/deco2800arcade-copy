@@ -53,7 +53,7 @@ public class SnakeLadder extends GameClient {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Tile[] tileList; 
-    GamePlayer gamePlayer;
+    public GamePlayer gamePlayer;
     private Level lvl;
     private Texture ladder;
 //    public enum GameState {
@@ -61,7 +61,7 @@ public class SnakeLadder extends GameClient {
 //		INPROGRESS,
 //		GAMEOVER
 //	}
-	GameState gameState;
+	public GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
 	private ShapeRenderer shapeRenderer;
@@ -69,7 +69,7 @@ public class SnakeLadder extends GameClient {
 	private Skin skin;
 	private BitmapFont font;
 	private TextButton diceButton;
-	String statusMessage;
+	public String statusMessage;
 	
 	private Label diceLabel;
 	private Dice dice;
@@ -325,7 +325,7 @@ public class SnakeLadder extends GameClient {
 
 	}
 	
-	void startPoint() {
+	public void startPoint() {
 		// TODO Auto-generated method stub
 		gamePlayer.initializeVelocity();
 		getDice().rollDice();	

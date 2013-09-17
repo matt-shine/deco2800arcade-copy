@@ -1,46 +1,134 @@
 package deco2800.arcade.burningskies;
 
 import java.util.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 public class Configuration {
-	public void write() {
+	
+	// Volumes stored as integers from 0-100 inclusive, represents % max volume
+	private static int masterVolume;
+	private static int effectsVolume;
+	private static int backgroundVolume;
+	// Difficulty stored as integer from 0 to 4, with 4 being insane mode
+	private static int difficulty;
+	// Hashmap of action:keyPress pairs
+	private HashMap<String, String> keybindings;
+	
+	/*
+	 * Writes to the configuration file. Specifically, it writes masterVolume,
+	 * effectsVolume, backgroundVolume and difficulty to the configuration file.
+	 */
+	public void writeConfig() {
 	}
 	
-	public void read() {
+	/*
+	 * Reads from the configuration file. Specifically, it reads masterVolume,
+	 * effectsVolume, backgroundVolume and difficulty from the configuration 
+	 * file.
+	 */
+	public static void readConfig() {
+		FileHandle configFile = Gdx.files.internal("config/config.cfg");
+		String text = configFile.readString();
+		
+		String[] options = text.split(System.getProperty("line.separator"));
+		for (int i = 0; i < options.length; i++) {
+			String[] currentOption = options[i].split(":");
+			int temp = Integer.parseInt(currentOption[1]);
+			switch(i) {
+			case 0:
+				if (temp > 100) {
+					masterVolume = 100;
+				} else if (temp < 0) {
+					masterVolume = 0;
+				} else {
+					masterVolume = Integer.parseInt(currentOption[1]); 
+				}
+				break;
+			case 1:
+				if (temp > 100) {
+					effectsVolume = 100;
+				} else if (temp < 0) {
+					effectsVolume = 0;
+				} else {
+					effectsVolume = Integer.parseInt(currentOption[1]); 
+				}
+				break;
+			case 2:
+				if (temp > 100) {
+					backgroundVolume = 100;
+				} else if (temp < 0) {
+					backgroundVolume = 0;
+				} else {
+					backgroundVolume = Integer.parseInt(currentOption[1]); 
+				}
+				break;
+			case 3:
+				if (temp > 4) {
+					difficulty = 3;
+				} else if (temp < 0) {
+					difficulty = 0;
+				} else {
+					difficulty = Integer.parseInt(currentOption[1]);
+				}
+				break;
+			default:
+				System.out.println("Unexpected configuration encountered.");
+			}
+		}
 	}
 	
-	public int get_master_volume() {
-		return -1;
+	/*
+	 * Writes to the keybinding and configuration files. The keybinding files 
+	 * store binding setups defined by the user in separate text files, then 
+	 * appends the name of said file to the configuration file.
+	 */
+	public void writeBinds() {
 	}
 	
-	public int get_effects_volume() {
-		return -1;
+	/*
+	 * Reads from the specified keybinding file. Adds each binding into a
+	 * <String, String> HashMap.
+	 */
+	public void readBinds() {
 	}
 	
-	public int get_background_volume() {
-		return -1;
+	public static int getMasterVolume() {
+		return Configuration.masterVolume;
 	}
 	
-	public int get_difficulty() {
-		return -1;
+	public int getEffectsVolume() {
+		return Configuration.effectsVolume;
 	}
 	
-	public HashMap<String, String> get_keybindings() {
-		return new HashMap<String, String>();
+	public int getBackgroundVolume() {
+		return Configuration.backgroundVolume;
 	}
 	
-	public void set_master_volume(int volume) {
+	public static int getDifficulty() {
+		return Configuration.difficulty;
 	}
 	
-	public void set_effects_volume(int volume) {
+	public HashMap<String, String> getKeybindings() {
+		return this.keybindings;
 	}
 	
-	public void set_background_volume(int volume) {
+	public void setMasterVolume(int volume) {
+		Configuration.masterVolume = volume;
+	}
+
+	public void setEffectsVolume(int volume) {
+		Configuration.effectsVolume = volume;
 	}
 	
-	public void set_difficulty(int difficulty) {
+	public void setBackgroundVolume(int volume) {
+		Configuration.backgroundVolume = volume;
 	}
 	
-	public void set_keybindings(String action, String key){
+	public void setDifficulty(int difficulty) {
+		Configuration.difficulty = difficulty;
+	}
+	
+	public void setKeybindings(String action, String key){
 	}
 }

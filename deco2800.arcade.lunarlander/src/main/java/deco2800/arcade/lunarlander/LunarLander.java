@@ -131,8 +131,8 @@ public class LunarLander extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		// setting up various constants 
-		initialPositionY = 700;
-		initialPositionX = 50;
+		initialPositionY = 750;
+		initialPositionX = 600;
 		landerX = 30;
 		landerY = 30;		
 		acceleration = 0;

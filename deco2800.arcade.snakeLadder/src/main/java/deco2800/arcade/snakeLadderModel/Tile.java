@@ -4,7 +4,7 @@ import java.awt.Point;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public abstract class Tile {
+public class Tile {
 	
 	protected int index;
 	protected Point coordinate; 
@@ -33,5 +33,21 @@ public abstract class Tile {
 	public int getCoorY(){return coordinate.y;}
 	
 	// initialize the coordinate based on position index
-	public abstract Point iniCoordinate(int index);
+	public Point iniCoordinate(int index) {
+		index = index - 1;
+		int y = (index / 10) * this.dimension ;
+		int x = 0;
+		
+		// if it is even row
+		if ((index/10) % 2 == 0)
+		{
+			x = this.dimension * (index%10);
+		}
+		else 
+		{
+			x = this.dimension * 10 - this.dimension * (index%10 +1) ;
+		}
+		
+		return new Point(x,y);
+	}
 }

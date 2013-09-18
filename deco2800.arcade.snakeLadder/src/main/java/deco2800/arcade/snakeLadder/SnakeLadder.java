@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -52,15 +53,18 @@ public class SnakeLadder extends GameClient {
 	
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	private Tile[] tileList; 
+	
     public GamePlayer gamePlayer;
-    private Level lvl;
-    private Texture ladder;
-//    public enum GameState {
-//		READY,
-//		INPROGRESS,
-//		GAMEOVER
-//	}
+    private GameMap map;
+   
+	public GameMap getMap() {
+		return map;
+	}
+
+	public void setMap(GameMap map) {
+		this.map = map;
+	}
+
 	public GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
@@ -134,18 +138,13 @@ public class SnakeLadder extends GameClient {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
-//		//test
-//		ladder =  new Texture(Gdx.files.classpath("images/arrow.png"));
 		
 		//creating level loading background board and initializing the rule mapping
-		lvl =new Level1();
-		lvl.ini();
-	
-		//initialize the map size for this level 
-		setTileList(lvl.iniMapSize());
+		map =new GameMap();
+		map.ini();
 		//loading game map
-		lvl.loadMap(getTileList(), "maps/lvl1.txt");
-	
+		map.loadMap("maps/lvl1.txt");
+		
 		// create the game player
 		gamePlayer = new GamePlayer();
 
@@ -265,9 +264,8 @@ public class SnakeLadder extends GameClient {
 	    //Begin batch
 	    batch.begin();
 		// render map for this level
-		lvl.renderMap(getTileList(), batch);
-//		//test
-//		batch.draw(ladder,tileList[5].getCoorX(), tileList[5].getCoorY());
+		map.renderMap(batch);
+		
 		getDice().renderDice(batch);
 
 		
@@ -356,14 +354,6 @@ public class SnakeLadder extends GameClient {
 
 	public void setDice(Dice dice) {
 		this.dice = dice;
-	}
-
-	public Tile[] getTileList() {
-		return tileList;
-	}
-
-	public void setTileList(Tile[] tileList) {
-		this.tileList = tileList;
 	}
 
 }

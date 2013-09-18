@@ -16,7 +16,7 @@ public class InProgressState extends GameState {
 //    		
 //    		position+=a;
 //    	}
-		if(Math.abs(context.getTileList()[context.gamePlayer.newposition()].getCoorX() - context.gamePlayer.getBounds().x) <(1f)&&Math.abs(context.getTileList()[context.gamePlayer.newposition()].getCoorY() - context.gamePlayer.getBounds().y) <(1f))
+		if(Math.abs(context.getMap().getTileList()[context.gamePlayer.newposition()].getCoorX() - context.gamePlayer.getBounds().x) <(1f)&&Math.abs(context.getMap().getTileList()[context.gamePlayer.newposition()].getCoorY() - context.gamePlayer.getBounds().y) <(1f))
 	    {
 		    	context.stopPoint();
 	    }

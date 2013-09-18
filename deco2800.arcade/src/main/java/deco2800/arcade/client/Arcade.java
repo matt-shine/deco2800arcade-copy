@@ -118,8 +118,8 @@ public class Arcade extends JFrame {
 	 * Completely exits arcade. The status code is always set to 0.
 	 */
     public void arcadeExit() {
-        removeCanvas();
-
+    	removeCanvas();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				System.exit(0);
@@ -217,10 +217,6 @@ public class Arcade extends JFrame {
 	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
-		if (selectedGame == null) {
-			System.err.println("No game with ID " + gameid + " exists.");
-			return;
-		}
         selectedGame.setNetworkClient(this.client);
 		startGame(selectedGame);
 	}
@@ -292,6 +288,8 @@ public class Arcade extends JFrame {
 
 		});
 	}
+	
+
 
 	private Map<String, Class<? extends GameClient>> gameMap = null;
 

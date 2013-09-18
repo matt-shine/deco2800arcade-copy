@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
+import deco2800.arcade.client.ArcadeSystem;
+
 public class WL6InputProcessor implements InputProcessor {
 
 	private WL6 game = null;
@@ -20,9 +22,19 @@ public class WL6InputProcessor implements InputProcessor {
 	
 	@Override
 	public boolean keyDown(int c) {
+		
+		//debug
 		if (c == Keys.NUM_1) {
 			game.toggleDebugMode();
 		}
+		
+		//panic
+		if (c == Keys.NUM_2) {
+			ArcadeSystem.exit();
+		}
+		
+		
+		
 		if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
 			updatePlayerSpeed();
 		}

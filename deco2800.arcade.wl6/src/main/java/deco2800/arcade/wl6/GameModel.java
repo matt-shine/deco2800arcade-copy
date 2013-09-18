@@ -22,10 +22,11 @@ public class GameModel {
 	private String currentLevel = "nothing";
 	
 	//the player
-	private Player player = new Player();
+	private Player player = null;
 	
 	//the player spawn point
 	private Vector2 spawn = new Vector2(0, 0);
+	private float spawnAngle = 0;
 	
 	//All the entities
 	private LinkedList<Doodad> doodads = new LinkedList<Doodad>();
@@ -60,8 +61,9 @@ public class GameModel {
 		
 		MapProcessor.processEverything(this);
 		
-		player = new Player();
+		player = new Player(MapProcessor.doodadID());
 		player.setPos(spawn);
+		player.setAngle(this.spawnAngle);
 		this.addDoodad(player);
 	}
 	
@@ -119,8 +121,9 @@ public class GameModel {
 	 * @param x
 	 * @param y
 	 */
-	public void setSpawnPoint(float x, float y) {
+	public void setSpawnPoint(float x, float y, float angle) {
 		spawn = new Vector2(x, y);
+		spawnAngle = angle;
 	}
 	
 	

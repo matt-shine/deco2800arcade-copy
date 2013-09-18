@@ -20,43 +20,21 @@ public class MapProcessor {
 		    for (int j = 0; j < WL6.MAP_DIM; j++) {
 		    	
 		    	//now generate all the items
-		    	switch (map.getDoodadAt(i, j)) {
 		    	
-		    	//facing up
-		    	//TODO implement spawn facing direction
-		    	case WL6Meta.SPAWN_POINT:
-		    		model.setSpawnPoint(i + 0.5f, j + 0.5f);
-		    		break;
+		    	int id = map.getDoodadAt(i, j);
+		    	DoodadInfo dInfo = WL6Meta.doodad(id);
 		    	
-		    	//facing right
-		    	case WL6Meta.SPAWN_POINT + 1:
-		    		model.setSpawnPoint(i + 0.5f, j + 0.5f);
-		    		break;
-		    	
-		    	//facing down
-		    	case WL6Meta.SPAWN_POINT + 2:
-		    		model.setSpawnPoint(i + 0.5f, j + 0.5f);
-		    		break;
+		    	//spawn points
+		    	if (id >= WL6Meta.SPAWN_POINT && id < WL6Meta.SPAWN_POINT + 4) {
 		    		
-		    	//facing right
-		    	case WL6Meta.SPAWN_POINT + 3:
-		    		model.setSpawnPoint(i + 0.5f, j + 0.5f);
-		    		break;
+		    		//TODO the angle doesn't work quite right -- don't know why
+		    		model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.direction));
 		    		
-		    	//TODO doors, hidden passages etc
+		    	} else {
 		    		
+		    		//everything else
+		    		spawnDoodadFromInfo(model, dInfo, id, i, j);
 		    		
-		    		
-		    		
-		    		
-		    	default:
-		    		spawnDoodadFromInfo(
-		    				model,
-		    				WL6Meta.doodad(map.getDoodadAt(i, j)),
-		    				map.getDoodadAt(i, j),
-		    				i, j
-		    		);
-		    	
 		    	}
 		    	
 		    	
@@ -67,6 +45,20 @@ public class MapProcessor {
 		
 		
 	}
+	
+	
+	
+	/**
+	 * Unique ids for doodads. This relies on the assumption that no two doodads can
+	 * spawn on the same tile.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public static int doodadID() {
+		return (int) Math.floor(Math.random() * Integer.MAX_VALUE);
+	}
+	
 	
 	
 	/**
@@ -104,10 +96,9 @@ public class MapProcessor {
 			
 		} else {
 			
-			
-			dd = new Doodad();
+			//spawn a static nonsolid doodad
+			dd = new Doodad(doodadID());
 			dd.setTextureName(d.texture);
-			System.out.println();
 			
 		}
 		

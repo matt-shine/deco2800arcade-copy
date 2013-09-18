@@ -17,6 +17,29 @@ public class WL6Meta {
 	public static final int SECRET_DOOR = 98;
 	
 	
+	public static enum DIRS {
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+	}
+	
+	
+	public static float dirToAngle(DIRS d) {
+		switch (d) {
+		case UP:
+			return 270;
+		case LEFT:
+			return 0;
+		case DOWN:
+			return 90;
+		case RIGHT:
+			return 180;
+		default:
+			return 0;
+		}
+	}
+	
 	
 	private static BlockInfo[] blocks;
 	private static DoodadInfo[] doodads;
@@ -128,17 +151,17 @@ public class WL6Meta {
 				//18: nothing
 				new DoodadInfo(),
 				
-				//19: spawn point up - do nothing, this is handled in the MapProcessor
-				new DoodadInfo(),
+				//19: spawn point - special case of waypoint handled by MapProcessor
+				DoodadInfo.wayPoint(DIRS.UP).specialCase(),
 				
-				//20: spawn point right - do nothing, this is handled in the MapProcessor
-				new DoodadInfo(),
+				//20: spawn point - special case of waypoint handled by MapProcessor
+				DoodadInfo.wayPoint(DIRS.RIGHT).specialCase(),
 				
-				//21: spawn point down - do nothing, this is handled in the MapProcessor
-				new DoodadInfo(),
+				//21: spawn point - special case of waypoint handled by MapProcessor
+				DoodadInfo.wayPoint(DIRS.DOWN).specialCase(),
 				
-				//22: spawn point left- do nothing, this is handled in the MapProcessor
-				new DoodadInfo(),
+				//22: spawn point - special case of waypoint handled by MapProcessor
+				DoodadInfo.wayPoint(DIRS.LEFT).specialCase(),
 				
 				//23: nothing
 				new DoodadInfo(),

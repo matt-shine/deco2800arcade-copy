@@ -4,8 +4,8 @@ public class Player extends Mob {
 
 	public static final float SPEED = 3f;
 	
-	public Player() {
-		super();
+	public Player(int uid) {
+		super(uid);
 	}
 	
 	
@@ -19,6 +19,7 @@ public class Player extends Mob {
 	@Override
 	public void tick(GameModel model) {
 		super.tick(model);
+		//System.out.println("pos: " + this.getPos().x + " " + this.getPos().y + " " + this.getAngle());
 	}
 	
 	

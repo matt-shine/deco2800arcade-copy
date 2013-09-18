@@ -1,4 +1,4 @@
-package deco2800.arcade.hunter.model;
+package deco2800.arcade.platformergame.model;
 
 import deco2800.arcade.platformergame.model.Entity;
 
@@ -7,6 +7,7 @@ public class EntityCollision implements Comparable<Object> {
 		PLAYER_C_LEFT_EDGE,
 		PREY_C_LEFT_EDGE,
 		PREDATOR_C_LEFT_EDGE,
+		ITEM_C_LEFT_EDGE,
 		ITEM_C_PLAYER,
 		PLAYER_PROJECTILE_C_ANIMAL,
 		WORLD_PROJECTILE_C_PLAYER,

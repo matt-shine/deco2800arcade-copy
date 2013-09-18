@@ -1,12 +1,10 @@
-package deco2800.arcade.hunter.model;
+package deco2800.arcade.platformergame.model;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import deco2800.arcade.platformergame.model.Entity;
 
 public class EntityCollection implements Iterable<Entity> {
 	/**
@@ -32,6 +30,7 @@ public class EntityCollection implements Iterable<Entity> {
 		entities.put(generateId(), e);
 	}
 
+	
 	@Override
 	public Iterator<Entity> iterator() {
 		return entities.values().iterator();

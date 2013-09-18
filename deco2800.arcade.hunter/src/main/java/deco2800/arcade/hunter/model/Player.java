@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.hunter.model.EntityCollision.CollisionType;
 import deco2800.arcade.platformergame.model.Entity;
+import deco2800.arcade.platformergame.model.EntityCollection;
+import deco2800.arcade.platformergame.model.EntityCollision;
+import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 
 public class Player extends Entity {
 	private static final int JUMP_VELOCITY = 1;
@@ -22,11 +24,14 @@ public class Player extends Entity {
 	
 	private Animation currAnim;
 	
+	private int lives;
+	
 	private HashMap<String, Animation> animationList = new HashMap<String,Animation>();
 	//States used to determine how to draw the player
 	private enum State {
 		RUNNING,
 		JUMPING,
+		ATTACK,
 		FALLING,
 		DEAD
 	};
@@ -37,6 +42,7 @@ public class Player extends Entity {
 		super(pos, width, height);
 		setX(128); //starting X offset
 		loadAnimations();
+		lives = 3;
 	}
 	
 	/**
@@ -195,11 +201,63 @@ public class Player extends Entity {
 		batch.draw(img, getX(), getY(), getWidth(), getHeight());
 	}
 	
-//	@Override
-//	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
-//		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
-//		if player is colliding with the left edge of the screen
-//			collisions.add(new EntityCollision(CollisionType.PLAYER_C_LEFT_EDGE));
-//		return collisions;
-//	}
+	@Override
+	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
+		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+		Player player = this;
+		for (Entity e: entities){
+			if(player.getX() <= 0){ // change 0 to forgeoundlayer.getXoffset();
+				collisions.add(new EntityCollision(player, null, CollisionType.PLAYER_C_LEFT_EDGE));
+			}
+			if(player.getBounds().overlaps(e.getBounds())){
+				if(e.getClass().equals(Animal.class)){
+					if (player.state == State.ATTACK) collisions.add(new EntityCollision(player, e,CollisionType.PLAYER_PROJECTILE_C_ANIMAL));
+					else collisions.add(new EntityCollision(player,e,CollisionType.WORLD_PROJECTILE_C_PLAYER));
+					
+				}
+				if(e.getClass()==Items.class){
+					collisions.add(new EntityCollision(player,e,CollisionType.ITEM_C_PLAYER));
+				}
+			}
+			
+		}
+		return collisions;
+	}
+	
+	@Override
+	public void handleCollision(Entity e){
+		if (e == null){
+			gameOver();
+		}
+		if (e.getClass() == Items.class){
+			System.out.println("Item pickup!");
+		}
+		if (e.getClass() == Animal.class){
+			System.out.println("Animal Collision");
+			loseLife();
+		}
+		if (e.getClass() == Animal.class && this.state == State.ATTACK){
+			killAnimal();
+		}
+	}
+
+	private void killAnimal() {
+		System.out.println("Yay you killed an animal!");
+	}
+
+	private void loseLife() {
+		lives -= 1;
+	}
+	
+	private void addLife(){
+		lives += 1;
+	}
+	
+	public int getLives(){
+		return lives;
+	}
+	
+	private void gameOver() {
+		System.out.println("Game Over!");
+	}
 }

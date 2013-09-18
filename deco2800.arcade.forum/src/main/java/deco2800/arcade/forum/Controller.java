@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 public class Controller {
 	//private ForumModel model;
 	//private ForumUi interf;
-	
+/*	
 	public Controller(ForumModel model, ForumUi interf) {
 		this.model = model;
 		this.view = interf;
@@ -17,5 +17,5 @@ public class Controller {
 			this.view.postThread();
 			this.view.updateThread();
 		}
-	}
+	}*/
 }

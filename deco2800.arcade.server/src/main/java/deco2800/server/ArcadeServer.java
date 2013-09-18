@@ -93,7 +93,7 @@ public class ArcadeServer {
 	// Highscore database storage service
 	private HighscoreDatabase highscoreDatabase;
 	
-	/* Forum strage service */
+	/* Forum storage service */
 	private ForumStorage forumStorage;
 	
 	/**
@@ -135,6 +135,14 @@ public class ArcadeServer {
     public GameStorage getGameStorageDatabase() {
         return gameStorage;
     }
+	
+	/**
+	 * Get access to the forum storage.
+	 * @return ForumStorage instance
+	 */
+	public ForumStorage getForumStorage() {
+		return this.forumStorage;
+	}
 	
 	/**
 	 * Create a new Arcade Server.

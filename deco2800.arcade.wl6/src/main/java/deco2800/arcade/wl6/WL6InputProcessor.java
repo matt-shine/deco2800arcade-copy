@@ -22,16 +22,16 @@ public class WL6InputProcessor implements InputProcessor {
 			game.toggleDebugMode();
 		}
 		if (arg0 == Keys.W) {
-			model.getPlayer().setX(model.getPlayer().getPos().x + 1);
-		}
-		if (arg0 == Keys.S) {
-			model.getPlayer().setX(model.getPlayer().getPos().x - 1);
-		}
-		if (arg0 == Keys.A) {
 			model.getPlayer().setY(model.getPlayer().getPos().y - 1);
 		}
-		if (arg0 == Keys.D) {
+		if (arg0 == Keys.S) {
 			model.getPlayer().setY(model.getPlayer().getPos().y + 1);
+		}
+		if (arg0 == Keys.A) {
+			model.getPlayer().setX(model.getPlayer().getPos().x - 1);
+		}
+		if (arg0 == Keys.D) {
+			model.getPlayer().setX(model.getPlayer().getPos().x + 1);
 		}
 		return false;
 	}

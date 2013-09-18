@@ -14,6 +14,7 @@ public class WL6Meta {
 	 * are consecutive.
 	 */
 	public static final int SPAWN_POINT = 19;
+	public static final int SECRET_DOOR = 98;
 	
 	
 	

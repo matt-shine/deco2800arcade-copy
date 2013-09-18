@@ -5,8 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -19,7 +21,6 @@ import com.badlogic.gdx.math.Matrix4;
  */
 public class Renderer {
 
-	//private FloatBuffer data = ByteBuffer.allocateDirect(10000000).asFloatBuffer();
 	private ShaderProgram terrainShader = null;
 	private ShaderProgram doodadShader = null;
 	private Mesh terrainMesh;
@@ -27,7 +28,8 @@ public class Renderer {
 	private ArrayList<Float> terrainScratch = new ArrayList<Float>();
 	private GameModel game = null;
 	private boolean debugMode = false;
-	
+	private Texture terrainAtlas = null;
+	private Texture doodadsAtlas = null;
 	
 	
 	public Renderer() {
@@ -48,6 +50,13 @@ public class Renderer {
 	public void load() {
 		if (terrainShader == null) {
 
+			FileHandle imageFileHandle = Gdx.files.internal("wl6WallsAtlas.png"); 
+	        terrainAtlas = new Texture(imageFileHandle);
+
+			imageFileHandle = Gdx.files.internal("wl6DoodadsAtlas.png"); 
+	        doodadsAtlas = new Texture(imageFileHandle);
+			
+	        
 			Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
 			
 			String vertexShader = loadFile("wl6TerrainVertShader.glsl");
@@ -55,21 +64,26 @@ public class Renderer {
 
 			terrainShader = new ShaderProgram(vertexShader, fragmentShader);
 			VertexAttribute pos = new VertexAttribute(Usage.Position, 3, "a_position");
+			VertexAttribute tex = new VertexAttribute(Usage.TextureCoordinates, 2, "a_texpos");
 			float[] posData = toPrimativeArray(terrainScratch);
-			terrainMesh = new Mesh(true, posData.length, 0, pos);
+			terrainMesh = new Mesh(true, posData.length, 0, pos, tex);
 			terrainMesh.setVertices(posData);
 			
-
+			
+			
+			
+			
 			vertexShader = loadFile("wl6DoodadVertShader.glsl");
 			fragmentShader = loadFile("wl6DoodadFragShader.glsl");
 
 			doodadShader = new ShaderProgram(vertexShader, fragmentShader);
 			pos = new VertexAttribute(Usage.Position, 3, "a_position");
+			tex = new VertexAttribute(Usage.TextureCoordinates, 2, "a_texpos");
 			posData = toPrimativeArray(generateQuadMesh());
-			quadMesh = new Mesh(true, posData.length, 0, pos);
+			quadMesh = new Mesh(true, posData.length, 0, pos, tex);
 			quadMesh.setVertices(posData);
 			
-			
+			System.out.println("Shader compile errors: " + terrainShader.getLog() + " " + doodadShader.getLog());
 			
 			
 		} else {
@@ -96,6 +110,10 @@ public class Renderer {
 	public void draw(boolean debug) {
 		debugMode = debug;
 		
+		//prepare
+		Gdx.graphics.getGL20().glEnable(GL20.GL_TEXTURE_2D);
+		terrainAtlas.bind();
+		
 		
 		//draw terrain
 		terrainShader.begin();
@@ -109,6 +127,8 @@ public class Renderer {
 		terrainMesh.render(terrainShader, GL20.GL_TRIANGLES);
 		terrainShader.end();
 		
+		
+		doodadsAtlas.bind();
 		
 		//draw doodads
 		doodadShader.begin();
@@ -137,14 +157,17 @@ public class Renderer {
 		
 		//model transform
 		Matrix4 m = new Matrix4().idt();
-		m.translate(x, y, debugMode ? -0.1f : -0.5f);
+		m.translate(x, y, debugMode ? 0.1f : 0.5f);
 		if (this.debugMode) {
-			m.rotate(1, 0, 0, 90);
+			m.rotate(1, 0, 0, 270);
 		}
 		
 		//combine matrixes
 		Matrix4 combined = pv.mul(m);
 		doodadShader.setUniformMatrix("uMVPMatrix", combined);
+		
+		//set texture offset
+		doodadShader.setUniform2fv("u_texoffset", new float[]{0, 0}, 0, 2);
 		
 		//draw
 		quadMesh.render(doodadShader, GL20.GL_TRIANGLES);
@@ -174,37 +197,11 @@ public class Renderer {
 
 		ArrayList<Float> quadMesh = new ArrayList<Float>();
 		
-		//triangle 1
-		//bottom left
-		quadMesh.add((float) -0.5f);
-		quadMesh.add((float) 0);
-		quadMesh.add((float) -0.5f);
+		float texX = 0;
+		float texY = 0;
+		float texS = 1;
 		
-		//bottom right
-		quadMesh.add((float) 0.5f);
-		quadMesh.add((float) 0);
-		quadMesh.add((float) -0.5f);
-		
-		//top left
-		quadMesh.add((float) -0.5f);
-		quadMesh.add((float) 0);
-		quadMesh.add((float) 0.5f);
-		
-		//triangle 2
-		//top left
-		quadMesh.add((float) -0.5f);
-		quadMesh.add((float) 0);
-		quadMesh.add((float) 0.5f);
-		
-		//bottom right
-		quadMesh.add((float) 0.5f);
-		quadMesh.add((float) 0);
-		quadMesh.add((float) -0.5f);
-		
-		//top right
-		quadMesh.add((float) 0.5f);
-		quadMesh.add((float) 0);
-		quadMesh.add((float) 0.5f);
+		CubeGen.genQuad(texX, texY, texS, quadMesh);
 		
 		return quadMesh;
 		
@@ -223,44 +220,52 @@ public class Renderer {
 		    	//we want to generate all terrain blocks that have a texture
 		    	if (WL6Meta.block(map.getTerrainAt(i, j)).texture != null) {
 		    		
-		    		//triangle 1
-		    		//bottom left
-		    		terrainScratch.add((float) i);
-		    		terrainScratch.add((float) j);
-		    		terrainScratch.add((float) 0);
 		    		
-		    		//bottom right
-		    		terrainScratch.add((float) i + 1);
-		    		terrainScratch.add((float) j);
-		    		terrainScratch.add((float) 0);
+		    		if (map.getDoodadAt(i, j) == WL6Meta.SECRET_DOOR ||
+		    				isSurrounded(i, j, map)) {
+		    			continue;
+		    		}
 		    		
-		    		//top left
-		    		terrainScratch.add((float) i);
-		    		terrainScratch.add((float) j + 1);
-		    		terrainScratch.add((float) 0);
+
+		    		float texX = 0;
+		    		float texY = 0;
+		    		float texS = 1;
 		    		
-		    		//triangle 2
-		    		//top left
-		    		terrainScratch.add((float) i);
-		    		terrainScratch.add((float) j + 1);
-		    		terrainScratch.add((float) 0);
+		    		CubeGen.getCube(i, j, texX, texY, texS, terrainScratch);
 		    		
-		    		//bottom right
-		    		terrainScratch.add((float) i + 1);
-		    		terrainScratch.add((float) j);
-		    		terrainScratch.add((float) 0);
-		    		
-		    		//top right
-		    		terrainScratch.add((float) i + 1);
-		    		terrainScratch.add((float) j + 1);
-		    		terrainScratch.add((float) 0);
-		    		
+
 		    	}
 		    }
 	    }
 	}
 	
 	
+	public boolean isSurrounded(int x, int y, Level map) {
+		int surrounded = 0;
+		//check if we're surrounded
+		if (x == 0 || (WL6Meta.block(map.getTerrainAt(x - 1, y)).texture != null) &&
+				map.getDoodadAt(x - 1, y) != WL6Meta.SECRET_DOOR) {
+			surrounded++;
+		}
+		if (x == 63 || (WL6Meta.block(map.getTerrainAt(x + 1, y)).texture != null) &&
+				map.getDoodadAt(x + 1, y) != WL6Meta.SECRET_DOOR) {
+			surrounded++;
+		}
+		if (y == 0 || (WL6Meta.block(map.getTerrainAt(x, y - 1)).texture != null) &&
+				map.getDoodadAt(x, y - 1) != WL6Meta.SECRET_DOOR) {
+			surrounded++;
+		}
+		if (y == 63 || (WL6Meta.block(map.getTerrainAt(x, y + 1)).texture != null) &&
+				map.getDoodadAt(x, y + 1) != WL6Meta.SECRET_DOOR) {
+			surrounded++;
+		}
+		if (surrounded == 4) {
+			return true;
+		}
+		
+		return false;
+		
+	}
 	
 	
 	/**
@@ -293,7 +298,7 @@ public class Renderer {
 	 */
 	public Matrix4 getDebugCameraTransform() {
 		float scale = 0.08f;
-		return new Matrix4().idt().trn(-(32 * scale), -(32 * scale), -5.0f).scale(scale, scale, scale);
+		return new Matrix4().idt().trn(-(32 * scale), (32 * scale), -5.0f).scale(scale, scale, scale).rotate(1, 0, 0, 180);
 	}
 	
 	/**
@@ -310,11 +315,14 @@ public class Renderer {
 		//we're looking down at the moment, we need to look at the horizon
 		m.rotate(1, 0, 0, 90);
 		
+		//we're upsidedown...
+		//m.rotate(1, 0, 0, 90);
+				
 		//now look the same way the player is facing
 		m.rotate(0, 0, 1, r);
 		
 		//now translate
-		m.translate(-x, -y, 0.5f);
+		m.translate(-x, -y, -0.5f);
 		
 		return m;
 	}

@@ -31,7 +31,7 @@ public class Wolfenstein {
 
 				arcade.connectAsUser("wolfTest");
 				
-				ArcadeSystem.goToGame("wolfenstein");
+				ArcadeSystem.goToGame("Wolfenstein 3D");
 			}
 		});
 		

@@ -1,8 +1,11 @@
 package deco2800.arcade.platformergame.model;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
 
 public abstract class Entity {
 	protected Rectangle bounds;
@@ -58,4 +61,9 @@ public abstract class Entity {
 	public void update(float delta) {}
 	public void draw(SpriteBatch batch) {}
 	public void handleCollision(Entity entityTwo) {}
+	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
+		return null;
+	}
+	
+	
 }

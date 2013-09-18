@@ -7,20 +7,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
+import deco2800.arcade.hunter.model.Animal;
 import deco2800.arcade.hunter.model.BackgroundLayer;
-import deco2800.arcade.hunter.model.Enemy;
-import deco2800.arcade.hunter.model.EntityCollection;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.model.Player;
-import deco2800.arcade.hunter.model.EntityCollision;
-import deco2800.arcade.hunter.model.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.model.SpriteLayer;
 import deco2800.arcade.platformergame.model.Entity;
+import deco2800.arcade.platformergame.model.EntityCollection;
+import deco2800.arcade.platformergame.model.EntityCollision;
 
 /**
  * A Hunter game for use in the Arcade
@@ -61,11 +62,13 @@ public class GameScreen implements Screen {
 
 		
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
-		Enemy enemy = new Enemy(new Vector2(200,10),128,128,false,"hippo");
+		Animal animal = new Animal(new Vector2(200,10),128,128,false,"hippo");
 
 		entities.add(player);
-		//entities.add(enemy);
+		//entities.add(animal);
 	}
+
+	
 
 	@Override
 	public void dispose() {
@@ -110,7 +113,9 @@ public class GameScreen implements Screen {
 			foregroundLayer.draw(batch);
 			
 			entities.drawAll(batch);
-		    
+			
+//			drawLives();
+			
 			batch.end();
 		}
 		
@@ -126,8 +131,13 @@ public class GameScreen implements Screen {
 			player.jump();
 		}
 		
-		if (Gdx.input.isKeyPressed(Keys.P)){
-			//Pause the game
+	}
+	
+	private void drawLives() {
+		Texture lives = new Texture("textures/lives.png");
+		TextureRegion life = new TextureRegion(lives, 64,64);
+		for(int x = 1; x<=player.getLives();x++){
+			batch.draw(life, (Config.screenWidth-(x * life.getRegionWidth())), (Config.screenHeight - (x * life.getRegionHeight())));
 		}
 	}
 	
@@ -199,7 +209,7 @@ public class GameScreen implements Screen {
 					case 3:
 						//   |_\ slope
 						if (i <= (int) e.getX()) {
-							slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (Config.TILE_SIZE - e.getX() % Config.TILE_SIZE));
+							slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e.getX() % Config.TILE_SIZE));
 							if (e.getY() < slopeHeight) {
 								e.setY(slopeHeight + 0.1f);
 								e.getCollider().bottom = true;
@@ -216,7 +226,6 @@ public class GameScreen implements Screen {
 						break;
 					default:
 						//Outside the map, or invalid tile.
-						System.out.println(tile); //Debug TODO remove
 						break;
 				}
 				
@@ -253,6 +262,7 @@ public class GameScreen implements Screen {
 		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
 		
 		for (Entity e : entities) {
+			collisions.addAll(e.getCollisions(entities));
 //			collisions.add(new EntityCollision(e, e, CollisionType.PLAYER_C_LEFT_EDGE)); //EXAMPLE, REMOVEME TODO
 //			ArrayList<EntityCollision> ec = e.getCollisions();
 //			for (EntityCollision c : ec) {

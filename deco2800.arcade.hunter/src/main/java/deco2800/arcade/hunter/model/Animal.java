@@ -1,15 +1,18 @@
 package deco2800.arcade.hunter.model;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.platformergame.model.Entity;
+import deco2800.arcade.platformergame.model.EntityCollection;
+import deco2800.arcade.platformergame.model.EntityCollision;
+import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 
-public class Enemy extends Entity {
-
-	private boolean hunted;
+public class Animal extends Entity {
 	
 	private boolean moving;
 	
@@ -19,13 +22,19 @@ public class Enemy extends Entity {
 	
 	private Animation currAnim;
 	
+	private Type type;
 	
-	public Enemy(Vector2 pos, float width, float height, boolean hunted, String filepath) {
+	
+	public Animal(Vector2 pos, float width, float height, boolean hunted, String filepath) {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
 		moving = false;
-		this.hunted = hunted;
+		if(hunted){
+			type = Type.PREY;
+		}else{
+			type = Type.PREDATOR;
+		}
 		setAnimation(loadAnimations(filepath));
 	}
 
@@ -44,6 +53,11 @@ public class Enemy extends Entity {
 		MOVING,
 		DEAD,
 		IDLE
+	}
+	
+	private enum Type{
+		PREDATOR,
+		PREY
 	}
 	
 	/*
@@ -87,5 +101,28 @@ public class Enemy extends Entity {
 	
 	public Animation getAnim(){
 		return currAnim;
+	}
+	
+	public Type getType(){
+		return type;
+	}
+	
+	@Override
+	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
+		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+		for (Entity e: entities){
+			if (this.getX() <= 0)collisions.add(new EntityCollision(e, null, CollisionType.PREDATOR_C_LEFT_EDGE));
+		}
+		return collisions;
+	}
+	
+	@Override
+	public void handleCollision(Entity e){
+		if (e == null)
+			killAnimal();
+	}
+
+	private void killAnimal() {
+		System.out.println("DESTROY");
 	}
 }

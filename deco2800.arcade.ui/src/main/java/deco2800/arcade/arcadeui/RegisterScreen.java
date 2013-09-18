@@ -16,7 +16,6 @@ public class RegisterScreen implements Screen {
 
     private Skin skin;
     private RegisterScreenStage stage;
-    @SuppressWarnings("unused")
 	private ArcadeUI arcadeUI;
 
     public RegisterScreen(ArcadeUI ui) {
@@ -59,18 +58,14 @@ public class RegisterScreen implements Screen {
 
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+
             }
         });
         cancelButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-
+                arcadeUI.setScreen(arcadeUI.login);
             }
         });
-    }
-
-    @Override
-    public void show() {
-    	ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
     @Override
@@ -81,14 +76,17 @@ public class RegisterScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
-        stage.dispose();
-        skin.dispose();
+    public void resize(int arg0, int arg1) {
+    }
+
+    @Override
+    public void show() {
+        ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
     @Override
     public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 
     @Override
@@ -100,6 +98,8 @@ public class RegisterScreen implements Screen {
     }
 
     @Override
-    public void resize(int arg0, int arg1) {
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
     }
 }

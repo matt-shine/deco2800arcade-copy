@@ -73,18 +73,18 @@ public class LoginScreen implements Screen {
                     errorLabel.setText("No Username Supplied");
                 }
                 else if (usernameText.getText().toLowerCase().equals("store")) {
-                    arcadeUI.requestScreen("store");
+                    arcadeUI.setScreen(arcadeUI.store);
                 }
                 else {
-                    // username supplied, try to login
                     ArcadeSystem.login(usernameText.getText());
+                    arcadeUI.setScreen(arcadeUI.home);
                 }
             }
         });
         
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                arcadeUI.requestScreen("register");
+                arcadeUI.setScreen(arcadeUI.register);
             }
         });
         
@@ -95,30 +95,28 @@ public class LoginScreen implements Screen {
 	}
 
 	@Override
-	public void show() {
-		ArcadeInputMux.getInstance().addProcessor(stage);
-    }
-
-	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-	    if (ArcadeSystem.isLoggedIn()) {
+	    /*if (ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");
-	    }
+	    }*/
 	}
 
-	@Override
-	public void dispose() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
-        stage.dispose();
-        skin.dispose();
-	}
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void show() {
+        ArcadeInputMux.getInstance().addProcessor(stage);
+    }
 
 	@Override
 	public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -129,7 +127,9 @@ public class LoginScreen implements Screen {
 	public void resume() {
 	}
 
-	@Override
-	public void resize(int arg0, int arg1) {
-	}
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+    }
 }

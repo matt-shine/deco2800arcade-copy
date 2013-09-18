@@ -206,7 +206,7 @@ public class LunarLander extends GameClient {
 	    // and ends with the shapeRenderer.end
 	    //shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
 	    
-	    for (int i = 0; i < 2; i++){
+	    for (int i = 0; i < terrain.size(); i++){
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
 	    }
 	    
@@ -270,18 +270,25 @@ public class LunarLander extends GameClient {
 		while (pointX < 800){
 
 			int arrayPosition = 1;
-			int newPointX = (50 + new Random().nextInt( 200 - 50 + 1 )) + pointX;
+			int newPointX = (50 + new Random().nextInt( 200 - 50 + 1 ));
 			int newPointY = 100 + new Random().nextInt( 400 - 100 + 1 );
 			
 			terrain.add(new ArrayList<Integer>());
 			terrain.get(arrayPosition).add(pointX);
 			terrain.get(arrayPosition).add(pointY);
-			terrain.get(arrayPosition).add(newPointX);
+			terrain.get(arrayPosition).add(newPointX + pointX);
 			terrain.get(arrayPosition).add(newPointY);
 			
+			System.out.println("Point X: " + pointX);
+			System.out.println("Point Y: " + pointY);
+			System.out.println("New Point X: " + newPointX);
+			System.out.println("New Point Y: " + newPointY);
+			System.out.println("--------------");
+			
 			pointX = pointX + newPointX;
-			pointY = pointY + newPointY;
+			pointY = newPointY;
 			arrayPosition++;
+			
 		}		
 		return terrain;
 	}

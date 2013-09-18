@@ -3,6 +3,9 @@ package com.test.game.world;
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureAtlasLoader.TextureAtlasParameter;
+import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -62,6 +65,7 @@ public class WorldRenderer {
 	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg, heartsTexture;
 	private TextureRegion followerFrame;
 	private TextureRegion walkerRegion;
+	private TextureAtlas groundTextureAtlas;
 	private Array<AtlasRegion> walkerRegions;
 	private Animation followerAnimation; 
 	float width, height;
@@ -216,7 +220,13 @@ public class WorldRenderer {
 		for (BlockMaker bm: blockMakers) {
 			Array<Block> blocks = bm.getBlocks();
 			for (Block b: blocks) {
-				TextureRegion tr = b.getAtlas().findRegion("level", b.getAtlasIndex());
+				TextureAtlas at;
+				if (b.getAtlas() == Block.TextureAtlasReference.LEVEL) {
+					at = groundTextureAtlas;
+				} else {
+					at = groundTextureAtlas;
+				}
+				TextureRegion tr = at.findRegion("level", b.getAtlasIndex());
 				batch.draw(tr, b.getPosition().x, b.getPosition().y, 1f, 1f);
 			}
 		}
@@ -451,25 +461,38 @@ public class WorldRenderer {
 	}
 	
 	private void loadTextures() {
-		example = new Texture("data/enemysprite1-small.png");
+		AssetManager manager = new AssetManager();
+		TextureParameter linearFilteringParam = new TextureParameter();
+		linearFilteringParam.minFilter = TextureFilter.Linear;
+		manager.load("data/enemysprite1-small.png", Texture.class, linearFilteringParam);
+		manager.load("data/bg2.png", Texture.class, linearFilteringParam);
+		manager.load("data/ship.png", Texture.class, linearFilteringParam);
+		manager.load("data/heart.png", Texture.class, linearFilteringParam);
+		manager.load("data/projectiles/lightningball.png", Texture.class, linearFilteringParam);
+		manager.load("data/follower.txt", TextureAtlas.class);
+		manager.load("data/modular3.txt", TextureAtlas.class);
+		manager.load("data/level packfile", TextureAtlas.class);
+		manager.finishLoading();
+		
+		example = manager.get("data/enemysprite1-small.png", Texture.class);
 		example.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		rotationArms = 0f;
 		
-		bg = new Texture("data/bg2.png");
+		bg = manager.get("data/bg2.png", Texture.class);
 		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
-		shipTexture = new Texture("data/ship.png");
+		shipTexture = manager.get("data/ship.png", Texture.class);
 		shipTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		heartsTexture = new Texture("data/heart.png");
+		heartsTexture = manager.get("data/heart.png", Texture.class);
 		heartsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
-		bulletTexture = new Texture("data/projectiles/lightningball.png");
+		bulletTexture = manager.get("data/projectiles/lightningball.png");
 		bulletTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 			/* Load follower texture */
 		//followerTexture = new Texture("data/follower.png");
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("data/follower.txt"));
+		TextureAtlas atlas = manager.get("data/follower.txt", TextureAtlas.class);
 		/*TextureRegion[] followerFrames = new TextureRegion[3];
 		for (int i=0; i<3;i++) {
 			followerFrames[i] = atlas.findRegion("follower_"+(i+1));
@@ -483,7 +506,7 @@ public class WorldRenderer {
 		
 			/* Load walker texture */
 		//walkerTexture = new Texture("data/walker.png");
-		TextureAtlas walkerAtlas = new TextureAtlas(Gdx.files.internal("data/modular3.txt"));
+		TextureAtlas walkerAtlas = manager.get("data/modular3.txt", TextureAtlas.class);
 		walkerRegions = walkerAtlas.findRegions("a");
 				
 		for (int i=0; i<walkerRegions.size; i++) {
@@ -491,8 +514,16 @@ public class WorldRenderer {
 					
 		}
 		System.out.println("Found " + walkerRegions.size + " walker parts");
+		
+		groundTextureAtlas = manager.get("data/level packfile", TextureAtlas.class);
 			/* Load walker texture - END */
 		return;
+		
+		
+		
+		
+		
+		
 	}
 	
 	public void dispose() {

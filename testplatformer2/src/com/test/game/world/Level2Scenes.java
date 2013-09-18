@@ -22,6 +22,8 @@ public class Level2Scenes extends LevelScenes {
 	BlockMakerSpiderBoss blockMaker;
 	private EnemySpiderBoss boss;
 	
+	private boolean closeNextUpdate;
+	
 	private float targetPos;
 	
 	public Level2Scenes(Ship ship, ParallaxCamera cam) {
@@ -32,6 +34,7 @@ public class Level2Scenes extends LevelScenes {
 	@Override
 	public Array<Object> start(float rank) {
 		isPlaying = true;
+		closeNextUpdate = false;
 		
 		cam.setFollowShip(false);
 		
@@ -64,13 +67,20 @@ public class Level2Scenes extends LevelScenes {
 	}
 
 	@Override
-	public void update(float delta) {
+	public boolean update(float delta) {
 		manager.update(delta);
 		ship.getVelocity().x = Ship.SPEED / 1.5f;
 		
 		float lerp = 0.8f;
 		targetPos -= delta * 1.5;
 		boss.getPosition().x += delta* (ship.getPosition().x - 0f - boss.getPosition().x + targetPos)* lerp;
+		if (closeNextUpdate) {
+			isPlaying = false;
+			ship.getVelocity().x = 0;
+			return true;
+		} else {
+			return false;
+		}
 		
 	}
 
@@ -87,8 +97,9 @@ public class Level2Scenes extends LevelScenes {
 	}
 	
 	public void tweenCompleted() {
-		isPlaying = false;
+		closeNextUpdate = true;
 		blockMaker.setActive(true);
+		blockMaker.camHasReachedStartPosition();
 		ship.getVelocity().x = 0;
 	}
 

@@ -148,8 +148,10 @@ public class World {
 		}
 
 		if (levelScenes.isPlaying()) {
-			levelScenes.update(Gdx.graphics.getDeltaTime());
-			inputHandler.acceptInput();
+			if (levelScenes.update(Gdx.graphics.getDeltaTime())) {
+				// The scene is complete; accept input again
+				inputHandler.acceptInput();
+			}
 		} else {
 			float[] sceneStartValues = levelScenes.getStartValues();
 			if (ship.getPosition().x > sceneStartValues[scenePosition]) {

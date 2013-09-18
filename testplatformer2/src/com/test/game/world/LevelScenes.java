@@ -21,7 +21,7 @@ public abstract class LevelScenes {
 	}
 	
 	public abstract Array<Object> start(float rank);
-	public abstract void update(float delta);
+	public abstract boolean update(float delta);
 	public abstract float[] getStartValues();
 	//public abstract boolean isPlaying();
 }

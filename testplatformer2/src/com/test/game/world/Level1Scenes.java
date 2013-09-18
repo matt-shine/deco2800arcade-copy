@@ -66,7 +66,7 @@ public class Level1Scenes extends LevelScenes{
 		out.add(copter);
 		return out;
 	}
-	public void update(float delta) {
+	public boolean update(float delta) {
 		//manager.update(delta);
 		count += delta;
 		if (count > 2.0f) {
@@ -95,6 +95,7 @@ public class Level1Scenes extends LevelScenes{
 		}
 		
 		copter.update(ship);
+		return false;
 	}
 
 	@Override

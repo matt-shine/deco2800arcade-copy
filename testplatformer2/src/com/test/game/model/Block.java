@@ -8,14 +8,18 @@ import com.badlogic.gdx.math.Vector2;
 public class Block extends Entity {
 	
 	//private Texture texture;
-	private TextureAtlas atlas;
+	public enum TextureAtlasReference {
+		LEVEL
+	}
+	
+	TextureAtlasReference atlas;
 	private int atlasIndex;
 	
 	static final float SIZE = 1f;
 	
 	
 	
-	public Block(Vector2 pos, TextureAtlas atlas, int atlasIndex) {
+	public Block(Vector2 pos, TextureAtlasReference atlas, int atlasIndex) {
 		super(pos, SIZE, SIZE);
 		this.atlas = atlas;
 		this.atlasIndex = atlasIndex;
@@ -23,15 +27,15 @@ public class Block extends Entity {
 
 
 
-	public TextureAtlas getAtlas() {
+	public TextureAtlasReference getAtlas() {
 		return atlas;
 	}
 
 
 
-	public void setAtlas(TextureAtlas atlas) {
+	/*public void setAtlas(TextureAtlas atlas) {
 		this.atlas = atlas;
-	}
+	}*/
 
 
 

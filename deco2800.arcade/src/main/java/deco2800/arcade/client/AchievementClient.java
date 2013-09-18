@@ -6,6 +6,7 @@ import java.util.HashMap;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementStatistics;
 import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.*;
@@ -13,6 +14,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementListener;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Connection;
+import com.badlogic.gdx.Gdx;
 import deco2800.arcade.client.network.listener.NetworkListener;
 
 public class AchievementClient extends NetworkListener {
@@ -35,32 +37,6 @@ public class AchievementClient extends NetworkListener {
             this.networkClient.addListener(this);
         }
     }
-
-    @Override
-    public void received(Connection connection, Object object) {
-        super.received(connection, object);
-
-        if(object instanceof IncrementProgressResponse) {
-            final IncrementProgressResponse resp = (IncrementProgressResponse)object;
-            // need to do this in a different thread as this method is going to stop other network
-            // requests from being served
-            new Thread(new Runnable() {
-                    public void run() {
-                        Achievement ach = achievementForID(resp.achievementID);
-                        if(resp.newProgress == ach.awardThreshold) {
-                            for(AchievementListener l : listeners) {
-                                l.achievementAwarded(ach);
-                            }
-                        } else {
-                            for(AchievementListener l : listeners) {
-                                l.progressIncremented(ach, resp.newProgress);
-                            }
-                        }
-                    }
-            }).start();
-        }
-    }
-   
 
     /**
      * Utility method for fetching a single achievement. This is just a wrapper
@@ -173,6 +149,7 @@ public class AchievementClient extends NetworkListener {
         
     }
 
+
     /**
      * Adds a listener to be notified of achievement events. The listener is
      * only notified of events after they've been confirmed by the server.
@@ -195,4 +172,37 @@ public class AchievementClient extends NetworkListener {
         listeners.remove(listener);
     }
 
+    /**
+     * Implementation for servicing IncrementProgressResponses and dispatching
+     * the appropriate calls to listeners.
+     */
+    @Override
+    public void received(Connection connection, Object object) {
+        super.received(connection, object);
+
+        if(object instanceof IncrementProgressResponse) {
+            final IncrementProgressResponse resp = (IncrementProgressResponse)object;
+            // need to do this in a different thread as this method is going to stop other network
+            // requests from being served
+            new Thread(new Runnable() {
+                    public void run() {
+                        final Achievement ach = achievementForID(resp.achievementID);
+			// want to post these on the GDX thread so we can actually display overlays
+			Gdx.app.postRunnable(new Runnable() {
+			    public void run() {
+				if(resp.newProgress == ach.awardThreshold) {
+				    for(AchievementListener l : listeners) {
+					l.achievementAwarded(ach);
+				    }
+				} else {
+				    for(AchievementListener l : listeners) {
+					l.progressIncremented(ach, resp.newProgress);
+				    }
+				}
+			    }
+			});
+		    }
+            }).start();
+        }
+    }
 }

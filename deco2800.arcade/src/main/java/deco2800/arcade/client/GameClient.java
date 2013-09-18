@@ -37,13 +37,28 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 	public abstract Game getGame();
 
-    public void achievementAwarded(Achievement ach) {
-        System.out.println("Achievement `" + ach.name + "` awarded!");
+    public void achievementAwarded(final Achievement ach) {
+	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+		
+	    @Override
+	    public String getMessage() {
+		return "Achievement " + ach.name + " awarded!";
+	    }
+	        
+	});	
     }
 
-    public void progressIncremented(Achievement ach, int progress) {
+    public void progressIncremented(final Achievement ach, final int progress) {
         System.out.println("Progress in achievement `" + ach.name + "`: (" + progress +
                            "/" + ach.awardThreshold + ")");
+	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+		
+	    @Override
+	    public String getMessage() {
+		return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
+	    }
+	        
+	});
     }
 
     public void setNetworkClient(NetworkClient client) {
@@ -52,23 +67,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
     public void incrementAchievement(final String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
-        
-        /*if (achievementClient.progressForPlayer(player).
-        		progressForAchievement(achievementClient.achievementForID(achievementID)) >= 
-        		achievementClient.achievementForID(achievementID).awardThreshold) {
-        */
-        
-        	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
-				
-				@Override
-				public String getMessage() {
-					//return achievementClient.achievementForID(achievementID).name;
-					return achievementID;
-				}
-	        	
-	        });
-        	
-    	//}
+        // don't display a popup here - we aren't sure if the player's actually
+	// got the achievement or what progress. wait for the response and display
+	// it in achievementAwarded/progressIncremented
     }
 
     public AchievementClient getAchievementClient() {

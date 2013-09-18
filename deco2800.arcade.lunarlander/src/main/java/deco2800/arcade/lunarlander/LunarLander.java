@@ -160,12 +160,12 @@ public class LunarLander extends GameClient {
 		
 	    // boost the lander's speed
 		if ((Gdx.input.isKeyPressed(Keys.W)) || (Gdx.input.isKeyPressed(Keys.UP))) {
-			initialPositionY -= Gdx.graphics.getDeltaTime() * downwardSpeed;
+			initialPositionY += Gdx.graphics.getDeltaTime() * downwardSpeed;
 		}
 		
-		// for development purposes
-		if (Gdx.input.isKeyPressed(Keys.Q)){
-			createMap();
+		//for development purposes
+		if (Gdx.input.isKeyPressed(Keys.Q)) {
+			System.out.println(terrain.size());
 		}
 		
 		// clear screen, create background using texture
@@ -196,9 +196,11 @@ public class LunarLander extends GameClient {
 	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
 	    // and ends with the shapeRenderer.end
 	    //shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
+	    int size = terrain.size();
 	    
-	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1), terrain.get(0).get(2), terrain.get(0).get(3));
-	    shapeRenderer.line(terrain.get(1).get(0), terrain.get(1).get(1), terrain.get(1).get(2), terrain.get(1).get(3));
+	    for (int i=0; i< size - 1; i++){
+	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
+	    }
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
@@ -237,39 +239,42 @@ public class LunarLander extends GameClient {
 		
 		List<List<Integer>> terrain = new ArrayList<List<Integer>>();
 		
-		//makes a random X coordinate for landing pad
-		Random randomX = new Random();  
-		int startX = 100;     // beginning of range  
-		int endX = 700;      // end of range 
+		//example code for a random int ranging from 50 to 100
+		//int randomNumber = 50 + new Random().nextInt( 100 - 50 + 1 );
 		
-		//makes a random Y coordinate for landing pad, this code will be smaller soon...
-		Random randomY = new Random();  
-		int startY = 50;     // beginning of range  
-		int endY = 200;      // end of range
+		//creating the landing pads coordinates
+		int landPadLeftX = 100 + new Random().nextInt( 700 - 100 + 1 );
+		int landPadLeftY = 50 + new Random().nextInt( 200 - 50 + 1 );
+		int landPadRightX = landPadLeftX + 50; //makes the pad 50 pixels wide
+		int landPadRightY = landPadLeftY;
 		
-		int landingPadY = startY + randomY.nextInt( endY - startY + 1 );
-		int landingPadX1 = startX + randomX.nextInt( endX - startX + 1 );
-		int landingPadX2 = landingPadX1 + 50;
-		
-		//creation of landingPad, it will be the first element in the array
-		//TO DO, change color of landing pad
+		//adding the landPad as the first element of the array, TO DO, change color of landing pad
 		terrain.add(new ArrayList<Integer>());
-		terrain.get(0).add(landingPadX1);
-		terrain.get(0).add(landingPadY);
-		terrain.get(0).add(landingPadX2);
-		terrain.get(0).add(landingPadY);
+		terrain.get(0).add(landPadLeftX);
+		terrain.get(0).add(landPadLeftY);
+		terrain.get(0).add(landPadRightX);
+		terrain.get(0).add(landPadRightY);
 		
-		//creating the X and Y for the next line
-		int pointAX = (25 + new Random().nextInt( 50 - 25 + 1 )) + terrain.get(0).get(2);
-		int pointAY = 100 + new Random().nextInt( 400 - 100 + 1 );
+		int pointX = terrain.get(0).get(2);
+		int pointY = terrain.get(0).get(3);
 		
-		//adds the line to the right of landing pad, using the right side of the landing pad as the initial X and Y
-		terrain.add(new ArrayList<Integer>());
-		terrain.get(1).add(terrain.get(0).get(2));
-		terrain.get(1).add(terrain.get(0).get(3));
-		terrain.get(1).add(pointAX);
-		terrain.get(1).add(pointAY);
-		
+		//recursively adds lines to the right of the landing pad
+		while (pointX < 800){
+
+			int arrayPosition = 1;
+			int newPointX = (50 + new Random().nextInt( 200 - 50 + 1 )) + pointX;
+			int newPointY = 100 + new Random().nextInt( 400 - 100 + 1 );
+			
+			terrain.add(new ArrayList<Integer>());
+			terrain.get(arrayPosition).add(pointX);
+			terrain.get(arrayPosition).add(pointY);
+			terrain.get(arrayPosition).add(newPointX);
+			terrain.get(arrayPosition).add(newPointY);
+			
+			pointX = pointX + newPointX;
+			pointY = pointY + newPointY;
+			arrayPosition++;
+		}		
 		return terrain;
 	}
 	

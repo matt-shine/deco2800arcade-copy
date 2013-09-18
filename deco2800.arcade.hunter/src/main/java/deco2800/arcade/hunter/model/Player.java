@@ -13,9 +13,7 @@ import deco2800.arcade.hunter.model.EntityCollision.CollisionType;
 import deco2800.arcade.platformergame.model.Entity;
 
 public class Player extends Entity {
-	private static final int JUMP_VELOCITY = 1;
-	//Is the player standing on something
-	private boolean grounded;
+	private static final int JUMP_VELOCITY = 8;
 	private float jumpVelocity;
 	
 	private TextureRegion img = new TextureRegion(new Texture("textures/playerAnim/GensijinRun kf.png"));
@@ -35,7 +33,6 @@ public class Player extends Entity {
 	
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
-		setX(128); //starting X offset
 		loadAnimations();
 	}
 	
@@ -93,7 +90,7 @@ public class Player extends Entity {
 	 * @return grounded
 	 */
 	public boolean isGrounded() {
-		return grounded;
+		return collider.bottom;
 	}
 	
 	/**
@@ -101,7 +98,7 @@ public class Player extends Entity {
 	 * @param grounded Boolean value of whether its grounded
 	 */
 	public void setGrounded(boolean grounded) {
-		this.grounded = grounded;
+		this.collider.bottom = grounded;
 	}
 	
 	/**
@@ -114,6 +111,7 @@ public class Player extends Entity {
 	
 	public void jump() {
 		setJumpVelocity(JUMP_VELOCITY);
+		this.collider.bottom = false;
 	}
 
 	public void setJumpVelocity(float jumpVelocity) {
@@ -128,29 +126,17 @@ public class Player extends Entity {
 	public void update(float delta) {
 		//Everything depends on everything else here, may have to rearrange, or even double up on checks
 		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
-//		if (getY() <= 0) {
-//			setY(0);
-//			grounded = true;
-//		} else {
-//			grounded = false;
-//		}
-		
-		grounded = true;
-		
 		setX(getX() + delta * 100);
 		
-		//Move the player vertically, horizontally controlled by map
-		setJumpVelocity((float) (getJumpVelocity() - delta * 9.81));
-		if (jumpVelocity > 0 || !grounded) {
-			//JUMP UP
-			setY(getY() + getJumpVelocity()); //9.81 is gravity.
-		}
+		setJumpVelocity(getJumpVelocity() - delta * 9.81f);
+		setY(getY() + getJumpVelocity());
 		
 		//Need to check for the player moving past the edge of a tile in the physics step above TODO
 		
 		//Update the player state
 		//Pretending the DEAD state doesn't exist for now... TODO
-		if (grounded) {
+		if (isGrounded()) {
+			jumpVelocity = 0;
 			this.state = State.RUNNING;
 			currAnim = runAnimation();
 		} else if (jumpVelocity > 0) {
@@ -194,12 +180,4 @@ public class Player extends Entity {
 	public void draw(SpriteBatch batch) {
 		batch.draw(img, getX(), getY(), getWidth(), getHeight());
 	}
-	
-//	@Override
-//	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
-//		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
-//		if player is colliding with the left edge of the screen
-//			collisions.add(new EntityCollision(CollisionType.PLAYER_C_LEFT_EDGE));
-//		return collisions;
-//	}
 }

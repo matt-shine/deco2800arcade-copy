@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
 		Enemy enemy = new Enemy(new Vector2(200,10),128,128,false,"hippo");
 
 		entities.add(player);
-		entities.add(enemy);
+		//entities.add(enemy);
 	}
 
 	@Override
@@ -147,7 +147,9 @@ public class GameScreen implements Screen {
 		
 		int i;
 		
-		for (Entity e : entities) {		
+		for (Entity e : entities) {
+			e.getCollider().clear();
+			
 			//Right edge
 			
 			float right = e.getX() + e.getWidth();
@@ -161,6 +163,7 @@ public class GameScreen implements Screen {
 //			
 			//Top edge
 //			for (i = (int) e.getX(); i <= right; i += Config.TILE_SIZE) {
+				
 //				if (foregroundLayer.getCollisionTileAt(i, (int) top) != 0) {
 //					e.setY((float) ((Math.floor(top / Config.TILE_SIZE) * Config.TILE_SIZE) - e.getHeight()));
 //				}
@@ -168,12 +171,59 @@ public class GameScreen implements Screen {
 			
 			
 			//Bottom edge
-			for (i = (int) e.getX(); i <= right; i += Config.TILE_SIZE) {
-				int tile = foregroundLayer.getCollisionTileAt(i, (int) e.getY());
-				if (tile != 0) {
-					System.out.println("collBot: " + tile);
-					e.setY((float) ((Math.ceil(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE)));
+			for (i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
+				boolean breakOut = false;
+				int tile = foregroundLayer.getCollisionTileAt(i, e.getY());
+				float slopeHeight = 0;
+				switch (tile) {
+					case 0:
+						//Air, do nothing
+						break;
+					case 1:
+						//Solid tile, do something
+						e.getCollider().bottom = true;
+						e.setY((float) (Math.ceil(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE) + 0.5f);
+						breakOut = true;
+						break;
+					case 2:
+						//   /_|  slope
+						if (i == (int) right) {
+							slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
+							if (e.getY() < slopeHeight) {
+								e.setY(slopeHeight + 0.5f);
+								e.getCollider().bottom = true;
+							}
+							breakOut = true;
+						}
+						break;
+					case 3:
+						//   |_\ slope
+						if (i <= (int) e.getX()) {
+							slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (Config.TILE_SIZE - e.getX() % Config.TILE_SIZE));
+							if (e.getY() < slopeHeight) {
+								e.setY(slopeHeight + 0.1f);
+								e.getCollider().bottom = true;
+							}
+							
+							breakOut = true;
+						}
+						break;
+					case 4:
+						//   |-/ slope
+						break;
+					case 5:
+						//   \-| slope
+						break;
+					default:
+						//Outside the map, or invalid tile.
+						System.out.println(tile); //Debug TODO remove
+						break;
 				}
+				
+				if (breakOut) {
+					break;
+				}
+				
 			}
 		}
 		

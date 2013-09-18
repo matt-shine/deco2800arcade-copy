@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
 	protected Rectangle bounds;
+	protected EdgeCollider collider = new EdgeCollider();
 	
 	public Entity (Vector2 pos, float width, float height) {
 		bounds = new Rectangle(pos.x, pos.y, width, height);
@@ -48,6 +49,10 @@ public abstract class Entity {
 	
 	public void setY(float y) {
 		this.bounds.y = y;
+	}
+	
+	public EdgeCollider getCollider() {
+		return collider;
 	}
 	
 	public void update(float delta) {}

@@ -47,10 +47,10 @@ public class ForegroundLayer extends Map {
 	 * @param gameSpeed current game speed
 	 */
 	public void update(float delta, float cameraX) {
-		if (cameraX - Config.PANE_SIZE_PX * paneCount > offset.x * Config.PANE_SIZE_PX) {
-			offset.x++;
+		if (cameraX - Config.PANE_SIZE_PX * paneCount > offset.x) {
+			offset.x += Config.PANE_SIZE_PX;
 			
-			offset.y += (panes.get(0).getEndOffset() - panes.get(1).getStartOffset()) * Config.TILE_SIZE;
+			offset.y += (panes.get(0).getEndOffset() - panes.get(1).getStartOffset());
 			
 			panes.remove(0);
 			panes.add(getRandomPane(MapType.GRASS));
@@ -65,38 +65,31 @@ public class ForegroundLayer extends Map {
 		//REPLACE TODO with getPaneOffset()
 		for (int i = 0; i < panes.size(); i++) {
 			if (i != 0) {
-				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * Config.TILE_SIZE;
+				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset());
 			}
 			
-			batch.draw(panes.get(i).getRendered(), i * Config.PANE_SIZE_PX + offset.x * Config.PANE_SIZE_PX, yOffset);
+			batch.draw(panes.get(i).getRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
 		}		
-	}
-	
-	public int getPaneAt(int x, int y) {
-		if (x / Config.PANE_SIZE >= offset.x && 
-			x / Config.PANE_SIZE < offset.x + Config.PANE_SIZE * paneCount) {
-			
-		}
-		
-		return -1;
 	}
 	
 	/*
 	 * Pane y offset relative to the main map offset
 	 */
-	private float getPaneOffset(int paneIndex) {
-		float yOffset = this.offset.y;
+	private int getPaneOffset(int paneIndex) {
+		int yOffset = (int) this.offset.y;
 		
 		if (paneIndex == 0) {
 			return yOffset;
 		} else if (paneIndex > 0 && paneIndex <= paneCount) {
 			for (int i = 1; i <= paneIndex; i++) {
-				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset()) * Config.TILE_SIZE;
+				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset());
 			}
 			
 			return yOffset;
+		} else {
+			System.out.println("DEBUG: Should never get to here");
+			return 0;
 		}
-		return -1;
 	}
 	
 	/**
@@ -105,8 +98,9 @@ public class ForegroundLayer extends Map {
 	 * @param y
 	 * @return
 	 */
-	public int getCollisionTileAt(int x, int y) {
-		float tileOffsetX = x - offset.x * Config.PANE_SIZE_PX;
+	public int getCollisionTileAt2(int x, int y) {
+		float tileOffsetX = x - offset.x;
+		
 		float paneOffsetY;
 		int tileX, tileY;
 		int pane = (int) (tileOffsetX / Config.PANE_SIZE_PX);
@@ -125,5 +119,32 @@ public class ForegroundLayer extends Map {
 			}
 		}
 		return -1;
+	}
+	
+	public int getCollisionTileAt(float x, float y) {
+		int tileOffsetX = (int) (x - offset.x);
+		int tileOffsetY;
+		int pane = (int) Math.floor(tileOffsetX / Config.PANE_SIZE_PX);
+		
+		int tileX, tileY;
+		
+		if (pane >=0 && pane < paneCount) {
+			tileOffsetY = (int) (y - getPaneOffset(pane));
+		} else {
+			//Player is out of bounds
+			return -1;
+		}
+		
+		tileX = (tileOffsetX - pane * Config.PANE_SIZE_PX) / Config.TILE_SIZE;
+		tileY = tileOffsetY / Config.TILE_SIZE;
+		
+		if (tileX < 0 || tileX >= Config.PANE_SIZE ||
+				tileY < 0 || tileY >= Config.PANE_SIZE) {
+			return -2;
+		}
+		
+		int tile = panes.get(pane).getCollisionTile(tileX, tileY);
+		//System.out.println("("+ tileX + ", " + tileY + ") = " + tile + "    [" + x + " : " + y + "] @" + pane); //Debug TODO remove
+		return tile;
 	}
 }

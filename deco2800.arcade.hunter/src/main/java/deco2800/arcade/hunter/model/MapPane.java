@@ -65,8 +65,8 @@ public class MapPane {
 		
 		//Parse offsets
 		String[] offsets = dataArray[0].split(",");
-		this.startOffset = Integer.parseInt(offsets[0]);
-		this.endOffset = Integer.parseInt(offsets[1]);
+		this.startOffset = Integer.parseInt(offsets[0]) * Config.TILE_SIZE;
+		this.endOffset = Integer.parseInt(offsets[1]) * Config.TILE_SIZE;
 		
 		String[] backgroundData = dataArray[1].split(",");
 		String[] foregroundData = dataArray[2].split(",");
@@ -128,10 +128,11 @@ public class MapPane {
 	}
 	
 	public int getCollisionTile(int x, int y) {
+		//Tiles aren't in this order...
 		if (x >= 0 && x < Config.PANE_SIZE &&
 			y >= 0 && y < Config.PANE_SIZE) {
-			return collision[x][y];
+			return collision[Config.PANE_SIZE - 1 - y][x];
 		}
-		return -1;
+		return -3;
 	}
 }

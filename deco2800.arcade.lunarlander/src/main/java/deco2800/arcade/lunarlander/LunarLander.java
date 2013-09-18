@@ -23,6 +23,10 @@ import com.badlogic.gdx.Input.Keys;
 
 
 
+
+
+
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -70,6 +74,7 @@ public class LunarLander extends GameClient {
 	private Point[] terrainCoords;
 	private float coord0X;
 	private float coord0Y;
+	private List<List<Integer>> terrain;
 	
 	// coordinates of the lander pad
 	private float landerPadLeftX;
@@ -128,7 +133,7 @@ public class LunarLander extends GameClient {
 		// setting up various constants 
 		initialPositionY = 700;
 		initialPositionX = 50;
-		landerX = 40;
+		landerX = 30;
 		landerY = 30;		
 		acceleration = 0;
 		angle = 5;
@@ -145,6 +150,7 @@ public class LunarLander extends GameClient {
 		landerPadLeftY = 50;
 		landerPadRightX = 100;
 		landerPadRightY = 100;
+		terrain = createMap();
 	}
 		/*		
 	
@@ -212,6 +218,11 @@ public class LunarLander extends GameClient {
 			initialPositionY -= Gdx.graphics.getDeltaTime() * downwardSpeed;
 		}
 		
+		// for development purposes
+		if (Gdx.input.isKeyPressed(Keys.Q)){
+			createMap();
+		}
+		
 		// clear screen, create background using texture
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
@@ -240,7 +251,10 @@ public class LunarLander extends GameClient {
 	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
 	    // and ends with the shapeRenderer.end
 	    shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
-	 	    
+	    
+	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1), terrain.get(0).get(2), terrain.get(0).get(3));
+	    
+	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
 	    
@@ -278,26 +292,53 @@ public class LunarLander extends GameClient {
 		
 	}
 	
-	public ArrayList<ArrayList<Integer>> createMap(){
+	public List<List<Integer>> createMap(){
 		
-		ArrayList<ArrayList<Integer>> terrain = new ArrayList<ArrayList<Integer>>();
+		List<List<Integer>> terrain = new ArrayList<List<Integer>>();
 		
-		//makes a random X coordinate
+		//makes a random X coordinate for landing pad
 		Random randomX = new Random();  
 		int startX = 100;     // beginning of range  
 		int endX = 700;      // end of range 
 		
-		//makes a random Y coordinate
+		//makes a random Y coordinate for landing pad
 		Random randomY = new Random();  
-		int startY = 200;     // beginning of range  
-		int endY = 1000;      // end of range 
+		int startY = 50;     // beginning of range  
+		int endY = 200;      // end of range
 		
-		int landingPadX = startX + randomX.nextInt( endX - startX + 1 );
 		int landingPadY = startY + randomY.nextInt( endY - startY + 1 );
+		int landingPadX1 = startX + randomX.nextInt( endX - startX + 1 );
+		int landingPadX2 = landingPadX1 + 50;
 		
 		//creation of landingPad, it will be the first element in the array
+		terrain.add(new ArrayList<Integer>());
+		terrain.get(0).add(landingPadX1);
+		terrain.get(0).add(landingPadY);
+		terrain.get(0).add(landingPadX2);
+		terrain.get(0).add(landingPadY);
 		
-		//System.out.println( num[y][x] );
+		//makes a random X coordinate to the right of the landing pad
+		Random randomXright = new Random();  
+		int startXright = terrain.get(0).get(2);     // beginning of range, starts at rightmost position of landing pad
+		int endXright = 1190;      // end of range
+		
+		//makes a random Y coordinate to the right of the landing pad
+		Random randomYright = new Random();  
+		int startYright = 10;     // beginning of range  
+		int endYright = 1190;      // end of range
+		
+		//creates a random length of a line
+		Random randomLineLength = new Random();
+		int startLineLength = 10;
+		int endLineLength = 50;
+		
+		//creation of lines to the right of the landing pad...
+		
+		System.out.println( terrain.get(0).get(0));
+		System.out.println( terrain.get(0).get(1));
+		System.out.println( terrain.get(0).get(2));
+		System.out.println( terrain.get(0).get(3));
+		System.out.println("-----------------------");
 		
 		return terrain;
 		//HEIGHT = 800;

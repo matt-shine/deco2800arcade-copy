@@ -7,6 +7,7 @@ import java.lang.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,21 +37,22 @@ public class LunarLander extends GameClient {
 	public static final int SCREENHEIGHT = 800;
 	public static final int SCREENWIDTH = 1200; 
 	
-	private ShapeRenderer shapeRenderer;
-	private SpriteBatch batch;
-	private Texture backgroundTexture;
-	private BitmapFont font;
-	Texture[] backgroundTextures;
+	// Gdx tools
+	private ShapeRenderer shapeRenderer; // draws shapes
+	private SpriteBatch batch; 
+	private Texture landerTexture; // draws lander png file
+	private Texture backgroundTexture; // draws background png file
+	private TextureRegion backgroundTextureRegion; // draws portion of background png file
+	private BitmapFont font; // draws text 
+	//Texture[] backgroundTextures;
 	
-	//physics
-	private Texture landerTexture;
-	private float landerX;
-	private float landerY;
+	// lander constants
+	private float landerX; // the width of the lander png
+	private float landerY; // the height of the lander png
+	private float initialPositionX; // the initial position of the lander - x coordinate
+	private float initialPositionY; // the initial postiion of the lander - y coordinate
+	
 	private float acceleration;
-	private float initialPositionX;
-	private float initialPositionY;
-	private Texture lander;
-	private int initPosition;
 	private double angle;
 	//private double speed;
 	private double scaleX;
@@ -67,15 +69,23 @@ public class LunarLander extends GameClient {
 	private float coord0X;
 	private float coord0Y;
 	
-	//info
+	// coordinates of the lander pad
+	private float landerPadLeftX;
+	private float landerPadLeftY;
+	private float landerPadRightX;
+	private float landerPadRightY;
+
+	
+	// statistics to be displayed on game screen
 	private int score;
 	private int fuel;
 	private int speed;
 	private int time;
+	
 	// speed of movement when lander is moved left or right 
 	private float sideSpeed = 40.0f;
 	// speed of movement when lander is moved downwards
-	private float downwardSpeed = 60.0f;
+	private float downwardSpeed = 80.0f;
 	// speed of movement when lander is moving downwards of its own accord
 	private float downwardDrift = 20.0f;
 	
@@ -97,21 +107,28 @@ public class LunarLander extends GameClient {
 	 */
 	@Override
 	public void create() {
-				
-		batch = new SpriteBatch();		
-		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/stars.png"));
+			
+		// setting up various Gdx tools
+		batch = new SpriteBatch();
+		// loads background png file
+		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png"));
+		// creates a portion of that background to display
+		backgroundTextureRegion = new TextureRegion(backgroundTexture, 1200, 800);
+		// loads lander png file
 		landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
+		// creates a new font to use for text
 		font = new BitmapFont();
 		shapeRenderer = new ShapeRenderer();
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
-		//physics
-		initialPositionY = 600;
-		initialPositionX = 400;
+		// setting up various constants 
+		initialPositionY = 700;
+		initialPositionX = 50;
+		landerX = 50;
+		landerY = 40;		
 		acceleration = 0;
-		initPosition= 600;
 		angle = 5;
 		speed = 1;
 		acceleration = 2;
@@ -121,6 +138,11 @@ public class LunarLander extends GameClient {
 		velocityY = (speed*scaleY);
 		gravity = 3;
 		moving = true;
+		
+		landerPadLeftX = 100;
+		landerPadLeftY = 100;
+		landerPadRightX = 150;
+		landerPadRightY = 100;
 		
 		/*//terrain generation, not working at the moment
 		terrainCoords[0] = new Point(500,500);
@@ -137,18 +159,13 @@ public class LunarLander extends GameClient {
 		
 		shapeRenderer.line(coord0X, coord0Y, coord0X, coord0Y);*/
 	
-		
-		//info
-		//physics
+		// sets initial values to be displayed  
 		score = 0;
 		fuel = 1000;
 		speed = 0;
 		time = 0;
 		
-		landerX = 60;
-		landerY = 50;		
-		
-        //add the overlay listeners
+        //add the overlay listeners - not sure if we really need this!
         this.getOverlay().setListeners(new Screen() {
 
 			@Override
@@ -184,47 +201,37 @@ public class LunarLander extends GameClient {
         
         
 	}	
-/*
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
-	@Override
-	public void pause() {
-		super.pause();
-	}
 
-	*/
 	/**
 	 * Render the current state of the game and process updates
 	 */
 	@Override
 	public void render() {
-				
-		if(Gdx.input.isKeyPressed(Keys.A)) { //working
-			//System.out.println("D pressed");
+			
+		// move lander left
+		if ((Gdx.input.isKeyPressed(Keys.A)) || (Gdx.input.isKeyPressed(Keys.LEFT))) { 
 			initialPositionX -= Gdx.graphics.getDeltaTime() * sideSpeed;
 		}
 		
-	    if(Gdx.input.isKeyPressed(Keys.D)) {
-	    	initialPositionX += Gdx.graphics.getDeltaTime() * downwardSpeed;
+		// move lander right
+	    if ((Gdx.input.isKeyPressed(Keys.D)) || (Gdx.input.isKeyPressed(Keys.RIGHT))) {
+	    	initialPositionX += Gdx.graphics.getDeltaTime() * sideSpeed;
 	    }
 		
-		if(Gdx.input.isKeyPressed(Keys.S)) {
-			initialPositionY -= Gdx.graphics.getDeltaTime() * sideSpeed;
+	    // boost the lander's speed
+		if ((Gdx.input.isKeyPressed(Keys.W)) || (Gdx.input.isKeyPressed(Keys.UP))) {
+			initialPositionY -= Gdx.graphics.getDeltaTime() * downwardSpeed;
 		}
-		// make W booster key
 		
 		// clear screen, create background using texture
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
-	    batch.draw(backgroundTexture, 0, 0, 1200, 800);
+	    batch.draw(backgroundTextureRegion, 0, 0);
 	    batch.draw(landerTexture, initialPositionX, initialPositionY, landerX, landerY);
-	    
+	    	    
 	    //batch.draw(landerTexture, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
 	    
-	    //batch.draw(landerTexture, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
-	    
+	    // display values on screen
 	    font.setColor(Color.WHITE);
 	    font.draw(batch, "Score: " + Integer.toString(score), SCREENWIDTH - 200, SCREENHEIGHT - 40);
 	    font.draw(batch, "Remaining fuel: " + Integer.toString(fuel), SCREENWIDTH - 200, SCREENHEIGHT - 60);
@@ -239,15 +246,14 @@ public class LunarLander extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    //Begin drawing of shapes
-	    //shapeRenderer.begin(ShapeType.Line);
+	    shapeRenderer.begin(ShapeType.Line);
 	    
 	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
 	    // and ends with the shapeRenderer.end
-	    //shapeRenderer.line(SCREENWIDTH/2, SCREENHEIGHT/2, 50, 50);
+	    shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
 	 	    
 	    //End drawing of shapes
-	    //shapeRenderer.begin(ShapeType.FilledRectangle);
-	    //shapeRenderer.end();
+	    shapeRenderer.end();
 	    
 	    //Slightly more complicated gravity function, hopefully this will increase logarithmically
 	    //When the lander is at or lower than 20 pixels, it stops, otherwise it calculates the next position.
@@ -269,9 +275,13 @@ public class LunarLander extends GameClient {
 	    // work out how to do that! 
 	    //speed = speed + 1;
 	    
-	    if(!((initialPositionY - 0.25) < 0)) {
+	    //very basic downwards movement of the lander
+	    if(!((initialPositionY - 0.25) < 20)) {
 	    	initialPositionY -= 0.25;
+	    	System.out.println(initialPositionY);
+	    	System.out.println(landerPadLeftY);
 	    }
+	    
 	/*    	velocityY = velocityY - gravity;
 	    	speed = speed + acceleration;
 		    velocityX = (int) (speed * scaleX);
@@ -289,20 +299,6 @@ public class LunarLander extends GameClient {
 		
 	}
 
-
-	/**
-	 * Create an update object to send to the server notifying of a score change or game outcome
-	 * @return The Game Status Update.
-	 *//*
-	private GameStatusUpdate createScoreUpdate() {
-		GameStatusUpdate update = new GameStatusUpdate();
-		update.gameId = game.id;
-		update.username = players[0];
-		//TODO Should also send the score!
-		return update;
-	}
-
-*/
 	@Override
 	public void resize(int arg0, int arg1) {
 		super.resize(arg0, arg1);

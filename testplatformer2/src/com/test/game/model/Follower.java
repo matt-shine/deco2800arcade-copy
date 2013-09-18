@@ -3,6 +3,7 @@ package com.test.game.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 public class Follower extends Enemy {
 	
@@ -36,7 +37,7 @@ public class Follower extends Enemy {
 	}*/
 
 	@Override
-	public void advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Ship ship, float rank) {
 		//position.lerp(ship.getPosition(), delta);
 		Vector2 dir = new Vector2(new Vector2(ship.getPosition().x,ship.getPosition().y).sub(
 				new Vector2(position.x, position.y)));
@@ -46,7 +47,7 @@ public class Follower extends Enemy {
 		
 		super.update(ship);
 		stateTime += delta;
-		
+		return null;
 	}
 
 

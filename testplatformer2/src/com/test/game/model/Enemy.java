@@ -2,6 +2,7 @@ package com.test.game.model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.test.game.model.Ship.State;
 
 public abstract class Enemy extends MovableEntity{
@@ -64,6 +65,6 @@ public abstract class Enemy extends MovableEntity{
 		
 	}
 	
-	public abstract void advance(float delta, Ship ship, float rank);
+	public abstract Array<Enemy> advance(float delta, Ship ship, float rank);
 
 }

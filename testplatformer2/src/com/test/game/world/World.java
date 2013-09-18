@@ -403,9 +403,12 @@ public class World {
 		while(eItr.hasNext()) {
 			e = eItr.next();
 			// Get near player if scene is not playing
-			if (!levelScenes.isPlaying())
-				e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
-			
+			if (!levelScenes.isPlaying()) {
+				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
+				if (newEnemies != null) {
+					enemies.addAll(newEnemies);
+				}
+			}
 			/* Sword collisions */
 			if (e.getBounds().overlaps(sword.getBounds())) {
 				//System.out.println("C");
@@ -584,7 +587,8 @@ public class World {
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Ship(new Vector2(20f, 6));
+		//ship = new Ship(new Vector2(20f, 6));
+		ship = new Ship(new Vector2(270, 60));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

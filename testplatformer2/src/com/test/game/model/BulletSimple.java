@@ -3,20 +3,26 @@ package com.test.game.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-public class BulletSimple extends BulletEnemy {
+public class BulletSimple extends Enemy {
 
-	private int graphic;
+	public static enum Graphic {
+		FIRE
+	}
+	
+	private Graphic graphic;
 	
 	public BulletSimple(float speed, float rotation, Vector2 pos, float width,
-			float height, Vector2 velocity, int graphic) {
-		super(speed, rotation, pos, width, height, velocity);
+			float height, Vector2 direction, Graphic graphic) {
+		super(speed, rotation, pos, width, height);
 		this.graphic = graphic;
+		this.velocity = direction;
 	}
 
 	@Override
 	public void update(Ship ship) {
-		position.add(velocity.scl(Gdx.graphics.getDeltaTime() * speed));
+		position.add(velocity.nor().scl(Gdx.graphics.getDeltaTime() * speed));
 		velocity.scl(1/(Gdx.graphics.getDeltaTime()*speed));
 		super.update(ship);
 		
@@ -57,8 +63,14 @@ public class BulletSimple extends BulletEnemy {
 		
 	}
 	
-	public int getGraphic() {
+	public Graphic getGraphic() {
 		return graphic;
+	}
+
+	@Override
+	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

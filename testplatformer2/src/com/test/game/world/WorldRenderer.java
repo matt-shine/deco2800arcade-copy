@@ -25,9 +25,11 @@ import com.badlogic.gdx.utils.Array;
 import com.test.game.model.Block;
 import com.test.game.model.BlockMaker;
 import com.test.game.model.Bullet;
+import com.test.game.model.BulletSimple;
 import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
 import com.test.game.model.EnemySpiderBoss;
+import com.test.game.model.EnemySpiderBossArms;
 import com.test.game.model.Follower;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
@@ -72,6 +74,7 @@ public class WorldRenderer {
 	private Array<CutsceneObject> csObjects;
 	private Array<MovablePlatform> mvPlatforms;
 	private Array<BlockMaker> blockMakers;
+	private float rotationArms;
 	
 	//attempting to use maps
 	TiledMapRenderer tileMapRenderer;
@@ -256,6 +259,21 @@ public class WorldRenderer {
 				batch.draw(example, e.getPosition().x, e.getPosition().y, 0,
 						0, e.getWidth(), e.getHeight(), 1, 1, 0, 0, 0,
 						256, 256, true, false);
+				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
+				rotationArms++;
+				batch.draw(shipTexture, arms.getPosition().x, arms.getPosition().y, arms.getWidth()/2, arms.getHeight()/2, 
+						arms.getHeight(), arms.getHeight(), 1, 1, rotationArms, 0, 0, shipTexture.getWidth(),
+						shipTexture.getHeight(), false, false);
+			} else if (e.getClass() == BulletSimple.class) {
+				Texture bulletTex;
+				if (((BulletSimple)e).getGraphic() == BulletSimple.Graphic.FIRE) {
+					bulletTex = bulletTexture;
+				} else {
+					bulletTex = bulletTexture;
+				}
+				batch.draw(bulletTex, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
+						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
+						shipTexture.getHeight(), false, false);
 			} else if (e.getClass() == Walker.class){
 				//draw the parts in order
 				int i=7; 
@@ -435,6 +453,7 @@ public class WorldRenderer {
 	private void loadTextures() {
 		example = new Texture("data/enemysprite1-small.png");
 		example.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		rotationArms = 0f;
 		
 		bg = new Texture("data/bg2.png");
 		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);

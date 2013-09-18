@@ -1,6 +1,8 @@
 package com.test.game.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
 import java.lang.Math;
 
 public class Zombie extends Enemy {
@@ -12,11 +14,12 @@ public class Zombie extends Enemy {
 	}
 
 	@Override
-	public void advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Ship ship, float rank) {
 		velocity.x = (float)(Math.sin(4*position.x) + 1.5);
 		
 		position.add(velocity.scl(delta));
 		velocity.scl(1/delta);
+		return null;
 	}
 
 	@Override

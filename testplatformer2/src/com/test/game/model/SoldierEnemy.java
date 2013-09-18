@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.test.game.model.Ship.State;
 
 public class SoldierEnemy extends Enemy {
@@ -50,7 +51,7 @@ public class SoldierEnemy extends Enemy {
 	}
 
 	@Override
-	public void advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Ship ship, float rank) {
 		super.update(ship);
 		
 		if (Math.abs(velocity.x) < 1) {
@@ -121,6 +122,8 @@ public class SoldierEnemy extends Enemy {
 				velocity.y = JUMP_VELOCITY;
 			}
 		}
+		
+		return null;
 	}
 
 	public void pickNewState(Ship ship) {

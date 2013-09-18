@@ -51,7 +51,7 @@ public class Walker extends Enemy {
 	}
 	
 	@Override
-	public void advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Ship ship, float rank) {
 		//walking animation test
 		frameCount += delta;
 		if (frameCount > FRAME_LENGTH) {
@@ -134,6 +134,7 @@ public class Walker extends Enemy {
 		for (WalkerPart wp: parts) {
 			wp.update(ship);
 		}
+		return null;
 	}
 
 	@Override

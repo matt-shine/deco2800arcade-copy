@@ -1,4 +1,4 @@
-package accolades;
+package deco2800.arcade.statistics;
 import java.util.NoSuchElementException;
 
 import javax.script.ScriptEngineManager;

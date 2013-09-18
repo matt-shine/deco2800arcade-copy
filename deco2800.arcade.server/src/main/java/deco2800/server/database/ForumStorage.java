@@ -9,9 +9,15 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
+import deco2800.arcade.forum.ParentThread;
+import deco2800.arcade.forum.ChildThread;
+import deco2800.arcade.forum.User;
+
 /**
  * This models the server storage for a forum. It would be best to use
  * a transaction on every SQL-related function.
+ * This implements the transaction based database operation (i.e. every
+ * SQL execution is committed in the end of function.)
  * 
  * @author Forum
  * @see java.sql
@@ -46,7 +52,7 @@ public class ForumStorage {
 		String createParentThreadTable = "CREATE TABLE parent_thread"
 				+ " (pid integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)" 
 				+ ", topic varchar(30) NOT NULL"
-				+ ", content long varchar NOT NULL"
+				+ ", message long varchar NOT NULL"
 				+ ", created_by integer NOT NULL"
 				+ ", timestamp timestamp"
 				+ ", category varchar(30) DEFAULT 'General Admin'"
@@ -57,12 +63,9 @@ public class ForumStorage {
 		try {
 			Statement st = con.createStatement();
 			con.setAutoCommit(false);
-			ResultSet tables = con.getMetaData().getTables(null, null, "parent_thread", null);
-			if (!tables.next()) {
-				st.execute(dropParentThreadTable);
-				st.execute(createParentThreadTable);
-				st.execute(this.getCategoryConstraint());
-			}
+			st.execute(dropParentThreadTable);
+			st.execute(createParentThreadTable);
+			st.execute(this.getCategoryConstraint());
 			con.commit();
 			st.close();
 			initialized = true;
@@ -71,7 +74,8 @@ public class ForumStorage {
 				con.rollback();
 			} catch (SQLException er) {
 				throw new DatabaseException("Fail to rollback: ", er);
-			}
+			} 
+			this.initialized = false;
 			throw new DatabaseException("Fail to create table: " + e);
 		} finally {
 			try {
@@ -99,7 +103,7 @@ public class ForumStorage {
 		int result = -1;
 		
 		String insertParentThread = "INSERT INTO parent_thread"
-				+ " (topic, content, created_by, timestamp, category, tags)"
+				+ " (topic, message, created_by, timestamp, category, tags)"
 				+ " VALUES(?, ?, ?, ?, ?, ?)";
 		
 		/* Check parameters */
@@ -149,38 +153,33 @@ public class ForumStorage {
 	}
 	
 	/**
-	 * Retrieve parent thread data from given pid from DB.
-	 * Return String[] for success and null for failure
+	 * Retrieve parent thread from DB by given pid
 	 * 
-	 * @param pid, int, unique id of parent thread
-	 * @return String[], contains the result set {pid, topic, content
-	 * 					, createdBy, timestamp, category, tags}
+	 * @param pid, int parent thread id
+	 * @return ParentThread instance
+	 * @throws DatabaseException	Occurs if query error.
 	 */
-	public String[] getParentThread(int pid) throws DatabaseException {
-		String selectPid = "SELECT * FROM parent_thread WHERE pid=?";
-		String[] result = new String[7];
+	public ParentThread getParentThread(int pid) throws DatabaseException {
+		String query = "SELECT * FROM parent_thread WHERE pid = ?";
+		ParentThread result;
 		
-		/* Create database connection */
-		Connection con = Database.getConnection();
-		
-		/* Check parameter */
 		if (pid < 0) {
 			return null;
 		}
-		/* SELECT query */
+		
+		Connection con = Database.getConnection();
+		
 		try {
 			con.setAutoCommit(true);
-			PreparedStatement st = con.prepareStatement(selectPid);
+			PreparedStatement st = con.prepareStatement(query);
 			st.setInt(1, pid);
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
-				result[0] = rs.getString("pid");
-				result[1] = rs.getString("topic");
-				result[2] = rs.getString("content");
-				result[3] = rs.getString("created_by");
-				result[4] = rs.getString("timestamp");
-				result[5] = rs.getString("category");
-				result[6] = rs.getString("tags");
+				result = new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
+						, new User(rs.getInt("created_by"), ""), rs.getTimestamp("timestamp"), rs.getString("category")
+						, rs.getString("tags"));
+			} else {
+				result = null;
 			}
 		} catch (SQLException e) {
 			throw new DatabaseException("Fail to retrieve parent thread: " + e);
@@ -191,8 +190,8 @@ public class ForumStorage {
 				throw new DatabaseException("Fail to close DB connection: " + e);
 			}
 		}
-		
 		return result;
+		
 	}
 	
 	/**

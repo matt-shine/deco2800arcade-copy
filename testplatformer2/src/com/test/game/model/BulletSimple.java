@@ -20,13 +20,7 @@ public class BulletSimple extends Enemy {
 		this.velocity = direction;
 	}
 
-	@Override
-	public void update(Ship ship) {
-		position.add(velocity.nor().scl(Gdx.graphics.getDeltaTime() * speed));
-		velocity.scl(1/(Gdx.graphics.getDeltaTime()*speed));
-		super.update(ship);
-		
-	}
+	
 
 	@Override
 	public boolean isSolid() {
@@ -69,7 +63,9 @@ public class BulletSimple extends Enemy {
 
 	@Override
 	public Array<Enemy> advance(float delta, Ship ship, float rank) {
-		// TODO Auto-generated method stub
+		//System.out.println("Velocity="+velocity+" speed=" + speed);
+		position.add(velocity.nor().scl(Gdx.graphics.getDeltaTime() * speed));
+		velocity.scl(1/(Gdx.graphics.getDeltaTime()*speed));
 		return null;
 	}
 

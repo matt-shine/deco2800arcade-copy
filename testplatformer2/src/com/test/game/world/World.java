@@ -121,7 +121,7 @@ public class World {
 		handleEnemies();
 		
 		if (!levelScenes.isPlaying()) {
-			checkDamage();
+			//checkDamage();
 		}
 
 		if (firstUpdate) {
@@ -155,22 +155,8 @@ public class World {
 		} else {
 			float[] sceneStartValues = levelScenes.getStartValues();
 			if (ship.getPosition().x > sceneStartValues[scenePosition]) {
-				inputHandler.cancelInput();
-				ship.getVelocity().x = 0;
-				Array<Object> temp = levelScenes.start(rank);
-				for (Object obj: temp) {
-					if (obj.getClass() == CutsceneObject.class) {
-						cutsceneObjects.add( (CutsceneObject) obj );
-					} else if (obj.getClass() == MovablePlatform.class) {
-						movablePlatforms.add( (MovablePlatform) obj );
-					} else if (obj instanceof BlockMaker) {
-						System.out.println("adding blockmaker");
-						blockMakers.add( (BlockMaker) obj);
-					} else if (obj instanceof Enemy) {
-						enemies.add( (Enemy) obj);
-					}
-				}
-				scenePosition++;
+				sceneStart();
+				
 			}
 		}
 		
@@ -265,7 +251,9 @@ public class World {
 		for (BlockMaker blockMaker: blockMakers) {
 			Array<Block> bmb = blockMaker.getBlocks();
 			for (Block b: bmb) {
-				tiles.add(b.getBounds());
+				if (b.isSolid()) {
+					tiles.add(b.getBounds());
+				}
 			}
 		}
 
@@ -407,6 +395,19 @@ public class World {
 			// Get near player if scene is not playing
 			if (!levelScenes.isPlaying()) {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
+				if (e.isDead()) {
+					eItr.remove();
+					//System.out.println("removed enemy");
+					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
+						spns.removeEnemy(e);
+					}
+					for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
+						res.removeEnemy(e);
+					}
+				}
+				if (e.startingNextScene()) {
+					sceneStart();
+				}
 				if (newEnemies != null) {
 					enemies.addAll(newEnemies);
 				}
@@ -414,14 +415,8 @@ public class World {
 			/* Sword collisions */
 			if (e.getBounds().overlaps(sword.getBounds())) {
 				//System.out.println("C");
-				eItr.remove();
-				//System.out.println("removed enemy");
-				for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
-					spns.removeEnemy(e);
-				}
-				for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
-					res.removeEnemy(e);
-				}
+				e.handleDamage();
+				
 				//System.out.println("cleaned arrays");
 				
 			} 
@@ -505,6 +500,7 @@ public class World {
 		}
 	}
 	
+
 	public void resetCamera() {
 		if(ship.getPosition().x > cam.viewportWidth/2 ) {
 			cam.position.x = ship.getPosition().x;
@@ -525,10 +521,30 @@ public class World {
 	
 	public void updateBlockMakers() {
 		for (BlockMaker bm: blockMakers) {
-			bm.update(Gdx.graphics.getDeltaTime(), cam);
+			if (bm.isActive()) {
+				bm.update(Gdx.graphics.getDeltaTime(), cam);
+			}
 		}
 	}
-	
+
+	private void sceneStart() {
+		inputHandler.cancelInput();
+		ship.getVelocity().x = 0;
+		Array<Object> temp = levelScenes.start(scenePosition, rank);
+		for (Object obj: temp) {
+			if (obj.getClass() == CutsceneObject.class) {
+				cutsceneObjects.add( (CutsceneObject) obj );
+			} else if (obj.getClass() == MovablePlatform.class) {
+				movablePlatforms.add( (MovablePlatform) obj );
+			} else if (obj instanceof BlockMaker) {
+				System.out.println("adding blockmaker");
+				blockMakers.add( (BlockMaker) obj);
+			} else if (obj instanceof Enemy) {
+				enemies.add( (Enemy) obj);
+			}
+		}
+		scenePosition++;
+	}
 	public boolean isPaused() {
 		return isPaused;
 	}
@@ -598,7 +614,7 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-		rank = 20;
+		rank = 0.85f;
 		scenePosition = 0;
 		
 		isPaused = false;

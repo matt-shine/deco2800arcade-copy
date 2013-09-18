@@ -20,7 +20,7 @@ public abstract class LevelScenes {
 		return isPlaying;
 	}
 	
-	public abstract Array<Object> start(float rank);
+	public abstract Array<Object> start(int scenePosition, float rank);
 	public abstract boolean update(float delta);
 	public abstract float[] getStartValues();
 	//public abstract boolean isPlaying();

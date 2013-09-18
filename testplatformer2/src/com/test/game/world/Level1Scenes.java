@@ -41,7 +41,7 @@ public class Level1Scenes extends LevelScenes{
 		
 	}
 	
-	public Array<Object> start(float rank) {
+	public Array<Object> start(int scenePosition, float rank) {
 		playState=0;
 		copter = new MovablePlatform(copterTex, new Vector2(50, 1), 4f, 2f, new Vector2(52f,10f), 2f, false, 0f);
 		//copter.setCollisionRectangle(0,0,4f,1f);

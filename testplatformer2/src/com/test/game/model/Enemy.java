@@ -8,9 +8,13 @@ import com.test.game.model.Ship.State;
 public abstract class Enemy extends MovableEntity{
 	
 	protected float stateTime = 0;
+	protected boolean isDead;
+	protected boolean startingNextScene;
 	
 	public Enemy(float speed, float rotation, Vector2 pos, float width, float height) {
 		super(speed, rotation, pos, width, height);
+		isDead = false;
+		startingNextScene = false;
 	}
 	
 	
@@ -63,6 +67,23 @@ public abstract class Enemy extends MovableEntity{
 			position.y = tile.y - getHeight();
 		}
 		
+	}
+	
+	public void handleDamage() {
+		isDead = true;
+	}
+	
+	public boolean isDead() {
+		return isDead;
+	}
+	
+	public boolean startingNextScene() {
+		if (startingNextScene) {
+			startingNextScene = false;
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public abstract Array<Enemy> advance(float delta, Ship ship, float rank);

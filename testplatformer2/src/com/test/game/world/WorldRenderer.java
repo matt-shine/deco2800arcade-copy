@@ -227,7 +227,9 @@ public class WorldRenderer {
 					at = groundTextureAtlas;
 				}
 				TextureRegion tr = at.findRegion("level", b.getAtlasIndex());
-				batch.draw(tr, b.getPosition().x, b.getPosition().y, 1f, 1f);
+				//batch.draw(tr, b.getPosition().x, b.getPosition().y, 1f, 1f);
+				
+				batch.draw(tr, b.getPosition().x, b.getPosition().y, 0.5f, 0.5f, 1f, 1f, 1f, 1f, b.getDrawRotation());
 			}
 		}
 		
@@ -270,7 +272,11 @@ public class WorldRenderer {
 						0, e.getWidth(), e.getHeight(), 1, 1, 0, 0, 0,
 						256, 256, true, false);
 				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
-				rotationArms++;
+				if (arms.isAttacking()) { 
+					rotationArms+= 10;
+				} else {
+					rotationArms = 0;
+				}
 				batch.draw(shipTexture, arms.getPosition().x, arms.getPosition().y, arms.getWidth()/2, arms.getHeight()/2, 
 						arms.getHeight(), arms.getHeight(), 1, 1, rotationArms, 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
@@ -282,8 +288,8 @@ public class WorldRenderer {
 					bulletTex = bulletTexture;
 				}
 				batch.draw(bulletTex, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
-						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);
+						e.getWidth(), e.getHeight(), 4, 4, e.getRotation(), 0, 0, bulletTexture.getWidth(),
+						bulletTexture.getHeight(), false, false);
 			} else if (e.getClass() == Walker.class){
 				//draw the parts in order
 				int i=7; 

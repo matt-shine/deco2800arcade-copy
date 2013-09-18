@@ -1,4 +1,5 @@
 apply plugin: 'sonar'
+apply plugin: 'cobertura'
 
 configurations {
   doclet
@@ -17,6 +18,18 @@ dependencies {
   doclet group: 'org.jboss.apiviz', name: 'apiviz', version: '1.3.2.GA'
   //doclet group: 'org.yworks', name: 'ydoc', version: '3.0.02'
 }
+
+buildscript {
+  repositories {
+    maven {
+      url 'http://deco2800.uqcloud.net/artifactory/everything'
+    }
+  }
+  dependencies {
+    classpath "net.saliman:gradle-cobertura-plugin:1.1.1"
+  }
+}
+
 
 sonar {
   project {
@@ -41,6 +54,12 @@ sonar {
       password = sonarDatabasePassword 
     }
   }
+  project {
+    dynamicAnalysis = "reuseReports"
+    coberturaReportPath = file("$buildDir/reports/cobertura/cobertura.xml")
+    testReportPath = file("$buildDir/test-results")
+  }
+
 }
 
 subprojects {

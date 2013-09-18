@@ -21,6 +21,8 @@ import com.badlogic.gdx.Input.Keys;
 
 
 
+
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -139,25 +141,12 @@ public class LunarLander extends GameClient {
 		gravity = 3;
 		moving = true;
 		
-		landerPadLeftX = 100;
-		landerPadLeftY = 100;
-		landerPadRightX = 150;
-		landerPadRightY = 150;
-		
-		/*//terrain generation, not working at the moment
-		terrainCoords[0] = new Point(500,500);
-		terrainCoords[1] = new Point(200,200);
-		terrainCoords[2] = new Point(300,300);
-		terrainCoords[3] = new Point(400,200);
-		terrainCoords[4] = new Point(500,100);
-		
-		coord0X = (float) terrainCoords[0].getX();
-		coord0Y = (float) terrainCoords[0].getY();
-		System.out.println("----------------");
-		System.out.println(coord0X);
-		System.out.println(coord0Y);
-		
-		shapeRenderer.line(coord0X, coord0Y, coord0X, coord0Y);*/
+		landerPadLeftX = 25;
+		landerPadLeftY = 50;
+		landerPadRightX = 100;
+		landerPadRightY = 100;
+	}
+		/*		
 	
 		// sets initial values to be displayed  
 		score = 0;
@@ -269,17 +258,11 @@ public class LunarLander extends GameClient {
 	    	break;
 	    }*/
 	    
-	    //Simple gravity function, hopefully this will increase logarithmically
-	    // I think the speed will only increase if the player presses a key that
-	    // will make the lander speed up, so I've just commented this out until we
-	    // work out how to do that! 
-	    //speed = speed + 1;
-	    
 	    //very basic downwards movement of the lander
 	    if(!((initialPositionY - 0.25) < 20)) {
 	    	initialPositionY -= 0.25;
-	    	System.out.println(initialPositionY);
-	    	System.out.println(landerPadLeftY);
+	    	//System.out.println(initialPositionY);
+	    	//System.out.println(landerPadLeftY);
 	    }
 	    
 	/*    	velocityY = velocityY - gravity;
@@ -289,16 +272,42 @@ public class LunarLander extends GameClient {
 		    finalX = (int) (finalX + velocityX);
 		    finalY = (int) (finalY + velocityY);
 		    moving = false;
-		    
-	    }else {
-	    	//"moving" is only used here to slow the lander down, otherwise the infinite loop is too fast.
-	    	moving = true;
-	    }*/
+	*/
 	    
 		super.render();
 		
 	}
-
+	
+	public ArrayList<ArrayList<Integer>> createMap(){
+		
+		ArrayList<ArrayList<Integer>> terrain = new ArrayList<ArrayList<Integer>>();
+		
+		//makes a random X coordinate
+		Random randomX = new Random();  
+		int startX = 100;     // beginning of range  
+		int endX = 700;      // end of range 
+		
+		//makes a random Y coordinate
+		Random randomY = new Random();  
+		int startY = 200;     // beginning of range  
+		int endY = 1000;      // end of range 
+		
+		int landingPadX = startX + randomX.nextInt( endX - startX + 1 );
+		int landingPadY = startY + randomY.nextInt( endY - startY + 1 );
+		
+		//creation of landingPad, it will be the first element in the array
+		
+		//System.out.println( num[y][x] );
+		
+		return terrain;
+		//HEIGHT = 800;
+		//WIDTH = 1200;
+		
+		//private int landingCoords;
+		//Point[] terrain = {new Point(1,2),new Point(2,3)};
+	}
+	
+	
 	@Override
 	public void resize(int arg0, int arg1) {
 		super.resize(arg0, arg1);

@@ -34,7 +34,7 @@ public class Level {
 	 * @return
 	 */
 	public Level nextLevel() {
-		return LevelContainer.nextLevel(this);
+		return null;
 	}
 	
 	/**

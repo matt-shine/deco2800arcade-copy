@@ -2,7 +2,7 @@ package deco2800.arcade.junglejump;
 
 public class FallingPlatform extends Platform{
 	
-	public FallingPlatform(int type, boolean flipped, int pX, int pY, int pWidth, int pHeight) {
+	public FallingPlatform(char type, boolean flipped, int pX, int pY, int pWidth, int pHeight) {
 		super(type, flipped, pX, pY, pWidth, pHeight);
 		// TODO Auto-generated constructor stub
 	}

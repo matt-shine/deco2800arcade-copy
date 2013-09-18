@@ -5,6 +5,7 @@ import java.util.*;
 
 import deco2800.arcade.junglejump.GUI.junglejump;
 
+
 /**
  * Class holding a list of all the levels in the game
  * Levels are sorted into worlds
@@ -13,6 +14,8 @@ import deco2800.arcade.junglejump.GUI.junglejump;
  */
 public class LevelContainer {
 	static ArrayList<Level> levels;
+	public static int currentLevel;
+	public int currentWorld;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -20,13 +23,21 @@ public class LevelContainer {
 	 */
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
-		
-		Level level1 = new Level(); // Creating and adding to a test level
+		currentLevel = 0;
+		currentWorld = 0;
 		
 		// Read level from file
+		for(int i=0;i<2;i++) {
+			addLevel(i);
+		}
+		
+	}
+	
+	public void addLevel(int levelNum) {
 		BufferedReader br;
+		Level level = new Level(); // Creating and adding to a level
 		try {
-			br = new BufferedReader(new FileReader("junglejumpassets/levels/level1.txt"));
+			br = new BufferedReader(new FileReader("junglejumpassets/levels/world1/level" + (levelNum+1) + ".txt"));
 		} catch (FileNotFoundException e1) {
 			System.out.println("No file");
 			return;
@@ -41,9 +52,16 @@ public class LevelContainer {
 	        while (line != null) {
 	        	for(int x=0; x<junglejump.SCREENWIDTH/xLength; x++) {
 	        		char c = line.charAt(x);
-	        		if(c != '*') {
-	        			Platform p = new Platform(c, false, (x*xLength), (y*yLength), xLength, yLength);
-	        			level1.addPlatform(p);
+	        		Platform p;
+	        		switch(c) {
+	        		case '-':
+	        			p = new Platform(c, false, (x*xLength), (y*yLength), xLength, yLength);
+	        			level.addPlatform(p);
+	        			break;
+	        		case '^':
+	        			p = new Platform(c, false, (x*xLength), (y*yLength), xLength, yLength);
+	        			level.addPlatform(p);
+	        			break;
 	        		}
 	        	}
 	        	line = br.readLine();
@@ -53,27 +71,24 @@ public class LevelContainer {
 			return;
 		} finally {
 	        try {
+	        	addLevel(level);	
 				br.close();
 			} catch (IOException e) {
 				return;
 			}
 	    }
-		
-	    
-		Collectable testBanana = new Collectable();
-		level1.addBanana(testBanana);
-		addLevel(level1);	
 	}
 	
 	
 	/**
 	 * Returns the next level after the given level
-	 * @param currentLevel
 	 * @return
 	 */
-	public static Level nextLevel(Level currentLevel) {
-		int newLevel = levels.indexOf(currentLevel);
-		return levels.get(newLevel);
+	public static void nextLevel() {
+		int newLevel = currentLevel+1;
+		junglejump.currentLevel = getLevel(newLevel);
+		clearCurrentLevel();
+		return;
 	}
 	
 	/**
@@ -95,6 +110,12 @@ public class LevelContainer {
 	 */
 	public static int getLevelIndex(Level level) {
 		return levels.indexOf(level);
+	}
+	
+	public static void clearCurrentLevel() {
+		for (Platform p : getLevel(currentLevel).getPlatforms()) {
+			p.setX(1000);
+		}
 	}
 	
 

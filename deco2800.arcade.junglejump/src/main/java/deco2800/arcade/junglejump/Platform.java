@@ -16,11 +16,13 @@ public class Platform {
 		WORLD_ONE, WORLD_TWO, WORLD_THREE
 	}
 	private world currentWorld;
+	private char platType;
+	
 	/**
 	 * Platform constructor
 	 * Takes width, height and X and Y position as parameters
 	 */
-	public Platform(int type, boolean flipped, int pX, int pY, int pWidth, int pHeight) {
+	public Platform(char type, boolean flipped, int pX, int pY, int pWidth, int pHeight) {
 		this.width = pWidth;
 		this.height = pHeight;
 		this.xPos = pX;
@@ -28,6 +30,7 @@ public class Platform {
 		this.active = false;
 		this.inverted = flipped;
 		currentWorld = world.WORLD_ONE; // Placeholder 
+		platType = type;
 		setTexture(type);
 	}
 	
@@ -127,6 +130,9 @@ public class Platform {
 	 * move or change when stood on.
 	 */
 	public void setActive() {
+		if(this.platType == '^') {
+			LevelContainer.nextLevel();
+		}
 		this.active = true;
 	}
 	

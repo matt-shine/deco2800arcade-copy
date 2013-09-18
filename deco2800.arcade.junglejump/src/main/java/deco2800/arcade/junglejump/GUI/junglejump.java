@@ -65,6 +65,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER
 	}
+	
+	int monkey_length = 40;
 
 	private GameState gameState;
 	PerspectiveCamera cam;
@@ -94,8 +96,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	boolean onPlatform, isFalling = false;
 	
 //	public int currentLevelIndex = 0;
-	LevelContainer currentCont = new LevelContainer();
-	Level currentLevel = currentCont.getLevel(0);
+	static LevelContainer currentCont = new LevelContainer();
+	public static Level currentLevel = currentCont.getLevel(0);
 //	public static int currentWorld = 0;
 
 	Texture texture;
@@ -348,27 +350,26 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 
 	}
-	public boolean isOnPlatform(float x, float y) {
-		// Place holder for checking through platform array
-		// Consider data structure for efficiency
+	
+	public void drawLevel() {
 		for (Platform p : currentLevel.getPlatforms()) {
-			if (x > p.getX() && x < p.getX()+p.getWidth() && y < p.getY()+p.getHeight() && y > p.getY()-p.getHeight()) {
+			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+		}
+	}
+	
+	public boolean isOnPlatform(float x, float y) {
+		for (Platform p : currentLevel.getPlatforms()) {
+			if (x > (p.getX() - p.getWidth()/2 - monkey_length/2) && x < (p.getX()+p.getWidth()/4 + // Check platform dimensions
+					monkey_length/2) && y <= p.getY() + p.getHeight() && y >= p.getY()+p.getHeight()/2) {
+				if(monkeyY > p.getY() + p.getHeight()/2) { // If the monkey's colliding with the platform, place him on top
+					monkeyY = p.getY() + p.getHeight();
+				}
+				p.setActive();
 				return true;
+			} else {
+				p.setInactive();
 			}
 		} return false;
-//		if (x > 78 && x < 170 && y < 76 ) return true;
-//		    else return false;
-//	
-		// Gonna do it the easy way until it causes problems
-//		currentLevel = LevelContainer.getLevel(currentLevelIndex);
-//		for(int i=0; i<currentLevel.platformAmount(); i++) {
-//			Platform p = currentLevel.getPlatforms().get(i);
-//			if(x > p.getX() && x < p.getX() + p.getWidth() &&
-//					y < p.getY()) {
-//				return true;
-//			}
-//		}
-//		return false;
 	}
 
 	@Override

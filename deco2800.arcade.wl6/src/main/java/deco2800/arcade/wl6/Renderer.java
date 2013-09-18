@@ -150,17 +150,23 @@ public class Renderer {
 	 * Draws a sprite. This assumes that the doodadShader is active
 	 * @param s
 	 */
-	public void drawBasicSprite(String s, float x, float y) {
+	public void drawBasicSprite(String s, float x, float y, float angle) {
 		
 		//camera
 		Matrix4 pv = getProjectionViewMatrix();
 		
 		//model transform
 		Matrix4 m = new Matrix4().idt();
-		m.translate(x, y, debugMode ? 0.1f : 0.5f);
+		m.translate(x, y, 0.5f);
 		if (this.debugMode) {
+			//if debug mode, face up, and face the player
+			m.rotate(0, 0, 1, angle + 180);
 			m.rotate(1, 0, 0, 270);
+		} else {
+			//if not debug mode, rotate to face the player
+			m.rotate(0, 0, 1, angle);
 		}
+		
 		
 		//combine matrixes
 		Matrix4 combined = pv.mul(m);

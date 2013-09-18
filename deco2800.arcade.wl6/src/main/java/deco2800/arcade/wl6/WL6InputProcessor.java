@@ -1,6 +1,8 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
 public class WL6InputProcessor implements InputProcessor {
@@ -17,40 +19,52 @@ public class WL6InputProcessor implements InputProcessor {
 	
 	
 	@Override
-	public boolean keyDown(int arg0) {
-		if (arg0 == Keys.NUM_1) {
+	public boolean keyDown(int c) {
+		if (c == Keys.NUM_1) {
 			game.toggleDebugMode();
 		}
-		if (arg0 == Keys.W) {
-			model.getPlayer().setY(model.getPlayer().getPos().y - 1);
-		}
-		if (arg0 == Keys.S) {
-			model.getPlayer().setY(model.getPlayer().getPos().y + 1);
-		}
-		if (arg0 == Keys.A) {
-			model.getPlayer().setX(model.getPlayer().getPos().x - 1);
-		}
-		if (arg0 == Keys.D) {
-			model.getPlayer().setX(model.getPlayer().getPos().x + 1);
+		if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
+			updatePlayerSpeed();
 		}
 		return false;
 	}
-
+	
+	
+	public void updatePlayerSpeed() {
+		Player p = model.getPlayer();
+		float x = 0;
+		float y = 0;
+		if (Gdx.input.isKeyPressed(Keys.W)) y -= 1;
+		if (Gdx.input.isKeyPressed(Keys.S)) y += 1;
+		if (Gdx.input.isKeyPressed(Keys.A)) x -= 1;
+		if (Gdx.input.isKeyPressed(Keys.D)) x += 1;
+		p.setVel(
+				new Vector2(x, y)
+				.nor()
+				.mul(Player.SPEED * model.delta())
+				.rotate(-p.getAngle())
+		);
+	}
+	
+	
 	@Override
-	public boolean keyTyped(char arg0) {
+	public boolean keyTyped(char c) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean keyUp(int arg0) {
-		// TODO Auto-generated method stub
+	public boolean keyUp(int c) {
+		if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
+			updatePlayerSpeed();
+		}
 		return false;
 	}
 
 	@Override
-	public boolean mouseMoved(int arg0, int arg1) {
-		model.getPlayer().setAngle(arg0);
+	public boolean mouseMoved(int x, int y) {
+		model.getPlayer().setAngle(-x);
+		updatePlayerSpeed();
 		return false;
 	}
 

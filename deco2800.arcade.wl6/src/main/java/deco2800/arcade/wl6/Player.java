@@ -1,7 +1,8 @@
 package deco2800.arcade.wl6;
 
-public class Player extends LOSableDoodad {
+public class Player extends Mob {
 
+	public static final float SPEED = 3f;
 	
 	public Player() {
 		super();
@@ -10,11 +11,15 @@ public class Player extends LOSableDoodad {
 	
 	public void draw(Renderer renderer) {
 		if (renderer.isDebugMode()) {
-			super.draw(renderer);
+			renderer.drawBasicSprite(getTextureName(), getPos().x, getPos().y, getAngle());
 		}
+		//no super call
 	}
 	
-	
+	@Override
+	public void tick(GameModel model) {
+		super.tick(model);
+	}
 	
 	
 }

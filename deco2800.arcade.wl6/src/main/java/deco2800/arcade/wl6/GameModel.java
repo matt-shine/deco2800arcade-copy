@@ -30,8 +30,12 @@ public class GameModel {
 	//All the entities
 	private LinkedList<Doodad> doodads = new LinkedList<Doodad>();
 	
+	//Delta time
+	private float delta = 0;
 	
 	
+	
+
 	public GameModel() {
 	}
 	
@@ -148,4 +152,23 @@ public class GameModel {
 	}
 	
 	
+	/**
+	 * returns the time that the last frame took
+	 * @return
+	 */
+	public float delta() {
+		return this.delta;
+	}
+	
+	
+	
+	/**
+	 * Update the delta time
+	 * @param delta
+	 */
+	public void setDelta(float delta) {
+		this.delta = delta;
+	}
+
+
 }

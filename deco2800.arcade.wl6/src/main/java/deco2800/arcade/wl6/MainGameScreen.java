@@ -52,7 +52,9 @@ public class MainGameScreen implements Screen {
 	}
 
 	@Override
-	public void render(float arg0) {
+	public void render(float delta) {
+		
+		model.setDelta(delta);
 		
 		//iterate over all game objects
 		Iterator<Doodad> itr = model.getDoodadIterator();

@@ -3,6 +3,7 @@ dependencies {
   compile project(":deco2800.arcade.protocol")
   compile project(":deco2800.arcade.model")
   compile project(":deco2800.arcade.packman")
+  compile project(":deco2800.arcade.forum")
 
   compile group: "org.apache.derby", name: "derby", version: "10.10.1.1"
 

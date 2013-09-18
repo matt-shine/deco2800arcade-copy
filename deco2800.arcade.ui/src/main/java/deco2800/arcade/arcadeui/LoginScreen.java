@@ -17,8 +17,11 @@ public class LoginScreen implements Screen {
 	
 	private Skin skin;
     private LoginScreenStage stage;
+    private ArcadeUI arcadeUI;
 
-	public LoginScreen() {
+	public LoginScreen(ArcadeUI ui) {
+        arcadeUI = ui;
+
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
@@ -70,8 +73,7 @@ public class LoginScreen implements Screen {
                     errorLabel.setText("No Username Supplied");
                 }
                 else if (usernameText.getText().toLowerCase().equals("store")) {
-                    // temporary direct access to store until a proper solution is found
-                    ArcadeSystem.login("store");
+                    arcadeUI.requestScreen("store");
                 }
                 else {
                     // username supplied, try to login
@@ -82,6 +84,7 @@ public class LoginScreen implements Screen {
         
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                arcadeUI.requestScreen("register");
             }
         });
         

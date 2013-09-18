@@ -99,10 +99,6 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
-	    /*if (ArcadeSystem.isLoggedIn()) {
-	    	ArcadeSystem.goToGame("arcadeui");
-	    }*/
 	}
 
     @Override

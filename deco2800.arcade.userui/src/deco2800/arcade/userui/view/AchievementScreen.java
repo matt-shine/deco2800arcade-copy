@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -40,6 +41,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	private JPanel sidepanel;
 	private JPanel playerpanel;
 	private JPanel playerinfopanel;
+	private JPanel gamepanel;
 	
 	//Declare Buttons here
 	private JButton addfriendbutton;
@@ -49,6 +51,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	private JButton storelink;
 	private JButton gameslink;
 	
+	//Declare ComboBox
+	private JComboBox gameselect;
+		
 	//Declare Labels here
 	private JLabel avatar;
 	private JLabel addfriend;
@@ -58,6 +63,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	
 	//Declare Text Areas
 	private JTextArea achievementarea;
+	private JTextArea gamearea;
 	
 	//Declare Images here
 	private ImageIcon picavatar;
@@ -99,9 +105,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		 * 
 		 */
 		
-		achievementarea = new JTextArea();
-		JPanel friendarea = new JPanel();
-		
+		achievementarea = new JTextArea();	
+		//gamearea = new JTextArea();
+				
 		/*
 		 * Panels and ScrollPanes
 		 * 
@@ -117,10 +123,17 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	    playerinfopanel = new JPanel(new MigLayout());
 	    playerpanel.setOpaque(false);
 	    playerinfopanel.setOpaque(false);
+	    gamepanel = new JPanel(new MigLayout());
+	    JScrollPane gamescroll = new JScrollPane(gamepanel);
+		gamescroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		gamescroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	    
 	    contentpanel = new JPanel(new MigLayout());
 	    achievementpanel = new JPanel(new MigLayout());
 	    //achievementpanel.setOpaque(false);
+	    JScrollPane achievementscroll = new JScrollPane(achievementpanel);
+		achievementscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		achievementscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 	               
         /*
          * Buttons and Image Buttons
@@ -215,6 +228,13 @@ public class AchievementScreen extends JFrame implements ActionListener {
         achievementtext10.setBackground(Color.BLUE);
         achievementtext11.setBackground(Color.BLUE);
         achievementtext12.setBackground(Color.BLUE);
+        
+        /*Combo Box for selecting game
+         * 
+         */
+        
+        gameselect = new JComboBox();
+        //List out all the games in the arcade
 
 		/*Add objects and position panels
 		 * 
@@ -231,7 +251,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
         playerinfopanel.add(editbutton,"align 50% 50%");
         playerpanel.add(playerinfopanel);
         
-        sidepanel.add(playerpanel, "wrap, center, width :300, height :300");
+        sidepanel.add(playerpanel, "wrap, center, width :300, height :600");
+        sidepanel.add(gamescroll, "wrap, gapbottom 30px, width :300, height :600");
+        sidepanel.add(gameselect, "gapbottom 170px");
         
         achievementpanel.add(achievementbar, "north");
         achievementpanel.add(achievement1,"gapbefore 5px, pad 10 10 10 10");
@@ -259,7 +281,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
         achievementpanel.add(achievement12,"pad 10 10 10 10");
         achievementpanel.add(achievementtext12,"pad 10 10 10 10, growy, width :110");
 
-        contentpanel.add(achievementpanel, "height :320, width :810, gapbefore 30px");
+        contentpanel.add(achievementscroll, "height :640, width :810, gapbefore 30px");
             
 	    /*Add panels to Main Panel	
 	     *                

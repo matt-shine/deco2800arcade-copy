@@ -110,7 +110,7 @@ public class TileViewModel extends Group {
 		applyTransform(batch, computeTransform());
 
 		/* draw item */
-		ItemModel item = model.getSpawnedItem();
+		/*ItemModel item = model.getSpawnedItem();
 		if (item != null) {
 			TextureRegion region;
 
@@ -128,7 +128,7 @@ public class TileViewModel extends Group {
 				region = UNKNOWN_REGION;
 			}
 			batch.draw(region, 0, 0, tileSize, tileSize);
-		}
+		}*/
 
 		resetTransform(batch);
 	}

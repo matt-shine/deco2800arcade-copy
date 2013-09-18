@@ -4,7 +4,6 @@ package deco2800.arcade.mixmaze.domain;
  * Helper class of directions in mixmaze.
  */
 public class Direction {
-
 	public static final int WEST = 0;
 	public static final int NORTH = 1;
 	public static final int EAST = 2;
@@ -15,8 +14,7 @@ public class Direction {
 	 * when an integer is not one of <code>WEST</code>, <code>NORTH</code>,
 	 * <code>EAST</code>, or <code>SOUTH</code>.
 	 */
-	public static final IllegalArgumentException NOT_A_DIRECTION =
-			new IllegalArgumentException("Direction is invalid.");
+	public static final IllegalArgumentException NOT_A_DIRECTION = new IllegalArgumentException("Direction is invalid.");
 
 	/**
 	 * Returns true if and only the specified direction is <code>West</code>

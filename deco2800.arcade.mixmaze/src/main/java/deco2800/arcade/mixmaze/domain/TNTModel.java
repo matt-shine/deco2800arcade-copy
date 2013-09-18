@@ -1,8 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
 public class TNTModel extends ItemModel {
-
-	protected TNTModel(TileModel spawnedOn) {
-		super(ItemType.TNT, spawnedOn);
+	public TNTModel() {
+		super(ItemType.TNT);
 	}
 }

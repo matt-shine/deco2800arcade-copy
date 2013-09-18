@@ -1,8 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.BrickModel.MAX_BRICKS;
-import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
+import deco2800.arcade.mixmaze.domain.ItemModel.ItemType;
 
 /**
  * Player model represents a player.
@@ -11,7 +10,11 @@ public class PlayerModel {
 	public enum PlayerAction {
 		USE_BRICK,
 		USE_PICK,
-		USE_TNT
+		USE_TNT;
+		
+		public PlayerAction getNextAction() {
+			return values()[(ordinal() + 1) % values().length];
+		}
 	}
 
 	// Player data
@@ -100,7 +103,7 @@ public class PlayerModel {
 	 *
 	 * @return true if the player can move, false otherwise
 	 */
-	public boolean canMove() {
+	private boolean canMove() {
 		return (System.currentTimeMillis() - lastMoved) >= (0.3 * 1000);
 	}
 
@@ -109,9 +112,11 @@ public class PlayerModel {
 	 *
 	 */
 	public void move() {
-		playerX = getNextX();
-		playerY = getNextY();
-		lastMoved = System.currentTimeMillis();
+		if(canMove()) {
+			playerX = getNextX();
+			playerY = getNextY();
+			lastMoved = System.currentTimeMillis();
+		}
 	}
 
 	/**
@@ -133,7 +138,34 @@ public class PlayerModel {
 		}
 		playerDirection = direction;
 	}
-
+	
+	public BrickModel getBrick() {
+		return brick;
+	}
+	
+	public PickModel getPick() {
+		return pick;
+	}
+	
+	public TNTModel getTNT() {
+		return tnt;
+	}
+	
+	public boolean pickupItem(ItemModel item) {
+		if(item.getType() == ItemType.BRICK) {
+			BrickModel brick = (BrickModel)item;
+			brick.mergeBricks(brick);
+			return brick.getAmount() == 0;
+		} else if(item.getType() == ItemType.PICK && pick == null) {
+			pick = (PickModel)item;
+			return true;
+		} else if(item.getType() == ItemType.TNT && tnt == null) {
+			tnt = (TNTModel)item;
+			return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Returns the active action of this player.
 	 *
@@ -142,76 +174,7 @@ public class PlayerModel {
 	public PlayerAction getPlayerAction() {
 		return playerAction;
 	}
-
-	/**
-	 * Sets the active action of this player.
-	 *
-	 * @param action Possible values are USE_BRICK, USE_PICK, and USE_TNT.
-	 */
-	public void setPlayerAction(PlayerAction action) {
-		playerAction = action;
-	}
-
-	/**Checks of this player can perform a action.
-	 *
-	 * @return true if this player can use any action, false otherwise
-	 */
-	public boolean canUseAction() {
-		return (System.currentTimeMillis() - lastAction) >= (3 * 1000);
-	}
-
-	/**
-	 * Picks up an item on a tile of the gameboard.
-	 * <p>
-	 * This player will pick up as many bricks as possible until reaching
-	 * <code>MAX_BRICKS</code>.  In the case of pick or TNT, the item will
-	 * be only picked up if this player does not possess one.
-	 *
-	 * @param item the item to be picked up by this player
-	 */
-	public void pickUpItem(ItemModel item) {
-		if (item instanceof BrickModel) {
-			BrickModel tileBrick = (BrickModel)item;
-
-			if (brick.getAmount() + tileBrick.getAmount()
-					<= MAX_BRICKS) {
-				/* pick up all bricks */
-				brick.addAmount(tileBrick.getAmount());
-				tileBrick.pickUpItem();
-			} else {
-				/* pick up to the maximum number */
-				tileBrick.removeAmount(MAX_BRICKS
-						- brick.getAmount());
-				brick.setAmount(MAX_BRICKS);
-			}
-		} else if (item instanceof PickModel) {
-			PickModel tilePick = (PickModel)item;
-			if (pick == null) {
-				pick = tilePick;
-				pick.pickUpItem();
-			}
-		} else if (item instanceof TNTModel) {
-			TNTModel tileTNT = (TNTModel)item;
-			if (tnt == null) {
-				tnt = tileTNT;
-				tnt.pickUpItem();
-			}
-		}
-	}
-
-	// all these 3 method are not used anywher in the workspad? dumindu
-	public BrickModel getBrick() {
-		return brick;
-	}
-
-	public PickModel getPick() {
-		return pick;
-	}
-
-	public TNTModel getTNT() {
-		return tnt;
-	}
-
+	
 	/**
 	 * Switches to the next action, in this order
 	 * USE_BRICK - USE_PICK - USE_TNT - USE_BRICK.
@@ -219,51 +182,55 @@ public class PlayerModel {
 	 * the associated item.
 	 */
 	public void switchAction() {
-		/* brick is never null */
-		switch (playerAction) {
-		case USE_BRICK:
-			if (pick != null) {
-				setPlayerAction(USE_PICK);
-			} else if (tnt != null) {
-				setPlayerAction(USE_TNT);
-			}
-			break;
-		case USE_PICK:
-			if (tnt != null) {
-				setPlayerAction(USE_TNT);
-			} else {
-				setPlayerAction(USE_BRICK);
-			}
-			break;
-		case USE_TNT:
-			setPlayerAction(USE_BRICK);
-			break;
+		playerAction = playerAction.getNextAction();
+		if((playerAction == PlayerAction.USE_PICK && pick == null) || (playerAction == PlayerAction.USE_TNT && tnt == null)) {
+			switchAction();
 		}
 	}
-
+	
+	/**Checks of this player can perform a action.
+	 *
+	 * @return true if this player can use any action, false otherwise
+	 */
+	public boolean canUseAction() {
+		return (System.currentTimeMillis() - lastAction) >= (0.5 * 1000);
+	}
+	
 	/**
 	 * Uses the active action of this player.
 	 *
 	 * @param tile the tile where this player is
 	 */
-	public void useAction(TileModel tile) {
-		switch (playerAction) {
-		case USE_BRICK:
-			tile.buildWall(this, playerDirection);
-			break;
-		case USE_PICK:
-			if (tile.destroyWall(this, playerDirection)) {
-				pick = null;
-				switchAction();
+	public boolean useAction(TileModel tile) {
+		if(canUseAction()) {
+			boolean used = false;
+			if(playerAction == PlayerAction.USE_BRICK && brick.getAmount() > 0) {
+				WallModel wall = tile.getWall(playerDirection);
+				if(!wall.isBuilt()) {
+					brick.removeOne();
+					wall.build(this);
+					used = true;
+				}
+			} else if(playerAction == PlayerAction.USE_PICK && pick != null) {
+				WallModel wall = tile.getWall(playerDirection);
+				if(wall.isBuilt()) {
+					pick = null;
+					wall.destroy(this);
+					used = true;
+				}
+			} else if(playerAction == PlayerAction.USE_TNT && tnt != null) {
+				tnt = null;
+				for(int direction = 0; direction < 4; ++direction) {
+					WallModel wall = tile.getWall(direction);
+					if(wall.isBuilt()) {
+						wall.destroy(this);
+					}
+				}
+				used = true;
 			}
-			break;
-		case USE_TNT:
-			tnt = null;	// exploded
-			for (int dir = 0; dir < 4; dir++)
-				tile.destroyWall(this, dir);
-			switchAction();
-			break;
+			lastAction = used ? System.currentTimeMillis() : lastAction;
 		}
+		return false;
 	}
 
 	/**
@@ -274,8 +241,6 @@ public class PlayerModel {
 	public PlayerModel(int id) {
 		playerID = id;
 		playerAction = PlayerAction.USE_BRICK;
-		// why do we create brickmodel here? dumindu
 		brick = new BrickModel(4);
 	}
-
 }

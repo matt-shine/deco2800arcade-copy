@@ -4,11 +4,30 @@ package deco2800.arcade.mixmaze.domain;
  * Brick model represents a collection of bricks.
  */
 public class BrickModel extends ItemModel {
-
-	public final static int MAX_BRICKS = 10;
-
+	/**
+	 * Thrown when an operation results in an invalid amount of bricks.
+	 */
+	private final static IllegalArgumentException NUMOUTOFRANGE = new IllegalArgumentException("number must result in a amount greater than 0 and less then MAX_BRICKS."); 
+	
+	/**
+	 * Stores maximum number of bricks in a stack.
+	 */
+	private static int MAX_BRICKS = 10;
+	
+	// Brick Data
 	private int amount;
 
+	public static int getMaxBricks() {
+		return MAX_BRICKS;
+	}
+	
+	public static void setMaxBricks(int max) {
+		if(max < 1) {
+			throw new IllegalArgumentException("max must be greater than or equal to 1.");
+		}
+		MAX_BRICKS = max;
+	}
+	
 	/**
 	 * Returns the amount of bricks in this <code>BrickModel</code>.
 	 *
@@ -28,9 +47,7 @@ public class BrickModel extends ItemModel {
 	 */
 	public void setAmount(int number) {
 		if (number < 0 || number > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must be positive and less than "
-					+ "or equal to MAXBRICKS.");
+			throw NUMOUTOFRANGE;
 		}
 		amount = number;
 	}
@@ -45,12 +62,8 @@ public class BrickModel extends ItemModel {
 	 */
 	public void addAmount(int number) {
 		int addedAmount = amount + number;
-
 		if (addedAmount < 0 || addedAmount > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
+			throw NUMOUTOFRANGE;
 		}
 		amount = addedAmount;
 	}
@@ -63,12 +76,8 @@ public class BrickModel extends ItemModel {
 	 */
 	public void removeAmount(int number) {
 		int balance = amount - number;
-		// why do we check if its >Max, this only removes bricks? dumindu
 		if (balance < 0 || balance > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
+			throw NUMOUTOFRANGE;
 		}
 		amount = balance;
 	}
@@ -80,33 +89,21 @@ public class BrickModel extends ItemModel {
 		removeAmount(1);
 	}
 	
-	public BrickModel(int number) {
-		super(ItemType.BRICK);
-		
-		if (number < 0 || number > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
+	public void mergeBricks(BrickModel brick) {
+		int canPickup = (MAX_BRICKS - brick.getAmount());
+		if(canPickup <= brick.getAmount()) {
+			brick.removeAmount(canPickup);
+		} else {
+			canPickup = canPickup - brick.getAmount();
+			brick.removeAmount(canPickup);
 		}
-		amount = number;
+		amount += canPickup;
 	}
 	
-	/**
-	 * Constructs a new <code>BrickModel</code> by setting the
-	 * Specified <code>tileModel</code> and the <code>amount</code> of bricks.
-	 * 
-	 * @param spawnedOn the tileModel on which the brick is spawned
-	 * @param number amount of bricks spawned
-	 */
-	public BrickModel(TileModel spawnedOn, int number) {
-		super(ItemType.BRICK, spawnedOn);
-		
+	public BrickModel(int number) {
+		super(ItemType.BRICK);
 		if (number < 0 || number > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
+			throw NUMOUTOFRANGE;
 		}
 		amount = number;
 	}

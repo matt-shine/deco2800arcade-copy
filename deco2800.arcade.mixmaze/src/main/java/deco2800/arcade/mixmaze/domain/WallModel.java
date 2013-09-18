@@ -7,20 +7,9 @@ import java.util.List;
  * WallModel represents an active/inactive wall on a tile.
  */
 public class WallModel {
-	private int direction;
 	private List<TileModel> tiles;
 	private boolean built;
 	private PlayerModel builder;
-
-	/**
-	 * Returns the direction this wall is attached to its tile.
-	 *
-	 * @return the direction
-	 */
-	// i dnt understand the meaning if this method?dumi
-	public int getDirection() {
-		return direction;
-	}
 
 	public void addTile(TileModel tile) {
 		if (tiles.contains(tile)) {
@@ -50,13 +39,11 @@ public class WallModel {
 
 	public void build(PlayerModel player) {
 		if (player == null) {
-			throw new IllegalArgumentException(
-					"player cannot be null.");
+			throw new IllegalArgumentException("player cannot be null.");
 		}
 
 		if (built) {
-			throw new IllegalStateException(
-					"The wall is already built.");
+			throw new IllegalStateException("The wall is already built.");
 		}
 
 		built = true;
@@ -83,8 +70,7 @@ public class WallModel {
 	 */
 	private void checkTiles(PlayerModel player) {
 		if (player == null) {
-			throw new IllegalArgumentException(
-					"player cannot be null.");
+			throw new IllegalArgumentException("player cannot be null.");
 		}
 
 		for (TileModel tile : tiles) {
@@ -109,12 +95,7 @@ public class WallModel {
 	 *
 	 * @param dir the direction this wall is attached to its parent tile
 	 */
-	public WallModel(int dir) {
-		if (!Direction.isDirection(dir)) {
-			throw Direction.NOT_A_DIRECTION;
-		}
-
-		direction = dir;
+	public WallModel() {
 		tiles = new ArrayList<TileModel>();
 	}
 }

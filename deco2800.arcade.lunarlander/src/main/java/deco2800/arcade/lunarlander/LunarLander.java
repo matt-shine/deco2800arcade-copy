@@ -247,7 +247,7 @@ public class LunarLander extends GameClient {
 	    
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.Line);
-	    
+	    Gdx.gl.glLineWidth(5);
 	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
 	    // and ends with the shapeRenderer.end
 	    shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);

@@ -311,6 +311,7 @@ public class LunarLander extends GameClient {
 		int landingPadX2 = landingPadX1 + 50;
 		
 		//creation of landingPad, it will be the first element in the array
+		//TO DO, change color of landing pad
 		terrain.add(new ArrayList<Integer>());
 		terrain.get(0).add(landingPadX1);
 		terrain.get(0).add(landingPadY);
@@ -332,20 +333,7 @@ public class LunarLander extends GameClient {
 		int startLineLength = 10;
 		int endLineLength = 50;
 		
-		//creation of lines to the right of the landing pad...
-		
-		System.out.println( terrain.get(0).get(0));
-		System.out.println( terrain.get(0).get(1));
-		System.out.println( terrain.get(0).get(2));
-		System.out.println( terrain.get(0).get(3));
-		System.out.println("-----------------------");
-		
 		return terrain;
-		//HEIGHT = 800;
-		//WIDTH = 1200;
-		
-		//private int landingCoords;
-		//Point[] terrain = {new Point(1,2),new Point(2,3)};
 	}
 	
 	

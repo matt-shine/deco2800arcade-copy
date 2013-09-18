@@ -126,8 +126,8 @@ public class LunarLander extends GameClient {
 		// setting up various constants 
 		initialPositionY = 700;
 		initialPositionX = 50;
-		landerX = 50;
-		landerY = 40;		
+		landerX = 40;
+		landerY = 30;		
 		acceleration = 0;
 		angle = 5;
 		speed = 1;
@@ -142,7 +142,7 @@ public class LunarLander extends GameClient {
 		landerPadLeftX = 100;
 		landerPadLeftY = 100;
 		landerPadRightX = 150;
-		landerPadRightY = 100;
+		landerPadRightY = 150;
 		
 		/*//terrain generation, not working at the moment
 		terrainCoords[0] = new Point(500,500);

@@ -76,8 +76,8 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	//Declare Fonts to use here
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
 	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
+	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	
-		
 	public AchievementScreen(Model model) throws HeadlessException {
 		
 		super("Achievements");
@@ -148,19 +148,26 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	    editbutton.setContentAreaFilled(false);
 	    
 	    myprofilelink = new JButton("My Profile");
-	    //myprofilelink.setBorder(BorderFactory.createEmptyBorder());
-	    //myprofilelink.setContentAreaFilled(false);
-	    myprofilelink.setBackground(Color.CYAN);
+	    myprofilelink.setFont(blacklink);
+	    myprofilelink.setBorder(BorderFactory.createEmptyBorder());
+	    myprofilelink.setContentAreaFilled(false);
+	    myprofilelink.setForeground(Color.WHITE);
 
 	    homelink = new JButton("Home");
-	    //homelink.setBorder(BorderFactory.createEmptyBorder());
-	    //homelink.setContentAreaFilled(false);
+	    homelink.setFont(blacklink);
+	    homelink.setForeground(Color.white);
+	    homelink.setBorder(BorderFactory.createEmptyBorder());
+	    homelink.setContentAreaFilled(false);
 	    gameslink = new JButton("MyGames");
-	    //gameslink.setBorder(BorderFactory.createEmptyBorder());
-	    //gameslink.setContentAreaFilled(false);
+	    gameslink.setFont(blacklink);
+	    gameslink.setForeground(Color.white);
+	    gameslink.setBorder(BorderFactory.createEmptyBorder());
+	    gameslink.setContentAreaFilled(false);
 	    storelink = new JButton("Game-Store");
-	    //storelink.setBorder(BorderFactory.createEmptyBorder());
-	    //storelink.setContentAreaFilled(false);
+	    storelink.setFont(blacklink);
+	    storelink.setForeground(Color.white);
+	    storelink.setBorder(BorderFactory.createEmptyBorder());
+	    storelink.setContentAreaFilled(false);
 	    
         
         /*Labels
@@ -240,9 +247,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		 * 
 		 */
         menupanel.add(homelink, "center, gapbefore 250px");
-        menupanel.add(storelink, "center, gapbefore 60px");
-        menupanel.add(gameslink, "center, gapbefore 60px");
-        menupanel.add(myprofilelink,"center, gapbefore 440px");
+        menupanel.add(storelink, "center, gapbefore 100px");
+        menupanel.add(gameslink, "center, gapbefore 100px");
+        menupanel.add(myprofilelink,"center, gapbefore 470px");
 
         playerpanel.add(avatar);
         playerinfopanel.add(playername,"wrap, align 50% 50%");       

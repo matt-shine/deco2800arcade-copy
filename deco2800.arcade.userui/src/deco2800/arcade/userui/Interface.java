@@ -34,7 +34,7 @@ public class Interface {
 		
 		UserProfile view = new UserProfile(modelprofile);
 		//EditProfile v = new EditProfile(m);
-		AchievementScreen achievementview = new AchievementScreen(amodel);
+		//AchievementScreen achievementview = new AchievementScreen(amodel);
 		
 		Controller controller = new Controller(modelprofile,view);
 		

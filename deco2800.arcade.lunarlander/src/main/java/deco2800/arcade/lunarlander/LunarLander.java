@@ -166,6 +166,15 @@ public class LunarLander extends GameClient {
 		//for development purposes
 		if (Gdx.input.isKeyPressed(Keys.Q)) {
 			System.out.println(terrain.size());
+			System.out.println(terrain.get(0).get(0));
+			System.out.println(terrain.get(0).get(1));
+			System.out.println(terrain.get(0).get(2));
+			System.out.println(terrain.get(0).get(3));
+			System.out.println(terrain.get(1).get(0));
+			System.out.println(terrain.get(1).get(1));
+			System.out.println(terrain.get(1).get(2));
+			System.out.println(terrain.get(1).get(3));
+			System.out.println("-------------------");
 		}
 		
 		// clear screen, create background using texture
@@ -196,9 +205,8 @@ public class LunarLander extends GameClient {
 	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
 	    // and ends with the shapeRenderer.end
 	    //shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
-	    int size = terrain.size();
 	    
-	    for (int i=0; i< size - 1; i++){
+	    for (int i = 0; i < 2; i++){
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
 	    }
 	    

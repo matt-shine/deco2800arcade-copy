@@ -19,14 +19,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Input.Keys;
 
-
-
-
-
-
-
-
-
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -71,9 +63,6 @@ public class LunarLander extends GameClient {
 	private boolean moving;
 	
 	//terrain generation
-	private Point[] terrainCoords;
-	private float coord0X;
-	private float coord0Y;
 	private List<List<Integer>> terrain;
 	
 	// coordinates of the lander pad
@@ -152,50 +141,6 @@ public class LunarLander extends GameClient {
 		landerPadRightY = 100;
 		terrain = createMap();
 	}
-		/*		
-	
-		// sets initial values to be displayed  
-		score = 0;
-		fuel = 1000;
-		speed = 0;
-		time = 0;
-		
-        //add the overlay listeners - not sure if we really need this!
-        this.getOverlay().setListeners(new Screen() {
-
-			@Override
-			public void dispose() {
-			}
-
-			@Override
-			public void hide() {
-				//TODO: unpause pong
-			}
-
-			@Override
-			public void pause() {
-			}
-
-			@Override
-			public void render(float arg0) {
-			}
-
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
-
-			@Override
-			public void resume() {
-			}
-
-			@Override
-			public void show() {
-				//TODO: unpause pong
-			}
-        });
-        
-        
-	}	
 
 	/**
 	 * Render the current state of the game and process updates
@@ -250,16 +195,14 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glLineWidth(5);
 	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
 	    // and ends with the shapeRenderer.end
-	    shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
+	    //shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
 	    
 	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1), terrain.get(0).get(2), terrain.get(0).get(3));
-	    
+	    shapeRenderer.line(terrain.get(1).get(0), terrain.get(1).get(1), terrain.get(1).get(2), terrain.get(1).get(3));
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
 	    
-	    //Slightly more complicated gravity function, hopefully this will increase logarithmically
-	    //When the lander is at or lower than 20 pixels, it stops, otherwise it calculates the next position.
 	    /*if(!(initPosition + finalY <= 20) && moving == true){
 	    	
 	    case INPROGRESS: //Point is underway, ball is moving
@@ -275,8 +218,6 @@ public class LunarLander extends GameClient {
 	    //very basic downwards movement of the lander
 	    if(!((initialPositionY - 0.25) < 20)) {
 	    	initialPositionY -= 0.25;
-	    	//System.out.println(initialPositionY);
-	    	//System.out.println(landerPadLeftY);
 	    }
 	    
 	/*    	velocityY = velocityY - gravity;
@@ -301,7 +242,7 @@ public class LunarLander extends GameClient {
 		int startX = 100;     // beginning of range  
 		int endX = 700;      // end of range 
 		
-		//makes a random Y coordinate for landing pad
+		//makes a random Y coordinate for landing pad, this code will be smaller soon...
 		Random randomY = new Random();  
 		int startY = 50;     // beginning of range  
 		int endY = 200;      // end of range
@@ -318,24 +259,25 @@ public class LunarLander extends GameClient {
 		terrain.get(0).add(landingPadX2);
 		terrain.get(0).add(landingPadY);
 		
-		//makes a random X coordinate to the right of the landing pad
-		Random randomXright = new Random();  
-		int startXright = terrain.get(0).get(2);     // beginning of range, starts at rightmost position of landing pad
-		int endXright = 1190;      // end of range
+		//creating the X and Y for the next line
+		int pointAX = (25 + new Random().nextInt( 50 - 25 + 1 )) + terrain.get(0).get(2);
+		int pointAY = 100 + new Random().nextInt( 400 - 100 + 1 );
 		
-		//makes a random Y coordinate to the right of the landing pad
-		Random randomYright = new Random();  
-		int startYright = 10;     // beginning of range  
-		int endYright = 1190;      // end of range
-		
-		//creates a random length of a line
-		Random randomLineLength = new Random();
-		int startLineLength = 10;
-		int endLineLength = 50;
+		//adds the line to the right of landing pad, using the right side of the landing pad as the initial X and Y
+		terrain.add(new ArrayList<Integer>());
+		terrain.get(1).add(terrain.get(0).get(2));
+		terrain.get(1).add(terrain.get(0).get(3));
+		terrain.get(1).add(pointAX);
+		terrain.get(1).add(pointAY);
 		
 		return terrain;
 	}
 	
+	//creates a random length of a line, used by createMap()
+	public int randomLength(){
+		int randomLength = 10 + new Random().nextInt( 50 - 10 + 1 );
+		return randomLength;
+	}
 	
 	@Override
 	public void resize(int arg0, int arg1) {

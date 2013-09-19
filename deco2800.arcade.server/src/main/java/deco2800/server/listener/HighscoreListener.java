@@ -1,5 +1,7 @@
 package deco2800.server.listener;
 
+import java.sql.SQLException;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -48,6 +50,16 @@ public class HighscoreListener extends Listener {
 			 for (int i = 0; i < scoreQueue.length; i+=2) {
 				 System.out.println("    Type: " + scoreQueue[i] + "; Value: " + scoreQueue[i+1] + ".");
 			 }
+			
+			
+			try {
+				hsDatabase.addHighscore(asr.Game_ID, asr.Username);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			 
+			 
 		 
 		 } else if (object instanceof GetScoreRequest) {
 			 GetScoreRequest gsReq = (GetScoreRequest)object;
@@ -60,7 +72,7 @@ public class HighscoreListener extends Listener {
 			 
 			 //Create the response
 			 GetScoreResponse gsRes = new GetScoreResponse();
-			 gsRes.columnNumbers = 0;
+			 gsRes.columnNumbers = 12;
 			 gsRes.data = data;
 			 
 			 //Send the response

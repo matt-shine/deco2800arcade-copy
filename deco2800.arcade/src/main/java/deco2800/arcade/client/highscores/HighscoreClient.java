@@ -12,10 +12,6 @@ public class HighscoreClient {
 	private String Game_ID;
 	private NetworkClient client;
 	
-	/*Used for blocking the client when waiting for a response from the 
-	 *server*/
-	private boolean waitingForResponse = true;
-	
 	/*Stores the response that the server sends back*/
 	private GetScoreResponse gsRes;
 	

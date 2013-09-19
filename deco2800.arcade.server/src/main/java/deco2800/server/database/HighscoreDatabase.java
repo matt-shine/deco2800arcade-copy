@@ -247,7 +247,7 @@ public class HighscoreDatabase {
 	//Adding Score Methods
 	//======================
 	
-	private int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
+	public int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
 		int hid = 0;
 		Connection connection = null;
 		Statement statement = null;
@@ -365,21 +365,21 @@ public class HighscoreDatabase {
 		try {
 			if (c != null) c.close();
 		} catch (SQLException e) {
-			//Silently fail
+			//Silently fail, no need to worry
 		}
 		
 		//Close the Statement
 		try {
 			if (s != null) s.close();
 		} catch (SQLException e) {
-			//Silently fail
+			//Silently fail, no need to worry
 		}
 		
 		//Close the ResultSet
 		try {
 			if (r != null) r.close();
 		} catch (SQLException e) {
-			//Silently fail
+			//Silently fail, no need to worry
 		}
 	}
 	

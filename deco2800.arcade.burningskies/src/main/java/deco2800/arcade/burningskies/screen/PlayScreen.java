@@ -35,6 +35,8 @@ public class PlayScreen implements Screen
 	private PlayerShip player;
 	private GameMap map;
 	
+	private Texture testTex;
+	
 	public PlayScreen( BurningSkies game){
 		this.game = game;
 	}	
@@ -65,9 +67,8 @@ public class PlayScreen implements Screen
     	// Test code
     	PowerUp test = new PowerUp();
     	addPowerup(test);
-    	Texture testText = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
-    	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
-    	addEnemy(e);
+    	testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+    	addEnemy(new Enemy(200, testTex, new Vector2(300,400), this));
     }
     
     @Override
@@ -98,7 +99,10 @@ public class PlayScreen implements Screen
     					Enemy e = enemies.get(j);
     					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
     						e.damage(b.getDamage());
-    						if(!e.isAlive()) removeEntity(e);
+    						if(!e.isAlive()) {
+    							removeEntity(e);
+    							addEnemy(new Enemy(200, testTex, new Vector2(300,400), this)); //TODO: DEBUG, REMOVE LATER
+    						}
     						removeEntity(b);
     	        			i--;
     						continue;

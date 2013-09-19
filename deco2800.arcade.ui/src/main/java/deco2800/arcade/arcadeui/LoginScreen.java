@@ -44,7 +44,7 @@ public class LoginScreen implements Screen {
         passwordText.setPasswordCharacter('*');
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
-        //CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        CheckBox rememberBox = new CheckBox("Remember Me", skin);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton registerButton = new TextButton("Register", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
@@ -59,8 +59,8 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(serverText).width(400).pad(5).colspan(2);
         table.row();
-        //table.add(rememberBox);
-        //table.row();
+        table.add(rememberBox);
+        table.row();
         table.add(loginButton).width(190).height(50).pad(5);
         table.add(registerButton).width(190).height(50).pad(5);
         table.row();

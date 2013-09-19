@@ -53,8 +53,8 @@ public class RegisterScreen implements Screen {
         table.row();
         table.add(passwordTextCheck).width(400).pad(5).colspan(2);
         table.row();
-        table.add(registerButton).width(200).pad(5);
-        table.add(cancelButton).width(200).pad(5);
+        table.add(registerButton).width(190).height(50).pad(5);
+        table.add(cancelButton).width(190).height(50).pad(5);
 
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {

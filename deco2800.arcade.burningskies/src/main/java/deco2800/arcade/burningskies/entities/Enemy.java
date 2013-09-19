@@ -21,10 +21,9 @@ public class Enemy extends Ship {
 
 		xPos = pos.x;
 		yPos = pos.y;
-
-		// resizing the enemy unit to 1/3 of the original
-		this.setHeight((float) 100);
-		this.setWidth((float) 100);
+		setWidth(getWidth()/2);
+		setHeight(getHeight()/2);
+		setPosition(xPos, yPos);
 	}
 	
 	public void onRender(float delta) {

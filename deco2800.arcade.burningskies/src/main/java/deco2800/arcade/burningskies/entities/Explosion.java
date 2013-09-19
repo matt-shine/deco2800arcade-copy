@@ -10,8 +10,8 @@ public class Explosion extends EntityAnimated {
 	public Explosion(Texture walkSheet, int cols, int rows, float speed, float x, float y) {
 		super(walkSheet, cols, rows, speed);
 		length = rows*cols*speed;
-		setX(x);
-		setY(y);
+		setX(x - getWidth()/2);
+		setY(y - getHeight()/2);
 	}
 	
 	//for testing

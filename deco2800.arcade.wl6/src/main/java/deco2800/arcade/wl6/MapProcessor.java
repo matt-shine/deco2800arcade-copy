@@ -49,8 +49,7 @@ public class MapProcessor {
 	
 	
 	/**
-	 * Unique ids for doodads. This relies on the assumption that no two doodads can
-	 * spawn on the same tile.
+	 * Unique ids for doodads. TODO make this better
 	 * @param x
 	 * @param y
 	 * @return
@@ -72,6 +71,11 @@ public class MapProcessor {
 	public static void spawnDoodadFromInfo(GameModel model, DoodadInfo d, int id, int x, int y) {
 		Doodad dd = null;
 		
+		if (d.special) {
+			System.err.println("Tried to automatically generate a special case doodad: " + id + " (" + x + ", " + y + ")");
+			return;
+		}
+		
 		if (d.texture == null) {
 			//this doodad is invisible so it must be a waypoint or something
 			//we don't need to do anything
@@ -90,9 +94,9 @@ public class MapProcessor {
 			
 		} else if (d.solid) {
 			
-			
-			//TODO spawn a solid static doodad
-			
+			//TODO make these solid
+			dd = new Doodad(doodadID());
+			dd.setTextureName(d.texture);
 			
 		} else {
 			

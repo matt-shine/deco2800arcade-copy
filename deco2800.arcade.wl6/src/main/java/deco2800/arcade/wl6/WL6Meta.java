@@ -28,13 +28,13 @@ public class WL6Meta {
 	public static float dirToAngle(DIRS d) {
 		switch (d) {
 		case UP:
-			return 270;
-		case LEFT:
 			return 0;
-		case DOWN:
+		case LEFT:
 			return 90;
-		case RIGHT:
+		case DOWN:
 			return 180;
+		case RIGHT:
+			return 270;
 		default:
 			return 0;
 		}
@@ -51,40 +51,55 @@ public class WL6Meta {
 				new BlockInfo(),
 				
 				//1: grey brick wall
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "greybrick"),
 				
 				//2: grey brick wall 2
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "greybrick"),
 				
 				//3: grey brick wall with nazi flag
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "greybrickflag"),
 				
 				//4: grey brick wall with hitler portrait
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "greybrickportrait"),
 				
 				//5: prison cell (blue brick)
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "bluebrickprison"),
 				
 				//6: grey brick with nazi eagle
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "greybrickeagle"),
 				
 				//7: prison cell with skeleton (blue brick)
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "bluebrickprisonskeleton"),
 				
 				//8: blue brick
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "bluebrick"),
 				
 				//9: blue brick 2
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "bluebrick"),
 				
 				//10: wood wall with nazi eagle
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "woodeagle"),
 				
 				//11: wood wall with portrait of hitler
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "woodportrait"),
 				
 				//12: wood wall
-				new BlockInfo(true, "unknown"),
+				new BlockInfo(true, "wood"),
+
+				//13: entranceelavator
+				new BlockInfo(true, "entranceelavator"),
+
+				//14: steel wall with sign
+				new BlockInfo(true, "steelsign"),
+
+				//15: steel wall
+				new BlockInfo(true, "steel"),
+
+				//16: starysky
+				new BlockInfo(true, "starysky"),
+
+				//17: red brick
+				new BlockInfo(true, "redbrick"),
 				
 				//TODO the rest of the blocks
 				
@@ -164,19 +179,19 @@ public class WL6Meta {
 				DoodadInfo.wayPoint(DIRS.LEFT).specialCase(),
 				
 				//23: nothing
-				new DoodadInfo(),
+				DoodadInfo.nonsolidScenery("water"),
 				
 				//24: oil drum
-				DoodadInfo.solidScenery("unknown"),
+				DoodadInfo.solidScenery("oildrum"),
 				
 				//25: table and chairs
-				DoodadInfo.solidScenery("unknown"),
+				DoodadInfo.solidScenery("table"),
 				
-				//26: floor light
-				DoodadInfo.nonsolidScenery("unknown"),
+				//26: lamp
+				DoodadInfo.nonsolidScenery("lamp"),
 				
 				//26: chandelier
-				DoodadInfo.nonsolidScenery("unknown"),
+				DoodadInfo.nonsolidScenery("chandelier"),
 				
 				//TODO the rest of the items
 		};

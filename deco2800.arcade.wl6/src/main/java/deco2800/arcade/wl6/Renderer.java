@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Stores, generates, maintains, and uploads the VBO, prepares the shader
@@ -50,15 +51,17 @@ public class Renderer {
 	public void load() {
 		if (terrainShader == null) {
 
-			FileHandle imageFileHandle = Gdx.files.internal("wl6WallsAtlas.png"); 
+			FileHandle imageFileHandle = Gdx.files.internal("wl6TerrainAtlas.png"); 
 	        terrainAtlas = new Texture(imageFileHandle);
 
-			imageFileHandle = Gdx.files.internal("wl6DoodadsAtlas.png"); 
+			imageFileHandle = Gdx.files.internal("wl6DoodadAtlas.png"); 
 	        doodadsAtlas = new Texture(imageFileHandle);
 			
 	        
 			Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
-			
+			Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+			Gdx.gl20.glEnable(GL20.GL_BLEND);
+		    
 			String vertexShader = loadFile("wl6TerrainVertShader.glsl");
 			String fragmentShader = loadFile("wl6TerrainFragShader.glsl");
 
@@ -83,7 +86,10 @@ public class Renderer {
 			quadMesh = new Mesh(true, posData.length, 0, pos, tex);
 			quadMesh.setVertices(posData);
 			
-			System.out.println("Shader compile errors: " + terrainShader.getLog() + " " + doodadShader.getLog());
+			String compileErrors = (terrainShader.getLog() + " " + doodadShader.getLog()).trim();
+			if (compileErrors.length() != 0) {
+				System.out.println("Shader compile errors: " + compileErrors);
+			}
 			
 			
 		} else {
@@ -115,10 +121,10 @@ public class Renderer {
 		Gdx.gl.glClearColor(0.4f, 0.4f, 0.4f, 1);
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		Gdx.graphics.getGL20().glEnable(GL20.GL_TEXTURE_2D);
-		terrainAtlas.bind();
 		
 		
 		//draw terrain
+		terrainAtlas.bind();
 		terrainShader.begin();
 		
 		Matrix4 pv = getProjectionViewMatrix();
@@ -131,9 +137,11 @@ public class Renderer {
 		terrainShader.end();
 		
 		
-		doodadsAtlas.bind();
+		
+		
 		
 		//draw doodads
+		doodadsAtlas.bind();
 		doodadShader.begin();
 		
 		Iterator<Doodad> itr = game.getDoodadIterator();
@@ -234,12 +242,12 @@ public class Renderer {
 		    		}
 		    		
 
-		    		float texX = 0;
-		    		float texY = 0;
-		    		float texS = 1;
+		    		Vector2 texPos = TextureResolver.getTextureLocation(
+		    				WL6Meta.block(map.getTerrainAt(i, j)).texture);
+		    		float texS = 1 / 3f;
 		    		
 		    		CubeGen.getCube(i, j,
-		    				texX, texY, texS,
+		    				texPos.x, texPos.y, texS,
 		    				i != 0 && !hasObscuringBlockAt(i - 1, j, map),
 		    				i != 63 && !hasObscuringBlockAt(i + 1, j, map),
 		    				j != 0 && !hasObscuringBlockAt(i, j - 1, map),
@@ -336,9 +344,6 @@ public class Renderer {
 		
 		//we're looking down at the moment, we need to look at the horizon
 		m.rotate(1, 0, 0, 90);
-		
-		//we're upsidedown...
-		//m.rotate(1, 0, 0, 90);
 				
 		//now look the same way the player is facing
 		m.rotate(0, 0, 1, r);

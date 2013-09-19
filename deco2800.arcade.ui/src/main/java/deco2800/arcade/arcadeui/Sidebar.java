@@ -2,18 +2,13 @@ package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import deco2800.arcade.client.ArcadeSystem;
 
@@ -41,8 +36,10 @@ public class Sidebar extends Group {
 		this.overlay = overlay;
 		this.window = window;
 		texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 10, 20, 10, 10);
-		
-        skin = new Skin();
+
+        skin = new Skin(Gdx.files.internal("loginSkin.json"));
+
+        /*skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -58,7 +55,7 @@ public class Sidebar extends Group {
         textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
         textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
+        skin.add("default", textButtonStyle);*/
         
         
         this.setBounds(0, 0, 1280, 720);
@@ -82,8 +79,9 @@ public class Sidebar extends Group {
     	
     	int numItems = buttonText.length;
     	for (int i = 0; i < numItems; i++) {
-    		SidebarMenuItem item = new SidebarMenuItem(skin);
-    		item.setSize(120, 40);
+            SidebarMenuItem item = new SidebarMenuItem(skin);
+    		//item.setSize(120, 40);
+            item.setSize(150, 40);
         	item.setText(buttonText[i]);
         	item.setPosition(WIDTH / 2 - item.getWidth() / 2, overlay.getHeight() - i * 60 - 200);
         	final int buttonNum = i;
@@ -92,15 +90,15 @@ public class Sidebar extends Group {
         		
 				@Override
 				public boolean handle(Event e) {
-					if (e.toString() == "touchDown") {
+					if (e.toString().equals("touchDown")) {
 						if (buttonNum == 0) {
-							addAchievemntsWindow();
+							addAchievementsWindow();
 						} else if (buttonNum == 3) {
 							ArcadeSystem.goToGame(ArcadeSystem.UI);
 						}
 					}
-					if (buttonNum == 0 && e.toString() == "touchDown") {
-						addAchievemntsWindow();
+					if (buttonNum == 0 && e.toString().equals("touchDown")) {
+						addAchievementsWindow();
 					}
 					return true;
 				}
@@ -164,7 +162,7 @@ public class Sidebar extends Group {
 	}
 	
 	
-	public void addAchievemntsWindow() {
+	public void addAchievementsWindow() {
 		window.setContent(new AchievementList(overlay, skin));
 		this.isUIOpen = false;
 	}

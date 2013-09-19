@@ -6,9 +6,10 @@ List games = []
 
 task(listGames) {
     String contents = file('games.txt').getText('UTF-8')
-    List file_contents = contents.split("\n")
+    List file_contents = contents.split('[\\r\\n]+')
+    
     for (String game : file_contents) {
-        if (game.charAt(0) != '#' && game.charAt(0) != '\n') {
+        if (game.charAt(0) != "#" && game.charAt(0) != "[\\r\\n]+") {
             games.add(game)
         }
     }

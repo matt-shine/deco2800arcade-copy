@@ -35,28 +35,8 @@ public class Sidebar extends Group {
 		
 		this.overlay = overlay;
 		this.window = window;
-		texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 10, 20, 10, 10);
-
+	    texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 10, 20, 10, 10);
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
-
-        /*skin = new Skin();
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("white", new Texture(pixmap));
-        skin.add("default", new BitmapFont());
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        skin.add("default", labelStyle);
-        
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);*/
-        
         
         this.setBounds(0, 0, 1280, 720);
         
@@ -80,8 +60,7 @@ public class Sidebar extends Group {
     	int numItems = buttonText.length;
     	for (int i = 0; i < numItems; i++) {
             SidebarMenuItem item = new SidebarMenuItem(skin);
-    		//item.setSize(120, 40);
-            item.setSize(150, 40);
+    		item.setSize(120, 40);
         	item.setText(buttonText[i]);
         	item.setPosition(WIDTH / 2 - item.getWidth() / 2, overlay.getHeight() - i * 60 - 200);
         	final int buttonNum = i;

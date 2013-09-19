@@ -36,7 +36,9 @@ public abstract class Ship extends Entity {
 	
 	@Override
 	public boolean remove() {
-		//TODO: SPAWN AN EXPLOSION ANIMATION HERE
+		if(getStage() != null) {
+			getStage().addActor(new Explosion(getX(),getY()));
+		}
 		return super.remove();
 	}
 	

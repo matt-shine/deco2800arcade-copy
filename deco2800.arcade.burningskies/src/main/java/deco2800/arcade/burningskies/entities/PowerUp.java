@@ -9,7 +9,7 @@ public class PowerUp extends EntityAnimated {
 
 	// Recommend to implement animation only to one specific class  
 	public PowerUp() {
-		super(new Texture(Gdx.files.internal("items/test_ani.png")), 10, 7, 0.15f);
+		super(new Texture(Gdx.files.internal("images/misc/test_ani.png")), 10, 7, 0.15f);
 		//TODO: TEST CODE REMOVE
 		setX(500);
 		setY(500);

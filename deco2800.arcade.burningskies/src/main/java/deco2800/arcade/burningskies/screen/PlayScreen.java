@@ -52,7 +52,7 @@ public class PlayScreen implements Screen
     	
         game.playSong("level1");
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/jet_debug.png"));
+    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet_debug.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
     	map = new GameMap("fixme");
 
@@ -65,7 +65,7 @@ public class PlayScreen implements Screen
     	// Test code
     	PowerUp test = new PowerUp();
     	addPowerup(test);
-    	Texture testText = new Texture(Gdx.files.internal("enemies/enemy1.png"));
+    	Texture testText = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
     	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
     	addEnemy(e);
     }

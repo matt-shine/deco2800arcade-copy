@@ -15,7 +15,7 @@ public class PlayerPattern extends BulletPattern {
 	
 	public PlayerPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
-		image = new Texture(Gdx.files.internal("bullets/energy_ball_1.png"));
+		image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
 		interval = (float) 0.03;
 	}
 	

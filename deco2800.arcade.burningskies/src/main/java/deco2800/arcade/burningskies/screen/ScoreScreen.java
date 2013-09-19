@@ -81,11 +81,11 @@ public class ScoreScreen implements Screen {
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
-        atlas = new TextureAtlas("images/button.pack");
+        atlas = new TextureAtlas("images/menu/button.pack");
         skin = new Skin();
         skin.addRegions(atlas);
-        white = new BitmapFont(Gdx.files.internal("images/whitefont.fnt"), false);
-        black = new BitmapFont(Gdx.files.internal("images/font.fnt"), false);
+        white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
+        black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         
         int width = BurningSkies.SCREENWIDTH;
         int height = BurningSkies.SCREENHEIGHT;

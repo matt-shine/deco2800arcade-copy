@@ -22,7 +22,7 @@ public class SplashScreen implements Screen
     @Override
     public void show()
     {
-        logo = new Texture(Gdx.files.internal("images/splash.png"));
+        logo = new Texture(Gdx.files.internal("images/menu/splash.png"));
         spriteBatch = new SpriteBatch();
         game.playSong("splash", false);
     }

@@ -210,6 +210,7 @@ public class LunarLander extends GameClient {
 	    	//load premade ArrayList of points, and background texture
 	    }
 	    
+	    //colors the landing pad green
 	    shapeRenderer.setColor(255, 0, 0, 1);
 	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1), terrain.get(0).get(2), terrain.get(0).get(3));
 	    shapeRenderer.setColor(1, 1, 1, 1);

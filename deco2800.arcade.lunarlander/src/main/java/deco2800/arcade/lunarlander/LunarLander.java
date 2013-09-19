@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,13 +19,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Input.Keys;
-
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -39,7 +31,6 @@ import deco2800.arcade.client.network.NetworkClient;
 
 @ArcadeGame(id="LunarLander")
 public class LunarLander extends GameClient {
-	private Mesh mesh;
 		
 	private OrthographicCamera camera;
 	public static final int SCREENHEIGHT = 800;
@@ -114,16 +105,7 @@ public class LunarLander extends GameClient {
 	 */
 	@Override
 	public void create() {
-		
-		if (mesh == null) {
-            mesh = new Mesh(true, 3, 3, 
-                    new VertexAttribute(Usage.Position, 3, "a_position"));          
-
-            mesh.setVertices(new float[] { -0.5f, -0.5f, 0,
-                                           0.5f, -0.5f, 0,
-                                           0, 0.5f, 0 });   
-            mesh.setIndices(new short[] { 0, 1, 2 });                       
-		}
+			
 		// setting up various Gdx tools
 		batch = new SpriteBatch();
 		// loads background png file
@@ -169,9 +151,7 @@ public class LunarLander extends GameClient {
 	 */
 	@Override
 	public void render() {
-		
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        mesh.render(GL10.GL_TRIANGLES, 0, 3);
+			
 		// move lander left
 		if ((Gdx.input.isKeyPressed(Keys.A)) || (Gdx.input.isKeyPressed(Keys.LEFT))) { 
 			initialPositionX -= Gdx.graphics.getDeltaTime() * sideSpeed;
@@ -187,18 +167,9 @@ public class LunarLander extends GameClient {
 			initialPositionY += Gdx.graphics.getDeltaTime() * downwardSpeed;
 		}
 		
-		//for development purposes
+		//for debugging purposes
 		if (Gdx.input.isKeyPressed(Keys.Q)) {
-			System.out.println(terrain.size());
-			System.out.println(terrain.get(0).get(0));
-			System.out.println(terrain.get(0).get(1));
-			System.out.println(terrain.get(0).get(2));
-			System.out.println(terrain.get(0).get(3));
-			System.out.println(terrain.get(1).get(0));
-			System.out.println(terrain.get(1).get(1));
-			System.out.println(terrain.get(1).get(2));
-			System.out.println(terrain.get(1).get(3));
-			System.out.println("-------------------");
+			System.out.println("debug button has been pressed!");
 		}
 		
 		// clear screen, create background using texture
@@ -321,7 +292,7 @@ public class LunarLander extends GameClient {
 		int pointY2 = terrain.get(0).get(1);
 		int arrayPosition2 = arrayPosition;
 		
-		//adds lines to the right of the platform/landing pad
+		//adds lines to the left of the platform/landing pad
 		while (pointX2 > -100){
 
 			int newPointX2 = (50 + new Random().nextInt( 200 - 50 + 1 ));
@@ -332,13 +303,6 @@ public class LunarLander extends GameClient {
 			terrain.get(arrayPosition2).add(newPointY2);
 			terrain.get(arrayPosition2).add(pointX2);
 			terrain.get(arrayPosition2).add(pointY2);
-			
-			System.out.println("ArrayPosition2" + arrayPosition);
-			System.out.println("Point X2: " + pointX2);
-			System.out.println("Point Y2: " + pointY2);
-			System.out.println("New Point X2: " + (newPointX2 + pointX2));
-			System.out.println("New Point Y2: " + newPointY2);
-			System.out.println("--------------");
 			
 			pointX2 = pointX2 - newPointX2;
 			pointY2 = newPointY2;

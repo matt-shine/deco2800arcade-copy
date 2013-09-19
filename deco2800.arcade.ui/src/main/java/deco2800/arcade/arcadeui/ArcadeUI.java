@@ -1,14 +1,12 @@
 package deco2800.arcade.arcadeui;
 
-import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.Game.ArcadeGame;
 
 /**
  * This class is the main interface for the arcade.
@@ -19,38 +17,34 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	
-	@SuppressWarnings("unused")
-	private LoginScreen login = null;
-	@SuppressWarnings("unused")
-	private StoreScreen store = null;
-	@SuppressWarnings("unused")
-	private HomeScreen home = null;
-    @SuppressWarnings("unused")
-    private AccMgtScreen accMgt = null;
-	
-	private Screen current = null;
+	LoginScreen login = null;
+	StoreScreen store = null;
+	HomeScreen home = null;
+    RegisterScreen register = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
-	
-	@Override
-	public void create() {
-		
-		ArcadeSystem.openConnection();
-		
-		if (player == null) {
-			current = login = new LoginScreen();
-		} else {
-			current = home = new HomeScreen();
-			//current = store = new StoreScreen();
-		}
-		
-		this.setScreen(current);
-		
-		
-		super.create();
-	}
+
+    @Override
+    public void create() {
+        ArcadeSystem.openConnection(); // Move this to somewhere more appropriate.
+
+        // Initialise the different screens.
+        login = new LoginScreen(this);
+        home = new HomeScreen();
+        store = new StoreScreen();
+        register = new RegisterScreen(this);
+
+        // Check to see if a user is logged in.
+        if (ArcadeSystem.isLoggedIn()) {
+            this.setScreen(home);
+        } else {
+            this.setScreen(login);
+        }
+
+        super.create();
+    }
 
 	@Override
 	public void dispose() {

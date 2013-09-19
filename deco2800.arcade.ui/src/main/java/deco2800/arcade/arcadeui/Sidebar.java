@@ -102,7 +102,7 @@ public class Sidebar extends Group {
 					}
 					return true;
 				}
-        		
+
         	});
         	
         	this.addActor(item);

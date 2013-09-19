@@ -129,4 +129,12 @@ task alldocs(type: Javadoc) {
     }
 
 }
+
 //alldocs.onlyif { System.properties['yDoc.path'] }
+
+task (releaseArcade, dependsOn: ":deco2800.arcade.ui:installApp", type: Copy) {
+	from "deco2800.arcade.ui/build/install/deco2800.arcade.ui"
+	into "release"
+}
+
+

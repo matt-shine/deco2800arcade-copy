@@ -26,6 +26,29 @@ public class AccoladeContainer implements Iterable<Accolade> {
         this.head = null;
         this.tail = null;
     }
+    
+    /**Retrieves all accolades achevied by player with playerID
+     * TODO implmenet server communication and return non-dummydata
+     */
+    public void populateAccoladesPlayer(int playerID){
+    	BUILDDUMMYDATA();
+    }
+    
+    /**Retrieves all accolades totals for game with gameID
+     * TODO implmenet server communication and return non-dummydata
+     */
+    public void populateAccoladesPlayer(int gameID){
+    	BUILDDUMMYDATA();
+    }
+    
+    /**Clears the list of accolades ready for repopulation
+     */
+    public void clearAccolades(){
+    	/** TODO implement stub*/
+    	head = null;
+    	tail = null;
+    	current = null;
+    }
  
     /**
      * this is probably going to be a private class since most of the Accolade

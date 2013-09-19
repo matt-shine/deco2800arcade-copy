@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.model.Game;
@@ -197,11 +198,8 @@ public class LunarLander extends GameClient {
 	    //Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.Line);
 	    Gdx.gl.glLineWidth(5);
-	    // this draws a line - it needs to happen after you call the shapeRenderer.begin method
-	    // and ends with the shapeRenderer.end
-	    //shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
 	    
-	    //set random
+	    //set map to be randomonly made, or not
 	    if(randomMap == true){
 	    for (int i = 0; i < terrain.size(); i++){
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
@@ -215,6 +213,11 @@ public class LunarLander extends GameClient {
 	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1), terrain.get(0).get(2), terrain.get(0).get(3));
 	    shapeRenderer.setColor(1, 1, 1, 1);
 	    //End drawing of shapes
+	    shapeRenderer.end();
+	    
+	    shapeRenderer.begin(ShapeType.FilledTriangle);
+	    shapeRenderer.setColor(1, 1, 1, 1);
+		shapeRenderer.filledTriangle(300, 300, 100, 500, 500, 500);
 	    shapeRenderer.end();
 	    
 	    /*if(!(initPosition + finalY <= 20) && moving == true){

@@ -31,7 +31,7 @@ public abstract class Bullet extends Entity {
 	/**
 	 * Creates a new bullet
 	 * @param affinity
-	 * @param damage <0 if damage else healing.
+	 * @param damage
 	 * @param initialPosition
 	 * @param parent
 	 * @param player

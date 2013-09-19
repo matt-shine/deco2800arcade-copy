@@ -34,11 +34,20 @@ public abstract class Ship extends Entity {
         super.act(delta);
 	}
 	
+	@Override
+	public boolean remove() {
+		//TODO: SPAWN AN EXPLOSION ANIMATION HERE
+		return super.remove();
+	}
+	
 	/**
-	 * Modifies the current health of the ship accordingly.
-	 * May be negative or positive value.
+	 * Damages the ship
 	 */
-	public void setHealth(int healthchange) {
+	public void damage(int healthchange) {
+		this.health -= healthchange;
+	}
+	
+	public void heal(int healthchange) {
 		this.health += healthchange;
 	}
 	

@@ -31,7 +31,7 @@ public class PlayerShip extends Ship {
 	}
 	
 	@Override
-	public void setHealth(int healthchange) {
+	public void heal(int healthchange) {
 		this.health += healthchange;
 		//Just for the sake of the health bar being consistent.
 		//This probably will have to be changed if we plan to be able to heal over the maxHealth

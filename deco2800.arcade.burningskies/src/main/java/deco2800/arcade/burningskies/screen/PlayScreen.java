@@ -88,8 +88,7 @@ public class PlayScreen implements Screen
     		for(int i=0; i<bullets.size(); i++) {
     			Bullet b = bullets.get(i);
         		if(outOfBounds(b)) {
-        			b.remove();
-        			bullets.remove(i);
+        			removeEntity(b);
         			i--;
         			continue;
         		}
@@ -97,23 +96,20 @@ public class PlayScreen implements Screen
     			if(b.getAffinity() == Affinity.PLAYER) {
     				for(int j=0; j<enemies.size(); j++) {
     					Enemy e = enemies.get(j);
-    					if(b.hasCollided(e)) {
-    						//TODO: HANDLE DAMAGE FROM THIS YA MUPPETS
-    						e.setHealth(b.getDamage());
-    						if (!e.isAlive()) e.remove(); //I assume this will be changed to
-    						b.remove();					  //an array number too. enemies.remove(i)
-    	        			bullets.remove(i);
+    					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
+    						e.damage(b.getDamage());
+    						if(!e.isAlive()) removeEntity(e);
+    						removeEntity(b);
     	        			i--;
     						continue;
     					}
     				}
     			} else if(b.hasCollided(player)) {
     				//TODO: DAMAGE THE PLAYER YOU NUGGET
-    				player.setHealth(b.getDamage());
+    				player.damage(b.getDamage());
     				//TODO: Player death/respawn checker.
     				//if (!player.isAlive()) { }
-    				b.remove();
-        			bullets.remove(i);
+    				removeEntity(b);
         			i--;
     				continue;
     			}
@@ -122,8 +118,7 @@ public class PlayScreen implements Screen
 				PowerUp p = powerups.get(i);
 				if(p.hasCollidedUnscaled(player)) {
 					//TODO: POWERUPS WOO
-					p.remove();
-					powerups.remove(i);
+					removeEntity(p);
 					i--;
 					continue;
 				}
@@ -173,5 +168,20 @@ public class PlayScreen implements Screen
     public void addPowerup(PowerUp p) {
     	stage.addActor(p);
     	powerups.add(p);
+    }
+    
+    public void removeEntity(Bullet b) {
+    	b.remove();
+		bullets.remove(b);
+    }
+    
+    public void removeEntity(Enemy e) {
+    	e.remove();
+    	enemies.remove(e);
+    }
+    
+    public void removeEntity(PowerUp p) {
+    	p.remove();
+    	powerups.remove(p);
     }
 }

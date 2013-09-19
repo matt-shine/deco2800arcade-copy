@@ -70,7 +70,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	private GameState gameState;
 	PerspectiveCamera cam;
-	private SpriteBatch batch;
+	private static SpriteBatch batch;
 
 	Frustum camGone = new Frustum();
 	private World world;
@@ -84,8 +84,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static final int SCREENWIDTH = 800;
 	float butX;
 	float butY;
-	float monkeyX;
-	float monkeyY, monkeyYoriginal;
+	public static float monkeyX;
+	public static float monkeyY;
+	float monkeyYoriginal;
 	boolean movingLeft, movingRight;
 	int monkeyRun = 0;
 	boolean leap = true;
@@ -97,8 +98,11 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 //	public int currentLevelIndex = 0;
 	static LevelContainer currentCont = new LevelContainer();
-	public static Level currentLevel = currentCont.getLevel(0);
+	public static Level currentLevel = currentCont.getLevel(currentCont.currentLevel);
 //	public static int currentWorld = 0;
+	
+	public static float monkeyDefaultX;
+	public static float monkeyDefaultY;
 
 	Texture texture;
 	Clip clip;
@@ -123,8 +127,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		butX = 488f;
 		butY = 242f;
-		monkeyX = 0f;
-		monkeyY = 0f;
+		monkeyDefaultX = 60f;
+		monkeyDefaultY = 80f;
+		monkeyX = monkeyDefaultX;
+		monkeyY = monkeyDefaultY;
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
@@ -337,6 +343,9 @@ public class junglejump extends GameClient implements InputProcessor {
 //				batch.draw(p.getTexture(), p.getX(), platY);
 //			}
 			for (Platform p : currentLevel.getPlatforms()) {
+				if(p.getX() >= 1000) {
+					p.setX(p.getX()-1000);
+				}
 				batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 			}
 			//batch.draw(platform, 100, 50);
@@ -351,19 +360,24 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	}
 	
-	public void drawLevel() {
+	public static void drawLevel() {
+		batch.begin();
+		System.out.println(currentLevel);
 		for (Platform p : currentLevel.getPlatforms()) {
 			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 		}
+		batch.end();
 	}
 	
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
 			if (x > (p.getX() - p.getWidth()/2 - monkey_length/2) && x < (p.getX()+p.getWidth()/4 + // Check platform dimensions
 					monkey_length/2) && y <= p.getY() + p.getHeight() && y >= p.getY()+p.getHeight()/2) {
+				
 				if(monkeyY > p.getY() + p.getHeight()/2) { // If the monkey's colliding with the platform, place him on top
 					monkeyY = p.getY() + p.getHeight();
 				}
+				
 				p.setActive();
 				return true;
 			} else {

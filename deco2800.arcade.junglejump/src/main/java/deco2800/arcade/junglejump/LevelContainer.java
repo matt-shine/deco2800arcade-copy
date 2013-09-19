@@ -15,7 +15,7 @@ import deco2800.arcade.junglejump.GUI.junglejump;
 public class LevelContainer {
 	static ArrayList<Level> levels;
 	public static int currentLevel;
-	public int currentWorld;
+	public static int currentWorld;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -27,7 +27,7 @@ public class LevelContainer {
 		currentWorld = 0;
 		
 		// Read level from file
-		for(int i=0;i<2;i++) {
+		for(int i=0;i<4;i++) {
 			addLevel(i);
 		}
 		
@@ -37,7 +37,7 @@ public class LevelContainer {
 		BufferedReader br;
 		Level level = new Level(); // Creating and adding to a level
 		try {
-			br = new BufferedReader(new FileReader("junglejumpassets/levels/world1/level" + (levelNum+1) + ".txt"));
+			br = new BufferedReader(new FileReader("junglejumpassets/levels/world" + (currentWorld+1) + "/level" + (levelNum+1) + ".txt"));
 		} catch (FileNotFoundException e1) {
 			System.out.println("No file");
 			return;
@@ -85,9 +85,16 @@ public class LevelContainer {
 	 * @return
 	 */
 	public static void nextLevel() {
-		int newLevel = currentLevel+1;
-		junglejump.currentLevel = getLevel(newLevel);
 		clearCurrentLevel();
+		currentLevel++;
+		if(currentLevel > 3) {
+			currentLevel = 0;
+		//	currentWorld++;
+		}
+		junglejump.currentLevel = getLevel(currentLevel);
+		//currentLevel = newLevel;
+		junglejump.monkeyX = junglejump.monkeyDefaultX;
+		junglejump.monkeyY = junglejump.monkeyDefaultY;
 		return;
 	}
 	
@@ -114,7 +121,7 @@ public class LevelContainer {
 	
 	public static void clearCurrentLevel() {
 		for (Platform p : getLevel(currentLevel).getPlatforms()) {
-			p.setX(1000);
+			p.setX(p.getX()+1000);
 		}
 	}
 	

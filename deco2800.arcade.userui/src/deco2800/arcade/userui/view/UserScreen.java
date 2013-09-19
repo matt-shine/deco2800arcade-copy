@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 import deco2800.arcade.userui.model.Model;
 
-public class UserProfile extends JFrame implements ActionListener {
+public class UserScreen extends JFrame implements ActionListener {
 	
 	/**
 	 * The view class for the main page of the user profile page
@@ -82,7 +82,7 @@ public class UserProfile extends JFrame implements ActionListener {
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	
 		
-	public UserProfile(Model model) throws HeadlessException {
+	public UserScreen(Model model) throws HeadlessException {
 		
 		super("Profile");
 		
@@ -116,22 +116,14 @@ public class UserProfile extends JFrame implements ActionListener {
 	    addhistorypanel();
 	    addachievementpanel();
 	    
-	    sidepanel = new JPanel(new MigLayout());        
-        sidepanel.add(playerpanel, "wrap, center, width :300, height :300");
-        sidepanel.add(aboutpanel, "wrap, center, width :300, height :300");
-        sidepanel.add(friendpanel, "center, width :300, height :300");
-             
-	    contentpanel = new JPanel(new MigLayout());
-        contentpanel.add(historypanel, "wrap, height :320, width :810, gapbefore 30px");
-        contentpanel.add(achievementpanel, "height :320, width :810, gapbefore 30px");
-            
+	    addsidepanel();
+	    addcontentpanel();
+	    
 	    /*Add panels to Main Panel	
 	     *                
 	     */
 		parentContainer.add(menupanel, "dock north");
-		sidepanel.setBackground(Color.darkGray);
 		parentContainer.add(sidepanel, "west, width :350, height :700");
-		contentpanel.setBackground(Color.gray);
 		parentContainer.add(contentpanel, "east, width :950, height :700");
 
 		add(parentContainer);
@@ -144,6 +136,31 @@ public class UserProfile extends JFrame implements ActionListener {
 		pack();
 		setVisible(true);
 		setResizable(false);		
+	}
+	
+	
+	/*
+	 * Holds all content on the left
+	 */
+	public void addsidepanel(){
+		
+		sidepanel = new JPanel(new MigLayout());        
+        sidepanel.add(playerpanel, "wrap, center, width :300, height :300");
+        sidepanel.add(aboutpanel, "wrap, center, width :300, height :300");
+        sidepanel.add(friendpanel, "center, width :300, height :300");
+		sidepanel.setBackground(Color.darkGray);
+
+	}
+	
+	/*
+	 * Holds all content on the right
+	 */
+	public void addcontentpanel(){
+		
+		contentpanel = new JPanel(new MigLayout());
+        contentpanel.add(historypanel, "wrap, height :320, width :810, gapbefore 30px");
+        contentpanel.add(achievementpanel, "height :320, width :810, gapbefore 30px");
+		contentpanel.setBackground(Color.gray);
 	}
 	
 	

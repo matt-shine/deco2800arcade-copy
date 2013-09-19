@@ -25,7 +25,7 @@ import javax.swing.JFrame;
 
 import deco2800.arcade.userui.model.Model;
 
-public class EditProfile extends JFrame {
+public class EditScreen extends JFrame {
 	
 	private JPanel parentContainer;
 	private ImagePanel menupanel;
@@ -57,7 +57,7 @@ public class EditProfile extends JFrame {
 	Font font = new Font("Verdana", Font.BOLD, 26);
 	Font normal = new Font("Verdana", Font.PLAIN, 14);
 	
-	public EditProfile(Model m) throws HeadlessException {
+	public EditScreen(Model m) throws HeadlessException {
 		super("Edit Profile");
 		
 		piccat = new ImageIcon("assets/images/avatar_mockup.png");

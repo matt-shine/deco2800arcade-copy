@@ -73,6 +73,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	private ImageIcon piceditbutton;
 	private ImageIcon picaddfriend;
 	
+	private JScrollPane achievementscroll;
+	private JScrollPane gamescroll;
+	
 	//Declare Fonts to use here
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
 	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
@@ -83,16 +86,11 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		super("Achievements");
 		
 		this.model = model;
-		
-		/**
-		 * Add elements here to window
-		 **/
-		
+
 		/* 
 		 * Create Image Icons
 		 * 
-		 */
-		
+		 */	
 		picavatar = new ImageIcon("assets/images/stark.png");
 		picachievementbar = new ImageIcon("assets/images/achievement_bar.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
@@ -100,91 +98,81 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
 		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		
-		/*
-		 * Text Areas
-		 * 
-		 */
+		addplayerinfopanel();
+		addplayerpanel();
+		addmenupanel();
+		addachievementpanel();
+		addgamepanel();
 		
-		achievementarea = new JTextArea();	
-		//gamearea = new JTextArea();
-				
-		/*
-		 * Panels and ScrollPanes
-		 * 
-		 */
+		addsidepanel();
+		addcontentpanel();
+
 		parentContainer = new JPanel(new MigLayout());
+		parentContainer.add(menupanel, "dock north");
+		parentContainer.add(sidepanel, "west, width :350, height :700");
+		parentContainer.add(contentpanel, "east, width :950, height :700");
 		
-	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
-	    menupanel.setLayout(new MigLayout());
-	    menupanel.setBackground(Color.red);
-	    
-	    sidepanel = new JPanel(new MigLayout());
-	    playerpanel = new JPanel(new MigLayout());
-	    playerinfopanel = new JPanel(new MigLayout());
-	    playerpanel.setOpaque(false);
-	    playerinfopanel.setOpaque(false);
+		add(parentContainer);
+	
+		/*Set the  view window constraints
+		 * 
+		 */
+		setSize(1280,800);
+		pack();
+		setVisible(true);
+		setResizable(false);		
+	}
+	
+	/*
+	 *  Holds everything on the left side
+	 */
+	public void addsidepanel(){
+		
+		sidepanel = new JPanel(new MigLayout());
+        sidepanel.add(playerpanel, "wrap, center, width :300, height :600");
+        sidepanel.add(gamescroll, "wrap, gapbottom 30px, width :300, height :600");
+        sidepanel.add(gameselect, "gapbottom 170px");
+		sidepanel.setBackground(Color.darkGray);
+	}
+	
+	/*
+	 * Holds everything on the right side
+	 */
+	public void addcontentpanel(){
+		
+		 contentpanel = new JPanel(new MigLayout());
+	     contentpanel.add(achievementscroll, "height :640, width :810, gapbefore 30px");
+	     contentpanel.setBackground(Color.gray);
+
+	}
+	
+	/*
+	 * Lists info for each of the games in the arcade
+	 */
+	public void addgamepanel(){
+		
 	    gamepanel = new JPanel(new MigLayout());
-	    JScrollPane gamescroll = new JScrollPane(gamepanel);
+	    gamescroll = new JScrollPane(gamepanel);
 		gamescroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		gamescroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    
-	    contentpanel = new JPanel(new MigLayout());
+		
+		gameselect = new JComboBox();
+		  
+	}
+	
+	/*Lists all the player achievements for a particular game
+	 * 
+	 */
+	public void addachievementpanel(){
+		
+		achievementarea = new JTextArea();	
+		
 	    achievementpanel = new JPanel(new MigLayout());
-	    //achievementpanel.setOpaque(false);
-	    JScrollPane achievementscroll = new JScrollPane(achievementpanel);
+	    achievementpanel.setOpaque(false);
+	    achievementscroll = new JScrollPane(achievementpanel);
 		achievementscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		achievementscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	               
-        /*
-         * Buttons and Image Buttons
-         * 
-         */
-	    
-	    addfriendbutton = new JButton(picaddfriend);
-	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
-	    addfriendbutton.setContentAreaFilled(false);
-	    editbutton = new JButton(piceditbutton);
-	    editbutton.setBorder(BorderFactory.createEmptyBorder());
-	    editbutton.setContentAreaFilled(false);
-	    
-	    myprofilelink = new JButton("My Profile");
-	    myprofilelink.setFont(blacklink);
-	    myprofilelink.setBorder(BorderFactory.createEmptyBorder());
-	    myprofilelink.setContentAreaFilled(false);
-	    myprofilelink.setForeground(Color.WHITE);
-
-	    homelink = new JButton("Home");
-	    homelink.setFont(blacklink);
-	    homelink.setForeground(Color.white);
-	    homelink.setBorder(BorderFactory.createEmptyBorder());
-	    homelink.setContentAreaFilled(false);
-	    gameslink = new JButton("MyGames");
-	    gameslink.setFont(blacklink);
-	    gameslink.setForeground(Color.white);
-	    gameslink.setBorder(BorderFactory.createEmptyBorder());
-	    gameslink.setContentAreaFilled(false);
-	    storelink = new JButton("Game-Store");
-	    storelink.setFont(blacklink);
-	    storelink.setForeground(Color.white);
-	    storelink.setBorder(BorderFactory.createEmptyBorder());
-	    storelink.setContentAreaFilled(false);
-	    
-        
-        /*Labels
-         * 
-         */
-	    
-        avatar = new JLabel();
-        avatar.setIcon(picavatar);
-        addfriend = new JLabel();
-        addfriend.setIcon(picaddfriend);
-        playername = new JLabel("Stark");
-        playername.setForeground(Color.white);
-        playername.setFont(blackbold);
-        playerlevel = new JLabel("Level 20");
-        playerlevel.setFont(blacknormal);
-        playerlevel.setForeground(Color.white);
-
+		
         achievementbar = new JLabel();
         achievementbar.setIcon(picachievementbar);
         JLabel achievement1 = new JLabel();
@@ -199,6 +187,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
         JLabel achievement10 = new JLabel();
         JLabel achievement11 = new JLabel();
         JLabel achievement12 = new JLabel();
+        
         achievement1.setIcon(piclocked);
         achievement2.setIcon(piclocked);
         achievement3.setIcon(piclocked);
@@ -211,6 +200,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
         achievement10.setIcon(piclocked);
         achievement11.setIcon(piclocked);
         achievement12.setIcon(piclocked);
+        
         JPanel achievementtext1 = new JPanel(new MigLayout());
         JPanel achievementtext2 = new JPanel(new MigLayout());
         JPanel achievementtext3 = new JPanel(new MigLayout());
@@ -223,6 +213,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
         JPanel achievementtext10 = new JPanel(new MigLayout());
         JPanel achievementtext11 = new JPanel(new MigLayout());
         JPanel achievementtext12 = new JPanel(new MigLayout());
+        
         achievementtext1.setBackground(Color.BLUE);
         achievementtext2.setBackground(Color.BLUE);
         achievementtext3.setBackground(Color.BLUE);
@@ -235,32 +226,6 @@ public class AchievementScreen extends JFrame implements ActionListener {
         achievementtext10.setBackground(Color.BLUE);
         achievementtext11.setBackground(Color.BLUE);
         achievementtext12.setBackground(Color.BLUE);
-        
-        /*Combo Box for selecting game
-         * 
-         */
-        
-        gameselect = new JComboBox();
-        //List out all the games in the arcade
-
-		/*Add objects and position panels
-		 * 
-		 */
-        menupanel.add(homelink, "center, gapbefore 250px");
-        menupanel.add(storelink, "center, gapbefore 100px");
-        menupanel.add(gameslink, "center, gapbefore 100px");
-        menupanel.add(myprofilelink,"center, gapbefore 470px");
-
-        playerpanel.add(avatar);
-        playerinfopanel.add(playername,"wrap, align 50% 50%");       
-        playerinfopanel.add(playerlevel,"wrap, align 50% 50%"); 
-        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%");
-        playerinfopanel.add(editbutton,"align 50% 50%");
-        playerpanel.add(playerinfopanel);
-        
-        sidepanel.add(playerpanel, "wrap, center, width :300, height :600");
-        sidepanel.add(gamescroll, "wrap, gapbottom 30px, width :300, height :600");
-        sidepanel.add(gameselect, "gapbottom 170px");
         
         achievementpanel.add(achievementbar, "north");
         achievementpanel.add(achievement1,"gapbefore 5px, pad 10 10 10 10");
@@ -287,30 +252,90 @@ public class AchievementScreen extends JFrame implements ActionListener {
         achievementpanel.add(achievementtext11,"pad 10 10 10 10, growy, width :110");
         achievementpanel.add(achievement12,"pad 10 10 10 10");
         achievementpanel.add(achievementtext12,"pad 10 10 10 10, growy, width :110");
-
-        contentpanel.add(achievementscroll, "height :640, width :810, gapbefore 30px");
-            
-	    /*Add panels to Main Panel	
-	     *                
-	     */
-		parentContainer.add(menupanel, "dock north");
-		sidepanel.setBackground(Color.darkGray);
-		parentContainer.add(sidepanel, "west, width :350, height :700");
-		contentpanel.setBackground(Color.gray);
-		parentContainer.add(contentpanel, "east, width :950, height :700");
 		
-		/*Add the main panel to JFrame
-		 * 
-		 */
-		add(parentContainer);
+	}
 	
-		/*Set the  view window constraints
-		 * 
-		 */
-		setSize(1280,800);
-		pack();
-		setVisible(true);
-		setResizable(false);		
+	/*
+	 *  Holds the player info and avatar
+	 */
+	public void addplayerpanel(){
+		
+	    playerpanel = new JPanel(new MigLayout());	    
+	    playerpanel.setOpaque(false);
+		playerpanel.add(avatar);
+        playerpanel.add(playerinfopanel);
+    
+	}
+	
+	/*
+	 * Displays all the player information
+	 */
+	public void addplayerinfopanel(){
+		
+		//Add Buttons
+	    addfriendbutton = new JButton(picaddfriend);
+	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
+	    addfriendbutton.setContentAreaFilled(false);
+	    editbutton = new JButton(piceditbutton);
+	    editbutton.setBorder(BorderFactory.createEmptyBorder());
+	    editbutton.setContentAreaFilled(false);
+	    
+	    //Add Labels	    
+        avatar = new JLabel();
+        avatar.setIcon(picavatar);
+        addfriend = new JLabel();
+        addfriend.setIcon(picaddfriend);
+        playername = new JLabel("Stark");
+        playername.setForeground(Color.white);
+        playername.setFont(blackbold);
+        playerlevel = new JLabel("Level 20");
+        playerlevel.setFont(blacknormal);
+        playerlevel.setForeground(Color.white);
+        
+		//Add Elements to Panel
+		playerinfopanel = new JPanel(new MigLayout());
+		playerinfopanel.setOpaque(false);		   	
+        playerinfopanel.add(playername,"wrap, align 50% 50%");       
+        playerinfopanel.add(playerlevel,"wrap, align 50% 50%"); 
+        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%");
+        playerinfopanel.add(editbutton,"align 50% 50%");
+        
+	}
+	
+	/*
+	 *  The top navigation bar
+	 */
+	public void addmenupanel(){
+		
+	    //Page Button Links
+	    myprofilelink = new JButton("My Profile");
+	    myprofilelink.setFont(blacklink);
+	    myprofilelink.setBorder(BorderFactory.createEmptyBorder());
+	    myprofilelink.setContentAreaFilled(false);
+	    myprofilelink.setForeground(Color.WHITE);
+	    homelink = new JButton("Home");
+	    homelink.setFont(blacklink);
+	    homelink.setForeground(Color.white);
+	    homelink.setBorder(BorderFactory.createEmptyBorder());
+	    homelink.setContentAreaFilled(false);
+	    gameslink = new JButton("MyGames");
+	    gameslink.setFont(blacklink);
+	    gameslink.setForeground(Color.white);
+	    gameslink.setBorder(BorderFactory.createEmptyBorder());
+	    gameslink.setContentAreaFilled(false);
+	    storelink = new JButton("Game-Store");
+	    storelink.setFont(blacklink);
+	    storelink.setForeground(Color.white);
+	    storelink.setBorder(BorderFactory.createEmptyBorder());
+	    storelink.setContentAreaFilled(false);
+	    
+		//Add Elements to Panel
+	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
+	    menupanel.setLayout(new MigLayout());	    
+        menupanel.add(homelink, "center, gapbefore 250px");
+        menupanel.add(storelink, "center, gapbefore 100px");
+        menupanel.add(gameslink, "center, gapbefore 100px");
+        menupanel.add(myprofilelink,"center, gapbefore 470px");	    		
 	}
 
 	@Override

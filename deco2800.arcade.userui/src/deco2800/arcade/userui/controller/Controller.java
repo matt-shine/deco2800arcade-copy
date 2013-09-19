@@ -1,16 +1,16 @@
 package deco2800.arcade.userui.controller;
 
 import deco2800.arcade.userui.model.Model;
-import deco2800.arcade.userui.view.EditProfile;
-import deco2800.arcade.userui.view.UserProfile;
+import deco2800.arcade.userui.view.EditScreen;
+import deco2800.arcade.userui.view.UserScreen;
 
 public class Controller {
 	
-	private EditProfile edit;
-	private UserProfile view;
+	private EditScreen edit;
+	private UserScreen view;
 	private Model model;
 	
-	public Controller(Model model2, UserProfile view2) {
+	public Controller(Model model2, UserScreen view2) {
 		/**
 		 * 
 		 */

@@ -5,7 +5,7 @@ import javax.swing.SwingUtilities;
 import deco2800.arcade.userui.controller.Controller;
 import deco2800.arcade.userui.model.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
-import deco2800.arcade.userui.view.UserProfile;
+import deco2800.arcade.userui.view.UserScreen;
 
 public class Interface {
 	
@@ -32,9 +32,9 @@ public class Interface {
 		Model m = new Model();
 		Model amodel = new Model();
 		
-		UserProfile view = new UserProfile(modelprofile);
+		UserScreen view = new UserScreen(modelprofile);
 		//EditProfile v = new EditProfile(m);
-		//AchievementScreen achievementview = new AchievementScreen(amodel);
+		AchievementScreen achievementview = new AchievementScreen(amodel);
 		
 		Controller controller = new Controller(modelprofile,view);
 		

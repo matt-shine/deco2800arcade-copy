@@ -76,15 +76,8 @@ public class AchievementList extends OverlayWindowContent {
 
 	}
 	
-	
 	@Override
 	public void resize(int w, int h) {
 		generateButtons();
 	}
-	
-	
-	
-	
-	
-
 }

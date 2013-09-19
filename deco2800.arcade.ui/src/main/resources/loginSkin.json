@@ -1,8 +1,7 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        default: { file: Manteka18.fnt },
-        textbox: { file: CenturyGothic20Bold.fnt },
-        alt: { file: SFAtarianSystem24.fnt }
+        default: { file: Fonts/Manteka18.fnt },
+        textbox: { file: Fonts/CenturyGothic20Bold.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
         red:    { a: 1, r: 1, g: 0, b: 0 },
@@ -25,5 +24,5 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
     	default: { font: default, fontColor: white, checkboxOn: checkbox_checked, checkboxOff: checkbox_unchecked }
-    },
+    }
 }

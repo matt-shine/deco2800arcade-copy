@@ -33,7 +33,7 @@ public class LunarLander extends GameClient {
 		
 	private OrthographicCamera camera;
 	public static final int SCREENHEIGHT = 800;
-	public static final int SCREENWIDTH = 1200; 
+	public static final int SCREENWIDTH = 1200;
 	
 	// Gdx tools
 	private ShapeRenderer shapeRenderer; // draws shapes
@@ -64,6 +64,7 @@ public class LunarLander extends GameClient {
 	
 	//terrain generation
 	private List<List<Integer>> terrain;
+	private boolean randomMap;
 	
 	// coordinates of the lander pad
 	private float landerPadLeftX;
@@ -134,6 +135,8 @@ public class LunarLander extends GameClient {
 		velocityY = (speed*scaleY);
 		gravity = 3;
 		moving = true;
+		
+		randomMap = true;
 		
 		landerPadLeftX = 25;
 		landerPadLeftY = 50;
@@ -206,11 +209,21 @@ public class LunarLander extends GameClient {
 	    // and ends with the shapeRenderer.end
 	    //shapeRenderer.line(landerPadLeftX, landerPadLeftY, landerPadRightX, landerPadRightY);
 	    
+	    //set random
+	    if(randomMap == true){
 	    for (int i = 0; i < terrain.size(); i++){
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
 	    }
+	    }else{
+	    	//load premade ArrayList of points, and background texture
+	    }
+	    
+	    
 	    
 	    //End drawing of shapes
+	    shapeRenderer.end();
+	    shapeRenderer.begin(ShapeType.Triangle);
+	    shapeRenderer.triangle(400, 400, 300, 300, 200, 200);
 	    shapeRenderer.end();
 	    
 	    /*if(!(initPosition + finalY <= 20) && moving == true){

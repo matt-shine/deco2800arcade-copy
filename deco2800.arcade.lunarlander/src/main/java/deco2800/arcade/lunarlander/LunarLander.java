@@ -267,7 +267,7 @@ public class LunarLander extends GameClient {
 		int pointY = terrain.get(0).get(3);
 		int arrayPosition = 1;
 		
-		//recursively adds lines to the right of the landing pad
+		//automatically adds lines to the right of the landing pad
 		while (pointX < 1300){
 
 			int newPointX = (50 + new Random().nextInt( 200 - 50 + 1 ));
@@ -279,18 +279,40 @@ public class LunarLander extends GameClient {
 			terrain.get(arrayPosition).add(newPointX + pointX);
 			terrain.get(arrayPosition).add(newPointY);
 			
-			System.out.println("ArrayPosition" + arrayPosition);
-			System.out.println("Point X: " + pointX);
-			System.out.println("Point Y: " + pointY);
-			System.out.println("New Point X: " + (newPointX + pointX));
-			System.out.println("New Point Y: " + newPointY);
-			System.out.println("--------------");
-			
 			pointX = pointX + newPointX;
 			pointY = newPointY;
 			arrayPosition++;
 			
-		}		
+		}
+		
+		int pointX2 = terrain.get(0).get(0);
+		int pointY2 = terrain.get(0).get(1);
+		int arrayPosition2 = arrayPosition;
+		
+		//adds lines to the right of the platform/landing pad
+		while (pointX2 > -100){
+
+			int newPointX2 = (50 + new Random().nextInt( 200 - 50 + 1 ));
+			int newPointY2 = 100 + new Random().nextInt( 400 - 100 + 1 );
+			
+			terrain.add(new ArrayList<Integer>());
+			terrain.get(arrayPosition2).add(pointX2 - newPointX2);
+			terrain.get(arrayPosition2).add(newPointY2);
+			terrain.get(arrayPosition2).add(pointX2);
+			terrain.get(arrayPosition2).add(pointY2);
+			
+			System.out.println("ArrayPosition2" + arrayPosition);
+			System.out.println("Point X2: " + pointX2);
+			System.out.println("Point Y2: " + pointY2);
+			System.out.println("New Point X2: " + (newPointX2 + pointX2));
+			System.out.println("New Point Y2: " + newPointY2);
+			System.out.println("--------------");
+			
+			pointX2 = pointX2 - newPointX2;
+			pointY2 = newPointY2;
+			arrayPosition2++;
+			
+		}
 		return terrain;
 	}
 	

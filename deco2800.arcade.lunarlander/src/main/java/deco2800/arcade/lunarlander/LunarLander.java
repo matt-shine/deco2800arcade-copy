@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.Input.Keys;
 
@@ -218,12 +219,17 @@ public class LunarLander extends GameClient {
 	    	//load premade ArrayList of points, and background texture
 	    }
 	    
-	    
+	    shapeRenderer.setColor(0, 255, 0, 0);
+	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1) + 2, terrain.get(0).get(2), terrain.get(0).get(3) + 2);
 	    
 	    //End drawing of shapes
 	    shapeRenderer.end();
+	    
 	    shapeRenderer.begin(ShapeType.Triangle);
-	    shapeRenderer.triangle(400, 400, 300, 300, 200, 200);
+	    float A = 400;
+	    float B = 300;
+	    float C = 200;
+	    shapeRenderer.triangle(A, A, B, B, C, C);
 	    shapeRenderer.end();
 	    
 	    /*if(!(initPosition + finalY <= 20) && moving == true){

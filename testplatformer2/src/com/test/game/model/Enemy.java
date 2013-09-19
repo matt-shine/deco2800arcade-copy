@@ -69,7 +69,7 @@ public abstract class Enemy extends MovableEntity{
 		
 	}
 	
-	public void handleDamage() {
+	public void handleDamage(boolean fromRight) {
 		isDead = true;
 	}
 	

@@ -28,11 +28,13 @@ import com.badlogic.gdx.utils.Array;
 import com.test.game.model.Block;
 import com.test.game.model.BlockMaker;
 import com.test.game.model.Bullet;
+import com.test.game.model.BulletHomingDestructible;
 import com.test.game.model.BulletSimple;
 import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
 import com.test.game.model.EnemySpiderBoss;
 import com.test.game.model.EnemySpiderBossArms;
+import com.test.game.model.EnemySpiderBossPopcorn;
 import com.test.game.model.Follower;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
@@ -259,7 +261,7 @@ public class WorldRenderer {
 				followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
 				batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
 						e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
-			} else if (e.getClass() == SoldierEnemy.class){
+			} else if (e.getClass() == SoldierEnemy.class || (e.getClass() == EnemySpiderBossPopcorn.class)){
 				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
@@ -280,7 +282,7 @@ public class WorldRenderer {
 				batch.draw(shipTexture, arms.getPosition().x, arms.getPosition().y, arms.getWidth()/2, arms.getHeight()/2, 
 						arms.getHeight(), arms.getHeight(), 1, 1, rotationArms, 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
-			} else if (e.getClass() == BulletSimple.class) {
+			} else if (e.getClass() == BulletSimple.class || e.getClass() == BulletHomingDestructible.class) {
 				Texture bulletTex;
 				if (((BulletSimple)e).getGraphic() == BulletSimple.Graphic.FIRE) {
 					bulletTex = bulletTexture;

@@ -33,6 +33,7 @@ public class Ship extends MovableEntity{
 	private float bounceBackTime = 0;
 	float jumpTime = 0;
 	float wallTime = WALL_ATTACH_TIME;
+	private boolean wallClimbEnabled = true;
 	
 	public Ship(Vector2 pos) {
 		super (SPEED, 0, pos, WIDTH, HEIGHT);
@@ -221,6 +222,10 @@ public class Ship extends MovableEntity{
 			setState(State.JUMP);
 		}
 	}
+	
+	public void setWallClimbEnabled (boolean wallClimbEnabled) {
+		this.wallClimbEnabled = wallClimbEnabled;
+	}
 	public void update(Ship ship) {
 		//System.out.println("Before suepr update " + velocity.x);
 		super.update(ship);
@@ -277,7 +282,7 @@ public class Ship extends MovableEntity{
 		velocity.add(0, GRAVITY);
 		
 		//System.out.println("Velocity after gravity " + velocity.x+","+velocity.y);
-		if (state == State.WALL && velocity.y < -MAX_WALL_VELOCITY){
+		if (state == State.WALL && velocity.y < -MAX_WALL_VELOCITY && wallClimbEnabled){
 			velocity.y = -MAX_WALL_VELOCITY;
 		} else if (velocity.y<-MAX_FALL_VELOCITY) {
 			velocity.y = -MAX_FALL_VELOCITY;

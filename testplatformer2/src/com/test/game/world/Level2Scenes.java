@@ -28,10 +28,11 @@ public class Level2Scenes extends LevelScenes {
 	
 	private float count;
 	private int scenePosition;
+	private boolean doneSomethingOnce;
 	
 	public Level2Scenes(Ship ship, ParallaxCamera cam) {
 		super(ship, cam);
-		
+		doneSomethingOnce = false;
 	}
 
 	@Override
@@ -81,6 +82,7 @@ public class Level2Scenes extends LevelScenes {
 	@Override
 	public boolean update(float delta) {
 		if (scenePosition == 0) {
+			//Scene to introduce the boss
 			manager.update(delta);
 			ship.getVelocity().x = Ship.SPEED / 1.5f;
 			
@@ -95,13 +97,46 @@ public class Level2Scenes extends LevelScenes {
 				return false;
 			}
 		} else if (scenePosition == 1) {
+			//scene to move the boss into phase 2
 			count += delta;
 			if (count <= 2f) {
 				ship.getPosition().x += delta * (cam.position.x - ship.getPosition().x) * 0.8f;
+			} else if (count <= 4f){
+				if (count <3f) blockMaker.startDownward();
+				ship.getVelocity().x = 0;
+				ship.getPosition().y -= (ship.getPosition().y - (4f)) * delta;
+				ship.getPosition().x -= (ship.getPosition().x - (cam.position.x)) * delta * 0.4f;
+				ship.setWallClimbEnabled(false);
 			} else {
-				blockMaker.startDownward();
 				isPlaying = false;
 				ship.getVelocity().x = 0;
+				count = 0;
+				return true;
+			}
+			return false;
+		} else if (scenePosition == 2) {
+			//boss into phase 3 scene
+			count += delta;
+			if (count <= 2f) {
+				boss.getPosition().x -= (boss.getPosition().x - (cam.position.x -cam.viewportWidth/2))*delta*0.2f;
+				boss.getPosition().y -= (boss.getPosition().y - 14f)*delta*0.2f;
+			} else if (count <=5f) {
+				if (!doneSomethingOnce) {
+					doneSomethingOnce = true;
+					blockMaker.startStatic();
+				}
+				boss.getPosition().x -= (boss.getPosition().x - (cam.position.x -cam.viewportWidth/2))*delta*0.5f;
+				boss.getPosition().y -= (boss.getPosition().y - (-13f))*delta*12.2f;
+				
+			} else if (count <= 5.5f) {
+				boss.getPosition().x = (cam.position.x -cam.viewportWidth/2);
+				boss.getPosition().y = 0f;
+				blockMaker.staticExplosion(cam.position.x-cam.viewportWidth/2);
+			} else {
+				isPlaying=false;
+				ship.getVelocity().x = 0;
+				count = 0;
+				doneSomethingOnce = false;
 				return true;
 			}
 			return false;
@@ -113,7 +148,7 @@ public class Level2Scenes extends LevelScenes {
 
 	@Override
 	public float[] getStartValues() {
-		float[] starts = {319, 999, 999};
+		float[] starts = {319, 999, 999, 999};
 		return starts;
 	}
 

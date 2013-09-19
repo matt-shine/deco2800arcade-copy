@@ -19,6 +19,7 @@ public class EnemySpiderBoss extends Enemy {
 	public static final float MOUTH_OFFSET_Y = 5f;
 	public static final float FIREBALL_WIDTH = 0.5f;
 	public static final float FIREBALL_HEIGHT = 0.5f;
+	public static final float INVINCIBLE_TIME = 0.3f;
 	
 	
 	private float rank;
@@ -26,10 +27,15 @@ public class EnemySpiderBoss extends Enemy {
 	private int phase;
 	private float count;
 	private int count2;
+	private float countEnemies;
 	private int movesUntilVulnerable;
 	private boolean performingTell;
 	private EnemySpiderBossArms arms;
-	private BlockMakerSpiderBoss blockMaker;
+	private int health;
+	private float invincibleTime;
+	private boolean beingHit;
+	private Array<EnemySpiderBossPopcorn> popcorns;
+	//private BlockMakerSpiderBoss blockMaker;
 	
 	private State state;
 	
@@ -40,15 +46,20 @@ public class EnemySpiderBoss extends Enemy {
 		super(0, 0, pos, WIDTH, HEIGHT);
 		this.rank = rank;
 		this.cam = cam;
-		this.blockMaker = blockMaker;
+		//this.blockMaker = blockMaker;
 		phase = 1;
 		count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 		count2 = 0;
+		countEnemies = 0f;
 		movesUntilVulnerable = 1;
 		performingTell = false;
 		state = State.IDLE;
 		arms = new EnemySpiderBossArms(this);
 		bullets = new Array<BulletSimple>();
+		popcorns = new Array<EnemySpiderBossPopcorn>();
+		health = 3;
+		invincibleTime = INVINCIBLE_TIME;
+		beingHit = false;
 		//state = State.INTRO1;
 		
 		
@@ -59,7 +70,7 @@ public class EnemySpiderBoss extends Enemy {
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		int randInt;
 		count -= delta;
-		if (phase == 1) {
+		//if (phase == 1) {
 			//Choose a new move if it is time to
 			if (count < 0) {
 				switch(state) {
@@ -211,10 +222,18 @@ public class EnemySpiderBoss extends Enemy {
 			}
 			
 			//Make the move
+			//System.out.println("state="+ state+" phase="+phase+" health=" +health);
 			if (state == State.IDLE) {
-				float lerp = 0.8f;
-				position.y -= delta * (position.y - (5f - 4 * MathUtils.cos(count))) * lerp;
-				position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 1f)) * lerp;
+				if (phase == 1) {
+					float lerp = 0.8f;
+					position.y -= delta * (position.y - (5f - 4 * MathUtils.cos(count))) * lerp;
+					position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 1f)) * lerp;
+				} else if (phase == 2) {
+					//System.out.println("yeah, yeah. I'm moving!");
+					float lerp = 0.8f;
+					position.y -= delta * (position.y - (cam.position.y + cam.viewportHeight/2 - 5f)) * lerp;
+					position.x -= delta * (position.x - (cam.position.x -WIDTH/2-2 * MathUtils.cos(4f*count))) * lerp;
+				}
 			} else if (state == State.THROW_ARMS){
 				if (performingTell) {
 					float lerp = 0.7f;
@@ -228,8 +247,44 @@ public class EnemySpiderBoss extends Enemy {
 					position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 2.5f)) * lerp;
 				}
 			}
-		}
+		//}
 		
+			//Spawn any new enemies 
+			if (phase == 2) {
+				countEnemies+= delta;
+				if (countEnemies >= 3f) {
+					countEnemies = 0;
+					Vector2 startPos = new Vector2(MathUtils.random(cam.position.x-cam.viewportWidth/2+
+							2f, cam.position.x+cam.viewportWidth/2-2f-EnemySpiderBossPopcorn.WIDTH),
+							-EnemySpiderBossPopcorn.HEIGHT);
+					float startVeloX = MathUtils.random(-20f, 20f);
+					EnemySpiderBossPopcorn newEnemy = new EnemySpiderBossPopcorn(startPos, startVeloX);
+					newEnemies.add(newEnemy);
+					popcorns.add(newEnemy);
+				}
+				for (EnemySpiderBossPopcorn p: popcorns) {
+					if (p.getPosition().x < 0f) {
+						popcorns.removeValue(p, true);
+					} else if (p.isProjectile()){
+						//WARNING NOT SURE IF THIS WILL BE EFFECTED BY ENEMY ATTACK SWAPOVER
+						if (p.getBounds().overlaps(getBounds())) {
+							p.getPosition().x = -40;
+							handleDamage(true);
+						}
+					}
+				}
+				
+				//check collisions with popcorn
+				
+			}
+			
+			if (beingHit) {
+				invincibleTime -= delta;
+				if (invincibleTime <= 0f) {
+					beingHit = false;
+				}
+			}
+			
 		Array<Enemy> armsNewEnemies = arms.advance(delta, ship, rank);
 		for (BulletSimple b: bullets) {
 			//b.position.x -= delta * BlockMakerSpiderBoss.SPEED;
@@ -252,8 +307,15 @@ public class EnemySpiderBoss extends Enemy {
 	}
 	
 	@Override
-	public void handleDamage() {
-		changePhase();
+	public void handleDamage(boolean fromRight) {
+		if (!beingHit) {
+			if (--health == 0) {
+				changePhase();
+			} else {
+				beingHit = true;
+				invincibleTime = INVINCIBLE_TIME;
+			}
+		}
 	}
 	
 	public EnemySpiderBossArms getArms() {
@@ -272,10 +334,16 @@ public class EnemySpiderBoss extends Enemy {
 	private void changePhase() {
 		switch(phase){
 		case 1:
+		case 2:
 			startingNextScene = true;
+			state = State.IDLE;
+			health = 3;
 			break;
 		}
 		phase++;
 	}
 	
+	public int getPhase() {
+		return phase;
+	}
 }

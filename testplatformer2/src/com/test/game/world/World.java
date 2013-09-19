@@ -121,7 +121,7 @@ public class World {
 		handleEnemies();
 		
 		if (!levelScenes.isPlaying()) {
-			//checkDamage();
+			checkDamage();
 		}
 
 		if (firstUpdate) {
@@ -415,7 +415,11 @@ public class World {
 			/* Sword collisions */
 			if (e.getBounds().overlaps(sword.getBounds())) {
 				//System.out.println("C");
-				e.handleDamage();
+				boolean fromRight = false;
+				if (e.getPosition().x < sword.getPosition().x) {
+					fromRight = true;
+				}
+				e.handleDamage(fromRight);
 				
 				//System.out.println("cleaned arrays");
 				
@@ -614,7 +618,7 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-		rank = 0.85f;
+		rank = 0.2f;
 		scenePosition = 0;
 		
 		isPaused = false;

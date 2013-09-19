@@ -57,6 +57,11 @@ public class BulletSimple extends Enemy {
 		
 	}
 	
+	@Override
+	public void handleDamage(boolean fromRight) {
+		;
+	}
+	
 	public Graphic getGraphic() {
 		return graphic;
 	}

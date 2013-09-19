@@ -20,11 +20,12 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	private float count;
 	private float rank;
 	private boolean camHasReachedStartPosition;
+	private boolean firstUpdate;
 	
 	private int loopPos;
 	
 	private enum State {
-		RIGHT, DOWN
+		RIGHT, DOWN, STATICTRANSITION, STATIC
 	}
 	
 	private State state;
@@ -49,6 +50,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 		oldBlocksType = new HashMap<Block, Integer>();
 		state = State.RIGHT;
 		latestBlock = new Block(new Vector2(-40,400), Block.TextureAtlasReference.LEVEL, 0);
+		firstUpdate = false;
 	}
 	
 	public Array<Block> getBlocks() {
@@ -137,36 +139,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				blocks.add(latestBlock);
 			}
 			
-			//Move old blocks
-			for (Block b: oldBlocks) {
-				
-				int type = oldBlocksType.get(b);
-				float destroySpeed = 14f;
-				switch(type) {
-				case 0:
-					System.out.println("Found oldBlock at " + b.getPosition());
-					b.getPosition().x -= delta *destroySpeed;
-					b.getPosition().y += delta* destroySpeed;
-					break;
-				case 1:
-					b.getPosition().x -= delta *destroySpeed * 0.5f;
-					b.getPosition().y += delta* destroySpeed * 2f;
-					break;
-				case 2:
-					b.getPosition().x += delta *destroySpeed * 0.5f;
-					b.getPosition().y += delta* destroySpeed * 2f;
-					break;
-				case 3:
-					b.getPosition().x += delta *destroySpeed;
-					b.getPosition().y += delta* destroySpeed;
-					break;
-					
-				}
-				if (b.getPosition().y > cam.position.y + cam.viewportHeight) {
-					oldBlocks.removeValue(b, true);
-				}
-				
-			}
+			
 			
 			//Move objects in the moveWithEntities
 			for (MovableEntity mve: moveWithEntities) {
@@ -184,6 +157,54 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				}
 				
 			}
+		} else if (state == State.STATICTRANSITION) {
+			if (firstUpdate) {
+				for (float i = cam.position.x - cam.viewportWidth/2; i < cam.position.x + cam.viewportWidth/2; i+=1f) {
+					blocks.add(new Block(new Vector2(i, -1f), Block.TextureAtlasReference.LEVEL, 0));
+					blocks.add(new Block(new Vector2(i, -2f), Block.TextureAtlasReference.LEVEL, 0));
+					blocks.add(new Block(new Vector2(i, -3f), Block.TextureAtlasReference.LEVEL, 0));
+					latestBlock = new Block(new Vector2(i, -4f), Block.TextureAtlasReference.LEVEL, 0);
+					blocks.add(latestBlock);
+				}
+				firstUpdate = false;
+			}
+			for (Block b: blocks) {
+				b.getPosition().y += delta * Ship.MAX_FALL_VELOCITY;
+			}
+			if (latestBlock.getPosition().y >= 0f) {
+				state = State.STATIC;
+			}
+		}
+		
+		//Move old blocks
+		for (Block b: oldBlocks) {
+			
+			int type = oldBlocksType.get(b);
+			float destroySpeed = 14f;
+			switch(type) {
+			case 0:
+				System.out.println("Found oldBlock at " + b.getPosition());
+				b.getPosition().x -= delta *destroySpeed;
+				b.getPosition().y += delta* destroySpeed;
+				break;
+			case 1:
+				b.getPosition().x -= delta *destroySpeed * 0.5f;
+				b.getPosition().y += delta* destroySpeed * 2f;
+				break;
+			case 2:
+				b.getPosition().x += delta *destroySpeed * 0.5f;
+				b.getPosition().y += delta* destroySpeed * 2f;
+				break;
+			case 3:
+				b.getPosition().x += delta *destroySpeed;
+				b.getPosition().y += delta* destroySpeed;
+				break;
+				
+			}
+			if (b.getPosition().y > cam.position.y + cam.viewportHeight) {
+				oldBlocks.removeValue(b, true);
+			}
+			
 		}
 		
 	}
@@ -220,6 +241,43 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 		//blocks.clear();
 		state = State.DOWN;
 		loopPos = 0;
+	}
+	
+	public void startStatic() {
+		firstUpdate = true;
+		state = State.STATICTRANSITION;
+	}
+	
+	public void staticExplosion(float xPosition) {
+		for (float i = xPosition; i < xPosition+7f; i+= 1f) {
+			for (float j = 0f; j <= 3f; j += 1f) {
+				Block block = new Block(new Vector2(i, j), Block.TextureAtlasReference.LEVEL, 0);
+				oldBlocks.add(block);
+				blocks.add(block);
+			}
+		}
+		int type = 0;
+		for (Block b: oldBlocks) {
+			b.setSolid(false);
+			oldBlocksType.put(b, type);
+			switch (type) {
+			case 0:
+				b.setDrawRotation(-45f);
+				break;
+			case 1:
+				b.setDrawRotation(-20f);
+				break;
+			case 2:
+				b.setDrawRotation(20f);
+				break;
+			case 3:
+				b.setDrawRotation(45f);
+				break;
+			}
+			if (++type == 4) {
+				type = 0;
+			}
+		}
 	}
 	
 	

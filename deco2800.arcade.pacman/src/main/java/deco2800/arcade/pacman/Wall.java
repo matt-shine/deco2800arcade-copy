@@ -23,7 +23,7 @@ public class Wall extends Collideable{
 	private static final float renderColourBlue = 1f;
 	private static final float renderColourAlpha = 1f;
 	
-	public Wall(List<Object> colList, int wallType, float xpos, float ypos, float length) {
+	public Wall(List<Collideable> colList, int wallType, int xpos, int ypos, float length) {
 		super(colList);
 		this.wallType = wallType;
 		x = xpos;

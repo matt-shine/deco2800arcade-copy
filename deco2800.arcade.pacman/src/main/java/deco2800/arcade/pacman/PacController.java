@@ -1,5 +1,7 @@
 package deco2800.arcade.pacman;
 
+import java.util.List;
+
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 
@@ -14,9 +16,33 @@ import deco2800.arcade.pacman.PacChar.PacState;
 public class PacController implements InputProcessor {
 
 	private PacChar player;
+	private List<Collideable> colList;
 	
-	public PacController(PacChar player) {
+	public PacController(PacChar player, List<Collideable> colList) {
 		this.player = player;
+		this.colList = colList;
+	}
+	
+	private void checkCollisions() {
+		//check collisions here, using x,y,width, height against the two walls
+		// variables are left, right, top, bottom
+		int pl = player.getX();
+		int pb = player.getY();
+		int pt = player.getHeight() + pb;
+		int pr = player.getWidth() + pl;
+	    for (int i=1; i < colList.size(); i++) {
+	    	Collideable c = colList.get(i);
+	    	int cl = c.getX();
+	    	int cb = c.getY();
+	    	int cr = cl + c.getWidth();
+	    	int ct = cb + c.getHeight();
+	    	if ((pl < cl && pr >= cl) || (pr > cr && pl <= cr) || (pb < cb && pt >= cb) || (pt > ct && pb <= ct)) {
+	    		//set pacman's state to idle so he stops moving
+	    		player.setCurrentState(PacState.IDLE);
+	    		System.out.println("COLLISION DETECTED!");
+	    		return;
+	    	}
+	    }
 	}
 	
 	@Override
@@ -32,15 +58,14 @@ public class PacController implements InputProcessor {
 		} else if (key == Keys.DOWN){ 
 			facing = 4;	
 		} else if (key == Keys.ENTER) {
-			facing = 5;
-			
-			
-		}
-		
-		// if not one of the arrow keys
-		else {
+			facing = 5;			
+		} else {
+			// if not one of the arrow keys
 			return false;
 		}
+		// check for collisions
+		checkCollisions();
+		
 		//set facing and state
 		player.setFacing(facing);
 		if (player.getCurrentState().equals(PacState.IDLE)) {

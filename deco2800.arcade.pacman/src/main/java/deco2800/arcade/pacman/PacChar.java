@@ -33,7 +33,7 @@ public class PacChar extends Collideable{
 	// amount of time spent in this state of animation?
 	float stateTime;
 	
-	public PacChar(List<Object> colList) {
+	public PacChar(List<Collideable> colList) {
 		super(colList);
 		//grabs file
 		walkSheet = new Texture(Gdx.files.internal("pacmove.png"));

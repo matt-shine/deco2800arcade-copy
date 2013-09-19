@@ -57,7 +57,7 @@ public class Pacman extends GameClient {
 	private Wall testWall;
 	private Wall testWall2;
 	
-	private List<Object> colList;	
+	private List<Collideable> colList;	
 	
 	//not used yet
 	//private NetworkClient networkClient;
@@ -115,7 +115,7 @@ public class Pacman extends GameClient {
 		// Just use a set file for the time being!
 		String file = "testmap";
 		//initialise collision list
-		colList = new ArrayList<Object>();
+		colList = new ArrayList<Collideable>();
 		// this guy doesn't show up either. 
 		logger.info("Hey, I'm a log message");
 		//Initialize camera
@@ -132,7 +132,7 @@ public class Pacman extends GameClient {
 		System.out.println(colList.toString());
 		//initialise receiver for input- use the multiplexer from Arcade
 		// because overlay group said to in log messages
-		controller = new PacController(player);
+		controller = new PacController(player, colList);
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
 		gameState = GameState.READY;
@@ -203,14 +203,6 @@ public class Pacman extends GameClient {
 	    camera.update();
 	    //tell the spritebatch to use the coordinate system of the camera
 	    batch.setProjectionMatrix(camera.combined);	    
-
-	    //check collisions here, using x,y,width, height against the two walls
-//	    for (int i=1; i < colList.size(); i++) {
-//	    	if (player.getX() < ( (Collideable) colList.get(i)).getX() && player.getX() ) {
-//	    		
-//	    	}
-//	    }
-		
 	    // start the drawing
 	    batch.begin();
 	    // render player pacman 

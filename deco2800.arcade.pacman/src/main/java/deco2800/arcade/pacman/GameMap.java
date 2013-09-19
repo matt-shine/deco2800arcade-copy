@@ -90,9 +90,8 @@ public class GameMap {
 		for (int i = 0; i < map.size(); i++) {
 			char[] s = map.get(i);
 			for (int j = 0; j < s.length; j++) {
-				Wall wall = new Wall(Character.getNumericValue(s[j]),
-						(900 - 24 * i), (650 - 24 * j), 25);
-				wall.render(shaper);
+				//Wall wall = new Wall(Character.getNumericValue(s[j]),	(900 - 24 * i), (650 - 24 * j), 25);
+				//wall.render(shaper);
 			}
 		}
 	}

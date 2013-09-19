@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class HighscoreDatabase {
@@ -62,7 +63,37 @@ public class HighscoreDatabase {
 	//Fetching Score Methods
 	//======================	
 	
-	/** Displays an amount of top players for a specified game
+	/**
+	 * A general method called by HighscoreListener that picks a query to run,
+	 * based on the value of requestType and returns.
+	 * 
+	 * @param requestType - The identifier of the request that is bring sent. 
+	 * It corresponds to a query that is to be run.
+	 * @param game_ID - The game that the request is being sent for
+	 * @param username - The user that the scores are being sent for
+	 * 
+	 * @return A list of strings containing the data returned by the query. 
+	 * The first value is the number of columns that are bring returned.
+	 */
+	public LinkedList<String> fetchData(int requestID, String game_ID, String username) {
+		//Run the query corresponding to the requestID. This switch statement 
+		//is probably going to get pretty big.
+		switch (requestID) {
+		case 1: return null; //Return value of query with requestID 1
+		case 2: return null; //Return value of query with requestID 2
+		case 3: return null; //Return value of query with requestID 3
+		}
+		
+		
+		//This should never be reached, as all requestIDs should be covered in the switch
+		return null;
+	}
+	
+	/** 
+	 * requestID: 1
+	 * 
+	 * Displays an amount of top players for a specified game
+	 * 
 	 * @param Game_ID
 	 * @param top - number of top players to display
 	 * @throws DatabaseException 
@@ -78,6 +109,7 @@ public class HighscoreDatabase {
 		Connection connection = Database.getConnection();
 		Statement statement = null;
 		ResultSet resultSet = null;
+		
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES_PLAYER h INNER JOIN " +
@@ -256,14 +288,13 @@ public class HighscoreDatabase {
 		
 		String insertTableSQL = "INSERT INTO HIGHSCORES_PLAYER"
 				+ "(Username, GameID, Date, Rating) VALUES"
-				+ "(" + Username + "," + Game_ID +  ", to_date('"
+				+ "('" + Username + "','" + Game_ID +  "', to_date('"
 				+ getCurrentTimeStamp() + "', 'yyyy/mm/dd hh24:mi:ss'), 0)";
 		
 		try {
 			// Get a connection to the database
 			connection = Database.getConnection();
-			
-			//Do we need a statement = connection.createStatement() here?
+			statement = connection.createStatement();
 			
 			statement.executeUpdate(insertTableSQL);
 			

@@ -176,8 +176,8 @@ public class HighscoreClient {
 		if (Username != null) { //If the class was instantiated with a user
 			//Build the request that is being sent
 			AddScoreRequest asr = new AddScoreRequest();
-			asr.Username = Username;
-			asr.Game_ID = Game_ID;
+			asr.username = Username;
+			asr.game_ID = Game_ID;
 			asr.scoreQueue = serialisedScores();
 			
 			//Send the request
@@ -261,12 +261,12 @@ public class HighscoreClient {
 	 * @param requestType An integer representing the request that is being 
 	 * sent.
 	 */
-	private void sendScoreRequest(int requestType) {
+	private void sendScoreRequest(int requestID) {
 		//Build the request
 		GetScoreRequest gsReq = new GetScoreRequest();
-		gsReq.Username = this.Username;
-		gsReq.Game_ID = this.Game_ID;
-		gsReq.requestType = requestType;
+		gsReq.username = this.Username;
+		gsReq.game_ID = this.Game_ID;
+		gsReq.requestID = requestID;
 		
 		//Send the response, and wait for a reply
 		this.gsRes = null;
@@ -277,6 +277,9 @@ public class HighscoreClient {
 			try { Thread.sleep(20); } 
 			catch (InterruptedException e) { break; }
 		}
+		
+		//Will only reach here when a response has been received.
+		
 	}
 	
 	/**

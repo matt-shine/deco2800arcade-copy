@@ -219,9 +219,9 @@ public class LunarLander extends GameClient {
 	    	//load premade ArrayList of points, and background texture
 	    }
 	    
-	    shapeRenderer.setColor(0, 255, 0, 0);
+	    shapeRenderer.setColor(255, 0, 0, 1);
 	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1) + 2, terrain.get(0).get(2), terrain.get(0).get(3) + 2);
-	    
+	    shapeRenderer.setColor(255, 255, 255, 1);
 	    //End drawing of shapes
 	    shapeRenderer.end();
 	    

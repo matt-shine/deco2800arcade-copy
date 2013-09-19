@@ -26,8 +26,6 @@ public class HighscoreDatabase {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		
-		
-		
 		try {
 			Statement statement = connection.createStatement();
 			

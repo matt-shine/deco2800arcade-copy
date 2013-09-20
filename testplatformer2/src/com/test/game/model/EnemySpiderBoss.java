@@ -3,6 +3,7 @@ package com.test.game.model;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.Array;
 import com.test.game.world.ParallaxCamera;
 
@@ -89,7 +90,7 @@ public class EnemySpiderBoss extends Enemy {
 						movesUntilVulnerable = 2;
 						
 					} else {
-						randInt = MathUtils.random(1);
+						randInt = MathUtils.random(2);
 						if (randInt == 0 || (randInt == 1 && phase == 3)) {
 							//do fireball attack
 							System.out.println("Chosen: Shooting fireballs");
@@ -104,10 +105,11 @@ public class EnemySpiderBoss extends Enemy {
 							count = 2.1f - 2* rank;
 							phase2fireballPosition = MathUtils.random(-14f, 14f);
 						} else if (randInt == 2) {
-							System.out.println("Chosen: Ram attack");
+							System.out.println("Chosen: Laser attack");
 							performingTell = true;
-							state = State.RAM;
+							state = State.LASER;
 							count = 2.1f - 2* rank;
+							
 						}
 					}
 					break;
@@ -236,17 +238,32 @@ public class EnemySpiderBoss extends Enemy {
 					if (performingTell) {
 						performingTell = false;
 						if (phase == 1) {
-							velocity = new Vector2(0, 10f);
+							velocity = new Vector2(1f, 2.5f);
+							velocity.nor().scl(1f+rank*30f);
 						} else if (phase ==2) {
 							velocity = new Vector2(0, -1f-50*rank);
 						}
+						System.out.println("Ram velocity starts at"+velocity);
 						count2= 0;
 					} else {
 						
 					}
-				}
-					
 				
+					break;
+				case LASER:
+					if (performingTell) {
+						Vector2 intendedDirection = new Vector2((ship.getPosition().x+ ship.getWidth()/2) - (position.x+MOUTH_OFFSET_X),
+								(ship.getPosition().y +ship.getHeight()/2)- (position.y+MOUTH_OFFSET_Y));
+						float intendedAngle = intendedDirection.angle();
+						newEnemies.add(new LaserBeam(intendedAngle, new Vector2(position.x+MOUTH_OFFSET_X, position.y+MOUTH_OFFSET_Y), 2f+ rank*5f, false));
+						performingTell = false;
+						count = 8f;
+					} else {
+						count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
+						state = State.IDLE;
+					}
+					break;
+				}
 				
 			}
 			
@@ -295,23 +312,40 @@ public class EnemySpiderBoss extends Enemy {
 					}
 				} else {
 					if (phase == 1) {
-						if (velocity.angle() < 89f) {
-							velocity.rotate(delta * 2f);
-							
-						} else {
-							velocity.scl(1f+delta*2*rank);
-						}
-						if (position.y <= 2f) {
+						System.out.println("velocity="+velocity+"   angle="+velocity.angle()+ "   position="+position+"   count2="+count2);
+						if (count2 == 0 || count2 == 1) {
+							if (velocity.angle() <= 4f) {
+								//allow next part of attack to start
+								count2 = 1;
+							}
+							if (velocity.angle() >= 270f && velocity.angle() <= 272f) {
+								//found downward angle
+								velocity.scl(1f+delta*2*rank);
+								
+								
+								
+							} else {
+								//adjust towards downward angle
+								velocity.rotate(-delta * 145f * rank);
+							}
+						} 
+						if (position.y <= 2f && count2 == 1) {
 							velocity = new Vector2(-BlockMakerSpiderBoss.SPEED, 0);
-						}
-						if (position.x <= 1f) {
-							count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
-							state = State.IDLE;
+							count2 = 2;
+						} else if (count2==2) {
+							if (position.x <= cam.position.x+2f) {
+								velocity = new Vector2(-BlockMakerSpiderBoss.SPEED * 3, 0);
+							}
+							if (position.x <= cam.position.x-cam.viewportWidth+1f) {
+					
+								count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
+								state = State.IDLE;
+							}
 						}
 					} else {
 						if (position.y <= 1f) {
 							count2 += delta;
-							if (count2 <= 3f) {
+							if (count2 <= 1f) {
 								velocity = new Vector2(0,0);
 							} else if (count2 <= 3f-rank){
 								velocity = new Vector2(0, -1f-rank*3f);
@@ -344,7 +378,6 @@ public class EnemySpiderBoss extends Enemy {
 					if (p.getPosition().x < 0f) {
 						popcorns.removeValue(p, true);
 					} else if (p.isProjectile()){
-						//WARNING NOT SURE IF THIS WILL BE EFFECTED BY ENEMY ATTACK SWAPOVER
 						if (p.getBounds().overlaps(getBounds())) {
 							p.getPosition().x = -40;
 							handleDamage(true);

@@ -84,7 +84,7 @@ public class EnemySpiderBossArms extends Enemy {
 					bulletCount -= delta;
 					if (bulletCount <= 0f) {
 						//System.out.println("Arms: Spawning bullet!");
-						bulletCount = 0.5f - 0.39f* rank;
+						bulletCount = 0.75f - 0.39f* rank;
 						BulletSimple bullet = new BulletSimple(10f + 2*rank, 0f, new Vector2(position.x+WIDTH/2,
 								position.y+HEIGHT/2), parent.FIREBALL_WIDTH, parent.FIREBALL_HEIGHT, new Vector2(ship.position.x + ship.getWidth()/2-
 								position.x, ship.position.y+ship.getHeight()/2-position.y),BulletSimple.Graphic.FIRE);
@@ -142,9 +142,9 @@ public class EnemySpiderBossArms extends Enemy {
 					phase2pos = 2;
 				}*/
 				if (attackUp) {
-					velocity.rotate(-75*delta);
+					velocity.rotate(-150*delta*rank);
 				} else {
-					velocity.rotate(75*delta);
+					velocity.rotate(150*delta*rank);
 				}
 				System.out.println("Velocity="+velocity);
 				position.add(new Vector2(velocity).scl(delta));

@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -24,8 +26,10 @@ import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
 import com.test.game.model.EnemySpawner;
 import com.test.game.model.Follower;
+import com.test.game.model.LaserBeam;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
+import com.test.game.model.MovablePlatformAttachment;
 import com.test.game.model.MovablePlatformSpawner;
 import com.test.game.model.RandomizedEnemySpawner;
 import com.test.game.model.Ship;
@@ -312,16 +316,35 @@ public class World {
 			
 			/* Collision with enemy */
 			if(!ship.isInvincible()) {
-				for (Rectangle r: e.getPlayerDamageBounds()) {
-					if ( r.overlaps(ship.getBounds()) ) {
-						ship.decrementHearts();
-						
-						ship.bounceBack(true);
-						
-						ship.setInvincibility(true);
-						break;
+				if (e.getClass() == LaserBeam.class) {
+					Polygon laserPoly = ((LaserBeam)e).getLaserBounds();
+					if (laserPoly != null) {
+						Polygon shipPoly = new Polygon();
+						float sx = ship.getPosition().x;
+						float sy = ship.getPosition().y;
+						shipPoly.setOrigin(sx, sy);
+						float[] vertices = {sx, sy+ship.getHeight(), sx+ship.getWidth(), sy+ship.getHeight(), sx+ship.getWidth(), sy};
+						shipPoly.setVertices(vertices);
+						if (Intersector.overlapConvexPolygons(laserPoly, shipPoly)) {
+							ship.decrementHearts();
+							
+							ship.bounceBack(true);
+							
+							ship.setInvincibility(true);
+						}
 					}
-					
+				} else {
+					for (Rectangle r: e.getPlayerDamageBounds()) {
+						if ( r.overlaps(ship.getBounds()) ) {
+							ship.decrementHearts();
+							
+							ship.bounceBack(true);
+							
+							ship.setInvincibility(true);
+							break;
+						}
+						
+					}
 				}
 			}
 		}
@@ -548,7 +571,11 @@ public class World {
 			if (obj.getClass() == CutsceneObject.class) {
 				cutsceneObjects.add( (CutsceneObject) obj );
 			} else if (obj.getClass() == MovablePlatform.class) {
+				System.out.println("that was a new movable platform!");
 				movablePlatforms.add( (MovablePlatform) obj );
+			} else if (obj.getClass() == MovablePlatformAttachment.class) {
+				System.out.println("that was a new movable platform attachment!");
+				movablePlatforms.add( (MovablePlatformAttachment) obj );
 			} else if (obj instanceof BlockMaker) {
 				System.out.println("adding blockmaker");
 				blockMakers.add( (BlockMaker) obj);
@@ -627,7 +654,9 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-		rank = 0.91f;
+		//rank = 0.91f;
+		rank = 0.76f;
+		//rank = 0.21f;
 		scenePosition = 0;
 		
 		isPaused = false;

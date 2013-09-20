@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
@@ -37,6 +38,7 @@ import com.test.game.model.EnemySpiderBoss;
 import com.test.game.model.EnemySpiderBossArms;
 import com.test.game.model.EnemySpiderBossPopcorn;
 import com.test.game.model.Follower;
+import com.test.game.model.LaserBeam;
 import com.test.game.model.MovableEntity;
 import com.test.game.model.MovablePlatform;
 import com.test.game.model.Ship;
@@ -238,9 +240,11 @@ public class WorldRenderer {
 		
 		/* Draw Moveable Platform */
 		for (MovablePlatform mvPlat: mvPlatforms) {
-			batch.draw(mvPlat.getTexture(), mvPlat.getPosition().x, mvPlat.getPosition().y, mvPlat.getWidth() /2, mvPlat.getHeight()/2,
-					mvPlat.getWidth(), mvPlat.getHeight(), 1, 1, mvPlat.getRotation(), 0, 0, mvPlat.getTexture().getWidth(),
-					mvPlat.getTexture().getHeight(), false, false);
+			if (mvPlat.getTexture() != null) {
+				batch.draw(mvPlat.getTexture(), mvPlat.getPosition().x, mvPlat.getPosition().y, mvPlat.getWidth() /2, mvPlat.getHeight()/2,
+						mvPlat.getWidth(), mvPlat.getHeight(), 1, 1, mvPlat.getRotation(), 0, 0, mvPlat.getTexture().getWidth(),
+						mvPlat.getTexture().getHeight(), false, false);
+			}
 		}
 		
 		/* Draw ship */
@@ -425,6 +429,11 @@ public class WorldRenderer {
 					sr.rect(wp.getBounds().x, wp.getBounds().y, wp.getBounds().width, wp.getBounds().height);
 					
 					
+				}
+			} else if (e.getClass() == LaserBeam.class) {
+				Polygon p = ((LaserBeam)e).getLaserBounds();
+				if (p != null) {
+					sr.polygon(p.getTransformedVertices()); 
 				}
 			}
 			

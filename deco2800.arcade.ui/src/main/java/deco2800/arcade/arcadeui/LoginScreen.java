@@ -17,8 +17,11 @@ public class LoginScreen implements Screen {
 	
 	private Skin skin;
     private LoginScreenStage stage;
+    private ArcadeUI arcadeUI;
 
-	public LoginScreen() {
+	public LoginScreen(ArcadeUI ui) {
+        arcadeUI = ui;
+
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
@@ -29,7 +32,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the store\nlogin with username: store", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);
@@ -41,7 +44,7 @@ public class LoginScreen implements Screen {
         passwordText.setPasswordCharacter('*');
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
-        //CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        CheckBox rememberBox = new CheckBox("Remember Me", skin);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton registerButton = new TextButton("Register", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
@@ -56,8 +59,8 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(serverText).width(400).pad(5).colspan(2);
         table.row();
-        //table.add(rememberBox);
-        //table.row();
+        table.add(rememberBox);
+        table.row();
         table.add(loginButton).width(190).height(50).pad(5);
         table.add(registerButton).width(190).height(50).pad(5);
         table.row();
@@ -70,18 +73,18 @@ public class LoginScreen implements Screen {
                     errorLabel.setText("No Username Supplied");
                 }
                 else if (usernameText.getText().toLowerCase().equals("store")) {
-                    // temporary direct access to store until a proper solution is found
-                    ArcadeSystem.login("store");
+                    arcadeUI.setScreen(arcadeUI.store);
                 }
                 else {
-                    // username supplied, try to login
                     ArcadeSystem.login(usernameText.getText());
+                    arcadeUI.setScreen(arcadeUI.home);
                 }
             }
         });
         
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+                arcadeUI.setScreen(arcadeUI.register);
             }
         });
         
@@ -92,30 +95,24 @@ public class LoginScreen implements Screen {
 	}
 
 	@Override
-	public void show() {
-		ArcadeInputMux.getInstance().addProcessor(stage);
-    }
-
-	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
-	    if (ArcadeSystem.isLoggedIn()) {
-	    	ArcadeSystem.goToGame("arcadeui");
-	    }
 	}
 
-	@Override
-	public void dispose() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
-        stage.dispose();
-        skin.dispose();
-	}
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void show() {
+        ArcadeInputMux.getInstance().addProcessor(stage);
+    }
 
 	@Override
 	public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -126,7 +123,9 @@ public class LoginScreen implements Screen {
 	public void resume() {
 	}
 
-	@Override
-	public void resize(int arg0, int arg1) {
-	}
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+    }
 }

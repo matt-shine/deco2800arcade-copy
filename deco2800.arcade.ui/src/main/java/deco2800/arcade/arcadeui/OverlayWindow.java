@@ -77,5 +77,5 @@ public class OverlayWindow extends Group {
 	public void destroy() {
 		ArcadeInputMux.getInstance().removeProcessor(contentStage);
 	}
-	
+
 }

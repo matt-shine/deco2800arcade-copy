@@ -55,6 +55,7 @@ public class SnakeLadder extends GameClient {
 	private SpriteBatch batch;
 	
     public GamePlayer gamePlayer;
+    public AIPlayer AIPlayer;
     private GameMap map;
    
 	public GameMap getMap() {
@@ -147,6 +148,9 @@ public class SnakeLadder extends GameClient {
 		// create the game player
 		gamePlayer = new GamePlayer();
 
+		// create the AI player
+		AIPlayer=new AIPlayer();
+		
 		font = new BitmapFont();
 		font.setScale(2);
 		//Initialise the game state
@@ -263,6 +267,7 @@ public class SnakeLadder extends GameClient {
 		
 		getDice().renderDice(batch);
 		gamePlayer.renderPlayer(batch);
+		AIPlayer.renderPlayer(batch);
 		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
@@ -296,12 +301,16 @@ public class SnakeLadder extends GameClient {
 	
 	public void stopPoint() {
 		gamePlayer.reset();
+		AIPlayer.reset();
 		// If we've reached the victory point then update the display
 		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
 			gameState = new GameOverState();
 		    //Update the game state to the server
 		    //networkClient.sendNetworkObject(createScoreUpdate());
 		} 
+		if (AIPlayer.getBounds().x<=(60-20f)&& AIPlayer.getBounds().y>=540){
+			gameState = new GameOverState();
+		}
 		else {
 			// No winner yet, get ready for another point
 			gameState = new ReadyState();
@@ -313,6 +322,7 @@ public class SnakeLadder extends GameClient {
 	public void startPoint() {
 		gamePlayer.initializeVelocity();
 		getDice().rollDice();	
+		AIPlayer.initializeVelocity();
 		gameState = new InProgressState();
 		statusMessage = null;
 	}

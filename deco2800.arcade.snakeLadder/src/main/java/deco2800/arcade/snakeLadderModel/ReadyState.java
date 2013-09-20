@@ -13,6 +13,7 @@ public class ReadyState extends GameState {
 		if (Gdx.input.isTouched()) {
     		context.startPoint();
     		context.gamePlayer.getDnumber(context.getDice().getDiceNumber());
+    		context.AIPlayer.getDnumber2();
     	}
 	}
 

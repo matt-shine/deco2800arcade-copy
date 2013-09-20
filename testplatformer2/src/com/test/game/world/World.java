@@ -18,6 +18,8 @@ import com.test.game.TestGame2;
 import com.test.game.model.Block;
 import com.test.game.model.BlockMaker;
 import com.test.game.model.Bullet;
+import com.test.game.model.BulletHomingDestructible;
+import com.test.game.model.BulletSimple;
 import com.test.game.model.CutsceneObject;
 import com.test.game.model.Enemy;
 import com.test.game.model.EnemySpawner;
@@ -310,12 +312,16 @@ public class World {
 			
 			/* Collision with enemy */
 			if(!ship.isInvincible()) {
-				if ( e.getBounds().overlaps(ship.getBounds()) ) {
-					ship.decrementHearts();
+				for (Rectangle r: e.getPlayerDamageBounds()) {
+					if ( r.overlaps(ship.getBounds()) ) {
+						ship.decrementHearts();
+						
+						ship.bounceBack(true);
+						
+						ship.setInvincibility(true);
+						break;
+					}
 					
-					ship.bounceBack(true);
-					
-					ship.setInvincibility(true);
 				}
 			}
 		}
@@ -411,6 +417,9 @@ public class World {
 				if (newEnemies != null) {
 					enemies.addAll(newEnemies);
 				}
+			} else if (e.getClass() == BulletSimple.class || e.getClass() == BulletHomingDestructible.class){
+				//keep the bullets flying throughout scenes
+				e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
 			}
 			/* Sword collisions */
 			if (e.getBounds().overlaps(sword.getBounds())) {
@@ -618,7 +627,7 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-		rank = 0.2f;
+		rank = 0.91f;
 		scenePosition = 0;
 		
 		isPaused = false;

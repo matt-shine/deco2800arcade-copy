@@ -1,6 +1,7 @@
 package com.test.game.model;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.test.game.world.ParallaxCamera;
@@ -35,12 +36,14 @@ public class EnemySpiderBoss extends Enemy {
 	private float invincibleTime;
 	private boolean beingHit;
 	private Array<EnemySpiderBossPopcorn> popcorns;
+	private float phase2fireballPosition;
+	
 	//private BlockMakerSpiderBoss blockMaker;
 	
 	private State state;
 	
-	//the following array is only added for a quick fix to make bullets with screen not terrain. Actually that's pretty weird. Might remove?
-	public Array<BulletSimple> bullets;
+	//the following array is only added for a quick fix to make bullets with screen not terrain. Actually that's pretty weird. Might remove? now removes bullets after phase change
+	//public Array<Enemy> bullets;
 	
 	public EnemySpiderBoss(Vector2 pos, float rank, ParallaxCamera cam) {
 		super(0, 0, pos, WIDTH, HEIGHT);
@@ -55,11 +58,12 @@ public class EnemySpiderBoss extends Enemy {
 		performingTell = false;
 		state = State.IDLE;
 		arms = new EnemySpiderBossArms(this);
-		bullets = new Array<BulletSimple>();
+		//bullets = new Array<Enemy>();
 		popcorns = new Array<EnemySpiderBossPopcorn>();
 		health = 3;
 		invincibleTime = INVINCIBLE_TIME;
 		beingHit = false;
+		phase2fireballPosition = 0f;
 		//state = State.INTRO1;
 		
 		
@@ -85,13 +89,25 @@ public class EnemySpiderBoss extends Enemy {
 						movesUntilVulnerable = 2;
 						
 					} else {
-						randInt = MathUtils.random(0);
-						if (randInt == 0) {
+						randInt = MathUtils.random(1);
+						if (randInt == 0 || (randInt == 1 && phase == 3)) {
 							//do fireball attack
 							System.out.println("Chosen: Shooting fireballs");
 							performingTell = true;
 							state = State.FIREBALL;
 							count = 2.1f - 2*rank;
+							phase2fireballPosition = MathUtils.random(-14f, 14f);
+						} else if (randInt == 1 || (randInt == 2 && phase == 2)) {
+							System.out.println("Chosen: Ram attack");
+							performingTell = true;
+							state = State.RAM;
+							count = 2.1f - 2* rank;
+							phase2fireballPosition = MathUtils.random(-14f, 14f);
+						} else if (randInt == 2) {
+							System.out.println("Chosen: Ram attack");
+							performingTell = true;
+							state = State.RAM;
+							count = 2.1f - 2* rank;
 						}
 					}
 					break;
@@ -215,6 +231,19 @@ public class EnemySpiderBoss extends Enemy {
 						count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 						state = State.IDLE;
 					}
+					
+				case RAM:
+					if (performingTell) {
+						performingTell = false;
+						if (phase == 1) {
+							velocity = new Vector2(0, 10f);
+						} else if (phase ==2) {
+							velocity = new Vector2(0, -1f-50*rank);
+						}
+						count2= 0;
+					} else {
+						
+					}
 				}
 					
 				
@@ -237,14 +266,63 @@ public class EnemySpiderBoss extends Enemy {
 			} else if (state == State.THROW_ARMS){
 				if (performingTell) {
 					float lerp = 0.7f;
-					position.y -= delta * (position.y - 5f) * lerp;
-					position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 0.5f)) * lerp;
+					if (phase == 1) {
+						
+						position.y -= delta * (position.y - 5f) * lerp;
+						position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 0.5f)) * lerp;
+					} else if (phase ==2) {
+						position.y -= delta * (position.y - (cam.position.y + cam.viewportHeight/2 - 4f)) * lerp;
+						position.x -= delta * (position.x - (cam.position.x -WIDTH/2)) * lerp;
+					}
 				}
 			} else if (state == State.FIREBALL) {
 				if (performingTell) {
 					float lerp = 0.9f;
-					position.y -= delta * (position.y - 9.5f) * lerp;
-					position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 2.5f)) * lerp;
+					if (phase == 1) {
+						position.y -= delta * (position.y - 9.5f) * lerp;
+						position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 2.5f)) * lerp;
+					} else if (phase == 2) {
+						position.y -= delta * (position.y - (cam.position.y + cam.viewportHeight/2 - 6f)) * lerp;
+						position.x -= delta * (position.x - (cam.position.x -WIDTH/2 + phase2fireballPosition)) * 1.4;
+					}
+				}
+			} else if (state == State.RAM){
+				if (performingTell) {
+					float lerp=0.9f;
+					if (phase == 1) {
+						position.y -= delta * (position.y - (-4f)) * lerp;
+						position.x -= delta * (position.x - (cam.position.x -cam.viewportWidth/2 + 2.5f)) * lerp;
+					}
+				} else {
+					if (phase == 1) {
+						if (velocity.angle() < 89f) {
+							velocity.rotate(delta * 2f);
+							
+						} else {
+							velocity.scl(1f+delta*2*rank);
+						}
+						if (position.y <= 2f) {
+							velocity = new Vector2(-BlockMakerSpiderBoss.SPEED, 0);
+						}
+						if (position.x <= 1f) {
+							count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
+							state = State.IDLE;
+						}
+					} else {
+						if (position.y <= 1f) {
+							count2 += delta;
+							if (count2 <= 3f) {
+								velocity = new Vector2(0,0);
+							} else if (count2 <= 3f-rank){
+								velocity = new Vector2(0, -1f-rank*3f);
+							} else {
+								count2 = 0;
+								count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
+								state = State.IDLE;
+							}
+						}
+					}
+					position.add(new Vector2(velocity).scl(delta));
 				}
 			}
 		//}
@@ -286,9 +364,9 @@ public class EnemySpiderBoss extends Enemy {
 			}
 			
 		Array<Enemy> armsNewEnemies = arms.advance(delta, ship, rank);
-		for (BulletSimple b: bullets) {
+		//for (BulletSimple b: bullets) {
 			//b.position.x -= delta * BlockMakerSpiderBoss.SPEED;
-		}
+		//}
 		newEnemies.addAll(armsNewEnemies);
 		return newEnemies;
 		
@@ -296,13 +374,12 @@ public class EnemySpiderBoss extends Enemy {
 
 	@Override
 	public boolean isSolid() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void handleNoTileUnderneath() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
@@ -327,7 +404,7 @@ public class EnemySpiderBoss extends Enemy {
 		//not sure which rank this is pulling from or if it matters
 		BulletSimple bullet = new BulletSimple(5f + 30f * rank, 0f, new Vector2(position.x + MOUTH_OFFSET_X, 
 				position.y + MOUTH_OFFSET_Y), FIREBALL_WIDTH, FIREBALL_HEIGHT, direction, BulletSimple.Graphic.FIRE);
-		bullets.add(bullet);
+		//bullets.add(bullet);
 		return bullet;
 	}
 	
@@ -345,5 +422,13 @@ public class EnemySpiderBoss extends Enemy {
 	
 	public int getPhase() {
 		return phase;
+	}
+	
+	@Override
+	public Array<Rectangle> getPlayerDamageBounds() {
+		Array<Rectangle> rects = new Array<Rectangle>();
+		rects.add(arms.getBounds());
+		rects.add(new Rectangle(position.x, position.y, WIDTH, 3f));
+		return rects;
 	}
 }

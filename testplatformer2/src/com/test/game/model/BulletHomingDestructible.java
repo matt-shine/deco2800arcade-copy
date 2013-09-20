@@ -42,11 +42,11 @@ public class BulletHomingDestructible extends BulletSimple {
 			float maxRotation;
 			//System.out.println("*** homedCount = "+homedCount);
 			if (homedCount < 5) {
-				maxRotation = 40f + 10* rank;
+				maxRotation = 40f + 5* rank;
 			} else if (homedCount > 20) {
 				maxRotation = 0.1f;
 			} else {
-				maxRotation = 20f + 5*rank;
+				maxRotation = 20f + 2.5f*rank;
 			}
 			if (angleDifference > maxRotation) {
 				velocity.rotate(maxRotation);

@@ -11,6 +11,7 @@ public abstract class Enemy extends MovableEntity{
 	protected boolean isDead;
 	protected boolean startingNextScene;
 	
+	
 	public Enemy(float speed, float rotation, Vector2 pos, float width, float height) {
 		super(speed, rotation, pos, width, height);
 		isDead = false;
@@ -84,6 +85,12 @@ public abstract class Enemy extends MovableEntity{
 		} else {
 			return false;
 		}
+	}
+	
+	public Array<Rectangle> getPlayerDamageBounds() {
+		Array<Rectangle> playerDamageRectangle = new Array<Rectangle>();
+		playerDamageRectangle.add(getBounds());
+		return playerDamageRectangle;
 	}
 	
 	public abstract Array<Enemy> advance(float delta, Ship ship, float rank);

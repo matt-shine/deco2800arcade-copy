@@ -66,7 +66,7 @@ public class EnemySpiderBossArms extends Enemy {
 				}
 				if (moveRight) {
 					position.x += thisMoveDelta;
-					if (position.x > parent.getPosition().x +29f) {
+					if (position.x > parent.getPosition().x +32f) {
 						
 						moveRight = false;
 						attackUp = !attackUp;
@@ -80,15 +80,15 @@ public class EnemySpiderBossArms extends Enemy {
 						isReturning = true;
 					}
 				}
-				if (rank > 0.5f) {
+				if (rank > 0.5f && position.x < parent.getPosition().x + 26f) {
 					bulletCount -= delta;
 					if (bulletCount <= 0f) {
 						//System.out.println("Arms: Spawning bullet!");
-						bulletCount = 0.5f - 0.49f* rank;
+						bulletCount = 0.5f - 0.39f* rank;
 						BulletSimple bullet = new BulletSimple(10f + 2*rank, 0f, new Vector2(position.x+WIDTH/2,
 								position.y+HEIGHT/2), parent.FIREBALL_WIDTH, parent.FIREBALL_HEIGHT, new Vector2(ship.position.x + ship.getWidth()/2-
 								position.x, ship.position.y+ship.getHeight()/2-position.y),BulletSimple.Graphic.FIRE);
-						parent.bullets.add(bullet);
+						//parent.bullets.add(bullet);
 						newEnemies.add(bullet);
 					}
 				}
@@ -120,6 +120,8 @@ public class EnemySpiderBossArms extends Enemy {
 					phase2pos = 1;
 					circlePos = 0;
 					velocity = new Vector2(0, -thisMoveDelta/delta);
+					isAttacking = false;
+					isReturning = false;
 				}
 			} else if (phase2pos == 1) {
 				//make a circle in one of two directions
@@ -198,6 +200,32 @@ public class EnemySpiderBossArms extends Enemy {
 				position.y = parent.position.y + PHASE2_OFFSET_Y;
 			}
 			System.out.println("phase2pos="+phase2pos+"  position="+position);
+			
+			
+			
+		} else if (phase == 3) {
+			if (isAttacking) {
+				if (moveRight) {
+					velocity = new Vector2(thisMoveDelta / delta, 0);
+					if (position.x >= parent.getPosition().x + 14f) {
+						moveRight = false;
+						velocity = new Vector2(0, thisMoveDelta/delta);
+					}
+				} else {
+					if (position.y >= 14f) {
+						velocity = new Vector2(parent.position.x + PARENT_OFFSET_X - position.x, parent.position.y+PARENT_OFFSET_Y-position.y).nor().scl(thisMoveDelta/delta);
+						isAttacking = false;
+						isReturning = true;
+					}
+				}
+			} else if (isReturning) {
+				if (position.x <= parent.position.x+PARENT_OFFSET_X) {
+					isReturning = false;
+				}
+			} else {
+				position.x = parent.position.x + PARENT_OFFSET_X;
+				position.y = parent.position.y + PARENT_OFFSET_Y;
+			}
 		}
 		return newEnemies;
 	}
@@ -217,7 +245,9 @@ public class EnemySpiderBossArms extends Enemy {
 		isAttacking = true;
 		moveRight = true;
 		this.attackUp=attackUp;
-		phase2pos = 0;
+		if (parent.getPhase() == 2) {
+			phase2pos = 0;
+		}
 	}
 	
 	public boolean isAttacking() {

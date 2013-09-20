@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.test.game.model.BlockMakerSpiderBoss;
 import com.test.game.model.EnemySpiderBoss;
 import com.test.game.model.MovableEntity;
+import com.test.game.model.MovablePlatformAttachment;
 import com.test.game.model.PartTween;
 import com.test.game.model.Ship;
 import com.test.game.model.WalkerPart;
@@ -68,6 +69,10 @@ public class Level2Scenes extends LevelScenes {
 			blockMaker.setActive(true);
 			boss = new EnemySpiderBoss(new Vector2(319f - cam.viewportWidth/2 - EnemySpiderBoss.WIDTH, 5f), rank, cam);
 			output.add(boss);
+			MovablePlatformAttachment bossSolid1 = new MovablePlatformAttachment(null, 2f, 5f, boss, new Vector2(4f, 5f));
+			MovablePlatformAttachment bossSolid2 = new MovablePlatformAttachment(null, 5f, 2f, boss, new Vector2(1f, 2f));
+			output.add(bossSolid1);
+			output.add(bossSolid2);
 			
 			targetPos = 0f;
 		} else if (scenePosition == 1) {
@@ -118,7 +123,7 @@ public class Level2Scenes extends LevelScenes {
 			//boss into phase 3 scene
 			count += delta;
 			if (count <= 2f) {
-				boss.getPosition().x -= (boss.getPosition().x - (cam.position.x -cam.viewportWidth/2))*delta*0.2f;
+				boss.getPosition().x -= (boss.getPosition().x - (cam.position.x -cam.viewportWidth/2))*delta*0.6f;
 				boss.getPosition().y -= (boss.getPosition().y - 14f)*delta*0.2f;
 			} else if (count <=5f) {
 				if (!doneSomethingOnce) {
@@ -127,6 +132,7 @@ public class Level2Scenes extends LevelScenes {
 				}
 				boss.getPosition().x -= (boss.getPosition().x - (cam.position.x -cam.viewportWidth/2))*delta*0.5f;
 				boss.getPosition().y -= (boss.getPosition().y - (-13f))*delta*12.2f;
+				ship.getPosition().x -= (ship.getPosition().x - (cam.position.x + cam.viewportWidth/2-3f))*delta*0.8f;
 				
 			} else if (count <= 5.5f) {
 				boss.getPosition().x = (cam.position.x -cam.viewportWidth/2);

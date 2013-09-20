@@ -54,7 +54,7 @@ public class EnemySpiderBossPopcorn extends Enemy {
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(-15f)));
 			}
 			for (Vector2 v: spawnDirections) {
-				BulletHomingDestructible bullet = new BulletHomingDestructible(5f + 30f * rank, 0f, new Vector2(position.x + width/2, 
+				BulletHomingDestructible bullet = new BulletHomingDestructible(5f + 10f * rank, 0f, new Vector2(position.x + width/2, 
 						position.y + height/2), 1f, 1f, v, BulletSimple.Graphic.FIRE);
 				newEnemies.add(bullet);
 			}
@@ -103,6 +103,12 @@ public class EnemySpiderBossPopcorn extends Enemy {
 	
 	public boolean isProjectile() {
 		return isProjectile;
+	}
+	
+	@Override
+	public Array<Rectangle> getPlayerDamageBounds() {
+		Array<Rectangle> playerDamageRectangle = new Array<Rectangle>();
+		return playerDamageRectangle;
 	}
 
 }

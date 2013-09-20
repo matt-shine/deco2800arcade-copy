@@ -45,10 +45,14 @@ public class LoginScreen implements Screen {
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
         CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        rememberBox.getCells().get(0).size(25, 25);
+        rememberBox.getCells().get(0).pad(5);
+        rememberBox.getCells().get(1).pad(2);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton registerButton = new TextButton("Register", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
 
+        //table.debug();
         table.add(tempLabel).colspan(2);  // Temporary label to display a message
         table.row();
         table.add(errorLabel).width(400).pad(5).colspan(2);
@@ -59,7 +63,7 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(serverText).width(400).pad(5).colspan(2);
         table.row();
-        table.add(rememberBox);
+        table.add(rememberBox).width(190).height(25).pad(5).colspan(2).align(1000);
         table.row();
         table.add(loginButton).width(190).height(50).pad(5);
         table.add(registerButton).width(190).height(50).pad(5);
@@ -99,6 +103,7 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+        //Table.drawDebug(stage);
 	}
 
     @Override

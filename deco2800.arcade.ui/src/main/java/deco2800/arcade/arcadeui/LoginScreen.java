@@ -53,7 +53,6 @@ public class LoginScreen implements Screen {
         TextButton registerButton = new TextButton("Register", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
 
-        //table.debug();
         table.add(tempLabel).colspan(2);  // Temporary label to display a message
         table.row();
         table.add(errorLabel).width(400).pad(5).colspan(2);
@@ -104,7 +103,6 @@ public class LoginScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        //Table.drawDebug(stage);
 	}
 
     @Override

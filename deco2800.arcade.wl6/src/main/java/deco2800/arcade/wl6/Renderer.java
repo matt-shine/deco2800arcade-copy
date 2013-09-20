@@ -237,7 +237,7 @@ public class Renderer {
 		    		
 		    		
 		    		if (map.getDoodadAt(i, j) == WL6Meta.SECRET_DOOR ||
-		    				isSurrounded(i, j, map)) {
+		    				WL6Meta.isSurrounded(i, j, map)) {
 		    			continue;
 		    		}
 		    		
@@ -248,10 +248,10 @@ public class Renderer {
 		    		
 		    		CubeGen.getCube(i, j,
 		    				texPos.x, texPos.y, texS,
-		    				i != 0 && !hasObscuringBlockAt(i - 1, j, map),
-		    				i != 63 && !hasObscuringBlockAt(i + 1, j, map),
-		    				j != 0 && !hasObscuringBlockAt(i, j - 1, map),
-		    				j != 63 && !hasObscuringBlockAt(i, j + 1, map),
+		    				i != 0 && !WL6Meta.hasObscuringBlockAt(i - 1, j, map),
+		    				i != 63 && !WL6Meta.hasObscuringBlockAt(i + 1, j, map),
+		    				j != 0 && !WL6Meta.hasObscuringBlockAt(i, j - 1, map),
+		    				j != 63 && !WL6Meta.hasObscuringBlockAt(i, j + 1, map),
 		    				true,
 		    				terrainScratch
 		    		);
@@ -260,42 +260,6 @@ public class Renderer {
 		    	}
 		    }
 	    }
-	}
-	
-	
-	
-	
-	public boolean isSurrounded(int x, int y, Level map) {
-		int surrounded = 0;
-		//check if we're surrounded
-		if (x == 0 || hasObscuringBlockAt(x - 1, y, map)) {
-			surrounded++;
-		}
-		if (x == 63 || hasObscuringBlockAt(x + 1, y, map)) {
-			surrounded++;
-		}
-		if (y == 0 || hasObscuringBlockAt(x, y - 1, map)) {
-			surrounded++;
-		}
-		if (y == 63 || hasObscuringBlockAt(x, y + 1, map)) {
-			surrounded++;
-		}
-		if (surrounded == 4) {
-			return true;
-		}
-		
-		return false;
-		
-	}
-	
-	
-	
-	public boolean hasObscuringBlockAt(int x, int y, Level map) {
-		if (WL6Meta.block(map.getTerrainAt(x, y)).texture != null &&
-				map.getDoodadAt(x, y) != WL6Meta.SECRET_DOOR) {
-			return true;
-		}
-		return false;
 	}
 	
 	

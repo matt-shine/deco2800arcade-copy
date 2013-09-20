@@ -50,6 +50,8 @@ public class WL6InputProcessor implements InputProcessor {
 		if (Gdx.input.isKeyPressed(Keys.S)) y += 1;
 		if (Gdx.input.isKeyPressed(Keys.A)) x -= 1;
 		if (Gdx.input.isKeyPressed(Keys.D)) x += 1;
+		
+		//velocity = rotate(180, normalize((x, y)) * speed * delta)
 		p.setVel(
 				new Vector2(x, y)
 				.nor()
@@ -75,6 +77,7 @@ public class WL6InputProcessor implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int x, int y) {
+		
 		model.getPlayer().setAngle(-x);
 		updatePlayerSpeed();
 		return false;

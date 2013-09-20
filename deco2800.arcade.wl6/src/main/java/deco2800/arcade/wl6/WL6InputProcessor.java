@@ -74,11 +74,15 @@ public class WL6InputProcessor implements InputProcessor {
 		}
 		return false;
 	}
-
+	
+	private int lookOffset = 0;
+	
 	@Override
 	public boolean mouseMoved(int x, int y) {
-		
-		model.getPlayer().setAngle(-x);
+		Gdx.input.setCursorCatched(true);
+		Gdx.input.setCursorPosition(game.getWidth() / 2, game.getHeight() / 2);
+		lookOffset -= x - game.getWidth() / 2;
+		model.getPlayer().setAngle(lookOffset / 1.5f);//divide by 1.5 just to reduce mouse sensitivity
 		updatePlayerSpeed();
 		return false;
 	}

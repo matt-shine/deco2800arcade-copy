@@ -31,7 +31,13 @@ public class MapProcessor {
 		    		
 		    		model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.direction));
 		    		
-
+		    	} else if (id == WL6Meta.SECRET_DOOR) {
+		    		
+		    		SecretDoor door = new SecretDoor(doodadID());
+		    		door.setTextureName(dInfo.texture);
+		    		door.setPos(new Vector2(i + 0.5f, j + 0.5f));
+		    		model.addDoodad(door);
+		    		
 		    	} else {
 			    	
 		    		//everything else

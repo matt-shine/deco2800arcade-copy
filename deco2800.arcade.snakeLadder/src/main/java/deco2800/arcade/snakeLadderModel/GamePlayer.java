@@ -29,6 +29,7 @@ public class GamePlayer {
 	 * Basic constructor for player. Set position and dimensions to the default
 	 */
 	public GamePlayer() {
+    	//loading player icon
 		this.player =new Texture(Gdx.files.classpath("images/player.png"));
 		getBounds().x = 0;
 		getBounds().y = 0;
@@ -100,14 +101,7 @@ public class GamePlayer {
      */
     public void renderPlayer(SpriteBatch batch)
     {
-    	//loading player icon
-    	//player =new Texture(Gdx.files.classpath("images/player.png"));
-    	batch.draw(this.player,getBounds().x,getBounds().y);
-//    	shapeRenderer.filledRect(this.getBounds().x,
-//                this.getBounds().y,
-//                this.getBounds().width,
-//                this.getBounds().height);
-    	
+    	batch.draw(this.player,getBounds().x,getBounds().y);   	
     }
     
     public void initializeVelocity() {

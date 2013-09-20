@@ -68,7 +68,6 @@ public class SnakeLadder extends GameClient {
 	public GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
-	//private ShapeRenderer shapeRenderer;
 	private Stage stage;
 	private Skin skin;
 	private BitmapFont font;
@@ -148,7 +147,6 @@ public class SnakeLadder extends GameClient {
 		// create the game player
 		gamePlayer = new GamePlayer();
 
-		//shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setScale(2);
 		//Initialise the game state
@@ -256,11 +254,8 @@ public class SnakeLadder extends GameClient {
 		camera.update();
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
-		//shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
-		
-		 //Begin drawing of shapes
-	    //shapeRenderer.begin(ShapeType.FilledRectangle);
+
 	    //Begin batch
 	    batch.begin();
 		// render map for this level
@@ -280,11 +275,6 @@ public class SnakeLadder extends GameClient {
 	    	}
 	    }
 		batch.end();
-		//Render gamePlayer 
-		//gamePlayer.render(shapeRenderer);
-		 //End drawing of shapes
-	    //shapeRenderer.end();
-
 		
 		 handleInput();
 		

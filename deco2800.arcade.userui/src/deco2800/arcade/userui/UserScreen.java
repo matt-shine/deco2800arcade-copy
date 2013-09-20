@@ -1,11 +1,8 @@
-package deco2800.arcade.userui.view;
+package deco2800.arcade.userui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.HeadlessException;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,10 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
-import deco2800.arcade.userui.model.Model;
 
 public class UserScreen extends JFrame implements ActionListener {
 	
@@ -33,22 +28,20 @@ public class UserScreen extends JFrame implements ActionListener {
 	//Declare JPanel and ImagePanels
 	private JPanel parentContainer;	
 	private ImagePanel menupanel;	
-	private JPanel contentpanel;
-	private JPanel achievementpanel;
-	private JPanel historypanel;	
-	private JPanel sidepanel;
+	private ImagePanel contentpanel;
+	private ImagePanel achievementpanel;
+	private ImagePanel historypanel;	
+	private ImagePanel sidepanel;
 	private JPanel playerinfopanel;
 	private JPanel playerpanel;
-	private JPanel friendpanel;
-	private JPanel aboutpanel;
+	private ImagePanel friendpanel;
+	private ImagePanel aboutpanel;
 	
 	//Declare Buttons 
 	private JButton addfriendbutton;
 	private JButton editbutton;
 	private JButton myprofilelink;
-	private JButton homelink;
-	private JButton storelink;
-	private JButton gameslink;
+	private JButton homelink, storelink, librarylink, forumlink;
 	
 	//Declare Labels 
 	private JLabel avatar;
@@ -59,6 +52,8 @@ public class UserScreen extends JFrame implements ActionListener {
 	private JLabel friendbar;
 	private JLabel historybar;
 	private JLabel achievementbar;
+	private JLabel history1, history2, history3, history4, history5, 
+	history6, history7, history8;
 	
 	//Declare Text Areas
 	private JTextArea achievementarea;
@@ -66,21 +61,15 @@ public class UserScreen extends JFrame implements ActionListener {
 	private JTextArea historyarea;
 	
 	//Declare Images 
-	private ImageIcon picavatar;
-	private ImageIcon picaboutbar;
-	private ImageIcon picfriendbar;
-	private ImageIcon picaddfriend;
-	private ImageIcon pichistorybar;
-	private ImageIcon picachievementbar;
-	private ImageIcon piclocked;
-	private ImageIcon picunlocked;
-	private ImageIcon piceditbutton;
+	private ImageIcon picavatar, picaboutbar, picfriendbar, picaddfriend, 
+	pichistorybar, picachievementbar, piclocked, picunlocked, piceditbutton;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
 	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
-	
+	Font linkbold = new Font("Verdana", Font.BOLD, 14);
+
 		
 	public UserScreen(Model model) throws HeadlessException {
 		
@@ -106,7 +95,6 @@ public class UserScreen extends JFrame implements ActionListener {
 		 *  (Page split into 3 main panels inside a parent container 
 		 *  ie. sidepanel, contentpanel, menupanel )
 		 */
-		parentContainer = new JPanel(new MigLayout());
 			    
 	    addmenupanel();
 	    addplayerinfopanel();
@@ -122,9 +110,11 @@ public class UserScreen extends JFrame implements ActionListener {
 	    /*Add panels to Main Panel	
 	     *                
 	     */
+	    
+	    parentContainer = new JPanel(new MigLayout());
 		parentContainer.add(menupanel, "dock north");
-		parentContainer.add(sidepanel, "west, width :350, height :700");
-		parentContainer.add(contentpanel, "east, width :950, height :700");
+		parentContainer.add(sidepanel, "west");
+		parentContainer.add(contentpanel, "east");
 
 		add(parentContainer);
 	
@@ -144,10 +134,11 @@ public class UserScreen extends JFrame implements ActionListener {
 	 */
 	public void addsidepanel(){
 		
-		sidepanel = new JPanel(new MigLayout());        
-        sidepanel.add(playerpanel, "wrap, center, width :300, height :300");
-        sidepanel.add(aboutpanel, "wrap, center, width :300, height :300");
-        sidepanel.add(friendpanel, "center, width :300, height :300");
+	    sidepanel = new ImagePanel(new ImageIcon("assets/images/side.png").getImage());  
+	    sidepanel.setLayout(new MigLayout());
+        sidepanel.add(playerpanel, "wrap, center");
+        sidepanel.add(aboutpanel, "wrap, center");
+        sidepanel.add(friendpanel, "center");
 		sidepanel.setBackground(Color.darkGray);
 
 	}
@@ -157,9 +148,10 @@ public class UserScreen extends JFrame implements ActionListener {
 	 */
 	public void addcontentpanel(){
 		
-		contentpanel = new JPanel(new MigLayout());
-        contentpanel.add(historypanel, "wrap, height :320, width :810, gapbefore 30px");
-        contentpanel.add(achievementpanel, "height :320, width :810, gapbefore 30px");
+	    contentpanel = new ImagePanel(new ImageIcon("assets/images/content.png").getImage());
+        contentpanel.setLayout(new MigLayout());
+	    contentpanel.add(historypanel, "wrap, height :320, width :810, gap top 20px");
+        contentpanel.add(achievementpanel, "height :320, width :810");
 		contentpanel.setBackground(Color.gray);
 	}
 	
@@ -204,10 +196,10 @@ public class UserScreen extends JFrame implements ActionListener {
 		//Add Elements to Panel
 		playerinfopanel = new JPanel(new MigLayout());
 		playerinfopanel.setOpaque(false);		   	
-        playerinfopanel.add(playername,"wrap, align 50% 50%");       
-        playerinfopanel.add(playerlevel,"wrap, align 50% 50%"); 
-        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%");
-        playerinfopanel.add(editbutton,"align 50% 50%");
+        playerinfopanel.add(playername,"wrap, align 50% 50%, gap top 30px");       
+        playerinfopanel.add(playerlevel,"wrap, align 50% 50%, gap top 5px"); 
+        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%, gap top 20px");
+        playerinfopanel.add(editbutton,"align 50% 50%, gap top 5px");
         
 	}
 	
@@ -217,34 +209,40 @@ public class UserScreen extends JFrame implements ActionListener {
 	public void addmenupanel(){
 		
 	    //Page Button Links
-	    myprofilelink = new JButton("My Profile");
-	    myprofilelink.setFont(blacklink);
+	    myprofilelink = new JButton("MY PROFILE");
+	    myprofilelink.setFont(linkbold);
 	    myprofilelink.setBorder(BorderFactory.createEmptyBorder());
 	    myprofilelink.setContentAreaFilled(false);
 	    myprofilelink.setForeground(Color.WHITE);
-	    homelink = new JButton("Home");
+	    homelink = new JButton("HOME");
 	    homelink.setFont(blacklink);
 	    homelink.setForeground(Color.white);
 	    homelink.setBorder(BorderFactory.createEmptyBorder());
 	    homelink.setContentAreaFilled(false);
-	    gameslink = new JButton("MyGames");
-	    gameslink.setFont(blacklink);
-	    gameslink.setForeground(Color.white);
-	    gameslink.setBorder(BorderFactory.createEmptyBorder());
-	    gameslink.setContentAreaFilled(false);
-	    storelink = new JButton("Game-Store");
+	    librarylink = new JButton("LIBRARY");
+	    librarylink.setFont(blacklink);
+	    librarylink.setForeground(Color.white);
+	    librarylink.setBorder(BorderFactory.createEmptyBorder());
+	    librarylink.setContentAreaFilled(false);
+	    storelink = new JButton("STORE");
 	    storelink.setFont(blacklink);
 	    storelink.setForeground(Color.white);
 	    storelink.setBorder(BorderFactory.createEmptyBorder());
 	    storelink.setContentAreaFilled(false);
+	    forumlink = new JButton("FORUM");
+	    forumlink.setFont(blacklink);
+	    forumlink.setForeground(Color.white);
+	    forumlink.setBorder(BorderFactory.createEmptyBorder());
+	    forumlink.setContentAreaFilled(false);
 	    
 		//Add Elements to Panel
 	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
 	    menupanel.setLayout(new MigLayout());	    
         menupanel.add(homelink, "center, gapbefore 250px");
         menupanel.add(storelink, "center, gapbefore 100px");
-        menupanel.add(gameslink, "center, gapbefore 100px");
-        menupanel.add(myprofilelink,"center, gapbefore 470px");	    		
+        menupanel.add(librarylink, "center, gapbefore 100px");
+        menupanel.add(forumlink, "center, gapbefore 100px");
+        menupanel.add(myprofilelink,"center, gapbefore 350px");	    		
 	}
 	
 	/*
@@ -253,19 +251,19 @@ public class UserScreen extends JFrame implements ActionListener {
 	public void addfriendpanel(){
 		
 		//ScrollPane
-		JPanel friendarea = new JPanel();
-		JScrollPane friendscroll = new JScrollPane(friendarea);
-		friendscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		//JScrollPane friendscroll = new JScrollPane(friendarea);
+		//friendscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		//friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		//Label
 		friendbar = new JLabel();
 	    friendbar.setIcon(picfriendbar);
 		
 		//Add Elements to Panel
-	    friendpanel = new JPanel(new MigLayout());
-        friendpanel.add(friendbar, "north");
-        friendpanel.add(friendscroll,"width :100%, height :100%");    
+	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
+        friendpanel.setLayout(new MigLayout());
+	    //friendpanel.add(friendbar, "north");
+        //friendpanel.add(friendscroll,"width :100%, height :100%");    
 		
 	}
 	
@@ -275,7 +273,7 @@ public class UserScreen extends JFrame implements ActionListener {
 	public void addaboutpanel(){
 		
 		//Textarea
-		aboutarea = new JTextArea();
+		/*aboutarea = new JTextArea();
 		aboutarea.setLineWrap(true);
 		aboutarea.setFont(blacknormal);
 		aboutarea.setLineWrap(true);
@@ -284,15 +282,16 @@ public class UserScreen extends JFrame implements ActionListener {
 		JScrollPane aboutscroll = new JScrollPane(aboutarea);
 		aboutscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		aboutscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
+		*/
 		//Label
-		aboutbar = new JLabel();
-	    aboutbar.setIcon(picaboutbar);
+		//aboutbar = new JLabel();
+	    //aboutbar.setIcon(picaboutbar);
 		
 		//Add Elements to Panel
-	    aboutpanel = new JPanel(new MigLayout());
-        aboutpanel.add(aboutbar,"north");
-        aboutpanel.add(aboutscroll, "width :100%, height :100%");
+	    aboutpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
+        aboutpanel.setLayout(new MigLayout());
+	    //aboutpanel.add(aboutbar,"north");
+        //aboutpanel.add(aboutscroll, "width :100%, height :100%");
         
 	}
 	
@@ -301,11 +300,12 @@ public class UserScreen extends JFrame implements ActionListener {
 	 */
 	public void addachievementpanel(){
 				
-		achievementarea = new JTextArea();		
-	    achievementbar = new JLabel();
-	    achievementbar.setIcon(picachievementbar);
+		//achievementarea = new JTextArea();		
+	    //achievementbar = new JLabel();
+	    //achievementbar.setIcon(picachievementbar);
 	    
 	    //Displayed Achievements
+	    /*
 	    JLabel achievement1 = new JLabel();
 	    JLabel achievement2 = new JLabel();
 	    JLabel achievement3 = new JLabel();
@@ -357,9 +357,10 @@ public class UserScreen extends JFrame implements ActionListener {
 	    achievementtext10.setBackground(Color.BLUE);
 	    achievementtext11.setBackground(Color.BLUE);
 	    achievementtext12.setBackground(Color.BLUE);
-	    
+	    */
 		//Add Elements to Panel
-	    achievementpanel = new JPanel(new MigLayout());
+	    achievementpanel = new ImagePanel(new ImageIcon("assets/images/Pink_Box.png").getImage());
+		/*
 		achievementpanel.add(achievementbar, "north");
         achievementpanel.add(achievement1,"gapbefore 5px, pad 10 10 10 10");
         achievementpanel.add(achievementtext1,"pad 10 10 10 10, growy, width :110");
@@ -385,7 +386,7 @@ public class UserScreen extends JFrame implements ActionListener {
         achievementpanel.add(achievementtext11,"pad 10 10 10 10, growy, width :110");
         achievementpanel.add(achievement12,"pad 10 10 10 10");
         achievementpanel.add(achievementtext12,"pad 10 10 10 10, growy, width :110");
-		
+		*/
 	}
 	
 	/*
@@ -402,12 +403,14 @@ public class UserScreen extends JFrame implements ActionListener {
         historybar.setIcon(pichistorybar);
         
         //Show Recent history Labels and game icon
-        JLabel history1 = new JLabel();
-        JLabel history2 = new JLabel();
-        JLabel history3 = new JLabel();
-        JLabel history4 = new JLabel();
-        JLabel history5 = new JLabel();
-        JLabel history6 = new JLabel();
+        history1 = new JLabel();
+        history2 = new JLabel();
+        history3 = new JLabel();
+        history4 = new JLabel();
+        history5 = new JLabel();
+        history6 = new JLabel();
+        history7 = new JLabel();
+        history8 = new JLabel();
 
         history1.setIcon(piclocked);
         history2.setIcon(piclocked);
@@ -415,6 +418,8 @@ public class UserScreen extends JFrame implements ActionListener {
         history4.setIcon(piclocked);
         history5.setIcon(piclocked);
         history6.setIcon(piclocked);
+        history7.setIcon(piclocked);
+        history8.setIcon(piclocked);
 
         JPanel historytext1 = new JPanel(new MigLayout());
         JPanel historytext2 = new JPanel(new MigLayout());
@@ -422,17 +427,14 @@ public class UserScreen extends JFrame implements ActionListener {
         JPanel historytext4 = new JPanel(new MigLayout());
         JPanel historytext5 = new JPanel(new MigLayout());
         JPanel historytext6 = new JPanel(new MigLayout());
-
-        historytext1.setBackground(Color.BLUE);
-        historytext2.setBackground(Color.BLUE);
-        historytext3.setBackground(Color.BLUE);
-        historytext4.setBackground(Color.BLUE);
-        historytext5.setBackground(Color.BLUE);
-        historytext6.setBackground(Color.BLUE);
+        JPanel historytext7 = new JPanel(new MigLayout());
+        JPanel historytext8 = new JPanel(new MigLayout());
         
         //Add Elements to Panel
-	    historypanel = new JPanel(new MigLayout());
-        historypanel.add(historybar, "north");
+	    historypanel = new ImagePanel(new ImageIcon("assets/images/Green_Box.png").getImage());
+	    historypanel.setLayout(new MigLayout());
+        //historypanel.add(historybar, "north");
+	    historypanel.setOpaque(true);
         historypanel.add(history1,"gapbefore 5px, pad 10 10 10 10");
         historypanel.add(historytext1,"pad 10 10 10 10, growy, width :110");
         historypanel.add(history2,"pad 10 10 10 10");
@@ -444,7 +446,11 @@ public class UserScreen extends JFrame implements ActionListener {
         historypanel.add(history5,"gapbefore 5px, pad 10 10 10 10");
         historypanel.add(historytext5,"pad 10 10 10 10, growy, width :110");
         historypanel.add(history6,"pad 10 10 10 10");
-        historypanel.add(historytext6,"pad 10 10 10 10, growy, width :110");		
+        historypanel.add(historytext6,"pad 10 10 10 10, growy, width :110");	
+        historypanel.add(history7,"pad 10 10 10 10");
+        historypanel.add(historytext7,"pad 10 10 10 10, growy, width :110");	
+        historypanel.add(history8,"pad 10 10 10 10");
+        historypanel.add(historytext8,"pad 10 10 10 10, growy, width :110");	
 	}
 	
 
@@ -462,29 +468,4 @@ public class UserScreen extends JFrame implements ActionListener {
 }
 
 
-/*
- * Class for adding background Image to JPanels
- */
-class ImagePanel extends JPanel {
 
-	  private Image img;
-
-	  public ImagePanel(String img) {
-	    this(new ImageIcon(img).getImage());
-	  }
-
-	  public ImagePanel(Image img) {
-	    this.img = img;
-	    Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
-	    setPreferredSize(size);
-	    setMinimumSize(size);
-	    setMaximumSize(size);
-	    setSize(size);
-	    setLayout(null);
-	  }
-
-	  public void paintComponent(Graphics g) {
-	    g.drawImage(img, 0, 0, null);
-	  }
-
-	}

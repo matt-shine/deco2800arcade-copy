@@ -1,4 +1,4 @@
-package deco2800.arcade.userui.model;
+package deco2800.arcade.userui;
 
 public class Model {
 	/**

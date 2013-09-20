@@ -1,4 +1,4 @@
-package deco2800.arcade.userui.view;
+package deco2800.arcade.userui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -19,11 +19,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
-import deco2800.arcade.userui.model.Model;
 
 import javax.swing.JFrame;
-
-import deco2800.arcade.userui.model.Model;
 
 public class EditScreen extends JFrame {
 	

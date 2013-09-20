@@ -1,4 +1,4 @@
-package deco2800.arcade.userui.view;
+package deco2800.arcade.userui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,8 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import net.miginfocom.swing.MigLayout;
-import deco2800.arcade.userui.model.Model;
-import deco2800.arcade.userui.view.ImagePanel;
+import deco2800.arcade.userui.ImagePanel;
 
 public class AchievementScreen extends JFrame implements ActionListener {
 
@@ -47,9 +46,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	private JButton addfriendbutton;
 	private JButton editbutton;
 	private JButton myprofilelink;
-	private JButton homelink;
-	private JButton storelink;
-	private JButton gameslink;
+	private JButton homelink, storelink, librarylink, forumlink;
 	
 	//Declare ComboBox
 	private JComboBox gameselect;
@@ -66,13 +63,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	private JTextArea gamearea;
 	
 	//Declare Images here
-	private ImageIcon picavatar;
-	private ImageIcon picachievementbar;
-	private ImageIcon piclocked;
-	private ImageIcon picunlocked;
-	private ImageIcon piceditbutton;
-	private ImageIcon picaddfriend;
-	
+	private ImageIcon picavatar, picaddfriend, picachievementbar, 
+	piclocked, picunlocked, piceditbutton;
+		
 	private JScrollPane achievementscroll;
 	private JScrollPane gamescroll;
 	
@@ -80,6 +73,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
 	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
+	Font linkbold = new Font("Verdana", Font.BOLD, 14);
 	
 	public AchievementScreen(Model model) throws HeadlessException {
 		
@@ -156,7 +150,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		gamescroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		gamescroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
-		gameselect = new JComboBox();
+		String[] gamelist = {"", "Pong", "Chess", "Burning Skies", "Checkers","Jungle Jump",
+				"Snakes and Ladders"};
+		gameselect = new JComboBox(gamelist);
 		  
 	}
 	
@@ -168,10 +164,12 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		achievementarea = new JTextArea();	
 		
 	    achievementpanel = new JPanel(new MigLayout());
+	    achievementpanel.setBackground(Color.blue);
 	    achievementpanel.setOpaque(false);
 	    achievementscroll = new JScrollPane(achievementpanel);
 		achievementscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		achievementscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		achievementscroll.setOpaque(false);
 		
         achievementbar = new JLabel();
         achievementbar.setIcon(picachievementbar);
@@ -292,13 +290,13 @@ public class AchievementScreen extends JFrame implements ActionListener {
         playerlevel.setFont(blacknormal);
         playerlevel.setForeground(Color.white);
         
-		//Add Elements to Panel
-		playerinfopanel = new JPanel(new MigLayout());
-		playerinfopanel.setOpaque(false);		   	
-        playerinfopanel.add(playername,"wrap, align 50% 50%");       
-        playerinfopanel.add(playerlevel,"wrap, align 50% 50%"); 
-        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%");
-        playerinfopanel.add(editbutton,"align 50% 50%");
+        //Add Elements to Panel
+        playerinfopanel = new JPanel(new MigLayout());
+      	playerinfopanel.setOpaque(false);		   	
+        playerinfopanel.add(playername,"wrap, align 50% 50%, gap top 30px");       
+        playerinfopanel.add(playerlevel,"wrap, align 50% 50%, gap top 5px"); 
+        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%, gap top 20px");
+        playerinfopanel.add(editbutton,"align 50% 50%, gap top 5px");
         
 	}
 	
@@ -307,35 +305,41 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	 */
 	public void addmenupanel(){
 		
-	    //Page Button Links
-	    myprofilelink = new JButton("My Profile");
-	    myprofilelink.setFont(blacklink);
+		 //Page Button Links
+	    myprofilelink = new JButton("MY PROFILE");
+	    myprofilelink.setFont(linkbold);
 	    myprofilelink.setBorder(BorderFactory.createEmptyBorder());
 	    myprofilelink.setContentAreaFilled(false);
 	    myprofilelink.setForeground(Color.WHITE);
-	    homelink = new JButton("Home");
+	    homelink = new JButton("HOME");
 	    homelink.setFont(blacklink);
 	    homelink.setForeground(Color.white);
 	    homelink.setBorder(BorderFactory.createEmptyBorder());
 	    homelink.setContentAreaFilled(false);
-	    gameslink = new JButton("MyGames");
-	    gameslink.setFont(blacklink);
-	    gameslink.setForeground(Color.white);
-	    gameslink.setBorder(BorderFactory.createEmptyBorder());
-	    gameslink.setContentAreaFilled(false);
-	    storelink = new JButton("Game-Store");
+	    librarylink = new JButton("LIBRARY");
+	    librarylink.setFont(blacklink);
+	    librarylink.setForeground(Color.white);
+	    librarylink.setBorder(BorderFactory.createEmptyBorder());
+	    librarylink.setContentAreaFilled(false);
+	    storelink = new JButton("STORE");
 	    storelink.setFont(blacklink);
 	    storelink.setForeground(Color.white);
 	    storelink.setBorder(BorderFactory.createEmptyBorder());
 	    storelink.setContentAreaFilled(false);
+	    forumlink = new JButton("FORUM");
+	    forumlink.setFont(blacklink);
+	    forumlink.setForeground(Color.white);
+	    forumlink.setBorder(BorderFactory.createEmptyBorder());
+	    forumlink.setContentAreaFilled(false);
 	    
 		//Add Elements to Panel
 	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
 	    menupanel.setLayout(new MigLayout());	    
         menupanel.add(homelink, "center, gapbefore 250px");
         menupanel.add(storelink, "center, gapbefore 100px");
-        menupanel.add(gameslink, "center, gapbefore 100px");
-        menupanel.add(myprofilelink,"center, gapbefore 470px");	    		
+        menupanel.add(librarylink, "center, gapbefore 100px");
+        menupanel.add(forumlink, "center, gapbefore 100px");
+        menupanel.add(myprofilelink,"center, gapbefore 350px");	   		
 	}
 
 	@Override

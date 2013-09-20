@@ -75,6 +75,7 @@ public class GameScreen implements Screen  {
 //	}
 
 	private GameState gameState;
+	private Level levelSystem;
 
 	// Rendering Requirements for LibGDX
 	private ShapeRenderer shapeRenderer;
@@ -87,20 +88,22 @@ public class GameScreen implements Screen  {
 	// Array of Brick
 	Brick bricks[];
 	
-	// test variables for rendering colours
+	// variables for rendering colours
 	private int outer = 0;
 	private int inner = 0;
 	
 	GameScreen(final Breakout game) {
+		this.levelSystem = new Level();
 		score = 0;
 		lives = 3;
 		this.game = game;
 		gamearea();
 		
 	}
+	
 	public void gamearea() {
 		Texture.setEnforcePotImages(false);
-		background = new Texture(Gdx.files.classpath("imgs/background.png"));
+		//background = new Texture(Gdx.files.classpath("imgs/background.png"));
 		// Sets the display size
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
@@ -127,49 +130,16 @@ public class GameScreen implements Screen  {
 
 		int index;
 		if (getLevel() == 1) {
-			// create 48 Bricks in a rectangle formation
-			index = 0;
-			bricks = new Brick[48];
-			outer = 6;
-			inner = 8;
-			for (int i = 0; i < 6; i++) {
-				for (int j = 0; j < 8; j++) {
-					bricks[index] = new Brick(j * 125 + 120, SCREENHEIGHT - i
-							* 45 - 110);
-					index++;
-				}
-			}
+			bricks = levelSystem.levelOne(bricks, this);
 		} else if (getLevel() == 2) {
-			index = 0;
-			bricks = new Brick[20];
-			outer = 4;
-			inner = 5;
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 5; j++) {
-					bricks[index] = new Brick(j * 125 + index * 10 + 120,
-							SCREENHEIGHT - (4 * index) - (i * 40) - 110);
-					index++;
-				}
-			}
+			bricks = levelSystem.levelTwo(bricks, this);
 		} else if (getLevel() == 3) {
-			index = 0;
-			bricks = new Brick[20];
-			outer = 4;
-			inner = 5;
-			while (index < 20) {
-				int shift = 0;
-				double yPos = Math.sin(18 * index);
-				if (yPos < 0) {
-					shift = -40;
-				} else if (yPos > 0) {
-					shift = 40;
-				}
-				bricks[index] = new Brick((float)(640 + 225*Math.cos(18*index)),
-						(float)(360 + shift + 225*yPos));
-				index++;
-			}
+			bricks = levelSystem.levelThree(bricks, this);
+		} else if (getLevel() == 4) {
+			bricks = levelSystem.levelFour(bricks, this);
 		}
 		setBrickNum(bricks.length);
+		System.out.println("Bricks length: " + bricks.length);
 
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
@@ -221,9 +191,9 @@ public class GameScreen implements Screen  {
 			batch.setProjectionMatrix(camera.combined);
 
 			// Draw a background
-			batch.begin();
-			batch.draw(background, 0, 0);
-			batch.end();
+			//batch.begin();
+			//batch.draw(background, 0, 0);
+			//batch.end();
 
 			// renders the rectangles that are filled.
 			shapeRenderer.begin(ShapeType.FilledRectangle);
@@ -231,32 +201,10 @@ public class GameScreen implements Screen  {
 			getPaddle().render(shapeRenderer);
 			// TODO Make the Ball a Circle
 			getBall().render(shapeRenderer);
-			
-			
 
-			// Writes in the text information
-			int index = 0;
-			for (int i=0; i < outer; i++) {
-				for (int j = 0; j < inner; j++) {
-					if (bricks[index].getState()) {
-						bricks[index].render(shapeRenderer, i, getLevel());
-					}
-					index++;
-				}
-			}
+			// Render the level
+			levelSystem.render(bricks, outer, inner, this, shapeRenderer);
 			
-			
-			/*
-			 * Iterates through the array check whether brick's status is true,
-			 * which will then render the individual brick.
-			 */
-//			int num = 0;
-//			for (Brick b : bricks) {
-//				if (b.getState()) {
-//					b.render(shapeRenderer, num % 2);
-//				}
-//				num++;
-//			}
 			shapeRenderer.end();
 			batch.begin();
 			font.setColor(Color.GREEN);
@@ -286,7 +234,7 @@ public class GameScreen implements Screen  {
 
 			batch.end();
 			handleState();
- }
+	 }
 	
 	 /**
 	 * 
@@ -297,77 +245,78 @@ public class GameScreen implements Screen  {
 
 	
 	 void Start() {
-			getBall().randomizeVelocity();
-			setStatus(null);
-			gameState = new InProgressState();
-			setStatus(null);
+		getBall().randomizeVelocity();
+		setStatus(null);
+		gameState = new InProgressState();
+		setStatus(null);
 
-		}
+	}
 	 /**
-		 * Adds the remaining lives as a score and checks whether any achievement
-		 * criteria has been met. Also sets the gameState to GAMEOVER.
-		 */
-		void win() {
-			score += lives * 5;
+	 * Adds the remaining lives as a score and checks whether any achievement
+	 * criteria has been met. Also sets the gameState to GAMEOVER.
+	 */
+	void win() {
+		score += lives * 5;
 
-			if (highScore < score){
-				highScore = score;
-				gameoverstatus = "Congratulations " + player + " you have a new HighScore: "
-						+ score;
-				
-			}else{
-				gameoverstatus = "Congratulations " + player + " your final score is: "
-						+ score;
-			}
+		if (highScore < score){
+			highScore = score;
+			gameoverstatus = "Congratulations " + player + " you have a new HighScore: "
+					+ score;
 			
-			System.out.println("Congratulations " + player
-					+ " your final score is: " + score);
-			//if (lives == 3) {
-			//	incrementAchievement("breakout.prefect");
-		//	} else if (lives == 0) {
-		//		incrementAchievement("breakout.closeOne");
-		//	} else if (score < 0) {
-		//		incrementAchievement("breakout.noob");
-			}
-			
-		//	incrementAchievement("breakout.winGame");
-		//	gameState = GameState.GAMEOVER;
-	//	}
+		}else{
+			gameoverstatus = "Congratulations " + player + " your final score is: "
+					+ score;
+		}
+		
+		System.out.println("Congratulations " + player
+				+ " your final score is: " + score);
+		gameState = new GameOverState();
+		//if (lives == 3) {
+		//	incrementAchievement("breakout.prefect");
+	//	} else if (lives == 0) {
+	//		incrementAchievement("breakout.closeOne");
+	//	} else if (score < 0) {
+	//		incrementAchievement("breakout.noob");
+	}
+		
+	//	incrementAchievement("breakout.winGame");
+	//	gameState = GameState.GAMEOVER;
+//	}
 	
 		
-		/**
-		 * Rewards the Player 2 extra lives and makes the sequence null, so that the
-		 * Player can not re-use the cheat
+	/**
+	 * Rewards the Player 2 extra lives and makes the sequence null, so that the
+	 * Player can not re-use the cheat
+	 */
+	void bonusLives() {
+		lives = lives + 2;
+		setSequence(null);
+	}
+
+	/**
+	 * Resets games area or sets the gameState to GAMEOVER
+	 */
+	void roundOver() {
+		/*
+		 * Checks whether the lives have fallen below 0 If true then the
+		 * gameState is set to GAMEOVER, Otherwise a lives is decremented and
+		 * gameState is set to READY
 		 */
-		void bonusLives() {
-			lives = lives + 2;
-			setSequence(null);
+		if (lives > 0) {
+			getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
+			lives--;
+			score -= 5;
+			gameState = new ReadyState();
+		} else {
+
+			gameoverstatus = "Bad luck " + player + " your final score is: "
+					+ score;
+			System.out.println("Bad luck " + player + " your final score is: "
+					+ score);
+			gameState = new GameOverState();
 		}
 
-		/**
-		 * Resets games area or sets the gameState to GAMEOVER
-		 */
-		void roundOver() {
-			/*
-			 * Checks whether the lives have fallen below 0 If true then the
-			 * gameState is set to GAMEOVER, Otherwise a lives is decremented and
-			 * gameState is set to READY
-			 */
-			if (lives > 0) {
-				getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
-				lives--;
-				score -= 5;
-				gameState = new ReadyState();
-			} else {
-
-				gameoverstatus = "Bad luck " + player + " your final score is: "
-						+ score;
-				System.out.println("Bad luck " + player + " your final score is: "
-						+ score);
-				gameState = new GameOverState();
-			}
-
-		}
+	}
 	 
 	 
 	 
@@ -519,6 +468,14 @@ public class GameScreen implements Screen  {
 	 */
 	public void setLastHitY(float lastHitY) {
 		this.lastHitY = lastHitY;
+	}
+	
+	public void setInner(int inner) {
+		this.inner = inner;
+	}
+	
+	public void setOuter(int outer) {
+		this.outer = outer;
 	}
 
 }

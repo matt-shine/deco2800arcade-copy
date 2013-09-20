@@ -47,6 +47,15 @@ public class Brick {
 		// this.height = bricksImage.getHeight();
 		this.state = true;
 	}
+	
+	public Brick(float x, float y, float width, float height) {
+		brickShape = new Rectangle();
+		this.brickShape.x = x;
+		this.brickShape.y = y;
+		this.brickShape.height = height;
+		this.brickShape.width = width;
+		this.state = true;
+	}
 
 	// Check if the brick has already been hit or not
 	public boolean getState() {
@@ -140,48 +149,93 @@ public class Brick {
 //		sBatch.begin();
 //		sBatch.draw(brickImg, brickShape.x, brickShape.y);
 //		sBatch.end();
-		render.setColor(Color.GREEN);
 		if (level == 1) {
-			num = num%6;
-			if (num == 1) {
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
-			} else if (num == 2){
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-			} else if (num == 3){
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
-			} else if (num == 4){
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE);
-			} else if (num == 5){
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
-			} else {
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-			}
+			renderLevelOne(render, num);
 		}
-		if (level == 2 || level == 3) {
-			num = num%4;
-			if (num == 1) {
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-			} else if (num == 2) {
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
-			} else if (num == 3) {
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
-			} else {
-				render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-						brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
-			}
+		if (level == 2) {
+			renderLevelTwo(render, num);
 		}
-		
-	}	
-		
+		if (level == 3) {
+			renderLevelThree(render, num);
+		}
+		if (level == 4) {
+			renderLevelFour(render, num);
+		}
+	}
+	
+	public void renderLevelOne(ShapeRenderer render, int num) {
+		num = num%6;
+		if (num == 1) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
+		} else if (num == 2){
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+		} else if (num == 3){
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+		} else if (num == 4){
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE);
+		} else if (num == 5){
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
+		} else {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+		}
+	}
+	
+	public void renderLevelTwo(ShapeRenderer render, int num) {
+		num = num%4;
+		if (num == 1) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+		} else if (num == 2) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
+		} else if (num == 3) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
+		} else {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+		}
+	}
+	
+	public void renderLevelThree(ShapeRenderer render, int num) {
+		num = num%4;
+		if (num == 1) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+		} else if (num == 2) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
+		} else if (num == 3) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
+		} else {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+		}
+	}
+	
+	public void renderLevelFour(ShapeRenderer render, int num) {
+		num = num%4;
+		if (num == 1) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+		} else if (num == 2) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
+		} else if (num == 3) {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
+		} else {
+			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+					brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+		}
+	}
 	// return string representation of the bricks position
 	public String toString() {
 		return "brickpos: " + this.brickShape.x + ", " + this.brickShape.y;

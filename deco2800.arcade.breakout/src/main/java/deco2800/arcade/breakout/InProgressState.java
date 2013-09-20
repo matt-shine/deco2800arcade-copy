@@ -9,6 +9,57 @@ public class InProgressState extends GameState {
 	public void handleState(GameScreen context) {
 		context.getPaddle().update(context.getBall());
 		context.getBall().move(Gdx.graphics.getDeltaTime());
+		
+		handleBrickCollision(context);
+
+		if (context.getBrickNum() == 0) {
+			context.setLevel(context.getLevel() + 1);
+			if (context.getLevel() > 4) {
+				context.win();
+			} else {
+				context.dispose();
+				context.gamearea();
+			}
+		}
+
+		handleOtherCollision(context);
+		
+		if (Gdx.input.isButtonPressed(Keys.ESCAPE)) {
+			context.pause();
+		}
+
+	}
+	
+	private void handleOtherCollision(GameScreen context) {
+		if (context.getBall().bounds.overlaps(context.getPaddle().paddleShape)
+				&& context.getBall().getYVelocity() < 0) {
+			context.getBall().updateVelocity(context.getLastHitX(), context.getLastHitY(), context.getPaddle());
+			context.bump.play();
+			context.getBall().bounceY();
+
+		}
+
+		if (context.getBall().bounds.y >= context.SCREENHEIGHT - Ball.WIDTH) {
+			context.setLastHitX(context.getBall().getX());
+			context.setLastHitY(context.getBall().getY());
+			context.getBall().bounceY();
+		}
+
+		if (context.getBall().bounds.x <= 0
+				|| context.getBall().bounds.x + Ball.WIDTH > context.SCREENWIDTH) {
+			context.setLastHitX(context.getBall().getX());
+			context.setLastHitY(context.getBall().getY());
+			context.getBall().bounceX();
+		}
+
+		if (context.getBall().bounds.y <= 0) {
+			context.roundOver();
+		}
+
+		
+	}
+
+	public void handleBrickCollision(GameScreen context) {
 		for (Brick b : context.bricks) {
 			if (b.getState()) {
 				if (b.checkLeftCollision(context.getBall().bounds)) {
@@ -41,46 +92,6 @@ public class InProgressState extends GameState {
 				}
 			}
 		}
-
-		if (context.getBrickNum() == 0) {
-			context.setLevel(context.getLevel() + 1);
-			if (context.getLevel() > 3) {
-				context.win();
-			} else {
-				context.dispose();
-				context.gamearea();
-			}
-		}
-
-		if (context.getBall().bounds.overlaps(context.getPaddle().paddleShape)
-				&& context.getBall().getYVelocity() < 0) {
-			context.getBall().updateVelocity(context.getLastHitX(), context.getLastHitY(), context.getPaddle());
-			context.bump.play();
-			context.getBall().bounceY();
-
-		}
-
-		if (context.getBall().bounds.y >= context.SCREENHEIGHT - Ball.WIDTH) {
-			context.setLastHitX(context.getBall().getX());
-			context.setLastHitY(context.getBall().getY());
-			context.getBall().bounceY();
-		}
-
-		if (context.getBall().bounds.x <= 0
-				|| context.getBall().bounds.x + Ball.WIDTH > context.SCREENWIDTH) {
-			context.setLastHitX(context.getBall().getX());
-			context.setLastHitY(context.getBall().getY());
-			context.getBall().bounceX();
-		}
-
-		if (context.getBall().bounds.y <= 0) {
-			context.roundOver();
-		}
-
-		if (Gdx.input.isButtonPressed(Keys.ESCAPE)) {
-			context.pause();
-		}
-
 	}
 
 }

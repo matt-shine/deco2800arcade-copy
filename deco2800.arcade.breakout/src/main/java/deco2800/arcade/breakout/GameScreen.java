@@ -139,7 +139,6 @@ public class GameScreen implements Screen  {
 			bricks = levelSystem.levelFour(bricks, this);
 		}
 		setBrickNum(bricks.length);
-		System.out.println("Bricks length: " + bricks.length);
 
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
@@ -203,9 +202,10 @@ public class GameScreen implements Screen  {
 			getBall().render(shapeRenderer);
 
 			// Render the level
-			levelSystem.render(bricks, outer, inner, this, shapeRenderer);
-			
+			levelSystem.render(bricks, outer, inner, this, shapeRenderer, batch);
 			shapeRenderer.end();
+			
+			
 			batch.begin();
 			font.setColor(Color.GREEN);
 			font.draw(batch, "player " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);

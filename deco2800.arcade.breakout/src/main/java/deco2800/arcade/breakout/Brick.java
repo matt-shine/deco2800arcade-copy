@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Brick {
 
 	private SpriteBatch sBatch;
+	private Sprite[] brickImgs;
 
 	// protected int x;
 	// protected int y;
@@ -33,11 +34,17 @@ public class Brick {
 	 * @param y
 	 */
 	public Brick(float x, float y) {
-		// TextureAtlas myTextures = new TextureAtlas("packed.txt");
+		//TextureAtlas myTextures = new TextureAtlas("packed.txt");
 		// Pixmap pixels = new Pixmap("data/libgdx.png");
-		// bricksImage = new Texture(Gdx.files.absolute("C:/Users/Owner/Desktop/
-		// bricks.png"));
-		// bricksImage = new Texture(1,1,Pixmap.Format.RGB888);
+		brickImgs = new Sprite[6];
+		brickImgs[0] = new Sprite(new Texture(Gdx.files.classpath("imgs/green.png")));
+		brickImgs[1] = new Sprite(new Texture(Gdx.files.classpath("imgs/red.png")));
+		brickImgs[2] = new Sprite(new Texture(Gdx.files.classpath("imgs/yellow.png")));
+		brickImgs[3] = new Sprite(new Texture(Gdx.files.classpath("imgs/blue.png")));
+		brickImgs[4] = new Sprite(new Texture(Gdx.files.classpath("imgs/orange.png")));
+		brickImgs[5] = new Sprite(new Texture(Gdx.files.classpath("imgs/purple.png")));
+//		bricksImage = new Texture(Gdx.files.absolute("C:/Users/Owner/Desktop/bricks.png"));
+//		bricksImage = new Texture(1,1,Pixmap.Format.RGB888);
 		brickShape = new Rectangle();
 		this.brickShape.x = x;
 		this.brickShape.y = y;
@@ -142,7 +149,7 @@ public class Brick {
 //		sBatch = new SpriteBatch();
 	}
 	
-	public void render(ShapeRenderer render, int num, int level) {
+	public void render(ShapeRenderer render, int num, int level, SpriteBatch b, int index) {
 //		brickImg = new Sprite(new Texture(Gdx.files.classpath("imgs/brick.png")));
 //		brickImg.setSize(width, height);
 //		sBatch = batch;
@@ -150,7 +157,7 @@ public class Brick {
 //		sBatch.draw(brickImg, brickShape.x, brickShape.y);
 //		sBatch.end();
 		if (level == 1) {
-			renderLevelOne(render, num);
+			renderLevelOne(num, b);
 		}
 		if (level == 2) {
 			renderLevelTwo(render, num);
@@ -159,31 +166,33 @@ public class Brick {
 			renderLevelThree(render, num);
 		}
 		if (level == 4) {
-			renderLevelFour(render, num);
+			renderLevelFour(b, index);
 		}
 	}
 	
-	public void renderLevelOne(ShapeRenderer render, int num) {
+	public void renderLevelOne(int num, SpriteBatch b) {
+		for (int i = 0; i < 6; i++) {
+			brickImgs[i].setSize(width, height);	
+		}
+		sBatch = b;
+		sBatch.begin();
 		num = num%6;
 		if (num == 1) {
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
+			sBatch.draw(brickImgs[0], brickShape.x, brickShape.y);
 		} else if (num == 2){
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+			sBatch.draw(brickImgs[1], brickShape.x, brickShape.y);
 		} else if (num == 3){
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+			sBatch.draw(brickImgs[2], brickShape.x, brickShape.y);
+//			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
+//					brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
 		} else if (num == 4){
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.ORANGE, Color.ORANGE, Color.ORANGE, Color.ORANGE);
+			sBatch.draw(brickImgs[3], brickShape.x, brickShape.y);
 		} else if (num == 5){
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
+			sBatch.draw(brickImgs[4], brickShape.x, brickShape.y);
 		} else {
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-		}
+			sBatch.draw(brickImgs[5], brickShape.x, brickShape.y);	
+		} 
+		sBatch.end();
 	}
 	
 	public void renderLevelTwo(ShapeRenderer render, int num) {
@@ -220,21 +229,22 @@ public class Brick {
 		}
 	}
 	
-	public void renderLevelFour(ShapeRenderer render, int num) {
-		num = num%4;
-		if (num == 1) {
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-		} else if (num == 2) {
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.YELLOW, Color.YELLOW, Color.YELLOW, Color.YELLOW);
-		} else if (num == 3) {
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.RED, Color.RED, Color.RED, Color.RED);
-		} else {
-			render.filledRect(brickShape.x, brickShape.y, brickShape.width,
-					brickShape.height, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+	public void renderLevelFour(SpriteBatch b, int index) {
+		for (int i = 0; i < 4; i++) {
+			brickImgs[i].setSize(width, height);	
 		}
+		sBatch = b;
+		sBatch.begin();
+		if (index < 4) {
+			sBatch.draw(brickImgs[0], brickShape.x, brickShape.y);
+		} else if (index >= 4 && index < 10) {
+			sBatch.draw(brickImgs[1], brickShape.x, brickShape.y);
+		} else if (index >= 10 && index < 20) {
+			sBatch.draw(brickImgs[2], brickShape.x, brickShape.y);
+		} else {
+			sBatch.draw(brickImgs[3], brickShape.x, brickShape.y);
+		}
+		sBatch.end();
 	}
 	// return string representation of the bricks position
 	public String toString() {

@@ -1,5 +1,6 @@
 package deco2800.arcade.breakout;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class Level {
@@ -75,26 +76,26 @@ public class Level {
 		bricks[4] = new Brick(400,640);
 		bricks[5] = new Brick(400,600);
 		bricks[6] = new Brick(400,560);
-		bricks[7] = new Brick(280,640);
-		bricks[8] = new Brick(280,600);
-		bricks[9] = new Brick(280,560);
-		bricks[10] = new Brick(280,520);
-		bricks[11] = new Brick(280,480);
-		bricks[12] = new Brick(160,640);
-		bricks[13] = new Brick(160,600);
-		bricks[14] = new Brick(160,560);
-		bricks[15] = new Brick(160,520);
-		bricks[16] = new Brick(160,480);
-		bricks[17] = new Brick(160,440);
-		bricks[18] = new Brick(160,400);
-		bricks[19] = new Brick(760,640);
-		bricks[20] = new Brick(760,600);
-		bricks[21] = new Brick(760,560);
-		bricks[22] = new Brick(880,640);
-		bricks[23] = new Brick(880,600);
-		bricks[24] = new Brick(880,560);
-		bricks[25] = new Brick(880,520);
-		bricks[26] = new Brick(880,480);
+		bricks[7] = new Brick(760,640);
+		bricks[8] = new Brick(760,600);
+		bricks[9] = new Brick(760,560);
+		bricks[10] = new Brick(280,640);
+		bricks[11] = new Brick(280,600);
+		bricks[12] = new Brick(280,560);
+		bricks[13] = new Brick(280,520);
+		bricks[14] = new Brick(280,480);
+		bricks[15] = new Brick(880,640);
+		bricks[16] = new Brick(880,600);
+		bricks[17] = new Brick(880,560);
+		bricks[18] = new Brick(880,520);
+		bricks[19] = new Brick(880,480);
+		bricks[20] = new Brick(160,640);
+		bricks[21] = new Brick(160,600);
+		bricks[22] = new Brick(160,560);
+		bricks[23] = new Brick(160,520);
+		bricks[24] = new Brick(160,480);
+		bricks[25] = new Brick(160,440);
+		bricks[26] = new Brick(160,400);
 		bricks[27] = new Brick(1000,640);
 		bricks[28] = new Brick(1000,600);
 		bricks[29] = new Brick(1000,560);
@@ -106,12 +107,12 @@ public class Level {
 	}
 	
 	public void render(Brick[] bricks, int outer, int inner, GameScreen context, 
-			ShapeRenderer shapeRenderer) {
+			ShapeRenderer shapeRenderer, SpriteBatch b) {
 		int index = 0;
 		for (int i=0; i < outer; i++) {
 			for (int j = 0; j < inner; j++) {
 				if (bricks[index].getState()) {
-					bricks[index].render(shapeRenderer, i, context.getLevel());
+					bricks[index].render(shapeRenderer, i, context.getLevel(), b, index);
 				}
 				index++;
 			}

@@ -29,7 +29,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access homepage\nlogin with username:home\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);
@@ -45,7 +45,7 @@ public class LoginScreen implements Screen {
         TextButton loginButton = new TextButton("Login", skin);
         TextButton registerButton = new TextButton("Register", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
-
+       
         table.add(tempLabel).colspan(2);  // Temporary label to display a message
         table.row();
         table.add(errorLabel).width(400).pad(5).colspan(2);
@@ -63,6 +63,7 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(forgotLogButton).width(400).height(35).pad(5).colspan(2);
         
+        
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 if (usernameText.getText().equals("")) {
@@ -72,6 +73,10 @@ public class LoginScreen implements Screen {
                 else if (usernameText.getText().toLowerCase().equals("store")) {
                     // temporary direct access to store until a proper solution is found
                     ArcadeSystem.login("store");
+                }
+                else if (usernameText.getText().toLowerCase().equals("home")) {
+                	// temporary access to homepage
+                    ArcadeSystem.login("home");
                 }
                 else {
                     // username supplied, try to login
@@ -89,6 +94,7 @@ public class LoginScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
             }
         });
+       
 	}
 
 	@Override

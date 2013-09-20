@@ -68,13 +68,13 @@ public class SnakeLadder extends GameClient {
 	public GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 
-	private ShapeRenderer shapeRenderer;
+	//private ShapeRenderer shapeRenderer;
 	private Stage stage;
 	private Skin skin;
 	private BitmapFont font;
 	private TextButton diceButton;
 	public String statusMessage;
-	
+
 	private Label diceLabel;
 	private Dice dice;
 	
@@ -148,7 +148,7 @@ public class SnakeLadder extends GameClient {
 		// create the game player
 		gamePlayer = new GamePlayer();
 
-		shapeRenderer = new ShapeRenderer();
+		//shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
 		font.setScale(2);
 		//Initialise the game state
@@ -256,18 +256,18 @@ public class SnakeLadder extends GameClient {
 		camera.update();
 		// tell the SpriteBatch to render in the
 		// coordinate system specified by the camera.
-		shapeRenderer.setProjectionMatrix(camera.combined);
+		//shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
 		
 		 //Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    //shapeRenderer.begin(ShapeType.FilledRectangle);
 	    //Begin batch
 	    batch.begin();
 		// render map for this level
 		map.renderMap(batch);
 		
 		getDice().renderDice(batch);
-
+		gamePlayer.renderPlayer(batch);
 		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
@@ -281,9 +281,9 @@ public class SnakeLadder extends GameClient {
 	    }
 		batch.end();
 		//Render gamePlayer 
-		gamePlayer.render(shapeRenderer);
+		//gamePlayer.render(shapeRenderer);
 		 //End drawing of shapes
-	    shapeRenderer.end();
+	    //shapeRenderer.end();
 
 		
 		 handleInput();
@@ -307,16 +307,13 @@ public class SnakeLadder extends GameClient {
 	public void stopPoint() {
 		gamePlayer.reset();
 		// If we've reached the victory point then update the display
-		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {	
-		   
-		    //gameState = GameState.GAMEOVER;
+		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
 			gameState = new GameOverState();
 		    //Update the game state to the server
 		    //networkClient.sendNetworkObject(createScoreUpdate());
-		   
-		} else {
+		} 
+		else {
 			// No winner yet, get ready for another point
-			//gameState = GameState.READY;
 			gameState = new ReadyState();
 			statusMessage = "Throw the dice again";
 		}
@@ -324,10 +321,8 @@ public class SnakeLadder extends GameClient {
 	}
 	
 	public void startPoint() {
-		// TODO Auto-generated method stub
 		gamePlayer.initializeVelocity();
 		getDice().rollDice();	
-		//gameState = GameState.INPROGRESS;
 		gameState = new InProgressState();
 		statusMessage = null;
 	}
@@ -355,5 +350,5 @@ public class SnakeLadder extends GameClient {
 	public void setDice(Dice dice) {
 		this.dice = dice;
 	}
-
 }
+

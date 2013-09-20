@@ -15,7 +15,7 @@ public class GamePlayer {
 	public static final float WIDTH = 20f; //How big is the player (its a square)
 	public static final float INITIALSPEED = 60; // How fast is the player going at the start of a point
 	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
-	//private Texture player;
+	protected Texture player;
 	private int coordinate=-1;
 	//private int[] scores = new int[2];
 	private int score;
@@ -29,6 +29,7 @@ public class GamePlayer {
 	 * Basic constructor for player. Set position and dimensions to the default
 	 */
 	public GamePlayer() {
+		this.player =new Texture(Gdx.files.classpath("images/player.png"));
 		getBounds().x = 0;
 		getBounds().y = 0;
 		getBounds().height = WIDTH;
@@ -97,14 +98,15 @@ public class GamePlayer {
      * Render the player.
      * @param 
      */
-    public void render(ShapeRenderer shapeRenderer)
+    public void renderPlayer(SpriteBatch batch)
     {
     	//loading player icon
-    	//player =new Texture(Gdx.files.classpath("assets/player.png"));
-    	shapeRenderer.filledRect(this.getBounds().x,
-                this.getBounds().y,
-                this.getBounds().width,
-                this.getBounds().height);
+    	//player =new Texture(Gdx.files.classpath("images/player.png"));
+    	batch.draw(this.player,getBounds().x,getBounds().y);
+//    	shapeRenderer.filledRect(this.getBounds().x,
+//                this.getBounds().y,
+//                this.getBounds().width,
+//                this.getBounds().height);
     	
     }
     

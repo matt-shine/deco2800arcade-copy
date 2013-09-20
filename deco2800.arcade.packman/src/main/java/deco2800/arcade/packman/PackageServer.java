@@ -14,7 +14,7 @@ public class PackageServer {
 	public PackageServer() {
 		
 		// Create the release folder
-		System.out.println("Creating directory: " );
+		System.out.println("Creating directory: " + releaseFolder);
 		if (PackageUtils.createDirectory(releaseFolder)) {
 			System.out.println("Created: " + releaseFolder);
 		} else {

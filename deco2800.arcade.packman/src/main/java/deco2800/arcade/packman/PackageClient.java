@@ -19,7 +19,7 @@ public class PackageClient {
 	public PackageClient() {
 		
 		// Create the games folder
-		System.out.println("Creating directory: " );
+		System.out.println("Creating directory: " + gameFolder);
 		if (PackageUtils.createDirectory(gameFolder)) {
 			System.out.println("Created: " + gameFolder);
 		} else {

@@ -16,6 +16,8 @@ public class LevelContainer {
 	static ArrayList<Level> levels;
 	public static int currentLevel;
 	public static int currentWorld;
+	private static int levelAmount;
+	private int worldAmount = 1;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -25,14 +27,23 @@ public class LevelContainer {
 		levels = new ArrayList<Level>();
 		currentLevel = 0;
 		currentWorld = 0;
+		levelAmount = 4;
 		
 		// Read level from file
-		for(int i=0;i<4;i++) {
-			addLevel(i);
+		for(int i=0;i<worldAmount;i++) {
+			for(int j=0; j<levelAmount; j++) {
+				addLevel(j);
+			}
 		}
 		
 	}
 	
+	/**
+	 * Adds a specific level to the game
+	 * by reading file contents and creating platforms
+	 * Level is added to arraylist of levels
+	 * @param levelNum
+	 */
 	public void addLevel(int levelNum) {
 		BufferedReader br;
 		Level level = new Level(); // Creating and adding to a level
@@ -46,22 +57,45 @@ public class LevelContainer {
 	        String line = br.readLine();
 	        
 	        int xLength = 40;
-	        int yLength = 20;
+	        int yLength = 40;
 	        
 	        int y = junglejump.SCREENHEIGHT/yLength;
 	        while (line != null) {
 	        	for(int x=0; x<junglejump.SCREENWIDTH/xLength; x++) {
 	        		char c = line.charAt(x);
 	        		Platform p;
+	        		
 	        		switch(c) {
-	        		case '-':
-	        			p = new Platform(c, false, (x*xLength), (y*yLength), xLength, yLength);
-	        			level.addPlatform(p);
+	        		case '-': // branch
+	        			//xLength = 20;
+	        		case '<':
+	        			//xLength = 20;
 	        			break;
-	        		case '^':
-	        			p = new Platform(c, false, (x*xLength), (y*yLength), xLength, yLength);
-	        			level.addPlatform(p);
+	        		case '>':
+	        			//platformType = "branch_right";
 	        			break;
+	        		case '^': // Goal Vine
+	        			//platformType = "trunk_short";
+	        			break;
+	        		case 'j': // Vine
+	        			//platformType = "branch_short";
+	        			break;
+	        		case 't': // short tree
+	        			//platformType = "treetop_short";
+	        			break;
+	        		case 'T': // Big tree
+	        			//platformType = "treetop";
+	        			break;
+	        		case '|': // long trunk
+	        			//platformType = "trunk_long";
+	        			break;
+	        		case 'i':
+	        			//platformType = "trunk_short";
+	        			break;
+	        		}
+	        		if(c!='*') {
+	        			p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+	        			level.addPlatform(p);
 	        		}
 	        	}
 	        	line = br.readLine();
@@ -87,7 +121,7 @@ public class LevelContainer {
 	public static void nextLevel() {
 		clearCurrentLevel();
 		currentLevel++;
-		if(currentLevel > 3) {
+		if(currentLevel > levelAmount-1) {
 			currentLevel = 0;
 		//	currentWorld++;
 		}

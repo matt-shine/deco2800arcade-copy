@@ -35,14 +35,41 @@ public class Platform {
 	}
 	
 	public void setTexture(int type) {
+		String platformType = "";
 		switch(type) {
 		case '-': 
-			platText = new Texture("junglejumpassets/branch.png");
+			platformType = "branch";
+			break;
+		case '<':
+			platformType = "branch_end";
+			break;
+		case '>':
+			platformType = "branch_right";
+			break;
+		case '^': // Goal Vine
+			platformType = "trunk_short";
+			break;
+		case 'j': // Vine
+			platformType = "branch_short";
+			break;
+		case 't': // short tree
+			platformType = "treetop_short";
+			break;
+		case 'T': // Big tree
+			platformType = "treetop";
+			break;
+		case '|': // long trunk
+			platformType = "trunk_long";
+			break;
+		case 'i':
+			platformType = "trunk_short";
 			break;
 		default:
-			platText = new Texture("junglejumpassets/branch_short.png");
+			platformType = "branch_short";
 			break;
 		}
+		
+		platText = new Texture("junglejumpassets/world1/" + platformType + ".png");
 		
 	}
 	

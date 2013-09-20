@@ -66,7 +66,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		AT_MENU, INPROGRESS, GAMEOVER
 	}
 	
-	int monkey_length = 40;
+	int monkeyLength = 40;
 
 	private GameState gameState;
 	PerspectiveCamera cam;
@@ -186,7 +186,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
 		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
 		gameBackground = new Texture(("junglejumpassets/gameBackground.png"));
-		platform = new Texture("junglejumpassets/platform.png");
+		//platform = new Texture("junglejumpassets/platform.png");
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
@@ -287,6 +287,9 @@ public class junglejump extends GameClient implements InputProcessor {
 				if (isOnPlatform(monkeyX, monkeyY)) {
 					isFalling = false;
 				} else monkeyY += -9.8f / 2f;
+				if(monkeyY <= 5) {
+					killMonkey();
+				}
 			}
 			if (jumping) {
 				velocity = (velocity - 9.8f / 75f);
@@ -360,6 +363,11 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	}
 	
+	public void killMonkey() {
+		monkeyY = 100;
+		monkeyX = 10;
+	}
+	
 	public static void drawLevel() {
 		batch.begin();
 		System.out.println(currentLevel);
@@ -371,13 +379,14 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
-			if (x > (p.getX() - p.getWidth()/2 - monkey_length/2) && x < (p.getX()+p.getWidth()/4 + // Check platform dimensions
-					monkey_length/2) && y <= p.getY() + p.getHeight() && y >= p.getY()+p.getHeight()/2) {
+			if (x > (p.getX() - p.getWidth()/2 - monkeyLength/2) && x < (p.getX()+p.getWidth()/4 + // Check platform dimensions
+					monkeyLength/2) && y <= p.getY() + p.getHeight() && y >= p.getY()-p.getHeight()/2) {
 				
-				if(monkeyY > p.getY() + p.getHeight()/2) { // If the monkey's colliding with the platform, place him on top
+				if(y >= p.getY() && y < p.getY()+p.getHeight()/2) { // If the monkey's colliding with the platform, place him on top
 					monkeyY = p.getY() + p.getHeight();
+				} else if(y < p.getY()) { // monkey is hitting bottom of platform
+					monkeyY = p.getY() - p.getHeight();
 				}
-				
 				p.setActive();
 				return true;
 			} else {
@@ -449,7 +458,6 @@ public class junglejump extends GameClient implements InputProcessor {
 		return game;
 	}
 
-	//
 
 	@Override
 	public boolean keyDown(int keycode) {

@@ -10,6 +10,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 
+
 /**
  * This class is the main interface for the arcade.
  * @author Simon
@@ -22,6 +23,8 @@ public class ArcadeUI extends GameClient {
 	private LoginScreen login = null;
 	private StoreScreen store = null;
 	private HomeScreen home = null;
+	private FrontPage main = null;
+	
     @SuppressWarnings("unused")
     private RegisterScreen register = null;
 	
@@ -36,7 +39,8 @@ public class ArcadeUI extends GameClient {
 			current = login;
 		} else if (player.getUsername() == "store") {
 			current = store;
-			// Guys, I have no freaking clue, soz. -Addison(GameHost)
+		} else if (player.getUsername() == "home") {
+			current = main;
 		} else {
 			current = home;
 		}
@@ -48,6 +52,7 @@ public class ArcadeUI extends GameClient {
         login = new LoginScreen();
         home = new HomeScreen();
         store = new StoreScreen();
+        main = new FrontPage();
         register = new RegisterScreen();
 
         chooseScreen();

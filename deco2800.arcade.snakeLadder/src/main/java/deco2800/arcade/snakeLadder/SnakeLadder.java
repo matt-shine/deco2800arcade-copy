@@ -68,6 +68,8 @@ public class SnakeLadder extends GameClient {
 
 	public GameState gameState;
 	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	private ArrayList<Label> userLabels = new ArrayList<Label>(); //labels for users
+    private ArrayList<Label> scoreLabels = new ArrayList<Label>(); 
 
 	private Stage stage;
 	private Skin skin;
@@ -158,70 +160,14 @@ public class SnakeLadder extends GameClient {
 		gameState = new ReadyState();
 		statusMessage = "Click to start!";
 		
-		//setting up the skin for the layout
-		skin = new Skin();
-		Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-        skin.add("white", new Texture(pixmap));
-        
-		skin.add("default", new BitmapFont());
-		//skin for label
-		Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        skin.add("default", labelStyle);		
 		
-        //skin for textbutton or dice button
-		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
-        
-        //setting the dice button
-        diceButton = new TextButton("Roll the dice", skin);
-        
-        ArrayList<Label> userLabels = new ArrayList<Label>(); //labels for users
-        ArrayList<Label> scoreLabels = new ArrayList<Label>(); //labels for scores of each user
-        
-        //setting players name and score
-        for(int i = 0; i < players.length; i++){
-        	userLabels.add(new Label (players[i], skin));
-        	scoreLabels.add(new Label (""+gamePlayer.getScore(), skin)); //This is just returning player 1 score
-	    }
-        
-        //creating the stage
+		//creating the stage
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         
-        //table to place all the GUI
-        Table table = new Table();
-        table.setFillParent(true);
-        stage.addActor(table);
-        table.top().left();
+      //rendering scoreboard UI
+      		renderScoreBoard();
         
-        //adding player name
-        table.add(new Label("Players' Name", skin)).width(200).top().left();
-        for(int i = 0; i < players.length; i++){
-        	table.add(userLabels.get(i)).width(200).top().left();
-	    } 
-        table.row();
-        //add player score
-        table.add(new Label("Players' Score", skin)).width(200).top().left();
-        for(int i = 0; i < players.length; i++){
-        	table.add(scoreLabels.get(i)).width(200).top().left();
-	    } 
-        table.row();     
-        //adding dice button to GUI
-        table.add(diceButton).width(100).height(50).pad(10);
-        
-        table.row();
-        
-        //label for the dice roll
-        //diceLabel = new Label ("x",skin);        
-        //table.add(diceLabel).width(100).height(50).pad(10);
         setDice(new Dice());
         
         //TODO: button should be disabled when its others player turn or when player is on the move
@@ -269,6 +215,8 @@ public class SnakeLadder extends GameClient {
 		gamePlayer.renderPlayer(batch);
 		AIPlayer.renderPlayer(batch);
 		
+		
+		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
@@ -300,6 +248,7 @@ public class SnakeLadder extends GameClient {
 	}
 	
 	public void stopPoint() {
+		this.updateScore(gamePlayer);
 		gamePlayer.reset();
 		AIPlayer.reset();
 		// If we've reached the victory point then update the display
@@ -349,6 +298,94 @@ public class SnakeLadder extends GameClient {
 
 	public void setDice(Dice dice) {
 		this.dice = dice;
+	}
+	
+	/*
+	 * Rendering scoreboard UI
+	 */
+	public void renderScoreBoard(){
+		//setting up the skin for the layout
+				skin = new Skin();
+				Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+		        pixmap.setColor(Color.WHITE);
+		        pixmap.fill();
+		        skin.add("white", new Texture(pixmap));
+		        
+				skin.add("default", new BitmapFont());
+				//skin for label
+				Label.LabelStyle labelStyle = new Label.LabelStyle();
+		        labelStyle.font = skin.getFont("default");
+		        skin.add("default", labelStyle);		
+				
+		        //skin for textbutton or dice button
+				TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+		        textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+		        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+		        textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
+		        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+		        textButtonStyle.font = skin.getFont("default");
+		        skin.add("default", textButtonStyle);
+		        
+		        //setting the dice button
+		        diceButton = new TextButton("Roll the dice", skin);
+		        
+		        //labels for scores of each user
+		        
+		        //setting players name and score
+		        for(int i = 0; i < players.length; i++){
+		        	userLabels.add(new Label (players[i], skin));
+		        	scoreLabels.add(new Label ("0", skin)); //This is just setting the initial score which is 0
+			    }
+		        		        
+		        
+		        //table to place all the GUI
+		        Table table = new Table();
+		        table.setFillParent(true);
+		        stage.addActor(table);
+		        table.top().left();
+		        
+		        //adding player name
+		        table.add(new Label("Players' Name", skin)).width(200).top().left();
+		        for(int i = 0; i < players.length; i++){
+		        	table.add(userLabels.get(i)).width(200).top().left();
+			    } 
+		        table.row();
+		        //add player score
+		        table.add(new Label("Players' Score", skin)).width(200).top().left();
+		        for(int i = 0; i < players.length; i++){
+		        	table.add(scoreLabels.get(i)).width(200).top().left();
+			    } 
+		        table.row();     
+		        //adding dice button to GUI
+		        table.add(diceButton).width(100).height(50).pad(10);
+		        
+		        table.row();
+	}
+	
+	/*
+	 * Updating score label
+	 */
+	private void updateScore(GamePlayer gp){
+		//System.out.println(gp.newposition());
+		String rule = this.getMap().getTileList()[gp.newposition()].getRule();
+		if (isScore(rule))
+			gp.setScore(Integer.parseInt(rule));
+		System.out.println("This player's score: "+ gp.getScore());
+		//TODO: should update the scoreLabel depending on the gamePlayer index
+		this.scoreLabels.get(0).setText(""+gp.getScore());
+	}
+	
+	/*
+	 * Check if the rule is related to score or not
+	 */
+	private boolean isScore (String rule) {
+	    try { 
+	        Integer.parseInt(rule); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    }
+	    // only got here if we didn't return false
+	    return true;
 	}
 }
 

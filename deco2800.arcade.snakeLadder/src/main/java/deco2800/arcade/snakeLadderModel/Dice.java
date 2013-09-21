@@ -48,7 +48,7 @@ public class Dice {
 	
 	/**
 	 * Render the dice image based on the dice number. Initially the dice image should be empty.
-	 * @param batch the batch used the draw into the stage
+	 * @param the batch used the draw into the stage
 	 */
 	public void renderDice(SpriteBatch batch){
 		switch (this.num){

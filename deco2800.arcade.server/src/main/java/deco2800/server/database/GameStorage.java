@@ -1,9 +1,15 @@
 package deco2800.server.database;
 
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Icon;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class GameStorage {
@@ -33,7 +39,60 @@ public class GameStorage {
 		}
 	initialised = true;
 	}
-	
+
+
+    public Set<Game> getServerGames() throws DatabaseException {
+        Set<Game> games = new HashSet<Game>();
+        if (!initialised) {
+            initialise();
+        }
+
+        Connection connection = Database.getConnection();
+
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * from GAMES");
+
+            while (resultSet.next()) {
+                Game game = new Game();
+
+
+                game.id = resultSet.getString("ID");
+                game.name = resultSet.getString("NAME");
+                game.description = resultSet.getString("DESCRIPTION");
+                try {
+                    game.icon = new Icon(resultSet.getString("ICONPATH"));
+                } catch (IOException e) {
+                    game.icon = null;
+                }
+                game.pricePerPlay = resultSet.getInt("PRICE");
+
+                games.add(game);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("Unable to get game name from database", e);
+        } finally {
+            try {
+                if (resultSet !=null) {
+                    resultSet.close();
+                }
+                if (statement != null){
+                    statement.close();
+                }
+                if (connection != null){
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return games;
+    }
+
 	/**
 	 * Gets a games name from the table
 	 * @param gameID
@@ -225,8 +284,8 @@ public class GameStorage {
 	private String findGameName(int gameID, ResultSet results) throws SQLException {
 		String result = null;
 		while (results.next()) {
-			String user = results.getString("gameID");
-			if (user.equals(gameID)) {
+            int id = results.getInt("gameID");
+            if (id == gameID) {
 				result = results.getString("NAME");
 				break;
 			}
@@ -237,8 +296,8 @@ public class GameStorage {
     private String findGameID(int gameID, ResultSet results) throws SQLException {
         String result = null;
         while (results.next()) {
-            String user = results.getString("gameID");
-            if (user.equals(gameID)) {
+            int id = results.getInt("gameID");
+            if (id == gameID) {
                 result = results.getString("ID");
                 break;
             }
@@ -249,8 +308,8 @@ public class GameStorage {
     private int findGamePrice(int gameID, ResultSet results) throws SQLException {
         int result = 0;
         while (results.next()) {
-            String user = results.getString("gameID");
-            if (user.equals(gameID)) {
+            int id = results.getInt("gameID");
+            if (id == gameID) {
                 result = results.getInt("PRICE");
                 break;
             }
@@ -261,8 +320,8 @@ public class GameStorage {
 	private String findGameDescription(int gameID, ResultSet results) throws SQLException {
 		String result = null;
 		while (results.next()) {
-			String user = results.getString("gameID");
-			if (user.equals(gameID)) {
+            int id = results.getInt("gameID");
+            if (id == gameID) {
 				result = results.getString("DESCRIPTION");
 				break;
 			}
@@ -273,8 +332,8 @@ public class GameStorage {
 	private String findIconPath(int gameID, ResultSet results) throws SQLException {
 		String result = null;
 		while (results.next()) {
-			String user = results.getString("gameID");
-			if (user.equals(gameID)) {
+			int id = results.getInt("gameID");
+			if (id == gameID) {
 				result = results.getString("ICONPATH");
 				break;
 			}

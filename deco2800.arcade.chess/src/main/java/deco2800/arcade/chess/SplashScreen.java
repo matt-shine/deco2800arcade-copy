@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -68,6 +69,10 @@ public class SplashScreen implements Screen, UIOverlay, InputProcessor {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		if (Gdx.input.justTouched() || Gdx.input.isKeyPressed(Keys.SPACE)) {
+    		game.setScreen(game.menuScreen);
+    	}
+		
 		batch.begin();
 		batch.draw(splashTexture, 0, 0);
 		batch.end();
@@ -101,7 +106,7 @@ public class SplashScreen implements Screen, UIOverlay, InputProcessor {
         splashSprite.setY(Gdx.graphics.getHeight() / 2 - (splashSprite.getHeight() / 2));
         
         inputMultiplexer.addProcessor(this);
-		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
+	    ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
 		
 		
 	
@@ -174,7 +179,7 @@ public class SplashScreen implements Screen, UIOverlay, InputProcessor {
 	@Override
 	public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
 		//Skips menuscreen
-		game.setScreen(game);
+		//game.setScreen(game);
 		return false;
 	}
 

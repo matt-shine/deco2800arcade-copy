@@ -38,18 +38,12 @@ public class MenuScreen implements Screen {
 	Sprite splashSprite;
 	private Chess game;
     private Stage stage;
-    private BitmapFont black;
-    private BitmapFont white;
-    private TextureAtlas atlas;
+    private BitmapFont BmFontA, BmFontB;
+    private TextureAtlas map;
     private Skin skin;
     private SpriteBatch batch;
-    private TextButton sB;
-    private TextButton optionsButton;
-    private TextButton scoresButton;
-    private TextButton hB;
-    private TextButton eB;
-    private Label label;
-	
+    private TextButton sB, hB, eB;
+
 	public MenuScreen( Chess game){
 		this.game = game;		
 	}
@@ -58,9 +52,9 @@ public class MenuScreen implements Screen {
 	public void dispose() {
 		batch.dispose();
         skin.dispose();
-        atlas.dispose();
-        white.dispose();
-        black.dispose();
+        map.dispose();
+        BmFontB.dispose();
+        BmFontA.dispose();
         stage.dispose();
 	}
 
@@ -79,9 +73,7 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         
-        //stage.act(delta);
         batch.begin();
-        int width = Chess.SCREENWIDTH;
         int height = Chess.SCREENHEIGHT;
       
         batch.draw(splashTexture, 0, 0);
@@ -89,6 +81,7 @@ public class MenuScreen implements Screen {
         batch.begin();
         batch.draw(splashTexture2, 0, (float) ((float)height*0.88));
         batch.end();
+        
         batch.begin();
         stage.draw();
         batch.end();
@@ -114,11 +107,11 @@ public class MenuScreen implements Screen {
         splashSprite.setY(Gdx.graphics.getHeight() / 2 - (splashSprite.getHeight() / 2));
 		//FIXME gigantic method
 		batch = new SpriteBatch(); //batch for render
-        atlas = new TextureAtlas("images/button.pack");
+		map = new TextureAtlas("b.pack");
         skin = new Skin();
-        skin.addRegions(atlas);
-        white = new BitmapFont(Gdx.files.internal("imgs/gameFont.fnt"), false);
-        black = new BitmapFont(Gdx.files.internal("imgs/gameFont.fnt"), false);
+        skin.addRegions(map);
+        BmFontB = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"), false);
+        BmFontA = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"), false);
         setBoundaries();
         
 
@@ -135,7 +128,7 @@ public class MenuScreen implements Screen {
 	    TextButtonStyle style = new TextButtonStyle();
 	    style.up = skin.getDrawable("buttonnormal");
 	    style.down = skin.getDrawable("buttonpressed");
-	    style.font = black;
+	    style.font = BmFontA;
 	
 	    sB = new TextButton("Start", style);
 	    hB = new TextButton("Help", style);
@@ -156,20 +149,10 @@ public class MenuScreen implements Screen {
 	    sB.setY(hB.getY() + (2 * (sB.getHeight() + 10)));
 	    eB.setY(hB.getY() - (2 * (sB.getHeight() + 10)));
 	
-	    addListeners(sB, hB, eB);
-	    
-	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    /*label = new Label("Chess Masters", ls);
-	    label.setX(0);
-	    label.setY((float)(height*0.95));
-	    label.setWidth(width);
-	    label.setAlignment(Align.center);*/
-	   	
-	    
+	    addListeners(sB, hB, eB);   	    
 	    stage.addActor(hB);
 	    stage.addActor(sB);
 	    stage.addActor(eB);
-	    //stage.addActor(label);
 	}
 	
 	public void addListeners(TextButton sB, TextButton hB, TextButton eB){

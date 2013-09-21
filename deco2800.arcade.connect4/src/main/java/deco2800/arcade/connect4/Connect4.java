@@ -21,6 +21,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.highscores.*;
 import java.util.*;
 /**
  * A Connect4 game for use in the Arcade
@@ -96,7 +97,7 @@ public class Connect4 extends GameClient {
 		replayListener = new ReplayListener(replayHandler);
 		
 		this.networkClient.addListener(replayListener);
-
+		
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		
 		//Declare an event to be registered in the factory, we can pass arrays.

@@ -6,17 +6,16 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Tile {
 	
-	protected int index;
-	protected Point coordinate; 
-	protected String rule;
-	protected int dimension;
-	protected Texture tileTexture; 
+	private int index;
+	private Point coordinate; 
+	private String rule;
+	private static final int dimension = 60;
+	private Texture tileTexture; 
 	
-	public Tile(int index, int dimension, String rule)
+	public Tile(int index, String rule)
 	{
 		this.index = index;
 		this.rule = rule;
-		this.dimension = dimension;
 		this.coordinate = iniCoordinate(index);
 	}
 	
@@ -24,8 +23,7 @@ public class Tile {
     public int getIndex(){return index; }
     public void setRule(String rule) { this.rule = rule;}
 	public String getRule() { return rule;	}
-	public void setDimension(int dimension){this.dimension = dimension;}
-    public int getDimension(){return dimension; }
+    public static int getDimension(){return dimension; }
     public void setTexture(Texture t){this.tileTexture = t; }
     public Texture getTexture(){return this.tileTexture ;}
 	
@@ -35,17 +33,17 @@ public class Tile {
 	// initialize the coordinate based on position index
 	public Point iniCoordinate(int index) {
 		index = index - 1;
-		int y = (index / 10) * this.dimension ;
+		int y = (index / 10) * dimension ;
 		int x = 0;
 		
 		// if it is even row
 		if ((index/10) % 2 == 0)
 		{
-			x = this.dimension * (index%10);
+			x = dimension * (index%10);
 		}
 		else 
 		{
-			x = this.dimension * 10 - this.dimension * (index%10 +1) ;
+			x = dimension * 10 - dimension * (index%10 +1) ;
 		}
 		
 		return new Point(x,y);

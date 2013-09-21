@@ -65,7 +65,7 @@ public class GameMap {
 					{
 						index = (10-counter-1)*10+i+1;
 					}
-					Tile t = new Tile(index,60,tiles[i]);
+					Tile t = new Tile(index,tiles[i]);
 					if(t.getRule().startsWith("L"))
 					{
 						Ladder l = new Ladder(index, (int)Integer.parseInt(t.getRule().substring(1)));

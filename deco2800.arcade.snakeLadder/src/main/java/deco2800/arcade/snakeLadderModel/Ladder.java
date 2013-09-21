@@ -31,9 +31,9 @@ public class Ladder {
 	public void createLadder(Tile[] tileList)
 	{
 		Vector2 ladderVector = new Vector2(tileList[destinationPosition-1].getCoorX() - tileList[originPosition-1].getCoorX(), tileList[destinationPosition-1].getCoorY() - tileList[originPosition-1].getCoorY());
-		sprite.setBounds(tileList[originPosition-1].getCoorX(), tileList[originPosition-1].getCoorY(), 30, ladderVector.len());
-		sprite.setOrigin(tileList[originPosition-1].getCoorX(), tileList[originPosition-1].getCoorY());
-		sprite.setRotation(ladderVector.angle());
+		sprite.setBounds(tileList[originPosition-1].getCoorX()+Tile.getDimension()/2, tileList[originPosition-1].getCoorY()+Tile.getDimension()/2, 30, ladderVector.len());
+		sprite.setOrigin(0f,0f);
+		sprite.setRotation(ladderVector.angle()-90f);
 	}
 
 }

@@ -54,7 +54,7 @@ public class PlayScreen implements Screen
     	
         game.playSong("level1");
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet_debug.png"));
+    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
     	map = new GameMap("fixme");
 

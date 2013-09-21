@@ -24,7 +24,8 @@ public class GameStorage {
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE GAMES(gameID INT PRIMARY KEY," 
-						+ "NAME VARCHAR(30)," + "DESCRIPTION VARCHAR(200)," + "ICONPATH VARCHAR(40));");
+						+ "NAME VARCHAR(30)," + "ID VARCHAR(30)," + "PRICE INT,"
+                        + "DESCRIPTION VARCHAR(200)," + "ICONPATH VARCHAR(40));");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,6 +74,76 @@ public class GameStorage {
 			}
 		}
 	}
+
+    public String getGameID(int gameID) throws DatabaseException {
+        if (!initialised) {
+            initialise();
+        }
+
+        Connection connection = Database.getConnection();
+
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * from GAMES");
+            String result = findGameID(gameID, resultSet);
+
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("Unable to get game id from database", e);
+        } finally {
+            try {
+                if (resultSet !=null) {
+                    resultSet.close();
+                }
+                if (statement != null){
+                    statement.close();
+                }
+                if (connection != null){
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public int getGamePrice(int gameID) throws DatabaseException {
+        if (!initialised) {
+            initialise();
+        }
+
+        Connection connection = Database.getConnection();
+
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * from GAMES");
+            int result = findGamePrice(gameID, resultSet);
+
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseException("Unable to get game price from database", e);
+        } finally {
+            try {
+                if (resultSet !=null) {
+                    resultSet.close();
+                }
+                if (statement != null){
+                    statement.close();
+                }
+                if (connection != null){
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 	
 	public String getGameDescription(int gameID) throws DatabaseException {
 		if (!initialised) {
@@ -156,12 +227,36 @@ public class GameStorage {
 		while (results.next()) {
 			String user = results.getString("gameID");
 			if (user.equals(gameID)) {
-				result = results.getString("name");
+				result = results.getString("NAME");
 				break;
 			}
 		}
 		return result;
 	}
+
+    private String findGameID(int gameID, ResultSet results) throws SQLException {
+        String result = null;
+        while (results.next()) {
+            String user = results.getString("gameID");
+            if (user.equals(gameID)) {
+                result = results.getString("ID");
+                break;
+            }
+        }
+        return result;
+    }
+
+    private int findGamePrice(int gameID, ResultSet results) throws SQLException {
+        int result = 0;
+        while (results.next()) {
+            String user = results.getString("gameID");
+            if (user.equals(gameID)) {
+                result = results.getInt("PRICE");
+                break;
+            }
+        }
+        return result;
+    }
 	
 	private String findGameDescription(int gameID, ResultSet results) throws SQLException {
 		String result = null;

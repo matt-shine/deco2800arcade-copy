@@ -41,18 +41,22 @@ public class AchievementList extends OverlayWindowContent {
     		this.removeActor(this.getChildren().get(i));
     	}
 		
+    	//This seems to be broken right now
+    	
+		/*
 		achClient = new AchievementClient(overlay.getNetworkClient());
 		achievements = achClient.achievementsForGame(overlay.getHost().getGame());
 		playerProgress = achClient.progressForPlayer(overlay.getPlayer());
-
-		/*for(Achievement ach : achievements) {
+		
+		for(Achievement ach : achievements) {
 		    int achProgress = playerProgress.progressForAchievement(ach);
 		    double percentage = 100 * (achProgress / (double)ach.awardThreshold);
-		}*/
+		}
+		*/
 
 		// getting a list of the achievements a player has been awarded
-		awardedIDs = playerProgress.awardedAchievementIDs();
-		achievements = achClient.achievementsForIDs(awardedIDs);
+		//awardedIDs = playerProgress.awardedAchievementIDs();
+		//achievements = achClient.achievementsForIDs(awardedIDs);
 		
 		@SuppressWarnings("unused")
 		float width = getWidth(), height = getHeight(), x = getX(), y = getY();
@@ -72,15 +76,8 @@ public class AchievementList extends OverlayWindowContent {
 
 	}
 	
-	
 	@Override
 	public void resize(int w, int h) {
 		generateButtons();
 	}
-	
-	
-	
-	
-	
-
 }

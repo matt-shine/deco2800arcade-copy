@@ -7,7 +7,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.TextMessage;
 import deco2800.arcade.protocol.communication.VoiceMessage;
-
+//TODO commenting?
 public class CommunicationNetwork {
 	
 	protected Player player;
@@ -33,6 +33,7 @@ public class CommunicationNetwork {
 		}
 		
 		public void updateChat(TextMessage textMessage){
+			//FIXME deprecated
 			controller.updateChat(textMessage.username + ": " + textMessage.text);
 		}
 	}

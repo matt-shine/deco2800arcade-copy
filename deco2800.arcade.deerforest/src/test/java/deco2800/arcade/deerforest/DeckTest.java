@@ -1,7 +1,5 @@
 package deco2800.arcade.deerforest;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
 import deco2800.arcade.deerforest.models.cardContainers.Deck;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.DarkMonster;
-import deco2800.arcade.deerforest.models.cards.FieldSpell;
 import deco2800.arcade.deerforest.models.cards.FireMonster;
 import deco2800.arcade.deerforest.models.cards.GeneralSpell;
 import deco2800.arcade.deerforest.models.cards.WaterMonster;

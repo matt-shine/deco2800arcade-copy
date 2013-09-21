@@ -1,7 +1,5 @@
 package deco2800.arcade.arcadeui;
 
-import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -19,12 +17,10 @@ import deco2800.arcade.model.Player;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	
-	private LoginScreen login = null;
-	private StoreScreen store = null;
-	private HomeScreen home = null;
-    private RegisterScreen register = null;
-	
-	private Screen current = null;
+	LoginScreen login = null;
+	StoreScreen store = null;
+	HomeScreen home = null;
+    RegisterScreen register = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -41,29 +37,18 @@ public class ArcadeUI extends GameClient {
         register = new RegisterScreen(this);
 
         // Check to see if a user is logged in.
-        if (player == null) {
-            current = login; // No user, go to login screen
+        if (ArcadeSystem.isLoggedIn()) {
+            this.setScreen(home);
         } else {
-            current = home;  // There is a user, go to home screen
+            this.setScreen(login);
         }
-        this.setScreen(current);
 
         super.create();
-    }
-
-    public void requestScreen(String screen) {
-        if (screen.equals("register")) {
-            current = register;
-        } else if (screen.equals("store")) {
-            current = store;
-        }
-        this.setScreen(current);
     }
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		current.dispose();
 	}
 	
 	@Override

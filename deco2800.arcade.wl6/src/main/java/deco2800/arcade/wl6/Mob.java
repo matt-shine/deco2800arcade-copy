@@ -7,8 +7,8 @@ public class Mob extends Doodad {
 	private float angle = 0;
 	private Vector2 vel = new Vector2();
 	
-	public Mob() {
-		super();
+	public Mob(int uid) {
+		super(uid);
 	}
 	
 	@Override

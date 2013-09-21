@@ -6,11 +6,18 @@ public class Doodad {
 
 	
 	private Vector2 pos = new Vector2(0, 0);
-	private String textureName = "unknown";
+	private String textureName = null;
+	private int uid = 0;
+	
+
+
+	public Doodad(int uid) {
+		this.uid = uid;
+	}
 	
 	
-	public Doodad() {
-		
+	public int getUid() {
+		return uid;
 	}
 
 

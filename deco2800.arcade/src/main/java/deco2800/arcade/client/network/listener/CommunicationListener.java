@@ -16,17 +16,6 @@ public class CommunicationListener extends NetworkListener {
 	}
 
 	@Override
-	public void connected(Connection connection) {
-		super.connected(connection);
-		
-	}
-
-	@Override
-	public void disconnected(Connection connection) {
-		super.disconnected(connection);
-	}
-
-	@Override
 	public void idle(Connection connection) {
 		super.idle(connection);
 	}
@@ -49,8 +38,6 @@ public class CommunicationListener extends NetworkListener {
 		 * existing chat.
 		 */
 		if (object instanceof ChatRequest){
-			System.out.println(communicationNetwork.getPlayer().getUsername() + " received chatRequest");
-			
 			ChatRequest chatRequest = (ChatRequest) object;
 			communicationNetwork.joinExistingChat(chatRequest);
 		}
@@ -60,12 +47,9 @@ public class CommunicationListener extends NetworkListener {
 		 * the participant is removed from the chat instance.
 		 */
 		if (object instanceof ChatResponse){
-			System.out.println(communicationNetwork.getPlayer().getUsername() + " received chatResponse");
-			
 			ChatResponse chatResponse = (ChatResponse) object;
 			if(chatResponse.response == "offline"){
 				communicationNetwork.leaveChat(chatResponse.chatID, chatResponse.sender);
-				System.out.println(chatResponse.sender + "has left the conversation");
 			}
 		}
 		

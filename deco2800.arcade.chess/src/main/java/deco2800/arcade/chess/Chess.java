@@ -1,9 +1,10 @@
 package deco2800.arcade.chess;
 
 //import deco2800.arcade.chess.screen.HelpScreen;
-import deco2800.arcade.chess.MenuScreen;
+//import deco2800.arcade.chess.MenuScreen;
 import deco2800.arcade.chess.SplashScreen;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.UIOverlay.PopupMessage;
@@ -35,10 +36,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
@@ -77,7 +86,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private OrthographicCamera camera;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
-	
+	private Chess game;
 
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
@@ -87,7 +96,17 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private BitmapFont font;
 
 	private Texture chessBoard;
-
+	
+	//Stuff for menu return etc
+	private TextButton backButton;
+	private Stage stage;
+    private BitmapFont BmFontA, BmFontB;
+    private TextureAtlas map;
+    private Skin skin;
+    Texture splashTexture;
+	Texture splashTexture2;
+	Sprite splashSprite;
+    
 	private Sprite blackBishop1, blackBishop2, blackRook1, blackRook2,
 			blackKnight1, blackKnight2, blackKing, blackQueen, blackPawn0,
 			blackPawn1, blackPawn2, blackPawn3, blackPawn4, blackPawn5,
@@ -180,6 +199,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		inputMultiplexer.addProcessor(this);
 		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
 		
+	
 		Overlay = this.getOverlay();
 
 		// load the images for the droplet and the bucket, 512x512 pixels each
@@ -256,8 +276,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			@Override
 			public void dispose() {}
 		});
-
-		}
+		
+	}
 	
 
 	/**
@@ -267,17 +287,17 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public void render() {
 
 		// White background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		drawPieces();
-
+		//Gdx.gl.glClearColor(0, 0, 0, 1);
+		//Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		
 		// tell the camera to update its matrices.
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
-
-		drawPieces();
-		
+		drawButton();
+	    drawPieces();
+	    
+		stage.draw();
 		if(moving) {
 			showPossibleMoves(movingPiece);
 		}
@@ -969,6 +989,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
 		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
 		batch.end();
+		//Im sorry i just made an even more awfulling long code longer
+		
 	}
 	
 	private void setPiecePics() {
@@ -1035,7 +1057,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
@@ -1045,10 +1067,55 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	}
 	@Override
 	public void show() {
-		create();
-		render();
+		
+		
+		
 		
 	}
+	public void drawButton(){
+		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
+		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
+		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashSprite = new Sprite(splashTexture);
+		//moves sprite to centre of screen
+		splashSprite.setX(Gdx.graphics.getWidth() / 2 - (splashSprite.getWidth() / 2));
+        splashSprite.setY(Gdx.graphics.getHeight() / 2 - (splashSprite.getHeight() / 2));
+		batch = new SpriteBatch();
+		map = new TextureAtlas("b.pack");
+        skin = new Skin();
+        skin.addRegions(map);
+        BmFontA = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"), false);
+        BmFontB = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"), false);
+        
+        int width = Chess.SCREENWIDTH;
+        int height = Chess.SCREENHEIGHT;
+        
+        stage = new Stage(width, height, true);
 	
+        ArcadeInputMux.getInstance().addProcessor(stage);
+	
+	    TextButtonStyle style = new TextButtonStyle();
+	    style.up = skin.getDrawable("buttonnormal");
+	    style.down = skin.getDrawable("buttonpressed");
+	    style.font = BmFontB;
+	    
+	    backButton = new TextButton("Quit to Menu", style);
+	    backButton.setWidth(200);
+	    backButton.setHeight(50);
+	    backButton.setX((float)(width*0.02));
+	    backButton.setY((float)(height*0.02));
+	    
+	    backButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
 
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	setScreen(menuScreen);
+            }
+	    });    
+	    
+	    stage.addActor(backButton);
+	}
 }

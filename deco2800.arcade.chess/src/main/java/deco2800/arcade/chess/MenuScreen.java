@@ -1,12 +1,10 @@
 package deco2800.arcade.chess;
 
-
 import deco2800.arcade.client.ArcadeInputMux;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
+import deco2800.arcade.client.ArcadeSystem;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -17,18 +15,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 
-import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Player;
+
 
 public class MenuScreen implements Screen {
 	
@@ -43,7 +35,7 @@ public class MenuScreen implements Screen {
     private Skin skin;
     private SpriteBatch batch;
     private TextButton sB, hB, eB;
-
+    
 	public MenuScreen( Chess game){
 		this.game = game;		
 	}
@@ -183,7 +175,12 @@ public class MenuScreen implements Screen {
         }
 
         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        	ArcadeSystem.goToGame(ArcadeSystem.UI);
+        	ArcadeInputMux.getInstance().removeProcessor(stage);
+        	ArcadeInputMux.getInstance().removeProcessor(0);
+        	ArcadeSystem.goToGame("arcadeui");
+        	ArcadeInputMux.getInstance().removeProcessor(0);
+        	ArcadeInputMux.getInstance().removeProcessor(stage);
+
         }
     });
 	}

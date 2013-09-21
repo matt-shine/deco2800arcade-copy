@@ -1,34 +1,35 @@
 package deco2800.arcade.chess;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+
 
 import deco2800.arcade.client.ArcadeInputMux;
 
 public class HelpScreen implements Screen {
 	
+	Texture splashTexture;
+	Texture splashTexture2;
+	Sprite splashSprite;
 	private Chess game;
     private Stage stage;
-    private BitmapFont black;
-    private BitmapFont white;
-    private TextureAtlas atlas;
+    private BitmapFont BmFontA, BmFontB;
+    private TextureAtlas map;
     private Skin skin;
     private SpriteBatch batch;
     private TextButton backButton;
-    private Label label;
 	
 	public HelpScreen(Chess game) {
 		this.game = game;
@@ -38,9 +39,9 @@ public class HelpScreen implements Screen {
 	public void dispose() {
 		batch.dispose();
         skin.dispose();
-        atlas.dispose();
-        white.dispose();
-        black.dispose();
+        map.dispose();
+        BmFontB.dispose();
+        BmFontA.dispose();
         stage.dispose();
 	}
 
@@ -58,9 +59,16 @@ public class HelpScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-        stage.act(delta);
-
+        
+        batch.begin();
+        int height = Chess.SCREENHEIGHT;
+      
+        batch.draw(splashTexture, 0, 0);
+        batch.end();
+        batch.begin();
+        batch.draw(splashTexture2, 0, (float) ((float)height*0.88));
+        batch.end();
+        
         batch.begin();
         stage.draw();
         batch.end();
@@ -76,12 +84,20 @@ public class HelpScreen implements Screen {
 
 	@Override
 	public void show() {
+		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
+		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
+		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashSprite = new Sprite(splashTexture);
+		//moves sprite to centre of screen
+		splashSprite.setX(Gdx.graphics.getWidth() / 2 - (splashSprite.getWidth() / 2));
+        splashSprite.setY(Gdx.graphics.getHeight() / 2 - (splashSprite.getHeight() / 2));
 		batch = new SpriteBatch();
-        atlas = new TextureAtlas("images/button.pack");
+		map = new TextureAtlas("b.pack");
         skin = new Skin();
-        skin.addRegions(atlas);
-        white = new BitmapFont(Gdx.files.internal("images/whitefont.fnt"), false);
-        black = new BitmapFont(Gdx.files.internal("images/font.fnt"), false);
+        skin.addRegions(map);
+        BmFontA = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"), false);
+        BmFontB = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"), false);
         
         int width = Chess.SCREENWIDTH;
         int height = Chess.SCREENHEIGHT;
@@ -93,7 +109,7 @@ public class HelpScreen implements Screen {
 	    TextButtonStyle style = new TextButtonStyle();
 	    style.up = skin.getDrawable("buttonnormal");
 	    style.down = skin.getDrawable("buttonpressed");
-	    style.font = black;
+	    style.font = BmFontB;
 	    
 	    backButton = new TextButton("Back to Menu", style);
 	    backButton.setWidth(200);
@@ -109,16 +125,8 @@ public class HelpScreen implements Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     game.setScreen(new MenuScreen(game));
             }
-	    });
-	    
-	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    label = new Label("Chess Master", ls);
-	    label.setX(0);
-	    label.setY((float)(height*0.95));
-	    label.setWidth(width);
-	    label.setAlignment(Align.center);
+	    });    
 	    
 	    stage.addActor(backButton);
-	    stage.addActor(label);
 	}
 }

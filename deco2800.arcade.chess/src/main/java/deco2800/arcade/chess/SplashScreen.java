@@ -10,21 +10,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.Application;
-
-import static com.badlogic.gdx.Input.*;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Game;
-import deco2800.arcade.model.Player;
-import deco2800.arcade.model.Game.ArcadeGame;
 
 
 
@@ -40,6 +29,7 @@ public class SplashScreen implements Screen, UIOverlay, InputProcessor {
 	
 	public SplashScreen(Chess game){
 		this.game = game;
+		
 	}
 
 

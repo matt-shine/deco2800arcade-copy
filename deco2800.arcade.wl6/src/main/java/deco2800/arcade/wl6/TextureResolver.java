@@ -26,24 +26,12 @@ public class TextureResolver {
 		if (s == "steel") {
 			return new Vector2(2 / size, 1 / size);
 		}
-		
-		//doodads
-		if (s == "oildrum") {
-			return new Vector2(0 / size, 1 / size);
+		if (s == "door") {
+			return new Vector2(1 / size, 2 / size);
 		}
-		if (s == "lamp") {
-			return new Vector2(1 / size, 0 / size);
+		if (s == "doodad") {
+			return new Vector2(0 / size, 2 / size);
 		}
-		if (s == "table") {
-			return new Vector2(1 / size, 1 / size);
-		}
-		if (s == "chandelier") {
-			return new Vector2(2 / size, 0 / size);
-		}
-		if (s == "water") {
-			return new Vector2(2 / size, 1 / size);
-		}
-		
 		
 		
 		//unknown

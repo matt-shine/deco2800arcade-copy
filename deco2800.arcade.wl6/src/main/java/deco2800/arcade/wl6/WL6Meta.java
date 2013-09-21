@@ -238,19 +238,19 @@ public class WL6Meta {
 				DoodadInfo.wayPoint(DIRS.LEFT).specialCase(),
 				
 				//23: nothing
-				DoodadInfo.nonsolidScenery("water"),
+				DoodadInfo.nonsolidScenery("doodad"),
 				
 				//24: oil drum
-				DoodadInfo.solidScenery("oildrum"),
+				DoodadInfo.solidScenery("doodad"),
 				
 				//25: table and chairs
-				DoodadInfo.solidScenery("table"),
+				DoodadInfo.solidScenery("doodad"),
 				
 				//26: lamp
-				DoodadInfo.nonsolidScenery("lamp"),
+				DoodadInfo.nonsolidScenery("doodad"),
 				
 				//26: chandelier
-				DoodadInfo.nonsolidScenery("chandelier"),
+				DoodadInfo.nonsolidScenery("doodad"),
 				
 				//TODO the rest of the items
 		};

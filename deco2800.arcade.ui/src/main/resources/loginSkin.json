@@ -1,0 +1,28 @@
+{
+    com.badlogic.gdx.graphics.g2d.BitmapFont: {
+        default: { file: Fonts/Manteka18.fnt },
+        textbox: { file: Fonts/CenturyGothic20Bold.fnt }
+    },
+    com.badlogic.gdx.graphics.Color: {
+        red:    { a: 1, r: 1, g: 0, b: 0 },
+        green:  { a: 1, r: 0, g: 1, b: 0 },
+        blue:   { a: 1, r: 0, g: 0, b: 1 },
+        white:  { a: 1, r: 1, g: 1, b: 1 },
+        black:  { a: 1, r: 0, g: 0, b: 0 },
+        grey:   { a: 1, r: 0.5, g: 0.5, b: 0.5 }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+        default: { font: default, fontColor: white },
+        error: { font: default, fontColor: red }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+        default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+        default: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
+        alt: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonRed }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+    	default: { font: default, fontColor: white, checkboxOn: checkbox_checked, checkboxOff: checkbox_unchecked }
+    }
+}

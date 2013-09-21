@@ -8,11 +8,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.model.Achievement;
 
-public abstract class GameClient extends com.badlogic.gdx.Game implements Comparable<GameClient> {
+public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
 	protected NetworkClient networkClient;
@@ -29,10 +31,24 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Compar
 		this.player = player;
 		this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
+        this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
 	}
 
 	public abstract Game getGame();
+	
+    public void achievementAwarded(Achievement ach) {
+        System.out.println("Achievement `" + ach.name + "` awarded!");
+    }
+
+    public void progressIncremented(Achievement ach, int progress) {
+        System.out.println("Progress in achievement `" + ach.name + "`: (" + progress +
+                           "/" + ach.awardThreshold + ")");
+    }
+
+    public void setNetworkClient(NetworkClient client) {
+        achievementClient.setNetworkClient(client);
+    }
 
     public void incrementAchievement(final String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
@@ -55,13 +71,17 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Compar
     	//}
     }
 
+    public AchievementClient getAchievementClient() {
+        return this.achievementClient;
+    }
+
 	/**
 	 * Adds the in game overlay
 	 * @param overlay
 	 */
 	public void addOverlay(ApplicationListener overlay) {
 		this.overlay = overlay;
-        if (this.overlay != null) overlay.resize(width, height);
+		overlay.resize(width, height);
 	}
 
 	/**
@@ -183,14 +203,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Compar
 	public Player getPlayer() {
 		return player;
 	}
-
-    /**
-     *  Compare Games based on names
-     */
-    @Override
-    public int compareTo(GameClient gameClient) {
-        return this.getGame().compareTo(gameClient.getGame());
-    }
 	
 	
 }

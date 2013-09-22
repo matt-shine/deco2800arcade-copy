@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class MenuScreen implements Screen {
@@ -49,18 +50,17 @@ public class MenuScreen implements Screen {
         white.dispose();
         black.dispose();
         stage.dispose();
-
 	}
 
 	@Override
 	public void hide() {
 		game.stopSong();
+		ArcadeInputMux.getInstance().removeProcessor(stage);
+		this.dispose();
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -73,7 +73,6 @@ public class MenuScreen implements Screen {
         batch.begin();
         stage.draw();
         batch.end();
-
 	}
 
 	@Override
@@ -82,8 +81,6 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -101,7 +98,7 @@ public class MenuScreen implements Screen {
         
         stage = new Stage(width, height, true);
 	
-	    Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 	
 	    TextButtonStyle style = new TextButtonStyle();
 	    style.up = skin.getDrawable("buttonnormal");
@@ -153,7 +150,7 @@ public class MenuScreen implements Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    game.setScreen(new PlayScreen(game));
+                    game.setScreen(new OptionsScreen(game));
             }
 	    });
 	    
@@ -190,10 +187,10 @@ public class MenuScreen implements Screen {
 	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
 	    label = new Label("Burning Skies", ls);
 	    label.setX(0);
-	    label.setY(startButton.getY() + startButton.getHeight() + 10);
+	    label.setY((float)(height*0.95));
 	    label.setWidth(width);
 	    label.setAlignment(Align.center);
-	
+	   	
 	    stage.addActor(startButton);
 	    stage.addActor(optionsButton);
 	    stage.addActor(scoresButton);

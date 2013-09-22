@@ -28,8 +28,10 @@ import deco2800.arcade.userui.model.Model;
 public class EditProfile extends JFrame {
 	
 	private JPanel parentContainer;
+	private JPanel topContainer;
+	private JPanel middleContainer;
 	private ImagePanel menupanel;
-	private JPanel editProfile;
+	private JPanel bottomContainer;
 	
 	
 	private ImageIcon piccat;
@@ -65,12 +67,15 @@ public class EditProfile extends JFrame {
 		picsavebutton = new ImageIcon("assets/images/save_button.png");
 		piccancelbutton = new ImageIcon("assets/images/cancel_button.png");
 		
+		
 		parentContainer = new JPanel(new MigLayout());
 		
 		menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
 	    menupanel.setLayout(new MigLayout());
 	    
-	    editProfile = new JPanel(new MigLayout());
+	    topContainer = new JPanel(new MigLayout());
+	    middleContainer = new JPanel(new MigLayout());
+	    bottomContainer = new JPanel(new MigLayout());
 	    
 	    browsebutton = new JButton(picbrowsebutton);
 	    browsebutton.setBorder(BorderFactory.createEmptyBorder());
@@ -86,16 +91,16 @@ public class EditProfile extends JFrame {
         avatar.setIcon(piccat);
         
         editprofilebar = new JLabel("Edit Profile");
-        editprofilebar.setForeground(Color.white);
+        editprofilebar.setForeground(Color.black);
         editprofilebar.setFont(font);
-        profilenamebar = new JLabel("Profile Name");
-        profilenamebar.setForeground(Color.white);
+        profilenamebar = new JLabel("Profile Name:");
+        profilenamebar.setForeground(Color.black);
         profilenamebar.setFont(normal);
-        realnamebar = new JLabel("Real Name");
-        realnamebar.setForeground(Color.white);
+        realnamebar = new JLabel("Real Name:");
+        realnamebar.setForeground(Color.black);
         realnamebar.setFont(normal);
-        aboutmebar = new JLabel("About Me");
-        aboutmebar.setForeground(Color.white);
+        aboutmebar = new JLabel("About Me:");
+        aboutmebar.setForeground(Color.black);
         aboutmebar.setFont(normal);
         
         upload = new JTextField("Upload a new picture");
@@ -103,28 +108,34 @@ public class EditProfile extends JFrame {
         realname = new JTextField("Whats your real name");
         aboutme = new JTextField("Give a short description");
         
-        editProfile.add(avatar);
-        editProfile.add(editprofilebar,"wrap, align 50% 50%");
-        editProfile.add(upload,"wrap, align 50% 50%");
-        editProfile.add(browsebutton,"wrap, align 50% 50%");
-        editProfile.add(profilenamebar);
-        editProfile.add(profile,"wrap, align 50% 50%");
-        editProfile.add(realnamebar);
-        editProfile.add(realname,"wrap, align 50% 50%");
-        editProfile.add(aboutmebar);
-        editProfile.add(aboutme,"wrap, align 50% 50%");
-        editProfile.add(savebutton);
-        editProfile.add(cancelbutton);
         
+        topContainer.add(avatar, "dock west");
+        topContainer.add(editprofilebar, "dock north, wrap, align 50% 50%");
+        topContainer.add(upload, "dock north");
+        topContainer.add(browsebutton, "dock north, wrap, align 50% 50%");
+         
+        
+        middleContainer.add(profilenamebar, "dock north");
+        middleContainer.add(profile, "dock north, wrap, align 50% 50%");
+        middleContainer.add(realnamebar, "dock north");
+        middleContainer.add(realname, "dock north, wrap, align 50% 50%");
+        middleContainer.add(aboutmebar, "dock north");
+        middleContainer.add(aboutme, "dock north, wrap, align 50% 50%");
+        
+        bottomContainer.add(savebutton, "dock north");
+        bottomContainer.add(cancelbutton, "dock north");
+        
+                 
         parentContainer.add(menupanel, "dock north");
-        editProfile.setBackground(Color.gray);
-        parentContainer.add(editProfile);
+        parentContainer.add(topContainer, "dock north");
+        parentContainer.add(middleContainer, "dock north");
+        parentContainer.add(bottomContainer, "dock north");
         add(parentContainer);
 		
         
 		
 	// Set the  view window constraints
-	setSize(400,437);
+	setSize(1280,800);
 	setDefaultCloseOperation(EXIT_ON_CLOSE);
 	setVisible(true);
 	setResizable(false);

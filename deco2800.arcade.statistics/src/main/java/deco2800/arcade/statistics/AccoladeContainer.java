@@ -1,5 +1,4 @@
-package accolades;
- 
+package deco2800.arcade.statistics;
 import java.util.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {
@@ -37,7 +36,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     /**Retrieves all accolades totals for game with gameID
      * TODO implmenet server communication and return non-dummydata
      */
-    public void populateAccoladesPlayer(int gameID){
+    public void populateAccoladesGame(int gameID){
     	BUILDDUMMYDATA();
     }
     
@@ -47,7 +46,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     	/** TODO implement stub*/
     	head = null;
     	tail = null;
-    	current = null;
+    	//current = null;
     }
  
     /**

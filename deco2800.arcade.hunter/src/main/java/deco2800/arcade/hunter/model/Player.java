@@ -130,9 +130,14 @@ public class Player extends Entity {
 	
 	@Override
 	public void update(float delta) {
+		
+		if (collider.top) {
+			setJumpVelocity(0);
+		}
+		
 		//Everything depends on everything else here, may have to rearrange, or even double up on checks
 		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
-		setX(getX() + delta * 100);
+		setX(getX() + delta * 256);
 		
 		setJumpVelocity(getJumpVelocity() - delta * 9.81f);
 		setY(getY() + getJumpVelocity());

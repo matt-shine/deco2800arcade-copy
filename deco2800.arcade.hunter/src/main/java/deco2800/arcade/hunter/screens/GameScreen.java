@@ -160,82 +160,213 @@ public class GameScreen implements Screen {
 		for (Entity e : entities) {
 			e.getCollider().clear();
 			
-			//Right edge
-			
-			float right = e.getX() + e.getWidth();
-			//float top = e.getY() + e.getHeight();
-			
-//			for (i = (int) e.getY(); i <= top; i += Config.TILE_SIZE) {
-//				if (foregroundLayer.getCollisionTileAt((int) right, i) != 0) {
-//					e.setX((float) ((Math.floor(right / Config.TILE_SIZE) * Config.TILE_SIZE) - e.getWidth()));
-//				}
-//			}
-//			
-			//Top edge
-//			for (i = (int) e.getX(); i <= right; i += Config.TILE_SIZE) {
-				
-//				if (foregroundLayer.getCollisionTileAt(i, (int) top) != 0) {
-//					e.setY((float) ((Math.floor(top / Config.TILE_SIZE) * Config.TILE_SIZE) - e.getHeight()));
-//				}
-//			}
-			
-			
 			//Bottom edge
-			for (i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
-				boolean breakOut = false;
-				int tile = foregroundLayer.getCollisionTileAt(i, e.getY());
-				float slopeHeight = 0;
-				switch (tile) {
-					case 0:
-						//Air, do nothing
-						break;
-					case 1:
-						//Solid tile, do something
-						e.getCollider().bottom = true;
-						e.setY((float) (Math.ceil(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE) + 0.5f);
-						breakOut = true;
-						break;
-					case 2:
-						//   /_|  slope
-						if (i == (int) right) {
-							slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
-							if (e.getY() < slopeHeight) {
-								e.setY(slopeHeight + 0.5f);
-								e.getCollider().bottom = true;
-							}
-							breakOut = true;
-						}
-						break;
-					case 3:
-						//   |_\ slope
-						if (i <= (int) e.getX()) {
-							slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e.getX() % Config.TILE_SIZE));
-							if (e.getY() < slopeHeight) {
-								e.setY(slopeHeight + 0.1f);
-								e.getCollider().bottom = true;
-							}
-							
-							breakOut = true;
-						}
-						break;
-					case 4:
-						//   |-/ slope
-						break;
-					case 5:
-						//   \-| slope
-						break;
-					default:
-						//Outside the map, or invalid tile.
-						break;
-				}
-				
-				if (breakOut) {
-					break;
-				}
-				
-			}
+			checkMapCollisionBottom(e);
+			
+			//Right edge			
+			checkMapCollisionRight(e);
+			
+			//Top edge
+			checkMapCollisionTop(e);
 		}
 		
+	}
+	
+	private void checkMapCollisionBottom(Entity e) {
+		float right = e.getX() + e.getWidth();
+		boolean breakOut = false;
+
+		for (int i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
+			int tile = foregroundLayer.getCollisionTileAt(i, e.getY());
+			float slopeHeight = 0;
+			
+			switch (tile) {
+				case 0:
+					//Air tile
+					break;
+				case 1:
+					//Solid tile, do something
+					e.getCollider().bottom = true;
+					e.setY((float) (Math.ceil(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE) + 0.5f);
+					breakOut = true;
+					break;
+				case 2:
+					//   /_|  slope
+					if (i == (int) right) {
+						slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
+						if (e.getY() < slopeHeight) {
+							e.setY(slopeHeight + 0.5f);
+							e.getCollider().bottom = true;
+						}
+						breakOut = true;
+					}
+					break;
+				case 3:
+					//   |_\ slope
+					if (i <= (int) e.getX()) {
+						slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e.getX() % Config.TILE_SIZE));
+						if (e.getY() < slopeHeight) {
+							e.setY(slopeHeight + 0.1f);
+							e.getCollider().bottom = true;
+						}
+						
+						breakOut = true;
+					}
+					break;
+				case 4:
+					//   |-/ slope
+					
+					//TODO
+					break;
+				case 5:
+					//   \-| slope
+					
+					//TODO
+					break;
+				default:
+					//Outside the map, or invalid tile.
+					break;
+			}
+			
+			if (breakOut) {
+				break;
+			}
+			
+		}
+	}
+	
+	private void checkMapCollisionTop(Entity e) {
+		float right = e.getX() + e.getWidth();
+		float top = e.getY() + e.getHeight();
+		
+		boolean breakOut = false;
+
+		for (int i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
+			int tile = foregroundLayer.getCollisionTileAt(i, top);
+			float slopeHeight = 0;
+			switch (tile) {
+				case 0:
+					//Air tile
+					break;
+				case 1:
+					//Solid tile, do something
+					e.getCollider().top = true;
+					e.setY((float) (Math.ceil((e.getY() - Config.TILE_SIZE) / Config.TILE_SIZE) * Config.TILE_SIZE) - 0.5f);
+					breakOut = true;
+					break;
+				case 2:
+					//   /_|  slope
+					if (i == (int) right) {
+						slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
+						if (e.getY() > slopeHeight) {
+							e.setY(slopeHeight - 0.5f);
+							e.getCollider().top = true;
+						}
+						breakOut = true;
+					}
+					break;
+				case 3:
+					//   |_\ slope
+					if (i <= (int) e.getX()) {
+						slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e.getX() % Config.TILE_SIZE));
+						if (e.getY() > slopeHeight) {
+							e.setY(slopeHeight - 0.1f);
+							e.getCollider().top = true;
+						}
+						
+						breakOut = true;
+					}
+					break;
+				case 4:
+					//   |-/ slope
+					
+					//TODO
+					break;
+				case 5:
+					//   \-| slope
+					
+					//TODO
+					break;
+				default:
+					//Outside the map, or invalid tile.
+					break;
+			}
+			
+			if (breakOut) {
+				break;
+			}
+			
+		}
+	}
+	
+//	for (i = (int) e.getY(); i <= top; i += Config.TILE_SIZE) {
+//	if (foregroundLayer.getCollisionTileAt((int) right, i) != 0) {
+//		e.setX((float) ((Math.floor(right / Config.TILE_SIZE) * Config.TILE_SIZE) - e.getWidth()));
+//	}
+//}
+	
+	private void checkMapCollisionRight(Entity e) {
+		float right = e.getX() + e.getWidth();
+		float top = e.getY() + e.getHeight();
+		
+		boolean breakOut = false;
+
+		for (int i = (int) e.getY(); i <= top; i += Config.TILE_SIZE) {
+			int tile = foregroundLayer.getCollisionTileAt((int) right, i);
+			float slopeHeight = 0;
+			switch (tile) {
+				case 0:
+					//Air tile
+					break;
+				case 1:
+					//Solid tile, do something
+					e.getCollider().right = true;
+					e.setX((float) (Math.ceil((e.getX() - Config.TILE_SIZE) / Config.TILE_SIZE) * Config.TILE_SIZE) - 0.5f);
+					breakOut = true;
+					break;
+				case 2:
+					//   /_|  slope
+					if (i == (int) right) {
+						slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
+						if (e.getY() > slopeHeight) {
+							e.setY(slopeHeight - 0.5f);
+							e.getCollider().top = true;
+						}
+						breakOut = true;
+					}
+					break;
+				case 3:
+					//   |_\ slope
+					if (i <= (int) e.getX()) {
+						slopeHeight = (float) (Math.floor(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e.getX() % Config.TILE_SIZE));
+						if (e.getY() > slopeHeight) {
+							e.setY(slopeHeight - 0.1f);
+							e.getCollider().top = true;
+						}
+						
+						breakOut = true;
+					}
+					break;
+				case 4:
+					//   |-/ slope
+					
+					//TODO
+					break;
+				case 5:
+					//   \-| slope
+					
+					//TODO
+					break;
+				default:
+					//Outside the map, or invalid tile.
+					break;
+			}
+			
+			if (breakOut) {
+				break;
+			}
+			
+		}
 	}
 	
 	private void checkEntityCollisions() {

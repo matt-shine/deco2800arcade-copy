@@ -80,8 +80,8 @@ public class MovablePlatform extends MovableEntity{
 	}
 	
 	public void setCollisionRectangle(float xOrigin, float yOrigin, float width, float height) {
-		collRect.set(new Rectangle(getPosition().x + xOrigin,getPosition().y+yOrigin,width,height));
-		this.xOrigin=xOrigin;
+		collRect.set( new Rectangle(getPosition().x + xOrigin, getPosition().y + yOrigin,width,height) );
+		this.xOrigin = xOrigin;
 		this.yOrigin = yOrigin;
 	}
 	
@@ -90,7 +90,7 @@ public class MovablePlatform extends MovableEntity{
 		super.update(ship);
 		float delta = Gdx.graphics.getDeltaTime();
 		
-		int inPosition =0;
+		int inPosition = 0;
 		//the following function needs editing and might actually need to go after the calculation of position
 		if (position.x <= targetPos.x + delta*speed+0.1f && position.x >= targetPos.x - delta*speed -0.1f) {
 			position.x = targetPos.x;
@@ -103,7 +103,7 @@ public class MovablePlatform extends MovableEntity{
 			inPosition++;
 		}
 		
-		if (inPosition==2) {
+		if (inPosition == 2) {
 			//If platform is within the range of the target, stop moving
 			//System.out.println("In position");
 			if (firstFrameOfWait) {

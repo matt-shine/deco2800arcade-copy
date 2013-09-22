@@ -45,9 +45,8 @@ import com.test.game.model.Zombie;
  *
  */
 public class World {
-	public static final float WORLD_WIDTH = 400f;
-	public static final float WORLD_HEIGHT = 59f;
-	
+	public static final float WORLD_WIDTH = 600f;
+	public static final float WORLD_HEIGHT = 60f;
 	
 	private Boolean firstUpdate;
 	private Ship ship;
@@ -68,6 +67,8 @@ public class World {
 	private float time;
 	private boolean isPaused;
 	private int scenePosition;
+	
+	private boolean turnOffScenes = true;
 	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
@@ -126,8 +127,23 @@ public class World {
 
 		handleEnemies();
 		
-		if (!levelScenes.isPlaying()) {
+		if ( !levelScenes.isPlaying() ) {
 			checkDamage();
+		}
+		
+		if ( levelScenes.isPlaying() && !turnOffScenes ) {
+			if (levelScenes.update(Gdx.graphics.getDeltaTime())) {
+				// The scene is complete; accept input again
+				inputHandler.acceptInput();
+			}
+		
+		// Check for scene start
+		} else if( !levelScenes.isPlaying() && !turnOffScenes ) {
+			float[] sceneStartValues = levelScenes.getStartValues();
+			
+			if (ship.getPosition().x > sceneStartValues[scenePosition]) {
+				sceneStart();
+			}
 		}
 
 		if (firstUpdate) {
@@ -153,18 +169,7 @@ public class World {
 			resetLevel();
 		}
 
-		if (levelScenes.isPlaying()) {
-			if (levelScenes.update(Gdx.graphics.getDeltaTime())) {
-				// The scene is complete; accept input again
-				inputHandler.acceptInput();
-			}
-		} else {
-			float[] sceneStartValues = levelScenes.getStartValues();
-			if (ship.getPosition().x > sceneStartValues[scenePosition]) {
-				sceneStart();
-				
-			}
-		}
+		
 		
 		updateBlockMakers();
 		
@@ -422,7 +427,7 @@ public class World {
 		while(eItr.hasNext()) {
 			e = eItr.next();
 			// Get near player if scene is not playing
-			if (!levelScenes.isPlaying()) {
+			if ( !levelScenes.isPlaying() ) {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
 				if (e.isDead()) {
 					eItr.remove();
@@ -444,6 +449,8 @@ public class World {
 				//keep the bullets flying throughout scenes
 				e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
 			}
+			
+			
 			/* Sword collisions */
 			if (e.getBounds().overlaps(sword.getBounds())) {
 				//System.out.println("C");
@@ -672,6 +679,7 @@ public class World {
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
+		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
 		return;
 	}
 	

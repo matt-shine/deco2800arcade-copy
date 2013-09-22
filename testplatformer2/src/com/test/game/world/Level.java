@@ -38,7 +38,7 @@ public class Level {
 		randomEnemySpawners = new Array<RandomizedEnemySpawner>();
 		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
 		
-		map = new TmxMapLoader().load("data/level"+levelNum+".tmx");
+		map = new TmxMapLoader().load("data/level"+"2_new"+".tmx");
 		collisionLayer = (TiledMapTileLayer) ( map.getLayers().get("Collision") );
 
 		renderer = new OrthogonalTiledMapRenderer(map, 1/32f);

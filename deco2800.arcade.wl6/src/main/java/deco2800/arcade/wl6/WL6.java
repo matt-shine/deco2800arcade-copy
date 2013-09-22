@@ -1,5 +1,6 @@
 package deco2800.arcade.wl6;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 import deco2800.arcade.model.Game;
@@ -67,6 +68,7 @@ public class WL6 extends GameClient {
 			@Override
 			public void show() {
 				gameScreen.setOverlayPause(true);
+				Gdx.input.setCursorCatched(false);
 			}
 			
         });
@@ -87,6 +89,7 @@ public class WL6 extends GameClient {
 	@Override
 	public void pause() {
 		super.pause();
+		Gdx.input.setCursorCatched(false);
 	}
 
 	@Override

@@ -1,10 +1,11 @@
-package deco2800.arcade.wl6;
+package deco2800.arcade.wl6.screen;
 
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.wl6.*;
 
 public class MainGameScreen implements Screen {
 	
@@ -64,7 +65,7 @@ public class MainGameScreen implements Screen {
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
+	public void resize(int width, int height) {
 	}
 
 	@Override

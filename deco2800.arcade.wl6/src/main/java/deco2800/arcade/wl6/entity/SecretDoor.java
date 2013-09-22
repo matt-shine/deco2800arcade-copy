@@ -1,6 +1,7 @@
-package deco2800.arcade.wl6;
+package deco2800.arcade.wl6.entity;
 
 import com.badlogic.gdx.math.Vector2;
+import deco2800.arcade.wl6.*;
 
 /**
  * This code is confusing and I don't recommend anyone else read it.

@@ -1,4 +1,4 @@
-package deco2800.arcade.wl6;
+package deco2800.arcade.wl6.entity;
 
 public enum EnemyType {
 	NOT_AN_ENEMY,

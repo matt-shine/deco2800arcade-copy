@@ -1,6 +1,11 @@
-package deco2800.arcade.wl6;
+package deco2800.arcade.wl6.entity;
 
-public class Door extends Doodad{
+import deco2800.arcade.wl6.Doodad;
+import deco2800.arcade.wl6.GameModel;
+import deco2800.arcade.wl6.Renderer;
+import deco2800.arcade.wl6.WL6Meta;
+
+public class Door extends Doodad {
 
 	
 	private boolean vertical = false;

@@ -75,4 +75,12 @@ public abstract class Mortal extends GridObject{
 		}
 		
 	}
+	
+	// Removes any effect the unit has on the grid and begins death animation.
+	public void die(){
+		/**
+		 * TODO implement death animation and clear any status effects this object is applying to the grid.
+		 * There should be a death animation at the same index in the sprite array for every GridObject that extends Mortal.
+		 */
+	}
 }

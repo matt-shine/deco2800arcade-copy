@@ -3,144 +3,109 @@ loginSkin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-iconMagenta_plus
-  rotate: false
-  xy: 1, 1767
-  size: 2315, 2314
-  orig: 2315, 2314
-  offset: 0, 0
-  index: -1
-iconBlue
-  rotate: false
-  xy: 1, 67
-  size: 1699, 1698
-  orig: 1699, 1698
-  offset: 0, 0
-  index: -1
-textbox
-  rotate: false
-  xy: 1, 18
-  size: 400, 47
-  orig: 400, 47
-  offset: 0, 0
-  index: -1
-cursor
-  rotate: false
-  xy: 1, 14
-  size: 1, 2
-  orig: 1, 2
-  offset: 0, 0
-  index: -1
-selection
-  rotate: false
-  xy: 1, 11
-  size: 1, 1
-  orig: 1, 1
-  offset: 0, 0
-  index: -1
-checkbox_checked
-  rotate: false
-  xy: 403, 1
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-checkbox_unchecked
-  rotate: false
-  xy: 469, 1
-  size: 64, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-iconGreen
-  rotate: false
-  xy: 1702, 67
-  size: 1699, 1698
-  orig: 1699, 1698
-  offset: 0, 0
-  index: -1
 iconBlue_plus
   rotate: false
-  xy: 2318, 1767
-  size: 2315, 2314
-  orig: 2315, 2314
+  xy: 1, 856
+  size: 1158, 1157
+  orig: 1158, 1157
   offset: 0, 0
   index: -1
 iconMagenta
   rotate: false
-  xy: 3403, 67
-  size: 1699, 1698
-  orig: 1699, 1698
+  xy: 1, 5
+  size: 850, 849
+  orig: 850, 849
   offset: 0, 0
   index: -1
-iconGreen_plus
+iconBlue
   rotate: false
-  xy: 4635, 1767
-  size: 2315, 2314
-  orig: 2315, 2314
+  xy: 1161, 1165
+  size: 849, 848
+  orig: 849, 848
   offset: 0, 0
   index: -1
-buttonRed
+iconGreen
   rotate: false
-  xy: 6952, 3709
-  size: 1230, 372
-  orig: 1230, 372
-  offset: 0, 0
-  index: -1
-ButtonBlue
-  rotate: false
-  xy: 6952, 3337
-  size: 1230, 370
-  orig: 1230, 370
-  offset: 0, 0
-  index: -1
-buttonGreen
-  rotate: false
-  xy: 6952, 2965
-  size: 1230, 370
-  orig: 1230, 370
-  offset: 0, 0
-  index: -1
-buttonGrey
-  rotate: false
-  xy: 6952, 2593
-  size: 1230, 370
-  orig: 1230, 370
+  xy: 1161, 315
+  size: 849, 848
+  orig: 849, 848
   offset: 0, 0
   index: -1
 CenturyGothic20Bold
   rotate: false
-  xy: 6952, 2335
+  xy: 853, 598
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
 SFAtarianSystem24
   rotate: false
-  xy: 7210, 2335
+  xy: 853, 340
   size: 256, 256
   orig: 256, 256
   offset: 0, 0
   index: -1
+buttonRed
+  rotate: false
+  xy: 853, 127
+  size: 615, 186
+  orig: 615, 186
+  offset: 0, 0
+  index: -1
+textbox
+  rotate: false
+  xy: 853, 78
+  size: 400, 47
+  orig: 400, 47
+  offset: 0, 0
+  index: -1
 Manteka18
   rotate: false
-  xy: 7468, 2463
+  xy: 1470, 185
   size: 256, 128
   orig: 256, 128
   offset: 0, 0
   index: -1
 CenturyGothic18Bold
   rotate: false
-  xy: 7726, 2463
+  xy: 1728, 185
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 Manteka16
   rotate: false
-  xy: 7856, 2463
+  xy: 1858, 185
   size: 128, 128
   orig: 128, 128
+  offset: 0, 0
+  index: -1
+checkbox_checked
+  rotate: false
+  xy: 853, 12
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+checkbox_unchecked
+  rotate: false
+  xy: 919, 12
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 1, 1
+  size: 1, 2
+  orig: 1, 2
+  offset: 0, 0
+  index: -1
+selection
+  rotate: false
+  xy: 2012, 2012
+  size: 1, 1
+  orig: 1, 1
   offset: 0, 0
   index: -1
 
@@ -148,10 +113,43 @@ loginSkin2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-menuBar
+iconGreen_plus
+  rotate: false
+  xy: 1, 375
+  size: 1158, 1157
+  orig: 1158, 1157
+  offset: 0, 0
+  index: -1
+buttonBlue
+  rotate: false
+  xy: 1, 188
+  size: 615, 185
+  orig: 615, 185
+  offset: 0, 0
+  index: -1
+buttonGreen
+  rotate: false
+  xy: 1161, 1347
+  size: 615, 185
+  orig: 615, 185
+  offset: 0, 0
+  index: -1
+buttonGrey
   rotate: false
   xy: 1, 1
-  size: 8003, 283
-  orig: 8003, 283
+  size: 615, 185
+  orig: 615, 185
+  offset: 0, 0
+  index: -1
+
+loginSkin3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+iconMagenta_plus
+  rotate: false
+  xy: 1, 1
+  size: 1158, 1157
+  orig: 1158, 1157
   offset: 0, 0
   index: -1

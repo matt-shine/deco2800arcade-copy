@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.wl6.entity.Player;
 
 public class WL6InputProcessor implements InputProcessor {
 

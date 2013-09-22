@@ -3,9 +3,6 @@ package deco2800.arcade.wl6;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
-import deco2800.arcade.wl6.entity.Door;
-import deco2800.arcade.wl6.entity.EnemyType;
-import deco2800.arcade.wl6.entity.SecretDoor;
 
 public class MapProcessor {
 

@@ -1,11 +1,11 @@
-package deco2800.arcade.wl6.entity;
+package deco2800.arcade.wl6.enemy;
 
 /**
  * Created with IntelliJ IDEA.
  * User: john
  * Date: 22/09/13
- * Time: 17:45
+ * Time: 20:51
  * To change this template use File | Settings | File Templates.
  */
-public class Dog {
+public class White {
 }

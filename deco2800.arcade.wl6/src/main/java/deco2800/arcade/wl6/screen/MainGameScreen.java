@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.wl6.*;
+import deco2800.arcade.wl6.Doodad;
 
 public class MainGameScreen implements Screen {
 	

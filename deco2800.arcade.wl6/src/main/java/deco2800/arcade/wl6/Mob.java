@@ -1,4 +1,4 @@
-package deco2800.arcade.wl6.entity;
+package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wl6.Doodad;

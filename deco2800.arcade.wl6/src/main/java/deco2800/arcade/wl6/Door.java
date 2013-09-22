@@ -1,9 +1,4 @@
-package deco2800.arcade.wl6.entity;
-
-import deco2800.arcade.wl6.Doodad;
-import deco2800.arcade.wl6.GameModel;
-import deco2800.arcade.wl6.Renderer;
-import deco2800.arcade.wl6.WL6Meta;
+package deco2800.arcade.wl6;
 
 public class Door extends Doodad {
 

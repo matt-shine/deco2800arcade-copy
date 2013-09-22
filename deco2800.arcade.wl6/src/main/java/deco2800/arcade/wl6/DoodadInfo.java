@@ -1,7 +1,6 @@
 package deco2800.arcade.wl6;
 
 import deco2800.arcade.wl6.WL6Meta.DIRS;
-import deco2800.arcade.wl6.entity.EnemyType;
 
 /**
  * Describes a thing. A thing can be an enemy, a powerup, a gun, or many at the same time

@@ -1,8 +1,4 @@
-package deco2800.arcade.wl6.entity;
-
-import deco2800.arcade.wl6.GameModel;
-import deco2800.arcade.wl6.Renderer;
-import deco2800.arcade.wl6.entity.Mob;
+package deco2800.arcade.wl6;
 
 public class Player extends Mob {
 

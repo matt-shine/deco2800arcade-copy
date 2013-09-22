@@ -244,8 +244,9 @@ public abstract class GridObject {
 	 * Remove the object from the model.
 	 * 
 	 * TODO implement generic destruction method of GridObject. Render the
-	 * object invisible, update any game state, remove any persistent effects
-	 * and then delete it from the model.
+	 * object invisible, update any game state through the current instantiated
+	 * ship object, remove any persistent effects and then delete it from the
+	 * model.
 	 */
 	public void destroy() {
 
@@ -253,30 +254,13 @@ public abstract class GridObject {
 
 	/**
 	 * Removes any effect the unit has on the grid and begins death animation.
+	 * Precondition: Must call destroy() before returning.
 	 * 
 	 * TODO implement death animation and clear any status effects this object
 	 * is applying to the grid. There should be a death sprite on any object
 	 * that can die.
 	 */
 	public void die() {
-	}
-
-	/**
-	 * To be invoked while instantiating or destroying an object to keep track
-	 * of any required state such as numbers on the grid.
-	 * 
-	 * TODO decide what game state will be kept, calculated and if calculated
-	 * when. This may need to be split into further methods Here we need to
-	 * consider: What actions are pushed to replay, how exact do replays need to
-	 * be? What stats do we need to keep track of for game mechanic reasons?
-	 * What stats do we need to keep track of for achievements? What stats do we
-	 * need to keep track of for accolades? What stats do we need to keep track
-	 * of for save/load?
-	 * 
-	 * This may be best kept in the Ship class. We just reference the ship (game
-	 * world) whenever we want to update what's happened within it.
-	 */
-	public void updateGameState() {
 	}
 
 	/**
@@ -291,5 +275,12 @@ public abstract class GridObject {
 		} else {
 			return true;
 		}
+	}
+
+	/**
+	 * write this method to record each discrete unit of object creation,
+	 * action and destruction for replay.
+	 */
+	public void pushToReplay(String name, GameAction action, int value) {
 	}
 }

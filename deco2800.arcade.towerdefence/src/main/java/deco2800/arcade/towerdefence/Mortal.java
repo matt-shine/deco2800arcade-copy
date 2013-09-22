@@ -30,21 +30,21 @@ public abstract class Mortal extends GridObject {
 
 	// Getters
 	/**
-	 * Return the current health of the mortal, nonnegative.
-	 * 
-	 * @return
-	 */
-	public int health() {
-		return health;
-	}
-
-	/**
 	 * Return the maximum health of the mortal, nonnegative.
 	 * 
 	 * @return
 	 */
 	public int maxHealth() {
 		return maxHealth;
+	}
+	
+	/**
+	 * Return the current health of the mortal, nonnegative.
+	 * 
+	 * @return
+	 */
+	public int health() {
+		return health;
 	}
 
 	/**

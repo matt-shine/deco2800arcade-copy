@@ -1,18 +1,18 @@
 package deco2800.arcade.towerdefence;
 
 /**
- * The class for Aliens invading the ship.
+ * The class for enemys invading the ship.
  * 
  * @author hadronn
  * 
  */
 public class Enemy extends Mobile implements Melee {
 	// Fields
-	// The number of attacks per second the alien can do.
+	// The number of attacks per second the enemy can do.
 	private float attackRate;
-	// The amount of damage the alien can inflict with an attack.
+	// The amount of damage the enemy can inflict with an attack.
 	private int damage;
-	// The amount of armour the alien's attack ignores.
+	// The amount of armour the enemy's attack ignores.
 	private int penetration;
 	// The current target.
 	private GridObject target;

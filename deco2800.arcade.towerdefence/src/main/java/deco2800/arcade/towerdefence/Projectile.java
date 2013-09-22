@@ -17,17 +17,43 @@ public class Projectile extends GridObject {
 	// Constructor
 
 	// Getters
+	/**
+	 * Returns the damage the projectile inflicts on collision.
+	 * 
+	 * @return
+	 */
 	public int damage() {
-		// Return the damage this projectile does if it hits.
 		return damage;
 	}
 
+	/**
+	 * Returns the penetration amount on the projectile. The amount of armor
+	 * this projectile ignores.
+	 * 
+	 * @return
+	 */
 	public int penetration() {
-		// Return the amount of armor this projectile ignores.
 		return penetration;
 	}
 
 	// Setters
+	/**
+	 * Set the damage this projectile inflicts on collision.
+	 * 
+	 * @param damage
+	 */
+	public void damage(int damage) {
+		this.damage = damage;
+	}
+
+	/**
+	 * Set the amount of penetration on the projectile.
+	 * 
+	 * @param penetration
+	 */
+	public void penetration(int penetration) {
+		this.penetration = penetration;
+	}
 
 	// Methods
 

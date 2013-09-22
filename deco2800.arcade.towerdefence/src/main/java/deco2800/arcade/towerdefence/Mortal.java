@@ -16,6 +16,12 @@ public abstract class Mortal extends GridObject{
 	private int armour;
 
 	
+	public Mortal(int maxHealth, int armour){
+		this.maxHealth = maxHealth;
+		this.health = maxHealth;
+		this.armour = armour; 
+	}
+	
 	//Return the current health of the mortal, nonnegative.
 	public int health() {
 		return health;
@@ -56,11 +62,10 @@ public abstract class Mortal extends GridObject{
 	//Decrease the current health, not below 0. Using penetration calculations.
 	//Penetration is a direct armour debuff for that attack alone.
 	public void takeDamage(int amount, int penetration) {
-		if (penetration >= armour){
-			takeDamage(amount);
-			return;
+		if (penetration < armour){
+			amount -= (armour - penetration);
 		}
-		amount -= (armour - penetration);
+		
 		if (amount <= 0){
 			return;
 		}

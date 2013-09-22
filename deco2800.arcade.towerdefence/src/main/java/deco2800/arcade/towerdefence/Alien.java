@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author hadronn
  *
  */
-public class Alien extends Mortal implements Melee {
+public class Alien extends Mobile implements Melee {
 	//Fields
 	//The number of attacks per second the alien can do.
 	private float attackRate;
@@ -23,7 +23,9 @@ public class Alien extends Mortal implements Melee {
 	
 	
 	//Constructor
-	
+	public Alien(int maxHealth, int armour){
+		super(maxHealth, armour);
+	}
 	
 	//Getters
 	public float attackRate() {

@@ -11,6 +11,10 @@ public abstract class Mobile extends Mortal {
 	//The object's speed in moves per second
 	private Vector2 vector = new Vector2();
 	
+	public Mobile(int maxHealth, int armour){
+		super(maxHealth, armour);
+	}
+	
 	//Move the GridObject one unit in the vector specified.
 	public void move(Vector2 vector) {
 		/**

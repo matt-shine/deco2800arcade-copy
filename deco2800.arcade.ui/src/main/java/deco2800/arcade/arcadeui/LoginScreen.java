@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.esotericsoftware.tablelayout.BaseTableLayout;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
@@ -45,6 +46,9 @@ public class LoginScreen implements Screen {
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
         CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        rememberBox.getCells().get(0).size(25, 25);
+        rememberBox.getCells().get(0).pad(5);
+        rememberBox.getCells().get(1).pad(2);
         TextButton loginButton = new TextButton("Login", skin);
         TextButton registerButton = new TextButton("Register", skin);
         TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
@@ -59,7 +63,7 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(serverText).width(400).pad(5).colspan(2);
         table.row();
-        table.add(rememberBox);
+        table.add(rememberBox).width(190).height(25).pad(5).colspan(2).align(BaseTableLayout.LEFT);
         table.row();
         table.add(loginButton).width(190).height(50).pad(5);
         table.add(registerButton).width(190).height(50).pad(5);

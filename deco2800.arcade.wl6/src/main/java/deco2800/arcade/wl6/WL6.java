@@ -82,6 +82,7 @@ public class WL6 extends GameClient {
 
 	@Override
 	public void dispose() {
+		Gdx.input.setCursorCatched(false);
 		currentScreen.dispose();
 		super.dispose();
 	}

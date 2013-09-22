@@ -1,5 +1,9 @@
 package deco2800.arcade.towerdefence;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  * The interface for GridObjects that can attack another GridObject on it's
  * facing.
@@ -35,5 +39,11 @@ public interface Melee {
 	 * @return
 	 */
 	public GridObject target();
+	
+	/**
+	 * Returns the array of sprites to animate melee attacking.
+	 * @return
+	 */
+	public ArrayList<Sprite> meleeSprites();
 
 }

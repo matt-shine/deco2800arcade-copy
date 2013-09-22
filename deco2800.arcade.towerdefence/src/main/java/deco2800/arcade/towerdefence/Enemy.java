@@ -1,5 +1,9 @@
 package deco2800.arcade.towerdefence;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  * The class for enemys invading the ship.
  * 
@@ -51,6 +55,13 @@ public class Enemy extends Mobile implements Melee {
 		return target;
 	}
 
+	/**
+	 * Return the sprites for melee attacking animation.
+	 */
+	public ArrayList<Sprite> meleeSprites() {
+		return null;
+	}
+	
 	// Setters
 	/**
 	 * Sets the attacks per second the enemy can make.
@@ -87,6 +98,12 @@ public class Enemy extends Mobile implements Melee {
 	public void target(GridObject target) {
 		this.target = target;
 	}
-
-	// Methods
+	
+	/**
+	 * Sets the sprites for melee attacking animation.
+	 */
+	public void meleeSprites(ArrayList<Sprite> meleeSprites) {
+	}
+	
+	// Methods	
 }

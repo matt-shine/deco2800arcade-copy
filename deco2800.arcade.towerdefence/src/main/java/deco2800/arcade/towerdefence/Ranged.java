@@ -1,5 +1,9 @@
 package deco2800.arcade.towerdefence;
 
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  * The interface for GridObjects that can shoot projectiles at a position
  * (probably at another GridObject).
@@ -15,7 +19,7 @@ public interface Ranged {
 	 * 
 	 * @return
 	 */
-	public float rangedAttackRate();
+	public float attackRate();
 
 	/**
 	 * Fire a projectile from your own position at another.
@@ -43,4 +47,10 @@ public interface Ranged {
 	 * @return
 	 */
 	public GridObject target();
+	
+	/**
+	 * Returns the array of sprites to animate shooting.
+	 * @return
+	 */
+	public ArrayList<Sprite> shootingSprites();
 }

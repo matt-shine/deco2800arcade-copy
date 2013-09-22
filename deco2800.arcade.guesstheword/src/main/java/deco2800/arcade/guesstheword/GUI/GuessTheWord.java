@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.guesstheword.gameplay.GetterSetter;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -17,6 +18,8 @@ import deco2800.arcade.model.Player;
 public class GuessTheWord extends GameClient{
 	
 	private static final Game GAME;
+	
+	GetterSetter getterSetter;
 	
 	Screen splashScreen;
 	Screen mainScreen;
@@ -32,8 +35,9 @@ public class GuessTheWord extends GameClient{
 	
 	@Override
 	public void create() {
-		super.create();
+		getterSetter = new GetterSetter();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		
 		splashScreen = new SplashScreen(this);
 		mainScreen = new MainScreen(this);
 		gameScreen = new GameScreen(this);

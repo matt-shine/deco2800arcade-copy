@@ -42,12 +42,15 @@ public class MainScreen implements Screen {
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
+				game.getterSetter.setLevel("Default");
+				System.out.println("Changing to Game Screen");
 				game.setScreen(game.gameScreen);
 			}
 		});
 		settingsButton = new TextButton("Game Settings" , skin);
 		settingsButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
+				System.out.println("Changing to Settings Screen");
 				game.setScreen(game.settingsScreen);
 			}
 		});
@@ -70,25 +73,15 @@ public class MainScreen implements Screen {
 		mainTable.add(settingsButton).width(BUTTON_WIDTH).padBottom(5);
 		mainTable.row();
 		mainTable.add(achieveButton).width(BUTTON_WIDTH).padBottom(5);
-		
-		
-		
+
 		stage.addActor(mainTable);
 		
 	}
 	
 	@Override
 	public void render(float arg0) {
-		// TODO Auto-generated method stub	
-//		if (settingsButton.isPressed()) {
-//			settingsButton.toggle();	// set back to unchecked
-//			System.out.println( "switching to settings screen");
-//			//game.setScreen(game.settingsScreen);
-//		}
-		
 		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
-        
 		stage.act(arg0);
 		stage.draw();
 

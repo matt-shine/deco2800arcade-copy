@@ -68,7 +68,7 @@ public class AccoladeStorage{
 
     private ImageStorage imageStorage;
 
-    public AchievementStorage(ImageStorage imageStorage) {
+    public AccoladeStorage(ImageStorage imageStorage) {
         this.imageStorage = imageStorage;
     }
 

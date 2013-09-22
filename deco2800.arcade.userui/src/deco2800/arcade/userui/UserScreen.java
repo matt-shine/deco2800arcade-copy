@@ -67,11 +67,13 @@ public class UserScreen extends JFrame implements ActionListener {
 	
 	//Declare Images 
 	private ImageIcon picavatar, picaboutbar, picfriendbar, picaddfriend, 
-	pichistorybar, picachievementbar, piclocked, picunlocked, piceditbutton;
+	pichistorybar, picachievementbar, piclocked, picunlocked, piceditbutton,
+	picfriendonline, picfriendoffline;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
 	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
+	Font blacksmall = new Font("Verdana", Font.PLAIN, 12);
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	Font linkbold = new Font("Verdana", Font.BOLD, 14);
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
@@ -95,6 +97,8 @@ public class UserScreen extends JFrame implements ActionListener {
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
+		picfriendonline = new ImageIcon("assets/images/addfriendonline.png");
+		picfriendoffline = new ImageIcon("assets/images/addfriendoffline.png");
 				
 		/*
 		 *  Create all Panels 
@@ -181,7 +185,7 @@ public class UserScreen extends JFrame implements ActionListener {
 	public void addplayerinfopanel(){
 		
 		//Add Buttons
-	    addfriendbutton = new JButton(picaddfriend);
+	    addfriendbutton = new JButton(picfriendoffline);
 	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    addfriendbutton.setContentAreaFilled(false);
 	    editbutton = new JButton(piceditbutton);
@@ -193,11 +197,11 @@ public class UserScreen extends JFrame implements ActionListener {
         avatar.setIcon(picavatar);
         addfriend = new JLabel();
         addfriend.setIcon(picaddfriend);
-        playername = new JLabel("Stark");
+        playername = new JLabel("Player");
         playername.setForeground(Color.white);
         playername.setFont(blackbold);
-        playerlevel = new JLabel("Level 20");
-        playerlevel.setFont(blacknormal);
+        playerlevel = new JLabel("Last Login: 8/3/2013");
+        playerlevel.setFont(blacksmall);
         playerlevel.setForeground(Color.white);
         
 		//Add Elements to Panel

@@ -33,17 +33,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <interface id="4" language="java" name="deco2800.arcade.towerdefence.Divine" project="deco2800.arcade.towerdefence" 
-    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Divine.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="416" y="-75"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </interface>  
-  <class id="5" language="java" name="deco2800.arcade.towerdefence.Effect" project="deco2800.arcade.towerdefence" 
+  <class id="4" language="java" name="deco2800.arcade.towerdefence.Effect" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Effect.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="635" y="656"/>    
@@ -53,7 +43,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="deco2800.arcade.towerdefence.Grid" project="deco2800.arcade.towerdefence" 
+  <class id="5" language="java" name="deco2800.arcade.towerdefence.Grid" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Grid.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="634" y="885"/>    
@@ -63,8 +53,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="7" language="java" name="deco2800.arcade.towerdefence.GridObject" 
-    project="deco2800.arcade.towerdefence" 
+  <class id="6" language="java" name="deco2800.arcade.towerdefence.GridObject" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/GridObject.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="83" y="10"/>    
@@ -73,8 +62,8 @@
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
-  </interface>  
-  <class id="8" language="java" name="deco2800.arcade.towerdefence.Mobile" project="deco2800.arcade.towerdefence" 
+  </class>  
+  <class id="7" language="java" name="deco2800.arcade.towerdefence.Mobile" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Mobile.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="564" y="192"/>    
@@ -84,17 +73,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="9" language="java" name="deco2800.arcade.towerdefence.Mortal" project="deco2800.arcade.towerdefence" 
-    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Mortal.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="572" y="-21"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
-      visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </interface>  
-  <class id="10" language="java" name="deco2800.arcade.towerdefence.Projectile" project="deco2800.arcade.towerdefence" 
+  <class id="8" language="java" name="deco2800.arcade.towerdefence.Projectile" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Projectile.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="266" y="561"/>    
@@ -104,7 +83,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="11" language="java" name="deco2800.arcade.towerdefence.Ranged" project="deco2800.arcade.towerdefence" 
+  <interface id="9" language="java" name="deco2800.arcade.towerdefence.Ranged" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Ranged.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="727" y="-46"/>    
@@ -114,7 +93,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <interface id="12" language="java" name="deco2800.arcade.towerdefence.Ship" project="deco2800.arcade.towerdefence" 
+  <interface id="10" language="java" name="deco2800.arcade.towerdefence.Ship" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Ship.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="500" y="497"/>    
@@ -124,7 +103,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <enumeration id="13" language="java" name="deco2800.arcade.towerdefence.Team" project="deco2800.arcade.towerdefence" 
+  <enumeration id="11" language="java" name="deco2800.arcade.towerdefence.Team" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Team.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="278" y="938"/>    
@@ -134,7 +113,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <interface id="14" language="java" name="deco2800.arcade.towerdefence.Melee" project="deco2800.arcade.towerdefence" 
+  <interface id="12" language="java" name="deco2800.arcade.towerdefence.Melee" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Melee.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="256" y="179"/>    
@@ -144,7 +123,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <interface id="15" language="java" name="deco2800.arcade.towerdefence.Tower" project="deco2800.arcade.towerdefence" 
+  <interface id="13" language="java" name="deco2800.arcade.towerdefence.Tower" project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/Tower.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="729" y="131"/>    
@@ -154,7 +133,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <enumeration id="16" language="java" name="deco2800.arcade.towerdefence.TowerType" 
+  <enumeration id="14" language="java" name="deco2800.arcade.towerdefence.TowerType" 
     project="deco2800.arcade.towerdefence" 
     file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/TowerType.java" binary="false" 
     corner="BOTTOM_RIGHT">    
@@ -165,113 +144,13 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </enumeration>  
-  <realization id="17">    
+  <realization id="15">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="12"/>  
+  </realization>  
+  <generalization id="16">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="7"/>  
-  </realization>  
-  <realization id="18">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="9"/>  
-  </realization>  
-  <association id="19">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="20" name="grid"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="22">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="14"/>  
-  </realization>  
-  <association id="23">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="24" name="team"/>      
-      <multiplicity id="25" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="26">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="8"/>  
-  </generalization>  
-  <realization id="27">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="7"/>  
-  </realization>  
-  <association id="28">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="29" name="effects"/>      
-      <multiplicity id="30" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="31">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="32" name="effects"/>      
-      <multiplicity id="33" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="34">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="35" name="team"/>      
-      <multiplicity id="36" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <realization id="37">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="4"/>  
-  </realization>  
-  <realization id="38">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="7"/>  
-  </realization>  
-  <generalization id="39">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <association id="40">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="41" name="direction"/>      
-      <multiplicity id="42" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="43">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <association id="44">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="45" name="grid"/>      
-      <multiplicity id="46" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="47">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="7"/>  
-  </generalization>  
-  <association id="48">    
-    <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="49" name="direction"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="51">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="8"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     accessors="true" visibility="true">    

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class CubeGen {
 
 	public static void getCube(
-			float i,
-			float j,
-			float texX,
-			float texY,
-			float texS,
+			float x,
+			float y,
+			float u,
+			float v,
+			float tileSize,
 			boolean left,
 			boolean right,
 			boolean front,
@@ -23,107 +23,107 @@ public class CubeGen {
 		//triangle 1
 		//bottom left
 		if (debug) {
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v);
 			
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//triangle 2
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 	
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v + tileSize);
 		}
 
 		//SIDE: FRONT
 		//triangle 1
 		//bottom left
 		if (front) {
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v);
 			
 	
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 1);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//triangle 2
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v + tileSize);
 		}
 		
 
@@ -132,54 +132,54 @@ public class CubeGen {
 		//triangle 1
 		//bottom left
 		if (back) {
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v);
 			
 	
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 1);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//triangle 2
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v + tileSize);
 			
 		}
 
@@ -188,54 +188,54 @@ public class CubeGen {
 		//triangle 1
 		//bottom left
 		if (left) {
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v);
 			
 	
 			//bottom right
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 1);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//triangle 2
 			//top left
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//bottom right
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top right
-			terrainScratch.add((float) i);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v + tileSize);
 		}
 		
 
@@ -243,54 +243,54 @@ public class CubeGen {
 		//triangle 1
 		//bottom left
 		if (right) {
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v);
 			
 	
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 			
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top left
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 1);
 			
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//triangle 2
 			//top left
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u);
+			terrainScratch.add((float) v + tileSize);
 			
 			//bottom right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 0);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v);
 			
 			//top right
-			terrainScratch.add((float) i + 1);
-			terrainScratch.add((float) j + 1);
+			terrainScratch.add((float) x + 1);
+			terrainScratch.add((float) y + 1);
 			terrainScratch.add((float) 1);
 	
-			terrainScratch.add((float) texX + texS);
-			terrainScratch.add((float) texY + texS);
+			terrainScratch.add((float) u + tileSize);
+			terrainScratch.add((float) v + tileSize);
 		}
 		
 	}

@@ -29,8 +29,7 @@ public class Renderer {
 	private ArrayList<Float> terrainScratch = new ArrayList<Float>();
 	private GameModel game = null;
 	private boolean debugMode = false;
-	private Texture terrainAtlas = null;
-	private Texture doodadsAtlas = null;
+	private Texture atlas = null;
 	
 	
 	public Renderer() {
@@ -51,12 +50,8 @@ public class Renderer {
 	public void load() {
 		if (terrainShader == null) {
 
-			FileHandle imageFileHandle = Gdx.files.internal("wl6TerrainAtlas.png"); 
-	        terrainAtlas = new Texture(imageFileHandle);
-
-			imageFileHandle = Gdx.files.internal("wl6DoodadAtlas.png"); 
-	        doodadsAtlas = new Texture(imageFileHandle);
-			
+			FileHandle imageFileHandle = Gdx.files.internal("wl6Atlas.png"); 
+	        atlas = new Texture(imageFileHandle);
 	        
 			Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
 			Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
@@ -71,9 +66,6 @@ public class Renderer {
 			float[] posData = toPrimativeArray(terrainScratch);
 			terrainMesh = new Mesh(true, posData.length, 0, pos, tex);
 			terrainMesh.setVertices(posData);
-			
-			
-			
 			
 			
 			vertexShader = loadFile("wl6DoodadVertShader.glsl");
@@ -124,7 +116,7 @@ public class Renderer {
 		
 		
 		//draw terrain
-		terrainAtlas.bind();
+		atlas.bind();
 		terrainShader.begin();
 		
 		Matrix4 pv = getProjectionViewMatrix();
@@ -141,7 +133,6 @@ public class Renderer {
 		
 		
 		//draw doodads
-		doodadsAtlas.bind();
 		doodadShader.begin();
 		
 		Iterator<Doodad> itr = game.getDoodadIterator();
@@ -183,8 +174,11 @@ public class Renderer {
 		Matrix4 combined = pv.mul(m);
 		doodadShader.setUniformMatrix("uMVPMatrix", combined);
 		
+		//get texture
+		Vector2 texPos = TextureResolver.getTextureLocation(s);
+		
 		//set texture offset
-		doodadShader.setUniform2fv("u_texoffset", new float[]{0, 0}, 0, 2);
+		doodadShader.setUniform2fv("u_texoffset", new float[]{texPos.x, texPos.y}, 0, 2);
 		
 		//draw
 		quadMesh.render(doodadShader, GL20.GL_TRIANGLES);
@@ -214,7 +208,7 @@ public class Renderer {
 
 		ArrayList<Float> quadMesh = new ArrayList<Float>();
 		
-		float texS = 1;
+		float texS = 1/3f;
 		
 		CubeGen.genQuad(texS, quadMesh);
 		
@@ -230,72 +224,36 @@ public class Renderer {
 	 */
 	public void generateTerrain(Level map, boolean debug) {
 		for (int i = 0; i < WL6.MAP_DIM; i++) {
-		    for (int j = 0; j < WL6.MAP_DIM; j++) {
-		    	
-		    	//we want to generate all terrain blocks that have a texture
-		    	if (WL6Meta.block(map.getTerrainAt(i, j)).texture != null) {
-		    		
-		    		
-		    		if (map.getDoodadAt(i, j) == WL6Meta.SECRET_DOOR ||
-		    				isSurrounded(i, j, map)) {
-		    			continue;
-		    		}
-		    		
-
-		    		Vector2 texPos = TextureResolver.getTextureLocation(
-		    				WL6Meta.block(map.getTerrainAt(i, j)).texture);
-		    		float texS = 1 / 3f;
-		    		
-		    		CubeGen.getCube(i, j,
-		    				texPos.x, texPos.y, texS,
-		    				i != 0 && !hasObscuringBlockAt(i - 1, j, map),
-		    				i != 63 && !hasObscuringBlockAt(i + 1, j, map),
-		    				j != 0 && !hasObscuringBlockAt(i, j - 1, map),
-		    				j != 63 && !hasObscuringBlockAt(i, j + 1, map),
-		    				true,
-		    				terrainScratch
-		    		);
-		    		
-
-		    	}
+			for (int j = 0; j < WL6.MAP_DIM; j++) {
+				
+				//we want to generate all terrain blocks that have a texture
+				if (WL6Meta.block(map.getTerrainAt(i, j)).texture != null) {
+					
+					
+					if (map.getDoodadAt(i, j) == WL6Meta.SECRET_DOOR ||
+							WL6Meta.isSurrounded(i, j, map)) {
+						continue;
+					}
+					
+					
+					Vector2 texPos = TextureResolver.getTextureLocation(
+							WL6Meta.block(map.getTerrainAt(i, j)).texture);
+					float texS = 1 / 3f;
+					
+					CubeGen.getCube(i, j,
+							texPos.x, texPos.y, texS,
+							i != 0 && !WL6Meta.hasObscuringBlockAt(i - 1, j, map),
+							i != 63 && !WL6Meta.hasObscuringBlockAt(i + 1, j, map),
+							j != 0 && !WL6Meta.hasObscuringBlockAt(i, j - 1, map),
+							j != 63 && !WL6Meta.hasObscuringBlockAt(i, j + 1, map),
+							true,
+							terrainScratch
+					);
+					
+					
+				}
 		    }
 	    }
-	}
-	
-	
-	
-	
-	public boolean isSurrounded(int x, int y, Level map) {
-		int surrounded = 0;
-		//check if we're surrounded
-		if (x == 0 || hasObscuringBlockAt(x - 1, y, map)) {
-			surrounded++;
-		}
-		if (x == 63 || hasObscuringBlockAt(x + 1, y, map)) {
-			surrounded++;
-		}
-		if (y == 0 || hasObscuringBlockAt(x, y - 1, map)) {
-			surrounded++;
-		}
-		if (y == 63 || hasObscuringBlockAt(x, y + 1, map)) {
-			surrounded++;
-		}
-		if (surrounded == 4) {
-			return true;
-		}
-		
-		return false;
-		
-	}
-	
-	
-	
-	public boolean hasObscuringBlockAt(int x, int y, Level map) {
-		if (WL6Meta.block(map.getTerrainAt(x, y)).texture != null &&
-				map.getDoodadAt(x, y) != WL6Meta.SECRET_DOOR) {
-			return true;
-		}
-		return false;
 	}
 	
 	

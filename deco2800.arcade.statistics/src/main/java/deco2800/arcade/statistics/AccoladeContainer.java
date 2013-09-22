@@ -3,14 +3,6 @@ import java.util.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {
  
-    public static void main(String[] args) {
-        AccoladeContainer container = new AccoladeContainer();
-        container.BUILDDUMMYDATA();
-        for (Accolade testAccolade : container) {
-            System.out.println("HI: " + testAccolade.toString());
-            
-        }
-    }
     //instantiate variables
     private Accolade head;
     private Accolade tail;
@@ -143,4 +135,5 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * END ITERATOR STUFF YO *
      */
 }
+
 

@@ -47,10 +47,10 @@ public class Platform {
 			platformType = "branch_right";
 			break;
 		case '^': // Goal Vine
-			platformType = "trunk_short";
+			platformType = "goal";
 			break;
 		case 'j': // Vine
-			platformType = "branch_short";
+			platformType = "vine_short";
 			break;
 		case 't': // short tree
 			platformType = "treetop_short";

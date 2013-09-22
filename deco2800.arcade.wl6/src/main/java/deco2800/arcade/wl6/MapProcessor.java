@@ -2,6 +2,8 @@ package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+
 public class MapProcessor {
 
 
@@ -27,11 +29,17 @@ public class MapProcessor {
 		    	//spawn points
 		    	if (id >= WL6Meta.SPAWN_POINT && id < WL6Meta.SPAWN_POINT + 4) {
 		    		
-		    		//TODO the angle doesn't work quite right -- don't know why
 		    		model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.direction));
 		    		
-		    	} else {
+		    	} else if (id == WL6Meta.SECRET_DOOR) {
 		    		
+		    		SecretDoor door = new SecretDoor(doodadID());
+		    		door.setTextureName(dInfo.texture);
+		    		door.setPos(new Vector2(i + 0.5f, j + 0.5f));
+		    		model.addDoodad(door);
+		    		
+		    	} else {
+			    	
 		    		//everything else
 		    		spawnDoodadFromInfo(model, dInfo, id, i, j);
 		    		
@@ -42,6 +50,19 @@ public class MapProcessor {
 		}
 		
 		
+		//spawn all the blocks that are actually doodads
+		for (int i = 0; i < WL6.MAP_DIM; i++) {
+		    for (int j = 0; j < WL6.MAP_DIM; j++) {
+		    	
+		    	int id = map.getTerrainAt(i, j);
+		    	BlockInfo dInfo = WL6Meta.block(id);
+		    	
+	    		if (WL6Meta.hasDoorAt(i, j, map)) {
+	    			spawnDoor(model, dInfo, id, i, j);
+	    		}
+		    }
+		}
+		
 		
 		
 	}
@@ -49,8 +70,7 @@ public class MapProcessor {
 	
 	
 	/**
-	 * Unique ids for doodads. This relies on the assumption that no two doodads can
-	 * spawn on the same tile.
+	 * Unique ids for doodads. TODO make this better
 	 * @param x
 	 * @param y
 	 * @return
@@ -59,6 +79,16 @@ public class MapProcessor {
 		return (int) Math.floor(Math.random() * Integer.MAX_VALUE);
 	}
 	
+	
+	
+	
+	public static void spawnDoor(GameModel model, BlockInfo bInfo, int id, int x, int y) {
+		//TODO: respect door types
+		Door door = new Door(doodadID(), id % 2 != 0, KEY_TYPE.NONE);
+		door.setTextureName(bInfo.texture);
+		door.setPos(new Vector2(x + 0.5f, y + 0.5f));
+		model.addDoodad(door);
+	}
 	
 	
 	/**
@@ -71,6 +101,11 @@ public class MapProcessor {
 	 */
 	public static void spawnDoodadFromInfo(GameModel model, DoodadInfo d, int id, int x, int y) {
 		Doodad dd = null;
+		
+		if (d.special) {
+			System.err.println("Tried to automatically generate a special case doodad: " + id + " (" + x + ", " + y + ")");
+			return;
+		}
 		
 		if (d.texture == null) {
 			//this doodad is invisible so it must be a waypoint or something
@@ -90,9 +125,9 @@ public class MapProcessor {
 			
 		} else if (d.solid) {
 			
-			
-			//TODO spawn a solid static doodad
-			
+			//TODO make these solid
+			dd = new Doodad(doodadID());
+			dd.setTextureName(d.texture);
 			
 		} else {
 			

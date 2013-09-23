@@ -60,7 +60,7 @@ public class GameScreen implements Screen  {
 	private String status = null;
 	
 	// Integer to determine what the current level is
-	private int level = 2;
+	private int level = 1;
 
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;

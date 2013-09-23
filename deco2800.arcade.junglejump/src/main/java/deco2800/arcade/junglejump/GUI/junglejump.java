@@ -63,7 +63,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public float QUIT = (float) (242 - 37.5 * 5);
 
 	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS
 	}
 	
 	int monkeyLength = 40;
@@ -358,6 +358,18 @@ public class junglejump extends GameClient implements InputProcessor {
 			super.render();
 			break;
 		case GAMEOVER:
+			break;
+		case ACHIEVEMENTS:
+			Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.setProjectionMatrix(camera.combined);
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			batch.begin();
+			// Draw achievement labels and graphics here
+			
+			batch.end();
+			camera.update();
+			super.render();
 			break;
 		}
 

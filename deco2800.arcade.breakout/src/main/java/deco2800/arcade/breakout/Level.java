@@ -607,7 +607,230 @@ public class Level {
 		bricks[60] = new Brick(680,180,80,40);	
 		return bricks;
 	}
-	
+	public Brick[] levelTen(Brick[] bricks, GameScreen context) {
+		bricks = new Brick[189];
+		context.setOuter(189);
+		context.setInner(1);
+		//Layer one of trophy
+		bricks[0] = new Brick(600,640,80,40);
+		bricks[1] = new Brick(520,640,80,40);
+		bricks[2] = new Brick(440,640,80,40);
+		bricks[3] = new Brick(680,640,80,40);
+		bricks[4] = new Brick(760,640,80,40);
+		//Layer two of trophy
+		bricks[5] = new Brick(480,600,80,40);
+		bricks[6] = new Brick(560,600,80,40);
+		bricks[7] = new Brick(640,600,80,40);
+		bricks[8] = new Brick(720,600,80,40);
+		//Layer three of trophy
+		bricks[9] = new Brick(520,560,80,40);
+		bricks[10] = new Brick(600,560,80,40);
+		bricks[11] = new Brick(680,560,80,40);
+		//Layer four of trophy
+		bricks[12] = new Brick(560,520,80,40);
+		bricks[13] = new Brick(640,520,80,40);
+		//Layer five and six of trophy
+		bricks[14] = new Brick(600,480,80,40);
+		bricks[15] = new Brick(600,440,80,40);
+		//Layer seven
+		bricks[16] = new Brick(560,400,80,40);
+		bricks[17] = new Brick(640,400,80,40);
+		//Left Handle
+		bricks[18] = new Brick(400,620,80,20);
+		bricks[19] = new Brick(380,540,20,100);
+		bricks[20] = new Brick(400,540,80,20);
+		bricks[21] = new Brick(480,540,80,20);
+		//Right Handle
+		bricks[22] = new Brick(800,620,80,20);
+		bricks[23] = new Brick(880,540,20,100);
+		bricks[24] = new Brick(800,540,80,20);
+		bricks[25] = new Brick(720,540,80,20);
+		//Letter C
+		bricks[26] = new Brick(40,240,20,20);
+		bricks[27] = new Brick(50,220,20,20);
+		bricks[28] = new Brick(60,200,20,20);
+		bricks[29] = new Brick(80,200,20,20);
+		bricks[30] = new Brick(50,260,20,20);
+		bricks[31] = new Brick(60,280,20,20);
+		bricks[32] = new Brick(80,280,20,20);
+		//Letter A
+		bricks[33] = new Brick(440,200,20,20);
+		bricks[34] = new Brick(440,220,20,20);
+		bricks[35] = new Brick(440,240,20,20);
+		bricks[36] = new Brick(450,260,20,20);
+		bricks[37] = new Brick(460,280,20,20);
+		bricks[38] = new Brick(480,280,20,20);
+		bricks[39] = new Brick(490,260,20,20);
+		bricks[40] = new Brick(500,240,20,20);
+		bricks[41] = new Brick(500,220,20,20);
+		bricks[42] = new Brick(500,200,20,20);
+		bricks[43] = new Brick(460,220,20,20);
+		bricks[44] = new Brick(480,220,20,20);
+		//Letter T
+		bricks[45] = new Brick(850,280,20,20);
+		bricks[46] = new Brick(870,280,20,20);
+		bricks[47] = new Brick(890,280,20,20);
+		bricks[48] = new Brick(870,260,20,20);
+		bricks[49] = new Brick(870,240,20,20);
+		bricks[50] = new Brick(870,220,20,20);
+		bricks[51] = new Brick(870,200,20,20);
+		//Letter O
+		bricks[52] = new Brick(110,220,20,20);
+		bricks[53] = new Brick(120,200,20,20);
+		bricks[54] = new Brick(140,200,20,20);
+		bricks[55] = new Brick(150,220,20,20);
+		bricks[56] = new Brick(110,240,20,20);
+		bricks[57] = new Brick(110,260,20,20);
+		bricks[58] = new Brick(120,280,20,20);
+		bricks[59] = new Brick(150,240,20,20);
+		bricks[60] = new Brick(150,260,20,20);
+		bricks[61] = new Brick(140,280,20,20);
+		//Letter T
+		bricks[62] = new Brick(530,280,20,20);
+		bricks[63] = new Brick(550,280,20,20);
+		bricks[64] = new Brick(570,280,20,20);
+		bricks[65] = new Brick(550,260,20,20);
+		bricks[66] = new Brick(550,240,20,20);
+		bricks[67] = new Brick(550,220,20,20);
+		bricks[68] = new Brick(550,200,20,20);
+		//Letter I
+		bricks[69] = new Brick(920,280,20,20);
+		bricks[70] = new Brick(920,260,20,20);
+		bricks[71] = new Brick(920,240,20,20);
+		bricks[72] = new Brick(920,220,20,20);
+		bricks[73] = new Brick(920,200,20,20);
+		//Letter N
+		bricks[74] = new Brick(180,200,20,20);
+		bricks[75] = new Brick(180,220,20,20);
+		bricks[76] = new Brick(180,240,20,20);
+		bricks[77] = new Brick(180,260,20,20);
+		bricks[78] = new Brick(180,280,20,20);
+		bricks[79] = new Brick(200,260,20,20);
+		bricks[80] = new Brick(210,240,20,20);
+		bricks[81] = new Brick(230,220,20,20);
+		bricks[82] = new Brick(250,200,20,20);
+		bricks[83] = new Brick(250,220,20,20);
+		bricks[84] = new Brick(250,240,20,20);
+		bricks[85] = new Brick(250,260,20,20);
+		bricks[86] = new Brick(250,280,20,20);
+		//Letter U
+		bricks[87] = new Brick(600,280,20,20);
+		bricks[88] = new Brick(600,260,20,20);
+		bricks[89] = new Brick(600,240,20,20);
+		bricks[90] = new Brick(600,220,20,20);
+		bricks[91] = new Brick(620,200,20,20);
+		bricks[92] = new Brick(640,200,20,20);
+		bricks[93] = new Brick(660,220,20,20);
+		bricks[94] = new Brick(660,240,20,20);
+		bricks[95] = new Brick(660,260,20,20);
+		bricks[96] = new Brick(660,280,20,20);
+		//Letter O
+		bricks[97] = new Brick(950,220,20,20);
+		bricks[98] = new Brick(960,200,20,20);
+		bricks[99] = new Brick(980,200,20,20);
+		bricks[100] = new Brick(990,220,20,20);
+		bricks[101] = new Brick(950,240,20,20);
+		bricks[102] = new Brick(950,260,20,20);
+		bricks[103] = new Brick(980,280,20,20);
+		bricks[104] = new Brick(990,240,20,20);
+		bricks[105] = new Brick(990,260,20,20);
+		bricks[106] = new Brick(960,280,20,20);
+		//Letter G
+		bricks[107] = new Brick(280,220,20,20);
+		bricks[108] = new Brick(280,240,20,20);
+		bricks[109] = new Brick(280,260,20,20);
+		bricks[110] = new Brick(290,280,20,20);
+		bricks[111] = new Brick(310,280,20,20);
+		bricks[112] = new Brick(290,200,20,20);
+		bricks[113] = new Brick(310,200,20,20);
+		bricks[114] = new Brick(330,220,20,20);
+		bricks[115] = new Brick(330,240,20,20);
+		bricks[116] = new Brick(310,240,20,20);
+		//Letter L
+		bricks[117] = new Brick(690,200,20,20);
+		bricks[118] = new Brick(690,220,20,20);
+		bricks[119] = new Brick(690,240,20,20);
+		bricks[120] = new Brick(690,260,20,20);
+		bricks[121] = new Brick(690,280,20,20);
+		bricks[122] = new Brick(710,200,20,20);
+		bricks[123] = new Brick(730,200,20,20);
+		//Letter N
+		bricks[124] = new Brick(1020,200,20,20);
+		bricks[125] = new Brick(1020,220,20,20);
+		bricks[126] = new Brick(1020,240,20,20);
+		bricks[127] = new Brick(1020,260,20,20);
+		bricks[128] = new Brick(1020,280,20,20);
+		bricks[129] = new Brick(1040,260,20,20);
+		bricks[130] = new Brick(1050,240,20,20);
+		bricks[131] = new Brick(1070,220,20,20);
+		bricks[132] = new Brick(1090,200,20,20);
+		bricks[133] = new Brick(1090,220,20,20);
+		bricks[134] = new Brick(1090,240,20,20);
+		bricks[135] = new Brick(1090,260,20,20);
+		bricks[136] = new Brick(1090,280,20,20);
+		//Letter R
+		bricks[137] = new Brick(360,200,20,20);
+		bricks[138] = new Brick(360,220,20,20);
+		bricks[139] = new Brick(360,240,20,20);
+		bricks[140] = new Brick(360,260,20,20);
+		bricks[141] = new Brick(360,280,20,20);
+		bricks[142] = new Brick(380,280,20,20);
+		bricks[143] = new Brick(400,260,20,20);
+		bricks[144] = new Brick(380,240,20,20);
+		bricks[145] = new Brick(400,220,20,20);
+		bricks[146] = new Brick(410,200,20,20);
+		//Letter A
+		bricks[147] = new Brick(760,200,20,20);
+		bricks[148] = new Brick(760,220,20,20);
+		bricks[149] = new Brick(760,240,20,20);
+		bricks[150] = new Brick(770,260,20,20);
+		bricks[151] = new Brick(780,280,20,20);
+		bricks[152] = new Brick(800,280,20,20);
+		bricks[153] = new Brick(810,260,20,20);
+		bricks[154] = new Brick(820,240,20,20);
+		bricks[155] = new Brick(820,220,20,20);
+		bricks[156] = new Brick(820,200,20,20);
+		bricks[157] = new Brick(780,220,20,20);
+		bricks[158] = new Brick(800,220,20,20);
+		//Letter S
+		bricks[159] = new Brick(1160,280,20,20);
+		bricks[160] = new Brick(1140,280,20,20);
+		bricks[161] = new Brick(1120,260,20,20);
+		bricks[162] = new Brick(1120,240,20,20);
+		bricks[163] = new Brick(1140,240,20,20);
+		bricks[164] = new Brick(1160,220,20,20);
+		bricks[165] = new Brick(1140,200,20,20);
+		bricks[166] = new Brick(1120,200,20,20);
+		//Left mini trophy 
+		bricks[167] = new Brick(270,440,40,40);
+		bricks[168] = new Brick(280,480,20,20);
+		bricks[169] = new Brick(270,500,40,40);
+		bricks[170] = new Brick(250,540,40,40);
+		bricks[171] = new Brick(290,540,40,40);
+		//Left mini trophy handle
+		bricks[172] = new Brick(230,570,20,10);
+		bricks[173] = new Brick(220,540,10,40);
+		bricks[174] = new Brick(230,540,20,10);
+		
+		bricks[175] = new Brick(330,570,20,10);
+		bricks[176] = new Brick(350,540,10,40);
+		bricks[177] = new Brick(330,540,20,10);
+		//Right mini trophy
+		bricks[178] = new Brick(970,440,40,40);
+		bricks[179] = new Brick(980,480,20,20);
+		bricks[180] = new Brick(970,500,40,40);
+		bricks[181] = new Brick(950,540,40,40);
+		bricks[182] = new Brick(990,540,40,40);
+		//Right mini trophy handle
+		bricks[183] = new Brick(930,570,20,10);
+		bricks[184] = new Brick(920,540,10,40);
+		bricks[185] = new Brick(930,540,20,10);
+		
+		bricks[186] = new Brick(1030,570,20,10);
+		bricks[187] = new Brick(1050,540,10,40);
+		bricks[188] = new Brick(1030,540,20,10);
+		return bricks;
+	}
 	public void render(Brick[] bricks, int outer, int inner, GameScreen context, 
 			ShapeRenderer shapeRenderer, SpriteBatch b) {
 		int index = 0;

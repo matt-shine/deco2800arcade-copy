@@ -147,6 +147,8 @@ public class GameScreen implements Screen  {
 			bricks = levelSystem.levelEight(bricks, this);
 		} else if (getLevel() == 9) {
 			bricks = levelSystem.levelNine(bricks, this);
+		} else if (getLevel() == 10) {
+			bricks = levelSystem.levelTen(bricks,this);
 		}
 		setBrickNum(bricks.length);
 

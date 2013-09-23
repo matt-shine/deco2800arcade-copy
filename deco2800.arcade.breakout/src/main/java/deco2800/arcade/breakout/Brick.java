@@ -192,6 +192,9 @@ public class Brick {
 		if (level == 9){
 			renderLevelNine(b, index);
 		}
+		if (level == 10) {
+			renderLevelTen(b, index);
+		}
 	}
 	
 	public void renderLevelOne(int num, SpriteBatch b) {
@@ -351,6 +354,24 @@ public class Brick {
 			sBatch.draw(brickImgs[5], brickShape.x, brickShape.y, getWidth(), getHeight());
 		} else {
 			sBatch.draw(brickImgs[1], brickShape.x, brickShape.y, getWidth(), getHeight());
+		}
+		sBatch.end();
+	}
+	public void renderLevelTen(SpriteBatch b, int index) {
+		sBatch = b;
+		sBatch.begin();
+		if (index < 26) {
+			sBatch.draw(brickImgs[2], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 26 && index < 52) {
+			sBatch.draw(brickImgs[0], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 52 && index < 74) {
+			sBatch.draw(brickImgs[1], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 74 && index < 107){
+			sBatch.draw(brickImgs[3], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 107 && index < 137){
+			sBatch.draw(brickImgs[4], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else {
+			sBatch.draw(brickImgs[5], brickShape.x, brickShape.y, getWidth(), getHeight());
 		}
 		sBatch.end();
 	}

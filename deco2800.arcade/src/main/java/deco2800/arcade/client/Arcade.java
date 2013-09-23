@@ -176,7 +176,7 @@ public class Arcade extends JFrame {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
 		
-		Protocol.registerEncrypted(connectionRequest);
+		//Protocol.registerEncrypted(connectionRequest);
 		
 		this.client.sendNetworkObject(connectionRequest);
 

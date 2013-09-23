@@ -100,8 +100,9 @@ public class ReplaySystemDemo {
 		
 		Thread.sleep( 1000 );
 		
-		replayHandler.requestEventsForSession( session );
-	
+		//replayHandler.requestEventsForSession( session );
+		replayHandler.playbackCurrentSession();
+		
 		playbackFinished = false;
 		while (!playbackFinished) {
 			replayHandler.runLoop();

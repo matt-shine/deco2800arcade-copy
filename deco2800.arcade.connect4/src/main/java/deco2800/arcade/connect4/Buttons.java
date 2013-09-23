@@ -26,7 +26,7 @@ public class Buttons {
 		
 		ButtonSingle a = new ButtonSingle(1, "Quit", Color.RED, yPos);
 		buttons.add(a);
-		System.out.println(a.buttonText);
+		//System.out.println(a.buttonText);
 		ButtonSingle b = new ButtonSingle(2, "Replay", Color.RED, yPos - spaceAmt);
 		buttons.add(b);
 	}

@@ -39,6 +39,8 @@ public class ReplayListener extends Listener {
     public void received(Connection connection, Object object) {
         super.received(connection, object);
 
+        System.out.println( "Server got some stuff" );
+        
         //We got a request for the replay handler
         if (object instanceof ReplayRequest) {
             ReplayRequest replayRequest = (ReplayRequest) object;

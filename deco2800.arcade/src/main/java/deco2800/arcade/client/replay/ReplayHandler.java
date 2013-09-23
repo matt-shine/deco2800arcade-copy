@@ -41,11 +41,8 @@ public class ReplayHandler {
 	
 	private Integer sessionId;
 	
-	private long playbackStartTime = -1;
-	private long nextReplayTime = -1;
-	private int nextReplayIndex = -1;
-	
 	ReplayRecorder recorder;
+	ReplayPlayback playback;
 	
 	/**
 	 * Basic constructor for the ReplayHandler
@@ -77,6 +74,8 @@ public class ReplayHandler {
 	    
 	    serializer = new Gson();
 	    
+	    playback = new ReplayPlayback( this, this.client );
+	    
 	    GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 		gsonBuilder.registerTypeAdapter(ReplayNode.class, new ReplayNodeDeserializer());
@@ -87,6 +86,10 @@ public class ReplayHandler {
 		return this.recorder;
 	}
 	
+	public ReplayPlayback getPlayback() {
+		return this.playback;
+	}
+	
 	/**
 	 * Start a recording session with the server.
 	 * @param gameId The id for the recorded game
@@ -94,6 +97,7 @@ public class ReplayHandler {
 	 */
 	public void startSession(String gameId, String username)
 	{
+		System.out.println( "Trying to start session" );
 	    StartSessionRequest ssr = new StartSessionRequest();
 	    ssr.gameId = gameId;
 	    ssr.username = username;
@@ -108,6 +112,8 @@ public class ReplayHandler {
 	{
 	    //TODO Implement
 	    setSessionId(ssr.sessionId);
+
+		System.out.println( "Session started" );
 	    
 		recorder = new ReplayRecorder( this, this.client, this.sessionId );
 	}
@@ -203,26 +209,6 @@ public class ReplayHandler {
 	 * derp-proof.
 	 */
 	
-	/**
-	 * Request all the events for a given session.
-	 * @param sessionId
-	 */
-	public void requestEventsForSession(Integer sessionId)
-	{
-	    GetEventsRequest ger = new GetEventsRequest();
-	    ger.sessionId = sessionId;
-	    client.sendNetworkObject(ger);
-	}
-	
-	/**
-	 * Lists all events received in a session
-	 * @param ger The list
-	 */
-	public void eventsForSessionReceived(GetEventsResponse ger)
-	{
-		replayHistory = ger.nodes;
-		startPlayback();
-	}
 	
 	/**
 	 * Set the handler's session id.
@@ -267,14 +253,8 @@ public class ReplayHandler {
 	 * Start recording game
 	 */
 	public void startRecording() {
+		
 		this.recorder.startRecording();
-		/*
-		this.startTime = -1;
-		this.replayIndex = 0;
-	    this.replayHistory = new ArrayList<String>();
-	    
-		this.startTime = System.currentTimeMillis();
-		*/
 	}
 	
 	/**
@@ -282,70 +262,12 @@ public class ReplayHandler {
 	 */
 	public void finishRecording() {
 		this.recorder.finishRecording();
-		//this.startTime = -1;
-		// Do something with the captured data, then reset it (or possibly allow playback etc.)
 	}
-//	
-//	/**
-//	 * Pushes nodes to server
-//	 * @param eData The nodes
-//	 */
-//	public void pushEvent( ReplayNode eData ) {
-//		ReplayNode toAdd = new ReplayNode( eData );
-//		if ( startTime < 0 ) {
-//			System.err.println( "Didn't start first" );
-//		}
-//		long timeOffset = System.currentTimeMillis() - startTime;
-//		toAdd.setTime( timeOffset );
-//		String nodeString = serializer.toJson( toAdd );
-//		replayHistory.add( nodeString );
-//		
-//		System.out.println( nodeString );
-//		pushEventToServer( replayIndex, nodeString, sessionId );
-//		replayIndex ++;
-//		
-//		// probably get rid of this, kind of useless
-//		dispatchReplayEvent( "event_pushed", null );
-//	}
 	
 	public void pushEvent( ReplayNode eData ) {
 		this.recorder.pushEvent( eData );
 	}
 		
-	/*
-	public void pushEvent( String eType, List<ReplayItem> eData ) {
-		List<ReplayItem> items = new ArrayList<ReplayItem>();
-		for ( ReplayItem item: eData ) {
-			items.add( new ReplayItem( item.getName(), item.getData() ) );
-		}
-		if ( startTime < 0 ) {
-			System.out.println( "Didn't start first" );
-		}
-		long timeOffset = System.currentTimeMillis() - startTime;
-		ReplayNode node = new ReplayNode( eType, items, timeOffset );
-		
-		replayHistory.add( node );
-		dispatchReplayEvent( "event_pushed", node );
-	}
-	*/
-	
-	/*
-	 * Problems will come from people adding mutable eData
-	 * Only way I can think of at the moment is to make different
-	 * functions taking the common data types for people to use, 
-	 * eg String, List, Map etc (and for the List and Map perform
-	 * a one level deep copy, throwing an error if the type stored
-	 * within the List or Map is mutable [can check for inheritance
-	 * from Object?])
-	 */
-	/*
-	public void pushEvent( String eType, String fieldName, Object eData ) {
-		List<ReplayItem> items = new ArrayList<ReplayItem>();
-		items.add( new ReplayItem( fieldName, eData ) );
-		pushEvent( eType, items );
-	}
-	*/
-	
 	/**
 	 * Resets the replay history
 	 */
@@ -358,37 +280,17 @@ public class ReplayHandler {
 	 * Runs through the nodes and plays them
 	 */
 	public void runLoop() {
-		if ( System.currentTimeMillis() > this.nextReplayTime ) {
-			if ( this.nextReplayIndex < 0 ) {
-				// NOPE
-				return;
-			}
-			playbackItem( this.nextReplayIndex );
-			
-			this.nextReplayIndex ++;
-			if ( this.nextReplayIndex >= this.replayHistory.size() ) {
-				this.nextReplayIndex = -1;
-				this.nextReplayTime = -1;
-				
-				dispatchReplayEvent( "playback_complete", null );
-			} else {
-				ReplayNode next = deserializer.fromJson(
-						replayHistory.get( this.nextReplayIndex ),
-						ReplayNode.class );
-				
-				this.nextReplayTime = playbackStartTime + next.getTime();
-			}
-		}
+		playback.runLoop();
 	}
 	
 	/**
 	 * Deserializes the node
 	 * @param index Particular history
 	 */
-	private void playbackItem( final int index ) {
-		ReplayNode node = deserializer.fromJson(
-				replayHistory.get( index ),
-				ReplayNode.class );
+	public void playbackItem( ReplayNode node ) {
+//		ReplayNode node = deserializer.fromJson(
+//				replayHistory.get( index ),
+//				ReplayNode.class );
 		
 		dispatchReplayEvent( node.getType(), node );
 	}
@@ -398,54 +300,27 @@ public class ReplayHandler {
 	 */
 	public void playbackCurrentSession() {
 		this.replayHistory = null;
-		requestEventsForSession( sessionId );
+		this.playback.playbackSession( sessionId );
+		//requestEventsForSession( sessionId );
 	}
 	
-	/**
-	 * Starts playback of game
-	 */
-	public void startPlayback() {
-		playbackStartTime = System.currentTimeMillis();
-		this.nextReplayIndex = 0;
-		
-		ReplayNode next = deserializer.fromJson(
-				replayHistory.get( this.nextReplayIndex ),
-				ReplayNode.class );
-		
-		this.nextReplayTime = playbackStartTime + next.getTime();
-		
-		//playbackItem( 0, 0 );
-		//playbackItem();
-	}
+//	/**
+//	 * Starts playback of game
+//	 */
+//	public void startPlayback() {
+//		playbackStartTime = System.currentTimeMillis();
+//		this.nextReplayIndex = 0;
+//		
+//		ReplayNode next = deserializer.fromJson(
+//				replayHistory.get( this.nextReplayIndex ),
+//				ReplayNode.class );
+//		
+//		this.nextReplayTime = playbackStartTime + next.getTime();
+//	}
 	
-	/*
-	private void playbackItem( final int index, long lastNodeTime ) {
-		final ReplayNode node = deserializer.fromJson(
-				replayHistory.get( index ),
-				ReplayNode.class );
-		long nodeTimeVal = node.getTime();
-		if ( nodeTimeVal == 0 ) {
-			System.err.println( "what" );
-			nodeTimeVal = lastNodeTime;
-		} 
-		final long nodeTime = nodeTimeVal;
-		
-		new java.util.Timer().schedule( 
-		        new java.util.TimerTask() {
-		            @Override
-		            public void run() {
-		            	dispatchReplayEvent( node.getType(), node );
-		            	if ( index < replayHistory.size()-1 ) {
-		            		playbackItem( index+1, nodeTime );
-		            	} else {
-		            		dispatchReplayEvent( "playback_finished", null );
-		            	}
-		            }
-		        }, 
-		        nodeTime - lastNodeTime
-		);
-	}
-	*/
+//	public void startPlayback() {
+//		this.playback.startPlayback();
+//	}
 	
 	/**
 	 * Waits for replay to be added to a list

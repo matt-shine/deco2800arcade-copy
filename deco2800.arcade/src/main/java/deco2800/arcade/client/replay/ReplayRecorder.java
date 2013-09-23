@@ -23,23 +23,32 @@ public class ReplayRecorder {
 
 	private Integer sessionId;
 	
+	private boolean recording;
+	
 	
 	public ReplayRecorder(ReplayHandler handler, NetworkClient client, Integer sessionId) { 
 		this.startTime = -1;
 		this.client = client;
 		this.sessionId = sessionId;
 		this.handler = handler;
+		
+		this.recording = false;
 	    
 	    serializer = new Gson();
-	    
-	    GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-		gsonBuilder.registerTypeAdapter(ReplayNode.class, new ReplayNodeDeserializer());
+	}
+	
+	public boolean isRecording() {
+		return this.recording;
 	}
 	
 	public void startRecording() {
+		if ( this.recording ) {
+			throw new RuntimeException( "Already recording" );
+		}
+		
 		this.startTime = -1;
 		this.replayIndex = 0;
+		this.recording = true;
 	    
 		this.startTime = System.currentTimeMillis();
 	}
@@ -48,8 +57,12 @@ public class ReplayRecorder {
 	 * End recording
 	 */
 	public void finishRecording() {
+		if ( !this.recording ) {
+			throw new RuntimeException( "Already recording" );
+		}
+		
 		this.startTime = -1;
-		// Do something with the captured data, then reset it (or possibly allow playback etc.)
+		this.recording = false;
 	}
 	
 
@@ -85,7 +98,7 @@ public class ReplayRecorder {
 	 */
 	public void pushEvent( ReplayNode eData ) {
 		ReplayNode toAdd = new ReplayNode( eData );
-		if ( startTime < 0 ) {
+		if ( !recording ) {
 			System.err.println( "Didn't start first" );
 		}
 		long timeOffset = System.currentTimeMillis() - startTime;

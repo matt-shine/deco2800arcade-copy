@@ -483,8 +483,9 @@ public class Connect4 extends GameClient {
 			   			reset();
 				    	gameState = GameState.REPLAY;
 				    	//replayHandler.startPlayback();
-				    	replayHandler.requestEventsForSession(replayHandler.getSessionId());
+				    	//replayHandler.requestEventsForSession(replayHandler.getSessionId());
 				    	replayHandler.endSession(replayHandler.getSessionId());
+				    	replayHandler.playbackCurrentSession();
 				    	isReplaying = true;
 				    	buttons.hide();
 			   		}

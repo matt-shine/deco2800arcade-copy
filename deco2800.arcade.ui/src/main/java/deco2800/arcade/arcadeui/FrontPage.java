@@ -103,7 +103,30 @@ public class FrontPage implements Screen {
         storeButton.setPosition(bX3, bY);
         
         
-       
+        //adding panel for top and bottom bar
+        final Table topBox = new Table();
+        final Table bottomBox = new Table();
+        
+        //set panel sizes and positions
+        topBox.setSize(1279, 60);
+        topBox.setPosition(1, 659);
+        topBox.setColor(255, 255, 255, 1);
+        
+        bottomBox.setSize(1279, 60);
+        bottomBox.setPosition(1, 1);
+        bottomBox.setColor(255, 255, 255, 1);
+        
+        //adding to stage
+        stage.addActor(topBox);
+        stage.addActor(bottomBox);
+        
+        //this somehow makes it show up
+        topBox.debug();
+        bottomBox.debug();
+        
+        
+        
+        
         
         //float height = storeButton.getHeight();
     	//float width = storeButton.getWidth();

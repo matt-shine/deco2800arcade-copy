@@ -185,7 +185,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyRun2 = new Texture(("junglejumpassets/monkeyRun2.png"));
 		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
 		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("junglejumpassets/gameBackground.png"));
+		gameBackground = new Texture(("junglejumpassets/gameBackground2.png"));
 		//platform = new Texture("junglejumpassets/platform.png");
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
@@ -379,7 +379,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
-			if (x > (p.getX() - p.getWidth()/2 - monkeyLength/2) && x < (p.getX()+p.getWidth()/4 + // Check platform dimensions
+			if (x > (p.getX() - p.getWidth()/2 - monkeyLength/2) && x < (p.getX()+p.getWidth()/2 + // Check platform dimensions
 					monkeyLength/2) && y <= p.getY() + p.getHeight() && y >= p.getY()-p.getHeight()/2) {
 				
 				if(y >= p.getY() && y < p.getY()+p.getHeight()/2) { // If the monkey's colliding with the platform, place him on top

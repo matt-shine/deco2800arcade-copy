@@ -78,7 +78,7 @@ public class Connect4 extends GameClient {
 	int nextComputerCol = -1;
 
 	/**
-	 * Basic constructor for the Checkers game
+	 * Basic constructor for the Connect4 game
 	 * @param player The name of the player
 	 * @param networkClient The network client for sending/receiving messages to/from the server
 	 */

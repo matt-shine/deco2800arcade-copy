@@ -10,11 +10,14 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.Gdx;
@@ -25,6 +28,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -62,16 +67,23 @@ public class FrontPage implements Screen {
         bgSprite = new Sprite(bg);
         batch = new SpriteBatch();
         
+        /*skin.add("blue", new Texture("iconBlue.png"));
+        
+        TextButtonStyle textButtonStyle = new TextButtonStyle();
+        
+        textButtonStyle.up = skin.newDrawable("blue");*/
+        
+        
         //Text Buttons
-        final TextButton storeButton = new TextButton("Store", skin);
+        final TextButton storeButton = new TextButton("Store", skin, "blue");
         //skin.add("Store", new Texture("homescreen_bg.png"));
         final TextButton chatButton = new TextButton("Chat", skin);
         final TextButton libraryButton = new TextButton("Library", skin);
         final TextButton recentButton = new TextButton("Recently Played", skin);
         
         //make button sizes and positioning
-        storeButton.setSize(190, 190);
-        storeButton.setPosition(190, 300);
+        storeButton.setSize(300, 300);
+        storeButton.setPosition(190, 200);
         
         libraryButton.setSize(190, 190);
         libraryButton.setPosition(490, 300);
@@ -85,31 +97,59 @@ public class FrontPage implements Screen {
         stage.addActor(libraryButton);
         stage.addActor(recentButton);
         
+        storeButton.addListener((new ClickListener() {
+        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+            	 if (storeButton.isOver() == true){ 
+         			System.out.println("store moved");
+         			storeButton.setSize(600, 600);
+            	 }
+ 
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	
+            	System.out.println("store moved back");
+       		 storeButton.setSize(300, 300);
+            	
+            }
+        }));   
+        
+       
         
         storeButton.addListener((new ChangeListener() {
+        	
+        	
+        	
             public void changed (ChangeEvent event, Actor actor) {
+            	
+                
+
+            	
             	ArcadeSystem.login("store");
             	bclicked = true;
             	System.out.println("store clicked");
             }
-        })); 
+        })
         
-    libraryButton.addListener((new ChangeListener() {
-        public void changed (ChangeEvent event, Actor actor) {
-        	ArcadeSystem.login("library");
-        	bclicked = true;
-        	System.out.println("library clicked");
-        }
-    })); 
-    
-
-recentButton.addListener((new ChangeListener() {
-    public void changed (ChangeEvent event, Actor actor) {
-    	ArcadeSystem.login("recent");
-    	bclicked = true;
-    	System.out.println("recent clicked");
-    }
-})); }
+        	
+        		); 
+        
+	    libraryButton.addListener((new ChangeListener() {
+	        public void changed (ChangeEvent event, Actor actor) {
+	        	ArcadeSystem.login("library");
+	        	bclicked = true;
+	        	System.out.println("library clicked");
+	        }
+	    })); 
+	    
+	
+		recentButton.addListener((new ChangeListener() {
+		    public void changed (ChangeEvent event, Actor actor) {
+		    	ArcadeSystem.login("recent");
+		    	bclicked = true;
+		    	System.out.println("recent clicked");
+		    }
+		})); }
 
         
         

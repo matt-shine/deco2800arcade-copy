@@ -61,11 +61,11 @@ public class RegisterScreen implements Screen {
 
             }
         });
-        cancelButton.addListener(new ChangeListener() {
+        /*cancelButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 arcadeUI.setScreen(arcadeUI.login);
             }
-        });
+        });*/
     }
 
     @Override

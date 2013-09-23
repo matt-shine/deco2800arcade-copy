@@ -53,7 +53,7 @@ public class ArcadeUI extends GameClient {
         home = new HomeScreen();
         store = new StoreScreen();
         main = new FrontPage();
-        register = new RegisterScreen();
+        //register = new RegisterScreen(); //<-- dafuq
 
         chooseScreen();
 		this.setScreen(current);

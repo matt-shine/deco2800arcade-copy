@@ -1,10 +1,9 @@
 package deco2800.arcade.packman;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -71,7 +70,7 @@ public class PackageUtils {
 		
 		try {
 			md = MessageDigest.getInstance("MD5");
-			fis = Files.newInputStream(Paths.get(fileName));
+			fis = new FileInputStream(fileName);
 		} catch (NoSuchAlgorithmException e1) {
 			e1.printStackTrace();
 			return null;

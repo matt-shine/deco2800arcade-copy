@@ -251,11 +251,11 @@ public class Player extends Entity {
 		System.out.println("Yay you killed an animal!");
 	}
 
-	private void loseLife() {
+	public void loseLife() {
 		lives -= 1;
 	}
 	
-	private void addLife(){
+	public void addLife(){
 		lives += 1;
 	}
 	

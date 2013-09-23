@@ -41,11 +41,11 @@ public class GameScreen implements Screen {
 	private SpriteLayer spriteLayer;
 	private ForegroundLayer foregroundLayer;
 	
-	private float speedIncreaseCountdown = 3;
+	private float speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
 	private boolean paused = false;
 	
 	private SpriteBatch batch = new SpriteBatch();
-	private SpriteBatch backgroundBatch = new SpriteBatch();
+	private SpriteBatch staticBatch = new SpriteBatch();
 	
 	public GameScreen(Hunter hunter){
 		this.hunter = hunter;
@@ -93,7 +93,7 @@ public class GameScreen implements Screen {
 		speedIncreaseCountdown -= delta;
 		
 		if (speedIncreaseCountdown <= 0) {
-			speedIncreaseCountdown = 3;
+			speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
 			
 			if (Config.gameSpeed < Config.MAX_SPEED) {
 				Config.gameSpeed++;
@@ -113,15 +113,15 @@ public class GameScreen implements Screen {
 			entities.updateAll(delta);
 			
 			PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
-			checkEntityCollisions();
+			//checkEntityCollisions();
 			
 			backgroundLayer.update(delta, Config.gameSpeed);
 			spriteLayer.update(delta, Config.gameSpeed);
 			foregroundLayer.update(delta, camera.position.x);
 			
-			backgroundBatch.begin();
-			backgroundLayer.draw(backgroundBatch);
-			backgroundBatch.end();
+			staticBatch.begin();
+			backgroundLayer.draw(staticBatch);
+			staticBatch.end();
 			
 			batch.begin();
 			spriteLayer.draw(batch);
@@ -129,9 +129,11 @@ public class GameScreen implements Screen {
 			
 			entities.drawAll(batch);
 			
-//			drawLives();
-			
 			batch.end();
+			
+			staticBatch.begin();
+			drawLives(staticBatch);
+			staticBatch.end();
 		}
 		
 	}
@@ -148,11 +150,11 @@ public class GameScreen implements Screen {
 		
 	}
 	
-	private void drawLives() {
+	private void drawLives(SpriteBatch batch) {
 		Texture lives = new Texture("textures/lives.png");
 		TextureRegion life = new TextureRegion(lives, 64,64);
 		for(int x = 1; x<=player.getLives();x++){
-			batch.draw(life, (Config.screenWidth-(x * life.getRegionWidth())), (Config.screenHeight - (x * life.getRegionHeight())));
+			batch.draw(life, (Config.screenWidth-(x * life.getRegionWidth())), (Config.screenHeight - life.getRegionHeight() - 16));
 		}
 	}
 	

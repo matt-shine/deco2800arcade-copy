@@ -248,6 +248,58 @@ public class HighscoreDatabase {
 		}
 	}
 	
+	
+	/**
+	 * Displays a string representation of the users score for the specified game and type of score
+	 * @param Game_ID - game id to query against
+	 * @param type - type of score that needs to be retrieved
+	 * @throws DatabaseException 
+	 */
+	public String getAvgUserHighScore(String Game_ID, String type) throws DatabaseException{
+		String data = null;
+
+		if (!initialised) {
+			initialise();
+		}
+		
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT AVG(s.SCORE) as SCORE from HIGHSCORES_PLAYER h INNER JOIN " +
+					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
+					type + "';");
+			while(resultSet.next())
+			{
+				data = resultSet.getString("SCORE");
+			}
+
+			return data;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player information from database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	public String getTopPlayers() throws DatabaseException, SQLException{
 		String data = null;
 		

@@ -36,22 +36,22 @@ public class EnemySpiderBossPopcorn extends Enemy {
 			Vector2 dirAwayShip = new Vector2(-xToShip, -yToShip);
 			Vector2 dirPerp0 = new Vector2(-yToShip, xToShip);
 			Array<Vector2> spawnDirections = new Array<Vector2>();
-			spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(0f)));
+			spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(0f)));
 			if (rank > 0.3f) {
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(1f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(1f)));
 			}
 			if (rank > 0.5f) {
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(-1f)));
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(5f)));
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(-5f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-1f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(5f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-5f)));
 			}
 			if (rank > 0.8f) {
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(2.5f)));
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(-2.5f)));
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(10f)));
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(-10f)));
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(15f)));
-				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().scl(-15f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(2.5f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-2.5f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(10f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-10f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(15f)));
+				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-15f)));
 			}
 			for (Vector2 v: spawnDirections) {
 				BulletHomingDestructible bullet = new BulletHomingDestructible(5f + 10f * rank, 0f, new Vector2(position.x + width/2, 
@@ -63,8 +63,8 @@ public class EnemySpiderBossPopcorn extends Enemy {
 		
 		
 		//do the move
-		position.add(velocity.scl(delta));
-		velocity.scl(1/delta);
+		position.add(velocity.mul(delta));
+		velocity.mul(1/delta);
 		
 		return newEnemies;
 	}

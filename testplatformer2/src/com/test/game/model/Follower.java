@@ -41,7 +41,7 @@ public class Follower extends Enemy {
 		//position.lerp(ship.getPosition(), delta);
 		Vector2 dir = new Vector2(new Vector2(ship.getPosition().x,ship.getPosition().y).sub(
 				new Vector2(position.x, position.y)));
-		dir.nor().scl(delta * 2);
+		dir.nor().mul(delta * 2);
 		position.add(dir);
 		//rotation += Gdx.graphics.getDeltaTime() * ROTATION_SPEED;
 		

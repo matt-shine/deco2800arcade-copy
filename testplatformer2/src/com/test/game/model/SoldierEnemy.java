@@ -79,10 +79,10 @@ public class SoldierEnemy extends Enemy {
 			}
 		}
 		
-		position.add(velocity.scl(delta));
+		position.add(velocity.mul(delta));
 		//System.out.println("Velocity after scl " + velocity.x+","+velocity.y);
 		//tmp1.scl(Gdx.graphics.getDeltaTime());
-		velocity.scl(1/delta);
+		velocity.mul(1/delta);
 		velocity.add(0, GRAVITY);
 		
 		

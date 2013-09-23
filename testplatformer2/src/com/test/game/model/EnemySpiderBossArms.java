@@ -115,7 +115,7 @@ public class EnemySpiderBossArms extends Enemy {
 			if (phase2pos == 0) {
 				//Move to bottom of screen
 				velocity = new Vector2(0, -thisMoveDelta/delta);
-				position.add(velocity.scl(delta)); 
+				position.add(velocity.mul(delta)); 
 				if (position.y < 1.0f) {
 					phase2pos = 1;
 					circlePos = 0;
@@ -147,7 +147,7 @@ public class EnemySpiderBossArms extends Enemy {
 					velocity.rotate(150*delta*rank);
 				}
 				System.out.println("Velocity="+velocity);
-				position.add(new Vector2(velocity).scl(delta));
+				position.add(new Vector2(velocity).mul(delta));
 				
 				if (position.y >= 5.9f) {
 					System.out.println("Arms: Circle Next phase");
@@ -163,7 +163,7 @@ public class EnemySpiderBossArms extends Enemy {
 						
 					}
 					aimY =  (-position.y + 6f);
-					velocity = new Vector2(aimX,aimY).nor().scl(thisMoveDelta/delta);
+					velocity = new Vector2(aimX,aimY).nor().mul(thisMoveDelta/delta);
 				}
 			} else if (phase2pos == 2) {
 				float range = 10f;
@@ -182,7 +182,7 @@ public class EnemySpiderBossArms extends Enemy {
 				
 				
 				//position.y -= (position.y - 6f) * thisMoveDelta;
-				position.add(new Vector2(velocity).scl(delta));
+				position.add(new Vector2(velocity).mul(delta));
 			} else if (phase2pos == 3) {
 				float pickUp = 12f;
 				if (attackUp) {
@@ -213,7 +213,7 @@ public class EnemySpiderBossArms extends Enemy {
 					}
 				} else {
 					if (position.y >= 14f) {
-						velocity = new Vector2(parent.position.x + PARENT_OFFSET_X - position.x, parent.position.y+PARENT_OFFSET_Y-position.y).nor().scl(thisMoveDelta/delta);
+						velocity = new Vector2(parent.position.x + PARENT_OFFSET_X - position.x, parent.position.y+PARENT_OFFSET_Y-position.y).nor().mul(thisMoveDelta/delta);
 						isAttacking = false;
 						isReturning = true;
 					}

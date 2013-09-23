@@ -164,10 +164,10 @@ public class Ship extends MovableEntity{
 	@Override
 	public void handleXCollision(Rectangle tile) {
 		if (velocity.x > 0.01f) {
-			position.x = tile.getX() - getWidth();
+			position.x = tile.getX() - getWidth() - 0.001f;
 				
 		} else if (velocity.x < -0.01f){
-			position.x = tile.getX() + tile.getWidth();
+			position.x = tile.getX() + tile.getWidth() + 0.001f;
 		}
 		
 		/* Wall slide */
@@ -195,7 +195,7 @@ public class Ship extends MovableEntity{
 				velocity.y = -movablePlatform.getSpeed();
 			}
 			if (!onMovablePlatform) {
-				position.y = tile.y + tile.height;
+				position.y = tile.y + tile.height + 0.001f;
 				velocity.y = 0;
 			}
 			if (velocity.x == 0) {
@@ -213,7 +213,7 @@ public class Ship extends MovableEntity{
 			} else {
 				velocity.y = 0;
 			}
-			position.y = tile.y - getHeight();
+			position.y = tile.y - getHeight() - 0.001f;
 		}
 	}
 	
@@ -244,8 +244,8 @@ public class Ship extends MovableEntity{
 		//System.out.println(velocity.x);
 		//System.out.println("Velocity before scl " + velocity.x+","+velocity.y);
 		
-		position.add(velocity.scl(Gdx.graphics.getDeltaTime()));
-		velocity.scl(1/(Gdx.graphics.getDeltaTime()));
+		position.add(velocity.mul(Gdx.graphics.getDeltaTime()));
+		velocity.mul(1/(Gdx.graphics.getDeltaTime()));
 
 		//System.out.println("Velocity after scl " + velocity.x+","+velocity.y);
 		//tmp1.scl(Gdx.graphics.getDeltaTime());
@@ -267,8 +267,8 @@ public class Ship extends MovableEntity{
 		if (state == State.WALL) {
 			wallTime -= Gdx.graphics.getDeltaTime();
 			if (wallTime > 0) {
-				position.x -= velocity.scl(Gdx.graphics.getDeltaTime()).x;
-				velocity.scl(1/Gdx.graphics.getDeltaTime());
+				position.x -= velocity.mul(Gdx.graphics.getDeltaTime()).x;
+				velocity.mul(1/Gdx.graphics.getDeltaTime());
 			} else {
 				if (velocity.x > 0) {
 					facingRight = true;

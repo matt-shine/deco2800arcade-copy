@@ -18,10 +18,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+//import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -86,7 +87,7 @@ public class WorldRenderer {
 	private float rotationArms;
 	
 	//attempting to use maps
-	TiledMapRenderer tileMapRenderer;
+	TileMapRenderer tileMapRenderer;
 	//OrthogonalTiledMapRenderer oRenderer;
 	//TiledMap map;
 	//TileAtlas mapAtlas;
@@ -203,12 +204,36 @@ public class WorldRenderer {
 		batch.end();
 		
 		/* Draw tiled layers */
-		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
+		/*tileMapRenderer.setView(cam.calculateParallaxMatrix(0.25f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
+		
 		tileMapRenderer.render(new int[]{0});
 		tileMapRenderer.setView(cam.calculateParallaxMatrix(0.5f, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
 		tileMapRenderer.render(new int[]{1});
 		tileMapRenderer.setView(cam.calculateParallaxMatrix(1, 1), 0, 0, World.WORLD_WIDTH, World.WORLD_HEIGHT);
-		tileMapRenderer.render(new int[]{2});
+		tileMapRenderer.render(new int[]{2});*/
+		
+		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
+		//tileMapRenderer.render(cam, new int[]{0, 1, 2});
+		//tileMapRenderer.render(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2,
+			//	cam.viewportWidth, cam.viewportHeight);
+		//tileMapRenderer.render(cam.position.x, cam.position.y, cam.viewportWidth*2, cam.viewportHeight*2);
+		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.25f, 1));
+		tileMapRenderer.render(cam, new int[]{0});
+		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.5f, 1));
+		tileMapRenderer.render(cam, new int[]{1});
+		//tileMapRenderer.render(cam.);
+		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(1, 1));
+		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
+		
+		/*Vector3 tmp = new Vector3();
+		tmp.set(0,0,0);
+		cam.unproject(tmp);
+		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());*/
+		tileMapRenderer.render(cam, new int[]{2});
+		//tileMapRenderer.render((int) cam.position.x-cam.viewportWidth/2, (int) cam.position.y-cam.viewportHeight/2, 999, 999,
+			//	new int[]{2});
+		
+		
 		
 		return;
 	}
@@ -405,15 +430,17 @@ public class WorldRenderer {
 	private void drawDebugAids() {
 		/* ----- Debug stuff. Will slow game down!! ----- */
 		sr.setProjectionMatrix(cam.combined);
-		sr.begin(ShapeType.Line);
+		//sr.begin(ShapeType.Line);
+		sr.begin(ShapeType.Rectangle);
 		
 		sr.setColor(Color.CYAN);
 		sr.rect(ship.getBounds().x, ship.getBounds().y, ship.getBounds().width, ship.getBounds().height);
-		
+		sr.end();
 		
 		eItr = enemies.iterator();
 		while (eItr.hasNext()) {
 			e = eItr.next();
+			sr.begin(ShapeType.Rectangle);
 			sr.setColor(Color.RED);
 			sr.rect(e.getBounds().x, e.getBounds().y, e.getBounds().width, e.getBounds().height);
 			sr.setColor(Color.YELLOW);
@@ -430,14 +457,23 @@ public class WorldRenderer {
 					
 					
 				}
-			} else if (e.getClass() == LaserBeam.class) {
+			} 
+			sr.end();
+			sr.begin(ShapeType.Line);
+			if (e.getClass() == LaserBeam.class) {
 				Polygon p = ((LaserBeam)e).getLaserBounds();
 				if (p != null) {
-					sr.polygon(p.getTransformedVertices()); 
+					float[] vertices = p.getTransformedVertices();
+					for (int i = 0; i < vertices.length-3; i+=2) {
+						sr.line(vertices[i], vertices[i+1], vertices[i+2], vertices[i+3]);
+					//sr.
+					}
 				}
 			}
+			sr.end();
 			
 		}
+		sr.begin(ShapeType.Rectangle);
 		for (CutsceneObject csObj: csObjects) {
 			sr.rect(csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth(), csObj.getHeight());
 		}
@@ -460,6 +496,7 @@ public class WorldRenderer {
 		Sword sword = world.getSword();
 		sr.setColor(Color.YELLOW);
 		sr.rect(sword.getBounds().x, sword.getBounds().y, sword.getBounds().width, sword.getBounds().height);
+		sr.setColor(Color.WHITE);
 		
 		sr.end();
 		fpsLogger.log();

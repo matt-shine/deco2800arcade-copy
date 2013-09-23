@@ -35,10 +35,10 @@ public abstract class Enemy extends MovableEntity{
 	public void handleXCollision(Rectangle tile) {
 		//System.out.println("enemy had x collision");
 		if (velocity.x > 0.01f) {
-			position.x = tile.getX() - getWidth();
+			position.x = tile.getX() - getWidth() -0.001f;
 				
 		} else if (velocity.x < -0.01f){
-			position.x = tile.getX() + tile.getWidth();
+			position.x = tile.getX() + tile.getWidth() + 0.001f;
 		}
 		
 		
@@ -54,7 +54,7 @@ public abstract class Enemy extends MovableEntity{
 				velocity.y = -movablePlatform.getSpeed();
 			}
 			if (!onMovablePlatform) {
-				position.y = tile.y + tile.height;
+				position.y = tile.y + tile.height + 0.001f;
 				velocity.y = 0;
 			}
 				
@@ -65,7 +65,7 @@ public abstract class Enemy extends MovableEntity{
 			} else {
 				velocity.y = 0;
 			}
-			position.y = tile.y - getHeight();
+			position.y = tile.y - getHeight() - 0.001f;
 		}
 		
 	}

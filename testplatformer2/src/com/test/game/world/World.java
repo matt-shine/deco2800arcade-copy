@@ -9,8 +9,7 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledLayer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -230,7 +229,8 @@ public class World {
 		/* Tile collisions code */
 		//Check player to tile collisions
 		//get tiles near player
-		TiledMapTileLayer collisionLayer = curLevel.getCollisionLayer();
+		TiledLayer collisionLayer = curLevel.getCollisionLayer();
+		com.badlogic.gdx.graphics.g2d.tiled.TiledMap map = curLevel.getMap();
 		
 		Array<Rectangle> tiles = new Array<Rectangle>();
 		tiles.clear();
@@ -243,14 +243,30 @@ public class World {
 			for (float j = mve.getPosition().y - checkY; j < mve.getPosition().y + mve.getHeight() + checkY; j++) {
 				//System.out.println("chcking cell at " + (int)i + "," + (int)j + " and collisionlayer is " + collisionLayer);
 		
-				Cell cell = collisionLayer.getCell((int) i, (int) j);
-				if (cell != null) {
-					//System.out.println("found cell at " + (int)i + "," + (int)j);
-					//System.out.println("floats were " + i +"," + j);
-					//System.out.println("i range: " + (ship.getPosition().x-checkX) +" to "+(ship.getPosition().x+ship.getWidth()+checkX));
-					//System.out.println("j range: " + (ship.getPosition().y-checkY)+" to "+(ship.getPosition().y+ship.getHeight()+checkY));
-					Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
-					tiles.add(rect);
+				//Cell cell = collisionLayer.getCell((int) i, (int) j);
+				
+				int xLength = collisionLayer.tiles[0].length;
+				int yLength = collisionLayer.tiles.length;
+				//int yLength = 59; //obviously this is wrong I just need to get this working
+				if (i < xLength && i > 0 && j < yLength && j > 0) { 
+					int cell = collisionLayer.tiles[yLength-((int)j)-1][(int)i];
+					
+					//System.out.println("Cell ("+(int)i+","+(int)j+") test: "+cell + "  Mve = "+mve.getClass());
+					/*if (cell != null) {
+						//System.out.println("found cell at " + (int)i + "," + (int)j);
+						//System.out.println("floats were " + i +"," + j);
+						//System.out.println("i range: " + (ship.getPosition().x-checkX) +" to "+(ship.getPosition().x+ship.getWidth()+checkX));
+						//System.out.println("j range: " + (ship.getPosition().y-checkY)+" to "+(ship.getPosition().y+ship.getHeight()+checkY));
+						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
+						tiles.add(rect);
+					}*/
+					String type = map.getTileProperty(cell, "checkCollision");
+					//System.out.println(type);
+					if (type != null && type.equals("solid")) {
+						//System.out.println("I'm colliding with ("+(int)i+","+(int)j+")");
+						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
+						tiles.add(rect);
+					}
 				}
 			}
 		}
@@ -324,12 +340,14 @@ public class World {
 				if (e.getClass() == LaserBeam.class) {
 					Polygon laserPoly = ((LaserBeam)e).getLaserBounds();
 					if (laserPoly != null) {
-						Polygon shipPoly = new Polygon();
+						
 						float sx = ship.getPosition().x;
 						float sy = ship.getPosition().y;
-						shipPoly.setOrigin(sx, sy);
 						float[] vertices = {sx, sy+ship.getHeight(), sx+ship.getWidth(), sy+ship.getHeight(), sx+ship.getWidth(), sy};
-						shipPoly.setVertices(vertices);
+						Polygon shipPoly = new Polygon(vertices);
+						shipPoly.setOrigin(sx, sy);
+						
+						
 						if (Intersector.overlapConvexPolygons(laserPoly, shipPoly)) {
 							ship.decrementHearts();
 							
@@ -652,8 +670,8 @@ public class World {
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		//ship = new Ship(new Vector2(20f, 6));
-		ship = new Ship(new Vector2(270, 60));
+		ship = new Ship(new Vector2(20f, 6));
+		//ship = new Ship(new Vector2(270, 60));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

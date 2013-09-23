@@ -6,23 +6,30 @@ import com.test.game.model.MovablePlatformSpawner;
 import com.test.game.model.Follower;
 import com.test.game.model.MovablePlatform;
 import com.test.game.model.SoldierEnemy;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.graphics.g2d.tiled.TileAtlas;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledLayer;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledLoader;
+//import com.badlogic.gdx.maps.MapObject;
+//import com.badlogic.gdx.maps.objects.RectangleMapObject;
+//import com.badlogic.gdx.maps.tiled.TiledMap;
+//import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+//import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+//import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class Level {
 	private int levelNum;
-	private OrthogonalTiledMapRenderer renderer;
-	private TiledMap map;
-	private TiledMapTileLayer collisionLayer;
+	private com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer renderer;
+	//private TiledMap map;
+	//private TiledMapTileLayer collisionLayer;
+	private TiledLayer collisionLayer;
+	private com.badlogic.gdx.graphics.g2d.tiled.TiledMap map;
+	private TileAtlas atlas;
 	
 	private Array<EnemySpawner> enemySpawners;
 	private Array<RandomizedEnemySpawner> randomEnemySpawners;
@@ -38,14 +45,36 @@ public class Level {
 		randomEnemySpawners = new Array<RandomizedEnemySpawner>();
 		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
 		
-		map = new TmxMapLoader().load("data/level"+"2_new"+".tmx");
-		collisionLayer = (TiledMapTileLayer) ( map.getLayers().get("Collision") );
+		//map = TiledLoader.createMap(Gdx.files.internal("data/level"+"2_new"+".tmx"));
+		map = TiledLoader.createMap(Gdx.files.internal("data/level"+levelNum+".tmx"));
+		//map = TiledLoader.createMap(Gdx.files.internal("data/levelOld.tmx"));
+		
+		collisionLayer = (TiledLayer) ( map.layers.get(3) );
+		
 
-		renderer = new OrthogonalTiledMapRenderer(map, 1/32f);
+		atlas = new TileAtlas(map, Gdx.files.internal("data/level1/"));
+		//atlas = new TileAtlas(map, Gdx.files.internal("data/tiles/"));
+		//renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, 1/32f);
+		
+		renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, atlas, 16,16, 1, 1);
+		
+		//Debugging downgrade stuff
+		for (int x =0; x<map.layers.size(); x++) {
+			//for (int i =0; i<map.layers.get(x).getWidth(); i++) {
+			for (int i =0; i<250; i++) {
+				for (int j = 0; j< 5; j++) {
+					//System.out.println("Lyar= "+x+ " ("+i+","+(map.height-j-1)+") = "+map.layers.get(x).tiles[j][i]);
+				}
+			}
+		}
+		
+		
 		
 		//Load objects. Need to standardize this. Talk to Robert.
 		Array<Object> objects = new Array<Object>();
-
+		
+		//The following code will need to be worked out. Was removed in downgrade to Libgdx 0.9.7
+		/*
 		if(levelNum == 1) {
 			for( MapObject object : map.getLayers().get("spawners").getObjects() ) {
 				if(object instanceof RectangleMapObject) {
@@ -57,6 +86,7 @@ public class Level {
 			}
 
 		} else {
+		*/
 			// Add the log parts for the waterfall
 			Texture logTex = new Texture("data/log.png");
 			logTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -80,7 +110,7 @@ public class Level {
 			objects.add(logS0);
 			objects.add(logS1);
 			objects.add(res);
-		}
+		//}
 		
 		//Filter objects
 		for (Object o: objects) {
@@ -122,15 +152,15 @@ public class Level {
 		return movablePlatformSpawners;
 	} 
 	
-	public TiledMap getMap() {
+	public com.badlogic.gdx.graphics.g2d.tiled.TiledMap getMap() {
 		return map;
 	}
 	
-	public TiledMapTileLayer getCollisionLayer() {
+	public TiledLayer getCollisionLayer() {
 		return collisionLayer;
 	}
 	
-	public OrthogonalTiledMapRenderer getRenderer() {
+	public com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer getRenderer() {
 		return renderer;
 	}
 	

@@ -136,47 +136,47 @@ public class EnemySpiderBoss extends Enemy {
 							direction0.add(new Vector2())*/
 
 							//Vector2 dirPerp1 = new Vector2(xToShip, -yToShip);
-							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(5f)));
-							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-5f)));
+							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(5f)));
+							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-5f)));
 							//Shoot fireballs around player position but not at
-							/*System.out.println("dirToShip="+dirToShip+"  dirPerp0="+dirPerp0+"  dir="+ (new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(5f)) +
-									"  dir2=" + (new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-5f)));
-							System.out.println("widestDir1=" + (new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(16f)) + "  widestDir2=" +
-									(new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-16f)));*/
+							/*System.out.println("dirToShip="+dirToShip+"  dirPerp0="+dirPerp0+"  dir="+ (new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(5f)) +
+									"  dir2=" + (new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-5f)));
+							System.out.println("widestDir1=" + (new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(16f)) + "  widestDir2=" +
+									(new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-16f)));*/
 							
 							/*System.out.println("(new Vector2(dirPerp0))=" + (new Vector2(dirPerp0)) + "  (new Vector2(dirPerp0)).nor()=" + (new Vector2(dirPerp0)).nor());
-							System.out.println("(new Vector2(dirPerp0)).nor().scl(-16f))="+(new Vector2(dirPerp0)).nor().scl(-16f));
+							System.out.println("(new Vector2(dirPerp0)).nor().mul(-16f))="+(new Vector2(dirPerp0)).nor().mul(-16f));
 							System.out.println("new Vector2(dirToShip)=" + new Vector2(dirToShip));
-							System.out.println("(new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-16f)))="+(new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-16f)));
+							System.out.println("(new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-16f)))="+(new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-16f)));
 							*/
 							if (rank > 0.4f) {
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(4.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-4.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(4.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-4.5f)));
 								
 							}
 							if (rank > 0.6f) {
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(3.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-3.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(5.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-5.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(7.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-7.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(9.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-9.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(13.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-13.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(3.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-3.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(5.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-5.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(7.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-7.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(9.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-9.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(13.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-13.5f)));
 							}
 							if (rank > 0.8f) {
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(3f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-3f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(6f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-6f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(12f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-12f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(14f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-14f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(16f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-16f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(3f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-3f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(6f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-6f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(12f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-12f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(14f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-14f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(16f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-16f)));
 								
 							}
 							count = 0.2f;
@@ -185,27 +185,27 @@ public class EnemySpiderBoss extends Enemy {
 						case 4:
 						case 5:
 						
-							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(0.2f)));
-							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-0.2f)));
+							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(0.2f)));
+							spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-0.2f)));
 							if (rank > 0.4f) {
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(0.4f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-0.4f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(0.4f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-0.4f)));
 							}
 							if (rank > 0.6f) {
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(0.6f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-0.6f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(0.8f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-0.8f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(0.6f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-0.6f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(0.8f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-0.8f)));
 							}
 							if (rank > 0.8f) {
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(1f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(1f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(0.1f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-0.1f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(0.3f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-0.3f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(0.5f)));
-								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().scl(-0.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(1f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(1f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(0.1f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-0.1f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(0.3f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-0.3f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(0.5f)));
+								spawnDirections.add((new Vector2(dirToShip)).add((new Vector2(dirPerp0)).nor().mul(-0.5f)));
 							}
 							count = 0.025f;
 							break;
@@ -239,7 +239,7 @@ public class EnemySpiderBoss extends Enemy {
 						performingTell = false;
 						if (phase == 1) {
 							velocity = new Vector2(1f, 2.5f);
-							velocity.nor().scl(1f+rank*30f);
+							velocity.nor().mul(1f+rank*30f);
 						} else if (phase ==2) {
 							velocity = new Vector2(0, -1f-50*rank);
 						}
@@ -320,7 +320,7 @@ public class EnemySpiderBoss extends Enemy {
 							}
 							if (velocity.angle() >= 270f && velocity.angle() <= 272f) {
 								//found downward angle
-								velocity.scl(1f+delta*2*rank);
+								velocity.mul(1f+delta*2*rank);
 								
 								
 								
@@ -356,7 +356,7 @@ public class EnemySpiderBoss extends Enemy {
 							}
 						}
 					}
-					position.add(new Vector2(velocity).scl(delta));
+					position.add(new Vector2(velocity).mul(delta));
 				}
 			}
 		//}

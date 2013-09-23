@@ -17,8 +17,8 @@ public class Zombie extends Enemy {
 	public Array<Enemy> advance(float delta, Ship ship, float rank) {
 		velocity.x = (float)(Math.sin(4*position.x) + 1.5);
 		
-		position.add(velocity.scl(delta));
-		velocity.scl(1/delta);
+		position.add(velocity.mul(delta));
+		velocity.mul(1/delta);
 		return null;
 	}
 

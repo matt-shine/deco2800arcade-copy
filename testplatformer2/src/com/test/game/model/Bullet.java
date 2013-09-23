@@ -29,8 +29,8 @@ public class Bullet extends MovableEntity {
 			velocity.y = (float)Math.cos(2*position.x);
 		}
 		//position.add(velocity.tmp().mul(Gdx.graphics.getDeltaTime() * speed));
-		position.add(velocity.scl(Gdx.graphics.getDeltaTime() * speed));
-		velocity.scl(1/(Gdx.graphics.getDeltaTime()*speed));
+		position.add(velocity.mul(Gdx.graphics.getDeltaTime() * speed));
+		velocity.mul(1/(Gdx.graphics.getDeltaTime()*speed));
 		existTime += Gdx.graphics.getDeltaTime();
 		super.update(ship);
 	}

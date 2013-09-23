@@ -41,13 +41,6 @@ public class LaserBeam extends Enemy {
 		if (currentWidth < 0.1f) {
 			return null;
 		}
-		Polygon collision = new Polygon();
-		collision.setOrigin(initPos.x, initPos.y);
-		//set points as though facing directly up
-		/*float[] vertices = {currentWidth/2, OPENING_LENGTH,
-				-currentWidth/2, OPENING_LENGTH,
-				currentWidth/2, DEFAULT_LENGTH,
-				-currentWidth/2, DEFAULT_LENGTH};*/
 		float[] vertices = {initPos.x, initPos.y,
 				initPos.x+currentWidth/2, initPos.y+OPENING_LENGTH,
 				initPos.x+currentWidth/2, initPos.y+DEFAULT_LENGTH,
@@ -55,8 +48,17 @@ public class LaserBeam extends Enemy {
 				initPos.x-currentWidth/2, initPos.y+OPENING_LENGTH
 				
 				};
+		Polygon collision = new Polygon(vertices);
 		
-		collision.setVertices(vertices);
+		collision.setOrigin(initPos.x, initPos.y);
+		//set points as though facing directly up
+		/*float[] vertices = {currentWidth/2, OPENING_LENGTH,
+				-currentWidth/2, OPENING_LENGTH,
+				currentWidth/2, DEFAULT_LENGTH,
+				-currentWidth/2, DEFAULT_LENGTH};*/
+		
+		
+		//collision.setVertices(vertices);
 		
 		//rotate to correct rotation
 		collision.rotate(-90+ rotation);

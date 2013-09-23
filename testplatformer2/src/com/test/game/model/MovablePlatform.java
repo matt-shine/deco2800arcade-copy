@@ -135,7 +135,7 @@ public class MovablePlatform extends MovableEntity{
 			Vector2 oldPos = new Vector2(position.x, position.y);
 			Vector2 dir = new Vector2(new Vector2(targetPos.x,targetPos.y).sub(
 					new Vector2(position.x, position.y)));
-			dir.nor().scl(delta * speed);
+			dir.nor().mul(delta * speed);
 			position.add(dir);
 			positionDelta = new Vector2(position.x, position.y).sub(new Vector2(oldPos.x, oldPos.y));
 			//System.out.println("Moved by "+ positionDelta.x+","+positionDelta.y);

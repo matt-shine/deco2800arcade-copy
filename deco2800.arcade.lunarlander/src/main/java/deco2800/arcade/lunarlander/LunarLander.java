@@ -165,7 +165,7 @@ public class LunarLander extends GameClient {
 		
 	    // boost the lander's speed
 		if ((Gdx.input.isKeyPressed(Keys.W)) || (Gdx.input.isKeyPressed(Keys.UP))) {
-			initialPositionY += Gdx.graphics.getDeltaTime() * downwardSpeed;
+			initialPositionY += (Gdx.graphics.getDeltaTime() * downwardSpeed)/2;
 		}
 		
 		//for debugging purposes
@@ -219,6 +219,20 @@ public class LunarLander extends GameClient {
 	    shapeRenderer.setColor(1, 1, 1, 1);
 		shapeRenderer.filledTriangle(300, 300, 100, 500, 500, 500);
 	    shapeRenderer.end();
+	    
+	    Vector2[] vertices = new Vector2[8];
+	    
+	    vertices[0] = new Vector2(82f  , 0f  );
+	    vertices[1] = new Vector2(146f , 40f  );
+	    vertices[2] = new Vector2(385f , 268f);
+	    vertices[3] = new Vector2(322f , 341f);
+	    vertices[4] = new Vector2(225f , 322f);
+	    vertices[5] = new Vector2(282f , 398f);     
+	    vertices[6] = new Vector2(161f , 457f);
+	    vertices[7] = new Vector2(135f , 298f);
+	    
+	    PolygonShape shape = new PolygonShape();
+	    shape.set(vertices);
 	    
 	    /*if(!(initPosition + finalY <= 20) && moving == true){
 	    	

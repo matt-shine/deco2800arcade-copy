@@ -51,7 +51,7 @@ public class HighscoreListener extends Listener {
 	 * 
 	 * @return queryResult as a String of comma separated values.
 	 */
-	private String serialisedData(LinkedList<String> queryResult) {
+	private String serialisedData(List<String> queryResult) {
 		String output = "";
 		
 		Iterator<String> resultIterator = queryResult.iterator();
@@ -73,17 +73,25 @@ public class HighscoreListener extends Listener {
 			 AddScoreRequest asr = (AddScoreRequest)object;
 			 String[] scoreQueue = deserialisedScores(asr.scoreQueue);
 			 
+			 LinkedList<String> types = new LinkedList<String>();
+			 LinkedList<Integer> scores = new LinkedList<Integer>();
+			 
 			 /*This following is temporary, simply for showing that the 
 			  * connection has succeeded and the data has been sent correctly.*/
 			 System.out.println("Recieved add score request for username:" 
 					 + asr.username +" and Game_ID:" + asr.game_ID + ". Scores: "); 
 			 for (int i = 0; i < scoreQueue.length; i+=2) {
+				 types.addLast(scoreQueue[i]);
+				 scores.addLast(Integer.parseInt(scoreQueue[i+1]));
+				 
 				 System.out.println("    Type: " + scoreQueue[i] + "; Value: " + scoreQueue[i+1] + ".");
 			 }
+			 
+			 
 			
 			 
 			 try {
-				 hsDatabase.addHighscore(asr.game_ID, asr.username);
+				 //hsDatabase.updateScore(Game_ID, Username, type, score)
 			 } catch (Exception e) {
 				 e.printStackTrace();
 			 }
@@ -94,15 +102,15 @@ public class HighscoreListener extends Listener {
 			 GetScoreRequest gsReq = (GetScoreRequest)object;
 
 			 //Get the data that's needed
-			 LinkedList<String> queryResult = hsDatabase.fetchData(gsReq.requestID, gsReq.game_ID, gsReq.username);
+			 List<String> queryResult = hsDatabase.fetchData(gsReq);
 			 
 			 //hsDatabase.fetchData doesn't return anything at the moment, so this is just a placeholder column number for until it does
 			 queryResult = new LinkedList<String>();
-			 queryResult.addLast("5"); 
+			 queryResult.add(0, "5");
 			 
 			 //Create the response
 			 GetScoreResponse gsRes = new GetScoreResponse();
-			 gsRes.columnNumbers = Integer.parseInt(queryResult.getFirst());
+			 gsRes.columnNumbers = Integer.parseInt(queryResult.get(0));
 			 gsRes.data = serialisedData(queryResult);
 			 
 			 //Send the response

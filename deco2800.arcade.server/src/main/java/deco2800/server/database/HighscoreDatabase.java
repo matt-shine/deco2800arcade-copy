@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import deco2800.arcade.protocol.highscore.GetScoreRequest;
+
 public class HighscoreDatabase {
 	private boolean initialised = false;
 	private static final DateFormat dateFormat = new SimpleDateFormat(
@@ -75,15 +77,17 @@ public class HighscoreDatabase {
 	 * @return A list of strings containing the data returned by the query. 
 	 * The first value is the number of columns that are bring returned.
 	 */
-	public LinkedList<String> fetchData(int requestID, String game_ID, String username) {
-		//Run the query corresponding to the requestID. This switch statement 
-		//is probably going to get pretty big.
-		switch (requestID) {
-		case 1: return null; //Return value of query with requestID 1
-		case 2: return null; //Return value of query with requestID 2
-		case 3: return null; //Return value of query with requestID 3
+	public List<String> fetchData(GetScoreRequest gsReq) {
+		//Run the query corresponding to the requestID. This switch statement is probably going to get pretty big.
+		try {
+			switch (gsReq.requestID) {
+			case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type); //Return value of query with requestID 1
+			case 2: return null; //Return value of query with requestID 2
+			case 3: return null; //Return value of query with requestID 3
+			}
+		} catch (DatabaseException e) {
+			//bad
 		}
-		
 		
 		//This should never be reached, as all requestIDs should be covered in the switch
 		return null;

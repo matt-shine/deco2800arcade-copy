@@ -1,0 +1,8 @@
+
+dependencies {
+  compile project(":deco2800.arcade.model")
+  compile project(":deco2800.arcade")
+
+  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
+  compile group: "com.miglayout", name: "miglayout-swing", version: "4.2"
+}

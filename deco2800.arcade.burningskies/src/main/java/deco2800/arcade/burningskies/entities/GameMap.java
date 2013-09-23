@@ -15,6 +15,7 @@ public class GameMap extends Image {
 	private final float mapSpeed;
 	// A list of enemy spawn times
 	private ArrayList<Float> spawnTimes;
+
 	
 	public GameMap(String filename) {
 		//TODO: Remove this and make it dynamic
@@ -24,7 +25,9 @@ public class GameMap extends Image {
 		mapSpeed = 40; //TODO: load from map file
 		//TODO: Load spawn times
 		spawnTimes = new ArrayList<Float>();
+		
 	}
+	
 	
 	@Override
 	public void act(float delta) {

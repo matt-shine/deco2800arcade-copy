@@ -30,14 +30,7 @@ public class ReplayHandler {
 
 	protected EventListenerList listenerList = new EventListenerList();
 	
-	private long startTime;
-	
-	private int replayIndex;
-	
-	private List<String> replayHistory;
 	private NetworkClient client;
-	private Gson serializer;
-	private Gson deserializer;
 	
 	private Integer sessionId;
 	
@@ -69,17 +62,9 @@ public class ReplayHandler {
 	 */
 	private void init()
 	{	
-	    this.startTime = -1;
-	    this.replayHistory = new ArrayList<String>();
-	    
-	    serializer = new Gson();
 	    
 	    playback = new ReplayPlayback( this, this.client );
 	    
-	    GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
-		gsonBuilder.registerTypeAdapter(ReplayNode.class, new ReplayNodeDeserializer());
-		deserializer = gsonBuilder.create();
 	}
 	
 	public ReplayRecorder getRecorder() {
@@ -176,39 +161,6 @@ public class ReplayHandler {
 	    
 	  //TODO Implement
 	}
-//
-//	/**
-//	 * Send a node as a string to the server for storage
-//	 * @param node
-//	 */
-//	private void pushEventToServer(Integer eventIndex, String node, Integer sessionId)
-//	{
-//	    PushEventRequest per = new PushEventRequest();
-//	    per.eventIndex = eventIndex;
-//	    per.nodeString = node;
-//	    per.sessionId = sessionId;
-//	    client.sendNetworkObject(per);
-//	}
-//	
-//	/**
-//	 * Sends new event to server
-//	 * @param per Confirms
-//	 */
-//	public void eventPushed(PushEventResponse per)
-//	{
-//		if ( !per.success ) {
-//			// well then...
-//		}
-//	  //TODO Implement
-//	}
-	
-	/*
-	 * TODO make this take a gameID too, so you can only get 
-	 * replays for the current game. Shouldn't be a problem if 
-	 * the user interface is implemented properly, but makes it
-	 * derp-proof.
-	 */
-	
 	
 	/**
 	 * Set the handler's session id.
@@ -267,14 +219,6 @@ public class ReplayHandler {
 	public void pushEvent( ReplayNode eData ) {
 		this.recorder.pushEvent( eData );
 	}
-		
-	/**
-	 * Resets the replay history
-	 */
-	public void resetReplayHistory() {
-		this.replayHistory = new ArrayList<String>();
-		dispatchReplayEvent( "replay_reset", null );
-	}
 	
 	/**
 	 * Runs through the nodes and plays them
@@ -299,28 +243,9 @@ public class ReplayHandler {
 	 * This is temporary, will probably remove it later. Just for the demo.
 	 */
 	public void playbackCurrentSession() {
-		this.replayHistory = null;
 		this.playback.playbackSession( sessionId );
 		//requestEventsForSession( sessionId );
 	}
-	
-//	/**
-//	 * Starts playback of game
-//	 */
-//	public void startPlayback() {
-//		playbackStartTime = System.currentTimeMillis();
-//		this.nextReplayIndex = 0;
-//		
-//		ReplayNode next = deserializer.fromJson(
-//				replayHistory.get( this.nextReplayIndex ),
-//				ReplayNode.class );
-//		
-//		this.nextReplayTime = playbackStartTime + next.getTime();
-//	}
-	
-//	public void startPlayback() {
-//		this.playback.startPlayback();
-//	}
 	
 	/**
 	 * Waits for replay to be added to a list

@@ -45,6 +45,8 @@ public class ReplayHandler {
 	private long nextReplayTime = -1;
 	private int nextReplayIndex = -1;
 	
+	ReplayRecorder recorder;
+	
 	/**
 	 * Basic constructor for the ReplayHandler
 	 * 
@@ -55,24 +57,21 @@ public class ReplayHandler {
 	    setClient(client);
 	    init();
 	}
+	
 	/**
 	 * Sets the instance variables for the client
 	 * @param client
 	 */
-	public void setClient(NetworkClient client)
+	private void setClient(NetworkClient client)
 	{
 	    this.client = client;
-	}
-	
-	public ReplayHandler() {
-	    init();
 	}
 	
 	/**
 	 * Set up the default variables.
 	 */
 	private void init()
-	{
+	{	
 	    this.startTime = -1;
 	    this.replayHistory = new ArrayList<String>();
 	    
@@ -82,6 +81,10 @@ public class ReplayHandler {
 		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 		gsonBuilder.registerTypeAdapter(ReplayNode.class, new ReplayNodeDeserializer());
 		deserializer = gsonBuilder.create();
+	}
+	
+	public ReplayRecorder getRecorder() {
+		return this.recorder;
 	}
 	
 	/**
@@ -105,6 +108,8 @@ public class ReplayHandler {
 	{
 	    //TODO Implement
 	    setSessionId(ssr.sessionId);
+	    
+		recorder = new ReplayRecorder( this, this.client, this.sessionId );
 	}
 	
 	/**
@@ -165,31 +170,31 @@ public class ReplayHandler {
 	    
 	  //TODO Implement
 	}
-	
-	/**
-	 * Send a node as a string to the server for storage DO NOT CALL
-	 * @param node
-	 */
-	private void pushEventToServer(Integer eventIndex, String node, Integer sessionId)
-	{
-	    PushEventRequest per = new PushEventRequest();
-	    per.eventIndex = eventIndex;
-	    per.nodeString = node;
-	    per.sessionId = sessionId;
-	    client.sendNetworkObject(per);
-	}
-	
-	/**
-	 * Sends new event to server
-	 * @param per Confirms
-	 */
-	public void eventPushed(PushEventResponse per)
-	{
-		if ( !per.success ) {
-			// well then...
-		}
-	  //TODO Implement
-	}
+//
+//	/**
+//	 * Send a node as a string to the server for storage
+//	 * @param node
+//	 */
+//	private void pushEventToServer(Integer eventIndex, String node, Integer sessionId)
+//	{
+//	    PushEventRequest per = new PushEventRequest();
+//	    per.eventIndex = eventIndex;
+//	    per.nodeString = node;
+//	    per.sessionId = sessionId;
+//	    client.sendNetworkObject(per);
+//	}
+//	
+//	/**
+//	 * Sends new event to server
+//	 * @param per Confirms
+//	 */
+//	public void eventPushed(PushEventResponse per)
+//	{
+//		if ( !per.success ) {
+//			// well then...
+//		}
+//	  //TODO Implement
+//	}
 	
 	/*
 	 * TODO make this take a gameID too, so you can only get 
@@ -262,43 +267,51 @@ public class ReplayHandler {
 	 * Start recording game
 	 */
 	public void startRecording() {
+		this.recorder.startRecording();
+		/*
 		this.startTime = -1;
 		this.replayIndex = 0;
 	    this.replayHistory = new ArrayList<String>();
 	    
 		this.startTime = System.currentTimeMillis();
+		*/
 	}
 	
 	/**
 	 * End recording
 	 */
 	public void finishRecording() {
-		this.startTime = -1;
+		this.recorder.finishRecording();
+		//this.startTime = -1;
 		// Do something with the captured data, then reset it (or possibly allow playback etc.)
 	}
+//	
+//	/**
+//	 * Pushes nodes to server
+//	 * @param eData The nodes
+//	 */
+//	public void pushEvent( ReplayNode eData ) {
+//		ReplayNode toAdd = new ReplayNode( eData );
+//		if ( startTime < 0 ) {
+//			System.err.println( "Didn't start first" );
+//		}
+//		long timeOffset = System.currentTimeMillis() - startTime;
+//		toAdd.setTime( timeOffset );
+//		String nodeString = serializer.toJson( toAdd );
+//		replayHistory.add( nodeString );
+//		
+//		System.out.println( nodeString );
+//		pushEventToServer( replayIndex, nodeString, sessionId );
+//		replayIndex ++;
+//		
+//		// probably get rid of this, kind of useless
+//		dispatchReplayEvent( "event_pushed", null );
+//	}
 	
-	/**
-	 * Pushes nodes to server
-	 * @param eData The nodes
-	 */
 	public void pushEvent( ReplayNode eData ) {
-		ReplayNode toAdd = new ReplayNode( eData );
-		if ( startTime < 0 ) {
-			System.err.println( "Didn't start first" );
-		}
-		long timeOffset = System.currentTimeMillis() - startTime;
-		toAdd.setTime( timeOffset );
-		String nodeString = serializer.toJson( toAdd );
-		replayHistory.add( nodeString );
-		
-		System.out.println( nodeString );
-		pushEventToServer( replayIndex, nodeString, sessionId );
-		replayIndex ++;
-		
-		// probably get rid of this, kind of useless
-		dispatchReplayEvent( "event_pushed", null );
+		this.recorder.pushEvent( eData );
 	}
-	
+		
 	/*
 	public void pushEvent( String eType, List<ReplayItem> eData ) {
 		List<ReplayItem> items = new ArrayList<ReplayItem>();
@@ -455,7 +468,7 @@ public class ReplayHandler {
 	 * @param eType
 	 * @param eData
 	 */
-	private void dispatchReplayEvent( String eType, ReplayNode eData  ) {
+	void dispatchReplayEvent( String eType, ReplayNode eData  ) {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i++ ) {
 			if ( listeners[i] == ReplayEventListener.class ) {

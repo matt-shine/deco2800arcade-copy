@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class SidebarMenuItem extends TextButton {
 
 	public SidebarMenuItem(Skin skin, String styleName) {
-		super(styleName, skin);
+		super("", skin, styleName);
 		
 	}
 

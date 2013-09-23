@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class CommunicationModel {
 	
+	//FIXME ArrayList or List?
 	private ArrayList<String> participants;
 	
 	public CommunicationModel(String username){

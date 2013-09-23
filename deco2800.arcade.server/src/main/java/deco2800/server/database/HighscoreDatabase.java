@@ -250,7 +250,8 @@ public class HighscoreDatabase {
 	
 	
 	/**
-	 * Displays a string representation of the users score for the specified game and type of score
+	 * Displays a string representation of all the users highscores aggregated into an average. This could be used by the games
+	 * if they wish to display this as a way of comparing the users score against the average player
 	 * @param Game_ID - game id to query against
 	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 

@@ -17,6 +17,7 @@ import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.listener.PackmanListener;
 import deco2800.server.listener.HighscoreListener;
 import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
@@ -177,6 +178,17 @@ public class ArcadeServer {
 		server.addListener(new ReplayListener());
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
-		
+        server.addListener(new PackmanListener());
 	}
+
+    /**
+     * Return the packServ object.
+     * Possible temporary fix just to get network communication
+     * between client and packman server operational.
+     * TODO don't reveal packServ object publically
+     * @return the packServ variable
+     */
+    public PackageServer packServ() {
+        return packServ;
+    }
 }

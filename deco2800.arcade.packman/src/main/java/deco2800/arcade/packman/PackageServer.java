@@ -1,5 +1,6 @@
 package deco2800.arcade.packman;
 
+import java.lang.System;
 import deco2800.arcade.packman.PackageUtils;
 
 public class PackageServer {
@@ -21,4 +22,11 @@ public class PackageServer {
 			System.out.println("Failed creating: " + releaseFolder);
 		}
 	}
+
+    /**
+     * Print confirmation of successful connection by client to package server
+     */
+    public void printSuccess() {
+        System.out.println("PACKMAN: Client connection success");
+    }
 }

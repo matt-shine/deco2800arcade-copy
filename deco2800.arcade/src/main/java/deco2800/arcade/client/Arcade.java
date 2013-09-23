@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
+import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
@@ -34,6 +36,7 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 
 /**
  * The client application for running arcade games.
@@ -157,67 +160,74 @@ public class Arcade extends JFrame {
         try {
             // TODO allow server/port as optional runtime arguments xor user inputs.
             System.out.println("connecting to server");
-            client = new NetworkClient(serverIPAddress, 54555, 54777);
-            communicationNetwork = new CommunicationNetwork(player, this.client);
-            addListeners();
-        } catch (NetworkException e) {
-            throw new ArcadeException("Unable to connect to Arcade Server ("
-                    + serverIPAddress + ")", e);
-        }
-    }
+			client = new NetworkClient(serverIPAddress, 54555, 54777);
+			communicationNetwork = new CommunicationNetwork(player, this.client);
+			addListeners();
+		} catch (NetworkException e) {
+			throw new ArcadeException("Unable to connect to Arcade Server ("
+					+ serverIPAddress + ")", e);
+		}
+	}
 
-    private void addListeners() {
-        this.client.addListener(new ConnectionListener());
-        this.client.addListener(new CreditListener());
-        this.client.addListener(new GameListener());
-        this.client.addListener(new CommunicationListener(communicationNetwork));
-    }
+	private void addListeners() {
+		this.client.addListener(new ConnectionListener());
+		this.client.addListener(new CreditListener());
+		this.client.addListener(new GameListener());
+		this.client.addListener(new CommunicationListener(communicationNetwork));
+        this.client.addListener(new PackmanListener());
+	}
 
-    public void connectAsUser(String username) {
-        ConnectionRequest connectionRequest = new ConnectionRequest();
-        connectionRequest.username = username;
+	public void connectAsUser(String username) {
+		ConnectionRequest connectionRequest = new ConnectionRequest();
+		connectionRequest.username = username;
+		
+		//Protocol.registerEncrypted(connectionRequest);
+		
+		this.client.sendNetworkObject(connectionRequest);
 
-        //Protocol.registerEncrypted(connectionRequest);
+		CommunicationRequest communicationRequest = new CommunicationRequest();
+		communicationRequest.username = username;
 
-        this.client.sendNetworkObject(connectionRequest);
+		this.client.sendNetworkObject(communicationRequest);
 
-        CommunicationRequest communicationRequest = new CommunicationRequest();
-        communicationRequest.username = username;
+		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
+		creditBalanceRequest.username = username;
 
-        this.client.sendNetworkObject(communicationRequest);
+		this.client.sendNetworkObject(creditBalanceRequest);
 
-        CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
-        creditBalanceRequest.username = username;
+		this.player = new Player(0, username,
+				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
+		this.player.setUsername(username);
 
-        this.client.sendNetworkObject(creditBalanceRequest);
+		// this.communicationNetwork.createNewChat(username);
 
-        this.player = new Player(0, username,
-                "THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
-        this.player.setUsername(username);
+        // TODO move this call to be internal to Packman class
+        GameUpdateCheckRequest gameUpdateCheckRequest = new
+                GameUpdateCheckRequest();
 
-        // this.communicationNetwork.createNewChat(username);
-    }
+        this.client.sendNetworkObject(gameUpdateCheckRequest);
+	}
 
-    /**
-     * Ask the server to play a given game.
-     *
-     * @param gameClient
-     *            the type of game to play
-     */
-    public void requestGameSession(GameClient gameClient) {
-        NewGameRequest newGameRequest = new NewGameRequest();
-        newGameRequest.gameId = gameClient.getGame().id;
-        newGameRequest.username = player.getUsername();
-        newGameRequest.requestType = GameRequestType.NEW;
-        this.client.sendNetworkObject(newGameRequest);
-    }
+	/**
+	 * Ask the server to play a given game.
+	 * 
+	 * @param gameClient
+	 *            the type of game to play
+	 */
+	public void requestGameSession(GameClient gameClient) {
+		NewGameRequest newGameRequest = new NewGameRequest();
+		newGameRequest.gameId = gameClient.getGame().id;
+		newGameRequest.username = player.getUsername();
+		newGameRequest.requestType = GameRequestType.NEW;
+		this.client.sendNetworkObject(newGameRequest);
+	}
 
-    /**
-     * Begin playing the game in the <tt>selectedGame</tt> field.
-     */
-    public void startGame(String gameid) {
+	/**
+	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 */
+	public void startGame(String gameid) {
 
-        selectedGame = getInstanceOfGame(gameid);
+		selectedGame = getInstanceOfGame(gameid);
         selectedGame.setNetworkClient(this.client);
         startGame(selectedGame);
     }

@@ -19,127 +19,127 @@ import deco2800.arcade.model.Player;
 @InternalGame
 @ArcadeGame(id="arcadeoverlay")
 public class Overlay extends GameClient implements UIOverlay {
-	
-	private class PermanentOverlayStage extends Stage {}
-	
-	private Logger logger = new Logger("Overlay");
-	
-	private boolean notifiedForMissingCallbacks = false;
-	private boolean notifiedForMissingInput = false;
-	
+
+    private class PermanentOverlayStage extends Stage {}
+
+    private Logger logger = new Logger("Overlay");
+
+    private boolean notifiedForMissingCallbacks = false;
+    private boolean notifiedForMissingInput = false;
+
     private PermanentOverlayStage stage;
     Table table = new Table();
-    
-	private OverlayScreen screen = new OverlayScreen(this);
-	private OverlayPopup popup = new OverlayPopup(this);
-	private SpriteBatch batch = new SpriteBatch();
-	
-	private GameClient host = null;
-	
-	public Overlay(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
+
+    private OverlayScreen screen = new OverlayScreen(this);
+    private OverlayPopup popup = new OverlayPopup(this);
+    private SpriteBatch batch = new SpriteBatch();
+
+    private GameClient host = null;
+
+    public Overlay(Player player, NetworkClient networkClient) {
+        super(player, networkClient);
 
         stage = new PermanentOverlayStage();
-        
+
         table.setFillParent(true);
-        
+
         stage.addActor(table);
-        
-	}
-	
-	@Override
-	public void setListeners(Screen l) {
-		screen.setListeners(l);
-	}
 
-	@Override
-	public void addPopup(PopupMessage s) {
-		popup.addMessageToQueue(s);
-	}
-	
-	@Override
-	public void create() {
-		this.setScreen(screen);
-		ArcadeInputMux.getInstance().addProcessor(stage);
-	}
+    }
 
-	@Override
-	public void render() {
-		super.render();
-		
+    @Override
+    public void setListeners(Screen l) {
+        screen.setListeners(l);
+    }
 
-		
-		popup.act(Gdx.graphics.getDeltaTime());
-		batch.begin();
-		popup.draw(batch, 1f);
-		batch.end();
-		
-		// Check nobody is being selfish, keeping all the precious inputs for themselves
-		if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance() && !notifiedForMissingInput) {
-			notifiedForMissingInput = true;
-			logger.error("Something has stolen the inputlistener. " +
-					"See src/main/java/deco2800/arcade/client/ArcadeInputMux.java");
-		}
-		
-		// Check that people love me
-		if (screen.getListeners() == null && !notifiedForMissingCallbacks) {
-	    	notifiedForMissingCallbacks = true;
-	    	logger.error("Overlay event listeners are not set. " + 
-	    			"See https://github.com/UQdeco2800/deco2800-2013/wiki/Overlay");
-	    }
+    @Override
+    public void addPopup(PopupMessage s) {
+        popup.addMessageToQueue(s);
+    }
 
-		// Check that I'm not being run on top of myself.
-		// Why would anyone do that?
-		if (this.getHost() instanceof UIOverlay) {
-			logger.error("The overlay is being run on top of another overlay." + 
-	    			" What??? Why???");
-		}
-		
-	}
-	
-	@Override
-	public void dispose() {
-	    
-		ArcadeInputMux.getInstance().removeProcessor(stage);
-		
-		stage.dispose();
-        
+    @Override
+    public void create() {
+        this.setScreen(screen);
+        ArcadeInputMux.getInstance().addProcessor(stage);
+    }
+
+    @Override
+    public void render() {
+        super.render();
+
+
+
+        popup.act(Gdx.graphics.getDeltaTime());
+        batch.begin();
+        popup.draw(batch, 1f);
+        batch.end();
+
+        // Check nobody is being selfish, keeping all the precious inputs for themselves
+        if (Gdx.input.getInputProcessor() != ArcadeInputMux.getInstance() && !notifiedForMissingInput) {
+            notifiedForMissingInput = true;
+            logger.error("Something has stolen the inputlistener. " +
+                    "See src/main/java/deco2800/arcade/client/ArcadeInputMux.java");
+        }
+
+        // Check that people love me
+        if (screen.getListeners() == null && !notifiedForMissingCallbacks) {
+            notifiedForMissingCallbacks = true;
+            logger.error("Overlay event listeners are not set. " +
+                    "See https://github.com/UQdeco2800/deco2800-2013/wiki/Overlay");
+        }
+
+        // Check that I'm not being run on top of myself.
+        // Why would anyone do that?
+        if (this.getHost() instanceof UIOverlay) {
+            logger.error("The overlay is being run on top of another overlay." +
+                    " What??? Why???");
+        }
+
+    }
+
+    @Override
+    public void dispose() {
+
+        ArcadeInputMux.getInstance().removeProcessor(stage);
+
+        stage.dispose();
+
         screen.dispose();
-	    
-	}
-	
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
-	}
+    }
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public Game getGame() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public GameClient getHost() {
-		return host;
-	}
-	
-	
-	public void setHost(GameClient host) {
-		this.host = host;
-	}
-	
-	
-	
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Game getGame() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public GameClient getHost() {
+        return host;
+    }
+
+
+    public void setHost(GameClient host) {
+        this.host = host;
+    }
+
+
+
 }

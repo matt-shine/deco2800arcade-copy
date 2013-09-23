@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import deco2800.server.database.ForumStorage;
-import deco2800.arcade.forum.ParentThread;
+import deco2800.arcade.model.forum.ParentThread;
 
 /**
  * Unit test for ForumStorage class

@@ -1,6 +1,8 @@
-package deco2800.arcade.forum;
+package deco2800.arcade.model.forum;
 
 import java.sql.Timestamp;
+
+import deco2800.arcade.model.User;
 
 /**
  * ParentThread models the parent thread (top-level thread). 
@@ -30,7 +32,7 @@ public class ParentThread {
 	 * @param	id, non-negative integer of parent thread's id 
 	 * @param	topic, string of thread's topic which is less than 80 chars
 	 * @param	message, string of message (thread's content)
-	 * @param	createdBy, User Instance
+	 * @param	createdBy, Player instance
 	 * @param	timestamp, Timestamp instance specified in SQL timestamp
 	 * @param	category, string of category which a parent thread is categorised into.
 	 * @param	tags, array of string of tags which are attached to the parent thread used for additional search.
@@ -143,7 +145,7 @@ public class ParentThread {
 	 */
 	public String toString() {
 		return String.format("%d: %s, %s createdBy %s on %s as %s as %s"
-				, this.id, this.topic, this.message, this.createdBy.getName()
+				, this.id, this.topic, this.message, this.createdBy.toString()
 				, this.timestamp.toString(), this.category, this.getTagsString());
 	}
 	

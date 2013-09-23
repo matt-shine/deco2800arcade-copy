@@ -18,6 +18,7 @@ import deco2800.server.database.ForumStorage;
 import deco2800.server.database.ForumStorage;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
+import deco2800.server.listener.ForumListener;
 import deco2800.server.listener.GameListener;
 import deco2800.server.listener.HighscoreListener;
 import deco2800.server.database.HighscoreDatabase;
@@ -157,9 +158,7 @@ public class ArcadeServer {
           
 			achievementStorage.initialise();
 			
-			highscoreDatabase.initialise();
-
-			this.forumStorage.initialise();
+			//highscoreDatabase.initialise();
 
 			this.forumStorage.initialise();
 		} catch (DatabaseException e) {
@@ -192,10 +191,10 @@ public class ArcadeServer {
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
-		server.addListener(new AchievementListener());
-		server.addListener(new ReplayListener());
-		server.addListener(new HighscoreListener());
-		server.addListener(new CommunicationListener(server));
-		
+		//server.addListener(new AchievementListener());
+		//server.addListener(new ReplayListener());
+		//server.addListener(new HighscoreListener());
+		//server.addListener(new CommunicationListener(server));
+		server.addListener(new ForumListener());
 	}
 }

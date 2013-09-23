@@ -2,6 +2,9 @@ package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * TileModel represents a tile on game board.
  */
@@ -50,20 +53,56 @@ public class TileModel {
 		return walls[direction];
 	}
 
-	/**
-	 * Assign this tile's boxer to the specified <code>player</code>.
-	 * Boxer is only assign to this tile given that this tile is a complete box.
-	 * Otherwise, the boxer is set to <code>null</code>.
-	 *
-	 * @param player the player in this tile
-	 */
-	public void checkBox(PlayerModel player) {
+	public void buildBox(PlayerModel player) {
 		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
 		boxer = isBox() ? player : null;
 	}
-
+	
+	public List<TileModel> findPath(List<TileModel> path)
+	{
+		for(int direction = 0; direction < 4; ++direction) {
+			WallModel wall = walls[direction];
+			if(wall.isBuilt()) {
+				if(Direction.isXDirection(direction)) {
+					TileModel northTile = adjTiles[Direction.NORTH];
+					if(northTile.getWall(Direction.SOUTH).isBuilt() || northTile.getWall(direction).isBuilt()) {
+						
+					}
+					
+					TileModel adjTile = adjTiles[direction];
+					if(adjTile.getWall(Direction.NORTH).isBuilt() || adjTile.getWall(Direction.SOUTH).isBuilt()) {
+						
+					}
+				} else {
+					
+				}
+				
+				switch(direction) {
+				case Direction.WEST:
+					break;
+				case Direction.NORTH: 
+					break;
+				case Direction.EAST: 
+					break;
+				case Direction.SOUTH: 
+					break;
+				}
+			}
+		}
+		return path;
+	}
+	
+	private boolean checkWalls(int wallDirection, int tileDirection) {
+		if(Direction.isXDirection(wallDirection)) {
+			
+		} else {
+			
+		}
+		return false;
+	}
+	
 	/**
 	 * Checks if this tile is a complete box.
 	 *
@@ -88,6 +127,13 @@ public class TileModel {
 	@Override
 	public String toString() {
 		return LOG + "row: " + tileY + "\tcolumn: " + tileX;
+	}
+	
+	private TileModel getAdjacent(int direction) {
+		if(!Direction.isDirection(direction)) {
+			throw Direction.NOT_A_DIRECTION;
+		}
+		return adjTiles[direction];
 	}
 	
 	private void addAdjacent(TileModel tile, int direction) {

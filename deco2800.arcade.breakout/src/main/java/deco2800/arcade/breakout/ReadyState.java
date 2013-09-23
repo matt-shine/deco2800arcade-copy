@@ -17,7 +17,7 @@ public class ReadyState extends GameState {
 			}
 			if (context.getSequence().length == context.getCurrentButton()) {
 				context.setCurrentButton(0);
-				context.bonusLives();
+				context.bonusLives(2);
 			}
 		}
 

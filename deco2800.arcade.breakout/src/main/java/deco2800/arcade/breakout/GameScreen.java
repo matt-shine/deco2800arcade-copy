@@ -60,7 +60,7 @@ public class GameScreen implements Screen  {
 	private String status = null;
 	
 	// Integer to determine what the current level is
-	private int level = 1;
+	private int level = 2;
 
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
@@ -124,7 +124,7 @@ public class GameScreen implements Screen  {
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
 		setBall(new Ball());
-		getBall().setColor(0, 1, 0, 1);
+		getBall().setColor(0.7f, 0.7f, 0.7f, 0.5f);
 		
 		
 
@@ -137,6 +137,16 @@ public class GameScreen implements Screen  {
 			bricks = levelSystem.levelThree(bricks, this);
 		} else if (getLevel() == 4) {
 			bricks = levelSystem.levelFour(bricks, this);
+		} else if (getLevel() == 5) {
+			bricks = levelSystem.levelFive(bricks, this);
+		} else if (getLevel() == 6) {
+			bricks = levelSystem.levelSix(bricks, this);
+		} else if (getLevel() == 7) {
+			bricks = levelSystem.levelSeven(bricks, this);
+		} else if (getLevel() == 8) {
+			bricks = levelSystem.levelEight(bricks, this);
+		} else if (getLevel() == 9) {
+			bricks = levelSystem.levelNine(bricks, this);
 		}
 		setBrickNum(bricks.length);
 
@@ -155,7 +165,6 @@ public class GameScreen implements Screen  {
 	 * for processing
 	 */
 	public void updateGameState(int bounce) {
-		System.out.println("ball's x velocity: " + getBall().getXVelocity());
 		if (bounce == 0) {
 			getBall().bounceX();
 		} else if (bounce == 1) {
@@ -198,11 +207,14 @@ public class GameScreen implements Screen  {
 			shapeRenderer.begin(ShapeType.FilledRectangle);
 
 			getPaddle().render(shapeRenderer);
-			// TODO Make the Ball a Circle
-			getBall().render(shapeRenderer);
+			
 
 			// Render the level
 			levelSystem.render(bricks, outer, inner, this, shapeRenderer, batch);
+			shapeRenderer.end();
+			shapeRenderer.begin(ShapeType.FilledCircle);
+			// Ball is a Circle
+			getBall().render(shapeRenderer);
 			shapeRenderer.end();
 			
 			
@@ -288,8 +300,8 @@ public class GameScreen implements Screen  {
 	 * Rewards the Player 2 extra lives and makes the sequence null, so that the
 	 * Player can not re-use the cheat
 	 */
-	void bonusLives() {
-		lives = lives + 2;
+	void bonusLives(int bonus) {
+		lives = lives + bonus;
 		setSequence(null);
 	}
 

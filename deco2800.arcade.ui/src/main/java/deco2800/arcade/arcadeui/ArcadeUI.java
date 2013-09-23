@@ -16,19 +16,23 @@ import deco2800.arcade.model.Player;
 @InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
-	
-	LoginScreen login = null;
-	StoreScreen store = null;
-	HomeScreen home = null;
+
+    LoginScreen login = null;
+    StoreScreen store = null;
+    HomeScreen home = null;
     RegisterScreen register = null;
 
-	public ArcadeUI(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-	}
+    public ArcadeUI(Player player, NetworkClient networkClient) {
+        super(player, networkClient);
+    }
 
     @Override
     public void create() {
-        ArcadeSystem.openConnection(); // Move this to somewhere more appropriate.
+        // TODO Move this to somewhere more appropriate.
+        // FIXME This really needs to be fixed.
+        // The connection should be attempted to be opened after a user has pressed login on the loginScreen
+        // But I don't know the best way or place to do this - abbjohn
+        ArcadeSystem.openConnection();
 
         // Initialise the different screens.
         login = new LoginScreen(this);
@@ -46,35 +50,35 @@ public class ArcadeUI extends GameClient {
         super.create();
     }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
-	
-	@Override
-	public void pause() {
-		super.pause();
-	}
-	
-	@Override
-	public void render() {
-		super.render();
-	}
+    @Override
+    public void dispose() {
+        super.dispose();
+    }
 
-	@Override
-	public void resume() {
-		super.resume();
-	}
+    @Override
+    public void pause() {
+        super.pause();
+    }
 
-	private static final Game game;
-	static {
-		game = new Game();
-		game.id = "arcadeui";
-		game.name = "Arcade UI";
-	}
+    @Override
+    public void render() {
+        super.render();
+    }
 
-	public Game getGame() {
-		return game;
-	}
-		
+    @Override
+    public void resume() {
+        super.resume();
+    }
+
+    private static final Game game;
+    static {
+        game = new Game();
+        game.id = "arcadeui";
+        game.name = "Arcade UI";
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
 }

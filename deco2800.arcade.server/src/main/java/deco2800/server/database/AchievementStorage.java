@@ -815,7 +815,11 @@ public class AchievementStorage {
 		//Connect to table and select Achievement and increment
 		try {
 			statement = connection.createStatement();
-			statement.executeQuery("");
+			resultSet = statement.executeQuery("SELECT COUNT(*) AS num FROM AWARDED_ACHIEVEMENT WHERE " +
+					"achievementID = '" + achievementID + "'");
+			resultSet.next();
+			return resultSet.getInt("num");
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get achievements from database", e);
@@ -834,7 +838,6 @@ public class AchievementStorage {
 				e.printStackTrace();
 			}
 		}
-		return 1;
     }
 	
 }

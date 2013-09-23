@@ -54,11 +54,13 @@ public class MainGameScreen implements Screen {
 		model.setDelta(delta);
 		
 		//iterate over all game objects
+		model.beginTick();
 		Iterator<Doodad> itr = model.getDoodadIterator();
 		while (itr.hasNext()) {
 			Doodad d = itr.next();
 			d.tick(model);
 		}
+		model.endTick();
 		
 		Gdx.gl20.glViewport(0, 0, game.getWidth(), game.getHeight());
 		b.draw(this.debugMode);
@@ -83,6 +85,11 @@ public class MainGameScreen implements Screen {
 	
 	public void setOverlayPause(boolean pause) {
 		this.overlayPause = pause;
+		if (pause) {
+			ArcadeInputMux.getInstance().removeProcessor(input);
+		} else {
+			ArcadeInputMux.getInstance().addProcessor(input);
+		}
 	}
 
 }

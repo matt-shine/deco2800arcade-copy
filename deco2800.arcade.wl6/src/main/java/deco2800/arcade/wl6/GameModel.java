@@ -1,5 +1,6 @@
 package deco2800.arcade.wl6;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -34,9 +35,13 @@ public class GameModel {
 	//Delta time
 	private float delta = 0;
 	
-	
-	
+	//Doodads to delete
+	private ArrayList<Doodad> toDelete = new ArrayList<Doodad>();
 
+	
+	
+	
+	
 	public GameModel() {
 	}
 	
@@ -142,7 +147,7 @@ public class GameModel {
 	 * @param doodad
 	 */
 	public void destroyDoodad(Doodad doodad) {
-		doodads.remove(doodad);
+		toDelete.add(doodad);
 	}
 	
 	
@@ -173,5 +178,22 @@ public class GameModel {
 		this.delta = delta;
 	}
 
-
+	
+	
+	/**
+	 * Call this before ticking.
+	 */
+	public void beginTick() {
+		//nothing to do yet
+	}
+	
+	
+	/**
+	 * Call this after finishing ticking.
+	 */
+	public void endTick() {
+		for (Doodad d : toDelete) {
+			doodads.remove(d);
+		}
+	}
 }

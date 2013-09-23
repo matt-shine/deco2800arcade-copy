@@ -22,6 +22,10 @@ import deco2800.arcade.protocol.replay.types.Session;
 
 import java.util.*;
 
+/**
+ * An extension for the arcade client for recording and replaying games.
+ * 
+ */
 public class ReplayHandler {
 
 	protected EventListenerList listenerList = new EventListenerList();
@@ -41,13 +45,20 @@ public class ReplayHandler {
 	private long nextReplayTime = -1;
 	private int nextReplayIndex = -1;
 	
-	
+	/**
+	 * Basic constructor for the ReplayHandler
+	 * 
+	 * @param client The network client for sending/receiving messages to/from the server
+	 */
 	public ReplayHandler(NetworkClient client)
 	{
 	    setClient(client);
 	    init();
 	}
-	
+	/**
+	 * Sets the instance variables for the client
+	 * @param client
+	 */
 	public void setClient(NetworkClient client)
 	{
 	    this.client = client;
@@ -75,8 +86,8 @@ public class ReplayHandler {
 	
 	/**
 	 * Start a recording session with the server.
-	 * @param gameId
-	 * @param username
+	 * @param gameId The id for the recorded game
+	 * @param username The username of the user recording the game
 	 */
 	public void startSession(String gameId, String username)
 	{
@@ -86,6 +97,10 @@ public class ReplayHandler {
 	    client.sendNetworkObject(ssr);
 	}
 	
+	/**
+	 * Sets the session ID
+	 * @param ssr The session
+	 */
 	public void sessionStarted(StartSessionResponse ssr)
 	{
 	    //TODO Implement
@@ -94,7 +109,7 @@ public class ReplayHandler {
 	
 	/**
 	 * Terminate the current recording session.
-	 * @param sessionId
+	 * @param sessionId ID for the session
 	 */
 	public void endSession(Integer sessionId)
 	{
@@ -103,6 +118,10 @@ public class ReplayHandler {
 	    client.sendNetworkObject(esr);
 	}
 	
+	/**
+	 * Finish the session
+	 * @param esr Confirm session ended
+	 */
 	public void sessionEnded(EndSessionResponse esr)
 	{
 	    //TODO Implement
@@ -121,6 +140,10 @@ public class ReplayHandler {
 	    client.sendNetworkObject(lsr);
 	}
 	
+	/**
+	 * Requests list for sessions
+	 * @param lsr List of session responses
+	 */
 	public void sessionListReceived(ListSessionsResponse lsr)
 	{
 	    ArrayList<Session> sessions = lsr.sessions;
@@ -144,10 +167,10 @@ public class ReplayHandler {
 	}
 	
 	/**
-	 * Send a node as a string to the server for storage
+	 * Send a node as a string to the server for storage DO NOT CALL
 	 * @param node
 	 */
-	public void pushEventToServer(Integer eventIndex, String node, Integer sessionId)
+	private void pushEventToServer(Integer eventIndex, String node, Integer sessionId)
 	{
 	    PushEventRequest per = new PushEventRequest();
 	    per.eventIndex = eventIndex;
@@ -156,6 +179,10 @@ public class ReplayHandler {
 	    client.sendNetworkObject(per);
 	}
 	
+	/**
+	 * Sends new event to server
+	 * @param per Confirms
+	 */
 	public void eventPushed(PushEventResponse per)
 	{
 		if ( !per.success ) {
@@ -182,6 +209,10 @@ public class ReplayHandler {
 	    client.sendNetworkObject(ger);
 	}
 	
+	/**
+	 * Lists all events received in a session
+	 * @param ger The list
+	 */
 	public void eventsForSessionReceived(GetEventsResponse ger)
 	{
 		replayHistory = ger.nodes;
@@ -198,6 +229,10 @@ public class ReplayHandler {
 	    System.out.println("Session Id: " + sessionId);
 	}
 	
+	/**
+	 * Retrieves the session ID
+	 * @return The session ID
+	 */
 	public Integer getSessionId()
 	{
 	    return sessionId;
@@ -223,6 +258,9 @@ public class ReplayHandler {
         System.out.println(rr);
 	}
 	
+	/**
+	 * Start recording game
+	 */
 	public void startRecording() {
 		this.startTime = -1;
 		this.replayIndex = 0;
@@ -231,11 +269,18 @@ public class ReplayHandler {
 		this.startTime = System.currentTimeMillis();
 	}
 	
+	/**
+	 * End recording
+	 */
 	public void finishRecording() {
 		this.startTime = -1;
 		// Do something with the captured data, then reset it (or possibly allow playback etc.)
 	}
 	
+	/**
+	 * Pushes nodes to server
+	 * @param eData The nodes
+	 */
 	public void pushEvent( ReplayNode eData ) {
 		ReplayNode toAdd = new ReplayNode( eData );
 		if ( startTime < 0 ) {
@@ -288,11 +333,17 @@ public class ReplayHandler {
 	}
 	*/
 	
+	/**
+	 * Resets the replay history
+	 */
 	public void resetReplayHistory() {
 		this.replayHistory = new ArrayList<String>();
 		dispatchReplayEvent( "replay_reset", null );
 	}
 	
+	/**
+	 * Runs through the nodes and plays them
+	 */
 	public void runLoop() {
 		if ( System.currentTimeMillis() > this.nextReplayTime ) {
 			if ( this.nextReplayIndex < 0 ) {
@@ -317,6 +368,10 @@ public class ReplayHandler {
 		}
 	}
 	
+	/**
+	 * Deserializes the node
+	 * @param index Particular history
+	 */
 	private void playbackItem( final int index ) {
 		ReplayNode node = deserializer.fromJson(
 				replayHistory.get( index ),
@@ -333,6 +388,9 @@ public class ReplayHandler {
 		requestEventsForSession( sessionId );
 	}
 	
+	/**
+	 * Starts playback of game
+	 */
 	public void startPlayback() {
 		playbackStartTime = System.currentTimeMillis();
 		this.nextReplayIndex = 0;
@@ -376,13 +434,27 @@ public class ReplayHandler {
 	}
 	*/
 	
+	/**
+	 * Waits for replay to be added to a list
+	 * @param listener
+	 */
 	public void addReplayEventListener( ReplayEventListener listener ) {
 		listenerList.add( ReplayEventListener.class, listener );
 	}
+	
+	/**
+	 * Waits for replay to be removed from the list
+	 * @param listener
+	 */
 	public void removeReplayEventListener( ReplayEventListener listener ) {
 		listenerList.remove( ReplayEventListener.class, listener );
 	}
 	
+	/**
+	 * Sends the information 
+	 * @param eType
+	 * @param eData
+	 */
 	private void dispatchReplayEvent( String eType, ReplayNode eData  ) {
 		Object[] listeners = listenerList.getListenerList();
 		for (int i = 0; i < listeners.length; i++ ) {

@@ -36,9 +36,8 @@ public class EditScreen extends JFrame {
 	private JPanel middleContainer;
 	private JPanel bottomContainer;
 	private ImagePanel menupanel;
-	private ImagePanel profilePanel;
-	private ImagePanel realnamePanel;
-	private ImagePanel aboutmePanel;
+	private ImagePanel background;
+
 	
 	
 	
@@ -87,6 +86,8 @@ public class EditScreen extends JFrame {
 	    topContainer = new JPanel(new MigLayout());
 	    middleContainer = new JPanel(new MigLayout());
 	    bottomContainer = new JPanel(new MigLayout());
+	    background = new ImagePanel(new ImageIcon("assets/images/background.png").getImage());
+	    background.setLayout(new MigLayout());
 	    
         
         //set sizes
@@ -154,11 +155,19 @@ public class EditScreen extends JFrame {
         topContainer.setBorder(new EmptyBorder(30, 450, 0, 0));
         middleContainer.setBorder(new EmptyBorder(0, 450, 0, 0));
         bottomContainer.setBorder(new EmptyBorder(0, 450, 0, 0));
+        topContainer.setOpaque(false);
+        middleContainer.setOpaque(false);
+        bottomContainer.setOpaque(false);
+        
+        background.add(topContainer, "dock north, align center");
+        background.add(middleContainer, "dock north, align center");
+        background.add(bottomContainer, "dock north, align center");
        
         parentContainer.add(menupanel, "dock north, align center");
-        parentContainer.add(topContainer, "dock north, align center");
-        parentContainer.add(middleContainer, "dock north, align center");
-        parentContainer.add(bottomContainer, "dock north, align center");
+        parentContainer.add(background, "dock south");
+       // parentContainer.add(topContainer, "dock north, align center");
+       // parentContainer.add(middleContainer, "dock north, align center");
+       // parentContainer.add(bottomContainer, "dock north, align center");
         add(parentContainer);
 		
         

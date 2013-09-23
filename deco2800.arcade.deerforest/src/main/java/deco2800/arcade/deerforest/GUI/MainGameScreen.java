@@ -171,9 +171,11 @@ public class MainGameScreen implements Screen {
 	    game.font.draw(game.batch, "Press RIGHT_ALT for debug info", 0.80f*getWidth(), 0.25f*getHeight());
 	    game.font.draw(game.batch, "Press LEFT_ALT for next turn", 0.80f*getWidth(), 0.3f*getHeight());
         game.font.draw(game.batch, "Press LEFT_SHIFT for zoom", 0.80f*getWidth(), 0.35f*getHeight());
-        game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.4f*getHeight());
-	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.45f*getHeight());
-	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.5f*getHeight());
+        game.font.draw(game.batch, "Press M for mute", 0.80f*getWidth(), 0.4f*getHeight());
+        game.font.draw(game.batch, "Press N for new game", 0.80f*getWidth(), 0.45f*getHeight());
+        game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.5f*getHeight());
+	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.55f*getHeight());
+	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.6f*getHeight());
 
         // draw health bars / print LP
         drawHealthBars();

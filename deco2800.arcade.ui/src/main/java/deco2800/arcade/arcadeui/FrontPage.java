@@ -17,8 +17,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 
 public class FrontPage implements Screen {
 	
@@ -30,6 +40,7 @@ public class FrontPage implements Screen {
     private float funds;
     private int tokens;
     
+    private boolean bclicked;
     Texture bg;
     Sprite bgSprite;
     SpriteBatch batch;
@@ -51,25 +62,13 @@ public class FrontPage implements Screen {
         bgSprite = new Sprite(bg);
         batch = new SpriteBatch();
         
-        
-/*        //adding panel for top and bottom bar
-        final Table topBox = new Table();
-        final Table bottomBox = new Table();
-        
-        //set panel sizes and positions
-        topBox.setSize(1280, 70);
-        topBox.setPosition(0, 1280);
-        
-        bottomBox.setSize(1280, 70);
-        bottomBox.setPosition(0, 0);*/
-        
         //Text Buttons
         final TextButton storeButton = new TextButton("Store", skin);
+        //skin.add("Store", new Texture("homescreen_bg.png"));
         final TextButton chatButton = new TextButton("Chat", skin);
         final TextButton libraryButton = new TextButton("Library", skin);
         final TextButton recentButton = new TextButton("Recently Played", skin);
         
-       
         //make button sizes and positioning
         storeButton.setSize(190, 190);
         storeButton.setPosition(190, 300);
@@ -80,14 +79,42 @@ public class FrontPage implements Screen {
         recentButton.setSize(190, 190);
         recentButton.setPosition(790, 300);
         
+        
         //adding to stage
         stage.addActor(storeButton);
         stage.addActor(libraryButton);
         stage.addActor(recentButton);
-     /*   stage.addActor(topBox);
-        stage.addActor(bottomBox);*/
         
-        //something to be added here
+        
+        storeButton.addListener((new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	ArcadeSystem.login("store");
+            	bclicked = true;
+            	System.out.println("store clicked");
+            }
+        })); 
+        
+    libraryButton.addListener((new ChangeListener() {
+        public void changed (ChangeEvent event, Actor actor) {
+        	ArcadeSystem.login("library");
+        	bclicked = true;
+        	System.out.println("library clicked");
+        }
+    })); 
+    
+
+recentButton.addListener((new ChangeListener() {
+    public void changed (ChangeEvent event, Actor actor) {
+    	ArcadeSystem.login("recent");
+    	bclicked = true;
+    	System.out.println("recent clicked");
+    }
+})); }
+
+        
+        
+            	
+        
         /*Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -184,7 +211,7 @@ public class FrontPage implements Screen {
         
         
         topBox.add(fundLabel).width(100);
-        topBox.add(tokenLabel).width(100)*/;
+        topBox.add(tokenLabel).width(100)*/
         
         /*searchButton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
@@ -234,7 +261,6 @@ public class FrontPage implements Screen {
                 
             }
         });*/
-	}
     
     
     
@@ -267,6 +293,16 @@ public class FrontPage implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
         Table.drawDebug(stage);  // Shows table debug lines
+        
+        
+        
+		if (bclicked == true) {
+        	System.out.println("going to arcadeui");
+	    	ArcadeSystem.goToGame("arcadeui");
+	    }
+    	
+        
+        
 	}
 	
 	@Override

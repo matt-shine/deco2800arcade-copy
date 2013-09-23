@@ -9,6 +9,7 @@ import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
+import deco2800.server.database.HashStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
@@ -43,6 +44,9 @@ public class ArcadeServer {
 	// Package manager
 	@SuppressWarnings("unused")
 	private PackageServer packServ;
+	
+	// Password Storage
+	private static HashStorage hashStorage;
 	
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
@@ -169,6 +173,13 @@ public class ArcadeServer {
 			e.printStackTrace();
 		}
 		
+		hashStorage = new HashStorage();
+		try {
+			getHashStorage().initialise();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+		
 		Protocol.register(server.getKryo());
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());
@@ -178,5 +189,9 @@ public class ArcadeServer {
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
 		
+	}
+
+	public static HashStorage getHashStorage() {
+		return hashStorage;
 	}
 }

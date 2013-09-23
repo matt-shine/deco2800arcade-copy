@@ -7,15 +7,17 @@ import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
+import deco2800.server.ArcadeServer;
+import deco2800.server.database.DatabaseException;
 
 public class ConnectionListener extends Listener {
-	//list of all connected users
+	// list of all connected users
 	private Set<String> connectedUsers;
-	
-	public ConnectionListener(Set<String> connectedUsers){
+
+	public ConnectionListener(Set<String> connectedUsers) {
 		this.connectedUsers = connectedUsers;
 	}
-	
+
 	@Override
 	/**
 	 * takes Connection object called connection and an Object called object
@@ -26,14 +28,21 @@ public class ConnectionListener extends Listener {
 	 */
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
-		
+
 		if (object instanceof ConnectionRequest) {
 			ConnectionRequest request = (ConnectionRequest) object;
-			connectedUsers.add(request.username);
-
-			connection.sendTCP(ConnectionResponse.OK);
+			try {
+				if (ArcadeServer.getHashStorage().checkPassword(
+						request.username, request.password)) {
+					connectedUsers.add(request.username);
+					connection.sendTCP(ConnectionResponse.OK);
+				} else {
+					connection.sendTCP(ConnectionResponse.REFUSED);
+				}
+			} catch (DatabaseException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	
 }

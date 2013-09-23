@@ -2,6 +2,8 @@ package deco2800.arcade.client;
 
 import java.util.Set;
 
+import deco2800.arcade.model.Player;
+
 //TODO commenting?
 public class ArcadeSystem {
 	
@@ -31,8 +33,8 @@ public class ArcadeSystem {
 		return arcade.findPlayableIds();
 	}
 	
-	public static void login(String username) {
-		arcade.connectAsUser(username);
+	public static void login(String username, String password) {
+		arcade.connectAsUser(username, password);
 	}
 	
 	public static boolean isLoggedIn() {
@@ -45,5 +47,9 @@ public class ArcadeSystem {
 
 	public static GameClient getCurrentGame() {
 		return arcade.getCurrentGame();
+	}
+
+	public static void setPlayer(Object object) {
+		arcade.setPlayer((Player)object);
 	}
 }

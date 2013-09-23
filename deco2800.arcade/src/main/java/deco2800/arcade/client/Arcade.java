@@ -157,7 +157,7 @@ public class Arcade extends JFrame {
 			// inputs.
             System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
-			communicationNetwork = new CommunicationNetwork(player, this.client);
+			communicationNetwork = new CommunicationNetwork(getPlayer(), this.client);
 			addListeners();
 		} catch (NetworkException e) {
 			throw new ArcadeException("Unable to connect to Arcade Server ("
@@ -172,9 +172,10 @@ public class Arcade extends JFrame {
 		this.client.addListener(new CommunicationListener(communicationNetwork));
 	}
 
-	public void connectAsUser(String username) {
+	public void connectAsUser(String username, String password) {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
+		connectionRequest.password = password;
 		
 		Protocol.registerEncrypted(connectionRequest);
 		
@@ -190,10 +191,9 @@ public class Arcade extends JFrame {
 
 		this.client.sendNetworkObject(creditBalanceRequest);
 
-		this.player = new Player(0, username,
-				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
-		this.player.setUsername(username);
-
+		//setPlayer(new Player(0, username, "THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)"));
+		//this.getPlayer().setUsername(username);
+		
 		// this.communicationNetwork.createNewChat(username);
 	}
 
@@ -206,7 +206,7 @@ public class Arcade extends JFrame {
 	public void requestGameSession(GameClient gameClient) {
 		NewGameRequest newGameRequest = new NewGameRequest();
 		newGameRequest.gameId = gameClient.getGame().id;
-		newGameRequest.username = player.getUsername();
+		newGameRequest.username = getPlayer().getUsername();
 		newGameRequest.requestType = GameRequestType.NEW;
 		this.client.sendNetworkObject(newGameRequest);
 	}
@@ -241,7 +241,7 @@ public class Arcade extends JFrame {
 	 * returns true if the player exists
 	 */
 	public boolean hasPlayer() {
-		return (this.player != null);
+		return (getPlayer() != null);
 	}
 
 	/**
@@ -347,7 +347,7 @@ public class Arcade extends JFrame {
 			if (gameClass != null) {
 				Constructor<? extends GameClient> constructor = gameClass
 						.getConstructor(Player.class, NetworkClient.class);
-				GameClient game = constructor.newInstance(player, client);
+				GameClient game = constructor.newInstance(getPlayer(), client);
 
 				// add the overlay to the game
 				if (!gameClass.isAnnotationPresent(InternalGame.class)) {
@@ -383,6 +383,14 @@ public class Arcade extends JFrame {
 	}
 	public GameClient getCurrentGame() {
 		return selectedGame;
+	}
+
+	public Player getPlayer() {
+		return this.player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 }

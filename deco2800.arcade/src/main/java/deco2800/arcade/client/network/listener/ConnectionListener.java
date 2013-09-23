@@ -2,6 +2,9 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 
 public class ConnectionListener extends NetworkListener {
@@ -27,10 +30,10 @@ public class ConnectionListener extends NetworkListener {
 		
 		if (object instanceof ConnectionResponse){
 			
-			@SuppressWarnings("unused")
 			ConnectionResponse connectionResponse = (ConnectionResponse)object;
-			
-			//TODO something
+			if (connectionResponse.OK != ConnectionResponse.OK) {
+				ArcadeSystem.setPlayer(null);
+			}
 		}
 	}
 

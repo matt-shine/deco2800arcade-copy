@@ -71,13 +71,15 @@ public class LoginScreen implements Screen {
                 if (usernameText.getText().equals("")) {
                     // no username entered, throw error
                     errorLabel.setText("No Username Supplied");
-                }
-                else if (usernameText.getText().toLowerCase().equals("store")) {
+                } else if (passwordText.getText().equals("")) {
+                	// no password entered, throw error
+                    errorLabel.setText("No Password Supplied");
+                } else if (usernameText.getText().toLowerCase().equals("store")) {
                     arcadeUI.requestScreen("store");
                 }
                 else {
                     // username supplied, try to login
-                    ArcadeSystem.login(usernameText.getText());
+                    ArcadeSystem.login(usernameText.getText(), passwordText.getText());
                 }
             }
         });
@@ -105,7 +107,7 @@ public class LoginScreen implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-	    if (ArcadeSystem.isLoggedIn()) {
+	    if (!ArcadeSystem.isLoggedIn()) {
 	    	ArcadeSystem.goToGame("arcadeui");
 	    }
 	}

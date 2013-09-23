@@ -1,0 +1,11 @@
+Contents: (down in groups of 3 to ghost doors, then 4 inner double wall corners on bottom, then in 4th column, 4 join bit goes out, the 2 vertical join bits, then the 4 inner single wall corners)
+8 double wall squares with energiser inside
+8 single wall squares with pellet inside
+8 ghost pen squares with empty square inside
+3 ghost door squares
+4 inner double wall corners
+2 squares for the join to the top section that goes down
+4 squares for the join to the side sections that go out
+4 inner single wall corners
+
+If you don't understand my layout, just ask and I'll explain (or I could write the first map file)

@@ -13,21 +13,21 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
-	
-	private class LoginScreenStage extends Stage {}
-	
-	private Skin skin;
+
+    private class LoginScreenStage extends Stage {}
+
+    private Skin skin;
     private LoginScreenStage stage;
     private ArcadeUI arcadeUI;
 
-	public LoginScreen(ArcadeUI ui) {
+    public LoginScreen(ArcadeUI ui) {
         arcadeUI = ui;
 
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new LoginScreenStage();
-        
+
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
@@ -69,7 +69,7 @@ public class LoginScreen implements Screen {
         table.add(registerButton).width(190).height(50).pad(5);
         table.row();
         table.add(forgotLogButton).width(400).height(35).pad(5).colspan(2);
-        
+
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 if (usernameText.getText().equals("")) {
@@ -85,25 +85,25 @@ public class LoginScreen implements Screen {
                 }
             }
         });
-        
+
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 arcadeUI.setScreen(arcadeUI.register);
             }
         });
-        
+
         forgotLogButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
             }
         });
-	}
+    }
 
-	@Override
-	public void render(float arg0) {
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    @Override
+    public void render(float arg0) {
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-	}
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -114,18 +114,18 @@ public class LoginScreen implements Screen {
         ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
-	@Override
-	public void hide() {
+    @Override
+    public void hide() {
         ArcadeInputMux.getInstance().removeProcessor(stage);
-	}
+    }
 
-	@Override
-	public void pause() {
-	}
+    @Override
+    public void pause() {
+    }
 
-	@Override
-	public void resume() {
-	}
+    @Override
+    public void resume() {
+    }
 
     @Override
     public void dispose() {

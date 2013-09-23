@@ -98,7 +98,7 @@ public class HighscoreDatabase {
 	 * 
 	 * Displays an amount of top players for a specified game
 	 * 
-	 * @param Game_ID
+	 * @param Game_ID - game id to query against
 	 * @param top - number of top players to display
 	 * @throws DatabaseException 
 	 */
@@ -147,10 +147,10 @@ public class HighscoreDatabase {
 	}
 	
 	/**
-	 * 
-	 * @param User_ID
-	 * @param Game_ID
-	 * @param type
+	 * Displays a string representation of the users score for the specified game and type of score
+	 * @param User_ID - users id to query against
+	 * @param Game_ID - game id to query against
+	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
 	public String getUserHighScore(String Username, String Game_ID, String type) throws DatabaseException{
@@ -198,10 +198,10 @@ public class HighscoreDatabase {
 	}
 	
 	/**
-	 * 
-	 * @param User_ID
+	 * Displays the users ranking in the highscores for the specified game and score type
+	 * @param User_ID - users id to query against
 	 * @param Game_ID
-	 * @param type
+	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
 	public String getUserRanking(String Username, String Game_ID, String type) throws DatabaseException{

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
@@ -17,6 +18,8 @@ import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 public class Player extends Entity {
 	private static final int JUMP_VELOCITY = 8;
 	private float jumpVelocity;
+	
+	private Vector2 velocity = new Vector2(1, 0);
 	
 	private TextureRegion img = new TextureRegion(new Texture("textures/playerAnim/GensijinRun kf.png"));
 	
@@ -112,7 +115,7 @@ public class Player extends Entity {
 	 * @return float value of the JumpVelocity
 	 */
 	public float getJumpVelocity() {
-		return jumpVelocity;
+		return this.velocity.y;
 	}
 	
 	public void jump() {
@@ -121,7 +124,7 @@ public class Player extends Entity {
 	}
 
 	public void setJumpVelocity(float jumpVelocity) {
-		this.jumpVelocity = jumpVelocity;
+		this.velocity.y = jumpVelocity;
 	}
 	
 	public State getState() {
@@ -131,13 +134,25 @@ public class Player extends Entity {
 	@Override
 	public void update(float delta) {
 		
-		if (collider.top) {
+		if (collider.top && velocity.y > 0) {
 			setJumpVelocity(0);
 		}
 		
+		if (collider.bottom && velocity.y < 0) {
+			setJumpVelocity(0);
+		}
+		
+		if (collider.right) {
+			velocity.x = 0;
+		} else if (velocity.x < Config.gameSpeed) {
+			velocity.x++;
+		}
+		
+		//HERE TODO
+		
 		//Everything depends on everything else here, may have to rearrange, or even double up on checks
 		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
-		setX(getX() + delta * 256);
+		setX(getX() + delta * velocity.x);
 		
 		setJumpVelocity(getJumpVelocity() - delta * 9.81f);
 		setY(getY() + getJumpVelocity());

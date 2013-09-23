@@ -26,7 +26,8 @@ public class OverlayWindow extends Group {
     public OverlayWindow(Overlay overlay) {
 
         this.overlay = overlay;
-        texture = new NinePatch(new Texture(Gdx.files.internal("popupbg.png")), 30, 30, 30, 30);
+        //texture = new NinePatch(new Texture(Gdx.files.internal("popupbg.png")), 30, 30, 30, 30);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen_plus.png")), 30, 30, 30, 30);
         contentStage.addActor(contentGroup);
         ArcadeInputMux.getInstance().addProcessor(contentStage);
     }

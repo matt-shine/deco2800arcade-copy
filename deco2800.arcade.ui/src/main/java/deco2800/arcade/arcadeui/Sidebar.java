@@ -35,7 +35,8 @@ public class Sidebar extends Group {
 
         this.overlay = overlay;
         this.window = window;
-        texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 10, 20, 10, 10);
+        //texture = new NinePatch(new Texture(Gdx.files.internal("sidebarbg.png")), 10, 20, 10, 10);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconBlue.png")), 10, 20, 10, 10);
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
 
         this.setBounds(0, 0, 1280, 720);

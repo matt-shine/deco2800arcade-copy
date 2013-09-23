@@ -1,6 +1,8 @@
 package deco2800.arcade.burningskies;
 
+import java.io.IOException;
 import java.util.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -19,7 +21,27 @@ public class Configuration {
 	 * Writes to the configuration file. Specifically, it writes masterVolume,
 	 * effectsVolume, backgroundVolume and difficulty to the configuration file.
 	 */
-	public void writeConfig() {
+	public static void writeConfig() {
+		
+		FileHandle configFile = Gdx.files.external("BurningSkies/config.cfg");
+		
+		String lineOne = "masterVolume:" + getMasterVolume() + System.getProperty("line.separator");
+		String lineTwo = "effectsVolume:" + getEffectsVolume() + System.getProperty("line.separator");
+		String lineThree = "backgroundVolume:" + getBackgroundVolume() + System.getProperty("line.separator");
+		String lineFour = "difficulty:" + getDifficulty() + System.getProperty("line.separator");
+		
+		if (!configFile.exists()) {
+			try {
+				configFile.file().createNewFile();
+			} catch (IOException e) {
+				/* Ignore exception. Since configFile does not currently exist, 
+				 	it throws an exception saying file does not exist, 
+					yet it continues to create said file anyway.
+				*/
+			}
+		}
+		
+		configFile.writeString(lineOne + lineTwo + lineThree + lineFour, false);
 	}
 	
 	/*
@@ -28,7 +50,7 @@ public class Configuration {
 	 * file.
 	 */
 	public static void readConfig() {
-		FileHandle configFile = Gdx.files.internal("config/config.cfg");
+		FileHandle configFile = Gdx.files.external("BurningSkies/config.cfg");
 		String text = configFile.readString();
 		
 		String[] options = text.split(System.getProperty("line.separator"));
@@ -97,11 +119,11 @@ public class Configuration {
 		return Configuration.masterVolume;
 	}
 	
-	public int getEffectsVolume() {
+	public static int getEffectsVolume() {
 		return Configuration.effectsVolume;
 	}
 	
-	public int getBackgroundVolume() {
+	public static int getBackgroundVolume() {
 		return Configuration.backgroundVolume;
 	}
 	

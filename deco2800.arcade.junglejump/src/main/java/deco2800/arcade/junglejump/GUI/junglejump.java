@@ -117,8 +117,15 @@ public class junglejump extends GameClient implements InputProcessor {
 	ShapeRenderer shapeRenderer;
 
 	/* ACHIEVEMENT VARIABLES */
-	ArrayList testArray;
-	BitmapFont achievementTitleFont, achievementFont;
+	ArrayList<Achievement> achievementArray;
+
+	// achievement fonts used for achievement screen
+	BitmapFont achievementTitleFont;
+	BitmapFont achievementIDFont;
+	BitmapFont achievementNameFont;
+	BitmapFont achievementDescriptionFont;
+	BitmapFont achievementThresholdFont;
+	Texture achievementIconTexture;
 
 	Music themeMusic;
 	Clip menuSound, jump, die, levelup, loselife, collect;
@@ -197,23 +204,26 @@ public class junglejump extends GameClient implements InputProcessor {
 		//platform = new Texture("junglejumpassets/platform.png");
 
 		/* ACHIEVEMENT STUFF */
-		testArray = new ArrayList();
-		testArray.add("achievement1");
-		testArray.add("achievement2");
-		testArray.add("achievement3");
-		testArray.add("achievement4");
-		testArray.add("achievement5");
+		AchievementClient achClient = this.getAchievementClient();
+		Game myGame = this.getGame();
 
-		/*AchievementClient achClient = this.getAchievementClient();
-		ArrayList<Achievement> achievements = achClient.achievementsForGame(this.getGame());
-		AchievementProgress playerProgress = achClient.progressForPlayer(this.getPlayer());
+		achievementArray = new ArrayList<Achievement>();
+		//achievementArray = achClient.achievementsForGame(myGame);
 
-		for(Achievement ach : achievements) {
-		    System.out.println(ach.name);
-		}*/
+		if (achievementArray.isEmpty()) {
+			System.out.println("list of achievements is empty. will be fixed with merge with master (NEW ACHIEVEMENT API NEEDED)");
+			achievementArray.add(new Achievement("-1", "Empty Achievement List", "issue is in the achievement api of our branch. we have to merge master in to our branch when we can", 0, "I.D10t"));
+		}
 
-		achievementTitleFont = new BitmapFont(false);
-		achievementFont = new BitmapFont(false);
+		//AchievementProgress playerProgress = achClient.progressForPlayer(this.getPlayer());
+		//System.out.println("progress: " + playerProgress);
+
+		achievementTitleFont       = new BitmapFont(false);
+		achievementIDFont          = new BitmapFont(false);
+		achievementNameFont        = new BitmapFont(false);
+		achievementDescriptionFont = new BitmapFont(false);
+		achievementThresholdFont   = new BitmapFont(false);
+		achievementIconTexture     = new Texture(("junglejumpassets/monkeySit.png"));
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
@@ -389,13 +399,24 @@ public class junglejump extends GameClient implements InputProcessor {
 		case GAMEOVER:
 			break;
 		case ACHIEVEMENTS:
-			Gdx.gl.glClearColor(0f, 1f, 0f, 1f);
+			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.setProjectionMatrix(camera.combined);
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			batch.begin();
 			// Draw achievement labels and graphics here
-			achievementTitleFont.draw(batch, "Achievements", 100, 460);
+			achievementTitleFont.draw(batch, "Achievements", 100, SCREENHEIGHT); /* TITLE */
+			// loop through achievements and draw relevant information
+			for (int i = 0; i <= achievementArray.size() - 1; i++) {
+				// draw achievement information set out
+				// draw achievement id in a small font (unimportant information for most users)
+				achievementIDFont.draw(batch, achievementArray.get(i).id, 10, 460 + ((i + 1)*-50));
+				achievementNameFont.draw(batch, achievementArray.get(i).name, 100, 460 + ((i + 1)*-50));
+				achievementIDFont.draw(batch, achievementArray.get(i).description, 100, 460 + ((i + 1)*-75));
+				achievementThresholdFont.draw(batch,Integer.toString(achievementArray.get(i).awardThreshold),SCREENWIDTH - 100,460 + ((i + 1)*-50));
+				// do something for the achievement icon
+				batch.draw(achievementIconTexture,40,460 + ((i + 1)*-75),32,32);
+			}
 			batch.end();
 			camera.update();
 			super.render();
@@ -509,6 +530,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		game = new Game();
 		game.id = "junglejump";
 		game.name = "Jungle Jump";
+		game.description = "Help Jay find Jay's Jane"; // Nathaniel for fun.
 	}
 
 	public Game getGame() {

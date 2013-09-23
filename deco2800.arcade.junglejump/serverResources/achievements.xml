@@ -7,7 +7,7 @@
   </achievement>
   <achievement id="junglejump.worldchampion">
     <name>World Champion</name>
-    <description>Get through all of the worlds and defeat Gym's Steels leader.</description>
+    <description>Get through all of the worlds and defeat Gyms Steels leader.</description>
     <icon>world_champion.png</icon>
     <components>
       <component id="junglejump.worldchampion.finishWorld1" awardThreshold="1" />
@@ -27,6 +27,6 @@
     <name>Zombiemonkey</name>
     <description>Die 200 times.</description>
     <awardThreshold>200</awardThreshold>
-    <icon>zombiemonkey.png</icon>
+    <icon>zombie_monkey.png</icon>
   </achievement>
 </achievements>

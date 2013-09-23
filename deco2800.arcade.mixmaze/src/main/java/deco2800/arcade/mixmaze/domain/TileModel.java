@@ -12,6 +12,7 @@ public class TileModel {
 	private int tileX;
 	private int tileY;
 	private WallModel[] walls;
+	private TileModel[] adjTiles;
 	private PlayerModel boxer;
 
 	/**
@@ -88,7 +89,15 @@ public class TileModel {
 	public String toString() {
 		return LOG + "row: " + tileY + "\tcolumn: " + tileX;
 	}
-
+	
+	private void addAdjacent(TileModel tile, int direction) {
+		TileModel cTile = adjTiles[direction];
+		if(cTile != null && cTile != tile) {
+			throw new IllegalStateException("tile adjacency cannot be changed once set.");
+		}
+		adjTiles[direction] = tile;
+	}
+	
 	/**
 	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
 	 * surrounding the this <code>TileModel</>
@@ -97,15 +106,19 @@ public class TileModel {
 	 * @param y		the row number on game board.origin starts at top left
 	 * @param adjWalls	the wall adjacent to this tile
 	 */
-	public TileModel(int x, int y, WallModel[] adjWalls) {
+	public TileModel(int x, int y, TileModel[] tiles) {
 		tileX = x;
 		tileY = y;
+		adjTiles = tiles;
 		walls = new WallModel[4];
 		for (int direction = 0; direction < 4; ++direction) {
-			if (adjWalls[direction] == null) {
-				walls[direction] = new WallModel();
+			TileModel tile = tiles[direction];
+			int polarDir = Direction.getPolarDirection(direction);
+			if(tile != null) {
+				walls[direction] = tile.getWall(polarDir);
+				tile.addAdjacent(tile, polarDir);
 			} else {
-				walls[direction] = adjWalls[direction];
+				walls[direction] = new WallModel();
 			}
 			walls[direction].addTile(this);
 		}

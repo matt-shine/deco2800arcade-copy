@@ -461,19 +461,15 @@ public class MixMazeModel {
 		items = new ItemModel[boardSize][boardSize];
 		for(int row = 0; row < boardSize; ++row) {
 			for(int column = 0; column < boardSize; ++column) {
-				WallModel[] adjWalls = new WallModel[4];
-				int[] xChecks = new int[] { (column - 1), column, (column + 1), column };
-				int[] yChecks = new int[] { row, (row - 1), row, (row + 1) };
+				TileModel[] adjTiles = new TileModel[4];
+				int[] tileX = new int[] { (column - 1), column, (column + 1), column };
+				int[] tileY = new int[] { row, (row - 1), row, (row + 1) };
 				for(int tileDir = 0; tileDir < 4; ++tileDir) {
-					if(checkCoordinates(xChecks[tileDir], yChecks[tileDir])) {
-						TileModel adjTile = getBoardTile(xChecks[tileDir], yChecks[tileDir]);
-						if(adjTile != null) {
-							adjWalls[tileDir] = adjTile.getWall(getPolarDirection(tileDir));
-						}
+					if(checkCoordinates(tileX[tileDir], tileY[tileDir])) {
+						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);
 					}
 				}
-				board[row][column] = new TileModel(column, row, adjWalls);
-				items[row][column] = null;
+				board[row][column] = new TileModel(column, row, adjTiles);
 			}
 		}
 

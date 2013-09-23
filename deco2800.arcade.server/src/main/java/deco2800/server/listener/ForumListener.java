@@ -35,9 +35,13 @@ public class ForumListener extends Listener {
 			ParentThreadRequest request = (ParentThreadRequest) object;
 			ParentThreadResponse response = new ParentThreadResponse();
 			try {
-				response.parentThread = ArcadeServer.instance().getForumStorage().getParentThread(request.pid);
-				if (response.parentThread == null) {
+				/* Retrieve parent thread */
+				ParentThread pThread = ArcadeServer.instance().getForumStorage().getParentThread(request.pid);
+
+				if (pThread == null) {
 					response.error = "No result";
+				} else {
+					response.pThread = pThread;
 				}
 			} catch (DatabaseException e) {
 				e.printStackTrace();

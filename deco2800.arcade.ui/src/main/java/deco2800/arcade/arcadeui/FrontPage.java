@@ -51,12 +51,25 @@ public class FrontPage implements Screen {
         bgSprite = new Sprite(bg);
         batch = new SpriteBatch();
         
+        
+/*        //adding panel for top and bottom bar
+        final Table topBox = new Table();
+        final Table bottomBox = new Table();
+        
+        //set panel sizes and positions
+        topBox.setSize(1280, 70);
+        topBox.setPosition(0, 1280);
+        
+        bottomBox.setSize(1280, 70);
+        bottomBox.setPosition(0, 0);*/
+        
         //Text Buttons
         final TextButton storeButton = new TextButton("Store", skin);
         final TextButton chatButton = new TextButton("Chat", skin);
         final TextButton libraryButton = new TextButton("Library", skin);
         final TextButton recentButton = new TextButton("Recently Played", skin);
         
+       
         //make button sizes and positioning
         storeButton.setSize(190, 190);
         storeButton.setPosition(190, 300);
@@ -71,6 +84,8 @@ public class FrontPage implements Screen {
         stage.addActor(storeButton);
         stage.addActor(libraryButton);
         stage.addActor(recentButton);
+     /*   stage.addActor(topBox);
+        stage.addActor(bottomBox);*/
         
         //something to be added here
         /*Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);

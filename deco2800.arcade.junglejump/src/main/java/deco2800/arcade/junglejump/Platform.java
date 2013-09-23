@@ -43,15 +43,15 @@ public class Platform {
 		switch(type) {
 		case '-': 
 			platformType = "branch";
-			this.height = 30;
+			this.height = 20;
 			break;
 		case '<':
 			platformType = "branch_end";
-			this.height = 30;
+			this.height = 20;
 			break;
 		case '>':
 			platformType = "branch_right";
-			this.height = 30;
+			this.height = 20;
 			break;
 		case '^': // Goal Vine
 			platformType = "goal";
@@ -65,8 +65,8 @@ public class Platform {
 			break;
 		case 't': // short tree
 			platformType = "treetop_short";
-			this.width = 80;
-			this.xPos -= 20;
+			this.width = 100;
+			this.xPos -= 30;
 			break;
 		case 'T': // Big tree
 			platformType = "treetop";

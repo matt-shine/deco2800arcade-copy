@@ -66,7 +66,8 @@ public class junglejump extends GameClient implements InputProcessor {
 		AT_MENU, INPROGRESS, GAMEOVER
 	}
 	
-	int monkeyLength = 40;
+	int monkeyLength = 35;
+	int monkeyHeight = 40;
 
 	private GameState gameState;
 	PerspectiveCamera cam;
@@ -287,9 +288,9 @@ public class junglejump extends GameClient implements InputProcessor {
 				if (isOnPlatform(monkeyX, monkeyY)) {
 					isFalling = false;
 				} else monkeyY += -9.8f / 2f;
-				if(monkeyY <= 5) {
-					killMonkey();
-				}
+			}
+			if(monkeyY <= 5) {
+				killMonkey();
 			}
 			if (jumping) {
 				velocity = (velocity - 9.8f / 75f);
@@ -309,7 +310,8 @@ public class junglejump extends GameClient implements InputProcessor {
 					}
 				} else {
 					System.out.println(true);
-					isFalling = false;
+					isFalling = true;	// Changed this to true as monkey would be falling
+										// Gets rid of floating in air glitch
 					jumping = false;
 				}
 			}
@@ -379,14 +381,30 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
-			if (x > (p.getX() - p.getWidth()/2 - monkeyLength/2) && x < (p.getX()+p.getWidth()/2 + // Check platform dimensions
-					monkeyLength/2) && y <= p.getY() + p.getHeight() && y >= p.getY()-p.getHeight()/2) {
+			// Check x and y are within the platform boundaries and monkey is on it
+			if (x > (p.getX() - monkeyLength) 
+					&& x < (p.getX()+p.getWidth() - 10) 
+					&& y <= p.getY() + p.getHeight() // Top of platform
+					&& y >= p.getY() - monkeyHeight) {				// Bottom of platform
 				
-				if(y >= p.getY() && y < p.getY()+p.getHeight()/2) { // If the monkey's colliding with the platform, place him on top
+				System.out.println("Width:" + p.getWidth() + " Height" + p.getHeight()
+						+ " X:" + p.getX() + " Y:" + p.getY());
+				
+				// If the monkey's colliding with the platform, place him on top
+				if(y > p.getY() + p.getHeight()/2
+						&& y <= p.getY() + p.getHeight()) {
+					isFalling = false;
 					monkeyY = p.getY() + p.getHeight();
-				} else if(y < p.getY()) { // monkey is hitting bottom of platform
-					monkeyY = p.getY() - p.getHeight();
 				}
+				
+				// If monkey hits bottom of platform tough titties
+				/*if(y >= p.getY() - monkeyHeight 
+						&& y < p.getY()) {
+					monkeyY = p.getY() - monkeyHeight;
+					p.setInactive();
+					return false;
+				}*/
+				
 				p.setActive();
 				return true;
 			} else {

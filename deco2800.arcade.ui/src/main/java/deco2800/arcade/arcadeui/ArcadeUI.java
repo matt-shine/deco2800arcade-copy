@@ -1,7 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -9,6 +9,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+
 
 /**
  * This class is the main interface for the arcade.
@@ -22,6 +23,8 @@ public class ArcadeUI extends GameClient {
 	private LoginScreen login = null;
 	private StoreScreen store = null;
 	private HomeScreen home = null;
+	private FrontPage main = null;
+	
     @SuppressWarnings("unused")
     private RegisterScreen register = null;
 	
@@ -36,7 +39,8 @@ public class ArcadeUI extends GameClient {
 			current = login;
 		} else if (player.getUsername() == "store") {
 			current = store;
-			// Guys, I have no freaking clue, soz. -Addison(GameHost)
+		} else if (player.getUsername() == "home") {
+			current = main;
 		} else {
 			current = home;
 		}
@@ -48,7 +52,8 @@ public class ArcadeUI extends GameClient {
         login = new LoginScreen();
         home = new HomeScreen();
         store = new StoreScreen();
-        register = new RegisterScreen();
+        main = new FrontPage();
+        //register = new RegisterScreen(); //<-- dafuq
 
         chooseScreen();
 		this.setScreen(current);

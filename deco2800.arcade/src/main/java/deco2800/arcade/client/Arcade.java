@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
+import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -20,11 +21,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
-import deco2800.arcade.client.network.listener.AchievementListener;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
@@ -35,6 +36,7 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 
 /**
  * The client application for running arcade games.
@@ -42,120 +44,122 @@ import deco2800.arcade.protocol.game.NewGameRequest;
  */
 public class Arcade extends JFrame {
 
-	/**
-	 * Only exists to stop warning
-	 */
-	private static final long serialVersionUID = 3609353264826109097L;
+    /**
+     * Only exists to stop warning
+     */
+    private static final long serialVersionUID = 3609353264826109097L;
 
-	private NetworkClient client;
+    private NetworkClient client;
 
-	private Player player;
+    private Player player;
 
-	private int width, height;
+    private int width, height;
 
-	private String serverIPAddress = "127.0.0.1";
+    private String serverIPAddress = "127.0.0.1";
 
-	private LwjglCanvas canvas;
+    private LwjglCanvas canvas;
 
-	private GameClient selectedGame = null;
+    private GameClient selectedGame = null;
 
-	private ProxyApplicationListener proxy;
+    private ProxyApplicationListener proxy;
 
-	private CommunicationNetwork communicationNetwork;
-	
-	// Width and height of the Arcade window
-	private static final int ARCADE_HEIGHT = 720;
-	private static final int ARCADE_WIDTH = 1280;
+    private CommunicationNetwork communicationNetwork;
 
-	/**
-	 * ENTRY POINT
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Arcade arcade = new Arcade(args);
+    // Width and height of the Arcade window
+    private static final int ARCADE_WIDTH = 1280;
+    private static final int ARCADE_HEIGHT = 720;
+    private static final int MIN_ARCADE_WIDTH = 640;
+    private static final int MIN_ARCADE_HEIGHT = 480;
 
-		ArcadeSystem.setArcadeInstance(arcade);
+    /**
+     * ENTRY POINT
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        Arcade arcade = new Arcade(args);
 
-		arcade.addCanvas();
+        ArcadeSystem.setArcadeInstance(arcade);
 
-		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	}
+        arcade.addCanvas();
 
-	/**
-	 * Sets the instance variables for the arcade
-	 * 
-	 * @param args
-	 */
-	public Arcade(String[] args) {
-		
-		this.width = ARCADE_WIDTH;
-		this.height = ARCADE_HEIGHT;
-		initWindow();
-	}
+        ArcadeSystem.goToGame(ArcadeSystem.UI);
+    }
 
-	/**
-	 * Configure the window
-	 */
-	private void initWindow() {
-		// create the main window
-		this.setSize(new Dimension(width, height));
-		this.setVisible(true);
-		Insets insets = this.getInsets();
-		this.setSize(new Dimension(width + insets.left + insets.right, height
-				+ insets.bottom + insets.top));
-		this.setMinimumSize(new Dimension(640, 480));
-		this.getContentPane().setBackground(Color.black);
+    /**
+     * Sets the instance variables for the arcade
+     *
+     * @param args
+     */
+    public Arcade(String[] args) {
 
-		// set shutdown behaviour
-		this.addWindowListener(new java.awt.event.WindowAdapter() {
-		    public void windowClosing(WindowEvent winEvt) {
+        this.width = ARCADE_WIDTH;
+        this.height = ARCADE_HEIGHT;
+        initWindow();
+    }
+
+    /**
+     * Configure the window
+     */
+    private void initWindow() {
+        // create the main window
+        this.setSize(new Dimension(width, height));
+        this.setVisible(true);
+        Insets insets = this.getInsets();
+        this.setSize(new Dimension(width + insets.left + insets.right, height
+                + insets.bottom + insets.top));
+        this.setMinimumSize(new Dimension(MIN_ARCADE_WIDTH, MIN_ARCADE_HEIGHT));
+        this.getContentPane().setBackground(Color.black);
+
+        // set shutdown behaviour
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(WindowEvent winEvt) {
                 arcadeExit();
-		    }
-		});
-	}
+            }
+        });
+    }
 
-	/**
-	 * Completely exits arcade. The status code is always set to 0.
-	 */
+    /**
+     * Completely exits arcade. The status code is always set to 0.
+     */
     public void arcadeExit() {
         removeCanvas();
 
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				System.exit(0);
-			}
-		});
-	}
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                System.exit(0);
+            }
+        });
+    }
 
-	/**
-	 * Attempts to connect to the server
-	 */
-	public void startConnection() {
-		// Try to connect to the server until successful
-		boolean connected = false;
-		while (!connected){
-			try {
-				connectToServer();
-				connected = true;
-			} catch (ArcadeException e) {
-				// TODO: error on connection failure
-				System.out.println("Connection failed... Trying again.");
-			}
-		}
+    /**
+     * Attempts to connect to the server
+     */
+    public void startConnection() {
+        // Try to connect to the server until successful
+        boolean connected = false;
+        while (!connected){
+            try {
+                connectToServer();
+                connected = true;
+            } catch (ArcadeException e) {
+                // TODO: error on connection failure
+                System.out.println("Connection failed... Trying again.");
+            }
+        }
 
-	}
+    }
 
-	/**
-	 * Attempt to initiate a connection with the server.
-	 * 
-	 * @throws ArcadeException
-	 *             if the connection failed.
-	 */
-	public void connectToServer() throws ArcadeException {
-		try {
-			// TODO allow server/port as optional runtime arguments xor user
-			// inputs.
+    /**
+     * Attempt to initiate a connection with the server.
+     *
+     * @throws ArcadeException
+     *             if the connection failed.
+     */
+    public void connectToServer() throws ArcadeException {
+        try {
+            // TODO allow server/port as optional runtime arguments xor user inputs.
+            System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
@@ -166,18 +170,18 @@ public class Arcade extends JFrame {
 	}
 
 	private void addListeners() {
-		this.client.addListener(new AchievementListener());
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
+        this.client.addListener(new PackmanListener());
 	}
 
 	public void connectAsUser(String username) {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
 		
-		Protocol.registerEncrypted(connectionRequest);
+		//Protocol.registerEncrypted(connectionRequest);
 		
 		this.client.sendNetworkObject(connectionRequest);
 
@@ -196,6 +200,12 @@ public class Arcade extends JFrame {
 		this.player.setUsername(username);
 
 		// this.communicationNetwork.createNewChat(username);
+
+        // TODO move this call to be internal to Packman class
+        GameUpdateCheckRequest gameUpdateCheckRequest = new
+                GameUpdateCheckRequest();
+
+        this.client.sendNetworkObject(gameUpdateCheckRequest);
 	}
 
 	/**
@@ -218,168 +228,170 @@ public class Arcade extends JFrame {
 	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
+        selectedGame.setNetworkClient(this.client);
+        startGame(selectedGame);
+    }
 
-		startGame(selectedGame);
-	}
+    /**
+     * Stop the current game
+     */
+    public void stopGame() {
 
-	/**
-	 * Stop the current game
-	 */
-	public void stopGame() {
+        if (selectedGame != null) {
+            selectedGame.gameOver();
+            proxy.dispose();
+        }
+        proxy.setTarget(new DummyApplicationListener());
+    }
 
-		if (selectedGame != null) {
-			selectedGame.gameOver();
-			proxy.dispose();
-		}
-		proxy.setTarget(new DummyApplicationListener());
-	}
+    /**
+     * returns true if the player exists
+     */
+    public boolean hasPlayer() {
+        return (this.player != null);
+    }
 
-	/**
-	 * returns true if the player exists
-	 */
-	public boolean hasPlayer() {
-		return (this.player != null);
-	}
+    /**
+     * Start a GameClient
+     */
+    public void addCanvas() {
+        this.proxy = new ProxyApplicationListener();
+        this.canvas = new LwjglCanvas(proxy, true);
+        this.canvas.getCanvas().setSize(width, height);
 
-	/**
-	 * Start a GameClient
-	 */
-	public void addCanvas() {
-		this.proxy = new ProxyApplicationListener();
-		this.canvas = new LwjglCanvas(proxy, true);
-		this.canvas.getCanvas().setSize(width, height);
+        proxy.setTarget(new DummyApplicationListener());
 
-		proxy.setTarget(new DummyApplicationListener());
+        Object mon = new Object();
+        synchronized (mon) {
+            proxy.setThreadMonitor(mon);
+            this.add(this.canvas.getCanvas());
 
-		Object mon = new Object();
-		synchronized (mon) {
-			proxy.setThreadMonitor(mon);
-			this.add(this.canvas.getCanvas());
+            try {
+                mon.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
-			try {
-				mon.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+    }
 
-	}
+    /**
+     * Removes the canvas from the frame. Should be called before shutdown.
+     * Never elsewhere, as there should only ever be one canvas.
+     */
+    public void removeCanvas() {
 
-	/**
-	 * Removes the canvas from the frame. Should be called before shutdown.
-	 * Never elsewhere, as there should only ever be one canvas.
-	 */
-	public void removeCanvas() {
+        this.remove(this.canvas.getCanvas());
 
-		this.remove(this.canvas.getCanvas());
+    }
 
-	}
+    /**
+     * Start a GameClient
+     */
+    public void startGame(final GameClient game) {
+        proxy.setTarget(game);
 
-	/**
-	 * Start a GameClient
-	 */
-	public void startGame(final GameClient game) {
-		proxy.setTarget(game);
+        game.addGameOverListener(new GameOverListener() {
 
-		game.addGameOverListener(new GameOverListener() {
+            @Override
+            public void notify(GameClient client) {
+            }
 
-			@Override
-			public void notify(GameClient client) {
-			}
+        });
+    }
 
-		});
-	}
 
-	private Map<String, Class<? extends GameClient>> gameMap = null;
 
-	private Map<String, Class<? extends GameClient>> getGameMap() {
+    private Map<String, Class<? extends GameClient>> gameMap = null;
 
-		if (gameMap != null) {
-			return gameMap;
-		}
+    private Map<String, Class<? extends GameClient>> getGameMap() {
 
-		gameMap = new HashMap<String, Class<? extends GameClient>>();
-		Reflections reflections = new Reflections("deco2800.arcade");
-		Set<Class<?>> possibleGames = reflections
-				.getTypesAnnotatedWith(ArcadeGame.class);
-		for (Class<?> g : possibleGames) {
-			if (GameClient.class.isAssignableFrom(g)) {
-				Class<? extends GameClient> game = g
-						.asSubclass(GameClient.class);
-				ArcadeGame aGame = g.getAnnotation(ArcadeGame.class);
-				String gameId = aGame.id();
-				gameMap.put(gameId, game);
-			}
-		}
-		return gameMap;
-	}
+        if (gameMap != null) {
+            return gameMap;
+        }
 
-	/**
-	 * Returns all games except ones with the @InternalGame annotation
-	 * 
-	 * @return
-	 */
-	public Set<String> findPlayableIds() {
-		Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
-				getGameMap());
+        gameMap = new HashMap<String, Class<? extends GameClient>>();
+        Reflections reflections = new Reflections("deco2800.arcade");
+        Set<Class<?>> possibleGames = reflections
+                .getTypesAnnotatedWith(ArcadeGame.class);
+        for (Class<?> g : possibleGames) {
+            if (GameClient.class.isAssignableFrom(g)) {
+                Class<? extends GameClient> game = g
+                        .asSubclass(GameClient.class);
+                ArcadeGame aGame = g.getAnnotation(ArcadeGame.class);
+                String gameId = aGame.id();
+                gameMap.put(gameId, game);
+            }
+        }
+        return gameMap;
+    }
 
-		Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games
-				.entrySet().iterator();
-		while (it.hasNext()) {
+    /**
+     * Returns all games except ones with the @InternalGame annotation
+     *
+     * @return
+     */
+    public Set<String> findPlayableIds() {
+        Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
+                getGameMap());
 
-			Map.Entry<String, Class<? extends GameClient>> pair = it.next();
+        Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games
+                .entrySet().iterator();
+        while (it.hasNext()) {
 
-			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
-				it.remove();
-			}
-		}
+            Map.Entry<String, Class<? extends GameClient>> pair = it.next();
 
-		return games.keySet();
-	}
+            if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+                it.remove();
+            }
+        }
 
-	public GameClient getInstanceOfGame(String id) {
+        return games.keySet();
+    }
 
-		Class<? extends GameClient> gameClass = getGameMap().get(id);
-		try {
-			if (gameClass != null) {
-				Constructor<? extends GameClient> constructor = gameClass
-						.getConstructor(Player.class, NetworkClient.class);
-				GameClient game = constructor.newInstance(player, client);
+    public GameClient getInstanceOfGame(String id) {
 
-				// add the overlay to the game
-				if (!gameClass.isAnnotationPresent(InternalGame.class)) {
+        Class<? extends GameClient> gameClass = getGameMap().get(id);
+        try {
+            if (gameClass != null) {
+                Constructor<? extends GameClient> constructor = gameClass
+                        .getConstructor(Player.class, NetworkClient.class);
+                GameClient game = constructor.newInstance(player, client);
 
-					GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
+                // add the overlay to the game
+                if (!gameClass.isAnnotationPresent(InternalGame.class)) {
 
-					// the overlay and the bridge are the same object, but
-					// GameClient doesn't know that and it mightn't be that way
-					// forever
-					game.addOverlay(overlay);
-					if (overlay instanceof UIOverlay) {
-						game.addOverlayBridge((UIOverlay) overlay);
-					}
+                    GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 
-				}
+                    // the overlay and the bridge are the same object, but
+                    // GameClient doesn't know that and it mightn't be that way
+                    // forever
+                    game.addOverlay(overlay);
+                    if (overlay instanceof UIOverlay) {
+                        game.addOverlayBridge((UIOverlay) overlay);
+                    }
 
-				return game;
-			}
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	public GameClient getCurrentGame() {
-		return selectedGame;
-	}
+                }
+
+                return game;
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public GameClient getCurrentGame() {
+        return selectedGame;
+    }
 
 }

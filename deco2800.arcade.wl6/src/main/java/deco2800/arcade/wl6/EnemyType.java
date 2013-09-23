@@ -1,0 +1,21 @@
+package deco2800.arcade.wl6;
+
+public enum EnemyType {
+	NOT_AN_ENEMY,
+	BROWN,
+	BLUE,
+	WHITE,
+	ZOMBIE,
+	DOG,
+	BOSS1,
+	BOSS2,
+	HITLER,
+	HITLER_IN_A_MECH_SUIT,
+	BOSS4,
+	BOSS5,
+	BOSS6,
+	PACMAN_1,
+	PACMAN_2,
+	PACMAN_3,
+	PACMAN_4,
+}

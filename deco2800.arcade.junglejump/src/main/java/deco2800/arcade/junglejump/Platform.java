@@ -35,34 +35,51 @@ public class Platform {
 	}
 	
 	public void setTexture(int type) {
+		
+		this.width = 40;
+		this.height = 40;
+		
 		String platformType = "";
 		switch(type) {
 		case '-': 
 			platformType = "branch";
+			this.height = 30;
 			break;
 		case '<':
 			platformType = "branch_end";
+			this.height = 30;
 			break;
 		case '>':
 			platformType = "branch_right";
+			this.height = 30;
 			break;
 		case '^': // Goal Vine
 			platformType = "goal";
+			this.width = 20;
+			this.height = 80;
 			break;
 		case 'j': // Vine
 			platformType = "vine_short";
+			this.width = 20;
+			this.height = 80;
 			break;
 		case 't': // short tree
 			platformType = "treetop_short";
+			this.width = 80;
+			this.xPos -= 20;
 			break;
 		case 'T': // Big tree
 			platformType = "treetop";
+			this.width = 80;
+			this.height = 80;
 			break;
 		case '|': // long trunk
 			platformType = "trunk_long";
+			this.height = 80;
 			break;
 		case 'i':
 			platformType = "trunk_short";
+			this.height = 40;
 			break;
 		default:
 			platformType = "branch_short";

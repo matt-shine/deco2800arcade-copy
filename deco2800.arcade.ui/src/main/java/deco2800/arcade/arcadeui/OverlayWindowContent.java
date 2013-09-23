@@ -4,6 +4,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 
 public class OverlayWindowContent extends Group {
 
-	public void resize(int height, int width) {}
-	
+    public void resize(int width, int height) {}
+
 }

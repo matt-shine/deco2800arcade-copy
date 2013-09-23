@@ -1,7 +1,5 @@
 package deco2800.arcade.arcadeui;
 
-import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -18,21 +16,23 @@ import deco2800.arcade.model.Player;
 @InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
-	
-	private LoginScreen login = null;
-	private StoreScreen store = null;
-	private HomeScreen home = null;
-    private RegisterScreen register = null;
-	
-	private Screen current = null;
 
-	public ArcadeUI(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-	}
+    LoginScreen login = null;
+    StoreScreen store = null;
+    HomeScreen home = null;
+    RegisterScreen register = null;
+
+    public ArcadeUI(Player player, NetworkClient networkClient) {
+        super(player, networkClient);
+    }
 
     @Override
     public void create() {
-        ArcadeSystem.openConnection(); // Move this to somewhere more appropriate.
+        // TODO Move this to somewhere more appropriate.
+        // FIXME This really needs to be fixed.
+        // The connection should be attempted to be opened after a user has pressed login on the loginScreen
+        // But I don't know the best way or place to do this - abbjohn
+        ArcadeSystem.openConnection();
 
         // Initialise the different screens.
         login = new LoginScreen(this);
@@ -41,55 +41,44 @@ public class ArcadeUI extends GameClient {
         register = new RegisterScreen(this);
 
         // Check to see if a user is logged in.
-        if (player == null) {
-            current = login; // No user, go to login screen
+        if (ArcadeSystem.isLoggedIn()) {
+            this.setScreen(home);
         } else {
-            current = home;  // There is a user, go to home screen
+            this.setScreen(login);
         }
-        this.setScreen(current);
 
         super.create();
     }
 
-    public void requestScreen(String screen) {
-        if (screen.equals("register")) {
-            current = register;
-        } else if (screen.equals("store")) {
-            current = store;
-        }
-        this.setScreen(current);
+    @Override
+    public void dispose() {
+        super.dispose();
     }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-		current.dispose();
-	}
-	
-	@Override
-	public void pause() {
-		super.pause();
-	}
-	
-	@Override
-	public void render() {
-		super.render();
-	}
+    @Override
+    public void pause() {
+        super.pause();
+    }
 
-	@Override
-	public void resume() {
-		super.resume();
-	}
+    @Override
+    public void render() {
+        super.render();
+    }
 
-	private static final Game game;
-	static {
-		game = new Game();
-		game.id = "arcadeui";
-		game.name = "Arcade UI";
-	}
+    @Override
+    public void resume() {
+        super.resume();
+    }
 
-	public Game getGame() {
-		return game;
-	}
-		
+    private static final Game game;
+    static {
+        game = new Game();
+        game.id = "arcadeui";
+        game.name = "Arcade UI";
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
 }

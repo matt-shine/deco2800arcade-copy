@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import deco2800.arcade.client.ArcadeInputMux;
 
 public class RegisterScreen implements Screen {
@@ -24,7 +25,7 @@ public class RegisterScreen implements Screen {
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new RegisterScreenStage();
-        
+
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
@@ -52,23 +53,19 @@ public class RegisterScreen implements Screen {
         table.row();
         table.add(passwordTextCheck).width(400).pad(5).colspan(2);
         table.row();
-        table.add(registerButton).width(200).pad(5);
-        table.add(cancelButton).width(200).pad(5);
+        table.add(registerButton).width(190).height(50).pad(5);
+        table.add(cancelButton).width(190).height(50).pad(5);
 
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
+
             }
         });
         cancelButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-
+                arcadeUI.setScreen(arcadeUI.login);
             }
         });
-    }
-
-    @Override
-    public void show() {
-    	ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
     @Override
@@ -79,14 +76,17 @@ public class RegisterScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
-        stage.dispose();
-        skin.dispose();
+    public void resize(int arg0, int arg1) {
+    }
+
+    @Override
+    public void show() {
+        ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
     @Override
     public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 
     @Override
@@ -98,6 +98,8 @@ public class RegisterScreen implements Screen {
     }
 
     @Override
-    public void resize(int arg0, int arg1) {
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
     }
 }

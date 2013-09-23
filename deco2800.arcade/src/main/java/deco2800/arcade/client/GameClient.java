@@ -41,7 +41,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	}
 
 	public abstract Game getGame();
-
+	
     public void achievementAwarded(Achievement ach) {
         System.out.println("Achievement `" + ach.name + "` awarded!");
     }

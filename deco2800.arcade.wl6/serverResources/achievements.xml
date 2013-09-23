@@ -1,0 +1,32 @@
+<achievements>
+  <achievement id="pong.winGame">
+    <name>Winner!</name>
+    <description>Win a game of Pong.</description>
+    <awardThreshold>1</awardThreshold>
+    <icon>winner.png</icon>
+  </achievement>
+
+  <achievement id="pong.master">
+    <name>Master of Boredom</name>
+    <description>Win 10 games of Pong.</description>
+    <awardThreshold>10</awardThreshold>
+    <icon>winner.png</icon>
+  </achievement>
+
+  <achievement id="pong.slider">
+    <name>Slider</name>
+    <description>Hit the ball while moving the paddle in both directions.</description>
+    <icon>winner.png</icon>
+    <components>
+      <component id="pong.slider.moveUp" awardThreshold="1" />
+      <component id="pong.slider.moveDown" awardThreshold="1" />
+    </components>
+  </achievement>
+
+  <achievement id="pong.win5Points">
+    <name>Win 5 points</name>
+    <description>Win 5 points, because 5 is such a magic number</description>
+    <icon>winner.png</icon>
+    <awardThreshold>5</awardThreshold>
+  </achievement>
+</achievements>

@@ -84,7 +84,7 @@ public class Pong extends GameClient {
         HighscoreClient hsd = new HighscoreClient("Dylan", "Connect4", networkClient);
         
         //Single score
-        //hsd.storeScore("Number", 1290193);
+        hsd.storeScore("Number", 1290193);
         
         //Multiple scores
         //hsd.addMultiScoreItem("Number", 123345);

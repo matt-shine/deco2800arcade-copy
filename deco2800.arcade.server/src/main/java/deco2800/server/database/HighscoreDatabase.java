@@ -255,7 +255,8 @@ public class HighscoreDatabase {
 		
 		try {
 			// Get a connection to the database
-			connection = Database.getConnection();		
+			connection = Database.getConnection();
+			statement = connection.createStatement();
 			resultSet = statement.executeQuery(selectTableSQL);
 			
 			while(resultSet.next())
@@ -287,10 +288,10 @@ public class HighscoreDatabase {
 		
 		
 		String insertTableSQL = "INSERT INTO HIGHSCORES_PLAYER"
-				+ "(Username, GameID, Date, Rating) VALUES"
+				+ "(Username, GameID, Date) VALUES"
 				+ "('" + Username + "','" + Game_ID +  "', to_date('"
-				+ getCurrentTimeStamp() + "', 'yyyy/mm/dd hh24:mi:ss'), 0)";
-		
+				+ getCurrentTimeStamp() + "', 'yyyy/mm/dd hh24:mi:ss'))";
+		System.out.println(insertTableSQL);
 		try {
 			// Get a connection to the database
 			connection = Database.getConnection();
@@ -325,15 +326,15 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 * @throws SQLException 
 	 */
-	public void updateScore(String Game_ID, String Username, String type, float score) throws DatabaseException, SQLException{
+	public void updateScore(String Game_ID, String Username, String[] type, int[] scores) throws DatabaseException, SQLException{
 		String data = null;
 		int hid = addHighscore(Game_ID, Username);
-
+		System.out.println("new HighScore ID = " + hid);
 		if (!initialised) {
 			initialise();
 		}
 
-		// Get a connection to the database
+		/* Get a connection to the database
 		Connection connection = Database.getConnection();
 
 		Statement statement = null;
@@ -352,7 +353,7 @@ public class HighscoreDatabase {
 			 
 					+ "(SELECT h.ID FROM HIGHSCORES h INNER JOIN SCORES s on h.HID = s.HID"
 					+ "WHERE h.GameId='" + Game_ID + "' AND h.Username='" + Username + "' AND s.Score_Type='" + type + "');");
-			*/
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -360,7 +361,7 @@ public class HighscoreDatabase {
 					"Unable to get player information from database", e);
 		} finally {
 			connectionCleanup(connection, statement, resultSet);
-		}
+		}*/
 	}
 	
 	

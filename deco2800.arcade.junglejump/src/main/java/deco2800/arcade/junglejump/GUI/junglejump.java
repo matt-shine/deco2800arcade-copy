@@ -2,6 +2,7 @@ package deco2800.arcade.junglejump.GUI;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -36,7 +38,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import deco2800.arcade.junglejump.Level;
 import deco2800.arcade.junglejump.LevelContainer;
 import deco2800.arcade.junglejump.Platform;
-import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -45,7 +46,9 @@ import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-
+import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 /**
  * Main class for Jungle Jump Game Instantiates game with scene, player and
  * assets
@@ -112,6 +115,10 @@ public class junglejump extends GameClient implements InputProcessor {
 	Texture gameBackground, platform;
 	ShapeRenderer shapeRenderer;
 
+	/* ACHIEVEMENT VARIABLES */
+	ArrayList testArray;
+	BitmapFont achievementTitleFont, achievementFont;
+	
 	Music themeMusic;
 	Clip menuSound, jump, die, levelup, loselife, collect;
 
@@ -187,6 +194,26 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
 		gameBackground = new Texture(("junglejumpassets/gameBackground2.png"));
 		//platform = new Texture("junglejumpassets/platform.png");
+		
+		/* ACHIEVEMENT STUFF */
+		testArray = new ArrayList();
+		testArray.add("achievement1");
+		testArray.add("achievement2");
+		testArray.add("achievement3");
+		testArray.add("achievement4");
+		testArray.add("achievement5");
+		
+		AchievementClient achClient = this.getAchievementClient();
+		ArrayList<Achievement> achievements = achClient.achievementsForGame(this.getGame());
+		AchievementProgress playerProgress = achClient.progressForPlayer(this.getPlayer());
+		
+		for(Achievement ach : achievements) {
+		    System.out.println(ach.name);
+		}
+		
+		achievementTitleFont = new BitmapFont(false);
+		achievementFont = new BitmapFont(false);
+		
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
@@ -366,7 +393,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			batch.begin();
 			// Draw achievement labels and graphics here
-			
+			achievementTitleFont.draw(batch, "Achievements", 100, 460);
 			batch.end();
 			camera.update();
 			super.render();
@@ -487,6 +514,10 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (butY == NEW_GAME) {
 				gameState = GameState.INPROGRESS;
 			}
+			if (butY == ACHIEVEMENTS) {
+				gameState = GameState.ACHIEVEMENTS;
+			}
+			
 		}
 		if (keycode == Keys.RIGHT) {
 			// Move right

@@ -9,9 +9,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
-import deco2800.arcade.forum.ParentThread;
-import deco2800.arcade.forum.ChildThread;
-import deco2800.arcade.forum.User;
+import deco2800.arcade.model.Player;
+import deco2800.arcade.model.User;
+import deco2800.arcade.model.forum.ChildThread;
+import deco2800.arcade.model.forum.ParentThread;
 
 /**
  * This models the server storage for a forum. It would be best to use
@@ -176,7 +177,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				result = new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
-						, new User(rs.getInt("created_by"), ""), rs.getTimestamp("timestamp"), rs.getString("category")
+						, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
 						, rs.getString("tags"));
 			} else {
 				result = null;

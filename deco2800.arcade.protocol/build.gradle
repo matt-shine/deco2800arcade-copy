@@ -1,6 +1,5 @@
 
 dependencies {
   compile project(":deco2800.arcade.model")
-  compile project(":deco2800.arcade.forum")
   compile group: "com.esotericsoftware.kryonet", name: "kryonet", version: "2.18", classifier: "all", transitive: true
 }

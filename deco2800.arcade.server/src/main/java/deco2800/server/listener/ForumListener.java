@@ -7,7 +7,7 @@ import deco2800.arcade.protocol.forum.*;
 import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ForumStorage;
-import deco2800.arcade.forum.*;
+import deco2800.arcade.model.forum.*;
 
 /**
  * ForumListener models listener for forum's server service

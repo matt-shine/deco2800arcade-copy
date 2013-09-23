@@ -1,6 +1,8 @@
-package deco2800.arcade.forum;
+package deco2800.arcade.model.forum;
 
 import java.sql.Timestamp;
+
+import deco2800.arcade.model.User;
 
 /**
  * Child thread models the child thread (sub-thread of the parent thread)
@@ -23,7 +25,7 @@ public class ChildThread {
 	 * 
 	 * @param id, a non negative integer of the child thread's id
 	 * @param message, string of thread's content
-	 * @param createdBy, User Instance
+	 * @param createdBy, Player Instance
 	 * @param timestamp, Timestamp Instance specified in SQL Timestamp
 	 * @param like, an incrementing non negative integer
 	 * @require params != null, except like
@@ -55,7 +57,7 @@ public class ChildThread {
 	
 	/**
 	 * Return the user of the created thread
-	 * @return User instance
+	 * @return Player instance
 	 */
 	public User getCreatedBy() {
 		return this.createdBy;

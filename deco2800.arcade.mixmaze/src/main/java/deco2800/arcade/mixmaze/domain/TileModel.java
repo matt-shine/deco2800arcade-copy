@@ -2,6 +2,9 @@ package deco2800.arcade.mixmaze.domain;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * TileModel represents a tile on game board.
  */
@@ -12,6 +15,7 @@ public class TileModel {
 	private int tileX;
 	private int tileY;
 	private WallModel[] walls;
+	private TileModel[] adjTiles;
 	private PlayerModel boxer;
 
 	/**
@@ -49,20 +53,56 @@ public class TileModel {
 		return walls[direction];
 	}
 
-	/**
-	 * Assign this tile's boxer to the specified <code>player</code>.
-	 * Boxer is only assign to this tile given that this tile is a complete box.
-	 * Otherwise, the boxer is set to <code>null</code>.
-	 *
-	 * @param player the player in this tile
-	 */
-	public void checkBox(PlayerModel player) {
+	public void buildBox(PlayerModel player) {
 		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
 		boxer = isBox() ? player : null;
 	}
-
+	
+	public List<TileModel> findPath(List<TileModel> path)
+	{
+		for(int direction = 0; direction < 4; ++direction) {
+			WallModel wall = walls[direction];
+			if(wall.isBuilt()) {
+				if(Direction.isXDirection(direction)) {
+					TileModel northTile = adjTiles[Direction.NORTH];
+					if(northTile.getWall(Direction.SOUTH).isBuilt() || northTile.getWall(direction).isBuilt()) {
+						
+					}
+					
+					TileModel adjTile = adjTiles[direction];
+					if(adjTile.getWall(Direction.NORTH).isBuilt() || adjTile.getWall(Direction.SOUTH).isBuilt()) {
+						
+					}
+				} else {
+					
+				}
+				
+				switch(direction) {
+				case Direction.WEST:
+					break;
+				case Direction.NORTH: 
+					break;
+				case Direction.EAST: 
+					break;
+				case Direction.SOUTH: 
+					break;
+				}
+			}
+		}
+		return path;
+	}
+	
+	private boolean checkWalls(int wallDirection, int tileDirection) {
+		if(Direction.isXDirection(wallDirection)) {
+			
+		} else {
+			
+		}
+		return false;
+	}
+	
 	/**
 	 * Checks if this tile is a complete box.
 	 *
@@ -88,7 +128,22 @@ public class TileModel {
 	public String toString() {
 		return LOG + "row: " + tileY + "\tcolumn: " + tileX;
 	}
-
+	
+	private TileModel getAdjacent(int direction) {
+		if(!Direction.isDirection(direction)) {
+			throw Direction.NOT_A_DIRECTION;
+		}
+		return adjTiles[direction];
+	}
+	
+	private void addAdjacent(TileModel tile, int direction) {
+		TileModel cTile = adjTiles[direction];
+		if(cTile != null && cTile != tile) {
+			throw new IllegalStateException("tile adjacency cannot be changed once set.");
+		}
+		adjTiles[direction] = tile;
+	}
+	
 	/**
 	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
 	 * surrounding the this <code>TileModel</>
@@ -97,15 +152,19 @@ public class TileModel {
 	 * @param y		the row number on game board.origin starts at top left
 	 * @param adjWalls	the wall adjacent to this tile
 	 */
-	public TileModel(int x, int y, WallModel[] adjWalls) {
+	public TileModel(int x, int y, TileModel[] tiles) {
 		tileX = x;
 		tileY = y;
+		adjTiles = tiles;
 		walls = new WallModel[4];
 		for (int direction = 0; direction < 4; ++direction) {
-			if (adjWalls[direction] == null) {
-				walls[direction] = new WallModel();
+			TileModel tile = tiles[direction];
+			int polarDir = Direction.getPolarDirection(direction);
+			if(tile != null) {
+				walls[direction] = tile.getWall(polarDir);
+				tile.addAdjacent(tile, polarDir);
 			} else {
-				walls[direction] = adjWalls[direction];
+				walls[direction] = new WallModel();
 			}
 			walls[direction].addTile(this);
 		}

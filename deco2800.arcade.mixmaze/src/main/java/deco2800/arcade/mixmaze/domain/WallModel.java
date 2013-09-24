@@ -45,48 +45,30 @@ public class WallModel {
 		if (built) {
 			throw new IllegalStateException("The wall is already built.");
 		}
-
 		built = true;
 		builder = player;
-		checkTiles(player);
+		
+		// Executes recursive box building
+		for (TileModel tile : tiles) {
+			tile.buildBox(player);
+		}
 	}
 
 	public void destroy(PlayerModel player) {
 		if (!built) {
-			throw new IllegalStateException(
-					"The wall is not built.");
+			throw new IllegalStateException("The wall is not built.");
 		}
-
 		built = false;
 		builder = null;
-		checkTiles(player);
-	}
-
-	/**
-	 * Check if any of the tiles incident on this wall has its boxer
-	 * changed.
-	 *
-	 * @param player the player to check
-	 */
-	private void checkTiles(PlayerModel player) {
-		if (player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
-		}
-
-		for (TileModel tile : tiles) {
-			tile.checkBox(player);
-		}
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder("WallModel: ");
-
 		for (TileModel tile : tiles) {
 			str.append(tile);
 			str.append(", ");
 		}
-
 		return str.toString();
 	}
 

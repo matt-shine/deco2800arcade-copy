@@ -25,13 +25,14 @@ import deco2800.arcade.model.forum.ParentThread;
  */
 public class ForumStorage {
 	/**
-	 * TODO Create method to retrieve the DB data
-	 * TODO Coordinate methods with forum classes.
-	 * TODO Create test case for delete
+	 * TODO Add listener for getTaggedParentThreads
+	 * TODO Add listener for insertParentThread
+	 * TODO Modify getParentThreads functions
 	 */
 	/* Fields */
 	private boolean initialized = false;
 	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
+	private static final String TAG_SPLITTER = "#";
 	
 	/**
 	 * Return initialized flag
@@ -69,7 +70,7 @@ public class ForumStorage {
 			st.execute(this.getCategoryConstraint());
 			con.commit();
 			st.close();
-			initialized = true;
+			this.initialized = true;
 		} catch (SQLException e) {
 			try {
 				con.rollback();
@@ -86,20 +87,77 @@ public class ForumStorage {
 				throw new DatabaseException("Fail to close DB connectoin: " + e);
 			}
 		}
+		this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "General Admin", "Test#Parent thread");
+	}
+	
+	/**
+	 * Get tags (non duplication) attached onto parent threads in DB as string array.
+	 * Set limits to set the number of tags to be retrieved.
+	 * Notes; the order of tags is always same since the order of query is organized by pid.
+	 * 
+	 * @param	limit, non-negative int, the number of tags to be retrieved. If limits == 0, all tags.
+	 * @return	String array. If no tags, return empty string array (i.e. String[0]).
+	 * @throws DatabaseException	if SQLException
+	 */
+	public String[] getAllTags(int limit) throws DatabaseException {
+		String query = "SELECT tags FROM parent_thread";
+		ArrayList<String> result = new ArrayList<String>();
+		
+		if (limit < 0) {
+			return new String[0];
+		}
+		Connection con = Database.getConnection();
+		boolean isLimit = false;
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				String tags = rs.getString("tags");
+				if (tags != "" || tags != null) {
+					String[] array = tags.split(TAG_SPLITTER);
+					for (String tag : array) {
+						if (!result.contains(tag)) {
+							result.add(tag);
+							if (limit != 0 && result.size() == limit) {
+								isLimit = true;
+							}
+						}
+					}
+				}
+				if (isLimit == true) {
+					break;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException(e);
+			}
+		}
+		if (result.size() == 0) {
+			return new String[0];
+		} else {
+			return result.toArray(new String[0]);
+		}
 	}
 	
 	/**
 	 * Insert new parent thread
 	 * 
 	 * @param topic	String, topic
-	 * @param content	String, content
+	 * @param message	String, message
 	 * @param createdBy	int, user or player id who creates it
 	 * @param category	String, category which thread is in that is specified in this.category
 	 * @param tags	tags, tags that are attached to this thread
 	 * @return	int, pid of new parent thread, -1 if failed.
 	 * @throws DatabaseException
 	 */
-	public int insertParentThread(String topic, String content
+	public int insertParentThread(String topic, String message
 			, int createdBy, String category, String tags) throws DatabaseException {
 		int result = -1;
 		
@@ -110,7 +168,7 @@ public class ForumStorage {
 		/* Check parameters */
 		if (topic == "" || topic.length() > 30) {
 			return result;
-		} else if (content == "") {
+		} else if (message == "") {
 			return result;
 		} else if (createdBy < 0) {
 			return result;
@@ -127,7 +185,7 @@ public class ForumStorage {
 			/* Prepare */
 			PreparedStatement st = con.prepareStatement(insertParentThread);
 			st.setString(1, topic);
-			st.setString(2, category);
+			st.setString(2, message);
 			st.setInt(3, createdBy);
 			st.setTimestamp(4, this.getNow());
 			st.setString(5, category);
@@ -193,6 +251,50 @@ public class ForumStorage {
 		}
 		return result;
 		
+	}
+	
+	/**
+	 * Get parent threads which has given tag.
+	 * 
+	 * @param tag, String, tag. If empty, returns empty array.
+	 * @return	ParentThread[], array of parent threads which has the tag.
+	 * 			Return empty ParentThread[] if no results.
+	 * @throws DatabaseException	if SQLException.
+	 */
+	public ParentThread[] getTaggedParentThreads(String tag) throws DatabaseException {
+		String query = "SELECT * FROM parent_thread";
+		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
+		Connection con = Database.getConnection();
+		if (tag == "") {
+			return new ParentThread[0];
+		}
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				String tags = rs.getString("tags");
+				String[] tag_array = tags.split(TAG_SPLITTER);
+				for (String temp : tag_array) {
+					if (temp.equals(tag)) {
+						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
+								, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
+								, rs.getString("tags")));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException(e);
+			}
+		}
+		
+		return result.toArray(new ParentThread[0]);
 	}
 	
 	/**
@@ -330,6 +432,81 @@ public class ForumStorage {
 		return result2;
 	}
 	
+	/**
+	 * Update (modify) parent thread which has the given pid. 
+	 * 
+	 * @param pid	int, parent thread id which is subject to change.
+	 * @param newTopic	String, new topic. If empty, no change.
+	 * @param newMessage	String, new message. If empty, no change.
+	 * @param newCategory	String, new category. If empty, no change.
+	 * @param newTags	String, new tags. If empty, no change.
+	 * @throws DatabaseException	If SQLException or parameter error.
+	 */
+	public void updateParentThread(int pid, String newTopic, String newMessage, String newCategory, String newTags)
+			throws DatabaseException {
+		String query = "SELECT topic, message, category, tags FROM parent_thread WHERE pid = ?";
+		String update = "UPDATE parent_thread SET topic = ?, message = ?, category = ?, tags = ? WHERE pid = ? ";
+		/* Check parameters */
+		if (pid < 0) {
+			throw new DatabaseException("Parent thread id must be non-negative int");
+		}
+		if (newTopic == "" && newMessage == "" && newCategory == "" && newTags == "") {
+			throw new DatabaseException("Invalid parameter set.");
+		}
+		/* Retrieve data and update */
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, pid);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				PreparedStatement st2 = con.prepareStatement(update);
+				/* Set new value if not null */
+				if (newTopic != "") {
+					st2.setString(1, newTopic);
+				} else {
+					/* Otherwise override with the same value */
+					st2.setString(1, rs.getString("topic"));
+				}
+				if (newMessage != "") {
+					st2.setString(2, newMessage);
+				} else {
+					st2.setString(2, rs.getString("message"));
+				}
+				if (newCategory != "" && this.inCategoryList(newCategory)) {
+					st2.setString(3, newCategory);
+				} else {
+					st2.setString(3, rs.getString("category"));
+				}
+				if (newTags != "") {
+					st2.setString(4, newTags);
+				} else {
+					st2.setString(4, rs.getString("tags"));
+				}
+				st2.setInt(5, pid);
+				st2.executeUpdate();
+			} else {
+				throw new DatabaseException("Parent thread is not found");
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Failed to close connection");
+			}
+		}
+		
+	}
+	
+	/**
+	 * Delete parent thread of given pid
+	 * @param pid	integer, parent thread id to be deleted.
+	 * @throws DatabaseException	if SQLException.
+	 */
 	public void deleteParentThread(int pid) throws DatabaseException {
 		String deleteParentThread = "DELETE FROM parent_thread WHERE pid=?";
 		Connection con;
@@ -373,16 +550,27 @@ public class ForumStorage {
 	}
 	
 	private String getTagsString(String[] tags) {
-		String result = "";
+		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < tags.length; i++) {
-			result += tags[i];
-			result += ";";
+			result.append(tags[i]);
+			if (i != (tags.length - 1)) {
+				result.append("#");
+			}
 		}
-		return result;
+		return new String(result);
 	}
 	
 	private Timestamp getNow() {
 		Date d = new Date();
 		return new Timestamp(d.getTime());
+	}
+	
+	private boolean inCategoryList(String category) {
+		for (int i = 0; i < this.category.length; i++) {
+			if (category.equals(this.category[i])) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

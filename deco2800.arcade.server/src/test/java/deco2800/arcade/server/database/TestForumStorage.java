@@ -36,30 +36,46 @@ public class TestForumStorage {
 	
 	@Before
 	public void setUp() throws Exception {
-		forumStorage = new ForumStorage();
-		forumStorage.initialise();
-		forumStorage.insertParentThread("Test topic 1", "Test content this is.", 1, "General Admin", "tag1;tag2");
-		forumStorage.insertParentThread("Test topic 2", "Test content this is.", 1, "General Admin", "tag1;tag2");
-		forumStorage.insertParentThread("Test topic 3", "Test content this is.", 1, "General Admin", "tag1;tag2");
-		forumStorage.insertParentThread("Test topic 4", "Test content this is.", 1, "General Admin", "tag1;tag2");
+		System.out.println("TestForumStorage starts");
+		this.forumStorage = new ForumStorage();
+		this.forumStorage.initialise();
+		this.forumStorage.insertParentThread("Test topic 1", "Test content this is.", 1, "General Admin", "tag1#tag2");
+		this.forumStorage.insertParentThread("Test topic 2", "Test content this is.", 1, "General Admin", "tag3#tag4");
+		this.forumStorage.insertParentThread("Test topic 3", "Test content this is.", 1, "General Admin", "tag3#tag5");
+		this.forumStorage.insertParentThread("Test topic 4", "Test content this is.", 1, "General Admin", "tag6#tag7");
+		String tags = "";
+		for (String tag : this.forumStorage.getAllTags(0)) {
+			tags += tag;
+			tags += "#";
+		}
+		System.out.println("Tags: " + tags);
 	}
 	
 	@Test
 	public void selectTest() throws Exception {
-		assertEquals("Test topic 1", forumStorage.getParentThread(1).getTopic());
-		assertEquals("Test topic 2", forumStorage.getParentThread(2).getTopic());
+		assertEquals("Test parent thread", forumStorage.getParentThread(1).getTopic());
+		assertEquals("Test topic 1", forumStorage.getParentThread(2).getTopic());
+		assertEquals("Test topic 2", this.forumStorage.getParentThread(3).getTopic());
 	}
 	
 	@Test
-	public void selectAllTest() throws Exception {
-		//assertEquals("Test topic 1", forumStorage.getAllParentThread()[0][1]);
+	public void deleteTest() throws Exception {
+		this.forumStorage.deleteParentThread(5);
+		assertEquals(null, this.forumStorage.getParentThread(5));
+	}
+	
+	@Test 
+	public void updateTest() throws Exception {
+		this.forumStorage.updateParentThread(2, "This is new topic", "", "Game Bug", "");
+		assertEquals("This is new topic", this.forumStorage.getParentThread(2).getTopic());
+		assertEquals("Test content this is.", this.forumStorage.getParentThread(2).getMessage());
+		assertEquals("Game Bug", this.forumStorage.getParentThread(2).getCategory());
 	}
 	
 	@Test
-	public void selectRangeTest() throws Exception {
-		//assertEquals(4, forumStorage.getParentThreads(0, 0, 0).length);
-		//assertEquals(2, forumStorage.getParentThreads(0, 3, 2).length);
-		//assertEquals(3, forumStorage.getParentThreads(2, 4, 0).length);
-		//assertEquals(2, forumStorage.getParentThreads(1, 4, 2).length);
+	public void getTaggedParentThreadsTest() throws Exception {
+		ParentThread[] result = this.forumStorage.getTaggedParentThreads("tag3");
+		assertEquals(3, result[0].getId());
+		assertEquals(4, result[1].getId());
 	}
 }

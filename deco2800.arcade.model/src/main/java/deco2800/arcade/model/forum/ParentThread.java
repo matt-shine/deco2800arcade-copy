@@ -132,7 +132,7 @@ public class ParentThread {
 		String result = "";
 		for (String s: this.tags) {
 			result.concat(s);
-			result.concat("# ");
+			result.concat("#");
 		}
 		return result;
 	}

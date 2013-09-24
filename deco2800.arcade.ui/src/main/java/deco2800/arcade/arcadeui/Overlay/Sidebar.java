@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -29,9 +29,9 @@ public class Sidebar extends Group {
     private float vel = 0;
     private boolean isUIOpen = true;
     private boolean hasTabPressedLast = false;
-    private OverlayWindow window;
+    private Window window;
 
-    public Sidebar(Overlay overlay, OverlayWindow window) {
+    public Sidebar(Overlay overlay, Window window) {
 
         this.overlay = overlay;
         this.window = window;

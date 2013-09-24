@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 
-public class AchievementList extends OverlayWindowContent {
+public class AchievementList extends WindowContent {
 
     AchievementClient achClient;
     ArrayList<Achievement> achievements;

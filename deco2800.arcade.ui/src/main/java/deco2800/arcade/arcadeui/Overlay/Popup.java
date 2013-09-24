@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import java.util.LinkedList;
 
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import deco2800.arcade.client.UIOverlay.PopupMessage;
 
-public class OverlayPopup extends Actor {
+public class Popup extends Actor {
 
     private LinkedList<PopupMessage> msgs = new LinkedList<PopupMessage>();
 
@@ -40,7 +40,7 @@ public class OverlayPopup extends Actor {
     private BitmapFont font;
     private Overlay overlay;
 
-    public OverlayPopup(Overlay overlay) {
+    public Popup(Overlay overlay) {
         super();
 
         font = new BitmapFont(false);

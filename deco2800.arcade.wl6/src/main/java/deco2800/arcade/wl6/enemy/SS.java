@@ -7,5 +7,5 @@ package deco2800.arcade.wl6.enemy;
  * Time: 20:50
  * To change this template use File | Settings | File Templates.
  */
-public class Blue {
+public class SS {
 }

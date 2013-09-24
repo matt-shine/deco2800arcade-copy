@@ -7,5 +7,5 @@ package deco2800.arcade.wl6.enemy;
  * Time: 20:52
  * To change this template use File | Settings | File Templates.
  */
-public class Boss1 {
+public class Hans {
 }

@@ -2,20 +2,40 @@ package deco2800.arcade.wl6.enemy;
 
 public enum EnemyType {
 	NOT_AN_ENEMY,
-	BROWN,
-	BLUE,
-	WHITE,
-	ZOMBIE,
-	DOG,
-	BOSS1,
-	BOSS2,
+    // Normal Mobs
+	GUARD,
+    OFFICER,
+	SS,
+    DOG,
+	MUTANT,
+	FAKE_HITLER,
+    GHOSTS_1,
+    GHOSTS_2,
+    GHOSTS_3,
+    GHOSTS_4,
+    // Bosses
+	HANS,
+	SCHABBS,
 	HITLER,
-	HITLER_IN_A_MECH_SUIT,
-	BOSS4,
-	BOSS5,
-	BOSS6,
-	PACMAN_1,
-	PACMAN_2,
-	PACMAN_3,
-	PACMAN_4,
+	GIFTMACHER,
+	GRETEL,
+	FETTGESICHT,
+
 }
+
+/*
+Guard
+Officer
+SS
+Dog
+Mutant
+Fake Hitler
+Pacman Ghosts
+
+Hans Grosse
+Dr. Schabbs
+Adolf Hitler
+Otto Giftmacher
+Gretel Grosse
+General Fettgesicht
+*/

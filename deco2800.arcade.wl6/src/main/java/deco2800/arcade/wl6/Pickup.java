@@ -23,7 +23,7 @@ public class Pickup extends Doodad {
 	@Override
 	public void tick(GameModel game) {
 		
-		if (this.getPos().dst(game.getPlayer().getPos()) < 0.5) {
+		if (this.getPos().dst(game.getPlayer().getPos()) < 0.8) {
 			game.destroyDoodad(this);
 		}
 		

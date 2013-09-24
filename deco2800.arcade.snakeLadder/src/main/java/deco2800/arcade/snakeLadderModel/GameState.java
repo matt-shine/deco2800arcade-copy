@@ -8,4 +8,5 @@ public abstract class GameState {
 	public static final GameState GAMEOVER = null;
 
 	public abstract void handleInput(SnakeLadder context);
+	
 }

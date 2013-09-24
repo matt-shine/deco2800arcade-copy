@@ -81,7 +81,7 @@ public static final float WIDTH = 20f; //How big is the player (its a square)
 	public void moveUp() {
 		//if player reacher left/right edge, it moves up one row
 		velocity.x *= -1;
-		getBounds().y = getBounds().y + 60f;		
+		getBounds().y = getBounds().y + 60f;	
 	}
 	
 	/**
@@ -128,8 +128,8 @@ public static final float WIDTH = 20f; //How big is the player (its a square)
     	
 	}
     
-   public int getDnumber2(){
-	    int diceNumber2=6;
+   public int getDnumber2(int diceNumber2){
+	    
     	coordinate+=diceNumber2;
     	return coordinate;
     }

@@ -247,35 +247,42 @@ public class SnakeLadder extends GameClient {
 		gameState.handleInput(this);
 	}
 	
-	public void stopPoint() {
-		this.updateScore(gamePlayer);
-		gamePlayer.reset();
-		AIPlayer.reset();
-		// If we've reached the victory point then update the display
-		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
-			gameState = new GameOverState();
-		    //Update the game state to the server
-		    //networkClient.sendNetworkObject(createScoreUpdate());
-		} 
-		if (AIPlayer.getBounds().x<=(60-20f)&& AIPlayer.getBounds().y>=540){
-			gameState = new GameOverState();
-		}
-		else {
-			// No winner yet, get ready for another point
-			gameState = new ReadyState();
-			statusMessage = "Throw the dice again";
-		}
+//	public void stopPoint() {
+//		this.updateScore(gamePlayer);
+//		gamePlayer.reset();
+//		AIPlayer.reset();
+//		// If we've reached the victory point then update the display
+//		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
+//			gameState = new GameOverState();
+//		    //Update the game state to the server
+//		    //networkClient.sendNetworkObject(createScoreUpdate());
+//		} 
+//		if (AIPlayer.getBounds().x<=(60-20f)&& AIPlayer.getBounds().y>=540){
+//			gameState = new GameOverState();
+//		}
+//		else {
+//			// No winner yet, get ready for another point
+//			gameState = new ReadyState();
+//			statusMessage = "Throw the dice again";
+//		}
+//
+//	}
+	
+//	public void startPoint() {
+//		gamePlayer.initializeVelocity();
+//		getDice().rollDice();	
+//		AIPlayer.initializeVelocity();
+//		gameState = new InProgressState();
+//		statusMessage = null;
+//	}
 
+	int i=0;
+	public int taketurns() {
+		
+		i++;
+		return this.i;
 	}
 	
-	public void startPoint() {
-		gamePlayer.initializeVelocity();
-		getDice().rollDice();	
-		AIPlayer.initializeVelocity();
-		gameState = new InProgressState();
-		statusMessage = null;
-	}
-
 	@Override
 	public Game getGame() {
 		// TODO Auto-generated method stub
@@ -365,7 +372,7 @@ public class SnakeLadder extends GameClient {
 	/*
 	 * Updating score label
 	 */
-	private void updateScore(GamePlayer gp){
+	public void updateScore(GamePlayer gp){
 		//System.out.println(gp.newposition());
 		String rule = this.getMap().getTileList()[gp.newposition()].getRule();
 		if (isScore(rule))
@@ -387,5 +394,12 @@ public class SnakeLadder extends GameClient {
 	    // only got here if we didn't return false
 	    return true;
 	}
+
+	public int getturns() {
+		// TODO Auto-generated method stub
+		return this.i;
+	}
+
+	
 }
 

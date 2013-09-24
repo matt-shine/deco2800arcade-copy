@@ -105,19 +105,6 @@ public class GamePlayer {
     }
     
     public void initializeVelocity() {
-//    	int n=0;
-//    	
-//    	if(bounds.y==120*n)
-//    	{
-//		velocity.x = 60f;
-//		velocity.y=0;
-//		n++;
-//    	}
-//    	else
-//    	{
-//    		velocity.x=-60f;
-//    		velocity.y=0;
-//    	}
     	
     	if(getBounds().y==0 || getBounds().y==120 || getBounds().y==240 || getBounds().y==360 || getBounds().y==480){
 			velocity.x = 60;

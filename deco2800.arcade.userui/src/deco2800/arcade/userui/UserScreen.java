@@ -43,8 +43,7 @@ public class UserScreen extends JFrame implements ActionListener {
 	//Declare Buttons 
 	private JButton addfriendbutton;
 	private JButton editbutton;
-	private JButton myprofilelink;
-	private JButton homelink, storelink, librarylink, forumlink;
+	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
 	//Declare Labels 
 	private JLabel avatar;
@@ -56,18 +55,17 @@ public class UserScreen extends JFrame implements ActionListener {
 	private JLabel historybar;
 	private JLabel achievementbar;
 	private JLabel history1, history2, history3, history4, history5, 
-	history6, history7, history8;
+	history6;
 	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
-	achievement6, achievement7, achievement8;
+	achievement6;
 	
 	//Declare Text Areas
 	private JTextArea achievementarea;
-	private JTextArea aboutarea;
 	private JTextArea historyarea;
 	
 	//Declare Images 
-	private ImageIcon picavatar, picaboutbar, picfriendbar, picaddfriend, 
-	pichistorybar, picachievementbar, piclocked, picunlocked, piceditbutton,
+	private ImageIcon picavatar, picaddfriend, 
+	pichistorybar, piclocked, picunlocked, piceditbutton,
 	picfriendonline, picfriendoffline;
 	
 	//Declare Fonts
@@ -89,11 +87,8 @@ public class UserScreen extends JFrame implements ActionListener {
 		 * 
 		 */		
 		picavatar = new ImageIcon("assets/images/stark.png");
-		picaboutbar = new ImageIcon("assets/images/about_bar.png");
-		picfriendbar = new ImageIcon("assets/images/friendbar.png");
 		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		pichistorybar = new ImageIcon("assets/images/history_bar.png");
-		picachievementbar = new ImageIcon("assets/images/achievement_bar.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
@@ -144,12 +139,11 @@ public class UserScreen extends JFrame implements ActionListener {
 	 */
 	public void addsidepanel(){
 		
-	    sidepanel = new ImagePanel(new ImageIcon("assets/images/side.png").getImage());  
+	    sidepanel = new ImagePanel(new ImageIcon("assets/images/sidebackground.png").getImage());  
 	    sidepanel.setLayout(new MigLayout());
         sidepanel.add(playerpanel, "wrap, center");
         sidepanel.add(aboutpanel, "wrap, center, gap top 5px");
         sidepanel.add(friendpanel, "center");
-		sidepanel.setBackground(Color.darkGray);
 
 	}
 	
@@ -158,12 +152,10 @@ public class UserScreen extends JFrame implements ActionListener {
 	 */
 	public void addcontentpanel(){
 		
-	    //contentpanel = new ImagePanel(new ImageIcon("assets/images/content.png").getImage());
-        contentpanel = new JPanel(new MigLayout());
-		//contentpanel.setLayout(new MigLayout());
+	    contentpanel = new ImagePanel(new ImageIcon("assets/images/contentbackground.png").getImage());
+		contentpanel.setLayout(new MigLayout());
 	    contentpanel.add(historypanel, "wrap, height :320, width :810, gap top 20px");
         contentpanel.add(achievementpanel, "height :320, width :810");
-		contentpanel.setBackground(Color.DARK_GRAY);
 	}
 	
 	
@@ -292,7 +284,6 @@ public class UserScreen extends JFrame implements ActionListener {
 		/*aboutarea = new JTextArea();
 		aboutarea.setLineWrap(true);
 		aboutarea.setFont(blacknormal);
-		aboutarea.setLineWrap(true);
 		
 		//ScrollPane
 		JScrollPane aboutscroll = new JScrollPane(aboutarea);

@@ -11,7 +11,7 @@ import deco2800.arcade.protocol.forum.ForumTestResponse;
 
 /**
  * This models client connection to server. 
- * At the moment this is for testing connection to server.
+ * It connects to the ArcadeServer to communicate the forum data.
  * 
  * @author Junya
  * @see deco2800.arcade.client.network.NetworkClient
@@ -21,23 +21,43 @@ public class ClientConnection {
 	private Client client;
 	/* Timeout for connection waits */
 	private static final int TIMEOUT = 10000;
+	/* Default server information */
+	private static final String DEFAULT_SERVER_ADDRESS = "127.0.0.1";
+	private static final int DEFAULT_TPC_PORT = 54555;
+	private static final int DEFAULT_UDP_PORT = 54777;
 	
+	/**
+	 * Constructor: It creates the Kryonet Client instance to establish the connection with the server.
+	 * If parameters are {"", 0, 0}, it sets the default values for server connection.
+	 * 
+	 * @param serverAddress	String, IP address of server. Empty for default (localhost) value.
+	 * @param tcpPort	Non-negative integer, Port number for TCP
+	 * @param udpPort	Non-negative integer, Port number for UDP
+	 * @throws ForumException	if invalid parameters or fail to connect server.
+	 */
 	public ClientConnection(String serverAddress, int tcpPort, int udpPort) throws ForumException {
+		if (tcpPort < 0 || udpPort < 0) {
+			throw new ForumException("Invalid port numbers.");
+		}
+		if (serverAddress == "") {
+			serverAddress = DEFAULT_SERVER_ADDRESS;
+		}
+		if (tcpPort == 0) {
+			tcpPort = DEFAULT_TPC_PORT;
+		}
+		if (udpPort == 0) {
+			udpPort = DEFAULT_UDP_PORT;
+		}
 		this.client = new Client();
 		this.client.start();
 		try {
 			client.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
+			/* Register client listener */
 			Protocol.register(client.getKryo());
-			client.addListener(new Listener() {
-				public void received(Connection con, Object object) {
-					if (object instanceof ForumTestResponse) {
-						ForumTestResponse response = (ForumTestResponse) object;
-						System.out.println(response.result);
-					}
-				}
-			});
+			client.addListener(new ForumClientListener());
 			System.out.println("Client is connected");
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new ForumException("Unable to connect to the server" + e);
 		}
 	}

@@ -25,7 +25,7 @@ public class Enemy extends Mob {
     // speed while chasing
     public int chaseSpeed;
     // suffers from pain (do they have an animation that they do nothing in when they get hit, interrupts there current action)
-    public Boolean pain;
+    public boolean pain;
     // points awarded when killed
     public int points;
     // damage

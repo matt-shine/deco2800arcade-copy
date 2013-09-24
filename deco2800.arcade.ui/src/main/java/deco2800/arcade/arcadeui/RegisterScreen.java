@@ -16,7 +16,7 @@ public class RegisterScreen implements Screen {
 
     private Skin skin;
     private RegisterScreenStage stage;
-	private ArcadeUI arcadeUI;
+    private ArcadeUI arcadeUI;
 
     public RegisterScreen(ArcadeUI ui) {
         arcadeUI = ui;
@@ -25,7 +25,7 @@ public class RegisterScreen implements Screen {
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new RegisterScreenStage();
-        
+
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));

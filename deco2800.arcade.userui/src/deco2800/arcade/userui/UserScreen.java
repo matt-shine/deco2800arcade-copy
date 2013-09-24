@@ -43,17 +43,16 @@ public class UserScreen extends JFrame implements ActionListener {
 	//Declare Buttons 
 	private JButton addfriendbutton;
 	private JButton editbutton;
+	private JButton achievementbar;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
 	//Declare Labels 
 	private JLabel avatar;
+	private JLabel playername, playerlastonline, realname, program, description;
 	private JLabel addfriend;
-	private JLabel playername;
-	private JLabel playerlevel;
 	private JLabel aboutbar;
 	private JLabel friendbar;
 	private JLabel historybar;
-	private JLabel achievementbar;
 	private JLabel history1, history2, history3, history4, history5, 
 	history6;
 	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
@@ -66,7 +65,7 @@ public class UserScreen extends JFrame implements ActionListener {
 	//Declare Images 
 	private ImageIcon picavatar, picaddfriend, 
 	pichistorybar, piclocked, picunlocked, piceditbutton,
-	picfriendonline, picfriendoffline;
+	picfriendonline, picfriendoffline, piconline, picoffline;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -94,6 +93,8 @@ public class UserScreen extends JFrame implements ActionListener {
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
 		picfriendonline = new ImageIcon("assets/images/addfriendonline.png");
 		picfriendoffline = new ImageIcon("assets/images/addfriendoffline.png");
+		piconline = new ImageIcon("assets/images/online.png");
+		picoffline = new ImageIcon("assets/images/offline.png");
 				
 		/*
 		 *  Create all Panels 
@@ -192,15 +193,15 @@ public class UserScreen extends JFrame implements ActionListener {
         playername = new JLabel("Player");
         playername.setForeground(Color.white);
         playername.setFont(blackbold);
-        playerlevel = new JLabel("Last Login: 8/3/2013");
-        playerlevel.setFont(blacksmall);
-        playerlevel.setForeground(Color.white);
+        playerlastonline = new JLabel("Last Login: 8/3/2013");
+        playerlastonline.setFont(blacksmall);
+        playerlastonline.setForeground(Color.white);
         
 		//Add Elements to Panel
 		playerinfopanel = new JPanel(new MigLayout());
 		playerinfopanel.setOpaque(false);		   	
         playerinfopanel.add(playername,"wrap, align 50% 50%, gap top 30px");       
-        playerinfopanel.add(playerlevel,"wrap, align 50% 50%, gap top 5px"); 
+        playerinfopanel.add(playerlastonline,"wrap, align 50% 50%, gap top 5px"); 
         playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%, gap top 20px");
         playerinfopanel.add(editbutton,"align 50% 50%, gap top 5px");
         
@@ -291,15 +292,31 @@ public class UserScreen extends JFrame implements ActionListener {
 		aboutscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		*/
 		
+		realname = new JLabel("Name:");
+		realname.setFont(blacknormal);
+		realname.setForeground(Color.white);
+		program = new JLabel("Program:");
+		program.setFont(blacknormal);
+		program.setForeground(Color.white);
+		description = new JLabel("Description:");
+		description.setFont(blacknormal);
+		description.setForeground(Color.white);
+		
 		aboutbar = new JLabel("ABOUT ME");
 	    aboutbar.setFont(sidebold);
 	    aboutbar.setForeground(Color.white);
+	    
+	    JPanel aboutlist = new JPanel(new MigLayout());
+	    aboutlist.setOpaque(false);
+	    aboutlist.add(realname,"wrap");
+	    aboutlist.add(program,"wrap");
+	    aboutlist.add(description);
 		
 		//Add Elements to Panel
 	    aboutpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         aboutpanel.setLayout(new MigLayout());
-        aboutpanel.add(aboutbar,"gap left 10px");
-        //aboutpanel.add(aboutscroll, "width :100%, height :100%");
+        aboutpanel.add(aboutbar,"gap left 10px, wrap");
+        aboutpanel.add(aboutlist,"width :10px, height :120px");
         
 	}
 	
@@ -334,9 +351,11 @@ public class UserScreen extends JFrame implements ActionListener {
 	    JPanel achievementbarpanel = new JPanel(new MigLayout());
 	    JPanel achievementlistpanel = new JPanel(new MigLayout());
 	    
-	    achievementbar = new JLabel("Achievements");
+	    achievementbar = new JButton("Achievements");
 	    achievementbar.setFont(linkbold);
 	    achievementbar.setForeground(Color.white);
+	    achievementbar.setBorder(BorderFactory.createEmptyBorder());
+	    achievementbar.setContentAreaFilled(false);
 	    
 	    achievementbarpanel.add(achievementbar);
 	    achievementbarpanel.setOpaque(false);

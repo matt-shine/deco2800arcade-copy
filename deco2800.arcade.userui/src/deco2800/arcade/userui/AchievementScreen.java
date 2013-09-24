@@ -145,7 +145,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	public void addgamepanel(){
 		
 		String[] gamelist = {"", "Pong", "Chess", "Burning Skies", "Checkers","Jungle Jump",
-		"Snakes and Ladders"};
+		"Snakes and Ladders","Raiden","Breakout"};
 		gameselect = new JComboBox(gamelist);
 		
 		gamename = new JLabel("Game Name");

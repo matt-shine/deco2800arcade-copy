@@ -29,7 +29,7 @@ public class Interface {
 		
 		UserScreen view = new UserScreen(modelprofile);
 		//EditScreen v = new EditScreen(m);
-		AchievementScreen achievementview = new AchievementScreen(modelprofile);
+		//AchievementScreen achievementview = new AchievementScreen(modelprofile);
 		
 		//Controller controller = new Controller(modelprofile,view);
 		

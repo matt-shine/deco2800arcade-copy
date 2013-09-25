@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//import deco2800.arcade.server.database.ChatStorage;
+
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -23,6 +25,7 @@ public class CommunicationNetwork {
 	private CommunicationView view;
 	private ChatNode currentChat;
 	private CommunicationController controller;
+	//private ChatStorage chatHistory;
 
 	/**
 	 * Initialises an empty list of chat instances.
@@ -72,7 +75,7 @@ public class CommunicationNetwork {
 		currentChat = node;
 		
 		//Temporary:
-		System.out.println(textMessage.senderName + ": " + textMessage.text);
+		System.out.println(textMessage.senderUsername + ": " + textMessage.text);
 	}	
 	
 	/**
@@ -151,6 +154,9 @@ public class CommunicationNetwork {
 		this.view = new CommunicationView();
 		//this.model = new CommunicationModel();
 		this.controller = new CommunicationController(view, null, this);
+		
+		//Load chat History:
+		
 	}
 	
 	

@@ -39,12 +39,18 @@ public class CommunicationListener extends Listener {
 							
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
+			textMessage.senderUsername = userAliases.get(textMessage.senderID);
 
 			//Need a way to get a Player object from somewhere... Or at least the ability to check stuff like IsBlocked from just two playerIDs...
 			//In the mean time, forward the message without checking if blocked:
 			for (int recipientID : textMessage.recipients){
-				textMessage.senderName = userAliases.get(textMessage.senderID);
-				server.sendToTCP(connectedUsers.get(recipientID), textMessage);
+				if (connectedUsers.get(recipientID) != null){ //Recipient is online
+					server.sendToTCP(connectedUsers.get(recipientID), textMessage);
+				} else { //Recipient is offline
+					textMessage.text = "The person you are sending to is offline.";
+					textMessage.senderUsername = "Server";
+					server.sendToTCP(connectedUsers.get(textMessage.senderID), textMessage);
+				}
 			}
 			
 			/*

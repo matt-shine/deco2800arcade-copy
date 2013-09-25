@@ -182,7 +182,7 @@ public class Arcade extends JFrame {
 	public void connectAsUser(String username) {
 		//This should really GET the player with the details that were provided at login, not create a new player!
 		//For testing purposes, a specific ID number is given to debug users
-		int myID = 0;
+		int myID = 1 + (int)(Math.random() * ((500 - 1) + 1));
 		if (username.equals("debug")){
 			myID = 999;
 		} else if (username.equals("debug1")){
@@ -211,8 +211,8 @@ public class Arcade extends JFrame {
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
 		creditBalanceRequest.playerID = myID;
 		creditBalanceRequest.username = username;
-		this.client.sendNetworkObject(creditBalanceRequest);		
-		
+		this.client.sendNetworkObject(creditBalanceRequest);
+
 		//For testing chat:		
 		if (player.getID() == 888){ //This ID belongs to debug1
 			List<Integer> chat = new ArrayList<Integer>();

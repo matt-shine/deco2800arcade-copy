@@ -85,7 +85,6 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		//FIXME gigantic method
 		batch = new SpriteBatch();
         atlas = new TextureAtlas("images/menu/button.pack");
         skin = new Skin();
@@ -110,79 +109,10 @@ public class MenuScreen implements Screen {
 	    scoresButton = new TextButton("Scores", style);
 	    helpButton = new TextButton("Help", style);
 	    exitButton = new TextButton("Exit", style);
-	    
-	    startButton.setWidth(200);
-	    startButton.setHeight(50);
-	    optionsButton.setWidth(200);
-	    optionsButton.setHeight(50);
-	    scoresButton.setWidth(200);
-	    scoresButton.setHeight(50);
-	    helpButton.setWidth(200);
-	    helpButton.setHeight(50);
-	    exitButton.setWidth(200);
-	    exitButton.setHeight(50);
-	    
-	    startButton.setX(width / 2 - startButton.getWidth() / 2);
-	    optionsButton.setX(width / 2 - optionsButton.getWidth() / 2);
-	    scoresButton.setX(width / 2 - scoresButton.getWidth() / 2);
-	    helpButton.setX(width / 2 - helpButton.getWidth() / 2);
-	    exitButton.setX(width / 2 - exitButton.getWidth() / 2);
-	    
-	    optionsButton.setY(height / 2 - optionsButton.getHeight() / 2);
-	    startButton.setY(optionsButton.getY() + (2 * (startButton.getHeight() + 10)));
-	    scoresButton.setY(optionsButton.getY() + (startButton.getHeight() + 10));
-	    helpButton.setY(optionsButton.getY() - (startButton.getHeight() + 10));
-	    exitButton.setY(optionsButton.getY() - (2 * (startButton.getHeight() + 10)));
-	
-	    startButton.addListener(new InputListener() {
-	            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-	                    return true;
-	            }
-	
-	            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-	                    game.setScreen(new PlayScreen(game));
-	            }
-	    });
-	    
-	    optionsButton.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-            }
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    game.setScreen(new OptionsScreen(game));
-            }
-	    });
-	    
-	    scoresButton.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-            }
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    game.setScreen(new ScoreScreen(game));
-            }
-	    });
-	    
-	    helpButton.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-            }
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    game.setScreen(new HelpScreen(game));
-            }
-	    });
-	    
-	    exitButton.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-            }
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            	ArcadeSystem.goToGame(ArcadeSystem.UI);
-            }
-	    });
+	   
+	    buttonDimensions();
+	    buttonPosition(width, height);
+	    listeners();
 	    
 	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
 	    label = new Label("Burning Skies", ls);
@@ -199,5 +129,79 @@ public class MenuScreen implements Screen {
 	    stage.addActor(label);
 
 	}
+	
+	public void buttonDimensions() {
+		startButton.setWidth(200);
+	    startButton.setHeight(50);
+	    optionsButton.setWidth(200);
+	    optionsButton.setHeight(50);
+	    scoresButton.setWidth(200);
+	    scoresButton.setHeight(50);
+	    helpButton.setWidth(200);
+	    helpButton.setHeight(50);
+	    exitButton.setWidth(200);
+	    exitButton.setHeight(50);
+	}
+	
+	public void buttonPosition(int width, int height) {
 
+	    startButton.setX(width / 2 - startButton.getWidth() / 2);
+	    optionsButton.setX(width / 2 - optionsButton.getWidth() / 2);
+	    scoresButton.setX(width / 2 - scoresButton.getWidth() / 2);
+	    helpButton.setX(width / 2 - helpButton.getWidth() / 2);
+	    exitButton.setX(width / 2 - exitButton.getWidth() / 2);
+	    
+	    optionsButton.setY(height / 2 - optionsButton.getHeight() / 2);
+	    startButton.setY(optionsButton.getY() + (2 * (startButton.getHeight() + 10)));
+	    scoresButton.setY(optionsButton.getY() + (startButton.getHeight() + 10));
+	    helpButton.setY(optionsButton.getY() - (startButton.getHeight() + 10));
+	    exitButton.setY(optionsButton.getY() - (2 * (startButton.getHeight() + 10)));
+	}
+	
+	public void listeners() {
+		startButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            	return true;
+            }
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	game.setScreen(new PlayScreen(game));
+            }
+		});
+    
+		optionsButton.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+			}
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new OptionsScreen(game));
+			}
+		});
+    
+	    scoresButton.addListener(new InputListener() {
+	        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+	                return true;
+	        }
+	        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+	        	game.setScreen(new ScoreScreen(game));
+	        }
+	    });
+    
+	    helpButton.addListener(new InputListener() {
+	        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+	        	return true;
+	        }
+	        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+	        	game.setScreen(new HelpScreen(game));
+	        }
+	    });
+	    
+	    exitButton.addListener(new InputListener() {
+	        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+	        	return true;
+	        }
+	        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+	        	ArcadeSystem.goToGame(ArcadeSystem.UI);
+	        }
+	    });
+	}
 }

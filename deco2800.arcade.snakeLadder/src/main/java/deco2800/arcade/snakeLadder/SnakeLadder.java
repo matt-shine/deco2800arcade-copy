@@ -157,7 +157,7 @@ public class SnakeLadder extends GameClient {
 		font.setScale(2);
 		//Initialise the game state
 		//gameState = GameState.READY;
-		gameState = new ReadyState();
+		gameState = new WaitingState();
 		statusMessage = "Click to start!";
 		
 		

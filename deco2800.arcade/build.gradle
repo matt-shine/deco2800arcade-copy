@@ -1,6 +1,7 @@
 dependencies {
   compile project(":deco2800.arcade.model")
   compile project(":deco2800.arcade.protocol")
+  compile project(":deco2800.arcade.packman")
 
   compile group: "org.reflections", name: "reflections", version: "0.9.9-RC1"
   compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
@@ -14,7 +15,7 @@ dependencies {
 task(runArcade, dependsOn: "classes", type: JavaExec) {
     main = "deco2800.arcade.client.Arcade"
     classpath = sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
-    String contents = file('games.txt').getText('UTF-8');
+    String contents = file('../deco2800.arcade.packman/games.txt').getText('UTF-8');
     List games = contents.split('[\\r\\n]+');
     for (String game : games) {
         if (game.charAt(0) != "#" && game.charAt(0) != "[\\r\\n]+") {
@@ -27,7 +28,8 @@ task(debugArcade, dependsOn: "classes", type: JavaExec) {
     main = "deco2800.arcade.client.Arcade"
     classpath = sourceSets.main.runtimeClasspath.plus project(":deco2800.arcade.ui").sourceSets.main.runtimeClasspath
    	jvmArgs = ["-Xdebug", "-Xnoagent", "-Djava,compiler=NONE", "-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005"]
-    String contents = file('games.txt').getText('UTF-8');
+   
+    String contents = file('../deco2800.arcade.packman/games.txt').getText('UTF-8');
     List games = contents.split('[\\r\\n]+');
     for (String game : games) {
         if (game.charAt(0) != "#" && game.charAt(0) != "[\\r\\n]+") {

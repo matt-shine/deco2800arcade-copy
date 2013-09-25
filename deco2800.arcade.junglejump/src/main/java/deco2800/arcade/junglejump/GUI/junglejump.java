@@ -208,7 +208,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		Game myGame = this.getGame();
 
 		achievementArray = new ArrayList<Achievement>();
-		//achievementArray = achClient.achievementsForGame(myGame);
+		achievementArray = achClient.achievementsForGame(myGame);
 
 		if (achievementArray.isEmpty()) {
 			System.out.println("list of achievements is empty. will be fixed with merge with master (NEW ACHIEVEMENT API NEEDED)");
@@ -406,16 +406,17 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.begin();
 			// Draw achievement labels and graphics here
 			achievementTitleFont.draw(batch, "Achievements", 100, SCREENHEIGHT); /* TITLE */
+			achievementTitleFont.draw(batch, "Press \"BACKSPACE\" to go back to the main menu.", 100, SCREENHEIGHT-20); /* navigation */
 			// loop through achievements and draw relevant information
 			for (int i = 0; i <= achievementArray.size() - 1; i++) {
 				// draw achievement information set out
 				// draw achievement id in a small font (unimportant information for most users)
-				achievementIDFont.draw(batch, achievementArray.get(i).id, 10, 460 + ((i + 1)*-50));
-				achievementNameFont.draw(batch, achievementArray.get(i).name, 100, 460 + ((i + 1)*-50));
-				achievementIDFont.draw(batch, achievementArray.get(i).description, 100, 460 + ((i + 1)*-75));
+				achievementIDFont.draw(batch, achievementArray.get(i).id, 10, 460 + ((i + 1)*-40));
+				achievementNameFont.draw(batch, achievementArray.get(i).name, 100, 460 + ((i + 1)*-55));
+				achievementIDFont.draw(batch, achievementArray.get(i).description, 100, 460 + ((i + 1)*-95));
 				achievementThresholdFont.draw(batch,Integer.toString(achievementArray.get(i).awardThreshold),SCREENWIDTH - 100,460 + ((i + 1)*-50));
 				// do something for the achievement icon
-				batch.draw(achievementIconTexture,40,460 + ((i + 1)*-75),32,32);
+				batch.draw(achievementIconTexture,40,460 + ((i + 1)*-90),32,32);
 			}
 			batch.end();
 			camera.update();
@@ -480,6 +481,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void dispose() {
+
 			}
 
 			@Override
@@ -557,7 +559,13 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (butY == ACHIEVEMENTS) {
 				gameState = GameState.ACHIEVEMENTS;
 			}
-
+		}
+		if (keycode == Keys.BACKSPACE) {
+			// pressed backspace
+			if (gameState == GameState.ACHIEVEMENTS) {
+				// load main menu
+				gameState = GameState.AT_MENU;
+			}
 		}
 		if (keycode == Keys.RIGHT) {
 			// Move right

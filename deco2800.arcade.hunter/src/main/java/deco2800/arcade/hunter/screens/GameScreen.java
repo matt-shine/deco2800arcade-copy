@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -46,6 +47,9 @@ public class GameScreen implements Screen {
 	
 	private SpriteBatch batch = new SpriteBatch();
 	private SpriteBatch staticBatch = new SpriteBatch();
+	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
+	
+	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
 	
 	public GameScreen(Hunter hunter){
 		this.hunter = hunter;
@@ -68,8 +72,6 @@ public class GameScreen implements Screen {
 		entities.add(player);
 		//entities.add(animal);
 	}
-
-	
 
 	@Override
 	public void dispose() {
@@ -132,10 +134,13 @@ public class GameScreen implements Screen {
 			batch.end();
 			
 			staticBatch.begin();
-			drawLives(staticBatch);
+			drawGameUI(staticBatch);
 			staticBatch.end();
 		}
-		
+	}
+	
+	private ArrayList<Animal> getAnimalsKilled() {
+		return animalsKilled;
 	}
 	
 	private void pollInput() {
@@ -148,6 +153,26 @@ public class GameScreen implements Screen {
 			player.jump();
 		}
 		
+	}
+	
+	private void drawGameUI(SpriteBatch batch) {
+		drawLives(batch);
+		drawScore(batch);
+		drawDistance(batch);
+	}
+	
+	private void drawScore(SpriteBatch batch) {
+		int x = Config.screenWidth / 2;
+		int y = Config.screenHeight - 16;
+		CharSequence scoreText = Integer.toString(player.getCurrentScore());
+		font.draw(batch, scoreText, x, y);
+	}
+	
+	private void drawDistance(SpriteBatch batch) {
+		int x = 16;
+		int y = Config.screenHeight - 16;
+		CharSequence scoreText = Float.toString(player.getCurrentDistance()) + "m";
+		font.draw(batch, scoreText, x, y);
 	}
 	
 	private void drawLives(SpriteBatch batch) {

@@ -17,7 +17,6 @@ import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 
 public class Player extends Entity {
 	private static final int JUMP_VELOCITY = 8;
-	private float jumpVelocity;
 	
 	private Vector2 velocity = new Vector2(1, 0);
 	
@@ -26,6 +25,7 @@ public class Player extends Entity {
 	private Animation currAnim;
 	
 	private int lives;
+	private int score = 0;
 	
 	private HashMap<String, Animation> animationList = new HashMap<String,Animation>();
 	//States used to determine how to draw the player
@@ -148,8 +148,6 @@ public class Player extends Entity {
 			velocity.x++;
 		}
 		
-		//HERE TODO
-		
 		//Everything depends on everything else here, may have to rearrange, or even double up on checks
 		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
 		setX(getX() + delta * velocity.x);
@@ -157,18 +155,16 @@ public class Player extends Entity {
 		setJumpVelocity(getJumpVelocity() - delta * 9.81f);
 		setY(getY() + getJumpVelocity());
 		
-		//Need to check for the player moving past the edge of a tile in the physics step above TODO
-		
-		//Update the player state
+		//Update the player state, animate based upon the state
 		//Pretending the DEAD state doesn't exist for now... TODO
 		if (isGrounded()) {
-			jumpVelocity = 0;
+			this.velocity.y = 0;
 			this.state = State.RUNNING;
 			currAnim = runAnimation();
-		} else if (jumpVelocity > 0) {
+		} else if (this.velocity.y > 0) {
 			this.state = State.JUMPING;
 			currAnim = jumpAnimation();
-		} else if (jumpVelocity <= 0) {
+		} else if (this.velocity.y <= 0) {
 			this.state = State.FALLING;
 			currAnim = fallAnimation();
 		}
@@ -261,6 +257,14 @@ public class Player extends Entity {
 	
 	public int getLives(){
 		return lives;
+	}
+	
+	public int getCurrentScore() {
+		return score;
+	}
+	
+	public float getCurrentDistance() {
+		return getX() / Config.TILE_SIZE;
 	}
 	
 	private void gameOver() {

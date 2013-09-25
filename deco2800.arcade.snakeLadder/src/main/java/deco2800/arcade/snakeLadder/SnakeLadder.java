@@ -83,10 +83,6 @@ public class SnakeLadder extends GameClient {
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
-	
-	// haku add
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -307,8 +303,9 @@ public class SnakeLadder extends GameClient {
 		this.dice = dice;
 	}
 	
-	/*
-	 * Rendering scoreboard UI
+
+	/***
+	 * Rendering score board UI on top of the screen
 	 */
 	public void renderScoreBoard(){
 		//setting up the skin for the layout
@@ -369,21 +366,25 @@ public class SnakeLadder extends GameClient {
 		        table.row();
 	}
 	
-	/*
-	 * Updating score label
+
+	/***
+	 * Updating the score of the game player and print it out on the scoreLabel
+	 * @param gp the Game Player its referring to
 	 */
 	public void updateScore(GamePlayer gp){
 		//System.out.println(gp.newposition());
 		String rule = this.getMap().getTileList()[gp.newposition()].getRule();
 		if (isScore(rule))
 			gp.setScore(Integer.parseInt(rule));
-		System.out.println("This player's score: "+ gp.getScore());
+		//System.out.println("This player's score: "+ gp.getScore());
 		//TODO: should update the scoreLabel depending on the gamePlayer index
 		this.scoreLabels.get(0).setText(""+gp.getScore());
 	}
 	
-	/*
-	 * Check if the rule is related to score or not
+	/***
+	 * Check whether the rule is score related or not
+	 * @param rule The rule of the tile the player is currently in
+	 * @return true if the rule have something to do with score, false otherwise
 	 */
 	private boolean isScore (String rule) {
 	    try { 

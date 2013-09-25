@@ -121,11 +121,11 @@ public class Configuration {
 	}
 	
 	public static int getEffectsVolume() {
-		return Configuration.effectsVolume;
+		return Math.min(Configuration.masterVolume, Configuration.effectsVolume);
 	}
 	
 	public static int getBackgroundVolume() {
-		return Configuration.backgroundVolume;
+		return Math.min(Configuration.masterVolume, Configuration.backgroundVolume);
 	}
 	
 	public static int getDifficulty() {

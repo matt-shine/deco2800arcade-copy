@@ -22,8 +22,7 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class MenuScreen implements Screen {
-	
-	//@SuppressWarnings("unused")
+
 	private BurningSkies game;
     private Stage stage;
     private BitmapFont black;
@@ -127,7 +126,6 @@ public class MenuScreen implements Screen {
 	    stage.addActor(helpButton);
 	    stage.addActor(exitButton);
 	    stage.addActor(label);
-
 	}
 	
 	public void buttonDimensions() {
@@ -144,7 +142,6 @@ public class MenuScreen implements Screen {
 	}
 	
 	public void buttonPosition(int width, int height) {
-
 	    startButton.setX(width / 2 - startButton.getWidth() / 2);
 	    optionsButton.setX(width / 2 - optionsButton.getWidth() / 2);
 	    scoresButton.setX(width / 2 - scoresButton.getWidth() / 2);

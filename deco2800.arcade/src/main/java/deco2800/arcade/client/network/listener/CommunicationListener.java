@@ -1,8 +1,11 @@
 package deco2800.arcade.client.network.listener;
 
+import java.util.List;
+
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.communication.CommunicationNetwork;
+import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationListener extends NetworkListener {
@@ -31,6 +34,14 @@ public class CommunicationListener extends NetworkListener {
 			 communicationNetwork.recieveTextMesage(textMessage);
 		}
 		
+		/**
+		 * If ChatHistory is received, the communication network
+		 * will handle it
+		 */
+		if (object instanceof ChatHistory){
+			ChatHistory chatHistory = (ChatHistory) object;
+			communicationNetwork.receiveChatHistory(chatHistory);
+		}
 	}
 	
 }

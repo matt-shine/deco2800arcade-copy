@@ -181,7 +181,7 @@ public class Arcade extends JFrame {
 
 	public void connectAsUser(String username) {
 		//This should really GET the player with the details that were provided at login, not create a new player!
-		//For testing purposes, a specific ID number is given to debug users
+		//For testing purposes, a specific ID number is given to debug users and random users get a random ID
 		int myID = 1 + (int)(Math.random() * ((500 - 1) + 1));
 		if (username.equals("debug")){
 			myID = 999;

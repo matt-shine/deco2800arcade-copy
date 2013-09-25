@@ -1,16 +1,18 @@
 package deco2800.server.listener;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
-import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
-import deco2800.server.database.PlayerStorage;
+import deco2800.server.ArcadeServer;
+import deco2800.server.database.ChatStorage;
 
 public class CommunicationListener extends Listener {
 	
@@ -35,23 +37,38 @@ public class CommunicationListener extends Listener {
 			CommunicationRequest contact = (CommunicationRequest) object;
 			connectedUsers.put(contact.playerID, connection.getID());
 			userAliases.put(contact.playerID, contact.username);
+			
+			//A user has just logged in, get there chat history and send it to them
+			HashMap<Integer, List<String>> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
+			if (personalChatHistory != null){
+				ChatHistory chatHistory = new ChatHistory();
+				chatHistory.updateChatHistory(personalChatHistory);
+				server.sendToTCP(connectedUsers.get(contact.playerID), chatHistory);
+			}
 		}
 							
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
 			textMessage.senderUsername = userAliases.get(textMessage.senderID);
+			String chatLine = textMessage.senderUsername + ": " + textMessage.text;
 
 			//Need a way to get a Player object from somewhere... Or at least the ability to check stuff like IsBlocked from just two playerIDs...
 			//In the mean time, forward the message without checking if blocked:
 			for (int recipientID : textMessage.recipients){
 				if (connectedUsers.get(recipientID) != null){ //Recipient is online
+					if (recipientID != textMessage.senderID){
+						ArcadeServer.instance().getChatStorage().addChatHistory(recipientID, textMessage.senderID, chatLine);
+						ArcadeServer.instance().getChatStorage().addChatHistory(textMessage.senderID, recipientID, chatLine);
+					}
 					server.sendToTCP(connectedUsers.get(recipientID), textMessage);
 				} else { //Recipient is offline
-					textMessage.text = "The person you are sending to is offline.";
-					textMessage.senderUsername = "Server";
-					server.sendToTCP(connectedUsers.get(textMessage.senderID), textMessage);
+					ArcadeServer.instance().getChatStorage().addChatHistory(recipientID, textMessage.senderID, chatLine);
+					ArcadeServer.instance().getChatStorage().addChatHistory(textMessage.senderID, recipientID, chatLine);
 				}
 			}
+			
+			//What about something like this?
+			//ArcadeServer.instance().getplayers?
 			
 			/*
 			//This stuff was for the case where userAliases was <playerID, Player> but that broke the network passing around Players for some reason

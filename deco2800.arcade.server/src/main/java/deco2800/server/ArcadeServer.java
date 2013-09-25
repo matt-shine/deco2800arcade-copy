@@ -8,6 +8,7 @@ import java.net.BindException;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
+import deco2800.server.database.ChatStorage;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
@@ -74,6 +75,9 @@ public class ArcadeServer {
 	//Achievement storage service
 	private AchievementStorage achievementStorage;
 	
+	//Chat History storage
+	private ChatStorage chatStorage;
+	
 	// Credit storage service
 	private CreditStorage creditStorage;
 	//private PlayerStorage playerStorage;
@@ -117,6 +121,14 @@ public class ArcadeServer {
 	}
 	
 	/**
+	 * Access the server's chat history storage
+	 * @return
+	 */
+	public ChatStorage getChatStorage(){
+		return this.chatStorage;
+	}
+	
+	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
@@ -126,6 +138,7 @@ public class ArcadeServer {
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
+		this.chatStorage = new ChatStorage();
 		
         this.imageStorage = new ImageStorage();
 

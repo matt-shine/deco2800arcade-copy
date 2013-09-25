@@ -5,8 +5,10 @@ import com.esotericsoftware.kryo.serializers.*;
 
 import java.util.ArrayList;
 
+
 //import deco2800.arcade.model.Achievement;
 import deco2800.arcade.protocol.achievement.*;
+import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -105,6 +107,7 @@ public class Protocol {
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
+		kryo.register(ChatHistory.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
 		
@@ -114,6 +117,7 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
+		kryo.register(java.util.HashMap.class);
 
 	}
 	

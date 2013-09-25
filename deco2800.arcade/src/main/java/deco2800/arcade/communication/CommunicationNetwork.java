@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//import deco2800.arcade.server.database.ChatStorage;
-
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 /**
@@ -25,7 +24,7 @@ public class CommunicationNetwork {
 	private CommunicationView view;
 	private ChatNode currentChat;
 	private CommunicationController controller;
-	//private ChatStorage chatHistory;
+	private ChatHistory chatHistory;
 
 	/**
 	 * Initialises an empty list of chat instances.
@@ -151,12 +150,35 @@ public class CommunicationNetwork {
 		this.player = player;
 		this.chatNodes = new HashMap<Integer, ChatNode>();
 		this.textMessage = new TextMessage();
+		this.chatHistory = new ChatHistory();
 		this.view = new CommunicationView();
 		//this.model = new CommunicationModel();
 		this.controller = new CommunicationController(view, null, this);
+	}
+
+	/**
+	 * Chat history is received and ready to be loaded for the
+	 * appropriate friend
+	 * @param receivedHistory
+	 */
+	public void receiveChatHistory(ChatHistory receivedHistory) {
+		chatHistory = receivedHistory;
+
+		/* TODO
+		 * If the chat history is with someone who is not in the active chat window,
+		 * display a notification and then load the chat history when you click them
+		 * 
+		 * Also, only display a notification if the history has changed since last time
+		 * 
+		 * Finally, there may have to be a limit imposed on how much history is sent/received
+		 * as it could clog the network, let alone the chat window
+		 */
+
 		
-		//Load chat History:
-		
+		//Temporary:
+		for (Map.Entry<Integer, List<String>> entry : chatHistory.getAllHistory().entrySet()){
+			System.out.println("History with: " + entry);
+		}
 	}
 	
 	

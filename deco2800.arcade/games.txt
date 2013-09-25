@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Add games here in the following format
 # deco2800.arcade.gameName
 # Any lines in this file that start with a # will be ignored when
@@ -24,6 +25,8 @@ connect4
 raiden
 GuessTheWord
 =======
+=======
+>>>>>>> master
 # Add games here in the following format
 # deco2800.arcade.gameName
 # Any lines in this file that start with a # will be ignored when
@@ -47,5 +50,11 @@ towerdefence
 pacman
 connect4
 raiden
+GuessTheWord
+<<<<<<< HEAD
+statistics
+>>>>>>> master
+=======
+wl6
 statistics
 >>>>>>> master

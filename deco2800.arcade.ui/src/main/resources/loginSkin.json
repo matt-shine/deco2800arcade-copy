@@ -20,7 +20,11 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
         default: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonGreen },
-        alt: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonRed }
+        default-red: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonRed },
+        default-blue: { font: default, fontColor: white, up: buttonGrey, down: buttonGrey, over: buttonBlue },
+	    blue: { font: default, fontColor: white, up: iconBlue, down: iconBlue, over: iconBlue_plus },
+	    magenta: { font: default, fontColor: white, up: iconMagenta, down: iconMagenta, over: iconMagenta_plus },
+	    green: { font: default, fontColor: white, up: iconGreen, down: iconGreen, over: iconGreen_plus }
     },
     com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
     	default: { font: default, fontColor: white, checkboxOn: checkbox_checked, checkboxOff: checkbox_unchecked }

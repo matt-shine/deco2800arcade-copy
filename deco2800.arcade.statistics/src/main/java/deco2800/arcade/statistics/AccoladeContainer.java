@@ -1,17 +1,8 @@
 package deco2800.arcade.statistics;
- 
 import java.util.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {
  
-    public static void main(String[] args) {
-        AccoladeContainer container = new AccoladeContainer();
-        container.BUILDDUMMYDATA();
-        for (Accolade testAccolade : container) {
-            System.out.println("HI: " + testAccolade.toString());
-            
-        }
-    }
     //instantiate variables
     private Accolade head;
     private Accolade tail;
@@ -25,6 +16,29 @@ public class AccoladeContainer implements Iterable<Accolade> {
         this.size = 0;
         this.head = null;
         this.tail = null;
+    }
+    
+    /**Retrieves all accolades achevied by player with playerID
+     * TODO implmenet server communication and return non-dummydata
+     */
+    public void populateAccoladesPlayer(int playerID){
+    	BUILDDUMMYDATA();
+    }
+    
+    /**Retrieves all accolades totals for game with gameID
+     * TODO implmenet server communication and return non-dummydata
+     */
+    public void populateAccoladesGame(int gameID){
+    	BUILDDUMMYDATA();
+    }
+    
+    /**Clears the list of accolades ready for repopulation
+     */
+    public void clearAccolades(){
+    	/** TODO implement stub*/
+    	head = null;
+    	tail = null;
+    	//current = null;
     }
  
     /**
@@ -121,4 +135,5 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * END ITERATOR STUFF YO *
      */
 }
+
 

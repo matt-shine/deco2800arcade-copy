@@ -70,6 +70,7 @@ public class BurningSkies extends GameClient {
 		}
 		nowPlaying = Gdx.audio.newMusic(Gdx.files.internal("sound/music/" + songName + ".ogg"));
 		nowPlaying.setLooping(loop);
+		nowPlaying.setVolume((float)Configuration.getBackgroundVolume()/100);
 		nowPlaying.play();
 	}
 	
@@ -87,6 +88,10 @@ public class BurningSkies extends GameClient {
 	
 	public void stopSong() {
 		if(nowPlaying != null) nowPlaying.stop();
+	}
+	
+	public void changeVolume(int volume) {
+		if(nowPlaying != null) nowPlaying.setVolume((float)volume/100);
 	}
 	
 	/**

@@ -28,8 +28,7 @@ public class MainGameScreen implements Screen {
 		input = new WL6InputProcessor(game, model);
 		ArcadeInputMux.getInstance().addProcessor(input);
 		
-		b.setGame(model);
-		b.generateTerrain(model.getMap(), false);
+		b.setGame(model, game);
 		b.load();
 		
 	}
@@ -51,6 +50,8 @@ public class MainGameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		
+		Gdx.gl20.glViewport(0, 0, game.getWidth(), game.getHeight());
+		
 		model.setDelta(delta);
 		
 		//iterate over all game objects
@@ -62,7 +63,7 @@ public class MainGameScreen implements Screen {
 		}
 		model.endTick();
 		
-		Gdx.gl20.glViewport(0, 0, game.getWidth(), game.getHeight());
+		
 		b.draw(this.debugMode);
 		
 	}

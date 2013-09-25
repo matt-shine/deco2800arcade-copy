@@ -1,21 +1,19 @@
 package deco2800.arcade.mixmaze.domain;
 
+import deco2800.arcade.mixmaze.domain.view.IBrickModel;
+import deco2800.arcade.mixmaze.domain.view.IItemModel;
+import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
+import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
+import deco2800.arcade.mixmaze.domain.view.IPickModel;
+import deco2800.arcade.mixmaze.domain.view.ITNTModel;
+import deco2800.arcade.mixmaze.domain.view.ITileModel;
+
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import deco2800.arcade.mixmaze.domain.ItemModel.ItemType;
 
 /**
  * Player model represents a player.
  */
-public class PlayerModel {
-	public enum PlayerAction {
-		USE_BRICK,
-		USE_PICK,
-		USE_TNT;
-		
-		public PlayerAction getNextAction() {
-			return values()[(ordinal() + 1) % values().length];
-		}
-	}
+public class PlayerModel implements IPlayerModel {
 
 	// Player data
 	private int playerID;
@@ -138,20 +136,22 @@ public class PlayerModel {
 		}
 		playerDirection = direction;
 	}
-	
-	public BrickModel getBrick() {
+
+	public IBrickModel getBrick() {
 		return brick;
 	}
-	
-	public PickModel getPick() {
+
+	public IPickModel getPick() {
 		return pick;
 	}
-	
-	public TNTModel getTNT() {
+
+	public ITNTModel getTNT() {
 		return tnt;
 	}
-	
-	public boolean pickupItem(ItemModel item) {
+
+	public boolean pickupItem(IItemModel iitem) {
+		ItemModel item = (ItemModel) iitem;
+
 		if(item.getType() == ItemType.BRICK) {
 			BrickModel brick = (BrickModel)item;
 			brick.mergeBricks(brick);
@@ -165,7 +165,7 @@ public class PlayerModel {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns the active action of this player.
 	 *
@@ -174,7 +174,7 @@ public class PlayerModel {
 	public PlayerAction getPlayerAction() {
 		return playerAction;
 	}
-	
+
 	/**
 	 * Switches to the next action, in this order
 	 * USE_BRICK - USE_PICK - USE_TNT - USE_BRICK.
@@ -187,7 +187,7 @@ public class PlayerModel {
 			switchAction();
 		}
 	}
-	
+
 	/**Checks of this player can perform a action.
 	 *
 	 * @return true if this player can use any action, false otherwise
@@ -195,24 +195,26 @@ public class PlayerModel {
 	public boolean canUseAction() {
 		return (System.currentTimeMillis() - lastAction) >= (0.5 * 1000);
 	}
-	
+
 	/**
 	 * Uses the active action of this player.
 	 *
 	 * @param tile the tile where this player is
 	 */
-	public boolean useAction(TileModel tile) {
+	public boolean useAction(ITileModel itile) {
+		TileModel tile = (TileModel) itile;
+
 		if(canUseAction()) {
 			boolean used = false;
 			if(playerAction == PlayerAction.USE_BRICK && brick.getAmount() > 0) {
-				WallModel wall = tile.getWall(playerDirection);
+				WallModel wall = (WallModel) tile.getWall(playerDirection);
 				if(!wall.isBuilt()) {
 					brick.removeOne();
 					wall.build(this);
 					used = true;
 				}
 			} else if(playerAction == PlayerAction.USE_PICK && pick != null) {
-				WallModel wall = tile.getWall(playerDirection);
+				WallModel wall = (WallModel) tile.getWall(playerDirection);
 				if(wall.isBuilt()) {
 					pick = null;
 					wall.destroy(this);
@@ -221,7 +223,7 @@ public class PlayerModel {
 			} else if(playerAction == PlayerAction.USE_TNT && tnt != null) {
 				tnt = null;
 				for(int direction = 0; direction < 4; ++direction) {
-					WallModel wall = tile.getWall(direction);
+					WallModel wall = (WallModel) tile.getWall(direction);
 					if(wall.isBuilt()) {
 						wall.destroy(this);
 					}

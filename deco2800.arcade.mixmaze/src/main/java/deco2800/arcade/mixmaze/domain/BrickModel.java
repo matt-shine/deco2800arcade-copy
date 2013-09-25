@@ -1,33 +1,35 @@
 package deco2800.arcade.mixmaze.domain;
 
+import deco2800.arcade.mixmaze.domain.view.IBrickModel;
+
 /**
  * Brick model represents a collection of bricks.
  */
-public class BrickModel extends ItemModel {
+public class BrickModel extends ItemModel implements IBrickModel {
 	/**
 	 * Thrown when an operation results in an invalid amount of bricks.
 	 */
-	private final static IllegalArgumentException NUMOUTOFRANGE = new IllegalArgumentException("number must result in a amount greater than 0 and less then MAX_BRICKS."); 
-	
+	private final static IllegalArgumentException NUMOUTOFRANGE = new IllegalArgumentException("number must result in a amount greater than 0 and less then MAX_BRICKS.");
+
 	/**
 	 * Stores maximum number of bricks in a stack.
 	 */
 	private static int MAX_BRICKS = 10;
-	
+
 	// Brick Data
 	private int amount;
 
 	public static int getMaxBricks() {
 		return MAX_BRICKS;
 	}
-	
+
 	public static void setMaxBricks(int max) {
 		if(max < 1) {
 			throw new IllegalArgumentException("max must be greater than or equal to 1.");
 		}
 		MAX_BRICKS = max;
 	}
-	
+
 	/**
 	 * Returns the amount of bricks in this <code>BrickModel</code>.
 	 *
@@ -88,8 +90,8 @@ public class BrickModel extends ItemModel {
 	public void removeOne() {
 		removeAmount(1);
 	}
-	
-	public void mergeBricks(BrickModel brick) {
+
+	public void mergeBricks(IBrickModel brick) {
 		int canPickup = (MAX_BRICKS - brick.getAmount());
 		if(canPickup <= brick.getAmount()) {
 			brick.removeAmount(canPickup);
@@ -99,7 +101,7 @@ public class BrickModel extends ItemModel {
 		}
 		amount += canPickup;
 	}
-	
+
 	public BrickModel(int number) {
 		super(ItemType.BRICK);
 		if (number < 0 || number > MAX_BRICKS) {

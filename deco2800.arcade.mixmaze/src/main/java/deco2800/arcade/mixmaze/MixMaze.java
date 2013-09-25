@@ -3,63 +3,62 @@
  */
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.network.NetworkClient;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ArcadeGame(id="mixmaze")
 public final class MixMaze extends GameClient {
-	private static final String LOG = MixMaze.class.getSimpleName();
 
+	final Logger logger = LoggerFactory.getLogger(MixMaze.class);
+
+	Skin skin;
 	Screen splashScreen;
 	Screen menuScreen;
-	Screen gameScreen;
 	Screen settingsScreen;
-	Skin skin;
+	GameScreen singleScreen;
+	GameScreen hostScreen;
+	GameScreen clientScreen;
 
+	/**
+	 * Constructor. Note this constructor will be called before any
+	 * gdx.Application exists, and therefore all initialisation should
+	 * be done in the method create.
+	 *
+	 * @param player	TODO
+	 * @param networkClient	TODO
+	 */
 	public MixMaze(Player player, NetworkClient networkClient) {
-		/*
-		 * Note the constructor is called before a gdx.Application
-		 * exists, and therefore all initialisation should be done
-		 * under create().
-		 */
 		super(player, networkClient);
 	}
 
 	@Override
 	public void create() {
-		/* Use Application.LOG_NONE to mute all logging. */
-		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		Gdx.app.debug(LOG, "creating");
-
 		super.create();
 
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
-		gameScreen = new GameScreen(this);
 		settingsScreen = new SettingsScreen(this);
-		
-		setScreen(splashScreen);
+		singleScreen = new SingleScreen(this);
+		hostScreen = new HostScreen(this);
+		clientScreen = new ClientScreen(this);
 
-		Gdx.app.debug(LOG, "Default key bindings");
-		Gdx.app.debug(LOG, "Player 1: W, S, A, D to move, "
-				+ "G switch action, H use action");
-		Gdx.app.debug(LOG, "Player 2: arrow keys to move"
-				+ "NUM_5 switch action, NUM_6 use action");
+		setScreen(splashScreen);
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		Gdx.app.debug(LOG, "resizing to "
-				+ width + "x" + height);
+		logger.debug("window resized to {}x{}", width, height);
 		super.resize(width, height);
 	}
 
@@ -70,27 +69,30 @@ public final class MixMaze extends GameClient {
 
 	@Override
 	public void dispose() {
-		Gdx.app.debug(LOG, "disposing");
 		splashScreen.dispose();
 		menuScreen.dispose();
-		gameScreen.dispose();
+		singleScreen.dispose();
+		hostScreen.dispose();
+		clientScreen.dispose();
 		super.dispose();
+		logger.debug("disposed");
 	}
 
+	/**
+	 * This method is called just before the application
+	 * is destroyed.
+	 */
 	@Override
 	public void pause() {
-		/*
-		 * This method is called just before the application
-		 * is destroyed.
-		 */
-		Gdx.app.debug(LOG, "pausing");
+		logger.debug("paused");
 		super.pause();
 	}
 
+	/**
+	 * This method will never be called on the desktop.
+	 */
 	@Override
 	public void resume() {
-		/* This method will never be called on the desktop. */
-		Gdx.app.debug(LOG, "resuming");
 		super.resume();
 	}
 

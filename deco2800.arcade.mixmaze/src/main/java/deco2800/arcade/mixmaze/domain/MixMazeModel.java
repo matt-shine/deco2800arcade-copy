@@ -1,5 +1,9 @@
 package deco2800.arcade.mixmaze.domain;
 
+import deco2800.arcade.mixmaze.domain.view.IItemModel;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
+import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
+
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
 import java.util.Calendar;
@@ -9,31 +13,10 @@ import java.util.Random;
 /**
  * Mix maze model represents the running game state
  */
-public class MixMazeModel {
-	/**
-	 * Enumeration for representing different
-	 * states of game difficulty
-	 */
-	public enum MixMazeDifficulty {
-		/**
-		 * Allows movement through all obstacles
-		 * All items spawn frequently
-		 */
-		Beginner,
-		/**
-		 * Allows movement through walls, but not boxes
-		 * All items excluding TNT spawn frequently
-		 */
-		Intermediate,
-		/**
-		 * Disallows movement through both walls and boxes
-		 * Bricks spawn frequently, Picks moderately, TNT rarely
-		 */
-		Advanced
-	}
+public class MixMazeModel implements IMixMazeModel {
 
 	/**
-	 * Enumeration for representing the current 
+	 * Enumeration for representing the current
 	 * state of the game
 	 */
 	private enum GameState {
@@ -50,17 +33,17 @@ public class MixMazeModel {
 		 */
 		END
 	}
-	
+
 	/**
 	 * Thrown when operations requiring the game to be started are attempted.
 	 */
 	private final static IllegalStateException NOT_STARTED = new IllegalStateException("The game has not started.");
-	
+
 	/**
 	 * Thrown when operations requiring the game to not be in progress are attempted.
 	 */
 	private final static IllegalStateException STARTED = new IllegalStateException("The game has already started.");
-	
+
 	/**
 	 * Thrown when an operation using coordinates out of
 	 * the range of of <CODE>board</CODE> are used
@@ -86,7 +69,7 @@ public class MixMazeModel {
 	// Item spawning data
 	private Random spawner;
 	private long lastSpawned;
-	
+
 	/**
 	 * Specifies if the game is running
 	 * @return <CODE>true</CODE> if running, <CODE>false</CODE> otherwise
@@ -94,7 +77,7 @@ public class MixMazeModel {
 	public boolean isRunning() {
 		return state == GameState.RUNNING;
 	}
-	
+
 	/**
 	 * Specifies if the game has ended
 	 * @return <CODE>true</CODE> if ended, <CODE>false</CODE> otherwise
@@ -102,7 +85,7 @@ public class MixMazeModel {
 	public boolean isEnded() {
 		return state == GameState.END;
 	}
-	
+
 	/**
 	 * Gets the current size of the board
 	 * @return the size of the board
@@ -110,13 +93,13 @@ public class MixMazeModel {
 	public int getBoardSize() {
 		return boardSize;
 	}
-	
+
 	/**
 	 * Gets the tile at the position (x, y)
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
 	 * @return <CODE>TileModel</CODE> at position (x, y)
-	 * @throws IllegalArgumentException if the specified 
+	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
 	public TileModel getBoardTile(int x, int y) {
@@ -125,7 +108,7 @@ public class MixMazeModel {
 		}
 		return board[y][x];
 	}
-	
+
 	/**
 	 * Gets the current level of game difficulty.
 	 * @return <CODE>MixMazeDifficulty</CODE> representing
@@ -150,7 +133,7 @@ public class MixMazeModel {
 	public Date getGameStartTime() {
 		return gameStartTime;
 	}
-	
+
 	/**
 	 * Gets the time the game ended
 	 * @return <CODE>Date</CODE> representing game end time
@@ -158,30 +141,30 @@ public class MixMazeModel {
 	public Date getGameEndTime() {
 		return gameEndTime;
 	}
-	
+
 	/**
 	 * Gets player one model
 	 * @return <CODE>PlayerModel</CODE> representing player one
 	 */
-	public PlayerModel getPlayer1() {
+	public IPlayerModel getPlayer1() {
 		return player1;
 	}
-	
+
 	/**
 	 * Gets player two model
 	 * @return <CODE>PlayerModel</CODE> representing player two
 	 */
-	public PlayerModel getPlayer2() {
+	public IPlayerModel getPlayer2() {
 		return player2;
 	}
 
 	/**
-	 * Gets the current number of built boxes for the 
+	 * Gets the current number of built boxes for the
 	 * specified player
 	 * @param player The specified player
 	 * @return Number of boxes built by specified player
 	 */
-	public int getPlayerScore(PlayerModel player) {
+	public int getPlayerScore(IPlayerModel player) {
 		int boxes = 0;
 		for(int row = 0; row < boardSize; ++row) {
 			for(int column = 0; column < boardSize; ++column) {
@@ -193,35 +176,35 @@ public class MixMazeModel {
 		}
 		return boxes;
 	}
-	
+
 	/**
 	 * Checks the specified (x, y) position and
 	 * determines if it is in range
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
-	 * @return <CODE>true</CODE> if specified (x, y) is valid, 
+	 * @return <CODE>true</CODE> if specified (x, y) is valid,
 	 * <CODE>false</CODE> otherwise
 	 */
 	private boolean checkCoordinates(int x, int y) {
 		return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
 	}
-	
+
 	/**
 	 * Checks if a player is currently at
 	 * the specified (x, y) position
 	 * @param x X position on the game board
 	 * @param y y position on the game board
-	 * @return <CODE>true</CODE> if player is present at specified (x, y), 
+	 * @return <CODE>true</CODE> if player is present at specified (x, y),
 	 * <CODE>false</CODE> otherwise
 	 */
 	private boolean isPlayerAtPosition(int x, int y) {
 		if(!checkCoordinates(x, y)) {
 			throw COORDSOUTOFRANGE;
 		}
-		return (player1.getX() == x && player1.getY() == y) 
+		return (player1.getX() == x && player1.getY() == y)
 				|| (player2.getX() == x && player2.getY() == y);
 	}
-	
+
 	/**
 	 * Starts the current game
 	 */
@@ -232,17 +215,17 @@ public class MixMazeModel {
 		state = GameState.RUNNING;
 		gameStartTime = Calendar.getInstance().getTime();
 	}
-	
+
 	/**
 	 * Ends the current game.
-	 * @return <CODE>PlayerModel</CODE> representing player with the 
+	 * @return <CODE>PlayerModel</CODE> representing player with the
 	 * most built boxes or <CODE>null</CODE> in the event of a tie
 	 */
-	public PlayerModel endGame() {
+	public IPlayerModel endGame() {
 		if (state != GameState.RUNNING) {
 			throw NOT_STARTED;
 		}
-		
+
 		// End game
 		state = GameState.END;
 		gameEndTime = Calendar.getInstance().getTime();
@@ -254,7 +237,7 @@ public class MixMazeModel {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Gets the current maximum number of items that
 	 * can spawn at the same time
@@ -270,7 +253,7 @@ public class MixMazeModel {
 			return 2;
 		}
 	}
-	
+
 	/**
 	 * Gets the current number of items spawned
 	 * @return Amount of items currently spawned
@@ -286,7 +269,7 @@ public class MixMazeModel {
 		}
 		return count;
 	}
-	
+
 	/**
 	 * Gets a random item depending on the current
 	 * game difficulty.
@@ -305,7 +288,7 @@ public class MixMazeModel {
 			brickFactor = 0.85;
 			pickFactor = 0.95;
 		}
-		
+
 		if(spawnFactor <= brickFactor) {
 			return new BrickModel((spawner.nextInt(4) + 1));
 		} else if(spawnFactor <= pickFactor) {
@@ -314,9 +297,9 @@ public class MixMazeModel {
 			return new TNTModel();
 		}
 	}
-	
+
 	/**
-	 * Executes a round of item spawning, 
+	 * Executes a round of item spawning,
 	 * will only spawn items every <CODE>10 / getMaxItemCount()</CODE>
 	 * seconds
 	 */
@@ -338,23 +321,23 @@ public class MixMazeModel {
 			lastSpawned = System.currentTimeMillis();
 		}
 	}
-	
+
 	/**
 	 * Gets the item at the specified (x, y) position
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
-	 * @return <CODE>ItemModel</CODE> at the specified (x, y) 
+	 * @return <CODE>ItemModel</CODE> at the specified (x, y)
 	 * position or <CODE>null</CODE> if there is none
-	 * @throws IllegalArgumentException if the specified 
+	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
-	public ItemModel getSpawnedItem(int x, int y) {
+	public IItemModel getSpawnedItem(int x, int y) {
 		if(!checkCoordinates(x, y)) {
 			throw COORDSOUTOFRANGE;
 		}
 		return items[y][x];
 	}
-	
+
 	/**
 	 * Set the item at the specified (x, y) position
 	 * @param item The specified item, can be <CODE>null</CODE>
@@ -367,19 +350,21 @@ public class MixMazeModel {
 		}
 		items[y][x] = item;
 	}
-	
+
 	/**
-	 * Moves the specified player in the specified direction, or 
+	 * Moves the specified player in the specified direction, or
 	 * will turn the specified player in the specified direction
 	 * if they are not currently facing that direction
 	 * @param player The specified player
 	 * @param direction The specified direction
 	 * of movement
-	 * @throws IllegalStateException if the game has not been started, 
-	 * the specified player is <CODE>null</CODE> or the specified 
+	 * @throws IllegalStateException if the game has not been started,
+	 * the specified player is <CODE>null</CODE> or the specified
 	 * direction is not a direction
 	 */
-	public void movePlayer(PlayerModel player, int direction) {
+	public void movePlayer(IPlayerModel iplayer, int direction) {
+		PlayerModel player = (PlayerModel) iplayer;
+
 		if(state != GameState.RUNNING) {
 			throw NOT_STARTED;
 		}
@@ -399,7 +384,7 @@ public class MixMazeModel {
 			player.setDirection(direction);
 			return;
 		}
-		
+
 		if(checkCoordinates(nextX, nextY)  && !isPlayerAtPosition(nextX, nextY)) {
 			boolean isBlocked = false;
 			if(gameDifficulty != MixMazeDifficulty.Beginner) {
@@ -407,33 +392,33 @@ public class MixMazeModel {
 				isBlocked = (gameDifficulty == MixMazeDifficulty.Intermediate) ?
 						nextTile.isBox() : nextTile.getWall(getPolarDirection(direction)).isBuilt();
 			}
-			
+
 			if(!isBlocked) {
 				player.move();
 				onPlayerMove(player, nextX, nextY);
 			}
 		}
 	}
-	
+
 	/**
 	 * Performs operations after a player moves onto
 	 * a new tile
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
-	 * @throws IllegalArgumentException if the specified 
+	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
 	private void onPlayerMove(PlayerModel player, int x, int y) {
 		if(!checkCoordinates(x, y)) {
 			throw COORDSOUTOFRANGE;
 		}
-		
-		ItemModel item = getSpawnedItem(x, y);
+
+		ItemModel item = (ItemModel) getSpawnedItem(x, y);
 		if(item != null && player.pickupItem(item)) {
 			setSpawnedItem(null, x, y);
 		}
 	}
-	
+
 	/**
 	 * <CODE>MixMazeModel</CODE> constructor
 	 * @param size The size of the game board
@@ -450,11 +435,11 @@ public class MixMazeModel {
 		if(maxSeconds < 30 || maxSeconds > 900) {
 			throw new IllegalArgumentException("maxSeconds must be between 30 and 900.");
 		}
-		
+
 		// Initialize default fields
 		spawner = new Random();
 		state = GameState.NOT_STARTED;
-		
+
 		// Initialize board/items data
 		boardSize = size;
 		board = new TileModel[boardSize][boardSize];

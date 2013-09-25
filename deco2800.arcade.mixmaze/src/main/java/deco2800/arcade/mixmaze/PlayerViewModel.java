@@ -3,12 +3,12 @@
  */
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.BrickModel;
-import deco2800.arcade.mixmaze.domain.ItemModel;
-import deco2800.arcade.mixmaze.domain.MixMazeModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction;
-import deco2800.arcade.mixmaze.domain.TileModel;
+import deco2800.arcade.mixmaze.domain.view.IBrickModel;
+import deco2800.arcade.mixmaze.domain.view.IItemModel;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
+import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
+import deco2800.arcade.mixmaze.domain.view.IPlayerModel.PlayerAction;
+import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.utils.KeyManager;
 
 import com.badlogic.gdx.Gdx;
@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import java.util.HashMap;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
+import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
 import static com.badlogic.gdx.Input.Keys.*;
 
 /**
@@ -33,8 +33,8 @@ final class PlayerViewModel extends Actor {
 
 	private static final String LOG = PlayerViewModel.class.getSimpleName();
 
-	private final PlayerModel model;
-	private final MixMazeModel gameModel;
+	private final IPlayerModel model;
+	private final IMixMazeModel gameModel;
 	private final int tileSize;
 	private final TextureRegion[] region;
 	private final KeyManager km;
@@ -42,9 +42,10 @@ final class PlayerViewModel extends Actor {
 
 	/**
 	 * Constructor
-	 * @param playerControls 
+	 *
+	 * @param playerControls
 	 */
-	PlayerViewModel(PlayerModel model, MixMazeModel gameModel,
+	PlayerViewModel(IPlayerModel model, IMixMazeModel gameModel,
 			int tileSize, int id, int[] playerControls) {
 		Vector2 stagePos;
 		Texture texture;
@@ -62,7 +63,7 @@ final class PlayerViewModel extends Actor {
 	if(playerControls[3] != RIGHT) mapping.put(playerControls[3], RIGHT);
 	if(playerControls[4] != NUM_5) mapping.put(playerControls[4], NUM_5);
 	if(playerControls[5] != NUM_6) mapping.put(playerControls[5], NUM_6);
-		
+
 		km = new KeyManager(mapping);
 
 		/* load texture */
@@ -113,7 +114,7 @@ final class PlayerViewModel extends Actor {
 	 * @return the amount of bricks
 	 */
 	public int getBrickAmount() {
-		BrickModel brick = model.getBrick();
+		IBrickModel brick = model.getBrick();
 
 		if (brick == null) {
 			return 0;
@@ -122,8 +123,8 @@ final class PlayerViewModel extends Actor {
 		}
 	}
 
-	private boolean hasItem(ItemModel.ItemType type) {
-		ItemModel item = null;
+	private boolean hasItem(IItemModel.ItemType type) {
+		IItemModel item = null;
 
 		switch (type) {
 		case PICK:
@@ -220,7 +221,7 @@ final class PlayerViewModel extends Actor {
 				model.switchAction();
 				break;
 			case NUM_6:
-				TileModel tile = gameModel.getBoardTile(
+				ITileModel tile = gameModel.getBoardTile(
 						model.getX(), model.getY());
 				model.useAction(tile);
 				break;

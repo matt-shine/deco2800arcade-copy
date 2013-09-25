@@ -1,12 +1,15 @@
 package deco2800.arcade.mixmaze.domain;
 
+import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
+import deco2800.arcade.mixmaze.domain.view.IWallModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * WallModel represents an active/inactive wall on a tile.
  */
-public class WallModel {
+public class WallModel implements IWallModel {
 	private List<TileModel> tiles;
 	private boolean built;
 	private PlayerModel builder;
@@ -37,7 +40,9 @@ public class WallModel {
 		return builder;
 	}
 
-	public void build(PlayerModel player) {
+	public void build(IPlayerModel iplayer) {
+		PlayerModel player = (PlayerModel) iplayer;
+
 		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
@@ -47,7 +52,7 @@ public class WallModel {
 		}
 		built = true;
 		builder = player;
-		
+
 		// Executes recursive box building
 		for (TileModel tile : tiles) {
 			tile.buildBox(player);

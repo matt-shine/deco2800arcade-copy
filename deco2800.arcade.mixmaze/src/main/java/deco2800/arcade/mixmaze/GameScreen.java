@@ -3,9 +3,18 @@
  */
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.MixMazeModel;
-import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.Direction;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
+import deco2800.arcade.mixmaze.domain.WallModel;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
+import deco2800.arcade.mixmaze.domain.view.ITileModel;
+import deco2800.arcade.mixmaze.domain.view.IWallModel;
+
+import java.io.IOException;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -22,62 +31,74 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Timer;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.EndPoint;
+import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.kryonet.rmi.ObjectSpace;
+import com.esotericsoftware.kryonet.rmi.RemoteObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
+import static deco2800.arcade.mixmaze.domain.view.IPlayerModel.PlayerAction.*;
 
-import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.*;
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
 
 /**
  * GameScreen draws all elements in a game session.
  */
-final class GameScreen implements Screen {
+abstract class GameScreen implements Screen {
 
-	private static final String LOG = GameScreen.class.getSimpleName();
+	final Logger logger = LoggerFactory.getLogger(GameScreen.class);
+
+	protected final Stage stage;
+	protected final ShapeRenderer renderer;
+
+	protected Group gameArea;
+	protected PlayerViewModel p1;
+	protected PlayerViewModel p2;
+	protected IMixMazeModel model;
+	protected Table tileTable;
+	protected int countdown;
+	protected ObjectSpace os;
+	protected Label timerLabel;
+	protected Table endGameTable;
+	protected TextButton backMenu;
+	protected Label resultLabel;
+	protected SidePanel left;
+	protected SidePanel right;
 
 	private final MixMaze game;
-	private final Stage stage;
-	private final ShapeRenderer renderer;
 	private final Skin skin;
 
-	private Label timerLabel;
-	private int countdown;
-	private Table tileTable;
-	private Group gameArea;
-	private Table endGameTable;
-	private PlayerViewModel p1;
-	private PlayerViewModel p2;
-	private MixMazeModel model;
-	private TextButton backMenu;
-	private Label resultLabel;
-	private SidePanel left;
-	private SidePanel right;
-
 	/**
-	 * Constructor
+	 * Constructor.
+	 *
+	 * @param game	the MixMaze game
 	 */
 	GameScreen(final MixMaze game) {
 		this.game = game;
 		this.skin = game.skin;
 
-		/*
-		 * This should be the only ShapeRender used in this
-		 * stage.
-		 */
+		/* This should be the only ShapeRender used on this stage. */
 		renderer = new ShapeRenderer();
 
 		stage = new Stage();
 
 		setupLayout();
-
 	}
 
 	/**
 	 * Set up the layout on stage.
 	 */
 	private void setupLayout() {
+		/*
+		 * FIXME: this method is too long.
+		 */
 		Stack gameBoard = new Stack();
 		Table root = new Table();
 
@@ -139,36 +160,7 @@ final class GameScreen implements Screen {
 		});
 	}
 
-	private void setupGameBoard() {
-		int tileSize = 640 / model.getBoardSize();
-
-		for (int j = 0; j < model.getBoardSize(); j++) {
-			for (int i = 0; i < model.getBoardSize(); i++) {
-				tileTable.add(new TileViewModel(
-						model.getBoardTile(i, j),
-						renderer,
-						tileSize))
-						.size(tileSize, tileSize);
-			}
-
-			/*
-			 * Luran:
-			 * Not sure if an extra row() after boardHeight
-			 * will cause problem, but it is easy to check.
-			 */
-			if (j < model.getBoardSize())
-				tileTable.row();
-		}
-
-		// Might rcommend not passing the entire model to the PlayerViewModel, just to keep good seperation
-		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
-				1,new Settings().p1Controls);
-		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
-				2,new Settings().p2Controls);
-		gameArea.addActor(p1);
-		gameArea.addActor(p2);
-
-	}
+	protected abstract void setupGameBoard();
 
 	@Override
 	public void render(float delta) {
@@ -195,8 +187,6 @@ final class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		Gdx.app.debug(LOG, "resizing");
-
 		stage.setViewport(1280, 720, true);
 		stage.getCamera().translate(-stage.getGutterWidth(),
 				-stage.getGutterHeight(), 0);
@@ -210,70 +200,8 @@ final class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		Gdx.app.debug(LOG, "hiding");
 		Gdx.input.setInputProcessor(null);
-	}
-
-	@Override
-	public void show() {
-		Gdx.app.debug(LOG, "showing");
-
-		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60*2);
-		setupGameBoard();
-
-		/* set timer */
-		Label.LabelStyle style = timerLabel.getStyle();
-		style.fontColor = WHITE;
-		timerLabel.setStyle(style);
-
-		countdown = model.getGameMaxTime();
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				int min = countdown / 60;
-				int sec = countdown % 60;
-
-				if (countdown == 10) {
-					Label.LabelStyle style = timerLabel
-							.getStyle();
-					style.fontColor = RED;
-					timerLabel.setStyle(style);
-				}
-				timerLabel.setText(String.format("%s%d:%s%d",
-						(min < 10) ? "0" : "", min,
-						(sec < 10) ? "0" : "", sec));
-				countdown -= 1;
-			}
-		}, 0, 1, model.getGameMaxTime());
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				PlayerModel winner;
-
-				stage.setKeyboardFocus(null);
-				winner = model.endGame();
-				if (winner == null) {
-					/* draw */
-					resultLabel.setText("Draw");
-				} else {
-					/* winner */
-					resultLabel.setText("Player "
-							+ winner.getPlayerID()
-							+ " win");
-				}
-				endGameTable.setVisible(true);
-			}
-		/*
-		 * FIXME: this does not look like a good solution.
-		 * It takes some time for timerLabel to change text,
-		 * and therefore, without the extra 1, the game will end
-		 * before the timer showing up 00:00.
-		 */
-		}, model.getGameMaxTime() + 1);
-
-		/* start game */
-		Gdx.input.setInputProcessor(stage);
-		stage.setKeyboardFocus(gameArea);
-		model.startGame();
+		logger.debug("hided");
 	}
 
 	@Override
@@ -282,6 +210,16 @@ final class GameScreen implements Screen {
 
 	@Override
 	public void resume() {
+	}
+
+	protected void register(EndPoint endPoint) {
+		Kryo kryo = endPoint.getKryo();
+
+		ObjectSpace.registerClasses(kryo);
+		kryo.register(IMixMazeModel.class);
+		kryo.register(IWallModel.class);
+		kryo.register(ITileModel.class);
+		kryo.register(IPlayerModel.class);
 	}
 
 	/*
@@ -357,18 +295,18 @@ final class GameScreen implements Screen {
 			}
 		}
 	}
-	
+
 	public class Settings{
-		private int[] p1Controls = {Keys.W,Keys.S,Keys.A,Keys.D,Keys.G,Keys.H};
-		private int[] p2Controls = {Keys.UP,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.O,Keys.P};
-		
+		protected int[] p1Controls = {Keys.W,Keys.S,Keys.A,Keys.D,Keys.G,Keys.H};
+		protected int[] p2Controls = {Keys.UP,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.O,Keys.P};
+
 		public Settings(int[] p1Controls,int[] p2Controls){
 			this.p1Controls = p1Controls;
 			this.p2Controls = p2Controls;
 		}
-		
+
 		public Settings(){
-			
+
 		}
 	}
 }

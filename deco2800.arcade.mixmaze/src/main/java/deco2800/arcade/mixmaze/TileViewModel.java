@@ -3,9 +3,8 @@
  */
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.ItemModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.TileModel;
+import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
+import deco2800.arcade.mixmaze.domain.view.ITileModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
+import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
@@ -38,7 +37,7 @@ public class TileViewModel extends Group {
 
 	private static final String LOG = TileViewModel.class.getSimpleName();
 
-	private final TileModel model;
+	private final ITileModel model;
 	private final ShapeRenderer renderer;
 	private final int tileSize;
 
@@ -49,7 +48,7 @@ public class TileViewModel extends Group {
 	 * @param renderer	the renderer
 	 * @param tileSize	the graphical size of the tile
 	 */
-	public TileViewModel(TileModel model, ShapeRenderer renderer,
+	public TileViewModel(ITileModel model, ShapeRenderer renderer,
 			int tileSize) {
 		this.model = model;
 		this.renderer = renderer;
@@ -67,7 +66,7 @@ public class TileViewModel extends Group {
 		renderer.setTransformMatrix(computeTransform());
 
 		/* draw box */
-		PlayerModel p = model.getBoxer();
+		IPlayerModel p = model.getBoxer();
 		renderer.begin(FilledRectangle);
 		if (p == null) {
 			renderer.setColor(.8f, .8f, .8f, 1f);

@@ -12,5 +12,4 @@ Export-Package: .,
 Require-Bundle: deco2800.arcade.protocol;bundle-version="1.0.0",
  deco2800.arcade.model;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: deco2800.arcade.client.network.listener,
- deco2800.server.database
+Import-Package: deco2800.arcade.client.network.listener

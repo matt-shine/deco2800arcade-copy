@@ -9,4 +9,3 @@ Export-Package: deco2800.arcade.protocol,
  deco2800.arcade.protocol.credit,
  deco2800.arcade.protocol.game
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Import-Package: deco2800.server.database

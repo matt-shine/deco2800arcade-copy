@@ -1,67 +1,67 @@
 package deco2800.arcade.communication;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class CommunicationView {
-	
-	JTextArea textArea;
-	JTextArea input;
-	JButton sendButton;
-	
-	public CommunicationView(){
+
+public class CommunicationView extends JFrame {
+
+	private JScrollPane scrollPane;
+	private JTextArea inputArea;
+	private JButton sendButton;
+	private Container container;
+	private JLabel testLabel;
+	private JPanel scrollablePanel;
+	private JLabel testLabel2;
+
+	public CommunicationView(){		
+		setBounds(400,200,100,740);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
-		//Create individual chat window.
-		JFrame chat = new JFrame("Testing Chat");
-		chat.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Container container = chat.getContentPane();
+		container = getContentPane();
+		container.setBackground(Color.WHITE);
 		
-		addTextArea(container);
-		addInputArea(container);
-		addSendButton(container);
+		scrollablePanel = new JPanel();
+		scrollablePanel.setLayout(new BoxLayout(scrollablePanel, BoxLayout.Y_AXIS));
 		
-		chat.pack();
-		chat.setVisible(true);
+		scrollPane = new JScrollPane(scrollablePanel);
+		scrollPane.setPreferredSize(new Dimension(100, 400));
+
+		inputArea = new JTextArea();
+		sendButton = new JButton("Send");
+		sendButton.setPreferredSize(new Dimension(100,100));
 		
-	}
-	
-	private void addTextArea(Container container){
-		textArea = new JTextArea(5,20);
-		textArea.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(textArea);
 		container.add(scrollPane, BorderLayout.NORTH);
-	}
-	
-	private void addInputArea(Container container){
-		input = new JTextArea(5,20);
-		container.add(input, BorderLayout.CENTER);
-	}
-	
-	private void addSendButton(Container container){
-		sendButton = new JButton("SEND");
+		container.add(inputArea, BorderLayout.CENTER);
 		container.add(sendButton, BorderLayout.SOUTH);
+		
+		setVisible(true);
+		
 	}
 	
-	public void addSendButtonListener(ActionListener listener){
+	public void addChatNode(ChatNode node){
+		//scrollablePanel.add(node);
+	}
+
+	public void addSendListener(ActionListener listener) {
 		sendButton.addActionListener(listener);
 	}
 	
-	public void setTextInput(String text){
-		input.setText(text);
+	public String getMessage(){
+		return inputArea.getText();
 	}
 	
-	public void appendTextArea(String text){
-		textArea.append(text);
-	}
-	
-	public String getTextInput(){
-		return input.getText();
-	}
 
 }

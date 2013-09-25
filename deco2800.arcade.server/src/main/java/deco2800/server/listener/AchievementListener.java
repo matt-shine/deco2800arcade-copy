@@ -33,7 +33,7 @@ public class AchievementListener extends Listener {
 				} else {
 					System.out.println(achievements.toString());
                     AchievementsForIDsResponse resp = new AchievementsForIDsResponse();
-                    resp.achievements = achievements;
+                    //resp.achievements = achievements;
 			   		BlockingMessage.respond(connection, req, resp);
 				}
 				
@@ -76,13 +76,13 @@ public class AchievementListener extends Listener {
             
             try {
 				//update database
-			    resp.achievements =
+			    //resp.achievements =
 						ArcadeServer.instance().getAchievementStorage().achievementsForGame(gameID);
                 BlockingMessage.respond(connection, req, resp);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
                 // can't let the client keep blocking, just send an empty list
-                resp.achievements = new ArrayList<Achievement>();
+                //resp.achievements = new ArrayList<Achievement>();
                 BlockingMessage.respond(connection, req, resp);
             }			
 		}

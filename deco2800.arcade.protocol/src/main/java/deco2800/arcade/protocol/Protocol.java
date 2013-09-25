@@ -5,9 +5,8 @@ import com.esotericsoftware.kryo.serializers.*;
 
 import java.util.ArrayList;
 
-import deco2800.arcade.model.Achievement;
+//import deco2800.arcade.model.Achievement;
 import deco2800.arcade.protocol.achievement.*;
-import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -66,7 +65,7 @@ public class Protocol {
 		kryo.register(CreditBalanceResponse.class);
 
 		// Achievement messages
-		kryo.register(Achievement.class);
+		//kryo.register(Achievement.class);
 		kryo.register(AchievementsForIDsRequest.class);
 		kryo.register(AchievementsForIDsResponse.class);
 		kryo.register(AchievementsForGameRequest.class);
@@ -106,16 +105,16 @@ public class Protocol {
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
-		kryo.register(ChatRequest.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
-
+		
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
 
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
+
 	}
 	
 	/**

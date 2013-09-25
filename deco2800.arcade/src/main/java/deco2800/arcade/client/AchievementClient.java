@@ -11,7 +11,6 @@ import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.*;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementListener;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Connection;
 import deco2800.arcade.client.network.listener.NetworkListener;
 
@@ -113,7 +112,7 @@ public class AchievementClient extends NetworkListener {
 	// they're immutable - once we've retrieved it from the server once
 	// we shouldn't ever need to ask for it again.
 
-        return resp.achievements;
+        return new ArrayList<Achievement>();//resp.achievements;
     }
     
     /**
@@ -128,7 +127,7 @@ public class AchievementClient extends NetworkListener {
         BlockingMessage r = BlockingMessage.request(networkClient.kryoClient(),
                                                        req);
         AchievementsForGameResponse resp = (AchievementsForGameResponse)r;
-        return resp.achievements;
+        return new ArrayList<Achievement>();//resp.achievements;
     }
 
     /**

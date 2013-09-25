@@ -8,8 +8,10 @@ import java.awt.event.WindowEvent;
 import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -178,33 +180,56 @@ public class Arcade extends JFrame {
 	}
 
 	public void connectAsUser(String username) {
+		//This should really GET the player with the details that were provided at login, not create a new player!
+		//For testing purposes, a specific ID number is given to debug users
+		int myID = 0;
+		if (username.equals("debug")){
+			myID = 999;
+		} else if (username.equals("debug1")){
+			myID = 888;
+		} else if (username.equals("debug2")){
+			myID = 777;
+		}
+		
+		System.out.println("My ID is: " + myID);
+		this.player = new Player(myID, username, "path/to/avatar");
+		this.player.setUsername(username);
+		this.communicationNetwork.loggedIn(this.player);
+	
 		ConnectionRequest connectionRequest = new ConnectionRequest();
+		connectionRequest.playerID = myID;
 		connectionRequest.username = username;
-		
-		//Protocol.registerEncrypted(connectionRequest);
-		
+		//This breaks network communication at the moment!
+		//Protocol.registerEncrypted(connectionRequest); 
 		this.client.sendNetworkObject(connectionRequest);
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
+		communicationRequest.playerID = myID;
 		communicationRequest.username = username;
-
 		this.client.sendNetworkObject(communicationRequest);
 
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
+		creditBalanceRequest.playerID = myID;
 		creditBalanceRequest.username = username;
-
-		this.client.sendNetworkObject(creditBalanceRequest);
-
-		this.player = new Player(0, username,
-				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
-		this.player.setUsername(username);
-
-		// this.communicationNetwork.createNewChat(username);
+		this.client.sendNetworkObject(creditBalanceRequest);		
+		
+		//For testing chat:		
+		if (player.getID() == 888){ //This ID belongs to debug1
+			List<Integer> chat = new ArrayList<Integer>();
+			chat.add(999); //debug
+			chat.add(888); //debug1
+			this.communicationNetwork.createChat(chat);
+		}
+		
+		if (player.getID() == 777){ //This ID belongs to debug2
+			List<Integer> chat = new ArrayList<Integer>();
+			chat.add(999); //debug
+			chat.add(777); //debug2
+			this.communicationNetwork.createChat(chat);
+		}
 
         // TODO move this call to be internal to Packman class
-        GameUpdateCheckRequest gameUpdateCheckRequest = new
-                GameUpdateCheckRequest();
-
+        GameUpdateCheckRequest gameUpdateCheckRequest = new GameUpdateCheckRequest();
         this.client.sendNetworkObject(gameUpdateCheckRequest);
 	}
 

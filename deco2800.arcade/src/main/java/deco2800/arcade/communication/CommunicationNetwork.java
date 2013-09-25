@@ -1,64 +1,157 @@
 package deco2800.arcade.communication;
 
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.TextMessage;
-import deco2800.arcade.protocol.communication.VoiceMessage;
-//TODO commenting?
+
+/**
+ * Handles the list of individual chat instances. 
+ * Allowing you to create, leave, join and delete chats.
+ *
+ */
 public class CommunicationNetwork {
 	
-	protected Player player;
-	protected NetworkClient networkClient;
-	protected Map<String, ChatWindow> currentChats;
-	
-	@SuppressWarnings("unused")
-	private VoiceMessage voiceMessage;
-	
-	
-	
-	/************************************************************/
-	
-	public class ChatWindow {
-		private CommunicationView window;
-		private CommunicationController controller;
-		private CommunicationModel model;
-		
-		public ChatWindow(String username){
-			window = new CommunicationView();
-			model = new CommunicationModel(username);
-			controller = new CommunicationController(window, model, networkClient);
-		}
-		
-		public void updateChat(TextMessage textMessage){
-			//FIXME deprecated
-			controller.updateChat(textMessage.username + ": " + textMessage.text);
-		}
-	}
-	
-	/***********************************************************/
-	
+	private Player player;
+	private NetworkClient networkClient;
+	private Map<Integer, ChatNode> chatNodes;
+	private TextMessage textMessage;
+	private CommunicationView view;
+	private ChatNode currentChat;
+	private CommunicationController controller;
 
+	/**
+	 * Initialises an empty list of chat instances.
+	 * @param player
+	 * @param networkClient
+	 */
 	public CommunicationNetwork(Player player, NetworkClient networkClient){
 		this.player = player;
 		this.networkClient = networkClient;
-		currentChats = new HashMap<String, ChatWindow>();
 	}
 	
-	public void createNewChat(String username){
-		currentChats.put(username, new ChatWindow(username));
+	/**
+	 * Creates a chatNode with the playerIDs of the participants
+	 * @param chatParticipants
+	 */
+	public void createChat(List<Integer> chatParticipants){
+		ChatNode node = new ChatNode(chatParticipants);
+		chatNodes.put(chatParticipants.hashCode(), node);
+		currentChat = node;
+		view.addChatNode(node);
 	}
 	
-	public void updateChat(String username, TextMessage message){
-		ChatWindow tempWindow = currentChats.get(username);
-		tempWindow.updateChat(message);
+	/**
+	 * Forwards the TextMessage to the server so it can handle it
+	 * @param message
+	 */
+	public void sendTextMessage(TextMessage message){
+		networkClient.sendNetworkObject(message);
 	}
-	
-	//TODO Check if chat exists before making new window.
-	public void checkIfChatExists(){
+
+	/**
+	 * Adds a message received to the chat history of the
+	 * corresponding chat instance.
+	 * @param textMessage
+	 */
+	public void recieveTextMesage(TextMessage textMessage){
+		//TO DO:
+		//If you don't have the window open, then display a notification in the chat area
+		//else, display the message in the open chat window
+		int chatID = textMessage.chatID;
+		ChatNode node = chatNodes.get(chatID);
+		if (node == null){
+			node = new ChatNode(textMessage.recipients);
+			chatNodes.put(textMessage.recipients.hashCode(), node);
+		}
+		node.addMessage(textMessage.text);
+		currentChat = node;
 		
+		//Temporary:
+		System.out.println(textMessage.senderName + ": " + textMessage.text);
+	}	
+	
+	/**
+	 * Adds a user to an existing chat.
+	 * @param chat
+	 * @param playerId
+	 */
+	public void inviteUser(ChatNode chat, int playerId){
+		ChatNode node = chat;		
+		node.addParticipant(playerId);
+	}	
+	
+	/**
+	 * Leaves an existing chat instance.
+	 * @param chatId
+	 * @param playerId
+	 */
+	public void leaveChat(int chatId, int playerId){
+		ChatNode node = chatNodes.get(chatId);
+		node.removeParticipant(playerId);
 	}
+	
+	/**
+	 * Returns a map of current chat instances.
+	 */
+	public Map<Integer, ChatNode> getCurrentChats(){
+		return chatNodes;
+	}
+	
+	public ChatNode getCurrentChat(){
+		return currentChat;
+	}
+	
+	public void setCurrentChat(ChatNode chat){
+		currentChat = chat;
+	}
+			
+	/**
+	 * Returns the player that is apart of the current chat instances.
+	 */
+	public Player getPlayer() {
+		return player;
+	}
+
+	/**
+	 * Sets the player to be the owner of the current chat instances.
+	 * @param player
+	 */
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	/**
+	 * Returns the network client being used to communicate.
+	 */
+	public NetworkClient getNetworkClient() {
+		return networkClient;
+	}
+
+	/**
+	 * Sets the network client being used to communicate.
+	 * @param networkClient
+	 */
+	public void setNetworkClient(NetworkClient networkClient) {
+		this.networkClient = networkClient;
+	}
+
+	/**
+	 * Updates the Communication Network for the logged-in Player
+	 * @param player
+	 */
+	public void loggedIn(Player player) {
+		this.player = player;
+		this.chatNodes = new HashMap<Integer, ChatNode>();
+		this.textMessage = new TextMessage();
+		this.view = new CommunicationView();
+		//this.model = new CommunicationModel();
+		this.controller = new CommunicationController(view, null, this);
+	}
+	
 	
 }

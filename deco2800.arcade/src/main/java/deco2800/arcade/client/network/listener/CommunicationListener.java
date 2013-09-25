@@ -10,20 +10,7 @@ public class CommunicationListener extends NetworkListener {
 	CommunicationNetwork communicationNetwork;
 	
 	public CommunicationListener(CommunicationNetwork communicationNetwork) {
-		// TODO Auto-generated constructor stub
 		this.communicationNetwork = communicationNetwork;
-		
-	}
-
-	@Override
-	public void connected(Connection connection) {
-		super.connected(connection);
-		
-	}
-
-	@Override
-	public void disconnected(Connection connection) {
-		super.disconnected(connection);
 	}
 
 	@Override
@@ -35,15 +22,15 @@ public class CommunicationListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
+		/**
+		 * If a text message is received, the message is added to the
+		 * corresponding chat instance.
+		 */
 		if (object instanceof TextMessage){
 			 TextMessage textMessage = (TextMessage) object;
-			 if(textMessage.username.equals("")){
-				 System.out.println(textMessage.text);
-			 }else{
-				 System.out.println(textMessage.username);
-				 communicationNetwork.updateChat(textMessage.username, textMessage);
-			 }
+			 communicationNetwork.recieveTextMesage(textMessage);
 		}
+		
 	}
 	
 }

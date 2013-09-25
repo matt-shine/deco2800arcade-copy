@@ -92,6 +92,7 @@ public class OverlayScreen implements Screen {
         }
         ArcadeInputMux.getInstance().removeProcessor(stage);
         this.window.destroy();
+        this.clock.destroy();
     }
 
     @Override

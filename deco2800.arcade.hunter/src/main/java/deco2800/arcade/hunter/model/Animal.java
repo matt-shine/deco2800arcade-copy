@@ -14,14 +14,29 @@ import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 
 public class Animal extends Entity {
 	
+	/**
+	 * Boolean of whether the Animal is moving
+	 */
 	private boolean moving;
 	
+	/**
+	 * The speed at which the Animal moves
+	 */
 	private int moveSpeed;
 	
+	/**
+	 * State of the Animal
+	 */
 	private State state = State.IDLE;
 	
+	/**
+	 * The current animation of the animal
+	 */
 	private Animation currAnim;
 	
+	/**
+	 * The type of animal
+	 */
 	private Type type;
 	
 	
@@ -37,7 +52,12 @@ public class Animal extends Entity {
 		}
 		setAnimation(loadAnimations(filepath));
 	}
-
+	
+	/**
+	 * Takes a file path and loads all the animations in that file path
+	 * @param filepath Filepath for the animal
+	 * @return Animation for the animal
+	 */
 	private Animation loadAnimations(String filepath) {
 		Texture text = new Texture("textures/Animals/"+filepath+"IDLE.png");
 		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()/2, text.getHeight());
@@ -60,8 +80,8 @@ public class Animal extends Entity {
 		PREY
 	}
 	
-	/*
-	 * Changes the state of the entity to moving
+	/**
+	 * Toggles the animal to whether it is moving or not
 	 */
 	public void changeMove(){
 		if (moving){
@@ -95,18 +115,31 @@ public class Animal extends Entity {
 		
 	}
 	
+	/**
+	 * Sets the current animation to the anim
+	 * @param anim Animation of the animal to be set to
+	 */
 	private void setAnimation(Animation anim){
 		currAnim = anim;
 	}
-	
+	/**
+	 * Returns the current animation of the animal
+	 * @return Animation Current Animation
+	 */
 	public Animation getAnim(){
 		return currAnim;
 	}
-	
+	/**
+	 * Returns the type of animal
+	 * @return Type - Predator or Prey
+	 */
 	public Type getType(){
 		return type;
 	}
 	
+	/**
+	 * Checks for collisions
+	 */
 	@Override
 	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
 		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
@@ -115,13 +148,18 @@ public class Animal extends Entity {
 		}
 		return collisions;
 	}
-	
+	/**
+	 * Handles Collisions
+	 */
 	@Override
 	public void handleCollision(Entity e){
 		if (e == null)
 			killAnimal();
 	}
 
+	/**
+	 * Destroys the animal entity
+	 */
 	private void killAnimal() {
 		System.out.println("DESTROY");
 	}

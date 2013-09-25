@@ -15,7 +15,13 @@ import deco2800.arcade.platformergame.model.EntityCollision;
 import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 
 public class Player extends Entity {
+	/**
+	 * Constant of JUMP VELOCITY
+	 */
 	private static final int JUMP_VELOCITY = 8;
+	/**
+	 * Jump Velocity variable
+	 */
 	private float jumpVelocity;
 	
 	private TextureRegion img = new TextureRegion(new Texture("textures/playerAnim/GensijinRun kf.png"));
@@ -115,15 +121,26 @@ public class Player extends Entity {
 		return jumpVelocity;
 	}
 	
+	/**
+	 * Makes the player jump
+	 */
 	public void jump() {
 		setJumpVelocity(JUMP_VELOCITY);
 		this.collider.bottom = false;
 	}
-
+	
+	/**
+	 * Sets the jump velocity
+	 * @param jumpVelocity Float value of what the jump velocity will be set to
+	 */
 	public void setJumpVelocity(float jumpVelocity) {
 		this.jumpVelocity = jumpVelocity;
 	}
 	
+	/**
+	 * Returns the Player State
+	 * @return State
+	 */
 	public State getState() {
 		return state;
 	}
@@ -159,30 +176,58 @@ public class Player extends Entity {
 		}
 	}
 	
+	/**
+	 * Returns the current animation
+	 * @return Animation - Current Animation
+	 */
 	public Animation getAnimation(){
 		return currAnim;
 	}
 	
+	/**
+	 * Return the hurt Animation
+	 * @return Animation - Hurt Animation
+	 */
 	public Animation hurtAnimation(){
 		return null;
 	}
 	
+	/**
+	 * Returns the death Animation
+	 * @return Animation - Death animation
+	 */
 	public Animation deathAnimation(){
 		return null;
 	}
 	
+	/**
+	 * Returns the attack animation
+	 * @return Animation - Attack Animation
+	 */
 	public Animation attackAnimation(){
 		return null;
 	}
 	
+	/**
+	 * Returns the jump animation
+	 * @return Animation - Jump Animation
+	 */
 	public Animation jumpAnimation(){
 		return animationList.get("Jump");
 	}
 	
+	/**
+	 * Returns the fall animation
+	 * @return Animation - Fall animation
+	 */
 	public Animation fallAnimation(){
 		return animationList.get("Fall");
 	}
 	
+	/**
+	 * Returns the run animation
+	 * @return Animation - Run animation
+	 */
 	public Animation runAnimation(){
 		return animationList.get("RunKnF");
 	}
@@ -192,6 +237,9 @@ public class Player extends Entity {
 		batch.draw(img, getX(), getY(), getWidth(), getHeight());
 	}
 	
+	/**
+	 * Checks for entity collisions
+	 */
 	@Override
 	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
 		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
@@ -215,6 +263,9 @@ public class Player extends Entity {
 		return collisions;
 	}
 	
+	/**
+	 * Handles entity collisions
+	 */
 	@Override
 	public void handleCollision(Entity e){
 		if (e == null){

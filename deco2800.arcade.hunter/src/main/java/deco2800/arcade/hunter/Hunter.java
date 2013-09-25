@@ -20,14 +20,31 @@ public class Hunter extends PlatformerGame {
 		public final static int PANE_SIZE = 16;
 		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
 	}
-
+	
+	
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		prefManage = new PreferencesManager();
+		setHighScores();
 	}
 	
+	/**
+	 * Returns the preferences manager of the game which stores all the option settings
+	 * @return PreferencesManager
+	 */
 	public PreferencesManager getPreferencesManager(){
 		return prefManage;
+	}
+	
+	/**
+	 * Sets the highScores
+	 */
+	public void setHighScores(){
+		getPreferencesManager().addHighScore(100000);
+		getPreferencesManager().addHighScore(10000);
+		getPreferencesManager().addHighScore(1000);
+		getPreferencesManager().addHighScore(20000);
+		getPreferencesManager().addHighScore(2);
 	}
 	
 	@Override

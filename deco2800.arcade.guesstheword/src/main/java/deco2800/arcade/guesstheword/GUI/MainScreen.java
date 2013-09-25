@@ -1,21 +1,15 @@
 package deco2800.arcade.guesstheword.GUI;
 
-import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MainScreen implements Screen {
 	
@@ -30,21 +24,21 @@ public class MainScreen implements Screen {
 	// setup the dimensions of the menu buttons
     private static final float BUTTON_WIDTH = 300f;
     private static final float BUTTON_HEIGHT = 60f;
-    private static final float BUTTON_SPACING = 10f;
     
-	
 	MainScreen(final GuessTheWord game){
 		this.game = game;
 		this.skin = game.skin;
 		this.stage = new Stage();
-		//Gdx.input.setInputProcessor(stage);
+
 		titleLabel = new Label("Welcome to Guess The Word!" , skin);
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				game.getterSetter.setLevel("Default");
 				System.out.println("Changing to Game Screen");
+				clearTextfield();
 				game.setScreen(game.gameScreen);
+				
 			}
 		});
 		settingsButton = new TextButton("Game Settings" , skin);
@@ -68,15 +62,25 @@ public class MainScreen implements Screen {
 
 		mainTable.add(titleLabel).padBottom(15);
 		mainTable.row();
-		mainTable.add(startButton).width(BUTTON_WIDTH).padBottom(5);
+		mainTable.add(startButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
 		mainTable.row();
-		mainTable.add(settingsButton).width(BUTTON_WIDTH).padBottom(5);
+		mainTable.add(settingsButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
 		mainTable.row();
-		mainTable.add(achieveButton).width(BUTTON_WIDTH).padBottom(5);
+		mainTable.add(achieveButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
 
 		stage.addActor(mainTable);
 		
 	}
+	
+	private void clearTextfield(){
+		game.getterSetter.setText1("");
+		game.getterSetter.setText2("");
+		game.getterSetter.setText3("");
+		game.getterSetter.setText4("");
+		game.getterSetter.setText5("");
+		game.getterSetter.setText6("");
+	}
+	
 	
 	@Override
 	public void render(float arg0) {

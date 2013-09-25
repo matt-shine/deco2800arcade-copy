@@ -50,6 +50,10 @@ public class GuessTheWord extends GameClient{
 	public void resume() {
 		super.resume();
 	}
+	
+	public void render() {
+		super.render();
+	}
 
 	static {
 		GAME = new Game();

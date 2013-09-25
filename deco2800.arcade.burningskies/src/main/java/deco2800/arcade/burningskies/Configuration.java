@@ -1,6 +1,5 @@
 package deco2800.arcade.burningskies;
 
-import java.io.IOException;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -9,13 +8,26 @@ import com.badlogic.gdx.files.FileHandle;
 public class Configuration {
 	
 	// Volumes stored as integers from 0-100 inclusive, represents % max volume
-	private static int masterVolume;
-	private static int effectsVolume;
-	private static int backgroundVolume;
+	private static int masterVolume = 50;
+	private static int effectsVolume = 50;
+	private static int backgroundVolume = 50;
 	// Difficulty stored as integer from 0 to 4, with 4 being insane mode
-	private static int difficulty;
+	private static int difficulty = 2;
 	// Hashmap of action:keyPress pairs
 	private HashMap<String, String> keybindings;
+	
+	/* 
+	 * Initialises all variables on game start up. Checks if config file exists, 
+	 * creates new config file with default settings if non existent, otherwise
+	 * reads in config file.
+	 */
+	public static void initialise() {
+		if (!Gdx.files.external("BurningSkies/config.cfg").exists()) {
+			writeConfig();
+		} else {
+			readConfig();
+		}
+	}
 	
 	/*
 	 * Writes to the configuration file. Specifically, it writes masterVolume,
@@ -29,17 +41,6 @@ public class Configuration {
 		String lineTwo = "effectsVolume:" + getEffectsVolume() + System.getProperty("line.separator");
 		String lineThree = "backgroundVolume:" + getBackgroundVolume() + System.getProperty("line.separator");
 		String lineFour = "difficulty:" + getDifficulty() + System.getProperty("line.separator");
-		
-		if (!configFile.exists()) {
-			try {
-				configFile.file().createNewFile();
-			} catch (IOException e) {
-				/* Ignore exception. Since configFile does not currently exist, 
-				 	it throws an exception saying file does not exist, 
-					yet it continues to create said file anyway.
-				*/
-			}
-		}
 		
 		configFile.writeString(lineOne + lineTwo + lineThree + lineFour, false);
 	}

@@ -70,7 +70,7 @@ public class BurningSkies extends GameClient {
 		}
 		nowPlaying = Gdx.audio.newMusic(Gdx.files.internal("sound/music/" + songName + ".ogg"));
 		nowPlaying.setLooping(loop);
-		nowPlaying.setVolume((float)Configuration.getBackgroundVolume()/100);
+		nowPlaying.setVolume(Configuration.getBackgroundVolume());
 		nowPlaying.play();
 	}
 	

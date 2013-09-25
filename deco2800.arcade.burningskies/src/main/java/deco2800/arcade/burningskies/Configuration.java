@@ -37,10 +37,10 @@ public class Configuration {
 		
 		FileHandle configFile = Gdx.files.external("BurningSkies/config.cfg");
 		
-		String lineOne = "masterVolume:" + getMasterVolume() + System.getProperty("line.separator");
-		String lineTwo = "effectsVolume:" + getEffectsVolume() + System.getProperty("line.separator");
-		String lineThree = "backgroundVolume:" + getBackgroundVolume() + System.getProperty("line.separator");
-		String lineFour = "difficulty:" + getDifficulty() + System.getProperty("line.separator");
+		String lineOne = "masterVolume:" + masterVolume + System.getProperty("line.separator");
+		String lineTwo = "effectsVolume:" + effectsVolume + System.getProperty("line.separator");
+		String lineThree = "backgroundVolume:" + backgroundVolume + System.getProperty("line.separator");
+		String lineFour = "difficulty:" + difficulty + System.getProperty("line.separator");
 		
 		configFile.writeString(lineOne + lineTwo + lineThree + lineFour, false);
 	}
@@ -116,16 +116,12 @@ public class Configuration {
 	public void readBinds() {
 	}
 	
-	public static int getMasterVolume() {
-		return Configuration.masterVolume;
+	public static float getEffectsVolume() {
+		return ((float)(Configuration.masterVolume * Configuration.effectsVolume))/10000;
 	}
 	
-	public static int getEffectsVolume() {
-		return Math.min(Configuration.masterVolume, Configuration.effectsVolume);
-	}
-	
-	public static int getBackgroundVolume() {
-		return Math.min(Configuration.masterVolume, Configuration.backgroundVolume);
+	public static float getBackgroundVolume() {
+		return ((float)(Configuration.masterVolume * Configuration.backgroundVolume))/10000;
 	}
 	
 	public static int getDifficulty() {

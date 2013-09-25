@@ -19,7 +19,6 @@ public class GamePlayer {
 	private int coordinate=-1;
 	//private int[] scores = new int[2];
 	private int score;
-	
 	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
 	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
 	
@@ -106,14 +105,24 @@ public class GamePlayer {
     
     public void initializeVelocity() {
     	
-    	if(getBounds().y==0 || getBounds().y==120 || getBounds().y==240 || getBounds().y==360 || getBounds().y==480){
+//    	if(getBounds().y==0 || getBounds().y==120 || getBounds().y==240 || getBounds().y==360 || getBounds().y==480){
+//			velocity.x = 60;
+//		}
+//		else if(getBounds().y==60 || getBounds().y==180 || getBounds().y==300 || getBounds().y==420 || getBounds().y==540)
+//		{
+//			velocity.x = -60;
+//		}
+    	
+		// if it is even row
+		if (getBounds().y % 120 == 0)
+		{
 			velocity.x = 60;
 		}
-		else if(getBounds().y==60 || getBounds().y==180 || getBounds().y==300 || getBounds().y==420 || getBounds().y==540)
+		// if it is odd row
+		else 
 		{
 			velocity.x = -60;
 		}
-    	
 	}
     
    public int getDnumber(int diceNumber){

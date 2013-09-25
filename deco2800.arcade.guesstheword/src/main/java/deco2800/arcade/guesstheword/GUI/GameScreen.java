@@ -12,10 +12,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -101,31 +97,7 @@ public class GameScreen implements Screen {
 		createGameScreen();
 		
 		picturePanel =  new PicturePanel();
-		
-//		switch(level){		
-//		case "Level 1": 
-//					createGameScreen();
-//					
-//					stage.act(arg0);
-//					stage.draw();
-//					Table.drawDebug(stage);
-//
-//		case "Level 2": 
-//					createGameScreen();
-//					
-//
-//					stage.act(arg0);
-//					stage.draw();
-//					Table.drawDebug(stage);
-//			
-//		case "Level 3":
-//					createGameScreen();
-//
-//					stage.act(arg0);
-//					stage.draw();
-//					Table.drawDebug(stage);
-//		}
-		
+
 		// back to main menu
 		if(Gdx.input.isKeyPressed(Keys.ESCAPE)){
 			System.out.println("Back to MainScreen");

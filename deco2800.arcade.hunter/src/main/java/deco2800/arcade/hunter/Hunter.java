@@ -16,9 +16,12 @@ public class Hunter extends PlatformerGame {
 		INSTANCE;
 		public static int screenWidth = 1280;
 		public static int screenHeight = 720;
+		public static int gameSpeed = 256;
 		public final static int TILE_SIZE = 64;
 		public final static int PANE_SIZE = 16;
 		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
+		public final static int MAX_SPEED = 512;
+		public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
 	}
 	
 	

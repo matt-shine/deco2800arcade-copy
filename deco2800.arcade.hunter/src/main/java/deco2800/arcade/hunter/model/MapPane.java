@@ -61,7 +61,9 @@ public class MapPane {
 		FileHandle mapFile = Gdx.files.internal(filename);
 		
 		String mapDataString = mapFile.readString();
-		String[] dataArray = mapDataString.replace("[", "").replace("]", "").split(System.lineSeparator());
+		
+		mapDataString = mapDataString.replace("\n", "").replace("\r", "");
+		String[] dataArray = mapDataString.replace("[", "").split("]");
 		
 		//Parse offsets
 		String[] offsets = dataArray[0].split(",");
@@ -80,7 +82,6 @@ public class MapPane {
 				collision[row][col] = Integer.parseInt(collisionData[row*Config.PANE_SIZE + col]);
 			}
 		}
-		
 	}
 
 	/**

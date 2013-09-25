@@ -31,3 +31,6 @@ bin
 .idea/
 *.iml
 *.eml
+
+# Release
+release

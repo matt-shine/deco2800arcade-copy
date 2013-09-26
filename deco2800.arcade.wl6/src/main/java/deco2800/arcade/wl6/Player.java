@@ -11,7 +11,7 @@ public class Player extends Mob {
 	
 	public void draw(Renderer renderer) {
 		if (renderer.isDebugMode()) {
-			renderer.drawBasicSprite(getTextureName(), getPos().x, getPos().y, getAngle());
+			renderer.drawBasicSprite(getTextureName(), getPos().x, getPos().y, -getAngle());
 		}
 		//no super call
 	}
@@ -19,7 +19,6 @@ public class Player extends Mob {
 	@Override
 	public void tick(GameModel model) {
 		super.tick(model);
-		//System.out.println("pos: " + this.getPos().x + " " + this.getPos().y + " " + this.getAngle());
 	}
 	
 	

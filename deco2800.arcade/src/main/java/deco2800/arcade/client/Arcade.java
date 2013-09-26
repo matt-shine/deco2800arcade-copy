@@ -8,13 +8,12 @@ import java.awt.event.WindowEvent;
 import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.JFrame;
 
+import deco2800.arcade.client.network.listener.*;
+import deco2800.arcade.protocol.game.GameLibraryRequest;
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -161,6 +160,9 @@ public class Arcade extends JFrame {
             // TODO allow server/port as optional runtime arguments xor user inputs.
             System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
+
+            client.sendNetworkObject(new GameLibraryRequest());
+
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
 		} catch (NetworkException e) {
@@ -169,12 +171,16 @@ public class Arcade extends JFrame {
 		}
 	}
 
-	private void addListeners() {
+    /**
+     * Add Listeners to the network client
+     */
+    private void addListeners() {
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
         this.client.addListener(new PackmanListener());
+        this.client.addListener(new LibraryResponseListener());
 	}
 
 	public void connectAsUser(String username) {
@@ -273,7 +279,7 @@ public class Arcade extends JFrame {
             }
         }
 
-    }
+	}
 
     /**
      * Removes the canvas from the frame. Should be called before shutdown.
@@ -300,8 +306,6 @@ public class Arcade extends JFrame {
         });
     }
 
-
-
     private Map<String, Class<? extends GameClient>> gameMap = null;
 
     private Map<String, Class<? extends GameClient>> getGameMap() {
@@ -309,6 +313,7 @@ public class Arcade extends JFrame {
         if (gameMap != null) {
             return gameMap;
         }
+
 
         gameMap = new HashMap<String, Class<? extends GameClient>>();
         Reflections reflections = new Reflections("deco2800.arcade");
@@ -357,19 +362,23 @@ public class Arcade extends JFrame {
                 Constructor<? extends GameClient> constructor = gameClass
                         .getConstructor(Player.class, NetworkClient.class);
                 GameClient game = constructor.newInstance(player, client);
-
-                // add the overlay to the game
-                if (!gameClass.isAnnotationPresent(InternalGame.class)) {
+                
+				// add the overlay to the game
+				if (!gameClass.isAnnotationPresent(InternalGame.class) && game != null) {
 
                     GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 
                     // the overlay and the bridge are the same object, but
                     // GameClient doesn't know that and it mightn't be that way
                     // forever
-                    game.addOverlay(overlay);
-                    if (overlay instanceof UIOverlay) {
-                        game.addOverlayBridge((UIOverlay) overlay);
+                    if (overlay != null) {
+                        game.addOverlay(overlay);
+                        if (overlay instanceof UIOverlay) {
+                            game.addOverlayBridge((UIOverlay) overlay);
+                        }
                     }
+
+				}
 
                 }
 
@@ -394,4 +403,48 @@ public class Arcade extends JFrame {
         return selectedGame;
     }
 
+    /**
+     * Set selected game client
+     * @param gameClient GameClient
+     */
+    public void setGame(GameClient gameClient) {
+        selectedGame = gameClient;
+    }
+
+    /**
+     * Return all playable games
+     * @return Set of Playable Games
+     */
+    public Set<GameClient> findPlayableGames() {
+        Map<String, Class<? extends GameClient>> games = getGameMap();
+
+        Set<GameClient> gameSet = new HashSet<GameClient>();
+
+        Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, Class<? extends GameClient>> pair = it.next();
+            if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+                it.remove();
+            } else {
+                GameClient gameClient = getInstanceOfGame(pair.getKey());
+                if (gameClient != null) {
+                    gameSet.add(gameClient);
+                }
+
+            }
+
+        }
+        return gameSet;
+    }
+
+    public void requestGames() {
+        GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
+        System.out.println(client.kryoClient().isConnected());
+
+        client.sendNetworkObject(gameLibraryRequest);
+
+
+        System.out.println(client.kryoClient().isConnected());
+    }
 }

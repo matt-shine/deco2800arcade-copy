@@ -56,6 +56,7 @@ public class Pacman extends GameClient {
 	
 	private Wall testWall;
 	private Wall testWall2;
+	private List<ArrayList<Tile>> map;
 	
 	private List<Collideable> colList;	
 	
@@ -112,6 +113,10 @@ public class Pacman extends GameClient {
         
         
 		super.create();	
+		
+		//create map which is a list of tiles
+		map = new ArrayList<ArrayList<Tile>>();
+		
 		// Just use a set file for the time being!
 		String file = "testmap";
 		//initialise collision list

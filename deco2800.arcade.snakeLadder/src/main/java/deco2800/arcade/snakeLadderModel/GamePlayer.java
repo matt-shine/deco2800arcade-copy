@@ -27,9 +27,9 @@ public class GamePlayer {
 	/**
 	 * Basic constructor for player. Set position and dimensions to the default
 	 */
-	public GamePlayer() {
+	public GamePlayer(String playerTexture) {
     	//loading player icon
-		this.player =new Texture(Gdx.files.classpath("images/player.png"));
+		this.player =new Texture(Gdx.files.classpath("images/"+playerTexture));
 		getBounds().x = 0;
 		getBounds().y = 0;
 		getBounds().height = WIDTH;

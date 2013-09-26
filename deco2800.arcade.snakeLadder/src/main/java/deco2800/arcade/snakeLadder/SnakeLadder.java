@@ -54,8 +54,7 @@ public class SnakeLadder extends GameClient {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	
-    public GamePlayer gamePlayer;
-    public AIPlayer AIPlayer;
+    public GamePlayer[] gamePlayers = new GamePlayer[2];
     private GameMap map;
    
 	public GameMap getMap() {
@@ -144,10 +143,8 @@ public class SnakeLadder extends GameClient {
 		map.loadMap("maps/lvl1.txt");
 		
 		// create the game player
-		gamePlayer = new GamePlayer();
-
-		// create the AI player
-		AIPlayer=new AIPlayer();
+		gamePlayers[0] = new GamePlayer("player.png");
+		gamePlayers[1] = new GamePlayer("AI.png");
 		
 		font = new BitmapFont();
 		font.setScale(2);
@@ -208,10 +205,10 @@ public class SnakeLadder extends GameClient {
 		map.renderMap(batch);
 		
 		getDice().renderDice(batch);
-		gamePlayer.renderPlayer(batch);
-		AIPlayer.renderPlayer(batch);
-		
-		
+		for(GamePlayer gamePlayer: gamePlayers)
+		{
+			gamePlayer.renderPlayer(batch);
+		}
 		
 		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
@@ -225,7 +222,7 @@ public class SnakeLadder extends GameClient {
 	    }
 		batch.end();
 		
-		 handleInput();
+		handleInput();
 		
 		super.render();
 		
@@ -398,7 +395,7 @@ public class SnakeLadder extends GameClient {
 
 	public int getturns() {
 		// TODO Auto-generated method stub
-		return this.i;
+		return this.i%2;
 	}
 
 	

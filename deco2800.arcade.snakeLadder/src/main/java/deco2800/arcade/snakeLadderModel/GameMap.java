@@ -53,8 +53,8 @@ public class GameMap {
 			String line = "";
 			while((line = file.readLine()) != null)
 			{
-				String[] tiles = line.split(";");
-				for(int i=0;i<tiles.length;i++)
+				String[] tileRules = line.split(";");
+				for(int i=0;i<tileRules.length;i++)
 				{
 					int index =1;
 					if(counter%2==0)
@@ -65,7 +65,7 @@ public class GameMap {
 					{
 						index = (10-counter-1)*10+i+1;
 					}
-					Tile t = new Tile(index,tiles[i]);
+					Tile t = new Tile(index,tileRules[i]);
 					if(t.getRule().startsWith("L"))
 					{
 						Ladder l = new Ladder(index, (int)Integer.parseInt(t.getRule().substring(1)));

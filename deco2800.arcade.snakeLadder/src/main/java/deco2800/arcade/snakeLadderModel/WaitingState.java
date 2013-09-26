@@ -10,29 +10,31 @@ public class WaitingState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {
-		if (Gdx.input.isTouched()) {
+		
     		//context.startPoint();
     		
-    		context.getDice().rollDice();	
-    		int i=context.getturns();
-    		if(i%2==0)
+    			
+    		int turn=context.getturns();
+    		if(turn%2==0)
     		{
-    		 context.gamePlayer.initializeVelocity();
-    		 context.gameState = new MovingState();
-     		 context.statusMessage = null;     		
-     		 context.gamePlayer.getDnumber(context.getDice().getDiceNumber());
-   
+    			if (Gdx.input.isTouched()) {
+    			 context.getDice().rollDice();
+	    		 context.gamePlayers[0].initializeVelocity();
+	    		 context.gameState = new MovingState();
+	     		 context.statusMessage = null;     		
+	     		 context.gamePlayers[0].getDnumber(context.getDice().getDiceNumber());
+    			}
     		}
-    		else
+    		else if(turn%2==1)
     		{
-    		 context.gamePlayer.velocity.x=0;
-    		 context.AIPlayer.initializeVelocity();
-    		 context.gameState = new MovingState();
-     		 context.statusMessage = null;
-     		 context.AIPlayer.getDnumber2(context.getDice().getDiceNumber());
-    		
+    			context.getDice().rollDice();
+	    		context.gamePlayers[0].velocity.x=0;
+	    		context.gamePlayers[1].initializeVelocity();
+	    		context.gameState = new MovingState();
+	     		context.statusMessage = null;
+	     		context.gamePlayers[1].getDnumber(context.getDice().getDiceNumber());
     		}
-		}
+		
 
 	}
 

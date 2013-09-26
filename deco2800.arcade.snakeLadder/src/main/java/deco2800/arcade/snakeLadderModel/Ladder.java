@@ -14,7 +14,7 @@ public class Ladder {
 	
 	public Ladder(int originPosition,int destinationPosition)
 	{
-		this.texture = new Texture(Gdx.files.classpath("images/arrow.png"));
+		this.texture = new Texture(Gdx.files.classpath("images/ladder.png"));
 		this.sprite = new Sprite(texture); 
 		this.destinationPosition = destinationPosition;
 		this.originPosition = originPosition;

@@ -8,6 +8,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 
+
 /**
  * This class is the main interface for the arcade.
  * @author Simon
@@ -20,6 +21,7 @@ public class ArcadeUI extends GameClient {
 	LoginScreen login = null;
 	StoreScreen store = null;
 	HomeScreen home = null;
+    FrontPage main = null;
     RegisterScreen register = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
@@ -28,12 +30,17 @@ public class ArcadeUI extends GameClient {
 
     @Override
     public void create() {
-        ArcadeSystem.openConnection(); // Move this to somewhere more appropriate.
+        // TODO Move this to somewhere more appropriate.
+        // FIXME This really needs to be fixed.
+        // The connection should be attempted to be opened after a user has pressed login on the loginScreen
+        // But I don't know the best way or place to do this - abbjohn
+        ArcadeSystem.openConnection();
 
         // Initialise the different screens.
         login = new LoginScreen(this);
         home = new HomeScreen();
         store = new StoreScreen();
+        main = new FrontPage();
         register = new RegisterScreen(this);
 
         // Check to see if a user is logged in.

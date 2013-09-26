@@ -17,6 +17,7 @@ import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+
 public class ReportBug {
 	private static JTextField textField;
 

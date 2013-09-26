@@ -31,10 +31,12 @@ public class OverlayScreen implements Screen {
         this.overlay = overlay;
         window = new Window(overlay);
         sidebar = new Sidebar(overlay, window);
+        clock = new Clock(overlay);
 
         stage = new OverlayScreenStage();
         stage.addActor(window);
         stage.addActor(sidebar);
+        stage.addActor(clock);
 
     }
 

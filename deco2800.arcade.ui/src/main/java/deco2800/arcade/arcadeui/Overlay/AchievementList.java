@@ -65,11 +65,9 @@ public class AchievementList extends WindowContent {
         for (int i = 0; i < num; i++) {
 
             TextButton l = new TextButton("Test Achievement " + i, skin);
-            l.setSize(this.getWidth(), 60);
-
             this.addActor(l);
-            l.setPosition(30, ((num - i) * 80));
-            l.setSize(width - 60, 60);
+            l.setPosition(60, ((num - i) * 80));
+            l.setSize(width - 120, 50);
 
         }
 

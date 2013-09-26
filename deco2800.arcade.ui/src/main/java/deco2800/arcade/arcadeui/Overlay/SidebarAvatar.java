@@ -17,7 +17,7 @@ public class SidebarAvatar extends Widget {
 
     public SidebarAvatar(Overlay overlay) {
 
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconMagenta.png")), 100, 100, 100, 100);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconMagenta.png")), 75, 75, 75, 75);
 
         font = new BitmapFont(false);
         this.overlay = overlay;

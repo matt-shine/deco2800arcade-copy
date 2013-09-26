@@ -55,14 +55,15 @@ public class Sidebar extends Group {
         avatar.setPosition(WIDTH / 2 - avatar.getPrefWidth() / 2, overlay.getHeight() - 140);
         this.addActor(avatar);
 
-        String[] buttonText = new String[]{"Achievements", "Chat", "Matchmaking", "Quit Game"};
+        String[] buttonText = new String[]{"Achievements", "Item2", "Item3", "Quit Game"};
 
         int numItems = buttonText.length;
         for (int i = 0; i < numItems; i++) {
-            SidebarMenuItem item = new SidebarMenuItem(skin);
+            SidebarMenuItem item = new SidebarMenuItem(skin, "default-green-smallfont");
             item.setSize(120, 40);
             item.setText(buttonText[i]);
-            item.setPosition(WIDTH / 2 - item.getWidth() / 2, overlay.getHeight() - i * 60 - 200);
+            //item.setPosition(WIDTH / 2 - item.getWidth() / 2, overlay.getHeight() - i * 60 - 200);
+            item.setPosition(30, overlay.getHeight() - i * 60 - 200);
             final int buttonNum = i;
 
             item.addListener(new EventListener() {
@@ -95,7 +96,7 @@ public class Sidebar extends Group {
     public void act(float d) {
 
         //toggles isUIOpen on tab key down
-        if (Gdx.input.isKeyPressed(Keys.SPACE) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
+        /*if (Gdx.input.isKeyPressed(Keys.SPACE) != hasTabPressedLast && (hasTabPressedLast = !hasTabPressedLast)) {
             isUIOpen = !isUIOpen;
         }
 
@@ -122,7 +123,7 @@ public class Sidebar extends Group {
         }
 
 
-        this.setX(pos);
+        this.setX(pos);*/
 
         super.act(d);
     }
@@ -130,7 +131,8 @@ public class Sidebar extends Group {
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
 
-        texture.draw(batch, -50, 0, pos + WIDTH + 70, overlay.getHeight());
+        //texture.draw(batch, -50, 0, pos + WIDTH + 70, overlay.getHeight());
+        texture.draw(batch, -25, 0, 230, overlay.getHeight());
         super.draw(batch, parentAlpha);
 
     }

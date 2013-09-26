@@ -17,17 +17,23 @@ public class Clock extends Group {
     private ClockStage contentStage = new ClockStage();
     private Group contentGroup = new Group();
     private NinePatch texture;
+    private int width;
+    private int height;
 
     public Clock(Overlay overlay) {
         this.overlay = overlay;
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen.png")), 100, 100, 100, 100);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconMagenta.png")), 75, 75, 75, 75);
         contentStage.addActor(contentGroup);
         ArcadeInputMux.getInstance().addProcessor(contentStage);
+        //width = overlay.getWidth() - 320;
+        //height = overlay.getHeight() - 200;
+        width = 400;
+        height = 200;
     }
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-        texture.draw(batch, 160, 100, overlay.getWidth() - 320, overlay.getHeight() - 200);
+        texture.draw(batch, overlay.getWidth() - width + 25, overlay.getHeight() - height + 25, width, height);
         super.draw(batch, parentAlpha);
     }
 

@@ -46,7 +46,7 @@ public class Popup extends Actor {
         font = new BitmapFont(false);
         this.overlay = overlay;
 
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen_plus.png")), 100, 100, 100, 100);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen.png")), 100, 100, 100, 100);
 
         ypos = YPOS_START;
 

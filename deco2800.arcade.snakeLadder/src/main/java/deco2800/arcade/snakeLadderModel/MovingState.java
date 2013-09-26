@@ -41,7 +41,7 @@ public class MovingState extends GameState {
 		if(Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorX() - gamePlayer.getBounds().x) <(1f)&&Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorY() - gamePlayer.getBounds().y) <(1f))
 		{
 		    	//context.stopPoint();
-		    	context.updateScore(gamePlayer);
+//		    	context.updateScore(gamePlayer);
 				gamePlayer.reset();
 				context.gamePlayers[1].reset();
 				// If we've reached the victory point then update the display
@@ -55,9 +55,9 @@ public class MovingState extends GameState {
 				}
 				else {
 					// No winner yet, get ready for another point
-					context.gameState = new WaitingState();
-					context.statusMessage = "Throw the dice again";
-					context.taketurns();
+					context.gameState = new RuleExcutingState();
+//					context.statusMessage = "Throw the dice again";
+//					context.taketurns();
 					
 				}
 		}

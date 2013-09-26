@@ -79,6 +79,7 @@ public class SnakeLadder extends GameClient {
 	private Label diceLabel;
 	private Dice dice;
 	
+	private int turn=0;
 	//Network client for communicating with the server.
 	//Should games reuse the client of the arcade somehow? Probably!
 	private NetworkClient networkClient;
@@ -90,6 +91,14 @@ public class SnakeLadder extends GameClient {
         this.networkClient = networkClient; //this is a bit of a hack
 	}
 
+	public int getturns() {
+		return this.turn%2;
+	}
+
+	public ArrayList<Label> getScoreLabels() {
+		return scoreLabels;
+	}
+	
 	/**
 	 * Creates the game
 	 */
@@ -268,12 +277,9 @@ public class SnakeLadder extends GameClient {
 //		gameState = new InProgressState();
 //		statusMessage = null;
 //	}
-
-	int i=0;
 	public int taketurns() {
-		
-		i++;
-		return this.i;
+		turn++;
+		return this.turn;
 	}
 	
 	@Override
@@ -335,7 +341,7 @@ public class SnakeLadder extends GameClient {
 		        //setting players name and score
 		        for(int i = 0; i < players.length; i++){
 		        	userLabels.add(new Label (players[i], skin));
-		        	scoreLabels.add(new Label ("0", skin)); //This is just setting the initial score which is 0
+		        	getScoreLabels().add(new Label ("0", skin)); //This is just setting the initial score which is 0
 			    }
 		        		        
 		        
@@ -354,7 +360,7 @@ public class SnakeLadder extends GameClient {
 		        //add player score
 		        table.add(new Label("Players' Score", skin)).width(200).top().left();
 		        for(int i = 0; i < players.length; i++){
-		        	table.add(scoreLabels.get(i)).width(200).top().left();
+		        	table.add(getScoreLabels().get(i)).width(200).top().left();
 			    } 
 		        table.row();     
 		        //adding dice button to GUI
@@ -362,42 +368,5 @@ public class SnakeLadder extends GameClient {
 		        
 		        table.row();
 	}
-	
-
-	/***
-	 * Updating the score of the game player and print it out on the scoreLabel
-	 * @param gp the Game Player its referring to
-	 */
-	public void updateScore(GamePlayer gp){
-		//System.out.println(gp.newposition());
-		String rule = this.getMap().getTileList()[gp.newposition()].getRule();
-		if (isScore(rule))
-			gp.setScore(Integer.parseInt(rule));
-		//System.out.println("This player's score: "+ gp.getScore());
-		//TODO: should update the scoreLabel depending on the gamePlayer index
-		this.scoreLabels.get(0).setText(""+gp.getScore());
-	}
-	
-	/***
-	 * Check whether the rule is score related or not
-	 * @param rule The rule of the tile the player is currently in
-	 * @return true if the rule have something to do with score, false otherwise
-	 */
-	private boolean isScore (String rule) {
-	    try { 
-	        Integer.parseInt(rule); 
-	    } catch(NumberFormatException e) { 
-	        return false; 
-	    }
-	    // only got here if we didn't return false
-	    return true;
-	}
-
-	public int getturns() {
-		// TODO Auto-generated method stub
-		return this.i%2;
-	}
-
-	
 }
 

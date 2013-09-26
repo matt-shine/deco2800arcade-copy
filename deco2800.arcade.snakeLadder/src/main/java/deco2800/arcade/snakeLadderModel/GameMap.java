@@ -24,7 +24,7 @@ public class GameMap {
 		this.tileList = tileList;
 	}
 
-	private List<Ladder> ladderList = new ArrayList<Ladder>();
+	private List<SnakeLadderBridge> snakeLadderList = new ArrayList<SnakeLadderBridge>();
 	
 	public void ini()
 	{
@@ -68,8 +68,13 @@ public class GameMap {
 					Tile t = new Tile(index,tileRules[i]);
 					if(t.getRule().startsWith("L"))
 					{
-						Ladder l = new Ladder(index, (int)Integer.parseInt(t.getRule().substring(1)));
-						ladderList.add(l);
+						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),"ladder");
+						snakeLadderList.add(sl);
+					}
+					else if(t.getRule().startsWith("S"))
+					{
+						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),"snake");
+						snakeLadderList.add(sl);
 					}
 					else if(!t.getRule().equals("."))
 					{
@@ -86,7 +91,7 @@ public class GameMap {
 			return false;
 		}
 		//initialize ladder rotation and scalling 
-		for(Ladder l: ladderList)
+		for(SnakeLadderBridge l: snakeLadderList)
 		{
 			l.createLadder(tileList);
 		}
@@ -98,14 +103,14 @@ public class GameMap {
 		batch.draw(backgroundBoard,0,0);
 		for(Tile t:tileList)
 		{
-			if(t.getRule().startsWith("L"))
+			if(t.getRule().startsWith("L")||t.getRule().startsWith("S"))
 			{
-				for(Ladder l: ladderList)
+				for(SnakeLadderBridge sl: snakeLadderList)
 				{
-					l.getSprite().draw(batch);
+					sl.getSprite().draw(batch);
 				}
 			}
-			else if(!t.getRule().equals(".")&&!t.getRule().equals("S")&&!t.getRule().equals("E"))
+			else if(!t.getRule().equals("."))
 			{
 				batch.draw(t.getTexture(),t.getCoorX(),t.getCoorY());
 			}

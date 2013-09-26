@@ -5,16 +5,16 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-public class Ladder {
+public class SnakeLadderBridge {
 	
 	private Sprite sprite;
 	private Texture texture;
 	private int destinationPosition;
 	private int originPosition;
 	
-	public Ladder(int originPosition,int destinationPosition)
+	public SnakeLadderBridge(int originPosition,int destinationPosition,String type)
 	{
-		this.texture = new Texture(Gdx.files.classpath("images/ladder.png"));
+		this.texture = new Texture(Gdx.files.classpath("images/"+type+".png"));
 		this.sprite = new Sprite(texture); 
 		this.destinationPosition = destinationPosition;
 		this.originPosition = originPosition;

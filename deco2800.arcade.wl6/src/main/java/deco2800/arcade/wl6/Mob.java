@@ -1,6 +1,8 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
+import deco2800.arcade.wl6.Doodad;
+import deco2800.arcade.wl6.GameModel;
 
 public class Mob extends Doodad {
 	

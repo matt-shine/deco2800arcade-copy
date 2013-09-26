@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS Global_Accolades (
+g_accolade_id INT(11) NOT NULL AUTO_INCREMENT,
+tag VARRCHAR(32) NOT NULL,
+name VARCHAR(16) NOT NULL,
+string VARCHAR(64) NOT NULL,
+unit VARCHAR(16) NOT NULL,
+modifier VARCHAR(64),
+image VARCHAR(32),
+PRIMARY KEY (accolade_id),
+UNIQUE (tag)
+);

@@ -1,6 +1,7 @@
 package deco2800.arcade.wl6;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,9 +12,13 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Stores, generates, maintains, and uploads the VBO, prepares the shader
@@ -26,11 +31,12 @@ public class Renderer {
 	private ShaderProgram doodadShader = null;
 	private Mesh terrainMesh;
 	private Mesh quadMesh;
-	private ArrayList<Float> terrainScratch = new ArrayList<Float>();
 	private GameModel game = null;
+	private WL6 wl6 = null;
 	private boolean debugMode = false;
-	private Texture atlas = null;
-	
+	private HashMap<String, Rectangle> texturePositions = new HashMap<String, Rectangle>();
+	private Texture texture = null;
+	private int ceilingColor = -1;
 	
 	public Renderer() {
 	}
@@ -39,7 +45,8 @@ public class Renderer {
 		return game;
 	}
 
-	public void setGame(GameModel game) {
+	public void setGame(GameModel game, WL6 wl6) {
+		this.wl6 = wl6;
 		this.game = game;
 	}
 
@@ -50,24 +57,43 @@ public class Renderer {
 	public void load() {
 		if (terrainShader == null) {
 
-			FileHandle imageFileHandle = Gdx.files.internal("wl6Atlas.png"); 
-	        atlas = new Texture(imageFileHandle);
+			//texture atlas load
+			FileHandle imageFileHandle = Gdx.files.internal("wl6Atlas.atlas"); 
+			TextureAtlas atlas = new TextureAtlas(imageFileHandle);
 	        
+	        Array<AtlasRegion> regions = atlas.getRegions();
+	        for (int i = 0; i < regions.size; i++) {
+	        	texturePositions.put(regions.get(i).name,
+	        			new Rectangle(regions.get(i).getU(), regions.get(i).getV(),
+	        					regions.get(i).getU2() - regions.get(i).getU(),
+	        					regions.get(i).getV2() - regions.get(i).getV())
+	        			
+	        	);
+	        }
+	        texture = (Texture) atlas.getTextures().toArray()[0];
+	        
+	        
+	        
+	        //gl init
 			Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
 			Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			Gdx.gl20.glEnable(GL20.GL_BLEND);
 		    
+			
+			//load terrain shader
 			String vertexShader = loadFile("wl6TerrainVertShader.glsl");
 			String fragmentShader = loadFile("wl6TerrainFragShader.glsl");
 
 			terrainShader = new ShaderProgram(vertexShader, fragmentShader);
 			VertexAttribute pos = new VertexAttribute(Usage.Position, 3, "a_position");
 			VertexAttribute tex = new VertexAttribute(Usage.TextureCoordinates, 2, "a_texpos");
-			float[] posData = toPrimativeArray(terrainScratch);
+			float[] posData = toPrimativeArray(generateTerrain(game.getMap(), false));
 			terrainMesh = new Mesh(true, posData.length, 0, pos, tex);
 			terrainMesh.setVertices(posData);
 			
 			
+			
+			//load doodad shader
 			vertexShader = loadFile("wl6DoodadVertShader.glsl");
 			fragmentShader = loadFile("wl6DoodadFragShader.glsl");
 
@@ -110,13 +136,16 @@ public class Renderer {
 		
 		
 		//prepare
-		Gdx.gl.glClearColor(0.4f, 0.4f, 0.4f, 1);
-	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		Gdx.gl.glClearColor(0.48f, 0.48f, 0.48f, 1);
+	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.graphics.getGL20().glEnable(GL20.GL_TEXTURE_2D);
+		texture.bind();
+		
+		IngameUI.drawCeiling(getCeilingColor(), wl6.getWidth(), wl6.getHeight());
+		Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
 		
 		
 		//draw terrain
-		atlas.bind();
 		terrainShader.begin();
 		
 		Matrix4 pv = getProjectionViewMatrix();
@@ -175,7 +204,12 @@ public class Renderer {
 		doodadShader.setUniformMatrix("uMVPMatrix", combined);
 		
 		//get texture
-		Vector2 texPos = TextureResolver.getTextureLocation(s);
+		Rectangle r = this.texturePositions.get(s);
+		if (r == null) {
+			r = this.texturePositions.get("unknown");
+		}
+		Vector2 texPos = new Vector2(r.x, r.y);
+
 		
 		//set texture offset
 		doodadShader.setUniform2fv("u_texoffset", new float[]{texPos.x, texPos.y}, 0, 2);
@@ -184,6 +218,18 @@ public class Renderer {
 		quadMesh.render(doodadShader, GL20.GL_TRIANGLES);
 		
 	}
+	
+	
+	
+	private int getCeilingColor() {
+		if (ceilingColor == -1) {
+			//TODO work out ceiling color
+		}
+		
+		return 0x555555;
+		
+	}
+	
 	
 	
 	/**
@@ -208,8 +254,9 @@ public class Renderer {
 
 		ArrayList<Float> quadMesh = new ArrayList<Float>();
 		
-		float texS = 1/3f;
-		
+		Rectangle r = this.texturePositions.get("unknown");
+		float texS = r.width;
+				
 		CubeGen.genQuad(texS, quadMesh);
 		
 		return quadMesh;
@@ -222,7 +269,10 @@ public class Renderer {
 	 * @param map
 	 * @param debug
 	 */
-	public void generateTerrain(Level map, boolean debug) {
+	public ArrayList<Float> generateTerrain(Level map, boolean debug) {
+		
+		ArrayList<Float> terrainScratch = new ArrayList<Float>();
+		
 		for (int i = 0; i < WL6.MAP_DIM; i++) {
 			for (int j = 0; j < WL6.MAP_DIM; j++) {
 				
@@ -236,9 +286,13 @@ public class Renderer {
 					}
 					
 					
-					Vector2 texPos = TextureResolver.getTextureLocation(
+					Rectangle r = this.texturePositions.get(
 							WL6Meta.block(map.getTerrainAt(i, j)).texture);
-					float texS = 1 / 3f;
+					if (r == null) {
+						r = this.texturePositions.get("unknown");
+					}
+					Vector2 texPos = new Vector2(r.x, r.y);
+					float texS = r.width;
 					
 					CubeGen.getCube(i, j,
 							texPos.x, texPos.y, texS,
@@ -254,6 +308,7 @@ public class Renderer {
 				}
 		    }
 	    }
+		return terrainScratch;
 	}
 	
 	

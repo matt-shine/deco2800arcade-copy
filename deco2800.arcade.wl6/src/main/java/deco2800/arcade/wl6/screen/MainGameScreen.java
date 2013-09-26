@@ -1,10 +1,12 @@
-package deco2800.arcade.wl6;
+package deco2800.arcade.wl6.screen;
 
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.wl6.*;
+import deco2800.arcade.wl6.Doodad;
 
 public class MainGameScreen implements Screen {
 	
@@ -26,8 +28,7 @@ public class MainGameScreen implements Screen {
 		input = new WL6InputProcessor(game, model);
 		ArcadeInputMux.getInstance().addProcessor(input);
 		
-		b.setGame(model);
-		b.generateTerrain(model.getMap(), false);
+		b.setGame(model, game);
 		b.load();
 		
 	}
@@ -49,22 +50,26 @@ public class MainGameScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		
+		Gdx.gl20.glViewport(0, 0, game.getWidth(), game.getHeight());
+		
 		model.setDelta(delta);
 		
 		//iterate over all game objects
+		model.beginTick();
 		Iterator<Doodad> itr = model.getDoodadIterator();
 		while (itr.hasNext()) {
 			Doodad d = itr.next();
 			d.tick(model);
 		}
+		model.endTick();
 		
-		Gdx.gl20.glViewport(0, 0, game.getWidth(), game.getHeight());
+		
 		b.draw(this.debugMode);
 		
 	}
 
 	@Override
-	public void resize(int arg0, int arg1) {
+	public void resize(int width, int height) {
 	}
 
 	@Override
@@ -81,6 +86,11 @@ public class MainGameScreen implements Screen {
 	
 	public void setOverlayPause(boolean pause) {
 		this.overlayPause = pause;
+		if (pause) {
+			ArcadeInputMux.getInstance().removeProcessor(input);
+		} else {
+			ArcadeInputMux.getInstance().addProcessor(input);
+		}
 	}
 
 }

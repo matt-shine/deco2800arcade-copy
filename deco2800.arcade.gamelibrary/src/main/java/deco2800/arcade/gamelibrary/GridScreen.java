@@ -15,13 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * GDX Screen class for Grid View
@@ -38,8 +36,8 @@ public class GridScreen implements Screen, LibraryScreen {
      */
     private SpriteBatch batch;
     private BitmapFont font;
-    private ArrayList<GameClient> games = null;
-    private GameClient currentClient;
+    private ArrayList<Game> games = null;
+    private Game currentGame;
     private Stage stage;
     private int x = 0;
     private int y = 580;
@@ -159,41 +157,38 @@ public class GridScreen implements Screen, LibraryScreen {
         int gridX = 25;
         int gridY = 435;
         int count = 0;
-        for (final GameClient gameClient : games) {
-            if (gameClient != null) {
-                Game game = gameClient.getGame();
-                if (game != null) {
+        for (Game game : games) {
+            if (game != null) {
 
-                    Actor background = new Image(gridTexture);
-                    background.setX(gridX);
-                    background.setY(gridY);
+                Actor background = new Image(gridTexture);
+                background.setX(gridX);
+                background.setY(gridY);
 
-                    Label gridLabel = new Label(game.name, skin, "titleStyle");
-                    gridLabel.setWidth(background.getWidth());
-                    gridLabel.setHeight(40);
-                    gridLabel.setX(gridX + background.getWidth()/4);
-                    gridLabel.setY(gridY + background.getHeight() - 40);
+                Label gridLabel = new Label(game.name, skin, "titleStyle");
+                gridLabel.setWidth(background.getWidth());
+                gridLabel.setHeight(40);
+                gridLabel.setX(gridX + background.getWidth()/4);
+                gridLabel.setY(gridY + background.getHeight() - 40);
 
-                    TextButton gamePlay = new TextButton("Play", skin);
-                    gamePlay.setWidth(150);
-                    gamePlay.setHeight(30);
-                    gamePlay.setX(gridX + 5);
-                    gamePlay.setY(gridY + 50 - gridLabel.getHeight());
-                    gamePlay.addListener(new PlayButtonActionHandler(this, gameClient));
+                TextButton gamePlay = new TextButton("Play", skin);
+                gamePlay.setWidth(150);
+                gamePlay.setHeight(30);
+                gamePlay.setX(gridX + 5);
+                gamePlay.setY(gridY + 50 - gridLabel.getHeight());
+                gamePlay.addListener(new PlayButtonActionHandler(this, game));
 
-                    if (++count % 7 == 0) {
-                        gridX = 20;
-                        gridY -= (background.getHeight() + 15);
-                    } else {
-                        gridX += (background.getWidth() + 15);
-                    }
-
-                    //y = gridY - 80;
-
-                    stage.addActor(background);
-                    stage.addActor(gridLabel);
-                    stage.addActor(gamePlay);
+                if (++count % 7 == 0) {
+                    gridX = 20;
+                    gridY -= (background.getHeight() + 15);
+                } else {
+                    gridX += (background.getWidth() + 15);
                 }
+
+                //y = gridY - 80;
+
+                stage.addActor(background);
+                stage.addActor(gridLabel);
+                stage.addActor(gamePlay);
             }
         }
 
@@ -269,11 +264,11 @@ public class GridScreen implements Screen, LibraryScreen {
 
     private void play() {
         dispose();
-        ArcadeSystem.goToGame(currentClient);
+        ArcadeSystem.goToGame(currentGame.id);
     }
 
-    public void setSelectedGame(final GameClient game) {
-        currentClient = game;
+    public void setSelectedGame(Game game) {
+        currentGame = game;
     }
 
     public Player getPlayer() {

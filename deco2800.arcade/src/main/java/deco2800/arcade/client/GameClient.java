@@ -31,7 +31,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 		this.player = player;
 		this.networkClient = networkClient;
         this.achievementClient = new AchievementClient(networkClient);
-        this.achievementClient.addListener(this);
+        //this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
 	}
 

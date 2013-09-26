@@ -11,16 +11,14 @@ import java.util.*;
 
 import javax.swing.JFrame;
 
+import deco2800.arcade.client.network.listener.*;
+import deco2800.arcade.protocol.game.GameLibraryRequest;
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
-import deco2800.arcade.client.network.listener.CommunicationListener;
-import deco2800.arcade.client.network.listener.ConnectionListener;
-import deco2800.arcade.client.network.listener.CreditListener;
-import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
@@ -103,10 +101,10 @@ public class Arcade extends JFrame {
 
 		// set shutdown behaviour
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
-		    public void windowClosing(WindowEvent winEvt) {
+            public void windowClosing(WindowEvent winEvt) {
                 arcadeExit();
-		    }
-		});
+            }
+        });
 	}
 
 	/**
@@ -116,10 +114,10 @@ public class Arcade extends JFrame {
     	removeCanvas();
 		
 		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				System.exit(0);
-			}
-		});
+            public void run() {
+                System.exit(0);
+            }
+        });
 	}
 
 	/**
@@ -152,6 +150,9 @@ public class Arcade extends JFrame {
 			// inputs.
             System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
+
+            client.sendNetworkObject(new GameLibraryRequest());
+
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
 		} catch (NetworkException e) {
@@ -160,11 +161,15 @@ public class Arcade extends JFrame {
 		}
 	}
 
-	private void addListeners() {
+    /**
+     * Add Listeners to the network client
+     */
+    private void addListeners() {
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
+        this.client.addListener(new LibraryResponseListener());
 	}
 
 	public void connectAsUser(String username) {
@@ -344,17 +349,20 @@ public class Arcade extends JFrame {
 				GameClient game = constructor.newInstance(player, client);
 
 				// add the overlay to the game
-				if (!gameClass.isAnnotationPresent(InternalGame.class)) {
+				if (!gameClass.isAnnotationPresent(InternalGame.class) && game != null) {
 
 					GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 
 					// the overlay and the bridge are the same object, but
 					// GameClient doesn't know that and it mightn't be that way
 					// forever
-					game.addOverlay(overlay);
-					if (overlay instanceof UIOverlay) {
-						game.addOverlayBridge((UIOverlay) overlay);
-					}
+
+                    if (overlay != null) {
+                        game.addOverlay(overlay);
+                        if (overlay instanceof UIOverlay) {
+                            game.addOverlayBridge((UIOverlay) overlay);
+                        }
+                    }
 
 				}
 
@@ -412,5 +420,15 @@ public class Arcade extends JFrame {
 
         }
         return gameSet;
+    }
+
+    public void requestGames() {
+        GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
+        System.out.println(client.kryoClient().isConnected());
+
+        client.sendNetworkObject(gameLibraryRequest);
+
+
+        System.out.println(client.kryoClient().isConnected());
     }
 }

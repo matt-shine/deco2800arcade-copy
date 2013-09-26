@@ -15,13 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * GDX Screen for List View
@@ -38,8 +36,8 @@ public class ListScreen implements Screen, LibraryScreen {
      */
     private SpriteBatch batch;
     private BitmapFont font;
-    private ArrayList<GameClient> games = null;
-    private GameClient currentClient;
+    private ArrayList<Game> games = null;
+    private Game currentGame;
     private Stage stage;
     private int x = 0;
     private int y = 580;
@@ -174,28 +172,24 @@ public class ListScreen implements Screen, LibraryScreen {
 
         games = gameLibrary.getAvailableGames();
         int count = 0;
-        for (final GameClient gameClient : games) {
-            if (gameClient != null) {
-                Game game = gameClient.getGame();
+        for (Game game : games) {
+            if (game != null) {
+                button = new TextButton("" + game.name, skin);
+                button.setWidth(275);
+                button.setHeight(33);
+                button.setX(x);
+                button.setY(y);
+                y-= 35;
 
-                if (game != null) {
-                    button = new TextButton("" + game.name, skin);
-                    button.setWidth(275);
-                    button.setHeight(33);
-                    button.setX(x);
-                    button.setY(y);
-                    y-= 35;
+                button.addListener(new GameButtonActionHandler(this, game, button));
 
-                    button.addListener(new GameButtonActionHandler(this, gameClient, button));
-
-                    if (count++ == 0) {
-                        button.setChecked(true);
-                        setCurrentButton(button);
-                        setSelectedGame(gameClient);
-                    }
-
-                    stage.addActor(button);
+                if (count++ == 0) {
+                    button.setChecked(true);
+                    setCurrentButton(button);
+                    setSelectedGame(game);
                 }
+
+                stage.addActor(button);
             }
         }
 
@@ -282,15 +276,14 @@ public class ListScreen implements Screen, LibraryScreen {
 
     private void play() {
         dispose();
-        ArcadeSystem.goToGame(currentClient);
+        ArcadeSystem.goToGame(currentGame.id);
     }
 
-    public void setSelectedGame(final GameClient gameClient) {
-        currentClient = gameClient;
-        Game game = gameClient.getGame();
+    public void setSelectedGame(Game game) {
+        currentGame = game;
         gameTitle = game.name;
         description = "Game Details: " + "\n";
-        if(game.getDescription() == null) {
+        if(game.getDescription() == null || game.getDescription().equals("N/A")) {
             description += "No Description Available";
         } else {
             description += game.getDescription();

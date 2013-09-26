@@ -12,9 +12,8 @@ import deco2800.arcade.client.network.NetworkClient;
  * @author Team lion
  *
  */
-//@ArcadeGame(id="Raiden")
-//public class Raiden extends GameClient {
-public class Raiden {
+@ArcadeGame(id="Raiden")
+public class Raiden extends GameClient {
 
 	/**
 	 * The constructor for game raiden.
@@ -24,7 +23,7 @@ public class Raiden {
 	//private String statusMessage;
 	
 	public Raiden(Player player, NetworkClient networkClient) {
-		//super(player, networkClient);
+		super(player, networkClient);
 		GameFrame raiden = new GameFrame();
 	}
 	

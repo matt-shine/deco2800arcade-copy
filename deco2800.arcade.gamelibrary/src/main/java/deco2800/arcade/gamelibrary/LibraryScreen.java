@@ -2,7 +2,7 @@ package deco2800.arcade.gamelibrary;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import deco2800.arcade.client.GameClient;
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
@@ -24,9 +24,9 @@ public interface LibraryScreen {
 
     /**
      * Update Currently Selected Game
-     * @param gameClient Game
+     * @param game Game
      */
-    public void setSelectedGame(final GameClient gameClient);
+    public void setSelectedGame(Game game);
 
     /**
      * Set Game Selected

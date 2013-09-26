@@ -1,5 +1,7 @@
 package deco2800.arcade.client;
 
+import deco2800.arcade.model.Game;
+
 import java.util.Set;
 
 //TODO commenting?
@@ -9,6 +11,8 @@ public class ArcadeSystem {
 	public static String OVERLAY = "arcadeoverlay";
 	
 	private static Arcade arcade = null;
+
+    private static Set<Game> gameSet = null;
 	
 	public static void setArcadeInstance(Arcade a) {
 		arcade = a;
@@ -44,6 +48,10 @@ public class ArcadeSystem {
 	public static void login(String username) {
 		arcade.connectAsUser(username);
 	}
+
+    public static void requestGames() {
+        arcade.requestGames();
+    }
 	
 	public static boolean isLoggedIn() {
 		return arcade.hasPlayer();
@@ -56,4 +64,12 @@ public class ArcadeSystem {
 	public static GameClient getCurrentGame() {
 		return arcade.getCurrentGame();
 	}
+
+    public static void updateGamesList(Set<Game> games) {
+        gameSet = games;
+    }
+
+    public static Set<Game> getArcadeGames() {
+        return gameSet;
+    }
 }

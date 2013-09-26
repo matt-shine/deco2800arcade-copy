@@ -6,6 +6,8 @@ import com.esotericsoftware.kryo.serializers.*;
 import java.util.ArrayList;
 
 import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Icon;
 import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
@@ -16,11 +18,7 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
-import deco2800.arcade.protocol.game.GameRequestType;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
-import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
-import deco2800.arcade.protocol.game.NewGameRequest;
-import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.game.*;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
@@ -101,6 +99,10 @@ public class Protocol {
 		kryo.register(NewGameRequest.class);
 		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
+        kryo.register(GameLibraryRequest.class);
+        kryo.register(GameLibraryResponse.class);
+        kryo.register(Game.class);
+        kryo.register(Icon.class);
 
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
@@ -112,6 +114,9 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
+        kryo.register(java.util.Set.class);
+        kryo.register(java.util.HashSet.class);
+        kryo.register(java.awt.image.BufferedImage.class);
 	}
 	
 	/**

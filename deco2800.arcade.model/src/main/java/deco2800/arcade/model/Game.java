@@ -95,6 +95,6 @@ public class Game implements Comparable<Game> {
      */
     @Override
     public int compareTo(Game g) {
-        return name.compareTo(g.name);
+        return (name.toUpperCase()).compareTo(g.name.toUpperCase());
     }
 }

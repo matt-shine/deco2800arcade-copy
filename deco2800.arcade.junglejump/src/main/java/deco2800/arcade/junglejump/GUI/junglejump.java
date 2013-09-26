@@ -111,6 +111,39 @@ public class junglejump extends GameClient implements InputProcessor {
 		this.networkClient = networkClient; // this is a bit of a hack
 		Gdx.input.setCatchBackKey(true);
 		Gdx.input.setInputProcessor(this);
+		butX = 488f;
+		butY = 242f;
+		monkeyX = 0f;
+		monkeyY = 0f;
+		monkeyYoriginal = 0f;
+		// Replace "file" with chosen music
+		try {
+			File file = new File("junglejumpassets/soundtrack.wav");
+			FileHandle fileh = new FileHandle(file);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.start();
+			clip.loop(clip.LOOP_CONTINUOUSLY);
+
+			// System.out.println(file.getCanonicalPath());
+			// themeMusic = Gdx.audio.newMusic(fileh);
+			// themeMusic.setLooping(true);
+			// themeMusic.play();
+		} catch (Exception e) {
+			Gdx.app.log(junglejump.messages,
+					"Audio File for Theme Music Not Found");
+		}
+		try {
+			File file2 = new File("junglejumpassets/menu.wav");
+			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
+			menuSound = AudioSystem.getClip();
+			menuSound.open(audioIn2);
+		} catch (Exception e) {
+			// IO Exception or problem with sound format
+		}
+
+		createWorld();
 
 	}
 
@@ -125,45 +158,6 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
-
-
-        butX = 488f;
-        butY = 242f;
-        monkeyX = 0f;
-        monkeyY = 0f;
-        monkeyYoriginal = 0f;
-        // Replace "file" with chosen music
-        try {
-            File file = new File("junglejumpassets/soundtrack.wav");
-            FileHandle fileh = new FileHandle(file);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
-            clip.start();
-            clip.loop(clip.LOOP_CONTINUOUSLY);
-
-            // System.out.println(file.getCanonicalPath());
-            // themeMusic = Gdx.audio.newMusic(fileh);
-            // themeMusic.setLooping(true);
-            // themeMusic.play();
-        } catch (Exception e) {
-            Gdx.app.log(junglejump.messages,
-                    "Audio File for Theme Music Not Found");
-        }
-        try {
-            File file2 = new File("junglejumpassets/menu.wav");
-            AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
-            menuSound = AudioSystem.getClip();
-            menuSound.open(audioIn2);
-        } catch (Exception e) {
-            // IO Exception or problem with sound format
-        }
-
-        createWorld();
-
-
-
-
         System.out.println(System.getProperty("user.dir"));
 		texture = new Texture(("junglejumpassets/mainscreen.png"));
 		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));

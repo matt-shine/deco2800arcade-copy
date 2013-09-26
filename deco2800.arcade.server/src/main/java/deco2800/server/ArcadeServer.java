@@ -2,26 +2,17 @@ package deco2800.server;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.net.BindException;
 
 import com.esotericsoftware.kryonet.Server;
 
+import deco2800.arcade.model.Game;
 import deco2800.arcade.protocol.Protocol;
-import deco2800.server.database.CreditStorage;
-import deco2800.server.database.ImageStorage;
-import deco2800.server.database.DatabaseException;
-import deco2800.server.database.ReplayStorage;
-import deco2800.server.listener.CommunicationListener;
-import deco2800.server.listener.ReplayListener;
-import deco2800.server.listener.ConnectionListener;
-import deco2800.server.listener.CreditListener;
-import deco2800.server.listener.GameListener;
-import deco2800.server.listener.HighscoreListener;
-import deco2800.server.database.HighscoreDatabase;
+import deco2800.server.database.*;
+import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
-import deco2800.server.database.AchievementStorage;
-import deco2800.server.listener.AchievementListener;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -43,6 +34,8 @@ public class ArcadeServer {
 	// Package manager
 	@SuppressWarnings("unused")
 	private PackageServer packServ;
+
+    private GameStorage gameStorage;
 	
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
@@ -114,6 +107,14 @@ public class ArcadeServer {
 	public HighscoreDatabase getHighscoreDatabase() {
 		return this.highscoreDatabase;
 	}
+
+    /**
+     * Access the server's game storage
+     * @return gameStorage
+     */
+    public GameStorage getGameStorageDatabase() {
+        return gameStorage;
+    }
 	
 	/**
 	 * Create a new Arcade Server.
@@ -121,6 +122,11 @@ public class ArcadeServer {
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
+
+        instance = this;
+
+        this.gameStorage = new GameStorage();
+
 		this.creditStorage = new CreditStorage();
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
@@ -133,9 +139,12 @@ public class ArcadeServer {
 		this.highscoreDatabase = new HighscoreDatabase();
 		
 		this.packServ = new PackageServer();
+
+
 		
 		//initialize database classes
 		try {
+            gameStorage.initialise();
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
@@ -143,6 +152,17 @@ public class ArcadeServer {
 			achievementStorage.initialise();
 			
 			highscoreDatabase.initialise();
+
+
+
+            Set<Game> games = gameStorage.getServerGames();
+            //System.out.println(games.size());
+            Iterator<Game> iterator = games.iterator();
+            while (iterator.hasNext()) {
+                Game game = iterator.next();
+                System.out.println(game.name + " - " + game.description);
+            }
+
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,6 +197,6 @@ public class ArcadeServer {
 		server.addListener(new ReplayListener());
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
-		
+        server.addListener(new LibraryListener());
 	}
 }

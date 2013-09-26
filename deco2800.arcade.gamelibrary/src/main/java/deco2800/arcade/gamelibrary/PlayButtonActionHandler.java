@@ -3,6 +3,7 @@ package deco2800.arcade.gamelibrary;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.model.Game;
 
 /**
  * @author Aaron Hayes
@@ -10,31 +11,31 @@ import deco2800.arcade.client.GameClient;
 public class PlayButtonActionHandler extends ChangeListener {
 
     private LibraryScreen screen;
-    private GameClient gameClient;
+    private Game game;
     private boolean down = false;
 
     public PlayButtonActionHandler(LibraryScreen libraryScreen) {
         screen = libraryScreen;
-        gameClient = null;
+        game = null;
     }
 
 
     /**
      * Grid View Play Buttons
      * @param libraryScreen library screen
-     * @param game Game
+     * @param g Game
      */
-    public PlayButtonActionHandler(LibraryScreen libraryScreen, GameClient game) {
+    public PlayButtonActionHandler(LibraryScreen libraryScreen, Game g) {
         screen = libraryScreen;
-        gameClient = game;
+        game = g;
     }
 
 
     @Override
     public void changed(ChangeEvent changeEvent, Actor actor) {
         down = !down;
-        if (gameClient != null) {
-            screen.setSelectedGame(gameClient);
+        if (game != null) {
+            screen.setSelectedGame(game);
         }
 
         screen.setGameSelected();

@@ -1,31 +1,27 @@
 package deco2800.arcade.lunarlander;
 
-import java.awt.Point;
 import java.util.*;
-import java.lang.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.PolygonRegion;
+import com.badlogic.gdx.graphics.g2d.PolygonSprite;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Polygon;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
@@ -43,6 +39,8 @@ public class LunarLander extends GameClient {
 	private Texture landerTexture; // draws lander png file
 	private Texture backgroundTexture; // draws background png file
 	private TextureRegion backgroundTextureRegion; // draws portion of background png file
+	private Texture backgroundTexture2; // draws background png file
+	private TextureRegion backgroundTextureRegion2; // draws portion of background png file
 	private BitmapFont font; // draws text 
 	//Texture[] backgroundTextures;
 	
@@ -67,6 +65,10 @@ public class LunarLander extends GameClient {
 	//terrain generation
 	private List<List<Integer>> terrain;
 	private boolean randomMap;
+	
+	PolygonSprite poly;
+	PolygonSpriteBatch polyBatch;
+	Texture textureSolid;
 	
 	// coordinates of the lander pad
 	private float landerPadLeftX;
@@ -101,6 +103,20 @@ public class LunarLander extends GameClient {
         this.networkClient = networkClient;  
 	}
 	
+	    float a = 100;
+	    float b = 100;
+	    PolygonRegion polyReg = new PolygonRegion(
+	      backgroundTextureRegion2, new float[] {
+	        a*0, b*0,
+	        a*0, b*2,
+	        a*3, b*2,
+	        a*3, b*0,
+	        a*2, b*0,
+	        a*2, b*1,
+	        a*1, b*1,
+	        a*1, b*0,
+	    });
+	
 	/**
 	 * Creates the game
 	 */
@@ -113,6 +129,8 @@ public class LunarLander extends GameClient {
 		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png"));
 		// creates a portion of that background to display
 		backgroundTextureRegion = new TextureRegion(backgroundTexture, 1200, 800);
+		backgroundTexture2 = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
+		backgroundTextureRegion2 = new TextureRegion(backgroundTexture, 200, 200);
 		// loads lander png file
 		landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
 		// creates a new font to use for text
@@ -208,6 +226,11 @@ public class LunarLander extends GameClient {
 	    	//load premade ArrayList of points, and background texture
 	    }
 	    
+	    polyBatch.begin();
+	    poly.draw(polyBatch);
+	    polyBatch.end();
+	    poly.rotate(1.1f);
+	    
 	    //colors the landing pad green
 	    shapeRenderer.setColor(255, 0, 0, 1);
 	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1), terrain.get(0).get(2), terrain.get(0).get(3));
@@ -220,19 +243,9 @@ public class LunarLander extends GameClient {
 		shapeRenderer.filledTriangle(300, 300, 100, 500, 500, 500);
 	    shapeRenderer.end();
 	    
-	    Vector2[] vertices = new Vector2[8];
+	    //shapeRenderer.begin(ShapeType.);
+	    //shapeRenderer. //(new float[] {0,0,5,5,5,2.5f, 10,12.5f, 10,0});
 	    
-	    vertices[0] = new Vector2(82f  , 0f  );
-	    vertices[1] = new Vector2(146f , 40f  );
-	    vertices[2] = new Vector2(385f , 268f);
-	    vertices[3] = new Vector2(322f , 341f);
-	    vertices[4] = new Vector2(225f , 322f);
-	    vertices[5] = new Vector2(282f , 398f);     
-	    vertices[6] = new Vector2(161f , 457f);
-	    vertices[7] = new Vector2(135f , 298f);
-	    
-	    PolygonShape shape = new PolygonShape();
-	    shape.set(vertices);
 	    
 	    /*if(!(initPosition + finalY <= 20) && moving == true){
 	    	

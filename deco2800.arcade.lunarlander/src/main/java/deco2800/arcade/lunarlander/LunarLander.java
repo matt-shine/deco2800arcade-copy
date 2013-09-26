@@ -103,19 +103,19 @@ public class LunarLander extends GameClient {
         this.networkClient = networkClient;  
 	}
 	
-	    float a = 100;
-	    float b = 100;
-	    PolygonRegion polyReg = new PolygonRegion(
-	      backgroundTextureRegion2, new float[] {
-	        a*0, b*0,
-	        a*0, b*2,
-	        a*3, b*2,
-	        a*3, b*0,
-	        a*2, b*0,
-	        a*2, b*1,
-	        a*1, b*1,
-	        a*1, b*0,
-	    });
+//	    float a = 100;
+//	    float b = 100;
+//	    PolygonRegion polyReg = new PolygonRegion(
+//	      backgroundTextureRegion2, new float[] {
+//	        a*0, b*0,
+//	        a*0, b*2,
+//	        a*3, b*2,
+//	        a*3, b*0,
+//	        a*2, b*0,
+//	        a*2, b*1,
+//	        a*1, b*1,
+//	        a*1, b*0,
+//	    });
 	
 	/**
 	 * Creates the game
@@ -226,10 +226,10 @@ public class LunarLander extends GameClient {
 	    	//load premade ArrayList of points, and background texture
 	    }
 	    
-	    polyBatch.begin();
-	    poly.draw(polyBatch);
-	    polyBatch.end();
-	    poly.rotate(1.1f);
+//	    polyBatch.begin();
+//	    poly.draw(polyBatch);
+//	    polyBatch.end();
+//	    poly.rotate(1.1f);
 	    
 	    //colors the landing pad green
 	    shapeRenderer.setColor(255, 0, 0, 1);

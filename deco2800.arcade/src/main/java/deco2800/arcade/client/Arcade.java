@@ -279,7 +279,7 @@ public class Arcade extends JFrame {
             }
         }
 
-	}
+    }
 
     /**
      * Removes the canvas from the frame. Should be called before shutdown.
@@ -306,6 +306,8 @@ public class Arcade extends JFrame {
         });
     }
 
+
+
     private Map<String, Class<? extends GameClient>> gameMap = null;
 
     private Map<String, Class<? extends GameClient>> getGameMap() {
@@ -313,7 +315,6 @@ public class Arcade extends JFrame {
         if (gameMap != null) {
             return gameMap;
         }
-
 
         gameMap = new HashMap<String, Class<? extends GameClient>>();
         Reflections reflections = new Reflections("deco2800.arcade");
@@ -362,23 +363,19 @@ public class Arcade extends JFrame {
                 Constructor<? extends GameClient> constructor = gameClass
                         .getConstructor(Player.class, NetworkClient.class);
                 GameClient game = constructor.newInstance(player, client);
-                
-				// add the overlay to the game
-				if (!gameClass.isAnnotationPresent(InternalGame.class) && game != null) {
+
+                // add the overlay to the game
+                if (!gameClass.isAnnotationPresent(InternalGame.class)) {
 
                     GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 
                     // the overlay and the bridge are the same object, but
                     // GameClient doesn't know that and it mightn't be that way
                     // forever
-                    if (overlay != null) {
-                        game.addOverlay(overlay);
-                        if (overlay instanceof UIOverlay) {
-                            game.addOverlayBridge((UIOverlay) overlay);
-                        }
+                    game.addOverlay(overlay);
+                    if (overlay instanceof UIOverlay) {
+                        game.addOverlayBridge((UIOverlay) overlay);
                     }
-
-				}
 
                 }
 

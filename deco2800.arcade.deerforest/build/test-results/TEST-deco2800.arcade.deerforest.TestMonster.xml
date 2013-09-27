@@ -1,8 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<testsuite name="deco2800.arcade.deerforest.TestMonster" tests="2" failures="0" errors="0" timestamp="2013-09-27T06:35:32" hostname="x007-PC" time="0.001">
-  <properties/>
-  <testcase name="testToString" classname="deco2800.arcade.deerforest.TestMonster" time="0.0"/>
-  <testcase name="testEquals" classname="deco2800.arcade.deerforest.TestMonster" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

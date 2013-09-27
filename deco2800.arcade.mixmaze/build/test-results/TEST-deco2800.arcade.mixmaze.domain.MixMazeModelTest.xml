@@ -1,9 +1,0 @@
-<?xml version="1.1" encoding="UTF-8"?>
-<testsuite name="deco2800.arcade.mixmaze.domain.MixMazeModelTest" tests="3" failures="0" errors="0" timestamp="2013-09-27T06:35:35" hostname="x007-PC" time="0.007">
-  <properties/>
-  <testcase name="mixMazeTimeOutOfRange" classname="deco2800.arcade.mixmaze.domain.MixMazeModelTest" time="0.004"/>
-  <testcase name="mixMazeInitialization" classname="deco2800.arcade.mixmaze.domain.MixMazeModelTest" time="0.002"/>
-  <testcase name="mixMazeSizeOutOfRange" classname="deco2800.arcade.mixmaze.domain.MixMazeModelTest" time="0.0"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

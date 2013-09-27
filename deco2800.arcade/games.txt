@@ -21,4 +21,10 @@ towerdefence
 pacman
 connect4
 raiden
+<<<<<<< HEAD
 
+=======
+wl6
+statistics
+snakeLadder
+>>>>>>> master

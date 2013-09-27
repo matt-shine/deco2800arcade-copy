@@ -93,7 +93,6 @@ public class HomeScreen implements Screen {
 		    }
 		    
 		    index++;
-		    
 	    }
 	    
 	    batch.end();
@@ -120,8 +119,6 @@ public class HomeScreen implements Screen {
 	@Override
 	public void resume() {
 	}
-
-
 
 	@Override
 	public void resize(int arg0, int arg1) {

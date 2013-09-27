@@ -1,6 +1,0 @@
-deco2800.arcade.server.database.TestAchievementStoragåSLF4J: Class path contains multiple SLF4J bindings.Šdeco2800.arcade.server.database.TestAchievementStoragåäSLF4J: Found binding in [jar:file:/Users/malvin/.gradle/caches/artifacts-26/filestore/org.slf4j/slf4j-log4j12/1.7.5/jar/6edffc576ce104ec769d954618764f39f0f0f10d/slf4j-log4j12-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
-deco2800.arcade.server.database.TestAchievementStoragåâSLF4J: Found binding in [jar:file:/Users/malvin/.gradle/caches/artifacts-26/filestore/org.slf4j/slf4j-simple/1.7.5/jar/4a950c50bbc67fdbc908190dc8e25d7a0251f74a/slf4j-simple-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
-deco2800.arcade.server.database.TestAchievementStoragåÒSLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
-deco2800.arcade.server.database.TestAchievementStoragåÆSLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
-deco2800.arcade.server.database.TestAchievementStoragåØlog4j:WARN No appenders could be found for logger (org.dbunit.assertion.SimpleAssert).
-deco2800.arcade.server.database.TestAchievementStoragålog4j:WARN Please initialize the log4j system properly.Šdeco2800.arcade.server.database.TestAchievementStoragåÕlog4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.

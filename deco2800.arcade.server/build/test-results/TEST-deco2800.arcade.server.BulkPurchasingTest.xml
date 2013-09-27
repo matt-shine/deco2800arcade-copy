@@ -1,12 +1,12 @@
 <?xml version="1.1" encoding="UTF-8"?>
-<testsuite name="deco2800.arcade.server.BulkPurchasingTest" tests="6" failures="0" errors="0" timestamp="2013-09-27T04:41:39" hostname="Malvins-MacBook-Pro.local" time="0.064">
+<testsuite name="deco2800.arcade.server.BulkPurchasingTest" tests="6" failures="0" errors="0" timestamp="2013-09-27T06:43:15" hostname="x007-PC" time="0.079">
   <properties/>
-  <testcase name="discountOnFive" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.053"/>
-  <testcase name="discountOnTen" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0010"/>
-  <testcase name="canAffordIt" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0010"/>
-  <testcase name="cannotAffordIt" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0010"/>
-  <testcase name="testTwentyTeamPlay" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0020"/>
-  <testcase name="discountOnHundred" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0010"/>
+  <testcase name="discountOnFive" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.073"/>
+  <testcase name="discountOnTen" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.001"/>
+  <testcase name="canAffordIt" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0"/>
+  <testcase name="cannotAffordIt" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0"/>
+  <testcase name="testTwentyTeamPlay" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.001"/>
+  <testcase name="discountOnHundred" classname="deco2800.arcade.server.BulkPurchasingTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

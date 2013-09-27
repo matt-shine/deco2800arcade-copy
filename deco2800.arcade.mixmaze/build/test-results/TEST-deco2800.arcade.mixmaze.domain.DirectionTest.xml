@@ -1,13 +1,13 @@
 <?xml version="1.1" encoding="UTF-8"?>
-<testsuite name="deco2800.arcade.mixmaze.domain.DirectionTest" tests="10" failures="0" errors="0" timestamp="2013-09-27T04:06:07" hostname="Malvins-MacBook-Pro.local" time="0.015">
+<testsuite name="deco2800.arcade.mixmaze.domain.DirectionTest" tests="10" failures="0" errors="0" timestamp="2013-09-27T06:35:35" hostname="x007-PC" time="0.005">
   <properties/>
-  <testcase name="getPolarDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0040"/>
+  <testcase name="getPolarDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.002"/>
   <testcase name="east" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
   <testcase name="west" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
   <testcase name="north" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
-  <testcase name="south" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
+  <testcase name="south" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.001"/>
   <testcase name="isDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
-  <testcase name="isPositiveDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0010"/>
+  <testcase name="isPositiveDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
   <testcase name="isYDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
   <testcase name="isXDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>
   <testcase name="isNegativeDirection" classname="deco2800.arcade.mixmaze.domain.DirectionTest" time="0.0"/>

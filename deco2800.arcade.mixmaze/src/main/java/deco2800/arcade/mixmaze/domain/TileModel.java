@@ -163,4 +163,14 @@ public class TileModel implements ITileModel {
 			walls[direction].addTile(this);
 		}
 	}
+
+	/**
+	 * Set the boxer of this tile.
+	 *
+	 * @param p	the builder
+	 */
+	void setBoxer(PlayerModel p) {
+		boxer = p;
+	}
+
 }

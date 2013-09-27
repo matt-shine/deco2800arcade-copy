@@ -61,10 +61,12 @@ public class WallModel implements IWallModel {
 
 	public void destroy(PlayerModel player) {
 		if (!built) {
-			throw new IllegalStateException("The wall is not built.");
+			throw new IllegalStateException("wall not built");
 		}
 		built = false;
 		builder = null;
+		for (TileModel t : tiles)
+			t.setBoxer(null);
 	}
 
 	@Override

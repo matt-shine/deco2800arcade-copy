@@ -29,6 +29,7 @@ public class Invaders extends JFrame implements Runnable {
 	private ArrayList<enemyShot> Eshots;
 
 	public Invaders() {
+
 		super("Land Invaders");
 		WallList = new ArrayList<blockWall>();
 		WallList.add(new blockWall(180, 350, 4, 8));

@@ -1,7 +1,9 @@
 package deco2800.cyra.model;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.tiled.TiledLayer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -15,12 +17,14 @@ public class RandomizedEnemySpawner {
 	
 	private float count;
 	private boolean active;
+	private TiledLayer collisionLayer;
 	
 	public RandomizedEnemySpawner(Array<EnemySpawner> enemySpawners, boolean[] rightSideOfScreen, float rate) {
-		this(enemySpawners, rightSideOfScreen, rate, 0, 9999f);
+		this(enemySpawners, rightSideOfScreen, null, rate, 0, 9999f);
 	}
 	
-	public RandomizedEnemySpawner(Array<EnemySpawner> enemySpawners, boolean[] rightSideOfScreen, float rate, float startRange, float endRange) {
+	public RandomizedEnemySpawner(Array<EnemySpawner> enemySpawners, boolean[] rightSideOfScreen, TiledLayer collisionLayer, 
+			float rate, float startRange, float endRange) {
 		this.enemySpawners = enemySpawners;
 		this.rightSideOfScreen = rightSideOfScreen;
 		this.rate = rate;
@@ -28,6 +32,7 @@ public class RandomizedEnemySpawner {
 		active = false;
 		this.startRange = startRange;
 		this.endRange = endRange;
+		this.collisionLayer = collisionLayer;
 	}
 	
 	
@@ -61,6 +66,28 @@ public class RandomizedEnemySpawner {
 						es.setPosition(new Vector2 (cam.position.x + cam.viewportWidth/2 + 2f, es.getPosition().y));
 					} else {
 						es.setPosition(new Vector2 (cam.position.x - cam.viewportWidth/2 - 2f, es.getPosition().y));
+					}
+					if (collisionLayer != null) {
+						
+						for (float yChange = es.getPosition().y; yChange < es.getPosition().y + 1.5f; yChange+=0.5f) {
+							boolean collision = false;
+							int yLength = collisionLayer.tiles.length;
+							//if (i < xLength && i > 0 && j < yLength && j > 0) { 
+							int cell = collisionLayer.tiles[yLength-((int)yChange)-1][(int)es.getPosition().x];
+							
+							/*String type = map.getTileProperty(cell, "checkCollision");
+							if (type != null && type.equals("solid")) {*/
+							if (cell != 0) {
+								Rectangle rect = new Rectangle((int)es.getPosition().x, (int)yChange, 1, 1);
+								if (rect.overlaps(new Rectangle(es.getPosition().x, es.getPosition().y, 1,1))){
+									collision = true;
+								}
+							}
+							
+							if (!collision) {
+								break;
+							}
+						}
 					}
 					System.out.println("Spawning new from randomized at "+ es.getPosition() + "campos="+cam.position.x+" camview="+cam.viewportWidth);
 					output = es.spawnNewIfPossible();

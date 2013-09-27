@@ -29,6 +29,7 @@ public class EnemySpiderBoss extends Enemy {
 	private int phase;
 	private float count;
 	private int count2;
+	private float count3;
 	private float countEnemies;
 	private int movesUntilVulnerable;
 	private boolean performingTell;
@@ -38,6 +39,7 @@ public class EnemySpiderBoss extends Enemy {
 	private boolean beingHit;
 	private Array<EnemySpiderBossPopcorn> popcorns;
 	private float phase2fireballPosition;
+	private Array<MovablePlatformAttachment> solidParts;
 	
 	//private BlockMakerSpiderBoss blockMaker;
 	
@@ -244,7 +246,7 @@ public class EnemySpiderBoss extends Enemy {
 							velocity = new Vector2(0, -1f-50*rank);
 						}
 						System.out.println("Ram velocity starts at"+velocity);
-						count2= 0;
+						count3 = 0f;
 					} else {
 						
 					}
@@ -344,13 +346,13 @@ public class EnemySpiderBoss extends Enemy {
 						}
 					} else {
 						if (position.y <= 1f) {
-							count2 += delta;
-							if (count2 <= 1f) {
+							count3 += delta;
+							System.out.println("count3="+count3);
+							if (count3 <= 1f) {
 								velocity = new Vector2(0,0);
-							} else if (count2 <= 3f-rank){
+							} else if (count3 <= 3f-rank){
 								velocity = new Vector2(0, -1f-rank*3f);
 							} else {
-								count2 = 0;
 								count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 								state = State.IDLE;
 							}
@@ -442,13 +444,28 @@ public class EnemySpiderBoss extends Enemy {
 	}
 	
 	private void changePhase() {
+		boolean setSolidParts = true;
 		switch(phase){
 		case 1:
+			setSolidParts = false;
 		case 2:
 			startingNextScene = true;
 			state = State.IDLE;
 			health = 3;
 			break;
+		}
+		//for (MovablePlatformAttachment apa: solidParts) {
+		for (int i=0; i < solidParts.size; i++) {
+			MovablePlatformAttachment mpa = solidParts.get(i);
+			if (setSolidParts) {
+				if (i == 0) {
+					mpa.setTargetOffset(new Vector2(2f,5f));
+				} else {
+					mpa.setTargetOffset(new Vector2(5f,2f));
+				}
+			} else {
+				mpa.setTargetOffset(new Vector2(-100,0));
+			}
 		}
 		phase++;
 	}
@@ -463,5 +480,9 @@ public class EnemySpiderBoss extends Enemy {
 		rects.add(arms.getBounds());
 		rects.add(new Rectangle(position.x, position.y, WIDTH, 3f));
 		return rects;
+	}
+	
+	public void setSolidParts(Array<MovablePlatformAttachment> solidParts) {
+		this.solidParts = solidParts;
 	}
 }

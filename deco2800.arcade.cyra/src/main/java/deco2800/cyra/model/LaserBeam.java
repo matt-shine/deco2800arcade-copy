@@ -76,6 +76,9 @@ public class LaserBeam extends Enemy {
 		}
 		if (count >= 2.5) {
 			currentWidth = maxWidth/(count-1.5f);
+			if (currentWidth <= maxWidth * 0.66) {
+				position.x = -100f;
+			}
 		}
 		return null;
 	}
@@ -91,6 +94,11 @@ public class LaserBeam extends Enemy {
 		return false;
 	}
 
+	@Override
+	public void handleDamage(boolean fromRight) {
+		;
+	}
+	
 	@Override
 	public void handleNoTileUnderneath() {
 		

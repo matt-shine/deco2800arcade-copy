@@ -15,6 +15,9 @@ public class MovablePlatformAttachment extends MovablePlatform {
 		
 	}
 	
+	public void setTargetOffset(Vector2 targetOffset) {
+		this.targetOffset = targetOffset;
+	}
 	@Override
 	public void update(Ship ship) {
 		super.update(ship);

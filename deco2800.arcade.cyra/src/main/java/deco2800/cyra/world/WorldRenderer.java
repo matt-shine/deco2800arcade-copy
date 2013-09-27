@@ -210,7 +210,10 @@ public class WorldRenderer {
 		tmp.set(0,0,0);
 		cam.unproject(tmp);
 		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());*/
+		tileMapRenderer.render(cam, new int[]{3}); // THIS IS ONLY UNTIL layer 2's graphics are complete
 		tileMapRenderer.render(cam, new int[]{2});
+		
+		
 		//tileMapRenderer.render((int) cam.position.x-cam.viewportWidth/2, (int) cam.position.y-cam.viewportHeight/2, 999, 999,
 			//	new int[]{2});
 		

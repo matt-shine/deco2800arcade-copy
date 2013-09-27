@@ -67,7 +67,7 @@ public class World {
 	private boolean isPaused;
 	private int scenePosition;
 	
-	private boolean turnOffScenes = true;
+	private boolean turnOffScenes = false;
 	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
@@ -276,10 +276,12 @@ public class World {
 			tiles.add(mvPlat.getCollisionRectangle());
 		}
 		for (BlockMaker blockMaker: blockMakers) {
-			Array<Block> bmb = blockMaker.getBlocks();
-			for (Block b: bmb) {
-				if (b.isSolid()) {
-					tiles.add(b.getBounds());
+			if (blockMaker.isActive()) {
+				Array<Block> bmb = blockMaker.getBlocks();
+				for (Block b: bmb) {
+					if (b.isSolid()) {
+						tiles.add(b.getBounds());
+					}
 				}
 			}
 		}
@@ -557,7 +559,12 @@ public class World {
 				System.out.println("posY "+cam.position.y+" viewportHeight="+cam.viewportHeight);
 			}*/
 		} else {
-			
+			//ensure ship stays within camera bounds
+			if (ship.getPosition().x < cam.position.x - cam.viewportWidth/2) {
+				ship.getPosition().x = cam.position.x - cam.viewportWidth/2;
+			} else if (ship.getPosition().x > cam.position.x + cam.viewportWidth/2 - ship.getWidth()) {
+				ship.getPosition().x = cam.position.x + cam.viewportWidth/2 -ship.getWidth();
+			}
 		}
 	}
 	
@@ -583,7 +590,7 @@ public class World {
 	public void updateBlockMakers() {
 		for (BlockMaker bm: blockMakers) {
 			if (bm.isActive()) {
-				bm.update(Gdx.graphics.getDeltaTime(), cam);
+				bm.update(Gdx.graphics.getDeltaTime(), cam, rank);
 			}
 		}
 	}
@@ -672,6 +679,7 @@ public class World {
 		//ship = new Ship(new Vector2(220f, 60));
 		ship = new Ship(new Vector2(20f, 6));
 		//ship = new Ship(new Vector2(270, 60));
+		ship = new Ship(new Vector2(600, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();

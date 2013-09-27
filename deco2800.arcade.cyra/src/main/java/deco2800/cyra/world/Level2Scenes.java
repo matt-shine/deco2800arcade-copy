@@ -18,6 +18,8 @@ import deco2800.cyra.model.WalkerPart;
 
 public class Level2Scenes extends LevelScenes {
 
+	public static final float SPIDER_BOSS_START = 602f;
+	
 	//private ParallaxCamera cam;
 	private TweenManager manager;
 	BlockMakerSpiderBoss blockMaker;
@@ -31,9 +33,12 @@ public class Level2Scenes extends LevelScenes {
 	private int scenePosition;
 	private boolean doneSomethingOnce;
 	
+	
+	
 	public Level2Scenes(Ship ship, ParallaxCamera cam) {
 		super(ship, cam);
 		doneSomethingOnce = false;
+		blockMaker = new BlockMakerSpiderBoss();
 	}
 
 	@Override
@@ -56,7 +61,7 @@ public class Level2Scenes extends LevelScenes {
 	
 				
 			};
-			Tween.to(cam, CameraTween.POSITION,(343f-319f)/BlockMakerSpiderBoss.SPEED).target(343f + cam.viewportWidth/2, cam.viewportHeight/2).ease(
+			Tween.to(cam, CameraTween.POSITION,(24f)/BlockMakerSpiderBoss.SPEED).target(SPIDER_BOSS_START + 24f + cam.viewportWidth/2, cam.viewportHeight/2).ease(
 					TweenEquations.easeNone).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 			
 			
@@ -64,16 +69,20 @@ public class Level2Scenes extends LevelScenes {
 			Array<MovableEntity> movingEntities = new Array<MovableEntity>();
 			movingEntities.add(ship);
 			//movingEntites.add(spiderBoss)
-			blockMaker = new BlockMakerSpiderBoss(rank, movingEntities);
+			//blockMaker = new BlockMakerSpiderBoss(rank, movingEntities);
+			blockMaker.setMoveWithEntites(movingEntities);
 			output.add(blockMaker);
 			blockMaker.setActive(true);
-			boss = new EnemySpiderBoss(new Vector2(319f - cam.viewportWidth/2 - EnemySpiderBoss.WIDTH, 5f), rank, cam);
+			boss = new EnemySpiderBoss(new Vector2(SPIDER_BOSS_START - cam.viewportWidth/2 - EnemySpiderBoss.WIDTH, 5f), rank, cam);
 			output.add(boss);
 			MovablePlatformAttachment bossSolid1 = new MovablePlatformAttachment(null, 2f, 5f, boss, new Vector2(4f, 5f));
 			MovablePlatformAttachment bossSolid2 = new MovablePlatformAttachment(null, 5f, 2f, boss, new Vector2(1f, 2f));
 			output.add(bossSolid1);
 			output.add(bossSolid2);
-			
+			Array<MovablePlatformAttachment> solidParts = new Array<MovablePlatformAttachment>();
+			solidParts.add(bossSolid1);
+			solidParts.add(bossSolid2);
+			boss.setSolidParts(solidParts);
 			targetPos = 0f;
 		} else if (scenePosition == 1) {
 			count = 0;
@@ -89,7 +98,8 @@ public class Level2Scenes extends LevelScenes {
 		if (scenePosition == 0) {
 			//Scene to introduce the boss
 			manager.update(delta);
-			ship.getVelocity().x = Ship.SPEED / 1.5f;
+			//ship.getVelocity().x = Ship.SPEED / 1.5f;
+			ship.getVelocity().x = 12f / 1.5f; //after changed ship's default speed
 			
 			float lerp = 0.8f;
 			targetPos -= delta * 1.5;
@@ -143,6 +153,7 @@ public class Level2Scenes extends LevelScenes {
 				ship.getVelocity().x = 0;
 				count = 0;
 				doneSomethingOnce = false;
+				ship.setWallClimbEnabled(true);
 				return true;
 			}
 			return false;
@@ -154,7 +165,7 @@ public class Level2Scenes extends LevelScenes {
 
 	@Override
 	public float[] getStartValues() {
-		float[] starts = {319, 999, 999, 999};
+		float[] starts = {SPIDER_BOSS_START, 999, 999, 999};
 		return starts;
 	}
 

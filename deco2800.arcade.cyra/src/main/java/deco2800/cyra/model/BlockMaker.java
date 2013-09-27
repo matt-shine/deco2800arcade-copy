@@ -16,7 +16,7 @@ public abstract class BlockMaker {
 	}
 	
 	public abstract Array<Block> getBlocks();
-	public abstract void update(float delta, OrthographicCamera cam);
+	public abstract void update(float delta, OrthographicCamera cam, float rank);
 	
 	
 }

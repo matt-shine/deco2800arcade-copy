@@ -49,10 +49,18 @@ public class BulletHomingDestructible extends BulletSimple {
 				maxRotation = 20f + 2.5f*rank;
 			}
 			if (angleDifference > maxRotation) {
-				velocity.rotate(maxRotation);
+				//if (angleDifference >0) {
+					velocity.rotate(maxRotation);
+				//} else {
+					velocity.rotate(-maxRotation);
+				//}
 				rotation += maxRotation;
 			} else {
-				velocity.rotate(angleDifference);
+				//if (angleDifference > 0) {
+					velocity.rotate(angleDifference);
+				//} else {
+				//	velocity.rotate(-angleDifference);
+				//}
 				rotation += angleDifference;
 			}
 			//System.out.println("Rotation now " + rotation);

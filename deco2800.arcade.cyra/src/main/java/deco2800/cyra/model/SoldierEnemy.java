@@ -23,9 +23,10 @@ public class SoldierEnemy extends Enemy {
 	private Boolean performingTell;
 	private float stateTime;
 	private float jumpTime;
+	private float swordTime;
 	
 	private enum State {
-		INIT, WALK, WAIT, JUMP, SHOOT, BOMB, SWORD, CHARGE, DEATH
+		INIT, WALK, WAIT, JUMP, SHOOT, AOE, RAM, SWORD, GRENADE, DEATH
 	}
 	
 	public SoldierEnemy () {
@@ -42,6 +43,7 @@ public class SoldierEnemy extends Enemy {
 		performingTell = false;
 		stateTime = 0.33f;
 		jumpTime = 0;
+		swordTime = 0;
 		
 		if (startOnRight) {
 			velocity.x = -SPEED;
@@ -53,6 +55,7 @@ public class SoldierEnemy extends Enemy {
 	@Override
 	public Array<Enemy> advance(float delta, Ship ship, float rank) {
 		super.update(ship);
+		Array<Enemy> newEnemies = new Array<Enemy>();
 		
 		if (Math.abs(velocity.x) < 1) {
 			velocity.x = 0;
@@ -89,6 +92,7 @@ public class SoldierEnemy extends Enemy {
 		stateTime -= delta;
 		if (stateTime < 0) {
 			if (performingTell) {
+				performingTell = false;
 				switch (state) {
 				//Will be used for states JUMP, SHOOT, BOMB, SWORD and CHARGE
 				case JUMP:
@@ -101,13 +105,50 @@ public class SoldierEnemy extends Enemy {
 					jumpTime = JUMP_TIME;
 					stateTime = 3f;
 					break;
+				
+				case SHOOT:
+					int randInt = MathUtils.random(1);
+					if (randInt == 0) {
+						newEnemies.add(new BulletHomingDestructible(5f + 10f * rank, 0f, new Vector2(position.x + width/2, 
+								position.y + height/2), 1f, 1f, new Vector2(0,1f), BulletSimple.Graphic.FIRE));
+					} else {
+						Vector2 direction;
+						if (facingRight) { 
+							direction = new Vector2(1f,0);
+						} else {
+							direction = new Vector2(-1f,0);
+						}
+						newEnemies.add(new BulletSimple(5f + 30f * rank, 0f, new Vector2(position.x + width/2, 
+								position.y + height/2), 1f, 1f, direction, BulletSimple.Graphic.FIRE));
+					}
+					stateTime = 1f;
+					break;
+				case AOE:
+					stateTime = 2f;
+					velocity.x = 0f;
+					break;
+				case RAM:
+					velocity.x = SPEED * 3f;
+					if (!facingRight) {
+						velocity.x = -velocity.x;
+					}
+					stateTime = 1f;
+					break;
+				case SWORD:
+					stateTime = 2f;
+					swordTime = 1.5f;
+					break;
+				case GRENADE:
+					//newEnemies.add(new Grendae);
+					stateTime = 1f;
+					break;
 				}
 				
-				performingTell = false;
+				
 				
 			} else {
 				//pick a new state
-				pickNewState(ship);
+				pickNewState(ship, rank);
 			}
 		}
 		//System.out.println("Velocity after soldier advance = "+velocity+ "    Position after soldier advance ="+position);
@@ -123,15 +164,31 @@ public class SoldierEnemy extends Enemy {
 			}
 		}
 		
-		return null;
+		return newEnemies;
 	}
 
-	public void pickNewState(Ship ship) {
-		float rand = MathUtils.random(1f);
+	public void pickNewState(Ship ship, float rank) {
 		//will need to make it so the same state doesn't get picked twice
-		float walkChance = 0.4f;
-		float jumpChance = 0.9f;
-		float waitChance = 1f;
+		float walkChance = 0.4f - 0.34f * rank;
+		float jumpChance = walkChance + 0.3f;
+		float waitChance = jumpChance + 0.2f - 0.2f * rank;
+		float shootChance = waitChance + 0.4f * rank;
+		float aoeChance;
+		if (rank > 0.75f) {
+			aoeChance = shootChance + 0.3f;
+		} else {
+			aoeChance = shootChance;	
+		}
+		float ramChance = aoeChance + 0.1f * rank;
+		float swordChance =  ramChance + 0.2f;
+		float grenadeChance;
+		if (rank > 0.6f) {
+			grenadeChance = swordChance + 0.3f;
+		} else {
+			grenadeChance = swordChance;
+		}
+		float rand = MathUtils.random(grenadeChance);
+		
 		if (rand < walkChance) {
 			state = State.WALK;
 			stateTime = 2f;
@@ -166,7 +223,58 @@ public class SoldierEnemy extends Enemy {
 			stateTime = 1f;
 			velocity.x = 0;
 			performingTell = false;
+		} else if (rand < shootChance) {
+			state = State.SHOOT;
+			if (ship.position.x > position.x) {
+				facingRight = true;
+			} else {
+				facingRight = false;
+			}
+			performingTell = true;
+			velocity.x = 0;
+			stateTime = 1.5f-1.35f * rank;
+		
+		} else if (rand < aoeChance) {
+			state = State.AOE;
+			
+			performingTell = true;
+			velocity.x = 0;
+			stateTime = 2.5f-1.5f * rank;
+		
+		} else if (rand < ramChance) {
+			state = State.RAM;
+			if (ship.position.x > position.x) {
+				facingRight = true;
+			} else {
+				facingRight = false;
+			}
+			performingTell = true;
+			velocity.x = 0;
+			stateTime = 1.5f-1.35f * rank;
+		} else if (rand < swordChance) {
+			state = State.SWORD;
+			if (ship.position.x > position.x) {
+				facingRight = true;
+			} else {
+				facingRight = false;
+			}
+			performingTell = true;
+			velocity.x = 0;
+			stateTime = 1.5f-1.35f * rank;
+		
+		//} else if (rand < grenadeChance) {
+		} else {
+			state = State.GRENADE;
+			if (ship.position.x > position.x) {
+				facingRight = true;
+			} else {
+				facingRight = false;
+			}
+			performingTell = true;
+			stateTime = 1.5f-1.35f * rank;
+		
 		}
+		
 		System.out.println("Picked new state: "+ state);
 	}
 	
@@ -208,6 +316,29 @@ public class SoldierEnemy extends Enemy {
 			stateTime = 1f;
 		}*/
 		
+	}
+	
+	@Override
+	public Array<Rectangle> getPlayerDamageBounds() {
+		Array<Rectangle> output = new Array<Rectangle>();
+		if (!performingTell) {
+			if (state == State.AOE) {
+				float size = 1.5f;
+				output.add(new Rectangle(position.x - size, position.y-size, width+2*size, height+2*size));
+			} else if (swordTime > 0) {
+				swordTime -= Gdx.graphics.getDeltaTime();
+				if (facingRight) {
+					output.add(new Rectangle(position.x + width/2, position.y + height/4, width *2, height/2));
+				} else {
+					output.add(new Rectangle(position.x - width*1.5f, position.y + height/4, width *2, height/2));
+				}
+			} else if (state == State.JUMP) {
+				output.add(new Rectangle(position.x, position.y, width,height));
+			} else if (state == State.RAM) {
+				output.add(new Rectangle(position.x, position.y, width,height/2));
+			}
+		}
+		return output;	
 	}
 
 }

@@ -7,9 +7,10 @@ import com.badlogic.gdx.math.Vector2;
 public class Ship extends MovableEntity{
 	
 	public enum State {
-		IDLE, WALK, DASH, JUMP, FALL, DEATH, DASH_JUMP, WALL
+		IDLE, WALK, JUMP, FALL, DEATH, DASH_JUMP, WALL
 	}
-	public static final float SPEED = 12f;
+	public static final float SPEED = 9f; //was 12
+	public static final float DASH_SPEED = 13.5f;
 	public static final float JUMP_VELOCITY = 20f;
 	public static final float WIDTH = 1f;
 	public static final float HEIGHT = 1.7f;
@@ -34,6 +35,7 @@ public class Ship extends MovableEntity{
 	float jumpTime = 0;
 	float wallTime = WALL_ATTACH_TIME;
 	private boolean wallClimbEnabled = true;
+	private float doubleTapTime = 0;
 	
 	public Ship(Vector2 pos) {
 		super (SPEED, 0, pos, WIDTH, HEIGHT);
@@ -86,18 +88,20 @@ public class Ship extends MovableEntity{
 	
 	/* ----- Setter methods ----- */
 	public void jump() {
-		if (getState() == State.WALL) {
-			if (getVelocity().x > 0) {
-				setFacingRight(true);
-			} else if (getVelocity().x < 0) {
-				setFacingRight(false);
-			} else {
-				setFacingRight(!isFacingRight());
+		if (wallClimbEnabled) {
+			if (getState() == State.WALL) {
+				if (getVelocity().x > 0) {
+					setFacingRight(true);
+				} else if (getVelocity().x < 0) {
+					setFacingRight(false);
+				} else {
+					setFacingRight(!isFacingRight());
+				}
 			}
+			getVelocity().y = Ship.JUMP_VELOCITY;
+			setState(Ship.State.JUMP);
+			resetJumpTime();
 		}
-		getVelocity().y = Ship.JUMP_VELOCITY;
-		setState(Ship.State.JUMP);
-		resetJumpTime();
 	}
 	
 	public void moveRight() {
@@ -105,6 +109,11 @@ public class Ship extends MovableEntity{
 		if (getState() != State.WALL) {
 			setState(State.WALK);
 			setFacingRight(true);
+		}
+		if (doubleTapTime > 0 && facingRight && state != State.WALL && state != State.JUMP) {
+			getVelocity().x = DASH_SPEED;
+		} else {
+			doubleTapTime = 0.2f;
 		}
 		bounceBack(false);
 	}
@@ -115,6 +124,12 @@ public class Ship extends MovableEntity{
 			setState(State.WALK);
 			setFacingRight(false);
 		}
+		if (doubleTapTime > 0 && !facingRight && state != State.WALL && state != State.JUMP) {
+			getVelocity().x = -DASH_SPEED;
+		} else {
+			doubleTapTime = 0.2f;
+		}
+		doubleTapTime = 0.2f;
 		bounceBack(false);
 	}
 	
@@ -215,12 +230,14 @@ public class Ship extends MovableEntity{
 			}
 			position.y = tile.y - getHeight() - 0.001f;
 		}
+		
 	}
 	
 	public void handleNoTileUnderneath() {
 		if (getState() == State.IDLE || getState() == State.WALK) {
 			setState(State.JUMP);
 		}
+		
 	}
 	
 	public void setWallClimbEnabled (boolean wallClimbEnabled) {
@@ -315,6 +332,10 @@ public class Ship extends MovableEntity{
 		if(invincibleTime > MAX_INVINCIBLE_TIME) {
 			setInvincibility(false);
 			invincibleTime = 0;
+		}
+		
+		if (doubleTapTime > 0f) {
+			doubleTapTime -= Gdx.graphics.getDeltaTime();
 		}
 	}
 }

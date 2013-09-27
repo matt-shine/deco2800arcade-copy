@@ -17,6 +17,7 @@ public class InputHandler implements InputProcessor{
 	Vector2 vec2Touch = new Vector2();
 	private boolean acceptInput;
 	Vector3 touch = new Vector3();
+	
 
 	//private static final float WALL_ATTACH_LENGTH = 4f;
 	//private float wallTime = 0;
@@ -26,6 +27,7 @@ public class InputHandler implements InputProcessor{
 		this.ship = world.getShip();
 		this.sword = world.getSword();
 		acceptInput = true;
+		
 	}
 	
 	@Override

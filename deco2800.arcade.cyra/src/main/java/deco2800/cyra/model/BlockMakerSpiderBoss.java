@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import deco2800.cyra.world.Level2Scenes;
+
 public class BlockMakerSpiderBoss extends BlockMaker {
 	
 	public static final float SPEED = 3f;
@@ -18,7 +20,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	private HashMap<Block, Integer> oldBlocksType;
 	private Block latestBlock;
 	private float count;
-	private float rank;
+	//private float rank;
 	private boolean camHasReachedStartPosition;
 	private boolean firstUpdate;
 	
@@ -33,12 +35,12 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 		
 	private Array<MovableEntity> moveWithEntities;
 	
-	public BlockMakerSpiderBoss(float rank) {
-		this(rank, new Array<MovableEntity>());
+	public BlockMakerSpiderBoss() {
+		this(new Array<MovableEntity>());
 	}
 	
-	public BlockMakerSpiderBoss(float rank, Array<MovableEntity> moveWithEntities) {
-		this.rank = rank;
+	public BlockMakerSpiderBoss(Array<MovableEntity> moveWithEntities) {
+		//this.rank = rank;
 		loopPos = 0;
 		//groundTextures = new TextureAtlas("data/level packfile");
 		isActive = false;
@@ -61,7 +63,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	}
 
 	public void initBlocks() {
-		float initX = 329; //find a better way to get this variable
+		float initX = Level2Scenes.SPIDER_BOSS_START + 13f; //find a better way to get this variable
 		for (float i = 0; i < 70; i += 1f) {
 			blocks.add(new Block(new Vector2(initX + i, 0f), Block.TextureAtlasReference.LEVEL, 0));
 			blocks.add(new Block(new Vector2(initX + i, 1f), Block.TextureAtlasReference.LEVEL, 0));
@@ -71,7 +73,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 			
 	}
 	
-	public void update(float delta, OrthographicCamera cam) {
+	public void update(float delta, OrthographicCamera cam, float rank) {
 		count += delta;
 		if (state == State.RIGHT) {
 			//Add new blocks
@@ -183,7 +185,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 			float destroySpeed = 14f;
 			switch(type) {
 			case 0:
-				System.out.println("Found oldBlock at " + b.getPosition());
+				//System.out.println("Found oldBlock at " + b.getPosition());
 				b.getPosition().x -= delta *destroySpeed;
 				b.getPosition().y += delta* destroySpeed;
 				break;
@@ -280,7 +282,9 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 		}
 	}
 	
-	
+	public void setMoveWithEntites(Array<MovableEntity> moveEntities) {
+		this.moveWithEntities = moveEntities;
+	}
 
 	
 }

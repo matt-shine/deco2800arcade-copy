@@ -13,6 +13,9 @@ Thumbs.db
 build
 .gradle
 
+# emacs stuff
+*~
+
 # Compiled
 *.class
 bin
@@ -28,3 +31,6 @@ bin
 .idea/
 *.iml
 *.eml
+
+# Release
+release

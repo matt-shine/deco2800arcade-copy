@@ -1,34 +1,39 @@
 package deco2800.arcade.burningskies.screen;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.entities.Enemy;
+import deco2800.arcade.burningskies.entities.Entity;
+import deco2800.arcade.burningskies.entities.GameMap;
 import deco2800.arcade.burningskies.entities.PlayerShip;
+import deco2800.arcade.burningskies.entities.PowerUp;
+import deco2800.arcade.burningskies.entities.bullets.Bullet;
+import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
+import deco2800.arcade.client.ArcadeInputMux;
 
 
 public class PlayScreen implements Screen
 {
 	private BurningSkies game;
-	private Music music;
 	
 	private OrthographicCamera camera;
-	private SpriteBatch batch;
-	private Texture texture;
 	private Stage stage;
-	
-	private int x = 0;
-	private float y = 0;
-	private int speed = 40;
+	private PlayerInputProcessor processor;
+	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
 	
 	private PlayerShip player;
+	private GameMap map;
 	
 	public PlayScreen( BurningSkies game){
 		this.game = game;
@@ -38,9 +43,7 @@ public class PlayScreen implements Screen
     public void show()
     {
     	// Initialising variables
-    	texture = new Texture( Gdx.files.internal("maps/test2.png"));
-		batch = new SpriteBatch();
-		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true , batch);
+		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true);
 
 		// Setting up the camera view for the game
 		camera = (OrthographicCamera) stage.getCamera();
@@ -49,32 +52,91 @@ public class PlayScreen implements Screen
     	
         game.playSong("level1");
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/Jet1.png"));
-    	player = new PlayerShip(100, shiptext, new Vector2(400, 100));
+    	Texture shiptext = new Texture(Gdx.files.internal("images/jet_debug.png"));
+    	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
+    	map = new GameMap("fixme");
+
+    	stage.addActor(map);
     	stage.addActor(player);
+    	
+    	processor = new PlayerInputProcessor(player);
+    	ArcadeInputMux.getInstance().addProcessor(processor);
+    	
+    	// Test code
+    	PowerUp test = new PowerUp();
+    	addPowerup(test);
+    	Texture testText = new Texture(Gdx.files.internal("enemies/enemy1.png"));
+    	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
+    	addEnemy(e);
     }
     
     @Override
     public void hide() {
-    	music.stop();
-    } 
+    	//TODO: Make sure this resets properly
+    	ArcadeInputMux.getInstance().removeProcessor(processor);
+    	stage.dispose();
+    }
     
     @Override
     public void render(float delta)
-    {    	
-    	// auto scroll
-    	y -= (float) Gdx.graphics.getDeltaTime() * speed;
-    	
+    {
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
+    	if(!game.isPaused()) {
+    		stage.act(delta);
+    		for(int i=0; i<bullets.size(); i++) {
+    			Bullet b = bullets.get(i);
+        		if(outOfBounds(b)) {
+        			b.remove();
+        			bullets.remove(i);
+        			i--;
+        			continue;
+        		}
+        		//deal with collisions
+    			if(b.getAffinity() == Affinity.PLAYER) {
+    				for(int j=0; j<enemies.size(); j++) {
+    					Enemy e = enemies.get(j);
+    					if(b.hasCollided(e)) {
+    						//TODO: HANDLE DAMAGE FROM THIS YA MUPPETS
+    						b.remove();
+    	        			bullets.remove(i);
+    	        			i--;
+    						continue;
+    					}
+    				}
+    			} else if(b.hasCollided(player)) {
+    				//TODO: DAMAGE THE PLAYER YOU NUGGET
+    				b.remove();
+        			bullets.remove(i);
+        			i--;
+    				continue;
+    			}
+    		}
+			for(int i=0; i<powerups.size(); i++) {
+				PowerUp p = powerups.get(i);
+				if(p.hasCollidedUnscaled(player)) {
+					//TODO: POWERUPS WOO
+					p.remove();
+					powerups.remove(i);
+					i--;
+					continue;
+				}
+			}
+    	}
     	// Draws the map
-    	batch.begin();
-    	batch.draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight() );
-    	batch.end();
-    	
-    	stage.act(delta);
     	stage.draw();
+    }
+    
+    private boolean outOfBounds(Entity e) {
+    	// are we in bounds? if not, goodbye
+		float left = e.getX() + e.getWidth();
+		float right = e.getY() + e.getHeight();
+		// 10 pixels in case they're flying off the sides
+		if(left < -10 || right < -10 || e.getX() > stage.getWidth() + 10 || e.getY() > stage.getHeight() + 10) {
+			return true;
+		} 
+		return false;
     }
     
     @Override
@@ -91,5 +153,20 @@ public class PlayScreen implements Screen
     
     @Override
     public void dispose() {
+    }
+    
+    public void addBullet(Bullet bullet) {
+    	stage.addActor(bullet);
+    	bullets.add(bullet);
+    }
+    
+    public void addEnemy(Enemy enemy) {
+    	stage.addActor(enemy);
+    	enemies.add(enemy);
+    }
+    
+    public void addPowerup(PowerUp p) {
+    	stage.addActor(p);
+    	powerups.add(p);
     }
 }

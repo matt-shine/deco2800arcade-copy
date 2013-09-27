@@ -22,7 +22,7 @@ public class DeerForestPlayer {
 		this.hand = new Hand();
 		this.graveyard = new Graveyard();
 		this.field = new Field();
-		this.currentLife = 50;
+		this.currentLife = 200;
 		this.currentShield = 0;
 	}
 
@@ -60,15 +60,6 @@ public class DeerForestPlayer {
 	}
 	
 	public void inflictDamage(int damage) {
-		//If shield exists decrement it
-		if(currentShield > 0 && currentShield >= damage) {
-			currentShield -= damage;
-			damage = 0;
-		} else if(currentShield > 0 && currentShield < damage) {
-			damage -= currentShield;
-			currentShield = 0;
-		}
-		
 		//Inflict Life point damage
 		currentLife -= damage;
 		if(currentLife < 0) {

@@ -45,14 +45,14 @@ public class Level {
 		randomEnemySpawners = new Array<RandomizedEnemySpawner>();
 		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
 		
-		//map = TiledLoader.createMap(Gdx.files.internal("data/level"+"2_new"+".tmx"));
-		map = TiledLoader.createMap(Gdx.files.internal("data/level"+levelNum+".tmx"));
+		map = TiledLoader.createMap(Gdx.files.internal("data/tiles/level"+"2_new"+".tmx"));
+		//map = TiledLoader.createMap(Gdx.files.internal("data/level"+levelNum+".tmx"));
 		//map = TiledLoader.createMap(Gdx.files.internal("data/levelOld.tmx"));
 		
 		collisionLayer = (TiledLayer) ( map.layers.get(3) );
 		
 
-		atlas = new TileAtlas(map, Gdx.files.internal("data/level1/"));
+		atlas = new TileAtlas(map, Gdx.files.internal("data/tiles/"));
 		//atlas = new TileAtlas(map, Gdx.files.internal("data/tiles/"));
 		//renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, 1/32f);
 		

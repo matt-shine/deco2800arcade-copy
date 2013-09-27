@@ -1,0 +1,7 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="deco2800.arcade.client.replay.test.ReplayHandlerTest" tests="1" failures="0" errors="0" timestamp="2013-09-27T04:05:54" hostname="Malvins-MacBook-Pro.local" time="0.0010">
+  <properties/>
+  <testcase name="testFail" classname="deco2800.arcade.client.replay.test.ReplayHandlerTest" time="0.0010"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

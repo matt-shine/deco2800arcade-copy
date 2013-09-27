@@ -1,0 +1,181 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta httpEquiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Test results - Class deco2800.arcade.server.database.TestAchievementStorage</title>
+<link href="base-style.css" rel="stylesheet" type="text/css"/>
+<link href="style.css" rel="stylesheet" type="text/css"/>
+<script src="report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>Class deco2800.arcade.server.database.TestAchievementStorage</h1>
+<div class="breadcrumbs">
+<a href="index.html">all</a> &gt; 
+<a href="deco2800.arcade.server.database.html">deco2800.arcade.server.database</a> &gt; TestAchievementStorage</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">3</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">1.984s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+<li>
+<a href="#tab2">Standard error</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testAchievementsForIDs</td>
+<td>0.092s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testIncrementAchievement</td>
+<td>0.260s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testProgressForPlayer</td>
+<td>1.632s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>Testing progressForPlayer method.
+================
+
+DB: Existing progress found. Increment progress continue.
+DB: Insert new player achievement record.
+DB: Existing progress found. Increment progress continue.
+DB: Insert new player achievement record.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+CHECK1[PlayerProgress] Check Fired: pong.winthreegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winthreegames
+CHECK3[ProgressOrAward]
+CHECK1[PlayerProgress] Check Fired: pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK3[ProgressOrAward]
+Player 1 Progress
+inProgress: [pong.winthreegames, pong.winfivegames]
+Awarded: []
+
+CHECK1[PlayerProgress] Check Fired: pong.winthreegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winthreegames
+CHECK3[ProgressOrAward]
+CHECK1[PlayerProgress] Check Fired: pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK3[ProgressOrAward]
+Player 2 Progress
+inProgress: [pong.winthreegames]
+Awarded: [pong.winfivegames]
+
+
+Testing AchievementsForIDs method.
+================
+Create a test ArrayList of AchievementIDs.
+Create a test example response from database - ArrayList&lt;Achievement&gt;.
+Test ArrayList&lt;Achievement&gt;: [(pong.winthreegames, 3 Times Down, Win 3 games of Pong, 3)]
+From Method ArrayList&lt;Achievement&gt;: [(pong.winthreegames, 3 Times Down, Win 3 games of Pong, 3), (pong.winfivegames, 5 Times Down, Win 5 games of Pong, 5)]
+AchievementsForIDs method: PASSED
+
+
+Returning initial PLAYER_ACHIEVEMENT table.
+================
+PlayerID: 1 Achievement: pong.winthreegames Progress: 1
+PlayerID: 1 Achievement: pong.winfivegames Progress: 4
+DB: Existing progress found. Increment progress continue.
+DB: Insert new player achievement record.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+
+- Increment Player1 with achievement Pong Win3Games
+- Increment x2 Player2 with achievement Pong Win3Games
+- Increment Player1 with achievement Pong Win5Games
+================
+PlayerID: 1 Achievement: pong.winthreegames Progress: 2
+PlayerID: 1 Achievement: pong.winfivegames Progress: 5
+PlayerID: 2 Achievement: pong.winthreegames Progress: 2
+TEST: Testing Over Increment
+DB: Existing progress found. Increment progress continue.
+DB: Threshold has been reached.
+</pre>
+</span>
+</div>
+<div id="tab2" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/Users/malvin/.gradle/caches/artifacts-26/filestore/org.slf4j/slf4j-log4j12/1.7.5/jar/6edffc576ce104ec769d954618764f39f0f0f10d/slf4j-log4j12-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/Users/malvin/.gradle/caches/artifacts-26/filestore/org.slf4j/slf4j-simple/1.7.5/jar/4a950c50bbc67fdbc908190dc8e25d7a0251f74a/slf4j-simple-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+log4j:WARN No appenders could be found for logger (org.dbunit.assertion.SimpleAssert).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>Generated by 
+<a href="http://www.gradle.org">Gradle 1.7</a> at Sep 27, 2013 2:41:42 PM</p>
+</div>
+</div>
+</body>

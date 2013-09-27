@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Fri Sep 27 15:07:00 EST 2013:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.1 - (1458268): instance a816c00e-0141-5dd0-1526-000004556810 
+on database directory /Users/malvin/deco2800-2013/deco2800.arcade.server/Arcade with class loader sun.misc.Launcher$AppClassLoader@20cf2c80 
+Loaded from file:/Users/malvin/.gradle/caches/artifacts-26/filestore/org.apache.derby/derby/10.10.1.1/jar/9f6f910f0373adc1b23c10f9b4bb151b7e7449f/derby-10.10.1.1.jar
+java.vendor=Apple Inc.
+java.runtime.version=1.6.0_51-b11-457-11M4509
+user.dir=/Users/malvin/deco2800-2013/deco2800.arcade.server
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.8.5
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

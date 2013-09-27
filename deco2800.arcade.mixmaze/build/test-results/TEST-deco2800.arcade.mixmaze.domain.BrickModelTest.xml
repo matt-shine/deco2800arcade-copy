@@ -1,0 +1,17 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="deco2800.arcade.mixmaze.domain.BrickModelTest" tests="11" failures="0" errors="0" timestamp="2013-09-27T04:06:06" hostname="Malvins-MacBook-Pro.local" time="0.364">
+  <properties/>
+  <testcase name="brickAmountOutOfRange" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.345"/>
+  <testcase name="removeAmount" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0010"/>
+  <testcase name="removeOneInvalid" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0010"/>
+  <testcase name="setAmountInvalid" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0040"/>
+  <testcase name="brickNullTile" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0"/>
+  <testcase name="addAmount" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0"/>
+  <testcase name="setAmount" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0"/>
+  <testcase name="removeOne" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0"/>
+  <testcase name="initializeBrickModel" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0030"/>
+  <testcase name="addAmountInvalid" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0010"/>
+  <testcase name="removeAmountInvalid" classname="deco2800.arcade.mixmaze.domain.BrickModelTest" time="0.0010"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

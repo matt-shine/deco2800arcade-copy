@@ -1,0 +1,79 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="deco2800.arcade.server.database.TestAchievementStorage" tests="3" failures="0" errors="0" timestamp="1970-01-01T00:00:00" hostname="Malvins-MacBook-Pro.local" time="1.380256902233E9">
+  <properties/>
+  <testcase name="testProgressForPlayer" classname="deco2800.arcade.server.database.TestAchievementStorage" time="1.632"/>
+  <testcase name="testAchievementsForIDs" classname="deco2800.arcade.server.database.TestAchievementStorage" time="0.092"/>
+  <testcase name="testIncrementAchievement" classname="deco2800.arcade.server.database.TestAchievementStorage" time="0.26"/>
+  <system-out><![CDATA[Testing progressForPlayer method.
+================
+
+DB: Existing progress found. Increment progress continue.
+DB: Insert new player achievement record.
+DB: Existing progress found. Increment progress continue.
+DB: Insert new player achievement record.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+CHECK1[PlayerProgress] Check Fired: pong.winthreegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winthreegames
+CHECK3[ProgressOrAward]
+CHECK1[PlayerProgress] Check Fired: pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK3[ProgressOrAward]
+Player 1 Progress
+inProgress: [pong.winthreegames, pong.winfivegames]
+Awarded: []
+
+CHECK1[PlayerProgress] Check Fired: pong.winthreegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winthreegames
+CHECK3[ProgressOrAward]
+CHECK1[PlayerProgress] Check Fired: pong.winfivegames
+CHECK2[ProgressFindAchievement] pong.winfivegames
+CHECK3[ProgressOrAward]
+Player 2 Progress
+inProgress: [pong.winthreegames]
+Awarded: [pong.winfivegames]
+
+
+Testing AchievementsForIDs method.
+================
+Create a test ArrayList of AchievementIDs.
+Create a test example response from database - ArrayList<Achievement>.
+Test ArrayList<Achievement>: [(pong.winthreegames, 3 Times Down, Win 3 games of Pong, 3)]
+From Method ArrayList<Achievement>: [(pong.winthreegames, 3 Times Down, Win 3 games of Pong, 3), (pong.winfivegames, 5 Times Down, Win 5 games of Pong, 5)]
+AchievementsForIDs method: PASSED
+
+
+Returning initial PLAYER_ACHIEVEMENT table.
+================
+PlayerID: 1 Achievement: pong.winthreegames Progress: 1
+PlayerID: 1 Achievement: pong.winfivegames Progress: 4
+DB: Existing progress found. Increment progress continue.
+DB: Insert new player achievement record.
+DB: Existing progress found. Increment progress continue.
+DB: Existing progress found. Increment progress continue.
+
+- Increment Player1 with achievement Pong Win3Games
+- Increment x2 Player2 with achievement Pong Win3Games
+- Increment Player1 with achievement Pong Win5Games
+================
+PlayerID: 1 Achievement: pong.winthreegames Progress: 2
+PlayerID: 1 Achievement: pong.winfivegames Progress: 5
+PlayerID: 2 Achievement: pong.winthreegames Progress: 2
+TEST: Testing Over Increment
+DB: Existing progress found. Increment progress continue.
+DB: Threshold has been reached.
+]]></system-out>
+  <system-err><![CDATA[SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/Users/malvin/.gradle/caches/artifacts-26/filestore/org.slf4j/slf4j-log4j12/1.7.5/jar/6edffc576ce104ec769d954618764f39f0f0f10d/slf4j-log4j12-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/Users/malvin/.gradle/caches/artifacts-26/filestore/org.slf4j/slf4j-simple/1.7.5/jar/4a950c50bbc67fdbc908190dc8e25d7a0251f74a/slf4j-simple-1.7.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+log4j:WARN No appenders could be found for logger (org.dbunit.assertion.SimpleAssert).
+log4j:WARN Please initialize the log4j system properly.
+log4j:WARN See http://logging.apache.org/log4j/1.2/faq.html#noconfig for more info.
+]]></system-err>
+</testsuite>

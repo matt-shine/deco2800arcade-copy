@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<testsuite name="deco2800.arcade.server.database.TestHashStorage" tests="2" failures="0" errors="0" timestamp="2013-09-27T04:41:42" hostname="Malvins-MacBook-Pro.local" time="0.223">
+  <properties/>
+  <testcase name="updatePasswordTest" classname="deco2800.arcade.server.database.TestHashStorage" time="0.173"/>
+  <testcase name="registerPasswordTest" classname="deco2800.arcade.server.database.TestHashStorage" time="0.05"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

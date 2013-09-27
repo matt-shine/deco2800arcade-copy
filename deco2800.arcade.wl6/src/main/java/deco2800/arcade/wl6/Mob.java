@@ -18,12 +18,13 @@ public class Mob extends Doodad {
         setPos(getPos(), vel);
 	}
 
+    // Checks to see if the mob is trying to go through an obstructing block
     public void setPos(Vector2 pos, Vector2 vel) {
-        int x = (int) (pos.x + vel.x);
-        int y = (int) (pos.y + vel.y);
+        int x = (int) (pos.x + vel.x * 2);
+        int y = (int) (pos.y + vel.y * 2);
         if (WL6Meta.hasObscuringBlockAt(x, y, game.getMap()) &&
                 !WL6Meta.hasDoorAt(x, y, game.getMap())) {
-            setPos(new Vector2(pos.x - vel.x, pos.y - vel.y));
+            setPos(new Vector2(pos.x, pos.y));
         } else {
             setPos(new Vector2(pos.x + vel.x, pos.y + vel.y));
         }

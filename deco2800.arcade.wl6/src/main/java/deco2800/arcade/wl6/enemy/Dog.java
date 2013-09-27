@@ -1,11 +1,16 @@
 package deco2800.arcade.wl6.enemy;
 
-/**
- * Created with IntelliJ IDEA.
- * User: john
- * Date: 22/09/13
- * Time: 17:45
- * To change this template use File | Settings | File Templates.
- */
-public class Dog {
+public class Dog extends Enemy {
+
+    public Dog(int uid) {
+        super(uid);
+
+        state = STATES.PATH;
+        totalHealth = 1;
+        health = totalHealth;
+        pathSpeed = 1500;
+        chaseSpeed = 3000;
+        pain = false;
+        points = 200;
+    }
 }

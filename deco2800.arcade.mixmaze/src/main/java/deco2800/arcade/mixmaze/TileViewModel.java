@@ -3,9 +3,10 @@
  */
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.mixmaze.domain.view.IItemModel;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,10 +16,12 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
-
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
-public class TileViewModel extends Group {
+/**
+ * TileViewModel draws the associated tile.
+ */
+class TileViewModel extends Group {
 	static final TextureRegion PILE_BRICK_REGION;
 	static final TextureRegion PICK_REGION;
 	static final TextureRegion TNT_REGION;
@@ -35,38 +38,48 @@ public class TileViewModel extends Group {
 		BRICK_REGION = new TextureRegion(texture, 1024, 0, 256, 256);
 	}
 
-	private static final String LOG = TileViewModel.class.getSimpleName();
-
 	private final ITileModel model;
-	private final ShapeRenderer renderer;
+	private final IMixMazeModel gameModel;
 	private final int tileSize;
+	private final ShapeRenderer renderer;
 
 	/**
 	 * Constructor
 	 *
 	 * @param model 	the tile model
+	 * @param gameModel 	the game model
 	 * @param renderer	the renderer
 	 * @param tileSize	the graphical size of the tile
 	 */
-	public TileViewModel(ITileModel model, ShapeRenderer renderer,
-			int tileSize) {
+	public TileViewModel(ITileModel model, IMixMazeModel gameModel,
+			int tileSize, ShapeRenderer renderer) {
 		this.model = model;
-		this.renderer = renderer;
+		this.gameModel = gameModel;
 		this.tileSize = tileSize;
+		this.renderer = renderer;
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		//FIXME big method
 		batch.end();
 
-		/*
-		 * Begin shape renderer drawing.
-		 */
+		/* shape renderer drawing */
 		renderer.setTransformMatrix(computeTransform());
+		drawBox();
+		drawWalls();
+		drawCorners();
+		renderer.identity();
 
-		/* draw box */
+		/* sprite batch drawing */
+		batch.begin();
+		applyTransform(batch, computeTransform());
+		drawItem(batch);
+		resetTransform(batch);
+	}
+
+	private void drawBox() {
 		IPlayerModel p = model.getBoxer();
+
 		renderer.begin(FilledRectangle);
 		if (p == null) {
 			renderer.setColor(.8f, .8f, .8f, 1f);
@@ -77,8 +90,9 @@ public class TileViewModel extends Group {
 		}
 		renderer.filledRect(0, 0, tileSize, tileSize);
 		renderer.end();
+	}
 
-		/* draw wall */
+	private void drawWalls() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(1f, 1f, 0f, 1f);
 		if (model.getWall(WEST).isBuilt())
@@ -90,8 +104,9 @@ public class TileViewModel extends Group {
 		if (model.getWall(SOUTH).isBuilt())
 			renderer.filledRect(0, 0, 128f, 4f);
 		renderer.end();
+	}
 
-		/* draw dots */
+	private void drawCorners() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(0f, 0f, 0f, 1f);
 		renderer.filledRect(0, 0, 4f, 4f);
@@ -99,17 +114,12 @@ public class TileViewModel extends Group {
 		renderer.filledRect(124f, 124f, 4f, 4f);
 		renderer.filledRect(124f, 0, 4f, 4f);
 		renderer.end();
+	}
 
-		renderer.identity();
+	private void drawItem(SpriteBatch batch) {
+		IItemModel item = gameModel.getSpawnedItem(
+				model.getX(), model.getY());
 
-		/*
-		 * Begin batch drawing.
-		 */
-		batch.begin();
-		applyTransform(batch, computeTransform());
-
-		/* draw item */
-		/*ItemModel item = model.getSpawnedItem();
 		if (item != null) {
 			TextureRegion region;
 
@@ -127,8 +137,7 @@ public class TileViewModel extends Group {
 				region = UNKNOWN_REGION;
 			}
 			batch.draw(region, 0, 0, tileSize, tileSize);
-		}*/
-
-		resetTransform(batch);
+		}
 	}
+
 }

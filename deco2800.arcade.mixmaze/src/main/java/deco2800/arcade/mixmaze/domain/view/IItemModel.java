@@ -12,4 +12,11 @@ public interface IItemModel {
 		BRICK, PICK, TNT, UNKNOWN
 	}
 
+	/**
+	 * Return the type of this item.
+	 *
+	 * @return the type
+	 */
+	ItemType getType();
+
 }

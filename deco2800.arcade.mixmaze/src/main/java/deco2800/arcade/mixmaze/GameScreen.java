@@ -76,11 +76,11 @@ abstract class GameScreen implements Screen {
 	private final Skin skin;
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @param game	the MixMaze game
 	 */
-	GameScreen(final MixMaze game) {
+	GameScreen(MixMaze game) {
 		this.game = game;
 		this.skin = game.skin;
 
@@ -166,6 +166,8 @@ abstract class GameScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		model.spawnItems();
 
 		/* update player status on side panels */
 		left.update(p1);

@@ -65,7 +65,7 @@ final class MenuScreen implements Screen {
 		if (localButton.isChecked()) {
 			localButton.toggle();	// set back to unchecked
 			logger.debug("switching to single screen");
-			game.setScreen(game.singleScreen);
+			game.setScreen(game.localScreen);
 		} else if (hostButton.isChecked()) {
 			hostButton.toggle();	// set back to unchecked
 			logger.debug("switching to host screen");

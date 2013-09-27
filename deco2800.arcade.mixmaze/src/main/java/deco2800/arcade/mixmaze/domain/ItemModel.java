@@ -14,13 +14,8 @@ public abstract class ItemModel implements IItemModel {
 		itemType = type;
 	}
 
-	/**
-	 * Returns the type of this item.
-	 *
-	 * @return the type
-	 */
-	public ItemType getType()
-	{
+	@Override
+	public ItemType getType() {
 		return itemType;
 	}
 }

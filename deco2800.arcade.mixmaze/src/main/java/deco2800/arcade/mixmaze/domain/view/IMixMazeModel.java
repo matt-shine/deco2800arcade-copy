@@ -118,12 +118,6 @@ public interface IMixMazeModel {
 	 */
 	IPlayerModel endGame();
 
-	/**
-	 * Executes a round of item spawning,
-	 * will only spawn items every <CODE>10 / getMaxItemCount()</CODE>
-	 * seconds
-	 */
-	void spawnItems();
 
 	/**
 	 * Gets the item at the specified (x, y) position
@@ -137,6 +131,13 @@ public interface IMixMazeModel {
 	IItemModel getSpawnedItem(int x, int y);
 
 	/**
+	 * Executes a round of item spawning,
+	 * will only spawn items every <code>10 / getMaxItemCount()</code>
+	 * seconds
+	 */
+	void spawnItems();
+
+	/**
 	 * Moves the specified player in the specified direction, or
 	 * will turn the specified player in the specified direction
 	 * if they are not currently facing that direction
@@ -148,4 +149,5 @@ public interface IMixMazeModel {
 	 * direction is not a direction
 	 */
 	void movePlayer(IPlayerModel player, int direction);
+
 }

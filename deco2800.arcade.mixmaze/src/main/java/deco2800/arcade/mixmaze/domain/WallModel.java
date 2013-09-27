@@ -78,9 +78,7 @@ public class WallModel implements IWallModel {
 	}
 
 	/**
-	 * Constructor.
-	 *
-	 * @param dir the direction this wall is attached to its parent tile
+	 * Constructor
 	 */
 	public WallModel() {
 		tiles = new ArrayList<TileModel>();

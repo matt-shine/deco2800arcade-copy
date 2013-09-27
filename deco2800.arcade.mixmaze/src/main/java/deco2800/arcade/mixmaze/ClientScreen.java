@@ -137,34 +137,6 @@ class ClientScreen extends GameScreen {
 
 	@Override
 	protected void setupGameBoard() {
-		int tileSize = 640 / model.getBoardSize();
-
-		for (int j = 0; j < model.getBoardSize(); j++) {
-			for (int i = 0; i < model.getBoardSize(); i++) {
-				tileTable.add(new TileViewModel(
-						model.getBoardTile(i, j),
-						renderer,
-						tileSize))
-						.size(tileSize, tileSize);
-			}
-
-			/*
-			 * Luran:
-			 * Not sure if an extra row() after boardHeight
-			 * will cause problem, but it is easy to check.
-			 */
-			if (j < model.getBoardSize())
-				tileTable.row();
-		}
-
-		// Might rcommend not passing the entire model to the PlayerViewModel, just to keep good seperation
-		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
-				1,new Settings().p1Controls);
-		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
-				2,new Settings().p2Controls);
-		gameArea.addActor(p1);
-		gameArea.addActor(p2);
-
 	}
 
 }

@@ -20,20 +20,12 @@ public class TileModel implements ITileModel {
 	private PlayerModel boxer = null;
 	private TileModel[] adjTiles;
 
-	/**
-	 * Returns the column number of this tile on game board. origin is at the top left corner.
-	 *
-	 * @return the column number
-	 */
+	@Override
 	public int getX() {
 		return tileX;
 	}
 
-	/**
-	 * Returns the row number of this tile on game board.origin is at the top left corner.
-	 *
-	 * @return the row number
-	 */
+	@Override
 	public int getY() {
 		return tileY;
 	}

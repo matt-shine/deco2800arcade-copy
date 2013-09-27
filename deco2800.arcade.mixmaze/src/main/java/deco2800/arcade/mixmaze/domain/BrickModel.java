@@ -6,29 +6,33 @@ import deco2800.arcade.mixmaze.domain.view.IBrickModel;
  * Brick model represents a collection of bricks.
  */
 public class BrickModel extends ItemModel implements IBrickModel {
+
+	public static final int DEFAULT_MAX_BRICKS = 10;
 	/**
 	 * Thrown when an operation results in an invalid amount of bricks.
 	 */
-	private final static IllegalArgumentException NUMOUTOFRANGE = new IllegalArgumentException("number must result in a amount greater than 0 and less then MAX_BRICKS.");
+	private final static IllegalArgumentException NUM_OUT_OF_RANGE = new IllegalArgumentException("number must result in a amount greater than 0 and less then maxBricks.");
 
 	/**
-	 * Stores maximum number of bricks in a stack.
+	 * The maximum number of bricks in a stack.
 	 */
-	private static int MAX_BRICKS = 10;
-
-	// Brick Data
-	private int amount;
+	private static int maxBricks = DEFAULT_MAX_BRICKS;
 
 	public static int getMaxBricks() {
-		return MAX_BRICKS;
+		return maxBricks;
 	}
 
 	public static void setMaxBricks(int max) {
 		if(max < 1) {
 			throw new IllegalArgumentException("max must be greater than or equal to 1.");
 		}
-		MAX_BRICKS = max;
+		maxBricks = max;
 	}
+
+	/**
+	 * The amount of bricks in this stack.
+	 */
+	private int amount;
 
 	/**
 	 * Returns the amount of bricks in this <code>BrickModel</code>.
@@ -45,11 +49,11 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	 * @param number the number of bricks to set
 	 * @throws IllegalArgumentException If <code>number</code> is negative
 	 * 				    or greater than
-	 * 				    <code>MAX_BRICKS</code>.
+	 * 				    <code>maxBricks</code>.
 	 */
 	public void setAmount(int number) {
-		if (number < 0 || number > MAX_BRICKS) {
-			throw NUMOUTOFRANGE;
+		if (number < 0 || number > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
 		}
 		amount = number;
 	}
@@ -60,12 +64,12 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	 * @param number the number of bricks to add
 	 * @throws IllegalArgumentException If the amount after the addition
 	 * 				    will be negative or greater than
-	 * 				    <code>MAX_BRICKS</code>.
+	 * 				    <code>maxBricks</code>.
 	 */
 	public void addAmount(int number) {
 		int addedAmount = amount + number;
-		if (addedAmount < 0 || addedAmount > MAX_BRICKS) {
-			throw NUMOUTOFRANGE;
+		if (addedAmount < 0 || addedAmount > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
 		}
 		amount = addedAmount;
 	}
@@ -78,8 +82,8 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	 */
 	public void removeAmount(int number) {
 		int balance = amount - number;
-		if (balance < 0 || balance > MAX_BRICKS) {
-			throw NUMOUTOFRANGE;
+		if (balance < 0 || balance > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
 		}
 		amount = balance;
 	}
@@ -92,7 +96,7 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	}
 
 	public void mergeBricks(IBrickModel brick) {
-		int canPickup = (MAX_BRICKS - brick.getAmount());
+		int canPickup = (maxBricks - brick.getAmount());
 		if(canPickup <= brick.getAmount()) {
 			brick.removeAmount(canPickup);
 		} else {
@@ -102,11 +106,17 @@ public class BrickModel extends ItemModel implements IBrickModel {
 		amount += canPickup;
 	}
 
-	public BrickModel(int number) {
+	/**
+	 * Constructor
+	 *
+	 * @param amount	initial amount of bricks
+	 */
+	public BrickModel(int amount) {
 		super(ItemType.BRICK);
-		if (number < 0 || number > MAX_BRICKS) {
-			throw NUMOUTOFRANGE;
+		if (amount < 0 || amount > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
 		}
-		amount = number;
+		this.amount = amount;
 	}
+
 }

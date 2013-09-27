@@ -48,7 +48,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 * Thrown when an operation using coordinates out of
 	 * the range of of <CODE>board</CODE> are used
 	 */
-	private final static IllegalArgumentException COORDSOUTOFRANGE = new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
+	private final static IllegalArgumentException COORDS_OUT_OF_RANGE = new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
 
 	// Game data
 	private GameState state;
@@ -104,7 +104,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 */
 	public TileModel getBoardTile(int x, int y) {
 		if(!checkCoordinates(x, y)) {
-			throw COORDSOUTOFRANGE;
+			throw COORDS_OUT_OF_RANGE;
 		}
 		return board[y][x];
 	}
@@ -199,7 +199,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 */
 	private boolean isPlayerAtPosition(int x, int y) {
 		if(!checkCoordinates(x, y)) {
-			throw COORDSOUTOFRANGE;
+			throw COORDS_OUT_OF_RANGE;
 		}
 		return (player1.getX() == x && player1.getY() == y)
 				|| (player2.getX() == x && player2.getY() == y);
@@ -298,11 +298,7 @@ public class MixMazeModel implements IMixMazeModel {
 		}
 	}
 
-	/**
-	 * Executes a round of item spawning,
-	 * will only spawn items every <CODE>10 / getMaxItemCount()</CODE>
-	 * seconds
-	 */
+	@Override
 	public void spawnItems() {
 		double spawnWait = (10 * 1000) / getMaxItemCount();
 		if(getItemCount() < getMaxItemCount() && (System.currentTimeMillis() - lastSpawned) >= spawnWait) {
@@ -326,14 +322,14 @@ public class MixMazeModel implements IMixMazeModel {
 	 * Gets the item at the specified (x, y) position
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
-	 * @return <CODE>ItemModel</CODE> at the specified (x, y)
-	 * position or <CODE>null</CODE> if there is none
+	 * @return the item at the specified
+	 * position or <code>null</code> if it does not exist
 	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
 	public IItemModel getSpawnedItem(int x, int y) {
-		if(!checkCoordinates(x, y)) {
-			throw COORDSOUTOFRANGE;
+		if (!checkCoordinates(x, y)) {
+			throw COORDS_OUT_OF_RANGE;
 		}
 		return items[y][x];
 	}
@@ -346,7 +342,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 */
 	private void setSpawnedItem(ItemModel item, int x, int y) {
 		if(!checkCoordinates(x, y)) {
-			throw COORDSOUTOFRANGE;
+			throw COORDS_OUT_OF_RANGE;
 		}
 		items[y][x] = item;
 	}
@@ -410,7 +406,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 */
 	private void onPlayerMove(PlayerModel player, int x, int y) {
 		if(!checkCoordinates(x, y)) {
-			throw COORDSOUTOFRANGE;
+			throw COORDS_OUT_OF_RANGE;
 		}
 
 		ItemModel item = (ItemModel) getSpawnedItem(x, y);

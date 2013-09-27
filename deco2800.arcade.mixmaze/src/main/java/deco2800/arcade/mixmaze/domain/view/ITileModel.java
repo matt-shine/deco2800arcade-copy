@@ -25,4 +25,20 @@ public interface ITileModel {
 	 */
 	IPlayerModel getBoxer();
 
+	/**
+	 * Return the column number of this tile on game board.
+	 * Origin is at the top left corner.
+	 *
+	 * @return the column number
+	 */
+	int getX();
+
+	/**
+	 * Return the row number of this tile on game board.
+	 * Origin is at the top left corner.
+	 *
+	 * @return the row number
+	 */
+	int getY();
+
 }

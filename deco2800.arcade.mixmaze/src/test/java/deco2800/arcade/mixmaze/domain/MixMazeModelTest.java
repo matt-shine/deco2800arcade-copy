@@ -4,19 +4,19 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.MixMazeDifficulty;
 
 public class MixMazeModelTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void mixMazeSizeOutOfRange() {
 		new MixMazeModel(-1, MixMazeDifficulty.Beginner, 60);
 	}
-	
+
 	@Test(expected=IllegalArgumentException.class)
 	public void mixMazeTimeOutOfRange() {
 		new MixMazeModel(5, MixMazeDifficulty.Beginner, -1);
 	}
-	
+
 	@Test
 	public void mixMazeInitialization() {
 		MixMazeModel mixMaze = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60);
@@ -31,8 +31,8 @@ public class MixMazeModelTest {
 		}
 		assertEquals(MixMazeDifficulty.Beginner, mixMaze.getGameDifficulty());
 		assertEquals(60, mixMaze.getGameMaxTime());
-		assertEquals(-1, mixMaze.getGameStartTime());
-		assertEquals(-1, mixMaze.getGameEndTime());
+		assertEquals(null, mixMaze.getGameStartTime());
+		assertEquals(null, mixMaze.getGameEndTime());
 		assertNotNull(mixMaze.getPlayer1());
 		assertNotNull(mixMaze.getPlayer2());
 	}

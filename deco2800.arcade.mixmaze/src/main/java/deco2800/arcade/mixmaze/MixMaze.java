@@ -25,7 +25,7 @@ public final class MixMaze extends GameClient {
 	Screen splashScreen;
 	Screen menuScreen;
 	Screen settingsScreen;
-	GameScreen singleScreen;
+	GameScreen localScreen;
 	GameScreen hostScreen;
 	GameScreen clientScreen;
 
@@ -49,7 +49,7 @@ public final class MixMaze extends GameClient {
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		settingsScreen = new SettingsScreen(this);
-		singleScreen = new SingleScreen(this);
+		localScreen = new LocalScreen(this);
 		hostScreen = new HostScreen(this);
 		clientScreen = new ClientScreen(this);
 
@@ -71,7 +71,7 @@ public final class MixMaze extends GameClient {
 	public void dispose() {
 		splashScreen.dispose();
 		menuScreen.dispose();
-		singleScreen.dispose();
+		localScreen.dispose();
 		hostScreen.dispose();
 		clientScreen.dispose();
 		super.dispose();

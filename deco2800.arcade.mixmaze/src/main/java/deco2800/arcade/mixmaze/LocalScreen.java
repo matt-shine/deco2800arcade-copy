@@ -1,5 +1,5 @@
 /*
- * SingleScreen
+ * LocalScreen
  */
 package deco2800.arcade.mixmaze;
 
@@ -35,9 +35,12 @@ import com.badlogic.gdx.utils.Timer;
 
 import static com.badlogic.gdx.graphics.Color.*;
 
-class SingleScreen extends GameScreen {
+/**
+ * Local game on a the same machine.
+ */
+class LocalScreen extends GameScreen {
 
-	SingleScreen(final MixMaze game) {
+	LocalScreen(MixMaze game) {
 		super(game);
 	}
 
@@ -116,16 +119,12 @@ class SingleScreen extends GameScreen {
 			for (int i = 0; i < model.getBoardSize(); i++) {
 				tileTable.add(new TileViewModel(
 						model.getBoardTile(i, j),
-						renderer,
-						tileSize))
+						model,
+						tileSize,
+						renderer))
 						.size(tileSize, tileSize);
 			}
 
-			/*
-			 * Luran:
-			 * Not sure if an extra row() after boardHeight
-			 * will cause problem, but it is easy to check.
-			 */
 			if (j < model.getBoardSize())
 				tileTable.row();
 		}

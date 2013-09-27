@@ -15,33 +15,33 @@ public interface IMixMazeModel {
 	 * Enumeration for representing different
 	 * states of game difficulty
 	 */
-	enum MixMazeDifficulty {
+	enum Difficulty {
 		/**
 		 * Allows movement through all obstacles
 		 * All items spawn frequently
 		 */
-		Beginner,
+		BEGINNER,
 		/**
 		 * Allows movement through walls, but not boxes
 		 * All items excluding TNT spawn frequently
 		 */
-		Intermediate,
+		INTERMEDIATE,
 		/**
 		 * Disallows movement through both walls and boxes
 		 * Bricks spawn frequently, Picks moderately, TNT rarely
 		 */
-		Advanced
+		ADVANCED
 	}
 
 	/**
 	 * Specifies if the game is running
-	 * @return <CODE>true</CODE> if running, <CODE>false</CODE> otherwise
+	 * @return <code>true</code> if running, <code>false</code> otherwise
 	 */
 	boolean isRunning();
 
 	/**
 	 * Specifies if the game has ended
-	 * @return <CODE>true</CODE> if ended, <CODE>false</CODE> otherwise
+	 * @return <code>true</code> if ended, <code>false</code> otherwise
 	 */
 	boolean isEnded();
 
@@ -55,18 +55,19 @@ public interface IMixMazeModel {
 	 * Gets the tile at the position (x, y)
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
-	 * @return <CODE>TileModel</CODE> at position (x, y)
+	 * @return <code>TileModel</code> at position (x, y)
 	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
 	ITileModel getBoardTile(int x, int y);
 
 	/**
-	 * Gets the current level of game difficulty.
-	 * @return <CODE>MixMazeDifficulty</CODE> representing
+	 * Returns the current level of game difficulty.
+	 *
+	 * @return <code>Difficulty</code> representing
 	 * current game difficulty
 	 */
-	MixMazeDifficulty getGameDifficulty();
+	Difficulty getGameDifficulty();
 
 	/**
 	 * Gets the maximum duration of the current game
@@ -76,25 +77,25 @@ public interface IMixMazeModel {
 
 	/**
 	 * Gets the time the game started
-	 * @return <CODE>Date</CODE> representing game start time
+	 * @return <code>Date</code> representing game start time
 	 */
 	Date getGameStartTime();
 
 	/**
 	 * Gets the time the game ended
-	 * @return <CODE>Date</CODE> representing game end time
+	 * @return <code>Date</code> representing game end time
 	 */
 	Date getGameEndTime();
 
 	/**
 	 * Gets player one model
-	 * @return <CODE>PlayerModel</CODE> representing player one
+	 * @return <code>PlayerModel</code> representing player one
 	 */
 	IPlayerModel getPlayer1();
 
 	/**
 	 * Gets player two model
-	 * @return <CODE>PlayerModel</CODE> representing player two
+	 * @return <code>PlayerModel</code> representing player two
 	 */
 	IPlayerModel getPlayer2();
 
@@ -113,8 +114,8 @@ public interface IMixMazeModel {
 
 	/**
 	 * Ends the current game.
-	 * @return <CODE>PlayerModel</CODE> representing player with the
-	 * most built boxes or <CODE>null</CODE> in the event of a tie
+	 * @return <code>PlayerModel</code> representing player with the
+	 * most built boxes or <code>null</code> in the event of a tie
 	 */
 	IPlayerModel endGame();
 
@@ -123,8 +124,8 @@ public interface IMixMazeModel {
 	 * Gets the item at the specified (x, y) position
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
-	 * @return <CODE>ItemModel</CODE> at the specified (x, y)
-	 * position or <CODE>null</CODE> if there is none
+	 * @return <code>ItemModel</code> at the specified (x, y)
+	 * position or <code>null</code> if there is none
 	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
@@ -139,14 +140,14 @@ public interface IMixMazeModel {
 
 	/**
 	 * Moves the specified player in the specified direction, or
-	 * will turn the specified player in the specified direction
+	 * turns the specified player in the specified direction
 	 * if they are not currently facing that direction
-	 * @param player The specified player
-	 * @param direction The specified direction
-	 * of movement
-	 * @throws IllegalStateException if the game has not been started,
-	 * the specified player is <CODE>null</CODE> or the specified
-	 * direction is not a direction
+	 *
+	 * @param player 	the player
+	 * @param direction	the direction of the movement
+	 * @throws IllegalStateException if the game has not started.
+	 * @throws IllegalArgumentException if <code>player</code> is null
+	 * or <code>direction</code> is invalid.
 	 */
 	void movePlayer(IPlayerModel player, int direction);
 

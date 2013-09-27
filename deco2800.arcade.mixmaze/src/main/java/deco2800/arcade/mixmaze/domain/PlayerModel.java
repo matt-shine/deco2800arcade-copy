@@ -48,7 +48,8 @@ public class PlayerModel implements IPlayerModel {
 	}
 
 	/**
-	 * Returns the next x-coordinate.
+	 * Returns the next x-coordinate. Note the returned coordinate
+	 * might be out of board range.
 	 *
 	 * @return the next x-coordinate in relative to the direction facing.
 	 */
@@ -233,6 +234,11 @@ public class PlayerModel implements IPlayerModel {
 			lastAction = used ? System.currentTimeMillis() : lastAction;
 		}
 		return false;
+	}
+
+	@Override
+	public String toString() {
+		return "<Player " + playerID + ">";
 	}
 
 	/**

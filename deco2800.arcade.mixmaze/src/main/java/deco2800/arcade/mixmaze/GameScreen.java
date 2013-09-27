@@ -7,7 +7,7 @@ import deco2800.arcade.mixmaze.domain.Direction;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.mixmaze.domain.view.IWallModel;

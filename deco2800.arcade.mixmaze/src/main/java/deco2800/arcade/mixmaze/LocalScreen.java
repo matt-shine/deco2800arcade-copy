@@ -8,7 +8,7 @@ import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 
@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 
+import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
 import static com.badlogic.gdx.graphics.Color.*;
 
 /**
@@ -46,7 +47,8 @@ class LocalScreen extends GameScreen {
 
 	@Override
 	public void show() {
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60*2);
+		//model = new MixMazeModel(5, BEGINNER, 60*2);
+		model = new MixMazeModel(5, ADVANCED, 60*2);
 
 		try {
 			Thread.sleep(1000);

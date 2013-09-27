@@ -2,18 +2,23 @@ package deco2800.arcade.mixmaze.domain;
 
 import deco2800.arcade.mixmaze.domain.view.IItemModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-
-import static deco2800.arcade.mixmaze.domain.Direction.*;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static deco2800.arcade.mixmaze.domain.Direction.*;
+import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
 
 /**
  * Mix maze model represents the running game state
  */
 public class MixMazeModel implements IMixMazeModel {
+
+	final Logger logger = LoggerFactory.getLogger(MixMazeModel.class);
 
 	/**
 	 * Enumeration for representing the current
@@ -57,7 +62,7 @@ public class MixMazeModel implements IMixMazeModel {
 	private ItemModel[][] items;
 
 	// Game settings
-	private MixMazeDifficulty gameDifficulty;
+	private Difficulty difficulty;
 	private int gameMaxTime;
 	private Date gameStartTime;
 	private Date gameEndTime;
@@ -114,8 +119,8 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @return <CODE>MixMazeDifficulty</CODE> representing
 	 * current game difficulty
 	 */
-	public MixMazeDifficulty getGameDifficulty() {
-		return gameDifficulty;
+	public Difficulty getGameDifficulty() {
+		return difficulty;
 	}
 
 	/**
@@ -197,7 +202,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @return <CODE>true</CODE> if player is present at specified (x, y),
 	 * <CODE>false</CODE> otherwise
 	 */
-	private boolean isPlayerAtPosition(int x, int y) {
+	private boolean hasPlayerAtPosition(int x, int y) {
 		if(!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
 		}
@@ -241,17 +246,20 @@ public class MixMazeModel implements IMixMazeModel {
 	/**
 	 * Gets the current maximum number of items that
 	 * can spawn at the same time
+	 *
 	 * @return Maximum number of items that can spawn at
 	 * the same time
 	 */
 	private int getMaxItemCount() {
-		if(gameDifficulty == MixMazeDifficulty.Beginner) {
-			return 6;
-		} else if(gameDifficulty == MixMazeDifficulty.Intermediate) {
-			return 4;
-		} else {
-			return 2;
-		}
+		int res = 0;
+
+		if (difficulty == BEGINNER)
+			res = 6;
+		else if (difficulty == INTERMEDIATE)
+			res = 4;
+		else if (difficulty == ADVANCED)
+			res = 2;
+		return res;
 	}
 
 	/**
@@ -281,10 +289,10 @@ public class MixMazeModel implements IMixMazeModel {
 		double spawnFactor = spawner.nextDouble();
 		double brickFactor = 0.33;
 		double pickFactor = 0.66;
-		if(gameDifficulty == MixMazeDifficulty.Intermediate) {
+		if(difficulty == INTERMEDIATE) {
 			brickFactor = 0.5;
 			pickFactor = 0.7;
-		} else if(gameDifficulty == MixMazeDifficulty.Advanced) {
+		} else if(difficulty == ADVANCED) {
 			brickFactor = 0.85;
 			pickFactor = 0.95;
 		}
@@ -347,54 +355,59 @@ public class MixMazeModel implements IMixMazeModel {
 		items[y][x] = item;
 	}
 
-	/**
-	 * Moves the specified player in the specified direction, or
-	 * will turn the specified player in the specified direction
-	 * if they are not currently facing that direction
-	 * @param player The specified player
-	 * @param direction The specified direction
-	 * of movement
-	 * @throws IllegalStateException if the game has not been started,
-	 * the specified player is <CODE>null</CODE> or the specified
-	 * direction is not a direction
-	 */
-	public void movePlayer(IPlayerModel iplayer, int direction) {
-		PlayerModel player = (PlayerModel) iplayer;
-
-		if(state != GameState.RUNNING) {
+	@Override
+	public void movePlayer(IPlayerModel iPlayer, int direction) {
+		if (state != GameState.RUNNING)
 			throw NOT_STARTED;
-		}
-
-		// Player is not null
-		if(player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
-		}
-
-		// Check specified direction is valid
-		if(!isDirection(direction)) {
+		else if (iPlayer == null)
+			throw new IllegalArgumentException(
+					"player cannot be null");
+		else if (!isDirection(direction))
 			throw NOT_A_DIRECTION;
-		}
 
-		int nextX = player.getNextX(), nextY = player.getNextY();
-		if(player.getDirection() != direction) {
+		PlayerModel player = (PlayerModel) iPlayer;
+		int nextX = player.getNextX();
+		int nextY = player.getNextY();
+
+		if (player.getDirection() != direction) {
 			player.setDirection(direction);
-			return;
-		}
-
-		if(checkCoordinates(nextX, nextY)  && !isPlayerAtPosition(nextX, nextY)) {
-			boolean isBlocked = false;
-			if(gameDifficulty != MixMazeDifficulty.Beginner) {
-				TileModel nextTile = getBoardTile(nextX, nextY);
-				isBlocked = (gameDifficulty == MixMazeDifficulty.Intermediate) ?
-						nextTile.isBox() : nextTile.getWall(getPolarDirection(direction)).isBuilt();
-			}
-
-			if(!isBlocked) {
-				player.move();
-				onPlayerMove(player, nextX, nextY);
-			}
+		} else if (canMove(player, nextX, nextY,
+				getPolarDirection(direction))) {
+			player.move();
+			onPlayerMove(player, nextX, nextY);
 		}
 	}
+
+	/**
+	 * Checks if the player <code>p</code> can move to the specified
+	 * tile from direction <code>dir</code>.
+	 *
+	 * @param p	the player
+	 * @param x	the column number
+	 * @param y	the row number
+	 * @param dir	the tile direction from which the player tries to enter
+	 * @return <code>true</code> if the player can move to the specified
+	 * tile, <code>false</code> otherwise.
+	 */
+	private boolean canMove(PlayerModel p, int x, int y, int dir) {
+		boolean res = checkCoordinates(x, y)
+				&& !hasPlayerAtPosition(x, y);
+
+		/* No extra movement restriction on BEGINNER */
+
+		if (difficulty == INTERMEDIATE) {
+			PlayerModel boxer = getBoardTile(x, y).getBoxer();
+
+			res = res && (boxer == null || boxer == p);
+			logger.debug("canMove INTERMEDIATE: {}", res);
+		} else if (difficulty == ADVANCED) {
+			res = res && !getBoardTile(x, y).getWall(dir).isBuilt();
+			logger.debug("canMove ADVANCED: {}", res);
+		}
+
+		return res;
+	}
+
 
 	/**
 	 * Performs operations after a player moves onto
@@ -423,7 +436,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @throws IllegalArgumentException If <code>size</code> is not in range
 	 * from 5 to 10, or <code>maxMinutes</code> is not in range from 2 to 15.
 	 */
-	public MixMazeModel(int size, MixMazeDifficulty difficulty, int maxSeconds) {
+	public MixMazeModel(int size, Difficulty difficulty, int maxSeconds) {
 		if(size < 5 || size > 10) {
 			throw new IllegalArgumentException("size must be between 5 and 10.");
 		}
@@ -455,7 +468,7 @@ public class MixMazeModel implements IMixMazeModel {
 		}
 
 		// Set game settings
-		gameDifficulty = difficulty;
+		this.difficulty = difficulty;
 		gameMaxTime = maxSeconds;
 
 		// Initialize player 1
@@ -472,4 +485,5 @@ public class MixMazeModel implements IMixMazeModel {
 		player2.setDirection(WEST);
 		onPlayerMove(player2, (boardSize - 1), (boardSize - 1));
 	}
+
 }

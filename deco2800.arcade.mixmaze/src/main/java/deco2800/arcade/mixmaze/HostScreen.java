@@ -8,7 +8,7 @@ import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 
@@ -41,6 +41,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.kryonet.rmi.ObjectSpace;
 import com.esotericsoftware.kryonet.rmi.RemoteObject;
 
+import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
 import static com.badlogic.gdx.graphics.Color.*;
 
 class HostScreen extends GameScreen {
@@ -54,7 +55,7 @@ class HostScreen extends GameScreen {
 	@Override
 	public void show() {
 		logger.info("this is host");
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60*2);
+		model = new MixMazeModel(5, BEGINNER, 60*2);
 
 		server = new Server();
 		register(server);

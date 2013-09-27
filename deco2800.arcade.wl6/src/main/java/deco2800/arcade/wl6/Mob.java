@@ -1,13 +1,12 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
-import deco2800.arcade.wl6.Doodad;
-import deco2800.arcade.wl6.GameModel;
 
 public class Mob extends Doodad {
 	
 	private float angle = 0;
 	private Vector2 vel = new Vector2();
+    private GameModel game;
 	
 	public Mob(int uid) {
 		super(uid);
@@ -15,9 +14,20 @@ public class Mob extends Doodad {
 	
 	@Override
 	public void tick(GameModel game) {
-		Vector2 pos = getPos();
-		this.setPos(new Vector2(pos.x + vel.x, pos.y + vel.y));
+        this.game = game;
+        setPos(getPos(), vel);
 	}
+
+    public void setPos(Vector2 pos, Vector2 vel) {
+        int x = (int) (pos.x + vel.x);
+        int y = (int) (pos.y + vel.y);
+        if (WL6Meta.hasObscuringBlockAt(x, y, game.getMap()) &&
+                !WL6Meta.hasDoorAt(x, y, game.getMap())) {
+            setPos(new Vector2(pos.x - vel.x, pos.y - vel.y));
+        } else {
+            setPos(new Vector2(pos.x + vel.x, pos.y + vel.y));
+        }
+    }
 	
 	public float getAngle() {
 		return angle;

@@ -48,7 +48,7 @@ public class GridScreen implements Screen, LibraryScreen {
     private Texture splashTexture;
     private Texture gridTexture;
     private Actor image;
-
+    private Skin libSkin;
 
     private Texture listIconTexture;
     private Texture gridIconTexture;
@@ -68,6 +68,7 @@ public class GridScreen implements Screen, LibraryScreen {
         font = new BitmapFont(true);
         font.setColor(Color.BLACK);
         skin = new Skin();
+        libSkin = new Skin(Gdx.files.internal("libSkin.json"));
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -140,7 +141,7 @@ public class GridScreen implements Screen, LibraryScreen {
         stage.addActor(listImageButton);
         stage.addActor(gridImageButton);
 
-        Actor exitButton = new TextButton("Exit", skin);
+        Actor exitButton = new TextButton("Exit", libSkin, "red");
         exitButton.setWidth(200);
         exitButton.setHeight(40);
         exitButton.setX(1000);
@@ -192,15 +193,15 @@ public class GridScreen implements Screen, LibraryScreen {
             }
         }
 
-        storeButton = new TextButton("Game Store", skin);
-        storeButton.setWidth(200);
+        storeButton = new TextButton("Game Store", libSkin);
+        storeButton.setWidth(150);
         storeButton.setHeight(40);
-        storeButton.setX(x);
+        storeButton.setX(100);
         storeButton.setY(650);
         storeButton.addListener(new PlayButtonActionHandler(this));
 
-        userProfileButton = new TextButton("User Profile", skin);
-        userProfileButton.setWidth(200);
+        userProfileButton = new TextButton("User Profile", libSkin);
+        userProfileButton.setWidth(150);
         userProfileButton.setHeight(40);
         userProfileButton.setX(300);
         userProfileButton.setY(650);

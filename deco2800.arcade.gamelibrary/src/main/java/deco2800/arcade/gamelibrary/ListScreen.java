@@ -52,7 +52,7 @@ public class ListScreen implements Screen, LibraryScreen {
     private Label titleLabel;
     private Texture splashTexture;
     private Actor image;
-
+    private Skin libSkin;
 
     private Texture listIconTexture;
     private Texture gridIconTexture;
@@ -72,6 +72,7 @@ public class ListScreen implements Screen, LibraryScreen {
         font = new BitmapFont(true);
         font.setColor(Color.BLACK);
         skin = new Skin();
+        libSkin = new Skin(Gdx.files.internal("libSkin.json"));
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
@@ -100,22 +101,6 @@ public class ListScreen implements Screen, LibraryScreen {
         //textFieldStyle.background = ;
         skin.add("default", textFieldStyle);
 
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        //textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
-
-        TextButton.TextButtonStyle playButtonStyle = new TextButton.TextButtonStyle();
-        playButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
-        playButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
-        playButtonStyle.over = skin.newDrawable("white", Color.DARK_GRAY);
-        playButtonStyle.up = skin.newDrawable("white", new Color(135, 103, 140, 100));
-        playButtonStyle.font = skin.getFont("default");
-        skin.add("playButton", playButtonStyle);
-
     }
 
     private void setupListUI() {
@@ -143,7 +128,7 @@ public class ListScreen implements Screen, LibraryScreen {
         stage.addActor(gridImageButton);
 
 
-        Actor exitButton = new TextButton("Exit", skin);
+        Actor exitButton = new TextButton("Exit", libSkin, "red");
         exitButton.setWidth(200);
         exitButton.setHeight(40);
         exitButton.setX(1000);
@@ -158,23 +143,23 @@ public class ListScreen implements Screen, LibraryScreen {
 
 
 
-        label = new Label(description, skin, "default");
+        label = new Label(description, libSkin);
         label.setWidth(150);
         label.setHeight(40);
-        label.setX(290);
+        label.setX(320);
         label.setY(475);
 
-        titleLabel = new Label(gameTitle, skin, "titleStyle");
+        titleLabel = new Label(gameTitle, libSkin, "heading");
         titleLabel.setWidth(150);
         titleLabel.setHeight(40);
-        titleLabel.setX(290);
+        titleLabel.setX(320);
         titleLabel.setY(530);
 
         games = gameLibrary.getAvailableGames();
         int count = 0;
         for (Game game : games) {
             if (game != null) {
-                button = new TextButton("" + game.name, skin);
+                button = new TextButton("" + game.name, libSkin, "gameslistbutton");
                 button.setWidth(275);
                 button.setHeight(33);
                 button.setX(x);
@@ -193,22 +178,22 @@ public class ListScreen implements Screen, LibraryScreen {
             }
         }
 
-        Actor playButton = new TextButton("Play", skin, "playButton");
-        playButton.setWidth(50);
+        Actor playButton = new TextButton("Play", libSkin, "green");
+        playButton.setWidth(150);
         playButton.setHeight(40);
-        playButton.setX(380);
-        playButton.setY(580);
+        playButton.setX(320);
+        playButton.setY(575);
         playButton.addListener(new PlayButtonActionHandler(this));
 
-        storeButton = new TextButton("Game Store", skin);
-        storeButton.setWidth(200);
+        storeButton = new TextButton("Game Store", libSkin);
+        storeButton.setWidth(150);
         storeButton.setHeight(40);
-        storeButton.setX(x);
+        storeButton.setX(100);
         storeButton.setY(650);
         storeButton.addListener(new PlayButtonActionHandler(this));
 
-        userProfileButton = new TextButton("User Profile", skin);
-        userProfileButton.setWidth(200);
+        userProfileButton = new TextButton("User Profile", libSkin);
+        userProfileButton.setWidth(150);
         userProfileButton.setHeight(40);
         userProfileButton.setX(300);
         userProfileButton.setY(650);

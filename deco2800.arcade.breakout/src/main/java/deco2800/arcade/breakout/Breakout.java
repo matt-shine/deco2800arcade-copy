@@ -1,7 +1,5 @@
 package deco2800.arcade.breakout;
 
-import java.awt.SplashScreen;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
@@ -25,7 +23,6 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.breakout.PongBall;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.GameScreen;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.ArcadeSystem;
 

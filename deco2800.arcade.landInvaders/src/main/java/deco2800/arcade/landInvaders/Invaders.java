@@ -4,9 +4,6 @@ package deco2800.arcade.landInvaders;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
-
-import deco2800.arcade.landInvaders.screens.InstructionScreen;
-
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -47,7 +44,6 @@ public class Invaders extends JFrame implements Runnable {
 		move = 0;
 		direction = 1;
 		moveDown = false;
-		this.add(new InstructionScreen());
 
 
 		

@@ -77,8 +77,6 @@ public interface IPlayerModel {
 	 */
 	void setDirection(int direction);
 
-	boolean pickupItem(IItemModel item);
-
 	/**
 	 * Returns the active action of this player.
 	 *

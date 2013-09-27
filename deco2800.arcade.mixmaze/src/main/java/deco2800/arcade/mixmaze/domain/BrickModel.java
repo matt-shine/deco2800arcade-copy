@@ -1,6 +1,8 @@
 package deco2800.arcade.mixmaze.domain;
 
 import deco2800.arcade.mixmaze.domain.view.IBrickModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Brick model represents a collection of bricks.
@@ -8,6 +10,9 @@ import deco2800.arcade.mixmaze.domain.view.IBrickModel;
 public class BrickModel extends ItemModel implements IBrickModel {
 
 	public static final int DEFAULT_MAX_BRICKS = 10;
+
+	final Logger logger = LoggerFactory.getLogger(BrickModel.class);
+
 	/**
 	 * Thrown when an operation results in an invalid amount of bricks.
 	 */
@@ -95,15 +100,24 @@ public class BrickModel extends ItemModel implements IBrickModel {
 		removeAmount(1);
 	}
 
-	public void mergeBricks(IBrickModel brick) {
-		int canPickup = (maxBricks - brick.getAmount());
-		if(canPickup <= brick.getAmount()) {
-			brick.removeAmount(canPickup);
-		} else {
-			canPickup = canPickup - brick.getAmount();
-			brick.removeAmount(canPickup);
-		}
-		amount += canPickup;
+	/**
+	 * Merges the bricks in <code>brick</code> into this brick as many
+	 * as possible.
+	 *
+	 * @param brick		the brick to merge from
+	 */
+	void mergeBricks(BrickModel brick) {
+		int pickup;
+
+		if (this.amount +  brick.getAmount() <= this.maxBricks)
+			pickup = brick.getAmount();
+		else
+			pickup = this.maxBricks - this.amount;
+
+		logger.debug("mergeBricks: this {} that {} maxBricks {} pickup{}",
+				amount, brick.getAmount(), maxBricks, pickup);
+		brick.removeAmount(pickup);
+		this.amount += pickup;
 	}
 
 	/**

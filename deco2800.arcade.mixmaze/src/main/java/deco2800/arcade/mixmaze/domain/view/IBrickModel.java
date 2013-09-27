@@ -45,6 +45,4 @@ public interface IBrickModel extends IItemModel {
 	 */
 	void removeOne();
 
-	void mergeBricks(IBrickModel brick);
-
 }

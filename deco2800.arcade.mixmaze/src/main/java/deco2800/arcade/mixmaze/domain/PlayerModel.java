@@ -2,13 +2,13 @@ package deco2800.arcade.mixmaze.domain;
 
 import deco2800.arcade.mixmaze.domain.view.IBrickModel;
 import deco2800.arcade.mixmaze.domain.view.IItemModel;
-import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.IPickModel;
 import deco2800.arcade.mixmaze.domain.view.ITNTModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
+import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
 
 /**
  * Player model represents a player.
@@ -150,21 +150,30 @@ public class PlayerModel implements IPlayerModel {
 		return tnt;
 	}
 
-	public boolean pickupItem(IItemModel iitem) {
-		ItemModel item = (ItemModel) iitem;
+	/**
+	 * Tries to pick up the specified <code>item</code>.
+	 * <code>item</code> must not be null.
+	 *
+	 * @param item	the item
+	 * @return <code>true</code> if the item is fully picked up,
+	 * e.g. pile of bricks, <code>false</code> otherwise.
+	 */
+	boolean pickupItem(ItemModel item) {
+		boolean res = false;
 
-		if(item.getType() == ItemType.BRICK) {
-			BrickModel brick = (BrickModel)item;
-			brick.mergeBricks(brick);
-			return brick.getAmount() == 0;
-		} else if(item.getType() == ItemType.PICK && pick == null) {
-			pick = (PickModel)item;
-			return true;
-		} else if(item.getType() == ItemType.TNT && tnt == null) {
-			tnt = (TNTModel)item;
-			return true;
+		if (item.getType() == BRICK) {
+			BrickModel brick = (BrickModel) item;
+
+			this.brick.mergeBricks(brick);
+			res = (brick.getAmount() == 0);
+		} else if(item.getType() == PICK && this.pick == null) {
+			pick = (PickModel) item;
+			res = true;
+		} else if(item.getType() == TNT && this.tnt == null) {
+			tnt = (TNTModel) item;
+			res = true;
 		}
-		return false;
+		return res;
 	}
 
 	/**

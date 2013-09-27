@@ -410,22 +410,18 @@ public class MixMazeModel implements IMixMazeModel {
 
 
 	/**
-	 * Performs operations after a player moves onto
-	 * a new tile
-	 * @param x X position on the game board
-	 * @param y Y position on the game board
-	 * @throws IllegalArgumentException if the specified
-	 * (x, y) position is out of range
+	 * Performs operations after a player moves onto a new tile.
+	 * Currently this method only picks up the item if available.
+	 * The movement to the specified tile must be validated beforehand.
+	 *
+	 * @param x	the column number
+	 * @param y	the row number
 	 */
 	private void onPlayerMove(PlayerModel player, int x, int y) {
-		if(!checkCoordinates(x, y)) {
-			throw COORDS_OUT_OF_RANGE;
-		}
-
 		ItemModel item = (ItemModel) getSpawnedItem(x, y);
-		if(item != null && player.pickupItem(item)) {
+
+		if (item != null && player.pickupItem(item))
 			setSpawnedItem(null, x, y);
-		}
 	}
 
 	/**

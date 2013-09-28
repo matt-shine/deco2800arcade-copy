@@ -19,7 +19,6 @@ import deco2800.arcade.model.Player;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	
-<<<<<<< HEAD
 	@SuppressWarnings("unused")
 	private LoginScreen login = null;
 	@SuppressWarnings("unused")
@@ -33,18 +32,15 @@ public class ArcadeUI extends GameClient {
     @SuppressWarnings("unused")
     private AccMgtScreen accMgt = null;
 	private Screen current = null;
-=======
 	LoginScreen login = null;
 	StoreScreen store = null;
 	HomeScreen home = null;
     FrontPage main = null;
     RegisterScreen register = null;
->>>>>>> origin/master
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
-<<<<<<< HEAD
 	
 	@Override
 	public void create() {
@@ -70,7 +66,6 @@ public class ArcadeUI extends GameClient {
 		
 		super.create();
 	}
-=======
 
     @Override
     public void create() {
@@ -96,7 +91,6 @@ public class ArcadeUI extends GameClient {
 
         super.create();
     }
->>>>>>> origin/master
 
 	@Override
 	public void dispose() {

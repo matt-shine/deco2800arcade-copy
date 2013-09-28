@@ -11,27 +11,22 @@ import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
-<<<<<<< HEAD
 import deco2800.server.database.HighscoreDatabase;
-=======
 import deco2800.server.database.ReplayStorage;
->>>>>>> origin/master
 import deco2800.server.listener.CommunicationListener;
 import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
-<<<<<<< HEAD
 import deco2800.server.listener.MultiplayerListener;
 
-=======
 import deco2800.server.listener.PackmanListener;
 import deco2800.server.listener.HighscoreListener;
 import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.listener.AchievementListener;
->>>>>>> origin/master
+
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -166,14 +161,11 @@ public class ArcadeServer {
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
 		this.highscoreDatabase = new HighscoreDatabase();
-<<<<<<< HEAD
 //		this.packServ = new PackageServer();
 		
 		this.matchmakerQueue = new MatchmakerQueue();
-=======
 		
 		this.packServ = new PackageServer();
->>>>>>> origin/master
 		
 		//initialize database classes
 		try {
@@ -218,11 +210,8 @@ public class ArcadeServer {
 		server.addListener(new ReplayListener());
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
-<<<<<<< HEAD
 		server.addListener(new MultiplayerListener(matchmakerQueue));
-=======
         server.addListener(new PackmanListener());
->>>>>>> origin/master
 	}
 
     /**

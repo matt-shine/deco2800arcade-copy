@@ -100,7 +100,6 @@ public class HomeScreen implements Screen {
 	    	h += 16;
 		    font.draw(batch, "" + (char)(index + 65) + ". " + game, 110, h);
 		    
-<<<<<<< HEAD
 		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
 		    	if (multiplayerEnabled) {
 		    		//If user selects multiplayer mode, set arcades multiplayer and return to arcadeUI
@@ -110,10 +109,8 @@ public class HomeScreen implements Screen {
 		    	} else {
 		    		ArcadeSystem.goToGame(game);
 		    	}
-=======
 		    if (Gdx.input.isKeyPressed(Keys.A + index)) {
 		    	ArcadeSystem.goToGame(game);
->>>>>>> origin/master
 		    }
 		    
 		    index++;

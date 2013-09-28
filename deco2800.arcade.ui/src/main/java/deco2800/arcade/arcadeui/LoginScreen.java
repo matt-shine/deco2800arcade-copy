@@ -16,7 +16,6 @@ public class LoginScreen implements Screen {
 	
 	private class LoginScreenStage extends Stage {}
 	
-<<<<<<< HEAD
 	public LoginScreen() {
 
 	
@@ -45,11 +44,9 @@ public class LoginScreen implements Screen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         skin.add("default", labelStyle);
-=======
 	private Skin skin;
     private LoginScreenStage stage;
     private ArcadeUI arcadeUI;
->>>>>>> origin/master
 
 	public LoginScreen(ArcadeUI ui) {
         arcadeUI = ui;
@@ -74,7 +71,6 @@ public class LoginScreen implements Screen {
         passwordText.setMessageText("Password");
         passwordText.setPasswordMode(true);
         passwordText.setPasswordCharacter('*');
-<<<<<<< HEAD
         TextButton loginButton = new TextButton("Login", skin2);
         TextButton exitButton = new TextButton("Exit", skin2);
 
@@ -84,7 +80,6 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(passwordLabel);
         table.add(passwordText).width(100);
-=======
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
         CheckBox rememberBox = new CheckBox("Remember Me", skin);
@@ -98,7 +93,6 @@ public class LoginScreen implements Screen {
         table.add(tempLabel).colspan(2);  // Temporary label to display a message
         table.row();
         table.add(errorLabel).width(400).pad(5).colspan(2);
->>>>>>> origin/master
         table.row();
         table.add(usernameText).width(400).pad(5).colspan(2);
         table.row();
@@ -144,7 +138,6 @@ public class LoginScreen implements Screen {
         });
 	}
 
-<<<<<<< HEAD
 
 	@Override
 	public void show() {
@@ -157,8 +150,6 @@ public class LoginScreen implements Screen {
 */		
 	}
 	
-=======
->>>>>>> origin/master
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -189,8 +180,6 @@ public class LoginScreen implements Screen {
 	public void resume() {
 	}
 
-<<<<<<< HEAD
-
 
 	@Override
 	public void resize(int arg0, int arg1) {
@@ -198,11 +187,9 @@ public class LoginScreen implements Screen {
 		
 	}
 
-=======
     @Override
     public void dispose() {
         stage.dispose();
         skin.dispose();
     }
->>>>>>> origin/master
 }

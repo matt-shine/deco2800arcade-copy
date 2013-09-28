@@ -21,7 +21,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
-<<<<<<< HEAD
+
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMatchmakingRequest;
@@ -29,7 +29,7 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
-=======
+
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
@@ -44,7 +44,7 @@ import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
->>>>>>> origin/master
+
 
 public class Protocol {
 	
@@ -119,7 +119,6 @@ public class Protocol {
 		kryo.register(ChatRequest.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
-<<<<<<< HEAD
 		
 
 		//Multiplayer Messages
@@ -133,7 +132,6 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 
-=======
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
@@ -141,7 +139,6 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
->>>>>>> origin/master
 	}
 	
 	/**

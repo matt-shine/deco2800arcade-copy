@@ -112,6 +112,7 @@ public class HomeScreen implements Screen {
 		    if (Gdx.input.isKeyPressed(Keys.A + index)) {
 		    	ArcadeSystem.goToGame(game);
 		    }
+		    }
 		    
 		    index++;
 	    }

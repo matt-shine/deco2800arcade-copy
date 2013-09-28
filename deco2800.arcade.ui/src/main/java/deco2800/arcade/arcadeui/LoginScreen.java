@@ -14,11 +14,15 @@ import deco2800.arcade.client.ArcadeSystem;
 
 public class LoginScreen implements Screen {
 	
+	private Skin skin;
+	private Skin skin2;
+    private LoginScreenStage stage;
+    private ArcadeUI arcadeUI;
+	
 	private class LoginScreenStage extends Stage {}
 	
 	public LoginScreen() {
 
-	
 		// Move skin stuff to an overall class
 
         //skin = new Skin(Gdx.files.internal("loginSkin.json"));
@@ -44,9 +48,7 @@ public class LoginScreen implements Screen {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = skin.getFont("default");
         skin.add("default", labelStyle);
-	private Skin skin;
-    private LoginScreenStage stage;
-    private ArcadeUI arcadeUI;
+
 
 	public LoginScreen(ArcadeUI ui) {
         arcadeUI = ui;

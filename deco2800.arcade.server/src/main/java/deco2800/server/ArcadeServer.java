@@ -51,7 +51,7 @@ public class ArcadeServer {
 
 	// Package manager
 	@SuppressWarnings("unused")
-//	private PackageServer packServ;
+	private PackageServer packServ;
 	
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;

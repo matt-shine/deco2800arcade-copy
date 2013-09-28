@@ -36,11 +36,39 @@ public class Enemy extends Mob {
 
     // damage accuracy (ss, officers are more accurate then guards)
 
-    // something to store the time between animations (e.g. an officer transitions between chasing and attacking a lot faster then a guard)
-
 
     public Enemy(int uid) {
         super(uid);
     }
+
+    // change states
+    // delay is the time between animations (e.g. an officer transitions between chasing and attacking a lot faster then a guard)
+    public void changeStates(STATES oldState, STATES newState, int delay) {
+
+    }
+
+    // follow patrol path (walk from waypoint to waypoint)
+    public void walk(int nextWaypoint) {
+
+    }
+
+    // detect player
+
+
+    // chase player
+
+
+    // dodge (same as chase player, but with some randomized movement to 'dodge' players attacks)
+
+
+    // attack player
+
+
+    // react to pain
+
+
+    // die
+
+
 }
 

@@ -14,6 +14,8 @@ import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
+import deco2800.arcade.hunter.MusicManager.HunterMusic;
+import deco2800.arcade.hunter.PhysicsHandler;
 import deco2800.arcade.hunter.model.Animal;
 import deco2800.arcade.hunter.model.BackgroundLayer;
 import deco2800.arcade.hunter.model.ForegroundLayer;
@@ -22,7 +24,6 @@ import deco2800.arcade.hunter.model.SpriteLayer;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
-import deco2800.arcade.hunter.PhysicsHandler;
 
 /**
  * A Hunter game for use in the Arcade
@@ -50,6 +51,8 @@ public class GameScreen implements Screen {
 	public GameScreen(Hunter hunter){
 		this.hunter = hunter;
 		//Initialise camera
+		
+		hunter.getMusicManager().play(HunterMusic.GAME);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
 		camera.update();
@@ -66,6 +69,7 @@ public class GameScreen implements Screen {
 		Animal animal = new Animal(new Vector2(200,10),128,128,false,"hippo");
 
 		entities.add(player);
+		hunter.incrementAchievement("hunter.beginner");
 		//entities.add(animal);
 	}
 
@@ -141,6 +145,7 @@ public class GameScreen implements Screen {
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)){
 			//Attack
+			
 		}
 		
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {

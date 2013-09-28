@@ -11,6 +11,7 @@ import deco2800.arcade.platformergame.PlatformerGame;
 @ArcadeGame(id="hunter")
 public class Hunter extends PlatformerGame {
 	private PreferencesManager prefManage;
+	private MusicManager musicManager;
 	
 	public enum Config {
 		INSTANCE;
@@ -28,6 +29,7 @@ public class Hunter extends PlatformerGame {
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		prefManage = new PreferencesManager();
+		musicManager = new MusicManager();
 		setHighScores();
 	}
 	
@@ -39,6 +41,9 @@ public class Hunter extends PlatformerGame {
 		return prefManage;
 	}
 	
+	public MusicManager getMusicManager(){
+		return musicManager;
+	}
 	/**
 	 * Sets the highScores
 	 */

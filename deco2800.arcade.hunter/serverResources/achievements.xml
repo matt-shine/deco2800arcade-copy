@@ -1,0 +1,38 @@
+<achievements>
+	<achievement id="hunter.beginner">
+		<name>Beginner</name>
+		<description>Play one game of Hunter</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>yay.png</icon>
+	</achievement>
+	
+	<achievement id="hunter.played">
+		<name>Survivor</name>
+		<description>Play 30 seconds of hunter</description>
+		<icon>yay.png</icon>
+		
+		<components>
+			<component id="hunter.played.play10sec" awardThreshold="1">
+			<component id="hunter.played.play20sec" awardThreshold="1">
+			<component id="hunter.played.play30sec" awardThreshold="1">
+		</components>
+	</achievement>
+	<achievement id="hunter.played.play10sec">
+		<name>Play10Sec</name>
+		<description>Played 10 Seconds of Hunter</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>yay.png</icon>
+	</achievement>
+	<achievement id="hunter.played.play20sec">
+		<name>Play20Sec</name>
+		<description>Played 20 Seconds of Hunter</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>yay.png</icon>
+	</achievement>
+	<achievement id="hunter.played.play30sec">
+		<name>Play30Sec</name>
+		<description>Played 30 Seconds of Hunter</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>yay.png</icon>
+	</achievement>
+</achievements>

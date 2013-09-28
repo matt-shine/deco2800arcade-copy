@@ -20,6 +20,7 @@ public class Player extends Entity {
 	 * Constant of JUMP VELOCITY
 	 */
 	private static final int JUMP_VELOCITY = 8;
+<<<<<<< HEAD
 	/**
 	 * Jump Velocity variable
 	 */
@@ -27,6 +28,9 @@ public class Player extends Entity {
 	/**
 	 * Velocity of the player
 	 */
+=======
+	
+>>>>>>> e9ee482bdc251ae0685cdf9e8fa06afe35ef0ec7
 	private Vector2 velocity = new Vector2(1, 0);
 
 	private TextureRegion img = new TextureRegion(new Texture(
@@ -39,12 +43,15 @@ public class Player extends Entity {
 	 * Lives counter for the player
 	 */
 	private int lives;
+<<<<<<< HEAD
 	/**
 	 * A hashmap list of all the players
 	 */
 	private HashMap<String, Animation> animationList = new HashMap<String, Animation>();
 
 	// States used to determine how to draw the player
+=======
+>>>>>>> e9ee482bdc251ae0685cdf9e8fa06afe35ef0ec7
 	private int score = 0;
 	
 	//States used to determine how to draw the player
@@ -222,6 +229,7 @@ public class Player extends Entity {
 		} else if (velocity.x < Config.gameSpeed) {
 			velocity.x++;
 		}
+<<<<<<< HEAD
 
 		// HERE TODO
 
@@ -229,6 +237,9 @@ public class Player extends Entity {
 		// even double up on checks
 		// Check if player is grounded, this should be changed to check if you
 		// are standing on a map tile TODO
+=======
+		
+>>>>>>> e9ee482bdc251ae0685cdf9e8fa06afe35ef0ec7
 		//Everything depends on everything else here, may have to rearrange, or even double up on checks
 		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
 		setX(getX() + delta * velocity.x);
@@ -394,6 +405,14 @@ public class Player extends Entity {
 		return lives;
 	}
 
+	
+	public int getCurrentScore() {
+		return score;
+	}
+	
+	public float getCurrentDistance() {
+		return getX() / Config.TILE_SIZE;
+	}
 	
 	public int getCurrentScore() {
 		return score;

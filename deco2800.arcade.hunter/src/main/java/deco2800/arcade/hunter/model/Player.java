@@ -45,6 +45,9 @@ public class Player extends Entity {
 	private HashMap<String, Animation> animationList = new HashMap<String, Animation>();
 
 	// States used to determine how to draw the player
+	private int score = 0;
+	
+	//States used to determine how to draw the player
 	private enum State {
 		RUNNING, JUMPING, ATTACK, FALLING, DEAD
 	};
@@ -226,6 +229,8 @@ public class Player extends Entity {
 		// even double up on checks
 		// Check if player is grounded, this should be changed to check if you
 		// are standing on a map tile TODO
+		//Everything depends on everything else here, may have to rearrange, or even double up on checks
+		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
 		setX(getX() + delta * velocity.x);
 
 		setJumpVelocity(getJumpVelocity() - delta * 9.81f);
@@ -236,14 +241,17 @@ public class Player extends Entity {
 
 		// Update the player state
 		// Pretending the DEAD state doesn't exist for now... TODO
+		
+		//Update the player state, animate based upon the state
+		//Pretending the DEAD state doesn't exist for now... TODO
 		if (isGrounded()) {
-			jumpVelocity = 0;
+			this.velocity.y = 0;
 			this.state = State.RUNNING;
 			currAnim = runAnimation();
-		} else if (jumpVelocity > 0) {
+		} else if (this.velocity.y > 0) {
 			this.state = State.JUMPING;
 			currAnim = jumpAnimation();
-		} else if (jumpVelocity <= 0) {
+		} else if (this.velocity.y <= 0) {
 			this.state = State.FALLING;
 			currAnim = fallAnimation();
 		}
@@ -386,6 +394,15 @@ public class Player extends Entity {
 		return lives;
 	}
 
+	
+	public int getCurrentScore() {
+		return score;
+	}
+	
+	public float getCurrentDistance() {
+		return getX() / Config.TILE_SIZE;
+	}
+	
 	private void gameOver() {
 		System.out.println("Game Over!");
 	}

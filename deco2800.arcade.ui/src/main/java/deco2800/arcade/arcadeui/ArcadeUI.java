@@ -1,15 +1,14 @@
 package deco2800.arcade.arcadeui;
 
-import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.MultiplayerTest;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.Game.ArcadeGame;
+
 
 /**
  * This class is the main interface for the arcade.
@@ -20,6 +19,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
 	
+<<<<<<< HEAD
 	@SuppressWarnings("unused")
 	private LoginScreen login = null;
 	@SuppressWarnings("unused")
@@ -33,10 +33,18 @@ public class ArcadeUI extends GameClient {
     @SuppressWarnings("unused")
     private AccMgtScreen accMgt = null;
 	private Screen current = null;
+=======
+	LoginScreen login = null;
+	StoreScreen store = null;
+	HomeScreen home = null;
+    FrontPage main = null;
+    RegisterScreen register = null;
+>>>>>>> origin/master
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
+<<<<<<< HEAD
 	
 	@Override
 	public void create() {
@@ -62,6 +70,33 @@ public class ArcadeUI extends GameClient {
 		
 		super.create();
 	}
+=======
+
+    @Override
+    public void create() {
+        // TODO Move this to somewhere more appropriate.
+        // FIXME This really needs to be fixed.
+        // The connection should be attempted to be opened after a user has pressed login on the loginScreen
+        // But I don't know the best way or place to do this - abbjohn
+        ArcadeSystem.openConnection();
+
+        // Initialise the different screens.
+        login = new LoginScreen(this);
+        home = new HomeScreen();
+        store = new StoreScreen();
+        main = new FrontPage();
+        register = new RegisterScreen(this);
+
+        // Check to see if a user is logged in.
+        if (ArcadeSystem.isLoggedIn()) {
+            this.setScreen(home);
+        } else {
+            this.setScreen(login);
+        }
+
+        super.create();
+    }
+>>>>>>> origin/master
 
 	@Override
 	public void dispose() {

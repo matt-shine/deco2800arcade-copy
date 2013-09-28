@@ -3,6 +3,7 @@ package deco2800.arcade.wl6;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+import deco2800.arcade.wl6.enemy.EnemyType;
 
 public class MapProcessor {
 
@@ -117,10 +118,11 @@ public class MapProcessor {
 			//TODO spawn an enemy
 			
 			
-		} else if (d.health != 0 || d.gun != 0 || d.ammo != 0 || d.points != 0) {
+		} else if (d.health != 0 || d.points != 0 || d.ammo != 0 || d.gun != 0) {
 			
 			
-			//TODO spawn a pickup
+			dd = new Pickup(doodadID(), d.health, d.points, d.ammo, d.gun);
+			dd.setTextureName(d.texture);
 			
 			
 		} else if (d.solid) {

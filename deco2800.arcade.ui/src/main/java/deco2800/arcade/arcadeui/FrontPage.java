@@ -46,6 +46,7 @@ public class FrontPage implements Screen {
     private int tokens;
     private int creditVal = 0;
     private boolean bclicked;
+    private ArcadeUI arcadeUI;
     
     Texture bg;
     Texture mB;
@@ -54,9 +55,9 @@ public class FrontPage implements Screen {
     
     SpriteBatch batch;
     
-    public FrontPage() {
+    public FrontPage(ArcadeUI ui) {
     	//FIXME big method
-        
+        arcadeUI = ui;
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
         stage = new FrontPageStage();
@@ -169,8 +170,7 @@ public class FrontPage implements Screen {
 	    
 		recentButton.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
-		    	ArcadeSystem.login("recent");
-		    	bclicked = true;
+		    	//arcadeUI.setScreen(arcadeUI.recent);
 		    	System.out.println("recent clicked");
 		    }
 		})); 
@@ -192,9 +192,7 @@ public class FrontPage implements Screen {
         
 	    libraryButton.addListener((new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	ArcadeSystem.login("library");
-	        	bclicked = true;
-	        	System.out.println("library clicked");
+	        	arcadeUI.setScreen(arcadeUI.home);
 	        }
 	    })); 
 	    
@@ -216,9 +214,7 @@ public class FrontPage implements Screen {
         
         storeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	ArcadeSystem.login("store");
-            	System.out.println("store clicked");
-            	bclicked = true;
+            	arcadeUI.setScreen(arcadeUI.store);
             }
         })); 
         
@@ -253,13 +249,7 @@ public class FrontPage implements Screen {
         stage.draw();
         Table.drawDebug(stage);  // Shows table debug lines
         
-        
-        
-		if (bclicked == true) {
-        	System.out.println("going to arcadeui");
-	    	ArcadeSystem.goToGame("arcadeui");
-	    }
-    	
+     
         
         
 	}

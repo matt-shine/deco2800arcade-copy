@@ -40,7 +40,7 @@ public class ArcadeUI extends GameClient {
         login = new LoginScreen(this);
         home = new HomeScreen();
         store = new StoreScreen();
-        main = new FrontPage();
+        main = new FrontPage(this);
         register = new RegisterScreen(this);
 
         // Check to see if a user is logged in.

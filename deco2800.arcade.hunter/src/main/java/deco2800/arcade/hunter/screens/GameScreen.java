@@ -45,14 +45,10 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch = new SpriteBatch();
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
-<<<<<<< HEAD
 	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
 		
 	public GameScreen(Hunter hunter) {
-=======
 	
-	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
->>>>>>> e9ee482bdc251ae0685cdf9e8fa06afe35ef0ec7
 	
 		this.hunter = hunter;
 		// Plays the music
@@ -150,19 +146,12 @@ public class GameScreen implements Screen {
 			drawGameUI(staticBatch);
 			staticBatch.end();
 		}
-<<<<<<< HEAD
-
-=======
-	}
-	
-	private ArrayList<Animal> getAnimalsKilled() {
-		return animalsKilled;
->>>>>>> e9ee482bdc251ae0685cdf9e8fa06afe35ef0ec7
 	}
 	
 	private ArrayList<Animal> getAnimalsKilled() {
 		return animalsKilled;
 	}
+	
 
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
@@ -183,26 +172,7 @@ public class GameScreen implements Screen {
 	 * @param batch
 	 */
 	
-	private void drawGameUI(SpriteBatch batch) {
-		drawLives(batch);
-		drawScore(batch);
-		drawDistance(batch);
-	}
-	
-	private void drawScore(SpriteBatch batch) {
-		int x = Config.screenWidth / 2;
-		int y = Config.screenHeight - 16;
-		CharSequence scoreText = Integer.toString(player.getCurrentScore());
-		font.draw(batch, scoreText, x, y);
-	}
-	
-	private void drawDistance(SpriteBatch batch) {
-		int x = 16;
-		int y = Config.screenHeight - 16;
-		CharSequence scoreText = Float.toString(player.getCurrentDistance()) + "m";
-		font.draw(batch, scoreText, x, y);
-	}
-	
+
 	private void drawGameUI(SpriteBatch batch) {
 		drawLives(batch);
 		drawScore(batch);

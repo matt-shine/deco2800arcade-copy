@@ -44,6 +44,7 @@ public class Items extends Entity {
 	public Items(Vector2 pos, float width, float height, boolean weapon) {
 		super(pos, width, height);
 		Random rnd = new Random();
+		//Randomises item depending on type
 		if (weapon){
 			type = Type.WEAPON;
 			switch(rnd.nextInt(2)){

@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import deco2800.arcade.hunter.Hunter.Config;
 
 public class BackgroundLayer extends Map {
-	
+
 	TextureRegion background = new TextureRegion(new Texture("textures/background.png"));
 
 	public BackgroundLayer(float speedModifier) {

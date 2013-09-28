@@ -8,11 +8,11 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.platformergame.PlatformerGame;
 
-@ArcadeGame(id="hunter")
+@ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
 	private PreferencesManager prefManage;
 	private MusicManager musicManager;
-	
+
 	public enum Config {
 		INSTANCE;
 		public static int screenWidth = 1280;
@@ -24,60 +24,71 @@ public class Hunter extends PlatformerGame {
 		public final static int MAX_SPEED = 512;
 		public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
 	}
-	
-	
+
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		prefManage = new PreferencesManager();
 		musicManager = new MusicManager();
 		setHighScores();
 	}
-	
+
 	/**
-	 * Returns the preferences manager of the game which stores all the option settings
+	 * Returns the preferences manager of the game which stores all the option
+	 * settings
+	 * 
 	 * @return PreferencesManager
 	 */
-	public PreferencesManager getPreferencesManager(){
+	public PreferencesManager getPreferencesManager() {
 		return prefManage;
 	}
-	
-	public MusicManager getMusicManager(){
+
+	public MusicManager getMusicManager() {
 		return musicManager;
 	}
+
 	/**
 	 * Sets the highScores
 	 */
-	public void setHighScores(){
+	public void setHighScores() {
 		getPreferencesManager().addHighScore(100000);
 		getPreferencesManager().addHighScore(10000);
 		getPreferencesManager().addHighScore(1000);
 		getPreferencesManager().addHighScore(20000);
 		getPreferencesManager().addHighScore(2);
 	}
-	
+
 	@Override
 	public void create() {
 		this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
-				//Unpause your game here
+				// Unpause your game here
 			}
-			
+
 			@Override
 			public void show() {
-				//Pause your game here
+				// Pause your game here
 			}
-			
+
 			@Override
-			public void pause() {}
+			public void pause() {
+			}
+
 			@Override
-			public void render(float arg0) {}
+			public void render(float arg0) {
+			}
+
 			@Override
-			public void resize(int arg0, int arg1) {}
+			public void resize(int arg0, int arg1) {
+			}
+
 			@Override
-			public void resume() {}
+			public void resume() {
+			}
+
 			@Override
-			public void dispose() {}
+			public void dispose() {
+			}
 		});
 		setScreen(new SplashScreen(this));
 	}

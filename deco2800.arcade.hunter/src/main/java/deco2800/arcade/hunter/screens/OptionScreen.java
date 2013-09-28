@@ -24,13 +24,10 @@ public class OptionScreen implements Screen {
 
 	private Hunter game;
 	private Stage stage;
-
 	private boolean music;
 	private boolean sound;
 	private float volume;
 	private Skin skin;
-	
-	
 	
 	public OptionScreen(Hunter p){
 		game = p;

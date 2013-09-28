@@ -6,25 +6,31 @@ import com.badlogic.gdx.math.Vector2;
 public abstract class Map {
 	protected Vector2 offset = new Vector2();
 	protected float speedModifier;
-	
+
 	protected Map(float speedModifier) {
 		this.speedModifier = speedModifier;
 	}
-	
+
 	public abstract void update(float delta, float gameSpeed);
+
 	public abstract void draw(SpriteBatch batch);
-	
+
 	/**
 	 * @return xOffset
 	 */
 	public float getXOffset() {
 		return offset.x;
 	}
-	
+
+	/**
+	 * Returns yOffset
+	 * 
+	 * @return float yOffset
+	 */
 	public float getYOffset() {
 		return offset.y;
 	}
-	
+
 	/**
 	 * @param speedModifier
 	 */

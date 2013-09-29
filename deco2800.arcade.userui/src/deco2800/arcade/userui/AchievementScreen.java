@@ -17,7 +17,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import net.miginfocom.swing.MigLayout;
-import deco2800.arcade.userui.ImagePanel;
 
 public class AchievementScreen extends JFrame implements ActionListener {
 

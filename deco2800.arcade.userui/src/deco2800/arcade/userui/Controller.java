@@ -1,6 +1,7 @@
 package deco2800.arcade.userui;
 
 
+
 public class Controller {
 	
 	private EditScreen edit;

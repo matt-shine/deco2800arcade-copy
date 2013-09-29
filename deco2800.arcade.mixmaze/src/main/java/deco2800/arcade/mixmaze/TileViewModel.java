@@ -27,6 +27,7 @@ class TileViewModel extends Group {
 	static final TextureRegion TNT_REGION;
 	static final TextureRegion SELECTION_REGION;
 	static final TextureRegion UNKNOWN_REGION;
+	static final TextureRegion WHITE_REGION;
 	static final TextureRegion BRICK_REGION;
 	static final TextureRegion EMPTY_PICK_REGION;
 	static final TextureRegion EMPTY_TNT_REGION;
@@ -44,6 +45,7 @@ class TileViewModel extends Group {
 				256, 256);
 		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0,
 				256, 256);
+		WHITE_REGION = new TextureRegion(texture, 2048, 0, 256, 256);
 	}
 
 	private final ITileModel model;

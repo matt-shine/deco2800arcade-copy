@@ -1,6 +1,3 @@
-/*
- * GameScreen
- */
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.Direction;
@@ -11,13 +8,12 @@ import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.mixmaze.domain.view.IWallModel;
-
-import java.io.IOException;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,14 +35,16 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.kryonet.rmi.ObjectSpace;
 import com.esotericsoftware.kryonet.rmi.RemoteObject;
+import java.io.IOException;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
 import static deco2800.arcade.mixmaze.domain.view.IPlayerModel.PlayerAction.*;
-
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
+import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
 /**
  * GameScreen draws all elements in a game session.
@@ -71,6 +69,7 @@ abstract class GameScreen implements Screen {
 	protected Label resultLabel;
 	protected SidePanel left;
 	protected SidePanel right;
+	private Scorebar[] scorebar;
 
 	private final MixMaze game;
 	private final Skin skin;
@@ -85,10 +84,8 @@ abstract class GameScreen implements Screen {
 		this.skin = game.skin;
 
 		/* This should be the only ShapeRender used on this stage. */
-		renderer = new ShapeRenderer();
-
-		stage = new Stage();
-
+		this.renderer = new ShapeRenderer();
+		this.stage = new Stage();
 		setupLayout();
 	}
 
@@ -96,14 +93,17 @@ abstract class GameScreen implements Screen {
 	 * Set up the layout on stage.
 	 */
 	private void setupLayout() {
-		/*
-		 * FIXME: this method is too long.
-		 */
 		Stack gameBoard = new Stack();
 		Table root = new Table();
+		Table middle = new Table();
+		root.debug();
 
 		left = new SidePanel();
 		right = new SidePanel();
+
+		scorebar = new Scorebar[2];
+		scorebar[0] = new Scorebar(true);
+		scorebar[1] = new Scorebar(false);
 
 		timerLabel = new Label("timer", skin, "timer-white");
 		timerLabel.setFontScale(2f);
@@ -118,17 +118,18 @@ abstract class GameScreen implements Screen {
 		endGameTable.row();
 		endGameTable.add(backMenu);
 
+		middle.add(scorebar[0]).left();
+		middle.add(timerLabel);
+		middle.add(scorebar[1]).right();
+		middle.row();
+		middle.add(gameBoard).colspan(3);
+
 		root.setFillParent(true);
 		root.debug();
 		stage.addActor(root);
 
-		/* header */
-		root.add(timerLabel).expandX().colspan(3);
-		root.row();
-
-		/* body */
 		root.add(left);
-		root.add(gameBoard);
+		root.add(middle);
 		root.add(right);
 
 		/*
@@ -169,9 +170,11 @@ abstract class GameScreen implements Screen {
 
 		model.spawnItems();
 
-		/* update player status on side panels */
+		/* update player status */
 		left.update(p1);
 		right.update(p2);
+		scorebar[0].update(p1);
+		scorebar[1].update(p2);
 
 		stage.act(delta);
 		stage.draw();
@@ -228,18 +231,19 @@ abstract class GameScreen implements Screen {
 	 * Draw the player item status on side panel.
 	 */
 	private class SidePanel extends Table {
+		private Label nameLabel;
 		private Image[] frameImages;
 		private Image[] brickImages;
 		private Image pickImage;
 		private Image emptyPickImage;
 		private Image tntImage;
 		private Image emptyTntImage;
-		private Label scoreLabel;
 
 		SidePanel() {
 			Table brickTable = new Table();
 			Stack[] itemStacks = new Stack[3];
 
+			nameLabel = new Label("", skin);
 			frameImages = new Image[3];
 			brickImages = new Image[10];
 			pickImage = new Image(PICK_REGION);
@@ -248,10 +252,8 @@ abstract class GameScreen implements Screen {
 			emptyTntImage = new Image(EMPTY_TNT_REGION);
 			pickImage = new Image(PICK_REGION);
 
-			scoreLabel = new Label("", skin);
-
 			/* layout */
-			this.add(scoreLabel);
+			this.add(nameLabel);
 			this.row();
 
 			for (int i = 0; i < 3; i++) {
@@ -280,8 +282,7 @@ abstract class GameScreen implements Screen {
 		}
 
 		void update(PlayerViewModel p) {
-			scoreLabel.setText("Player" + p.getId()
-					+ " boxes " + p.getScore());
+			nameLabel.setText("Player " + p.getId());
 
 			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
 				brickImages[i].setVisible(i < n);
@@ -307,6 +308,47 @@ abstract class GameScreen implements Screen {
 		}
 	}
 
+	private class Scorebar extends Table {
+
+		private Scorebox box;
+		private Label scoreLabel;
+
+		Scorebar(boolean alignLeft) {
+			box = new Scorebox(WHITE_REGION);
+			scoreLabel = new Label("0", skin);
+
+			if (alignLeft) {
+				this.add(box).size(60, 60).pad(4);
+				this.add(scoreLabel);
+			} else {
+				this.add(scoreLabel);
+				this.add(box).size(60, 60).pad(4);
+			}
+		}
+
+		void update(PlayerViewModel p) {
+			box.setColor(p.getColor());
+			scoreLabel.setText("" + p.getScore());
+		}
+
+		private class Scorebox extends Image {
+
+			Scorebox(TextureRegion region) {
+				super(region);
+			}
+
+			public void draw(SpriteBatch batch, float parentAlpha) {
+				Color old = batch.getColor();
+
+				batch.setColor(this.getColor());
+				super.draw(batch, parentAlpha);
+				batch.setColor(old);
+			}
+
+		};
+
+	}
+
 	public class Settings{
 		protected int[] p1Controls = {Keys.W,Keys.S,Keys.A,Keys.D,Keys.G,Keys.H};
 		protected int[] p2Controls = {Keys.UP,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.O,Keys.P};
@@ -320,4 +362,5 @@ abstract class GameScreen implements Screen {
 
 		}
 	}
+
 }

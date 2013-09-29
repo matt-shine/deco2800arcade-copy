@@ -12,6 +12,7 @@ import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.utils.KeyManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -77,26 +78,24 @@ final class PlayerViewModel extends Actor {
 		region[WEST] = new TextureRegion(texture, 512, 0, 256, 256);
 		region[EAST] = new TextureRegion(texture, 768, 0, 256, 256);
 
+		if (id == 1)
+			this.setColor(1f, 0f, 0f, 1f);
+		else
+			this.setColor(0f, 0f, 1f, 1f);
+
 		addListener(new PlayerInputListener());
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		//Gdx.app.log(LOG, "" + getX() + "\t" + getY());
+		Color old = batch.getColor();
 
-		/*
-		 * NOTE: models use the y-down coordinate system.
-		 */
-		if (id == 1) {
-			batch.setColor(1, 0, 0, 1);
-		} else if (id == 2) {
-			batch.setColor(0, 0, 1, 1);
-		}
-
+		batch.setColor(this.getColor());
 		batch.draw(region[model.getDirection()],
 				model.getX() * tileSize,
 				640 - (model.getY() + 1) * tileSize,
 				tileSize, tileSize);
+		batch.setColor(old);
 	}
 
 	/**

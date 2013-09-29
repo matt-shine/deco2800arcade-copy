@@ -62,18 +62,18 @@ public class Lobby {
 	 * @param user - Map <username, connection>  of the user
 	 * @return - True if match created successfully, false otherwise.
 	 */
-	public boolean createMatch(String gameId, String username, Connection connection) {
+	public boolean createMatch(String gameId, int playerId, Connection connection) {
 		//TODO: handle user joining multiple matches?
-		if (userHasMatch(username)) {
+		if (userHasMatch(playerId)) {
 			return false;
 		}
 		/* Create the match and add to array of matches */
-		LobbyMatch match = new LobbyMatch(gameId, username, connection);
+		LobbyMatch match = new LobbyMatch(gameId, playerId, connection);
 		lobbyGames.add(match);
 		return true;
 	}
 
-	public void joinMatch(LobbyMatch match, String gameId, String username, Connection connection) {
+	public void joinMatch(LobbyMatch match, String gameId, int playerId, Connection connection) {
 
 	}
 
@@ -83,9 +83,9 @@ public class Lobby {
 	 * @param username - the username to check
 	 * @return - true if user has a match in lobby, false otherwise.
 	 */
-	public boolean userHasMatch(String username) {
+	public boolean userHasMatch(int playerId) {
 		for (int i = 0; i <lobbyGames.size(); i++) {
-			if (lobbyGames.get(i).getHostUsername() == username) {
+			if (lobbyGames.get(i).getHostPlayerId() == playerId) {
 				return true; /* User  hosting a match in lobby */
 			}
 		}
@@ -97,9 +97,9 @@ public class Lobby {
 	 * Removes the match from the lobby.
 	 * @param gameId - the id of the game the match is for
 	 */
-	public void destroyMatch(String username) {
+	public void destroyMatch(int playerId) {
 		for (int i = 0; i < lobbyGames.size(); i++) {
-			if (lobbyGames.get(i).getHostUsername() == username) {
+			if (lobbyGames.get(i).getHostPlayerId() == playerId) {
 				lobbyGames.remove(i);
 			}
 		}

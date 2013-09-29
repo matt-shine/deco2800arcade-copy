@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 
 
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
@@ -38,6 +39,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.lobby.JoinLobbyResponse;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
@@ -147,9 +149,11 @@ public class Protocol {
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
 		
-		//Multiplayer classes
+		//Lobby classes
 		kryo.register(NewLobbyRequest.class);
 		kryo.register(LobbyRequestType.class);
+		kryo.register(JoinLobbyResponse.class);
+		
 
 		// Register miscellaneous classes
 		kryo.register(byte[].class);

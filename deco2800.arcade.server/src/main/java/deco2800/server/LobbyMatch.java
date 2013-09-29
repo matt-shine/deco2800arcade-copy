@@ -4,18 +4,18 @@ import com.esotericsoftware.kryonet.Connection;
 
 public class LobbyMatch {
 
-	private String hostUsername;
+	private int hostPlayerId;
 	private Connection hostConnection;
 	private String gameId;
 
-	public LobbyMatch(String gameId, String hostUsername, Connection connection) {
-		this.hostUsername = hostUsername;
+	public LobbyMatch(String gameId, int hostPlayerId, Connection connection) {
+		this.hostPlayerId = hostPlayerId;
 		this.hostConnection = connection;
 		this.gameId = gameId;
 	}
 
-	public String getHostUsername() {
-		return this.hostUsername;
+	public int getHostPlayerId() {
+		return this.hostPlayerId;
 	}
 
 	public Connection getHostConnection() {

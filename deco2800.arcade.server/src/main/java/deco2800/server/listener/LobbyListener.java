@@ -22,7 +22,7 @@ import com.esotericsoftware.kryonet.Listener;
 public class LobbyListener extends Listener {
 
 	/* Holds the users currently in the lobby */
-	private Map<String, Map<String, Set<Connection>>> lobbyUsers;
+	private Map<String, Map<Integer, Set<Connection>>> lobbyUsers = new HashMap<String, Map<Integer, Set<Connection>>>();
 
 
 	Lobby lobby = Lobby.instance();
@@ -37,20 +37,25 @@ public class LobbyListener extends Listener {
 			
 
 			NewLobbyRequest newLobbyRequest = (NewLobbyRequest) object;
-			String username = newLobbyRequest.username;
+			int playerId = newLobbyRequest.playerID;
+			System.out.println(newLobbyRequest.requestType);
 			LobbyRequestType requestType = newLobbyRequest.requestType;
-			String gameId = newLobbyRequest.gameId;
+			String gameId = null;
+			if (newLobbyRequest.gameId != null) {
+				gameId = newLobbyRequest.gameId;
+			}
+			
 
 			switch (requestType)
 			{
 			case JOINLOBBY:
-				handleJoinLobbyRequest(username, connection);
+				handleJoinLobbyRequest(playerId, connection);
 				break;
 			case CREATEMATCH:
-				handleCreateMatchRequest(gameId, username, connection);
+				handleCreateMatchRequest(gameId, playerId, connection);
 				break;
 			case CANCELMATCH:
-				handleCancelMatchRequest(username);
+				handleCancelMatchRequest(playerId);
 				break;
 			}
 		}
@@ -58,21 +63,24 @@ public class LobbyListener extends Listener {
 	}
 
 
-	private void handleJoinLobbyRequest(String username, Connection connection){
+	private void handleJoinLobbyRequest(int playerId, Connection connection){
 
-		Map<String, Set<Connection>> userConnections;
-
-		if (lobbyUsers.containsKey(username)) {
+		Map<Integer, Set<Connection>> userConnections;
+		System.out.println("*****HERE****");
+		if (lobbyUsers.containsKey(playerId)) {
 			//User already has a lobby session
-			userConnections = lobbyUsers.get(username);
+			
+			userConnections = lobbyUsers.get(playerId);
+			
 		} else {
 			//No lobby session for user
-			userConnections = new HashMap<String, Set<Connection>>();
+			
+			userConnections = new HashMap<Integer, Set<Connection>>();
 		}
-
-		if (userConnections.containsKey(username)) {
+		
+		if (userConnections.containsKey(playerId)) {
 			//
-			Set<Connection> connections = userConnections.get(username);
+			Set<Connection> connections = userConnections.get(playerId);
 			connections.add(connection);
 			connection.sendTCP(JoinLobbyResponse.OK);
 		} else {
@@ -82,20 +90,20 @@ public class LobbyListener extends Listener {
 
 	}
 
-	private void handleCreateMatchRequest(String gameId, String username, Connection connection) {
-		if (lobby.userHasMatch(username)) {
+	private void handleCreateMatchRequest(String gameId, int playerId, Connection connection) {
+		if (lobby.userHasMatch(playerId)) {
 			connection.sendTCP(JoinLobbyResponse.CREATE_MATCH_FAILED);
 		} else {
-			lobby.createMatch(gameId, username, connection);
+			lobby.createMatch(gameId, playerId, connection);
 			connection.sendTCP(JoinLobbyResponse.OK);
 		}
 	}
 
-	private void handleCancelMatchRequest(String username) {
-		lobby.destroyMatch(username);
+	private void handleCancelMatchRequest(int playerId) {
+		lobby.destroyMatch(playerId);
 	}
 
-	private void handleJoinMatchRequest(String username, Connection connection, LobbyMatch match) {
+	private void handleJoinMatchRequest(int playerId, Connection connection, LobbyMatch match) {
 
 	}
  	

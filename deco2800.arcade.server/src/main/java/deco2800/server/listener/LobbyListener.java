@@ -4,10 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import lobby.JoinLobbyResponse;
-import lobby.LobbyRequest;
-import lobby.LobbyRequestType;
-import lobby.NewLobbyRequest;
+
+
+
+
+
+import deco2800.arcade.protocol.lobby.JoinLobbyResponse;
+import deco2800.arcade.protocol.lobby.LobbyRequestType;
+import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.server.ArcadeServer;
 import deco2800.server.Lobby;
 import deco2800.server.LobbyMatch;
@@ -28,8 +32,9 @@ public class LobbyListener extends Listener {
 		super.received(connection, object);
 
 		ArcadeServer server = new ArcadeServer(); //get the server instance
-
-		if (object instanceof LobbyRequest) {
+		System.out.println("Lobby Request Received");
+		if (object instanceof NewLobbyRequest) {
+			
 
 			NewLobbyRequest newLobbyRequest = (NewLobbyRequest) object;
 			String username = newLobbyRequest.username;

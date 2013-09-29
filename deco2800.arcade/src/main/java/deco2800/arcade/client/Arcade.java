@@ -15,9 +15,6 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
-import lobby.LobbyRequestType;
-import lobby.NewLobbyRequest;
-
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -34,12 +31,13 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.lobby.LobbyRequestType;
+import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 
 /**
@@ -220,6 +218,7 @@ public class Arcade extends JFrame {
 		lobbyRequest.requestType = LobbyRequestType.JOINLOBBY;
 		lobbyRequest.playerID = this.player.getID();
 		this.client.sendNetworkObject(lobbyRequest);
+		
 	}
 
 	/**

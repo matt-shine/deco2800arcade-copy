@@ -1,11 +1,11 @@
 package deco2800.arcade.client.network.listener;
 
-import multiplayerGame.GameStateUpdateRequest;
-import multiplayerGame.NewMultiGameRequest;
-import multiplayerGame.NewMultiResponse;
-import multiplayerGame.NewMultiSessionResponse;
-
 import com.esotericsoftware.kryonet.Connection;
+
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 
 

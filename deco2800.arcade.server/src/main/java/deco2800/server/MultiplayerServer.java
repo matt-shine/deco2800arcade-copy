@@ -1,8 +1,8 @@
 package deco2800.server;
 
-import multiplayerGame.GameStateUpdateRequest;
-
 import com.esotericsoftware.kryonet.Connection;
+
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 
 
 

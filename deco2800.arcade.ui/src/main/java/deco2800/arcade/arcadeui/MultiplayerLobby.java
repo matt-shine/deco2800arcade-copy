@@ -170,7 +170,7 @@ public void show() {
 		*/
 		 button.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                
+                ArcadeSystem.requestLobbyGamesList();
 				
 				//table2.removeActor();
 				table2.clear();

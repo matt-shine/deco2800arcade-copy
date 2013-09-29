@@ -6,14 +6,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import multiplayerGame.GameStateUpdateRequest;
-import multiplayerGame.MultiGameRequestType;
-import multiplayerGame.NewMultiGameRequest;
-import multiplayerGame.NewMultiResponse;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+
 import deco2800.arcade.protocol.game.GameRequestType;
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
+import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.server.MultiplayerServer;
 import deco2800.server.MatchmakerQueue;
 

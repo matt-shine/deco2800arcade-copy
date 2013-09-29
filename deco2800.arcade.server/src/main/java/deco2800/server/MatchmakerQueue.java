@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import multiplayerGame.NewMultiGameRequest;
-import multiplayerGame.NewMultiSessionResponse;
-
 import com.esotericsoftware.kryonet.Connection;
+
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 
 

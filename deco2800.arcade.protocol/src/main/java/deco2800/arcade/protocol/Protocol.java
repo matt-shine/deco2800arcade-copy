@@ -21,6 +21,8 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
+import deco2800.arcade.protocol.lobby.LobbyRequestType;
+import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
@@ -112,6 +114,10 @@ public class Protocol {
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
+		
+		//Multiplayer classes
+		kryo.register(NewLobbyRequest.class);
+		kryo.register(LobbyRequestType.class);
 
 		// Register miscellaneous classes
 		kryo.register(byte[].class);

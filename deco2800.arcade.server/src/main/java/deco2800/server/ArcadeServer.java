@@ -13,6 +13,7 @@ import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.LobbyListener;
 import deco2800.server.listener.MultiplayerListener;
 import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
@@ -203,6 +204,7 @@ public class ArcadeServer {
 		server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
         server.addListener(new MultiplayerListener(matchmakerQueue));
+        server.addListener(new LobbyListener());
 	}
 
     /**

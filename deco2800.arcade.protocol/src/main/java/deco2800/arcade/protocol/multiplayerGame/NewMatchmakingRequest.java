@@ -1,4 +1,4 @@
-package multiplayerGame;
+package deco2800.arcade.protocol.multiplayerGame;
 
 import com.esotericsoftware.kryonet.Connection;
 

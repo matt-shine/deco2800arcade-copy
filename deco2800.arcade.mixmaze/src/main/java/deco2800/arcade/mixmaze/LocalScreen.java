@@ -47,8 +47,7 @@ class LocalScreen extends GameScreen {
 
 	@Override
 	public void show() {
-		//model = new MixMazeModel(5, BEGINNER, 60*2);
-		model = new MixMazeModel(5, ADVANCED, 60*2);
+		model = new MixMazeModel(10, BEGINNER, 60*2);
 
 		try {
 			Thread.sleep(1000);

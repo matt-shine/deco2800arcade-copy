@@ -40,7 +40,8 @@ class TileViewModel extends Group {
 
 	private final ITileModel model;
 	private final IMixMazeModel gameModel;
-	private final int tileSize;
+	private final float tileSize;
+	private final float offset;
 	private final ShapeRenderer renderer;
 
 	/**
@@ -52,10 +53,11 @@ class TileViewModel extends Group {
 	 * @param tileSize	the graphical size of the tile
 	 */
 	public TileViewModel(ITileModel model, IMixMazeModel gameModel,
-			int tileSize, ShapeRenderer renderer) {
+			float tileSize, ShapeRenderer renderer) {
 		this.model = model;
 		this.gameModel = gameModel;
 		this.tileSize = tileSize;
+		this.offset = tileSize / 32;
 		this.renderer = renderer;
 	}
 
@@ -96,23 +98,26 @@ class TileViewModel extends Group {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(1f, 1f, 0f, 1f);
 		if (model.getWall(WEST).isBuilt())
-			renderer.filledRect(0, 0, 4f, 128f);
+			renderer.filledRect(0, 0, offset, tileSize);
 		if (model.getWall(NORTH).isBuilt())
-			renderer.filledRect(0, 124f, 128f, 4f);
+			renderer.filledRect(0, tileSize - offset,
+					tileSize, offset);
 		if (model.getWall(EAST).isBuilt())
-			renderer.filledRect(124f, 0, 4f, 128f);
+			renderer.filledRect(tileSize - offset, 0,
+					offset, tileSize);
 		if (model.getWall(SOUTH).isBuilt())
-			renderer.filledRect(0, 0, 128f, 4f);
+			renderer.filledRect(0, 0, tileSize, offset);
 		renderer.end();
 	}
 
 	private void drawCorners() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(0f, 0f, 0f, 1f);
-		renderer.filledRect(0, 0, 4f, 4f);
-		renderer.filledRect(0, 124f, 4f, 4f);
-		renderer.filledRect(124f, 124f, 4f, 4f);
-		renderer.filledRect(124f, 0, 4f, 4f);
+		renderer.filledRect(0, 0, offset, offset);
+		renderer.filledRect(0, tileSize - offset, offset, offset);
+		renderer.filledRect(tileSize - offset, tileSize - offset,
+				offset, offset);
+		renderer.filledRect(tileSize - offset, 0, offset, offset);
 		renderer.end();
 	}
 

@@ -25,8 +25,11 @@ class TileViewModel extends Group {
 	static final TextureRegion PILE_BRICK_REGION;
 	static final TextureRegion PICK_REGION;
 	static final TextureRegion TNT_REGION;
+	static final TextureRegion SELECTION_REGION;
 	static final TextureRegion UNKNOWN_REGION;
 	static final TextureRegion BRICK_REGION;
+	static final TextureRegion EMPTY_PICK_REGION;
+	static final TextureRegion EMPTY_TNT_REGION;
 
 	static {
 		Texture texture = new Texture(Gdx.files.internal("item.png"));
@@ -34,8 +37,13 @@ class TileViewModel extends Group {
 		PILE_BRICK_REGION = new TextureRegion(texture, 0, 0, 256, 256);
 		PICK_REGION = new TextureRegion(texture, 256, 0, 256, 256);
 		TNT_REGION = new TextureRegion(texture, 512, 0, 256, 256);
-		UNKNOWN_REGION = new TextureRegion(texture, 768, 0, 256, 256);
+		SELECTION_REGION = new TextureRegion(texture, 768, 0, 256, 256);
 		BRICK_REGION = new TextureRegion(texture, 1024, 0, 256, 256);
+		UNKNOWN_REGION = new TextureRegion(texture, 1280, 0, 256, 256);
+		EMPTY_TNT_REGION = new TextureRegion(texture, 1536, 0,
+				256, 256);
+		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0,
+				256, 256);
 	}
 
 	private final ITileModel model;

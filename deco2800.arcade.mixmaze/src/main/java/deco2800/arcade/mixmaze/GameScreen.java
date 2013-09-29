@@ -231,7 +231,9 @@ abstract class GameScreen implements Screen {
 		private Image[] frameImages;
 		private Image[] brickImages;
 		private Image pickImage;
+		private Image emptyPickImage;
 		private Image tntImage;
+		private Image emptyTntImage;
 		private Label scoreLabel;
 
 		SidePanel() {
@@ -241,7 +243,10 @@ abstract class GameScreen implements Screen {
 			frameImages = new Image[3];
 			brickImages = new Image[10];
 			pickImage = new Image(PICK_REGION);
+			emptyPickImage = new Image(EMPTY_PICK_REGION);
 			tntImage = new Image(TNT_REGION);
+			emptyTntImage = new Image(EMPTY_TNT_REGION);
+			pickImage = new Image(PICK_REGION);
 
 			scoreLabel = new Label("", skin);
 
@@ -255,12 +260,14 @@ abstract class GameScreen implements Screen {
 				if (i < 2)
 					this.row();
 
-				frameImages[i] = new Image(UNKNOWN_REGION);
+				frameImages[i] = new Image(SELECTION_REGION);
 				itemStacks[i].add(frameImages[i]);
 			}
 
 			itemStacks[0].add(brickTable);
+			itemStacks[1].add(emptyPickImage);
 			itemStacks[1].add(pickImage);
+			itemStacks[2].add(emptyTntImage);
 			itemStacks[2].add(tntImage);
 
 			/* bricks */
@@ -279,7 +286,9 @@ abstract class GameScreen implements Screen {
 			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
 				brickImages[i].setVisible(i < n);
 			pickImage.setVisible(p.hasPick());
+			emptyPickImage.setVisible(!p.hasPick());
 			tntImage.setVisible(p.hasTNT());
+			emptyTntImage.setVisible(!p.hasTNT());
 
 			for (int i = 0; i < 3; i++)
 				frameImages[i].setVisible(false);

@@ -24,7 +24,7 @@ public class HomeScreen implements Screen {
 	private BitmapFont font;
 	boolean multiplayerEnabled;
 	Set<String> games = null;
-	
+	private MultiplayerLobby lobby;
 	
 	
 	
@@ -83,17 +83,12 @@ public class HomeScreen implements Screen {
 	    int h = 110;
 	    int index = 0;
 	    font.draw(batch, "Select a game by pressing a number key:", 110, h);
-	    font.draw(batch, "Press 'm' to enable multiplayer", 110, h+20);
+	    font.draw(batch, "Press 'm' for Multiplayer Lobby", 110, h+20);
 	    h += 20;
 	    
 	    if (Gdx.input.isKeyPressed(Keys.M)) {
-	    	multiplayerEnabled = true;
-	    }
-	    if (Gdx.input.isKeyPressed(Keys.S)) {
-	    	multiplayerEnabled = false;
-	    }
-	    if (multiplayerEnabled) {
-	    	font.draw(batch,  "Multiplayer Enabled (Press 's' for single player mode)", 500, 600);
+	    	ArcadeSystem.setMultiplayerEnabled(true);
+	    	ArcadeSystem.goToGame("arcadeui");
 	    }
 	    
 	    

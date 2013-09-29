@@ -23,6 +23,7 @@ public class ArcadeUI extends GameClient {
 	HomeScreen home = null;
     FrontPage main = null;
     RegisterScreen register = null;
+    MultiplayerLobby lobby = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -42,6 +43,7 @@ public class ArcadeUI extends GameClient {
         store = new StoreScreen();
         main = new FrontPage();
         register = new RegisterScreen(this);
+        lobby = new MultiplayerLobby();
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
@@ -49,9 +51,16 @@ public class ArcadeUI extends GameClient {
         } else {
             this.setScreen(login);
         }
+        
+        if (ArcadeSystem.isMultiplayerEnabled()) {
+        	this.setScreen(lobby);
+        }
 
         super.create();
     }
+    
+    
+    
 
 	@Override
 	public void dispose() {

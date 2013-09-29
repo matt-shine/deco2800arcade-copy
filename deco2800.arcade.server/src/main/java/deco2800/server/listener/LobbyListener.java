@@ -1,5 +1,6 @@
 package deco2800.server.listener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +33,6 @@ public class LobbyListener extends Listener {
 		super.received(connection, object);
 
 		ArcadeServer server = new ArcadeServer(); //get the server instance
-		System.out.println("Lobby Request Received");
 		if (object instanceof NewLobbyRequest) {
 			
 
@@ -66,7 +66,7 @@ public class LobbyListener extends Listener {
 	private void handleJoinLobbyRequest(int playerId, Connection connection){
 
 		Map<Integer, Set<Connection>> userConnections;
-		System.out.println("*****HERE****");
+
 		if (lobbyUsers.containsKey(playerId)) {
 			//User already has a lobby session
 			
@@ -83,6 +83,8 @@ public class LobbyListener extends Listener {
 			Set<Connection> connections = userConnections.get(playerId);
 			connections.add(connection);
 			connection.sendTCP(JoinLobbyResponse.OK);
+			ArrayList<LobbyMatch> matches = lobby.getMatches();
+			connection.sendTCP(matches);
 		} else {
 			//session not found
 			connection.sendTCP(JoinLobbyResponse.UNAVAILABLE);

@@ -64,6 +64,8 @@ public class Arcade extends JFrame {
     private ProxyApplicationListener proxy;
 
     private CommunicationNetwork communicationNetwork;
+    
+    private static boolean multiplayerEnabled;
 
     // Width and height of the Arcade window
     private static final int ARCADE_WIDTH = 1280;
@@ -243,6 +245,14 @@ public class Arcade extends JFrame {
         }
         proxy.setTarget(new DummyApplicationListener());
     }
+    
+    public boolean isMultiplayerEnabled() {
+		return multiplayerEnabled;
+	}
+
+	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
+		Arcade.multiplayerEnabled = multiplayerEnabled;
+	}
 
     /**
      * returns true if the player exists

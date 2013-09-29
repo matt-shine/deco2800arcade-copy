@@ -46,4 +46,12 @@ public class ArcadeSystem {
 	public static GameClient getCurrentGame() {
 		return arcade.getCurrentGame();
 	}
+	
+    public static void setMultiplayerEnabled(boolean b) {
+    	arcade.setMultiplayerEnabled(b);
+    }
+    
+    public static boolean isMultiplayerEnabled() {
+    	return arcade.isMultiplayerEnabled();
+    }
 }

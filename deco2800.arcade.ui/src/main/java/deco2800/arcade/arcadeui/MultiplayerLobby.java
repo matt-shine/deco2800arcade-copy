@@ -38,6 +38,7 @@ public void show() {
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
+		
                 
 		// Gui button & label Styles 		
 		skin = new Skin();

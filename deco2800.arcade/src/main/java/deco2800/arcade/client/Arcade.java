@@ -15,6 +15,9 @@ import java.util.Set;
 
 import javax.swing.JFrame;
 
+import lobby.LobbyRequestType;
+import lobby.NewLobbyRequest;
+
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -210,6 +213,13 @@ public class Arcade extends JFrame {
                 GameUpdateCheckRequest();
 
         this.client.sendNetworkObject(gameUpdateCheckRequest);
+	}
+	
+	public void requestLobbyGamesList() {
+		NewLobbyRequest lobbyRequest = new NewLobbyRequest();
+		lobbyRequest.requestType = LobbyRequestType.JOINLOBBY;
+		lobbyRequest.playerID = this.player.getID();
+		this.client.sendNetworkObject(lobbyRequest);
 	}
 
 	/**

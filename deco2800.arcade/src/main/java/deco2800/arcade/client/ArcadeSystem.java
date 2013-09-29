@@ -54,4 +54,8 @@ public class ArcadeSystem {
     public static boolean isMultiplayerEnabled() {
     	return arcade.isMultiplayerEnabled();
     }
+    
+    public static void requestLobbyGamesList() {
+    	arcade.requestLobbyGamesList();
+    }
 }

@@ -241,6 +241,7 @@ public class PlayerModel implements IPlayerModel {
 				used = true;
 			}
 			lastAction = used ? System.currentTimeMillis() : lastAction;
+			return used;
 		}
 		return false;
 	}

@@ -35,7 +35,6 @@ public class ListScreen implements Screen, LibraryScreen {
      * UI Objects
      */
     private SpriteBatch batch;
-    private BitmapFont font;
     private ArrayList<Game> games = null;
     private Game currentGame;
     private Stage stage;
@@ -47,7 +46,6 @@ public class ListScreen implements Screen, LibraryScreen {
     private TextButton currentButton;
     private TextButton homeButton;
 
-    private Skin skin;
     private String description;
     private String gameTitle;
     private Label label;
@@ -71,38 +69,7 @@ public class ListScreen implements Screen, LibraryScreen {
     }
 
     private void styleSetup() {
-        font = new BitmapFont(true);
-        font.setColor(Color.BLACK);
-        skin = new Skin();
         libSkin = new Skin(Gdx.files.internal("libSkin.json"));
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-
-        skin.add("white", new Texture(pixmap));
-        skin.add("default", new BitmapFont());
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        skin.add("default", labelStyle);
-
-        Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
-        BitmapFont titleFont = skin.getFont("default");
-        titleFont.setColor(new Color(125,100,129,1.0f));
-        //titleFont.setScale(1.5f);
-        titleLabelStyle.font = titleFont;
-        skin.add("titleStyle", titleLabelStyle);
-
-
-        // Specify font, fontColor, cursor, selection, and background
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("default");
-        textFieldStyle.fontColor = Color.WHITE;
-        textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
-        textFieldStyle.selection = skin.newDrawable("white", Color.WHITE);
-        //textFieldStyle.background = ;
-        skin.add("default", textFieldStyle);
-
     }
 
     private void setupListUI() {
@@ -113,15 +80,15 @@ public class ListScreen implements Screen, LibraryScreen {
         image = new Image(splashTexture);
         stage.addActor(image);
 
-        listIconTexture = new Texture("Assets/list-icon.jpg");
-        gridIconTexture = new Texture("Assets/grid-icon.jpg");
+        listIconTexture = new Texture("Assets/list-icon.png");
+        gridIconTexture = new Texture("Assets/grid-icon.png");
         listImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(listIconTexture)));
         gridImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(gridIconTexture)));
 
-        listImageButton.setX(1000);
-        gridImageButton.setX(1050);
-        listImageButton.setY(650);
-        gridImageButton.setY(650);
+        listImageButton.setX(1075);
+        gridImageButton.setX(1155);
+        listImageButton.setY(643);
+        gridImageButton.setY(643);
 
         listImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.LIST_VIEW));
         gridImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.GRID_VIEW));

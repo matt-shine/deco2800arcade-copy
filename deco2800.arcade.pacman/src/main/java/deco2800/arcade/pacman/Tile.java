@@ -1,21 +1,23 @@
 package deco2800.arcade.pacman;
 
-/** A square in the grid of pacman. Can be either a dot, energiser, fruit, wall, or door to ghost pen
+/** A square in the grid of pacman. Can be either a dot, energiser, fruit, wall, 
+ * or door to ghost pen
  * 
  */
 public abstract class Tile {
 
-	private int sideLength; //length of side of square
+	private static int sideLength = 8; //length of side of square- should be same for all tiles
 	private Tile north;
 	private Tile east;
 	private Tile south;
 	private Tile west;
 	
-	public Tile(int sideLength) {
-		this.sideLength = sideLength;
+	public Tile() {
 	}
 	
 	//returns the type of tile
+	// may change this implementation so each tile just knows its grid location, 
+	//but these methods would still exist
 	protected Class<? extends Tile> getNorthType() {
 		return north.getClass(); 
 	}
@@ -31,5 +33,8 @@ public abstract class Tile {
 	protected Class<? extends Tile> getWestType() {
 		return west.getClass(); 
 	}
-	
+
+	public static int getSideLength() {
+		return sideLength;
+	}	
 }

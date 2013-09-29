@@ -114,11 +114,11 @@ public class Pacman extends GameClient {
         
 		super.create();	
 		
-		//create map which is a list of tiles
+		//create map which is a grid of tiles
 		map = new ArrayList<ArrayList<Tile>>();
 		
 		// Just use a set file for the time being!
-		String file = "testmap";
+		String file = "testmap.txt";
 		//initialise collision list
 		colList = new ArrayList<Collideable>();
 		// this guy doesn't show up either. 
@@ -131,23 +131,22 @@ public class Pacman extends GameClient {
 		batch = new SpriteBatch();		
 		shaper = new ShapeRenderer();
 		//initialise pacman
-		player = new PacChar(colList);
-		testWall = new Wall(colList, 1, 350, 350, 25);
-		testWall2 = new Wall(colList, 2, 350, 350, 25);
-		System.out.println(colList.toString());
+//		player = new PacChar(colList);
+//		testWall = new Wall(colList, 1, 350, 350, 25);
+//		testWall2 = new Wall(colList, 2, 350, 350, 25);
+//		System.out.println(colList.toString());
 		//initialise receiver for input- use the multiplexer from Arcade
 		// because overlay group said to in log messages
 		controller = new PacController(player, colList);
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
 		gameState = GameState.READY;
-		map1 = new GameMap();
+		map1 = new GameMap(224, 288);
 		try {
 			map1Array = map1.readMap(file);
 		} catch (IOException e) {
 			e.printStackTrace();
-		} // Hope this is fixed!
-		map1.drawMap(colList, map1Array, shaper);
+		} 
 	}
 	
 	/**
@@ -210,8 +209,9 @@ public class Pacman extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);	    
 	    // start the drawing
 	    batch.begin();
+	    map1.drawMap(map1Array, batch);
 	    // render player pacman 
-	    player.render(batch);
+//	    player.render(batch);
 	    //end the drawing
 	    batch.end();
 	    //initialise walls and draw them 
@@ -219,9 +219,8 @@ public class Pacman extends GameClient {
 	    // shouldn't be super difficult to make them thicker, but will need a different approach 
 	    // (filled shapes probably)	    
 	    shaper.begin(ShapeType.Line);
-
-	    testWall.render(shaper);
-	    testWall2.render(shaper);
+//	    testWall.render(shaper);
+//	    testWall2.render(shaper);
 		//map1.drawMap(colList, map1Array, shaper);
 	     
 	    shaper.end();

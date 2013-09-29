@@ -1,15 +1,32 @@
 package deco2800.arcade.protocol;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.serializers.*;
-
 import java.util.ArrayList;
 
+import multiplayerGame.GameStateUpdateRequest;
+import multiplayerGame.MultiGameRequestType;
+import multiplayerGame.NewMatchmakingRequest;
+import multiplayerGame.NewMultiGameRequest;
+import multiplayerGame.NewMultiResponse;
+import multiplayerGame.NewMultiSessionResponse;
+
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
+import com.esotericsoftware.kryo.serializers.FieldSerializer;
+
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.protocol.achievement.*;
+import deco2800.arcade.protocol.achievement.AchievementListRequest;
+import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
+import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
+import deco2800.arcade.protocol.achievement.AchievementsForIDsRequest;
+import deco2800.arcade.protocol.achievement.AchievementsForIDsResponse;
+import deco2800.arcade.protocol.achievement.AddAchievementRequest;
+import deco2800.arcade.protocol.achievement.IncrementProgressRequest;
+import deco2800.arcade.protocol.achievement.IncrementProgressResponse;
+import deco2800.arcade.protocol.achievement.ProgressForPlayerRequest;
+import deco2800.arcade.protocol.achievement.ProgressForPlayerResponse;
 import deco2800.arcade.protocol.communication.ChatRequest;
-import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
+import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.TextMessage;
 import deco2800.arcade.protocol.communication.VoiceMessage;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
@@ -21,8 +38,8 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
-import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
@@ -109,6 +126,14 @@ public class Protocol {
 		kryo.register(ChatRequest.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
+		
+		//Multiplayer Messages
+		kryo.register(NewMultiGameRequest.class);
+		kryo.register(NewMultiResponse.class);
+		kryo.register(MultiGameRequestType.class);
+		kryo.register(GameStateUpdateRequest.class);
+		kryo.register(NewMultiSessionResponse.class);
+		kryo.register(NewMatchmakingRequest.class);
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);

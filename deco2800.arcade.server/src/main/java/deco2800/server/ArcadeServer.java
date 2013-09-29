@@ -13,6 +13,7 @@ import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.MultiplayerListener;
 import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
@@ -40,6 +41,10 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
+	
+	private MatchmakerQueue matchmakerQueue;
+
+	private HashSet<String> lobbyUsers = new HashSet<String>();
 	
 	// Package manager
 	@SuppressWarnings("unused")
@@ -93,6 +98,24 @@ public class ArcadeServer {
 	}
 	
 	/**
+	 * Returns a set of the usernames of users in the lobby.
+	 * 
+	 * @return HashSet - the set of users currently connected to the
+	 * 	lobby.
+	 */
+	public HashSet<String> getLobbyUsers() {
+		return (HashSet<String>)lobbyUsers.clone();
+	}
+
+
+	/*
+	 * Adds a username to the set of users currently in the lobby.
+	 */
+	protected void addLobbyUser(String username) {
+		lobbyUsers.add(username);
+	}
+	
+	/**
 	 * * Access the Serer's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
 	 */
@@ -132,7 +155,7 @@ public class ArcadeServer {
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
 		this.highscoreDatabase = new HighscoreDatabase();
-		
+		this.matchmakerQueue = new MatchmakerQueue();
 		this.packServ = new PackageServer();
 		
 		//initialize database classes
@@ -179,6 +202,7 @@ public class ArcadeServer {
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
+        server.addListener(new MultiplayerListener(matchmakerQueue));
 	}
 
     /**

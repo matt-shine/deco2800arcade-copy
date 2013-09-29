@@ -25,6 +25,7 @@ import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.MultiplayerListener;
 import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -177,6 +178,7 @@ public class Arcade extends JFrame {
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
         this.client.addListener(new PackmanListener());
+        this.client.addListener(new MultiplayerListener());
 	}
 
 	public void connectAsUser(String username) {

@@ -6,25 +6,30 @@ import java.util.Map;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
+import deco2800.server.database.PlayerGameStorage;
 
 
 
 public class MatchmakerQueue {
 
 	/* Players currently in the matchmaking queue - gameId, map of usernames/connections */
-	private Map<String, Map<String, Connection>> queuedUsers;
-
-	private ArrayList<MultiplayerServer> activeServers;
+	private Map<String, Map<Integer, Connection>> queuedUsers;
+	private Map<Integer, MultiplayerServer> activeServers;
+	PlayerGameStorage database;
+	private int serverNumber;
 
 	/* Singleton */
 	private static MatchmakerQueue instance;
 
 
 	public MatchmakerQueue() {
-		this.queuedUsers = new HashMap<String, Map<String, Connection>>();
-		this.activeServers = new ArrayList<MultiplayerServer>();
+		this.queuedUsers = new HashMap<String, Map<Integer, Connection>>();
+		this.activeServers = new HashMap<Integer, MultiplayerServer>();
+		this.database = new PlayerGameStorage();
+		this.serverNumber = 0;
 		}
 
 	/**
@@ -43,8 +48,8 @@ public class MatchmakerQueue {
 	 * Returns a copy of the (complete) current queue.
 	 * @return
 	 */
-	public Map<String, Map<String, Connection>> getQueue() {
-		Map<String, Map<String, Connection>> map = new HashMap<String, Map<String, Connection>>(queuedUsers);
+	public Map<String, Map<Integer, Connection>> getQueue() {
+		Map<String, Map<Integer, Connection>> map = new HashMap<String, Map<Integer, Connection>>(queuedUsers);
 		return map;
 	}
 
@@ -53,8 +58,8 @@ public class MatchmakerQueue {
 	 * @param gameId - the gameId of the game.
 	 * @return the queue for the given game.
 	 */
-	public Map<String, Connection> getGameQueue(String gameId) {
-		Map<String, Connection> map = new HashMap<String, Connection>(queuedUsers.get(gameId));
+	public Map<Integer, Connection> getGameQueue(String gameId) {
+		Map<Integer, Connection> map = new HashMap<Integer, Connection>(queuedUsers.get(gameId));
 		return map;
 	}
 
@@ -66,11 +71,11 @@ public class MatchmakerQueue {
 	private void add(NewMultiGameRequest request, Connection connection) {
 		//TODO: handle players already in queue? allow multi-game queue placement?
 		if (!this.queuedUsers.containsKey(request.gameId)) {
-			Map<String, Connection> player = new HashMap<String, Connection>();
-			player.put(request.username, connection);
+			Map<Integer, Connection> player = new HashMap<Integer, Connection>();
+			player.put(request.playerID, connection);
 			this.queuedUsers.put(request.gameId, player);
 		} else {
-			this.queuedUsers.get(request.gameId).put(request.username, connection);
+			this.queuedUsers.get(request.gameId).put(request.playerID, connection);
 		}
 
 	}
@@ -79,12 +84,12 @@ public class MatchmakerQueue {
 	 * Removes the given username from the matchmaking queue (all games)
 	 * @param username - the players username
 	 */
-	public void remove(String username) {
+	public void remove(Integer playerID) {
 		/* Might be a more efficient way to do this (will gameId be available?) */
-		for (Map.Entry<String, Map<String, Connection>> entry : queuedUsers.entrySet()) {
-			Map<String, Connection> players = entry.getValue();
-			for (Map.Entry<String, Connection> e : players.entrySet()) {
-				if (e.getKey() == username) {
+		for (Map.Entry<String, Map<Integer, Connection>> entry : queuedUsers.entrySet()) {
+			Map<Integer, Connection> players = entry.getValue();
+			for (Map.Entry<Integer, Connection> e : players.entrySet()) {
+				if (e.getKey() == playerID) {
 					queuedUsers.remove(e);
 				}
 			}
@@ -96,45 +101,70 @@ public class MatchmakerQueue {
 	 * @param username - the players username
 	 * @param gameId - the game queue to remove the player from
 	 */
-	public void remove(String username, String gameId) {
+	public void remove(Integer playerID, String gameId) {
 		if (queuedUsers.containsKey(gameId)) {
-			Map<String, Connection> entry = queuedUsers.get(gameId);
-			if (entry.containsKey(username)) {
-				entry.remove(username);
+			Map<Integer, Connection> entry = queuedUsers.get(gameId);
+			if (entry.containsKey(playerID)) {
+				entry.remove(playerID);
 			}
 		}
 	}
 
 	public void checkForGame(NewMultiGameRequest request, Connection connection) {
-		String username = request.username;
+		int playerID = request.playerID;
 		String gameId = request.gameId;
 		System.out.println("gameID: " + gameId);
 		System.out.println("size: " + queuedUsers.size());
 		if (queuedUsers.get(gameId) == null) {
-			Map<String, Connection> userConnection = new HashMap<String, Connection>();
-			userConnection.put(username, connection);
+			Map<Integer, Connection> userConnection = new HashMap<Integer, Connection>();
+			userConnection.put(playerID, connection);
 			queuedUsers.put(gameId, userConnection);
 			return;
 		} else {
-			Map<String, Connection> player2 = queuedUsers.get(gameId);
-			String player2Name = (String) player2.keySet().toArray()[0];
-			Connection player2Connection = player2.get(player2Name);			
-			MultiplayerServer gameServer =  new MultiplayerServer(username, player2Name, connection, 
-					player2Connection, gameId, activeServers.size());
+			Map<Integer, Connection> player2 = queuedUsers.get(gameId);
+			Integer player2ID = (Integer) player2.keySet().toArray()[0];
+			Connection player2Connection = player2.get(player2ID);			
+			MultiplayerServer gameServer =  new MultiplayerServer(playerID, player2ID, connection, 
+					player2Connection, gameId, serverNumber, this);
 
-			activeServers.add(gameServer);
+			activeServers.put(serverNumber, gameServer);
 			queuedUsers.remove(gameId);
 			NewMultiSessionResponse session = new NewMultiSessionResponse();
-			session.sessionId = activeServers.size()-1;
+			session.sessionId = serverNumber;
+			serverNumber++;
 			session.gameId = gameId;
-			//session.playerID = username; STRINGS OR INTS
 			connection.sendTCP(session);
 			player2Connection.sendTCP(session);
 		}
 
 	}
-
-	public ArrayList<MultiplayerServer> getActiveServers() {
+	
+	public void gameOver(int session, int player1ID, int player2ID, String gameID) {
+		int player1Rating = 0;
+		int player2Rating = 0;
+		try {
+			player1Rating = database.getPlayerRating(player1ID, Integer.parseInt(gameID));
+			player2Rating = database.getPlayerRating(player2ID, Integer.parseInt(gameID));
+		} catch (Exception e) {
+			System.out.println(e);
+		}		
+		/*TODO: ELO CALCULATION
+		 * database.updateplayerrating for player1 player2 in gameID
+		 */
+		try {
+			database.updatePlayerRating(player1ID, Integer.parseInt(gameID), player1Rating);
+			database.updatePlayerRating(player1ID, Integer.parseInt(gameID), player2Rating);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		dropServer(session);
+	}
+	
+	public void dropServer(int session) {
+		activeServers.remove(session);
+	}
+	
+	public Map<Integer, MultiplayerServer> getActiveServers() {
 		return activeServers;
 	}
 

@@ -3,19 +3,21 @@ package deco2800.server;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
+import deco2800.server.database.PlayerGameStorage;
 
 
 
 public class MultiplayerServer {
 
-	private String player1Id;
-	private String player2Id;
+	private int player1Id;
+	private int player2Id;
 	private Connection player1;
 	private Connection player2;
-	private String gameId;
+	private int gameId;
 	private int sessionId;
+	private MatchmakerQueue queue;
 
-	public MultiplayerServer(String player1Id, String player2Id, Connection player1, Connection player2, String gameId, int sessionId) {
+	public MultiplayerServer(int player1Id, int player2Id, Connection player1, Connection player2, int gameId, int sessionId, MatchmakerQueue queue) {
 		System.out.println("Multiplayer server started");
 		this.player1Id = player1Id;
 		this.player2Id = player2Id;;
@@ -23,19 +25,20 @@ public class MultiplayerServer {
 		this.player2 = player2;
 		this.gameId = gameId;
 		this.sessionId = sessionId;
+		this.queue = queue;
 		player1.sendTCP(this.sessionId);
 		player2.sendTCP(this.sessionId);
 	}
 
-	public String getPlayer1() {
+	public int getPlayer1() {
 		return player1Id;
 	}
 
-	public String getplayer2() {
+	public int getplayer2() {
 		return player2Id;
 	}
 
-	public String getGameId() {
+	public int getGameId() {
 		return gameId;
 	}
 
@@ -46,8 +49,19 @@ public class MultiplayerServer {
 	public void stateUpdate(GameStateUpdateRequest request) {
 		//if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
 		System.out.println(request.playerID);
+		if (request.gameOver == true) {
+			queue.gameOver(sessionId, player1Id, player2Id, gameId);
+			return;
+		}
 			player1.sendTCP(request);	
 			player2.sendTCP(request);
 		//}
+	}
+	
+	private void gameOver()  {
+		/*TODO: ELO CALCULATION
+		 * database.updateplayerrating for player1 player2
+		 */
+		
 	}
 }

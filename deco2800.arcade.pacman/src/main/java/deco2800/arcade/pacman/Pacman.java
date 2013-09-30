@@ -207,6 +207,7 @@ public class Pacman extends GameClient {
 	    camera.update();
 	    //tell the spritebatch to use the coordinate system of the camera
 	    batch.setProjectionMatrix(camera.combined);	    
+	    shaper.setProjectionMatrix(camera.combined);
 	    // start the drawing
 	    batch.begin();
 	    map1.drawMap(map1Array, batch);

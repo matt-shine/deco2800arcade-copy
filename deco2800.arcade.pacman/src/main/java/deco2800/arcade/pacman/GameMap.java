@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -42,33 +43,30 @@ public class GameMap {
 		file = "src\\main\\resources\\" + file;		
 		String absolutePath = Gdx.files.internal(file).file().getAbsolutePath();
 		absolutePath = absolutePath.replace("arcade", "arcade.pacman");
-
+		
+		//resultArray contains a number of char arrays equal to the number of lines
+		// each array contains all the characters from that line
+		ArrayList<char[]> resultArray = new ArrayList<char[]>();
 		BufferedReader br = null;
 		try {
-			FileReader fr = new FileReader(absolutePath);
-			br = new BufferedReader(fr);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-
-		ArrayList<char[]> resultArray = new ArrayList<char[]>();
-		try {
-			String str;
-			while ((str = br.readLine()) != null) {
-				resultArray.add(str.toCharArray());
+			br = new BufferedReader(new FileReader(absolutePath));			
+			String line;
+			while ((line = br.readLine()) != null) {
+				resultArray.add(line.toCharArray());
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (br != null)
-					br.close();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
+			if (br != null)  {
+				br.close();
+			}			
+		}		
+		//reverse as libgdx draws from bottom left
+		Collections.reverse(resultArray);
+//		for (int i=0; i<resultArray.size(); i++) {
+//			System.out.println(resultArray.get(i));
+//		}
 		return resultArray;
-
 	}
 
 	/*
@@ -78,18 +76,18 @@ public class GameMap {
 	 * we can just use libgdx's functions to read our file.
 	 */
 	public ArrayList<char[]> readMap2(String file) {
-//		FileHandle filePath = Gdx.files.internal(file);
-		
-		file = "src\\main\\resources\\" + file;
-		FileHandle filePath = Gdx.files.internal(file);
-		String mapstr = filePath.readString();
-		
-		ArrayList<char[]> mapp = new ArrayList<char[]>();	
-		String[] stringarray = mapstr.split(System.getProperty("line.separator"));
-		for (int i = 0; i < stringarray.length; i++) {
-			mapp.add(stringarray[i].toCharArray());
+		// Pre-process 'file' to get it to point to the correct directory
+		file = "src\\main\\resources\\" + file;		
+		String absolutePath = Gdx.files.internal(file).file().getAbsolutePath();
+		absolutePath = absolutePath.replace("arcade", "arcade.pacman");
+		FileHandle filePath = Gdx.files.absolute(absolutePath);
+		String contents = filePath.readString();		
+		ArrayList<char[]> levelMap = new ArrayList<char[]>();	
+		String[] lineArray = contents.split(System.getProperty("line.separator"));
+		for (int i = 0; i < lineArray.length; i++) {
+			levelMap.add(lineArray[i].toCharArray());
 		}
-		return mapp;
+		return levelMap;
 	}
 
 	/*
@@ -118,15 +116,11 @@ public class GameMap {
 		int hOffset = 300;
 		int vOffset = 100;
 		int side = Tile.getSideLength();
-		// this is making what looks like a square, not a rectangle... whoever wrote this
-		// an explanation of what exactly is happening would be nice, I think I misunderstood
-		for (int i = 0; i < map.size(); i++) {
-			char[] s = map.get(i);
-			for (int j = 0; j < s.length; j++) {
-				//character.getnumericvalue needs to be changed to just be able to
-				// take any char
-				WallTile wall = new WallTile(Character.getNumericValue(s[j]));
-				wall.render(batch, hOffset + i*side, vOffset + j*side);
+		for (int lineNum = 0; lineNum < map.size(); lineNum++) {
+			char[] line = map.get(lineNum);
+			for (int i = 0; i < line.length; i++) {
+				WallTile wall = new WallTile(line[i]);
+				wall.render(batch, hOffset + i*side, vOffset + lineNum*side);
 			}
 		}
 	}

@@ -6,8 +6,10 @@ import java.util.Map;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
+import deco2800.server.database.PlayerGameStorage;
 
 
 
@@ -15,8 +17,9 @@ public class MatchmakerQueue {
 
 	/* Players currently in the matchmaking queue - gameId, map of usernames/connections */
 	private Map<String, Map<Integer, Connection>> queuedUsers;
-
-	private ArrayList<MultiplayerServer> activeServers;
+	private Map<Integer, MultiplayerServer> activeServers;
+	PlayerGameStorage database;
+	private int serverNumber;
 
 	/* Singleton */
 	private static MatchmakerQueue instance;
@@ -24,7 +27,9 @@ public class MatchmakerQueue {
 
 	public MatchmakerQueue() {
 		this.queuedUsers = new HashMap<String, Map<Integer, Connection>>();
-		this.activeServers = new ArrayList<MultiplayerServer>();
+		this.activeServers = new HashMap<Integer, MultiplayerServer>();
+		this.database = new PlayerGameStorage();
+		this.serverNumber = 0;
 		}
 
 	/**
@@ -120,20 +125,46 @@ public class MatchmakerQueue {
 			Integer player2ID = (Integer) player2.keySet().toArray()[0];
 			Connection player2Connection = player2.get(player2ID);			
 			MultiplayerServer gameServer =  new MultiplayerServer(playerID, player2ID, connection, 
-					player2Connection, gameId, activeServers.size());
+					player2Connection, gameId, serverNumber, this);
 
-			activeServers.add(gameServer);
+			activeServers.put(serverNumber, gameServer);
 			queuedUsers.remove(gameId);
 			NewMultiSessionResponse session = new NewMultiSessionResponse();
-			session.sessionId = activeServers.size()-1;
+			session.sessionId = serverNumber;
+			serverNumber++;
 			session.gameId = gameId;
 			connection.sendTCP(session);
 			player2Connection.sendTCP(session);
 		}
 
 	}
-
-	public ArrayList<MultiplayerServer> getActiveServers() {
+	
+	public void gameOver(int session, int player1ID, int player2ID, String gameID) {
+		int player1Rating = 0;
+		int player2Rating = 0;
+		try {
+			player1Rating = database.getPlayerRating(player1ID, Integer.parseInt(gameID));
+			player2Rating = database.getPlayerRating(player2ID, Integer.parseInt(gameID));
+		} catch (Exception e) {
+			System.out.println(e);
+		}		
+		/*TODO: ELO CALCULATION
+		 * database.updateplayerrating for player1 player2 in gameID
+		 */
+		try {
+			database.updatePlayerRating(player1ID, Integer.parseInt(gameID), player1Rating);
+			database.updatePlayerRating(player1ID, Integer.parseInt(gameID), player2Rating);
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		dropServer(session);
+	}
+	
+	public void dropServer(int session) {
+		activeServers.remove(session);
+	}
+	
+	public Map<Integer, MultiplayerServer> getActiveServers() {
 		return activeServers;
 	}
 

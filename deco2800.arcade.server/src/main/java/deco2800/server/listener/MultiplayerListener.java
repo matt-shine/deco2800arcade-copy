@@ -19,13 +19,9 @@ import deco2800.server.MultiplayerServer;
 import deco2800.server.MatchmakerQueue;
 
 public class MultiplayerListener extends Listener {
-	//Map holding GameId, username, userconnection, and connection destination
-	private Map<String, Map<String, Connection>> queueSession;
-	private ArrayList<MultiplayerServer> activeServers;
 	private MatchmakerQueue matchmakerQueue;
 
 	public MultiplayerListener(MatchmakerQueue matchmakerQueue) {
-		this.queueSession = new HashMap<String, Map<String, Connection>>();
 		this.matchmakerQueue = matchmakerQueue;
 	}
 
@@ -58,7 +54,7 @@ public class MultiplayerListener extends Listener {
 		} else if (object instanceof GameStateUpdateRequest) {
 			//Sends update to server to broadcast
 			GameStateUpdateRequest request = (GameStateUpdateRequest) object;
-			ArrayList<MultiplayerServer> activeServers = matchmakerQueue.getActiveServers();
+			Map<Integer, MultiplayerServer> activeServers = matchmakerQueue.getActiveServers();
 			MultiplayerServer server = activeServers.get(request.gameSession);
 			server.stateUpdate(request);
 		}

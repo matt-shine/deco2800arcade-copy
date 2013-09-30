@@ -50,11 +50,12 @@ public void show() {
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
-		
                 
 		// Gui button & label Styles 		
 		skin = new Skin();
         final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
+		skin.add("background", new Texture("homescreen_bg.png"));
+		
         Label label = new Label("Matchmaking Lobby", skin);
 		Label label2 = new Label("Chat:", skin);
 		
@@ -94,41 +95,39 @@ public void show() {
 				
 				
 				//Create buttons, labels and tables for layout purposes
-				TextButton createbutton = new TextButton("Create Match", skin2);
-                TextButton button = new TextButton("Match Me!", skin2);
-				TextButton button2 = new TextButton("Return to Menu", skin2);
+				TextButton createbutton = new TextButton("Create Match", skin);
+                TextButton button = new TextButton("Match Me!", skin);
+				TextButton button2 = new TextButton("Return to Menu", skin);
 				
-				TextButton button3 = new TextButton(">>", skin2);
+				TextButton button3 = new TextButton(">>", skin);
                 
-				final TextField chatfield = new TextField("", skin2);
+				final TextField chatfield = new TextField("", skin);
 				chatfield.setMessageText("Enter Chat");
-				
-				
+
 				final Table table4 = new Table();
 				final Table table = new Table();
 				final Table table2 = new Table();
-				final Table table3 = new Table();
-				
-				
+				final Table table3 = new Table();	
 				final Table table5 = new Table();
-				
-				stage.addActor(table5);
-				table5.setFillParent(true);
-				
-				
+	
 				Table chattable = new Table();
-				
-				stage.addActor(chattable);
-				stage.addActor(table3);
-				stage.addActor(table2);
-                stage.addActor(table);
-                
+
 				table.setFillParent(true);
 				table2.setFillParent(true);
 				table3.setFillParent(true);
 				chattable.setFillParent(true);
 				table4.setFillParent(true);
+				table5.setFillParent(true);
                 
+				table3.setBackground(skin.getDrawable("background"));
+
+				//Add tables to stage.
+				stage.addActor(table3);
+				stage.addActor(table5);
+				stage.addActor(chattable);
+				stage.addActor(table2);
+                stage.addActor(table);
+				
 				/*
 				// Add Scroll Bar
 				Table table5 = new Table();
@@ -146,31 +145,28 @@ public void show() {
 				
 				table5.add(scroll).expand().fill().size(720, 520);
 				*/
+					
+				// Add tables and set position.
+				table3.add(chatfield).width(200).height(35).padLeft(960).padTop(440);
 				
-			
-			
-			
-				chattable.add(label2).padTop(480).padLeft(610);
-           
-				table3.add(chatfield).width(150).padLeft(850).padTop(480);
+				chattable.add(label2).padTop(440).padLeft(620);
 				
-				table3.add(button3).width(30).padLeft(3).padTop(480);
+				table3.add(button3).width(45).height(35).padLeft(3).padTop(440);
 				
 				table.add(createbutton).width(300).height(40).padRight(80).padTop(600);
 				
-                table.add(button).width(300).height(40).padRight(80).padTop(600);
+                table.add(button).width(300).height(40).padRight(80).padLeft(80).padTop(600);
 				
 				table.add(button2).width(300).height(40).padLeft(80).padTop(600);
+		
 
-		
-		
 		/* "Match Me!" Button Event Listener. 
 		The "Match Me!" button Looks through an array and returns the number of elements; 
 		in the form of buttons with unique ids as well as avatars and player info etc.
 		*/
 		 button.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                ArcadeSystem.requestLobbyGamesList();
+                
 				
 				//table2.removeActor();
 				table2.clear();
@@ -187,7 +183,7 @@ public void show() {
 				
 				Label avatars = new Label("<Insert User Avatar Here>" + i, skin2);
 				Label players = new Label("Player: " + i, skin2);
-				final TextButton button4 = new TextButton("Join Game: " + i, skin2);
+				final TextButton button4 = new TextButton("Join Game: " + i, skin);
 				button4.setName(""+ i);
 				players.setName(""+ i);
 				avatars.setName(""+ i);
@@ -197,7 +193,7 @@ public void show() {
 				table2.center().left();
 				table2.add(avatars).width(130).padTop(20).padLeft(150);
 				table2.add(players).width(130).padTop(20).padLeft(130);
-				table2.add(button4).width(130).padTop(20);
+				table2.add(button4).width(130).height(25).padTop(20);
 				table2.row();
 
 				
@@ -286,7 +282,7 @@ public void show() {
 	
 		//Gdx.gl.glClearColor(0.9f, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+/*
 		shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
 	    shapeRenderer.filledRect(50,
@@ -294,7 +290,7 @@ public void show() {
 	        1280 - 100,
 	        720 - 200);
   
-	    shapeRenderer.end();
+	    shapeRenderer.end();*/
 		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();

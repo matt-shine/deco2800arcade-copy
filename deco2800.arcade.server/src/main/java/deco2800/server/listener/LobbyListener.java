@@ -70,6 +70,7 @@ public class LobbyListener extends Listener {
 			Connection hostConnection = connection;
 			
 			lobby.createMatch(gameId, playerId, hostConnection);
+			
 		}
 
 	}

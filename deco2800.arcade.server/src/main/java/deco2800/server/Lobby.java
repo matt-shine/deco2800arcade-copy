@@ -96,6 +96,7 @@ public class Lobby {
 		CreateMatchResponse response = new CreateMatchResponse();
 		response.matchId = match.getMatchId().toString();
 		connection.sendTCP(response);
+		System.out.println("[SERVER] Create Match Response sent.");
 	}
 
 	public void joinMatch(LobbyMatch match, String gameId, int playerId, Connection connection) {

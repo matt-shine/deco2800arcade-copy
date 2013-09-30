@@ -12,16 +12,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import net.miginfocom.swing.MigLayout;
 
-public class UserScreen extends JFrame implements ActionListener {
+public class UserScreen extends JFrame{
 	
 	/**
-	 * The view class for the main page of the user profile page
+	 * The view class for the main page of the user profile
 	 */
 	
 	private Model model;
@@ -76,7 +77,7 @@ public class UserScreen extends JFrame implements ActionListener {
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
 
 		
-	public UserScreen(Model model) throws HeadlessException {
+	public UserScreen(Model model) throws HeadlessException{
 		
 		super("Profile");
 		
@@ -317,8 +318,7 @@ public class UserScreen extends JFrame implements ActionListener {
 	 */
 	public void addachievementpanel(){
 				
-	    //Displayed Achievements
-	    
+	    //Displayed Achievements	    
 	    achievement1 = new JLabel();
 	    achievement2 = new JLabel();
 	    achievement3 = new JLabel();
@@ -420,12 +420,9 @@ public class UserScreen extends JFrame implements ActionListener {
 	    historybarpanel.setOpaque(false);
 	    JPanel historylistpanel = new JPanel(new MigLayout());
 	    historylistpanel.setOpaque(false);
-        //Add Elements to Panel
-	    historypanel = new ImagePanel(new ImageIcon("assets/images/Green_Box.png").getImage());
-	    historypanel.setLayout(new MigLayout());
 	    
-	    historybarpanel.add(historybar);
-	    
+        //Add Elements to Panel	    
+	    historybarpanel.add(historybar);	    
         historylistpanel.add(history1);
         historylistpanel.add(historytext1,"growy, width :110");
         historylistpanel.add(history2);
@@ -439,21 +436,111 @@ public class UserScreen extends JFrame implements ActionListener {
         historylistpanel.add(history6);
         historylistpanel.add(historytext6,"growy, width :110");
         
+	    historypanel = new ImagePanel(new ImageIcon("assets/images/Green_Box.png").getImage());
+	    historypanel.setLayout(new MigLayout());       
         historypanel.add(historybarpanel,"wrap");
         historypanel.add(historylistpanel);
 	}
 	
-
-	/**
+	/*
 	 *  Event Listeners for Buttons
 	 */
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
+	/**
+	 * Button navigates to the home page on click
+	 * @param listenForHomeLink
+	 */
+	public void addHomeListener(ActionListener listenForHomeLink){
+		
+		homelink.addActionListener(listenForHomeLink);	
 		
 	}
 	
+	/**
+	 * Button navigates to the GameStore page on click
+	 * @param listenForStoreLink
+	 */
+	public void addStoreListener(ActionListener listenForStoreLink){
+		
+		storelink.addActionListener(listenForStoreLink);
+		
+	}
+	
+	/**
+	 * Button navigates to the Forum page on click
+	 * @param listenForForumLink
+	 */
+	public void addForumListener(ActionListener listenForForumLink){
+		
+		forumlink.addActionListener(listenForForumLink);
+		
+	}
+	
+	/**
+	 * Button navigates to the Library page on click
+	 * @param listenForLibraryLink
+	 */
+	public void addLibraryListener(ActionListener listenForLibraryLink){
+		
+		librarylink.addActionListener(listenForLibraryLink);
+		
+	}
+	
+	/**
+	 * Button navigates back to user's profile page
+	 * @param listenForProfileLink
+	 */
+	public void addProfileListener(ActionListener listenForProfileLink){
+		
+		myprofilelink.addActionListener(listenForProfileLink);	
+		
+	}
+	
+	/**
+	 * Button navigates to the Achievements page on click
+	 * @param listenForAchievementButton
+	 */
+	public void addAchievementListener(ActionListener listenForAchievementButton){
+		
+		achievementbar.addActionListener(listenForAchievementButton);
+		
+	}
+	
+	/**
+	 * Button opens a popup allowing user to add friend
+	 * @param listenForAddFriendButton
+	 */
+	public void addFriendListener(ActionListener listenForAddFriendButton){
+		
+		addfriendbutton.addActionListener(listenForAddFriendButton);	
+		
+	}
+	
+	/**
+	 * Button opens a popup allowing editing of profile details
+	 * @param listenForEditButton
+	 */
+	public void addEditListener(ActionListener listenForEditButton){
+		
+		editbutton.addActionListener(listenForEditButton);	
+		
+	}
+	
+	/**
+	 * Button opens a popup allowing user to change their visibility status
+	 * @param listenForStatusButton
+	 */
+	public void addStatusListener(ActionListener listenForStatusButton){
+		
+		// make button then add here
+		
+	}
+	
+	public void displayErrorMessage(String errorMessage){
+		
+		JOptionPane.showMessageDialog(this, errorMessage);
+		
+	}
 	
 }
 

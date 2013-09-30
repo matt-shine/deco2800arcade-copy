@@ -23,17 +23,15 @@ public class Interface {
 	}
 	
 	public static void runApp() {
-		Model modelprofile = new Model();
-		Model m = new Model();
-		Model amodel = new Model();
 		
-		UserScreen view = new UserScreen(modelprofile);
-		//EditScreen v = new EditScreen(m);
-		//AchievementScreen achievementview = new AchievementScreen(modelprofile);
+		Model theModel = new Model();
 		
-		//Controller controller = new Controller(modelprofile,view);
+		UserScreen userView = new UserScreen(theModel);
+		//EditScreen editView = new EditScreen(theModel);
+		AchievementScreen achievementview = new AchievementScreen(theModel);
 		
-		
+		Controller controller = new Controller(theModel,userView);
+			
 	}
 
 }

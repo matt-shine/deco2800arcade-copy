@@ -76,7 +76,7 @@ public class RegisterScreen implements Screen {
     }
 
     @Override
-    public void resize(int arg0, int arg1) {
+    public void resize(int width, int height) {
     }
 
     @Override

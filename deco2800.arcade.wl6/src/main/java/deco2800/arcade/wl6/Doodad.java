@@ -1,6 +1,8 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
+import deco2800.arcade.wl6.GameModel;
+import deco2800.arcade.wl6.Renderer;
 
 public class Doodad {
 

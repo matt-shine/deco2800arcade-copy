@@ -1,10 +1,8 @@
 package deco2800.arcade.communication;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.ChatHistory;
@@ -180,6 +178,5 @@ public class CommunicationNetwork {
 			System.out.println("History with: " + entry);
 		}
 	}
-	
 	
 }

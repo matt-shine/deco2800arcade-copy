@@ -21,3 +21,5 @@ towerdefence
 pacman
 connect4
 raiden
+wl6
+snakeLadder

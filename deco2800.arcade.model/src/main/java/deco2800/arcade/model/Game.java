@@ -73,13 +73,4 @@ public class Game {
 		return name;
 	}
 	
-	/**
-	 * Creates a game with given ID
-	 * @param id
-	 */
-	public Game(String id){
-		this.id = id;
-	}
-	
-	
 }

@@ -109,7 +109,7 @@ public class PlayerStorage {
 	}
 
 	/**
-	 * Searches through a ResultSet for a player's information.
+	 * Searches through a ResultSet for for a player's information.
 	 * 
 	 * @param playerID
 	 *            The player's playerID

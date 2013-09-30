@@ -1,6 +1,6 @@
 package deco2800.arcade.wl6;
 
-public class Door extends Doodad{
+public class Door extends Doodad {
 
 	
 	private boolean vertical = false;

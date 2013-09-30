@@ -38,10 +38,10 @@ public class LocalPlayer extends Paddle {
 
 		if (Gdx.input.isKeyPressed(Keys.RIGHT)
 				|| Gdx.input.isKeyPressed(Keys.D))
-			movement(paddleSpeed * Gdx.graphics.getDeltaTime());
+			movement(paddleSpeed * 1.15f * Gdx.graphics.getDeltaTime());
 
 		if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.A))
-			movement(-paddleSpeed * Gdx.graphics.getDeltaTime());
+			movement(-paddleSpeed * 1.15f * Gdx.graphics.getDeltaTime());
 
 	}
 }

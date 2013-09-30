@@ -1,21 +1,32 @@
-/*
- * IPlayerModel
- */
 package deco2800.arcade.mixmaze.domain.view;
+
+import deco2800.arcade.mixmaze.PlayerViewModel;
 
 public interface IPlayerModel {
 
-	enum PlayerAction {
+	enum Action {
 		USE_BRICK,
 		USE_PICK,
 		USE_TNT;
 
-		public PlayerAction getNextAction() {
-			return values()[(ordinal() + 1) % values().length];
+		public Action getNextAction(boolean hasPick, boolean hasTnt) {
+			Action next = values()[(ordinal() + 1) % values().length];
+			if ((next == USE_PICK && !hasPick)
+					|| (next == USE_TNT && !hasTnt))
+				return next.getNextAction(hasPick, hasTnt);
+			else
+				return next;
 		}
 	}
 
-	int getPlayerID();
+	/**
+	 * Adds a viewer to this player model.
+	 *
+	 * @param v	the viewer
+	 */
+	void addViewer(PlayerViewModel v);
+
+	int getId();
 
 	/**
 	 * Returns the x-coordinates for this player. The x-coordinate's orgin is at
@@ -76,13 +87,6 @@ public interface IPlayerModel {
 	 * @param direction an integer representation of the direction
 	 */
 	void setDirection(int direction);
-
-	/**
-	 * Returns the active action of this player.
-	 *
-	 * @return one of USE_BRICK, USE_PICK, and USE_TNT
-	 */
-	PlayerAction getPlayerAction();
 
 	/**
 	 * Switches to the next action, in this order

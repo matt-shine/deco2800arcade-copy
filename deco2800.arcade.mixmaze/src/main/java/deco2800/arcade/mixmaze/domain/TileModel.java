@@ -1,5 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
+import deco2800.arcade.mixmaze.TileViewModel;
+import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.mixmaze.domain.view.IWallModel;
 
@@ -16,9 +18,43 @@ public class TileModel implements ITileModel {
 	// Tile data
 	private int tileX;
 	private int tileY;
+	private boolean isBoxBuilt;
 	private WallModel[] walls = null;
 	private PlayerModel boxer = null;
 	private TileModel[] adjTiles;
+	private ArrayList<TileViewModel> viewers;
+
+	/**
+	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
+	 * surrounding the this <code>TileModel</>
+	 *
+	 * @param x		the column number on game board. origin starts at top left
+	 * @param y		the row number on game board.origin starts at top left
+	 * @param adjWalls	the wall adjacent to this tile
+	 */
+	public TileModel(int x, int y, TileModel[] tiles) {
+		viewers = new ArrayList<TileViewModel>();
+		tileX = x;
+		tileY = y;
+		isBoxBuilt = false;
+		adjTiles = tiles;
+		walls = new WallModel[4];
+		for (int direction = 0; direction < 4; ++direction) {
+			TileModel tile = tiles[direction];
+			int polarDir = Direction.getPolarDirection(direction);
+			if(tile != null) {
+				walls[direction] = (WallModel) tile.getWall(polarDir);
+				tile.addAdjacent(tile, polarDir);
+			} else {
+				walls[direction] = new WallModel();
+			}
+			walls[direction].addTile(this);
+		}
+	}
+
+	public void addViewer(TileViewModel v) {
+		viewers.add(v);
+	}
 
 	@Override
 	public int getX() {
@@ -52,11 +88,46 @@ public class TileModel implements ITileModel {
 		return walls[direction];
 	}
 
-	public void buildBox(PlayerModel player) {
-		if (player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
+	private int getDirection(WallModel w) {
+		for (int i = 0; i < 4; i++)
+			if (w == walls[i])
+				return i;
+		return -1;
+	}
+
+	/**
+	 * Validates the status of the box on this tile, and modifies the
+	 * <code>boxer</code> based on any change.
+	 *
+	 * @param player	the player who used an action against this tile
+	 */
+	void validateBox(PlayerModel player) {
+		if (!isBoxBuilt && isBox()) {
+			isBoxBuilt = true;
+			boxer = player;
+			boxer.incrementScore();
+			updateBoxer(player.getId());
+		} else if (isBoxBuilt && !isBox()) {
+			isBoxBuilt = false;
+			boxer.decrementScore();
+			boxer = null;
+			updateBoxer(0);
 		}
-		boxer = isBox() ? player : null;
+	}
+
+	void updateWall(WallModel w, boolean isBuilt) {
+		for (TileViewModel v : viewers)
+			v.updateWall(getDirection(w), isBuilt);
+	}
+
+	void updateType(ItemType type) {
+		for (TileViewModel v : viewers)
+			v.updateType(type);
+	}
+
+	private void updateBoxer(int id) {
+		for (TileViewModel v : viewers)
+			v.updateBoxer(id);
 	}
 
 	public List<TileModel> findPath(List<TileModel> path)
@@ -115,7 +186,7 @@ public class TileModel implements ITileModel {
 	}
 
 	public int getBoxerId() {
-		return (boxer == null) ? 0 : boxer.getPlayerID();
+		return (boxer == null) ? 0 : boxer.getId();
 	}
 
 	/**
@@ -145,32 +216,6 @@ public class TileModel implements ITileModel {
 			throw new IllegalStateException("tile adjacency cannot be changed once set.");
 		}
 		adjTiles[direction] = tile;
-	}
-
-	/**
-	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
-	 * surrounding the this <code>TileModel</>
-	 *
-	 * @param x		the column number on game board. origin starts at top left
-	 * @param y		the row number on game board.origin starts at top left
-	 * @param adjWalls	the wall adjacent to this tile
-	 */
-	public TileModel(int x, int y, TileModel[] tiles) {
-		tileX = x;
-		tileY = y;
-		adjTiles = tiles;
-		walls = new WallModel[4];
-		for (int direction = 0; direction < 4; ++direction) {
-			TileModel tile = tiles[direction];
-			int polarDir = Direction.getPolarDirection(direction);
-			if(tile != null) {
-				walls[direction] = (WallModel) tile.getWall(polarDir);
-				tile.addAdjacent(tile, polarDir);
-			} else {
-				walls[direction] = new WallModel();
-			}
-			walls[direction].addTile(this);
-		}
 	}
 
 	/**

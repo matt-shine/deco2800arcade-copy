@@ -35,6 +35,16 @@ public interface IMixMazeModel {
 	}
 
 	/**
+	 * TODO
+	 */
+	void switchAction(int id);
+
+	/**
+	 * TODO
+	 */
+	void useAction(int id);
+
+	/**
 	 * Specifies if the game is running
 	 * @return <code>true</code> if running, <code>false</code> otherwise
 	 */
@@ -139,12 +149,12 @@ public interface IMixMazeModel {
 	 * turns the specified player in the specified direction
 	 * if they are not currently facing that direction
 	 *
-	 * @param player 	the player
+	 * @param id		the id of the player
 	 * @param direction	the direction of the movement
 	 * @throws IllegalStateException if the game has not started.
 	 * @throws IllegalArgumentException if <code>player</code> is null
 	 * or <code>direction</code> is invalid.
 	 */
-	void movePlayer(IPlayerModel player, int direction);
+	void movePlayer(int id, int direction);
 
 }

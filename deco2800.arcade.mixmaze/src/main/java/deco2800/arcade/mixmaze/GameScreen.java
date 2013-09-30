@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
-import static deco2800.arcade.mixmaze.domain.view.IPlayerModel.PlayerAction.*;
+import static deco2800.arcade.mixmaze.domain.view.IPlayerModel.Action.*;
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
@@ -242,20 +242,20 @@ abstract class GameScreen implements Screen {
 			}
 		}
 
-		void update(PlayerViewModel p) {
-			nameLabel.setText("Player " + p.getId());
+		void setPlayerName(String name) {
+			nameLabel.setText(name);
+		}
 
-			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
-				brickImages[i].setVisible(i < n);
-			pickImage.setVisible(p.hasPick());
-			emptyPickImage.setVisible(!p.hasPick());
-			tntImage.setVisible(p.hasTNT());
-			emptyTntImage.setVisible(!p.hasTNT());
+		void updateBrick(int amount) {
+			for (int i = 0; i < 10; i++)
+				brickImages[i].setVisible(i < amount);
+		}
 
+		void updateAction(IPlayerModel.Action action) {
 			for (int i = 0; i < 3; i++)
 				frameImages[i].setVisible(false);
 
-			switch (p.getAction()) {
+			switch (action) {
 			case USE_BRICK:
 				frameImages[0].setVisible(true);
 				break;
@@ -268,12 +268,22 @@ abstract class GameScreen implements Screen {
 			}
 		}
 
+		void updatePick(boolean hasPick) {
+			pickImage.setVisible(hasPick);
+			emptyPickImage.setVisible(!hasPick);
+		}
+
+		void updateTnt(boolean hasTnt) {
+			tntImage.setVisible(hasTnt);
+			emptyTntImage.setVisible(!hasTnt);
+		}
+
 	}
 
 	/**
 	 * Scorebar displays the player score.
 	 */
-	protected class Scorebar extends Table {
+	class Scorebar extends Table {
 
 		private Scorebox box;
 		private Label scoreLabel;
@@ -295,7 +305,7 @@ abstract class GameScreen implements Screen {
 			box.setColor(c);
 		}
 
-		public void update(int score) {
+		void update(int score) {
 			scoreLabel.setText(String.valueOf(score));
 		}
 

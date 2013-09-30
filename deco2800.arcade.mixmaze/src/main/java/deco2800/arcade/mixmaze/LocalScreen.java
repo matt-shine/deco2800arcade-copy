@@ -34,10 +34,6 @@ class LocalScreen extends GameScreen {
 
 		model.spawnItems();
 
-		/* update player status */
-		left.update(p1);
-		right.update(p2);
-
 		stage.act(delta);
 		stage.draw();
 		//Table.drawDebug(stage);
@@ -53,30 +49,35 @@ class LocalScreen extends GameScreen {
 	}
 
 	protected void setupGameBoard() {
+		TileViewModel tile;
 		int boardSize = model.getBoardSize();
 		int tileSize = 640 / boardSize;
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
-				tileTable.add(new TileViewModel(
-						model.getBoardTile(i, j),
-						model,
-						tileSize,
-						renderer))
-						.size(tileSize, tileSize);
+				tile = new TileViewModel(model, i, j,
+						tileSize, renderer);
+				tileTable.add(tile).size(tileSize, tileSize);
+				model.getBoardTile(i, j).addViewer(tile);
 			}
 			if (j < boardSize)
 				tileTable.row();
 		}
 
-		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
-				1,new Settings().p1Controls);
-		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
-				2,new Settings().p2Controls);
+		p1 = new PlayerViewModel(model, tileSize,
+				1,new Settings().p1Controls, scorebar[0],
+				left);
+		p2 = new PlayerViewModel(model, tileSize,
+				2,new Settings().p2Controls, scorebar[1],
+				right);
+		model.getPlayer1().addViewer(p1);
+		model.getPlayer2().addViewer(p2);
 		gameArea.addActor(p1);
 		gameArea.addActor(p2);
 		scorebar[0].setBoxColor(p1.getColor());
 		scorebar[1].setBoxColor(p2.getColor());
+		left.setPlayerName("kate_is_kewl");
+		right.setPlayerName("mixMAZEr0x");
 	}
 
 	protected void setupTimer() {
@@ -114,7 +115,7 @@ class LocalScreen extends GameScreen {
 				} else {
 					/* winner */
 					resultLabel.setText("Player "
-							+ winner.getPlayerID()
+							+ winner.getId()
 							+ " win");
 				}
 				endGameTable.setVisible(true);

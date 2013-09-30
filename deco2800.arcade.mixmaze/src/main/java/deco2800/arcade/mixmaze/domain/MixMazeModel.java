@@ -69,12 +69,83 @@ public class MixMazeModel implements IMixMazeModel {
 	private Date gameEndTime;
 
 	// Player data
-	private PlayerModel player1;
-	private PlayerModel player2;
+	private PlayerModel[] player;
 
 	// Item spawning data
 	private Random spawner;
 	private long lastSpawned;
+
+	/**
+	 * Constructor
+	 *
+	 * @param size The size of the game board
+	 * @param difficulty The game difficulty
+	 * @param maxSeconds The maximum time of a game session in seconds
+	 * @throws IllegalArgumentException If <code>size</code> is not in range
+	 * from 5 to 10, or <code>maxMinutes</code> is not in range from 2 to 15.
+	 */
+	public MixMazeModel(int size, Difficulty difficulty, int maxSeconds) {
+		if(size < 5 || size > 10) {
+			throw new IllegalArgumentException("size must be between 5 and 10.");
+		}
+
+		if(maxSeconds < 30 || maxSeconds > 900) {
+			throw new IllegalArgumentException("maxSeconds must be between 30 and 900.");
+		}
+
+		// Initialize default fields
+		spawner = new Random();
+		state = GameState.NOT_STARTED;
+
+		// Initialize board/items data
+		boardSize = size;
+		board = new TileModel[boardSize][boardSize];
+		items = new ItemModel[boardSize][boardSize];
+		for(int row = 0; row < boardSize; ++row) {
+			for(int column = 0; column < boardSize; ++column) {
+				TileModel[] adjTiles = new TileModel[4];
+				int[] tileX = new int[] { (column - 1), column, (column + 1), column };
+				int[] tileY = new int[] { row, (row - 1), row, (row + 1) };
+				for(int tileDir = 0; tileDir < 4; ++tileDir) {
+					if(checkCoordinates(tileX[tileDir], tileY[tileDir])) {
+						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);
+					}
+				}
+				board[row][column] = new TileModel(column, row, adjTiles);
+			}
+		}
+
+		// Set game settings
+		this.difficulty = difficulty;
+		gameMaxTime = maxSeconds;
+
+		player = new PlayerModel[2];
+		// Initialize player 1
+		player[0] = new PlayerModel(1);
+		player[0].setX(0);
+		player[0].setY(0);
+		player[0].setDirection(EAST);
+		onPlayerMove(player[0], 0, 0);
+
+		// Initialize player 2
+		player[1] = new PlayerModel(2);
+		player[1].setX(boardSize - 1);
+		player[1].setY(boardSize - 1);
+		player[1].setDirection(WEST);
+		onPlayerMove(player[1], (boardSize - 1), (boardSize - 1));
+	}
+
+	@Override
+	public void switchAction(int id) {
+		player[id - 1].switchAction();
+	}
+
+	@Override
+	public void useAction(int id) {
+		PlayerModel p = player[id - 1];
+
+		p.useAction(board[p.getY()][p.getX()]);
+	}
 
 	/**
 	 * Specifies if the game is running
@@ -109,7 +180,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 * (x, y) position is out of range
 	 */
 	public TileModel getBoardTile(int x, int y) {
-		if(!checkCoordinates(x, y)) {
+		if (!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
 		}
 		return board[y][x];
@@ -153,7 +224,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @return <CODE>PlayerModel</CODE> representing player one
 	 */
 	public IPlayerModel getPlayer1() {
-		return player1;
+		return player[0];
 	}
 
 	/**
@@ -161,7 +232,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @return <CODE>PlayerModel</CODE> representing player two
 	 */
 	public IPlayerModel getPlayer2() {
-		return player2;
+		return player[1];
 	}
 
 	/**
@@ -196,19 +267,16 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Checks if a player is currently at
-	 * the specified (x, y) position
+	 * Checks if any player is at the specified position.
+	 *
 	 * @param x X position on the game board
 	 * @param y y position on the game board
 	 * @return <CODE>true</CODE> if player is present at specified (x, y),
 	 * <CODE>false</CODE> otherwise
 	 */
 	private boolean hasPlayerAtPosition(int x, int y) {
-		if(!checkCoordinates(x, y)) {
-			throw COORDS_OUT_OF_RANGE;
-		}
-		return (player1.getX() == x && player1.getY() == y)
-				|| (player2.getX() == x && player2.getY() == y);
+		return (player[0].getX() == x && player[0].getY() == y)
+				|| (player[1].getX() == x && player[1].getY() == y);
 	}
 
 	/**
@@ -235,10 +303,10 @@ public class MixMazeModel implements IMixMazeModel {
 		// End game
 		state = GameState.END;
 		gameEndTime = Calendar.getInstance().getTime();
-		int player1Score = getPlayerScore(player1);
-		int player2Score = getPlayerScore(player2);
+		int player1Score = getPlayerScore(player[0]);
+		int player2Score = getPlayerScore(player[1]);
 		if(player1Score != player2Score) {
-			return (player1Score > player2Score) ? player1 : player2;
+			return (player1Score > player2Score) ? player[0] : player[1];
 		} else {
 			return null;
 		}
@@ -350,7 +418,8 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Set the item at the specified (x, y) position
-	 * @param item The specified item, can be <CODE>null</CODE>
+	 *
+	 * @param item The specified item, can be <code>null</code>
 	 * @param x X position on the game board
 	 * @param y Y position on the game board
 	 */
@@ -359,28 +428,29 @@ public class MixMazeModel implements IMixMazeModel {
 			throw COORDS_OUT_OF_RANGE;
 		}
 		items[y][x] = item;
+		if (item == null)
+			board[y][x].updateType(ItemType.NONE);
+		else
+			board[y][x].updateType(item.getType());
 	}
 
 	@Override
-	public void movePlayer(IPlayerModel iPlayer, int direction) {
+	public void movePlayer(int id, int direction) {
 		if (state != GameState.RUNNING)
 			throw NOT_STARTED;
-		else if (iPlayer == null)
-			throw new IllegalArgumentException(
-					"player cannot be null");
 		else if (!isDirection(direction))
 			throw NOT_A_DIRECTION;
 
-		PlayerModel player = (PlayerModel) iPlayer;
-		int nextX = player.getNextX();
-		int nextY = player.getNextY();
+		PlayerModel p = player[id - 1];
+		int nextX = p.getNextX();
+		int nextY = p.getNextY();
 
-		if (player.getDirection() != direction) {
-			player.setDirection(direction);
-		} else if (canMove(player, nextX, nextY,
+		if (p.getDirection() != direction) {
+			p.setDirection(direction);
+		} else if (canMove(p, nextX, nextY,
 				getPolarDirection(direction))) {
-			player.move();
-			onPlayerMove(player, nextX, nextY);
+			p.move();
+			onPlayerMove(p, nextX, nextY);
 		}
 	}
 
@@ -428,64 +498,6 @@ public class MixMazeModel implements IMixMazeModel {
 
 		if (item != null && player.pickupItem(item))
 			setSpawnedItem(null, x, y);
-	}
-
-	/**
-	 * <CODE>MixMazeModel</CODE> constructor
-	 * @param size The size of the game board
-	 * @param difficulty The game difficulty
-	 * @param maxSeconds The maximum time of a game session in seconds
-	 * @throws IllegalArgumentException If <code>size</code> is not in range
-	 * from 5 to 10, or <code>maxMinutes</code> is not in range from 2 to 15.
-	 */
-	public MixMazeModel(int size, Difficulty difficulty, int maxSeconds) {
-		if(size < 5 || size > 10) {
-			throw new IllegalArgumentException("size must be between 5 and 10.");
-		}
-
-		if(maxSeconds < 30 || maxSeconds > 900) {
-			throw new IllegalArgumentException("maxSeconds must be between 30 and 900.");
-		}
-
-		// Initialize default fields
-		spawner = new Random();
-		state = GameState.NOT_STARTED;
-
-		// Initialize board/items data
-		boardSize = size;
-		board = new TileModel[boardSize][boardSize];
-		items = new ItemModel[boardSize][boardSize];
-		for(int row = 0; row < boardSize; ++row) {
-			for(int column = 0; column < boardSize; ++column) {
-				TileModel[] adjTiles = new TileModel[4];
-				int[] tileX = new int[] { (column - 1), column, (column + 1), column };
-				int[] tileY = new int[] { row, (row - 1), row, (row + 1) };
-				for(int tileDir = 0; tileDir < 4; ++tileDir) {
-					if(checkCoordinates(tileX[tileDir], tileY[tileDir])) {
-						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);
-					}
-				}
-				board[row][column] = new TileModel(column, row, adjTiles);
-			}
-		}
-
-		// Set game settings
-		this.difficulty = difficulty;
-		gameMaxTime = maxSeconds;
-
-		// Initialize player 1
-		player1 = new PlayerModel(1);
-		player1.setX(0);
-		player1.setY(0);
-		player1.setDirection(EAST);
-		onPlayerMove(player1, 0, 0);
-
-		// Initialize player 2
-		player2 = new PlayerModel(2);
-		player2.setX(boardSize - 1);
-		player2.setY(boardSize - 1);
-		player2.setDirection(WEST);
-		onPlayerMove(player2, (boardSize - 1), (boardSize - 1));
 	}
 
 }

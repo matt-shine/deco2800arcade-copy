@@ -1,11 +1,15 @@
 package deco2800.arcade.mixmaze.domain.view;
 
+import deco2800.arcade.mixmaze.TileViewModel;
+
 /**
  * ITileModel
  */
 public interface ITileModel {
 
 	static final String LOG = "TileModel: ";
+
+	public void addViewer(TileViewModel v);
 
 	/**
 	 * Checks if the wall on the specified <code>direction</code> is built.

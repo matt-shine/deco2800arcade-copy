@@ -7,7 +7,6 @@ import deco2800.arcade.mixmaze.domain.view.IBrickModel;
 import deco2800.arcade.mixmaze.domain.view.IItemModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel.PlayerAction;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.utils.KeyManager;
 
@@ -30,33 +29,41 @@ import static com.badlogic.gdx.Input.Keys.*;
 /**
  * PlayerViewModel draws the character of the player.
  */
-final class PlayerViewModel extends Actor {
+public final class PlayerViewModel extends Actor {
 
 	private static final String LOG = PlayerViewModel.class.getSimpleName();
 
-	private final IPlayerModel model;
 	private final IMixMazeModel gameModel;
 	private final int tileSize;
 	private final TextureRegion[] region;
 	private final KeyManager km;
 	private final int id;
+	private final GameScreen.Scorebar scorebar;
+	private final GameScreen.SidePanel sidePanel;
+
+	private int x;
+	private int y;
+	private int direction;
 
 	/**
 	 * Constructor
 	 *
 	 * @param playerControls
 	 */
-	PlayerViewModel(IPlayerModel model, IMixMazeModel gameModel,
-			int tileSize, int id, int[] playerControls) {
+	PlayerViewModel(IMixMazeModel gameModel,
+			int tileSize, int id, int[] playerControls,
+			GameScreen.Scorebar scorebar,
+			GameScreen.SidePanel sidePanel) {
 		Vector2 stagePos;
 		Texture texture;
 		HashMap<Integer, Integer> mapping =
 				new HashMap<Integer, Integer>();
 
-		this.model = model;
 		this.gameModel = gameModel;
 		this.tileSize = tileSize;
 		this.id = id;
+		this.scorebar = scorebar;
+		this.sidePanel = sidePanel;
 
 	if(playerControls[0] != UP) mapping.put(playerControls[0], UP);
 	if(playerControls[1] != DOWN) mapping.put(playerControls[1], DOWN);
@@ -91,11 +98,40 @@ final class PlayerViewModel extends Actor {
 		Color old = batch.getColor();
 
 		batch.setColor(this.getColor());
-		batch.draw(region[model.getDirection()],
-				model.getX() * tileSize,
-				640 - (model.getY() + 1) * tileSize,
+		batch.draw(region[direction],
+				x * tileSize,
+				640 - (y + 1) * tileSize,
 				tileSize, tileSize);
 		batch.setColor(old);
+	}
+
+	public void updateScore(int score) {
+		scorebar.update(score);
+	}
+
+	public void updateBrick(int amount) {
+		sidePanel.updateBrick(amount);
+	}
+
+	public void updatePick(boolean hasPick) {
+		sidePanel.updatePick(hasPick);
+	}
+
+	public void updateTnt(boolean hasTnt) {
+		sidePanel.updateTnt(hasTnt);
+	}
+
+	public void updateAction(IPlayerModel.Action action) {
+		sidePanel.updateAction(action);
+	}
+
+	public void updateDirection(int direction) {
+		this.direction = direction;
+	}
+
+	public void updatePosition(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	/**
@@ -112,6 +148,7 @@ final class PlayerViewModel extends Actor {
 	 *
 	 * @return the amount of bricks
 	 */
+	/*
 	public int getBrickAmount() {
 		IBrickModel brick = model.getBrick();
 
@@ -121,7 +158,9 @@ final class PlayerViewModel extends Actor {
 			return brick.getAmount();
 		}
 	}
+	*/
 
+	/*
 	private boolean hasItem(IItemModel.ItemType type) {
 		IItemModel item = null;
 
@@ -136,6 +175,7 @@ final class PlayerViewModel extends Actor {
 
 		return (item == null) ? false : true;
 	}
+	*/
 
 	/**
 	 * Returns if this player has a pick.
@@ -143,9 +183,11 @@ final class PlayerViewModel extends Actor {
 	 * @param pid the player id, can be either 1 or 2
 	 * @return true if the player has pick, otherwise false
 	 */
+	/*
 	public boolean hasPick() {
 		return hasItem(PICK);
 	}
+	*/
 
 	/**
 	 * Returns if this player has a TNT.
@@ -153,18 +195,11 @@ final class PlayerViewModel extends Actor {
 	 * @param pid the player id, can be either 1 or 2
 	 * @return true if the player has TNT, otherwise false
 	 */
+	/*
 	public boolean hasTNT() {
 		return hasItem(TNT);
 	}
-
-	/**
-	 * Returns the number of boxes this player has.
-	 *
-	 * @return the number of boxes
-	 */
-	public int getScore() {
-		return gameModel.getPlayerScore(model);
-	}
+	*/
 
 	/**
 	 * Returns the active action of this player.
@@ -172,15 +207,18 @@ final class PlayerViewModel extends Actor {
 	 * @return one of <code>USE_BRICK</code>, <code>USE_PICK</code>, or
 	 * 	   <code>USE_TNT</code>
 	 */
+	/*
 	public PlayerAction getAction() {
 		return model.getPlayerAction();
 	}
+	*/
 
 	/**
 	 * Returns the name of the active action of this player.
 	 *
 	 * @return a String representing the active action
 	 */
+	/*
 	public String getActionName() {
 		PlayerAction act = model.getPlayerAction();
 
@@ -195,6 +233,7 @@ final class PlayerViewModel extends Actor {
 			return "unknown";
 		}
 	}
+	*/
 
 	/*
 	 * Handles movement input.
@@ -205,24 +244,22 @@ final class PlayerViewModel extends Actor {
 		public boolean keyDown(InputEvent event, int keycode) {
 			switch (km.get(keycode)) {
 			case LEFT:
-				gameModel.movePlayer(model, WEST);
+				gameModel.movePlayer(id, WEST);
 				break;
 			case RIGHT:
-				gameModel.movePlayer(model, EAST);
+				gameModel.movePlayer(id, EAST);
 				break;
 			case UP:
-				gameModel.movePlayer(model, NORTH);
+				gameModel.movePlayer(id, NORTH);
 				break;
 			case DOWN:
-				gameModel.movePlayer(model, SOUTH);
+				gameModel.movePlayer(id, SOUTH);
 				break;
 			case NUM_5:
-				model.switchAction();
+				gameModel.switchAction(id);
 				break;
 			case NUM_6:
-				ITileModel tile = gameModel.getBoardTile(
-						model.getX(), model.getY());
-				model.useAction(tile);
+				gameModel.useAction(id);
 				break;
 			default:
 				return false;	// event not handled

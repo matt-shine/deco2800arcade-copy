@@ -1,11 +1,13 @@
 package deco2800.arcade.mixmaze.domain;
 
+import deco2800.arcade.mixmaze.PlayerViewModel;
 import deco2800.arcade.mixmaze.domain.view.IBrickModel;
 import deco2800.arcade.mixmaze.domain.view.IItemModel;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.IPickModel;
 import deco2800.arcade.mixmaze.domain.view.ITNTModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
+import java.util.ArrayList;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
@@ -16,14 +18,15 @@ import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
 public class PlayerModel implements IPlayerModel {
 
 	// Player data
-	private int playerID;
-	private int playerX;
-	private int playerY;
-	private int playerDirection;
-	private PlayerAction playerAction;
+	private int id;
+	private int x;
+	private int y;
+	private int direction;
+	private Action action;
 	private long lastMoved;
 	private long lastAction;
 	private int score;
+	private ArrayList<PlayerViewModel> viewer;
 
 	// Item data
 	private BrickModel brick;
@@ -33,21 +36,54 @@ public class PlayerModel implements IPlayerModel {
 	/**
 	 * Constructs a new Player with the specified <code>id</code>
 	 *
-	 * @param id the playerID of this player
+	 * @param id the id of this player
 	 */
 	public PlayerModel(int id) {
-		playerID = id;
-		playerAction = PlayerAction.USE_BRICK;
+		this.id = id;
+		action = Action.USE_BRICK;
 		brick = new BrickModel(4);
-		this.score = 0;
+		score = 0;
+		viewer = new ArrayList<PlayerViewModel>();
+	}
+
+	@Override
+	public void addViewer(PlayerViewModel v) {
+		viewer.add(v);
+		v.updateScore(score);
+		v.updateDirection(direction);
+		v.updatePosition(x, y);
+		v.updateAction(action);
+		v.updateBrick(brick.getAmount());
+		v.updatePick(pick != null);
+		v.updateTnt(tnt != null);
 	}
 
 	/**
-	 * Returns the playerID of this player
-	 * @return the <code>playerID</> of this player
+	 * Increments the score of this player by 1.
 	 */
-	public int getPlayerID() {
-		return playerID;
+	void incrementScore() {
+		changeScore(1);
+	}
+
+	/**
+	 * Decrements the score of this player by 1.
+	 */
+	void decrementScore() {
+		changeScore(-1);
+	}
+
+	private void changeScore(int delta) {
+		score += delta;
+		for (PlayerViewModel v : viewer)
+			v.updateScore(score);
+	}
+
+	/**
+	 * Returns the id of this player
+	 * @return the <code>id</> of this player
+	 */
+	public int getId() {
+		return id;
 	}
 
 	/**
@@ -57,7 +93,7 @@ public class PlayerModel implements IPlayerModel {
 	 * @return the x-coordinate of this player
 	 */
 	public int getX() {
-		return playerX;
+		return x;
 	}
 
 	/**
@@ -67,10 +103,10 @@ public class PlayerModel implements IPlayerModel {
 	 * @return the next x-coordinate in relative to the direction facing.
 	 */
 	public int getNextX() {
-		if(!isXDirection(playerDirection)) {
-			return playerX;
+		if(!isXDirection(direction)) {
+			return x;
 		}
-		return isPositiveDirection(playerDirection) ? (playerX + 1) : (playerX - 1);
+		return isPositiveDirection(direction) ? (x + 1) : (x - 1);
 	}
 
 	/**
@@ -80,7 +116,7 @@ public class PlayerModel implements IPlayerModel {
 	 * @param x the x-coordinate of this player
 	 */
 	public void setX(int x) {
-		playerX = x;
+		this.x = x;
 	}
 
 	/**
@@ -90,24 +126,24 @@ public class PlayerModel implements IPlayerModel {
 	 * @return the y-coordinate of this player
 	 */
 	public int getY() {
-		return playerY;
+		return y;
 	}
 
 	public int getNextY() {
-		if(!isYDirection(playerDirection)) {
-			return playerY;
+		if(!isYDirection(direction)) {
+			return y;
 		}
-		return isPositiveDirection(playerDirection) ? (playerY + 1) : (playerY - 1);
+		return isPositiveDirection(direction) ? (y + 1) : (y - 1);
 	}
 
 	/**
 	 * Sets the y-coordinates for this player. The y-coordinate's orgin is at
 	 * the top left.
 	 *
-	 * @param x the y-coordinate of this player
+	 * @param y the y-coordinate of this player
 	 */
 	public void setY(int y) {
-		playerY = y;
+		this.y = y;
 	}
 
 	/** Checks if this player can move. The player can only make a move after 0.3
@@ -120,13 +156,14 @@ public class PlayerModel implements IPlayerModel {
 	}
 
 	/**
-	 * Moves the player. This player is moved one <code>tile</> forward in the direction facing.
-	 *
+	 * Moves the player by one <code>tile</code> in the facing direction.
 	 */
 	public void move() {
-		if(canMove()) {
-			playerX = getNextX();
-			playerY = getNextY();
+		if (canMove()) {
+			x = getNextX();
+			y = getNextY();
+			for (PlayerViewModel v : viewer)
+				v.updatePosition(x, y);
 			lastMoved = System.currentTimeMillis();
 		}
 	}
@@ -137,18 +174,21 @@ public class PlayerModel implements IPlayerModel {
 	 * @return the facing <code>direction</> of this player
 	 */
 	public int getDirection() {
-		return playerDirection;
+		return direction;
 	}
 
 	/**
 	 * Change this player's direction by the specified <code>direction</>
+	 *
 	 * @param direction an integer representation of the direction
 	 */
 	public void setDirection(int direction) {
-		if(!isDirection(direction)) {
+		if (!isDirection(direction)) {
 			throw NOT_A_DIRECTION;
 		}
-		playerDirection = direction;
+		this.direction = direction;
+		for (PlayerViewModel v : viewer)
+			v.updateDirection(direction);
 	}
 
 	public IBrickModel getBrick() {
@@ -178,12 +218,15 @@ public class PlayerModel implements IPlayerModel {
 			BrickModel brick = (BrickModel) item;
 
 			this.brick.mergeBricks(brick);
+			updateBrick(this.brick.getAmount());
 			res = (brick.getAmount() == 0);
 		} else if(item.getType() == PICK && this.pick == null) {
 			pick = (PickModel) item;
+			updatePick(true);
 			res = true;
 		} else if(item.getType() == TNT && this.tnt == null) {
 			tnt = (TNTModel) item;
+			updateTnt(true);
 			res = true;
 		}
 		return res;
@@ -194,8 +237,8 @@ public class PlayerModel implements IPlayerModel {
 	 *
 	 * @return one of USE_BRICK, USE_PICK, and USE_TNT
 	 */
-	public PlayerAction getPlayerAction() {
-		return playerAction;
+	public Action getAction() {
+		return action;
 	}
 
 	/**
@@ -205,10 +248,12 @@ public class PlayerModel implements IPlayerModel {
 	 * the associated item.
 	 */
 	public void switchAction() {
-		playerAction = playerAction.getNextAction();
-		if((playerAction == PlayerAction.USE_PICK && pick == null) || (playerAction == PlayerAction.USE_TNT && tnt == null)) {
-			switchAction();
-		}
+		IPlayerModel.Action old = action;
+
+		action = action.getNextAction(pick != null,
+				tnt != null);
+		if (action != old)
+			updateAction(action);
 	}
 
 	/**Checks of this player can perform a action.
@@ -229,28 +274,31 @@ public class PlayerModel implements IPlayerModel {
 
 		if(canUseAction()) {
 			boolean used = false;
-			if(playerAction == PlayerAction.USE_BRICK && brick.getAmount() > 0) {
-				WallModel wall = (WallModel) tile.getWall(playerDirection);
+			if(action == Action.USE_BRICK && brick.getAmount() > 0) {
+				WallModel wall = (WallModel) tile.getWall(direction);
 				if(!wall.isBuilt()) {
 					brick.removeOne();
 					wall.build(this);
 					used = true;
+					updateBrick(brick.getAmount());
 				}
-			} else if(playerAction == PlayerAction.USE_PICK && pick != null) {
-				WallModel wall = (WallModel) tile.getWall(playerDirection);
+			} else if(action == Action.USE_PICK && pick != null) {
+				WallModel wall = (WallModel) tile.getWall(direction);
 				if(wall.isBuilt()) {
 					pick = null;
 					wall.destroy(this);
+					updatePick(false);
 					used = true;
 				}
-			} else if(playerAction == PlayerAction.USE_TNT && tnt != null) {
+			} else if(action == Action.USE_TNT && tnt != null) {
 				tnt = null;
-				for(int direction = 0; direction < 4; ++direction) {
-					WallModel wall = (WallModel) tile.getWall(direction);
+				for(int dir = 0; dir < 4; ++dir) {
+					WallModel wall = (WallModel) tile.getWall(dir);
 					if(wall.isBuilt()) {
 						wall.destroy(this);
 					}
 				}
+				updateTnt(false);
 				used = true;
 			}
 			lastAction = used ? System.currentTimeMillis() : lastAction;
@@ -259,9 +307,29 @@ public class PlayerModel implements IPlayerModel {
 		return false;
 	}
 
+	private void updateBrick(int amount) {
+		for (PlayerViewModel v : viewer)
+			v.updateBrick(amount);
+	}
+
+	private void updatePick(boolean hasPick) {
+		for (PlayerViewModel v : viewer)
+			v.updatePick(hasPick);
+	}
+
+	private void updateTnt(boolean hasTnt) {
+		for (PlayerViewModel v : viewer)
+			v.updateTnt(hasTnt);
+	}
+
+	private void updateAction(IPlayerModel.Action action) {
+		for (PlayerViewModel v : viewer)
+			v.updateAction(action);
+	}
+
 	@Override
 	public String toString() {
-		return "<Player " + playerID + ">";
+		return "<Player " + id + ">";
 	}
 
 }

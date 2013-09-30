@@ -123,6 +123,7 @@ class ClientScreen extends GameScreen {
 		logger.debug("boardSize: {}", boardSize);
 		int tileSize = 640 / boardSize;
 
+		/*
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
 				tileTable.add(new TileViewModel(
@@ -135,13 +136,16 @@ class ClientScreen extends GameScreen {
 			if (j < boardSize)
 				tileTable.row();
 		}
+		*/
 
+		/*
 		p1 = new PlayerViewModel(remotePlayer[0], model, tileSize,
-				1,new Settings().p1Controls);
+				1,new Settings().p1Controls, scorebar[0]);
 		p2 = new PlayerViewModel(remotePlayer[1], model, tileSize,
-				2,new Settings().p2Controls);
+				2,new Settings().p2Controls, scorebar[1]);
 		gameArea.addActor(p1);
 		gameArea.addActor(p2);
+		*/
 	}
 
 }

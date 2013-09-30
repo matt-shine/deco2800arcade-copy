@@ -2,7 +2,6 @@ package deco2800.arcade.mixmaze.domain;
 
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.IWallModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +9,18 @@ import java.util.List;
  * WallModel represents an active/inactive wall on a tile.
  */
 public class WallModel implements IWallModel {
-	private List<TileModel> tiles;
+
+	private final List<TileModel> tiles;
+
 	private boolean built;
 	private PlayerModel builder;
+
+	/**
+	 * Constructor
+	 */
+	public WallModel() {
+		tiles = new ArrayList<TileModel>();
+	}
 
 	public void addTile(TileModel tile) {
 		if (tiles.contains(tile)) {
@@ -54,8 +62,9 @@ public class WallModel implements IWallModel {
 		builder = player;
 
 		// Executes recursive box building
-		for (TileModel tile : tiles) {
-			tile.buildBox(player);
+		for (TileModel t : tiles) {
+			t.validateBox(player);
+			t.updateWall(this, built);
 		}
 	}
 
@@ -65,8 +74,10 @@ public class WallModel implements IWallModel {
 		}
 		built = false;
 		builder = null;
-		for (TileModel t : tiles)
-			t.setBoxer(null);
+		for (TileModel t : tiles) {
+			t.validateBox(player);
+			t.updateWall(this, built);
+		}
 	}
 
 	@Override
@@ -79,10 +90,4 @@ public class WallModel implements IWallModel {
 		return str.toString();
 	}
 
-	/**
-	 * Constructor
-	 */
-	public WallModel() {
-		tiles = new ArrayList<TileModel>();
-	}
 }

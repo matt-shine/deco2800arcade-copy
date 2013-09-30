@@ -82,7 +82,7 @@ public class Arena extends Sprite {
 	}
 	
 	private void resizeZones(int x, int y) {
-		//FIXME big method
+
 		//create new p1Monster zones
 		Map<Rectangle, ExtendedSprite> p1MonsterZones = new LinkedHashMap<Rectangle, ExtendedSprite>();
 		

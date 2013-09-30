@@ -16,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -24,14 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Timer;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
-import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
 
 /**
  * GameScreen draws all elements in a game session.
  */
 final class GameScreen implements Screen {
-
 	private static final String LOG = GameScreen.class.getSimpleName();
 
 	private final MixMaze game;
@@ -40,12 +37,14 @@ final class GameScreen implements Screen {
 	private final Skin skin;
 
 	private Label timerLabel;
-	private int countdown;
+	private int elapsed;
 	private Table tileTable;
 	private Group gameArea;
 	private Table endGameTable;
 	private PlayerViewModel p1;
 	private PlayerViewModel p2;
+	private Label[] userLabels;
+	private Label[] scoreLabels;
 	private MixMazeModel model;
 	private TextButton backMenu;
 	private Label resultLabel;
@@ -81,8 +80,15 @@ final class GameScreen implements Screen {
 		left = new SidePanel();
 		right = new SidePanel();
 
-		timerLabel = new Label("timer", skin, "timer-white");
-		timerLabel.setFontScale(2f);
+		userLabels = new Label[2];
+		scoreLabels = new Label[2];
+
+		userLabels[0] = new Label("Player 1", skin);
+		userLabels[1] = new Label("Player 2", skin);
+		scoreLabels[0] = new Label("Player 1 box: 0", skin);
+		scoreLabels[1] = new Label("Player 2 box: 0", skin);
+
+		timerLabel = new Label("timer", skin);
 		tileTable = new Table();
 		gameArea = new Group();
 		endGameTable = new Table();
@@ -99,12 +105,16 @@ final class GameScreen implements Screen {
 		stage.addActor(root);
 
 		/* header */
-		root.add(timerLabel).expandX().colspan(3);
+		root.add(userLabels[0]).width(320);
+		root.add(scoreLabels[0]);
+		root.add(timerLabel).expandX();
+		root.add(scoreLabels[1]);
+		root.add(userLabels[1]).width(320);
 		root.row();
 
 		/* body */
 		root.add(left);
-		root.add(gameBoard);
+		root.add(gameBoard).colspan(3);
 		root.add(right);
 
 		/*
@@ -118,22 +128,6 @@ final class GameScreen implements Screen {
 		gameBoard.add(tileTable);
 		gameBoard.add(gameArea);
 		gameBoard.add(endGameTable);
-
-		/*
-		 * This listener should be added only once.
-		 */
-		gameArea.addListener(new InputListener() {
-			public boolean keyDown(InputEvent event, int keycode) {
-				Actor actor = event.getListenerActor();
-
-				for (Actor child : gameArea.getChildren()) {
-					if (child.notify(event, false))
-						return true;
-				}
-
-				return false;
-			}
-		});
 	}
 
 	private void setupGameBoard() {
@@ -172,16 +166,23 @@ final class GameScreen implements Screen {
 		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
 		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		/* update player status on side panels */
+		/*
+		 * TODO: these status updates should be encapsulated
+		 * in a method or a class.
+		 */
 		left.update(p1);
 		right.update(p2);
 
+		userLabels[0].setText("player 1: " + p1.getActionName());
+		userLabels[1].setText("player 2: " + p2.getActionName());
+		scoreLabels[0].setText("boxes: " + p1.getScore());
+		scoreLabels[1].setText("boxes: " + p2.getScore());
+
 		stage.act(delta);
 		stage.draw();
-		//Table.drawDebug(stage);
+		Table.drawDebug(stage);
 
 		if (endGameTable.isVisible() && backMenu.isChecked()) {
-			/* clean up this session and go to menu screen */
 			backMenu.toggle();
 			endGameTable.setVisible(false);
 			tileTable.clear();
@@ -216,32 +217,18 @@ final class GameScreen implements Screen {
 		Gdx.app.debug(LOG, "showing");
 
 		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 30);
+		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60);
 		setupGameBoard();
 
 		/* set timer */
-		Label.LabelStyle style = timerLabel.getStyle();
-		style.fontColor = WHITE;
-		timerLabel.setStyle(style);
-
-		countdown = model.getGameMaxTime();
+		elapsed = 0;
 		Timer.schedule(new Timer.Task() {
 			public void run() {
-				int min = countdown / 60;
-				int sec = countdown % 60;
-
-				if (countdown == 10) {
-					Label.LabelStyle style = timerLabel
-							.getStyle();
-					style.fontColor = RED;
-					timerLabel.setStyle(style);
-				}
-				timerLabel.setText(String.format("%s%d:%s%d",
-						(min < 10) ? "0" : "", min,
-						(sec < 10) ? "0" : "", sec));
-				countdown -= 1;
+				elapsed += 1;
+				timerLabel.setText("Timer: "
+						 + elapsed);
 			}
-		}, 0, 1, model.getGameMaxTime());
+		}, 1, 1, model.getGameMaxTime());
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				PlayerModel winner;
@@ -259,16 +246,22 @@ final class GameScreen implements Screen {
 				}
 				endGameTable.setVisible(true);
 			}
-		/*
-		 * FIXME: this does not look like a good solution.
-		 * It takes some time for timerLabel to change text,
-		 * and therefore, without the extra 1, the game will end
-		 * before the timer showing up 00:00.
-		 */
-		}, model.getGameMaxTime() + 1);
+		}, model.getGameMaxTime());
 
 		/* start game */
 		Gdx.input.setInputProcessor(stage);
+		gameArea.addListener(new InputListener() {
+			public boolean keyDown(InputEvent event, int keycode) {
+				Actor actor = event.getListenerActor();
+
+				for (Actor child : gameArea.getChildren()) {
+					if (child.notify(event, false))
+						return true;
+				}
+
+				return false;
+			}
+		});
 		stage.setKeyboardFocus(gameArea);
 		model.startGame();
 	}
@@ -289,7 +282,6 @@ final class GameScreen implements Screen {
 		private Image[] brickImages;
 		private Image pickImage;
 		private Image tntImage;
-		private Label scoreLabel;
 
 		SidePanel() {
 			Table brickTable = new Table();
@@ -300,15 +292,10 @@ final class GameScreen implements Screen {
 			pickImage = new Image(PICK_REGION);
 			tntImage = new Image(TNT_REGION);
 
-			scoreLabel = new Label("", skin);
-
 			/* layout */
-			this.add(scoreLabel);
-			this.row();
-
 			for (int i = 0; i < 3; i++) {
 				itemStacks[i] = new Stack();
-				this.add(itemStacks[i]).size(210, 210);
+				this.add(itemStacks[i]);
 				if (i < 2)
 					this.row();
 
@@ -323,16 +310,13 @@ final class GameScreen implements Screen {
 			/* bricks */
 			for (int i = 0; i < 10; i++) {
 				brickImages[i] = new Image(BRICK_REGION);
-				brickTable.add(brickImages[i]).size(52, 52);
+				brickTable.add(brickImages[i]).size(64, 64);
 				if ((i + 1) % 4 == 0)
 					brickTable.row();
 			}
 		}
 
 		void update(PlayerViewModel p) {
-			scoreLabel.setText("Player" + p.getId()
-					+ " boxes " + p.getScore());
-
 			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
 				brickImages[i].setVisible(i < n);
 			pickImage.setVisible(p.hasPick());

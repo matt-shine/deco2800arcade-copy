@@ -1,4 +1,0 @@
-I do find myself wondering if the piece movement has been done as elegantly as possible. There are a lot of
-bit methods throughout the code and it also appears that movement logic is in a couple of places? I find myself
-confused about where logic / data is sitting between the different classes.
-Phillip

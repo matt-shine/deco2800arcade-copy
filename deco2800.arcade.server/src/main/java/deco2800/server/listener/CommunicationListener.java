@@ -1,14 +1,14 @@
 package deco2800.server.listener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
-
-import java.util.Map;
-import java.util.HashMap;
 
 public class CommunicationListener extends Listener {
 	

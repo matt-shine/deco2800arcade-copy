@@ -5,15 +5,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollectionList;
 import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
+import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
 public class SpriteLogic {
-	//FIXME some big methods that may warrant shrinking
+
 	//define array of keys for P1 / P2 zones
 	final static String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
 	final static String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};

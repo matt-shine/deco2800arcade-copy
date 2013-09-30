@@ -1,25 +1,3 @@
 dependencies {
  
 }
-
-List games = []
-
-task(listGames) {
-    String contents = file('games.txt').getText('UTF-8')
-    List file_contents = contents.split('[\\r\\n]+')
-    
-    for (String game : file_contents) {
-        if (game.charAt(0) != "#" && game.charAt(0) != "[\\r\\n]+") {
-            games.add(game)
-        }
-    }
-}
-
-task(pack, dependsOn: "listGames", type: JavaExec) {
-    main = "deco2800.arcade.packman.Pack"
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-// Add dependencies
-for (String game : games)
-    pack.dependsOn(":deco2800.arcade." + game + ":jar")

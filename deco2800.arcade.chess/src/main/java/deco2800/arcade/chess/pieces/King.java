@@ -2,7 +2,6 @@ package deco2800.arcade.chess.pieces;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import deco2800.arcade.chess.Board;
 public class King implements Piece {
 
@@ -188,7 +187,6 @@ public class King implements Piece {
 
 	public ArrayList<int[]> getChecks(Board board) {
 
-		@SuppressWarnings("unused")
 		ArrayList<int[]> possibleChecks = new ArrayList<int[]>();
 		return null;
 

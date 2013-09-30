@@ -1,16 +1,12 @@
 package deco2800.arcade.packman;
 
 import java.io.File;
-import java.lang.System;
-
-import deco2800.arcade.packman.PackageUtils;
 
 /**
  * Client for package manager
  */
 public class PackageClient {
 	
-	private static final String gameFolder = ".." + File.separator + "games";
 	
 	/**
 	 * Initialiser
@@ -18,13 +14,17 @@ public class PackageClient {
 	 * Create the 'Games' directory if it does not exist
 	 */
 	public PackageClient() {
+		File releaseDir = new File("Games");
 		
-		// Create the games folder
-		System.out.println("Creating directory: " + gameFolder);
-		if (PackageUtils.createDirectory(gameFolder)) {
-			System.out.println("Created: " + gameFolder);
-		} else {
-			System.out.println("Failed creating: " + gameFolder);
+		// Create the Release directory if it doesn't exist
+		if (!releaseDir.exists()) {
+			System.out.println("Creating directory: " + releaseDir);
+			
+			if (releaseDir.mkdirs()) {
+				System.out.println("Created: " + releaseDir);
+			} else {
+				System.out.println("Failed creating: " + releaseDir);
+			}
 		}
 	}
 	

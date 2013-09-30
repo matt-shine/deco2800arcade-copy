@@ -7,10 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
@@ -26,8 +28,7 @@ public class MainGame extends Game {
 	final private GameSystem model;
     private Music bgLoop;
     private Sound battleSoundEffect;
-    @SuppressWarnings("unused")
-	private Sound phaseSoundEffect;
+    private Sound phaseSoundEffect;
     private boolean effectsMuted;
     private boolean musicMuted;
     private final boolean muted = false;

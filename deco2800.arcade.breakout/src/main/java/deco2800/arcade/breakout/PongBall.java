@@ -34,7 +34,7 @@ public class PongBall {
 	 */
 	public PongBall() {
 		bounds.x = Breakout.SCREENWIDTH / 2 - PongBall.WIDTH / 2;
-		bounds.y = 15 - PongBall.WIDTH / 2;
+		bounds.y = Breakout.SCREENHEIGHT / 2 - PongBall.WIDTH / 2;
 		bounds.height = WIDTH;
 		bounds.width = WIDTH;
 	}
@@ -48,14 +48,6 @@ public class PongBall {
 	public void setVelocity(Vector2 newVelocity) {
 		this.velocity.x = newVelocity.x;
 		this.velocity.y = newVelocity.y;
-	}
-	
-	public float getX() {
-		return bounds.x;
-	}
-	
-	public float getY() {
-		return bounds.y;
 	}
 
 	/**
@@ -114,11 +106,11 @@ public class PongBall {
 	/**
 	 * Reset the ball to its initial position and velocity
 	 */
-	public void reset(Vector2 paddlePos) {
+	public void reset() {
 		velocity.x = 0;
 		velocity.y = 0;
-		bounds.x = paddlePos.x - PongBall.WIDTH / 2;
-		bounds.y = paddlePos.y + 5 - PongBall.WIDTH / 2;
+		bounds.x = Breakout.SCREENWIDTH / 2 - PongBall.WIDTH / 2;
+		bounds.y = Breakout.SCREENHEIGHT / 2 - PongBall.WIDTH / 2;
 	}
 
 	/**

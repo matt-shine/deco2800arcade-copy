@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import deco2800.arcade.communication.CommunicationView;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.communication.TextMessage;
-//TODO commenting?
+
 public class CommunicationController {
 	
 	private CommunicationView window;

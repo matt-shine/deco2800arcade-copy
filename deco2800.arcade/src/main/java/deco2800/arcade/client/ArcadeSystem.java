@@ -2,7 +2,6 @@ package deco2800.arcade.client;
 
 import java.util.Set;
 
-//TODO commenting?
 public class ArcadeSystem {
 	
 	public static String UI = "arcadeui";
@@ -39,7 +38,7 @@ public class ArcadeSystem {
 		return arcade.hasPlayer();
 	}
 
-    public static void exit() {
+    public static void close() {
         arcade.arcadeExit();
     }
 

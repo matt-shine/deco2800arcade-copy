@@ -63,9 +63,6 @@ final class PlayerViewModel extends Actor {
 			mapping.put(D, RIGHT);
 			mapping.put(G, NUM_5);
 			mapping.put(H, NUM_6);
-		} else if (id == 2) {
-			mapping.put(O, NUM_5);
-			mapping.put(P, NUM_6);
 		}
 		km = new KeyManager(mapping);
 
@@ -90,25 +87,10 @@ final class PlayerViewModel extends Actor {
 		/*
 		 * NOTE: models use the y-down coordinate system.
 		 */
-		if (id == 1) {
-			batch.setColor(1, 0, 0, 1);
-		} else if (id == 2) {
-			batch.setColor(0, 0, 1, 1);
-		}
-
 		batch.draw(region[model.getDirection()],
 				model.getX() * tileSize,
 				640 - (model.getY() + 1) * tileSize,
 				tileSize, tileSize);
-	}
-
-	/**
-	 * Returns the ID of this player.
-	 *
-	 * @return this player's ID
-	 */
-	public int getId() {
-		return id;
 	}
 
 	/**

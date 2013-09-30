@@ -1,9 +1,10 @@
 package deco2800.arcade.burningskies.entities;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.graphics.Texture;
 
-public abstract class Ship extends Entity {
+public abstract class Ship  extends Image {
 
 	protected int health;	
 	protected Vector2 velocity;

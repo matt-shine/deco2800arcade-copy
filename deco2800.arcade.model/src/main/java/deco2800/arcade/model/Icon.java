@@ -39,12 +39,13 @@ public class Icon {
 	 *             Throws IOException if the filepath cannot be resolved to an
 	 *             image.
 	 */
-	public Icon(String filepath) {
+	public Icon(String filepath) throws IOException {
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
+		icon = ImageIO.read(new File(filepath));
 	}
 
 	/**

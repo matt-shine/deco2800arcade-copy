@@ -12,15 +12,6 @@ breakout
 deerforest
 mixmaze
 chess
-landInvaders
 junglejump
 burningskies
 checkers
-landInvaders
-towerdefence
-pacman
-connect4
-raiden
-wl6
-statistics
-snakeLadder

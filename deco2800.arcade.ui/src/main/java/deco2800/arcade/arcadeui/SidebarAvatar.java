@@ -10,44 +10,44 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
 public class SidebarAvatar extends Widget {
 
-    private NinePatch texture;
-    private BitmapFont font;
-    @SuppressWarnings("unused")
-    private Overlay overlay;
+	private NinePatch texture;
+	private BitmapFont font;
+	@SuppressWarnings("unused")
+	private Overlay overlay;
 
-    public SidebarAvatar(Overlay overlay) {
+	public SidebarAvatar(Overlay overlay) {
+		
+		texture = new NinePatch(new Texture(Gdx.files.internal("popupbg.png")), 30, 30, 30, 30);
 
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconMagenta.png")), 30, 30, 30, 30);
+		font = new BitmapFont(false);
+		this.overlay = overlay;
+		
+	}
+	
+	@Override
+	public void act(float d) {
+		super.act(d);
+	}
+	
+	@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		
+		texture.draw(batch, getX(), getY(), 120, 120);
+		font.setColor(Color.WHITE);
+		font.draw(batch, "text", 0, 0);
+	}
 
-        font = new BitmapFont(false);
-        this.overlay = overlay;
+	@Override
+	public float getPrefHeight() {
+		return 120;
+	}
 
-    }
-
-    @Override
-    public void act(float d) {
-        super.act(d);
-    }
-
-    @Override
-    public void draw(SpriteBatch batch, float parentAlpha) {
-
-        texture.draw(batch, getX(), getY() - 20, 170, 170);
-        font.setColor(Color.WHITE);
-        font.draw(batch, "text", 0, 0);
-    }
-
-    @Override
-    public float getPrefHeight() {
-        return 170;
-    }
-
-    @Override
-    public float getPrefWidth() {
-        return 170;
-    }
-
-
-
-
+	@Override
+	public float getPrefWidth() {
+		return 120;
+	}
+	
+	
+	
+	
 }

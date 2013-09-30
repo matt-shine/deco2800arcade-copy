@@ -5,12 +5,10 @@ package deco2800.arcade.mixmaze;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
@@ -21,7 +19,6 @@ final class MenuScreen implements Screen {
 	private final Skin skin;
 	private final Stage stage;
 	private final TextButton startButton;
-	private final TextButton settingsButton;
 
 	/**
 	 * This constructor associate MenuScreen with MixMaze.
@@ -37,16 +34,7 @@ final class MenuScreen implements Screen {
 		stage.addActor(rootTable);
 
 		startButton = new TextButton("New Game", skin);
-		settingsButton = new TextButton("Settings", skin);
 		rootTable.add(startButton);
-		rootTable.add(settingsButton);
-		
-		settingsButton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
-				game.setScreen(game.settingsScreen);
-			}
-		});
-		
 	}
 
 	@Override
@@ -81,7 +69,6 @@ final class MenuScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		
 	}
 
 	@Override

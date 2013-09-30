@@ -1,5 +1,10 @@
 package deco2800.arcade.deerforest.models.cards;
 
+import java.util.List;
+
+import deco2800.arcade.deerforest.models.effects.Attack;
+import deco2800.arcade.deerforest.models.effects.MonsterEffect;
+
 public abstract class AbstractMonster extends AbstractCard {
 
 	private String type;

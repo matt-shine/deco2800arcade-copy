@@ -81,7 +81,7 @@ public class Checkers extends GameClient {
 	 */
 	@Override
 	public void create() {
-		//FIXME big method
+		
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
@@ -185,7 +185,7 @@ public class Checkers extends GameClient {
 	 */
 	@Override
 	public void render() {
-		//FIXME big method
+		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -326,7 +326,6 @@ public class Checkers extends GameClient {
 	private GameStatusUpdate createScoreUpdate() {
 		GameStatusUpdate update = new GameStatusUpdate();
 		update.gameId = game.id;
-		//FIXME deprecated
 		update.username = players[0];
 		//TODO Should also send the score!
 		return update;
@@ -336,7 +335,6 @@ public class Checkers extends GameClient {
 	 * AI makes a move, and change game state to player making move
 	 */
 	private void startPoint() {
-		//FIXME gigantic method
 		int toMoveNum = 0;
 		int direction = 0;
 		int leftEdible = 0;
@@ -533,7 +531,7 @@ public class Checkers extends GameClient {
 
 	
 	private void mouseReleased() {
-		//FIXME big method
+
 		int x = Gdx.input.getX();
 		int y = Gdx.input.getY();
 		int realX = clickToScreenX(x);

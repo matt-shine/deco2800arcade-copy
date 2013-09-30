@@ -10,13 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  */
 public class SidebarMenuItem extends TextButton {
 
-    public SidebarMenuItem(Skin skin, String styleName) {
-        super("", skin, styleName);
+	public SidebarMenuItem(Skin skin, String styleName) {
+		super(styleName, skin);
+		
+	}
 
-    }
-
-    public SidebarMenuItem(Skin skin) {
-        this(skin, "default");
-    }
+	public SidebarMenuItem(Skin skin) {
+		this(skin, "default");
+	}
 
 }

@@ -14,7 +14,7 @@ public class CreditListener extends Listener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 
-		if (object instanceof CreditBalanceRequest) {
+		if (object instanceof CreditBalanceRequest){
 			CreditBalanceRequest creditBalanceRequest = (CreditBalanceRequest) object;
 			int playerID = creditBalanceRequest.playerID;
 			try {

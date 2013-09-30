@@ -33,7 +33,10 @@ public interface UIOverlay {
 	void addPopup(PopupMessage p);
 	
 	GameClient getHost();
-		
+	
+	
 	void setHost(GameClient host);
+	
+	
 	
 }

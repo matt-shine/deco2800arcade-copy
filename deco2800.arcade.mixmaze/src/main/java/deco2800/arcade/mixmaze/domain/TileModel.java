@@ -30,6 +30,11 @@ public class TileModel implements ITileModel {
 		return tileY;
 	}
 
+	@Override
+	public boolean isWallBuilt(int direction) {
+		return getWall(direction).isBuilt();
+	}
+
 	/**
 	 * Returns the adjacent wall specified by <code>direction</code>.
 	 *
@@ -39,7 +44,7 @@ public class TileModel implements ITileModel {
 	 * of <code>WEST</code>, <code>NORTH</code>, <code>EAST</code>,
 	 * or <code>SOUTH</code>.
 	 */
-	public IWallModel getWall(int direction) {
+	IWallModel getWall(int direction) {
 		// Check the specified direction is in range.
 		if (!isDirection(direction)) {
 			throw NOT_A_DIRECTION;
@@ -109,12 +114,16 @@ public class TileModel implements ITileModel {
 				&& getWall(SOUTH).isBuilt();
 	}
 
+	public int getBoxerId() {
+		return (boxer == null) ? 0 : boxer.getPlayerID();
+	}
+
 	/**
 	 * Returns the boxer of this tile.
 	 *
 	 * @return the <code>player</code>, if there is a complete box, <code>null</code> otherwise
 	 */
-	public PlayerModel getBoxer() {
+	PlayerModel getBoxer() {
 		return boxer;
 	}
 

@@ -9,7 +9,7 @@ public interface IItemModel {
 	 * Item types.
 	 */
 	enum ItemType {
-		BRICK, PICK, TNT, UNKNOWN
+		BRICK, PICK, TNT, UNKNOWN, NONE
 	}
 
 	/**

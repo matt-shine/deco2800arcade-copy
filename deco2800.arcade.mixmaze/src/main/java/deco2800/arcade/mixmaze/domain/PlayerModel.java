@@ -23,11 +23,24 @@ public class PlayerModel implements IPlayerModel {
 	private PlayerAction playerAction;
 	private long lastMoved;
 	private long lastAction;
+	private int score;
 
 	// Item data
 	private BrickModel brick;
 	private PickModel pick;
 	private TNTModel tnt;
+
+	/**
+	 * Constructs a new Player with the specified <code>id</code>
+	 *
+	 * @param id the playerID of this player
+	 */
+	public PlayerModel(int id) {
+		playerID = id;
+		playerAction = PlayerAction.USE_BRICK;
+		brick = new BrickModel(4);
+		this.score = 0;
+	}
 
 	/**
 	 * Returns the playerID of this player
@@ -251,14 +264,4 @@ public class PlayerModel implements IPlayerModel {
 		return "<Player " + playerID + ">";
 	}
 
-	/**
-	 * Constructs a new Player with the specified <code>id</code>
-	 *
-	 * @param id the playerID of this player
-	 */
-	public PlayerModel(int id) {
-		playerID = id;
-		playerAction = PlayerAction.USE_BRICK;
-		brick = new BrickModel(4);
-	}
 }

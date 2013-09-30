@@ -1,6 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
 import deco2800.arcade.mixmaze.domain.view.IItemModel;
+import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
@@ -326,6 +327,11 @@ public class MixMazeModel implements IMixMazeModel {
 		}
 	}
 
+	public ItemType getSpawnedItemType(int x, int y) {
+		IItemModel item = getSpawnedItem(x, y);
+		return (item == null) ? ItemType.NONE : item.getType();
+	}
+
 	/**
 	 * Gets the item at the specified (x, y) position
 	 * @param x X position on the game board
@@ -335,7 +341,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
-	public IItemModel getSpawnedItem(int x, int y) {
+	IItemModel getSpawnedItem(int x, int y) {
 		if (!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
 		}

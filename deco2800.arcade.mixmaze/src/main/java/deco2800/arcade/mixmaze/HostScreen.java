@@ -1,12 +1,7 @@
-/*
- * HostScreen
- */
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.Direction;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.WallModel;
+import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
@@ -44,18 +39,18 @@ import com.esotericsoftware.kryonet.rmi.RemoteObject;
 import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
 import static com.badlogic.gdx.graphics.Color.*;
 
-class HostScreen extends GameScreen {
+class HostScreen extends LocalScreen {
 
 	private Server server;
+	private ObjectSpace os;
 
 	HostScreen(final MixMaze game) {
 		super(game);
 	}
 
 	@Override
-	public void show() {
-		logger.info("this is host");
-		model = new MixMazeModel(5, BEGINNER, 60*2);
+	protected void newGame() {
+		model = new MixMazeModel(10, BEGINNER, 60*2);
 
 		server = new Server();
 		register(server);
@@ -68,81 +63,37 @@ class HostScreen extends GameScreen {
 		server.addListener(new Listener() {
 			public void received(Connection c, Object o) {
 				if (o instanceof String) {
-					logger.info("string received"
+					logger.debug("string received: "
 							+ o);
 					os = new ObjectSpace();
 					os.register(42, model);
+					os.register(1700, model.getPlayer1());
+					os.register(1701, model.getPlayer2());
+					int boardSize = model.getBoardSize();
+					for (int j = 0; j < boardSize; j++)
+						for (int i = 0; i < boardSize; i++)
+							os.register(100 + j*boardSize + i, model.getBoardTile(i, j));
 					os.addConnection(c);
 					c.sendTCP(
 						"sending model");
-					model.startGame();
+					logger.info("connection accepted and game started");
+					setupTimer();
+					startGame();
 				}
 			}
 		});
-
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-		}
-
-		/* FIXME: game size and time limit should be passed from UI */
+		logger.info("host waiting for connection");
 		setupGameBoard();
-
-		/* set timer */
-		Label.LabelStyle style = timerLabel.getStyle();
-		style.fontColor = WHITE;
-		timerLabel.setStyle(style);
-
-		countdown = model.getGameMaxTime();
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				int min = countdown / 60;
-				int sec = countdown % 60;
-
-				if (countdown == 10) {
-					Label.LabelStyle style = timerLabel
-							.getStyle();
-					style.fontColor = RED;
-					timerLabel.setStyle(style);
-				}
-				timerLabel.setText(String.format("%s%d:%s%d",
-						(min < 10) ? "0" : "", min,
-						(sec < 10) ? "0" : "", sec));
-				countdown -= 1;
-			}
-		}, 0, 1, model.getGameMaxTime());
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				IPlayerModel winner;
-
-				stage.setKeyboardFocus(null);
-				winner = model.endGame();
-				if (winner == null) {
-					/* draw */
-					resultLabel.setText("Draw");
-				} else {
-					/* winner */
-					resultLabel.setText("Player "
-							+ winner.getPlayerID()
-							+ " win");
-				}
-				endGameTable.setVisible(true);
-			}
-		/*
-		 * FIXME: this does not look like a good solution.
-		 * It takes some time for timerLabel to change text,
-		 * and therefore, without the extra 1, the game will end
-		 * before the timer showing up 00:00.
-		 */
-		}, model.getGameMaxTime() + 1);
-
-		/* start game */
-		Gdx.input.setInputProcessor(stage);
-		stage.setKeyboardFocus(gameArea);
 	}
 
-	@Override
-	protected void setupGameBoard() {
+	static void register(EndPoint endPoint) {
+		Kryo kryo = endPoint.getKryo();
+
+		ObjectSpace.registerClasses(kryo);
+		kryo.register(IMixMazeModel.class);
+		kryo.register(IPlayerModel.class);
+		kryo.register(ITileModel.class);
+		kryo.register(ItemType.class);
 	}
 
 }

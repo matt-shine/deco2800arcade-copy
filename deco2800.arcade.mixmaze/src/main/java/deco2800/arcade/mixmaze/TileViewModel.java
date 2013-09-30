@@ -4,6 +4,7 @@
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.view.IItemModel;
+import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
@@ -53,6 +54,8 @@ class TileViewModel extends Group {
 	private final float tileSize;
 	private final float offset;
 	private final ShapeRenderer renderer;
+	private final int x;
+	private final int y;
 
 	/**
 	 * Constructor
@@ -69,6 +72,8 @@ class TileViewModel extends Group {
 		this.tileSize = tileSize;
 		this.offset = tileSize / 32;
 		this.renderer = renderer;
+		this.x = model.getX();
+		this.y = model.getY();
 	}
 
 	@Override
@@ -90,14 +95,14 @@ class TileViewModel extends Group {
 	}
 
 	private void drawBox() {
-		IPlayerModel p = model.getBoxer();
+		int id = model.getBoxerId();
 
 		renderer.begin(FilledRectangle);
-		if (p == null) {
+		if (id == 0) {
 			renderer.setColor(.8f, .8f, .8f, 1f);
-		} else if (p.getPlayerID() == 1) {
+		} else if (id == 1) {
 			renderer.setColor(1f, 0f, 0f, 1f);
-		} else if (p.getPlayerID() == 2) {
+		} else if (id == 2) {
 			renderer.setColor(0f, 0f, 1f, 1f);
 		}
 		renderer.filledRect(0, 0, tileSize, tileSize);
@@ -107,15 +112,15 @@ class TileViewModel extends Group {
 	private void drawWalls() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(1f, 1f, 0f, 1f);
-		if (model.getWall(WEST).isBuilt())
+		if (model.isWallBuilt(WEST))
 			renderer.filledRect(0, 0, offset, tileSize);
-		if (model.getWall(NORTH).isBuilt())
+		if (model.isWallBuilt(NORTH))
 			renderer.filledRect(0, tileSize - offset,
 					tileSize, offset);
-		if (model.getWall(EAST).isBuilt())
+		if (model.isWallBuilt(EAST))
 			renderer.filledRect(tileSize - offset, 0,
 					offset, tileSize);
-		if (model.getWall(SOUTH).isBuilt())
+		if (model.isWallBuilt(SOUTH))
 			renderer.filledRect(0, 0, tileSize, offset);
 		renderer.end();
 	}
@@ -132,13 +137,11 @@ class TileViewModel extends Group {
 	}
 
 	private void drawItem(SpriteBatch batch) {
-		IItemModel item = gameModel.getSpawnedItem(
-				model.getX(), model.getY());
+		TextureRegion region;
+		ItemType type = gameModel.getSpawnedItemType(x, y);
 
-		if (item != null) {
-			TextureRegion region;
-
-			switch (item.getType()) {
+		if (type != NONE) {
+			switch (type) {
 			case BRICK:
 				region = PILE_BRICK_REGION;
 				break;

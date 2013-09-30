@@ -1,12 +1,5 @@
-/*
- * ClientScreen
- */
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.Direction;
-import deco2800.arcade.mixmaze.domain.MixMazeModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
@@ -42,21 +35,28 @@ import com.esotericsoftware.kryonet.rmi.ObjectSpace;
 import com.esotericsoftware.kryonet.rmi.RemoteObject;
 
 import static com.badlogic.gdx.graphics.Color.*;
+import static com.badlogic.gdx.graphics.GL20.*;
 
 class ClientScreen extends GameScreen {
 
 	private Client client;
+	private int boardSize;
+	private ITileModel[][] remoteTile;
+	private IPlayerModel[] remotePlayer;
 
 	ClientScreen(final MixMaze game) {
 		super(game);
 	}
 
 	@Override
-	public void show() {
+	protected void newGame() {
+		model = null;
+
 		logger.info("this is client");
 		client = new Client();
-		register(client);
+		HostScreen.register(client);
 		client.start();
+		logger.debug("trying to connect");
 		try {
 			client.connect(5000, "127.0.0.1", 64532, 65532);
 		} catch (IOException e) {
@@ -65,78 +65,83 @@ class ClientScreen extends GameScreen {
 		client.addListener(new Listener() {
 			public void received(Connection c, Object o) {
 				if (o instanceof String) {
-					logger.info("string received"
+					logger.debug("string received: "
 							+ o);
 					model = ObjectSpace.getRemoteObject(c, 42, IMixMazeModel.class);
-					logger.info("model: " + model);
+					logger.debug("model: " + model);
 				}
 			}
 		});
 		client.sendTCP("give me model");
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
+		while (model == null) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
 		}
-
-		/* FIXME: game size and time limit should be passed from UI */
+		boardSize = model.getBoardSize();
+		remoteTile = new ITileModel[boardSize][boardSize];
+		for (int j = 0; j < boardSize; j++)
+			for (int i = 0; i < boardSize; i++)
+				remoteTile[i][j] = ObjectSpace.getRemoteObject(client, 100 + j*boardSize + i, ITileModel.class);
+		remotePlayer = new IPlayerModel[2];
+		remotePlayer[0] = ObjectSpace.getRemoteObject(client, 1700,
+				IPlayerModel.class);
+		remotePlayer[1] = ObjectSpace.getRemoteObject(client, 1701,
+				IPlayerModel.class);
 		setupGameBoard();
-
-		/* set timer */
-		Label.LabelStyle style = timerLabel.getStyle();
-		style.fontColor = WHITE;
-		timerLabel.setStyle(style);
-
-		countdown = model.getGameMaxTime();
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				int min = countdown / 60;
-				int sec = countdown % 60;
-
-				if (countdown == 10) {
-					Label.LabelStyle style = timerLabel
-							.getStyle();
-					style.fontColor = RED;
-					timerLabel.setStyle(style);
-				}
-				timerLabel.setText(String.format("%s%d:%s%d",
-						(min < 10) ? "0" : "", min,
-						(sec < 10) ? "0" : "", sec));
-				countdown -= 1;
-			}
-		}, 0, 1, model.getGameMaxTime());
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				IPlayerModel winner;
-
-				stage.setKeyboardFocus(null);
-				winner = model.endGame();
-				if (winner == null) {
-					/* draw */
-					resultLabel.setText("Draw");
-				} else {
-					/* winner */
-					resultLabel.setText("Player "
-							+ winner.getPlayerID()
-							+ " win");
-				}
-				endGameTable.setVisible(true);
-			}
-		/*
-		 * FIXME: this does not look like a good solution.
-		 * It takes some time for timerLabel to change text,
-		 * and therefore, without the extra 1, the game will end
-		 * before the timer showing up 00:00.
-		 */
-		}, model.getGameMaxTime() + 1);
-
-		/* start game */
-		Gdx.input.setInputProcessor(stage);
-		stage.setKeyboardFocus(gameArea);
 	}
 
 	@Override
-	protected void setupGameBoard() {
+	public void render(float delta) {
+		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
+		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		/*
+		left.update(p1);
+		right.update(p2);
+		scorebar[0].update(p1);
+		scorebar[1].update(p2);
+		*/
+
+		stage.act(delta);
+		stage.draw();
+
+		/*
+		if (endGameTable.isVisible() && backMenu.isChecked()) {
+			backMenu.toggle();
+			endGameTable.setVisible(false);
+			tileTable.clear();
+			gameArea.clear();
+			game.setScreen(game.menuScreen);
+		}
+		*/
+	}
+
+	private void setupGameBoard() {
+		logger.debug("boardSize: {}", boardSize);
+		int tileSize = 640 / boardSize;
+
+		for (int j = 0; j < boardSize; j++) {
+			for (int i = 0; i < boardSize; i++) {
+				tileTable.add(new TileViewModel(
+						remoteTile[i][j],
+						model,
+						tileSize,
+						renderer))
+						.size(tileSize, tileSize);
+			}
+			if (j < boardSize)
+				tileTable.row();
+		}
+
+		p1 = new PlayerViewModel(remotePlayer[0], model, tileSize,
+				1,new Settings().p1Controls);
+		p2 = new PlayerViewModel(remotePlayer[1], model, tileSize,
+				2,new Settings().p2Controls);
+		gameArea.addActor(p1);
+		gameArea.addActor(p2);
 	}
 
 }

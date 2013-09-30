@@ -8,22 +8,20 @@ public interface ITileModel {
 	static final String LOG = "TileModel: ";
 
 	/**
-	 * Returns the adjacent wall specified by <code>direction</code>.
+	 * Checks if the wall on the specified <code>direction</code> is built.
 	 *
-	 * @param direction a direction specifying the adjacent wall this tile.
-	 * @return the adjacent wall in the specified <code>direction</code>
-	 * @throws IllegalArgumentException If <code>direction</code> is not one
-	 * of <code>WEST</code>, <code>NORTH</code>, <code>EAST</code>,
-	 * or <code>SOUTH</code>.
+	 * @param direction	the direction
+	 * @return <code>true</code> if the wall is built, <code>false</code>
+	 * otherwise.
 	 */
-	IWallModel getWall(int direction);
+	boolean isWallBuilt(int direction);
 
 	/**
-	 * Returns the boxer of this tile.
+	 * Returns the id of the boxer.
 	 *
-	 * @return the <code>player</code>, if there is a complete box, <code>null</code> otherwise
+	 * @return 0 if the box is not built, otherwise the boxer id.
 	 */
-	IPlayerModel getBoxer();
+	int getBoxerId();
 
 	/**
 	 * Return the column number of this tile on game board.

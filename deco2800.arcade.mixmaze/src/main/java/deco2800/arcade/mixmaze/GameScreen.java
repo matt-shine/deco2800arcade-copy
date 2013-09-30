@@ -1,8 +1,6 @@
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.Direction;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
@@ -27,14 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.EndPoint;
-import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.kryonet.rmi.ObjectSpace;
-import com.esotericsoftware.kryonet.rmi.RemoteObject;
 import java.io.IOException;
 import java.util.List;
 import org.slf4j.Logger;
@@ -62,16 +52,15 @@ abstract class GameScreen implements Screen {
 	protected IMixMazeModel model;
 	protected Table tileTable;
 	protected int countdown;
-	protected ObjectSpace os;
 	protected Label timerLabel;
 	protected Table endGameTable;
 	protected TextButton backMenu;
 	protected Label resultLabel;
 	protected SidePanel left;
 	protected SidePanel right;
-	private Scorebar[] scorebar;
+	protected Scorebar[] scorebar;
 
-	private final MixMaze game;
+	protected final MixMaze game;
 	private final Skin skin;
 
 	/**
@@ -161,35 +150,6 @@ abstract class GameScreen implements Screen {
 		});
 	}
 
-	protected abstract void setupGameBoard();
-
-	@Override
-	public void render(float delta) {
-		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
-		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		model.spawnItems();
-
-		/* update player status */
-		left.update(p1);
-		right.update(p2);
-		scorebar[0].update(p1);
-		scorebar[1].update(p2);
-
-		stage.act(delta);
-		stage.draw();
-		//Table.drawDebug(stage);
-
-		if (endGameTable.isVisible() && backMenu.isChecked()) {
-			/* clean up this session and go to menu screen */
-			backMenu.toggle();
-			endGameTable.setVisible(false);
-			tileTable.clear();
-			gameArea.clear();
-			game.setScreen(game.menuScreen);
-		}
-	}
-
 	@Override
 	public void resize(int width, int height) {
 		stage.setViewport(1280, 720, true);
@@ -202,6 +162,16 @@ abstract class GameScreen implements Screen {
 		renderer.dispose();
 		stage.dispose();
 	}
+
+	@Override
+	public void show() {
+		newGame();
+	}
+
+	/**
+	 * Starts a new game session.
+	 */
+	protected abstract void newGame();
 
 	@Override
 	public void hide() {
@@ -217,20 +187,11 @@ abstract class GameScreen implements Screen {
 	public void resume() {
 	}
 
-	protected void register(EndPoint endPoint) {
-		Kryo kryo = endPoint.getKryo();
-
-		ObjectSpace.registerClasses(kryo);
-		kryo.register(IMixMazeModel.class);
-		kryo.register(IWallModel.class);
-		kryo.register(ITileModel.class);
-		kryo.register(IPlayerModel.class);
-	}
-
-	/*
-	 * Draw the player item status on side panel.
+	/**
+	 * SidePanel displays the player status.
 	 */
-	private class SidePanel extends Table {
+	protected class SidePanel extends Table {
+
 		private Label nameLabel;
 		private Image[] frameImages;
 		private Image[] brickImages;
@@ -306,9 +267,13 @@ abstract class GameScreen implements Screen {
 				break;
 			}
 		}
+
 	}
 
-	private class Scorebar extends Table {
+	/**
+	 * Scorebar displays the player score.
+	 */
+	protected class Scorebar extends Table {
 
 		private Scorebox box;
 		private Label scoreLabel;
@@ -326,9 +291,12 @@ abstract class GameScreen implements Screen {
 			}
 		}
 
-		void update(PlayerViewModel p) {
-			box.setColor(p.getColor());
-			scoreLabel.setText("" + p.getScore());
+		void setBoxColor(Color c) {
+			box.setColor(c);
+		}
+
+		public void update(int score) {
+			scoreLabel.setText(String.valueOf(score));
 		}
 
 		private class Scorebox extends Image {

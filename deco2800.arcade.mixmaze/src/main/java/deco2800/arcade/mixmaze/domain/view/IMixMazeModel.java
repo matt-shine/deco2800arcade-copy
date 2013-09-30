@@ -1,5 +1,6 @@
 package deco2800.arcade.mixmaze.domain.view;
 
+import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -119,17 +120,12 @@ public interface IMixMazeModel {
 	 */
 	IPlayerModel endGame();
 
-
 	/**
-	 * Gets the item at the specified (x, y) position
-	 * @param x X position on the game board
-	 * @param y Y position on the game board
-	 * @return <code>ItemModel</code> at the specified (x, y)
-	 * position or <code>null</code> if there is none
-	 * @throws IllegalArgumentException if the specified
-	 * (x, y) position is out of range
+	 * Returns the type of the spawned item.
+	 *
+	 * @return the type.
 	 */
-	IItemModel getSpawnedItem(int x, int y);
+	ItemType getSpawnedItemType(int x, int y);
 
 	/**
 	 * Executes a round of item spawning,

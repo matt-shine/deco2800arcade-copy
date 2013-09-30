@@ -28,6 +28,7 @@ import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 
 /**
  * 
@@ -170,9 +171,7 @@ public void show() {
                 
 				
 
-                ArcadeSystem.requestLobbyGamesList();
-                ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
-				System.out.println("Matches: " + matches.toString());
+                
 				//table2.removeActor();
 				table2.clear();
 				
@@ -232,8 +231,15 @@ public void show() {
 		// "Create Match" Button Event Listener
 		 createbutton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-                
-				System.out.println("You Clicked the Create Match Button.");
+            	
+            	CreateMatchRequest request = new CreateMatchRequest();
+            	request.gameId = "99999";
+            	request.hostPlayerId = 12345;
+            	ArcadeSystem.createMatch(request);
+            	ArcadeSystem.requestLobbyGamesList();
+                ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
+				System.out.println("Matches: " + matches.toString());
+
 				
             }
         });

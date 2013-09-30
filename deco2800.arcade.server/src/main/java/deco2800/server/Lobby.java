@@ -12,6 +12,7 @@ import java.util.UUID;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 /**
  * The Lobby class - Singleton Pattern.
  * 
@@ -84,15 +85,17 @@ public class Lobby {
 	 * @param user - Map <username, connection>  of the user
 	 * @return - True if match created successfully, false otherwise.
 	 */
-	public boolean createMatch(String gameId, int playerId, Connection connection) {
+	public void createMatch(String gameId, int playerId, Connection connection) {
 		//TODO: handle user joining multiple matches?
 		if (userHasMatch(playerId)) {
-			return false;
+			//return false;
 		}
 		/* Create the match and add to array of matches */
 		LobbyMatch match = new LobbyMatch(gameId, playerId, connection);
 		lobbyGames.add(match);
-		return true;
+		CreateMatchResponse response = new CreateMatchResponse();
+		response.matchId = match.getMatchId().toString();
+		connection.sendTCP(response);
 	}
 
 	public void joinMatch(LobbyMatch match, String gameId, int playerId, Connection connection) {

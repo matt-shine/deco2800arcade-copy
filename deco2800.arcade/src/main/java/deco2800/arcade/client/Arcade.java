@@ -440,6 +440,8 @@ public class Arcade extends JFrame {
 	}
 	
 	public void createMatch(CreateMatchRequest request) {
+		//request.hostConnection = this.client.connection;
+		System.out.println("[CLIENT] Sending CreateMatchRequest (gameId: " + request.gameId + ", playerId: " + request.hostPlayerId);
 		this.client.sendNetworkObject(request);
 	}
 

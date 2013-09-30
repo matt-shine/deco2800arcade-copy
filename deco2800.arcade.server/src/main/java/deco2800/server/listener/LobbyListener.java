@@ -34,10 +34,8 @@ public class LobbyListener extends Listener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 
-		ArcadeServer server = new ArcadeServer(); //get the server instance
 		if (object instanceof NewLobbyRequest) {
 			
-
 			NewLobbyRequest newLobbyRequest = (NewLobbyRequest) object;
 			int playerId = newLobbyRequest.playerID;
 			System.out.println(newLobbyRequest.requestType);
@@ -68,7 +66,8 @@ public class LobbyListener extends Listener {
 			CreateMatchRequest request = (CreateMatchRequest) object;
 			String gameId = request.gameId;
 			int playerId = request.hostPlayerId;
-			Connection hostConnection = request.hostConnection;
+			System.out.println("[SERVER] Create Match Request received (gameId: " + gameId + ", playerId: " + playerId);
+			Connection hostConnection = connection;
 			
 			lobby.createMatch(gameId, playerId, hostConnection);
 		}
@@ -107,6 +106,7 @@ public class LobbyListener extends Listener {
 	}
 
 	private void handleCreateMatchRequest(String gameId, int playerId, Connection connection) {
+		System.out.println("HANDLE MATCH REQUEST");
 		if (lobby.userHasMatch(playerId)) {
 			connection.sendTCP(JoinLobbyResponse.CREATE_MATCH_FAILED);
 		} else {

@@ -9,4 +9,5 @@ public class CreateMatchRequest extends LobbyRequest {
 	public int hostPlayerId;
 	public Connection hostConnection;
 	public String gameId;
+
 }

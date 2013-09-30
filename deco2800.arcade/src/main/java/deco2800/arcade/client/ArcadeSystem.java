@@ -63,4 +63,8 @@ public class ArcadeSystem {
     	arcade.requestLobbyGamesList();
     }
     
+    public static void createMatch(CreateMatchRequest matchRequest) {
+    	arcade.createMatch(matchRequest);
+    }
+    
 }

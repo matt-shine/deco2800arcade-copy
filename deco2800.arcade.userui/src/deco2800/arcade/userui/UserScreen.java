@@ -121,7 +121,6 @@ public class UserScreen extends JFrame implements ActionListener {
 		parentContainer.add(menupanel, "dock north");
 		parentContainer.add(sidepanel, "west");
 		parentContainer.add(contentpanel, "east");
-
 		add(parentContainer);
 	
 		/*Set the  view window constraints
@@ -135,8 +134,8 @@ public class UserScreen extends JFrame implements ActionListener {
 	}
 	
 	
-	/*
-	 * Holds all content on the left
+	/**
+	 *  Method creates a side panel to hold everything on the left of page.
 	 */
 	public void addsidepanel(){
 		
@@ -148,8 +147,8 @@ public class UserScreen extends JFrame implements ActionListener {
 
 	}
 	
-	/*
-	 * Holds all content on the right
+	/**
+	 *  Method creates a content panel to hold everything on the right of page.
 	 */
 	public void addcontentpanel(){
 		
@@ -160,8 +159,9 @@ public class UserScreen extends JFrame implements ActionListener {
 	}
 	
 	
-	/*
-	 *  Holds the player info and avatar
+	/**
+	 *  Method creates a panel with player avatar &
+	 *  playerinfopanel.
 	 */
 	public void addplayerpanel(){
 		
@@ -172,8 +172,9 @@ public class UserScreen extends JFrame implements ActionListener {
     
 	}
 	
-	/*
-	 * Displays all the player information
+	/**
+	 *  Creates a panel containing player status options,
+	 *  add friend button, edit profile option. 
 	 */
 	public void addplayerinfopanel(){
 		
@@ -207,8 +208,8 @@ public class UserScreen extends JFrame implements ActionListener {
         
 	}
 	
-	/*
-	 *  The top navigation bar
+	/**
+	 *   Creates a panel containing button links to other pages in game arcade.
 	 */
 	public void addmenupanel(){
 		
@@ -249,8 +250,8 @@ public class UserScreen extends JFrame implements ActionListener {
         menupanel.add(myprofilelink,"center, gapbefore 350px");	    		
 	}
 	
-	/*
-	 *  Friends of this particular user, which are being stored
+	/**
+	 *   Creates a panel listing all friends of user
 	 */
 	public void addfriendpanel(){
 		
@@ -276,22 +277,12 @@ public class UserScreen extends JFrame implements ActionListener {
 		
 	}
 	
-	/*
-	 *  Displays information about the user
+	/**
+	 *   Creates a panel displaying player information
+	 *   ie. realname, program, description
 	 */
 	public void addaboutpanel(){
-		
-		//Textarea
-		/*aboutarea = new JTextArea();
-		aboutarea.setLineWrap(true);
-		aboutarea.setFont(blacknormal);
-		
-		//ScrollPane
-		JScrollPane aboutscroll = new JScrollPane(aboutarea);
-		aboutscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		aboutscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		*/
-		
+
 		realname = new JLabel("Name:");
 		realname.setFont(blacknormal);
 		realname.setForeground(Color.white);
@@ -320,8 +311,9 @@ public class UserScreen extends JFrame implements ActionListener {
         
 	}
 	
-	/*
-	 * Shows chosen achievements listed by user
+	/**
+	 *  Method creates a panel with up to 6 set achievements &
+	 *  link button to the achievements page.
 	 */
 	public void addachievementpanel(){
 				
@@ -384,8 +376,9 @@ public class UserScreen extends JFrame implements ActionListener {
 
 	}
 	
-	/*
-	 * Shows the most recent games played by the user
+	/**
+	 *  Creates a panel displaying the most recently played games.
+	 *  (Up to 6 can be showed at a time)
 	 */
 	public void addhistorypanel(){
 				

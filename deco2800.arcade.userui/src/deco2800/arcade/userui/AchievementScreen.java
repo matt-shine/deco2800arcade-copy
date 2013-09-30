@@ -29,13 +29,10 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	private Model model;
 	
 	//Declare JPanel and ImagePanels
-	private JPanel parentContainer;
-	
+	private JPanel parentContainer;	
 	private ImagePanel menupanel;
-	
 	private ImagePanel contentpanel;
 	private JPanel achievementpanel;
-	
 	private ImagePanel sidepanel;
 	private JPanel playerpanel;
 	private JPanel playerinfopanel;
@@ -61,9 +58,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	//Declare Images here
 	private ImageIcon picavatar, picaddfriend, picachievementbar, 
 	piclocked, picunlocked, piceditbutton, picfriendoffline;
-		
-	private JScrollPane achievementscroll;
-	
+			
 	//Declare Fonts to use here
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
 	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
@@ -101,8 +96,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		parentContainer = new JPanel(new MigLayout());
 		parentContainer.add(menupanel, "dock north");
 		parentContainer.add(sidepanel, "west, width :350, height :700");
-		parentContainer.add(contentpanel, "east, width :950, height :700");
-		
+		parentContainer.add(contentpanel, "east, width :950, height :700");		
 		add(parentContainer);
 	
 		/*Set the  view window constraints
@@ -114,8 +108,8 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		setResizable(false);		
 	}
 	
-	/*
-	 *  Holds everything on the left side
+	/**
+	 *  Method creates a side panel to hold everything on the left of page.
 	 */
 	public void addsidepanel(){
 		
@@ -126,8 +120,8 @@ public class AchievementScreen extends JFrame implements ActionListener {
         sidepanel.add(gameselect, "gapbottom 170px");
 	}
 	
-	/*
-	 * Holds everything on the right side
+	/**
+	 *  Method creates a content panel to hold everything on the right of page.
 	 */
 	public void addcontentpanel(){
 		
@@ -138,8 +132,8 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	     
 	}
 	
-	/*
-	 * Lists info for each of the games in the arcade
+	/**
+	 *  Method creates a panel showing game information for each game in the arcade
 	 */
 	public void addgamepanel(){
 		
@@ -157,8 +151,10 @@ public class AchievementScreen extends JFrame implements ActionListener {
 			  
 	}
 	
-	/*Lists all the player achievements for a particular game
-	 * 
+	/**
+	 *  Method creates a panel which displays
+	 *  all achievements for a particular game 
+	 *  as a list.
 	 */
 	public void addachievementpanel(){
 				    
@@ -216,8 +212,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
 		
 	}
 	
-	/*
-	 *  Holds the player info and avatar
+	/**
+	 *  Method creates a panel with player avatar &
+	 *  playerinfopanel.
 	 */
 	public void addplayerpanel(){
 		
@@ -228,8 +225,9 @@ public class AchievementScreen extends JFrame implements ActionListener {
     
 	}
 	
-	/*
-	 * Displays all the player information
+	/**
+	 *  Creates a panel containing player status options,
+	 *  add friend button, edit profile option. 
 	 */
 public void addplayerinfopanel(){
 		
@@ -263,8 +261,8 @@ public void addplayerinfopanel(){
         
 	}
 	
-	/*
-	 *  The top navigation bar
+	/**
+	 *   Creates a panel containing button links to other pages in game arcade.
 	 */
 	public void addmenupanel(){
 		

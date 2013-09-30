@@ -36,6 +36,7 @@ import deco2800.arcade.client.ArcadeSystem;
 public class Breakout extends GameClient {
 	SplashScreen splashScreen;
 	GameScreen gamescreen;
+	menuscreen MenuScreen;
 
 	/*
 	 * Creates private instance variables for each element of The
@@ -62,7 +63,7 @@ public class Breakout extends GameClient {
 		super.create();
 		
 		splashScreen = new SplashScreen(this);
-		
+		MenuScreen=new menuscreen(this);
 		gamescreen = new GameScreen(this);
 		setScreen(splashScreen);
 	}

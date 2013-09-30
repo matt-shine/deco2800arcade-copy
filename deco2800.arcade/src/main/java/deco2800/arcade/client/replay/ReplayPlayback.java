@@ -14,6 +14,11 @@ public class ReplayPlayback {
 	private long nextReplayTime = -1;
 	private int nextReplayIndex = -1;
 	
+	private final long CONSTANT_PLAYBACK_DEFAULT_INTERVAL = 1000;
+	private long constantTimePlaybackInterval = CONSTANT_PLAYBACK_DEFAULT_INTERVAL;
+	private long lastPlaybackTime;
+	private boolean constantTimePlayback = false;
+	
 	private NetworkClient client;
 	
 	private ReplayHandler handler;
@@ -31,6 +36,25 @@ public class ReplayPlayback {
 		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
 		gsonBuilder.registerTypeAdapter(ReplayNode.class, new ReplayNodeDeserializer());
 		deserializer = gsonBuilder.create();
+	}
+	
+	/**
+	 * Set the handler to constant-time playback
+	 * @param interval The spacing between events
+	 */
+	public void enableConstantTimePlayback(long interval)
+	{
+	    constantTimePlayback = true;
+	    constantTimePlaybackInterval = interval;
+	}
+	
+	/**
+	 * Set the handler to real-time playback.
+	 */
+	public void enableRealTimePlayback()
+	{
+	    constantTimePlayback = false;
+	    constantTimePlaybackInterval = CONSTANT_PLAYBACK_DEFAULT_INTERVAL;
 	}
 
 	/**
@@ -68,6 +92,7 @@ public class ReplayPlayback {
 			throw new RuntimeException( "Started replay with no data" );
 		}
 		playbackStartTime = System.currentTimeMillis();
+		lastPlaybackTime = playbackStartTime;
 		this.nextReplayIndex = 0;
 		
 		ReplayNode next = deserializer.fromJson(
@@ -75,34 +100,69 @@ public class ReplayPlayback {
 				ReplayNode.class );
 		
 		this.nextReplayTime = playbackStartTime + next.getTime();
+		
 	}
 
+	private void runLoopRealTime()
+	{   
+	    if ( System.currentTimeMillis() > this.nextReplayTime ) {
+	        playNextNode();
+        }   
+	}
+	
+	private void runLoopConstantTime()
+	{
+       if ( System.currentTimeMillis() > lastPlaybackTime + 
+                                         constantTimePlaybackInterval ) {
+            playNextNode();
+            lastPlaybackTime = lastPlaybackTime + 
+                               constantTimePlaybackInterval;
+        }      
+	}
+	
+	/**
+	 * Handle the dispatch of the next event.
+	 */
+	private void playNextNode()
+	{
+        if ( this.nextReplayIndex < 0 ) {
+            // NOPE
+            return;
+        }
+        ReplayNode node = deserializer.fromJson(
+                replayHistory.get( this.nextReplayIndex  ),
+                ReplayNode.class );
+        
+        handler.playbackItem( node );
+        
+        this.nextReplayIndex ++;
+        if ( this.nextReplayIndex >= replayHistory.size() ) {
+            this.nextReplayIndex = -1;
+            this.nextReplayTime = -1;
+            
+            handler.dispatchReplayEvent( "playback_complete", null );
+        } else {
+            ReplayNode next = this.deserializer.fromJson(
+                    replayHistory.get( this.nextReplayIndex ),
+                    ReplayNode.class );
+            
+            this.nextReplayTime = playbackStartTime + next.getTime();
+        }   
+	}
+	
+	/**
+	 * Called once per frame in a game, handles updating and dispatching of 
+	 * events.
+	 */
 	public void runLoop() {
-		if ( System.currentTimeMillis() > this.nextReplayTime ) {
-			if ( this.nextReplayIndex < 0 ) {
-				// NOPE
-				return;
-			}
-			ReplayNode node = deserializer.fromJson(
-					replayHistory.get( this.nextReplayIndex  ),
-					ReplayNode.class );
-			
-			handler.playbackItem( node );
-			
-			this.nextReplayIndex ++;
-			if ( this.nextReplayIndex >= replayHistory.size() ) {
-				this.nextReplayIndex = -1;
-				this.nextReplayTime = -1;
-				
-				handler.dispatchReplayEvent( "playback_complete", null );
-			} else {
-				ReplayNode next = this.deserializer.fromJson(
-						replayHistory.get( this.nextReplayIndex ),
-						ReplayNode.class );
-				
-				this.nextReplayTime = playbackStartTime + next.getTime();
-			}
-		}
+	
+	    if (constantTimePlayback)
+	    {
+	        runLoopConstantTime();
+	    } else {
+	        runLoopRealTime();
+	    }
+		
 	}
 	
 }

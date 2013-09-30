@@ -218,6 +218,23 @@ public class ReplayHandler {
 	}
 	
 	/**
+     * Set the handler to constant-time playback
+     * @param interval The spacing between events
+     */
+    public void enableConstantTimePlayback(long interval)
+    {
+        playback.enableConstantTimePlayback(interval);
+    }
+    
+    /**
+     * Set the handler to real-time playback.
+     */
+    public void enableRealTimePlayback()
+    {
+        playback.enableRealTimePlayback();
+    }
+	
+	/**
 	 * Deserializes the node
 	 * @param index Particular history
 	 */

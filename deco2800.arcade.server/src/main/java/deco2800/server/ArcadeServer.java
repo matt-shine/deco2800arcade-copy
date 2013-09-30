@@ -9,13 +9,20 @@ import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
 import deco2800.server.database.CreditStorage;
+import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
+import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
+import deco2800.server.listener.PackmanListener;
+import deco2800.server.listener.HighscoreListener;
 import deco2800.server.database.HighscoreDatabase;
 import deco2800.arcade.packman.PackageServer;
+import deco2800.server.database.AchievementStorage;
+import deco2800.server.listener.AchievementListener;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -27,6 +34,9 @@ public class ArcadeServer {
 
 	// Keep track of which users are connected
 	private Set<String> connectedUsers = new HashSet<String>();
+	
+	//Replay data
+	private ReplayStorage replayStorage;
 	
 	//singleton pattern
 	private static ArcadeServer instance;
@@ -61,10 +71,15 @@ public class ArcadeServer {
 		server.start();
 	}
 
+	//Achievement storage service
+	private AchievementStorage achievementStorage;
+	
 	// Credit storage service
 	private CreditStorage creditStorage;
 	//private PlayerStorage playerStorage;
 	//private FriendStorage friendStorage;
+
+    private ImageStorage imageStorage;
 	
 	// Highscore database storage service
 	private HighscoreDatabase highscoreDatabase;
@@ -78,28 +93,64 @@ public class ArcadeServer {
 	}
 	
 	/**
+	 * * Access the Serer's achievement storage facility
+	 * @return AchievementStorage currently in use by the arcade
+	 */
+	public AchievementStorage getAchievementStorage() {
+		return this.achievementStorage;
+	}
+	
+	/**
+	 * Access the replay records.
+	 * @return
+	 */
+	public ReplayStorage getReplayStorage()
+	{
+	    return this.replayStorage;
+	}
+	
+	/**
+	 * Access the server's high score storage
+	 */
+	public HighscoreDatabase getHighscoreDatabase() {
+		return this.highscoreDatabase;
+	}
+	
+	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
 		this.creditStorage = new CreditStorage();
+		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		
+        this.imageStorage = new ImageStorage();
+
+		//do achievement database initialisation
+		this.achievementStorage = new AchievementStorage(imageStorage);
 		this.highscoreDatabase = new HighscoreDatabase();
+		
 		this.packServ = new PackageServer();
 		
 		//initialize database classes
 		try {
 			creditStorage.initialise();
+            imageStorage.initialise();
 			//playerStorage.initialise();
+            
+			achievementStorage.initialise();
 			
 			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// once the db is fine, load in achievement data from disk
+		this.achievementStorage.loadAchievementData();
 	}
 	
 	/**
@@ -123,6 +174,21 @@ public class ArcadeServer {
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());
 		server.addListener(new GameListener());
+		server.addListener(new AchievementListener());
+		server.addListener(new ReplayListener());
+		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
+        server.addListener(new PackmanListener());
 	}
+
+    /**
+     * Return the packServ object.
+     * Possible temporary fix just to get network communication
+     * between client and packman server operational.
+     * TODO don't reveal packServ object publically
+     * @return the packServ variable
+     */
+    public PackageServer packServ() {
+        return packServ;
+    }
 }

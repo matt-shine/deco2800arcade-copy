@@ -1,3 +1,6 @@
+apply plugin: 'application'
+
+mainClassName = "deco2800.arcade.client.Arcade"
 
 dependencies {
   compile project(":deco2800.arcade.model")

@@ -2,6 +2,10 @@ package deco2800.arcade.client.network.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
+
 public class LobbyListener extends NetworkListener {
 	
 	@Override
@@ -23,5 +27,12 @@ public class LobbyListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
+		if (object instanceof ActiveMatchDetails) {
+			Arcade.addToMatchList((ActiveMatchDetails) object);
+		}
+		
+		else if (object instanceof RemovedMatchDetails) {
+			Arcade.removeFromMatchList((RemovedMatchDetails)object);
+		}
 	}
 }

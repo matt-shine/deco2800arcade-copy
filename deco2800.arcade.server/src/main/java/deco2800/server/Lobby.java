@@ -1,13 +1,17 @@
 package deco2800.server;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 import com.esotericsoftware.kryonet.Connection;
+
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 /**
  * The Lobby class - Singleton Pattern.
  * 
@@ -49,11 +53,29 @@ public class Lobby {
 	 * Returns the current matches in the lobby.
 	 * @return - ArrayList of current matches  in the lobby.
 	 */
-	public ArrayList<LobbyMatch> getMatches() {
-		ArrayList<LobbyMatch> copy = new ArrayList<LobbyMatch>();
-		System.arraycopy(lobbyGames, 0, copy, 0, lobbyGames.size());
-		return copy;
+//	public ArrayList<LobbyMatch> getMatches() {
+//		ArrayList<LobbyMatch> copy = new ArrayList<LobbyMatch>();
+//		System.arraycopy(lobbyGames, 0, copy, 0, lobbyGames.size());
+//		return copy;
+//	}
+	
+	public boolean sendMatchesToClient(Connection connection) {
+		if (lobbyGames.size() == 0) {
+			connection.sendTCP("No matches found! Try creating one?");
+			return false;
+		} else {
+			for (int i=0; i< lobbyGames.size(); i++) {
+				ActiveMatchDetails match = new ActiveMatchDetails();
+				match.gameId = lobbyGames.get(i).getGameId();
+				match.hostPlayerId = lobbyGames.get(i).getHostPlayerId();
+				match.matchId = lobbyGames.get(i).getMatchId();
+				connection.sendTCP(lobbyGames.get(i));
+			}
+ 		}
+		
+		return true;
 	}
+	
 
 	/** 
 	 * Create a match to be displayed by the lobby.

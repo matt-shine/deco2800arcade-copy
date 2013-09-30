@@ -8,10 +8,12 @@ import java.awt.event.WindowEvent;
 import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.swing.JFrame;
 
@@ -25,6 +27,7 @@ import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.LobbyListener;
 import deco2800.arcade.client.network.listener.MultiplayerListener;
 import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
@@ -36,8 +39,11 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
+import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 
 /**
@@ -68,6 +74,9 @@ public class Arcade extends JFrame {
     private CommunicationNetwork communicationNetwork;
     
     private static boolean multiplayerEnabled;
+    
+    private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
+    
 
     // Width and height of the Arcade window
     private static final int ARCADE_WIDTH = 1280;
@@ -180,6 +189,7 @@ public class Arcade extends JFrame {
 		this.client.addListener(new CommunicationListener(communicationNetwork));
         this.client.addListener(new PackmanListener());
         this.client.addListener(new MultiplayerListener());
+        this.client.addListener(new LobbyListener());
 	}
 
 	public void connectAsUser(String username) {
@@ -414,5 +424,23 @@ public class Arcade extends JFrame {
     public GameClient getCurrentGame() {
         return selectedGame;
     }
+    
+	public static void addToMatchList(ActiveMatchDetails response) {
+		matches.add(response);
+	}
+	
+	public static void removeFromMatchList(RemovedMatchDetails response) {
+		if (matches.contains(response)) {
+			matches.remove(response);
+		}
+	}
+	
+	public static ArrayList<ActiveMatchDetails> getMatches() {
+		return matches;
+	}
+	
+	public void createMatch(CreateMatchRequest request) {
+		this.client.sendNetworkObject(request);
+	}
 
 }

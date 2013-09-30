@@ -1,8 +1,10 @@
 package deco2800.arcade.arcadeui;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
+
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,23 +13,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.*;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
-
 import deco2800.arcade.client.ArcadeSystem;
-
 import deco2800.arcade.client.GameClient;
-
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 
 /**
  * 
@@ -44,7 +44,7 @@ public class MultiplayerLobby implements Screen {
     private Skin skin2;
 	private ShapeRenderer shapeRenderer;
 	private ShapeRenderer shapeRenderer2;
-	
+	;
 	
 public void show() {
 		shapeRenderer = new ShapeRenderer();
@@ -166,8 +166,13 @@ public void show() {
 		*/
 		 button.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
+
                 
 				
+
+                ArcadeSystem.requestLobbyGamesList();
+                ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
+				System.out.println("Matches: " + matches.toString());
 				//table2.removeActor();
 				table2.clear();
 				
@@ -270,6 +275,9 @@ public void show() {
  
 		//Gdx.app.exit();
 	}
+
+
+
 	
 	
 	@Override

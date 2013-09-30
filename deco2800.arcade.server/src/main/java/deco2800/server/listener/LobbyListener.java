@@ -10,6 +10,8 @@ import java.util.Set;
 
 
 
+
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyResponse;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
@@ -57,11 +59,25 @@ public class LobbyListener extends Listener {
 			case CANCELMATCH:
 				handleCancelMatchRequest(playerId);
 				break;
+			case GETMATCHES:
+				handleGetMatchesRequest(connection);
+				break;
 			}
+		} else if (object instanceof CreateMatchRequest) {
+			
+			CreateMatchRequest request = (CreateMatchRequest) object;
+			String gameId = request.gameId;
+			int playerId = request.hostPlayerId;
+			Connection hostConnection = request.hostConnection;
+			
+			lobby.createMatch(gameId, playerId, hostConnection);
 		}
 
 	}
-
+	
+	private void handleGetMatchesRequest(Connection connection) {
+		lobby.sendMatchesToClient(connection);
+	}
 
 	private void handleJoinLobbyRequest(int playerId, Connection connection){
 
@@ -83,8 +99,6 @@ public class LobbyListener extends Listener {
 			Set<Connection> connections = userConnections.get(playerId);
 			connections.add(connection);
 			connection.sendTCP(JoinLobbyResponse.OK);
-			ArrayList<LobbyMatch> matches = lobby.getMatches();
-			connection.sendTCP(matches);
 		} else {
 			//session not found
 			connection.sendTCP(JoinLobbyResponse.UNAVAILABLE);

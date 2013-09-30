@@ -1,6 +1,10 @@
 package deco2800.arcade.client;
 
 import java.util.Set;
+import java.util.UUID;
+
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 
 //TODO commenting?
 public class ArcadeSystem {
@@ -58,4 +62,5 @@ public class ArcadeSystem {
     public static void requestLobbyGamesList() {
     	arcade.requestLobbyGamesList();
     }
+    
 }

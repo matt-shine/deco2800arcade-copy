@@ -368,9 +368,9 @@ public class PlayerDatabaseManager {
 			blockedSet.add(new User(i));
 		}
 
-		for (String i : gameData) {
-			gameSet.add(new Game(i));
-		}
+		//for (String i : gameData) {
+			//gameSet.add(new Game(i));
+		//}
 
 		for (int i = 0; i < privacyData.size(); i++) {
 			if (privacyData.get(i) == 1) {

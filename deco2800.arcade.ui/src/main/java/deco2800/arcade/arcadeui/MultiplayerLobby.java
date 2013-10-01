@@ -197,7 +197,7 @@ public void show() {
 				table2.center().left();
 				table2.add(avatars).width(130).padTop(20).padLeft(150);
 				table2.add(players).width(130).padTop(20).padLeft(130);
-				table2.add(button4).width(130).height(25).padTop(20);
+				table2.add(button4).width(130).height(30).padTop(20);
 				table2.row();
 
 				
@@ -215,6 +215,23 @@ public void show() {
 	
 				}
 				
+				//Create "Refresh" Button.
+				table2.row();
+				final TextButton refresh = new TextButton("Refresh", skin);
+				final TextButton spacer = new TextButton("", skin);
+				table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
+				table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
+				
+				// "Refresh" button event listener.
+					 refresh.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+                System.out.println("You Clicked the refresh button");
+				// Add Refresh code here <Need this to return to the "match me" change listener.> 
+				
+			}
+				
+				
+            });
 				
 				
             }

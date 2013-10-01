@@ -223,13 +223,6 @@ public class Arcade extends JFrame {
         this.client.sendNetworkObject(gameUpdateCheckRequest);
 	}
 	
-	public void requestLobbyGamesList() {
-		NewLobbyRequest lobbyRequest = new NewLobbyRequest();
-		lobbyRequest.requestType = LobbyRequestType.JOINLOBBY;
-		lobbyRequest.playerID = this.player.getID();
-		this.client.sendNetworkObject(lobbyRequest);
-		
-	}
 
 	/**
 	 * Ask the server to play a given game.
@@ -427,6 +420,7 @@ public class Arcade extends JFrame {
     
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
+		System.out.println("Match Added To List in Arcade");
 	}
 	
 	public static void removeFromMatchList(RemovedMatchDetails response) {

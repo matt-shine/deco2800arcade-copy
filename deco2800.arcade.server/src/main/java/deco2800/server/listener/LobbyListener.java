@@ -11,6 +11,8 @@ import java.util.Set;
 
 
 
+
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyResponse;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;

@@ -169,7 +169,9 @@ public void show() {
             public void changed (ChangeEvent event, Actor actor) {
 
                 
-				
+            	ArcadeSystem.requestLobbyGamesList();
+                ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
+				System.out.println("Matches: " + matches.toString());
 
                 
 				//table2.removeActor();
@@ -236,9 +238,7 @@ public void show() {
             	request.gameId = "99999";
             	request.hostPlayerId = 12345;
             	ArcadeSystem.createMatch(request);
-            	ArcadeSystem.requestLobbyGamesList();
-                ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
-				System.out.println("Matches: " + matches.toString());
+            	
 
 				
             }

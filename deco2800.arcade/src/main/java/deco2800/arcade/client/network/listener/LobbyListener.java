@@ -31,7 +31,9 @@ public class LobbyListener extends NetworkListener {
 		super.received(connection, object);
 		
 		if (object instanceof ActiveMatchDetails) {
-			Arcade.addToMatchList((ActiveMatchDetails) object);
+			ActiveMatchDetails match = (ActiveMatchDetails)object;
+			Arcade.addToMatchList(match);
+			System.out.println("[CLIENT] MATCH ADDED. gameId: " + match.gameId + ", hostId: " + match.hostPlayerId);
 		}
 		
 		else if (object instanceof RemovedMatchDetails) {
@@ -41,8 +43,8 @@ public class LobbyListener extends NetworkListener {
 			ArcadeSystem.createMatch((CreateMatchRequest) object);
 		}
 		else if (object instanceof CreateMatchResponse) {
-			CreateMatchResponse response = new CreateMatchResponse();
-			System.out.println("[CLIENT] Create Match Response received (gameId: " + response.matchId + ")");
+			CreateMatchResponse response = (CreateMatchResponse)object;
+			//TODO: TAKE THE USER SOMEWHERE/CREATE A POPUP OR SOMETHING
 		}
 	}
 }

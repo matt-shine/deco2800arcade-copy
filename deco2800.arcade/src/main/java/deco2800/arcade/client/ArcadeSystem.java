@@ -1,5 +1,6 @@
 package deco2800.arcade.client;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
@@ -59,8 +60,8 @@ public class ArcadeSystem {
     	return arcade.isMultiplayerEnabled();
     }
     
-    public static void requestLobbyGamesList() {
-    	arcade.requestLobbyGamesList();
+    public static ArrayList<ActiveMatchDetails> requestLobbyGamesList() {
+    	return arcade.getMatches();
     }
     
     public static void createMatch(CreateMatchRequest matchRequest) {

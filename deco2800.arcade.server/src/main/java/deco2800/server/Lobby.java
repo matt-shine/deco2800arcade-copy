@@ -70,7 +70,8 @@ public class Lobby {
 				match.gameId = lobbyGames.get(i).getGameId();
 				match.hostPlayerId = lobbyGames.get(i).getHostPlayerId();
 				match.matchId = lobbyGames.get(i).getMatchId();
-				connection.sendTCP(lobbyGames.get(i));
+				connection.sendTCP(match);
+				System.out.println("SENDING MATCH TO CLIENT");
 			}
  		}
 		
@@ -94,7 +95,7 @@ public class Lobby {
 		LobbyMatch match = new LobbyMatch(gameId, playerId, connection);
 		lobbyGames.add(match);
 		CreateMatchResponse response = new CreateMatchResponse();
-		response.matchId = match.getMatchId().toString();
+		response.matchId = "TESTING MOTHER FUCKER";
 		connection.sendTCP(response);
 		System.out.println("[SERVER] Create Match Response sent.");
 	}

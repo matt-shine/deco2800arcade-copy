@@ -3,6 +3,7 @@ package deco2800.arcade.wl6;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+import deco2800.arcade.wl6.enemy.EnemyType;
 
 public class MapProcessor {
 
@@ -31,7 +32,13 @@ public class MapProcessor {
 		    		
 		    		model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.direction));
 		    		
-
+		    	} else if (id == WL6Meta.SECRET_DOOR) {
+		    		
+		    		SecretDoor door = new SecretDoor(doodadID());
+		    		door.setTextureName(dInfo.texture);
+		    		door.setPos(new Vector2(i + 0.5f, j + 0.5f));
+		    		model.addDoodad(door);
+		    		
 		    	} else {
 			    	
 		    		//everything else
@@ -111,10 +118,11 @@ public class MapProcessor {
 			//TODO spawn an enemy
 			
 			
-		} else if (d.health != 0 || d.gun != 0 || d.ammo != 0 || d.points != 0) {
+		} else if (d.health != 0 || d.points != 0 || d.ammo != 0 || d.gun != 0) {
 			
 			
-			//TODO spawn a pickup
+			dd = new Pickup(doodadID(), d.health, d.points, d.ammo, d.gun);
+			dd.setTextureName(d.texture);
 			
 			
 		} else if (d.solid) {

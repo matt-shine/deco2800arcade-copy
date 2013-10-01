@@ -1,6 +1,6 @@
 package deco2800.arcade.wl6;
 
-public class Door extends Doodad{
+public class Door extends Doodad {
 
 	
 	private boolean vertical = false;
@@ -37,13 +37,13 @@ public class Door extends Doodad{
 		float offY = vertical ? 0 : 0.5f;
 		
 		r.drawBasicSprite(
-				"unknown",
+				"door",
 				x + (vertical ? openness : 0),
 				y + (vertical ? 0 : openness),
 				angle
 		);
-		r.drawBasicSprite("unknown", x - offX, y - offY, angle + 90);
-		r.drawBasicSprite("unknown", x + offX, y + offY, angle - 90);
+		r.drawBasicSprite("door", x - offX, y - offY, angle + 90);
+		r.drawBasicSprite("door", x + offX, y + offY, angle - 90);
 		
 		
 	}

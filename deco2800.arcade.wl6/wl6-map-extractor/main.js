@@ -5,6 +5,24 @@
  */
 
 
+
+/**
+ * this code defines the order of the levels in the binary file
+ */
+var innerLevelOrder = ["boss", "l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8", "secret"];
+var levelOrder = [];
+for (var i = 1; i <= 6; i++) {
+    for (var j = 0; j < 10; j++) {
+        levelOrder.push("e" + i + innerLevelOrder[j]);
+    }
+}
+console.log(levelOrder);
+
+
+
+
+
+
 /**
  * Array transpose function from
  * http://stackoverflow.com/questions/4492678/to-swap-rows-with-columns-of-matrix-in-javascript-or-jquery
@@ -43,7 +61,6 @@ Array.prototype.transpose = function() {
     
     return t;
 };
-
 
 
 
@@ -118,17 +135,16 @@ Array.prototype.transpose = function() {
     }
     
     
+    
     function getLevelName(number) {
-        var episode = Math.floor(number / 10);
-        var level = number % 10;
-        var levelNames = ["boss", "l1", "l2", "l3", "l4", "l5", "l6", "l7", "l8", "secret"];
-        return "e" + (episode + 1) + levelNames[level];
+        return levelOrder[number];
     }
+    
     
     var d = get();
     for (var level in d) {
         if (d.hasOwnProperty(level)) {
-            fs.writeFile("out/" + level + ".json", JSON.stringify(d[level]));
+            fs.writeFile("out/" + level + ".json", JSON.stringify(d[level]).replace(/]/g, "]\n"));
         }
     }
       

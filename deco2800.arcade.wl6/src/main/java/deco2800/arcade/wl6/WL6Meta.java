@@ -145,8 +145,8 @@ public class WL6Meta {
 				//12: wood wall
 				new BlockInfo(true, "wood"),
 
-				//13: entranceelavator
-				new BlockInfo(true, "entranceelavator"),
+				//13: entrance elevator
+				new BlockInfo(true, "entranceelevator"),
 
 				//14: steel wall with sign
 				new BlockInfo(true, "steelsign"),
@@ -237,21 +237,105 @@ public class WL6Meta {
 				//22: spawn point - special case of waypoint handled by MapProcessor
 				DoodadInfo.wayPoint(DIRS.LEFT).specialCase(),
 				
-				//23: nothing
-				DoodadInfo.nonsolidScenery("water"),
+				//23: puddle of water
+				DoodadInfo.nonsolidScenery("doodad"),
 				
 				//24: oil drum
-				DoodadInfo.solidScenery("oildrum"),
+				DoodadInfo.solidScenery("doodad"),
 				
 				//25: table and chairs
-				DoodadInfo.solidScenery("table"),
+				DoodadInfo.solidScenery("doodad"),
 				
 				//26: lamp
-				DoodadInfo.nonsolidScenery("lamp"),
+				DoodadInfo.nonsolidScenery("doodad"),
 				
-				//26: chandelier
-				DoodadInfo.nonsolidScenery("chandelier"),
+				//27: chandelier
+				DoodadInfo.nonsolidScenery("doodad"),
 				
+				//28: temp - nothing
+				new DoodadInfo(),
+				
+				//29: dog food
+				DoodadInfo.healthPickup("dogfood", 5, 0),
+				
+				//30: temp - nothing
+				new DoodadInfo(),
+				
+				//31: temp - nothing
+				new DoodadInfo(),
+				
+				//32: temp - nothing
+				new DoodadInfo(),
+				
+				//33: temp - nothing
+				new DoodadInfo(),
+				
+				//34: temp - nothing
+				new DoodadInfo(),
+				
+				//35: temp - nothing
+				new DoodadInfo(),
+				
+				//36: temp - nothing
+				new DoodadInfo(),
+				
+				//37: temp - nothing
+				new DoodadInfo(),
+				
+				//38: temp - nothing
+				new DoodadInfo(),
+				
+				//39: temp - nothing
+				new DoodadInfo(),
+				
+				//40: temp - nothing
+				new DoodadInfo(),
+				
+				//41: temp - nothing
+				new DoodadInfo(),
+				
+				//42: temp - nothing
+				new DoodadInfo(),
+				
+				//43: temp - nothing
+				new DoodadInfo(),
+				
+				//44: temp - nothing
+				new DoodadInfo(),
+				
+				//45: temp - nothing
+				new DoodadInfo(),
+				
+				//46: temp - nothing
+				new DoodadInfo(),
+				
+				//47: food
+				DoodadInfo.healthPickup("food", 10, 0),
+				
+				//48: medkit
+				DoodadInfo.healthPickup("medkit", 25, 0),
+				
+				//49: ammo pickup
+				DoodadInfo.ammoPickup("ammo", 5, 0),
+				
+				//50: "small gun" - don't know what the difference between this and machine gun is
+				DoodadInfo.gunPickup("machinegun", 1, 0),
+
+				//51: machine gun
+				DoodadInfo.gunPickup("machinegun", 1, 0),
+
+				//52: cross
+				DoodadInfo.treasurePickup("crossrelic", 100),
+
+				//53: chalice
+				DoodadInfo.treasurePickup("chalice", 500),
+
+				//54: treasure chest
+				DoodadInfo.treasurePickup("treasurechest", 1000),
+
+				//55: crown
+				DoodadInfo.treasurePickup("crown", 5000),
+
 				//TODO the rest of the items
 		};
 	}

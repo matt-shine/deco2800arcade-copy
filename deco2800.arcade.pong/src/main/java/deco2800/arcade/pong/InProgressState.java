@@ -7,35 +7,44 @@ public class InProgressState extends GameState {
 
 	@Override
 	public void handleInput(Pong context) {
-		//Move the left paddle (mouse)
-    	context.getLeftPaddle().update(context.getBall());
-    	
-    	//Move the right paddle (automatic)
-    	if(!Gdx.input.isTouched())context.getRightPaddle().update(context.getBall());
+		Paddle left = context.getLeftPaddle();
+		Paddle right = context.getRightPaddle();
+		Ball ball = context.getBall();
+		
+		//Move the paddles (mouse)
+    	left.update(ball);
+    	right.update(ball);
     	
     	//Move the ball
     	//ball.bounds.x -= ball.velocity.x * Gdx.graphics.getDeltaTime();
-    	context.getBall().move(Gdx.graphics.getDeltaTime());
+    	ball.move(Gdx.graphics.getDeltaTime());
     	
     	// checking code for the slider achievement
-        if (context.getBall().bounds.overlaps(context.getLeftPaddle().bounds)) {
-            if (context.getLeftPaddle().direction == -1) context.incrementAchievement("pong.slider.moveUp");
-            if (context.getLeftPaddle().direction == 1) context.incrementAchievement("pong.slider.moveDown");
+    	boolean hitLeft = ball.bounds.overlaps(left.bounds);
+       	boolean hitRight = ball.bounds.overlaps(right.bounds);
+       	
+        if (hitLeft) {
+            if (left.direction == -1) {
+            	context.incrementAchievement("pong.slider.moveUp");
+            } else if (left.direction == 1) {
+            	context.incrementAchievement("pong.slider.moveDown");
+            }
         }
     	
     	//If the ball hits a paddle then bounce it
-    	if (context.getBall().bounds.overlaps(context.getLeftPaddle().bounds) || context.getBall().bounds.overlaps(context.getRightPaddle().bounds)) {
-    		context.getBall().bounceX();
+    	if (hitLeft || hitRight) {
+    		ball.bounceX();
     	}
+    	
     	//Bounce off the top or bottom of the screen
-    	if (context.getBall().bounds.y <= 0 || context.getBall().bounds.y >= context.SCREENHEIGHT-Ball.WIDTH) {
-    		context.getBall().bounceY();
+    	if (ball.bounds.y <= 0 || ball.bounds.y >= context.SCREENHEIGHT-Ball.WIDTH) {
+    		ball.bounceY();
     	}
     	
     	//If the ball gets to the left edge then player 2 wins
-    	if (context.getBall().bounds.x <= 0) {
+    	if (ball.bounds.x <= 0) {
     		context.endPoint(1);
-    	} else if (context.getBall().bounds.x + Ball.WIDTH > context.SCREENWIDTH) { 
+    	} else if (ball.bounds.x + Ball.WIDTH > context.SCREENWIDTH) { 
     		//If the ball gets to the right edge then player 1 wins
     		context.endPoint(0);
             context.incrementAchievement("pong.win5Points");

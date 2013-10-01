@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.esotericsoftware.tablelayout.BaseTableLayout;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
@@ -32,7 +33,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access homepage\nlogin with username:home\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);
@@ -45,9 +46,12 @@ public class LoginScreen implements Screen {
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
         CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        rememberBox.getCells().get(0).size(25, 25);
+        rememberBox.getCells().get(0).pad(5);
+        rememberBox.getCells().get(1).pad(2);
         TextButton loginButton = new TextButton("Login", skin);
-        TextButton registerButton = new TextButton("Register", skin);
-        TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
+        TextButton registerButton = new TextButton("Register", skin, "default-blue");
+        TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "default-red");
 
         table.add(tempLabel).colspan(2);  // Temporary label to display a message
         table.row();
@@ -59,7 +63,7 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(serverText).width(400).pad(5).colspan(2);
         table.row();
-        table.add(rememberBox);
+        table.add(rememberBox).width(190).height(25).pad(5).colspan(2).align(BaseTableLayout.LEFT);
         table.row();
         table.add(loginButton).width(190).height(50).pad(5);
         table.add(registerButton).width(190).height(50).pad(5);
@@ -74,6 +78,9 @@ public class LoginScreen implements Screen {
                 }
                 else if (usernameText.getText().toLowerCase().equals("store")) {
                     arcadeUI.setScreen(arcadeUI.store);
+                }
+                else if (usernameText.getText().toLowerCase().equals("home")) {
+                	arcadeUI.setScreen(arcadeUI.main);
                 }
                 else {
                     ArcadeSystem.login(usernameText.getText());

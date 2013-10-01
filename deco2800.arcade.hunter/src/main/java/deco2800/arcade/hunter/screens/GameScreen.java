@@ -1,7 +1,6 @@
 package deco2800.arcade.hunter.screens;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -22,9 +21,7 @@ import deco2800.arcade.hunter.model.BackgroundLayer;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.hunter.model.SpriteLayer;
-import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
-import deco2800.arcade.platformergame.model.EntityCollision;
 
 /**
  * A Hunter game for use in the Arcade
@@ -49,7 +46,7 @@ public class GameScreen implements Screen {
 		
 	public GameScreen(Hunter hunter) {
 	
-	
+
 		this.hunter = hunter;
 		// Plays the music
 		hunter.getMusicManager().play(HunterMusic.GAME);
@@ -124,7 +121,7 @@ public class GameScreen implements Screen {
 			entities.updateAll(delta);
 
 			PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
-			// checkEntityCollisions();
+			// PhysicsHandler.checkEntityCollisions(entities);
 
 			backgroundLayer.update(delta, Config.gameSpeed);
 			spriteLayer.update(delta, Config.gameSpeed);
@@ -169,10 +166,8 @@ public class GameScreen implements Screen {
 	/**
 	 * Draws the lives of the player on screen
 	 * 
-	 * @param batch
+	 * @param batch SpriteBatch to use for drawing.
 	 */
-	
-
 	private void drawGameUI(SpriteBatch batch) {
 		drawLives(batch);
 		drawScore(batch);
@@ -213,47 +208,6 @@ public class GameScreen implements Screen {
 
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
-	}
-
-	/**
-	 * Checks for entity collisions
-	 */
-	private void checkEntityCollisions() {
-		// Make a list of collision events
-		// At the end process them all one after another
-		/*
-		 * precedence should be
-		 * 
-		 * 
-		 * Player ->| left edge of screen Prey ->| left edge of screen Predator
-		 * ->| left edge of screen Item ->| Player PlayerProjectile ->| Animal
-		 * (player melee attacks also PlayerProjectiles) WorldProjectile ->|
-		 * Player (animal melee attacks also WorldProjectiles) MapEntity ->|
-		 * Animal MapEntity ->| WorldProjectile MapEntity ->| PlayerProjectile
-		 * MapEntity ->| Player
-		 * 
-		 * use an enum for collision types and iterate through a sorted list
-		 */
-
-		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
-
-		for (Entity e : entities) {
-			collisions.addAll(e.getCollisions(entities));
-			// collisions.add(new EntityCollision(e, e,
-			// CollisionType.PLAYER_C_LEFT_EDGE)); //EXAMPLE, REMOVEME TODO
-			// ArrayList<EntityCollision> ec = e.getCollisions();
-			// for (EntityCollision c : ec) {
-			// collisions.add(c);
-			// }
-		}
-		// Add events here
-
-		Collections.sort(collisions);
-
-		for (EntityCollision c : collisions) {
-			// Handle the collision
-			c.getEntityOne().handleCollision(c.getEntityTwo());
-		}
 	}
 
 	/**

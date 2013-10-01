@@ -1,0 +1,8 @@
+[GRASS]
+grass_1.csv
+grass_2.csv
+grass_3.csv
+[ROCK]
+rock_1.csv
+rock_2.csv
+rock_3.csv

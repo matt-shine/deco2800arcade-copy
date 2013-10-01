@@ -4,11 +4,46 @@ import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
+import deco2800.arcade.platformergame.model.EntityCollision;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class PhysicsHandler {
-	public static void checkCollisions(EntityCollection ec) {
+    /**
+     * Checks for entity collisions
+     */
+    private void checkEntityCollisions(EntityCollection entities) {
+		/*
+		 * Make a list of collision events
+		 * At the end, process them all one after the other
+		 * Precedence should be
+		 *
+		 * Player ->| left edge of screen
+		 * Prey ->| left edge of screen
+		 * Predator ->| left edge of screen
+		 * Item ->| Player
+		 * PlayerProjectile ->| Animal(player melee attacks also PlayerProjectiles)
+		 * WorldProjectile ->| Player (animal melee attacks also WorldProjectiles)
+		 * MapEntity ->| Animal
+		 * MapEntity ->| WorldProjectile
+		 * MapEntity ->| PlayerProjectile
+		 * MapEntity ->| Player
+		 */
 
-	}
+        ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
+
+        for (Entity e : entities) {
+            collisions.addAll(e.getCollisions(entities));
+        }
+
+        Collections.sort(collisions);
+
+        for (EntityCollision c : collisions) {
+            // Handle the collision
+            c.getEntityOne().handleCollision(c.getEntityTwo());
+        }
+    }
 
 	/**
 	 * Checks the collision of entities with the map
@@ -54,7 +89,7 @@ public class PhysicsHandler {
 
 		for (int i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
 			int tile = foregroundLayer.getCollisionTileAt(i, e.getY());
-			float slopeHeight = 0;
+			float slopeHeight;
 
 			switch (tile) {
 			case 0:
@@ -133,7 +168,7 @@ public class PhysicsHandler {
 
 		for (int i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
 			int tile = foregroundLayer.getCollisionTileAt(i, top);
-			float slopeHeight = 0;
+			float slopeHeight;
 			switch (tile) {
 			case 0:
 				// Air tile
@@ -212,7 +247,7 @@ public class PhysicsHandler {
 
 		for (int i = (int) e.getY(); i <= top; i += Config.TILE_SIZE) {
 			int tile = foregroundLayer.getCollisionTileAt((int) right, i);
-			float slopeHeight = 0;
+			float slopeHeight;
 			switch (tile) {
 			case 0:
 				// Air tile

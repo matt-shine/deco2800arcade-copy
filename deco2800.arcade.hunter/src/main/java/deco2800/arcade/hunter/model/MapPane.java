@@ -24,26 +24,12 @@ public class MapPane {
 	private TextureRegion rendered;
 	
 	/**
-	 * 
-	 * @param data map data
-	 * @param startOffset The first tile from the bottom on the left hand
-	 * 		  side of the map, which is a space where the player can stand.
-	 * @param endOffset The first tile from the bottom on the right hand
-	 * 		  side of the map, which is a space where the player can stand.
-	 * @param type the current map type
+	 * @param filename file path for map relative to src/resources/
+	 * @param type The MapType of the map pane.
 	 */
 	public MapPane(String filename, MapType type) {
-		
-		//Rewrite to take file path string, make parser for file of format
-		/*
-		 * [startOffset, endOffset]
-		 * [backgroundLayerData]
-		 * [foregroundLayerData]
-		 * [collisionLayerData]
-		 */
-		
 		this.type = type;
-		
+
 		loadPane(filename);
 		renderPane();
 		

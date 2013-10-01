@@ -1,7 +1,11 @@
 package deco2800.arcade.hunter.model;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import deco2800.arcade.hunter.Hunter.Config;
@@ -10,50 +14,106 @@ import deco2800.arcade.hunter.model.MapPane.MapType;
 public class ForegroundLayer extends Map {
 	private ArrayList<MapPane> panes;
 	private int paneCount; //How many panes should we keep loaded at a time, should be the number that can fit on the screen plus one
+    private MapType currentType = MapType.GRASS;
+
+    //Key is one of the MapType enums, value is a list of pane objects which can be instantiated
+    private HashMap<MapType, ArrayList<MapPane>> mapPanes = new HashMap<MapType, ArrayList<MapPane>>();
 	
 	/**
-	 * @param width map panes to keep loaded at a time
+     * @param speedModifier How fast the pane should move relative to the camera. 1 is the same speed as the camera.
+	 * @param paneCount map panes to keep loaded at a time
 	 */
 	public ForegroundLayer(float speedModifier, int paneCount) {
 		super(speedModifier);
 		this.paneCount = paneCount;
+
+        loadPanes(Gdx.files.internal("maps/maplist.txt"));
 		
 		panes = new ArrayList<MapPane>(paneCount);
 		while (panes.size() < this.paneCount) {
-			panes.add(getRandomPane(MapType.GRASS));
+			panes.add(getRandomPane());
 		}
 	}
 	
 	public ArrayList<MapPane> getPanes() {
-		ArrayList<MapPane> paneArray = new ArrayList<MapPane>(panes);
-		return paneArray;
+		return new ArrayList<MapPane>(panes);
 	}
+
+    /*
+     * Load a set of panes from a given file into the mapPanes HashMap above
+     * file should have the format:
+     * [MapType]
+     * filename.map
+     * filename2.map
+     * [MapType2]
+     * filename3.map
+     */
+    private void loadPanes(FileHandle listFile) {
+        BufferedReader br;
+        String line, tagText;
+        MapType type = null;
+
+        try {
+            br = new BufferedReader(new InputStreamReader(listFile.read()));
+
+            while (null != (line = br.readLine())) {
+                if (line.matches("\\[\\w+\\]")) {
+                    //Line is a tag which corresponds to a set of maps for a new MapType
+                    tagText = line.replace("[", "").replace("]", "");
+                    try {
+                        type = MapType.valueOf(tagText);
+
+                    } catch (IllegalArgumentException e) {
+                        e.printStackTrace(); //Todo, more detail here?
+                    }
+                } else if (type != null) {
+                    //Here's a map file for the current type! Add it to the list.
+                    ArrayList<MapPane> typePanes = mapPanes.get(type);
+                    if (typePanes == null) {
+                        typePanes = new ArrayList<MapPane>();
+                    }
+                    typePanes.add(new MapPane("maps/" + line, type));
+                    mapPanes.put(type, typePanes);
+                }
+            }
+
+            br.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();  //Todo, more detail here?
+        } catch (IOException e) {
+            e.printStackTrace();  //Todo, more detail here?
+        }
+    }
 	
 	/**
 	 * Get a random map pane of the requested type
-	 * @param type map type
 	 * @return new MapPane
 	 */
-	private MapPane getRandomPane(MapType type) {
-		String filename;
-		filename = "maps/exampleMap.csv";
-		
-		return new MapPane(filename, type); //Fixed start/end offset should be read from a file
+	private MapPane getRandomPane() {
+        ArrayList<MapPane> typePanes = mapPanes.get(this.currentType);
+
+        return typePanes.get((int) Math.round(Math.random() * (typePanes.size() - 1                                                                                 )));
 	}
 	
 	/**
 	 * Update the state of the map, should be called each time the main render loop is called
 	 * @param delta delta time of the render loop
-	 * @param gameSpeed current game speed
+	 * @param cameraX current camera x position
 	 */
 	public void update(float delta, float cameraX) {
 		if (cameraX - Config.PANE_SIZE_PX * paneCount > offset.x) {
 			offset.x += Config.PANE_SIZE_PX;
+
+            if (offset.x > (currentType.ordinal() + 1) * Config.PANES_PER_TYPE * Config.PANE_SIZE_PX) {
+                if (currentType.ordinal() < MapType.values().length - 1) {
+                    currentType = MapType.values()[(currentType.ordinal() + 1)];
+                }
+            }
 			
 			offset.y += (panes.get(0).getEndOffset() - panes.get(1).getStartOffset());
 			
 			panes.remove(0);
-			panes.add(getRandomPane(MapType.GRASS));
+			panes.add(getRandomPane());
 		}
 	}
 
@@ -94,33 +154,10 @@ public class ForegroundLayer extends Map {
 	
 	/**
 	 * Get the collision tile at a given world-space coordinate
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @return collision tile type, or -1 if the given location is out of bounds
 	 */
-	public int getCollisionTileAt2(int x, int y) {
-		float tileOffsetX = x - offset.x;
-		
-		float paneOffsetY;
-		int tileX, tileY;
-		int pane = (int) (tileOffsetX / Config.PANE_SIZE_PX);
-		
-		if (pane >= 0 && pane < paneCount) {
-			
-			tileX = Config.PANE_SIZE - (int) (tileOffsetX / Config.TILE_SIZE);
-			
-			paneOffsetY = getPaneOffset(pane);
-			
-			if (y >= paneOffsetY && y <= paneOffsetY + Config.PANE_SIZE_PX){
-				tileY = Config.PANE_SIZE - (int) ((y + paneOffsetY) / Config.TILE_SIZE);
-				
-				int tile = panes.get(pane).getCollisionTile(tileX, tileY);
-				return tile;
-			}
-		}
-		return -1;
-	}
-	
 	public int getCollisionTileAt(float x, float y) {
 		int tileOffsetX = (int) (x - offset.x);
 		int tileOffsetY;
@@ -142,9 +179,7 @@ public class ForegroundLayer extends Map {
 				tileY < 0 || tileY >= Config.PANE_SIZE) {
 			return -2;
 		}
-		
-		int tile = panes.get(pane).getCollisionTile(tileX, tileY);
-		//System.out.println("("+ tileX + ", " + tileY + ") = " + tile + "    [" + x + " : " + y + "] @" + pane); //Debug TODO remove
-		return tile;
+
+		return panes.get(pane).getCollisionTile(tileX, tileY);
 	}
 }

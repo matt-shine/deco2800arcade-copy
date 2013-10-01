@@ -3,15 +3,19 @@ package deco2800.arcade.userui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
-
-public class Controller {
+public class ControllerMain {
 	
 	private EditScreen editView;
 	private UserScreen userView;
+	private AchievementScreen achievementView;
 	private Model theModel;
 	
-	public Controller(Model theModel, UserScreen userView) {
+	/**
+	 * Controller for the main profile page
+	 * @param theModel
+	 * @param userView
+	 */
+	public ControllerMain(Model theModel, UserScreen userView) {
 		
 		this.theModel = theModel;
 		this.userView = userView;
@@ -21,9 +25,9 @@ public class Controller {
 		this.userView.addForumListener(new ForumListener());
 		this.userView.addStoreListener(new StoreListener());
 		this.userView.addLibraryListener(new LibraryListener());
+		this.userView.addProfileListener(new MyProfileListener());
 		this.userView.addFriendListener(new FriendListener());
 		this.userView.addStatusListener(new StatusListener());
-
 	
 	}
 	
@@ -38,12 +42,13 @@ public class Controller {
 		
 	}
 	
-	class HomeListener implements ActionListener{
+	public class HomeListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the home page
+			System.out.println("Home Button Works");
 			
 		}
 		
@@ -55,6 +60,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the forum
+			System.out.println("Forum Button Works");
 			
 		}
 		
@@ -66,6 +72,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the game store
+			System.out.println("Store Button Works");
 			
 		}
 		
@@ -77,6 +84,18 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the Library page
+			System.out.println("Library Button Works");
+			
+		}
+		
+	}
+	
+	class MyProfileListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			System.out.println("My Profile Button Works");
 			
 		}
 		
@@ -88,6 +107,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Add Friend to List
+			System.out.println("Add Friend Button");
 			
 		}
 		
@@ -99,6 +119,7 @@ public class Controller {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open status popup
+			System.out.println("Status Button Works");
 			
 		}
 		

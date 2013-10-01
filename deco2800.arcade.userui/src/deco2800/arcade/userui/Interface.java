@@ -27,10 +27,12 @@ public class Interface {
 		Model theModel = new Model();
 		
 		UserScreen userView = new UserScreen(theModel);
+		AchievementScreen achievementView = new AchievementScreen(theModel);
 		//EditScreen editView = new EditScreen(theModel);
-		AchievementScreen achievementview = new AchievementScreen(theModel);
 		
-		Controller controller = new Controller(theModel,userView);
+		ControllerMain maincontroller = new ControllerMain(theModel,userView);
+		ControllerAchievement achievementcontroller = new ControllerAchievement(theModel, achievementView);
+		//ControllerEdit editcontroller = new ControllerEdit(theModel, editView);
 			
 	}
 

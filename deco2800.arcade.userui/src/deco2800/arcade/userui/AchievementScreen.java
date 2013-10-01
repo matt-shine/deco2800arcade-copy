@@ -12,13 +12,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import net.miginfocom.swing.MigLayout;
 
-public class AchievementScreen extends JFrame implements ActionListener {
+public class AchievementScreen extends JFrame{
 
 	/**
 	 * 
@@ -41,8 +42,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
 	//Declare Buttons here
 	private JButton addfriendbutton;
 	private JButton editbutton;
-	private JButton myprofilelink;
-	private JButton homelink, storelink, librarylink, forumlink;
+	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
 	//Declare ComboBox
 	private JComboBox gameselect;
@@ -118,6 +118,7 @@ public class AchievementScreen extends JFrame implements ActionListener {
         sidepanel.add(playerpanel, "wrap, center, width :300, height :600");
         sidepanel.add(gamepanel, "wrap, gapbottom 30px, width :300, height :600");
         sidepanel.add(gameselect, "gapbottom 170px");
+        
 	}
 	
 	/**
@@ -303,9 +304,94 @@ public void addplayerinfopanel(){
         menupanel.add(myprofilelink,"center, gapbefore 350px");	   		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent a) {
+	/*
+	 *  Event Listeners for Buttons
+	 */
+	
+	/**
+	 * Button navigates to the home page on click
+	 * @param listenForHomeLink
+	 */
+	public void addHomeListener(ActionListener listenForHomeLink){
 		
+		homelink.addActionListener(listenForHomeLink);	
+		
+	}
+	
+	/**
+	 * Button navigates to the GameStore page on click
+	 * @param listenForStoreLink
+	 */
+	public void addStoreListener(ActionListener listenForStoreLink){
+		
+		storelink.addActionListener(listenForStoreLink);
+		
+	}
+	
+	/**
+	 * Button navigates to the Forum page on click
+	 * @param listenForForumLink
+	 */
+	public void addForumListener(ActionListener listenForForumLink){
+		
+		forumlink.addActionListener(listenForForumLink);
+		
+	}
+	
+	/**
+	 * Button navigates to the Library page on click
+	 * @param listenForLibraryLink
+	 */
+	public void addLibraryListener(ActionListener listenForLibraryLink){
+		
+		librarylink.addActionListener(listenForLibraryLink);
+		
+	}
+	
+	/**
+	 * Button navigates back to user's profile page
+	 * @param listenForProfileLink
+	 */
+	public void addProfileListener(ActionListener listenForProfileLink){
+		
+		myprofilelink.addActionListener(listenForProfileLink);	
+		
+	}
+	
+	/**
+ 	* Button opens a popup allowing user to add friend
+ 	* @param listenForAddFriendButton
+ 	*/
+	public void addFriendListener(ActionListener listenForAddFriendButton){
+	
+		addfriendbutton.addActionListener(listenForAddFriendButton);	
+	
+	}
+
+	/**
+ 	* Button opens a popup allowing editing of profile details
+ 	* @param listenForEditButton
+ 	*/
+	public void addEditListener(ActionListener listenForEditButton){
+	
+		editbutton.addActionListener(listenForEditButton);	
+	
+	}
+
+	/**
+ 	* Button opens a popup allowing user to change their visibility status
+ 	* @param listenForStatusButton
+ 	*/
+	public void addStatusListener(ActionListener listenForStatusButton){
+	
+		// make button then add here
+	
+	}
+
+	public void displayErrorMessage(String errorMessage){
+	
+		JOptionPane.showMessageDialog(this, errorMessage);
+	
 	}
 
 }

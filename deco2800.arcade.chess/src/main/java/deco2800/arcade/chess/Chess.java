@@ -124,6 +124,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	//Tracks whether the game is paused
 	boolean paused = false;
 	
+	//Tracks level of single player mode
+	boolean EasyComputerOpponent;
+	boolean HardComputerOpponent;
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
@@ -153,6 +156,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; // TODO eventually the server may send back the
 									// opponent's actual username
+		EasyComputerOpponent = true;
 		
 		URL resource = this.getClass().getResource("/");
 		
@@ -285,10 +289,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 */
 	@Override
 	public void render() {
-
-		// White background
-		//Gdx.gl.glClearColor(0, 0, 0, 1);
-		//Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		// tell the camera to update its matrices.
 		camera.update();
@@ -301,7 +301,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		if(moving) {
 			showPossibleMoves(movingPiece);
 		}
-
+		
 		super.render();
 
 	}
@@ -423,12 +423,21 @@ public class Chess extends GameClient implements InputProcessor, Screen {
     			                "move_piece",
     			                movingPiece, newPos
     			        ));
-				return true;*/
+					 */
+					/* If the easy computer opponent is playing, and black teams turn
+					*  (computer controlled team)
+					*/
+					if(EasyComputerOpponent && board.whoseTurn()) {
+						board.moveAIPieceEasy();
+						movePieceGraphic();
+					}
+					return true;
 				}
 				board.checkForCheckmate(board.whoseTurn());
 				movingPiece = board.nullPiece;
 				moving = false;
 				return false;
+				
 			}
 		}
 		return true;

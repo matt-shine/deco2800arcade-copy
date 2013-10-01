@@ -427,10 +427,7 @@ public class Board {
 		if ((piece.getClass() == blackKing.getClass())
 				|| (piece.getClass() == blackRook1.getClass())) {
 			// Check if the kingCastle swap can be performed, if so allow move
-			System.out.println("1");
 			if (kingCastleSwap(piece)) {
-				System.out.println("2");
-				System.out.println(piece);
 				// Allow black teams move
 				System.out.println(piece.getTeam());
 				if (piece.getTeam()) {
@@ -573,6 +570,30 @@ public class Board {
 			}
 		}
 		return activePieces;
+	}
+	
+	/**
+	 * Finds and returns a list of all currently active pieces for the given 
+	 * team.
+	 * 
+	 * @param team
+	 * 		The team for which the active pieces will be found.
+	 * @return
+	 * 		A list of all currently active pieces for the team.
+	 */
+	public List<Piece> findActivePieces(boolean team) {
+		List<Piece> allActive;
+		List<Piece> returnPieces = new ArrayList<Piece>();
+		
+		allActive = findActivePieces();
+		
+		for(Piece piece: allActive) {
+			if(piece.getTeam() == team) {
+				returnPieces.add(piece);
+			}
+		}
+		
+		return returnPieces;
 	}
 
 	public String toString() {
@@ -1478,6 +1499,13 @@ public class Board {
 		Piece movePiece = chooseAIPiece();
 		
 		int[] moveSquare = chooseAISquare(movePiece);
+		
+		System.out.println("AI move: " + movePiece);
+		System.out.println("AI move: [" + moveSquare[0] + ", " + moveSquare[1] + "]");
+		if(!checkForStaleMate(turn)) {
+			movePiece(movePiece, moveSquare);
+		}
+		
 	}
 	
 	/**
@@ -1488,8 +1516,17 @@ public class Board {
 	 * 		The piece that will be moved by the computer controlled player.
 	 */
 	private Piece chooseAIPiece() {
+		List<Piece> activePieces = findActivePieces(turn);
+		int numPieces = activePieces.size();
 		
-		return null;
+		int pieceIndex = (int)(Math.random() * ((numPieces - 1) + 1));
+		
+		Piece returnPiece = activePieces.get(pieceIndex);
+		while(allowedMoves(returnPiece).size() == 0) {
+			pieceIndex = (int)(Math.random() * ((numPieces - 1) + 1));
+		}
+		
+		return returnPiece;
 	}
 	
 	/**
@@ -1503,7 +1540,13 @@ public class Board {
 	 */
 	private int[] chooseAISquare(Piece movePiece) {
 		
-		return null;
+		List<int[]> moves = allowedMoves(movePiece);
+		
+		int numMoves = moves.size();
+		
+		int moveIndex = (int)(Math.random() * ((numMoves - 1) + 1));
+		
+		return moves.get(moveIndex);
 	}
 
 	/**

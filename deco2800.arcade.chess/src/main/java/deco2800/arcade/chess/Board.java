@@ -13,7 +13,7 @@ public class Board {
 	// stores all moves pieces have made
 	ArrayList<int[]> moves;
 	ArrayList<Piece> pieceMoved;
-	// true = blacks turn false = whites turn
+	// true = blacks turn, false = whites turn
 	private boolean turn;
 	//
 	boolean checkmateFlag;
@@ -170,6 +170,11 @@ public class Board {
 		return true;
 	}
 	
+	/**
+	 * 
+	 * @param piece
+	 * @return
+	 */
 	public List<int[]> removeCheckMoves(Piece piece) {
 		int index = 0;
 		List<int[]> allowedMoves = this.allowedMoves(piece);
@@ -210,6 +215,14 @@ public class Board {
 		return allowedMovesCopy;
 	}
 
+	/**
+	 * Determines if a stalemate has been reached.
+	 * 
+	 * @param Team
+	 * 		The team that is currently in turn.
+	 * @return
+	 * 		True if a stalemate has been reached, false otherwise.
+	 */
 	private boolean checkForStaleMate(boolean Team) {
 
 		boolean staleMate = false;
@@ -378,7 +391,17 @@ public class Board {
 		}
 		return allowableMoves;
 	}
-
+	
+	/**
+	 * Moves the given piece to the given position.
+	 * 
+	 * @param piece
+	 * 		The piece to be moved.
+	 * @param newPosition
+	 * 		The position to which the piece will be moved.
+	 * @return
+	 * 		True if the piece moved, false if the move failed.
+	 */
 	public boolean movePiece(Piece piece, int[] newPosition) {
 		//FIXME big method
 		int[] oldPos = findPiece(piece);
@@ -524,7 +547,7 @@ public class Board {
 	}
 
 	/**
-	 * Undos last move
+	 * Undoes last move
 	 */
 	private void removeMove() {
 		moves.remove(moves.size() - 1);
@@ -557,8 +580,18 @@ public class Board {
 	}
 
 	/**
-	 * Checks directions bishop can move and all removes jumps from possible
-	 * moves
+	 * Returns a list with all impossible jumps removed from the bishops possible
+	 * moves.
+	 * 
+	 * @param possibleMoves
+	 *            List of all possible moves the bishop can make, not disregarding
+	 *            disallowed moves
+	 * @param currentPos
+	 *            The current position of the given bishop
+	 * @param piece
+	 *            The bishop for whom the moves are being removed from
+	 * @return A list of all possible moves the bishop can make without the
+	 *         impossible jumps included in possibleMoves
 	 */
 	private List<int[]> removeJumpsBishop(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
@@ -778,7 +811,6 @@ public class Board {
 	 * @return A list of all possible moves the rook can make without the
 	 *         impossible jumps included in possibleMoves
 	 */
-
 	private List<int[]> removeJumpsRook(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
 		//FIXME big method
@@ -973,6 +1005,20 @@ public class Board {
 
 	}
 
+	/**
+	 * Returns a list with all impossible jumps removed from the queens possible
+	 * moves.
+	 * 
+	 * @param possibleMoves
+	 *            List of all possible moves the queen can make, not disregarding
+	 *            disallowed moves
+	 * @param currentPos
+	 *            The current position of the given queen
+	 * @param piece
+	 *            The queen for whom the moves are being removed from
+	 * @return A list of all possible moves the queen can make without the
+	 *         impossible jumps included in possibleMoves
+	 */
 	private List<int[]> removeJumpsQueen(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
 		//FIXME big method
@@ -1422,6 +1468,42 @@ public class Board {
 		}
 		// Required conditions aren't met
 		return false;
+	}
+	
+	/**
+	 * Moves a piece on the computer controlled team using basic logic for
+	 * easy mode.
+	 */
+	public void moveAIPieceEasy() {
+		Piece movePiece = chooseAIPiece();
+		
+		int[] moveSquare = chooseAISquare(movePiece);
+	}
+	
+	/**
+	 * Chooses a piece from the computer controlled teams active pieces to 
+	 * move.
+	 * 
+	 * @return
+	 * 		The piece that will be moved by the computer controlled player.
+	 */
+	private Piece chooseAIPiece() {
+		
+		return null;
+	}
+	
+	/**
+	 * Chooses an allowable move for the given piece for the computer
+	 * controlled player to make.
+	 * 
+	 * @param movePiece
+	 * 		The piece that will be moved by the computer controlled player.
+	 * @return
+	 * 		The square to which the given piece will be moved.
+	 */
+	private int[] chooseAISquare(Piece movePiece) {
+		
+		return null;
 	}
 
 	/**

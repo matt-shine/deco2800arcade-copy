@@ -195,18 +195,39 @@ public class LunarLander extends GameClient {
 	    shapeRenderer.setColor(1, 1, 1, 1);
 	    shapeRenderer.end();
 	    
-//	    for (int i = 0; i < terrain.size(); i++){
-//	    	shapeRenderer.begin(ShapeType.FilledTriangle);
-//		    shapeRenderer.setColor(1, 1, 1, 1);
-//			shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), 50, 50);		
-//			shapeRenderer.end();
-//	    }
+	    //fills map with rectangles
+	    for (int i = 1; i < terrain.size(); i++){
+	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
+	    		shapeRenderer.begin(ShapeType.FilledRectangle);
+			    shapeRenderer.setColor(1, 1, 1, 1);
+				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));		
+				shapeRenderer.end();
+	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
+	    		shapeRenderer.begin(ShapeType.FilledRectangle);
+			    shapeRenderer.setColor(1, 1, 1, 1);
+				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1));		
+				shapeRenderer.end();
+	    	}
+	  
+	    }
 	    
-	    for (int i = 0; i < terrain.size(); i++){
-	    	shapeRenderer.begin(ShapeType.FilledRectangle);
-		    shapeRenderer.setColor(1, 1, 1, 1);
-			shapeRenderer.filledRect(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));		
-			shapeRenderer.end();
+	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    shapeRenderer.setColor(1, 1, 1, 1);
+		shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));		
+		shapeRenderer.end();
+	    
+	    for (int i = 1; i < terrain.size(); i++){
+	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
+		    	shapeRenderer.begin(ShapeType.FilledTriangle);
+			    shapeRenderer.setColor(88, 222, 1, 1);
+				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(0), terrain.get(i).get(3));		
+				shapeRenderer.end();
+	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
+	    		shapeRenderer.begin(ShapeType.FilledTriangle);
+			    shapeRenderer.setColor(88, 222, 1, 1);
+				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(2), terrain.get(i).get(1));		
+				shapeRenderer.end();
+	    	}
 	    }
 	    
 	    /*if(!(initPosition + finalY <= 20) && moving == true){

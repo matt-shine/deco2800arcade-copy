@@ -181,6 +181,7 @@ public class LunarLander extends GameClient {
 	    //set map to be randomonly made, or not
 	    if(randomMap == true){
 	    for (int i = 0; i < terrain.size(); i++){
+	    	shapeRenderer.setColor(5, 255, 5, 1);
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
 	    	
 	    }

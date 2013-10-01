@@ -32,19 +32,19 @@ public class SidebarAvatar extends Widget {
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
 
-        texture.draw(batch, getX(), getY() - 20, 170, 170);
+        texture.draw(batch, getX(), getY() - 20, 180, 180);
         font.setColor(Color.WHITE);
-        font.draw(batch, "text", 0, 0);
+        font.draw(batch, "your picture here", getX(), getY() - 20);
     }
 
     @Override
     public float getPrefHeight() {
-        return 170;
+        return 180;
     }
 
     @Override
     public float getPrefWidth() {
-        return 170;
+        return 180;
     }
 
 

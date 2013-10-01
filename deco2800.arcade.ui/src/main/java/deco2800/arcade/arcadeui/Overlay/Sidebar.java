@@ -63,7 +63,7 @@ public class Sidebar extends Group {
             item.setSize(120, 40);
             item.setText(buttonText[i]);
             //item.setPosition(WIDTH / 2 - item.getWidth() / 2, overlay.getHeight() - i * 60 - 200);
-            item.setPosition(30, overlay.getHeight() - i * 60 - 200);
+            item.setPosition(30, overlay.getHeight() - i * 60 - 250);
             final int buttonNum = i;
 
             item.addListener(new EventListener() {

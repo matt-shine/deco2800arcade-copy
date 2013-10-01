@@ -211,9 +211,10 @@ public class LunarLander extends GameClient {
 	  
 	    }
 	    
+	    //fills underneath landing pad
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
 	    shapeRenderer.setColor(1, 1, 1, 1);
-		shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));		
+		shapeRenderer.filledRect(terrain.get(0).get(0), 0, terrain.get(0).get(2), terrain.get(0).get(3));		
 		shapeRenderer.end();
 	    
 	    for (int i = 1; i < terrain.size(); i++){

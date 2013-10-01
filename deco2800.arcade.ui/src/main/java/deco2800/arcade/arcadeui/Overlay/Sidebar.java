@@ -52,7 +52,8 @@ public class Sidebar extends Group {
         }
 
         SidebarAvatar avatar = new SidebarAvatar(overlay);
-        avatar.setPosition(WIDTH / 2 - avatar.getPrefWidth() / 2, overlay.getHeight() - 140);
+        //avatar.setPosition(WIDTH / 2 - avatar.getPrefWidth() / 2, overlay.getHeight() - 180);
+        avatar.setPosition(0, overlay.getHeight() - 200);
         this.addActor(avatar);
 
         String[] buttonText = new String[]{"Achievements", "Item2", "Item3", "Quit Game"};

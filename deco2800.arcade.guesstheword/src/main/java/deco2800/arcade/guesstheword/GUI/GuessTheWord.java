@@ -1,13 +1,16 @@
 package deco2800.arcade.guesstheword.GUI;
 
-import com.badlogic.gdx.Application;
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.guesstheword.gameplay.GetterSetter;
+import deco2800.arcade.guesstheword.gameplay.Pictures;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -20,6 +23,7 @@ public class GuessTheWord extends GameClient{
 	private static final Game GAME;
 	
 	GetterSetter getterSetter;
+	Pictures picture;
 	
 	Screen splashScreen;
 	Screen mainScreen;
@@ -35,7 +39,13 @@ public class GuessTheWord extends GameClient{
 	
 	@Override
 	public void create() {
+		
+		Gdx.graphics.setContinuousRendering(false);
+//		Gdx.graphics.requestRendering();
+		
 		getterSetter = new GetterSetter();
+		picture = new Pictures();
+		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
 		splashScreen = new SplashScreen(this);
@@ -43,7 +53,7 @@ public class GuessTheWord extends GameClient{
 		gameScreen = new GameScreen(this);
 		settingsScreen = new SettingScreen(this);
 	//	acheivementScreen = new AchievementScreen(this);
-		
+		picture.loadPictures();
 		setScreen(splashScreen);
 	}
 
@@ -66,5 +76,4 @@ public class GuessTheWord extends GameClient{
 		
 		return GAME;
 	}
-
 }

@@ -12,8 +12,10 @@ public class GameStarter {
 		cfg.useGL20 = true;
 		cfg.width = 1280;
 		cfg.height = 720;
-
-		new LwjglApplication(new GuessTheWord(null, null), cfg);
+		GuessTheWord game =  new GuessTheWord(null, null);
+//		game.loadPictures();
+		new LwjglApplication(game, cfg);
+		
 	}
 
 }

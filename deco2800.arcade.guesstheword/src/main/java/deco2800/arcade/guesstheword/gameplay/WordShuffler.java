@@ -1,27 +1,36 @@
 package deco2800.arcade.guesstheword.gameplay;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class WordShuffler {
 	public WordShuffler(){}
 	
+	public String getHint(char[] s){
+		Random r = new Random();
+		return "" + s[r.nextInt(s.length)];
+	}
+	
 	public String[] breakWord(String s){
 		Random r = new Random();
 		
-		//Characters needed, bounded at 10. 
-		int charsNeeded = 10 - s.length();
+		StringBuilder sb = new StringBuilder();
+		sb.append(s);
 		
-		 for (int i = 0; i < charsNeeded; i++ ){
-			 char addWord = (char)(r.nextInt(26) + 'A');
-			 s += addWord;
-		  }
-		  
-		//split string into string array
-		 String[] solutionArray = s.split("");
-		 //List<String> solutionArray = Arrays.asList(Arrays.copyOfRange(solutionArray, 1, solutionArray.length))
-		 //call shuffleArray method
-		 shuffleWord(solutionArray);
-		 
+		int charsNeeded = 10 - s.length();
+	    
+	    //loop for fill up 10 characters
+	    for (int i=0; i<charsNeeded;i++)
+	    {
+	       char randomadd = (char)(r.nextInt(26) + 'A');
+	       sb.append(randomadd);
+	    }
+	    //split string into string array without empty element
+	    List<String> tempArray = Arrays.asList(sb.toString().split("(?!^)"));
+	    String[] solutionArray = tempArray.toArray(new String[0]);
+        //call shuffleArray method
+	    shuffleWord(solutionArray);
 		 return solutionArray;
 	}
 	

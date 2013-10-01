@@ -3,6 +3,7 @@ package deco2800.arcade.guesstheword.GUI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -34,7 +35,20 @@ public class MainScreen implements Screen {
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
+				//Users will start the game in a default mode
+				// Level 1 and category is .....
 				game.getterSetter.setLevel("Default");
+				
+				//Retrieving of category and texture.
+				String category = "" + game.picture.getLevel1().keySet().toArray()[0]; 
+				String categoryItem = "" + game.picture.getLevel1().get(category).keySet().toArray()[0];
+				Texture texture = game.picture.getLevel1().get(category).get(categoryItem);
+				
+				System.out.println("Category!! = " + category + " and the word is " + categoryItem);
+				game.getterSetter.setCategory(category);
+				game.getterSetter.setCategoryItem(categoryItem);
+				game.getterSetter.setTexture(texture);
+				
 				System.out.println("Changing to Game Screen");
 				clearTextfield();
 				game.setScreen(game.gameScreen);

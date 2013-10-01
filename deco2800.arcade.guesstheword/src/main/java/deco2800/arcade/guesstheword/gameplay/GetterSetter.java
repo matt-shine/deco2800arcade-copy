@@ -1,8 +1,12 @@
 package deco2800.arcade.guesstheword.gameplay;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class GetterSetter {
 	
+	private Texture texture;
 	private String level ;
+	private String category, categoryItem ;
 	private String  text1 = "" ;
 	private String  text2 = "" ;
 	private String  text3 = "" ;
@@ -10,7 +14,9 @@ public class GetterSetter {
 	private String  text5 = "" ;
 	private String  text6 = "" ;
 	
-	
+	private String button1 = "";
+	private String button2 = "";
+	//LEVEL
 	public void setLevel(String level){
 		this.level = level;
 	}
@@ -18,6 +24,27 @@ public class GetterSetter {
 		return level;
 	}
 	
+	//CATEGORY
+	public void setCategory(String category){
+		this.category = category;
+	}
+	public String getCategory(){
+		return category;
+	}
+	public void setCategoryItem(String categoryItem){
+		this.categoryItem = categoryItem;
+	}
+	public String getCategoryItem(){
+		return categoryItem;
+	}
+	
+	public void setTexture(Texture texture){
+		this.texture = texture;
+	}
+	public Texture getTexture(){
+		return texture;
+	}
+	//TEXTFIELDS
 	public void setText(String text){
 		this.text1 = text;
 	}
@@ -68,6 +95,19 @@ public class GetterSetter {
 		return text6;
 	}
 	
+	//TEXTBUTTONS
+	public void setButton1(String button1){
+		this.button1 = button1;
+	}
+	public String getButton1(){
+		return button1;
+	}
+	public void setButton2(String button2){
+		this.button2 = button2;
+	}
+	public String getButton2(){
+		return button2;
+	}
 	
 
 

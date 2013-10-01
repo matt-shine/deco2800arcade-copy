@@ -35,10 +35,6 @@ public class SettingScreen implements Screen{
 		
 		list = new List(new String [] {"Level 1 - 4 letters", "Level 2 - 5 letters","Level 3 - 6 letters"}, skin);
 		
-		
-	
-//		list.addListener(listener)
-		
 		settingLabel = new Label("Choose Level", skin);
 		
 		playButton = new TextButton("Click to Play", skin);

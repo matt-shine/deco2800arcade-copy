@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 
 public class OptionsScreen implements Screen {
@@ -47,14 +48,12 @@ public class OptionsScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 		
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -76,7 +75,7 @@ public class OptionsScreen implements Screen {
 		}
 		stage.clear();
 		
-		Gdx.input.setInputProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);	
 
 		// Setting the "Style of a TextButton",
 		TextButtonStyle style = new TextButtonStyle();
@@ -106,8 +105,6 @@ public class OptionsScreen implements Screen {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

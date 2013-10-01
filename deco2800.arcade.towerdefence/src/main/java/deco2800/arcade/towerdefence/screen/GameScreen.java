@@ -63,7 +63,7 @@ public class GameScreen implements Screen{
 	public GameScreen(TowerDefence game){
 		this.game = game;
 		stage = new Stage();
-		camera = new OrthographicCamera(1024, CAMERA_HEIGHT);
+		
 		
 		//setting style for resource textfield
 		TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
@@ -119,8 +119,8 @@ public class GameScreen implements Screen{
 		if(!game.isPaused()) {
 			stage.act(delta);
 		}		
-		//camera.update();
-        //camera.apply(Gdx.gl10);
+		camera.update();
+
 	}
 
 	@Override
@@ -128,8 +128,8 @@ public class GameScreen implements Screen{
 		if(stage == null) {
 			stage = new Stage(width, height, true);
 		} 
-		
-		//stage.setViewport(1280, 720, true);
+		camera = (OrthographicCamera) stage.getCamera();
+		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 				
 		// Setting the "Style of a TextButton",
 		TextButtonStyle style = new TextButtonStyle();
@@ -229,7 +229,7 @@ public class GameScreen implements Screen{
 		auraB.setX(darknessB.getX() + BUTTON_WIDTH + 5);
 		auraB.setY(5);
 		
-		backB = new TextButton("Back", style);
+		backB = new TextButton("X", style);
 		backB.setWidth(BUTTON_WIDTH);
 		backB.setHeight(BUTTON_HEIGHT);
 		backB.addListener(new InputListener() { 
@@ -247,11 +247,9 @@ public class GameScreen implements Screen{
 		resourceTF.setX(5);
 		resourceTF.setY(Gdx.graphics.getHeight() - resourceTF.getHeight() - 5);
 		
-		towerInfo.setX(piercingB.getX() + towerInfo.getWidth() + 5);
+		towerInfo.setX(piercingB.getX() + towerInfo.getWidth()/2 + 10);
 		towerInfo.setY(69);
 		
-		//camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - BOTTOM_HEIGHT - STATUS_HEIGHT);
-	
 		stage.addActor(frostB);
 		stage.addActor(fireB);
 		stage.addActor(darknessB);

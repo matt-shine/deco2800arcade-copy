@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+
 import deco2800.arcade.client.*;
 
 
@@ -31,7 +32,7 @@ public class GameScreen implements Screen  {
 	/*
 	 * Creates private instance variables for each element of The
 	 */
-	private String player;
+	public String player;
 	// private NetworkClient nc;
 	private Paddle paddle;
 	private Ball ball;
@@ -97,8 +98,8 @@ public class GameScreen implements Screen  {
 		score = 0;
 		lives = 3;
 		this.game = game;
+		this.player = game.playerName();
 		gamearea();
-		
 	}
 	
 	public void gamearea() {

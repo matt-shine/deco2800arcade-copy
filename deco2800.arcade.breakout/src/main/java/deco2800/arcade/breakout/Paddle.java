@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Paddle {
 
-	private static final float WIDTH = 128f;
+	private float width = 128f;
 	private static final float HEIGHT = 20f;
 
 	Rectangle paddleShape = new Rectangle();
@@ -26,7 +26,7 @@ public abstract class Paddle {
 	public Paddle(Vector2 position) {
 		this.paddleShape.x = position.x;
 		this.paddleShape.y = position.y;
-		this.paddleShape.width = WIDTH;
+		this.paddleShape.width = width;
 		this.paddleShape.height = HEIGHT;
 	}
 	
@@ -42,7 +42,12 @@ public abstract class Paddle {
 	
 	// Getter method for the paddles width
 	public float getWidth() {
-		return WIDTH;
+		return width;
+	}
+	
+	//Sets the width
+	public void setWidth(float width) {
+		this.width = width;
 	}
 
 	/**

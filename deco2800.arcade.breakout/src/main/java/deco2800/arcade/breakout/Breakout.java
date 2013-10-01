@@ -16,11 +16,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 
-
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.breakout.PongBall;
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -45,18 +45,22 @@ public class Breakout extends GameClient {
 	/*
 	 * Creates private instance variables for each element of The
 	 */
-	private String player;
+	public String player;
+	private NetworkClient networkClient;
+	private AchievementClient achievementClient;
 	
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
+	
+
 
 
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.player = player.getUsername();
-		
-		// this.nc = networkClient;
+		this.networkClient = networkClient;
+		this.achievementClient = new AchievementClient(networkClient);
 	}
 
 	/**
@@ -116,7 +120,9 @@ public class Breakout extends GameClient {
 		return game;
 	}
 
-	
+	public String playerName() {
+		return player;
+	}
 
 	/**
 	 * Provides details about the game to the Arcade system.

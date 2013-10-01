@@ -37,6 +37,10 @@ public class Breakout extends GameClient {
 	SplashScreen splashScreen;
 	GameScreen gamescreen;
 	menuscreen MenuScreen;
+	levelscreen LevelScreen;
+	achivementscreen AchivementScreen;
+	rankingscreen RankingScreen;
+
 
 	/*
 	 * Creates private instance variables for each element of The
@@ -65,6 +69,9 @@ public class Breakout extends GameClient {
 		splashScreen = new SplashScreen(this);
 		MenuScreen=new menuscreen(this);
 		gamescreen = new GameScreen(this);
+		LevelScreen=new levelscreen(this);
+		AchivementScreen=new achivementscreen(this);
+		RankingScreen=new rankingscreen(this);
 		setScreen(splashScreen);
 	}
 
@@ -73,7 +80,10 @@ public class Breakout extends GameClient {
 		
 		splashScreen.dispose();
 		gamescreen.dispose();
-		
+		LevelScreen.dispose();
+		MenuScreen.dispose();
+		AchivementScreen.dispose();
+		RankingScreen.dispose();
 		super.dispose();
 	}
 

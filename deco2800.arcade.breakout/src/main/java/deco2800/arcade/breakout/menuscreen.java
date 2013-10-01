@@ -34,8 +34,10 @@ public class menuscreen implements Screen  {
 	   TextureRegionDrawable gamedown;
 	   TextureRegionDrawable levelup;
 	   TextureRegionDrawable leveldown;
-	   TextureRegionDrawable achievementup;
-	   TextureRegionDrawable achievementdown;
+	   TextureRegionDrawable rankingup;
+	   TextureRegionDrawable rankingdown;
+	   TextureRegionDrawable achivementup;
+	   TextureRegionDrawable achivementdown;
 	   TextureRegionDrawable quitup;
 	   TextureRegionDrawable quitdown;
 	   
@@ -45,8 +47,8 @@ public class menuscreen implements Screen  {
 	   TextureRegion levelbuttonDown;
 	   TextureRegion rankingbuttonUp;
 	   TextureRegion rankingbuttonDown;
-	   TextureRegion achievementbuttonUp;
-	   TextureRegion achievementbuttonDown;
+	   TextureRegion achivementbuttonUp;
+	   TextureRegion achivementbuttonDown;
 	   TextureRegion quitbuttonUp;
 	   TextureRegion quitbuttonDown;
 	   
@@ -55,7 +57,7 @@ public class menuscreen implements Screen  {
 	   ImageButton gamebutton;
 	   ImageButton levelbutton;
 	   ImageButton rankingbutton;
-	   ImageButton achievementbutton;
+	   ImageButton achivementbutton;
 	   ImageButton quitbutton;
 	   
 	   
@@ -66,16 +68,16 @@ public class menuscreen implements Screen  {
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/menu.png"));
-		tex = new Texture(Gdx.files.classpath("imgs/show_mop.png"));
-		TextureRegion[][] tmp1 = TextureRegion.split(tex, 120, 120);
-		TextureRegion[][] tmp2 = TextureRegion.split(tex, 120, 120);
+		tex = new Texture(Gdx.files.classpath("imgs/button.png"));
+		TextureRegion[][] tmp = TextureRegion.split(tex, 130, 45);
 		
-	    newgamebuttonUp = tmp1[0][0];
-	    newgamebuttonDown = tmp1[0][1];
+		
+	    newgamebuttonUp = tmp[0][0];
+	    newgamebuttonDown = tmp[0][1];
 	    gameup = new TextureRegionDrawable(newgamebuttonUp);
 	    gamedown = new TextureRegionDrawable(newgamebuttonDown);
 	    gamebutton = new ImageButton(gameup, gamedown);
-	    gamebutton.setPosition(450, 400);
+	    gamebutton.setPosition(480, 450);
 	    gamebutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
 	        		
@@ -87,13 +89,70 @@ public class menuscreen implements Screen  {
 	        		game.setScreen(game.gamescreen); 
 	        	}}
 	    	   );
+	   
+	    
+ //level screen
+	    
+	    levelbuttonUp=tmp[0][2];
+	    levelbuttonDown=tmp[0][3];
+	    levelup = new TextureRegionDrawable(levelbuttonUp);
+	    leveldown = new TextureRegionDrawable(levelbuttonDown);
+	    levelbutton = new ImageButton(levelup, leveldown);
+	    levelbutton.setPosition(480, 370);
+	    levelbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		game.setScreen(game.LevelScreen); 
+	        		
+	        	}}
+	    	   );
+	    //ranking
+	    rankingbuttonUp=tmp[1][0];
+	    rankingbuttonDown=tmp[1][1];
+	    rankingup = new TextureRegionDrawable(rankingbuttonUp);
+	    rankingdown = new TextureRegionDrawable(rankingbuttonDown);
+	    rankingbutton = new ImageButton(rankingup, rankingdown);
+	    rankingbutton.setPosition(480, 290);
+	    rankingbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		game.setScreen(game.RankingScreen); 
+	        		
+	        	}}
+	    	   );
+	    //achivement
+	    achivementbuttonUp=tmp[1][2];
+	    achivementbuttonDown=tmp[1][3];
+	    achivementup = new TextureRegionDrawable(achivementbuttonUp);
+	    achivementdown = new TextureRegionDrawable(achivementbuttonDown);
+	    achivementbutton = new ImageButton(achivementup, achivementdown);
+	    achivementbutton.setPosition(480, 210);
+	    achivementbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		game.setScreen(game.AchivementScreen); 
+	        		
+	        	}}
+	    	   );
 	    //quit
-	    quitbuttonUp=tmp2[1][0];
-	    quitbuttonDown=tmp2[1][1];
+	    quitbuttonUp=tmp[2][0];
+	    quitbuttonDown=tmp[2][1];
 	    quitup = new TextureRegionDrawable(quitbuttonUp);
 	    quitdown = new TextureRegionDrawable(quitbuttonDown);
 	    quitbutton = new ImageButton(quitup, quitdown);
-	    quitbutton.setPosition(450, 300);
+	    quitbutton.setPosition(480, 130);
 	    quitbutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
 	        		
@@ -105,17 +164,23 @@ public class menuscreen implements Screen  {
 	        		ArcadeSystem.goToGame(ArcadeSystem.UI);
 	        	}}
 	    	   );
+	    
+	    
 
-	       stage = new Stage(560, 640, true);
-	       gamebutton.setWidth(200f);
-	       gamebutton.setHeight(50f);
-	       quitbutton.setWidth(200f);
-	       quitbutton.setHeight(50f);
+	       stage = new Stage(480, 640, true);
+	      // gamebutton.setWidth(400f);
+	      // gamebutton.setHeight(100f);
+	      // quitbutton.setWidth(200f);
+	      // quitbutton.setHeight(50f);
 	       
 	       
-	       Gdx.input.setInputProcessor(stage);
+	       
 	       stage.addActor(gamebutton);
 	       stage.addActor(quitbutton);
+	       stage.addActor(levelbutton);
+	       stage.addActor(rankingbutton);
+	       stage.addActor(achivementbutton);
+	       
 	       
 		
 	}
@@ -173,7 +238,7 @@ public class menuscreen implements Screen  {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		Gdx.input.setInputProcessor(stage);
 		
 	}
 

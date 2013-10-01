@@ -3,8 +3,6 @@ package deco2800.server;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
-import deco2800.server.database.PlayerGameStorage;
-
 
 
 public class MultiplayerServer {
@@ -13,11 +11,11 @@ public class MultiplayerServer {
 	private int player2Id;
 	private Connection player1;
 	private Connection player2;
-	private int gameId;
+	private String gameId;
 	private int sessionId;
 	private MatchmakerQueue queue;
 
-	public MultiplayerServer(int player1Id, int player2Id, Connection player1, Connection player2, int gameId, int sessionId, MatchmakerQueue queue) {
+	public MultiplayerServer(int player1Id, int player2Id, Connection player1, Connection player2, String gameId, int sessionId, MatchmakerQueue queue) {
 		System.out.println("Multiplayer server started");
 		this.player1Id = player1Id;
 		this.player2Id = player2Id;;
@@ -38,7 +36,7 @@ public class MultiplayerServer {
 		return player2Id;
 	}
 
-	public int getGameId() {
+	public String getGameId() {
 		return gameId;
 	}
 
@@ -53,15 +51,8 @@ public class MultiplayerServer {
 			queue.gameOver(sessionId, player1Id, player2Id, gameId);
 			return;
 		}
-			player1.sendTCP(request);	
-			player2.sendTCP(request);
+		player1.sendTCP(request);	
+		player2.sendTCP(request);
 		//}
-	}
-	
-	private void gameOver()  {
-		/*TODO: ELO CALCULATION
-		 * database.updateplayerrating for player1 player2
-		 */
-		
 	}
 }

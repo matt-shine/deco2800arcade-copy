@@ -8,6 +8,7 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 
+
 /**
  * This class is the main interface for the arcade.
  * @author Simon
@@ -16,15 +17,16 @@ import deco2800.arcade.model.Player;
 @InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
-
-    LoginScreen login = null;
-    StoreScreen store = null;
-    HomeScreen home = null;
+	
+	LoginScreen login = null;
+	StoreScreen store = null;
+	HomeScreen home = null;
+    FrontPage main = null;
     RegisterScreen register = null;
 
-    public ArcadeUI(Player player, NetworkClient networkClient) {
-        super(player, networkClient);
-    }
+	public ArcadeUI(Player player, NetworkClient networkClient) {
+		super(player, networkClient);
+	}
 
     @Override
     public void create() {
@@ -38,6 +40,7 @@ public class ArcadeUI extends GameClient {
         login = new LoginScreen(this);
         home = new HomeScreen();
         store = new StoreScreen();
+        main = new FrontPage();
         register = new RegisterScreen(this);
 
         // Check to see if a user is logged in.
@@ -50,35 +53,35 @@ public class ArcadeUI extends GameClient {
         super.create();
     }
 
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
+	
+	@Override
+	public void pause() {
+		super.pause();
+	}
+	
+	@Override
+	public void render() {
+		super.render();
+	}
 
-    @Override
-    public void pause() {
-        super.pause();
-    }
+	@Override
+	public void resume() {
+		super.resume();
+	}
 
-    @Override
-    public void render() {
-        super.render();
-    }
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "arcadeui";
+		game.name = "Arcade UI";
+	}
 
-    @Override
-    public void resume() {
-        super.resume();
-    }
-
-    private static final Game game;
-    static {
-        game = new Game();
-        game.id = "arcadeui";
-        game.name = "Arcade UI";
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
+	public Game getGame() {
+		return game;
+	}
+		
 }

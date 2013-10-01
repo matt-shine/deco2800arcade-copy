@@ -24,6 +24,9 @@ public class StatusScreen extends JFrame{
 	
 	//Declare JPanel and ImagePanels
 	private JPanel parentContainer;	
+	private JPanel titlepanel;
+	private JPanel contentpanel;
+	private JPanel actionpanel;
 	
 	//Declare Buttons
 	private JRadioButton awaybutton;
@@ -57,60 +60,19 @@ public class StatusScreen extends JFrame{
 		 */		
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
-				
-		/*
-		 *  Create all Panels 
-		 */
-		JPanel titlepanel = new JPanel(new MigLayout());
-		JPanel contentpanel = new JPanel(new MigLayout());
-		JPanel savepanel = new JPanel(new MigLayout());
-		
-		JLabel title = new JLabel("Player Status");
-		title.setFont(blackbold);
-		
-		JLabel away = new JLabel();
-		JLabel busy = new JLabel();
-		JLabel online = new JLabel();
-		JLabel offline = new JLabel();
-		away.setIcon(picoffline);
-		busy.setIcon(picoffline);
-		online.setIcon(piconline);
-		offline.setIcon(picoffline);
-		
-		awaybutton = new JRadioButton("", true);
-		busybutton = new JRadioButton("", false);
-		onlinebutton = new JRadioButton("", false);
-		offlinebutton = new JRadioButton("", false);
-		savebutton = new JButton("Save");
-		cancelbutton = new JButton("Cancel");
-		
-		titlepanel.add(title,"gap left 50px");		
-		contentpanel.add(awaybutton);
-		contentpanel.add(away,"wrap, gap left 15px");
-		contentpanel.add(busybutton);
-		contentpanel.add(busy,"wrap, gap left 15px");
-		contentpanel.add(onlinebutton);
-		contentpanel.add(online,"wrap, gap left 15px");
-		contentpanel.add(offlinebutton);
-	    contentpanel.add(offline,"wrap, gap left 15px");
-	    
-	    savepanel.add(savebutton);
-	    savepanel.add(cancelbutton);
-	    
-	    status = new ButtonGroup();
-	    status.add(awaybutton);
-	    status.add(busybutton);
-	    status.add(offlinebutton);
-	    status.add(onlinebutton);
-	        
+	
 	    /*Add panels to Main Panel	
 	     *                
 	     */
+		
+		addtitlepanel();
+		addcontentpanel();
+		addactionpanel();
 	    
 	    parentContainer = new JPanel(new MigLayout());
 	    parentContainer.add(titlepanel,"wrap");
 	    parentContainer.add(contentpanel,"gap left 30px, wrap");
-	    parentContainer.add(savepanel,"gap left 30px");
+	    parentContainer.add(actionpanel,"gap left 30px");
 	    
 		add(parentContainer);
 	
@@ -123,6 +85,68 @@ public class StatusScreen extends JFrame{
 		setResizable(false);		
 	}
 	
+	/**
+	 * 
+	 */
+	public void addtitlepanel(){
+
+		JLabel title = new JLabel("Player Status");
+		title.setFont(blackbold);
+		
+		titlepanel = new JPanel(new MigLayout());
+		titlepanel.add(title,"gap left 50px");		
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void addcontentpanel(){
+				
+		JLabel away = new JLabel();
+		JLabel busy = new JLabel();
+		JLabel online = new JLabel();
+		JLabel offline = new JLabel();
+		away.setIcon(picoffline);
+		busy.setIcon(picoffline);
+		online.setIcon(piconline);
+		offline.setIcon(picoffline);		
+		awaybutton = new JRadioButton("", true);
+		busybutton = new JRadioButton("", false);
+		onlinebutton = new JRadioButton("", false);
+		offlinebutton = new JRadioButton("", false);
+		
+		contentpanel = new JPanel(new MigLayout());
+		contentpanel.add(awaybutton);
+		contentpanel.add(away,"wrap, gap left 15px");
+		contentpanel.add(busybutton);
+		contentpanel.add(busy,"wrap, gap left 15px");
+		contentpanel.add(onlinebutton);
+		contentpanel.add(online,"wrap, gap left 15px");
+		contentpanel.add(offlinebutton);
+	    contentpanel.add(offline,"wrap, gap left 15px");
+	  
+	    status = new ButtonGroup();
+	    status.add(awaybutton);
+	    status.add(busybutton);
+	    status.add(offlinebutton);
+	    status.add(onlinebutton);
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void addactionpanel(){
+		
+		savebutton = new JButton("Save");
+		cancelbutton = new JButton("Cancel");
+
+		actionpanel = new JPanel(new MigLayout());
+	    actionpanel.add(savebutton);
+	    actionpanel.add(cancelbutton);
+	     		
+	}
 
 
 }

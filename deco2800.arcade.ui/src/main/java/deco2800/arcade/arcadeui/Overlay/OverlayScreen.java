@@ -18,7 +18,7 @@ public class OverlayScreen implements Screen {
     private OverlayScreenStage stage;
     private Sidebar sidebar = null;
     private Window window = null;
-    private Clock clock = null;
+    private Topbar topbar = null;
 
     private boolean isUIOpen = false;
     private boolean hasTabPressedLast = false;
@@ -31,13 +31,12 @@ public class OverlayScreen implements Screen {
         this.overlay = overlay;
         window = new Window(overlay);
         sidebar = new Sidebar(overlay, window);
-        clock = new Clock(overlay);
+        topbar = new Topbar(overlay);
 
         stage = new OverlayScreenStage();
         stage.addActor(window);
         stage.addActor(sidebar);
-        stage.addActor(clock);
-
+        stage.addActor(topbar);
     }
 
 

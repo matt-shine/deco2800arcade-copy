@@ -1,7 +1,8 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
         default: { file: Fonts/Manteka18.fnt },
-        default-small: { file: Fonts/Manteka16.fnt },
+        default-small: { file: Fonts/Manteka14.fnt },
+        default-large: { file: Fonts/Manteka34.fnt },
         textbox: { file: Fonts/CenturyGothic20Bold.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
@@ -14,6 +15,7 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
         default: { font: default, fontColor: white },
+        default-large: { font: default-large, fontColor: white },
         error: { font: default, fontColor: red }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {

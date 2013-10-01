@@ -27,6 +27,8 @@ public class WallTile extends Tile {
 	public void render(SpriteBatch batch, float x, float y) {
 		int row = 7;
 		int col = 1;
+		//get rid of non wall tiles here and put them in the tile render method
+		// add T for teleporter
 		switch(type) {
 		case 'A': row = 0; col = 0; break;
 		case 'B': row = 0; break;
@@ -75,7 +77,7 @@ public class WallTile extends Tile {
 		}
 //		System.out.println("type: " + type + ", row: " + row + ", col: " + col + 
 //				", x: " + x + ", y: " + y);
-		batch.draw(wallSprites[row][col], x, y);
+		batch.draw(wallSprites[row][col], x, y, Tile.getSideLength(), Tile.getSideLength());
 	}	
 
 }

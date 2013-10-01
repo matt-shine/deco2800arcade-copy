@@ -23,10 +23,12 @@ public class GameMap {
 	// doesn't do anything yet, need to think more about how that might work
 	private int width;
 	private int height;
+	private boolean vsym;
 	
 	public GameMap(int width, int height) {
 		this.width = width;
 		this.height = height;
+		vsym = false;
 	}
 	
 	/*
@@ -52,6 +54,13 @@ public class GameMap {
 			br = new BufferedReader(new FileReader(absolutePath));			
 			String line;
 			while ((line = br.readLine()) != null) {
+				if (line.contains("VSYM")) {
+					vsym = true;
+					continue;
+				}
+				if (vsym) {
+					line = useVSymmetry(line);
+				}
 				resultArray.add(line.toCharArray());
 			}
 		} catch (Exception e) {
@@ -69,6 +78,62 @@ public class GameMap {
 		return resultArray;
 	}
 
+	private String useVSymmetry(String line) {
+		StringBuffer reverse = new StringBuffer(line).reverse();
+		for (int i = 0; i < reverse.length(); i++) {
+			char letter = reverse.charAt(i);
+			String replacer = null;
+			switch(letter) {
+			case 'A': replacer = "C"; break;
+			case 'C': replacer = "A"; break;
+			case 'D': replacer = "E"; break;
+			case 'E': replacer = "D"; break;
+			case 'F': replacer = "H"; break;
+			case 'H': replacer = "F"; break;
+			case 'a': replacer = "c"; break;
+			case 'c': replacer = "a"; break;
+			case 'd': replacer = "e"; break;
+			case 'e': replacer = "d"; break;
+			case 'f': replacer = "h"; break;
+			case 'h': replacer = "f"; break;
+			case '1': replacer = "3"; break;
+			case '3': replacer = "1"; break;
+			case '4': replacer = "5"; break;
+			case '5': replacer = "4"; break;
+			case '6': replacer = "8"; break;
+			case '8': replacer = "6"; break;
+			case '9': replacer = "0"; break;
+			case '0': replacer = "9"; break;
+			case 'R': replacer = "S"; break;
+			case 'S': replacer = "R"; break;
+			case 'X': replacer = "Z"; break;
+			case 'Z': replacer = "X"; break;
+			case 'W': replacer = "Y"; break;
+			case 'Y': replacer = "W"; break;
+			case 'x': replacer = "z"; break;
+			case 'z': replacer = "x"; break;
+			case 'w': replacer = "y"; break;
+			case 'y': replacer = "w"; break;
+			case 'J': replacer = "L"; break;
+			case 'L': replacer = "J"; break;
+			case 'K': replacer = "M"; break;
+			case 'M': replacer = "K"; break;
+			}
+			if (replacer !=  null) {
+				reverse.replace(i, i+1, replacer);
+				//System.out.println("New string: " + reverse);
+			}
+		}
+		return line + reverse.toString();
+	}
+
+//	public static void main(String[] args) {
+//		System.out.println(useVSymmetry(new String("ABBBBBBBBBBBBR")));
+//		System.out.println(useVSymmetry(new String("Dppppppppppppd")));
+//		System.out.println(useVSymmetry(new String("Dpabbcpabbbcpd")));
+//		System.out.println(useVSymmetry(new String("DPd  epd   epd")));
+//	}
+	
 	/*
 	 * Alternate implementation of readMap. Given that map files
 	 * have relatively small dimensions, it shouldn't be an issue to simply

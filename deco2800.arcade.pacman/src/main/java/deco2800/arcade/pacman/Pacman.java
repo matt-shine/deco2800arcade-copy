@@ -44,8 +44,8 @@ public class Pacman extends GameClient {
 	
 	private OrthographicCamera camera;			
 	private GameState gameState;
-	public static final int SCREENHEIGHT = 480;
-	public static final int SCREENWIDTH = 800;	
+	public static final int SCREENHEIGHT = 720;
+	public static final int SCREENWIDTH = 1280;	
 	private SpriteBatch batch;
 	private ShapeRenderer shaper;
 	private PacChar player;
@@ -118,7 +118,7 @@ public class Pacman extends GameClient {
 		map = new ArrayList<ArrayList<Tile>>();
 		
 		// Just use a set file for the time being!
-		String file = "testmap.txt";
+		String file = "levelMap.txt";
 		//initialise collision list
 		colList = new ArrayList<Collideable>();
 		// this guy doesn't show up either. 

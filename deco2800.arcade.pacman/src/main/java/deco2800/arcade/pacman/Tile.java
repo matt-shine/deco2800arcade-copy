@@ -6,7 +6,7 @@ package deco2800.arcade.pacman;
  */
 public abstract class Tile {
 
-	private static int sideLength = 8; //length of side of square- should be same for all tiles
+	private static int sideLength = 16; //length of side of square- should be same for all tiles
 	private Tile north;
 	private Tile east;
 	private Tile south;

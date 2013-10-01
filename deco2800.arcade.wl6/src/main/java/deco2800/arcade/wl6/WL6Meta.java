@@ -143,7 +143,7 @@ public class WL6Meta {
 				new BlockInfo(true, "woodportrait"),
 				
 				//12: wood wall
-				new BlockInfo(true, "wood"),
+				new BlockInfo(true, "woodwall"),
 
 				//13: entrance elevator
 				new BlockInfo(true, "entranceelevator"),

@@ -28,16 +28,16 @@ public class PackCompress {
 		// Initialize the state by setting the desired properties
 	    p = packer.properties();
 	    // take more time choosing codings for better compression
-	    p.put(Packer.EFFORT, "7");  // default is "5"
+	    p.put(Packer.EFFORT, "9");  // default is "5"
 	    // use largest-possible archive segments (>10% better compression).
 	    p.put(Packer.SEGMENT_LIMIT, "-1");
 	    // reorder files for better compression.
-	    p.put(Packer.KEEP_FILE_ORDER, Packer.FALSE);
+	    //p.put(Packer.KEEP_FILE_ORDER, Packer.FALSE);
 	    // smear modification times to a single value.
 	    p.put(Packer.MODIFICATION_TIME, Packer.LATEST);
 	    // ignore all JAR deflation requests,
 	    // transmitting a single request to use "store" mode.
-	    p.put(Packer.DEFLATE_HINT, Packer.FALSE);
+	    //p.put(Packer.DEFLATE_HINT, Packer.FALSE);
 	    // discard debug attributes
 	    p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
 	    // throw an error if an attribute is unrecognized

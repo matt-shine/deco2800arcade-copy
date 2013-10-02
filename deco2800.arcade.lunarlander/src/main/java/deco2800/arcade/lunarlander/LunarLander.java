@@ -3,25 +3,23 @@ package deco2800.arcade.lunarlander;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSprite;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-
 
 @ArcadeGame(id="LunarLander")
 public class LunarLander extends GameClient {
@@ -31,12 +29,11 @@ public class LunarLander extends GameClient {
 	public static final int SCREENWIDTH = 1200;
 	
 	private SpriteBatch batch;
-	private ShapeRenderer shapeRenderer; // draws shapes 
+	private ShapeRenderer shapeRenderer;
 	private Texture landerTexture;
 	private Texture backgroundTexture;
-	private Texture moonTexture;
+	private Texture moon;
 	private TextureRegion backgroundTextureRegion; // draws portion of background png file
-	private TextureRegion moonTextureRegion;
 	private BitmapFont font; // draws text 
 	//Texture[] backgroundTextures;
 	
@@ -51,8 +48,6 @@ public class LunarLander extends GameClient {
 	private List<List<Integer>> terrain;
 	private boolean randomMap;
 	
-	PolygonSprite poly;
-	PolygonSpriteBatch polyBatch;
 	Texture textureSolid;
 
 	
@@ -91,16 +86,11 @@ public class LunarLander extends GameClient {
 			
 		// setting up various Gdx tools
 		batch = new SpriteBatch();
-		// loads background png file
-		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png"));
-		// creates a portion of that background to display
-		backgroundTextureRegion = new TextureRegion(backgroundTexture, 1200, 800);
-		moonTexture = new Texture(Gdx.files.internal("lunarlanderassets/moon.png"));
-		moonTextureRegion = new TextureRegion(moonTexture, 200, 200);
-		// loads lander png file
-		landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
-		// creates a new font to use for text
-		font = new BitmapFont();
+		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png")); //loads background file
+		backgroundTextureRegion = new TextureRegion(backgroundTexture, 1200, 800); //creates a portion of that to display
+		moon = new Texture(Gdx.files.internal("lunarlanderassets/moon.png"));
+		landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/lander.png")); // loads lander png file
+		font = new BitmapFont(); // creates a new font to use for text
 		shapeRenderer = new ShapeRenderer();
 
 		camera = new OrthographicCamera();
@@ -155,9 +145,27 @@ public class LunarLander extends GameClient {
 	    font.draw(batch, "Remaining fuel: " + Integer.toString(fuel), SCREENWIDTH - 200, SCREENHEIGHT - 60);
 	    font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
 	    font.draw(batch, "Time spent: " + Integer.toString(time), SCREENWIDTH - 200, SCREENHEIGHT - 100);
+	   
+	    batch.draw(moon, initialPositionX, initialPositionY, landerX, landerY);
 	    
-	    TextureRegion moonPattern = new TextureRegion(moonTexture, 0, 0, 200, 200);
-	    batch.draw(moonPattern, 500, 500);
+//	    for (int i = 1; i < terrain.size(); i++){
+//	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
+//	    		TextureRegion moonPattern = new TextureRegion(moon, terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1) - terrain.get(i).get(3));
+//	    	    batch.draw(moonPattern, 10, 10);
+////	    		shapeRenderer.begin(ShapeType.FilledRectangle);
+////			    shapeRenderer.setColor(1, 1, 1, 1);
+////				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));
+////				shapeRenderer.end();
+//	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
+//	    		TextureRegion moonPattern = new TextureRegion(moon, 0, 0, 200, 200);
+//	    	    batch.draw(moonPattern, 500, 500);
+////	    		shapeRenderer.begin(ShapeType.FilledRectangle);
+////			    shapeRenderer.setColor(1, 1, 1, 1);
+////				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1));		
+////				shapeRenderer.end();
+//	    	}
+//	  
+//	    }
 	    
 	    batch.end();
 
@@ -175,8 +183,7 @@ public class LunarLander extends GameClient {
 	    for (int i = 0; i < terrain.size(); i++){
 	    	shapeRenderer.setColor(5, 255, 5, 1);
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
-	    	
-	    }
+	    	}
 	    }else{
 	    	//load premade ArrayList of points, and background texture
 	    }

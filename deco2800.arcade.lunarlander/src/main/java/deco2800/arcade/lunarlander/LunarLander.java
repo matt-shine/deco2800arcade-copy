@@ -44,7 +44,8 @@ public class LunarLander extends GameClient {
 	private float landerXnew;
 	private float landerYnew;
 	private float velY;
-	private float velX;
+	private float velXleft;
+	private float velXright;
 	
 	
 	//terrain generation
@@ -106,7 +107,8 @@ public class LunarLander extends GameClient {
 		landerWidth = 30;
 		landerHeight = 30;
 		velY = 1;
-		velX = 0;
+		velXleft = 0;
+		velXright = 0;
 		speed = 1;
 		fuel = 1000;
 		
@@ -127,14 +129,15 @@ public class LunarLander extends GameClient {
 		if(!(gameOver == true)){
 			velY += 0.01;
 			landerY -= (0.10 + velY);
-			landerX -= velX;
-		}
-		
-		//sideways velocity
-		if(velX > 0){
-			velX -= 0.02;
-		}else if(velX < 0){
-			velX += 0.02;
+			landerX += velXright;
+			landerX -= velXleft;
+			
+			if (velXleft > 0){
+				velXleft -= 0.001;
+			}else if(velXright > 0){
+				velXright -= 0.001;
+			}
+			
 		}
 		
 		
@@ -144,20 +147,20 @@ public class LunarLander extends GameClient {
 			// move lander left
 			if ((Gdx.input.isKeyPressed(Keys.A)) || (Gdx.input.isKeyPressed(Keys.LEFT))) {
 				landerX -= Gdx.graphics.getDeltaTime() * sideSpeed;
-				velX -= 0.01;
+				velXleft += 0.02;
 			}
 			
 			if ((Gdx.input.isKeyPressed(Keys.D)) || (Gdx.input.isKeyPressed(Keys.RIGHT))) {
-				velX += 0.01;
 		    	landerX += Gdx.graphics.getDeltaTime() * sideSpeed;
+		    	velXright += 0.02;
 		    }
 			
 		    // boost the lander's speed
 			if ((Gdx.input.isKeyPressed(Keys.W)) || (Gdx.input.isKeyPressed(Keys.UP))) {
-				//while(fuel > 0){
-					velY -= 0.02;
-					fuel -= 0.01;
-				//}
+				if(fuel > 0){
+					velY -= 0.015;
+					fuel -= 0.05;
+				}
 			}			
 			
 		}

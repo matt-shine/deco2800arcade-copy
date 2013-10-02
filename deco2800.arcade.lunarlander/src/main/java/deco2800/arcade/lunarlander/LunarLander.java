@@ -158,60 +158,7 @@ public class LunarLander extends GameClient {
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
-	    //Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.Line);
-	    Gdx.gl.glLineWidth(5);
-	    
-	    //set map to be randomly made, or not
-	    if(randomMap == true){
-	    for (int i = 0; i < terrain.size(); i++){
-	    	shapeRenderer.setColor(180, 180, 5, 1);
-	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
-	    	}
-	    }else{
-	    	//load pre-made ArrayList of points, and background texture
-	    }
-	    
-	    //colors the landing pad green
-	    shapeRenderer.setColor(255, 0, 0, 1);
-	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1) + 3, terrain.get(0).get(2), terrain.get(0).get(3) + 3);
-	    shapeRenderer.end();
-	    
-	    //fills map with rectangles
-	    for (int i = 1; i < terrain.size(); i++){
-	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
-	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
-				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));
-				shapeRenderer.end();
-	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
-	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
-				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1));		
-				shapeRenderer.end();
-	    	}
-	  
-	    }
-	    
-	    //fills underneath landing pad
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.setColor(20, 20, 20, 100);
-		shapeRenderer.filledRect(terrain.get(0).get(0), 0, terrain.get(0).get(2), terrain.get(0).get(3));		
-		shapeRenderer.end();
-	    
-	    for (int i = 1; i < terrain.size(); i++){
-	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
-		    	shapeRenderer.begin(ShapeType.FilledTriangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
-				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(0), terrain.get(i).get(3));		
-				shapeRenderer.end();
-	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
-	    		shapeRenderer.begin(ShapeType.FilledTriangle);
-			    shapeRenderer.setColor(20, 20, 20, 100);
-				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(2), terrain.get(i).get(1));		
-				shapeRenderer.end();
-	    	}
-	    }
+	    LunarLanderTerrain.renderMap(terrain);
 	    
 	    //very basic downwards movement of the lander
 	    if(!(gameOver == true)){
@@ -237,10 +184,6 @@ public class LunarLander extends GameClient {
 	    		}
 	    	}
 	    }
-	    
-//	    LunarLanderTerrain obj = new LunarLanderTerrain();
-//	    int fanfare = obj.returnLength("Quadricepts");
-//	    System.out.println(fanfare + " is the length?");
 	    
 	    super.render();
 		

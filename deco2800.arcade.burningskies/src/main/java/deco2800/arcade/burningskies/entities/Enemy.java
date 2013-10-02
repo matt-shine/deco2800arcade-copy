@@ -27,6 +27,7 @@ public class Enemy extends Ship {
 	}
 	
 	public void onRender(float delta) {
+		super.onRender(delta);
 		if(xPos < xMax && velocity > 0) { // check to make sure it can still move right
 			xPos += (float) velocity*delta;
 			if(xPos >= xMax)

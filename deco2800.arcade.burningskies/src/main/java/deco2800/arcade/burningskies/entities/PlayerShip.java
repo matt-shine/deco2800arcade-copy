@@ -45,6 +45,7 @@ public class PlayerShip extends Ship {
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */
 	public void onRender(float delta) {
+		super.onRender(delta);
 		// reset
 		velocity.set(0, 0);
     	if(up) {

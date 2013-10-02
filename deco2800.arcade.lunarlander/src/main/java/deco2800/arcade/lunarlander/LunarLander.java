@@ -123,15 +123,18 @@ public class LunarLander extends GameClient {
 	@Override
 	public void render() {
 		
-		//downwards movement of lander
+		//calculates velocity of lander
 		if(!(gameOver == true)){
-			velY += 0.005;
-			landerY -= (0.05 + velY);
+			velY += 0.01;
+			landerY -= (0.10 + velY);
+			landerX -= velX;
 		}
 		
 		//sideways velocity
 		if(velX > 0){
-			velX = velX / 2;
+			velX -= 0.02;
+		}else if(velX < 0){
+			velX += 0.02;
 		}
 		
 		
@@ -140,21 +143,21 @@ public class LunarLander extends GameClient {
 			
 			// move lander left
 			if ((Gdx.input.isKeyPressed(Keys.A)) || (Gdx.input.isKeyPressed(Keys.LEFT))) {
-				velX -= 0.02;
-				//landerX -= Gdx.graphics.getDeltaTime() * sideSpeed;
+				landerX -= Gdx.graphics.getDeltaTime() * sideSpeed;
+				velX -= 0.01;
 			}
 			
 			if ((Gdx.input.isKeyPressed(Keys.D)) || (Gdx.input.isKeyPressed(Keys.RIGHT))) {
-				velX += 0.02;
-		    	//landerX += Gdx.graphics.getDeltaTime() * sideSpeed;
+				velX += 0.01;
+		    	landerX += Gdx.graphics.getDeltaTime() * sideSpeed;
 		    }
 			
 		    // boost the lander's speed
 			if ((Gdx.input.isKeyPressed(Keys.W)) || (Gdx.input.isKeyPressed(Keys.UP))) {
-				while(fuel > 0){
-					velY -= 0.01;
-					fuel -= 1;
-				}
+				//while(fuel > 0){
+					velY -= 0.02;
+					fuel -= 0.01;
+				//}
 			}			
 			
 		}

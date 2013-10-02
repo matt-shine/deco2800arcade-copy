@@ -14,10 +14,6 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-
-import java.awt.Graphics;
-import java.awt.Polygon;
-
 import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.model.Game;
@@ -33,16 +29,14 @@ public class LunarLander extends GameClient {
 	private OrthographicCamera camera;
 	public static final int SCREENHEIGHT = 800;
 	public static final int SCREENWIDTH = 1200;
-	private static final Graphics Graphics = null;
 	
-	// Gdx tools
-	private ShapeRenderer shapeRenderer; // draws shapes
-	private SpriteBatch batch; 
-	private Texture landerTexture; // draws lander png file
-	private Texture backgroundTexture; // draws background png file
+	private SpriteBatch batch;
+	private ShapeRenderer shapeRenderer; // draws shapes 
+	private Texture landerTexture;
+	private Texture backgroundTexture;
+	private Texture moonTexture;
 	private TextureRegion backgroundTextureRegion; // draws portion of background png file
-	private Texture backgroundTexture2; // draws background png file
-	private TextureRegion backgroundTextureRegion2; // draws portion of background png file
+	private TextureRegion moonTextureRegion;
 	private BitmapFont font; // draws text 
 	//Texture[] backgroundTextures;
 	
@@ -101,8 +95,8 @@ public class LunarLander extends GameClient {
 		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png"));
 		// creates a portion of that background to display
 		backgroundTextureRegion = new TextureRegion(backgroundTexture, 1200, 800);
-		backgroundTexture2 = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
-		backgroundTextureRegion2 = new TextureRegion(backgroundTexture, 200, 200);
+		moonTexture = new Texture(Gdx.files.internal("lunarlanderassets/moon.png"));
+		moonTextureRegion = new TextureRegion(moonTexture, 200, 200);
 		// loads lander png file
 		landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/lander.png"));
 		// creates a new font to use for text
@@ -129,9 +123,6 @@ public class LunarLander extends GameClient {
 	@Override
 	public void render() {
 		
-		
-		Graphics gragon = Graphics;
-		
 		// move lander left
 		if ((Gdx.input.isKeyPressed(Keys.A)) || (Gdx.input.isKeyPressed(Keys.LEFT))) { 
 			initialPositionX -= Gdx.graphics.getDeltaTime() * sideSpeed;
@@ -156,9 +147,7 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(backgroundTextureRegion, 0, 0);
-	    batch.draw(landerTexture, initialPositionX, initialPositionY, landerX, landerY);
-	    	    
-	    //batch.draw(landerTexture, (initPosition + finalX), (initPosition + finalY), 50, 50);	    
+	    batch.draw(landerTexture, initialPositionX, initialPositionY, landerX, landerY);    
 	    
 	    // display values on screen
 	    font.setColor(Color.WHITE);
@@ -166,6 +155,9 @@ public class LunarLander extends GameClient {
 	    font.draw(batch, "Remaining fuel: " + Integer.toString(fuel), SCREENWIDTH - 200, SCREENHEIGHT - 60);
 	    font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
 	    font.draw(batch, "Time spent: " + Integer.toString(time), SCREENWIDTH - 200, SCREENHEIGHT - 100);
+	    
+	    TextureRegion moonPattern = new TextureRegion(moonTexture, 0, 0, 200, 200);
+	    batch.draw(moonPattern, 500, 500);
 	    
 	    batch.end();
 
@@ -200,7 +192,7 @@ public class LunarLander extends GameClient {
 	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledRectangle);
 			    shapeRenderer.setColor(1, 1, 1, 1);
-				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));		
+				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));
 				shapeRenderer.end();
 	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledRectangle);

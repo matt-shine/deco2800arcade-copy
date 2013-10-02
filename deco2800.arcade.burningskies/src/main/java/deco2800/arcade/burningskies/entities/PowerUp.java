@@ -15,6 +15,10 @@ public class PowerUp extends EntityAnimated {
 		setY(500);
 	}
 
+	public void powerOn(PlayerShip player) {
+		//Abstract method to be filled?
+	}
+	
 	@Override
 	public void onRender(float delta) {
 		// TODO Auto-generated method stub

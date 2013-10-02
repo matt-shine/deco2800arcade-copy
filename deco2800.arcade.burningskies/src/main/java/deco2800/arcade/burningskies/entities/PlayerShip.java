@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
-	private final float MAXVELOCITY = 600;
+	private float maxVelocity = 600; //Changed from static to dynamic.
 	private int maxHealth; //For health powerups.
 	private PlayScreen screen;
 	
@@ -48,16 +48,16 @@ public class PlayerShip extends Ship {
 		// reset
 		velocity.set(0, 0);
     	if(up) {
-    		velocity.add(0, MAXVELOCITY);
+    		velocity.add(0, maxVelocity);
     	}
     	if(down) {
-    		velocity.add(0, -MAXVELOCITY);
+    		velocity.add(0, -maxVelocity);
     	}
     	if(left) {
-    		velocity.add(-MAXVELOCITY, 0);
+    		velocity.add(-maxVelocity, 0);
     	}
     	if(right) {
-    		velocity.add(MAXVELOCITY, 0);
+    		velocity.add(maxVelocity, 0);
     	}
     	position.add( velocity.x * delta, velocity.y * delta );
 		if (position.x + getWidth() > BurningSkies.SCREENWIDTH) {
@@ -98,6 +98,22 @@ public class PlayerShip extends Ship {
 	
 	public void setShooting(boolean shooting) {
 		this.shooting = shooting;
+	}
+	
+	/**
+	 * Changes the max velocity of the ship.
+	 */
+	public void setMaxSpeed(float velocity) {
+		maxVelocity = velocity;
+	}
+	
+	/**
+	 * Changes the players current bullet type.
+	 * @ensure pattern != NULL
+	 */
+	public void setBulletPattern(BulletPattern pattern) {
+		playerBullets = pattern;
+		getStage().addActor(playerBullets);
 	}
 	
 	/**

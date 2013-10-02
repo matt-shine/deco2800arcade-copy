@@ -16,6 +16,7 @@ import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.GameMap;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
+import deco2800.arcade.burningskies.entities.DemoPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -65,7 +66,7 @@ public class PlayScreen implements Screen
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	// Test code
-    	PowerUp test = new PowerUp();
+    	PowerUp test = new DemoPowerUp(this);
     	addPowerup(test);
     	testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
     	addEnemy(new Enemy(200, testTex, new Vector2(300,400), this));
@@ -122,6 +123,7 @@ public class PlayScreen implements Screen
 				PowerUp p = powerups.get(i);
 				if(p.hasCollidedUnscaled(player)) {
 					//TODO: POWERUPS WOO
+					p.powerOn(player);
 					removeEntity(p);
 					i--;
 					continue;

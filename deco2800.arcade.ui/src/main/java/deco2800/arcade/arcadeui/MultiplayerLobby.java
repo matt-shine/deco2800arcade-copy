@@ -51,15 +51,12 @@ public class MultiplayerLobby implements Screen {
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
-<<<<<<< HEAD
 
-=======
         
 		/* Add player to servers list of lobby users */
 		ArcadeSystem.addPlayerToLobby();
 		
 		
->>>>>>> Matches being displayed in lobby now.
 		// Gui button & label Styles 		
 		skin = new Skin();
 		final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
@@ -139,15 +136,6 @@ public class MultiplayerLobby implements Screen {
 		stage.addActor(table2);
 		stage.addActor(table);
 
-		/*		Add Scroll Bar
-				Table table5 = new Table();
-				stage.addActor(table5);
-				table5.setFillParent(true);
-		//Scroll bar latest
-				ScrollPane scroll = new ScrollPane(table2);
-				scroll.setScrollingDisabled(true, false);
-				table5.add(scroll).expand().fill().size(720, 520);
-		 */
 
 		// Add tables and set position.
 		table3.add(chatfield).width(200).height(35).padLeft(960).padTop(440);
@@ -163,8 +151,8 @@ public class MultiplayerLobby implements Screen {
 		table.add(button4).width(300).height(40).padRight(20).padLeft(20).padTop(600);
 
 		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
-
-
+		
+		
 		/** Open Games Button Event Listener 
 		The open games button Looks through an array and returns the number of elements; 
 		in the form of buttons with unique ids as well as avatars and player info etc.
@@ -173,99 +161,17 @@ public class MultiplayerLobby implements Screen {
 			public void changed (ChangeEvent event, Actor actor) {
 
 				ArcadeSystem.requestLobbyGamesList();
-				ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
+				final ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
 				System.out.println("Matches: " + matches.toString());
 
 				//table2.removeActor();
 				table2.clear();
-<<<<<<< HEAD
-
-				int[] anArray = { 
-						1, 2, 3,
-						4, 5, 6, 
-						7, 8, 9, 10
-				};
-
-				if (anArray.length > 0){
-
-					for(int i= anArray[0]; i < anArray.length +1; i++) {
-
-						Label avatars = new Label("<Insert User Avatar Here>" + i, skin2);
-						Label players = new Label("Player: " + i, skin2);
-						final TextButton button4 = new TextButton("Join Game: " + i, skin);
-						button4.setName(""+ i);
-						players.setName(""+ i);
-						avatars.setName(""+ i);
-
-						table2.center().left();
-						table2.add(avatars).width(130).padTop(20).padLeft(150);
-						table2.add(players).width(130).padTop(20).padLeft(130);
-						table2.add(button4).width(130).height(30).padTop(20);
-						table2.row();
-
-						System.out.println(button4.getName());
-						System.out.println("Element:" + i);
-
-						button4.addListener(new ChangeListener() {
-							public void changed (ChangeEvent event, Actor actor) {
-								System.out.println("You Clicked: " + button4.getName());
-							//OVERLAY CODE GOES HERE
-							}
-
-						});
-
-
-					}
-
-					//Create "Refresh" Button.
-					table2.row();
-					final TextButton refresh = new TextButton("Refresh", skin);
-					final TextButton spacer = new TextButton("", skin);
-					table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
-					table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
-
-					// "Refresh" button event listener.
-					refresh.addListener(new ChangeListener() {
-						public void changed (ChangeEvent event, Actor actor) {
-							System.out.println("You Clicked the refresh button");
-							// Add Refresh code here <Need this to return to the "match me" change listener.> 
-
-						}
-
-
-					});
-
-
-				}
-
-				else {
-
-					//Do Nothing
-
-				}
-
-			}
-		});
-
-		// "Create Match" Button Event Listener
-		createbutton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
-
-				CreateMatchRequest request = new CreateMatchRequest();
-				request.gameId = "99999";
-				request.hostPlayerId = 12345;
-				ArcadeSystem.createMatch(request);
-
-
-
-			}
-		});
-=======
 				
+			
 				if (matches.size() > 0 ) {
 					for (int i = 0; i < matches.size(); i++) {
-						Label matchLabel = new Label("MATCH: ", skin2);
-						Label player = new Label("Player: " + matches.get(i).playerID, skin2);
+						Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
+						Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
 						final TextButton button4 = new TextButton("Join", skin);
 						
 						table2.center().left();
@@ -297,8 +203,36 @@ public class MultiplayerLobby implements Screen {
 				// "Refresh" button event listener.
 					 refresh.addListener(new ChangeListener() {
 				public void changed (ChangeEvent event, Actor actor) {
-					System.out.println("You Clicked the refresh button");
-					// Add Refresh code here <Need this to return to the "match me" change listener.> 
+					table2.clear();
+					
+					if (matches.size() > 0 ) {
+						for (int i = 0; i < matches.size(); i++) {
+							Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
+							Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
+							final TextButton button4 = new TextButton("Join", skin);
+							
+							table2.center().left();
+							table2.add(matchLabel).width(130).padTop(20).padLeft(150);
+							table2.add(player).width(130).padTop(20).padLeft(130);
+							table2.add(button4).width(130).height(30).padTop(20);
+							table2.row();
+							
+							button4.addListener(new ChangeListener() {
+					            public void changed (ChangeEvent event, Actor actor) {
+					                System.out.println("You Clicked: " + button4.getName());
+									
+								}
+					            
+					        });
+						}
+			
+					}
+					//Create "Refresh" Button.
+					table2.row();
+					final TextButton refresh = new TextButton("Refresh", skin);
+					final TextButton spacer = new TextButton("", skin);
+					table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
+					table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
 				
 			}
 				
@@ -310,19 +244,22 @@ public class MultiplayerLobby implements Screen {
 			
 			
         });
+
+		
+		
 		
 		// "Create Match" Button Event Listener
 		 createbutton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
             	
             	CreateMatchRequest request = new CreateMatchRequest();
-            	request.gameId = "99999";
-            	request.hostPlayerId = 12345;
-
+            	request.gameId = Integer.toString((int)(Math.random()*10000));
+            	System.out.println("**********" + request.gameId);
+            	request.hostPlayerId = (int) (Math.random()*1000);
+            	ArcadeSystem.createMatch(request);
             }
         });
->>>>>>> Matches being displayed in lobby now.
-		
+
 		
 		//"Match Me" button event listener
 		button4.addListener(new ChangeListener() {
@@ -370,10 +307,10 @@ public class MultiplayerLobby implements Screen {
 
 		//Gdx.app.exit();
 	}
-
-
-
-
+	
+	public void refreshGames() {
+		
+	}
 
 	@Override
 	public void render(float arg0) {

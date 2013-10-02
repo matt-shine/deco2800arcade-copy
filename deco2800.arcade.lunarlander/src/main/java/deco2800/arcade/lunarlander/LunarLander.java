@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -51,6 +50,7 @@ public class LunarLander extends GameClient {
 	private List<List<Integer>> terrain;
 	private boolean randomMap; //currently used in LunarLanderTerrain file, will be reimplemented upon creation of menu.
 	private boolean gameOver;
+	private boolean upKey;
 	
 	Texture textureSolid;
 
@@ -114,6 +114,7 @@ public class LunarLander extends GameClient {
 		
 		randomMap = true;
 		gameOver = false;
+		upKey = false;
 		
 		//creates the map using the method in LunarLanderTerrain file
 		terrain = LunarLanderTerrain.createMap();
@@ -162,9 +163,9 @@ public class LunarLander extends GameClient {
 				if(fuel > 0){
 					velY -= 0.015;
 					fuel -= 0.05;
+					upKey = true;
 				}
 			}
-			batch.draw(flames, landerX, landerY - 5, 100, 100);
 		}
 		speed *= velY * 1;
 		
@@ -177,6 +178,10 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.draw(backgroundTextureRegion, 0, 0);
 	    batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
+	    if(upKey == true){
+	    	batch.draw(flames, landerX + 10, landerY - 5, 10, 10);
+	    	upKey = false;
+	    }
 	    
 	    // display values on screen
 	    font.setColor(Color.WHITE);

@@ -41,6 +41,9 @@ public class LunarLander extends GameClient {
 	private float landerHeight; // the height of the lander png
 	private float landerX; // the initial position of the lander - x coordinate
 	private float landerY; // the initial postiion of the lander - y coordinate
+	private float landerXnew;
+	private float landerYnew;
+	private float velY;
 	
 	
 	//terrain generation
@@ -101,6 +104,7 @@ public class LunarLander extends GameClient {
 		landerY = 750;
 		landerWidth = 30;
 		landerHeight = 30;
+		velY = 1;
 		speed = 1;
 		
 		randomMap = true;
@@ -115,6 +119,10 @@ public class LunarLander extends GameClient {
 	 */
 	@Override
 	public void render() {
+		
+		landerY -= (0.25 + velY);
+		velY += 1;
+		
 		
 		// move lander right
 		if(!(gameOver == true)){

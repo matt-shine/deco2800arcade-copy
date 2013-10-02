@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -145,27 +144,6 @@ public class LunarLander extends GameClient {
 	    font.draw(batch, "Remaining fuel: " + Integer.toString(fuel), SCREENWIDTH - 200, SCREENHEIGHT - 60);
 	    font.draw(batch, "Current speed: " + Integer.toString(speed), SCREENWIDTH - 200, SCREENHEIGHT - 80);
 	    font.draw(batch, "Time spent: " + Integer.toString(time), SCREENWIDTH - 200, SCREENHEIGHT - 100);
-	   
-	    batch.draw(moon, initialPositionX, initialPositionY, landerX, landerY);
-	    
-//	    for (int i = 1; i < terrain.size(); i++){
-//	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
-//	    		TextureRegion moonPattern = new TextureRegion(moon, terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1) - terrain.get(i).get(3));
-//	    	    batch.draw(moonPattern, 10, 10);
-////	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-////			    shapeRenderer.setColor(1, 1, 1, 1);
-////				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));
-////				shapeRenderer.end();
-//	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
-//	    		TextureRegion moonPattern = new TextureRegion(moon, 0, 0, 200, 200);
-//	    	    batch.draw(moonPattern, 500, 500);
-////	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-////			    shapeRenderer.setColor(1, 1, 1, 1);
-////				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1));		
-////				shapeRenderer.end();
-//	    	}
-//	  
-//	    }
 	    
 	    batch.end();
 
@@ -181,7 +159,7 @@ public class LunarLander extends GameClient {
 	    //set map to be randomonly made, or not
 	    if(randomMap == true){
 	    for (int i = 0; i < terrain.size(); i++){
-	    	shapeRenderer.setColor(5, 255, 5, 1);
+	    	shapeRenderer.setColor(180, 180, 5, 1);
 	    	shapeRenderer.line(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3));
 	    	}
 	    }else{
@@ -190,20 +168,19 @@ public class LunarLander extends GameClient {
 	    
 	    //colors the landing pad green
 	    shapeRenderer.setColor(255, 0, 0, 1);
-	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1), terrain.get(0).get(2), terrain.get(0).get(3));
-	    shapeRenderer.setColor(1, 1, 1, 1);
+	    shapeRenderer.line(terrain.get(0).get(0), terrain.get(0).get(1) + 3, terrain.get(0).get(2), terrain.get(0).get(3) + 3);
 	    shapeRenderer.end();
 	    
 	    //fills map with rectangles
 	    for (int i = 1; i < terrain.size(); i++){
 	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-			    shapeRenderer.setColor(1, 1, 1, 1);
+			    shapeRenderer.setColor(20, 20, 20, 100);
 				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(3));
 				shapeRenderer.end();
 	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledRectangle);
-			    shapeRenderer.setColor(1, 1, 1, 1);
+			    shapeRenderer.setColor(20, 20, 20, 100);
 				shapeRenderer.filledRect(terrain.get(i).get(0), 0, terrain.get(i).get(2) - terrain.get(i).get(0), terrain.get(i).get(1));		
 				shapeRenderer.end();
 	    	}
@@ -212,19 +189,19 @@ public class LunarLander extends GameClient {
 	    
 	    //fills underneath landing pad
 	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    shapeRenderer.setColor(1, 1, 1, 1);
+	    shapeRenderer.setColor(20, 20, 20, 100);
 		shapeRenderer.filledRect(terrain.get(0).get(0), 0, terrain.get(0).get(2), terrain.get(0).get(3));		
 		shapeRenderer.end();
 	    
 	    for (int i = 1; i < terrain.size(); i++){
 	    	if (terrain.get(i).get(1) > terrain.get(i).get(3)){
 		    	shapeRenderer.begin(ShapeType.FilledTriangle);
-			    shapeRenderer.setColor(88, 222, 1, 1);
+			    shapeRenderer.setColor(20, 20, 20, 100);
 				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(0), terrain.get(i).get(3));		
 				shapeRenderer.end();
 	    	}else if (terrain.get(i).get(1) < terrain.get(i).get(3)){
 	    		shapeRenderer.begin(ShapeType.FilledTriangle);
-			    shapeRenderer.setColor(88, 222, 1, 1);
+			    shapeRenderer.setColor(20, 20, 20, 100);
 				shapeRenderer.filledTriangle(terrain.get(i).get(0), terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3), terrain.get(i).get(2), terrain.get(i).get(1));		
 				shapeRenderer.end();
 	    	}
@@ -247,7 +224,18 @@ public class LunarLander extends GameClient {
 	    	initialPositionY -= 0.25;
 	    }
 	    
-		super.render();
+	    //check for collision
+	    for (int i = 0; i < terrain.size(); i++){
+	    	if(initialPositionX > terrain.get(i).get(0) && initialPositionX < terrain.get(i).get(2)){
+	    		if(initialPositionY < terrain.get(i).get(1)){
+	    			System.out.println("Collided with the ground! Fatal!");
+	    		}
+	    	}else{
+	    		//do nothing
+	    	}
+	    }
+	    
+	    super.render();
 		
 	}
 	

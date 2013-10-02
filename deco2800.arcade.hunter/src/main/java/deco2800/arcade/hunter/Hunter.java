@@ -8,6 +8,8 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.platformergame.PlatformerGame;
 
+import java.util.Random;
+
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
 	private PreferencesManager prefManage;
@@ -24,6 +26,7 @@ public class Hunter extends PlatformerGame {
 		public final static int MAX_SPEED = 512;
 		public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
         public final static int PANES_PER_TYPE = 2; //Number of map panes each map type should be used for
+        public static Random randomGenerator;
 	}
 
 	public Hunter(Player player, NetworkClient networkClient) {

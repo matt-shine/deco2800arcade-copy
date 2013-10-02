@@ -1,11 +1,11 @@
 package deco2800.arcade.hunter.model;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
@@ -43,11 +43,10 @@ public class Items extends Entity {
 
 	public Items(Vector2 pos, float width, float height, boolean weapon) {
 		super(pos, width, height);
-		Random rnd = new Random();
 		//Randomises item depending on type
 		if (weapon){
 			type = Type.WEAPON;
-			switch(rnd.nextInt(2)){
+			switch(Hunter.Config.randomGenerator.nextInt(2)){
 			case 0:item = weapons[0];
 			case 1:item = weapons[1];
 			case 2:item = weapons[2];
@@ -55,7 +54,7 @@ public class Items extends Entity {
 		}
 		else{
 			type = Type.POWERUP;
-			switch(rnd.nextInt(2)){
+			switch(Hunter.Config.randomGenerator.nextInt(2)){
 			case 0:item = powerups[0];
 			case 1:item = powerups[1];
 			case 2:item = powerups[2];
@@ -77,7 +76,7 @@ public class Items extends Entity {
 	@Override
 	public ArrayList<EntityCollision> getCollisions(EntityCollection entities){
 		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
-		for(Entity e:entities){
+		for(Entity e : entities){
 			if (this.getX() <= 0) collisions.add(new EntityCollision(this,null,CollisionType.ITEM_C_LEFT_EDGE));
 		}
 		return collisions;

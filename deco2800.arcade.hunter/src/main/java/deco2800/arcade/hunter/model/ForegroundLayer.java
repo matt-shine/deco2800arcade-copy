@@ -92,7 +92,7 @@ public class ForegroundLayer extends Map {
 	private MapPane getRandomPane() {
         ArrayList<MapPane> typePanes = mapPanes.get(this.currentType);
 
-        return typePanes.get((int) Math.round(Math.random() * (typePanes.size() - 1                                                                                 )));
+        return typePanes.get(Config.randomGenerator.nextInt(typePanes.size()));
 	}
 	
 	/**

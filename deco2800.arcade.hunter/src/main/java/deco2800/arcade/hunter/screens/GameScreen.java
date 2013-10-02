@@ -1,6 +1,7 @@
 package deco2800.arcade.hunter.screens;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -55,6 +56,10 @@ public class GameScreen implements Screen {
 		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
+
+        //Generate random seed and feed it to the random number generator here.
+        //If you want to make it work the same as a previous run, manually set the seed at the start
+        Config.randomGenerator = new Random((long) (Math.random() * Long.MAX_VALUE));
 
 		backgroundLayer = new BackgroundLayer(0);
 		spriteLayer = new SpriteLayer((float) 0.6);

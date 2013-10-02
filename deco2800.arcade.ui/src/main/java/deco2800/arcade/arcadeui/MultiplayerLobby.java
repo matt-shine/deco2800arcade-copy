@@ -51,7 +51,15 @@ public class MultiplayerLobby implements Screen {
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
+<<<<<<< HEAD
 
+=======
+        
+		/* Add player to servers list of lobby users */
+		ArcadeSystem.addPlayerToLobby();
+		
+		
+>>>>>>> Matches being displayed in lobby now.
 		// Gui button & label Styles 		
 		skin = new Skin();
 		final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
@@ -170,6 +178,7 @@ public class MultiplayerLobby implements Screen {
 
 				//table2.removeActor();
 				table2.clear();
+<<<<<<< HEAD
 
 				int[] anArray = { 
 						1, 2, 3,
@@ -251,6 +260,68 @@ public class MultiplayerLobby implements Screen {
 
 			}
 		});
+=======
+				
+				if (matches.size() > 0 ) {
+					for (int i = 0; i < matches.size(); i++) {
+						Label matchLabel = new Label("MATCH: ", skin2);
+						Label player = new Label("Player: " + matches.get(i).playerID, skin2);
+						final TextButton button4 = new TextButton("Join", skin);
+						
+						table2.center().left();
+						table2.add(matchLabel).width(130).padTop(20).padLeft(150);
+						table2.add(player).width(130).padTop(20).padLeft(130);
+						table2.add(button4).width(130).height(30).padTop(20);
+						table2.row();
+						
+						button4.addListener(new ChangeListener() {
+				            public void changed (ChangeEvent event, Actor actor) {
+				                System.out.println("You Clicked: " + button4.getName());
+								
+							}
+				            
+				        });
+					}
+		
+				}
+	
+				
+				
+				//Create "Refresh" Button.
+				table2.row();
+				final TextButton refresh = new TextButton("Refresh", skin);
+				final TextButton spacer = new TextButton("", skin);
+				table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
+				table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
+				
+				// "Refresh" button event listener.
+					 refresh.addListener(new ChangeListener() {
+				public void changed (ChangeEvent event, Actor actor) {
+					System.out.println("You Clicked the refresh button");
+					// Add Refresh code here <Need this to return to the "match me" change listener.> 
+				
+			}
+				
+				
+            });
+				
+				
+            }
+			
+			
+        });
+		
+		// "Create Match" Button Event Listener
+		 createbutton.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	
+            	CreateMatchRequest request = new CreateMatchRequest();
+            	request.gameId = "99999";
+            	request.hostPlayerId = 12345;
+
+            }
+        });
+>>>>>>> Matches being displayed in lobby now.
 		
 		
 		//"Match Me" button event listener

@@ -439,4 +439,13 @@ public class Arcade extends JFrame {
 		this.client.sendNetworkObject(request);
 	}
 
+	public void addPlayerToLobby() {
+		System.out.println("Adding player to arcade");
+		NewLobbyRequest request = new NewLobbyRequest();
+		request.playerID = player.getID();
+		request.requestType = LobbyRequestType.JOINLOBBY;
+		this.client.sendNetworkObject(request);
+		
+	}
+
 }

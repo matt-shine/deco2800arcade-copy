@@ -44,6 +44,7 @@ public class LobbyListener extends NetworkListener {
 		}
 		else if (object instanceof CreateMatchResponse) {
 			CreateMatchResponse response = (CreateMatchResponse)object;
+			System.out.println("CreateMatchResponse received: matchId: " + response.matchId);
 			//TODO: TAKE THE USER SOMEWHERE/CREATE A POPUP OR SOMETHING
 		}
 	}

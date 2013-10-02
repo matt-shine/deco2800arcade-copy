@@ -41,29 +41,10 @@ public class LobbyListener extends Listener {
 			NewLobbyRequest newLobbyRequest = (NewLobbyRequest) object;
 			int playerId = newLobbyRequest.playerID;
 			System.out.println(newLobbyRequest.requestType);
-			LobbyRequestType requestType = newLobbyRequest.requestType;
-			String gameId = null;
-			if (newLobbyRequest.gameId != null) {
-				gameId = newLobbyRequest.gameId;
-			}
+			Lobby.instance().addPlayerToLobby(playerId, connection);
 			
-
-			switch (requestType)
-			{
-			case JOINLOBBY:
-				handleJoinLobbyRequest(playerId, connection);
-				break;
-			case CREATEMATCH:
-				handleCreateMatchRequest(gameId, playerId, connection);
-				break;
-			case CANCELMATCH:
-				handleCancelMatchRequest(playerId);
-				break;
-			case GETMATCHES:
-				handleGetMatchesRequest(connection);
-				break;
 			}
-		} else if (object instanceof CreateMatchRequest) {
+		else if (object instanceof CreateMatchRequest) {
 			
 			CreateMatchRequest request = (CreateMatchRequest) object;
 			String gameId = request.gameId;
@@ -72,59 +53,9 @@ public class LobbyListener extends Listener {
 			Connection hostConnection = connection;
 			
 			lobby.createMatch(gameId, playerId, hostConnection);
-			
 		}
 
 	}
 	
-	private void handleGetMatchesRequest(Connection connection) {
-		lobby.sendMatchesToClient(connection);
-	}
-
-	private void handleJoinLobbyRequest(int playerId, Connection connection){
-
-		Map<Integer, Set<Connection>> userConnections;
-
-		if (lobbyUsers.containsKey(playerId)) {
-			//User already has a lobby session
-			
-			userConnections = lobbyUsers.get(playerId);
-			
-		} else {
-			//No lobby session for user
-			
-			userConnections = new HashMap<Integer, Set<Connection>>();
-		}
-		
-		if (userConnections.containsKey(playerId)) {
-			//
-			Set<Connection> connections = userConnections.get(playerId);
-			connections.add(connection);
-			connection.sendTCP(JoinLobbyResponse.OK);
-		} else {
-			//session not found
-			connection.sendTCP(JoinLobbyResponse.UNAVAILABLE);
-		}
-
-	}
-
-	private void handleCreateMatchRequest(String gameId, int playerId, Connection connection) {
-		System.out.println("HANDLE MATCH REQUEST");
-		if (lobby.userHasMatch(playerId)) {
-			connection.sendTCP(JoinLobbyResponse.CREATE_MATCH_FAILED);
-		} else {
-			lobby.createMatch(gameId, playerId, connection);
-			connection.sendTCP(JoinLobbyResponse.OK);
-		}
-	}
-
-	private void handleCancelMatchRequest(int playerId) {
-		lobby.destroyMatch(playerId);
-	}
-
-	private void handleJoinMatchRequest(int playerId, Connection connection, LobbyMatch match) {
-
-	}
- 	
 
 }

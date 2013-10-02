@@ -3,6 +3,8 @@ package deco2800.server;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.net.BindException;
 
 import com.esotericsoftware.kryonet.Server;
@@ -44,8 +46,6 @@ public class ArcadeServer {
 	private static ArcadeServer instance;
 	
 	private MatchmakerQueue matchmakerQueue;
-
-	private HashSet<String> lobbyUsers = new HashSet<String>();
 	
 	// Package manager
 	@SuppressWarnings("unused")
@@ -75,6 +75,7 @@ public class ArcadeServer {
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
+		
 	}
 
 	//Achievement storage service
@@ -98,24 +99,8 @@ public class ArcadeServer {
 		return this.creditStorage;
 	}
 	
-	/**
-	 * Returns a set of the usernames of users in the lobby.
-	 * 
-	 * @return HashSet - the set of users currently connected to the
-	 * 	lobby.
-	 */
-	public HashSet<String> getLobbyUsers() {
-		return (HashSet<String>)lobbyUsers.clone();
-	}
 
 
-	/*
-	 * Adds a username to the set of users currently in the lobby.
-	 */
-	protected void addLobbyUser(String username) {
-		lobbyUsers.add(username);
-	}
-	
 	/**
 	 * * Access the Serer's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
@@ -175,6 +160,7 @@ public class ArcadeServer {
 
 		// once the db is fine, load in achievement data from disk
 		this.achievementStorage.loadAchievementData();
+		
 	}
 	
 	/**
@@ -217,4 +203,6 @@ public class ArcadeServer {
     public PackageServer packServ() {
         return packServ;
     }
+
+
 }

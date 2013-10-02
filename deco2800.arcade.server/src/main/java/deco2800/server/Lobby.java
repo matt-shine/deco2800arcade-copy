@@ -29,6 +29,9 @@ public class Lobby {
 
 	/* Holds the 'matches' in the lobby (gameid, <host username, host connection>)*/
 	private ArrayList<LobbyMatch> lobbyGames;
+	
+	/* Holds the players who are connected to the lobby */
+	private Map<Integer, Connection> connectedPlayers;
 
 
 	/**
@@ -37,6 +40,7 @@ public class Lobby {
 	 */
 	private Lobby() {
 		this.lobbyGames = new ArrayList<LobbyMatch>();
+		this.connectedPlayers = new HashMap<Integer, Connection>();
 	}
 
 	/**
@@ -62,14 +66,13 @@ public class Lobby {
 	
 	public boolean sendMatchesToClient(Connection connection) {
 		if (lobbyGames.size() == 0) {
-			connection.sendTCP("No matches found! Try creating one?");
 			return false;
 		} else {
 			for (int i=0; i< lobbyGames.size(); i++) {
 				ActiveMatchDetails match = new ActiveMatchDetails();
 				match.gameId = lobbyGames.get(i).getGameId();
 				match.hostPlayerId = lobbyGames.get(i).getHostPlayerId();
-				match.matchId = lobbyGames.get(i).getMatchId();
+				match.matchId = lobbyGames.get(i).getMatchId().toString();
 				connection.sendTCP(match);
 				System.out.println("SENDING MATCH TO CLIENT");
 			}
@@ -95,15 +98,55 @@ public class Lobby {
 		LobbyMatch match = new LobbyMatch(gameId, playerId, connection);
 		lobbyGames.add(match);
 		CreateMatchResponse response = new CreateMatchResponse();
-		response.matchId = "TESTING MOTHER FUCKER";
+		response.matchId = match.getMatchId().toString();
 		connection.sendTCP(response);
 		System.out.println("[SERVER] Create Match Response sent.");
+		
+		this.sendGamesToLobbyUsers();
 	}
 
 	public void joinMatch(LobbyMatch match, String gameId, int playerId, Connection connection) {
 
 	}
+	
+	public void addPlayerToLobby(int playerId, Connection connection) {
+		if (connectedPlayers.containsKey(playerId)) {
+			//Players already in the lobby list - remove to re-add
+			connectedPlayers.remove(playerId);
+		}
+		connectedPlayers.put(playerId, connection);
+	}
 
+	public void removePlayerFromLobby(int playerId, Connection connection) {
+		if (connectedPlayers.containsKey(playerId)) {
+			connectedPlayers.remove(playerId);
+		}
+	}
+	
+	/**
+	 * Sends the current active matches (i.e. matches with a host and a free
+	 * 	spot) to the users in the lobby.
+	 * 
+	 * Currently called exclusively by the ArcadeServer every 15 seconds.
+	 */
+	public void sendGamesToLobbyUsers() {
+		System.out.println("[SERVER] in sendGamesToLobbyUsers, connectedPlayers: " + connectedPlayers.size() + ", lobbyGames: " + lobbyGames.size());
+		if (connectedPlayers.size() > 0 && lobbyGames.size() > 0) {
+		
+			for (int i=0;i<connectedPlayers.size();i++) {
+				for (int j=0;j<lobbyGames.size();j++) {
+					/* Create the ActiveMatchDetails object to send */
+					ActiveMatchDetails amd = new ActiveMatchDetails();
+					amd.gameId = lobbyGames.get(j).getGameId();
+					amd.hostPlayerId = lobbyGames.get(j).getHostPlayerId();
+					amd.matchId = lobbyGames.get(j).getMatchId().toString();
+					
+					/* Send it to the client */
+					connectedPlayers.get(i).sendTCP(amd);
+				}
+			}
+		}
+	}
 
 	/**
 	 * Checks if the user is hosting a match in the lobby.
@@ -130,5 +173,6 @@ public class Lobby {
 				lobbyGames.remove(i);
 			}
 		}
+		this.sendGamesToLobbyUsers();
 	}
 }

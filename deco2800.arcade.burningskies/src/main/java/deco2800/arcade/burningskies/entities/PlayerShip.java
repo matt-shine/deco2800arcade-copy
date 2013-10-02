@@ -112,6 +112,7 @@ public class PlayerShip extends Ship {
 	 * @ensure pattern != NULL
 	 */
 	public void setBulletPattern(BulletPattern pattern) {
+		playerBullets.remove();
 		playerBullets = pattern;
 		getStage().addActor(playerBullets);
 	}

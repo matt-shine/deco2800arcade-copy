@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
-	private float maxVelocity = 600; //Changed from static to dynamic.
+	private float maxVelocity = 300; //Changed from static to dynamic.
 	private int maxHealth; //For health powerups.
 	private PlayScreen screen;
 	
@@ -59,6 +59,9 @@ public class PlayerShip extends Ship {
     	if(right) {
     		velocity.add(maxVelocity, 0);
     	}
+    	//normalise our velocity
+    	velocity.nor();
+    	velocity.mul(maxVelocity);
     	position.add( velocity.x * delta, velocity.y * delta );
 		if (position.x + getWidth() > BurningSkies.SCREENWIDTH) {
 			position.x = BurningSkies.SCREENWIDTH - getImageWidth();

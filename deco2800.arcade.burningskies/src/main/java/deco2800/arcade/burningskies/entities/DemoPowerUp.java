@@ -16,7 +16,7 @@ public class DemoPowerUp extends PowerUp {
 	public void powerOn(PlayerShip player) {
 		//Demo of these changes. These are set though and not timed at the moment.
 		player.setBulletPattern(new DemoPattern(player, screen));
-		player.setMaxSpeed((float) 100);
+		player.setMaxSpeed(600f);
 	}
 
 }

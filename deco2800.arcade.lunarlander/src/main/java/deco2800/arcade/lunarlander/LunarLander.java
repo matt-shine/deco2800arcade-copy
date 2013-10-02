@@ -48,7 +48,7 @@ public class LunarLander extends GameClient {
 	
 	//terrain generation
 	private List<List<Integer>> terrain;
-	private boolean randomMap;
+	private boolean randomMap; //currently used in LunarLanderTerrain file, will be reimplemented upon creation of menu.
 	private boolean gameOver;
 	
 	Texture textureSolid;
@@ -120,8 +120,11 @@ public class LunarLander extends GameClient {
 	@Override
 	public void render() {
 		
-		landerY -= (0.25 + velY);
-		velY += 1;
+		//downwards movement of lander
+		if(!(gameOver == true)){
+			velY += 0.005;
+			landerY -= (0.05 + velY);
+		}
 		
 		
 		// move lander right
@@ -138,7 +141,9 @@ public class LunarLander extends GameClient {
 			
 		    // boost the lander's speed
 			if ((Gdx.input.isKeyPressed(Keys.W)) || (Gdx.input.isKeyPressed(Keys.UP))) {
-				landerY += (Gdx.graphics.getDeltaTime() * downwardSpeed)/2;
+				while(fuel > 0){
+					velY -= 0.01;
+				}
 			}			
 			
 		}
@@ -171,13 +176,6 @@ public class LunarLander extends GameClient {
 	    //renders the map using the list of lists "terrain"
 	    LunarLanderTerrain.renderMap(terrain);
 	    
-	    //very basic downwards movement of the lander
-	    if(!(gameOver == true)){
-	    	if(!((landerY - 0.25) < 20)) {
-		    	landerY -= 0.25;
-		    }
-	    }
-	    
 	    //check for collision
 	    for (int i = 1; i < terrain.size(); i++){
 	    	if(landerX > terrain.get(i).get(0) && landerX < terrain.get(i).get(2)){
@@ -185,13 +183,15 @@ public class LunarLander extends GameClient {
 	    			System.out.println("Collided with the ground! Fatal!");
 	    			landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/landerExplode1.png"));
 	    			gameOver = true;
-	    			//initialPositionY += 0.25;
+	    			landerY += 0.25;
+	    			velY = 0;
 	    		}
 	    	}else if(landerX > terrain.get(0).get(0) && landerX < terrain.get(0).get(2)){
 	    		if(landerY - 5 < terrain.get(0).get(1)){
 	    			System.out.println("You win!");
 	    			gameOver = true;
-	    			//initialPositionY += 0.25;
+	    			landerY += 0.25;
+	    			velY = 0;
 	    		}
 	    	}
 	    }

@@ -105,7 +105,7 @@ public class LunarLander extends GameClient {
 		
 		randomMap = true;
 		gameOver = false;
-		terrain = createMap();
+		terrain = LunarLanderTerrain.createMap();
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class LunarLander extends GameClient {
 			
 		}
 		
-		//for debugging purposes
+		//for debugging purposes, can be used when game is over or not
 		if (Gdx.input.isKeyPressed(Keys.Q)) {
 			System.out.println("debug button has been pressed!");
 		}
@@ -213,18 +213,6 @@ public class LunarLander extends GameClient {
 	    	}
 	    }
 	    
-	    /*if(!(initPosition + finalY <= 20) && moving == true){
-	    	
-	    case INPROGRESS: //Point is underway, ball is moving
-	    	
-	    case GAMEOVER: //The game has been won, wait to exit
-	    	if (Gdx.input.isTouched()) {
-	    		gameOver();
-	    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-	    	}
-	    	break;
-	    }*/
-	    
 	    //very basic downwards movement of the lander
 	    if(!(gameOver == true)){
 	    	if(!((initialPositionY - 0.25) < 20)) {
@@ -250,80 +238,12 @@ public class LunarLander extends GameClient {
 	    	}
 	    }
 	    
+//	    LunarLanderTerrain obj = new LunarLanderTerrain();
+//	    int fanfare = obj.returnLength("Quadricepts");
+//	    System.out.println(fanfare + " is the length?");
+	    
 	    super.render();
 		
-	}
-	
-	public List<List<Integer>> createMap(){
-		
-		List<List<Integer>> terrain = new ArrayList<List<Integer>>();
-		
-		//creating the landing pads coordinates
-		int landPadLeftX = randNum(100, 700);
-		int landPadLeftY = randNum(50, 200);
-		int landPadRightX = landPadLeftX + 50; //makes the pad 50 pixels wide
-		int landPadRightY = landPadLeftY;
-		
-		//adding the landPad as the first element of the array, TO DO, change color of landing pad
-		terrain.add(new ArrayList<Integer>());
-		terrain.get(0).add(landPadLeftX);
-		terrain.get(0).add(landPadLeftY);
-		terrain.get(0).add(landPadRightX);
-		terrain.get(0).add(landPadRightY);
-		
-		int pointX = terrain.get(0).get(2);
-		int pointY = terrain.get(0).get(3);
-		int arrayPosition = 1;
-		
-		//automatically adds lines to the right of the landing pad
-		while (pointX < 1300){
-
-			int newPointX = randNum(50, 200);
-			int newPointY = randNum(100, 400);
-			
-			terrain.add(new ArrayList<Integer>());
-			terrain.get(arrayPosition).add(pointX);
-			terrain.get(arrayPosition).add(pointY);
-			terrain.get(arrayPosition).add(newPointX + pointX);
-			terrain.get(arrayPosition).add(newPointY);
-			
-			pointX = pointX + newPointX;
-			pointY = newPointY;
-			arrayPosition++;
-			
-		}
-		
-		int pointX2 = terrain.get(0).get(0);
-		int pointY2 = terrain.get(0).get(1);
-		int arrayPosition2 = arrayPosition;
-		
-		//adds lines to the left of the platform/landing pad
-		while (pointX2 > -100){
-
-			int newPointX2 = randNum(50, 200);
-			int newPointY2 = randNum(100, 400);
-			
-			terrain.add(new ArrayList<Integer>());
-			terrain.get(arrayPosition2).add(pointX2 - newPointX2);
-			terrain.get(arrayPosition2).add(newPointY2);
-			terrain.get(arrayPosition2).add(pointX2);
-			terrain.get(arrayPosition2).add(pointY2);
-			
-			pointX2 = pointX2 - newPointX2;
-			pointY2 = newPointY2;
-			arrayPosition2++;
-			
-			
-		}
-		
-		
-		return terrain;
-	}
-	
-	//creates a random length of a line, used by createMap()
-	public int randNum(int start, int finish){
-		int number = start + new Random().nextInt(finish - start + 1 );
-		return number;
 	}
 	
 	@Override

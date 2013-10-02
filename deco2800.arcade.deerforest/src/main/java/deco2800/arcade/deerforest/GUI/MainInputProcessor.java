@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
+import deco2800.arcade.deerforest.models.cards.AbstractSpell;
 
 //This class functions basically as the controller
 public class MainInputProcessor implements InputProcessor {
@@ -34,6 +35,8 @@ public class MainInputProcessor implements InputProcessor {
     private boolean drawn;
     private boolean gameStarted;
 
+    SpellLogic spellHandler;
+
 	//define array of keys for P1 / P2 zones
 	final String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
 	final String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};
@@ -45,6 +48,8 @@ public class MainInputProcessor implements InputProcessor {
         this.gameFinished = false;
         this.drawn = false;
         this.gameStarted = false;
+        //Set up a spellLogic handler
+        spellHandler = new SpellLogic(game, view, this);
 	}
 	
 	@Override
@@ -100,6 +105,11 @@ public class MainInputProcessor implements InputProcessor {
         //If currently zoomed return
         if(zoomed) return false;
 
+        //Check if spell is waiting to be resolved
+        if(spellHandler.needsSelection()) {
+            return false;
+        }
+
 		//Go to next phase
 		if(keycode == Keys.SPACE && game.getPhase() != null) {
 
@@ -107,6 +117,10 @@ public class MainInputProcessor implements InputProcessor {
             if(game.getPhase().equals("DrawPhase") && !drawn) return true;
 
 			game.nextPhase();
+
+            //Activate all continuous spells for this phase
+            spellHandler.activateContinuousEffects(game.getCurrentPlayer(), game.getPhase());
+
 			//Set stuff up at the start phase
 			if(game.getPhase().equals("StartPhase")) {
 				currentSelection = null;
@@ -133,57 +147,6 @@ public class MainInputProcessor implements InputProcessor {
             view.setHighlightedZones(new ArrayList<Rectangle>());
 			return true;
 		}
-		
-		//Print debug stuff
-		if(keycode == Keys.ALT_RIGHT) {
-			System.out.println("Screen data");
-			view.printSpriteMap();
-			System.out.println();
-			
-			System.out.println("Arena data");
-			view.getArena().printZoneInfo();
-			System.out.println();
-			if(currentSelection != null) {
-				System.out.println("CurrentSelection: " + currentSelection + " player: " + currentSelection.getPlayer() 
-						+ " monster: " + currentSelection.isMonster() + " field" + currentSelection.isField() + " area: " + currentSelection.getArea());
-			}
-			System.out.println();
-	    	
-	    	//Print out data about hand / deck / field
-			System.out.println("Model data");
-			CardCollection p1Hand = game.getCardCollection(1, "Hand");
-			System.out.println("P1Hand: " + Arrays.toString(p1Hand.toArray()));
-			System.out.println();
-			
-			CardCollection p2Hand = game.getCardCollection(2, "Hand");
-			System.out.println("P2Hand: " + Arrays.toString(p2Hand.toArray()));
-			System.out.println();
-			
-			CardCollection p1Field = game.getCardCollection(1, "Field");
-			System.out.println("P1Field: " + Arrays.toString(p1Field.toArray()));
-			System.out.println();
-			
-			CardCollection p2Field = game.getCardCollection(2, "Field");
-			System.out.println("P2Field: " + Arrays.toString(p2Field.toArray()));
-			System.out.println();
-			System.out.println();
-
-            CardCollection p1Grave = game.getCardCollection(1, "Graveyard");
-            System.out.println("P1Grave: " + Arrays.toString(p1Grave.toArray()));
-            System.out.println();
-
-            CardCollection p2Grave = game.getCardCollection(2, "Graveyard");
-            System.out.println("P2Grave: " + Arrays.toString(p2Grave.toArray()));
-            System.out.println();
-			
-			return true;
-		}
-		
-		if(keycode == Keys.CONTROL_LEFT) {
-            if(currentSelection != null) {
-                System.out.println(SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), currentSelection.getArea()));
-            }
-		}
 
         return false;
     }
@@ -201,13 +164,22 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
     	//FIXME big method
-        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
+        //System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
+
+        //Check it was a single click
+        if(button != Buttons.LEFT) return false;
 
         //If currently zoomed / gamefinished return
         if(zoomed || gameFinished) return false;
 
         //Reset zoomSelection color
         if(zoomSelection != null) zoomSelection.setSelected(false);
+
+        //Check if spell is waiting to be resolved
+        if(spellHandler.needsSelection()) {
+            spellHandler.handleClick(x, y);
+            return true;
+        }
 
         //get zoomSelection
         zoomSelection = SpriteLogic.checkIntersection(1, x, y);
@@ -225,9 +197,6 @@ public class MainInputProcessor implements InputProcessor {
             zoomSelection.setField(SpriteLogic.getSpriteZoneType(zoomSelection)[0]);
             zoomSelection.setSelected(true);
         }
-
-    	//Check it was a single click
-    	if(button != Buttons.LEFT) return false;
 
         //Check if click was on deck and try to draw
         if(!drawn && game.getPhase().equals("DrawPhase")) {
@@ -250,6 +219,11 @@ public class MainInputProcessor implements InputProcessor {
     			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), oldArea);
     			cards.add(c);
     			game.moveCards(currentSelection.getPlayer(), cards, oldArea, newArea);
+                //Check if a spell was moved from the hand to the field
+                if(currentSelection.getCard() instanceof AbstractSpell && oldArea.contains("Hand") && newArea.contains("Spell")) {
+                    //Play spell
+                    spellHandler.activateSpell(currentSelection.getPlayer(), (AbstractSpell)currentSelection.getCard(), currentSelection);
+                }
     		}
     		//clear available zones and currentSelection
     		currentSelection = null;
@@ -297,6 +271,11 @@ public class MainInputProcessor implements InputProcessor {
     			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), oldArea);
     			cards.add(c);
     			game.moveCards(currentSelection.getPlayer(), cards, oldArea, newArea);
+                //Check if a spell was moved from the hand to the field
+                if(currentSelection.getCard() instanceof AbstractSpell && oldArea.contains("Hand") && newArea.contains("Spell")) {
+                    //Play spell
+                    spellHandler.activateSpell(currentSelection.getPlayer(), (AbstractSpell)currentSelection.getCard(), currentSelection);
+                }
 			} else {
 				//card was not moved, set it back to original position
 				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelection.getOriginZone(), currentSelection.getPlayer(), 
@@ -350,7 +329,7 @@ public class MainInputProcessor implements InputProcessor {
         return currentZoomed;
     }
 
-    private void doDraw() {
+    public void doDraw() {
     	
     	//Get current hand
     	int player = game.getCurrentPlayer();

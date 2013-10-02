@@ -1,6 +1,8 @@
 package deco2800.arcade.deerforest.GUI;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
@@ -67,18 +69,21 @@ public class DeerForest extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
-		
-		// Remove the current input processor
-		ArcadeInputMux.getInstance().removeProcessor(ArcadeInputMux.getInstance().getProcessors().get(1));
-		
-		// Dispose the screen
-		this.getScreen().dispose();
-		
-		// Dispose all of the models
-		mainMenu.dispose();
-		mainGame.dispose();
-		deckBuilder.dispose();
-		
+
+        try {
+            // Remove the current input processor
+            ArcadeInputMux.getInstance().removeProcessor(ArcadeInputMux.getInstance().getProcessors().get(1));
+
+            // Dispose the screen
+            this.getScreen().dispose();
+
+            // Dispose all of the models
+            mainMenu.dispose();
+            mainGame.dispose();
+            deckBuilder.dispose();
+        } catch(Exception e) {
+
+        }
 	}
 	
 	@Override
@@ -149,16 +154,96 @@ public class DeerForest extends GameClient {
 			}
 			cardList.add(card);
 		}
+
 		//Add general spells
-		for(int i = 0; i < 5; i++) {
-			SpellEffect spellEffect = null;
+		for(int i = 0; i < 10; i++) {
+
+            Set<String> typeEffects = null;
+
+            List<String> effectCategory = new ArrayList<String>();
+            effectCategory.add("Draw");
+            effectCategory.add("Draw");
+
+            List<List<Integer>> effectParams = new ArrayList<List<Integer>>();
+            ArrayList<Integer> drawEffect = new ArrayList<Integer>();
+
+            drawEffect.add(2); //Amount to draw
+            drawEffect.add(1); //Amount to discard before
+            drawEffect.add(1); //Amount to discard after
+            drawEffect.add(0); //Affect yourself
+            drawEffect.add(0); //On activation
+
+            ArrayList<Integer> drawEffect2 = new ArrayList<Integer>();
+
+            drawEffect2.add(1); //Amount to draw
+            drawEffect2.add(0); //Amount to discard before
+            drawEffect2.add(0); //Amount to discard after
+            drawEffect2.add(0); //Affect yourself
+            drawEffect2.add(2); //On opponents end
+
+            effectParams.add(drawEffect);
+            effectParams.add(drawEffect2);
+
+            SpellEffect spellEffect;
+            try {
+                spellEffect = new SpellEffect(typeEffects, effectCategory, effectParams);
+            } catch (Exception e) {
+                System.out.println("Error making effect");
+                spellEffect = null;
+            }
+
 			String filePath = "DeerForestAssets/GeneralSpellShell.png";
 			AbstractCard spell = new GeneralSpell(spellEffect, filePath);
 			cardList.add(spell);
 		}
+
 		//add field Spells
-		for(int i = 0; i < 5; i++) {
-			SpellEffect spellEffect = null;
+		for(int i = 0; i < 10; i++) {
+
+            Set<String> typeEffects = null;
+
+            List<String> effectCategory = new ArrayList<String>();
+            effectCategory.add("Draw");
+            effectCategory.add("Draw");
+            effectCategory.add("Draw");
+
+            List<List<Integer>> effectParams = new ArrayList<List<Integer>>();
+            ArrayList<Integer> drawEffect = new ArrayList<Integer>();
+
+            drawEffect.add(2); //Amount to draw
+            drawEffect.add(2); //Amount to discard before
+            drawEffect.add(0); //Amount to discard after
+            drawEffect.add(0); //Affect player
+            drawEffect.add(0); //On activation
+
+            ArrayList<Integer> drawEffect2 = new ArrayList<Integer>();
+
+            drawEffect2.add(1); //Amount to draw
+            drawEffect2.add(1); //Amount to discard before
+            drawEffect2.add(0); //Amount to discard after
+            drawEffect2.add(0); //Affect player
+            drawEffect2.add(0); //On activation
+
+            ArrayList<Integer> drawEffect3 = new ArrayList<Integer>();
+
+            drawEffect3.add(2); //Amount to draw
+            drawEffect3.add(0); //Amount to discard before
+            drawEffect3.add(2); //Amount to discard after
+            drawEffect3.add(0); //Affect player
+            drawEffect3.add(1); //On Your end turn
+
+            effectParams.add(drawEffect);
+            effectParams.add(drawEffect2);
+            effectParams.add(drawEffect3);
+
+            SpellEffect spellEffect;
+            try {
+                spellEffect = new SpellEffect(typeEffects, effectCategory, effectParams);
+            } catch (Exception e) {
+                System.out.println("Error making effect");
+                spellEffect = null;
+            }
+
 			String filePath = "DeerForestAssets/FieldSpellShell.png";
 			AbstractCard spell = new FieldSpell(spellEffect, filePath);
 			cardList.add(spell);

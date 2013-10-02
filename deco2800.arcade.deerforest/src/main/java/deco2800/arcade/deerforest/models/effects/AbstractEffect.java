@@ -41,15 +41,15 @@ public abstract class AbstractEffect {
 	 * 				1 = Opponent
 	 * 				2 = Both (so each player destroys the amount of cards)
 	 * 				3 = Either (so amount of cards is destroyed from whoever)
-	 * 			- Frequency
-	 * 				0 = On activation / Summon
-	 * 				1 = once per turn (yours)
-	 * 				2 = once per turn (opponents)
-	 * 				3 = once per turn (each players turn)
 	 * 			- Category of card affected
 	 * 				0 = Monsters
 	 * 				1 = Spells
 	 * 				2 = Both
+ 	 * 			- Frequency
+	 * 				0 = On activation / Summon
+	 * 				1 = once per turn (yours)
+	 * 				2 = once per turn (opponents)
+	 * 				3 = once per turn (each players turn)
 	 * 			- Type card affects
 	 * 				0 = any
 	 * 				1 = Fire (if monster) / General (if spell)
@@ -82,12 +82,6 @@ public abstract class AbstractEffect {
 	 * 				1 = Health
 	 * 				2 = Both
 	 * 			- Amount to affect by (can be negative for losing attack / health)
-	 * 			- Frequency
-	 * 				0 = while on field
-	 * 				1 = during turn of activation
-	 * 				2 = once per turn (yours)
-	 * 				3 = once per turn (opponents)
-	 * 				4 = once per turn (each players turn)
 	 * 			- Type card affects
 	 * 				0 = any
 	 * 				1 = Fire
@@ -95,6 +89,12 @@ public abstract class AbstractEffect {
 	 * 				3 = Water
 	 * 				4 = Dark
 	 * 				5 = Light
+	 * 			- Frequency
+	 * 				0 = while on field
+	 * 				1 = during turn of activation
+	 * 				2 = once per turn (yours)
+	 * 				3 = once per turn (opponents)
+	 * 				4 = once per turn (each players turn)
 	 * 
 	 * 		"Search" category:
 	 * 			- Amount of cards
@@ -108,14 +108,14 @@ public abstract class AbstractEffect {
 	 * 				1 = Hand
 	 * 				2 = Field
 	 * 				3 = Graveyard
-	 * 			- Frequency
-	 * 				0 = On activation / Summon
-	 * 				1 = once per turn (yours)
-	 * 				2 = once per turn (opponents)
 	 * 			- Category of card searched
 	 * 				0 = Monsters
 	 * 				1 = Spells
 	 * 				2 = Both
+	 * 			- Frequency
+	 * 				0 = On activation / Summon
+	 * 				1 = once per turn (yours)
+	 * 				2 = once per turn (opponents)
 	 * 			- Min attack (irrelevant if spell searching, still needs to exist)
 	 * 				-1 = N/A
 	 * 			- Max attack (irrelevant if spell searching, still needs to exist)
@@ -155,7 +155,7 @@ public abstract class AbstractEffect {
 	 * @param typeEffects Set of all the monster types that the effect affects
 	 * 			null if it can affect any type
 	 * 
-	 * @param effectCategory List of each effect category that this effect has
+	 * @param effectCategories List of each effect category that this effect has
 	 * 			must be in same order as the parameters list
 	 * 
 	 * @param effectParams List of list of parameters, with one list for each 

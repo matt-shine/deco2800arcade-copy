@@ -157,8 +157,8 @@ public class MultiplayerLobby implements Screen {
 		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
 
 
-		/** "Match Me!" Button Event Listener. 
-		The "Match Me!" button Looks through an array and returns the number of elements; 
+		/** Open Games Button Event Listener 
+		The open games button Looks through an array and returns the number of elements; 
 		in the form of buttons with unique ids as well as avatars and player info etc.
 		 */
 		button.addListener(new ChangeListener() {
@@ -249,6 +249,16 @@ public class MultiplayerLobby implements Screen {
 
 
 
+			}
+		});
+		
+		
+		//"Match Me" button event listener
+		button4.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				//add to matchmaking queue method
+				//add overlay to say 'waiting for match'
+				//add second overlay (or modify first) to 'accept' or 'decline' match
 			}
 		});
 

@@ -3,7 +3,6 @@ package deco2800.arcade.packman;
 import java.lang.String;
 import java.lang.System;
 import java.util.ArrayList;
-import java.util.Set;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;

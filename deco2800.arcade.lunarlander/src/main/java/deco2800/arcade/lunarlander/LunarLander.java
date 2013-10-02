@@ -226,8 +226,10 @@ public class LunarLander extends GameClient {
 	    }*/
 	    
 	    //very basic downwards movement of the lander
-	    if(!((initialPositionY - 0.25) < 20)) {
-	    	initialPositionY -= 0.25;
+	    if(!(gameOver == true)){
+	    	if(!((initialPositionY - 0.25) < 20)) {
+		    	initialPositionY -= 0.25;
+		    }
 	    }
 	    
 	    //check for collision

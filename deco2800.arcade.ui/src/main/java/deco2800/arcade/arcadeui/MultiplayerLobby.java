@@ -95,9 +95,11 @@ public class MultiplayerLobby implements Screen {
 		skin2.add("default", textButtonStyle);
 
 
-		//Create buttons, labels and tables for layout purposes
+		//Create buttons, labels and tables for layout purposes 
+		//Changed open games 
 		TextButton createbutton = new TextButton("Create Match", skin);
-		TextButton button = new TextButton("Match Me!", skin);
+		TextButton button = new TextButton("Open Games", skin);
+		TextButton button4 = new TextButton("Match Me!", skin);
 		TextButton button2 = new TextButton("Return to Menu", skin);
 
 		TextButton button3 = new TextButton(">>", skin);
@@ -146,11 +148,13 @@ public class MultiplayerLobby implements Screen {
 
 		table3.add(button3).width(45).height(35).padLeft(3).padTop(440);
 
-		table.add(createbutton).width(300).height(40).padRight(80).padTop(600);
+		table.add(createbutton).width(300).height(40).padRight(20).padTop(600);
+		
+		table.add(button).width(300).height(40).padRight(20).padLeft(20).padTop(600);
+		
+		table.add(button4).width(300).height(40).padRight(20).padLeft(20).padTop(600);
 
-		table.add(button).width(300).height(40).padRight(80).padLeft(80).padTop(600);
-
-		table.add(button2).width(300).height(40).padLeft(80).padTop(600);
+		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
 
 
 		/** "Match Me!" Button Event Listener. 
@@ -159,7 +163,6 @@ public class MultiplayerLobby implements Screen {
 		 */
 		button.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-
 
 				ArcadeSystem.requestLobbyGamesList();
 				ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();

@@ -229,9 +229,10 @@ public class LunarLander extends GameClient {
 	    	if(initialPositionX > terrain.get(i).get(0) && initialPositionX < terrain.get(i).get(2)){
 	    		if(initialPositionY < terrain.get(i).get(1)){
 	    			System.out.println("Collided with the ground! Fatal!");
+	    			landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/landerExplode.png"));
 	    		}
 	    	}else if(initialPositionX > terrain.get(0).get(0) && initialPositionX < terrain.get(0).get(2)){
-	    		if(initialPositionY < terrain.get(0).get(1)){
+	    		if(initialPositionY - 5 < terrain.get(0).get(1)){
 	    			System.out.println("You win!");
 	    			initialPositionY += 0.25;
 	    		}

@@ -230,8 +230,8 @@ public class LunarLander extends GameClient {
 	    		if(initialPositionY < terrain.get(i).get(1)){
 	    			System.out.println("Collided with the ground! Fatal!");
 	    		}
-	    	}else if(initialPositionX > terrain.get(1).get(0) && initialPositionX < terrain.get(1).get(2)){
-	    		if(initialPositionY < terrain.get(1).get(1)){
+	    	}else if(initialPositionX > terrain.get(0).get(0) && initialPositionX < terrain.get(0).get(2)){
+	    		if(initialPositionY < terrain.get(0).get(1)){
 	    			System.out.println("You win!");
 	    			initialPositionY += 0.25;
 	    		}

@@ -25,18 +25,19 @@ public class Ghost {
 private enum GhostMode {
 	CHASE, SCATTER, FRIGHT, DEAD
 }
-private int ghost;
+private int ghostNum;
 // 1 - Blinky, 2 - Pinky, 3 - Inky, 4 - Clyde
 private int xpos;
 private int ypos;
 private int targetx;
 private int targety;
 private PacChar player;
+private boolean allowedOut; //says whether the ghost can go through the ghost pen door
 
-public Ghost(int ghostNumber, int curX, int curY, PacChar player) {
-	this.ghost = ghostNumber;
-	this.xpos = curX;
-	this.ypos = curY;
+public Ghost(int ghostNum, int xpos, int ypos, PacChar player) {
+	this.ghostNum = ghostNum;
+	this.xpos = xpos;
+	this.ypos = ypos;
 	this.player = player;
 }
 
@@ -48,18 +49,18 @@ public void targetTile() {
 	// if in fright, targets change randomly
 	// if dead, target is monster pen
 	
-	if (ghost == 1) { // Blinky
+	if (ghostNum == 1) { // Blinky
 		// add if statement for dots remaining in maze, for Elroy mode
 		targetx = player.getX();
 		targety = player.getY();
 	}
-	else if (ghost == 2) { // Pinky
+	else if (ghostNum == 2) { // Pinky
 		// if statements for direction
 	}
-	else if (ghost == 3) { // Inky
+	else if (ghostNum == 3) { // Inky
 		// complex
 	}
-	else if (ghost == 4) { // Clyde
+	else if (ghostNum == 4) { // Clyde
 		// random
 	}
 	

@@ -1,83 +1,58 @@
 package deco2800.arcade.pacman;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
-/*
- * Probably just replace this with a method in Pacman.java later, but for now
- * this is just a thinking space :).
+/**
+ * The map of the pacman game, containing the list of tiles and which tiles 
+ * are doors to the ghost pen
  */
-
 public class GameMap {
 
-	// created these to try to specify a space in which the gamemap should go
-	// doesn't do anything yet, need to think more about how that might work
-	private int width;
-	private int height;
 	private boolean vsym;
+	private Tile[][] grid; //game map
+	private List<WallTile> ghostDoors; //list of ghost doors for ghosts to access
 	
-	public GameMap(int width, int height) {
-		this.width = width;
-		this.height = height;
+	public GameMap() {
 		vsym = false;
+		ghostDoors = new ArrayList<WallTile>();
 	}
 	
-	/*
-	 * The idea is to read in a text file representing the game 'grid' and
-	 * append lines to an ArrayList. Maybe arrays of chars/strings will work
-	 * more nicely but for now it's just convenient because ArrayLists are
-	 * dynamically sized so there's no need to pre-compute the size of the map
-	 * beforehand.
+
+	/**
+	 * Reads a file and converts it into a character array to generate tiles from
 	 */
-
-	public ArrayList<char[]> readMap(String file) throws IOException {
-
-		// Pre-process 'file' to get it to point to the correct directory
-		file = "src\\main\\resources\\" + file;		
-		String absolutePath = Gdx.files.internal(file).file().getAbsolutePath();
-		absolutePath = absolutePath.replace("arcade", "arcade.pacman");
-		
+	public ArrayList<char[]> readMap(String fileName) {
+		String contents = Gdx.files.internal(fileName).readString();
 		//resultArray contains a number of char arrays equal to the number of lines
 		// each array contains all the characters from that line
 		ArrayList<char[]> resultArray = new ArrayList<char[]>();
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(absolutePath));			
-			String line;
-			while ((line = br.readLine()) != null) {
-				if (line.contains("VSYM")) {
-					vsym = true;
-					continue;
-				}
-				if (vsym) {
-					line = useVSymmetry(line);
-				}
-				resultArray.add(line.toCharArray());
+		String[] lineArray = contents.split(System.getProperty("line.separator"));
+		for (int i = 0; i < lineArray.length; i++) {
+			String line = lineArray[i];
+			if (line.contains("VSYM")) {
+				vsym = true;
+				continue;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null)  {
-				br.close();
-			}			
-		}		
+			if (vsym) {
+				line = useVSymmetry(line); 
+			}
+			resultArray.add(line.toCharArray());
+		}
 		//reverse as libgdx draws from bottom left
 		Collections.reverse(resultArray);
-//		for (int i=0; i<resultArray.size(); i++) {
-//			System.out.println(resultArray.get(i));
-//		}
 		return resultArray;
 	}
-
+	
+	/**
+	 * Takes a string from a vertically symmetrical map file and uses that 
+	 * property to generate the other half of the map, replacing tiles with 
+	 * their reflection when appropriate. 
+	 * @return: the string containing the whole of that line to make tiles from
+	 */
 	private String useVSymmetry(String line) {
 		StringBuffer reverse = new StringBuffer(line).reverse();
 		for (int i = 0; i < reverse.length(); i++) {
@@ -121,72 +96,70 @@ public class GameMap {
 			}
 			if (replacer !=  null) {
 				reverse.replace(i, i+1, replacer);
-				//System.out.println("New string: " + reverse);
 			}
 		}
 		return line + reverse.toString();
 	}
-
-//	public static void main(String[] args) {
-//		System.out.println(useVSymmetry(new String("ABBBBBBBBBBBBR")));
-//		System.out.println(useVSymmetry(new String("Dppppppppppppd")));
-//		System.out.println(useVSymmetry(new String("Dpabbcpabbbcpd")));
-//		System.out.println(useVSymmetry(new String("DPd  epd   epd")));
-//	}
 	
-	/*
-	 * Alternate implementation of readMap. Given that map files
-	 * have relatively small dimensions, it shouldn't be an issue to simply
-	 * read the entire text file into memory all at once. So for this purpose,
-	 * we can just use libgdx's functions to read our file.
+	/**
+	 * Generate tiles as specified by the character ArrayList
 	 */
-	public ArrayList<char[]> readMap2(String file) {
-		// Pre-process 'file' to get it to point to the correct directory
-		file = "src\\main\\resources\\" + file;		
-		String absolutePath = Gdx.files.internal(file).file().getAbsolutePath();
-		absolutePath = absolutePath.replace("arcade", "arcade.pacman");
-		FileHandle filePath = Gdx.files.absolute(absolutePath);
-		String contents = filePath.readString();		
-		ArrayList<char[]> levelMap = new ArrayList<char[]>();	
-		String[] lineArray = contents.split(System.getProperty("line.separator"));
-		for (int i = 0; i < lineArray.length; i++) {
-			levelMap.add(lineArray[i].toCharArray());
-		}
-		return levelMap;
-	}
-
-	/*
-	 * OLD METHOD: Generate and draw walls as specified by the map ArrayList.
-	 */
-	public void drawMap2(List<Collideable> colList, ArrayList<char[]> map, ShapeRenderer shaper) {
-		// using a unit length for the walls as 25 pixels. This means by the
-		// standard grid we are working at
-		// at the moment, the txt files must be 24x24.
-		for (int i = 0; i < map.size(); i++) {
-			char[] s = map.get(i);
-			for (int j = 0; j < s.length; j++) {
-				Wall wall = new Wall(colList, Character.getNumericValue(s[j]),
-						(900 - 8 * i), (650 - 8 * j), 8);
-				wall.render(shaper);
+	public void createTiles(ArrayList<char[]> map) {
+		//initialise size of map grid
+		int ySize = map.size(); // number of lines
+		int xSize = map.get(0).length; //length of each line
+		grid = new Tile[xSize][ySize];
+		//set up teleport target making- currently supports any even number 
+		//of teleporters, each targeting the next one which appears in the list
+		Tile target = null;
+		//create tiles
+		for (int lineNum = 0; lineNum < map.size(); lineNum++) {
+			char[] line = map.get(lineNum);
+			for (int i = 0; i < line.length; i++) {
+				Tile square;
+				char type = line[i];
+				if (type == 'p' || type == 'P') {
+					square = new DotTile(type);
+				} else if (type == 'T') {
+					square = new TeleportTile();
+					//set up teleport targeting between two most recently
+					//made tiles
+					if (target != null) {
+						((TeleportTile) square).setTarget(target);
+						((TeleportTile) target).setTarget(square);
+						target = null;
+					} else {
+						target = square;
+					}
+				} else if (type == ' ' || type == 'r' || type == 's'){
+					square = new Tile();
+				} else {
+					square = new WallTile(type);
+					// if it's a ghost door, add it to the list
+					if (type == 'Q') {
+						ghostDoors.add((WallTile) square);
+					}
+				}
+				grid[i][lineNum] = square;
 			}
 		}
 	}
 	
-	/*
-	 * Generate and draw walls as specified by the map ArrayList. THIS IS THE CURRENT METHOD BEING USED
-	 */
-	public void drawMap(ArrayList<char[]> map, SpriteBatch batch) {
+	public void render(SpriteBatch batch) {
 		//should do some fancy stuff to position pacman grid in middle of screen horizontally
 		//instead of what I've done here with just setting them to a value I picked
 		int hOffset = 300;
 		int vOffset = 100;
 		int side = Tile.getSideLength();
-		for (int lineNum = 0; lineNum < map.size(); lineNum++) {
-			char[] line = map.get(lineNum);
-			for (int i = 0; i < line.length; i++) {
-				WallTile wall = new WallTile(line[i]);
-				wall.render(batch, hOffset + i*side, vOffset + lineNum*side);
+		for (int x = 0; x < grid.length; x++) {
+			for (int y = 0; y < grid[x].length; y++) {
+				grid[x][y].render(batch, hOffset + x*side, vOffset + y*side);
 			}
 		}
 	}
+
+	public List<WallTile> getGhostDoors() {
+		return ghostDoors;
+	}
+
 }

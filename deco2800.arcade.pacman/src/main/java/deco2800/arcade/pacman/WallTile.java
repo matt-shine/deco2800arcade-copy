@@ -11,31 +11,21 @@ public class WallTile extends Tile {
 	/** A char representing the type of wallTile. Same char used in file
 	 *  
 	 */
-	private char type;
-	//sprite sheet
-	private TextureRegion[][] wallSprites;
+	private final char type;
 	
 	public WallTile(char type) {
-		super();
 		this.type = type;
-		Texture temp = new Texture(Gdx.files.internal("wallsAndPellets.png"));
-		// splits into columns and rows then puts them into one array in order
-		wallSprites= TextureRegion.split(temp, 8, 8);
-	}
+	}	
 	
-	// draws the wall tile at [row num][col num]- default is blank
 	public void render(SpriteBatch batch, float x, float y) {
 		int row = 7;
 		int col = 1;
-		//get rid of non wall tiles here and put them in the tile render method
-		// add T for teleporter
 		switch(type) {
 		case 'A': row = 0; col = 0; break;
 		case 'B': row = 0; break;
 		case 'C': row = 0; col = 2; break;
 		case 'J': row = 0; col = 3; break;
 		case 'D': row = 1; col = 0; break;
-		case 'P': row = 1; break;
 		case 'E': row = 1; col = 2; break;
 		case 'K': row = 1; col = 3; break;
 		case 'F': row = 2; col = 0; break;
@@ -47,7 +37,6 @@ public class WallTile extends Tile {
 		case 'c': row = 3; col = 2; break;
 		case 'M': row = 3; col = 3; break;
 		case 'd': row = 4; col = 0; break;
-		case 'p': row = 4; break;
 		case 'e': row = 4; col = 2; break;
 		case 'R': row = 4; col = 3; break;
 		case 'f': row = 5; col = 0; break;
@@ -59,7 +48,6 @@ public class WallTile extends Tile {
 		case '3': row = 6; col = 2; break;
 		case 'w': row = 6; col = 3; break;
 		case '4': col = 0; break;
-		case ' ': break;
 		case '5': col = 2; break;
 		case 'x': col = 3; break;
 		case '6': row = 8; col = 0; break;
@@ -73,11 +61,8 @@ public class WallTile extends Tile {
 		case 'W': row = 10; col = 0; break;
 		case 'X': row = 10; break;
 		case 'Y': row = 10; col = 2; break;
-		case 'Z': row = 10; col = 3; break;		
+		case 'Z': row = 10; col = 3; break;
 		}
-//		System.out.println("type: " + type + ", row: " + row + ", col: " + col + 
-//				", x: " + x + ", y: " + y);
-		batch.draw(wallSprites[row][col], x, y, Tile.getSideLength(), Tile.getSideLength());
-	}	
-
+		batch.draw(tileSprites[row][col], x, y, sideLength, sideLength);
+	}
 }

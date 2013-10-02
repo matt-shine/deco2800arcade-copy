@@ -141,12 +141,9 @@ public class Pacman extends GameClient {
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
 		gameState = GameState.READY;
-		map1 = new GameMap(224, 288);
-		try {
-			map1Array = map1.readMap(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
+		map1 = new GameMap();
+		map1Array = map1.readMap(file);
+		map1.createTiles(map1Array);
 	}
 	
 	/**
@@ -210,7 +207,7 @@ public class Pacman extends GameClient {
 	    shaper.setProjectionMatrix(camera.combined);
 	    // start the drawing
 	    batch.begin();
-	    map1.drawMap(map1Array, batch);
+	    map1.render(batch);
 	    // render player pacman 
 //	    player.render(batch);
 	    //end the drawing

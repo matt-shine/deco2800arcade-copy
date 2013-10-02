@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PacChar extends Collideable{
 	
+	private Tile startTile; //pacman's starting tile(s), needs to be initialised
+	
 	// Describes the current state of pacman- starts IDLE
 	public enum PacState {
 		IDLE, MOVING, DEAD

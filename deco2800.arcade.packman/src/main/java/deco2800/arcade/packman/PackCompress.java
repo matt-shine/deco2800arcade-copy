@@ -44,6 +44,14 @@ public class PackCompress {
 	    p.put(Packer.UNKNOWN_ATTRIBUTE, Packer.ERROR);
 	}
 	
+	/**
+	 * Compress a jar file into a (normally) tar.gz file that is easier to 
+	 * transfer across the network.
+	 * 
+	 * @param inputPath	Relative path to the input jar file
+	 * @param outputPath Relative path to the desired location of the compressed file
+	 * @throws IOException If file cannot be compressed
+	 */
 	public void Compress(String inputPath, String outputPath) throws IOException {
         JarFile jarFile = new JarFile(inputPath);
         FileOutputStream fos = new FileOutputStream(outputPath);
@@ -54,6 +62,13 @@ public class PackCompress {
         fos.close();
 	}
 	
+	/**
+	 * Expands a (normally) tar.gz file to a jar file that is faster to load.
+	 * 
+	 * @param inputPath Relative path to the compressed file
+	 * @param outputPath Relative path to the desired location of the jar file
+	 * @throws IOException If the file cannot be expanded
+	 */
 	public void Expand(String inputPath, String outputPath) throws IOException {
 		File f = new File(inputPath);
 		FileOutputStream fostream = new FileOutputStream(outputPath);

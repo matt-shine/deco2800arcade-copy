@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Color;
@@ -52,6 +53,7 @@ public class LunarLander extends GameClient {
 	private boolean gameOver;
 	private boolean upKey;
 	
+	Music flameSound;
 	Texture textureSolid;
 
 	
@@ -111,6 +113,8 @@ public class LunarLander extends GameClient {
 		velXright = 0;
 		speed = 1;
 		fuel = 1000;
+		
+		flameSound = Gdx.audio.newMusic(Gdx.files.internal("lunarlanderassets/flame.ogg"));
 		
 		randomMap = true;
 		gameOver = false;
@@ -180,6 +184,7 @@ public class LunarLander extends GameClient {
 	    batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
 	    if(upKey == true){
 	    	batch.draw(flames, landerX + 10, landerY - 5, 10, 10);
+	    	flameSound.play();
 	    	upKey = false;
 	    }
 	    

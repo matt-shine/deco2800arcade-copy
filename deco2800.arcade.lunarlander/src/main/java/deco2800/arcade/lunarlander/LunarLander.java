@@ -225,13 +225,16 @@ public class LunarLander extends GameClient {
 	    }
 	    
 	    //check for collision
-	    for (int i = 0; i < terrain.size(); i++){
+	    for (int i = 1; i < terrain.size(); i++){
 	    	if(initialPositionX > terrain.get(i).get(0) && initialPositionX < terrain.get(i).get(2)){
 	    		if(initialPositionY < terrain.get(i).get(1)){
 	    			System.out.println("Collided with the ground! Fatal!");
 	    		}
-	    	}else{
-	    		//do nothing
+	    	}else if(initialPositionX > terrain.get(1).get(0) && initialPositionX < terrain.get(1).get(2)){
+	    		if(initialPositionY < terrain.get(1).get(1)){
+	    			System.out.println("You win!");
+	    			initialPositionY += 0.25;
+	    		}
 	    	}
 	    }
 	    

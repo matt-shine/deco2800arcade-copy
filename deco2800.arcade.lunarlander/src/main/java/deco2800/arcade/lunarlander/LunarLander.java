@@ -32,6 +32,7 @@ public class LunarLander extends GameClient {
 	private Texture landerTexture;
 	private Texture backgroundTexture;
 	private Texture moon;
+	private Texture flames;
 	private TextureRegion backgroundTextureRegion; // draws portion of background png file
 	private BitmapFont font; // draws text 
 	//Texture[] backgroundTextures;
@@ -41,8 +42,6 @@ public class LunarLander extends GameClient {
 	private float landerHeight; // the height of the lander png
 	private float landerX; // the initial position of the lander - x coordinate
 	private float landerY; // the initial postiion of the lander - y coordinate
-	private float landerXnew;
-	private float landerYnew;
 	private float velY;
 	private float velXleft;
 	private float velXright;
@@ -94,6 +93,7 @@ public class LunarLander extends GameClient {
 		backgroundTexture = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png")); //loads background file
 		backgroundTextureRegion = new TextureRegion(backgroundTexture, 1200, 800); //creates a portion of that to display
 		moon = new Texture(Gdx.files.internal("lunarlanderassets/moon.png"));
+		flames = new Texture(Gdx.files.internal("lunarlanderassets/flames.png"));
 		landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/lander.png")); // loads lander png file
 		font = new BitmapFont(); // creates a new font to use for text
 		shapeRenderer = new ShapeRenderer();
@@ -123,7 +123,7 @@ public class LunarLander extends GameClient {
 	 * Render the current state of the game and process updates
 	 */
 	@Override
-	public void render() {
+	public void render() {		
 		
 		//calculates velocity of lander
 		if(!(gameOver == true)){
@@ -140,19 +140,21 @@ public class LunarLander extends GameClient {
 			
 		}
 		
-		
+		batch.begin();
 		// move lander right
 		if(!(gameOver == true)){
 			
 			// move lander left
 			if ((Gdx.input.isKeyPressed(Keys.A)) || (Gdx.input.isKeyPressed(Keys.LEFT))) {
 				landerX -= Gdx.graphics.getDeltaTime() * sideSpeed;
-				velXleft += 0.02;
+				velXleft += 0.01;
+				fuel -= 0.025;
 			}
 			
 			if ((Gdx.input.isKeyPressed(Keys.D)) || (Gdx.input.isKeyPressed(Keys.RIGHT))) {
 		    	landerX += Gdx.graphics.getDeltaTime() * sideSpeed;
-		    	velXright += 0.02;
+		    	velXright += 0.01;
+		    	fuel -= 0.025;
 		    }
 			
 		    // boost the lander's speed
@@ -161,9 +163,10 @@ public class LunarLander extends GameClient {
 					velY -= 0.015;
 					fuel -= 0.05;
 				}
-			}			
-			
+			}
+			batch.draw(flames, landerX, landerY - 5, 100, 100);
 		}
+		speed *= velY * 1;
 		
 		//for debugging purposes, can be used when game is over or not
 		if (Gdx.input.isKeyPressed(Keys.Q)) {
@@ -172,9 +175,8 @@ public class LunarLander extends GameClient {
 		
 		// clear screen, create background using texture
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	    batch.begin();
 	    batch.draw(backgroundTextureRegion, 0, 0);
-	    batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);    
+	    batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
 	    
 	    // display values on screen
 	    font.setColor(Color.WHITE);
@@ -197,17 +199,15 @@ public class LunarLander extends GameClient {
 	    for (int i = 1; i < terrain.size(); i++){
 	    	if(landerX > terrain.get(i).get(0) && landerX < terrain.get(i).get(2)){
 	    		if(landerY < terrain.get(i).get(1)){
-	    			System.out.println("Collided with the ground! Fatal!");
+	    			System.out.println("Collided with the ground!");
 	    			landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/landerExplode1.png"));
 	    			gameOver = true;
-	    			landerY += 0.25;
 	    			velY = 0;
 	    		}
 	    	}else if(landerX > terrain.get(0).get(0) && landerX < terrain.get(0).get(2)){
 	    		if(landerY - 5 < terrain.get(0).get(1)){
 	    			System.out.println("You win!");
 	    			gameOver = true;
-	    			landerY += 0.25;
 	    			velY = 0;
 	    		}
 	    	}
@@ -216,7 +216,7 @@ public class LunarLander extends GameClient {
 	    super.render();
 		
 	}
-	
+
 	@Override
 	public void resize(int arg0, int arg1) {
 		super.resize(arg0, arg1);

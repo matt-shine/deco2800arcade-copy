@@ -37,10 +37,10 @@ public class LunarLander extends GameClient {
 	//Texture[] backgroundTextures;
 	
 	// lander constants
-	private float landerX; // the width of the lander png
-	private float landerY; // the height of the lander png
-	private float initialPositionX; // the initial position of the lander - x coordinate
-	private float initialPositionY; // the initial postiion of the lander - y coordinate
+	private float landerWidth; // the width of the lander png
+	private float landerHeight; // the height of the lander png
+	private float landerX; // the initial position of the lander - x coordinate
+	private float landerY; // the initial postiion of the lander - y coordinate
 	
 	
 	//terrain generation
@@ -97,14 +97,16 @@ public class LunarLander extends GameClient {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		// setting up various constants 
-		initialPositionY = 750;
-		initialPositionX = 600;
-		landerX = 30;
-		landerY = 30;
+		landerX = 600;
+		landerY = 750;
+		landerWidth = 30;
+		landerHeight = 30;
 		speed = 1;
 		
 		randomMap = true;
 		gameOver = false;
+		
+		//creates the map using the method in LunarLanderTerrain file
 		terrain = LunarLanderTerrain.createMap();
 	}
 
@@ -119,16 +121,16 @@ public class LunarLander extends GameClient {
 			
 			// move lander left
 			if ((Gdx.input.isKeyPressed(Keys.A)) || (Gdx.input.isKeyPressed(Keys.LEFT))) { 
-				initialPositionX -= Gdx.graphics.getDeltaTime() * sideSpeed;
+				landerX -= Gdx.graphics.getDeltaTime() * sideSpeed;
 			}
 			
 			if ((Gdx.input.isKeyPressed(Keys.D)) || (Gdx.input.isKeyPressed(Keys.RIGHT))) {
-		    	initialPositionX += Gdx.graphics.getDeltaTime() * sideSpeed;
+		    	landerX += Gdx.graphics.getDeltaTime() * sideSpeed;
 		    }
 			
 		    // boost the lander's speed
 			if ((Gdx.input.isKeyPressed(Keys.W)) || (Gdx.input.isKeyPressed(Keys.UP))) {
-				initialPositionY += (Gdx.graphics.getDeltaTime() * downwardSpeed)/2;
+				landerY += (Gdx.graphics.getDeltaTime() * downwardSpeed)/2;
 			}			
 			
 		}
@@ -142,7 +144,7 @@ public class LunarLander extends GameClient {
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 	    batch.begin();
 	    batch.draw(backgroundTextureRegion, 0, 0);
-	    batch.draw(landerTexture, initialPositionX, initialPositionY, landerX, landerY);    
+	    batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);    
 	    
 	    // display values on screen
 	    font.setColor(Color.WHITE);
@@ -158,26 +160,27 @@ public class LunarLander extends GameClient {
 	    shapeRenderer.setProjectionMatrix(camera.combined);
 	    batch.setProjectionMatrix(camera.combined);
 	    
+	    //renders the map using the list of lists "terrain"
 	    LunarLanderTerrain.renderMap(terrain);
 	    
 	    //very basic downwards movement of the lander
 	    if(!(gameOver == true)){
-	    	if(!((initialPositionY - 0.25) < 20)) {
-		    	initialPositionY -= 0.25;
+	    	if(!((landerY - 0.25) < 20)) {
+		    	landerY -= 0.25;
 		    }
 	    }
 	    
 	    //check for collision
 	    for (int i = 1; i < terrain.size(); i++){
-	    	if(initialPositionX > terrain.get(i).get(0) && initialPositionX < terrain.get(i).get(2)){
-	    		if(initialPositionY < terrain.get(i).get(1)){
+	    	if(landerX > terrain.get(i).get(0) && landerX < terrain.get(i).get(2)){
+	    		if(landerY < terrain.get(i).get(1)){
 	    			System.out.println("Collided with the ground! Fatal!");
 	    			landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/landerExplode1.png"));
 	    			gameOver = true;
 	    			//initialPositionY += 0.25;
 	    		}
-	    	}else if(initialPositionX > terrain.get(0).get(0) && initialPositionX < terrain.get(0).get(2)){
-	    		if(initialPositionY - 5 < terrain.get(0).get(1)){
+	    	}else if(landerX > terrain.get(0).get(0) && landerX < terrain.get(0).get(2)){
+	    		if(landerY - 5 < terrain.get(0).get(1)){
 	    			System.out.println("You win!");
 	    			gameOver = true;
 	    			//initialPositionY += 0.25;

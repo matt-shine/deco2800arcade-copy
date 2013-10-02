@@ -42,26 +42,14 @@ public class StatusScreen extends JFrame{
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
-	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
-	Font blacksmall = new Font("Verdana", Font.PLAIN, 12);
-	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
-	Font linkbold = new Font("Verdana", Font.BOLD, 14);
-	Font sidebold = new Font("Verdana", Font.BOLD, 12);
 
-		
 	public StatusScreen(Model model) throws HeadlessException{
 		
 		super("Player Status");
 		
 		this.model = model;
-
-		/*  Create Image Icons
-		 * 
-		 */		
-		piconline = new ImageIcon("assets/images/online.png");
-		picoffline = new ImageIcon("assets/images/offline.png");
 	
-	    /*Add panels to Main Panel	
+	    /*Add panels to main panel	
 	     *                
 	     */
 		
@@ -72,8 +60,7 @@ public class StatusScreen extends JFrame{
 	    parentContainer = new JPanel(new MigLayout());
 	    parentContainer.add(titlepanel,"wrap");
 	    parentContainer.add(contentpanel,"gap left 30px, wrap");
-	    parentContainer.add(actionpanel,"gap left 30px");
-	    
+	    parentContainer.add(actionpanel,"gap left 30px");	    
 		add(parentContainer);
 	
 		/*Set the  view window constraints
@@ -82,7 +69,8 @@ public class StatusScreen extends JFrame{
 		setSize(300,350);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		setResizable(false);		
+		setResizable(false);
+		
 	}
 	
 	/**
@@ -102,6 +90,9 @@ public class StatusScreen extends JFrame{
 	 * 
 	 */
 	public void addcontentpanel(){
+		
+		piconline = new ImageIcon("assets/images/online.png");
+		picoffline = new ImageIcon("assets/images/offline.png");
 				
 		JLabel away = new JLabel();
 		JLabel busy = new JLabel();

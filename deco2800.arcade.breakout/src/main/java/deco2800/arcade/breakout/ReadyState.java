@@ -12,13 +12,22 @@ public class ReadyState extends GameState {
 			context.Start();
 		} else if (context.getSequence() != null) {
 			if (Gdx.input.isKeyPressed(context.getSequence()[context
-					.getCurrentButton()])) {
+					.getCurrentButton()]) && context.getPressed() == 0) {
+				context.setPressed(1);
+				
+			} else if (!Gdx.input.isKeyPressed(context.getSequence()[context
+			        .getCurrentButton()]) && context.getPressed() == 1){
 				context.setCurrentButton(context.getCurrentButton() + 1);
+				context.setPressed(0);
+				System.out.println(context.getCurrentButton());
 			}
 			if (context.getSequence().length == context.getCurrentButton()) {
 				context.setCurrentButton(0);
 				context.bonusLives(2);
+
 			}
+		} else if (Gdx.input.isKeyPressed(Keys.M)) {
+			context.mute();
 		}
 
 	}

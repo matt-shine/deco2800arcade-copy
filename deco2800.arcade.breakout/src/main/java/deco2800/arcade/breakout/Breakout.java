@@ -1,6 +1,7 @@
 package deco2800.arcade.breakout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
@@ -48,6 +49,7 @@ public class Breakout extends GameClient {
 	public String player;
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
+	//private AccoladeSystem accolades;
 	
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
@@ -61,6 +63,7 @@ public class Breakout extends GameClient {
 		this.player = player.getUsername();
 		this.networkClient = networkClient;
 		this.achievementClient = new AchievementClient(networkClient);
+		//this.accolades = new AccoladeSystem();
 	}
 
 	/**
@@ -70,6 +73,40 @@ public class Breakout extends GameClient {
 	public void create() {
 		super.create();
 		
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				resume();
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				pause();
+			}
+			
+        });
 		splashScreen = new SplashScreen(this);
 		MenuScreen=new menuscreen(this);
 		gamescreen = new GameScreen(this);
@@ -77,6 +114,7 @@ public class Breakout extends GameClient {
 		AchivementScreen=new achivementscreen(this);
 		RankingScreen=new rankingscreen(this);
 		setScreen(splashScreen);
+		
 	}
 
 	@Override

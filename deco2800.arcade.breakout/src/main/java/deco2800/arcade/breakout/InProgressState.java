@@ -33,16 +33,20 @@ public class InProgressState extends GameState {
 
 		handleOtherCollision(context);
 		
-		if (Gdx.input.isButtonPressed(Keys.ESCAPE)) {
+		if (Gdx.input.isKeyPressed(Keys.P)) {
 			context.pause();
 		}
 		
-		if (Gdx.input.isButtonPressed(Keys.CONTROL_LEFT)) {
+		if (Gdx.input.isKeyPressed(Keys.M)) {
+			context.mute();
+		}
+		
+		if (Gdx.input.isKeyPressed(Keys.CONTROL_LEFT)) {
 			context.roundOver();
 			context.bonusLives(1);
 		}
 		
-		if (Gdx.input.isButtonPressed(Keys.ALT_LEFT)) {
+		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT)) {
 			context.setLevel(context.getLevel() + 1);
 			context.dispose();
 			context.gamearea();

@@ -115,7 +115,6 @@ public class LunarLander extends GameClient {
 		fuel = 1000;
 		
 		flameSound = Gdx.audio.newMusic(Gdx.files.internal("lunarlanderassets/flame.ogg"));
-		
 		randomMap = true;
 		gameOver = false;
 		upKey = false;
@@ -167,6 +166,8 @@ public class LunarLander extends GameClient {
 				if(fuel > 0){
 					velY -= 0.015;
 					fuel -= 0.05;
+					flameSound.setVolume(1);
+					flameSound.play();
 					upKey = true;
 				}
 			}
@@ -184,7 +185,6 @@ public class LunarLander extends GameClient {
 	    batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
 	    if(upKey == true){
 	    	batch.draw(flames, landerX + 10, landerY - 5, 10, 10);
-	    	flameSound.play();
 	    	upKey = false;
 	    }
 	    
@@ -222,7 +222,6 @@ public class LunarLander extends GameClient {
 	    		}
 	    	}
 	    }
-	    
 	    super.render();
 		
 	}

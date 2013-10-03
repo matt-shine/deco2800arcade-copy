@@ -34,7 +34,7 @@ public class MapPane {
 		renderPane();
 		
 		//Get a rendered version of the map pane
-		rendered = MapPaneRenderer.renderPane(this, type);
+		rendered = MapPaneRenderer.renderPane(this);
 		
 	}
 	

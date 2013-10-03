@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
-import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.swing.JFrame;
 
@@ -40,10 +38,10 @@ import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
-import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 
 /**
@@ -188,7 +186,7 @@ public class Arcade extends JFrame {
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
         this.client.addListener(new PackmanListener());
-        this.client.addListener(new MultiplayerListener());
+        this.client.addListener(new MultiplayerListener(this));
         this.client.addListener(new LobbyListener());
 	}
 
@@ -374,22 +372,27 @@ public class Arcade extends JFrame {
     }
 
     public GameClient getInstanceOfGame(String id) {
-
+    	System.out.println("** ID IS : " + id);
         Class<? extends GameClient> gameClass = getGameMap().get(id);
+        System.out.println("Gameclass: " + gameClass);
         try {
             if (gameClass != null) {
                 Constructor<? extends GameClient> constructor = gameClass
                         .getConstructor(Player.class, NetworkClient.class);
+                System.out.println("Constructor: " + constructor);
                 GameClient game = constructor.newInstance(player, client);
+                System.out.println("Game: " + game);
 
                 // add the overlay to the game
                 if (!gameClass.isAnnotationPresent(InternalGame.class)) {
-
+                	System.out.println("getting overlay");
                     GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 
                     // the overlay and the bridge are the same object, but
                     // GameClient doesn't know that and it mightn't be that way
                     // forever
+                    System.out.println("Overlay: " + overlay);
+                    System.out.println("************ABOUT TO ADD OVERLAY************");
                     game.addOverlay(overlay);
                     if (overlay instanceof UIOverlay) {
                         game.addOverlayBridge((UIOverlay) overlay);
@@ -433,9 +436,10 @@ public class Arcade extends JFrame {
 		return matches;
 	}
 	
-	public void createMatch(CreateMatchRequest request) {
+	public void createMatch(NewMultiGameRequest request) {
 		//request.hostConnection = this.client.connection;
-		System.out.println("[CLIENT] Sending CreateMatchRequest (gameId: " + request.gameId + ", playerId: " + request.hostPlayerId);
+		//System.out.println("[CLIENT] Sending CreateMatchRequest (gameId: " + request.gameId + ", playerId: " + request.hostPlayerId);
+		request.playerID = player.getID();
 		this.client.sendNetworkObject(request);
 	}
 

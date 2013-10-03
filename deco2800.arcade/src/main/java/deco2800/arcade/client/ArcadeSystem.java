@@ -2,10 +2,9 @@ package deco2800.arcade.client;
 
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.UUID;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
-import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 
 //TODO commenting?
 public class ArcadeSystem {
@@ -64,7 +63,7 @@ public class ArcadeSystem {
     	return arcade.getMatches();
     }
     
-    public static void createMatch(CreateMatchRequest matchRequest) {
+    public static void createMatch(NewMultiGameRequest matchRequest) {
     	arcade.createMatch(matchRequest);
     }
     

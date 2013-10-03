@@ -1,8 +1,6 @@
 package deco2800.arcade.arcadeui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
@@ -29,6 +27,8 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 
 /**
  * 
@@ -251,12 +251,27 @@ public class MultiplayerLobby implements Screen {
 		// "Create Match" Button Event Listener
 		 createbutton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
+            	NewMultiGameRequest request = new NewMultiGameRequest();
+            	Set<String> games = ArcadeSystem.getGamesList();
+            	int i = 0;
+            	String gameid = "";
+            	for (String game : games) {
+            		if (game.equals("chess")) {
+            			gameid = game;
+            			break;
+            		}
+            	}
+            	System.out.println("game id for reqeust is : " + gameid);
+            	request.gameId = gameid;
+            	request.playerID = 0;
+            	request.requestType = MultiGameRequestType.NEW;
+            	ArcadeSystem.createMatch(request);
             	
-            	CreateMatchRequest request = new CreateMatchRequest();
+            	/*CreateMatchRequest request = new CreateMatchRequest();
             	request.gameId = Integer.toString((int)(Math.random()*10000));
             	System.out.println("**********" + request.gameId);
-            	request.hostPlayerId = (int) (Math.random()*1000);
-            	ArcadeSystem.createMatch(request);
+            	request.hostPlayerId = (int) (Math.random()*1000);*/
+            	//ArcadeSystem.createMatch(request);
             }
         });
 

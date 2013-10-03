@@ -40,7 +40,7 @@ public class LobbyListener extends NetworkListener {
 			Arcade.removeFromMatchList((RemovedMatchDetails)object);
 		}
 		else if (object instanceof CreateMatchRequest) {
-			ArcadeSystem.createMatch((CreateMatchRequest) object);
+			//ArcadeSystem.createMatch((CreateMatchRequest) object);
 		}
 		else if (object instanceof CreateMatchResponse) {
 			CreateMatchResponse response = (CreateMatchResponse)object;

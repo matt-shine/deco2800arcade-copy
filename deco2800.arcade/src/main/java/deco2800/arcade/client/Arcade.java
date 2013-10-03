@@ -243,6 +243,11 @@ public class Arcade extends JFrame {
 
 		selectedGame = getInstanceOfGame(gameid);
         selectedGame.setNetworkClient(this.client);
+        if (isMultiplayerEnabled()) {
+        	selectedGame.setMultiplayerOn();
+        } else {
+        	selectedGame.setMultiplayerOff();
+        }
         startGame(selectedGame);
     }
 
@@ -452,4 +457,7 @@ public class Arcade extends JFrame {
 		
 	}
 
+	public void disposeGame() {
+		selectedGame.dispose();
+	}
 }

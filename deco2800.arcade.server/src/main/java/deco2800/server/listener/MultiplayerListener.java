@@ -48,7 +48,7 @@ public class MultiplayerListener extends Listener {
 				NewMultiSessionResponse response = new NewMultiSessionResponse();
 				response.gameId = ((NewMultiGameRequest) object).gameId;
 				response.sessionId = 0;
-				response.playerID = 0;
+				response.playerID = ((NewMultiGameRequest) object).playerID;
 				connection.sendTCP(response);
 				break;
 			case JOIN:

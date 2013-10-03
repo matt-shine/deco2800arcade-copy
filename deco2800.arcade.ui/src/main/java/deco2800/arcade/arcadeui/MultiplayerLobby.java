@@ -251,6 +251,9 @@ public class MultiplayerLobby implements Screen {
 		// "Create Match" Button Event Listener
 		 createbutton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
+            	//dispose();
+            	//System.out.println("DISPOSED************************************************");
+            	ArcadeSystem.setMultiplayerEnabled(false);
             	NewMultiGameRequest request = new NewMultiGameRequest();
             	Set<String> games = ArcadeSystem.getGamesList();
             	int i = 0;
@@ -262,11 +265,10 @@ public class MultiplayerLobby implements Screen {
             		}
             	}
             	System.out.println("game id for reqeust is : " + gameid);
-            	request.gameId = gameid;
+            	request.gameId = "arcadeui";
             	request.playerID = 0;
             	request.requestType = MultiGameRequestType.NEW;
             	ArcadeSystem.createMatch(request);
-            	
             	/*CreateMatchRequest request = new CreateMatchRequest();
             	request.gameId = Integer.toString((int)(Math.random()*10000));
             	System.out.println("**********" + request.gameId);

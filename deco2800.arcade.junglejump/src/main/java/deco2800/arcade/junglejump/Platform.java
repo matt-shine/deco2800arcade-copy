@@ -177,6 +177,9 @@ public class Platform {
 		if(this.platType == '^') {
 			LevelContainer.nextLevel();
 		}
+		if(this.platType == 'j') {
+			junglejump.monkeyY += 50;
+		}
 		this.active = true;
 	}
 	

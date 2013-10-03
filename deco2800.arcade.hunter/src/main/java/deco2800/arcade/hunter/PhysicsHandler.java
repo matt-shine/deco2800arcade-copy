@@ -132,12 +132,12 @@ public class PhysicsHandler {
 			case 4:
 				// |-/ slope
 
-				// TODO
+				// TODO - cleanly remove this from the code base. No need for this collision type
 				break;
 			case 5:
 				// \-| slope
 
-				// TODO
+				// TODO - cleanly remove this from the code base. No need for this collision type
 				break;
 			default:
 				// Outside the map, or invalid tile.

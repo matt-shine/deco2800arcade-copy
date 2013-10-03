@@ -449,27 +449,28 @@ public class junglejump extends GameClient implements InputProcessor {
 					&& y >= p.getY() - monkeyHeight) {				// Bottom of platform
 
 				System.out.println("Width:" + p.getWidth() + " Height" + p.getHeight()
-						+ " X:" + p.getX() + " Y:" + p.getY());
+						+ " X:" + p.getX() + " Y:" + p.getY() + " onPlatform: " + onPlatform + "  isFalling: " + isFalling);
 
 				// If the monkey's colliding with the platform, place him on top
-				if(y > p.getY() + p.getHeight()/2
-						&& y <= p.getY() + p.getHeight()) {
-					isFalling = false;
+				if(y > (p.getY() + p.getHeight()/2)
+						&& y < p.getY() + p.getHeight()) {
+					System.out.println("resetting monkey");
+					onPlatform = true;
 					monkeyY = p.getY() + p.getHeight();
 				}
+				
+				jumping = false;
 
 				// If monkey hits bottom of platform tough titties
-				/*if(y >= p.getY() - monkeyHeight
+				if(y >= p.getY() - monkeyHeight
 						&& y < p.getY()) {
 					monkeyY = p.getY() - monkeyHeight;
 					p.setInactive();
 					return false;
-				}*/
+				}
 
 				p.setActive();
 				return true;
-			} else {
-				p.setInactive();
 			}
 		} return false;
 	}

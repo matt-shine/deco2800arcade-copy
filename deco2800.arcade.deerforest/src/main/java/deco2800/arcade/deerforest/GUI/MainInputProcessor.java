@@ -131,6 +131,13 @@ public class MainInputProcessor implements InputProcessor {
                 //reset drawn
                 this.drawn = false;
 			}
+
+            if(game.getPhase().equals("BattlePhase")) {
+                CardCollection field = game.getCardCollection(1, "Field");
+                field.addAll(game.getCardCollection(2, "Field"));
+                System.out.println(new ArrayList<AbstractCard>(field));
+            }
+
             view.setPhaseDisplayed(false);
             currentSelection = null;
             view.setHighlightedZones(new ArrayList<Rectangle>());
@@ -164,7 +171,7 @@ public class MainInputProcessor implements InputProcessor {
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
     	//FIXME big method
-        //System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
+        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
 
         //Check it was a single click
         if(button != Buttons.LEFT) return false;

@@ -77,6 +77,8 @@ public class SpellLogic {
      */
     public void activateSpell(int player, AbstractSpell spell, ExtendedSprite sprite) {
 
+        System.out.println("ACTIVATED SPELL");
+
         SpellEffect effects = spell.getSpellEffect();
         this.currentSpell = spell;
         this.currentSprite = sprite;
@@ -509,9 +511,23 @@ public class SpellLogic {
             effectParameters.set(0, canDestroy);
         }
 
+        System.out.println("Before setting stuff");
+        if(this.destroyType == null || this.destroyType.isEmpty()) {
+            view.setEffectMessage("Currently performing a destroy effect" + System.getProperty("line.separator") +
+                    "You must destroy " + effectParameters.get(0) + " cards" + System.getProperty("line.separator") +
+                    "They can be of any type" + System.getProperty("line.separator") +
+                    "They must be from " + this.destroyLoc);
+        } else {
+            view.setEffectMessage("Currently performing a destroy effect" + System.getProperty("line.separator") +
+                    "You must destroy " + effectParameters.get(0) + " cards" + System.getProperty("line.separator") +
+                    "They must be of type: " + this.destroyType.iterator().next() + System.getProperty("line.separator") +
+                    "They must be from " + this.destroyLoc);
+        }
+
         //Needs selecting if there are valid cards to destroy
         if(effectParameters.get(0) <= 0) {
             this.needsSelection = false;
+            view.setEffectMessage(null);
             return true;
         } else {
             this.needsSelection = true;
@@ -527,6 +543,11 @@ public class SpellLogic {
      */
     private boolean doDraw(List<Integer> effectParameters) {
         System.out.println("DID DRAW");
+
+        System.out.println("Before setting stuff");
+        view.setEffectMessage("Currently performing a draw effect" + System.getProperty("line.separator") +
+                "You must discard " + effectParameters.get(1) + " cards before" + System.getProperty("line.separator") +
+                "You must discard " +  effectParameters.get(2) + " cards after");
 
         //Check if cards need to be discarded before draw
         if(effectParameters.get(1) > 0) {
@@ -575,6 +596,7 @@ public class SpellLogic {
 
         this.hasDrawn = false;
 
+        view.setEffectMessage(null);
         return true;
     }
 
@@ -655,9 +677,21 @@ public class SpellLogic {
             effectParameters.set(0, canBuff);
         }
 
+        System.out.println("Before setting stuff");
+        if(this.monsterType == null || this.monsterType.isEmpty()) {
+            view.setEffectMessage("Currently performing a monster alter effect" + System.getProperty("line.separator") +
+                    "You must alter " + effectParameters.get(0) + " monsters" + System.getProperty("line.separator") +
+                    "They can be of any type");
+        } else {
+            view.setEffectMessage("Currently performing a monster alter effect" + System.getProperty("line.separator") +
+                    "You must alter " + effectParameters.get(0) + " monsters" + System.getProperty("line.separator") +
+                    "They must be of type: " + this.monsterType.iterator().next());
+        }
+
         //Needs selecting if there are valid cards to buff
         if(effectParameters.get(0) <= 0) {
             this.needsSelection = false;
+            view.setEffectMessage(null);
             return true;
         } else {
             this.needsSelection = true;

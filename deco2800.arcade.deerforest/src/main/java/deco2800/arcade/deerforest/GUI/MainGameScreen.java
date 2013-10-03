@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
 public class MainGameScreen implements Screen {
@@ -40,19 +43,23 @@ public class MainGameScreen implements Screen {
     private ExtendedSprite cardBack;
     private ExtendedSprite p1Deck;
     private ExtendedSprite p2Deck;
-    private final static float healthBarX = 0.065625f;
-    private final static float healthBarWidth = 0.01875f;
-    private final static float P1HealthBarY = 0.65833336f;
-    private final static float P2HealthBarY = 0.093055554f;
-    private final static float healthBarHeight = 0.247222246f;
-    private final static float lifePointsX = 0.103f;
-    private final static float lifePointsP1Y = 0.65055555f;
-    private final static float lifePointsP2Y = 0.089277776f;
-    private final static float deckX = 0.21471875f;
-    private final static float deckWidth = 0.07265625f;
-    private final static float deckHeight = 0.1375f;
-    private final static float P1DeckY = 0.7361111f;
-    private final static float P2DeckY = 0.16527778f;
+    private final static float healthBarX = 0.04921875f;
+    private final static float healthBarWidth = 0.0109375f;
+    private final static float P1HealthBarY = 0.44444445f;
+    private final static float P2HealthBarY = 0.055555556f;
+    private final static float healthBarHeight = 0.21805555f;
+    private final static float lifePointsX = 0.08125f;
+    private final static float lifePointsP1Y = 0.43888888f;
+    private final static float lifePointsP2Y = 0.05138889f;
+    private final static float deckX = 0.09609375f;
+    private final static float deckWidth = 0.05703125f;
+    private final static float deckHeight = 0.12361114f;
+    private final static float P1DeckY = 0.61388886f;
+    private final static float P2DeckY = 0.21944444f;
+    private final static float phaseX = 0.30859375f;
+    private final static float phaseY = 0.7986111f;
+    private final static float phaseWidth = 0.38828124f;
+    private final static float phaseHeight = 0.18194443f;
 
 	//assets
 	private Map<String, Set<ExtendedSprite>> spriteMap;
@@ -67,6 +74,9 @@ public class MainGameScreen implements Screen {
     private final int battleDisplayTime = 150;
     private int currentBattleDisplayTime;
     private final int battleFadeRatio = 5;
+
+    //Effect Message variable
+    private String effectMessage;
 
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
@@ -114,13 +124,14 @@ public class MainGameScreen implements Screen {
 	}
 
 	private void loadAssets() {
-		manager.load("DeerForestAssets/LightMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/DarkMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/FireMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/WaterMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/NatureMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/GeneralSpellShell.png", Texture.class);
-		manager.load("DeerForestAssets/FieldSpellShell.png", Texture.class);
+
+        CardCollection deck = game.getCardCollection(1, "Deck");
+        deck.addAll(game.getCardCollection(1, "Deck"));
+        ArrayList<AbstractCard> decks = new ArrayList<AbstractCard>(deck);
+        for(AbstractCard card : decks) {
+            manager.load(card.getPictureFilePath(), Texture.class);
+        }
+
 		manager.load("DeerForestAssets/background.png", Texture.class);
         manager.load("DeerForestAssets/MainPhase.png", Texture.class);
         manager.load("DeerForestAssets/BattlePhase.png", Texture.class);
@@ -149,10 +160,16 @@ public class MainGameScreen implements Screen {
 	 
 		//Begin drawing the sprites
 		game.batch.begin();
-		
+
 		//Draw game board
 	    arena.draw(game.batch);
-	    
+
+        //Draw the phase message if needed
+        drawPhaseMessage();
+
+        //Draw the effect message if any
+        drawEffectMessage();
+
 	    //draw the sprites currently in map (if not players turn their hand is cardBack)
 	    for(String key : spriteMap.keySet()) {
 	    	for(ExtendedSprite s : spriteMap.get(key)) {
@@ -190,9 +207,6 @@ public class MainGameScreen implements Screen {
         highlightZones();
 
         game.batch.flush();
-
-        //Draw the phase message if needed
-        drawPhaseMessage();
 
 	    game.batch.end();
 
@@ -353,12 +367,32 @@ public class MainGameScreen implements Screen {
                     }
                 }
 
-                s.setScale(Gdx.graphics.getWidth()/(3*s.getWidth()/2), Gdx.graphics.getHeight()/(2*s.getHeight()));
-                s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
+                float x = Gdx.graphics.getWidth();
+                float y = Gdx.graphics.getHeight();
+
+                s.setPosition(x * phaseX, y * phaseY);
+                s.setScale(x * phaseWidth / s.getWidth(), y * phaseHeight / s.getHeight());
                 s.draw(game.batch);
 
                 Gdx.gl.glDisable(GL10.GL_BLEND);
             }
+        }
+    }
+
+    private void drawEffectMessage() {
+
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
+
+        if(this.effectMessage != null) {
+            Scanner s = new Scanner(this.effectMessage);
+            int i = 0;
+            while(s.hasNext()) {
+                String line = s.nextLine();
+                game.font.draw(game.batch, line, x * phaseX + i*20, y * phaseY + i*20);
+                i++;
+            }
+
         }
     }
 
@@ -585,5 +619,9 @@ public class MainGameScreen implements Screen {
             s.setPosition(r.getX(), r.getY());
             s.setScale(r.getWidth()/s.getWidth(), r.getHeight()/s.getHeight());
         }
+    }
+
+    public void setEffectMessage(String message) {
+        this.effectMessage = message;
     }
 }

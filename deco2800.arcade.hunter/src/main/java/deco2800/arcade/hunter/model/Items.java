@@ -21,7 +21,7 @@ public class Items extends Entity {
 	/**
 	 * String array of possible power ups
 	 */
-	private String[] powerups = {"DoublePoints", "ExtraLife", "Invulnerability"};
+	private String[] powerups = {"DoublePoints", "ExtraLife", "Invulnerability","AttackX2"};
 	
 	/**
 	 * String array of possible weapons
@@ -68,7 +68,7 @@ public class Items extends Entity {
 	 * Loads the texture image for the item
 	 */
 	private void loadImage() {
-		texture = new Texture("textures/Items" + item + ".png");
+		texture = new Texture("textures/Items/" + item + ".png");
 	}
 	
 	/**

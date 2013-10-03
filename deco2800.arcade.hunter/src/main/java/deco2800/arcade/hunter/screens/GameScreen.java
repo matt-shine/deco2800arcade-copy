@@ -22,6 +22,7 @@ import deco2800.arcade.hunter.model.BackgroundLayer;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.hunter.model.SpriteLayer;
+import deco2800.arcade.hunter.model.Items;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
@@ -46,6 +47,7 @@ public class GameScreen implements Screen {
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
 	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
+	
 		
 	public GameScreen(Hunter hunter) {
 	
@@ -68,12 +70,12 @@ public class GameScreen implements Screen {
 
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
-		Animal animal = new Animal(new Vector2(200, 10), 128, 128, false,
+		Animal animal = new Animal(new Vector2(200, 5*Config.TILE_SIZE), 128, 128, false,
 				"hippo");
 
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
-		// entities.add(animal);
+		entities.add(animal);
 	}
 
 	@Override
@@ -156,7 +158,7 @@ public class GameScreen implements Screen {
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			// Attack
-
+			gameOver();
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
@@ -265,6 +267,10 @@ public class GameScreen implements Screen {
 		return foregroundLayer;
 	}
 
+	private void gameOver(){
+		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),getAnimalsKilled().size()));
+	}
+	
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub

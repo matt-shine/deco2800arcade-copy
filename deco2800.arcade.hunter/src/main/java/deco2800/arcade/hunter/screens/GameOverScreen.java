@@ -1,13 +1,22 @@
 package deco2800.arcade.hunter.screens;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
 
@@ -18,20 +27,82 @@ import deco2800.arcade.hunter.Hunter.Config;
  * 
  */
 public class GameOverScreen implements Screen {
-	private OrthographicCamera camera;
 	private Hunter hunter;
-
-	// private MenuInput input = new MenuInput();
-
-	private ShapeRenderer shapeRenderer;
-
-	public GameOverScreen(Hunter p) {
+	private Stage stage;
+	private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+	private static final String[] HIGH_SCORE_LIST = {"HIGHSCORE1","HIGHSCORE2","HIGHSCORE3"};
+	private HashMap<String,Integer> highScoreList;
+	
+	private ArrayList<Integer> highscore = new ArrayList<Integer>();
+	
+	private Texture background;
+	private SpriteBatch batch;
+	public GameOverScreen(Hunter p, float distance, int score, int killCount) {
 		hunter = p;
-		// Initialise camera
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
+		stage= new Stage();
+		ArcadeInputMux.getInstance().addProcessor(stage);
+		highScoreList = hunter.getPreferencesManager().getHighScore();
+		
+		Texture.setEnforcePotImages(false);
+		background = new Texture("textures/mainmenu.png");
+		batch = new SpriteBatch();
+		for(int x = 0; x <3; x++){
+			highscore.add(highScoreList.get(HIGH_SCORE_LIST[x]));
+		}
+		System.out.println(highScoreList);
+		
+		Table table = new Table(skin);
+		table.setFillParent(true);
+		table.padRight(600f);
+		table.padTop(200f);
+		stage.addActor(table);
+				
+		//set table defaults
+		table.defaults().spaceBottom(20);
+		table.columnDefaults(0).colspan(2);
+		
+		
+		table.add("GAME OVER").colspan(2);
+		table.row();
+		
+		table.add("Distance Travelled: ");
+		table.add(String.valueOf(distance)).colspan(2);
+		table.row();
+		
+		table.add("Score: ");
+		table.add(String.valueOf(score)).colspan(2);
+		table.row();
+		
+		table.add("Kills: ");
+		table.add(String.valueOf(killCount) + " Animals").colspan(2);
+		table.row();
+		
+		TextButton playButton = new TextButton("Play Again", skin);
+		playButton.addListener(new ChangeListener() {
 
-		shapeRenderer = new ShapeRenderer();
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+        		System.out.println("Play Again");
+        		hunter.setScreen(new GameScreen(hunter));
+        		stage.clear();
+        	}
+        });
+		
+		TextButton backButton = new TextButton("Back to main menu", skin);
+        backButton.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+        		System.out.println("Going back to the main menu!");
+        		hunter.setScreen(new MenuScreen(hunter));
+        		stage.clear();
+        	}
+        });
+        
+        table.add(backButton).size(300,70);
+        table.row();
+		
+		
 	}
 
 	@Override
@@ -58,18 +129,13 @@ public class GameOverScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		shapeRenderer.setProjectionMatrix(camera.combined);
-
-		shapeRenderer.begin(ShapeType.FilledRectangle);
-		shapeRenderer.setColor(Color.RED);
-		shapeRenderer.filledRect(0, 0, 100, 100);
-
-		shapeRenderer.setColor(Color.BLUE);
-		shapeRenderer.filledRect(Config.screenWidth - 100,
-				Config.screenHeight - 100, 100, 100);
-
-		shapeRenderer.end();
-
+		batch.begin();
+		drawBackground();
+		batch.end();
+		
+		Gdx.input.setInputProcessor(stage);
+		stage.act(delta);
+		stage.draw();
 	}
 
 	@Override
@@ -90,4 +156,7 @@ public class GameOverScreen implements Screen {
 
 	}
 
+	private void drawBackground(){
+		batch.draw(background, 0f, 0f, Config.screenWidth, Config.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+	}
 }

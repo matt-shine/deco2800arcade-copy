@@ -23,6 +23,7 @@ public class SplashScreen implements Screen{
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 		Texture text = new Texture("textures/splashscreen.png");
+		
 		splashImage = new Image(text);
 		splashImage.setFillParent(true);
 		

@@ -214,7 +214,7 @@ abstract class GameScreen implements Screen {
 			pickImage = new Image(PICK_REGION);
 
 			/* layout */
-			this.add(nameLabel);
+			this.add(nameLabel).height(48);
 			this.row();
 
 			for (int i = 0; i < 3; i++) {
@@ -236,7 +236,7 @@ abstract class GameScreen implements Screen {
 			/* bricks */
 			for (int i = 0; i < 10; i++) {
 				brickImages[i] = new Image(BRICK_REGION);
-				brickTable.add(brickImages[i]).size(52, 52);
+				brickTable.add(brickImages[i]).size(48, 48);
 				if ((i + 1) % 4 == 0)
 					brickTable.row();
 			}

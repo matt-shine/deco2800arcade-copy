@@ -23,10 +23,12 @@ public class WallModel implements IWallModel {
 	}
 
 	public void addTile(TileModel tile) {
+		/*
 		if (tiles.contains(tile)) {
 			throw new IllegalStateException(
 					"The tile is already present.");
 		}
+		*/
 		tiles.add(tile);
 	}
 
@@ -51,13 +53,17 @@ public class WallModel implements IWallModel {
 	public void build(IPlayerModel iplayer) {
 		PlayerModel player = (PlayerModel) iplayer;
 
+		/*
 		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null.");
 		}
+		*/
 
+		/*
 		if (built) {
 			throw new IllegalStateException("The wall is already built.");
 		}
+		*/
 		built = true;
 		builder = player;
 
@@ -69,9 +75,11 @@ public class WallModel implements IWallModel {
 	}
 
 	public void destroy(PlayerModel player) {
+		/*
 		if (!built) {
 			throw new IllegalStateException("wall not built");
 		}
+		*/
 		built = false;
 		builder = null;
 		for (TileModel t : tiles) {

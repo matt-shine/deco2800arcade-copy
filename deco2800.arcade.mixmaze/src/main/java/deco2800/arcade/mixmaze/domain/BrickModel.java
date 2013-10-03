@@ -16,7 +16,9 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	/**
 	 * Thrown when an operation results in an invalid amount of bricks.
 	 */
+	/*
 	private final static IllegalArgumentException NUM_OUT_OF_RANGE = new IllegalArgumentException("number must result in a amount greater than 0 and less then maxBricks.");
+	*/
 
 	/**
 	 * The maximum number of bricks in a stack.
@@ -28,9 +30,11 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	}
 
 	public static void setMaxBricks(int max) {
+		/*
 		if(max < 1) {
 			throw new IllegalArgumentException("max must be greater than or equal to 1.");
 		}
+		*/
 		maxBricks = max;
 	}
 
@@ -57,9 +61,11 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	 * 				    <code>maxBricks</code>.
 	 */
 	public void setAmount(int number) {
+		/*
 		if (number < 0 || number > maxBricks) {
 			throw NUM_OUT_OF_RANGE;
 		}
+		*/
 		amount = number;
 	}
 
@@ -73,9 +79,11 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	 */
 	public void addAmount(int number) {
 		int addedAmount = amount + number;
+		/*
 		if (addedAmount < 0 || addedAmount > maxBricks) {
 			throw NUM_OUT_OF_RANGE;
 		}
+		*/
 		amount = addedAmount;
 	}
 
@@ -87,9 +95,11 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	 */
 	public void removeAmount(int number) {
 		int balance = amount - number;
+		/*
 		if (balance < 0 || balance > maxBricks) {
 			throw NUM_OUT_OF_RANGE;
 		}
+		*/
 		amount = balance;
 	}
 
@@ -127,9 +137,11 @@ public class BrickModel extends ItemModel implements IBrickModel {
 	 */
 	public BrickModel(int amount) {
 		super(ItemType.BRICK);
+		/*
 		if (amount < 0 || amount > maxBricks) {
 			throw NUM_OUT_OF_RANGE;
 		}
+		*/
 		this.amount = amount;
 	}
 

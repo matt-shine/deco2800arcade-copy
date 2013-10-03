@@ -43,18 +43,24 @@ public class MixMazeModel implements IMixMazeModel {
 	/**
 	 * Thrown when operations requiring the game to be started are attempted.
 	 */
+	/*
 	private final static IllegalStateException NOT_STARTED = new IllegalStateException("The game has not started.");
+	*/
 
 	/**
 	 * Thrown when operations requiring the game to not be in progress are attempted.
 	 */
+	/*
 	private final static IllegalStateException STARTED = new IllegalStateException("The game has already started.");
+	*/
 
 	/**
 	 * Thrown when an operation using coordinates out of
 	 * the range of of <CODE>board</CODE> are used
 	 */
+	/*
 	private final static IllegalArgumentException COORDS_OUT_OF_RANGE = new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
+	*/
 
 	// Game data
 	private GameState state;
@@ -85,13 +91,17 @@ public class MixMazeModel implements IMixMazeModel {
 	 * from 5 to 10, or <code>maxMinutes</code> is not in range from 2 to 15.
 	 */
 	public MixMazeModel(int size, Difficulty difficulty, int maxSeconds) {
+		/*
 		if(size < 5 || size > 10) {
 			throw new IllegalArgumentException("size must be between 5 and 10.");
 		}
+		*/
 
+		/*
 		if(maxSeconds < 30 || maxSeconds > 900) {
 			throw new IllegalArgumentException("maxSeconds must be between 30 and 900.");
 		}
+		*/
 
 		// Initialize default fields
 		spawner = new Random();
@@ -180,9 +190,11 @@ public class MixMazeModel implements IMixMazeModel {
 	 * (x, y) position is out of range
 	 */
 	public TileModel getBoardTile(int x, int y) {
+		/*
 		if (!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
 		}
+		*/
 		return board[y][x];
 	}
 
@@ -283,9 +295,11 @@ public class MixMazeModel implements IMixMazeModel {
 	 * Starts the current game
 	 */
 	public void startGame() {
+		/*
 		if (state != GameState.NOT_STARTED) {
 			throw STARTED;
 		}
+		*/
 		state = GameState.RUNNING;
 		gameStartTime = Calendar.getInstance().getTime();
 	}
@@ -296,9 +310,11 @@ public class MixMazeModel implements IMixMazeModel {
 	 * most built boxes or <CODE>null</CODE> in the event of a tie
 	 */
 	public IPlayerModel endGame() {
+		/*
 		if (state != GameState.RUNNING) {
 			throw NOT_STARTED;
 		}
+		*/
 
 		// End game
 		state = GameState.END;
@@ -410,9 +426,11 @@ public class MixMazeModel implements IMixMazeModel {
 	 * (x, y) position is out of range
 	 */
 	IItemModel getSpawnedItem(int x, int y) {
+		/*
 		if (!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
 		}
+		*/
 		return items[y][x];
 	}
 
@@ -424,9 +442,11 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @param y Y position on the game board
 	 */
 	private void setSpawnedItem(ItemModel item, int x, int y) {
+		/*
 		if(!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
 		}
+		*/
 		items[y][x] = item;
 		if (item == null)
 			board[y][x].updateType(ItemType.NONE);
@@ -436,10 +456,12 @@ public class MixMazeModel implements IMixMazeModel {
 
 	@Override
 	public void movePlayer(int id, int direction) {
+		/*
 		if (state != GameState.RUNNING)
 			throw NOT_STARTED;
 		else if (!isDirection(direction))
 			throw NOT_A_DIRECTION;
+			*/
 
 		PlayerModel p = player[id - 1];
 		int nextX = p.getNextX();

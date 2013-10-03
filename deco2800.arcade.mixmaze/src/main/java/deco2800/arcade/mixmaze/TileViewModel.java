@@ -2,7 +2,6 @@ package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.view.IItemModel;
 import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import com.badlogic.gdx.Gdx;
@@ -19,7 +18,7 @@ import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 /**
  * TileViewModel draws the associated tile.
  */
-public final class TileViewModel extends Group {
+public final class TileViewModel extends Group implements TileNetworkView {
 	static final TextureRegion PILE_BRICK_REGION;
 	static final TextureRegion PICK_REGION;
 	static final TextureRegion TNT_REGION;
@@ -46,7 +45,6 @@ public final class TileViewModel extends Group {
 		WHITE_REGION = new TextureRegion(texture, 2048, 0, 256, 256);
 	}
 
-	private final IMixMazeModel gameModel;
 	private final float tileSize;
 	private final float offset;
 	private final int x;
@@ -60,13 +58,11 @@ public final class TileViewModel extends Group {
 	/**
 	 * Constructor
 	 *
-	 * @param gameModel 	the game model
 	 * @param renderer	the renderer
 	 * @param tileSize	the graphical size of the tile
 	 */
-	public TileViewModel(IMixMazeModel gameModel, int x, int y,
+	public TileViewModel(int x, int y,
 			float tileSize, ShapeRenderer renderer) {
-		this.gameModel = gameModel;
 		this.tileSize = tileSize;
 		offset = tileSize / 32;
 		this.renderer = renderer;
@@ -95,14 +91,17 @@ public final class TileViewModel extends Group {
 		resetTransform(batch);
 	}
 
+	@Override
 	public void updateBoxer(int id) {
 		boxerId = id;
 	}
 
+	@Override
 	public void updateWall(int direction, boolean isBuilt) {
 		isWallBuilt[direction] = isBuilt;
 	}
 
+	@Override
 	public void updateType(ItemType type) {
 		this.type = type;
 	}

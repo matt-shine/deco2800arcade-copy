@@ -20,7 +20,7 @@ class LocalScreen extends GameScreen {
 
 	@Override
 	protected void newGame() {
-		model = new MixMazeModel(10, BEGINNER, 60*2);
+		model = new MixMazeModel(5, BEGINNER, 60*2);
 
 		setupGameBoard();
 		setupTimer();
@@ -55,7 +55,7 @@ class LocalScreen extends GameScreen {
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
-				tile = new TileViewModel(model, i, j,
+				tile = new TileViewModel(i, j,
 						tileSize, renderer);
 				tileTable.add(tile).size(tileSize, tileSize);
 				model.getBoardTile(i, j).addViewer(tile);
@@ -133,6 +133,7 @@ class LocalScreen extends GameScreen {
 		Gdx.input.setInputProcessor(stage);
 		stage.setKeyboardFocus(gameArea);
 		model.startGame();
+		logger.info("start game");
 	}
 
 }

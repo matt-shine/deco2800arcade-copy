@@ -1,6 +1,6 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.TileViewModel;
+import deco2800.arcade.mixmaze.TileNetworkView;
 import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.mixmaze.domain.view.IWallModel;
@@ -22,7 +22,7 @@ public class TileModel implements ITileModel {
 	private WallModel[] walls = null;
 	private PlayerModel boxer = null;
 	private TileModel[] adjTiles;
-	private ArrayList<TileViewModel> viewers;
+	private ArrayList<TileNetworkView> viewers;
 
 	/**
 	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
@@ -33,7 +33,7 @@ public class TileModel implements ITileModel {
 	 * @param adjWalls	the wall adjacent to this tile
 	 */
 	public TileModel(int x, int y, TileModel[] tiles) {
-		viewers = new ArrayList<TileViewModel>();
+		viewers = new ArrayList<TileNetworkView>();
 		tileX = x;
 		tileY = y;
 		isBoxBuilt = false;
@@ -52,7 +52,7 @@ public class TileModel implements ITileModel {
 		}
 	}
 
-	public void addViewer(TileViewModel v) {
+	public void addViewer(TileNetworkView v) {
 		viewers.add(v);
 	}
 
@@ -82,9 +82,11 @@ public class TileModel implements ITileModel {
 	 */
 	IWallModel getWall(int direction) {
 		// Check the specified direction is in range.
+		/*
 		if (!isDirection(direction)) {
 			throw NOT_A_DIRECTION;
 		}
+		*/
 		return walls[direction];
 	}
 
@@ -116,17 +118,17 @@ public class TileModel implements ITileModel {
 	}
 
 	void updateWall(WallModel w, boolean isBuilt) {
-		for (TileViewModel v : viewers)
+		for (TileNetworkView v : viewers)
 			v.updateWall(getDirection(w), isBuilt);
 	}
 
 	void updateType(ItemType type) {
-		for (TileViewModel v : viewers)
+		for (TileNetworkView v : viewers)
 			v.updateType(type);
 	}
 
 	private void updateBoxer(int id) {
-		for (TileViewModel v : viewers)
+		for (TileNetworkView v : viewers)
 			v.updateBoxer(id);
 	}
 
@@ -204,17 +206,21 @@ public class TileModel implements ITileModel {
 	}
 
 	private TileModel getAdjacent(int direction) {
+		/*
 		if(!Direction.isDirection(direction)) {
 			throw Direction.NOT_A_DIRECTION;
 		}
+		*/
 		return adjTiles[direction];
 	}
 
 	private void addAdjacent(TileModel tile, int direction) {
 		TileModel cTile = adjTiles[direction];
+		/*
 		if(cTile != null && cTile != tile) {
 			throw new IllegalStateException("tile adjacency cannot be changed once set.");
 		}
+		*/
 		adjTiles[direction] = tile;
 	}
 

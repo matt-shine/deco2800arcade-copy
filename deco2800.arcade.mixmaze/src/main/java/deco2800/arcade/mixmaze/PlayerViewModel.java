@@ -1,6 +1,3 @@
-/*
- * PlayerViewModel
- */
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.view.IBrickModel;
@@ -9,7 +6,6 @@ import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import deco2800.arcade.utils.KeyManager;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,8 +15,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-
 import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
@@ -29,9 +26,9 @@ import static com.badlogic.gdx.Input.Keys.*;
 /**
  * PlayerViewModel draws the character of the player.
  */
-public final class PlayerViewModel extends Actor {
+public final class PlayerViewModel extends Actor implements PlayerNetworkView {
 
-	private static final String LOG = PlayerViewModel.class.getSimpleName();
+	final Logger logger = LoggerFactory.getLogger(PlayerViewModel.class);
 
 	private final IMixMazeModel gameModel;
 	private final int tileSize;
@@ -105,31 +102,45 @@ public final class PlayerViewModel extends Actor {
 		batch.setColor(old);
 	}
 
+	@Override
 	public void updateScore(int score) {
+		logger.debug("score: {}", score);
 		scorebar.update(score);
 	}
 
+	@Override
 	public void updateBrick(int amount) {
+		logger.debug("amount: {}", amount);
 		sidePanel.updateBrick(amount);
 	}
 
+	@Override
 	public void updatePick(boolean hasPick) {
+		logger.debug("hasPick: {}", hasPick);
 		sidePanel.updatePick(hasPick);
 	}
 
+	@Override
 	public void updateTnt(boolean hasTnt) {
+		logger.debug("hasTnt: {}", hasTnt);
 		sidePanel.updateTnt(hasTnt);
 	}
 
+	@Override
 	public void updateAction(IPlayerModel.Action action) {
+		logger.debug("action: {}", action);
 		sidePanel.updateAction(action);
 	}
 
+	@Override
 	public void updateDirection(int direction) {
+		logger.debug("direction: {}", direction);
 		this.direction = direction;
 	}
 
+	@Override
 	public void updatePosition(int x, int y) {
+		logger.debug("(x, y): ({}, {})", x, y);
 		this.x = x;
 		this.y = y;
 	}

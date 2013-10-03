@@ -1,6 +1,6 @@
 package deco2800.arcade.mixmaze.domain.view;
 
-import deco2800.arcade.mixmaze.PlayerViewModel;
+import deco2800.arcade.mixmaze.PlayerNetworkView;
 
 public interface IPlayerModel {
 
@@ -24,7 +24,7 @@ public interface IPlayerModel {
 	 *
 	 * @param v	the viewer
 	 */
-	void addViewer(PlayerViewModel v);
+	void addViewer(PlayerNetworkView v);
 
 	int getId();
 

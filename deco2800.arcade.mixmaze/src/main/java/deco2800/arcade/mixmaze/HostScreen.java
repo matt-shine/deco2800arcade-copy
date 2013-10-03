@@ -42,7 +42,11 @@ import static com.badlogic.gdx.graphics.Color.*;
 class HostScreen extends LocalScreen {
 
 	private Server server;
+	private Connection client;
 	private ObjectSpace os;
+	private PlayerNetworkView p1;
+	private PlayerNetworkView p2;
+	private boolean isConnected;
 
 	HostScreen(final MixMaze game) {
 		super(game);
@@ -50,8 +54,10 @@ class HostScreen extends LocalScreen {
 
 	@Override
 	protected void newGame() {
-		model = new MixMazeModel(10, BEGINNER, 60*2);
+		model = new MixMazeModel(5, BEGINNER, 60*2);
+		isConnected = false;
 
+		os = new ObjectSpace();
 		server = new Server();
 		register(server);
 		server.start();
@@ -60,30 +66,21 @@ class HostScreen extends LocalScreen {
 		} catch (IOException e) {
 			logger.info(e.getMessage());
 		}
-		server.addListener(new Listener() {
-			public void received(Connection c, Object o) {
-				if (o instanceof String) {
-					logger.debug("string received: "
-							+ o);
-					os = new ObjectSpace();
-					os.register(42, model);
-					os.register(1700, model.getPlayer1());
-					os.register(1701, model.getPlayer2());
-					int boardSize = model.getBoardSize();
-					for (int j = 0; j < boardSize; j++)
-						for (int i = 0; i < boardSize; i++)
-							os.register(100 + j*boardSize + i, model.getBoardTile(i, j));
-					os.addConnection(c);
-					c.sendTCP(
-						"sending model");
-					logger.info("connection accepted and game started");
-					setupTimer();
-					startGame();
-				}
-			}
-		});
+		server.addListener(new HostListener());
 		logger.info("host waiting for connection");
 		setupGameBoard();
+
+		while (!isConnected) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+		}
+		model.getPlayer1().addViewer(p1);
+		model.getPlayer2().addViewer(p2);
+		setupTimer();
+		startGame();
+		client.sendTCP("signal: game started");
 	}
 
 	static void register(EndPoint endPoint) {
@@ -91,9 +88,64 @@ class HostScreen extends LocalScreen {
 
 		ObjectSpace.registerClasses(kryo);
 		kryo.register(IMixMazeModel.class);
-		kryo.register(IPlayerModel.class);
-		kryo.register(ITileModel.class);
+		kryo.register(TileNetworkView.class);
+		kryo.register(PlayerNetworkView.class);
+		kryo.register(IPlayerModel.Action.class);
 		kryo.register(ItemType.class);
+		/*
+		kryo.register(IllegalStateException.class);
+		kryo.register(IllegalArgumentException.class);
+		*/
+	}
+
+	public class HostListener extends Listener {
+
+		public void received(Connection c, Object o) {
+			if (o instanceof String) {
+				String msg = (String) o;
+
+				logger.debug("string received: {}", msg);
+				if ("request: game model".equals(msg)) {
+					sendModel(c);
+				} else if ("response: client viewers"
+						.equals(msg)) {
+					recvViewers(c);
+					client = c;
+					isConnected = true;
+				}
+			}
+		}
+
+		private void sendModel(Connection c) {
+			os.register(42, model);
+			os.addConnection(c);
+			c.sendTCP("response: game model");
+		}
+
+		private void recvViewers(Connection c) {
+			int boardSize = model.getBoardSize();
+			TileNetworkView t;
+
+			for (int j = 0; j < boardSize; j++)
+				for (int i = 0; i < boardSize; i++) {
+					t = ObjectSpace.getRemoteObject(c,
+							1700 + j*100 + i,
+							TileNetworkView.class);
+					((RemoteObject) t).setNonBlocking(true);
+					((RemoteObject) t).setTransmitExceptions(false);
+					model.getBoardTile(i, j).addViewer(t);
+				}
+
+			p1 = ObjectSpace.getRemoteObject(c, 101,
+					PlayerNetworkView.class);
+			((RemoteObject) p1).setNonBlocking(true);
+			((RemoteObject) p1).setTransmitExceptions(false);
+			p2 = ObjectSpace.getRemoteObject(c, 102,
+					PlayerNetworkView.class);
+			((RemoteObject) p2).setNonBlocking(true);
+			((RemoteObject) p2).setTransmitExceptions(false);
+		}
+
 	}
 
 }

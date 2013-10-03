@@ -1,8 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.PlayerViewModel;
+import deco2800.arcade.mixmaze.PlayerNetworkView;
 import deco2800.arcade.mixmaze.domain.view.IBrickModel;
-import deco2800.arcade.mixmaze.domain.view.IItemModel;
 import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import deco2800.arcade.mixmaze.domain.view.IPickModel;
 import deco2800.arcade.mixmaze.domain.view.ITNTModel;
@@ -26,7 +25,7 @@ public class PlayerModel implements IPlayerModel {
 	private long lastMoved;
 	private long lastAction;
 	private int score;
-	private ArrayList<PlayerViewModel> viewer;
+	private ArrayList<PlayerNetworkView> viewers;
 
 	// Item data
 	private BrickModel brick;
@@ -43,12 +42,12 @@ public class PlayerModel implements IPlayerModel {
 		action = Action.USE_BRICK;
 		brick = new BrickModel(4);
 		score = 0;
-		viewer = new ArrayList<PlayerViewModel>();
+		viewers = new ArrayList<PlayerNetworkView>();
 	}
 
 	@Override
-	public void addViewer(PlayerViewModel v) {
-		viewer.add(v);
+	public void addViewer(PlayerNetworkView v) {
+		viewers.add(v);
 		v.updateScore(score);
 		v.updateDirection(direction);
 		v.updatePosition(x, y);
@@ -74,7 +73,7 @@ public class PlayerModel implements IPlayerModel {
 
 	private void changeScore(int delta) {
 		score += delta;
-		for (PlayerViewModel v : viewer)
+		for (PlayerNetworkView v : viewers)
 			v.updateScore(score);
 	}
 
@@ -103,7 +102,7 @@ public class PlayerModel implements IPlayerModel {
 	 * @return the next x-coordinate in relative to the direction facing.
 	 */
 	public int getNextX() {
-		if(!isXDirection(direction)) {
+		if (!isXDirection(direction)) {
 			return x;
 		}
 		return isPositiveDirection(direction) ? (x + 1) : (x - 1);
@@ -130,7 +129,7 @@ public class PlayerModel implements IPlayerModel {
 	}
 
 	public int getNextY() {
-		if(!isYDirection(direction)) {
+		if (!isYDirection(direction)) {
 			return y;
 		}
 		return isPositiveDirection(direction) ? (y + 1) : (y - 1);
@@ -162,7 +161,7 @@ public class PlayerModel implements IPlayerModel {
 		if (canMove()) {
 			x = getNextX();
 			y = getNextY();
-			for (PlayerViewModel v : viewer)
+			for (PlayerNetworkView v : viewers)
 				v.updatePosition(x, y);
 			lastMoved = System.currentTimeMillis();
 		}
@@ -183,11 +182,13 @@ public class PlayerModel implements IPlayerModel {
 	 * @param direction an integer representation of the direction
 	 */
 	public void setDirection(int direction) {
+		/*
 		if (!isDirection(direction)) {
 			throw NOT_A_DIRECTION;
 		}
+		*/
 		this.direction = direction;
-		for (PlayerViewModel v : viewer)
+		for (PlayerNetworkView v : viewers)
 			v.updateDirection(direction);
 	}
 
@@ -308,22 +309,22 @@ public class PlayerModel implements IPlayerModel {
 	}
 
 	private void updateBrick(int amount) {
-		for (PlayerViewModel v : viewer)
+		for (PlayerNetworkView v : viewers)
 			v.updateBrick(amount);
 	}
 
 	private void updatePick(boolean hasPick) {
-		for (PlayerViewModel v : viewer)
+		for (PlayerNetworkView v : viewers)
 			v.updatePick(hasPick);
 	}
 
 	private void updateTnt(boolean hasTnt) {
-		for (PlayerViewModel v : viewer)
+		for (PlayerNetworkView v : viewers)
 			v.updateTnt(hasTnt);
 	}
 
 	private void updateAction(IPlayerModel.Action action) {
-		for (PlayerViewModel v : viewer)
+		for (PlayerNetworkView v : viewers)
 			v.updateAction(action);
 	}
 

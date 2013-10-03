@@ -139,7 +139,7 @@ public class MatchmakerQueue {
 
 	}
 	
-	public void gameOver(int session, int player1ID, int player2ID, String gameID) {
+	public void gameOver(int session, int player1ID, int player2ID, String gameID, int winner) {
 		int player1Rating = 0;
 		int player2Rating = 0;
 		try {

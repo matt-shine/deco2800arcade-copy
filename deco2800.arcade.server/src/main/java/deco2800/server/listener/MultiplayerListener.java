@@ -15,6 +15,7 @@ import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 import deco2800.server.MultiplayerServer;
 import deco2800.server.MatchmakerQueue;
 
@@ -35,6 +36,7 @@ public class MultiplayerListener extends Listener {
 		super.received(connection, object);
 
 		if (object instanceof NewMultiGameRequest) {
+			System.out.println("GameID from request: " + ((NewMultiGameRequest) object).gameId);
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
 			matchmakerQueue.checkForGame(multiRequest, connection);
 			MultiGameRequestType requestType = multiRequest.requestType;
@@ -43,6 +45,11 @@ public class MultiplayerListener extends Listener {
 			case NEW:
 				System.out.println("Connection Received");
 				connection.sendTCP(NewMultiResponse.OK);
+				NewMultiSessionResponse response = new NewMultiSessionResponse();
+				response.gameId = ((NewMultiGameRequest) object).gameId;
+				response.sessionId = 0;
+				response.playerID = 0;
+				connection.sendTCP(response);
 				break;
 			case JOIN:
 				//TODO: 2+ player games

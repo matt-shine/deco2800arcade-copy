@@ -48,7 +48,7 @@ public class MultiplayerServer {
 		//if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
 		System.out.println(request.playerID);
 		if (request.gameOver == true) {
-			queue.gameOver(sessionId, player1Id, player2Id, gameId);
+			queue.gameOver(sessionId, player1Id, player2Id, gameId, request.winner);
 			return;
 		}
 		player1.sendTCP(request);	

@@ -1,10 +1,5 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.domain.view.IItemModel;
-import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -12,96 +7,119 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
 
 /**
- * Mix maze model represents the running game state
+ * Mix maze model represents a full game session.
  */
 public class MixMazeModel implements IMixMazeModel {
 
 	final Logger logger = LoggerFactory.getLogger(MixMazeModel.class);
 
 	/**
-	 * Enumeration for representing the current
-	 * state of the game
+	 * Game difficulty specifies certain rules of the game play.
+	 * <p>
+	 * <table border=1>
+	 * <tr><th>Level<th>Move through walls<th>Move through boxes
+	 * <th>Picks spawn<th>TNTs spawn
+	 * <tr><td>Beginner<td>Yes<td>Yes<td>Frequently<td>Frequently
+	 * <tr><td>Intermediate<td>Yes<td>Yes only through your own
+	 * <td>Frequently<td>Rarely
+	 * <tr><td>Advanced<td>No<td>No<td>Moderately<td>Rarely
+	 * </table>
+	 */
+	public enum Difficulty {
+		BEGINNER,
+		INTERMEDIATE,
+		ADVANCED
+	}
+	
+	/**
+	 * Game state
 	 */
 	private enum GameState {
-		/**
-		 * The game has not yet been played
-		 */
+		
+		/** The game has not yet been played */
 		NOT_STARTED,
-		/**
-		 * The game is currently in progress
-		 */
+		
+		/** The game is currently in progress */
 		RUNNING,
-		/**
-		 * The game has been played and ended
-		 */
+		
+		/** The game has been played and ended */
 		END
 	}
 
 	/**
-	 * Thrown when operations requiring the game to be started are attempted.
+	 * Thrown when attempting to operate a game that is not running.
 	 */
-	/*
-	private final static IllegalStateException NOT_STARTED = new IllegalStateException("The game has not started.");
-	*/
+	private final static IllegalStateException NOT_STARTED = 
+			new IllegalStateException("The game has not started.");
 
 	/**
-	 * Thrown when operations requiring the game to not be in progress are attempted.
+	 * Thrown when attempting to start a game that is currently running.
 	 */
-	/*
-	private final static IllegalStateException STARTED = new IllegalStateException("The game has already started.");
-	*/
+	private final static IllegalStateException STARTED = 
+			new IllegalStateException("The game has already started.");
 
 	/**
-	 * Thrown when an operation using coordinates out of
-	 * the range of of <CODE>board</CODE> are used
+	 * Thrown when using coordinates out of the <code>board</code> range.
 	 */
-	/*
-	private final static IllegalArgumentException COORDS_OUT_OF_RANGE = new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
-	*/
+	private final static IllegalArgumentException COORDS_OUT_OF_RANGE = 
+			new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
 
-	// Game data
+	/* Game data */
+	
+	/** Game state */
 	private GameState state;
+	
+	/** Board size */
 	private int boardSize;
+	
+	/** Tiles on the game board */
 	private TileModel[][] board;
+	
+	/** Items on the game board (one per tile) */
 	private ItemModel[][] items;
 
-	// Game settings
+	/** Players in this game */
+	private PlayerModel[] player;
+	
+	/* Game setting */
+	
+	/** Game difficulty */
 	private Difficulty difficulty;
+	
+	/** Time limit of this game */
 	private int gameMaxTime;
+	
+	/** Start time of this game */
 	private Date gameStartTime;
+	
+	/** End time of this game */
 	private Date gameEndTime;
 
-	// Player data
-	private PlayerModel[] player;
-
-	// Item spawning data
+	/** Item spawner */
 	private Random spawner;
+	
+	/*
+	 * TODO: doc
+	 */
 	private long lastSpawned;
 
 	/**
 	 * Constructor
 	 *
-	 * @param size The size of the game board
-	 * @param difficulty The game difficulty
-	 * @param maxSeconds The maximum time of a game session in seconds
-	 * @throws IllegalArgumentException If <code>size</code> is not in range
-	 * from 5 to 10, or <code>maxMinutes</code> is not in range from 2 to 15.
+	 * @param size		the size of the game board
+	 * @param difficulty	the game difficulty
+	 * @param maxSeconds	the time limit of this game session
+	 * @throws IllegalArgumentException
+	 * If <code>size</code> is not in range from 5 to 10,
+	 * or <code>maxSeconds</code> is not in range from 30 to 900.
 	 */
 	public MixMazeModel(int size, Difficulty difficulty, int maxSeconds) {
-		/*
-		if(size < 5 || size > 10) {
+		if(size < 5 || size > 10)
 			throw new IllegalArgumentException("size must be between 5 and 10.");
-		}
-		*/
-
-		/*
-		if(maxSeconds < 30 || maxSeconds > 900) {
+		if(maxSeconds < 30 || maxSeconds > 900)
 			throw new IllegalArgumentException("maxSeconds must be between 30 and 900.");
-		}
-		*/
 
 		// Initialize default fields
 		spawner = new Random();
@@ -146,56 +164,121 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	@Override
-	public void switchAction(int id) {
-		player[id - 1].switchAction();
-	}
-
-	@Override
-	public void useAction(int id) {
-		PlayerModel p = player[id - 1];
-
-		p.useAction(board[p.getY()][p.getX()]);
-	}
-
-	/**
-	 * Specifies if the game is running
-	 * @return <CODE>true</CODE> if running, <CODE>false</CODE> otherwise
-	 */
-	public boolean isRunning() {
-		return state == GameState.RUNNING;
-	}
-
-	/**
-	 * Specifies if the game has ended
-	 * @return <CODE>true</CODE> if ended, <CODE>false</CODE> otherwise
-	 */
-	public boolean isEnded() {
-		return state == GameState.END;
-	}
-
-	/**
-	 * Gets the current size of the board
-	 * @return the size of the board
-	 */
 	public int getBoardSize() {
 		return boardSize;
 	}
 
-	/**
-	 * Gets the tile at the position (x, y)
-	 * @param x X position on the game board
-	 * @param y Y position on the game board
-	 * @return <CODE>TileModel</CODE> at position (x, y)
-	 * @throws IllegalArgumentException if the specified
-	 * (x, y) position is out of range
-	 */
+	@Override
+	public int getGameMaxTime() {
+		return gameMaxTime;
+	}
+	
+	@Override
 	public TileModel getBoardTile(int x, int y) {
-		/*
-		if (!checkCoordinates(x, y)) {
+		if (!checkCoordinates(x, y))
 			throw COORDS_OUT_OF_RANGE;
-		}
-		*/
+
 		return board[y][x];
+	}
+	
+	@Override
+	public PlayerModel getPlayer(int id) {
+		return player[id - 1];
+	}
+	
+	@Override
+	public void switchPlayerAction(int id) {
+		player[id - 1].switchAction();
+	}
+
+	@Override
+	public void usePlayerAction(int id) {
+		PlayerModel p = player[id - 1];
+
+		p.useAction(board[p.getY()][p.getX()]);
+	}
+	
+	@Override
+	public void movePlayer(int id, int direction) {
+		if (state != GameState.RUNNING)
+			throw NOT_STARTED;
+		else if (!isDirection(direction))
+			throw NOT_A_DIRECTION;
+
+		PlayerModel p = player[id - 1];
+		int nextX = p.getNextX();
+		int nextY = p.getNextY();
+
+		if (p.getDirection() != direction) {
+			p.setDirection(direction);
+		} else if (canMove(p, nextX, nextY,
+				getPolarDirection(direction))) {
+			p.move();
+			onPlayerMove(p, nextX, nextY);
+		}
+	}
+	
+	@Override
+	public void startGame() {
+		if (state != GameState.NOT_STARTED)
+			throw STARTED;
+
+		state = GameState.RUNNING;
+		gameStartTime = Calendar.getInstance().getTime();
+	}
+	
+	@Override
+	public PlayerModel endGame() {
+		if (state != GameState.RUNNING)
+			throw NOT_STARTED;
+
+		// End game
+		state = GameState.END;
+		gameEndTime = Calendar.getInstance().getTime();
+		int player1Score = getPlayerScore(player[0]);
+		int player2Score = getPlayerScore(player[1]);
+		if(player1Score != player2Score) {
+			return (player1Score > player2Score) ? player[0] : player[1];
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
+	public void spawnItems() {
+		double spawnWait = (10 * 1000) / getMaxItemCount();
+		if(getItemCount() < getMaxItemCount() && (System.currentTimeMillis() - lastSpawned) >= spawnWait) {
+			for(int i = getItemCount(); i < getMaxItemCount(); ++i) {
+				ItemModel toSpawn = getRandomItem();
+				if(toSpawn != null) {
+					int x = spawner.nextInt(boardSize);
+					int y = spawner.nextInt(boardSize);
+					while(getSpawnedItem(x, y) != null) {
+						x = spawner.nextInt(boardSize);
+						y = spawner.nextInt(boardSize);
+					}
+					setSpawnedItem(toSpawn, x, y);
+				}
+			}
+			lastSpawned = System.currentTimeMillis();
+		}
+	}
+	
+	/**
+	 * Specifies if the game is running.
+	 * 
+	 * @return <code>true</code> if running, <code>false</code> otherwise
+	 */
+	boolean isRunning() {
+		return state == GameState.RUNNING;
+	}
+
+	/**
+	 * Specifies if the game has ended.
+	 * @return <code>true</code> if ended, <code>false</code> otherwise
+	 */
+	boolean isEnded() {
+		return state == GameState.END;
 	}
 
 	/**
@@ -205,14 +288,6 @@ public class MixMazeModel implements IMixMazeModel {
 	 */
 	public Difficulty getGameDifficulty() {
 		return difficulty;
-	}
-
-	/**
-	 * Gets the maximum duration of the current game
-	 * @return Maximum duration in seconds
-	 */
-	public int getGameMaxTime() {
-		return gameMaxTime;
 	}
 
 	/**
@@ -232,28 +307,12 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Gets player one model
-	 * @return <CODE>PlayerModel</CODE> representing player one
-	 */
-	public IPlayerModel getPlayer1() {
-		return player[0];
-	}
-
-	/**
-	 * Gets player two model
-	 * @return <CODE>PlayerModel</CODE> representing player two
-	 */
-	public IPlayerModel getPlayer2() {
-		return player[1];
-	}
-
-	/**
 	 * Gets the current number of built boxes for the
 	 * specified player
 	 * @param player The specified player
 	 * @return Number of boxes built by specified player
 	 */
-	public int getPlayerScore(IPlayerModel player) {
+	public int getPlayerScore(PlayerModel player) {
 		int boxes = 0;
 		for(int row = 0; row < boardSize; ++row) {
 			for(int column = 0; column < boardSize; ++column) {
@@ -292,43 +351,6 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Starts the current game
-	 */
-	public void startGame() {
-		/*
-		if (state != GameState.NOT_STARTED) {
-			throw STARTED;
-		}
-		*/
-		state = GameState.RUNNING;
-		gameStartTime = Calendar.getInstance().getTime();
-	}
-
-	/**
-	 * Ends the current game.
-	 * @return <CODE>PlayerModel</CODE> representing player with the
-	 * most built boxes or <CODE>null</CODE> in the event of a tie
-	 */
-	public IPlayerModel endGame() {
-		/*
-		if (state != GameState.RUNNING) {
-			throw NOT_STARTED;
-		}
-		*/
-
-		// End game
-		state = GameState.END;
-		gameEndTime = Calendar.getInstance().getTime();
-		int player1Score = getPlayerScore(player[0]);
-		int player2Score = getPlayerScore(player[1]);
-		if(player1Score != player2Score) {
-			return (player1Score > player2Score) ? player[0] : player[1];
-		} else {
-			return null;
-		}
-	}
-
-	/**
 	 * Gets the current maximum number of items that
 	 * can spawn at the same time
 	 *
@@ -338,11 +360,11 @@ public class MixMazeModel implements IMixMazeModel {
 	private int getMaxItemCount() {
 		int res = 0;
 
-		if (difficulty == BEGINNER)
+		if (difficulty == Difficulty.BEGINNER)
 			res = 6;
-		else if (difficulty == INTERMEDIATE)
+		else if (difficulty == Difficulty.INTERMEDIATE)
 			res = 4;
-		else if (difficulty == ADVANCED)
+		else if (difficulty == Difficulty.ADVANCED)
 			res = 2;
 		return res;
 	}
@@ -374,10 +396,10 @@ public class MixMazeModel implements IMixMazeModel {
 		double spawnFactor = spawner.nextDouble();
 		double brickFactor = 0.33;
 		double pickFactor = 0.66;
-		if(difficulty == INTERMEDIATE) {
+		if(difficulty == Difficulty.INTERMEDIATE) {
 			brickFactor = 0.5;
 			pickFactor = 0.7;
-		} else if(difficulty == ADVANCED) {
+		} else if(difficulty == Difficulty.ADVANCED) {
 			brickFactor = 0.85;
 			pickFactor = 0.95;
 		}
@@ -391,29 +413,9 @@ public class MixMazeModel implements IMixMazeModel {
 		}
 	}
 
-	@Override
-	public void spawnItems() {
-		double spawnWait = (10 * 1000) / getMaxItemCount();
-		if(getItemCount() < getMaxItemCount() && (System.currentTimeMillis() - lastSpawned) >= spawnWait) {
-			for(int i = getItemCount(); i < getMaxItemCount(); ++i) {
-				ItemModel toSpawn = getRandomItem();
-				if(toSpawn != null) {
-					int x = spawner.nextInt(boardSize);
-					int y = spawner.nextInt(boardSize);
-					while(getSpawnedItem(x, y) != null) {
-						x = spawner.nextInt(boardSize);
-						y = spawner.nextInt(boardSize);
-					}
-					setSpawnedItem(toSpawn, x, y);
-				}
-			}
-			lastSpawned = System.currentTimeMillis();
-		}
-	}
-
-	public ItemType getSpawnedItemType(int x, int y) {
-		IItemModel item = getSpawnedItem(x, y);
-		return (item == null) ? ItemType.NONE : item.getType();
+	public ItemModel.Type getSpawnedItemType(int x, int y) {
+		ItemModel item = getSpawnedItem(x, y);
+		return (item == null) ? ItemModel.Type.NONE : item.getType();
 	}
 
 	/**
@@ -425,12 +427,10 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @throws IllegalArgumentException if the specified
 	 * (x, y) position is out of range
 	 */
-	IItemModel getSpawnedItem(int x, int y) {
-		/*
-		if (!checkCoordinates(x, y)) {
+	ItemModel getSpawnedItem(int x, int y) {
+		if (!checkCoordinates(x, y))
 			throw COORDS_OUT_OF_RANGE;
-		}
-		*/
+
 		return items[y][x];
 	}
 
@@ -442,38 +442,14 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @param y Y position on the game board
 	 */
 	private void setSpawnedItem(ItemModel item, int x, int y) {
-		/*
-		if(!checkCoordinates(x, y)) {
+		if (!checkCoordinates(x, y))
 			throw COORDS_OUT_OF_RANGE;
-		}
-		*/
+
 		items[y][x] = item;
 		if (item == null)
-			board[y][x].updateType(ItemType.NONE);
+			board[y][x].updateType(ItemModel.Type.NONE);
 		else
 			board[y][x].updateType(item.getType());
-	}
-
-	@Override
-	public void movePlayer(int id, int direction) {
-		/*
-		if (state != GameState.RUNNING)
-			throw NOT_STARTED;
-		else if (!isDirection(direction))
-			throw NOT_A_DIRECTION;
-			*/
-
-		PlayerModel p = player[id - 1];
-		int nextX = p.getNextX();
-		int nextY = p.getNextY();
-
-		if (p.getDirection() != direction) {
-			p.setDirection(direction);
-		} else if (canMove(p, nextX, nextY,
-				getPolarDirection(direction))) {
-			p.move();
-			onPlayerMove(p, nextX, nextY);
-		}
 	}
 
 	/**
@@ -493,19 +469,18 @@ public class MixMazeModel implements IMixMazeModel {
 
 		/* No extra movement restriction on BEGINNER */
 
-		if (difficulty == INTERMEDIATE) {
+		if (difficulty == Difficulty.INTERMEDIATE) {
 			PlayerModel boxer = getBoardTile(x, y).getBoxer();
 
 			res = res && (boxer == null || boxer == p);
 			logger.debug("canMove INTERMEDIATE: {}", res);
-		} else if (difficulty == ADVANCED) {
+		} else if (difficulty == Difficulty.ADVANCED) {
 			res = res && !getBoardTile(x, y).getWall(dir).isBuilt();
 			logger.debug("canMove ADVANCED: {}", res);
 		}
 
 		return res;
 	}
-
 
 	/**
 	 * Performs operations after a player moves onto a new tile.
@@ -521,5 +496,4 @@ public class MixMazeModel implements IMixMazeModel {
 		if (item != null && player.pickupItem(item))
 			setSpawnedItem(null, x, y);
 	}
-
 }

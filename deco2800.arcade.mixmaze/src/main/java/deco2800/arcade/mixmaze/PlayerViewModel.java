@@ -1,17 +1,14 @@
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.view.IBrickModel;
-import deco2800.arcade.mixmaze.domain.view.IItemModel;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-import deco2800.arcade.mixmaze.domain.view.ITileModel;
+import deco2800.arcade.mixmaze.domain.IMixMazeModel;
+import deco2800.arcade.mixmaze.domain.PlayerModel;
+import deco2800.arcade.mixmaze.domain.PlayerModelObserver;
 import deco2800.arcade.utils.KeyManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -20,13 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
 import static com.badlogic.gdx.Input.Keys.*;
 
 /**
  * PlayerViewModel draws the character of the player.
  */
-public final class PlayerViewModel extends Actor implements PlayerNetworkView {
+public final class PlayerViewModel extends Actor implements PlayerModelObserver {
 
 	final Logger logger = LoggerFactory.getLogger(PlayerViewModel.class);
 
@@ -51,7 +47,6 @@ public final class PlayerViewModel extends Actor implements PlayerNetworkView {
 			int tileSize, int id, int[] playerControls,
 			GameScreen.Scorebar scorebar,
 			GameScreen.SidePanel sidePanel) {
-		Vector2 stagePos;
 		Texture texture;
 		HashMap<Integer, Integer> mapping =
 				new HashMap<Integer, Integer>();
@@ -127,7 +122,7 @@ public final class PlayerViewModel extends Actor implements PlayerNetworkView {
 	}
 
 	@Override
-	public void updateAction(IPlayerModel.Action action) {
+	public void updateAction(PlayerModel.Action action) {
 		logger.debug("action: {}", action);
 		sidePanel.updateAction(action);
 	}
@@ -267,10 +262,10 @@ public final class PlayerViewModel extends Actor implements PlayerNetworkView {
 				gameModel.movePlayer(id, SOUTH);
 				break;
 			case NUM_5:
-				gameModel.switchAction(id);
+				gameModel.switchPlayerAction(id);
 				break;
 			case NUM_6:
-				gameModel.useAction(id);
+				gameModel.usePlayerAction(id);
 				break;
 			default:
 				return false;	// event not handled

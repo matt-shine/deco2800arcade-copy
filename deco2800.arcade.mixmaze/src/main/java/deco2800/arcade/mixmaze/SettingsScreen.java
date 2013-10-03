@@ -18,8 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class SettingsScreen implements Screen {
 
-	private static final String LOG = SettingsScreen.class.getSimpleName();
-
 	private final MixMaze game;
 	private Skin skin;
 	private Stage stage;

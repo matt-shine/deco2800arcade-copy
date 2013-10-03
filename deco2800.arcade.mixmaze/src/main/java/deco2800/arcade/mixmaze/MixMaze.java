@@ -1,6 +1,3 @@
-/*
- * MixMaze
- */
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.client.GameClient;
@@ -8,8 +5,6 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;

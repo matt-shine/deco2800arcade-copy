@@ -1,11 +1,13 @@
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
+import deco2800.arcade.mixmaze.domain.PlayerModel;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Timer;
-import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
+
+import static deco2800.arcade.mixmaze.domain.MixMazeModel.Difficulty.*;
 import static com.badlogic.gdx.graphics.Color.*;
 import static com.badlogic.gdx.graphics.GL20.*;
 
@@ -58,7 +60,7 @@ class LocalScreen extends GameScreen {
 				tile = new TileViewModel(i, j,
 						tileSize, renderer);
 				tileTable.add(tile).size(tileSize, tileSize);
-				model.getBoardTile(i, j).addViewer(tile);
+				model.getBoardTile(i, j).addObserver(tile);
 			}
 			if (j < boardSize)
 				tileTable.row();
@@ -70,8 +72,8 @@ class LocalScreen extends GameScreen {
 		p2 = new PlayerViewModel(model, tileSize,
 				2,new Settings().p2Controls, scorebar[1],
 				right);
-		model.getPlayer1().addViewer(p1);
-		model.getPlayer2().addViewer(p2);
+		model.getPlayer(1).addViewer(p1);
+		model.getPlayer(2).addViewer(p2);
 		gameArea.addActor(p1);
 		gameArea.addActor(p2);
 		scorebar[0].setBoxColor(p1.getColor());
@@ -105,7 +107,7 @@ class LocalScreen extends GameScreen {
 		}, 0, 1, model.getGameMaxTime());
 		Timer.schedule(new Timer.Task() {
 			public void run() {
-				IPlayerModel winner;
+				PlayerModel winner;
 
 				stage.setKeyboardFocus(null);
 				winner = model.endGame();

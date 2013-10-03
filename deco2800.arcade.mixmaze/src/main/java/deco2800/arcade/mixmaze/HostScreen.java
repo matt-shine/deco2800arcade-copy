@@ -1,51 +1,29 @@
 package deco2800.arcade.mixmaze;
 
+import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-import deco2800.arcade.mixmaze.domain.view.ITileModel;
-
-import java.io.IOException;
-import java.util.List;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Timer;
+import deco2800.arcade.mixmaze.domain.PlayerModelObserver;
+import deco2800.arcade.mixmaze.domain.TileModelObserver;
+import deco2800.arcade.mixmaze.domain.ItemModel;
+import deco2800.arcade.mixmaze.domain.PlayerModel;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.EndPoint;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.kryonet.rmi.ObjectSpace;
 import com.esotericsoftware.kryonet.rmi.RemoteObject;
+import java.io.IOException;
 
-import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
-import static com.badlogic.gdx.graphics.Color.*;
+import static deco2800.arcade.mixmaze.domain.MixMazeModel.Difficulty.*;
 
 class HostScreen extends LocalScreen {
 
 	private Server server;
 	private Connection client;
 	private ObjectSpace os;
-	private PlayerNetworkView p1;
-	private PlayerNetworkView p2;
+	private PlayerModelObserver p1;
+	private PlayerModelObserver p2;
 	private boolean isConnected;
 
 	HostScreen(final MixMaze game) {
@@ -76,8 +54,8 @@ class HostScreen extends LocalScreen {
 			} catch (InterruptedException e) {
 			}
 		}
-		model.getPlayer1().addViewer(p1);
-		model.getPlayer2().addViewer(p2);
+		model.getPlayer(1).addViewer(p1);
+		model.getPlayer(2).addViewer(p2);
 		setupTimer();
 		startGame();
 		client.sendTCP("signal: game started");
@@ -88,10 +66,10 @@ class HostScreen extends LocalScreen {
 
 		ObjectSpace.registerClasses(kryo);
 		kryo.register(IMixMazeModel.class);
-		kryo.register(TileNetworkView.class);
-		kryo.register(PlayerNetworkView.class);
-		kryo.register(IPlayerModel.Action.class);
-		kryo.register(ItemType.class);
+		kryo.register(TileModelObserver.class);
+		kryo.register(PlayerModelObserver.class);
+		kryo.register(PlayerModel.Action.class);
+		kryo.register(ItemModel.Type.class);
 		/*
 		kryo.register(IllegalStateException.class);
 		kryo.register(IllegalArgumentException.class);
@@ -124,24 +102,24 @@ class HostScreen extends LocalScreen {
 
 		private void recvViewers(Connection c) {
 			int boardSize = model.getBoardSize();
-			TileNetworkView t;
+			TileModelObserver t;
 
 			for (int j = 0; j < boardSize; j++)
 				for (int i = 0; i < boardSize; i++) {
 					t = ObjectSpace.getRemoteObject(c,
 							1700 + j*100 + i,
-							TileNetworkView.class);
+							TileModelObserver.class);
 					((RemoteObject) t).setNonBlocking(true);
 					((RemoteObject) t).setTransmitExceptions(false);
-					model.getBoardTile(i, j).addViewer(t);
+					model.getBoardTile(i, j).addObserver(t);
 				}
 
 			p1 = ObjectSpace.getRemoteObject(c, 101,
-					PlayerNetworkView.class);
+					PlayerModelObserver.class);
 			((RemoteObject) p1).setNonBlocking(true);
 			((RemoteObject) p1).setTransmitExceptions(false);
 			p2 = ObjectSpace.getRemoteObject(c, 102,
-					PlayerNetworkView.class);
+					PlayerModelObserver.class);
 			((RemoteObject) p2).setNonBlocking(true);
 			((RemoteObject) p2).setTransmitExceptions(false);
 		}

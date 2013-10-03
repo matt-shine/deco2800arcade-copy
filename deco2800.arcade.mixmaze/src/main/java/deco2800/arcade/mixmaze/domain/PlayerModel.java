@@ -1,60 +1,100 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.PlayerNetworkView;
-import deco2800.arcade.mixmaze.domain.view.IBrickModel;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-import deco2800.arcade.mixmaze.domain.view.IPickModel;
-import deco2800.arcade.mixmaze.domain.view.ITNTModel;
-import deco2800.arcade.mixmaze.domain.view.ITileModel;
 import java.util.ArrayList;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
+import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
 
 /**
  * Player model represents a player.
  */
-public class PlayerModel implements IPlayerModel {
-
-	// Player data
-	private int id;
-	private int x;
-	private int y;
-	private int direction;
-	private Action action;
-	private long lastMoved;
-	private long lastAction;
-	private int score;
-	private ArrayList<PlayerNetworkView> viewers;
-
-	// Item data
-	private BrickModel brick;
-	private PickModel pick;
-	private TNTModel tnt;
+public class PlayerModel {
 
 	/**
-	 * Constructs a new Player with the specified <code>id</code>
-	 *
-	 * @param id the id of this player
+	 * Player action
 	 */
-	public PlayerModel(int id) {
+	public enum Action {
+		USE_BRICK,
+		USE_PICK,
+		USE_TNT;
+
+		/**
+		 * Returns the next action, given the status of pick and TNT.
+		 * 
+		 * @param hasPick	whether this player has pick or not
+		 * @param hasTnt	whether this player has TNT or not
+		 * @return the next action
+		 */
+		public Action getNextAction(boolean hasPick, boolean hasTnt) {
+			Action next = values()[(ordinal() + 1) % values().length];
+			if ((next == USE_PICK && !hasPick)
+					|| (next == USE_TNT && !hasTnt))
+				return next.getNextAction(hasPick, hasTnt);
+			else
+				return next;
+		}
+	}
+
+	/** Player id */
+	private int id;
+	
+	/** Column number */
+	private int x;
+	
+	/** Row number */
+	private int y;
+	
+	/** Facing direction */
+	private int direction;
+	
+	/** Current action */
+	private Action action;
+	
+	/** Number of boxes */
+	private int score;
+	
+	/** The brick on this player */
+	private BrickModel brick;
+	
+	/** The pick on this player */
+	private PickModel pick;
+	
+	/** The TNT on this player */
+	private TNTModel tnt;
+	
+	/** Observers to this player */
+	private ArrayList<PlayerModelObserver> observers;
+	
+	private long lastMoved;
+	private long lastAction;
+	
+	/**
+	 * Constructor
+	 *
+	 * @param id	the player id
+	 */
+	PlayerModel(int id) {
 		this.id = id;
 		action = Action.USE_BRICK;
 		brick = new BrickModel(4);
 		score = 0;
-		viewers = new ArrayList<PlayerNetworkView>();
+		observers = new ArrayList<PlayerModelObserver>();
 	}
 
-	@Override
-	public void addViewer(PlayerNetworkView v) {
-		viewers.add(v);
-		v.updateScore(score);
-		v.updateDirection(direction);
-		v.updatePosition(x, y);
-		v.updateAction(action);
-		v.updateBrick(brick.getAmount());
-		v.updatePick(pick != null);
-		v.updateTnt(tnt != null);
+	/**
+	 * Adds an observer to this player.
+	 * 
+	 * @param observer	the observer
+	 */
+	public void addViewer(PlayerModelObserver observer) {
+		observers.add(observer);
+		observer.updateScore(score);
+		observer.updateDirection(direction);
+		observer.updatePosition(x, y);
+		observer.updateAction(action);
+		observer.updateBrick(brick.getAmount());
+		observer.updatePick(pick != null);
+		observer.updateTnt(tnt != null);
 	}
 
 	/**
@@ -71,27 +111,30 @@ public class PlayerModel implements IPlayerModel {
 		changeScore(-1);
 	}
 
+	/*
+	 * Changes the score of this player by delta.
+	 */
 	private void changeScore(int delta) {
 		score += delta;
-		for (PlayerNetworkView v : viewers)
+		for (PlayerModelObserver v : observers)
 			v.updateScore(score);
 	}
 
 	/**
-	 * Returns the id of this player
-	 * @return the <code>id</> of this player
+	 * Returns the id of this player.
+	 * 
+	 * @return the <code>id</code> of this player
 	 */
 	public int getId() {
 		return id;
 	}
 
 	/**
-	 * Returns the x-coordinates for this player. The x-coordinate's orgin is at
-	 * the top left.
+	 * Returns the x-coordinate of this player. Origin is at top left.
 	 *
 	 * @return the x-coordinate of this player
 	 */
-	public int getX() {
+	int getX() {
 		return x;
 	}
 
@@ -101,67 +144,73 @@ public class PlayerModel implements IPlayerModel {
 	 *
 	 * @return the next x-coordinate in relative to the direction facing.
 	 */
-	public int getNextX() {
-		if (!isXDirection(direction)) {
+	int getNextX() {
+		if (isXDirection(direction))
+			return isPositiveDirection(direction)
+			       ? (x + 1) : (x - 1);	
+		else
 			return x;
-		}
-		return isPositiveDirection(direction) ? (x + 1) : (x - 1);
 	}
 
 	/**
-	 * Sets the x-coordinates for this player. The x-coordinate's orgin is at
-	 * the top left.
+	 * Sets the x-coordinate of this player. Origin is at top left.
 	 *
 	 * @param x the x-coordinate of this player
 	 */
-	public void setX(int x) {
+	void setX(int x) {
 		this.x = x;
 	}
 
 	/**
-	 * Returns the y-coordinates for this player. The y-coordinate's orgin is at
-	 * the top left.
+	 * Returns the y-coordinate of this player. Origin is at top left.
 	 *
 	 * @return the y-coordinate of this player
 	 */
-	public int getY() {
+	int getY() {
 		return y;
 	}
 
-	public int getNextY() {
-		if (!isYDirection(direction)) {
+	/**
+	 * Returns the next y-coordinate. Note the returned coordinate
+	 * might be out of board range.
+	 *
+	 * @return the next y-coordinate in relative to the direction facing.
+	 */
+	int getNextY() {
+		if (isYDirection(direction))
+			return isPositiveDirection(direction)
+			       ? (y + 1) : (y - 1);	
+		else
 			return y;
-		}
-		return isPositiveDirection(direction) ? (y + 1) : (y - 1);
 	}
 
 	/**
-	 * Sets the y-coordinates for this player. The y-coordinate's orgin is at
-	 * the top left.
+	 * Sets the y-coordinate of this player. Origin is at top left.
 	 *
 	 * @param y the y-coordinate of this player
 	 */
-	public void setY(int y) {
+	void setY(int y) {
 		this.y = y;
 	}
 
-	/** Checks if this player can move. The player can only make a move after 0.3
-	 * seconds after the previous move
+	/**
+	 * Checks if this player can move. The player can only make a move 
+	 * after 300 milliseconds since the previous move.
 	 *
 	 * @return true if the player can move, false otherwise
 	 */
 	private boolean canMove() {
-		return (System.currentTimeMillis() - lastMoved) >= (0.3 * 1000);
+		return ((System.currentTimeMillis() - lastMoved) >= 300);
 	}
 
 	/**
-	 * Moves the player by one <code>tile</code> in the facing direction.
+	 * Moves the player by one tile in the facing direction.
 	 */
-	public void move() {
+	void move() {
 		if (canMove()) {
 			x = getNextX();
 			y = getNextY();
-			for (PlayerNetworkView v : viewers)
+			for (PlayerModelObserver v : observers)
 				v.updatePosition(x, y);
 			lastMoved = System.currentTimeMillis();
 		}
@@ -172,35 +221,34 @@ public class PlayerModel implements IPlayerModel {
 	 *
 	 * @return the facing <code>direction</> of this player
 	 */
-	public int getDirection() {
+	int getDirection() {
 		return direction;
 	}
 
 	/**
-	 * Change this player's direction by the specified <code>direction</>
+	 * Changes this player's direction to the specified
+	 * <code>direction</code>.
 	 *
-	 * @param direction an integer representation of the direction
+	 * @param direction	the requested direction
 	 */
-	public void setDirection(int direction) {
-		/*
-		if (!isDirection(direction)) {
+	void setDirection(int direction) {
+		if (!isDirection(direction))
 			throw NOT_A_DIRECTION;
-		}
-		*/
+
 		this.direction = direction;
-		for (PlayerNetworkView v : viewers)
+		for (PlayerModelObserver v : observers)
 			v.updateDirection(direction);
 	}
 
-	public IBrickModel getBrick() {
+	BrickModel getBrick() {
 		return brick;
 	}
 
-	public IPickModel getPick() {
+	PickModel getPick() {
 		return pick;
 	}
 
-	public ITNTModel getTNT() {
+	TNTModel getTNT() {
 		return tnt;
 	}
 
@@ -238,7 +286,7 @@ public class PlayerModel implements IPlayerModel {
 	 *
 	 * @return one of USE_BRICK, USE_PICK, and USE_TNT
 	 */
-	public Action getAction() {
+	Action getAction() {
 		return action;
 	}
 
@@ -248,21 +296,21 @@ public class PlayerModel implements IPlayerModel {
 	 * An action is skipped if this player does not have
 	 * the associated item.
 	 */
-	public void switchAction() {
-		IPlayerModel.Action old = action;
+	void switchAction() {
+		PlayerModel.Action old = action;
 
-		action = action.getNextAction(pick != null,
-				tnt != null);
+		action = action.getNextAction(pick != null, tnt != null);
 		if (action != old)
 			updateAction(action);
 	}
 
-	/**Checks of this player can perform a action.
+	/**
+	 * Checks if this player can perform a action.
 	 *
 	 * @return true if this player can use any action, false otherwise
 	 */
-	public boolean canUseAction() {
-		return (System.currentTimeMillis() - lastAction) >= (0.5 * 1000);
+	boolean canUseAction() {
+		return (System.currentTimeMillis() - lastAction) >= (500);
 	}
 
 	/**
@@ -270,9 +318,8 @@ public class PlayerModel implements IPlayerModel {
 	 *
 	 * @param tile the tile where this player is
 	 */
-	public boolean useAction(ITileModel itile) {
-		TileModel tile = (TileModel) itile;
-
+	boolean useAction(TileModel tile) {
+		/* XXX: too many indentation levels */
 		if(canUseAction()) {
 			boolean used = false;
 			if(action == Action.USE_BRICK && brick.getAmount() > 0) {
@@ -308,29 +355,49 @@ public class PlayerModel implements IPlayerModel {
 		return false;
 	}
 
+	/**
+	 * Updates all observers on the brick status.
+	 * 
+	 * @param amount	the brick amount
+	 */
 	private void updateBrick(int amount) {
-		for (PlayerNetworkView v : viewers)
+		for (PlayerModelObserver v : observers)
 			v.updateBrick(amount);
 	}
 
+	/**
+	 * Updates all observers on the pick status.
+	 * 
+	 * @param hasPick	if this player has a pick
+	 */
 	private void updatePick(boolean hasPick) {
-		for (PlayerNetworkView v : viewers)
+		for (PlayerModelObserver v : observers)
 			v.updatePick(hasPick);
 	}
 
+	/**
+	 * Updates all observers on the TNT status.
+	 * 
+	 * @param hasTnt	if this player has a TNT
+	 */
 	private void updateTnt(boolean hasTnt) {
-		for (PlayerNetworkView v : viewers)
+		for (PlayerModelObserver v : observers)
 			v.updateTnt(hasTnt);
 	}
 
-	private void updateAction(IPlayerModel.Action action) {
-		for (PlayerNetworkView v : viewers)
+	/**
+	 * Updates all observers on the action status.
+	 * 
+	 * @param action	the current action of this player
+	 */
+	private void updateAction(Action action) {
+		for (PlayerModelObserver v : observers)
 			v.updateAction(action);
 	}
 
 	@Override
 	public String toString() {
-		return "<Player " + id + ">";
+		return "<Player: " + id + ">";
 	}
 
 }

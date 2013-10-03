@@ -1,11 +1,7 @@
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.Direction;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-import deco2800.arcade.mixmaze.domain.view.ITileModel;
-import deco2800.arcade.mixmaze.domain.view.IWallModel;
+import deco2800.arcade.mixmaze.domain.IMixMazeModel;
+import deco2800.arcade.mixmaze.domain.PlayerModel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -20,21 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import java.io.IOException;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
-import static deco2800.arcade.mixmaze.domain.view.IPlayerModel.Action.*;
-import static com.badlogic.gdx.graphics.Color.*;
-import static com.badlogic.gdx.graphics.GL20.*;
-import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
 /**
  * GameScreen draws all elements in a game session.
@@ -138,8 +127,6 @@ abstract class GameScreen implements Screen {
 		 */
 		gameArea.addListener(new InputListener() {
 			public boolean keyDown(InputEvent event, int keycode) {
-				Actor actor = event.getListenerActor();
-
 				for (Actor child : gameArea.getChildren()) {
 					if (child.notify(event, false))
 						return true;
@@ -251,7 +238,7 @@ abstract class GameScreen implements Screen {
 				brickImages[i].setVisible(i < amount);
 		}
 
-		void updateAction(IPlayerModel.Action action) {
+		void updateAction(PlayerModel.Action action) {
 			for (int i = 0; i < 3; i++)
 				frameImages[i].setVisible(false);
 

@@ -1,8 +1,7 @@
-package deco2800.arcade.mixmaze;
+package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
 
-public interface PlayerNetworkView {
+public interface PlayerModelObserver {
 
 	void updateScore(int score);
 
@@ -12,7 +11,7 @@ public interface PlayerNetworkView {
 
 	void updateTnt(boolean hasTnt);
 
-	void updateAction(IPlayerModel.Action action);
+	void updateAction(PlayerModel.Action action);
 
 	void updateDirection(int direction);
 

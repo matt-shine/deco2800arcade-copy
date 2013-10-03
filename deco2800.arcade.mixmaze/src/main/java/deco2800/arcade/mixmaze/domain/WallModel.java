@@ -1,35 +1,41 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-import deco2800.arcade.mixmaze.domain.view.IWallModel;
+import deco2800.arcade.mixmaze.domain.PlayerModel;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * WallModel represents an active/inactive wall on a tile.
+ * WallModel represents a wall on a tile, which can be either active or 
+ * inactive.
  */
-public class WallModel implements IWallModel {
+class WallModel {
 
+	/** Adjacent tiles */
 	private final List<TileModel> tiles;
 
-	private boolean built;
+	/** Whether this wall is built or not */
+	private boolean isBuilt;
+	
+	/** The player who builds this wall, <code>null</code> if not built */
 	private PlayerModel builder;
 
 	/**
 	 * Constructor
 	 */
-	public WallModel() {
+	WallModel() {
 		tiles = new ArrayList<TileModel>();
 	}
 
-	public void addTile(TileModel tile) {
-		/*
-		if (tiles.contains(tile)) {
-			throw new IllegalStateException(
-					"The tile is already present.");
-		}
-		*/
-		tiles.add(tile);
+	/**
+	 * Adds a tile adjacent to this wall.
+	 * 
+	 * @param tile	the tile to add
+	 */
+	void addTile(TileModel tile) {
+		if (tiles.contains(tile))
+			throw new IllegalStateException("The tile is already present.");
+		else
+			tiles.add(tile);
 	}
 
 	/**
@@ -37,65 +43,64 @@ public class WallModel implements IWallModel {
 	 *
 	 * @return true if the wall is built, otherwise false
 	 */
-	public boolean isBuilt() {
-		return built;
+	boolean isBuilt() {
+		return isBuilt;
 	}
 
 	/**
-	 * Returns the <code>PlayerModel</code> that builds this wall.
+	 * Returns the <code>PlayerModel</code> that built this wall, or
+	 * <code>null</code> is not built.
 	 *
-	 * @return the <code>PlayerModel</code>
+	 * @return the <code>PlayerModel</code> or <code>null</code>
 	 */
-	public PlayerModel getBuilder() {
+	PlayerModel getBuilder() {
 		return builder;
 	}
 
-	public void build(IPlayerModel iplayer) {
-		PlayerModel player = (PlayerModel) iplayer;
-
-		/*
-		if (player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
-		}
-		*/
-
-		/*
-		if (built) {
-			throw new IllegalStateException("The wall is already built.");
-		}
-		*/
-		built = true;
+	/**
+	 * Builds this wall.
+	 * 
+	 * @param player	the builder
+	 */
+	void build(PlayerModel player) {
+		if (player == null)
+			throw new IllegalArgumentException("player cannot be null");
+		if (isBuilt)
+			throw new IllegalStateException("this wall is already built");
+		
+		isBuilt = true;
 		builder = player;
-
-		// Executes recursive box building
+		
 		for (TileModel t : tiles) {
 			t.validateBox(player);
-			t.updateWall(this, built);
+			t.updateWall(this, true);
 		}
 	}
 
+	/**
+	 * Destroys this wall.
+	 * 
+	 * @param player	the player who destroys this wall
+	 */
 	public void destroy(PlayerModel player) {
-		/*
-		if (!built) {
+		if (!isBuilt)
 			throw new IllegalStateException("wall not built");
-		}
-		*/
-		built = false;
+
+		isBuilt = false;
 		builder = null;
+		
 		for (TileModel t : tiles) {
 			t.validateBox(player);
-			t.updateWall(this, built);
+			t.updateWall(this, false);
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder("WallModel: ");
-		for (TileModel tile : tiles) {
-			str.append(tile);
-			str.append(", ");
-		}
+		StringBuilder str = new StringBuilder("<WallModel: ");
+		
+		str.append((isBuilt) ? "built" : "not built");
+		str.append(">");
 		return str.toString();
 	}
-
 }

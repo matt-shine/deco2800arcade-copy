@@ -1,7 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
 /**
- * Helper class of directions in mixmaze.
+ * Helper class of directions in MixMaze.
  */
 public class Direction {
 	public static final int WEST = 0;
@@ -14,120 +14,121 @@ public class Direction {
 	 * when an integer is not one of <code>WEST</code>, <code>NORTH</code>,
 	 * <code>EAST</code>, or <code>SOUTH</code>.
 	 */
-	/*
-	public static final IllegalArgumentException NOT_A_DIRECTION = new IllegalArgumentException("Direction is invalid.");
-	*/
+	static final IllegalArgumentException NOT_A_DIRECTION = 
+			new IllegalArgumentException("Direction is invalid.");
 
 	/**
-	 * Returns true if and only the specified direction is <code>West</code>
-	 * @param direction a integer representation of the direction
-	 * @return true if the passed direction is <code>West</code>, false otherwise
+	 * Returns true if <code>direction</code> is <code>WEST</code>.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is <code>WEST</code>, false otherwise
 	 */
-	public static boolean isWest(int direction) {
+	static boolean isWest(int direction) {
 		return direction == WEST;
 	}
 
 	/**
-	 * Returns true if and only the specified direction is <code>North</code>
-	 * @param direction a integer representation of the direction
-	 * @return true if the passed direction is <code>North</code>, false otherwise
+	 * Returns true if <code>direction</code> is <code>NORTH</code>.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is <code>NORTH</code>, false otherwise
 	 */
-	public static boolean isNorth(int direction) {
+	static boolean isNorth(int direction) {
 		return direction == NORTH;
 	}
 
 	/**
-	 * Returns true if and only the specified direction is <code>East</code>
-	 * @param direction a integer representation of the direction
-	 * @return true if the passed direction is <code>East</code>, false otherwise
+	 * Returns true if <code>direction</code> is <code>EAST</code>.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is <code>EAST</code>, false otherwise
 	 */
-	public static boolean isEast(int direction) {
+	static boolean isEast(int direction) {
 		return direction == EAST;
 	}
 
 	/**
-	 * Returns true if and only the specified direction is <code>South</code>
-	 * @param direction a integer representation of the direction
-	 * @return true if the passed direction is <code>South</code>, false otherwise
+	 * Returns true if <code>direction</code> is <code>SOUTH</code>.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is <code>SOUTH</code>, false otherwise
 	 */
-	public static boolean isSouth(int direction) {
+	static boolean isSouth(int direction) {
 		return direction == SOUTH;
 	}
 
 	/**
-	 * returns true if and only the specified direction is one of <code>East, West,
-	 *  South, North</code>
-	 * @param direction a integer representation of the direction
+	 * Checks if the direction is valid.
+	 * 
+	 * @param direction	the direction
 	 * @return true if the specified direction valid, false otherwise
-	 * @throws NOT_A_DIRECTION if the specified direction is not one of <code>WEST</code>, <code>NORTH</code>,
-	 * <code>EAST</code>, or <code>SOUTH</code>.
+	 * @throws NOT_A_DIRECTION if the direction is not one of 
+	 * <code>WEST</code>, <code>NORTH</code>,
+	 * <code>EAST</code> or <code>SOUTH</code>.
 	 */
-	public static boolean isDirection(int direction) {
+	static boolean isDirection(int direction) {
 		return isWest(direction) || isNorth(direction)
 				|| isEast(direction) || isSouth(direction);
 	}
 
 	/**
 	 * Gets the polar opposite of the specified direction.
-	 * @param direction a integer representation of the direction
+	 * 
+	 * @param direction	the direction
 	 * @return <code>WEST</code> if <code>EAST</code> is specified.
 	 * <code>NORTH</code> if <code>SOUTH</code> is specified.
 	 * <code>EAST</code> if <code>WEST</code> is specified.
 	 * <code>SOUTH</code> if <code>NORTH</code> is specified.
 	 */
-	public static int getPolarDirection(int direction) {
-		/*
-		if(!isDirection(direction)) {
+	static int getPolarDirection(int direction) {
+		if (!isDirection(direction))
 			throw NOT_A_DIRECTION;
-		}
-		*/
-		return isPositiveDirection(direction) ? (direction - 2) : (direction + 2);
+		else
+			return isPositiveDirection(direction) 
+			       ? (direction - 2) : (direction + 2);
 	}
 
 	/**
-	 * compares the specified direction to check if it lies horizontally
-	 * in the X-axis
-	 * @param direction a integer representation of the direction
-	 * @return true if the specified direction is <code>West</code> or
-	 *  <code>East</code>, false otherwise
+	 * Checks if <code>direction</code> lies on the x-axis.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is <code>WEST</code> or
+	 *  <code>EAST</code>, false otherwise
 	 */
-	public static boolean isXDirection(int direction) {
+	static boolean isXDirection(int direction) {
 		return isWest(direction) || isEast(direction);
 	}
 
 	/**
-	 * compares the specified <code>direction</code> to check if it lies vertically 
-	 * in the Y-axis
-	 *
-	 * @param direction a integer representation of the direction
-	 * @return true if the specified direction is <code>North</code> or
-	 *  "<code>South</code>, false otherwise
+	 * Checks if <code>direction</code> lies on the y-axis.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is <code>NORTH</code> or
+	 *  <code>SOUTH</code>, false otherwise
 	 */
-	public static boolean isYDirection(int direction) {
+	static boolean isYDirection(int direction) {
 		return isNorth(direction) || isSouth(direction);
 	}
 
-
 	/**
-	 * compares the specified <code>direction</code> to check if it faces the <code>Positive Direction</code>.
-	 * <code>Positive Direction</code> means if it faces <code>South</> or <code>East</>
-	 * @param direction a integer representation of the direction
-	 * @return true if the specified direction is <code>East</code> or
-	 *  <code>South</code>, false otherwise
+	 * Checks if <code>direction</code> is positive.
+	 * Positive directions are <code>SOUTH</code> and <code>EAST</code>.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is positive, false otherwise
 	 */
-
-	public static boolean isPositiveDirection(int direction) {
+	static boolean isPositiveDirection(int direction) {
 		return isEast(direction) || isSouth(direction);
 	}
 
 	/**
-	 * compares the specified <code>direction</code> to check if it faces the <code>Negative Direction</code>.
-	 * <code>Negative Direction</code> means if it faces <code>North</> or <code>West</>
-	 * @param direction a integer representation of the direction
-	 * @return true if the specified direction is <code>North</code> or
-	 *  <code>West</code>, false otherwise
+	 * Checks if <code>direction</code> is negative.
+	 * Positive directions are <code>NORTH</code> and <code>WEST</code>.
+	 * 
+	 * @param direction	the direction
+	 * @return true if the direction is negative, false otherwise
 	 */
-	public static boolean isNegativeDirection(int direction) {
+	static boolean isNegativeDirection(int direction) {
 		return isWest(direction) || isNorth(direction);
 	}
 }

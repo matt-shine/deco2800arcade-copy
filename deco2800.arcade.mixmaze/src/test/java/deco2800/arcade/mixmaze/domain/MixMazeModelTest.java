@@ -2,7 +2,7 @@ package deco2800.arcade.mixmaze.domain;
 
 import org.junit.Test;
 
-import static deco2800.arcade.mixmaze.domain.view.IMixMazeModel.Difficulty.*;
+import static deco2800.arcade.mixmaze.domain.IMixMazeModel.Difficulty.*;
 import static org.junit.Assert.*;
 
 public class MixMazeModelTest {

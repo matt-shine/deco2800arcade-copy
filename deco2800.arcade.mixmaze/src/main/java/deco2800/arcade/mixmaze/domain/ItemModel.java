@@ -1,21 +1,35 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.domain.view.IItemModel;
-
 /**
- * Abstraction of items in mixmaze.
+ * Abstraction of items in MixMaze.
  */
-public abstract class ItemModel implements IItemModel {
+public abstract class ItemModel {
 
-	// Item Data
-	private ItemType itemType;
-
-	protected ItemModel(ItemType type) {
-		itemType = type;
+	/**
+	 * Item types
+	 */
+	public enum Type {
+		BRICK, PICK, TNT, UNKNOWN, NONE
 	}
 
-	@Override
-	public ItemType getType() {
-		return itemType;
+	/** The type of this item */
+	private Type type;
+
+	/**
+	 * Constructor
+	 *
+	 * @param type	the item type
+	 */
+	protected ItemModel(Type type) {
+		this.type = type;
+	}
+
+	/**
+	 * Returns the type of this item.
+	 *
+	 * @return the type
+	 */
+	Type getType() {
+		return type;
 	}
 }

@@ -1,9 +1,8 @@
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.view.IItemModel;
-import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
-import deco2800.arcade.mixmaze.domain.view.IPlayerModel;
-import deco2800.arcade.mixmaze.domain.view.ITileModel;
+import deco2800.arcade.mixmaze.domain.ItemModel;
+import deco2800.arcade.mixmaze.domain.TileModelObserver;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,13 +11,13 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType.*;
+import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
 /**
  * TileViewModel draws the associated tile.
  */
-public final class TileViewModel extends Group implements TileNetworkView {
+public final class TileViewModel extends Group implements TileModelObserver {
 	static final TextureRegion PILE_BRICK_REGION;
 	static final TextureRegion PICK_REGION;
 	static final TextureRegion TNT_REGION;
@@ -47,13 +46,11 @@ public final class TileViewModel extends Group implements TileNetworkView {
 
 	private final float tileSize;
 	private final float offset;
-	private final int x;
-	private final int y;
 	private final ShapeRenderer renderer;
 
 	private int boxerId;
 	private boolean[] isWallBuilt;
-	private ItemType type;
+	private ItemModel.Type type;
 
 	/**
 	 * Constructor
@@ -66,8 +63,6 @@ public final class TileViewModel extends Group implements TileNetworkView {
 		this.tileSize = tileSize;
 		offset = tileSize / 32;
 		this.renderer = renderer;
-		this.x = x;
-		this.y = y;
 		boxerId = 0;
 		isWallBuilt = new boolean[4];
 		type = NONE;
@@ -102,7 +97,7 @@ public final class TileViewModel extends Group implements TileNetworkView {
 	}
 
 	@Override
-	public void updateType(ItemType type) {
+	public void updateType(ItemModel.Type type) {
 		this.type = type;
 	}
 

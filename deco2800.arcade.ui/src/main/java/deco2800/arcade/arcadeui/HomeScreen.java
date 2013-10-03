@@ -22,6 +22,7 @@ public class HomeScreen implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
+	private ArcadeUI arcadeUI;
 	boolean multiplayerEnabled;
 	Set<String> games = null;
 	private MultiplayerLobby lobby;
@@ -29,8 +30,8 @@ public class HomeScreen implements Screen {
 	
 	
 	
-	public HomeScreen() {
-		
+	public HomeScreen(ArcadeUI ui) {
+		arcadeUI = ui;
 		//check that no input listeners are left
 		if (ArcadeInputMux.getInstance().getProcessors().size != 0) {
 			System.err.println("Home Screen: Input listener leak detected. The following " +
@@ -88,7 +89,7 @@ public class HomeScreen implements Screen {
 	    
 	    if (Gdx.input.isKeyPressed(Keys.M)) {
 	    	ArcadeSystem.setMultiplayerEnabled(true);
-	    	ArcadeSystem.goToGame("arcadeui");
+	    	arcadeUI.setScreen(arcadeUI.getLobby());
 	    }
 	    
 	    
@@ -100,7 +101,7 @@ public class HomeScreen implements Screen {
 		    	if (multiplayerEnabled) {
 		    		//If user selects multiplayer mode, set arcades multiplayer and return to arcadeUI
 		    		ArcadeSystem.setMultiplayerEnabled(true);
-		    		ArcadeSystem.goToGame("arcadeui");
+		    		arcadeUI.setScreen(arcadeUI.getLobby());
 		    		
 		    	} else {
 		    		ArcadeSystem.goToGame(game);

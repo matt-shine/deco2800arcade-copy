@@ -39,11 +39,11 @@ public class ArcadeUI extends GameClient {
 
         // Initialise the different screens.
         login = new LoginScreen(this);
-        home = new HomeScreen();
+        home = new HomeScreen(this);
         store = new StoreScreen();
         main = new FrontPage();
         register = new RegisterScreen(this);
-        lobby = new MultiplayerLobby();
+        lobby = new MultiplayerLobby(this);
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
@@ -91,6 +91,14 @@ public class ArcadeUI extends GameClient {
 
 	public Game getGame() {
 		return game;
+	}
+	
+	public HomeScreen getHome() {
+		return home;
+	}
+	
+	public MultiplayerLobby getLobby() {
+		return lobby;
 	}
 		
 }

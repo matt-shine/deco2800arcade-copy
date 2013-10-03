@@ -46,7 +46,7 @@ public class MultiplayerListener extends NetworkListener {
 		}
 		else if (object instanceof NewMultiSessionResponse) { //Game Found
 			System.out.println("Game Found");
-			arcade.disposeGame();
+			//arcade.disposeGame();
 			ArcadeSystem.goToGame(((NewMultiSessionResponse) object).gameId);
 			//ArcadeSystem.goToGame("arcadeui");
 			//arcade.startGame(((NewMultiSessionResponse) object).gameId);

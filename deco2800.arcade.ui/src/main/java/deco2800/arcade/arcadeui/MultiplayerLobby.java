@@ -45,8 +45,13 @@ public class MultiplayerLobby implements Screen {
 	private Skin skin2;
 	private ShapeRenderer shapeRenderer;
 	private ShapeRenderer shapeRenderer2;
+	private ArcadeUI arcadeUI;
 	;
 
+	public MultiplayerLobby(ArcadeUI ui) {
+		arcadeUI = ui;
+	}
+	
 	public void show() {
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
@@ -268,6 +273,7 @@ public class MultiplayerLobby implements Screen {
             	request.gameId = "arcadeui";
             	request.playerID = 0;
             	request.requestType = MultiGameRequestType.NEW;
+            	arcadeUI.setScreen(arcadeUI.getHome());
             	ArcadeSystem.createMatch(request);
             	/*CreateMatchRequest request = new CreateMatchRequest();
             	request.gameId = Integer.toString((int)(Math.random()*10000));
@@ -294,7 +300,8 @@ public class MultiplayerLobby implements Screen {
 
 				dispose();
 				ArcadeSystem.setMultiplayerEnabled(false);
-				ArcadeSystem.goToGame("arcadeui");
+				//ArcadeSystem.goToGame("arcadeui");
+				arcadeUI.setScreen(arcadeUI.getHome());
 
 			}
 		});
@@ -358,6 +365,7 @@ public class MultiplayerLobby implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		System.out.println("########LOBBY DISPOSED############");
 		stage.dispose();
 		skin.dispose();
 		skin2.dispose();
@@ -388,6 +396,7 @@ public class MultiplayerLobby implements Screen {
 		// TODO Auto-generated method stub
 
 	}
+	
 
 
 }

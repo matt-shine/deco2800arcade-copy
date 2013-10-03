@@ -1,0 +1,23 @@
+<player>
+	<animation id="KnifeandFork">
+		<running>textures/playerAnim/GensijinRun kf.png</running>
+		<attack>textures/playerAnim/Gensijinattack kf.png</attack>
+		<jumping>textures/playerAnim/GensijinJump kf.png</jumping>
+		<damage>textures/playerAnim/GensijinDamage kf.png</damage>
+		<death>textures/playerAnim/GensijinGameOver kf.png</death>
+	</animation>
+	<animation id="Spear">
+		<running>textures/playerAnim/GensijinRun spear.png</running>
+		<attack>textures/playerAnim/Gensijinattack spear.png</attack>
+		<jumping>textures/playerAnim/GensijinJump spear.png</jumping>
+		<damage>textures/playerAnim/GensijinDamage spear.png</damage>
+		<death>textures/playerAnim/GensijinGameOver spear.png</death>
+	</animation>
+	<animation id="Trident">
+		<running>textures/playerAnim/GensijinRun df.png</running>
+		<attack>textures/playerAnim/Gensijinattack df.png</attack>
+		<jumping>textures/playerAnim/GensijinJump kf.png</jumping>
+		<damage>textures/playerAnim/GensijinDamage df.png</damage>
+		<death>textures/playerAnim/GensijinGameOver df.png</death>
+	</animation>
+</player>

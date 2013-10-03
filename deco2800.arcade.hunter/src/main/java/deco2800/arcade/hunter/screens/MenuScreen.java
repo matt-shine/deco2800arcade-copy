@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -14,9 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.Hunter.Config;
 
 /**
  * A Hunter game for use in the Arcade
@@ -28,21 +30,29 @@ public class MenuScreen implements Screen {
 		
 	private Stage stage;
 	
+	private SpriteBatch batch;
+	
+	private Texture background;
+	
 	public MenuScreen(Hunter p){
 		hunter = p;
-		
+		Texture.setEnforcePotImages(false);
+		background = new Texture("textures/mainmenu.png");
 		//Set up stage
 		stage = new Stage();
+		batch = new SpriteBatch();
 		
 		ArcadeInputMux.getInstance().addProcessor(stage);
 		
 		Table table = new Table();
+		table.padRight(600f);
+		table.padTop(200f);
 		table.setFillParent(true);
 		stage.addActor(table);
 		
 		//Add play button to the table
 		Button playButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/playbutton.png"))));
-		playButton.setSize(200, 60);
+		playButton.setSize(300, 80);
 		//implement listener to the button
 		playButton.addListener(new ChangeListener() {
 
@@ -54,12 +64,12 @@ public class MenuScreen implements Screen {
 
 		});
 		//add to the table
-		table.add(playButton).size(200,60).spaceBottom(20);
+		table.add(playButton).size(300,80).spaceBottom(20);
 		table.row();
 		
 		//Add options button to the table
 		Button optionsButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/optionsbutton.png"))));
-		optionsButton.setSize(200,60);
+		optionsButton.setSize(300,80);
 		
 		optionsButton.addListener(new ChangeListener() {
 
@@ -72,7 +82,7 @@ public class MenuScreen implements Screen {
 			}
 		});
 		
-		table.add(optionsButton).size(200,60).spaceBottom(20);
+		table.add(optionsButton).size(300,80).spaceBottom(20);
 		table.row();
 		
 		
@@ -90,11 +100,11 @@ public class MenuScreen implements Screen {
 			}
 		});
 		
-		table.add(highScoreButton).size(200,60).spaceBottom(20);
+		table.add(highScoreButton).size(300,80).spaceBottom(20);
 		table.row();
 		
 		Button exitButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/exitbutton.png"))));
-		exitButton.setSize(200, 60);
+		exitButton.setSize(300, 80);
 		
 		exitButton.addListener(new ClickListener(){
 			@Override
@@ -106,7 +116,7 @@ public class MenuScreen implements Screen {
 			}
 		});
 		
-		table.add(exitButton).size(200,60).spaceBottom(20);
+		table.add(exitButton).size(300,80).spaceBottom(20);
 	}
 
 	@Override
@@ -133,9 +143,15 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		batch.begin();
+		drawBackground();
+		batch.end();
+		
 		Gdx.input.setInputProcessor(stage);
 		stage.act(delta);
 		stage.draw();
+		
+		
 	}
 
 	@Override
@@ -153,6 +169,10 @@ public class MenuScreen implements Screen {
 	@Override
 	public void show() {
 			
+	}
+	
+	private void drawBackground(){
+		batch.draw(background, 0f, 0f, Config.screenWidth, Config.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
 	}
 	
 }

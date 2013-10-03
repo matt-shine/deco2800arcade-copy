@@ -1,7 +1,16 @@
 package deco2800.arcade.hunter.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -61,6 +70,34 @@ public class Player extends Entity {
 		lives = 3;
 	}
 
+	
+	private void loadAnims(){
+		try{
+			File fXmlfile = new File("player.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(fXmlfile);
+			
+			NodeList nList = doc.getElementsByTagName("animation");
+			
+			for (int temp = 0; temp < nList.getLength(); temp++){
+				
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					animationList.put(eElement.getAttribute("id")+"running", createAnimation(3,new Texture(eElement.getElementsByTagName("running").item(0).getTextContent())));
+					animationList.put(eElement.getAttribute("id")+"attack", createAnimation(3,new Texture(eElement.getElementsByTagName("attack").item(0).getTextContent())));
+					animationList.put(eElement.getAttribute("id")+"jump", createAnimation(3,new Texture(eElement.getElementsByTagName("jumping").item(0).getTextContent())));
+					animationList.put(eElement.getAttribute("id")+"damage", createAnimation(3,new Texture(eElement.getElementsByTagName("damage").item(0).getTextContent())));
+					animationList.put(eElement.getAttribute("id")+"death", createAnimation(3,new Texture(eElement.getElementsByTagName("death").item(0).getTextContent())));
+				}
+			}
+			System.out.println("Player Animations Loaded");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Loads all the animations and puts it into the HashMap of Animations
 	 */

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.Hunter.Config;
 
 public class HighScoreScreen implements Screen {
 
@@ -26,11 +29,18 @@ public class HighScoreScreen implements Screen {
 	
 	private ArrayList<Integer> highscore = new ArrayList<Integer>();
 	
+	private Texture background;
+	private SpriteBatch batch;
+	
 	public HighScoreScreen(Hunter h){
 		hunter = h;
 		stage= new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 		highScoreList = hunter.getPreferencesManager().getHighScore();
+		
+		Texture.setEnforcePotImages(false);
+		background = new Texture("textures/mainmenu.png");
+		batch = new SpriteBatch();
 		for(int x = 0; x <3; x++){
 			highscore.add(highScoreList.get(HIGH_SCORE_LIST[x]));
 		}
@@ -38,6 +48,8 @@ public class HighScoreScreen implements Screen {
 		
 		Table table = new Table(skin);
 		table.setFillParent(true);
+		table.padRight(600f);
+		table.padTop(200f);
 		stage.addActor(table);
 				
 		//set table defaults
@@ -87,6 +99,10 @@ public class HighScoreScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		batch.begin();
+		drawBackground();
+		batch.end();
+		
 		Gdx.input.setInputProcessor(stage);
 		stage.act(delta);
 		stage.draw();
@@ -129,4 +145,7 @@ public class HighScoreScreen implements Screen {
 		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
+	private void drawBackground(){
+		batch.draw(background, 0f, 0f, Config.screenWidth, Config.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+	}
 }

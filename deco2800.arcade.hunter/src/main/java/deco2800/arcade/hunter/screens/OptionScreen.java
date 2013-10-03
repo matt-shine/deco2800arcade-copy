@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -19,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.Hunter.Config;
 
 public class OptionScreen implements Screen {
 
@@ -28,11 +31,17 @@ public class OptionScreen implements Screen {
 	private boolean sound;
 	private float volume;
 	private Skin skin;
+	private Texture background;
+	private SpriteBatch batch;
 	
 	public OptionScreen(Hunter p){
 		game = p;
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
+		
+		Texture.setEnforcePotImages(false);
+		background = new Texture("textures/mainmenu.png");
+		batch = new SpriteBatch();
 		
 		getPreferences();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -40,6 +49,8 @@ public class OptionScreen implements Screen {
 		
 		Table table = new Table(skin);
 		table.setFillParent(true);
+		table.padRight(600f);
+		table.padTop(200f);
 		stage.addActor(table);
 		
 		//set table defaults
@@ -132,6 +143,10 @@ public class OptionScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+		batch.begin();
+		drawBackground();
+		batch.end();
+		
 		Gdx.input.setInputProcessor(stage);
 		stage.act(delta);
 		stage.draw();
@@ -171,4 +186,7 @@ public class OptionScreen implements Screen {
 		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
+	private void drawBackground(){
+		batch.draw(background, 0f, 0f, Config.screenWidth, Config.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+	}
 }

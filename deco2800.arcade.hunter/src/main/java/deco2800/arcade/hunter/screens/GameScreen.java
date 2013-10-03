@@ -2,6 +2,7 @@ package deco2800.arcade.hunter.screens;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -22,7 +23,6 @@ import deco2800.arcade.hunter.model.BackgroundLayer;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.hunter.model.SpriteLayer;
-import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 
 /**

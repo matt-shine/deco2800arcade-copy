@@ -24,6 +24,7 @@ public class ArcadeUI extends GameClient {
     FrontPage main = null;
     RegisterScreen register = null;
     MultiplayerLobby lobby = null;
+    BettingWindow betting = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -44,6 +45,7 @@ public class ArcadeUI extends GameClient {
         main = new FrontPage();
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);
+        betting = new BettingWindow(this);
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
@@ -100,5 +102,7 @@ public class ArcadeUI extends GameClient {
 	public MultiplayerLobby getLobby() {
 		return lobby;
 	}
-		
+	public BettingWindow getBetting() {
+		return betting;
+	}
 }

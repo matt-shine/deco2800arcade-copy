@@ -3,6 +3,7 @@ package deco2800.arcade.arcadeui;
 import java.util.*;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -355,6 +356,11 @@ public class MultiplayerLobby implements Screen {
 	        720 - 200);
 
 	    shapeRenderer.end();*/
+		
+		if (Gdx.input.isKeyPressed(Keys.B)) {
+	    	ArcadeSystem.setPlayerBetting(true);
+	    	arcadeUI.setScreen(arcadeUI.getBetting());
+	    }
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();

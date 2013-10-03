@@ -84,13 +84,15 @@ public class HomeScreen implements Screen {
 	    int h = 110;
 	    int index = 0;
 	    font.draw(batch, "Select a game by pressing a number key:", 110, h);
-	    font.draw(batch, "Press 'm' for Multiplayer Lobby", 110, h+20);
+	    font.draw(batch, "Press 'Z' for Multiplayer Lobby", 110, h+20);
 	    h += 20;
 	    
-	    if (Gdx.input.isKeyPressed(Keys.M)) {
+	    if (Gdx.input.isKeyPressed(Keys.Z)) {
 	    	ArcadeSystem.setMultiplayerEnabled(true);
 	    	arcadeUI.setScreen(arcadeUI.getLobby());
 	    }
+	    
+	    
 	    
 	    
 	    for (String game : games) {
@@ -98,18 +100,12 @@ public class HomeScreen implements Screen {
 		    font.draw(batch, "" + (char)(index + 65) + ". " + game, 110, h);
 		    
 		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
-		    	if (multiplayerEnabled) {
-		    		//If user selects multiplayer mode, set arcades multiplayer and return to arcadeUI
-		    		ArcadeSystem.setMultiplayerEnabled(true);
-		    		arcadeUI.setScreen(arcadeUI.getLobby());
-		    		
-		    	} else {
 		    		ArcadeSystem.goToGame(game);
 		    	}
 		    if (Gdx.input.isKeyPressed(Keys.A + index)) {
 		    	ArcadeSystem.goToGame(game);
 		    }
-		    }
+		    
 		    
 		    index++;
 	    }

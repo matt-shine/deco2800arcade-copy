@@ -70,4 +70,12 @@ public class ArcadeSystem {
     public static void addPlayerToLobby() {
     	arcade.addPlayerToLobby();
     }
+
+	public static void setPlayerBetting(boolean b) {
+		arcade.setPlayerBetting(b);
+		
+	}
+	 public static boolean isPlayerBetting() {
+	    	return arcade.isPlayerBetting();
+	    }
 }

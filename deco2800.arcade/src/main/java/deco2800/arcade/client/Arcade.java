@@ -73,6 +73,8 @@ public class Arcade extends JFrame {
     
     private static boolean multiplayerEnabled;
     
+    private static boolean playerBetting;
+    
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
     
 
@@ -459,5 +461,13 @@ public class Arcade extends JFrame {
 
 	public void disposeGame() {
 		selectedGame.dispose();
+	}
+
+	public boolean isPlayerBetting() {
+		return playerBetting;
+	}
+
+	public void setPlayerBetting(boolean playerBetting) {
+		Arcade.playerBetting = playerBetting;
 	}
 }

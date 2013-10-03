@@ -20,7 +20,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	protected Player player;
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
-	protected int multiplayerEnabled;
 	private int multiplayerOn = 0;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
@@ -40,19 +39,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		gameOverListeners = new ArrayList<GameOverListener>();
 		
 		this.packClient = new PackageClient();
-	}
-	
-	public GameClient(Player player, NetworkClient networkClient, int multiplayerEnabled) {
-		this.player = player;
-		this.networkClient = networkClient;
-		this.multiplayerEnabled = multiplayerEnabled;
-        this.achievementClient = new AchievementClient(networkClient);
-        this.achievementClient.addListener(this);
-		gameOverListeners = new ArrayList<GameOverListener>();
-		
-		this.packClient = new PackageClient(); 
-		System.out.println("Made it here");
-		
 	}
 
 	public abstract Game getGame();
@@ -226,12 +212,18 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	
 	public void setMultiplayerOn() {
 		multiplayerOn = 1;
-		System.out.println("Multiplayer is on");
 	}
 	
 	public void setMultiplayerOff() {
 		multiplayerOn = 0;
 	}
 	
+	public boolean multiplayerMode() {
+		if (multiplayerOn == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 }

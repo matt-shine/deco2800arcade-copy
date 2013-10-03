@@ -5,6 +5,7 @@ import java.util.Set;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 //TODO commenting?
 public class ArcadeSystem {
@@ -69,5 +70,13 @@ public class ArcadeSystem {
     
     public static void addPlayerToLobby() {
     	arcade.addPlayerToLobby();
+    }
+    
+    public static void newMultiplayerGame(NewMultiSessionResponse response) {
+    	int playerID = response.playerID;
+    	String gameID = response.gameId;
+    	int session = response.sessionId;
+    	goToGame(gameID);
+    	
     }
 }

@@ -300,13 +300,13 @@ public class GameSystem {
 	
 	public CardCollection getCardCollection(int player, String area) {
 		
-		if(area.equals("Hand")) {
+		if(area.contains("Hand")) {
 			return player==1?p1.getHand():p2.getHand();
-		} else if(area.equals("Deck")) {
+		} else if(area.contains("Deck")) {
 			return player==1?p1.getDeck():p2.getDeck();
-		} else if(area.equals("Field")) {
+		} else if(area.contains("Field")) {
 			return player==1?p1.getField():p2.getField();
-		} else if(area.equals("Graveyard")) {
+		} else if(area.contains("Graveyard")) {
 			return player==1?p1.getGraveyard():p2.getGraveyard();
 		}
 		

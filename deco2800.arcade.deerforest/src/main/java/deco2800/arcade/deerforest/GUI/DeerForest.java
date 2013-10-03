@@ -162,27 +162,28 @@ public class DeerForest extends GameClient {
 
             List<String> effectCategory = new ArrayList<String>();
             effectCategory.add("Draw");
-            effectCategory.add("Draw");
+            effectCategory.add("Destroy");
 
             List<List<Integer>> effectParams = new ArrayList<List<Integer>>();
             ArrayList<Integer> drawEffect = new ArrayList<Integer>();
 
-            drawEffect.add(2); //Amount to draw
-            drawEffect.add(1); //Amount to discard before
-            drawEffect.add(1); //Amount to discard after
-            drawEffect.add(0); //Affect yourself
+            drawEffect.add(2);
+            drawEffect.add(1);
+            drawEffect.add(1);
+            drawEffect.add(0);
             drawEffect.add(0); //On activation
 
-            ArrayList<Integer> drawEffect2 = new ArrayList<Integer>();
+            ArrayList<Integer> destroyEffect = new ArrayList<Integer>();
 
-            drawEffect2.add(1); //Amount to draw
-            drawEffect2.add(0); //Amount to discard before
-            drawEffect2.add(0); //Amount to discard after
-            drawEffect2.add(0); //Affect yourself
-            drawEffect2.add(2); //On opponents end
+            destroyEffect.add(2); //Amount to destroy
+            destroyEffect.add(0); //Location on hand
+            destroyEffect.add(1); //Opponents cards
+            destroyEffect.add(2); //Affect monsters
+            destroyEffect.add(0); //On activation
+            destroyEffect.add(0); //On activation
 
             effectParams.add(drawEffect);
-            effectParams.add(drawEffect2);
+            effectParams.add(destroyEffect);
 
             SpellEffect spellEffect;
             try {
@@ -203,38 +204,28 @@ public class DeerForest extends GameClient {
             Set<String> typeEffects = null;
 
             List<String> effectCategory = new ArrayList<String>();
-            effectCategory.add("Draw");
-            effectCategory.add("Draw");
-            effectCategory.add("Draw");
+            effectCategory.add("Monster");
+            effectCategory.add("Player");
 
             List<List<Integer>> effectParams = new ArrayList<List<Integer>>();
-            ArrayList<Integer> drawEffect = new ArrayList<Integer>();
+            ArrayList<Integer> monsterEffect = new ArrayList<Integer>();
+            ArrayList<Integer> playerEffect = new ArrayList<Integer>();
 
-            drawEffect.add(2); //Amount to draw
-            drawEffect.add(2); //Amount to discard before
-            drawEffect.add(0); //Amount to discard after
-            drawEffect.add(0); //Affect player
-            drawEffect.add(0); //On activation
+            monsterEffect.add(2); //Amount to buff
+            monsterEffect.add(0); //Player to affect
+            monsterEffect.add(0); //Affect health
+            monsterEffect.add(10); //give +10
+            monsterEffect.add(0); //On activation
+            monsterEffect.add(0); //Affect any types
 
-            ArrayList<Integer> drawEffect2 = new ArrayList<Integer>();
+            playerEffect.add(0);
+            playerEffect.add(0);
+            playerEffect.add(20);
+            playerEffect.add(0);
+            playerEffect.add(0);
 
-            drawEffect2.add(1); //Amount to draw
-            drawEffect2.add(1); //Amount to discard before
-            drawEffect2.add(0); //Amount to discard after
-            drawEffect2.add(0); //Affect player
-            drawEffect2.add(0); //On activation
-
-            ArrayList<Integer> drawEffect3 = new ArrayList<Integer>();
-
-            drawEffect3.add(2); //Amount to draw
-            drawEffect3.add(0); //Amount to discard before
-            drawEffect3.add(2); //Amount to discard after
-            drawEffect3.add(0); //Affect player
-            drawEffect3.add(1); //On Your end turn
-
-            effectParams.add(drawEffect);
-            effectParams.add(drawEffect2);
-            effectParams.add(drawEffect3);
+            effectParams.add(monsterEffect);
+            effectParams.add(playerEffect);
 
             SpellEffect spellEffect;
             try {

@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -9,11 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
-/**
- * Create a sidebar on the left side of the screen
- * @author s4266321
- *
- */
 public class OverlayScreen implements Screen {
 
     private class OverlayScreenStage extends Stage {}
@@ -22,7 +17,8 @@ public class OverlayScreen implements Screen {
 
     private OverlayScreenStage stage;
     private Sidebar sidebar = null;
-    private OverlayWindow window = null;
+    private Window window = null;
+    private Topbar topbar = null;
 
     private boolean isUIOpen = false;
     private boolean hasTabPressedLast = false;
@@ -33,13 +29,14 @@ public class OverlayScreen implements Screen {
     public OverlayScreen(Overlay overlay) {
 
         this.overlay = overlay;
-        window = new OverlayWindow(overlay);
+        window = new Window(overlay);
         sidebar = new Sidebar(overlay, window);
+        topbar = new Topbar(overlay);
 
         stage = new OverlayScreenStage();
         stage.addActor(window);
         stage.addActor(sidebar);
-
+        stage.addActor(topbar);
     }
 
 
@@ -68,6 +65,7 @@ public class OverlayScreen implements Screen {
 
         }
 
+        // Exit the current open game and go back to the arcade on escape key down
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
             ArcadeSystem.goToGame(ArcadeSystem.UI);
         }

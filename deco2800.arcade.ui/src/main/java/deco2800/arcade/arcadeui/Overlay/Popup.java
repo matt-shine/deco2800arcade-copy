@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import java.util.LinkedList;
 
@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import deco2800.arcade.client.UIOverlay.PopupMessage;
 
-public class OverlayPopup extends Actor {
+public class Popup extends Actor {
 
     private LinkedList<PopupMessage> msgs = new LinkedList<PopupMessage>();
 
@@ -40,14 +40,13 @@ public class OverlayPopup extends Actor {
     private BitmapFont font;
     private Overlay overlay;
 
-    public OverlayPopup(Overlay overlay) {
+    public Popup(Overlay overlay) {
         super();
 
         font = new BitmapFont(false);
         this.overlay = overlay;
 
-        //texture = new NinePatch(new Texture(Gdx.files.internal("popupbg.png")), 30, 30, 30, 30);
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen_plus.png")), 30, 30, 30, 30);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen.png")), 100, 100, 100, 100);
 
         ypos = YPOS_START;
 

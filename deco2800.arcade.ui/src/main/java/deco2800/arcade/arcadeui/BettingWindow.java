@@ -134,7 +134,6 @@ public class BettingWindow implements Screen {
 		// "Return to Menu" Button Event Listener
 		button2.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-
 				dispose();
 				ArcadeSystem.setPlayerBetting(false);
 				ArcadeSystem.setMultiplayerEnabled(true);

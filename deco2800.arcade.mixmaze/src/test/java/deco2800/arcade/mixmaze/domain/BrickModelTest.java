@@ -4,10 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import deco2800.arcade.mixmaze.domain.view.IItemModel.ItemType;
 
 public class BrickModelTest {
 
@@ -25,7 +21,7 @@ public class BrickModelTest {
 
 	@Test
 	public void initializeBrickModel() {
-		assertEquals(ItemType.BRICK, brick.getType());
+		assertEquals(ItemModel.Type.BRICK, brick.getType());
 		assertEquals(5, brick.getAmount());
 	}
 

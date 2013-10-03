@@ -2,7 +2,7 @@ package deco2800.arcade.mixmaze.domain;
 
 import org.junit.Test;
 
-import static deco2800.arcade.mixmaze.domain.IMixMazeModel.Difficulty.*;
+import static deco2800.arcade.mixmaze.domain.MixMazeModel.Difficulty.*;
 import static org.junit.Assert.*;
 
 public class MixMazeModelTest {
@@ -32,7 +32,7 @@ public class MixMazeModelTest {
 		assertEquals(60, mixMaze.getGameMaxTime());
 		assertEquals(null, mixMaze.getGameStartTime());
 		assertEquals(null, mixMaze.getGameEndTime());
-		assertNotNull(mixMaze.getPlayer1());
-		assertNotNull(mixMaze.getPlayer2());
+		assertNotNull(mixMaze.getPlayer(1));
+		assertNotNull(mixMaze.getPlayer(2));
 	}
 }

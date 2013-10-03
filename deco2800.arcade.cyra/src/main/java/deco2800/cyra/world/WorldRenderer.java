@@ -52,7 +52,7 @@ public class WorldRenderer {
 	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg, heartsTexture;
 	private TextureRegion followerFrame;
 	private TextureRegion walkerRegion;
-	private TextureAtlas groundTextureAtlas;
+	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures;
 	private Array<AtlasRegion> walkerRegions;
 	private Animation followerAnimation; 
 	float width, height;
@@ -296,6 +296,23 @@ public class WorldRenderer {
 				batch.draw(shipTexture, arms.getPosition().x, arms.getPosition().y, arms.getWidth()/2, arms.getHeight()/2, 
 						arms.getHeight(), arms.getHeight(), 1, 1, rotationArms, 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
+				
+				if (((EnemySpiderBoss)e).getState() == EnemySpiderBoss.State.LASER) {
+					Array<Rectangle> charges = ((EnemySpiderBoss)e).getLaserChargePositions();
+					TextureRegion region = laserTextures.findRegion("laser_charge");
+					for (Rectangle r: charges) {
+						
+						batch.draw(region, r.x, r.y, r.width/2, r.height/2); 
+					}
+				}
+			} else if (e.getClass() == Explosion.class) {
+				int frame = ((Explosion)e).getFrame();
+				if (frame >= 0 && frame <= 5) {
+					TextureRegion region = explosionTextures.findRegion("explosion", frame);
+					batch.draw(region, e.getPosition().x, e.getPosition().y, e.getWidth()/2, e.getHeight()/2, e.getWidth(), e.getHeight(),
+							1f,1f, e.getRotation());
+				}
+				
 			} else if (e.getClass() == BulletSimple.class || e.getClass() == BulletHomingDestructible.class) {
 				Texture bulletTex;
 				if (((BulletSimple)e).getGraphic() == BulletSimple.Graphic.FIRE) {
@@ -306,6 +323,11 @@ public class WorldRenderer {
 				batch.draw(bulletTex, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 4, 4, e.getRotation(), 0, 0, bulletTexture.getWidth(),
 						bulletTexture.getHeight(), false, false);
+			} else if (e.getClass() == LaserBeam.class) {
+				TextureRegion region = laserTextures.findRegion("laser");
+				LaserBeam las = (LaserBeam)e;
+				batch.draw(region, las.getOriginPosition().x-las.getMaxWidth()/2, las.getOriginPosition().y, las.getMaxWidth()/2, 0, las.getCurrentWidth(), 
+						LaserBeam.DEFAULT_LENGTH, 1f,1f, e.getRotation()-90f);
 			} else if (e.getClass() == Walker.class){
 				//draw the parts in order
 				int i=7; 
@@ -514,6 +536,8 @@ public class WorldRenderer {
 		manager.load("data/ship.png", Texture.class, linearFilteringParam);
 		manager.load("data/heart.png", Texture.class, linearFilteringParam);
 		manager.load("data/projectiles/lightningball.png", Texture.class, linearFilteringParam);
+		manager.load("data/projectiles/lasers.txt", TextureAtlas.class);
+		manager.load("data/projectiles/explosion.txt", TextureAtlas.class);
 		manager.load("data/follower.txt", TextureAtlas.class);
 		manager.load("data/modular3.txt", TextureAtlas.class);
 		manager.load("data/level packfile", TextureAtlas.class);
@@ -534,6 +558,10 @@ public class WorldRenderer {
 		
 		bulletTexture = manager.get("data/projectiles/lightningball.png");
 		bulletTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		laserTextures = manager.get("data/projectiles/lasers.txt");
+		explosionTextures = manager.get("data/projectiles/explosion.txt");
+		//laserTextures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 			/* Load follower texture */
 		//followerTexture = new Texture("data/follower.png");

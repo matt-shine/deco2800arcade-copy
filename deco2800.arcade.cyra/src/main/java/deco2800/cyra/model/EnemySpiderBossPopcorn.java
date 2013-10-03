@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import deco2800.cyra.world.Sounds;
+
 public class EnemySpiderBossPopcorn extends Enemy {
 
 	public static final float WIDTH = 2f;
@@ -13,12 +15,15 @@ public class EnemySpiderBossPopcorn extends Enemy {
 	
 	private boolean isProjectile;
 	private boolean releasedMissiles;
+	private float count;
 	
 	public EnemySpiderBossPopcorn(Vector2 pos, float velocityX) {
 		super(0, 0, pos, WIDTH, HEIGHT);
 		velocity = new Vector2(velocityX, RISE_RATE);
 		isProjectile = false;
 		releasedMissiles = false;
+		count = 0f;
+		
 		
 	}
 
@@ -61,6 +66,14 @@ public class EnemySpiderBossPopcorn extends Enemy {
 			releasedMissiles = true;
 		}
 		
+		if (isProjectile) {
+			count += delta;
+			if (count > 0.2f) {
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2)));
+				count = 0f;
+				Sounds.playExplosionShort(0.5f);
+			}
+		}
 		
 		//do the move
 		position.add(velocity.mul(delta));

@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.Array;
 //this probably shouldn't extend Enemy but not sure how else to do it within reasonable time
 public class LaserBeam extends Enemy {
 
-	private static final float DEFAULT_LENGTH = 30f;
+	public static final float DEFAULT_LENGTH = 30f;
 	private static final float OPENING_LENGTH = 4f;
 	
 	//private Polygon collision;
@@ -68,7 +68,6 @@ public class LaserBeam extends Enemy {
 
 	@Override
 	public Array<Enemy> advance(float delta, Ship ship, float rank) {
-
 		count += delta;
 		if (count >= 0 && count <= 1.5f) {
 			currentWidth = (maxWidth)/(2.5f-count);
@@ -78,6 +77,7 @@ public class LaserBeam extends Enemy {
 			currentWidth = maxWidth/(count-1.5f);
 			if (currentWidth <= maxWidth * 0.66) {
 				position.x = -100f;
+				
 			}
 		}
 		return null;
@@ -104,5 +104,18 @@ public class LaserBeam extends Enemy {
 		
 		
 	}
+	
+	public float getCurrentWidth() {
+		return currentWidth;
+	}
+	
+	public Vector2 getOriginPosition() {
+		return new Vector2(initPos.x, initPos.y);
+	}
+	
+	public float getMaxWidth() {
+		return maxWidth;
+	}
+	
 	
 }

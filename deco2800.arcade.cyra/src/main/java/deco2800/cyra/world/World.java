@@ -68,6 +68,7 @@ public class World {
 	private int scenePosition;
 	
 	private boolean turnOffScenes = false;
+	private LaserBeam testBeam;
 	
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
@@ -446,10 +447,13 @@ public class World {
 		eItr = enemies.iterator();
 		while(eItr.hasNext()) {
 			e = eItr.next();
+			
 			// Get near player if scene is not playing
 			if ( !levelScenes.isPlaying() ) {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
+				
 				if (e.isDead()) {
+					System.out.println("removing " + e.getClass()+ " because dead");
 					eItr.remove();
 					//System.out.println("removed enemy");
 					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
@@ -458,6 +462,7 @@ public class World {
 					for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
 						res.removeEnemy(e);
 					}
+					
 				}
 				if (e.startingNextScene()) {
 					sceneStart();
@@ -487,6 +492,7 @@ public class World {
 			//Remove enemies too far outside of camera view
 			if (e.getPosition().x > cam.position.x + cam.viewportWidth * 1.5 ||
 					e.getPosition().x < cam.position.x - cam.viewportWidth * 1.5) {
+				System.out.println("removing " + e.getClass()+ " because too far from x position");
 				eItr.remove();
 				for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 					spns.removeEnemy(e);
@@ -674,12 +680,13 @@ public class World {
 	
 	/* ----- Setter methods ----- */
 	public void init() {
+		Sounds.loadAll();
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
 		ship = new Ship(new Vector2(20f, 6));
 		//ship = new Ship(new Vector2(270, 60));
-		ship = new Ship(new Vector2(600, 6));
+		//ship = new Ship(new Vector2(600, 6));
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();
@@ -706,6 +713,8 @@ public class World {
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
+		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false);
+		enemies.add(testBeam);
 		return;
 	}
 	

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import deco2800.cyra.model.Ship.State;
+import deco2800.cyra.world.Sounds;
 
 public class SoldierEnemy extends Enemy {
 	
@@ -24,6 +25,10 @@ public class SoldierEnemy extends Enemy {
 	private float stateTime;
 	private float jumpTime;
 	private float swordTime;
+	private int deathType;
+	private boolean deathFromRight;
+	private float deathCount;
+	private float deathRotation;
 	
 	private enum State {
 		INIT, WALK, WAIT, JUMP, SHOOT, AOE, RAM, SWORD, GRENADE, DEATH
@@ -142,11 +147,15 @@ public class SoldierEnemy extends Enemy {
 					//newEnemies.add(new Grendae);
 					stateTime = 1f;
 					break;
+				case DEATH:
+					isDead = true;
+					break;
 				}
 				
 				
 				
 			} else {
+				
 				//pick a new state
 				pickNewState(ship, rank);
 			}
@@ -161,6 +170,68 @@ public class SoldierEnemy extends Enemy {
 				//velocity.x = 0;
 			} else {
 				velocity.y = JUMP_VELOCITY;
+			}
+		}
+		
+		if (state == State.DEATH) {
+			deathCount += delta;
+			if (deathType == 0) {
+				if (!deathFromRight) {
+					velocity = new Vector2(1,1).mul(20f);
+				} else {
+					velocity = new Vector2(-1,1).mul(20f);
+				}
+				if (deathCount > 0.1f) {
+					newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2)));
+					deathCount = 0f;
+					Sounds.playExplosionShort(0.5f);
+				}
+			} else if (deathType == 1) {
+				if (!deathFromRight) {
+					rotation = 90f;
+					velocity = new Vector2(1,0).mul(10f);
+				} else {
+					rotation = -90f;
+					velocity = new Vector2(-1, 0).mul(10f);
+				}
+				if (deathCount > 0.1f) {
+					newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(0f,4f)));
+					deathCount = 0f;
+					Sounds.playExplosionShort(0.5f);
+				}
+			} else if (deathType == 2) {
+				float eSpeed = 5f;
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(0f,1f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(0f,-1f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(1f,0f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(1f,-1f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(1f,1f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(-1f,0f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(-1f,-1f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(-1f,1f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(1f,0.5f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(1f,-0.5f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(-1f,0.5f).nor().mul(eSpeed)));
+				newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(-1f,-0.5f).nor().mul(eSpeed)));
+				Sounds.playExplosionLong(0.5f);
+				isDead = true;
+			} else if (deathType == 3) {
+				float eSpeed = 5f;
+				if (deathCount > 0.04f) {
+					velocity = new Vector2(0,0);
+					deathCount = 0;
+					deathRotation += 10f;
+					Vector2 vel = new Vector2(1,0);
+					vel.rotate(deathRotation);
+					vel.mul(7f);
+					newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(vel)));
+					newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2), new Vector2(vel).mul(-1)));
+					Sounds.playExplosionShort(0.5f);
+					if (deathRotation > 180f) {
+						isDead = true;
+					}
+					
+				}
 			}
 		}
 		
@@ -339,6 +410,19 @@ public class SoldierEnemy extends Enemy {
 			}
 		}
 		return output;	
+	}
+	
+	@Override
+	public void handleDamage(boolean fromRight) {
+		if (state != State.DEATH) {
+			state = State.DEATH;
+			deathType = MathUtils.random(3);
+			deathFromRight = fromRight;
+			stateTime = 1f;
+			performingTell = true;
+			deathCount = 0f;
+			deathRotation = 0f;
+		}
 	}
 
 }

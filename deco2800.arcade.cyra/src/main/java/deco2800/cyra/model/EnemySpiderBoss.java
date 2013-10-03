@@ -40,6 +40,7 @@ public class EnemySpiderBoss extends Enemy {
 	private Array<EnemySpiderBossPopcorn> popcorns;
 	private float phase2fireballPosition;
 	private Array<MovablePlatformAttachment> solidParts;
+	private Array<Rectangle> charges;
 	
 	//private BlockMakerSpiderBoss blockMaker;
 	
@@ -111,6 +112,12 @@ public class EnemySpiderBoss extends Enemy {
 							performingTell = true;
 							state = State.LASER;
 							count = 2.1f - 2* rank;
+							count3=0f;
+							charges = new Array<Rectangle>();
+							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X-1, position.y+MOUTH_OFFSET_Y-1, 2,2));
+							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 1.6f, position.y+MOUTH_OFFSET_Y, 1, 1));
+							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.1f, position.y+MOUTH_OFFSET_Y-0.25f, 1, 1));
+							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.5f, position.y+MOUTH_OFFSET_Y+0.44f, 1, 1));
 							
 						}
 					}
@@ -235,7 +242,7 @@ public class EnemySpiderBoss extends Enemy {
 						count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 						state = State.IDLE;
 					}
-					
+					break;
 				case RAM:
 					if (performingTell) {
 						performingTell = false;
@@ -247,6 +254,7 @@ public class EnemySpiderBoss extends Enemy {
 						}
 						System.out.println("Ram velocity starts at"+velocity);
 						count3 = 0f;
+						count2 = 0;
 					} else {
 						
 					}
@@ -260,6 +268,8 @@ public class EnemySpiderBoss extends Enemy {
 						newEnemies.add(new LaserBeam(intendedAngle, new Vector2(position.x+MOUTH_OFFSET_X, position.y+MOUTH_OFFSET_Y), 2f+ rank*5f, false));
 						performingTell = false;
 						count = 8f;
+						charges.clear();
+						
 					} else {
 						count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 						state = State.IDLE;
@@ -359,6 +369,24 @@ public class EnemySpiderBoss extends Enemy {
 						}
 					}
 					position.add(new Vector2(velocity).mul(delta));
+				}
+			} else if (state == State.LASER) {
+				if (performingTell) {
+					count3+= delta;
+					if (count3 > 0.2f) {
+						charges.add(new Rectangle(position.x+MOUTH_OFFSET_X+ MathUtils.random(-0.5f,1.5f), position.y+MOUTH_OFFSET_Y+MathUtils.random(-1.7f, 0.7f), 1,1));
+					}
+					float chargeSpeed = 2f;
+					for (int i=1; i<charges.size; i++) {
+						Rectangle r = charges.get(i);
+						Vector2 rVel = new Vector2(charges.get(0).x - r.x, charges.get(0).y - r.y).nor().mul(chargeSpeed);
+						r.x += rVel.x * delta;
+						r.y += rVel.y * delta;
+						if (r.x < charges.get(0).x) {
+							charges.removeIndex(i);
+							i--;
+						}
+					}
 				}
 			}
 		//}
@@ -484,5 +512,17 @@ public class EnemySpiderBoss extends Enemy {
 	
 	public void setSolidParts(Array<MovablePlatformAttachment> solidParts) {
 		this.solidParts = solidParts;
+	}
+	
+	public Array<Rectangle> getLaserChargePositions() {
+		if (state == State.LASER && performingTell) {
+			count3++;
+			
+		}
+		return charges;
+	}
+	
+	public State getState() {
+		return state;
 	}
 }

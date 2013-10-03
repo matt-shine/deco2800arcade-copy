@@ -36,7 +36,9 @@ public class PlayScreen implements Screen
 	private PlayerShip player;
 	private GameMap map;
 	
-	private Texture testTex;
+	private float timerCounter;
+	private float enemyInterval = 2;
+	
 	
 	public PlayScreen( BurningSkies game){
 		this.game = game;
@@ -68,8 +70,10 @@ public class PlayScreen implements Screen
     	// Test code
     	PowerUp test = new DemoPowerUp(this);
     	addPowerup(test);
-    	testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
-    	addEnemy(new Enemy(200, testTex, new Vector2(300,400), this));
+    	
+    	// Add an enemy
+    	addRandomEnemy();
+    	timerCounter = 0;
     }
     
     @Override
@@ -86,6 +90,13 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	if(!game.isPaused()) {
+    		//Increment timer
+    		timerCounter += delta;
+    		if (timerCounter >= enemyInterval){
+    			addRandomEnemy();
+    			timerCounter -= enemyInterval;
+    		}
+    		
     		stage.act(delta);
     		for(int i=0; i<bullets.size(); i++) {
     			Bullet b = bullets.get(i);
@@ -102,12 +113,14 @@ public class PlayScreen implements Screen
     						e.damage(b.getDamage());
     						if(!e.isAlive()) {
     							removeEntity(e);
-    							addEnemy(new Enemy(200, testTex, new Vector2(300,400), this)); //TODO: DEBUG, REMOVE LATER
+    							//addEnemy(new Enemy(200, testTex, new Vector2(300,400), this)); //TODO: DEBUG, REMOVE LATER
+    						//	addRandomEnemy();
     						}
     						removeEntity(b);
     	        			i--;
     						continue;
     					}
+    					
     				}
     			} else if(b.hasCollided(player)) {
     				//TODO: DAMAGE THE PLAYER YOU NUGGET
@@ -129,7 +142,19 @@ public class PlayScreen implements Screen
 					continue;
 				}
 			}
+			// checks if the enemy is out of screen, if so remove it
+			for(int i=0; i<enemies.size(); i++) {
+				Enemy e = enemies.get(i);
+				if(outOfBounds(e)) {
+					removeEntity(e);
+					i--;
+					continue;
+					
+				}
+			}			
     	}
+    	
+    	
     	// Draws the map
     	stage.draw();
     }
@@ -169,6 +194,23 @@ public class PlayScreen implements Screen
     public void addEnemy(Enemy enemy) {
     	stage.addActor(enemy);
     	enemies.add(enemy);
+    }
+    
+    private void addRandomEnemy() {
+    	Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
+    	float startY = (float) 700;
+    	int direction;
+    	
+    	if((int) Math.floor(Math.random() * 2) == 1 )
+    		direction = 1;
+    	else
+    		direction = -1;
+    	
+    	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
+    	float vY = (float) Math.ceil(Math.random() * -150) - 50;
+    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
+    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, new Vector2(vX,vY)) );    	
     }
     
     public void addPowerup(PowerUp p) {

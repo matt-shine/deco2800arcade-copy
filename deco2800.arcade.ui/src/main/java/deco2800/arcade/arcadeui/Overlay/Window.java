@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,30 +9,29 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 import deco2800.arcade.client.ArcadeInputMux;
 
-public class OverlayWindow extends Group {
+public class Window extends Group {
 
-    private class OverlayWindowStage extends Stage {}
+    private class WindowStage extends Stage {}
 
     private NinePatch texture;
     private Overlay overlay;
-    private OverlayWindowStage contentStage = new OverlayWindowStage();
+    private WindowStage contentStage = new WindowStage();
     private Group contentGroup = new Group();
-    private OverlayWindowContent windowContent = null;
+    private WindowContent windowContent = null;
     private float delta = 0;
     private int height = 0;
     private int width = 0;
 
 
-    public OverlayWindow(Overlay overlay) {
+    public Window(Overlay overlay) {
 
         this.overlay = overlay;
-        //texture = new NinePatch(new Texture(Gdx.files.internal("popupbg.png")), 30, 30, 30, 30);
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen_plus.png")), 30, 30, 30, 30);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen.png")), 100, 100, 100, 100);
         contentStage.addActor(contentGroup);
         ArcadeInputMux.getInstance().addProcessor(contentStage);
     }
 
-    public void setContent(OverlayWindowContent g) {
+    public void setContent(WindowContent g) {
 
         if (this.windowContent != null) {
             contentGroup.removeActor(windowContent);

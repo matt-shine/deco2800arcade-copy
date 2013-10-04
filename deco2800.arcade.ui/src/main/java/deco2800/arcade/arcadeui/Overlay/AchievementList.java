@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import java.util.ArrayList;
 
@@ -9,7 +9,7 @@ import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
 
-public class AchievementList extends OverlayWindowContent {
+public class AchievementList extends WindowContent {
 
     AchievementClient achClient;
     ArrayList<Achievement> achievements;
@@ -65,11 +65,9 @@ public class AchievementList extends OverlayWindowContent {
         for (int i = 0; i < num; i++) {
 
             TextButton l = new TextButton("Test Achievement " + i, skin);
-            l.setSize(this.getWidth(), 60);
-
             this.addActor(l);
-            l.setPosition(30, ((num - i) * 80));
-            l.setSize(width - 60, 60);
+            l.setPosition(60, ((num - i) * 80));
+            l.setSize(width - 120, 50);
 
         }
 

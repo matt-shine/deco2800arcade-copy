@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,18 +10,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
 public class SidebarAvatar extends Widget {
 
-    private NinePatch texture;
-    private BitmapFont font;
     @SuppressWarnings("unused")
     private Overlay overlay;
+    private BitmapFont font;
+    private NinePatch texture;
+
 
     public SidebarAvatar(Overlay overlay) {
-
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconMagenta.png")), 30, 30, 30, 30);
-
-        font = new BitmapFont(false);
         this.overlay = overlay;
 
+        font = new BitmapFont(false);
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconMagenta.png")), 75, 75, 75, 75);
     }
 
     @Override
@@ -31,23 +30,19 @@ public class SidebarAvatar extends Widget {
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-
-        texture.draw(batch, getX(), getY() - 20, 170, 170);
+        texture.draw(batch, getX(), getY(), 180, 180);
         font.setColor(Color.WHITE);
-        font.draw(batch, "text", 0, 0);
+        font.draw(batch, "your picture", getX() + 50, getY() + 105);
+        font.draw(batch, "here", getX() + 50, getY() + 85);
     }
 
     @Override
     public float getPrefHeight() {
-        return 170;
+        return 180;
     }
 
     @Override
     public float getPrefWidth() {
-        return 170;
+        return 180;
     }
-
-
-
-
 }

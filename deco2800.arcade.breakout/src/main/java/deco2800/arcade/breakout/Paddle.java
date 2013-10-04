@@ -30,6 +30,14 @@ public abstract class Paddle {
 		this.paddleShape.height = HEIGHT;
 	}
 	
+	public void decreaseSize() {
+		this.paddleShape.width = width/2;
+	}
+	
+	public void increaseSize() {
+		this.paddleShape.width = width*2;
+	}
+	
 	// Getter method for the paddles x position
 	public float getPaddleX() {
 		return this.paddleShape.x;

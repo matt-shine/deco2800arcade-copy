@@ -1,6 +1,8 @@
 package deco2800.arcade.breakout;
 
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
@@ -15,8 +17,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.breakout.powerup.PowerupManager;
 import deco2800.arcade.client.*;
 
 
@@ -36,6 +40,7 @@ public class GameScreen implements Screen  {
 	// private NetworkClient nc;
 	private Paddle paddle;
 	private Ball ball;
+	private Ball powerupBall;
 	private int score;
 	private int lives;
 	
@@ -65,6 +70,7 @@ public class GameScreen implements Screen  {
 
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
+	private int numBalls = 1;
 
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
@@ -93,12 +99,17 @@ public class GameScreen implements Screen  {
 	private int outer = 0;
 	private int inner = 0;
 	
+	// Power up manager and details
+	private boolean powerupsOn = false;
+	private PowerupManager powerupManager;
+	
 	GameScreen(final Breakout game) {
 		this.levelSystem = new Level();
 		score = 0;
 		lives = 3;
 		this.game = game;
 		this.player = game.playerName();
+		this.powerupManager = new PowerupManager(this);
 		gamearea();
 	}
 	
@@ -108,9 +119,6 @@ public class GameScreen implements Screen  {
 		// Sets the display size
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		
-		
-		
 
 		// access the file location of the sounds
 		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
@@ -163,25 +171,55 @@ public class GameScreen implements Screen  {
 		setStatus("Click to start!");
 
 	}
+	
+	private void powerupCheck(Brick b) {
+		if (isPowerupOn()) {
+			return;
+		}
+		if (Math.random() < 0.2) {
+			Rectangle r = b.getShape();
+			getPowerupManager().handlePowerup(r.x + r.width/2, r.y);
+		}
+	}
+	
 	/*
 	 * Decrements bricks and increments score once ball hits brick. Gives time
 	 * for processing
 	 */
-	public void updateGameState(int bounce) {
-		if (bounce == 0) {
-			getBall().bounceX();
-		} else if (bounce == 1) {
-			getBall().bounceY();
+	public void updateGameState(int bounce, Brick b, boolean pBall) {
+		if (pBall) {
+			if (powerupBall != null) {
+				if (bounce == 0) {
+					getPowerupBall().bounceX();
+				} else if (bounce == 1) {
+					getPowerupBall().bounceY();
+				} else {
+					getPowerupBall().bounceX();
+					getPowerupBall().bounceY();
+				}
+				setLastHitX(getPowerupBall().getX());
+				setLastHitY(getPowerupBall().getY());
+			}
 		} else {
-			getBall().bounceX();
-			getBall().bounceY();
+			if (ball != null) {
+				if (bounce == 0) {
+					getBall().bounceX();
+				} else if (bounce == 1) {
+					getBall().bounceY();
+				} else {
+					getBall().bounceX();
+					getBall().bounceY();
+				}
+				
+				setLastHitX(getBall().getX());
+				setLastHitY(getBall().getY());
+			}
 		}
-		setLastHitX(getBall().getX());
-		setLastHitY(getBall().getY());
 		breaking.play();
 		brickBreak++;
 		score += this.getLevel()*2;
 		setBrickNum(getBrickNum() - 1);
+		powerupCheck(b);
 		try {
 			Thread.currentThread().sleep(35);
 		} catch (Exception e) {
@@ -210,6 +248,7 @@ public class GameScreen implements Screen  {
 			shapeRenderer.begin(ShapeType.FilledRectangle);
 
 			getPaddle().render(shapeRenderer);
+			getPowerupManager().renderAll(batch);
 			
 
 			// Render the level
@@ -217,7 +256,12 @@ public class GameScreen implements Screen  {
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
 			// Ball is a Circle
-			getBall().render(shapeRenderer);
+			if (ball != null) {
+				getBall().render(shapeRenderer);
+			}
+			if (powerupBall != null) {
+				powerupBall.render(shapeRenderer);
+			}
 			shapeRenderer.end();
 			
 			
@@ -303,7 +347,7 @@ public class GameScreen implements Screen  {
 	 * Rewards the Player 2 extra lives and makes the sequence null, so that the
 	 * Player can not re-use the cheat
 	 */
-	void bonusLives(int bonus) {
+	public void bonusLives(int bonus) {
 		lives = lives + bonus;
 		setSequence(null);
 	}
@@ -318,7 +362,12 @@ public class GameScreen implements Screen  {
 		 * gameState is set to READY
 		 */
 		if (lives > 0) {
+			if (getBall() == null) {
+				setBall(new Ball());
+			}
 			getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
+			setNumBalls(1);
+			destroyPowerupBall();
 			lives--;
 			score -= 5;
 			gameState = new ReadyState();
@@ -436,6 +485,19 @@ public class GameScreen implements Screen  {
 	public void setBall(Ball ball) {
 		this.ball = ball;
 	}
+	
+	public void createNewBall(Vector2 position) {
+		if (powerupBall == null) {
+			this.powerupBall = new Ball();
+			System.out.println("Runs");
+			this.powerupBall.reset(position);
+			setNumBalls(2);
+			this.powerupBall.randomizeVelocity();
+			this.powerupBall.setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		}
+		
+	}
+	
 	/**
 	 * @return the brickNum
 	 */
@@ -491,6 +553,42 @@ public class GameScreen implements Screen  {
 	
 	public void setOuter(int outer) {
 		this.outer = outer;
+	}
+	
+	public int getNumBalls() {
+		return this.numBalls;
+	}
+	
+	public void setNumBalls(int newNum) {
+		this.numBalls = newNum;
+	}
+
+	public PowerupManager getPowerupManager() {
+		return powerupManager;
+	}
+	
+	public boolean isPowerupOn() {
+		return this.powerupsOn;
+	}
+	
+	public void switchGameMode(boolean mode) {
+		this.powerupsOn = mode;
+	}
+	
+	public Ball getPowerupBall() {
+		return this.powerupBall;
+	}
+	
+	public void destroyPowerupBall() {
+		if (powerupBall != null) {
+			powerupBall = null;
+		}
+	}
+	
+	public void destroyBall() {
+		if (ball != null) {
+			ball = null;
+		}
 	}
 
 }

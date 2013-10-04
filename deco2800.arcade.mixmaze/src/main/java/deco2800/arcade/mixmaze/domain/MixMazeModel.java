@@ -125,28 +125,18 @@ public class MixMazeModel implements IMixMazeModel {
 		spawner = new Random();
 		state = GameState.NOT_STARTED;
 
-		// Initialize board/items data
-		boardSize = size;
-		board = new TileModel[boardSize][boardSize];
-		items = new ItemModel[boardSize][boardSize];
-		for(int row = 0; row < boardSize; ++row) {
-			for(int column = 0; column < boardSize; ++column) {
-				TileModel[] adjTiles = new TileModel[4];
-				int[] tileX = new int[] { (column - 1), column, (column + 1), column };
-				int[] tileY = new int[] { row, (row - 1), row, (row + 1) };
-				for(int tileDir = 0; tileDir < 4; ++tileDir) {
-					if(checkCoordinates(tileX[tileDir], tileY[tileDir])) {
-						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);
-					}
-				}
-				board[row][column] = new TileModel(column, row, adjTiles);
-			}
-		}
-
-		// Set game settings
+		this.boardSize = size;
 		this.difficulty = difficulty;
-		gameMaxTime = maxSeconds;
+		this.gameMaxTime = maxSeconds;
+		
+		initBoard();
+		initPlayers();
+	}
 
+	/**
+	 * Initialises players.
+	 */
+	private void initPlayers() {
 		player = new PlayerModel[2];
 		// Initialize player 1
 		player[0] = new PlayerModel(1);
@@ -161,6 +151,28 @@ public class MixMazeModel implements IMixMazeModel {
 		player[1].setY(boardSize - 1);
 		player[1].setDirection(WEST);
 		onPlayerMove(player[1], (boardSize - 1), (boardSize - 1));
+	}
+
+	/**
+	 * Initialises the game board.
+	 */
+	private void initBoard() {
+		board = new TileModel[boardSize][boardSize];
+		items = new ItemModel[boardSize][boardSize];
+		/* XXX: too many levels of nested loops */
+		for (int y = 0; y < boardSize; ++y) {
+			for (int x = 0; x < boardSize; ++x) {
+				TileModel[] adjTiles = new TileModel[4];
+				int[] tileX = new int[] {(x - 1), x, (x + 1), x};
+				int[] tileY = new int[] {y, (y - 1), y, (y + 1)};
+				for (int tileDir = 0; tileDir < 4; ++tileDir) {
+					if(checkCoordinates(tileX[tileDir], tileY[tileDir])) {
+						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);
+					}
+				}
+				board[y][x] = new TileModel(x, y, adjTiles);
+			}
+		}
 	}
 
 	@Override
@@ -232,7 +244,6 @@ public class MixMazeModel implements IMixMazeModel {
 		if (state != GameState.RUNNING)
 			throw NOT_STARTED;
 
-		// End game
 		state = GameState.END;
 		gameEndTime = Calendar.getInstance().getTime();
 		int player1Score = getPlayerScore(player[0]);
@@ -275,6 +286,7 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Specifies if the game has ended.
+	 * 
 	 * @return <code>true</code> if ended, <code>false</code> otherwise
 	 */
 	boolean isEnded() {
@@ -283,36 +295,39 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Gets the current level of game difficulty.
-	 * @return <CODE>MixMazeDifficulty</CODE> representing
-	 * current game difficulty
+	 * 
+	 * @return the current game difficulty
 	 */
-	public Difficulty getGameDifficulty() {
+	Difficulty getGameDifficulty() {
 		return difficulty;
 	}
 
 	/**
-	 * Gets the time the game started
-	 * @return <CODE>Date</CODE> representing game start time
+	 * Gets the time the game started.
+	 * 
+	 * @return the start time
 	 */
-	public Date getGameStartTime() {
+	Date getGameStartTime() {
 		return gameStartTime;
 	}
 
 	/**
-	 * Gets the time the game ended
-	 * @return <CODE>Date</CODE> representing game end time
+	 * Gets the time the game ended.
+	 * 
+	 * @return the end time
 	 */
-	public Date getGameEndTime() {
+	Date getGameEndTime() {
 		return gameEndTime;
 	}
 
 	/**
 	 * Gets the current number of built boxes for the
-	 * specified player
-	 * @param player The specified player
-	 * @return Number of boxes built by specified player
+	 * specified player.
+	 * 
+	 * @param player	the specified player
+	 * @return number of boxes built by specified player
 	 */
-	public int getPlayerScore(PlayerModel player) {
+	int getPlayerScore(PlayerModel player) {
 		int boxes = 0;
 		for(int row = 0; row < boardSize; ++row) {
 			for(int column = 0; column < boardSize; ++column) {
@@ -327,11 +342,12 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Checks the specified (x, y) position and
-	 * determines if it is in range
-	 * @param x X position on the game board
-	 * @param y Y position on the game board
-	 * @return <CODE>true</CODE> if specified (x, y) is valid,
-	 * <CODE>false</CODE> otherwise
+	 * determines if it is in range.
+	 * 
+	 * @param x	the column number
+	 * @param y	the row number
+	 * @return <code>true</code> if specified (x, y) is valid,
+	 * <code>false</code> otherwise
 	 */
 	private boolean checkCoordinates(int x, int y) {
 		return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
@@ -340,10 +356,10 @@ public class MixMazeModel implements IMixMazeModel {
 	/**
 	 * Checks if any player is at the specified position.
 	 *
-	 * @param x X position on the game board
-	 * @param y y position on the game board
-	 * @return <CODE>true</CODE> if player is present at specified (x, y),
-	 * <CODE>false</CODE> otherwise
+	 * @param x	the column number
+	 * @param y	the row number
+	 * @return <code>true</code> if player is present at specified (x, y),
+	 * <code>false</code> otherwise
 	 */
 	private boolean hasPlayerAtPosition(int x, int y) {
 		return (player[0].getX() == x && player[0].getY() == y)
@@ -352,9 +368,9 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Gets the current maximum number of items that
-	 * can spawn at the same time
+	 * can spawn at the same time.
 	 *
-	 * @return Maximum number of items that can spawn at
+	 * @return maximum number of items that can spawn at
 	 * the same time
 	 */
 	private int getMaxItemCount() {
@@ -370,8 +386,9 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Gets the current number of items spawned
-	 * @return Amount of items currently spawned
+	 * Gets the current number of items spawned.
+	 * 
+	 * @return amount of items currently spawned
 	 */
 	private int getItemCount() {
 		int count = 0;
@@ -388,8 +405,9 @@ public class MixMazeModel implements IMixMazeModel {
 	/**
 	 * Gets a random item depending on the current
 	 * game difficulty.
-	 * @return <CODE>BrickModel</CODE>, <CODE>PickModel</CODE>
-	 * or <CODE>TNTModel</CODE>
+	 * 
+	 * @return <code>BrickModel</code>, <code>PickModel</code>
+	 * or <code>TNTModel</code>
 	 */
 	private ItemModel getRandomItem()
 	{
@@ -413,7 +431,7 @@ public class MixMazeModel implements IMixMazeModel {
 		}
 	}
 
-	public ItemModel.Type getSpawnedItemType(int x, int y) {
+	ItemModel.Type getSpawnedItemType(int x, int y) {
 		ItemModel item = getSpawnedItem(x, y);
 		return (item == null) ? ItemModel.Type.NONE : item.getType();
 	}

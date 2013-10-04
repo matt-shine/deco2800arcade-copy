@@ -60,10 +60,11 @@ public abstract class Entity {
 	
 	public void update(float delta) {}
 	public void draw(SpriteBatch batch, float stateTime) {}
-	public void handleCollision(Entity entityTwo) {}
+	public void handleCollision(Entity entityTwo, EntityCollection entities) {}
 	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
 		return null;
 	}
+	public String getType(){return null;}
 	
 	
 }

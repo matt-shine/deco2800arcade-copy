@@ -8,6 +8,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.MapPane.MapType;
 
@@ -98,10 +99,10 @@ public class ForegroundLayer extends Map {
 	/**
 	 * Update the state of the map, should be called each time the main render loop is called
 	 * @param delta delta time of the render loop
-	 * @param cameraX current camera x position
+	 * @param cameraPos current camera position
 	 */
-	public void update(float delta, float cameraX) {
-		if (cameraX - Config.PANE_SIZE_PX * paneCount > offset.x) {
+	public void update(float delta, Vector3 cameraPos) {
+		if (cameraPos.x - Config.PANE_SIZE_PX * paneCount > offset.x) {
 			offset.x += Config.PANE_SIZE_PX;
 
             if (offset.x > (currentType.ordinal() + 1) * Config.PANES_PER_TYPE * Config.PANE_SIZE_PX) {

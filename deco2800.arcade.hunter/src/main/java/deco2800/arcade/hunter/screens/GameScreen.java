@@ -140,9 +140,9 @@ public class GameScreen implements Screen {
 			PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
 			PhysicsHandler.checkEntityCollisions(entities);
 
-			backgroundLayer.update(delta, Config.gameSpeed);
-			spriteLayer.update(delta, Config.gameSpeed);
-			foregroundLayer.update(delta, camera.position.x);
+			backgroundLayer.update(delta, camera.position);
+			spriteLayer.update(delta, camera.position);
+			foregroundLayer.update(delta, camera.position);
 
 			staticBatch.begin();
 			backgroundLayer.draw(staticBatch);
@@ -220,11 +220,12 @@ public class GameScreen implements Screen {
 	
 	private void drawLives(SpriteBatch batch) {
 		Texture lives = new Texture("textures/lives.png");
-		TextureRegion life = new TextureRegion(lives, 64, 64);
+		TextureRegion life = new TextureRegion(lives);
 		for (int x = 1; x <= player.getLives(); x++) {
 			batch.draw(life,
-					(Config.screenWidth - (x * life.getRegionWidth())),
-					(Config.screenHeight - life.getRegionHeight() - 16));
+					(Config.screenWidth - (x * (life.getRegionWidth() / 2f + 16))),
+					(Config.screenHeight - (life.getRegionHeight() / 2f) - 16),
+                    life.getRegionWidth() / 2f, life.getRegionHeight() / 2f);
 		}
 	}
 

@@ -13,7 +13,7 @@ public class PhysicsHandler {
     /**
      * Checks for entity collisions
      */
-    private void checkEntityCollisions(EntityCollection entities) {
+    public static void checkEntityCollisions(EntityCollection entities) {
 		/*
 		 * Make a list of collision events
 		 * At the end, process them all one after the other
@@ -41,7 +41,7 @@ public class PhysicsHandler {
 
         for (EntityCollision c : collisions) {
             // Handle the collision
-            c.getEntityOne().handleCollision(c.getEntityTwo());
+            c.getEntityOne().handleCollision(c.getEntityTwo(), entities);
         }
     }
 

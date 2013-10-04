@@ -51,4 +51,8 @@ public class EntityCollection implements Iterable<Entity> {
 			e.draw(batch, stateTime);
 		}
 	}
+
+    public int size() {
+        return entities.size();
+    }
 }

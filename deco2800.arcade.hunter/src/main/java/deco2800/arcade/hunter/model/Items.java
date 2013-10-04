@@ -3,6 +3,7 @@ package deco2800.arcade.hunter.model;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
@@ -27,6 +28,8 @@ public class Items extends Entity {
 	 * String array of possible weapons
 	 */
 	private String[] weapons = {"KnifeAndFork","Spear","Trident"};
+	
+	private String classType = "Items";
 	
 	/**
 	 * Name of the item
@@ -86,10 +89,25 @@ public class Items extends Entity {
 	 * Handles collisions with other entities
 	 */
 	@Override
-	public void handleCollision(Entity e){
+	public void handleCollision(Entity e, EntityCollection entities){
 		if (e == null) {
-			System.out.println("Destroy the animal");
+			System.out.println("Destroy the Entity");
+			entities.remove(this);
 		}
 	}
 	
+	@Override
+	public void draw(SpriteBatch batch, float stateTime){
+		batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+	}
+	
+	@Override
+	public String getType(){
+		return classType;
+	}
+	
+	
+	public String getItem(){
+		return item;
+	}
 }

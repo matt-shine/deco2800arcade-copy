@@ -15,10 +15,6 @@ import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 
 public class Animal extends Entity {
 
-	/**
-	 * Boolean of whether the Animal is moving
-	 */
-	private boolean moving;
 
 	/**
 	 * The speed at which the Animal moves
@@ -38,7 +34,9 @@ public class Animal extends Entity {
 	/**
 	 * The type of animal
 	 */
-	private Type type;
+	private Type hunt;
+	
+	private String classType = "Animal";
 	
 	private boolean animLoop;
 
@@ -47,11 +45,12 @@ public class Animal extends Entity {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
-		moving = false;
 		if (hunted) {
-			type = Type.PREY;
+			hunt = Type.PREY;
+			moveSpeed = 4;
 		} else {
-			type = Type.PREDATOR;
+			hunt = Type.PREDATOR;
+			moveSpeed = -2;
 		}
 		setAnimation(loadAnimations(filepath));
 	}
@@ -83,38 +82,14 @@ public class Animal extends Entity {
 		PREDATOR, PREY
 	}
 
-	/**
-	 * Toggles the animal to whether it is moving or not
-	 */
-	public void changeMove() {
-		if (moving) {
-			state = State.IDLE;
-			moving = false;
-			moveSpeed = 0;
-		} else {
-			state = State.MOVING;
-			moving = true;
-			moveSpeed = -5;
-		}
-	}
 
 	public void update(float delta) {
-		// Checks whether the enemy is on the screen
-		if (getX() <= 0) {
-			setX(200);
-		}
-
 		if (moveSpeed != 0) {
 			// updates position of enemy
 			setX(getX() + moveSpeed);
 		}
-
-		// checking collision with the ground and eventually with the tile map
-		// TODO
-		if (getY() <= 0) {
-			setY(1);
-		}
-
+		
+		setY(getY()-9.81f);
 	}
 
 	/**
@@ -141,8 +116,8 @@ public class Animal extends Entity {
 	 * 
 	 * @return Type - Predator or Prey
 	 */
-	public Type getType() {
-		return type;
+	public Type getHunt() {
+		return hunt;
 	}
 
 	/**
@@ -153,7 +128,7 @@ public class Animal extends Entity {
 		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
 		for (Entity e : entities) {
 			if (this.getX() <= 0)
-				collisions.add(new EntityCollision(e, null,
+				collisions.add(new EntityCollision(this, null,
 						CollisionType.PREDATOR_C_LEFT_EDGE));
 		}
 		return collisions;
@@ -163,16 +138,14 @@ public class Animal extends Entity {
 	 * Handles Collisions
 	 */
 	@Override
-	public void handleCollision(Entity e) {
+	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null)
-			killAnimal();
+			entities.remove(this);
 	}
-
-	/**
-	 * Destroys the animal entity
-	 */
-	private void killAnimal() {
-		System.out.println("DESTROY");
+	
+	@Override
+	public String getType(){
+		return classType;
 	}
 	
 	@Override

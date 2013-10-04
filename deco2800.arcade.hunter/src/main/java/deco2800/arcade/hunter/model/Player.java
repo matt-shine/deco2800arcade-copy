@@ -184,6 +184,8 @@ public class Player extends Entity {
 	
 	@Override
 	public void update(float delta) {
+        // Everything depends on everything else here, may have to rearrange, or
+        // even double up on checks
 
 		if (collider.top && velocity.y > 0) {
 			setJumpVelocity(0);
@@ -199,28 +201,13 @@ public class Player extends Entity {
 			velocity.x++;
 		}
 
-		// HERE TODO
-
-		// Everything depends on everything else here, may have to rearrange, or
-		// even double up on checks
-		// Check if player is grounded, this should be changed to check if you
-		// are standing on a map tile TODO
-		
-		//Everything depends on everything else here, may have to rearrange, or even double up on checks
-		//Check if player is grounded, this should be changed to check if you are standing on a map tile TODO
 		setX(getX() + delta * velocity.x);
 
 		setJumpVelocity(getJumpVelocity() - delta * 9.81f);
 		setY(getY() + getJumpVelocity());
 
-		// Need to check for the player moving past the edge of a tile in the
-		// physics step above TODO
-
 		// Update the player state
 		// Pretending the DEAD state doesn't exist for now... TODO
-		
-		//Update the player state, animate based upon the state
-		//Pretending the DEAD state doesn't exist for now... TODO
 		if (isGrounded()) {
 			this.velocity.y = 0;
 			this.state = State.RUNNING;

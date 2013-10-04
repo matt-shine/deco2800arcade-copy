@@ -1,7 +1,6 @@
 package deco2800.arcade.hunter.screens;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
@@ -21,8 +20,10 @@ import deco2800.arcade.hunter.PhysicsHandler;
 import deco2800.arcade.hunter.model.Animal;
 import deco2800.arcade.hunter.model.BackgroundLayer;
 import deco2800.arcade.hunter.model.ForegroundLayer;
+import deco2800.arcade.hunter.model.Items;
 import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.hunter.model.SpriteLayer;
+import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 
 /**
@@ -46,6 +47,7 @@ public class GameScreen implements Screen {
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
 	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
 	private float stateTime;	
+	private float counter;
 	
 	public GameScreen(Hunter hunter) {
 	
@@ -72,14 +74,18 @@ public class GameScreen implements Screen {
 
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
-		Animal animal = new Animal(new Vector2(200, 5*Config.TILE_SIZE), 128, 128, false,
-				"hippo");
+		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo");
+		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion");
+		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, true);
 
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
 		entities.add(animal);
+		entities.add(prey);
+		entities.add(item);
 		
 		stateTime = 0f;
+		counter = 0f;
 	}
 
 	@Override
@@ -132,7 +138,7 @@ public class GameScreen implements Screen {
 			entities.updateAll(delta);
 
 			PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
-			// PhysicsHandler.checkEntityCollisions(entities);
+			PhysicsHandler.checkEntityCollisions(entities);
 
 			backgroundLayer.update(delta, Config.gameSpeed);
 			spriteLayer.update(delta, Config.gameSpeed);
@@ -153,6 +159,13 @@ public class GameScreen implements Screen {
 			staticBatch.begin();
 			drawGameUI(staticBatch);
 			staticBatch.end();
+			
+			if (stateTime - counter >= 10f){
+				createAnimals();
+				counter += 10f;
+			}else{
+				
+			}
 		}
 	}
 	
@@ -160,6 +173,8 @@ public class GameScreen implements Screen {
 		return animalsKilled;
 	}
 	
+	private void createAnimals(){
+	}
 
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
@@ -236,6 +251,10 @@ public class GameScreen implements Screen {
 
 	private void gameOver(){
 		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),getAnimalsKilled().size()));
+	}
+	
+	public void removeEntity(Entity e){
+		entities.remove(e);
 	}
 	
 	@Override

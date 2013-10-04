@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.client.GameScreen;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
@@ -55,6 +56,8 @@ public class Player extends Entity {
 	
 	// States used to determine how to draw the player
 	private int score = 0;
+	
+	private String classType = "Player";
 	
 	//States used to determine how to draw the player
 	private enum State {
@@ -303,22 +306,20 @@ public class Player extends Entity {
 		ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
 		Player player = this;
 		for (Entity e : entities) {
-			if (player.getX() <= 0) { // change 0 to
-										// forgeoundlayer.getXoffset();
-				collisions.add(new EntityCollision(player, null,
-						CollisionType.PLAYER_C_LEFT_EDGE));
-			}
 			if (player.getBounds().overlaps(e.getBounds())) {
-				if (e.getClass().equals(Animal.class)) {
+				if (e.getType() == "Animal") {
+					System.out.println("Animal Collision");
 					if (player.state == State.ATTACK)
 						collisions.add(new EntityCollision(player, e,
 								CollisionType.PLAYER_PROJECTILE_C_ANIMAL));
+							
 					else
 						collisions.add(new EntityCollision(player, e,
 								CollisionType.WORLD_PROJECTILE_C_PLAYER));
 
 				}
-				if (e.getClass() == Items.class) {
+				if (e.getType() == "Items") {
+					System.out.println("Item Collision");
 					collisions.add(new EntityCollision(player, e,
 							CollisionType.ITEM_C_PLAYER));
 				}
@@ -332,19 +333,20 @@ public class Player extends Entity {
 	 * Handles entity collisions
 	 */
 	@Override
-	public void handleCollision(Entity e) {
+	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null) {
 			gameOver();
-		}
-		if (e.getClass() == Items.class) {
+		}else if (e.getType() == "Items") {
 			System.out.println("Item pickup!");
-		}
-		if (e.getClass() == Animal.class) {
-			System.out.println("Animal Collision");
-			loseLife();
-		}
-		if (e.getClass() == Animal.class && this.state == State.ATTACK) {
-			killAnimal();
+			System.out.println(((Items) e).getItem());
+			entities.remove(((Items)e));
+		}else if (e.getType() == "Animals") {
+			if (state == State.ATTACK){
+				System.out.println("Attack Animal");
+			}else{
+				System.out.println("Animal Collision");
+				loseLife();
+			}
 		}
 	}
 
@@ -380,4 +382,10 @@ public class Player extends Entity {
 		state = State.ATTACK;
 		currAnim = attackAnimation();
 	}
+	
+	@Override
+	public String getType(){
+		return classType;
+	}
+	
 }

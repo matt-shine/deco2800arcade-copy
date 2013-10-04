@@ -335,7 +335,7 @@ public class Arcade extends JFrame {
     /**
      * Returns all games except ones with the @InternalGame annotation
      *
-     * @return
+     * @return set of playable game ids
      */
     public Set<String> findPlayableIds() {
         Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
@@ -355,6 +355,11 @@ public class Arcade extends JFrame {
         return games.keySet();
     }
 
+    /**
+     * Get a GameClient Instance of a game
+     * @param id Game id
+     * @return GameClient
+     */
     public GameClient getInstanceOfGame(String id) {
 
         Class<? extends GameClient> gameClass = getGameMap().get(id);
@@ -396,6 +401,11 @@ public class Arcade extends JFrame {
         }
         return null;
     }
+
+    /**
+     * Get the current game
+     * @return selectedGame
+     */
     public GameClient getCurrentGame() {
         return selectedGame;
     }
@@ -435,13 +445,11 @@ public class Arcade extends JFrame {
         return gameSet;
     }
 
+    /**
+     * Send a request for a list of games to the server
+     */
     public void requestGames() {
         GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
-        System.out.println(client.kryoClient().isConnected());
-
         client.sendNetworkObject(gameLibraryRequest);
-
-
-        System.out.println(client.kryoClient().isConnected());
     }
 }

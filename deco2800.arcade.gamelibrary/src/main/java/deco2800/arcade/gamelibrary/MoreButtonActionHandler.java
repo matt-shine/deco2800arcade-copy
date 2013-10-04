@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
+ * Action handler for more buttons
  * @author Aaron Hayes
  */
 public class MoreButtonActionHandler extends ChangeListener {
@@ -13,6 +14,11 @@ public class MoreButtonActionHandler extends ChangeListener {
     private boolean down = false;
 	private TextButton button;
 
+    /**
+     * Constructor
+     * @param libraryScreen The Library Screen
+     * @param b The Button
+     */
     public MoreButtonActionHandler(LibraryScreen libraryScreen, TextButton b) {
         screen = libraryScreen;
 		button = b;

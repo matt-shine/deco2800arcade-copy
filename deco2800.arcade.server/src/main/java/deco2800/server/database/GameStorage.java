@@ -48,6 +48,11 @@ public class GameStorage {
 	    initialised = true;
 	}
 
+    /**
+     * Run scripts to populate games table
+     * @param connection Database connection
+     * @throws SQLException
+     */
     private void runScript(Connection connection) throws SQLException {
         Statement statement = connection.createStatement();
 
@@ -170,6 +175,12 @@ public class GameStorage {
 		}
 	}
 
+    /**
+     * Get game ID
+     * @param gameID integer game id
+     * @return GameID arcade string game id
+     * @throws DatabaseException
+     */
     public String getGameID(int gameID) throws DatabaseException {
         if (!initialised) {
             initialise();
@@ -204,6 +215,12 @@ public class GameStorage {
         }
     }
 
+    /**
+     * Get Game Price
+     * @param gameID game ID
+     * @return game price
+     * @throws DatabaseException
+     */
     public int getGamePrice(int gameID) throws DatabaseException {
         if (!initialised) {
             initialise();
@@ -236,7 +253,13 @@ public class GameStorage {
             }
         }
     }
-	
+
+    /**
+     * Get game description
+     * @param gameID game id
+     * @return game description
+     * @throws DatabaseException
+     */
 	public String getGameDescription(int gameID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
@@ -269,7 +292,13 @@ public class GameStorage {
 			}
 		}
 	}
-	
+
+    /**
+     * Get Icon Path
+     * @param gameID game ID
+     * @return Icon Path
+     * @throws DatabaseException
+     */
 	public String getIconPath(int gameID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
@@ -305,8 +334,8 @@ public class GameStorage {
 	
 	/**
 	 * Returns the game name when gameID matches the ID given
-	 * @param	gameID
-	 * @param 	results
+	 * @param	gameID game ID
+	 * @param 	results Result Set
 	 * @return String game name
 	 * @throws SQLException
 	 */
@@ -322,6 +351,13 @@ public class GameStorage {
 		return result;
 	}
 
+    /**
+     * Find Game (Arcade - string) ID
+     * @param gameID game id
+     * @param results Result Set
+     * @return Game (Arcade) ID
+     * @throws SQLException
+     */
     private String findGameID(int gameID, ResultSet results) throws SQLException {
         String result = null;
         while (results.next()) {
@@ -334,6 +370,13 @@ public class GameStorage {
         return result;
     }
 
+    /**
+     * Find Game Price for a game
+     * @param gameID game id
+     * @param results Result Set
+     * @return price of game
+     * @throws SQLException
+     */
     private int findGamePrice(int gameID, ResultSet results) throws SQLException {
         int result = 0;
         while (results.next()) {
@@ -345,7 +388,14 @@ public class GameStorage {
         }
         return result;
     }
-	
+
+    /**
+     * Find game description of a game
+     * @param gameID Game ID
+     * @param results Result Set
+     * @return game description
+     * @throws SQLException
+     */
 	private String findGameDescription(int gameID, ResultSet results) throws SQLException {
 		String result = null;
 		while (results.next()) {
@@ -357,7 +407,14 @@ public class GameStorage {
 		}
 		return result;
 	}
-	
+
+    /**
+     * Find Icon path of a game
+     * @param gameID Game ID
+     * @param results Result Set
+     * @return Icon Path
+     * @throws SQLException
+     */
 	private String findIconPath(int gameID, ResultSet results) throws SQLException {
 		String result = null;
 		while (results.next()) {

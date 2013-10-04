@@ -6,7 +6,6 @@ import java.util.Set;
 /**
  * The response to a Game Library Request
  * @author Aaron Hayes
- *
  */
 public class GameLibraryResponse {
     public Set<Game> games;

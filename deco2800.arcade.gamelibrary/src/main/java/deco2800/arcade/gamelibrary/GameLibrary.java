@@ -43,6 +43,11 @@ public class GameLibrary extends GameClient {
     private Screen curentScreen;
     private ArrayList<Game> gameList;
 
+    /**
+     * Basic Constructor for a game library
+     * @param player1 Player
+     * @param networkClient1 Network client
+     */
     public GameLibrary(Player player1, NetworkClient networkClient1) {
         super(player1, networkClient1);
         player = player1;

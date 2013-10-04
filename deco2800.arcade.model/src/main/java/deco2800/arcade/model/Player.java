@@ -314,6 +314,10 @@ public class Player extends User {
 		}
 	}
 
+    /**
+     * Update user's library style
+     * @param style Library Style
+     */
     public void updateLibraryLayout(int style) {
         libraryStyle.setLayout(style);
         setChanged();
@@ -321,6 +325,10 @@ public class Player extends User {
         clearChanged();
     }
 
+    /**
+     * Update User's library colour
+     * @param colour Colour Scheme
+     */
     public void updateLibraryColour(int colour) {
         libraryStyle.setColourScheme(colour);
         setChanged();
@@ -328,6 +336,10 @@ public class Player extends User {
         clearChanged();
     }
 
+    /**
+     * Get User's Library Style
+     * @return libraryStyle
+     */
     public LibraryStyle getLibraryStyle() {
         return libraryStyle;
     }

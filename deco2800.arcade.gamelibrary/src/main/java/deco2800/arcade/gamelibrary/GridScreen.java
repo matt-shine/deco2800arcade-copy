@@ -50,7 +50,10 @@ public class GridScreen implements Screen, LibraryScreen {
     private ImageButton gridImageButton;
 
 
-
+    /**
+     * Constructor for gird screen
+     * @param gl The Game Library
+     */
     public GridScreen(GameLibrary gl) {
         gameSelected = false;
         gameLibrary = gl;
@@ -58,11 +61,16 @@ public class GridScreen implements Screen, LibraryScreen {
         setupGridUI();
     }
 
+    /**
+     * Setup required styles
+     */
     private void styleSetup() {
         libSkin = new Skin(Gdx.files.internal("libSkin.json"));
     }
 
-
+    /**
+     * Setup User Interface
+     */
     private void setupGridUI() {
 
         stage = new Stage();
@@ -218,6 +226,9 @@ public class GridScreen implements Screen, LibraryScreen {
         return currentButton;
     }
 
+    /**
+     * Start an Arcade Game
+     */
     private void play() {
         dispose();
         ArcadeSystem.goToGame(currentGame.id);

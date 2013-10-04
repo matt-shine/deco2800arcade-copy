@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import deco2800.arcade.model.Game;
 
 /**
+ * Play Button Action Handler
  * @author Aaron Hayes
  */
 public class PlayButtonActionHandler extends ChangeListener {

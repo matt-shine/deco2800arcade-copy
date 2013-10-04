@@ -12,6 +12,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,17 +31,11 @@ public class Player extends Entity {
 	 */
 	private static final int JUMP_VELOCITY = 8;
 	/**
-	 * Jump Velocity variable
-	 */
-	private float jumpVelocity;
-	/**
 	 * Velocity of the player
 	 */
 	
 	private Vector2 velocity = new Vector2(1, 0);
 
-	private TextureRegion img = new TextureRegion(new Texture(
-			"textures/playerAnim/GensijinRun kf.png"));
 	/**
 	 * The current animation for the player
 	 */
@@ -53,7 +48,11 @@ public class Player extends Entity {
 	 * A hashmap list of all the players
 	 */
 	private HashMap<String, Animation> animationList = new HashMap<String, Animation>();
-
+	
+	private String Weapon;
+	
+	private boolean animLoop;
+	
 	// States used to determine how to draw the player
 	private int score = 0;
 	
@@ -66,14 +65,16 @@ public class Player extends Entity {
 
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
-		loadAnimations();
+		loadAnims();
 		lives = 3;
+		Weapon = "Spear";
+		currAnim = runAnimation();
 	}
 
 	
 	private void loadAnims(){
 		try{
-			File fXmlfile = new File("player.xml");
+			File fXmlfile = Gdx.files.internal("../deco2800.arcade.hunter/src/main/resources/player.xml").file();
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlfile);
@@ -85,11 +86,11 @@ public class Player extends Entity {
 				Node nNode = nList.item(temp);
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
-					animationList.put(eElement.getAttribute("id")+"running", createAnimation(3,new Texture(eElement.getElementsByTagName("running").item(0).getTextContent())));
-					animationList.put(eElement.getAttribute("id")+"attack", createAnimation(3,new Texture(eElement.getElementsByTagName("attack").item(0).getTextContent())));
-					animationList.put(eElement.getAttribute("id")+"jump", createAnimation(3,new Texture(eElement.getElementsByTagName("jumping").item(0).getTextContent())));
-					animationList.put(eElement.getAttribute("id")+"damage", createAnimation(3,new Texture(eElement.getElementsByTagName("damage").item(0).getTextContent())));
-					animationList.put(eElement.getAttribute("id")+"death", createAnimation(3,new Texture(eElement.getElementsByTagName("death").item(0).getTextContent())));
+					animationList.put(eElement.getAttribute("id")+"running", createAnimation(3,new Texture(eElement.getElementsByTagName("running").item(0).getTextContent()),0.1f ));
+					animationList.put(eElement.getAttribute("id")+"attack", createAnimation(2,new Texture(eElement.getElementsByTagName("attack").item(0).getTextContent()),1f ));
+					animationList.put(eElement.getAttribute("id")+"jump", createAnimation(2,new Texture(eElement.getElementsByTagName("jumping").item(0).getTextContent()),2f ));
+					animationList.put(eElement.getAttribute("id")+"damage", createAnimation(1,new Texture(eElement.getElementsByTagName("damage").item(0).getTextContent()),1f ));
+					animationList.put(eElement.getAttribute("id")+"death", createAnimation(1,new Texture(eElement.getElementsByTagName("death").item(0).getTextContent()),10f ));
 				}
 			}
 			System.out.println("Player Animations Loaded");
@@ -98,76 +99,6 @@ public class Player extends Entity {
 		}
 	}
 	
-	/**
-	 * Loads all the animations and puts it into the HashMap of Animations
-	 */
-	private void loadAnimations() {
-		Texture jumpSheet = new Texture("textures/jumpSheet.png");
-		TextureRegion[][] jumpRegion = TextureRegion.split(jumpSheet,
-				jumpSheet.getWidth() / 2, jumpSheet.getHeight());
-		TextureRegion jumpFrame = jumpRegion[0][1];
-		jumpFrame.flip(true, false);
-		animationList.put("Jump", new Animation(1f, jumpFrame));
-
-		Texture fallSheet = new Texture("textures/jumpSheet.png");
-		TextureRegion[][] fallRegion = TextureRegion.split(fallSheet,
-				fallSheet.getWidth() / 2, fallSheet.getHeight());
-		TextureRegion fallFrame = fallRegion[0][0];
-		fallFrame.flip(true, false);
-		animationList.put("Fall", new Animation(1f, fallFrame));
-
-		animationList.put("Run",
-				createAnimation(3, new Texture("textures/runSheet.png")));
-		animationList.put(
-				"RunSpear",
-				createAnimation(3, new Texture(
-						"textures/playerAnim/GensijinRun spear.png")));
-		animationList.put(
-				"RunKnF",
-				createAnimation(3, new Texture(
-						"textures/playerAnim/GensijinRun kf.png")));
-		animationList.put(
-				"RunTrident",
-				createAnimation(3, new Texture(
-						"textures/playerAnim/GensijinRun df.png")));
-		animationList.put(
-				"AttackKnF",
-				createAnimation(2, new Texture(
-						"textures/playerAnim/Gensijinattack kf.png")));
-		animationList.put(
-				"AttackTrident",
-				createAnimation(2, new Texture(
-						"textures/playerAnim/Gensijinattack df.png")));
-		animationList.put(
-				"AttackSpear",
-				createAnimation(2, new Texture(
-						"textures/playerAnim/Gensijinattack spear.png")));
-		animationList.put(
-				"DamageSpear",
-				createAnimation(1, new Texture(
-						"textures/playerAnim/GensijinDamage spear.png")));
-		animationList.put(
-				"DamageKnF",
-				createAnimation(1, new Texture(
-						"textures/playerAnim/GensijinDamage kf.png")));
-		animationList.put(
-				"DamageTrident",
-				createAnimation(1, new Texture(
-						"textures/playerAnim/GensijinDamage df.png")));
-		animationList.put(
-				"GameOverSpear",
-				createAnimation(1, new Texture(
-						"textures/playerAnim/GensijinGameOverspear.png")));
-		animationList.put(
-				"GameOverKnF",
-				createAnimation(1, new Texture(
-						"textures/playerAnim/GensijinGameOver kf.png")));
-		animationList.put(
-				"GameOverTrident",
-				createAnimation(1, new Texture(
-						"textures/playerAnim/GensijinGameOver df.png")));
-
-	}
 
 	/**
 	 * Creates an animation
@@ -178,7 +109,7 @@ public class Player extends Entity {
 	 *            The texture to be created into an animation
 	 * @return Animation of the Texture
 	 */
-	private Animation createAnimation(int frames, Texture text) {
+	private Animation createAnimation(int frames, Texture text, float speed) {
 		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()
 				/ frames, text.getHeight());
 		TextureRegion[] animFrames = new TextureRegion[frames];
@@ -186,7 +117,7 @@ public class Player extends Entity {
 		for (int j = 0; j < frames; j++) {
 			animFrames[index++] = tmp[0][j];
 		}
-		return new Animation(0.1f, animFrames);
+		return new Animation(speed, animFrames);
 	}
 
 	/**
@@ -244,6 +175,10 @@ public class Player extends Entity {
 		return state;
 	}
 
+	public void setWeapon(String s){
+		Weapon = s;
+	}
+	
 	@Override
 	public void update(float delta) {
         // Everything depends on everything else here, may have to rearrange, or
@@ -279,7 +214,6 @@ public class Player extends Entity {
 			currAnim = jumpAnimation();
 		} else if (this.velocity.y <= 0) {
 			this.state = State.FALLING;
-			currAnim = fallAnimation();
 		}
 	}
 
@@ -298,7 +232,7 @@ public class Player extends Entity {
 	 * @return Animation - Hurt Animation
 	 */
 	public Animation hurtAnimation() {
-		return null;
+		return animationList.get(Weapon + "damage");
 	}
 
 	/**
@@ -307,7 +241,7 @@ public class Player extends Entity {
 	 * @return Animation - Death animation
 	 */
 	public Animation deathAnimation() {
-		return null;
+		return animationList.get(Weapon + "death");
 	}
 
 	/**
@@ -316,7 +250,7 @@ public class Player extends Entity {
 	 * @return Animation - Attack Animation
 	 */
 	public Animation attackAnimation() {
-		return null;
+		return animationList.get(Weapon + "attack");
 	}
 
 	/**
@@ -325,16 +259,7 @@ public class Player extends Entity {
 	 * @return Animation - Jump Animation
 	 */
 	public Animation jumpAnimation() {
-		return animationList.get("Jump");
-	}
-
-	/**
-	 * Returns the fall animation
-	 * 
-	 * @return Animation - Fall animation
-	 */
-	public Animation fallAnimation() {
-		return animationList.get("Fall");
+		return animationList.get(Weapon + "jump");
 	}
 
 	/**
@@ -343,12 +268,18 @@ public class Player extends Entity {
 	 * @return Animation - Run animation
 	 */
 	public Animation runAnimation() {
-		return animationList.get("RunKnF");
+		return animationList.get(Weapon + "running");
 	}
 
 	@Override
-	public void draw(SpriteBatch batch) {
-		batch.draw(img, getX(), getY(), getWidth(), getHeight());
+	public void draw(SpriteBatch batch, float stateTime) {
+		if(state == State.RUNNING){
+			animLoop = true;
+		}else{
+			animLoop = false;
+		}
+		TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
+		batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
 	}
 
 	/**
@@ -430,5 +361,10 @@ public class Player extends Entity {
 	
 	private void gameOver() {
 		System.out.println("Game Over!");
+	}
+
+	public void attack() {
+		state = State.ATTACK;
+		currAnim = attackAnimation();
 	}
 }

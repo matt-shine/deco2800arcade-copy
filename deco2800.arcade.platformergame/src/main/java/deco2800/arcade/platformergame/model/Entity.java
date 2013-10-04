@@ -59,7 +59,7 @@ public abstract class Entity {
 	}
 	
 	public void update(float delta) {}
-	public void draw(SpriteBatch batch) {}
+	public void draw(SpriteBatch batch, float stateTime) {}
 	public void handleCollision(Entity entityTwo) {}
 	public ArrayList<EntityCollision> getCollisions(EntityCollection entities) {
 		return null;

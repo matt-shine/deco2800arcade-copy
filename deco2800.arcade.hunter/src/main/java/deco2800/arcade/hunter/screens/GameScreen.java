@@ -45,7 +45,8 @@ public class GameScreen implements Screen {
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
 	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
-		
+	private float stateTime;	
+	
 	public GameScreen(Hunter hunter) {
 	
 	
@@ -77,6 +78,8 @@ public class GameScreen implements Screen {
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
 		entities.add(animal);
+		
+		stateTime = 0f;
 	}
 
 	@Override
@@ -120,6 +123,8 @@ public class GameScreen implements Screen {
 		if (!paused) {
 			pollInput();
 
+			stateTime += Gdx.graphics.getDeltaTime();
+			
 			increaseGameSpeed(delta);
 
 			moveCamera();
@@ -141,7 +146,7 @@ public class GameScreen implements Screen {
 			spriteLayer.draw(batch);
 			foregroundLayer.draw(batch);
 
-			entities.drawAll(batch);
+			entities.drawAll(batch, stateTime);
 
 			batch.end();
 
@@ -159,9 +164,13 @@ public class GameScreen implements Screen {
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			// Attack
-			gameOver();
+			player.attack();
 		}
 
+		if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+			gameOver();
+		}
+		
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
 			// Jump
 			player.jump();

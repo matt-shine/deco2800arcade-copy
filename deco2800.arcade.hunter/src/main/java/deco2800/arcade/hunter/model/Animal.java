@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -38,6 +39,8 @@ public class Animal extends Entity {
 	 * The type of animal
 	 */
 	private Type type;
+	
+	private boolean animLoop;
 
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
 			String filepath) {
@@ -170,5 +173,16 @@ public class Animal extends Entity {
 	 */
 	private void killAnimal() {
 		System.out.println("DESTROY");
+	}
+	
+	@Override
+	public void draw(SpriteBatch batch, float stateTime){
+		if(state == State.DEAD){
+			animLoop = false;
+		}else{
+			animLoop = true;
+		}
+		TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
+		batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
 	}
 }

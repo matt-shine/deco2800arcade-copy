@@ -42,9 +42,9 @@ public class EntityCollection implements Iterable<Entity> {
 		}
 	}
 	
-	public void drawAll(SpriteBatch batch) {
+	public void drawAll(SpriteBatch batch, float stateTime) {
 		for (Entity e : this) {
-			e.draw(batch);
+			e.draw(batch, stateTime);
 		}
 	}
 }

@@ -20,7 +20,7 @@ public class SpriteLayer extends Map {
 	private EntityCollection clouds = new EntityCollection();
     private EntityCollection trees = new EntityCollection();
 
-    private float CHANCE_OF_CLOUDS = 0.85f;
+    private float CHANCE_OF_CLOUDS = 0.15f;
     private float CHANCE_OF_TREES = 0.1f;
 
     public Vector2 randomScreenCoordinate() {

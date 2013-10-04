@@ -152,6 +152,32 @@ public class ForegroundLayer extends Map {
 			return 0;
 		}
 	}
+
+    /**
+     * Get the pane at a given X offset
+     * @param x x offset to check
+     * @return pane index for the given x offset, -1 if the coordinate does not correspond to a valid pane
+     */
+    public int getPane(float x) {
+        int pane = (int) Math.floor((x - offset.x) / Config.PANE_SIZE_PX);
+        if (pane >= 0 && pane < paneCount) {
+            return pane;
+        }
+        return -1;
+    }
+
+    /**
+     * Find the column that corresponds to a given x coordinate
+     * @param x in pixel coordinates
+     * @return corresponding column number
+     */
+    public int getColumn(float x) {
+        int tile = (int) ((x - offset.x) - getPane(x) * Config.PANE_SIZE_PX) / Config.TILE_SIZE;
+        if (tile >= 0 && tile < Config.PANE_SIZE) {
+            return tile;
+        }
+        return -1;
+    }
 	
 	/**
 	 * Get the collision tile at a given world-space coordinate
@@ -160,27 +186,45 @@ public class ForegroundLayer extends Map {
 	 * @return collision tile type, or -1 if the given location is out of bounds
 	 */
 	public int getCollisionTileAt(float x, float y) {
-		int tileOffsetX = (int) (x - offset.x);
 		int tileOffsetY;
-		int pane = (int) Math.floor(tileOffsetX / Config.PANE_SIZE_PX);
+		int pane = getPane(x);
 		
 		int tileX, tileY;
 		
-		if (pane >=0 && pane < paneCount) {
+		if (pane != -1) {
 			tileOffsetY = (int) (y - getPaneOffset(pane));
 		} else {
 			//Player is out of bounds
 			return -1;
 		}
 		
-		tileX = (tileOffsetX - pane * Config.PANE_SIZE_PX) / Config.TILE_SIZE;
+		tileX = getColumn(x);
 		tileY = tileOffsetY / Config.TILE_SIZE;
 		
-		if (tileX < 0 || tileX >= Config.PANE_SIZE ||
-				tileY < 0 || tileY >= Config.PANE_SIZE) {
+		if (tileX == -1 || tileY < 0 || tileY >= Config.PANE_SIZE) {
 			return -2;
 		}
 
 		return panes.get(pane).getCollisionTile(tileX, tileY);
 	}
+
+    /**
+     * Get the y position of the pixel above the top collision tile
+     * @param x the x position of the column to check
+     * @return -1 if there is no top collision tile
+     */
+    public int getColumnTop(float x) {
+        int tile = getColumn(x);
+        int pane = getPane(x);
+
+        for (int i = Config.PANE_SIZE - 1; i >= 0; i--) {
+            int collisionType = panes.get(pane).getCollisionTile(tile, i);
+            if (collisionType == -1) {
+                return -1;
+            } else if (collisionType != 0) {
+                return getPaneOffset(pane) + (i+1) * Config.TILE_SIZE;
+            }
+        }
+        return -1;
+    }
 }

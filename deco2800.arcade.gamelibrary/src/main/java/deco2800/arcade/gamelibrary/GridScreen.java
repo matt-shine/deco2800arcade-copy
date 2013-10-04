@@ -124,7 +124,7 @@ public class GridScreen implements Screen, LibraryScreen {
                 gridLabel.setAlignment(2, 2);
                 gridLabel.setWidth(background.getWidth());
                 gridLabel.setHeight(40);
-                gridLabel.setX(gridX);// + background.getWidth()/4);
+                gridLabel.setX(gridX);
                 gridLabel.setY(gridY + background.getHeight() - 40);
 
                 TextButton gamePlay = new TextButton("Play", libSkin, "green");
@@ -140,8 +140,6 @@ public class GridScreen implements Screen, LibraryScreen {
                 } else {
                     gridX += (background.getWidth() + 15);
                 }
-
-                //y = gridY - 80;
 
                 stage.addActor(background);
                 stage.addActor(gridLabel);

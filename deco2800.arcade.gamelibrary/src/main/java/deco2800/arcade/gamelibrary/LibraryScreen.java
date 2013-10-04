@@ -33,9 +33,20 @@ public interface LibraryScreen {
      */
     public void setGameSelected();
 
+    /**
+     * Set the currently selected button
+     * @param textButton TextButton
+     */
     public void setCurrentButton(TextButton textButton);
 
+    /**
+     * Fetch the button currently selected by user
+     * @return Button currently selected by user
+     */
     public Button getCurrentButton();
 
+    /**
+     * Show more games if screen is full
+     */
     public void showMore();
 }

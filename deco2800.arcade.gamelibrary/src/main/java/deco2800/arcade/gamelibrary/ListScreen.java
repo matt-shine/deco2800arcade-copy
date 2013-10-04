@@ -58,7 +58,11 @@ public class ListScreen implements Screen, LibraryScreen {
     private ImageButton gridImageButton;
 
 
-
+    /**
+     * Constructor for list screen
+     * @param gl The Game Library
+     * @param nextPage boolean to show the second page of games
+     */
     public ListScreen(GameLibrary gl, boolean nextPage) {
         gameSelected = false;
         gameLibrary = gl;
@@ -67,10 +71,16 @@ public class ListScreen implements Screen, LibraryScreen {
         setupListUI();
     }
 
+    /**
+     * Setup required UI styles
+     */
     private void styleSetup() {
         libSkin = new Skin(Gdx.files.internal("libSkin.json"));
     }
 
+    /**
+     * Setup UI
+     */
     private void setupListUI() {
 
         stage = new Stage();
@@ -263,6 +273,9 @@ public class ListScreen implements Screen, LibraryScreen {
         return currentButton;
     }
 
+    /**
+     * Start an Arcade Game
+     */
     private void play() {
         dispose();
         ArcadeSystem.goToGame(currentGame.id);

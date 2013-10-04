@@ -29,16 +29,18 @@ public class LibraryResponseListener extends NetworkListener {
 		super.idle(connection);
 	}
 
+    /**
+     * Update the list of games on the arcade system
+     *  if a LibraryResponse is received
+     * @param connection Connection
+     * @param object Network Object
+     */
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 
         if (object instanceof GameLibraryResponse) {
             GameLibraryResponse gameLibraryResponse = (GameLibraryResponse) object;
-
-            /*for (Game game : gameLibraryResponse.games) {
-                System.out.println("Game : " + game.name + " : " + game.description);
-            }    */
             ArcadeSystem.updateGamesList(gameLibraryResponse.games);
         }
 	}

@@ -15,26 +15,46 @@ public class LibraryStyle {
     private int layout;
     private int colour;
 
+    /**
+     * Basic Constructor
+     */
     public LibraryStyle() {
         layout = LIST_VIEW; // Default view
         colour = LIGHT_PURPLE; // Default color
     }
 
+    /**
+     * Set the layout
+     * @param style New Layout Style
+     */
     public void setLayout(int style) {
         if (style == LIST_VIEW || style == GRID_VIEW) {
             layout = style;
         }
     }
 
+    /**
+     * Get the current layout style
+     * @return this.layout
+     */
     public int getLayout() {
         return layout;
     }
 
+    /**
+     * Set a new colour Scheme
+     * @param newColour Color Scheme
+     */
     public void setColourScheme(int newColour) {
         if (newColour == LIGHT_PURPLE) {
             colour = newColour;
         }
     }
+
+    /**
+     * Get the current colour scheme
+     * @return this.colour
+     */
     public int getColourScheme() {
         return colour;
     }

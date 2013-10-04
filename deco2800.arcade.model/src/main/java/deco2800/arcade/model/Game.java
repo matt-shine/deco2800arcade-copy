@@ -42,11 +42,10 @@ public class Game implements Comparable<Game> {
 	
 	/**
 	 * Sets the description for a game
-	 * @param description
+	 * @param description Game Description
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-		return;
 	}
 	
 	/**
@@ -63,7 +62,6 @@ public class Game implements Comparable<Game> {
 	 */
 	public void setName(String name) {
 		this.name = name;
-		return;
 	}
 	
 	/**
@@ -91,7 +89,9 @@ public class Game implements Comparable<Game> {
     }
 
     /**
-     *  Compare Games based on names
+     * Compare Games based on names
+     * @param g Game to compare
+     * @return result of comparison
      */
     @Override
     public int compareTo(Game g) {

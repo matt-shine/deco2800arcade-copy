@@ -2,6 +2,7 @@ package deco2800.arcade.userui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import deco2800.arcade.userui.AchievementScreen;
 
 public class ControllerAchievement {
 	
@@ -25,6 +26,7 @@ public class ControllerAchievement {
 		this.achievementView.addProfileListener(new MyProfileListener());
 		this.achievementView.addFriendListener(new FriendListener());
 		this.achievementView.addStatusListener(new StatusListener());
+		this.achievementView.addSelectListener(new SelectListener());
 		
 	}
 
@@ -122,5 +124,16 @@ public class ControllerAchievement {
 		
 	}
 	
+	class SelectListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			//View achievements for particular game
+			achievementView.getGameSelection();
+			
+		}
+		
+	}
 
 }

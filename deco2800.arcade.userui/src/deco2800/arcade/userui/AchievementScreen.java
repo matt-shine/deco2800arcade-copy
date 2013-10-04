@@ -40,8 +40,8 @@ public class AchievementScreen extends JFrame{
 	private ImagePanel gamepanel;
 	
 	//Declare Buttons here
-	private JButton addfriendbutton;
-	private JButton editbutton;
+	private JButton addfriendbutton, editbutton;
+	private JButton selectbutton;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
 	//Declare ComboBox
@@ -117,7 +117,8 @@ public class AchievementScreen extends JFrame{
 	    sidepanel.setLayout(new MigLayout());
         sidepanel.add(playerpanel, "wrap, center, width :300, height :600");
         sidepanel.add(gamepanel, "wrap, gapbottom 30px, width :300, height :600");
-        sidepanel.add(gameselect, "gapbottom 170px");
+        sidepanel.add(gameselect, "wrap");
+        sidepanel.add(selectbutton,"gap bottom 170px");
         
 	}
 	
@@ -145,6 +146,7 @@ public class AchievementScreen extends JFrame{
 		gamename = new JLabel("Game Name");
 	    gamename.setFont(linkbold);
 	    gamename.setForeground(Color.white);
+	    selectbutton = new JButton("Select");
 		
 		gamepanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
 		gamepanel.setLayout(new MigLayout());
@@ -387,11 +389,32 @@ public void addplayerinfopanel(){
 		// make button then add here
 	
 	}
+	/**
+ 	* Button when clicked will display achievements for the particular game 
+ 	* selected in combo-box
+ 	* @param listenForSelectButton
+ 	*/
+	public void addSelectListener(ActionListener listenForSelectButton){
+	
+		selectbutton.addActionListener(listenForSelectButton);
+	
+	}
 
 	public void displayErrorMessage(String errorMessage){
 	
 		JOptionPane.showMessageDialog(this, errorMessage);
 	
+	}
+	
+	/*
+	 * Get and Set method for objects
+	 */
+	
+	public void getGameSelection(){
+		
+		//Set selected game identifier
+		System.out.println(gameselect.getSelectedItem().toString());
+		
 	}
 
 }

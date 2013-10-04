@@ -24,9 +24,9 @@ public class MapPaneRenderer {
 		
 		//MapPane sized texture
 		TextureRegion tr = new TextureRegion(new Texture(Config.PANE_SIZE_PX, Config.PANE_SIZE_PX, Format.RGBA8888));
-		
-		Pixmap tile; //Temporary pixmap to hold the image of one tile
-		tile = new Pixmap(Config.TILE_SIZE, Config.TILE_SIZE, Format.RGBA8888);
+
+        //Temporary pixmap to hold the image of one tile
+		Pixmap tile = new Pixmap(Config.TILE_SIZE, Config.TILE_SIZE, Format.RGBA8888);
 		
 		for (int row = 0; row < Config.PANE_SIZE; row++) {
 			for (int col = 0; col < Config.PANE_SIZE; col++) {

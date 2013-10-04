@@ -15,8 +15,7 @@ public class Hunter extends PlatformerGame {
 	private PreferencesManager prefManage;
 	private MusicManager musicManager;
 
-	public enum Config {
-		INSTANCE;
+	public static class Config {
 		public static int screenWidth = 1280;
 		public static int screenHeight = 720;
 		public static int gameSpeed = 256;
@@ -25,7 +24,7 @@ public class Hunter extends PlatformerGame {
 		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
 		public final static int MAX_SPEED = 512;
 		public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
-        public final static int PANES_PER_TYPE = 2; //Number of map panes each map type should be used for
+        public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
         public static Random randomGenerator;
 	}
 

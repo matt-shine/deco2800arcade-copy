@@ -7,15 +7,15 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-<<<<<<< HEAD
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-=======
+
 import java.util.*;
->>>>>>> master
+
 
 import javax.swing.JFrame;
 
@@ -201,12 +201,9 @@ public class Arcade extends JFrame {
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
         this.client.addListener(new PackmanListener());
-<<<<<<< HEAD
         this.client.addListener(new MultiplayerListener(this));
         this.client.addListener(new LobbyListener());
-=======
         this.client.addListener(new LibraryResponseListener());
->>>>>>> master
 	}
 
 	public void connectAsUser(String username) {
@@ -491,7 +488,6 @@ public class Arcade extends JFrame {
 		
 	}
 
-<<<<<<< HEAD
 	public void disposeGame() {
 		selectedGame.dispose();
 	}
@@ -503,7 +499,6 @@ public class Arcade extends JFrame {
 	public void setPlayerBetting(boolean playerBetting) {
 		Arcade.playerBetting = playerBetting;
 	}
-=======
     /**
      * Set selected game client
      * @param gameClient GameClient
@@ -546,5 +541,4 @@ public class Arcade extends JFrame {
         GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
         client.sendNetworkObject(gameLibraryRequest);
     }
->>>>>>> master
 }

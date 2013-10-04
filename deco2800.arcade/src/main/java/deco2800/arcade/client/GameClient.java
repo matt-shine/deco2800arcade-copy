@@ -238,6 +238,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public void updateGameState(Object update) {
 	}
 	
-	}
-	
 }
+	
+

@@ -209,12 +209,9 @@ public class ArcadeServer {
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
-<<<<<<< HEAD
         server.addListener(new MultiplayerListener(matchmakerQueue));
         server.addListener(new LobbyListener());
-=======
         server.addListener(new LibraryListener());
->>>>>>> master
 	}
 
     /**

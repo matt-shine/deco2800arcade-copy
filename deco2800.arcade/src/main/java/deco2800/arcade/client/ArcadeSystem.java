@@ -1,6 +1,6 @@
 package deco2800.arcade.client;
 
-<<<<<<< HEAD
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -10,12 +10,10 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 //TODO commenting?
-=======
 import deco2800.arcade.model.Game;
 
 import java.util.Set;
 
->>>>>>> master
 public class ArcadeSystem {
 	
 	public static String UI = "arcadeui";
@@ -116,7 +114,6 @@ public class ArcadeSystem {
 	public static GameClient getCurrentGame() {
 		return arcade.getCurrentGame();
 	}
-<<<<<<< HEAD
 	
     public static void setMultiplayerEnabled(boolean b) {
     	arcade.setMultiplayerEnabled(b);
@@ -158,7 +155,7 @@ public class ArcadeSystem {
     	
     }
 
-=======
+
 
     /**
      * Update set of available games
@@ -175,5 +172,5 @@ public class ArcadeSystem {
     public static Set<Game> getArcadeGames() {
         return gameSet;
     }
->>>>>>> master
+
 }

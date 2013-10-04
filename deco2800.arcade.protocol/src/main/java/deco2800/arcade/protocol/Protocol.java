@@ -19,7 +19,6 @@ import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 
 import deco2800.arcade.model.Achievement;
-<<<<<<< HEAD
 import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
 import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
@@ -30,11 +29,9 @@ import deco2800.arcade.protocol.achievement.IncrementProgressRequest;
 import deco2800.arcade.protocol.achievement.IncrementProgressResponse;
 import deco2800.arcade.protocol.achievement.ProgressForPlayerRequest;
 import deco2800.arcade.protocol.achievement.ProgressForPlayerResponse;
-=======
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
 import deco2800.arcade.protocol.achievement.*;
->>>>>>> master
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
@@ -44,7 +41,6 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
-<<<<<<< HEAD
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
@@ -63,9 +59,7 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
-=======
 import deco2800.arcade.protocol.game.*;
->>>>>>> master
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
@@ -181,13 +175,10 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
-<<<<<<< HEAD
 		kryo.register(UUID.class);
-=======
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
->>>>>>> master
 	}
 	
 	/**

@@ -17,7 +17,8 @@ public class IncreasePaddle extends Powerup{
 	//TODO: Create a timer so that the paddle returns to the original size after a certain time has passed 
 	public void applyPowerup() {
 		System.out.println("Increase paddle");
-		context.getPaddle().increaseSize();
+		//context.getPaddle().increaseSize();
+		context.getPaddle().setWidth(context.getPaddle().getWidth()*2);
 	}
 	
 	public Sprite getSprite() {

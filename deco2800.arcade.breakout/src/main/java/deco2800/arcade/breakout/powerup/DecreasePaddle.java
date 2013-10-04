@@ -17,7 +17,8 @@ public class DecreasePaddle extends Powerup{
 	//TODO: Create a timer so that the paddle returns to the original size after a certain time has passed
 	public void applyPowerup() {
 		System.out.println("Decrease paddle");
-		context.getPaddle().decreaseSize();
+		//context.getPaddle().decreaseSize();
+		context.getPaddle().setWidth(context.getPaddle().getWidth()/2);
 	}
 	
 	public Sprite getSprite() {

@@ -34,4 +34,10 @@ bin
 
 # Release
 release
+<<<<<<< HEAD
 *.bin
+=======
+
+# Gradle settings and build files
+.gradle/
+>>>>>>> master

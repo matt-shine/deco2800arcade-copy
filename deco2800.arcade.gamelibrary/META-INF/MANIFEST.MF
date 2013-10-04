@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Library
+Bundle-SymbolicName: deco2800.arcade.gamelibrary
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: library.jar,
+ libs/gdx.jar
+Export-Package: 
+ deco2800.arcade.gamelibrary
+Require-Bundle: deco2800.arcade.model;bundle-version="1.0.0",
+ deco2800.arcade
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

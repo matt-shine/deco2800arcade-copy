@@ -40,6 +40,7 @@ public class ForumListener extends Listener {
 				response.result = false;
 				response.error = "Not implemented";
 			} catch (Exception e) {
+				response.result = false;
 				response.error = "Exception :" + e.getMessage();
 			} finally {
 				connection.sendTCP(response);
@@ -76,6 +77,23 @@ public class ForumListener extends Listener {
 			} finally {
 				connection.sendTCP(response);
 			}
+		} else if (object instanceof GetTaggedParentThreadsRequest) {
+			/* Retrieve parent threads which have a specific tag */
+			GetTaggedParentThreadsRequest request = (GetTaggedParentThreadsRequest) object;
+			GetTaggedParentThreadsResponse response = new GetTaggedParentThreadsResponse();
+			response.result = null;
+			response.error = "";
+			try {
+				response.result = ArcadeServer.instance().getForumStorage().getTaggedParentThreads(request.tag);
+				if (response.result == null) {
+					response.error = "No result found";
+				}
+			} catch (DatabaseException e) {
+				response.error = e.getMessage();
+				response.result = null;
+			} finally {
+				connection.sendTCP(response);
+			}
 		} else if (object instanceof DeleteRequest) {
 			/* Delete parent_thread record for given pid, and sends error if occur */
 			DeleteRequest request = (DeleteRequest) object;
@@ -83,6 +101,20 @@ public class ForumListener extends Listener {
 			response.error = "";
 			try {
 				ArcadeServer.instance().getForumStorage().deleteParentThread(request.pid);
+			} catch (DatabaseException e) {
+				response.error = e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+			}
+		} else if (object instanceof InsertParentThreadRequest) {
+			/* Insert a new parent thread */
+			InsertParentThreadRequest request = (InsertParentThreadRequest) object;
+			InsertParentThreadResponse response = new InsertParentThreadResponse();
+			response.result = 0;
+			response.error = "";
+			try {
+				response.result = ArcadeServer.instance().getForumStorage()
+						.insertParentThread(request.topic, request.message, request.createdBy, request.category, request.tags);
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();
 			} finally {

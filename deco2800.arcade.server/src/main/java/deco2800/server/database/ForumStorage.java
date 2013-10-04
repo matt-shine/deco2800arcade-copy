@@ -53,28 +53,50 @@ public class ForumStorage {
 	 */
 	public void initialise() throws DatabaseException {
 		Connection con;
-		String dropParentThreadTable = "DROP TABLE parent_thread";
 		String createParentThreadTable = "CREATE TABLE parent_thread"
-				+ " (pid integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)" 
+				+ " (pid int PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)" 
 				+ ", topic varchar(30) NOT NULL"
 				+ ", message long varchar NOT NULL"
-				+ ", created_by integer NOT NULL"
+				+ ", created_by int NOT NULL"
 				+ ", timestamp timestamp"
 				+ ", category varchar(30) DEFAULT 'General Admin'"
-				+ ", tags long varchar)";
+				+ ", tags long varchar"
+				+ ", vote int DEFAULT 0"
+				+ ")";
+		String createChildThreadTable = "CREATE TABLE child_thread"
+				+ " (cid int PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)"
+				+ ", message long varchar NOT NULL"
+				+ ", created_by int NOT NULL"
+				+ ", timestamp timestamp"
+				+ ", p_thread int NOT NULL"
+				+ ", vote int DEFAULT 0"
+				+ ")";
+		String addFkPThread = "ALTER TABLE child_thread"
+				+ " ADD CONSTRAINT fk_p_thread FOREIGN KEY (p_thread) REFERENCES parent_thread (pid) ON DELETE CASCADE";
 		/* Create database connection */
 		con = Database.getConnection();
 		/* Create tables */
 		try {
 			Statement st = con.createStatement();
 			con.setAutoCommit(false);
-			st.execute(dropParentThreadTable);
-			st.execute(createParentThreadTable);
-			st.execute(this.getCategoryConstraint());
+			ResultSet rs = con.getMetaData().getTables(null, null, "PARENT_THREAD", null);
+			if (!rs.next()) {
+				st.execute(createParentThreadTable);
+				st.execute(this.getCategoryConstraint());
+				this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "General Admin", "Test#Parent thread");
+			}
+			rs.close();
+			rs = con.getMetaData().getTables(null, null, "CHILD_THREAD", null);
+			if (!rs.next()) {
+				st.execute(createChildThreadTable);
+				st.execute(addFkPThread);
+			}
+			rs.close();
 			con.commit();
 			st.close();
 			this.initialized = true;
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				con.rollback();
 			} catch (SQLException er) {
@@ -90,7 +112,76 @@ public class ForumStorage {
 				throw new DatabaseException("Fail to close DB connectoin: " + e);
 			}
 		}
-		this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "General Admin", "Test#Parent thread");
+		
+	}
+	
+	/**
+	 * Reset table i.e. delete all rows in all tables in ForumStorage
+	 */
+	public void resetTables() throws DatabaseException {
+		String update = "DELETE FROM parent_thread";
+		String alter = "ALTER TABLE parent_thread ALTER COLUMN pid RESTART WITH 1";
+		String alter2 = "ALTER TABLE child_thread ALTER COLUMN cid RESTART WITH 1";
+		Connection con = Database.getConnection();
+		try {
+			Statement st = con.createStatement();
+			st.execute(update);
+			st.execute(alter);
+			st.execute(alter2);
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to reset tables, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
+			}
+		}
+	}
+	
+	/** 
+	 * Drop all tables of Forum Storage.
+	 */
+	public void dropAllTables() throws DatabaseException {
+		String update1 = "DROP TABLE parent_thread";
+		String update2 = "DROP TABLE child_thread";
+		Connection con = Database.getConnection();
+		try {
+			Statement st = con.createStatement();
+			con.setAutoCommit(false);
+			ResultSet rs = con.getMetaData().getTables(null, null, "CHILD_THREAD", null);
+			if (rs.next()) {
+				st.execute(update2);
+			}
+			rs.close();
+			rs = con.getMetaData().getTables(null, null, "PARENT_THREAD", null);
+			if (rs.next()) {
+				st.execute(update1);
+			}
+			rs.close();
+			con.commit();
+			st.close();
+			this.initialized = false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				con.rollback();
+			} catch (SQLException er) {
+				throw new DatabaseException("Fail to rollback: ", er);
+			} 
+			this.initialized = false;
+			throw new DatabaseException("Fail to create table: " + e);
+		} finally {
+			try {
+				con.setAutoCommit(true);
+				con.close();
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close DB connectoin: " + e);
+			}
+		}
 	}
 	
 	/**
@@ -197,9 +288,11 @@ public class ForumStorage {
 			st.executeUpdate();
 			con.commit();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				con.rollback();
 			} catch (SQLException er) {
+				er.printStackTrace();
 				throw new DatabaseException("Fail to rollback: ", er);
 			}
 			throw new DatabaseException("InsertError: " + e);
@@ -208,6 +301,7 @@ public class ForumStorage {
 				con.setAutoCommit(true);
 				con.close();
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new DatabaseException("ExitError: " + e);
 			}
 		}
@@ -239,7 +333,7 @@ public class ForumStorage {
 			if (rs.next()) {
 				result = new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
 						, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
-						, rs.getString("tags"));
+						, rs.getString("tags"), rs.getInt("vote"));
 			} else {
 				result = null;
 			}
@@ -281,7 +375,7 @@ public class ForumStorage {
 					if (temp.equals(tag)) {
 						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
 								, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
-								, rs.getString("tags")));
+								, rs.getString("tags"), rs.getInt("vote")));
 					}
 				}
 			}
@@ -301,8 +395,7 @@ public class ForumStorage {
 	}
 	
 	/**
-	 * Return array of strings that contains parent threads data retrieved
-	 * from DB with specifying id range. See param specification for 
+	 * Return array of ParentThreads with specifying id range. See param specification for 
 	 * how to set the id range. All params must be non-negative.
 	 * Query to be executed =	SELECT * FROM parent_thread
 	 * 							WHERE [pid <= start [AND end <= pid]]
@@ -321,12 +414,11 @@ public class ForumStorage {
 	 * 			category, tags}}, return null if no result or failed
 	 * @throws	DatabaseException
 	 */
-	public String[][] getParentThreads(int start, int end, int limit) throws DatabaseException {
+	public ParentThread[] getParentThreads(int start, int end, int limit) throws DatabaseException {
 		String query1 = "SELECT * FROM parent_thread WHERE ? <= pid AND pid <= ?";
 		String query2 = "SELECT * FROM parent_thread WHERE ? <= pid";
 		String query;
-		ArrayList<String[]> result = new ArrayList<String[]>();
-		String[] strArray;
+		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
 		
 		/* Check params */
 		if (start < 0 || end < 0 || limit < 0) {
@@ -356,15 +448,10 @@ public class ForumStorage {
 			}
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
-				strArray = new String[7];
-				strArray[0] = rs.getString("pid");
-				strArray[1] = rs.getString("topic");
-				strArray[2] = rs.getString("content");
-				strArray[3] = rs.getString("created_by");
-				strArray[4] = rs.getString("timestamp");
-				strArray[5] = rs.getString("category");
-				strArray[6] = rs.getString("tags");
-				result.add(strArray);
+				ParentThread pThread = new ParentThread(rs.getInt("pid"), rs.getString("topic")
+						, rs.getString("message"), new User(rs.getInt("created_by")), rs.getTimestamp("timestamp")
+						, rs.getString("category"), rs.getString("tags"), rs.getInt("vote"));
+				result.add(pThread);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -381,58 +468,8 @@ public class ForumStorage {
 			return null;
 		} else {
 			/* Convert ArrayList to String[][] */
-			String[][] result2 = new String[result.size()][7];
-			result2 = result.toArray(result2);
-			return result2;
+			return result.toArray(new ParentThread[0]);
 		}
-	}
-	
-	/**
-	 * Retrieve all parent threads data from DB. Return String[][] for result
-	 * , and return null for failure. 
-	 * 
-	 * @return	String[][],	{pthread = {pid, topic, content, createdBy
-	 * 						, timestamp, category, tags}}
-	 */
-	public String[][] getAllParentThread() throws DatabaseException {
-		String selectAll = "SELECT * FROM parent_thread";
-		ArrayList<String[]> result = new ArrayList<String[]>();
-		String[] strArray;
-		Connection con = null;
-		/* Get DB connection */
-		try {
-			con = Database.getConnection();
-		} catch (Exception e) {
-			return null;
-		}
-		/* Retrieve all parent threads from DB */
-		try {
-			PreparedStatement st = con.prepareStatement(selectAll);
-			ResultSet rs = st.executeQuery();
-			while (rs.next()) {
-				strArray = new String[7];
-				strArray[0] = rs.getString("pid");
-				strArray[1] = rs.getString("topic");
-				strArray[2] = rs.getString("content");
-				strArray[3] = rs.getString("created_by");
-				strArray[4] = rs.getString("timestamp");
-				strArray[5] = rs.getString("category");
-				strArray[6] = rs.getString("tags");
-				result.add(strArray);
-			}
-		} catch (SQLException e) {
-			throw new DatabaseException("Fail to retrieve parent threads: " + e);
-		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				throw new DatabaseException("Fail to close DB connection: " + e);
-			}
-		}
-		/* Convert ArrayList to String[][] */
-		String[][] result2 = new String[result.size()][7];
-		result2 = result.toArray(result2);
-		return result2;
 	}
 	
 	/**
@@ -540,6 +577,53 @@ public class ForumStorage {
 		}
 	}
 	
+	/**
+	 * Increase/decrease like value of threads. 
+	 * 
+	 * @param value	value to be changed on like (negative is allowed)
+	 * @param threadType	If "parent", change parent_thread's like. If "child"
+	 * 						, change the child_thread's like.
+	 * @param id	id of threads (non-negative)
+	 * @exception DatabaseException
+	 */
+	public void addVote(int value, String threadType, int id) throws DatabaseException {
+		String query;
+		String update;
+		int vote;
+		if (id < 0) {
+			throw new DatabaseException("Invalid id for addVote().");
+		}
+		if (threadType == "parent") {
+			query = "SELECT vote FROM parent_thread WHERE pid = ?";
+			update = "UPDATE parent_thread SET vote = ? WHERE pid = ?";
+		} else if (threadType == "child") {
+			throw new DatabaseException("Not implemented");
+		} else {
+			throw new DatabaseException("Invalid threadType for addVote().");
+		}
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				vote = rs.getInt("vote");
+				rs.close();
+				st.close();
+				st = con.prepareStatement(update);
+				vote += value;
+				st.setInt(1, vote);
+				st.setInt(2, id);
+				st.execute();
+			} else {
+				throw new DatabaseException("Thread does not exist");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(e.getMessage());
+		}
+	}
+	
 	private String getCategoryConstraint() {
 		String result = "ALTER TABLE parent_thread ADD CHECK (category IN (";
 		for (int i = 0; i < this.category.length; i++) {
@@ -558,6 +642,10 @@ public class ForumStorage {
 			result += tags[i];
 			result += "#";
 		return result;
+	}
+	
+	private String[] getTagsArray(String tags) {
+		return tags.split(TAG_SPLITTER);
 	}
 	
 	private Timestamp getNow() {

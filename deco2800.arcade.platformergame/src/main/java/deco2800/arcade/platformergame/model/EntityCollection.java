@@ -25,6 +25,10 @@ public class EntityCollection implements Iterable<Entity> {
 		return id;
 	}
 	
+	public void remove(Entity e){
+		entities.remove(e);
+	}
+	
 	public void add(Entity e) {
 		//Add an entity to the entities map, with a unique id
 		entities.put(generateId(), e);

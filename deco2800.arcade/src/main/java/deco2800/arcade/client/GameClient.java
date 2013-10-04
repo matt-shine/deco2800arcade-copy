@@ -56,14 +56,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
     public void progressIncremented(final Achievement ach, final int progress) {
         System.out.println("Progress in achievement `" + ach.name + "`: (" + progress +
                            "/" + ach.awardThreshold + ")");
-	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+        this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 		
-	    @Override
-	    public String getMessage() {
-		return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
-	    }
+        	@Override
+        	public String getMessage() {
+        		return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
+        	}
 	        
-	});
+        });
     }
 
     public void setNetworkClient(NetworkClient client) {

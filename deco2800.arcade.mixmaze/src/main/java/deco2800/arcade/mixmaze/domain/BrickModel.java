@@ -1,20 +1,70 @@
 package deco2800.arcade.mixmaze.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Brick model represents a collection of bricks.
  */
-public class BrickModel extends ItemModel {
+class BrickModel extends ItemModel {
 
-	public final static int MAX_BRICKS = 10;
+	/** Default value of the maximum number of bricks */
+	public static final int DEFAULT_MAX_BRICKS = 10;
 
+	/**
+	 * Thrown when an operation results in an invalid amount of bricks.
+	 */
+	private static final IllegalArgumentException NUM_OUT_OF_RANGE =
+			new IllegalArgumentException("number must result in a amount greater than 0 and less then maxBricks.");
+
+	/** The maximum number of bricks in every stack */
+	private static int maxBricks = DEFAULT_MAX_BRICKS;
+
+	final Logger logger = LoggerFactory.getLogger(BrickModel.class);
+
+	/** The amount of bricks in this stack */
 	private int amount;
+
+	/**
+	 * Constructor
+	 *
+	 * @param amount	initial amount of bricks
+	 */
+	BrickModel(int amount) {
+		super(Type.BRICK);
+		if (amount < 0 || amount > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
+		}
+		this.amount = amount;
+	}
+
+	/**
+	 * Returns the maximum number of bricks.
+	 *
+	 * @return the maximum number
+	 */
+	static int getMaxBricks() {
+		return maxBricks;
+	}
+
+	/**
+	 * Sets the maximum number of bricks.
+	 *
+	 * @param max	the maximum number
+	 */
+	static void setMaxBricks(int max) {
+		if (max < 1) {
+			throw new IllegalArgumentException("max must be greater than or equal to 1.");
+		}
+		maxBricks = max;
+	}
 
 	/**
 	 * Returns the amount of bricks in this <code>BrickModel</code>.
 	 *
 	 * @return the number of bricks
 	 */
-	public int getAmount() {
+	int getAmount() {
 		return amount;
 	}
 
@@ -24,13 +74,11 @@ public class BrickModel extends ItemModel {
 	 * @param number the number of bricks to set
 	 * @throws IllegalArgumentException If <code>number</code> is negative
 	 * 				    or greater than
-	 * 				    <code>MAX_BRICKS</code>.
+	 * 				    <code>maxBricks</code>.
 	 */
-	public void setAmount(int number) {
-		if (number < 0 || number > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must be positive and less than "
-					+ "or equal to MAXBRICKS.");
+	void setAmount(int number) {
+		if (number < 0 || number > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
 		}
 		amount = number;
 	}
@@ -38,76 +86,60 @@ public class BrickModel extends ItemModel {
 	/**
 	 * Increases the amount of bricks by <code>number</code>.
 	 *
-	 * @param number the number of bricks to add
+	 * @param number	the number of bricks to add
 	 * @throws IllegalArgumentException If the amount after the addition
 	 * 				    will be negative or greater than
-	 * 				    <code>MAX_BRICKS</code>.
+	 * 				    <code>maxBricks</code>.
 	 */
-	public void addAmount(int number) {
-		int addedAmount = amount + number;
+	void addAmount(int number) {
+		int result = amount + number;
 
-		if (addedAmount < 0 || addedAmount > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
+		if (result < 0 || result > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
 		}
-		amount = addedAmount;
+		amount = result;
 	}
 
 	/**
-	 * Removes the specified number of bricks from this <code>BrickModel</code>
-	 * @param number amount of bricks to be removed.This must be a positive number
+	 * Removes the specified number of bricks from this
+	 * <code>BrickModel</code>.
+	 *
+	 * @param number 	amount of bricks to be removed.
+	 * This must be a positive number.
 	 * @throws IllegalArgumentException If the amount after the deletion
-	 * 				    is be negative.
+	 * 				    is negative.
 	 */
-	public void removeAmount(int number) {
-		int balance = amount - number;
-		// why do we check if its >Max, this only removes bricks? dumindu
-		if (balance < 0 || balance > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
+	void removeAmount(int number) {
+		int result = amount - number;
+
+		if (result < 0 || result > maxBricks) {
+			throw NUM_OUT_OF_RANGE;
 		}
-		amount = balance;
+		amount = result;
 	}
 
 	/**
 	 * Remove one brick from this <code>BrickModel</code>
 	 */
-	public void removeOne() {
+	void removeOne() {
 		removeAmount(1);
 	}
-	
-	public BrickModel(int number) {
-		super(ItemType.BRICK);
-		
-		if (number < 0 || number > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
-		}
-		amount = number;
-	}
-	
+
 	/**
-	 * Constructs a new <code>BrickModel</code> by setting the
-	 * Specified <code>tileModel</code> and the <code>amount</code> of bricks.
-	 * 
-	 * @param spawnedOn the tileModel on which the brick is spawned
-	 * @param number amount of bricks spawned
+	 * Merges the bricks in <code>brick</code> into this brick as many
+	 * as possible.
+	 *
+	 * @param brick		the brick to merge from
 	 */
-	public BrickModel(TileModel spawnedOn, int number) {
-		super(ItemType.BRICK, spawnedOn);
-		
-		if (number < 0 || number > MAX_BRICKS) {
-			throw new IllegalArgumentException(
-					"number must result in a amount that is"
-					+ " positive and less than or equal to "
-					+ "MAX_BRICKS.");
-		}
-		amount = number;
+	void mergeBricks(BrickModel brick) {
+		int pickup;
+
+		if (this.amount +  brick.getAmount() <= maxBricks)
+			pickup = brick.getAmount();
+		else
+			pickup = maxBricks - this.amount;
+
+		brick.removeAmount(pickup);
+		this.amount += pickup;
 	}
 }

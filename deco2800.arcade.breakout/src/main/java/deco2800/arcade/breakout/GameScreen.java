@@ -4,6 +4,7 @@ package deco2800.arcade.breakout;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
@@ -46,8 +47,9 @@ public class GameScreen implements Screen  {
 	
 
 	// Cheat Code
-	private int[] sequence = { 19, 19, 20, 20, 21, 22, 21, 22, 30, 29 };
+	private int[] sequence = {Keys.UP, Keys.UP, Keys.DOWN, Keys.DOWN, Keys.LEFT, Keys.RIGHT, Keys.LEFT, Keys.RIGHT, Keys.B, Keys.A};
 	private int currentButton = 0;
+	private int pressed = 0;
 
 	// The counting of random statistics
 	public int highScore = 0;
@@ -62,7 +64,9 @@ public class GameScreen implements Screen  {
 	public Sound breaking;
 	public Music music;
 	public Sound bump;
-
+	public Sound achieve;
+	public boolean mute = false;
+	
 	private String status = null;
 	
 	// Integer to determine what the current level is
@@ -124,10 +128,11 @@ public class GameScreen implements Screen  {
 		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.ogg"));
 		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
+		achieve = Gdx.audio.newSound(Gdx.files.classpath("sounds/achieve.mp3"));
 
 		// setting and playing the background music
 		music.setLooping(true);
-		music.setVolume(0.3f);
+		music.setVolume(0.2f);
 		music.play();
 
 		// setting the ball and paddle
@@ -146,18 +151,24 @@ public class GameScreen implements Screen  {
 			bricks = levelSystem.levelThree(bricks, this);
 		} else if (getLevel() == 4) {
 			bricks = levelSystem.levelFour(bricks, this);
+			game.incrementAchievement("breakout.basic");
+			achieve.play();
 		} else if (getLevel() == 5) {
 			bricks = levelSystem.levelFive(bricks, this);
 		} else if (getLevel() == 6) {
 			bricks = levelSystem.levelSix(bricks, this);
 		} else if (getLevel() == 7) {
 			bricks = levelSystem.levelSeven(bricks, this);
+			game.incrementAchievement("breakout.intermediate");
+			achieve.play();
 		} else if (getLevel() == 8) {
 			bricks = levelSystem.levelEight(bricks, this);
 		} else if (getLevel() == 9) {
 			bricks = levelSystem.levelNine(bricks, this);
 		} else if (getLevel() == 10) {
 			bricks = levelSystem.levelTen(bricks,this);
+			game.incrementAchievement("breakout.pro");
+			achieve.play();
 		}
 		setBrickNum(bricks.length);
 
@@ -167,7 +178,6 @@ public class GameScreen implements Screen  {
 		batch = new SpriteBatch();
 
 		gameState = new ReadyState();
-//		gameState = GameState.READY;
 		setStatus("Click to start!");
 
 	}
@@ -326,21 +336,21 @@ public class GameScreen implements Screen  {
 			gameoverstatus = "Congratulations " + player + " your final score is: "
 					+ score;
 		}
-		
 		System.out.println("Congratulations " + player
 				+ " your final score is: " + score);
+		if (lives == 3) {
+			game.incrementAchievement("breakout.prefect");
+		} else if (lives == 0) {
+			game.incrementAchievement("breakout.closeOne");
+		} else if (score < 0) {
+			game.incrementAchievement("breakout.noob");
 		gameState = new GameOverState();
-		//if (lives == 3) {
-		//	incrementAchievement("breakout.prefect");
-	//	} else if (lives == 0) {
-	//		incrementAchievement("breakout.closeOne");
-	//	} else if (score < 0) {
-	//		incrementAchievement("breakout.noob");
-	}
+		}	
 		
-	//	incrementAchievement("breakout.winGame");
-	//	gameState = GameState.GAMEOVER;
-//	}
+		game.incrementAchievement("breakout.winGame");
+		gameState = new GameOverState();
+		
+	}
 	
 		
 	/**
@@ -350,6 +360,8 @@ public class GameScreen implements Screen  {
 	public void bonusLives(int bonus) {
 		lives = lives + bonus;
 		setSequence(null);
+		game.incrementAchievement("breakout.secret");
+		achieve.play();
 	}
 
 	/**
@@ -382,7 +394,15 @@ public class GameScreen implements Screen  {
 
 	}
 	 
-	 
+	 public void mute(){
+		 if(mute){
+			 music.play();
+			 mute = false;
+		 } else {
+			 music.stop();
+			 mute = true;
+		 }
+	 }
 	 
 	
 	@Override
@@ -390,6 +410,7 @@ public class GameScreen implements Screen  {
 		breaking.dispose();
 		music.dispose();
 		bump.dispose();
+		achieve.dispose();
 		
 		// TODO Auto-generated method stub
 		
@@ -402,8 +423,10 @@ public class GameScreen implements Screen  {
 	}
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		game.pause();
+		if(Gdx.input.isKeyPressed(Keys.R)){
+			resume();
+		}
 	}
 
 	
@@ -416,8 +439,7 @@ public class GameScreen implements Screen  {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
+		game.resume();		
 	}
 
 	@Override
@@ -455,12 +477,30 @@ public class GameScreen implements Screen  {
 	public int getCurrentButton() {
 		return currentButton;
 	}
+
 	/**
 	 * @param currentButton the currentButton to set
 	 */
 	public void setCurrentButton(int currentButton) {
 		this.currentButton = currentButton;
 	}
+	
+	/**
+	 * 
+	 * @return the check press int
+	 */
+	public int getPressed(){
+		return pressed;
+	}
+	/**
+	 * 
+	 * @param pressed
+	 */
+	public void setPressed(int pressed){
+		this.pressed = pressed;
+		
+	}
+	
 	/**
 	 * @return the paddle
 	 */
@@ -554,6 +594,7 @@ public class GameScreen implements Screen  {
 	public void setOuter(int outer) {
 		this.outer = outer;
 	}
+<<<<<<< HEAD
 	
 	public int getNumBalls() {
 		return this.numBalls;
@@ -591,4 +632,6 @@ public class GameScreen implements Screen  {
 		}
 	}
 
+=======
+>>>>>>> 39563477e23bcecbe81e644c207ace4a0605cac1
 }

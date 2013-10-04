@@ -134,9 +134,9 @@ public class GameScreen implements Screen {
 			PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
 			// PhysicsHandler.checkEntityCollisions(entities);
 
-			backgroundLayer.update(delta, Config.gameSpeed);
-			spriteLayer.update(delta, Config.gameSpeed);
-			foregroundLayer.update(delta, camera.position.x);
+			backgroundLayer.update(delta, camera.position);
+			spriteLayer.update(delta, camera.position);
+			foregroundLayer.update(delta, camera.position);
 
 			staticBatch.begin();
 			backgroundLayer.draw(staticBatch);

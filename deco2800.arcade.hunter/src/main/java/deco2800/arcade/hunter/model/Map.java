@@ -2,6 +2,7 @@ package deco2800.arcade.hunter.model;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public abstract class Map {
 	protected Vector2 offset = new Vector2();
@@ -11,7 +12,7 @@ public abstract class Map {
 		this.speedModifier = speedModifier;
 	}
 
-	public abstract void update(float delta, float gameSpeed);
+	public abstract void update(float delta, Vector3 cameraPos);
 
 	public abstract void draw(SpriteBatch batch);
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter.Config;
 
 public class BackgroundLayer extends Map {
@@ -20,7 +21,7 @@ public class BackgroundLayer extends Map {
 	}
 
 	@Override
-	public void update(float delta, float gameSpeed) {
+	public void update(float delta, Vector3 cameraPos) {
 		// TODO Auto-generated method stub
 		
 	}

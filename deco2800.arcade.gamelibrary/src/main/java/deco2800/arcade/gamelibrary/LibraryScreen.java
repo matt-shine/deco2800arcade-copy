@@ -36,4 +36,6 @@ public interface LibraryScreen {
     public void setCurrentButton(TextButton textButton);
 
     public Button getCurrentButton();
+
+    public void showMore();
 }

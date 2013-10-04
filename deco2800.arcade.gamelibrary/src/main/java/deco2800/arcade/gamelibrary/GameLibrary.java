@@ -163,21 +163,43 @@ public class GameLibrary extends GameClient {
         gameList = arrayList;
     }
 
+    /**
+     * Get Current Player
+     * @return player
+     */
+    @Override
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Switch between list and grid views
+     */
     public void switchViews() {
         switch (player.getLibraryStyle().getLayout()) {
             case LibraryStyle.LIST_VIEW:
-                updateScreen(new ListScreen(this));
+                updateScreen(new ListScreen(this, false));
                 break;
             case LibraryStyle.GRID_VIEW:
                 updateScreen(new GridScreen(this));
                 break;
             default:
-                updateScreen(new ListScreen(this));
+                updateScreen(new ListScreen(this, false));
                 break;
         }
+    }
+
+    /**
+     * Show next page of games in list view
+     */
+    public void showMore() {
+        updateScreen(new ListScreen(this, true));
+    }
+
+    /**
+     * Show previous page of games in list view
+     */
+    public void showLess() {
+        updateScreen(new ListScreen(this, false));
     }
 }

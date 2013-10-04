@@ -2,11 +2,8 @@ package deco2800.arcade.gamelibrary;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -236,5 +233,9 @@ public class GridScreen implements Screen, LibraryScreen {
 
     public void changeView() {
         gameLibrary.switchViews();
+    }
+
+    public void showMore() {
+
     }
 }

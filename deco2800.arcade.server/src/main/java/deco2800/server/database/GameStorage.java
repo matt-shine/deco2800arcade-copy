@@ -25,11 +25,9 @@ public class GameStorage {
 
 		
 		try {
-            //System.out.println("Loading Games Table");
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "GAMES", null);
 
 			if (!tableData.next()) {
-                //System.out.println("Creating Games Table");
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE GAMES(gameID INT NOT NULL," +
                         "ID VARCHAR (30) NOT NULL," +
@@ -41,9 +39,7 @@ public class GameStorage {
             } else {
                 //Statement statement = connection.createStatement();
                 //statement.executeUpdate("ALTER TABLE GAMES ALTER COLUMN DESCRIPTION VARCHAR (255) NOT NULL, ICONPATH VARCHAR (100)");
-                //System.out.println("Filling Games Table");
                 runScript(connection);
-                //System.out.println("Filled Games Table");
             }
         } catch (SQLException e) {
 			e.printStackTrace();
@@ -78,12 +74,10 @@ public class GameStorage {
             try {
                 statement.addBatch(cmd);
             } catch (SQLException e) {
-
+                e.printStackTrace();
             }
-            System.out.println(cmd);
-
+            //System.out.println(cmd);
         }
-
         statement.executeBatch();
     }
 
@@ -139,7 +133,7 @@ public class GameStorage {
 
 	/**
 	 * Gets a games name from the table
-	 * @param gameID
+	 * @param gameID game id
 	 * @return string name of game
 	 * @throws DatabaseException 	If SQLException occurs
 	 */
@@ -155,9 +149,7 @@ public class GameStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from GAMES");
-			String result = findGameName(gameID, resultSet);
-			
-			return result;
+			return findGameName(gameID, resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get game name from database", e);
@@ -190,9 +182,8 @@ public class GameStorage {
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * from GAMES");
-            String result = findGameID(gameID, resultSet);
+            return findGameID(gameID, resultSet);
 
-            return result;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("Unable to get game id from database", e);
@@ -225,9 +216,7 @@ public class GameStorage {
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT * from GAMES");
-            int result = findGamePrice(gameID, resultSet);
-
-            return result;
+            return findGamePrice(gameID, resultSet);
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("Unable to get game price from database", e);
@@ -260,9 +249,7 @@ public class GameStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from GAMES");
-			String result = findGameDescription(gameID, resultSet);
-			
-			return result;
+			return findGameDescription(gameID, resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get game description from database", e);
@@ -295,9 +282,7 @@ public class GameStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from GAMES");
-			String result = findIconPath(gameID, resultSet);
-			
-			return result;
+			return findIconPath(gameID, resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get game iconpath from database", e);

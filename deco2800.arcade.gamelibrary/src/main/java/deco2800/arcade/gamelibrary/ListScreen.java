@@ -2,11 +2,8 @@ package deco2800.arcade.gamelibrary;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -30,6 +27,7 @@ public class ListScreen implements Screen, LibraryScreen {
 
     private GameLibrary gameLibrary;
     private Boolean gameSelected;
+    private Boolean more;
 
     /**
      * UI Objects
@@ -61,9 +59,10 @@ public class ListScreen implements Screen, LibraryScreen {
 
 
 
-    public ListScreen(GameLibrary gl) {
+    public ListScreen(GameLibrary gl, boolean nextPage) {
         gameSelected = false;
         gameLibrary = gl;
+        more = nextPage;
         styleSetup();
         setupListUI();
     }
@@ -128,6 +127,22 @@ public class ListScreen implements Screen, LibraryScreen {
         int count = 0;
         for (Game game : games) {
             if (game != null) {
+
+                if (count == 0 && more) {
+                    button = new TextButton("More...", libSkin, "gameslistbutton");
+                    button.setWidth(275);
+                    button.setHeight(33);
+                    button.setX(x);
+                    button.setY(y);
+
+                    button.addListener(new MoreButtonActionHandler(this, button));
+                    stage.addActor(button);
+                    y-= 35;
+                }
+
+                if (more && count++ <= 16) continue;
+
+
                 button = new TextButton("" + game.name, libSkin, "gameslistbutton");
                 button.setWidth(275);
                 button.setHeight(33);
@@ -137,13 +152,25 @@ public class ListScreen implements Screen, LibraryScreen {
 
                 button.addListener(new GameButtonActionHandler(this, game, button));
 
-                if (count++ == 0) {
+                if ((more && count == 18) || count++ == 0) {
                     button.setChecked(true);
                     setCurrentButton(button);
                     setSelectedGame(game);
                 }
 
                 stage.addActor(button);
+
+                if (count > 16 && !more) {
+                    button = new TextButton("More...", libSkin, "gameslistbutton");
+                    button.setWidth(275);
+                    button.setHeight(33);
+                    button.setX(x);
+                    button.setY(y);
+
+                    button.addListener(new MoreButtonActionHandler(this, button));
+                    stage.addActor(button);
+                    break;
+                }
             }
         }
 
@@ -265,6 +292,14 @@ public class ListScreen implements Screen, LibraryScreen {
 
     public void changeView() {
         gameLibrary.switchViews();
+    }
+
+    public void showMore() {
+        if (more) {
+            gameLibrary.showLess();
+        } else {
+            gameLibrary.showMore();
+        }
     }
 
 }

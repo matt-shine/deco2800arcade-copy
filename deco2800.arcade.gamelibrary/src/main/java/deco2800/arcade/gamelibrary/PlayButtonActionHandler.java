@@ -2,7 +2,6 @@ package deco2800.arcade.gamelibrary;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Game;
 
 /**
@@ -28,6 +27,18 @@ public class PlayButtonActionHandler extends ChangeListener {
     public PlayButtonActionHandler(LibraryScreen libraryScreen, Game g) {
         screen = libraryScreen;
         game = g;
+    }
+
+    /**
+     * Grid View Play Buttons
+     * @param libraryScreen library screen
+     * @param gameID ArcadeID of the game
+     */
+    public PlayButtonActionHandler(LibraryScreen libraryScreen, String gameID) {
+        screen = libraryScreen;
+        Game newGame = new Game();
+        newGame.id = gameID;
+        game = newGame;
     }
 
 

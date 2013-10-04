@@ -35,20 +35,17 @@ public class GridScreen implements Screen, LibraryScreen {
      * UI Objects
      */
     private SpriteBatch batch;
-    private BitmapFont font;
     private ArrayList<Game> games = null;
     private Game currentGame;
     private Stage stage;
-    private int x = 0;
-    private int y = 580;
     private TextButton storeButton;
     private TextButton userProfileButton;
     private TextButton currentButton;
-    private Skin skin;
+    private TextButton homeButton;
     private Texture splashTexture;
     private Texture gridTexture;
     private Actor image;
-
+    private Skin libSkin;
 
     private Texture listIconTexture;
     private Texture gridIconTexture;
@@ -65,53 +62,7 @@ public class GridScreen implements Screen, LibraryScreen {
     }
 
     private void styleSetup() {
-        font = new BitmapFont(true);
-        font.setColor(Color.BLACK);
-        skin = new Skin();
-        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.WHITE);
-        pixmap.fill();
-
-        skin.add("white", new Texture(pixmap));
-        skin.add("default", new BitmapFont());
-
-        Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = skin.getFont("default");
-        skin.add("default", labelStyle);
-
-        Label.LabelStyle titleLabelStyle = new Label.LabelStyle();
-        BitmapFont titleFont = skin.getFont("default");
-        titleFont.setColor(new Color(125,100,129,1.0f));
-        //titleFont.setScale(1.5f);
-        titleLabelStyle.font = titleFont;
-        skin.add("titleStyle", titleLabelStyle);
-
-
-        // Specify font, fontColor, cursor, selection, and background
-        TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
-        textFieldStyle.font = skin.getFont("default");
-        textFieldStyle.fontColor = Color.WHITE;
-        textFieldStyle.cursor = skin.newDrawable("white", Color.WHITE);
-        textFieldStyle.selection = skin.newDrawable("white", Color.WHITE);
-        //textFieldStyle.background = ;
-        skin.add("default", textFieldStyle);
-
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
-        //textButtonStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
-        textButtonStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-        textButtonStyle.font = skin.getFont("default");
-        skin.add("default", textButtonStyle);
-
-        TextButton.TextButtonStyle playButtonStyle = new TextButton.TextButtonStyle();
-        playButtonStyle.down = skin.newDrawable("white", Color.LIGHT_GRAY);
-        playButtonStyle.checked = skin.newDrawable("white", Color.WHITE);
-        playButtonStyle.over = skin.newDrawable("white", Color.DARK_GRAY);
-        playButtonStyle.up = skin.newDrawable("white", new Color(135, 103, 140, 100));
-        playButtonStyle.font = skin.getFont("default");
-        skin.add("playButton", playButtonStyle);
-
+        libSkin = new Skin(Gdx.files.internal("libSkin.json"));
     }
 
 
@@ -124,15 +75,15 @@ public class GridScreen implements Screen, LibraryScreen {
         image = new Image(splashTexture);
         stage.addActor(image);
 
-        listIconTexture = new Texture("Assets/list-icon.jpg");
-        gridIconTexture = new Texture("Assets/grid-icon.jpg");
+        listIconTexture = new Texture("Assets/list-icon.png");
+        gridIconTexture = new Texture("Assets/grid-icon.png");
         listImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(listIconTexture)));
         gridImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(gridIconTexture)));
 
-        listImageButton.setX(1000);
-        gridImageButton.setX(1050);
-        listImageButton.setY(650);
-        gridImageButton.setY(650);
+        listImageButton.setX(1075);
+        gridImageButton.setX(1155);
+        listImageButton.setY(643);
+        gridImageButton.setY(643);
 
         listImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.LIST_VIEW));
         gridImageButton.addListener(new ViewSwitchButtonActionHandler(this, LibraryStyle.GRID_VIEW));
@@ -140,7 +91,7 @@ public class GridScreen implements Screen, LibraryScreen {
         stage.addActor(listImageButton);
         stage.addActor(gridImageButton);
 
-        Actor exitButton = new TextButton("Exit", skin);
+        Actor exitButton = new TextButton("Exit", libSkin, "red");
         exitButton.setWidth(200);
         exitButton.setHeight(40);
         exitButton.setX(1000);
@@ -164,13 +115,13 @@ public class GridScreen implements Screen, LibraryScreen {
                 background.setX(gridX);
                 background.setY(gridY);
 
-                Label gridLabel = new Label(game.name, skin, "titleStyle");
+                Label gridLabel = new Label(game.name, libSkin);
                 gridLabel.setWidth(background.getWidth());
                 gridLabel.setHeight(40);
                 gridLabel.setX(gridX + background.getWidth()/4);
                 gridLabel.setY(gridY + background.getHeight() - 40);
 
-                TextButton gamePlay = new TextButton("Play", skin);
+                TextButton gamePlay = new TextButton("Play", libSkin, "green");
                 gamePlay.setWidth(150);
                 gamePlay.setHeight(30);
                 gamePlay.setX(gridX + 5);
@@ -192,20 +143,28 @@ public class GridScreen implements Screen, LibraryScreen {
             }
         }
 
-        storeButton = new TextButton("Game Store", skin);
-        storeButton.setWidth(200);
+        homeButton = new TextButton("Home", libSkin);
+        homeButton.setWidth(150);
+        homeButton.setHeight(40);
+        homeButton.setX(100);
+        homeButton.setY(650);
+        homeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
+
+        storeButton = new TextButton("Game Store", libSkin);
+        storeButton.setWidth(150);
         storeButton.setHeight(40);
-        storeButton.setX(x);
+        storeButton.setX(300);
         storeButton.setY(650);
-        storeButton.addListener(new PlayButtonActionHandler(this));
+        storeButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
 
-        userProfileButton = new TextButton("User Profile", skin);
-        userProfileButton.setWidth(200);
+        userProfileButton = new TextButton("User Profile", libSkin);
+        userProfileButton.setWidth(150);
         userProfileButton.setHeight(40);
-        userProfileButton.setX(300);
+        userProfileButton.setX(500);
         userProfileButton.setY(650);
-        userProfileButton.addListener(new PlayButtonActionHandler(this));
+        userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
 
+        stage.addActor(homeButton);
         stage.addActor(storeButton);
         stage.addActor(userProfileButton);
         Gdx.input.setInputProcessor(stage);

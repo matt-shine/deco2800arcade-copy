@@ -64,11 +64,7 @@ public class InProgressState extends GameState {
 			context.bonusLives(1);
 		}
 		
-<<<<<<< HEAD
 		if (Gdx.input.isButtonPressed(Keys.CONTROL_RIGHT)) {
-=======
-		if (Gdx.input.isKeyPressed(Keys.ALT_LEFT)) {
->>>>>>> 39563477e23bcecbe81e644c207ace4a0605cac1
 			context.setLevel(context.getLevel() + 1);
 			context.dispose();
 			context.gamearea();

@@ -363,6 +363,10 @@ public class GameScreen implements Screen  {
 		game.incrementAchievement("breakout.secret");
 		achieve.play();
 	}
+	
+	public void powerupLives() {
+		lives++;
+	}
 
 	/**
 	 * Resets games area or sets the gameState to GAMEOVER
@@ -594,7 +598,6 @@ public class GameScreen implements Screen  {
 	public void setOuter(int outer) {
 		this.outer = outer;
 	}
-<<<<<<< HEAD
 	
 	public int getNumBalls() {
 		return this.numBalls;
@@ -631,7 +634,4 @@ public class GameScreen implements Screen  {
 			ball = null;
 		}
 	}
-
-=======
->>>>>>> 39563477e23bcecbe81e644c207ace4a0605cac1
 }

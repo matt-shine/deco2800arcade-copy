@@ -17,7 +17,7 @@ public class LifePowerup extends Powerup{
 	}
 	
 	public void applyPowerup() {
-		context.bonusLives(1);
+		context.powerupLives();
 	}
 	
 	public Sprite getSprite() {

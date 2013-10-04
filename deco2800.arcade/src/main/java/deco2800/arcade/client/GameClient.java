@@ -21,6 +21,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
 	private int multiplayerOn = 0;
+	private int multiplayerSession;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
@@ -224,6 +225,19 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		} else {
 			return false;
 		}
+	}
+	
+	public void setMultiSession(int session) {
+		multiplayerSession = session;
+		startMultiplayerGame();
+	}
+	
+	public void startMultiplayerGame() {
+	}
+	
+	public void updateGameState(Object update) {
+	}
+	
 	}
 	
 }

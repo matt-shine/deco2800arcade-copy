@@ -45,14 +45,18 @@ public class MultiplayerListener extends NetworkListener {
 			}
 		}
 		else if (object instanceof NewMultiSessionResponse) { //Game Found
+			int sessionId = ((NewMultiSessionResponse) object).sessionId;
 			System.out.println("Game Found");
-			System.out.println("session id: " + ((NewMultiSessionResponse) object).sessionId);
+			System.out.println("session id: " + sessionId);
+			arcade.getCurrentGame().setMultiSession(sessionId);
 			//SEND THE RESPONSE TO THE GAME SESSION
 			//
 			//
 			//
 			//
 		} else if (object instanceof GameStateUpdateRequest) {
+			Object update = ((GameStateUpdateRequest) object).stateChange;
+			arcade.getCurrentGame().updateGameState(update);
 			System.out.println("Game State Updated");
 		} 
 	}

@@ -148,7 +148,7 @@ public class GameMap {
 	public void render(SpriteBatch batch) {
 		//should do some fancy stuff to position pacman grid in middle of screen horizontally
 		//instead of what I've done here with just setting them to a value I picked
-		int hOffset = 300;
+		int hOffset = 400;
 		int vOffset = 100;
 		int side = Tile.getSideLength();
 		for (int x = 0; x < grid.length; x++) {

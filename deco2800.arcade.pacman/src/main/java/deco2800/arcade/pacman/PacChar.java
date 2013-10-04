@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class PacChar extends Collideable{
+public class PacChar extends Mover{
 	
 	private Tile startTile; //pacman's starting tile(s), needs to be initialised
 	
@@ -18,13 +18,18 @@ public class PacChar extends Collideable{
 	public enum PacState {
 		IDLE, MOVING, DEAD
 	}
+	//describes a direction- test will be removed later
+	public enum Dir {
+		LEFT, RIGHT, UP, DOWN, TEST
+	}
+		
 	private PacState currentState;
 	// Static variables for pulling sprites from sprite sheet
 	private static final int FRAME_COLS = 2;
 	private static final int FRAME_ROWS = 4;
-	private int facing; // 1: Right, 2: Left
+	private Dir facing; // 1: Right, 2: Left
 							// 3: Up, 4: Down
-
+	
 	// the distance pacman moves each frame
 	private float moveDist;
 
@@ -32,11 +37,9 @@ public class PacChar extends Collideable{
 	private Texture walkSheet;
 	private TextureRegion[] walkFrames;
 	private TextureRegion currentFrame;
-	// amount of time spent in this state of animation?
-	float stateTime;
 	
-	public PacChar(List<Collideable> colList) {
-		super(colList);
+	public PacChar(Tile startTile, int x, int y) {
+		super(startTile, x, y);
 		//grabs file
 		walkSheet = new Texture(Gdx.files.internal("pacmove.png"));
 		// splits into columns and rows then puts them into one array in order
@@ -52,10 +55,7 @@ public class PacChar extends Collideable{
 		}
 		// initialise some variables
 		currentState = PacState.IDLE;
-		facing = 2;
-		//set initial position to be (x,y)
-		x = 300;
-		y = 300;
+		facing = Dir.LEFT;
 		width = walkFrames[1].getRegionWidth();
 		height = walkFrames[1].getRegionHeight();
 		moveDist = 1;
@@ -69,32 +69,36 @@ public class PacChar extends Collideable{
 	 * Draws the Pacman
 	 */
 	public void render(SpriteBatch batch) {
+		int spritePos = 3;
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState.equals(PacState.MOVING)) {
-    		if (facing == 1) {
-    			x += moveDist;
-    		} else if (facing == 2){
+			if (facing == Dir.LEFT){
     			x -= moveDist;
-    		} else if (facing == 3) {
+    		} else if (facing == Dir.RIGHT) {
+    			x += moveDist;
+    			spritePos = 1;
+    		} else if (facing == Dir.UP) {
     			y += moveDist;
-    		} else if (facing == 4){ 
+    			spritePos = 5;
+    		} else if (facing == Dir.DOWN){ 
     			y -= moveDist;
+    			spritePos = 7;
     		} else {
     			currentState = PacState.IDLE;
     			x = 300;
     			y = 300;
-    			facing =1;
+    			facing = Dir.LEFT;
     		}
     	}
 		//draw pacman facing the appropriate direction
-		batch.draw(walkFrames[facing * 2 - 1], x, y);
+		batch.draw(walkFrames[spritePos], x, y);
 	}
 	 
-	public int getFacing() {
+	public Dir getFacing() {
 			return facing;
 		}
 	
-	public void setFacing(int facing) {
+	public void setFacing(Dir facing) {
 		this.facing = facing;
 	}
 	

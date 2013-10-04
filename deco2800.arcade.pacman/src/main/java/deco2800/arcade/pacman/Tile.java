@@ -1,5 +1,8 @@
 package deco2800.arcade.pacman;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,8 +23,10 @@ public class Tile {
 	private Tile east;
 	private Tile south;
 	private Tile west;
+	private List<Mover> moversHere; //list of pacman/ghosts for whom this is the current tile
 	
 	public Tile() {
+		moversHere = new ArrayList<Mover>();
 	}
 	
 	//returns the type of tile
@@ -49,7 +54,19 @@ public class Tile {
 
 	public static int getSideLength() {
 		return sideLength;
-	}	
+	}
+
+	public List<Mover> getMovers() {
+		return moversHere;
+	}
+
+	public void setMovers(List<Mover> moversHere) {
+		this.moversHere = moversHere;
+	}
+	
+	public void addMover(Mover mover) {
+		moversHere.add(mover);
+	}
 	
 	
 	// copy of massive switch statement in case it turns out to be necessary:

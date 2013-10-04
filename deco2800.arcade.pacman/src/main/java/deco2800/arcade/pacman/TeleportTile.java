@@ -5,6 +5,7 @@ public class TeleportTile extends Tile {
 	private Tile target;
 	
 	public TeleportTile() {
+		super();
 	}
 
 	public Tile getTarget() {

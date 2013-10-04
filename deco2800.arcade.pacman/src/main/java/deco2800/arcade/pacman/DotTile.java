@@ -8,6 +8,7 @@ public class DotTile extends Tile {
 	private boolean exists; //true if not eaten, false if eaten
 	
 	public DotTile(char type) {
+		super();
 		if (type == 'P') {
 			energiser = true;
 		} else {

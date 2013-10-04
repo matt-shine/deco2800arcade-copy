@@ -1,5 +1,7 @@
 package deco2800.arcade.pacman;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,6 +17,11 @@ public class WallTile extends Tile {
 	
 	public WallTile(char type) {
 		this.type = type;
+		if (type == 'Q') {
+			this.setMovers(new ArrayList<Mover>());
+		} else {
+			this.setMovers(null);
+		}
 	}	
 	
 	public void render(SpriteBatch batch, float x, float y) {

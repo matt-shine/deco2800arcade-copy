@@ -2,21 +2,22 @@ package deco2800.arcade.pacman;
 
 import java.util.List;
 /**
- * An abstract class for objects that can be collided with
- *
+ * An abstract class for objects that can move and collide *
  */
-public abstract class Collideable {
+public abstract class Mover {
 
-	//the coordinates of the bottom left corner of the collideable object
+	//the coordinates of the bottom left corner of the pacman/ghost
 	protected int x; 
 	protected int y;
 	protected int height; 
 	protected int width;
+	protected Tile currentTile; //current tile of the pacman/ghost
 	
-	public Collideable(List<Collideable> colList) {
-		colList.add(this);
+	public Mover(Tile startTile, int x, int y) {
+		currentTile = startTile;
+		this.x = x;
+		this.y = y;		
 	}
-
 	
 	public int getX() {
 		return x;
@@ -53,7 +54,14 @@ public abstract class Collideable {
 		this.width = width;
 	}
 
+	public Tile getCurrentTile() {
+		return currentTile;
+	}
 
+	public void setCurrentTile(Tile currentTile) {
+		this.currentTile = currentTile;
+	}
+	
 	/**
 	 * Overrides toString() so that trying to print the list won't crash the program
 	 */

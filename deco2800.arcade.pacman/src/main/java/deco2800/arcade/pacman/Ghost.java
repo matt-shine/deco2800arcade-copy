@@ -1,8 +1,8 @@
 package deco2800.arcade.pacman;
 
-import deco2800.arcade.model.Player;
+import java.util.List;
 
-public class Ghost {
+public class Ghost extends Mover {
 	
 
 	/* path finding logic
@@ -27,17 +27,14 @@ private enum GhostMode {
 }
 private int ghostNum;
 // 1 - Blinky, 2 - Pinky, 3 - Inky, 4 - Clyde
-private int xpos;
-private int ypos;
-private int targetx;
+private int targetx; // these should be changed to target a tile like in normal pacman
 private int targety;
 private PacChar player;
 private boolean allowedOut; //says whether the ghost can go through the ghost pen door
 
-public Ghost(int ghostNum, int xpos, int ypos, PacChar player) {
+public Ghost(int ghostNum, int x, int y, PacChar player, Tile startTile) {
+	super(startTile, x, y);
 	this.ghostNum = ghostNum;
-	this.xpos = xpos;
-	this.ypos = ypos;
 	this.player = player;
 }
 

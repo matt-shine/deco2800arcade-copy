@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 
+import deco2800.arcade.pacman.PacChar.Dir;
 import deco2800.arcade.pacman.PacChar.PacState;
 
 /**
@@ -16,9 +17,9 @@ import deco2800.arcade.pacman.PacChar.PacState;
 public class PacController implements InputProcessor {
 
 	private PacChar player;
-	private List<Collideable> colList;
+	private List<Mover> colList;
 	
-	public PacController(PacChar player, List<Collideable> colList) {
+	public PacController(PacChar player, List<Mover> colList) {
 		this.player = player;
 		this.colList = colList;
 	}
@@ -31,7 +32,7 @@ public class PacController implements InputProcessor {
 		int pt = player.getHeight() + pb;
 		int pr = player.getWidth() + pl;
 	    for (int i=1; i < colList.size(); i++) {
-	    	Collideable c = colList.get(i);
+	    	Mover c = colList.get(i);
 	    	int cl = c.getX();
 	    	int cb = c.getY();
 	    	int cr = cl + c.getWidth();
@@ -47,18 +48,18 @@ public class PacController implements InputProcessor {
 	
 	@Override
 	public boolean keyDown(int key) {
-		int facing;
+		Dir facing;
 		//move based on key pressed
 		if (key == Keys.RIGHT) {
-			facing = 1;
+			facing = Dir.RIGHT;
 		} else if (key == Keys.LEFT){
-			facing = 2;
+			facing = Dir.LEFT;
 		} else if (key == Keys.UP) {
-			facing = 3;
+			facing = Dir.UP;
 		} else if (key == Keys.DOWN){ 
-			facing = 4;	
+			facing = Dir.DOWN;	
 		} else if (key == Keys.ENTER) {
-			facing = 5;			
+			facing = Dir.TEST;			
 		} else {
 			// if not one of the arrow keys
 			return false;

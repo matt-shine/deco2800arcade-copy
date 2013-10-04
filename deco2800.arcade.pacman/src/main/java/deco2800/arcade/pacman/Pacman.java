@@ -1,6 +1,5 @@
 package deco2800.arcade.pacman;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,11 +11,8 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -27,9 +23,6 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.pacman.PacChar.PacState;
-
-
-
 
 //note: no 'implements ApplicationListener is relevant anywhere in our program,
 // as GameClient extends Game which implements it. As far as I can tell
@@ -51,14 +44,9 @@ public class Pacman extends GameClient {
 	private PacChar player;
 	//takes keyboard input
 	private InputProcessor controller;
-	private GameMap map1;
-	private ArrayList<char[]> map1Array;
+	private GameMap gameMap;
 	
-	private Wall testWall;
-	private Wall testWall2;
-	private List<ArrayList<Tile>> map;
-	
-	private List<Collideable> colList;	
+	private List<Mover> colList;	
 	
 	//not used yet
 	//private NetworkClient networkClient;
@@ -109,20 +97,13 @@ public class Pacman extends GameClient {
 			public void show() {
 
 			}			
-        });   
-        
-        
-		super.create();	
-		
-		//create map which is a grid of tiles
-		map = new ArrayList<ArrayList<Tile>>();
-		
-		// Just use a set file for the time being!
+        });           
+		super.create();			
+		// level map file
 		String file = "levelMap.txt";
 		//initialise collision list
-		colList = new ArrayList<Collideable>();
-		// this guy doesn't show up either. 
-		logger.info("Hey, I'm a log message");
+		colList = new ArrayList<Mover>();
+
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
@@ -136,14 +117,12 @@ public class Pacman extends GameClient {
 //		testWall2 = new Wall(colList, 2, 350, 350, 25);
 //		System.out.println(colList.toString());
 		//initialise receiver for input- use the multiplexer from Arcade
-		// because overlay group said to in log messages
 		controller = new PacController(player, colList);
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
 		gameState = GameState.READY;
-		map1 = new GameMap();
-		map1Array = map1.readMap(file);
-		map1.createTiles(map1Array);
+		gameMap = new GameMap();
+		gameMap.createTiles(gameMap.readMap(file));
 	}
 	
 	/**
@@ -207,24 +186,17 @@ public class Pacman extends GameClient {
 	    shaper.setProjectionMatrix(camera.combined);
 	    // start the drawing
 	    batch.begin();
-	    map1.render(batch);
+	    gameMap.render(batch);
 	    // render player pacman 
 //	    player.render(batch);
 	    //end the drawing
 	    batch.end();
-	    //initialise walls and draw them 
-	    // note, this method only allows single pixel width lines, as far as I can tell.
-	    // shouldn't be super difficult to make them thicker, but will need a different approach 
-	    // (filled shapes probably)	    
+	    
+	    //currently ShapeRenderer not being used
 	    shaper.begin(ShapeType.Line);
-//	    testWall.render(shaper);
-//	    testWall2.render(shaper);
-		//map1.drawMap(colList, map1Array, shaper);
-	     
 	    shaper.end();
 	    //do any stuff the superclass normally does for rendering
-		super.render();
-		
+		super.render();		
 	}
 	
 	
@@ -248,12 +220,12 @@ public class Pacman extends GameClient {
 	static {
 			game = new Game();
 			game.id = "Pacman";
-			game.name = "Pac man";
-			game.description = "An implementation of the classic arcade game Pac "
+			game.name = "Pacman";
+			game.description = "An implementation of the classic arcade game Pac-"
 			+ "man." + System.getProperty("line.separator") + "Still in progress- additional " + 
-			"features may be added later. Note: currently only displays blank screen";
+			"features may be added later.";
 			// game.icon- to be added later once the icon part is fully implemented
-		} //System.getProperty("line.separator")
+		} 
 	
 	public Game getGame() {
 		return game;

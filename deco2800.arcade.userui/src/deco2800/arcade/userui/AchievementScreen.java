@@ -35,9 +35,9 @@ public class AchievementScreen extends JFrame{
 	private ImagePanel contentpanel;
 	private JPanel achievementpanel;
 	private ImagePanel sidepanel;
-	private JPanel playerpanel;
-	private JPanel playerinfopanel;
+	private JPanel playerpanel, playerinfopanel;
 	private ImagePanel gamepanel;
+	private JPanel gameavatarpanel, gameinfopanel;
 	
 	//Declare Buttons here
 	private JButton addfriendbutton, editbutton;
@@ -48,12 +48,10 @@ public class AchievementScreen extends JFrame{
 	private JComboBox gameselect;
 		
 	//Declare Labels here
-	private JLabel avatar;
-	private JLabel addfriend;
-	private JLabel playername;
-	private JLabel playerlevel;
+	private JLabel avatar, addfriend, playername, playerlevel;
 	private JLabel achievementbar;
-	private JLabel gamename;
+	private JLabel gamename, gameachievementcount, gameicon;
+	private JTextArea gamedescription;
 	
 	//Declare Images here
 	private ImageIcon picavatar, picaddfriend, picachievementbar, 
@@ -104,6 +102,7 @@ public class AchievementScreen extends JFrame{
 		 */
 		setSize(1280,800);
 		pack();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		setResizable(false);		
 	}
@@ -143,15 +142,37 @@ public class AchievementScreen extends JFrame{
 		"Snakes and Ladders","Raiden","Breakout"};
 		gameselect = new JComboBox(gamelist);
 		
+		selectbutton = new JButton("Select");
+		
 		gamename = new JLabel("Game Name");
 	    gamename.setFont(linkbold);
 	    gamename.setForeground(Color.white);
-	    selectbutton = new JButton("Select");
+	    gameachievementcount = new JLabel("15/100");
+	    gameachievementcount.setFont(blackbold);
+	    gameachievementcount.setForeground(Color.white);
+	    gamedescription = new JTextArea("Some description about the game");
+	    gamedescription.setFont(blacksmall);
+	    gamedescription.setForeground(Color.white);
+	    gamedescription.setLineWrap(true);
+	    gamedescription.setOpaque(false);
+	    gameicon = new JLabel();
+	    gameicon.setIcon(piclocked);
+	    
+	    gameavatarpanel = new JPanel(new MigLayout());
+	    gameavatarpanel.add(gameicon);
+	    gameavatarpanel.setOpaque(false);
+	    
+	    gameinfopanel = new JPanel(new MigLayout());
+	    gameinfopanel.add(gameachievementcount,"gap left 20px, wrap");
+	    gameinfopanel.add(gamedescription,"width :180px, height :100px");
+	    gameinfopanel.setOpaque(false);
 		
 		gamepanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
 		gamepanel.setLayout(new MigLayout());
-		gamepanel.add(gamename,"gap left 10px");
-			  
+		gamepanel.add(gamename,"gap left 10px, wrap");
+		gamepanel.add(gameavatarpanel,"left, gap bottom 50px");
+		gamepanel.add(gameinfopanel,"center, gap bottom 50px");
+		
 	}
 	
 	/**

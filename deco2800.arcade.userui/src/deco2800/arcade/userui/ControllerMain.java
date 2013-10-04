@@ -3,6 +3,8 @@ package deco2800.arcade.userui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import deco2800.arcade.model.Achievement;
+
 public class ControllerMain {
 	
 	private EditScreen editView;
@@ -28,6 +30,7 @@ public class ControllerMain {
 		this.userView.addProfileListener(new MyProfileListener());
 		this.userView.addFriendListener(new FriendListener());
 		this.userView.addStatusListener(new StatusListener());
+		this.userView.addAchievementListener(new AchievementListener());
 	
 	}
 	
@@ -120,6 +123,21 @@ public class ControllerMain {
 			
 			//Open status popup
 			System.out.println("Status Button Works");
+			
+		}
+		
+	}
+	
+	class AchievementListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			//Open Achievement Screen
+			System.out.println("Achievement opens");
+			userView.dispose();
+			achievementView = new AchievementScreen(theModel);
+			ControllerAchievement achievementcontroller = new ControllerAchievement(theModel, achievementView);
 			
 		}
 		

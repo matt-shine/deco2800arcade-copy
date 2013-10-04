@@ -2,11 +2,13 @@ package deco2800.arcade.userui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import deco2800.arcade.userui.AchievementScreen;
 
 public class ControllerAchievement {
 	
 	private AchievementScreen achievementView;
+	private UserScreen userView;
 	private Model theModel;
 
 	/**
@@ -95,6 +97,9 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			System.out.println("My Profile Button Works");
+			achievementView.dispose();
+			userView = new UserScreen(theModel);
+			ControllerMain maincontroller = new ControllerMain(theModel,userView);
 			
 		}
 		

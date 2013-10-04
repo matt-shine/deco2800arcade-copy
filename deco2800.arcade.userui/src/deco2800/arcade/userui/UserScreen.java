@@ -34,16 +34,14 @@ public class UserScreen extends JFrame{
 	private ImagePanel achievementpanel;
 	private ImagePanel historypanel;	
 	private ImagePanel sidepanel;
-	private JPanel playerinfopanel;
-	private JPanel playerpanel;
+	private JPanel playerinfopanel, playerpanel;
 	private ImagePanel friendpanel;
 	private ImagePanel aboutpanel;
 	private JPanel friendlist;
 	private JScrollPane friendscroll;
 	
 	//Declare Buttons 
-	private JButton addfriendbutton;
-	private JButton editbutton;
+	private JButton addfriendbutton, editbutton;
 	private JButton achievementbar;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
@@ -51,9 +49,7 @@ public class UserScreen extends JFrame{
 	private JLabel avatar;
 	private JLabel playername, playerlastonline, realname, program, description;
 	private JLabel addfriend;
-	private JLabel aboutbar;
-	private JLabel friendbar;
-	private JLabel historybar;
+	private JLabel aboutbar, friendbar, historybar;
 	private JLabel history1, history2, history3, history4, history5, 
 	history6;
 	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 

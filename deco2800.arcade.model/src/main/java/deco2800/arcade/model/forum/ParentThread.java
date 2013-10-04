@@ -25,6 +25,7 @@ public class ParentThread {
 	private Timestamp timestamp;
 	private String category;
 	private String[] tags;
+	private int vote;
 	
 	/**
 	 * Constructor: Create ParentThread
@@ -36,12 +37,13 @@ public class ParentThread {
 	 * @param	timestamp, Timestamp instance specified in SQL timestamp
 	 * @param	category, string of category which a parent thread is categorised into.
 	 * @param	tags, array of string of tags which are attached to the parent thread used for additional search.
+	 * @param	vote, vote of thread (i.e. evaluation of thread by users)
 	 * @require	params != null except tags, id >= 0,  
 	 * @see	java.sql.Timestamp
 	 */
 	public ParentThread(int id, String topic, String message,
 			User createdBy, Timestamp timestamp, String category,
-			String tagString) {
+			String tagString, int vote) {
 		this.id = id;
 		this.topic = topic;
 		this.message = message;
@@ -49,6 +51,7 @@ public class ParentThread {
 		this.timestamp = timestamp;
 		this.category = category;
 		this.tags = tagsStrToArray(tagString);
+		this.vote = vote;
 	}
 	
 	/**
@@ -137,6 +140,14 @@ public class ParentThread {
 		return result;
 	}
 	
+	/**
+	 * Return vote (i.e. evaluation of thread)
+	 * @return int, vote 
+	 */
+	public int getVote() {
+		return this.vote;
+	}
+	
 	@Override
 	/**
 	 * Return human-readable string representation of ParentThread instance
@@ -144,9 +155,9 @@ public class ParentThread {
 	 * @return	string
 	 */
 	public String toString() {
-		return String.format("%d: %s, %s createdBy %s on %s as %s as %s"
+		return String.format("%d: %s, %s createdBy %s on %s as %s as %s with %d votes"
 				, this.id, this.topic, this.message, this.createdBy.toString()
-				, this.timestamp.toString(), this.category, this.getTagsString());
+				, this.timestamp.toString(), this.category, this.getTagsString(), this.vote);
 	}
 	
 	@Override

@@ -158,94 +158,95 @@ public class MultiplayerLobby implements Screen {
 
 		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
 		
+		ArcadeSystem.requestLobbyGamesList();
+		final ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
+		System.out.println("Matches: " + matches.toString());
+
+		//table2.removeActor();
+		table2.clear();
+		
+	
+		if (matches.size() > 0 ) {
+			for (int i = 0; i < matches.size(); i++) {
+				Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
+				Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
+				final TextButton button5 = new TextButton("Join", skin);
+				
+				table2.center().left();
+				table2.add(matchLabel).width(130).padTop(20).padLeft(150);
+				table2.add(player).width(130).padTop(20).padLeft(130);
+				table2.add(button4).width(130).height(30).padTop(20);
+				table2.row();
+				
+				button4.addListener(new ChangeListener() {
+		            public void changed (ChangeEvent event, Actor actor) {
+		                System.out.println("You Clicked: " + button5.getName());
+						
+					}
+		            
+		        });
+			}
+
+		}
+
+		
+		
+
+		
 		
 		/** Open Games Button Event Listener 
-		The open games button Looks through an array and returns the number of elements; 
-		in the form of buttons with unique ids as well as avatars and player info etc.
+		 * Now just creates a match on the server.
 		 */
 		button.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
+				
+            	CreateMatchRequest request = new CreateMatchRequest();
+            	request.gameId = Integer.toString((int)(Math.random()*10000));
+            	System.out.println("**********" + request.gameId);
+            	request.hostPlayerId = (int) (Math.random()*1000);
+            	ArcadeSystem.createMatch(request);
+            	
+        		//Create "Refresh" Button.
+        		table2.row();
+        		final TextButton refresh = new TextButton("Refresh", skin);
+        		final TextButton spacer = new TextButton("", skin);
+        		table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
+        		table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
+        		
+        		// "Refresh" button event listener.
+        			 refresh.addListener(new ChangeListener() {
+        		public void changed (ChangeEvent event, Actor actor) {
+        			table2.clear();
+        			
+        			if (matches.size() > 0 ) {
+        				for (int i = 0; i < matches.size(); i++) {
+        					Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
+        					Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
+        					final TextButton button4 = new TextButton("Join", skin);
+        					
+        					table2.center().left();
+        					table2.add(matchLabel).width(130).padTop(20).padLeft(150);
+        					table2.add(player).width(130).padTop(20).padLeft(130);
+        					table2.add(button4).width(130).height(30).padTop(20);
+        					table2.row();
+        					
+        					button4.addListener(new ChangeListener() {
+        			            public void changed (ChangeEvent event, Actor actor) {
+        			                System.out.println("You Clicked: " + button4.getName());
+        							
+        						}
+        			            
+        			        });
+        				}
+        	
+        			}
 
-				ArcadeSystem.requestLobbyGamesList();
-				final ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
-				System.out.println("Matches: " + matches.toString());
-
-				//table2.removeActor();
-				table2.clear();
-				
-			
-				if (matches.size() > 0 ) {
-					for (int i = 0; i < matches.size(); i++) {
-						Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
-						Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
-						final TextButton button4 = new TextButton("Join", skin);
-						
-						table2.center().left();
-						table2.add(matchLabel).width(130).padTop(20).padLeft(150);
-						table2.add(player).width(130).padTop(20).padLeft(130);
-						table2.add(button4).width(130).height(30).padTop(20);
-						table2.row();
-						
-						button4.addListener(new ChangeListener() {
-				            public void changed (ChangeEvent event, Actor actor) {
-				                System.out.println("You Clicked: " + button4.getName());
-								
-							}
-				            
-				        });
-					}
-		
-				}
-	
-				
-				
-				//Create "Refresh" Button.
-				table2.row();
-				final TextButton refresh = new TextButton("Refresh", skin);
-				final TextButton spacer = new TextButton("", skin);
-				table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
-				table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
-				
-				// "Refresh" button event listener.
-					 refresh.addListener(new ChangeListener() {
-				public void changed (ChangeEvent event, Actor actor) {
-					table2.clear();
-					
-					if (matches.size() > 0 ) {
-						for (int i = 0; i < matches.size(); i++) {
-							Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
-							Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
-							final TextButton button4 = new TextButton("Join", skin);
-							
-							table2.center().left();
-							table2.add(matchLabel).width(130).padTop(20).padLeft(150);
-							table2.add(player).width(130).padTop(20).padLeft(130);
-							table2.add(button4).width(130).height(30).padTop(20);
-							table2.row();
-							
-							button4.addListener(new ChangeListener() {
-					            public void changed (ChangeEvent event, Actor actor) {
-					                System.out.println("You Clicked: " + button4.getName());
-									
-								}
-					            
-					        });
-						}
-			
-					}
-					//Create "Refresh" Button.
-					table2.row();
-					final TextButton refresh = new TextButton("Refresh", skin);
-					final TextButton spacer = new TextButton("", skin);
-					table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
-					table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
-				
-			}
-				
-				
+        		
+        	}
+        		
+        		
             });
-				
-				
+
             }
 			
 			
@@ -276,13 +277,8 @@ public class MultiplayerLobby implements Screen {
             	request.playerID = 0;
             	request.requestType = MultiGameRequestType.NEW;
             	ArcadeSystem.goToGame(gameid);
-            	ArcadeSystem.createMatch(request);
-            	
-            	/*CreateMatchRequest request = new CreateMatchRequest();
-            	request.gameId = Integer.toString((int)(Math.random()*10000));
-            	System.out.println("**********" + request.gameId);
-            	request.hostPlayerId = (int) (Math.random()*1000);*/
-            	//ArcadeSystem.createMatch(request);
+            	ArcadeSystem.createMultiplayerGame(request);
+
             }
         });
 
@@ -333,10 +329,7 @@ public class MultiplayerLobby implements Screen {
 
 		//Gdx.app.exit();
 	}
-	
-	public void refreshGames() {
-		
-	}
+
 
 	@Override
 	public void render(float arg0) {

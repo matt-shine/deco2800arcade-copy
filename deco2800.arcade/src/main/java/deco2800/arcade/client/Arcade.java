@@ -38,6 +38,7 @@ import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
@@ -443,12 +444,17 @@ public class Arcade extends JFrame {
 		return matches;
 	}
 	
-	public void createMatch(NewMultiGameRequest request) {
+	public void createMultiplayerGame(NewMultiGameRequest request) {
 		//request.hostConnection = this.client.connection;
 		//System.out.println("[CLIENT] Sending CreateMatchRequest (gameId: " + request.gameId + ", playerId: " + request.hostPlayerId);
 		request.playerID = player.getID();
 		this.client.sendNetworkObject(request);
 	}
+	
+	public void createMatch(CreateMatchRequest request) {
+		this.client.sendNetworkObject(request);
+	}
+	
 
 	public void addPlayerToLobby() {
 		System.out.println("Adding player to arcade");

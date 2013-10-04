@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
@@ -64,7 +65,11 @@ public class ArcadeSystem {
     	return arcade.getMatches();
     }
     
-    public static void createMatch(NewMultiGameRequest matchRequest) {
+    public static void createMultiplayerGame(NewMultiGameRequest multigameRequest) {
+    	arcade.createMultiplayerGame(multigameRequest);
+    }
+    
+    public static void createMatch(CreateMatchRequest matchRequest) {
     	arcade.createMatch(matchRequest);
     }
     

@@ -46,7 +46,7 @@ public class SoldierEnemy extends Enemy {
 		facingRight = !startOnRight;
 		state = State.INIT;
 		performingTell = false;
-		stateTime = 0.33f;
+		stateTime = 0.1f;
 		jumpTime = 0;
 		swordTime = 0;
 		
@@ -93,6 +93,10 @@ public class SoldierEnemy extends Enemy {
 		velocity.mul(1/delta);
 		velocity.add(0, GRAVITY);
 		
+		if (state == State.INIT && (ship.getPosition().x > position.x - 10f || ship.getPosition().x < position.x +10f)) {
+			System.out.println("cancelled init at ship"+ship.getPosition()+" and enemy"+position);
+			stateTime = 0f;
+		}
 		
 		stateTime -= delta;
 		if (stateTime < 0) {
@@ -116,6 +120,7 @@ public class SoldierEnemy extends Enemy {
 					if (randInt == 0) {
 						newEnemies.add(new BulletHomingDestructible(5f + 10f * rank, 0f, new Vector2(position.x + width/2, 
 								position.y + height/2), 1f, 1f, new Vector2(0,1f), BulletSimple.Graphic.FIRE));
+						
 					} else {
 						Vector2 direction;
 						if (facingRight) { 
@@ -125,6 +130,7 @@ public class SoldierEnemy extends Enemy {
 						}
 						newEnemies.add(new BulletSimple(5f + 30f * rank, 0f, new Vector2(position.x + width/2, 
 								position.y + height/2), 1f, 1f, direction, BulletSimple.Graphic.FIRE));
+						Sounds.playShootSound(0.5f);
 					}
 					stateTime = 1f;
 					break;
@@ -184,7 +190,7 @@ public class SoldierEnemy extends Enemy {
 				if (deathCount > 0.1f) {
 					newEnemies.add(new Explosion(new Vector2(position.x+width/2, position.y+height/2)));
 					deathCount = 0f;
-					Sounds.playExplosionShort(0.5f);
+					Sounds.playExplosionLong(0.5f);
 				}
 			} else if (deathType == 1) {
 				if (!deathFromRight) {

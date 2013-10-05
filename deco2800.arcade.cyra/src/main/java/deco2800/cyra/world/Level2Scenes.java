@@ -6,24 +6,30 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import deco2800.cyra.model.BlockMakerSpiderBoss;
 import deco2800.cyra.model.EnemySpiderBoss;
 import deco2800.cyra.model.MovableEntity;
+import deco2800.cyra.model.MovablePlatform;
 import deco2800.cyra.model.MovablePlatformAttachment;
 import deco2800.cyra.model.PartTween;
 import deco2800.cyra.model.Ship;
+import deco2800.cyra.model.SoldierBoss;
 import deco2800.cyra.model.WalkerPart;
 
 public class Level2Scenes extends LevelScenes {
 
 	public static final float SPIDER_BOSS_START = 602f;
+	public static final float SOLDIER_BOSS_START = 235f;
 	
 	//private ParallaxCamera cam;
 	private TweenManager manager;
 	BlockMakerSpiderBoss blockMaker;
 	private EnemySpiderBoss boss;
+	private SoldierBoss soldierBoss;
 	
 	private boolean closeNextUpdate;
 	
@@ -47,10 +53,22 @@ public class Level2Scenes extends LevelScenes {
 		isPlaying = true;
 		closeNextUpdate = false;
 		Array<Object> output = new Array<Object>();
-		cam.setFollowShip(false);
+		
 		System.out.println("Starting scene " + scenePosition);
 		
 		if (scenePosition == 0) {
+			ship.getVelocity().x = 0;
+			Texture logTex = new Texture("data/log.png"); //need to move this to WorldRenderer
+			logTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			MovablePlatform log0 =  new MovablePlatform(logTex, new Vector2(-1, -1), 2, 4, new Vector2(0,0), 10f, false, 0f);
+			MovablePlatform log1 =  new MovablePlatform(logTex, new Vector2(-1, -1), 2, 4, new Vector2(0,0), 10f, false, 0f);
+			output.add(log0);
+			output.add(log1);
+			soldierBoss = new SoldierBoss(new Vector2(239, 60));
+			count = 0;
+			//make it drop down, screen shakes, health charges up, then battle starts
+		} else if (scenePosition == 1) {
+			cam.setFollowShip(false);
 			Tween.registerAccessor(ParallaxCamera.class, new CameraTween());
 			manager = new TweenManager();
 			TweenCallback cb = new TweenCallback() {
@@ -61,6 +79,7 @@ public class Level2Scenes extends LevelScenes {
 	
 				
 			};
+			Sounds.playBossMusic();
 			Tween.to(cam, CameraTween.POSITION,(24f)/BlockMakerSpiderBoss.SPEED).target(SPIDER_BOSS_START + 24f + cam.viewportWidth/2, cam.viewportHeight/2).ease(
 					TweenEquations.easeNone).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 			
@@ -84,7 +103,7 @@ public class Level2Scenes extends LevelScenes {
 			solidParts.add(bossSolid2);
 			boss.setSolidParts(solidParts);
 			targetPos = 0f;
-		} else if (scenePosition == 1) {
+		} else if (scenePosition == 2) {
 			count = 0;
 			//blockMaker.startDownward();
 			//blockMaker.setActive(false);
@@ -96,6 +115,14 @@ public class Level2Scenes extends LevelScenes {
 	@Override
 	public boolean update(float delta) {
 		if (scenePosition == 0) {
+			if (ship.getPosition().x < 248f) {
+				ship.getPosition().x += delta * Ship.SPEED;
+			} else {
+				return true;
+			}
+			return false;
+		} else
+		if (scenePosition == 1) {
 			//Scene to introduce the boss
 			manager.update(delta);
 			//ship.getVelocity().x = Ship.SPEED / 1.5f;
@@ -111,7 +138,7 @@ public class Level2Scenes extends LevelScenes {
 			} else {
 				return false;
 			}
-		} else if (scenePosition == 1) {
+		} else if (scenePosition == 2) {
 			//scene to move the boss into phase 2
 			count += delta;
 			if (count <= 2f) {
@@ -129,7 +156,7 @@ public class Level2Scenes extends LevelScenes {
 				return true;
 			}
 			return false;
-		} else if (scenePosition == 2) {
+		} else if (scenePosition == 3) {
 			//boss into phase 3 scene
 			count += delta;
 			if (count <= 2f) {
@@ -165,7 +192,7 @@ public class Level2Scenes extends LevelScenes {
 
 	@Override
 	public float[] getStartValues() {
-		float[] starts = {SPIDER_BOSS_START, 999, 999, 999};
+		float[] starts = {SOLDIER_BOSS_START, SPIDER_BOSS_START, 999, 999, 999};
 		return starts;
 	}
 

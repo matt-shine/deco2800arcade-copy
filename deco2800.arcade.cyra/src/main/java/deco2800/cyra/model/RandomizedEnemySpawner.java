@@ -69,7 +69,7 @@ public class RandomizedEnemySpawner {
 					}
 					if (collisionLayer != null) {
 						
-						for (float yChange = es.getPosition().y; yChange < es.getPosition().y + 1.5f; yChange+=0.5f) {
+						for (float yChange = es.getPosition().y; yChange < es.getPosition().y + 25f; yChange+=0.5f) {
 							boolean collision = false;
 							int yLength = collisionLayer.tiles.length;
 							//if (i < xLength && i > 0 && j < yLength && j > 0) { 
@@ -77,10 +77,14 @@ public class RandomizedEnemySpawner {
 							
 							/*String type = map.getTileProperty(cell, "checkCollision");
 							if (type != null && type.equals("solid")) {*/
+							
+							
+							//this won't work becaus it only checks single tiles collisions. Unless you just combine inline and collision layers
 							if (cell != 0) {
 								Rectangle rect = new Rectangle((int)es.getPosition().x, (int)yChange, 1, 1);
 								if (rect.overlaps(new Rectangle(es.getPosition().x, es.getPosition().y, 1,1))){
 									collision = true;
+									System.out.println("Collision at "+rect);
 								}
 							}
 							

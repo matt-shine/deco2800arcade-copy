@@ -90,9 +90,10 @@ public class Level {
 			// Add the log parts for the waterfall
 			Texture logTex = new Texture("data/log.png");
 			logTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			MovablePlatform log =  new MovablePlatform(logTex, new Vector2(-1, -1), 2, 4, 2.5f);
-			MovablePlatformSpawner logS0 = new MovablePlatformSpawner(log, new Vector2(200, 59), new Vector2(200, -9), 0f, 3.5f, 0, 10);
-			MovablePlatformSpawner logS1 = new MovablePlatformSpawner(log, new Vector2(210, 59), new Vector2(210, -9), 1.75f, 3.5f, 0, 10);
+			MovablePlatform log =  new MovablePlatform(logTex, new Vector2(-1, -1), 2, 4, 1.5f);
+			MovablePlatformSpawner logS0 = new MovablePlatformSpawner(log, new Vector2(202, 59), new Vector2(200, -9), 0f, 5f, 0, 10);
+			MovablePlatformSpawner logS1 = new MovablePlatformSpawner(log, new Vector2(210, 59), new Vector2(210, -9), 1.75f, 5f, 0, 10);
+		
 			
 			//Add popcorn enemy spawners
 			Class<SoldierEnemy> c = SoldierEnemy.class;
@@ -106,6 +107,14 @@ public class Level {
 			
 			RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f, 0f, 200f);
 			res.setActive(true);
+			
+			//Spawners on top of the logs
+			objects.add(new EnemySpawner(c, new Vector2(202f, 20f), 4, 100, 1));
+			objects.add(new EnemySpawner(c, new Vector2(210f, 30f), 4, 100, 1));
+			objects.add(new EnemySpawner(c, new Vector2(202f, 35f), 4, 100, 1));
+			objects.add(new EnemySpawner(c, new Vector2(210f, 40f), 4, 100, 1));
+			objects.add(new EnemySpawner(c, new Vector2(202f, 45f), 4, 100, 1));
+			objects.add(new EnemySpawner(c, new Vector2(210f, 50f), 4, 100, 1));
 			
 			objects.add(logS0);
 			objects.add(logS1);

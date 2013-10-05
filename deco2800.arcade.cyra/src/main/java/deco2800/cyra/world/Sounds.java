@@ -1,6 +1,7 @@
 package deco2800.cyra.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.MathUtils;
 
@@ -8,7 +9,8 @@ public class Sounds {
 
 		public static Sound jump;
 		
-		private static Sound explosion0,explosion1,explosion2; 
+		private static Sound explosion0,explosion1,explosion2,shoot0; 
+		private static Music boss1bgm;
 		
 		public static void load() {
 			jump = loadSound("jump.wav");
@@ -18,6 +20,10 @@ public class Sounds {
 			explosion0 = loadSound("explosion00.wav");
 			explosion1 = loadSound("explosion01.wav");
 			explosion2 = loadSound("explosion02.wav");
+			shoot0 = loadSound("shoot03.wav");
+			boss1bgm = Gdx.audio.newMusic(Gdx.files.internal("data/sounds/boss1music_prototype.mp3"));
+			
+			
 			
 		}
 		
@@ -60,6 +66,17 @@ public class Sounds {
 			//} else {
 				play(explosion1, pan);
 			//}
+		}
+		
+		public static void playShootSound(float pan) {
+			play(shoot0, pan);
+		}
+		
+		public static void playBossMusic() {
+			boss1bgm.stop();
+			boss1bgm.play();
+			boss1bgm.setVolume(0.4f);
+			boss1bgm.setLooping(true);
 		}
 		
 		

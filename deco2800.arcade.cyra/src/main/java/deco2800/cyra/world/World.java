@@ -77,7 +77,7 @@ public class World {
 	public World(TestGame2 game, int level, ParallaxCamera cam) {
 		curLevel = new Level(level);
 		this.cam = cam;
-		
+		Sounds.loadAll();
 		init();
 		
 		//hardcode
@@ -537,13 +537,18 @@ public class World {
 		//can now move this method and resetCamera() into ParralaxCamera class
 		if (cam.isFollowingShip()) {
 			
-			float boxX=2.5f;
-			//float boxY=6f;
-			//if(ship.getPosition().x - boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
-			//System.out.println("shipX="+ship.getPosition().x+" camviewwidth/2="+cam.viewportWidth/2+" camX="+cam.position.x);
+			//float boxX=2.5f;
+			float boxX = 1.5f;
+			
 			if(ship.getPosition().x + boxX> cam.viewportWidth/2 && (cam.position.x < ship.getPosition().x-boxX || cam.position.x > ship.getPosition().x + boxX)) {
 				//if (ship.getVelocity().x > 0.5f) {
-				float lerp = 0.03f;
+				//float lerp = 0.03f;
+				float lerp; 
+				if (ship.getVelocity().x < 10f) {
+					lerp = 0.03f;
+				} else {
+					lerp = 0.065f;
+				}
 				if (ship.isFacingRight()) {
 				//cam.position.x = ship.getPosition().x - boxX;
 					cam.position.x += (ship.getPosition().x + boxX- cam.position.x) * lerp;
@@ -680,7 +685,8 @@ public class World {
 	
 	/* ----- Setter methods ----- */
 	public void init() {
-		Sounds.loadAll();
+		
+		//Sounds.playBossMusic();
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));

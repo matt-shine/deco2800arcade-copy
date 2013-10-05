@@ -1,10 +1,12 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.view;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -12,12 +14,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
 public class StatusScreen extends JFrame{
 	
 	/**
-	 * The view class for the status
+	 * The view class for the status page
 	 */
 	
 	private Model model;
@@ -70,6 +73,7 @@ public class StatusScreen extends JFrame{
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
+		setAlwaysOnTop(true);
 		
 	}
 	
@@ -139,6 +143,23 @@ public class StatusScreen extends JFrame{
 	     		
 	}
 
+	public void addSaveListener(ActionListener listenForSaveButton){
+		
+		savebutton.addActionListener(listenForSaveButton);
+	
+	}
+	
+	public void addCancelListener(ActionListener listenForCancelButton){
+		
+		cancelbutton.addActionListener(listenForCancelButton);
+	
+	}
+	
+	public void getStatusSelection(){
+		
+		System.out.println(status.getSelection().toString());
+		
+	}
 
 }
 

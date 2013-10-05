@@ -1,4 +1,4 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.view;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
 public class UserScreen extends JFrame{
@@ -41,14 +42,14 @@ public class UserScreen extends JFrame{
 	private JScrollPane friendscroll;
 	
 	//Declare Buttons 
-	private JButton addfriendbutton, editbutton;
+	private JButton addfriendbutton, removefriendbutton, editbutton, statusbutton;
 	private JButton achievementbar;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
 	//Declare Labels 
 	private JLabel avatar;
 	private JLabel playername, playerlastonline, realname, program, description;
-	private JLabel addfriend;
+	private JLabel addfriend, status;
 	private JLabel aboutbar, friendbar, historybar;
 	private JLabel history1, history2, history3, history4, history5, 
 	history6;
@@ -176,9 +177,9 @@ public class UserScreen extends JFrame{
 	public void addplayerinfopanel(){
 		
 		//Add Buttons
-	    addfriendbutton = new JButton(picfriendoffline);
-	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
-	    addfriendbutton.setContentAreaFilled(false);
+	    statusbutton = new JButton(piconline);
+	    statusbutton.setBorder(BorderFactory.createEmptyBorder());
+	    statusbutton.setContentAreaFilled(false);
 	    editbutton = new JButton(piceditbutton);
 	    editbutton.setBorder(BorderFactory.createEmptyBorder());
 	    editbutton.setContentAreaFilled(false);
@@ -186,8 +187,6 @@ public class UserScreen extends JFrame{
 	    //Add Labels	    
         avatar = new JLabel();
         avatar.setIcon(picavatar);
-        addfriend = new JLabel();
-        addfriend.setIcon(picaddfriend);
         playername = new JLabel("Player");
         playername.setForeground(Color.white);
         playername.setFont(blackbold);
@@ -200,7 +199,7 @@ public class UserScreen extends JFrame{
 		playerinfopanel.setOpaque(false);		   	
         playerinfopanel.add(playername,"wrap, align 50% 50%, gap top 30px");       
         playerinfopanel.add(playerlastonline,"wrap, align 50% 50%, gap top 5px"); 
-        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%, gap top 20px");
+        playerinfopanel.add(statusbutton, "wrap, align 50% 50%, gap top 20px");
         playerinfopanel.add(editbutton,"align 50% 50%, gap top 5px");
         
 	}
@@ -265,11 +264,24 @@ public class UserScreen extends JFrame{
 		//Label
 		friendbar = new JLabel("FRIEND LIST");
 	    friendbar.setFont(sidebold);
-	    friendbar.setForeground(Color.white);	
+	    friendbar.setForeground(Color.white);
+	    addfriendbutton = new JButton("+");
+	    addfriendbutton.setFont(blackbold);
+	    addfriendbutton.setForeground(Color.GREEN);
+	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
+	    addfriendbutton.setContentAreaFilled(false);
+	    removefriendbutton = new JButton("-");
+	    removefriendbutton.setFont(blackbold);
+	    removefriendbutton.setForeground(Color.RED);
+	    removefriendbutton.setBorder(BorderFactory.createEmptyBorder());
+	    removefriendbutton.setContentAreaFilled(false);
+	    
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         friendpanel.setLayout(new MigLayout());
 	    friendpanel.add(friendbar, "gap left 10px, gap bottom 110px");
+	    friendpanel.add(addfriendbutton,"gap left 10px");
+	    friendpanel.add(removefriendbutton,"gap left 10px");
         friendpanel.add(friendscroll, "width :500px, height :100px, gap top 30px");    
 		
 	}
@@ -503,16 +515,6 @@ public class UserScreen extends JFrame{
 	}
 	
 	/**
-	 * Button opens a popup allowing user to add friend
-	 * @param listenForAddFriendButton
-	 */
-	public void addFriendListener(ActionListener listenForAddFriendButton){
-		
-		addfriendbutton.addActionListener(listenForAddFriendButton);	
-		
-	}
-	
-	/**
 	 * Button opens a popup allowing editing of profile details
 	 * @param listenForEditButton
 	 */
@@ -528,7 +530,27 @@ public class UserScreen extends JFrame{
 	 */
 	public void addStatusListener(ActionListener listenForStatusButton){
 		
-		// make button then add here
+		statusbutton.addActionListener(listenForStatusButton);
+		
+	}
+	
+	/**
+	 * Add a friend to the list
+	 * @param listenForAddFriendButton
+	 */
+	public void addFriendListener(ActionListener listenForAddFriendButton){
+		
+		addfriendbutton.addActionListener(listenForAddFriendButton);
+		
+	}
+	
+	/**
+	 * Remove a friend from the list
+	 * @param listenForAddFriendButton
+	 */
+	public void addRemoveFriendListener(ActionListener listenForRemoveFriendButton){
+		
+		removefriendbutton.addActionListener(listenForRemoveFriendButton);
 		
 	}
 	

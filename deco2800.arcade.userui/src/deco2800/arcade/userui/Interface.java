@@ -2,6 +2,10 @@ package deco2800.arcade.userui;
 
 import javax.swing.SwingUtilities;
 
+import deco2800.arcade.userui.controller.ControllerMain;
+import deco2800.arcade.userui.view.AddFriendScreen;
+import deco2800.arcade.userui.view.UserScreen;
+
 public class Interface {
 	
 	/**
@@ -27,12 +31,9 @@ public class Interface {
 		Model theModel = new Model();
 		
 		UserScreen userView = new UserScreen(theModel);
-		//AchievementScreen achievementView = new AchievementScreen(theModel);
 		//EditScreen editView = new EditScreen(theModel);
-		//StatusScreen statusView = new StatusScreen(theModel);
 		
 		ControllerMain maincontroller = new ControllerMain(theModel,userView);
-		//ControllerAchievement achievementcontroller = new ControllerAchievement(theModel, achievementView);
 		//ControllerEdit editcontroller = new ControllerEdit(theModel, editView);
 			
 	}

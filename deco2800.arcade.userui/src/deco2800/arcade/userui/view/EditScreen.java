@@ -1,4 +1,4 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,6 +28,8 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
+
+import deco2800.arcade.userui.Model;
 
 public class EditScreen extends JFrame implements ActionListener {
 

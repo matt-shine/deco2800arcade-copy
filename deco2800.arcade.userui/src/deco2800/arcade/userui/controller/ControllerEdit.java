@@ -1,7 +1,10 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import deco2800.arcade.userui.Model;
+import deco2800.arcade.userui.view.EditScreen;
 
 public class ControllerEdit {
 	

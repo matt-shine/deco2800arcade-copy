@@ -1,15 +1,21 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import deco2800.arcade.userui.AchievementScreen;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.userui.Model;
+import deco2800.arcade.userui.view.AchievementScreen;
+import deco2800.arcade.userui.view.StatusScreen;
+import deco2800.arcade.userui.view.UserScreen;
 
 public class ControllerAchievement {
 	
 	private AchievementScreen achievementView;
+	private StatusScreen statusView;
 	private UserScreen userView;
 	private Model theModel;
+	public Game Pong;
 
 	/**
 	 * Controller for the achievement page
@@ -26,7 +32,6 @@ public class ControllerAchievement {
 		this.achievementView.addStoreListener(new StoreListener());
 		this.achievementView.addLibraryListener(new LibraryListener());
 		this.achievementView.addProfileListener(new MyProfileListener());
-		this.achievementView.addFriendListener(new FriendListener());
 		this.achievementView.addStatusListener(new StatusListener());
 		this.achievementView.addSelectListener(new SelectListener());
 		
@@ -123,7 +128,8 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open status popup
-			System.out.println("Status Button Works");
+			statusView = new StatusScreen(theModel);
+			ControllerStatus statuscontroller = new ControllerStatus(theModel, statusView);
 			
 		}
 		
@@ -133,9 +139,9 @@ public class ControllerAchievement {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+
 			//View achievements for particular game
-			achievementView.getGameSelection();
+			//achievementView.setAchievementList(Pong);
 			
 		}
 		

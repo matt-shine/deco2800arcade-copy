@@ -1,14 +1,25 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import deco2800.arcade.model.Achievement;
+import deco2800.arcade.userui.Model;
+import deco2800.arcade.userui.view.AchievementScreen;
+import deco2800.arcade.userui.view.EditScreen;
+import deco2800.arcade.userui.view.AddFriendScreen;
+import deco2800.arcade.userui.view.RemoveFriendScreen;
+import deco2800.arcade.userui.view.StatusScreen;
+import deco2800.arcade.userui.view.UserScreen;
 
 public class ControllerMain {
 	
 	private EditScreen editView;
 	private UserScreen userView;
+	private StatusScreen statusView;
+	private AddFriendScreen friendView;
+	private RemoveFriendScreen removeView;
+	
 	private AchievementScreen achievementView;
 	private Model theModel;
 	
@@ -28,9 +39,10 @@ public class ControllerMain {
 		this.userView.addStoreListener(new StoreListener());
 		this.userView.addLibraryListener(new LibraryListener());
 		this.userView.addProfileListener(new MyProfileListener());
-		this.userView.addFriendListener(new FriendListener());
 		this.userView.addStatusListener(new StatusListener());
 		this.userView.addAchievementListener(new AchievementListener());
+		this.userView.addFriendListener(new AddFriendListener());
+		this.userView.addRemoveFriendListener(new RemoveFriendListener());
 	
 	}
 	
@@ -104,13 +116,25 @@ public class ControllerMain {
 		
 	}
 	
-	class FriendListener implements ActionListener{
+	class AddFriendListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Add Friend to List
-			System.out.println("Add Friend Button");
+			friendView = new AddFriendScreen(theModel);
+			
+		}
+		
+	}
+	
+	class RemoveFriendListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			//Remove a friend
+			removeView = new RemoveFriendScreen(theModel);
 			
 		}
 		
@@ -122,7 +146,8 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open status popup
-			System.out.println("Status Button Works");
+			statusView = new StatusScreen(theModel);
+			ControllerStatus statuscontroller = new ControllerStatus(theModel, statusView);
 			
 		}
 		
@@ -134,7 +159,6 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open Achievement Screen
-			System.out.println("Achievement opens");
 			userView.dispose();
 			achievementView = new AchievementScreen(theModel);
 			ControllerAchievement achievementcontroller = new ControllerAchievement(theModel, achievementView);

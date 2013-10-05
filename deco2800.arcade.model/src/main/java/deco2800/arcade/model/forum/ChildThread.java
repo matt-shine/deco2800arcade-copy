@@ -79,6 +79,20 @@ public class ChildThread {
 		return this.like;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sd = new StringBuilder();
+		sd.append(this.id);
+		sd.append(": ");
+		sd.append(this.message);
+		sd.append(", created by ");
+		sd.append(this.createdBy.getID());
+		sd.append(", on ");
+		sd.append(this.timestamp.toString());
+		sd.append(", vote=");
+		sd.append(this.like);
+		return new String(sd);
+	}
 //	public getThread() {
 		
 //	}

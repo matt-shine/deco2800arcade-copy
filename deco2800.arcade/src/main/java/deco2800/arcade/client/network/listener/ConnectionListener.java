@@ -29,7 +29,7 @@ public class ConnectionListener extends NetworkListener {
 			
 			@SuppressWarnings("unused")
 			ConnectionResponse connectionResponse = (ConnectionResponse)object;
-			
+
 			//TODO something
 		}
 	}

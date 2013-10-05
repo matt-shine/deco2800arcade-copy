@@ -26,7 +26,7 @@ public class Topbar extends Group {
         texture = new NinePatch(new Texture(Gdx.files.internal("iconMagenta.png")), 75, 75, 75, 75);
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
 
-        simpleDateFormat = new SimpleDateFormat("h:mm a");
+        simpleDateFormat = new SimpleDateFormat("hh:mm a");
 
         username = new Label("USERNAME", skin, "default-large");
         clock = new Label("CLOCK", skin, "default-large");
@@ -40,7 +40,7 @@ public class Topbar extends Group {
         texture.draw(batch, width - 675, height - 125, 700, 150);
         username.setPosition(width - 620, height - 70);
         username.setText(overlay.getPlayer().getUsername());
-        clock.setPosition(width - 160, height - 70);
+        clock.setPosition(width - 170, height - 70);
         clock.setText(simpleDateFormat.format(new Date()));
         this.addActor(username);
         this.addActor(clock);

@@ -36,7 +36,13 @@ public class MenuScreen implements Screen {
     private TextButton helpButton;
     private TextButton exitButton;
     private Label label;
-	
+    // Used to check whether to display dotted selection box around buttons
+	private static Boolean keyboardSelection = false;
+	// Navigation counter used for keyboard selection on menus
+	private static int buttonSelected = 0;
+	private MenuInputProcessor processor;
+    
+    
 	public MenuScreen( BurningSkies game){
 		this.game = game;		
 	}
@@ -55,20 +61,21 @@ public class MenuScreen implements Screen {
 	public void hide() {
 		game.stopSong();
 		ArcadeInputMux.getInstance().removeProcessor(stage);
+		ArcadeInputMux.getInstance().removeProcessor(processor);
 		this.dispose();
 	}
 
 	@Override
 	public void pause() {
 	}
-
+	
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
-
+        
         batch.begin();
         stage.draw();
         batch.end();
@@ -95,8 +102,10 @@ public class MenuScreen implements Screen {
         int height = BurningSkies.SCREENHEIGHT;
         
         stage = new Stage(width, height, true);
-	
         ArcadeInputMux.getInstance().addProcessor(stage);
+        
+        processor = new MenuInputProcessor(game);
+    	ArcadeInputMux.getInstance().addProcessor(processor);
 	
 	    TextButtonStyle style = new TextButtonStyle();
 	    style.up = skin.getDrawable("buttonnormal");
@@ -200,5 +209,22 @@ public class MenuScreen implements Screen {
 	        	ArcadeSystem.goToGame(ArcadeSystem.UI);
 	        }
 	    });
+	}
+	
+
+	public static void setSelected(int selected) {
+		buttonSelected = selected;
+	}
+	
+	public static int getSelected() {
+		return buttonSelected;
+	}
+	
+	public static void setKeyboardSelected(boolean keyboard) {
+		keyboardSelection = keyboard;
+	}
+	
+	public static boolean getKeyboardSelection() {
+		return keyboardSelection;
 	}
 }

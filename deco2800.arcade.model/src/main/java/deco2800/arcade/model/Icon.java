@@ -20,6 +20,7 @@ public class Icon {
 	private final int PAD = 2;
 
 	private BufferedImage icon;
+    private String path;
 
 	/*
 	 * Notes for testing and implementations:
@@ -45,7 +46,21 @@ public class Icon {
 		 * cannot be loaded there is no way (other than changing the return type
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
+        path = filepath;
 	}
+
+    /**
+     * Create new Icon instance
+     */
+    public Icon() {
+
+    }
+
+    public void setPath(String filepath) {
+        path = filepath;
+
+        //TODO Convert to image
+    }
 
 	/**
 	 * Creates a new Icon given a BufferedImage icon.

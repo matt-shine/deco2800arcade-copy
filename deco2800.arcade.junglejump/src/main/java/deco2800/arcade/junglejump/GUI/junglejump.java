@@ -158,7 +158,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
-		System.out.println(System.getProperty("user.dir"));
+        System.out.println(System.getProperty("user.dir"));
 		texture = new Texture(("junglejumpassets/mainscreen.png"));
 		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));
 		monkeySitRIGHT = new Texture(("junglejumpassets/monkeySit.png"));

@@ -20,6 +20,8 @@ import deco2800.server.listener.GameListener;
 import deco2800.server.listener.PackmanListener;
 import deco2800.server.listener.HighscoreListener;
 import deco2800.server.database.HighscoreDatabase;
+import deco2800.server.database.*;
+import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.listener.AchievementListener;
@@ -44,6 +46,8 @@ public class ArcadeServer {
 	// Package manager
 	@SuppressWarnings("unused")
 	private PackageServer packServ;
+
+    private GameStorage gameStorage;
 	
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
@@ -115,6 +119,14 @@ public class ArcadeServer {
 	public HighscoreDatabase getHighscoreDatabase() {
 		return this.highscoreDatabase;
 	}
+
+    /**
+     * Access the server's game storage
+     * @return gameStorage
+     */
+    public GameStorage getGameStorageDatabase() {
+        return gameStorage;
+    }
 	
 	/**
 	 * Create a new Arcade Server.
@@ -122,6 +134,11 @@ public class ArcadeServer {
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
+
+        instance = this;
+
+        this.gameStorage = new GameStorage();
+
 		this.creditStorage = new CreditStorage();
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
@@ -134,9 +151,12 @@ public class ArcadeServer {
 		this.highscoreDatabase = new HighscoreDatabase();
 		
 		this.packServ = new PackageServer();
+
+
 		
 		//initialize database classes
 		try {
+            gameStorage.initialise();
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
@@ -179,6 +199,7 @@ public class ArcadeServer {
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
+        server.addListener(new LibraryListener());
 	}
 
     /**

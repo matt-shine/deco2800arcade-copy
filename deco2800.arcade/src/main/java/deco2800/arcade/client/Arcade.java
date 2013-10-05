@@ -454,7 +454,11 @@ public class Arcade extends JFrame {
     
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
-		System.out.println("Match Added To List in Arcade");
+	}
+	
+	public static void clearMatchList() {
+		matches.removeAll(matches);
+		System.out.println("MATCHES CLEARED (SIZEOF: " + matches.size());
 	}
 	
 	public static void removeFromMatchList(RemovedMatchDetails response) {
@@ -480,7 +484,6 @@ public class Arcade extends JFrame {
 	
 
 	public void addPlayerToLobby() {
-		System.out.println("Adding player to arcade");
 		NewLobbyRequest request = new NewLobbyRequest();
 		request.playerID = player.getID();
 		request.requestType = LobbyRequestType.JOINLOBBY;

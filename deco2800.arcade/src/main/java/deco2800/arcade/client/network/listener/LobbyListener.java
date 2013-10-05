@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
@@ -33,7 +34,7 @@ public class LobbyListener extends NetworkListener {
 		if (object instanceof ActiveMatchDetails) {
 			ActiveMatchDetails match = (ActiveMatchDetails)object;
 			Arcade.addToMatchList(match);
-			System.out.println("[CLIENT] MATCH ADDED. gameId: " + match.gameId + ", hostId: " + match.hostPlayerId);
+
 		}
 		
 		else if (object instanceof RemovedMatchDetails) {
@@ -46,6 +47,9 @@ public class LobbyListener extends NetworkListener {
 			CreateMatchResponse response = (CreateMatchResponse)object;
 			System.out.println("CreateMatchResponse received: matchId: " + response.matchId);
 			//TODO: TAKE THE USER SOMEWHERE/CREATE A POPUP OR SOMETHING
+		}
+		else if (object instanceof ClearListRequest) {
+			Arcade.clearMatchList();
 		}
 	}
 }

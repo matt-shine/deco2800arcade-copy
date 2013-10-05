@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.SnapshotArray;
 
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -94,7 +95,6 @@ public class MultiplayerLobby implements Screen {
 		textFieldStyle.background = skin2.newDrawable("white", Color.DARK_GRAY);
 		skin2.add("default", textFieldStyle);
 
-
 		TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
 
 		textButtonStyle.up = skin2.newDrawable("white", Color.DARK_GRAY);
@@ -105,10 +105,10 @@ public class MultiplayerLobby implements Screen {
 
 		skin2.add("default", textButtonStyle);
 
-
 		//Create buttons, labels and tables for layout purposes 
 		//Changed open games 
 		TextButton createbutton = new TextButton("Create Match", skin);
+		TextButton refreshButton = new TextButton("Refresh", skin);
 		TextButton button = new TextButton("Open Games", skin);
 		TextButton button4 = new TextButton("Match Me!", skin);
 		TextButton button2 = new TextButton("Return to Menu", skin);
@@ -142,7 +142,6 @@ public class MultiplayerLobby implements Screen {
 		stage.addActor(table2);
 		stage.addActor(table);
 
-
 		// Add tables and set position.
 		table3.add(chatfield).width(200).height(35).padLeft(960).padTop(440);
 
@@ -151,6 +150,8 @@ public class MultiplayerLobby implements Screen {
 		table3.add(button3).width(45).height(35).padLeft(3).padTop(440);
 
 		table.add(createbutton).width(300).height(40).padRight(20).padTop(600);
+		
+		table.add(refreshButton).width(300).height(40).padRight(20).padTop(600);
 		
 		table.add(button).width(300).height(40).padRight(20).padLeft(20).padTop(600);
 		
@@ -162,10 +163,6 @@ public class MultiplayerLobby implements Screen {
 		final ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
 		System.out.println("Matches: " + matches.toString());
 
-		//table2.removeActor();
-		table2.clear();
-		
-	
 		if (matches.size() > 0 ) {
 			for (int i = 0; i < matches.size(); i++) {
 				Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
@@ -181,12 +178,9 @@ public class MultiplayerLobby implements Screen {
 				button4.addListener(new ChangeListener() {
 		            public void changed (ChangeEvent event, Actor actor) {
 		                System.out.println("You Clicked: " + button5.getName());
-						
 					}
-		            
 		        });
 			}
-
 		}
 
 		
@@ -202,57 +196,41 @@ public class MultiplayerLobby implements Screen {
 				
             	CreateMatchRequest request = new CreateMatchRequest();
             	request.gameId = Integer.toString((int)(Math.random()*10000));
-            	System.out.println("**********" + request.gameId);
             	request.hostPlayerId = (int) (Math.random()*1000);
             	ArcadeSystem.createMatch(request);
-            	
-        		//Create "Refresh" Button.
-        		table2.row();
-        		final TextButton refresh = new TextButton("Refresh", skin);
-        		final TextButton spacer = new TextButton("", skin);
-        		table2.add(spacer).width(0).height(0).padTop(30).padBottom(80);
-        		table2.add(refresh).width(160).height(35).padTop(30).padBottom(80);	
-        		
-        		// "Refresh" button event listener.
-        			 refresh.addListener(new ChangeListener() {
-        		public void changed (ChangeEvent event, Actor actor) {
-        			table2.clear();
-        			
-        			if (matches.size() > 0 ) {
-        				for (int i = 0; i < matches.size(); i++) {
-        					Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
-        					Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
-        					final TextButton button4 = new TextButton("Join", skin);
-        					
-        					table2.center().left();
-        					table2.add(matchLabel).width(130).padTop(20).padLeft(150);
-        					table2.add(player).width(130).padTop(20).padLeft(130);
-        					table2.add(button4).width(130).height(30).padTop(20);
-        					table2.row();
-        					
-        					button4.addListener(new ChangeListener() {
-        			            public void changed (ChangeEvent event, Actor actor) {
-        			                System.out.println("You Clicked: " + button4.getName());
-        							
-        						}
-        			            
-        			        });
-        				}
-        	
-        			}
-
-        		
-        	}
-        		
-        		
-            });
-
             }
-			
-			
         });
 
-		
+		// "Refresh" button event listener.
+		 refreshButton.addListener(new ChangeListener() {
+			 	public void changed (ChangeEvent event, Actor actor) {
+					table2.clear();
+			
+					
+					if (matches.size() > 0 ) {
+						for (int i = 0; i < matches.size(); i++) {
+							Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
+							Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
+							final TextButton button4 = new TextButton("Join", skin);
+							
+							table2.center().left();
+							table2.add(matchLabel).width(130).padTop(20).padLeft(150);
+							table2.add(player).width(130).padTop(20).padLeft(130);
+							table2.add(button4).width(130).height(30).padTop(20);
+							table2.row();
+							
+							button4.addListener(new ChangeListener() {
+					            public void changed (ChangeEvent event, Actor actor) {
+					                System.out.println("You Clicked: " + button4.getName());
+									
+								}
+					            
+					        });
+						}
+			
+					}	
+			 	}
+		});
 		
 		
 		// "Create Match" Button Event Listener

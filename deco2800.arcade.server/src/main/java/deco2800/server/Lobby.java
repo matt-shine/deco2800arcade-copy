@@ -12,6 +12,7 @@ import java.util.UUID;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 /**
  * The Lobby class - Singleton Pattern.
@@ -54,33 +55,7 @@ public class Lobby {
 		return instance;
 	}
 
-	/**
-	 * Returns the current matches in the lobby.
-	 * @return - ArrayList of current matches  in the lobby.
-	 */
-//	public ArrayList<LobbyMatch> getMatches() {
-//		ArrayList<LobbyMatch> copy = new ArrayList<LobbyMatch>();
-//		System.arraycopy(lobbyGames, 0, copy, 0, lobbyGames.size());
-//		return copy;
-//	}
-	
-	public boolean sendMatchesToClient(Connection connection) {
-		if (lobbyGames.size() == 0) {
-			return false;
-		} else {
-			for (int i=0; i< lobbyGames.size(); i++) {
-				ActiveMatchDetails match = new ActiveMatchDetails();
-				match.gameId = lobbyGames.get(i).getGameId();
-				match.hostPlayerId = lobbyGames.get(i).getHostPlayerId();
-				match.matchId = lobbyGames.get(i).getMatchId().toString();
-				connection.sendTCP(match);
-				System.out.println("SENDING MATCH TO CLIENT");
-			}
- 		}
-		
-		return true;
-	}
-	
+
 
 	/** 
 	 * Create a match to be displayed by the lobby.
@@ -100,7 +75,6 @@ public class Lobby {
 		CreateMatchResponse response = new CreateMatchResponse();
 		response.matchId = match.getMatchId().toString();
 		connection.sendTCP(response);
-		System.out.println("[SERVER] Create Match Response sent.");
 		
 		this.sendGamesToLobbyUsers();
 	}
@@ -130,10 +104,12 @@ public class Lobby {
 	 * Currently called exclusively by the ArcadeServer every 15 seconds.
 	 */
 	public void sendGamesToLobbyUsers() {
-		System.out.println("[SERVER] in sendGamesToLobbyUsers, connectedPlayers: " + connectedPlayers.size() + ", lobbyGames: " + lobbyGames.size());
 		if (connectedPlayers.size() > 0 && lobbyGames.size() > 0) {
 		
+		
 			for (int i=0;i<connectedPlayers.size();i++) {
+				ClearListRequest clr = new ClearListRequest();
+				connectedPlayers.get(i).sendTCP(clr);
 				for (int j=0;j<lobbyGames.size();j++) {
 					/* Create the ActiveMatchDetails object to send */
 					ActiveMatchDetails amd = new ActiveMatchDetails();

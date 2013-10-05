@@ -14,11 +14,11 @@ public class Level {
 	private int length;
 	private int height;
 	private ArrayList<Platform> platforms; // list of all objects available to be rendered
-	private ArrayList<Collectable> bananas;
+	private ArrayList<Boolean> bananas;
 	
 	public Level() {
 		platforms = new ArrayList<Platform>();
-		bananas = new ArrayList<Collectable>();
+		bananas = new ArrayList<Boolean>();
 	}
 	
 	public ArrayList<Platform> getPlatforms() {
@@ -45,8 +45,16 @@ public class Level {
 		platforms.add(thing);
 	}
 	
-	public void addBanana(Collectable banana) {
-		bananas.add(banana);
+	public void addBanana() {
+		bananas.add(false);
+	}
+	
+	public void setBanana(int bananaIndex, boolean state) {
+		bananas.set(bananaIndex, state);
+	}
+	
+	public boolean getBanana(int bananaIndex) {
+		return bananas.get(bananaIndex);
 	}
 	
 	/**

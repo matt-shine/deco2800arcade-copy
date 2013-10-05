@@ -11,12 +11,13 @@ public class Platform {
 	private boolean active;
 	public boolean climbable = false;
 	private Texture platText;
+	public boolean visible = true;
 	private boolean inverted;
 	private enum world {
 		WORLD_ONE, WORLD_TWO, WORLD_THREE
 	}
 	private world currentWorld;
-	private char platType;
+	public char platType;
 	
 	/**
 	 * Platform constructor
@@ -60,8 +61,9 @@ public class Platform {
 			break;
 		case 'j': // Vine
 			platformType = "vine_short";
-			this.width = 20;
+			this.width = 40;
 			this.height = 80;
+			this.xPos -= 10;
 			break;
 		case 't': // short tree
 			platformType = "treetop_short";
@@ -80,6 +82,11 @@ public class Platform {
 		case 'i':
 			platformType = "trunk_short";
 			this.height = 40;
+			break;
+		case 'b':
+			platformType = "banana";
+			this.width = 30;
+			this.height = 30;
 			break;
 		default:
 			platformType = "branch_short";

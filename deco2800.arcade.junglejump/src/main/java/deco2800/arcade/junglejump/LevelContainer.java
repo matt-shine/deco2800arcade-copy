@@ -32,7 +32,7 @@ public class LevelContainer {
 		// Read level from file
 		for(int i=0;i<worldAmount;i++) {
 			for(int j=0; j<levelAmount; j++) {
-				addLevel(j);
+				addLevel(i, j);
 			}
 		}
 		
@@ -44,11 +44,13 @@ public class LevelContainer {
 	 * Level is added to arraylist of levels
 	 * @param levelNum
 	 */
-	public void addLevel(int levelNum) {
+	public void addLevel(int worldNum, int levelNum) {
 		BufferedReader br;
+		int bananaCounter = 0;
 		Level level = new Level(); // Creating and adding to a level
+		
 		try {
-			br = new BufferedReader(new FileReader("junglejumpassets/levels/world" + (currentWorld+1) + "/level" + (levelNum+1) + ".txt"));
+			br = new BufferedReader(new FileReader("junglejumpassets/levels/world" + (worldNum+1) + "/level" + (levelNum+1) + ".txt"));
 		} catch (FileNotFoundException e1) {
 			System.out.println("No file");
 			return;
@@ -64,6 +66,12 @@ public class LevelContainer {
 	        	for(int x=0; x<junglejump.SCREENWIDTH/xLength; x++) {
 	        		char c = line.charAt(x);
 	        		Platform p;
+	        		if(c == 'b') {
+	        				level.addBanana(); // false means not found
+	        				p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+		        			level.addPlatform(p);
+		        			bananaCounter++;
+	        		}
 	        		if(c!='*') {
 	        			p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);

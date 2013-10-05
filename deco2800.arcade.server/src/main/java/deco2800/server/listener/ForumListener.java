@@ -56,6 +56,18 @@ public class ForumListener extends Listener {
 			} finally {
 				connection.sendTCP(response);
 			}
+		} else if (object instanceof AddVoteRequest) {
+			/* For both parent and child thread */
+			AddVoteRequest request = (AddVoteRequest) object;
+			AddVoteResponse response = new AddVoteResponse();
+			response.error = "";
+			try {
+				ArcadeServer.instance().getForumStorage().addVote(request.value, request.threadType, request.id);
+			} catch (DatabaseException e) {
+				response.error = e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+			}
 		} else if (object instanceof ParentThreadRequest) {
 			/* Reply ParentThread instance from given pid 
 			 * Set error for no parent thread is found or DatabaseException
@@ -94,6 +106,18 @@ public class ForumListener extends Listener {
 			} finally {
 				connection.sendTCP(response);
 			}
+		} else if (object instanceof GetParentThreadsRequest){
+			GetParentThreadsRequest request = (GetParentThreadsRequest) object;
+			GetParentThreadsResponse response = new GetParentThreadsResponse();
+			response.error = "";
+			try {
+				response.result = ArcadeServer.instance().getForumStorage().getParentThreads(request.start, request.end, request.limit);
+			} catch (DatabaseException e) {
+				response.error = e.getMessage();
+				response.result = null;
+			} finally {
+				connection.sendTCP(response);
+			}
 		} else if (object instanceof DeleteRequest) {
 			/* Delete parent_thread record for given pid, and sends error if occur */
 			DeleteRequest request = (DeleteRequest) object;
@@ -115,6 +139,18 @@ public class ForumListener extends Listener {
 			try {
 				response.result = ArcadeServer.instance().getForumStorage()
 						.insertParentThread(request.topic, request.message, request.createdBy, request.category, request.tags);
+			} catch (DatabaseException e) {
+				response.error = e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+			}
+		} else if (object instanceof UpdateParentThreadRequest) {
+			UpdateParentThreadRequest request = (UpdateParentThreadRequest) object;
+			UpdateParentThreadResponse response = new UpdateParentThreadResponse();
+			response.error = "";
+			try {
+				ArcadeServer.instance().getForumStorage().updateParentThread(
+						request.pid, request.newTopic, request.newMessage, request.newCategory, request.newTags);
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();
 			} finally {

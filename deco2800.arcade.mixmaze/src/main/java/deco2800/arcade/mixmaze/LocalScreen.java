@@ -25,7 +25,7 @@ class LocalScreen extends GameScreen {
 		model = new MixMazeModel(5, BEGINNER, 60*2);
 
 		setupGameBoard();
-		setupTimer();
+		setupTimer(model.getGameMaxTime());
 		startGame();
 	}
 
@@ -50,6 +50,7 @@ class LocalScreen extends GameScreen {
 		}
 	}
 
+	@Override
 	protected void setupGameBoard() {
 		TileViewModel tile;
 		int boardSize = model.getBoardSize();
@@ -82,12 +83,13 @@ class LocalScreen extends GameScreen {
 		right.setPlayerName("mixMAZEr0x");
 	}
 
-	protected void setupTimer() {
+	@Override
+	protected void setupTimer(int timeLimit) {
 		LabelStyle style = timerLabel.getStyle();
 		style.fontColor = WHITE;
 		timerLabel.setStyle(style);
 
-		countdown = model.getGameMaxTime();
+		countdown = timeLimit;
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				int min = countdown / 60;
@@ -104,7 +106,7 @@ class LocalScreen extends GameScreen {
 						(sec < 10) ? "0" : "", sec));
 				countdown -= 1;
 			}
-		}, 0, 1, model.getGameMaxTime());
+		}, 0, 1, timeLimit);
 		Timer.schedule(new Timer.Task() {
 			public void run() {
 				PlayerModel winner;
@@ -122,15 +124,18 @@ class LocalScreen extends GameScreen {
 				}
 				endGameTable.setVisible(true);
 			}
-		/*
-		 * FIXME: this does not look like a good solution.
-		 * It takes some time for timerLabel to change text,
-		 * and therefore, without the extra 1, the game will end
-		 * before the timer showing up 00:00.
-		 */
-		}, model.getGameMaxTime() + 1);
+			/*
+			 * FIXME: this does not look like a good solution. It
+			 * takes some time for timerLabel to change text, and
+			 * therefore, without the extra 1, the game will end
+			 * before the timer showing up 00:00.
+			 */
+		}, timeLimit + 1);
 	}
 
+	/**
+	 * Starts the game.
+	 */
 	protected void startGame() {
 		Gdx.input.setInputProcessor(stage);
 		stage.setKeyboardFocus(gameArea);

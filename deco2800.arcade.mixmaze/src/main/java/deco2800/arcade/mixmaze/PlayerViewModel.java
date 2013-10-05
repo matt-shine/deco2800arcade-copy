@@ -31,7 +31,7 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	private final TextureRegion[] region;
 	private final KeyManager km;
 	private final int id;
-	private final GameScreen.Scorebar scorebar;
+	private final GameScreen.ScoreBar scorebar;
 	private final GameScreen.SidePanel sidePanel;
 
 	private int x;
@@ -45,7 +45,7 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	 */
 	PlayerViewModel(IMixMazeModel gameModel,
 			int tileSize, int id, int[] playerControls,
-			GameScreen.Scorebar scorebar,
+			GameScreen.ScoreBar scorebar,
 			GameScreen.SidePanel sidePanel) {
 		Texture texture;
 		HashMap<Integer, Integer> mapping =

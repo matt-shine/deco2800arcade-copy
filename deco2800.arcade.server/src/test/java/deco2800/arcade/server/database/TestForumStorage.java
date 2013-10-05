@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ForumStorage;
+import deco2800.arcade.model.forum.ChildThread;
 import deco2800.arcade.model.forum.ParentThread;
 
 /**
@@ -54,6 +55,12 @@ public class TestForumStorage {
 		this.forumStorage.insertParentThread("Test topic 2", "Test content this is.", 1, "General Admin", "tag3#tag4");
 		this.forumStorage.insertParentThread("Test topic 3", "Test content this is.", 1, "General Admin", "tag3#tag5");
 		this.forumStorage.insertParentThread("Test topic 4", "Test content this is.", 1, "General Admin", "tag6#tag7");
+		this.forumStorage.insertChildThread("This is child thread 1.", 1, 1);
+		this.forumStorage.insertChildThread("This is child thread 2.", 1, 1);
+		this.forumStorage.insertChildThread("This is child thread 3.", 1, 1);
+		this.forumStorage.insertChildThread("This is child thread 4.", 1, 1);
+		this.forumStorage.insertChildThread("This is child thread 5.", 1, 2);
+		this.forumStorage.insertChildThread("This is child thread 6.", 1, 2);
 	}
 	
 	@After
@@ -61,6 +68,7 @@ public class TestForumStorage {
 		tester.onTearDown();
 	}
 	
+	/* Parent thread-related test cases */
 	@Test
 	public void getParentThreadsTest() throws Exception {
 		ParentThread[] threads = this.forumStorage.getParentThreads(0, 0, 0);
@@ -92,6 +100,29 @@ public class TestForumStorage {
 		assertEquals("Game Bug", this.forumStorage.getParentThread(1).getCategory());
 	}
 	
+	/* Child thread-related test cases */
+	@Test
+	public void getChildThreadTest() throws Exception {
+		ChildThread[] array = this.forumStorage.getChildThreads(1);
+		for (ChildThread temp : array) {
+			System.out.println(temp.toString());
+		}
+	}
+	@Test
+	public void getChildThreadTest2() throws Exception {
+		ChildThread[] array = this.forumStorage.getChildThreads(1, 1, 4, 3);
+		assertEquals(array.length, 3);
+		assertEquals(array[0].getMessage(), "This is child thread 1.");
+	}
+	
+	@Test
+	public void deleteChildThreadTest() throws Exception {
+		this.forumStorage.deleteChildThread(1);
+		this.forumStorage.deleteChildThread(2);
+		assertEquals(this.forumStorage.getChildThreads(1).length, 2);
+	}
+	
+	/* General test cases */
 	@Test
 	public void getAllTagsTest() throws Exception {
 		System.out.println("List of tags: ");

@@ -68,7 +68,7 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		km = new KeyManager(mapping);
 
 		/* load texture */
-		texture = new Texture(Gdx.files.internal("body.png"));
+		texture = new Texture(Gdx.files.internal("body2.png"));
 		bodyRegion = new TextureRegion(texture);
 		texture = new Texture(Gdx.files.internal(
 				(id == 1) ? "miner.png" : "cowboy.png"));
@@ -88,7 +88,10 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 
 		batch.setColor(this.getColor());
 		batch.draw(bodyRegion, x * tileSize, 640 - (y + 1) * tileSize,
-				tileSize, tileSize);
+				tileSize / 2, tileSize / 2,
+				tileSize, tileSize,
+				1f, 1f,
+				rotation);
 		batch.setColor(old);
 		batch.draw(headRegion, x * tileSize, 640 - (y + 1) * tileSize,
 				tileSize / 2, tileSize / 2,

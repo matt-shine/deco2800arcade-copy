@@ -72,7 +72,7 @@ class WallModel {
 		builder = player;
 		
 		for (TileModel t : tiles) {
-			t.validateBox(player);
+			t.validateBox(player, this);
 			t.updateWall(this, true);
 		}
 	}
@@ -90,7 +90,7 @@ class WallModel {
 		builder = null;
 		
 		for (TileModel t : tiles) {
-			t.validateBox(player);
+			t.validateBox(player, this);
 			t.updateWall(this, false);
 		}
 	}

@@ -74,7 +74,7 @@ public class MixMazeModel implements IMixMazeModel {
 	/** Board size */
 	private int boardSize;
 	
-	/** Tiles on the game board */
+	/** Tiles on the game board (rows by columns, i.e y by x) */
 	private TileModel[][] board;
 	
 	/** Items on the game board (one per tile) */
@@ -170,7 +170,7 @@ public class MixMazeModel implements IMixMazeModel {
 						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);
 					}
 				}
-				board[y][x] = new TileModel(x, y, adjTiles);
+				board[y][x] = new TileModel(x, y, adjTiles, this);
 			}
 		}
 	}
@@ -513,5 +513,88 @@ public class MixMazeModel implements IMixMazeModel {
 
 		if (item != null && player.pickupItem(item))
 			setSpawnedItem(null, x, y);
+	}
+	
+	/**
+	 * Checks if there is an enclosed area starting from <code>tile</code>.
+	 * Ignore the direction on the specified tile
+	 * where a wall is most recently built/destroyed.
+	 * 
+	 * @param tile		the tile to start
+	 * @param ignoreDir	the direction on the tile to ignore 
+	 * @return a two dimensional array indicating whether each box is part 
+	 * of the enclosed area.
+	 */
+	boolean checkBoxes(TileModel tile, int ignoreDir, boolean[][] marker) {
+		int x = tile.getX();
+		int y = tile.getY();
+		
+		if (hasUnbuiltEdgeWall(tile))
+			return false;
+		
+		marker[y][x] = true;
+		if (!(ignoreDir == WEST || tile.isWallBuilt(WEST) 
+				|| checkTile(board[y][x-1], marker)))
+			return false;
+		if (!(ignoreDir == NORTH || tile.isWallBuilt(NORTH) 
+				|| checkTile(board[y-1][x], marker)))
+			return false;
+		if (!(ignoreDir == EAST || tile.isWallBuilt(EAST) 
+				|| checkTile(board[y][x+1], marker)))
+			return false;
+		if (!(ignoreDir == SOUTH || tile.isWallBuilt(SOUTH) 
+				|| checkTile(board[y+1][x], marker)))
+			return false;
+		return true;
+	}
+	
+	private boolean checkTile(TileModel t, boolean[][] marker) {
+		int x = t.getX();
+		int y = t.getY();
+		
+		logger.debug("check tile ({}, {})", y, x);
+		/* already visited */
+		if (marker[y][x]) {
+			logger.debug("already marked");
+			return true;
+		}
+		
+		/* area unbounded */
+		if (hasUnbuiltEdgeWall(t)) {
+			logger.debug("has unbuilt edge wall");
+			return false;
+		}
+		
+		/* mark the tile and check each direction */
+		marker[y][x] = true;
+		if (!(t.isWallBuilt(WEST) || checkTile(board[y][x-1], marker))) {
+			logger.debug("west adjacent tile failed");
+			return false;
+		}
+		if (!(t.isWallBuilt(NORTH) || checkTile(board[y-1][x], marker))) {
+			logger.debug("north adjacent tile failed");
+			return false;
+		}
+		if (!(t.isWallBuilt(EAST) || checkTile(board[y][x+1], marker))) {
+			logger.debug("east adjacent tile failed");
+			return false;
+		}
+		if (!(t.isWallBuilt(SOUTH) || checkTile(board[y+1][x], marker))) {
+			logger.debug("south adjacent tile failed");
+			return false;
+		}
+		logger.debug("success");
+		return true;
+	}
+	
+	private boolean hasUnbuiltEdgeWall(TileModel t) {
+		int x = t.getX();
+		int y = t.getY();
+		
+		return ((x == 0 && !t.isWallBuilt(WEST))
+				|| x == boardSize - 1 && !t.isWallBuilt(EAST)
+				|| y == 0 && !t.isWallBuilt(NORTH)
+				|| y == boardSize - 1 && !t.isWallBuilt(SOUTH))
+		       ? true : false;
 	}
 }

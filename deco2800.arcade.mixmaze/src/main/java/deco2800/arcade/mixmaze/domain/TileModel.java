@@ -29,6 +29,9 @@ public class TileModel {
 	/** Tiles adjacent to this tile */
 	private TileModel[] adjTiles;
 	
+	/** The game model that contains this tile */
+	private MixMazeModel gameModel;
+	
 	/** Player who built the box or <code>null</code> if not built */
 	private PlayerModel boxer = null;
 	
@@ -43,11 +46,13 @@ public class TileModel {
 	 * @param x		the column number (origin at top left)
 	 * @param y		the row number (origin at top left)
 	 * @param adjTiles	the tiles adjacent to this tile
+	 * @param gameModel	the game model
 	 */
-	public TileModel(int x, int y, TileModel[] adjTiles) {
+	TileModel(int x, int y, TileModel[] adjTiles, MixMazeModel gameModel) {
 		this.x = x;
 		this.y = y;
 		this.adjTiles = adjTiles;
+		this.gameModel = gameModel;
 		observers = new ArrayList<TileModelObserver>();
 		isBoxBuilt = false;
 		initWalls();
@@ -160,18 +165,33 @@ public class TileModel {
 	 * <code>boxer</code> based on any change.
 	 *
 	 * @param player	the player who used an action against this tile
+	 * @param wall		the wall that is most recently built/destroyed
 	 */
-	void validateBox(PlayerModel player) {
-		if (!isBoxBuilt && isBox()) {
-			isBoxBuilt = true;
-			boxer = player;
+	void validateBox(PlayerModel player, WallModel wall) {
+		int size = gameModel.getBoardSize();
+		boolean[][] marker = new boolean[size][size];
+		
+		if (!gameModel.checkBoxes(this, getDirection(wall), marker))
+			return;
+		
+		for (int i = 0; i < marker.length; i++)
+			for (int j = 0; j < marker.length; j++)
+				if (marker[j][i])
+					gameModel.getBoardTile(i, j)
+							.toggleBox(player);
+		
+	}
+	
+	private void toggleBox(PlayerModel p) {
+		isBoxBuilt = !isBoxBuilt;
+		if (isBoxBuilt) {
+			boxer = p;
 			boxer.incrementScore();
-			updateBoxer(player.getId());
-		} else if (isBoxBuilt && !isBox()) {
-			isBoxBuilt = false;
+			updateBoxer(p.getId());
+		} else {
 			boxer.decrementScore();
 			boxer = null;
-			updateBoxer(0);
+			updateBoxer(0);			
 		}
 	}
 

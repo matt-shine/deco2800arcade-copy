@@ -4,8 +4,8 @@ public class TeleportTile extends Tile {
 
 	private Tile target;
 	
-	public TeleportTile() {
-		super();
+	public TeleportTile(GameMap gameMap) {
+		super(gameMap);
 	}
 
 	public Tile getTarget() {
@@ -14,6 +14,10 @@ public class TeleportTile extends Tile {
 
 	public void setTarget(Tile target) {
 		this.target = target;
+	}
+	
+	public String toString() {
+		return "Teleport" + super.toString();
 	}
 
 	//no render method needed as tile is blank and can use superclass method

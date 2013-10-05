@@ -15,13 +15,15 @@ public class WallTile extends Tile {
 	 */
 	private final char type;
 	
-	public WallTile(char type) {
+	public WallTile(GameMap gameMap, char type) {
+		super(gameMap);
 		this.type = type;
-		if (type == 'Q') {
-			this.setMovers(new ArrayList<Mover>());
-		} else {
-			this.setMovers(null);
-		}
+		this.setMovers(new ArrayList<Mover>());
+//		if (type == 'Q') {
+//			this.setMovers(new ArrayList<Mover>());
+//		} else {
+//			this.setMovers(null);
+//		}
 	}	
 	
 	public void render(SpriteBatch batch, float x, float y) {
@@ -71,5 +73,9 @@ public class WallTile extends Tile {
 		case 'Z': row = 10; col = 3; break;
 		}
 		batch.draw(tileSprites[row][col], x, y, sideLength, sideLength);
+	}
+	
+	public String toString() {
+		return "Wall" + super.toString();
 	}
 }

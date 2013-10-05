@@ -43,7 +43,7 @@ public class Pacman extends GameClient {
 	private ShapeRenderer shaper;
 	private PacChar player;
 	//takes keyboard input
-	private InputProcessor controller;
+	private PacController controller;
 	private GameMap gameMap;
 	
 	private List<Mover> colList;	
@@ -111,18 +111,16 @@ public class Pacman extends GameClient {
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
 		shaper = new ShapeRenderer();
+		//initialise gamemap
+		gameMap = new GameMap(450, 100);
+		gameMap.createTiles(gameMap.readMap(file));
 		//initialise pacman
-//		player = new PacChar(colList);
-//		testWall = new Wall(colList, 1, 350, 350, 25);
-//		testWall2 = new Wall(colList, 2, 350, 350, 25);
-//		System.out.println(colList.toString());
+		player = new PacChar(gameMap);
 		//initialise receiver for input- use the multiplexer from Arcade
-		controller = new PacController(player, colList);
+		controller = new PacController(player, gameMap);
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
-		gameState = GameState.READY;
-		gameMap = new GameMap();
-		gameMap.createTiles(gameMap.readMap(file));
+		gameState = GameState.READY;		
 	}
 	
 	/**
@@ -140,6 +138,9 @@ public class Pacman extends GameClient {
 	}
 	
 	private void makeChanges() {
+		if (controller.checkNoWallCollision(player.currentTile)) {
+			player.setCurrentState(PacState.IDLE);
+		}
 		 // Respond to user input depending on the game state
 	    switch(gameState) {	    
 	    //TODO BLARH apparently this commented bit of code isn't even being reached
@@ -188,7 +189,7 @@ public class Pacman extends GameClient {
 	    batch.begin();
 	    gameMap.render(batch);
 	    // render player pacman 
-//	    player.render(batch);
+	    player.render(batch);
 	    //end the drawing
 	    batch.end();
 	    

@@ -17,35 +17,14 @@ import deco2800.arcade.pacman.PacChar.PacState;
 public class PacController implements InputProcessor {
 
 	private PacChar player;
-	private List<Mover> colList;
+	private GameMap gameMap;
 	
-	public PacController(PacChar player, List<Mover> colList) {
+	public PacController(PacChar player, GameMap gameMap) {
 		this.player = player;
-		this.colList = colList;
+		this.gameMap = gameMap;
 	}
 	
-	private void checkCollisions() {
-		//check collisions here, using x,y,width, height against the two walls
-		// variables are left, right, top, bottom
-		int pl = player.getX();
-		int pb = player.getY();
-		int pt = player.getHeight() + pb;
-		int pr = player.getWidth() + pl;
-	    for (int i=1; i < colList.size(); i++) {
-	    	Mover c = colList.get(i);
-	    	int cl = c.getX();
-	    	int cb = c.getY();
-	    	int cr = cl + c.getWidth();
-	    	int ct = cb + c.getHeight();
-	    	if ((pl < cl && pr >= cl) || (pr > cr && pl <= cr) || (pb < cb && pt >= cb) || (pt > ct && pb <= ct)) {
-	    		//set pacman's state to idle so he stops moving
-	    		player.setCurrentState(PacState.IDLE);
-	    		System.out.println("COLLISION DETECTED!");
-	    		return;
-	    	}
-	    }
-	}
-	
+		
 	@Override
 	public boolean keyDown(int key) {
 		Dir facing;
@@ -65,16 +44,53 @@ public class PacController implements InputProcessor {
 			return false;
 		}
 		// check for collisions
-		checkCollisions();
-		
-		//set facing and state
-		player.setFacing(facing);
-		if (player.getCurrentState().equals(PacState.IDLE)) {
+		Tile pTile = player.getTile();
+		if (checkNoWallCollision(pTile)) {
+			System.out.println("Now moving");
 			player.setCurrentState(PacState.MOVING);	
-		}		
+		} else {
+			System.out.println("now idle");
+			player.setCurrentState(PacState.IDLE);
+		}
+		checkGhostCollision(pTile);
+		player.setFacing(facing);			
 		return true;
 	}
 
+	private void checkGhostCollision(Tile pTile) {	
+		List<Mover> colList = pTile.getMovers();
+		if (colList.size() > 1) {
+			for (int i=0; i < colList.size(); i++) {
+				if (colList.get(i) instanceof Ghost) {
+					//TODO some death thing
+					player.setCurrentState(PacState.DEAD);
+				}
+			}
+		}
+		
+	}
+	
+	public boolean checkNoWallCollision(Tile pTile) {
+		boolean canMove = true;
+		int x = gameMap.getTilePos(pTile).getX();
+		int y = gameMap.getTilePos(pTile).getY();
+		Tile[][] grid = gameMap.getGrid();
+		//System.out.println(x + ", " + y);
+		switch(player.getFacing()) {
+		case LEFT: x -= 1; break;
+		case RIGHT: x += 1; break;
+		case UP: y += 1; break;
+		case DOWN: y -= 1; break;
+		}
+		//System.out.println(grid[x][y]);
+		//System.out.println(grid[x][y].getClass());
+		if (grid[x][y].getClass() == WallTile.class) {
+			canMove = false;
+		}
+		//System.out.println(canMove);
+		return canMove;
+	}
+	
 	@Override
 	public boolean keyTyped(char arg0) {
 		// TODO Auto-generated method stub

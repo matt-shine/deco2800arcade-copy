@@ -7,8 +7,8 @@ public class DotTile extends Tile {
 	private final boolean energiser; //true means energiser, false means normal dot
 	private boolean exists; //true if not eaten, false if eaten
 	
-	public DotTile(char type) {
-		super();
+	public DotTile(GameMap gameMap, char type) {
+		super(gameMap);
 		if (type == 'P') {
 			energiser = true;
 		} else {
@@ -30,5 +30,9 @@ public class DotTile extends Tile {
 				batch.draw(tileSprites[4][1], x, y, sideLength, sideLength);
 			} 
 		} 
+	}
+	
+	public String toString() {
+		return "Dot" + super.toString();
 	}
 }

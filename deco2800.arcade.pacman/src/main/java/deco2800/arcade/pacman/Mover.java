@@ -1,38 +1,38 @@
 package deco2800.arcade.pacman;
 
-import java.util.List;
 /**
  * An abstract class for objects that can move and collide *
  */
 public abstract class Mover {
 
-	//the coordinates of the bottom left corner of the pacman/ghost
-	protected int x; 
-	protected int y;
+	//the coordinates of the bottom left corner of the pacman/ghost (for drawing)
+	protected int drawX; 
+	protected int drawY;
+	protected int midX; //where the middle pixel of the pacman/ghost is
+	protected int midY;
 	protected int height; 
 	protected int width;
 	protected Tile currentTile; //current tile of the pacman/ghost
+	protected GameMap gameMap;
 	
-	public Mover(Tile startTile, int x, int y) {
-		currentTile = startTile;
-		this.x = x;
-		this.y = y;		
+	public Mover(GameMap gameMap) {
+		this.gameMap = gameMap;
 	}
 	
-	public int getX() {
-		return x;
+	public int getDrawX() {
+		return drawX;
 	}
 
-	public void setX(int x) {
-		this.x = x;
+	public void setDrawX(int x) {
+		drawX = x;
 	}
 
-	public int getY() {
-		return y;
+	public int getDrawY() {
+		return drawY;
 	}
 
-	public void setY(int y) {
-		this.y = y;
+	public void setDrawY(int y) {
+		drawY = y;
 	}
 	
 	public int getHeight() {
@@ -54,12 +54,25 @@ public abstract class Mover {
 		this.width = width;
 	}
 
-	public Tile getCurrentTile() {
+	public Tile getTile() {
 		return currentTile;
 	}
 
-	public void setCurrentTile(Tile currentTile) {
-		this.currentTile = currentTile;
+	/**
+	 * Updates the middle coordinate of the mover and its tile. 
+	 * Also updates the tile's list of movers
+	 */
+	protected void updatePosition() {
+		midX = drawX + width/2;
+		midY = drawY + width/2;
+		//remove mover from tile and add it to new one if it's changed
+		Tile newTile = gameMap.findMoverTile(this);
+		if (currentTile != newTile) {
+			System.out.println("Current is " + currentTile + ", new is " + newTile);
+			currentTile.removeMover(this);
+			currentTile = newTile;
+			currentTile.addMover(this);
+		}		
 	}
 	
 	/**
@@ -67,6 +80,15 @@ public abstract class Mover {
 	 */
 	@Override
 	public String toString() {
-		return new String("Object of " + this.getClass() + " at (" + x + "," + y + "), width=" + width + ", height=" + height);
+		return new String("Object of " + this.getClass() + " at (" + drawX + "," + drawY + ")," +
+				" in tile: " + currentTile + ", width=" + width + ", height=" + height);
+	}
+
+	public int getMidX() {
+		return midX;
+	}
+	
+	public int getMidY() {
+		return midY;
 	}
 }

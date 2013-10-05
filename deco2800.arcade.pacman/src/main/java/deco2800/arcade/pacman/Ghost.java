@@ -32,8 +32,8 @@ private int targety;
 private PacChar player;
 private boolean allowedOut; //says whether the ghost can go through the ghost pen door
 
-public Ghost(int ghostNum, int x, int y, PacChar player, Tile startTile) {
-	super(startTile, x, y);
+public Ghost(int ghostNum, int x, int y, PacChar player, GameMap gameMap) {
+	super(gameMap);
 	this.ghostNum = ghostNum;
 	this.player = player;
 }
@@ -48,8 +48,8 @@ public void targetTile() {
 	
 	if (ghostNum == 1) { // Blinky
 		// add if statement for dots remaining in maze, for Elroy mode
-		targetx = player.getX();
-		targety = player.getY();
+		targetx = player.getDrawX();
+		targety = player.getDrawY();
 	}
 	else if (ghostNum == 2) { // Pinky
 		// if statements for direction

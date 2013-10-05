@@ -1,18 +1,12 @@
 package deco2800.arcade.pacman;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PacChar extends Mover{
-	
-	private Tile startTile; //pacman's starting tile(s), needs to be initialised
 	
 	// Describes the current state of pacman- starts IDLE
 	public enum PacState {
@@ -38,10 +32,14 @@ public class PacChar extends Mover{
 	private TextureRegion[] walkFrames;
 	private TextureRegion currentFrame;
 	
-	public PacChar(Tile startTile, int x, int y) {
-		super(startTile, x, y);
+	public PacChar(GameMap gameMap) {
+		super(gameMap);
+		currentTile = gameMap.getPacStart();
+		System.out.println(currentTile);
+		drawX = gameMap.getTileCoords(currentTile).getX() + 3;
+		drawY = gameMap.getTileCoords(currentTile).getY() - 3;
 		//grabs file
-		walkSheet = new Texture(Gdx.files.internal("pacmove.png"));
+		walkSheet = new Texture(Gdx.files.internal("pacMove2.png"));
 		// splits into columns and rows then puts them into one array in order
 		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
 		walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
@@ -56,9 +54,12 @@ public class PacChar extends Mover{
 		// initialise some variables
 		currentState = PacState.IDLE;
 		facing = Dir.LEFT;
-		width = walkFrames[1].getRegionWidth();
-		height = walkFrames[1].getRegionHeight();
+		width = walkFrames[1].getRegionWidth() * 2;
+		height = walkFrames[1].getRegionHeight() * 2;
+		updatePosition();
 		moveDist = 1;
+		currentTile.addMover(this);
+		System.out.println(this);
 //		animation not necessary unless Pacman moving		
 //		walkAnimation = new Animation(0.025f, walkFrames);
 //		stateTime = 0f;	
@@ -71,27 +72,38 @@ public class PacChar extends Mover{
 	public void render(SpriteBatch batch) {
 		int spritePos = 3;
 		// checks if pacman is moving, and if so keeps him moving in that direction
-		if (currentState.equals(PacState.MOVING)) {
+		if (currentState == PacState.MOVING) {
 			if (facing == Dir.LEFT){
-    			x -= moveDist;
+    			drawX -= moveDist;
     		} else if (facing == Dir.RIGHT) {
-    			x += moveDist;
+    			drawX += moveDist;
     			spritePos = 1;
     		} else if (facing == Dir.UP) {
-    			y += moveDist;
+    			drawY += moveDist;
     			spritePos = 5;
     		} else if (facing == Dir.DOWN){ 
-    			y -= moveDist;
+    			drawY -= moveDist;
     			spritePos = 7;
     		} else {
     			currentState = PacState.IDLE;
-    			x = 300;
-    			y = 300;
+    			drawX = 300;
+    			drawY = 300;
     			facing = Dir.LEFT;
     		}
-    	}
+			updatePosition();
+    	} else if (currentState == PacState.IDLE) {
+			if (facing == Dir.RIGHT) {
+    			spritePos = 1;
+    		} else if (facing == Dir.UP) {
+    			spritePos = 5;
+    		} else if (facing == Dir.DOWN){ 
+    			spritePos = 7;
+    		} else {
+    			facing = Dir.LEFT;
+    		}
+    	}	
 		//draw pacman facing the appropriate direction
-		batch.draw(walkFrames[spritePos], x, y);
+		batch.draw(walkFrames[spritePos], drawX, drawY, width, height);
 	}
 	 
 	public Dir getFacing() {

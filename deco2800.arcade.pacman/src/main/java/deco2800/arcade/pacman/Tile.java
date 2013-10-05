@@ -10,8 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /** A square in the grid of pacman. Can be either a dot, energiser, fruit, wall, 
  * door to ghost pen or teleporter
- * TODO there are classes for dot/energiser, wall, door and teleporter- I don't think one is
- * needed for fruit, but if so, it'll need to be made
+ * TODO work out how slowtiles (ghosts slow down near teleporters) and fruit works
  */
 public class Tile {
 
@@ -19,35 +18,16 @@ public class Tile {
 	//sprite sheet, divided into array of arrays of 8x8 tile images
 	protected static final TextureRegion[][] tileSprites = TextureRegion.split(
 			new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);
-	private Tile north;
-	private Tile east;
-	private Tile south;
-	private Tile west;
 	private List<Mover> moversHere; //list of pacman/ghosts for whom this is the current tile
+	private GameMap gameMap;
 	
-	public Tile() {
+	//thinking gameMap should become the model- currently Tile only has it 
+	//because it needs it for the toString() method, but most eveyrthing else seems to need it
+	public Tile(GameMap gameMap) {
 		moversHere = new ArrayList<Mover>();
+		this.gameMap = gameMap;
 	}
 	
-	//returns the type of tile
-	// may change this implementation so each tile just knows its grid location, 
-	//but these methods would still exist
-	protected Class<? extends Tile> getNorthType() {
-		return north.getClass(); 
-	}
-	
-	protected Class<? extends Tile> getEastType() {
-		return east.getClass(); 
-	}
-	
-	protected Class<? extends Tile> getSouthType() {
-		return south.getClass(); 
-	}
-	
-	protected Class<? extends Tile> getWestType() {
-		return west.getClass(); 
-	}
-
 	public void render(SpriteBatch batch, float x, float y) {
 		batch.draw(tileSprites[7][1], x, y, sideLength, sideLength);
 	}
@@ -59,15 +39,23 @@ public class Tile {
 	public List<Mover> getMovers() {
 		return moversHere;
 	}
+	
+	public void setMovers(List<Mover> list) {
+		moversHere = list;
+	}
 
-	public void setMovers(List<Mover> moversHere) {
-		this.moversHere = moversHere;
+	public void removeMover(Mover mover) {
+		moversHere.remove(mover);
 	}
 	
 	public void addMover(Mover mover) {
 		moversHere.add(mover);
 	}
 	
+	public String toString() {
+		return "Tile at " + gameMap.getTilePos(this).getX() + ", " + gameMap.getTilePos(this).getY() + 
+				" at " +gameMap.getTileCoords(this);
+	}
 	
 	// copy of massive switch statement in case it turns out to be necessary:
 	//get rid of non wall tiles here and put them in the tile render method

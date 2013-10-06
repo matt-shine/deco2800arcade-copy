@@ -59,9 +59,10 @@ public class SettingsScreen implements Screen {
 		playButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				getPlayerControlls(p1Texts,p1Controls);
-				getPlayerControlls(p2Texts,p2Controls);				
-				//((GameScreen) game.gameScreen).new Settings(p1Controls, p2Controls);
-				//game.setScreen(game.gameScreen);
+				getPlayerControlls(p2Texts,p2Controls);
+				((GameScreen)game.clientScreen).new Settings(p1Controls, p2Controls);
+				((GameScreen)game.localScreen).new Settings(p1Controls, p2Controls);
+				game.setScreen(game.localScreen);				
 			}			
 
 		});

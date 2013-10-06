@@ -8,6 +8,9 @@ import org.junit.Test;
 
 /**
  * JUnit tests for gamestorage
+ * Works as a stand alone test for game storage, but can cause issues in the arcade build 
+ * when not commented out
+ * To run: uncomment and run as a JUnit test
  * @author Steven Sheriff
  * @see deco2800.arcade.server.database.GameStorage
  */

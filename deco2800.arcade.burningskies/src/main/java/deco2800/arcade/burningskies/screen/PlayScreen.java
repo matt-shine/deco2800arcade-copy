@@ -109,12 +109,16 @@ public class PlayScreen implements Screen
     			if(b.getAffinity() == Affinity.PLAYER) {
     				for(int j=0; j<enemies.size(); j++) {
     					Enemy e = enemies.get(j);
+    					if(outOfBounds(e)) {
+    						removeEntity(e);
+    						j--;
+    						continue;
+    						
+    					}
     					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
     						e.damage(b.getDamage());
     						if(!e.isAlive()) {
     							removeEntity(e);
-    							//addEnemy(new Enemy(200, testTex, new Vector2(300,400), this)); //TODO: DEBUG, REMOVE LATER
-    						//	addRandomEnemy();
     						}
     						removeEntity(b);
     	        			i--;
@@ -141,17 +145,7 @@ public class PlayScreen implements Screen
 					i--;
 					continue;
 				}
-			}
-			// checks if the enemy is out of screen, if so remove it
-			for(int i=0; i<enemies.size(); i++) {
-				Enemy e = enemies.get(i);
-				if(outOfBounds(e)) {
-					removeEntity(e);
-					i--;
-					continue;
-					
-				}
-			}			
+			}		
     	}
     	
     	
@@ -197,9 +191,9 @@ public class PlayScreen implements Screen
     }
     
     private void addRandomEnemy() {
-    	Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+    	final Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
     	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
-    	float startY = (float) 700;
+    	float startY = 700f;
     	int direction;
     	
     	if((int) Math.floor(Math.random() * 2) == 1 )
@@ -209,7 +203,7 @@ public class PlayScreen implements Screen
     	
     	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
     	float vY = (float) Math.ceil(Math.random() * -150) - 50;
-    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
+    	System.out.println("x: " + startX + ", y: " + startY + ", vX: " + vX + ", vY: " + vY);
     	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, new Vector2(vX,vY)) );    	
     }
     

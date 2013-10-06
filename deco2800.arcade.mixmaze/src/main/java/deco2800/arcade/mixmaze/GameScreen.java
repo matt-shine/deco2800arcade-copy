@@ -51,6 +51,8 @@ abstract class GameScreen implements Screen {
 
 	protected final MixMaze game;
 	private final Skin skin;
+	
+	
 
 	/**
 	 * Constructor
@@ -325,18 +327,17 @@ abstract class GameScreen implements Screen {
 		};
 
 	}
-
-	public class Settings{
-		protected int[] p1Controls = {Keys.W,Keys.S,Keys.A,Keys.D,Keys.G,Keys.H};
-		protected int[] p2Controls = {Keys.UP,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.O,Keys.P};
-
-		public Settings(int[] p1Controls,int[] p2Controls){
-			this.p1Controls = p1Controls;
-			this.p2Controls = p2Controls;
+	
+	 class Settings{
+		protected  int[] p1Controls = {Keys.G,Keys.H,Keys.W,Keys.A,Keys.S,Keys.D};
+		protected int[] p2Controls = {Keys.O,Keys.P,Keys.UP,Keys.LEFT,Keys.DOWN,Keys.RIGHT};
+		 
+		public Settings(int[] innerP1Controls,int[] innerP2Controls){
+			this.p1Controls = innerP1Controls;
+			this.p2Controls = innerP2Controls;
 		}
-
 		public Settings(){
-
+			
 		}
 	}
 }

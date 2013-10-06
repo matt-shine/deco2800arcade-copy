@@ -55,13 +55,14 @@ final class PlayerViewModel extends Actor {
 		this.gameModel = gameModel;
 		this.tileSize = tileSize;
 		this.id = id;
-
-	if(playerControls[0] != UP) mapping.put(playerControls[0], UP);
-	if(playerControls[1] != DOWN) mapping.put(playerControls[1], DOWN);
-	if(playerControls[2] != LEFT) mapping.put(playerControls[2], LEFT);
-	if(playerControls[3] != RIGHT) mapping.put(playerControls[3], RIGHT);
-	if(playerControls[4] != NUM_5) mapping.put(playerControls[4], NUM_5);
-	if(playerControls[5] != NUM_6) mapping.put(playerControls[5], NUM_6);
+		
+	if(playerControls[0] != NUM_5) mapping.put(playerControls[0], NUM_5);
+	if(playerControls[1] != NUM_6) mapping.put(playerControls[1], NUM_6);
+	if(playerControls[2] != UP) mapping.put(playerControls[2], UP);
+	if(playerControls[3] != LEFT) mapping.put(playerControls[3], LEFT);
+	if(playerControls[4] != DOWN) mapping.put(playerControls[4], DOWN);
+	if(playerControls[5] != RIGHT) mapping.put(playerControls[5], RIGHT);
+	
 		
 		km = new KeyManager(mapping);
 

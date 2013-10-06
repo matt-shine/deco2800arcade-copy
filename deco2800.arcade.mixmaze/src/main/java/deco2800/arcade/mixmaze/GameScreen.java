@@ -55,6 +55,9 @@ final class GameScreen implements Screen {
 	private SidePanel left;
 	private SidePanel right;
 
+	private int[] p1Controls = {Keys.G,Keys.H,Keys.W,Keys.A,Keys.S,Keys.D};
+	private int[] p2Controls = {Keys.O,Keys.P,Keys.UP,Keys.LEFT,Keys.DOWN,Keys.RIGHT};
+
 	/**
 	 * Constructor
 	 */
@@ -162,9 +165,9 @@ final class GameScreen implements Screen {
 
 		// Might rcommend not passing the entire model to the PlayerViewModel, just to keep good seperation
 		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
-				1,new Settings().p1Controls);
+				1,p1Controls);
 		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
-				2,new Settings().p2Controls);
+				2,p2Controls);
 		gameArea.addActor(p1);
 		gameArea.addActor(p2);
 
@@ -358,17 +361,11 @@ final class GameScreen implements Screen {
 		}
 	}
 	
-	public class Settings{
-		private int[] p1Controls = {Keys.W,Keys.S,Keys.A,Keys.D,Keys.G,Keys.H};
-		private int[] p2Controls = {Keys.UP,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.O,Keys.P};
-		
-		public Settings(int[] p1Controls,int[] p2Controls){
-			this.p1Controls = p1Controls;
-			this.p2Controls = p2Controls;
+	 class Settings{
+		public Settings(int[] innerP1Controls,int[] innerP2Controls){
+			p1Controls = innerP1Controls;
+			p2Controls = innerP2Controls;
 		}
 		
-		public Settings(){
-			
-		}
 	}
 }

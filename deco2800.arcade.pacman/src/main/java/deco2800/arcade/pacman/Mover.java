@@ -73,21 +73,29 @@ public abstract class Mover {
 			currentTile.removeMover(this);
 			currentTile = newTile;
 			currentTile.addMover(this);
-			// System.out.println(currentTile.getMovers());
+			checkTile(currentTile);
+		}
+	}
 
-			// Eat the dot!
-			if (currentTile.getClass() == DotTile.class) {
-				if (!((DotTile) currentTile).isEaten()) {
-					((DotTile) currentTile).eaten();
-					if (((DotTile) currentTile).isEnergiser()) {
-						this.setScore(this.getScore() + 50);
-					} else {
-						this.setScore(this.getScore() + 10);
-					}
+	/**
+	 * On movement, check if the Mover has 'eaten' a dot and update score accordingly.
+	 * Later this can be modified to handle interactions with other tiles such as
+	 * teleporters and fruit.
+	 * @param tile
+	 */
+	public void checkTile(Tile tile){
+		if (tile.getClass() == DotTile.class) {
+			if (!((DotTile) tile).isEaten()) {
+				((DotTile) tile).eaten();
+				if (((DotTile) tile).isEnergiser()) {
+					this.setScore(this.getScore() + 50);
+				} else {
+					this.setScore(this.getScore() + 10);
 				}
 			}
-			System.out.println("score: " + this.getScore());
-		}
+		} 
+//		System.out.println("score: " + this.getScore());
+//		displayScore(this); // This is broken at the moment
 	}
 
 	/**

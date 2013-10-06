@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -45,7 +46,8 @@ public class Pacman extends GameClient {
 	//takes keyboard input
 	private PacController controller;
 	private GameMap gameMap;
-	
+	private BitmapFont scoreText; 
+
 	private List<Mover> colList;	
 	
 	//not used yet
@@ -188,6 +190,11 @@ public class Pacman extends GameClient {
 	    // start the drawing
 	    batch.begin();
 	    gameMap.render(batch);
+	    
+	    //testing bitmap text print
+//	    scoreText.setColor(Color.WHITE);
+//	    scoreText.draw(batch, "Pacman!", 10, 10);
+	    
 	    // render player pacman 
 	    player.render(batch);
 	    //end the drawing
@@ -200,6 +207,17 @@ public class Pacman extends GameClient {
 		super.render();		
 	}
 	
+	/**
+	 * Displays the score of the current Mover.
+	 * When support for multiple player-controlled movers is implemented, printing
+	 * will have to occur in different positions.
+	 */
+	public void displayScore(Mover mover) {
+		batch.begin();
+		scoreText.setColor(Color.WHITE);
+		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
+		batch.end();
+	}
 	
 	private void startGame() {	
 		logger.debug("Game is now running");		

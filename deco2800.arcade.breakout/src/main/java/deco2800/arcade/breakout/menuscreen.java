@@ -40,6 +40,8 @@ public class menuscreen implements Screen  {
 	   TextureRegionDrawable achivementdown;
 	   TextureRegionDrawable quitup;
 	   TextureRegionDrawable quitdown;
+	   TextureRegionDrawable modelup;
+	   TextureRegionDrawable modeldown;
 	   
 	   TextureRegion newgamebuttonUp;
 	   TextureRegion newgamebuttonDown;
@@ -51,6 +53,8 @@ public class menuscreen implements Screen  {
 	   TextureRegion achivementbuttonDown;
 	   TextureRegion quitbuttonUp;
 	   TextureRegion quitbuttonDown;
+	   TextureRegion modelbuttonUp;
+	   TextureRegion modelbuttonDown;
 	   
 	   
 	   Texture tex;
@@ -59,6 +63,7 @@ public class menuscreen implements Screen  {
 	   ImageButton rankingbutton;
 	   ImageButton achivementbutton;
 	   ImageButton quitbutton;
+	   ImageButton modelbutton;
 	   
 	   
 	
@@ -77,7 +82,7 @@ public class menuscreen implements Screen  {
 	    gameup = new TextureRegionDrawable(newgamebuttonUp);
 	    gamedown = new TextureRegionDrawable(newgamebuttonDown);
 	    gamebutton = new ImageButton(gameup, gamedown);
-	    gamebutton.setPosition(480, 450);
+	    gamebutton.setPosition(480, 470);
 	    gamebutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
 	        		
@@ -88,16 +93,34 @@ public class menuscreen implements Screen  {
 	        		game.setScreen(game.gamescreen);
 	        	}}
 	    	   );
-	   
+	   //model screen
 	    
- //level screen
 	    
+ 
+	    modelbuttonUp=tmp[3][0];
+	    modelbuttonDown=tmp[3][1];
+	    modelup = new TextureRegionDrawable(modelbuttonUp);
+	    modeldown = new TextureRegionDrawable(modelbuttonDown);
+	    modelbutton = new ImageButton(modelup, modeldown);
+	    modelbutton.setPosition(480, 400);
+	    modelbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		game.setScreen(game.modelscreen); 
+	        		
+	        	}}
+	    	   );
+	  //level screen
 	    levelbuttonUp=tmp[0][2];
 	    levelbuttonDown=tmp[0][3];
 	    levelup = new TextureRegionDrawable(levelbuttonUp);
 	    leveldown = new TextureRegionDrawable(levelbuttonDown);
 	    levelbutton = new ImageButton(levelup, leveldown);
-	    levelbutton.setPosition(480, 370);
+	    levelbutton.setPosition(480, 340);
 	    levelbutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
 	        		
@@ -115,7 +138,7 @@ public class menuscreen implements Screen  {
 	    rankingup = new TextureRegionDrawable(rankingbuttonUp);
 	    rankingdown = new TextureRegionDrawable(rankingbuttonDown);
 	    rankingbutton = new ImageButton(rankingup, rankingdown);
-	    rankingbutton.setPosition(480, 290);
+	    rankingbutton.setPosition(480, 270);
 	    rankingbutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
 	        		
@@ -133,7 +156,7 @@ public class menuscreen implements Screen  {
 	    achivementup = new TextureRegionDrawable(achivementbuttonUp);
 	    achivementdown = new TextureRegionDrawable(achivementbuttonDown);
 	    achivementbutton = new ImageButton(achivementup, achivementdown);
-	    achivementbutton.setPosition(480, 210);
+	    achivementbutton.setPosition(480, 200);
 	    achivementbutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
 	        		
@@ -179,6 +202,7 @@ public class menuscreen implements Screen  {
 	       stage.addActor(levelbutton);
 	       stage.addActor(rankingbutton);
 	       stage.addActor(achivementbutton);
+	       stage.addActor(modelbutton);
 	       
 	       
 		

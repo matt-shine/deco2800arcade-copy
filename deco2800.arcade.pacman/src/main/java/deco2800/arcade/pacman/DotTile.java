@@ -17,9 +17,16 @@ public class DotTile extends Tile {
 		exists = true;
 	}
 	
+	public boolean isEnergiser(){
+		return energiser;
+	}
+	
+	public boolean isEaten(){
+		return !exists;
+	}
+	
 	public void eaten() {
 		exists = false;
-		//write more about getting score, need to set elsewhere that it stops rendering TODO
 	}
 	
 	public void render(SpriteBatch batch, float x, float y) {

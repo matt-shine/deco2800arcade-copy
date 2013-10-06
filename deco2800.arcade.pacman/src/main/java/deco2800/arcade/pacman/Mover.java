@@ -13,6 +13,7 @@ public abstract class Mover {
 	protected int midY;
 	protected int height;
 	protected int width;
+	private int score;
 	protected Tile currentTile; // current tile of the pacman/ghost
 	protected GameMap gameMap;
 
@@ -73,11 +74,19 @@ public abstract class Mover {
 			currentTile = newTile;
 			currentTile.addMover(this);
 			// System.out.println(currentTile.getMovers());
-			
-			// Eat the dot! Will need to mvoe this to a different class alter.
-			if (currentTile.getClass() == DotTile.class){
-				((DotTile) currentTile).eaten();
+
+			// Eat the dot!
+			if (currentTile.getClass() == DotTile.class) {
+				if (!((DotTile) currentTile).isEaten()) {
+					((DotTile) currentTile).eaten();
+					if (((DotTile) currentTile).isEnergiser()) {
+						this.setScore(this.getScore() + 50);
+					} else {
+						this.setScore(this.getScore() + 10);
+					}
+				}
 			}
+			System.out.println("score: " + this.getScore());
 		}
 	}
 
@@ -98,5 +107,13 @@ public abstract class Mover {
 
 	public int getMidY() {
 		return midY;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 }

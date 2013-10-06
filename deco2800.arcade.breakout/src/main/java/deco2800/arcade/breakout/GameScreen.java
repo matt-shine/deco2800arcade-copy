@@ -109,8 +109,8 @@ public class GameScreen implements Screen  {
 	
 	GameScreen(final Breakout game) {
 		this.levelSystem = new Level();
-		score = 0;
-		lives = 3;
+		setScore();
+		setLives(3);
 		this.game = game;
 		this.player = game.playerName();
 		this.powerupManager = new PowerupManager(this);
@@ -227,7 +227,7 @@ public class GameScreen implements Screen  {
 		}
 		breaking.play();
 		brickBreak++;
-		score += this.getLevel()*2;
+		incrementScore(this.getLevel()*2);
 		setBrickNum(getBrickNum() - 1);
 		powerupCheck(b);
 		try {
@@ -278,10 +278,10 @@ public class GameScreen implements Screen  {
 			batch.begin();
 			font.setColor(Color.GREEN);
 			font.draw(batch, "player " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);
-			font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
+			font.draw(batch, "Life " + Integer.toString(getLives()), SCREENWIDTH / 2,
 					SCREENHEIGHT - 20);
 
-			font.draw(batch, "Score " + Integer.toString(score),
+			font.draw(batch, "Score " + Integer.toString(getScore()),
 					SCREENWIDTH * 3 / 4, SCREENHEIGHT - 20);
 			if (gameoverstatus != null) {
 				font.setColor(Color.WHITE);
@@ -325,24 +325,24 @@ public class GameScreen implements Screen  {
 	 * criteria has been met. Also sets the gameState to GAMEOVER.
 	 */
 	void win() {
-		score += lives * 5;
+		incrementScore(getLives() * 5);
 
-		if (highScore < score){
-			highScore = score;
+		if (getHighScore() < getScore()){
+			setHighScore(getScore());
 			gameoverstatus = "Congratulations " + player + " you have a new HighScore: "
-					+ score;
+					+ getScore();
 			
 		}else{
 			gameoverstatus = "Congratulations " + player + " your final score is: "
-					+ score;
+					+ getScore();
 		}
 		System.out.println("Congratulations " + player
-				+ " your final score is: " + score);
-		if (lives == 3) {
+				+ " your final score is: " + getScore());
+		if (getLives() == 3) {
 			game.incrementAchievement("breakout.prefect");
-		} else if (lives == 0) {
+		} else if (getLives() == 0) {
 			game.incrementAchievement("breakout.closeOne");
-		} else if (score < 0) {
+		} else if (getScore() < 0) {
 			game.incrementAchievement("breakout.noob");
 		gameState = new GameOverState();
 		}	
@@ -354,45 +354,40 @@ public class GameScreen implements Screen  {
 	
 		
 	/**
-	 * Rewards the Player 2 extra lives and makes the sequence null, so that the
+	 * Rewards the Player extra lives and makes the sequence null, so that the
 	 * Player can not re-use the cheat
 	 */
-	public void bonusLives(int bonus) {
-		lives = lives + bonus;
+	public void cheatBonus(int bonus) {
+		incrementLives(bonus);
+		incrementScore(bonus*10);
 		setSequence(null);
 		game.incrementAchievement("breakout.secret");
 		achieve.play();
-	}
-	
-	public void powerupLives() {
-		lives++;
 	}
 
 	/**
 	 * Resets games area or sets the gameState to GAMEOVER
 	 */
-	void roundOver() {
+	public void roundOver() {
 		/*
 		 * Checks whether the lives have fallen below 0 If true then the
 		 * gameState is set to GAMEOVER, Otherwise a lives is decremented and
 		 * gameState is set to READY
 		 */
-		if (lives > 0) {
+		if (getLives() > 0) {
 			if (getBall() == null) {
 				setBall(new Ball());
 			}
 			getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
 			setNumBalls(1);
 			destroyPowerupBall();
-			lives--;
-			score -= 5;
+			decrementLives(1);
+			decrementScore(5);
 			gameState = new ReadyState();
 		} else {
 
 			gameoverstatus = "Bad luck " + player + " your final score is: "
-					+ score;
-			System.out.println("Bad luck " + player + " your final score is: "
-					+ score);
+					+ getScore();
 			gameState = new GameOverState();
 		}
 
@@ -633,5 +628,51 @@ public class GameScreen implements Screen  {
 		if (ball != null) {
 			ball = null;
 		}
+	}
+	public int getLives(){
+		return lives;
+	}
+	
+	public void setLives(int lives){
+		
+		this.lives = lives;
+	}
+	
+	public void incrementLives(int value){
+		this.lives = this.lives + value;
+	}
+	
+	public void decrementLives(int value){
+		this.lives = this.lives - value;
+	}
+	
+	public int getScore(){
+		return score;
+	}
+	
+	public void setScore(){
+		this.score = 0;
+	}
+	
+	
+	public void incrementScore(int value){
+		this.score = this.score + value;
+	}
+	
+	public void decrementScore(int value){
+		this.score = this.score - value;
+	}
+	
+	public void setHighScore(int score){
+		if (score > 0){
+			this.highScore = score;
+			game.highscoreUser.storeScore("Score", getHighScore());
+		} else {
+			this.highScore = 0;
+		}
+	}
+	
+	public int getHighScore(){
+		return highScore;
 	}
 }

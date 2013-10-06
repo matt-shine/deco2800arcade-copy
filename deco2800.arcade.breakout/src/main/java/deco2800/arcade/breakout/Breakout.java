@@ -25,7 +25,7 @@ import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.highscores.HighscoreClient;
 
 /**
  * 
@@ -49,6 +49,7 @@ public class Breakout extends GameClient {
 	public String player;
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
+	HighscoreClient highscoreUser;
 	//private AccoladeSystem accolades;
 	
 	// Screen Parameters
@@ -63,6 +64,7 @@ public class Breakout extends GameClient {
 		this.player = player.getUsername();
 		this.networkClient = networkClient;
 		this.achievementClient = new AchievementClient(networkClient);
+		this.highscoreUser = new HighscoreClient(player.getUsername(), "Breakout", networkClient);
 		//this.accolades = new AccoladeSystem();
 	}
 
@@ -114,7 +116,7 @@ public class Breakout extends GameClient {
 		AchivementScreen=new achivementscreen(this);
 		RankingScreen=new rankingscreen(this);
 		setScreen(splashScreen);
-		
+		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
 	}
 
 	@Override

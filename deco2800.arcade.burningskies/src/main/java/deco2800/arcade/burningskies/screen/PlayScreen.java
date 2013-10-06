@@ -34,10 +34,9 @@ public class PlayScreen implements Screen
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
 	
 	private PlayerShip player;
-	private GameMap map;
+	public GameMap map;
 	
-	private float timerCounter;
-	private float enemyInterval = 2;
+	private SpawnList sp;
 	
 	
 	public PlayScreen( BurningSkies game){
@@ -71,9 +70,10 @@ public class PlayScreen implements Screen
     	PowerUp test = new DemoPowerUp(this);
     	addPowerup(test);
     	
+    	sp = new SpawnList(this);
+    			
     	// Add an enemy
     	addRandomEnemy();
-    	timerCounter = 0;
     }
     
     @Override
@@ -90,12 +90,10 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	if(!game.isPaused()) {
-    		//Increment timer
-    		timerCounter += delta;
-    		if (timerCounter >= enemyInterval){
-    			addRandomEnemy();
-    			timerCounter -= enemyInterval;
-    		}
+
+    		sp.checkList(delta);
+    		
+    		//System.out.println("Num of enemies: " + enemies.size() );
     		
     		stage.act(delta);
     		for(int i=0; i<bullets.size(); i++) {
@@ -121,7 +119,7 @@ public class PlayScreen implements Screen
     							removeEntity(e);
     						}
     						removeEntity(b);
-    	        			i--;
+//    	        			i--; TODO this was causing trouble after making the SpawnList class, may need this later
     						continue;
     					}
     					
@@ -145,7 +143,21 @@ public class PlayScreen implements Screen
 					i--;
 					continue;
 				}
+<<<<<<< Updated upstream
 			}		
+=======
+			}
+			// checks if the enemy is out of screen, if so remove it
+			for(int i=0; i<enemies.size(); i++) {
+				Enemy e = enemies.get(i);
+				if(outOfBounds(e)) {
+					removeEntity(e);
+					i--;
+					continue;
+					
+				}
+			}	
+>>>>>>> Stashed changes
     	}
     	
     	
@@ -203,7 +215,11 @@ public class PlayScreen implements Screen
     	
     	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
     	float vY = (float) Math.ceil(Math.random() * -150) - 50;
+<<<<<<< Updated upstream
     	System.out.println("x: " + startX + ", y: " + startY + ", vX: " + vX + ", vY: " + vY);
+=======
+//    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
+>>>>>>> Stashed changes
     	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, new Vector2(vX,vY)) );    	
     }
     

@@ -67,12 +67,14 @@ public abstract class Mover {
 		midY = drawY + width/2;
 		//remove mover from tile and add it to new one if it's changed
 		Tile newTile = gameMap.findMoverTile(this);
-		if (currentTile != newTile) {
+		if (!currentTile.equals(newTile)) {
 			System.out.println("Current is " + currentTile + ", new is " + newTile);
 			currentTile.removeMover(this);
 			currentTile = newTile;
 			currentTile.addMover(this);
-		}		
+		} else {
+			
+		}
 	}
 	
 	/**

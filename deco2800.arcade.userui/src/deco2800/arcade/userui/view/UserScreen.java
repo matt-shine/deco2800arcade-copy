@@ -51,8 +51,7 @@ public class UserScreen extends JFrame{
 	private JLabel playername, playerlastonline, realname, program, description;
 	private JLabel addfriend, status;
 	private JLabel aboutbar, friendbar, historybar;
-	private JLabel history1, history2, history3, history4, history5, 
-	history6;
+	private JLabel history1, history2, history3, history4, history5;
 	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
 	achievement6;
 	
@@ -361,7 +360,7 @@ public class UserScreen extends JFrame{
 	    achievementbarpanel.setOpaque(false);
 	    
 		//Add Elements to Panel
-	    achievementpanel = new ImagePanel(new ImageIcon("assets/images/Green_Box.png").getImage());
+	    achievementpanel = new ImagePanel(new ImageIcon("assets/images/pink_box.png").getImage());
 		achievementpanel.setLayout(new MigLayout());
 				
         achievementlistpanel.add(achievement1);
@@ -404,21 +403,18 @@ public class UserScreen extends JFrame{
         history3 = new JLabel();
         history4 = new JLabel();
         history5 = new JLabel();
-        history6 = new JLabel();
-
+        
         history1.setIcon(piclocked);
         history2.setIcon(piclocked);
         history3.setIcon(piclocked);
         history4.setIcon(piclocked);
         history5.setIcon(piclocked);
-        history6.setIcon(piclocked);
 
         JPanel historytext1 = new JPanel(new MigLayout());
         JPanel historytext2 = new JPanel(new MigLayout());
         JPanel historytext3 = new JPanel(new MigLayout());
         JPanel historytext4 = new JPanel(new MigLayout());
         JPanel historytext5 = new JPanel(new MigLayout());
-        JPanel historytext6 = new JPanel(new MigLayout());
         
 	    historybar = new JLabel("Game History");
 	    historybar.setFont(linkbold);
@@ -441,10 +437,8 @@ public class UserScreen extends JFrame{
         historylistpanel.add(historytext4,"growy, width :110");
         historylistpanel.add(history5);
         historylistpanel.add(historytext5,"growy, width :110");
-        historylistpanel.add(history6);
-        historylistpanel.add(historytext6,"growy, width :110");
         
-	    historypanel = new ImagePanel(new ImageIcon("assets/images/Green_Box.png").getImage());
+	    historypanel = new ImagePanel(new ImageIcon("assets/images/green_box.png").getImage());
 	    historypanel.setLayout(new MigLayout());       
         historypanel.add(historybarpanel,"wrap");
         historypanel.add(historylistpanel);
@@ -551,6 +545,17 @@ public class UserScreen extends JFrame{
 	public void addRemoveFriendListener(ActionListener listenForRemoveFriendButton){
 		
 		removefriendbutton.addActionListener(listenForRemoveFriendButton);
+		
+	}
+	
+	public void setStatus(){
+		
+		
+	}
+	
+	public void buttonhover(){
+		
+		forumlink.setBackground(Color.red);
 		
 	}
 	

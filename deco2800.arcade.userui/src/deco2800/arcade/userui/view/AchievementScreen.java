@@ -38,7 +38,8 @@ public class AchievementScreen extends JFrame{
 	private JPanel parentContainer;	
 	private ImagePanel menupanel;
 	private ImagePanel contentpanel;
-	private JPanel achievementpanel, achievementbarpanel, achievementlistpanel;
+	private ImagePanel achievementpanel;
+	private JPanel achievementbarpanel, achievementlistpanel;
 	private ImagePanel sidepanel;
 	private JPanel playerpanel, playerinfopanel;
 	private ImagePanel gamepanel;
@@ -193,19 +194,25 @@ public class AchievementScreen extends JFrame{
 				    
         achievementbar = new JLabel("Achievement List");
         achievementbar.setFont(blackbold);
-        //achievementbar.setForeground(Color.white);
+        achievementbar.setForeground(Color.white);
         
         achievementbarpanel = new JPanel(new MigLayout());
         
 	    achievementlistpanel = new JPanel(new MigLayout());
+	    achievementlistpanel.setOpaque(false);
 	    achievementlist = new JTextArea();
 	    achievementlist.setLineWrap(true);
+	    achievementlist.setFont(blacknormal);
+	    achievementlist.setBackground(Color.LIGHT_GRAY);
+	    achievementlist.setEditable(false);
 	    
 	    achievementbarpanel.add(achievementbar);
+        achievementbarpanel.setOpaque(false);
 	    achievementlistpanel.add(achievementlist,"width :600px, height :500px");
 
-	    achievementpanel = new JPanel(new MigLayout());       
-		achievementpanel.add(achievementbarpanel,"gap left 10px, wrap");
+	    achievementpanel = new ImagePanel(new ImageIcon("assets/images/blue_achievement.png").getImage());
+	    achievementpanel.setLayout(new MigLayout());			
+	    achievementpanel.add(achievementbarpanel,"gap left 10px, wrap");
 		achievementpanel.add(achievementlistpanel, "width :700px, height :550px");
 		
 	}

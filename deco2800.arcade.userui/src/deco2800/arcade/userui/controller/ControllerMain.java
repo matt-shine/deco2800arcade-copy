@@ -2,6 +2,7 @@ package deco2800.arcade.userui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.userui.Model;
@@ -43,7 +44,7 @@ public class ControllerMain {
 		this.userView.addAchievementListener(new AchievementListener());
 		this.userView.addFriendListener(new AddFriendListener());
 		this.userView.addRemoveFriendListener(new RemoveFriendListener());
-	
+		
 	}
 	
 	class EditListener implements ActionListener{
@@ -52,6 +53,18 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the edit page
+			if (theModel.getStatus() == "away"){
+				System.out.println("away status");
+			}
+			if (theModel.getStatus() == "busy"){
+				System.out.println("away status");
+			}
+			if (theModel.getStatus() == "online"){
+				System.out.println("away status");
+			}
+			if (theModel.getStatus() == "offline"){
+				System.out.println("away status");
+			}
 			
 		}
 		

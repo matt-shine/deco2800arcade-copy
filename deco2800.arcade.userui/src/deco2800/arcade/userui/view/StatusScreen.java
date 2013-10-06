@@ -97,35 +97,37 @@ public class StatusScreen extends JFrame{
 		
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
+		picaway = new ImageIcon("assets/images/away.png");
+		picbusy = new ImageIcon("assets/images/away.png");
 				
 		JLabel away = new JLabel();
 		JLabel busy = new JLabel();
 		JLabel online = new JLabel();
 		JLabel offline = new JLabel();
-		away.setIcon(picoffline);
-		busy.setIcon(picoffline);
+		away.setIcon(picaway);
+		busy.setIcon(picbusy);
 		online.setIcon(piconline);
-		offline.setIcon(picoffline);		
-		awaybutton = new JRadioButton("", true);
-		busybutton = new JRadioButton("", false);
-		onlinebutton = new JRadioButton("", false);
+		offline.setIcon(picoffline);	
+		onlinebutton = new JRadioButton("", true);
 		offlinebutton = new JRadioButton("", false);
+		awaybutton = new JRadioButton("", false);
+		busybutton = new JRadioButton("", false);
 		
 		contentpanel = new JPanel(new MigLayout());
-		contentpanel.add(awaybutton);
-		contentpanel.add(away,"wrap, gap left 15px");
-		contentpanel.add(busybutton);
-		contentpanel.add(busy,"wrap, gap left 15px");
 		contentpanel.add(onlinebutton);
 		contentpanel.add(online,"wrap, gap left 15px");
 		contentpanel.add(offlinebutton);
 	    contentpanel.add(offline,"wrap, gap left 15px");
+		contentpanel.add(awaybutton);
+		contentpanel.add(away,"wrap, gap left 15px");
+		contentpanel.add(busybutton);
+		contentpanel.add(busy,"wrap, gap left 15px");
 	  
 	    status = new ButtonGroup();
-	    status.add(awaybutton);
-	    status.add(busybutton);
 	    status.add(offlinebutton);
 	    status.add(onlinebutton);
+	    status.add(awaybutton);
+	    status.add(busybutton);
 		
 	}
 	
@@ -157,7 +159,22 @@ public class StatusScreen extends JFrame{
 	
 	public void getStatusSelection(){
 		
-		System.out.println(status.getSelection().toString());
+		if (awaybutton.isSelected() == true){
+			System.out.println("away status");
+			model.setStatus("away");
+		}
+		if (busybutton.isSelected() == true){
+			System.out.println("busy status");
+			model.setStatus("busy");
+		}
+		if (onlinebutton.isSelected() == true){
+			System.out.println("online status");
+			model.setStatus("online");
+		}
+		if (offlinebutton.isSelected() == true){
+			System.out.println("offline status");
+			model.setStatus("offline");
+		}
 		
 	}
 

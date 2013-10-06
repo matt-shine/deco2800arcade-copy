@@ -59,7 +59,7 @@ public class Ball {
 	public void bounceX() {
 		//This is naive
 		velocity.x *= -1;
-		velocity.mul(BOUNCEINCREMENT);
+		// velocity = velocity.mul(BOUNCEINCREMENT);
 	}
 
 	/**

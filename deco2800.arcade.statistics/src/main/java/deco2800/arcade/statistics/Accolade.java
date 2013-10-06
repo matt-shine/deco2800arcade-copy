@@ -57,12 +57,31 @@ public class Accolade {
 		return this.id;
 	}
 	
+	public int getValue(){
+		return this.value;
+	}
+	
 	public int getGameID(){
 		return this.gameID;
 	}
 	
 	public String getName(){
 		return name;
+	}
+	
+	public String getUnit(){
+		return this.unit;
+	}
+	
+	public int getModifier(){
+		return this.modifier;
+	}
+	
+	public String getTag(){
+		return this.tag;
+	}
+	public String getImagePath(){
+		return this.image;
 	}
 	
 	//Only an avalible option because it's possible to construct an accolade 

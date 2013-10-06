@@ -2,6 +2,9 @@ package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+import deco2800.arcade.wl6.enemy.EnemyType;
+
 public class MapProcessor {
 
 
@@ -27,11 +30,17 @@ public class MapProcessor {
 		    	//spawn points
 		    	if (id >= WL6Meta.SPAWN_POINT && id < WL6Meta.SPAWN_POINT + 4) {
 		    		
-		    		//TODO the angle doesn't work quite right -- don't know why
 		    		model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.direction));
 		    		
-		    	} else {
+		    	} else if (id == WL6Meta.SECRET_DOOR) {
 		    		
+		    		SecretDoor door = new SecretDoor(doodadID());
+		    		door.setTextureName(dInfo.texture);
+		    		door.setPos(new Vector2(i + 0.5f, j + 0.5f));
+		    		model.addDoodad(door);
+		    		
+		    	} else {
+			    	
 		    		//everything else
 		    		spawnDoodadFromInfo(model, dInfo, id, i, j);
 		    		
@@ -41,6 +50,19 @@ public class MapProcessor {
 		    }
 		}
 		
+		
+		//spawn all the blocks that are actually doodads
+		for (int i = 0; i < WL6.MAP_DIM; i++) {
+		    for (int j = 0; j < WL6.MAP_DIM; j++) {
+		    	
+		    	int id = map.getTerrainAt(i, j);
+		    	BlockInfo dInfo = WL6Meta.block(id);
+		    	
+	    		if (WL6Meta.hasDoorAt(i, j, map)) {
+	    			spawnDoor(model, dInfo, id, i, j);
+	    		}
+		    }
+		}
 		
 		
 		
@@ -58,6 +80,16 @@ public class MapProcessor {
 		return (int) Math.floor(Math.random() * Integer.MAX_VALUE);
 	}
 	
+	
+	
+	
+	public static void spawnDoor(GameModel model, BlockInfo bInfo, int id, int x, int y) {
+		//TODO: respect door types
+		Door door = new Door(doodadID(), id % 2 != 0, KEY_TYPE.NONE);
+		door.setTextureName(bInfo.texture);
+		door.setPos(new Vector2(x + 0.5f, y + 0.5f));
+		model.addDoodad(door);
+	}
 	
 	
 	/**
@@ -86,10 +118,11 @@ public class MapProcessor {
 			//TODO spawn an enemy
 			
 			
-		} else if (d.health != 0 || d.gun != 0 || d.ammo != 0 || d.points != 0) {
+		} else if (d.health != 0 || d.points != 0 || d.ammo != 0 || d.gun != 0) {
 			
 			
-			//TODO spawn a pickup
+			dd = new Pickup(doodadID(), d.health, d.points, d.ammo, d.gun);
+			dd.setTextureName(d.texture);
 			
 			
 		} else if (d.solid) {

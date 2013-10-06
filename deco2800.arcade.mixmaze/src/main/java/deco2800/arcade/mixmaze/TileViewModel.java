@@ -1,11 +1,7 @@
-/*
- * TileViewModel
- */
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.ItemModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.TileModel;
+import deco2800.arcade.mixmaze.domain.TileModelObserver;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,16 +11,22 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
-
+import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType.*;
 
-public class TileViewModel extends Group {
+/**
+ * TileViewModel draws the associated tile.
+ */
+public final class TileViewModel extends Group implements TileModelObserver {
 	static final TextureRegion PILE_BRICK_REGION;
 	static final TextureRegion PICK_REGION;
 	static final TextureRegion TNT_REGION;
+	static final TextureRegion SELECTION_REGION;
 	static final TextureRegion UNKNOWN_REGION;
+	static final TextureRegion WHITE_REGION;
 	static final TextureRegion BRICK_REGION;
+	static final TextureRegion EMPTY_PICK_REGION;
+	static final TextureRegion EMPTY_TNT_REGION;
 
 	static {
 		Texture texture = new Texture(Gdx.files.internal("item.png"));
@@ -32,89 +34,118 @@ public class TileViewModel extends Group {
 		PILE_BRICK_REGION = new TextureRegion(texture, 0, 0, 256, 256);
 		PICK_REGION = new TextureRegion(texture, 256, 0, 256, 256);
 		TNT_REGION = new TextureRegion(texture, 512, 0, 256, 256);
-		UNKNOWN_REGION = new TextureRegion(texture, 768, 0, 256, 256);
+		SELECTION_REGION = new TextureRegion(texture, 768, 0, 256, 256);
 		BRICK_REGION = new TextureRegion(texture, 1024, 0, 256, 256);
+		UNKNOWN_REGION = new TextureRegion(texture, 1280, 0, 256, 256);
+		EMPTY_TNT_REGION = new TextureRegion(texture, 1536, 0,
+				256, 256);
+		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0,
+				256, 256);
+		WHITE_REGION = new TextureRegion(texture, 2048, 0, 256, 256);
 	}
 
-	private static final String LOG = TileViewModel.class.getSimpleName();
-
-	private final TileModel model;
+	private final float tileSize;
+	private final float offset;
 	private final ShapeRenderer renderer;
-	private final int tileSize;
+
+	private int boxerId;
+	private boolean[] isWallBuilt;
+	private ItemModel.Type type;
 
 	/**
 	 * Constructor
 	 *
-	 * @param model 	the tile model
 	 * @param renderer	the renderer
 	 * @param tileSize	the graphical size of the tile
 	 */
-	public TileViewModel(TileModel model, ShapeRenderer renderer,
-			int tileSize) {
-		this.model = model;
-		this.renderer = renderer;
+	public TileViewModel(int x, int y,
+			float tileSize, ShapeRenderer renderer) {
 		this.tileSize = tileSize;
+		offset = tileSize / 32;
+		this.renderer = renderer;
+		boxerId = 0;
+		isWallBuilt = new boolean[4];
+		type = NONE;
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		//FIXME big method
 		batch.end();
 
-		/*
-		 * Begin shape renderer drawing.
-		 */
+		/* shape renderer drawing */
 		renderer.setTransformMatrix(computeTransform());
+		drawBox();
+		drawWalls();
+		drawCorners();
+		renderer.identity();
 
-		/* draw box */
-		PlayerModel p = model.getBoxer();
+		/* sprite batch drawing */
+		batch.begin();
+		applyTransform(batch, computeTransform());
+		drawItem(batch);
+		resetTransform(batch);
+	}
+
+	@Override
+	public void updateBoxer(int id) {
+		boxerId = id;
+	}
+
+	@Override
+	public void updateWall(int direction, boolean isBuilt) {
+		isWallBuilt[direction] = isBuilt;
+	}
+
+	@Override
+	public void updateType(ItemModel.Type type) {
+		this.type = type;
+	}
+
+	private void drawBox() {
 		renderer.begin(FilledRectangle);
-		if (p == null) {
+		if (boxerId == 0) {
 			renderer.setColor(.8f, .8f, .8f, 1f);
-		} else if (p.getPlayerID() == 1) {
+		} else if (boxerId == 1) {
 			renderer.setColor(1f, 0f, 0f, 1f);
-		} else if (p.getPlayerID() == 2) {
+		} else if (boxerId == 2) {
 			renderer.setColor(0f, 0f, 1f, 1f);
 		}
 		renderer.filledRect(0, 0, tileSize, tileSize);
 		renderer.end();
+	}
 
-		/* draw wall */
+	private void drawWalls() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(1f, 1f, 0f, 1f);
-		if (model.getWall(WEST).isBuilt())
-			renderer.filledRect(0, 0, 4f, 128f);
-		if (model.getWall(NORTH).isBuilt())
-			renderer.filledRect(0, 124f, 128f, 4f);
-		if (model.getWall(EAST).isBuilt())
-			renderer.filledRect(124f, 0, 4f, 128f);
-		if (model.getWall(SOUTH).isBuilt())
-			renderer.filledRect(0, 0, 128f, 4f);
+		if (isWallBuilt[WEST])
+			renderer.filledRect(0, 0, offset, tileSize);
+		if (isWallBuilt[NORTH])
+			renderer.filledRect(0, tileSize - offset,
+					tileSize, offset);
+		if (isWallBuilt[EAST])
+			renderer.filledRect(tileSize - offset, 0,
+					offset, tileSize);
+		if (isWallBuilt[SOUTH])
+			renderer.filledRect(0, 0, tileSize, offset);
 		renderer.end();
+	}
 
-		/* draw dots */
+	private void drawCorners() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(0f, 0f, 0f, 1f);
-		renderer.filledRect(0, 0, 4f, 4f);
-		renderer.filledRect(0, 124f, 4f, 4f);
-		renderer.filledRect(124f, 124f, 4f, 4f);
-		renderer.filledRect(124f, 0, 4f, 4f);
+		renderer.filledRect(0, 0, offset, offset);
+		renderer.filledRect(0, tileSize - offset, offset, offset);
+		renderer.filledRect(tileSize - offset, tileSize - offset,
+				offset, offset);
+		renderer.filledRect(tileSize - offset, 0, offset, offset);
 		renderer.end();
+	}
 
-		renderer.identity();
+	private void drawItem(SpriteBatch batch) {
+		TextureRegion region;
 
-		/*
-		 * Begin batch drawing.
-		 */
-		batch.begin();
-		applyTransform(batch, computeTransform());
-
-		/* draw item */
-		/*ItemModel item = model.getSpawnedItem();
-		if (item != null) {
-			TextureRegion region;
-
-			switch (item.getType()) {
+		if (type != NONE) {
+			switch (type) {
 			case BRICK:
 				region = PILE_BRICK_REGION;
 				break;
@@ -128,8 +159,7 @@ public class TileViewModel extends Group {
 				region = UNKNOWN_REGION;
 			}
 			batch.draw(region, 0, 0, tileSize, tileSize);
-		}*/
-
-		resetTransform(batch);
+		}
 	}
+
 }

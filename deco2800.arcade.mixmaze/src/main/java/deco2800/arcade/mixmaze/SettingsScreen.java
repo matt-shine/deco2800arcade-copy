@@ -22,12 +22,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 
 
+
+import deco2800.arcade.mixmaze.GameScreen.Settings;
+
 import org.lwjgl.input.Keyboard;
 
 
 public class SettingsScreen implements Screen {
-
-	private static final String LOG = SettingsScreen.class.getSimpleName();
 
 	private final MixMaze game;
 	private Skin skin;
@@ -44,26 +45,36 @@ public class SettingsScreen implements Screen {
 	private TextField[] p2Texts = new TextField[6];
 	private int[] p1Controls = new int[6];
 	private int[] p2Controls = new int[6];
+	private TextFieldListener textFieldListener = new Listener();
 	
 	SettingsScreen(final MixMaze game) {
-		this.game = game;	
-		
+		this.game = game;
+
 		startDebug();
-		initialize();		
+		initialize();
 		setTableLayout();
 		createSettingsPanel();
 		createPlayerPanel(playerOnePanel,p1Texts);
 		createPlayerPanel(playerTwoPanel,p2Texts);
-		stage.addActor(rootTable);		
-				
+		stage.addActor(rootTable);
+		addActionListeners(p1Texts);
+		addActionListeners(p2Texts);
 		playButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				getPlayerControlls(p1Texts,p1Controls);
-				getPlayerControlls(p2Texts,p2Controls);
-				((GameScreen) game.gameScreen).new Settings(p1Controls, p2Controls);
-				game.setScreen(game.gameScreen);
+				getPlayerControlls(p2Texts,p2Controls);				
+				//((GameScreen) game.gameScreen).new Settings(p1Controls, p2Controls);
+				//game.setScreen(game.gameScreen);
 			}			
+
 		});
+
+	}
+
+	private void addActionListeners(TextField[] playerTexts) {
+		for (int i = 0;i<playerTexts.length;i++){
+			playerTexts[i].setTextFieldListener(textFieldListener);;
+		}		
 		
 	}
 
@@ -76,39 +87,28 @@ public class SettingsScreen implements Screen {
 	private void initialize() {
 		this.skin = game.skin;
 		this.stage = new Stage();
-		playButton = new TextButton("Play", skin);	
+		playButton = new TextButton("Play", skin);
 		playButton.pad(20);
-		skin.add("background", new Texture(Gdx.files.internal("settings.png")));		
+		skin.add("background", new Texture(Gdx.files.internal("settings.png")));
 		difficultyList = new List(new String [] {"Beginner", "Intermediate","Advanced"}, skin);
-		
+
 		p1Texts[0] = new TextField("G", skin);
 		p1Texts[1] = new TextField("H", skin);
 		p1Texts[2] = new TextField("W", skin);
 		p1Texts[3] = new TextField("A", skin);
 		p1Texts[4] = new TextField("S", skin);
 		p1Texts[5] = new TextField("D", skin);
-		p1Texts[0].setTextFieldFilter(new TextFieldFilter() {
-			
-			public boolean acceptChar(TextField textField, char key) {
-				if(textField.getText().length()>=1){
-					return false;	
-				}				
-				return true;
-			}
-		});
-		
-		p1Texts[1].setTextFieldListener(new TextFieldListener() {
-			public void keyTyped (TextField textField, char key) {
-				Gdx.app.debug(LOG, "key "+Character.getNumericValue(key)+" is pressed");
-			}
-		});
-		
+
 		p2Texts[0] = new TextField("5", skin);
 		p2Texts[1] = new TextField("6", skin);
 		p2Texts[2] = new TextField("UP", skin);
 		p2Texts[3] = new TextField("LEFT", skin);
 		p2Texts[4] = new TextField("DOWN", skin);
-		p2Texts[5] = new TextField("RIGHT", skin);	
+		p2Texts[5] = new TextField("RIGHT", skin);
+		
+		
+		
+		
 	}
 
 	private void createPlayerPanel(Table panel,TextField[] playerDetails) {
@@ -125,9 +125,9 @@ public class SettingsScreen implements Screen {
 
 	private void createSettingsPanel() {
 		gridSize= new SelectBox(new String []{"5","6","7","8","9","10"}, skin);
-		
-		settingsPanel.add(gridSize).expandX().padTop(220).padBottom(110);	
-		settingsPanel.row();		
+
+		settingsPanel.add(gridSize).expandX().padTop(220).padBottom(110);
+		settingsPanel.row();
 		settingsPanel.add(difficultyList).padBottom(170);
 		settingsPanel.row();
 		settingsPanel.add(playButton);
@@ -137,24 +137,24 @@ public class SettingsScreen implements Screen {
 		rootTable.debug();
 		settingsPanel.debug();
 		playerOnePanel.debug();
-		playerTwoPanel.debug();		
+		playerTwoPanel.debug();
 	}
 
 	private void setTableLayout() {
 		float celHeight = Gdx.graphics.getHeight();
 		float settingsWidth = (float) (Gdx.graphics.getWidth()/2.56);
 		float textWidth = (float) (Gdx.graphics.getWidth()/5.12);
-		float playerWidth = (float) (Gdx.graphics.getWidth()/4.8301);	//256	
+		float playerWidth = (float) (Gdx.graphics.getWidth()/4.8301);	//256
 		Drawable background = skin.getDrawable("background");
-		
+
 		rootTable.setFillParent(true);
 		rootTable.setBackground(background);
 		rootTable.top().left(); // so that cells are added from the top instead of center
 		rootTable.add(settingsPanel).width(settingsWidth).height(celHeight).expandX();
 		rootTable.add(textPanel).width(textWidth).height(celHeight).expandX();
-		rootTable.add(playerOnePanel).width(playerWidth).height(celHeight).expandX();	
+		rootTable.add(playerOnePanel).width(playerWidth).height(celHeight).expandX();
 		rootTable.add(playerTwoPanel).width(playerWidth).height(celHeight).expandX();
-						
+
 		settingsPanel.top().columnDefaults(4);
 		playerOnePanel.top().columnDefaults(3);
 		playerTwoPanel.top().columnDefaults(3);
@@ -164,19 +164,19 @@ public class SettingsScreen implements Screen {
 	public void dispose() {
 		stage.dispose();
 		skin.dispose();
-		
+
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pause() {
 		stage.dispose();
-		
+
 	}
 
 	@Override
@@ -184,27 +184,43 @@ public class SettingsScreen implements Screen {
 		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 		stage.act(delta);
-		stage.draw();		
+		stage.draw();
+		if(stage.getKeyboardFocus() == p1Texts[2] || stage.getKeyboardFocus() == p1Texts[3] || stage.getKeyboardFocus() == p1Texts[4]
+				|| stage.getKeyboardFocus() == p1Texts[5] || stage.getKeyboardFocus() == p2Texts[2] || stage.getKeyboardFocus() == p2Texts[3] || stage.getKeyboardFocus() == p2Texts[4]
+						|| stage.getKeyboardFocus() == p2Texts[5]){
+			if (Gdx.input.isKeyPressed(Keys.UP)){
+				((TextField)stage.getKeyboardFocus()).setText("UP");
+			}
+			if (Gdx.input.isKeyPressed(Keys.LEFT)){
+				((TextField)stage.getKeyboardFocus()).setText("LEFT");
+			}
+			if (Gdx.input.isKeyPressed(Keys.RIGHT)){
+				((TextField)stage.getKeyboardFocus()).setText("RIGHT");
+			}
+			if (Gdx.input.isKeyPressed(Keys.DOWN)){
+				((TextField)stage.getKeyboardFocus()).setText("DOWN");
+			}
+		}
 		//Table.drawDebug(stage);
 	}
 
 	@Override
 	public void resize(int arg0, int arg1) {
 		stage.setViewport(1280, 720, true);
-		
-		
+
+
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-		
+
 	}
 	
 	private int getKeyCode(String keyText){
@@ -253,5 +269,16 @@ public class SettingsScreen implements Screen {
 	return code;
 	}
 		
+	private class Listener implements TextFieldListener
+    {
+
+		@Override
+		public void keyTyped(TextField textField, char key) {
+			if(getKeyCode(""+key) != 0)
+			textField.setText((""+key).toUpperCase());			
+		}
+		
+		        
+    }
 	
 }

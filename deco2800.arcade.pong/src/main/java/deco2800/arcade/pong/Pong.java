@@ -85,6 +85,7 @@ public class Pong extends GameClient {
 	@Override
 	public void create() {
 		
+        
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
@@ -244,11 +245,11 @@ public class Pong extends GameClient {
 	 * @param winner 0 for player 1, 1 for player 2
 	 */
 	void endPoint(int winner) {
-		getBall().reset();
+		ball.reset();
 		scores[winner]++;
 		// If we've reached the victory point then update the display
 		if (scores[winner] == WINNINGSCORE) {	
-		    int loser = winner==1?0:1; //The loser is the player who didn't win!
+		    int loser = winner == 1 ? 0 : 1; //The loser is the player who didn't win!
 		    statusMessage = players[winner] + " Wins " + scores[winner] + " - " + scores[loser] + "!";
 		    gameState = new GameOverState();
 		    //Update the game state to the server

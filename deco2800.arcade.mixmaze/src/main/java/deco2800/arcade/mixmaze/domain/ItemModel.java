@@ -1,21 +1,27 @@
 package deco2800.arcade.mixmaze.domain;
 
 /**
- * Abstraction of items in mixmaze.
+ * Abstraction of items in MixMaze.
  */
 public abstract class ItemModel {
+
 	/**
-	 * Item types.
+	 * Item types
 	 */
-	public enum ItemType {
-		BRICK, PICK, TNT, UNKNOWN
+	public enum Type {
+		BRICK, PICK, TNT, UNKNOWN, NONE
 	}
 
-	// Item Data
-	private ItemType itemType;
-	
-	protected ItemModel(ItemType type) {
-		itemType = type;
+	/** The type of this item */
+	private Type type;
+
+	/**
+	 * Constructor
+	 *
+	 * @param type	the item type
+	 */
+	protected ItemModel(Type type) {
+		this.type = type;
 	}
 
 	/**
@@ -23,8 +29,7 @@ public abstract class ItemModel {
 	 *
 	 * @return the type
 	 */
-	public ItemType getType()
-	{
-		return itemType;
+	Type getType() {
+		return type;
 	}
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
@@ -17,16 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-
-
-
-
-
 import deco2800.arcade.mixmaze.GameScreen.Settings;
-
-import org.lwjgl.input.Keyboard;
-
 
 public class SettingsScreen implements Screen {
 
@@ -114,11 +108,7 @@ public class SettingsScreen implements Screen {
 		p2Texts[2] = new TextField("UP", skin);
 		p2Texts[3] = new TextField("LEFT", skin);
 		p2Texts[4] = new TextField("DOWN", skin);
-		p2Texts[5] = new TextField("RIGHT", skin);
-		
-		
-		
-		
+		p2Texts[5] = new TextField("RIGHT", skin);				
 	}
 
 	private void createPlayerPanel(Table panel,TextField[] playerDetails) {
@@ -196,8 +186,8 @@ public class SettingsScreen implements Screen {
 		stage.act(delta);
 		stage.draw();
 		if(stage.getKeyboardFocus() == p1Texts[2] || stage.getKeyboardFocus() == p1Texts[3] || stage.getKeyboardFocus() == p1Texts[4]
-				|| stage.getKeyboardFocus() == p1Texts[5] || stage.getKeyboardFocus() == p2Texts[2] || stage.getKeyboardFocus() == p2Texts[3] || stage.getKeyboardFocus() == p2Texts[4]
-						|| stage.getKeyboardFocus() == p2Texts[5]){
+				|| stage.getKeyboardFocus() == p1Texts[5] ||stage.getKeyboardFocus() == p2Texts[2] || stage.getKeyboardFocus() == p2Texts[3] || stage.getKeyboardFocus() == p2Texts[4]
+				|| stage.getKeyboardFocus() == p2Texts[5]){
 			if (Gdx.input.isKeyPressed(Keys.UP)){
 				((TextField)stage.getKeyboardFocus()).setText("UP");
 			}
@@ -210,6 +200,7 @@ public class SettingsScreen implements Screen {
 			if (Gdx.input.isKeyPressed(Keys.DOWN)){
 				((TextField)stage.getKeyboardFocus()).setText("DOWN");
 			}
+			
 		}
 		//Table.drawDebug(stage);
 	}
@@ -230,71 +221,50 @@ public class SettingsScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(stage);
-
 	}
 	
 	private int getKeyCode(String keyText){
 		int code = 0;
-	if (keyText.equals("0")) code = Keys.NUM_0;
-	if (keyText.equals("1")) code = Keys.NUM_1;
-	if (keyText.equals("2")) code = Keys.NUM_2;
-	if (keyText.equals("3")) code = Keys.NUM_3;
-	if (keyText.equals("4")) code = Keys.NUM_4;
-	if (keyText.equals("5")) code = Keys.NUM_5;
-	if (keyText.equals("6")) code = Keys.NUM_6;
-	if (keyText.equals("7")) code = Keys.NUM_7;
-	if (keyText.equals("8")) code = Keys.NUM_8;
-	if (keyText.equals("9")) code = Keys.NUM_9;
-	if (keyText.equalsIgnoreCase("q")) code = Keys.Q;
-	if (keyText.equalsIgnoreCase("w")) code = Keys.W;
-	if (keyText.equalsIgnoreCase("e")) code = Keys.E;
-	if (keyText.equalsIgnoreCase("r")) code = Keys.R;
-	if (keyText.equalsIgnoreCase("t")) code = Keys.T;
-	if (keyText.equalsIgnoreCase("y")) code = Keys.Y;
-	if (keyText.equalsIgnoreCase("u")) code = Keys.U;
-	if (keyText.equalsIgnoreCase("i")) code = Keys.I;
-	if (keyText.equalsIgnoreCase("o")) code = Keys.O;
-	if (keyText.equalsIgnoreCase("p")) code = Keys.P;
-	if (keyText.equalsIgnoreCase("a")) code = Keys.A;
-	if (keyText.equalsIgnoreCase("s")) code = Keys.S;
-	if (keyText.equalsIgnoreCase("d")) code = Keys.D;
-	if (keyText.equalsIgnoreCase("f")) code = Keys.F;
-	if (keyText.equalsIgnoreCase("g")) code = Keys.G;
-	if (keyText.equalsIgnoreCase("h")) code = Keys.H;
-	if (keyText.equalsIgnoreCase("j")) code = Keys.J;
-	if (keyText.equalsIgnoreCase("k")) code = Keys.K;
-	if (keyText.equalsIgnoreCase("l")) code = Keys.L;
-	if (keyText.equalsIgnoreCase("z")) code = Keys.Z;
-	if (keyText.equalsIgnoreCase("x")) code = Keys.X;
-	if (keyText.equalsIgnoreCase("c")) code = Keys.C;
-	if (keyText.equalsIgnoreCase("v")) code = Keys.V;
-	if (keyText.equalsIgnoreCase("b")) code = Keys.B;
-	if (keyText.equalsIgnoreCase("n")) code = Keys.N;
-	if (keyText.equalsIgnoreCase("m")) code = Keys.N;
-	if (keyText.equalsIgnoreCase("up")) code = Keys.UP;
-	if (keyText.equalsIgnoreCase("down")) code = Keys.DOWN;
-	if (keyText.equalsIgnoreCase("left")) code = Keys.LEFT;
-	if (keyText.equalsIgnoreCase("right")) code = Keys.RIGHT;
-	
-	if (keyText.equalsIgnoreCase("`")) code = -1;
-	if (keyText.equalsIgnoreCase("-")) code = -1;
-	if (keyText.equalsIgnoreCase("=")) code = -1;
-	if (keyText.equalsIgnoreCase("[")) code = -1;
-	if (keyText.equalsIgnoreCase("]")) code = -1;
-	if (keyText.equalsIgnoreCase("\\")) code = -1;
-	if (keyText.equalsIgnoreCase(";")) code = -1;
-	if (keyText.equalsIgnoreCase("'")) code = -1;
-	if (keyText.equalsIgnoreCase(",")) code = -1;
-	if (keyText.equalsIgnoreCase(".")) code = -1;
-	if (keyText.equalsIgnoreCase("/")) code = -1;
-	if (keyText.equalsIgnoreCase("")) code = -1;
-	if (keyText.equalsIgnoreCase("")) code = -1;
-	if (keyText.equalsIgnoreCase("")) code = -1;
-	if (keyText.equalsIgnoreCase("")) code = -1;
-	if (keyText.equalsIgnoreCase("")) code = -1;
-	if (keyText.equalsIgnoreCase("")) code = -1;
-	if (keyText.equalsIgnoreCase(" ")) code = -1;
-	
+		if (keyText.equals("0")) code = Keys.NUM_0;
+		if (keyText.equals("1")) code = Keys.NUM_1;
+		if (keyText.equals("2")) code = Keys.NUM_2;
+		if (keyText.equals("3")) code = Keys.NUM_3;
+		if (keyText.equals("4")) code = Keys.NUM_4;
+		if (keyText.equals("5")) code = Keys.NUM_5;
+		if (keyText.equals("6")) code = Keys.NUM_6;
+		if (keyText.equals("7")) code = Keys.NUM_7;
+		if (keyText.equals("8")) code = Keys.NUM_8;
+		if (keyText.equals("9")) code = Keys.NUM_9;
+		if (keyText.equalsIgnoreCase("q")) code = Keys.Q;
+		if (keyText.equalsIgnoreCase("w")) code = Keys.W;
+		if (keyText.equalsIgnoreCase("e")) code = Keys.E;
+		if (keyText.equalsIgnoreCase("r")) code = Keys.R;
+		if (keyText.equalsIgnoreCase("t")) code = Keys.T;
+		if (keyText.equalsIgnoreCase("y")) code = Keys.Y;
+		if (keyText.equalsIgnoreCase("u")) code = Keys.U;
+		if (keyText.equalsIgnoreCase("i")) code = Keys.I;
+		if (keyText.equalsIgnoreCase("o")) code = Keys.O;
+		if (keyText.equalsIgnoreCase("p")) code = Keys.P;
+		if (keyText.equalsIgnoreCase("a")) code = Keys.A;
+		if (keyText.equalsIgnoreCase("s")) code = Keys.S;
+		if (keyText.equalsIgnoreCase("d")) code = Keys.D;
+		if (keyText.equalsIgnoreCase("f")) code = Keys.F;
+		if (keyText.equalsIgnoreCase("g")) code = Keys.G;
+		if (keyText.equalsIgnoreCase("h")) code = Keys.H;
+		if (keyText.equalsIgnoreCase("j")) code = Keys.J;
+		if (keyText.equalsIgnoreCase("k")) code = Keys.K;
+		if (keyText.equalsIgnoreCase("l")) code = Keys.L;
+		if (keyText.equalsIgnoreCase("z")) code = Keys.Z;
+		if (keyText.equalsIgnoreCase("x")) code = Keys.X;
+		if (keyText.equalsIgnoreCase("c")) code = Keys.C;
+		if (keyText.equalsIgnoreCase("v")) code = Keys.V;
+		if (keyText.equalsIgnoreCase("b")) code = Keys.B;
+		if (keyText.equalsIgnoreCase("n")) code = Keys.N;
+		if (keyText.equalsIgnoreCase("m")) code = Keys.N;
+		if (keyText.equalsIgnoreCase("up")) code = Keys.UP;
+		if (keyText.equalsIgnoreCase("down")) code = Keys.DOWN;
+		if (keyText.equalsIgnoreCase("left")) code = Keys.LEFT;
+		if (keyText.equalsIgnoreCase("right")) code = Keys.RIGHT;	
 	return code;
 	}
 		
@@ -309,12 +279,8 @@ public class SettingsScreen implements Screen {
 	
 	private class Filter implements TextFieldFilter{
 		@Override
-		public boolean acceptChar(TextField textField, char key) {
-			if(getKeyCode(""+key) == -1){
-				return false;
-			}
-			return true;
+		public boolean acceptChar(TextField textField, char key) {			
+			return (Character.isLetterOrDigit(key) || key == '\t');
 		}
-	}	
-	
+	}		
 }

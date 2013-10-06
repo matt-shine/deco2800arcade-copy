@@ -46,6 +46,7 @@ public class SettingsScreen implements Screen {
 	private int[] p1Controls = new int[6];
 	private int[] p2Controls = new int[6];
 	private TextFieldListener textFieldListener = new Listener();
+	private TextFieldFilter  textFieldFilter = new Filter();
 	
 	SettingsScreen(final MixMaze game) {
 		this.game = game;
@@ -57,8 +58,10 @@ public class SettingsScreen implements Screen {
 		createPlayerPanel(playerOnePanel,p1Texts);
 		createPlayerPanel(playerTwoPanel,p2Texts);
 		stage.addActor(rootTable);
-		addActionListeners(p1Texts);
-		addActionListeners(p2Texts);
+		addTextFeildListeners(p1Texts);
+		addTextFeildListeners(p2Texts);
+		addTextFieldFilter(p1Texts);
+		addTextFieldFilter(p2Texts);
 		playButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				getPlayerControlls(p1Texts,p1Controls);
@@ -71,9 +74,16 @@ public class SettingsScreen implements Screen {
 
 	}
 
-	private void addActionListeners(TextField[] playerTexts) {
+	private void addTextFieldFilter(TextField[] playerTexts) {
 		for (int i = 0;i<playerTexts.length;i++){
-			playerTexts[i].setTextFieldListener(textFieldListener);;
+			playerTexts[i].setTextFieldFilter(textFieldFilter);;
+		}	
+		
+	}
+
+	private void addTextFeildListeners(TextField[] playerTexts) {
+		for (int i = 0;i<playerTexts.length;i++){
+			playerTexts[i].setTextFieldListener(textFieldListener);
 		}		
 		
 	}
@@ -266,19 +276,45 @@ public class SettingsScreen implements Screen {
 	if (keyText.equalsIgnoreCase("left")) code = Keys.LEFT;
 	if (keyText.equalsIgnoreCase("right")) code = Keys.RIGHT;
 	
+	if (keyText.equalsIgnoreCase("`")) code = -1;
+	if (keyText.equalsIgnoreCase("-")) code = -1;
+	if (keyText.equalsIgnoreCase("=")) code = -1;
+	if (keyText.equalsIgnoreCase("[")) code = -1;
+	if (keyText.equalsIgnoreCase("]")) code = -1;
+	if (keyText.equalsIgnoreCase("\\")) code = -1;
+	if (keyText.equalsIgnoreCase(";")) code = -1;
+	if (keyText.equalsIgnoreCase("'")) code = -1;
+	if (keyText.equalsIgnoreCase(",")) code = -1;
+	if (keyText.equalsIgnoreCase(".")) code = -1;
+	if (keyText.equalsIgnoreCase("/")) code = -1;
+	if (keyText.equalsIgnoreCase("")) code = -1;
+	if (keyText.equalsIgnoreCase("")) code = -1;
+	if (keyText.equalsIgnoreCase("")) code = -1;
+	if (keyText.equalsIgnoreCase("")) code = -1;
+	if (keyText.equalsIgnoreCase("")) code = -1;
+	if (keyText.equalsIgnoreCase("")) code = -1;
+	if (keyText.equalsIgnoreCase(" ")) code = -1;
+	
 	return code;
 	}
 		
-	private class Listener implements TextFieldListener
-    {
-
+	private class Listener implements TextFieldListener{
 		@Override
 		public void keyTyped(TextField textField, char key) {
-			if(getKeyCode(""+key) != 0)
-			textField.setText((""+key).toUpperCase());			
-		}
-		
-		        
+			if(getKeyCode(""+key) != 0){
+				textField.setText((""+key).toUpperCase());	
+			}
+		}		        
     }
+	
+	private class Filter implements TextFieldFilter{
+		@Override
+		public boolean acceptChar(TextField textField, char key) {
+			if(getKeyCode(""+key) == -1){
+				return false;
+			}
+			return true;
+		}
+	}	
 	
 }

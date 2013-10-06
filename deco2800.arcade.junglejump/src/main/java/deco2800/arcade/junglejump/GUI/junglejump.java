@@ -464,6 +464,20 @@ public class junglejump extends GameClient implements InputProcessor {
 					BANANAS_FOUND++;
 					System.out.println(BANANAS_FOUND/2);
 					p.setY(10000);
+					
+					// Play banana sound
+					try{ 
+						File file = new File("junglejumpassets/pickup.wav");
+						FileHandle fileh = new FileHandle(file);
+						AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+						Clip clip = AudioSystem.getClip();
+						clip.open(audioIn);
+						clip.start();
+					} catch (Exception e) {
+						Gdx.app.log(junglejump.messages,
+								"Audio File for Banana Music Not Found");
+					}
+					
 					return true;
 				} else {
 
@@ -618,12 +632,26 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.SPACE) {
 			// Jump
-			if (!jumping) {
+			if (!jumping && !isFalling) {
 				velocity = 5.0f;
 				monkeyYoriginal = monkeyY - 1f;
 				monkeyY+=1.1f;
 				correct = true;
 				jumping = true;
+				
+				
+				// Play sound effect for jumping
+				try{ 
+					File file = new File("junglejumpassets/jump.wav");
+					FileHandle fileh = new FileHandle(file);
+					AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+					Clip clip = AudioSystem.getClip();
+					clip.open(audioIn);
+					clip.start();
+				} catch (Exception e) {
+					Gdx.app.log(junglejump.messages,
+							"Audio File for Jump Music Not Found");
+				}
 			}
 		}
 		if (keycode == Keys.UP) {

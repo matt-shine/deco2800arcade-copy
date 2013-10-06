@@ -1,6 +1,14 @@
 
 package deco2800.arcade.junglejump;
 
+import java.io.File;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.junglejump.GUI.junglejump;
@@ -182,6 +190,18 @@ public class Platform {
 	 */
 	public void setActive() {
 		if(this.platType == '^') {
+			// Play banana sound
+			try{ 
+				File file = new File("junglejumpassets/pickup.wav");
+				FileHandle fileh = new FileHandle(file);
+				AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioIn);
+				clip.start();
+			} catch (Exception e) {
+				Gdx.app.log(junglejump.messages,
+						"Audio File for Banana Music Not Found");
+			}
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {

@@ -74,8 +74,9 @@ public abstract class Mover {
 			currentTile.addMover(this);
 			// System.out.println(currentTile.getMovers());
 			
+			// Eat the dot! Will need to mvoe this to a different class alter.
 			if (currentTile.getClass() == DotTile.class){
-//				System.out.println("Yummy dot");
+				((DotTile) currentTile).eaten();
 			}
 		}
 	}

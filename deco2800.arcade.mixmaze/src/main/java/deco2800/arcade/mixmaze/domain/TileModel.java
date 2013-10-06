@@ -176,7 +176,7 @@ public class TileModel {
 				return i;
 		return -1;
 	}
-
+	
 	/**
 	 * Validates the status of the box on this tile, and modifies the
 	 * <code>boxer</code> based on any change.
@@ -184,25 +184,34 @@ public class TileModel {
 	 * @param player	the player who used an action against this tile
 	 */
 	void validateBox(PlayerModel player) {
-		if (!isBoxBuilt && isBox()) {
+		validateBox(player, false, false);
+	}
+	
+	void validateBox(PlayerModel player, boolean force, boolean isBuilt) {
+		if (!isBoxBuilt && (isBox() || (force && isBuilt))) {
 			isBoxBuilt = true;
 			boxer = player;
 			boxer.incrementScore();
 			updateBoxer(player.getId());
-			return;
-		}
-		
-		List<TileModel> boxes = null;
-		if(!isBoxBuilt && (boxes = findBoxes(this, null)) != null) {
-			
-			return;
-		}
-		
-		if (isBoxBuilt && !isBox()) {
+		} else if (isBoxBuilt && (!isBox() || (force && !isBuilt))) {
 			isBoxBuilt = false;
 			boxer.decrementScore();
 			boxer = null;
 			updateBoxer(0);
+		}
+		
+		// Check multi-boxing
+		if(!force) {
+			List<TileModel> boxes = new ArrayList<TileModel>();
+			if(findBoxes(this, boxes) != null) {
+				for(TileModel box : boxes) {
+					box.validateBox(player, true, true);
+				}
+			} else {
+				for(TileModel box : boxes) {
+					box.validateBox(player, true, false);
+				}
+			}
 		}
 	}
 	

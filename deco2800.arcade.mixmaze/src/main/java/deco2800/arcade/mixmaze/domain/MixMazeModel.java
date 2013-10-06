@@ -412,13 +412,13 @@ public class MixMazeModel implements IMixMazeModel {
 	private ItemModel getRandomItem()
 	{
 		double spawnFactor = spawner.nextDouble();
-		double brickFactor = 0.33;
-		double pickFactor = 0.66;
+		double brickFactor = 0.5;
+		double pickFactor = 0.85;
 		if(difficulty == Difficulty.INTERMEDIATE) {
-			brickFactor = 0.5;
-			pickFactor = 0.7;
+			brickFactor = 0.33;
+			pickFactor = 0.66;
 		} else if(difficulty == Difficulty.ADVANCED) {
-			brickFactor = 0.85;
+			brickFactor = 0.5;
 			pickFactor = 0.95;
 		}
 

@@ -2,6 +2,7 @@ package deco2800.arcade.mixmaze.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class TileModel {
 	private PlayerModel boxer = null;
 	
 	/** Observers to this tile */
-	private ArrayList<TileModelObserver> observers;
+	private List<TileModelObserver> observers;
 
 	/**
 	 * Constructs a new <code>TileModel</code> at 
@@ -94,7 +95,7 @@ public class TileModel {
 		}
 		adjTiles[direction] = tile;
 	}
-
+	
 	/**
 	 * Adds an observer to this tile.
 	 * 
@@ -104,6 +105,21 @@ public class TileModel {
 		observers.add(observer);
 	}
 
+	/**
+	 * Determines if the tile is on the edge of the 
+	 * game board.
+	 * @return <CODE>true</CODE> if the tile is at the edge of
+	 * of the game board, <CODE>false</CODE> otherwise
+	 */
+	public boolean isEdgeTile() {
+		for(int direction = 0; direction < 4; ++direction) {
+			if(adjTiles[direction] == null) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Returns the column number of this tile on game board.
 	 * Origin is at the top left corner.
@@ -173,14 +189,23 @@ public class TileModel {
 			boxer = player;
 			boxer.incrementScore();
 			updateBoxer(player.getId());
-		} else if (isBoxBuilt && !isBox()) {
+			return;
+		}
+		
+		List<TileModel> boxes = null;
+		if(!isBoxBuilt && (boxes = findBoxes(this, null)) != null) {
+			
+			return;
+		}
+		
+		if (isBoxBuilt && !isBox()) {
 			isBoxBuilt = false;
 			boxer.decrementScore();
 			boxer = null;
 			updateBoxer(0);
 		}
 	}
-
+	
 	/**
 	 * Updates all observers on the wall status.
 	 * 
@@ -191,7 +216,26 @@ public class TileModel {
 		for (TileModelObserver o : observers)
 			o.updateWall(getDirection(wall), isBuilt);
 	}
-
+	
+	public List<TileModel> findBoxes(TileModel tile, List<TileModel> _tiles) {
+		if(tile == null) {
+			return null;
+		}
+		
+		List<TileModel> tiles = (_tiles != null) ? _tiles : new ArrayList<TileModel>();
+		tiles.add(tile);
+		for(int direction = 0; direction < 4; ++direction) {
+			WallModel wall = tile.getWall(direction);
+			if(!wall.isBuilt()) {
+				TileModel adjTile = tile.getAdjacentTile(direction);
+				if(!tiles.contains(adjTile) && findBoxes(adjTile, tiles) == null) {
+					return null;
+				}
+			}
+		}
+		return tiles;
+	}
+	
 	/**
 	 * Updates all observers on the item status.
 	 * 
@@ -253,10 +297,7 @@ public class TileModel {
 		boxer = p;
 	}
 	
-	private TileModel getAdjacent(int direction) {
-		/*
-		 * FIXME: this method is never used
-		 */
+	private TileModel getAdjacentTile(int direction) {
 		if (!Direction.isDirection(direction)) {
 			throw Direction.NOT_A_DIRECTION;
 		}

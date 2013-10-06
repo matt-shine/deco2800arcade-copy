@@ -1,8 +1,9 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.domain.PlayerModel;
 import java.util.ArrayList;
 import java.util.List;
+
+import deco2800.arcade.mixmaze.domain.PlayerModel;
 
 /**
  * WallModel represents a wall on a tile, which can be either active or 
@@ -51,6 +52,28 @@ class WallModel {
 	 */
 	public void setLeftTile(TileModel left) {
 		leftTile = left;
+	}
+	
+	/**
+	 * Gets the tile on the left side of
+	 * the wall.
+	 * @return <CODE>null</CODE> if there is
+	 * no tile on the left side, otherwise the associated
+	 * <CODE>TileModel</CODE>
+	 */
+	public TileModel getLeftTile() {
+		return leftTile;
+	}
+	
+	/**
+	 * Gets the tile on the right side of
+	 * the wall.
+	 * @return <CODE>null</CODE> if there is
+	 * no tile on the right side, otherwise the associated
+	 * <CODE>TileModel</CODE>
+	 */
+	public TileModel getRightTile() {
+		return rightTile;
 	}
 	
 	/**
@@ -106,11 +129,6 @@ class WallModel {
 		builder = player;
 		updateTile(leftTile, player, true);
 		updateTile(rightTile, player, true);
-	}
-	
-	public List<WallModel> findRegion(WallModel wall, List<WallModel> path) {
-		
-		return null;
 	}
 	
 	/**

@@ -9,9 +9,18 @@ import java.util.List;
  * inactive.
  */
 class WallModel {
-
-	/** Adjacent tiles */
-	private final List<TileModel> tiles;
+	/** Is this a horizontal wall? */
+	private boolean isHorizontal = false;
+	
+	/** The tile of the left side of the wall if
+	 * you were facing from end-to-end.
+	 **/
+	private TileModel leftTile;
+	
+	/** The tile of the right side of the wall if
+	 * you were facing from end-to-end.
+	 **/
+	private TileModel rightTile;
 
 	/** Whether this wall is built or not */
 	private boolean isBuilt;
@@ -22,20 +31,45 @@ class WallModel {
 	/**
 	 * Constructor
 	 */
-	WallModel() {
-		tiles = new ArrayList<TileModel>();
+	WallModel(boolean isVertical) {
+		isHorizontal = !isVertical;
 	}
-
+	
 	/**
-	 * Adds a tile adjacent to this wall.
-	 * 
-	 * @param tile	the tile to add
+	 * Determines whether the wall faces North to South (vertically), or
+	 * West to East (horizontally).
+	 * @return A value indicating the orientation of the wall
 	 */
-	void addTile(TileModel tile) {
-		if (tiles.contains(tile))
-			throw new IllegalStateException("The tile is already present.");
-		else
-			tiles.add(tile);
+	public boolean isHorizontalWall() {
+		return isHorizontal;
+	}
+	
+	/**
+	 * Specifies the tile on the left side of the wall if
+	 * you were facing from end-to-end.
+	 * @param left tile on the left side of the wall
+	 */
+	public void setLeftTile(TileModel left) {
+		leftTile = left;
+	}
+	
+	/**
+	 * Specifies the tile on the right side of the wall if
+	 * you were facing from end-to-end.
+	 * @param right tile on the right side of the wall
+	 */
+	public void setRightTile(TileModel right) {
+		rightTile = right;
+	}
+	
+	/**
+	 * Determines whether the wall is on the edge of 
+	 * the game board.
+	 * @return <CODE>true</CODE> if the wall is on the
+	 * edge of the board, <CODE>false</CODE> otherwise
+	 */
+	public boolean isEdgeWall() {
+		return leftTile == null || rightTile == null;
 	}
 
 	/**
@@ -70,13 +104,15 @@ class WallModel {
 		
 		isBuilt = true;
 		builder = player;
-		
-		for (TileModel t : tiles) {
-			t.validateBox(player);
-			t.updateWall(this, true);
-		}
+		updateTile(leftTile, player, true);
+		updateTile(rightTile, player, true);
 	}
-
+	
+	public List<WallModel> findRegion(WallModel wall, List<WallModel> path) {
+		
+		return null;
+	}
+	
 	/**
 	 * Destroys this wall.
 	 * 
@@ -88,13 +124,18 @@ class WallModel {
 
 		isBuilt = false;
 		builder = null;
-		
-		for (TileModel t : tiles) {
-			t.validateBox(player);
-			t.updateWall(this, false);
-		}
+		updateTile(leftTile, player, false);
+		updateTile(rightTile, player, false);
 	}
 
+	private void updateTile(TileModel tile, PlayerModel player, boolean isBuilt) {
+		if(tile == null) {
+			return;
+		}
+		tile.validateBox(player);
+		tile.updateWall(this, isBuilt);
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder str = new StringBuilder("<WallModel: ");

@@ -163,8 +163,8 @@ public class MixMazeModel implements IMixMazeModel {
 		for (int y = 0; y < boardSize; ++y) {
 			for (int x = 0; x < boardSize; ++x) {
 				TileModel[] adjTiles = new TileModel[4];
-				int[] tileX = new int[] {(x - 1), x, (x + 1), x};
-				int[] tileY = new int[] {y, (y - 1), y, (y + 1)};
+				int[] tileX = new int[] { (x - 1), x, (x + 1), x };
+				int[] tileY = new int[] { y, (y - 1), y, (y + 1) };
 				for (int tileDir = 0; tileDir < 4; ++tileDir) {
 					if(checkCoordinates(tileX[tileDir], tileY[tileDir])) {
 						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);

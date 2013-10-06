@@ -57,20 +57,26 @@ public class TileModel {
 	 * Initialises the walls adjacent to this tile.
 	 */
 	private void initWalls() {
-		TileModel tile;
-		int polarDir;
-		
 		walls = new WallModel[4];
 		for (int direction = 0; direction < 4; ++direction) {
-			tile = adjTiles[direction];
-			polarDir = Direction.getPolarDirection(direction);
-			if (tile != null) {
-				walls[direction] = tile.getWall(polarDir);
-				tile.addAdjacent(this, polarDir);
+			boolean isXAxis = Direction.isXDirection(direction);
+			TileModel adjTile = adjTiles[direction];
+			WallModel wall = null;
+			
+			if (adjTile != null) {
+				int polarDir = Direction.getPolarDirection(direction);
+				wall = adjTile.getWall(polarDir);
+				adjTile.addAdjacent(this, polarDir);
 			} else {
-				walls[direction] = new WallModel();
+				wall = new WallModel(isXAxis);
 			}
-			walls[direction].addTile(this);
+			walls[direction] = wall;
+			
+			if(direction == Direction.NORTH || direction == Direction.EAST) {
+				wall.setLeftTile(this);
+			} else {
+				wall.setRightTile(this);
+			}
 		}
 	}
 
@@ -204,55 +210,6 @@ public class TileModel {
 	private void updateBoxer(int id) {
 		for (TileModelObserver o : observers)
 			o.updateBoxer(id);
-	}
-
-	/*
-	 * TODO: doc
-	 */
-	public List<TileModel> findPath(List<TileModel> path)
-	{
-		for(int direction = 0; direction < 4; ++direction) {
-			WallModel wall = walls[direction];
-			if(wall.isBuilt()) {
-				if(Direction.isXDirection(direction)) {
-					TileModel northTile = adjTiles[Direction.NORTH];
-					if(northTile.getWall(Direction.SOUTH).isBuilt() || northTile.getWall(direction).isBuilt()) {
-
-					}
-
-					TileModel adjTile = adjTiles[direction];
-					if(adjTile.getWall(Direction.NORTH).isBuilt() || adjTile.getWall(Direction.SOUTH).isBuilt()) {
-
-					}
-				} else {
-
-				}
-
-				switch(direction) {
-				case Direction.WEST:
-					break;
-				case Direction.NORTH:
-					break;
-				case Direction.EAST:
-					break;
-				case Direction.SOUTH:
-					break;
-				}
-			}
-		}
-		return path;
-	}
-
-	/*
-	 * TODO
-	 */
-	private boolean checkWalls(int wallDirection, int tileDirection) {
-		if(Direction.isXDirection(wallDirection)) {
-
-		} else {
-
-		}
-		return false;
 	}
 
 	/**

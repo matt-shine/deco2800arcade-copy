@@ -181,6 +181,10 @@ public class GameLibrary extends GameClient {
      * Switch between list and grid views
      */
     public void switchViews() {
+        // Refresh games list on swaps
+        createRequest();
+        loadGameList();
+
         switch (player.getLibraryStyle().getLayout()) {
             case LibraryStyle.LIST_VIEW:
                 updateScreen(new ListScreen(this, false));

@@ -66,8 +66,7 @@ public class GameScreen implements Screen {
 		backgroundLayer = new BackgroundLayer(0);
 		spriteLayer = new SpriteLayer((float) 0.6);
 
-		int numPanes = (int) (Math.ceil(Config.screenWidth
-				/ Config.PANE_SIZE_PX) + 1);
+		int numPanes = (int) (Math.ceil(Config.screenWidth / (double) Config.PANE_SIZE_PX) + 1);
 		foregroundLayer = new ForegroundLayer(1, numPanes);
 
 		// Spawn entities

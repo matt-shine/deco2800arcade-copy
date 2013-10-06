@@ -128,8 +128,9 @@ public class ForegroundLayer extends Map {
 			if (i != 0) {
 				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset());
 			}
-			
-			batch.draw(panes.get(i).getRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
+
+            batch.draw(panes.get(i).getBgRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
+            batch.draw(panes.get(i).getFgRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
 		}		
 	}
 	

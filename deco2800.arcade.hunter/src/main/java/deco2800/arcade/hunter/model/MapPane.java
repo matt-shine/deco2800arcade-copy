@@ -21,7 +21,8 @@ public class MapPane {
 		ROCK
 	}
 	private MapType type;
-	private TextureRegion rendered;
+	private TextureRegion fgRendered;
+    private TextureRegion bgRendered;
 	
 	/**
 	 * @param filename file path for map relative to src/resources/
@@ -31,15 +32,10 @@ public class MapPane {
 		this.type = type;
 
 		loadPane(filename);
-		renderPane();
 		
 		//Get a rendered version of the map pane
-		rendered = MapPaneRenderer.renderPane(this);
-		
-	}
-	
-	private void renderPane() {
-		// TODO Auto-generated method stub
+		fgRendered = MapPaneRenderer.renderPane(foreground);
+        bgRendered = MapPaneRenderer.renderPane(background);
 		
 	}
 
@@ -110,9 +106,17 @@ public class MapPane {
 	 * Getter for rendered version of the map
 	 * @return rendered version of the map
 	 */
-	public TextureRegion getRendered() {
-		return rendered;
+	public TextureRegion getFgRendered() {
+		return fgRendered;
 	}
+
+    /**
+     * Getter for rendered version of the map
+     * @return rendered version of the map
+     */
+    public TextureRegion getBgRendered() {
+        return bgRendered;
+    }
 	
 	public int getCollisionTile(int x, int y) {
 		//Tiles aren't in this order...

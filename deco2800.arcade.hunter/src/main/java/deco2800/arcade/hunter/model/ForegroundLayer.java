@@ -102,7 +102,7 @@ public class ForegroundLayer extends Map {
 	 * @param cameraPos current camera position
 	 */
 	public void update(float delta, Vector3 cameraPos) {
-		if (cameraPos.x - Config.PANE_SIZE_PX * paneCount > offset.x) {
+		if (cameraPos.x - Config.PANE_SIZE_PX * 2 > offset.x) {
 			offset.x += Config.PANE_SIZE_PX;
 
             if (offset.x > (currentType.ordinal() + 1) * Config.PANES_PER_TYPE * Config.PANE_SIZE_PX) {
@@ -128,8 +128,9 @@ public class ForegroundLayer extends Map {
 			if (i != 0) {
 				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset());
 			}
-			
-			batch.draw(panes.get(i).getRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
+
+            batch.draw(panes.get(i).getBgRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
+            batch.draw(panes.get(i).getFgRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
 		}		
 	}
 	

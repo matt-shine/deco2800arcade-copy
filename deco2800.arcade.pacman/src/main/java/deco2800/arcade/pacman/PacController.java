@@ -81,10 +81,11 @@ public class PacController implements InputProcessor {
 		case RIGHT: x += 1; break;
 		case UP: y += 1; break;
 		case DOWN: y -= 1; break;
+		case TEST: break;
 		}
 		//System.out.println(grid[x][y]);
 		//System.out.println(grid[x][y].getClass());
-		if (grid[x][y].getClass() == WallTile.class) {
+		if (!(grid[x][y].getClass() == WallTile.class)) {
 			canMove = false;
 		}
 		//System.out.println(canMove);

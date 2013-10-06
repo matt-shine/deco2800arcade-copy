@@ -90,7 +90,9 @@ public class PacChar extends Mover{
     			drawY = 300;
     			facing = Dir.LEFT;
     		}
+			
 			updatePosition();
+			
     	} else if (currentState == PacState.IDLE) {
 			if (facing == Dir.RIGHT) {
     			spritePos = 1;

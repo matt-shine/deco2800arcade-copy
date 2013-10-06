@@ -2,6 +2,7 @@ package deco2800.arcade.hunter;
 
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.ForegroundLayer;
+import deco2800.arcade.hunter.model.Items;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
@@ -45,6 +46,7 @@ public class PhysicsHandler {
         }
     }
 
+    
 	/**
 	 * Checks the collision of entities with the map
 	 * 

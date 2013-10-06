@@ -162,9 +162,15 @@ public class GameScreen implements Screen {
 			
 			if (stateTime - counter >= 10f){
 				createAnimals();
+				createItems();
 				counter += 10f;
 			}else{
-				
+				if(Config.randomGenerator.nextFloat() > 0.997f){
+					createAnimals();
+				}
+				if(Config.randomGenerator.nextFloat() > 0.999f){
+					createItems();
+				}
 			}
 		}
 	}
@@ -174,6 +180,14 @@ public class GameScreen implements Screen {
 	}
 	
 	private void createAnimals(){
+		String[] anims= {"hippo","lion","zebra"};
+		System.out.println("New Animal");
+//		entities.add(new Animal(new Vector2(player.getX() + 10*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 10*Config.TILE_SIZE)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(2)]));
+	}
+	
+	private void createItems(){
+		System.out.println("New Item");
+//		entities.add(new Items(new Vector2(player.getX() + 13*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 13*Config.TILE_SIZE)), 64, 64, Config.randomGenerator.nextBoolean()));
 	}
 
 	private void pollInput() {
@@ -182,10 +196,10 @@ public class GameScreen implements Screen {
 			player.attack();
 		}
 
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+		if (Gdx.input.isKeyPressed(Keys.V)){
 			gameOver();
 		}
-		
+				
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
 			// Jump
 			player.jump();

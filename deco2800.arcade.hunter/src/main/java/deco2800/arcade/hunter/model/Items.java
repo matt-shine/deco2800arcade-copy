@@ -91,7 +91,6 @@ public class Items extends Entity {
 	@Override
 	public void handleCollision(Entity e, EntityCollection entities){
 		if (e == null) {
-			System.out.println("Destroy the Entity");
 			entities.remove(this);
 		}
 	}

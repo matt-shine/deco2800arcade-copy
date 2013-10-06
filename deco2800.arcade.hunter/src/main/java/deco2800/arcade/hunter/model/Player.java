@@ -295,7 +295,6 @@ public class Player extends Entity {
 		for (Entity e : entities) {
 			if (player.getBounds().overlaps(e.getBounds())) {
 				if (e.getType() == "Animal") {
-					System.out.println("Animal Collision");
 					if (player.state == State.ATTACK)
 						collisions.add(new EntityCollision(player, e,
 								CollisionType.PLAYER_PROJECTILE_C_ANIMAL));
@@ -326,10 +325,12 @@ public class Player extends Entity {
 		}else if (e.getType() == "Items") {
 			System.out.println("Item pickup!");
 			System.out.println(((Items) e).getItem());
-			entities.remove(((Items)e));
-		}else if (e.getType() == "Animals") {
+			entities.remove(e);
+		}else if (e.getType() == "Animal") {
 			if (state == State.ATTACK){
 				System.out.println("Attack Animal");
+				entities.remove(e);
+				killAnimal();
 			}else{
 				System.out.println("Animal Collision");
 				loseLife();

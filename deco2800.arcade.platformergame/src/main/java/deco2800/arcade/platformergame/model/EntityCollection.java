@@ -26,7 +26,13 @@ public class EntityCollection implements Iterable<Entity> {
 	}
 	
 	public void remove(Entity e){
-		entities.remove(e);
+		Iterator itr = iterator();
+		while(itr.hasNext()){
+			Entity currEn = (Entity) itr.next();
+			if (currEn.equals(e)){
+				itr.remove();
+			}
+		}
 	}
 	
 	public void add(Entity e) {

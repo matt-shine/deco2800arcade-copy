@@ -18,6 +18,8 @@ public class Player extends User {
 
 	private Icon icon;
 
+    private LibraryStyle libraryStyle;
+
 	// private String realName;
 
 	// private String location;
@@ -43,6 +45,8 @@ public class Player extends User {
 		this.friends = new Friends();
 		this.friendInvites = new FriendInvites();
 		this.blocked = new Blocked();
+        this.libraryStyle = new LibraryStyle();
+
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
@@ -59,6 +63,7 @@ public class Player extends User {
 		this.icon = null;
 	}
 
+
 	/**
 	 * getUsername returns a string of the player created
 	 * 
@@ -70,8 +75,7 @@ public class Player extends User {
 
 	/**
 	 * Sets the name of the user.
-	 * 
-	 * @param username
+	 * @param username string of username
 	 */
 	public void setUsername(String username) {
 		if (username != null) {
@@ -309,4 +313,35 @@ public class Player extends User {
 			clearChanged();
 		}
 	}
+
+    /**
+     * Update user's library style
+     * @param style Library Style
+     */
+    public void updateLibraryLayout(int style) {
+        libraryStyle.setLayout(style);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
+    /**
+     * Update User's library colour
+     * @param colour Colour Scheme
+     */
+    public void updateLibraryColour(int colour) {
+        libraryStyle.setColourScheme(colour);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
+    /**
+     * Get User's Library Style
+     * @return libraryStyle
+     */
+    public LibraryStyle getLibraryStyle() {
+        return libraryStyle;
+    }
+
 }

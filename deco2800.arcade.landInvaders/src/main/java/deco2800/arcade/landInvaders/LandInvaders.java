@@ -18,7 +18,7 @@ public class LandInvaders extends GameClient  {
 
 	public LandInvaders(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		Invaders invader = new Invaders();
+		MenuScreen w = new MenuScreen();
 	}
 
 	public void resume() {

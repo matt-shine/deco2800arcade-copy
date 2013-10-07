@@ -35,7 +35,7 @@ public class Interface {
 		
 		ControllerMain maincontroller = new ControllerMain(theModel,userView);
 		//ControllerEdit editcontroller = new ControllerEdit(theModel, editView);
-			
+
 	}
 
 }

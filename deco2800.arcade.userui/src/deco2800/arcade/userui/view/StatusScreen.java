@@ -160,20 +160,20 @@ public class StatusScreen extends JFrame{
 	public void getStatusSelection(){
 		
 		if (awaybutton.isSelected() == true){
-			System.out.println("away status");
 			model.setStatus("away");
+			model.setStatusIcon(picaway);
 		}
 		if (busybutton.isSelected() == true){
-			System.out.println("busy status");
 			model.setStatus("busy");
+			model.setStatusIcon(picbusy);
 		}
 		if (onlinebutton.isSelected() == true){
-			System.out.println("online status");
 			model.setStatus("online");
+			model.setStatusIcon(piconline);
 		}
 		if (offlinebutton.isSelected() == true){
-			System.out.println("offline status");
 			model.setStatus("offline");
+			model.setStatusIcon(picoffline);
 		}
 		
 	}

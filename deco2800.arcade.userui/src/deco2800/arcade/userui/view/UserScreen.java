@@ -548,8 +548,9 @@ public class UserScreen extends JFrame{
 		
 	}
 	
-	public void setStatus(){
+	public void setStatus(ImageIcon icon){
 		
+		statusbutton.setIcon(icon);
 		
 	}
 	

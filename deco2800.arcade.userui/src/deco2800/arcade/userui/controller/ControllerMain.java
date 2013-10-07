@@ -45,6 +45,24 @@ public class ControllerMain {
 		this.userView.addFriendListener(new AddFriendListener());
 		this.userView.addRemoveFriendListener(new RemoveFriendListener());
 		
+		checkstatus();
+		
+	}
+	
+	public void checkstatus(){
+		
+		if (theModel.getStatus() == "away"){
+			userView.setStatus(theModel.getStatusIcon());
+		}
+		if (theModel.getStatus() == "busy"){
+			userView.setStatus(theModel.getStatusIcon());
+		}
+		if (theModel.getStatus() == "online"){
+			userView.setStatus(theModel.getStatusIcon());
+		}
+		if (theModel.getStatus() == "offline"){
+			userView.setStatus(theModel.getStatusIcon());
+		}		
 	}
 	
 	class EditListener implements ActionListener{
@@ -52,19 +70,7 @@ public class ControllerMain {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			//Open the edit page
-			if (theModel.getStatus() == "away"){
-				System.out.println("away status");
-			}
-			if (theModel.getStatus() == "busy"){
-				System.out.println("away status");
-			}
-			if (theModel.getStatus() == "online"){
-				System.out.println("away status");
-			}
-			if (theModel.getStatus() == "offline"){
-				System.out.println("away status");
-			}
+			
 			
 		}
 		

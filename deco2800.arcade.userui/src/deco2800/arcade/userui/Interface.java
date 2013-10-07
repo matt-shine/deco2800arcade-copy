@@ -30,11 +30,8 @@ public class Interface {
 		
 		Model theModel = new Model();
 		
-		UserScreen userView = new UserScreen(theModel);
-		//EditScreen editView = new EditScreen(theModel);
-		
+		UserScreen userView = new UserScreen(theModel);		
 		ControllerMain maincontroller = new ControllerMain(theModel,userView);
-		//ControllerEdit editcontroller = new ControllerEdit(theModel, editView);
 
 	}
 

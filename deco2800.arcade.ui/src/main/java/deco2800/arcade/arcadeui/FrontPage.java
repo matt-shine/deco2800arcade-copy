@@ -48,7 +48,10 @@ public class FrontPage implements Screen {
     private boolean bclicked;
     
     Texture bg;
+    Texture mB;
     Sprite bgSprite;
+    Sprite mbSprite;
+    
     SpriteBatch batch;
     
     public FrontPage() {
@@ -57,6 +60,7 @@ public class FrontPage implements Screen {
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
         stage = new FrontPageStage();
+        skin.add("menuBar", new Texture("menuBar.png"));
                
         Table table = new Table();
         table.setFillParent(true);
@@ -67,6 +71,11 @@ public class FrontPage implements Screen {
         bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         bgSprite = new Sprite(bg);
         batch = new SpriteBatch();
+        
+        mB = new Texture("menuBar.png");
+        mB.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        mbSprite = new Sprite(mB);
+        
         
         /*skin.add("blue", new Texture("iconBlue.png"));
         
@@ -108,21 +117,18 @@ public class FrontPage implements Screen {
         final Table bottomBox = new Table();
         
         //set panel sizes and positions
-        topBox.setSize(1279, 60);
-        topBox.setPosition(1, 659);
+        topBox.setSize(1279, 30);
+        topBox.setPosition(1, 690);
         topBox.setColor(255, 255, 255, 1);
+        topBox.setBackground(skin.getDrawable("menuBar"));
         
-        bottomBox.setSize(1279, 60);
+        bottomBox.setSize(1279, 30);
         bottomBox.setPosition(1, 1);
         bottomBox.setColor(255, 255, 255, 1);
         
         //adding to stage
         stage.addActor(topBox);
         stage.addActor(bottomBox);
-        
-        //this somehow makes it show up
-        topBox.debug();
-        bottomBox.debug();
         
         
         

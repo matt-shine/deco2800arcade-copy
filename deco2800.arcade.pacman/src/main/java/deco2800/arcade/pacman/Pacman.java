@@ -48,7 +48,7 @@ public class Pacman extends GameClient {
 	private GameMap gameMap;
 	private BitmapFont scoreText; 
 
-	private List<Mover> colList;	
+	private List<Mover> colList;
 	
 	//not used yet
 	//private NetworkClient networkClient;

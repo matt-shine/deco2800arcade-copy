@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 import static com.badlogic.gdx.graphics.GL20.*;
 
@@ -58,6 +59,7 @@ public class MenuScreen implements Screen{
 
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -83,7 +85,7 @@ public class MenuScreen implements Screen{
 		}
 		stage.clear();
 		
-		Gdx.input.setInputProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 				
 		//Setting the "Style of a TextButton", 
 		TextButtonStyle style = new TextButtonStyle();
@@ -185,6 +187,17 @@ public class MenuScreen implements Screen{
         quitButton.setHeight(buttonHeight);
         quitButton.setX(Gdx.graphics.getWidth() / 2 - quitButton.getWidth() / 2);
         quitButton.setY(creditsButton.getY() - creditsButton.getHeight() - buttonSpacing); 
+        quitButton.addListener(new InputListener() { //adding listener to newGameButton
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		music.stop();
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		//implement quit
+        	}
+        	
+        });
 
         buttonSpacing = (Gdx.graphics.getHeight() - (7*(newGameButton.getHeight())))/6;
         //adding the buttons to the stage

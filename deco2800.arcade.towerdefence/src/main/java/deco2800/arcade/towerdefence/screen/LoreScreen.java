@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 
 public class LoreScreen implements Screen{
@@ -56,14 +57,11 @@ public class LoreScreen implements Screen{
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-		
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -86,7 +84,7 @@ public class LoreScreen implements Screen{
 		stage.clear();
 		table.clear();
 		
-		Gdx.input.setInputProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 
 		// Setting the "Style of a TextButton",
 		TextButtonStyle style = new TextButtonStyle();

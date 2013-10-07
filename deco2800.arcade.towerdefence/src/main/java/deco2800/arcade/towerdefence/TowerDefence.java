@@ -90,7 +90,6 @@ public class TowerDefence extends GameClient {
 	@Override
 	public void render() {
 		super.render();
-
 	}
 
 	@Override

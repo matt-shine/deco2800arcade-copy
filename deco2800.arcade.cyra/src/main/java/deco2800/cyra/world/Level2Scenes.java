@@ -23,7 +23,8 @@ import deco2800.cyra.model.WalkerPart;
 public class Level2Scenes extends LevelScenes {
 
 	public static final float SPIDER_BOSS_START = 602f;
-	public static final float SOLDIER_BOSS_START = 235f;
+	//public static final float SOLDIER_BOSS_START = 235f;
+	public static final float SOLDIER_BOSS_START = 600f;
 	
 	//private ParallaxCamera cam;
 	private TweenManager manager;

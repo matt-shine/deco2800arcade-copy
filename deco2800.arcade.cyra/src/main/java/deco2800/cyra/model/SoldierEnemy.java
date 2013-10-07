@@ -139,7 +139,7 @@ public class SoldierEnemy extends Enemy {
 					velocity.x = 0f;
 					break;
 				case RAM:
-					velocity.x = SPEED * 3f;
+					velocity.x = SPEED * 2.5f * rank;
 					if (!facingRight) {
 						velocity.x = -velocity.x;
 					}

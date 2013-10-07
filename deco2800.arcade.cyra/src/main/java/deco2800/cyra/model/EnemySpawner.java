@@ -42,6 +42,7 @@ public class EnemySpawner {
 		if (enemies.size < maxSpawnAtOnce && spawnCount < maxSpawn) {
 			return spawnNew();
 		} else {
+			System.out.println("Not spawned because "+enemies.size+", "+maxSpawnAtOnce+", "+spawnCount+", "+maxSpawn);
 			return null;
 		}
 	}

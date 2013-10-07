@@ -44,7 +44,7 @@ public class Level {
 		//map = TiledLoader.createMap(Gdx.files.internal("data/level"+levelNum+".tmx"));
 		//map = TiledLoader.createMap(Gdx.files.internal("data/levelOld.tmx"));
 		
-		collisionLayer = (TiledLayer) ( map.layers.get(3) );
+		collisionLayer = (TiledLayer) ( map.layers.get(2) );
 		
 
 		atlas = new TileAtlas(map, Gdx.files.internal("data/tiles/"));
@@ -102,20 +102,23 @@ public class Level {
 			
 
 			RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f, 0f, 200f);
+			RandomizedEnemySpawner res2 = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f, 300f, 600f);
 			res.setActive(true);
+			res2.setActive(true);
 			
 			//Spawners on top of the logs
-        	/* objects.add(new EnemySpawner(c, new Vector2(202f, 20f), 4, 100, 1));
+        	 objects.add(new EnemySpawner(c, new Vector2(202f, 20f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(210f, 30f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(202f, 35f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(210f, 40f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(202f, 45f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(210f, 50f), 4, 100, 1));
-			*/
+			
 			
 			objects.add(logS0);
 			objects.add(logS1);
 			objects.add(res);
+			objects.add(res2);
 		//}
 		
 		//Filter objects

@@ -221,7 +221,7 @@ public class World {
 		tiles.clear();
 
 		int checkX = 0, checkY = 0;
-		if (mve.getVelocity().x != 0) checkX = 1;
+		if (mve.getVelocity().x != 0) checkX = 2;
 		if (mve.getVelocity().y != 0) checkY = 2;
 
 		for (float i = mve.getPosition().x - checkX; i < mve.getPosition().x + 1+ mve.getWidth() + checkX; i++) {
@@ -245,9 +245,10 @@ public class World {
 						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
 						tiles.add(rect);
 					}*/
-					String type = map.getTileProperty(cell, "checkCollision");
+					//String type = map.getTileProperty(cell, "checkCollision");
 					//System.out.println(type);
-					if (type != null && type.equals("solid")) {
+					//if (type != null && type.equals("solid")) {
+					if (cell != 0) {
 						//System.out.println("I'm colliding with ("+(int)i+","+(int)j+")");
 						Rectangle rect = new Rectangle((int)i, (int)j, 1, 1);
 						tiles.add(rect);
@@ -377,7 +378,9 @@ public class World {
 			if (s.increment()) {
 				//System.out.println("Ready to spawn. Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
 				Vector2 spp = s.getPosition();
-				Vector2 shp = ship.getPosition();
+				//Vector2 shp = ship.getPosition();
+				float camX = cam.position.x;
+				float camY = cam.position.y;
 				/*if ((spp.x < shp.x + 7f && spp.x > shp.x + 6f)||
 						(spp.x > shp.x - 7f && spp.x < shp.x - 6f)||
 						(spp.y > shp.y -4f && spp.y < shp.y -3.5f)||
@@ -385,7 +388,7 @@ public class World {
 					
 					enemies.add(s.spawnNew());
 				}*/
-				if (
+				/*if (
 						(((spp.x < shp.x + 7f && spp.x > shp.x + 6f && ship.getVelocity().x>0)||
 						(spp.x > shp.x - 7f && spp.x < shp.x - 6f &&ship.getVelocity().x<0)) &&
 						(spp.y > shp.y -3.5f && spp.y < shp.y + 3.5f)) ||
@@ -394,6 +397,15 @@ public class World {
 						(spp.y < shp.y+4f && spp.y > shp.y+3.5f && ship.getVelocity().y>0)) &&
 						(spp.x > shp.x - 6f && spp.x <shp.x + 6f)) 
 						
+						) {*/
+				if (
+						(((spp.x > camX + cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2+1f && ship.getVelocity().x > 0) ||
+						(spp.x > camX - cam.viewportWidth/2 - 1f && spp.x < camX - cam.viewportWidth/2 && ship.getVelocity().x < 0)) &&
+						(spp.y >camY - cam.viewportHeight/2 && spp.y < camY + cam.viewportHeight/2)) ||
+						
+						(((spp.y > camY + cam.viewportHeight/2 && spp.y < camY + cam.viewportHeight/2+1f && ship.getVelocity().y > 0) ||
+						(spp.y > camY - cam.viewportHeight/2 - 1f && spp.y < camY - cam.viewportHeight/2 && ship.getVelocity().y < 0)) &&
+						(spp.x >camX - cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2))
 						) {
 					System.out.println("Spawn! Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
 					enemies.add(s.spawnNew());

@@ -16,27 +16,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import deco2800.cyra.game.TestGame2;
-import deco2800.cyra.model.Block;
-import deco2800.cyra.model.BlockMaker;
-import deco2800.cyra.model.Bullet;
-import deco2800.cyra.model.BulletHomingDestructible;
-import deco2800.cyra.model.BulletSimple;
-import deco2800.cyra.model.CutsceneObject;
-import deco2800.cyra.model.Enemy;
-import deco2800.cyra.model.EnemySpawner;
-import deco2800.cyra.model.Follower;
-import deco2800.cyra.model.LaserBeam;
-import deco2800.cyra.model.MovableEntity;
-import deco2800.cyra.model.MovablePlatform;
-import deco2800.cyra.model.MovablePlatformAttachment;
-import deco2800.cyra.model.MovablePlatformSpawner;
-import deco2800.cyra.model.RandomizedEnemySpawner;
-import deco2800.cyra.model.Ship;
-import deco2800.cyra.model.Ship.State;
-import deco2800.cyra.model.SoldierEnemy;
-import deco2800.cyra.model.Sword;
-import deco2800.cyra.model.Walker;
-import deco2800.cyra.model.Zombie;
+import deco2800.cyra.model.*;
 
 /** World class controls all objects in the specified level including any collisions
  * and links Object references where needed
@@ -46,6 +26,8 @@ import deco2800.cyra.model.Zombie;
 public class World {
 	public static final float WORLD_WIDTH = 618f;
 	public static final float WORLD_HEIGHT = 60f;
+	
+	private AchievementsTracker at = new AchievementsTracker();
 	
 	private Boolean firstUpdate;
 	private Ship ship;
@@ -159,8 +141,6 @@ public class World {
 		// Check if sprite has reached left/right level boundary.
 		if( (int)(ship.getNextPos().x) < 1 || (int)(ship.getNextPos().x) > WORLD_WIDTH )
 			ship.setCanMove(false);
-		
-		
 		// Check if sprite has gone out of level bounds to the bottom.
 		if( (int)(ship.getPosition().y) < -1 ) {
 			resetLevel();
@@ -357,6 +337,8 @@ public class World {
 						
 						if (Intersector.overlapConvexPolygons(laserPoly, shipPoly)) {
 							ship.decrementHearts();
+							at.incrementHeartsLost();
+
 							
 							ship.bounceBack(true);
 							
@@ -367,6 +349,7 @@ public class World {
 					for (Rectangle r: e.getPlayerDamageBounds()) {
 						if ( r.overlaps(ship.getBounds()) ) {
 							ship.decrementHearts();
+							at.incrementHeartsLost();
 							
 							ship.bounceBack(true);
 							
@@ -448,6 +431,7 @@ public class World {
 		Bullet b;
 		Enemy e;
 		
+		
 		eItr = enemies.iterator();
 		while(eItr.hasNext()) {
 			e = eItr.next();
@@ -456,7 +440,7 @@ public class World {
 			if ( !levelScenes.isPlaying() ) {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
 				
-				if (e.isDead()) {
+				if (e.isDead()) {			
 					System.out.println("removing " + e.getClass()+ " because dead");
 					eItr.remove();
 					//System.out.println("removed enemy");
@@ -466,6 +450,7 @@ public class World {
 					for (RandomizedEnemySpawner res: curLevel.getRandomEnemySpawners() ) {
 						res.removeEnemy(e);
 					}
+					
 					
 				}
 				if (e.startingNextScene()) {
@@ -489,10 +474,12 @@ public class World {
 				}
 				e.handleDamage(fromRight);
 				
+				
 				//System.out.println("cleaned arrays");
 				
 			} 
-			
+
+				
 			//Remove enemies too far outside of camera view
 			if (e.getPosition().x > cam.position.x + cam.viewportWidth * 1.5 ||
 					e.getPosition().x < cam.position.x - cam.viewportWidth * 1.5) {
@@ -632,6 +619,12 @@ public class World {
 		}
 		scenePosition++;
 	}
+	
+	private void addStaticEnemies() {
+		enemies.add( new Zombie(new Vector2(32f, 3f)) );
+		return;
+	}
+	
 	public boolean isPaused() {
 		return isPaused;
 	}
@@ -689,12 +682,13 @@ public class World {
 	
 	/* ----- Setter methods ----- */
 	public void init() {
+		at.printStats();
 		
 		//Sounds.playBossMusic();
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Ship(new Vector2(600f, 6));
+		ship = new Ship(new Vector2(20f, 6));
 		//ship = new Ship(new Vector2(270, 60));
 		//ship = new Ship(new Vector2(600, 6));
 		sword = new Sword(new Vector2(-1, -1));
@@ -714,22 +708,24 @@ public class World {
 		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);
 		
-		//Test objects
-		enemies.add( new Zombie(new Vector2(12f,12f)) );
+		
 		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(17, 10), 4f, 2f, new Vector2(20,8), 5f, true, 3.5f));
-		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(25, 8), 4f, 2f, new Vector2(28,10), 4.5f, true, 3.5f));
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
 		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false);
 		enemies.add(testBeam);
+		
+		//addStaticEnemies();
+		
 		return;
 	}
 	
 	
 
 	public void resetLevel() {
+		at.addToTime( (int)time );
+		
 		ship = null;
 		sword = null;
 		enemies = null;

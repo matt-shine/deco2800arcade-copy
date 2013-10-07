@@ -1,11 +1,6 @@
 package deco2800.cyra.world;
 
-import deco2800.cyra.model.EnemySpawner;
-import deco2800.cyra.model.RandomizedEnemySpawner;
-import deco2800.cyra.model.MovablePlatformSpawner;
-import deco2800.cyra.model.Follower;
-import deco2800.cyra.model.MovablePlatform;
-import deco2800.cyra.model.SoldierEnemy;
+import deco2800.cyra.model.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -59,7 +54,7 @@ public class Level {
 		renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, atlas, 16,16, 1, 1);
 		
 		//Debugging downgrade stuff
-		for (int x =0; x<map.layers.size(); x++) {
+		for (int x = 0; x<map.layers.size(); x++) {
 			//for (int i =0; i<map.layers.get(x).getWidth(); i++) {
 			for (int i =0; i<250; i++) {
 				for (int j = 0; j< 5; j++) {
@@ -99,22 +94,24 @@ public class Level {
 			Class<SoldierEnemy> c = SoldierEnemy.class;
 			
 			Array<EnemySpawner> spawners = new Array<EnemySpawner>();
-			spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
+			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
 			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 1)); 
-			spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
-			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 2)); 
+			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
+			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 1));
 			boolean[] sides = {true, true, true, false};
 			
+
 			RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f, 0f, 200f);
 			res.setActive(true);
 			
 			//Spawners on top of the logs
-			objects.add(new EnemySpawner(c, new Vector2(202f, 20f), 4, 100, 1));
+        	/* objects.add(new EnemySpawner(c, new Vector2(202f, 20f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(210f, 30f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(202f, 35f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(210f, 40f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(202f, 45f), 4, 100, 1));
 			objects.add(new EnemySpawner(c, new Vector2(210f, 50f), 4, 100, 1));
+			*/
 			
 			objects.add(logS0);
 			objects.add(logS1);

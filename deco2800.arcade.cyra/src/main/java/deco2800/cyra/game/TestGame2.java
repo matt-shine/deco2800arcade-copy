@@ -34,6 +34,7 @@ public class TestGame2 extends Game {
 		//setScreen(getSplashScreen());
 		//OR go straight to the action
 		setScreen(new GameScreen(this));
+		
 	}
 
 	@Override

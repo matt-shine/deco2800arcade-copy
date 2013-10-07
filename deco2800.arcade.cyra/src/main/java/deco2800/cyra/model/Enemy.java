@@ -9,8 +9,8 @@ public abstract class Enemy extends MovableEntity{
 	
 	protected float stateTime = 0;
 	protected boolean isDead;
+	protected boolean deathCounted = false;
 	protected boolean startingNextScene;
-	
 	
 	public Enemy(float speed, float rotation, Vector2 pos, float width, float height) {
 		super(speed, rotation, pos, width, height);
@@ -76,6 +76,12 @@ public abstract class Enemy extends MovableEntity{
 	
 	public boolean isDead() {
 		return isDead;
+	}
+	public void toggleDeathCount() {
+		deathCounted = true;
+	}
+	public boolean getDeathCounted() {
+		return deathCounted;
 	}
 	
 	public boolean startingNextScene() {

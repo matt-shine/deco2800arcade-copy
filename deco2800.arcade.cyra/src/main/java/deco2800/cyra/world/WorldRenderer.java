@@ -420,7 +420,7 @@ public class WorldRenderer {
 		
 		textBatch.begin();
 		
-		CharSequence str = "Time: " + (int)world.getTime();
+		CharSequence str = "Time: " + (int)world.getTime(); //(int)ship.getPosition().x;
 		int strXPos = Gdx.graphics.getWidth() - 223; //Offset from right
 		int strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
 		font.draw(textBatch, str, strXPos, strYPos);

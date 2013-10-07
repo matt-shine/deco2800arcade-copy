@@ -98,7 +98,7 @@ public class HighscoreDatabase {
 	 * 
 	 * Displays an amount of top players for a specified game
 	 * 
-	 * @param Game_ID
+	 * @param Game_ID - game id to query against
 	 * @param top - number of top players to display
 	 * @throws DatabaseException 
 	 */
@@ -147,10 +147,10 @@ public class HighscoreDatabase {
 	}
 	
 	/**
-	 * 
-	 * @param User_ID
-	 * @param Game_ID
-	 * @param type
+	 * Displays a string representation of the users score for the specified game and type of score
+	 * @param User_ID - users id to query against
+	 * @param Game_ID - game id to query against
+	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
 	public String getUserHighScore(String Username, String Game_ID, String type) throws DatabaseException{
@@ -198,10 +198,10 @@ public class HighscoreDatabase {
 	}
 	
 	/**
-	 * 
-	 * @param User_ID
+	 * Displays the users ranking in the highscores for the specified game and score type
+	 * @param User_ID - users id to query against
 	 * @param Game_ID
-	 * @param type
+	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
 	public String getUserRanking(String Username, String Game_ID, String type) throws DatabaseException{
@@ -247,6 +247,59 @@ public class HighscoreDatabase {
 			}
 		}
 	}
+	
+	
+	/**
+	 * Displays a string representation of all the users highscores aggregated into an average. This could be used by the games
+	 * if they wish to display this as a way of comparing the users score against the average player
+	 * @param Game_ID - game id to query against
+	 * @param type - type of score that needs to be retrieved
+	 * @throws DatabaseException 
+	 */
+	public String getAvgUserHighScore(String Game_ID, String type) throws DatabaseException{
+		String data = null;
+
+		if (!initialised) {
+			initialise();
+		}
+		
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT AVG(s.SCORE) as SCORE from HIGHSCORES_PLAYER h INNER JOIN " +
+					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
+					type + "';");
+			while(resultSet.next())
+			{
+				data = resultSet.getString("SCORE");
+			}
+
+			return data;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player information from database", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	public String getTopPlayers() throws DatabaseException, SQLException{
 		String data = null;

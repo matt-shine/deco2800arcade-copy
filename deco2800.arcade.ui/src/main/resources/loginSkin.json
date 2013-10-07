@@ -13,7 +13,8 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
         default: { font: default, fontColor: white },
-        error: { font: default, fontColor: red }
+        error: { font: default, fontColor: red },
+	cgothic: { font: textbox, fontColor: white}
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }

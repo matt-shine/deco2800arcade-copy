@@ -91,8 +91,12 @@ public class FrontPage implements Screen {
         final TextButton libraryButton = new TextButton("Library", skin, "magenta");
         final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
     
-        final Label username = new Label("Adeleen Pavia", skin);
-        final Label credits = new Label( creditVal + " Credits", skin);
+        final Label username = new Label("Adeleen Pavia", skin, "cgothic");
+        username.setAlignment(Align.right);
+        final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
+        credits.setAlignment(Align.right);
+        final Label divider = new Label("|", skin, "cgothic");
+        divider.setAlignment(Align.right);
     
         final int bWidth = 300;
         final int bHeight = 300;
@@ -124,7 +128,8 @@ public class FrontPage implements Screen {
         topBox.setColor(255, 255, 255, 1);
         topBox.setBackground(skin.getDrawable("menuBar"));
         
-        topBox.add(username).width(100);
+        topBox.add(username).width(1000);
+        topBox.add(divider).width(5).pad(20);
         topBox.add(credits).width(90);
         bottomBox.setSize(1279, 30);
         bottomBox.setPosition(1, 1);
@@ -140,8 +145,10 @@ public class FrontPage implements Screen {
         
         //float height = storeButton.getHeight();
     	//float width = storeButton.getWidth();
-
         
+        
+
+        // Icon event listeners, mouseOver and mouseClick
         recentButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
            		recentButton.setSize(bWidth + enlarge,  bHeight + enlarge);

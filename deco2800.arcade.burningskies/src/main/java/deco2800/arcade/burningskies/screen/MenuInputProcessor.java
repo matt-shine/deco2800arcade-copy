@@ -10,8 +10,8 @@ import deco2800.arcade.client.ArcadeSystem;
 public class MenuInputProcessor extends InputAdapter {
 	
 	private BurningSkies game;
-	private int buttonSelected = MenuScreen.getSelected();
-	private Boolean keyboardSelection = MenuScreen.getKeyboardSelection();
+	private static int buttonSelected = 0;
+	private static Boolean keyboardSelection = false;
 	
 	public MenuInputProcessor(BurningSkies game) {
 		this.game = game;
@@ -20,36 +20,51 @@ public class MenuInputProcessor extends InputAdapter {
 	@Override
 	public boolean keyDown(int keycode) {
 		switch(keycode) {
-		case Keys.UP:
-        	buttonSelected = ((buttonSelected - 1) % 5 + 5) % 5;
-        	MenuScreen.setSelected(buttonSelected);
-			break;
-		case Keys.DOWN:
+		case Keys.RIGHT:
 			buttonSelected = ((buttonSelected + 1) % 5 + 5) % 5;
-        	MenuScreen.setSelected(buttonSelected);
+			keyboardSelection = true;
+			break;
+		case Keys.LEFT:
+			buttonSelected = ((buttonSelected - 1) % 5 + 5) % 5;
+			keyboardSelection = true;
 			break;
 		case Keys.ENTER:
 			if (buttonSelected == 0) {
 				game.setScreen(new PlayScreen(game));
 			} else if (buttonSelected == 1) {
-				game.setScreen(new ScoreScreen(game));
+				game.setScreen(game.scoreScreen);
 			} else if (buttonSelected == 2) {
-				game.setScreen(new OptionsScreen(game));;
+				game.setScreen(game.optionsScreen);
 			} else if (buttonSelected == 3) {
-				game.setScreen(new HelpScreen(game));
+				game.setScreen(game.helpScreen);
 			} else if (buttonSelected == 4) {
 				ArcadeSystem.goToGame(ArcadeSystem.UI);
 			}
-		case Keys.LEFT:
+			break;
+		case Keys.DOWN:
 			keyboardSelection = true;
-			MenuScreen.setKeyboardSelected(keyboardSelection);
-		case Keys.RIGHT:
+			break;
+		case Keys.UP:
 			keyboardSelection = true;
-			MenuScreen.setKeyboardSelected(keyboardSelection);
-		case Keys.ESCAPE:
-			keyboardSelection = false;
-			MenuScreen.setKeyboardSelected(keyboardSelection);
+			break;
+		case Keys.BACKSPACE:
+			if (keyboardSelection == true) {
+				keyboardSelection = false;
+			} else if (game.getScreen() == game.menuScreen) {
+				ArcadeSystem.goToGame(ArcadeSystem.UI);
+			} else {
+				game.setScreen(game.menuScreen);
+			}
+			break;
 		}
 		return false;
+	}
+	
+	public static int getButtonSelection() {
+		return buttonSelected;
+	}
+
+	public static  Boolean getKeyboardSelection() {
+		return keyboardSelection;
 	}
 }

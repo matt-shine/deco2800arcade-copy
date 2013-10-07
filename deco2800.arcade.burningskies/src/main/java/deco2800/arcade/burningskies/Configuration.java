@@ -1,7 +1,5 @@
 package deco2800.arcade.burningskies;
 
-import java.util.*;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -13,8 +11,6 @@ public class Configuration {
 	private static int backgroundVolume = 50;
 	// Difficulty stored as integer from 0 to 4, with 4 being insane mode
 	private static int difficulty = 2;
-	// Hashmap of action:keyPress pairs
-	private HashMap<String, String> keybindings;
 	
 	/* 
 	 * Initialises all variables on game start up. Checks if config file exists, 
@@ -128,26 +124,19 @@ public class Configuration {
 		return Configuration.difficulty;
 	}
 	
-	public HashMap<String, String> getKeybindings() {
-		return this.keybindings;
-	}
-	
-	public void setMasterVolume(int volume) {
+	public static void setMasterVolume(int volume) {
 		Configuration.masterVolume = volume;
 	}
 
-	public void setEffectsVolume(int volume) {
+	public static void setEffectsVolume(int volume) {
 		Configuration.effectsVolume = volume;
 	}
 	
-	public void setBackgroundVolume(int volume) {
+	public static void setBackgroundVolume(int volume) {
 		Configuration.backgroundVolume = volume;
 	}
 	
-	public void setDifficulty(int difficulty) {
+	public static void setDifficulty(int difficulty) {
 		Configuration.difficulty = difficulty;
-	}
-	
-	public void setKeybindings(String action, String key){
 	}
 }

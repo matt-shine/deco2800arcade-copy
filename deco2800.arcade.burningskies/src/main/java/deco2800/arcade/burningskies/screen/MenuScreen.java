@@ -4,18 +4,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -27,7 +27,6 @@ public class MenuScreen implements Screen {
     private Stage stage;
     private BitmapFont black;
     private BitmapFont white;
-    private TextureAtlas atlas;
     private Skin skin;
     private SpriteBatch batch;
     private TextButton startButton;
@@ -36,11 +35,14 @@ public class MenuScreen implements Screen {
     private TextButton helpButton;
     private TextButton exitButton;
     private Label label;
+    private Image background;
     // Used to check whether to display dotted selection box around buttons
-	private static Boolean keyboardSelection = false;
-	// Navigation counter used for keyboard selection on menus
-	private static int buttonSelected = 0;
+	private static Boolean keyboardSelection;
+	// Input processor for keyboard navigation in menus
 	private MenuInputProcessor processor;
+	private int width = BurningSkies.SCREENWIDTH;
+    private int height = BurningSkies.SCREENHEIGHT;
+    private Texture selectionBox;
     
     
 	public MenuScreen( BurningSkies game){
@@ -51,7 +53,6 @@ public class MenuScreen implements Screen {
 	public void dispose() {
 		batch.dispose();
         skin.dispose();
-        atlas.dispose();
         white.dispose();
         black.dispose();
         stage.dispose();
@@ -74,11 +75,16 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-        stage.act(delta);
+        keyboardSelection = MenuInputProcessor.getKeyboardSelection();
         
-        batch.begin();
+        stage.act(delta);
         stage.draw();
-        batch.end();
+        
+        if (keyboardSelection == true) {
+        	batch.begin();
+        	batch.draw(selectionBox, (optionsButton.getX() - (2 * (startButton.getWidth() + 30))) - 11, (height / 9) - 68);
+        	batch.end();
+        }
 	}
 
 	@Override
@@ -92,38 +98,30 @@ public class MenuScreen implements Screen {
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
-        atlas = new TextureAtlas("images/menu/button.pack");
-        skin = new Skin();
-        skin.addRegions(atlas);
+        skin = new Skin(Gdx.files.internal("images/menu/uiskin32.json"));
         white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
-        
-        int width = BurningSkies.SCREENWIDTH;
-        int height = BurningSkies.SCREENHEIGHT;
+        background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));
+        selectionBox = new Texture(Gdx.files.internal("images/menu/selected_outline.png"));
         
         stage = new Stage(width, height, true);
         ArcadeInputMux.getInstance().addProcessor(stage);
         
         processor = new MenuInputProcessor(game);
     	ArcadeInputMux.getInstance().addProcessor(processor);
-	
-	    TextButtonStyle style = new TextButtonStyle();
-	    style.up = skin.getDrawable("buttonnormal");
-	    style.down = skin.getDrawable("buttonpressed");
-	    style.font = black;
-	
-	    startButton = new TextButton("Start", style);
-	    optionsButton = new TextButton("Options", style);
-	    scoresButton = new TextButton("Scores", style);
-	    helpButton = new TextButton("Help", style);
-	    exitButton = new TextButton("Exit", style);
+		
+	    startButton = new TextButton("Start", skin);
+	    optionsButton = new TextButton("Options", skin);
+	    scoresButton = new TextButton("Scores", skin);
+	    helpButton = new TextButton("Help", skin);
+	    exitButton = new TextButton("Exit", skin);
 	   
 	    buttonDimensions();
 	    buttonPosition(width, height);
 	    listeners();
 	    
 	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    label = new Label("Burning Skies", ls);
+	    label = new Label("Are you ready?", ls);
 	    label.setX(0);
 	    label.setY((float)(height*0.95));
 	    label.setWidth(width);
@@ -135,6 +133,8 @@ public class MenuScreen implements Screen {
 	    stage.addActor(helpButton);
 	    stage.addActor(exitButton);
 	    stage.addActor(label);
+	    stage.addActor(background);
+	    background.toBack();
 	}
 	
 	public void buttonDimensions() {
@@ -150,18 +150,18 @@ public class MenuScreen implements Screen {
 	    exitButton.setHeight(50);
 	}
 	
-	public void buttonPosition(int width, int height) {
-	    startButton.setX(width / 2 - startButton.getWidth() / 2);
-	    optionsButton.setX(width / 2 - optionsButton.getWidth() / 2);
-	    scoresButton.setX(width / 2 - scoresButton.getWidth() / 2);
-	    helpButton.setX(width / 2 - helpButton.getWidth() / 2);
-	    exitButton.setX(width / 2 - exitButton.getWidth() / 2);
+	public void buttonPosition(int width, int height) {		
+		optionsButton.setY(height / 9);
+	    startButton.setY(height / 9);
+	    scoresButton.setY(height / 9);
+	    helpButton.setY(height / 9);
+	    exitButton.setY(height / 9);
 	    
-	    optionsButton.setY(height / 2 - optionsButton.getHeight() / 2);
-	    startButton.setY(optionsButton.getY() + (2 * (startButton.getHeight() + 10)));
-	    scoresButton.setY(optionsButton.getY() + (startButton.getHeight() + 10));
-	    helpButton.setY(optionsButton.getY() - (startButton.getHeight() + 10));
-	    exitButton.setY(optionsButton.getY() - (2 * (startButton.getHeight() + 10)));
+	    optionsButton.setX(width / 2 - optionsButton.getWidth() / 2);
+	    startButton.setX(optionsButton.getX() - (2 * (startButton.getWidth() + 30)));
+	    scoresButton.setX(optionsButton.getX() - (startButton.getWidth() + 30));
+	    helpButton.setX(optionsButton.getX() + (startButton.getWidth() + 30));
+	    exitButton.setX(optionsButton.getX() + (2 * (startButton.getWidth() + 30)));
 	}
 	
 	public void listeners() {
@@ -179,7 +179,7 @@ public class MenuScreen implements Screen {
                 return true;
 			}
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new OptionsScreen(game));
+                game.setScreen(game.optionsScreen);
 			}
 		});
     
@@ -188,7 +188,7 @@ public class MenuScreen implements Screen {
 	                return true;
 	        }
 	        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-	        	game.setScreen(new ScoreScreen(game));
+	        	game.setScreen(game.scoreScreen);
 	        }
 	    });
     
@@ -197,7 +197,7 @@ public class MenuScreen implements Screen {
 	        	return true;
 	        }
 	        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-	        	game.setScreen(new HelpScreen(game));
+	        	game.setScreen(game.helpScreen);
 	        }
 	    });
 	    
@@ -209,22 +209,5 @@ public class MenuScreen implements Screen {
 	        	ArcadeSystem.goToGame(ArcadeSystem.UI);
 	        }
 	    });
-	}
-	
-
-	public static void setSelected(int selected) {
-		buttonSelected = selected;
-	}
-	
-	public static int getSelected() {
-		return buttonSelected;
-	}
-	
-	public static void setKeyboardSelected(boolean keyboard) {
-		keyboardSelection = keyboard;
-	}
-	
-	public static boolean getKeyboardSelection() {
-		return keyboardSelection;
 	}
 }

@@ -35,11 +35,11 @@ public class PacChar extends Mover{
 	public PacChar(GameMap gameMap) {
 		super(gameMap);
 		currentTile = gameMap.getPacStart();
-		System.out.println(currentTile);
-		drawX = gameMap.getTileCoords(currentTile).getX() + 3;
-		drawY = gameMap.getTileCoords(currentTile).getY() - 3;
-		//grabs file
-		walkSheet = new Texture(Gdx.files.internal("pacMove2.png"));
+		//set up pacman to be drawn in the right place- this is defintely right
+		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
+		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
+		//grabs file- should be pacMove2.png, pacTest marks the edges and middle pixel in red
+		walkSheet = new Texture(Gdx.files.internal("pacTest.png"));
 		// splits into columns and rows then puts them into one array in order
 		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
 		walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
@@ -59,7 +59,7 @@ public class PacChar extends Mover{
 		updatePosition();
 		moveDist = 1;
 		currentTile.addMover(this);
-		System.out.println(this);
+		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
 //		walkAnimation = new Animation(0.025f, walkFrames);
 //		stateTime = 0f;	
@@ -70,40 +70,33 @@ public class PacChar extends Mover{
 	 * Draws the Pacman
 	 */
 	public void render(SpriteBatch batch) {
+		
 		int spritePos = 3;
+		if (facing == Dir.RIGHT) {
+			spritePos = 1;
+		} else if (facing == Dir.UP) {
+			spritePos = 5;
+		} else if (facing == Dir.DOWN){ 
+			spritePos = 7;
+		} else {
+			facing = Dir.LEFT;
+		}
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
 			if (facing == Dir.LEFT){
     			drawX -= moveDist;
     		} else if (facing == Dir.RIGHT) {
     			drawX += moveDist;
-    			spritePos = 1;
     		} else if (facing == Dir.UP) {
     			drawY += moveDist;
-    			spritePos = 5;
     		} else if (facing == Dir.DOWN){ 
     			drawY -= moveDist;
-    			spritePos = 7;
     		} else {
     			currentState = PacState.IDLE;
-    			drawX = 300;
-    			drawY = 300;
     			facing = Dir.LEFT;
-    		}
-			
-			updatePosition();
-			
-    	} else if (currentState == PacState.IDLE) {
-			if (facing == Dir.RIGHT) {
-    			spritePos = 1;
-    		} else if (facing == Dir.UP) {
-    			spritePos = 5;
-    		} else if (facing == Dir.DOWN){ 
-    			spritePos = 7;
-    		} else {
-    			facing = Dir.LEFT;
-    		}
-    	}	
+    		}			
+			updatePosition();			
+    	} 
 		//draw pacman facing the appropriate direction
 		batch.draw(walkFrames[spritePos], drawX, drawY, width, height);
 	}
@@ -130,6 +123,11 @@ public class PacChar extends Mover{
 
 	public void setMoveDist(float moveDist) {
 		this.moveDist = moveDist;
+	}
+	
+	public String toString() {
+		return "Pacman at (" + midX + ", " + midY + ") drawn at {" + drawX + 
+				", " + drawY + "}, " + currentState + " in " + currentTile;
 	}
 		
 }

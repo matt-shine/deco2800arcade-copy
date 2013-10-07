@@ -47,8 +47,6 @@ public class Pacman extends GameClient {
 	private PacController controller;
 	private GameMap gameMap;
 	private BitmapFont scoreText; 
-
-	private List<Mover> colList;	
 	
 	//not used yet
 	//private NetworkClient networkClient;
@@ -103,8 +101,6 @@ public class Pacman extends GameClient {
 		super.create();			
 		// level map file
 		String file = "levelMap.txt";
-		//initialise collision list
-		colList = new ArrayList<Mover>();
 
 		//Initialize camera
 		camera = new OrthographicCamera();
@@ -140,9 +136,7 @@ public class Pacman extends GameClient {
 	}
 	
 	private void makeChanges() {
-		if (controller.checkNoWallCollision(player.currentTile)) {
-			player.setCurrentState(PacState.IDLE);
-		}
+		
 		 // Respond to user input depending on the game state
 	    switch(gameState) {	    
 	    //TODO BLARH apparently this commented bit of code isn't even being reached
@@ -177,7 +171,7 @@ public class Pacman extends GameClient {
 	public void render() {	
 		//FIXME big method
 		//make changes to location of object etc, then draw
-		makeChanges();
+		//makeChanges();
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -195,7 +189,11 @@ public class Pacman extends GameClient {
 //	    scoreText.setColor(Color.WHITE);
 //	    scoreText.draw(batch, "Pacman!", 10, 10);
 	    
-	    // render player pacman 
+	    // check if pacman is trying to move into a wall
+	    // this stops him even if no key is pressed
+	    if (!controller.checkNoWallCollision(player.getTile())) {
+			player.setCurrentState(PacState.IDLE);
+		}
 	    player.render(batch);
 	    //end the drawing
 	    batch.end();

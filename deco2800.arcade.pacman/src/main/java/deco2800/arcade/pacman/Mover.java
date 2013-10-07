@@ -56,14 +56,14 @@ public abstract class Mover {
 	public Tile getTile() {
 		return currentTile;
 	}
-
+	
 	/**
 	 * Updates the middle coordinate of the mover and its tile. Also updates the
 	 * tile's list of movers
 	 */
 	protected void updatePosition() {
 		midX = drawX + width / 2;
-		midY = drawY + width / 2;
+		midY = drawY + height / 2;
 		// remove mover from tile and add it to new one if it's changed
 		Tile newTile = gameMap.findMoverTile(this);
 		// Pacman has moved!

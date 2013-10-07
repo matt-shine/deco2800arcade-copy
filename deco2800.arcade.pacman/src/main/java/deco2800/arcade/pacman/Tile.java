@@ -57,9 +57,10 @@ public class Tile {
 	}
 
 	public String toString() {
-		return "Tile at " + gameMap.getTilePos(this).getX() + ", "
-				+ gameMap.getTilePos(this).getY() + " at "
-				+ gameMap.getTileCoords(this);
+		return "Tile [" + gameMap.getTilePos(this).getX() + ", "
+				+ gameMap.getTilePos(this).getY() + "] at ("
+				+ gameMap.getTileCoords(this).getX() + ", " + 
+				gameMap.getTileCoords(this).getY() + ")";
 	}
 
 	// Equals method which compares tiles based on position

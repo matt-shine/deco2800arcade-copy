@@ -52,7 +52,7 @@ public class ReplayItem {
 	 */
 	public Integer intVal() {
 		if ( this.type == TYPE_INTEGER ) {
-			return (Integer)this.data;
+			return (Integer) getData();
 		} else {
 			throw new RuntimeException( "Invalid cast" );
 		}
@@ -66,7 +66,7 @@ public class ReplayItem {
 	 */
 	public Float floatVal() {
 		if ( this.type == TYPE_FLOAT ) {
-			return (Float)this.data;
+			return (Float) getData();
 		} else {
 			throw new RuntimeException( "Invalid cast" );
 		}
@@ -80,7 +80,7 @@ public class ReplayItem {
 	 */
 	public String stringVal() {
 		if ( this.type == TYPE_STRING ) {
-			return (String)this.data;
+			return (String) getData();
 		} else {
 			throw new RuntimeException( "Invalid cast" );
 		}

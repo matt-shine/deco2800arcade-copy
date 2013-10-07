@@ -6,6 +6,7 @@ import java.util.Random;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -48,10 +49,12 @@ public class GameScreen implements Screen {
 	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
 	private float stateTime;	
 	private float counter;
+	private float timer;
+	private int multiplier;
 	
 	public GameScreen(Hunter hunter) {
 	
-	
+		
 		this.hunter = hunter;
 		// Plays the music
 		hunter.getMusicManager().play(HunterMusic.GAME);
@@ -75,7 +78,7 @@ public class GameScreen implements Screen {
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
 		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo");
 		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion");
-		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, true);
+		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, false);
 
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
@@ -85,6 +88,9 @@ public class GameScreen implements Screen {
 		
 		stateTime = 0f;
 		counter = 0f;
+		multiplier = 1;
+		
+		
 	}
 
 	@Override
@@ -161,19 +167,42 @@ public class GameScreen implements Screen {
 			
 			if (stateTime - counter >= 10f){
 				createAnimals();
-				createItems();
 				counter += 10f;
 			}else{
-				if(Config.randomGenerator.nextFloat() > 0.997f){
-					createAnimals();
+				if(stateTime%4f <= 0.05f){
+					if(Config.randomGenerator.nextFloat() >= 0.6)
+						createAnimals();
 				}
-				if(Config.randomGenerator.nextFloat() > 0.999f){
-					createItems();
+				if(stateTime%6f <= 0.05f){
+					if(Config.randomGenerator.nextFloat() >= 0.7)
+						createItems(false);
+				}
+				if(stateTime%20f <= 0.05f){
+					if(Config.randomGenerator.nextFloat() >= 0.5)
+						createItems(true);
 				}
 			}
+			timer -= delta;
+			if (timer <= 0f && timer > -1f){
+				player.setInvulnerability(false);
+				player.setMultiplier(1);
+			}
+			if (timer <= -1f){
+				checkBuffs();
+			}
+			
 		}
 	}
 	
+	private void checkBuffs() {
+		if (player.isInvulnerable()){
+			timer = 5f;
+		}else if(player.getMultiplier() != 1){
+			timer = 5f;
+			multiplier = player.getMultiplier();
+		}
+	}
+
 	private ArrayList<Animal> getAnimalsKilled() {
 		return animalsKilled;
 	}
@@ -181,18 +210,20 @@ public class GameScreen implements Screen {
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
 		System.out.println("New Animal");
-//		entities.add(new Animal(new Vector2(player.getX() + 10*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 10*Config.TILE_SIZE)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(2)]));
+		entities.add(new Animal(new Vector2(player.getX() + 10*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 10*Config.TILE_SIZE)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
 	}
 	
-	private void createItems(){
+	private void createItems(boolean weapon){
 		System.out.println("New Item");
-//		entities.add(new Items(new Vector2(player.getX() + 13*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 13*Config.TILE_SIZE)), 64, 64, Config.randomGenerator.nextBoolean()));
+		entities.add(new Items(new Vector2(player.getX() + 13*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 13*Config.TILE_SIZE)), 64, 64, weapon));
 	}
 
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			// Attack
 			player.attack();
+			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
+			attack.play(hunter.getPreferencesManager().getVolume());
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.V)){
@@ -202,6 +233,8 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
 			// Jump
 			player.jump();
+			Sound jump = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
+			jump.play(hunter.getPreferencesManager().getVolume());
 		}
 
 	}
@@ -216,11 +249,11 @@ public class GameScreen implements Screen {
 		drawScore(batch);
 		drawDistance(batch);
 	}
-	
+
 	private void drawScore(SpriteBatch batch) {
 		int x = Config.screenWidth / 2;
 		int y = Config.screenHeight - 16;
-		CharSequence scoreText = Integer.toString(player.getCurrentScore());
+		CharSequence scoreText = Integer.toString(player.getCurrentScore())+ "     x" + multiplier;
 		font.draw(batch, scoreText, x, y);
 	}
 	
@@ -242,6 +275,7 @@ public class GameScreen implements Screen {
 		}
 	}
 
+	
 	/**
 	 * Moves the cameras along with the player
 	 */

@@ -17,10 +17,10 @@ public class EnemySpawner {
 	private int spawnCount;
 	
 	public EnemySpawner(Class<? extends Enemy> objClass, Vector2 pos, int rate, int maxSpawn, int maxSpawnAtOnce) {
-		this.objClass=objClass;
+		this.objClass = objClass;
 		this.pos = pos;
-		this.rate=rate;
-		this.maxSpawn=maxSpawn;
+		this.rate = rate;
+		this.maxSpawn = maxSpawn;
 		this.maxSpawnAtOnce = maxSpawnAtOnce;
 		count = rate;
 		enemies = new Array<Enemy>();

@@ -44,7 +44,7 @@ import deco2800.cyra.model.Zombie;
  *
  */
 public class World {
-	public static final float WORLD_WIDTH = 600f;
+	public static final float WORLD_WIDTH = 618f;
 	public static final float WORLD_HEIGHT = 60f;
 	
 	private Boolean firstUpdate;
@@ -156,13 +156,17 @@ public class World {
 		//System.out.println("End of World update " + ship.getVelocity().x);
 
 		
-		// Check if sprite has reached left level boundary.
-		// if( (int)(ship.getPosition().x) < 1 ) ship.getVelocity().x = 0;
+		// Check if sprite has reached left/right level boundary.
+		if( (int)(ship.getNextPos().x) < 1 || (int)(ship.getNextPos().x) > WORLD_WIDTH )
+			ship.setCanMove(false);
 		
 		
 		// Check if sprite has gone out of level bounds to the bottom.
 		if( (int)(ship.getPosition().y) < -1 ) {
 			resetLevel();
+		}
+		if( (int)(ship.getPosition().x)-1 < -1 ) {
+			
 		}
 		// Reset if health = 0
 		if( ship.getHearts() == 0 ) {
@@ -690,7 +694,7 @@ public class World {
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Ship(new Vector2(20f, 6));
+		ship = new Ship(new Vector2(600f, 6));
 		//ship = new Ship(new Vector2(270, 60));
 		//ship = new Ship(new Vector2(600, 6));
 		sword = new Sword(new Vector2(-1, -1));
@@ -712,7 +716,6 @@ public class World {
 		
 		//Test objects
 		enemies.add( new Zombie(new Vector2(12f,12f)) );
-		enemies.add( new Walker(new Vector2 (10f, 9f)) );
 		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
 		Texture copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);

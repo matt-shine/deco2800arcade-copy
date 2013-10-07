@@ -9,7 +9,7 @@ public class Ship extends MovableEntity{
 	public enum State {
 		IDLE, WALK, JUMP, FALL, DEATH, DASH_JUMP, WALL
 	}
-	public static final float SPEED = 9f; //was 12
+	public static final float SPEED = 9f;
 	public static final float DASH_SPEED = 13.5f;
 	public static final float JUMP_VELOCITY = 20f;
 	public static final float WIDTH = 1f;
@@ -27,6 +27,7 @@ public class Ship extends MovableEntity{
 	private State state = State.IDLE;
 	private int hearts = 4;
 	private boolean facingRight = false;
+	private boolean canMove = true;
 	private boolean onMovable = false;
 	private boolean invincible = false;
 	private float invincibleTime = 0;
@@ -86,6 +87,13 @@ public class Ship extends MovableEntity{
 		return hearts;
 	}
 	
+	public Vector2 getNextPos() {
+		Vector2 tmp = new Vector2(position); 
+		tmp.add(velocity.mul(Gdx.graphics.getDeltaTime()));
+		velocity.mul(1/(Gdx.graphics.getDeltaTime()));
+		return tmp;
+	}
+	
 	/* ----- Setter methods ----- */
 	public void jump() {
 		if (wallClimbEnabled) {
@@ -142,6 +150,10 @@ public class Ship extends MovableEntity{
 				getVelocity().x = 2 * SPEED;
 			}
 		}
+	}
+	
+	public void setCanMove(boolean canMv) {
+		canMove = canMv;
 	}
 	
 	public void setState(State state) {
@@ -243,6 +255,9 @@ public class Ship extends MovableEntity{
 	public void setWallClimbEnabled (boolean wallClimbEnabled) {
 		this.wallClimbEnabled = wallClimbEnabled;
 	}
+	
+	
+	
 	public void update(Ship ship) {
 		//System.out.println("Before suepr update " + velocity.x);
 		super.update(ship);
@@ -261,9 +276,15 @@ public class Ship extends MovableEntity{
 		//System.out.println(velocity.x);
 		//System.out.println("Velocity before scl " + velocity.x+","+velocity.y);
 		
-		position.add(velocity.mul(Gdx.graphics.getDeltaTime()));
+		Vector2 deltaNextPos = velocity.mul(Gdx.graphics.getDeltaTime());
+		if(canMove) {
+			position.add(deltaNextPos);
+		} else {
+			position.y += deltaNextPos.y;
+			canMove = true;
+		}
 		velocity.mul(1/(Gdx.graphics.getDeltaTime()));
-
+		
 		//System.out.println("Velocity after scl " + velocity.x+","+velocity.y);
 		//tmp1.scl(Gdx.graphics.getDeltaTime());
 

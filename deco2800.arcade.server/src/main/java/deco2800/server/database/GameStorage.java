@@ -115,9 +115,7 @@ public class GameStorage {
             while (resultSet.next()) {
                 Game game = new Game();
                 game.id = resultSet.getString("ID");
-                System.out.println(game.id);
                 game.name = resultSet.getString("NAME");
-                System.out.println(game.name);
                 game.description = resultSet.getString("DESCRIPTION");
                 game.icon = new Icon();
                 game.icon.setPath(resultSet.getString("ICONPATH"));

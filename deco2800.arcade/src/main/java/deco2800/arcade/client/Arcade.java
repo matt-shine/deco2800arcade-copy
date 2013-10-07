@@ -8,13 +8,12 @@ import java.awt.event.WindowEvent;
 import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.JFrame;
 
+import deco2800.arcade.client.network.listener.*;
+import deco2800.arcade.protocol.game.GameLibraryRequest;
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -161,6 +160,9 @@ public class Arcade extends JFrame {
             // TODO allow server/port as optional runtime arguments xor user inputs.
             System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
+
+            client.sendNetworkObject(new GameLibraryRequest());
+
 			communicationNetwork = new CommunicationNetwork(player, this.client);
 			addListeners();
 		} catch (NetworkException e) {
@@ -169,12 +171,16 @@ public class Arcade extends JFrame {
 		}
 	}
 
-	private void addListeners() {
+    /**
+     * Add Listeners to the network client
+     */
+    private void addListeners() {
 		this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
         this.client.addListener(new PackmanListener());
+        this.client.addListener(new LibraryResponseListener());
 	}
 
 	public void connectAsUser(String username) {
@@ -329,7 +335,7 @@ public class Arcade extends JFrame {
     /**
      * Returns all games except ones with the @InternalGame annotation
      *
-     * @return
+     * @return set of playable game ids
      */
     public Set<String> findPlayableIds() {
         Map<String, Class<? extends GameClient>> games = new HashMap<String, Class<? extends GameClient>>(
@@ -349,6 +355,11 @@ public class Arcade extends JFrame {
         return games.keySet();
     }
 
+    /**
+     * Get a GameClient Instance of a game
+     * @param id Game id
+     * @return GameClient
+     */
     public GameClient getInstanceOfGame(String id) {
 
         Class<? extends GameClient> gameClass = getGameMap().get(id);
@@ -390,8 +401,55 @@ public class Arcade extends JFrame {
         }
         return null;
     }
+
+    /**
+     * Get the current game
+     * @return selectedGame
+     */
     public GameClient getCurrentGame() {
         return selectedGame;
     }
 
+    /**
+     * Set selected game client
+     * @param gameClient GameClient
+     */
+    public void setGame(GameClient gameClient) {
+        selectedGame = gameClient;
+    }
+
+    /**
+     * Return all playable games
+     * @return Set of Playable Games
+     */
+    public Set<GameClient> findPlayableGames() {
+        Map<String, Class<? extends GameClient>> games = getGameMap();
+
+        Set<GameClient> gameSet = new HashSet<GameClient>();
+
+        Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games.entrySet().iterator();
+
+        while (it.hasNext()) {
+            Map.Entry<String, Class<? extends GameClient>> pair = it.next();
+            if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+                it.remove();
+            } else {
+                GameClient gameClient = getInstanceOfGame(pair.getKey());
+                if (gameClient != null) {
+                    gameSet.add(gameClient);
+                }
+
+            }
+
+        }
+        return gameSet;
+    }
+
+    /**
+     * Send a request for a list of games to the server
+     */
+    public void requestGames() {
+        GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
+        client.sendNetworkObject(gameLibraryRequest);
+    }
 }

@@ -44,7 +44,7 @@ public class FrontPage implements Screen {
 	
     private float funds;
     private int tokens;
-    
+    private int creditVal = 0;
     private boolean bclicked;
     
     Texture bg;
@@ -90,8 +90,10 @@ public class FrontPage implements Screen {
         final TextButton chatButton = new TextButton("Chat", skin);
         final TextButton libraryButton = new TextButton("Library", skin, "magenta");
         final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
-        
-        
+    
+        final Label username = new Label("Adeleen Pavia", skin);
+        final Label credits = new Label( creditVal + " Credits", skin);
+    
         final int bWidth = 300;
         final int bHeight = 300;
         final int bX = 150;
@@ -122,6 +124,8 @@ public class FrontPage implements Screen {
         topBox.setColor(255, 255, 255, 1);
         topBox.setBackground(skin.getDrawable("menuBar"));
         
+        topBox.add(username).width(100);
+        topBox.add(credits).width(90);
         bottomBox.setSize(1279, 30);
         bottomBox.setPosition(1, 1);
         bottomBox.setColor(255, 255, 255, 1);
@@ -131,7 +135,7 @@ public class FrontPage implements Screen {
         stage.addActor(bottomBox);
         
         
-        
+   
         
         
         //float height = storeButton.getHeight();

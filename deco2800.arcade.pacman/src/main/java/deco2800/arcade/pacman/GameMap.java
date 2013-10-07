@@ -18,8 +18,8 @@ public class GameMap {
 	private boolean vsym;
 	private Tile[][] grid; //game map
 	private List<WallTile> ghostDoors; //list of ghost doors for ghosts to access
-	private Tile pacStart; //the left starting tile for pacman (appears on two tiles)
-	private Tile fruitLeft; // the left tile that fruit appears on
+	private Tile pacStart; //the right starting tile for pacman (appears on two tiles)
+	private Tile fruitRight; // the right tile that fruit appears on
 	private int hOffset;
 	private int vOffset;
 	private int side;
@@ -104,6 +104,8 @@ public class GameMap {
 			case 'L': replacer = "J"; break;
 			case 'K': replacer = "M"; break;
 			case 'M': replacer = "K"; break;
+			// r is left tile fruit starts on
+			// s is left tile pacman starts on
 			case 'r': replacer = " "; break;
 			case 's': replacer = " "; break;
 			}
@@ -147,7 +149,7 @@ public class GameMap {
 				} else if (type == ' ' || type == 'r' || type == 's'){
 					square = new Tile(this);
 					if (type == 'r') {
-						fruitLeft = square;
+						fruitRight = square;
 					} else if (type == 's'){
 						pacStart = square;
 					}
@@ -162,7 +164,12 @@ public class GameMap {
 				//square.setGridPos(new Point(i, lineNum));
 			}
 		}
-		System.out.println(getTilePos(pacStart));
+//		for (Tile[] a: grid) {
+//			for (Tile t: a) {
+//				System.out.println(t);
+//			}
+//			System.out.println();
+//		}
 	}
 	
 	public void render(SpriteBatch batch) {
@@ -184,7 +191,7 @@ public class GameMap {
 	}
 
 	public Tile getFruitLeft() {
-		return fruitLeft;
+		return fruitRight;
 	}
 	
 	/**
@@ -206,10 +213,10 @@ public class GameMap {
 		int side = Tile.getSideLength();
 		for (int i = 0; i < grid.length; i++) {
 			int tileX = getTileCoords(grid[i][0]).getX();
-			if (x >= tileX && x < tileX + side) {
+			if (x > tileX && x <= tileX + side) {
 				for (int j = 0; j < grid[i].length; j++) {
 					int tileY = getTileCoords(grid[i][j]).getY(); 
-					if (y >= tileY && y < tileY + side) {
+					if (y > tileY && y <= tileY + side) {
 						return grid[i][j];
 					}
 				}

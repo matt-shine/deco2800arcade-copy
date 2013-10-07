@@ -18,6 +18,7 @@ public class PacController implements InputProcessor {
 
 	private PacChar player;
 	private GameMap gameMap;
+	private String test = "";
 	
 	public PacController(PacChar player, GameMap gameMap) {
 		this.player = player;
@@ -45,15 +46,17 @@ public class PacController implements InputProcessor {
 		}
 		// check for collisions
 		Tile pTile = player.getTile();
+		Dir tempFacing = player.getFacing();
+		player.setFacing(facing);
+		System.out.println("Can pacman move? " + checkNoWallCollision(pTile));
 		if (checkNoWallCollision(pTile)) {
-			System.out.println("Now moving");
-			player.setCurrentState(PacState.MOVING);	
+			player.setCurrentState(PacState.MOVING);
 		} else {
-			System.out.println("now idle");
 			player.setCurrentState(PacState.IDLE);
+			//stops pacman changing facing if he can't move in that direction			
+			player.setFacing(tempFacing);
 		}
-		checkGhostCollision(pTile);
-		player.setFacing(facing);			
+		//checkGhostCollision(pTile);			
 		return true;
 	}
 
@@ -61,7 +64,8 @@ public class PacController implements InputProcessor {
 		List<Mover> colList = pTile.getMovers();
 		if (colList.size() > 1) {
 			for (int i=0; i < colList.size(); i++) {
-				if (colList.get(i) instanceof Ghost) {
+				if (colList.get(i).getClass() == Ghost.class) {
+					System.out.println("Pacman hit a ghost!");
 					//TODO some death thing
 					player.setCurrentState(PacState.DEAD);
 				}
@@ -70,8 +74,11 @@ public class PacController implements InputProcessor {
 		
 	}
 	
+	/**
+	 * Checks if the proposed movement will make pacman hit a wall
+	 * Returns true if he can move and false if he can't
+	 */
 	public boolean checkNoWallCollision(Tile pTile) {
-		boolean canMove = true;
 		int x = gameMap.getTilePos(pTile).getX();
 		int y = gameMap.getTilePos(pTile).getY();
 		Tile[][] grid = gameMap.getGrid();
@@ -82,14 +89,14 @@ public class PacController implements InputProcessor {
 		case UP: y += 1; break;
 		case DOWN: y -= 1; break;
 		case TEST: break;
+		}		
+		if (!test.equals(player + " wants to move to " + grid[x][y] + 
+				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
+			test = player + " wants to move to " + grid[x][y] + 
+					" allowed=" + (grid[x][y].getClass() != WallTile.class);
+			System.out.println(test);
 		}
-		//System.out.println(grid[x][y]);
-		//System.out.println(grid[x][y].getClass());
-		if (!(grid[x][y].getClass() == WallTile.class)) {
-			canMove = false;
-		}
-		//System.out.println(canMove);
-		return canMove;
+		return grid[x][y].getClass() != WallTile.class;
 	}
 	
 	@Override

@@ -33,7 +33,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access homepage\nlogin with username:home\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access homepage\nlogin with username:home\nTo access games library\n login with username: games\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);
@@ -81,6 +81,10 @@ public class LoginScreen implements Screen {
                 }
                 else if (usernameText.getText().toLowerCase().equals("home")) {
                 	arcadeUI.setScreen(arcadeUI.main);
+                }
+                else if (usernameText.getText().toLowerCase().equals("games")) {
+                    ArcadeSystem.login(usernameText.getText());
+                    ArcadeSystem.goToGame("gamelibrary");
                 }
                 else {
                     ArcadeSystem.login(usernameText.getText());

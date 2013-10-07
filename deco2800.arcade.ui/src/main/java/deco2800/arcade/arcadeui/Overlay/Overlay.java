@@ -1,4 +1,4 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -31,7 +31,7 @@ public class Overlay extends GameClient implements UIOverlay {
     Table table = new Table();
 
     private OverlayScreen screen = new OverlayScreen(this);
-    private OverlayPopup popup = new OverlayPopup(this);
+    private Popup popup = new Popup(this);
     private SpriteBatch batch = new SpriteBatch();
 
     private GameClient host = null;

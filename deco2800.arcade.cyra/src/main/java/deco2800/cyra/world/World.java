@@ -138,8 +138,9 @@ public class World {
 		//System.out.println("End of World update " + ship.getVelocity().x);
 
 		
-		// Check if sprite has reached left/right level boundary.
-		if( (int)(ship.getNextPos().x) < 1 || (int)(ship.getNextPos().x) > WORLD_WIDTH )
+		// Check if sprite has reached left/right level boundary. Changed to just left boundary
+		//if( (int)(ship.getNextPos().x) < 1 || (int)(ship.getNextPos().x) > WORLD_WIDTH )
+		if( (int)(ship.getNextPos().x) < 2)
 			ship.setCanMove(false);
 		// Check if sprite has gone out of level bounds to the bottom.
 		if( (int)(ship.getPosition().y) < -1 ) {
@@ -147,6 +148,13 @@ public class World {
 		}
 		if( (int)(ship.getPosition().x)-1 < -1 ) {
 			
+		}
+		// stop player going off top of screen
+		if ( ship.getPosition().y > WORLD_HEIGHT-ship.getHeight()) {
+			ship.getPosition().y = WORLD_HEIGHT-ship.getHeight();
+			if (ship.getVelocity().y > 0) {
+				ship.getVelocity().y = 0;
+			}
 		}
 		// Reset if health = 0
 		if( ship.getHearts() == 0 ) {
@@ -702,7 +710,7 @@ public class World {
 		//ship = new Ship(new Vector2(220f, 60));
 		ship = new Ship(new Vector2(20f, 6));
 		//ship = new Ship(new Vector2(270, 60));
-		//ship = new Ship(new Vector2(600, 6));
+		
 		sword = new Sword(new Vector2(-1, -1));
 		enemies = new Array<Enemy>();
 		bullets = new Array<Bullet>();
@@ -727,6 +735,8 @@ public class World {
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
 		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false);
 		enemies.add(testBeam);
+		enemies.add(new BulletHomingDestructible(6f, 0f, new Vector2(25f, 9f),1f, 1f, new Vector2(1,0.25f), BulletSimple.Graphic.FIRE));
+		enemies.add(new BulletHomingDestructible(6f, 0f, new Vector2(15f, 9f),1f, 1f, new Vector2(-1,0.25f), BulletSimple.Graphic.FIRE));
 		
 		//addStaticEnemies();
 		

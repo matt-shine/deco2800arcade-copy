@@ -296,5 +296,11 @@ public class SoldierBoss extends Enemy {
 		}*/
 		return output;	
 	}
+	
+	@Override
+	public void handleDamage(boolean fromRight) {
+		isDead = true;
+		startingNextScene = true;
+	}
 
 }

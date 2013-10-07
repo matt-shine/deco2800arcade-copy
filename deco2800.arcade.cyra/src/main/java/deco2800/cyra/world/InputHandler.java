@@ -60,7 +60,9 @@ public class InputHandler implements InputProcessor{
 			case Keys.Q:
 				world.resetLevel();
 				break;
-				
+			case Keys.W:
+				ship.getPosition().x = 599f;
+				break;
 			case Keys.SPACE:
 				if (acceptInput) {
 							/*

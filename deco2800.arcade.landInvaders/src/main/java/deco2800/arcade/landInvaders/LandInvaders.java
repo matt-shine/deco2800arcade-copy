@@ -1,8 +1,11 @@
 package deco2800.arcade.landInvaders;
 
 
+import javax.swing.JFrame;
+
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.landInvaders.Screens.MenuScreen;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;

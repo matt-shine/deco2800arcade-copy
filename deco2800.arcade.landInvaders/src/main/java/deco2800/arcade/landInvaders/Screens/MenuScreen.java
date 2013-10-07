@@ -23,16 +23,20 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-public class MenuScreen extends JLabel{
+import deco2800.arcade.landInvaders.Invaders;
 
+public class MenuScreen extends JFrame{
+    private JLabel t = new JLabel();
 	private JButton instructionBtn = new JButton();
 	private JButton newGameBtn = new JButton();
 
 	public MenuScreen(){
-		setIcon(new ImageIcon(
-				((new ImageIcon("Main.png")).getImage()).getScaledInstance(
+		super("LandInvaders");
+		this.add(t);
+		t.setIcon(new ImageIcon(
+				((new ImageIcon(this.getClass().getResource("/image/stage.jpg"))).getImage()).getScaledInstance(
 						800, 500, java.awt.Image.SCALE_SMOOTH)));
-		setLayout(new GridBagLayout());
+		t.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.CENTER;
 		gbc.insets = new Insets(2, 2, 2, 2);
@@ -42,11 +46,11 @@ public class MenuScreen extends JLabel{
 		newGameBtn.setOpaque(false);
 		newGameBtn.setContentAreaFilled(false);
 		newGameBtn.setBorderPainted(false);
-		newGameBtn.setIcon(new ImageIcon(((new ImageIcon("Button1.png"))
+		newGameBtn.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/Button1.png")))
 				.getImage()).getScaledInstance(200, 50,
 						java.awt.Image.SCALE_SMOOTH)));
 		newGameBtn.addMouseListener(new mouse1());
-		add(newGameBtn, gbc);
+		t.add(newGameBtn, gbc);
 		gbc.gridy++;
 
 		gbc.anchor = GridBagConstraints.CENTER;
@@ -56,12 +60,15 @@ public class MenuScreen extends JLabel{
 		instructionBtn.setContentAreaFilled(false);
 		instructionBtn.setBorderPainted(false);
 		instructionBtn.setIcon(new ImageIcon(
-				((new ImageIcon("Button3.png")).getImage())
+				((new ImageIcon(this.getClass().getResource("/image/Button3.png"))).getImage())
 				.getScaledInstance(200, 50,
 						java.awt.Image.SCALE_SMOOTH)));
 		instructionBtn.addMouseListener(new mouse2());
 		instructionBtn.addActionListener(new btnClick1());
-		add(instructionBtn, gbc);
+		t.add(instructionBtn, gbc);
+		
+		this.setVisible(true);
+		this.setSize(800,500);
 
 	}
 
@@ -70,7 +77,7 @@ public class MenuScreen extends JLabel{
 		public void mouseEntered(MouseEvent evt) {
 
 			newGameBtn.setIcon(new ImageIcon(
-					((new ImageIcon("Button2.png")).getImage())
+					((new ImageIcon(this.getClass().getResource("/image/Button2.png"))).getImage())
 					.getScaledInstance(200, 50,
 							java.awt.Image.SCALE_SMOOTH)));
 		}
@@ -84,7 +91,7 @@ public class MenuScreen extends JLabel{
 		@Override
 		public void mouseExited(MouseEvent e) {
 			newGameBtn.setIcon(new ImageIcon(
-					((new ImageIcon("Button1.png")).getImage())
+					((new ImageIcon(this.getClass().getResource("/image/Button1.png"))).getImage())
 					.getScaledInstance(200, 50,
 							java.awt.Image.SCALE_SMOOTH)));
 
@@ -108,7 +115,7 @@ public class MenuScreen extends JLabel{
 		public void mouseEntered(MouseEvent evt) {
 
 			instructionBtn.setIcon(new ImageIcon(((new ImageIcon(
-					"Button4.png")).getImage()).getScaledInstance(200, 50,
+					this.getClass().getResource("/image/Button4.png"))).getImage()).getScaledInstance(200, 50,
 							java.awt.Image.SCALE_SMOOTH)));
 		}
 
@@ -121,7 +128,7 @@ public class MenuScreen extends JLabel{
 		@Override
 		public void mouseExited(MouseEvent e) {
 			instructionBtn.setIcon(new ImageIcon(((new ImageIcon(
-					"Button3.png")).getImage()).getScaledInstance(200, 50,
+					this.getClass().getResource("/image/Button3.png"))).getImage()).getScaledInstance(200, 50,
 							java.awt.Image.SCALE_SMOOTH)));
 
 		}
@@ -145,4 +152,12 @@ public class MenuScreen extends JLabel{
 			
 		}
 	}
+	
+	public static void main (String args[]) throws IOException {
+		MenuScreen w = new MenuScreen();
+			
+		}
+	
+	
+	
 }

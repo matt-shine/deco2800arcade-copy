@@ -4,8 +4,8 @@ package deco2800.arcade.landInvaders;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
-import java.awt.event.*;
 import java.util.ArrayList;
+
 
 public class Invaders extends JFrame implements Runnable {
 	JFrame appFrame;
@@ -53,6 +53,7 @@ public class Invaders extends JFrame implements Runnable {
 
 		mains = bg.getGraphics();
 		mains.drawImage(background, 0, 0, Width, Height, panel);
+		
 
 		setBackground(Color.black);
 		setVisible(true);
@@ -70,7 +71,6 @@ public class Invaders extends JFrame implements Runnable {
 	public void paint(Graphics g) {
 
 		mains.clearRect(0, 0, Width, Height);
-
 		mains.drawImage(background, 0, 0, Width, Height, panel);
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
@@ -206,9 +206,6 @@ public class Invaders extends JFrame implements Runnable {
 
 	}
 
-	public static void main(String[] args) throws Exception {
-		Invaders invader = new Invaders();
-	}
 
 	@Override
 	public void run() {

@@ -10,7 +10,10 @@ import com.badlogic.gdx.files.FileHandle;
  */
 public class SoundFileHolder implements Comparable<SoundFileHolder> {
 
-    public static final float VOLUME = 0.75f;
+    public static final float DEFAULT_VOLUME = 0.5f;
+    public static final float SAMPLE_VOLUME = 0.65f;
+    public static final float MAX_VOLUME = 1.0f;
+
     private boolean loop = false;
     private FileHandle filePath;
     private Music sample;
@@ -22,13 +25,17 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
      * @param file path of file containing sound sample
      */
     public SoundFileHolder(String file, String label, boolean loop) {
-        filePath = new FileHandle(file);
-        sample = Gdx.audio.newMusic(filePath);
-        sample.setVolume(VOLUME);
         this.loop = loop;
         this.label = label;
 
-        sample.setLooping(this.loop);
+        try {
+            filePath = new FileHandle(file);
+            sample = Gdx.audio.newMusic(filePath);
+            sample.setVolume(DEFAULT_VOLUME);
+            sample.setLooping(this.loop);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -45,29 +52,43 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
      */
     public void setLoop(boolean loop) {
         this.loop = loop;
-        sample.setLooping(this.loop);
+        if (sample != null) {
+            sample.setLooping(this.loop);
+        }
     }
 
     /**
      * Set the sample's volume
      */
     public void setVolume(float volume) {
-        sample.setVolume(volume);
+        if (sample != null) {
+            if (volume > MAX_VOLUME) {
+                sample.setVolume(MAX_VOLUME);
+            } else {
+                sample.setVolume(volume);
+            }
+        }
     }
 
     /**
      * Play the sample
      */
     public void play() {
-        sample.play();
-        playing = true;
+        if (sample != null) {
+            sample.play();
+        }
+        if (isLoop()) {
+            playing = true;
+        }
     }
 
     /**
      * Stop playing sample
      */
     public void stop() {
-        sample.stop();
+        if (sample != null) {
+            sample.stop();
+        }
         playing = false;
     }
 
@@ -93,5 +114,13 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
     @Override
     public int compareTo(SoundFileHolder sfh) {
         return (label.toUpperCase()).compareTo(sfh.label.toUpperCase());
+    }
+
+    /**
+     * Get playing status
+     * @return playing
+     */
+    public boolean isPlaying() {
+        return playing;
     }
 }

@@ -9,10 +9,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.soundboard.model.SoundFileHolder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * UQ DECO2800 Soundboard game
@@ -25,8 +22,8 @@ public class Soundboard extends GameClient {
     private NetworkClient networkClient;
     private Screen screen;
 
-    private ArrayList<SoundFileHolder> loops;
-    private ArrayList<SoundFileHolder> samples;
+    private List<SoundFileHolder> loops;
+    private List<SoundFileHolder> samples;
 
     /**
      * Basic Constructor for Soundboard game
@@ -55,7 +52,6 @@ public class Soundboard extends GameClient {
         loops.put("minimal_loop.wav", "Minimal Electro");
         loops.put("techno_loop.wav", "Techno");
 
-
         for (Map.Entry<String, String> file : loops.entrySet()) {
             this.loops.add(new SoundFileHolder("SoundboardAssets/loops/" + file.getKey(), file.getValue(), true));
         }
@@ -70,9 +66,27 @@ public class Soundboard extends GameClient {
         samples.put("hat.wav", "Hat");
 
         for (Map.Entry<String, String> file : samples.entrySet()) {
-            this.samples.add(new SoundFileHolder("SoundboardAssets/samples/" + file.getKey(), file.getValue(), false));
+            SoundFileHolder soundFileHolder = new SoundFileHolder("SoundboardAssets/samples/" + file.getKey(), file.getValue(), false);
+            soundFileHolder.setVolume(SoundFileHolder.SAMPLE_VOLUME);
+            this.samples.add(soundFileHolder);
         }
         Collections.sort(this.samples);
+    }
+
+    /**
+     * Get list of loops
+     * @return Loops
+     */
+    public List<SoundFileHolder> getLoops() {
+        return loops;
+    }
+
+    /**
+     * Get list of samples
+     * @return Samples
+     */
+    public List<SoundFileHolder> getSamples() {
+        return samples;
     }
 
     @Override
@@ -124,10 +138,6 @@ public class Soundboard extends GameClient {
     public UIOverlay getOverlay() {
         return super.getOverlay();
     }
-
-
-
-
 
     /* Game Information */
     private static final Game game;

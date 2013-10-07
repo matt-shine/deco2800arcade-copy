@@ -139,6 +139,9 @@ public class GameLibrary extends GameClient {
      * Loads games on the server available to the user into the gamelibrary
      */
     private void loadGameList() {
+        if (player == null || networkClient == null) {
+            return;
+        }
         //Set<Game> playerGames = player.getGames();
         Set<Game> serverGames = null;
 

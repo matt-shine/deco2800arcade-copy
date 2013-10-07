@@ -17,6 +17,7 @@ import deco2800.cyra.model.MovableEntity;
 import deco2800.cyra.model.MovablePlatform;
 import deco2800.cyra.model.MovablePlatformAttachment;
 import deco2800.cyra.model.PartTween;
+import deco2800.cyra.model.ResultsScreen;
 import deco2800.cyra.model.Ship;
 import deco2800.cyra.model.SoldierBoss;
 import deco2800.cyra.model.WalkerPart;
@@ -44,14 +45,14 @@ public class Level2Scenes extends LevelScenes {
 	
 	
 	
-	public Level2Scenes(Ship ship, ParallaxCamera cam) {
-		super(ship, cam);
+	public Level2Scenes(Ship ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
+		super(ship, cam, resultsScreen);
 		doneSomethingOnce = false;
 		blockMaker = new BlockMakerSpiderBoss();
 	}
 
 	@Override
-	public Array<Object> start(int scenePosition, float rank) {
+	public Array<Object> start(int scenePosition, float rank, int time) {
 		this.scenePosition = scenePosition;
 		//scenePosition++; //DEBUG line!
 		isPlaying = true;
@@ -73,11 +74,13 @@ public class Level2Scenes extends LevelScenes {
 			count = 0;
 			//make it drop down, screen shakes, health charges up, then battle starts
 		} else if (scenePosition == 1) {
+			count = 0;
+			resultsScreen.showResults(time, ship.getHearts());
 			destructLog.setTargetPosition(new Vector2(270, 61));
 			for (int i=0; i< 5; i++) {
 				output.add(new Explosion(new Vector2(267, 46+2*i)));
 			}
-			Sounds.playExplosionLong(0.5f);
+			
 		} else if (scenePosition == 2) {
 			cam.setFollowShip(false);
 			Tween.registerAccessor(ParallaxCamera.class, new CameraTween());
@@ -134,8 +137,14 @@ public class Level2Scenes extends LevelScenes {
 			}
 			return false;
 		} else if (scenePosition == 1) {
-			isPlaying = false;
-			return true;
+			count += delta;
+			if (count >= 0.1f) {
+				Sounds.playExplosionLong(0.5f);
+				isPlaying = false;
+				return true;
+			} else {
+				return false;
+			}
 		} else if (scenePosition == 2) {
 			//Scene to introduce the boss
 			manager.update(delta);

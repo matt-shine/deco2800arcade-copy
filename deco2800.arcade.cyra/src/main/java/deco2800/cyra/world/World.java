@@ -39,6 +39,8 @@ public class World {
 	private Array<MovablePlatform> movablePlatforms;
 	private Array<BlockMaker> blockMakers;
 	private ParallaxCamera cam;
+	private ResultsScreen resultsScreen;
+	private int score;
 	
 	private float rank;
 	private Level curLevel;
@@ -61,22 +63,31 @@ public class World {
 		this.cam = cam;
 		Sounds.loadAll();
 		init();
-		
 		//hardcode
-		if(level == 1) {
-			levelScenes = new Level1Scenes(ship, cam);
-		} else {
-			levelScenes = new Level2Scenes(ship, cam);
-		}
+				if(level == 1) {
+					levelScenes = new Level1Scenes(ship, cam, resultsScreen);
+				} else {
+					levelScenes = new Level2Scenes(ship, cam, resultsScreen);
+				}
+		
 	}
 	
 	
 	
 	public void update() {
-		time += Gdx.graphics.getDeltaTime();
+		
 
 		//If game is in paused state immediately return
 		if (isPaused) return;
+		//If showing results Screen, update it and do nothing else
+		if (resultsScreen.isShowing()) {
+			score += resultsScreen.update(Gdx.graphics.getDeltaTime());
+			return;
+		}
+		if (!levelScenes.isPlaying()) {
+			time += Gdx.graphics.getDeltaTime();
+		}
+		
 		//System.out.println("Delta = "+Gdx.graphics.getDeltaTime());
 		//System.out.println("State before ship = "+ship.getState());
 		ship.update(ship);		
@@ -620,7 +631,7 @@ public class World {
 	private void sceneStart() {
 		inputHandler.cancelInput();
 		ship.getVelocity().x = 0;
-		Array<Object> temp = levelScenes.start(scenePosition, rank);
+		Array<Object> temp = levelScenes.start(scenePosition, rank, (int)time);
 		for (Object obj: temp) {
 			if (obj.getClass() == CutsceneObject.class) {
 				cutsceneObjects.add( (CutsceneObject) obj );
@@ -696,12 +707,26 @@ public class World {
 		return curLevel;
 	}
 	
+	public int getScore() {
+		return score;
+	}
+	
+	public ResultsScreen getResultsScreen() {
+		return resultsScreen;
+	}
+	
+	public boolean isScenePlaying() {
+		return levelScenes.isPlaying();
+	}
+	
 
 	
 	
 	
 	/* ----- Setter methods ----- */
 	public void init() {
+		
+		
 		at.printStats();
 		
 		//Sounds.playBossMusic();
@@ -722,6 +747,7 @@ public class World {
 		rank = 0.76f;
 		//rank = 0.21f;
 		scenePosition = 0;
+		resultsScreen = new ResultsScreen();
 		
 		isPaused = false;
 		
@@ -759,7 +785,7 @@ public class World {
 
 		curLevel.reloadLevel();
 		init();
-		levelScenes = new Level2Scenes(ship, cam);
+		levelScenes = new Level2Scenes(ship, cam, resultsScreen);
 		return;
 	}
 	

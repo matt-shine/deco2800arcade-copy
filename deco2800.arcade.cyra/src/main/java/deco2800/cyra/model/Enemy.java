@@ -93,6 +93,14 @@ public abstract class Enemy extends MovableEntity{
 		}
 	}
 	
+	public boolean displayHealth() {
+		return false;
+	}
+	
+	public float getHealthPercentage() {
+		return 0f;
+	}
+	
 	public Array<Rectangle> getPlayerDamageBounds() {
 		Array<Rectangle> playerDamageRectangle = new Array<Rectangle>();
 		playerDamageRectangle.add(getBounds());

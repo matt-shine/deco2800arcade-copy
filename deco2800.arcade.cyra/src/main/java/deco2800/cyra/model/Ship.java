@@ -23,9 +23,10 @@ public class Ship extends MovableEntity{
 	public static final float MAX_WALL_VELOCITY = 6.2f; //note that any movable platform falling at speed greater than this will have bugged moving
 	public static final float WALL_ATTACH_TIME = 0.13f;
 	public static final float MAX_INVINCIBLE_TIME = 3f;
+	public static final int DEFAULT_HEARTS = 4;
 	
 	private State state = State.IDLE;
-	private int hearts = 4;
+	private int hearts = DEFAULT_HEARTS;
 	private boolean facingRight = false;
 	private boolean canMove = true;
 	private boolean onMovable = false;

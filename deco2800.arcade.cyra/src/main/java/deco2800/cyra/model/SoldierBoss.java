@@ -15,12 +15,18 @@ public class SoldierBoss extends Enemy {
 	private static final float GRAVITY = -1.8f;
 	public static final float JUMP_TIME = 0.4f;
 	public static final float JUMP_VELOCITY = 14f;
+	public static final float INVINCIBLE_TIME = 0.3f;
+	public static final int INITIAL_HEALTH = 10;
+	
 	
 	boolean facingRight;
 	private State state;
 	private Boolean performingTell;
 	private float stateTime;
 	private float jumpTime;
+	private int health;
+	private boolean beingHit;
+	private float invincibleTime;
 	
 	private enum State {
 		WALK, WAIT, JUMP, SHOOT, BOMB, SWORD, CHARGE, DEATH
@@ -38,6 +44,8 @@ public class SoldierBoss extends Enemy {
 		performingTell = false;
 		stateTime = 0.33f;
 		jumpTime = 0;
+		health = INITIAL_HEALTH;
+		beingHit =false;
 		
 		
 	}
@@ -58,6 +66,12 @@ public class SoldierBoss extends Enemy {
 		velocity.mul(1/delta);
 		velocity.add(0, GRAVITY);
 		
+		if (beingHit) {
+			invincibleTime -= delta;
+			if (invincibleTime < 0) {
+				beingHit = false;
+			}
+		}
 		
 		stateTime -= delta;
 		if (stateTime < 0) {
@@ -298,9 +312,28 @@ public class SoldierBoss extends Enemy {
 	}
 	
 	@Override
+	public boolean displayHealth() {
+		return true;
+	}
+	
+	@Override
+	public float getHealthPercentage() {
+		return ((float)health)/((float)INITIAL_HEALTH);
+	}
+	
+	@Override
 	public void handleDamage(boolean fromRight) {
-		isDead = true;
-		startingNextScene = true;
+		if (!beingHit) {
+			if (--health == 0) {
+				isDead = true;
+				startingNextScene = true;
+			} else {
+				beingHit = true;
+				invincibleTime = INVINCIBLE_TIME;
+			}
+		
+		}	
+		
 	}
 
 }

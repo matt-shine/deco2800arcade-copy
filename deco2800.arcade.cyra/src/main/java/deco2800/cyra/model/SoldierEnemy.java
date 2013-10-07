@@ -249,8 +249,8 @@ public class SoldierEnemy extends Enemy {
 		float walkChance = 0.4f - 0.34f * rank;
 		float jumpChance = walkChance + 0.3f;
 		float waitChance = jumpChance + 0.2f - 0.2f * rank;
-		//float shootChance = waitChance + 0.4f * rank;
-		float shootChance = waitChance + 50f+0.4f * rank; // doing this to test the shooting
+		float shootChance = waitChance + 0.4f * rank;
+		//float shootChance = waitChance + 50f+0.4f * rank; // doing this to test the shooting
 		float aoeChance;
 		if (rank > 0.75f) {
 			aoeChance = shootChance + 0.3f;

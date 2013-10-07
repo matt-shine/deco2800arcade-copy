@@ -1,10 +1,7 @@
 package deco2800.server.listener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -38,8 +35,6 @@ public class ReplayListener extends Listener {
     @Override
     public void received(Connection connection, Object object) {
         super.received(connection, object);
-
-        System.out.println( "Server got some stuff" );
         
         //We got a request for the replay handler
         if (object instanceof ReplayRequest) {
@@ -57,15 +52,12 @@ public class ReplayListener extends Listener {
             StartSessionRequest ssr = (StartSessionRequest) object;
             StartSessionResponse response = new StartSessionResponse();
             
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
-            System.out.println(dateFormat.format(date));
             
             int sessionID = -1;
             
             try {
-                //TODO, DB should sent US the sessionId, also date format is wrong.
-                sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId, ssr.username, 000, "");
+                sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId, ssr.username, date.getTime(), "");
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
@@ -76,7 +68,6 @@ public class ReplayListener extends Listener {
             
             log("Got a StartSessionRequest: " + ssr.gameId + ", " + ssr.username);
             
-            //TODO Generate Session ID
             response.sessionId = sessionID;
             connection.sendTCP(response);
         } else if (object instanceof EndSessionRequest)
@@ -172,8 +163,6 @@ public class ReplayListener extends Listener {
             response.serverOffset = 0;
             
             connection.sendTCP(response);
-            
-            //TODO deal with the data that comes back.
         }
     }
     

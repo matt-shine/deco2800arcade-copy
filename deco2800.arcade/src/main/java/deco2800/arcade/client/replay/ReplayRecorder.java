@@ -1,13 +1,11 @@
 package deco2800.arcade.client.replay;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.replay.exception.RecordingException;
+import deco2800.arcade.client.replay.exception.RecordingNotStartedException;
+import deco2800.arcade.client.replay.exception.ServerRejectedNodeException;
 import deco2800.arcade.protocol.replay.PushEventRequest;
 import deco2800.arcade.protocol.replay.PushEventResponse;
 
@@ -43,7 +41,7 @@ public class ReplayRecorder {
 	
 	public void startRecording() {
 		if ( this.recording ) {
-			throw new RuntimeException( "Already recording" );
+			throw new RecordingException( "Already recording, cannot start." );
 		}
 		
 		this.startTime = -1;
@@ -58,7 +56,7 @@ public class ReplayRecorder {
 	 */
 	public void finishRecording() {
 		if ( !this.recording ) {
-			throw new RuntimeException( "Already recording" );
+			throw new RecordingException( "Not recording, cannot stop." );
 		}
 		
 		this.startTime = -1;
@@ -87,9 +85,9 @@ public class ReplayRecorder {
 	public void eventPushed(PushEventResponse per)
 	{
 		if ( !per.success ) {
-			// well then...
+			throw new ServerRejectedNodeException("Event was not pushed" +
+					                            "successfully, server denied.");
 		}
-	  //TODO Implement
 	}
 	
 	/**
@@ -98,9 +96,13 @@ public class ReplayRecorder {
 	 */
 	public void pushEvent( ReplayNode eData ) {
 		ReplayNode toAdd = new ReplayNode( eData );
+		
 		if ( !recording ) {
-			System.err.println( "Didn't start first" );
+			throw new RecordingNotStartedException(
+			        "Didn't start recording before pushing an event, " +
+			        "or pushed event after recording finished.");
 		}
+		
 		long timeOffset = System.currentTimeMillis() - startTime;
 		toAdd.setTime( timeOffset );
 		String nodeString = serializer.toJson( toAdd );

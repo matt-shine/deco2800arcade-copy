@@ -1,5 +1,6 @@
 package deco2800.arcade.client.replay;
 
+import deco2800.arcade.client.replay.exception.BadReplayItemCastException;
 import deco2800.arcade.client.replay.exception.ReplayItemDataInvalidException;
 
 public class ReplayItem {
@@ -54,7 +55,7 @@ public class ReplayItem {
 		if ( this.type == TYPE_INTEGER ) {
 			return (Integer) getData();
 		} else {
-			throw new RuntimeException( "Invalid cast" );
+			throw new BadReplayItemCastException( "Invalid cast" );
 		}
 	}
 	
@@ -68,7 +69,7 @@ public class ReplayItem {
 		if ( this.type == TYPE_FLOAT ) {
 			return (Float) getData();
 		} else {
-			throw new RuntimeException( "Invalid cast" );
+			throw new BadReplayItemCastException( "Invalid cast" );
 		}
 	}
 
@@ -82,7 +83,7 @@ public class ReplayItem {
 		if ( this.type == TYPE_STRING ) {
 			return (String) getData();
 		} else {
-			throw new RuntimeException( "Invalid cast" );
+			throw new BadReplayItemCastException( "Invalid cast" );
 		}
 	}
 	

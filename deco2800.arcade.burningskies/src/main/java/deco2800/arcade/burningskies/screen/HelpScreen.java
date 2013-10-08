@@ -33,7 +33,8 @@ public class HelpScreen implements Screen {
     private Label label;
     private Image background;	
 	private MenuInputProcessor processor;
-    
+    private Image controls;
+	
 	public HelpScreen(BurningSkies game) {
 		this.game = game;
 	}
@@ -89,6 +90,7 @@ public class HelpScreen implements Screen {
         white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));
+        controls = new Image(new Texture(Gdx.files.internal("images/menu/commands.png")));
         
         int width = BurningSkies.SCREENWIDTH;
         int height = BurningSkies.SCREENHEIGHT;
@@ -121,9 +123,11 @@ public class HelpScreen implements Screen {
 	    label.setWidth(width);
 	    label.setAlignment(Align.center);
 	    
-	    stage.addActor(backButton);
-	    stage.addActor(label);
+	    
 	    stage.addActor(background);
+	    stage.addActor(controls);
+	    stage.addActor(label);
+	    stage.addActor(backButton);
 	    background.toBack();
 	}
 }

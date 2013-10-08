@@ -3,12 +3,14 @@ package deco2800.arcade.chess;
 //import deco2800.arcade.chess.screen.HelpScreen;
 //import deco2800.arcade.chess.MenuScreen;
 import deco2800.arcade.chess.SplashScreen;
+
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.UIOverlay.PopupMessage;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
 import deco2800.arcade.client.replay.ReplayEventListener;
 import deco2800.arcade.client.replay.ReplayHandler;
@@ -156,7 +158,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; // TODO eventually the server may send back the
 									// opponent's actual username
-		EasyComputerOpponent = true;
+		//setup highscore client
+		HighscoreClient player1 = new HighscoreClient(players[0], "chess",
+				networkClient);
+		EasyComputerOpponent = false;
 		
 		URL resource = this.getClass().getResource("/");
 		
@@ -319,8 +324,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	/**
 	 * Ends the game
 	 */
-	private void finishGame() {
-		this.incrementAchievement("chess.winGame");
+	private void finishGame(boolean loser) {
+		System.err.println("GAME OVER");
+		//loser was black i.e. not this player, increment achievement
+		if (loser == true) {
+			this.incrementAchievement("chess.winGame");
+		}
+		//reset board
+		board = new Board();
+		//go back to menuscreen
+		setScreen(menuScreen);
+		//move pieces into starting positions
+		movePieceGraphic();
+		return;
 	}
 
 	/**
@@ -418,6 +434,15 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				if (board.movePiece(movingPiece, newPos)) {
 					movePieceGraphic();
 					moving = false;
+					//if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						if (!board.whoseTurn()) {
+							//player1.logLoss(); <- this is not working
+						} else {
+							//player1.logWin(); <- this is not working
+						}
+						this.finishGame(board.whoseTurn());
+					}
 					/*replayHandler.pushEvent(
     			        ReplayNodeFactory.createReplayNode(
     			                "move_piece",
@@ -431,6 +456,15 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 						board.moveAIPieceEasy();
 						movePieceGraphic();
 					}
+					//if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						if (!board.whoseTurn()) {
+							//player1.logLoss(); <- this is not working
+						} else {
+							//player1.logWin(); <- this is not working
+						}
+						this.finishGame(board.whoseTurn());
+					}
 					return true;
 				}
 				board.checkForCheckmate(board.whoseTurn());
@@ -443,6 +477,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		return true;
 
 	}
+	
+	/*private void handleGameover() {
+		board = new Board();
+		setScreen(menuScreen);
+	}*/
 
 	@Override
 	public boolean touchDragged(int arg0, int arg1, int arg2) {

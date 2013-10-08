@@ -15,9 +15,11 @@ public class Board {
 	ArrayList<Piece> pieceMoved;
 	// true = blacks turn, false = whites turn
 	private boolean turn;
-	//
-	boolean checkmateFlag;
-	boolean teamCheckmate;
+	//true if respective team is in checkmate
+	boolean whiteCheckmate;
+	boolean blackCheckmate;
+	
+	//boolean teamCheckmate;
 
 	// Initialise pieces
 	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
@@ -45,8 +47,6 @@ public class Board {
 		pieceMoved = new ArrayList<Piece>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
-		checkmateFlag = false;
-		teamCheckmate = false;
 		nullPiece = new Null();
 
 		blackCheck = false;
@@ -1448,7 +1448,7 @@ public class Board {
 		List<Boolean> canMove = new ArrayList<Boolean>();
 
 		for (int i = 0; i < activePieces.size(); i++) {
-			if (allowedMoves(activePieces.get(i)).isEmpty()) {
+			if (removeCheckMoves(activePieces.get(i)).isEmpty()) {
 				canMove.add(false);
 			} else {
 				canMove.add(true);

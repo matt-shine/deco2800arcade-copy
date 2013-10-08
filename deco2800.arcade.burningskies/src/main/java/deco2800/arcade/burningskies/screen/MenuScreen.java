@@ -43,7 +43,8 @@ public class MenuScreen implements Screen {
 	private int width = BurningSkies.SCREENWIDTH;
     private int height = BurningSkies.SCREENHEIGHT;
     private Texture selectionBox;
-    
+    private float selectionX;
+    private float selectionY;
     
 	public MenuScreen( BurningSkies game){
 		this.game = game;		
@@ -75,6 +76,10 @@ public class MenuScreen implements Screen {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
+        // Math that gets the selection box where it needs to be. Thank god we don't have to worry about scaling
+        selectionX = ((optionsButton.getX() - (2 * (startButton.getWidth() + 30))) - 9) + (MenuInputProcessor.getButtonSelection() * 230);
+        selectionY = (height / 9) - 69;
+        
         keyboardSelection = MenuInputProcessor.getKeyboardSelection();
         
         stage.act(delta);
@@ -82,7 +87,7 @@ public class MenuScreen implements Screen {
         
         if (keyboardSelection == true) {
         	batch.begin();
-        	batch.draw(selectionBox, ((optionsButton.getX() - (2 * (startButton.getWidth() + 30))) - 9) + (MenuInputProcessor.getButtonSelection() * 230), (height / 9) - 69);
+        	batch.draw(selectionBox, selectionX, selectionY);
         	batch.end();
         }
 	}

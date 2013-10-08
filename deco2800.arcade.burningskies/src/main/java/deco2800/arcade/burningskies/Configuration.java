@@ -96,20 +96,17 @@ public class Configuration {
 			}
 		}
 	}
-	
-	/*
-	 * Writes to the keybinding and configuration files. The keybinding files 
-	 * store binding setups defined by the user in separate text files, then 
-	 * appends the name of said file to the configuration file.
-	 */
-	public void writeBinds() {
+		
+	public static int getMasterVolumeInt() {
+		return masterVolume;
 	}
 	
-	/*
-	 * Reads from the specified keybinding file. Adds each binding into a
-	 * <String, String> HashMap.
-	 */
-	public void readBinds() {
+	public static int getEffectsVolumeInt() {
+		return effectsVolume;
+	}
+	
+	public static int getBackgroundVolumeInt() {
+		return backgroundVolume;
 	}
 	
 	public static float getEffectsVolume() {
@@ -139,4 +136,5 @@ public class Configuration {
 	public static void setDifficulty(int difficulty) {
 		Configuration.difficulty = difficulty;
 	}
+	
 }

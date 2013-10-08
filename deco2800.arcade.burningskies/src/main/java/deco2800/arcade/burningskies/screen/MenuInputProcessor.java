@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.client.ArcadeSystem;
 
 
@@ -59,6 +60,7 @@ public class MenuInputProcessor extends InputAdapter {
 				ArcadeSystem.goToGame(ArcadeSystem.UI);
 			} else {
 				keyboardSelection = true;
+				Configuration.writeConfig();
 				game.setScreen(game.menuScreen);
 			}
 			break;

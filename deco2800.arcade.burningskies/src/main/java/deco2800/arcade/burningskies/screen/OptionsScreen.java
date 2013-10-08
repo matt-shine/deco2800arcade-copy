@@ -2,7 +2,6 @@ package deco2800.arcade.burningskies.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
@@ -27,13 +26,9 @@ import deco2800.arcade.client.ArcadeInputMux;
 
 public class OptionsScreen implements Screen {
 	
-	@SuppressWarnings("unused")
 	private int masterVolume;
-	@SuppressWarnings("unused")
-	private int bgmVolume;
-	@SuppressWarnings("unused")
-	private int sfxVolume;
-	@SuppressWarnings("unused")
+	private int effectsVolume;
+	private int backgroundVolume;
 	private int difficulty;
 	
 	private BurningSkies game;
@@ -54,6 +49,9 @@ public class OptionsScreen implements Screen {
 	private Label effectsVolumeLabel;
 	private Label backgroundVolumeLabel;
 	private Label difficultyLabel;
+    private int width = BurningSkies.SCREENWIDTH;
+    private int height = BurningSkies.SCREENHEIGHT;
+    
 	
 	public OptionsScreen(BurningSkies game) {
 		this.game = game;
@@ -84,10 +82,6 @@ public class OptionsScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-        if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-    		game.setScreen(game.menuScreen);
-    	}
         
         stage.act(delta);
 
@@ -111,59 +105,43 @@ public class OptionsScreen implements Screen {
         white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));
-        
-        int width = BurningSkies.SCREENWIDTH;
-        int height = BurningSkies.SCREENHEIGHT;
-        
+    
         stage = new Stage(width, height, true);
+        
+        masterVolume = Configuration.getMasterVolumeInt();
+        effectsVolume = Configuration.getEffectsVolumeInt();
+        backgroundVolume = Configuration.getBackgroundVolumeInt();
+        difficulty = Configuration.getDifficulty();
 	
         ArcadeInputMux.getInstance().addProcessor(stage);
         processor = new MenuInputProcessor(game);
     	ArcadeInputMux.getInstance().addProcessor(processor);
-	
-    	masterVolumeSlider = new Slider(0, 100, 1, false, skin);
-    	masterVolumeSlider.setBounds(width/2 - 320, height/2 + 100, 640, 50);
-    	
-    	effectsVolumeSlider = new Slider(0, 100, 1, false, skin);
-    	effectsVolumeSlider.setBounds(width/2 - 320, height/2 + 50, 640, 50);
-    	
-    	backgroundVolumeSlider = new Slider(0, 100, 1, false, skin);
-    	backgroundVolumeSlider.setBounds(width/2 - 320, height/2, 640, 50);
-    	
-    	difficultySlider = new Slider(0, 4, 1, false, skin);
-    	difficultySlider.setBounds(width/2 - 320, height/2 - 50, 640, 50);
-    	
+
 	    backButton = new TextButton("Back", skin);
 	    backButton.setWidth(200);
 	    backButton.setHeight(50);
 	    backButton.setX((float)(width*0.02));
 	    backButton.setY((float)(height*0.02));
 	    
-	    backButton.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-            }
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    game.setScreen(game.menuScreen);
-            }
-	    });
+	    createSliders();
+	    createListeners();
+	    createLabels();
 	    
-	    masterVolumeSlider.addListener(new ChangeListener() {
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				Slider slider = (Slider) actor;
-
-				float value = slider.getValue();
-				if (value == 0) {
-					Configuration.setMasterVolume(0);
-				} else {
-					Configuration.setMasterVolume((int) value);
-				}
-			}
-		});
-	    
-	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
+	    stage.addActor(backButton);
+	    stage.addActor(label);
+	    stage.addActor(masterVolumeLabel);
+	    stage.addActor(effectsVolumeLabel);
+	    stage.addActor(backgroundVolumeLabel);
+	    stage.addActor(difficultyLabel);
+	    stage.addActor(background);
+	    stage.addActor(masterVolumeSlider);
+	    stage.addActor(effectsVolumeSlider);
+	    stage.addActor(backgroundVolumeSlider);
+	    stage.addActor(difficultySlider);
+	    background.toBack();
+	}
+	public void createLabels() {
+		LabelStyle ls = new LabelStyle(white, Color.WHITE);
 	    label = new Label("Options", ls);
 	    label.setX(0);
 	    label.setY((float)(height*0.95));
@@ -193,18 +171,92 @@ public class OptionsScreen implements Screen {
 	    difficultyLabel.setY(height/2 - 20);
 	    difficultyLabel.setWidth(width);
 	    difficultyLabel.setAlignment(Align.center);
+	}
+	
+	public void createListeners() {
+		backButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	Configuration.writeConfig();
+                game.setScreen(game.menuScreen);
+            }
+	    });
 	    
-	    stage.addActor(backButton);
-	    stage.addActor(label);
-	    stage.addActor(masterVolumeLabel);
-	    stage.addActor(effectsVolumeLabel);
-	    stage.addActor(backgroundVolumeLabel);
-	    stage.addActor(difficultyLabel);
-	    stage.addActor(background);
-	    stage.addActor(masterVolumeSlider);
-	    stage.addActor(effectsVolumeSlider);
-	    stage.addActor(backgroundVolumeSlider);
-	    stage.addActor(difficultySlider);
-	    background.toBack();
+	    masterVolumeSlider.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Slider slider = (Slider) actor;
+
+				float value = slider.getValue();
+				if (value == 0) {
+					Configuration.setMasterVolume(0);
+				} else {
+					Configuration.setMasterVolume((int) value);
+				}
+			}
+		});
+	    
+	    effectsVolumeSlider.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Slider slider = (Slider) actor;
+
+				float value = slider.getValue();
+				if (value == 0) {
+					Configuration.setEffectsVolume(0);
+				} else {
+					Configuration.setEffectsVolume((int) value);
+				}
+			}
+		});
+	    
+	    backgroundVolumeSlider.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Slider slider = (Slider) actor;
+
+				float value = slider.getValue();
+				if (value == 0) {
+					Configuration.setBackgroundVolume(0);
+				} else {
+					Configuration.setBackgroundVolume((int) value);
+				}
+			}
+		});
+	    
+	    difficultySlider.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				Slider slider = (Slider) actor;
+
+				float value = slider.getValue();
+				if (value == 0) {
+					Configuration.setDifficulty(0);
+				} else {
+					Configuration.setDifficulty((int) value);
+				}
+			}
+		});
+	}
+	
+	public void createSliders() {
+		masterVolumeSlider = new Slider(0, 100, 1, false, skin);
+    	masterVolumeSlider.setBounds(width/2 - 320, height/2 + 100, 640, 50);
+    	masterVolumeSlider.setValue(masterVolume);
+    	
+    	effectsVolumeSlider = new Slider(0, 100, 1, false, skin);
+    	effectsVolumeSlider.setBounds(width/2 - 320, height/2 + 50, 640, 50);
+    	effectsVolumeSlider.setValue(effectsVolume);
+    	
+    	backgroundVolumeSlider = new Slider(0, 100, 1, false, skin);
+    	backgroundVolumeSlider.setBounds(width/2 - 320, height/2, 640, 50);
+    	backgroundVolumeSlider.setValue(backgroundVolume);
+    	
+    	difficultySlider = new Slider(0, 4, 1, false, skin);
+    	difficultySlider.setBounds(width/2 - 320, height/2 - 50, 640, 50);
+    	difficultySlider.setValue(difficulty);
 	}
 }

@@ -1,4 +1,4 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.view;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,16 +12,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
-public class UserScreen extends JFrame implements ActionListener {
+public class UserScreen extends JFrame{
 	
 	/**
-	 * The view class for the main page of the user profile page
+	 * The view class for the main page of the user profile
 	 */
 	
 	private Model model;
@@ -33,42 +35,34 @@ public class UserScreen extends JFrame implements ActionListener {
 	private ImagePanel achievementpanel;
 	private ImagePanel historypanel;	
 	private ImagePanel sidepanel;
-	private JPanel playerinfopanel;
-	private JPanel playerpanel;
+	private JPanel playerinfopanel, playerpanel;
 	private ImagePanel friendpanel;
 	private ImagePanel aboutpanel;
 	private JPanel friendlist;
 	private JScrollPane friendscroll;
 	
 	//Declare Buttons 
-	private JButton addfriendbutton;
-	private JButton editbutton;
-	private JButton myprofilelink;
-	private JButton homelink, storelink, librarylink, forumlink;
+	private JButton addfriendbutton, removefriendbutton, editbutton, statusbutton;
+	private JButton achievementbar;
+	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
 	//Declare Labels 
 	private JLabel avatar;
-	private JLabel addfriend;
-	private JLabel playername;
-	private JLabel playerlevel;
-	private JLabel aboutbar;
-	private JLabel friendbar;
-	private JLabel historybar;
-	private JLabel achievementbar;
-	private JLabel history1, history2, history3, history4, history5, 
-	history6, history7, history8;
+	private JLabel playername, playerlastonline, realname, program, description;
+	private JLabel addfriend, status;
+	private JLabel aboutbar, friendbar, historybar;
+	private JLabel history1, history2, history3, history4, history5;
 	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
-	achievement6, achievement7, achievement8;
+	achievement6;
 	
 	//Declare Text Areas
 	private JTextArea achievementarea;
-	private JTextArea aboutarea;
 	private JTextArea historyarea;
 	
 	//Declare Images 
-	private ImageIcon picavatar, picaboutbar, picfriendbar, picaddfriend, 
-	pichistorybar, picachievementbar, piclocked, picunlocked, piceditbutton,
-	picfriendonline, picfriendoffline;
+	private ImageIcon picavatar, picaddfriend, 
+	pichistorybar, piclocked, picunlocked, piceditbutton,
+	picfriendonline, picfriendoffline, piconline, picoffline;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -79,7 +73,7 @@ public class UserScreen extends JFrame implements ActionListener {
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
 
 		
-	public UserScreen(Model model) throws HeadlessException {
+	public UserScreen(Model model) throws HeadlessException{
 		
 		super("Profile");
 		
@@ -89,16 +83,15 @@ public class UserScreen extends JFrame implements ActionListener {
 		 * 
 		 */		
 		picavatar = new ImageIcon("assets/images/stark.png");
-		picaboutbar = new ImageIcon("assets/images/about_bar.png");
-		picfriendbar = new ImageIcon("assets/images/friendbar.png");
 		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		pichistorybar = new ImageIcon("assets/images/history_bar.png");
-		picachievementbar = new ImageIcon("assets/images/achievement_bar.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
 		picfriendonline = new ImageIcon("assets/images/addfriendonline.png");
 		picfriendoffline = new ImageIcon("assets/images/addfriendoffline.png");
+		piconline = new ImageIcon("assets/images/online.png");
+		picoffline = new ImageIcon("assets/images/offline.png");
 				
 		/*
 		 *  Create all Panels 
@@ -125,7 +118,6 @@ public class UserScreen extends JFrame implements ActionListener {
 		parentContainer.add(menupanel, "dock north");
 		parentContainer.add(sidepanel, "west");
 		parentContainer.add(contentpanel, "east");
-
 		add(parentContainer);
 	
 		/*Set the  view window constraints
@@ -139,36 +131,34 @@ public class UserScreen extends JFrame implements ActionListener {
 	}
 	
 	
-	/*
-	 * Holds all content on the left
+	/**
+	 *  Method creates a side panel to hold everything on the left of page.
 	 */
 	public void addsidepanel(){
 		
-	    sidepanel = new ImagePanel(new ImageIcon("assets/images/side.png").getImage());  
+	    sidepanel = new ImagePanel(new ImageIcon("assets/images/sidebackground.png").getImage());  
 	    sidepanel.setLayout(new MigLayout());
         sidepanel.add(playerpanel, "wrap, center");
         sidepanel.add(aboutpanel, "wrap, center, gap top 5px");
         sidepanel.add(friendpanel, "center");
-		sidepanel.setBackground(Color.darkGray);
 
 	}
 	
-	/*
-	 * Holds all content on the right
+	/**
+	 *  Method creates a content panel to hold everything on the right of page.
 	 */
 	public void addcontentpanel(){
 		
-	    //contentpanel = new ImagePanel(new ImageIcon("assets/images/content.png").getImage());
-        contentpanel = new JPanel(new MigLayout());
-		//contentpanel.setLayout(new MigLayout());
+	    contentpanel = new ImagePanel(new ImageIcon("assets/images/contentbackground.png").getImage());
+		contentpanel.setLayout(new MigLayout());
 	    contentpanel.add(historypanel, "wrap, height :320, width :810, gap top 20px");
         contentpanel.add(achievementpanel, "height :320, width :810");
-		contentpanel.setBackground(Color.DARK_GRAY);
 	}
 	
 	
-	/*
-	 *  Holds the player info and avatar
+	/**
+	 *  Method creates a panel with player avatar &
+	 *  playerinfopanel.
 	 */
 	public void addplayerpanel(){
 		
@@ -179,15 +169,16 @@ public class UserScreen extends JFrame implements ActionListener {
     
 	}
 	
-	/*
-	 * Displays all the player information
+	/**
+	 *  Creates a panel containing player status options,
+	 *  add friend button, edit profile option. 
 	 */
 	public void addplayerinfopanel(){
 		
 		//Add Buttons
-	    addfriendbutton = new JButton(picfriendoffline);
-	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
-	    addfriendbutton.setContentAreaFilled(false);
+	    statusbutton = new JButton(piconline);
+	    statusbutton.setBorder(BorderFactory.createEmptyBorder());
+	    statusbutton.setContentAreaFilled(false);
 	    editbutton = new JButton(piceditbutton);
 	    editbutton.setBorder(BorderFactory.createEmptyBorder());
 	    editbutton.setContentAreaFilled(false);
@@ -195,27 +186,25 @@ public class UserScreen extends JFrame implements ActionListener {
 	    //Add Labels	    
         avatar = new JLabel();
         avatar.setIcon(picavatar);
-        addfriend = new JLabel();
-        addfriend.setIcon(picaddfriend);
         playername = new JLabel("Player");
         playername.setForeground(Color.white);
         playername.setFont(blackbold);
-        playerlevel = new JLabel("Last Login: 8/3/2013");
-        playerlevel.setFont(blacksmall);
-        playerlevel.setForeground(Color.white);
+        playerlastonline = new JLabel("Last Login: 8/3/2013");
+        playerlastonline.setFont(blacksmall);
+        playerlastonline.setForeground(Color.white);
         
 		//Add Elements to Panel
 		playerinfopanel = new JPanel(new MigLayout());
 		playerinfopanel.setOpaque(false);		   	
         playerinfopanel.add(playername,"wrap, align 50% 50%, gap top 30px");       
-        playerinfopanel.add(playerlevel,"wrap, align 50% 50%, gap top 5px"); 
-        playerinfopanel.add(addfriendbutton, "wrap, align 50% 50%, gap top 20px");
+        playerinfopanel.add(playerlastonline,"wrap, align 50% 50%, gap top 5px"); 
+        playerinfopanel.add(statusbutton, "wrap, align 50% 50%, gap top 20px");
         playerinfopanel.add(editbutton,"align 50% 50%, gap top 5px");
         
 	}
 	
-	/*
-	 *  The top navigation bar
+	/**
+	 *   Creates a panel containing button links to other pages in game arcade.
 	 */
 	public void addmenupanel(){
 		
@@ -256,8 +245,8 @@ public class UserScreen extends JFrame implements ActionListener {
         menupanel.add(myprofilelink,"center, gapbefore 350px");	    		
 	}
 	
-	/*
-	 *  Friends of this particular user, which are being stored
+	/**
+	 *   Creates a panel listing all friends of user
 	 */
 	public void addfriendpanel(){
 		
@@ -274,51 +263,69 @@ public class UserScreen extends JFrame implements ActionListener {
 		//Label
 		friendbar = new JLabel("FRIEND LIST");
 	    friendbar.setFont(sidebold);
-	    friendbar.setForeground(Color.white);	
+	    friendbar.setForeground(Color.white);
+	    addfriendbutton = new JButton("+");
+	    addfriendbutton.setFont(blackbold);
+	    addfriendbutton.setForeground(Color.GREEN);
+	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
+	    addfriendbutton.setContentAreaFilled(false);
+	    removefriendbutton = new JButton("-");
+	    removefriendbutton.setFont(blackbold);
+	    removefriendbutton.setForeground(Color.RED);
+	    removefriendbutton.setBorder(BorderFactory.createEmptyBorder());
+	    removefriendbutton.setContentAreaFilled(false);
+	    
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         friendpanel.setLayout(new MigLayout());
 	    friendpanel.add(friendbar, "gap left 10px, gap bottom 110px");
+	    friendpanel.add(addfriendbutton,"gap left 10px");
+	    friendpanel.add(removefriendbutton,"gap left 10px");
         friendpanel.add(friendscroll, "width :500px, height :100px, gap top 30px");    
 		
 	}
 	
-	/*
-	 *  Displays information about the user
+	/**
+	 *   Creates a panel displaying player information
+	 *   ie. realname, program, description
 	 */
 	public void addaboutpanel(){
-		
-		//Textarea
-		/*aboutarea = new JTextArea();
-		aboutarea.setLineWrap(true);
-		aboutarea.setFont(blacknormal);
-		aboutarea.setLineWrap(true);
-		
-		//ScrollPane
-		JScrollPane aboutscroll = new JScrollPane(aboutarea);
-		aboutscroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		aboutscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		*/
+
+		realname = new JLabel("Name:");
+		realname.setFont(blacknormal);
+		realname.setForeground(Color.white);
+		program = new JLabel("Program:");
+		program.setFont(blacknormal);
+		program.setForeground(Color.white);
+		description = new JLabel("Description:");
+		description.setFont(blacknormal);
+		description.setForeground(Color.white);
 		
 		aboutbar = new JLabel("ABOUT ME");
 	    aboutbar.setFont(sidebold);
 	    aboutbar.setForeground(Color.white);
+	    
+	    JPanel aboutlist = new JPanel(new MigLayout());
+	    aboutlist.setOpaque(false);
+	    aboutlist.add(realname,"wrap");
+	    aboutlist.add(program,"wrap");
+	    aboutlist.add(description);
 		
 		//Add Elements to Panel
 	    aboutpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         aboutpanel.setLayout(new MigLayout());
-        aboutpanel.add(aboutbar,"gap left 10px");
-        //aboutpanel.add(aboutscroll, "width :100%, height :100%");
+        aboutpanel.add(aboutbar,"gap left 10px, wrap");
+        aboutpanel.add(aboutlist,"width :10px, height :120px");
         
 	}
 	
-	/*
-	 * Shows chosen achievements listed by user
+	/**
+	 *  Method creates a panel with up to 6 set achievements &
+	 *  link button to the achievements page.
 	 */
 	public void addachievementpanel(){
 				
-	    //Displayed Achievements
-	    
+	    //Displayed Achievements	    
 	    achievement1 = new JLabel();
 	    achievement2 = new JLabel();
 	    achievement3 = new JLabel();
@@ -343,15 +350,17 @@ public class UserScreen extends JFrame implements ActionListener {
 	    JPanel achievementbarpanel = new JPanel(new MigLayout());
 	    JPanel achievementlistpanel = new JPanel(new MigLayout());
 	    
-	    achievementbar = new JLabel("Achievements");
+	    achievementbar = new JButton("Achievements");
 	    achievementbar.setFont(linkbold);
 	    achievementbar.setForeground(Color.white);
+	    achievementbar.setBorder(BorderFactory.createEmptyBorder());
+	    achievementbar.setContentAreaFilled(false);
 	    
 	    achievementbarpanel.add(achievementbar);
 	    achievementbarpanel.setOpaque(false);
 	    
 		//Add Elements to Panel
-	    achievementpanel = new ImagePanel(new ImageIcon("assets/images/Green_Box.png").getImage());
+	    achievementpanel = new ImagePanel(new ImageIcon("assets/images/pink_box.png").getImage());
 		achievementpanel.setLayout(new MigLayout());
 				
         achievementlistpanel.add(achievement1);
@@ -374,8 +383,9 @@ public class UserScreen extends JFrame implements ActionListener {
 
 	}
 	
-	/*
-	 * Shows the most recent games played by the user
+	/**
+	 *  Creates a panel displaying the most recently played games.
+	 *  (Up to 6 can be showed at a time)
 	 */
 	public void addhistorypanel(){
 				
@@ -393,21 +403,18 @@ public class UserScreen extends JFrame implements ActionListener {
         history3 = new JLabel();
         history4 = new JLabel();
         history5 = new JLabel();
-        history6 = new JLabel();
-
+        
         history1.setIcon(piclocked);
         history2.setIcon(piclocked);
         history3.setIcon(piclocked);
         history4.setIcon(piclocked);
         history5.setIcon(piclocked);
-        history6.setIcon(piclocked);
 
         JPanel historytext1 = new JPanel(new MigLayout());
         JPanel historytext2 = new JPanel(new MigLayout());
         JPanel historytext3 = new JPanel(new MigLayout());
         JPanel historytext4 = new JPanel(new MigLayout());
         JPanel historytext5 = new JPanel(new MigLayout());
-        JPanel historytext6 = new JPanel(new MigLayout());
         
 	    historybar = new JLabel("Game History");
 	    historybar.setFont(linkbold);
@@ -417,12 +424,9 @@ public class UserScreen extends JFrame implements ActionListener {
 	    historybarpanel.setOpaque(false);
 	    JPanel historylistpanel = new JPanel(new MigLayout());
 	    historylistpanel.setOpaque(false);
-        //Add Elements to Panel
-	    historypanel = new ImagePanel(new ImageIcon("assets/images/Green_Box.png").getImage());
-	    historypanel.setLayout(new MigLayout());
 	    
-	    historybarpanel.add(historybar);
-	    
+        //Add Elements to Panel	    
+	    historybarpanel.add(historybar);	    
         historylistpanel.add(history1);
         historylistpanel.add(historytext1,"growy, width :110");
         historylistpanel.add(history2);
@@ -433,24 +437,134 @@ public class UserScreen extends JFrame implements ActionListener {
         historylistpanel.add(historytext4,"growy, width :110");
         historylistpanel.add(history5);
         historylistpanel.add(historytext5,"growy, width :110");
-        historylistpanel.add(history6);
-        historylistpanel.add(historytext6,"growy, width :110");
         
+	    historypanel = new ImagePanel(new ImageIcon("assets/images/green_box.png").getImage());
+	    historypanel.setLayout(new MigLayout());       
         historypanel.add(historybarpanel,"wrap");
         historypanel.add(historylistpanel);
 	}
 	
-
-	/**
+	/*
 	 *  Event Listeners for Buttons
 	 */
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
+	/**
+	 * Button navigates to the home page on click
+	 * @param listenForHomeLink
+	 */
+	public void addHomeListener(ActionListener listenForHomeLink){
+		
+		homelink.addActionListener(listenForHomeLink);	
 		
 	}
 	
+	/**
+	 * Button navigates to the GameStore page on click
+	 * @param listenForStoreLink
+	 */
+	public void addStoreListener(ActionListener listenForStoreLink){
+		
+		storelink.addActionListener(listenForStoreLink);
+		
+	}
+	
+	/**
+	 * Button navigates to the Forum page on click
+	 * @param listenForForumLink
+	 */
+	public void addForumListener(ActionListener listenForForumLink){
+		
+		forumlink.addActionListener(listenForForumLink);
+		
+	}
+	
+	/**
+	 * Button navigates to the Library page on click
+	 * @param listenForLibraryLink
+	 */
+	public void addLibraryListener(ActionListener listenForLibraryLink){
+		
+		librarylink.addActionListener(listenForLibraryLink);
+		
+	}
+	
+	/**
+	 * Button navigates back to user's profile page
+	 * @param listenForProfileLink
+	 */
+	public void addProfileListener(ActionListener listenForProfileLink){
+		
+		myprofilelink.addActionListener(listenForProfileLink);	
+		
+	}
+	
+	/**
+	 * Button navigates to the Achievements page on click
+	 * @param listenForAchievementButton
+	 */
+	public void addAchievementListener(ActionListener listenForAchievementButton){
+		
+		achievementbar.addActionListener(listenForAchievementButton);
+		
+	}
+	
+	/**
+	 * Button opens a popup allowing editing of profile details
+	 * @param listenForEditButton
+	 */
+	public void addEditListener(ActionListener listenForEditButton){
+		
+		editbutton.addActionListener(listenForEditButton);	
+		
+	}
+	
+	/**
+	 * Button opens a popup allowing user to change their visibility status
+	 * @param listenForStatusButton
+	 */
+	public void addStatusListener(ActionListener listenForStatusButton){
+		
+		statusbutton.addActionListener(listenForStatusButton);
+		
+	}
+	
+	/**
+	 * Add a friend to the list
+	 * @param listenForAddFriendButton
+	 */
+	public void addFriendListener(ActionListener listenForAddFriendButton){
+		
+		addfriendbutton.addActionListener(listenForAddFriendButton);
+		
+	}
+	
+	/**
+	 * Remove a friend from the list
+	 * @param listenForAddFriendButton
+	 */
+	public void addRemoveFriendListener(ActionListener listenForRemoveFriendButton){
+		
+		removefriendbutton.addActionListener(listenForRemoveFriendButton);
+		
+	}
+	
+	public void setStatus(ImageIcon icon){
+		
+		statusbutton.setIcon(icon);
+		
+	}
+	
+	public void buttonhover(){
+		
+		forumlink.setBackground(Color.red);
+		
+	}
+	
+	public void displayErrorMessage(String errorMessage){
+		
+		JOptionPane.showMessageDialog(this, errorMessage);
+		
+	}
 	
 }
 

@@ -154,6 +154,13 @@ public class ArcadeServer {
 
 
 		
+		//Init highscore database
+		try {
+			highscoreDatabase.initialise();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+		
 		//initialize database classes
 		try {
             gameStorage.initialise();
@@ -162,8 +169,6 @@ public class ArcadeServer {
 			//playerStorage.initialise();
             
 			achievementStorage.initialise();
-			
-			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

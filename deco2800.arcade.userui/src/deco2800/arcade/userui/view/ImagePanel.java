@@ -1,4 +1,4 @@
-package deco2800.arcade.userui;
+package deco2800.arcade.userui.view;
 
 import java.awt.Dimension;
 import java.awt.Graphics;

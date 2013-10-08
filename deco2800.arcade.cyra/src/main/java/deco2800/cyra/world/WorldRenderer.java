@@ -48,13 +48,15 @@ public class WorldRenderer {
 	//Follower follower;
 	Walker walker;
 	private ParallaxCamera cam;
+	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font;
-	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg, heartsTexture;
-	private TextureRegion followerFrame;
+	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg, heartsTexture, 
+	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture;
+	private TextureRegion followerFrame, cyraFrame;
 	private TextureRegion walkerRegion;
 	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures;
 	private Array<AtlasRegion> walkerRegions;
-	private Animation followerAnimation; 
+	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
 	float width, height;
 	private Array<Bullet> bullets;
 	private Array<Enemy> enemies;
@@ -87,6 +89,9 @@ public class WorldRenderer {
 	public WorldRenderer(World world, ParallaxCamera cam) {
 		this.world = world;
 		this.cam = cam;
+		rightCyraCount = 0;
+		leftCyraCount = 0;
+		rightFrameCounter = 0;
 		cam.update();
 		
 		
@@ -160,16 +165,58 @@ public class WorldRenderer {
 	
 	private void drawShip() {
 		if (ship.isFacingRight()) {
-			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
+			leftCyraCount = 0;
+			leftFrameCounter = 0;
+			rightFrameCounter = (rightFrameCounter+1) %8;
+			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
+				cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount, true);
+					rightCyraCount = (rightCyraCount+1) % 5;
+					System.out.println("Cyra Frame count is " + rightCyraCount);
+			}
+			
+			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
+			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
+					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, 0);
+			
+			/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
 					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), false, false);
+					shipTexture.getHeight(), false, false);*/
 		/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y, ship.getWidth() /2, ship.getHeight()/2,
 				ship.getWidth(), ship.getHeight(), 1, 1, ship.getRotation(), 0, 0, shipTexture.getWidth(),
 				shipTexture.getHeight(), false, false);*/
 		} else {
-			batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
+			/*rightFrameCounter = 0;
+			rightCyraCount = 0;
+			System.out.println("woop derit is");
+			leftFrameCounter = (leftFrameCounter+1) %10;
+			//cyraFrame = cyraAnimation.getKeyFrame(e.getStateTime(), true);
+			/*batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
+					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1, 1, 0);
+			if((leftFrameCounter == 0) && (ship.isWalking() == true)){
+				cyraFrame = cyraLeftAnimation.getKeyFrame(leftCyraCount, true);
+					leftCyraCount = (leftCyraCount+1) % 5;
+					System.out.println("Cyra Frame count is " + leftCyraCount+1);
+					System.out.println("woop derit is");
+			}
+			System.out.println("woop derit is");
+			cyraFrame = cyraLeftAnimation.getKeyFrame(leftCyraCount+1, true);
+			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
+					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.5f, 1f, 0);
+			/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
 					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
-					shipTexture.getHeight(), true, false);
+					shipTexture.getHeight(), true, false);*/
+			leftCyraCount = 0;
+			leftFrameCounter = 0;
+			rightFrameCounter = (rightFrameCounter+1) %8;
+			if((rightFrameCounter == 0) && (ship.isWalking() == true)){
+				cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount, true);
+					rightCyraCount = (rightCyraCount+1) % 5;
+					System.out.println("Cyra Frame count is " + rightCyraCount);
+			}
+			
+			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
+			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
+					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, 0);
 		}
 	}
 	
@@ -275,7 +322,57 @@ public class WorldRenderer {
 				followerFrame = followerAnimation.getKeyFrame(e.getStateTime(), true);
 				batch.draw(followerFrame, e.getPosition().x, e.getPosition().y, e.getWidth()/2,
 						e.getHeight()/2, e.getWidth(), e.getHeight(), 1, 1, 0);
-			} else if (e.getClass() == SoldierEnemy.class || (e.getClass() == EnemySpiderBossPopcorn.class)){
+			} else if (e.getClass() == SoldierEnemy.class){
+				
+				if(e.isJumping() == true){
+				batch.draw(jumperFrontArmJumpingTexture, (e.getPosition().x)-.3f, (e.getPosition().y) +.55f, e.getWidth() /2, e.getHeight()/2,
+						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontArmJumpingTexture.getWidth(),
+						jumperFrontArmJumpingTexture.getHeight(), false, false);
+				
+				batch.draw(jumperFrontLegJumpingTexture, (e.getPosition().x)-.1f, (e.getPosition().y), e.getWidth() /2, e.getHeight()/2,
+						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontLegJumpingTexture.getWidth(),
+						jumperFrontLegJumpingTexture.getHeight(), false, false);
+				
+					batch.draw(jumperBodyTexture, e.getPosition().x, e.getPosition().y+.70f, e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperBodyTexture.getWidth(),
+							jumperBodyTexture.getHeight(), false, false);
+					
+					batch.draw(jumperFrontArmJumpingTexture, (e.getPosition().x)-.3f, (e.getPosition().y) +.45f, e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontArmJumpingTexture.getWidth(),
+							jumperFrontArmJumpingTexture.getHeight(), false, false);
+					
+					batch.draw(jumperFrontLegJumpingTexture, (e.getPosition().x)+.2f, (e.getPosition().y), e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontLegJumpingTexture.getWidth(),
+							jumperFrontLegJumpingTexture.getHeight(), false, false);
+				}
+				else{
+					batch.draw(jumperFrontLegTexture, (e.getPosition().x)-.2f, (e.getPosition().y), e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontLegTexture.getWidth(),
+							jumperFrontLegTexture.getHeight(), true, false);
+					
+					batch.draw(jumperFrontArmTexture, (e.getPosition().x)+.1f, (e.getPosition().y) +.25f, e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontArmTexture.getWidth(),
+							jumperFrontArmTexture.getHeight(), false, false);
+					
+					batch.draw(jumperBodyTexture, e.getPosition().x, e.getPosition().y+.55f, e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperBodyTexture.getWidth(),
+							jumperBodyTexture.getHeight(), false, false);
+				
+					batch.draw(jumperFrontArmTexture, (e.getPosition().x)+.1f, (e.getPosition().y) +.35f, e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontArmTexture.getWidth(),
+							jumperFrontArmTexture.getHeight(), false, false);
+					
+					batch.draw(jumperFrontLegTexture, (e.getPosition().x)+.2f, (e.getPosition().y), e.getWidth() /2, e.getHeight()/2,
+							e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, jumperFrontLegTexture.getWidth(),
+							jumperFrontLegTexture.getHeight(), false, false);
+				}
+			}
+			else if (e.getClass() == Zombie.class){
+				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
+						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
+						shipTexture.getHeight(), false, false);				
+			}
+			else if ((e.getClass() == EnemySpiderBossPopcorn.class)){
 				batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, e.getWidth() /2, e.getHeight()/2,
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
@@ -534,11 +631,19 @@ public class WorldRenderer {
 		manager.load("data/enemysprite1-small.png", Texture.class, linearFilteringParam);
 		manager.load("data/bg2.png", Texture.class, linearFilteringParam);
 		manager.load("data/ship.png", Texture.class, linearFilteringParam);
+		manager.load("data/cyra.png", Texture.class, linearFilteringParam);
+		manager.load("data/body-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("data/frontarm-normal-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("data/frontleg-normal1-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("data/frontleg-jumping-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("data/frontarm-jumping-jumper.png", Texture.class, linearFilteringParam);
 		manager.load("data/heart.png", Texture.class, linearFilteringParam);
 		manager.load("data/projectiles/lightningball.png", Texture.class, linearFilteringParam);
 		manager.load("data/projectiles/lasers.txt", TextureAtlas.class);
 		manager.load("data/projectiles/explosion.txt", TextureAtlas.class);
 		manager.load("data/follower.txt", TextureAtlas.class);
+		manager.load("data/cyraRightMovement.txt", TextureAtlas.class);
+		manager.load("data/cyraLeftMovement.txt", TextureAtlas.class);
 		manager.load("data/modular3.txt", TextureAtlas.class);
 		manager.load("data/level packfile", TextureAtlas.class);
 		manager.finishLoading();
@@ -565,6 +670,27 @@ public class WorldRenderer {
 		
 			/* Load follower texture */
 		//followerTexture = new Texture("data/follower.png");
+		followerTexture = manager.get("data/ship.png");
+		followerTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		jumperBodyTexture = manager.get("data/body-jumper.png");
+		jumperBodyTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		jumperFrontArmTexture = manager.get("data/frontarm-normal-jumper.png");
+		jumperFrontArmTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		jumperFrontLegTexture = manager.get("data/frontleg-normal1-jumper.png");
+		jumperFrontLegTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		jumperFrontLegJumpingTexture = manager.get("data/frontleg-jumping-jumper.png");
+		jumperFrontLegJumpingTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		jumperFrontArmJumpingTexture = manager.get("data/frontarm-jumping-jumper.png");
+		jumperFrontArmJumpingTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		TextureAtlas cyraRightAtlas = manager.get("data/cyraRightMovement.txt", TextureAtlas.class);
+		TextureAtlas cyraLeftAtlas = manager.get("data/cyraRightMovement.txt", TextureAtlas.class);
+		
 		TextureAtlas atlas = manager.get("data/follower.txt", TextureAtlas.class);
 		/*TextureRegion[] followerFrames = new TextureRegion[3];
 		for (int i=0; i<3;i++) {
@@ -576,6 +702,20 @@ public class WorldRenderer {
 			followerFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		followerAnimation = new Animation(FOLLOWER_FRAME_DURATION, followerFrames);
 			/* Load follower texture - END*/
+		
+		
+		Array<AtlasRegion> cyraRightFrames = cyraRightAtlas.findRegions("cyra");
+		System.out.println("Found " + cyraRightFrames.size + " cyra frames");
+		for (int i=0; i<cyraRightFrames.size; i++) 
+			cyraRightFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		cyraRightAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraRightFrames);
+		
+		Array<AtlasRegion> cyraLeftFrames = cyraLeftAtlas.findRegions("cyra");
+		System.out.println("Found " + cyraLeftFrames.size + " cyra frames");
+		for (int i=0; i<cyraLeftFrames.size; i++) 
+			cyraLeftFrames.get(i).getTexture().setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		cyraLeftAnimation = new Animation(FOLLOWER_FRAME_DURATION, cyraLeftFrames);
+		
 		
 			/* Load walker texture */
 		//walkerTexture = new Texture("data/walker.png");

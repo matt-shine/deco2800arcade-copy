@@ -9,7 +9,7 @@ public class Sounds {
 
 		public static Sound jump;
 		
-		private static Sound explosion0,explosion1,explosion2,shoot0; 
+		private static Sound coin0, coin1, explosion0,explosion1,explosion2,shoot0; 
 		private static Music boss1bgm;
 		
 		public static void load() {
@@ -17,6 +17,8 @@ public class Sounds {
 		}
 		
 		public static void loadAll() {
+			coin0 = loadSound("coin01.wav");
+			coin1 = loadSound("shoot01.wav");
 			explosion0 = loadSound("explosion00.wav");
 			explosion1 = loadSound("explosion01.wav");
 			explosion2 = loadSound("explosion02.wav");
@@ -70,6 +72,13 @@ public class Sounds {
 		
 		public static void playShootSound(float pan) {
 			play(shoot0, pan);
+		}
+		
+		public static void playCoinSound(float pan) {
+			coin0.stop();
+			coin1.stop();
+			play(coin0, pan);
+			play(coin1, pan);
 		}
 		
 		public static void playBossMusic() {

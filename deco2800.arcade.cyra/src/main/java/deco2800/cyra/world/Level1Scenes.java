@@ -16,6 +16,7 @@ import deco2800.cyra.model.CutsceneObject;
 import deco2800.cyra.model.MovableEntity;
 import deco2800.cyra.model.MovablePlatform;
 import deco2800.cyra.model.PartTween;
+import deco2800.cyra.model.ResultsScreen;
 import deco2800.cyra.model.Ship;
 
 public class Level1Scenes extends LevelScenes{
@@ -30,8 +31,8 @@ public class Level1Scenes extends LevelScenes{
 	
 	private int playState;
 	
-	public Level1Scenes (Ship ship, ParallaxCamera cam) {
-		super(ship, cam);
+	public Level1Scenes (Ship ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
+		super(ship, cam, resultsScreen);
 		copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
@@ -41,7 +42,7 @@ public class Level1Scenes extends LevelScenes{
 		
 	}
 	
-	public Array<Object> start(int scenePosition, float rank) {
+	public Array<Object> start(int scenePosition, float rank, int time) {
 		playState=0;
 		copter = new MovablePlatform(copterTex, new Vector2(50, 1), 4f, 2f, new Vector2(52f,10f), 2f, false, 0f);
 		//copter.setCollisionRectangle(0,0,4f,1f);

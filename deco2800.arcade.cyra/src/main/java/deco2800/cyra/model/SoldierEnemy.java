@@ -139,7 +139,7 @@ public class SoldierEnemy extends Enemy {
 					velocity.x = 0f;
 					break;
 				case RAM:
-					velocity.x = SPEED * 3f;
+					velocity.x = SPEED * 2.5f * rank;
 					if (!facingRight) {
 						velocity.x = -velocity.x;
 					}
@@ -250,6 +250,7 @@ public class SoldierEnemy extends Enemy {
 		float jumpChance = walkChance + 0.3f;
 		float waitChance = jumpChance + 0.2f - 0.2f * rank;
 		float shootChance = waitChance + 0.4f * rank;
+		//float shootChance = waitChance + 50f+0.4f * rank; // doing this to test the shooting
 		float aoeChance;
 		if (rank > 0.75f) {
 			aoeChance = shootChance + 0.3f;

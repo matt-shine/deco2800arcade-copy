@@ -9,6 +9,7 @@ import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -38,6 +39,7 @@ import deco2800.cyra.model.*;
 public class WorldRenderer {
 
 	private static final float FOLLOWER_FRAME_DURATION = 0.06f;
+	private static final float SCENE_BAR_MAX_HEIGHT = 2.5f;
 	
 	
 	
@@ -68,6 +70,9 @@ public class WorldRenderer {
 	private Array<MovablePlatform> mvPlatforms;
 	private Array<BlockMaker> blockMakers;
 	private float rotationArms;
+	private float sceneBarHeight;
+	private boolean enemyWithHealthOnScreen = false;
+	private float healthPercentage;
 	
 	//attempting to use maps
 	TileMapRenderer tileMapRenderer;
@@ -315,6 +320,7 @@ public class WorldRenderer {
 			drawShip();
 		}
 		
+		enemyWithHealthOnScreen = false;
 		eItr = enemies.iterator();
 		while (eItr.hasNext()) {
 			e = eItr.next();
@@ -467,6 +473,12 @@ public class WorldRenderer {
 					}
 				}
 			}
+			
+			//draw the enemies health
+			if (e.displayHealth()) {
+				enemyWithHealthOnScreen = true;
+				healthPercentage = e.getHealthPercentage();
+			}
 		}
 		bItr = bullets.iterator();
 		while(bItr.hasNext()) {
@@ -512,18 +524,70 @@ public class WorldRenderer {
 
 		batch.end();
 		
-		
+		if (enemyWithHealthOnScreen) {
+			float barWidth = 10f;
+			float barHeight = 1.5f;
+			sr.begin(ShapeType.Rectangle);
+			sr.setColor(0f,0f,0f,1f);
+			sr.rect(cam.position.x - barWidth/2, cam.position.y-barHeight/2-8f, barWidth, barHeight);
+			sr.end();
+			sr.begin(ShapeType.FilledRectangle);
+			sr.setColor(1f, 0f,0f,1f);
+			sr.filledRect(cam.position.x-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
+			sr.end();
+		}
 		
 		
 		textBatch.begin();
 		
-		CharSequence str = "Time: " + (int)world.getTime();
+		CharSequence str = "Time: " + (int)world.getTime(); //(int)ship.getPosition().x;
 		int strXPos = Gdx.graphics.getWidth() - 223; //Offset from right
 		int strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
 		font.draw(textBatch, str, strXPos, strYPos);
 		
 		textBatch.end();
+		if (world.isScenePlaying()) {
+			if (sceneBarHeight < SCENE_BAR_MAX_HEIGHT) {
+				sceneBarHeight += 0.04f;
+			}
+			
+		} else if (sceneBarHeight > 0) {
+			sceneBarHeight -= 0.04f;
+		}
+		if (sceneBarHeight > 0) {
+			sr.begin(ShapeType.FilledRectangle);
+			sr.setColor(0f,0f,0f,1f);
+			//float rectHeight = 2.5f;
+			sr.filledRect(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2, cam.viewportWidth, sceneBarHeight);
+			sr.filledRect(cam.position.x-cam.viewportWidth/2, cam.position.y+cam.viewportHeight/2-sceneBarHeight, cam.viewportWidth, sceneBarHeight);
+			sr.end();
+		}
 		
+		ResultsScreen resultsScreen = world.getResultsScreen();
+		if (resultsScreen.isShowing()) {
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			sr.begin(ShapeType.FilledRectangle);
+			
+			sr.setColor(new Color(0f, 0f, 0f,0.55f));
+			sr.filledRect(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
+			
+			sr.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			
+			textBatch.begin();
+			CharSequence timeText= "TIME BONUS: " + resultsScreen.getTimeBonus();
+			CharSequence healthText = "HEALTH BONUS: "+resultsScreen.getHealthBonus();
+			CharSequence scoreText = "TOTAL SCORE: "+ world.getScore();
+			font.draw(textBatch, timeText, cam.position.x-14f, Gdx.graphics.getHeight()-122);
+			font.draw(textBatch, healthText, cam.position.x-14f, Gdx.graphics.getHeight()-172);
+			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-272);
+			textBatch.end();
+			
+			
+		}
+		
+
 		//If game is paused render pause overlay
 		if (world.isPaused()) {
 			
@@ -612,7 +676,7 @@ public class WorldRenderer {
 		textBatch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("data/font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		
-		
+		sceneBarHeight = 0f;
 		sr = new ShapeRenderer();
 		tileMapRenderer = world.getLevel().getRenderer();
 		batch = new SpriteBatch();

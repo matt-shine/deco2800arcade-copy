@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import deco2800.arcade.towerdefence.TowerDefence;
 
 public class CreditsScreen implements Screen{
-	private static final String LOG = SplashScreen.class.getSimpleName();
+	private static final String LOG = CreditsScreen.class.getSimpleName();
 	private final TowerDefence game;
 	SpriteBatch batch;
 	Texture texture;

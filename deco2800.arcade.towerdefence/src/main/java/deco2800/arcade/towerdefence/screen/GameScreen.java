@@ -1,22 +1,25 @@
 package deco2800.arcade.towerdefence.screen;
 
 import static com.badlogic.gdx.graphics.Color.*;
-import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static com.badlogic.gdx.graphics.GL20.GL_DEPTH_BUFFER_BIT;
-
-import java.awt.TextArea;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -38,14 +41,10 @@ public class GameScreen implements Screen{
 	
 	private Stage stage;
 	//private ShapeRenderer shapeRenderer;
-	private Table table;
-	private Table gameTable;
-	private Table topStatus;
-	private Table bottomBar, bottomBarRight, bottomBarLeft;
 	private static float STATUS_HEIGHT = 50f;
 	private static float BOTTOM_HEIGHT = 150f;
 	Button frostB, fireB, holyB, darknessB, piercingB, auraB, backB; //TowerButtons
-	private Label randomLabel3, towerInfo;
+	private Label towerInfo;
 	BitmapFont black;
     BitmapFont white;
     Skin skin;
@@ -56,6 +55,15 @@ public class GameScreen implements Screen{
 	private static final float BUTTON_HEIGHT = 64f, CAMERA_HEIGHT = (720- STATUS_HEIGHT - BOTTOM_HEIGHT), BUTTON_WIDTH = 64f;
 	int resource; //int for player's resources.
 	
+	//static final int WIDTH  = 480;
+    //static final int HEIGHT = 320;
+
+    private OrthographicCamera				cam;
+    private Texture                         texture, crystalsTexture;
+    private Mesh                            mesh;
+    private Rectangle                       glViewport;
+    private float                           rotationSpeed;
+	
 	/*
 	 * Constructor for GameScreen, creates the platform for which the game will be played.
 	 * 720p (720 x 1024) pixels
@@ -63,7 +71,6 @@ public class GameScreen implements Screen{
 	public GameScreen(TowerDefence game){
 		this.game = game;
 		stage = new Stage();
-		
 		
 		//setting style for resource textfield
 		TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
@@ -74,7 +81,7 @@ public class GameScreen implements Screen{
 		resourceTF = new TextField("", textFieldStyle);
 		
 		//Need to work out how to add this sprite to the table.
-		Texture crystalsTexture = new Texture(Gdx.files.internal("crystals.png"));
+		crystalsTexture = new Texture(Gdx.files.internal("crystals.png"));
         crystalsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		Sprite crystals = new Sprite(crystalsTexture);
 		
@@ -83,9 +90,25 @@ public class GameScreen implements Screen{
 				WHITE));
 		towerInfo.setWrap(true);
 		
-		randomLabel3 = new Label("Game screen here?", 
-				new Label.LabelStyle(new BitmapFont(),
-				MAGENTA));
+		//
+		
+		rotationSpeed = 0.5f;
+        mesh = new Mesh(true, 4, 6,
+                        new VertexAttribute(VertexAttributes.Usage.Position, 3,"attr_Position"),
+                        new VertexAttribute(Usage.TextureCoordinates, 2, "attr_texCoords"));
+        texture = new Texture(Gdx.files.internal("sc_map.png"));
+        mesh.setVertices(new float[] { 
+                         -1024f, -1024f, 0, 0, 1,
+                          1024f, -1024f, 0, 1, 1,
+                          1024f,  1024f, 0, 1, 0,
+                         -1024f,  1024f, 0, 0, 0
+        });
+        mesh.setIndices(new short[] { 0, 1, 2, 2, 3, 0 });
+
+        cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());            
+        cam.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+
+        glViewport = new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override
@@ -110,18 +133,58 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
+        handleInput();
 		Gdx.gl20.glClearColor(0, 0, 0, 1);
-		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		resourceTF.setMessageText("Resources: " + resource);
+		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		
+		camera.update();
+		
+		resourceTF.setMessageText("" + resource);
+		
 		stage.act(delta);
 		stage.draw();
 		Table.drawDebug(stage);
 		if(!game.isPaused()) {
 			stage.act(delta);
-		}		
-		camera.update();
-
+		}
+		
+		batch.begin();
+		batch.draw(crystalsTexture, 5, Gdx.graphics.getHeight() - crystalsTexture.getHeight() - 5);
+		batch.end();
+		
 	}
+	
+	
+	private void handleInput() {
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+                camera.zoom += 0.02;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                camera.zoom -= 0.02;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                if (camera.position.x > 0)
+                        camera.translate(-3, 0, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if (camera.position.x < 1024)
+                        camera.translate(3, 0, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (camera.position.y > 0)
+                        camera.translate(0, -3, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                if (camera.position.y < 1024)
+                        camera.translate(0, 3, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+                camera.rotate(-rotationSpeed, 0, 0, 1);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.E)) {
+                camera.rotate(rotationSpeed, 0, 0, 1);
+        }
+}
 
 	@Override
 	public void resize(int width, int height) {
@@ -244,8 +307,9 @@ public class GameScreen implements Screen{
 		backB.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 5);
 		backB.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 5);
 		
-		resourceTF.setX(5);
-		resourceTF.setY(Gdx.graphics.getHeight() - resourceTF.getHeight() - 5);
+		resourceTF.setX(45);
+		resourceTF.setY(Gdx.graphics.getHeight() - resourceTF.getHeight() - 15);
+		resourceTF.setDisabled(true);
 		
 		towerInfo.setX(piercingB.getX() + towerInfo.getWidth()/2 + 10);
 		towerInfo.setY(69);
@@ -267,7 +331,6 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void show() {
-		
 		ArcadeInputMux.getInstance().addProcessor(stage);
 		atlas = new TextureAtlas(Gdx.files.internal("black_button.pack"));
 		skin = new Skin();

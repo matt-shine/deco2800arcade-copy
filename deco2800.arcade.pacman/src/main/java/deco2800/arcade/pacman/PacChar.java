@@ -17,17 +17,11 @@ public class PacChar extends Mover{
 	public enum PacState {
 		IDLE, MOVING, DEAD
 	}
-	//describes a direction- test will be removed later
-	public enum Dir {
-		LEFT, RIGHT, UP, DOWN, TEST
-	}
-		
+			
 	private PacState currentState;
 	// Static variables for pulling sprites from sprite sheet
 	private static final int FRAME_COLS = 2;
 	private static final int FRAME_ROWS = 4;
-	private Dir facing; // 1: Right, 2: Left
-							// 3: Up, 4: Down
 	
 	// the distance pacman moves each frame
 	private float moveDist;

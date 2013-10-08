@@ -5,6 +5,14 @@ package deco2800.arcade.pacman;
  */
 public abstract class Mover {
 
+	//describes a direction- test will be removed later
+	public enum Dir {
+		LEFT, RIGHT, UP, DOWN, TEST
+	}
+		
+	protected Dir facing; // 1: Right, 2: Left
+						// 3: Up, 4: Down
+	
 	// the coordinates of the bottom left corner of the pacman/ghost (for
 	// drawing)
 	protected int drawX;

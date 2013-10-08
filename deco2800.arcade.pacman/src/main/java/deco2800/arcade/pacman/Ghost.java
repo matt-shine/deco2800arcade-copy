@@ -10,8 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
 import deco2800.arcade.model.Player;
-
-import deco2800.arcade.pacman.PacChar.Dir;
 import deco2800.arcade.pacman.PacChar.PacState;
 
 
@@ -20,17 +18,12 @@ public class Ghost extends Mover {
 	private enum GhostState {
 	CHASE, SCATTER, FRIGHT, DEAD
 	}
-	
-	public enum Dir {
-		LEFT, RIGHT, UP, DOWN, TEST
-	}
-	
+		
 	private GhostState currentState;
 	// Static variables for pulling sprites from sprite sheet
-	private static final int FRAME_COLS = 2;
-	private static final int FRAME_ROWS = 4;
-	private Dir facing; // 1: Right, 2: Left
-							// 3: Up, 4: Down
+	private static final int FRAME_COLS = 8;
+	private static final int FRAME_ROWS = 1;
+
 	
 	// the distance ghost moves each frame
 	private float moveDist;
@@ -42,11 +35,10 @@ public class Ghost extends Mover {
 	
 	public Ghost(GameMap gameMap) {
 		super(gameMap);
-		currentTile = gameMap.getPacStart(); // CHANGE TO appropriate ghost start
+		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost start
 		//set up pacman to be drawn in the right place- this is defintely right
 		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
-		//grabs file- should be pacMove2.png, pacTest marks the edges and middle pixel in red
 		walkSheet = new Texture(Gdx.files.internal("redghostmove.png"));
 		// splits into columns and rows then puts them into one array in order
 		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
@@ -65,7 +57,8 @@ public class Ghost extends Mover {
 		width = walkFrames[1].getRegionWidth() * 2;
 		height = walkFrames[1].getRegionHeight() * 2;
 		updatePosition();
-		moveDist = 1;
+		moveDist = 0; //made it so he can't move at the moment, because he
+						// currently goes through walls and crashes it.
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		

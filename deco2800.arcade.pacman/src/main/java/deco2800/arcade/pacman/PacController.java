@@ -5,7 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 
-import deco2800.arcade.pacman.PacChar.Dir;
+import deco2800.arcade.pacman.Mover.Dir;
 import deco2800.arcade.pacman.PacChar.PacState;
 
 /**

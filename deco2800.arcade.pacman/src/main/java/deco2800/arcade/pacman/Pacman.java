@@ -47,7 +47,7 @@ public class Pacman extends GameClient {
 	//takes keyboard input
 
 	
-	private InputProcessor controller;
+	private PacController controller;
 	private GameMap map1;
 	private ArrayList<char[]> map1Array;
 	

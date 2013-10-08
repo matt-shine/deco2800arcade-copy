@@ -54,8 +54,10 @@ public class GameLibrary extends GameClient {
         player = player1;
         networkClient = networkClient1;
         responseListener = new LibraryResponseListener();
-        networkClient.addListener(responseListener);
 
+        if (networkClient != null) {
+            networkClient.addListener(responseListener);
+        }
         gameList = new ArrayList<Game>();
         loadGameList();
     }

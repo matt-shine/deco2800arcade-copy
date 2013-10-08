@@ -49,7 +49,6 @@ public class HelpScreen implements Screen {
 
 	@Override
 	public void hide() {
-		game.stopSong();
 		ArcadeInputMux.getInstance().removeProcessor(stage);
 		ArcadeInputMux.getInstance().removeProcessor(processor);
 		this.dispose();

@@ -61,7 +61,6 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void hide() {
-		game.stopSong();
 		ArcadeInputMux.getInstance().removeProcessor(stage);
 		ArcadeInputMux.getInstance().removeProcessor(processor);
 		this.dispose();
@@ -175,6 +174,7 @@ public class MenuScreen implements Screen {
             	return true;
             }
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        		game.stopSong();
             	game.setScreen(new PlayScreen(game));
             }
 		});
@@ -211,6 +211,7 @@ public class MenuScreen implements Screen {
 	        	return true;
 	        }
 	        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+	        	game.stopSong();
 	        	ArcadeSystem.goToGame(ArcadeSystem.UI);
 	        }
 	    });

@@ -68,7 +68,6 @@ public class OptionsScreen implements Screen {
 
 	@Override
 	public void hide() {
-		game.stopSong();
 		ArcadeInputMux.getInstance().removeProcessor(stage);
 		ArcadeInputMux.getInstance().removeProcessor(processor);
 		this.dispose();
@@ -196,6 +195,16 @@ public class OptionsScreen implements Screen {
 				} else {
 					Configuration.setMasterVolume((int) value);
 				}
+				
+				if (value < Configuration.getEffectsVolumeInt()) {
+					effectsVolumeSlider.setValue(value);
+					Configuration.setEffectsVolume((int) value);
+				}
+				
+				if (value < Configuration.getBackgroundVolumeInt()) {
+					backgroundVolumeSlider.setValue(value);
+					Configuration.setBackgroundVolume((int) value);
+				}
 			}
 		});
 	    
@@ -207,6 +216,10 @@ public class OptionsScreen implements Screen {
 				float value = slider.getValue();
 				if (value == 0) {
 					Configuration.setEffectsVolume(0);
+					game.changeVolume(Configuration.getEffectsVolumeInt());
+				} else if (value > Configuration.getMasterVolumeInt()) {
+					masterVolumeSlider.setValue(value);
+					Configuration.setEffectsVolume(Configuration.getMasterVolumeInt());
 				} else {
 					Configuration.setEffectsVolume((int) value);
 				}
@@ -221,8 +234,14 @@ public class OptionsScreen implements Screen {
 				float value = slider.getValue();
 				if (value == 0) {
 					Configuration.setBackgroundVolume(0);
+					game.changeVolume(Configuration.getBackgroundVolumeInt());
+				} else if (value > Configuration.getMasterVolumeInt()) {
+					masterVolumeSlider.setValue(value);
+					Configuration.setBackgroundVolume(Configuration.getMasterVolumeInt());
+					game.changeVolume(Configuration.getBackgroundVolumeInt());
 				} else {
 					Configuration.setBackgroundVolume((int) value);
+					game.changeVolume(Configuration.getBackgroundVolumeInt());
 				}
 			}
 		});

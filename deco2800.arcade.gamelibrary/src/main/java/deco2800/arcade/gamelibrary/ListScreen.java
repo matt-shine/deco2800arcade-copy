@@ -148,7 +148,9 @@ public class ListScreen implements Screen, LibraryScreen {
                     y-= 35;
                 }
 
-                if (more && count++ <= 15) continue;
+                if (more && count++ <= 15) {
+                    continue;
+                }
 
 
                 button = new TextButton("" + game.name, libSkin, "gameslistbutton");

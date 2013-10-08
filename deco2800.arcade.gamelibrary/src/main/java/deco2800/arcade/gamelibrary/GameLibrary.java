@@ -93,16 +93,6 @@ public class GameLibrary extends GameClient {
         });   */
     }
 
-    @Override
-    public void render() {
-        super.render();
-    }
-
-    @Override
-    public UIOverlay getOverlay() {
-        return super.getOverlay();
-    }
-
     /**
      * Update the current screen being display
      */
@@ -145,7 +135,9 @@ public class GameLibrary extends GameClient {
             serverGames = ArcadeSystem.getArcadeGames();
         }
 
-        if (serverGames != null) orderGameSet(serverGames);
+        if (serverGames != null) {
+            orderGameSet(serverGames);
+        }
     }
 
     /**

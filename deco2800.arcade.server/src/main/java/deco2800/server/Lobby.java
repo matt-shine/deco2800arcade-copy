@@ -101,7 +101,7 @@ public class Lobby {
 	 * Sends the current active matches (i.e. matches with a host and a free
 	 * 	spot) to the users in the lobby.
 	 * 
-	 * Currently called exclusively by the ArcadeServer every 15 seconds.
+	 * Currently unused.
 	 */
 	public void sendGamesToLobbyUsers() {
 		if (connectedPlayers.size() > 0 && lobbyGames.size() > 0) {
@@ -121,6 +121,30 @@ public class Lobby {
 					connectedPlayers.get(i).sendTCP(amd);
 				}
 			}
+		}
+	}
+	
+	/**
+	 * Sends the current active matches (i.e. matches with a host and 
+	 * a free spot) to the specified user.
+	 * @param playerId - The id of the player to send the matches to.
+	 */
+	public void sendGamesToLobbyUser(int playerId) {
+		System.out.println("Sending matches to player: " + playerId);
+		/* Send a clear list request to the players client */
+		ClearListRequest clr = new ClearListRequest();
+		connectedPlayers.get(playerId).sendTCP(clr);
+		
+		/* Now send the matches through to the client */
+		for (int i=0;i<lobbyGames.size();i++) {
+			/* Create the ActiveMatchDetails object to send */
+			ActiveMatchDetails amd = new ActiveMatchDetails();
+			amd.gameId = lobbyGames.get(i).getGameId();
+			amd.hostPlayerId = lobbyGames.get(i).getHostPlayerId();
+			amd.matchId = lobbyGames.get(i).getMatchId().toString();
+			
+			/* Send it to the client */
+			connectedPlayers.get(playerId).sendTCP(amd);
 		}
 	}
 

@@ -124,7 +124,7 @@ public class ArcadeSystem {
     }
     
     public static ArrayList<ActiveMatchDetails> requestLobbyGamesList() {
-    	return arcade.getMatches();
+    	return Arcade.getMatches();
     }
     
     public static void createMultiplayerGame(NewMultiGameRequest multigameRequest) {
@@ -145,7 +145,11 @@ public class ArcadeSystem {
 	}
 	 public static boolean isPlayerBetting() {
 	    	return arcade.isPlayerBetting();
-	    }
+    }
+	 
+	 public static void initializeLobbyMatchList() {
+		 arcade.populateMatchList();
+	 }
     
     public static void newMultiplayerGame(NewMultiSessionResponse response) {
     	int playerID = response.playerID;

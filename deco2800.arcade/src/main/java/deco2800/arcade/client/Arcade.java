@@ -398,27 +398,20 @@ public class Arcade extends JFrame {
      * @return GameClient
      */
     public GameClient getInstanceOfGame(String id) {
-    	System.out.println("** ID IS : " + id);
         Class<? extends GameClient> gameClass = getGameMap().get(id);
-        System.out.println("Gameclass: " + gameClass);
         try {
             if (gameClass != null) {
                 Constructor<? extends GameClient> constructor = gameClass
                         .getConstructor(Player.class, NetworkClient.class);
-                System.out.println("Constructor: " + constructor);
                 GameClient game = constructor.newInstance(player, client);
-                System.out.println("Game: " + game);
 
                 // add the overlay to the game
                 if (!gameClass.isAnnotationPresent(InternalGame.class)) {
-                	System.out.println("getting overlay");
                     GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 
                     // the overlay and the bridge are the same object, but
                     // GameClient doesn't know that and it mightn't be that way
                     // forever
-                    System.out.println("Overlay: " + overlay);
-                    System.out.println("************ABOUT TO ADD OVERLAY************");
                     game.addOverlay(overlay);
                     if (overlay instanceof UIOverlay) {
                         game.addOverlayBridge((UIOverlay) overlay);
@@ -458,7 +451,6 @@ public class Arcade extends JFrame {
 	
 	public static void clearMatchList() {
 		matches.removeAll(matches);
-		System.out.println("MATCHES CLEARED (SIZEOF: " + matches.size());
 	}
 	
 	public static void removeFromMatchList(RemovedMatchDetails response) {
@@ -472,13 +464,17 @@ public class Arcade extends JFrame {
 	}
 	
 	public void createMultiplayerGame(NewMultiGameRequest request) {
-		//request.hostConnection = this.client.connection;
-		//System.out.println("[CLIENT] Sending CreateMatchRequest (gameId: " + request.gameId + ", playerId: " + request.hostPlayerId);
 		request.playerID = player.getID();
 		this.client.sendNetworkObject(request);
 	}
 	
 	public void createMatch(CreateMatchRequest request) {
+		this.client.sendNetworkObject(request);
+	}
+	
+	public void populateMatchList() {
+		NewLobbyRequest request = new NewLobbyRequest();
+		request.requestType = LobbyRequestType.POPULATE;
 		this.client.sendNetworkObject(request);
 	}
 	

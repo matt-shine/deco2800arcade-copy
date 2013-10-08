@@ -38,10 +38,28 @@ public class LobbyListener extends Listener {
 
 		if (object instanceof NewLobbyRequest) {
 			
+			
+			
 			NewLobbyRequest newLobbyRequest = (NewLobbyRequest) object;
-			int playerId = newLobbyRequest.playerID;
-			System.out.println(newLobbyRequest.requestType);
-			Lobby.instance().addPlayerToLobby(playerId, connection);
+			switch (newLobbyRequest.requestType) {
+			case CANCELMATCH:
+				break;
+			case CREATEMATCH:
+				break;
+			case GETMATCHES:
+				break;
+			case JOINLOBBY:
+				int playerId = newLobbyRequest.playerID;
+				Lobby.instance().addPlayerToLobby(playerId, connection);
+				break;
+			case POPULATE:
+				Lobby.instance().sendGamesToLobbyUser(newLobbyRequest.playerID);
+				break;
+			default:
+				break;
+			
+			}
+			
 			
 			}
 		else if (object instanceof CreateMatchRequest) {

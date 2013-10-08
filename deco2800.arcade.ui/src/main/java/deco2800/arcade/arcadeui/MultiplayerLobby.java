@@ -48,13 +48,16 @@ public class MultiplayerLobby implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private ShapeRenderer shapeRenderer2;
 	private ArcadeUI arcadeUI;
-	;
+	ArrayList<ActiveMatchDetails> matches; 
 
 	public MultiplayerLobby(ArcadeUI ui) {
 		arcadeUI = ui;
 	}
 	
 	public void show() {
+		ArcadeSystem.addPlayerToLobby();
+		ArcadeSystem.initializeLobbyMatchList();
+		matches  = ArcadeSystem.requestLobbyGamesList();
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
@@ -159,11 +162,11 @@ public class MultiplayerLobby implements Screen {
 
 		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
 		
-		ArcadeSystem.requestLobbyGamesList();
-		final ArrayList<ActiveMatchDetails> matches = Arcade.getMatches();
-		System.out.println("Matches: " + matches.toString());
+		
+
 
 		if (matches.size() > 0 ) {
+			matches = ArcadeSystem.requestLobbyGamesList();
 			for (int i = 0; i < matches.size(); i++) {
 				Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
 				Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
@@ -172,10 +175,10 @@ public class MultiplayerLobby implements Screen {
 				table2.center().left();
 				table2.add(matchLabel).width(130).padTop(20).padLeft(150);
 				table2.add(player).width(130).padTop(20).padLeft(130);
-				table2.add(button4).width(130).height(30).padTop(20);
+				table2.add(button5).width(130).height(30).padTop(20);
 				table2.row();
 				
-				button4.addListener(new ChangeListener() {
+				button5.addListener(new ChangeListener() {
 		            public void changed (ChangeEvent event, Actor actor) {
 		                System.out.println("You Clicked: " + button5.getName());
 					}

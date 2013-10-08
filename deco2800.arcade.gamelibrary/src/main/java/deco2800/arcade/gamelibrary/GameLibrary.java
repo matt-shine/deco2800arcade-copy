@@ -15,6 +15,7 @@ import deco2800.arcade.protocol.game.GameLibraryRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 
@@ -41,7 +42,7 @@ public class GameLibrary extends GameClient {
     private LibraryResponseListener responseListener;
 
     private Screen curentScreen;
-    private ArrayList<Game> gameList;
+    private List<Game> gameList;
 
     /**
      * Basic Constructor for a game library
@@ -53,6 +54,7 @@ public class GameLibrary extends GameClient {
         player = player1;
         networkClient = networkClient1;
         responseListener = new LibraryResponseListener();
+        networkClient.addListener(responseListener);
 
         gameList = new ArrayList<Game>();
         loadGameList();
@@ -118,19 +120,9 @@ public class GameLibrary extends GameClient {
 
     /**
      * Get lists of games available to users on the server
-     * @param forceUpdate Force the Game Library
      * @return gameSet
      */
-    private ArrayList<Game> getAvailableGames(boolean forceUpdate) {
-        if (forceUpdate) loadGameList();
-        return getAvailableGames();
-    }
-
-    /**
-     * Get lists of games available to users on the server
-     * @return gameSet
-     */
-    public ArrayList<Game> getAvailableGames() {
+    public List<Game> getAvailableGames() {
         return gameList;
     }
 

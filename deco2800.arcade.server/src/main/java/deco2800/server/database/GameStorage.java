@@ -38,6 +38,8 @@ public class GameStorage {
                         "PRIMARY KEY(gameID))");
             } else {
                 Statement statement = connection.createStatement();
+
+                /* Database was not being initialised properly - this is a hack fix */
                 statement.execute("DROP TABLE GAMES");
                 statement.execute("CREATE TABLE GAMES(gameID INT NOT NULL," +
                         "ID VARCHAR (30) NOT NULL," +
@@ -46,6 +48,8 @@ public class GameStorage {
                         "DESCRIPTION VARCHAR (500) NOT NULL," +
                         "ICONPATH VARCHAR (100)," +
                         "PRIMARY KEY(gameID))");
+
+
                 runScript(connection);
             }
         } catch (SQLException e) {

@@ -16,8 +16,6 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
-import java.util.ArrayList;
-
 /**
  * GDX Screen for List View
  * @author Aaron Hayes
@@ -33,7 +31,7 @@ public class ListScreen implements Screen, LibraryScreen {
      * UI Objects
      */
     private SpriteBatch batch;
-    private ArrayList<Game> games = null;
+    private java.util.List<Game> games = null;
     private Game currentGame;
     private Stage stage;
     private int x = 0;
@@ -232,7 +230,9 @@ public class ListScreen implements Screen, LibraryScreen {
         stage.draw();
         batch.end();
 
-        if (gameSelected) play();
+        if (gameSelected) {
+            play();
+        }
     }
 
     @Override

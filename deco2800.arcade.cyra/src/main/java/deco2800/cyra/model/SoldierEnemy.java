@@ -11,8 +11,8 @@ import deco2800.cyra.world.Sounds;
 public class SoldierEnemy extends Enemy {
 	
 	private static final float SPEED = 11f;
-	private static final float WIDTH = 2f;
-	private static final float HEIGHT = 2f;
+	private static final float WIDTH = 1.25f;
+	private static final float HEIGHT = 1.25f;
 	private static final float GRAVITY = -1.8f;
 	public static final float JUMP_TIME = 0.4f;
 	public static final float JUMP_VELOCITY = 14f;
@@ -393,6 +393,15 @@ public class SoldierEnemy extends Enemy {
 			stateTime = 1f;
 		}*/
 		
+	}
+	@Override
+	public boolean isJumping(){
+		if(state == State.JUMP){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	@Override

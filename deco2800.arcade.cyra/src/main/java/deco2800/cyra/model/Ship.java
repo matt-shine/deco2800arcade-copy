@@ -13,7 +13,7 @@ public class Ship extends MovableEntity{
 	public static final float DASH_SPEED = 13.5f;
 	public static final float JUMP_VELOCITY = 20f;
 	public static final float WIDTH = 1f;
-	public static final float HEIGHT = 1.7f;
+	public static final float HEIGHT = 1.8f;
 	//public static final float WIDTH = 1f;
 	//public static final float HEIGHT = 1f;
 	public static final float MAX_BOUNCEBACK_TIME = 0.06f;
@@ -64,6 +64,15 @@ public class Ship extends MovableEntity{
 	/* ----- Getter methods ----- */
 	public State getState() {
 		return state;
+	}
+	
+	public boolean isWalking(){
+		if(state == State.WALK){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	public boolean isInvincible() {

@@ -6,11 +6,12 @@ import com.badlogic.gdx.utils.Array;
 import java.lang.Math;
 
 public class Zombie extends Enemy {
-	public final static float WIDTH = 2f;
-	public final static float HEIGHT = 2f;
+	public final static float WIDTH = 1f;
+	public final static float HEIGHT = 1f;
 
 	public Zombie(Vector2 pos) {
 		super(1, 0, pos, WIDTH, HEIGHT);
+		System.out.println("IT'S HAPPENING");
 	}
 
 	@Override

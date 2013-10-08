@@ -18,6 +18,10 @@ public abstract class Enemy extends MovableEntity{
 		startingNextScene = false;
 	}
 	
+	public boolean isJumping(){
+			return false;
+	}
+	
 	
 	public float getStateTime() {
 		return stateTime;

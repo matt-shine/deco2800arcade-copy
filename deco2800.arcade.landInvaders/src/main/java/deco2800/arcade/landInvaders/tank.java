@@ -15,18 +15,20 @@ public class tank implements KeyListener {
 	private boolean shotState = false;
 	private boolean Mleft=false;
 	private boolean Mright=false;
+	private String img;
 /**
  * Tank initial starting point
  */
-	public tank() {
+	public tank(String img) {
 		p_x = 370;
 		p_y = 400;
+		this.img= img;
 
 	}
 	// testing
 	public void drawTank(Graphics g, JFrame p) {
 		g.setColor(Color.green);
-		im = new javax.swing.ImageIcon(this.getClass().getResource("/image/tank.png")).getImage();
+		im = new javax.swing.ImageIcon(this.getClass().getResource(img)).getImage();
 		g.drawImage(im,p_x, p_y,40,80,p);
 
 	}

@@ -1,11 +1,9 @@
 package deco2800.arcade.landInvaders;
 
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 import java.util.ArrayList;
-
 
 public class Invaders extends JFrame implements Runnable {
 	JFrame appFrame;
@@ -19,7 +17,6 @@ public class Invaders extends JFrame implements Runnable {
 	private tank tank;
 	private int move;
 	private int direction;
-	private Robot r;
 	private int shotsNmb;
 	private int level;
 	private blockWall blockWall;
@@ -33,33 +30,38 @@ public class Invaders extends JFrame implements Runnable {
 
 		super("Land Invaders");
 		WallList = new ArrayList<blockWall>();
-		WallList.add(new blockWall(180, 350, 4, 8));
-		WallList.add(new blockWall(380, 350, 4, 8));
-		WallList.add(new blockWall(580, 350, 4, 8));
+		setGameImg("/tank/");
 		shotsNmb = 6;
 		level = 1;
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
-		enemyG = new enemyGroup(3, 6);
-		tank = new tank();
+
 		addKeyListener(tank);
 		move = 0;
 		direction = 1;
 		moveDown = false;
-		
-		background = new javax.swing.ImageIcon(this.getClass().getResource("/image/city.jpg")).getImage();
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 
 		mains = bg.getGraphics();
 		mains.drawImage(background, 0, 0, Width, Height, panel);
-		
 
 		setBackground(Color.black);
 		setVisible(true);
 		setSize(Width, Height);
 		startGame();
 
+	}
+
+	public void setGameImg(String type) {
+
+		WallList.add(new blockWall(180, 350, 4, 8, type + "WallD.png"));
+		WallList.add(new blockWall(380, 350, 4, 8, type + "WallD.png"));
+		WallList.add(new blockWall(580, 350, 4, 8, type + "WallD.png"));
+		enemyG = new enemyGroup(3, 6, 50, 83, type + "TankE.png");
+		tank = new tank(type +"TankP.png");
+		background = new javax.swing.ImageIcon(this.getClass().getResource(
+				type + "BGD.png")).getImage();
 	}
 
 	public void startGame() {
@@ -81,7 +83,7 @@ public class Invaders extends JFrame implements Runnable {
 
 		}
 		for (int e = 0; e < WallList.size(); e++) {
-			WallList.get(e).drawWall(mains,this);
+			WallList.get(e).drawWall(mains, this);
 		}
 		enemyG.drawGroup(mains, this);
 		tank.drawTank(mains, this);
@@ -140,7 +142,7 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	public void enemyMove(int count, boolean moveD) {
- 
+
 		if (count % 10 == 0) {
 			if (move == 130) {
 				direction = -1;
@@ -163,11 +165,11 @@ public class Invaders extends JFrame implements Runnable {
 		switch (level) {
 
 		case 1:
-			enemyMove(count, false); 
+			enemyMove(count, false);
 			break;
 		case 2:
 			enemyMove(count, false);
-			levelTwo(count); 
+			levelTwo(count);
 			break;
 		case 3:
 			enemyMove(count, true);
@@ -176,36 +178,37 @@ public class Invaders extends JFrame implements Runnable {
 
 		}
 	}
-	
-	public void levelCheck(){
-		if(enemyG.isEmpty() ==true){
-			if(level != 3){
+
+	public void levelCheck() {
+		if (enemyG.isEmpty() == true) {
+			if (level != 3) {
 				level++;
-			}else{
-				level =1;
+			} else {
+				level = 1;
 			}
-			restart();
-		
+			//restart();
+
 		}
 	}
-	
-	public void restart(){
+
+	/**
+	public void restart() {
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
-		enemyG = new enemyGroup(3, 6);
+		enemyG = new enemyGroup(3, 6, 50, 50, "");
 		tank = new tank();
 		addKeyListener(tank);
 		move = 0;
 		direction = 1;
 		moveDown = false;
 	}
+	*/
 
 	public void levelTwo(int count) {
 
 		Eshots.addAll(enemyG.enemyShot(count));
 
 	}
-
 
 	@Override
 	public void run() {

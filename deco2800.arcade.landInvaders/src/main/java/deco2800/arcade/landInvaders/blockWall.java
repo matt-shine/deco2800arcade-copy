@@ -12,23 +12,23 @@ public class blockWall {
 	private int px;
 	private int py;
 	
-	public blockWall(int px, int py, int rowNum, int rowEnemyNum) {
+	public blockWall(int px, int py, int rowNum, int rowEnemyNum, String img) {
 		this.rowNum = rowNum;
 		this.rowEnemyNum = rowEnemyNum;
 		lists = new enemy[rowNum][rowEnemyNum];
 		this.px=px;
 		this.py=py;
-		createWall();
+		createWall(img);
 		
 
 	}
 
-	public void createWall() {
+	public void createWall(String img) {
 
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(px+i*10, py + n * 10, 10, 10,"/image/brick.jpg");
+				temp[i] = new enemy(px+i*10, py + n * 10, 10, 10,img);
 
 			}
 			lists[n] = temp;

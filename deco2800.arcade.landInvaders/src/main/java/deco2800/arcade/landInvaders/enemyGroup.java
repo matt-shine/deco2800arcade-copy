@@ -13,23 +13,23 @@ public class enemyGroup {
 	private enemy[][] lists;
 	private int shotRow;
 
-	public enemyGroup(int rowNum, int rowEnemyNum) {
+	public enemyGroup(int rowNum, int rowEnemyNum, int EsizeW, int EsizeH, String img) {
 
 		this.rowNum = rowNum;
 		this.rowEnemyNum = rowEnemyNum;
 		shotRow= 1;
 		lists = new enemy[rowNum][rowEnemyNum];
 
-		createGroup();
+		createGroup(img, EsizeW, EsizeH);
 
 	}
 
-	public void createGroup() {
+	public void createGroup(String img ,int EsizeW, int EsizeH) {
 
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(100 + i * 100, 100 + n * 40, 30, 30,"/image/flies.png");
+				temp[i] = new enemy(100 + i * 100, 100 + n * 40, EsizeW, EsizeH, img);
 
 			}
 			lists[n] = temp;

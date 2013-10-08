@@ -43,10 +43,10 @@ public class Pacman extends GameClient {
 	private SpriteBatch batch;
 	private ShapeRenderer shaper;
 	private PacChar player;
-	
+	private Ghost blinky;
 	//takes keyboard input
 
-	private Ghost blinkyController;
+	
 	private InputProcessor controller;
 	private GameMap map1;
 	private ArrayList<char[]> map1Array;
@@ -129,6 +129,7 @@ public class Pacman extends GameClient {
 		gameMap.createTiles(gameMap.readMap(file));
 		//initialise pacman
 		player = new PacChar(gameMap);
+		blinky = new Ghost(gameMap);
 		//initialise receiver for input- use the multiplexer from Arcade
 
 		// because overlay group said to in log messages
@@ -216,6 +217,7 @@ public class Pacman extends GameClient {
 			player.setCurrentState(PacState.IDLE);
 		}
 	    player.render(batch);
+	    blinky.render(batch);
 	    //end the drawing
 	    batch.end();
 	    

@@ -56,6 +56,7 @@ public class ForumUi {
 	      textField.setBounds(769, 74, 116, 22);
 	      f.getContentPane().add(textField);
 	      textField.setColumns(10);
+
 	      //Body
 	      JTextArea textArea = new JTextArea();
 	      textArea.setBackground(new Color(192, 192, 192));

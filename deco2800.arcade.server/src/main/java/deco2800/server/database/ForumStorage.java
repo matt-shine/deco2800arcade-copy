@@ -32,18 +32,14 @@ import deco2800.arcade.model.forum.ParentThread;
  * @see java.sql
  */
 public class ForumStorage {
+	/**
+	 * TODO Test child thread methods
+	 * TODO Add listener and protocol.
+	 */
 	/* Fields */
 	private boolean initialized = false;
 	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
-
-	/**
-	 * Return initialized flag
-	 * 
-	 * @return boolean, initialized flag
-	 */
-	public boolean getInitialized() {
-		return this.initialized;
-	}
+	private static final String TAG_SPLITTER = "#";
 	
 	/**
 	 * Return initialized flag
@@ -906,9 +902,12 @@ public class ForumStorage {
 	private String getTagsString(String[] tags) {
 		StringBuilder result = new StringBuilder();
 		for (int i = 0; i < tags.length; i++) {
-			result += tags[i];
-			result += "#";
-		return result;
+			result.append(tags[i]);
+			if (i != (tags.length - 1)) {
+				result.append("#");
+			}
+		}
+		return new String(result);
 	}
 	
 	private String[] getTagsArray(String tags) {

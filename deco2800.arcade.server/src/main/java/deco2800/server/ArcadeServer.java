@@ -142,6 +142,14 @@ public class ArcadeServer {
 	}
 	
 	/**
+	 * Get access to the forum storage.
+	 * @return ForumStorage instance
+	 */
+	public ForumStorage getForumStorage() {
+		return this.forumStorage;
+	}
+	
+	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
@@ -168,11 +176,9 @@ public class ArcadeServer {
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
-
 			achievementStorage.initialise();
-			highscoreDatabase.initialise();
-			//highscoreDatabase.initialise();
-
+			highscoreDatabase.initialise();          
+			achievementStorage.initialise();
 			this.forumStorage.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block

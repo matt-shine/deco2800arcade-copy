@@ -19,6 +19,7 @@ import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
 import deco2800.arcade.protocol.game.*;
+import deco2800.arcade.protocol.forum.*;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
@@ -35,11 +36,6 @@ import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 import deco2800.arcade.protocol.forum.ForumTestRequest;
 import deco2800.arcade.protocol.forum.ForumTestResponse;
-import deco2800.arcade.protocol.game.GameRequestType;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
-import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
-import deco2800.arcade.protocol.game.NewGameRequest;
-import deco2800.arcade.protocol.game.NewGameResponse;
 
 public class Protocol {
 	
@@ -107,15 +103,11 @@ public class Protocol {
 		kryo.register(NewGameRequest.class);
 		kryo.register(GameRequestType.class);
 		kryo.register(NewGameResponse.class);
-<<<<<<< HEAD
         kryo.register(GameLibraryRequest.class);
         kryo.register(GameLibraryResponse.class);
         kryo.register(Game.class);
         kryo.register(Icon.class);
-		
-=======
 
->>>>>>> Delete unremoved git diff comment
 		// Communication messages
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
@@ -129,12 +121,9 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
-<<<<<<< HEAD
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
-=======
->>>>>>> Delete unremoved git diff comment
 		
 		// Forum Protocols
 		kryo.register(ForumTestResponse.class);

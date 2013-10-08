@@ -188,7 +188,7 @@ public class ParentThread {
 		
 		return result;
 	}
-	
+
 	/**
 	 * Return string of tags which is separated by ';'.
 	 * Note; getTags() returns string array.

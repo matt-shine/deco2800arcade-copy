@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.User;
+import deco2800.arcade.model.forum.ForumUser;
 import deco2800.arcade.model.forum.ChildThread;
 import deco2800.arcade.model.forum.ParentThread;
 
@@ -290,7 +290,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				result = new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
-						, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
+						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
 						, rs.getString("tags"), rs.getInt("vote"));
 			} else {
 				result = null;
@@ -335,7 +335,7 @@ public class ForumStorage {
 				for (String temp : tag_array) {
 					if (temp.equals(tag)) {
 						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
-								, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp"), rs.getString("category")
+								, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
 								, rs.getString("tags"), rs.getInt("vote")));
 					}
 				}
@@ -411,7 +411,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				ParentThread pThread = new ParentThread(rs.getInt("pid"), rs.getString("topic")
-						, rs.getString("message"), new User(rs.getInt("created_by")), rs.getTimestamp("timestamp")
+						, rs.getString("message"), new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp")
 						, rs.getString("category"), rs.getString("tags"), rs.getInt("vote"));
 				result.add(pThread);
 			}
@@ -456,7 +456,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			if (rs.next()) {
 				result = new ChildThread(rs.getInt("cid"), rs.getString("message")
-						, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp") 
+						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp") 
 						, rs.getInt("vote"));
 			} else {
 				result = null;
@@ -523,7 +523,7 @@ public class ForumStorage {
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
 				ChildThread temp = new ChildThread(rs.getInt("cid"), rs.getString("message")
-						, new User(rs.getInt("created_by")), rs.getTimestamp("timestamp") 
+						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp") 
 						, rs.getInt("vote"));
 				result.add(temp);
 			}

@@ -16,7 +16,7 @@ public class ChildThread {
 	/* Fields */
 	private int id;
 	private String message;
-	private User createdBy;
+	private ForumUser createdBy;
 	private Timestamp timestamp;
 	private int like;
 	
@@ -25,13 +25,13 @@ public class ChildThread {
 	 * 
 	 * @param id, a non negative integer of the child thread's id
 	 * @param message, string of thread's content
-	 * @param createdBy, Player Instance
+	 * @param createdBy, ForumUser Instance
 	 * @param timestamp, Timestamp Instance specified in SQL Timestamp
 	 * @param like, an incrementing non negative integer
 	 * @require params != null, except like
 	 * @require id >= 0 
 	 */
-	public ChildThread(int id, String message, User createdBy, Timestamp timestamp, int like) {
+	public ChildThread(int id, String message, ForumUser createdBy, Timestamp timestamp, int like) {
 		this.id = id;
 		this.message = message;
 		this.createdBy = createdBy;
@@ -59,7 +59,7 @@ public class ChildThread {
 	 * Return the user of the created thread
 	 * @return Player instance
 	 */
-	public User getCreatedBy() {
+	public ForumUser getCreatedBy() {
 		return this.createdBy;
 	}
 	
@@ -86,7 +86,7 @@ public class ChildThread {
 		sd.append(": ");
 		sd.append(this.message);
 		sd.append(", created by ");
-		sd.append(this.createdBy.getID());
+		sd.append(this.createdBy.toString());
 		sd.append(", on ");
 		sd.append(this.timestamp.toString());
 		sd.append(", vote=");

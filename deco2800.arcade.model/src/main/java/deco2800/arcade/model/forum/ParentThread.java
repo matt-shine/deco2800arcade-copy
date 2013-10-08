@@ -21,7 +21,7 @@ public class ParentThread {
 	private int id;
 	private String topic;
 	private String message;
-	private User createdBy;
+	private ForumUser createdBy;
 	private Timestamp timestamp;
 	private String category;
 	private String[] tags;
@@ -42,7 +42,7 @@ public class ParentThread {
 	 * @see	java.sql.Timestamp
 	 */
 	public ParentThread(int id, String topic, String message,
-			User createdBy, Timestamp timestamp, String category,
+			ForumUser createdBy, Timestamp timestamp, String category,
 			String tagString, int vote) {
 		this.id = id;
 		this.topic = topic;
@@ -86,7 +86,7 @@ public class ParentThread {
 	 * 
 	 * @return	User, user who created the parent thread
 	 */
-	public User getCreatedBy() {
+	public ForumUser getCreatedBy() {
 		return this.createdBy;
 	}
 	
@@ -158,63 +158,7 @@ public class ParentThread {
 		return String.format("%d: %s, %s createdBy %s on %s as %s as %s with %d votes"
 				, this.id, this.topic, this.message, this.createdBy.toString()
 				, this.timestamp.toString(), this.category, this.getTagsString(), this.vote);
-	}
-	
-	@Override
-	/**
-	 * Return true if the parameter object is equivalent to this.instance
-	 * 
-	 * @return	boolean, true if equals
-	 */
-	public boolean equals(Object pThread) {
-		if (pThread == null) {
-			return false;
-		}
-		if (!(pThread instanceof ParentThread)) {
-			return false;
-		}
-		if (!(this.toString().equals(((ParentThread)pThread).toString()))) {
-			return false;
-		}
-		
-		return true;
-	}
-
-	/**
-	 * Create a parent thread from DB retrieved data
-	 */
-	public static ParentThread getParentThread(int id) {
-		ParentThread result = null;
-		
-		return result;
-	}
-
-	/**
-	 * Return string of tags which is separated by ';'.
-	 * Note; getTags() returns string array.
-	 * 
-	 * @return string, tags with ';' as separator.
-	 */
-	public String getTagsString() {
-		String result = "";
-		for (int i = 0; i < this.tags.length; i++) {
-			result.concat(this.tags[i]);
-			result.concat(";");
-		}
-		return result;
-	}
-	
-	@Override
-	/**
-	 * Return human-readable string representation of ParentThread instance
-	 * 
-	 * @return	string
-	 */
-	public String toString() {
-		return String.format("%d: %s, %s createdBy %s on %s as %s as %s"
-				, this.id, this.topic, this.message, this.createdBy.getName()
-				, this.timestamp.toString(), this.category, this.getTagsString());
-	}
+	}	
 	
 	@Override
 	/**

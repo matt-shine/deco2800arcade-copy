@@ -5,6 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 
+import deco2800.arcade.pacman.PacChar.Dir;
 import deco2800.arcade.pacman.PacChar.PacState;
 
 /**
@@ -16,64 +17,88 @@ import deco2800.arcade.pacman.PacChar.PacState;
 public class PacController implements InputProcessor {
 
 	private PacChar player;
-	private List<Collideable> colList;
+	private GameMap gameMap;
+	private String test = "";
 	
-	public PacController(PacChar player, List<Collideable> colList) {
+	public PacController(PacChar player, GameMap gameMap) {
 		this.player = player;
-		this.colList = colList;
+		this.gameMap = gameMap;
 	}
 	
-	private void checkCollisions() {
-		//check collisions here, using x,y,width, height against the two walls
-		// variables are left, right, top, bottom
-		int pl = player.getX();
-		int pb = player.getY();
-		int pt = player.getHeight() + pb;
-		int pr = player.getWidth() + pl;
-	    for (int i=1; i < colList.size(); i++) {
-	    	Collideable c = colList.get(i);
-	    	int cl = c.getX();
-	    	int cb = c.getY();
-	    	int cr = cl + c.getWidth();
-	    	int ct = cb + c.getHeight();
-	    	if ((pl < cl && pr >= cl) || (pr > cr && pl <= cr) || (pb < cb && pt >= cb) || (pt > ct && pb <= ct)) {
-	    		//set pacman's state to idle so he stops moving
-	    		player.setCurrentState(PacState.IDLE);
-	    		System.out.println("COLLISION DETECTED!");
-	    		return;
-	    	}
-	    }
-	}
-	
+		
 	@Override
 	public boolean keyDown(int key) {
-		int facing;
+		Dir facing;
 		//move based on key pressed
 		if (key == Keys.RIGHT) {
-			facing = 1;
+			facing = Dir.RIGHT;
 		} else if (key == Keys.LEFT){
-			facing = 2;
+			facing = Dir.LEFT;
 		} else if (key == Keys.UP) {
-			facing = 3;
+			facing = Dir.UP;
 		} else if (key == Keys.DOWN){ 
-			facing = 4;	
+			facing = Dir.DOWN;	
 		} else if (key == Keys.ENTER) {
-			facing = 5;			
+			facing = Dir.TEST;			
 		} else {
 			// if not one of the arrow keys
 			return false;
 		}
 		// check for collisions
-		checkCollisions();
-		
-		//set facing and state
+		Tile pTile = player.getTile();
+		Dir tempFacing = player.getFacing();
 		player.setFacing(facing);
-		if (player.getCurrentState().equals(PacState.IDLE)) {
-			player.setCurrentState(PacState.MOVING);	
-		}		
+		System.out.println("Can pacman move? " + checkNoWallCollision(pTile));
+		if (checkNoWallCollision(pTile)) {
+			player.setCurrentState(PacState.MOVING);
+		} else {
+			player.setCurrentState(PacState.IDLE);
+			//stops pacman changing facing if he can't move in that direction			
+			player.setFacing(tempFacing);
+		}
+		//checkGhostCollision(pTile);			
 		return true;
 	}
 
+	private void checkGhostCollision(Tile pTile) {	
+		List<Mover> colList = pTile.getMovers();
+		if (colList.size() > 1) {
+			for (int i=0; i < colList.size(); i++) {
+				if (colList.get(i).getClass() == Ghost.class) {
+					System.out.println("Pacman hit a ghost!");
+					//TODO some death thing
+					player.setCurrentState(PacState.DEAD);
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * Checks if the proposed movement will make pacman hit a wall
+	 * Returns true if he can move and false if he can't
+	 */
+	public boolean checkNoWallCollision(Tile pTile) {
+		int x = gameMap.getTilePos(pTile).getX();
+		int y = gameMap.getTilePos(pTile).getY();
+		Tile[][] grid = gameMap.getGrid();
+		//System.out.println(x + ", " + y);
+		switch(player.getFacing()) {
+		case LEFT: x -= 1; break;
+		case RIGHT: x += 1; break;
+		case UP: y += 1; break;
+		case DOWN: y -= 1; break;
+		case TEST: break;
+		}		
+		if (!test.equals(player + " wants to move to " + grid[x][y] + 
+				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
+			test = player + " wants to move to " + grid[x][y] + 
+					" allowed=" + (grid[x][y].getClass() != WallTile.class);
+			System.out.println(test);
+		}
+		return grid[x][y].getClass() != WallTile.class;
+	}
+	
 	@Override
 	public boolean keyTyped(char arg0) {
 		// TODO Auto-generated method stub

@@ -1,6 +1,5 @@
 package deco2800.arcade.pacman;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,15 +7,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -27,9 +24,6 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.pacman.PacChar.PacState;
-
-
-
 
 //note: no 'implements ApplicationListener is relevant anywhere in our program,
 // as GameClient extends Game which implements it. As far as I can tell
@@ -49,8 +43,9 @@ public class Pacman extends GameClient {
 	private SpriteBatch batch;
 	private ShapeRenderer shaper;
 	private PacChar player;
-	private GhostChar blinky;
+	
 	//takes keyboard input
+
 	private Ghost blinkyController;
 	private InputProcessor controller;
 	private GameMap map1;
@@ -59,8 +54,15 @@ public class Pacman extends GameClient {
 	
 	private List<ArrayList<Tile>> map;
 	
-	private List<Collideable> colList;	
 	
+	
+
+	
+	private GameMap gameMap;
+	private BitmapFont scoreText; 
+
+
+
 	//not used yet
 	//private NetworkClient networkClient;
 	
@@ -110,20 +112,11 @@ public class Pacman extends GameClient {
 			public void show() {
 
 			}			
-        });   
-        
-        
-		super.create();	
-		
-		//create map which is a grid of tiles
-		map = new ArrayList<ArrayList<Tile>>();
-		
-		// Just use a set file for the time being!
+        });           
+		super.create();			
+		// level map file
 		String file = "levelMap.txt";
-		//initialise collision list
-		colList = new ArrayList<Collideable>();
-		// this guy doesn't show up either. 
-		logger.info("Hey, I'm a log message");
+
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
@@ -131,21 +124,22 @@ public class Pacman extends GameClient {
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
 		shaper = new ShapeRenderer();
+		//initialise gamemap
+		gameMap = new GameMap(450, 100);
+		gameMap.createTiles(gameMap.readMap(file));
 		//initialise pacman
-//		player = new PacChar(colList);
-//		testWall = new Wall(colList, 1, 350, 350, 25);
-//		testWall2 = new Wall(colList, 2, 350, 350, 25);
-//		System.out.println(colList.toString());
+		player = new PacChar(gameMap);
 		//initialise receiver for input- use the multiplexer from Arcade
+
 		// because overlay group said to in log messages
-		controller = new PacController(player, colList);
-		blinkyController = new Ghost(blinky, colList);
+		
+		
+
+		controller = new PacController(player, gameMap);
+
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
-		gameState = GameState.READY;
-		map1 = new GameMap();
-		map1Array = map1.readMap(file);
-		map1.createTiles(map1Array);
+		gameState = GameState.READY;		
 	}
 	
 	/**
@@ -163,6 +157,7 @@ public class Pacman extends GameClient {
 	}
 	
 	private void makeChanges() {
+		
 		 // Respond to user input depending on the game state
 	    switch(gameState) {	    
 	    //TODO BLARH apparently this commented bit of code isn't even being reached
@@ -197,7 +192,7 @@ public class Pacman extends GameClient {
 	public void render() {	
 		//FIXME big method
 		//make changes to location of object etc, then draw
-		makeChanges();
+		//makeChanges();
 		
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -209,26 +204,39 @@ public class Pacman extends GameClient {
 	    shaper.setProjectionMatrix(camera.combined);
 	    // start the drawing
 	    batch.begin();
-	    map1.render(batch);
-	    // render player pacman 
-//	    player.render(batch);
+	    gameMap.render(batch);
+	    
+	    //testing bitmap text print
+//	    scoreText.setColor(Color.WHITE);
+//	    scoreText.draw(batch, "Pacman!", 10, 10);
+	    
+	    // check if pacman is trying to move into a wall
+	    // this stops him even if no key is pressed
+	    if (!controller.checkNoWallCollision(player.getTile())) {
+			player.setCurrentState(PacState.IDLE);
+		}
+	    player.render(batch);
 	    //end the drawing
 	    batch.end();
-	    //initialise walls and draw them 
-	    // note, this method only allows single pixel width lines, as far as I can tell.
-	    // shouldn't be super difficult to make them thicker, but will need a different approach 
-	    // (filled shapes probably)	    
+	    
+	    //currently ShapeRenderer not being used
 	    shaper.begin(ShapeType.Line);
-//	    testWall.render(shaper);
-//	    testWall2.render(shaper);
-		//map1.drawMap(colList, map1Array, shaper);
-	     
 	    shaper.end();
 	    //do any stuff the superclass normally does for rendering
-		super.render();
-		
+		super.render();		
 	}
 	
+	/**
+	 * Displays the score of the current Mover.
+	 * When support for multiple player-controlled movers is implemented, printing
+	 * will have to occur in different positions.
+	 */
+	public void displayScore(Mover mover) {
+		batch.begin();
+		scoreText.setColor(Color.WHITE);
+		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
+		batch.end();
+	}
 	
 	private void startGame() {	
 		logger.debug("Game is now running");		
@@ -250,12 +258,12 @@ public class Pacman extends GameClient {
 	static {
 			game = new Game();
 			game.id = "Pacman";
-			game.name = "Pac man";
-			game.description = "An implementation of the classic arcade game Pac "
+			game.name = "Pacman";
+			game.description = "An implementation of the classic arcade game Pac-"
 			+ "man." + System.getProperty("line.separator") + "Still in progress- additional " + 
-			"features may be added later. Note: currently only displays blank screen";
+			"features may be added later.";
 			// game.icon- to be added later once the icon part is fully implemented
-		} //System.getProperty("line.separator")
+		} 
 	
 	public Game getGame() {
 		return game;

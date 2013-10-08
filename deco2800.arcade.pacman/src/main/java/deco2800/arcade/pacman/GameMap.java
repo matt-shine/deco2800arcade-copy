@@ -3,6 +3,9 @@ package deco2800.arcade.pacman;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.lwjgl.util.Point;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -15,10 +18,18 @@ public class GameMap {
 	private boolean vsym;
 	private Tile[][] grid; //game map
 	private List<WallTile> ghostDoors; //list of ghost doors for ghosts to access
+	private Tile pacStart; //the right starting tile for pacman (appears on two tiles)
+	private Tile fruitRight; // the right tile that fruit appears on
+	private int hOffset;
+	private int vOffset;
+	private int side;
 	
-	public GameMap() {
+	public GameMap(int hOffset, int vOffset) {
 		vsym = false;
 		ghostDoors = new ArrayList<WallTile>();
+		this.hOffset = hOffset;
+		this.vOffset = vOffset;
+		side = Tile.getSideLength();		
 	}
 	
 
@@ -93,6 +104,10 @@ public class GameMap {
 			case 'L': replacer = "J"; break;
 			case 'K': replacer = "M"; break;
 			case 'M': replacer = "K"; break;
+			// r is left tile fruit starts on
+			// s is left tile pacman starts on
+			case 'r': replacer = " "; break;
+			case 's': replacer = " "; break;
 			}
 			if (replacer !=  null) {
 				reverse.replace(i, i+1, replacer);
@@ -119,9 +134,9 @@ public class GameMap {
 				Tile square;
 				char type = line[i];
 				if (type == 'p' || type == 'P') {
-					square = new DotTile(type);
+					square = new DotTile(this, type);
 				} else if (type == 'T') {
-					square = new TeleportTile();
+					square = new TeleportTile(this);
 					//set up teleport targeting between two most recently
 					//made tiles
 					if (target != null) {
@@ -132,25 +147,34 @@ public class GameMap {
 						target = square;
 					}
 				} else if (type == ' ' || type == 'r' || type == 's'){
-					square = new Tile();
+					square = new Tile(this);
+					if (type == 'r') {
+						fruitRight = square;
+					} else if (type == 's'){
+						pacStart = square;
+					}
 				} else {
-					square = new WallTile(type);
+					square = new WallTile(this, type);
 					// if it's a ghost door, add it to the list
 					if (type == 'Q') {
 						ghostDoors.add((WallTile) square);
 					}
 				}
 				grid[i][lineNum] = square;
+				//square.setGridPos(new Point(i, lineNum));
 			}
 		}
+//		for (Tile[] a: grid) {
+//			for (Tile t: a) {
+//				System.out.println(t);
+//			}
+//			System.out.println();
+//		}
 	}
 	
 	public void render(SpriteBatch batch) {
 		//should do some fancy stuff to position pacman grid in middle of screen horizontally
-		//instead of what I've done here with just setting them to a value I picked
-		int hOffset = 300;
-		int vOffset = 100;
-		int side = Tile.getSideLength();
+		//instead of what I've done here with just setting them to a value I picked		
 		for (int x = 0; x < grid.length; x++) {
 			for (int y = 0; y < grid[x].length; y++) {
 				grid[x][y].render(batch, hOffset + x*side, vOffset + y*side);
@@ -160,6 +184,74 @@ public class GameMap {
 
 	public List<WallTile> getGhostDoors() {
 		return ghostDoors;
+	}
+
+	public Tile getPacStart() {
+		return pacStart;
+	}
+
+	public Tile getFruitLeft() {
+		return fruitRight;
+	}
+	
+	/**
+	 *  Returns the coordinates of the bottom left corner of the tile
+	 *  @param the position of the tile in the grid
+	 */
+	public Point getTileCoords(Tile tile) {
+		Point xy = getTilePos(tile);
+		return new Point(hOffset + xy.getX()*side, vOffset + xy.getY()*side);
+	}
+	
+	/**
+	 * Returns the tile the middle pixel of the mover is currently in
+	 * Returns null if the mover is not in a tile (shouldn't happen)
+	 */
+	public Tile findMoverTile(Mover mover) {
+		int x = mover.getMidX();
+		int y = mover.getMidY();
+		int side = Tile.getSideLength();
+		for (int i = 0; i < grid.length; i++) {
+			int tileX = getTileCoords(grid[i][0]).getX();
+			if (x > tileX && x <= tileX + side) {
+				for (int j = 0; j < grid[i].length; j++) {
+					int tileY = getTileCoords(grid[i][j]).getY(); 
+					if (y > tileY && y <= tileY + side) {
+						return grid[i][j];
+					}
+				}
+			}			
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns the position of the tile in the grid
+	 * Returns null if the tile is not in the grid (shouldn't happen)
+	 */
+	public Point getTilePos(Tile tile) {
+		for (int x = 0; x < grid.length; x++) {
+			for (int y = 0; y < grid[x].length; y++) {
+				if (tile == grid[x][y]) {
+					return new Point(x, y);
+				}
+			}
+		}
+		return null;
+	}
+
+	public Tile[][] getGrid() {
+		return grid;
+	}
+
+
+	public int getHOffset() {
+		return hOffset;
+	}
+
+
+	public int getVOffset() {
+		return vOffset;
 	}
 
 }

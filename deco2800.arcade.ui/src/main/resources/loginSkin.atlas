@@ -3,58 +3,142 @@ loginSkin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-textfield
+menuBar
   rotate: false
-  xy: 1, 448
-  size: 400, 47
-  orig: 400, 47
+  xy: 1, 7544
+  size: 8003, 283
+  orig: 8003, 283
   offset: 0, 0
   index: -1
-AeroviasBrasil28
+overlayPopUp
   rotate: false
-  xy: 1, 318
-  size: 256, 128
-  orig: 256, 128
+  xy: 1, 3032
+  size: 2220, 4510
+  orig: 2220, 4510
   offset: 0, 0
   index: -1
-Manteka18
+iconBlue_plus
   rotate: false
-  xy: 1, 188
-  size: 256, 128
-  orig: 256, 128
+  xy: 2223, 5228
+  size: 2315, 2314
+  orig: 2315, 2314
+  offset: 0, 0
+  index: -1
+iconGreen_plus
+  rotate: false
+  xy: 4540, 5228
+  size: 2315, 2314
+  orig: 2315, 2314
+  offset: 0, 0
+  index: -1
+iconMagenta_plus
+  rotate: false
+  xy: 1, 716
+  size: 2315, 2314
+  orig: 2315, 2314
+  offset: 0, 0
+  index: -1
+iconBlue
+  rotate: false
+  xy: 2223, 3528
+  size: 1699, 1698
+  orig: 1699, 1698
+  offset: 0, 0
+  index: -1
+iconGreen
+  rotate: false
+  xy: 3924, 3528
+  size: 1699, 1698
+  orig: 1699, 1698
+  offset: 0, 0
+  index: -1
+iconMagenta
+  rotate: false
+  xy: 5625, 3528
+  size: 1699, 1698
+  orig: 1699, 1698
+  offset: 0, 0
+  index: -1
+overlayButton
+  rotate: false
+  xy: 1, 631
+  size: 2220, 83
+  orig: 2220, 83
   offset: 0, 0
   index: -1
 buttonRed
   rotate: false
-  xy: 1, 125
-  size: 200, 61
-  orig: 200, 61
+  xy: 2223, 3154
+  size: 1230, 372
+  orig: 1230, 372
   offset: 0, 0
   index: -1
 buttonGreen
   rotate: false
-  xy: 1, 63
-  size: 200, 60
-  orig: 200, 60
+  xy: 1, 259
+  size: 1230, 370
+  orig: 1230, 370
   offset: 0, 0
   index: -1
 buttonGrey
   rotate: false
+  xy: 3455, 3156
+  size: 1230, 370
+  orig: 1230, 370
+  offset: 0, 0
+  index: -1
+CenturyGothic20Bold
+  rotate: false
+  xy: 6857, 7286
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+SFAtarianSystem24
+  rotate: false
   xy: 1, 1
-  size: 200, 60
-  orig: 200, 60
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+textbox
+  rotate: false
+  xy: 2223, 3105
+  size: 400, 47
+  orig: 400, 47
+  offset: 0, 0
+  index: -1
+Manteka18
+  rotate: false
+  xy: 1233, 501
+  size: 256, 128
+  orig: 256, 128
+  offset: 0, 0
+  index: -1
+checkbox_checked
+  rotate: false
+  xy: 8006, 7763
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+checkbox_unchecked
+  rotate: false
+  xy: 2223, 650
+  size: 64, 64
+  orig: 64, 64
   offset: 0, 0
   index: -1
 cursor
   rotate: false
-  xy: 403, 493
+  xy: 4687, 3524
   size: 1, 2
   orig: 1, 2
   offset: 0, 0
   index: -1
 selection
   rotate: false
-  xy: 259, 445
+  xy: 6857, 7283
   size: 1, 1
   orig: 1, 1
   offset: 0, 0

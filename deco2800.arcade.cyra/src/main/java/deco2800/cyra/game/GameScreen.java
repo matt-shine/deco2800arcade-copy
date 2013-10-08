@@ -1,7 +1,6 @@
 package deco2800.cyra.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import deco2800.cyra.world.ParallaxCamera;
 import deco2800.cyra.world.World;
@@ -22,9 +21,7 @@ public class GameScreen extends AbstractScreen {
 		ParallaxCamera cam = new ParallaxCamera(width, height);
 		world = new World(game, level, cam);
 		render = new WorldRenderer(world, cam);
-		
-		
-		
+
 	}
 	
 	public void render(float delta) {

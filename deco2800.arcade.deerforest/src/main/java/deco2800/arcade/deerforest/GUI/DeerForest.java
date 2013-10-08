@@ -18,6 +18,7 @@ import deco2800.arcade.deerforest.models.cards.*;
 import deco2800.arcade.deerforest.models.effects.SpellEffect;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 import deco2800.arcade.deerforest.models.gameControl.DeerForestPlayer;
+import deco2800.arcade.deerforest.models.gameControl.DeckSystem;
 /**
  * A card game for use in the Arcade
  * @author deerforest
@@ -32,9 +33,9 @@ public class DeerForest extends GameClient {
 	MainMenu mainMenu;
 	MainMenuInputProcessor menuInputProcessor;
 	MainInputProcessor inputProcessor;
-	DeckBuilder deckBuilder;
-	DeckBuilderScreen deckBuilderView;
-	DeckBuilderInputProcessor deckInputProcessor;
+	static DeckBuilder deckBuilder;
+	static DeckBuilderScreen deckBuilderView;
+	static DeckBuilderInputProcessor deckInputProcessor;
 	
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
@@ -57,7 +58,8 @@ public class DeerForest extends GameClient {
 		inputProcessor = new MainInputProcessor(mainGame, view);
 		
 		// Setup deck-builder
-		deckBuilder = new DeckBuilder(null);
+		DeckSystem deck = new DeckSystem(createDeerForestPlayer().getDeck(), createDeerForestPlayer().getDeck());
+		deckBuilder = new DeckBuilder(deck);
 		deckBuilderView = new DeckBuilderScreen(deckBuilder);
 		deckInputProcessor = new DeckBuilderInputProcessor(deckBuilder, deckBuilderView);
         

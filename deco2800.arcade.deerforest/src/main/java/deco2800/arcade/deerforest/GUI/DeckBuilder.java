@@ -16,7 +16,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
-import deco2800.arcade.deerforest.models.gameControl.GameSystem;
+import deco2800.arcade.deerforest.models.gameControl.DeckSystem;
+
+
 
 //This class functions as sort of a higher level game system controller
 //As well as (most importantly) being an instance of a game (according to Gdx)
@@ -25,16 +27,9 @@ public class DeckBuilder extends Game {
 
 	SpriteBatch batch;
 	BitmapFont font;
-	final private GameSystem model;
-    private Music bgLoop;
-    private Sound battleSoundEffect;
-    private Sound phaseSoundEffect;
-    private boolean effectsMuted;
-    private boolean musicMuted;
-    private final boolean muted = false;
-
+	final private DeckSystem model;
 	
-	public DeckBuilder(GameSystem model) {
+	public DeckBuilder(DeckSystem model) {
 		this.model = model;
 	}
 	
@@ -59,10 +54,14 @@ public class DeckBuilder extends Game {
 	public void dispose() {
 		batch.dispose();
 		font.dispose();
-        bgLoop.dispose();
+
 	}
 	
-	public GameSystem getModel() {
+	public CardCollection getCardCollection(String area) {
+		return model.getCardCollection(area);
+	}
+	
+	public DeckSystem getModel() {
 		return this.model;
 	}
 	

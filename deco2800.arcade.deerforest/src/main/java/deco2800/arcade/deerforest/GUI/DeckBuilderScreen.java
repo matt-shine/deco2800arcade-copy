@@ -13,43 +13,74 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 
+import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
+
 
 public class DeckBuilderScreen implements Screen {
 	
-	private ShapeRenderer shapeRenderer;
-	
 	private final DeckBuilder deckBuilder;
 	private OrthographicCamera camera;
-	private Map<String, Map<Rectangle, ExtendedSprite>> all;
+	private ShapeRenderer shapeRenderer;
+	private Map<String, Map<Rectangle, BuilderSpriteLogic>> all;
+	
 	AssetManager manager;
 
 	//assets
-	private Map<String, Set<ExtendedSprite>> spriteMap;
+	private Map<String, Set<BuilderSpriteLogic>> spriteMap;
 	private BuilderArena arena;
 
+	/**
+	 * Initialises DeckBuilderScreen
+	 * 
+	 * @param DeckBuilder builder
+	 */
 	public DeckBuilderScreen(final DeckBuilder dec) {
 		this.deckBuilder = dec;
 	    
-		//initialise shapeRender / glowSize
-		shapeRenderer = new ShapeRenderer();
-		
 		//create the camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, getWidth(), getHeight());
+				
+		//initialise shapeRender
+		shapeRenderer = new ShapeRenderer();
+		
+		
 		
 		//load some assets
 		manager = new AssetManager();
 		loadAssets();
 		manager.finishLoading();
 		
+		//initialises the areana
 		arena = new BuilderArena(manager.get("DeerForestAssets/builderBackground.png", Texture.class));
+		
+		//create map of sprites
+		spriteMap = new HashMap<String, Set<BuilderSpriteLogic>>();
+		
+		spriteMap.put("Card", new HashSet<BuilderSpriteLogic>());
+	    spriteMap.put("Deck", new HashSet<BuilderSpriteLogic>());
+	    spriteMap.put("Zoom", new HashSet<BuilderSpriteLogic>());
 		
 	}
 
+	/**
+	 * Loads images used
+	 */
 	private void loadAssets() {
 		manager.load("DeerForestAssets/builderBackground.png", Texture.class);
+		CardCollection deck = deckBuilder.getModel().deck;
+        deck.addAll(deckBuilder.getModel().deck);
+        ArrayList<AbstractCard> decks = new ArrayList<AbstractCard>(deck);
+        for(AbstractCard card : decks) {
+            manager.load(card.getPictureFilePath(), Texture.class);
+        }
 	}
 	
+	
+	/**
+	 * Overrides the render function - draws the screen
+	 */
 	@Override
 	public void render(float delta) {
 		
@@ -69,12 +100,18 @@ public class DeckBuilderScreen implements Screen {
 
 	    // Print menu text
 		arena.draw(deckBuilder.batch);
+		
+		for(String key : spriteMap.keySet()) {
+	    	for(BuilderSpriteLogic s : spriteMap.get(key)) {
+                    s.draw(deckBuilder.batch);
+		    }
+	    }
 
 	    deckBuilder.batch.end();
 	    
-	    Map<String, Map<Rectangle, ExtendedSprite>> map = BuilderArena.getMap();
+	    Map<String, Map<Rectangle, BuilderSpriteLogic>> map = BuilderArena.getMap();
 	    
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	   /* shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
 	    for (String key : map.keySet()) {
 	    	for(Rectangle r : map.get(key).keySet()) {
@@ -87,7 +124,7 @@ public class DeckBuilderScreen implements Screen {
 	    		}
 	    	}
 	    }
-	    shapeRenderer.end();
+	    shapeRenderer.end();*/
 	}
 	
 
@@ -107,6 +144,12 @@ public class DeckBuilderScreen implements Screen {
 
 	}
 
+	/**
+	 * Resizes the screen
+	 * 
+	 * @param x width
+	 * @param y height
+	 */
 	@Override
 	public void resize(int x, int y) {
 		arena.resize(x, y);
@@ -123,13 +166,24 @@ public class DeckBuilderScreen implements Screen {
 
 	}
 
-	public Map<String, Set<ExtendedSprite>> getSpriteMap() {
+	/**
+	 * Gets a list of all the sprites
+	 * 
+	 * @return spriteMap
+	 */
+	public Map<String, Set<BuilderSpriteLogic>> getSpriteMap() {
 		return spriteMap;
 	}
 	
+	/**
+	 * Returns the arena
+	 * 
+	 * @return arena
+	 */
 	public BuilderArena getArena() {
 		return arena;
 	}
+	
 	
 	public int getWidth() {
 		return Gdx.graphics.getWidth();
@@ -137,5 +191,46 @@ public class DeckBuilderScreen implements Screen {
 	
 	public int getHeight() {
 		return Gdx.graphics.getHeight();
+	}
+	
+	/**
+	 * Prints the spriteMap for debugging
+	 */
+	public void printSpriteMap() {
+		for(String key : spriteMap.keySet()) {
+			System.out.println("Key: " + key + " list: " + spriteMap.get(key));
+		}
+	}
+	
+	/**
+	 * Adds a sprite to an area
+	 * 
+	 * @param currentSelection sprite to set in area
+	 * @param area to set the sprite in
+	 * @return boolean
+	 */
+	public boolean setSpriteToArea(BuilderSpriteLogic currentSelection, String area) {
+		Set<BuilderSpriteLogic> listToAddTo = spriteMap.get(area);
+		if(listToAddTo != null) {
+			return listToAddTo.add(currentSelection);
+		}
+		return false;
+	}
+	
+	public boolean removeSprite(BuilderSpriteLogic s) {
+        for(String key : spriteMap.keySet()) {
+            if(spriteMap.get(key).contains(s)) {
+                return spriteMap.get(key).remove(s);
+            }
+        }
+        return false;
+   }
+	
+	public boolean removeSpriteFromArea(BuilderSpriteLogic s, String area) {
+		Set<BuilderSpriteLogic> listToAddTo = spriteMap.get(area);
+		if(listToAddTo != null) {
+			return listToAddTo.remove(s);
+		}
+		return false;
 	}
 }

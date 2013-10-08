@@ -49,13 +49,14 @@ public class Pacman extends GameClient {
 	private SpriteBatch batch;
 	private ShapeRenderer shaper;
 	private PacChar player;
+	private GhostChar blinky;
 	//takes keyboard input
+	private Ghost blinkyController;
 	private InputProcessor controller;
 	private GameMap map1;
 	private ArrayList<char[]> map1Array;
 	
-	private Wall testWall;
-	private Wall testWall2;
+	
 	private List<ArrayList<Tile>> map;
 	
 	private List<Collideable> colList;	
@@ -138,6 +139,7 @@ public class Pacman extends GameClient {
 		//initialise receiver for input- use the multiplexer from Arcade
 		// because overlay group said to in log messages
 		controller = new PacController(player, colList);
+		blinkyController = new Ghost(blinky, colList);
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
 		gameState = GameState.READY;

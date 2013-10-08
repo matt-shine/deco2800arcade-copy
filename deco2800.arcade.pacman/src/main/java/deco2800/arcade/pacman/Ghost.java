@@ -1,6 +1,10 @@
 package deco2800.arcade.pacman;
 
+import java.util.List;
+
 import deco2800.arcade.model.Player;
+import deco2800.arcade.pacman.GhostChar.GhostState;
+import deco2800.arcade.pacman.PacChar.PacState;
 
 public class Ghost {
 	
@@ -21,59 +25,39 @@ public class Ghost {
 	 		Inky - The most complexed of the ghosts, will need to read his more thoroughly
 	 		Clyde - Proximity based
 	*/ 
-
-private enum GhostMode {
-	CHASE, SCATTER, FRIGHT, DEAD
-}
-private int ghostNum;
-// 1 - Blinky, 2 - Pinky, 3 - Inky, 4 - Clyde
-private int xpos;
-private int ypos;
-private int targetx;
-private int targety;
-private PacChar player;
-private boolean allowedOut; //says whether the ghost can go through the ghost pen door
-
-public Ghost(int ghostNum, int xpos, int ypos, PacChar player) {
-	this.ghostNum = ghostNum;
-	this.xpos = xpos;
-	this.ypos = ypos;
-	this.player = player;
-}
-
-
-
-public void targetTile() {
-	// needs to check the GhostMode first. If in chase do first block
-	// if in scatter, targets change to corners
-	// if in fright, targets change randomly
-	// if dead, target is monster pen
 	
-	if (ghostNum == 1) { // Blinky
-		// add if statement for dots remaining in maze, for Elroy mode
-		targetx = player.getX();
-		targety = player.getY();
-	}
-	else if (ghostNum == 2) { // Pinky
-		// if statements for direction
-	}
-	else if (ghostNum == 3) { // Inky
-		// complex
-	}
-	else if (ghostNum == 4) { // Clyde
-		// random
+	private GhostChar ghost;
+	private List<Collideable> colList;
+	
+	public Ghost(GhostChar ghost, List<Collideable> colList) {
+		this.ghost = ghost;
+		this.colList = colList;
 	}
 	
-}
+	private void checkCollisions() {
+		//check collisions here, using x,y,width, height against the two walls
+		// variables are left, right, top, bottom
+		int pl = ghost.getX();
+		int pb = ghost.getY();
+		int pt = ghost.getHeight() + pb;
+		int pr = ghost.getWidth() + pl;
+	    for (int i=1; i < colList.size(); i++) {
+	    	Collideable c = colList.get(i);
+	    	int cl = c.getX();
+	    	int cb = c.getY();
+	    	int cr = cl + c.getWidth();
+	    	int ct = cb + c.getHeight();
+	    	if ((pl < cl && pr >= cl) || (pr > cr && pl <= cr) || (pb < cb && pt >= cb) || (pt > ct && pb <= ct)) {
+	    		//set pacman's state to idle so he stops moving
+	    		ghost.setCurrentState(GhostState.IDLE);
+	    		System.out.println("COLLISION DETECTED!");
+	    		return;
+	    	}
+	    }
+	}
 
-public void intersectionDecision() {
-	// This method uses targetTile to decide which way it will turn at the next interseciton
-	
-}
-
-public void changeMode() {
-	// This method is for changing between ghost modes
-}
-
+	public void targetTile() {
+		
+	}
 
 }

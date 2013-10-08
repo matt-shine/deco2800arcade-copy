@@ -47,6 +47,13 @@ public class OptionsScreen implements Screen {
     private Image background;
 	private MenuInputProcessor processor;
 	private Slider masterVolumeSlider;
+	private Slider effectsVolumeSlider;
+	private Slider backgroundVolumeSlider;
+	private Slider difficultySlider;
+	private Label masterVolumeLabel;
+	private Label effectsVolumeLabel;
+	private Label backgroundVolumeLabel;
+	private Label difficultyLabel;
 	
 	public OptionsScreen(BurningSkies game) {
 		this.game = game;
@@ -115,7 +122,16 @@ public class OptionsScreen implements Screen {
     	ArcadeInputMux.getInstance().addProcessor(processor);
 	
     	masterVolumeSlider = new Slider(0, 100, 1, false, skin);
-    	masterVolumeSlider.setBounds(600, 600, 640, 50);
+    	masterVolumeSlider.setBounds(width/2 - 320, height/2 + 100, 640, 50);
+    	
+    	effectsVolumeSlider = new Slider(0, 100, 1, false, skin);
+    	effectsVolumeSlider.setBounds(width/2 - 320, height/2 + 50, 640, 50);
+    	
+    	backgroundVolumeSlider = new Slider(0, 100, 1, false, skin);
+    	backgroundVolumeSlider.setBounds(width/2 - 320, height/2, 640, 50);
+    	
+    	difficultySlider = new Slider(0, 4, 1, false, skin);
+    	difficultySlider.setBounds(width/2 - 320, height/2 - 50, 640, 50);
     	
 	    backButton = new TextButton("Back", skin);
 	    backButton.setWidth(200);
@@ -154,10 +170,41 @@ public class OptionsScreen implements Screen {
 	    label.setWidth(width);
 	    label.setAlignment(Align.center);
 	    
+	    masterVolumeLabel = new Label("Master Volume", ls);
+	    masterVolumeLabel.setX(0);
+	    masterVolumeLabel.setY(height/2 + 130);
+	    masterVolumeLabel.setWidth(width);
+	    masterVolumeLabel.setAlignment(Align.center);
+	    
+	    effectsVolumeLabel = new Label("Effects Volume", ls);
+	    effectsVolumeLabel.setX(0);
+	    effectsVolumeLabel.setY(height/2 + 80);
+	    effectsVolumeLabel.setWidth(width);
+	    effectsVolumeLabel.setAlignment(Align.center);
+	    
+	    backgroundVolumeLabel = new Label("Background Volume", ls);
+	    backgroundVolumeLabel.setX(0);
+	    backgroundVolumeLabel.setY(height/2 + 30);
+	    backgroundVolumeLabel.setWidth(width);
+	    backgroundVolumeLabel.setAlignment(Align.center);
+	    
+	    difficultyLabel = new Label("Difficulty", ls);
+	    difficultyLabel.setX(0);
+	    difficultyLabel.setY(height/2 - 20);
+	    difficultyLabel.setWidth(width);
+	    difficultyLabel.setAlignment(Align.center);
+	    
 	    stage.addActor(backButton);
-	    stage.addActor(label);	
+	    stage.addActor(label);
+	    stage.addActor(masterVolumeLabel);
+	    stage.addActor(effectsVolumeLabel);
+	    stage.addActor(backgroundVolumeLabel);
+	    stage.addActor(difficultyLabel);
 	    stage.addActor(background);
 	    stage.addActor(masterVolumeSlider);
+	    stage.addActor(effectsVolumeSlider);
+	    stage.addActor(backgroundVolumeSlider);
+	    stage.addActor(difficultySlider);
 	    background.toBack();
 	}
 }

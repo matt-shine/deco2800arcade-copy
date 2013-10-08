@@ -12,6 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import deco2800.arcade.client.network.listener.ReplayListener;
+import deco2800.arcade.client.replay.ReplayHandler;
+import deco2800.arcade.model.Player;
 import deco2800.arcade.soundboard.actions.SoundButtonChangeListener;
 import deco2800.arcade.soundboard.model.SoundFileHolder;
 
@@ -23,8 +27,17 @@ import java.util.List;
  */
 public class SoundboardScreen implements Screen {
 
+    private final Player player;
     private List<SoundFileHolder> loops;
     private List<SoundFileHolder> samples;
+    private ReplayHandler replayHandler;
+    private ReplayListener replayListener;
+    private boolean recording = false;
+    private boolean playback;
+    private int session;
+
+    public static final int LOOPS = 0;
+    public static final int SAMPLES = 1;
 
     private static final int LOOP_BUTTON_WIDTH = 275;
     private static final int SAMPLE_BUTTON_WIDTH = 200;
@@ -36,6 +49,11 @@ public class SoundboardScreen implements Screen {
     private static final int BUTTON_SAMPLE_OFFSET_Y = 50;
     private static final int SAMPLE_BUTTON_ROW_COUNT = 4;
     private static final int WIDTH = 1024;
+    private static final int LABEL_HEIGHT = 40;
+    private static final int TITLE_Y = 650;
+    private static final int TITLE_LABEL_X = 450;
+    private static final int RECORD_BTN_X = 750;
+    private static final int PLAY_BTN_X = 1000;
 
     /**
      * UI Objects
@@ -50,13 +68,25 @@ public class SoundboardScreen implements Screen {
     private TextButton button;
     private Label loopLabel;
     private Label sampleLabel;
+    private Label titleLabel;
+    private TextButton recordButton;
+    private TextButton playbackButton;
+
+
 
     /**
      * Basic Constructor
      */
-    public SoundboardScreen(List<SoundFileHolder> loops, List<SoundFileHolder> samples) {
+    public SoundboardScreen(List<SoundFileHolder> loops, List<SoundFileHolder> samples,
+                            ReplayHandler replayHandler, ReplayListener replayListener,
+                            Player player) {
         this.loops = loops;
         this.samples = samples;
+        this.replayHandler = replayHandler;
+        this.replayListener = replayListener;
+        this.player = player;
+
+        session = -1;
         libSkin = new Skin(Gdx.files.internal("libSkin.json"));
         setupUI();
     }
@@ -71,10 +101,67 @@ public class SoundboardScreen implements Screen {
         image = new Image(background);
         stage.addActor(image);
 
+        setupTitleBar();
         setupLoopButtons();
         setupSampleButtons();
 
         Gdx.input.setInputProcessor(stage);
+    }
+
+    /**
+     * Setup Interface elements in title bar
+     */
+    private void setupTitleBar() {
+        titleLabel = new Label("UQ Soundboard!", libSkin, "heading");
+        titleLabel.setWidth(SAMPLE_BUTTON_WIDTH);
+        titleLabel.setHeight(LABEL_HEIGHT);
+        titleLabel.setX(TITLE_LABEL_X);
+        titleLabel.setY(TITLE_Y);
+        stage.addActor(titleLabel);
+
+        recordButton = new TextButton("Start Recording", libSkin);
+        recordButton.setWidth(SAMPLE_BUTTON_WIDTH);
+        recordButton.setHeight(LABEL_HEIGHT);
+        recordButton.setX(RECORD_BTN_X);
+        recordButton.setY(TITLE_Y);
+        recordButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (recording) {
+                    recordButton.setText("Start Recording");
+                    session = replayHandler.getSessionId();
+                    replayHandler.endSession(session);
+                } else {
+                    reset();
+                    recordButton.setText("Stop Recording");
+                    replayHandler.startSession(1, player.getUsername());
+                    replayHandler.startRecording();
+                }
+                recordButton.remove();
+                stage.addActor(recordButton);
+                recording = !recording;
+            }
+        });
+
+        stage.addActor(recordButton);
+
+        playbackButton = new TextButton("Playback Recording", libSkin);
+        playbackButton.setWidth(SAMPLE_BUTTON_WIDTH);
+        playbackButton.setHeight(LABEL_HEIGHT);
+        playbackButton.setX(PLAY_BTN_X);
+        playbackButton.setY(TITLE_Y);
+        playbackButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (session != -1 && !recording) {
+                    reset();
+                    replayHandler.requestEventsForSession(session);
+                    playback = true;
+                }
+            }
+        });
+
+        stage.addActor(playbackButton);
     }
 
     /**
@@ -94,10 +181,11 @@ public class SoundboardScreen implements Screen {
         y -= BUTTON_SAMPLE_OFFSET_Y;
         stage.addActor(sampleLabel);
 
+        int index = 0;
         /* Make buttons for samples */
         for (SoundFileHolder sound : samples) {
             button = new TextButton(sound.getLabel(), libSkin, "red");
-            button.addListener(new SoundButtonChangeListener(sound));
+            button.addListener(new SoundButtonChangeListener(sound, replayHandler, index++, this));
             button.setWidth(SAMPLE_BUTTON_WIDTH);
             button.setHeight(BUTTON_HEIGHT);
             button.setX(x);
@@ -128,11 +216,11 @@ public class SoundboardScreen implements Screen {
         y -= BUTTON_OFFSET_Y;
         stage.addActor(loopLabel);
 
-
+        int index = 0;
         /* Make buttons for loops */
         for (SoundFileHolder sound : loops) {
             button = new TextButton(sound.getLabel(), libSkin, "green");
-            button.addListener(new SoundButtonChangeListener(sound));
+            button.addListener(new SoundButtonChangeListener(sound, replayHandler, index++, this));
             button.setWidth(LOOP_BUTTON_WIDTH);
             button.setHeight(BUTTON_HEIGHT);
             button.setX(x);
@@ -152,6 +240,10 @@ public class SoundboardScreen implements Screen {
         batch.begin();
         stage.draw();
         batch.end();
+
+        if (playback) {
+            replayHandler.runLoop();
+        }
     }
 
     @Override
@@ -178,5 +270,66 @@ public class SoundboardScreen implements Screen {
     public void dispose() {
         stage.dispose();
         batch.dispose();
+    }
+
+    /**
+     * Check if sounds should be recorded
+     * @return recoding
+     */
+    public boolean isRecording() {
+        return this.recording;
+    }
+
+    /**
+     * Set recording
+     * @param recording boolean
+     */
+    public void setRecording(boolean recording) {
+        this.recording = recording;
+    }
+
+    /**
+     * Set if the screen is playing back recording
+     * @param playback boolean
+     */
+    public void setPlayback(boolean playback) {
+        this.playback = playback;
+    }
+
+    /**
+     * Check if screen is currently playing back recording
+     * @return playback
+     */
+    public boolean isPlayback() {
+        return this.playback;
+    }
+
+    /**
+     * Reset screen
+     *  - Stop all sounds playing
+     */
+    public void reset() {
+        for (SoundFileHolder sound : loops) {
+            sound.stop();
+        }
+
+        for (SoundFileHolder sound : samples) {
+            sound.stop();
+        }
+
+    }
+
+    /**
+     * Play a sound
+     * @param sound_name Name of the sound
+     * @param loop_type Type of sound
+     * @param index index in array
+     */
+    public void playSound(String sound_name, int loop_type, Integer index) {
+        if (loop_type == LOOPS) {
+            loops.get(index).play();
+        } else if (loop_type == SAMPLES) {
+            samples.get(index).play();
+        }
     }
 }

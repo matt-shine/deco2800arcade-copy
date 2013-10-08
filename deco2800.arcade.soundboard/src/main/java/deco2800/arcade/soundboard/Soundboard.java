@@ -5,6 +5,11 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.ReplayListener;
+import deco2800.arcade.client.replay.ReplayEventListener;
+import deco2800.arcade.client.replay.ReplayHandler;
+import deco2800.arcade.client.replay.ReplayNode;
+import deco2800.arcade.client.replay.ReplayNodeFactory;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.soundboard.model.SoundFileHolder;
@@ -20,7 +25,9 @@ public class Soundboard extends GameClient {
 
     private Player player;
     private NetworkClient networkClient;
-    private Screen screen;
+    private SoundboardScreen screen;
+    private ReplayHandler replayHandler;
+    private ReplayListener replayListener;
 
     private List<SoundFileHolder> loops;
     private List<SoundFileHolder> samples;
@@ -34,6 +41,15 @@ public class Soundboard extends GameClient {
         super(player1, networkClient1);
         player = player1;
         networkClient = networkClient1;
+
+        replayHandler = new ReplayHandler(networkClient);
+        replayListener = new ReplayListener(replayHandler);
+        networkClient.addListener(replayListener);
+
+        replayHandler.addReplayEventListener(initReplayEventListener());
+
+        ReplayNodeFactory.registerEvent("sound_pushed", new String[]{"sound_name", "loop_type", "index"});
+
         loops = new ArrayList<SoundFileHolder>();
         samples = new ArrayList<SoundFileHolder>();
         fetchLoops();
@@ -92,7 +108,7 @@ public class Soundboard extends GameClient {
     @Override
     public void create() {
         ArcadeSystem.openConnection();
-        screen = new SoundboardScreen(loops, samples);
+        screen = new SoundboardScreen(loops, samples, replayHandler, replayListener, player);
         setScreen(screen);
         super.create();
 
@@ -151,5 +167,28 @@ public class Soundboard extends GameClient {
     @Override
     public Game getGame() {
         return game;
+    }
+
+    /**
+     * Initialise replay event listener
+     */
+    private ReplayEventListener initReplayEventListener() {
+        return new ReplayEventListener() {
+            @Override
+            public void replayEventReceived(String eType, ReplayNode eData) {
+                if ( eType.equals( "playback_complete" ) ) {
+                    screen.setPlayback(false);
+                    screen.reset();
+                }
+
+                if ( eType.equals( "sound_pushed" ) ) {
+                    if (screen.isPlayback()) {
+                        screen.playSound(eData.getItemForString("sound_name").toString(),
+                                eData.getItemForString("loop_type").intVal(),
+                                eData.getItemForString("index").intVal());
+                    }
+                }
+            }
+        };
     }
 }

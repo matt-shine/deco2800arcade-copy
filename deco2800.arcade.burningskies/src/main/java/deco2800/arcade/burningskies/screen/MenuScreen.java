@@ -82,7 +82,7 @@ public class MenuScreen implements Screen {
         
         if (keyboardSelection == true) {
         	batch.begin();
-        	batch.draw(selectionBox, (optionsButton.getX() - (2 * (startButton.getWidth() + 30))) - 11, (height / 9) - 68);
+        	batch.draw(selectionBox, ((optionsButton.getX() - (2 * (startButton.getWidth() + 30))) - 9) + (MenuInputProcessor.getButtonSelection() * 230), (height / 9) - 69);
         	batch.end();
         }
 	}

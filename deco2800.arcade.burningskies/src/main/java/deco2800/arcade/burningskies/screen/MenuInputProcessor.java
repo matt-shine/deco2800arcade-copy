@@ -30,14 +30,19 @@ public class MenuInputProcessor extends InputAdapter {
 			break;
 		case Keys.ENTER:
 			if (buttonSelected == 0) {
+				keyboardSelection = false;
 				game.setScreen(new PlayScreen(game));
 			} else if (buttonSelected == 1) {
+				keyboardSelection = false;
 				game.setScreen(game.scoreScreen);
 			} else if (buttonSelected == 2) {
+				keyboardSelection = false;
 				game.setScreen(game.optionsScreen);
 			} else if (buttonSelected == 3) {
+				keyboardSelection = false;
 				game.setScreen(game.helpScreen);
 			} else if (buttonSelected == 4) {
+				keyboardSelection = false;
 				ArcadeSystem.goToGame(ArcadeSystem.UI);
 			}
 			break;
@@ -53,6 +58,7 @@ public class MenuInputProcessor extends InputAdapter {
 			} else if (game.getScreen() == game.menuScreen) {
 				ArcadeSystem.goToGame(ArcadeSystem.UI);
 			} else {
+				keyboardSelection = true;
 				game.setScreen(game.menuScreen);
 			}
 			break;

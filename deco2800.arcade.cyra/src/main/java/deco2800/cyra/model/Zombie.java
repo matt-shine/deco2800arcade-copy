@@ -15,7 +15,7 @@ public class Zombie extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		velocity.x = -1 * (float)(Math.sin(4*position.x) + 1.5);
 		
 		position.add(velocity.mul(delta));

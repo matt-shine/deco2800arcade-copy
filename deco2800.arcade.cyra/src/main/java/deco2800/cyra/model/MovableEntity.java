@@ -71,7 +71,7 @@ public abstract class MovableEntity extends Entity {
 	//public abstract void handleX
 	//public abstract boolean 
 	
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		bounds.x = position.x;
 		bounds.y = position.y;
 		

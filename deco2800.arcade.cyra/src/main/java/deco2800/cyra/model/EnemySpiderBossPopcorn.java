@@ -28,7 +28,7 @@ public class EnemySpiderBossPopcorn extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		if (isProjectile && position.y <= 0) {
 			velocity.y = -velocity.y;

@@ -1,7 +1,6 @@
 package deco2800.cyra.game;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -12,6 +11,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Player;
+import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Game;
+
 /** The extension of Game class that is opened by the desktop application.
  * Will need to be altered to extend GameClient instead.
  * GameScreen.java might need to get merged with this one, so that this will
@@ -19,17 +24,23 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * @author Game Over
  *
  */
-public class TestGame2 extends Game {
+@ArcadeGame(id="cyra")
+public class Cyra extends GameClient {
 
       
-    public SplashScreen getSplashScreen() {
+    public Cyra(Player player, NetworkClient networkClient) {
+		super(player, networkClient);
+		// TODO Auto-generated constructor stub
+	}
+
+	public SplashScreen getSplashScreen() {
     	return new SplashScreen(this);
     }
 	
 	@Override
 	public void create() {		
 	
-		
+		super.create();
 		//Set to splash screen
 		//setScreen(getSplashScreen());
 		//OR go straight to the action
@@ -39,6 +50,7 @@ public class TestGame2 extends Game {
 
 	@Override
 	public void dispose() {
+		super.dispose();
 		//batch.dispose();
 		//texture.dispose();
 	}
@@ -52,13 +64,29 @@ public class TestGame2 extends Game {
 
 	@Override
 	public void resize(int width, int height) {
+		super.resize(width, height);
 	}
 
 	@Override
 	public void pause() {
+		super.pause();
 	}
 
 	@Override
 	public void resume() {
+		super.resume();
+	}
+	
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "cyra";
+		game.name = "Cyra";
+		game.description = "Run around and kill stuff with sword, yay!";
+	}
+	
+	@Override
+	public deco2800.arcade.model.Game getGame() {
+		return game;
 	}
 }

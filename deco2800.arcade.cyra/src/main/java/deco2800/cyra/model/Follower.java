@@ -37,7 +37,7 @@ public class Follower extends Enemy {
 	}*/
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		//position.lerp(ship.getPosition(), delta);
 		Vector2 dir = new Vector2(new Vector2(ship.getPosition().x,ship.getPosition().y).sub(
 				new Vector2(position.x, position.y)));

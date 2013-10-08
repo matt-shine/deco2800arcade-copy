@@ -23,7 +23,7 @@ public class SplashScreen extends AbstractScreen {
 	private Sprite splashSpr;
 	private TweenManager manager;
 	
-	public SplashScreen( TestGame2 game) {
+	public SplashScreen( Cyra game) {
 		super (game);
 	}
 	

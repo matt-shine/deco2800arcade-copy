@@ -3,7 +3,7 @@ package deco2800.cyra.model;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import deco2800.cyra.model.Ship.State;
+import deco2800.cyra.model.Player.State;
 
 public abstract class Enemy extends MovableEntity{
 	
@@ -111,6 +111,6 @@ public abstract class Enemy extends MovableEntity{
 		return playerDamageRectangle;
 	}
 	
-	public abstract Array<Enemy> advance(float delta, Ship ship, float rank);
+	public abstract Array<Enemy> advance(float delta, Player ship, float rank);
 
 }

@@ -33,7 +33,7 @@ public class CutsceneObject extends MovableEntity{
 	}
 	
 	@Override
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		super.update(ship);
 		collRect.x = getPosition().x + xOrigin;
 		collRect.y = getPosition().y + yOrigin;

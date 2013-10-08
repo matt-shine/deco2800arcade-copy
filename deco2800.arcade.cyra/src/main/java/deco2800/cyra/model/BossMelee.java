@@ -35,7 +35,7 @@ public class BossMelee extends Enemy {
 	}
 	
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		count -= delta;
 		if (count == 0) {
 			//make new decision

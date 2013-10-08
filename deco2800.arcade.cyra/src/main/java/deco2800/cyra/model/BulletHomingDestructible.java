@@ -30,7 +30,7 @@ public class BulletHomingDestructible extends BulletSimple {
 	}
 	
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		count += delta;
 		if (count >= 0.2f) {
 			//Determine angle to the player 

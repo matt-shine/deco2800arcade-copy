@@ -3,7 +3,7 @@ package deco2800.cyra;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import deco2800.cyra.game.TestGame2;
+import deco2800.cyra.game.Cyra;
 
 /**
  * Class used to run the game independent of the arcade. Useful for quick testing.
@@ -17,6 +17,6 @@ public class Main {
 		cfg.width = 1280;
 		cfg.height = 720;
 		
-		new LwjglApplication(new TestGame2(), cfg);
+		new LwjglApplication(new Cyra(null, null), cfg);
 	}
 }

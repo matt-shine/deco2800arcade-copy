@@ -51,7 +51,7 @@ public class Walker extends Enemy {
 	}
 	
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		//walking animation test
 		frameCount += delta;
 		if (frameCount > FRAME_LENGTH) {

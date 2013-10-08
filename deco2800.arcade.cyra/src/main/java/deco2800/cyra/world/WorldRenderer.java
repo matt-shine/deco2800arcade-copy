@@ -46,7 +46,7 @@ public class WorldRenderer {
 	World world;
 	SpriteBatch batch;
 	SpriteBatch textBatch;
-	Ship ship;
+	Player ship;
 	//Follower follower;
 	Walker walker;
 	private ParallaxCamera cam;

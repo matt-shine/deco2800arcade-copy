@@ -19,7 +19,7 @@ public class MovablePlatformAttachment extends MovablePlatform {
 		this.targetOffset = targetOffset;
 	}
 	@Override
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		super.update(ship);
 		position = new Vector2(parent.position.x+targetOffset.x, parent.position.y+targetOffset.y);
 	}

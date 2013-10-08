@@ -5,14 +5,14 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import deco2800.cyra.model.Bullet;
-import deco2800.cyra.model.Ship.State;
-import deco2800.cyra.model.Ship;
+import deco2800.cyra.model.Player.State;
+import deco2800.cyra.model.Player;
 import deco2800.cyra.model.Sword;
 
 public class InputHandler implements InputProcessor{
 
 	World world;
-	Ship ship;
+	Player ship;
 	Sword sword;
 	Vector2 vec2Touch = new Vector2();
 	private boolean acceptInput;

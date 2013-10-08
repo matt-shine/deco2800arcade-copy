@@ -10,7 +10,7 @@ public abstract class BulletEnemy extends MovableEntity {
 		this.velocity= velocity;
 	}
 	
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		super.update(ship);
 	}
 

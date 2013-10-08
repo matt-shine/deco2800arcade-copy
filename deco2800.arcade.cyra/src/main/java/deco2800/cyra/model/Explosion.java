@@ -26,7 +26,7 @@ public class Explosion extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		position.add(new Vector2(velocity).mul(delta));
 		count += delta;
 		if (count > 0.1f) {

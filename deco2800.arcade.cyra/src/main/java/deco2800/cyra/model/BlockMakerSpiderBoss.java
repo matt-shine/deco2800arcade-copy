@@ -145,13 +145,13 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 			
 			//Move objects in the moveWithEntities
 			for (MovableEntity mve: moveWithEntities) {
-				mve.getPosition().y += delta * Ship.MAX_FALL_VELOCITY;
+				mve.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
 			}
 			
 			//Move and remove existing blocks
 			for (int i=0; i<blocks.size; i++) {
 				Block block = blocks.get(i);
-				block.getPosition().y += delta * Ship.MAX_FALL_VELOCITY;
+				block.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
 				if (block.getPosition().y  > cam.position.y + cam.viewportHeight/2) {
 					//System.out.println("Removing Block at " + block.getPosition());
 					blocks.removeIndex(i);
@@ -171,7 +171,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				firstUpdate = false;
 			}
 			for (Block b: blocks) {
-				b.getPosition().y += delta * Ship.MAX_FALL_VELOCITY;
+				b.getPosition().y += delta * Player.MAX_FALL_VELOCITY;
 			}
 			if (latestBlock.getPosition().y >= 0f) {
 				state = State.STATIC;

@@ -30,7 +30,7 @@ public class MainMenu extends AbstractScreen{
 	private int buttonframe = 0;
 	private boolean keydown = false;
 	
-	public MainMenu(TestGame2 game) {
+	public MainMenu(Cyra game) {
 		super(game);
 		
 	}

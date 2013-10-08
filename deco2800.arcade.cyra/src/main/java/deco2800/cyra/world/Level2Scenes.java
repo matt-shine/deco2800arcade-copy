@@ -18,7 +18,7 @@ import deco2800.cyra.model.MovablePlatform;
 import deco2800.cyra.model.MovablePlatformAttachment;
 import deco2800.cyra.model.PartTween;
 import deco2800.cyra.model.ResultsScreen;
-import deco2800.cyra.model.Ship;
+import deco2800.cyra.model.Player;
 import deco2800.cyra.model.SoldierBoss;
 import deco2800.cyra.model.WalkerPart;
 
@@ -45,7 +45,7 @@ public class Level2Scenes extends LevelScenes {
 	
 	
 	
-	public Level2Scenes(Ship ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
+	public Level2Scenes(Player ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
 		super(ship, cam, resultsScreen);
 		doneSomethingOnce = false;
 		blockMaker = new BlockMakerSpiderBoss();
@@ -130,7 +130,7 @@ public class Level2Scenes extends LevelScenes {
 	public boolean update(float delta) {
 		if (scenePosition == 0) {
 			if (ship.getPosition().x < 248f) {
-				ship.getPosition().x += delta * Ship.SPEED;
+				ship.getPosition().x += delta * Player.SPEED;
 			} else {
 				isPlaying = false;
 				return true;

@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import deco2800.cyra.model.Ship.State;
+import deco2800.cyra.model.Player.State;
 import deco2800.cyra.world.Sounds;
 
 public class SoldierEnemy extends Enemy {
@@ -58,7 +58,7 @@ public class SoldierEnemy extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		super.update(ship);
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		
@@ -244,7 +244,7 @@ public class SoldierEnemy extends Enemy {
 		return newEnemies;
 	}
 
-	public void pickNewState(Ship ship, float rank) {
+	public void pickNewState(Player ship, float rank) {
 		//will need to make it so the same state doesn't get picked twice
 		float walkChance = 0.4f - 0.34f * rank;
 		float jumpChance = walkChance + 0.3f;

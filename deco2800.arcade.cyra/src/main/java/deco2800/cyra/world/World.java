@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import deco2800.cyra.game.TestGame2;
+import deco2800.cyra.game.Cyra;
 import deco2800.cyra.model.*;
 
 /** World class controls all objects in the specified level including any collisions
@@ -30,7 +30,7 @@ public class World {
 	private AchievementsTracker at = new AchievementsTracker();
 	
 	private Boolean firstUpdate;
-	private Ship ship;
+	private Player ship;
 	Rectangle sRec;
 	private Sword sword;
 	private Array<Enemy> enemies;
@@ -58,7 +58,7 @@ public class World {
 	// if not using mouse then remove this
 	//WorldRenderer wr;
 	
-	public World(TestGame2 game, int level, ParallaxCamera cam) {
+	public World(Cyra game, int level, ParallaxCamera cam) {
 		curLevel = new Level(level);
 		this.cam = cam;
 		Sounds.loadAll();
@@ -669,7 +669,7 @@ public class World {
 		return 0f;
 	}
 	/* ----- Getter methods ----- */
-	public Ship getShip() {
+	public Player getShip() {
 		return ship;
 	}
 	
@@ -733,7 +733,7 @@ public class World {
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Ship(new Vector2(20f, 6));
+		ship = new Player(new Vector2(20f, 6));
 		//ship = new Ship(new Vector2(270, 60));
 		
 		sword = new Sword(new Vector2(-1, -1));

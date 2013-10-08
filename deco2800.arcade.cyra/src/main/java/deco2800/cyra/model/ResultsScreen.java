@@ -18,7 +18,7 @@ public class ResultsScreen {
 	public ResultsScreen() {
 		count = 0;
 		timeAtLastCall = 0;
-		healthAtLastCall = Ship.DEFAULT_HEARTS;
+		healthAtLastCall = Player.DEFAULT_HEARTS;
 		isShowing = false;
 	}
 	

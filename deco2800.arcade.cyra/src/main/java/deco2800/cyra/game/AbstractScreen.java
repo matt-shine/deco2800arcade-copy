@@ -9,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class AbstractScreen implements Screen {
 
-	protected final TestGame2 game;
+	protected final Cyra game;
 	protected final BitmapFont font;
 	protected final SpriteBatch batch;
 	
-	public AbstractScreen( TestGame2 game) {
+	public AbstractScreen( Cyra game) {
 		this.game = game;
 		this.font = new BitmapFont();
 		this.batch = new SpriteBatch();

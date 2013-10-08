@@ -86,7 +86,7 @@ public class MovablePlatform extends MovableEntity{
 	}
 	
 	@Override
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		super.update(ship);
 		float delta = Gdx.graphics.getDeltaTime();
 		

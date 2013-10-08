@@ -67,7 +67,7 @@ public class BulletSimple extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		//System.out.println("Velocity="+velocity+" speed=" + speed);
 		position.add(velocity.nor().mul(Gdx.graphics.getDeltaTime() * speed));
 		velocity.mul(1/(Gdx.graphics.getDeltaTime()*speed));

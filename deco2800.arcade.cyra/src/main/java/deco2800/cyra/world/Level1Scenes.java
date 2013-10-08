@@ -17,7 +17,7 @@ import deco2800.cyra.model.MovableEntity;
 import deco2800.cyra.model.MovablePlatform;
 import deco2800.cyra.model.PartTween;
 import deco2800.cyra.model.ResultsScreen;
-import deco2800.cyra.model.Ship;
+import deco2800.cyra.model.Player;
 
 public class Level1Scenes extends LevelScenes{
 	private Texture copterTex;
@@ -31,7 +31,7 @@ public class Level1Scenes extends LevelScenes{
 	
 	private int playState;
 	
-	public Level1Scenes (Ship ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
+	public Level1Scenes (Player ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
 		super(ship, cam, resultsScreen);
 		copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -77,13 +77,13 @@ public class Level1Scenes extends LevelScenes{
 		if (playState == 0) {
 			if (!copter.isMoving()) {
 				playState = 1;
-				ship.getVelocity().x = Ship.SPEED;
+				ship.getVelocity().x = Player.SPEED;
 			}
 		}
 		if (playState == 1 && ship.getPosition().x > 48.5f) {
 			playState =2;
-			ship.getVelocity().y = Ship.JUMP_VELOCITY;
-			ship.setState(Ship.State.JUMP);
+			ship.getVelocity().y = Player.JUMP_VELOCITY;
+			ship.setState(Player.State.JUMP);
 			ship.resetJumpTime();
 		}
 		

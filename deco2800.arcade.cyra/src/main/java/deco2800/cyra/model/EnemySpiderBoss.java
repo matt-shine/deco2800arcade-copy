@@ -74,7 +74,7 @@ public class EnemySpiderBoss extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		int randInt;
 		count -= delta;

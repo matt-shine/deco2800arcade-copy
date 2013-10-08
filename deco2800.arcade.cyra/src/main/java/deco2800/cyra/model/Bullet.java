@@ -22,7 +22,7 @@ public class Bullet extends MovableEntity {
 	}
 	
 	@Override
-	public void update(Ship ship) {
+	public void update(Player ship) {
 		if(verticalInverse) {
 			velocity.y = -1 * (float)Math.cos(2*position.x);
 		} else {

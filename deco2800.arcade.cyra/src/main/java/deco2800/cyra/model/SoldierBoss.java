@@ -51,7 +51,7 @@ public class SoldierBoss extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Ship ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank) {
 		super.update(ship);
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		
@@ -143,7 +143,7 @@ public class SoldierBoss extends Enemy {
 		return newEnemies;
 	}
 
-	public void pickNewState(Ship ship) {
+	public void pickNewState(Player ship) {
 		//will need to make it so the same state doesn't get picked twice
 		/*float walkChance = 0.4f - 0.34 * rank;
 		float jumpChance = walkChance + 0.3f;

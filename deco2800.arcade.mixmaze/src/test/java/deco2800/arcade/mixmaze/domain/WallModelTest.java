@@ -19,7 +19,7 @@ public class WallModelTest {
 
 	@Test
 	public void buildWall() {
-		WallModel wall = new WallModel(false);
+		WallModel wall = new WallModel();
 
 		wall.build(mockedPlayer);
 		assertTrue(wall.isBuilt());
@@ -28,7 +28,7 @@ public class WallModelTest {
 
 	@Test
 	public void destroyWall() {
-		WallModel wall = new WallModel(false);
+		WallModel wall = new WallModel();
 
 		wall.build(mockedPlayer);
 		wall.destroy(mockedPlayer);

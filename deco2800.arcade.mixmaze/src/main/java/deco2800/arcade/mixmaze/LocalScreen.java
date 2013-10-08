@@ -2,6 +2,7 @@ package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.MixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
+import deco2800.arcade.mixmaze.domain.TileModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -58,10 +59,14 @@ class LocalScreen extends GameScreen {
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
-				tile = new TileViewModel(i, j,
-						tileSize, renderer);
+				tile = new TileViewModel(i, j, tileSize, renderer);
 				tileTable.add(tile).size(tileSize, tileSize);
-				model.getBoardTile(i, j).addObserver(tile);
+				
+				TileModel tileModel = model.getBoardTile(i, j);
+				tileModel.addObserver(tile);
+				for(int direction = 0; direction < 4; ++direction) {
+					tile.watchWall(direction, tileModel.getWall(direction));
+				}
 			}
 			if (j < boardSize)
 				tileTable.row();

@@ -9,10 +9,7 @@ import deco2800.arcade.mixmaze.domain.PlayerModel;
  * WallModel represents a wall on a tile, which can be either active or 
  * inactive.
  */
-class WallModel {
-	/** Is this a horizontal wall? */
-	private boolean isHorizontal = false;
-	
+public class WallModel {
 	/** The tile of the left side of the wall if
 	 * you were facing from end-to-end.
 	 **/
@@ -29,29 +26,17 @@ class WallModel {
 	/** The player who builds this wall, <code>null</code> if not built */
 	private PlayerModel builder;
 
-	/**
-	 * Constructor
-	 */
-	WallModel(boolean isVertical) {
-		isHorizontal = !isVertical;
+	/** Observers to this tile */
+	private List<WallModelObserver> observers = new ArrayList<WallModelObserver>();
+	
+	public void addObserver(WallModelObserver observer) {
+		observers.add(observer);
 	}
 	
-	/**
-	 * Determines whether the wall faces North to South (vertically), or
-	 * West to East (horizontally).
-	 * @return A value indicating the orientation of the wall
-	 */
-	public boolean isHorizontalWall() {
-		return isHorizontal;
-	}
-	
-	/**
-	 * Specifies the tile on the left side of the wall if
-	 * you were facing from end-to-end.
-	 * @param left tile on the left side of the wall
-	 */
-	public void setLeftTile(TileModel left) {
-		leftTile = left;
+	private void updateWall() {
+		for(WallModelObserver o : observers) {
+			o.updateWall(isBuilt);
+		}
 	}
 	
 	/**
@@ -63,6 +48,15 @@ class WallModel {
 	 */
 	public TileModel getLeftTile() {
 		return leftTile;
+	}
+	
+	/**
+	 * Specifies the tile on the left side of the wall if
+	 * you were facing from end-to-end.
+	 * @param left tile on the left side of the wall
+	 */
+	public void setLeftTile(TileModel left) {
+		leftTile = left;
 	}
 	
 	/**
@@ -83,16 +77,6 @@ class WallModel {
 	 */
 	public void setRightTile(TileModel right) {
 		rightTile = right;
-	}
-	
-	/**
-	 * Determines whether the wall is on the edge of 
-	 * the game board.
-	 * @return <CODE>true</CODE> if the wall is on the
-	 * edge of the board, <CODE>false</CODE> otherwise
-	 */
-	public boolean isEdgeWall() {
-		return leftTile == null || rightTile == null;
 	}
 
 	/**
@@ -127,8 +111,8 @@ class WallModel {
 		
 		isBuilt = true;
 		builder = player;
-		updateTile(leftTile, player, true);
-		updateTile(rightTile, player, true);
+		updateWall();
+		updateTiles(player);
 	}
 	
 	/**
@@ -142,24 +126,19 @@ class WallModel {
 
 		isBuilt = false;
 		builder = null;
-		updateTile(leftTile, player, false);
-		updateTile(rightTile, player, false);
+		updateWall();
+		updateTiles(player);
 	}
-
-	private void updateTile(TileModel tile, PlayerModel player, boolean isBuilt) {
-		if(tile == null) {
-			return;
-		}
-		tile.validateBox(player);
-		tile.updateWall(this, isBuilt);
+	
+	private void updateTiles(PlayerModel player) {
+		if(leftTile != null) 
+			leftTile.validateBox(player);
+		if(rightTile != null) 
+			rightTile.validateBox(player);
 	}
 	
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder("<WallModel: ");
-		
-		str.append((isBuilt) ? "built" : "not built");
-		str.append(">");
-		return str.toString();
+		return String.format("<WallModel: %s>", ((isBuilt) ? "built" : "not built"));
 	}
 }

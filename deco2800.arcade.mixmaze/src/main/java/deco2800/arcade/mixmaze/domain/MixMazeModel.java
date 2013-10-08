@@ -264,7 +264,7 @@ public class MixMazeModel implements IMixMazeModel {
 				if(toSpawn != null) {
 					int x = spawner.nextInt(boardSize);
 					int y = spawner.nextInt(boardSize);
-					while(getSpawnedItem(x, y) != null) {
+					while(getSpawnedItem(x, y) != null || getBoardTile(x, y).isBoxBuilt()) {
 						x = spawner.nextInt(boardSize);
 						y = spawner.nextInt(boardSize);
 					}
@@ -332,7 +332,7 @@ public class MixMazeModel implements IMixMazeModel {
 		for(int row = 0; row < boardSize; ++row) {
 			for(int column = 0; column < boardSize; ++column) {
 				TileModel tile = getBoardTile(column, row);
-				if(tile.isBox() && tile.getBoxer() == player) {
+				if(tile.isBoxBuilt() && tile.getBoxer() == player) {
 					boxes++;
 				}
 			}
@@ -374,15 +374,11 @@ public class MixMazeModel implements IMixMazeModel {
 	 * the same time
 	 */
 	private int getMaxItemCount() {
-		int res = 0;
-
 		if (difficulty == Difficulty.BEGINNER)
-			res = 6;
+			return 5;
 		else if (difficulty == Difficulty.INTERMEDIATE)
-			res = 4;
-		else if (difficulty == Difficulty.ADVANCED)
-			res = 2;
-		return res;
+			return 3;
+		return 2; // Advanced
 	}
 
 	/**
@@ -412,14 +408,14 @@ public class MixMazeModel implements IMixMazeModel {
 	private ItemModel getRandomItem()
 	{
 		double spawnFactor = spawner.nextDouble();
-		double brickFactor = 0.5;
-		double pickFactor = 0.85;
+		double brickFactor = 0.8;
+		double pickFactor = 0.95;
 		if(difficulty == Difficulty.INTERMEDIATE) {
-			brickFactor = 0.33;
-			pickFactor = 0.66;
+			brickFactor = 0.8;
+			pickFactor = 0.97;
 		} else if(difficulty == Difficulty.ADVANCED) {
-			brickFactor = 0.5;
-			pickFactor = 0.95;
+			brickFactor = 0.9;
+			pickFactor = 0.99;
 		}
 
 		if(spawnFactor <= brickFactor) {

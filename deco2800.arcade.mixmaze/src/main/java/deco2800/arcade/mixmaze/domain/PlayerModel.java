@@ -192,7 +192,11 @@ public class PlayerModel {
 	void setY(int y) {
 		this.y = y;
 	}
-
+	
+	public boolean isAtLocation(int x, int y) {
+		return this.x == x && this.y == y;
+	}
+	
 	/**
 	 * Checks if this player can move. The player can only make a move 
 	 * after 300 milliseconds since the previous move.

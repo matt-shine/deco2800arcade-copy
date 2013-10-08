@@ -64,7 +64,7 @@ public class InProgressState extends GameState {
 			context.cheatBonus(1);
 		}
 		
-		if (Gdx.input.isKeyPressed(Keys.CONTROL_RIGHT)) {
+		if (Gdx.input.isKeyPressed(Keys.L)) {
 			context.setLevel(context.getLevel() + 1);
 			context.dispose();
 			context.gamearea();

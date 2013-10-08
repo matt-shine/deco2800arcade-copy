@@ -133,7 +133,7 @@ public class GameScreen implements Screen  {
 		// setting and playing the background music
 		music.setLooping(true);
 		music.setVolume(0.2f);
-		music.play();
+		playMusic();
 
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
@@ -277,11 +277,11 @@ public class GameScreen implements Screen  {
 			
 			batch.begin();
 			font.setColor(Color.GREEN);
-			font.draw(batch, "player " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);
-			font.draw(batch, "Life " + Integer.toString(getLives()), SCREENWIDTH / 2,
+			font.draw(batch, "Player: " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);
+			font.draw(batch, "Life: " + Integer.toString(getLives()), SCREENWIDTH / 2,
 					SCREENHEIGHT - 20);
 
-			font.draw(batch, "Score " + Integer.toString(getScore()),
+			font.draw(batch, "Score: " + Integer.toString(getScore()),
 					SCREENWIDTH * 3 / 4, SCREENHEIGHT - 20);
 			if (gameoverstatus != null) {
 				font.setColor(Color.WHITE);
@@ -675,4 +675,13 @@ public class GameScreen implements Screen  {
 	public int getHighScore(){
 		return highScore;
 	}
+	
+	public void playMusic(){
+		music.play();
+	}
+	
+	public void stopMusic(){
+		music.stop();
+	}
+	
 }

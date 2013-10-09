@@ -1,0 +1,27 @@
+System Level Tests for the Package Manager
+==========================================
+
+ o   Gradle clean
+ o   Gradle build
+
+Server Tests
+============
+
+ o   gradle runServer
+
+Server should print 'Creating directory: Release' to logs
+Server should print 'Created: Release' to logs
+ 
+ Client Tests
+ 
+ o   gradle releaseArcade
+ 
+ A folder titled 'Release' in the top level directory for the project 
+should have been created, and populated with two subfolders: bin and lib.
+
+Navigate to the created bin directory, and run the bat file (if on a Windows 
+system) or the shell script (if on a UN*X system).
+
+Client should print 'Creating directory: ..\games'
+Client should print 'Created: ..\games'
+ 

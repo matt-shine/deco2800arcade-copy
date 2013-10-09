@@ -10,7 +10,6 @@ import deco2800.arcade.model.Player;
 //Main Class
 @ArcadeGame(id = "LandInvaders")
 public class LandInvaders extends GameClient  {
-
 	private static final Game GAME;
 
 	public LandInvaders(Player player, NetworkClient networkClient) {
@@ -28,7 +27,7 @@ public class LandInvaders extends GameClient  {
 		GAME.name = "LandInvaders";
 		GAME.description = "funny game!";
 	}
-	@Override
+	//@Override
 	public Game getGame() {
 		
 		return GAME;

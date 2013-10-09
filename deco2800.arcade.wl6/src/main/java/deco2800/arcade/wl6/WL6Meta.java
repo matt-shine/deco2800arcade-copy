@@ -1,7 +1,6 @@
 package deco2800.arcade.wl6;
 
 import deco2800.arcade.wl6.enemy.EnemyType;
-import deco2800.arcade.wl6.enemy.Guard;
 
 /**
  * Defines what each tile in the game files does. For example, tile

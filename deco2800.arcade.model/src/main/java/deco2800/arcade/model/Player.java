@@ -43,6 +43,14 @@ public class Player extends User {
     private LibraryStyle libraryStyle;
 
 	private Icon icon;
+    
+    @Deprecated
+    /**
+     * DO NOT USE THIS METHOD, AT ALL, EVER.
+     */
+    public Player(int playerID, String username, String filepath) {
+        //Doing nothing
+    }
 
 	@Deprecated
 	/**

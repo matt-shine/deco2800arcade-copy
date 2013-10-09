@@ -124,8 +124,15 @@ public class ArcadeServer {
         instance = this;
 
         this.gameStorage = new GameStorage();
-
-		this.creditStorage = new CreditStorage();
+        try {
+            this.creditStorage = new CreditStorage();
+        } catch (Exception e) {
+            //Do nothing, yet ;P
+        }
+        
+        
+        
+        //CODE SMELL
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();

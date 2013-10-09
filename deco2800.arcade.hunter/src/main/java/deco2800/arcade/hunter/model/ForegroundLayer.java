@@ -40,7 +40,7 @@ public class ForegroundLayer extends Map {
 		return new ArrayList<MapPane>(panes);
 	}
 
-    /*
+    /**
      * Load a set of panes from a given file into the mapPanes HashMap above
      * file should have the format:
      * [MapType]

@@ -20,7 +20,7 @@ public class SpriteLayer extends Map {
 	private EntityCollection clouds = new EntityCollection();
     private EntityCollection trees = new EntityCollection();
 
-    private float CHANCE_OF_CLOUDS = 0.15f;
+    private float CHANCE_OF_CLOUDS = 0.05f;
     private float CHANCE_OF_TREES = 0.1f;
 
     public Vector2 randomScreenCoordinate() {
@@ -36,7 +36,7 @@ public class SpriteLayer extends Map {
         sprites.put("cloud", new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/cloud.png"))));
 
         //Create clouds
-        for (int c = 0; c < 30; c++) {
+        for (int c = 0; c < 10; c++) {
             //No need for seeded rng here, doesn't affect gameplay
             clouds.add(new BackgroundSprite(randomScreenCoordinate(),
                     sprites.get("cloud").getRegionWidth(), sprites.get("cloud").getRegionHeight()));
@@ -50,7 +50,7 @@ public class SpriteLayer extends Map {
         while (cl.hasNext()) {
             Entity cloud = cl.next();
             cloud.update(delta * speedModifier);
-            if (cloud.getX() + cloud.getWidth() < cameraPos.x - Hunter.Config.screenWidth) {
+            if (cloud.getX() + cloud.getWidth() < cameraPos.x * speedModifier - Hunter.Config.screenWidth) {
                 cl.remove();
             }
         }

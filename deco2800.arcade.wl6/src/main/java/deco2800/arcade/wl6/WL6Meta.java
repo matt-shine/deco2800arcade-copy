@@ -106,7 +106,9 @@ public class WL6Meta {
     private static BlockInfo[] blocks;
     private static DoodadInfo[] doodads;
 
+    // Is there any way to make this neater/smaller? -abbjohn
     static {
+        //TODO the rest of the blocks
         blocks = new BlockInfo[]{
 
                 //0: nothing
@@ -162,13 +164,9 @@ public class WL6Meta {
 
                 //17: red brick
                 new BlockInfo(true, "redbrick"),
-
-                //TODO the rest of the blocks
-
-
         };
 
-
+        //TODO the rest of the items
         doodads = new DoodadInfo[]{
 
                 //0: nothing
@@ -255,61 +253,61 @@ public class WL6Meta {
                 //27: chandelier
                 DoodadInfo.nonsolidScenery("doodad"),
 
-                //28: temp - nothing
+                //28: hanging skeleton
                 new DoodadInfo(),
 
                 //29: dog food
                 DoodadInfo.healthPickup("dogfood", 5, 0),
 
-                //30: temp - nothing
+                //30: white column
                 new DoodadInfo(),
 
-                //31: temp - nothing
+                //31: green plant
                 new DoodadInfo(),
 
-                //32: temp - nothing
+                //32: skeleton
                 new DoodadInfo(),
 
-                //33: temp - nothing
+                //33: sink
                 new DoodadInfo(),
 
-                //34: temp - nothing
+                //34: brown plant
                 new DoodadInfo(),
 
-                //35: temp - nothing
+                //35: vase
                 new DoodadInfo(),
 
-                //36: temp - nothing
+                //36: table
                 new DoodadInfo(),
 
-                //37: temp - nothing
+                //37: ceiling light (green)
                 new DoodadInfo(),
 
-                //38: temp - nothing
+                //38: utensils brown
                 new DoodadInfo(),
 
-                //39: temp - nothing
+                //39: armor
                 new DoodadInfo(),
 
-                //40: temp - nothing
+                //40: empty cage
                 new DoodadInfo(),
 
-                //41: temp - nothing
+                //41: cage / skeleton
                 new DoodadInfo(),
 
-                //42: temp - nothing
+                //42: bones 1
                 new DoodadInfo(),
 
-                //43: temp - nothing
+                //43: gold key
                 new DoodadInfo(),
 
-                //44: temp - nothing
+                //44: silver key
                 new DoodadInfo(),
 
-                //45: temp - nothing
+                //45: bed
                 new DoodadInfo(),
 
-                //46: temp - nothing
+                //46: basket
                 new DoodadInfo(),
 
                 //47: food
@@ -321,7 +319,8 @@ public class WL6Meta {
                 //49: ammo pickup
                 DoodadInfo.ammoPickup("ammo", 5, 0),
 
-                //50: "small gun" - don't know what the difference between this and machine gun is
+                //50: "small gun"
+                //don't know what the difference between this and machine gun is
                 DoodadInfo.gunPickup("machinegun", 1, 0),
 
                 //51: machine gun
@@ -339,36 +338,482 @@ public class WL6Meta {
                 //55: crown
                 DoodadInfo.treasurePickup("crown", 5000),
 
-                // TODO 56-107
+                //56: extra life
+                new DoodadInfo(),
 
-                // 108: guard 1 (standing)
+                //57: bones / blood
+                new DoodadInfo(),
+
+                //58: barrel
+                new DoodadInfo(),
+
+                //59: well / water
+                new DoodadInfo(),
+
+                //60: well
+                new DoodadInfo(),
+
+                //61: pool of blood
+                new DoodadInfo(),
+
+                //62: flag
+                new DoodadInfo(),
+
+                //63: nothing
+                new DoodadInfo(),
+
+                //64: bones 2
+                new DoodadInfo(),
+
+                //65: bones 3
+                new DoodadInfo(),
+
+                //66: bones 4
+                new DoodadInfo(),
+
+                //67: utensils blue
+                new DoodadInfo(),
+
+                //68: stove
+                new DoodadInfo(),
+
+                //69: rack
+                new DoodadInfo(),
+
+                //70: vines
+                new DoodadInfo(),
+
+                //71: nothing
+                new DoodadInfo(),
+
+                //72: nothing
+                new DoodadInfo(),
+
+                //73: nothing
+                new DoodadInfo(),
+
+                //74: nothing
+                new DoodadInfo(),
+
+                //75: nothing
+                new DoodadInfo(),
+
+                //76: nothing
+                new DoodadInfo(),
+
+                //77: nothing
+                new DoodadInfo(),
+
+                //78: nothing
+                new DoodadInfo(),
+
+                //79: nothing
+                new DoodadInfo(),
+
+                //80: nothing
+                new DoodadInfo(),
+
+                //81: nothing
+                new DoodadInfo(),
+
+                //82: nothing
+                new DoodadInfo(),
+
+                //83: nothing
+                new DoodadInfo(),
+
+                //84: nothing
+                new DoodadInfo(),
+
+                //85: nothing
+                new DoodadInfo(),
+
+                //86: nothing
+                new DoodadInfo(),
+
+                //87: nothing
+                new DoodadInfo(),
+
+                //88: nothing
+                new DoodadInfo(),
+
+                //89: nothing
+                new DoodadInfo(),
+
+                //90: Turning point
+                new DoodadInfo(),
+
+                //91: Turning point
+                new DoodadInfo(),
+
+                //92: Turning point
+                new DoodadInfo(),
+
+                //93: Turning point
+                new DoodadInfo(),
+
+                //94: Turning point
+                new DoodadInfo(),
+
+                //95: Turning point
+                new DoodadInfo(),
+
+                //96: Turning point
+                new DoodadInfo(),
+
+                //97: Turning point
+                new DoodadInfo(),
+
+                //98: Secret door
+                new DoodadInfo(),
+
+                //99: Endgame trigger
+                new DoodadInfo(),
+
+                //100: nothing
+                new DoodadInfo(),
+
+                //101: nothing
+                new DoodadInfo(),
+
+                //102: nothing
+                new DoodadInfo(),
+
+                //103: nothing
+                new DoodadInfo(),
+
+                //104: nothing
+                new DoodadInfo(),
+
+                //105: nothing
+                new DoodadInfo(),
+
+                //106: nothing
+                new DoodadInfo(),
+
+                //107: nothing
+                new DoodadInfo(),
+
+                //108: Guard 1 (Standing)
                 new DoodadInfo(true, "doodad", 0, 0, 0, 0, EnemyType.GUARD, 0, DIRS.UP),
 
-                // 109: guard 1 (standing)
+                //109: Guard 1 (Standing)
                 new DoodadInfo(),
 
-                // 110: guard 1 (standing)
+                //110: Guard 1 (Standing)
                 new DoodadInfo(),
 
-                // 111: guard 1 (standing)
+                //111: Guard 1 (Standing)
                 new DoodadInfo(),
 
-                // 112: guard 1 (moving)
+                //112: Guard 1 (Moving)
                 new DoodadInfo(),
 
-                // 113: guard 1 (moving)
+                //113: Guard 1 (Moving)
                 new DoodadInfo(),
 
-                // 114: guard 1 (moving)
+                //114: Guard 1 (Moving)
                 new DoodadInfo(),
 
-                // 115: guard 1 (moving)
+                //115: Guard 1 (Moving)
                 new DoodadInfo(),
 
-                // 124: dead guard
+                //116: nothing
                 new DoodadInfo(),
 
-                //TODO the rest of the items
+                //117: nothing
+                new DoodadInfo(),
+
+                //118: nothing
+                new DoodadInfo(),
+
+                //119: nothing
+                new DoodadInfo(),
+
+                //120: nothing
+                new DoodadInfo(),
+
+                //121: nothing
+                new DoodadInfo(),
+
+                //122: nothing
+                new DoodadInfo(),
+
+                //123: nothing
+                new DoodadInfo(),
+
+                //124: dead guard
+                new DoodadInfo(),
+
+                //125: nothing
+                new DoodadInfo(),
+
+                //126: SS 1 (Standing)
+                new DoodadInfo(),
+
+                //127: SS 1 (Standing)
+                new DoodadInfo(),
+
+                //128: SS 1 (Standing)
+                new DoodadInfo(),
+
+                //129: SS 1 (Standing)
+                new DoodadInfo(),
+
+                //130: SS 1 (Moving)
+                new DoodadInfo(),
+
+                //131: SS 1 (Moving)
+                new DoodadInfo(),
+
+                //132: SS 1 (Moving)
+                new DoodadInfo(),
+
+                //133: SS 1 (Moving)
+                new DoodadInfo(),
+
+                //134: nothing
+                new DoodadInfo(),
+
+                //135: nothing
+                new DoodadInfo(),
+
+                //136: nothing
+                new DoodadInfo(),
+
+                //137: nothing
+                new DoodadInfo(),
+
+                //138: Dog 1 (Moving)
+                new DoodadInfo(),
+
+                //139: Dog 1 (Moving)
+                new DoodadInfo(),
+
+                //140: Dog 1 (Moving)
+                new DoodadInfo(),
+
+                //141: Dog 1 (Moving)
+                new DoodadInfo(),
+
+                //142: nothing
+                new DoodadInfo(),
+
+                //143: nothing
+                new DoodadInfo(),
+
+                //144: Guard 3 (Standing)
+                new DoodadInfo(),
+
+                //145: Guard 3 (Standing)
+                new DoodadInfo(),
+
+                //146: Guard 3 (Standing)
+                new DoodadInfo(),
+
+                //147: Guard 3 (Standing)
+                new DoodadInfo(),
+
+                //148: Guard 3 (Moving)
+                new DoodadInfo(),
+
+                //149: Guard 3 (Moving)
+                new DoodadInfo(),
+
+                //150: Guard 3 (Moving)
+                new DoodadInfo(),
+
+                //151: Guard 3 (Moving)
+                new DoodadInfo(),
+
+                //152: nothing
+                new DoodadInfo(),
+
+                //153: nothing
+                new DoodadInfo(),
+
+                //154: nothing
+                new DoodadInfo(),
+
+                //155: nothing
+                new DoodadInfo(),
+
+                //156: nothing
+                new DoodadInfo(),
+
+                //157: nothing
+                new DoodadInfo(),
+
+                //158: nothing
+                new DoodadInfo(),
+
+                //159: nothing
+                new DoodadInfo(),
+
+                //160: nothing
+                new DoodadInfo(),
+
+                //161: nothing
+                new DoodadInfo(),
+
+                //162: SS 3 (Standing)
+                new DoodadInfo(),
+
+                //163: SS 3 (Standing)
+                new DoodadInfo(),
+
+                //164: SS 3 (Standing)
+                new DoodadInfo(),
+
+                //165: SS 3 (Standing)
+                new DoodadInfo(),
+
+                //166: SS 3 (Moving)
+                new DoodadInfo(),
+
+                //167: SS 3 (Moving)
+                new DoodadInfo(),
+
+                //168: SS 3 (Moving)
+                new DoodadInfo(),
+
+                //169: SS 3 (Moving)
+                new DoodadInfo(),
+
+                //170: nothing
+                new DoodadInfo(),
+
+                //171: nothing
+                new DoodadInfo(),
+
+                //172: nothing
+                new DoodadInfo(),
+
+                //173: nothing
+                new DoodadInfo(),
+
+                //174: Dog 3 (Moving)
+                new DoodadInfo(),
+
+                //175: Dog 3 (Moving)
+                new DoodadInfo(),
+
+                //176: Dog 3 (Moving)
+                new DoodadInfo(),
+
+                //177: Dog 3 (Moving)
+                new DoodadInfo(),
+
+                //178: nothing
+                new DoodadInfo(),
+
+                //179: nothing
+                new DoodadInfo(),
+
+                //180: Guard 4 (Standing)
+                new DoodadInfo(),
+
+                //181: Guard 4 (Standing)
+                new DoodadInfo(),
+
+                //182: Guard 4 (Standing)
+                new DoodadInfo(),
+
+                //183: Guard 4 (Standing)
+                new DoodadInfo(),
+
+                //184: Guard 4 (Moving)
+                new DoodadInfo(),
+
+                //185: Guard 4 (Moving)
+                new DoodadInfo(),
+
+                //186: Guard 4 (Moving)
+                new DoodadInfo(),
+
+                //187: Guard 4 (Moving)
+                new DoodadInfo(),
+
+                //188: nothing
+                new DoodadInfo(),
+
+                //189: nothing
+                new DoodadInfo(),
+
+                //190: nothing
+                new DoodadInfo(),
+
+                //191: nothing
+                new DoodadInfo(),
+
+                //192: nothing
+                new DoodadInfo(),
+
+                //193: nothing
+                new DoodadInfo(),
+
+                //194: nothing
+                new DoodadInfo(),
+
+                //195: nothing
+                new DoodadInfo(),
+
+                //196: nothing
+                new DoodadInfo(),
+
+                //197: nothing
+                new DoodadInfo(),
+
+                //198: SS 4 (Standing)
+                new DoodadInfo(),
+
+                //199: SS 4 (Standing)
+                new DoodadInfo(),
+
+                //200: SS 4 (Standing)
+                new DoodadInfo(),
+
+                //201: SS 4 (Standing)
+                new DoodadInfo(),
+
+                //202: SS 4 (Moving)
+                new DoodadInfo(),
+
+                //203: SS 4 (Moving)
+                new DoodadInfo(),
+
+                //204: SS 4 (Moving)
+                new DoodadInfo(),
+
+                //205: SS 4 (Moving)
+                new DoodadInfo(),
+
+                //206: nothing
+                new DoodadInfo(),
+
+                //207: nothing
+                new DoodadInfo(),
+
+                //208: nothing
+                new DoodadInfo(),
+
+                //209: nothing
+                new DoodadInfo(),
+
+                //210: Dog 4 (Moving)
+                new DoodadInfo(),
+
+                //211: Dog 4 (Moving)
+                new DoodadInfo(),
+
+                //212: Dog 4 (Moving)
+                new DoodadInfo(),
+
+                //213: Dog 4 (Moving)
+                new DoodadInfo(),
+
+                //214: Hans Grosse
+                new DoodadInfo(),
         };
     }
 

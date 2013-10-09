@@ -30,7 +30,6 @@ public class ArcadeServer {
 	private static ArcadeServer instance;
 	
 	// Package manager
-	@SuppressWarnings("unused")
 	private PackageServer packServ;
 
     private GameStorage gameStorage;

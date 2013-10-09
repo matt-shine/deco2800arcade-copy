@@ -14,7 +14,8 @@ public class EntityCollision implements Comparable<Object> {
 		MAP_ENTITY_C_ANIMAL,
 		MAP_ENTITY_C_WORLD_PROJECTILE,
 		MAP_ENTITY_C_PLAYER_PROJECTILE,
-		MAP_ENTITY_C_PLAYER
+		MAP_ENTITY_C_PLAYER,
+		MAP_ENTITY_C_LEFT_EDGE
 	};
 	
 	private Entity entityOne;

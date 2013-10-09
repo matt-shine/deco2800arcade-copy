@@ -12,7 +12,7 @@ import java.util.Random;
 
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
-	private PreferencesManager prefManage;
+	private static PreferencesManager prefManage;
 	private MusicManager musicManager;
 
 	public static class Config {
@@ -31,7 +31,10 @@ public class Hunter extends PlatformerGame {
         public static long PLAYER_BLINK_TIMEOUT = 1000;
 
         public static Random randomGenerator;
-    }
+        public static PreferencesManager getPreferencesManager() {
+    		return prefManage;
+    	}
+	}
 
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);

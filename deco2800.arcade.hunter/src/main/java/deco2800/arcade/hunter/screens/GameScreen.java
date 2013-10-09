@@ -22,6 +22,7 @@ import deco2800.arcade.hunter.model.Animal;
 import deco2800.arcade.hunter.model.BackgroundLayer;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.model.Items;
+import deco2800.arcade.hunter.model.MapEntity;
 import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.hunter.model.SpriteLayer;
 import deco2800.arcade.platformergame.model.Entity;
@@ -57,13 +58,15 @@ public class GameScreen implements Screen {
 		
 		this.hunter = hunter;
 		// Plays the music
-		hunter.getMusicManager().play(HunterMusic.GAME);
+		if(Config.getPreferencesManager().isMusicEnabled() && Config.getPreferencesManager().isSoundEnabled()){
+			hunter.getMusicManager().play(HunterMusic.GAME);
+		}
 		// Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
-
+		
         //Generate random seed and feed it to the random number generator here.
         //If you want to make it work the same as a previous run, manually set the seed at the start
         Config.randomGenerator = new Random((long) (Math.random() * Long.MAX_VALUE));
@@ -76,8 +79,8 @@ public class GameScreen implements Screen {
 
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
-		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo");
-		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion");
+		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"Hippo");
+		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"Lion");
 		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, false);
 
 		entities.add(player);
@@ -177,7 +180,11 @@ public class GameScreen implements Screen {
 					if(Config.randomGenerator.nextFloat() >= 0.7)
 						createItems(false);
 				}
-				if(stateTime%20f <= 0.05f){
+				if(stateTime%8f <= 0.05f){
+					if(Config.randomGenerator.nextFloat()>=0.7)
+						createMapEntity();
+				}
+				if(stateTime%10f <= 0.05f){
 					if(Config.randomGenerator.nextFloat() >= 0.5)
 						createItems(true);
 				}
@@ -194,6 +201,10 @@ public class GameScreen implements Screen {
 		}
 	}
 	
+
+	/**
+	 * Checks if any player buffs are applied
+	 */
 	private void checkBuffs() {
 		if (player.isInvulnerable()){
 			timer = 5f;
@@ -203,19 +214,27 @@ public class GameScreen implements Screen {
 		}
 	}
 
+	/**
+	 * Gets the number of animals that were killed by the player
+	 * @return int animalsKilled
+	 */
 	private ArrayList<Animal> getAnimalsKilled() {
 		return animalsKilled;
 	}
 	
+	private void createMapEntity() {
+		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64));
+	}
+	
 	private void createAnimals(){
-		String[] anims= {"hippo","lion","zebra"};
+		String[] anims= {"Hippo","Lion","Zebra"};
 		System.out.println("New Animal");
-		entities.add(new Animal(new Vector2(player.getX() + 10*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 10*Config.TILE_SIZE)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
+		entities.add(new Animal(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
 	}
 	
 	private void createItems(boolean weapon){
 		System.out.println("New Item");
-		entities.add(new Items(new Vector2(player.getX() + 13*Config.TILE_SIZE, getForeground().getColumnTop(player.getX() + 13*Config.TILE_SIZE)), 64, 64, weapon));
+		entities.add(new Items(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)), 64, 64, weapon));
 	}
 
 	private void pollInput() {
@@ -223,7 +242,9 @@ public class GameScreen implements Screen {
 			// Attack
 			player.attack();
 			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
-			attack.play(hunter.getPreferencesManager().getVolume());
+			if (Config.getPreferencesManager().isSoundEnabled()){
+				attack.play(hunter.getPreferencesManager().getVolume());
+			}
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.V)){
@@ -234,7 +255,9 @@ public class GameScreen implements Screen {
 			// Jump
 			player.jump();
 			Sound jump = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
-			jump.play(hunter.getPreferencesManager().getVolume());
+			if (Config.getPreferencesManager().isSoundEnabled()){
+				jump.play(hunter.getPreferencesManager().getVolume());
+			}
 		}
 
 	}
@@ -253,7 +276,7 @@ public class GameScreen implements Screen {
 	private void drawScore(SpriteBatch batch) {
 		int x = Config.screenWidth / 2;
 		int y = Config.screenHeight - 16;
-		CharSequence scoreText = Integer.toString(player.getCurrentScore())+ "     x" + multiplier;
+		CharSequence scoreText = Integer.toString(player.getCurrentScore())+ "     X " + multiplier + " MULTIPLIER";
 		font.draw(batch, scoreText, x, y);
 	}
 	

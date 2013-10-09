@@ -95,16 +95,16 @@ public abstract class Mover {
 	 * @param tile
 	 * @return
 	 */
-	public Tile nextTile(Tile tile){
+	public Tile nextTile(Tile tile, int offset){
 		int x = gameMap.getTilePos(tile).getX();
 		int y = gameMap.getTilePos(tile).getY();
 		Tile[][] grid = gameMap.getGrid();
 		//System.out.println(x + ", " + y);
 		switch(this.getFacing()) {
-		case LEFT: x -= 1; break;
-		case RIGHT: x += 1; break;
-		case UP: y += 1; break;
-		case DOWN: y -= 1; break;
+		case LEFT: x -= offset; break;
+		case RIGHT: x += offset; break;
+		case UP: y += offset; break;
+		case DOWN: y -= offset; break;
 		case TEST: break;
 		}
 		return grid[x][y];

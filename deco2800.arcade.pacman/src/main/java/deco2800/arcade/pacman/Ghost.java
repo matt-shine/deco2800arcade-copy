@@ -153,14 +153,14 @@ public class Ghost extends Mover {
 			return player.getTile();
 		}
 		else if (ghost == GhostName.PINKY) {
-			return player.getTile();
+			return player.nextTile(player.getTile(), 4);
 		}
 		else {
-			return targetTile;
+			return player.getTile();
 		}
-		
-		
 	}
+	
+	
 
 	public void setTargetTile(Tile targetTile) {
 		this.targetTile = targetTile;

@@ -18,7 +18,11 @@ public class Ghost extends Mover {
 	private enum GhostState {
 	CHASE, SCATTER, FRIGHT, DEAD
 	}
-		
+	
+	public enum GhostName {
+		BLINKY, PINKY, INKY, CLYDE
+	}
+	private GhostName ghost;
 	private GhostState currentState;
 	// Static variables for pulling sprites from sprite sheet
 	private static final int FRAME_COLS = 8;
@@ -33,13 +37,23 @@ public class Ghost extends Mover {
 	private TextureRegion[] walkFrames;
 	private TextureRegion currentFrame;
 	
-	public Ghost(GameMap gameMap) {
+	public Ghost(GameMap gameMap, GhostName ghost) {
 		super(gameMap);
+		this.ghost = ghost;
 		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost start
 		//set up pacman to be drawn in the right place- this is defintely right
 		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
-		walkSheet = new Texture(Gdx.files.internal("redghostmove.png"));
+		
+		String file = "";
+		switch (ghost) {
+		case BLINKY : file = "redghostmove.png"; break;
+		case PINKY : file = "pinkghostmove.png"; break;
+		case INKY : file = "tealghostmove.png"; break;
+		case CLYDE : file = "orangeghostmove.png"; break;
+		}
+		
+		walkSheet = new Texture(Gdx.files.internal(file));
 		// splits into columns and rows then puts them into one array in order
 		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
 		walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()

@@ -24,6 +24,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.pacman.PacChar.PacState;
+import deco2800.arcade.pacman.Ghost.GhostName;
 
 //note: no 'implements ApplicationListener is relevant anywhere in our program,
 // as GameClient extends Game which implements it. As far as I can tell
@@ -129,7 +130,7 @@ public class Pacman extends GameClient {
 		gameMap.createTiles(gameMap.readMap(file));
 		//initialise pacman
 		player = new PacChar(gameMap);
-		blinky = new Ghost(gameMap);
+		blinky = new Ghost(gameMap, GhostName.BLINKY);
 		//initialise receiver for input- use the multiplexer from Arcade
 
 		// because overlay group said to in log messages

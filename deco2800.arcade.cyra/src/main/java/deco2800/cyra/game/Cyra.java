@@ -14,7 +14,7 @@ import deco2800.arcade.model.Game;
  * @author Game Over
  *
  */
-@ArcadeGame(id="cyra")
+@ArcadeGame(id = "Cyra")
 public class Cyra extends GameClient {
 
 	private NetworkClient networkClient;

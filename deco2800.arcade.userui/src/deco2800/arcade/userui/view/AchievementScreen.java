@@ -3,6 +3,7 @@ package deco2800.arcade.userui.view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -70,8 +71,6 @@ public class AchievementScreen extends JFrame{
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	Font linkbold = new Font("Verdana", Font.BOLD, 14);
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
-
-	private Game game;
 	
 	public AchievementScreen(Model model) throws HeadlessException {
 		
@@ -203,8 +202,9 @@ public class AchievementScreen extends JFrame{
 	    achievementlist = new JTextArea();
 	    achievementlist.setLineWrap(true);
 	    achievementlist.setFont(blacknormal);
-	    achievementlist.setBackground(Color.LIGHT_GRAY);
+	    achievementlist.setBackground(Color.white);
 	    achievementlist.setEditable(false);
+	    achievementlist.setMargin(new Insets(10,10,10,10));
 	    
 	    achievementbarpanel.add(achievementbar);
         achievementbarpanel.setOpaque(false);
@@ -410,22 +410,37 @@ public void addplayerinfopanel(){
 	 * Get and Set method for objects
 	 */
 	
-	public void getGameSelection(){
+	public String getGameSelection(){
 		
 		//Set selected game identifier
 		System.out.println(gameselect.getSelectedItem().toString());
+		return gameselect.getSelectedItem().toString();
 		
 	}
 	
-	public void setAchievementList(Game game){
+	public void setAchievementList(){
 		
-		this.game = game;			
-		ArrayList<Achievement> list;
-		AchievementClient gameAchievement = null;
+		//achievementlist.setText(model.achievements.achievementsForGame(getGameSelection()).toString());
+		achievementlist.setText(getGameSelection());	
+		if (getGameSelection() == "Pong"){
+			
+			//achievementlist.setText(model.achievements.achievementsForGame(game));
+		}
+		//Need to change the gamelist (combobox) to take in Game element values
+		//Note: since the box is a string may need to do a check for each game seperately
 		
-		gameAchievement.achievementsForGame(game);
-		achievementlist.setText(gameAchievement.toString());
-				
+	}
+	
+	public void setGameName(){
+		
+		
+		
+	}
+	
+	public void setGameDescription(){
+		
+		
+		
 	}
 
 }

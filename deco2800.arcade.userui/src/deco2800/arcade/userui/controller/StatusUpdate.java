@@ -8,7 +8,7 @@ import deco2800.arcade.userui.view.AchievementScreen;
 import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
-public class ControllerStatus {
+public class StatusUpdate {
 	
 	private AchievementScreen achievementView;
 	private StatusScreen statusView;
@@ -20,10 +20,11 @@ public class ControllerStatus {
 	 * @param theModel
 	 * @param statusView
 	 */
-	public ControllerStatus(Model theModel, StatusScreen statusView){
+	public StatusUpdate(Model theModel, StatusScreen statusView, UserScreen userView){
 		
 		this.theModel = theModel;
 		this.statusView = statusView;
+		this.userView = userView;
 		
 		this.statusView.addSaveListener(new SaveListener());
 		this.statusView.addCancelListener(new CancelListener());
@@ -37,7 +38,7 @@ public class ControllerStatus {
 			
 			statusView.dispose();
 			statusView.getStatusSelection();
-			theModel.statusviewon = false;
+			userView.setStatus(theModel.statusIcon);
 			
 		}
 		

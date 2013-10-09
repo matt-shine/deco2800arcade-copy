@@ -15,7 +15,7 @@ public class ControllerAchievement {
 	private StatusScreen statusView;
 	private UserScreen userView;
 	private Model theModel;
-	public Game Pong;
+	private Game Pong;
 
 	/**
 	 * Controller for the achievement page
@@ -140,8 +140,8 @@ public class ControllerAchievement {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 
-			//View achievements for particular game
-			//achievementView.setAchievementList(Pong);
+			//Calls the method to set achievement list based on game selection
+			achievementView.setAchievementList();
 			
 		}
 		

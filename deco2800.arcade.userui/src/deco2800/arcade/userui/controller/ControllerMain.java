@@ -44,8 +44,9 @@ public class ControllerMain {
 		this.userView.addAchievementListener(new AchievementListener());
 		this.userView.addFriendListener(new AddFriendListener());
 		this.userView.addRemoveFriendListener(new RemoveFriendListener());
-		
+					
 		checkstatus();
+			
 		
 	}
 	
@@ -62,7 +63,8 @@ public class ControllerMain {
 		}
 		if (theModel.getStatus() == "offline"){
 			userView.setStatus(theModel.getStatusIcon());
-		}		
+		}	
+		
 	}
 	
 	class EditListener implements ActionListener{
@@ -166,7 +168,7 @@ public class ControllerMain {
 			
 			//Open status popup
 			statusView = new StatusScreen(theModel);
-			ControllerStatus statuscontroller = new ControllerStatus(theModel, statusView);
+			StatusUpdate statuscontrol = new StatusUpdate(theModel, statusView, userView);
 			
 		}
 		

@@ -49,14 +49,12 @@ public class UserScreen extends JFrame{
 	//Declare Labels 
 	private JLabel avatar;
 	private JLabel playername, playerlastonline, realname, program, description;
-	private JLabel addfriend, status;
 	private JLabel aboutbar, friendbar, historybar;
 	private JLabel history1, history2, history3, history4, history5;
 	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
 	achievement6;
 	
 	//Declare Text Areas
-	private JTextArea achievementarea;
 	private JTextArea historyarea;
 	
 	//Declare Images 
@@ -97,8 +95,7 @@ public class UserScreen extends JFrame{
 		 *  Create all Panels 
 		 *  (Page split into 3 main panels inside a parent container 
 		 *  ie. sidepanel, contentpanel, menupanel )
-		 */
-			    
+		 */			    
 	    addmenupanel();
 	    addplayerinfopanel();
 	    addplayerpanel();
@@ -112,8 +109,7 @@ public class UserScreen extends JFrame{
 	    
 	    /*Add panels to Main Panel	
 	     *                
-	     */
-	    
+	     */	    
 	    parentContainer = new JPanel(new MigLayout());
 		parentContainer.add(menupanel, "dock north");
 		parentContainer.add(sidepanel, "west");
@@ -260,6 +256,7 @@ public class UserScreen extends JFrame{
 		friendscroll.setOpaque(false);
 		friendscroll.setBorder(BorderFactory.createEmptyBorder());
 		friendscroll.getViewport().setOpaque(false);
+		friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		//Label
 		friendbar = new JLabel("FRIEND LIST");
 	    friendbar.setFont(sidebold);
@@ -525,6 +522,7 @@ public class UserScreen extends JFrame{
 	public void addStatusListener(ActionListener listenForStatusButton){
 		
 		statusbutton.addActionListener(listenForStatusButton);
+		model.statusviewon = true;
 		
 	}
 	
@@ -548,9 +546,20 @@ public class UserScreen extends JFrame{
 		
 	}
 	
+	/**
+	 * 
+	 * @param icon
+	 */
 	public void setStatus(ImageIcon icon){
 		
 		statusbutton.setIcon(icon);
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void updateFriends(){
 		
 	}
 	

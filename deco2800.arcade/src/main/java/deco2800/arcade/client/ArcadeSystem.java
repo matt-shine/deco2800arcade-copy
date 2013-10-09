@@ -12,8 +12,6 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 //TODO commenting?
 import deco2800.arcade.model.Game;
 
-import java.util.Set;
-
 public class ArcadeSystem {
 	
 	public static String UI = "arcadeui";
@@ -137,6 +135,10 @@ public class ArcadeSystem {
     
     public static void addPlayerToLobby() {
     	arcade.addPlayerToLobby();
+    }
+    
+    public static void removePlayerFromLobby() {
+    	arcade.removePlayerFromLobby();
     }
 
 	public static void setPlayerBetting(boolean b) {

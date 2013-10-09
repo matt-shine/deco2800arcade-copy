@@ -83,6 +83,11 @@ public class Lobby {
 
 	}
 	
+	/**
+	 * Add a player to the list of lobby players
+	 * @param playerId
+	 * @param connection
+	 */
 	public void addPlayerToLobby(int playerId, Connection connection) {
 		if (connectedPlayers.containsKey(playerId)) {
 			//Players already in the lobby list - remove to re-add
@@ -90,10 +95,16 @@ public class Lobby {
 		}
 		connectedPlayers.put(playerId, connection);
 	}
-
-	public void removePlayerFromLobby(int playerId, Connection connection) {
+	
+	/**
+	 * Remove a player from the list of lobby players
+	 * @param playerId
+	 * @param connection
+	 */
+	public void removePlayerFromLobby(int playerId) {
 		if (connectedPlayers.containsKey(playerId)) {
 			connectedPlayers.remove(playerId);
+			System.out.println("Removed player " + playerId + " from lobby");
 		}
 	}
 	
@@ -130,7 +141,7 @@ public class Lobby {
 	 * @param playerId - The id of the player to send the matches to.
 	 */
 	public void sendGamesToLobbyUser(int playerId) {
-		System.out.println("Sending matches to player: " + playerId);
+
 		/* Send a clear list request to the players client */
 		ClearListRequest clr = new ClearListRequest();
 		connectedPlayers.get(playerId).sendTCP(clr);

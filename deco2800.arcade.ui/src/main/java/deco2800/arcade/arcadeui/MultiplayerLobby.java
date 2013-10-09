@@ -8,25 +8,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.SnapshotArray;
 
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.model.Game;
-import deco2800.arcade.model.Game.InternalGame;
-import deco2800.arcade.model.Player;
-import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
@@ -71,7 +61,7 @@ public class MultiplayerLobby implements Screen {
 		skin = new Skin();
 		final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
 		skin.add("background", new Texture("homescreen_bg.png"));
-
+		
 		Label label = new Label("Matchmaking Lobby", skin);
 		Label label2 = new Label("Chat:", skin);
 
@@ -109,10 +99,8 @@ public class MultiplayerLobby implements Screen {
 		skin2.add("default", textButtonStyle);
 
 		//Create buttons, labels and tables for layout purposes 
-		//Changed open games 
 		TextButton createbutton = new TextButton("Create Match", skin);
 		TextButton refreshButton = new TextButton("Refresh", skin);
-		TextButton button = new TextButton("Open Games", skin);
 		TextButton button4 = new TextButton("Match Me!", skin);
 		TextButton button2 = new TextButton("Return to Menu", skin);
 
@@ -156,7 +144,7 @@ public class MultiplayerLobby implements Screen {
 		
 		table.add(refreshButton).width(300).height(40).padRight(20).padTop(600);
 		
-		table.add(button).width(300).height(40).padRight(20).padLeft(20).padTop(600);
+		//table.add(button).width(300).height(40).padRight(20).padLeft(20).padTop(600);
 		
 		table.add(button4).width(300).height(40).padRight(20).padLeft(20).padTop(600);
 
@@ -173,9 +161,9 @@ public class MultiplayerLobby implements Screen {
 				final TextButton button5 = new TextButton("Join", skin);
 				
 				table2.center().left();
-				table2.add(matchLabel).width(130).padTop(20).padLeft(150);
-				table2.add(player).width(130).padTop(20).padLeft(130);
-				table2.add(button5).width(130).height(30).padTop(20);
+				table2.add(matchLabel).width(130).padTop(5).padLeft(150);
+				table2.add(player).width(130).padTop(5).padLeft(130);
+				table2.add(button5).width(130).height(20).padTop(5);
 				table2.row();
 				
 				button5.addListener(new ChangeListener() {
@@ -191,10 +179,10 @@ public class MultiplayerLobby implements Screen {
 
 		
 		
-		/** Open Games Button Event Listener 
-		 * Now just creates a match on the server.
+		/** Test Button Event Listener 
+		 * Simulates creating a match on the server.
 		 */
-		button.addListener(new ChangeListener() {
+		/*button.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				
             	CreateMatchRequest request = new CreateMatchRequest();
@@ -202,7 +190,7 @@ public class MultiplayerLobby implements Screen {
             	request.hostPlayerId = (int) (Math.random()*1000);
             	ArcadeSystem.createMatch(request);
             }
-        });
+        });*/
 
 		// "Refresh" button event listener.
 		 refreshButton.addListener(new ChangeListener() {
@@ -214,23 +202,20 @@ public class MultiplayerLobby implements Screen {
 						for (int i = 0; i < matches.size(); i++) {
 							Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
 							Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
-							final TextButton button4 = new TextButton("Join", skin);
+							final TextButton button5 = new TextButton("Join", skin);
 							
 							table2.center().left();
-							table2.add(matchLabel).width(130).padTop(20).padLeft(150);
-							table2.add(player).width(130).padTop(20).padLeft(130);
-							table2.add(button4).width(130).height(30).padTop(20);
+							table2.add(matchLabel).width(130).padTop(5).padLeft(150);
+							table2.add(player).width(130).padTop(5).padLeft(130);
+							table2.add(button5).width(130).height(20).padTop(5);
 							table2.row();
 							
-							button4.addListener(new ChangeListener() {
+							button5.addListener(new ChangeListener() {
 					            public void changed (ChangeEvent event, Actor actor) {
-					                System.out.println("You Clicked: " + button4.getName());
-									
+					                System.out.println("You Clicked: " + button5.getName());
 								}
-					            
 					        });
 						}
-			
 					}	
 			 	}
 		});
@@ -240,8 +225,6 @@ public class MultiplayerLobby implements Screen {
 		 createbutton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
             	
-            	//dispose();
-            	//System.out.println("DISPOSED************************************************");
             	ArcadeSystem.setMultiplayerEnabled(false);
             	NewMultiGameRequest request = new NewMultiGameRequest();
             	Set<String> games = ArcadeSystem.getGamesList();
@@ -277,8 +260,8 @@ public class MultiplayerLobby implements Screen {
 		// "Return to Menu" Button Event Listener
 		button2.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-
 				dispose();
+				ArcadeSystem.removePlayerFromLobby();
 				ArcadeSystem.setMultiplayerEnabled(false);
 				arcadeUI.setScreen(arcadeUI.getHome());
 
@@ -317,8 +300,6 @@ public class MultiplayerLobby implements Screen {
 
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
-		//stage.pause();
-		//screen.dispose();
 
 		//Gdx.gl.glClearColor(0.9f, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -347,7 +328,6 @@ public class MultiplayerLobby implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		System.out.println("########LOBBY DISPOSED############");
 		stage.dispose();
 		skin.dispose();
 		skin2.dispose();
@@ -369,7 +349,6 @@ public class MultiplayerLobby implements Screen {
 	@Override
 	public void resize(int arg0, int arg1) {
 		// TODO Auto-generated method stub
-
 
 	}
 

@@ -445,20 +445,36 @@ public class Arcade extends JFrame {
         return selectedGame;
     }
     
+    /**
+     * Adds a lobby match to the clients list of matches.
+     * @param response - The match to add.
+     */
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
 	}
 	
+	/**
+	 * Resets the client's list of lobby matches.
+	 */
 	public static void clearMatchList() {
 		matches.removeAll(matches);
 	}
 	
+	/**
+	 * Removes a match from the client's list of lobby matches.
+	 * @param response - The match to remove.
+	 */
 	public static void removeFromMatchList(RemovedMatchDetails response) {
 		if (matches.contains(response)) {
 			matches.remove(response);
 		}
 	}
 	
+	/**
+	 * Returns an array of matches in the lobby
+	 * 
+	 * @return the list of matches
+	 */
 	public static ArrayList<ActiveMatchDetails> getMatches() {
 		return matches;
 	}
@@ -468,23 +484,44 @@ public class Arcade extends JFrame {
 		this.client.sendNetworkObject(request);
 	}
 	
+	/**
+	 * Sends a CreateMatchRequest to the server.
+	 * @param request
+	 */
 	public void createMatch(CreateMatchRequest request) {
 		this.client.sendNetworkObject(request);
 	}
 	
+	/**
+	 * Sends a populate request to the lobby, which responds by sending
+	 * all matches currently active in the lobby.
+	 */
 	public void populateMatchList() {
 		NewLobbyRequest request = new NewLobbyRequest();
 		request.requestType = LobbyRequestType.POPULATE;
 		this.client.sendNetworkObject(request);
 	}
 	
-
+	/**
+	 * Send a request to add this player to the list of players 
+	 * connected to the lobby.
+	 */
 	public void addPlayerToLobby() {
 		NewLobbyRequest request = new NewLobbyRequest();
 		request.playerID = player.getID();
 		request.requestType = LobbyRequestType.JOINLOBBY;
-		this.client.sendNetworkObject(request);
-		
+		this.client.sendNetworkObject(request);	
+	}
+	
+	/**
+	 * Send a request to remove this player from the list of players 
+	 * connected to the lobby.
+	 */
+	public void removePlayerFromLobby() {
+		NewLobbyRequest request = new NewLobbyRequest();
+		request.playerID = player.getID();
+		request.requestType = LobbyRequestType.LEAVELOBBY;
+		this.client.sendNetworkObject(request);	
 	}
 
 	public void disposeGame() {

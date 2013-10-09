@@ -20,7 +20,6 @@ public class PackmanListener extends Listener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 
-        System.out.println(object); // TODO remove
 		if (object instanceof GameUpdateCheckRequest) {
             System.out.println("[Server]: GameUpdateCheckRequest recieved");
             PackageServer packServ = ArcadeServer.instance().packServ();

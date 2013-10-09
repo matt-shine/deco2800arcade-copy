@@ -100,9 +100,6 @@ public class PacChar extends Mover{
 		batch.draw(walkFrames[spritePos], drawX, drawY, width, height);
 	}
 	 
-	public Dir getFacing() {
-			return facing;
-		}
 	
 	public void setFacing(Dir facing) {
 		this.facing = facing;

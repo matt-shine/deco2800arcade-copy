@@ -12,7 +12,7 @@ import java.util.Random;
 
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
-	private PreferencesManager prefManage;
+	private static PreferencesManager prefManage;
 	private MusicManager musicManager;
 
 	public static class Config {
@@ -26,6 +26,9 @@ public class Hunter extends PlatformerGame {
 		public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
         public static Random randomGenerator;
+        public static PreferencesManager getPreferencesManager() {
+    		return prefManage;
+    	}
 	}
 
 	public Hunter(Player player, NetworkClient networkClient) {

@@ -73,6 +73,7 @@ public class Player extends Entity {
 	private Sound pickup = Gdx.audio.newSound(Gdx.files.internal("powerup.wav"));
 	private Sound death = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
 	private Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
+	private int animalsKilled;
 	
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
@@ -287,7 +288,8 @@ public class Player extends Entity {
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
 		if (invulnerable){
-			//draw invincibility bubble
+			Texture inv = new Texture("textures/Items/Invulnerability.png");
+			batch.draw(inv,getX()-10,getY()-10,getWidth()+20,getHeight()+20);
 		}
 		if(state == State.RUNNING){
 			animLoop = true;
@@ -322,6 +324,10 @@ public class Player extends Entity {
 					collisions.add(new EntityCollision(player, e,
 							CollisionType.ITEM_C_PLAYER));
 				}
+				if (e.getType() == "MapEntity"){
+					System.out.println("Map Entity Collision");
+					collisions.add(new EntityCollision(player,e,CollisionType.MAP_ENTITY_C_PLAYER));
+				}
 			}
 
 		}
@@ -336,10 +342,11 @@ public class Player extends Entity {
 		if (e == null) {
 			gameOver();
 		}else if (e.getType() == "Items") {
-			System.out.println("Item pickup!");
 			System.out.println(((Items) e).getItem());
 			entities.remove(e);
-			pickup.play(1.0f);
+			if (Config.getPreferencesManager().isSoundEnabled()){
+				pickup.play(Config.getPreferencesManager().getVolume());
+			}
 			if (((Items)e).getItemType() == Items.Type.WEAPON){
 				setWeapon(((Items)e).getItem());
 			}else{
@@ -349,10 +356,12 @@ public class Player extends Entity {
 			if (getState() == State.ATTACK){
 				System.out.println("Attack Animal");
 				entities.remove(e);
-				killAnimal();
-				
+				score = score + 20*multiplier;
+				animalsKilled++;
 			}else{
-				hurt.play(1.0f);
+				if (Config.getPreferencesManager().isSoundEnabled()){
+					hurt.play(1.0f);
+				}
 				System.out.println("Animal Collision");
 				if (!invulnerable){
 					loseLife();
@@ -362,13 +371,21 @@ public class Player extends Entity {
 		}
 	}
 
+	/**
+	 * Checks if the player has any lives left
+	 */
 	private void checkLives() {
 		if(lives <= 0){
-			death.play(1.0f);
+			if (Config.getPreferencesManager().isSoundEnabled()){
+				death.play(Config.getPreferencesManager().getVolume());
+			}
 		}
 	}
 
-
+	/**
+	 * Applies the buffs that the player receives
+	 * @param item - String of item to be applied
+	 */
 	private void applyPlayerBuff(String item) {
 		if (item == "DoublePoints"){
 			multiplier = multiplier * 2;
@@ -385,44 +402,80 @@ public class Player extends Entity {
 		}
 	}
 
-
-	private void killAnimal() {
-		System.out.println("Yay you killed an animal!");
-		score = score + 20*multiplier;
-	}
-
+	/**
+	 * Reduces the players life by 1;
+	 */
 	public void loseLife() {
 		lives -= 1;
 	}
 
+	/**
+	 * Adds an extra life for the player by 1;
+	 */
 	public void addLife() {
 		lives += 1;
 	}
 
+	/**
+	 * Sets if the player is invulnerable;
+	 * @param inv - Boolean of invulnerability
+	 */
 	public void setInvulnerability(boolean inv){
 		invulnerable= inv;
 	}
 	
+	/**
+	 * Checks if the player is invulnerable
+	 * @return Boolean if the player is invulnerable
+	 */
 	public boolean isInvulnerable(){
 		return invulnerable;
 	}
 	
+	/**
+	 * Sets a score multiplier for the player
+	 * @param multi - int of multiplier
+	 */
 	public void setMultiplier(int multi){
 		multiplier = multi;
 	}
 	
+	/**
+	 * Returns the multiplier
+	 * @return int - multiplier
+	 */
 	public int getMultiplier(){
 		return multiplier;
 	}
 	
+	/**
+	 * Returns the lives of the player
+	 * @return int - lives
+	 */
 	public int getLives() {
 		return lives;
 	}
 	
+	/**
+	 * Returns the player's score
+	 * @return int - score
+	 */
 	public int getCurrentScore() {
 		return score;
 	}
 	
+	/**
+	 * Returns the amount of animals killed
+	 * @return int - animalsKilled
+	 */
+	public int getAnimalsKilled(){
+		return animalsKilled;
+	}
+	
+	/**
+	 * Returns the current distance of the player
+	 * @return float - distance
+	 */
 	public float getCurrentDistance() {
 		return getX() / Config.TILE_SIZE;
 	}

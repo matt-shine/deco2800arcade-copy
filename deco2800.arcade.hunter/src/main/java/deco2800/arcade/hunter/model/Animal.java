@@ -1,6 +1,7 @@
 package deco2800.arcade.hunter.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -38,6 +39,8 @@ public class Animal extends Entity {
 	
 	private String classType = "Animal";
 	
+	private HashMap<String,Animation> animMap = new HashMap<String,Animation>();
+	
 	private boolean animLoop;
 
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
@@ -45,6 +48,7 @@ public class Animal extends Entity {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
+		loadAnimations();
 		if (hunted) {
 			hunt = Type.PREY;
 			moveSpeed = 4;
@@ -52,7 +56,7 @@ public class Animal extends Entity {
 			hunt = Type.PREDATOR;
 			moveSpeed = -2;
 		}
-		setAnimation(loadAnimations(filepath));
+		setAnimation(animMap.get(filepath));
 	}
 
 	/**
@@ -62,16 +66,20 @@ public class Animal extends Entity {
 	 *            Filepath for the animal
 	 * @return Animation for the animal
 	 */
-	private Animation loadAnimations(String filepath) {
-		Texture text = new Texture("textures/Animals/" + filepath + "IDLE.png");
+	private void loadAnimations() {
+		String[] animals = {"Lion","Zebra","Hippo"};
+		Texture text = new Texture("textures/Animals/animals.png");
 		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth() / 2,
-				text.getHeight());
+				text.getHeight()/3);
 		TextureRegion[] animFrames = new TextureRegion[2];
 		int index = 0;
-		for (int j = 0; j < 2; j++) {
-			animFrames[index++] = tmp[0][j];
+		for (int j = 0; j < 3; j++) {
+			for (int i =0; i<2; i++){
+				animFrames[index++] = tmp[j][i];
+			}
+			animMap.put(animals[j],new Animation(0.5f, animFrames));
+			index = 0;
 		}
-		return new Animation(0.5f, animFrames);
 	}
 
 	private enum State {

@@ -72,10 +72,7 @@ public class WL6Meta {
                 map.getDoodadAt(x, y) != WL6Meta.SECRET_DOOR) {
             return true;
         }
-        if (hasDoorAt(x, y, map)) {
-            return true;
-        }
-        return false;
+        return hasDoorAt(x, y, map);
     }
 
 
@@ -94,11 +91,7 @@ public class WL6Meta {
         if (y == 63 || hasObscuringBlockAt(x, y + 1, map)) {
             surrounded++;
         }
-        if (surrounded == 4) {
-            return true;
-        }
-
-        return false;
+        return surrounded == 4;
 
     }
 

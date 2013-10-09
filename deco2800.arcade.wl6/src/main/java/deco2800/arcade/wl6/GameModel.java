@@ -53,7 +53,7 @@ public class GameModel {
      */
     public void goToLevel(String level) {
         //create the map
-        if (currentLevel != level) {
+        if (!currentLevel.equals(level)) {
             currentMap = new Level(loadFile("wl6maps/" + level + ".json"));
         }
 

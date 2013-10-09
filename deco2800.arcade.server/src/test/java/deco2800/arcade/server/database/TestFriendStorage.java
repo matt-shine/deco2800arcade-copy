@@ -1,7 +1,10 @@
 package deco2800.arcade.server.database;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -11,18 +14,17 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import deco2800.server.database.CreditStorage;
+import org.junit.Test;
 
-/**
- * Test class for CreditStorage
- * @author uqjstee8
- * @see deco2800.arcade.server.database.CreditStorage
- */
-public class TestCreditStorage {
+import deco2800.arcade.model.Player;
+import deco2800.server.database.DatabaseException;
+import deco2800.server.database.FriendStorage;
 
+
+public class TestFriendStorage {
 	private static IDatabaseTester databaseTester; //manage connections to the database
-	private CreditStorage creditStorage; //storage object to test
-
+	private FriendStorage friendStorage; //storage object to test
+	
 	/**
 	 * This method is run once when this class is instantiated
 	 * @throws Exception
@@ -33,7 +35,7 @@ public class TestCreditStorage {
                 "org.apache.derby.jdbc.EmbeddedDriver",
                 "jdbc:derby:Arcade;user=server;password=server;create=true");
 	}
-
+	
 	/**
 	 * Retrieve the dataset from an XML file
 	 * @return
@@ -41,22 +43,22 @@ public class TestCreditStorage {
 	 * @throws IOException
 	 */
 	private IDataSet getDataSet() throws DataSetException, IOException {
-		URL url = TestCreditStorage.class.getClassLoader().getResource("TestCreditStorage.xml");
+		URL url = TestCreditStorage.class.getClassLoader().getResource("TestFriendStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return builder.build(url);
 	}
 	
 	/**
-	 * Create a new credit storage and initialise it,
+	 * Create a new achievement storage and initialise it,
 	 * load in a dataset from XML, and get the database ready (clean old data and put the new stuff in)
 	 * This method is run once before each test case.
 	 * @throws Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		creditStorage = new CreditStorage();
-		//creditStorage.initialise();
+		friendStorage = new FriendStorage();
+        friendStorage.initialise();
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
 		databaseTester.onSetup();
@@ -71,23 +73,22 @@ public class TestCreditStorage {
 		databaseTester.onTearDown();
 	}
 	
-	/**
-	 * Simple test case to make sure our XML loading is working, and that retrieving a user's balance is OK
-	 * @throws DatabaseException
-	 */
-//	@Test
-//	public void initialTotal() throws DatabaseException {
-//		assertEquals(0, (int) creditStorage.getUserCredits(1));
-//	}
-//	
-//	/**
-//	 * Check that a simple addition to a zero balance works
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void basecase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 5);
-//		assertEquals(new Integer(5), creditStorage.getUserCredits(1));
-//	}
-//	
+	Player testPlayer0 = new Player(0, null, null, null, null, null, null, null);
+	Player testPlayer1 = new Player(1, null, null, null, null, null, null, null);
+	Player testPlayer2 = new Player(2, null, null, null, null, null, null, null);
+	
+/*	@Test
+	public void testFriendRequest() throws DatabaseException {
+		// create a test ArrayList<Integer> of playerIDs
+		ArrayList<Integer> testFriendRequests = new ArrayList<Integer>();
+		testFriendRequests.add(1);
+		testFriendRequests.add(2);
+		// create a test response from the database
+		
+		// compare playerIDs
+		friendStorage.addFriendRequest(0, 1);
+		friendStorage.addFriendRequest(0, 2);
+		assertEquals(testFriendRequests, friendStorage.getFriendInviteList(0));
+	}*/
+	
 }

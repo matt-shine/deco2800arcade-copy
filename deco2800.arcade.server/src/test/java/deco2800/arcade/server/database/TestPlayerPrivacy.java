@@ -11,18 +11,13 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import deco2800.server.database.CreditStorage;
 
-/**
- * Test class for CreditStorage
- * @author uqjstee8
- * @see deco2800.arcade.server.database.CreditStorage
- */
-public class TestCreditStorage {
+import deco2800.server.database.PlayerPrivacy;
 
+public class TestPlayerPrivacy {
 	private static IDatabaseTester databaseTester; //manage connections to the database
-	private CreditStorage creditStorage; //storage object to test
-
+	private PlayerPrivacy playerPrivacy; //storage object to test
+	
 	/**
 	 * This method is run once when this class is instantiated
 	 * @throws Exception
@@ -33,7 +28,7 @@ public class TestCreditStorage {
                 "org.apache.derby.jdbc.EmbeddedDriver",
                 "jdbc:derby:Arcade;user=server;password=server;create=true");
 	}
-
+	
 	/**
 	 * Retrieve the dataset from an XML file
 	 * @return
@@ -41,22 +36,22 @@ public class TestCreditStorage {
 	 * @throws IOException
 	 */
 	private IDataSet getDataSet() throws DataSetException, IOException {
-		URL url = TestCreditStorage.class.getClassLoader().getResource("TestCreditStorage.xml");
+		URL url = TestCreditStorage.class.getClassLoader().getResource("TestPlayerPrivacy.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return builder.build(url);
 	}
 	
 	/**
-	 * Create a new credit storage and initialise it,
+	 * Create a new achievement storage and initialise it,
 	 * load in a dataset from XML, and get the database ready (clean old data and put the new stuff in)
 	 * This method is run once before each test case.
 	 * @throws Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		creditStorage = new CreditStorage();
-		//creditStorage.initialise();
+		playerPrivacy = new PlayerPrivacy();
+        playerPrivacy.initialise();
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
 		databaseTester.onSetup();
@@ -70,24 +65,4 @@ public class TestCreditStorage {
 	public void  tearDown() throws Exception {
 		databaseTester.onTearDown();
 	}
-	
-	/**
-	 * Simple test case to make sure our XML loading is working, and that retrieving a user's balance is OK
-	 * @throws DatabaseException
-	 */
-//	@Test
-//	public void initialTotal() throws DatabaseException {
-//		assertEquals(0, (int) creditStorage.getUserCredits(1));
-//	}
-//	
-//	/**
-//	 * Check that a simple addition to a zero balance works
-//	 * @throws DatabaseException
-//	 */
-//	@Test
-//	public void basecase() throws DatabaseException {
-//		creditStorage.addUserCredits(1, 5);
-//		assertEquals(new Integer(5), creditStorage.getUserCredits(1));
-//	}
-//	
 }

@@ -16,7 +16,7 @@ public class MainGameScreen implements Screen {
 	@SuppressWarnings("unused")
 	private boolean overlayPause = false;
 	private WL6InputProcessor input = null;
-	
+	private IngameUI ui = new IngameUI();
 	
 	Renderer b = new Renderer();
 	
@@ -65,6 +65,8 @@ public class MainGameScreen implements Screen {
 		
 		
 		b.draw(this.debugMode);
+		
+		ui.draw(this.model);
 		
 	}
 

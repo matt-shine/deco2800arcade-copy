@@ -51,16 +51,22 @@ public class Items extends Entity {
 			type = Type.WEAPON;
 			switch(Config.randomGenerator.nextInt(3)){
 			case 0:item = weapons[0];
+				break;
 			case 1:item = weapons[1];
+				break;
 			case 2:item = weapons[2];
+				break;
 			}
 		}
 		else{
 			type = Type.POWERUP;
 			switch(Config.randomGenerator.nextInt(3)){
 			case 0:item = powerups[0];
+				break;
 			case 1:item = powerups[1];
+				break;
 			case 2:item = powerups[2];
+				break;
 			}
 		}
 		loadImage();

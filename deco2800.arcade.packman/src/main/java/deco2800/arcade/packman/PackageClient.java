@@ -1,7 +1,6 @@
 package deco2800.arcade.packman;
 
 import java.io.File;
-import java.lang.System;
 
 import deco2800.arcade.packman.PackageUtils;
 

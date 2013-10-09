@@ -1,11 +1,10 @@
 package deco2800.arcade.packman;
 
-import java.lang.System;
 import deco2800.arcade.packman.PackageUtils;
 
 public class PackageServer {
 	
-	private static final String releaseFolder = "Release";
+	private static final String RELEASE_FOLDER = "Release";
 	
 	/**
 	 * Initialiser
@@ -15,11 +14,11 @@ public class PackageServer {
 	public PackageServer() {
 		
 		// Create the release folder
-		System.out.println("Creating directory: " + releaseFolder);
-		if (PackageUtils.createDirectory(releaseFolder)) {
-			System.out.println("Created: " + releaseFolder);
+		System.out.println("Creating directory: " + RELEASE_FOLDER);
+		if (PackageUtils.createDirectory(RELEASE_FOLDER)) {
+			System.out.println("Created: " + RELEASE_FOLDER);
 		} else {
-			System.out.println("Failed creating: " + releaseFolder);
+			System.out.println("Failed creating: " + RELEASE_FOLDER);
 		}
 	}
 

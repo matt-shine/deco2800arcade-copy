@@ -122,9 +122,9 @@ public class Pack {
 
                     if (src != null && dest != null) {
                         try {
-                        	packer.Compress(srcPath, destPath);
-                        	packer.Expand(destPath, RELEASE_FOLDER + SP + 
-                        					game + "-" + version + ".jar");
+                        	packer.compress(srcPath, destPath);
+                        	//packer.expand(destPath, RELEASE_FOLDER + SP + 
+                        	//				game + "-" + version + ".jar");
                         } catch (IOException e) {
                             log.error("[Packman] Failed to copy JAR to Release directory", e);
                         }

@@ -1,23 +1,30 @@
 package deco2800.arcade.towerdefence;
 
+import deco2800.arcade.towerdefence.pathfinding.*;
 import java.util.UUID;
 
 /**
- * Grid object to store attributes of a generated Isometric Grid.
+ * Grid object to store attributes of a generated Grid.
  * 
  * @author hadronn
  * 
  */
-public class Grid {
+public class Grid implements TileBasedMap {
 	// Fields
 	// The unique id of the Grid.
 	private final UUID id;
 	// The grid's name, for making human recognisable variations if necessary.
 	private String name;
 	// The grid's max width.
-	private int width = 0;
+	private int width, depth;
 	// The grid's max depth.
-	private int depth = 0;
+	// The size of each grid square
+	private int gridSize;
+	// The dimensions of the grid in grid squares
+	private int gridWidth, gridDepth;
+	// The contents of the grid. 0 means clear, 1 means tower, 2 means wall, 3
+	// means wall with tower, and 4 means blocked.
+	private int gridContents[][];
 
 	// Constructor
 	/**
@@ -27,11 +34,15 @@ public class Grid {
 	 * @param depth
 	 * @param name
 	 */
-	public Grid(int width, int depth, String name) {
+	public Grid(int width, int depth, String name, int gridSize) {
 		id = UUID.randomUUID();
 		this.width = width;
 		this.depth = depth;
 		this.name = name;
+		this.gridSize = gridSize;
+		gridWidth = width / gridSize;
+		gridDepth = depth / gridSize;
+		gridContents = new int[gridWidth][gridDepth];
 	}
 
 	// Getters
@@ -98,5 +109,32 @@ public class Grid {
 	 */
 	public void name(String newName) {
 		this.name = newName;
+	}
+
+	public int getWidthInTiles() {
+		return gridWidth;
+	}
+
+	public int getHeightInTiles() {
+		return gridDepth;
+	}
+
+	public void pathFinderVisited(int x, int y) {
+		// do nothing - not needed
+
+	}
+
+	public boolean blocked(Mobile mover, int x, int y) {
+		if(gridContents[x][y] == 0){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public float getCost(Mobile mover, int sx, int sy, int tx, int ty) {
+		//Currently no special tiles to consider - always return 1
+		return 1;
 	}
 }

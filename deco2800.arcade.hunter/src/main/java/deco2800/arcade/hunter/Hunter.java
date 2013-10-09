@@ -18,13 +18,18 @@ public class Hunter extends PlatformerGame {
 	public static class Config {
 		public static int screenWidth = 1280;
 		public static int screenHeight = 720;
-		public static int gameSpeed = 256;
+		public static int gameSpeed = 768;
+        public static float gravity = 9.81f;
 		public final static int TILE_SIZE = 64;
 		public final static int PANE_SIZE = 16;
 		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
-		public final static int MAX_SPEED = 1024;
-		public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
+		public final static int MAX_SPEED = 1280;
+		public final static int SPEED_INCREASE_COUNTDOWN_START = 128;
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
+
+        public final static int PLAYER_ATTACK_TIMEOUT = 300; // Attack timeout in msec
+        public static long PLAYER_BLINK_TIMEOUT = 1000;
+
         public static Random randomGenerator;
         public static PreferencesManager getPreferencesManager() {
     		return prefManage;

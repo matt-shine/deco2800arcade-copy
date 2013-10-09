@@ -49,10 +49,10 @@ public class Player extends Entity {
 	 * A hashmap list of all the players
 	 */
 	private HashMap<String, Animation> animationList = new HashMap<String, Animation>();
-	
 	private String Weapon;
-	
 	private boolean animLoop;
+    private long attackTime = 0;
+    private long damageTime = 0; //Time when last hit by a monster.
 	
 	// States used to determine how to draw the player
 	private int score = 0;
@@ -60,8 +60,9 @@ public class Player extends Entity {
 	private String classType = "Player";
 	
 	private int multiplier;
-	
-	//States used to determine how to draw the player
+    private boolean blink = false;
+
+    //States used to determine how to draw the player
 	private enum State {
 		RUNNING, JUMPING, ATTACK, FALLING, DEAD
 	};
@@ -101,7 +102,7 @@ public class Player extends Entity {
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					animationList.put(eElement.getAttribute("id")+"running", createAnimation(3,new Texture(eElement.getElementsByTagName("running").item(0).getTextContent()),0.1f ));
-					animationList.put(eElement.getAttribute("id")+"attack", createAnimation(2,new Texture(eElement.getElementsByTagName("attack").item(0).getTextContent()),1f ));
+					animationList.put(eElement.getAttribute("id")+"attack", createAnimation(2,new Texture(eElement.getElementsByTagName("attack").item(0).getTextContent()),0.3f ));
 					animationList.put(eElement.getAttribute("id")+"jump", createAnimation(2,new Texture(eElement.getElementsByTagName("jumping").item(0).getTextContent()),2f ));
 					animationList.put(eElement.getAttribute("id")+"damage", createAnimation(1,new Texture(eElement.getElementsByTagName("damage").item(0).getTextContent()),1f ));
 					animationList.put(eElement.getAttribute("id")+"death", createAnimation(1,new Texture(eElement.getElementsByTagName("death").item(0).getTextContent()),10f ));
@@ -127,9 +128,8 @@ public class Player extends Entity {
 		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth()
 				/ frames, text.getHeight());
 		TextureRegion[] animFrames = new TextureRegion[frames];
-		int index = 0;
 		for (int j = 0; j < frames; j++) {
-			animFrames[index++] = tmp[0][j];
+			animFrames[j] = tmp[0][j];
 		}
 		return new Animation(speed, animFrames);
 	}
@@ -214,12 +214,20 @@ public class Player extends Entity {
 
 		setX(getX() + delta * velocity.x);
 
-		setJumpVelocity(getJumpVelocity() - delta * 9.81f);
+		setJumpVelocity(getJumpVelocity() - delta * Config.gravity);
 		setY(getY() + getJumpVelocity());
+
+        if (attackTime + Config.PLAYER_ATTACK_TIMEOUT < System.currentTimeMillis()) {
+            this.state = State.RUNNING;
+        }
+
+        if (damageTime + Config.PLAYER_BLINK_TIMEOUT < System.currentTimeMillis()) {
+            this.blink = false;
+        }
 
 		// Update the player state
 		// Pretending the DEAD state doesn't exist for now... TODO
-		if (isGrounded()) {
+		if (isGrounded() && this.state != State.ATTACK) {
 			this.velocity.y = 0;
 			this.state = State.RUNNING;
 			currAnim = runAnimation();
@@ -359,11 +367,14 @@ public class Player extends Entity {
 				score = score + 20*multiplier;
 				animalsKilled++;
 			}else{
-				if (Config.getPreferencesManager().isSoundEnabled()){
-					hurt.play(1.0f);
-				}
+				
 				System.out.println("Animal Collision");
-				if (!invulnerable){
+				if (!invulnerable && !blink){
+					if (Config.getPreferencesManager().isSoundEnabled()){
+						hurt.play(1.0f);
+					}
+					this.blink = true;
+                    damageTime = System.currentTimeMillis();
 					loseLife();
 					checkLives();
 				}
@@ -421,7 +432,7 @@ public class Player extends Entity {
 	 * @param inv - Boolean of invulnerability
 	 */
 	public void setInvulnerability(boolean inv){
-		invulnerable= inv;
+		invulnerable = inv;
 	}
 	
 	/**
@@ -485,8 +496,11 @@ public class Player extends Entity {
 	}
 
 	public void attack() {
-		state = State.ATTACK;
-		currAnim = attackAnimation();
+        if (this.state != State.ATTACK) {
+            state = State.ATTACK;
+            currAnim = attackAnimation();
+            attackTime = System.currentTimeMillis();
+        }
 	}
 	
 	@Override

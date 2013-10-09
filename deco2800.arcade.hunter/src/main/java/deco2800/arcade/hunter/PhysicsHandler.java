@@ -155,7 +155,7 @@ public class PhysicsHandler {
 
 	/**
 	 * Checks collision for a single entity's top edge with the map
-	 * 
+	 *
 	 * @param e
 	 *            The entity which will be checked for top map collision
 	 * @param foregroundLayer

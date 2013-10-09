@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
@@ -97,7 +98,7 @@ public class Animal extends Entity {
 			setX(getX() + moveSpeed);
 		}
 		
-		setY(getY()-9.81f);
+		setY(getY() - Hunter.Config.gravity);
 	}
 
 	/**

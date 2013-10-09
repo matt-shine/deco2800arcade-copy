@@ -157,7 +157,7 @@ public class GameScreen implements Screen {
 			staticBatch.end();
 
 			batch.begin();
-			spriteLayer.draw(batch);
+            spriteLayer.draw(batch);
 			foregroundLayer.draw(batch);
 
 			entities.drawAll(batch, stateTime);

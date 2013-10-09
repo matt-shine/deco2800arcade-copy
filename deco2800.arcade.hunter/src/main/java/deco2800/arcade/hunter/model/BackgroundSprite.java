@@ -12,6 +12,6 @@ public class BackgroundSprite extends Entity {
 	
 	@Override
 	public void update(float delta) {
-		setX(getX() - 64 * delta);
+		setX(getX() - 128 * delta);
 	}
 }

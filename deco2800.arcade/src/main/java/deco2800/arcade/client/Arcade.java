@@ -52,6 +52,8 @@ public class Arcade extends JFrame {
 
     private NetworkClient client;
 
+    private NetworkClient fileClient;
+
     private Player player;
 
     private int width, height;
@@ -71,6 +73,11 @@ public class Arcade extends JFrame {
     private static final int ARCADE_HEIGHT = 720;
     private static final int MIN_ARCADE_WIDTH = 640;
     private static final int MIN_ARCADE_HEIGHT = 480;
+
+    // Server will communicate over these ports
+    private static final int TCP_PORT = 54555;
+    private static final int UDP_PORT = 54777;
+    private static final int FILE_TCP_PORT = 54666;
 
     /**
      * ENTRY POINT
@@ -145,7 +152,18 @@ public class Arcade extends JFrame {
                 connected = true;
             } catch (ArcadeException e) {
                 // TODO: error on connection failure
-                System.out.println("Connection failed... Trying again.");
+                System.out.println("Server Connection failed... Trying again.");
+            }
+        }
+
+        connected = false;
+        while (!connected){
+            try {
+                connectToFileServer();
+                connected = true;
+            } catch (ArcadeException e) {
+                // TODO: error on connection failure
+                System.out.println("File Server connection failed... Trying again.");
             }
         }
 
@@ -161,7 +179,7 @@ public class Arcade extends JFrame {
         try {
             // TODO allow server/port as optional runtime arguments xor user inputs.
             System.out.println("connecting to server");
-			client = new NetworkClient(serverIPAddress, 54555, 54777);
+			client = new NetworkClient(serverIPAddress, TCP_PORT, UDP_PORT);
 
             client.sendNetworkObject(new GameLibraryRequest());
 
@@ -174,6 +192,24 @@ public class Arcade extends JFrame {
 	}
 
     /**
+     * Attempt to initiate a connection with the file server.
+     *
+     * @throws ArcadeException
+     *             if the connection failed.
+     */
+    public void connectToFileServer() throws ArcadeException {
+        try {
+            // TODO allow server/port as optional runtime arguments xor user inputs.
+            System.out.println("connecting to file server");
+            fileClient = new NetworkClient(serverIPAddress, FILE_TCP_PORT);
+            addFileClientListeners();
+        } catch (NetworkException e) {
+            throw new ArcadeException("Unable to connect to Arcade File Server ("
+                    + serverIPAddress + ")", e);
+        }
+    }
+
+    /**
      * Add Listeners to the network client
      */
     private void addListeners() {
@@ -184,6 +220,13 @@ public class Arcade extends JFrame {
         this.client.addListener(new PackmanListener());
         this.client.addListener(new LibraryResponseListener());
 	}
+
+    /**
+     * Add Listeners to the network client
+     */
+    private void addFileClientListeners() {
+        //this.fileClient.addListener(new ConnectionListener());
+    }
 
 	public void connectAsUser(String username) {
 		ConnectionRequest connectionRequest = new ConnectionRequest();

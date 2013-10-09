@@ -38,6 +38,9 @@ public class ArcadeServer {
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
 	private static final int UDP_PORT = 54777;
+    private static final int FILE_TCP_PORT = 54666;
+
+    private Server fileServer;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -59,6 +62,7 @@ public class ArcadeServer {
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
+        server.startFileserver();
 	}
 
 	//Achievement storage service
@@ -170,36 +174,57 @@ public class ArcadeServer {
 		// once the db is fine, load in achievement data from disk
 		this.achievementStorage.loadAchievementData();
 	}
-	
-	/**
-	 * Start the server running
-	 */
-	public void start() {
-		Server server = new Server();
-		System.out.println("Server starting");
-		server.start();
-		try {
-			server.bind(TCP_PORT, UDP_PORT);
-			System.out.println("Server bound");
-		} catch (BindException b) {
-			System.err.println("Error binding server: Address already in use");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Protocol.register(server.getKryo());
-		server.addListener(new ConnectionListener(connectedUsers));
-		server.addListener(new CreditListener());
-		server.addListener(new GameListener());
-		server.addListener(new AchievementListener());
-		server.addListener(new ReplayListener());
-		server.addListener(new HighscoreListener());
-		server.addListener(new CommunicationListener(server));
+
+    /**
+     * Start the server running
+     */
+    public void start() {
+        Server server = new Server();
+        System.out.println("Server starting");
+        server.start();
+        try {
+            server.bind(TCP_PORT, UDP_PORT);
+            System.out.println("Server bound");
+        } catch (BindException b) {
+            System.err.println("Error binding server: Address already in use");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Protocol.register(server.getKryo());
+        server.addListener(new ConnectionListener(connectedUsers));
+        server.addListener(new CreditListener());
+        server.addListener(new GameListener());
+        server.addListener(new AchievementListener());
+        server.addListener(new ReplayListener());
+        server.addListener(new HighscoreListener());
+        server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
         server.addListener(new LibraryListener());
         server.addListener(new PlayerListener());
-	}
+    }
+
+    /**
+     * Start the server running
+     */
+    public void startFileserver() {
+        Server server = new Server();
+        System.out.println("File Server starting");
+        server.start();
+        try {
+            server.bind(FILE_TCP_PORT);
+            System.out.println("File Server bound");
+        } catch (BindException b) {
+            System.err.println("Error binding file server: Address already in use");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Protocol.register(server.getKryo());
+        //server.addListener(new ConnectionListener(connectedUsers));
+    }
 
     /**
      * Return the packServ object.

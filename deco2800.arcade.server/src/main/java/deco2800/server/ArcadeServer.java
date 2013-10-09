@@ -223,7 +223,7 @@ public class ArcadeServer {
         }
 
         Protocol.register(server.getKryo());
-        //server.addListener(new ConnectionListener(connectedUsers));
+        server.addListener(new FileServerListener());
     }
 
     /**

@@ -38,6 +38,8 @@ import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
+import deco2800.arcade.protocol.packman.FetchGameRequest;
+import deco2800.arcade.protocol.packman.FetchGameResponse;
 
 /**
  * The client application for running arcade games.
@@ -225,7 +227,7 @@ public class Arcade extends JFrame {
      * Add Listeners to the network client
      */
     private void addFileClientListeners() {
-        //this.fileClient.addListener(new ConnectionListener());
+        this.fileClient.addListener(new FileServerListener());
     }
 
 	public void connectAsUser(String username) {
@@ -270,8 +272,45 @@ public class Arcade extends JFrame {
 
         GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
 
+        fetchGameJar("pong", "1.0");
+
         System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
+
+    /**
+     * Fetch the JAR for a given game/version from the server
+     * @param gameID
+     * @param version
+     */
+    public void fetchGameJar(String gameID, String version) {
+        FetchGameResponse resp;
+
+        FetchGameRequest fetchGameRequest = new
+                FetchGameRequest();
+        fetchGameRequest.gameID = gameID;
+        fetchGameRequest.version = version;
+        fetchGameRequest.byteOffset = 0;
+        fetchGameRequest.blockSize = 512;
+
+        int bytesReceived = 0;
+
+        // Fetch the file
+        do {
+            BlockingMessage r = BlockingMessage.request(fileClient.kryoClient(),
+                    fetchGameRequest);
+
+            resp = (FetchGameResponse) r;
+
+            fetchGameRequest.byteOffset = fetchGameRequest.byteOffset + resp.byteCount;
+
+            bytesReceived = bytesReceived + resp.byteCount;
+
+        } while (resp.status == 1 && bytesReceived < resp.totalBytes);
+
+        if (resp.status != 1) {
+            System.out.println("Error fetching game JAR: " + resp);
+        }
+    }
 
 	/**
 	 * Ask the server to play a given game.

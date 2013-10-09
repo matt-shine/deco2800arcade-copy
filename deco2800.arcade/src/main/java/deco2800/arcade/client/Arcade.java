@@ -29,7 +29,6 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -203,7 +202,6 @@ public class Arcade extends JFrame {
 
 		this.player = new Player(0, username,
 				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
-		this.player.setUsername(username);
 
 		// this.communicationNetwork.createNewChat(username);
 
@@ -234,6 +232,7 @@ public class Arcade extends JFrame {
 	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
+		System.out.println(selectedGame);
         selectedGame.setNetworkClient(this.client);
         startGame(selectedGame);
     }

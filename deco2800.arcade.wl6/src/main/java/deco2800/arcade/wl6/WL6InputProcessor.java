@@ -11,7 +11,7 @@ public class WL6InputProcessor implements InputProcessor {
 
     private WL6 game = null;
     private GameModel model = null;
-
+    private float MOUSE_SENSITIVITY = 0.25f;
 
 
     public WL6InputProcessor(WL6 game, GameModel model) {
@@ -82,7 +82,7 @@ public class WL6InputProcessor implements InputProcessor {
         Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(game.getWidth() / 2, game.getHeight() / 2);
         lookOffset -= x - game.getWidth() / 2;
-        model.getPlayer().setAngle(lookOffset / 1.5f);//divide by 1.5 just to reduce mouse sensitivity
+        model.getPlayer().setAngle(lookOffset * MOUSE_SENSITIVITY);
         updatePlayerSpeed();
         return false;
     }

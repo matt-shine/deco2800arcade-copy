@@ -18,11 +18,16 @@ import deco2800.server.database.ImageStorage;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+import org.slf4j.*;
+import org.apache.log4j.PropertyConfigurator;
+
 
 /**
  * Implements Achievement storage on database.
  */
 public class AchievementStorage { 
+	
+	private static Logger logger = LoggerFactory.getLogger(AchievementStorage.class);
 	
 	/**
 	 * Creates the Achievement table and sets initialised to TRUE on completion
@@ -33,33 +38,41 @@ public class AchievementStorage {
 
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
+		//Set up logger
+		PropertyConfigurator.configure("src/main/resources/log4j.properties");
+
 		
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null,
 					"ACHIEVEMENTS", null);
 			if (!tableData.next()){
+				logger.info("No achievements table in AchievementStorage database, creating table now...");
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE ACHIEVEMENTS(id VARCHAR(255) PRIMARY KEY," +
 						"NAME VARCHAR(30) NOT NULL," +
 						"DESCRIPTION VARCHAR(100) NOT NULL," +
 						"ICON VARCHAR(255) NOT NULL," +
 						"THRESHOLD INT NOT NULL)");
+				logger.info("achievements table successfully created.");
 			}
 			
 			ResultSet awardedAchievementData = connection.getMetaData().getTables(null, null,
 					"AWARDED_ACHIEVEMENT", null);
 			if (!awardedAchievementData.next()){
+				logger.info("No awarded_achievement table in AchievementStorage database, creating table now...");
 				Statement awardedAchievementStmt = connection.createStatement();
 				awardedAchievementStmt.execute("CREATE TABLE AWARDED_ACHIEVEMENT(" + 
 						"id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1," +
 						"INCREMENT BY 1)," +
 						"playerID INT NOT NULL," +
 						"achievementID VARCHAR(255) NOT NULL)");
+				logger.info("awarded_achievement table successfully created.");
 			}
 			
 			ResultSet playerAchievementData = connection.getMetaData().getTables(null, null,
 					"PLAYER_ACHIEVEMENT", null);
 			if (!playerAchievementData.next()){
+				logger.info("No playerAchievementData table in AchievementStorage database, creating table now...");
 				Statement playerAchievementStatement = connection.createStatement();
 				playerAchievementStatement.execute("CREATE TABLE PLAYER_ACHIEVEMENT(" +
 						"id INT PRIMARY KEY " +
@@ -68,10 +81,13 @@ public class AchievementStorage {
 						"achievementID VARCHAR(255) NOT NULL," +
 						"PROGRESS INT NOT NULL," +
 						"FOREIGN KEY (achievementID) REFERENCES ACHIEVEMENTS(id))");
+				logger.info("playerAchievementData table successfully created.");
 			}
+		logger.info("Achivement Storage sucessfully initialised.");
 		}
 		 catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to create achievements tables in database");
 			throw new DatabaseException("Unable to create achievements tables", e);
 		}
 	}
@@ -164,12 +180,15 @@ public class AchievementStorage {
                 }
 		        File icon = ResourceLoader.load(iconPath);
 		        imageStorage.set(iconPath, icon);
+		        logger.info("Achievement: {} added", name);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to load in achievement from file");
 			throw new DatabaseException("Error in loading achievements.", e);
 		} catch (FileNotFoundException e) {
             e.printStackTrace();
+            logger.error("Could not find achievement image file");
             throw new DatabaseException("Couldn't find file", e);
         } finally {
 			try {
@@ -211,6 +230,7 @@ public class AchievementStorage {
 						loadAchievement((Element)achNode, folder);
 					}
 				} catch(Exception e) {
+					logger.error("Unable to load in data for achievements");
 					e.printStackTrace();
 				}
 			}
@@ -259,6 +279,7 @@ public class AchievementStorage {
 			return achievements;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to load in data for achievements");
 			throw new DatabaseException("Unable to get achievements from database", e);
 		} finally {
 			try {
@@ -355,6 +376,7 @@ public class AchievementStorage {
 			return achievements;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to retrieve achievement data for game: {}", gameId);
 			throw new DatabaseException("Unable to get achievements from database", e);
 		} finally {
 			try {
@@ -407,6 +429,7 @@ public class AchievementStorage {
 			return components;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to retrieve components for achievement: {}", achID);
 			throw new DatabaseException("Unable to get components from database", e);
 		} finally {
 			try {
@@ -483,6 +506,7 @@ public class AchievementStorage {
     		}
     	} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to retrieve achievement progress for player with ID: {}", playerID);
 			throw new DatabaseException("Unable to get achievements from database", e);
 		} finally {
 			try {
@@ -533,6 +557,7 @@ public class AchievementStorage {
             return progress;
     	} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to retrieve progress for player with ID: {} in achievement: {}", playerID, achievementID);
 			throw new DatabaseException("Unable to get achievements from database", e);
 		} finally {
 			try {
@@ -569,6 +594,7 @@ public class AchievementStorage {
   
     	} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Failed to return players_achievement table from AchievementStorage database");
 			throw new DatabaseException("Unable to get achievements from database", e);
 		} finally {
 			try {
@@ -622,6 +648,7 @@ public class AchievementStorage {
     					"AND achievementID='" + achievementID + "'");
     		} catch (SQLException e) {
     			e.printStackTrace();
+    			logger.error("Unable to increment achievement: {} for player with ID: ", achievementID, playerID);
     			throw new DatabaseException("Unable to get achievements from database", e);
     		} finally {
     			try {
@@ -670,6 +697,7 @@ public class AchievementStorage {
     						"VALUES(" + playerID + ", '" + overallID + "')");
         		} catch (SQLException e) {
         			e.printStackTrace();
+        			logger.error("Unable to increment achievement: {} for player with ID: {}", achievementID, playerID);
         			throw new DatabaseException("Unable to get achievements from database", e);
         		} finally {
         			try {
@@ -733,6 +761,7 @@ public class AchievementStorage {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to initialise achievement: {} for player with ID: {}", achievementID, playerID);
 			throw new DatabaseException("Unable to get PLAYER_ACHIEVEMENT from database", e);
 		} finally {
 			try {
@@ -781,6 +810,7 @@ public class AchievementStorage {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to retrieve achievements data from database");
 			throw new DatabaseException("Unable to get ACHIEVEMENTS from database", e);
 		} finally {
 			try {
@@ -800,7 +830,7 @@ public class AchievementStorage {
 	}
 	
     /**
-     * Returns a integer of with the number of players with a given achievement. 
+     * Returns a integer of the number of players with a given achievement. 
      *
      * @param achievementID The ID of the achievement.
      * @throws DatabaseException
@@ -822,6 +852,7 @@ public class AchievementStorage {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			logger.error("Unable to retrieve the number of players who have the achievement: {}", achievementID);
 			throw new DatabaseException("Unable to get achievements from database", e);
 		} finally {
 			try {

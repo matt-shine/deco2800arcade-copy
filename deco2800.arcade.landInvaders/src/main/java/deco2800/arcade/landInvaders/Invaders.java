@@ -32,7 +32,13 @@ public class Invaders extends JFrame implements Runnable {
 
 		super("Land Invaders");
 		bglevel = 1;
+		WallList = new ArrayList<blockWall>();
+		
 		setGameImg("/tank/");
+		imgString = "/tank/";
+		WallList.add(new blockWall(180, 350, 4, 8, imgString + "WallD.png"));
+		WallList.add(new blockWall(380, 350, 4, 8, imgString + "WallD.png"));
+		WallList.add(new blockWall(580, 350, 4, 8, imgString + "WallD.png"));
 		shotsNmb = 6;
 		level = 1;
 		shots = new ArrayList<tankshot>();
@@ -56,11 +62,9 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	public void setGameImg(String type) {
-		WallList = new ArrayList<blockWall>();
+		
 
-		WallList.add(new blockWall(180, 350, 4, 8, type + "WallD.png"));
-		WallList.add(new blockWall(380, 350, 4, 8, type + "WallD.png"));
-		WallList.add(new blockWall(580, 350, 4, 8, type + "WallD.png"));
+		
 		enemyG = new enemyGroup(3, 6, 50, 83, type + "TankE.png");
 		tank = new tank(type +"TankP.png");
 		addKeyListener(tank);
@@ -198,8 +202,17 @@ public class Invaders extends JFrame implements Runnable {
 	
 	public void restart() {
 		
-		if(bglevel != 3 && level ==1)bglevel ++;
-		if(bglevel ==3 && level ==1) bglevel = 3;
+		if(bglevel != 3 && level ==1){
+			bglevel ++;
+			WallList = new ArrayList<blockWall>();
+			WallList.add(new blockWall(180, 350, 4, 8, imgString + "WallD.png"));
+			WallList.add(new blockWall(380, 350, 4, 8, imgString + "WallD.png"));
+			WallList.add(new blockWall(580, 350, 4, 8, imgString + "WallD.png"));
+		}
+		if(bglevel ==3 && level ==1){
+			bglevel = 1;
+			WallList = new ArrayList<blockWall>();
+		}
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
 		if(bglevel==1) imgString = "/tank/";

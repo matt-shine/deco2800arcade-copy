@@ -8,6 +8,7 @@ import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
 
 public class LobbyListener extends NetworkListener {
@@ -45,11 +46,22 @@ public class LobbyListener extends NetworkListener {
 		}
 		else if (object instanceof CreateMatchResponse) {
 			CreateMatchResponse response = (CreateMatchResponse)object;
-			System.out.println("CreateMatchResponse received: matchId: " + response.matchId);
 			//TODO: TAKE THE USER SOMEWHERE/CREATE A POPUP OR SOMETHING
 		}
 		else if (object instanceof ClearListRequest) {
 			Arcade.clearMatchList();
+		}
+		else if (object instanceof JoinLobbyMatchResponse) {
+			JoinLobbyMatchResponse response = (JoinLobbyMatchResponse) object;
+			switch (response.responseType) {
+			case NOTFOUND:
+				break;
+			case OK:
+				break;
+			default:
+				break;
+			
+			}
 		}
 	}
 }

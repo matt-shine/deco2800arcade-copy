@@ -14,6 +14,9 @@ import com.esotericsoftware.kryonet.Connection;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
 /**
  * The Lobby class - Singleton Pattern.
  * 
@@ -79,8 +82,33 @@ public class Lobby {
 		this.sendGamesToLobbyUsers();
 	}
 
-	public void joinMatch(LobbyMatch match, String gameId, int playerId, Connection connection) {
-
+	public void joinMatch(UUID matchId, int playerId, Connection connection) {
+		LobbyMatch match = getMatchByUUID(matchId);
+		if (match == null) {
+			/* Match wasn't found */
+			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
+			response.responseType = JoinLobbyMatchResponseType.NOTFOUND;
+			connection.sendTCP(response);
+		} else {
+			/* Match found */
+			
+		}
+	}
+	
+	/**
+	 * Returns the LobbyMatch instance of the given UUID.
+	 * 
+	 * @param matchId
+	 * @return
+	 */
+	private LobbyMatch getMatchByUUID(UUID matchId) {
+		for (int i = 0; i < lobbyGames.size(); i++) {
+			LobbyMatch current = lobbyGames.get(i);
+			if (current.getMatchId() == matchId) {
+				return current;
+			}
+		}
+		return null;
 	}
 	
 	/**

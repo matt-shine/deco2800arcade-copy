@@ -50,7 +50,7 @@ import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
-import deco2800.arcade.protocol.lobby.JoinLobbyResponse;
+import deco2800.arcade.protocol.lobby.JoinLobbyResponseType;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
@@ -168,11 +168,12 @@ public class Protocol {
 		//Lobby classes
 		kryo.register(NewLobbyRequest.class);
 		kryo.register(LobbyRequestType.class);
-		kryo.register(JoinLobbyResponse.class);
+		kryo.register(JoinLobbyResponseType.class);
 		kryo.register(CreateMatchRequest.class);
 		kryo.register(CreateMatchResponse.class);
 		kryo.register(ActiveMatchDetails.class);
 		kryo.register(ClearListRequest.class);
+
 
 		// Register miscellaneous classes
 		kryo.register(byte[].class);

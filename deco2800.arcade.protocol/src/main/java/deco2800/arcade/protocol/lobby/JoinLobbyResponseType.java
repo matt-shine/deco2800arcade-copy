@@ -1,6 +1,6 @@
 package deco2800.arcade.protocol.lobby;
 
-public enum JoinLobbyResponse {
+public enum JoinLobbyResponseType {
 
 	OK,
 	JOIN_MATCH_FAILED,

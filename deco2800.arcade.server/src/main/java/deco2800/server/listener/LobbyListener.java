@@ -1,7 +1,10 @@
 package deco2800.server.listener;
 
 
+import java.util.UUID;
+
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.server.Lobby;
 
@@ -23,12 +26,6 @@ public class LobbyListener extends Listener {
 			NewLobbyRequest newLobbyRequest = (NewLobbyRequest) object;
 			int playerId = newLobbyRequest.playerID;
 			switch (newLobbyRequest.requestType) {
-			case CANCELMATCH:
-				break;
-			case CREATEMATCH:
-				break;
-			case GETMATCHES:
-				break;
 			case JOINLOBBY:
 				Lobby.instance().addPlayerToLobby(playerId, connection);
 				break;
@@ -53,6 +50,13 @@ public class LobbyListener extends Listener {
 			Connection hostConnection = connection;
 			
 			lobby.createMatch(gameId, playerId, hostConnection);
+		}
+		else if (object instanceof JoinLobbyMatchRequest) {
+			
+			JoinLobbyMatchRequest request = (JoinLobbyMatchRequest) object;
+			UUID matchId = UUID.fromString(request.matchId);
+			int playerId = request.playerID;
+			lobby.joinMatch(matchId, playerId, connection);
 		}
 
 	}

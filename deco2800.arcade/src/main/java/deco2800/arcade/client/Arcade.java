@@ -569,6 +569,8 @@ public class Arcade extends JFrame {
         }
         return gameSet;
     }
+    
+   
 
     /**
      * Send a request for a list of games to the server

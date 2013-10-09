@@ -30,15 +30,17 @@ public class Ghost extends Mover {
 
 	
 	// the distance ghost moves each frame
+	private PacChar player;
 	private float moveDist;
-
+	private Tile targetTile;
 	private Animation walkAnimation;
 	private Texture walkSheet;
 	private TextureRegion[] walkFrames;
 	private TextureRegion currentFrame;
 	
-	public Ghost(GameMap gameMap, GhostName ghost) {
+	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
 		super(gameMap);
+		this.player = player;
 		this.ghost = ghost;
 		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost start
 		//set up pacman to be drawn in the right place- this is defintely right
@@ -145,7 +147,24 @@ public class Ghost extends Mover {
 				", " + drawY + "}, " + currentState + " in " + currentTile;
 	}
 		
+	
+	public Tile getTargetTile() {
+		if (ghost == GhostName.BLINKY) {
+			return player.getTile();
+		}
+		else if (ghost == GhostName.PINKY) {
+			return player.getTile();
+		}
+		else {
+			return targetTile;
+		}
+		
+		
+	}
 
+	public void setTargetTile(Tile targetTile) {
+		this.targetTile = targetTile;
+	}
 	
 
 }

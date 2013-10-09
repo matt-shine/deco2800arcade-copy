@@ -130,7 +130,7 @@ public class Pacman extends GameClient {
 		gameMap.createTiles(gameMap.readMap(file));
 		//initialise pacman
 		player = new PacChar(gameMap);
-		blinky = new Ghost(gameMap, GhostName.BLINKY);
+		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
 		//initialise receiver for input- use the multiplexer from Arcade
 
 		// because overlay group said to in log messages

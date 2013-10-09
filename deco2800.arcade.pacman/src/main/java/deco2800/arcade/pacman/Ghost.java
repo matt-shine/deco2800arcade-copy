@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
+import org.lwjgl.util.Point;
+import static java.lang.Math.*; 
 
 import deco2800.arcade.model.Player;
 import deco2800.arcade.pacman.PacChar.PacState;
@@ -160,7 +161,19 @@ public class Ghost extends Mover {
 		}
 	}
 	
-	
+	public double calcDist(Tile start, Tile target) {
+		Point startPoint = gameMap.getTilePos(start);
+		Point targetPoint = gameMap.getTilePos(target);
+		int startx = startPoint.getX();
+		int starty = startPoint.getY();
+		int targetx = targetPoint.getX();
+		int targety = targetPoint.getY();
+		double dist;
+		int distx = startx - targetx;
+		int disty = starty - targety;
+		dist = sqrt((distx*distx + disty*disty));
+		return dist;
+	}
 
 	public void setTargetTile(Tile targetTile) {
 		this.targetTile = targetTile;

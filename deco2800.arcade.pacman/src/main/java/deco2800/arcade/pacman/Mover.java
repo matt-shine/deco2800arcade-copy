@@ -110,6 +110,20 @@ public abstract class Mover {
 		return grid[x][y];
 	}
 	
+	public Tile getTestTile(Tile current, Dir direction) {
+		int x = gameMap.getTilePos(current).getX();
+		int y = gameMap.getTilePos(current).getY();
+		Tile[][] grid = gameMap.getGrid();
+		switch(direction) {
+		case LEFT: x -= 1; break;
+		case RIGHT: x += 1; break;
+		case UP: y += 1; break;
+		case DOWN: y -= 1; break;
+		case TEST: break;
+		}
+		return grid[x][y];
+	}
+	
 	
 	/**
 	 * On movement, check if the Mover has 'eaten' a dot and update score accordingly.

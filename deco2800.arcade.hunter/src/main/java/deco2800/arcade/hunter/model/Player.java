@@ -52,6 +52,7 @@ public class Player extends Entity {
 	private String Weapon;
 	private boolean animLoop;
     private long attackTime = 0;
+    private long damageTime = 0; //Time when last hit by a monster.
 	
 	// States used to determine how to draw the player
 	private int score = 0;
@@ -59,8 +60,9 @@ public class Player extends Entity {
 	private String classType = "Player";
 	
 	private int multiplier;
-	
-	//States used to determine how to draw the player
+    private boolean blink = false;
+
+    //States used to determine how to draw the player
 	private enum State {
 		RUNNING, JUMPING, ATTACK, FALLING, DEAD
 	};
@@ -218,6 +220,10 @@ public class Player extends Entity {
             this.state = State.RUNNING;
         }
 
+        if (damageTime + Config.PLAYER_BLINK_TIMEOUT < System.currentTimeMillis()) {
+            this.blink = false;
+        }
+
 		// Update the player state
 		// Pretending the DEAD state doesn't exist for now... TODO
 		if (isGrounded() && this.state != State.ATTACK) {
@@ -354,9 +360,11 @@ public class Player extends Entity {
 				killAnimal();
 				
 			}else{
-				hurt.play(1.0f);
 				System.out.println("Animal Collision");
-				if (!invulnerable){
+				if (!invulnerable && !blink){
+                    hurt.play(1.0f);
+                    this.blink = true;
+                    damageTime = System.currentTimeMillis();
 					loseLife();
 					checkLives();
 				}
@@ -402,7 +410,7 @@ public class Player extends Entity {
 	}
 
 	public void setInvulnerability(boolean inv){
-		invulnerable= inv;
+		invulnerable = inv;
 	}
 	
 	public boolean isInvulnerable(){

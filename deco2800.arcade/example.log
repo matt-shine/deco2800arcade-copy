@@ -439,3 +439,107 @@ file:/Users/moulthunly/Documents/Repositories/deco2800-2013/deco2800.arcade.land
 file:/Users/moulthunly/Documents/Repositories/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/Users/moulthunly/Documents/Repositories/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 INFO main org.reflections.Reflections - Reflections took 199 ms to scan 24 urls, producing 97 keys and 412 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 134 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 129 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 134 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 143 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 137 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 149 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 133 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 134 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 133 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 144 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 137 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 133 ms to scan 6 urls, producing 47 keys and 159 values 
+DEBUG main org.reflections.Reflections - going to scan these urls:
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.wl6/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.protocol/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.ui/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.model/bin/
+file:/C:/Stuff/Git/deco2800-2013/deco2800.arcade.packman/bin/
+INFO main org.reflections.Reflections - Reflections took 143 ms to scan 6 urls, producing 47 keys and 159 values 

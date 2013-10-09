@@ -1,5 +1,6 @@
 package deco2800.cyra.game;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
@@ -16,10 +17,15 @@ import deco2800.arcade.model.Game;
 @ArcadeGame(id="cyra")
 public class Cyra extends GameClient {
 
+	private NetworkClient networkClient;
+	private AchievementClient achievementClient;
+	
       
     public Cyra(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		// TODO Auto-generated constructor stub
+		this.networkClient = networkClient; //this is a bit of a hack
+        this.achievementClient = new AchievementClient(networkClient);
+        
 	}
 
 	public SplashScreen getSplashScreen() {

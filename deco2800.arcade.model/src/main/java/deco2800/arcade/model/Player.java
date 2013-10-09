@@ -87,6 +87,7 @@ public class Player extends User {
 		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
 				privacy[6]);
+        this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it

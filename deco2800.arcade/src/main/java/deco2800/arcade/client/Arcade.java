@@ -29,12 +29,14 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 
 /**
  * The client application for running arcade games.
@@ -211,10 +213,18 @@ public class Arcade extends JFrame {
 		// this.communicationNetwork.createNewChat(username);
 
         // TODO move this call to be internal to Packman class
+        // TODO iterate over actual game ids rather than just
+        // using pong
         GameUpdateCheckRequest gameUpdateCheckRequest = new
                 GameUpdateCheckRequest();
+        gameUpdateCheckRequest.gameID = "pong";
 
-        this.client.sendNetworkObject(gameUpdateCheckRequest);
+        BlockingMessage r = BlockingMessage.request(client.kryoClient(),
+                gameUpdateCheckRequest);
+
+        GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
+
+        System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
 
 	/**
@@ -237,7 +247,6 @@ public class Arcade extends JFrame {
 	public void startGame(String gameid) {
 
 		selectedGame = getInstanceOfGame(gameid);
-		System.out.println(selectedGame);
         selectedGame.setNetworkClient(this.client);
         startGame(selectedGame);
     }

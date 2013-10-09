@@ -21,6 +21,7 @@ public abstract class Mover {
 	protected int midY;
 	protected int height;
 	protected int width;
+	private String test = "";
 	private int score;
 	protected Tile currentTile; // current tile of the pacman/ghost
 	protected GameMap gameMap;
@@ -61,6 +62,10 @@ public abstract class Mover {
 		this.width = width;
 	}
 
+	public Dir getFacing() {
+		return facing;
+	}
+	
 	public Tile getTile() {
 		return currentTile;
 	}
@@ -81,10 +86,31 @@ public abstract class Mover {
 			currentTile.removeMover(this);
 			currentTile = newTile;
 			currentTile.addMover(this);
-			checkTile(currentTile);
+//			checkTile(currentTile);
 		}
 	}
 
+	/**
+	 * Returns the next tile in the direction pacman is facing.
+	 * @param tile
+	 * @return
+	 */
+	public Tile nextTile(Tile tile){
+		int x = gameMap.getTilePos(tile).getX();
+		int y = gameMap.getTilePos(tile).getY();
+		Tile[][] grid = gameMap.getGrid();
+		//System.out.println(x + ", " + y);
+		switch(this.getFacing()) {
+		case LEFT: x -= 1; break;
+		case RIGHT: x += 1; break;
+		case UP: y += 1; break;
+		case DOWN: y -= 1; break;
+		case TEST: break;
+		}
+		return grid[x][y];
+	}
+	
+	
 	/**
 	 * On movement, check if the Mover has 'eaten' a dot and update score accordingly.
 	 * Later this can be modified to handle interactions with other tiles such as
@@ -106,6 +132,30 @@ public abstract class Mover {
 //		displayScore(this); // This is broken at the moment
 	}
 
+	/**
+	 * Checks if the proposed movement will make pacman hit a wall
+	 * Returns true if he can move and false if he can't
+	 */
+	public boolean checkNoWallCollision(Tile pTile) {
+		int x = gameMap.getTilePos(pTile).getX();
+		int y = gameMap.getTilePos(pTile).getY();
+		Tile[][] grid = gameMap.getGrid();
+		//System.out.println(x + ", " + y);
+		switch(this.getFacing()) {
+		case LEFT: x -= 1; break;
+		case RIGHT: x += 1; break;
+		case UP: y += 1; break;
+		case DOWN: y -= 1; break;
+		case TEST: break;
+		}		
+		if (!test.equals(this + " wants to move to " + grid[x][y] + 
+				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
+			test = this + " wants to move to " + grid[x][y] + 
+					" allowed=" + (grid[x][y].getClass() != WallTile.class);
+			System.out.println(test);
+		}
+		return grid[x][y].getClass() != WallTile.class;
+	}
 	/**
 	 * Overrides toString() so that trying to print the list won't crash the
 	 * program

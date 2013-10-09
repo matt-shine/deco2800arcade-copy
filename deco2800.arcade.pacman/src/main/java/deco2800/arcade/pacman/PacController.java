@@ -18,7 +18,6 @@ public class PacController implements InputProcessor {
 
 	private PacChar player;
 	private GameMap gameMap;
-	private String test = "";
 	
 	public PacController(PacChar player, GameMap gameMap) {
 		this.player = player;
@@ -48,8 +47,14 @@ public class PacController implements InputProcessor {
 		Tile pTile = player.getTile();
 		Dir tempFacing = player.getFacing();
 		player.setFacing(facing);
-		System.out.println("Can pacman move? " + checkNoWallCollision(pTile));
-		if (checkNoWallCollision(pTile)) {
+		System.out.println("Can pacman move? Next tile is" + 
+							player.nextTile(pTile));
+		// Check for teleport tile
+		if (player.nextTile(pTile).getClass() == TeleportTile.class){
+			
+		}
+		
+		if (player.nextTile(pTile).getClass() != WallTile.class) {
 			player.setCurrentState(PacState.MOVING);
 		} else {
 			player.setCurrentState(PacState.IDLE);
@@ -74,30 +79,6 @@ public class PacController implements InputProcessor {
 		
 	}
 	
-	/**
-	 * Checks if the proposed movement will make pacman hit a wall
-	 * Returns true if he can move and false if he can't
-	 */
-	public boolean checkNoWallCollision(Tile pTile) {
-		int x = gameMap.getTilePos(pTile).getX();
-		int y = gameMap.getTilePos(pTile).getY();
-		Tile[][] grid = gameMap.getGrid();
-		//System.out.println(x + ", " + y);
-		switch(player.getFacing()) {
-		case LEFT: x -= 1; break;
-		case RIGHT: x += 1; break;
-		case UP: y += 1; break;
-		case DOWN: y -= 1; break;
-		case TEST: break;
-		}		
-		if (!test.equals(player + " wants to move to " + grid[x][y] + 
-				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
-			test = player + " wants to move to " + grid[x][y] + 
-					" allowed=" + (grid[x][y].getClass() != WallTile.class);
-			System.out.println(test);
-		}
-		return grid[x][y].getClass() != WallTile.class;
-	}
 	
 	@Override
 	public boolean keyTyped(char arg0) {

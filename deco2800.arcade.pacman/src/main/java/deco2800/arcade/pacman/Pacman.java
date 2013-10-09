@@ -213,7 +213,7 @@ public class Pacman extends GameClient {
 	    
 	    // check if pacman is trying to move into a wall
 	    // this stops him even if no key is pressed
-	    if (!controller.checkNoWallCollision(player.getTile())) {
+	    if (!player.checkNoWallCollision(player.getTile())) {
 			player.setCurrentState(PacState.IDLE);
 		}
 	    player.render(batch);

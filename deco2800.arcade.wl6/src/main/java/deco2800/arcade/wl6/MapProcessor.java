@@ -3,7 +3,9 @@ package deco2800.arcade.wl6;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+import deco2800.arcade.wl6.enemy.Dog;
 import deco2800.arcade.wl6.enemy.EnemyType;
+import deco2800.arcade.wl6.enemy.Guard;
 
 public class MapProcessor {
 
@@ -62,8 +64,7 @@ public class MapProcessor {
 
     /**
      * Unique ids for doodads. TODO make this better
-     * @param x
-     * @param y
+     *
      * @return
      */
     public static int doodadID() {
@@ -104,7 +105,42 @@ public class MapProcessor {
         {
             //TODO spawn an enemy
             switch (d.enemytype) {
-
+                case NOT_AN_ENEMY:
+                    break;
+                case GUARD:
+                    dd = new Guard(doodadID());
+                    break;
+                case OFFICER:
+                    break;
+                case SS:
+                    break;
+                case DOG:
+                    dd = new Dog(doodadID());
+                    break;
+                case MUTANT:
+                    break;
+                case FAKE_HITLER:
+                    break;
+                case GHOSTS_1:
+                    break;
+                case GHOSTS_2:
+                    break;
+                case GHOSTS_3:
+                    break;
+                case GHOSTS_4:
+                    break;
+                case HANS:
+                    break;
+                case SCHABBS:
+                    break;
+                case HITLER:
+                    break;
+                case GIFTMACHER:
+                    break;
+                case GRETEL:
+                    break;
+                case FETTGESICHT:
+                    break;
             }
         }
         else if (d.health != 0 || d.points != 0 || d.ammo != 0 || d.gun != 0)

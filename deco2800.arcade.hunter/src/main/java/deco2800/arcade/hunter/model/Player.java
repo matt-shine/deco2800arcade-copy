@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.badlogic.gdx.graphics.Color;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -303,7 +304,15 @@ public class Player extends Entity {
 			animLoop = false;
 		}
 		TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
+
+        if (blink) {
+            batch.setColor(1f, 1f, 1f, 0.5f);
+        } else {
+            batch.setColor(1f, 1f, 1f, 1f);
+        }
 		batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
+
+        batch.setColor(1f, 1f, 1f, 1f);
 	}
 
 	/**

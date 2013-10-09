@@ -16,7 +16,6 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
-import java.util.ArrayList;
 
 /**
  * GDX Screen class for Grid View
@@ -32,7 +31,7 @@ public class GridScreen implements Screen, LibraryScreen {
      * UI Objects
      */
     private SpriteBatch batch;
-    private ArrayList<Game> games = null;
+    private java.util.List<Game> games = null;
     private Game currentGame;
     private Stage stage;
     private TextButton storeButton;
@@ -76,7 +75,7 @@ public class GridScreen implements Screen, LibraryScreen {
         stage = new Stage();
         batch = new SpriteBatch();
         splashTexture = new Texture("Assets/splashscreen-grid.jpg");
-        gridTexture = new Texture("Assets/gridbk.jpg");
+        gridTexture = new Texture("Assets/gridbk.png");
         image = new Image(splashTexture);
         stage.addActor(image);
 
@@ -121,26 +120,25 @@ public class GridScreen implements Screen, LibraryScreen {
                 background.setY(gridY);
 
                 Label gridLabel = new Label(game.name, libSkin);
+                gridLabel.setAlignment(2, 2);
                 gridLabel.setWidth(background.getWidth());
                 gridLabel.setHeight(40);
-                gridLabel.setX(gridX + background.getWidth()/4);
+                gridLabel.setX(gridX);
                 gridLabel.setY(gridY + background.getHeight() - 40);
 
                 TextButton gamePlay = new TextButton("Play", libSkin, "green");
-                gamePlay.setWidth(150);
+                gamePlay.setWidth(152);
                 gamePlay.setHeight(30);
                 gamePlay.setX(gridX + 5);
-                gamePlay.setY(gridY + 50 - gridLabel.getHeight());
+                gamePlay.setY(gridY + 45 - gridLabel.getHeight());
                 gamePlay.addListener(new PlayButtonActionHandler(this, game));
 
                 if (++count % 7 == 0) {
-                    gridX = 20;
+                    gridX = 25;
                     gridY -= (background.getHeight() + 15);
                 } else {
                     gridX += (background.getWidth() + 15);
                 }
-
-                //y = gridY - 80;
 
                 stage.addActor(background);
                 stage.addActor(gridLabel);
@@ -185,7 +183,9 @@ public class GridScreen implements Screen, LibraryScreen {
         stage.draw();
         batch.end();
 
-        if (gameSelected) play();
+        if (gameSelected) {
+            play();
+        }
     }
 
     @Override

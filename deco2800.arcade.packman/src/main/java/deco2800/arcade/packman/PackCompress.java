@@ -39,7 +39,7 @@ public class PackCompress {
 	    // transmitting a single request to use "store" mode.
 	    //p.put(Packer.DEFLATE_HINT, Packer.FALSE);
 	    // discard debug attributes
-	    p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
+	    //p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
 	    // throw an error if an attribute is unrecognized
 	    p.put(Packer.UNKNOWN_ATTRIBUTE, Packer.ERROR);
 	}

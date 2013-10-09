@@ -57,13 +57,9 @@ public class Hunter extends PlatformerGame {
 	 */
 	public void setHighScores() {
 		getPreferencesManager().addHighScore(100000);
-		System.out.println(getPreferencesManager().getHighScore());
 		getPreferencesManager().addHighScore(10000);
-		System.out.println(getPreferencesManager().getHighScore());
 		getPreferencesManager().addHighScore(1000);
-		System.out.println(getPreferencesManager().getHighScore());
 		getPreferencesManager().addHighScore(20000);
-		System.out.println(getPreferencesManager().getHighScore());
 		getPreferencesManager().addHighScore(2);
 	}
 

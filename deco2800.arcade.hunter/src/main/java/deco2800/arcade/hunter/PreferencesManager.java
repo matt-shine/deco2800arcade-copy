@@ -111,7 +111,6 @@ public class PreferencesManager {
 			getPreferences().flush();
 		} else if (highScoreList.get(HIGH_SCORE_LIST[2]) < score) {
 			getPreferences().putInteger(HIGH_SCORE_LIST[2], score);
-			getPreferences().flush();
 		}
 
 	}

@@ -13,13 +13,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.client.GameScreen;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
@@ -58,19 +58,29 @@ public class Player extends Entity {
 	
 	private String classType = "Player";
 	
+	private int multiplier;
+	
 	//States used to determine how to draw the player
 	private enum State {
 		RUNNING, JUMPING, ATTACK, FALLING, DEAD
 	};
 
 	private State state = State.RUNNING;
+	private boolean invulnerable;
 
+
+	private Sound pickup = Gdx.audio.newSound(Gdx.files.internal("powerup.wav"));
+	private Sound death = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
+	private Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
+	
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
 		loadAnims();
 		lives = 3;
 		Weapon = "Spear";
 		currAnim = runAnimation();
+		multiplier = 1;
+		
 	}
 
 	
@@ -278,6 +288,9 @@ public class Player extends Entity {
 
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
+		if (invulnerable){
+			//draw invincibility bubble
+		}
 		if(state == State.RUNNING){
 			animLoop = true;
 		}else{
@@ -328,20 +341,56 @@ public class Player extends Entity {
 			System.out.println("Item pickup!");
 			System.out.println(((Items) e).getItem());
 			entities.remove(e);
+			pickup.play(1.0f);
+			if (((Items)e).getItemType() == Items.Type.WEAPON){
+				setWeapon(((Items)e).getItem());
+			}else{
+				applyPlayerBuff(((Items)e).getItem());
+			}
 		}else if (e.getType() == "Animal") {
-			if (state == State.ATTACK){
+			if (getState() == State.ATTACK){
 				System.out.println("Attack Animal");
 				entities.remove(e);
 				killAnimal();
+				
 			}else{
+				hurt.play(1.0f);
 				System.out.println("Animal Collision");
-				loseLife();
+				if (!invulnerable){
+					loseLife();
+					checkLives();
+				}
 			}
 		}
 	}
 
+	private void checkLives() {
+		if(lives <= 0){
+			death.play(1.0f);
+		}
+	}
+
+
+	private void applyPlayerBuff(String item) {
+		if (item == "DoublePoints"){
+			multiplier = multiplier * 2;
+		}
+			
+		if (item == "ExtraLife"){
+			addLife();
+		}
+		if (item == "Invulnerability"){
+			invulnerable = true;
+		}
+		if (item == "AttackX2"){
+			
+		}
+	}
+
+
 	private void killAnimal() {
 		System.out.println("Yay you killed an animal!");
+		score = score + 20*multiplier;
 	}
 
 	public void loseLife() {
@@ -352,6 +401,22 @@ public class Player extends Entity {
 		lives += 1;
 	}
 
+	public void setInvulnerability(boolean inv){
+		invulnerable= inv;
+	}
+	
+	public boolean isInvulnerable(){
+		return invulnerable;
+	}
+	
+	public void setMultiplier(int multi){
+		multiplier = multi;
+	}
+	
+	public int getMultiplier(){
+		return multiplier;
+	}
+	
 	public int getLives() {
 		return lives;
 	}

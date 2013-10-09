@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
@@ -27,7 +27,7 @@ public class Items extends Entity {
 	/**
 	 * String array of possible weapons
 	 */
-	private String[] weapons = {"KnifeAndFork","Spear","Trident"};
+	private String[] weapons = {"KnifeandFork","Spear","Trident"};
 	
 	private String classType = "Items";
 	
@@ -35,7 +35,7 @@ public class Items extends Entity {
 	 * Name of the item
 	 */
 	private String item;
-	private enum Type {
+	public enum Type {
 		WEAPON, POWERUP
 	}
 	
@@ -49,7 +49,7 @@ public class Items extends Entity {
 		//Randomises item depending on type
 		if (weapon){
 			type = Type.WEAPON;
-			switch(Hunter.Config.randomGenerator.nextInt(2)){
+			switch(Config.randomGenerator.nextInt(3)){
 			case 0:item = weapons[0];
 			case 1:item = weapons[1];
 			case 2:item = weapons[2];
@@ -57,7 +57,7 @@ public class Items extends Entity {
 		}
 		else{
 			type = Type.POWERUP;
-			switch(Hunter.Config.randomGenerator.nextInt(2)){
+			switch(Config.randomGenerator.nextInt(3)){
 			case 0:item = powerups[0];
 			case 1:item = powerups[1];
 			case 2:item = powerups[2];
@@ -105,6 +105,9 @@ public class Items extends Entity {
 		return classType;
 	}
 	
+	public Type getItemType(){
+		return type;
+	}
 	
 	public String getItem(){
 		return item;

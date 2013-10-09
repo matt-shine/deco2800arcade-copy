@@ -15,6 +15,10 @@ public class PlayerShip extends Ship {
 	private int maxHealth; //For health powerups.
 	private PlayScreen screen;
 	
+	//brute force way to handle timer
+	private long initialTime;
+	private boolean speedUp = false;
+	
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
 	private boolean shooting = false;
@@ -46,6 +50,16 @@ public class PlayerShip extends Ship {
 	 */
 	public void onRender(float delta) {
 		super.onRender(delta);
+		//resets any powerups if needed. Initial testing on speedup only.
+		//easily applies to a bullet pattern.
+		if (speedUp) {	
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - initialTime) >= 10000) {
+				maxVelocity = 300;
+				speedUp = false;
+			}
+		}
+		
 		// reset
 		velocity.set(0, 0);
     	if(up) {
@@ -108,6 +122,8 @@ public class PlayerShip extends Ship {
 	 * Changes the max velocity of the ship.
 	 */
 	public void setMaxSpeed(float velocity) {
+		speedUp = true;
+		initialTime = System.currentTimeMillis();
 		maxVelocity = velocity;
 	}
 	

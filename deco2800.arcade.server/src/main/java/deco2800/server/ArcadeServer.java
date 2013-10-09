@@ -8,27 +8,15 @@ import java.net.BindException;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
-import deco2800.server.database.CreditStorage;
-import deco2800.server.database.ImageStorage;
-import deco2800.server.database.DatabaseException;
-import deco2800.server.database.ReplayStorage;
-import deco2800.server.listener.CommunicationListener;
-import deco2800.server.listener.PlayerListener;
-import deco2800.server.listener.ReplayListener;
-import deco2800.server.listener.ConnectionListener;
-import deco2800.server.listener.CreditListener;
-import deco2800.server.listener.GameListener;
-import deco2800.server.listener.HighscoreListener;
-import deco2800.server.database.HighscoreDatabase;
+import deco2800.server.database.*;
+import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
-import deco2800.server.database.AchievementStorage;
-import deco2800.server.listener.AchievementListener;
 
-/**
+/** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
- * transport layer protocols.
+ * transport layer protocols. 
  * 
- * @see http://code.google.com/p/kryonet/
+ * @see http://code.google.com/p/kryonet/ 
  */
 public class ArcadeServer {
 
@@ -40,10 +28,12 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
-
+	
 	// Package manager
 	@SuppressWarnings("unused")
 	private PackageServer packServ;
+
+    private GameStorage gameStorage;
 	
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
@@ -51,7 +41,6 @@ public class ArcadeServer {
 	
 	/**
 	 * Retrieve the singleton instance of the server
-	 * 
 	 * @return the game server
 	 */
 	public static ArcadeServer instance() {
@@ -60,9 +49,10 @@ public class ArcadeServer {
 		}
 		return instance;
 	}
-
+	
 	/**
-	 * Initializes and starts Server Binds Ports
+	 * Initializes and starts Server
+	 * Binds Ports
 	 * 
 	 * @param args
 	 */
@@ -76,6 +66,8 @@ public class ArcadeServer {
 	
 	// Credit storage service
 	private CreditStorage creditStorage;
+	//private PlayerStorage playerStorage;
+	//private FriendStorage friendStorage;
 
     private ImageStorage imageStorage;
 	
@@ -84,13 +76,12 @@ public class ArcadeServer {
 	
 	/**
 	 * Access the server's credit storage facility
-	 * 
 	 * @return
 	 */
 	public CreditStorage getCreditStorage() {
 		return this.creditStorage;
 	}
-
+	
 	/**
 	 * * Access the Serer's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
@@ -114,6 +105,14 @@ public class ArcadeServer {
 	public HighscoreDatabase getHighscoreDatabase() {
 		return this.highscoreDatabase;
 	}
+
+    /**
+     * Access the server's game storage
+     * @return gameStorage
+     */
+    public GameStorage getGameStorageDatabase() {
+        return gameStorage;
+    }
 	
 	/**
 	 * Create a new Arcade Server.
@@ -121,8 +120,15 @@ public class ArcadeServer {
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
+
+        instance = this;
+
+        this.gameStorage = new GameStorage();
+
 		this.creditStorage = new CreditStorage();
 		this.replayStorage = new ReplayStorage();
+		//this.playerStorage = new PlayerStorage();
+		//this.friendStorage = new FriendStorage();
 		
         this.imageStorage = new ImageStorage();
 
@@ -131,15 +137,24 @@ public class ArcadeServer {
 		this.highscoreDatabase = new HighscoreDatabase();
 		
 		this.packServ = new PackageServer();
+
+
+		
+		//Init highscore database
+		try {
+			highscoreDatabase.initialise();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
 		
 		//initialize database classes
 		try {
+            gameStorage.initialise();
 			creditStorage.initialise();
             imageStorage.initialise();
+			//playerStorage.initialise();
             
 			achievementStorage.initialise();
-			
-			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -148,7 +163,7 @@ public class ArcadeServer {
 		// once the db is fine, load in achievement data from disk
 		this.achievementStorage.loadAchievementData();
 	}
-
+	
 	/**
 	 * Start the server running
 	 */
@@ -165,7 +180,7 @@ public class ArcadeServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		Protocol.register(server.getKryo());
 		server.addListener(new ConnectionListener(connectedUsers));
 		server.addListener(new CreditListener());
@@ -174,6 +189,19 @@ public class ArcadeServer {
 		server.addListener(new ReplayListener());
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
-		server.addListener(new PlayerListener());
+        server.addListener(new PackmanListener());
+        server.addListener(new LibraryListener());
+        server.addListener(new PlayerListener());
 	}
+
+    /**
+     * Return the packServ object.
+     * Possible temporary fix just to get network communication
+     * between client and packman server operational.
+     * TODO don't reveal packServ object publically
+     * @return the packServ variable
+     */
+    public PackageServer packServ() {
+        return packServ;
+    }
 }

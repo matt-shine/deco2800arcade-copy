@@ -11,11 +11,12 @@ import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.PlayerClient;
+import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 
-public abstract class GameClient extends com.badlogic.gdx.Game implements AchievementListener {
+public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
 	protected NetworkClient networkClient;
@@ -28,18 +29,22 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
     private PlayerClient playerClient;
     private boolean hasF11PressedLast = false;
     
+	private PackageClient packClient;
+    
 	public GameClient(Player player, NetworkClient networkClient) {
 		
 		this.player = player;
 		this.networkClient = networkClient;
 		this.playerClient = new PlayerClient(networkClient);
         this.achievementClient = new AchievementClient(networkClient);
-        this.achievementClient.addListener(this);
+        //this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
+		
+		this.packClient = new PackageClient();
 	}
 
 	public abstract Game getGame();
-
+	
     public void achievementAwarded(Achievement ach) {
         System.out.println("Achievement `" + ach.name + "` awarded!");
     }

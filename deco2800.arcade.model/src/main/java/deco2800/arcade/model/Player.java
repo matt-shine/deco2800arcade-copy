@@ -19,11 +19,9 @@ public class Player extends User {
 	public static final int GAMES_PRIVACY_ID = 6;
 	public static final int ACHIEVMENTS_PRIVACY_ID = 7;
 
-	// TODO shared between server & client?
 
 	private Field username;
 
-	// TODO Implement these
 	private Field name;
 	private Field email;
 	private Field program;
@@ -41,52 +39,10 @@ public class Player extends User {
 	private Friends friends;
 	private Blocked blocked;
 	private FriendInvites friendInvites;
+    
+    private LibraryStyle libraryStyle;
 
 	private Icon icon;
-
-	@Deprecated
-	/**
-	 * Creates a new Player given a name, achievement set and icon filename.
-	 * 
-	 * @param playerID
-	 *            The Player's nameID
-	 * @param username
-	 *            The Player's name
-	 * @param filepath
-	 *            The Player's icon filepath
-	 */
-	public Player(int playerID, String username, String filepath) {
-		super(playerID);
-		this.username = new Field(USERNAME_ID, username);
-		this.games = new Games();
-		this.friends = new Friends();
-		this.friendInvites = new FriendInvites();
-		this.blocked = new Blocked();
-
-		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, false);
-		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID, false);
-		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, false);
-		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, false);
-		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, false);
-		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, false);
-		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
-				false);
-
-		/*
-		 * Note that exception handling could be done in-method, however if it
-		 * cannot be loaded there is no way (other than changing the return type
-		 * to boolean/int and specifying error range) to communicate this.
-		 */
-
-		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFUALT TO
-		// PLACEHOLDER
-		// this.icon = new Icon(filepath);
-		/*
-		 * @throws IOException Throws exception when the image cannot be found
-		 * at the designated filepath.
-		 */
-		this.icon = null;
-	}
 
 	@Deprecated
 	/**
@@ -189,6 +145,7 @@ public class Player extends User {
 		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
 				privacy[6]);
+        this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -206,6 +163,7 @@ public class Player extends User {
 		this.icon = null;
 	}
 
+
 	/**
 	 * getUsername returns a string of the player created
 	 * 
@@ -217,8 +175,7 @@ public class Player extends User {
 
 	/**
 	 * Sets the name of the user.
-	 * 
-	 * @param username
+	 * @param username string of username
 	 */
 	public void setUsername(String username) {
 		if (username != null) {
@@ -712,4 +669,34 @@ public class Player extends User {
 	public boolean getAchievementsPrivacy() {
 		return achievementsPrivacy.getValue();
 	}
+
+    /**
+     * Update user's library style
+     * @param style Library Style
+     */
+    public void updateLibraryLayout(int style) {
+        libraryStyle.setLayout(style);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
+    /**
+     * Update User's library colour
+     * @param colour Colour Scheme
+     */
+    public void updateLibraryColour(int colour) {
+        libraryStyle.setColourScheme(colour);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
+    /**
+     * Get User's Library Style
+     * @return libraryStyle
+     */
+    public LibraryStyle getLibraryStyle() {
+        return libraryStyle;
+    }
 }

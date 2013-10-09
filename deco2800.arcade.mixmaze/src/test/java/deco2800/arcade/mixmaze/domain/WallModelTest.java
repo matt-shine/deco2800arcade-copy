@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 public class WallModelTest {
+
 	@Mock
 	private PlayerModel mockedPlayer;
 
@@ -16,20 +17,10 @@ public class WallModelTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void wallDirectionOutOfRange() {
-		new WallModel(-1);
-	}
-
-	@Test
-	public void wallInitialization() {
-		WallModel wall = new WallModel(Direction.WEST);
-		assertEquals(Direction.WEST, wall.getDirection());
-	}
-
 	@Test
 	public void buildWall() {
-		WallModel wall = new WallModel(Direction.WEST);
+		WallModel wall = new WallModel();
+
 		wall.build(mockedPlayer);
 		assertTrue(wall.isBuilt());
 		assertEquals(mockedPlayer, wall.getBuilder());
@@ -37,10 +28,12 @@ public class WallModelTest {
 
 	@Test
 	public void destroyWall() {
-		WallModel wall = new WallModel(Direction.WEST);
+		WallModel wall = new WallModel();
+
 		wall.build(mockedPlayer);
 		wall.destroy(mockedPlayer);
 		assertFalse(wall.isBuilt());
 		assertNull(wall.getBuilder());
 	}
+
 }

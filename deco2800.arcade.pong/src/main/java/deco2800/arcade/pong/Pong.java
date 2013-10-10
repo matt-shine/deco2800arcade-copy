@@ -75,13 +75,13 @@ public class Pong extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
-        this.achievementClient = new AchievementClient(networkClient);
+        //this.achievementClient = new AchievementClient(networkClient);
 
         
         //These methods are just used for testing HighscoreClient 
         
         //Creating new HighscoreClient connection
-        HighscoreClient hsd = new HighscoreClient("Dylan", "Connect4", networkClient);
+        HighscoreClient hsd = new HighscoreClient(player.getID(), "Pong", networkClient);
         
         //Single score
         hsd.storeScore("Number", 1290193);

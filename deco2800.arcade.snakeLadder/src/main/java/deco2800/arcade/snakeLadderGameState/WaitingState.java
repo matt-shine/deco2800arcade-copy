@@ -1,4 +1,4 @@
-package deco2800.arcade.snakeLadderModel;
+package deco2800.arcade.snakeLadderGameState;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
 
@@ -28,7 +28,7 @@ public class WaitingState extends GameState {
     		else if(turn%2==1)
     		{
     			context.getDice().rollDice();
-	    		context.gamePlayers[0].velocity.x=0;
+	    		context.gamePlayers[0].getVelocity().x=0;
 	    		context.gamePlayers[1].initializeVelocity();
 	    		context.gameState = new MovingState();
 	     		context.statusMessage = null;

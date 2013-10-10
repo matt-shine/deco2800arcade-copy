@@ -519,12 +519,12 @@ public class SpellLogic {
                     "They must be from " + this.destroyLoc);
         } else {
             view.setEffectMessage("Currently performing a destroy effect" + System.getProperty("line.separator") +
-                    "You must destroy " + effectParameters.get(0) + " cards" + System.getProperty("line.separator") +
+                    "You must destroy "+ effectParameters.get(0) + " cards" + System.getProperty("line.separator") +
                     "They must be of type: " + this.destroyType.iterator().next() + System.getProperty("line.separator") +
                     "They must be from " + this.destroyLoc);
         }
 
-        //Needs selecting if there are valid cards to destroy
+        //Needs selecting if there are valid cards to destroy, check them
         if(effectParameters.get(0) <= 0) {
             this.needsSelection = false;
             view.setEffectMessage(null);

@@ -83,6 +83,7 @@ public class PackageUtils {
 		
 		try {
 			while (dis.read(dataBytes) != -1);
+			dis.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

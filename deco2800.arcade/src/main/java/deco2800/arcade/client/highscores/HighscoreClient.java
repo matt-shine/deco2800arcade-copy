@@ -2,6 +2,7 @@ package deco2800.arcade.client.highscores;
 
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Timer;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
@@ -10,6 +11,9 @@ public class HighscoreClient {
 	private String Username;
 	private String Game_ID;
 	private NetworkClient client;
+	
+	/*Stores the response that the server sends back*/
+	private GetScoreResponse gsRes;
 	
 	/*Used for queuing up scores that will be sent to the server. Even elements 
 	 *are score types, odd elements are score values. Score values are stored 
@@ -46,6 +50,9 @@ public class HighscoreClient {
 			this.Username = Username;
 			this.Game_ID = Game_ID;
 			this.client = client;
+			
+			//Allow responses to be received
+			this.client.addListener(new HighscoreClientListener(this));
 			
 			//Init the score list that is used for sending scores
 			scoreQueue = new LinkedList<String>();
@@ -113,8 +120,7 @@ public class HighscoreClient {
 			scoreQueue.add(type);
 			scoreQueue.add(Integer.toString(value));
 		} else {
-			throw new UnsupportedScoreTypeException(type + 
-					" is not a valid score type");
+			throw new UnsupportedScoreTypeException(type + " is not a valid score type");
 		}
 	}
 	
@@ -170,8 +176,8 @@ public class HighscoreClient {
 		if (Username != null) { //If the class was instantiated with a user
 			//Build the request that is being sent
 			AddScoreRequest asr = new AddScoreRequest();
-			asr.Username = Username;
-			asr.Game_ID = Game_ID;
+			asr.username = Username;
+			asr.game_ID = Game_ID;
 			asr.scoreQueue = serialisedScores();
 			
 			//Send the request
@@ -243,6 +249,69 @@ public class HighscoreClient {
 	//Fetching Score Methods
 	//======================
 	
+	//--------------------
+	//Utility Methods
+	//--------------------
+	
+	/**
+	 * Creates and sends a new GetScoreRequest to the server of type 
+	 * requestType and waits until a response is received. Once the response 
+	 * is received it is stored in this.gsReq.
+	 * 
+	 * @param requestType An integer representing the request that is being 
+	 * sent.
+	 */
+	private void sendScoreRequest(int requestID) {
+		//Build the request
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.username = this.Username;
+		gsReq.game_ID = this.Game_ID;
+		gsReq.requestID = requestID;
+		
+		//Send the response, and wait for a reply
+		this.gsRes = null;
+		this.client.sendNetworkObject(gsReq); //Send the request
+		
+		//Wait until a response has been received from the server. Only check every 20ms.
+		while (gsRes == null) {
+			try { Thread.sleep(20); } 
+			catch (InterruptedException e) { break; }
+		}
+		
+		//Will only reach here when a response has been received.
+		
+	}
+	
+	/**
+	 * Called by HighscoreClientListener whenever a GetScoreResponse is 
+	 * received from the server.
+	 * 
+	 * @param gsRes The response that was received
+	 */
+	protected void responseRecieved(GetScoreResponse gsRes) {
+		this.gsRes = gsRes; //Store the response so it can be used
+	}
+	
+	/**
+	 * Returns the number of columns that is returned 
+	 * @return the number of columns that is returned.
+	 */
+	public int responseTest(int num) {
+		//This will block until this.gsRes is updated with the correct information.
+		sendScoreRequest(num);
+		
+		if (this.gsRes != null) {
+			//gsRes has been updated, so information from it can be returned.
+			return this.gsRes.columnNumbers;
+		} else {
+			return 0; //This is bad. This shouldn't happen.
+		}
+	}
+	
+	
+	//--------------------
+	//Public Methods
+	//--------------------
 	
 	
 	

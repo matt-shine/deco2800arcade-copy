@@ -552,10 +552,7 @@ public class UserScreen extends JFrame{
 		statusbutton.doClick();
 		
 	}
-	
-	/**
-	 * 
-	 */
+
 	public void updateFriends(){
 		
 	}

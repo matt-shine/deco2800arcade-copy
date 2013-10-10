@@ -44,7 +44,14 @@ public class FrontPage implements Screen {
 	
     private float funds;
     private int tokens;
+    
+    //need to get values for
     private int creditVal = 0;
+    private int onlineFriends = 0;
+    private String uName = "Adeleen Pavia";
+    private String game1 = "Chess";
+    private String game2 = "Pong";
+    
     private boolean bclicked;
     private ArcadeUI arcadeUI;
     
@@ -91,14 +98,28 @@ public class FrontPage implements Screen {
         final TextButton chatButton = new TextButton("Chat", skin);
         final TextButton libraryButton = new TextButton("Library", skin, "magenta");
         final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
+       
+        //buttons for recent games
     
-        final Label username = new Label("Adeleen Pavia", skin, "cgothic");
+        final TextButton recentgame1 = new TextButton(game1, skin, "blue");
+        final TextButton recentgame2 = new TextButton(game2, skin, "blue");
+        
+        //Top Box Labels
+        final Label logo = new Label("VAPOR", skin, "cgothic");
+        logo.setAlignment(Align.left);
+        final Label username = new Label( uName , skin, "cgothic");
         username.setAlignment(Align.right);
         final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
         credits.setAlignment(Align.right);
         final Label divider = new Label("|", skin, "cgothic");
         divider.setAlignment(Align.right);
-    
+       
+        //Bottom Box Labels
+        final Label divider2 = new Label("|", skin, "cgothic");
+        divider2.setAlignment(Align.right);
+        final Label chatLink = new Label("Online (" + onlineFriends +")" , skin, "cgothic");
+        chatLink.setAlignment(Align.right);
+        
         final int bWidth = 300;
         final int bHeight = 300;
         final int bX = 150;
@@ -111,7 +132,15 @@ public class FrontPage implements Screen {
       
         recentButton.setSize(bWidth, bHeight);        
         recentButton.setPosition(bX, bY);
+        
+        //recent games, 1 and 2
+        recentgame1.setSize(bWidth - 50, bHeight - 50);        
+        recentgame1.setPosition(bX + 25, bY - 250);
+        
+        recentgame2.setSize(bWidth - 50, bHeight - 50);        
+        recentgame2.setPosition(bX + 25, bY - 500);
        
+        
         libraryButton.setSize(bWidth, bHeight);
         libraryButton.setPosition(bX2, bY);
         
@@ -129,20 +158,26 @@ public class FrontPage implements Screen {
         topBox.setColor(255, 255, 255, 1);
         topBox.setBackground(skin.getDrawable("menuBar"));
         
-        topBox.add(username).width(1000);
+        //set top bar labels
+        topBox.add(logo).width(500);
+        topBox.add(username).width(615);
         topBox.add(divider).width(5).pad(20);
-        topBox.add(credits).width(90);
+        topBox.add(credits).width(100);
+        
+        //set bottom bar properties
         bottomBox.setSize(1279, 30);
         bottomBox.setPosition(1, 1);
         bottomBox.setColor(255, 255, 255, 1);
+        bottomBox.setBackground(skin.getDrawable("menuBar"));
+        
+        //add bottom labels
+        
+        bottomBox.add(divider2).width(1100).pad(20);
+        bottomBox.add(chatLink).width(100);
         
         //adding to stage
         stage.addActor(topBox);
         stage.addActor(bottomBox);
-        
-        
-   
-        
         
         //float height = storeButton.getHeight();
     	//float width = storeButton.getWidth();
@@ -152,8 +187,17 @@ public class FrontPage implements Screen {
         // Icon event listeners, mouseOver and mouseClick
         recentButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
-           		recentButton.setSize(bWidth + enlarge,  bHeight + enlarge);
-           		recentButton.setPosition(bX -(enlarge/2), bY-(enlarge/2));
+           		//recentButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+            	//recentButton.setPosition(bX - (enlarge/2), bY-(enlarge/2));
+            	
+            	//get original width and height and X and Y positions 
+           		float cSizeX = recentButton.getWidth();
+           		float cSizeY = recentButton.getHeight();
+           		float cPosX = recentButton.getX();
+           		float cPosY = recentButton.getY();
+           		
+           		recentButton.setSize(cSizeX + enlarge, cSizeY + enlarge);
+            	recentButton.setPosition(cPosX - (enlarge/2), cPosY - (enlarge/2));
            		recentButton.setText(null);
                	recentButton.setText("Recently Played");
             		
@@ -161,9 +205,19 @@ public class FrontPage implements Screen {
            
             }
             public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-            	recentButton.setSize(bWidth, bHeight);
-            	recentButton.setPosition(bX, bY);
-            	recentButton.setText(null);
+            	//recentButton.setSize(bWidth, bHeight);
+				//recentButton.setPosition(bX, bY);	
+            	//recentButton.setPosition(recentButton.getX() + (enlarge/2), recentButton.getY() + (enlarge/2));
+            	
+            	//get original position and shrink
+            	float cSizeX = recentButton.getWidth();
+           		float cSizeY = recentButton.getHeight();
+           		float cPosX = recentButton.getX();
+           		float cPosY = recentButton.getY();
+           		
+           		recentButton.setSize(cSizeX - enlarge, cSizeY - enlarge);
+           		recentButton.setPosition(cPosX + (enlarge/2), cPosY + (enlarge/2));
+           		recentButton.setText(null);
             	recentButton.setText("Recently Played");
             }}));   
         
@@ -171,10 +225,76 @@ public class FrontPage implements Screen {
 		recentButton.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	//arcadeUI.setScreen(arcadeUI.recent);
-		    	System.out.println("recent clicked");
+		    	//System.out.println("recent clicked");
+		    	//stage.addActor(recentgame1);
+		        //stage.addActor(recentgame2);
+		    	
+		    	//if it doesnt have the actors, add them.
+		    	for (int i = 0; i < stage.getActors().size ; i++){
+		    		//System.out.println(stage.getActors().get(i));
+		    		//System.out.println(recentgame1);
+		    		
+		    		
+		    		//Needs Fixing. This checks for the actors on stage. if recent game is in it, then remove, otherwise add.
+		    		if (stage.getActors().get(i) == recentgame1){
+		    			
+		    			System.out.println("boxes removed");
+		    			//stage.getActors().get(i).remove();
+		    			//recentgame1.remove();
+		    		//	recentgame2.remove();
+		    			
+		    		}else{
+		    			stage.addActor(recentgame1);
+		    			stage.addActor(recentgame2);
+		    		}
+		    	}
+		    	
+		    	
 		    }
 		})); 
-        
+        /* recent games start */
+		
+		  recentgame1.addListener(new ChangeListener(){
+	        	public void changed (ChangeEvent event, Actor actor){
+	        		recentButton.setSize(bWidth - 50, bHeight - 50);
+	        		recentButton.setPosition(bX + 25, bY + 300);
+	        		recentButton.setText(null);
+	            	recentButton.setText("Recently Played");
+	            	
+	        		recentgame1.setSize(bWidth, bHeight);
+	        		recentgame1.setPosition(bX, bY);
+	        		recentgame1.setText(null);
+	            	recentgame1.setText(game1);
+	        		
+	            	recentgame2.setSize(bWidth - 50, bHeight - 50); 
+	        		recentgame2.setPosition(bX + 25, bY - 250);
+	        		recentgame2.setText(null);
+	            	recentgame2.setText(game2);
+	        	}
+	        });
+	        
+	        recentgame2.addListener(new ChangeListener(){
+	        	public void changed (ChangeEvent event, Actor actor){
+	        		recentgame1.setSize(bWidth - 50, bHeight - 50);
+	        		recentgame1.setPosition(bX + 25, bY + 300);
+	        		recentgame1.setText(null);
+	            	recentgame1.setText(game1);
+	            	
+	        		recentgame2.setSize(bWidth, bHeight);
+	        		recentgame2.setPosition(bX, bY);
+	        		recentgame2.setText(null);
+	            	recentgame2.setText(game2);
+	        		
+	            	recentButton.setSize(bWidth - 50, bHeight - 50);
+	        		recentButton.setPosition(bX + 25, bY - 250);
+	        		recentButton.setText(null);
+	            	recentButton.setText("Recently Played");
+	        	}
+	        });
+		/* recent games end*/
+	        
+	        
+	        
         libraryButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
            		 libraryButton.setSize(bWidth + enlarge,  bHeight + enlarge);
@@ -224,11 +344,9 @@ public class FrontPage implements Screen {
         stage.addActor(recentButton);
         stage.addActor(libraryButton);
         stage.addActor(storeButton);
-    }
-
         
-    
-    
+        
+    }
     
     
 	@Override

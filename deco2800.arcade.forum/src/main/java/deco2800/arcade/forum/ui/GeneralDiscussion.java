@@ -98,4 +98,14 @@ public class GeneralDiscussion {
 	      f.setVisible(true);
 	      
 	    }
+
+	public static void setContentPanel(JPanel j) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 	}

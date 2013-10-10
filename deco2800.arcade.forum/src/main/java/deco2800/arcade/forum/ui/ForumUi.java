@@ -16,6 +16,8 @@ import java.awt.Color;
 import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ForumUi {
 	private static JTextField textField;
@@ -78,10 +80,21 @@ public class ForumUi {
 	      lblTag.setBounds(546, 129, 97, 16);
 	      f.getContentPane().add(lblTag);
 	      
-	      JLabel lblNewLabel = new JLabel("General Discussion");
-	      lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 13));
-	      lblNewLabel.setBounds(12, 155, 141, 16);
-	      f.getContentPane().add(lblNewLabel);
+	      JLabel lblGeneralDiscussion = new JLabel("General Discussion");
+	      lblGeneralDiscussion.setFont(new Font("Tahoma", Font.BOLD, 13));
+	      lblGeneralDiscussion.setBounds(12, 155, 141, 16);
+	      f.getContentPane().add(lblGeneralDiscussion);
+	      
+	      lblGeneralDiscussion.addMouseListener(new MouseAdapter(){ 
+	    	  public void mouseClicked(MouseEvent e)
+	    	  {
+	    		  
+	    		  GeneralDiscussion s = new GeneralDiscussion();
+	    		  s.setVisible(true);
+	    	  }
+	      });
+	     
+	     
 	      
 	      JLabel lblTutorial = new JLabel("Tutorial ");
 	      lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -128,6 +141,7 @@ public class ForumUi {
 	      f.setVisible(true);
 	      
 	    }
+	   
 	   
 	public void addListener(ActionListener dummy, JButton button) {
 		button.addActionListener(dummy);

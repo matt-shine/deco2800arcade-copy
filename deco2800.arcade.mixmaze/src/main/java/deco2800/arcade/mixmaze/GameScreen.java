@@ -47,10 +47,13 @@ abstract class GameScreen implements Screen {
 	protected Label resultLabel;
 	protected SidePanel left;
 	protected SidePanel right;
-	protected Scorebar[] scorebar;
+	protected ScoreBar[] scorebar;
 
 	protected final MixMaze game;
 	private final Skin skin;
+	
+	protected  int[] p1Controls = {Keys.G,Keys.H,Keys.W,Keys.A,Keys.S,Keys.D};
+	protected int[] p2Controls = {Keys.O,Keys.P,Keys.UP,Keys.LEFT,Keys.DOWN,Keys.RIGHT};
 
 	/**
 	 * Constructor
@@ -79,9 +82,9 @@ abstract class GameScreen implements Screen {
 		left = new SidePanel();
 		right = new SidePanel();
 
-		scorebar = new Scorebar[2];
-		scorebar[0] = new Scorebar(true);
-		scorebar[1] = new Scorebar(false);
+		scorebar = new ScoreBar[2];
+		scorebar[0] = new ScoreBar(true);
+		scorebar[1] = new ScoreBar(false);
 
 		timerLabel = new Label("timer", skin, "timer-white");
 		timerLabel.setFontScale(2f);
@@ -155,11 +158,6 @@ abstract class GameScreen implements Screen {
 		newGame();
 	}
 
-	/**
-	 * Starts a new game session.
-	 */
-	protected abstract void newGame();
-
 	@Override
 	public void hide() {
 		Gdx.input.setInputProcessor(null);
@@ -173,6 +171,23 @@ abstract class GameScreen implements Screen {
 	@Override
 	public void resume() {
 	}
+
+	/**
+	 * Starts a new game session.
+	 */
+	protected abstract void newGame();
+
+	/**
+	 * Sets up the game board.
+	 */
+	protected abstract void setupGameBoard();
+
+	/**
+	 * Sets up the timers for a game session.
+	 * 
+	 * @param timeLimit	the time limit of this session
+	 */
+	protected abstract void setupTimer(int timeLimit);
 
 	/**
 	 * SidePanel displays the player status.
@@ -268,14 +283,14 @@ abstract class GameScreen implements Screen {
 	}
 
 	/**
-	 * Scorebar displays the player score.
+	 * ScoreBar displays the player score.
 	 */
-	class Scorebar extends Table {
+	protected class ScoreBar extends Table {
 
 		private Scorebox box;
 		private Label scoreLabel;
 
-		Scorebar(boolean alignLeft) {
+		ScoreBar(boolean alignLeft) {
 			box = new Scorebox(WHITE_REGION);
 			scoreLabel = new Label("0", skin);
 
@@ -313,19 +328,14 @@ abstract class GameScreen implements Screen {
 		};
 
 	}
-
-	public class Settings{
-		protected int[] p1Controls = {Keys.W,Keys.S,Keys.A,Keys.D,Keys.G,Keys.H};
-		protected int[] p2Controls = {Keys.UP,Keys.DOWN,Keys.LEFT,Keys.RIGHT,Keys.O,Keys.P};
-
-		public Settings(int[] p1Controls,int[] p2Controls){
-			this.p1Controls = p1Controls;
-			this.p2Controls = p2Controls;
+	
+	 class Settings{		 
+		public Settings(int[] innerP1Controls,int[] innerP2Controls){
+			p1Controls = innerP1Controls;
+			p2Controls = innerP2Controls;
 		}
-
 		public Settings(){
-
+			
 		}
 	}
-
 }

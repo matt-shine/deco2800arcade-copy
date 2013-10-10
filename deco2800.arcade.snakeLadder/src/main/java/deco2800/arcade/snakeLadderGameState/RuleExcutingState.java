@@ -1,4 +1,4 @@
-package deco2800.arcade.snakeLadderModel;
+package deco2800.arcade.snakeLadderGameState;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
 
@@ -9,33 +9,20 @@ public class RuleExcutingState extends GameState {
 	@Override
 	public void handleInput(SnakeLadder context) {
 		int turn=context.getturns();
-		//player's turn
-		if(turn%2==0)
-		{
-			this.excuteRules(0, context);
-			//after excuting all the rule go back to waiting state
-			context.gameState = new WaitingState();
-			context.taketurns();
-		}
-		else if(turn%2==1)
-		{
-			this.excuteRules(1, context);
-			//after excuting all the rule go back to waiting state
-			context.gameState = new WaitingState();
-			context.statusMessage = "Throw the dice again";
-			context.taketurns();
-		}
-		
-		
+		int playerIndex = turn%context.gamePlayers.length;
+		String rule = context.getMap().getTileList()[context.gamePlayers[playerIndex].newposition()].getRule();
+		this.excuteRules(playerIndex, rule, context);
+		//after excuting all the rule go back to waiting state
+		context.gameState = new WaitingState();
+		context.statusMessage = "Throw the dice again";
+		context.taketurns();
 	}
 
 	/***
 	 * Updating the score of the game player and print it out on the scoreLabel
 	 * @param gp the Game Player its referring to
 	 */
-	public void excuteRules(int playerNum, SnakeLadder context){
-		//System.out.println(gp.newposition());
-		String rule = context.getMap().getTileList()[context.gamePlayers[playerNum].newposition()].getRule();
+	public void excuteRules(int playerNum, String rule, SnakeLadder context){
 		if (isScore(rule))
 		{
 			context.gamePlayers[playerNum].setScore(Integer.parseInt(rule));

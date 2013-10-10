@@ -4,7 +4,7 @@ import deco2800.arcade.model.EncodedImage;
 import deco2800.arcade.protocol.image.*;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import deco2800.arcade.util.AsyncFuture;
+import deco2800.arcade.utils.AsyncFuture;
 
 public class ImageClient {
 

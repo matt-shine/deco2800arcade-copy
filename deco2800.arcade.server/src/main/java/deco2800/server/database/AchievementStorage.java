@@ -182,6 +182,7 @@ public class AchievementStorage {
 					    c.awardThreshold + ")");
                 }
 		File icon = ResourceLoader.load(iconPath);
+		System.out.println(iconPath);
 		imageStorage.set(iconPath, icon);
 		logger.info("Achievement: {} added", name);
 	    }
@@ -257,7 +258,7 @@ public class AchievementStorage {
      * @throws DatabaseException 
      */
     public ArrayList<Achievement> achievementsForIDs(
-						     ArrayList<String> achievementIDs) throws DatabaseException {
+	    ArrayList<String> achievementIDs) throws DatabaseException {
     	
     	ArrayList<Achievement> achievements = new ArrayList<Achievement>();
     	

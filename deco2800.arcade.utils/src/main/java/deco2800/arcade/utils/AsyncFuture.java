@@ -1,10 +1,10 @@
-package deco2800.arcade.util;
+package deco2800.arcade.utils;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import deco2800.arcade.util.Handler;
+import deco2800.arcade.utils.Handler;
 
 public class AsyncFuture <T> implements Future<T> {
     private T result;

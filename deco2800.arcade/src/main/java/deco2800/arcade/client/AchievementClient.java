@@ -2,7 +2,9 @@ package deco2800.arcade.client;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import deco2800.arcade.utils.Handler;
+import deco2800.arcade.utils.AsyncFuture;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
@@ -21,11 +23,11 @@ public class AchievementClient extends NetworkListener {
 
     private NetworkClient networkClient;
     private HashSet<AchievementListener> listeners;
-    private HashMap<String, Achievement> achievementsForIDsCache;
+    private ConcurrentHashMap<String, Achievement> achievementsCache;
 
     public AchievementClient(NetworkClient networkClient) {
         this.listeners = new HashSet<AchievementListener>();
-        this.achievementsForIDsCache = new HashMap<String, Achievement>();
+        this.achievementsCache = new ConcurrentHashMap<String, Achievement>();
     }
 
     public void setNetworkClient(NetworkClient client) {
@@ -39,61 +41,105 @@ public class AchievementClient extends NetworkListener {
     }
 
     /**
-     * Utility method for fetching a single achievement. This is just a wrapper
-     * around achievementsForIDs, which is a more efficient method for
-     * fetching many achievements.
-     * 
-     * @param  achievementID            The unique ID for the achievement.
-     * @throws IllegalArgumentException If an achievement with the provided ID
-     *                                  doesn't exist.
-     * @return The Achievement matching the provided ID.
+     * Legacy method that's now a wrapper around getAchievementForID - you 
+     * should move to using that method in order to control whether you want
+     * the request to block or not.
      */
+    @Deprecated
     public Achievement achievementForID(String achievementID) {
-        ArrayList<String> achievementIDs = new ArrayList<String>();
-        achievementIDs.add(achievementID);
-        return achievementsForIDs(achievementIDs).get(0);
+	return getAchievementForID(achievementID).get();	
     }
     
+    /**
+     * Returns a future which will be provided with the Achievement
+     * corresponding to the given achievement ID. If no such achievement
+     * exists, the future will be cancelled.    
+     *
+     * @param achievementID The ID of the achievement to request.
+     * @return A future to be provided with the request's result.
+     */
+    public AsyncFuture<Achievement> getAchievementForID(String achievementID) {
+	// we'll just wrap the list-based version and provide the future
+	// with the first element of that version's future
+	ArrayList<String> ids = new ArrayList<String>();
+	ids.add(achievementID);
+
+	final AsyncFuture<Achievement> future = new AsyncFuture<Achievement>();	
+	final AsyncFuture<ArrayList<Achievement>> listFuture = getAchievementsForIDs(ids);
+	
+	listFuture.setHandler(new Handler<ArrayList<Achievement>> () {
+	    public void handle(ArrayList<Achievement> response) {
+		if (response == null)
+		    future.cancel(false);
+		else
+		    future.provide(response.get(0));
+	    }
+	});
+	
+	return future;
+    }
     
     /**
-     * Returns a list of Achievements corresponding to the supplied list of
-     * IDs. The ordering of the returned Achievements matches that of the
-     * supplied list of IDs.
-     *
-     * @param achievementIDs            The list of unique achievement IDs to
-     *                                  fetch data for from the server.
-     * @throws IllegalArgumentException If any of the provided IDs don't have
-     *                                  corresponding achievements.
-     * @return A list of Achievements corresponding to the supplied IDs.
+     * Legacy method that's now a wrapper around getAchievementsForIDs - you 
+     * should move to using that method in order to control whether you want
+     * the request to block or not.
      */
+    @Deprecated
     public ArrayList<Achievement> achievementsForIDs(
-            ArrayList<String> achievementIDs) {
-    	ArrayList<String> nonCached = new ArrayList<String>();
-    	ArrayList<Achievement> result = new ArrayList<Achievement>();
-    	
-    	//Only do query for non cached achievements (filter out already cached)
-    	for(String ID:achievementIDs){
-    		if(!achievementsForIDsCache.containsKey(ID)){
-    			nonCached.add(ID);
-    		}else{
-    			result.add(achievementsForIDsCache.get(ID));
-    		}
-    	}
-        
-    	//Actually get the non-cached achievements from database
-        AchievementsForIDsRequest request = new AchievementsForIDsRequest();
-        request.achievementIDs = nonCached;
-        BlockingMessage r = BlockingMessage.request(networkClient.kryoClient(),
-                                                           request);
-        AchievementsForIDsResponse response = (AchievementsForIDsResponse)r;
-        
-        //Add newly retrieved achievements to cache and to return result
-        for(Achievement achievement: response.achievements){
-        	achievementsForIDsCache.put(achievement.id, achievement);
-        	result.add(achievementsForIDsCache.get(achievement.id));
-        }
+	    ArrayList<String> achievementIDs) {
+	return getAchievementsForIDs(achievementIDs).get();
+    }
 
-        return result;
+    public AsyncFuture<ArrayList<Achievement>> getAchievementsForIDs(
+	    final ArrayList<String> achievementIDs) {
+	final AsyncFuture<ArrayList<Achievement>> future = 
+	    new AsyncFuture<ArrayList<Achievement>>();
+	ArrayList<String> nonCached = new ArrayList<String>();
+    	
+	// see if there's any non-cached IDs that we'll need to request
+    	for(String id : achievementIDs){
+	    if (!achievementsCache.containsKey(id))
+		nonCached.add(id);
+    	}
+
+	if (!nonCached.isEmpty()) {
+	    // make a request if we need to cache any
+	    AchievementsForIDsRequest req = new AchievementsForIDsRequest();
+	    req.achievementIDs = nonCached;
+	    
+	    AsyncFuture<NetworkObject> response = networkClient.request(req);
+	    response.setHandler(new Handler<NetworkObject>() {
+		public void handle(NetworkObject obj) {
+		    AchievementsForIDsResponse resp = (AchievementsForIDsResponse)obj;
+
+		    // just fill in the cache
+		    for (Achievement ach : resp.achievements) {
+			achievementsCache.put(ach.id, ach);
+		    }
+
+		    // and then build our result (this is a separate pass to make sure
+		    // the result has the same order as the list of IDs)
+		    ArrayList<Achievement> result = new ArrayList<Achievement>();
+		    for (String id : achievementIDs) {
+			result.add(achievementsCache.get(id));
+		    }
+		    
+		    future.provide(result);
+		}
+	    });
+
+	} else {
+	    // otherwise we're able to just provide the future now
+	    ArrayList<Achievement> result = new ArrayList<Achievement>();
+	    for (String id : achievementIDs) {
+		result.add(achievementsCache.get(id));
+	    }
+
+	    future.provide(result);
+	}
+        
+        return future;
+
     }
     
     /**

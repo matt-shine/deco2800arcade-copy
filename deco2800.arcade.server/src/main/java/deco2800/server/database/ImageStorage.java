@@ -56,13 +56,19 @@ public class ImageStorage {
         PreparedStatement ps = null;
 
         try {
-            ps = conn.prepareStatement(
-                "INSERT INTO IMAGES VALUES (?, ?)");
-            ps.setString(1, id);
-            ps.setBinaryStream(2, bis);
-            ps.execute();
+	    if (contains(id)) {
+		ps = conn.prepareStatement("UPDATE IMAGES SET data = ? WHERE id = ?");
+		ps.setString(2, id);
+		ps.setBinaryStream(1, bis);
+		ps.execute();
 
-        } catch(SQLException e) {
+	    } else {
+		ps = conn.prepareStatement("INSERT INTO IMAGES VALUES (?, ?)");		
+		ps.setString(1, id);
+		ps.setBinaryStream(2, bis);
+		ps.execute();
+	    }
+	} catch(SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -122,7 +128,30 @@ public class ImageStorage {
         }
     }
 
-    public boolean contains(String id) {
-        return false;
+    public boolean contains(String id) throws DatabaseException {
+	Connection conn = Database.getConnection();
+        PreparedStatement ps = null;        
+
+        try {
+            ps = conn.prepareStatement(
+                "SELECT id FROM IMAGES WHERE id = ?");
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (!rs.next())
+		return false;
+	    else
+		return true;
+
+        } catch(SQLException e) {
+            throw new DatabaseException("SQLException caught", e);            
+        } finally {
+            try {
+                ps.close(); // closes rs as well
+                conn.close();
+            } catch (SQLException e) {
+		throw new DatabaseException("Couldn't close connections", e);
+            }
+        }
     }
 }

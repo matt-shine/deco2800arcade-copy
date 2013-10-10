@@ -1,9 +1,9 @@
-package deco2800.arcade.util;
+package deco2800.arcade.utils;
 
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
-import deco2800.arcade.util.AsyncFuture;
-import deco2800.arcade.util.Handler;
+import deco2800.arcade.utils.AsyncFuture;
+import deco2800.arcade.utils.Handler;
 
 public class AsyncFutureTests {
 

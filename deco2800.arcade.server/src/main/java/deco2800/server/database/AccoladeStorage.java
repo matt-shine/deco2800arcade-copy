@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 import java.io.File;
+import java.io.IOException;
 import java.io.FileNotFoundException;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
@@ -172,7 +173,11 @@ public class AccoladeStorage{
 		} catch (FileNotFoundException e) {
             e.printStackTrace();
             throw new DatabaseException("Couldn't find file", e);
-        } finally {
+		} catch (IOException e) {
+		    // added due to ImageStorage refactor by mhenr18
+		    e.printStackTrace();
+		    throw new DatabaseException("IOException while reading image file", e);
+		} finally {
 			try {
 				if (resultSet != null){
 					resultSet.close();

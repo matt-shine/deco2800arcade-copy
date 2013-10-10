@@ -82,12 +82,20 @@ public class ArcadeServer {
 	}
 	
 	/**
-	 * * Access the Serer's achievement storage facility
+	 * * Access the server's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
 	 */
 	public AchievementStorage getAchievementStorage() {
 		return this.achievementStorage;
 	}
+    
+    /**
+     * Accessor for the server's image storage.
+     * @return ImageStorage currently in use by the arcade
+     */
+    public ImageStorage getImageStorage() {
+	return this.imageStorage;
+    }
 	
 	/**
 	 * Access the replay records.

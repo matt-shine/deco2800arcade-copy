@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Invaders extends JFrame implements Runnable {
 	JFrame appFrame;
 	public static int Width = 800;
-	public static int Height = 500;
+	public static int Height = 550;
 	private Image background = null;
 	private Graphics mains;
 	private BufferedImage bg;
@@ -23,6 +23,7 @@ public class Invaders extends JFrame implements Runnable {
 	private boolean moveDown;
 	private int bglevel;
 	private String imgString;
+	private Image frame = null;
 
 	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
@@ -43,6 +44,9 @@ public class Invaders extends JFrame implements Runnable {
 		level = 1;
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
+		
+		frame = new javax.swing.ImageIcon(this.getClass().getResource(
+				  "/image/Frame.png")).getImage();
 
 		addKeyListener(tank);
 		move = 0;
@@ -51,8 +55,10 @@ public class Invaders extends JFrame implements Runnable {
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
 
+		
 		mains = bg.getGraphics();
 		mains.drawImage(background, 0, 0, Width, Height, panel);
+		mains.drawImage(frame, 0, 0, Width, Height, panel);
 
 		setBackground(Color.black);
 		setVisible(true);
@@ -70,6 +76,8 @@ public class Invaders extends JFrame implements Runnable {
 		addKeyListener(tank);
 		background = new javax.swing.ImageIcon(this.getClass().getResource(
 				type + "BGD.png")).getImage();
+		
+		
 	}
 
 	public void startGame() {
@@ -82,6 +90,7 @@ public class Invaders extends JFrame implements Runnable {
 
 		mains.clearRect(0, 0, Width, Height);
 		mains.drawImage(background, 0, 0, Width, Height, panel);
+		mains.drawImage(frame, 10, 20, Width, Height, panel);
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
 

@@ -8,7 +8,7 @@ package deco2800.arcade.towerdefence;
  * @author hadronn
  * 
  */
-public interface Ship {
+public class Ship {
 	/**
 	 * To be invoked while instantiating or destroying an object to keep track
 	 * of any required state such as numbers on the grid.
@@ -27,14 +27,20 @@ public interface Ship {
 	 * We should create fields in the Ship class for each state we'd like to
 	 * keep track of and increment/decrement as the game plays.
 	 */
-	public void updateGameState(Object gameState, int change);
+	
+	
+	
+	public void updateGameState(Object gameState, int change) {
+	}
 
 	/**
 	 * Current resources of the ship. May need to be split into types later.
 	 * 
 	 * @return
 	 */
-	public int resources();
+	public int resources() {
+		return 0;
+	}
 
 	/**
 	 * Current score for the player. Perhaps a formula of units killed, wave and
@@ -42,34 +48,43 @@ public interface Ship {
 	 * 
 	 * @return
 	 */
-	public int score();
+	public int score() {
+		return 0;
+	}
 
 	/**
 	 * Current wave the player is on.
 	 * 
 	 * @return
 	 */
-	public int wave();
+	public int wave() {
+		return 0;
+	}
 
 	/**
 	 * Give the player more score.
 	 */
-	public void addScore();
+	public void addScore() {
+	}
 
 	/**
 	 * Give the ship more resources
 	 */
-	public void addResources();
+	public void addResources() {
+	}
 
 	/**
 	 * Increment the wave, keep to units of 1 don't be cute.
 	 */
-	public void nextWave();
+	public void nextWave() {
+		
+	}
 
 	/**
 	 * Jump forward to wave n, useful for save/load.
 	 * 
 	 * @param n
 	 */
-	public void setWave(int n);
+	public void setWave(int n) {
+	}
 }

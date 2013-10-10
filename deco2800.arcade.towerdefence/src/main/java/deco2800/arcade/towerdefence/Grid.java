@@ -1,6 +1,10 @@
 package deco2800.arcade.towerdefence;
 
 import deco2800.arcade.towerdefence.pathfinding.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.UUID;
 
 /**
@@ -24,7 +28,9 @@ public class Grid implements TileBasedMap {
 	private int gridWidth, gridDepth;
 	// The contents of the grid. 0 means clear, 1 means tower, 2 means wall, 3
 	// means wall with tower, and 4 means blocked.
-	private int gridContents[][];
+	private ArrayList<ArrayList<LinkedList<GridObject>>> gridContents;
+	// The ship that is using this grid
+	private Ship ship;
 
 	// Constructor
 	/**
@@ -34,15 +40,16 @@ public class Grid implements TileBasedMap {
 	 * @param depth
 	 * @param name
 	 */
-	public Grid(int width, int depth, String name, int gridSize) {
+	public Grid(int width, int depth, String name, int gridSize, Ship ship) {
 		id = UUID.randomUUID();
 		this.width = width;
 		this.depth = depth;
 		this.name = name;
 		this.gridSize = gridSize;
+		this.ship = ship;
 		gridWidth = width / gridSize;
 		gridDepth = depth / gridSize;
-		gridContents = new int[gridWidth][gridDepth];
+		gridContents = new ArrayList<ArrayList<LinkedList<GridObject>>>();
 	}
 
 	// Getters
@@ -125,16 +132,61 @@ public class Grid implements TileBasedMap {
 	}
 
 	public boolean blocked(Mobile mover, int x, int y) {
-		if(gridContents[x][y] == 0){
-			return true;
-		} else {
-			return false;
+		Iterator<GridObject> thisGridObjects = getGridContents(x,y).iterator();
+		while (thisGridObjects.hasNext()){
+			GridObject current = thisGridObjects.next();
+			if (current.getClass() != Enemy.class){
+				return false;
+			}
 		}
+		return true;
 	}
 
-	@Override
 	public float getCost(Mobile mover, int sx, int sy, int tx, int ty) {
-		//Currently no special tiles to consider - always return 1
+		// Currently no special tiles to consider - always return 1
 		return 1;
 	}
+
+	public Ship ship() {
+		return ship;
+	}
+
+	/**
+	 * Try and build an object at the specified grid. If it is blocked, return
+	 * false, otherwise return true and modify the gridContents appropriately.
+	 * 
+	 * @param x
+	 *            the x-coordinate of the object
+	 * @param y
+	 *            the y-coordinate of the object
+	 */
+	public boolean buildObject(int x, int y) {
+		/*if (gridContents[x][y] == 0){
+			//Do some check for aliens in the way
+			Iterator<Enemy> alienItr = ship.getEnemies().iterator();
+			while (alienItr.hasNext()){
+				Enemy current = alienItr.next();
+				if (current.position().x/gridSize == x || current.position().y/gridSize == y){
+					return false;
+				}
+			}
+			return true;
+		} else if(gridContents[x][y] == 2){
+			return true;
+		}else {
+			return false;
+		}*/
+		
+		Iterator<GridObject> thisGridObjects = getGridContents(x,y).iterator();
+		//Check for block wall
+		//Check for towers
+		//Check for aliens
+		
+		return true;
+	}
+	
+	private LinkedList<GridObject> getGridContents(int x, int y){
+		return gridContents.get(x).get(y);
+	}
+
 }

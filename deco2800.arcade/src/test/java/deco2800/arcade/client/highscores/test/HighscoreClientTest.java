@@ -13,11 +13,11 @@ public class HighscoreClientTest {
 	
 	@Test (expected=NullPointerException.class)
 	public void initTest1() {
-		HighscoreClient hsc = new HighscoreClient(null, null, null);
+		HighscoreClient hsc = new HighscoreClient(0, null, null);
 	}
 	
 	@Test (expected=NullPointerException.class)
 	public void initTest2() {
-		HighscoreClient hsc = new HighscoreClient(null, "TestGame", null);
+		HighscoreClient hsc = new HighscoreClient(0, "TestGame", null);
 	}
 }

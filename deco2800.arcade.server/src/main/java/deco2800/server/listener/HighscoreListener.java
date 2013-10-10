@@ -69,6 +69,8 @@ public class HighscoreListener extends Listener {
 	
 	@Override
     public void received(Connection connection, Object object) {
+		
+		//if the request sent is to add a score
 		 if (object instanceof AddScoreRequest) {
 			 AddScoreRequest asr = (AddScoreRequest)object;
 			 String[] scoreQueue = deserialisedScores(asr.scoreQueue);
@@ -79,7 +81,7 @@ public class HighscoreListener extends Listener {
 			 /*This following is temporary, simply for showing that the 
 			  * connection has succeeded and the data has been sent correctly.*/
 			 System.out.println("Recieved add score request for username:" 
-					 + asr.username +" and Game_ID:" + asr.game_ID + ". Scores: "); 
+					 + asr.player_id +" and Game_ID:" + asr.game_ID + ". Scores: "); 
 			 for (int i = 0; i < scoreQueue.length; i+=2) {
 				 types.addLast(scoreQueue[i]);
 				 scores.addLast(Integer.parseInt(scoreQueue[i+1]));
@@ -87,15 +89,11 @@ public class HighscoreListener extends Listener {
 				 System.out.println("    Type: " + scoreQueue[i] + "; Value: " + scoreQueue[i+1] + ".");
 			 }
 			 
-			 
-			
-			 
 			 try {
-				 //hsDatabase.updateScore(Game_ID, Username, type, score)
+				 hsDatabase.updateScore(asr.game_ID, asr.player_id, scoreQueue[0], Integer.parseInt(scoreQueue[1]));
 			 } catch (Exception e) {
 				 e.printStackTrace();
 			 }
-			 
 			 
 		 
 		 } else if (object instanceof GetScoreRequest) {

@@ -1,21 +1,18 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import deco2800.arcade.protocol.highscore.GetScoreRequest;
 
 public class HighscoreDatabase {
 	private boolean initialised = false;
-	private static final DateFormat dateFormat = new SimpleDateFormat(
-			"yyyy/MM/dd HH:mm:ss");
 	
 	
 	//======================
@@ -33,13 +30,14 @@ public class HighscoreDatabase {
 			Statement statement = connection.createStatement();
 			
 			//Create high scores base table
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_PLAYER", null);
+			ResultSet tableData = connection.getMetaData().getTables(null, null, "USER_HIGHSCORES", null);
 			
 			
 			if (!tableData.next()) {
-				statement.execute("CREATE TABLE HIGHSCORES_PLAYER(HID INT GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)," + 
-							"Username VARCHAR(30) NOT NULL," +
-							"GameID INT NOT NULL," +
+				System.out.println("------------------CREATING TABLE AGAIN------------------");
+				statement.execute("CREATE TABLE USER_HIGHSCORES(HID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)," + 
+							"PlayerID INTEGER NOT NULL," +
+							"GameID VARCHAR(30) NOT NULL," +
 							"Date TIMESTAMP, " +
 							"CONSTRAINT primary_key PRIMARY KEY (HID))");
 			}
@@ -47,10 +45,10 @@ public class HighscoreDatabase {
 			tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_DATA", null);
 			if (!tableData.next()) {
 				statement.execute("CREATE TABLE HIGHSCORES_DATA(ID INT PRIMARY KEY," +
-							"Score_Type VARCHAR(255)," +
+							"Score_Type VARCHAR(50)," +
 							"HID INT," +
 							"Score INT," +
-							"FOREIGN KEY(HID) REFERENCES HIGHSCORES_PLAYER(HID))");
+							"FOREIGN KEY(HID) REFERENCES USER_HIGHSCORES(HID))");
 			}
 			
 		} catch (SQLException e) {
@@ -79,17 +77,20 @@ public class HighscoreDatabase {
 	 */
 	public List<String> fetchData(GetScoreRequest gsReq) {
 		//Run the query corresponding to the requestID. This switch statement is probably going to get pretty big.
-		try {
-			switch (gsReq.requestID) {
-			case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type); //Return value of query with requestID 1
+		//System.out.println("adding a score should not get here.");
+		//try {
+		/* switch (gsReq.requestID) {
+			case 1: return null; //getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type); //Return value of query with requestID 1
 			case 2: return null; //Return value of query with requestID 2
 			case 3: return null; //Return value of query with requestID 3
+			case 4: return null;
+			case 5: return null;
 			}
-		} catch (DatabaseException e) {
+		//} catch (DatabaseException e) {
 			//bad
-		}
+		//}
 		
-		//This should never be reached, as all requestIDs should be covered in the switch
+		//This should never be reached, as all requestIDs should be covered in the switch*/
 		return null;
 	}
 	
@@ -103,7 +104,7 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public List<String> getGameTopPlayers(String Game_ID, int top, String type) throws DatabaseException{
-		List<String> data = new ArrayList<String>();
+		/*List<String> data = new ArrayList<String>();
 
 		if (!initialised) {
 			initialise();
@@ -143,7 +144,8 @@ public class HighscoreDatabase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
+		} */
+		return null;
 	}
 	
 	/**
@@ -154,7 +156,7 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public String getUserHighScore(String Username, String Game_ID, String type) throws DatabaseException{
-		String data = null;
+		/*String data = null;
 
 		if (!initialised) {
 			initialise();
@@ -194,7 +196,8 @@ public class HighscoreDatabase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
+		return null;
 	}
 	
 	/**
@@ -205,7 +208,7 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public String getUserRanking(String Username, String Game_ID, String type) throws DatabaseException{
-		String data = null;
+		/*String data = null;
 
 		if (!initialised) {
 			initialise();
@@ -245,7 +248,8 @@ public class HighscoreDatabase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
+		return null;
 	}
 	
 	
@@ -257,7 +261,7 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public String getAvgUserHighScore(String Game_ID, String type) throws DatabaseException{
-		String data = null;
+		/*String data = null;
 
 		if (!initialised) {
 			initialise();
@@ -297,13 +301,14 @@ public class HighscoreDatabase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
+		} */
+		return null;
 	}
 	
 	
 	public String getTopPlayers() throws DatabaseException, SQLException{
 		String data = null;
-		
+		/*
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
@@ -327,7 +332,7 @@ public class HighscoreDatabase {
 					"Unable to add highscore information to database", e);
 		} finally {
 			connectionCleanup(connection, statement, resultSet);
-		}
+		}*/
 		
 		return data;
 	}
@@ -337,31 +342,32 @@ public class HighscoreDatabase {
 	//Adding Score Methods
 	//======================
 	
-	public int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
+	public int addHighscore(String Game_ID, int player_ID) throws DatabaseException, SQLException {
 		int hid = 0;
 		Connection connection = null;
 		Statement statement = null;
 		ResultSet resultSet = null;
 		
-		
-		String insertTableSQL = "INSERT INTO HIGHSCORES_PLAYER"
-				+ "(Username, GameID, Date) VALUES"
-				+ "('" + Username + "','" + Game_ID +  "', to_date('"
-				+ getCurrentTimeStamp() + "', 'yyyy/mm/dd hh24:mi:ss'))";
+		String insertTableSQL = "INSERT INTO USER_HIGHSCORES"
+				+ "(PlayerID, GameID, Date) VALUES"
+				+ "(" + player_ID + ",'" + Game_ID +  "', '"
+				+ getCurrentTimeStamp() + "')";
 		System.out.println(insertTableSQL);
 		try {
 			// Get a connection to the database
 			connection = Database.getConnection();
 			statement = connection.createStatement();
 			
-			statement.executeUpdate(insertTableSQL);
+			statement.execute(insertTableSQL, Statement.RETURN_GENERATED_KEYS);
 			
 			resultSet = statement.getGeneratedKeys();
-	        if (resultSet.next()) {
-	            hid = resultSet.getInt(1);
+	        while(resultSet.next()){
+	        	hid = resultSet.getInt(1);
 	        }
+			
+	        
 
-		} catch (SQLException e) {
+		} catch 	(SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to add highscore information to database", e);
@@ -383,14 +389,15 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 * @throws SQLException 
 	 */
-	public void updateScore(String Game_ID, String Username, String[] type, int[] scores) throws DatabaseException, SQLException{
-		String data = null;
+	public void updateScore(String Game_ID, int Username, String type, int scores) throws DatabaseException, SQLException{
 		int hid = addHighscore(Game_ID, Username);
 		System.out.println("new HighScore ID = " + hid);
 		if (!initialised) {
 			initialise();
 		}
-
+		
+		System.out.println("Score to be added > game: " + Game_ID + ", player: " + Username + ", type: " + type + ", score: " + scores);
+		
 		/* Get a connection to the database
 		Connection connection = Database.getConnection();
 
@@ -432,10 +439,11 @@ public class HighscoreDatabase {
 	 * 
 	 * @return A string representation of the current date and time.
 	 */
-	private static String getCurrentTimeStamp() {
-		 
-		java.util.Date today = new java.util.Date();
-		return dateFormat.format(today.getTime());
+	private static Timestamp getCurrentTimeStamp() {
+		Timestamp time = new java.sql.Timestamp(new Timestamp(0).getTime());
+		System.out.println("Current time =" + time);
+		return time;
+		
  
 	}
 	

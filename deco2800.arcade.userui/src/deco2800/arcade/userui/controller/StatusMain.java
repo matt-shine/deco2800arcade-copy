@@ -5,36 +5,40 @@ import java.awt.event.ActionListener;
 
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
-import deco2800.arcade.userui.view.AddFriendScreen;
 import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
-public class AddFriend {
+public class StatusMain {
 	
+	private StatusScreen statusView;
 	private UserScreen userView;
-	private AddFriendScreen friendView;
 	private Model theModel;
 
 	/**
-	 * Controller for the status page
+	 * 
 	 * @param theModel
-	 * @param friendView
+	 * @param statusView
+	 * @param userView
 	 */
-	public AddFriend(Model theModel, AddFriendScreen friendView, UserScreen userView){
+	public StatusMain(Model theModel, StatusScreen statusView, UserScreen userView){
 		
 		this.theModel = theModel;
-		this.friendView = friendView;
+		this.statusView = statusView;
+		this.userView = userView;
 		
-		this.friendView.addFriendListener(new AddFriendListener());
+		this.statusView.addSaveListener(new SaveListener());
+		this.statusView.addCancelListener(new CancelListener());
 		
 	}
 
-	class AddFriendListener implements ActionListener{
+	class SaveListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			friendView.dispose();
+			statusView.dispose();
+			statusView.getStatusSelection();
+			userView.setStatus(theModel.statusIcon);
 			
 		}
 		
@@ -45,7 +49,7 @@ public class AddFriend {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
-			friendView.dispose();
+			statusView.dispose();
 			
 		}
 		

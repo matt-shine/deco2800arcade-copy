@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import org.apache.log4j.Logger;
+
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
@@ -18,11 +20,15 @@ public class ControllerMain {
 	private EditScreen editView;
 	private UserScreen userView;
 	private StatusScreen statusView;
-	private AddFriendScreen friendView;
-	private RemoveFriendScreen removeView;
+	private AddFriendScreen addfriendView;
+	private RemoveFriendScreen removefriendView;
 	
 	private AchievementScreen achievementView;
 	private Model theModel;
+	
+
+	//Logger
+	static Logger log = Logger.getLogger(UserScreen.class);
 	
 	/**
 	 * Controller for the main profile page
@@ -44,25 +50,15 @@ public class ControllerMain {
 		this.userView.addAchievementListener(new AchievementListener());
 		this.userView.addFriendListener(new AddFriendListener());
 		this.userView.addRemoveFriendListener(new RemoveFriendListener());
-		
+					
 		checkstatus();
-		
+			
 	}
 	
 	public void checkstatus(){
 		
-		if (theModel.getStatus() == "away"){
-			userView.setStatus(theModel.getStatusIcon());
-		}
-		if (theModel.getStatus() == "busy"){
-			userView.setStatus(theModel.getStatusIcon());
-		}
-		if (theModel.getStatus() == "online"){
-			userView.setStatus(theModel.getStatusIcon());
-		}
-		if (theModel.getStatus() == "offline"){
-			userView.setStatus(theModel.getStatusIcon());
-		}		
+		userView.setStatus(theModel.getStatusIcon());
+
 	}
 	
 	class EditListener implements ActionListener{
@@ -82,7 +78,7 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the home page
-			System.out.println("Home Button Works");
+			log.info("this works");
 			
 		}
 		
@@ -141,7 +137,7 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Add Friend to List
-			friendView = new AddFriendScreen(theModel);
+			addfriendView = new AddFriendScreen(theModel);
 			
 		}
 		
@@ -153,7 +149,7 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Remove a friend
-			removeView = new RemoveFriendScreen(theModel);
+			removefriendView = new RemoveFriendScreen(theModel);
 			
 		}
 		
@@ -166,7 +162,7 @@ public class ControllerMain {
 			
 			//Open status popup
 			statusView = new StatusScreen(theModel);
-			ControllerStatus statuscontroller = new ControllerStatus(theModel, statusView);
+			StatusMain statuscontrol = new StatusMain(theModel, statusView, userView);
 			
 		}
 		
@@ -180,7 +176,7 @@ public class ControllerMain {
 			//Open Achievement Screen
 			userView.dispose();
 			achievementView = new AchievementScreen(theModel);
-			ControllerAchievement achievementcontroller = new ControllerAchievement(theModel, achievementView);
+			ControllerAchievement achievementcontrol = new ControllerAchievement(theModel, achievementView);
 			
 		}
 		

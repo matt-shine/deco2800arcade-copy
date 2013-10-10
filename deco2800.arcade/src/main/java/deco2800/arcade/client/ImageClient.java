@@ -2,9 +2,11 @@ package deco2800.arcade.client;
 
 import deco2800.arcade.model.EncodedImage;
 import deco2800.arcade.protocol.image.*;
+import deco2800.arcade.protocol.NetworkObject;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import deco2800.arcade.utils.AsyncFuture;
+import deco2800.arcade.utils.Handler;
 
 public class ImageClient {
 
@@ -21,32 +23,21 @@ public class ImageClient {
      */
     public AsyncFuture<EncodedImage> get(final String imageID) {
         final AsyncFuture<EncodedImage> future = new AsyncFuture<EncodedImage>();
-        
-        // set up a listener for the response so we can provide the future
-        // with the data once it comes in over the network
-        connection.addListener(new Listener() {
-                public void received(Connection conn, Object obj) {
-                    if (obj instanceof GetImageResponse) {
-                        GetImageResponse resp = (GetImageResponse)obj;
-                        // not the right image, we don't care about it
-                        if (!resp.imageID.equals(imageID))
-                            return;
-
-                        if (resp.data == null)
-                            future.cancel(false);
-                        else
-                            future.provide(new EncodedImage(resp.data));
-
-                        // don't need to listen for anything any more
-                        connection.removeListener(this);
-                    }
-                }
-        });
-
-        // make the request
-        GetImageRequest req = new GetImageRequest();
+	GetImageRequest req = new GetImageRequest();
         req.imageID = imageID;
-	connection.sendTCP(req);
+
+	// make the request and set a handler for the response, which will
+	// then provide our future with the image
+	NetworkObject.request(connection, req).setHandler(new Handler<NetworkObject>() {
+	    public void handle(NetworkObject obj) {
+		GetImageResponse resp = (GetImageResponse)obj;
+		
+		if (resp.data == null)
+		    future.cancel(false);
+		else
+		    future.provide(new EncodedImage(resp.data));
+	    }
+	});
 
         return future;
     }
@@ -59,30 +50,16 @@ public class ImageClient {
      */
     public AsyncFuture<Boolean> set(final String imageID, EncodedImage img) {
         final AsyncFuture<Boolean> future = new AsyncFuture<Boolean>();
-
-        // set up a listener for the response so we can provide the future
-        // with the data once it comes in over the network
-        connection.addListener(new Listener() {
-                public void received(Connection conn, Object obj) {
-                    if (obj instanceof SetImageResponse) {
-                        SetImageResponse resp = (SetImageResponse)obj;
-                        // not the right image, we don't care about it
-                        if (!resp.imageID.equals(imageID))
-                            return;
-
-                        future.provide(new Boolean(resp.success));
-
-                        // don't need to listen for anything any more
-                        connection.removeListener(this);
-                    }
-                }
-        });
-
-        // make the request
-        SetImageRequest req = new SetImageRequest();
+	SetImageRequest req = new SetImageRequest();
         req.imageID = imageID;
         req.data = img.getData();
-	connection.sendTCP(req);
+
+	NetworkObject.request(connection, req).setHandler(new Handler<NetworkObject>() {
+	    public void handle(NetworkObject obj) {
+		SetImageResponse resp = (SetImageResponse)obj;
+		future.provide(resp.success);		
+	    }
+	});
 
         return future;
     }

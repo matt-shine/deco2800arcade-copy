@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ForumStorage;
 import deco2800.arcade.model.forum.ChildThread;
 import deco2800.arcade.model.forum.ParentThread;
@@ -24,8 +23,9 @@ import deco2800.arcade.model.forum.ParentThread;
 /**
  * Unit test for ForumStorage class
  * 
- * @author Junya
+ * @author Junya, Team Forum
  * @see deco2800.arcade.server.database.ForumStorage
+ * @see deco2800.arcade.model.forum
  */
 public class TestForumStorage {
 	private static IDatabaseTester tester;
@@ -53,14 +53,14 @@ public class TestForumStorage {
 		this.forumStorage.resetTables();
 		this.forumStorage.insertParentThread("Test topic 1", "Test content this is.", 1, "General Admin", "tag1#tag2");
 		this.forumStorage.insertParentThread("Test topic 2", "Test content this is.", 1, "General Admin", "tag3#tag4");
-		this.forumStorage.insertParentThread("Test topic 3", "Test content this is.", 1, "General Admin", "tag3#tag5");
-		this.forumStorage.insertParentThread("Test topic 4", "Test content this is.", 1, "General Admin", "tag6#tag7");
+		this.forumStorage.insertParentThread("Test topic 3", "Test content this is.", 2, "General Admin", "tag3#tag5");
+		this.forumStorage.insertParentThread("Test topic 4", "Test content this is.", 3, "General Admin", "tag6#tag7");
 		this.forumStorage.insertChildThread("This is child thread 1.", 1, 1);
 		this.forumStorage.insertChildThread("This is child thread 2.", 1, 1);
-		this.forumStorage.insertChildThread("This is child thread 3.", 1, 1);
-		this.forumStorage.insertChildThread("This is child thread 4.", 1, 1);
-		this.forumStorage.insertChildThread("This is child thread 5.", 1, 2);
-		this.forumStorage.insertChildThread("This is child thread 6.", 1, 2);
+		this.forumStorage.insertChildThread("This is child thread 3.", 2, 1);
+		this.forumStorage.insertChildThread("This is child thread 4.", 2, 1);
+		this.forumStorage.insertChildThread("This is child thread 5.", 3, 2);
+		this.forumStorage.insertChildThread("This is child thread 6.", 3, 2);
 	}
 	
 	@After
@@ -75,8 +75,22 @@ public class TestForumStorage {
 		for (ParentThread thread : threads) {
 			System.out.println(thread.toString());
 		}
+	}
+	
+	@Test
+	public void getParentThreadsTest2() throws Exception {
+		ParentThread[] threads = this.forumStorage.getParentThreads(0, 0, 0);
 		assertEquals("Test topic 1", forumStorage.getParentThread(1).getTopic());
 		assertEquals("Test topic 2", this.forumStorage.getParentThread(2).getTopic());
+		threads = this.forumStorage.getParentThreads(2, 4, 0);
+		assertEquals(3, threads.length);
+		threads = this.forumStorage.getParentThreads(2, 5, 1);
+		assertEquals("Test topic 2", threads[0].getTopic());
+		threads = this.forumStorage.getParentThreads(0, 0, 0, 1);
+		for (ParentThread thread : threads) {
+			assertEquals(1, thread.getCreatedBy().getId());
+		}
+		assertEquals(2, threads.length);
 	}
 	
 	@Test
@@ -84,6 +98,11 @@ public class TestForumStorage {
 		ParentThread[] result = this.forumStorage.getTaggedParentThreads("tag3");
 		assertEquals(2, result[0].getId());
 		assertEquals(3, result[1].getId());
+		result = this.forumStorage.getTaggedParentThreads("tag3", 1);
+		for (ParentThread thread : result) {
+			assertEquals(1, thread.getCreatedBy().getId());
+		}
+		assertEquals(2, result[0].getId());
 	}
 	
 	@Test
@@ -103,16 +122,22 @@ public class TestForumStorage {
 	/* Child thread-related test cases */
 	@Test
 	public void getChildThreadTest() throws Exception {
-		ChildThread[] array = this.forumStorage.getChildThreads(1);
-		for (ChildThread temp : array) {
+		ChildThread[] threads = this.forumStorage.getChildThreads(1);
+		for (ChildThread temp : threads) {
 			System.out.println(temp.toString());
 		}
 	}
+	
 	@Test
 	public void getChildThreadTest2() throws Exception {
-		ChildThread[] array = this.forumStorage.getChildThreads(1, 1, 4, 3);
-		assertEquals(array.length, 3);
-		assertEquals(array[0].getMessage(), "This is child thread 1.");
+		ChildThread[] threads = this.forumStorage.getChildThreads(1, 1, 4, 3);
+		assertEquals(threads.length, 3);
+		assertEquals(threads[0].getMessage(), "This is child thread 1.");
+		threads = this.forumStorage.getChildThreads(1, 1);
+		for (ChildThread thread : threads) {
+			assertEquals(1, thread.getCreatedBy().getId());
+		}
+		assertEquals(2, threads.length);
 	}
 	
 	@Test
@@ -140,6 +165,17 @@ public class TestForumStorage {
 		assertEquals(1, this.forumStorage.getParentThread(1).getVote());
 		this.forumStorage.addVote(-1, "parent", 1);
 		assertEquals(0, this.forumStorage.getParentThread(1).getVote());
+	}
+	
+	@Test
+	public void countVoteTest() throws Exception {
+		this.forumStorage.addVote(1, "parent", 1);
+		this.forumStorage.addVote(1, "parent", 1);
+		this.forumStorage.addVote(1, "parent", 2);
+		this.forumStorage.addVote(1, "child", 1);
+		this.forumStorage.addVote(1, "child", 2);
+		assertEquals(4, this.forumStorage.countParentThreadVotes(1));
+		assertEquals(1, this.forumStorage.countParentThreadVotes(2));
 	}
 	
 	private IDataSet getDataSet() throws DataSetException, IOException {

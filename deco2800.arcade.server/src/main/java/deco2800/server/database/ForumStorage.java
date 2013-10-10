@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.forum.ForumUser;
@@ -26,16 +27,15 @@ import deco2800.arcade.model.forum.ParentThread;
  * <li>One commit algorithm for every functions (methods). I.e. if a function
  * has multiple update commands (i.e. change DB states), it commits the change 
  * manually.</li>
+ * <li>Forum uses the user information from PlayerStorage.</li>
  * </ul>
  * 
- * @author Forum
+ * @author Junya, Team Forum
  * @see java.sql
+ * @see deco2800.arcade.model.forum
+ * @see deco2800.arcade.protocol.forum
  */
 public class ForumStorage {
-	/**
-	 * TODO Test child thread methods
-	 * TODO Add listener and protocol.
-	 */
 	/* Fields */
 	private boolean initialized = false;
 	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
@@ -122,7 +122,6 @@ public class ForumStorage {
 		
 	}
 	
-	/* Utilities */
 	/* Utilities */
 	/**
 	 * Reset table i.e. delete all rows in all tables in ForumStorage
@@ -263,8 +262,6 @@ public class ForumStorage {
 			return result.toArray(new String[0]);
 		}
 	}
-		/* Queries */
-
 	
 	/**
 	 * Retrieve parent thread from DB by given pid
@@ -357,6 +354,56 @@ public class ForumStorage {
 	}
 	
 	/**
+	 * Get parent threads having a specific tag and user id (created_by).
+	 * Overload exists.
+	 * 
+	 * @param tag	String, tag attached to threads
+	 * @param userId	int, user id who creates threads
+	 * @return	ParentThread array.
+	 * @throws DatabaseException	if invalid parameter and SQLException.
+	 */
+	public ParentThread[] getTaggedParentThreads(String tag, int userId) throws DatabaseException {
+		String query = "SELECT * FROM parent_thread WHERE created_by = ?";
+		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
+		Connection con = Database.getConnection();
+		if (tag == "") {
+			return new ParentThread[0];
+		}
+		if (userId < 0) {
+			throw new DatabaseException("Invalid parameter (negative int for id is given).");
+		}
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				String tags = rs.getString("tags");
+				String[] tag_array = tags.split(TAG_SPLITTER);
+				for (String temp : tag_array) {
+					if (temp.equals(tag)) {
+						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
+								, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
+								, rs.getString("tags"), rs.getInt("vote")));
+					}
+				}
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException(e);
+			}
+		}
+		return result.toArray(new ParentThread[0]);
+	}
+	
+	/**
 	 * Return array of ParentThreads with specifying id range. See param specification for 
 	 * how to set the id range. All params must be non-negative.
 	 * Query to be executed =	SELECT * FROM parent_thread
@@ -383,7 +430,7 @@ public class ForumStorage {
 		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
 		
 		/* Check params */
-		if (start < 0 || end < 0 || limit < 0 || start < end) {
+		if (start < 0 || end < 0 || limit < 0) {
 			throw new DatabaseException("Invalid parameter.");
 		}
 		
@@ -407,6 +454,89 @@ public class ForumStorage {
 			} else {
 				st.setInt(1, start);
 				st.setInt(2, end);
+			}
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				ParentThread pThread = new ParentThread(rs.getInt("pid"), rs.getString("topic")
+						, rs.getString("message"), new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp")
+						, rs.getString("category"), rs.getString("tags"), rs.getInt("vote"));
+				result.add(pThread);
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to retrieve parent threads: " + e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close DB connection: " + e);
+			}
+		}
+		if (result.size() == 0) {
+			return null;
+		} else {
+			/* Convert ArrayList to String[][] */
+			return result.toArray(new ParentThread[0]);
+		}
+	}
+	
+	/**
+	 * Return array of ParentThreads with specifying thread's id range and user id who 
+	 * created threads. See param specification for 
+	 * how to set the id range. All params must be non-negative.
+	 * Query to be executed =	SELECT * FROM parent_thread
+	 * 							WHERE created_by = userId AND [pid <= start [AND end <= pid]]
+	 * 							[FETCH FIRST limit ROWS ONLY]
+	 * 
+	 * @param start	int, starting pid of parent thread to be retrieved, 
+	 * 				if start = 0, it starts from first parent thread in table.
+	 * 				(inclusive)
+	 * @param end	int, ending pid of parent thread to be retrieved, 
+	 * 				if end = 0, it does not specify the ending parent thread
+	 * 				in table.
+	 * 				(inclusive)
+	 * @param limit	int, limit to number of parent threads to be returned, 
+	 * 				if limit = 0 it does not specify the limit. 
+	 * @param userId	int, user id who creates threads.
+	 * @return	String[][], 3D String array {{pid, topic, content, createdBy, 
+	 * 			category, tags}}, return null if no result found.
+	 * @throws	DatabaseException	if SQLException or invalid parameter.
+	 */
+	public ParentThread[] getParentThreads(int start, int end, int limit, int userId) throws DatabaseException {
+		String query1 = "SELECT * FROM parent_thread WHERE created_by = ? AND ? <= pid AND pid <= ?";
+		String query2 = "SELECT * FROM parent_thread WHERE created_by = ? AND ? <= pid";
+		String query;
+		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
+		
+		/* Check params */
+		if (start < 0 || end < 0 || limit < 0 || start < end || userId < 0) {
+			throw new DatabaseException("Invalid parameter.");
+		}
+		
+		/* Get DB connection */
+		Connection con = Database.getConnection();
+		
+		/* Begin query */
+		if (end == 0) {
+			query = query2;
+		} else {
+			query = query1;
+		}
+		if (limit != 0) {
+			query += " FETCH FIRST " + String.valueOf(limit) + " ROWS ONLY";
+		}
+		try {
+			/* Prepare st */
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, userId);
+			if (end == 0) {
+				st.setInt(2, start);
+			} else {
+				st.setInt(2, start);
+				st.setInt(3, end);
 			}
 			ResultSet rs = st.executeQuery();
 			while (rs.next()) {
@@ -548,6 +678,79 @@ public class ForumStorage {
 	}
 	
 	/**
+	 * Return array of ParentThreads with specifying id range and having a specific parent thread and user id. 
+	 * See param specification for how to set the id range. All params must be non-negative.
+	 * Overload method exists.
+	 * Query to be executed =	SELECT * FROM parent_thread
+	 * 							WHERE [pid <= start [AND end <= pid]] AND created_by = userId
+	 * 							[FETCH FIRST limit ROWS ONLY]
+	 * 
+	 * @param pid	int, id of referencing parent thread
+	 * @param start	int, starting cid to be retrieved. If 0, from first record.
+	 * @param end	int, ending cid to be retrieved. If 0, no end.
+	 * @param limit	int, number of records (child threads) to retrieve.
+	 * @param userId	int, user id who creates thrreads.
+	 * @return	Array of ChildThread instances.
+	 * @throws DatabaseException	if SQLException or invalid parameter.
+	 */
+	public ChildThread[] getChildThreads(int pid, int start, int end, int limit, int userId) throws DatabaseException {
+		String query1 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? <= cid AND cid <= ? AND created_by = ?";
+		String query2 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? <= cid AND created_by = ?";
+		String query;
+		ArrayList<ChildThread> result = new ArrayList<ChildThread>();
+		
+		if (pid < 0 || start < 0 || end < 0 || start > end || limit < 0 || userId < 0) {
+			throw new DatabaseException("Invalid parameters.");
+		}
+		
+		Connection con = Database.getConnection();
+		if (end == 0) {
+			query = query2;
+		} else {
+			query = query1;
+		}
+		if (limit != 0) {
+			query += " FETCH FIRST " + String.valueOf(limit) + " ROWS ONLY";
+		}
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, pid);
+			if (end == 0) {
+				st.setInt(2, start);
+				st.setInt(3, userId);
+			} else {
+				st.setInt(2, start);
+				st.setInt(3, end);
+				st.setInt(4, userId);
+			}
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				ChildThread temp = new ChildThread(rs.getInt("cid"), rs.getString("message")
+						, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp") 
+						, rs.getInt("vote"));
+				result.add(temp);
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to get child thread, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close DB connection: " + e);
+			}
+		}
+		if (result.size() == 0) {
+			return null;
+		} else {
+			return result.toArray(new ChildThread[0]);
+		}
+	}
+	
+	/**
 	 * Retrieve child threads having a specific parent thread.
 	 * Overload method exists.
 	 * 
@@ -557,6 +760,142 @@ public class ForumStorage {
 	 */
 	public ChildThread[] getChildThreads(int pid) throws DatabaseException {
 		return this.getChildThreads(pid, 0, 0, 0);
+	}
+	
+	/**
+	 * Retrieve child threads having a specific parent thread.
+	 * Overload method exists.
+	 * 
+	 * @param pid	int, id of a parent thread.
+	 * @param userId	int, user id who creates threads.
+	 * @return	Array of ChildThread instances.
+	 * @throws DatabaseException	if SQLException or invalid parameters.
+	 */
+	public ChildThread[] getChildThreads(int pid, int userId) throws DatabaseException {
+		return this.getChildThreads(pid, 0, 0, 0, userId);
+	}
+	
+	/**
+	 * Retrieve user information (extracted) from given id and return it as ForumUser
+	 * 
+	 * @param id	non-negative int, user's id.
+	 * @return ForumUser, containing id and name. If no result, return null.
+	 * @throws DatabaseException	if invalid parameter and SQLException.
+	 */
+	public ForumUser getForumUser(int id) throws DatabaseException {
+		String query = "SELECT playerid, username FROM Player WHERE playerid = ?";
+		ForumUser result;
+		if (id < 0) {
+			throw new DatabaseException("Invalid parameter (id was a negative integer).");
+		}
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, id);
+			ResultSet rs = st.executeQuery();
+			if (rs.next()) {
+				result = new ForumUser(id, rs.getString("username"));
+			} else {
+				result = null;
+			}
+		} catch (SQLException e) {
+			throw new DatabaseException("Failed to get user information: " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Return total vote having a specific user id
+	 * 
+	 * @param userId	int, user's id
+	 * @return int, total votes held by a specific user.
+	 * @throws DatabaseException
+	 */
+	public int countUserVote(int userId) throws DatabaseException {
+		String query = "SELECT SUM(vote) AS total FROM parent_thread WHERE created_by = ?";
+		String query2 = "SELECT SUM(vote) AS total FROM child_thread WHERE created_by = ?";
+		int result = 0;
+		if (userId < 0) {
+			throw new DatabaseException("Invalid parameter.");
+		}
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, userId);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				result += rs.getInt("total");
+			}
+			rs.close();
+			st.close();
+			st = con.prepareStatement(query2);
+			st.setInt(1, userId);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				result += rs.getInt("total");
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			throw new DatabaseException("Fail to get total votes: " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Return total votes of a parent thread and its underlying child threads.
+	 * 
+	 * @param pid	int, parent thread id
+	 * @return	int, total votes
+	 * @throws DatabaseException	if invalid parameter or SQLException.
+	 */
+	public int countParentThreadVotes(int pid) throws DatabaseException {
+		String query = "SELECT vote FROM parent_thread WHERE pid = ?";
+		String query2 = "SELECT SUM(vote) AS total FROM child_thread WHERE p_thread = ?";
+		int result = 0;
+		if (pid < 0) {
+			throw new DatabaseException("Invalid parameter.");
+		}
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			st.setInt(1, pid);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				result += rs.getInt("vote");
+			}
+			rs.close();
+			st.close();
+			st = con.prepareStatement(query2);
+			st.setInt(1, pid);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				result += rs.getInt("total");
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			throw new DatabaseException("Fail to get total votes: " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
+			}
+		}
+		return result;
 	}
 	
 	/* Updates */
@@ -834,6 +1173,33 @@ public class ForumStorage {
 	}
 	
 	/**
+	 * Delete all threads having a specific user id.
+	 * 
+	 * @param userId	int, user id
+	 * @throws DatabaseException	if SQLException.
+	 */
+	public void deleteThreads(int userId) throws DatabaseException {
+		String update = "DELETE FROM parent_thread WHERE userId = ?";
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(update);
+			st.setInt(1, userId);
+			st.executeUpdate();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to delete threads created by " + Integer.toString(userId) + ", " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
+			}
+		}
+	}
+	
+	/**
 	 * Increase/decrease like value of threads. 
 	 * 
 	 * @param value	value to be changed on like (negative is allowed)
@@ -885,8 +1251,7 @@ public class ForumStorage {
 		}
 	}
 	
-		/* Private methods */
-/* Private methods */
+	/* Private methods */
 	private String getCategoryConstraint() {
 		String result = "ALTER TABLE parent_thread ADD CHECK (category IN (";
 		for (int i = 0; i < this.category.length; i++) {

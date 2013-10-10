@@ -205,7 +205,7 @@ public class Platform {
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {
-			junglejump.monkeyY += 50;
+			junglejump.monkeyY += 5;
 		}
 		this.active = true;
 	}

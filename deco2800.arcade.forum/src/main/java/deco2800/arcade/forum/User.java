@@ -1,8 +1,10 @@
 package deco2800.arcade.forum;
 
+@Deprecated
 /** 
  * User models user or player of the arcade.
  * Note: We may replace this to the similar class made by others when integrating.
+ * Deprecated. Use deco2800.arcade.model.model.ForumUser instead.
  * 
  * @author Team-Forum
  *

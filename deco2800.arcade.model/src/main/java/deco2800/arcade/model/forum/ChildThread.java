@@ -18,7 +18,7 @@ public class ChildThread {
 	private String message;
 	private ForumUser createdBy;
 	private Timestamp timestamp;
-	private int like;
+	private int vote;
 	
 	/**
 	 * Constructor: Create ChildThread
@@ -31,12 +31,12 @@ public class ChildThread {
 	 * @require params != null, except like
 	 * @require id >= 0 
 	 */
-	public ChildThread(int id, String message, ForumUser createdBy, Timestamp timestamp, int like) {
+	public ChildThread(int id, String message, ForumUser createdBy, Timestamp timestamp, int vote) {
 		this.id = id;
 		this.message = message;
 		this.createdBy = createdBy;
 		this.timestamp = timestamp;
-		this.like = like;
+		this.vote = vote;
 	} 
 	
 	/**
@@ -76,7 +76,7 @@ public class ChildThread {
 	 * @return like	
 	 */
 	public int getLike() {
-		return this.like;
+		return this.vote;
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public class ChildThread {
 		sd.append(", on ");
 		sd.append(this.timestamp.toString());
 		sd.append(", vote=");
-		sd.append(this.like);
+		sd.append(this.vote);
 		return new String(sd);
 	}
 //	public getThread() {

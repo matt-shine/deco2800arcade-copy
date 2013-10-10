@@ -207,14 +207,15 @@ public class LunarLander extends GameClient {
 	    
 	    //check for collision
 	    for (int i = 1; i < terrain.size(); i++){
-	    	if(landerX > terrain.get(i).get(0) && landerX < terrain.get(i).get(2)){
-	    		if(landerY < terrain.get(i).get(1)){
-	    			System.out.println("Collided with the ground!");
-	    			landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/landerExplode1.png"));
-	    			gameOver = true;
-	    			velY = 0;
-	    		}
-	    	}else if(landerX > terrain.get(0).get(0) && landerX < terrain.get(0).get(2)){
+	    	if (isPointBelowLine(landerX, landerY, terrain.get(i).get(0),
+    				terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3)) ||
+    			isPointBelowLine(landerX + landerWidth, landerY, terrain.get(i).get(0),
+    	    		terrain.get(i).get(1), terrain.get(i).get(2), terrain.get(i).get(3))) {
+	    		System.out.println("Collided with the ground!");
+    			landerTexture = new Texture(Gdx.files.internal("lunarlanderassets/landerExplode1.png"));
+    			gameOver = true;
+    			velY = 0;
+	    	} else if(landerX > terrain.get(0).get(0) && landerX < terrain.get(0).get(2)){
 	    		if(landerY - 5 < terrain.get(0).get(1)){
 	    			System.out.println("You win!");
 	    			gameOver = true;
@@ -224,6 +225,17 @@ public class LunarLander extends GameClient {
 	    }
 	    super.render();
 		
+	}
+	
+	private boolean isPointBelowLine(double px, double py, double x1, double y1, double x2, double y2) {
+		if (px < x1 || px > x2)
+			return false;
+		
+		double m = (y2 - y1)/(x2 - x1);
+		double c = y1 - (m*x1);
+		double lineY = m*px + c;
+		
+		return py <= lineY;
 	}
 
 	@Override

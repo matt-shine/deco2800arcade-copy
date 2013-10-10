@@ -14,11 +14,6 @@ public class LunarLanderTerrain {
 	private static ShapeRenderer shapeRenderer;
 	private static boolean randomMap;
 	
-	
-	
-	
-	
-	
 	public static int main(String message) {
 		int length = message.length();
         return length; //Return the length

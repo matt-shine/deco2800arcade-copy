@@ -8,19 +8,19 @@ import deco2800.arcade.userui.view.AchievementScreen;
 import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
-public class StatusUpdate {
+public class StatusMain {
 	
-	private AchievementScreen achievementView;
 	private StatusScreen statusView;
 	private UserScreen userView;
 	private Model theModel;
 
 	/**
-	 * Controller for the status page
+	 * 
 	 * @param theModel
 	 * @param statusView
+	 * @param userView
 	 */
-	public StatusUpdate(Model theModel, StatusScreen statusView, UserScreen userView){
+	public StatusMain(Model theModel, StatusScreen statusView, UserScreen userView){
 		
 		this.theModel = theModel;
 		this.statusView = statusView;

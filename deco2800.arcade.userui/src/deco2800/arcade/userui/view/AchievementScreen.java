@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.apache.log4j.Logger;
+
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.client.AchievementClient;
@@ -47,7 +49,7 @@ public class AchievementScreen extends JFrame{
 	private JPanel gameavatarpanel, gameinfopanel;
 	
 	//Declare Buttons here
-	private JButton addfriendbutton, editbutton, statusbutton;
+	private JButton editbutton, statusbutton;
 	private JButton selectbutton;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
@@ -55,14 +57,14 @@ public class AchievementScreen extends JFrame{
 	private JComboBox gameselect;
 		
 	//Declare Labels here
-	private JLabel avatar, addfriend, playername, playerlevel;
+	private JLabel avatar, playername, playerlevel;
 	private JLabel achievementbar;
 	private JLabel gamename, gameachievementcount, gameicon;
 	private JTextArea gamedescription, achievementlist;
 	
 	//Declare Images here
-	private ImageIcon picavatar, picaddfriend, picachievementbar, 
-	piclocked, picunlocked, piceditbutton, picfriendoffline, piconline, picoffline;
+	private ImageIcon picavatar,piclocked, picunlocked, piceditbutton, 
+	piconline, picoffline;
 			
 	//Declare Fonts to use here
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -71,6 +73,9 @@ public class AchievementScreen extends JFrame{
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	Font linkbold = new Font("Verdana", Font.BOLD, 14);
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
+	
+	//Logger
+	static Logger log = Logger.getLogger(AchievementScreen.class);
 	
 	public AchievementScreen(Model model) throws HeadlessException {
 		
@@ -83,11 +88,9 @@ public class AchievementScreen extends JFrame{
 		 * 
 		 */	
 		picavatar = new ImageIcon("assets/images/stark.png");
-		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
-		picfriendoffline = new ImageIcon("assets/images/addfriendoffline.png");
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
 		
@@ -361,23 +364,13 @@ public void addplayerinfopanel(){
 	}
 	
 	/**
- 	* Button opens a popup allowing user to add friend
- 	* @param listenForAddFriendButton
- 	*/
-	public void addFriendListener(ActionListener listenForAddFriendButton){
-	
-
+	 * 
+	 * @param icon
+	 */
+	public void setStatus(ImageIcon icon){
 		
-	}
-
-	/**
- 	* Button opens a popup allowing editing of profile details
- 	* @param listenForEditButton
- 	*/
-	public void addEditListener(ActionListener listenForEditButton){
-	
-		editbutton.addActionListener(listenForEditButton);	
-	
+		statusbutton.setIcon(icon);
+		
 	}
 
 	/**

@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.apache.log4j.Logger;
+
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
@@ -30,14 +32,9 @@ public class UserScreen extends JFrame{
 	
 	//Declare JPanel and ImagePanels
 	private JPanel parentContainer;	
-	private ImagePanel menupanel;	
+	private ImagePanel menupanel, achievementpanel, historypanel, sidepanel, friendpanel, aboutpanel;	
 	private JPanel contentpanel;
-	private ImagePanel achievementpanel;
-	private ImagePanel historypanel;	
-	private ImagePanel sidepanel;
 	private JPanel playerinfopanel, playerpanel;
-	private ImagePanel friendpanel;
-	private ImagePanel aboutpanel;
 	private JPanel friendlist;
 	private JScrollPane friendscroll;
 	
@@ -58,9 +55,8 @@ public class UserScreen extends JFrame{
 	private JTextArea historyarea;
 	
 	//Declare Images 
-	private ImageIcon picavatar, picaddfriend, 
-	pichistorybar, piclocked, picunlocked, piceditbutton,
-	picfriendonline, picfriendoffline, piconline, picoffline;
+	private ImageIcon picavatar, pichistorybar, piclocked, picunlocked, piceditbutton,
+	piconline, picoffline;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -69,7 +65,6 @@ public class UserScreen extends JFrame{
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	Font linkbold = new Font("Verdana", Font.BOLD, 14);
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
-
 		
 	public UserScreen(Model model) throws HeadlessException{
 		
@@ -81,13 +76,10 @@ public class UserScreen extends JFrame{
 		 * 
 		 */		
 		picavatar = new ImageIcon("assets/images/stark.png");
-		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		pichistorybar = new ImageIcon("assets/images/history_bar.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
-		picfriendonline = new ImageIcon("assets/images/addfriendonline.png");
-		picfriendoffline = new ImageIcon("assets/images/addfriendoffline.png");
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
 				
@@ -522,7 +514,6 @@ public class UserScreen extends JFrame{
 	public void addStatusListener(ActionListener listenForStatusButton){
 		
 		statusbutton.addActionListener(listenForStatusButton);
-		model.statusviewon = true;
 		
 	}
 	
@@ -553,6 +544,12 @@ public class UserScreen extends JFrame{
 	public void setStatus(ImageIcon icon){
 		
 		statusbutton.setIcon(icon);
+		
+	}
+	
+	public void statusclick(){
+		
+		statusbutton.doClick();
 		
 	}
 	

@@ -7,11 +7,10 @@ import deco2800.arcade.model.Friends;
 
 public class Model {
 	
-	public String status;
-	public ImageIcon statusIcon;
+	public String status = "online";
+	public ImageIcon statusIcon = new ImageIcon("assets/images/online.png");
 	public Friends friends;
 	public AchievementClient achievements;
-	public boolean statusviewon = false;
 
 	public String getStatus() {
 		return status;

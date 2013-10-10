@@ -24,6 +24,10 @@ public class PlayerListener extends Listener{
 		if (object instanceof BioUpdateRequest) {
 			BioUpdateRequest request = (BioUpdateRequest) object;
 			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+		
+		} else if (object instanceof AgeUpdateRequest) {
+			AgeUpdateRequest request = (AgeUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 			
 		} else if (object instanceof BlockedUpdateRequest) {
 			BlockedUpdateRequest request  = (BlockedUpdateRequest) object;

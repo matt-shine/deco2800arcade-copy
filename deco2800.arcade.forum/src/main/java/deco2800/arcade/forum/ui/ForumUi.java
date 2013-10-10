@@ -35,7 +35,7 @@ public class ForumUi {
 	      lblArcadeForum.setFont(new Font("Tahoma", Font.BOLD, 16));
 	      lblArcadeForum.setBounds(12, 13, 141, 28);
 	      f.getContentPane().add(lblArcadeForum); 
-	      JButton btnLogIn = new JButton("LOG IN");
+	      JButton btnLogIn = new JButton("LOG IN");      
 	      btnLogIn.setBounds(897, 16, 97, 25);
 	      f.getContentPane().add(btnLogIn);	      
 
@@ -85,8 +85,8 @@ public class ForumUi {
 	      lblGeneralDiscussion.setBounds(12, 155, 141, 16);
 	      f.getContentPane().add(lblGeneralDiscussion);
 	      
-	      lblGeneralDiscussion.addMouseListener(new MouseAdapter(){ 
-	    	  public void mouseClicked(MouseEvent e)
+	      lblGeneralDiscussion.addMouseListener(new MouseAdapter(){      //Guys I struck on this for very long, need help. Click on 
+	    	  public void mouseClicked(MouseEvent e)					//GeneralDiscussion and will open the GeneralDiscussion.java
 	    	  {
 	    		  
 	    		  GeneralDiscussion s = new GeneralDiscussion();
@@ -147,3 +147,4 @@ public class ForumUi {
 		button.addActionListener(dummy);
 		}
 	}
+

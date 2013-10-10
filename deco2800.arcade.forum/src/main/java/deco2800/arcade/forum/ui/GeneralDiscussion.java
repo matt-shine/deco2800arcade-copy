@@ -23,6 +23,7 @@ public class GeneralDiscussion {
 	   public static void main(String[] args) {
 	      
 	      JFrame f = new JFrame("Arcade Forum");
+	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	      f.setSize(1024, 768);
 	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);

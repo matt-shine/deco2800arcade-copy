@@ -42,4 +42,9 @@ public class NetworkObject {
 	conn.sendTCP(req);
 	return future;
     }
+    
+    public static void respond(Connection conn, NetworkObject request, NetworkObject response) {
+	response.makeResponse(request);
+	conn.sendTCP(response);
+    }
 }

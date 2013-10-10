@@ -11,12 +11,13 @@ import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.PlayerClient;
+import deco2800.arcade.client.ImageClient;
 import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 
-public abstract class GameClient extends com.badlogic.gdx.Game {
+public abstract class GameClient extends com.badlogic.gdx.Game implements AchievementListener {
 
 	protected Player player;
 	protected NetworkClient networkClient;
@@ -37,7 +38,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 		this.networkClient = networkClient;
 		this.playerClient = new PlayerClient(networkClient);
         this.achievementClient = new AchievementClient(networkClient);
-        //this.achievementClient.addListener(this);
+        this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
 		
 		this.packClient = new PackageClient();
@@ -46,6 +47,11 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	public abstract Game getGame();
 
     public void achievementAwarded(final Achievement ach) {
+	if (this.overlayBridge == null)
+	    return;
+	
+
+
 	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 		
 	    @Override
@@ -57,8 +63,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
     }
 
     public void progressIncremented(final Achievement ach, final int progress) {
-        System.out.println("Progress in achievement `" + ach.name + "`: (" + progress +
-                           "/" + ach.awardThreshold + ")");
+	if (this.overlayBridge == null)
+	    return;
+
         this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 		
         	@Override
@@ -100,6 +107,8 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	 * @param overlay
 	 */
 	public void addOverlayBridge(UIOverlay overlay) {
+	    System.out.println("adding overlay bridge");
+
 		this.overlayBridge = overlay;
 		overlay.setHost(this);
 	}
@@ -143,6 +152,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 		for (GameOverListener listener : gameOverListeners) {
 			listener.notify(this);
 		}
+
+		achievementClient.setNetworkClient(null);
+		achievementClient.removeListener(this);
 	}
 
 	@Override

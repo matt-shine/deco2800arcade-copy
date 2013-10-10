@@ -31,6 +31,7 @@ public class ImageListener extends Listener {
                 resp.data = null;
             }
             
+	    resp.makeResponse(req);
             conn.sendTCP(resp);
         } else if (obj instanceof SetImageRequest) {
             SetImageRequest req = (SetImageRequest)obj;
@@ -44,6 +45,7 @@ public class ImageListener extends Listener {
                 resp.success = false;
             }
             
+	    resp.makeResponse(req);
 	    conn.sendTCP(resp);
         }
 

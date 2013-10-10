@@ -4,7 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.achievement.*;
-import deco2800.arcade.protocol.BlockingMessage;
+import deco2800.arcade.protocol.NetworkObject;
 import deco2800.server.ArcadeServer;
 import deco2800.server.database.AchievementStorage;
 import deco2800.server.database.DatabaseException;
@@ -39,73 +39,57 @@ public class AchievementListener extends Listener {
 		    resp.achievements.add(null);
 	    }
 
-	    connection.sendTCP(resp);
-	}
-		
-	if (object instanceof IncrementProgressRequest){
-	    IncrementProgressRequest incrementProgressRequest = (IncrementProgressRequest) object;
-	    String achievementID = incrementProgressRequest.achievementID;
-	    int playerID= incrementProgressRequest.playerID;
-            System.out.println("[Server]:  IncrementProgressRequest recieved (" + achievementID + ")");
+	    NetworkObject.respond(connection, req, resp);
+	} else if (object instanceof IncrementProgressRequest){
+	    IncrementProgressRequest req = (IncrementProgressRequest) object;
+            System.out.println("[Server]:  IncrementProgressRequest recieved (" + req.achievementID + ")");
 			
 	    try {
 		//update database
-		int newProgress = ArcadeServer.instance().getAchievementStorage().incrementProgress(playerID, achievementID);
+		int newProgress = storage.incrementProgress(req.playerID, req.achievementID);
                 // and tell the client if we have new progress
                 if (newProgress != -1) {
                     IncrementProgressResponse resp = new IncrementProgressResponse();
                     resp.newProgress = newProgress;
-                    if(Achievement.isComponentID(achievementID))
-                        resp.achievementID = Achievement.idForComponentID(achievementID);
+                    if(Achievement.isComponentID(req.achievementID))
+                        resp.achievementID = Achievement.idForComponentID(req.achievementID);
                     else
-                        resp.achievementID = achievementID;
-                    connection.sendTCP(resp);
+                        resp.achievementID = req.achievementID;
+
+		    // this isn't a response in the request/response manner as the request is
+		    // not tied to any future and this response is optional, so we just use sendTCP
+		    connection.sendTCP(resp);
                 }
 	    } catch (DatabaseException e) {
-		e.printStackTrace();
-				
+		// ok to not respond here - we're not required to make a response to this
+		// particular request so if an error occurs we can fail silently
 	    }
-	}
-	if (object instanceof AchievementsForGameRequest){
+	} else if (object instanceof AchievementsForGameRequest){
 	    System.out.println("[Server]:  AchievementsForGameRequest recieved");
 			
             AchievementsForGameRequest req = (AchievementsForGameRequest)object;
             AchievementsForGameResponse resp = new AchievementsForGameResponse();
-            String gameID = req.gameID;
             
             try {
-		//update database
-		resp.achievements =
-		    ArcadeServer.instance().getAchievementStorage().achievementsForGame(gameID);
-                BlockingMessage.respond(connection, req, resp);
+		resp.achievements = storage.achievementsForGame(req.gameID);
 	    } catch (DatabaseException e) {
-		e.printStackTrace();
-                // can't let the client keep blocking, just send an empty list
-                resp.achievements = new ArrayList<Achievement>();
-                BlockingMessage.respond(connection, req, resp);
-            }			
-	}
-	if (object instanceof ProgressForPlayerRequest){
+		resp.achievements = null;
+            }
+
+	    NetworkObject.respond(connection, req, resp);
+	} else if (object instanceof ProgressForPlayerRequest){
 	    System.out.println("[Server]:  ProgressForPlayerRequest recieved");
 			
-	    ProgressForPlayerRequest progressForPlayerRequest = (ProgressForPlayerRequest) object;
-	    int playerID = progressForPlayerRequest.playerID;
-			
+	    ProgressForPlayerRequest req = (ProgressForPlayerRequest)object;
+	    ProgressForPlayerResponse resp = new ProgressForPlayerResponse();			
 			
 	    try {
-		//update database
-		AchievementProgress achievementProgress = 
-		    ArcadeServer.instance().getAchievementStorage().progressForPlayer(playerID);
-	
-					
-		ProgressForPlayerResponse progressForPlayerResponse = new ProgressForPlayerResponse();
-			   		
-		connection.sendTCP(progressForPlayerResponse);
-				
+		resp.achievementProgress = storage.progressForPlayer(req.playerID);		
 	    } catch (DatabaseException e) {
-		e.printStackTrace();
-				
+		resp.achievementProgress = null;		
 	    }
+
+	    NetworkObject.respond(connection, req, resp);
 	}
     }
 

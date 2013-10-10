@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import deco2800.arcade.utils.AsyncFuture;
 import deco2800.arcade.utils.Handler;
+import com.badlogic.gdx.graphics.Pixmap;
 
 public class ImageClient {
 
@@ -62,5 +63,13 @@ public class ImageClient {
 	});
 
         return future;
+    }
+
+    /**
+     * Decodes an EncodedImage and returns a Pixmap sutiable for using with libGDX.
+     */
+    public static Pixmap decodeImage(EncodedImage image) {
+	byte[] data = image.getData();       
+	return new Pixmap(data, 0, data.length);
     }
 }

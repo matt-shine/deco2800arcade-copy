@@ -276,7 +276,7 @@ public class Pong extends GameClient {
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
 		    	incrementAchievement("pong.winGame");
-                incrementAchievement("pong.master");
+			incrementAchievement("pong.master");
 		    }
 		} else {
 			// No winner yet, get ready for another point

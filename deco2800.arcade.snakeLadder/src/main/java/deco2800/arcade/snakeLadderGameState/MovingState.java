@@ -1,36 +1,23 @@
-package deco2800.arcade.snakeLadderModel;
+package deco2800.arcade.snakeLadderGameState;
 
 import com.badlogic.gdx.Gdx;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
+import deco2800.arcade.snakeLadderModel.GamePlayer;
 
 public class MovingState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {
 		int turn=context.getturns();
-		//player's turn
-		if(turn%2==0)
-		{
-			movePlayer(context,context.gamePlayers[0]);	    	
-	    	//If the ball gets to the left edge then player 2 wins
-	    	if (context.gamePlayers[0].getBounds().x <= (60-20f) && context.gamePlayers[0].getBounds().y >= (540)) {
-	    		context.gamePlayers[0].reset();
-	    		context.statusMessage = "You Win! ";
-	    		context.gameState = GameState.GAMEOVER;
-	    	}
-		}
-		//AI's turn
-		else if (turn%2==1)
-		{
-			movePlayer(context,context.gamePlayers[1]);	  
-	    	//If the ball gets to the left edge then player 2 wins
-	    	if (context.gamePlayers[1].getBounds().x <= (60-20f) && context.gamePlayers[1].getBounds().y >= (540)) {
-	    		context.gamePlayers[1].reset();
-	    		context.statusMessage = "AI Wins! ";
-	    		context.gameState = GameState.GAMEOVER;
-	    	}
-		}
+		int playerIndex = turn%context.gamePlayers.length;
+		movePlayer(context,context.gamePlayers[playerIndex]);	    	
+    	//If the ball gets to the left edge then player 2 wins
+    	if (context.gamePlayers[playerIndex].getBounds().x <= (60-20f) && context.gamePlayers[0].getBounds().y >= (540)) {
+    		context.gamePlayers[playerIndex].reset();
+    		context.statusMessage = context.gamePlayers[playerIndex].getPlayerName() +" Win! ";
+    		context.gameState = GameState.GAMEOVER;
+    	}
 	}
 
 	/**

@@ -13,10 +13,9 @@ public class ControllerAchievement {
 	
 	private AchievementScreen achievementView;
 	private StatusScreen statusView;
-	private UserScreen userView;
 	private Model theModel;
-	public Game Pong;
-
+	private UserScreen userView;
+	
 	/**
 	 * Controller for the achievement page
 	 * @param theModel
@@ -35,6 +34,14 @@ public class ControllerAchievement {
 		this.achievementView.addStatusListener(new StatusListener());
 		this.achievementView.addSelectListener(new SelectListener());
 		
+		checkstatus();
+		
+	}
+	
+	public void checkstatus(){
+		
+		achievementView.setStatus(theModel.getStatusIcon());
+
 	}
 
 	class EditListener implements ActionListener{
@@ -129,7 +136,7 @@ public class ControllerAchievement {
 			
 			//Open status popup
 			statusView = new StatusScreen(theModel);
-			ControllerStatus statuscontroller = new ControllerStatus(theModel, statusView);
+			StatusAchievement status = new StatusAchievement(theModel, statusView, achievementView);
 			
 		}
 		
@@ -140,8 +147,8 @@ public class ControllerAchievement {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 
-			//View achievements for particular game
-			//achievementView.setAchievementList(Pong);
+			//Calls the method to set achievement list based on game selection
+			achievementView.setAchievementList();
 			
 		}
 		

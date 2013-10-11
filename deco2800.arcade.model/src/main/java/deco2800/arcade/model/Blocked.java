@@ -11,14 +11,16 @@ import java.util.Set;
  */
 public class Blocked {
 	private Set<User> blocked;
-	
+	private int updatedID;
+	private boolean added;
+
 	/**
 	 * Creates a new Blocked.
 	 */
 	public Blocked() {
 		this.blocked = new HashSet<User>();
 	}
-	
+
 	/**
 	 * Created a new Blocked given an existing Blocked, copying the entries.
 	 * 
@@ -28,7 +30,7 @@ public class Blocked {
 	public Blocked(Blocked b) {
 		this.blocked = new HashSet<User>(b.blocked);
 	}
-	
+
 	/**
 	 * Access method for a Set representation of this.
 	 * 
@@ -37,7 +39,7 @@ public class Blocked {
 	public Set<User> getSet() {
 		return new HashSet<User>(blocked);
 	}
-	
+
 	/**
 	 * Adds a User to this.
 	 * 
@@ -45,9 +47,23 @@ public class Blocked {
 	 *            The User to be added.
 	 */
 	public void add(User user) {
-		this.blocked.add(new User(user));
+		if (!contains(user)) {
+			this.blocked.add(new User(user));
+			updatedID = user.getID();
+			added = true;
+		}
 	}
 	
+	/**
+	 * Adds a Set of Users to this.
+	 * 
+	 * @param user
+	 *            The Set of Users to be added.
+	 */
+	public void addAll(Set<User> user) {
+		this.blocked.addAll(user);
+	}
+
 	/**
 	 * Removes a User from this.
 	 * 
@@ -55,9 +71,13 @@ public class Blocked {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		this.blocked.remove(new User(user));
+		if (contains(user)) {
+			this.blocked.remove(new User(user));
+			updatedID = user.getID();
+			added = false;
+		}
 	}
-	
+
 	/**
 	 * Checks if a User is in this.
 	 * 
@@ -67,5 +87,24 @@ public class Blocked {
 	 */
 	public boolean contains(User user) {
 		return this.blocked.contains(new User(user));
+	}
+	
+	/**
+	 * Access method for the most recent change ID.
+	 * 
+	 * @return Returns the ID of the field in the most recent change.
+	 */
+	public int getUpdatedID() {
+		return updatedID;
+	}
+
+	/**
+	 * Access method for most recent change flag.
+	 * 
+	 * @return Returns true if the last change was an addition, and false if it
+	 *         was a deletion.
+	 */
+	public boolean getAdded() {
+		return added;
 	}
 }

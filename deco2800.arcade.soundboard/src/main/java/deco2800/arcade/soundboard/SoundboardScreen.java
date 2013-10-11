@@ -31,7 +31,6 @@ public class SoundboardScreen implements Screen {
     private List<SoundFileHolder> loops;
     private List<SoundFileHolder> samples;
     private ReplayHandler replayHandler;
-    private ReplayListener replayListener;
     private boolean recording = false;
     private boolean playback;
     private int session;
@@ -78,12 +77,10 @@ public class SoundboardScreen implements Screen {
      * Basic Constructor
      */
     public SoundboardScreen(List<SoundFileHolder> loops, List<SoundFileHolder> samples,
-                            ReplayHandler replayHandler, ReplayListener replayListener,
-                            Player player) {
+                            ReplayHandler replayHandler, Player player) {
         this.loops = loops;
         this.samples = samples;
         this.replayHandler = replayHandler;
-        this.replayListener = replayListener;
         this.player = player;
 
         session = -1;
@@ -321,14 +318,14 @@ public class SoundboardScreen implements Screen {
 
     /**
      * Play a sound
-     * @param sound_name Name of the sound
-     * @param loop_type Type of sound
+     * @param name Name of the sound
+     * @param type Type of sound
      * @param index index in array
      */
-    public void playSound(String sound_name, int loop_type, Integer index) {
-        if (loop_type == LOOPS) {
+    public void playSound(String name, int type, int index) {
+        if (type == LOOPS) {
             loops.get(index).play();
-        } else if (loop_type == SAMPLES) {
+        } else if (type == SAMPLES) {
             samples.get(index).play();
         }
     }

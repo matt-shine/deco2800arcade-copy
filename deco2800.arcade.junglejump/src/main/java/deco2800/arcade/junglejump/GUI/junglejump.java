@@ -451,10 +451,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyX = 10;
 		lives--;
 		if(lives > 0) {
-			livesNumText = new Texture(("junglejumpassets/" + lives + ".png"));
 		} else {
 			lives = 5;
 		}
+		livesNumText = new Texture(("junglejumpassets/" + lives + ".png"));
 	}
 
 	public static void drawLevel() {

@@ -1,6 +1,5 @@
 package deco2800.server.listener;
 
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +9,6 @@ import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.highscore.*;
 import deco2800.server.ArcadeServer;
-import deco2800.server.database.DatabaseException;
 import deco2800.server.database.HighscoreDatabase;
 
 public class HighscoreListener extends Listener {
@@ -81,7 +79,7 @@ public class HighscoreListener extends Listener {
 			 /*This following is temporary, simply for showing that the 
 			  * connection has succeeded and the data has been sent correctly.*/
 			 System.out.println("Recieved add score request for username:" 
-					 + asr.player_id +" and Game_ID:" + asr.game_ID + ". Scores: "); 
+					 + asr.username +" and Game_ID:" + asr.game_ID + ". Scores: "); 
 			 for (int i = 0; i < scoreQueue.length; i+=2) {
 				 types.addLast(scoreQueue[i]);
 				 scores.addLast(Integer.parseInt(scoreQueue[i+1]));
@@ -90,7 +88,7 @@ public class HighscoreListener extends Listener {
 			 }
 			 
 			 try {
-				 hsDatabase.updateScore(asr.game_ID, asr.player_id, scoreQueue[0], Integer.parseInt(scoreQueue[1]));
+				 hsDatabase.updateScore(asr.game_ID, asr.username, scores, types);
 			 } catch (Exception e) {
 				 e.printStackTrace();
 			 }

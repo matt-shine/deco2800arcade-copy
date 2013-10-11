@@ -8,7 +8,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
 
 public class HighscoreClient {
-	private Integer Player_ID;
+	private String Username;
 	private String Game_ID;
 	private NetworkClient client;
 	
@@ -39,15 +39,15 @@ public class HighscoreClient {
 	 * Initializes a new HighscoreClient object that can be used for 
 	 * inserting and retrieving high score information from the database.
 	 * 
-	 * @param i The username of the user who the scores are for.
+	 * @param string The username of the user who the scores are for.
 	 *
 	 * @param j The game that the scores are for.
 	 * 
 	 * @param client The network client for the game; a handle on the database
 	 */
-	public HighscoreClient(int i, String j, NetworkClient client) {
+	public HighscoreClient(String string, String j, NetworkClient client) {
 		if (j != null && client != null) {
-			this.Player_ID = i;
+			this.Username = string;
 			this.Game_ID = j;
 			this.client = client;
 			
@@ -71,7 +71,7 @@ public class HighscoreClient {
 	 * @param client The network client for the game; a handle on the database.
 	 */
 	public HighscoreClient(Integer Game_ID, NetworkClient client) {
-		this(0, null, client);
+		this(null, null, client);
 	}
 	
 	
@@ -173,10 +173,10 @@ public class HighscoreClient {
 	 * will be thrown.
 	 */
 	private void sendScoresToServer() {
-		if (Player_ID != null) { //If the class was instantiated with a user
+		if (Username != null) { //If the class was instantiated with a user
 			//Build the request that is being sent
 			AddScoreRequest asr = new AddScoreRequest();
-			asr.playerID = Player_ID;
+			asr.username = Username;
 			asr.game_ID = Game_ID;
 			asr.scoreQueue = serialisedScores();
 			
@@ -264,7 +264,7 @@ public class HighscoreClient {
 	private void sendScoreRequest(int requestID) {
 		//Build the request
 		GetScoreRequest gsReq = new GetScoreRequest();
-		gsReq.playerID = this.Player_ID;
+		gsReq.username = this.Username;
 		gsReq.game_ID = this.Game_ID;
 		gsReq.requestID = requestID;
 		

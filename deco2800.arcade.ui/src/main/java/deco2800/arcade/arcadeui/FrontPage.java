@@ -51,14 +51,17 @@ public class FrontPage implements Screen {
     private String uName = "Adeleen Pavia";
     private String game1 = "Chess";
     private String game2 = "Pong";
+    private String game3 = "Snakes and Ladders";
     
     private boolean bclicked;
     private ArcadeUI arcadeUI;
     
     Texture bg;
     Texture mB;
+    Texture rP;
     Sprite bgSprite;
     Sprite mbSprite;
+    Sprite rpSprite;
     
     SpriteBatch batch;
     
@@ -69,7 +72,8 @@ public class FrontPage implements Screen {
         skin.add("background", new Texture("homescreen_bg.png"));
         stage = new FrontPageStage();
         skin.add("menuBar", new Texture("menuBar.png"));
-               
+        skin.add("recentBar", new Texture("recent.png"));
+        
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
@@ -84,6 +88,9 @@ public class FrontPage implements Screen {
         mB.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         mbSprite = new Sprite(mB);
         
+        rP = new Texture("recent.png");
+        rP.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        rpSprite = new Sprite(rP);
         
         /*skin.add("blue", new Texture("iconBlue.png"));
         
@@ -99,10 +106,18 @@ public class FrontPage implements Screen {
         final TextButton libraryButton = new TextButton("Library", skin, "magenta");
         final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
        
+        final Table recentTable = new Table();
+        //recentTable.setFillParent(true);
+        recentTable.setBackground(skin.getDrawable("recentBar"));
+        recentTable.setSize(400, 800);
+    	recentTable.setPosition(75, 0);
+    	
         //buttons for recent games
     
         final TextButton recentgame1 = new TextButton(game1, skin, "blue");
         final TextButton recentgame2 = new TextButton(game2, skin, "blue");
+        final TextButton recentgame3 = new TextButton(game3, skin, "blue");
+        
         
         //Top Box Labels
         final Label logo = new Label("VAPOR", skin, "cgothic");
@@ -127,18 +142,26 @@ public class FrontPage implements Screen {
         final int enlarge = 50;
         final int bX2= bX + bWidth + (enlarge);
         final int bX3= bX + 2*(bWidth + enlarge);
+        
+       
+        
+        
         //make button sizes and positioning
         
-      
+        
         recentButton.setSize(bWidth, bHeight);        
         recentButton.setPosition(bX, bY);
         
-        //recent games, 1 and 2
-        recentgame1.setSize(bWidth - 50, bHeight - 50);        
-        recentgame1.setPosition(bX + 25, bY - 250);
+        //recent games, 1 2 and 3
+        recentgame1.setSize(bWidth - 50, bHeight - 50);   //250px x 250px     
+        recentgame1.setPosition(bX + 25, bY + 250); 
+       
         
         recentgame2.setSize(bWidth - 50, bHeight - 50);        
-        recentgame2.setPosition(bX + 25, bY - 500);
+        recentgame2.setPosition(bX + 25, bY);
+        
+        recentgame3.setSize(bWidth - 50, bHeight - 50);        
+        recentgame3.setPosition(bX + 25, bY - 250);
        
         
         libraryButton.setSize(bWidth, bHeight);
@@ -157,6 +180,7 @@ public class FrontPage implements Screen {
         topBox.setPosition(1, 690);
         topBox.setColor(255, 255, 255, 1);
         topBox.setBackground(skin.getDrawable("menuBar"));
+        topBox.setZIndex(999);
         
         //set top bar labels
         topBox.add(logo).width(500);
@@ -166,7 +190,7 @@ public class FrontPage implements Screen {
         
         //set bottom bar properties
         bottomBox.setSize(1279, 30);
-        bottomBox.setPosition(1, 1);
+        bottomBox.setPosition(0, 0);
         bottomBox.setColor(255, 255, 255, 1);
         bottomBox.setBackground(skin.getDrawable("menuBar"));
         
@@ -224,13 +248,23 @@ public class FrontPage implements Screen {
 	    
 		recentButton.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
-		    	//arcadeUI.setScreen(arcadeUI.recent);
+		    	recentButton.remove();
+		    	
+		    	stage.addActor(recentTable);
+    			stage.addActor(recentgame1);
+    			stage.addActor(recentgame2);
+    			stage.addActor(recentgame3);
+    			recentTable.setZIndex(1);
+    			recentgame1.setZIndex(2);
+		    	recentgame2.setZIndex(2);
+		    	recentgame3.setZIndex(2);
+    			//arcadeUI.setScreen(arcadeUI.recent);
 		    	//System.out.println("recent clicked");
 		    	//stage.addActor(recentgame1);
 		        //stage.addActor(recentgame2);
 		    	
 		    	//if it doesnt have the actors, add them.
-		    	for (int i = 0; i < stage.getActors().size ; i++){
+		    	/*for (int i = 0; i < stage.getActors().size ; i++){
 		    		//System.out.println(stage.getActors().get(i));
 		    		//System.out.println(recentgame1);
 		    		
@@ -239,40 +273,45 @@ public class FrontPage implements Screen {
 		    		if (stage.getActors().get(i) == recentgame1){
 		    			
 		    			System.out.println("boxes removed");
+		    			
 		    			//stage.getActors().get(i).remove();
 		    			//recentgame1.remove();
 		    		//	recentgame2.remove();
 		    			
 		    		}else{
+		    			recentButton.remove();
 		    			stage.addActor(recentgame1);
 		    			stage.addActor(recentgame2);
+		    			stage.addActor(recentgame3);
 		    		}
 		    	}
-		    	
+		    	*/
 		    	
 		    }
 		})); 
-        /* recent games start */
-		
-		  recentgame1.addListener(new ChangeListener(){
-	        	public void changed (ChangeEvent event, Actor actor){
-	        		recentButton.setSize(bWidth - 50, bHeight - 50);
-	        		recentButton.setPosition(bX + 25, bY + 300);
-	        		recentButton.setText(null);
-	            	recentButton.setText("Recently Played");
-	            	
-	        		recentgame1.setSize(bWidth, bHeight);
-	        		recentgame1.setPosition(bX, bY);
-	        		recentgame1.setText(null);
-	            	recentgame1.setText(game1);
-	        		
-	            	recentgame2.setSize(bWidth - 50, bHeight - 50); 
-	        		recentgame2.setPosition(bX + 25, bY - 250);
-	        		recentgame2.setText(null);
-	            	recentgame2.setText(game2);
-	        	}
-	        });
-	        
+       
+		recentgame1.addListener(new ChangeListener(){
+        	public void changed (ChangeEvent event, Actor actor){
+        	/*	recentButton.setSize(bWidth - 50, bHeight - 50);
+        		recentButton.setPosition(bX + 25, bY + 300);
+        		recentButton.setText(null);
+            	recentButton.setText("Recently Played");
+            	
+        		recentgame1.setSize(bWidth, bHeight);
+        		recentgame1.setPosition(bX, bY);
+        		recentgame1.setText(null);
+            	recentgame1.setText(game1);
+        		
+        		recentgame2.setSize(bWidth - 50, bHeight - 50); 
+        		recentgame2.setPosition(bX + 25, bY - 250);
+        		recentgame2.setText(null);
+            	recentgame2.setText(game2);
+        		*/
+        		//selectGame(recentgame1, );
+            	
+        	}
+        });
+       /* recent games start
 	        recentgame2.addListener(new ChangeListener(){
 	        	public void changed (ChangeEvent event, Actor actor){
 	        		recentgame1.setSize(bWidth - 50, bHeight - 50);
@@ -291,7 +330,7 @@ public class FrontPage implements Screen {
 	            	recentButton.setText("Recently Played");
 	        	}
 	        });
-		/* recent games end*/
+		recent games end*/
 	        
 	        
 	        
@@ -347,7 +386,12 @@ public class FrontPage implements Screen {
         
         
     }
-    
+    public void selectGame(TextButton selected, String gameName){
+    	selected.setSize(300, 300);
+		selected.setPosition(150, 220);
+		selected.setText(null);
+    	selected.setText(gameName);
+    }
     
 	@Override
 	public void show() {

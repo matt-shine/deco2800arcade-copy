@@ -12,6 +12,7 @@ import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -30,6 +31,7 @@ import deco2800.server.database.FriendStorage;
 public class TestFriendStorage extends DBTestCase {
 	private static IDatabaseTester databaseTester; //manage connections to the database
 	private FriendStorage friendStorage; //storage object to test
+	private Map<String, List<String>> tablePrimaryKeyMap = new HashMap<String, List<String>>();
 	
 	/**
 	 * This method is run once when this class is instantiated
@@ -103,9 +105,29 @@ public class TestFriendStorage extends DBTestCase {
 	
 	@Override
 	protected void setUpDatabaseConfig(DatabaseConfig config) {
-		config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new DefaultColumnFilter());
+		config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new ColumnFilter());
 		Map<String, List<String>> tablePrimaryKeyMap = new HashMap<String, List<String>>();
 		tablePrimaryKeyMap.put("FRIENDS", Arrays.asList(new String[] {"U1", "U2"}));
 	}
+	
+	public Map<String, List<String>> getTablePrimaryKeyMap(){
+		return tablePrimaryKeyMap;
+	}
+	
+private class ColumnFilter extends DefaultColumnFilter {
+	
+	TestFriendStorage testFriendStorage = new TestFriendStorage();
+	Map<String, List<String>> tablePrimaryKeyMap = testFriendStorage.getTablePrimaryKeyMap();
+	
+	@Override
+	public boolean accept(String tableName, Column column) {
+		if (tablePrimaryKeyMap.containsKey(tableName)) {
+			return tablePrimaryKeyMap.get(tableName).contains(column.getColumnName());
+		} else {
+			return column.getColumnName().equalsIgnoreCase("U1");
+		}
+	}
+}
+	
 	
 }

@@ -79,7 +79,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	private static SpriteBatch batch;
 
 	Frustum camGone = new Frustum();
-	private World world;
+	public static int world;
 	// Store details about the activity of junglejump and the players
 	public static final String messages = junglejump.class.getSimpleName();
 	// FPS Animation helper
@@ -116,7 +116,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	Texture monkeySit, monkeyRun1, monkeyRun2;
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
-	Texture gameBackground, platform;
+	public static Texture gameBackground;
+	Texture platform, levelText, hyphenText, livesText, levelNumText, 
+	worldNumText, livesNumText;
 	ShapeRenderer shapeRenderer;
 
 	/* ACHIEVEMENT VARIABLES */
@@ -204,6 +206,12 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
 		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
 		gameBackground = new Texture(("junglejumpassets/gameBackground2.png"));
+		levelText = new Texture(("junglejumpassets/level.png"));
+		hyphenText = new Texture(("junglejumpassets/-.png"));
+		livesText = new Texture(("junglejumpassets/lives.png"));
+		worldNumText = new Texture(("junglejumpassets/0.png"));
+		livesNumText = new Texture(("junglejumpassets/3.png"));
+		levelNumText = new Texture(("junglejumpassets/0.png"));
 		//platform = new Texture("junglejumpassets/platform.png");
 
 		/* ACHIEVEMENT STUFF */
@@ -396,6 +404,12 @@ public class junglejump extends GameClient implements InputProcessor {
 					batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 				}
 			}
+			batch.draw(levelText, 50, 50, 80, 30);
+			batch.draw(hyphenText, 200, 50, 30, 30);
+			batch.draw(livesText, 50, 100, 80, 30);
+			batch.draw(levelNumText, 150, 50, 30, 30);
+			batch.draw(worldNumText, 250, 50, 30, 30);
+			batch.draw(livesNumText, 150, 100, 30, 30);
 			//batch.draw(platform, 100, 50);
 
 			batch.end();

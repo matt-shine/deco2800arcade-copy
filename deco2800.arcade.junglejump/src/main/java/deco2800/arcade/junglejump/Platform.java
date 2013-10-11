@@ -38,7 +38,6 @@ public class Platform {
 		this.yPos = pY;
 		this.active = false;
 		this.inverted = flipped;
-		currentWorld = world.WORLD_ONE; // Placeholder 
 		platType = type;
 		setTexture(type);
 	}
@@ -101,7 +100,7 @@ public class Platform {
 			break;
 		}
 		
-		platText = new Texture("junglejumpassets/world1/" + platformType + ".png");
+		platText = new Texture("junglejumpassets/world" + (junglejump.world + 1) + "/" + platformType + ".png");
 		
 	}
 	

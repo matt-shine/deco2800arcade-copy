@@ -3,6 +3,8 @@ package deco2800.arcade.junglejump;
 import java.io.*;
 import java.util.*;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import deco2800.arcade.junglejump.GUI.junglejump;
 
 
@@ -102,8 +104,13 @@ public class LevelContainer {
 		currentLevel++;
 		if(currentLevel > levelAmount-1) {
 			currentLevel = 0;
-		//	currentWorld++;
+			currentWorld++;
+			if(currentWorld > 5) {
+				currentWorld = 0;
+			}
+			junglejump.world = currentWorld;
 		}
+		junglejump.gameBackground = new Texture(("junglejumpassets/world" + currentWorld + "/background.png"));
 		junglejump.currentLevel = getLevel(currentLevel);
 		//currentLevel = newLevel;
 		junglejump.monkeyX = junglejump.monkeyDefaultX;

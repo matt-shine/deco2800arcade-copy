@@ -1,6 +1,7 @@
 package deco2800.arcade.breakout;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
@@ -142,35 +143,42 @@ public class GameScreen implements Screen  {
 		
 		
 
-		int index;
-		if (getLevel() == 1) {
-			bricks = levelSystem.levelOne(bricks, this);
-		} else if (getLevel() == 2) {
-			bricks = levelSystem.levelTwo(bricks, this);
-		} else if (getLevel() == 3) {
-			bricks = levelSystem.levelThree(bricks, this);
-		} else if (getLevel() == 4) {
-			bricks = levelSystem.levelFour(bricks, this);
-			game.incrementAchievement("breakout.basic");
-			achieve.play();
-		} else if (getLevel() == 5) {
-			bricks = levelSystem.levelFive(bricks, this);
-		} else if (getLevel() == 6) {
-			bricks = levelSystem.levelSix(bricks, this);
-		} else if (getLevel() == 7) {
-			bricks = levelSystem.levelSeven(bricks, this);
-			game.incrementAchievement("breakout.intermediate");
-			achieve.play();
-		} else if (getLevel() == 8) {
-			bricks = levelSystem.levelEight(bricks, this);
-		} else if (getLevel() == 9) {
-			bricks = levelSystem.levelNine(bricks, this);
-		} else if (getLevel() == 10) {
-			bricks = levelSystem.levelTen(bricks,this);
+		if (level > 10) {
 			game.incrementAchievement("breakout.pro");
 			achieve.play();
+			gameState = new GameOverState();
 		}
-		setBrickNum(bricks.length);
+		try {
+			bricks = levelSystem.readFile("levels/level" + level + ".txt",
+				bricks, this);
+			setBrickNum(bricks.length);
+		} catch (Exception e) {
+			System.err.println("Error is: " + e);
+			this.dispose();
+			this.gameState = new GameOverState();
+		}
+//		else if (getLevel() == 2) {
+//			bricks = levelSystem.levelTwo(bricks, this);
+//		} else if (getLevel() == 3) {
+//			bricks = levelSystem.levelThree(bricks, this);
+//		} else if (getLevel() == 4) {
+//			bricks = levelSystem.levelFour(bricks, this);
+//			game.incrementAchievement("breakout.basic");
+//			achieve.play();
+//		} else if (getLevel() == 5) {
+//			bricks = levelSystem.levelFive(bricks, this);
+//		} else if (getLevel() == 6) {
+//			bricks = levelSystem.levelSix(bricks, this);
+//		} else if (getLevel() == 7) {
+//			bricks = levelSystem.levelSeven(bricks, this);
+//			game.incrementAchievement("breakout.intermediate");
+//			achieve.play();
+//		} else if (getLevel() == 8) {
+//			bricks = levelSystem.levelEight(bricks, this);
+//		} else if (getLevel() == 9) {
+//			bricks = levelSystem.levelNine(bricks, this);
+//		} else if (getLevel() == 10) {
+//			bricks = levelSystem.levelTen(bricks,this);
 
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();

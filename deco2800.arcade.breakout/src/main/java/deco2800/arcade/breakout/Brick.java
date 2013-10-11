@@ -158,7 +158,7 @@ public class Brick {
 //		sBatch = new SpriteBatch();
 	}
 	
-	public void render(ShapeRenderer render, int num, int level, SpriteBatch b, int index) {
+	public void render(ShapeRenderer render, int level, SpriteBatch b, int index) {
 //		brickImg = new Sprite(new Texture(Gdx.files.classpath("imgs/brick.png")));
 //		brickImg.setSize(width, height);
 //		sBatch = batch;
@@ -166,7 +166,7 @@ public class Brick {
 //		sBatch.draw(brickImg, brickShape.x, brickShape.y);
 //		sBatch.end();
 		if (level == 1) {
-			renderLevelOne(num, b);
+			renderLevelOne(index/8, b);
 		}
 		if (level == 2) {
 			renderLevelTwo(b, index);

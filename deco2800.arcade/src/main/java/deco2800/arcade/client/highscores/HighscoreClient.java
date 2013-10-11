@@ -15,6 +15,9 @@ public class HighscoreClient {
 	/*Stores the response that the server sends back*/
 	private GetScoreResponse gsRes;
 	
+	/*Stores the scores that were sent back from the server*/
+	private List<Highscore> scoreResonseList;
+	
 	/*Used for queuing up scores that will be sent to the server. Even elements 
 	 *are score types, odd elements are score values. Score values are stored 
 	 *as strings.*/
@@ -116,6 +119,7 @@ public class HighscoreClient {
 		this.gsRes = gsRes; //Store the response so it can be used
 	}
 	
+	
 	/**
 	 * Converts a string of comma separated values into a list of Highscore 
 	 * objects that can be itersted through by the user.
@@ -124,31 +128,8 @@ public class HighscoreClient {
 	 */
 	private List<Highscore> deserialiseAsHighscore(String serialScores) {
 		
+		
 		return null;
-	}
-	
-	
-	/**
-	 * THIS IS A TEST METHOD. WILL BE REMOVED
-	 * 
-	 * Returns the number of columns that is returned 
-	 * @return the number of columns that is returned.
-	 */
-	public int responseTest(int num) {
-		//This will block until this.gsRes is updated with the correct information.
-		GetScoreRequest gsr = new GetScoreRequest();
-		gsr.requestID = 1;
-		gsr.limit = 10;
-		gsr.highestIsBest = true;
-		
-		sendScoreRequest(gsr);
-		
-		if (this.gsRes != null) {
-			//gsRes has been updated, so information from it can be returned.
-			return 0;
-		} else {
-			return 0; //This is bad. This shouldn't happen.
-		}
 	}
 	
 	

@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
 import static org.mockito.Mockito.*;
 
 public class WallModelTest {

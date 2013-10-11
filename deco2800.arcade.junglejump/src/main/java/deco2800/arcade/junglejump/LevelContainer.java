@@ -106,11 +106,12 @@ public class LevelContainer {
 		if(currentLevel > levelAmount-1) {
 			currentLevel = 0;
 			currentWorld++;
-			/*if(currentWorld > worldAmount-1) {
+			if(currentWorld > worldAmount-1) {
 				currentWorld = 0;
-			}*/
+			}
 			junglejump.world = currentWorld;
-			junglejump.gameBackground = new Texture(("junglejumpassets/world" + currentWorld + "/background.png"));
+			junglejump.gameBackground = new Texture(("junglejumpassets/world" + currentWorld+1 + "/background.png"));
+			junglejump.worldNumText = new Texture(("junglejumpassets/" + (currentWorld + 1) + ".png"));
 		}
 		junglejump.currentLevel = getLevel(currentLevel);
 		//currentLevel = newLevel;

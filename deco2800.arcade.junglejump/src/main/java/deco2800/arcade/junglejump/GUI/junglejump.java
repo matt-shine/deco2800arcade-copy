@@ -102,6 +102,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	float velocity = 5.0f;
 	boolean correct = false;
 	boolean onPlatform, isFalling = false;
+	public int lives = 3;
 
 //	public int currentLevelIndex = 0;
 	static LevelContainer currentCont = new LevelContainer();
@@ -404,12 +405,12 @@ public class junglejump extends GameClient implements InputProcessor {
 					batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 				}
 			}
-			batch.draw(levelText, 50, 50, 80, 30);
-			batch.draw(hyphenText, 200, 50, 30, 30);
-			batch.draw(livesText, 50, 100, 80, 30);
-			batch.draw(levelNumText, 150, 50, 30, 30);
-			batch.draw(worldNumText, 250, 50, 30, 30);
-			batch.draw(livesNumText, 150, 100, 30, 30);
+			batch.draw(levelText, 5, 5, 80, 30);
+			batch.draw(hyphenText, 120, 5, 30, 30);
+			batch.draw(livesText, 5, 30, 80, 30);
+			batch.draw(levelNumText, 140, 5, 30, 30);
+			batch.draw(worldNumText, 85, 5, 30, 30);
+			batch.draw(livesNumText, 85, 30, 30, 30);
 
 			batch.end();
 			camera.update();
@@ -448,6 +449,10 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void killMonkey() {
 		monkeyY = 100;
 		monkeyX = 10;
+		lives--;
+		if(lives > 1) {
+			livesNumText = new Texture(("junglejumpassets/" + lives + ".png"));
+		}
 	}
 
 	public static void drawLevel() {

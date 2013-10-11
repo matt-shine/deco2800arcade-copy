@@ -85,6 +85,7 @@ public class HighscoreDatabase {
 			case 3: return null; //Return value of query with requestID 3
 			case 4: return null;
 			case 5: return null;
+
 			}
 		} catch (DatabaseException e) {
 			//bad

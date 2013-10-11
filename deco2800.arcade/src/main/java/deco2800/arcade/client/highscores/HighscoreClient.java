@@ -1,5 +1,6 @@
 package deco2800.arcade.client.highscores;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +15,9 @@ public class HighscoreClient {
 	
 	/*Stores the response that the server sends back*/
 	private GetScoreResponse gsRes;
+	
+	/*Stores the scores that were sent back from the server*/
+	private List<Highscore> scoreResponseList;
 	
 	/*Used for queuing up scores that will be sent to the server. Even elements 
 	 *are score types, odd elements are score values. Score values are stored 
@@ -96,13 +100,14 @@ public class HighscoreClient {
 		this.client.sendNetworkObject(gsReq); //Send the request
 		
 		//Wait until a response has been received from the server. Only check every 20ms.
+		//Will not continue past here until a response has been received.
 		while (gsRes == null) {
 			try { Thread.sleep(20); } 
 			catch (InterruptedException e) { break; }
 		}
-		
-		//Will only reach here when a response has been received.
-		
+
+		//Convert the scores back to something readable
+		this.scoreResponseList = deserialiseAsHighscore(this.gsRes.data);
 	}
 	
 	
@@ -116,39 +121,58 @@ public class HighscoreClient {
 		this.gsRes = gsRes; //Store the response so it can be used
 	}
 	
+	
 	/**
 	 * Converts a string of comma separated values into a list of Highscore 
-	 * objects that can be itersted through by the user.
+	 * objects that can be iterated through by the user.
 	 * 
 	 * @return
 	 */
 	private List<Highscore> deserialiseAsHighscore(String serialScores) {
+		String[] splitScores = serialScores.split(",");
+		int numberOfColumns = 4; //Total number of columns
+		int currentColumn = 0; //The current column being modified
 		
-		return null;
-	}
-	
-	
-	/**
-	 * THIS IS A TEST METHOD. WILL BE REMOVED
-	 * 
-	 * Returns the number of columns that is returned 
-	 * @return the number of columns that is returned.
-	 */
-	public int responseTest(int num) {
-		//This will block until this.gsRes is updated with the correct information.
-		GetScoreRequest gsr = new GetScoreRequest();
-		gsr.requestID = num;
-		gsr.limit = 10;
-		gsr.highestIsBest = true;
+
+		//Make the list that will be output once created
+		List<Highscore> output = new ArrayList<Highscore>();
+		Highscore currentItem = new Highscore();
 		
-		sendScoreRequest(gsr);
-		
-		if (this.gsRes != null) {
-			//gsRes has been updated, so information from it can be returned.
-			return 0;
-		} else {
-			return 0; //This is bad. This shouldn't happen.
+		for (String scoreItem : splitScores) {
+			//Set the properties for the score items in the list
+			switch (currentColumn) {
+				case 0:
+					currentItem.playerName = scoreItem;
+					break;
+				case 1:
+					currentItem.score = Integer.parseInt(scoreItem);
+					break;
+				case 2:
+					currentItem.date = scoreItem;
+					break;
+				case 3:
+					currentItem.type = scoreItem;
+					
+					output.add(currentItem); //Last column, so add this one to the list and move on
+					currentItem = new Highscore(); //Create a new item for the next row
+					break;
+			}
+			
+			//Move onto the next column, wrapping around to the start
+			currentColumn = (currentColumn + 1) % numberOfColumns; 
 		}
+		
+		//COMMENT THIS OUT WHEN NOT NEEDED
+		for (int i = 0; i < output.size(); i++) {
+			System.out.println("Row: " + i);
+			System.out.println("        Name: " + output.get(i).playerName);
+			System.out.println("        Score: " + output.get(i).score);
+			System.out.println("        Date: " + output.get(i).date);
+			System.out.println("        Type: " + output.get(i).type);
+		}
+		
+
+		return output;
 	}
 	
 	
@@ -172,16 +196,11 @@ public class HighscoreClient {
 		gsReq.limit = limit;
 		gsReq.highestIsBest = highestIsBest;
 		
+		//Send the request off, waiting for response before continuing
 		sendScoreRequest(gsReq);
 		
-		//Waits for response from server, before reaching here.
-		
-		this.gsRes = null;
-		
-		
-		
-		
-		return null;
+		//Now that the response is back, return the data to the user
+		return this.scoreResponseList;
 	}
 	
 	

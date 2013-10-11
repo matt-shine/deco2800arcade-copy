@@ -1,5 +1,6 @@
 package deco2800.arcade.snakeLadder;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -32,6 +33,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
@@ -70,7 +73,7 @@ public class SnakeLadder extends GameClient {
 	public String statusMessage;
 	private Dice dice;
 	private int turn=0;
-	
+	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -104,11 +107,11 @@ public class SnakeLadder extends GameClient {
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
 		
+		iniRuleMapping();
 		//creating level loading background board and initializing the rule mapping
 		map =new GameMap();
-		map.ini();
 		//loading game map
-		map.loadMap("maps/lvl1.txt");
+		map.loadMap("maps/lvl1.txt",getRuleMapping());
 		
 		//loading the icon for each player
 		gamePlayers[0].setPlayerTexture("player.png");
@@ -333,6 +336,33 @@ public class SnakeLadder extends GameClient {
         table.add(diceButton).width(100).height(50).pad(10);
         
         table.row();
+	}
+	
+	public void iniRuleMapping()
+	{
+		XmlReader reader = new XmlReader();
+		try {
+			Element root = reader.parse(Gdx.files.classpath("ruleMapping.xml"));
+			Array<Element> entries = root.getChildrenByName("entry");
+			for (Element entry : entries)
+			{
+				String rule = entry.getChildByName("rule").getText();
+				String icon = entry.getChildByName("icon").getText();
+				String implementationClass = entry.getChildByName("implementationClass").getText();
+				getRuleMapping().put(rule, new RuleMapping(icon,implementationClass));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public HashMap<String,RuleMapping> getRuleMapping() {
+		return ruleMapping;
+	}
+
+	public void setRuleMapping(HashMap<String,RuleMapping> ruleMapping) {
+		this.ruleMapping = ruleMapping;
 	}
 }
 

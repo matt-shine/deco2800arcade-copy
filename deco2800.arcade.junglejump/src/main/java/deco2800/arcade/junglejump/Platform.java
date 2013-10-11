@@ -26,6 +26,7 @@ public class Platform {
 	}
 	private world currentWorld;
 	public char platType;
+	public String platformType = "";
 	
 	/**
 	 * Platform constructor
@@ -47,7 +48,7 @@ public class Platform {
 		this.width = 40;
 		this.height = 40;
 		
-		String platformType = "";
+		//String platformType = "";
 		switch(type) {
 		case '-': 
 			platformType = "branch";
@@ -124,6 +125,7 @@ public class Platform {
 			// World 3 texture
 			break;
 		} */
+		platText = new Texture("junglejumpassets/world" + (junglejump.world + 1) + "/" + platformType + ".png");
 		return this.platText;
 	}
 	

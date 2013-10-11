@@ -406,9 +406,9 @@ public class junglejump extends GameClient implements InputProcessor {
 				}
 			}
 			batch.draw(levelText, 5, 5, 80, 30);
-			batch.draw(hyphenText, 120, 5, 30, 30);
+			batch.draw(hyphenText, 105, 5, 30, 30);
 			batch.draw(livesText, 5, 30, 80, 30);
-			batch.draw(levelNumText, 140, 5, 30, 30);
+			batch.draw(levelNumText, 125, 5, 30, 30);
 			batch.draw(worldNumText, 85, 5, 30, 30);
 			batch.draw(livesNumText, 85, 30, 30, 30);
 
@@ -450,8 +450,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyY = 100;
 		monkeyX = 10;
 		lives--;
-		if(lives > 1) {
+		if(lives > 0) {
 			livesNumText = new Texture(("junglejumpassets/" + lives + ".png"));
+		} else {
+			lives = 5;
 		}
 	}
 

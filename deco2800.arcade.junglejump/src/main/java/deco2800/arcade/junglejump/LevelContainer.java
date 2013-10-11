@@ -19,7 +19,7 @@ public class LevelContainer {
 	public static int currentLevel;
 	public static int currentWorld;
 	private static int levelAmount;
-	private int worldAmount = 1;
+	private int worldAmount = 3;
 	
 	/**
 	 * Constructor where levels are created and placed

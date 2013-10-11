@@ -209,9 +209,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		levelText = new Texture(("junglejumpassets/level.png"));
 		hyphenText = new Texture(("junglejumpassets/-.png"));
 		livesText = new Texture(("junglejumpassets/lives.png"));
-		worldNumText = new Texture(("junglejumpassets/0.png"));
+		worldNumText = new Texture(("junglejumpassets/1.png"));
 		livesNumText = new Texture(("junglejumpassets/3.png"));
-		levelNumText = new Texture(("junglejumpassets/0.png"));
+		levelNumText = new Texture(("junglejumpassets/1.png"));
 		//platform = new Texture("junglejumpassets/platform.png");
 
 		/* ACHIEVEMENT STUFF */
@@ -410,7 +410,6 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.draw(levelNumText, 150, 50, 30, 30);
 			batch.draw(worldNumText, 250, 50, 30, 30);
 			batch.draw(livesNumText, 150, 100, 30, 30);
-			//batch.draw(platform, 100, 50);
 
 			batch.end();
 			camera.update();

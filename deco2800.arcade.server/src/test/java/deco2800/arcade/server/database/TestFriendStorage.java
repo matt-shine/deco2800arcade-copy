@@ -16,6 +16,7 @@ import org.dbunit.dataset.Column;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.filter.IColumnFilter;
 import org.junit.After;
@@ -69,13 +70,15 @@ public class TestFriendStorage extends DBTestCase {
 	@Before
 	public void setUp() throws Exception {
 		playerStorage = new PlayerStorage();
-		playerStorage.initialise();
-		
 		friendStorage = new FriendStorage();
         friendStorage.initialise();
         
 		IDataSet ds = getDataSet();
+		 FlatXmlWriter fxw = new FlatXmlWriter(System.out);
+		 fxw.write(ds);
         databaseTester.setDataSet(ds);
+      
+       
 		databaseTester.onSetup();
 		IDatabaseConnection connection = databaseTester.getConnection();
 		DatabaseConfig config = connection.getConfig();

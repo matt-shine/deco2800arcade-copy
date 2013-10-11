@@ -114,7 +114,7 @@ public class LevelContainer {
 		}
 		junglejump.currentLevel = getLevel(currentLevel);
 		//currentLevel = newLevel;
-		junglejump.levelNumText = new Texture(("jungljumpassets/" + (currentLevel + 1) + ".png"));
+		junglejump.levelNumText = new Texture(("junglejumpassets/" + (currentLevel + 1) + ".png"));
 		junglejump.monkeyX = junglejump.monkeyDefaultX;
 		junglejump.monkeyY = junglejump.monkeyDefaultY;
 		return;

@@ -58,13 +58,10 @@ public class WL6Meta {
      */
     public static boolean hasDoorAt(int x, int y, Level map) {
         int id = map.getTerrainAt(x, y);
-        if (id >= WL6Meta.DOOR && id < WL6Meta.DOOR + 2 ||
+        return id >= WL6Meta.DOOR && id < WL6Meta.DOOR + 2 ||
                 id >= WL6Meta.DOOR_GOLDKEY && id < WL6Meta.DOOR_GOLDKEY + 2 ||
                 id >= WL6Meta.DOOR_SOLVERKEY && id < WL6Meta.DOOR_SOLVERKEY + 2 ||
-                id >= WL6Meta.DOOR_ELEVATOR && id < WL6Meta.DOOR_ELEVATOR + 2) {
-            return true;
-        }
-        return false;
+                id >= WL6Meta.DOOR_ELEVATOR && id < WL6Meta.DOOR_ELEVATOR + 2;
     }
 
     /**
@@ -76,11 +73,8 @@ public class WL6Meta {
      * @return
      */
     public static boolean hasObscuringBlockAt(int x, int y, Level map) {
-        if (WL6Meta.block(map.getTerrainAt(x, y)).texture != null &&
-                map.getDoodadAt(x, y) != WL6Meta.SECRET_DOOR) {
-            return true;
-        }
-        return hasDoorAt(x, y, map);
+        return (WL6Meta.block(map.getTerrainAt(x, y)).texture != null && map.getDoodadAt(x, y) != WL6Meta.SECRET_DOOR)
+                || hasDoorAt(x, y, map);
     }
 
     /**

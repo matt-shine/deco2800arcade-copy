@@ -2,7 +2,7 @@ package deco2800.arcade.client.highscores;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Timer;
+import java.util.List;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
@@ -24,16 +24,10 @@ public class HighscoreClient {
 	private final String validScoreTypes[] = 
 		{"Time", "Number", "Distance"} ;
 	
-	/*NOTES!
-	 * - None of the following methods have been tested.
-	 * - None of the following methods have been implemented on the server-side
-	 * - Need to build tests for all of the methods that can be tested locally.
-	 */
 	
-	
-	//==============================
+	//=============================================================
 	//Initializers 
-	//==============================
+	//=============================================================
 	
 	/**
 	 * Initializes a new HighscoreClient object that can be used for 
@@ -75,9 +69,126 @@ public class HighscoreClient {
 	}
 	
 	
-	//==============================
+	
+	//=============================================================
+	//Fetching Score Methods
+	//=============================================================
+	
+	//--------------------
+	//Utility Methods
+	//--------------------
+	
+	/**
+	 * Creates and sends a new GetScoreRequest to the server of type 
+	 * requestType and waits until a response is received. Once the response 
+	 * is received it is stored in this.gsReq.
+	 * 
+	 * @param requestID An integer representing the request that is being 
+	 * sent.
+	 */
+	private void sendScoreRequest(GetScoreRequest gsReq) {
+		//Build the request
+		gsReq.username = this.Username;
+		gsReq.game_ID = this.Game_ID;
+		
+		//Send the response, and wait for a reply
+		this.gsRes = null;
+		this.client.sendNetworkObject(gsReq); //Send the request
+		
+		//Wait until a response has been received from the server. Only check every 20ms.
+		while (gsRes == null) {
+			try { Thread.sleep(20); } 
+			catch (InterruptedException e) { break; }
+		}
+		
+		//Will only reach here when a response has been received.
+		
+	}
+	
+	
+	/**
+	 * Called by HighscoreClientListener whenever a GetScoreResponse is 
+	 * received from the server.
+	 * 
+	 * @param gsRes The response that was received
+	 */
+	protected void responseRecieved(GetScoreResponse gsRes) {
+		this.gsRes = gsRes; //Store the response so it can be used
+	}
+	
+	/**
+	 * Converts a string of comma separated values into a list of Highscore 
+	 * objects that can be itersted through by the user.
+	 * 
+	 * @return
+	 */
+	private List<Highscore> deserialiseAsHighscore(String serialScores) {
+		
+		return null;
+	}
+	
+	
+	/**
+	 * THIS IS A TEST METHOD. WILL BE REMOVED
+	 * 
+	 * Returns the number of columns that is returned 
+	 * @return the number of columns that is returned.
+	 */
+	public int responseTest(int num) {
+		//This will block until this.gsRes is updated with the correct information.
+		GetScoreRequest gsr = new GetScoreRequest();
+		gsr.requestID = 1;
+		gsr.limit = 10;
+		gsr.highestIsBest = true;
+		
+		sendScoreRequest(gsr);
+		
+		if (this.gsRes != null) {
+			//gsRes has been updated, so information from it can be returned.
+			return 0;
+		} else {
+			return 0; //This is bad. This shouldn't happen.
+		}
+	}
+	
+	
+	//--------------------
+	//Public Methods
+	//--------------------
+	
+	/**
+	 * requestID: 1
+	 * 
+	 * @param limit The number of top players to be returned.
+	 * 
+	 * @param highestIsBest If having a high score is best for your game, then
+	 * set this to true. If having a low score is best, then set this to false.
+	 * 
+	 * @return A list of Highscore objects. 
+	 */
+	public List<Highscore> getGameTopPlayers(int limit, boolean highestIsBest) {
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.requestID = 1; //Telling the server which query to run
+		gsReq.limit = limit;
+		gsReq.highestIsBest = highestIsBest;
+		
+		sendScoreRequest(gsReq);
+		
+		//Waits for response from server, before reaching here.
+		
+		this.gsRes = null;
+		
+		
+		
+		
+		return null;
+	}
+	
+	
+	
+	//=============================================================
 	//Adding Score Methods
-	//==============================
+	//=============================================================
 	
 	//--------------------
 	//Single-Valued Scores
@@ -242,77 +353,5 @@ public class HighscoreClient {
 		
 		sendScoresToServer();
 	}
-	
-	
-	
-	//======================
-	//Fetching Score Methods
-	//======================
-	
-	//--------------------
-	//Utility Methods
-	//--------------------
-	
-	/**
-	 * Creates and sends a new GetScoreRequest to the server of type 
-	 * requestType and waits until a response is received. Once the response 
-	 * is received it is stored in this.gsReq.
-	 * 
-	 * @param requestType An integer representing the request that is being 
-	 * sent.
-	 */
-	private void sendScoreRequest(int requestID) {
-		//Build the request
-		GetScoreRequest gsReq = new GetScoreRequest();
-		gsReq.username = this.Username;
-		gsReq.game_ID = this.Game_ID;
-		gsReq.requestID = requestID;
-		
-		//Send the response, and wait for a reply
-		this.gsRes = null;
-		this.client.sendNetworkObject(gsReq); //Send the request
-		
-		//Wait until a response has been received from the server. Only check every 20ms.
-		while (gsRes == null) {
-			try { Thread.sleep(20); } 
-			catch (InterruptedException e) { break; }
-		}
-		
-		//Will only reach here when a response has been received.
-		
-	}
-	
-	/**
-	 * Called by HighscoreClientListener whenever a GetScoreResponse is 
-	 * received from the server.
-	 * 
-	 * @param gsRes The response that was received
-	 */
-	protected void responseRecieved(GetScoreResponse gsRes) {
-		this.gsRes = gsRes; //Store the response so it can be used
-	}
-	
-	/**
-	 * Returns the number of columns that is returned 
-	 * @return the number of columns that is returned.
-	 */
-	public int responseTest(int num) {
-		//This will block until this.gsRes is updated with the correct information.
-		sendScoreRequest(num);
-		
-		if (this.gsRes != null) {
-			//gsRes has been updated, so information from it can be returned.
-			return this.gsRes.columnNumbers;
-		} else {
-			return 0; //This is bad. This shouldn't happen.
-		}
-	}
-	
-	
-	//--------------------
-	//Public Methods
-	//--------------------
-	
-	
 	
 }

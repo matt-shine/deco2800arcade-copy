@@ -106,7 +106,6 @@ public class HighscoreListener extends Listener {
 			 
 			 //Create the response
 			 GetScoreResponse gsRes = new GetScoreResponse();
-			 gsRes.columnNumbers = Integer.parseInt(queryResult.get(0));
 			 gsRes.data = serialisedData(queryResult);
 			 
 			 //Send the response

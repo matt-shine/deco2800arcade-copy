@@ -6,9 +6,11 @@ import java.util.Random;
 
 public class Enemy extends Mob {
 
-    // Six possible states
-    // An enemy starts in either Stand or Path states.  Enters chase state when player is spotted.
-    // Once enemy has left stand or path states, it cannot reenter them.
+    /**
+     * Six possible states
+     * An enemy starts in either Stand or Path states.  Enters chase state when player is spotted or gunfire is heard.
+     * Once enemy has left the stand or path states, it cannot reenter them.
+     */
     public enum STATES {
         NO_STATE,   // No state, error
         STAND,      // Idle state 1, motionless

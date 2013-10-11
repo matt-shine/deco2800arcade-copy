@@ -10,7 +10,8 @@ public class Player extends User {
 	public static final int EMAIL_ID = 3;
 	public static final int PROGRAM_ID = 4;
 	public static final int BIO_ID = 5;
-
+	public static final int AGE_ID = 6;
+	
 	public static final int NAME_PRIVACY_ID = 1;
 	public static final int EMAIL_PRIVACY_IDNAME_ID = 2;
 	public static final int PROGRAM_PRIVACY_ID = 3;
@@ -19,13 +20,13 @@ public class Player extends User {
 	public static final int GAMES_PRIVACY_ID = 6;
 	public static final int ACHIEVMENTS_PRIVACY_ID = 7;
 
-
 	private Field username;
 
 	private Field name;
 	private Field email;
 	private Field program;
 	private Field bio;
+	private Field age;
 
 	private PrivacyField namePrivacy;
 	private PrivacyField emailPrivacy;
@@ -77,7 +78,6 @@ public class Player extends User {
 		this.friends = new Friends();
 		this.friendInvites = new FriendInvites();
 		this.blocked = new Blocked();
-
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
 				privacy[1]);
@@ -114,7 +114,7 @@ public class Player extends User {
 	 *            The Player's icon filepath
 	 * @param details
 	 *            An array of strings containing the player's username, name,
-	 *            email, program and bio.
+	 *            email, program, bio and age.
 	 * @param privacy
 	 *            A boolean array of privacy settings.
 	 * @require There are at least 7 elements in privacy array. Elements 1
@@ -135,7 +135,8 @@ public class Player extends User {
 		this.email = new Field(EMAIL_ID, details.get(2));
 		this.program = new Field(PROGRAM_ID, details.get(3));
 		this.bio = new Field(BIO_ID, details.get(4));
-
+		this.age = new Field(AGE_ID, details.get(5));
+		
 		this.games = new Games();
 		this.games.addAll(gamesList);
 		this.friends = new Friends();
@@ -247,7 +248,25 @@ public class Player extends User {
 	public void setName(String name) {
 		this.name.setValue(name);
 	}
-
+	
+	/**
+	 * An access method for the players age
+	 * 
+	 * @return a String of the players age
+	 */
+	public String getAge() {
+		return age.getValue();
+	}
+	
+	/**
+	 * Set the players age
+	 * 
+	 * @param age
+	 */
+	public void setAge(String age) {
+		this.age.setValue(age);
+	}
+	
 	/**
 	 * An access method for the players program
 	 * 

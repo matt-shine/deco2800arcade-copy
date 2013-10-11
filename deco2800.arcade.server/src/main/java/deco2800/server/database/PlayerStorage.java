@@ -46,7 +46,8 @@ public class PlayerStorage {
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
-								+ "program VARCHAR(30)," + "bio VARCHAR(200))");
+								+ "program VARCHAR(30)," 
+								+ "bio VARCHAR(200)," + "age VARCHAR(30))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -61,7 +62,7 @@ public class PlayerStorage {
 	 * @param playerID
 	 * @return Returns List of player data such that: List.get(0) -> username;
 	 *         List.get(1) -> name; List.get(2) -> email; List.get(3) ->
-	 *         program; List.get(4) -> bio;
+	 *         program; List.get(4) -> bio; List.get(5) -> age;
 	 * 
 	 * @throws DatabaseException
 	 */
@@ -85,7 +86,7 @@ public class PlayerStorage {
 			data.add(findPlayerInfo(playerID, resultSet, "email"));
 			data.add(findPlayerInfo(playerID, resultSet, "program"));
 			data.add(findPlayerInfo(playerID, resultSet, "bio"));
-
+			data.add(findPlayerInfo(playerID, resultSet, "age"));
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -203,6 +204,20 @@ public class PlayerStorage {
 	public void updateName(int playerID, String newValue)
 			throws DatabaseException {
 		updateField(playerID, newValue, "name");
+	}
+	
+	/**
+	 * Sets a player's name to the provided name.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new name.
+	 * @throws DatabaseException
+	 */
+	public void updateAge(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "age");
 	}
 
 	/**

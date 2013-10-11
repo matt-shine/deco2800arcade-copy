@@ -23,7 +23,7 @@ public class PlayerObserver implements Observer {
 	private NameUpdateRequest nameUpdateRequest;
 	private ProgramUpdateRequest programUpdateRequest;
 	private UsernameUpdateRequest usernameUpdateRequest;
-
+	private AgeUpdateRequest ageUpdateRequest;
 	private static NetworkClient networkClient;
 
 	/**
@@ -140,7 +140,15 @@ public class PlayerObserver implements Observer {
 					bioUpdateRequest.playerID = p.getID();
 					bioUpdateRequest.bio = value;
 					networkClient.sendNetworkObject(bioUpdateRequest);
-
+				
+				case Player.AGE_ID:
+					/*
+					 * Encapsulating Player change data for transmission for
+					 * server.
+					 */
+					ageUpdateRequest.playerID = p.getID();
+					ageUpdateRequest.age = value;
+					networkClient.sendNetworkObject(ageUpdateRequest);
 				}
 
 			}

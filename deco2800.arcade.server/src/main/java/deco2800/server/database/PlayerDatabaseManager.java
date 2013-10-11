@@ -63,6 +63,24 @@ public class PlayerDatabaseManager {
 			// TODO Error catch?
 		}
 	}
+	
+	/**
+	 * Updates the players age to that provided.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param age
+	 *            The Player's new age
+	 * @require age is valid, that is it obeys all restrictions imposed by the
+	 *          Player class. Player with playerID exists.
+	 */
+	public void updateAge(int playerID, String age) {
+		try {
+			playerStorage.updateAge(playerID, age);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
+	}
 
 	/**
 	 * Updates the players email to that provided.

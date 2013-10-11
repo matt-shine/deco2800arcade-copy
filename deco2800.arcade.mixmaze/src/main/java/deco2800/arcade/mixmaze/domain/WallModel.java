@@ -3,31 +3,80 @@ package deco2800.arcade.mixmaze.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import deco2800.arcade.mixmaze.domain.PlayerModel;
+
 /**
- * WallModel represents an active/inactive wall on a tile.
+ * WallModel represents a wall on a tile, which can be either active or 
+ * inactive.
  */
 public class WallModel {
-	private int direction;
-	private List<TileModel> tiles;
-	private boolean built;
+	/** The tile of the left side of the wall if
+	 * you were facing from end-to-end.
+	 **/
+	private TileModel leftTile;
+	
+	/** The tile of the right side of the wall if
+	 * you were facing from end-to-end.
+	 **/
+	private TileModel rightTile;
+
+	/** Whether this wall is built or not */
+	private boolean isBuilt;
+	
+	/** The player who builds this wall, <code>null</code> if not built */
 	private PlayerModel builder;
 
-	/**
-	 * Returns the direction this wall is attached to its tile.
-	 *
-	 * @return the direction
-	 */
-	// i dnt understand the meaning if this method?dumi
-	public int getDirection() {
-		return direction;
+	/** Observers to this tile */
+	private List<WallModelObserver> observers = new ArrayList<WallModelObserver>();
+	
+	public void addObserver(WallModelObserver observer) {
+		observers.add(observer);
 	}
-
-	public void addTile(TileModel tile) {
-		if (tiles.contains(tile)) {
-			throw new IllegalStateException(
-					"The tile is already present.");
+	
+	private void updateWall() {
+		for(WallModelObserver o : observers) {
+			o.updateWall(isBuilt);
 		}
-		tiles.add(tile);
+	}
+	
+	/**
+	 * Gets the tile on the left side of
+	 * the wall.
+	 * @return <CODE>null</CODE> if there is
+	 * no tile on the left side, otherwise the associated
+	 * <CODE>TileModel</CODE>
+	 */
+	public TileModel getLeftTile() {
+		return leftTile;
+	}
+	
+	/**
+	 * Specifies the tile on the left side of the wall if
+	 * you were facing from end-to-end.
+	 * @param left tile on the left side of the wall
+	 */
+	public void setLeftTile(TileModel left) {
+		leftTile = left;
+	}
+	
+	/**
+	 * Gets the tile on the right side of
+	 * the wall.
+	 * @return <CODE>null</CODE> if there is
+	 * no tile on the right side, otherwise the associated
+	 * <CODE>TileModel</CODE>
+	 */
+	public TileModel getRightTile() {
+		return rightTile;
+	}
+	
+	/**
+	 * Specifies the tile on the right side of the wall if
+	 * you were facing from end-to-end.
+	 * @param right tile on the right side of the wall
+	 */
+	public void setRightTile(TileModel right) {
+		rightTile = right;
 	}
 
 	/**
@@ -35,86 +84,61 @@ public class WallModel {
 	 *
 	 * @return true if the wall is built, otherwise false
 	 */
-	public boolean isBuilt() {
-		return built;
+	boolean isBuilt() {
+		return isBuilt;
 	}
 
 	/**
-	 * Returns the <code>PlayerModel</code> that builds this wall.
+	 * Returns the <code>PlayerModel</code> that built this wall, or
+	 * <code>null</code> is not built.
 	 *
-	 * @return the <code>PlayerModel</code>
+	 * @return the <code>PlayerModel</code> or <code>null</code>
 	 */
-	public PlayerModel getBuilder() {
+	PlayerModel getBuilder() {
 		return builder;
 	}
 
-	public void build(PlayerModel player) {
-		if (player == null) {
-			throw new IllegalArgumentException(
-					"player cannot be null.");
-		}
-
-		if (built) {
-			throw new IllegalStateException(
-					"The wall is already built.");
-		}
-
-		built = true;
-		builder = player;
-		checkTiles(player);
-	}
-
-	public void destroy(PlayerModel player) {
-		if (!built) {
-			throw new IllegalStateException(
-					"The wall is not built.");
-		}
-
-		built = false;
-		builder = null;
-		checkTiles(player);
-	}
-
 	/**
-	 * Check if any of the tiles incident on this wall has its boxer
-	 * changed.
-	 *
-	 * @param player the player to check
+	 * Builds this wall.
+	 * 
+	 * @param player	the builder
 	 */
-	private void checkTiles(PlayerModel player) {
-		if (player == null) {
-			throw new IllegalArgumentException(
-					"player cannot be null.");
-		}
-
-		for (TileModel tile : tiles) {
-			tile.checkBox(player);
-		}
+	void build(PlayerModel player) {
+		if (player == null)
+			throw new IllegalArgumentException("player cannot be null");
+		if (isBuilt)
+			throw new IllegalStateException("this wall is already built");
+		
+		isBuilt = true;
+		builder = player;
+		updateWall();
+		updateTiles(player);
 	}
+	
+	/**
+	 * Destroys this wall.
+	 * 
+	 * @param player	the player who destroys this wall
+	 */
+	public void destroy(PlayerModel player) {
+		if (!isBuilt)
+			throw new IllegalStateException("wall not built");
 
+		isBuilt = false;
+		builder = null;
+		updateWall();
+		updateTiles(player);
+	}
+	
+	private void updateTiles(PlayerModel player) {
+		if(leftTile != null) 
+			leftTile.validateBox(player);
+		if(rightTile != null) 
+			rightTile.validateBox(player);
+	}
+	
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder("WallModel: ");
-
-		for (TileModel tile : tiles) {
-			str.append(tile);
-			str.append(", ");
-		}
-
-		return str.toString();
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param dir the direction this wall is attached to its parent tile
-	 */
-	public WallModel(int dir) {
-		if (!Direction.isDirection(dir)) {
-			throw Direction.NOT_A_DIRECTION;
-		}
-
-		direction = dir;
-		tiles = new ArrayList<TileModel>();
+		return String.format("<WallModel: %s>", ((isBuilt) ? "built" : "not built"));
 	}
 }

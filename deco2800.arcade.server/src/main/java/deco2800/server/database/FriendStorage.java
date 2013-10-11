@@ -449,4 +449,32 @@ public class FriendStorage {
 			}
 		}
 	}
+	
+	/**
+	 * Checks if player1 has blocked player2.
+	 * @param player1
+	 * 			The playerID of the blocker.
+	 * @param player2
+	 * 			The playerID of the blockee.
+	 * @throws DatabaseException
+	 */
+	public boolean isBlocked(int player1, int player2) throws DatabaseException {
+		
+		ArrayList<Integer> blocked = getBlockedList(player1);
+		return blocked.contains(player2);
+	}
+	
+	/**
+	 * Checks if player1 is friends with player2.
+	 * @param player1
+	 * 			The playerID of the befriender.
+	 * @param player2
+	 * 			The playerID of the friend.
+	 * @throws DatabaseException
+	 */
+	public boolean isFriends(int player1, int player2) throws DatabaseException {
+		
+		ArrayList<Integer> friends = getFriendsList(player1);
+		return friends.contains(player2);
+	}
 }

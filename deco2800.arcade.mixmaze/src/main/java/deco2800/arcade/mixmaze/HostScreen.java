@@ -56,9 +56,9 @@ class HostScreen extends LocalScreen {
 		}
 		model.getPlayer(1).addViewer(p1);
 		model.getPlayer(2).addViewer(p2);
-		setupTimer();
-		startGame();
 		client.sendTCP("signal: game started");
+		setupTimer(model.getGameMaxTime());
+		startGame();
 	}
 
 	static void register(EndPoint endPoint) {
@@ -76,7 +76,7 @@ class HostScreen extends LocalScreen {
 		*/
 	}
 
-	public class HostListener extends Listener {
+	private class HostListener extends Listener {
 
 		public void received(Connection c, Object o) {
 			if (o instanceof String) {

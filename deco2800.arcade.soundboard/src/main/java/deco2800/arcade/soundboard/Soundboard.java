@@ -60,15 +60,15 @@ public class Soundboard extends GameClient {
      * Create SoundFileHandlers for each loop preset
      */
     private void fetchLoops() {
-        HashMap<String, String> loops = new HashMap<String, String>();
-        loops.put("creepy_loop.wav", "Creepy");
-        loops.put("dub_loop.wav", "Dubstep");
-        loops.put("funk_loop.wav", "Funk");
-        loops.put("house_loop.wav", "House");
-        loops.put("minimal_loop.wav", "Minimal Electro");
-        loops.put("techno_loop.wav", "Techno");
+        HashMap<String, String> loopsSetup = new HashMap<String, String>();
+        loopsSetup.put("creepy_loop.wav", "Creepy");
+        loopsSetup.put("dub_loop.wav", "Dubstep");
+        loopsSetup.put("funk_loop.wav", "Funk");
+        loopsSetup.put("house_loop.wav", "House");
+        loopsSetup.put("minimal_loop.wav", "Minimal Electro");
+        loopsSetup.put("techno_loop.wav", "Techno");
 
-        for (Map.Entry<String, String> file : loops.entrySet()) {
+        for (Map.Entry<String, String> file : loopsSetup.entrySet()) {
             this.loops.add(new SoundFileHolder("SoundboardAssets/loops/" + file.getKey(), file.getValue(), true));
         }
         Collections.sort(this.loops);
@@ -78,10 +78,10 @@ public class Soundboard extends GameClient {
      * Create SoundFileHandlers for each sample
      */
     private void fetchSamples() {
-        HashMap<String, String> samples = new HashMap<String, String>();
-        samples.put("hat.wav", "Hat");
+        HashMap<String, String> samplesSetup = new HashMap<String, String>();
+        samplesSetup.put("hat.wav", "Hat");
 
-        for (Map.Entry<String, String> file : samples.entrySet()) {
+        for (Map.Entry<String, String> file : samplesSetup.entrySet()) {
             SoundFileHolder soundFileHolder = new SoundFileHolder("SoundboardAssets/samples/" + file.getKey(), file.getValue(), false);
             soundFileHolder.setVolume(SoundFileHolder.SAMPLE_VOLUME);
             this.samples.add(soundFileHolder);
@@ -108,22 +108,16 @@ public class Soundboard extends GameClient {
     @Override
     public void create() {
         ArcadeSystem.openConnection();
-        screen = new SoundboardScreen(loops, samples, replayHandler, replayListener, player);
+        screen = new SoundboardScreen(loops, samples, replayHandler, player);
         setScreen(screen);
         super.create();
 
 
         this.getOverlay().setListeners(new Screen() {
             @Override
-            public void hide() {
-                //Unpause your game here
-            }
-
+            public void hide() {}
             @Override
-            public void show() {
-                //Pause your game here
-            }
-
+            public void show() {}
             @Override
             public void pause() {}
             @Override
@@ -138,22 +132,14 @@ public class Soundboard extends GameClient {
 
     }
 
-
-    @Override
-    public void render() {
-        super.render();
-    }
-
     @Override
     public void dispose() {
         super.dispose();
-        if (screen != null) screen.dispose();
+        if (screen != null) {
+            screen.dispose();
+        }
     }
 
-    @Override
-    public UIOverlay getOverlay() {
-        return super.getOverlay();
-    }
 
     /* Game Information */
     private static final Game game;
@@ -176,17 +162,15 @@ public class Soundboard extends GameClient {
         return new ReplayEventListener() {
             @Override
             public void replayEventReceived(String eType, ReplayNode eData) {
-                if ( eType.equals( "playback_complete" ) ) {
+                if (eType.equals("playback_complete")) {
                     screen.setPlayback(false);
                     screen.reset();
                 }
 
-                if ( eType.equals( "sound_pushed" ) ) {
-                    if (screen.isPlayback()) {
-                        screen.playSound(eData.getItemForString("sound_name").toString(),
-                                eData.getItemForString("loop_type").intVal(),
-                                eData.getItemForString("index").intVal());
-                    }
+                if (eType.equals("sound_pushed") && screen.isPlayback()) {
+                    screen.playSound(eData.getItemForString("sound_name").toString(),
+                            eData.getItemForString("loop_type").intVal(),
+                            eData.getItemForString("index").intVal());
                 }
             }
         };

@@ -595,19 +595,19 @@ public class WL6Meta {
                 DoodadInfo.wayPoint(DIRS.LEFT).specialCase(),
 
                 //23: puddle of water
-                DoodadInfo.nonsolidScenery("doodad"),
+                DoodadInfo.nonsolidScenery("puddle"),
 
                 //24: oil drum
-                DoodadInfo.solidScenery("doodad"),
+                DoodadInfo.solidScenery("oildrum"),
 
                 //25: table and chairs
-                DoodadInfo.solidScenery("doodad"),
+                DoodadInfo.solidScenery("tablechairs"),
 
                 //26: lamp
-                DoodadInfo.nonsolidScenery("doodad"),
+                DoodadInfo.nonsolidScenery("lamp"),
 
                 //27: chandelier
-                DoodadInfo.nonsolidScenery("doodad"),
+                DoodadInfo.nonsolidScenery("chandelier"),
 
                 //28: hanging skeleton
                 new DoodadInfo(),

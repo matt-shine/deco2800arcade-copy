@@ -1,4 +1,0 @@
-dependencies {
-	compile project(":deco2800.arcade.server")
-  	compile project(":deco2800.arcade.model")
-}

@@ -34,3 +34,6 @@ bin
 
 # Release
 release
+
+# Gradle settings and build files
+.gradle/

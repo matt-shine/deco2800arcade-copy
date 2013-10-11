@@ -13,12 +13,20 @@ import java.util.*;
 public class Level {
 	private int length;
 	private int height;
-	private ArrayList<Object> objects; // list of all objects available to be rendered
-	private ArrayList<Collectable> bananas;
+	private ArrayList<Platform> platforms; // list of all objects available to be rendered
+	private ArrayList<Boolean> bananas;
 	
 	public Level() {
-		objects = new ArrayList<Object>();
-		bananas = new ArrayList<Collectable>();
+		platforms = new ArrayList<Platform>();
+		bananas = new ArrayList<Boolean>();
+	}
+	
+	public ArrayList<Platform> getPlatforms() {
+		return platforms;
+	}
+	
+	public int platformAmount() {
+		return platforms.size();
 	}
 	
 	/**
@@ -26,7 +34,7 @@ public class Level {
 	 * @return
 	 */
 	public Level nextLevel() {
-		return LevelContainer.nextLevel(this);
+		return null;
 	}
 	
 	/**
@@ -34,12 +42,19 @@ public class Level {
 	 * @param thing
 	 */
 	public void addPlatform(Platform thing) {
-		objects.add(thing);
+		platforms.add(thing);
 	}
 	
-	public void addBanana(Collectable banana) {
-		objects.add(banana);
-		bananas.add(banana);
+	public void addBanana() {
+		bananas.add(false);
+	}
+	
+	public void setBanana(int bananaIndex, boolean state) {
+		bananas.set(bananaIndex, state);
+	}
+	
+	public boolean getBanana(int bananaIndex) {
+		return bananas.get(bananaIndex);
 	}
 	
 	/**

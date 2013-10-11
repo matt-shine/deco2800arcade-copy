@@ -6,11 +6,30 @@ public class Dog extends Enemy {
         super(uid);
 
         state = STATES.PATH;
-        totalHealth = 1;
-        health = totalHealth;
+        maxHealth = 1;
+        health = maxHealth;
         pathSpeed = 1500;
         chaseSpeed = 3000;
         pain = false;
         points = 200;
+    }
+
+    @Override
+    public int calcDamage(int dist, boolean speed, boolean look) {
+        boolean hit = false;
+        if (randInt(0, 255, this.rand) < 180) {
+            hit = true;
+        }
+
+        damage = randInt(0, 255, this.rand);
+
+        if (hit) {
+            damage = damage / 16;
+        }
+        else {
+            damage = 0;
+        }
+
+        return damage;
     }
 }

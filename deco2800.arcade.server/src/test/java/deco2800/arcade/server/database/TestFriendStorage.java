@@ -6,11 +6,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import org.dbunit.DBTestCase;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.dataset.filter.IColumnFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -21,7 +26,7 @@ import deco2800.server.database.DatabaseException;
 import deco2800.server.database.FriendStorage;
 
 
-public class TestFriendStorage {
+public class TestFriendStorage extends DBTestCase {
 	private static IDatabaseTester databaseTester; //manage connections to the database
 	private FriendStorage friendStorage; //storage object to test
 	
@@ -36,13 +41,14 @@ public class TestFriendStorage {
                 "jdbc:derby:Arcade;user=server;password=server;create=true");
 	}
 	
+	@Override
 	/**
 	 * Retrieve the dataset from an XML file
 	 * @return
 	 * @throws DataSetException
 	 * @throws IOException
 	 */
-	private IDataSet getDataSet() throws DataSetException, IOException {
+	protected IDataSet getDataSet() throws DataSetException, IOException {
 		URL url = TestCreditStorage.class.getClassLoader().getResource("TestFriendStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
@@ -62,6 +68,9 @@ public class TestFriendStorage {
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
 		databaseTester.onSetup();
+		IDatabaseConnection connection = databaseTester.getConnection();
+		DatabaseConfig config = connection.getConfig();
+		setUpDatabaseConfig(config);
 	}
 	
 	/**
@@ -90,5 +99,10 @@ public class TestFriendStorage {
 		friendStorage.addFriendRequest(0, 2);
 		assertEquals(testFriendRequests, friendStorage.getFriendInviteList(0));
 	}*/
+	
+	@Override
+	protected void setUpDatabaseConfig(DatabaseConfig config) {
+		//config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new IColumnFilter());
+	}
 	
 }

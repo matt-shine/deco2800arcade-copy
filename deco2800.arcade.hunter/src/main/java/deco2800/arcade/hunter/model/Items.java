@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter.Config;
-import deco2800.arcade.platformergame.model.Entity;
-import deco2800.arcade.platformergame.model.EntityCollection;
-import deco2800.arcade.platformergame.model.EntityCollision;
-import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.platformergame.Entity;
+import deco2800.arcade.hunter.platformergame.EntityCollection;
+import deco2800.arcade.hunter.platformergame.EntityCollision;
+import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
 
 public class Items extends Entity {
 	

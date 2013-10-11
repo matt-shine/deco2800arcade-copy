@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.platformergame.model.Entity;
-import deco2800.arcade.platformergame.model.EntityCollection;
+import deco2800.arcade.hunter.platformergame.Entity;
+import deco2800.arcade.hunter.platformergame.EntityCollection;
 
 import java.util.HashMap;
 import java.util.Iterator;

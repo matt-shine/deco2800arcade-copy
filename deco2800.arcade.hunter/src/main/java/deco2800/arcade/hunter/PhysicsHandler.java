@@ -2,10 +2,9 @@ package deco2800.arcade.hunter;
 
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.ForegroundLayer;
-import deco2800.arcade.hunter.model.Items;
-import deco2800.arcade.platformergame.model.Entity;
-import deco2800.arcade.platformergame.model.EntityCollection;
-import deco2800.arcade.platformergame.model.EntityCollision;
+import deco2800.arcade.hunter.platformergame.Entity;
+import deco2800.arcade.hunter.platformergame.EntityCollection;
+import deco2800.arcade.hunter.platformergame.EntityCollision;
 
 import java.util.ArrayList;
 import java.util.Collections;

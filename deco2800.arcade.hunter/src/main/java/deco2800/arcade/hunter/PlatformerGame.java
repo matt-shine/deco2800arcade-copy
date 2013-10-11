@@ -1,4 +1,4 @@
-package deco2800.arcade.platformergame;
+package deco2800.arcade.hunter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

@@ -1,4 +1,4 @@
-package deco2800.arcade.platformergame.model;
+package deco2800.arcade.hunter.platformergame;
 
 import java.util.HashMap;
 import java.util.Iterator;

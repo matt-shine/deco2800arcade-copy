@@ -1,6 +1,4 @@
-package deco2800.arcade.platformergame.model;
-
-import deco2800.arcade.platformergame.model.Entity;
+package deco2800.arcade.hunter.platformergame;
 
 public class EntityCollision implements Comparable<Object> {
 	public enum CollisionType {

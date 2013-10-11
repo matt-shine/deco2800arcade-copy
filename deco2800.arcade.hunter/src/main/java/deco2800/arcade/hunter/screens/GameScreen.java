@@ -25,8 +25,8 @@ import deco2800.arcade.hunter.model.Items;
 import deco2800.arcade.hunter.model.MapEntity;
 import deco2800.arcade.hunter.model.Player;
 import deco2800.arcade.hunter.model.SpriteLayer;
-import deco2800.arcade.platformergame.model.Entity;
-import deco2800.arcade.platformergame.model.EntityCollection;
+import deco2800.arcade.hunter.platformergame.Entity;
+import deco2800.arcade.hunter.platformergame.EntityCollection;
 
 /**
  * A Hunter game for use in the Arcade

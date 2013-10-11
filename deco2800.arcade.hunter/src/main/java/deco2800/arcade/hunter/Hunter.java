@@ -6,7 +6,6 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.hunter.screens.SplashScreen;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.platformergame.PlatformerGame;
 
 import java.util.Random;
 

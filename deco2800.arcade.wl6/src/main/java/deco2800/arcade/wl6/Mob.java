@@ -18,6 +18,7 @@ public class Mob extends Doodad {
         setPos(getPos(), vel);
     }
 
+
     // Checks to see if the mob is trying to go through an obstructing block
     public void setPos(Vector2 pos, Vector2 vel) {
         int x = (int) (pos.x + vel.x * 2);

@@ -65,7 +65,8 @@ public class WL6Meta {
     }
 
 
-
+    // Checks to see if there a solid block at the location
+    // counts doors, but not secret doors.
     public static boolean hasObscuringBlockAt(int x, int y, Level map) {
         if (WL6Meta.block(map.getTerrainAt(x, y)).texture != null &&
                 map.getDoodadAt(x, y) != WL6Meta.SECRET_DOOR) {
@@ -113,16 +114,16 @@ public class WL6Meta {
                 new BlockInfo(true, "greybrick"),
 
                 //3: grey brick wall with nazi flag
-                new BlockInfo(true, "greybrickflag"),
+                new BlockInfo(true, "greybrick"),
 
                 //4: grey brick wall with hitler portrait
-                new BlockInfo(true, "greybrickportrait"),
+                new BlockInfo(true, "greybrick"),
 
                 //5: prison cell (blue brick)
                 new BlockInfo(true, "bluebrickprison"),
 
                 //6: grey brick with nazi eagle
-                new BlockInfo(true, "greybrickeagle"),
+                new BlockInfo(true, "greybrick"),
 
                 //7: prison cell with skeleton (blue brick)
                 new BlockInfo(true, "bluebrickprisonskeleton"),

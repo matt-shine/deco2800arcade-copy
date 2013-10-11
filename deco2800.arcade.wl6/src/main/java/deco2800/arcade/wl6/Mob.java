@@ -20,6 +20,7 @@ public class Mob extends Doodad {
 
 
     // Checks to see if the mob is trying to go through an obstructing block
+    // FIXME need a better/correct way to do this
     public void setPos(Vector2 pos, Vector2 vel) {
         int x = (int) (pos.x + vel.x * 2);
         int y = (int) (pos.y + vel.y * 2);

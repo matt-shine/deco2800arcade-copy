@@ -26,7 +26,8 @@ import deco2800.arcade.deerforest.models.gameControl.DeckSystem;
  */
 @ArcadeGame(id="deerforest")
 public class DeerForest extends GameClient {
-	
+
+    //Variables for the games, screens and input processors to swap between
 	MainGameScreen view;
 	MainGame mainGame;
 	MainMenuScreen menuView;
@@ -36,11 +37,15 @@ public class DeerForest extends GameClient {
 	static DeckBuilder deckBuilder;
 	static DeckBuilderScreen deckBuilderView;
 	static DeckBuilderInputProcessor deckInputProcessor;
-	
+
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
 	}
-	
+
+    /**
+     * Creates the initial data for deerforest, sets up the mainMenu, game and
+     * deckBuilder screens, games and input processors
+     */
 	@Override
 	public void create() {
 		
@@ -68,6 +73,9 @@ public class DeerForest extends GameClient {
 		
     }
 
+    /**
+     * Dispose of all assets
+     */
 	@Override
 	public void dispose() {
 		super.dispose();
@@ -113,8 +121,12 @@ public class DeerForest extends GameClient {
 	public Game getGame() {
 		return game;
 	}
-	
-	// Changes the scene. Eg menu -> game
+
+    /**
+     * Changes the screen, for example menu ->game
+     *
+     * @param scene the scene to change to
+     */
 	public void changeScreen(String scene) {
 		if (scene.equals("game")) {
 
@@ -135,7 +147,15 @@ public class DeerForest extends GameClient {
 	        ArcadeInputMux.getInstance().addProcessor(menuInputProcessor);
 		}
 	}
-	
+
+    /**
+     * Creates a player for use in the game, note that really this should be
+     * filled by user profiles, however for initial testing purposes and
+     * while the user profile system / database system is in its infancy we use
+     * this
+     *
+     * @return a deerforst player
+     */
 	private DeerForestPlayer createDeerForestPlayer() {
 		ArrayList<AbstractCard> cardList = new ArrayList<AbstractCard>();
 		//add monsters

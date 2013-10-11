@@ -72,13 +72,11 @@ public class SpellLogic {
      * Activates a spell card, by updating the effectQueue accordingly,
      * then performing an effect
      *
-     * @param player
-     * @param spell
+     * @param player the player that activated the spell
+     * @param spell the spell that was activated
      */
     public void activateSpell(int player, AbstractSpell spell, ExtendedSprite sprite) {
-
         System.out.println("ACTIVATED SPELL");
-
         SpellEffect effects = spell.getSpellEffect();
         this.currentSpell = spell;
         this.currentSprite = sprite;
@@ -120,9 +118,7 @@ public class SpellLogic {
                     break;
             }
         }
-
         doEffect();
-
         //Move general spell to graveyard if empty
         if(effectQueue.isEmpty() && spell instanceof GeneralSpell) {
             view.getArena().removeSprite(sprite);
@@ -139,8 +135,8 @@ public class SpellLogic {
      * input, after click is handled it tries to continue going through the
      * effectQueue, stopping only when another selection is required
      *
-     * @param x
-     * @param y
+     * @param x the x location of the click
+     * @param y the y location of the click
      */
     public void handleClick(int x, int y) {
         //If there is nothing at click do nothing
@@ -151,161 +147,29 @@ public class SpellLogic {
                 return;
             }
         }
-
         String area = view.getArena().getAreaAtPoint(x, y);
         AbstractCard card = s.getCard();
-
         List<String> keysToRemove = new ArrayList<String>();
-
         Set<String> keys = effectQueue.keySet();
         for(String effectType : keys) {
             //Check what effect we are trying to activate
             if(effectType.contains("Destroy")) {
-                if(!keys.iterator().next().equals(effectType)) {
-                    if(!doDestroy(effectQueue.get(effectType))) {
-                        break;
-                    } else {
-                        keysToRemove.add(effectType);
-                        continue;
-                    }
-                }
-                //Check card is in right zone
-                CardCollection possibleDestroy;
-                //Check what the actual number of possible cards to destroy are
-                if(this.destroyPlayer != 3) {
-                    possibleDestroy = game.getCardCollection(this.destroyPlayer, this.destroyLoc);
+                if(destroyClick(card, effectType, area, s, keysToRemove, keys)) {
+                    continue;
                 } else {
-                    possibleDestroy = game.getCardCollection(1, this.destroyLoc);
-                    possibleDestroy.addAll(game.getCardCollection(2, this.destroyLoc));
-                }
-                //Check if selected card is in right area
-                if(!possibleDestroy.contains(card)) {
-                    System.out.println("Wrong area");
                     break;
-                }
-                //See if the selected card is valid to be destroyed
-                boolean valid = false;
-                if(this.destroyType.isEmpty()) {
-                    valid = true;
-                }
-                //if can destroy any monster:
-                if(this.destroyType.contains("Monster")) {
-                    if(card instanceof AbstractMonster) {
-                        valid = true;
-                    }
-                }
-                //See if card is of same destroy type
-                if(this.destroyCard != null && card.getClass() == this.destroyCard.getClass()) {
-                    valid = true;
-                }
-                //The card was valid
-                if(valid) {
-                    effectQueue.get(effectType).set(0, effectQueue.get(effectType).get(0) - 1);
-                    List<AbstractCard> cards = new ArrayList<AbstractCard>();
-                    cards.add(s.getCard());
-                    game.moveCards(game.getCurrentPlayer(), cards, area, "Graveyard");
-                    view.removeSprite(s);
-                    view.getArena().removeSprite(s);
-                } else {
-                    System.out.println("Not valid");
-                    System.out.println("Selection was: " + s);
-                    System.out.println("Selection was: " + s.getCard());
-                }
-                //If effect requires no interaction then keep going
-                if(!doDestroy(effectQueue.get(effectType))) {
-                    break;
-                } else {
-                    keysToRemove.add(effectType);
                 }
             } else if(effectType.contains("Draw")) {
-                if(!area.contains(game.getCurrentPlayer()+"Hand")) break; //Break if card isn't in hand
-                //Do discard if on the first loop then continue the effect
-                if(keys.iterator().next().equals(effectType)) {
-                    if(effectQueue.get(effectType).get(1) > 0) {
-                        effectQueue.get(effectType).set(1, effectQueue.get(effectType).get(1) - 1);
-                    } else {
-                        effectQueue.get(effectType).set(2, effectQueue.get(effectType).get(2) - 1);
-                    }
-                }
-                List<AbstractCard> cards = new ArrayList<AbstractCard>();
-                cards.add(s.getCard());
-                game.moveCards(game.getCurrentPlayer(), cards, area, "Graveyard");
-                view.removeSprite(s);
-                view.getArena().removeSprite(s);
-                if(!doDraw(effectQueue.get(effectType))) {
-                    break;
+                if(drawClick(effectType, area, s, keysToRemove, keys)) {
+                    continue;
                 } else {
-                    keysToRemove.add(effectType);
+                    break;
                 }
             } else if(effectType.contains("Monster")) {
-                //If not first in loop then try normal monster
-                if(!keys.iterator().next().equals(effectType)) {
-                    if(!doMonster(effectQueue.get(effectType))) {
-                        break;
-                    } else {
-                        keysToRemove.add(effectType);
-                        continue;
-                    }
-                }
-                //Check card is in right zone
-                CardCollection possibleBuff;
-                //Check what the actual number of possible cards to buff are
-                if(this.monsterPlayer != 3) {
-                    possibleBuff = game.getCardCollection(this.monsterPlayer, "Field");
+                if(monsterClick(card, effectType, area, s, keysToRemove, keys)) {
+                    continue;
                 } else {
-                    possibleBuff = game.getCardCollection(1, "Field");
-                    possibleBuff.addAll(game.getCardCollection(2, "Field"));
-                }
-                //Check if selected card is in right area
-                if(!possibleBuff.contains(card)) {
-                    System.out.println("Wrong area");
                     break;
-                }
-                //See if the selected card is valid to be destroyed
-                boolean valid = false;
-                if(this.monsterType.isEmpty()) {
-                    valid = true;
-                }
-                //if can destroy any monster:
-                if(this.monsterType.contains("Monster")) {
-                    if(card instanceof AbstractMonster) {
-                        valid = true;
-                    }
-                }
-                //See if card is of same destroy type
-                if(this.monsterCard != null && card.getClass() == this.monsterCard.getClass()) {
-                    valid = true;
-                }
-                //The card was valid, apply buff
-                if(valid) {
-                    AbstractMonster monster = (AbstractMonster) card;
-                    if(effectQueue.get(effectType).get(2) == 0) {
-                        monster.buffAttack(effectQueue.get(effectType).get(3));
-                    } else if(effectQueue.get(effectType).get(2) == 0) {
-                        monster.buffHealth(effectQueue.get(effectType).get(3));
-                    } else {
-                        monster.buff(effectQueue.get(effectType).get(3));
-                    }
-                    //Decrease the amount of monsters left
-                    effectQueue.get(effectType).set(0, effectQueue.get(effectType).get(0) - 1);
-                    //Remove monster if health is 0
-                    if(monster.getCurrentHealth() <= 0) {
-                        List<AbstractCard> cards = new ArrayList<AbstractCard>();
-                        cards.add(s.getCard());
-                        game.moveCards(game.getCurrentPlayer(), cards, area, "Graveyard");
-                        view.removeSprite(s);
-                        view.getArena().removeSprite(s);
-                    }
-                } else {
-                    System.out.println("Not valid");
-                    System.out.println("Selection was: " + s);
-                    System.out.println("Selection was: " + s.getCard());
-                }
-                //If effect requires no interaction then keep going
-                if(!doMonster(effectQueue.get(effectType))) {
-                    break;
-                } else {
-                    keysToRemove.add(effectType);
                 }
             } else if(effectType.contains("Search")) {
                 //If effect requires no interaction then keep going
@@ -321,11 +185,9 @@ public class SpellLogic {
                 }
             }
         }
-
         for(String key : keysToRemove) {
             effectQueue.remove(key);
         }
-
         //If complete move general spell to graveyard and don't require selection
         if(effectQueue.isEmpty()) {
             this.needsSelection = false;
@@ -339,6 +201,206 @@ public class SpellLogic {
         }
     }
 
+    /**
+     * Handles the event that a click occurred while the class was waiting on
+     * a destroy effect to be activated
+     *
+     * @param card the card that was selected by the click
+     * @param effectType the type of effect being activated
+     * @param area the area of the selected card
+     * @param s the sprite that was selected
+     * @param keysToRemove a list of keys to remove from the effect queue
+     * @param keys the set of all current effects
+     * @return
+     */
+    public boolean destroyClick(AbstractCard card, String effectType, String area,
+            ExtendedSprite s, List<String> keysToRemove, Set<String> keys) {
+
+        if(!keys.iterator().next().equals(effectType)) {
+            if(!doDestroy(effectQueue.get(effectType))) {
+                return false;
+            } else {
+                keysToRemove.add(effectType);
+                return true;
+            }
+        }
+        //Check card is in right zone
+        CardCollection possibleDestroy;
+        //Check what the actual number of possible cards to destroy are
+        if(this.destroyPlayer != 3) {
+            possibleDestroy = game.getCardCollection(this.destroyPlayer, this.destroyLoc);
+        } else {
+            possibleDestroy = game.getCardCollection(1, this.destroyLoc);
+            possibleDestroy.addAll(game.getCardCollection(2, this.destroyLoc));
+        }
+        //Check if selected card is in right area
+        if(!possibleDestroy.contains(card)) {
+            System.out.println("Wrong area");
+            return false;
+        }
+        //See if the selected card is valid to be destroyed
+        boolean valid = false;
+        if(this.destroyType.isEmpty()) {
+            valid = true;
+        }
+        //if can destroy any monster:
+        if(this.destroyType.contains("Monster")) {
+            if(card instanceof AbstractMonster) {
+                valid = true;
+            }
+        }
+        //See if card is of same destroy type
+        if(this.destroyCard != null && card.getClass() == this.destroyCard.getClass()) {
+            valid = true;
+        }
+        //The card was valid
+        if(valid) {
+            effectQueue.get(effectType).set(0, effectQueue.get(effectType).get(0) - 1);
+            List<AbstractCard> cards = new ArrayList<AbstractCard>();
+            cards.add(s.getCard());
+            game.moveCards(game.getCurrentPlayer(), cards, area, "Graveyard");
+            view.removeSprite(s);
+            view.getArena().removeSprite(s);
+        } else {
+            System.out.println("Not valid");
+            System.out.println("Selection was: " + s);
+            System.out.println("Selection was: " + s.getCard());
+        }
+        //If effect requires no interaction then keep going
+        if(!doDestroy(effectQueue.get(effectType))) {
+            return false;
+        } else {
+            keysToRemove.add(effectType);
+        }
+
+        return true;
+    }
+
+    /**
+     * Handles the event that a click occurred while the class was waiting on
+     * a monster effect to be activated
+     *
+     * @param card the card that was selected by the click
+     * @param effectType the type of effect being activated
+     * @param area the area of the selected card
+     * @param s the sprite that was selected
+     * @param keysToRemove a list of keys to remove from the effect queue
+     * @param keys the set of all current effects
+     * @return
+     */
+    public boolean monsterClick(AbstractCard card, String effectType, String area,
+            ExtendedSprite s, List<String> keysToRemove, Set<String> keys) {
+        //If not first in loop then try normal monster
+        if(!keys.iterator().next().equals(effectType)) {
+            if(!doMonster(effectQueue.get(effectType))) {
+                return false;
+            } else {
+                keysToRemove.add(effectType);
+                return true;
+            }
+        }
+        //Check card is in right zone
+        CardCollection possibleBuff;
+        //Check what the actual number of possible cards to buff are
+        if(this.monsterPlayer != 3) {
+            possibleBuff = game.getCardCollection(this.monsterPlayer, "Field");
+        } else {
+            possibleBuff = game.getCardCollection(1, "Field");
+            possibleBuff.addAll(game.getCardCollection(2, "Field"));
+        }
+        //Check if selected card is in right area
+        if(!possibleBuff.contains(card)) {
+            System.out.println("Wrong area");
+            return false;
+        }
+        //See if the selected card is valid to be destroyed
+        boolean valid = false;
+        if(this.monsterType.isEmpty()) {
+            valid = true;
+        }
+        //if can destroy any monster:
+        if(this.monsterType.contains("Monster")) {
+            if(card instanceof AbstractMonster) {
+                valid = true;
+            }
+        }
+        //See if card is of same destroy type
+        if(this.monsterCard != null && card.getClass() == this.monsterCard.getClass()) {
+            valid = true;
+        }
+        //The card was valid, apply buff
+        if(valid) {
+            AbstractMonster monster = (AbstractMonster) card;
+            if(effectQueue.get(effectType).get(2) == 0) {
+                monster.buffAttack(effectQueue.get(effectType).get(3));
+            } else if(effectQueue.get(effectType).get(2) == 0) {
+                monster.buffHealth(effectQueue.get(effectType).get(3));
+            } else {
+                monster.buff(effectQueue.get(effectType).get(3));
+            }
+            //Decrease the amount of monsters left
+            effectQueue.get(effectType).set(0, effectQueue.get(effectType).get(0) - 1);
+            //Remove monster if health is 0
+            if(monster.getCurrentHealth() <= 0) {
+                List<AbstractCard> cards = new ArrayList<AbstractCard>();
+                cards.add(s.getCard());
+                game.moveCards(game.getCurrentPlayer(), cards, area, "Graveyard");
+                view.removeSprite(s);
+                view.getArena().removeSprite(s);
+            }
+        } else {
+            System.out.println("Not valid");
+            System.out.println("Selection was: " + s);
+            System.out.println("Selection was: " + s.getCard());
+        }
+        //If effect requires no interaction then keep going
+        if(!doMonster(effectQueue.get(effectType))) {
+            return false;
+        } else {
+            keysToRemove.add(effectType);
+        }
+        return true;
+    }
+
+    /**
+     * Handles the event that a click occurred while the class was waiting on
+     * a draw effect to be activated
+     *
+     * @param effectType the type of effect being activated
+     * @param area the area of the selected card
+     * @param s the sprite that was selected
+     * @param keysToRemove a list of keys to remove from the effect queue
+     * @param keys the set of all current effects
+     * @return
+     */
+    public boolean drawClick(String effectType, String area,
+            ExtendedSprite s, List<String> keysToRemove, Set<String> keys) {
+
+        if(!area.contains(game.getCurrentPlayer()+"Hand")) return false; //Break if card isn't in hand
+        //Do discard if on the first loop then continue the effect
+        if(keys.iterator().next().equals(effectType)) {
+            if(effectQueue.get(effectType).get(1) > 0) {
+                effectQueue.get(effectType).set(1, effectQueue.get(effectType).get(1) - 1);
+            } else {
+                effectQueue.get(effectType).set(2, effectQueue.get(effectType).get(2) - 1);
+            }
+        }
+        List<AbstractCard> cards = new ArrayList<AbstractCard>();
+        cards.add(s.getCard());
+        game.moveCards(game.getCurrentPlayer(), cards, area, "Graveyard");
+        view.removeSprite(s);
+        view.getArena().removeSprite(s);
+        if(!doDraw(effectQueue.get(effectType))) {
+           return false;
+        } else {
+            keysToRemove.add(effectType);
+        }
+        return true;
+    }
+
+    /**
+     * @return true if we are currently waiting for a users interaction
+     */
     public boolean needsSelection() {
         return this.needsSelection;
     }
@@ -347,8 +409,8 @@ public class SpellLogic {
      * On each change of phase (though only works for ends currently) activate
      * all the continuous effects that exist on the field currently
      *
-     * @param player
-     * @param phase
+     * @param player  the player whose turn it is
+     * @param phase the phase the game is currently in
      */
     public void activateContinuousEffects(int player, String phase) {
 
@@ -424,8 +486,15 @@ public class SpellLogic {
 
     }
 
+    /**
+     * Performs a destroy effect based on the given parameters, this is not
+     * expected to ever succeed until user has interaction, however it sets up
+     * all the required information such that the user can select the target
+     *
+     * @param effectParameters the parameters for the effect
+     * @return true if effect is completely handled, false if it needs some interaction
+     */
     private boolean doDestroy(List<Integer> effectParameters) {
-        System.out.println("DID DESTROY");
 
         //Set up parameters for what is allowed to be destroyed
         switch(effectParameters.get(1)) { //Set up location
@@ -511,7 +580,6 @@ public class SpellLogic {
             effectParameters.set(0, canDestroy);
         }
 
-        System.out.println("Before setting stuff");
         if(this.destroyType == null || this.destroyType.isEmpty()) {
             view.setEffectMessage("Currently performing a destroy effect" + System.getProperty("line.separator") +
                     "You must destroy " + effectParameters.get(0) + " cards" + System.getProperty("line.separator") +
@@ -536,13 +604,13 @@ public class SpellLogic {
     }
 
     /**
-     * Performs the 'draw' effect, waiting for selection if required
+     * Performs a draw effect based on the given parameters, if user interaction
+     * is required, set up parameters accordingly
      *
-     * @param effectParameters
-     * @return
+     * @param effectParameters the parameters for the effect
+     * @return true if effect is completely handled, false if it needs some interaction
      */
     private boolean doDraw(List<Integer> effectParameters) {
-        System.out.println("DID DRAW");
 
         System.out.println("Before setting stuff");
         view.setEffectMessage("Currently performing a draw effect" + System.getProperty("line.separator") +
@@ -600,8 +668,15 @@ public class SpellLogic {
         return true;
     }
 
+    /**
+     * Performs a monster effect based on the given parameters, this is not
+     * expected to ever succeed until user has interaction, however it sets up
+     * all the required information such that the user can select the target
+     *
+     * @param effectParameters the parameters for the effect
+     * @return true if effect is completely handled, false if it needs some interaction
+     */
     private boolean doMonster(List<Integer> effectParameters) {
-        System.out.println("DID MONSTER");
 
         switch (effectParameters.get(1)) { //Set up player
             case 0:
@@ -699,13 +774,24 @@ public class SpellLogic {
         }
     }
 
+    /**
+     * Not currently implemented (probably won't be before the due date)
+     *
+     * @param effectParameters
+     * @return
+     */
     private boolean doSearch(List<Integer> effectParameters) {
-        System.out.println("DID SEARCH");
         return false;
     }
 
+    /**
+     * Performs a player effect, doing damage / gaining life per the effect
+     * parameters
+     *
+     * @param effectParameters the parameters for the effect
+     * @return true if effect is completely handled, false if it needs some interaction
+     */
     private boolean doPlayer(List<Integer> effectParameters) {
-        System.out.println("DID PLAYER");
 
         switch (effectParameters.get(0)) { //Set up player
             case 0:
@@ -721,8 +807,6 @@ public class SpellLogic {
                 game.inflictDamage(2, effectParameters.get(2));
                 break;
         }
-
-
         return false;
     }
 }

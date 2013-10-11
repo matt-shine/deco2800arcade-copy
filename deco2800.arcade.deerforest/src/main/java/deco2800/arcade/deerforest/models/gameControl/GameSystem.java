@@ -19,12 +19,21 @@ public class GameSystem {
 	private boolean summoned;
     private boolean firstTurn;
 
-	//Initialize the game, should get player data from controller (note players own their deck)
+    /**
+     * Initialize the game, should get player data from controller (note players own their deck)
+     * @param player1 the first player in the game
+     * @param player2 the second player in the game
+     */
 	public GameSystem(DeerForestPlayer player1, DeerForestPlayer player2) {
 		p1 = player1;
 		p2 = player2;
 	}
 
+    /**
+     * Starts the game, setting variables are required
+     * @param player1ToStart true if player 1 shall start
+     * @return true if game started, false if the game had already begun
+     */
 	public boolean startgame(boolean player1ToStart) {
 		//check that the game hasn't alreday started
 		if(currentPhase == null && currentPlayer == null) {
@@ -38,31 +47,12 @@ public class GameSystem {
 		//game already started
 		return false;
 	}
-	
-	//returns the current phase
-	public String getPhase() {
-		return currentPhase;
-	}
 
-	//returns the player whose turn it is
-	public DeerForestPlayer currentPlayer() {
-		return currentPlayer;
-	}
-
-	//returns the first player
-	public DeerForestPlayer player1() {
-		return p1;
-	}
-	
-	//do AI turn
-	public boolean AITurn() {
-		return false;
-	}
-	
-	//Turn sections, sets turn to correct phase, controller class relays information about
-	//what to do to this class, then if phase is ok does it
-
-	//go to the next phase
+    /**
+     * 	Turn sections, sets turn to correct phase, controller class relays information about
+     * 	what to do to this class, then if phase is ok does it
+     * 	goes to the next phase
+     */
 	public boolean nextPhase() {
 		
 		if(currentPhase.equals("EndPhase")) {
@@ -81,8 +71,11 @@ public class GameSystem {
 		
 		return false;
 	}
-	
-	//Start the turn, returns true if succeed
+
+    /**
+     * Start the turn
+     * @return true if succeeded
+     */
 	public boolean startPhase() {
 		
 		if(currentPhase.equals("EndPhase")) {
@@ -94,7 +87,10 @@ public class GameSystem {
 		return false;
 	}
 
-	//sets to draw phase, returns true if succeed
+    /**
+     * sets to draw phase
+     * @return true if successful
+     */
 	public boolean drawPhase() {
 		
 		if(currentPhase.equals("StartPhase")) {
@@ -105,7 +101,10 @@ public class GameSystem {
 		return false;
 	}
 
-	//sets to main phase, returns true if succeed
+    /**
+     * sets to main phase
+     * @return true if successful
+     */
 	public boolean mainPhase() {
 		
 		if(currentPhase.equals("DrawPhase")) {
@@ -116,7 +115,10 @@ public class GameSystem {
 		return false;
 	}
 
-	//sets to battle phase, returns true if succeed
+    /**
+     * sets to battle phase
+     * @return true if successful
+     */
 	public boolean battlePhase() {
 		
 		if(currentPhase.equals("MainPhase")) {
@@ -126,13 +128,11 @@ public class GameSystem {
 		
 		return false;
 	}
-	
-	//conducts a battle between two monsters
-	public void doBattle(AbstractMonster mon1, AbstractMonster mon2) {
-		
-	}
 
-	//sets to end phase, returns true if succeed, changes current player
+    /**
+     * sets to end phase, changes the current player
+     * @return true if successful
+     */
 	public boolean endPhase() {
 		
 		if(currentPhase.equals("BattlePhase") || (currentPhase.equals("MainPhase") && firstTurn)) {
@@ -144,139 +144,11 @@ public class GameSystem {
 		return false;
 	}
 
-	//Checks if either player has won, returns victor if exists
-	public DeerForestPlayer checkVictory() {
-		return null;
-	}
-	
-	//Possible Actions Section, what a controller can call based on user input
-
-	/**
-	 * Tries to summon a monster card to the given players side of the field
-	 * Returns an int representing if the summon was successful or whether
-	 * additional actions need to be taken (such as if monster has effect, 
-	 * field full, etc)
-	 * 
-	 * Return parameter is as follows:
-	 * 0: monster summoned successfully
-	 * 1: monster summoned successfully, has effect that needs to be activated
-	 * 2: field is full, cannot summon
-	 * 3: error
-	 * 
-	 * @param monster Card to be placed on the field
-	 * @param p Player to summon monster to 
-	 * @return error code
-	 */
-	public int summon(AbstractMonster monster, DeerForestPlayer p) {
-		return 0;
-	}
-	
-	/**
-	 * Activate a field spell, plays it on the specified players side of the
-	 * field. Returns an int representing if further actions need to be taken
-	 * or if an error occurred
-	 * 
-	 * Return parameter is as follows:
-	 * 0: Card activated successfully
-	 * 1: Card requires some selection
-	 * 2: field is full, cannot activate
-	 * 3: error
-	 * 
-	 * @param fSpell spell card to activate
-	 * @param p player that activated the card
-	 * @return error code
-	 */
-	public int activate(FieldSpell fSpell, DeerForestPlayer p) {
-		return 0;
-	}
-
-	/**
-	 * Activate a general spell from players side of field
-	 * 
-	 * Return parameter is as follows
-	 * 0: card activated successfully
-	 * 1: card requires some selection
-	 * 2: card currently has no effect (eg destroy when no cards on the field)
-	 * 3: error
-	 * 
-	 * @param gSpell spell card to activate
-	 * @param p Player who activated card
-	 * @return error code
-	 */
-	public int activate(GeneralSpell gSpell, DeerForestPlayer p) {
-		return 0;
-	}
-
-	/**
-	 * activate a monster effect
-	 * 
-	 * Return parameter is as follows:
-	 * 0: card activated successfully
-	 * 1: card requires some selection
-	 * 2: card currently has no effect
-	 * 3: error
-	 * 
-	 * @param effect monster effect to activate
-	 * @param p Player who owns monster
-	 * @return error code
-	 */
-	public int activateMonsterEffect(MonsterEffect effect, DeerForestPlayer p) {
-		return 0;
-	}
-	
-	/**
-	 * activate an attack effect
-	 * 
-	 * * Return parameter is as follows:
-	 * 0: card activated successfully
-	 * 1: card requires some selection
-	 * 2: card currently has no effect
-	 * 3: error
-	 * 
-	 * @param attack attack with effect to activate
-	 * @return error code
-	 */
-	public int activateAttackEffect(Attack attack) {
-		return 0;
-	}
-		
-	//Activate a search card
-	public int searchWithCardEffect(AbstractCard card) {
-		return 0;
-	}
-	
-	//Select card from search, with where it should go
-	public boolean selectSearchSelection (CardCollection cardLocation, List<AbstractCard> cards) {
-		return false;
-	}
-	
-	//Select card to destroy
-	public boolean destroyCard (DeerForestPlayer p, CardCollection cardLocation, AbstractCard card) {
-		return false;
-	}
-
-	//Updates all cards to reflect the continuous effects
-	//Updates player modifier list to reflect current effects
-	public void updateContinousEffects() {
-		
-	}
-	
-	
-	//get the selection choices
-	public List<AbstractCard> getSelectionOptions() {
-		return this.selectionChoices;
-	}
-	
-	//clear selection options
-	public void clearSelections() {
-		this.selectionChoices = new ArrayList<AbstractCard>();
-	}
-	
-	//Sort graveyard
-	public void sortGrave(DeerForestPlayer p) {
-		p.getGraveyard().sort();
-	}
-
+    /**
+     * Inflicts damage of the specified amount to the chosen player
+     * @param player the player to damage
+     * @param amount the amount to damage by
+     */
     public void inflictDamage(int player, int amount) {
 
         if(player == 1) {
@@ -286,19 +158,32 @@ public class GameSystem {
         }
     }
 
-	public boolean getSummoned() {
-		return summoned;
-	}
-	
-	public void setSummoned(boolean b) {
-		summoned = b;
-	}
-	
-	public int playerLP(int player) {
-		return player==1?p1.getLifePoints():p2.getLifePoints();
-	}
-	
-	public CardCollection getCardCollection(int player, String area) {
+    /**
+     * Draws a card from a given player
+     * @param player the player to draw from
+     * @return
+     */
+    public AbstractCard draw(int player) {
+        return player==1?p1.draw():p2.draw();
+    }
+
+    /**
+     * Moves cards between locations, owned by player
+     * @param player the owner of the cards
+     * @param cards the cards to move
+     * @param oldLocation where the cards are currently
+     * @param newLocation where the card will move to
+     * @return true if move was successful
+     */
+    public boolean moveCards(int player, List<AbstractCard> cards, CardCollection oldLocation, CardCollection newLocation) {
+        return player==1?p1.moveCards(cards, oldLocation, newLocation):p2.moveCards(cards, oldLocation, newLocation);
+    }
+
+    /**
+     * Getters
+     */
+
+    public CardCollection getCardCollection(int player, String area) {
 		
 		if(area.contains("Hand")) {
 			return player==1?p1.getHand():p2.getHand();
@@ -312,14 +197,33 @@ public class GameSystem {
 		
 		return null;
 	}
-	
-	public AbstractCard draw(int player) {
-		return player==1?p1.draw():p2.draw();
-	}
 
-	public boolean moveCards(int player, List<AbstractCard> cards, CardCollection oldLocation, CardCollection newLocation) {
-		return player==1?p1.moveCards(cards, oldLocation, newLocation):p2.moveCards(cards, oldLocation, newLocation);
-	}
+    public boolean getSummoned() {
+        return summoned;
+    }
+
+    //returns the current phase
+    public String getPhase() {
+        return currentPhase;
+    }
+
+    //returns the player whose turn it is
+    public DeerForestPlayer currentPlayer() {
+        return currentPlayer;
+    }
+
+    //returns the first player
+    public DeerForestPlayer player1() {
+        return p1;
+    }
+
+    public int playerLP(int player) {
+        return player==1?p1.getLifePoints():p2.getLifePoints();
+    }
+
+    /**
+     * Setters
+     */
 
     public void setCurrentPlayer(int player) {
         this.currentPlayer = player==1?p1:p2;
@@ -328,4 +232,9 @@ public class GameSystem {
     public void setFirstTurn(boolean b) {
         this.firstTurn = b;
     }
+
+    public void setSummoned(boolean b) {
+        summoned = b;
+    }
+
 }

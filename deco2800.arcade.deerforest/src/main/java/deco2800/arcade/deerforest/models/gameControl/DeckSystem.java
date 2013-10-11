@@ -27,6 +27,11 @@ public class DeckSystem {
 		this.cards = cards;
 	}
 
+    /**
+     * Returns the card collection of the specified area
+     * @param area the key for the area to return
+     * @return a CardCollection of the area
+     */
 	public CardCollection getCardCollection(String area) {
 		
 		if(area.contains("Card")) {

@@ -23,7 +23,7 @@ public class Grid implements TileBasedMap {
 	private int width, depth;
 	// The grid's max depth.
 	// The size of each grid square
-	private int gridSize;
+	private int tileSize;
 	// The dimensions of the grid in grid squares
 	private int gridWidth, gridDepth;
 	// The contents of the grid. 0 means clear, 1 means tower, 2 means wall, 3
@@ -40,15 +40,15 @@ public class Grid implements TileBasedMap {
 	 * @param depth
 	 * @param name
 	 */
-	public Grid(int width, int depth, String name, int gridSize, Ship ship) {
+	public Grid(int width, int depth, String name, int tileSize, Ship ship) {
 		id = UUID.randomUUID();
 		this.width = width;
 		this.depth = depth;
 		this.name = name;
-		this.gridSize = gridSize;
+		this.tileSize = tileSize;
 		this.ship = ship;
-		gridWidth = width / gridSize;
-		gridDepth = depth / gridSize;
+		gridWidth = width / tileSize;
+		gridDepth = depth / tileSize;
 		gridContents = new ArrayList<ArrayList<LinkedList<GridObject>>>();
 	}
 
@@ -132,10 +132,10 @@ public class Grid implements TileBasedMap {
 	}
 
 	public boolean blocked(Mobile mover, int x, int y) {
-		Iterator<GridObject> thisGridObjects = getGridContents(x,y).iterator();
-		while (thisGridObjects.hasNext()){
+		Iterator<GridObject> thisGridObjects = getGridContents(x, y).iterator();
+		while (thisGridObjects.hasNext()) {
 			GridObject current = thisGridObjects.next();
-			if (current.getClass() != Enemy.class){
+			if (current.getClass() != Enemy.class) {
 				return false;
 			}
 		}
@@ -160,33 +160,33 @@ public class Grid implements TileBasedMap {
 	 * @param y
 	 *            the y-coordinate of the object
 	 */
-	public boolean buildObject(int x, int y) {
-		/*if (gridContents[x][y] == 0){
-			//Do some check for aliens in the way
-			Iterator<Enemy> alienItr = ship.getEnemies().iterator();
-			while (alienItr.hasNext()){
-				Enemy current = alienItr.next();
-				if (current.position().x/gridSize == x || current.position().y/gridSize == y){
-					return false;
-				}
-			}
-			return true;
-		} else if(gridContents[x][y] == 2){
-			return true;
-		}else {
-			return false;
-		}*/
-		
-		Iterator<GridObject> thisGridObjects = getGridContents(x,y).iterator();
-		//Check for block wall
-		//Check for towers
-		//Check for aliens
-		
+	public boolean buildObject(int x, int y, GridObject object) {
+		Iterator<GridObject> thisGridObjects = getGridContents(x, y).iterator();
+		while (thisGridObjects.hasNext()) {
+			GridObject current = thisGridObjects.next();
+			// Check for block wall
+			// Check for towers
+			// Check for aliens
+		}
+
+		// Start the object AI and add it to the grid
+		object.start();
+		getGridContents(x, y).add(object);
+
 		return true;
 	}
-	
-	private LinkedList<GridObject> getGridContents(int x, int y){
+
+	private LinkedList<GridObject> getGridContents(int x, int y) {
 		return gridContents.get(x).get(y);
+	}
+
+	/**
+	 * Get the size of a single tile
+	 * 
+	 * @return an int representing the size of a single tile
+	 */
+	public int getTileSize() {
+		return tileSize;
 	}
 
 }

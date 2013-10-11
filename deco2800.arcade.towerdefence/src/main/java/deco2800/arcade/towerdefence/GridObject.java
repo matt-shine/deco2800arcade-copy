@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author hadronn
  * 
  */
-public abstract class GridObject {
+public class GridObject {
 	// Fields
 	// The grid this object is on.
 	private Grid grid;
@@ -278,9 +278,30 @@ public abstract class GridObject {
 	}
 
 	/**
-	 * write this method to record each discrete unit of object creation,
-	 * action and destruction for replay.
+	 * write this method to record each discrete unit of object creation, action
+	 * and destruction for replay.
 	 */
 	public void pushToReplay(String name, GameAction action, int value) {
+	}
+
+	/**
+	 * Get the position of the object as a tile on the grid.
+	 * 
+	 * @return a Vector2 representing the coordinates of the object's tile on
+	 *         the grid.
+	 */
+	public Vector2 positionInTiles() {
+		Vector2 tilesPosition = new Vector2(position);
+		tilesPosition.x /= grid.getTileSize();
+		tilesPosition.y /= grid.getTileSize();
+		return tilesPosition;
+	}
+
+	/**
+	 * Begin running the AI for the object, if any. Objects with AI should
+	 * overwrite this.
+	 */
+	public void start() {
+
 	}
 }

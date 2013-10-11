@@ -8,7 +8,7 @@ package deco2800.arcade.towerdefence;
  * @author hadronn
  * 
  */
-public abstract class Mortal extends GridObject {
+public class Mortal extends GridObject {
 	// Fields
 	// The maximum health the alien can have.
 	private int maxHealth;

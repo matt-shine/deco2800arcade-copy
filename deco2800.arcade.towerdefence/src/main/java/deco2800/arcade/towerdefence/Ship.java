@@ -27,9 +27,9 @@ public class Ship {
 	 * We should create fields in the Ship class for each state we'd like to
 	 * keep track of and increment/decrement as the game plays.
 	 */
-	
-	
-	
+
+	private Grid grid;
+
 	public void updateGameState(Object gameState, int change) {
 	}
 
@@ -77,7 +77,7 @@ public class Ship {
 	 * Increment the wave, keep to units of 1 don't be cute.
 	 */
 	public void nextWave() {
-		
+
 	}
 
 	/**
@@ -86,5 +86,13 @@ public class Ship {
 	 * @param n
 	 */
 	public void setWave(int n) {
+	}
+
+	public boolean placeObject(int x, int y, GridObject object) {
+		if (grid.buildObject(x, y, object)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

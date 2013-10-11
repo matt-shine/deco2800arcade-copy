@@ -4,6 +4,7 @@ package deco2800.arcade.chess;
 //import deco2800.arcade.chess.MenuScreen;
 import deco2800.arcade.chess.SplashScreen;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
@@ -16,10 +17,14 @@ import deco2800.arcade.client.replay.ReplayEventListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.client.replay.ReplayNode;
 import deco2800.arcade.client.replay.ReplayNodeFactory;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.chess.pieces.King;
 import deco2800.arcade.chess.pieces.Piece;
+
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -88,7 +93,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private OrthographicCamera camera;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
-	private Chess game;
+	
 
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
@@ -139,7 +144,12 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	
 	private HashMap<Piece, int[]> pieceMaps = new HashMap<Piece, int[]>();
 
-
+	private static Chess game = instanceGetter.getChess();
+	
+	//AchievementClient achClient = new AchievementClient(networkClient);
+	//ArrayList<Achievement> achievements = achClient.achievementsForGame();
+	//AchievementProgress playerProgress = achClient.progressForPlayer(player);
+	
 	
 	/**
 	 * Initialises a new game
@@ -157,10 +167,14 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		this.networkClient = networkClient; // this is a bit of a hack
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; // TODO eventually the server may send back the
-									// opponent's actual username
+							// opponent's actual username
 		//setup highscore client
 		HighscoreClient player1 = new HighscoreClient(players[0], "chess",
 				networkClient);
+		//Achieve stuff
+		
+
+		//Achieve stuff^^
 		EasyComputerOpponent = false;
 		
 		URL resource = this.getClass().getResource("/");
@@ -301,7 +315,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		batch.setProjectionMatrix(camera.combined);
 		drawButton();
 	    drawPieces();
-	    
+	   
 		stage.draw();
 		if(moving) {
 			showPossibleMoves(movingPiece);
@@ -575,6 +589,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	}
 	
 	private void showPossibleMoves(Piece piece) {
+		//if (instanceGetter.getChess() != null) {
+		//	instanceGetter.getChess().incrementAchievement("chess.BeginGame");
+		//}
 		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
 		Sprite allowedSquare = new Sprite(new Texture(
 				Gdx.files.classpath("imgs/spot.png")));

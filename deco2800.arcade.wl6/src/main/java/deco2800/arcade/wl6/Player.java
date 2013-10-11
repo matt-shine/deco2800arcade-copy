@@ -7,7 +7,7 @@ public class Player extends Mob {
     public static final float SPEED = 3f;
 
     
-    private int health = 100;
+    private int STARTING_HEALTH = 100;
     private int points = 0;
     private int currentGun = 1;
     private HashSet<Integer> guns = new HashSet<Integer>();
@@ -18,6 +18,7 @@ public class Player extends Mob {
 
 	public Player(int uid) {
         super(uid);
+        setHealth(STARTING_HEALTH);
         guns.add(0);
         guns.add(1);
     }
@@ -34,16 +35,6 @@ public class Player extends Mob {
     public void tick(GameModel model) {
         super.tick(model);
     }
-
-    
-    
-    
-    
-    
-    
-    public int getHealth() {
-		return health;
-	}
 
 
 	public void setHealth(int health, boolean overheal) {

@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.*;
 
 import org.dbunit.DBTestCase;
 import org.dbunit.IDatabaseTester;
@@ -15,6 +15,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.filter.IColumnFilter;
 import org.junit.After;
 import org.junit.Before;
@@ -102,7 +103,9 @@ public class TestFriendStorage extends DBTestCase {
 	
 	@Override
 	protected void setUpDatabaseConfig(DatabaseConfig config) {
-		//config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new IColumnFilter());
+		config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new DefaultColumnFilter());
+		Map<String, List<String>> tablePrimaryKeyMap = new HashMap<String, List<String>>();
+		tablePrimaryKeyMap.put("FRIENDS", Arrays.asList(new String[] {"U1", "U2"}));
 	}
 	
 }

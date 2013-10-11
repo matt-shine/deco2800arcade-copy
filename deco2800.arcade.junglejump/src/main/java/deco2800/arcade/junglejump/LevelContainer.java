@@ -19,7 +19,7 @@ public class LevelContainer {
 	public static int currentLevel;
 	public static int currentWorld;
 	private static int levelAmount;
-	private int worldAmount = 3;
+	private static int worldAmount = 3;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -100,17 +100,18 @@ public class LevelContainer {
 	 * @return
 	 */
 	public static void nextLevel() {
+		System.out.println("loading next level");
 		clearCurrentLevel();
 		currentLevel++;
 		if(currentLevel > levelAmount-1) {
 			currentLevel = 0;
 			currentWorld++;
-			if(currentWorld > 5) {
+			if(currentWorld > worldAmount-1) {
 				currentWorld = 0;
 			}
 			junglejump.world = currentWorld;
+			junglejump.gameBackground = new Texture(("junglejumpassets/world" + currentWorld + "/background.png"));
 		}
-		junglejump.gameBackground = new Texture(("junglejumpassets/world" + currentWorld + "/background.png"));
 		junglejump.currentLevel = getLevel(currentLevel);
 		//currentLevel = newLevel;
 		junglejump.monkeyX = junglejump.monkeyDefaultX;

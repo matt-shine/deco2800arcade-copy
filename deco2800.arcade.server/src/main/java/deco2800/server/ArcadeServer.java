@@ -8,23 +8,9 @@ import java.net.BindException;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
-import deco2800.server.database.CreditStorage;
-import deco2800.server.database.ImageStorage;
-import deco2800.server.database.DatabaseException;
-import deco2800.server.database.ReplayStorage;
-import deco2800.server.listener.CommunicationListener;
-import deco2800.server.listener.ReplayListener;
-import deco2800.server.listener.ConnectionListener;
-import deco2800.server.listener.CreditListener;
-import deco2800.server.listener.GameListener;
-import deco2800.server.listener.PackmanListener;
-import deco2800.server.listener.HighscoreListener;
-import deco2800.server.database.HighscoreDatabase;
 import deco2800.server.database.*;
 import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
-import deco2800.server.database.AchievementStorage;
-import deco2800.server.listener.AchievementListener;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -44,7 +30,6 @@ public class ArcadeServer {
 	private static ArcadeServer instance;
 	
 	// Package manager
-	@SuppressWarnings("unused")
 	private PackageServer packServ;
 
     private GameStorage gameStorage;
@@ -138,8 +123,15 @@ public class ArcadeServer {
         instance = this;
 
         this.gameStorage = new GameStorage();
-
-		this.creditStorage = new CreditStorage();
+        try {
+            this.creditStorage = new CreditStorage();
+        } catch (Exception e) {
+            //Do nothing, yet ;P
+        }
+        
+        
+        
+        //CODE SMELL
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
@@ -154,6 +146,13 @@ public class ArcadeServer {
 
 
 		
+		//Init highscore database
+		try {
+			highscoreDatabase.initialise();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+		
 		//initialize database classes
 		try {
             gameStorage.initialise();
@@ -162,8 +161,6 @@ public class ArcadeServer {
 			//playerStorage.initialise();
             
 			achievementStorage.initialise();
-			
-			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,6 +197,7 @@ public class ArcadeServer {
 		server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
         server.addListener(new LibraryListener());
+        server.addListener(new PlayerListener());
 	}
 
     /**

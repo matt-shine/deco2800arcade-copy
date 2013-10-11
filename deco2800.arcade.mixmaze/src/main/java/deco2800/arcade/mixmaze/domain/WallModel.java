@@ -1,17 +1,24 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.domain.PlayerModel;
 import java.util.ArrayList;
 import java.util.List;
+
+import deco2800.arcade.mixmaze.domain.PlayerModel;
 
 /**
  * WallModel represents a wall on a tile, which can be either active or 
  * inactive.
  */
-class WallModel {
-
-	/** Adjacent tiles */
-	private final List<TileModel> tiles;
+public class WallModel {
+	/** The tile of the left side of the wall if
+	 * you were facing from end-to-end.
+	 **/
+	private TileModel leftTile;
+	
+	/** The tile of the right side of the wall if
+	 * you were facing from end-to-end.
+	 **/
+	private TileModel rightTile;
 
 	/** Whether this wall is built or not */
 	private boolean isBuilt;
@@ -19,23 +26,57 @@ class WallModel {
 	/** The player who builds this wall, <code>null</code> if not built */
 	private PlayerModel builder;
 
-	/**
-	 * Constructor
-	 */
-	WallModel() {
-		tiles = new ArrayList<TileModel>();
+	/** Observers to this tile */
+	private List<WallModelObserver> observers = new ArrayList<WallModelObserver>();
+	
+	public void addObserver(WallModelObserver observer) {
+		observers.add(observer);
 	}
-
+	
+	private void updateWall() {
+		for(WallModelObserver o : observers) {
+			o.updateWall(isBuilt);
+		}
+	}
+	
 	/**
-	 * Adds a tile adjacent to this wall.
-	 * 
-	 * @param tile	the tile to add
+	 * Gets the tile on the left side of
+	 * the wall.
+	 * @return <CODE>null</CODE> if there is
+	 * no tile on the left side, otherwise the associated
+	 * <CODE>TileModel</CODE>
 	 */
-	void addTile(TileModel tile) {
-		if (tiles.contains(tile))
-			throw new IllegalStateException("The tile is already present.");
-		else
-			tiles.add(tile);
+	public TileModel getLeftTile() {
+		return leftTile;
+	}
+	
+	/**
+	 * Specifies the tile on the left side of the wall if
+	 * you were facing from end-to-end.
+	 * @param left tile on the left side of the wall
+	 */
+	public void setLeftTile(TileModel left) {
+		leftTile = left;
+	}
+	
+	/**
+	 * Gets the tile on the right side of
+	 * the wall.
+	 * @return <CODE>null</CODE> if there is
+	 * no tile on the right side, otherwise the associated
+	 * <CODE>TileModel</CODE>
+	 */
+	public TileModel getRightTile() {
+		return rightTile;
+	}
+	
+	/**
+	 * Specifies the tile on the right side of the wall if
+	 * you were facing from end-to-end.
+	 * @param right tile on the right side of the wall
+	 */
+	public void setRightTile(TileModel right) {
+		rightTile = right;
 	}
 
 	/**
@@ -70,13 +111,10 @@ class WallModel {
 		
 		isBuilt = true;
 		builder = player;
-		
-		for (TileModel t : tiles) {
-			t.validateBox(player);
-			t.updateWall(this, true);
-		}
+		updateWall();
+		updateTiles(player);
 	}
-
+	
 	/**
 	 * Destroys this wall.
 	 * 
@@ -88,19 +126,19 @@ class WallModel {
 
 		isBuilt = false;
 		builder = null;
-		
-		for (TileModel t : tiles) {
-			t.validateBox(player);
-			t.updateWall(this, false);
-		}
+		updateWall();
+		updateTiles(player);
 	}
-
+	
+	private void updateTiles(PlayerModel player) {
+		if(leftTile != null) 
+			leftTile.validateBox(player);
+		if(rightTile != null) 
+			rightTile.validateBox(player);
+	}
+	
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder("<WallModel: ");
-		
-		str.append((isBuilt) ? "built" : "not built");
-		str.append(">");
-		return str.toString();
+		return String.format("<WallModel: %s>", ((isBuilt) ? "built" : "not built"));
 	}
 }

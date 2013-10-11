@@ -37,8 +37,19 @@ public class GameStorage {
                         "ICONPATH VARCHAR (100)," +
                         "PRIMARY KEY(gameID))");
             } else {
-                //Statement statement = connection.createStatement();
-                //statement.executeUpdate("ALTER TABLE GAMES ALTER COLUMN DESCRIPTION VARCHAR (255) NOT NULL, ICONPATH VARCHAR (100)");
+                Statement statement = connection.createStatement();
+
+                /* Database was not being initialised properly - this is a hack fix */
+                statement.execute("DROP TABLE GAMES");
+                statement.execute("CREATE TABLE GAMES(gameID INT NOT NULL," +
+                        "ID VARCHAR (30) NOT NULL," +
+                        "NAME VARCHAR(30) NOT NULL," +
+                        "PRICE INT NOT NULL," +
+                        "DESCRIPTION VARCHAR (500) NOT NULL," +
+                        "ICONPATH VARCHAR (100)," +
+                        "PRIMARY KEY(gameID))");
+
+
                 runScript(connection);
             }
         } catch (SQLException e) {
@@ -72,7 +83,8 @@ public class GameStorage {
                 "INSERT INTO GAMES values (12, 'Wolfenstein 3D', 'Wolfenstein 3D', 0, 'Killin Natzis', '');" +
                 "INSERT INTO GAMES values (13, 'snakeLadder', 'snakeLadder', 0, 'N/A', '');" +
                 "INSERT INTO GAMES values (14, 'tictactoe', 'Tic Tac Toe', 0, 'N/A', '');" +
-                "INSERT INTO GAMES values (15, 'junglejump', 'Jungle Jump', 0, 'N/A', '');";
+                "INSERT INTO GAMES values (15, 'junglejump', 'Jungle Jump', 0, 'N/A', '');" +
+                "INSERT INTO GAMES values (16, 'soundboard', 'UQ Soundboard', 0, 'The epic DECO2800 Soundboard!! Enjoy the master sounds of UQ!', '');";
         String[] cmds = inserts.split(";");
 
         for (String cmd : cmds) {

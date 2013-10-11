@@ -16,8 +16,6 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
-import java.util.ArrayList;
-
 /**
  * GDX Screen for List View
  * @author Aaron Hayes
@@ -33,7 +31,7 @@ public class ListScreen implements Screen, LibraryScreen {
      * UI Objects
      */
     private SpriteBatch batch;
-    private ArrayList<Game> games = null;
+    private java.util.List<Game> games = null;
     private Game currentGame;
     private Stage stage;
     private int x = 0;
@@ -150,7 +148,9 @@ public class ListScreen implements Screen, LibraryScreen {
                     y-= 35;
                 }
 
-                if (more && count++ <= 16) continue;
+                if (more && count++ <= 15) {
+                    continue;
+                }
 
 
                 button = new TextButton("" + game.name, libSkin, "gameslistbutton");
@@ -162,7 +162,7 @@ public class ListScreen implements Screen, LibraryScreen {
 
                 button.addListener(new GameButtonActionHandler(this, game, button));
 
-                if ((more && count == 18) || count++ == 0) {
+                if ((more && count == 17) || count++ == 0) {
                     button.setChecked(true);
                     setCurrentButton(button);
                     setSelectedGame(game);
@@ -170,7 +170,7 @@ public class ListScreen implements Screen, LibraryScreen {
 
                 stage.addActor(button);
 
-                if (count > 16 && !more) {
+                if (count >= 16 && !more) {
                     button = new TextButton("More...", libSkin, "gameslistbutton");
                     button.setWidth(275);
                     button.setHeight(33);
@@ -232,7 +232,9 @@ public class ListScreen implements Screen, LibraryScreen {
         stage.draw();
         batch.end();
 
-        if (gameSelected) play();
+        if (gameSelected) {
+            play();
+        }
     }
 
     @Override

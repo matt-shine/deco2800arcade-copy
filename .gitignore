@@ -31,3 +31,12 @@ bin
 .idea/
 *.iml
 *.eml
+
+# Release
+release
+
+# Gradle settings and build files
+.gradle/
+
+# Ignore all .log files anywhere
+**/*.log

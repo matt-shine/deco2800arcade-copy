@@ -1,105 +1,160 @@
-/*
- * PlayerViewModel
- */
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.BrickModel;
-import deco2800.arcade.mixmaze.domain.ItemModel;
-import deco2800.arcade.mixmaze.domain.MixMazeModel;
+import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction;
-import deco2800.arcade.mixmaze.domain.TileModel;
+import deco2800.arcade.mixmaze.domain.PlayerModelObserver;
 import deco2800.arcade.utils.KeyManager;
-
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-
 import java.util.HashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.ItemModel.ItemType.*;
 import static com.badlogic.gdx.Input.Keys.*;
 
 /**
  * PlayerViewModel draws the character of the player.
  */
-final class PlayerViewModel extends Actor {
+public final class PlayerViewModel extends Actor implements PlayerModelObserver {
 
-	private static final String LOG = PlayerViewModel.class.getSimpleName();
+	final Logger logger = LoggerFactory.getLogger(PlayerViewModel.class);
 
-	private final PlayerModel model;
-	private final MixMazeModel gameModel;
+	private final IMixMazeModel gameModel;
 	private final int tileSize;
-	private final TextureRegion[] region;
+	private final TextureRegion bodyRegion;
+	private final TextureRegion headRegion;
 	private final KeyManager km;
 	private final int id;
+	private final GameScreen.ScoreBar scorebar;
+	private final GameScreen.SidePanel sidePanel;
+
+	private int x;
+	private int y;
+	private int rotation;
 
 	/**
 	 * Constructor
+	 *
+	 * @param playerControls
 	 */
-	PlayerViewModel(PlayerModel model, MixMazeModel gameModel,
-			int tileSize, int id) {
-		Vector2 stagePos;
+	PlayerViewModel(IMixMazeModel gameModel,
+			int tileSize, int id, int[] playerControls,
+			GameScreen.ScoreBar scorebar,
+			GameScreen.SidePanel sidePanel) {
 		Texture texture;
 		HashMap<Integer, Integer> mapping =
 				new HashMap<Integer, Integer>();
 
-		this.model = model;
 		this.gameModel = gameModel;
 		this.tileSize = tileSize;
 		this.id = id;
+		this.scorebar = scorebar;
+		this.sidePanel = sidePanel;
 
-		/* Player 1 uses W, S, A, D to move. */
-		if (id == 1) {
-			mapping.put(W, UP);
-			mapping.put(S, DOWN);
-			mapping.put(A, LEFT);
-			mapping.put(D, RIGHT);
-			mapping.put(G, NUM_5);
-			mapping.put(H, NUM_6);
-		} else if (id == 2) {
-			mapping.put(O, NUM_5);
-			mapping.put(P, NUM_6);
-		}
+		
+	if(playerControls[0] != NUM_5) mapping.put(playerControls[0], NUM_5);
+	if(playerControls[1] != NUM_6) mapping.put(playerControls[1], NUM_6);
+	if(playerControls[2] != UP) mapping.put(playerControls[2], UP);
+	if(playerControls[3] != LEFT) mapping.put(playerControls[3], LEFT);
+	if(playerControls[4] != DOWN) mapping.put(playerControls[4], DOWN);
+	if(playerControls[5] != RIGHT) mapping.put(playerControls[5], RIGHT);
+	
+
 		km = new KeyManager(mapping);
 
 		/* load texture */
+		texture = new Texture(Gdx.files.internal("body.png"));
+		bodyRegion = new TextureRegion(texture);
 		texture = new Texture(Gdx.files.internal(
-					(id == 1) ? "devil.png" : "angel.png"));
-		region = new TextureRegion[4];
+				(id == 1) ? "miner.png" : "cowboy.png"));
+		headRegion = new TextureRegion(texture);
 
-		/* index should be consistent with domain.Direction */
-		region[NORTH] = new TextureRegion(texture, 0, 0, 256, 256);
-		region[SOUTH] = new TextureRegion(texture, 256, 0, 256, 256);
-		region[WEST] = new TextureRegion(texture, 512, 0, 256, 256);
-		region[EAST] = new TextureRegion(texture, 768, 0, 256, 256);
+		if (id == 1)
+			this.setColor(1f, 0f, 0f, 1f);
+		else
+			this.setColor(0f, 0f, 1f, 1f);
 
 		addListener(new PlayerInputListener());
 	}
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		//Gdx.app.log(LOG, "" + getX() + "\t" + getY());
+		Color old = batch.getColor();
 
-		/*
-		 * NOTE: models use the y-down coordinate system.
-		 */
-		if (id == 1) {
-			batch.setColor(1, 0, 0, 1);
-		} else if (id == 2) {
-			batch.setColor(0, 0, 1, 1);
-		}
-
-		batch.draw(region[model.getDirection()],
-				model.getX() * tileSize,
-				640 - (model.getY() + 1) * tileSize,
+		batch.setColor(this.getColor());
+		batch.draw(bodyRegion, x * tileSize, 640 - (y + 1) * tileSize,
 				tileSize, tileSize);
+		batch.setColor(old);
+		batch.draw(headRegion, x * tileSize, 640 - (y + 1) * tileSize,
+				tileSize / 2, tileSize / 2,
+				tileSize, tileSize,
+				1, 1,
+				rotation);
+	}
+
+	@Override
+	public void updateScore(int score) {
+		logger.debug("score: {}", score);
+		scorebar.update(score);
+	}
+
+	@Override
+	public void updateBrick(int amount) {
+		logger.debug("amount: {}", amount);
+		sidePanel.updateBrick(amount);
+	}
+
+	@Override
+	public void updatePick(boolean hasPick) {
+		logger.debug("hasPick: {}", hasPick);
+		sidePanel.updatePick(hasPick);
+	}
+
+	@Override
+	public void updateTnt(boolean hasTnt) {
+		logger.debug("hasTnt: {}", hasTnt);
+		sidePanel.updateTnt(hasTnt);
+	}
+
+	@Override
+	public void updateAction(PlayerModel.Action action) {
+		logger.debug("action: {}", action);
+		sidePanel.updateAction(action);
+	}
+
+	@Override
+	public void updateDirection(int direction) {
+		logger.debug("direction: {}", direction);
+		switch (direction) {
+		case WEST:
+			rotation = -90;
+			break;
+		case NORTH:
+			rotation = 180;
+			break;
+		case EAST:
+			rotation = 90;
+			break;
+		case SOUTH:
+			rotation = 0;
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void updatePosition(int x, int y) {
+		logger.debug("(x, y): ({}, {})", x, y);
+		this.x = x;
+		this.y = y;
 	}
 
 	/**
@@ -116,8 +171,9 @@ final class PlayerViewModel extends Actor {
 	 *
 	 * @return the amount of bricks
 	 */
+	/*
 	public int getBrickAmount() {
-		BrickModel brick = model.getBrick();
+		IBrickModel brick = model.getBrick();
 
 		if (brick == null) {
 			return 0;
@@ -125,9 +181,11 @@ final class PlayerViewModel extends Actor {
 			return brick.getAmount();
 		}
 	}
+	*/
 
-	private boolean hasItem(ItemModel.ItemType type) {
-		ItemModel item = null;
+	/*
+	private boolean hasItem(IItemModel.ItemType type) {
+		IItemModel item = null;
 
 		switch (type) {
 		case PICK:
@@ -140,6 +198,7 @@ final class PlayerViewModel extends Actor {
 
 		return (item == null) ? false : true;
 	}
+	*/
 
 	/**
 	 * Returns if this player has a pick.
@@ -147,9 +206,11 @@ final class PlayerViewModel extends Actor {
 	 * @param pid the player id, can be either 1 or 2
 	 * @return true if the player has pick, otherwise false
 	 */
+	/*
 	public boolean hasPick() {
 		return hasItem(PICK);
 	}
+	*/
 
 	/**
 	 * Returns if this player has a TNT.
@@ -157,18 +218,11 @@ final class PlayerViewModel extends Actor {
 	 * @param pid the player id, can be either 1 or 2
 	 * @return true if the player has TNT, otherwise false
 	 */
+	/*
 	public boolean hasTNT() {
 		return hasItem(TNT);
 	}
-
-	/**
-	 * Returns the number of boxes this player has.
-	 *
-	 * @return the number of boxes
-	 */
-	public int getScore() {
-		return gameModel.getPlayerScore(model);
-	}
+	*/
 
 	/**
 	 * Returns the active action of this player.
@@ -176,15 +230,18 @@ final class PlayerViewModel extends Actor {
 	 * @return one of <code>USE_BRICK</code>, <code>USE_PICK</code>, or
 	 * 	   <code>USE_TNT</code>
 	 */
+	/*
 	public PlayerAction getAction() {
 		return model.getPlayerAction();
 	}
+	*/
 
 	/**
 	 * Returns the name of the active action of this player.
 	 *
 	 * @return a String representing the active action
 	 */
+	/*
 	public String getActionName() {
 		PlayerAction act = model.getPlayerAction();
 
@@ -199,6 +256,7 @@ final class PlayerViewModel extends Actor {
 			return "unknown";
 		}
 	}
+	*/
 
 	/*
 	 * Handles movement input.
@@ -209,24 +267,22 @@ final class PlayerViewModel extends Actor {
 		public boolean keyDown(InputEvent event, int keycode) {
 			switch (km.get(keycode)) {
 			case LEFT:
-				gameModel.movePlayer(model, WEST);
+				gameModel.movePlayer(id, WEST);
 				break;
 			case RIGHT:
-				gameModel.movePlayer(model, EAST);
+				gameModel.movePlayer(id, EAST);
 				break;
 			case UP:
-				gameModel.movePlayer(model, NORTH);
+				gameModel.movePlayer(id, NORTH);
 				break;
 			case DOWN:
-				gameModel.movePlayer(model, SOUTH);
+				gameModel.movePlayer(id, SOUTH);
 				break;
 			case NUM_5:
-				model.switchAction();
+				gameModel.switchPlayerAction(id);
 				break;
 			case NUM_6:
-				TileModel tile = gameModel.getBoardTile(
-						model.getX(), model.getY());
-				model.useAction(tile);
+				gameModel.usePlayerAction(id);
 				break;
 			default:
 				return false;	// event not handled

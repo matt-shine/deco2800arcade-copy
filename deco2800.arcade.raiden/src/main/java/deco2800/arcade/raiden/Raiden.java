@@ -28,7 +28,7 @@ public class Raiden extends GameClient {
 	}
 	
 	public void resume() {
-		super.resume();
+		//super.resume();
 	}
 	
 	private static final Game game;

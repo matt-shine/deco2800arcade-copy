@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.esotericsoftware.tablelayout.BaseTableLayout;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
@@ -32,7 +33,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access homepage\nlogin with username:home\nTo access games library\n login with username: games\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);
@@ -44,10 +45,13 @@ public class LoginScreen implements Screen {
         passwordText.setPasswordCharacter('*');
         final TextField serverText = new TextField("", skin);
         serverText.setMessageText("Server") ;
-        //CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        CheckBox rememberBox = new CheckBox("Remember Me", skin);
+        rememberBox.getCells().get(0).size(25, 25);
+        rememberBox.getCells().get(0).pad(5);
+        rememberBox.getCells().get(1).pad(2);
         TextButton loginButton = new TextButton("Login", skin);
-        TextButton registerButton = new TextButton("Register", skin);
-        TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "alt");
+        TextButton registerButton = new TextButton("Register", skin, "default-blue");
+        TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "default-red");
 
         table.add(tempLabel).colspan(2);  // Temporary label to display a message
         table.row();
@@ -59,8 +63,8 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(serverText).width(400).pad(5).colspan(2);
         table.row();
-        //table.add(rememberBox);
-        //table.row();
+        table.add(rememberBox).width(190).height(25).pad(5).colspan(2).align(BaseTableLayout.LEFT);
+        table.row();
         table.add(loginButton).width(190).height(50).pad(5);
         table.add(registerButton).width(190).height(50).pad(5);
         table.row();
@@ -73,18 +77,25 @@ public class LoginScreen implements Screen {
                     errorLabel.setText("No Username Supplied");
                 }
                 else if (usernameText.getText().toLowerCase().equals("store")) {
-                    arcadeUI.requestScreen("store");
+                    arcadeUI.setScreen(arcadeUI.store);
+                }
+                else if (usernameText.getText().toLowerCase().equals("home")) {
+                	arcadeUI.setScreen(arcadeUI.main);
+                }
+                else if (usernameText.getText().toLowerCase().equals("games")) {
+                    ArcadeSystem.login(usernameText.getText());
+                    ArcadeSystem.goToGame("gamelibrary");
                 }
                 else {
-                    // username supplied, try to login
                     ArcadeSystem.login(usernameText.getText());
+                    arcadeUI.setScreen(arcadeUI.home);
                 }
             }
         });
         
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                arcadeUI.requestScreen("register");
+                arcadeUI.setScreen(arcadeUI.register);
             }
         });
         
@@ -95,30 +106,24 @@ public class LoginScreen implements Screen {
 	}
 
 	@Override
-	public void show() {
-		ArcadeInputMux.getInstance().addProcessor(stage);
-    }
-
-	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-
-	    if (ArcadeSystem.isLoggedIn()) {
-	    	ArcadeSystem.goToGame("arcadeui");
-	    }
 	}
 
-	@Override
-	public void dispose() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
-        stage.dispose();
-        skin.dispose();
-	}
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void show() {
+        ArcadeInputMux.getInstance().addProcessor(stage);
+    }
 
 	@Override
 	public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -129,7 +134,9 @@ public class LoginScreen implements Screen {
 	public void resume() {
 	}
 
-	@Override
-	public void resize(int arg0, int arg1) {
-	}
+    @Override
+    public void dispose() {
+        stage.dispose();
+        skin.dispose();
+    }
 }

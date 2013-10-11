@@ -117,7 +117,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
 	public static Texture gameBackground;
-	Texture platform, levelText, hyphenText, livesText, levelNumText, 
+	public static Texture platform, levelText, hyphenText, livesText, levelNumText, 
 	worldNumText, livesNumText;
 	ShapeRenderer shapeRenderer;
 

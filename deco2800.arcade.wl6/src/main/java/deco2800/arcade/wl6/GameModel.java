@@ -38,7 +38,7 @@ public class GameModel {
     //Doodads to delete
     private ArrayList<Doodad> toDelete = new ArrayList<Doodad>();
 
-
+	private int difficulty = 1;
 
 
 
@@ -59,11 +59,10 @@ public class GameModel {
 
         currentLevel = level;
 
-        //remove the old player and create a new one
-        if (doodads.contains(player)) {
-            destroyDoodad(player);
+        for (Doodad d : doodads) {
+        	this.destroyDoodad(d);
         }
-
+        
         MapProcessor.processEverything(this);
 
         player = new Player(MapProcessor.doodadID());
@@ -196,6 +195,60 @@ public class GameModel {
             doodads.remove(d);
         }
     }
-    
+
+    public int getDifficulty() {
+		return difficulty;
+	}
+
+
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+		this.reset();
+	}
+
+	public String getChapter() {
+		return currentLevel.substring(1, 2);
+	}
+	
+	public String getLevelInChapter() {
+		if (!currentLevel.substring(2, 3).equals("l")) {
+			return currentLevel.substring(2, 3);
+		}
+		return currentLevel.substring(3, 4);
+	}
+	
+	
+	/**
+	 * Sends the player to the next level
+	 * if current level = 1-7 : current level++
+	 * if current level = 8 : current level = b
+	 * if current level = b : chapter++, current level = 1
+	 * if current level = s : current level = 2
+	 */
+	public void nextLevel() {
+		if (getLevelInChapter().equals("b")) {
+			if (getChapter().equals("6")) {
+				goToLevel("e1l1");
+			} else {
+				goToLevel("e" + (Integer.parseInt(getChapter()) + 1) + "l1");
+			}
+		} else if (getLevelInChapter().equals("s")) {
+			goToLevel("e" + getChapter() + "l2");
+		} else if (getLevelInChapter().equals("8")) {
+			goToLevel("e" + getChapter() + "boss");
+		} else {
+			goToLevel("e" + getChapter() + "l" + (Integer.parseInt(getLevelInChapter()) + 1));
+		}
+	}
+
+	
+	/**
+	 * go to the secret level
+	 */
+	public void secretLevel() {
+		goToLevel("e" + (Integer.parseInt(getChapter())) + "secret");
+	}
+
+
     
 }

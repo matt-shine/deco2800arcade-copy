@@ -29,7 +29,6 @@ public class MainGameScreen implements Screen {
 		ArcadeInputMux.getInstance().addProcessor(input);
 		
 		b.setGame(model, game);
-		b.load();
 		
 	}
 	

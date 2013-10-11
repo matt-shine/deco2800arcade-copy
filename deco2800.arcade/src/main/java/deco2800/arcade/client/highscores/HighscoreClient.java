@@ -137,7 +137,7 @@ public class HighscoreClient {
 	public int responseTest(int num) {
 		//This will block until this.gsRes is updated with the correct information.
 		GetScoreRequest gsr = new GetScoreRequest();
-		gsr.requestID = 1;
+		gsr.requestID = num;
 		gsr.limit = 10;
 		gsr.highestIsBest = true;
 		

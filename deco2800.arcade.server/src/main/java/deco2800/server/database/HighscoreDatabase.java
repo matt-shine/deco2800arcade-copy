@@ -80,8 +80,8 @@ public class HighscoreDatabase {
 		//System.out.println("adding a score should not get here.");
 		try {
 		switch (gsReq.requestID) {
-			case 1: return getGameTopPlayers("Pong", 1, "Number"); //Return value of query with requestID 1
-			case 2: return getUserHighScore("Matt", "Pong", "Number"); //Return value of query with requestID 2
+			case 1: return getGameTopPlayers("Pong", 1, "Number", gsReq.highestIsBest); //Return value of query with requestID 1
+			case 2: return getUserHighScore("Matt", "Pong", "Number", gsReq.highestIsBest); //Return value of query with requestID 2
 			case 3: return null; //Return value of query with requestID 3
 			case 4: return null;
 			case 5: return null;
@@ -103,16 +103,25 @@ public class HighscoreDatabase {
 	 * @param top - number of top players to display
 	 * @throws DatabaseException 
 	 */
-	public List<String> getGameTopPlayers(String Game_ID, int top, String type) throws DatabaseException{
+	public List<String> getGameTopPlayers(String Game_ID, int top, String type, boolean highestIsBest) throws DatabaseException{
 		System.out.println("getGameTopPlayers..");
+		
 		List<String> data = new ArrayList<String>();
 		int topCount = 0;
+		String order;
+		
 		System.out.println("Game: " + Game_ID + ", limit: " + top + ", type: " + type);
 		
 		if (!initialised) {
 			initialise();
 		}
-
+		
+		if(highestIsBest){
+			order = "DESC";
+		}else {
+			order = "ASC";
+		}
+		
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		Statement statement = null;
@@ -120,11 +129,11 @@ public class HighscoreDatabase {
 		
 		try {
 			statement = connection.createStatement();
-			String getTop = "SELECT * FROM PLAYER_HIGHSCORES AS H,  PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score DESC";
+			String getTop = "SELECT * FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
 			resultSet = statement.executeQuery(getTop);
 			//System.out.println(getTop);
 			
-			while(resultSet.next() && topCount < top) {
+			while(resultSet.next() && topCount <= top) {
 				//System.out.println("Player: " + resultSet.getString("Player"));
 				data.add(String.valueOf(resultSet.getString("Player")));
 				data.add(String.valueOf(resultSet.getInt("Score")));
@@ -152,11 +161,20 @@ public class HighscoreDatabase {
 	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
-	public List<String> getUserHighScore(String Username, String Game_ID, String type) throws DatabaseException{
+	public List<String> getUserHighScore(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
+		System.out.println("get User high score request..");
+		
 		List<String> data = new ArrayList<String>();
+		String order;
 		
 		if (!initialised) {
 			initialise();
+		}
+		
+		if(highestIsBest){
+			order = "DESC";
+		}else {
+			order = "ASC";
 		}
 		
 		// Get a connection to the database
@@ -166,11 +184,13 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT s.SCORE from HIGHSCORES_PLAYER h INNER JOIN " +
-					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
-					type + "' AND Username='" + Username + "';");
+			resultSet = statement.executeQuery("SELECT * FROM PLAYER_HIGHSCORES AS H, " +
+					"PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_type='" + 
+					type + "' AND H.Player='" + Username + "' ORDER BY D.Score " + order);
 			while(resultSet.next()) {
-				
+				System.out.println("Player: " + resultSet.getString("Player"));
+				System.out.println("Score: " + resultSet.getInt("Score"));
+				System.out.println("query passed........");
 			}
 
 			return data;

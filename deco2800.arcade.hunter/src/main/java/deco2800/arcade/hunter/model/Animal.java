@@ -10,13 +10,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
+import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.platformergame.model.Entity;
 import deco2800.arcade.platformergame.model.EntityCollection;
 import deco2800.arcade.platformergame.model.EntityCollision;
 import deco2800.arcade.platformergame.model.EntityCollision.CollisionType;
 
 public class Animal extends Entity {
-
 
 	/**
 	 * The speed at which the Animal moves
@@ -37,27 +37,29 @@ public class Animal extends Entity {
 	 * The type of animal
 	 */
 	private Type hunt;
-	
+
 	private String classType = "Animal";
-	
-	private HashMap<String,Animation> animMap = new HashMap<String,Animation>();
-	
+
+
 	private boolean animLoop;
+
+	private long deathTimer;
+	
+	private EntityCollection entities;
 
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
 			String filepath) {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
-		loadAnimations();
-		if (hunted) {
+		currAnim = loadAnimation(filepath);
+		if (filepath =="zebra") {
 			hunt = Type.PREY;
 			moveSpeed = 4;
 		} else {
 			hunt = Type.PREDATOR;
 			moveSpeed = -2;
 		}
-		setAnimation(animMap.get(filepath));
 	}
 
 	/**
@@ -67,20 +69,16 @@ public class Animal extends Entity {
 	 *            Filepath for the animal
 	 * @return Animation for the animal
 	 */
-	private void loadAnimations() {
-		String[] animals = {"Lion","Zebra","Hippo"};
-		Texture text = new Texture("textures/Animals/animals.png");
+	private Animation loadAnimation(String animal) {
+		Texture text = new Texture("textures/Animals/"+ animal + ".png");
 		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth() / 2,
-				text.getHeight()/3);
+				text.getHeight());
 		TextureRegion[] animFrames = new TextureRegion[2];
 		int index = 0;
-		for (int j = 0; j < 3; j++) {
-			for (int i =0; i<2; i++){
-				animFrames[index++] = tmp[j][i];
-			}
-			animMap.put(animals[j],new Animation(0.5f, animFrames));
-			index = 0;
+		for (int i = 0; i < 2; i++) {
+			animFrames[index++] = tmp[0][i];
 		}
+		return new Animation(0.5f,animFrames);
 	}
 
 	private enum State {
@@ -91,25 +89,21 @@ public class Animal extends Entity {
 		PREDATOR, PREY
 	}
 
-
 	public void update(float delta) {
 		if (moveSpeed != 0) {
 			// updates position of enemy
 			setX(getX() + moveSpeed);
 		}
-		
+
 		setY(getY() - Hunter.Config.gravity);
+		
+		if(this.state == State.DEAD){
+			if (deathTimer + Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()){
+				entities.remove(this);
+			}
+		}
 	}
 
-	/**
-	 * Sets the current animation to the anim
-	 * 
-	 * @param anim
-	 *            Animation of the animal to be set to
-	 */
-	private void setAnimation(Animation anim) {
-		currAnim = anim;
-	}
 
 	/**
 	 * Returns the current animation of the animal
@@ -129,6 +123,15 @@ public class Animal extends Entity {
 		return hunt;
 	}
 
+	public void dead(EntityCollection entities){
+		//draw a dead animal sprite
+		//play sound
+		moveSpeed = 0;
+		this.state = State.DEAD;
+		deathTimer = System.currentTimeMillis();
+		this.entities = entities;
+	}
+	
 	/**
 	 * Checks for collisions
 	 */
@@ -151,17 +154,17 @@ public class Animal extends Entity {
 		if (e == null)
 			entities.remove(this);
 	}
-	
+
 	@Override
-	public String getType(){
+	public String getType() {
 		return classType;
 	}
-	
+
 	@Override
-	public void draw(SpriteBatch batch, float stateTime){
-		if(state == State.DEAD){
+	public void draw(SpriteBatch batch, float stateTime) {
+		if (state == State.DEAD) {
 			animLoop = false;
-		}else{
+		} else {
 			animLoop = true;
 		}
 		TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);

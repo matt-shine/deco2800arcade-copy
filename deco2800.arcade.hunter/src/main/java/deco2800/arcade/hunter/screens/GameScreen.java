@@ -79,7 +79,7 @@ public class GameScreen implements Screen {
 
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
-		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"Hippo");
+		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo");
 		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"Lion");
 		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, false);
 
@@ -227,24 +227,21 @@ public class GameScreen implements Screen {
 	}
 	
 	private void createAnimals(){
-		String[] anims= {"Hippo","Lion","Zebra"};
+		String[] anims= {"hippo","lion","zebra"};
 		System.out.println("New Animal");
-		entities.add(new Animal(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
+//		entities.add(new Animal(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
 	}
 	
 	private void createItems(boolean weapon){
 		System.out.println("New Item");
-		entities.add(new Items(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)), 64, 64, weapon));
+//		entities.add(new Items(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)), 64, 64, weapon));
 	}
 
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			// Attack
 			player.attack();
-			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
-			if (Config.getPreferencesManager().isSoundEnabled()){
-				attack.play(hunter.getPreferencesManager().getVolume());
-			}
+			
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.V)){

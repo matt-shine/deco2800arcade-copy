@@ -64,7 +64,7 @@ public class Player extends Entity {
 
     //States used to determine how to draw the player
 	private enum State {
-		RUNNING, JUMPING, ATTACK, FALLING, DEAD
+		RUNNING, JUMPING, ATTACK, FALLING, DEAD, DAMAGED
 	};
 
 	private State state = State.RUNNING;
@@ -75,12 +75,13 @@ public class Player extends Entity {
 	private Sound death = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
 	private Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 	private int animalsKilled;
+	private int weaponAmmo;
 	
 	public Player(Vector2 pos, float width, float height) {
 		super(pos, width, height);
 		loadAnims();
 		lives = 3;
-		Weapon = "Spear";
+		Weapon = "Bow";
 		currAnim = runAnimation();
 		multiplier = 1;
 		
@@ -103,7 +104,8 @@ public class Player extends Entity {
 					Element eElement = (Element) nNode;
 					animationList.put(eElement.getAttribute("id")+"running", createAnimation(3,new Texture(eElement.getElementsByTagName("running").item(0).getTextContent()),0.1f ));
 					animationList.put(eElement.getAttribute("id")+"attack", createAnimation(2,new Texture(eElement.getElementsByTagName("attack").item(0).getTextContent()),0.3f ));
-					animationList.put(eElement.getAttribute("id")+"jump", createAnimation(2,new Texture(eElement.getElementsByTagName("jumping").item(0).getTextContent()),2f ));
+					animationList.put(eElement.getAttribute("id")+"jump", createAnimation(1,new Texture(eElement.getElementsByTagName("jumping").item(0).getTextContent()),2f ));
+					animationList.put(eElement.getAttribute("id")+"fall", createAnimation(1,new Texture(eElement.getElementsByTagName("falling").item(0).getTextContent()),2f ));
 					animationList.put(eElement.getAttribute("id")+"damage", createAnimation(1,new Texture(eElement.getElementsByTagName("damage").item(0).getTextContent()),1f ));
 					animationList.put(eElement.getAttribute("id")+"death", createAnimation(1,new Texture(eElement.getElementsByTagName("death").item(0).getTextContent()),10f ));
 				}
@@ -186,7 +188,7 @@ public class Player extends Entity {
 	 * @return State
 	 */
 	public State getState() {
-		return state;
+		return this.state;
 	}
 
 	public void setWeapon(String s){
@@ -216,13 +218,18 @@ public class Player extends Entity {
 
 		setJumpVelocity(getJumpVelocity() - delta * Config.gravity);
 		setY(getY() + getJumpVelocity());
-
-        if (attackTime + Config.PLAYER_ATTACK_TIMEOUT < System.currentTimeMillis()) {
+		if (attackTime + Config.PLAYER_ATTACK_TIMEOUT > System.currentTimeMillis()){
+			this.state = State.ATTACK;			
+			currAnim = attackAnimation();
+		}else{
             this.state = State.RUNNING;
         }
 
-        if (damageTime + Config.PLAYER_BLINK_TIMEOUT < System.currentTimeMillis()) {
-            this.blink = false;
+        if (damageTime + Config.PLAYER_BLINK_TIMEOUT > System.currentTimeMillis()) {
+            this.state = State.DAMAGED;
+            currAnim = damageAnimation();
+        }else{
+        	this.blink = false;
         }
 
 		// Update the player state
@@ -234,9 +241,12 @@ public class Player extends Entity {
 		} else if (this.velocity.y > 0) {
 			this.state = State.JUMPING;
 			currAnim = jumpAnimation();
-		} else if (this.velocity.y <= 0) {
+		} else if (this.velocity.y < -1) {
 			this.state = State.FALLING;
+			currAnim = fallAnimation();
 		}
+		
+		score += 0.4; 
 	}
 
 	/**
@@ -284,6 +294,14 @@ public class Player extends Entity {
 		return animationList.get(Weapon + "jump");
 	}
 
+	public Animation fallAnimation(){
+		return animationList.get(Weapon + "fall");
+	}
+	
+	public Animation damageAnimation(){
+		return animationList.get(Weapon + "damage");
+	}
+	
 	/**
 	 * Returns the run animation
 	 * 
@@ -293,6 +311,7 @@ public class Player extends Entity {
 		return animationList.get(Weapon + "running");
 	}
 
+	
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
 		if (invulnerable){
@@ -357,17 +376,19 @@ public class Player extends Entity {
 			}
 			if (((Items)e).getItemType() == Items.Type.WEAPON){
 				setWeapon(((Items)e).getItem());
+				weaponAmmo = 10;
 			}else{
 				applyPlayerBuff(((Items)e).getItem());
 			}
 		}else if (e.getType() == "Animal") {
 			if (getState() == State.ATTACK){
 				System.out.println("Attack Animal");
-				entities.remove(e);
-				score = score + 20*multiplier;
+				score = score + 200*multiplier;
 				animalsKilled++;
+				entities.remove(e);
+//				((Animal)e).dead(entities);
 			}else{
-				
+				System.out.println(getState());
 				System.out.println("Animal Collision");
 				if (!invulnerable && !blink){
 					if (Config.getPreferencesManager().isSoundEnabled()){
@@ -496,10 +517,20 @@ public class Player extends Entity {
 	}
 
 	public void attack() {
-        if (this.state != State.ATTACK) {
-            state = State.ATTACK;
-            currAnim = attackAnimation();
-            attackTime = System.currentTimeMillis();
+    	if (attackTime + Config.PLAYER_ATTACK_COOLDOWN < System.currentTimeMillis()){
+    		if (this.state != State.ATTACK) {
+    			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
+    			if (Config.getPreferencesManager().isSoundEnabled()){
+    				attack.play(Config.getPreferencesManager().getVolume());
+    			}
+        		state = State.ATTACK;
+        		currAnim = attackAnimation();
+        		attackTime = System.currentTimeMillis();
+        		weaponAmmo -= 1;
+        		if (weaponAmmo <= 0){
+        			Weapon = "KnifeandFork";
+        		}
+        	}
         }
 	}
 	

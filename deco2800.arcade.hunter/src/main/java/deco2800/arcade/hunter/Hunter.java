@@ -28,6 +28,7 @@ public class Hunter extends PlatformerGame {
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
 
         public final static int PLAYER_ATTACK_TIMEOUT = 300; // Attack timeout in msec
+        public final static int PLAYER_ATTACK_COOLDOWN = 600;
         public static long PLAYER_BLINK_TIMEOUT = 1000;
 
         public static Random randomGenerator;

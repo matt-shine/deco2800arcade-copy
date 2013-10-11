@@ -85,24 +85,6 @@ public class TestFriendStorage extends DBTestCase {
 		databaseTester.onTearDown();
 	}
 	
-	Player testPlayer0 = new Player(0, null, null, null, null, null, null, null);
-	Player testPlayer1 = new Player(1, null, null, null, null, null, null, null);
-	Player testPlayer2 = new Player(2, null, null, null, null, null, null, null);
-	
-/*	@Test
-	public void testFriendRequest() throws DatabaseException {
-		// create a test ArrayList<Integer> of playerIDs
-		ArrayList<Integer> testFriendRequests = new ArrayList<Integer>();
-		testFriendRequests.add(1);
-		testFriendRequests.add(2);
-		// create a test response from the database
-		
-		// compare playerIDs
-		friendStorage.addFriendRequest(0, 1);
-		friendStorage.addFriendRequest(0, 2);
-		assertEquals(testFriendRequests, friendStorage.getFriendInviteList(0));
-	}*/
-	
 	@Override
 	protected void setUpDatabaseConfig(DatabaseConfig config) {
 		config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new ColumnFilter());
@@ -114,20 +96,26 @@ public class TestFriendStorage extends DBTestCase {
 		return tablePrimaryKeyMap;
 	}
 	
-private class ColumnFilter extends DefaultColumnFilter {
+	@Test
+	public void testAcceptFriendRequest() throws DatabaseException {
+		friendStorage.acceptFriendRequest(1, 2);
+		assertTrue(friendStorage.isFriends(1, 2));
+	}
 	
-	TestFriendStorage testFriendStorage = new TestFriendStorage();
-	Map<String, List<String>> tablePrimaryKeyMap = testFriendStorage.getTablePrimaryKeyMap();
-	
-	@Override
-	public boolean accept(String tableName, Column column) {
-		if (tablePrimaryKeyMap.containsKey(tableName)) {
-			return tablePrimaryKeyMap.get(tableName).contains(column.getColumnName());
-		} else {
-			return column.getColumnName().equalsIgnoreCase("U1");
+	private class ColumnFilter extends DefaultColumnFilter {
+		
+		TestFriendStorage testFriendStorage = new TestFriendStorage();
+		Map<String, List<String>> tablePrimaryKeyMap = testFriendStorage.getTablePrimaryKeyMap();
+		
+		@Override
+		public boolean accept(String tableName, Column column) {
+			if (tablePrimaryKeyMap.containsKey(tableName)) {
+				return tablePrimaryKeyMap.get(tableName).contains(column.getColumnName());
+			} else {
+				return column.getColumnName().equalsIgnoreCase("U1");
+			}
 		}
 	}
-}
 	
 	
 }

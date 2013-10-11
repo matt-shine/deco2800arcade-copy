@@ -3,12 +3,13 @@ package deco2800.arcade.landInvaders;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.swing.*;
+
 import java.util.ArrayList;
 
 public class Invaders extends JFrame implements Runnable {
 	JFrame appFrame;
 	public static int Width = 800;
-	public static int Height = 550;
+	public static int Height = 670;
 	private Image background = null;
 	private Graphics mains;
 	private BufferedImage bg;
@@ -24,6 +25,7 @@ public class Invaders extends JFrame implements Runnable {
 	private int bglevel;
 	private String imgString;
 	private Image frame = null;
+	private int healthBar;
 
 	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
@@ -34,6 +36,11 @@ public class Invaders extends JFrame implements Runnable {
 		super("Land Invaders");
 		bglevel = 1;
 		WallList = new ArrayList<blockWall>();
+		
+		healthBar = 3;
+		JLabel label = new JLabel ("3");
+		
+
 		
 		setGameImg("/tank/");
 		imgString = "/tank/";
@@ -58,7 +65,7 @@ public class Invaders extends JFrame implements Runnable {
 		
 		mains = bg.getGraphics();
 		mains.drawImage(background, 0, 0, Width, Height, panel);
-		mains.drawImage(frame, 0, 0, Width, Height, panel);
+		mains.drawImage(frame, 0, 0, Width, 1000, panel);
 
 		setBackground(Color.black);
 		setVisible(true);
@@ -90,7 +97,7 @@ public class Invaders extends JFrame implements Runnable {
 
 		mains.clearRect(0, 0, Width, Height);
 		mains.drawImage(background, 0, 0, Width, Height, panel);
-		mains.drawImage(frame, 10, 20, Width, Height, panel);
+		mains.drawImage(frame, 10, 20, Width, 662, panel);
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
 

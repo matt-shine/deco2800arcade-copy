@@ -99,7 +99,7 @@ public class MenuScreen extends JFrame{
 		
 		
 		this.setVisible(true);
-		this.setSize(800,500);
+		this.setSize(800,530);
 
 	}
 

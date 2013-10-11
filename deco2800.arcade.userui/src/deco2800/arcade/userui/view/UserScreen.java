@@ -57,6 +57,8 @@ public class UserScreen extends JFrame{
 	//Declare Images 
 	private ImageIcon picavatar, pichistorybar, piclocked, picunlocked, piceditbutton,
 	piconline, picoffline;
+	private ImageIcon home, homehover, forum, forumhover, store, storehover,
+	library, libraryhover, profile, profilehover;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -82,6 +84,16 @@ public class UserScreen extends JFrame{
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
+		homehover = new ImageIcon("assets/images/homehover.png");
+		home = new ImageIcon("assets/images/home.png");
+		storehover = new ImageIcon("assets/images/storehover.png");
+		store = new ImageIcon("assets/images/store.png");
+		libraryhover = new ImageIcon("assets/images/libraryhover.png");
+		library = new ImageIcon("assets/images/library.png");
+		forumhover = new ImageIcon("assets/images/forumhover.png");
+		forum = new ImageIcon("assets/images/forum.png");
+		profilehover = new ImageIcon("assets/images/profilehover.png");
+		profile = new ImageIcon("assets/images/profile.png");
 				
 		/*
 		 *  Create all Panels 
@@ -170,7 +182,7 @@ public class UserScreen extends JFrame{
 	    editbutton = new JButton(piceditbutton);
 	    editbutton.setBorder(BorderFactory.createEmptyBorder());
 	    editbutton.setContentAreaFilled(false);
-	    
+
 	    //Add Labels	    
         avatar = new JLabel();
         avatar.setIcon(picavatar);
@@ -197,40 +209,41 @@ public class UserScreen extends JFrame{
 	public void addmenupanel(){
 		
 	    //Page Button Links
-	    myprofilelink = new JButton("MY PROFILE");
-	    myprofilelink.setFont(linkbold);
+	    myprofilelink = new JButton();
 	    myprofilelink.setBorder(BorderFactory.createEmptyBorder());
 	    myprofilelink.setContentAreaFilled(false);
-	    myprofilelink.setForeground(Color.WHITE);
-	    homelink = new JButton("HOME");
-	    homelink.setFont(blacklink);
-	    homelink.setForeground(Color.white);
+	    myprofilelink.setIcon(profile);
+	    myprofilelink.setRolloverIcon(profilehover);
+	    homelink = new JButton();
 	    homelink.setBorder(BorderFactory.createEmptyBorder());
 	    homelink.setContentAreaFilled(false);
-	    librarylink = new JButton("LIBRARY");
-	    librarylink.setFont(blacklink);
-	    librarylink.setForeground(Color.white);
+	    homelink.setIcon(home);
+	    homelink.setRolloverIcon(homehover);
+	    librarylink = new JButton();
 	    librarylink.setBorder(BorderFactory.createEmptyBorder());
 	    librarylink.setContentAreaFilled(false);
-	    storelink = new JButton("STORE");
-	    storelink.setFont(blacklink);
-	    storelink.setForeground(Color.white);
+	    librarylink.setIcon(library);
+	    librarylink.setRolloverIcon(libraryhover);
+	    storelink = new JButton();
 	    storelink.setBorder(BorderFactory.createEmptyBorder());
 	    storelink.setContentAreaFilled(false);
-	    forumlink = new JButton("FORUM");
-	    forumlink.setFont(blacklink);
-	    forumlink.setForeground(Color.white);
+	    storelink.setIcon(store);
+	    storelink.setRolloverIcon(storehover);
+	    forumlink = new JButton();
 	    forumlink.setBorder(BorderFactory.createEmptyBorder());
 	    forumlink.setContentAreaFilled(false);
+	    forumlink.setIcon(forum);
+	    forumlink.setRolloverIcon(forumhover);
 	    
 		//Add Elements to Panel
 	    menupanel = new ImagePanel(new ImageIcon("assets/images/menu_bar.png").getImage());
 	    menupanel.setLayout(new MigLayout());	    
-        menupanel.add(homelink, "center, gapbefore 250px");
-        menupanel.add(storelink, "center, gapbefore 100px");
-        menupanel.add(librarylink, "center, gapbefore 100px");
-        menupanel.add(forumlink, "center, gapbefore 100px");
-        menupanel.add(myprofilelink,"center, gapbefore 350px");	    		
+        menupanel.add(homelink, "center, gapbefore 200px");
+        menupanel.add(storelink, "center, gapbefore 50px");
+        menupanel.add(librarylink, "center, gapbefore 50px");
+        menupanel.add(forumlink, "center, gapbefore 50px");
+        menupanel.add(myprofilelink,"center, gapbefore 370px");	    
+        
 	}
 	
 	/**

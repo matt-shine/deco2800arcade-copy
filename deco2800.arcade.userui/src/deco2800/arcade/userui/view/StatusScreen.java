@@ -98,7 +98,7 @@ public class StatusScreen extends JFrame{
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
 		picaway = new ImageIcon("assets/images/away.png");
-		picbusy = new ImageIcon("assets/images/away.png");
+		picbusy = new ImageIcon("assets/images/busy.png");
 				
 		JLabel away = new JLabel();
 		JLabel busy = new JLabel();

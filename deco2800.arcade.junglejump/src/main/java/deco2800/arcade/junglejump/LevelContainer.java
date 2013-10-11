@@ -29,7 +29,7 @@ public class LevelContainer {
 		levels = new ArrayList<Level>();
 		currentLevel = 0;
 		currentWorld = 0;
-		levelAmount = 4;
+		levelAmount = 5;
 		
 		// Read level from file
 		for(int i=0;i<worldAmount;i++) {
@@ -110,7 +110,7 @@ public class LevelContainer {
 				currentWorld = 0;
 			}
 			junglejump.world = currentWorld;
-			junglejump.gameBackground = new Texture(("junglejumpassets/world" + currentWorld+1 + "/background.png"));
+			junglejump.gameBackground = new Texture(("junglejumpassets/world" + (currentWorld+1) + "/background.png"));
 			junglejump.worldNumText = new Texture(("junglejumpassets/" + (currentWorld + 1) + ".png"));
 		}
 		junglejump.currentLevel = getLevel(currentLevel);

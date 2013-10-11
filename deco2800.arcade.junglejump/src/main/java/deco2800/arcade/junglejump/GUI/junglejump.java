@@ -2,6 +2,7 @@ package deco2800.arcade.junglejump.GUI;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -33,7 +35,9 @@ import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
-import deco2800.arcade.model.Achievement;
+import deco2800.arcade.junglejump.Level;
+import deco2800.arcade.junglejump.LevelContainer;
+import deco2800.arcade.junglejump.Platform;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -42,11 +46,13 @@ import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-
+import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 /**
  * Main class for Jungle Jump Game Instantiates game with scene, player and
  * assets
- * 
+ *
  */
 @ArcadeGame(id = "junglejump")
 public class junglejump extends GameClient implements InputProcessor {
@@ -58,14 +64,19 @@ public class junglejump extends GameClient implements InputProcessor {
 	public float ACHIEVEMENTS = (float) (242 - 37.5 * 3);
 	public float OPTIONS = (float) (242 - 37.5 * 4);
 	public float QUIT = (float) (242 - 37.5 * 5);
+	
+	public int BANANAS_FOUND = 0;
 
 	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS
 	}
+
+	int monkeyLength = 35;
+	int monkeyHeight = 40;
 
 	private GameState gameState;
 	PerspectiveCamera cam;
-	private SpriteBatch batch;
+	private static SpriteBatch batch;
 
 	Frustum camGone = new Frustum();
 	private World world;
@@ -79,23 +90,45 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static final int SCREENWIDTH = 800;
 	float butX;
 	float butY;
-	float monkeyX;
-	float monkeyY, monkeyYoriginal;
+	public static float monkeyX;
+	public static float monkeyY;
+	float monkeyYoriginal;
 	boolean movingLeft, movingRight;
 	int monkeyRun = 0;
 	boolean leap = true;
 	boolean sit = false;
+	public static boolean onVine = false;
 	boolean jumping = false;
 	float velocity = 5.0f;
 	boolean correct = false;
 	boolean onPlatform, isFalling = false;
 
+//	public int currentLevelIndex = 0;
+	static LevelContainer currentCont = new LevelContainer();
+	public static Level currentLevel = currentCont.getLevel(currentCont.currentLevel);
+//	public static int currentWorld = 0;
+
+	public static float monkeyDefaultX;
+	public static float monkeyDefaultY;
+
 	Texture texture;
+	Clip clip;
 	Texture monkeySit, monkeyRun1, monkeyRun2;
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
 	Texture gameBackground, platform;
 	ShapeRenderer shapeRenderer;
+
+	/* ACHIEVEMENT VARIABLES */
+	ArrayList<Achievement> achievementArray;
+
+	// achievement fonts used for achievement screen
+	BitmapFont achievementTitleFont;
+	BitmapFont achievementIDFont;
+	BitmapFont achievementNameFont;
+	BitmapFont achievementDescriptionFont;
+	BitmapFont achievementThresholdFont;
+	Texture achievementIconTexture;
 
 	Music themeMusic;
 	Clip menuSound, jump, die, levelup, loselife, collect;
@@ -112,8 +145,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		butX = 488f;
 		butY = 242f;
-		monkeyX = 0f;
-		monkeyY = 0f;
+		monkeyDefaultX = 60f;
+		monkeyDefaultY = 80f;
+		monkeyX = monkeyDefaultX;
+		monkeyY = monkeyDefaultY;
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
@@ -157,7 +192,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
-		System.out.println(System.getProperty("user.dir"));
+        System.out.println(System.getProperty("user.dir"));
 		texture = new Texture(("junglejumpassets/mainscreen.png"));
 		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));
 		monkeySitRIGHT = new Texture(("junglejumpassets/monkeySit.png"));
@@ -168,14 +203,37 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyRun2 = new Texture(("junglejumpassets/monkeyRun2.png"));
 		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
 		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("junglejumpassets/gameBackground.png"));
-		platform = new Texture("junglejumpassets/platform.png");
+		gameBackground = new Texture(("junglejumpassets/gameBackground2.png"));
+		//platform = new Texture("junglejumpassets/platform.png");
+
+		/* ACHIEVEMENT STUFF */
+		AchievementClient achClient = this.getAchievementClient();
+		Game myGame = this.getGame();
+
+		achievementArray = new ArrayList<Achievement>();
+		achievementArray = achClient.achievementsForGame(myGame);
+
+		if (achievementArray.isEmpty()) {
+			System.out.println("list of achievements is empty. will be fixed with merge with master (NEW ACHIEVEMENT API NEEDED)");
+			achievementArray.add(new Achievement("-1", "Empty Achievement List", "issue is in the achievement api of our branch. we have to merge master in to our branch when we can", 0, "I.D10t"));
+		}
+
+		//AchievementProgress playerProgress = achClient.progressForPlayer(this.getPlayer());
+		//System.out.println("progress: " + playerProgress);
+
+		achievementTitleFont       = new BitmapFont(false);
+		achievementIDFont          = new BitmapFont(false);
+		achievementNameFont        = new BitmapFont(false);
+		achievementDescriptionFont = new BitmapFont(false);
+		achievementThresholdFont   = new BitmapFont(false);
+		achievementIconTexture     = new Texture(("junglejumpassets/monkeySit.png"));
+
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
-		
+
 		// add the overlay listeners
 		this.getOverlay().setListeners(new Screen() {
 
@@ -185,7 +243,6 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void hide() {
-
 			}
 
 			@Override
@@ -253,18 +310,18 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (movingLeft) {
 				monkeyX -= 2;
 				monkeyRun--;
-				if (!isOnPlatform(monkeyX, monkeyY)) {
+				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
 			if (movingRight) {
 				monkeyX += 2;
 				monkeyRun++;
-				if (!isOnPlatform(monkeyX, monkeyY)) {
+				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
-			if ((monkeyY > -3) && (monkeyY < 3)) {
+			if ((monkeyY < 3)) {
 				isFalling = false;
 			}
 			if (isFalling) {
@@ -272,16 +329,29 @@ public class junglejump extends GameClient implements InputProcessor {
 					isFalling = false;
 				} else monkeyY += -9.8f / 2f;
 			}
+			if(monkeyY <= 5) {
+				killMonkey();
+			}
 			if (jumping) {
 				velocity = (velocity - 9.8f / 75f);
-				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, monkeyY))) {
-					monkeyY += velocity;
+				//System.out.println("monkeyY " + monkeyY + " monkeyYor " + monkeyYoriginal + " == " + (monkeyY > monkeyYoriginal) +(monkeyY + velocity < 1f) + velocity + " " + monkeyY);
+				System.out.println(monkeyY > monkeyYoriginal);
+				System.out.println(!isOnPlatform(monkeyX, monkeyY)); //this is false :(
+				System.out.println(monkeyY + " " + monkeyYoriginal);
+				if ((monkeyY > monkeyYoriginal) && (!isOnPlatform(monkeyX, ++monkeyY))) {
+					if (monkeyY + velocity < 1f) {
+						monkeyY = 0;
+					} else {
+						monkeyY += velocity;
+					}
 					if (correct) {
 						monkeyYoriginal += 1.3f;
 						correct = false;
 					}
 				} else {
-					isFalling = false;
+					System.out.println(true);
+					isFalling = true;	// Changed this to true as monkey would be falling
+										// Gets rid of floating in air glitch
 					jumping = false;
 				}
 			}
@@ -311,7 +381,22 @@ public class junglejump extends GameClient implements InputProcessor {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
 			// Add platforms from platform coordinate array
-			batch.draw(platform, 100, 50);
+//			currentLevel = LevelContainer.getLevel(currentLevelIndex);
+//			for(int i=0; i<currentLevel.platformAmount(); i++) {
+//				Platform p = currentLevel.getPlatforms().get(i);
+//				float platY = p.getY() + (currentLevelIndex * SCREENHEIGHT); // Because levels are stacked on each other
+//				batch.draw(p.getTexture(), p.getX(), platY);
+//			}
+			for (Platform p : currentLevel.getPlatforms()) {
+				p.onActive();
+				if(p.getX() >= 1000) {
+					p.setX(p.getX()-1000);
+				}
+				if(p.visible){ 
+					batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+				}
+			}
+			//batch.draw(platform, 100, 50);
 
 			batch.end();
 			camera.update();
@@ -319,15 +404,130 @@ public class junglejump extends GameClient implements InputProcessor {
 			break;
 		case GAMEOVER:
 			break;
+		case ACHIEVEMENTS:
+			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.setProjectionMatrix(camera.combined);
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			batch.begin();
+			// Draw achievement labels and graphics here
+			achievementTitleFont.draw(batch, "Achievements", 100, SCREENHEIGHT); /* TITLE */
+			achievementTitleFont.draw(batch, "Press \"BACKSPACE\" to go back to the main menu.", 100, SCREENHEIGHT-20); /* navigation */
+			// loop through achievements and draw relevant information
+			for (int i = 0; i <= achievementArray.size() - 1; i++) {
+				// draw achievement information set out
+				// draw achievement id in a small font (unimportant information for most users)
+				achievementIDFont.draw(batch, achievementArray.get(i).id, 10, 460 + ((i + 1)*-40));
+				achievementNameFont.draw(batch, achievementArray.get(i).name, 100, 460 + ((i + 1)*-55));
+				achievementIDFont.draw(batch, achievementArray.get(i).description, 100, 460 + ((i + 1)*-95));
+				achievementThresholdFont.draw(batch,Integer.toString(achievementArray.get(i).awardThreshold),SCREENWIDTH - 100,460 + ((i + 1)*-50));
+				// do something for the achievement icon
+				batch.draw(achievementIconTexture,40,460 + ((i + 1)*-90),32,32);
+			}
+			batch.end();
+			camera.update();
+			super.render();
+			break;
 		}
 
 	}
+
+	public void killMonkey() {
+		monkeyY = 100;
+		monkeyX = 10;
+	}
+
+	public static void drawLevel() {
+		batch.begin();
+		System.out.println(currentLevel);
+		for (Platform p : currentLevel.getPlatforms()) {
+			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
+		}
+		batch.end();
+	}
+
 	public boolean isOnPlatform(float x, float y) {
-		// Place holder for checking through platform array
-		// Consider data structure for efficiency
-		System.out.print(y);
-		if (x > 100 && x < 170 && y > 50 && y < 75 ) return true;
-		else return false;
+		for (Platform p : currentLevel.getPlatforms()) {
+			// Check x and y are within the platform boundaries and monkey is on it
+			if (x > (p.getX() - monkeyLength)
+					&& x < (p.getX()+p.getWidth() - 10)
+					&& y <= p.getY() + p.getHeight() // Top of platform
+					&& y >= p.getY() - monkeyHeight) {				// Bottom of platform
+
+				System.out.println("Width:" + p.getWidth() + " Height" + p.getHeight()
+						+ " X:" + p.getX() + " Y:" + p.getY() + " onPlatform: " + onPlatform + "  isFalling: " + isFalling);
+				
+				p.setActive();
+				
+				if( p.platType == 'b') {
+					p.visible = false;
+					BANANAS_FOUND++;
+					System.out.println(BANANAS_FOUND/2);
+					p.setY(10000);
+					
+					// Play banana sound
+					try{ 
+						File file = new File("junglejumpassets/pickup.wav");
+						FileHandle fileh = new FileHandle(file);
+						AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+						Clip clip = AudioSystem.getClip();
+						clip.open(audioIn);
+						clip.start();
+					} catch (Exception e) {
+						Gdx.app.log(junglejump.messages,
+								"Audio File for Banana Music Not Found");
+					}
+					
+					return true;
+				} else {
+
+					// If the monkey's colliding with the platform, place him on top
+					if(y > (p.getY() + p.getHeight()/2)
+							&& y < p.getY() + p.getHeight()) {
+						System.out.println("resetting monkey");
+						onPlatform = true;
+						monkeyY = p.getY() + p.getHeight();
+						jumping = false;
+						return true;
+					}
+					
+					jumping = false;
+					
+					// Check if monkey hits left side of platform
+					if(x > (p.getX() - monkeyLength) && x < p.getX() + p.getWidth()/2 - monkeyLength
+							&& y <= p.getY() + p.getHeight()/2) {
+						monkeyX = p.getX() - monkeyLength;
+						onPlatform = false;
+						isFalling = true;
+						return false;
+					}
+					
+					// Same for right side
+					if(x > (p.getX() + p.getWidth()/2) &&
+							x < (p.getX() + p.getWidth() - 10)
+							&& y <= p.getY() + p.getHeight()/2) {
+						monkeyX = p.getX() + p.getWidth() -10;
+						onPlatform = false;
+						isFalling = true;
+						return false;
+					}
+					
+	
+					// If monkey hits bottom of platform tough titties
+					/*if(y >= p.getY() - monkeyHeight
+							&& y <= p.getY()) {
+						monkeyY = p.getY() - monkeyHeight;
+						p.setInactive();
+						onPlatform = false;
+						isFalling = true;
+						return false;
+					}*/
+					return true;
+				}
+			} else {
+				p.setInactive();
+			}
+		} return false;
 	}
 
 	@Override
@@ -337,6 +537,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 			@Override
 			public void dispose() {
+
 			}
 
 			@Override
@@ -378,6 +579,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void resume() {
 		super.resume();
+		clip.start();
 		Gdx.app.log(junglejump.messages, "Resume");
 	}
 
@@ -386,13 +588,13 @@ public class junglejump extends GameClient implements InputProcessor {
 		game = new Game();
 		game.id = "junglejump";
 		game.name = "Jungle Jump";
+		game.description = "Help Jay find Jay's Jane"; // Nathaniel for fun.
 	}
 
 	public Game getGame() {
 		return game;
 	}
 
-	//
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -410,6 +612,16 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (butY == NEW_GAME) {
 				gameState = GameState.INPROGRESS;
 			}
+			if (butY == ACHIEVEMENTS) {
+				gameState = GameState.ACHIEVEMENTS;
+			}
+		}
+		if (keycode == Keys.BACKSPACE) {
+			// pressed backspace
+			if (gameState == GameState.ACHIEVEMENTS) {
+				// load main menu
+				gameState = GameState.AT_MENU;
+			}
 		}
 		if (keycode == Keys.RIGHT) {
 			// Move right
@@ -420,11 +632,26 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.SPACE) {
 			// Jump
-			if (!jumping) {
+			if (!jumping && !isFalling) {
 				velocity = 5.0f;
 				monkeyYoriginal = monkeyY - 1f;
+				monkeyY+=1.1f;
 				correct = true;
 				jumping = true;
+				
+				
+				// Play sound effect for jumping
+				try{ 
+					File file = new File("junglejumpassets/jump.wav");
+					FileHandle fileh = new FileHandle(file);
+					AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+					Clip clip = AudioSystem.getClip();
+					clip.open(audioIn);
+					clip.start();
+				} catch (Exception e) {
+					Gdx.app.log(junglejump.messages,
+							"Audio File for Jump Music Not Found");
+				}
 			}
 		}
 		if (keycode == Keys.UP) {
@@ -435,7 +662,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					menuSound.stop();
 				}
 			}
-			
+
 			// Climb
 		}
 		if (keycode == Keys.DOWN) {
@@ -477,6 +704,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.DOWN) {
 			// Climb down STOP
+		}
+		if (keycode == Keys.ESCAPE) {
+			clip.stop();
 		}
 		return true;
 	}

@@ -8,9 +8,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.PlayerClient;
+import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.model.Achievement;
 
 public abstract class GameClient extends com.badlogic.gdx.Game {
 
@@ -22,24 +26,46 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	private boolean overlayInitialised = false;
 	private int width, height;
     private AchievementClient achievementClient;
+    private PlayerClient playerClient;
     private boolean hasF11PressedLast = false;
+    
+	private PackageClient packClient;
     
 	public GameClient(Player player, NetworkClient networkClient) {
 		
 		this.player = player;
 		this.networkClient = networkClient;
+		this.playerClient = new PlayerClient(networkClient);
         this.achievementClient = new AchievementClient(networkClient);
+        //this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
+		
+		this.packClient = new PackageClient();
 	}
 
 	public abstract Game getGame();
+	
+    public void achievementAwarded(Achievement ach) {
+        System.out.println("Achievement `" + ach.name + "` awarded!");
+    }
+
+    public void progressIncremented(Achievement ach, int progress) {
+        System.out.println("Progress in achievement `" + ach.name + "`: (" + progress +
+                           "/" + ach.awardThreshold + ")");
+    }
+
+    public void setNetworkClient(NetworkClient client) {
+        achievementClient.setNetworkClient(client);
+        playerClient.setNetworkClient(client);
+    }
 
     public void incrementAchievement(final String achievementID) {
         achievementClient.incrementProgress(achievementID, player);
         
-        //FIXME gigantic line? Indentation?
-        //if (achievementClient.progressForPlayer(player).progressForAchievement(achievementClient.achievementForID(achievementID)) >= achievementClient.achievementForID(achievementID).awardThreshold) {
-        
+        /*if (achievementClient.progressForPlayer(player).
+        		progressForAchievement(achievementClient.achievementForID(achievementID)) >= 
+        		achievementClient.achievementForID(achievementID).awardThreshold) {
+        */
         
         	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 				
@@ -52,6 +78,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	        });
         	
     	//}
+    }
+
+    public AchievementClient getAchievementClient() {
+        return this.achievementClient;
+    }
+    
+    public PlayerClient getPlayerClient() {
+    	return this.playerClient;
     }
 
 	/**
@@ -137,9 +171,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	    
 
 		//toggles fullscreen on F11
-	    //FIXME big lines
-		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast && (hasF11PressedLast = !hasF11PressedLast)) {
-			Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width, Gdx.graphics.getDesktopDisplayMode().height, !Gdx.graphics.isFullscreen());
+		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast &&
+				(hasF11PressedLast = !hasF11PressedLast)) {
+			
+			Gdx.graphics.setDisplayMode(
+					Gdx.graphics.getDesktopDisplayMode().width,
+					Gdx.graphics.getDesktopDisplayMode().height,
+					!Gdx.graphics.isFullscreen()
+			);
 		}
 		
 	}

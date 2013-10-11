@@ -61,8 +61,6 @@ public class TestHashStorage {
 		hashStorage.initialise();
 
 		IDataSet ds = getDataSet();
-		FlatXmlWriter fxw = new FlatXmlWriter(System.out);
-		fxw.write(ds);
 		databaseTester.setDataSet(ds);
 		databaseTester.onSetup();
 	}

@@ -9,20 +9,12 @@ import java.util.*;
 import org.dbunit.DBTestCase;
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
-import org.dbunit.database.DatabaseConfig;
-import org.dbunit.database.DatabaseConnection;
-import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.Column;
-import org.dbunit.dataset.DataSetException;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.dataset.xml.FlatXmlWriter;
+import org.dbunit.database.*;
+import org.dbunit.dataset.*;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
-import org.dbunit.dataset.filter.IColumnFilter;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
+import org.junit.*;
 
 import deco2800.arcade.model.Player;
 import deco2800.server.database.DatabaseException;
@@ -41,10 +33,8 @@ public class TestFriendStorage extends DBTestCase {
 	 * @throws Exception
 	 */
 	@BeforeClass
-	public static void setUpClass() throws Exception {
-		databaseTester = new JdbcDatabaseTester(
-                "org.apache.derby.jdbc.EmbeddedDriver",
-                "jdbc:derby:Arcade;user=server;password=server;create=true");
+	public static void setUpClass() throws ClassNotFoundException {
+		
 	}
 	
 	@Override
@@ -70,16 +60,17 @@ public class TestFriendStorage extends DBTestCase {
 	@Before
 	public void setUp() throws Exception {
 		playerStorage = new PlayerStorage();
+		playerStorage.initialise();
 		friendStorage = new FriendStorage();
         friendStorage.initialise();
         
+        databaseTester = new JdbcDatabaseTester(
+				"org.apache.derby.jdbc.EmbeddedDriver",
+				"jdbc:derby:Arcade;user=server;password=server;create=true");
 		IDataSet ds = getDataSet();
-		 FlatXmlWriter fxw = new FlatXmlWriter(System.out);
-		 fxw.write(ds);
         databaseTester.setDataSet(ds);
       
-       
-		databaseTester.onSetup();
+		// databaseTester.onSetup();
 		IDatabaseConnection connection = databaseTester.getConnection();
 		DatabaseConfig config = connection.getConfig();
 		setUpDatabaseConfig(config);
@@ -108,9 +99,9 @@ public class TestFriendStorage extends DBTestCase {
 	@Test
 	public void testAcceptFriendRequest() throws DatabaseException {
 		friendStorage.acceptFriendRequest(1, 2);
-		assertTrue(true);
-		//assertTrue(friendStorage.isFriends(1, 2));
+		assertTrue(friendStorage.isFriends(1, 2));
 	}
+	
 	
 	private class ColumnFilter extends DefaultColumnFilter {
 		

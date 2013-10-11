@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import deco2800.arcade.protocol.highscore.GetScoreRequest;
@@ -42,12 +43,12 @@ public class HighscoreDatabase {
 							"CONSTRAINT primary_key PRIMARY KEY (HID))");
 			}
 			//Create game scores table 
-			tableData = connection.getMetaData().getTables(null, null, "HIGHSCORES_DATA", null);
+			tableData = connection.getMetaData().getTables(null, null, "USER_HIGHSCORES_DATA", null);
 			if (!tableData.next()) {
-				statement.execute("CREATE TABLE HIGHSCORES_DATA(ID INT PRIMARY KEY," +
+				statement.execute("CREATE TABLE USER_HIGHSCORES_DATA(ID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)," +
 							"Score_Type VARCHAR(50)," +
-							"HID INT," +
-							"Score INT," +
+							"HID INTEGER," +
+							"Score INTEGER," +
 							"FOREIGN KEY(HID) REFERENCES USER_HIGHSCORES(HID))");
 			}
 			
@@ -78,17 +79,17 @@ public class HighscoreDatabase {
 	public List<String> fetchData(GetScoreRequest gsReq) {
 		//Run the query corresponding to the requestID. This switch statement is probably going to get pretty big.
 		//System.out.println("adding a score should not get here.");
-		//try {
-		/* switch (gsReq.requestID) {
-			case 1: return null; //getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type); //Return value of query with requestID 1
+		try {
+		switch (gsReq.requestID) {
+			case 1: return getGameTopPlayers("Pong", 1, "Number"); //Return value of query with requestID 1
 			case 2: return null; //Return value of query with requestID 2
 			case 3: return null; //Return value of query with requestID 3
 			case 4: return null;
 			case 5: return null;
 			}
-		//} catch (DatabaseException e) {
+		} catch (DatabaseException e) {
 			//bad
-		//}
+		}
 		
 		//This should never be reached, as all requestIDs should be covered in the switch*/
 		return null;
@@ -104,8 +105,11 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public List<String> getGameTopPlayers(String Game_ID, int top, String type) throws DatabaseException{
-		/*List<String> data = new ArrayList<String>();
-
+		/*System.out.println("getGameTopPlayers..");
+		List<String> data = new ArrayList<String>();
+		data.add("game");
+		System.out.println("Game: " + Game_ID + ", limit: " + top + ", type: " + type);
+		
 		if (!initialised) {
 			initialise();
 		}
@@ -117,13 +121,14 @@ public class HighscoreDatabase {
 		
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT h.USERNAME from HIGHSCORES_PLAYER h INNER JOIN " +
-					"HIGHSCORES_DATA s on h.HID = s.HID WHERE GameId='" + Game_ID + "' AND Score_Type='" + type +
-					"' ORDER BY s.Score desc LIMIT " + top + ";");
-			while(resultSet.next())
-			{
-				data.add(resultSet.getString("USERNAME"));
-			}
+			String getTop = "SELECT * FROM USER_HIGHSCORES AS H,  USER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID = " + Game_ID + " AND D.Score_Type =" + type + ";";
+			//resultSet = statement.executeQuery(getTop);
+			System.out.println(getTop);
+			
+			//while(resultSet.next()) {
+			//	System.out.println(resultSet.getFetchSize());
+				//data.add(resultSet.getString("USERNAME"));
+			//}
 
 			return data;
 		} catch (SQLException e) {
@@ -144,7 +149,7 @@ public class HighscoreDatabase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		} */
+		}*/
 		return null;
 	}
 	
@@ -389,43 +394,37 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 * @throws SQLException 
 	 */
-	public void updateScore(String Game_ID, int Username, String type, int scores) throws DatabaseException, SQLException{
+	public void updateScore(String Game_ID, int Username, LinkedList<Integer> scores, LinkedList<String> types) throws DatabaseException, SQLException{
 		int hid = addHighscore(Game_ID, Username);
 		System.out.println("new HighScore ID = " + hid);
 		if (!initialised) {
 			initialise();
 		}
 		
-		System.out.println("Score to be added > game: " + Game_ID + ", player: " + Username + ", type: " + type + ", score: " + scores);
-		
-		/* Get a connection to the database
-		Connection connection = Database.getConnection();
-
-		Statement statement = null;
-		ResultSet resultSet = null;
-		try {
-			statement = connection.createStatement();
+		for(int i = 0; i < scores.size(); i++){
+			System.out.println("Score to be added > game: " + Game_ID + ", player: " + Username + ", type: " + types.get(i) + ", score: " + scores.get(i));
 			
-			String insertTableSQL = "INSERT INTO HIGHSCORES_DATA"
-					+ "(Score_Type, HID, Score) VALUES"
-					+ "(" + type + "," + hid +  ", " + score + ")";
-			
-			statement.executeUpdate(insertTableSQL);
-			
-			/************
-			 statement.executeQuery("UPDATE SCORES SET Score='" + score + "' WHERE ID="
-			 
-					+ "(SELECT h.ID FROM HIGHSCORES h INNER JOIN SCORES s on h.HID = s.HID"
-					+ "WHERE h.GameId='" + Game_ID + "' AND h.Username='" + Username + "' AND s.Score_Type='" + type + "');");
-			
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException(
-					"Unable to get player information from database", e);
-		} finally {
-			connectionCleanup(connection, statement, resultSet);
-		}*/
+			//Get a connection to the database
+			Connection connection = Database.getConnection();
+			Statement statement = null;
+			ResultSet resultSet = null;
+			try {
+				statement = connection.createStatement();
+				String insertTableSQL = "INSERT INTO USER_HIGHSCORES_DATA"
+						+ "(Score_Type, HID, Score) VALUES"
+						+ "('" + types.get(i) + "'," + hid +  ", " + scores.get(i) + ")";
+				
+				statement.executeUpdate(insertTableSQL);
+				System.out.println("InsertQUERY:" + insertTableSQL);
+				System.out.println("inserted correctly");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException(
+						"Unable to get player information from database", e);
+			} finally {
+				connectionCleanup(connection, statement, resultSet);
+			}
+		}
 	}
 	
 	

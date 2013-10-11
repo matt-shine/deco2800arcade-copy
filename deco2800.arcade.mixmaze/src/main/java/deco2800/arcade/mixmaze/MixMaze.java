@@ -34,6 +34,7 @@ public final class MixMaze extends GameClient {
 	 */
 	public MixMaze(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
+		Achievements.initializeAchievements(this);
 	}
 
 	@Override

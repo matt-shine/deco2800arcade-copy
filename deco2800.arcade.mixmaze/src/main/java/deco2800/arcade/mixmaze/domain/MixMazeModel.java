@@ -3,9 +3,11 @@ package deco2800.arcade.mixmaze.domain;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import deco2800.arcade.mixmaze.Achievements;
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
 /**
@@ -248,6 +250,8 @@ public class MixMazeModel implements IMixMazeModel {
 		gameEndTime = Calendar.getInstance().getTime();
 		int player1Score = getPlayerScore(player[0]);
 		int player2Score = getPlayerScore(player[1]);
+		Achievements.getInstance().incrementAchievement(Achievements.Achievement.Playa);
+		
 		if(player1Score != player2Score) {
 			return (player1Score > player2Score) ? player[0] : player[1];
 		} else {

@@ -219,8 +219,8 @@ public class FriendStorage {
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS" 
-										+ " WHERE U1='" + playerID + "'"
-										+ " AND U2='" + player + "'");
+										+ " WHERE U1=" + playerID
+										+ " AND U2=" + player );
 			// if player-friend relationship exists, block the player
 			if (resultSet.first()) {
 				resultSet.updateInt("BLOCKED", 1);

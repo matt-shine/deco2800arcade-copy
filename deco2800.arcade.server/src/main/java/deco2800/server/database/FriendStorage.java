@@ -34,10 +34,10 @@ public class FriendStorage {
 				statement.execute("CREATE TABLE FRIENDS(U1 INT NOT NULL,"
 						+ "U2 INT NOT NULL,"
 						+ "STATUS INT NOT NULL,"
-						+ "BLOCKED INT NOT NULL"
+						+ "BLOCKED INT NOT NULL,"
 						+ "PRIMARY KEY(U1, U2),"
-						+ "FOREIGN KEY U1 REFERENCES PLAYER(playerID),"
-						+ "FOREIGN KEY U2 REFERENCES PLAYER(playerID)");
+						+ "FOREIGN KEY (U1) REFERENCES PLAYERS(playerID),"
+						+ "FOREIGN KEY (U2) REFERENCES PLAYERS(playerID))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -26,11 +26,13 @@ import org.junit.Test;
 import deco2800.arcade.model.Player;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.FriendStorage;
+import deco2800.server.database.PlayerStorage;
 
 
 public class TestFriendStorage extends DBTestCase {
 	private static IDatabaseTester databaseTester; //manage connections to the database
 	private FriendStorage friendStorage; //storage object to test
+	private PlayerStorage playerStorage;
 	private Map<String, List<String>> tablePrimaryKeyMap = new HashMap<String, List<String>>();
 	
 	/**
@@ -52,7 +54,7 @@ public class TestFriendStorage extends DBTestCase {
 	 * @throws IOException
 	 */
 	protected IDataSet getDataSet() throws DataSetException, IOException {
-		URL url = TestCreditStorage.class.getClassLoader().getResource("TestFriendStorage.xml");
+		URL url = TestFriendStorage.class.getClassLoader().getResource("TestFriendStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return builder.build(url);
@@ -66,8 +68,12 @@ public class TestFriendStorage extends DBTestCase {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		playerStorage = new PlayerStorage();
+		playerStorage.initialise();
+		
 		friendStorage = new FriendStorage();
         friendStorage.initialise();
+        
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
 		databaseTester.onSetup();

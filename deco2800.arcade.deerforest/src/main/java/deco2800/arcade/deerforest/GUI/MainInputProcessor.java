@@ -40,7 +40,13 @@ public class MainInputProcessor implements InputProcessor {
 	//define array of keys for P1 / P2 zones
 	final String[] P1Keys = {"P1HandZone", "P1MonsterZone", "P1SpellZone"};
 	final String[] P2Keys = {"P2HandZone", "P2MonsterZone", "P2SpellZone"};
-	
+
+    /**
+     * Constructs the input processor with the given game and view.
+     *
+     * @param game the game to be used by the input processor
+     * @param view the view to be used by the input processor
+     */
 	public MainInputProcessor(MainGame game, MainGameScreen view) {
 		this.game = game;
 		this.view = view;
@@ -51,110 +57,52 @@ public class MainInputProcessor implements InputProcessor {
         //Set up a spellLogic handler
         spellHandler = new SpellLogic(game, view, this);
 	}
-	
+
+    /**
+     * Interprets a key press, performing the proper action.
+     * @param keycode the key that was pressed
+     * @return true if key press was dealt with
+     */
 	@Override
 	public boolean keyDown (int keycode) {
-		//FIXME big method
         if(!gameStarted) {
             this.initialDraw(4);
             gameStarted = true;
             game.nextPhase();
             return true;
         }
-
         //Check for new game
         if(keycode == Keys.N) {
             this.newGame();
         }
-
         //Check for muted
         if(keycode == Keys.M) {
             game.toggleMuted();
         }
-
         if(gameFinished) {
             return false;
         }
-
         //Zoom in on card
         if(keycode == Keys.SHIFT_LEFT) {
-            //Check if zoom selection
-            if(zoomSelection != null) {
-                if(!zoomed) {
-                    currentScaleX = zoomSelection.getScaleX();
-                    currentScaleY = zoomSelection.getScaleY();
-                    currentX = zoomSelection.getX();
-                    currentY = zoomSelection.getY();
-                    zoomSelection.setScale(Gdx.graphics.getHeight()/(2*zoomSelection.getHeight()));
-                    float x = Gdx.graphics.getWidth()/2 - zoomSelection.getBoundingRectangle().getWidth()/2;
-                    float y = Gdx.graphics.getHeight()/2 - zoomSelection.getBoundingRectangle().getHeight()/2;
-                    zoomSelection.setPosition(x, y);
-                    zoomed = true;
-                    currentZoomed = zoomSelection;
-                } else {
-                    zoomSelection.setPosition(currentX, currentY);
-                    zoomSelection.setScale(currentScaleX, currentScaleY);
-                    currentZoomed = null;
-                    zoomed = false;
-                }
-            }
-
+            doZoom();
             return true;
         }
-
         //If currently zoomed return
         if(zoomed) return false;
-
         //Check if spell is waiting to be resolved
         if(spellHandler.needsSelection()) {
             return false;
         }
-
 		//Go to next phase
 		if(keycode == Keys.SPACE && game.getPhase() != null) {
-
-            //Don't let go to next phase until drawn
-            if(game.getPhase().equals("DrawPhase") && !drawn) return true;
-
-			game.nextPhase();
-
-            //Activate all continuous spells for this phase
-            spellHandler.activateContinuousEffects(game.getCurrentPlayer(), game.getPhase());
-
-			//Set stuff up at the start phase
-			if(game.getPhase().equals("StartPhase")) {
-				currentSelection = null;
-				view.setHighlightedZones(new ArrayList<Rectangle>());
-				game.nextPhase();
-                //reset hasAttacked
-                SpriteLogic.resetHasAttacked();
-                //reset drawn
-                this.drawn = false;
-			}
-
-            if(game.getPhase().equals("BattlePhase")) {
-                CardCollection field = game.getCardCollection(1, "Field");
-                field.addAll(game.getCardCollection(2, "Field"));
-                System.out.println(new ArrayList<AbstractCard>(field));
-            }
-
-            view.setPhaseDisplayed(false);
-            currentSelection = null;
-            view.setHighlightedZones(new ArrayList<Rectangle>());
+            doNextPhase();
             return true;
-		} 
-		
+		}
 		//Change player turns
 		if(keycode == Keys.ALT_LEFT) {
-			game.changeTurns();
-			game.nextPhase();
-			doDraw();
-			currentSelection = null;
-            view.setPhaseDisplayed(false);
-            view.setHighlightedZones(new ArrayList<Rectangle>());
+            doChangeTurns();
 			return true;
 		}
-
         return false;
     }
 
@@ -168,26 +116,29 @@ public class MainInputProcessor implements InputProcessor {
         return false;
     }
 
+    /**
+     * Interprets a click, generally this relates to selecting card for
+     * various purposes.
+     *
+     * @param x the x point of the click
+     * @param y the y point of the click
+     * @param pointer
+     * @param button what button was used (left, right, middle)
+     * @return true if click was dealt with
+     */
     @Override
     public boolean touchDown (int x, int y, int pointer, int button) {
-    	//FIXME big method
-        System.out.println("x,y ratio: " + (float)x / Gdx.graphics.getWidth() + "," + (float)y / Gdx.graphics.getHeight());
-
         //Check it was a single click
         if(button != Buttons.LEFT) return false;
-
         //If currently zoomed / gamefinished return
         if(zoomed || gameFinished) return false;
-
         //Reset zoomSelection color
         if(zoomSelection != null) zoomSelection.setSelected(false);
-
         //Check if spell is waiting to be resolved
         if(spellHandler.needsSelection()) {
             spellHandler.handleClick(x, y);
             return true;
         }
-
         //get zoomSelection
         zoomSelection = SpriteLogic.checkIntersection(1, x, y);
         if(zoomSelection == null) {
@@ -204,7 +155,6 @@ public class MainInputProcessor implements InputProcessor {
             zoomSelection.setField(SpriteLogic.getSpriteZoneType(zoomSelection)[0]);
             zoomSelection.setSelected(true);
         }
-
         //Check if click was on deck and try to draw
         if(!drawn && game.getPhase().equals("DrawPhase")) {
             if(view.deckAtPoint(x, y)) {
@@ -212,45 +162,23 @@ public class MainInputProcessor implements InputProcessor {
                 this.drawn = true;
             }
         }
-
     	//If there is already a current selected card then try to move it to
     	// the clicked space, set currentSelection to null then return
         //Can't move cards during battle phase, can only attack with cards on field
     	if(currentSelection != null && (!game.getPhase().equals("BattlePhase") || !currentSelection.isField())) {
-    		//completed successfully, so set current to null
-    		if(SpriteLogic.setCurrentSelectionToPoint(x,y)) {
-    			//Successfully moved card, update model
-    			String oldArea = currentSelection.getArea();
-    			String newArea = view.getArena().getAreaAtPoint(x, y);
-    			List<AbstractCard> cards = new ArrayList<AbstractCard>();
-    			AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), oldArea);
-    			cards.add(c);
-    			game.moveCards(currentSelection.getPlayer(), cards, oldArea, newArea);
-                //Check if a spell was moved from the hand to the field
-                if(currentSelection.getCard() instanceof AbstractSpell && oldArea.contains("Hand") && newArea.contains("Spell")) {
-                    //Play spell
-                    spellHandler.activateSpell(currentSelection.getPlayer(), (AbstractSpell)currentSelection.getCard(), currentSelection);
-                }
-    		}
-    		//clear available zones and currentSelection
-    		currentSelection = null;
-    		view.setHighlightedZones(new ArrayList<Rectangle>());
+    		tryBattle(x, y);
         	return true;
     	}
-
         //Handle battle phase attack selection
         if(currentSelection != null && game.getPhase().equals("BattlePhase") && currentSelection.isField()) {
             PhaseLogic.battlePhaseSelection(x,y);
         }
-
     	//Get the current Selection at point if it exists
     	currentSelection = SpriteLogic.checkIntersection(game.getCurrentPlayer(),x, y);
-    	
     	//There is a new currentSelection, set its parameters accordingly
     	if(currentSelection != null) {
     		SpriteLogic.setCurrentSelectionData(x,y);
     		return true;
-    		
     	} else {
     		//currentSelection is null, so set the highlighted zones 
     		//to be nothing then return
@@ -259,6 +187,15 @@ public class MainInputProcessor implements InputProcessor {
     	}
     }
 
+    /**
+     * Interprets the realising of a click, generally used when user is dragging
+     * a card around to place it into a zone
+     * @param x the x point of release
+     * @param y the y point of release
+     * @param pointer
+     * @param button what button was released
+     * @return true if the release was dealth with
+     */
 	@Override
     public boolean touchUp (int x, int y, int pointer, int button) {
 
@@ -298,6 +235,13 @@ public class MainInputProcessor implements InputProcessor {
 		return true;
     }
 
+    /**
+     * Handles the movement of a mouse, used for dragging cards around
+     * @param x the x point the mouse was dragged to
+     * @param y the y point the mouse was dragged to
+     * @param pointer
+     * @return
+     */
 	@Override
     public boolean touchDragged (int x, int y, int pointer) {
 
@@ -326,7 +270,12 @@ public class MainInputProcessor implements InputProcessor {
     public ExtendedSprite getCurrentSelection() {
     	return currentSelection;
     }
-    
+
+    /**
+     * Sets the click offset used when dragging cards around
+     * @param x the x offset
+     * @param y the y offset
+     */
     public void setOffset(float x, float y) {
     	xClickOffset = x;
     	yClickOffset = y;
@@ -336,6 +285,110 @@ public class MainInputProcessor implements InputProcessor {
         return currentZoomed;
     }
 
+    /**
+     * Zooms in on a given card, setting the new position and scale correctly,
+     * or returns card to place if already zoomed
+     */
+    private void doZoom() {
+        //Check if zoom selection
+        if(zoomSelection != null) {
+            if(!zoomed) {
+                currentScaleX = zoomSelection.getScaleX();
+                currentScaleY = zoomSelection.getScaleY();
+                currentX = zoomSelection.getX();
+                currentY = zoomSelection.getY();
+                zoomSelection.setScale(Gdx.graphics.getHeight()/(2*zoomSelection.getHeight()));
+                float x = Gdx.graphics.getWidth()/2 - zoomSelection.getBoundingRectangle().getWidth()/2;
+                float y = Gdx.graphics.getHeight()/2 - zoomSelection.getBoundingRectangle().getHeight()/2;
+                zoomSelection.setPosition(x, y);
+                zoomed = true;
+                currentZoomed = zoomSelection;
+            } else {
+                zoomSelection.setPosition(currentX, currentY);
+                zoomSelection.setScale(currentScaleX, currentScaleY);
+                currentZoomed = null;
+                zoomed = false;
+            }
+        }
+    }
+
+    /**
+     * Changes the phase to the next one, performing any relevant actions
+     */
+    private void doNextPhase() {
+        //Don't let go to next phase until drawn
+        if(game.getPhase().equals("DrawPhase") && !drawn) return;
+
+        game.nextPhase();
+
+        //Activate all continuous spells for this phase
+        spellHandler.activateContinuousEffects(game.getCurrentPlayer(), game.getPhase());
+
+        //Set stuff up at the start phase
+        if(game.getPhase().equals("StartPhase")) {
+            currentSelection = null;
+            view.setHighlightedZones(new ArrayList<Rectangle>());
+            game.nextPhase();
+            //reset hasAttacked
+            SpriteLogic.resetHasAttacked();
+            //reset drawn
+            this.drawn = false;
+        }
+
+        if(game.getPhase().equals("BattlePhase")) {
+            CardCollection field = game.getCardCollection(1, "Field");
+            field.addAll(game.getCardCollection(2, "Field"));
+            System.out.println(new ArrayList<AbstractCard>(field));
+        }
+
+        view.setPhaseDisplayed(false);
+        currentSelection = null;
+        view.setHighlightedZones(new ArrayList<Rectangle>());
+    }
+
+    /**
+     * Changes between player turns
+     */
+    private void doChangeTurns() {
+        game.changeTurns();
+        game.nextPhase();
+        doDraw();
+        currentSelection = null;
+        view.setPhaseDisplayed(false);
+        view.setHighlightedZones(new ArrayList<Rectangle>());
+    }
+
+    /**
+     * Tries to battle the current selection against whatever was clicked on
+     * at x, y
+     * @param x the x click point
+     * @param y the y click point
+     */
+    private void tryBattle(int x, int y) {
+        //completed successfully, so set current to null
+        if(SpriteLogic.setCurrentSelectionToPoint(x,y)) {
+            //Successfully moved card, update model
+            String oldArea = currentSelection.getArea();
+            String newArea = view.getArena().getAreaAtPoint(x, y);
+            List<AbstractCard> cards = new ArrayList<AbstractCard>();
+            AbstractCard c = SpriteLogic.getCardModelFromSprite(currentSelection, currentSelection.getPlayer(), oldArea);
+            cards.add(c);
+            game.moveCards(currentSelection.getPlayer(), cards, oldArea, newArea);
+            //Check if a spell was moved from the hand to the field
+            if(currentSelection.getCard() instanceof AbstractSpell && oldArea.contains("Hand") && newArea.contains("Spell")) {
+                //Play spell
+                spellHandler.activateSpell(currentSelection.getPlayer(), (AbstractSpell)currentSelection.getCard(), currentSelection);
+            }
+        }
+        //clear available zones and currentSelection
+        currentSelection = null;
+        view.setHighlightedZones(new ArrayList<Rectangle>());
+    }
+
+    /**
+     * Draws a card for the current player, adding it to their hand. Note that
+     * if the draw would cause them to have more than 6 cards it is not performed
+     */
     public void doDraw() {
     	
     	//Get current hand
@@ -367,6 +420,10 @@ public class MainInputProcessor implements InputProcessor {
 		SpriteLogic.setCurrentSelectionToRectangle(r);
 	}
 
+    /**
+     * Draws the initial n number of cards for each player
+     * @param n number of cards to draw
+     */
     public void initialDraw(int n) {
         //Draw initial cards
         for(int i = 0; i < 2*n; i++) {

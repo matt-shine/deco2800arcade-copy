@@ -525,6 +525,10 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
+    /**
+     * Defines the hashcode method, used for determining how each card is unique
+     * @return the hashcode
+     */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -539,6 +543,11 @@ public abstract class AbstractEffect {
 		return result;
 	}
 
+    /**
+     * compares this effect to another object
+     * @param obj the object to compare against
+     * @return true if the object is the same as this one, false otherwise
+     */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

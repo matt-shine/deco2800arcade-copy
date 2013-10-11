@@ -271,8 +271,8 @@ public class FriendStorage {
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS" 
-										+ " WHERE U1='" + playerID + "'"
-										+ " AND U2='" + player + "'");
+										+ " WHERE U1=" + playerID
+										+ " AND U2='" + player);
 			// if player-friend relationship exists, unblock the player
 			if (resultSet.first()) {
 				resultSet.updateInt("BLOCKED", 0);
@@ -372,8 +372,8 @@ public class FriendStorage {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			// retrieve the unaccepted friend request from the database
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS" 
-										+ " WHERE U1='" + playerID + "'"
-										+ " AND U2='" + friendID + "'"
+										+ " WHERE U1=" + playerID
+										+ " AND U2=" + friendID
 										+ " AND STATUS=0"
 										+ " AND BLOCKED=0");
 			// accept the friend request

@@ -102,6 +102,15 @@ public class TestFriendStorage extends DBTestCase {
 		assertTrue(friendStorage.isFriends(1, 2));
 	}
 	
+	@Test
+	public void testGetFriendsList() throws DatabaseException {
+		ArrayList<Integer> expectedFriends = new ArrayList<Integer>();
+		expectedFriends.add(2);
+		ArrayList<Integer> actualFriends = friendStorage.getFriendsList(1);
+		assertEquals(expectedFriends, actualFriends);
+	}
+	
+	
 	
 	private class ColumnFilter extends DefaultColumnFilter {
 		

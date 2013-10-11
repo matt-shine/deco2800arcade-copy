@@ -53,7 +53,6 @@ public class HighscoreListener extends Listener {
 		String output = "";
 		
 		Iterator<String> resultIterator = queryResult.iterator();
-		resultIterator.next();
 		
 		//Traverse through the scoreQueue, adding values to output
 		while (resultIterator.hasNext()) {
@@ -99,10 +98,6 @@ public class HighscoreListener extends Listener {
 
 			 //Get the data that's needed
 			 List<String> queryResult = hsDatabase.fetchData(gsReq);
-			 
-			 //hsDatabase.fetchData doesn't return anything at the moment, so this is just a placeholder column number for until it does
-			 queryResult = new LinkedList<String>();
-			 queryResult.add(0, "5");
 			 
 			 //Create the response
 			 GetScoreResponse gsRes = new GetScoreResponse();

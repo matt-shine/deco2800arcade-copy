@@ -84,17 +84,17 @@ public class Pong extends GameClient {
         HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
         
         //Single score
-        hsd.storeScore("Number", 1290193);
+        hsd.storeScore("Number", 11290193);
+        hsd.storeScore("Number", 30879);
         
         //Multiple scores
-        //hsd.addMultiScoreItem("Number", 123345);
-        //hsd.addMultiScoreItem("Distance", 123456543);
-        //hsd.sendMultiScoreItems();
+//        hsd.addMultiScoreItem("Number", 10);
+//        hsd.addMultiScoreItem("Distance", 1234043);
+//        hsd.sendMultiScoreItems();
         
         
-        //Getting scores
-        	//Not done yet.
-		System.out.println("Request ID: Deleted.");
+        //Getting top scores
+        hsd.getGameTopPlayers(10, true);
 	}
 	
 	/**

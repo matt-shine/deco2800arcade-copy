@@ -79,12 +79,12 @@ public class HighscoreDatabase {
 		//Run the query corresponding to the requestID. This switch statement is probably going to get pretty big.
 		//System.out.println("adding a score should not get here.");
 		try {
-		switch (gsReq.requestID) {
-			case 1: return getGameTopPlayers("Pong", 1, "Number"); //Return value of query with requestID 1
-			case 2: return null; //Return value of query with requestID 2
-			case 3: return null; //Return value of query with requestID 3
-			case 4: return null;
-			case 5: return null;
+			switch (gsReq.requestID) {
+				case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, "Number"); //Return value of query with requestID 1
+				case 2: return getUserHighScore("Matt", "Pong", "Number"); //Return value of query with requestID 2
+				case 3: return null; //Return value of query with requestID 3
+				case 4: return null;
+				case 5: return null;
 			}
 		} catch (DatabaseException e) {
 			//bad
@@ -106,7 +106,6 @@ public class HighscoreDatabase {
 	public List<String> getGameTopPlayers(String Game_ID, int top, String type) throws DatabaseException{
 		System.out.println("getGameTopPlayers..");
 		List<String> data = new ArrayList<String>();
-		data.add("3");
 		int topCount = 0;
 		System.out.println("Game: " + Game_ID + ", limit: " + top + ", type: " + type);
 		
@@ -121,52 +120,41 @@ public class HighscoreDatabase {
 		
 		try {
 			statement = connection.createStatement();
-			String getTop = "SELECT * FROM PLAYER_HIGHSCORES AS H,  PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "'";
+			String getTop = "SELECT * FROM PLAYER_HIGHSCORES AS H,  PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score DESC";
 			resultSet = statement.executeQuery(getTop);
-			int topScore;
 			//System.out.println(getTop);
 			
-			while(resultSet.next() && topCount < top) {
-				System.out.println("Player: " + resultSet.getString("Player"));
-				//data.add(String.valueOf(resultSet.getInt("PlayerID")));
-				//data.add(resultSet.getString("USERNAME"));
+			while(resultSet.next() && topCount <= top) {
+				//System.out.println("Player: " + resultSet.getString("Player"));
+				data.add(String.valueOf(resultSet.getString("Player")));
 				data.add(String.valueOf(resultSet.getInt("Score")));
-				
+				data.add(String.valueOf(resultSet.getDate("Date")));
+				data.add("");
 				topCount++;
 			}
-
+			System.out.println("Data size: " + data.size());
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			connectionCleanup(connection, statement, resultSet);
 		}
 	}
 	
 	/**
+	 * requestID: 2
+	 * 
 	 * Displays a string representation of the users score for the specified game and type of score
 	 * @param User_ID - users id to query against
 	 * @param Game_ID - game id to query against
 	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
-	public String getUserHighScore(String Username, String Game_ID, String type) throws DatabaseException{
-		/*String data = null;
-
+	public List<String> getUserHighScore(String Username, String Game_ID, String type) throws DatabaseException{
+		List<String> data = new ArrayList<String>();
+		
 		if (!initialised) {
 			initialise();
 		}
@@ -181,9 +169,8 @@ public class HighscoreDatabase {
 			resultSet = statement.executeQuery("SELECT s.SCORE from HIGHSCORES_PLAYER h INNER JOIN " +
 					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
 					type + "' AND Username='" + Username + "';");
-			while(resultSet.next())
-			{
-				data = resultSet.getString("SCORE");
+			while(resultSet.next()) {
+				
 			}
 
 			return data;
@@ -192,21 +179,8 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}*/
-		return null;
+			connectionCleanup(connection, statement, resultSet);
+		}
 	}
 	
 	/**

@@ -47,11 +47,13 @@ public class Pictures {
 		Texture bear1 = new Texture("Images/level1/animals/bear/bear_1.png");
 		Texture bull1 = new Texture("Images/level1/animals/bull/bull_1.png");
 		Texture fish1 = new Texture("Images/level1/animals/fish/fish_1.png");
-		Texture hare1 = new Texture("Images/level1/animals/hare/hare_2.png");
+		Texture hare1 = new Texture("Images/level1/animals/hare/hare_1.png");
+		Texture frog1 = new Texture("Images/level1/animals/frog/frog_1.png");
 		HashMap<String, Texture> animalsMap = new HashMap<String, Texture>();
 		animalsMap.put("BEAR", bear1 );
 		animalsMap.put("BULL", bull1 );
 		animalsMap.put("FISH", fish1 );
+		animalsMap.put("FROG", frog1 );
 		animalsMap.put("HARE", hare1 );
 		
 		System.out.println(animalsMap.keySet());
@@ -73,7 +75,7 @@ public class Pictures {
 		
 		//animals textures level 3
 		Texture baboon1 = new Texture("Images/level3/animals/baboon/baboon_1.png");
-		Texture donkey1 = new Texture("Images/level3/animals/beetle/donkey_1.png");
+		Texture donkey1 = new Texture("Images/level3/animals/donkey/donkey_1.png");
 		Texture bulldog1 = new Texture("Images/level3/animals/bulldog/bulldog_1.png");
 		Texture catfish1 = new Texture("Images/level3/animals/catfish/catfish_1.png");
 		Texture turkey1 = new Texture("Images/level3/animals/turkey/turkey_1.png");
@@ -106,12 +108,14 @@ public class Pictures {
 		Texture dell1 = new Texture("Images/level1/brands/dell/dell_1.png");
 		Texture ikea1 = new Texture("Images/level1/brands/ikea/ikea_1.png");	
 		Texture nike1 = new Texture("Images/level1/brands/nike/nike_1.png");
-		Texture sony1 = new Texture("Images/level1/brands/sony/sony_1.png");		
+		Texture sony1 = new Texture("Images/level1/brands/sony/sony_1.png");	
+		Texture ford1 = new Texture("Images/level1/brands/ford/ford_1.png");
 		HashMap<String, Texture> brandsMap = new HashMap<String, Texture>();
 		brandsMap.put("DELL", dell1);
 		brandsMap.put("IKEA", ikea1);
 		brandsMap.put("NIKE", nike1);
 		brandsMap.put("SONY", sony1);
+		brandsMap.put("FORD", ford1);
 //		System.out.println(brandsMap.keySet());
 		
 		
@@ -120,22 +124,27 @@ public class Pictures {
 		Texture pixar1 = new Texture("Images/level2/brands/pixar/pixar_1.jpg");	
 		Texture intel1 = new Texture("Images/level2/brands/intel/intel_1.png");
 		Texture honda1 = new Texture("Images/level2/brands/honda/honda_1.png");		
+		Texture kraft1 = new Texture("Images/level2/brands/kraft/kraft_1.png");	
 		HashMap<String, Texture> brandsMap2 = new HashMap<String, Texture>();
 		brandsMap2.put("PEPSI", pepsi1);
 		brandsMap2.put("PIXAR", pixar1);
 		brandsMap2.put("INTEL", intel1);
 		brandsMap2.put("HONDA", honda1);
+		brandsMap2.put("KRAFT", kraft1);
 //		System.out.println(brandsMap2.keySet());
 		
 		//brands textures level 3
 		Texture adidas1 = new Texture("Images/level3/brands/adidas/adidas_1.png");
 		Texture qantas1 = new Texture("Images/level3/brands/qantas/qantas_1.png");	
 		Texture target1 = new Texture("Images/level3/brands/targer/target_1.png");
-			
+		Texture hermes1 = new Texture("Images/level3/brands/hermes/hermes_1.png");	
+		Texture kitkat1 = new Texture("Images/level3/brands/kitkat/kitkat_1.png");	
 		HashMap<String, Texture> brandsMap3 = new HashMap<String, Texture>();
 		brandsMap3.put("ADIDAS", adidas1);
 		brandsMap3.put("QANTAS", qantas1);
 		brandsMap3.put("TARGET", target1);
+		brandsMap3.put("HERMES", hermes1);
+		brandsMap3.put("KITKAT", kitkat1);
 		
 //		System.out.println(brandsMap3.keySet());
 		
@@ -214,11 +223,13 @@ public class Pictures {
 		Texture chess1 = new Texture("Images/level2/sports/chess/chess_1.png");
 		Texture darts1 = new Texture("Images/level2/sports/darts/darts_1.png");
 		Texture rugby1 = new Texture("Images/level2/sports/rugby/rugby_1.png");
+		Texture rodeo1 = new Texture("Images/level2/sports/rodeo/rodeo_1.png");
 		HashMap<String, Texture> sportsMap2 = new HashMap<String, Texture>();
 		sportsMap2.put("CANOE" , canoe1);
 		sportsMap2.put("CHESS" , chess1);
 		sportsMap2.put("DARTS" , darts1);
 		sportsMap2.put("RUGBY" , rugby1);
+		sportsMap2.put("Rodeo" , rodeo1);
 //		System.out.println(sportsMap2.keySet());
 		
 		//Sports textures level 3

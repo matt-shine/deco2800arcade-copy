@@ -4,6 +4,7 @@ package deco2800.arcade.chess;
 //import deco2800.arcade.chess.MenuScreen;
 import deco2800.arcade.chess.SplashScreen;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
@@ -16,10 +17,14 @@ import deco2800.arcade.client.replay.ReplayEventListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.client.replay.ReplayNode;
 import deco2800.arcade.client.replay.ReplayNodeFactory;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.chess.pieces.King;
 import deco2800.arcade.chess.pieces.Piece;
+
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -54,11 +59,12 @@ import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor, Screen {
-	
+	private ReplayHandler replayHandler;
+	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
-	Piece movingPiece = null;
-	boolean isReplaying = false;
+	static Piece movingPiece = null;
+	static boolean isReplaying = false;
 	// Sprite offsets
 	int horizOff = SCREENWIDTH / 2 - 256;
 	int verticOff = SCREENHEIGHT / 2 - 256;
@@ -76,11 +82,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	int[] blackPawn0Pos, blackPawn1Pos, blackPawn2Pos, blackPawn3Pos,
 			blackPawn4Pos, blackPawn5Pos, blackPawn6Pos, blackPawn7Pos;
 
-	Board board;
+	static Board board;
 	
 	boolean players_move;
 	boolean playing;
-	Piece piece = new King(false);
 	private String[] players = new String[2]; // The names of the players: the
 												// local player is always
 												// players[0]
@@ -88,8 +93,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private OrthographicCamera camera;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
-	private Chess game;
-
+	
+	private static boolean recording;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 	public static final int NUM_1 = 8, NUM_2 = 9, NUM_3 = 10, NUM_4 = 11;
@@ -100,7 +105,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private Texture chessBoard;
 	
 	//Stuff for menu return etc
-	private TextButton backButton;
+	private TextButton replayButton, startreplayButton, backButton, newGameButton;
 	private Stage stage;
     private BitmapFont BmFontA, BmFontB;
     private TextureAtlas map;
@@ -125,7 +130,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	
 	//Tracks whether the game is paused
 	boolean paused = false;
-	
 	//Tracks level of single player mode
 	boolean EasyComputerOpponent;
 	boolean HardComputerOpponent;
@@ -139,7 +143,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	
 	private HashMap<Piece, int[]> pieceMaps = new HashMap<Piece, int[]>();
 
-
+	
 	
 	/**
 	 * Initialises a new game
@@ -154,13 +158,23 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		setScreen(splashScreen);
-		this.networkClient = networkClient; // this is a bit of a hack
+		this.networkClient = networkClient;
 		players[0] = player.getUsername();
-		players[1] = "Player 2"; // TODO eventually the server may send back the
-									// opponent's actual username
+		players[1] = "Player 2";
 		//setup highscore client
 		HighscoreClient player1 = new HighscoreClient(players[0], "chess",
 				networkClient);
+		//replay stuff
+		replayHandler = new ReplayHandler( this.networkClient );
+		replayListener = new ReplayListener(replayHandler);
+		this.networkClient.addListener(replayListener);
+		
+		
+		// Set up the movePiece event to take a piece id, target_x position and target_y position
+	    	
+	    replayHandler.addReplayEventListener(initReplayEventListener());
+		ReplayNodeFactory.registerEvent("movePiece", new String[]{"start_x", "start_y", "target_x", "target_y"});
+		
 		EasyComputerOpponent = false;
 		
 		URL resource = this.getClass().getResource("/");
@@ -285,9 +299,57 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			@Override
 			public void dispose() {}
 		});
-		
+		drawButton();
 	}
-	
+	private static ReplayEventListener initReplayEventListener()
+	{
+	    return new ReplayEventListener() {
+	        public void replayEventReceived( String eType, ReplayNode eData ) {
+	        	System.out.println( "Got event!" );
+	        	
+	            //Built in event types
+	            if ( eType.equals( "node_pushed" ) ) {
+	                System.out.println( eType );
+	                System.out.println( eData );
+	            }
+	            if ( eType.equals( "event_pushed" ) ) {
+	                System.out.println( eType );
+	            }
+	            if ( eType.equals( "replay_reset" ) ) {
+	                System.out.println( "replay reset" );
+	            }
+	            if ( eType.equals( "playback_complete" ) ) {
+	                System.out.println( "playback finished" );
+	                isReplaying = false;
+	            }
+
+	            //Custom events
+	        
+	            if ( eType.equals( "movePiece" ) ) {
+	            	int startx = eData.getItemForString( "start_x" ).intVal();
+	            	int starty = eData.getItemForString( "start_y" ).intVal();
+	            	System.out.println( "Move from: " + startx + "," + starty ); 
+	            	for ( Piece piece : board.findActivePieces() ) {
+	            		if ( board.findPiece( piece )[ 0 ] == startx && board.findPiece( piece )[ 1 ] == starty ) {
+	            			int [] movement = {eData.getItemForString( "target_x" ).intVal(),
+	    	            			eData.getItemForString( "target_y" ).intVal()};
+
+	    	                board.movePiece(
+	    	                		piece,
+	    	                		movement);
+	    	                
+	    	                break;
+	            		}
+	            	}                
+	            }
+	    
+	            if ( eType.equals( "playback_complete" ) ) {
+	                System.out.println( "playback finished" );
+
+	            }
+	        }
+	    }; 
+	}
 
 	/**
 	 * Render the current state of the game and process updates
@@ -299,17 +361,27 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
-		drawButton();
 	    drawPieces();
-	    
 		stage.draw();
+		
 		if(moving) {
 			showPossibleMoves(movingPiece);
 		}
-		
-		super.render();
+			
+		if(isReplaying){
+			movePieceGraphic();
+			replayHandler.runLoop();
+		}
 
+		super.render();
+		
 	}
+	public void reset(){
+		board = new Board();
+		movePieceGraphic();
+		drawButton();
+	}
+
 
 	@Override
 	public void resize(int arg0, int arg1) {
@@ -327,15 +399,21 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private void finishGame(boolean loser) {
 		System.err.println("GAME OVER");
 		//loser was black i.e. not this player, increment achievement
-		if (loser == true) {
-			this.incrementAchievement("chess.winGame");
-		}
+		//if (loser == true) {
+			//this.incrementAchievement("chess.winGame");
+		//}
+		
+	
 		//reset board
 		board = new Board();
-		//go back to menuscreen
-		setScreen(menuScreen);
-		//move pieces into starting positions
 		movePieceGraphic();
+		drawButton();
+		//go back to menuscreen
+		//setScreen(menuScreen);
+		//move pieces into starting positions
+		
+		
+		
 		return;
 	}
 
@@ -359,12 +437,14 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public void paint(Graphics g) {
 
 	}
+	public void startReplay(int num){
+		replayHandler.requestEventsForSession(num);
+		replayHandler.startPlayback();
+    	isReplaying = true;
+	}
 
 	@Override
 	public boolean keyDown(int arg0) {
-		/*if(arg0 == NUM_3){
-			gameState = GameState.REPLAY;
-		}*/
 		if(arg0 == Keys.CONTROL_LEFT) {
 			if(loadedStyle == styles.size()-1) {
 				loadedStyle = 0;
@@ -384,6 +464,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		if(arg0 == Keys.G) {
 			createPopup("WORKING");
 		}
+
 		return true;
 	}
 
@@ -413,6 +494,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
+		
 		if(!paused) {
 			if (!moving) {
 				movingPiece = checkSquare(x, y);
@@ -431,8 +513,20 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				return false;
 			} else {
 				int[] newPos = determineSquare(x, y);
+				int[] prevPos = board.findPiece( movingPiece );
 				if (board.movePiece(movingPiece, newPos)) {
+					if(recording){
+					replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
+							"movePiece", 
+							prevPos[0],
+							prevPos[1],
+							newPos[0], 
+							newPos[1]));
+					}
 					movePieceGraphic();
+					
+					
+					// Push the move that was just performed
 					moving = false;
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {
@@ -441,23 +535,35 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 						} else {
 							//player1.logWin(); <- this is not working
 						}
+						if(recording){
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
+								"movePiece", 
+								prevPos[0],
+								prevPos[1],
+								newPos[0], 
+								newPos[1]));
 						this.finishGame(board.whoseTurn());
+						}
 					}
-					/*replayHandler.pushEvent(
-    			        ReplayNodeFactory.createReplayNode(
-    			                "move_piece",
-    			                movingPiece, newPos
-    			        ));
-					 */
 					/* If the easy computer opponent is playing, and black teams turn
 					*  (computer controlled team)
 					*/
 					if(EasyComputerOpponent && board.whoseTurn()) {
 						board.moveAIPieceEasy();
+						if(recording){
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
+								"movePiece", 
+								prevPos[0],
+								prevPos[1],
+								newPos[0], 
+								newPos[1]));
+						}
 						movePieceGraphic();
+						
 					}
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {
+						
 						if (!board.whoseTurn()) {
 							//player1.logLoss(); <- this is not working
 						} else {
@@ -468,6 +574,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					return true;
 				}
 				board.checkForCheckmate(board.whoseTurn());
+				
 				movingPiece = board.nullPiece;
 				moving = false;
 				return false;
@@ -478,10 +585,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	}
 	
-	/*private void handleGameover() {
-		board = new Board();
-		setScreen(menuScreen);
-	}*/
 
 	@Override
 	public boolean touchDragged(int arg0, int arg1, int arg2) {
@@ -575,6 +678,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	}
 	
 	private void showPossibleMoves(Piece piece) {
+		
 		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
 		Sprite allowedSquare = new Sprite(new Texture(
 				Gdx.files.classpath("imgs/spot.png")));
@@ -1115,7 +1219,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	}
 	@Override
 	public void show() {
-		
+		drawButton();
 		
 		
 		
@@ -1154,6 +1258,26 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	    backButton.setX((float)(width*0.02));
 	    backButton.setY((float)(height*0.02));
 	    
+	    replayButton = new TextButton("Replay", style);
+	    replayButton .setWidth(200);
+	    replayButton .setHeight(50);
+	    replayButton .setX((float)(width*0.78));
+	    replayButton .setY((float)(height*0.68));
+	    
+	    startreplayButton = new TextButton("Start Recording", style);
+	    startreplayButton .setWidth(200);
+	    startreplayButton .setHeight(50);
+	    startreplayButton .setX((float)(width*0.78));
+	    startreplayButton .setY((float)(height*0.78));
+	    
+	   
+	    
+	    newGameButton = new TextButton("Start New Game", style);
+	    newGameButton .setWidth(200);
+	    newGameButton .setHeight(50);
+	    newGameButton .setX((float)(width*0.78));
+	    newGameButton .setY((float)(height*0.28));
+	    
 	    backButton.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     return true;
@@ -1162,8 +1286,53 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	setScreen(menuScreen);
             }
+	    });   
+	    replayButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	
+            if(replayHandler.getSessionId() != null){
+            	board = new Board();
+            	movePieceGraphic();
+            	drawButton();
+            	replayHandler.endSession(replayHandler.getSessionId());
+            	startReplay(replayHandler.getSessionId());
+            	recording = false;
+            	}
+            	else {
+            		System.out.println("Nothing to replay");
+            	}
+            }
 	    });    
-	    
+	    startreplayButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            	recording = true;
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	recording = true;
+            	replayHandler.startSession(1, player.getUsername());
+        		replayHandler.startRecording();
+            }
+	    });  
+	    newGameButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	board = new Board();
+        		movePieceGraphic();
+        		drawButton();
+            }
+	    });  
+	    stage.addActor(replayButton);
 	    stage.addActor(backButton);
+	    stage.addActor(startreplayButton);
+	    stage.addActor(newGameButton);
 	}
 }

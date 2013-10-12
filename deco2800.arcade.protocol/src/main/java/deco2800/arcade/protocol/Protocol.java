@@ -51,6 +51,8 @@ import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
 import deco2800.arcade.protocol.lobby.JoinLobbyResponseType;
 import deco2800.arcade.protocol.lobby.LobbyRequestType;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
@@ -183,11 +185,12 @@ public class Protocol {
 		kryo.register(JoinLobbyMatchRequest.class);
         kryo.register(GameUpdateCheckRequest.class);
         kryo.register(GameUpdateCheckResponse.class);
-
+        kryo.register(JoinLobbyMatchResponse.class);
+        kryo.register(JoinLobbyMatchResponseType.class);
+        
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
-		kryo.register(UUID.class);
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);

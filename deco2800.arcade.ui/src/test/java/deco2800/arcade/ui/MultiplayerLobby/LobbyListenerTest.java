@@ -19,7 +19,6 @@ public class LobbyListenerTest {
 		CreateMatchRequest cmr1 = new CreateMatchRequest();
 		cmr1.gameId = "1";
 		cmr1.hostConnection = null;
-		cmr1.hostPlayerId = 1;
 	}
 
 }

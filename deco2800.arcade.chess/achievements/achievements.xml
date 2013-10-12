@@ -1,6 +1,13 @@
-<achievement id="chess.beginGame">
-  <name>And so it begins!</name>
-  <description>Begin a game of chess</description>
-  <awardThreshold>1</awardThreshold>
-  <icon>chessMenu.png</icon>
-</achievement>
+<achievements>
+	<achievement id="chess.winGame">
+		  <name>Winner!</name>
+		  <description>Win</description>
+		  <awardThreshold>1</awardThreshold>
+		  <icon>chessMenu.png</icon>
+	</achievement>
+	<achievement id="chess.start">
+		<name>start</name>
+		<description>start a game of chess</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>chessMenu.png</icon></achievement>
+</achievements>

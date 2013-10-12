@@ -7,13 +7,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import deco2800.arcade.model.Friends;
+import deco2800.arcade.model.FriendInvites;
 import deco2800.arcade.model.User;
 
-public class FriendsTest {
+public class FriendInvitedTest {
 
-	private Friends f1;
-	private Friends f2;
+	private FriendInvites f1;
+	private FriendInvites f2;
 
 	private User user1;
 	private User user2;
@@ -26,7 +26,7 @@ public class FriendsTest {
 	
 	@Before
 	public void initialise(){
-		f1 = new Friends();
+		f1 = new FriendInvites();
 		
 		user1 = new User(1);
 		user2 = new User(2);
@@ -40,10 +40,10 @@ public class FriendsTest {
 
 	@Test
 	/**
-	 * Creates a new Friends, adds Users to it, and then checks if said users
-	 * are in Friends. Also checks getUpdatedID() and getAdded().
+	 * Creates a new FriendInvites, adds Users to it, and then checks if said users
+	 * are in FriendInvites. Also checks getUpdatedID() and getAdded().
 	 */
-	public void FriendsTest1() {
+	public void FriendInvitesTest1() {
 
 		f1.add(user1);
 		f1.add(user1);
@@ -73,10 +73,10 @@ public class FriendsTest {
 
 	@Test
 	/**
-	 * Adds a set of new Users to Friends, and then checks if said users
-	 * are in Friends.
+	 * Adds a set of new Users to FriendInvites, and then checks if said users
+	 * are in FriendInvites.
 	 */
-	public void FriendsTest2() {
+	public void FriendInvitesTest2() {
 		
 		Set<User> set = new HashSet<User>();
 		set.add(user5);
@@ -94,11 +94,11 @@ public class FriendsTest {
 
 	@Test
 	/**
-	 * Removed users from Friends, and then checks that removed users are not
-	 *  in Friends. Also Checks getAdded().
+	 * Removed users from FriendInvites, and then checks that removed users are not
+	 *  in FriendInvites. Also Checks getAdded().
 	 */
-	public void FriendsTest3() {
-		f1 = new Friends();
+	public void FriendInvitesTest3() {
+		f1 = new FriendInvites();
 		
 		Set<User> set = new HashSet<User>();
 		set.add(user5);
@@ -139,8 +139,8 @@ public class FriendsTest {
 	/**
 	 * Tests getSet method
 	 */
-	public void FriendsTest4() {
-		f1 = new Friends();
+	public void FriendInvitesTest4() {
+		f1 = new FriendInvites();
 		
 		Set<User> set = new HashSet<User>();
 		set.add(user5);
@@ -156,10 +156,10 @@ public class FriendsTest {
 	
 	@Test
 	/**
-	 * Tests Friends(Friends) constructor
+	 * Tests FriendInvites(FriendInvites) constructor
 	 */
-	public void FriendsTest5() {
-		f1 = new Friends();
+	public void FriendInvitesTest5() {
+		f1 = new FriendInvites();
 		
 		Set<User> set = new HashSet<User>();
 		set.add(user5);
@@ -169,7 +169,7 @@ public class FriendsTest {
 
 		f1.addAll(set);
 		
-		f2 = new Friends(f1);
+		f2 = new FriendInvites(f1);
 		
 		Assert.assertTrue(f2.contains(user5));
 		Assert.assertTrue(f2.contains(user6));

@@ -80,7 +80,7 @@ public class GameScreen implements Screen {
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
 		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo");
-		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"Lion");
+		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion");
 		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, false);
 
 		entities.add(player);

@@ -5,10 +5,12 @@ import java.awt.event.ActionListener;
 
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.RemoveFriendScreen;
+import deco2800.arcade.userui.view.UserScreen;
 
 public class RemoveFriend {
 	
 	private RemoveFriendScreen friendView;
+	private UserScreen userView;
 	private Model theModel;
 
 	/**
@@ -16,16 +18,28 @@ public class RemoveFriend {
 	 * @param theModel
 	 * @param friendView
 	 */
-	public RemoveFriend(Model theModel, RemoveFriendScreen friendView){
+	public RemoveFriend(Model theModel, RemoveFriendScreen friendView, UserScreen userView){
 		
 		this.theModel = theModel;
 		this.friendView = friendView;
+		this.userView = userView;
 		
 		this.friendView.addRemoveFriendListener(new RemoveFriendListener());
 		
 	}
 
 	class RemoveFriendListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			friendView.dispose();
+			
+		}
+		
+	}
+	
+	class CancelListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {

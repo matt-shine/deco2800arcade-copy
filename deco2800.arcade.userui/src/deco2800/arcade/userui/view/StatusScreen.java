@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
 import javax.swing.ImageIcon;
@@ -41,7 +42,8 @@ public class StatusScreen extends JFrame{
 	private JButton cancelbutton;
 	
 	//Declare Images 
-	private ImageIcon piconline, picoffline, picaway, picbusy;
+	private ImageIcon piconline, picoffline, picaway, picbusy, 
+	save, savehover, cancel, cancelhover;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -61,15 +63,16 @@ public class StatusScreen extends JFrame{
 		addactionpanel();
 	    
 	    parentContainer = new JPanel(new MigLayout());
+	    parentContainer.setBackground(Color.PINK);
 	    parentContainer.add(titlepanel,"wrap");
 	    parentContainer.add(contentpanel,"gap left 30px, wrap");
-	    parentContainer.add(actionpanel,"gap left 30px");	    
+	    parentContainer.add(actionpanel,"gap left 50px");	    
 		add(parentContainer);
 	
 		/*Set the  view window constraints
 		 * 
 		 */
-		setSize(300,350);
+		setSize(300,380);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
@@ -78,7 +81,7 @@ public class StatusScreen extends JFrame{
 	}
 	
 	/**
-	 * 
+	 *  Adds the title label
 	 */
 	public void addtitlepanel(){
 
@@ -86,12 +89,13 @@ public class StatusScreen extends JFrame{
 		title.setFont(blackbold);
 		
 		titlepanel = new JPanel(new MigLayout());
+		titlepanel.setOpaque(false);
 		titlepanel.add(title,"gap left 50px");		
 		
 	}
 	
 	/**
-	 * 
+	 *  Adds all status buttons
 	 */
 	public void addcontentpanel(){
 		
@@ -114,6 +118,7 @@ public class StatusScreen extends JFrame{
 		busybutton = new JRadioButton("", false);
 		
 		contentpanel = new JPanel(new MigLayout());
+		contentpanel.setOpaque(false);
 		contentpanel.add(onlinebutton);
 		contentpanel.add(online,"wrap, gap left 15px");
 		contentpanel.add(offlinebutton);
@@ -132,31 +137,56 @@ public class StatusScreen extends JFrame{
 	}
 	
 	/**
-	 * 
+	 *  Adds the save and cancel buttons
 	 */
 	public void addactionpanel(){
 		
-		savebutton = new JButton("Save");
-		cancelbutton = new JButton("Cancel");
+		save = new ImageIcon("assets/images/save.png");
+		savehover = new ImageIcon("assets/images/savehover.png");
+		cancel = new ImageIcon("assets/images/cancel.png");
+		cancelhover = new ImageIcon("assets/images/cancelhover.png");
+		
+		savebutton = new JButton();
+		savebutton.setBorder(BorderFactory.createEmptyBorder());
+	    savebutton.setContentAreaFilled(false);
+	    savebutton.setIcon(save);
+	    savebutton.setRolloverIcon(savehover);
+		cancelbutton = new JButton();
+		cancelbutton.setBorder(BorderFactory.createEmptyBorder());
+	    cancelbutton.setContentAreaFilled(false);
+	    cancelbutton.setIcon(cancel);
+	    cancelbutton.setRolloverIcon(cancelhover);
 
 		actionpanel = new JPanel(new MigLayout());
-	    actionpanel.add(savebutton);
-	    actionpanel.add(cancelbutton);
+		actionpanel.setOpaque(false);
+	    actionpanel.add(savebutton,"wrap, gap bottom 5px");
+	    actionpanel.add(cancelbutton,"gap bottom 5px");
 	     		
 	}
 
+	/**
+	 * Listener for the save button
+	 * @param listenForSaveButton
+	 */
 	public void addSaveListener(ActionListener listenForSaveButton){
 		
 		savebutton.addActionListener(listenForSaveButton);
 	
 	}
 	
+	/**
+	 * Listener for the cancel button
+	 * @param listenForCancelButton
+	 */
 	public void addCancelListener(ActionListener listenForCancelButton){
 		
 		cancelbutton.addActionListener(listenForCancelButton);
 	
 	}
 	
+	/**
+	 * 	Updates the Model.status to reflect changes made in view
+	 */
 	public void getStatusSelection(){
 		
 		if (awaybutton.isSelected() == true){
@@ -182,30 +212,45 @@ public class StatusScreen extends JFrame{
 	 *  Classes used for Testing 
 	 */
 	
+	/**
+	 *  Simulates onlinebutton click
+	 */
 	public void onlineclick(){
 		
 		onlinebutton.doClick();
 		
 	}
 	
+	/**
+	 *  Simulates offlinebutton click
+	 */
 	public void offlineclick(){
 		
 		offlinebutton.doClick();
 		
 	}
 	
+	/**
+	 *  Simulates awaybutton click
+	 */
 	public void awayclick(){
 		
 		awaybutton.doClick();
 		
 	}
 	
+	/**
+	 *  Simulates busybutton click
+	 */
 	public void busyclick(){
 		
 		busybutton.doClick();
 		
 	}
 	
+	/**
+	 *  Simulates savebutton click
+	 */
 	public void saveclick(){
 		
 		savebutton.doClick();

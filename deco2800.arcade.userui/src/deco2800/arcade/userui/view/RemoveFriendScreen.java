@@ -22,7 +22,7 @@ import net.miginfocom.swing.MigLayout;
 public class RemoveFriendScreen extends JFrame{
 	
 	/**
-	 * The view class for the status page
+	 * The view class for Removing a Friend
 	 */
 	
 	private Model model;
@@ -34,11 +34,14 @@ public class RemoveFriendScreen extends JFrame{
 	private JPanel actionpanel;
 	
 	//Declare Buttons
-	private JButton removefriendbutton;
+	private JButton removefriendbutton, cancelbutton;
 	
 	//Declare Text Field
 	private JTextField usernamefield;
 	private JLabel username;
+	
+	//Declare Image Icons
+	private ImageIcon remove, removehover, cancel, cancelhover;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -48,7 +51,7 @@ public class RemoveFriendScreen extends JFrame{
 		super("Remove Friend");
 		
 		this.model = model;
-	
+
 	    /*Add panels to main panel	
 	     *                
 	     */
@@ -58,6 +61,7 @@ public class RemoveFriendScreen extends JFrame{
 		addactionpanel();
 	    
 	    parentContainer = new JPanel(new MigLayout());
+	    parentContainer.setBackground(Color.pink);
 	    parentContainer.add(titlepanel,"wrap, gap right 30px");
 	    parentContainer.add(contentpanel,"wrap");
 	    parentContainer.add(actionpanel);	    
@@ -83,6 +87,7 @@ public class RemoveFriendScreen extends JFrame{
 		title.setFont(blackbold);
 		
 		titlepanel = new JPanel(new MigLayout());
+		titlepanel.setOpaque(false);
 		titlepanel.add(title);		
 		
 	}
@@ -96,6 +101,7 @@ public class RemoveFriendScreen extends JFrame{
 	    username = new JLabel("User Name");
 		
 		contentpanel = new JPanel(new MigLayout());
+		contentpanel.setOpaque(false);
 		contentpanel.add(username);
 		contentpanel.add(usernamefield,"wrap");
 		
@@ -106,16 +112,38 @@ public class RemoveFriendScreen extends JFrame{
 	 */
 	public void addactionpanel(){
 		
-		removefriendbutton = new JButton("Remove");
+		remove = new ImageIcon("assets/images/remove.png");
+		removehover = new ImageIcon("assets/images/removehover.png");
+		cancel = new ImageIcon("assets/images/cancel.png");
+		cancelhover = new ImageIcon("assets/images/cancelhover.png");
+		
+		removefriendbutton = new JButton();
+		removefriendbutton.setBorder(BorderFactory.createEmptyBorder());
+		removefriendbutton.setContentAreaFilled(false);
+		removefriendbutton.setIcon(remove);
+		removefriendbutton.setRolloverIcon(removehover);	
+		cancelbutton = new JButton();
+		cancelbutton.setBorder(BorderFactory.createEmptyBorder());
+		cancelbutton.setContentAreaFilled(false);
+		cancelbutton.setIcon(cancel);
+		cancelbutton.setRolloverIcon(cancelhover);
 
 		actionpanel = new JPanel(new MigLayout());
-		actionpanel.add(removefriendbutton);
+		actionpanel.setOpaque(false);
+		actionpanel.add(removefriendbutton,"gap after 30px");
+		actionpanel.add(cancelbutton);
 	     		
 	}
 
 	public void addRemoveFriendListener(ActionListener listenForRemoveFriendButton){
 		
 		removefriendbutton.addActionListener(listenForRemoveFriendButton);
+	
+	}
+	
+	public void addCancelListener(ActionListener listenForCancelButton){
+		
+		cancelbutton.addActionListener(listenForCancelButton);
 	
 	}
 

@@ -138,6 +138,7 @@ public class ControllerMain {
 			
 			//Add Friend to List
 			addfriendView = new AddFriendScreen(theModel);
+			AddFriend addfriend = new AddFriend(theModel, addfriendView, userView);
 			
 		}
 		
@@ -150,6 +151,7 @@ public class ControllerMain {
 			
 			//Remove a friend
 			removefriendView = new RemoveFriendScreen(theModel);
+			RemoveFriend removefriend = new RemoveFriend(theModel, removefriendView, userView);
 			
 		}
 		

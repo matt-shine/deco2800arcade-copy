@@ -64,7 +64,7 @@ public class AchievementScreen extends JFrame{
 	
 	//Declare Images here
 	private ImageIcon picavatar,piclocked, picunlocked, piceditbutton, 
-	piconline, picoffline;
+	piconline, picoffline, select, selecthover;
 	private ImageIcon home, homehover, forum, forumhover, store, storehover,
 	library, libraryhover, profile, profilehover;
 			
@@ -105,6 +105,8 @@ public class AchievementScreen extends JFrame{
 		forum = new ImageIcon("assets/images/forum.png");
 		profilehover = new ImageIcon("assets/images/profilehover.png");
 		profile = new ImageIcon("assets/images/profile.png");
+		select = new ImageIcon("assets/images/select.png");
+		selecthover = new ImageIcon("assets/images/selecthover.png");
 		
 		addplayerinfopanel();
 		addplayerpanel();
@@ -140,7 +142,7 @@ public class AchievementScreen extends JFrame{
 	    sidepanel.setLayout(new MigLayout());
         sidepanel.add(playerpanel, "wrap, center, width :300, height :600");
         sidepanel.add(gamepanel, "wrap, gapbottom 30px, width :300, height :600");
-        sidepanel.add(gameselect, "wrap");
+        sidepanel.add(gameselect, "wrap, gap bottom 10px");
         sidepanel.add(selectbutton,"gap bottom 170px");
         
 	}
@@ -166,7 +168,11 @@ public class AchievementScreen extends JFrame{
 		"Snakes and Ladders","Raiden","Breakout"};
 		gameselect = new JComboBox(gamelist);
 		
-		selectbutton = new JButton("Select");
+		selectbutton = new JButton();
+	    selectbutton.setBorder(BorderFactory.createEmptyBorder());
+	    selectbutton.setContentAreaFilled(false);
+		selectbutton.setIcon(select);
+		selectbutton.setRolloverIcon(selecthover);
 		
 		gamename = new JLabel("Game Name");
 	    gamename.setFont(linkbold);
@@ -416,6 +422,10 @@ public void addplayerinfopanel(){
 	 * Get and Set method for objects
 	 */
 	
+	/**
+	 * Get the game selection in the combo-box
+	 * @return String of the selected game
+	 */
 	public String getGameSelection(){
 		
 		//Set selected game identifier
@@ -424,6 +434,9 @@ public void addplayerinfopanel(){
 		
 	}
 	
+	/**
+	 *  Display achievements in panel
+	 */
 	public void setAchievementList(){
 		
 		//achievementlist.setText(model.achievements.achievementsForGame(getGameSelection()).toString());
@@ -437,12 +450,18 @@ public void addplayerinfopanel(){
 		
 	}
 	
+	/**
+	 *  Set the game's name field
+	 */
 	public void setGameName(){
 		
 		
 		
 	}
 	
+	/**
+	 *  Set the game's description field
+	 */
 	public void setGameDescription(){
 		
 		

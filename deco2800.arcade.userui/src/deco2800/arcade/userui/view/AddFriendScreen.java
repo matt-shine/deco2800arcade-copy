@@ -22,7 +22,7 @@ import net.miginfocom.swing.MigLayout;
 public class AddFriendScreen extends JFrame{
 	
 	/**
-	 * The view class for the status page
+	 * The view class for Adding a Friend
 	 */
 	
 	private Model model;
@@ -34,16 +34,15 @@ public class AddFriendScreen extends JFrame{
 	private JPanel actionpanel;
 	
 	//Declare Buttons
-	private JButton donebutton;
 	private JButton addfriendbutton;
-	private JButton findbutton;
+	private JButton backbutton;
 	
 	//Declare Text Field
 	private JTextField usernamefield, realnamefield;
 	private JLabel username, realname;
 	
 	//Declare Images 
-	private ImageIcon addfriend;
+	private ImageIcon addfriend, addfriendhover, back, backhover;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -53,6 +52,14 @@ public class AddFriendScreen extends JFrame{
 		super("Add Friend");
 		
 		this.model = model;
+		
+		/*
+		 * Create Image Icons
+		 */		
+		addfriend = new ImageIcon("assets/images/add.png");
+		addfriendhover = new ImageIcon("assets/images/addhover.png");
+		back = new ImageIcon("assets/images/back.png");
+		backhover = new ImageIcon("assets/images/backhover.png");
 	
 	    /*Add panels to main panel	
 	     *                
@@ -63,6 +70,7 @@ public class AddFriendScreen extends JFrame{
 		addactionpanel();
 	    
 	    parentContainer = new JPanel(new MigLayout());
+	    parentContainer.setBackground(Color.orange);
 	    parentContainer.add(titlepanel,"wrap, gap right 30px");
 	    parentContainer.add(contentpanel,"wrap");
 	    parentContainer.add(actionpanel);	    
@@ -80,7 +88,7 @@ public class AddFriendScreen extends JFrame{
 	}
 	
 	/**
-	 * 
+	 * 	Adds title label
 	 */
 	public void addtitlepanel(){
 
@@ -88,28 +96,23 @@ public class AddFriendScreen extends JFrame{
 		title.setFont(blackbold);
 		
 		titlepanel = new JPanel(new MigLayout());
+		titlepanel.setOpaque(false);
 		titlepanel.add(title);		
 		
 	}
 	
 	/**
-	 * 
+	 * 	Adds the labels and textfields
 	 */
 	public void addcontentpanel(){
-		
-		addfriend = new ImageIcon("assets/images/add_friend.png");
 
-	    addfriendbutton = new JButton(addfriend);
-	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
-	    addfriendbutton.setContentAreaFilled(false);
-	    
 	    usernamefield = new JTextField("", 20);
-	    realnamefield = new JTextField("", 20);
-	    
+	    realnamefield = new JTextField("", 20);    
 	    username = new JLabel("User Name");
 	    realname = new JLabel("Real Name");
-		
+	
 		contentpanel = new JPanel(new MigLayout());
+		contentpanel.setOpaque(false);
 		
 		contentpanel.add(username);
 		contentpanel.add(usernamefield,"wrap");
@@ -119,28 +122,46 @@ public class AddFriendScreen extends JFrame{
 	}
 	
 	/**
-	 * 
+	 * 	Adds the backbutton and addfriendbutton
 	 */
 	public void addactionpanel(){
 		
-		findbutton = new JButton("Find");
-		addfriendbutton = new JButton("Add");
+		backbutton = new JButton();
+		backbutton.setBorder(BorderFactory.createEmptyBorder());
+	    backbutton.setContentAreaFilled(false);
+	    backbutton.setIcon(back);
+	    backbutton.setRolloverIcon(backhover);
+	    
+		addfriendbutton = new JButton();
+	    addfriendbutton.setBorder(BorderFactory.createEmptyBorder());
+	    addfriendbutton.setContentAreaFilled(false);
+	    addfriendbutton.setIcon(addfriend);
+	    addfriendbutton.setRolloverIcon(addfriendhover);
 
 		actionpanel = new JPanel(new MigLayout());
-		actionpanel.add(findbutton);
-	    actionpanel.add(addfriendbutton);
+		actionpanel.setOpaque(false);
+	    actionpanel.add(addfriendbutton,"gap after 30px");
+		actionpanel.add(backbutton);
 	     		
 	}
 
+	/**
+	 * Listener for the addfriendbutton 
+	 * @param listenForAddFriendButton
+	 */
 	public void addFriendListener(ActionListener listenForAddFriendButton){
 		
 		addfriendbutton.addActionListener(listenForAddFriendButton);
 	
 	}
 	
-	public void addFindListener(ActionListener listenForFindButton){
+	/**
+	 * Listener for the backbutton
+	 * @param listenForCancelButton
+	 */
+	public void addCancelListener(ActionListener listenForCancelButton){
 		
-		findbutton.addActionListener(listenForFindButton);
+		backbutton.addActionListener(listenForCancelButton);
 	
 	}
 	

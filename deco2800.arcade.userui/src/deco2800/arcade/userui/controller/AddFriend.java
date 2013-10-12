@@ -24,8 +24,10 @@ public class AddFriend {
 		
 		this.theModel = theModel;
 		this.friendView = friendView;
+		this.userView = userView;
 		
 		this.friendView.addFriendListener(new AddFriendListener());
+		this.friendView.addCancelListener(new CancelListener());
 		
 	}
 

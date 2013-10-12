@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -47,7 +48,8 @@ public class FrontPage implements Screen {
     
     //need to get values for
     private int creditVal = 0;
-    private int onlineFriends = 0;
+    private String[] onlineFriends = {"adeleen", "alina", "moji", "will"};
+    private int nFriends = onlineFriends.length;
     private String uName = "Adeleen Pavia";
     private String game1 = "Chess";
     private String game2 = "Pong";
@@ -70,9 +72,11 @@ public class FrontPage implements Screen {
         arcadeUI = ui;
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
-        stage = new FrontPageStage();
         skin.add("menuBar", new Texture("menuBar.png"));
         skin.add("recentBar", new Texture("recent.png"));
+        skin.add("chatOverlay", new Texture("overlayPopUp.png"));
+        stage = new FrontPageStage();
+        
         
         Table table = new Table();
         table.setFillParent(true);
@@ -106,19 +110,17 @@ public class FrontPage implements Screen {
         final TextButton libraryButton = new TextButton("Library", skin, "magenta");
         final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
        
+        //buttons for recent games
+        final TextButton recentgame1 = new TextButton(game1, skin, "blue");
+        final TextButton recentgame2 = new TextButton(game2, skin, "blue");
+        final TextButton recentgame3 = new TextButton(game3, skin, "blue");
+        
         final Table recentTable = new Table();
         //recentTable.setFillParent(true);
         recentTable.setBackground(skin.getDrawable("recentBar"));
         recentTable.setSize(400, 800);
     	recentTable.setPosition(75, 0);
     	
-        //buttons for recent games
-    
-        final TextButton recentgame1 = new TextButton(game1, skin, "blue");
-        final TextButton recentgame2 = new TextButton(game2, skin, "blue");
-        final TextButton recentgame3 = new TextButton(game3, skin, "blue");
-        
-        
         //Top Box Labels
         final Label logo = new Label("VAPOR", skin, "cgothic");
         logo.setAlignment(Align.left);
@@ -132,7 +134,7 @@ public class FrontPage implements Screen {
         //Bottom Box Labels
         final Label divider2 = new Label("|", skin, "cgothic");
         divider2.setAlignment(Align.right);
-        final Label chatLink = new Label("Online (" + onlineFriends +")" , skin, "cgothic");
+        final Label chatLink = new Label("Online (" + nFriends +")" , skin, "cgothic");
         chatLink.setAlignment(Align.right);
         
         final int bWidth = 300;
@@ -142,9 +144,7 @@ public class FrontPage implements Screen {
         final int enlarge = 50;
         final int bX2= bX + bWidth + (enlarge);
         final int bX3= bX + 2*(bWidth + enlarge);
-        
-       
-        
+ 
         
         //make button sizes and positioning
         
@@ -206,8 +206,29 @@ public class FrontPage implements Screen {
         //float height = storeButton.getHeight();
     	//float width = storeButton.getWidth();
         
+      /*  chatLink.addListener((new ClickListener() {
+		    public void enter (InputEvent event, Actor actor) {
+		    	System.out.println("I got here");
+		    	chatTable.setSize(150, nFriends * 20);
+		    	stage.addActor(chatTable);
+		    	System.out.println("It should be here somewhere");
+		    }
+		})); 
+*/		
         
-
+        /*ONLY TESTING */
+        final TextButton chatButtonx = new TextButton("Online (" + nFriends + ")", skin, "magenta");
+        chatButtonx.setSize(150, 50);
+        chatButtonx.setPosition(640, 580);
+        stage.addActor(chatButtonx);
+        chatButtonx.addListener((new ChangeListener() {
+		    public void changed (ChangeEvent event, Actor actor) {
+		    	displayChat();
+		    }
+		}));
+        /*testing end*/
+        
+        
         // Icon event listeners, mouseOver and mouseClick
         recentButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
@@ -243,7 +264,8 @@ public class FrontPage implements Screen {
            		recentButton.setPosition(cPosX + (enlarge/2), cPosY + (enlarge/2));
            		recentButton.setText(null);
             	recentButton.setText("Recently Played");
-            }}));   
+            }
+        }));   
         
 	    
 		recentButton.addListener((new ChangeListener() {
@@ -290,50 +312,6 @@ public class FrontPage implements Screen {
 		    }
 		})); 
        
-		recentgame1.addListener(new ChangeListener(){
-        	public void changed (ChangeEvent event, Actor actor){
-        	/*	recentButton.setSize(bWidth - 50, bHeight - 50);
-        		recentButton.setPosition(bX + 25, bY + 300);
-        		recentButton.setText(null);
-            	recentButton.setText("Recently Played");
-            	
-        		recentgame1.setSize(bWidth, bHeight);
-        		recentgame1.setPosition(bX, bY);
-        		recentgame1.setText(null);
-            	recentgame1.setText(game1);
-        		
-        		recentgame2.setSize(bWidth - 50, bHeight - 50); 
-        		recentgame2.setPosition(bX + 25, bY - 250);
-        		recentgame2.setText(null);
-            	recentgame2.setText(game2);
-        		*/
-        		//selectGame(recentgame1, );
-            	
-        	}
-        });
-       /* recent games start
-	        recentgame2.addListener(new ChangeListener(){
-	        	public void changed (ChangeEvent event, Actor actor){
-	        		recentgame1.setSize(bWidth - 50, bHeight - 50);
-	        		recentgame1.setPosition(bX + 25, bY + 300);
-	        		recentgame1.setText(null);
-	            	recentgame1.setText(game1);
-	            	
-	        		recentgame2.setSize(bWidth, bHeight);
-	        		recentgame2.setPosition(bX, bY);
-	        		recentgame2.setText(null);
-	            	recentgame2.setText(game2);
-	        		
-	            	recentButton.setSize(bWidth - 50, bHeight - 50);
-	        		recentButton.setPosition(bX + 25, bY - 250);
-	        		recentButton.setText(null);
-	            	recentButton.setText("Recently Played");
-	        	}
-	        });
-		recent games end*/
-	        
-	        
-	        
         libraryButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
            		 libraryButton.setSize(bWidth + enlarge,  bHeight + enlarge);
@@ -386,12 +364,22 @@ public class FrontPage implements Screen {
         
         
     }
-    public void selectGame(TextButton selected, String gameName){
-    	selected.setSize(300, 300);
-		selected.setPosition(150, 220);
-		selected.setText(null);
-    	selected.setText(gameName);
+   
+    
+    public void displayChat(){
+    	Table chatTable = new Table();
+        //table.setFillParent(true);
+        chatTable.setBackground(skin.getDrawable("menuBar"));
+        chatTable.setPosition(1060 , 50);
+        chatTable.setSize(200, nFriends * 30);
+        stage.addActor(chatTable);
+        System.out.println("i got here");
+    	for (int i=0; i < nFriends; i++){
+    		Label user = new Label(onlineFriends[i], skin, "cgothic");
+    		chatTable.add(user).width(80);
+    	}
     }
+   
     
 	@Override
 	public void show() {
@@ -410,9 +398,6 @@ public class FrontPage implements Screen {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
         Table.drawDebug(stage);  // Shows table debug lines
-        
-     
-        
         
 	}
 	

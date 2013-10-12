@@ -15,17 +15,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class JoinGameListener extends ChangeListener {
 	
-	int matchNum;
+	int matchId;
 	MultiplayerLobby lobby;
 	
-	public JoinGameListener(int matchNum, MultiplayerLobby lobby) {
-		this.matchNum = matchNum;
+	public JoinGameListener(int matchId, MultiplayerLobby lobby) {
+		this.matchId = matchId;
 		this.lobby = lobby;
 	}
 	
 	public void changed(ChangeEvent event, Actor actor) {
-		System.out.println("Clicked: " + matchNum);
-		lobby.joinGame(matchNum);
+		System.out.println("Clicked: " + matchId);
+		lobby.joinGame(matchId);
 	}
 	
 }

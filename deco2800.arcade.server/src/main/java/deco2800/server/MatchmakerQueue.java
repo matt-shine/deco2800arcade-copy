@@ -25,7 +25,7 @@ public class MatchmakerQueue {
 	private static MatchmakerQueue instance;
 
 
-	public MatchmakerQueue() {
+	private MatchmakerQueue() {
 		this.queuedUsers = new HashMap<String, Map<Integer, Connection>>();
 		this.activeServers = new HashMap<Integer, MultiplayerServer>();
 		this.database = new PlayerGameStorage();
@@ -136,7 +136,19 @@ public class MatchmakerQueue {
 			connection.sendTCP(session);
 			player2Connection.sendTCP(session);
 		}
-
+	}
+	
+	public void addLobbyGame(int player1Id, int player2Id, Connection player1Connection, 
+			Connection player2Connection, String gameId) {
+			MultiplayerServer gameServer = new MultiplayerServer(player1Id, player2Id, player1Connection, 
+					player2Connection, gameId, serverNumber);
+			activeServers.put(serverNumber, gameServer);
+			NewMultiSessionResponse session = new NewMultiSessionResponse();
+			session.sessionId = serverNumber;
+			serverNumber++;
+			session.gameId = gameId;
+			player1Connection.sendTCP(session);
+			player2Connection.sendTCP(session);
 	}
 	
 	public void gameOver(int session, int player1ID, int player2ID, String gameID, int winner) {

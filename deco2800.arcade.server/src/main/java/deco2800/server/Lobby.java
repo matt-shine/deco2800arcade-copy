@@ -17,6 +17,7 @@ import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 /**
  * The Lobby class - Singleton Pattern.
  * 
@@ -94,12 +95,15 @@ public class Lobby {
 			connection.sendTCP(response);
 		} else {
 			/* Match found */
-			
+			MatchmakerQueue.instance().addLobbyGame(match.getHostPlayerId(), playerId, match.getHostConnection(), connection, match.getGameId());
+			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
+			response.responseType = JoinLobbyMatchResponseType.OK;
+			connection.sendTCP(response);
 		}
 	}
 	
 	/**
-	 * Returns the LobbyMatch instance of the given UUID.
+	 * Returns the LobbyMatch instance of the given id.
 	 * 
 	 * @param matchId
 	 * @return
@@ -203,8 +207,8 @@ public class Lobby {
 		}
 		return false;
 	}
-
-
+	
+	
 	/**
 	 * Removes the match from the lobby.
 	 * @param gameId - the id of the game the match is for

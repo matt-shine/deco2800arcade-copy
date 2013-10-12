@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import deco2800.arcade.client.network.listener.ReplayListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.soundboard.actions.SoundButtonChangeListener;
@@ -84,7 +83,7 @@ public class SoundboardScreen implements Screen {
         this.player = player;
 
         session = -1;
-        libSkin = new Skin(Gdx.files.internal("libSkin.json"));
+        libSkin = new Skin(Gdx.files.classpath("Assets/libSkin.json"));
         setupUI();
     }
 
@@ -325,7 +324,7 @@ public class SoundboardScreen implements Screen {
     public void playSound(String name, int type, int index) {
         if (type == LOOPS) {
             loops.get(index).play();
-        } else if (type == SAMPLES) {
+        } else {
             samples.get(index).play();
         }
     }

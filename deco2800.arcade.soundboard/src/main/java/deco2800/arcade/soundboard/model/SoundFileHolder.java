@@ -2,7 +2,7 @@ package deco2800.arcade.soundboard.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.files.FileHandle;
+
 
 /**
  * Wrapper to easily store multiple sound files
@@ -28,12 +28,11 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
         this.label = label;
 
         try {
-            FileHandle filePath = new FileHandle(file);
-            sample = Gdx.audio.newMusic(filePath);
+            sample = Gdx.audio.newMusic(Gdx.files.classpath(file));
             sample.setVolume(DEFAULT_VOLUME);
             sample.setLooping(this.loop);
         } catch (Exception e) {
-            // Could not find file nothing to worry about
+            e.printStackTrace();
         }
     }
 

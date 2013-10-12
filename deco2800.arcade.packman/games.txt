@@ -10,6 +10,8 @@ tictactoe
 ui
 breakout
 deerforest
+gamelibrary
+soundboard
 mixmaze
 chess
 landInvaders

@@ -24,7 +24,7 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class Modelscreen implements Screen  {
+public class Helpscreen1 implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -41,16 +41,13 @@ public class Modelscreen implements Screen  {
 	   ImageButton backbutton;
 	  
 	  
-	Modelscreen(final Breakout game) {
+	Helpscreen1(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
-		texture = new Texture(Gdx.files.classpath("imgs/ModeSelection.png"));
-		tex = new Texture(Gdx.files.classpath("imgs/button.png"));
+		texture = new Texture(Gdx.files.classpath("imgs/HelpScreen1.png"));
 		
-		
-	   
 	     
 	}
 	
@@ -59,8 +56,9 @@ public class Modelscreen implements Screen  {
 	
 	@Override
 	public void dispose() {
-		texture.dispose();
 		batch.dispose();
+		texture.dispose();
+		
 		
 	}
 
@@ -79,10 +77,10 @@ public class Modelscreen implements Screen  {
 	@Override
 	public void render(float arg0) {
 		
-
+		
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			
-			game.setScreen(game.LevelScreen);
+			game.setScreen(game.helpscreen2);
 		}
 	
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -91,6 +89,7 @@ public class Modelscreen implements Screen  {
 		 batch.begin();
 			batch.draw(texture, 0, 0);
 			batch.end();
+			
 	       
 	}
 

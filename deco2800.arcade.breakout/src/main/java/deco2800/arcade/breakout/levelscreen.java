@@ -23,56 +23,185 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class levelscreen implements Screen  {
+public class Levelscreen implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
-	//private final Texture texture;
+	private final Texture texture;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 	Stage stage;
-	   TextureRegionDrawable backup;
-	   TextureRegionDrawable backdown;
-	   TextureRegion backUp;
-	   TextureRegion backDown;
-	   TextureRegion backbuttonUp;
-	   TextureRegion backbuttonDown;
+	 TextureRegionDrawable level1up;
+	   TextureRegionDrawable level1down;
+	   TextureRegionDrawable level2up;
+	   TextureRegionDrawable level2down;
+	   TextureRegionDrawable level3up;
+	   TextureRegionDrawable level3down;
+	   TextureRegionDrawable level4up;
+	   TextureRegionDrawable level4down;
+	   TextureRegionDrawable level5up;
+	   TextureRegionDrawable level5down;
+	   TextureRegionDrawable nextup;
+	   TextureRegionDrawable nextdown;
+	   
+	   TextureRegion level1buttonUp;
+	   TextureRegion level1buttonDown;
+	   TextureRegion level2buttonUp;
+	   TextureRegion level2buttonDown;
+	   TextureRegion level3buttonUp;
+	   TextureRegion level3buttonDown;
+	   TextureRegion level4buttonUp;
+	   TextureRegion level4buttonDown;
+	   TextureRegion level5buttonUp;
+	   TextureRegion level5buttonDown;
+	   TextureRegion nextbuttonUp;
+	   TextureRegion nextbuttonDown;
+	   
+	   
 	   Texture tex;
-	   ImageButton backbutton;
+	   ImageButton level1button;
+	   ImageButton level2button;
+	   ImageButton level3button;
+	   ImageButton level4button;
+	   ImageButton level5button;
+	   ImageButton nextbutton;
+	   
 	  
 	  
-	levelscreen(final Breakout game) {
+	Levelscreen(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
-		//texture = new Texture(Gdx.files.classpath("imgs/menu.png"));
-		tex = new Texture(Gdx.files.classpath("imgs/button.png"));
-		TextureRegion[][] tmp = TextureRegion.split(tex, 130, 45);
+		texture = new Texture(Gdx.files.classpath("imgs/Level_Select.png"));
+		tex = new Texture(Gdx.files.classpath("imgs/buttons1.png"));
+		TextureRegion[][] tmp = TextureRegion.split(tex, 350, 210);
 		
-	    //backbutton
-	    backbuttonUp=tmp[2][2];
-	    backbuttonDown=tmp[2][3];
-	    backup = new TextureRegionDrawable(backbuttonUp);
-	    backdown = new TextureRegionDrawable(backbuttonDown);
-	    backbutton = new ImageButton(backup, backdown);
-	    backbutton.setPosition(480, 290);
-	    backbutton.addListener(new InputListener(){
+	    //level1
+		level1buttonUp=tmp[0][0];
+		level1buttonDown=tmp[0][1];
+		level1up = new TextureRegionDrawable(level1buttonUp);
+		level1down = new TextureRegionDrawable(level1buttonDown);
+		level1button = new ImageButton(level1up, level1down);
+		level1button.setPosition(50, 350);
+	    
+		level1button.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
 	        		
 	        		return true; 
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.MenuScreen); 
+	        		//game.setScreen(game.MenuScreen); 
+	        		
+	        	}}
+	    	   );
+		 //level2
+		level2buttonUp=tmp[0][2];
+		level2buttonDown=tmp[0][3];
+		level2up = new TextureRegionDrawable(level2buttonUp);
+		level2down = new TextureRegionDrawable(level2buttonDown);
+		level2button = new ImageButton(level2up, level2down);
+		level2button.setPosition(400, 350);
+	    
+		level2button.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		//sgame.setScreen(game.MenuScreen); 
+	        		
+	        	}}
+	    	   );
+		 //level3
+		level3buttonUp=tmp[1][0];
+		level3buttonDown=tmp[1][1];
+		level3up = new TextureRegionDrawable(level3buttonUp);
+		level3down = new TextureRegionDrawable(level3buttonDown);
+		level3button = new ImageButton(level3up, level3down);
+		level3button.setPosition(750, 350);
+	    
+		level3button.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		//game.setScreen(game.modelscreen); 
+	        		
+	        	}}
+	    	   );
+		 //level4
+		level4buttonUp=tmp[1][2];
+		level4buttonDown=tmp[1][3];
+		level4up = new TextureRegionDrawable(level4buttonUp);
+		level4down = new TextureRegionDrawable(level4buttonDown);
+		level4button = new ImageButton(level4up, level4down);
+		level4button.setPosition(50, 90);
+	    
+		level4button.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		//game.setScreen(game.MenuScreen); 
+	        		
+	        	}}
+	    	   );
+		 //level5
+		level5buttonUp=tmp[2][0];
+		level5buttonDown=tmp[2][1];
+		level5up = new TextureRegionDrawable(level5buttonUp);
+		level5down = new TextureRegionDrawable(level5buttonDown);
+		level5button = new ImageButton(level5up, level5down);
+		level5button.setPosition(400, 100);
+	    
+		level5button.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        	//	game.setScreen(game.MenuScreen); 
+	        		
+	        	}}
+	    	   );
+		 //next
+		nextbuttonUp=tmp[2][2];
+		nextbuttonDown=tmp[2][3];
+		nextup = new TextureRegionDrawable(nextbuttonUp);
+		nextdown = new TextureRegionDrawable(nextbuttonDown);
+		nextbutton = new ImageButton(nextup, nextdown);
+		nextbutton.setPosition(750, 100);
+	    
+		nextbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        	game.setScreen(game.gamescreen); 
 	        		
 	        	}}
 	    	   );
 	  
 	  
 	       stage = new Stage(480, 640, true);
-	       //Gdx.input.setInputProcessor(stage);
+	       
 	     
-	      stage.addActor(backbutton);
+	       stage.addActor(level1button);
+	       stage.addActor(level2button);
+	       stage.addActor(level3button);
+	       stage.addActor(level4button);
+	       stage.addActor(level5button);
+	       stage.addActor(nextbutton);
+	       
 	     
 	}
 	
@@ -81,6 +210,7 @@ public class levelscreen implements Screen  {
 	
 	@Override
 	public void dispose() {
+		texture.dispose();
 		batch.dispose();
 		
 	}
@@ -100,11 +230,13 @@ public class levelscreen implements Screen  {
 	@Override
 	public void render(float arg0) {
 		
-		//	game.setScreen(game.gamescreen);
-	
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		 Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		 
+		
+	       batch.begin();
+			batch.draw(texture, 0, 0);
+			batch.end();
 			stage.act();
 		       stage.draw();
 	       

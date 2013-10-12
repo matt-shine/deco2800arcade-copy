@@ -37,11 +37,12 @@ import deco2800.arcade.client.highscores.HighscoreClient;
 public class Breakout extends GameClient {
 	SplashScreen splashScreen;
 	GameScreen gamescreen;
-	menuscreen MenuScreen;
-	levelscreen LevelScreen;
-	achivementscreen AchivementScreen;
-	rankingscreen RankingScreen;
-	modelscreen modelscreen;
+	Menuscreen MenuScreen;
+	Levelscreen LevelScreen;
+	Helpscreen1 helpscreen1;
+	Rankingscreen RankingScreen;
+	Modelscreen modelscreen;
+	Helpscreen2 helpscreen2;
 
 
 	/*
@@ -111,12 +112,13 @@ public class Breakout extends GameClient {
 			
         });
 		splashScreen = new SplashScreen(this);
-		MenuScreen=new menuscreen(this);
+		MenuScreen=new Menuscreen(this);
 		gamescreen = new GameScreen(this);
-		LevelScreen=new levelscreen(this);
-		AchivementScreen=new achivementscreen(this);
-		RankingScreen=new rankingscreen(this);
-		modelscreen=new modelscreen(this);
+		LevelScreen=new Levelscreen(this);
+		helpscreen1=new Helpscreen1(this);
+		helpscreen2=new Helpscreen2(this);
+		RankingScreen=new Rankingscreen(this);
+		modelscreen=new Modelscreen(this);
 		setScreen(splashScreen);
 		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
 	}
@@ -128,7 +130,7 @@ public class Breakout extends GameClient {
 		gamescreen.dispose();
 		LevelScreen.dispose();
 		MenuScreen.dispose();
-		AchivementScreen.dispose();
+		helpscreen1.dispose();
 		RankingScreen.dispose();
 		super.dispose();
 	}

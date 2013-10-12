@@ -37,14 +37,17 @@ public class Player extends Mob {
     }
 
 
-	public void setHealth(int health, boolean overheal) {
+	/*public void setHealth(int health, boolean overheal) {
 		this.health = Math.min(this.health + health, overheal ? 150 : 100);
 	}
 	
 	
 	public void addHealth(int health, boolean overheal) {
 		setHealth(this.health + health, overheal);
-	}
+	}*/
+    public void addHealth(int health, boolean overheal) {
+        setHealth(Math.min(this.health + health, overheal ? 150 : 100));
+    }
 
 
 	public int getPoints() {

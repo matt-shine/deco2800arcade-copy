@@ -38,17 +38,15 @@ public class Mob extends Doodad {
         setHealth(getHealth() - damage);
     }
 
-
-    // Checks to see if the mob is trying to go through an obstructing block
-    // FIXME need a better/correct way to do this
+    // need to round the float either up or down depending on what direction we are approaching from
+    // ie if vel is +ve, round down, if vel is -ve round up.
     public void setPos(Vector2 pos, Vector2 vel) {
-        int x = (int) (pos.x + vel.x * 2);
-        int y = (int) (pos.y + vel.y * 2);
-        if (WL6Meta.hasObscuringBlockAt(x, y, game.getMap()) &&
-                !WL6Meta.hasDoorAt(x, y, game.getMap())) {
-            setPos(new Vector2(pos.x, pos.y));
-        } else {
-            setPos(new Vector2(pos.x + vel.x, pos.y + vel.y));
+        if (WL6Meta.hasSolidBlockAt((int) (pos.x + vel.x), (int) (pos.y + vel.y), game.getMap())) {
+            // New position has a solid block or doodad.  Don't move position.
+            setPos(pos);
+        }
+        else {
+            setPos(pos.add(vel));
         }
     }
 

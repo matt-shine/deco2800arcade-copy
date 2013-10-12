@@ -101,6 +101,17 @@ public class WL6Meta {
         return surrounded == 4;
     }
 
+    public static boolean hasSolidBlockAt(int x, int y, Level map) {
+        if (x >= 64 || x <= 0 || y >= 64 || y <=0) {
+            return true;
+        }
+        if (WL6Meta.block(map.getTerrainAt(x, y)).solid ||
+                WL6Meta.doodad(map.getDoodadAt(x, y)).solid) {
+            return true;
+        }
+        return false;
+    }
+
     private static BlockList blockList = new BlockList();
     private static DoodadList doodadList = new DoodadList();
 

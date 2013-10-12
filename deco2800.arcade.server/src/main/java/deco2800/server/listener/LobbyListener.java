@@ -54,7 +54,7 @@ public class LobbyListener extends Listener {
 		else if (object instanceof JoinLobbyMatchRequest) {
 			
 			JoinLobbyMatchRequest request = (JoinLobbyMatchRequest) object;
-			UUID matchId = UUID.fromString(request.matchId);
+			int matchId = request.matchId;
 			int playerId = request.playerID;
 			lobby.joinMatch(matchId, playerId, connection);
 		}

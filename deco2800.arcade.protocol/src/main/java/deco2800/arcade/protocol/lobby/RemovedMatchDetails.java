@@ -8,6 +8,6 @@ public class RemovedMatchDetails {
 	public int hostPlayerId;
 	//public Connection hostConnection; NOT SURE IF NECESSARY YET.
 	public String gameId;
-	public UUID matchId;
+	public int matchId;
 
 }

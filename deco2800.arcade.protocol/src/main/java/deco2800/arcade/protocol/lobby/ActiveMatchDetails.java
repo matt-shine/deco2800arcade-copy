@@ -5,7 +5,7 @@ public class ActiveMatchDetails extends LobbyRequest {
 	public int hostPlayerId;
 	//public Connection hostConnection; NOT SURE IF NECESSARY YET.
 	public String gameId;
-	public String matchId;
+	public int matchId;
 	
 
 }

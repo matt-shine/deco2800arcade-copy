@@ -32,11 +32,9 @@ public class MultiplayerLobby implements Screen {
 
 	private OrthographicCamera camera;
 	private Stage stage;
-	private Screen screen;
 	private Skin skin;
 	private Skin skin2;
 	private ShapeRenderer shapeRenderer;
-	private ShapeRenderer shapeRenderer2;
 	private ArcadeUI arcadeUI;
 	private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches; 

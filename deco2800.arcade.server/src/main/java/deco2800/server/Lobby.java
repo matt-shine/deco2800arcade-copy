@@ -37,6 +37,7 @@ public class Lobby {
 	/* Holds the players who are connected to the lobby */
 	private Map<Integer, Connection> connectedPlayers;
 
+	private int matchIdCounter;
 
 	/**
 	 * Constructor - hidden to enforce single instance.
@@ -45,6 +46,7 @@ public class Lobby {
 	private Lobby() {
 		this.lobbyGames = new ArrayList<LobbyMatch>();
 		this.connectedPlayers = new HashMap<Integer, Connection>();
+		this.matchIdCounter = 0;
 	}
 
 	/**
@@ -73,17 +75,18 @@ public class Lobby {
 			//return false;
 		}
 		/* Create the match and add to array of matches */
-		LobbyMatch match = new LobbyMatch(gameId, playerId, connection);
+		LobbyMatch match = new LobbyMatch(gameId, playerId, connection, this.matchIdCounter);
+		this.matchIdCounter++;
 		lobbyGames.add(match);
 		CreateMatchResponse response = new CreateMatchResponse();
-		response.matchId = match.getMatchId().toString();
+		response.matchId = match.getMatchId();
 		connection.sendTCP(response);
 		
 		this.sendGamesToLobbyUsers();
 	}
 
-	public void joinMatch(UUID matchId, int playerId, Connection connection) {
-		LobbyMatch match = getMatchByUUID(matchId);
+	public void joinMatch(int matchId, int playerId, Connection connection) {
+		LobbyMatch match = getMatchById(matchId);
 		if (match == null) {
 			/* Match wasn't found */
 			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
@@ -101,7 +104,7 @@ public class Lobby {
 	 * @param matchId
 	 * @return
 	 */
-	private LobbyMatch getMatchByUUID(UUID matchId) {
+	private LobbyMatch getMatchById(int matchId) {
 		for (int i = 0; i < lobbyGames.size(); i++) {
 			LobbyMatch current = lobbyGames.get(i);
 			if (current.getMatchId() == matchId) {
@@ -154,7 +157,7 @@ public class Lobby {
 					ActiveMatchDetails amd = new ActiveMatchDetails();
 					amd.gameId = lobbyGames.get(j).getGameId();
 					amd.hostPlayerId = lobbyGames.get(j).getHostPlayerId();
-					amd.matchId = lobbyGames.get(j).getMatchId().toString();
+					amd.matchId = lobbyGames.get(j).getMatchId();
 					
 					/* Send it to the client */
 					connectedPlayers.get(i).sendTCP(amd);
@@ -180,7 +183,7 @@ public class Lobby {
 			ActiveMatchDetails amd = new ActiveMatchDetails();
 			amd.gameId = lobbyGames.get(i).getGameId();
 			amd.hostPlayerId = lobbyGames.get(i).getHostPlayerId();
-			amd.matchId = lobbyGames.get(i).getMatchId().toString();
+			amd.matchId = lobbyGames.get(i).getMatchId();
 			
 			/* Send it to the client */
 			connectedPlayers.get(playerId).sendTCP(amd);

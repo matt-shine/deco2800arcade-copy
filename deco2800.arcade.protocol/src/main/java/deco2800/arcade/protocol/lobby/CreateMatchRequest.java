@@ -1,6 +1,5 @@
 package deco2800.arcade.protocol.lobby;
 
-import java.util.UUID;
 
 import com.esotericsoftware.kryonet.Connection;
 

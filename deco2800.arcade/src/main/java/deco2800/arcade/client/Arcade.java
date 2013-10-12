@@ -204,8 +204,8 @@ public class Arcade extends JFrame {
 
 		
         //TODO FIX THIS!! - Causing Errors when logging in see https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
-        boolean[] hack = {false, false, false, false, false, false, false, false};
-        this.player = new Player(0, username, "", hack);
+        boolean[] privacy = {false, false, false, false, false, false, false, false};
+        this.player = new Player(0, username, "", privacy);
 
 
 		this.player.setUsername(username);

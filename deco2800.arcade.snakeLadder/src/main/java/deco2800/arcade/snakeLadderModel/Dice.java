@@ -48,27 +48,29 @@ public class Dice {
 	
 	/**
 	 * Render the dice image based on the dice number. Initially the dice image should be empty.
-	 * @param the batch used the draw into the stage
+	 * @param batch used the draw into the stage
+	 * @param plaernum to indicate the which dice belongs to which player. Player numbering start at 0 for the
+	 * default player and 1 for AI
 	 */
-	public void renderDice(SpriteBatch batch){
+	public void renderDice(SpriteBatch batch, int playernum){
 		switch (this.num){
 		case 1:
-			batch.draw(this.diceOne,XPOS,YPOS);
+			batch.draw(this.diceOne,XPOS*(playernum+1),YPOS);
 			break;
 		case 2:
-			batch.draw(this.diceTwo,XPOS,YPOS);
+			batch.draw(this.diceTwo,XPOS*(playernum+1),YPOS);
 			break;
 		case 3:
-			batch.draw(this.diceThree,XPOS,YPOS);
+			batch.draw(this.diceThree,XPOS*(playernum+1),YPOS);
 			break;
 		case 4:
-			batch.draw(this.diceFour,XPOS,YPOS);
+			batch.draw(this.diceFour,XPOS*(playernum+1),YPOS);
 			break;
 		case 5:
-			batch.draw(this.diceFive,XPOS,YPOS);
+			batch.draw(this.diceFive,XPOS*(playernum+1),YPOS);
 			break;
 		case 6:
-			batch.draw(this.diceSix,XPOS,YPOS);
+			batch.draw(this.diceSix,XPOS*(playernum+1),YPOS);
 			break;
 		default:
 			//batch.draw(this.diceOne,0,0);

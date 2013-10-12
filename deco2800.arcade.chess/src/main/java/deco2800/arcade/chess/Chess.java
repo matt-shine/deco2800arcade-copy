@@ -176,7 +176,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		
 		// Set up the movePiece event to take a piece id, target_x position and target_y position
-		ReplayNodeFactory.registerEvent("movePiece", new String[]{"piece", "target_x", "target_y"});
+		ReplayNodeFactory.registerEvent("movePiece", new String[]{"start_x", "start_y", "target_x", "target_y"});
 		
 		
 		
@@ -332,10 +332,28 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	            //Custom events
 	            if ( eType.equals( "movePiece" ) ) {
+	            	int startx = eData.getItemForString( "start_x" ).intVal();
+	            	int starty = eData.getItemForString( "start_y" ).intVal();
+	            	System.out.println( "Move from: " + startx + "," + starty ); 
+	            	for ( Piece piece : board.findActivePieces() ) {
+	            		if ( board.findPiece( piece )[ 0 ] == startx && board.findPiece( piece )[ 1 ] == starty ) {
+	            			int [] movement = {eData.getItemForString( "target_x" ).intVal(),
+	    	            			eData.getItemForString( "target_y" ).intVal()};
+
+	    	                board.movePiece(
+	    	                		piece,
+	    	                		movement);
+	    	                
+	    	                break;
+	            		}
+	            	}
+	            	/*
+	            	System.out.println( board.findPiece( board.findActivePieces().get( eData.getItemForString( "piece" ).intVal() ) )[ 0 ] );
+
+	            	System.out.println( board.findPiece( board.findActivePieces().get( eData.getItemForString( "piece" ).intVal() ) )[ 1 ] );
+	            	*/
 	            	// Get the move data stored in (target_x, target_y)
-                    int [] movement = {eData.getItemForString( "target_x" ).intVal(),
-	            			eData.getItemForString( "target_y" ).intVal()};
-	                board.movePiece(movingPiece, movement);
+                    
 	                
 	            }
 	            if ( eType.equals( "playback_complete" ) ) {
@@ -364,6 +382,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		}
 			
 		if(isReplaying){
+			movePieceGraphic();
 			replayHandler.runLoop();
 		}
 
@@ -501,10 +520,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				return false;
 			} else {
 				int[] newPos = determineSquare(x, y);
+				int[] prevPos = board.findPiece( movingPiece );
 				if (board.movePiece(movingPiece, newPos)) {
 					movePieceGraphic();
+					
+					
 					// Push the move that was just performed, with 0 as the piece id placeholder
-					replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("movePiece", 0, newPos[0], newPos[1]));
+					replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
+							"movePiece", 
+							prevPos[0],
+							prevPos[1],
+							newPos[0], 
+							newPos[1]));
+					
 					moving = false;
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {

@@ -47,7 +47,7 @@ public class PacController implements InputProcessor {
 		Tile pTile = player.getTile();
 		Dir tempFacing = player.getFacing();
 		player.setFacing(facing);
-		System.out.println("Can pacman move? Next tile is" + 
+		System.out.println("Can pacman move? Next tile is " + 
 							player.nextTile(pTile, 1));
 		// Check for teleport tile
 		if (player.nextTile(pTile, 1).getClass() == TeleportTile.class){

@@ -38,7 +38,7 @@ public class PacChar extends Mover{
 		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
 		//grabs file- should be pacMove2.png, pacTest marks the edges and middle pixel in red
-		walkSheet = new Texture(Gdx.files.internal("pacTest.png"));
+		walkSheet = new Texture(Gdx.files.internal("pacMove2.png"));
 		// splits into columns and rows then puts them into one array in order
 		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
 		walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()

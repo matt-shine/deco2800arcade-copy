@@ -86,7 +86,7 @@ public abstract class Mover {
 			currentTile.removeMover(this);
 			currentTile = newTile;
 			currentTile.addMover(this);
-//			checkTile(currentTile);
+			checkTile(currentTile);
 		}
 	}
 

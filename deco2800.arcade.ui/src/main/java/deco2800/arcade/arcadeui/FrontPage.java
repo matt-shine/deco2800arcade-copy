@@ -249,13 +249,14 @@ public class FrontPage implements Screen {
 	
 	@Override
 	public void dispose() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
         stage.dispose();
         skin.dispose();
-        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override

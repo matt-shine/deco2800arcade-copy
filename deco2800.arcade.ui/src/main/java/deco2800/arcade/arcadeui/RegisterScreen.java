@@ -16,7 +16,7 @@ public class RegisterScreen implements Screen {
 
     private Skin skin;
     private RegisterScreenStage stage;
-    private ArcadeUI arcadeUI;
+	private ArcadeUI arcadeUI;
 
     public RegisterScreen(ArcadeUI ui) {
         arcadeUI = ui;
@@ -43,7 +43,7 @@ public class RegisterScreen implements Screen {
         passwordTextCheck.setPasswordMode(true);
         passwordTextCheck.setPasswordCharacter('*');
         TextButton registerButton = new TextButton("Register", skin);
-        TextButton cancelButton = new TextButton("Cancel", skin, "alt");
+        TextButton cancelButton = new TextButton("Cancel", skin, "default-red");
 
         table.add(errorLabel).colspan(2);
         table.row();
@@ -61,11 +61,11 @@ public class RegisterScreen implements Screen {
 
             }
         });
-        /*cancelButton.addListener(new ChangeListener() {
+        cancelButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 arcadeUI.setScreen(arcadeUI.login);
             }
-        });*/
+        });
     }
 
     @Override
@@ -76,7 +76,7 @@ public class RegisterScreen implements Screen {
     }
 
     @Override
-    public void resize(int arg0, int arg1) {
+    public void resize(int width, int height) {
     }
 
     @Override

@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 import static com.badlogic.gdx.graphics.GL20.*;
 
@@ -58,7 +59,7 @@ public class MenuScreen implements Screen{
 
 	@Override
 	public void hide() {
-		//dispose(); Why is this here?
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class MenuScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
 				
 		stage.act(delta);
@@ -84,7 +85,7 @@ public class MenuScreen implements Screen{
 		}
 		stage.clear();
 		
-		Gdx.input.setInputProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 				
 		//Setting the "Style of a TextButton", 
 		TextButtonStyle style = new TextButtonStyle();
@@ -186,7 +187,19 @@ public class MenuScreen implements Screen{
         quitButton.setHeight(buttonHeight);
         quitButton.setX(Gdx.graphics.getWidth() / 2 - quitButton.getWidth() / 2);
         quitButton.setY(creditsButton.getY() - creditsButton.getHeight() - buttonSpacing); 
-      
+        quitButton.addListener(new InputListener() { //adding listener to newGameButton
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		music.stop();
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		//implement quit
+        	}
+        	
+        });
+
+        buttonSpacing = (Gdx.graphics.getHeight() - (7*(newGameButton.getHeight())))/6;
         //adding the buttons to the stage
         stage.addActor(newGameButton);
         stage.addActor(continueButton);
@@ -195,7 +208,6 @@ public class MenuScreen implements Screen{
         stage.addActor(loreButton);
         stage.addActor(creditsButton);
         stage.addActor(quitButton);
-        buttonSpacing = (Gdx.graphics.getHeight() - 7*quitButton.getHeight())/6;
 	}
 	
 
@@ -213,7 +225,7 @@ public class MenuScreen implements Screen{
         white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
         music = Gdx.audio.newMusic(Gdx.files.internal("space_menu_sound.wav")); //new music
-    	music.play(); //start playing music. Comment this out if you are sick of the music...
+    	//music.play(); //start playing music. Comment this out if you are sick of the music...
     	music.setLooping(true); //once finished loops to start
 	}
 }

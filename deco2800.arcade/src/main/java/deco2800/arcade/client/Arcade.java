@@ -158,7 +158,7 @@ public class Arcade extends JFrame {
      */
     public void connectToServer() throws ArcadeException {
         try {
-            // TODO allow server/port as optional runtime arguments xor user inputs.
+            // TODO allow server/port as optional runtime arguments or user inputs.
             System.out.println("connecting to server");
 			client = new NetworkClient(serverIPAddress, 54555, 54777);
 

@@ -41,7 +41,6 @@ public class ReplayNodeDeserializerTest {
         Assert.assertEquals(rn.getItemForString("param2").floatVal(), recreated.getItemForString("param2").floatVal());
         Assert.assertEquals(rn.getItemForString("param3").stringVal(), recreated.getItemForString("param3").stringVal());
         
-        
     }
 
 }

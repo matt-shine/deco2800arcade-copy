@@ -110,7 +110,6 @@ public class ReplayHandler {
 	 */
 	public void sessionEnded(EndSessionResponse esr)
 	{
-	    //TODO Implement
 	    System.out.println("Session ended");
 	    setSessionId(null); //bad
 	}
@@ -184,6 +183,7 @@ public class ReplayHandler {
 	/**
 	 * A simple method for demonstrating the networking flow.
 	 * @param rr
+	 * 			the response sent from the server
 	 */
 	public void printOutServerResponse(ReplayResponse rr)
 	{
@@ -192,42 +192,61 @@ public class ReplayHandler {
 	}
 	
 	/**
-	 * Start recording game
+	 * Signals the start of a recording. Note that all time offsets will be
+	 * taken from the time this method is called.
 	 */
 	public void startRecording() {
-		
 		this.recorder.startRecording();
 	}
 	
 	/**
-	 * End recording
+	 * Signals the end of a recording, and should be called at the end of 
+	 * every recording.
 	 */
 	public void finishRecording() {
 		this.recorder.finishRecording();
 	}
 	
+	/**
+	 * Pushes a single event to the recording. Note that it will store this 
+	 * data on the server, not locally, when possible. Delegates the logic
+	 * to the recorder object.
+	 * @param eData
+	 */
 	public void pushEvent( ReplayNode eData ) {
 		this.recorder.pushEvent( eData );
 	}
 	
 	/**
-	 * Runs through the nodes and plays them
+	 * This method should be called once during the run loop of any
+	 * implementing game during playback, as it does the checking to see
+	 * whether an event should be broadcast. Delegates the logic to the
+	 * playback object.
 	 */
 	public void runLoop() {
 		playback.runLoop();
 	}
 	
 	/**
-     * Set the handler to constant-time playback
-     * @param interval The spacing between events
+     * Set the handler to constant-time playback. Constant time refers
+     * to the spacing between the events, so constant time will send one
+     * event per interval ms. This is useful when, for example, it takes
+     * a player a long time to think about a move and the viewer doesn't
+     * want to (or shouldn't have to) wait that amount of time to see
+     * the move.
+     * 
+     * @param interval
+     * 				The spacing between events, in milliseconds
      */
-    public void enableConstantTimePlayback(long interval)
+    public void enableConstantTimePlayback( long interval )
     {
         playback.enableConstantTimePlayback(interval);
     }
     
     /**
-     * Set the handler to real-time playback.
+     * Set the handler to real-time playback. This is the default, and
+     * returns the events in the order they were added at the same 
+     * relative times they were added.
      */
     public void enableRealTimePlayback()
     {
@@ -235,45 +254,56 @@ public class ReplayHandler {
     }
 	
 	/**
-	 * Deserializes the node
-	 * @param index Particular history
+	 * Play back a specific replay node item, by broadcasting it to all
+	 * of the observers
+	 * @param node
+	 * 			the node to dispatch to the observers
 	 */
 	public void playbackItem( ReplayNode node ) {
-//		ReplayNode node = deserializer.fromJson(
-//				replayHistory.get( index ),
-//				ReplayNode.class );
-		
 		dispatchReplayEvent( node.getType(), node );
 	}
 	
-	/*
-	 * This is temporary, will probably remove it later. Just for the demo.
+	/**
+	 * Play back the current session, used as a convenient helper method 
+	 * for games that require immediate playback.
 	 */
 	public void playbackCurrentSession() {
 		this.playback.playbackSession( sessionId );
-		//requestEventsForSession( sessionId );
 	}
 	
+	/*
+	 * 
+	 * Methods to handle the Observers (ReplayEventListeners)
+	 * 
+	 */
+	
 	/**
-	 * Waits for replay to be added to a list
+	 * Adds an observer
 	 * @param listener
+	 * 			the observer to add
 	 */
 	public void addReplayEventListener( ReplayEventListener listener ) {
 		listenerList.add( ReplayEventListener.class, listener );
 	}
 	
 	/**
-	 * Waits for replay to be removed from the list
+	 * Removes an observer
 	 * @param listener
+	 * 			the observer to remove
 	 */
 	public void removeReplayEventListener( ReplayEventListener listener ) {
 		listenerList.remove( ReplayEventListener.class, listener );
 	}
 	
 	/**
-	 * Sends the information 
+	 * Sends the replay event to every ReplayEventListener registered to 
+	 * receive the events. In practice, there should only be one of these, 
+	 * but this allows multiple to connect as per the pattern.
+	 * 
 	 * @param eType
+	 *  		the type of the event (eg. "piece_move")
 	 * @param eData
+	 * 			the ReplayNode storing the data for the event
 	 */
 	void dispatchReplayEvent( String eType, ReplayNode eData  ) {
 		Object[] listeners = listenerList.getListenerList();

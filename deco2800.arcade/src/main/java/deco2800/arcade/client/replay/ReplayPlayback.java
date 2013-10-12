@@ -15,6 +15,7 @@ public class ReplayPlayback {
 	private int nextReplayIndex = -1;
 	
 	private final long CONSTANT_PLAYBACK_DEFAULT_INTERVAL = 1000;
+	
 	private long constantTimePlaybackInterval =
 	                                         CONSTANT_PLAYBACK_DEFAULT_INTERVAL;
 	private long lastPlaybackTime;

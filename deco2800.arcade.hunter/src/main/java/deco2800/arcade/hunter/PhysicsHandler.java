@@ -64,249 +64,30 @@ public class PhysicsHandler {
 		for (Entity e : entities) {
 			e.getCollider().clear();
 
-			// Bottom edge
-			checkMapCollisionBottom(e, foregroundLayer);
+            int mid, colTop;
+            mid = (int) (e.getX() + (e.getWidth() / 2));
 
-			// Right edge
-			checkMapCollisionRight(e, foregroundLayer);
+            //Handle horizontal collisions with solid blocks
+//            if (foregroundLayer.getCollisionTileAt(mid + e.getWidth() / 4, e.getY() + Config.TILE_SIZE) == 1 ||
+//                    foregroundLayer.getCollisionTileAt(mid - e.getWidth() / 4, e.getY() + Config.TILE_SIZE) == 1) {
+//                int newX = foregroundLayer.getNearestEmptyColumn(e.getX(), e.getY());
+//                if (newX % Config.TILE_SIZE > Config.TILE_SIZE / 2) { //Collision right
+//                    newX = ((newX + Config.TILE_SIZE) / Config.TILE_SIZE - 1) * Config.TILE_SIZE;
+//                    e.getCollider().right = true;
+//                } else {
+//                    newX = (newX / Config.TILE_SIZE + 1) * Config.TILE_SIZE;
+//                    e.getCollider().left = true;
+//                }
+//
+//                e.setX(newX);
+//            }
 
-			// Top edge
-			checkMapCollisionTop(e, foregroundLayer);
-		}
-	}
-
-	/**
-	 * Checks collision for a single entity's right edge with the map
-	 * 
-	 * @param e
-	 *            The entity which is checked for collisions
-	 * @param foregroundLayer
-	 *            The foreground layer which it is checked against
-	 */
-	private static void checkMapCollisionBottom(Entity e,
-			ForegroundLayer foregroundLayer) {
-		float right = e.getX() + e.getWidth();
-		boolean breakOut = false;
-
-		for (int i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
-			int tile = foregroundLayer.getCollisionTileAt(i, e.getY());
-			float slopeHeight;
-
-			switch (tile) {
-			case 0:
-				// Air tile
-				break;
-			case 1:
-				// Solid tile, do something
-				e.getCollider().bottom = true;
-				e.setY((float) (Math.ceil(e.getY() / Config.TILE_SIZE) * Config.TILE_SIZE) + 0.5f);
-				breakOut = true;
-				break;
-			case 2:
-				// /_| slope
-				if (i == (int) right) {
-					slopeHeight = (float) (Math.floor(e.getY()
-							/ Config.TILE_SIZE)
-							* Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
-					if (e.getY() < slopeHeight) {
-						e.setY(slopeHeight + 0.5f);
-						e.getCollider().bottom = true;
-					}
-					breakOut = true;
-				}
-				break;
-			case 3:
-				// |_\ slope
-				if (i <= (int) e.getX()) {
-					slopeHeight = (float) (Math.floor(e.getY()
-							/ Config.TILE_SIZE)
-							* Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e
-							.getX() % Config.TILE_SIZE));
-					if (e.getY() < slopeHeight) {
-						e.setY(slopeHeight + 0.1f);
-						e.getCollider().bottom = true;
-					}
-
-					breakOut = true;
-				}
-				break;
-			case 4:
-				// |-/ slope
-
-				// TODO - cleanly remove this from the code base. No need for this collision type
-				break;
-			case 5:
-				// \-| slope
-
-				// TODO - cleanly remove this from the code base. No need for this collision type
-				break;
-			default:
-				// Outside the map, or invalid tile.
-				break;
-			}
-
-			if (breakOut) {
-				break;
-			}
-
-		}
-	}
-
-	/**
-	 * Checks collision for a single entity's top edge with the map
-	 *
-	 * @param e
-	 *            The entity which will be checked for top map collision
-	 * @param foregroundLayer
-	 *            The layer which the entity will be checked against
-	 */
-	private static void checkMapCollisionTop(Entity e,
-			ForegroundLayer foregroundLayer) {
-		float right = e.getX() + e.getWidth();
-		float top = e.getY() + e.getHeight();
-
-		boolean breakOut = false;
-
-		for (int i = (int) right; i >= (int) e.getX(); i -= Config.TILE_SIZE) {
-			int tile = foregroundLayer.getCollisionTileAt(i, top);
-			float slopeHeight;
-			switch (tile) {
-			case 0:
-				// Air tile
-				break;
-			case 1:
-				// Solid tile, do something
-				e.getCollider().top = true;
-				e.setY((float) (Math.ceil((e.getY() - Config.TILE_SIZE)
-						/ Config.TILE_SIZE) * Config.TILE_SIZE) - 0.5f);
-				breakOut = true;
-				break;
-			case 2:
-				// /_| slope
-				if (i == (int) right) {
-					slopeHeight = (float) (Math.floor(e.getY()
-							/ Config.TILE_SIZE)
-							* Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
-					if (e.getY() > slopeHeight) {
-						e.setY(slopeHeight - 0.5f);
-						e.getCollider().top = true;
-					}
-					breakOut = true;
-				}
-				break;
-			case 3:
-				// |_\ slope
-				if (i <= (int) e.getX()) {
-					slopeHeight = (float) (Math.floor(e.getY()
-							/ Config.TILE_SIZE)
-							* Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e
-							.getX() % Config.TILE_SIZE));
-					if (e.getY() > slopeHeight) {
-						e.setY(slopeHeight - 0.1f);
-						e.getCollider().top = true;
-					}
-
-					breakOut = true;
-				}
-				break;
-			case 4:
-				// |-/ slope
-
-				// TODO
-				break;
-			case 5:
-				// \-| slope
-
-				// TODO
-				break;
-			default:
-				// Outside the map, or invalid tile.
-				break;
-			}
-
-			if (breakOut) {
-				break;
-			}
-
-		}
-	}
-
-	/**
-	 * Checks collision for a single entity's right edge with the map
-	 * 
-	 * @param e
-	 *            The entity that is checked for collision
-	 * @param foregroundLayer
-	 *            The layer which the entity will be checked against
-	 */
-	private static void checkMapCollisionRight(Entity e,
-			ForegroundLayer foregroundLayer) {
-		float right = e.getX() + e.getWidth();
-		float top = e.getY() + e.getHeight();
-
-		boolean breakOut = false;
-
-		for (int i = (int) e.getY(); i <= top; i += Config.TILE_SIZE) {
-			int tile = foregroundLayer.getCollisionTileAt((int) right, i);
-			float slopeHeight;
-			switch (tile) {
-			case 0:
-				// Air tile
-				break;
-			case 1:
-				// Solid tile, do something
-				e.getCollider().right = true;
-				e.setX((float) (Math.ceil((e.getX() - Config.TILE_SIZE)
-						/ Config.TILE_SIZE) * Config.TILE_SIZE) - 0.5f);
-				breakOut = true;
-				break;
-			case 2:
-				// /_| slope
-				if (i == (int) right) {
-					slopeHeight = (float) (Math.floor(e.getY()
-							/ Config.TILE_SIZE)
-							* Config.TILE_SIZE + (e.getX() % Config.TILE_SIZE));
-					if (e.getY() > slopeHeight) {
-						e.setY(slopeHeight - 0.5f);
-						e.getCollider().top = true;
-					}
-					breakOut = true;
-				}
-				break;
-			case 3:
-				// |_\ slope
-				if (i <= (int) e.getX()) {
-					slopeHeight = (float) (Math.floor(e.getY()
-							/ Config.TILE_SIZE)
-							* Config.TILE_SIZE + (Config.TILE_SIZE - 1 - e
-							.getX() % Config.TILE_SIZE));
-					if (e.getY() > slopeHeight) {
-						e.setY(slopeHeight - 0.1f);
-						e.getCollider().top = true;
-					}
-
-					breakOut = true;
-				}
-				break;
-			case 4:
-				// |-/ slope
-
-				// TODO
-				break;
-			case 5:
-				// \-| slope
-
-				// TODO
-				break;
-			default:
-				// Outside the map, or invalid tile.
-				break;
-			}
-
-			if (breakOut) {
-				break;
-			}
-
+            //Handle bottom collision
+            colTop = foregroundLayer.getColumnTop(mid);
+            if (colTop > e.getY()) {
+                e.setY(colTop);
+                e.getCollider().bottom = true;
+            }
 		}
 	}
 }

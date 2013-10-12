@@ -218,12 +218,62 @@ public class ForegroundLayer extends Map {
         int tile = getColumn(x);
         int pane = getPane(x);
 
+        if (pane == -1) {
+            return -1;
+        }
+
         for (int i = Config.PANE_SIZE - 1; i >= 0; i--) {
             int collisionType = panes.get(pane).getCollisionTile(tile, i);
             if (collisionType == -1) {
                 return -1;
-            } else if (collisionType != 0) {
-                return getPaneOffset(pane) + (i+1) * Config.TILE_SIZE;
+            } else {
+                switch(collisionType) {
+                    case 0:
+                        //Empty tile, do nothing
+                        break;
+                    case 1:
+                        //Solid tile
+                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane);
+                    case 2:
+                        // /_| slope
+                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (int) (x % Config.TILE_SIZE);
+                    case 3:
+                        // |_\ slope
+                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (int) (x % Config.TILE_SIZE);
+                    default:
+                        return -1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Get the nearest empty column for a given row, up to a maximum of Config.PANE_SIZE tiles away
+     * @param x position to consider as the origin
+     * @param row row to test
+     * @return a pixel number (x position) within the nearest empty tile. -1 if no such tile is found
+     */
+    public int getNearestEmptyColumn(float x, float row) {
+        //Whether or not we check the right tile first
+        boolean rightFirst =  x % Config.TILE_SIZE > Config.TILE_SIZE / 2;
+
+        for (int i = 0; i < Config.PANE_SIZE; i++) {
+            int left = getCollisionTileAt(x - (i * Config.TILE_SIZE), row);
+            int right = getCollisionTileAt(x + (i * Config.TILE_SIZE), row);
+
+            if (rightFirst) {
+                if (right > 0) {
+                    return (int) x + (i * Config.TILE_SIZE);
+                } else if (left > 0) {
+                    return (int) x - (i * Config.TILE_SIZE);
+                }
+            } else {
+                if (left > 0) {
+                    return (int) x - (i * Config.TILE_SIZE);
+                } else if (right > 0) {
+                    return (int) x + (i * Config.TILE_SIZE);
+                }
             }
         }
         return -1;

@@ -25,6 +25,7 @@ public class ReplayHandler {
 	private NetworkClient client;
 	
 	private Integer sessionId;
+	private Integer lastSessionId;
 	
 	ReplayRecorder recorder;
 	ReplayPlayback playback;
@@ -37,6 +38,8 @@ public class ReplayHandler {
 	public ReplayHandler(NetworkClient client)
 	{
 	    setClient(client);
+	    System.out.println( "NULL 1" );
+		this.lastSessionId = null;
 	    init();
 	}
 	
@@ -54,7 +57,7 @@ public class ReplayHandler {
 	 */
 	private void init()
 	{	
-	    playback = new ReplayPlayback( this, this.client );
+	    this.playback = new ReplayPlayback( this, this.client );
 	}
 	
 	public ReplayRecorder getRecorder() {
@@ -94,11 +97,21 @@ public class ReplayHandler {
 	}
 	
 	/**
+	 * Ends the session currently being played
+	 */
+	public void endCurrentSession() {
+		endSession( this.sessionId );
+	}
+	
+	/**
 	 * Terminate the current recording session.
 	 * @param sessionId ID for the session
 	 */
 	public void endSession(Integer sessionId)
 	{
+		System.out.println( "ENDING SESSION" );
+		this.lastSessionId = sessionId;
+		
 	    EndSessionRequest esr = new EndSessionRequest();
 	    esr.sessionId = sessionId;
 	    client.sendNetworkObject(esr);
@@ -269,6 +282,14 @@ public class ReplayHandler {
 	 */
 	public void playbackCurrentSession() {
 		this.playback.playbackSession( sessionId );
+	}
+	
+	/**
+	 * Plays back the last session that was played, used as a convenient helper method 
+	 * for games that require immediate playback.
+	 */
+	public void playbackLastSession() {
+		this.playback.playbackSession( this.lastSessionId );
 	}
 	
 	/*

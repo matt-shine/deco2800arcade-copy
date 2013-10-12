@@ -53,7 +53,7 @@ public class Connect4 extends GameClient {
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
-	private final int AI_DELAY = 500;
+	private final int AI_DELAY = 100;
 	
 	private final int KEY_LEFT = 0;
 	private final int KEY_RIGHT = 1;
@@ -483,8 +483,9 @@ public class Connect4 extends GameClient {
 				    	gameState = GameState.REPLAY;
 				    	//replayHandler.startPlayback();
 				    	//replayHandler.requestEventsForSession(replayHandler.getSessionId());
-				    	replayHandler.endSession(replayHandler.getSessionId());
-				    	replayHandler.playbackCurrentSession();
+				    	//replayHandler.endSession(replayHandler.getSessionId());
+				    	replayHandler.playbackLastSession();
+				    	
 				    	isReplaying = true;
 				    	buttons.hide();
 			   		}
@@ -509,12 +510,14 @@ public class Connect4 extends GameClient {
 		if (player == 0){
 	    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
 	    		gameState = GameState.GAMEOVER;
+		    	replayHandler.endCurrentSession();
 	    		endGame( 0 );
 	    	}
 	    	//renderCursorDisc(1);
 	    } else {
 	    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
 	    		gameState = GameState.GAMEOVER;
+		    	replayHandler.endCurrentSession();
 	    		endGame( 1 );
 	    	}
 	    	//renderCursorDisc(0);

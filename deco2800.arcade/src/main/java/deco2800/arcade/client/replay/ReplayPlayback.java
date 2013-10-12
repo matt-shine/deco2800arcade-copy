@@ -83,6 +83,7 @@ public class ReplayPlayback {
 	}
 	
 	public void playbackSession( Integer sessionId ) {
+		System.out.println( "Playing back " + sessionId );
 		requestEventsForSession( sessionId );
 	}
 	

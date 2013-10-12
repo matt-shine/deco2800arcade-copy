@@ -40,4 +40,10 @@ release
 
 # Gradle settings and build files
 .gradle/
+<<<<<<< HEAD
 >>>>>>> master
+=======
+
+# Ignore all .log files anywhere
+**/*.log
+>>>>>>> origin/master

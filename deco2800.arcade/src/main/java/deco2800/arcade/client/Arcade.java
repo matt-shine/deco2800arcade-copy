@@ -38,6 +38,7 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
@@ -50,6 +51,7 @@ import deco2800.arcade.protocol.lobby.NewLobbyRequest;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 
 /**
  * The client application for running arcade games.
@@ -224,20 +226,33 @@ public class Arcade extends JFrame {
 
 		this.client.sendNetworkObject(creditBalanceRequest);
 
-		this.player = new Player(0, username,
-				"THIS IS A PLACE HOLDER - @AUTHENTICATION API GUYS :)");
+		
+        //TODO FIX THIS!! - Causing Errors when logging in see https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
+        boolean[] privacy = {false, false, false, false, false, false, false, false};
+        this.player = new Player(0, username, "", privacy);
+
+
 		this.player.setUsername(username);
 
 		// this.communicationNetwork.createNewChat(username);
 
         // TODO move this call to be internal to Packman class
+        // TODO iterate over actual game ids rather than just
+        // using pong
         GameUpdateCheckRequest gameUpdateCheckRequest = new
                 GameUpdateCheckRequest();
+        gameUpdateCheckRequest.gameID = "pong";
+
+        BlockingMessage r = BlockingMessage.request(client.kryoClient(),
+                gameUpdateCheckRequest);
+
+        GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
 
         this.client.sendNetworkObject(gameUpdateCheckRequest);
         
         getCurrentGame().setPlayer(this.player);
         getCurrentGame().setThisNetworkClient(this.client);
+        System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
 	
 

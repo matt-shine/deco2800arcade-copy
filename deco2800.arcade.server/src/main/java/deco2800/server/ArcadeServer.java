@@ -25,8 +25,6 @@ import deco2800.server.database.HighscoreDatabase;
 import deco2800.server.database.*;
 import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
-import deco2800.server.database.AchievementStorage;
-import deco2800.server.listener.AchievementListener;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -48,7 +46,6 @@ public class ArcadeServer {
 	private MatchmakerQueue matchmakerQueue;
 	
 	// Package manager
-	@SuppressWarnings("unused")
 	private PackageServer packServ;
 
     private GameStorage gameStorage;
@@ -145,8 +142,15 @@ public class ArcadeServer {
         instance = this;
 
         this.gameStorage = new GameStorage();
-
-		this.creditStorage = new CreditStorage();
+        try {
+            this.creditStorage = new CreditStorage();
+        } catch (Exception e) {
+            //Do nothing, yet ;P
+        }
+        
+        
+        
+        //CODE SMELL
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
@@ -161,6 +165,13 @@ public class ArcadeServer {
 
 
 		
+		//Init highscore database
+		try {
+			highscoreDatabase.initialise();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
+		
 		//initialize database classes
 		try {
             gameStorage.initialise();
@@ -169,8 +180,6 @@ public class ArcadeServer {
 			//playerStorage.initialise();
             
 			achievementStorage.initialise();
-			
-			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -210,6 +219,7 @@ public class ArcadeServer {
         server.addListener(new MultiplayerListener(matchmakerQueue));
         server.addListener(new LobbyListener());
         server.addListener(new LibraryListener());
+        server.addListener(new PlayerListener());
 	}
 
     /**
@@ -225,3 +235,4 @@ public class ArcadeServer {
 
 
 }
+

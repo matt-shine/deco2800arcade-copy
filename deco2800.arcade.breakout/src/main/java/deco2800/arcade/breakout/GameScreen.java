@@ -1,7 +1,11 @@
 package deco2800.arcade.breakout;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
@@ -15,13 +19,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import deco2800.arcade.breakout.powerup.PowerupManager;
 import deco2800.arcade.client.*;
 
-
-
-
- 
 
 public class GameScreen implements Screen  {
 	// Orthographic Camera is how the is displayed.
@@ -31,17 +34,19 @@ public class GameScreen implements Screen  {
 	/*
 	 * Creates private instance variables for each element of The
 	 */
-	private String player;
+	public String player;
 	// private NetworkClient nc;
 	private Paddle paddle;
 	private Ball ball;
+	private Ball powerupBall;
 	private int score;
 	private int lives;
 	
 
 	// Cheat Code
-	private int[] sequence = { 19, 19, 20, 20, 21, 22, 21, 22, 30, 29 };
+	private int[] sequence = {Keys.UP, Keys.UP, Keys.DOWN, Keys.DOWN, Keys.LEFT, Keys.RIGHT, Keys.LEFT, Keys.RIGHT, Keys.B, Keys.A};
 	private int currentButton = 0;
+	private int pressed = 0;
 
 	// The counting of random statistics
 	public int highScore = 0;
@@ -56,7 +61,9 @@ public class GameScreen implements Screen  {
 	public Sound breaking;
 	public Music music;
 	public Sound bump;
-
+	public Sound achieve;
+	public boolean mute = false;
+	
 	private String status = null;
 	
 	// Integer to determine what the current level is
@@ -64,6 +71,7 @@ public class GameScreen implements Screen  {
 
 	// Keeps track of the number of bricks on screen.
 	private int brickNum;
+	private int numBalls = 1;
 
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
@@ -92,13 +100,18 @@ public class GameScreen implements Screen  {
 	private int outer = 0;
 	private int inner = 0;
 	
+	// Power up manager and details
+	private boolean powerupsOn = false;
+	private PowerupManager powerupManager;
+	
 	GameScreen(final Breakout game) {
 		this.levelSystem = new Level();
-		score = 0;
-		lives = 3;
+		setScore();
+		setLives(3);
 		this.game = game;
+		this.player = game.playerName();
+		this.powerupManager = new PowerupManager(this);
 		gamearea();
-		
 	}
 	
 	public void gamearea() {
@@ -107,19 +120,17 @@ public class GameScreen implements Screen  {
 		// Sets the display size
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		
-		
-		
 
 		// access the file location of the sounds
 		breaking = Gdx.audio.newSound(Gdx.files.classpath("sounds/break.wav"));
 		music = Gdx.audio.newMusic(Gdx.files.classpath("sounds/bgmusic.ogg"));
 		bump = Gdx.audio.newSound(Gdx.files.classpath("sounds/bump.wav"));
+		achieve = Gdx.audio.newSound(Gdx.files.classpath("sounds/achieve.mp3"));
 
 		// setting and playing the background music
 		music.setLooping(true);
-		music.setVolume(0.3f);
-		music.play();
+		music.setVolume(0.2f);
+		playMusic();
 
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
@@ -128,27 +139,42 @@ public class GameScreen implements Screen  {
 		
 		
 
-		int index;
-		if (getLevel() == 1) {
-			bricks = levelSystem.levelOne(bricks, this);
-		} else if (getLevel() == 2) {
-			bricks = levelSystem.levelTwo(bricks, this);
-		} else if (getLevel() == 3) {
-			bricks = levelSystem.levelThree(bricks, this);
-		} else if (getLevel() == 4) {
-			bricks = levelSystem.levelFour(bricks, this);
-		} else if (getLevel() == 5) {
-			bricks = levelSystem.levelFive(bricks, this);
-		} else if (getLevel() == 6) {
-			bricks = levelSystem.levelSix(bricks, this);
-		} else if (getLevel() == 7) {
-			bricks = levelSystem.levelSeven(bricks, this);
-		} else if (getLevel() == 8) {
-			bricks = levelSystem.levelEight(bricks, this);
-		} else if (getLevel() == 9) {
-			bricks = levelSystem.levelNine(bricks, this);
+		if (level > 10) {
+			game.incrementAchievement("breakout.pro");
+			achieve.play();
+			gameState = new GameOverState();
 		}
-		setBrickNum(bricks.length);
+		try {
+			bricks = levelSystem.readFile("levels/level" + level + ".txt",
+				bricks, this);
+			setBrickNum(bricks.length);
+		} catch (Exception e) {
+			System.err.println("Error is: " + e);
+			this.dispose();
+			this.gameState = new GameOverState();
+		}
+//		else if (getLevel() == 2) {
+//			bricks = levelSystem.levelTwo(bricks, this);
+//		} else if (getLevel() == 3) {
+//			bricks = levelSystem.levelThree(bricks, this);
+//		} else if (getLevel() == 4) {
+//			bricks = levelSystem.levelFour(bricks, this);
+//			game.incrementAchievement("breakout.basic");
+//			achieve.play();
+//		} else if (getLevel() == 5) {
+//			bricks = levelSystem.levelFive(bricks, this);
+//		} else if (getLevel() == 6) {
+//			bricks = levelSystem.levelSix(bricks, this);
+//		} else if (getLevel() == 7) {
+//			bricks = levelSystem.levelSeven(bricks, this);
+//			game.incrementAchievement("breakout.intermediate");
+//			achieve.play();
+//		} else if (getLevel() == 8) {
+//			bricks = levelSystem.levelEight(bricks, this);
+//		} else if (getLevel() == 9) {
+//			bricks = levelSystem.levelNine(bricks, this);
+//		} else if (getLevel() == 10) {
+//			bricks = levelSystem.levelTen(bricks,this);
 
 		shapeRenderer = new ShapeRenderer();
 		font = new BitmapFont();
@@ -156,29 +182,58 @@ public class GameScreen implements Screen  {
 		batch = new SpriteBatch();
 
 		gameState = new ReadyState();
-//		gameState = GameState.READY;
 		setStatus("Click to start!");
 
 	}
+	
+	private void powerupCheck(Brick b) {
+		if (isPowerupOn()) {
+			return;
+		}
+		if (Math.random() < 0.2) {
+			Rectangle r = b.getShape();
+			getPowerupManager().handlePowerup(r.x + r.width/2, r.y);
+		}
+	}
+	
 	/*
 	 * Decrements bricks and increments score once ball hits brick. Gives time
 	 * for processing
 	 */
-	public void updateGameState(int bounce) {
-		if (bounce == 0) {
-			getBall().bounceX();
-		} else if (bounce == 1) {
-			getBall().bounceY();
+	public void updateGameState(int bounce, Brick b, boolean pBall) {
+		if (pBall) {
+			if (powerupBall != null) {
+				if (bounce == 0) {
+					getPowerupBall().bounceX();
+				} else if (bounce == 1) {
+					getPowerupBall().bounceY();
+				} else {
+					getPowerupBall().bounceX();
+					getPowerupBall().bounceY();
+				}
+				setLastHitX(getPowerupBall().getX());
+				setLastHitY(getPowerupBall().getY());
+			}
 		} else {
-			getBall().bounceX();
-			getBall().bounceY();
+			if (ball != null) {
+				if (bounce == 0) {
+					getBall().bounceX();
+				} else if (bounce == 1) {
+					getBall().bounceY();
+				} else {
+					getBall().bounceX();
+					getBall().bounceY();
+				}
+				
+				setLastHitX(getBall().getX());
+				setLastHitY(getBall().getY());
+			}
 		}
-		setLastHitX(getBall().getX());
-		setLastHitY(getBall().getY());
 		breaking.play();
 		brickBreak++;
-		score += this.getLevel()*2;
+		incrementScore(this.getLevel()*2);
 		setBrickNum(getBrickNum() - 1);
+		powerupCheck(b);
 		try {
 			Thread.currentThread().sleep(35);
 		} catch (Exception e) {
@@ -207,6 +262,7 @@ public class GameScreen implements Screen  {
 			shapeRenderer.begin(ShapeType.FilledRectangle);
 
 			getPaddle().render(shapeRenderer);
+			getPowerupManager().renderAll(batch);
 			
 
 			// Render the level
@@ -214,17 +270,22 @@ public class GameScreen implements Screen  {
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
 			// Ball is a Circle
-			getBall().render(shapeRenderer);
+			if (ball != null) {
+				getBall().render(shapeRenderer);
+			}
+			if (powerupBall != null) {
+				powerupBall.render(shapeRenderer);
+			}
 			shapeRenderer.end();
 			
 			
 			batch.begin();
 			font.setColor(Color.GREEN);
-			font.draw(batch, "player " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);
-			font.draw(batch, "Life " + Integer.toString(lives), SCREENWIDTH / 2,
+			font.draw(batch, "Player: " + player, SCREENWIDTH / 4, SCREENHEIGHT - 20);
+			font.draw(batch, "Life: " + Integer.toString(getLives()), SCREENWIDTH / 2,
 					SCREENHEIGHT - 20);
 
-			font.draw(batch, "Score " + Integer.toString(score),
+			font.draw(batch, "Score: " + Integer.toString(getScore()),
 					SCREENWIDTH * 3 / 4, SCREENHEIGHT - 20);
 			if (gameoverstatus != null) {
 				font.setColor(Color.WHITE);
@@ -268,69 +329,83 @@ public class GameScreen implements Screen  {
 	 * criteria has been met. Also sets the gameState to GAMEOVER.
 	 */
 	void win() {
-		score += lives * 5;
+		incrementScore(getLives() * 5);
 
-		if (highScore < score){
-			highScore = score;
+		if (getHighScore() < getScore()){
+			setHighScore(getScore());
 			gameoverstatus = "Congratulations " + player + " you have a new HighScore: "
-					+ score;
+					+ getScore();
 			
 		}else{
 			gameoverstatus = "Congratulations " + player + " your final score is: "
-					+ score;
+					+ getScore();
 		}
-		
 		System.out.println("Congratulations " + player
-				+ " your final score is: " + score);
+				+ " your final score is: " + getScore());
+		if (getLives() == 3) {
+			game.incrementAchievement("breakout.prefect");
+		} else if (getLives() == 0) {
+			game.incrementAchievement("breakout.closeOne");
+		} else if (getScore() < 0) {
+			game.incrementAchievement("breakout.noob");
 		gameState = new GameOverState();
-		//if (lives == 3) {
-		//	incrementAchievement("breakout.prefect");
-	//	} else if (lives == 0) {
-	//		incrementAchievement("breakout.closeOne");
-	//	} else if (score < 0) {
-	//		incrementAchievement("breakout.noob");
-	}
+		}	
 		
-	//	incrementAchievement("breakout.winGame");
-	//	gameState = GameState.GAMEOVER;
-//	}
+		game.incrementAchievement("breakout.winGame");
+		gameState = new GameOverState();
+		
+	}
 	
 		
 	/**
-	 * Rewards the Player 2 extra lives and makes the sequence null, so that the
+	 * Rewards the Player extra lives and makes the sequence null, so that the
 	 * Player can not re-use the cheat
 	 */
-	void bonusLives(int bonus) {
-		lives = lives + bonus;
+	public void cheatBonus(int bonus) {
+		incrementLives(bonus);
+		incrementScore(bonus*10);
 		setSequence(null);
+		game.incrementAchievement("breakout.secret");
+		achieve.play();
 	}
 
 	/**
 	 * Resets games area or sets the gameState to GAMEOVER
 	 */
-	void roundOver() {
+	public void roundOver() {
 		/*
 		 * Checks whether the lives have fallen below 0 If true then the
 		 * gameState is set to GAMEOVER, Otherwise a lives is decremented and
 		 * gameState is set to READY
 		 */
-		if (lives > 0) {
+		if (getLives() > 0) {
+			if (getBall() == null) {
+				setBall(new Ball());
+			}
 			getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
-			lives--;
-			score -= 5;
+			setNumBalls(1);
+			destroyPowerupBall();
+			decrementLives(1);
+			decrementScore(5);
 			gameState = new ReadyState();
 		} else {
 
 			gameoverstatus = "Bad luck " + player + " your final score is: "
-					+ score;
-			System.out.println("Bad luck " + player + " your final score is: "
-					+ score);
+					+ getScore();
 			gameState = new GameOverState();
 		}
 
 	}
 	 
-	 
+	 public void mute(){
+		 if(mute){
+			 music.play();
+			 mute = false;
+		 } else {
+			 music.stop();
+			 mute = true;
+		 }
+	 }
 	 
 	
 	@Override
@@ -338,6 +413,7 @@ public class GameScreen implements Screen  {
 		breaking.dispose();
 		music.dispose();
 		bump.dispose();
+		achieve.dispose();
 		
 		// TODO Auto-generated method stub
 		
@@ -350,8 +426,10 @@ public class GameScreen implements Screen  {
 	}
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		game.pause();
+		if(Gdx.input.isKeyPressed(Keys.R)){
+			resume();
+		}
 	}
 
 	
@@ -364,8 +442,7 @@ public class GameScreen implements Screen  {
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-		
+		game.resume();		
 	}
 
 	@Override
@@ -403,12 +480,30 @@ public class GameScreen implements Screen  {
 	public int getCurrentButton() {
 		return currentButton;
 	}
+
 	/**
 	 * @param currentButton the currentButton to set
 	 */
 	public void setCurrentButton(int currentButton) {
 		this.currentButton = currentButton;
 	}
+	
+	/**
+	 * 
+	 * @return the check press int
+	 */
+	public int getPressed(){
+		return pressed;
+	}
+	/**
+	 * 
+	 * @param pressed
+	 */
+	public void setPressed(int pressed){
+		this.pressed = pressed;
+		
+	}
+	
 	/**
 	 * @return the paddle
 	 */
@@ -433,6 +528,19 @@ public class GameScreen implements Screen  {
 	public void setBall(Ball ball) {
 		this.ball = ball;
 	}
+	
+	public void createNewBall(Vector2 position) {
+		if (powerupBall == null) {
+			this.powerupBall = new Ball();
+			System.out.println("Runs");
+			this.powerupBall.reset(position);
+			setNumBalls(2);
+			this.powerupBall.randomizeVelocity();
+			this.powerupBall.setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		}
+		
+	}
+	
 	/**
 	 * @return the brickNum
 	 */
@@ -489,5 +597,95 @@ public class GameScreen implements Screen  {
 	public void setOuter(int outer) {
 		this.outer = outer;
 	}
+	
+	public int getNumBalls() {
+		return this.numBalls;
+	}
+	
+	public void setNumBalls(int newNum) {
+		this.numBalls = newNum;
+	}
 
+	public PowerupManager getPowerupManager() {
+		return powerupManager;
+	}
+	
+	public boolean isPowerupOn() {
+		return this.powerupsOn;
+	}
+	
+	public void switchGameMode(boolean mode) {
+		this.powerupsOn = mode;
+	}
+	
+	public Ball getPowerupBall() {
+		return this.powerupBall;
+	}
+	
+	public void destroyPowerupBall() {
+		if (powerupBall != null) {
+			powerupBall = null;
+		}
+	}
+	
+	public void destroyBall() {
+		if (ball != null) {
+			ball = null;
+		}
+	}
+	public int getLives(){
+		return lives;
+	}
+	
+	public void setLives(int lives){
+		
+		this.lives = lives;
+	}
+	
+	public void incrementLives(int value){
+		this.lives = this.lives + value;
+	}
+	
+	public void decrementLives(int value){
+		this.lives = this.lives - value;
+	}
+	
+	public int getScore(){
+		return score;
+	}
+	
+	public void setScore(){
+		this.score = 0;
+	}
+	
+	
+	public void incrementScore(int value){
+		this.score = this.score + value;
+	}
+	
+	public void decrementScore(int value){
+		this.score = this.score - value;
+	}
+	
+	public void setHighScore(int score){
+		if (score > 0){
+			this.highScore = score;
+			game.highscoreUser.storeScore("Score", getHighScore());
+		} else {
+			this.highScore = 0;
+		}
+	}
+	
+	public int getHighScore(){
+		return highScore;
+	}
+	
+	public void playMusic(){
+		music.play();
+	}
+	
+	public void stopMusic(){
+		music.stop();
+	}
+	
 }

@@ -2,6 +2,8 @@ package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.ItemModel;
 import deco2800.arcade.mixmaze.domain.TileModelObserver;
+import deco2800.arcade.mixmaze.domain.WallModel;
+import deco2800.arcade.mixmaze.domain.WallModelObserver;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -44,12 +46,26 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		WHITE_REGION = new TextureRegion(texture, 2048, 0, 256, 256);
 	}
 
+	private final class WallWatcher implements WallModelObserver
+	{
+		private boolean isBuilt;
+		
+		public boolean IsBuilt() {
+			return isBuilt;
+		}
+		
+		@Override
+		public void updateWall(boolean isBuilt) {
+			this.isBuilt = isBuilt;
+		}
+	}
+	
 	private final float tileSize;
 	private final float offset;
 	private final ShapeRenderer renderer;
 
 	private int boxerId;
-	private boolean[] isWallBuilt;
+	private WallWatcher[] wallWatchers;
 	private ItemModel.Type type;
 
 	/**
@@ -58,16 +74,23 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	 * @param renderer	the renderer
 	 * @param tileSize	the graphical size of the tile
 	 */
-	public TileViewModel(int x, int y,
-			float tileSize, ShapeRenderer renderer) {
+	public TileViewModel(int x, int y, float tileSize, ShapeRenderer renderer) {
 		this.tileSize = tileSize;
 		offset = tileSize / 32;
 		this.renderer = renderer;
 		boxerId = 0;
-		isWallBuilt = new boolean[4];
 		type = NONE;
+		
+		wallWatchers = new WallWatcher[4];
+		for(int direction = 0; direction < 4; ++direction) {
+			wallWatchers[direction] = new WallWatcher();
+		}
 	}
-
+	
+	public void watchWall(int direction, WallModel wall) {
+		wall.addObserver(wallWatchers[direction]);
+	}
+	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		batch.end();
@@ -85,15 +108,10 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		drawItem(batch);
 		resetTransform(batch);
 	}
-
+	
 	@Override
 	public void updateBoxer(int id) {
 		boxerId = id;
-	}
-
-	@Override
-	public void updateWall(int direction, boolean isBuilt) {
-		isWallBuilt[direction] = isBuilt;
 	}
 
 	@Override
@@ -117,15 +135,13 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	private void drawWalls() {
 		renderer.begin(FilledRectangle);
 		renderer.setColor(1f, 1f, 0f, 1f);
-		if (isWallBuilt[WEST])
+		if (wallWatchers[WEST].IsBuilt())
 			renderer.filledRect(0, 0, offset, tileSize);
-		if (isWallBuilt[NORTH])
-			renderer.filledRect(0, tileSize - offset,
-					tileSize, offset);
-		if (isWallBuilt[EAST])
-			renderer.filledRect(tileSize - offset, 0,
-					offset, tileSize);
-		if (isWallBuilt[SOUTH])
+		if (wallWatchers[NORTH].IsBuilt())
+			renderer.filledRect(0, tileSize - offset, tileSize, offset);
+		if (wallWatchers[EAST].IsBuilt())
+			renderer.filledRect(tileSize - offset, 0, offset, tileSize);
+		if (wallWatchers[SOUTH].IsBuilt())
 			renderer.filledRect(0, 0, tileSize, offset);
 		renderer.end();
 	}

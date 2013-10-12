@@ -38,10 +38,12 @@ public class MultiplayerLobby implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private ShapeRenderer shapeRenderer2;
 	private ArcadeUI arcadeUI;
+	private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches; 
 
 	public MultiplayerLobby(ArcadeUI ui) {
 		arcadeUI = ui;
+		lobby = this;
 	}
 	
 	public void show() {
@@ -159,6 +161,7 @@ public class MultiplayerLobby implements Screen {
 				Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
 				Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
 				final TextButton button5 = new TextButton("Join", skin);
+				final int index = i;
 				
 				table2.center().left();
 				table2.add(matchLabel).width(130).padTop(5).padLeft(150);
@@ -166,11 +169,7 @@ public class MultiplayerLobby implements Screen {
 				table2.add(button5).width(130).height(20).padTop(5);
 				table2.row();
 				
-				button5.addListener(new ChangeListener() {
-		            public void changed (ChangeEvent event, Actor actor) {
-		                System.out.println("You Clicked: " + button5.getName());
-					}
-		        });
+				button5.addListener(new JoinGameListener(index, lobby));
 			}
 		}
 
@@ -203,6 +202,7 @@ public class MultiplayerLobby implements Screen {
 							Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
 							Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
 							final TextButton button5 = new TextButton("Join", skin);
+							final int index = i;
 							
 							table2.center().left();
 							table2.add(matchLabel).width(130).padTop(5).padLeft(150);
@@ -210,11 +210,7 @@ public class MultiplayerLobby implements Screen {
 							table2.add(button5).width(130).height(20).padTop(5);
 							table2.row();
 							
-							button5.addListener(new ChangeListener() {
-					            public void changed (ChangeEvent event, Actor actor) {
-					                System.out.println("You Clicked: " + button5.getName());
-								}
-					        });
+							button5.addListener(new JoinGameListener(index, lobby));
 						}
 					}	
 			 	}
@@ -224,24 +220,7 @@ public class MultiplayerLobby implements Screen {
 		// "Create Match" Button Event Listener
 		 createbutton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-            	
-            	ArcadeSystem.setMultiplayerEnabled(false);
-            	NewMultiGameRequest request = new NewMultiGameRequest();
-            	Set<String> games = ArcadeSystem.getGamesList();
-            	int i = 0;
-            	String gameid = "";
-            	for (String game : games) {
-            		if (game.equals("chess")) {
-            			gameid = game;
-            			break;
-            		}
-            	}
-            	System.out.println("game id for reqeust is : " + gameid);
-            	request.gameId = gameid;
-            	request.playerID = 0;
-            	request.requestType = MultiGameRequestType.NEW;
-            	ArcadeSystem.goToGame(gameid);
-            	ArcadeSystem.createMultiplayerGame(request);
+            	createMatch();
 
             }
         });
@@ -253,6 +232,25 @@ public class MultiplayerLobby implements Screen {
 				//add to matchmaking queue method
 				//add overlay to say 'waiting for match'
 				//add second overlay (or modify first) to 'accept' or 'decline' match
+				
+				
+				//ArcadeSystem.setMultiplayerEnabled(false);
+				NewMultiGameRequest request = new NewMultiGameRequest();
+            	Set<String> games = ArcadeSystem.getGamesList();
+            	int i = 0;
+            	String gameid = "";
+            	for (String game : games) {
+            		if (game.equals("chess")) {
+            			gameid = game;
+            			break;
+            		}
+            	}
+            	request.gameId = gameid;
+            	request.playerID = arcadeUI.getPlayer().getID();
+            	request.requestType = MultiGameRequestType.NEW;
+            	ArcadeSystem.goToGame(gameid);
+            	ArcadeSystem.createMultiplayerGame(request);
+				
 			}
 		});
 
@@ -358,6 +356,23 @@ public class MultiplayerLobby implements Screen {
 
 	}
 	
+	private void createMatch() {
+		CreateMatchRequest request = new CreateMatchRequest();
+    	request.gameId = "chess";
+    	request.playerID = arcadeUI.getPlayer().getID();
+    	request.hostPlayerId = arcadeUI.getPlayer().getID();
+    	arcadeUI.getNetworkClient().sendNetworkObject(request);
+	}
 
-
+	public void joinGame(int matchNum) {
+		ActiveMatchDetails details = matches.get(matchNum);
+		String gameId = details.gameId;
+		int playerID = details.playerID;
+		NewMultiGameRequest request = new NewMultiGameRequest();
+		request.gameId = gameId;
+		request.playerID = playerID;
+		request.requestType = MultiGameRequestType.JOIN;
+		arcadeUI.getNetworkClient().sendNetworkObject(request);
+	}
+	
 }

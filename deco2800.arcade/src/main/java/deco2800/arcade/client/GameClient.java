@@ -56,6 +56,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
     public void setNetworkClient(NetworkClient client) {
         achievementClient.setNetworkClient(client);
     }
+    
+    public void setThisNetworkClient(NetworkClient client) {
+    	this.networkClient = client;
+    }
+    
+    public void setPlayer(Player player) {
+    	this.player = player;
+    }
 
     public void incrementAchievement(final String achievementID) {
         achievementClient.incrementProgress(achievementID, player);

@@ -36,14 +36,12 @@ public class MultiplayerListener extends Listener {
 		super.received(connection, object);
 
 		if (object instanceof NewMultiGameRequest) {
-			System.out.println("GameID from request: " + ((NewMultiGameRequest) object).gameId);
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
 			matchmakerQueue.checkForGame(multiRequest, connection);
 			MultiGameRequestType requestType = multiRequest.requestType;
 
 			switch (requestType){
 			case NEW:
-				System.out.println("Connection Received");
 				connection.sendTCP(NewMultiResponse.OK);
 				NewMultiSessionResponse response = new NewMultiSessionResponse();
 				response.gameId = ((NewMultiGameRequest) object).gameId;
@@ -69,7 +67,7 @@ public class MultiplayerListener extends Listener {
 
 
 	private void handleJoinMultiRequest() {
-		//TODO: this method. 
+		System.out.println("JOIN GAME REQUEST HERE");
 	}
 
 

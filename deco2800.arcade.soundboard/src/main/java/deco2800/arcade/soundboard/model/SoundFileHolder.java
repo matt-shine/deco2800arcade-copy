@@ -10,8 +10,8 @@ import com.badlogic.gdx.audio.Music;
  */
 public class SoundFileHolder implements Comparable<SoundFileHolder> {
 
-    public static final float DEFAULT_VOLUME = 0.5f;
-    public static final float SAMPLE_VOLUME = 0.65f;
+    public static final float DEFAULT_VOLUME = 0.35f;
+    public static final float SAMPLE_VOLUME = 0.75f;
     public static final float MAX_VOLUME = 1.0f;
 
     private boolean loop = false;

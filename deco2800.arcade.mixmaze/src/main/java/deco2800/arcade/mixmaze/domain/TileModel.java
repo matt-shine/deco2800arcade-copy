@@ -3,16 +3,12 @@ package deco2800.arcade.mixmaze.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
 /**
  * TileModel represents a tile on the game board.
  */
 public class TileModel {
-	final Logger logger = LoggerFactory.getLogger(TileModel.class);
 
 	/** Column number */
 	private int x;
@@ -261,7 +257,7 @@ public class TileModel {
 		}
 	}
 	
-	public List<TileModel> findBoxes(TileModel tile, List<TileModel> _tiles) {
+	private List<TileModel> findBoxes(TileModel tile, List<TileModel> _tiles) {
 		if(tile == null) {
 			return null;
 		}

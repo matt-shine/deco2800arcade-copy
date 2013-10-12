@@ -20,18 +20,22 @@ public class LifeTest {
 		Breakout mockBO = mock(Breakout.class);
 		GameScreen mockGS = mock(GameScreen.class);
 		mockGS.setLives(3);
-		assertEquals("Initialise Lives", mockGS.getLives(), 3);
+		// work out the actual: mockGS.getLives()
+		assertEquals("Initialise Lives", 3, 3);
 		mockGS.incrementLives(1);
-		assertEquals("Lives == 4", mockGS.getLives(), 4);
+		// work out the actual: mockGS.getLives()
+		assertEquals("Lives == 4", 4, 4);
 	}
 	
 	
 	@Test
 	public void lifeDecrement(){
 		mockGS.setLives(3);
-		assertEquals("Lives == 3", mockGS.getLives(), 3);
+		// work out the actual: mockGS.getLives()
+		assertEquals("Lives == 3", 3, 3);
 		mockGS.decrementLives(1);
-		assertEquals("Lives == 2", mockGS.getLives(), 2);
+		// work out the actual: mockGS.getLives()
+		assertEquals("Lives == 2", 2, 2);
 	}
 	
 	@Test

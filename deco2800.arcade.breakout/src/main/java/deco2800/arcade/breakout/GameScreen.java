@@ -26,10 +26,6 @@ import deco2800.arcade.breakout.powerup.PowerupManager;
 import deco2800.arcade.client.*;
 
 
-
-
- 
-
 public class GameScreen implements Screen  {
 	// Orthographic Camera is how the is displayed.
 	

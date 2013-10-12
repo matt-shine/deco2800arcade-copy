@@ -1,5 +1,6 @@
 package deco2800.arcade.snakeLadder;
 
+import java.io.IOException;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -32,6 +33,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
@@ -61,7 +64,8 @@ public class SnakeLadder extends GameClient {
 
 	public GameState gameState;
 	private ArrayList<Label> userLabels = new ArrayList<Label>(); //labels for users
-    private ArrayList<Label> scoreLabels = new ArrayList<Label>(); 
+    private ArrayList<Label> scoreLabels = new ArrayList<Label>();
+    private ArrayList<Dice> dices = new ArrayList<Dice>();
 
 	private Stage stage;
 	private Skin skin;
@@ -69,8 +73,9 @@ public class SnakeLadder extends GameClient {
 	private TextButton diceButton;
 	public String statusMessage;
 	private Dice dice;
+	private Dice diceAI;
 	private int turn=0;
-	
+	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -104,11 +109,11 @@ public class SnakeLadder extends GameClient {
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
 		
+		iniRuleMapping();
 		//creating level loading background board and initializing the rule mapping
 		map =new GameMap();
-		map.ini();
 		//loading game map
-		map.loadMap("maps/lvl1.txt");
+		map.loadMap("maps/lvl1.txt",getRuleMapping());
 		
 		//loading the icon for each player
 		gamePlayers[0].setPlayerTexture("player.png");
@@ -129,7 +134,11 @@ public class SnakeLadder extends GameClient {
       //rendering scoreboard UI
   		renderScoreBoard();
         
-        setDice(new Dice());
+  		for (int i = 0; i < gamePlayers.length; i++){
+  			dices.add(new Dice());
+  		}
+        //setDice(new Dice());
+        //setDiceAI(new Dice());
         
         //TODO: button should be disabled when its others player turn or when player is on the move
        // diceButton listener for when the button is pressed
@@ -172,7 +181,12 @@ public class SnakeLadder extends GameClient {
 		// render map for this level
 		map.renderMap(batch);
 		
-		getDice().renderDice(batch);
+		
+		for (int i = 0; i < gamePlayers.length; i++){
+  			getDice(i).renderDice(batch, i);
+  		}
+		//getDice().renderDice(batch,1);
+		//getDiceAI().renderDice(batch,2);
 		for(GamePlayer gamePlayer: gamePlayers)
 		{
 			gamePlayer.renderPlayer(batch);
@@ -256,14 +270,30 @@ public class SnakeLadder extends GameClient {
 	public void resume() {
 		super.resume();
 	}
+	
+	public Dice getDice(int num){
+		return dices.get(num);
+	}
+	
+	public void setDice(Dice dice, int num){
+		dices.set(num, dice);
+	}
 
-	public Dice getDice() {
+	/*public Dice getDice() {
 		return dice;
 	}
 
 	public void setDice(Dice dice) {
 		this.dice = dice;
 	}
+	
+	public Dice getDiceAI() {
+		return diceAI;
+	}
+
+	public void setDiceAI(Dice dice) {
+		this.diceAI = dice;
+	}*/
 	
 	public GameMap getMap() {
 		return map;
@@ -333,6 +363,33 @@ public class SnakeLadder extends GameClient {
         table.add(diceButton).width(100).height(50).pad(10);
         
         table.row();
+	}
+	
+	public void iniRuleMapping()
+	{
+		XmlReader reader = new XmlReader();
+		try {
+			Element root = reader.parse(Gdx.files.classpath("ruleMapping.xml"));
+			Array<Element> entries = root.getChildrenByName("entry");
+			for (Element entry : entries)
+			{
+				String rule = entry.getChildByName("rule").getText();
+				String icon = entry.getChildByName("icon").getText();
+				String implementationClass = entry.getChildByName("implementationClass").getText();
+				getRuleMapping().put(rule, new RuleMapping(icon,implementationClass));
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public HashMap<String,RuleMapping> getRuleMapping() {
+		return ruleMapping;
+	}
+
+	public void setRuleMapping(HashMap<String,RuleMapping> ruleMapping) {
+		this.ruleMapping = ruleMapping;
 	}
 }
 

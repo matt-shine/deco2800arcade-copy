@@ -175,7 +175,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		
-		ReplayNodeFactory.registerEvent("movePiece", new String[]{"piece","x", "y"});
+		// Set up the movePiece event to take a piece id, target_x position and target_y position
+		ReplayNodeFactory.registerEvent("movePiece", new String[]{"piece", "target_x", "target_y"});
 		
 		
 		
@@ -306,12 +307,13 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		});
 		replayHandler.startSession(1, player.getUsername());
 		replayHandler.startRecording();
-		
 	}
 	private static ReplayEventListener initReplayEventListener()
 	{
 	    return new ReplayEventListener() {
 	        public void replayEventReceived( String eType, ReplayNode eData ) {
+	        	System.out.println( "Got event!" );
+	        	
 	            //Built in event types
 	            if ( eType.equals( "node_pushed" ) ) {
 	                System.out.println( eType );
@@ -330,9 +332,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	            //Custom events
 	            if ( eType.equals( "movePiece" ) ) {
+	            	// Get the move data stored in (target_x, target_y)
                     int [] movement = {eData.getItemForString( "target_x" ).intVal(),
 	            			eData.getItemForString( "target_y" ).intVal()};
 	                board.movePiece(movingPiece, movement);
+	                
 	            }
 	            if ( eType.equals( "playback_complete" ) ) {
 	                System.out.println( "playback finished" );
@@ -359,13 +363,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			showPossibleMoves(movingPiece);
 		}
 			
-			
-
 		if(isReplaying){
-			System.out.println("replaying");
-    		
+			replayHandler.runLoop();
 		}
-		replayHandler.runLoop();
 
 		super.render();
 		
@@ -503,7 +503,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				int[] newPos = determineSquare(x, y);
 				if (board.movePiece(movingPiece, newPos)) {
 					movePieceGraphic();
-					replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("movePiece", newPos[0], newPos[1]));
+					// Push the move that was just performed, with 0 as the piece id placeholder
+					replayHandler.pushEvent(ReplayNodeFactory.createReplayNode("movePiece", 0, newPos[0], newPos[1]));
 					moving = false;
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {

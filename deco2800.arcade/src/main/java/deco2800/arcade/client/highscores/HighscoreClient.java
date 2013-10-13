@@ -23,6 +23,7 @@ public class HighscoreClient {
 	 *are score types, odd elements are score values. Score values are stored 
 	 *as strings.*/
 	private LinkedList<String> scoreQueue;
+	private int queuedScoresCount = 0;
 	
 	//All of the valid score types, excluding WinLoss
 	private final String validScoreTypes[] = 
@@ -37,16 +38,16 @@ public class HighscoreClient {
 	 * Initializes a new HighscoreClient object that can be used for 
 	 * inserting and retrieving high score information from the database.
 	 * 
-	 * @param string The username of the user who the scores are for.
+	 * @param user The username of the user who the scores are for.
 	 *
-	 * @param j The game that the scores are for.
+	 * @param game The game that the scores are for.
 	 * 
 	 * @param client The network client for the game; a handle on the database
 	 */
-	public HighscoreClient(String string, String j, NetworkClient client) {
-		if (j != null && client != null) {
-			this.Username = string;
-			this.Game_ID = j;
+	public HighscoreClient(String user, String game, NetworkClient client) {
+		if (game != null && client != null) {
+			this.Username = user;
+			this.Game_ID = game;
 			this.client = client;
 			
 			//Allow responses to be received
@@ -64,12 +65,12 @@ public class HighscoreClient {
 	 * only for retrieving scores that do not require a User_ID. If any methods 
 	 * that require a user are called, they will fail throwing an exception.
 	 * 
-	 * @param Game_ID The game that scores are being retrieved for.
+	 * @param game The game that scores are being retrieved for.
 	 * 
 	 * @param client The network client for the game; a handle on the database.
 	 */
-	public HighscoreClient(Integer Game_ID, NetworkClient client) {
-		this(null, null, client);
+	public HighscoreClient(String game, NetworkClient client) {
+		this(null, game, client);
 	}
 	
 	
@@ -94,6 +95,9 @@ public class HighscoreClient {
 		//Build the request
 		gsReq.username = this.Username;
 		gsReq.game_ID = this.Game_ID;
+		
+		//Check the type is valid
+		checkTypeValidity(gsReq.type);
 		
 		//Send the response, and wait for a reply
 		this.gsRes = null;
@@ -161,16 +165,6 @@ public class HighscoreClient {
 			//Move onto the next column, wrapping around to the start
 			currentColumn = (currentColumn + 1) % numberOfColumns; 
 		}
-		
-		//COMMENT THIS OUT WHEN NOT NEEDED
-		for (int i = 0; i < output.size(); i++) {
-			System.out.println("Row: " + i);
-			System.out.println("        Name: " + output.get(i).playerName);
-			System.out.println("        Score: " + output.get(i).score);
-			System.out.println("        Date: " + output.get(i).date);
-			System.out.println("        Type: " + output.get(i).type);
-		}
-		
 
 		return output;
 	}
@@ -181,7 +175,7 @@ public class HighscoreClient {
 	//--------------------
 	
 	/**
-	 * requestID: 1
+	 * requestID: 1. This function is user INDEPENDENT.
 	 * 
 	 * @param limit The number of top players to be returned.
 	 * 
@@ -190,10 +184,11 @@ public class HighscoreClient {
 	 * 
 	 * @return A list of Highscore objects. 
 	 */
-	public List<Highscore> getGameTopPlayers(int limit, boolean highestIsBest) {
+	public List<Highscore> getGameTopPlayers(int limit, boolean highestIsBest, String type) {
 		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 1; //Telling the server which query to run
 		gsReq.limit = limit;
+		gsReq.type = type;
 		gsReq.highestIsBest = highestIsBest;
 		
 		//Send the request off, waiting for response before continuing
@@ -235,8 +230,7 @@ public class HighscoreClient {
 	//--------------------
 	
 	/**
-	 * Queues up a new score item to be added to a multi-score entity. Note
-	 * that when storeScore, sendMultiScoreItems, 
+	 * Queues up a new score item to be added to a multi-score entity.
 	 * 
 	 * @param type The type of the score that is being stored. For information 
 	 * on what types are available, refer to the documentation. If an invalid 
@@ -246,11 +240,10 @@ public class HighscoreClient {
 	 * only supports integers.
 	 */
 	public void addMultiScoreItem(String type, int value) {
-		if (typeIsValid(type)) {
+		if (checkTypeValidity(type)) {
 			scoreQueue.add(type);
 			scoreQueue.add(Integer.toString(value));
-		} else {
-			throw new UnsupportedScoreTypeException(type + " is not a valid score type");
+			this.queuedScoresCount++;
 		}
 	}
 	
@@ -274,11 +267,20 @@ public class HighscoreClient {
 	 * Clears all of the currently queued scores.
 	 */
 	public void clearMultiScoreQueue() {
-		/*A new map is initialized rather than clearing the current map to 
-		 * ensure that the map is not cleared before it is sent off to the 
+		/*A new list is initialized rather than clearing the current list to 
+		 * ensure that the list is not cleared before it is sent off to the 
 		 * server. The garbage collector will, obviously, clean up any stray 
-		 * maps.*/
+		 * lists.*/
 		this.scoreQueue = new LinkedList<String>();
+		this.queuedScoresCount = 0;
+	}
+	
+	/**
+	 * Returns the number of scores that are currently queued up to be sent to 
+	 * the database.
+	 */
+	public int queuedScoreCount() {
+		return this.queuedScoresCount;
 	}
 	
 	/**
@@ -287,13 +289,14 @@ public class HighscoreClient {
 	 * 
 	 * @param type The type this is to be checked.
 	 */
-	private boolean typeIsValid(String type) {
+	private boolean checkTypeValidity(String type) {
 		//Check if type is in validScoreTypes
 		for (String validType : validScoreTypes) {
 			if (validType.equals(type)) return true;
 		}
 		
-		return false; //None of the types in validScoreTypes match type
+		//Type is invalid, throw an exception
+		throw new UnsupportedScoreTypeException(type + " is not a valid score type");
 	}
 	
 	/**
@@ -371,6 +374,29 @@ public class HighscoreClient {
 		scoreQueue.add(Integer.toString(val));
 		
 		sendScoresToServer();
+	}
+	
+	
+	
+	//=============================================================
+	//Public General Utility Methods
+	//=============================================================
+	/**
+	 * Prints out all of the scores in hs to the console. This can be used for 
+	 * debugging to ensure that scores are being stored correctly.
+	 * 
+	 * @param hs A list of scores that are to be printed to the console.
+	 */
+	public static void printHighscores(List<Highscore> hs) {
+		System.out.println("Scores Printed:");
+		
+		for (int i = 0; i < hs.size(); i++) {
+			System.out.println("Row: " + i);
+			System.out.println("        Name: " + hs.get(i).playerName);
+			System.out.println("        Score: " + hs.get(i).score);
+			System.out.println("        Date: " + hs.get(i).date);
+			System.out.println("        Type: " + hs.get(i).type);
+		}
 	}
 	
 }

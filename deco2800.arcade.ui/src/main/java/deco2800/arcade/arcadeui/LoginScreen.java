@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
+
+import deco2800.arcade.arcadeui.store.GameStore;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
@@ -78,7 +80,7 @@ public class LoginScreen implements Screen {
                 }
                 else if (usernameText.getText().toLowerCase().equals("store")) {
                     // TEMPORARY
-                    arcadeUI.setScreen(arcadeUI.store);
+                    arcadeUI.setScreen(new GameStore());
                 }
                 else if (usernameText.getText().toLowerCase().equals("home")) {
                     // TEMPORARY

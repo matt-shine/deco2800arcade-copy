@@ -1,5 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import deco2800.arcade.arcadeui.store.GameStore;
+import deco2800.arcade.arcadeui.store.StoreScreen;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -41,7 +43,7 @@ public class ArcadeUI extends GameClient {
         // Initialise the different screens.
         login = new LoginScreen(this);
         home = new HomeScreen(this);
-        store = new StoreScreen();
+        store = new GameStore();
         main = new FrontPage();
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);

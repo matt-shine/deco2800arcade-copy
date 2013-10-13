@@ -100,7 +100,7 @@ public class TestFriendStorage {
 	@Test
 	public void testAcceptFriendRequest() throws DatabaseException {
 		friendStorage.acceptFriendRequest(1, 2);
-		assertTrue(friendStorage.isFriends(1, 2));
+		assertTrue(friendStorage.isFriends(2, 1));
 	}
 	
 	@Test

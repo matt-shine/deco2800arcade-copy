@@ -74,10 +74,12 @@ public class TestPlayerStorage {
 	}
 	
 	@Test
+	/**
+	 * Get a player's data from the database.
+	 */
 	public void testGetPlayerData() {
 		try {
 			List<String> playerData = new ArrayList<String>();
-			List<String> databasePlayerData = new ArrayList<String>();
 			playerData.add("1");
 			playerData.add("U1");
 			playerData.add("bob");
@@ -85,9 +87,7 @@ public class TestPlayerStorage {
 			playerData.add("BE");
 			playerData.add("I am bob.");
 			playerData.add("86");
-			playerStorage.addPlayer(1, "U1", "bob", "bob@gmail.com", "BE", "I am bob.", "86");
-			databasePlayerData = playerStorage.getPlayerData(1);
-			assertEquals(playerData, databasePlayerData);
+			assertEquals(playerData, playerStorage.getPlayerData(1));
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

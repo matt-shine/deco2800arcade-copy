@@ -107,7 +107,7 @@ public class PlayerStorage {
 	 * 
 	 * @throws DatabaseException
 	 */
-	public List<String> getPlayerData(int playerID) throws DatabaseException {
+	public List<String> getPlayerData(Integer playerID) throws DatabaseException {
 		List<String> data = new ArrayList<String>();
 
 		if (!initialised) {
@@ -122,12 +122,14 @@ public class PlayerStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * FROM PLAYERS");
-			data.add(findPlayerInfo(playerID, resultSet, "username"));
-			data.add(findPlayerInfo(playerID, resultSet, "name"));
-			data.add(findPlayerInfo(playerID, resultSet, "email"));
-			data.add(findPlayerInfo(playerID, resultSet, "program"));
-			data.add(findPlayerInfo(playerID, resultSet, "bio"));
-			data.add(findPlayerInfo(playerID, resultSet, "age"));
+			List<String> details = findPlayerInfo(playerID, resultSet);
+			data.add(playerID.toString());
+			data.add(details.get(0));
+			data.add(details.get(1));
+			data.add(details.get(2));
+			data.add(details.get(3));
+			data.add(details.get(4));
+			data.add(details.get(5));
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -151,32 +153,34 @@ public class PlayerStorage {
 	}
 
 	/**
-	 * Searches through a ResultSet for for a player's information.
+	 * Searches through a ResultSet for a player's information.
 	 * 
 	 * @param playerID
 	 *            The player's playerID
 	 * @param results
 	 *            The query result set
-	 * @param field
-	 *            The field to search for (ie email, program, username, bio,
-	 *            program).
 	 * @return Returns the player's information.
 	 * @throws SQLException
 	 */
-	private String findPlayerInfo(int playerID, ResultSet results, String field)
+	private List<String> findPlayerInfo(int playerID, ResultSet results)
 			throws SQLException {
-		String result = null;
+		List<String> details = new ArrayList<String>();
 		while (results.next()) {
-			String user = results.getString("playerID");
+			Integer user = results.getInt("playerID");
 			if (user.equals(playerID)) {
-				result = results.getString(field);
-				return result;
+				details.add(results.getString("username"));
+				details.add(results.getString("name"));
+				details.add(results.getString("email"));
+				details.add(results.getString("program"));
+				details.add(results.getString("bio"));
+				details.add(results.getString("age"));
+				return details;
 			}
 		}
 
-		return result;
+		return details;
 	}
-
+	
 	/**
 	 * Sets a player's username to the provided name.
 	 * 

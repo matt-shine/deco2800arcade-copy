@@ -40,7 +40,7 @@ public class ReplayResponder {
         return replays;
 	}
 	
-	public static void respondToReplayRequest( Response response ) throws Exception {
+	public static void respond( Response response ) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();
@@ -79,7 +79,10 @@ public class ReplayResponder {
 				if ( !replay.sessionId.equals( 100001 ) ) {
 					 itemCount = ( ArcadeServer.instance().getReplayStorage().getReplay( replay.sessionId ) ).size();
 				}
-				tableString += String.format( "<tr><td>%s</td><td>%d</td><td>%s</td></tr>", replay.username, itemCount, replayDateString );
+				tableString += String.format( "<tr><td>%s</td><td>%d</td><td>%s</td></tr>", 
+						replay.username, 
+						itemCount, 
+						replayDateString );
 			}
 			
 			contentString = contentString.replace( "#{{gameid}}", gameId );

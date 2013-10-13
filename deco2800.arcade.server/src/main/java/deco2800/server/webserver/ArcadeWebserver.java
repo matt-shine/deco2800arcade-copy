@@ -36,12 +36,17 @@ public class ArcadeWebserver implements Container {
 	public void handle(Request request, Response response) {
 		try {
 			
+			
+			
 			if ( request.getPath().toString().equals( "/") ) {
-				HomeResponder.respondToHomeRequest( response );
+				HomeResponder.respond( response );
+			} else if ( request.getPath().toString().equals( "/achievements") ) {
+				AchievementResponder.respond( response );
 			} else if ( request.getPath().toString().equals( "/replays") ) {
-				ReplayResponder.respondToReplayRequest( response );
+				ReplayResponder.respond( response );
+			} else if ( request.getPath().toString().equals( "/games") ) {
+				GameResponder.respond( response );
 			} else if ( request.getPath().toString().contains( "js" ) ) {
-				
 				PrintStream body = response.getPrintStream();
 				long time = System.currentTimeMillis();
 	

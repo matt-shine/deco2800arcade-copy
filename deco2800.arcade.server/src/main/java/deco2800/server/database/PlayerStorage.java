@@ -46,8 +46,9 @@ public class PlayerStorage {
 								+ "username VARCHAR(30) NOT NULL,"
 								+ "name VARCHAR(30),"
 								+ "email VARCHAR(30),"
-								+ "program VARCHAR(30)," 
-								+ "bio VARCHAR(200)," + "age VARCHAR(30))");
+								+ "program VARCHAR(30),"
+								+ "bio VARCHAR(200),"
+								+ "age VARCHAR(30))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -56,6 +57,46 @@ public class PlayerStorage {
 		initialised = true;
 	}
 
+	
+	public void addPlayer(int playerID, String username, String name,
+			String email, String program, String bio, String age) throws DatabaseException {
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		try {
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			resultSet = stmt.executeQuery("SELECT * FROM PLAYERS");
+			// add player to database
+			resultSet.moveToInsertRow();
+			resultSet.updateInt("playerID", playerID);
+			resultSet.updateString("username", username);
+			resultSet.updateString("name", name);
+			resultSet.updateString("email", email);
+			resultSet.updateString("program", program);
+			resultSet.updateString("bio", bio);
+			resultSet.updateString("age", age);
+			resultSet.insertRow();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			//clean up JDBC objects
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * Returns a list of player data given a playerID
 	 * 
@@ -91,7 +132,7 @@ public class PlayerStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
-					"Unable to get player informtion from database", e);
+					"Unable to get player information from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -205,7 +246,7 @@ public class PlayerStorage {
 			throws DatabaseException {
 		updateField(playerID, newValue, "name");
 	}
-	
+
 	/**
 	 * Sets a player's name to the provided name.
 	 * 

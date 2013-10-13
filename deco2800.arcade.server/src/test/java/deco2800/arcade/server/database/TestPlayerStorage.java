@@ -30,7 +30,9 @@ public class TestPlayerStorage {
 	 */
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-
+		databaseTester = new JdbcDatabaseTester(
+                "org.apache.derby.jdbc.EmbeddedDriver",
+                "jdbc:derby:Arcade;user=server;password=server;create=true");
 	}
 	
 	/**
@@ -54,15 +56,12 @@ public class TestPlayerStorage {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		databaseTester = new JdbcDatabaseTester(
-                "org.apache.derby.jdbc.EmbeddedDriver",
-                "jdbc:derby:Arcade;user=server;password=server;create=true");
-		
 		playerStorage = new PlayerStorage();
         playerStorage.initialise();
         
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
+        databaseTester.onSetup();
 	}
 	
 	/**
@@ -78,13 +77,17 @@ public class TestPlayerStorage {
 	public void testGetPlayerData() {
 		try {
 			List<String> playerData = new ArrayList<String>();
+			List<String> databasePlayerData = new ArrayList<String>();
 			playerData.add("1");
+			playerData.add("U1");
 			playerData.add("bob");
 			playerData.add("bob@gmail.com");
 			playerData.add("BE");
 			playerData.add("I am bob.");
 			playerData.add("86");
-			assertEquals(playerData, playerStorage.getPlayerData(1));
+			playerStorage.addPlayer(1, "U1", "bob", "bob@gmail.com", "BE", "I am bob.", "86");
+			databasePlayerData = playerStorage.getPlayerData(1);
+			assertEquals(playerData, databasePlayerData);
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -65,29 +65,6 @@ public class GameLibrary extends GameClient {
         ArcadeSystem.openConnection();
         switchViews();
         super.create();
-
-        this.getOverlay().setListeners(new Screen() {
-            @Override
-            public void hide() {
-                //Unpause your game here
-            }
-
-            @Override
-            public void show() {
-                //Pause your game here
-            }
-
-            @Override
-            public void pause() {}
-            @Override
-            public void render(float arg0) {}
-            @Override
-            public void resize(int arg0, int arg1) {}
-            @Override
-            public void resume() {}
-            @Override
-            public void dispose() {}
-        });
     }
 
     /**

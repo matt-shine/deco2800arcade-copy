@@ -10,142 +10,128 @@ armour
   orig: 320, 320
   offset: 0, 0
   index: -1
-bluebrick
+candywall
   rotate: false
   xy: 1, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-candywall
+cell
   rotate: false
   xy: 323, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-cell
+door
   rotate: false
   xy: 1, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-door
+frame_bp
   rotate: false
   xy: 323, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_bp
+frame_erp
   rotate: false
   xy: 645, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_erp
+frame_lsp
   rotate: false
   xy: 1, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_lsp
+frame_pb
   rotate: false
   xy: 323, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_pb
+frame_rp
   rotate: false
   xy: 645, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_rp
+frame_wp
   rotate: false
   xy: 967, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-frame_wp
+greybrick
   rotate: false
   xy: 1, 323
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-greybrick
+health
   rotate: false
   xy: 323, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-health
+icewall
   rotate: false
   xy: 645, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-icewall
+lemongrab
   rotate: false
   xy: 967, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-lemongrab
+penguin
   rotate: false
   xy: 1289, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-penguin
+steel
   rotate: false
   xy: 1, 1
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-redbrick
+unknown
   rotate: false
   xy: 323, 323
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-steel
+woodwall
   rotate: false
   xy: 645, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-unknown
-  rotate: false
-  xy: 967, 967
-  size: 320, 320
-  orig: 320, 320
-  offset: 0, 0
-  index: -1
-woodwall
-  rotate: false
-  xy: 1289, 1289
-  size: 320, 320
-  orig: 320, 320
-  offset: 0, 0
-  index: -1
 worm
   rotate: false
-  xy: 1611, 1611
+  xy: 967, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0

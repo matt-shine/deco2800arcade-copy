@@ -5,10 +5,17 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
-import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+
 import java.util.*;
+
 
 import javax.swing.JFrame;
 
@@ -24,6 +31,8 @@ import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.LobbyListener;
+import deco2800.arcade.client.network.listener.MultiplayerListener;
 import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -35,6 +44,12 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.lobby.LobbyRequestType;
+import deco2800.arcade.protocol.lobby.NewLobbyRequest;
+import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 
@@ -64,6 +79,13 @@ public class Arcade extends JFrame {
     private ProxyApplicationListener proxy;
 
     private CommunicationNetwork communicationNetwork;
+    
+    private static boolean multiplayerEnabled;
+    
+    private static boolean playerBetting;
+    
+    private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
+    
 
     // Width and height of the Arcade window
     private static final int ARCADE_WIDTH = 1280;
@@ -181,6 +203,8 @@ public class Arcade extends JFrame {
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
         this.client.addListener(new PackmanListener());
+        this.client.addListener(new MultiplayerListener(this));
+        this.client.addListener(new LobbyListener());
         this.client.addListener(new LibraryResponseListener());
 	}
 
@@ -223,9 +247,13 @@ public class Arcade extends JFrame {
                 gameUpdateCheckRequest);
 
         GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
-
+       
+        getCurrentGame().setPlayer(this.player);
+        getCurrentGame().setThisNetworkClient(this.client);
+        
         System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
+	
 
 	/**
 	 * Ask the server to play a given game.
@@ -248,6 +276,12 @@ public class Arcade extends JFrame {
 
 		selectedGame = getInstanceOfGame(gameid);
         selectedGame.setNetworkClient(this.client);
+        selectedGame.setPlayer(this.player);
+        if (isMultiplayerEnabled()) {
+        	selectedGame.setMultiplayerOn();
+        } else {
+        	selectedGame.setMultiplayerOff();
+        }
         startGame(selectedGame);
     }
 
@@ -262,6 +296,14 @@ public class Arcade extends JFrame {
         }
         proxy.setTarget(new DummyApplicationListener());
     }
+    
+    public boolean isMultiplayerEnabled() {
+		return multiplayerEnabled;
+	}
+
+	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
+		Arcade.multiplayerEnabled = multiplayerEnabled;
+	}
 
     /**
      * returns true if the player exists
@@ -374,7 +416,6 @@ public class Arcade extends JFrame {
      * @return GameClient
      */
     public GameClient getInstanceOfGame(String id) {
-
         Class<? extends GameClient> gameClass = getGameMap().get(id);
         try {
             if (gameClass != null) {
@@ -384,7 +425,6 @@ public class Arcade extends JFrame {
 
                 // add the overlay to the game
                 if (!gameClass.isAnnotationPresent(InternalGame.class)) {
-
                     GameClient overlay = getInstanceOfGame(ArcadeSystem.OVERLAY);
 
                     // the overlay and the bridge are the same object, but
@@ -422,7 +462,97 @@ public class Arcade extends JFrame {
     public GameClient getCurrentGame() {
         return selectedGame;
     }
+    
+    /**
+     * Adds a lobby match to the clients list of matches.
+     * @param response - The match to add.
+     */
+	public static void addToMatchList(ActiveMatchDetails response) {
+		matches.add(response);
+	}
+	
+	/**
+	 * Resets the client's list of lobby matches.
+	 */
+	public static void clearMatchList() {
+		matches.removeAll(matches);
+	}
+	
+	/**
+	 * Removes a match from the client's list of lobby matches.
+	 * @param response - The match to remove.
+	 */
+	public static void removeFromMatchList(RemovedMatchDetails response) {
+		if (matches.contains(response)) {
+			matches.remove(response);
+		}
+	}
+	
+	/**
+	 * Returns an array of matches in the lobby
+	 * 
+	 * @return the list of matches
+	 */
+	public static ArrayList<ActiveMatchDetails> getMatches() {
+		return matches;
+	}
+	
+	public void createMultiplayerGame(NewMultiGameRequest request) {
+		request.playerID = player.getID();
+		this.client.sendNetworkObject(request);
+	}
+	
+	/**
+	 * Sends a CreateMatchRequest to the server.
+	 * @param request
+	 */
+	public void createMatch(CreateMatchRequest request) {
+		this.client.sendNetworkObject(request);
+	}
+	
+	/**
+	 * Sends a populate request to the lobby, which responds by sending
+	 * all matches currently active in the lobby.
+	 */
+	public void populateMatchList() {
+		NewLobbyRequest request = new NewLobbyRequest();
+		request.requestType = LobbyRequestType.POPULATE;
+		this.client.sendNetworkObject(request);
+	}
+	
+	/**
+	 * Send a request to add this player to the list of players 
+	 * connected to the lobby.
+	 */
+	public void addPlayerToLobby() {
+		NewLobbyRequest request = new NewLobbyRequest();
+		request.playerID = player.getID();
+		request.requestType = LobbyRequestType.JOINLOBBY;
+		this.client.sendNetworkObject(request);	
+	}
+	
+	/**
+	 * Send a request to remove this player from the list of players 
+	 * connected to the lobby.
+	 */
+	public void removePlayerFromLobby() {
+		NewLobbyRequest request = new NewLobbyRequest();
+		request.playerID = player.getID();
+		request.requestType = LobbyRequestType.LEAVELOBBY;
+		this.client.sendNetworkObject(request);	
+	}
 
+	public void disposeGame() {
+		selectedGame.dispose();
+	}
+
+	public boolean isPlayerBetting() {
+		return playerBetting;
+	}
+
+	public void setPlayerBetting(boolean playerBetting) {
+		Arcade.playerBetting = playerBetting;
+	}
     /**
      * Set selected game client
      * @param gameClient GameClient
@@ -457,6 +587,8 @@ public class Arcade extends JFrame {
         }
         return gameSet;
     }
+    
+   
 
     /**
      * Send a request for a list of games to the server

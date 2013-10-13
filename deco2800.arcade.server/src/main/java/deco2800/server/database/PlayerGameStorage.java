@@ -216,4 +216,91 @@ public class PlayerGameStorage {
 			}
 		}
 	}
+	
+	/**
+	 * Searches for a given player's rating at a particular game
+	 * @param playerID
+	 * @param gameID
+	 * @return The player's MMR for the given game
+	 * @throws DatabaseException
+	 */
+	public int getPlayerRating(int playerID, int gameID) throws DatabaseException {
+		//Check whether or not the database has been intitialised
+		if (!initialised){
+			//Not initialised yet - initialise it
+			initialise();
+		}
+
+		//Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES WHERE playerID = " 
+					+ playerID + " AND gameID = " + gameID + ";");
+			int result = resultSet.findColumn("Rating");
+
+			return result;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get playergames from database", e);
+		} finally {
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Searches for a given player's rating at a particular game
+	 * @param playerID
+	 * @param gameID
+	 * @return The player's MMR for the given game
+	 * @throws DatabaseException
+	 */
+	public void updatePlayerRating(int playerID, int gameID, int newRating) throws DatabaseException {
+		//Check whether or not the database has been intitialised
+		if (!initialised){
+			//Not initialised yet - initialise it
+			initialise();
+		}
+
+		//Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		try {
+			statement = connection.createStatement();
+			statement.executeQuery("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
+					+ playerID + " AND gameID = " + gameID + ";");
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get playergames from database", e);
+		} finally {
+			try {
+				if (statement != null){
+					statement.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+
 }

@@ -64,7 +64,8 @@ public class SnakeLadder extends GameClient {
 
 	public GameState gameState;
 	private ArrayList<Label> userLabels = new ArrayList<Label>(); //labels for users
-    private ArrayList<Label> scoreLabels = new ArrayList<Label>(); 
+    private ArrayList<Label> scoreLabels = new ArrayList<Label>();
+    private ArrayList<Dice> dices = new ArrayList<Dice>();
 
 	private Stage stage;
 	private Skin skin;
@@ -72,6 +73,7 @@ public class SnakeLadder extends GameClient {
 	private TextButton diceButton;
 	public String statusMessage;
 	private Dice dice;
+	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
 
@@ -132,7 +134,11 @@ public class SnakeLadder extends GameClient {
       //rendering scoreboard UI
   		renderScoreBoard();
         
-        setDice(new Dice());
+  		for (int i = 0; i < gamePlayers.length; i++){
+  			dices.add(new Dice());
+  		}
+        //setDice(new Dice());
+        //setDiceAI(new Dice());
         
         //TODO: button should be disabled when its others player turn or when player is on the move
        // diceButton listener for when the button is pressed
@@ -175,7 +181,12 @@ public class SnakeLadder extends GameClient {
 		// render map for this level
 		map.renderMap(batch);
 		
-		getDice().renderDice(batch);
+		
+		for (int i = 0; i < gamePlayers.length; i++){
+  			getDice(i).renderDice(batch, i);
+  		}
+		//getDice().renderDice(batch,1);
+		//getDiceAI().renderDice(batch,2);
 		for(GamePlayer gamePlayer: gamePlayers)
 		{
 			gamePlayer.renderPlayer(batch);
@@ -259,14 +270,30 @@ public class SnakeLadder extends GameClient {
 	public void resume() {
 		super.resume();
 	}
+	
+	public Dice getDice(int num){
+		return dices.get(num);
+	}
+	
+	public void setDice(Dice dice, int num){
+		dices.set(num, dice);
+	}
 
-	public Dice getDice() {
+	/*public Dice getDice() {
 		return dice;
 	}
 
 	public void setDice(Dice dice) {
 		this.dice = dice;
 	}
+	
+	public Dice getDiceAI() {
+		return diceAI;
+	}
+
+	public void setDiceAI(Dice dice) {
+		this.diceAI = dice;
+	}*/
 	
 	public GameMap getMap() {
 		return map;

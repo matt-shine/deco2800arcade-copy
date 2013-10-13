@@ -34,9 +34,16 @@ bin
 
 # Release
 release
+<<<<<<< HEAD
+*.bin
+=======
 
 # Gradle settings and build files
 .gradle/
+<<<<<<< HEAD
+>>>>>>> master
+=======
 
 # Ignore all .log files anywhere
 **/*.log
+>>>>>>> origin/master

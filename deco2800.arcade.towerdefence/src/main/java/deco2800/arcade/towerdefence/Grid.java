@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import com.badlogic.gdx.math.Vector2;
+
 /**
  * Grid object to store attributes of a generated Grid.
  * 
@@ -28,9 +30,11 @@ public class Grid implements TileBasedMap {
 	private int gridWidth, gridDepth;
 	// The contents of the grid. 0 means clear, 1 means tower, 2 means wall, 3
 	// means wall with tower, and 4 means blocked.
-	private ArrayList<ArrayList<LinkedList<GridObject>>> gridContents;
+	private ArrayList<ArrayList<ArrayList<GridObject>>> gridContents;
 	// The ship that is using this grid
 	private Ship ship;
+	//The pathfinder used by objects in the grid
+	public AStarPathFinder pathfinder;
 
 	// Constructor
 	/**
@@ -49,7 +53,7 @@ public class Grid implements TileBasedMap {
 		this.ship = ship;
 		gridWidth = width / tileSize;
 		gridDepth = depth / tileSize;
-		gridContents = new ArrayList<ArrayList<LinkedList<GridObject>>>();
+		gridContents = new ArrayList<ArrayList<ArrayList<GridObject>>>();
 	}
 
 	// Getters
@@ -176,7 +180,7 @@ public class Grid implements TileBasedMap {
 		return true;
 	}
 
-	private LinkedList<GridObject> getGridContents(int x, int y) {
+	private ArrayList<GridObject> getGridContents(int x, int y) {
 		return gridContents.get(x).get(y);
 	}
 
@@ -187,6 +191,19 @@ public class Grid implements TileBasedMap {
 	 */
 	public int getTileSize() {
 		return tileSize;
+	}
+	
+	/**
+	 * Move the given object from its previous position to the new position.
+	 * @param object The object to be moved
+	 * @param position The object's current position
+	 * @param newPosition The position to move the object to
+	 */
+	public void moveObject (GridObject object, Vector2 position, Vector2 newPosition){
+		//Remove it from the old position
+		gridContents.get((int)position.x).get((int)position.y).remove(object);
+		//Add it to the new one
+		gridContents.get((int)newPosition.x).get((int)newPosition.y).add(object);
 	}
 
 }

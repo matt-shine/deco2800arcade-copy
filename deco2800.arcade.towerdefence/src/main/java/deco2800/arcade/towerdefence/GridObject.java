@@ -1,6 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -14,10 +15,11 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class GridObject {
 	// Fields
+	private UUID id;
 	// The grid this object is on.
-	private Grid grid;
+	protected Grid grid;
 	// The position of this object on the grid.
-	private Vector2 position = new Vector2();
+	protected Vector2 position = new Vector2();
 	// Whether the object is visible.
 	private boolean visible;
 	// The list of status effects this GridObject can apply.
@@ -34,6 +36,8 @@ public class GridObject {
 	private ArrayList<Sprite> deathSprites;
 	// The team this object belongs to.
 	private Team team;
+
+	// Constructor
 
 	// Getters
 	/**
@@ -108,6 +112,15 @@ public class GridObject {
 	 */
 	public ArrayList<Sprite> sprites() {
 		return standingSprites;
+	}
+
+	/**
+	 * Returns the ID of this object.
+	 * 
+	 * @return
+	 */
+	public UUID getID() {
+		return id;
 	}
 
 	/**
@@ -304,4 +317,36 @@ public class GridObject {
 	public void start() {
 
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((deathSprites == null) ? 0 : deathSprites.hashCode());
+		result = prime * result + ((effects == null) ? 0 : effects.hashCode());
+		result = prime * result + ((facing == null) ? 0 : facing.hashCode());
+		result = prime * result + ((grid == null) ? 0 : grid.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + opaqueness;
+		result = prime * result + (physical ? 1231 : 1237);
+		result = prime * result
+				+ ((position == null) ? 0 : position.hashCode());
+		result = prime * result
+				+ ((standingSprites == null) ? 0 : standingSprites.hashCode());
+		result = prime * result + ((team == null) ? 0 : team.hashCode());
+		result = prime * result + (visible ? 1231 : 1237);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() == GridObject.class && ((GridObject) o).getID() == this.id) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	
 }

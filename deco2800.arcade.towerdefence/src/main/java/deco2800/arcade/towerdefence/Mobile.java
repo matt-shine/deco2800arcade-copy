@@ -13,8 +13,8 @@ import com.badlogic.gdx.math.Vector2;
  */
 public abstract class Mobile extends Mortal {
 	// Fields
-	// The GridObject's speed in moves per second.
-	private Vector2 vector = new Vector2();
+	// The GridObject's speed in pixels per second.
+	private float speed;
 	// The GridObject's sprites to animate movement down.
 	private ArrayList<Sprite> downMovingSprites;
 	// The GridObject's sprites to animate movement left.
@@ -72,7 +72,7 @@ public abstract class Mobile extends Mortal {
 	 * @return
 	 */
 	public float speed() {
-		return vector.len();
+		return speed;
 	}
 
 	// Setters
@@ -125,14 +125,39 @@ public abstract class Mobile extends Mortal {
 	}
 
 	/**
-	 * Move the GridObject some speed calculated units in the direction
-	 * specified over one second.
-	 * 
-	 * TODO implement position modifier based on vector given.
+	 * Move the GridObject one tile in the specified direction at its speed.
 	 * 
 	 * @param vector
 	 */
 	public void moving(Vector2 vector) {
+		// Check for block in given direction
+		if (grid.blocked(this, (int) position().add(vector).x, (int) position()
+				.add(vector).y)) {
+			grid.pathfinder.findPath(this, (int) this.positionInTiles().x,
+					(int) this.positionInTiles().y, 50, 50);
+			return;
+		}
+		// Move it from this grid position to the next one
+		grid.moveObject(this, position, position().add(vector));
+
+		// Go into a wait-while loop changing the position 30 times per second
+		int distance = grid.getTileSize();
+		// Check if it is moving diagonally
+		if (vector.x != 0 && vector.y != 0) {
+			distance = (int) Math.sqrt((double) (2 * (distance * distance)));
+		}
+		long t0, t1;
+		Vector2 addVector = vector.mul(speed / 33);
+		for (int i = 0; i < distance; i += speed) {
+			t0 = System.currentTimeMillis();
+			t1 = t0;
+			// Move
+			position.add(addVector);
+			// Wait 1/30th of a second before moving again
+			while (t1 - t0 < 33) {
+				t1 = System.currentTimeMillis();
+			}
+		}
 	}
 
 	/**

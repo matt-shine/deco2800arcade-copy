@@ -2,6 +2,7 @@ package deco2800.arcade.model.test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -38,8 +39,12 @@ public class UserTest {
 		Assert.assertTrue(user2.equals(user));
 
 		User user3 = new User(9001);
-		Assert.assertTrue(!user3.equals(user2));
+		Assert.assertTrue(!user3.equals(new LinkedList<Integer>()));
 		Assert.assertTrue(!user3.equals(user));
+		
+		User u1 = new User();
+		User u2 = new User(u1);
+		Assert.assertEquals(u1, u2);
 
 	}
 

@@ -21,6 +21,7 @@ import org.reflections.Reflections;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
@@ -55,6 +56,8 @@ import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
  * 
  */
 public class Arcade {
+	
+	private LwjglApplication app;
 
     private NetworkClient client;
 
@@ -88,7 +91,11 @@ public class Arcade {
 
         ArcadeSystem.setArcadeInstance(arcade);
 
-        ArcadeSystem.goToGame(ArcadeSystem.UI);
+        arcade.app.postRunnable(new Runnable() {
+            public void run() {
+            	ArcadeSystem.goToGame(ArcadeSystem.UI);
+            }
+        });
     }
 
     /**
@@ -97,7 +104,6 @@ public class Arcade {
      * @param args
      */
     public Arcade(String[] args) {
-
     	// create the main window
     	LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
     	config.title = "DECO2800 Arcade";
@@ -107,7 +113,8 @@ public class Arcade {
     	config.height = ARCADE_HEIGHT;
     	this.proxy = new ProxyApplicationListener();
     	proxy.setTarget(new DummyApplicationListener());
-    	new LwjglApplication(proxy, config);
+    	app = new LwjglApplication(proxy, config);
+    	Texture.setEnforcePotImages(false);
     }
 
     /**

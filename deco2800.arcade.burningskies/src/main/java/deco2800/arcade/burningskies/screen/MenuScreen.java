@@ -102,7 +102,7 @@ public class MenuScreen implements Screen {
 	@Override
 	public void show() {
 		batch = new SpriteBatch();
-        skin = new Skin(Gdx.files.internal("images/menu/uiskin32.json"));
+        skin = new Skin(Gdx.files.classpath("resources/images/menu/uiskin32.json"));
         white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));

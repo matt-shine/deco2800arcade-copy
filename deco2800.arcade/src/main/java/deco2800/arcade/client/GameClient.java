@@ -36,7 +36,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game {
 	private PackageClient packClient;
     
 	public GameClient(Player player, NetworkClient networkClient) {
-		
 		this.player = player;
 		this.networkClient = networkClient;
 		this.playerClient = new PlayerClient(networkClient);

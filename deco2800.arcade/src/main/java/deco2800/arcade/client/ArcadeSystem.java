@@ -1,6 +1,7 @@
 package deco2800.arcade.client;
 
 
+import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Set;
 

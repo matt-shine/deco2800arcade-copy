@@ -19,6 +19,7 @@ public class FileReader {
 		byte[] bytes = encoded.array();
 		
 		inChannel.close();
+		raf.close();
 		
 		return new String(bytes, encoding);
 			}

@@ -2,18 +2,14 @@ package deco2800.server.webserver;
 
 import java.io.PrintStream;
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.Set;
 import java.util.TreeSet;
 
 import org.simpleframework.http.Response;
 
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
-import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.server.ArcadeServer;
 
 public class AchievementResponder {

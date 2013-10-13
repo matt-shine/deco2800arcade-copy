@@ -80,7 +80,7 @@ public class ReplayStorage {
 	/**
 	 * Sets recording = FALSE for given session.
 	 * 
-	 * @param sessionID
+	 * @param sessionID, the ID of the session to close
 	 * @throws DatabaseException
 	 */
 	public void endRecording( int sessionID ) throws DatabaseException{
@@ -115,13 +115,18 @@ public class ReplayStorage {
 		}
 	}
 	
-	public ArrayList<String> getGameIds() throws DatabaseException{
+	/**
+	 * Gets a list of all of the game ids that currently have replays
+	 * 
+	 * @return a List of Strings, where each string is the id of a game with replays
+	 * @throws DatabaseException
+	 */
+	public List<String> getGameIds() throws DatabaseException{
 		//return list of everything from sessions table for that ID
 		
-		ArrayList<String> gamesList = new ArrayList <String>();
+		List<String> gamesList = new ArrayList <String>();
 		Connection connection = null;
 		Statement state = null;
-		String concat;
 
 		try{
 			connection = Database.getConnection();
@@ -156,10 +161,11 @@ public class ReplayStorage {
 	}
 	
 	/**
-	 * Returns an ArrayList of all information pertaining to specific gameID
+	 * Gets all of the replay sessions corresponding to a particular game, stored
+	 * as an ArrayList of Strings. Each String represents a single replay session.
 	 * 
-	 * @param gameID
-	 * @return
+	 * @param gameID, the string ID of the game to get the sessions for
+	 * @return an ArrayList of all information pertaining to specific gameID
 	 */
 	public ArrayList<String> getSessionsForGame( String gameID ) throws DatabaseException{
 		//return list of everything from sessions table for that ID
@@ -217,12 +223,13 @@ public class ReplayStorage {
 	
 	
 	/**
-	 * Currently returns an array of strings with events pertaining to sessionID 
-	 * table SESSIONS with a SessionID of sessionID
-	 * @param sessionID
-	 * @return
+	 * Returns a List of String, with each String being a JSON serialised representation
+	 * of a replay event. The elements of the list are ordered by their event index.
+	 * 
+	 * @param sessionID, the integer ID of the session to get replay data for
+	 * @return a List of Strings, with each item being an Event in the given Session
 	 */
-	public List<String> getReplay( int sessionID ) throws DatabaseException{ //Want EventIDs too?
+	public List<String> getReplay( int sessionID ) throws DatabaseException{ 
 		
 		Connection connection = null;
 		Statement state = null;
@@ -271,8 +278,15 @@ public class ReplayStorage {
 	}	
 	
 	/**
-	 * Insert new entry into Sessions table.
+	 * Inserts a new session into the database, given a gameID, username, date/time and
+	 * a comment.
 	 * 
+	 * @param gameID, the string ID of the game to start a session for
+	 * @param userName, the string username of the user who started the session
+	 * @param dateTime, the date/time, given as time since epoch (long)
+	 * @param comment, the comment to attach to the replay
+	 * @return the ID of the session that was just created
+	 * @throws DatabaseException
 	 */
 	public int insertSession( String gameID, 
 			String userName, long dateTime, String comment ) throws DatabaseException{
@@ -328,11 +342,13 @@ public class ReplayStorage {
 	}
 	
 	/**
-	 *  Insert new event into Events table.
-	 *  
-	 * @param eventID
-	 * @param sessionID
-	 * @param event
+	 * Inserts a new event into the database, given a session ID, event index (relative
+	 * to the start of the session) and the flattened event string.
+	 * 
+	 * @param sessionID, the integer ID of the session to add the event for
+	 * @param eventIndex, the index of the event within the replay
+	 * @param event, the flattened string representing the event
+	 * @throws DatabaseException
 	 */
 	public void insertEvent( int sessionID, int eventIndex, String event ) throws DatabaseException{
 		Statement state = null;
@@ -370,7 +386,12 @@ public class ReplayStorage {
 		}
 	}
 	
-	
+	/**
+	 * Removes a given session from the database.
+	 * 
+	 * @param sessionID, the ID of the session to remove
+	 * @throws DatabaseException
+	 */
 	public void remove( int sessionID ) throws DatabaseException{
 		Statement state = null;
 		Connection connection = null;
@@ -414,9 +435,11 @@ public class ReplayStorage {
 	/**
 	 * Retrieves all the events that have been missed between time of game start &
 	 *  the time at which the spectator began viewing.
+	 *  
 	 * @param sessionID - SessionID of game being viewed.
 	 * @param dateTime - Time when spectator initiated viewing.
-	 * @return
+	 * @return a HashMap of Integer to String, where the key is the index of the event and 
+	 * 			the string is the flattened event data.
 	 * @throws DatabaseException 
 	 */
 	//for spectator mode

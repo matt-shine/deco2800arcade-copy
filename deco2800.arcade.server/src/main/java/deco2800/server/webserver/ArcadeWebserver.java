@@ -3,16 +3,10 @@
  */
 package deco2800.server.webserver;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
 import org.simpleframework.http.Request;
@@ -24,19 +18,12 @@ import org.simpleframework.transport.Server;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
 
-import deco2800.arcade.protocol.replay.types.Session;
-import deco2800.server.ArcadeServer;
-
 public class ArcadeWebserver implements Container {
-	
-	
 
-	
+	private static final int SERVER_PORT = 8080;
 	
 	public void handle(Request request, Response response) {
 		try {
-			
-			
 			
 			if ( request.getPath().toString().equals( "/") ) {
 				HomeResponder.respond( response );
@@ -86,9 +73,9 @@ public class ArcadeWebserver implements Container {
 	public static void startServer( ) {
 		try {
 			Container container = new ArcadeWebserver();
-			Server server = new ContainerServer(container);
-			Connection connection = new SocketConnection(server);
-			SocketAddress address = new InetSocketAddress(8080);
+			Server server = new ContainerServer( container );
+			Connection connection = new SocketConnection( server );
+			SocketAddress address = new InetSocketAddress( SERVER_PORT );
 	
 			connection.connect(address);
 		} catch( Exception e ) {

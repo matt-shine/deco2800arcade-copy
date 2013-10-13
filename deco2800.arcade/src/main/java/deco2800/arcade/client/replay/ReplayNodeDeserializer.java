@@ -46,9 +46,10 @@ public class ReplayNodeDeserializer implements JsonDeserializer<ReplayNode> {
 	
 	/**
 	 * Create a {@link ReplayItem} given the type expected and the Json representation.
+	 * 
 	 * @param type 
 	 * @param entryObject
-	 * @return
+	 * @return a ReplayItem with the given data
 	 */
 	private ReplayItem getReplayItem(int type, JsonObject entryObject)
 	{

@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.simpleframework.http.Response;
 
@@ -52,7 +53,7 @@ public class ReplayResponder {
 		
 		String bodyString = "";
 		
-		ArrayList<String> gameIds = ArcadeServer.instance().getReplayStorage().getGameIds();
+		List<String> gameIds = ArcadeServer.instance().getReplayStorage().getGameIds();
 		
 		gameIds.add( "test" );
 		

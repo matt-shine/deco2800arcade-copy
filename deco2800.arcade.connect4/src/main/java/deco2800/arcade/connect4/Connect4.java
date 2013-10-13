@@ -111,9 +111,8 @@ public class Connect4 extends GameClient {
 		
 		replayHandler.requestSessionList(getGame().id);
 		
-		replayHandler.startSession( getGame().id, "replayers" );
+		replayHandler.startSession( getGame().id, players[ 0 ] );
 	}
-	
 
 	private ReplayEventListener initReplayEventListener() {
 	    return new ReplayEventListener() {

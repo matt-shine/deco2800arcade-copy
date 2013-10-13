@@ -43,6 +43,7 @@ public class UserTest {
 
 	}
 
+	@Test
 	public void UserTest3() {
 
 		List<String> info = new ArrayList<String>();

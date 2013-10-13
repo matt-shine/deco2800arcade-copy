@@ -12,7 +12,7 @@ import org.simpleframework.http.Response;
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.server.ArcadeServer;
 
-public class ReplayResponder {
+public class ReplayResponder implements WebResponder {
 	private static ArrayList<Session> stringsToSessions( ArrayList<String> replayStrings ) {
 		ArrayList<Session> replays = new ArrayList<Session>();
 		//Convert back to sessions
@@ -41,7 +41,7 @@ public class ReplayResponder {
         return replays;
 	}
 	
-	public static void respond( Response response ) throws Exception {
+	public void respond( Response response ) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();

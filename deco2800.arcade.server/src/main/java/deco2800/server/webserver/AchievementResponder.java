@@ -12,9 +12,9 @@ import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.server.ArcadeServer;
 
-public class AchievementResponder {
+public class AchievementResponder implements WebResponder {
 	
-	public static void respond( Response response ) throws Exception {
+	public void respond( Response response ) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();

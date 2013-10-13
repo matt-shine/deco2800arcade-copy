@@ -10,9 +10,9 @@ import org.simpleframework.http.Response;
 import deco2800.arcade.model.Game;
 import deco2800.server.ArcadeServer;
 
-public class GameResponder {
+public class GameResponder implements WebResponder {
 	
-	public static void respond( Response response ) throws Exception {
+	public void respond( Response response ) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();

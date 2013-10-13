@@ -1,12 +1,13 @@
 package deco2800.server.webserver;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 
 import org.simpleframework.http.Response;
 
-public class HomeResponder {
-	public static void respond( Response response ) throws Exception {
+public class HomeResponder implements WebResponder {
+	public void respond( Response response ) throws IOException  {
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();
 

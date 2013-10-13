@@ -23,4 +23,18 @@ public class FileReader {
 		
 		return new String(bytes, encoding);
 			}
+	
+	static ByteBuffer readBinaryFile(String path) throws IOException
+	{
+	    RandomAccessFile raf = new RandomAccessFile(path, "r");
+        FileChannel inChannel = raf.getChannel();
+        
+        ByteBuffer encoded = ByteBuffer.allocate((int) inChannel.size());
+        inChannel.read(encoded);
+        
+        inChannel.close();
+        raf.close();
+
+        return encoded;
+	}
 }

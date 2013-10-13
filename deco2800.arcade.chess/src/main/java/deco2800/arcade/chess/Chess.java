@@ -71,6 +71,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	int pieceHorizOff = 24;
 	int pieceVerticOff = 24;
 	boolean flag = true;
+	private String info;
+	BitmapFont gameInfo;
 	// Piece positions
 	// x-co-ords
 	int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
@@ -215,6 +217,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		font = new BitmapFont();
 		font.setScale(2);
 		batch = new SpriteBatch();
+		
+		info = "White teams turn";
+		gameInfo = new BitmapFont();
 
 		Texture.setEnforcePotImages(false);
 
@@ -356,13 +361,28 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 */
 	@Override
 	public void render() {
-		
+        Gdx.graphics.getGLCommon().glClear( GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT );
+        batch.begin();
+		int height = Chess.SCREENHEIGHT;
+	      
+        batch.draw(splashTexture, 0, 0);
+        batch.draw(splashTexture2, 0, (float) ((float)height*0.88));
+		gameInfo.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		if (board.whoseTurn()) {
+			info = "Black teams turn";
+		} else {
+			info = "White teams turn";
+		}
+		gameInfo.draw(batch, info, 600, 70); 
+		batch.end();
 		// tell the camera to update its matrices.
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
 	    drawPieces();
 		stage.draw();
+		
+		
 		
 		if(moving) {
 			showPossibleMoves(movingPiece);
@@ -1100,6 +1120,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		
 
 		// Board - blue
 		batch.draw(chessBoard, horizOff, verticOff);

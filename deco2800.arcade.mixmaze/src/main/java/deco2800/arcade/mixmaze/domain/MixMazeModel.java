@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import deco2800.arcade.mixmaze.Achievements;
+import deco2800.arcade.mixmaze.domain.ItemModel.Type;
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 
 /**
@@ -70,6 +71,30 @@ public class MixMazeModel implements IMixMazeModel {
 		END
 	}
 
+	private final class TileWatcher implements TileModelObserver {
+		private TileModel watching;
+		private int watchX;
+		private int watchY;
+		
+		public TileWatcher(TileModel tile) {
+			watching = tile;
+			watchX = tile.getX();
+			watchY = tile.getY();
+		}
+		
+		@Override
+		public void updateBoxer(int id) {
+			if(id != 0 && isItemSpawned(watchX, watchY)) {
+				items[watchY][watchX] = null;
+				watching.updateType(Type.NONE);
+			}
+		}
+
+		@Override
+		public void updateType(Type type) {
+		}
+	}
+	
 	/**
 	 * Thrown when attempting to operate a game that is not running.
 	 */
@@ -98,7 +123,8 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/** Tiles on the game board */
 	private TileModel[][] board;
-
+	private TileWatcher[][] boardWatchers;
+	
 	/** Items on the game board (one per tile) */
 	private ItemModel[][] items;
 
@@ -186,6 +212,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 */
 	private void initBoard() {
 		board = new TileModel[boardSize][boardSize];
+		boardWatchers = new TileWatcher[boardSize][boardSize];
 		items = new ItemModel[boardSize][boardSize];
 		/* XXX: too many levels of nested loops */
 		for (int y = 0; y < boardSize; ++y) {
@@ -200,6 +227,8 @@ public class MixMazeModel implements IMixMazeModel {
 					}
 				}
 				board[y][x] = new TileModel(x, y, adjTiles);
+				boardWatchers[y][x] = new TileWatcher(board[y][x]);
+				board[y][x].addObserver(boardWatchers[y][x]);
 			}
 		}
 	}
@@ -278,7 +307,7 @@ public class MixMazeModel implements IMixMazeModel {
 		int player1Score = getPlayerScore(player[0]);
 		int player2Score = getPlayerScore(player[1]);
 		Achievements.getInstance().incrementAchievement(
-				Achievements.Achievement.Playa);
+				Achievements.AchievementType.Playa);
 
 		if (player1Score != player2Score) {
 			return (player1Score > player2Score) ? player[0] : player[1];
@@ -298,7 +327,8 @@ public class MixMazeModel implements IMixMazeModel {
 					int x = spawner.nextInt(boardSize);
 					int y = spawner.nextInt(boardSize);
 					while (getSpawnedItem(x, y) != null
-							|| getBoardTile(x, y).isBoxBuilt()) {
+							|| getBoardTile(x, y).isBoxBuilt()
+							|| isPlayerAtPosition(x, y)) {
 						x = spawner.nextInt(boardSize);
 						y = spawner.nextInt(boardSize);
 					}
@@ -398,9 +428,8 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @return <code>true</code> if player is present at specified (x, y),
 	 *         <code>false</code> otherwise
 	 */
-	private boolean hasPlayerAtPosition(int x, int y) {
-		return (player[0].getX() == x && player[0].getY() == y)
-				|| (player[1].getX() == x && player[1].getY() == y);
+	private boolean isPlayerAtPosition(int x, int y) {
+		return player[0].isAtLocation(x, y) || player[1].isAtLocation(x, y);
 	}
 
 	/**
@@ -485,6 +514,10 @@ public class MixMazeModel implements IMixMazeModel {
 		return items[y][x];
 	}
 
+	public boolean isItemSpawned(int x, int y) {
+		return getSpawnedItem(x, y) != null;
+	}
+	
 	/**
 	 * Set the item at the specified (x, y) position
 	 * 
@@ -523,7 +556,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 *         <code>false</code> otherwise.
 	 */
 	private boolean canMove(PlayerModel p, int x, int y, int dir) {
-		boolean res = checkCoordinates(x, y) && !hasPlayerAtPosition(x, y);
+		boolean res = checkCoordinates(x, y) && !isPlayerAtPosition(x, y);
 
 		/* No extra movement restriction on BEGINNER */
 

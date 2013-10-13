@@ -2,12 +2,18 @@ package deco2800.arcade.mixmaze;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -17,7 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldFilter;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Scaling;
+
+import deco2800.arcade.mixmaze.GameScreen.Settings;
 
 public class SettingsScreen implements Screen {
 
@@ -34,27 +45,37 @@ public class SettingsScreen implements Screen {
 	private SelectBox gridSize;
 	private TextField[] p1Texts = new TextField[6];
 	private TextField[] p2Texts = new TextField[6];
+	private TextButton[] p1Buttons = new TextButton[5];
+	private TextButton[] p2Buttons = new TextButton[5];
 	private int[] p1Controls = new int[6];
 	private int[] p2Controls = new int[6];
 	private TextFieldListener textFieldListener = new Listener();
 	private TextFieldFilter textFieldFilter = new Filter();
+	private Texture texture;
+	private TextureRegion p1AvatarTexRegion;
+	private Image p1AvatarImage;
+	private TextureRegion p2AvatarTexRegion;
+	private Image p2AvatarImage;
 
 	SettingsScreen(final MixMaze game) {
 		this.game = game;
-
+		
 		startDebug();
 		initialize();
 		setTableLayout();
 		createSettingsPanel();
-		createPlayerPanel(playerOnePanel, p1Texts);
-		createPlayerPanel(playerTwoPanel, p2Texts);
+		createPlayerPanel(playerOnePanel, p1Texts, p1Buttons, p1AvatarImage);
+		createPlayerPanel(playerTwoPanel, p2Texts, p2Buttons, p2AvatarImage);
+
 		stage.addActor(rootTable);
 		addTextFeildListeners(p1Texts);
 		addTextFeildListeners(p2Texts);
 		addTextFieldFilter(p1Texts);
 		addTextFieldFilter(p2Texts);
-		playButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
+
+		playButton.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
 				getPlayerControlls(p1Texts, p1Controls);
 				getPlayerControlls(p2Texts, p2Controls);
 				((GameScreen) game.clientScreen).new Settings(p1Controls,
@@ -65,6 +86,11 @@ public class SettingsScreen implements Screen {
 			}
 
 		});
+
+		p1Buttons[1].addListener(new ChangeListnr(p1AvatarTexRegion, true));
+		p1Buttons[0].addListener(new ChangeListnr(p1AvatarTexRegion, false));
+		p2Buttons[1].addListener(new ChangeListnr(p2AvatarTexRegion, true));
+		p2Buttons[0].addListener(new ChangeListnr(p2AvatarTexRegion, false));
 
 	}
 
@@ -112,25 +138,48 @@ public class SettingsScreen implements Screen {
 		p2Texts[3] = new TextField("LEFT", skin);
 		p2Texts[4] = new TextField("DOWN", skin);
 		p2Texts[5] = new TextField("RIGHT", skin);
+
+		p1Buttons[0] = new TextButton("<", skin);
+		p1Buttons[1] = new TextButton(">", skin);
+
+		p2Buttons[0] = new TextButton("<", skin);
+		p2Buttons[1] = new TextButton(">", skin);
+
+		p1AvatarTexRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("angel.png")), 0, 0, 256, 256);
+		p2AvatarTexRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("angel.png")), 0, 0, 256, 256);
+
+		p1AvatarImage = new Image(p1AvatarTexRegion);
+		p1AvatarImage.setScaling(Scaling.fill);
+		p2AvatarImage = new Image(p2AvatarTexRegion);
+		p2AvatarImage.setScaling(Scaling.fill);
+
 	}
 
-	private void createPlayerPanel(Table panel, TextField[] playerDetails) {
-		panel.add(playerDetails[0]).padTop(245).padBottom(80).expandX()
-				.colspan(3);
+	private void createPlayerPanel(Table panel, TextField[] playerDetails,
+			TextButton[] playerButtons, Image avatar) {
+		panel.row().padBottom(20).padTop(165);
+		panel.add(playerButtons[0]);
+		panel.add(avatar).prefHeight(150);
+		panel.add(playerButtons[1]);
 		panel.row();
-		panel.add(playerDetails[1]).padBottom(80).colspan(3);
+		panel.add(playerDetails[0]).padBottom(70).expandX().colspan(3)
+				.width(40);
+		panel.row();
+		panel.add(playerDetails[1]).padBottom(55).colspan(3).width(40);
 		panel.row();
 		panel.add(playerDetails[2]).width(40).padBottom(10).colspan(3);
 		panel.row();
-		panel.add(playerDetails[3]).width(40).right();
+		panel.add(playerDetails[3]).width(40).padLeft(42);
 		panel.add(playerDetails[4]).width(40);
-		panel.add(playerDetails[5]).width(40).left();
+		panel.add(playerDetails[5]).width(40).padRight(42);
+		panel.row();
 	}
 
 	private void createSettingsPanel() {
 		gridSize = new SelectBox(
 				new String[] { "5", "6", "7", "8", "9", "10" }, skin);
-
 		settingsPanel.add(gridSize).expandX().padTop(220).padBottom(110);
 		settingsPanel.row();
 		settingsPanel.add(difficultyList).padBottom(170);
@@ -158,12 +207,11 @@ public class SettingsScreen implements Screen {
 								// of center
 		rootTable.add(settingsPanel).width(settingsWidth).height(celHeight)
 				.expandX();
-		rootTable.add(textPanel).width(textWidth).height(celHeight).expandX();
 		rootTable.add(playerOnePanel).width(playerWidth).height(celHeight)
 				.expandX();
+		rootTable.add(textPanel).width(textWidth).height(celHeight).expandX();
 		rootTable.add(playerTwoPanel).width(playerWidth).height(celHeight)
 				.expandX();
-
 		settingsPanel.top().columnDefaults(4);
 		playerOnePanel.top().columnDefaults(3);
 		playerTwoPanel.top().columnDefaults(3);
@@ -173,19 +221,16 @@ public class SettingsScreen implements Screen {
 	public void dispose() {
 		stage.dispose();
 		skin.dispose();
-
 	}
 
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void pause() {
 		stage.dispose();
-
 	}
 
 	@Override
@@ -214,7 +259,6 @@ public class SettingsScreen implements Screen {
 			if (Gdx.input.isKeyPressed(Keys.DOWN)) {
 				((TextField) stage.getKeyboardFocus()).setText("DOWN");
 			}
-
 		}
 		// Table.drawDebug(stage);
 	}
@@ -222,13 +266,11 @@ public class SettingsScreen implements Screen {
 	@Override
 	public void resize(int arg0, int arg1) {
 		stage.setViewport(1280, 720, true);
-
 	}
 
 	@Override
 	public void resume() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -334,6 +376,26 @@ public class SettingsScreen implements Screen {
 		@Override
 		public boolean acceptChar(TextField textField, char key) {
 			return (Character.isLetterOrDigit(key) || key == '\t');
+		}
+	}
+
+	private class ChangeListnr extends ClickListener {
+		private TextureRegion avatar;
+		private boolean isNext;
+
+		@Override
+		public void clicked(InputEvent event, float x, float y) {
+			if (isNext == true && avatar.getRegionX() < 513) {
+				avatar.setRegion(avatar.getRegionX() + 256, 0, 256, 256);
+			}
+			if (isNext == false && avatar.getRegionX() > 255) {
+				avatar.setRegion(avatar.getRegionX() - 256, 0, 256, 256);
+			}
+		}
+		
+		public ChangeListnr(TextureRegion avatar, boolean isnext) {
+			this.avatar = avatar;
+			this.isNext = isnext;
 		}
 	}
 }

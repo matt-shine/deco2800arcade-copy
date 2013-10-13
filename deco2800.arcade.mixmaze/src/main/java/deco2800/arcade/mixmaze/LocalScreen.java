@@ -122,6 +122,7 @@ class LocalScreen extends GameScreen {
 					resultLabel.setText("Player " + winner.getId() + " win");
 				}
 				endGameTable.setVisible(true);
+				Sounds.stop();
 			}
 			/*
 			 * FIXME: this does not look like a good solution. It takes some

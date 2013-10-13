@@ -19,7 +19,6 @@ public final class MixMaze extends GameClient {
 
 	final Logger logger = LoggerFactory.getLogger(MixMaze.class);
 
-	private Music surgeLoop;
 	Skin skin;
 	Screen splashScreen;
 	Screen menuScreen;
@@ -44,15 +43,19 @@ public final class MixMaze extends GameClient {
 	}
 
 	@Override
+	public void setScreen(Screen screen) {
+		super.setScreen(screen);
+		if(screen instanceof GameScreen) {
+			Sounds.playAction();
+		} else {
+			Sounds.playMenu();
+		}
+	}
+	
+	@Override
 	public void create() {
 		super.create();
-
-		// Play Mix Maze music
-		surgeLoop = Gdx.audio.newMusic(Gdx.files.internal("lls_surge.mp3"));
-		surgeLoop.setLooping(true);
-		surgeLoop.setVolume(0.5f);
-		surgeLoop.play();
-
+		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
@@ -60,7 +63,6 @@ public final class MixMaze extends GameClient {
 		localScreen = new LocalScreen(this);
 		hostScreen = new HostScreen(this);
 		clientScreen = new ClientScreen(this);
-
 		setScreen(splashScreen);
 	}
 
@@ -77,7 +79,7 @@ public final class MixMaze extends GameClient {
 
 	@Override
 	public void dispose() {
-		surgeLoop.stop();
+		Sounds.stop();
 		splashScreen.dispose();
 		menuScreen.dispose();
 		localScreen.dispose();

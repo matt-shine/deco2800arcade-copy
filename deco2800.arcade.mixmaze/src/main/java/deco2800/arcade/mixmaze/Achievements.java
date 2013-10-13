@@ -1,7 +1,7 @@
 package deco2800.arcade.mixmaze;
 
 public final class Achievements {
-	public enum Achievement {
+	public enum AchievementType {
 		Playa
 	}
 
@@ -25,7 +25,7 @@ public final class Achievements {
 		return INSTANCE;
 	}
 
-	private String getAchievementName(Achievement achvmnt) {
+	private String getAchievementName(AchievementType achvmnt) {
 		switch (achvmnt) {
 		case Playa:
 			return "mixmaze.playa";
@@ -33,7 +33,7 @@ public final class Achievements {
 		throw NOT_A_ACHIEVMENT;
 	}
 
-	public void incrementAchievement(Achievement achvmnt) {
+	public void incrementAchievement(AchievementType achvmnt) {
 		String achievementID = getAchievementName(achvmnt);
 		gameClient.incrementAchievement(achievementID);
 	}

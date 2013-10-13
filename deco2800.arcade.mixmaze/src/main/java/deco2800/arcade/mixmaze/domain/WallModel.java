@@ -101,6 +101,11 @@ public class WallModel {
 		return isBuilt;
 	}
 
+	public boolean isInBox() {
+		return (leftTile != null && leftTile.isBoxBuilt())
+				|| (rightTile != null && rightTile.isBoxBuilt());
+	}
+
 	/**
 	 * Returns the <code>PlayerModel</code> that built this wall, or
 	 * <code>null</code> is not built.

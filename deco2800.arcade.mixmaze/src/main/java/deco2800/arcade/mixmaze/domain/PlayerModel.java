@@ -2,6 +2,7 @@ package deco2800.arcade.mixmaze.domain;
 
 import java.util.ArrayList;
 
+import deco2800.arcade.mixmaze.Sounds;
 import static deco2800.arcade.mixmaze.domain.Direction.*;
 import static deco2800.arcade.mixmaze.domain.ItemModel.Type.*;
 
@@ -339,11 +340,12 @@ public class PlayerModel {
 			boolean used = false;
 			if (action == Action.USE_BRICK && brick.getAmount() > 0) {
 				WallModel wall = (WallModel) tile.getWall(direction);
-				if (!wall.isBuilt()) {
+				if (!wall.isBuilt() && !wall.isInBox()) {
 					brick.removeOne();
 					wall.build(this);
 					used = true;
 					updateBrick(brick.getAmount());
+					Sounds.playBuild();
 				}
 			} else if (action == Action.USE_PICK && pick != null) {
 				WallModel wall = (WallModel) tile.getWall(direction);
@@ -352,6 +354,7 @@ public class PlayerModel {
 					wall.destroy(this);
 					updatePick(false);
 					used = true;
+					Sounds.playDestroy();
 					switchAction();
 				}
 			} else if (action == Action.USE_TNT && tnt != null) {
@@ -361,6 +364,7 @@ public class PlayerModel {
 					if (wall.isBuilt()) {
 						wall.destroy(this);
 					}
+					Sounds.playTNT();
 				}
 				updateTnt(false);
 				used = true;

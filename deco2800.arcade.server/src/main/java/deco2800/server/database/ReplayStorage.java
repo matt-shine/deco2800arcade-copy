@@ -115,6 +115,46 @@ public class ReplayStorage {
 		}
 	}
 	
+	public ArrayList<String> getGameIds() throws DatabaseException{
+		//return list of everything from sessions table for that ID
+		
+		ArrayList<String> gamesList = new ArrayList <String>();
+		Connection connection = null;
+		Statement state = null;
+		String concat;
+
+		try{
+			connection = Database.getConnection();
+			state = connection.createStatement();
+
+			ResultSet results = state.executeQuery( "SELECT DISTINCT GameId FROM " + sessions );
+			
+			while ( results.next() ){
+				gamesList.add( results.getString( "GameId" ) );
+			}
+			
+		}catch( Exception e ){
+			e.printStackTrace();
+			throw new DatabaseException("Failed to retrieve sessions.", e);
+		}finally{
+			//free resources
+			try{
+				if ( state != null ){
+					state.close();
+				}
+				if ( connection != null ){
+					connection.close();
+				}
+				
+			}catch ( Exception e ){
+				//Shouldn't occur
+				e.printStackTrace();
+				throw new DatabaseException("Something went awry.", e);
+			}			
+		}
+		return gamesList;	
+	}
+	
 	/**
 	 * Returns an ArrayList of all information pertaining to specific gameID
 	 * 

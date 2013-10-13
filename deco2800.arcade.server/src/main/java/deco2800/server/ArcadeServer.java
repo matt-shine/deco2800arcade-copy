@@ -12,6 +12,8 @@ import deco2800.server.database.*;
 import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
 
+import deco2800.server.webserver.ArcadeWebserver;
+
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
  * transport layer protocols. 
@@ -58,6 +60,8 @@ public class ArcadeServer {
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
+		
+		ArcadeWebserver.startServer( );
 	}
 
 	//Achievement storage service

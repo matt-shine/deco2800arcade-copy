@@ -133,6 +133,7 @@ public class ReplayHandler {
 	 */
 	public void requestSessionList(String gameId)
 	{
+		System.out.println( "Asked for sessions..." );
 	    ListSessionsRequest lsr = new ListSessionsRequest();
 	    lsr.gameId = gameId;
 	    client.sendNetworkObject(lsr);
@@ -144,7 +145,8 @@ public class ReplayHandler {
 	 */
 	public void sessionListReceived(ListSessionsResponse lsr)
 	{
-	    ArrayList<Session> sessions = lsr.sessions;
+	    System.out.println( "Got sessions!" );
+		ArrayList<Session> sessions = lsr.sessions;
 	    
 	    if (sessions.size() == 0)
 	    {
@@ -290,6 +292,14 @@ public class ReplayHandler {
 	 */
 	public void playbackLastSession() {
 		this.playback.playbackSession( this.lastSessionId );
+	}
+	
+	public void requestEventsForSession( int sessionId ) {
+		throw new RuntimeException( "This method is no longer supported." );
+	}
+	
+	public void startSession(int gameId, String username) {
+		throw new RuntimeException( "This method is no longer supported." );
 	}
 	
 	/*

@@ -58,6 +58,8 @@ public class ReplaySystemDemo {
 	    //Start the session with a game id and username
 	    replayHandler.startSession("replay_handler_demo", "max_koopman");
 	    
+	    Thread.sleep( 1000 );
+	    
 		replayHandler.startRecording();
 		
 		//Declare an event to be registered in the factory, we can pass arrays.
@@ -96,12 +98,16 @@ public class ReplaySystemDemo {
 
 		Integer session = replayHandler.getSessionId();
 		
-		replayHandler.endSession( replayHandler.getSessionId() );
+		//replayHandler.endSession( replayHandler.getSessionId() );
+		
+		replayHandler.endCurrentSession();
 		
 		Thread.sleep( 1000 );
 		
 		//replayHandler.requestEventsForSession( session );
-		replayHandler.playbackCurrentSession();
+		//replayHandler.playbackCurrentSession();
+		
+		replayHandler.playbackLastSession();
 		
 		playbackFinished = false;
 		while (!playbackFinished) {
@@ -109,6 +115,7 @@ public class ReplaySystemDemo {
 		}
 		
 		System.out.println( "Exiting demo." );
+		
 		/*
 		 
 		//Can still create nodes the old way too.

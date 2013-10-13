@@ -12,11 +12,17 @@ public abstract class Enemy extends MovableEntity{
 	protected boolean isDead;
 	protected boolean deathCounted = false;
 	protected boolean startingNextScene;
+	protected int score;
+	protected String healthName;
+	protected Boolean advanceDuringScenes;
 	
 	public Enemy(float speed, float rotation, Vector2 pos, float width, float height) {
 		super(speed, rotation, pos, width, height);
 		isDead = false;
 		startingNextScene = false;
+		score = 100;
+		advanceDuringScenes = false;
+		healthName = "";
 	}
 	
 	public boolean isJumping(){
@@ -106,6 +112,18 @@ public abstract class Enemy extends MovableEntity{
 		return 0f;
 	}
 	
+	public String getHealthName() {
+		return healthName;
+	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	public Rectangle getVulnerableBounds() {
+		return getBounds();
+	}
+	
 	public Array<Rectangle> getPlayerDamageBounds() {
 		Array<Rectangle> playerDamageRectangle = new Array<Rectangle>();
 		playerDamageRectangle.add(getBounds());
@@ -113,5 +131,9 @@ public abstract class Enemy extends MovableEntity{
 	}
 	
 	public abstract Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam);
+	
+	public boolean advanceDuringScenes() {
+		return advanceDuringScenes;
+	}
 
 }

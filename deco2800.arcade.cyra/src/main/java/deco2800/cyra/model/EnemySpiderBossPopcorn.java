@@ -24,6 +24,7 @@ public class EnemySpiderBossPopcorn extends Enemy {
 		isProjectile = false;
 		releasedMissiles = false;
 		count = 0f;
+		healthName = "Stephen The Mutant Iguana";
 		
 		
 	}
@@ -43,15 +44,15 @@ public class EnemySpiderBossPopcorn extends Enemy {
 			Vector2 dirPerp0 = new Vector2(-yToShip, xToShip);
 			Array<Vector2> spawnDirections = new Array<Vector2>();
 			spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(0f)));
-			if (rank > 0.3f) {
+			if (rank > 0.5f) {
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(1f)));
 			}
-			if (rank > 0.5f) {
+			if (rank > 0.8f) {
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-1f)));
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(5f)));
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-5f)));
 			}
-			if (rank > 0.8f) {
+			if (rank > 0.95f) {
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(2.5f)));
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-2.5f)));
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(10f)));
@@ -60,7 +61,7 @@ public class EnemySpiderBossPopcorn extends Enemy {
 				spawnDirections.add((new Vector2(dirAwayShip)).add((new Vector2(dirPerp0)).nor().mul(-15f)));
 			}
 			for (Vector2 v: spawnDirections) {
-				BulletHomingDestructible bullet = new BulletHomingDestructible(5f + 10f * rank, 0f, new Vector2(position.x + width/2, 
+				BulletHomingDestructible bullet = new BulletHomingDestructible(5f + 10f * rank, new Vector2(position.x + width/2, 
 						position.y + height/2), 1f, 1f, v, BulletSimple.Graphic.FIRE);
 				newEnemies.add(bullet);
 			}

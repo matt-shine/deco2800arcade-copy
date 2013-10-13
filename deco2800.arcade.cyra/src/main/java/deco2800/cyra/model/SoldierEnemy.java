@@ -120,7 +120,7 @@ public class SoldierEnemy extends Enemy {
 				case SHOOT:
 					int randInt = MathUtils.random(1);
 					if (randInt == 0) {
-						newEnemies.add(new BulletHomingDestructible(5f + 10f * rank, 0f, new Vector2(position.x + width/2, 
+						newEnemies.add(new BulletHomingDestructible(5f + 10f * rank, new Vector2(position.x + width/2, 
 								position.y + height/2), 1f, 1f, new Vector2(0,1f), BulletSimple.Graphic.FIRE));
 						
 					} else {

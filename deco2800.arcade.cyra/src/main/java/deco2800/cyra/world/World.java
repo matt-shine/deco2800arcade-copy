@@ -63,7 +63,11 @@ public class World {
 	//WorldRenderer wr;
 	
 	public World(Cyra game, int level, ParallaxCamera cam) {
-		curLevel = new Level(level);
+		//rank = 0.91f;
+		rank = 0.76f;
+		//rank = 0.99f;
+		//rank = 0.21f;
+		curLevel = new Level(level, rank);
 		this.cam = cam;
 		Sounds.loadAll();
 		callingInitAfterReloadLevel = false;
@@ -182,6 +186,7 @@ public class World {
 			initCount -= Gdx.graphics.getDeltaTime();
 			if (initCount <0) {
 				resetLevel();
+				Sounds.setSoundEnabled(true);
 			}
 		}
 		
@@ -501,17 +506,17 @@ public class World {
 				if (newEnemies != null) {
 					enemies.addAll(newEnemies);
 				}
-			} else if (e.getClass() == BulletSimple.class || e.getClass() == BulletHomingDestructible.class){
-				//keep the bullets flying throughout scenes
+			} else if (e.advanceDuringScenes()){
+				//keep the bullets explosions and lasers flying throughout scenes
 				e.advance(Gdx.graphics.getDeltaTime(), ship, rank, cam);
 			}
 			
 			
 			/* Sword collisions */
-			if (e.getBounds().overlaps(sword.getBounds())) {
+			if (e.getVulnerableBounds().overlaps(sword.getBounds())) {
 				//System.out.println("C");
 				boolean fromRight = false;
-				if (e.getPosition().x < sword.getPosition().x) {
+				if (e.getPosition().x < sword.getPosition().x+sword.getWidth()/2) {
 					fromRight = true;
 				}
 				e.handleDamage(fromRight);
@@ -754,15 +759,13 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-		//rank = 0.91f;
-		rank = 0.76f;
-		//rank = 0.21f;
+		
 		if (callingInitAfterReloadLevel) {
 			scenePosition = 0;
 			ship = new Player(new Vector2(PLAYER_INIT_X, 6));
 		} else {
 			ship = new Player(new Vector2(GAME_INIT_X, 6));
-			scenePosition = 2;
+			scenePosition = 4;
 		}
 		resultsScreen = new ResultsScreen();
 		
@@ -776,10 +779,10 @@ public class World {
 		Texture copterTex = new Texture("data/copter.png");
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
-		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false);
+		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false, 0.1f);
 		enemies.add(testBeam);
-		enemies.add(new BulletHomingDestructible(6f, 0f, new Vector2(25f, 9f),1f, 1f, new Vector2(1,0.25f), BulletSimple.Graphic.FIRE));
-		enemies.add(new BulletHomingDestructible(6f, 0f, new Vector2(15f, 9f),1f, 1f, new Vector2(-1,0.25f), BulletSimple.Graphic.FIRE));
+		enemies.add(new BulletHomingDestructible(6f, new Vector2(25f, 9f),1f, 1f, new Vector2(1,0.25f), BulletSimple.Graphic.FIRE));
+		enemies.add(new BulletHomingDestructible(6f, new Vector2(15f, 9f),1f, 1f, new Vector2(-1,0.25f), BulletSimple.Graphic.FIRE));
 		
 		//addStaticEnemies();
 		

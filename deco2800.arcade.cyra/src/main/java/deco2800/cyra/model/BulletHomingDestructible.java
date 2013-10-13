@@ -11,11 +11,13 @@ public class BulletHomingDestructible extends BulletSimple {
 	private int homedCount;
 	
 	
-	public BulletHomingDestructible(float speed, float rotation, Vector2 pos,
+	public BulletHomingDestructible(float speed, Vector2 pos,
 			float width, float height, Vector2 direction, Graphic graphic) {
-		super(speed, rotation, pos, width, height, direction, graphic);
+		//uses the rotation from the direction 
+		super(speed, direction.angle(), pos, width, height, direction, graphic);
 		count = 0;
 		homedCount = 0;
+		advanceDuringScenes=true;
 	}
 
 	@Override

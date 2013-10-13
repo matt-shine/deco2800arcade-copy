@@ -29,10 +29,13 @@ public class Level {
 	private Array<EnemySpawner> enemySpawners;
 	private Array<RandomizedEnemySpawner> randomEnemySpawners;
 	private Array<MovablePlatformSpawner> movablePlatformSpawners;
+	private float rank;
 	
-	public Level(int levelNum) {
+	public Level(int levelNum, float rank) {
 		this.levelNum = levelNum;
+		this.rank=rank;
 		init();
+		
 	}
 	
 	private void init() {
@@ -94,15 +97,23 @@ public class Level {
 			Class<SoldierEnemy> c = SoldierEnemy.class;
 			
 			Array<EnemySpawner> spawners = new Array<EnemySpawner>();
+			int spawnAtOnce;
+			if (rank > 0.9) {
+				spawnAtOnce = 3;
+			} else if (rank > 0.7f){
+				spawnAtOnce = 2;
+			} else {
+				spawnAtOnce = 1;
+			}
 			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
-			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 1)); 
+			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, spawnAtOnce)); 
 			//spawners.add(new EnemySpawner(c, new Vector2(0f, 3f), 4, 100, 1)); 
-			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, 1));
+			spawners.add(new EnemySpawner(c, new Vector2(0f, 8f), 4, 100, spawnAtOnce));
 			boolean[] sides = {true, true, true, false};
 			
 
-			RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f, 0f, 200f);
-			RandomizedEnemySpawner res2 = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f, 300f, 600f);
+			RandomizedEnemySpawner res = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 0f, 200f);
+			RandomizedEnemySpawner res2 = new RandomizedEnemySpawner(spawners, sides, collisionLayer, 1.5f-rank, 300f, 600f);
 			res.setActive(true);
 			res2.setActive(true);
 			

@@ -85,14 +85,20 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 				loopPos++;
 				float spawnX = latestBlock.getPosition().x + Block.SIZE;
 				if (loopPos > 0 && loopPos < 13) {
-					blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, 0));
-					blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, 2));
+					if (!(rank > 0.95f && loopPos > 4 && loopPos < 8)) {
+						blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, 0));
+						blocks.add(new Block(new Vector2(spawnX, 1f), Block.TextureAtlasReference.LEVEL, 0));
+						blocks.add(new Block(new Vector2(spawnX, 2f), Block.TextureAtlasReference.LEVEL, 0));
+						blocks.add(new Block(new Vector2(spawnX, 3f), Block.TextureAtlasReference.LEVEL, 2));
+					}
 				}
 				if (loopPos > 2 && loopPos < 6) {
 					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, 2));
+					System.out.println("%(&^*$$&(*^$(&^(&*$^(&^$(&^$ Created a block at high level");
 					
+				}
+				if (loopPos > 11 && loopPos < 17 && rank < 0.85f) {
+					blocks.add(new Block(new Vector2(spawnX, 7f), Block.TextureAtlasReference.LEVEL, 2));
 				}
 				if (loopPos >= 13 && rank < 0.75f) {
 					blocks.add(new Block(new Vector2(spawnX, 0f), Block.TextureAtlasReference.LEVEL, 0));
@@ -212,6 +218,7 @@ public class BlockMakerSpiderBoss extends BlockMaker {
 	}
 	
 	public void camHasReachedStartPosition() {
+		System.out.println("Cam reached start )(*#@&%)(@!*#&%)!#*(&%)#!*&%");
 		camHasReachedStartPosition = true;
 	}
 	

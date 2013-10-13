@@ -23,9 +23,11 @@ import com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer;
 
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.MathUtils;
 //import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 import com.badlogic.gdx.utils.Array;
@@ -39,7 +41,7 @@ import deco2800.cyra.model.*;
 public class WorldRenderer {
 
 	private static final float FOLLOWER_FRAME_DURATION = 0.06f;
-	private static final float SCENE_BAR_MAX_HEIGHT = 2.5f;
+	private static final float SCENE_BAR_MAX_HEIGHT = 1.5f;
 	
 	
 	
@@ -51,12 +53,12 @@ public class WorldRenderer {
 	Walker walker;
 	private ParallaxCamera cam;
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
-	private BitmapFont font;
+	private BitmapFont font, fontBig;
 	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, bg, heartsTexture, 
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture;
 	private TextureRegion followerFrame, cyraFrame;
 	private TextureRegion walkerRegion;
-	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas;
+	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter;
 	private TextureRegion boss1body, boss1head0, boss1head1, boss1arms;
 	private Array<AtlasRegion> walkerRegions;
 	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
@@ -74,6 +76,7 @@ public class WorldRenderer {
 	private float sceneBarHeight;
 	private boolean enemyWithHealthOnScreen = false;
 	private float healthPercentage;
+	private String healthName;
 	
 	//attempting to use maps
 	TileMapRenderer tileMapRenderer;
@@ -390,21 +393,50 @@ public class WorldRenderer {
 			} else if (e.getClass() == EnemySpiderBoss.class) {
 				EnemySpiderBoss esb = (EnemySpiderBoss)e;
 				float scale = 1.3f;
-				batch.draw(boss1body, e.getPosition().x, e.getPosition().y, 0,
-						0, boss1body.getRegionWidth()/32f, boss1body.getRegionHeight()/32f, scale, scale, 0);
-				int headFrame = esb.getHeadFrame();
-				TextureRegion b1head;
-				if (headFrame == 0) {
-					b1head = boss1head0;
-				} else {
-					b1head = boss1head1;
+				if (esb.getState() == EnemySpiderBoss.State.RAM){
+					float rotation;
+					if (esb.getPhase() ==1) {
+						rotation = 0;
+					} else {
+						rotation = -90f;
+					}
+					//rotation = MathUtils.random(359f);
+					TextureRegion bossRamFrame = bossRam.findRegion("stephenram", esb.getRamFrame());
+					//bossRamFrame.flip(true, false);
+					//batch.draw(bossRamFrame, e.getPosition().x-15f, e.getPosition().y-2f, 0,
+						//	0, bossRamFrame.getRegionWidth()/32f, bossRamFrame.getRegionHeight()/32f, scale, scale, rotation);
+					//batch.draw(bossRamFrame, e.getPosition().x+e.getWidth()/2, e.getPosition().y+e.getHeight()/2, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
+					batch.draw(bossRamFrame, e.getPosition().x-bossRamFrame.getRegionWidth()/32f/2f-3f, e.getPosition().y+e.getHeight()/2-bossRamFrame.getRegionHeight()/2f/32f, bossRamFrame.getRegionWidth()/32f-e.getWidth()/2,
+								bossRamFrame.getRegionHeight()/32f/2f, bossRamFrame.getRegionWidth()/32f, bossRamFrame.getRegionHeight()/32f, scale, scale, rotation);
+					
+					//region, las.getOriginPosition().x-las.getCurrentWidth()/2-bufferWidth, las.getOriginPosition().y, las.getCurrentWidth()/2+2*bufferWidth, 0, las.getCurrentWidth()+2*bufferWidth, 
+					//LaserBeam.DEFAULT_LENGTH, 1f,1f, e.getRotation()-90f
 				}
-				batch.draw(b1head, e.getPosition().x+(59f/32f)*scale, e.getPosition().y+(193f/32f)*scale, 0,
-						0, b1head.getRegionWidth()/32f, b1head.getRegionHeight()/32f, scale, scale, 0);
+				if (!(esb.isInvincible() && esb.toggleFlash())) { 
+					
+					batch.draw(boss1body, e.getPosition().x, e.getPosition().y, 0,
+							0, boss1body.getRegionWidth()/32f, boss1body.getRegionHeight()/32f, scale, scale, e.getRotation());
+					int headFrame = esb.getHeadFrame();
+					TextureRegion b1head;
+					if (headFrame == 0) {
+						b1head = boss1head0;
+					} else {
+						b1head = boss1head1;
+					}
+					Vector2 posForOriginZeroZero = new Vector2(e.getPosition().x+(45f/32f)*scale, e.getPosition().y+(188f/32f)*scale);
+					//Vector2 origin = new Vector2(b1head.getRegionWidth()/32f, -5f);
+					Vector2 origin = new Vector2(0,0);
+					batch.draw(b1head, posForOriginZeroZero.x, posForOriginZeroZero.y, origin.x,
+							origin.y, b1head.getRegionWidth()/32f, b1head.getRegionHeight()/32f, scale, scale, e.getRotation());
+					
+				}
+				
 				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
 				float rotationArms = arms.getRotation();
-				batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y, arms.getWidth()/2, arms.getHeight()/2, 
-						arms.getHeight(), arms.getHeight(), 1, 1, rotationArms);
+				System.out.println("scale*arms.getScale() = "+scale*arms.getScale());
+				//batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-2f, arms.getWidth()/2, arms.getHeight()/2, 
+				batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y+arms.getHeight()-1.5f, arms.getWidth()/2, arms.getHeight()/2,
+						boss1arms.getRegionWidth()/32f, boss1arms.getRegionHeight()/32f, scale*arms.getScale(), scale*arms.getScale(), e.getRotation() + rotationArms);
 				
 				if (((EnemySpiderBoss)e).getState() == EnemySpiderBoss.State.LASER) {
 					Array<Rectangle> charges = ((EnemySpiderBoss)e).getLaserChargePositions();
@@ -412,6 +444,13 @@ public class WorldRenderer {
 					for (Rectangle r: charges) {
 						
 						batch.draw(region, r.x, r.y, r.width/2, r.height/2); 
+					}
+				} else if (esb.getState() == EnemySpiderBoss.State.FIREBALL){
+					int frameNo = esb.getRamFrame();
+					if (frameNo >= 0 && frameNo <= 4) {
+						TextureRegion fireRegion = firestarter.findRegion("firestarter", frameNo);
+						batch.draw(fireRegion, esb.getPosition().x+EnemySpiderBoss.MOUTH_OFFSET_X-fireRegion.getRegionWidth()/32f/2f, esb.getPosition().y+EnemySpiderBoss.MOUTH_OFFSET_Y-fireRegion.getRegionHeight()/32f/2f,
+								0,0, fireRegion.getRegionWidth()/32f, fireRegion.getRegionHeight()/32f, 1,1,0);
 					}
 				}
 			} else if (e.getClass() == Explosion.class) {
@@ -438,6 +477,30 @@ public class WorldRenderer {
 				float bufferWidth = 0.2f;
 				batch.draw(region, las.getOriginPosition().x-las.getCurrentWidth()/2-bufferWidth, las.getOriginPosition().y, las.getCurrentWidth()/2+2*bufferWidth, 0, las.getCurrentWidth()+2*bufferWidth, 
 						LaserBeam.DEFAULT_LENGTH, 1f,1f, e.getRotation()-90f);
+			} else if (e.getClass() == WarningOverlay.class){
+				batch.end();
+				textBatch.begin();
+				WarningOverlay overlay = (WarningOverlay)e;
+				Vector2 position2;
+				float pixels = 32f;
+				float distanceApart = 200f;
+				if (overlay.isLeftRepeat()) {
+					
+					position2 = new Vector2(overlay.getPositionOnScreen(pixels).x-distanceApart, overlay.getPositionOnScreen(pixels).y);
+				} else {
+					position2 = new Vector2(overlay.getPositionOnScreen(pixels).x+distanceApart, overlay.getPositionOnScreen(pixels).y);
+				}
+				
+				//font.scale(overlay.getScale());
+				fontBig.draw(textBatch, "WARNING", overlay.getPositionOnScreen(pixels).x, overlay.getPositionOnScreen(pixels).y);
+				fontBig.draw(textBatch, "WARNING", position2.x, position2.y);
+				
+				textBatch.end();
+				//font.scale(1/overlay.getScale());
+				/*batch.draw(shipTexture, e.getPosition().x, e.getPosition().y, 0, 0,
+						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
+						shipTexture.getHeight(), false, false);*/
+				batch.begin();
 			} else if (e.getClass() == Walker.class){
 				//draw the parts in order
 				int i=7; 
@@ -485,6 +548,7 @@ public class WorldRenderer {
 			if (e.displayHealth()) {
 				enemyWithHealthOnScreen = true;
 				healthPercentage = e.getHealthPercentage();
+				healthName = e.getHealthName();
 			}
 		}
 		bItr = bullets.iterator();
@@ -530,7 +594,7 @@ public class WorldRenderer {
 		}
 
 		batch.end();
-		
+		sr.setProjectionMatrix(cam.combined);
 		if (enemyWithHealthOnScreen) {
 			float barWidth = 10f;
 			float barHeight = 1.5f;
@@ -542,15 +606,24 @@ public class WorldRenderer {
 			sr.setColor(1f, 0f,0f,1f);
 			sr.filledRect(cam.position.x-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
 			sr.end();
+			textBatch.begin();
+			System.out.println(cam);
+			System.out.println(font);
+			System.out.println(textBatch);
+			System.out.println(healthName);
+			//font.draw(textBatch, healthName, cam.position.x-cam.viewportWidth/2-4f, cam.position.y-cam.viewportHeight/2+4f);
+			font.draw(textBatch, healthName, 16f, 64f);
+			textBatch.end();
 		}
 		
 		
 		textBatch.begin();
-		
 		CharSequence str = "Time: " + (int)world.getTime(); //(int)ship.getPosition().x;
 		int strXPos = Gdx.graphics.getWidth() - 223; //Offset from right
 		int strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
 		font.draw(textBatch, str, strXPos, strYPos);
+		
+		
 		
 		textBatch.end();
 		if (world.isScenePlaying()) {
@@ -589,6 +662,7 @@ public class WorldRenderer {
 			font.draw(textBatch, timeText, cam.position.x-14f, Gdx.graphics.getHeight()-122);
 			font.draw(textBatch, healthText, cam.position.x-14f, Gdx.graphics.getHeight()-172);
 			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-272);
+			System.out.println("Drawing TotalScore at "+ (cam.position.x-14f) + ","+ (Gdx.graphics.getHeight()-272));
 			textBatch.end();
 			
 			
@@ -616,7 +690,7 @@ public class WorldRenderer {
 			e = eItr.next();
 			sr.begin(ShapeType.Rectangle);
 			sr.setColor(Color.RED);
-			sr.rect(e.getBounds().x, e.getBounds().y, e.getBounds().width, e.getBounds().height);
+			sr.rect(e.getVulnerableBounds().x, e.getVulnerableBounds().y, e.getVulnerableBounds().width, e.getVulnerableBounds().height);
 			sr.setColor(Color.YELLOW);
 			for (Rectangle r: e.getPlayerDamageBounds()) {
 				sr.rect(r.x, r.y, r.width, r.height);
@@ -682,6 +756,8 @@ public class WorldRenderer {
 
 		textBatch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("data/font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		fontBig = new BitmapFont(Gdx.files.internal("data/font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		fontBig.setScale(3f);
 		
 		sceneBarHeight = 0f;
 		sr = new ShapeRenderer();
@@ -701,6 +777,8 @@ public class WorldRenderer {
 		linearFilteringParam.minFilter = TextureFilter.Linear;
 		//manager.load("data/enemysprite1-small.png", Texture.class, linearFilteringParam);
 		manager.load("data/stephen.txt", TextureAtlas.class);
+		manager.load("data/stephenram.txt", TextureAtlas.class);
+		manager.load("data/firestarter.txt", TextureAtlas.class);
 		manager.load("data/bg2.png", Texture.class, linearFilteringParam);
 		manager.load("data/ship.png", Texture.class, linearFilteringParam);
 		manager.load("data/cyra.png", Texture.class, linearFilteringParam);
@@ -735,6 +813,18 @@ public class WorldRenderer {
 		boss1head0.flip(true, false);
 		boss1head1 = boss1Atlas.findRegion("steaphenhead1");
 		boss1head1.flip(true, false);
+		bossRam = manager.get("data/stephenram.txt", TextureAtlas.class);
+		TextureRegion frame0 = bossRam.findRegion("stephenram",0);
+		frame0.flip(true, false);
+		TextureRegion frame1 = bossRam.findRegion("stephenram", 1);
+		frame1.flip(true, false);
+		TextureRegion frame2 = bossRam.findRegion("stephenram", 2);
+		frame2.flip(true, false);
+		TextureRegion frame3 = bossRam.findRegion("stephenram", 3);
+		frame3.flip(true, false);
+		
+		firestarter = manager.get("data/firestarter.txt", TextureAtlas.class);
+		//bossRamAnimation = new Animation(FOLLOWER_FRAME_DURATION, bossRamFrames);
 		
 		
 		bg = manager.get("data/bg2.png", Texture.class);

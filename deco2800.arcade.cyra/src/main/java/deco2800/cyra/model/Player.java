@@ -183,6 +183,10 @@ public class Player extends MovableEntity{
 		return;
 	}
 	
+	public void resetHearts() {
+		hearts = DEFAULT_HEARTS;
+	}
+	
 	public void setInvincibility(boolean invisibility) {
 		invincible = invisibility;
 	}

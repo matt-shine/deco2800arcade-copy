@@ -47,6 +47,7 @@ public class SoldierBoss extends Enemy {
 		jumpTime = 0;
 		health = INITIAL_HEALTH;
 		beingHit =false;
+		healthName = "MegaMonkey 3000 v2.0";
 		
 		
 	}

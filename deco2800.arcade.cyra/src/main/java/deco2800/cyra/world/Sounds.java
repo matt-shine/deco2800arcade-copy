@@ -9,8 +9,9 @@ public class Sounds {
 
 		public static Sound jump;
 		
-		private static Sound coin0, coin1, explosion0,explosion1,explosion2,shoot0; 
+		private static Sound coin0, coin1, explosion0,explosion1,explosion2,shoot0, new5; 
 		private static Music boss1bgm;
+		private static boolean soundEnabled = false;
 		
 		public static void load() {
 			jump = loadSound("jump.wav");
@@ -23,10 +24,15 @@ public class Sounds {
 			explosion1 = loadSound("explosion01.wav");
 			explosion2 = loadSound("explosion02.wav");
 			shoot0 = loadSound("shoot03.wav");
+			new5 = loadSound("new05.wav");
 			boss1bgm = Gdx.audio.newMusic(Gdx.files.internal("data/sounds/boss1music_prototype.mp3"));
 			
 			
 			
+		}
+		
+		public static void setSoundEnabled(boolean enabled) {
+			soundEnabled = enabled;
 		}
 		
 		private static Sound loadSound (String filename) {
@@ -82,10 +88,19 @@ public class Sounds {
 		}
 		
 		public static void playBossMusic() {
-			/*boss1bgm.stop();
-			boss1bgm.play();
-			boss1bgm.setVolume(0.4f);
-			boss1bgm.setLooping(true);*/
+			if (soundEnabled) {
+				boss1bgm.stop();
+				boss1bgm.play();
+				boss1bgm.setVolume(0.4f);
+				boss1bgm.setLooping(true);
+			}
+		}
+		
+		public static void playWarningSound(float pan) {
+			if (soundEnabled) {
+				new5.stop();
+				play(new5, pan);
+			}
 		}
 		
 		

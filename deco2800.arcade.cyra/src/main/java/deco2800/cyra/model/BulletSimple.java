@@ -19,6 +19,7 @@ public class BulletSimple extends Enemy {
 		super(speed, rotation, pos, width, height);
 		this.graphic = graphic;
 		this.velocity = direction;
+		advanceDuringScenes=true;
 	}
 
 	

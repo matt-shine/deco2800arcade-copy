@@ -24,16 +24,17 @@ public class LaserBeam extends Enemy {
 	
 	
 	public LaserBeam(float rotation, Vector2 initPos, float maxWidth,
-			boolean stopWhenHitSolid) {
+			boolean stopWhenHitSolid, float timeToBegin) {
 		super(0, rotation, new Vector2(initPos.x-5f, initPos.y-5f), 10f, 10f);
 		//collision = new Polygon();
 		this.stopWhenHitSolid = stopWhenHitSolid;
 		currentWidth = 0.01f;
 		this.initPos = initPos;
 		this.rotation = rotation;
-		count = -3f;
+		count = -timeToBegin;
 		this.maxWidth = maxWidth;
 		System.out.println("Made new laser beam");
+		advanceDuringScenes=true;
 	}
 	
 	
@@ -70,12 +71,13 @@ public class LaserBeam extends Enemy {
 	@Override
 	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		count += delta;
-		if (count >= 0 && count <= 1.5f) {
-			currentWidth = (maxWidth)/(2.5f-count);
+		float endTime = 1f;
+		if (count >= 0 && count <= endTime) {
+			currentWidth = (maxWidth)/(1f+endTime-count);
 			
 		}
-		if (count >= 2.5) {
-			currentWidth = maxWidth/(count-1.5f);
+		if (count >= endTime + 1f) {
+			currentWidth = maxWidth/(count-endTime);
 			if (currentWidth <= maxWidth * 0.66) {
 				position.x = -100f;
 				
@@ -112,6 +114,10 @@ public class LaserBeam extends Enemy {
 	
 	public Vector2 getOriginPosition() {
 		return new Vector2(initPos.x, initPos.y);
+	}
+	
+	public void setOriginPosition(Vector2 position) {
+		initPos = new Vector2(position);
 	}
 	
 	public float getMaxWidth() {

@@ -24,6 +24,7 @@ public class Explosion extends Enemy {
 		count = 0f;
 		frame = 0;
 		this.velocity = vel;
+		advanceDuringScenes=true;
 	}
 
 	@Override

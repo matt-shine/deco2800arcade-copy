@@ -2,14 +2,15 @@ package deco2800.arcade.model;
 
 /*An exception for handing invalid player data */
 
-@SuppressWarnings("serial")
 public class PlayerException extends Exception {
 
-	  public PlayerException() {
-		super();
-	    }
+	private static final long serialVersionUID = 1L;
 
-	    public PlayerException(String s) {
+	public PlayerException() {
+		super();
+	}
+
+	public PlayerException(String s) {
 		super(s);
-	    }
+	}
 }

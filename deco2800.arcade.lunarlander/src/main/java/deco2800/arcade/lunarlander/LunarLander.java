@@ -292,6 +292,7 @@ public class LunarLander extends GameClient {
 			super.render();
 			break;			
 		case GAME_PAUSED:
+			// not working well
 			gamePaused = true;
 			// show overlay with options to quit or resume
 			batch.begin();

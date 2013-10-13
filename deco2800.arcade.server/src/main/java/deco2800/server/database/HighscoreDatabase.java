@@ -1,12 +1,12 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import deco2800.arcade.protocol.highscore.GetScoreRequest;

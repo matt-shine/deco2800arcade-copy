@@ -113,7 +113,7 @@ public class FriendStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM FRIENDS WHERE STATUS=0 AND BLOCKED=0");
+			resultSet = statement.executeQuery("SELECT * FROM FRIENDS" + " WHERE U1=" + playerID + " AND STATUS=0 AND BLOCKED=0");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -158,7 +158,7 @@ public class FriendStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * FROM FRIENDS" 
-											+" WHERE BLOCKED=1");
+											+" WHERE U1=" + playerID + " AND BLOCKED=1");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();

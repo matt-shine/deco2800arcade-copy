@@ -1,6 +1,6 @@
 package deco2800.arcade.server.database;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,7 +22,7 @@ import deco2800.server.database.FriendStorage;
 import deco2800.server.database.PlayerStorage;
 
 
-public class TestFriendStorage extends DBTestCase {
+public class TestFriendStorage {
 	private static IDatabaseTester databaseTester; //manage connections to the database
 	private FriendStorage friendStorage; //storage object to test
 	private PlayerStorage playerStorage;
@@ -34,17 +34,18 @@ public class TestFriendStorage extends DBTestCase {
 	 */
 	@BeforeClass
 	public static void setUpClass() throws ClassNotFoundException {
-		
+		 databaseTester = new JdbcDatabaseTester(
+					"org.apache.derby.jdbc.EmbeddedDriver",
+					"jdbc:derby:Arcade;user=server;password=server;create=true");
 	}
 	
-	@Override
 	/**
 	 * Retrieve the dataset from an XML file
 	 * @return
 	 * @throws DataSetException
 	 * @throws IOException
 	 */
-	protected IDataSet getDataSet() throws DataSetException, IOException {
+	private IDataSet getDataSet() throws DataSetException, IOException {
 		URL url = TestFriendStorage.class.getClassLoader().getResource("TestFriendStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
@@ -64,13 +65,11 @@ public class TestFriendStorage extends DBTestCase {
 		friendStorage = new FriendStorage();
         friendStorage.initialise();
         
-        databaseTester = new JdbcDatabaseTester(
-				"org.apache.derby.jdbc.EmbeddedDriver",
-				"jdbc:derby:Arcade;user=server;password=server;create=true");
 		IDataSet ds = getDataSet();
+		// databaseTester is null here, need to fix
         databaseTester.setDataSet(ds);
-      
-		// databaseTester.onSetup();
+        databaseTester.onSetup();
+        
 		IDatabaseConnection connection = databaseTester.getConnection();
 		DatabaseConfig config = connection.getConfig();
 		setUpDatabaseConfig(config);
@@ -85,12 +84,10 @@ public class TestFriendStorage extends DBTestCase {
 		databaseTester.onTearDown();
 	}
 	
-	@Override
-	protected void setUpDatabaseConfig(DatabaseConfig config) {
+	private void setUpDatabaseConfig(DatabaseConfig config) {
 		config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new ColumnFilter());
 		Map<String, List<String>> tablePrimaryKeyMap = new HashMap<String, List<String>>();
 		tablePrimaryKeyMap.put("FRIENDS", Arrays.asList(new String[] {"U1", "U2"}));
-		//tablePrimaryKeyMap.put("PLAYERS", Arrays.asList(new String[] {"playerID"}));
 	}
 	
 	public Map<String, List<String>> getTablePrimaryKeyMap(){
@@ -99,17 +96,10 @@ public class TestFriendStorage extends DBTestCase {
 	
 	@Test
 	public void testAcceptFriendRequest() throws DatabaseException {
-		friendStorage.acceptFriendRequest(2, 1);
+		friendStorage.acceptFriendRequest(1, 2);
 		assertTrue(friendStorage.isFriends(1, 2));
 	}
 	
-	@Test
-	public void testGetFriendsList() throws DatabaseException {
-		ArrayList<Integer> expectedFriends = new ArrayList<Integer>();
-		expectedFriends.add(2);
-		ArrayList<Integer> actualFriends = friendStorage.getFriendsList(1);
-		assertEquals(expectedFriends, actualFriends);
-	}
 	
 	private class ColumnFilter extends DefaultColumnFilter {
 		

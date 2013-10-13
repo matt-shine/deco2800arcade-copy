@@ -8,6 +8,20 @@ import java.net.BindException;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
+import deco2800.server.database.CreditStorage;
+import deco2800.server.database.ImageStorage;
+import deco2800.server.database.DatabaseException;
+import deco2800.server.database.ReplayStorage;
+import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.LobbyListener;
+import deco2800.server.listener.MultiplayerListener;
+import deco2800.server.listener.ReplayListener;
+import deco2800.server.listener.ConnectionListener;
+import deco2800.server.listener.CreditListener;
+import deco2800.server.listener.GameListener;
+import deco2800.server.listener.PackmanListener;
+import deco2800.server.listener.HighscoreListener;
+import deco2800.server.database.HighscoreDatabase;
 import deco2800.server.database.*;
 import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
@@ -30,6 +44,8 @@ public class ArcadeServer {
 	
 	//singleton pattern
 	private static ArcadeServer instance;
+	
+	private MatchmakerQueue matchmakerQueue;
 	
 	// Package manager
 	private PackageServer packServ;
@@ -60,7 +76,7 @@ public class ArcadeServer {
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
-		
+
 		ArcadeWebserver.startServer( );
 	}
 
@@ -85,6 +101,8 @@ public class ArcadeServer {
 		return this.creditStorage;
 	}
 	
+
+
 	/**
 	 * * Access the Serer's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
@@ -145,7 +163,7 @@ public class ArcadeServer {
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
 		this.highscoreDatabase = new HighscoreDatabase();
-		
+		this.matchmakerQueue = MatchmakerQueue.instance();
 		this.packServ = new PackageServer();
 
 
@@ -172,6 +190,7 @@ public class ArcadeServer {
 
 		// once the db is fine, load in achievement data from disk
 		this.achievementStorage.loadAchievementData();
+		
 	}
 	
 	/**
@@ -200,6 +219,8 @@ public class ArcadeServer {
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
+        server.addListener(new MultiplayerListener(matchmakerQueue));
+        server.addListener(new LobbyListener());
         server.addListener(new LibraryListener());
         server.addListener(new PlayerListener());
 	}
@@ -214,4 +235,6 @@ public class ArcadeServer {
     public PackageServer packServ() {
         return packServ;
     }
+
 }
+

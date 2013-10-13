@@ -2,6 +2,7 @@ package deco2800.arcade.snakeLadderModel;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
 
+
 public class ScoreRule implements Rule {
 
 	/***

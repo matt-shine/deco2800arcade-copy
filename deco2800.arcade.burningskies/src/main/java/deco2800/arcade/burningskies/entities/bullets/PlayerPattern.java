@@ -15,13 +15,13 @@ public class PlayerPattern extends BulletPattern {
 	
 	public PlayerPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
-		image = new Texture(Gdx.files.internal("images/placeholder_bullet.png"));
+		image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
 		interval = (float) 0.03;
 	}
 	
 	public void fire(float lag, float x, float y) {
-		float x1 = x - 40;
-		float x2 = x + 40;
+		float x1 = x - 40 + image.getWidth()/2;
+		float x2 = x + 40 + image.getWidth()/2;
 		PlayerBullet bullet = new PlayerBullet(Affinity.PLAYER, 10, emitter, (PlayerShip) emitter, new Vector2(x1,y), 90, image);
 		PlayerBullet bullet2 = new PlayerBullet(Affinity.PLAYER, 10, emitter, (PlayerShip) emitter, new Vector2(x2,y), 90, image);
 		screen.addBullet(bullet);

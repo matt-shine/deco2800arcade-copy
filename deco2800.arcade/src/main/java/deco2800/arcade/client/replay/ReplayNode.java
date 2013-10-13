@@ -144,7 +144,7 @@ public class ReplayNode {
 	 * Simple toString function
 	 */
 	public String toString() {
-		String repr = "ReplayNode at " + this.nodeTime;
+		String repr = "ReplayNode at " + this.nodeTime + ": " + this.items;
 		return repr;
 	}
 }

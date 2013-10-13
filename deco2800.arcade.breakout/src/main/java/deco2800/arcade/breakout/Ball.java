@@ -18,7 +18,9 @@ public class Ball {
 	// width of the ball
 	public static final float WIDTH = 20f;
 	public static final float INITIALSPEED = 400;
-	public static final float MAX_X_VELOCITY = 800f;
+	public static float MAX_X_VELOCITY = 800f;
+	private float multiplier = 1;
+	
 	// velocity of the ball
 	Vector2 velocity = new Vector2();
 	// Circle representing ball
@@ -37,6 +39,7 @@ public class Ball {
 		ballCirc.x = Breakout.SCREENWIDTH / 2 - Ball.WIDTH / 2 + 64;
 		ballCirc.y = 35 + ballCirc.radius;
 		ballCirc.radius = WIDTH/2;
+		setColor(0.7f, 0.7f, 0.7f, 0.5f);
 	}
 	
 	// Getter method for the balls X position
@@ -58,11 +61,11 @@ public class Ball {
 	// Setter method for the X Velocity of the ball
 	public void setXVelocity(float newVelocity) {
 		if (newVelocity > MAX_X_VELOCITY) {
-			this.velocity.x = MAX_X_VELOCITY;
+			this.velocity.x = multiplier * MAX_X_VELOCITY;
 			return;
 		}
 		if (newVelocity < -MAX_X_VELOCITY) {
-			this.velocity.x = -MAX_X_VELOCITY;
+			this.velocity.x = -MAX_X_VELOCITY * multiplier;
 			return;
 		}
 		this.velocity.x = newVelocity;
@@ -72,6 +75,7 @@ public class Ball {
 	public void reset(Vector2 paddlePos) {
 		velocity.x = 0;
 		velocity.y = 0;
+		multiplier = 1;
 		ballCirc.x = paddlePos.x - Ball.WIDTH / 2 + 64;
 		ballCirc.y = paddlePos.y + 25 + ballCirc.radius;
 	}
@@ -187,6 +191,14 @@ public class Ball {
 		int yFactor = (int) Math.sqrt((200 * 200) - (xFactor * xFactor));
 		velocity.x = xFactor;
 		velocity.y = yFactor + 200;
+	}
+	
+	/**
+	 * Method for powerup to slow the ball
+	 */
+	public void slowBall () {
+		this.multiplier = 0.8f;
+		this.velocity.y *= multiplier;
 	}
 
 }

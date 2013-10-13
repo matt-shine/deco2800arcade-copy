@@ -1,0 +1,89 @@
+
+libSkin.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+darkGreyBack
+  rotate: false
+  xy: 0, 114
+  size: 253, 49
+  orig: 253, 49
+  offset: 0, 0
+  index: -1
+greyBack
+  rotate: false
+  xy: 253, 114
+  size: 253, 49
+  orig: 253, 49
+  offset: 0, 0
+  index: -1
+whiteBack
+  rotate: false
+  xy: 506, 114
+  size: 253, 49
+  orig: 253, 49
+  offset: 0, 0
+  index: -1
+buttonGreen
+  rotate: false
+  xy: 759, 106
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonGreenDown
+  rotate: false
+  xy: 0, 57
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonGreenHover
+  rotate: false
+  xy: 190, 57
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonGrey
+  rotate: false
+  xy: 380, 57
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonGreyDown
+  rotate: false
+  xy: 570, 49
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonGreyHover
+  rotate: false
+  xy: 760, 49
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonRed
+  rotate: false
+  xy: 0, 0
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonRedDown
+  rotate: false
+  xy: 190, 0
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1
+buttonRedHover
+  rotate: false
+  xy: 380, 0
+  size: 190, 57
+  orig: 190, 57
+  offset: 0, 0
+  index: -1

@@ -3,7 +3,6 @@ package deco2800.arcade.packman;
 import java.lang.String;
 import java.lang.System;
 import java.util.ArrayList;
-import java.util.Set;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,6 +13,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import deco2800.arcade.packman.PackCompress;
+import deco2800.arcade.packman.PackageUtils;
+
 
 /**
  * The class for executing the "gradle pack" task to populate the Release folder
@@ -22,6 +24,13 @@ import java.io.OutputStream;
  */
 public class Pack {
     private ArrayList<String> games = new ArrayList<String>();
+    
+    private static final String sp = File.separator;
+    
+    private static final String releaseFolder = ".." + sp + 
+    											"deco2800.arcade.server" +
+    											sp + "Release";
+    
 
     public Pack(String[] args) {
 
@@ -33,6 +42,15 @@ public class Pack {
      * @param args
      */
     public static void main(String[] args) {
+		// Create the release folder
+		System.out.println("Creating directory: " + releaseFolder);
+		if (PackageUtils.createDirectory(releaseFolder)) {
+			System.out.println("Created: " + releaseFolder);
+		} else {
+			System.out.println("Failed creating: " + releaseFolder);
+		}
+    	
+    	
         Pack pack = new Pack(args);
 
         pack.populateGames();
@@ -49,6 +67,9 @@ public class Pack {
         ArrayList<String> versions;
         String version;
         String releaseVersion;
+        
+        PackCompress packer = new PackCompress();
+        
         for (String game : games) {
 
             versions = getVersions(game);
@@ -68,19 +89,24 @@ public class Pack {
 
                     File src = null;
                     File dest = null;
-                    String srcPath = "../deco2800.arcade." + game +
-                            "/build/libs/deco2800.arcade." + game + "-" + version + ".jar";
-                    String destPath = "../deco2800.arcade.server/Release/" + game + "-" +
-                            version + ".jar";
+                    String srcPath = ".." + sp + "deco2800.arcade." + game + 
+                    				 sp + "build" + sp + "libs" + sp + 
+                    				 "deco2800.arcade." + game + "-" + 
+                    				 version + ".jar";
+                    
+                    String destPath = releaseFolder + sp + game + 
+                    				  "-" + version + ".tar.gz";
 
                     src = new File(srcPath);
                     dest = new File(destPath);
 
                     if (src != null && dest != null) {
                         try {
-                            copyFile(src, dest);
+                            //copyFile(src, dest);
+                        	packer.Compress(srcPath, destPath);
+                        	//packer.Expand(destPath, releaseFolder + sp + game + "-" + version + ".jar");
                         } catch (IOException e) {
-                            System.err.println("[Packman] Failed to copy JAR to Releases directory");
+                            System.err.println("[Packman] Failed to copy JAR to Release directory");
                             e.printStackTrace();
                         }
                     }

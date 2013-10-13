@@ -50,7 +50,7 @@ public class Player extends User {
      * DO NOT USE THIS METHOD, AT ALL, EVER.
      */
     public Player(int playerID, String username, String filepath) {
-        //Doing nothing
+        // Do nothing
     }
 
 	@Deprecated
@@ -95,7 +95,7 @@ public class Player extends User {
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
 
-		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFUALT TO
+		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFAULT TO
 		// PLACEHOLDER
 		// this.icon = new Icon(filepath);
 		/*

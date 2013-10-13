@@ -11,8 +11,6 @@ import deco2800.arcade.userui.view.UserScreen;
 
 public class AddFriend {
 	
-	private AchievementScreen achievementView;
-	private StatusScreen statusView;
 	private UserScreen userView;
 	private AddFriendScreen friendView;
 	private Model theModel;
@@ -22,7 +20,7 @@ public class AddFriend {
 	 * @param theModel
 	 * @param friendView
 	 */
-	public AddFriend(Model theModel, AddFriendScreen friendView){
+	public AddFriend(Model theModel, AddFriendScreen friendView, UserScreen userView){
 		
 		this.theModel = theModel;
 		this.friendView = friendView;

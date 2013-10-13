@@ -1,36 +1,7 @@
-
 loginSkin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-iconBlue_plus
-  rotate: false
-  xy: 1, 856
-  size: 1158, 1157
-  orig: 1158, 1157
-  offset: 0, 0
-  index: -1
-iconMagenta
-  rotate: false
-  xy: 1, 5
-  size: 850, 849
-  orig: 850, 849
-  offset: 0, 0
-  index: -1
-iconBlue
-  rotate: false
-  xy: 1161, 1165
-  size: 849, 848
-  orig: 849, 848
-  offset: 0, 0
-  index: -1
-iconGreen
-  rotate: false
-  xy: 1161, 315
-  size: 849, 848
-  orig: 849, 848
-  offset: 0, 0
-  index: -1
 CenturyGothic20Bold
   rotate: false
   xy: 853, 598
@@ -87,7 +58,7 @@ selection
   orig: 1, 1
   offset: 0, 0
   index: -1
-  
+
 textField.png
 format: RGBA8888
 filter: Nearest,Nearest
@@ -100,26 +71,26 @@ textField
   offset: 0, 0
   index: -1
 
-loginSkin2.png
+green_button.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-iconGreen_plus
+green_button
   rotate: false
-  xy: 1, 375
-  size: 1158, 1157
-  orig: 1158, 1157
+  xy: 1, 1
+  size: 360, 98
+  orig: 360, 98
   offset: 0, 0
   index: -1
 
-loginSkin3.png
+green_button_glow.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-iconMagenta_plus
+green_button_glow
   rotate: false
   xy: 1, 1
-  size: 1158, 1157
-  orig: 1158, 1157
+  size: 360, 98
+  orig: 360, 98
   offset: 0, 0
   index: -1

@@ -80,7 +80,7 @@ public class LoginScreen implements Screen {
                 }
                 else if (usernameText.getText().toLowerCase().equals("store")) {
                     // TEMPORARY
-                    arcadeUI.setScreen(new GameStore());
+                    arcadeUI.setScreen(arcadeUI.store);
                 }
                 else if (usernameText.getText().toLowerCase().equals("home")) {
                     // TEMPORARY

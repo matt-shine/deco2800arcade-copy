@@ -97,17 +97,52 @@ public class TestFriendStorage {
 		return tablePrimaryKeyMap;
 	}
 	
+	/*
 	@Test
 	public void testAcceptFriendRequest() throws DatabaseException {
 		friendStorage.acceptFriendRequest(1, 2);
+		assertTrue(friendStorage.isFriends(1, 2));
 		assertTrue(friendStorage.isFriends(2, 1));
-	}
+	}*/
 	
 	@Test
 	public void testGetFriendList() throws DatabaseException {
 		List<Integer> friends = new ArrayList<Integer>();
 		friends.add(2);
 		assertEquals(friendStorage.getFriendsList(1), friends);
+	}
+	
+	@Test
+	/**
+	 * Tests blocking an existing player:player relationship.
+	 * @throws DatabaseException
+	 */
+	public void testBlockExistingPlayerRelationship() throws DatabaseException {
+		friendStorage.blockPlayer(1, 2);
+		assertTrue(friendStorage.isBlocked(1, 2));
+		assertFalse(friendStorage.isBlocked(2, 1));
+	}
+	
+	@Test
+	/**
+	 * Tests blocking and unblocking a player.
+	 * @throws DatabaseException
+	 */
+	public void testUnblockPlayer() throws DatabaseException {
+		friendStorage.blockPlayer(1, 2);
+		assertTrue(friendStorage.isBlocked(1,2));
+		friendStorage.unblockPlayer(1, 2);
+		assertFalse(friendStorage.isBlocked(1, 2));
+	}
+	
+	@Test
+	/**
+	 * Tests blocking a non-existing relationship.
+	 * @throws DatabaseException
+	 */
+	public void blockNonExistingPlayerRelationship() throws DatabaseException {
+		friendStorage.blockPlayer(2, 3);
+		assertTrue(friendStorage.isBlocked(2, 3));
 	}
 	
 	private class ColumnFilter extends DefaultColumnFilter {

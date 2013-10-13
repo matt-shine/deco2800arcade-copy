@@ -3,6 +3,7 @@
 <dataset>
 <PLAYERS playerID='1' username='U1'/>
 <PLAYERS playerID='2' username='U2'/>
+<PLAYERS playerID='3' username='U3'/>
 <FRIENDS U1='1' U2='2' STATUS='1' BLOCKED='0'/>
 <FRIENDS U1='2' U2='1' STATUS='0' BLOCKED='0'/>
 </dataset>

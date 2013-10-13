@@ -224,18 +224,25 @@ public class FriendStorage {
 										+ " WHERE U1=" + playerID
 										+ " AND U2=" + player );
 			// if player-friend relationship exists, block the player
-			if (resultSet.first()) {
+			if (resultSet.next()) {
 				resultSet.updateInt("BLOCKED", 1);
 				resultSet.updateRow();
-			} else { // else add a new row with blocked set to 1
+			} else { // else add new player-player relationships with playerID:player blocked
 				resultSet.moveToInsertRow();
 				resultSet.updateInt("U1", playerID);
 				resultSet.updateInt("U2", player);
 				resultSet.updateInt("STATUS", 0);
 				resultSet.updateInt("BLOCKED", 1);
 				resultSet.insertRow();
+				
+				resultSet.moveToInsertRow();
+				resultSet.updateInt("U1", player);
+				resultSet.updateInt("U2", playerID);
+				resultSet.updateInt("STATUS", 0);
+				resultSet.updateInt("BLOCKED", 0);
+				resultSet.insertRow();
+				resultSet.moveToCurrentRow();
 			}
-	
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -274,7 +281,7 @@ public class FriendStorage {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS" 
 										+ " WHERE U1=" + playerID
-										+ " AND U2='" + player);
+										+ " AND U2=" + player);
 			// if player-friend relationship exists, unblock the player
 			if (resultSet.first()) {
 				resultSet.updateInt("BLOCKED", 0);
@@ -319,6 +326,9 @@ public class FriendStorage {
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS");
+			
+			// TODO CHECK TO SEE IF PLAYER-PLAYER RELATIONSHIPS ALREADY EXISTS
+			
 			// add friendID as a friend for playerID
 			resultSet.moveToInsertRow();
 			resultSet.updateInt("U1", playerID);

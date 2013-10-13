@@ -77,7 +77,7 @@ public class TestPlayerStorage {
 	/**
 	 * Get a player's data from the database.
 	 */
-	public void testGetPlayerData() {
+	public void testGetPlayerData() throws DatabaseException {
 		try {
 			List<String> playerData = new ArrayList<String>();
 			playerData.add("1");

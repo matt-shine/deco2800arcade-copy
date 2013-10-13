@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ArcadeGame(id="Mixmaze")
+@ArcadeGame(id = "Mixmaze")
 public final class MixMaze extends GameClient {
 
 	final Logger logger = LoggerFactory.getLogger(MixMaze.class);
@@ -30,11 +30,13 @@ public final class MixMaze extends GameClient {
 
 	/**
 	 * Constructor. Note this constructor will be called before any
-	 * gdx.Application exists, and therefore all initialisation should
-	 * be done in the method create.
-	 *
-	 * @param player	TODO
-	 * @param networkClient	TODO
+	 * gdx.Application exists, and therefore all initialisation should be done
+	 * in the method create.
+	 * 
+	 * @param player
+	 *            TODO
+	 * @param networkClient
+	 *            TODO
 	 */
 	public MixMaze(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -50,7 +52,7 @@ public final class MixMaze extends GameClient {
 		surgeLoop.setLooping(true);
 		surgeLoop.setVolume(0.5f);
 		surgeLoop.play();
-		
+
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
@@ -86,8 +88,7 @@ public final class MixMaze extends GameClient {
 	}
 
 	/**
-	 * This method is called just before the application
-	 * is destroyed.
+	 * This method is called just before the application is destroyed.
 	 */
 	@Override
 	public void pause() {

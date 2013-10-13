@@ -41,16 +41,14 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 
 	/**
 	 * Constructor
-	 *
+	 * 
 	 * @param playerControls
 	 */
-	PlayerViewModel(IMixMazeModel gameModel,
-			int tileSize, int id, int[] playerControls,
-			GameScreen.ScoreBar scorebar,
+	PlayerViewModel(IMixMazeModel gameModel, int tileSize, int id,
+			int[] playerControls, GameScreen.ScoreBar scorebar,
 			GameScreen.SidePanel sidePanel) {
 		Texture texture;
-		HashMap<Integer, Integer> mapping =
-				new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
 
 		this.gameModel = gameModel;
 		this.tileSize = tileSize;
@@ -58,22 +56,26 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		this.scorebar = scorebar;
 		this.sidePanel = sidePanel;
 
-		
-	if(playerControls[0] != NUM_5) mapping.put(playerControls[0], NUM_5);
-	if(playerControls[1] != NUM_6) mapping.put(playerControls[1], NUM_6);
-	if(playerControls[2] != UP) mapping.put(playerControls[2], UP);
-	if(playerControls[3] != LEFT) mapping.put(playerControls[3], LEFT);
-	if(playerControls[4] != DOWN) mapping.put(playerControls[4], DOWN);
-	if(playerControls[5] != RIGHT) mapping.put(playerControls[5], RIGHT);
-	
+		if (playerControls[0] != NUM_5)
+			mapping.put(playerControls[0], NUM_5);
+		if (playerControls[1] != NUM_6)
+			mapping.put(playerControls[1], NUM_6);
+		if (playerControls[2] != UP)
+			mapping.put(playerControls[2], UP);
+		if (playerControls[3] != LEFT)
+			mapping.put(playerControls[3], LEFT);
+		if (playerControls[4] != DOWN)
+			mapping.put(playerControls[4], DOWN);
+		if (playerControls[5] != RIGHT)
+			mapping.put(playerControls[5], RIGHT);
 
 		km = new KeyManager(mapping);
 
 		/* load texture */
 		texture = new Texture(Gdx.files.internal("body.png"));
 		bodyRegion = new TextureRegion(texture);
-		texture = new Texture(Gdx.files.internal(
-				(id == 1) ? "miner.png" : "cowboy.png"));
+		texture = new Texture(Gdx.files.internal((id == 1) ? "miner.png"
+				: "cowboy.png"));
 		headRegion = new TextureRegion(texture);
 
 		if (id == 1)
@@ -93,10 +95,7 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 				tileSize, tileSize);
 		batch.setColor(old);
 		batch.draw(headRegion, x * tileSize, 640 - (y + 1) * tileSize,
-				tileSize / 2, tileSize / 2,
-				tileSize, tileSize,
-				1, 1,
-				rotation);
+				tileSize / 2, tileSize / 2, tileSize, tileSize, 1, 1, rotation);
 	}
 
 	@Override
@@ -159,7 +158,7 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 
 	/**
 	 * Returns the ID of this player.
-	 *
+	 * 
 	 * @return this player's ID
 	 */
 	public int getId() {
@@ -168,95 +167,70 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 
 	/**
 	 * Returns the amount of bricks this player has.
-	 *
+	 * 
 	 * @return the amount of bricks
 	 */
 	/*
-	public int getBrickAmount() {
-		IBrickModel brick = model.getBrick();
-
-		if (brick == null) {
-			return 0;
-		} else {
-			return brick.getAmount();
-		}
-	}
-	*/
+	 * public int getBrickAmount() { IBrickModel brick = model.getBrick();
+	 * 
+	 * if (brick == null) { return 0; } else { return brick.getAmount(); } }
+	 */
 
 	/*
-	private boolean hasItem(IItemModel.ItemType type) {
-		IItemModel item = null;
-
-		switch (type) {
-		case PICK:
-			item = model.getPick();
-			break;
-		case TNT:
-			item = model.getTNT();
-			break;
-		}
-
-		return (item == null) ? false : true;
-	}
-	*/
+	 * private boolean hasItem(IItemModel.ItemType type) { IItemModel item =
+	 * null;
+	 * 
+	 * switch (type) { case PICK: item = model.getPick(); break; case TNT: item
+	 * = model.getTNT(); break; }
+	 * 
+	 * return (item == null) ? false : true; }
+	 */
 
 	/**
 	 * Returns if this player has a pick.
-	 *
-	 * @param pid the player id, can be either 1 or 2
+	 * 
+	 * @param pid
+	 *            the player id, can be either 1 or 2
 	 * @return true if the player has pick, otherwise false
 	 */
 	/*
-	public boolean hasPick() {
-		return hasItem(PICK);
-	}
-	*/
+	 * public boolean hasPick() { return hasItem(PICK); }
+	 */
 
 	/**
 	 * Returns if this player has a TNT.
-	 *
-	 * @param pid the player id, can be either 1 or 2
+	 * 
+	 * @param pid
+	 *            the player id, can be either 1 or 2
 	 * @return true if the player has TNT, otherwise false
 	 */
 	/*
-	public boolean hasTNT() {
-		return hasItem(TNT);
-	}
-	*/
+	 * public boolean hasTNT() { return hasItem(TNT); }
+	 */
 
 	/**
 	 * Returns the active action of this player.
-	 *
+	 * 
 	 * @return one of <code>USE_BRICK</code>, <code>USE_PICK</code>, or
-	 * 	   <code>USE_TNT</code>
+	 *         <code>USE_TNT</code>
 	 */
 	/*
-	public PlayerAction getAction() {
-		return model.getPlayerAction();
-	}
-	*/
+	 * public PlayerAction getAction() { return model.getPlayerAction(); }
+	 */
 
 	/**
 	 * Returns the name of the active action of this player.
-	 *
+	 * 
 	 * @return a String representing the active action
 	 */
 	/*
-	public String getActionName() {
-		PlayerAction act = model.getPlayerAction();
-
-		switch (act) {
-		case USE_BRICK:
-			return "using brick";
-		case USE_PICK:
-			return "using pick";
-		case USE_TNT:
-			return "using TNT";
-		default:
-			return "unknown";
-		}
-	}
-	*/
+	 * public String getActionName() { PlayerAction act =
+	 * model.getPlayerAction();
+	 * 
+	 * switch (act) { case USE_BRICK: return "using brick"; case USE_PICK:
+	 * return "using pick"; case USE_TNT: return "using TNT"; default: return
+	 * "unknown"; } }
+	 */
 
 	/*
 	 * Handles movement input.
@@ -285,7 +259,7 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 				gameModel.usePlayerAction(id);
 				break;
 			default:
-				return false;	// event not handled
+				return false; // event not handled
 			}
 
 			event.cancel();

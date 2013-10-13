@@ -15,8 +15,8 @@ import static com.badlogic.gdx.Input.Keys.ANY_KEY;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 /**
- * This is the entry of the game application, and the next
- * should be the menu screen.
+ * This is the entry of the game application, and the next should be the menu
+ * screen.
  */
 final class SplashScreen implements Screen {
 
@@ -35,8 +35,9 @@ final class SplashScreen implements Screen {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param game	the MixMaze game
+	 * 
+	 * @param game
+	 *            the MixMaze game
 	 */
 	SplashScreen(final MixMaze game) {
 		this.game = game;

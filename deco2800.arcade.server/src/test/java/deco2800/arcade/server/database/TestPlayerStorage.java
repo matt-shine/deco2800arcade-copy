@@ -76,7 +76,7 @@ public class TestPlayerStorage {
 	@Test
 	public void testGetPlayerData() {
 		try {
-			//assertTrue(true);
+			assertTrue(true);
 			List<String> playerData = new ArrayList<String>();
 			playerData.add("1");
 			playerData.add("bob");

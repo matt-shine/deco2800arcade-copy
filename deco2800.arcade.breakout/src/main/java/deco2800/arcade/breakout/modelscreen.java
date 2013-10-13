@@ -82,7 +82,7 @@ public class Modelscreen implements Screen  {
 
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			
-			game.setScreen(game.LevelScreen);
+			game.setScreen(game.LevelScreen1);
 		}
 	
 		Gdx.gl.glClearColor(1, 1, 1, 1);

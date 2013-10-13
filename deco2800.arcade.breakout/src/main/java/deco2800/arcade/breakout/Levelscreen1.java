@@ -23,7 +23,7 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class Levelscreen implements Screen  {
+public class Levelscreen1 implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -67,12 +67,12 @@ public class Levelscreen implements Screen  {
 	   
 	  
 	  
-	Levelscreen(final Breakout game) {
+	Levelscreen1(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
-		texture = new Texture(Gdx.files.classpath("imgs/Level_Select.png"));
+		texture = new Texture(Gdx.files.classpath("imgs/Level_Select1.png"));
 		tex = new Texture(Gdx.files.classpath("imgs/buttons1.png"));
 		TextureRegion[][] tmp = TextureRegion.split(tex, 350, 210);
 		
@@ -91,7 +91,7 @@ public class Levelscreen implements Screen  {
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		//game.setScreen(game.MenuScreen); 
+	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}
 	    	   );
@@ -186,7 +186,7 @@ public class Levelscreen implements Screen  {
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        	game.setScreen(game.gamescreen); 
+	        	game.setScreen(game.LevelScreen2); 
 	        		
 	        	}}
 	    	   );

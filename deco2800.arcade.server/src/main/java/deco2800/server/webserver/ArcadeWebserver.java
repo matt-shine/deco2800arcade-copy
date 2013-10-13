@@ -34,7 +34,7 @@ public class ArcadeWebserver implements Container {
 			{
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
-			}
+	}
 
 	public void handle(Request request, Response response) {
 		try {
@@ -50,24 +50,31 @@ public class ArcadeWebserver implements Container {
 				
 				String bodyString = "";
 
-				ArrayList<String> test = new ArrayList<String>();
+				ArrayList<String> replays = new ArrayList<String>();
 				//test = ArcadeServer.instance().getReplayStorage().getSessionsForGame( "connect4" );
-				test.add( "1" );
-				test.add( "false" );
-				test.add( "replayers" );
-				test.add( "1381639231100" );
-				test.add( "" );
-				test.add( "2" );
-				test.add( "false" );
-				test.add( "replayers" );
-				test.add( "1381639268788" );
-				test.add( "" );
+				replays.add( "1" );
+				replays.add( "false" );
+				replays.add( "replayers" );
+				replays.add( "1381639231100" );
+				replays.add( "" );
+				replays.add( "2" );
+				replays.add( "false" );
+				replays.add( "replayers" );
+				replays.add( "1381639268788" );
+				replays.add( "" );
 						
-				System.out.println( test );
+				System.out.println( replays );
 				
 				bodyString = readFile( "webserver/html/template.html", StandardCharsets.UTF_8 );
 				
 				String contentString = readFile( "webserver/html/replays.html", StandardCharsets.UTF_8 );
+				
+				String tableString = "";
+				for ( int i = 0; i < replays.size(); i += 5 ) {
+					tableString += String.format( "<tr><td>%s</td><td>%s</td></tr>", replays.get( i + 2 ), replays.get( i + 3 ) );
+				}
+				
+				contentString = contentString.replace( "#{{tablebody}}", tableString );
 				
 				bodyString = bodyString.replace( "#{{content}}", contentString );
 			

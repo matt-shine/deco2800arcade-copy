@@ -139,7 +139,7 @@ public class HighscoreDatabase {
 				data.add(String.valueOf(resultSet.getString("Player")));
 				data.add(String.valueOf(resultSet.getInt("Score")));
 				data.add(String.valueOf(resultSet.getDate("Date")));
-				data.add("");
+				data.add(String.valueOf(resultSet.getString("Score_Type")));
 				topCount++;
 			}
 			System.out.println("Data size: " + data.size());

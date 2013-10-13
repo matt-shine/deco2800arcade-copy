@@ -66,7 +66,9 @@ public class FriendStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM FRIENDS WHERE STATUS=1 AND BLOCKED=0");
+			resultSet = statement.executeQuery("SELECT * FROM FRIENDS"
+					+ " WHERE U1=" + playerID
+					+ " AND STATUS=1 AND BLOCKED=0");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
 			e.printStackTrace();

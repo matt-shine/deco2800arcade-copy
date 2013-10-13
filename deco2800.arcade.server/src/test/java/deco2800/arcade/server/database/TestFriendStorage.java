@@ -90,6 +90,7 @@ public class TestFriendStorage extends DBTestCase {
 		config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new ColumnFilter());
 		Map<String, List<String>> tablePrimaryKeyMap = new HashMap<String, List<String>>();
 		tablePrimaryKeyMap.put("FRIENDS", Arrays.asList(new String[] {"U1", "U2"}));
+		//tablePrimaryKeyMap.put("PLAYERS", Arrays.asList(new String[] {"playerID"}));
 	}
 	
 	public Map<String, List<String>> getTablePrimaryKeyMap(){
@@ -98,7 +99,7 @@ public class TestFriendStorage extends DBTestCase {
 	
 	@Test
 	public void testAcceptFriendRequest() throws DatabaseException {
-		friendStorage.acceptFriendRequest(1, 2);
+		friendStorage.acceptFriendRequest(2, 1);
 		assertTrue(friendStorage.isFriends(1, 2));
 	}
 	
@@ -109,8 +110,6 @@ public class TestFriendStorage extends DBTestCase {
 		ArrayList<Integer> actualFriends = friendStorage.getFriendsList(1);
 		assertEquals(expectedFriends, actualFriends);
 	}
-	
-	
 	
 	private class ColumnFilter extends DefaultColumnFilter {
 		

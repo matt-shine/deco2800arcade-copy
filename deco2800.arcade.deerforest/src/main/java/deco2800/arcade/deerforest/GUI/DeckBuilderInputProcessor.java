@@ -99,8 +99,8 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 			//update currentSelection to be the drawn card
 			currentSelection = new BuilderSpriteLogic(view.manager.get(c.getPictureFilePath(), Texture.class));
 		    currentSelection.setCard(c);
-			/*//set the current selection data
-*/				
+			/*//set the current selection data*/
+		    view.setSpriteToArea(currentSelection, "Deck");
 
 		    //Set origin and scale to be that of the players deck (makes for nicer transition
 		    /*view.setSpriteToDeck(player, currentSelection);*/
@@ -108,6 +108,7 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 		    //Set to hand rectangle
 			Rectangle r = view.getArena().getAvailableZones("Deck").get(0);
 			BuilderSpriteLogic.setCurrentSelectionToRectangle(r);
+			
 		}
 	}
 	

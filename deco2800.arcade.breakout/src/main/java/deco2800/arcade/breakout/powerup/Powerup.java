@@ -28,9 +28,6 @@ public class Powerup {
 		return this.numActive;
 	}
 	
-	public void setNumActive(int change) {
-		numActive += change;
-	}
 	
 	public Sprite getSprite() {
 		return this.sprite;

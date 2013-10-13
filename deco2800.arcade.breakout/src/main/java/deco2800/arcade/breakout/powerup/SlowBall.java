@@ -15,9 +15,19 @@ public class SlowBall extends Powerup {
 	}
 	//TODO: Create a timer that resets the ball so that the ball returns to original speed
 	public void applyPowerup() {
-		System.out.println("slow ball activate");
-		context.getBall().slowBall();
+		if (context.getNumSlowBallsActivated() != 0) {
+			context.incrementScore(20 * context.getLevel());
+			return;
+		}
+		context.incrementNumSlowBallsActivated();
+		if (context.getBall() != null) {
+			context.getBall().slowBall();
+		}
+		if (context.getPowerupBall() != null) {
+			context.getPowerupBall().slowBall();
+		}
 	}
+		
 	
 	public Sprite getSprite() {
 		return this.sprite;

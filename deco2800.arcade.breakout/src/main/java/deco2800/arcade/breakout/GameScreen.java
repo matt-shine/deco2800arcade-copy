@@ -103,10 +103,12 @@ public class GameScreen implements Screen  {
 	// Power up manager and details
 	private boolean powerupsOn = false;
 	private PowerupManager powerupManager;
+	private int slowBallsActivated = 0;
+	
 	
 	GameScreen(final Breakout game) {
 		this.levelSystem = new Level();
-		setScore();
+		resetScore();
 		setLives(3);
 		this.game = game;
 		this.player = game.playerName();
@@ -190,10 +192,11 @@ public class GameScreen implements Screen  {
 		if (isPowerupOn()) {
 			return;
 		}
-		if (Math.random() < 0.2) {
+		if (Math.random() < 0.15) {
 			Rectangle r = b.getShape();
 			getPowerupManager().handlePowerup(r.x + r.width/2, r.y);
 		}
+		
 	}
 	
 	/*
@@ -204,12 +207,12 @@ public class GameScreen implements Screen  {
 		if (pBall) {
 			if (powerupBall != null) {
 				if (bounce == 0) {
-					getPowerupBall().bounceX();
+					getPowerupBall().bounceX(0);
 				} else if (bounce == 1) {
-					getPowerupBall().bounceY();
+					getPowerupBall().bounceY(0);
 				} else {
-					getPowerupBall().bounceX();
-					getPowerupBall().bounceY();
+					getPowerupBall().bounceX(0);
+					getPowerupBall().bounceY(0);
 				}
 				setLastHitX(getPowerupBall().getX());
 				setLastHitY(getPowerupBall().getY());
@@ -217,12 +220,12 @@ public class GameScreen implements Screen  {
 		} else {
 			if (ball != null) {
 				if (bounce == 0) {
-					getBall().bounceX();
+					getBall().bounceX(0);
 				} else if (bounce == 1) {
-					getBall().bounceY();
+					getBall().bounceY(0);
 				} else {
-					getBall().bounceX();
-					getBall().bounceY();
+					getBall().bounceX(0);
+					getBall().bounceY(0);
 				}
 				
 				setLastHitX(getBall().getX());
@@ -384,6 +387,7 @@ public class GameScreen implements Screen  {
 			}
 			getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
 			setNumBalls(1);
+			slowBallsActivated = 0;
 			destroyPowerupBall();
 			decrementLives(1);
 			decrementScore(5);
@@ -414,8 +418,7 @@ public class GameScreen implements Screen  {
 		music.dispose();
 		bump.dispose();
 		achieve.dispose();
-		
-		// TODO Auto-generated method stub
+		powerupManager.dispose();
 		
 	}
 
@@ -537,6 +540,13 @@ public class GameScreen implements Screen  {
 			setNumBalls(2);
 			this.powerupBall.randomizeVelocity();
 			this.powerupBall.setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		} else {
+			this.ball = new Ball();
+			System.out.println("Runs");
+			this.ball.reset(position);
+			setNumBalls(2);
+			this.ball.randomizeVelocity();
+			this.ball.setColor(0.7f, 0.7f, 0.7f, 0.5f);
 		}
 		
 	}
@@ -624,6 +634,7 @@ public class GameScreen implements Screen  {
 	
 	public void destroyPowerupBall() {
 		if (powerupBall != null) {
+			setNumBalls(getNumBalls() - 1);
 			powerupBall = null;
 		}
 	}
@@ -654,10 +665,9 @@ public class GameScreen implements Screen  {
 		return score;
 	}
 	
-	public void setScore(){
+	public void resetScore(){
 		this.score = 0;
 	}
-	
 	
 	public void incrementScore(int value){
 		this.score = this.score + value;
@@ -686,6 +696,14 @@ public class GameScreen implements Screen  {
 	
 	public void stopMusic(){
 		music.stop();
+	}
+	
+	public void incrementNumSlowBallsActivated() {
+		slowBallsActivated++;
+	}
+	
+	public int getNumSlowBallsActivated() {
+		return slowBallsActivated;
 	}
 	
 }

@@ -8,7 +8,7 @@ import deco2800.arcade.breakout.GameScreen;
 
 public class LifePowerup extends Powerup{
 
-	private final String img = "solidbrick.png";
+	private final String img = "LIFE.png";
 	private Sprite sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
 	private GameScreen context;
 	

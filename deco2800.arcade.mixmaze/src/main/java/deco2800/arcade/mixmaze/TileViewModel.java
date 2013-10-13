@@ -72,7 +72,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param renderer
 	 *            the renderer
 	 * @param tileSize
@@ -99,26 +99,18 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		batch.end();
 
-		/* background */
+		/* shape renderer drawing */
 		renderer.setTransformMatrix(computeTransform());
-		drawBackground();
+		drawBox();
+		drawWalls();
+		drawCorners();
 		renderer.identity();
 
 		/* sprite batch drawing */
 		batch.begin();
 		applyTransform(batch, computeTransform());
-		drawBox(batch);
 		drawItem(batch);
 		resetTransform(batch);
-		batch.end();
-
-		/* shape renderer drawing */
-		renderer.setTransformMatrix(computeTransform());
-		drawWalls();
-		drawCorners();
-		renderer.identity();
-
-		batch.begin();
 	}
 
 	@Override
@@ -131,25 +123,17 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		this.type = type;
 	}
 
-	private void drawBackground() {
+	private void drawBox() {
 		renderer.begin(FilledRectangle);
-		renderer.setColor(.8f, .8f, .8f, 1f);
+		if (boxerId == 0) {
+			renderer.setColor(.8f, .8f, .8f, 1f);
+		} else if (boxerId == 1) {
+			renderer.setColor(1f, 0f, 0f, 1f);
+		} else if (boxerId == 2) {
+			renderer.setColor(0f, 0f, 1f, 1f);
+		}
 		renderer.filledRect(0, 0, tileSize, tileSize);
 		renderer.end();
-	}
-
-	private void drawBox(SpriteBatch batch) {
-		Color old = batch.getColor();
-
-		if (boxerId == 0) {
-			batch.setColor(.8f, .8f, .8f, 1f);
-		} else if (boxerId == 1) {
-			batch.setColor(1f, 0f, 0f, 1f);
-		} else if (boxerId == 2) {
-			batch.setColor(0f, 0f, 1f, 1f);
-		}
-		batch.draw(BOX_REGION, 0, 0, tileSize, tileSize);
-		batch.setColor(old);
 	}
 
 	private void drawWalls() {

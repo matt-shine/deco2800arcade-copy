@@ -18,21 +18,21 @@ public class WaitingState extends GameState {
     		if(turn%2==0)
     		{
     			if (Gdx.input.isTouched()) {
-    			 context.getDice().rollDice();
+    			 context.getDice(0).rollDice();
 	    		 context.gamePlayers[0].initializeVelocity();
 	    		 context.gameState = new MovingState();
 	     		 context.statusMessage = null;     		
-	     		 context.gamePlayers[0].getDnumber(context.getDice().getDiceNumber());
+	     		 context.gamePlayers[0].getDnumber(context.getDice(0).getDiceNumber());
     			}
     		}
     		else if(turn%2==1)
     		{
-    			context.getDice().rollDice();
+    			context.getDice(1).rollDice();
 	    		context.gamePlayers[0].getVelocity().x=0;
 	    		context.gamePlayers[1].initializeVelocity();
 	    		context.gameState = new MovingState();
 	     		context.statusMessage = null;
-	     		context.gamePlayers[1].getDnumber(context.getDice().getDiceNumber());
+	     		context.gamePlayers[1].getDnumber(context.getDice(1).getDiceNumber());
     		}
 		
 

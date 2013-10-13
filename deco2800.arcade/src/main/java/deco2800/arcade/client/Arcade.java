@@ -7,10 +7,6 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -246,7 +242,6 @@ public class Arcade extends JFrame {
 		creditBalanceRequest.username = username;
 		this.client.sendNetworkObject(creditBalanceRequest);
 
-<<<<<<< HEAD
 		//For testing chat:		
 		if (player.getID() == 888){ //This ID belongs to debug1
 			List<Integer> chat = new ArrayList<Integer>();
@@ -261,11 +256,6 @@ public class Arcade extends JFrame {
 			chat.add(777); //debug2
 			this.communicationNetwork.createChat(chat);
 		}
-
-        // TODO move this call to be internal to Packman class
-        GameUpdateCheckRequest gameUpdateCheckRequest = new GameUpdateCheckRequest();
-        this.client.sendNetworkObject(gameUpdateCheckRequest);
-=======
 		
         //TODO FIX THIS!! - Causing Errors when logging in see https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
         boolean[] privacy = {false, false, false, false, false, false, false, false};
@@ -292,7 +282,6 @@ public class Arcade extends JFrame {
         getCurrentGame().setThisNetworkClient(this.client);
         
         System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
->>>>>>> master
 	}
 	
 

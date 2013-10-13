@@ -50,7 +50,7 @@ public class AchievementResponder {
 				continue;
 			}
 			
-			contentString += FileReader.readFile( "webserver/html/game_achievements.html", Charset.forName("UTF-8" ) );
+			contentString += FileReader.readFile( "webserver/html/_game_achievements.html", Charset.forName("UTF-8" ) );
 			
 			String gameAchievements = "";
 			for ( Achievement achievement : achievements ) {

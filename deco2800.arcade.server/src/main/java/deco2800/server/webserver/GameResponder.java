@@ -40,7 +40,7 @@ public class GameResponder {
 		String contentString = "<h1 class='text center'>Games</h1>";
 		
 		for ( Game game : games ) {
-			contentString += FileReader.readFile( "webserver/html/game.html", Charset.forName("UTF-8" ) );
+			contentString += FileReader.readFile( "webserver/html/_game.html", Charset.forName("UTF-8" ) );
 			
 			contentString = contentString.replace( "#{{gamename}}", game.name );
 			contentString = contentString.replace( "#{{gamedescription}}", game.description );

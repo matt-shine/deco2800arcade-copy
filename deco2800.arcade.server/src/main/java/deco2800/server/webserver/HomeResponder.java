@@ -16,7 +16,7 @@ public class HomeResponder {
 		response.setDate("Last-Modified", time);
 
 		String bodyString = FileReader.readFile( "webserver/html/template.html", Charset.forName("UTF-8" ) );
-		String contentString = FileReader.readFile( "webserver/html/home.html", Charset.forName("UTF-8" ) );
+		String contentString = FileReader.readFile( "webserver/html/_home.html", Charset.forName("UTF-8" ) );
 		
 		bodyString = bodyString.replace( "#{{content}}", contentString );
 		

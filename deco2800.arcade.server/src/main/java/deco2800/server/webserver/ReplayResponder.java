@@ -55,21 +55,19 @@ public class ReplayResponder {
 		
 		List<String> gameIds = ArcadeServer.instance().getReplayStorage().getGameIds();
 		
-		gameIds.add( "test" );
+		//gameIds.add( "test" );
 		
 		bodyString = FileReader.readFile( "webserver/html/template.html", Charset.forName("UTF-8" ) );
-		String contentString = "";
+		
+		String contentString = "<h1 class='text center'>Replays</h1>";
 		
 		for ( String gameId : gameIds ) {
 			ArrayList<String> replayStrings = new ArrayList<String>();
 			replayStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame( gameId );
-	
-			replayStrings.add( "100001, false, replayers, 1381645619190, " );
-			replayStrings.add( "100001, false, replayers, 1381645632133, " );
 			
 			ArrayList<Session> replays = stringsToSessions( replayStrings );
 			
-			contentString += FileReader.readFile( "webserver/html/replay.html", Charset.forName("UTF-8" ) );
+			contentString += FileReader.readFile( "webserver/html/_replay.html", Charset.forName("UTF-8" ) );
 			
 			String tableString = "";
 			for ( Session replay : replays ) {

@@ -189,7 +189,7 @@ public class Pictures {
 		Texture africa1 = new Texture("Images/level3/countries/africa/africa_1.png");
 		Texture mexico1 = new Texture("Images/level3/countries/mexico/mexico_1.png");
 		Texture russia1 = new Texture("Images/level3/countries/russia/russian_1.png");
-		Texture turkey2 = new Texture("Images/level3/countries/turkey/turkey_2.png");
+		Texture turkey2 = new Texture("Images/level3/countries/turkey/turkeyflag_1.png");
 		Texture zambia1 = new Texture("Images/level3/countries/zambia/zambia_1.png");
 		HashMap<String, Texture> countriesMap3 = new HashMap<String, Texture>();
 		countriesMap3.put("AFRICA", africa1);
@@ -213,21 +213,27 @@ public class Pictures {
 		//Sports textures level 1
 		Texture judo1 = new Texture("Images/level1/sports/judo/judo_3.png");
 		Texture polo1 = new Texture("Images/level1/sports/polo/polo_1.png");
+		Texture epee1 = new Texture("Images/level1/sports/epee/epee_1.png");
+		Texture golf1 = new Texture("Images/level1/sports/golf/golf_1.png");
+		Texture dart1 = new Texture("Images/level1/sports/dart/dart_1.png");
 		HashMap<String, Texture> sportsMap = new HashMap<String, Texture>();
 		sportsMap.put("JUDO" , judo1);
 		sportsMap.put("POLO" , polo1); 
+		sportsMap.put("EPEE" , epee1); 
+		sportsMap.put("GOLF" , golf1); 
+		sportsMap.put("DART" , dart1); 
 //		System.out.println(sportsMap.keySet());
 		
 		//Sports textures level 2
 		Texture canoe1 = new Texture("Images/level2/sports/canoe/canoe_1.png");
 		Texture chess1 = new Texture("Images/level2/sports/chess/chess_1.png");
-		Texture darts1 = new Texture("Images/level2/sports/darts/darts_1.png");
+		Texture silat1 = new Texture("Images/level2/sports/silat/silat_1.png");
 		Texture rugby1 = new Texture("Images/level2/sports/rugby/rugby_1.png");
 		Texture rodeo1 = new Texture("Images/level2/sports/rodeo/rodeo_1.png");
 		HashMap<String, Texture> sportsMap2 = new HashMap<String, Texture>();
 		sportsMap2.put("CANOE" , canoe1);
 		sportsMap2.put("CHESS" , chess1);
-		sportsMap2.put("DARTS" , darts1);
+		sportsMap2.put("SILAT" , silat1);
 		sportsMap2.put("RUGBY" , rugby1);
 		sportsMap2.put("Rodeo" , rodeo1);
 //		System.out.println(sportsMap2.keySet());
@@ -259,11 +265,13 @@ public class Pictures {
 		Texture luge1 = new Texture("Images/level1/transports/luge/luge_1.png");
 		Texture taxi1 = new Texture("Images/level1/transports/taxi/taxi_1.png");
 		Texture tram1 = new Texture("Images/level1/transports/tram/tram_1.png");
+		Texture boat1 = new Texture("Images/level1/transports/boat/boat_1.png");
 		HashMap<String, Texture> transportsMap = new HashMap<String, Texture>();
 		transportsMap.put("BIKE" , bike1);
 		transportsMap.put("LUGE" , luge1); 
 		transportsMap.put("TAXI" , taxi1);
 		transportsMap.put("TRAM" , tram1); 
+		transportsMap.put("BOAT" , boat1); 
 //		System.out.println(transportsMap.keySet());
 		
 		//Transport textures level 2

@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dataset>
-<PLAYERS playerID='1' username='U1' email='bob@gmail.com' program='BE' bio='I am bob.' age='86'/>
-<PLAYERS playerID='2' username='U2' email='james@gmail.com' program='BSc' bio='I am james.' age='9001'/>
+<PLAYERS />
 </dataset>

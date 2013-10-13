@@ -278,7 +278,7 @@ public class MixMazeModel implements IMixMazeModel {
 		int player1Score = getPlayerScore(player[0]);
 		int player2Score = getPlayerScore(player[1]);
 		Achievements.getInstance().incrementAchievement(
-				Achievements.Achievement.Playa);
+				Achievements.AchievementType.Playa);
 
 		if (player1Score != player2Score) {
 			return (player1Score > player2Score) ? player[0] : player[1];

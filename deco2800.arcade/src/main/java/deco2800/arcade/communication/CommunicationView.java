@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-
 public class CommunicationView extends JFrame {
 
 	private JScrollPane scrollPane;
@@ -26,42 +25,42 @@ public class CommunicationView extends JFrame {
 	private JPanel scrollablePanel;
 	private JLabel testLabel2;
 
-	public CommunicationView(){		
-		setBounds(400,200,100,740);
+	public CommunicationView() {
+		setBounds(400, 200, 100, 740);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
+
 		container = getContentPane();
 		container.setBackground(Color.WHITE);
-		
+
 		scrollablePanel = new JPanel();
-		scrollablePanel.setLayout(new BoxLayout(scrollablePanel, BoxLayout.Y_AXIS));
-		
+		scrollablePanel.setLayout(new BoxLayout(scrollablePanel,
+				BoxLayout.Y_AXIS));
+
 		scrollPane = new JScrollPane(scrollablePanel);
 		scrollPane.setPreferredSize(new Dimension(100, 400));
 
 		inputArea = new JTextArea();
 		sendButton = new JButton("Send");
-		sendButton.setPreferredSize(new Dimension(100,100));
-		
+		sendButton.setPreferredSize(new Dimension(100, 100));
+
 		container.add(scrollPane, BorderLayout.NORTH);
 		container.add(inputArea, BorderLayout.CENTER);
 		container.add(sendButton, BorderLayout.SOUTH);
-		
+
 		setVisible(true);
-		
+
 	}
-	
-	public void addChatNode(ChatNode node){
-		//scrollablePanel.add(node);
+
+	public void addChatNode(ChatNode node) {
+		// scrollablePanel.add(node);
 	}
 
 	public void addSendListener(ActionListener listener) {
 		sendButton.addActionListener(listener);
 	}
-	
-	public String getMessage(){
+
+	public String getMessage() {
 		return inputArea.getText();
 	}
-	
 
 }

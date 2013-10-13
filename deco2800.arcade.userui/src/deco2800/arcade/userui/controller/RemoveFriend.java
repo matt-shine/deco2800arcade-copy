@@ -25,6 +25,7 @@ public class RemoveFriend {
 		this.userView = userView;
 		
 		this.friendView.addRemoveFriendListener(new RemoveFriendListener());
+		this.friendView.addCancelListener(new CancelListener());
 		
 	}
 

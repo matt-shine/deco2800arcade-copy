@@ -96,20 +96,38 @@ public class TestFriendStorage {
 	public Map<String, List<String>> getTablePrimaryKeyMap(){
 		return tablePrimaryKeyMap;
 	}
-	
-	/*
+		
 	@Test
-	public void testAcceptFriendRequest() throws DatabaseException {
-		friendStorage.acceptFriendRequest(1, 2);
-		assertTrue(friendStorage.isFriends(1, 2));
-		assertTrue(friendStorage.isFriends(2, 1));
-	}*/
-	
-	@Test
+	/**
+	 * Tests getting the list of friends.
+	 * @throws DatabaseException
+	 */
 	public void testGetFriendList() throws DatabaseException {
 		List<Integer> friends = new ArrayList<Integer>();
 		friends.add(2);
-		assertEquals(friendStorage.getFriendsList(1), friends);
+		assertEquals(friends, friendStorage.getFriendsList(1));
+	}
+
+	@Test
+	/**
+	 * Tests getting the list of friend invites.
+	 * @throws DatabaseException
+	 */
+	public void testGetFriendInviteList() throws DatabaseException {
+		List<Integer> friendInvites = new ArrayList<Integer>();
+		friendInvites.add(1);
+		assertEquals(friendInvites, friendStorage.getFriendInviteList(2));
+	}
+	
+	@Test
+	/**
+	 * Tests getting the list of blocked players.
+	 * @throws DatabaseException
+	 */
+	public void testGetBlockedList() throws DatabaseException {
+		List<Integer> blockedList = new ArrayList<Integer>();
+		blockedList.add(4);
+		assertEquals(blockedList, friendStorage.getBlockedList(2));
 	}
 	
 	@Test
@@ -121,6 +139,16 @@ public class TestFriendStorage {
 		friendStorage.blockPlayer(1, 2);
 		assertTrue(friendStorage.isBlocked(1, 2));
 		assertFalse(friendStorage.isBlocked(2, 1));
+	}
+		
+	@Test
+	/**
+	 * Tests blocking a non-existing player-player relationship.
+	 * @throws DatabaseException
+	 */
+	public void testBlockNonExistingPlayerRelationship() throws DatabaseException {
+		friendStorage.blockPlayer(2, 3);
+		assertTrue(friendStorage.isBlocked(2, 3));
 	}
 	
 	@Test
@@ -137,13 +165,55 @@ public class TestFriendStorage {
 	
 	@Test
 	/**
-	 * Tests blocking a non-existing relationship.
+	 * Tests two players blocking each other, then unblocking each other.
 	 * @throws DatabaseException
 	 */
-	public void blockNonExistingPlayerRelationship() throws DatabaseException {
-		friendStorage.blockPlayer(2, 3);
-		assertTrue(friendStorage.isBlocked(2, 3));
+	public void testTwoPlayersBlockingThenUnblockingEachOther() throws DatabaseException {
+		friendStorage.blockPlayer(1, 2);
+		friendStorage.blockPlayer(2, 1);
+		assertTrue(friendStorage.isBlocked(1, 2));
+		assertTrue(friendStorage.isBlocked(2, 1));
+		friendStorage.unblockPlayer(1, 2);
+		assertFalse(friendStorage.isBlocked(1, 2));
+		friendStorage.unblockPlayer(2, 1);
+		assertFalse(friendStorage.isBlocked(2, 1));
 	}
+	
+	@Test
+	/**
+	 * Tests adding a friend request.
+	 * @throws DatabaseException
+	 */
+	public void testAddFriendRequest() throws DatabaseException {
+		friendStorage.addFriendRequest(2, 3);
+		assertTrue(friendStorage.isFriends(2, 3));
+		assertFalse(friendStorage.isFriends(3,2));
+	}
+	
+	@Test
+	/**
+	 * Tests accepting a friend request.
+	 * @throws DatabaseException
+	 */
+	public void testAcceptFriendRequest() throws DatabaseException {
+		friendStorage.acceptFriendRequest(2, 1);
+		assertTrue(friendStorage.isFriends(1, 2));
+		assertTrue(friendStorage.isFriends(2, 1));
+	}
+	
+	@Test
+	/** Tests remove friend.
+	 * 
+	 * @throws DatabaseException
+	 */
+	public void testRemoveFriend() throws DatabaseException {
+		assertTrue(friendStorage.isFriends(2, 4));
+		assertTrue(friendStorage.isFriends(4, 2));
+		friendStorage.removeFriend(2, 4);	
+		assertFalse(friendStorage.isFriends(2, 4));
+		assertFalse(friendStorage.isFriends(4, 2));
+	}
+
 	
 	private class ColumnFilter extends DefaultColumnFilter {
 		

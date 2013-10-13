@@ -80,8 +80,7 @@ public class Renderer {
             //gl init
             Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
             Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            Gdx.gl20.glEnable(GL20.GL_BLEND);
-
+            
 
             //load terrain shader
             String vertexShader = loadFile("wl6TerrainVertShader.glsl");
@@ -165,6 +164,7 @@ public class Renderer {
         Gdx.gl.glClearColor(0.48f, 0.48f, 0.48f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.graphics.getGL20().glEnable(GL20.GL_TEXTURE_2D);
+        Gdx.gl20.glEnable(GL20.GL_BLEND);
         texture.bind();
 
         IngameUI.drawCeiling(getCeilingColor(), wl6.getWidth(), wl6.getHeight());

@@ -36,7 +36,7 @@ public class TestPlayerStorage {
 	 * @throws IOException
 	 */
 	private IDataSet getDataSet() throws DataSetException, IOException {
-		URL url = TestCreditStorage.class.getClassLoader().getResource("TestPlayerStorage.xml");
+		URL url = TestPlayerStorage.class.getClassLoader().getResource("TestPlayerStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return builder.build(url);
@@ -65,4 +65,6 @@ public class TestPlayerStorage {
 	public void  tearDown() throws Exception {
 		databaseTester.onTearDown();
 	}
+	
+	
 }

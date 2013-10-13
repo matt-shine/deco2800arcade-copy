@@ -13,6 +13,8 @@ import org.dbunit.database.*;
 import org.dbunit.dataset.*;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.ext.mysql.MySqlDataTypeFactory;
+import org.dbunit.ext.mysql.MySqlMetadataHandler;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.*;
 
@@ -88,6 +90,7 @@ public class TestFriendStorage {
 		config.setProperty(DatabaseConfig.PROPERTY_PRIMARY_KEY_FILTER, new ColumnFilter());
 		Map<String, List<String>> tablePrimaryKeyMap = new HashMap<String, List<String>>();
 		tablePrimaryKeyMap.put("FRIENDS", Arrays.asList(new String[] {"U1", "U2"}));
+		tablePrimaryKeyMap.put("PLAYERS", Arrays.asList(new String[] {"playerID"}));
 	}
 	
 	public Map<String, List<String>> getTablePrimaryKeyMap(){
@@ -100,6 +103,12 @@ public class TestFriendStorage {
 		assertTrue(friendStorage.isFriends(1, 2));
 	}
 	
+	@Test
+	public void testGetFriendList() throws DatabaseException {
+		List<Integer> friends = new ArrayList<Integer>();
+		friends.add(2);
+		assertEquals(friendStorage.getFriendsList(1), friends);
+	}
 	
 	private class ColumnFilter extends DefaultColumnFilter {
 		

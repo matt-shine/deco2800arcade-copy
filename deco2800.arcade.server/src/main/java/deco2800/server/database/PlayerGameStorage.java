@@ -224,7 +224,7 @@ public class PlayerGameStorage {
 	 * @return The player's MMR for the given game
 	 * @throws DatabaseException
 	 */
-	public int getPlayerRating(int playerID, int gameID) throws DatabaseException {
+	public int getPlayerRating(int playerID, String gameID) throws DatabaseException {
 		//Check whether or not the database has been intitialised
 		if (!initialised){
 			//Not initialised yet - initialise it
@@ -270,7 +270,7 @@ public class PlayerGameStorage {
 	 * @return The player's MMR for the given game
 	 * @throws DatabaseException
 	 */
-	public void updatePlayerRating(int playerID, int gameID, int newRating) throws DatabaseException {
+	public void updatePlayerRating(int playerID, String gameID, int newRating) throws DatabaseException {
 		//Check whether or not the database has been intitialised
 		if (!initialised){
 			//Not initialised yet - initialise it

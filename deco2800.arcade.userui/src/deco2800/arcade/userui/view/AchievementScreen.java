@@ -3,6 +3,7 @@ package deco2800.arcade.userui.view;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import org.apache.log4j.Logger;
 
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
@@ -46,7 +49,7 @@ public class AchievementScreen extends JFrame{
 	private JPanel gameavatarpanel, gameinfopanel;
 	
 	//Declare Buttons here
-	private JButton addfriendbutton, editbutton, statusbutton;
+	private JButton editbutton, statusbutton;
 	private JButton selectbutton;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	
@@ -54,14 +57,14 @@ public class AchievementScreen extends JFrame{
 	private JComboBox gameselect;
 		
 	//Declare Labels here
-	private JLabel avatar, addfriend, playername, playerlevel;
+	private JLabel avatar, playername, playerlevel;
 	private JLabel achievementbar;
 	private JLabel gamename, gameachievementcount, gameicon;
 	private JTextArea gamedescription, achievementlist;
 	
 	//Declare Images here
-	private ImageIcon picavatar, picaddfriend, picachievementbar, 
-	piclocked, picunlocked, piceditbutton, picfriendoffline, piconline, picoffline;
+	private ImageIcon picavatar,piclocked, picunlocked, piceditbutton, 
+	piconline, picoffline;
 			
 	//Declare Fonts to use here
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -70,8 +73,9 @@ public class AchievementScreen extends JFrame{
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	Font linkbold = new Font("Verdana", Font.BOLD, 14);
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
-
-	private Game game;
+	
+	//Logger
+	static Logger log = Logger.getLogger(AchievementScreen.class);
 	
 	public AchievementScreen(Model model) throws HeadlessException {
 		
@@ -84,11 +88,9 @@ public class AchievementScreen extends JFrame{
 		 * 
 		 */	
 		picavatar = new ImageIcon("assets/images/stark.png");
-		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
-		picfriendoffline = new ImageIcon("assets/images/addfriendoffline.png");
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
 		
@@ -203,8 +205,9 @@ public class AchievementScreen extends JFrame{
 	    achievementlist = new JTextArea();
 	    achievementlist.setLineWrap(true);
 	    achievementlist.setFont(blacknormal);
-	    achievementlist.setBackground(Color.LIGHT_GRAY);
+	    achievementlist.setBackground(Color.white);
 	    achievementlist.setEditable(false);
+	    achievementlist.setMargin(new Insets(10,10,10,10));
 	    
 	    achievementbarpanel.add(achievementbar);
         achievementbarpanel.setOpaque(false);
@@ -361,23 +364,13 @@ public void addplayerinfopanel(){
 	}
 	
 	/**
- 	* Button opens a popup allowing user to add friend
- 	* @param listenForAddFriendButton
- 	*/
-	public void addFriendListener(ActionListener listenForAddFriendButton){
-	
-
+	 * 
+	 * @param icon
+	 */
+	public void setStatus(ImageIcon icon){
 		
-	}
-
-	/**
- 	* Button opens a popup allowing editing of profile details
- 	* @param listenForEditButton
- 	*/
-	public void addEditListener(ActionListener listenForEditButton){
-	
-		editbutton.addActionListener(listenForEditButton);	
-	
+		statusbutton.setIcon(icon);
+		
 	}
 
 	/**
@@ -410,22 +403,37 @@ public void addplayerinfopanel(){
 	 * Get and Set method for objects
 	 */
 	
-	public void getGameSelection(){
+	public String getGameSelection(){
 		
 		//Set selected game identifier
 		System.out.println(gameselect.getSelectedItem().toString());
+		return gameselect.getSelectedItem().toString();
 		
 	}
 	
-	public void setAchievementList(Game game){
+	public void setAchievementList(){
 		
-		this.game = game;			
-		ArrayList<Achievement> list;
-		AchievementClient gameAchievement = null;
+		//achievementlist.setText(model.achievements.achievementsForGame(getGameSelection()).toString());
+		achievementlist.setText(getGameSelection());	
+		if (getGameSelection() == "Pong"){
+			
+			//achievementlist.setText(model.achievements.achievementsForGame(game));
+		}
+		//Need to change the gamelist (combobox) to take in Game element values
+		//Note: since the box is a string may need to do a check for each game seperately
 		
-		gameAchievement.achievementsForGame(game);
-		achievementlist.setText(gameAchievement.toString());
-				
+	}
+	
+	public void setGameName(){
+		
+		
+		
+	}
+	
+	public void setGameDescription(){
+		
+		
+		
 	}
 
 }

@@ -18,7 +18,6 @@ public class TestingStarter extends GameClient{
 
 	public static void main(String[] args) {
 		BasicConfigurator.configure();
-//		Player p = new Player(0, null, null);
 		LwjglApplicationConfiguration cfg =
 				new LwjglApplicationConfiguration();
 

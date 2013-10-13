@@ -22,6 +22,7 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
     	default: { font: default, fontColor: white, up: textField },
+    	icon: { font: default, up: textField },
 	    green: { font: default, fontColor: white, up: green_button, down: green_button, over: green_button_glow }
     }
 }

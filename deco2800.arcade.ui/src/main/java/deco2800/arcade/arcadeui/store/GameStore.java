@@ -29,21 +29,27 @@ public class GameStore implements Screen, StoreScreen {
 
     Sprite left = new Sprite(new Texture(Gdx.files.internal("left_glow.png")), 0, 0, 39, 31);
     
-    private int iconX = 100;
     private float textfade = 100;
     private float iconfade = 100;
     private Label description;
+    private TextButton icon;
     
     //private ArcadeUI arcadeUI;
 
     public GameStore(ArcadeUI ui) {
     	//arcadeUI = ui;
 		skin.add("background", new Texture("main_bg.png"));
+		skin.add("temp", new Texture("right_glow.png"));
 		
-		Table table = new Table();
-		table.setFillParent(true);
-		//table.setBackground(skin.getDrawable("background"));
-		stage.addActor(table);
+		Table bg = new Table();
+		bg.setFillParent(true);
+		bg.setBackground(skin.getDrawable("background"));
+		stage.addActor(bg);
+		
+		icon = new TextButton("", skin, "icon");
+		icon.setSize(160, 160);
+		icon.setPosition(100, 450);
+		stage.addActor(icon);
 		
 		final TextField searchField = new TextField("", skin);
 		final TextButton searchButton = new TextButton("Search", skin, "green");
@@ -128,7 +134,6 @@ public class GameStore implements Screen, StoreScreen {
 			gameGrid.addListener(new ChangeListener() {
 				public void changed (ChangeEvent event, Actor actor) {
 					setSelected(gameGrid.getName());
-					System.out.println("\nmade it\n\n");
 					featuredScroll(featured);
 					System.out.println(featured.id);
 				}
@@ -138,41 +143,43 @@ public class GameStore implements Screen, StoreScreen {
 	}
 	private void textFade() {
 		if (textfade != 100) {
-			if (--textfade == -100) {
+			naptime(3);
+			if (--textfade < -100) {
 				textfade = 100;
-			} else if (textfade == 0) {
+			} else if (textfade == 33) {
 				if(featured.getDescription() == null
 						|| featured.getDescription().equals("N/A")) {
 		            description.setText(featured.name + "\nNo Description Available");
 		        } else {
 		        	description.setText(featured.name + "\n" + featured.getDescription());
 		        }
-				naptime(800);
 				iconfade = 99;
 			}
-			naptime(5);
-			description.setColor(1, 1, 1, Math.abs(textfade)/100);
+			if (textfade < 33 && textfade > -33) {
+				description.setColor(1, 1, 1, 0);
+				return;
+			}
+			description.setColor(1, 1, 1, (Math.abs(textfade) - 33)/66);
+		} else {
+			description.setColor(1, 1, 1, 1);
 		}
 	}
 	
 	private void iconFade() {
 		// Used to reset icon movement in case it breaks due to spamming
-		if (iconX < 100 || iconX > 302) {
-			iconfade = 1;
-			iconX = 300;
-		}
 		if (iconfade != 100) { // reset counter
-			if (--iconfade == -100) {
-				iconX += 2;
+			iconfade -= 3;
+			if (iconfade < -100) {
+				icon.setX(icon.getX() + 2);
 				iconfade = 100;
 			} else if (iconfade > 0) {
-				iconX += 2; // move right
+				icon.setX(icon.getX() + 2); // move right
 			} else if (iconfade < 0) {
-				iconX -= 2; // move back left
+				icon.setX(icon.getX() - 2); // move back left
 			} else if (iconfade == 0) {
-				naptime(300); // stay hidden for a short while
+				naptime(400); // stay hidden for a short while
 			}
-			naptime(5); // slows down animation
+			icon.setColor(1, 1, 1, Math.abs(iconfade)/100);
 		}
 	}
 	

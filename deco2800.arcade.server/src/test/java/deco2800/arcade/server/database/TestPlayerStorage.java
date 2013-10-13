@@ -2,6 +2,8 @@ package deco2800.arcade.server.database;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -11,7 +13,9 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
+import deco2800.server.database.DatabaseException;
 import deco2800.server.database.PlayerStorage;
 
 public class TestPlayerStorage {
@@ -66,5 +70,21 @@ public class TestPlayerStorage {
 		databaseTester.onTearDown();
 	}
 	
-	
+	@Test
+	public void testGetPlayerData() {
+		try {
+			List<String> playerData = new ArrayList<String>();
+			playerData.add("1");
+			playerData.add("bob");
+			playerData.add("bob@gmail.com");
+			playerData.add("BE");
+			playerData.add("I am bob.");
+			playerData.add("86");
+			playerStorage.getPlayerData(1);
+			
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

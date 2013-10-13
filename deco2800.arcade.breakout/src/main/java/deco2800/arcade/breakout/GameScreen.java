@@ -139,15 +139,25 @@ public class GameScreen implements Screen  {
 		setBall(new Ball());
 		getBall().setColor(0.7f, 0.7f, 0.7f, 0.5f);
 		
+		if (getLevel() == 4) {
+			game.incrementAchievement("breakout.basic");
+			achieve.play();
+			gameState = new GameOverState();
+		}
 		
+		if (getLevel() == 7) {
+			game.incrementAchievement("breakout.intermediate");
+			achieve.play();
+			gameState = new GameOverState();
+		}
 
-		if (level > 10) {
+		if (getLevel() == 10) {
 			game.incrementAchievement("breakout.pro");
 			achieve.play();
 			gameState = new GameOverState();
 		}
 		try {
-			bricks = levelSystem.readFile("levels/level" + level + ".txt",
+			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt",
 				bricks, this);
 			setBrickNum(bricks.length);
 		} catch (Exception e) {

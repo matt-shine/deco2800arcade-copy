@@ -28,10 +28,12 @@ public class PlayerModel {
 		public Action getNextAction(boolean hasPick, boolean hasTnt) {
 			Action next = values()[(ordinal() + 1) % values().length];
 			if ((next == USE_PICK && !hasPick)
-					|| (next == USE_TNT && !hasTnt))
+					|| (next == USE_TNT && !hasTnt)){
 				return next.getNextAction(hasPick, hasTnt);
-			else
+			}
+			else{
 				return next;
+			}
 		}
 	}
 
@@ -116,8 +118,9 @@ public class PlayerModel {
 	 */
 	private void changeScore(int delta) {
 		score += delta;
-		for (PlayerModelObserver v : observers)
+		for (PlayerModelObserver v : observers){
 			v.updateScore(score);
+		}
 	}
 
 	/**
@@ -145,11 +148,13 @@ public class PlayerModel {
 	 * @return the next x-coordinate in relative to the direction facing.
 	 */
 	int getNextX() {
-		if (isXDirection(direction))
+		if (isXDirection(direction)){
 			return isPositiveDirection(direction)
 			       ? (x + 1) : (x - 1);	
-		else
+		}
+		else{
 			return x;
+		}
 	}
 
 	/**
@@ -177,11 +182,13 @@ public class PlayerModel {
 	 * @return the next y-coordinate in relative to the direction facing.
 	 */
 	int getNextY() {
-		if (isYDirection(direction))
+		if (isYDirection(direction)){
 			return isPositiveDirection(direction)
 			       ? (y + 1) : (y - 1);	
-		else
+		}
+		else{
 			return y;
+		}
 	}
 
 	/**
@@ -214,8 +221,9 @@ public class PlayerModel {
 		if (canMove()) {
 			x = getNextX();
 			y = getNextY();
-			for (PlayerModelObserver v : observers)
+			for (PlayerModelObserver v : observers){
 				v.updatePosition(x, y);
+			}
 			lastMoved = System.currentTimeMillis();
 		}
 	}
@@ -236,12 +244,13 @@ public class PlayerModel {
 	 * @param direction	the requested direction
 	 */
 	void setDirection(int direction) {
-		if (!isDirection(direction))
+		if (!isDirection(direction)){
 			throw NOT_A_DIRECTION;
-
+		}
 		this.direction = direction;
-		for (PlayerModelObserver v : observers)
+		for (PlayerModelObserver v : observers){
 			v.updateDirection(direction);
+		}
 	}
 
 	BrickModel getBrick() {
@@ -304,8 +313,9 @@ public class PlayerModel {
 		PlayerModel.Action old = action;
 
 		action = action.getNextAction(pick != null, tnt != null);
-		if (action != old)
+		if (action != old){
 			updateAction(action);
+		}
 	}
 
 	/**
@@ -369,8 +379,9 @@ public class PlayerModel {
 	 * @param amount	the brick amount
 	 */
 	private void updateBrick(int amount) {
-		for (PlayerModelObserver v : observers)
+		for (PlayerModelObserver v : observers){
 			v.updateBrick(amount);
+		}
 	}
 
 	/**
@@ -379,8 +390,9 @@ public class PlayerModel {
 	 * @param hasPick	if this player has a pick
 	 */
 	private void updatePick(boolean hasPick) {
-		for (PlayerModelObserver v : observers)
+		for (PlayerModelObserver v : observers){
 			v.updatePick(hasPick);
+		}
 	}
 
 	/**
@@ -389,8 +401,9 @@ public class PlayerModel {
 	 * @param hasTnt	if this player has a TNT
 	 */
 	private void updateTnt(boolean hasTnt) {
-		for (PlayerModelObserver v : observers)
+		for (PlayerModelObserver v : observers){
 			v.updateTnt(hasTnt);
+		}
 	}
 
 	/**
@@ -399,8 +412,9 @@ public class PlayerModel {
 	 * @param action	the current action of this player
 	 */
 	private void updateAction(Action action) {
-		for (PlayerModelObserver v : observers)
+		for (PlayerModelObserver v : observers){
 			v.updateAction(action);
+		}
 	}
 
 	@Override

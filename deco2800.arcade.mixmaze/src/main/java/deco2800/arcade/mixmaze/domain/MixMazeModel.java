@@ -118,11 +118,13 @@ public class MixMazeModel implements IMixMazeModel {
 	 * or <code>maxSeconds</code> is not in range from 30 to 900.
 	 */
 	public MixMazeModel(int size, Difficulty difficulty, int maxSeconds) {
-		if(size < 5 || size > 10)
+		if(size < 5 || size > 10){
 			throw new IllegalArgumentException("size must be between 5 and 10.");
-		if(maxSeconds < 30 || maxSeconds > 900)
+		}
+		if(maxSeconds < 30 || maxSeconds > 900){
 			throw new IllegalArgumentException("maxSeconds must be between 30 and 900.");
-
+		}
+		
 		// Initialize default fields
 		spawner = new Random();
 		state = GameState.NOT_STARTED;
@@ -189,9 +191,9 @@ public class MixMazeModel implements IMixMazeModel {
 	
 	@Override
 	public TileModel getBoardTile(int x, int y) {
-		if (!checkCoordinates(x, y))
+		if (!checkCoordinates(x, y)){
 			throw COORDS_OUT_OF_RANGE;
-
+		}
 		return board[y][x];
 	}
 	
@@ -214,10 +216,12 @@ public class MixMazeModel implements IMixMazeModel {
 	
 	@Override
 	public void movePlayer(int id, int direction) {
-		if (state != GameState.RUNNING)
+		if (state != GameState.RUNNING){
 			throw NOT_STARTED;
-		else if (!isDirection(direction))
+		}
+		else if (!isDirection(direction)){
 			throw NOT_A_DIRECTION;
+		}
 
 		PlayerModel p = player[id - 1];
 		int nextX = p.getNextX();
@@ -234,18 +238,18 @@ public class MixMazeModel implements IMixMazeModel {
 	
 	@Override
 	public void startGame() {
-		if (state != GameState.NOT_STARTED)
+		if (state != GameState.NOT_STARTED){
 			throw STARTED;
-
+		}
 		state = GameState.RUNNING;
 		gameStartTime = Calendar.getInstance().getTime();
 	}
 	
 	@Override
 	public PlayerModel endGame() {
-		if (state != GameState.RUNNING)
+		if (state != GameState.RUNNING){
 			throw NOT_STARTED;
-
+		}
 		state = GameState.END;
 		gameEndTime = Calendar.getInstance().getTime();
 		int player1Score = getPlayerScore(player[0]);
@@ -378,10 +382,12 @@ public class MixMazeModel implements IMixMazeModel {
 	 * the same time
 	 */
 	private int getMaxItemCount() {
-		if (difficulty == Difficulty.BEGINNER)
+		if (difficulty == Difficulty.BEGINNER){
 			return 5;
-		else if (difficulty == Difficulty.INTERMEDIATE)
+		}
+		else if (difficulty == Difficulty.INTERMEDIATE){
 			return 3;
+		}
 		return 2; // Advanced
 	}
 
@@ -446,9 +452,9 @@ public class MixMazeModel implements IMixMazeModel {
 	 * (x, y) position is out of range
 	 */
 	ItemModel getSpawnedItem(int x, int y) {
-		if (!checkCoordinates(x, y))
+		if (!checkCoordinates(x, y)){
 			throw COORDS_OUT_OF_RANGE;
-
+		}
 		return items[y][x];
 	}
 
@@ -460,14 +466,16 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @param y Y position on the game board
 	 */
 	private void setSpawnedItem(ItemModel item, int x, int y) {
-		if (!checkCoordinates(x, y))
+		if (!checkCoordinates(x, y)){
 			throw COORDS_OUT_OF_RANGE;
-
+		}
 		items[y][x] = item;
-		if (item == null)
+		if (item == null){
 			board[y][x].updateType(ItemModel.Type.NONE);
-		else
+		}
+		else{
 			board[y][x].updateType(item.getType());
+		}
 	}
 
 	/**
@@ -511,7 +519,8 @@ public class MixMazeModel implements IMixMazeModel {
 	private void onPlayerMove(PlayerModel player, int x, int y) {
 		ItemModel item = (ItemModel) getSpawnedItem(x, y);
 
-		if (item != null && player.pickupItem(item))
+		if (item != null && player.pickupItem(item)){
 			setSpawnedItem(null, x, y);
+		}
 	}
 }

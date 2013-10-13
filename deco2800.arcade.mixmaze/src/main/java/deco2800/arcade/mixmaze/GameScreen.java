@@ -329,7 +329,7 @@ abstract class GameScreen implements Screen {
 
 	}
 	
-	 class Settings{		 
+	public class Settings{		 
 		public Settings(int[] innerP1Controls,int[] innerP2Controls){
 			p1Controls = innerP1Controls;
 			p2Controls = innerP2Controls;

@@ -81,11 +81,13 @@ public class Direction {
 	 * <code>SOUTH</code> if <code>NORTH</code> is specified.
 	 */
 	static int getPolarDirection(int direction) {
-		if (!isDirection(direction))
+		if (!isDirection(direction)){
 			throw NOT_A_DIRECTION;
-		else
+		}
+		else{
 			return isPositiveDirection(direction) 
 			       ? (direction - 2) : (direction + 2);
+		}
 	}
 
 	/**

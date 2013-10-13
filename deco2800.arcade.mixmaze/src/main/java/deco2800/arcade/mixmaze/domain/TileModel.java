@@ -1,6 +1,7 @@
 package deco2800.arcade.mixmaze.domain;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
@@ -29,7 +30,8 @@ public class TileModel {
 	private PlayerModel boxer = null;
 	
 	/** Observers to this tile */
-	private List<TileModelObserver> observers = new ArrayList<TileModelObserver>();
+	private List<TileModelObserver> observers = 
+			new ArrayList<TileModelObserver>();
 
 	/**
 	 * Constructs a new <code>TileModel</code> at 
@@ -43,7 +45,12 @@ public class TileModel {
 	public TileModel(int x, int y, TileModel[] adjacentTiles) {
 		this.x = x;
 		this.y = y;
-		this.adjacentTiles = adjacentTiles;
+		 if(adjacentTiles == null) { 
+			 this.adjacentTiles = new TileModel[0]; 
+		 } else { 
+			 this.adjacentTiles = Arrays.copyOf
+					 (adjacentTiles, adjacentTiles.length); 
+		 }		
 		initializeWalls();
 	}
 	
@@ -85,8 +92,9 @@ public class TileModel {
 	 * @param type	the item type
 	 */
 	public void updateType(ItemModel.Type type) {
-		for (TileModelObserver o : observers)
+		for (TileModelObserver o : observers){
 			o.updateType(type);
+		}
 	}
 
 	/**
@@ -95,8 +103,9 @@ public class TileModel {
 	 * @param id	the id of the boxer
 	 */
 	private void updateBoxer(int id) {
-		for (TileModelObserver o : observers)
+		for (TileModelObserver o : observers){
 			o.updateBoxer(id);
+		}
 	}
 	
 	private TileModel getAdjacentTile(int direction) {
@@ -170,8 +179,9 @@ public class TileModel {
 	 * or <code>SOUTH</code>.
 	 */
 	public WallModel getWall(int direction) {
-		if (!isDirection(direction))
+		if (!isDirection(direction)){
 			throw NOT_A_DIRECTION;
+		}
 
 		return walls[direction];
 	}
@@ -257,12 +267,12 @@ public class TileModel {
 		}
 	}
 	
-	private List<TileModel> findBoxes(TileModel tile, List<TileModel> _tiles) {
+	private List<TileModel> findBoxes(TileModel tile, List<TileModel> tileList) {
 		if(tile == null) {
 			return null;
 		}
 		
-		List<TileModel> tiles = (_tiles != null) ? _tiles : new ArrayList<TileModel>();
+		List<TileModel> tiles = (tileList != null) ? tileList : new ArrayList<TileModel>();
 		tiles.add(tile);
 		for(int direction = 0; direction < 4; ++direction) {
 			WallModel wall = tile.getWall(direction);

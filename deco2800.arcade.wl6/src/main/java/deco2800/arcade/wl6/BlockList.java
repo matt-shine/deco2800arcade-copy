@@ -36,10 +36,10 @@ public class BlockList {
                     new BlockInfo(true, "cell"),
 
                     //8: blue brick
-                    new BlockInfo(true, "bluebrick"),
+                    new BlockInfo(true, "icewall"),
 
                     //9: blue brick 2
-                    new BlockInfo(true, "bluebrick"),
+                    new BlockInfo(true, "icewall"),
 
                     //10: wood wall with nazi eagle
                     new BlockInfo(true, "frame_pb"),

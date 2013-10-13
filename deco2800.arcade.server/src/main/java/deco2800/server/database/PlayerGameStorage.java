@@ -311,6 +311,7 @@ public class PlayerGameStorage {
 		}
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * Adds a player game entry to the database with the given PlayerID,  
 	 * gameID and rating
@@ -354,4 +355,7 @@ public class PlayerGameStorage {
 	}
 	
 	
+=======
+
+>>>>>>> 3ce89d38fa6a6d8170c3bb5c6b351caa879d2d40
 }

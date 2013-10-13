@@ -1,8 +1,6 @@
 package deco2800.server.listener;
 
 
-import java.util.UUID;
-
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.lobby.NewLobbyRequest;
@@ -46,7 +44,7 @@ public class LobbyListener extends Listener {
 			
 			CreateMatchRequest request = (CreateMatchRequest) object;
 			String gameId = request.gameId;
-			int playerId = request.hostPlayerId;
+			int playerId = request.playerID;
 			Connection hostConnection = connection;
 			
 			lobby.createMatch(gameId, playerId, hostConnection);

@@ -28,7 +28,7 @@ public class MatchmakerQueue {
 
 
 	public MatchmakerQueue() {
-		this.queuedUsers = ArrayList<ArrayList<Object>>();
+		this.queuedUsers = new ArrayList<ArrayList<Object>>();
 		this.activeServers = new HashMap<Integer, MultiplayerServer>();
 		this.database = new PlayerGameStorage();
 		this.serverNumber = 0;

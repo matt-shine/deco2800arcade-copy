@@ -19,6 +19,7 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 
@@ -159,7 +160,7 @@ public class MultiplayerLobby implements Screen {
 				Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
 				Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
 				final TextButton button5 = new TextButton("Join", skin);
-				final int index = i;
+				final int matchId = matches.get(i).matchId;
 				
 				table2.center().left();
 				table2.add(matchLabel).width(130).padTop(5).padLeft(150);
@@ -167,7 +168,7 @@ public class MultiplayerLobby implements Screen {
 				table2.add(button5).width(130).height(20).padTop(5);
 				table2.row();
 				
-				button5.addListener(new JoinGameListener(index, lobby));
+				button5.addListener(new JoinGameListener(matchId, lobby));
 			}
 		}
 
@@ -200,7 +201,7 @@ public class MultiplayerLobby implements Screen {
 							Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
 							Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
 							final TextButton button5 = new TextButton("Join", skin);
-							final int index = i;
+							final int matchId = matches.get(i).matchId;
 							
 							table2.center().left();
 							table2.add(matchLabel).width(130).padTop(5).padLeft(150);
@@ -208,7 +209,7 @@ public class MultiplayerLobby implements Screen {
 							table2.add(button5).width(130).height(20).padTop(5);
 							table2.row();
 							
-							button5.addListener(new JoinGameListener(index, lobby));
+							button5.addListener(new JoinGameListener(matchId, lobby));
 						}
 					}	
 			 	}
@@ -358,10 +359,10 @@ public class MultiplayerLobby implements Screen {
 		CreateMatchRequest request = new CreateMatchRequest();
     	request.gameId = "chess";
     	request.playerID = arcadeUI.getPlayer().getID();
-    	request.hostPlayerId = arcadeUI.getPlayer().getID();
     	arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}
 
+<<<<<<< HEAD
 	public void joinGame(int matchNum) {
 		ActiveMatchDetails details = matches.get(matchNum);
 		String gameId = details.gameId;
@@ -371,6 +372,12 @@ public class MultiplayerLobby implements Screen {
 		request.playerID = arcadeUI.getPlayer().getID();
 		request.requestType = MultiGameRequestType.JOIN;
 		request.session = matchNum;
+=======
+	public void joinGame(int matchId) {
+		JoinLobbyMatchRequest request = new JoinLobbyMatchRequest();
+		request.matchId = matchId;
+		request.playerID = arcadeUI.getPlayer().getID();
+>>>>>>> 3ce89d38fa6a6d8170c3bb5c6b351caa879d2d40
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}
 	

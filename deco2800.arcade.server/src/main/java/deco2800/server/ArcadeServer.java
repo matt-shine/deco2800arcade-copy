@@ -160,7 +160,7 @@ public class ArcadeServer {
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
 		this.highscoreDatabase = new HighscoreDatabase();
-		this.matchmakerQueue = new MatchmakerQueue();
+		this.matchmakerQueue = MatchmakerQueue.instance();
 		this.packServ = new PackageServer();
 
 

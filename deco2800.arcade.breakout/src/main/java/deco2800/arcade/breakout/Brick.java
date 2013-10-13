@@ -195,6 +195,16 @@ public class Brick {
 		if (level == 10) {
 			renderLevelTen(b, index);
 		}
+		if (level == 11) {
+			renderLevelEleven(b);
+		}
+	}
+	
+	public void renderLevelEleven(SpriteBatch b) {
+		sBatch = b;
+		sBatch.begin();
+		sBatch.draw(brickImgs[0], brickShape.x, brickShape.y);
+		sBatch.end();
 	}
 	
 	public void renderLevelOne(int num, SpriteBatch b) {

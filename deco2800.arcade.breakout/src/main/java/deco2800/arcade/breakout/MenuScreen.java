@@ -124,13 +124,11 @@ public class MenuScreen implements Screen  {
 	    helpbutton.setPosition(485, 250);
 	    helpbutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
 	        		return true; 
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.setScreen(game.helpscreen1); 
-	        		
 	        	}}
 	    	   );
 	    //quit
@@ -147,7 +145,6 @@ public class MenuScreen implements Screen  {
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		
 	        		ArcadeSystem.goToGame(ArcadeSystem.UI);
 	        	}}
 	    	   );

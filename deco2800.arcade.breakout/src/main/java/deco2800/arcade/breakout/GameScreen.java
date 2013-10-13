@@ -77,11 +77,6 @@ public class GameScreen implements Screen  {
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 
-	// Game States
-//	private enum GameState {
-//		READY, INPROGRESS, GAMEOVER;
-//	}
-
 	private GameState gameState;
 	private Level levelSystem;
 

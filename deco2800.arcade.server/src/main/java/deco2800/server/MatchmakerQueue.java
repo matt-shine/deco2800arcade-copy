@@ -124,8 +124,13 @@ public class MatchmakerQueue {
 			player1.add(connection);
 			ArrayList<Object> player2 = queuedUsers.get(i);
 			if (goodGame(player1, player2)) {
-				MultiplayerServer gameServer = new MultiplayerServer((int)player1.get(2), (int)player2.get(2), (Connection) player1.get(3),
-						(Connection) player2.get(3), (String) player1.get(1), serverNumber, this);
+				int player1ID = (Integer)player1.get(2);
+				int player2ID = (Integer)player2.get(2);
+				Connection player1Conn = (Connection)player1.get(3);
+				Connection player2Conn = (Connection)player2.get(3);
+				String game = (String)player1.get(0);
+				MultiplayerServer gameServer = new MultiplayerServer(player1ID, player2ID, player1Conn,
+						player2Conn, game, serverNumber, this);
 				activeServers.put(serverNumber, gameServer);
 				queuedUsers.remove(i);
 				NewMultiSessionResponse session = new NewMultiSessionResponse();
@@ -154,9 +159,12 @@ public class MatchmakerQueue {
 	private boolean goodGame(ArrayList<Object> player1, ArrayList<Object> player2) {
 		int p1Rating = 0, p2Rating = 0, ratingDiff;
 		long timeAllowance;
+		int p1ID = (Integer)player1.get(2);
+		int p2ID = (Integer)player2.get(2);
+		String gameID = (String)player1.get(0);
 		try {
-			p1Rating = database.getPlayerRating((int)player1.get(2),(String)player1.get(0));
-			p2Rating = database.getPlayerRating((int)player2.get(2),(String)player2.get(0));
+			p1Rating = database.getPlayerRating(p1ID,gameID);
+			p2Rating = database.getPlayerRating(p2ID,gameID);
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -165,7 +173,8 @@ public class MatchmakerQueue {
 			p1Rating = 1500;
 			p2Rating = 1500;
 		}
-		timeAllowance = (((System.currentTimeMillis() - (long) player2.get(1)) / 60000)+1)*100;
+		long time = (Long)player2.get(1);
+		timeAllowance = (((System.currentTimeMillis() - time) / 60000)+1)*100;
 		if (p1Rating >= p2Rating) {
 			ratingDiff = p1Rating - p2Rating;
 		} else {

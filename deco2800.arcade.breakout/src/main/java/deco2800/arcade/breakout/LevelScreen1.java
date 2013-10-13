@@ -86,16 +86,15 @@ public class LevelScreen1 implements Screen  {
 	    
 		level1button.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
 	        		return true; 
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(1);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen);
-	        		
-	        	}}
-	    	   );
+	        	}
+		});
 		 //level2
 		level2buttonUp=tmp[0][2];
 		level2buttonDown=tmp[0][3];
@@ -112,6 +111,7 @@ public class LevelScreen1 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(2);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}
@@ -132,6 +132,7 @@ public class LevelScreen1 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(3);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}
@@ -152,6 +153,7 @@ public class LevelScreen1 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(4);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}
@@ -172,6 +174,7 @@ public class LevelScreen1 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(5);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen);  
 	        		
 	        	}}
@@ -210,7 +213,11 @@ public class LevelScreen1 implements Screen  {
 	     
 	}
 	
-	
+//	public void intitialiseGame(int level) {
+//		game.gamescreen.setLevel(level);
+//		game.gamescreen.gamearea();
+//		game.setScreen(game.gamescreen); 
+//	}
 	  
 	
 	@Override

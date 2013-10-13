@@ -92,6 +92,7 @@ public class LevelScreen2 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(6);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen);  
 	        		
 	        	}}
@@ -112,6 +113,7 @@ public class LevelScreen2 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(7);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}
@@ -132,6 +134,7 @@ public class LevelScreen2 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(8);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}
@@ -152,6 +155,7 @@ public class LevelScreen2 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(9);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}
@@ -172,6 +176,7 @@ public class LevelScreen2 implements Screen  {
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
 	        		game.gamescreen.setLevel(10);
+	        		game.gamescreen.gamearea();
 	        		game.setScreen(game.gamescreen); 
 	        		
 	        	}}

@@ -113,7 +113,7 @@ public class GameScreen implements Screen  {
 		this.game = game;
 		this.player = game.playerName();
 		this.powerupManager = new PowerupManager(this);
-		gamearea();
+		//gamearea();
 	}
 	
 	public void gamearea() {

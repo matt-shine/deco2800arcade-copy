@@ -23,7 +23,7 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class menuscreen implements Screen  {
+public class Menuscreen implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -67,7 +67,7 @@ public class menuscreen implements Screen  {
 	   
 	   
 	
-	menuscreen(final Breakout game) {
+	Menuscreen(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();

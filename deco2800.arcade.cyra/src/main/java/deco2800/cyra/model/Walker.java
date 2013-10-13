@@ -5,6 +5,7 @@ import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -51,7 +52,7 @@ public class Walker extends Enemy {
 	}
 	
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		//walking animation test
 		frameCount += delta;
 		if (frameCount > FRAME_LENGTH) {

@@ -2,6 +2,7 @@ package deco2800.cyra.model;
 
 import java.util.Arrays;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -67,7 +68,7 @@ public class LaserBeam extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		count += delta;
 		if (count >= 0 && count <= 1.5f) {
 			currentWidth = (maxWidth)/(2.5f-count);

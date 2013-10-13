@@ -1,6 +1,7 @@
 package deco2800.cyra.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -28,7 +29,7 @@ public class EnemySpiderBossPopcorn extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		if (isProjectile && position.y <= 0) {
 			velocity.y = -velocity.y;

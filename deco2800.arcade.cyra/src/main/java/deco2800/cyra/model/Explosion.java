@@ -1,5 +1,6 @@
 package deco2800.cyra.model;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -26,7 +27,7 @@ public class Explosion extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		position.add(new Vector2(velocity).mul(delta));
 		count += delta;
 		if (count > 0.1f) {

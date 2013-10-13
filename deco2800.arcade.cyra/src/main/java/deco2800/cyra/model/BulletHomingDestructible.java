@@ -1,6 +1,7 @@
 package deco2800.cyra.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -30,7 +31,7 @@ public class BulletHomingDestructible extends BulletSimple {
 	}
 	
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		count += delta;
 		if (count >= 0.2f) {
 			//Determine angle to the player 

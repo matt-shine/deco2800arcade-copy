@@ -1,5 +1,6 @@
 package deco2800.cyra.model;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -41,6 +42,7 @@ public class EnemySpiderBoss extends Enemy {
 	private float phase2fireballPosition;
 	private Array<MovablePlatformAttachment> solidParts;
 	private Array<Rectangle> charges;
+	private int headFrame;
 	
 	//private BlockMakerSpiderBoss blockMaker;
 	
@@ -68,13 +70,14 @@ public class EnemySpiderBoss extends Enemy {
 		invincibleTime = INVINCIBLE_TIME;
 		beingHit = false;
 		phase2fireballPosition = 0f;
+		headFrame = 0;
 		//state = State.INTRO1;
 		
 		
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		int randInt;
 		count -= delta;
@@ -83,6 +86,7 @@ public class EnemySpiderBoss extends Enemy {
 			if (count < 0) {
 				switch(state) {
 				case IDLE:
+					
 					//choose an attack
 					if (--movesUntilVulnerable == 0) {
 						//Perform arm throwing move
@@ -101,6 +105,7 @@ public class EnemySpiderBoss extends Enemy {
 							state = State.FIREBALL;
 							count = 2.1f - 2*rank;
 							phase2fireballPosition = MathUtils.random(-14f, 14f);
+							headFrame = 1;
 						} else if (randInt == 1 || (randInt == 2 && phase == 2)) {
 							System.out.println("Chosen: Ram attack");
 							performingTell = true;
@@ -118,7 +123,7 @@ public class EnemySpiderBoss extends Enemy {
 							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 1.6f, position.y+MOUTH_OFFSET_Y, 1, 1));
 							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.1f, position.y+MOUTH_OFFSET_Y-0.25f, 1, 1));
 							charges.add(new Rectangle(position.x+MOUTH_OFFSET_X + 0.5f, position.y+MOUTH_OFFSET_Y+0.44f, 1, 1));
-							
+							headFrame = 1;
 						}
 					}
 					break;
@@ -222,6 +227,7 @@ public class EnemySpiderBoss extends Enemy {
 							
 							count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 							state=State.IDLE;
+							headFrame = 0;
 						}
 						for (Vector2 vec: spawnDirections) {
 							newEnemies.add(spawnBullet(vec));
@@ -273,6 +279,7 @@ public class EnemySpiderBoss extends Enemy {
 					} else {
 						count = ATTACK_RATE - rank * ATTACK_RANK_RATE;
 						state = State.IDLE;
+						headFrame = 0;
 					}
 					break;
 				}
@@ -426,7 +433,7 @@ public class EnemySpiderBoss extends Enemy {
 				}
 			}
 			
-		Array<Enemy> armsNewEnemies = arms.advance(delta, ship, rank);
+		Array<Enemy> armsNewEnemies = arms.advance(delta, ship, rank, cam);
 		//for (BulletSimple b: bullets) {
 			//b.position.x -= delta * BlockMakerSpiderBoss.SPEED;
 		//}
@@ -524,5 +531,9 @@ public class EnemySpiderBoss extends Enemy {
 	
 	public State getState() {
 		return state;
+	}
+	
+	public int getHeadFrame() {
+		return headFrame;
 	}
 }

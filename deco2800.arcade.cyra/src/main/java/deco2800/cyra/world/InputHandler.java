@@ -63,6 +63,10 @@ public class InputHandler implements InputProcessor{
 			case Keys.W:
 				ship.getPosition().x = 599f;
 				break;
+			case Keys.E:
+				ship.getPosition().x = 220f;
+				ship.getPosition().y = 60f;
+				break;
 			case Keys.SPACE:
 				if (acceptInput) {
 							/*

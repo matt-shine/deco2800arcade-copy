@@ -52,11 +52,12 @@ public class WorldRenderer {
 	private ParallaxCamera cam;
 	Integer rightCyraCount, leftCyraCount, rightFrameCounter, leftFrameCounter;
 	private BitmapFont font;
-	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, example, bg, heartsTexture, 
+	private Texture shipTexture, followerTexture, bulletTexture, walkerTexture, bg, heartsTexture, 
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture;
 	private TextureRegion followerFrame, cyraFrame;
 	private TextureRegion walkerRegion;
-	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures;
+	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas;
+	private TextureRegion boss1body, boss1head0, boss1head1, boss1arms;
 	private Array<AtlasRegion> walkerRegions;
 	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
 	float width, height;
@@ -69,7 +70,7 @@ public class WorldRenderer {
 	private Array<CutsceneObject> csObjects;
 	private Array<MovablePlatform> mvPlatforms;
 	private Array<BlockMaker> blockMakers;
-	private float rotationArms;
+	//private float rotationArms;
 	private float sceneBarHeight;
 	private boolean enemyWithHealthOnScreen = false;
 	private float healthPercentage;
@@ -387,18 +388,23 @@ public class WorldRenderer {
 						e.getWidth(), e.getHeight(), 1, 1, e.getRotation(), 0, 0, shipTexture.getWidth(),
 						shipTexture.getHeight(), false, false);
 			} else if (e.getClass() == EnemySpiderBoss.class) {
-				batch.draw(example, e.getPosition().x, e.getPosition().y, 0,
-						0, e.getWidth(), e.getHeight(), 1, 1, 0, 0, 0,
-						256, 256, true, false);
-				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
-				if (arms.isAttacking()) { 
-					rotationArms+= 10;
+				EnemySpiderBoss esb = (EnemySpiderBoss)e;
+				float scale = 1.3f;
+				batch.draw(boss1body, e.getPosition().x, e.getPosition().y, 0,
+						0, boss1body.getRegionWidth()/32f, boss1body.getRegionHeight()/32f, scale, scale, 0);
+				int headFrame = esb.getHeadFrame();
+				TextureRegion b1head;
+				if (headFrame == 0) {
+					b1head = boss1head0;
 				} else {
-					rotationArms = 0;
+					b1head = boss1head1;
 				}
-				batch.draw(shipTexture, arms.getPosition().x, arms.getPosition().y, arms.getWidth()/2, arms.getHeight()/2, 
-						arms.getHeight(), arms.getHeight(), 1, 1, rotationArms, 0, 0, shipTexture.getWidth(),
-						shipTexture.getHeight(), false, false);
+				batch.draw(b1head, e.getPosition().x+(59f/32f)*scale, e.getPosition().y+(193f/32f)*scale, 0,
+						0, b1head.getRegionWidth()/32f, b1head.getRegionHeight()/32f, scale, scale, 0);
+				EnemySpiderBossArms arms = ((EnemySpiderBoss)e).getArms();
+				float rotationArms = arms.getRotation();
+				batch.draw(boss1arms, arms.getPosition().x, arms.getPosition().y, arms.getWidth()/2, arms.getHeight()/2, 
+						arms.getHeight(), arms.getHeight(), 1, 1, rotationArms);
 				
 				if (((EnemySpiderBoss)e).getState() == EnemySpiderBoss.State.LASER) {
 					Array<Rectangle> charges = ((EnemySpiderBoss)e).getLaserChargePositions();
@@ -429,7 +435,8 @@ public class WorldRenderer {
 			} else if (e.getClass() == LaserBeam.class) {
 				TextureRegion region = laserTextures.findRegion("laser");
 				LaserBeam las = (LaserBeam)e;
-				batch.draw(region, las.getOriginPosition().x-las.getMaxWidth()/2, las.getOriginPosition().y, las.getMaxWidth()/2, 0, las.getCurrentWidth(), 
+				float bufferWidth = 0.2f;
+				batch.draw(region, las.getOriginPosition().x-las.getCurrentWidth()/2-bufferWidth, las.getOriginPosition().y, las.getCurrentWidth()/2+2*bufferWidth, 0, las.getCurrentWidth()+2*bufferWidth, 
 						LaserBeam.DEFAULT_LENGTH, 1f,1f, e.getRotation()-90f);
 			} else if (e.getClass() == Walker.class){
 				//draw the parts in order
@@ -692,7 +699,8 @@ public class WorldRenderer {
 		AssetManager manager = new AssetManager();
 		TextureParameter linearFilteringParam = new TextureParameter();
 		linearFilteringParam.minFilter = TextureFilter.Linear;
-		manager.load("data/enemysprite1-small.png", Texture.class, linearFilteringParam);
+		//manager.load("data/enemysprite1-small.png", Texture.class, linearFilteringParam);
+		manager.load("data/stephen.txt", TextureAtlas.class);
 		manager.load("data/bg2.png", Texture.class, linearFilteringParam);
 		manager.load("data/ship.png", Texture.class, linearFilteringParam);
 		manager.load("data/cyra.png", Texture.class, linearFilteringParam);
@@ -712,9 +720,22 @@ public class WorldRenderer {
 		manager.load("data/level packfile", TextureAtlas.class);
 		manager.finishLoading();
 		
-		example = manager.get("data/enemysprite1-small.png", Texture.class);
-		example.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		rotationArms = 0f;
+		boss1Atlas = manager.get("data/stephen.txt", TextureAtlas.class);
+		Array<AtlasRegion> exRegions = boss1Atlas.findRegions("a");
+		for (int i=0; i< exRegions.size; i++) {
+			exRegions.get(i).getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			//exRegions.get(i).flip(true, false);
+					
+		}
+		boss1body = boss1Atlas.findRegion("steaphenbody");
+		boss1body.flip(true, false);
+		boss1arms = boss1Atlas.findRegion("stephenarms");
+		boss1arms.flip(true, false);
+		boss1head0 = boss1Atlas.findRegion("steaphenhead0");
+		boss1head0.flip(true, false);
+		boss1head1 = boss1Atlas.findRegion("steaphenhead1");
+		boss1head1.flip(true, false);
+		
 		
 		bg = manager.get("data/bg2.png", Texture.class);
 		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -754,6 +775,8 @@ public class WorldRenderer {
 		
 		TextureAtlas cyraRightAtlas = manager.get("data/cyraRightMovement.txt", TextureAtlas.class);
 		TextureAtlas cyraLeftAtlas = manager.get("data/cyraRightMovement.txt", TextureAtlas.class);
+		
+		
 		
 		TextureAtlas atlas = manager.get("data/follower.txt", TextureAtlas.class);
 		/*TextureRegion[] followerFrames = new TextureRegion[3];

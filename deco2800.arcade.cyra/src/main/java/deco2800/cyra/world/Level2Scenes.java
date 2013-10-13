@@ -28,6 +28,7 @@ public class Level2Scenes extends LevelScenes {
 	public static final float SOLDIER_BOSS_START = 235f;
 	//public static final float SOLDIER_BOSS_START = 600f;
 	
+	
 	//private ParallaxCamera cam;
 	private TweenManager manager;
 	BlockMakerSpiderBoss blockMaker;
@@ -45,10 +46,13 @@ public class Level2Scenes extends LevelScenes {
 	
 	
 	
+	
+	
 	public Level2Scenes(Player ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
 		super(ship, cam, resultsScreen);
 		doneSomethingOnce = false;
 		blockMaker = new BlockMakerSpiderBoss();
+		
 	}
 
 	@Override

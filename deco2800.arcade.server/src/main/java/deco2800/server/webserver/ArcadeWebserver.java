@@ -3,7 +3,9 @@
  */
 package deco2800.server.webserver;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -15,6 +17,7 @@ import java.nio.charset.Charset;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
+import org.simpleframework.http.Status;
 import org.simpleframework.http.core.Container;
 import org.simpleframework.http.core.ContainerServer;
 import org.simpleframework.transport.Server;
@@ -75,7 +78,9 @@ public class ArcadeWebserver implements Container {
 				
 				String tableString = "";
 				for ( int i = 0; i < replays.size(); i += 5 ) {
-					tableString += String.format( "<tr><td>%s</td><td>%s</td></tr>", replays.get( i + 2 ), replays.get( i + 3 ) );
+					Date replayDate = new Date( Long.parseLong( replays.get( i + 3 ) ) );
+					String replayDateString = DateFormat.getDateTimeInstance().format( replayDate );
+					tableString += String.format( "<tr><td>%s</td><td>%s</td></tr>", replays.get( i + 2 ), replayDateString );
 				}
 				
 				contentString = contentString.replace( "#{{tablebody}}", tableString );
@@ -110,7 +115,13 @@ public class ArcadeWebserver implements Container {
 				body.println( readFile( "webserver/style" + request.getPath(), Charset.forName("UTF-8" ) ) );
 				body.close();
 				System.out.println( "Served css" );
-			} 
+			} else {
+				response.setStatus( Status.BAD_REQUEST );
+
+				PrintStream body = response.getPrintStream();
+				body.println( "404 Not Found" );
+				body.close();
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -128,15 +139,4 @@ public class ArcadeWebserver implements Container {
 			
 		}
 	}
-	
-	/*
-	public static void main(String[] list) throws Exception {
-		Container container = new ReplaySystemWebserver();
-		Server server = new ContainerServer(container);
-		Connection connection = new SocketConnection(server);
-		SocketAddress address = new InetSocketAddress(8080);
-
-		connection.connect(address);
-	}
-	*/
 }

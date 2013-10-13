@@ -235,7 +235,7 @@ public class Pictures {
 		sportsMap2.put("CHESS" , chess1);
 		sportsMap2.put("SILAT" , silat1);
 		sportsMap2.put("RUGBY" , rugby1);
-		sportsMap2.put("Rodeo" , rodeo1);
+		sportsMap2.put("RODEO" , rodeo1);
 //		System.out.println(sportsMap2.keySet());
 		
 		//Sports textures level 3
@@ -316,5 +316,12 @@ public class Pictures {
 	
 	public HashMap<String, HashMap<String, Texture>> getLevel1(){
 		return level1Cat;
+	}
+	
+	public HashMap<String, HashMap<String, Texture>> getLevel2(){
+		return level2Cat;
+	}
+	public HashMap<String, HashMap<String, Texture>> getLevel3(){
+		return level3Cat;
 	}
 }

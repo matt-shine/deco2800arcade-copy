@@ -1,5 +1,6 @@
 package deco2800.arcade.burningskies.screen;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 
@@ -66,6 +67,22 @@ public class PlayerInputProcessor extends InputAdapter {
 		case Keys.SPACE:
 			player.setShooting(false);
 			break;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			player.setShooting(true);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			player.setShooting(false);
 		}
 		return false;
 	}

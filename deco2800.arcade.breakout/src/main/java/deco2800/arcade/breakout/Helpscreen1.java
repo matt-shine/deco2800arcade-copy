@@ -24,7 +24,7 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class Helpscreen1 implements Screen  {
+public class HelpScreen1 implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -41,7 +41,7 @@ public class Helpscreen1 implements Screen  {
 	   ImageButton backbutton;
 	  
 	  
-	Helpscreen1(final Breakout game) {
+	HelpScreen1(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();

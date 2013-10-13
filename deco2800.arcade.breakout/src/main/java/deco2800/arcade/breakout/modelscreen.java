@@ -24,7 +24,7 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class Modelscreen implements Screen  {
+public class ModelScreen implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -49,7 +49,7 @@ public class Modelscreen implements Screen  {
 	   
 	  
 	  
-	Modelscreen(final Breakout game) {
+	ModelScreen(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();

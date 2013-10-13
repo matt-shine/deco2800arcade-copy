@@ -23,7 +23,7 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class Levelscreen2 implements Screen  {
+public class LevelScreen2 implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -67,7 +67,7 @@ public class Levelscreen2 implements Screen  {
 	   
 	  
 	  
-	Levelscreen2(final Breakout game) {
+	LevelScreen2(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();

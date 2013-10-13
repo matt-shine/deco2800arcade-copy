@@ -3,12 +3,16 @@ package deco2800.arcade.packman;
 import java.io.File;
 import java.lang.System;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import deco2800.arcade.packman.PackageUtils;
 
 /**
  * Client for package manager
  */
 public class PackageClient {
+	final static Logger logger = LoggerFactory.getLogger(PackageClient.class);
 	
 	private static final String gameFolder = ".." + File.separator + "games";
 	
@@ -20,11 +24,11 @@ public class PackageClient {
 	public PackageClient() {
 		
 		// Create the games folder
-		System.out.println("Creating directory: " + gameFolder);
+		logger.debug("Creating directory: {}", gameFolder);
 		if (PackageUtils.createDirectory(gameFolder)) {
-			System.out.println("Created: " + gameFolder);
+			logger.debug("Created: {}", gameFolder);
 		} else {
-			System.out.println("Failed creating: " + gameFolder);
+			logger.debug("Failed creating: {}", gameFolder);
 		}
 	}
 	

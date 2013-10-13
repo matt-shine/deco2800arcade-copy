@@ -5,6 +5,7 @@ import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
 import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -22,6 +23,9 @@ public class PlayerShip extends Ship {
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
 	private boolean shooting = false;
+	
+	//mouse pointer
+	private Vector2 mousePos = new Vector2();
 
 	/**
 	 * Construct a playable ship for the user(s).
@@ -89,7 +93,10 @@ public class PlayerShip extends Ship {
     	if (position.y < 0) position.y = 0;
 		setX(position.x);
 		setY(position.y);
-		this.setZIndex(getStage().getActors().size); // this is silly, but no better way
+		mousePos.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()); // reversed y
+		mousePos.sub(getCenterX(), getCenterY()); // gotta have it centered
+		setRotation(mousePos.angle()-90);
+		setZIndex(getStage().getActors().size); // this is silly, but no better way
 		shoot(delta);
 		
 	}

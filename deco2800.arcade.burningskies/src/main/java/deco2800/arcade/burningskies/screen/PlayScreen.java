@@ -7,13 +7,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.burningskies.entities.Enemy;
 import deco2800.arcade.burningskies.entities.Entity;
-import deco2800.arcade.burningskies.entities.GameMap;
+import deco2800.arcade.burningskies.entities.Level;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
 import deco2800.arcade.burningskies.entities.DemoPowerUp;
@@ -28,13 +30,14 @@ public class PlayScreen implements Screen
 	
 	private OrthographicCamera camera;
 	private Stage stage;
+	private ShapeRenderer debugRender;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
 	
 	private PlayerShip player;
-	public GameMap map;
+	public Level level;
 	
 	private SpawnList sp;
 	
@@ -54,13 +57,16 @@ public class PlayScreen implements Screen
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
     	
+    	debugRender = new ShapeRenderer();
+    	debugRender.setProjectionMatrix(camera.combined);
+    	
         game.playSong("level1");
     	
     	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
-    	map = new GameMap("fixme");
+    	level = new Level("fixme");
 
-    	stage.addActor(map);
+    	stage.addActor(level);
     	stage.addActor(player);
     	
     	processor = new PlayerInputProcessor(player);
@@ -92,8 +98,6 @@ public class PlayScreen implements Screen
     	if(!game.isPaused()) {
 
     		sp.checkList(delta);
-    		
-    		//System.out.println("Num of enemies: " + enemies.size() );
     		
     		stage.act(delta);
     		for(int i=0; i<bullets.size(); i++) {
@@ -159,6 +163,10 @@ public class PlayScreen implements Screen
     	
     	// Draws the map
     	stage.draw();
+    	debugRender.begin(ShapeType.Circle);
+    	debugRender.circle(player.getCenterX(), player.getCenterY(), 5);
+    	debugRender.circle(player.getRotatedX(), player.getRotatedY(), 5);
+    	debugRender.end();
     }
     
     private boolean outOfBounds(Entity e) {

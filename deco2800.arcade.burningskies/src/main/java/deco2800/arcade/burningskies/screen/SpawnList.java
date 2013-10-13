@@ -37,7 +37,7 @@ public class SpawnList {
 	 * level for enemy spawn sequence
 	 */
 	private void makeList1() {
-		list.add((float) -100); // when to spawn on map
+		list.add((float) 2); // when to spawn on map
 		list.add((float) 1); // interval
 		list.add((int) 10); // number of times
 		Vector2[] test = new Vector2[2];
@@ -53,7 +53,7 @@ public class SpawnList {
 	 */
 	public void checkList(float delta) {
 		// TODO make an auto queue for the enemies
-		if(screen.map.getY() < (Float) list.get(0) && mapCounter != 0)  {
+		if(screen.level.getTimer() > (Float) list.get(0) && mapCounter != 0)  {
 			interval = (Float) list.get(1);
 			counter = (Integer) list.get(2);
 			mapCounter = 0;

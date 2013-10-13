@@ -3,7 +3,6 @@ package deco2800.arcade.userui.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import AddFriend.AddFriendListener;
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.EditScreen;
 import deco2800.arcade.userui.view.UserScreen;

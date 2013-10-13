@@ -31,7 +31,7 @@ import javax.swing.border.EmptyBorder;
 
 import deco2800.arcade.userui.Model;
 
-public class EditScreen extends JFrame implements ActionListener {
+public class EditScreen extends JFrame{
 
 	// Declare JPanels and ImagePanels for later use
 	private JPanel parentContainer;
@@ -91,9 +91,10 @@ public class EditScreen extends JFrame implements ActionListener {
 
 		// Set the view window constraints
 		setSize(400,300);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		setVisible(true);
 		setResizable(false);
+		setAlwaysOnTop(true);
 
 	}
 
@@ -249,7 +250,7 @@ public class EditScreen extends JFrame implements ActionListener {
 	
 	}
 	
-	public void UploadListener(ActionListener listenForCancelButton){
+	public void UploadListener(ActionListener listenForUploadButton){
 		browsebutton.addActionListener(listenForUploadButton);
 	
 	}

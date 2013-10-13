@@ -195,9 +195,9 @@ public class Brick {
 		if (level == 10) {
 			renderLevelTen(b, index);
 		}
-		if (level == 11) {
-			renderLevelEleven(b);
-		}
+//		if (level == 11) {
+//			renderLevelEleven(b);
+//		}
 	}
 	
 	public void renderLevelEleven(SpriteBatch b) {

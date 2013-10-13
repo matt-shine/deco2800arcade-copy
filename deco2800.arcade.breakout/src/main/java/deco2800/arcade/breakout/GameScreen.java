@@ -685,7 +685,7 @@ public class GameScreen implements Screen  {
 	public void setHighScore(int score){
 		if (score > 0){
 			this.highScore = score;
-			game.highscoreUser.storeScore("Score", score);
+			game.highscoreUser.storeScore("Number", score);
 		} else {
 			this.highScore = 0;
 		}

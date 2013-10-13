@@ -101,14 +101,14 @@ lemongrab
   orig: 320, 320
   offset: 0, 0
   index: -1
-penguin
+dog
   rotate: false
   xy: 1289, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-snowman
+guard
   rotate: false
   xy: 1, 1
   size: 320, 320

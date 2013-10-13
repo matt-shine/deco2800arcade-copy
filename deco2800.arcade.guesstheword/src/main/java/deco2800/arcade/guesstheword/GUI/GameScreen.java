@@ -12,16 +12,19 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.guesstheword.gameplay.KeyValues;
@@ -44,18 +47,25 @@ public class GameScreen implements Screen {
 	private TextButton button1, button2, button3, button4, button5, 
 	button6	, button7, button8, button9, button10 , backButton, playButton;
 	
+	
 	private TextField textfield1, textfield2, textfield3, 
 					  textfield4, textfield5, textfield6;  
 	
 	private Label scoreLabel, levelLabel , timeLabel;
+	private LabelStyle labelStyle;
+	
+	private final BitmapFont font;
 	
 	private ArrayList<TextButton> buttonList;
+	private ArrayList<Integer> lettersKeyed;
     private String[] breakword;
     
     private int score = 0;
 	Texture texture;
 	
 	String level;
+	
+	
 	
 	GameScreen(final GuessTheWord game){
 		this.game = game;
@@ -65,6 +75,9 @@ public class GameScreen implements Screen {
 		
 		//Creating Instances of the wordshuffler class 
 		word =  new WordShuffler();
+		lettersKeyed = new ArrayList<Integer>();
+		
+		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
 	}
 
 	/**
@@ -98,7 +111,13 @@ public class GameScreen implements Screen {
 		Table rootTable =  new Table();
 		rootTable.setFillParent(true);
 		
-		levelLabel = new Label(level , skin);
+
+		font.setColor(Color.WHITE);
+		
+		labelStyle = new LabelStyle();
+		labelStyle.font = font;
+		
+		levelLabel = new Label(level , labelStyle);
 		backButton =  new TextButton("Back", skin);
 		
 		backButton.addListener(new ChangeListener(){
@@ -124,187 +143,57 @@ public class GameScreen implements Screen {
 	private void checkKeyboardInputs(){
 		// Checking of A-Z inputs. 
 		if(Gdx.input.isKeyPressed(Input.Keys.A)){
-			getInputText("A"); 
-			for(TextButton btn : buttonList){	
-				if("A".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.A , "A");			
 		}else if(Gdx.input.isKeyPressed(Input.Keys.B)){
-			getInputText("B"); 
-			for(TextButton btn : buttonList){	
-				if("B".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.B , "B");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.C)){
-			getInputText("C"); System.out.println("C");
-			for(TextButton btn : buttonList){	
-				if("C".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.C , "C");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-			getInputText("D"); System.out.println("D");
-			for(TextButton btn : buttonList){	
-				if("D".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.D , "D");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.E)){
-			getInputText("E");
-			for(TextButton btn : buttonList){	
-				if("E".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.E , "E");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.F)){
-			getInputText("F");
-			for(TextButton btn : buttonList){	
-				if("F".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.F , "F");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.G)){
-			getInputText("G"); 
-			for(TextButton btn : buttonList){	
-				if("G".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.G , "G");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.H)){
-			getInputText("H");
-			for(TextButton btn : buttonList){	
-				if("H".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.H , "H");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.I)){
-			getInputText("I");
-			for(TextButton btn : buttonList){	
-				if("I".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.I , "I");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.J)){
-			getInputText("J");
-			for(TextButton btn : buttonList){	
-				if("J".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.J , "J");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.K)){
-			getInputText("K");
-			for(TextButton btn : buttonList){	
-				if("K".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.K , "K");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.L)){
-			getInputText("L");
-			for(TextButton btn : buttonList){	
-				if("L".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.L , "L");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.M)){
-			getInputText("M");
-			for(TextButton btn : buttonList){	
-				if("M".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.M , "M");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.N)){
-			getInputText("N");
-			for(TextButton btn : buttonList){	
-				if("N".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.N , "N");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.O)){
-			getInputText("O");
-			for(TextButton btn : buttonList){	
-				if("O".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.O , "O");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.P)){
-			getInputText("P");
-			for(TextButton btn : buttonList){	
-				if("P".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.P , "P");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
-			getInputText("Q");
-			for(TextButton btn : buttonList){	
-				if("Q".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.Q , "Q");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.R)){
-			getInputText("R");
-			for(TextButton btn : buttonList){	
-				if("R".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.R , "R");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.S)){
-			getInputText("S");
-			for(TextButton btn : buttonList){	
-				if("S".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.S , "S");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.T)){
-			getInputText("T");
-			for(TextButton btn : buttonList){	
-				if("T".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.T , "T");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.U)){
-			getInputText("U");
-			for(TextButton btn : buttonList){	
-				if("U".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.U , "U");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.V)){
-			getInputText("V");
-			for(TextButton btn : buttonList){	
-				if("V".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.V , "V");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.W)){
-			getInputText("W");
-			for(TextButton btn : buttonList){	
-				if("W".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.W , "W");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.X)){
-			getInputText("X");
-			for(TextButton btn : buttonList){	
-				if("X".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.X , "X");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.Y)){
-			getInputText("Y");
-			for(TextButton btn : buttonList){	
-				if("Y".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.Y , "Y");
 		}else if(Gdx.input.isKeyPressed(Input.Keys.Z)){
-			getInputText("Z");
-			for(TextButton btn : buttonList){	
-				if("Z".equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
+			CheckLetter(Input.Keys.Z , "Z");
 		}
 		
 		// BACKSPACE - to clear all the textfields.
@@ -347,6 +236,22 @@ public class GameScreen implements Screen {
 		
 		
 	} 
+	
+	private void CheckLetter(int key, String letter){
+		if(lettersKeyed.contains(key)){
+			lettersKeyed.clear();
+			getInputText(letter);
+			for(TextButton btn : buttonList){	
+				if(letter.equalsIgnoreCase(btn.getText().toString())){
+					btn.setText("");
+				}
+			}
+			
+		}else{
+			lettersKeyed.add(key);
+		}
+	}
+	
 	//  PROVIDE HINTS
 	private void getHints(){
 		// For each hint, 5 points will be deducted
@@ -542,15 +447,12 @@ public class GameScreen implements Screen {
 	}// end of checkTextfield
 	
 	private void checkButtons(){
-//		if(filled == true){
-			String category =  game.getterSetter.getCategoryItem();
-			breakword = word.breakWord(category);
+		String category =  game.getterSetter.getCategoryItem();
+		breakword = word.breakWord(category);
 			
-			for(int i = 0; i < buttonList.size(); i++){
-				//System.out.print(breakword[i]+ " ");
-				buttonList.get(i).setText(breakword[i]);
-			}
-			
+		for(int i = 0; i < buttonList.size(); i++){
+			buttonList.get(i).setText(breakword[i]);
+		}
 	}
 	
 	private void buttonListeners(){
@@ -664,10 +566,9 @@ public class GameScreen implements Screen {
 			this.add(F2Label).size(100, 50).padBottom(30).row();
 		}
 	}
+	
 	// Category Window
 	private Window getWindow(){
-		
-		
 		Object[] categories =  game.picture.getLevel1().keySet().toArray();
 //		String[] categories =  {"FOOD" , "SPORTS" , "BRANDS" , "COUNTRIES"};
 		final List categoryList =  new List(categories , skin);
@@ -688,7 +589,7 @@ public class GameScreen implements Screen {
 				game.getterSetter.setTexture(texture);
 				game.getterSetter.setCategoryItem(word);
 				
-				new PicturePanel();
+//				new PicturePanel();
 				checkButtons();
 				getWindow().setVisible(false);
 			}});
@@ -718,15 +619,12 @@ public class GameScreen implements Screen {
 	public void show() { 
 		setLevel();
 		createGameScreen();
-	//	checkKeyboardInputs();	
 		checkButtons();
-
 		Gdx.input.setInputProcessor(stage);
 	}
 	
 	@Override
 	public void dispose() {
-		
 		texture.dispose();
 		batch.dispose();
 		skin.dispose();

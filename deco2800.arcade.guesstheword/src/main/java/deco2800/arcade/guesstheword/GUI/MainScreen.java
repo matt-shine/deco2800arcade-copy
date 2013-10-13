@@ -2,14 +2,18 @@ package deco2800.arcade.guesstheword.GUI;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainScreen implements Screen {
@@ -22,6 +26,8 @@ public class MainScreen implements Screen {
 	private final TextButton settingsButton;
 	private final TextButton achieveButton;
 	
+
+	
 	// setup the dimensions of the menu buttons
     private static final float BUTTON_WIDTH = 300f;
     private static final float BUTTON_HEIGHT = 60f;
@@ -30,8 +36,11 @@ public class MainScreen implements Screen {
 		this.game = game;
 		this.skin = game.skin;
 		this.stage = new Stage();
+		
 
+		
 		titleLabel = new Label("Welcome to Guess The Word!" , skin);
+		
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {

@@ -1,7 +1,6 @@
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
@@ -84,20 +83,17 @@ class ClientScreen extends GameScreen {
 
 		for (int j = 0; j < boardSize; j++) {
 			for (int i = 0; i < boardSize; i++) {
-				tile = new TileViewModel(i, j,
-						tileSize, renderer);
+				tile = new TileViewModel(i, j, tileSize, renderer);
 				tileTable.add(tile).size(tileSize, tileSize);
-				os.register(1700 + j*100 + i, tile);
+				os.register(1700 + j * 100 + i, tile);
 			}
 			if (j < boardSize)
 				tileTable.row();
 		}
-		
-		p1 = new PlayerViewModel(model, tileSize,
-				1, p1Controls, scorebar[0],
+
+		p1 = new PlayerViewModel(model, tileSize, 1, p1Controls, scorebar[0],
 				left);
-		p2 = new PlayerViewModel(model, tileSize,
-				2, p2Controls, scorebar[1],
+		p2 = new PlayerViewModel(model, tileSize, 2, p2Controls, scorebar[1],
 				right);
 		os.register(101, p1);
 		os.register(102, p2);
@@ -122,41 +118,38 @@ class ClientScreen extends GameScreen {
 				int sec = countdown % 60;
 
 				if (countdown == 10) {
-					LabelStyle style = timerLabel
-							.getStyle();
+					LabelStyle style = timerLabel.getStyle();
 					style.fontColor = RED;
 					timerLabel.setStyle(style);
 				}
-				timerLabel.setText(String.format("%s%d:%s%d",
-						(min < 10) ? "0" : "", min,
-						(sec < 10) ? "0" : "", sec));
+				timerLabel.setText(String.format("%s%d:%s%d", (min < 10) ? "0"
+						: "", min, (sec < 10) ? "0" : "", sec));
 				countdown -= 1;
 			}
 		}, 0, 1, timeLimit - 1);
 		Timer.schedule(new Timer.Task() {
 			public void run() {
-//				PlayerModel winner;
+				// PlayerModel winner;
 
 				stage.setKeyboardFocus(null);
 
-//				winner = model.endGame();
-//				if (winner == null) {
-//					/* draw */
-//					resultLabel.setText("Draw");
-//				} else {
-//					/* winner */
-//					resultLabel.setText("Player "
-//							+ winner.getId()
-//							+ " win");
-//				}
-				
+				// winner = model.endGame();
+				// if (winner == null) {
+				// /* draw */
+				// resultLabel.setText("Draw");
+				// } else {
+				// /* winner */
+				// resultLabel.setText("Player "
+				// + winner.getId()
+				// + " win");
+				// }
+
 				endGameTable.setVisible(true);
 			}
 			/*
-			 * FIXME: this does not look like a good solution. It
-			 * takes some time for timerLabel to change text, and
-			 * therefore, without the extra 1, the game will end
-			 * before the timer showing up 00:00.
+			 * FIXME: this does not look like a good solution. It takes some
+			 * time for timerLabel to change text, and therefore, without the
+			 * extra 1, the game will end before the timer showing up 00:00.
 			 */
 		}, timeLimit);
 	}
@@ -168,8 +161,7 @@ class ClientScreen extends GameScreen {
 
 				logger.debug("string received: {}", msg);
 				if ("response: game model".equals(msg)) {
-					model = ObjectSpace.getRemoteObject(c,
-							42,
+					model = ObjectSpace.getRemoteObject(c, 42,
 							IMixMazeModel.class);
 					((RemoteObject) model).setTransmitExceptions(false);
 				} else if ("signal: game started".equals(msg)) {

@@ -21,31 +21,51 @@ public class MixMazeModel implements IMixMazeModel {
 	 * Game difficulty specifies certain rules of the game play.
 	 * <p>
 	 * <table border=1>
-	 * <tr><th>Level<th>Move through walls<th>Move through boxes
-	 * <th>Picks spawn<th>TNTs spawn
-	 * <tr><td>Beginner<td>Yes<td>Yes<td>Frequently<td>Frequently
-	 * <tr><td>Intermediate<td>Yes<td>Yes only through your own
-	 * <td>Frequently<td>Rarely
-	 * <tr><td>Advanced<td>No<td>No<td>Moderately<td>Rarely
+	 * <tr>
+	 * <th>Level</th>
+	 * <th>Move through walls</th>
+	 * <th>Move through boxes</th>
+	 * <th>Picks spawn</th>
+	 * <th>TNTs spawn</th>
+	 * </tr>
+	 * <tr>
+	 * <td>Beginner</td>
+	 * <td>Yes</td>
+	 * <td>Yes</td>
+	 * <td>Frequently</td>
+	 * <td>Frequently</td>
+	 * </tr>
+	 * <tr>
+	 * <td>Intermediate</td>
+	 * <td>Yes</td>
+	 * <td>Yes only through your own</td>
+	 * <td>Frequently</td>
+	 * <td>Rarely</td>
+	 * </tr>
+	 * <tr>
+	 * <td>Advanced</td>
+	 * <td>No</td>
+	 * <td>No</td>
+	 * <td>Moderately</td>
+	 * <td>Rarely</td>
+	 * </tr>
 	 * </table>
 	 */
 	public enum Difficulty {
-		BEGINNER,
-		INTERMEDIATE,
-		ADVANCED
+		BEGINNER, INTERMEDIATE, ADVANCED
 	}
-	
+
 	/**
 	 * Game state
 	 */
 	private enum GameState {
-		
+
 		/** The game has not yet been played */
 		NOT_STARTED,
-		
+
 		/** The game is currently in progress */
 		RUNNING,
-		
+
 		/** The game has been played and ended */
 		END
 	}
@@ -53,55 +73,55 @@ public class MixMazeModel implements IMixMazeModel {
 	/**
 	 * Thrown when attempting to operate a game that is not running.
 	 */
-	private final static IllegalStateException NOT_STARTED = 
-			new IllegalStateException("The game has not started.");
+	private final static IllegalStateException NOT_STARTED = new IllegalStateException(
+			"The game has not started.");
 
 	/**
 	 * Thrown when attempting to start a game that is currently running.
 	 */
-	private final static IllegalStateException STARTED = 
-			new IllegalStateException("The game has already started.");
+	private final static IllegalStateException STARTED = new IllegalStateException(
+			"The game has already started.");
 
 	/**
 	 * Thrown when using coordinates out of the <code>board</code> range.
 	 */
-	private final static IllegalArgumentException COORDS_OUT_OF_RANGE = 
-			new IllegalArgumentException("The specified coordinates(x, y) are out of range.");
+	private final static IllegalArgumentException COORDS_OUT_OF_RANGE = new IllegalArgumentException(
+			"The specified coordinates(x, y) are out of range.");
 
 	/* Game data */
-	
+
 	/** Game state */
 	private GameState state;
-	
+
 	/** Board size */
 	private int boardSize;
-	
+
 	/** Tiles on the game board */
 	private TileModel[][] board;
-	
+
 	/** Items on the game board (one per tile) */
 	private ItemModel[][] items;
 
 	/** Players in this game */
 	private PlayerModel[] player;
-	
+
 	/* Game setting */
-	
+
 	/** Game difficulty */
 	private Difficulty difficulty;
-	
+
 	/** Time limit of this game */
 	private int gameMaxTime;
-	
+
 	/** Start time of this game */
 	private Date gameStartTime;
-	
+
 	/** End time of this game */
 	private Date gameEndTime;
 
 	/** Item spawner */
 	private Random spawner;
-	
+
 	/*
 	 * TODO: doc
 	 */
@@ -109,19 +129,25 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Constructor
-	 *
-	 * @param size		the size of the game board
-	 * @param difficulty	the game difficulty
-	 * @param maxSeconds	the time limit of this game session
+	 * 
+	 * @param size
+	 *            the size of the game board
+	 * @param difficulty
+	 *            the game difficulty
+	 * @param maxSeconds
+	 *            the time limit of this game session
 	 * @throws IllegalArgumentException
-	 * If <code>size</code> is not in range from 5 to 10,
-	 * or <code>maxSeconds</code> is not in range from 30 to 900.
+	 *             If <code>size</code> is not in range from 5 to 10, or
+	 *             <code>maxSeconds</code> is not in range from 30 to 900.
 	 */
 	public MixMazeModel(int size, Difficulty difficulty, int maxSeconds) {
-		if(size < 5 || size > 10)
+		if (size < 5 || size > 10) {
 			throw new IllegalArgumentException("size must be between 5 and 10.");
-		if(maxSeconds < 30 || maxSeconds > 900)
-			throw new IllegalArgumentException("maxSeconds must be between 30 and 900.");
+		}
+		if (maxSeconds < 30 || maxSeconds > 900) {
+			throw new IllegalArgumentException(
+					"maxSeconds must be between 30 and 900.");
+		}
 
 		// Initialize default fields
 		spawner = new Random();
@@ -130,7 +156,7 @@ public class MixMazeModel implements IMixMazeModel {
 		this.boardSize = size;
 		this.difficulty = difficulty;
 		this.gameMaxTime = maxSeconds;
-		
+
 		initBoard();
 		initPlayers();
 	}
@@ -168,8 +194,9 @@ public class MixMazeModel implements IMixMazeModel {
 				int[] tileX = new int[] { (x - 1), x, (x + 1), x };
 				int[] tileY = new int[] { y, (y - 1), y, (y + 1) };
 				for (int tileDir = 0; tileDir < 4; ++tileDir) {
-					if(checkCoordinates(tileX[tileDir], tileY[tileDir])) {
-						adjTiles[tileDir] = getBoardTile(tileX[tileDir], tileY[tileDir]);
+					if (checkCoordinates(tileX[tileDir], tileY[tileDir])) {
+						adjTiles[tileDir] = getBoardTile(tileX[tileDir],
+								tileY[tileDir]);
 					}
 				}
 				board[y][x] = new TileModel(x, y, adjTiles);
@@ -186,20 +213,20 @@ public class MixMazeModel implements IMixMazeModel {
 	public int getGameMaxTime() {
 		return gameMaxTime;
 	}
-	
+
 	@Override
 	public TileModel getBoardTile(int x, int y) {
-		if (!checkCoordinates(x, y))
+		if (!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
-
+		}
 		return board[y][x];
 	}
-	
+
 	@Override
 	public PlayerModel getPlayer(int id) {
 		return player[id - 1];
 	}
-	
+
 	@Override
 	public void switchPlayerAction(int id) {
 		player[id - 1].switchAction();
@@ -211,13 +238,14 @@ public class MixMazeModel implements IMixMazeModel {
 
 		p.useAction(board[p.getY()][p.getX()]);
 	}
-	
+
 	@Override
 	public void movePlayer(int id, int direction) {
-		if (state != GameState.RUNNING)
+		if (state != GameState.RUNNING) {
 			throw NOT_STARTED;
-		else if (!isDirection(direction))
+		} else if (!isDirection(direction)) {
 			throw NOT_A_DIRECTION;
+		}
 
 		PlayerModel p = player[id - 1];
 		int nextX = p.getNextX();
@@ -225,50 +253,52 @@ public class MixMazeModel implements IMixMazeModel {
 
 		if (p.getDirection() != direction) {
 			p.setDirection(direction);
-		} else if (canMove(p, nextX, nextY,
-				getPolarDirection(direction))) {
+		} else if (canMove(p, nextX, nextY, getPolarDirection(direction))) {
 			p.move();
 			onPlayerMove(p, nextX, nextY);
 		}
 	}
-	
+
 	@Override
 	public void startGame() {
-		if (state != GameState.NOT_STARTED)
+		if (state != GameState.NOT_STARTED) {
 			throw STARTED;
-
+		}
 		state = GameState.RUNNING;
 		gameStartTime = Calendar.getInstance().getTime();
 	}
-	
+
 	@Override
 	public PlayerModel endGame() {
-		if (state != GameState.RUNNING)
+		if (state != GameState.RUNNING) {
 			throw NOT_STARTED;
-
+		}
 		state = GameState.END;
 		gameEndTime = Calendar.getInstance().getTime();
 		int player1Score = getPlayerScore(player[0]);
 		int player2Score = getPlayerScore(player[1]);
-		Achievements.getInstance().incrementAchievement(Achievements.Achievement.Playa);
-		
-		if(player1Score != player2Score) {
+		Achievements.getInstance().incrementAchievement(
+				Achievements.Achievement.Playa);
+
+		if (player1Score != player2Score) {
 			return (player1Score > player2Score) ? player[0] : player[1];
 		} else {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void spawnItems() {
 		double spawnWait = (10 * 1000) / getMaxItemCount();
-		if(getItemCount() < getMaxItemCount() && (System.currentTimeMillis() - lastSpawned) >= spawnWait) {
-			for(int i = getItemCount(); i < getMaxItemCount(); ++i) {
+		if (getItemCount() < getMaxItemCount()
+				&& (System.currentTimeMillis() - lastSpawned) >= spawnWait) {
+			for (int i = getItemCount(); i < getMaxItemCount(); ++i) {
 				ItemModel toSpawn = getRandomItem();
-				if(toSpawn != null) {
+				if (toSpawn != null) {
 					int x = spawner.nextInt(boardSize);
 					int y = spawner.nextInt(boardSize);
-					while(getSpawnedItem(x, y) != null || getBoardTile(x, y).isBoxBuilt()) {
+					while (getSpawnedItem(x, y) != null
+							|| getBoardTile(x, y).isBoxBuilt()) {
 						x = spawner.nextInt(boardSize);
 						y = spawner.nextInt(boardSize);
 					}
@@ -278,7 +308,7 @@ public class MixMazeModel implements IMixMazeModel {
 			lastSpawned = System.currentTimeMillis();
 		}
 	}
-	
+
 	/**
 	 * Specifies if the game is running.
 	 * 
@@ -325,18 +355,18 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Gets the current number of built boxes for the
-	 * specified player.
+	 * Gets the current number of built boxes for the specified player.
 	 * 
-	 * @param player	the specified player
+	 * @param player
+	 *            the specified player
 	 * @return number of boxes built by specified player
 	 */
 	int getPlayerScore(PlayerModel player) {
 		int boxes = 0;
-		for(int row = 0; row < boardSize; ++row) {
-			for(int column = 0; column < boardSize; ++column) {
+		for (int row = 0; row < boardSize; ++row) {
+			for (int column = 0; column < boardSize; ++column) {
 				TileModel tile = getBoardTile(column, row);
-				if(tile.isBoxBuilt() && tile.getBoxer() == player) {
+				if (tile.isBoxBuilt() && tile.getBoxer() == player) {
 					boxes++;
 				}
 			}
@@ -345,13 +375,14 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Checks the specified (x, y) position and
-	 * determines if it is in range.
+	 * Checks the specified (x, y) position and determines if it is in range.
 	 * 
-	 * @param x	the column number
-	 * @param y	the row number
+	 * @param x
+	 *            the column number
+	 * @param y
+	 *            the row number
 	 * @return <code>true</code> if specified (x, y) is valid,
-	 * <code>false</code> otherwise
+	 *         <code>false</code> otherwise
 	 */
 	private boolean checkCoordinates(int x, int y) {
 		return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
@@ -359,11 +390,13 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Checks if any player is at the specified position.
-	 *
-	 * @param x	the column number
-	 * @param y	the row number
+	 * 
+	 * @param x
+	 *            the column number
+	 * @param y
+	 *            the row number
 	 * @return <code>true</code> if player is present at specified (x, y),
-	 * <code>false</code> otherwise
+	 *         <code>false</code> otherwise
 	 */
 	private boolean hasPlayerAtPosition(int x, int y) {
 		return (player[0].getX() == x && player[0].getY() == y)
@@ -371,17 +404,16 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Gets the current maximum number of items that
-	 * can spawn at the same time.
-	 *
-	 * @return maximum number of items that can spawn at
-	 * the same time
+	 * Gets the current maximum number of items that can spawn at the same time.
+	 * 
+	 * @return maximum number of items that can spawn at the same time
 	 */
 	private int getMaxItemCount() {
-		if (difficulty == Difficulty.BEGINNER)
+		if (difficulty == Difficulty.BEGINNER) {
 			return 5;
-		else if (difficulty == Difficulty.INTERMEDIATE)
+		} else if (difficulty == Difficulty.INTERMEDIATE) {
 			return 3;
+		}
 		return 2; // Advanced
 	}
 
@@ -392,9 +424,9 @@ public class MixMazeModel implements IMixMazeModel {
 	 */
 	private int getItemCount() {
 		int count = 0;
-		for(int row = 0; row < boardSize; ++row) {
-			for(int column = 0; column < boardSize; ++column) {
-				if(items[row][column] != null) {
+		for (int row = 0; row < boardSize; ++row) {
+			for (int column = 0; column < boardSize; ++column) {
+				if (items[row][column] != null) {
 					count++;
 				}
 			}
@@ -403,28 +435,26 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Gets a random item depending on the current
-	 * game difficulty.
+	 * Gets a random item depending on the current game difficulty.
 	 * 
-	 * @return <code>BrickModel</code>, <code>PickModel</code>
-	 * or <code>TNTModel</code>
+	 * @return <code>BrickModel</code>, <code>PickModel</code> or
+	 *         <code>TNTModel</code>
 	 */
-	private ItemModel getRandomItem()
-	{
+	private ItemModel getRandomItem() {
 		double spawnFactor = spawner.nextDouble();
 		double brickFactor = 0.8;
 		double pickFactor = 0.95;
-		if(difficulty == Difficulty.INTERMEDIATE) {
+		if (difficulty == Difficulty.INTERMEDIATE) {
 			brickFactor = 0.8;
 			pickFactor = 0.97;
-		} else if(difficulty == Difficulty.ADVANCED) {
+		} else if (difficulty == Difficulty.ADVANCED) {
 			brickFactor = 0.9;
 			pickFactor = 0.99;
 		}
 
-		if(spawnFactor <= brickFactor) {
+		if (spawnFactor <= brickFactor) {
 			return new BrickModel((spawner.nextInt(4) + 1));
-		} else if(spawnFactor <= pickFactor) {
+		} else if (spawnFactor <= pickFactor) {
 			return new PickModel();
 		} else {
 			return new TNTModel();
@@ -438,52 +468,62 @@ public class MixMazeModel implements IMixMazeModel {
 
 	/**
 	 * Gets the item at the specified (x, y) position
-	 * @param x X position on the game board
-	 * @param y Y position on the game board
-	 * @return the item at the specified
-	 * position or <code>null</code> if it does not exist
-	 * @throws IllegalArgumentException if the specified
-	 * (x, y) position is out of range
+	 * 
+	 * @param x
+	 *            X position on the game board
+	 * @param y
+	 *            Y position on the game board
+	 * @return the item at the specified position or <code>null</code> if it
+	 *         does not exist
+	 * @throws IllegalArgumentException
+	 *             if the specified (x, y) position is out of range
 	 */
 	ItemModel getSpawnedItem(int x, int y) {
-		if (!checkCoordinates(x, y))
+		if (!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
-
+		}
 		return items[y][x];
 	}
 
 	/**
 	 * Set the item at the specified (x, y) position
-	 *
-	 * @param item The specified item, can be <code>null</code>
-	 * @param x X position on the game board
-	 * @param y Y position on the game board
+	 * 
+	 * @param item
+	 *            The specified item, can be <code>null</code>
+	 * @param x
+	 *            X position on the game board
+	 * @param y
+	 *            Y position on the game board
 	 */
 	private void setSpawnedItem(ItemModel item, int x, int y) {
-		if (!checkCoordinates(x, y))
+		if (!checkCoordinates(x, y)) {
 			throw COORDS_OUT_OF_RANGE;
-
+		}
 		items[y][x] = item;
-		if (item == null)
+		if (item == null) {
 			board[y][x].updateType(ItemModel.Type.NONE);
-		else
+		} else {
 			board[y][x].updateType(item.getType());
+		}
 	}
 
 	/**
-	 * Checks if the player <code>p</code> can move to the specified
-	 * tile from direction <code>dir</code>.
-	 *
-	 * @param p	the player
-	 * @param x	the column number
-	 * @param y	the row number
-	 * @param dir	the tile direction from which the player tries to enter
-	 * @return <code>true</code> if the player can move to the specified
-	 * tile, <code>false</code> otherwise.
+	 * Checks if the player <code>p</code> can move to the specified tile from
+	 * direction <code>dir</code>.
+	 * 
+	 * @param p
+	 *            the player
+	 * @param x
+	 *            the column number
+	 * @param y
+	 *            the row number
+	 * @param dir
+	 *            the tile direction from which the player tries to enter
+	 * @return <code>true</code> if the player can move to the specified tile,
+	 *         <code>false</code> otherwise.
 	 */
 	private boolean canMove(PlayerModel p, int x, int y, int dir) {
-		boolean res = checkCoordinates(x, y)
-				&& !hasPlayerAtPosition(x, y);
+		boolean res = checkCoordinates(x, y) && !hasPlayerAtPosition(x, y);
 
 		/* No extra movement restriction on BEGINNER */
 
@@ -501,17 +541,20 @@ public class MixMazeModel implements IMixMazeModel {
 	}
 
 	/**
-	 * Performs operations after a player moves onto a new tile.
-	 * Currently this method only picks up the item if available.
-	 * The movement to the specified tile must be validated beforehand.
-	 *
-	 * @param x	the column number
-	 * @param y	the row number
+	 * Performs operations after a player moves onto a new tile. Currently this
+	 * method only picks up the item if available. The movement to the specified
+	 * tile must be validated beforehand.
+	 * 
+	 * @param x
+	 *            the column number
+	 * @param y
+	 *            the row number
 	 */
 	private void onPlayerMove(PlayerModel player, int x, int y) {
 		ItemModel item = (ItemModel) getSpawnedItem(x, y);
 
-		if (item != null && player.pickupItem(item))
+		if (item != null && player.pickupItem(item)) {
 			setSpawnedItem(null, x, y);
+		}
 	}
 }

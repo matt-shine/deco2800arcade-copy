@@ -41,18 +41,15 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		SELECTION_REGION = new TextureRegion(texture, 768, 0, 256, 256);
 		BRICK_REGION = new TextureRegion(texture, 1024, 0, 256, 256);
 		UNKNOWN_REGION = new TextureRegion(texture, 1280, 0, 256, 256);
-		EMPTY_TNT_REGION = new TextureRegion(texture, 1536, 0,
-				256, 256);
-		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0,
-				256, 256);
+		EMPTY_TNT_REGION = new TextureRegion(texture, 1536, 0, 256, 256);
+		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0, 256, 256);
 		WHITE_REGION = new TextureRegion(texture, 2048, 0, 256, 256);
 
 		texture = new Texture(Gdx.files.internal("box.png"));
 		BOX_REGION = new TextureRegion(texture);
 	}
 
-	private final class WallWatcher implements WallModelObserver
-	{
+	private final class WallWatcher implements WallModelObserver {
 		private boolean isBuilt;
 
 		public boolean IsBuilt() {
@@ -75,9 +72,11 @@ public final class TileViewModel extends Group implements TileModelObserver {
 
 	/**
 	 * Constructor
-	 *
-	 * @param renderer	the renderer
-	 * @param tileSize	the graphical size of the tile
+	 * 
+	 * @param renderer
+	 *            the renderer
+	 * @param tileSize
+	 *            the graphical size of the tile
 	 */
 	public TileViewModel(int x, int y, float tileSize, ShapeRenderer renderer) {
 		this.tileSize = tileSize;
@@ -87,7 +86,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		type = NONE;
 
 		wallWatchers = new WallWatcher[4];
-		for(int direction = 0; direction < 4; ++direction) {
+		for (int direction = 0; direction < 4; ++direction) {
 			wallWatchers[direction] = new WallWatcher();
 		}
 	}
@@ -172,8 +171,8 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		renderer.setColor(0f, 0f, 0f, 1f);
 		renderer.filledRect(0, 0, offset, offset);
 		renderer.filledRect(0, tileSize - offset, offset, offset);
-		renderer.filledRect(tileSize - offset, tileSize - offset,
-				offset, offset);
+		renderer.filledRect(tileSize - offset, tileSize - offset, offset,
+				offset);
 		renderer.filledRect(tileSize - offset, 0, offset, offset);
 		renderer.end();
 	}

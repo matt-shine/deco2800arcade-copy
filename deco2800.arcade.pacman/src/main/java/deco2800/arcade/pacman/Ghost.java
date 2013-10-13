@@ -1,44 +1,62 @@
-
 package deco2800.arcade.pacman;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import org.lwjgl.util.Point;
+import static java.lang.Math.*; 
 
-public class PacChar extends Mover{
+import deco2800.arcade.model.Player;
+import deco2800.arcade.pacman.PacChar.PacState;
+
+
+public class Ghost extends Mover {
 	
-	// Describes the current state of pacman- starts IDLE
-	public enum PacState {
-		IDLE, MOVING, DEAD
+	private enum GhostState {
+	CHASE, SCATTER, FRIGHT, DEAD
 	}
-			
-	private PacState currentState;
-	// Static variables for pulling sprites from sprite sheet
-	private static final int FRAME_COLS = 2;
-	private static final int FRAME_ROWS = 4;
 	
-	// the distance pacman moves each frame
-	private float moveDist;
+	public enum GhostName {
+		BLINKY, PINKY, INKY, CLYDE
+	}
+	private GhostName ghost;
+	private GhostState currentState;
+	// Static variables for pulling sprites from sprite sheet
+	private static final int FRAME_COLS = 8;
+	private static final int FRAME_ROWS = 1;
 
+	
+	// the distance ghost moves each frame
+	private PacChar player;
+	private float moveDist;
+	private Tile targetTile;
 	private Animation walkAnimation;
 	private Texture walkSheet;
 	private TextureRegion[] walkFrames;
 	private TextureRegion currentFrame;
 	
-	public PacChar(GameMap gameMap) {
+	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
 		super(gameMap);
-		currentTile = gameMap.getPacStart();
+		this.player = player;
+		this.ghost = ghost;
+		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost start
 		//set up pacman to be drawn in the right place- this is defintely right
 		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
-		//grabs file- should be pacMove2.png, pacTest marks the edges and middle pixel in red
-		walkSheet = new Texture(Gdx.files.internal("pacMove2.png"));
+		
+		String file = "";
+		switch (ghost) {
+		case BLINKY : file = "redghostmove.png"; break;
+		case PINKY : file = "pinkghostmove.png"; break;
+		case INKY : file = "tealghostmove.png"; break;
+		case CLYDE : file = "orangeghostmove.png"; break;
+		}
+		
+		walkSheet = new Texture(Gdx.files.internal(file));
 		// splits into columns and rows then puts them into one array in order
 		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
 		walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
@@ -51,12 +69,13 @@ public class PacChar extends Mover{
 			}
 		}
 		// initialise some variables
-		currentState = PacState.IDLE;
+		currentState = GhostState.CHASE;
 		facing = Dir.LEFT;
 		width = walkFrames[1].getRegionWidth() * 2;
 		height = walkFrames[1].getRegionHeight() * 2;
 		updatePosition();
-		moveDist = 1;
+		moveDist = 0; //made it so he can't move at the moment, because he
+						// currently goes through walls and crashes it.
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
@@ -66,7 +85,7 @@ public class PacChar extends Mover{
 	
 	/**
 	 * Called everytime the main render method happens.
-	 * Draws the Pacman
+	 * Draws the Ghost
 	 */
 	public void render(SpriteBatch batch) {
 		
@@ -81,7 +100,7 @@ public class PacChar extends Mover{
 			facing = Dir.LEFT;
 		}
 		// checks if pacman is moving, and if so keeps him moving in that direction
-		if (currentState == PacState.MOVING) {
+		if (currentState == GhostState.CHASE) {
 			if (facing == Dir.LEFT){
     			drawX -= moveDist;
     		} else if (facing == Dir.RIGHT) {
@@ -91,7 +110,7 @@ public class PacChar extends Mover{
     		} else if (facing == Dir.DOWN){ 
     			drawY -= moveDist;
     		} else {
-    			currentState = PacState.IDLE;
+    			currentState = GhostState.SCATTER;
     			facing = Dir.LEFT;
     		}			
 			updatePosition();			
@@ -100,16 +119,19 @@ public class PacChar extends Mover{
 		batch.draw(walkFrames[spritePos], drawX, drawY, width, height);
 	}
 	 
+	public Dir getFacing() {
+			return facing;
+		}
 	
 	public void setFacing(Dir facing) {
 		this.facing = facing;
 	}
 	
-	public PacState getCurrentState() {
+	public GhostState getCurrentState() {
 		return currentState;
 	}
 
-	public void setCurrentState(PacState currentState) {
+	public void setCurrentState(GhostState currentState) {
 		this.currentState = currentState;
 	}
 
@@ -122,9 +144,40 @@ public class PacChar extends Mover{
 	}
 	
 	public String toString() {
-		return "Pacman at (" + midX + ", " + midY + ") drawn at {" + drawX + 
+		return "Ghost at (" + midX + ", " + midY + ") drawn at {" + drawX + 
 				", " + drawY + "}, " + currentState + " in " + currentTile;
 	}
 		
-}
+	
+	public Tile getTargetTile() {
+		if (ghost == GhostName.BLINKY) {
+			return player.getTile();
+		}
+		else if (ghost == GhostName.PINKY) {
+			return player.nextTile(player.getTile(), 4);
+		}
+		else {
+			return player.getTile();
+		}
+	}
+	
+	public double calcDist(Tile start, Tile target) {
+		Point startPoint = gameMap.getTilePos(start);
+		Point targetPoint = gameMap.getTilePos(target);
+		int startx = startPoint.getX();
+		int starty = startPoint.getY();
+		int targetx = targetPoint.getX();
+		int targety = targetPoint.getY();
+		double dist;
+		int distx = startx - targetx;
+		int disty = starty - targety;
+		dist = sqrt((distx*distx + disty*disty));
+		return dist;
+	}
 
+	public void setTargetTile(Tile targetTile) {
+		this.targetTile = targetTile;
+	}
+	
+
+}

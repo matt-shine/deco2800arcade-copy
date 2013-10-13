@@ -12,14 +12,13 @@ import deco2800.arcade.mixmaze.domain.PlayerModel;
 public class WallModel {
 
 	/**
-	 * The tile of the left side of the wall if
-	 * you were facing from end-to-end.
+	 * The tile of the left side of the wall if you were facing from end-to-end.
 	 */
 	private TileModel leftTile;
 
 	/**
-	 * The tile of the right side of the wall if
-	 * you were facing from end-to-end.
+	 * The tile of the right side of the wall if you were facing from
+	 * end-to-end.
 	 */
 	private TileModel rightTile;
 
@@ -30,13 +29,13 @@ public class WallModel {
 	private PlayerModel builder;
 
 	/** Observers to this tile */
-	private List<WallModelObserver> observers =
-			new ArrayList<WallModelObserver>();
+	private List<WallModelObserver> observers = new ArrayList<WallModelObserver>();
 
 	/**
 	 * Adds an observer to this wall.
-	 *
-	 * @param observer	the observer
+	 * 
+	 * @param observer
+	 *            the observer
 	 */
 	public void addObserver(WallModelObserver observer) {
 		observers.add(observer);
@@ -53,42 +52,41 @@ public class WallModel {
 
 	/**
 	 * Gets the tile on the left side of the wall.
-	 *
-	 * @return <code>null</code> if there is
-	 * no tile on the left side, otherwise the associated
-	 * <code>TileModel</code>
+	 * 
+	 * @return <code>null</code> if there is no tile on the left side, otherwise
+	 *         the associated <code>TileModel</code>
 	 */
 	public TileModel getLeftTile() {
 		return leftTile;
 	}
 
 	/**
-	 * Specifies the tile on the left side of the wall if
-	 * you were facing from end-to-end.
-	 *
-	 * @param left	tile on the left side of the wall
+	 * Specifies the tile on the left side of the wall if you were facing from
+	 * end-to-end.
+	 * 
+	 * @param left
+	 *            tile on the left side of the wall
 	 */
 	public void setLeftTile(TileModel left) {
 		leftTile = left;
 	}
 
 	/**
-	 * Gets the tile on the right side of
-	 * the wall.
-	 *
-	 * @return <code>null</code> if there is
-	 * no tile on the right side, otherwise the associated
-	 * <code>TileModel</code>
+	 * Gets the tile on the right side of the wall.
+	 * 
+	 * @return <code>null</code> if there is no tile on the right side,
+	 *         otherwise the associated <code>TileModel</code>
 	 */
 	public TileModel getRightTile() {
 		return rightTile;
 	}
 
 	/**
-	 * Specifies the tile on the right side of the wall if
-	 * you were facing from end-to-end.
-	 *
-	 * @param right	tile on the right side of the wall
+	 * Specifies the tile on the right side of the wall if you were facing from
+	 * end-to-end.
+	 * 
+	 * @param right
+	 *            tile on the right side of the wall
 	 */
 	public void setRightTile(TileModel right) {
 		rightTile = right;
@@ -96,7 +94,7 @@ public class WallModel {
 
 	/**
 	 * Returns if the wall is built.
-	 *
+	 * 
 	 * @return true if the wall is built, otherwise false
 	 */
 	boolean isBuilt() {
@@ -106,7 +104,7 @@ public class WallModel {
 	/**
 	 * Returns the <code>PlayerModel</code> that built this wall, or
 	 * <code>null</code> is not built.
-	 *
+	 * 
 	 * @return the <code>PlayerModel</code> or <code>null</code>
 	 */
 	PlayerModel getBuilder() {
@@ -115,8 +113,9 @@ public class WallModel {
 
 	/**
 	 * Builds this wall.
-	 *
-	 * @param player	the builder
+	 * 
+	 * @param player
+	 *            the builder
 	 */
 	void build(PlayerModel player) {
 		if (player == null) {
@@ -134,8 +133,9 @@ public class WallModel {
 
 	/**
 	 * Destroys this wall.
-	 *
-	 * @param player	the player who destroys this wall
+	 * 
+	 * @param player
+	 *            the player who destroys this wall
 	 */
 	public void destroy(PlayerModel player) {
 		if (!isBuilt) {
@@ -150,8 +150,9 @@ public class WallModel {
 
 	/**
 	 * Validates the box status of both associated tiles.
-	 *
-	 * @param player	the player that builds/destroys this wall
+	 * 
+	 * @param player
+	 *            the player that builds/destroys this wall
 	 */
 	private void updateTiles(PlayerModel player) {
 		if (leftTile != null) {
@@ -164,6 +165,7 @@ public class WallModel {
 
 	@Override
 	public String toString() {
-		return String.format("<WallModel: %s>", ((isBuilt) ? "built" : "not built"));
+		return String.format("<WallModel: %s>", ((isBuilt) ? "built"
+				: "not built"));
 	}
 }

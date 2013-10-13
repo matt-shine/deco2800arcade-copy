@@ -37,7 +37,7 @@ public class MultiplayerListener extends Listener {
 
 		if (object instanceof NewMultiGameRequest) {
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
-			matchmakerQueue.checkForGame(multiRequest, connection);
+			
 			MultiGameRequestType requestType = multiRequest.requestType;
 
 			switch (requestType){
@@ -53,6 +53,8 @@ public class MultiplayerListener extends Listener {
 				//TODO: 2+ player games
 				handleJoinMultiRequest();
 				break;
+			case MATCHMAKING:
+				matchmakerQueue.checkForGame(multiRequest, connection);
 			default:
 				break;
 			}	

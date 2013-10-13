@@ -368,8 +368,9 @@ public class MultiplayerLobby implements Screen {
 		int playerID = details.playerID;
 		NewMultiGameRequest request = new NewMultiGameRequest();
 		request.gameId = gameId;
-		request.playerID = playerID;
+		request.playerID = arcadeUI.getPlayer().getID();
 		request.requestType = MultiGameRequestType.JOIN;
+		request.session = matchNum;
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}
 	

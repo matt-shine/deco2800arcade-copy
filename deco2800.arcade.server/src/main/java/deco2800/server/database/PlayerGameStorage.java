@@ -224,7 +224,7 @@ public class PlayerGameStorage {
 	 * @return The player's MMR for the given game
 	 * @throws DatabaseException
 	 */
-	public int getPlayerRating(int playerID, int gameID) throws DatabaseException {
+	public int getPlayerRating(int playerID, String gameID) throws DatabaseException {
 		//Check whether or not the database has been intitialised
 		if (!initialised){
 			//Not initialised yet - initialise it
@@ -239,10 +239,19 @@ public class PlayerGameStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES WHERE playerID = " 
-					+ playerID + " AND gameID = " + gameID + ";");
-			int result = resultSet.findColumn("Rating");
-
-			return result;
+					+ playerID + " AND gameID = " + gameID);
+			if (resultSet != null) {
+				if (resultSet.findColumn("Rating") == 0) {
+					updatePlayerRating(playerID, gameID, 1500);
+					return 1500;
+				} else {
+					int result = resultSet.findColumn("Rating");
+					return result;
+				}
+			} else {
+				addPlayerGames(playerID, gameID, 1500);
+				return 1500;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get playergames from database", e);
@@ -264,13 +273,13 @@ public class PlayerGameStorage {
 	}
 	
 	/**
-	 * Searches for a given player's rating at a particular game
+	 * Update for a given player's rating at a particular game
 	 * @param playerID
 	 * @param gameID
-	 * @return The player's MMR for the given game
+	 * @param newRating The player's MMR for the given game
 	 * @throws DatabaseException
 	 */
-	public void updatePlayerRating(int playerID, int gameID, int newRating) throws DatabaseException {
+	public void updatePlayerRating(int playerID, String gameID, int newRating) throws DatabaseException {
 		//Check whether or not the database has been intitialised
 		if (!initialised){
 			//Not initialised yet - initialise it
@@ -284,7 +293,7 @@ public class PlayerGameStorage {
 		try {
 			statement = connection.createStatement();
 			statement.executeQuery("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
-					+ playerID + " AND gameID = " + gameID + ";");
+					+ playerID + " AND gameID = " + gameID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get playergames from database", e);
@@ -303,5 +312,46 @@ public class PlayerGameStorage {
 	}
 	
 	/**
-
+	 * Adds a player game entry to the database with the given PlayerID,  
+	 * gameID and rating
+	 * 
+	 * @param playerID, gameID, rating
+	 * 				the IDs for the player and game to be added
+	 * @throws DatabaseException
+	 */
+	public void addPlayerGames(int playerID, String gameID, int rating) throws DatabaseException {
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		try {
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			resultSet = stmt.executeQuery("SELECT * FROM PLAYERGAMES");
+			resultSet.moveToInsertRow();
+			resultSet.updateInt("playerID", playerID);
+			resultSet.updateString("gameID", gameID);
+			resultSet.updateInt("Rating", rating);
+			resultSet.insertRow();
+		} catch (SQLException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DatabaseException("Unable to add player game to database", e);
+		} finally {
+			//clean up JDBC objects
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 }

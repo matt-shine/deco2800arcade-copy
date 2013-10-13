@@ -6,6 +6,7 @@ import deco2800.arcade.mixmaze.domain.WallModel;
 import deco2800.arcade.mixmaze.domain.WallModelObserver;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -29,6 +30,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	static final TextureRegion BRICK_REGION;
 	static final TextureRegion EMPTY_PICK_REGION;
 	static final TextureRegion EMPTY_TNT_REGION;
+	static final TextureRegion BOX_REGION;
 
 	static {
 		Texture texture = new Texture(Gdx.files.internal("item.png"));
@@ -44,22 +46,25 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		EMPTY_PICK_REGION = new TextureRegion(texture, 1792, 0,
 				256, 256);
 		WHITE_REGION = new TextureRegion(texture, 2048, 0, 256, 256);
+
+		texture = new Texture(Gdx.files.internal("box.png"));
+		BOX_REGION = new TextureRegion(texture);
 	}
 
 	private final class WallWatcher implements WallModelObserver
 	{
 		private boolean isBuilt;
-		
+
 		public boolean IsBuilt() {
 			return isBuilt;
 		}
-		
+
 		@Override
 		public void updateWall(boolean isBuilt) {
 			this.isBuilt = isBuilt;
 		}
 	}
-	
+
 	private final float tileSize;
 	private final float offset;
 	private final ShapeRenderer renderer;
@@ -80,35 +85,43 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		this.renderer = renderer;
 		boxerId = 0;
 		type = NONE;
-		
+
 		wallWatchers = new WallWatcher[4];
 		for(int direction = 0; direction < 4; ++direction) {
 			wallWatchers[direction] = new WallWatcher();
 		}
 	}
-	
+
 	public void watchWall(int direction, WallModel wall) {
 		wall.addObserver(wallWatchers[direction]);
 	}
-	
+
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		batch.end();
 
-		/* shape renderer drawing */
+		/* background */
 		renderer.setTransformMatrix(computeTransform());
-		drawBox();
-		drawWalls();
-		drawCorners();
+		drawBackground();
 		renderer.identity();
 
 		/* sprite batch drawing */
 		batch.begin();
 		applyTransform(batch, computeTransform());
+		drawBox(batch);
 		drawItem(batch);
 		resetTransform(batch);
+		batch.end();
+
+		/* shape renderer drawing */
+		renderer.setTransformMatrix(computeTransform());
+		drawWalls();
+		drawCorners();
+		renderer.identity();
+
+		batch.begin();
 	}
-	
+
 	@Override
 	public void updateBoxer(int id) {
 		boxerId = id;
@@ -119,17 +132,25 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		this.type = type;
 	}
 
-	private void drawBox() {
+	private void drawBackground() {
 		renderer.begin(FilledRectangle);
-		if (boxerId == 0) {
-			renderer.setColor(.8f, .8f, .8f, 1f);
-		} else if (boxerId == 1) {
-			renderer.setColor(1f, 0f, 0f, 1f);
-		} else if (boxerId == 2) {
-			renderer.setColor(0f, 0f, 1f, 1f);
-		}
+		renderer.setColor(.8f, .8f, .8f, 1f);
 		renderer.filledRect(0, 0, tileSize, tileSize);
 		renderer.end();
+	}
+
+	private void drawBox(SpriteBatch batch) {
+		Color old = batch.getColor();
+
+		if (boxerId == 0) {
+			batch.setColor(.8f, .8f, .8f, 1f);
+		} else if (boxerId == 1) {
+			batch.setColor(1f, 0f, 0f, 1f);
+		} else if (boxerId == 2) {
+			batch.setColor(0f, 0f, 1f, 1f);
+		}
+		batch.draw(BOX_REGION, 0, 0, tileSize, tileSize);
+		batch.setColor(old);
 	}
 
 	private void drawWalls() {

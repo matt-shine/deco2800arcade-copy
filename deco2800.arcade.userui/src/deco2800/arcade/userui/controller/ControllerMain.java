@@ -66,8 +66,9 @@ public class ControllerMain {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			editView = new EditScreen(theModel);
 			
-			
+						
 		}
 		
 	}

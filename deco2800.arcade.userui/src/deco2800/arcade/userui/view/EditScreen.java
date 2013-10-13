@@ -90,7 +90,7 @@ public class EditScreen extends JFrame implements ActionListener {
 		add(parentContainer);
 
 		// Set the view window constraints
-		setSize(1280, 800);
+		setSize(400,300);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		setResizable(false);
@@ -239,9 +239,18 @@ public class EditScreen extends JFrame implements ActionListener {
 	 * Event Listeners for Buttons
 	 */
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
+	public void SaveListener(ActionListener listenForSaveButton){
+		savebutton.addActionListener(listenForSaveButton);
+	
 	}
-
+	
+	public void CancelListener(ActionListener listenForCancelButton){
+		cancelbutton.addActionListener(listenForCancelButton);
+	
+	}
+	
+	public void UploadListener(ActionListener listenForCancelButton){
+		browsebutton.addActionListener(listenForUploadButton);
+	
+	}
 }

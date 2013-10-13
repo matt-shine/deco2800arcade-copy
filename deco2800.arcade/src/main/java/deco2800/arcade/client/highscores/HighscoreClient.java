@@ -198,6 +198,27 @@ public class HighscoreClient {
 		return this.scoreResponseList;
 	}
 	
+	/**
+	 * requestID: 1. This function is user INDEPENDENT.
+	 * 
+	 * @param highestIsBest If having a high score is best for your game, then
+	 * set this to true. If having a low score is best, then set this to false.
+	 * 
+	 * @return A list of Highscore objects. 
+	 */
+	public List<Highscore> getUserHighScore(boolean highestIsBest, String type) {
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.requestID = 2; //Telling the server which query to run
+		gsReq.type = type;
+		gsReq.highestIsBest = highestIsBest;
+		
+		//Send the request off, waiting for response before continuing
+		sendScoreRequest(gsReq);
+		
+		//Now that the response is back, return the data to the user
+		return this.scoreResponseList;
+	}
+	
 	
 	
 	//=============================================================

@@ -27,13 +27,13 @@ public class BlockList {
                     new BlockInfo(true, "greybrick"),
 
                     //5: prison cell (blue brick)
-                    new BlockInfo(true, "bluebrickprison"),
+                    new BlockInfo(true, "cell"),
 
                     //6: grey brick with nazi eagle
                     new BlockInfo(true, "greybrick"),
 
                     //7: prison cell with skeleton (blue brick)
-                    new BlockInfo(true, "bluebrickprisonskeleton"),
+                    new BlockInfo(true, "cell"),
 
                     //8: blue brick
                     new BlockInfo(true, "bluebrick"),
@@ -42,10 +42,10 @@ public class BlockList {
                     new BlockInfo(true, "bluebrick"),
 
                     //10: wood wall with nazi eagle
-                    new BlockInfo(true, "woodeagle"),
+                    new BlockInfo(true, "frame_pb"),
 
                     //11: wood wall with portrait of hitler
-                    new BlockInfo(true, "woodportrait"),
+                    new BlockInfo(true, "frame_lsp"),
 
                     //12: wood wall
                     new BlockInfo(true, "woodwall"),
@@ -63,16 +63,16 @@ public class BlockList {
                     new BlockInfo(true, "starysky"),
 
                     //17: red brick
-                    new BlockInfo(true, "redbrick"),
+                    new BlockInfo(true, "candywall"),
 
                     //18: red brick with swastika
-                    new BlockInfo(true, "redbrickswatika"),
+                    new BlockInfo(true, "frame_erp"),
 
                     //19: purple
                     new BlockInfo(true, "purple"),
 
                     //20: red brick with flag
-                    new BlockInfo(true, "redbrickflag"),
+                    new BlockInfo(true, "frame_bp"),
 
                     //21: elevator
                     new BlockInfo(true, "elevator"),
@@ -81,16 +81,16 @@ public class BlockList {
                     new BlockInfo(true, "elevatorfake"),
 
                     //23: wood with iron cross
-                    new BlockInfo(true, "woodcross"),
+                    new BlockInfo(true, "frame_wp"),
 
                     //24: dirty brick 1
-                    new BlockInfo(true, "dirtybrick"),
+                    new BlockInfo(true, "greybrick"),
 
                     //25: purple with blood
                     new BlockInfo(true, "purpleblood"),
 
                     //26: dirty brick 2
-                    new BlockInfo(true, "dirtybrick"),
+                    new BlockInfo(true, "greybrick"),
 
                     //27: grey brick 3
                     new BlockInfo(true, "greybrick"),

@@ -30,9 +30,7 @@ public class TestPlayerStorage {
 	 */
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		databaseTester = new JdbcDatabaseTester(
-                "org.apache.derby.jdbc.EmbeddedDriver",
-                "jdbc:derby:Arcade;user=server;password=server;create=true");
+
 	}
 	
 	/**
@@ -56,12 +54,15 @@ public class TestPlayerStorage {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		databaseTester = new JdbcDatabaseTester(
+                "org.apache.derby.jdbc.EmbeddedDriver",
+                "jdbc:derby:Arcade;user=server;password=server;create=true");
+		
 		playerStorage = new PlayerStorage();
         playerStorage.initialise();
         
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
-		databaseTester.onSetup();
 	}
 	
 	/**
@@ -76,7 +77,6 @@ public class TestPlayerStorage {
 	@Test
 	public void testGetPlayerData() {
 		try {
-			assertTrue(true);
 			List<String> playerData = new ArrayList<String>();
 			playerData.add("1");
 			playerData.add("bob");

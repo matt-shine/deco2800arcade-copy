@@ -80,7 +80,7 @@ public class PlayerStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from PLAYERS;");
+			resultSet = statement.executeQuery("SELECT * FROM PLAYERS");
 			data.add(findPlayerInfo(playerID, resultSet, "username"));
 			data.add(findPlayerInfo(playerID, resultSet, "name"));
 			data.add(findPlayerInfo(playerID, resultSet, "email"));

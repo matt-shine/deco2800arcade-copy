@@ -306,7 +306,7 @@ public class Connect4 extends GameClient {
 		}
 		
 		//Render the cursor Disc for player 1
-	    shapeRenderer.begin(ShapeType.FilledCircle);
+	    shapeRenderer.begin(ShapeType.Filled);
 	    cursorDisc.render(shapeRenderer);
 	    shapeRenderer.end();
 	}

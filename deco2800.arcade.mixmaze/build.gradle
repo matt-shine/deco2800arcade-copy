@@ -5,7 +5,7 @@ dependencies {
   compile project(":deco2800.arcade.utils")
   compile project(":deco2800.arcade")
 
-  compile files("libs/gdx.jar")
+  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.9-SNAPSHOT"
 }
 
 task(runMixMaze, dependsOn: classes, type: JavaExec) {

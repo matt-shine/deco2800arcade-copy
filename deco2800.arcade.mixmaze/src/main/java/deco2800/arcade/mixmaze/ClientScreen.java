@@ -1,8 +1,6 @@
 package deco2800.arcade.mixmaze;
 
 import deco2800.arcade.mixmaze.domain.IMixMazeModel;
-import deco2800.arcade.mixmaze.domain.PlayerModel;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Timer;

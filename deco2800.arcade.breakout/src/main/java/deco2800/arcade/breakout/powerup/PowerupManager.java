@@ -3,7 +3,6 @@ package deco2800.arcade.breakout.powerup;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 

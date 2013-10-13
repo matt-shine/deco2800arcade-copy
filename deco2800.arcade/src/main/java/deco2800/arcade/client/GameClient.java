@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
 import deco2800.arcade.client.AchievementClient;
-import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.PlayerClient;
 import deco2800.arcade.packman.PackageClient;

@@ -3,8 +3,6 @@ package deco2800.arcade.snakeLadderGameState;
 import deco2800.arcade.snakeLadder.SnakeLadder;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class WaitingState extends GameState {
 

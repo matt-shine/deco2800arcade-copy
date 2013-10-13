@@ -1,7 +1,6 @@
 package deco2800.arcade.breakout;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 
 import com.badlogic.gdx.Gdx;

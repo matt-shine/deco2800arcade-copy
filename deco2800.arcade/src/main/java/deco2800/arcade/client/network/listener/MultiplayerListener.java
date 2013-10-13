@@ -3,9 +3,7 @@ package deco2800.arcade.client.network.listener;
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.Arcade;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
-import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 

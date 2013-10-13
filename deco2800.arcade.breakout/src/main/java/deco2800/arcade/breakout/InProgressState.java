@@ -73,7 +73,7 @@ public class InProgressState extends GameState {
 	}
 	
 	private boolean overlap(Circle c, Rectangle r) {
-		return Intersector.overlapCircleRectangle(c, r);
+		return Intersector.overlaps(c, r);
 	}
 	
 	private void handlePowerupBallOtherCollision(GameScreen context) {

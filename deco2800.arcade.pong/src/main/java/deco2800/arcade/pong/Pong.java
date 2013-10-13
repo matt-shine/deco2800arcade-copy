@@ -16,14 +16,12 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
 
-import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 
 /**
@@ -216,7 +214,7 @@ public class Pong extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    //Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    shapeRenderer.begin(ShapeType.Filled);
 	    
 	    getLeftPaddle().render(shapeRenderer);
 	    

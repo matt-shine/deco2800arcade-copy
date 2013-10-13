@@ -7,7 +7,6 @@ import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.player.*;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.PlayerDatabaseManager;
-import deco2800.arcade.model.*;
 
 public class PlayerListener extends Listener{
 	

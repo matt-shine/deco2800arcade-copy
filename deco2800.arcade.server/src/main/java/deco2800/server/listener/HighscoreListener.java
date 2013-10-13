@@ -1,6 +1,5 @@
 package deco2800.server.listener;
 
-import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +9,6 @@ import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.highscore.*;
 import deco2800.server.ArcadeServer;
-import deco2800.server.database.DatabaseException;
 import deco2800.server.database.HighscoreDatabase;
 
 public class HighscoreListener extends Listener {

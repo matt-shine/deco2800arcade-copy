@@ -15,11 +15,11 @@ public class IngameUI extends Stage {
     
     public static void drawCeiling(int color, float w, float h) {
 
-        r.begin(ShapeRenderer.ShapeType.FilledRectangle);
+        r.begin(ShapeRenderer.ShapeType.Filled);
         Color c = new Color();
         Color.rgb888ToColor(c, color);
         r.setColor(c);
-        r.filledRect(0, h / 2, w, h / 2);
+        r.rect(0, h / 2, w, h / 2);
         r.end();
         
     }

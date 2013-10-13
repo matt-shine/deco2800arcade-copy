@@ -290,13 +290,13 @@ public class MainGameScreen implements Screen {
 	    	Gdx.gl.glEnable(GL10.GL_BLEND);
 		    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-		    shapeRenderer.begin(ShapeType.FilledRectangle);
+		    shapeRenderer.begin(ShapeType.Filled);
 		    
 		    for(Rectangle r: highlightedZones) {
                 if(game.getPhase().equals("BattlePhase")) {
-                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.RED, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+                    shapeRenderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.RED, Color.CLEAR, Color.CLEAR, Color.CLEAR);
                 } else {
-                    shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
+                    shapeRenderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight()+glowSize, Color.YELLOW, Color.CLEAR, Color.CLEAR, Color.CLEAR);
                 }
 
 		    }

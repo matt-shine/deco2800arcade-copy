@@ -120,7 +120,7 @@ public final class TileViewModel extends Group implements TileModelObserver {
 	}
 
 	private void drawBox() {
-		renderer.begin(FilledRectangle);
+		renderer.begin(Filled);
 		if (boxerId == 0) {
 			renderer.setColor(.8f, .8f, .8f, 1f);
 		} else if (boxerId == 1) {
@@ -128,32 +128,32 @@ public final class TileViewModel extends Group implements TileModelObserver {
 		} else if (boxerId == 2) {
 			renderer.setColor(0f, 0f, 1f, 1f);
 		}
-		renderer.filledRect(0, 0, tileSize, tileSize);
+		renderer.rect(0, 0, tileSize, tileSize);
 		renderer.end();
 	}
 
 	private void drawWalls() {
-		renderer.begin(FilledRectangle);
+		renderer.begin(Filled);
 		renderer.setColor(1f, 1f, 0f, 1f);
 		if (wallWatchers[WEST].IsBuilt())
-			renderer.filledRect(0, 0, offset, tileSize);
+			renderer.rect(0, 0, offset, tileSize);
 		if (wallWatchers[NORTH].IsBuilt())
-			renderer.filledRect(0, tileSize - offset, tileSize, offset);
+			renderer.rect(0, tileSize - offset, tileSize, offset);
 		if (wallWatchers[EAST].IsBuilt())
-			renderer.filledRect(tileSize - offset, 0, offset, tileSize);
+			renderer.rect(tileSize - offset, 0, offset, tileSize);
 		if (wallWatchers[SOUTH].IsBuilt())
-			renderer.filledRect(0, 0, tileSize, offset);
+			renderer.rect(0, 0, tileSize, offset);
 		renderer.end();
 	}
 
 	private void drawCorners() {
-		renderer.begin(FilledRectangle);
+		renderer.begin(Filled);
 		renderer.setColor(0f, 0f, 0f, 1f);
-		renderer.filledRect(0, 0, offset, offset);
-		renderer.filledRect(0, tileSize - offset, offset, offset);
-		renderer.filledRect(tileSize - offset, tileSize - offset,
+		renderer.rect(0, 0, offset, offset);
+		renderer.rect(0, tileSize - offset, offset, offset);
+		renderer.rect(tileSize - offset, tileSize - offset,
 				offset, offset);
-		renderer.filledRect(tileSize - offset, 0, offset, offset);
+		renderer.rect(tileSize - offset, 0, offset, offset);
 		renderer.end();
 	}
 

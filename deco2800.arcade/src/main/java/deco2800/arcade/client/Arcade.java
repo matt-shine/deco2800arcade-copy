@@ -326,7 +326,6 @@ public class Arcade extends JFrame {
         synchronized (mon) {
             proxy.setThreadMonitor(mon);
             this.add(this.canvas.getCanvas());
-
             try {
                 mon.wait();
             } catch (InterruptedException e) {

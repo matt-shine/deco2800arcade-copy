@@ -1,7 +1,6 @@
 package deco2800.server;
 
 import com.esotericsoftware.kryonet.Connection;
-import java.util.UUID;
 
 public class LobbyMatch {
 

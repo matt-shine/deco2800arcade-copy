@@ -4,12 +4,9 @@ package deco2800.arcade.chess;
 //import deco2800.arcade.chess.MenuScreen;
 import deco2800.arcade.chess.SplashScreen;
 
-import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.UIOverlay;
-import deco2800.arcade.client.UIOverlay.PopupMessage;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
@@ -17,12 +14,8 @@ import deco2800.arcade.client.replay.ReplayEventListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.client.replay.ReplayNode;
 import deco2800.arcade.client.replay.ReplayNodeFactory;
-import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.AchievementProgress;
-import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.chess.pieces.King;
 import deco2800.arcade.chess.pieces.Piece;
 
 
@@ -40,7 +33,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;

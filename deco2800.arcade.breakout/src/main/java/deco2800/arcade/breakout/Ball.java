@@ -3,7 +3,6 @@ package deco2800.arcade.breakout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Circle;
 
@@ -102,7 +101,7 @@ public class Ball {
 	public void render(ShapeRenderer shapeRenderer) {
 		shapeRenderer.setColor(renderColourRed, renderColourGreen,
 				renderColourBlue, renderColourAlpha);
-		shapeRenderer.filledCircle(this.ballCirc.x, this.ballCirc.y, 
+		shapeRenderer.circle(this.ballCirc.x, this.ballCirc.y, 
 				this.ballCirc.radius);
 	}
 

@@ -158,12 +158,12 @@ public class Table {
      */
     public void render(ShapeRenderer shapeRenderer)
     {
-    	shapeRenderer.begin(ShapeType.FilledRectangle);
+    	shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(renderColourRed,
                                renderColourGreen,
                                renderColourBlue,
                                renderColourAlpha);
-        shapeRenderer.filledRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
+        shapeRenderer.rect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
         shapeRenderer.end();
         renderDiscs(shapeRenderer);
     }
@@ -172,7 +172,7 @@ public class Table {
     	int i = 0;
     	int j = 0;
     	
-    	shapeRenderer.begin(ShapeType.FilledCircle);
+    	shapeRenderer.begin(ShapeType.Filled);
 	    
     	for(i = 0; i < 6; i++){
     		for(j = 0; j < 7; j++){

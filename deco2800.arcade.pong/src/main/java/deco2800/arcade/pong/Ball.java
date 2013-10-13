@@ -114,7 +114,7 @@ public class Ball {
                                renderColourGreen,
                                renderColourBlue,
                                renderColourAlpha);
-        shapeRenderer.filledRect(this.bounds.x,
+        shapeRenderer.rect(this.bounds.x,
                                  this.bounds.y,
                                  this.bounds.width,
                                  this.bounds.height);

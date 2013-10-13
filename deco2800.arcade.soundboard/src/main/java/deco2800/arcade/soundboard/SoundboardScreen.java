@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import deco2800.arcade.client.network.listener.ReplayListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.soundboard.actions.SoundButtonChangeListener;

@@ -69,9 +69,9 @@ public class HomeScreen implements Screen {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		//draw a placeholder shape
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    shapeRenderer.begin(ShapeType.Filled);
 	    
-	    shapeRenderer.filledRect(100,
+	    shapeRenderer.rect(100,
 	        100,
 	        1280 - 200,
 	        720 - 200);

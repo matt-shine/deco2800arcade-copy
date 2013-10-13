@@ -149,7 +149,7 @@ public class PongBall {
 	public void render(ShapeRenderer shapeRenderer) {
 		shapeRenderer.setColor(renderColourRed, renderColourGreen,
 				renderColourBlue, renderColourAlpha);
-		shapeRenderer.filledRect(this.bounds.x, this.bounds.y,
+		shapeRenderer.rect(this.bounds.x, this.bounds.y,
 				this.bounds.width, this.bounds.height);
 	}
 

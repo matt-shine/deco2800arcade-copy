@@ -1,7 +1,5 @@
 package deco2800.arcade.model;
 
-import deco2800.arcade.model.Icon;
-
 /**
  * An immutable struct-like class used for storing information about an
  * achievement. Note that while the fields are public, they're also final

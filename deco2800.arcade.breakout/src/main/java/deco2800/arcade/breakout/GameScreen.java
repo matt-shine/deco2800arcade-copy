@@ -1,18 +1,13 @@
 package deco2800.arcade.breakout;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,7 +18,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.breakout.powerup.PowerupManager;
-import deco2800.arcade.client.*;
 
 
 public class GameScreen implements Screen  {
@@ -259,7 +253,7 @@ public class GameScreen implements Screen  {
 			//batch.end();
 
 			// renders the rectangles that are filled.
-			shapeRenderer.begin(ShapeType.FilledRectangle);
+			shapeRenderer.begin(ShapeType.Filled);
 
 			getPaddle().render(shapeRenderer);
 			getPowerupManager().renderAll(batch);
@@ -268,7 +262,7 @@ public class GameScreen implements Screen  {
 			// Render the level
 			levelSystem.render(bricks, outer, inner, this, shapeRenderer, batch);
 			shapeRenderer.end();
-			shapeRenderer.begin(ShapeType.FilledCircle);
+			shapeRenderer.begin(ShapeType.Filled);
 			// Ball is a Circle
 			if (ball != null) {
 				getBall().render(shapeRenderer);

@@ -2,10 +2,7 @@ package deco2800.arcade.model;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import static org.imgscalr.Scalr.*;
 

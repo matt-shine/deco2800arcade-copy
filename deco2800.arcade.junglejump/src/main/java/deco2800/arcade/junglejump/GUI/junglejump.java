@@ -1,24 +1,15 @@
 package deco2800.arcade.junglejump.GUI;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.security.auth.login.Configuration;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -32,7 +23,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Frustum;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 
 import deco2800.arcade.junglejump.Level;
@@ -41,14 +31,11 @@ import deco2800.arcade.junglejump.Platform;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-//import deco2800.arcade.breakout.Breakout.GameState;
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.AchievementProgress;
 /**
  * Main class for Jungle Jump Game Instantiates game with scene, player and
  * assets
@@ -294,8 +281,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.end();
 			Gdx.gl.glEnable(GL10.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-			shapeRenderer.begin(ShapeType.FilledRectangle);
-			shapeRenderer.filledRect(butX, butY, 232, 30, Color.CLEAR,
+			shapeRenderer.begin(ShapeType.Filled);
+			shapeRenderer.rect(butX, butY, 232, 30, Color.CLEAR,
 					Color.RED, Color.CLEAR, Color.RED);
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL10.GL_BLEND);

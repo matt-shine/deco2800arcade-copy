@@ -7,7 +7,6 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import deco2800.arcade.protocol.highscore.GetScoreRequest;

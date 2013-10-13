@@ -1,5 +1,5 @@
 dependencies {
-  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
+  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.9-SNAPSHOT"
 
-  testCompile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
+  testCompile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.9-SNAPSHOT"
 }

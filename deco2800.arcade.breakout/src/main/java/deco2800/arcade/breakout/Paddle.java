@@ -1,6 +1,5 @@
 package deco2800.arcade.breakout;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -76,7 +75,7 @@ public abstract class Paddle {
 	 */
 	public void render(ShapeRenderer render) {
 		render.setColor(0.7f, 0.7f, 0.7f, 0.5f);
-		render.filledRect(paddleShape.x, paddleShape.y, paddleShape.width,
+		render.rect(paddleShape.x, paddleShape.y, paddleShape.width,
 				paddleShape.height);
 	}
 

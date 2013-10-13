@@ -2,7 +2,6 @@ package deco2800.arcade.snakeLadderModel;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
 import deco2800.arcade.snakeLadderGameState.WaitingState;
-import deco2800.arcade.snakeLadderModel.GamePlayer;
 public class LadderSnakeRule implements Rule {
 
 	@Override

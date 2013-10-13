@@ -1,7 +1,5 @@
 package deco2800.arcade.snakeLadderGameState;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import deco2800.arcade.snakeLadder.SnakeLadder;
 
 public abstract class GameState {

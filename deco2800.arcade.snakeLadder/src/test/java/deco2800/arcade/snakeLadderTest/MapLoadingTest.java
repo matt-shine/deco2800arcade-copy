@@ -4,11 +4,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.Gdx;
-
-import deco2800.arcade.snakeLadder.SnakeLadder;
-import deco2800.arcade.snakeLadderModel.GameMap;
 import deco2800.arcade.snakeLadderModel.Tile;
 
 public class MapLoadingTest {

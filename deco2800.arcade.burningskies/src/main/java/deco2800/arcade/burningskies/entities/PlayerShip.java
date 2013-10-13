@@ -76,7 +76,7 @@ public class PlayerShip extends Ship {
     	}
     	//normalise our velocity
     	velocity.nor();
-    	velocity.mul(maxVelocity);
+    	velocity.scl(maxVelocity);
     	position.add( velocity.x * delta, velocity.y * delta );
 		if (position.x + getWidth() > BurningSkies.SCREENWIDTH) {
 			position.x = BurningSkies.SCREENWIDTH - getImageWidth();

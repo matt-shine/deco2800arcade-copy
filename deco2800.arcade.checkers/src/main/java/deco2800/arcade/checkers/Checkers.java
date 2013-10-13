@@ -196,7 +196,7 @@ public class Checkers extends GameClient {
 	    batch.setProjectionMatrix(camera.combined);
 	    
 	    //Begin drawing of shapes
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
+	    shapeRenderer.begin(ShapeType.Filled);
 	    
 	    for (int j=0; j<4; j++) {
 	    	for (int i=0; i<3; i++) {

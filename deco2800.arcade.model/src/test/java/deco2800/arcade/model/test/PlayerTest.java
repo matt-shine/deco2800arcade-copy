@@ -1,12 +1,6 @@
 package deco2800.arcade.model.test;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.junit.Assert;
 import org.junit.Test;
-import deco2800.arcade.model.Player;
-import deco2800.arcade.model.User;
 
 public class PlayerTest {
 

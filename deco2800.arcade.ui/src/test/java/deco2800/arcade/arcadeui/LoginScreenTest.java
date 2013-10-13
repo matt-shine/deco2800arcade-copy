@@ -1,7 +1,5 @@
 package deco2800.arcade.arcadeui;
 
-import org.junit.*;
-
 /**
  * Created with IntelliJ IDEA.
  * User: john

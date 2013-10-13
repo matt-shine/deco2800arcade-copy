@@ -55,7 +55,7 @@ public class WL6InputProcessor implements InputProcessor {
         p.setVel(
                 new Vector2(x, y)
                 .nor()
-                .mul(Player.SPEED * model.delta())
+                .scl(Player.SPEED * model.delta())
                 .rotate(-p.getAngle())
         );
     }

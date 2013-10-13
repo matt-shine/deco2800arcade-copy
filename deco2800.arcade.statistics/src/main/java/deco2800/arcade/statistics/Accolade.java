@@ -1,10 +1,6 @@
 package deco2800.arcade.statistics;
 import java.util.NoSuchElementException;
 
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-
 public class Accolade {
 	
 

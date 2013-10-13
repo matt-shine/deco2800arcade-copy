@@ -10,7 +10,6 @@ import deco2800.server.database.DatabaseException;
 import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.AchievementProgress;
-import deco2800.arcade.model.Game;
 
 public class AchievementListener extends Listener {
 

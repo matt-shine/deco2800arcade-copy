@@ -1,23 +1,15 @@
 package deco2800.server;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
-
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
-import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
-import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 /**
  * The Lobby class - Singleton Pattern.
  * 

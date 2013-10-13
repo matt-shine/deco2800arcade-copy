@@ -3,8 +3,6 @@ package deco2800.arcade.snakeLadderGameState;
 import deco2800.arcade.snakeLadder.SnakeLadder;
 import deco2800.arcade.snakeLadderModel.*;
 
-import com.badlogic.gdx.Gdx;
-
 public class RuleExcutingState extends GameState {
 
 	@Override

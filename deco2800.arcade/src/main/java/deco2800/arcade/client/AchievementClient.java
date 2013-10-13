@@ -11,7 +11,6 @@ import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.*;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementListener;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Connection;
 import deco2800.arcade.client.network.listener.NetworkListener;
 

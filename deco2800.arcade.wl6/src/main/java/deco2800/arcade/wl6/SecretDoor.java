@@ -81,7 +81,7 @@ public class SecretDoor extends Doodad {
         Vector2 offset = new Vector2(0, 0);
 
         if (movementDirection != null) {
-            offset = new Vector2(movementDirection).nor().mul(openness);
+            offset = new Vector2(movementDirection).nor().scl(openness);
         }
 
         r.drawBasicSprite(getTextureName(), x + offset.x, y + offset.y + 0.5f, 0);

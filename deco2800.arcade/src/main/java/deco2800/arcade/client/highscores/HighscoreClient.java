@@ -2,8 +2,6 @@ package deco2800.arcade.client.highscores;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Timer;
-
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.highscore.*;
 

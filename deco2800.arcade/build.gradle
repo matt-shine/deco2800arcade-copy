@@ -4,10 +4,9 @@ dependencies {
   compile project(":deco2800.arcade.packman")
 
   compile group: "org.reflections", name: "reflections", version: "0.9.9-RC1"
-  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.7"
-  compile group: "com.badlogicgames.gdx", name: "gdx-backend-lwjgl", version: "0.9.7"
-  compile group: "com.badlogicgames.gdx", name: "gdx-natives", version: "0.9.7"
-  compile group: "com.badlogicgames.gdx", name: "gdx-backend-lwjgl-natives", version: "0.9.7"
+  compile group: "com.badlogicgames.gdx", name: "gdx", version: "0.9.9-SNAPSHOT"
+  compile group: "com.badlogicgames.gdx", name: "gdx-backend-lwjgl", version: "0.9.9-SNAPSHOT"
+  compile "com.badlogicgames.gdx:gdx-platform:0.9.9-SNAPSHOT:natives-desktop"
   compile group: "com.google.code.gson", name: "gson", version: "2.2.4"
 
 }

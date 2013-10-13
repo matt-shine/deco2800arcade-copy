@@ -1,11 +1,5 @@
 package deco2800.arcade.server.database;
 
-import java.sql.SQLException;
-import deco2800.server.database.DatabaseException;
-import deco2800.server.database.GameStorage;
-import org.junit.Assert;
-import org.junit.Test;
-
 
 //This should work in the arcade build, else it is incorrect.
 /**

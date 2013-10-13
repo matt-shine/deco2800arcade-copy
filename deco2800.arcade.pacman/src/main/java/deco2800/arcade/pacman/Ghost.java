@@ -1,17 +1,12 @@
 package deco2800.arcade.pacman;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.lwjgl.util.Point;
-import static java.lang.Math.*; 
-
-import deco2800.arcade.model.Player;
-import deco2800.arcade.pacman.PacChar.PacState;
+import static java.lang.Math.*;
 
 
 public class Ghost extends Mover {

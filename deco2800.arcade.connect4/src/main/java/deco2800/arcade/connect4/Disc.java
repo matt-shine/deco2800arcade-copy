@@ -109,7 +109,7 @@ public class Disc {
                                renderColourGreen,
                                renderColourBlue,
                                renderColourAlpha);
-        shapeRenderer.filledCircle(this.bounds.x, this.bounds.y, this.bounds.width);
+        shapeRenderer.circle(this.bounds.x, this.bounds.y, this.bounds.width);
     }
 	
 }

@@ -1,7 +1,6 @@
 package deco2800.arcade.client;
 
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.Player;
 
 public interface AchievementListener {
 	/**

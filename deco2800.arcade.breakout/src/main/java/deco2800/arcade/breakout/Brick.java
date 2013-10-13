@@ -1,11 +1,9 @@
 package deco2800.arcade.breakout;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Circle;
@@ -109,7 +107,7 @@ public class Brick {
 		leftSide.y = this.brickShape.y - this.E;
 		leftSide.width = this.E;
 		leftSide.height = this.brickShape.height - this.E;
-		return Intersector.overlapCircleRectangle(ball, leftSide);
+		return Intersector.overlaps(ball, leftSide);
 	}
 	/*
 	 * Creates a small rectangle on the right of the brick to 
@@ -123,7 +121,7 @@ public class Brick {
 		rightSide.y = this.brickShape.y - this.E;
 		rightSide.width = this.E;
 		rightSide.height = this.brickShape.height - this.E;
-		return Intersector.overlapCircleRectangle(ball, rightSide);
+		return Intersector.overlaps(ball, rightSide);
 	}
 	/*
 	 * Creates a small rectangle on the top of the brick to 
@@ -137,7 +135,7 @@ public class Brick {
 		topSide.y = this.brickShape.y;
 		topSide.width = this.brickShape.width;
 		topSide.height = this.E;
-		return Intersector.overlapCircleRectangle(ball, topSide);
+		return Intersector.overlaps(ball, topSide);
 	}
 	/*
 	 * Creates a small rectangle on the bottom of the brick to 
@@ -151,7 +149,7 @@ public class Brick {
 		bottomSide.y = this.brickShape.y + this.brickShape.height - this.E;
 		bottomSide.width = this.brickShape.width;
 		bottomSide.height = this.E;
-		return Intersector.overlapCircleRectangle(ball, bottomSide);
+		return Intersector.overlaps(ball, bottomSide);
 	}
 	
 	public void create() {

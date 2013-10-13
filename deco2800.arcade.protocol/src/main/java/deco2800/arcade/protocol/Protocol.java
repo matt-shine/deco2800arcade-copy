@@ -12,8 +12,6 @@ import java.util.ArrayList;
 
 
 
-import java.util.UUID;
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
@@ -31,7 +29,6 @@ import deco2800.arcade.protocol.achievement.ProgressForPlayerRequest;
 import deco2800.arcade.protocol.achievement.ProgressForPlayerResponse;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
-import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
@@ -63,11 +60,9 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
-import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 import deco2800.arcade.protocol.game.*;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
-import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.highscore.GetScoreRequest;
 import deco2800.arcade.protocol.highscore.GetScoreResponse;
 import deco2800.arcade.protocol.replay.EndSessionRequest;

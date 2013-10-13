@@ -1,12 +1,10 @@
 package deco2800.server;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 import deco2800.server.database.PlayerGameStorage;

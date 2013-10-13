@@ -119,9 +119,7 @@ public abstract class Mobile extends Mortal {
 	 * @param vector
 	 */
 	public void move(Vector2 vector) {
-		/**
-		 * TODO implement position modifier based on vector given.
-		 */
+		position.add(vector);
 	}
 
 	/**
@@ -152,7 +150,7 @@ public abstract class Mobile extends Mortal {
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move
-			position.add(addVector);
+			move(addVector);
 			// Wait 1/30th of a second before moving again
 			while (t1 - t0 < 33) {
 				t1 = System.currentTimeMillis();

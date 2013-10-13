@@ -62,7 +62,7 @@ public class Pictures {
 		Texture birds1 = new Texture("Images/level2/animals/birds/birds_1.png");
 		Texture lions1 = new Texture("Images/level2/animals/lions/lions_1.png");
 		Texture sheep1 = new Texture("Images/level2/animals/sheep/sheep_1.png");
-		Texture wolfs1 = new Texture("Images/level2/animals/wolfs/wolfs_1.png");
+		Texture wolfs1 = new Texture("Images/level2/animals/wolfs/wolf_1.png");
 		Texture tiger1 = new Texture("Images/level2/animals/tiger/tiger_1.png");
 		HashMap<String, Texture> animalsMap2 = new HashMap<String, Texture>();
 		animalsMap2.put("BIRDS", birds1 );

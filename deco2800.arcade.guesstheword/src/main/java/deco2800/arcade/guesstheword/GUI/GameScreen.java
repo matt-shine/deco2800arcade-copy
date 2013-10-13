@@ -54,11 +54,13 @@ public class GameScreen implements Screen {
 	private Label scoreLabel, levelLabel , timeLabel;
 	private LabelStyle labelStyle;
 	
-	private final BitmapFont font;
+//	private final BitmapFont font;
 	
 	private ArrayList<TextButton> buttonList;
 	private ArrayList<Integer> lettersKeyed;
     private String[] breakword;
+    
+    private Boolean hintTaken = false ;
     
     private int score = 0;
 	Texture texture;
@@ -77,7 +79,7 @@ public class GameScreen implements Screen {
 		word =  new WordShuffler();
 		lettersKeyed = new ArrayList<Integer>();
 		
-		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
+//		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
 	}
 
 	/**
@@ -112,10 +114,10 @@ public class GameScreen implements Screen {
 		rootTable.setFillParent(true);
 		
 
-		font.setColor(Color.WHITE);
+//		font.setColor(Color.WHITE);
 		
 		labelStyle = new LabelStyle();
-		labelStyle.font = font;
+//		labelStyle.font = font;
 		
 		levelLabel = new Label(level , labelStyle);
 		backButton =  new TextButton("Back", skin);
@@ -225,7 +227,12 @@ public class GameScreen implements Screen {
 		// F1 - HINT
 		if(Gdx.input.isKeyPressed(Input.Keys.F1)){
 			System.out.println("Hint used, Points - 5");
-			getHints();
+			
+			// User can only use hint for once!
+			if(hintTaken == false){
+				getHints();
+				hintTaken = true;
+			}
 		}
 		
 		// F2 - CATEGORY
@@ -312,7 +319,7 @@ public class GameScreen implements Screen {
 					game.getterSetter.setCategoryItem(word);
 					game.getterSetter.setTexture(newTexture);
 					checkButtons();
-					
+					hintTaken = false;
 					break;
 				}
 			}

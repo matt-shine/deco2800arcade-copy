@@ -80,7 +80,7 @@ public class HighscoreDatabase {
 		//System.out.println("adding a score should not get here.");
 		try {
 		switch (gsReq.requestID) {
-			case 1: return getGameTopPlayers("Pong", 1, "Number", gsReq.highestIsBest); //Return value of query with requestID 1
+			case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 1
 			case 2: return getUserHighScore("Matt", "Pong", "Number", gsReq.highestIsBest); //Return value of query with requestID 2
 			case 3: return null; //Return value of query with requestID 3
 			case 4: return null;
@@ -91,7 +91,7 @@ public class HighscoreDatabase {
 			//bad
 		}
 		
-		//This should never be reached, as all requestIDs should be covered in the switch*/
+		/*This should never be reached, as all requestIDs should be covered in the switch*/
 		return null;
 	}
 	
@@ -117,9 +117,9 @@ public class HighscoreDatabase {
 			initialise();
 		}
 		
-		if(highestIsBest){
+		if (highestIsBest){
 			order = "DESC";
-		}else {
+		} else {
 			order = "ASC";
 		}
 		

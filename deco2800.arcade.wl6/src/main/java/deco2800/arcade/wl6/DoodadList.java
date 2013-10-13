@@ -102,7 +102,7 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //29: dog food
-                    DoodadInfo.healthPickup("dogfood", 5, 0),
+                    DoodadInfo.healthPickup("health", 5, 0),
 
                     //30: white column
                     new DoodadInfo(),

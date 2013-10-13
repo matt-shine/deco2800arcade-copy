@@ -18,7 +18,7 @@ public class Hunter extends PlatformerGame {
 		public static int screenWidth = 1280;
 		public static int screenHeight = 720;
 		public static int gameSpeed = 512;
-        public static float gravity = 9.81f;
+        public static float gravity = 2*9.81f;
 		public final static int TILE_SIZE = 64;
 		public final static int PANE_SIZE = 16;
 		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;

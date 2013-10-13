@@ -17,9 +17,30 @@ public class MapEntity extends Entity{
 	
 	private String classType = "MapEntity";
 	
-	public MapEntity(Vector2 pos, float width, float height) {
+	private int moveSpeed;
+	
+	private String Type;
+	
+	public MapEntity(Vector2 pos, float width, float height, String file){
 		super(pos, width, height);
-		text = new Texture("textures/spike trap.png");
+		text = new Texture("textures/" + file +".png");
+		if (file == "arrow"){
+			moveSpeed = 20;
+		}else{
+			moveSpeed = 0;
+		}
+		Type = file;
+	}
+	
+	public String getEntityType(){
+		return Type;
+	}
+	
+	@Override
+	public void update(float delta){
+		if (moveSpeed != 0){
+			setX(getX()+moveSpeed);
+		}
 	}
 	/**
 	 * Checks for collisions
@@ -31,6 +52,9 @@ public class MapEntity extends Entity{
 			if (this.getX() <= 0)
 				collisions.add(new EntityCollision(this, null,
 						CollisionType.MAP_ENTITY_C_LEFT_EDGE));
+			if (e.getType() == "Animal"){
+				collisions.add(new EntityCollision(this,e,CollisionType.MAP_ENTITY_C_ANIMAL));
+			}
 		}
 		return collisions;
 	}
@@ -40,8 +64,9 @@ public class MapEntity extends Entity{
 	 */
 	@Override
 	public void handleCollision(Entity e, EntityCollection entities) {
-		if (e == null)
+		if (e == null){
 			entities.remove(this);
+		}
 	}
 	
 	@Override
@@ -51,7 +76,7 @@ public class MapEntity extends Entity{
 	
 	@Override
 	public void draw(SpriteBatch batch, float stateTime){
-		batch.draw(text,getX(),getY(),128,64);
+		batch.draw(text,getX(),getY(),64,32);
 	}
 
 }

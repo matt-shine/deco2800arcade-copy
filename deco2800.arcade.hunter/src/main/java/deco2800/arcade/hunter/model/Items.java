@@ -22,7 +22,7 @@ public class Items extends Entity {
 	/**
 	 * String array of possible power ups
 	 */
-	private String[] powerups = {"DoublePoints", "ExtraLife", "Invulnerability","AttackX2"};
+	private String[] powerups = {"DoublePoints", "ExtraLife", "Invulnerability"};
 	
 	/**
 	 * String array of possible weapons

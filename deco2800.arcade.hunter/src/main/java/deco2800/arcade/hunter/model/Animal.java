@@ -137,6 +137,11 @@ public class Animal extends Entity {
 			if (this.getX() <= 0)
 				collisions.add(new EntityCollision(this, null,
 						CollisionType.PREDATOR_C_LEFT_EDGE));
+			if (this.getBounds().overlaps(e.getBounds())){
+				if (e.getType() == "MapEntity"){
+					collisions.add(new EntityCollision(this, e, CollisionType.MAP_ENTITY_C_ANIMAL));
+				}
+			}
 		}
 		return collisions;
 	}
@@ -146,8 +151,12 @@ public class Animal extends Entity {
 	 */
 	@Override
 	public void handleCollision(Entity e, EntityCollection entities) {
-		if (e == null)
+		if (e == null){
 			entities.remove(this);
+		}else if (e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() == "arrow"){
+			entities.remove(this);
+			entities.remove(e);
+		}
 	}
 
 	@Override

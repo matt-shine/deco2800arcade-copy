@@ -30,7 +30,7 @@ public class Player extends Entity {
 	/**
 	 * Constant of JUMP VELOCITY
 	 */
-	private static final int JUMP_VELOCITY = 8;
+	private static final int JUMP_VELOCITY = 12;
 	/**
 	 * Velocity of the player
 	 */
@@ -53,6 +53,7 @@ public class Player extends Entity {
 	private boolean animLoop;
     private long attackTime = 0;
     private long damageTime = 0; //Time when last hit by a monster.
+    private long cooldownModifier = 0;
 	
 	// States used to determine how to draw the player
 	private int score = 0;
@@ -84,7 +85,7 @@ public class Player extends Entity {
 		Weapon = "Bow";
 		currAnim = runAnimation();
 		multiplier = 1;
-		
+		weaponAmmo = 10;
 	}
 
 	
@@ -234,14 +235,14 @@ public class Player extends Entity {
 
 		// Update the player state
 		// Pretending the DEAD state doesn't exist for now... TODO
-		if (isGrounded() && this.state != State.ATTACK) {
+		if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED) {
 			this.velocity.y = 0;
 			this.state = State.RUNNING;
 			currAnim = runAnimation();
-		} else if (this.velocity.y > 0) {
+		} else if (this.velocity.y > 0 && this.state != State.ATTACK) {
 			this.state = State.JUMPING;
 			currAnim = jumpAnimation();
-		} else if (this.velocity.y < -1) {
+		} else if (this.velocity.y < -1 && this.state != State.ATTACK) {
 			this.state = State.FALLING;
 			currAnim = fallAnimation();
 		}
@@ -400,13 +401,24 @@ public class Player extends Entity {
 				System.out.println("Animal Collision");
 				if (!invulnerable && !blink){
 					if (Config.getPreferencesManager().isSoundEnabled()){
-						hurt.play(1.0f);
+						hurt.play(Config.getPreferencesManager().getVolume());
 					}
 					this.blink = true;
                     damageTime = System.currentTimeMillis();
 					loseLife();
 					checkLives();
 				}
+			}
+		}else if(e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() != "arrow"){
+			System.out.println("MapEntityCollision");
+			if (!invulnerable && !blink){
+				if (Config.getPreferencesManager().isSoundEnabled()){
+					hurt.play(Config.getPreferencesManager().getVolume());
+				}
+				this.blink = true;
+				damageTime = System.currentTimeMillis();
+				loseLife();
+				checkLives();
 			}
 		}
 	}
@@ -525,8 +537,8 @@ public class Player extends Entity {
 	}
 
 	public void attack() {
-    	if (attackTime + Config.PLAYER_ATTACK_COOLDOWN < System.currentTimeMillis()){
-    		if (this.state != State.ATTACK) {
+    	if (attackTime + Config.PLAYER_ATTACK_COOLDOWN - cooldownModifier< System.currentTimeMillis()){
+    		if (this.state != State.ATTACK && this.state != State.DAMAGED) {
     			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
     			if (Config.getPreferencesManager().isSoundEnabled()){
     				attack.play(Config.getPreferencesManager().getVolume());
@@ -538,8 +550,35 @@ public class Player extends Entity {
         		if (weaponAmmo <= 0){
         			Weapon = "KnifeandFork";
         		}
+        		if (Weapon == "KnifeandFork"){
+        			attackTime -= 200;
+        			cooldownModifier = 0;
+        		}else if(Weapon == "Trident"){
+        			cooldownModifier = 100;
+        		}else if(Weapon == "Spear"){
+        			attackTime += 100;
+        			cooldownModifier = -200;
+        		}else if (Weapon == "Bow"){
+        			cooldownModifier = 0;
+        		}
         	}
         }
+	}
+	
+	public String getWeapon(){
+		return Weapon;
+	}
+	
+	public long getAttackTime(){
+		return attackTime;
+	}
+	
+	public int getWeaponAmmo(){
+		if (Weapon != "KnifeandFork"){
+			return weaponAmmo;
+		}else{
+			return 0;
+		}
 	}
 	
 	@Override

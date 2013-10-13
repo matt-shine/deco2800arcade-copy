@@ -1,12 +1,13 @@
 package deco2800.arcade.hunter.screens;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,7 +17,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
-import deco2800.arcade.hunter.MusicManager.HunterMusic;
 import deco2800.arcade.hunter.PhysicsHandler;
 import deco2800.arcade.hunter.model.Animal;
 import deco2800.arcade.hunter.model.BackgroundLayer;
@@ -47,20 +47,21 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch = new SpriteBatch();
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
-	private ArrayList<Animal> animalsKilled = new ArrayList<Animal>();
+	private Music musicResource;
 	private float stateTime;	
 	private float counter;
 	private float timer;
 	private int multiplier;
+	private long animalTime;
+	private long itemTime;
+	private long mapEntityTime;
+	private long attackTime;
 	
 	public GameScreen(Hunter hunter) {
 	
 		
 		this.hunter = hunter;
-		// Plays the music
-		if(Config.getPreferencesManager().isMusicEnabled() && Config.getPreferencesManager().isSoundEnabled()){
-			hunter.getMusicManager().play(HunterMusic.GAME);
-		}
+		
 		// Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
@@ -89,11 +90,22 @@ public class GameScreen implements Screen {
 		entities.add(prey);
 		entities.add(item);
 		
+		// Plays the music
+		if(Config.getPreferencesManager().isMusicEnabled() && Config.getPreferencesManager().isSoundEnabled()){
+			FileHandle musicFile = Gdx.files.internal("gamemusic.mp3");
+			musicResource = Gdx.audio.newMusic(musicFile);
+			musicResource.setVolume(hunter.getPreferencesManager().getVolume());
+			musicResource.setLooping(true);
+			musicResource.play();
+		}
+		
 		stateTime = 0f;
 		counter = 0f;
 		multiplier = 1;
-		
-		
+		animalTime = 0;
+		itemTime = 0;
+		mapEntityTime = 0;
+		attackTime = 0;
 	}
 
 	@Override
@@ -168,31 +180,31 @@ public class GameScreen implements Screen {
 			drawGameUI(staticBatch);
 			staticBatch.end();
 			
-			if (stateTime - counter >= 10f){
-				createAnimals();
-				counter += 10f;
-			}else{
-				if(stateTime%4f <= 0.05f){
-					if(Config.randomGenerator.nextFloat() >= 0.6)
-						createAnimals();
+			if (animalTime + 2500 <= System.currentTimeMillis()){
+				if (Config.randomGenerator.nextFloat() >= 0.5){
+					createAnimals();
 				}
-				if(stateTime%6f <= 0.05f){
-					if(Config.randomGenerator.nextFloat() >= 0.7)
-						createItems(false);
-				}
-				if(stateTime%8f <= 0.05f){
-					if(Config.randomGenerator.nextFloat()>=0.7)
-						createMapEntity();
-				}
-				if(stateTime%10f <= 0.05f){
-					if(Config.randomGenerator.nextFloat() >= 0.5)
-						createItems(true);
-				}
+				animalTime = System.currentTimeMillis();
 			}
+			if (itemTime + 5000 <= System.currentTimeMillis()){
+				if (Config.randomGenerator.nextFloat() >= 0.5){
+					createItems(Config.randomGenerator.nextBoolean());
+				}
+				itemTime = System.currentTimeMillis();
+			}
+			if (mapEntityTime + 4000 <= System.currentTimeMillis()){
+				if (Config.randomGenerator.nextFloat() >= 0.5){
+					createMapEntity();
+				}
+				mapEntityTime = System.currentTimeMillis();
+			}
+			
+			
 			timer -= delta;
 			if (timer <= 0f && timer > -1f){
 				player.setInvulnerability(false);
 				player.setMultiplier(1);
+				multiplier = 1;
 			}
 			if (timer <= -1f){
 				checkBuffs();
@@ -214,34 +226,31 @@ public class GameScreen implements Screen {
 		}
 	}
 
-	/**
-	 * Gets the number of animals that were killed by the player
-	 * @return int animalsKilled
-	 */
-	private ArrayList<Animal> getAnimalsKilled() {
-		return animalsKilled;
-	}
 	
 	private void createMapEntity() {
-		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64));
+		System.out.println("New Map Entity");
+		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64, "spike trap"));
 	}
 	
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
 		System.out.println("New Animal");
-//		entities.add(new Animal(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
+		entities.add(new Animal(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
 	}
 	
 	private void createItems(boolean weapon){
 		System.out.println("New Item");
-//		entities.add(new Items(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)), 64, 64, weapon));
+		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, weapon));
 	}
 
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			// Attack
 			player.attack();
-			
+			if (player.getWeapon() == "Bow" && attackTime + Config.PLAYER_ATTACK_COOLDOWN <= System.currentTimeMillis()){
+				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),32,32,"arrow"));
+				attackTime = System.currentTimeMillis();
+			}
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.V)){
@@ -268,6 +277,7 @@ public class GameScreen implements Screen {
 		drawLives(batch);
 		drawScore(batch);
 		drawDistance(batch);
+		drawWeaponAmmo(batch);
 	}
 
 	private void drawScore(SpriteBatch batch) {
@@ -295,6 +305,12 @@ public class GameScreen implements Screen {
 		}
 	}
 
+	private void drawWeaponAmmo(SpriteBatch batch){
+		int x = 16;
+		int y = 16;
+		CharSequence ammoText = "Ammo: " + player.getWeaponAmmo();
+		font.draw(batch, ammoText, x, y);
+	}
 	
 	/**
 	 * Moves the cameras along with the player
@@ -318,7 +334,8 @@ public class GameScreen implements Screen {
 	}
 
 	private void gameOver(){
-		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),getAnimalsKilled().size()));
+		musicResource.stop();
+		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),player.getAnimalsKilled()));
 	}
 	
 	public void removeEntity(Entity e){

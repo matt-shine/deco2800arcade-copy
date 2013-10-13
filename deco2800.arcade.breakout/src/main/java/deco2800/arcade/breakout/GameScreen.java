@@ -199,10 +199,10 @@ public class GameScreen implements Screen  {
 	}
 	
 	private void powerupCheck(Brick b) {
-		if (isPowerupOn()) {
+		if (!isPowerupOn()) {
 			return;
 		}
-		if (Math.random() < 0.15) {
+		if (Math.random() < 0.4) {
 			Rectangle r = b.getShape();
 			getPowerupManager().handlePowerup(r.x + r.width/2, r.y);
 		}

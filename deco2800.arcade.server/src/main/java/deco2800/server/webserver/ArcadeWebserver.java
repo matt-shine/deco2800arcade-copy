@@ -12,10 +12,8 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import org.simpleframework.http.Request;
 import org.simpleframework.http.Response;
@@ -32,8 +30,17 @@ public class ArcadeWebserver implements Container {
 	static String readFile(String path, Charset encoding) 
 			throws IOException 
 			{
-		byte[] encoded = Files.readAllBytes(Paths.get(path));
-		return encoding.decode(ByteBuffer.wrap(encoded)).toString();
+	    RandomAccessFile raf = new RandomAccessFile(path, "r");
+	    FileChannel inChannel = raf.getChannel();
+	    
+		ByteBuffer encoded = ByteBuffer.allocate((int) inChannel.size());
+		inChannel.read(encoded);
+		
+		byte[] bytes = encoded.array();
+		
+		inChannel.close();
+		
+		return new String(bytes, encoding);
 			}
 
 	public void handle(Request request, Response response) {
@@ -65,9 +72,9 @@ public class ArcadeWebserver implements Container {
 						
 				System.out.println( test );
 				
-				bodyString = readFile( "webserver/html/template.html", StandardCharsets.UTF_8 );
+				bodyString = readFile( "webserver/html/template.html", Charset.forName("UTF-8" ) );
 				
-				String contentString = readFile( "webserver/html/replays.html", StandardCharsets.UTF_8 );
+				String contentString = readFile( "webserver/html/replays.html", Charset.forName("UTF-8" ) );
 				
 				bodyString = bodyString.replace( "#{{content}}", contentString );
 			
@@ -83,7 +90,7 @@ public class ArcadeWebserver implements Container {
 				response.setDate("Date", time);
 				response.setDate("Last-Modified", time);
 
-				body.println( readFile( "webserver/javascript" + request.getPath(), StandardCharsets.UTF_8 ) );
+				body.println( readFile( "webserver/javascript" + request.getPath(), Charset.forName("UTF-8" ) ) );
 				body.close();
 				System.out.println( "Served js" );
 			} else if ( request.getPath().toString().contains( "css" ) ){
@@ -96,7 +103,7 @@ public class ArcadeWebserver implements Container {
 				response.setDate("Date", time);
 				response.setDate("Last-Modified", time);
 
-				body.println( readFile( "webserver/style" + request.getPath(), StandardCharsets.UTF_8 ) );
+				body.println( readFile( "webserver/style" + request.getPath(), Charset.forName("UTF-8" ) ) );
 				body.close();
 				System.out.println( "Served css" );
 			} 

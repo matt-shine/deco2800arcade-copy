@@ -33,6 +33,31 @@ public class WL6InputProcessor implements InputProcessor {
             ArcadeSystem.exit();
         }
 
+        //reset level
+        if (c == Keys.NUM_3) {
+            model.reset();
+        }
+
+        //increment level
+        if (c == Keys.NUM_4) {
+            model.nextLevel();
+        }
+
+        //go to secret level
+        if (c == Keys.NUM_5) {
+            model.secretLevel();
+        }
+
+        //increment difficulty
+        if (c == Keys.NUM_6) {
+            model.setDifficulty(model.getDifficulty() + 1);
+        }
+
+        //decrement difficulty
+        if (c == Keys.NUM_7) {
+        	model.setDifficulty(model.getDifficulty() - 1);
+        }
+
 
 
         if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
@@ -51,7 +76,7 @@ public class WL6InputProcessor implements InputProcessor {
         if (Gdx.input.isKeyPressed(Keys.A)) x -= 1;
         if (Gdx.input.isKeyPressed(Keys.D)) x += 1;
 
-        //velocity = rotate(180, normalize((x, y)) * speed * delta)
+        //velocity = rotate(-p.getAngle(), normalize((x, y)) * speed * delta)
         p.setVel(
                 new Vector2(x, y)
                 .nor()
@@ -75,14 +100,13 @@ public class WL6InputProcessor implements InputProcessor {
         return false;
     }
 
-    private int lookOffset = 0;
-
     @Override
     public boolean mouseMoved(int x, int y) {
         Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(game.getWidth() / 2, game.getHeight() / 2);
-        lookOffset -= x - game.getWidth() / 2;
-        model.getPlayer().setAngle(lookOffset * MOUSE_SENSITIVITY);
+        float lookOffset = x - (game.getWidth() / 2);
+        float newLook = model.getPlayer().getAngle() - (lookOffset * MOUSE_SENSITIVITY);
+        model.getPlayer().setAngle(newLook);
         updatePlayerSpeed();
         return false;
     }

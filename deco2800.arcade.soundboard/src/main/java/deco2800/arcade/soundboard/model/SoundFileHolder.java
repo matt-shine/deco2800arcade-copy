@@ -15,7 +15,6 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
     public static final float MAX_VOLUME = 1.0f;
 
     private boolean loop = false;
-    private FileHandle filePath;
     private Music sample;
     private String label;
     private boolean playing = false;
@@ -29,12 +28,12 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
         this.label = label;
 
         try {
-            filePath = new FileHandle(file);
+            FileHandle filePath = new FileHandle(file);
             sample = Gdx.audio.newMusic(filePath);
             sample.setVolume(DEFAULT_VOLUME);
             sample.setLooping(this.loop);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            // Could not find file nothing to worry about
         }
     }
 

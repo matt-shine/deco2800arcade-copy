@@ -49,7 +49,7 @@ public class Player extends User {
      * DO NOT USE THIS METHOD, AT ALL, EVER.
      */
     public Player(int playerID, String username, String filepath) {
-        //Doing nothing
+        // Do nothing
     }
 
 	@Deprecated
@@ -87,6 +87,7 @@ public class Player extends User {
 		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
 				privacy[6]);
+        this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -94,7 +95,7 @@ public class Player extends User {
 		 * to boolean/int and specifying error range) to communicate this.
 		 */
 
-		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFUALT TO
+		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFAULT TO
 		// PLACEHOLDER
 		// this.icon = new Icon(filepath);
 		/*
@@ -114,6 +115,10 @@ public class Player extends User {
 	 * @param details
 	 *            An array of strings containing the player's username, name,
 	 *            email, program and bio.
+     * @param friendsList
+     * @param friendRequestsList
+     * @param blockedList
+     * @param gamesList
 	 * @param privacy
 	 *            A boolean array of privacy settings.
 	 * @require There are at least 7 elements in privacy array. Elements 1

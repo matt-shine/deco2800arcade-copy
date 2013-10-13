@@ -18,6 +18,8 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceResponse;
+import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
+import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 import deco2800.arcade.protocol.game.*;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
@@ -117,7 +119,8 @@ public class Protocol {
 		kryo.register(VoiceMessage.class);
 
 		// Package Manager
-		kryo.register(GameUpdateCheckRequest.class);
+        kryo.register(GameUpdateCheckRequest.class);
+        kryo.register(GameUpdateCheckResponse.class);
 
 		// Register miscellaneous classes
 		kryo.register(byte[].class);

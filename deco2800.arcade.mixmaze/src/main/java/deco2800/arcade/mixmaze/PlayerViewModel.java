@@ -28,15 +28,16 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 
 	private final IMixMazeModel gameModel;
 	private final int tileSize;
-	private final TextureRegion[] region;
+	private final TextureRegion bodyRegion;
+	private final TextureRegion headRegion;
 	private final KeyManager km;
 	private final int id;
-	private final GameScreen.Scorebar scorebar;
+	private final GameScreen.ScoreBar scorebar;
 	private final GameScreen.SidePanel sidePanel;
 
 	private int x;
 	private int y;
-	private int direction;
+	private int rotation;
 
 	/**
 	 * Constructor
@@ -45,7 +46,7 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	 */
 	PlayerViewModel(IMixMazeModel gameModel,
 			int tileSize, int id, int[] playerControls,
-			GameScreen.Scorebar scorebar,
+			GameScreen.ScoreBar scorebar,
 			GameScreen.SidePanel sidePanel) {
 		Texture texture;
 		HashMap<Integer, Integer> mapping =
@@ -57,25 +58,23 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		this.scorebar = scorebar;
 		this.sidePanel = sidePanel;
 
-	if(playerControls[0] != UP) mapping.put(playerControls[0], UP);
-	if(playerControls[1] != DOWN) mapping.put(playerControls[1], DOWN);
-	if(playerControls[2] != LEFT) mapping.put(playerControls[2], LEFT);
-	if(playerControls[3] != RIGHT) mapping.put(playerControls[3], RIGHT);
-	if(playerControls[4] != NUM_5) mapping.put(playerControls[4], NUM_5);
-	if(playerControls[5] != NUM_6) mapping.put(playerControls[5], NUM_6);
+		
+	if(playerControls[0] != NUM_5) mapping.put(playerControls[0], NUM_5);
+	if(playerControls[1] != NUM_6) mapping.put(playerControls[1], NUM_6);
+	if(playerControls[2] != UP) mapping.put(playerControls[2], UP);
+	if(playerControls[3] != LEFT) mapping.put(playerControls[3], LEFT);
+	if(playerControls[4] != DOWN) mapping.put(playerControls[4], DOWN);
+	if(playerControls[5] != RIGHT) mapping.put(playerControls[5], RIGHT);
+	
 
 		km = new KeyManager(mapping);
 
 		/* load texture */
+		texture = new Texture(Gdx.files.internal("body.png"));
+		bodyRegion = new TextureRegion(texture);
 		texture = new Texture(Gdx.files.internal(
-					(id == 1) ? "devil.png" : "angel.png"));
-		region = new TextureRegion[4];
-
-		/* index should be consistent with domain.Direction */
-		region[NORTH] = new TextureRegion(texture, 0, 0, 256, 256);
-		region[SOUTH] = new TextureRegion(texture, 256, 0, 256, 256);
-		region[WEST] = new TextureRegion(texture, 512, 0, 256, 256);
-		region[EAST] = new TextureRegion(texture, 768, 0, 256, 256);
+				(id == 1) ? "miner.png" : "cowboy.png"));
+		headRegion = new TextureRegion(texture);
 
 		if (id == 1)
 			this.setColor(1f, 0f, 0f, 1f);
@@ -90,11 +89,14 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		Color old = batch.getColor();
 
 		batch.setColor(this.getColor());
-		batch.draw(region[direction],
-				x * tileSize,
-				640 - (y + 1) * tileSize,
+		batch.draw(bodyRegion, x * tileSize, 640 - (y + 1) * tileSize,
 				tileSize, tileSize);
 		batch.setColor(old);
+		batch.draw(headRegion, x * tileSize, 640 - (y + 1) * tileSize,
+				tileSize / 2, tileSize / 2,
+				tileSize, tileSize,
+				1, 1,
+				rotation);
 	}
 
 	@Override
@@ -130,7 +132,22 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	@Override
 	public void updateDirection(int direction) {
 		logger.debug("direction: {}", direction);
-		this.direction = direction;
+		switch (direction) {
+		case WEST:
+			rotation = -90;
+			break;
+		case NORTH:
+			rotation = 180;
+			break;
+		case EAST:
+			rotation = 90;
+			break;
+		case SOUTH:
+			rotation = 0;
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override

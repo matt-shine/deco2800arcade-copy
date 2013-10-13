@@ -96,6 +96,10 @@ public class MapProcessor {
             return;
         }
 
+        if (d.difficulty > model.getDifficulty()) {
+        	return;
+        }
+        
         if (d.texture == null)
         {
             // This doodad is invisible so it must be a waypoint or something

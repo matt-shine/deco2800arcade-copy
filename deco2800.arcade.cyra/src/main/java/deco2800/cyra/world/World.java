@@ -26,6 +26,8 @@ import deco2800.cyra.model.*;
 public class World {
 	public static final float WORLD_WIDTH = 618f;
 	public static final float WORLD_HEIGHT = 60f;
+	public static final float PLAYER_INIT_X = 20f;
+	public static final float GAME_INIT_X = 602.5f;
 	
 	private AchievementsTracker at = new AchievementsTracker();
 	
@@ -50,6 +52,8 @@ public class World {
 	private float time;
 	private boolean isPaused;
 	private int scenePosition;
+	private boolean callingInitAfterReloadLevel;
+	private float initCount;
 	
 	private boolean turnOffScenes = false;
 	private LaserBeam testBeam;
@@ -62,6 +66,8 @@ public class World {
 		curLevel = new Level(level);
 		this.cam = cam;
 		Sounds.loadAll();
+		callingInitAfterReloadLevel = false;
+		initCount = 2.5f;
 		init();
 		//hardcode
 				if(level == 1) {
@@ -172,7 +178,12 @@ public class World {
 			resetLevel();
 		}
 
-		
+		if (!callingInitAfterReloadLevel) {
+			initCount -= Gdx.graphics.getDeltaTime();
+			if (initCount <0) {
+				resetLevel();
+			}
+		}
 		
 		updateBlockMakers();
 		
@@ -469,7 +480,7 @@ public class World {
 			
 			// Get near player if scene is not playing
 			if ( !levelScenes.isPlaying() ) {
-				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
+				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank, cam);
 				
 				if (e.isDead()) {			
 					System.out.println("removing " + e.getClass()+ " because dead");
@@ -492,7 +503,7 @@ public class World {
 				}
 			} else if (e.getClass() == BulletSimple.class || e.getClass() == BulletHomingDestructible.class){
 				//keep the bullets flying throughout scenes
-				e.advance(Gdx.graphics.getDeltaTime(), ship, rank);
+				e.advance(Gdx.graphics.getDeltaTime(), ship, rank, cam);
 			}
 			
 			
@@ -733,7 +744,7 @@ public class World {
 		time = 0;
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
-		ship = new Player(new Vector2(20f, 6));
+		
 		//ship = new Ship(new Vector2(270, 60));
 		
 		sword = new Sword(new Vector2(-1, -1));
@@ -746,7 +757,13 @@ public class World {
 		//rank = 0.91f;
 		rank = 0.76f;
 		//rank = 0.21f;
-		scenePosition = 0;
+		if (callingInitAfterReloadLevel) {
+			scenePosition = 0;
+			ship = new Player(new Vector2(PLAYER_INIT_X, 6));
+		} else {
+			ship = new Player(new Vector2(GAME_INIT_X, 6));
+			scenePosition = 2;
+		}
 		resultsScreen = new ResultsScreen();
 		
 		isPaused = false;
@@ -784,6 +801,7 @@ public class World {
 		cam.setFollowShip(true);
 
 		curLevel.reloadLevel();
+		callingInitAfterReloadLevel = true;
 		init();
 		levelScenes = new Level2Scenes(ship, cam, resultsScreen);
 		return;

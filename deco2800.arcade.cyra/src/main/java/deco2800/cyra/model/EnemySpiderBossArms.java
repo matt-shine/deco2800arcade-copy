@@ -1,5 +1,6 @@
 package deco2800.cyra.model;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -9,7 +10,7 @@ public class EnemySpiderBossArms extends Enemy {
 	private static final float BASE_SPEED = 4f;
 	private static final float RANK_SPEED_MULT = 20f;
 	private static final float WIDTH = 4f;
-	private static final float HEIGHT = 4f;
+	private static final float HEIGHT = 3f;
 	private static final float PARENT_OFFSET_X = 9f;
 	private static final float PARENT_OFFSET_Y = 4f;
 	private static final float PHASE2_OFFSET_X = 9f;
@@ -22,6 +23,7 @@ public class EnemySpiderBossArms extends Enemy {
 	private EnemySpiderBoss parent;
 	private int phase2pos;
 	private float circlePos;
+	
 	
 	
 	private float bulletCount;
@@ -42,7 +44,7 @@ public class EnemySpiderBossArms extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		int phase = parent.getPhase();
 		float thisMoveDelta = delta * (BASE_SPEED + rank * RANK_SPEED_MULT);
@@ -227,6 +229,12 @@ public class EnemySpiderBossArms extends Enemy {
 				position.y = parent.position.y + PARENT_OFFSET_Y;
 			}
 		}
+		
+		if (isAttacking || isReturning) {
+			rotation += 600*delta;
+		} else {
+			rotation = 0;
+		}
 		return newEnemies;
 	}
 
@@ -253,6 +261,8 @@ public class EnemySpiderBossArms extends Enemy {
 	public boolean isAttacking() {
 		return isAttacking;
 	}
+	
+	
 
 	
 }

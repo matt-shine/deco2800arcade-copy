@@ -1,5 +1,6 @@
 package deco2800.cyra.model;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -15,7 +16,7 @@ public class Zombie extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		velocity.x = -1 * (float)(Math.sin(4*position.x) + 1.5);
 		
 		position.add(velocity.mul(delta));

@@ -1,11 +1,13 @@
 package deco2800.cyra.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import deco2800.cyra.model.Player.State;
+import deco2800.cyra.world.ParallaxCamera;
 import deco2800.cyra.world.Sounds;
 
 public class SoldierEnemy extends Enemy {
@@ -58,7 +60,7 @@ public class SoldierEnemy extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		super.update(ship);
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		
@@ -160,9 +162,10 @@ public class SoldierEnemy extends Enemy {
 				
 				
 				
-			} else {
+			} else if (position.x >= cam.position.x - cam.viewportWidth/2 && position.x <= cam.position.x + cam.viewportWidth/2 - width/2 &&
+					position.y >= cam.position.y - cam.viewportHeight/2 && position.y <= cam.position.y + cam.viewportHeight/2 - height/2){
 				
-				//pick a new state
+				//pick a new state as long as is on screen
 				pickNewState(ship, rank);
 			}
 		}
@@ -245,6 +248,8 @@ public class SoldierEnemy extends Enemy {
 	}
 
 	public void pickNewState(Player ship, float rank) {
+		velocity.x = 0f;
+		
 		//will need to make it so the same state doesn't get picked twice
 		float walkChance = 0.4f - 0.34f * rank;
 		float jumpChance = walkChance + 0.3f;

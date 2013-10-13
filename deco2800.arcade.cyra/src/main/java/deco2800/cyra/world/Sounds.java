@@ -82,10 +82,10 @@ public class Sounds {
 		}
 		
 		public static void playBossMusic() {
-			boss1bgm.stop();
+			/*boss1bgm.stop();
 			boss1bgm.play();
 			boss1bgm.setVolume(0.4f);
-			boss1bgm.setLooping(true);
+			boss1bgm.setLooping(true);*/
 		}
 		
 		

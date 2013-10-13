@@ -1,6 +1,7 @@
 package deco2800.cyra.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -51,7 +52,7 @@ public class SoldierBoss extends Enemy {
 	}
 
 	@Override
-	public Array<Enemy> advance(float delta, Player ship, float rank) {
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
 		super.update(ship);
 		Array<Enemy> newEnemies = new Array<Enemy>();
 		

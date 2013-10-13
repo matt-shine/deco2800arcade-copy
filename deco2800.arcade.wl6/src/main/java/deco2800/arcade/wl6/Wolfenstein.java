@@ -16,8 +16,6 @@ public class Wolfenstein {
 		final Arcade arcade = new Arcade(args);
 
 		ArcadeSystem.setArcadeInstance(arcade);
-
-		arcade.addCanvas();
 		
 		try {
 			arcade.connectToServer();

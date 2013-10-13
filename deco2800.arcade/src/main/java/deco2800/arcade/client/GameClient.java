@@ -3,6 +3,9 @@ package deco2800.arcade.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

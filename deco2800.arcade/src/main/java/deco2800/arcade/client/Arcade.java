@@ -7,22 +7,19 @@ import java.awt.Insets;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import java.util.*;
-
 
 import javax.swing.JFrame;
 
 import deco2800.arcade.client.network.listener.*;
 import deco2800.arcade.protocol.game.GameLibraryRequest;
+
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
 import org.reflections.Reflections;
 
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 
 import deco2800.arcade.client.network.NetworkClient;
@@ -57,22 +54,13 @@ import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
  * The client application for running arcade games.
  * 
  */
-public class Arcade extends JFrame {
-
-    /**
-     * Only exists to stop warning
-     */
-    private static final long serialVersionUID = 3609353264826109097L;
+public class Arcade {
 
     private NetworkClient client;
 
     private Player player;
 
-    private int width, height;
-
     private String serverIPAddress = "127.0.0.1";
-
-    private LwjglCanvas canvas;
 
     private GameClient selectedGame = null;
 
@@ -86,12 +74,9 @@ public class Arcade extends JFrame {
     
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
     
-
-    // Width and height of the Arcade window
     private static final int ARCADE_WIDTH = 1280;
     private static final int ARCADE_HEIGHT = 720;
-    private static final int MIN_ARCADE_WIDTH = 640;
-    private static final int MIN_ARCADE_HEIGHT = 480;
+    
 
     /**
      * ENTRY POINT
@@ -103,8 +88,6 @@ public class Arcade extends JFrame {
 
         ArcadeSystem.setArcadeInstance(arcade);
 
-        arcade.addCanvas();
-
         ArcadeSystem.goToGame(ArcadeSystem.UI);
     }
 
@@ -115,37 +98,22 @@ public class Arcade extends JFrame {
      */
     public Arcade(String[] args) {
 
-        this.width = ARCADE_WIDTH;
-        this.height = ARCADE_HEIGHT;
-        initWindow();
-    }
-
-    /**
-     * Configure the window
-     */
-    private void initWindow() {
-        // create the main window
-        this.setSize(new Dimension(width, height));
-        this.setVisible(true);
-        Insets insets = this.getInsets();
-        this.setSize(new Dimension(width + insets.left + insets.right, height
-                + insets.bottom + insets.top));
-        this.setMinimumSize(new Dimension(MIN_ARCADE_WIDTH, MIN_ARCADE_HEIGHT));
-        this.getContentPane().setBackground(Color.black);
-
-        // set shutdown behaviour
-        this.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(WindowEvent winEvt) {
-                arcadeExit();
-            }
-        });
+    	// create the main window
+    	LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+    	config.title = "DECO2800 Arcade";
+    	config.vSyncEnabled = true;
+    	//config.useGL20 = true;
+    	config.width = ARCADE_WIDTH;
+    	config.height = ARCADE_HEIGHT;
+    	this.proxy = new ProxyApplicationListener();
+    	proxy.setTarget(new DummyApplicationListener());
+    	new LwjglApplication(proxy, config);
     }
 
     /**
      * Completely exits arcade. The status code is always set to 0.
      */
     public void arcadeExit() {
-        removeCanvas();
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -268,12 +236,13 @@ public class Arcade extends JFrame {
 		newGameRequest.requestType = GameRequestType.NEW;
 		this.client.sendNetworkObject(newGameRequest);
 	}
-
+	
 	/**
-	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 * Gets a game from the given gameid
+	 * @param gameid the game to get
+	 * @return a populated GameClient object to use with startGame()
 	 */
-	public void startGame(String gameid) {
-
+	public GameClient getGame(String gameid) {
 		selectedGame = getInstanceOfGame(gameid);
         selectedGame.setNetworkClient(this.client);
         selectedGame.setPlayer(this.player);
@@ -282,7 +251,14 @@ public class Arcade extends JFrame {
         } else {
         	selectedGame.setMultiplayerOff();
         }
-        startGame(selectedGame);
+        return selectedGame;
+	}
+
+	/**
+	 * Begin playing the game in the <tt>selectedGame</tt> field.
+	 */
+	public void startGame(String gameid) {
+        startGame(getGame(gameid));
     }
 
     /**
@@ -310,39 +286,6 @@ public class Arcade extends JFrame {
      */
     public boolean hasPlayer() {
         return (this.player != null);
-    }
-
-    /**
-     * Start a GameClient
-     */
-    public void addCanvas() {
-        this.proxy = new ProxyApplicationListener();
-        this.canvas = new LwjglCanvas(proxy, true);
-        this.canvas.getCanvas().setSize(width, height);
-
-        proxy.setTarget(new DummyApplicationListener());
-
-        Object mon = new Object();
-        synchronized (mon) {
-            proxy.setThreadMonitor(mon);
-            this.add(this.canvas.getCanvas());
-            try {
-                mon.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    /**
-     * Removes the canvas from the frame. Should be called before shutdown.
-     * Never elsewhere, as there should only ever be one canvas.
-     */
-    public void removeCanvas() {
-
-        this.remove(this.canvas.getCanvas());
-
     }
 
     /**

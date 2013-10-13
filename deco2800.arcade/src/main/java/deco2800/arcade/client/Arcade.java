@@ -248,9 +248,12 @@ public class Arcade extends JFrame {
 
         GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
        
-        getCurrentGame().setPlayer(this.player);
-        getCurrentGame().setThisNetworkClient(this.client);
-        
+        if (getCurrentGame() != null) {
+        	getCurrentGame().setPlayer(this.player);
+            getCurrentGame().setThisNetworkClient(this.client);
+            
+        }
+
         System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
 	

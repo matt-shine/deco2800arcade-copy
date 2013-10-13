@@ -155,17 +155,15 @@ public class MatchmakerQueue {
 		int player1Rating = 0;
 		int player2Rating = 0;
 		try {
-			player1Rating = database.getPlayerRating(player1ID, Integer.parseInt(gameID));
-			player2Rating = database.getPlayerRating(player2ID, Integer.parseInt(gameID));
+			player1Rating = database.getPlayerRating(player1ID, gameID);
+			player2Rating = database.getPlayerRating(player2ID, gameID);
 		} catch (Exception e) {
 			System.out.println(e);
 		}		
-		/*TODO: ELO CALCULATION
-		 * database.updateplayerrating for player1 player2 in gameID
-		 */
+		int[] newScores = elo(player1ID, player1Rating, player2ID, player2Rating, winner);
 		try {
-			database.updatePlayerRating(player1ID, Integer.parseInt(gameID), player1Rating);
-			database.updatePlayerRating(player1ID, Integer.parseInt(gameID), player2Rating);
+			database.updatePlayerRating(player1ID, gameID, newScores[0]);
+			database.updatePlayerRating(player1ID, gameID, newScores[1]);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -178,6 +176,38 @@ public class MatchmakerQueue {
 	
 	public Map<Integer, MultiplayerServer> getActiveServers() {
 		return activeServers;
+	}
+	
+	public int[] elo(int p1ID, int p1Rating, int p2ID, int p2Rating, int winner) {
+		int k = 32;
+		int[] newElo = new int[2];
+		if (p1Rating < 2100 || p2Rating < 2100) {
+			k = 32;
+		} else if ((p1Rating < 2401 && p1Rating >= 2100) || (p2Rating < 2401 && p1Rating >= 2100)) {
+			k = 24;
+		} else {
+			k = 16;
+		}
+		if (winner == p1ID) {
+			double score;
+			double diff = p1Rating - p2Rating;
+			score = k * (1 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));			
+			newElo[0] = (int) Math.floor(p1Rating += score);
+			score = k * (0 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));
+			newElo[1] = (int) Math.floor(p2Rating += score);
+		} else if (winner == p2ID) {
+			double score;
+			double diff = p1Rating - p2Rating;
+			score = k * (0 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));			
+			newElo[0] = (int) Math.floor(p1Rating += score);
+			score = k * (1 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));
+			newElo[1] = (int) Math.floor(p2Rating += score);
+		} else {
+			newElo[0] = p1Rating;
+			newElo[1] = p2Rating;
+		}
+		return newElo;
+		
 	}
 
 }

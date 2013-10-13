@@ -13,10 +13,7 @@ import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameLibraryRequest;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -69,7 +66,7 @@ public class GameLibrary extends GameClient {
         switchViews();
         super.create();
 
-        /*this.getOverlay().setListeners(new Screen() {
+        this.getOverlay().setListeners(new Screen() {
             @Override
             public void hide() {
                 //Unpause your game here
@@ -90,7 +87,7 @@ public class GameLibrary extends GameClient {
             public void resume() {}
             @Override
             public void dispose() {}
-        });   */
+        });
     }
 
     /**
@@ -127,12 +124,19 @@ public class GameLibrary extends GameClient {
             return;
         }
         //Set<Game> playerGames = player.getGames();
-        Set<Game> serverGames = null;
+        Set<Game> serverGames = new HashSet<Game>();
 
         if (ArcadeSystem.getArcadeGames() == null) {
             ArcadeSystem.requestGames();
         } else {
-            serverGames = ArcadeSystem.getArcadeGames();
+            Set<String> idList = ArcadeSystem.getGamesList();
+            Set<Game> serverList = ArcadeSystem.getArcadeGames();
+
+            for (Game game : serverList) {
+                if (idList.contains(game.id)) {
+                    serverGames.add(game);
+                }
+            }
         }
 
         if (serverGames != null) {

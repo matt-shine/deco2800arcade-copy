@@ -3,7 +3,6 @@ package deco2800.arcade.soundboard;
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
-import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.listener.ReplayListener;
 import deco2800.arcade.client.replay.ReplayEventListener;
@@ -48,7 +47,7 @@ public class Soundboard extends GameClient {
 
         replayHandler.addReplayEventListener(initReplayEventListener());
 
-        ReplayNodeFactory.registerEvent("sound_pushed", new String[]{"sound_name", "loop_type", "index"});
+        ReplayNodeFactory.registerEvent("sound_pushed", new String[]{"loop_type", "index"});
 
         loops = new ArrayList<SoundFileHolder>();
         samples = new ArrayList<SoundFileHolder>();
@@ -67,6 +66,9 @@ public class Soundboard extends GameClient {
         loopsSetup.put("house_loop.wav", "House");
         loopsSetup.put("minimal_loop.wav", "Minimal Electro");
         loopsSetup.put("techno_loop.wav", "Techno");
+        loopsSetup.put("dial_up_loop.wav", "Dial Up");
+        loopsSetup.put("click_loop.wav", "Clicks");
+
 
         for (Map.Entry<String, String> file : loopsSetup.entrySet()) {
             this.loops.add(new SoundFileHolder("SoundboardAssets/loops/" + file.getKey(), file.getValue(), true));
@@ -80,6 +82,19 @@ public class Soundboard extends GameClient {
     private void fetchSamples() {
         HashMap<String, String> samplesSetup = new HashMap<String, String>();
         samplesSetup.put("hat.wav", "Hat");
+        samplesSetup.put("huge.wav", "HUGE!");
+        samplesSetup.put("beta.wav", "Beta");
+        samplesSetup.put("arcade.wav", "Arcade");
+        samplesSetup.put("pluck.wav", "Pluck");
+        samplesSetup.put("drum.wav", "Low Drum");
+        samplesSetup.put("bat.wav", "Bat");
+        samplesSetup.put("haha.wav", "Laugh");
+        samplesSetup.put("okay.wav", "Okay");
+        samplesSetup.put("sneeze.wav", "Sneeze");
+        samplesSetup.put("deco2800.wav", "DECO2800");
+        samplesSetup.put("umso.wav", "Umm.. So");
+        samplesSetup.put("down.wav", "Down");
+        samplesSetup.put("up.wav", "Up");
 
         for (Map.Entry<String, String> file : samplesSetup.entrySet()) {
             SoundFileHolder soundFileHolder = new SoundFileHolder("SoundboardAssets/samples/" + file.getKey(), file.getValue(), false);
@@ -168,8 +183,7 @@ public class Soundboard extends GameClient {
                 }
 
                 if (eType.equals("sound_pushed") && screen.isPlayback()) {
-                    screen.playSound(eData.getItemForString("sound_name").toString(),
-                            eData.getItemForString("loop_type").intVal(),
+                    screen.playSound(eData.getItemForString("loop_type").intVal(),
                             eData.getItemForString("index").intVal());
                 }
             }

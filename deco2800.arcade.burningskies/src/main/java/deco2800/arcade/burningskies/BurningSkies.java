@@ -24,8 +24,6 @@ import deco2800.arcade.client.network.NetworkClient;
 @ArcadeGame(id="burningskies")
 public class BurningSkies extends GameClient {
 	
-	static final boolean ENABLEMUSIC = false;
-	
 	public static final int SCREENWIDTH = 1280;
 	public static final int SCREENHEIGHT = 720;
 	
@@ -64,12 +62,12 @@ public class BurningSkies extends GameClient {
 	}
 	
 	public void playSong(String songName, boolean loop) {
-		if(!ENABLEMUSIC) return;
 		if(nowPlaying != null) {
 			nowPlaying.dispose();
 		}
 		nowPlaying = Gdx.audio.newMusic(Gdx.files.internal("sound/music/" + songName + ".ogg"));
 		nowPlaying.setLooping(loop);
+		nowPlaying.setVolume(Configuration.getBackgroundVolume());
 		nowPlaying.play();
 	}
 	
@@ -87,6 +85,10 @@ public class BurningSkies extends GameClient {
 	
 	public void stopSong() {
 		if(nowPlaying != null) nowPlaying.stop();
+	}
+	
+	public void changeVolume(int volume) {
+		if(nowPlaying != null) nowPlaying.setVolume((float)volume/100);
 	}
 	
 	/**

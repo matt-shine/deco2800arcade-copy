@@ -11,8 +11,13 @@ import com.badlogic.gdx.math.Vector2;
 public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
-	private final float MAXVELOCITY = 600;
+	private float maxVelocity = 300; //Changed from static to dynamic.
+	private int maxHealth; //For health powerups.
 	private PlayScreen screen;
+	
+	//brute force way to handle timer
+	private long initialTime;
+	private boolean speedUp = false;
 	
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
@@ -25,27 +30,53 @@ public class PlayerShip extends Ship {
 	public PlayerShip(int health, Texture image, Vector2 position, PlayScreen screen) {
 		super(health, image, position);
 		this.screen = screen;
+		this.maxHealth = health;
 		hitboxScale = 0.25f; // lets the player 'just miss' bullets
+	}
+	
+	@Override
+	public void heal(int healthchange) {
+		this.health += healthchange;
+		//Just for the sake of the health bar being consistent.
+		//This probably will have to be changed if we plan to be able to heal over the maxHealth
+		//though.
+		if (health > maxHealth) {
+			this.health = maxHealth;
+		}
 	}
 	
 	/**
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */
 	public void onRender(float delta) {
+		super.onRender(delta);
+		//resets any powerups if needed. Initial testing on speedup only.
+		//easily applies to a bullet pattern.
+		if (speedUp) {	
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - initialTime) >= 10000) {
+				maxVelocity = 300;
+				speedUp = false;
+			}
+		}
+		
 		// reset
 		velocity.set(0, 0);
     	if(up) {
-    		velocity.add(0, MAXVELOCITY);
+    		velocity.add(0, maxVelocity);
     	}
     	if(down) {
-    		velocity.add(0, -MAXVELOCITY);
+    		velocity.add(0, -maxVelocity);
     	}
     	if(left) {
-    		velocity.add(-MAXVELOCITY, 0);
+    		velocity.add(-maxVelocity, 0);
     	}
     	if(right) {
-    		velocity.add(MAXVELOCITY, 0);
+    		velocity.add(maxVelocity, 0);
     	}
+    	//normalise our velocity
+    	velocity.nor();
+    	velocity.mul(maxVelocity);
     	position.add( velocity.x * delta, velocity.y * delta );
 		if (position.x + getWidth() > BurningSkies.SCREENWIDTH) {
 			position.x = BurningSkies.SCREENWIDTH - getImageWidth();
@@ -85,6 +116,25 @@ public class PlayerShip extends Ship {
 	
 	public void setShooting(boolean shooting) {
 		this.shooting = shooting;
+	}
+	
+	/**
+	 * Changes the max velocity of the ship.
+	 */
+	public void setMaxSpeed(float velocity) {
+		speedUp = true;
+		initialTime = System.currentTimeMillis();
+		maxVelocity = velocity;
+	}
+	
+	/**
+	 * Changes the players current bullet type.
+	 * @ensure pattern != NULL
+	 */
+	public void setBulletPattern(BulletPattern pattern) {
+		playerBullets.remove();
+		playerBullets = pattern;
+		getStage().addActor(playerBullets);
 	}
 	
 	/**

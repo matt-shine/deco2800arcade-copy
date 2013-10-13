@@ -11,7 +11,7 @@ public class PlayerBullet extends Bullet {
 	public PlayerBullet(Affinity affinity, int damage, Ship parent,
 			PlayerShip player, Vector2 initialPosition, float direction, Texture image) {
 		super(affinity, damage, parent, player, initialPosition, direction, image);
-		velocity = new Vector2(0,4000);
+		velocity = new Vector2(0,2000);
 	}
 
 }

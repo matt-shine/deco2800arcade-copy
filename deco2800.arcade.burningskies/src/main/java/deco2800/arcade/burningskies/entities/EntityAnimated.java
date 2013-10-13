@@ -14,7 +14,7 @@ public abstract class EntityAnimated extends Entity {
 	float stateTime;
 
 	// Recommend to implement animation only to one specific class  
-	public EntityAnimated(Texture walkSheet, int cols, int rows) {
+	public EntityAnimated(Texture walkSheet, int cols, int rows, float speed) {
 		super();
 		// Using variables to divide up the sprite sheet for this case 10 x 7
 		TextureRegion[][] tmp = TextureRegion.split(walkSheet,walkSheet.getWidth() / cols, walkSheet.getHeight() / rows);
@@ -33,7 +33,7 @@ public abstract class EntityAnimated extends Entity {
 		}
 		
 		// the first parameter determines the speed of the animation
-		walkAnimation = new Animation(0.15f, walkFrames);
+		walkAnimation = new Animation(speed, walkFrames);
 		stateTime = 0f;
 		animate(0f);
 		this.setDrawable(currentFrame);
@@ -51,8 +51,8 @@ public abstract class EntityAnimated extends Entity {
 	@Override
 	public void act(float delta) {
 		animate(delta);
-		move(delta);
+		onRender(delta);
 	}
 	
-	public abstract void move(float delta);
+	public abstract void onRender(float delta);
 }

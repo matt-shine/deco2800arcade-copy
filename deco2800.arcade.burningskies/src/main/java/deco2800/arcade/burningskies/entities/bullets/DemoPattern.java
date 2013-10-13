@@ -16,8 +16,8 @@ public class DemoPattern extends BulletPattern {
 	
 	public DemoPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
-		image = new Texture(Gdx.files.internal("images/energy_ball_1.png"));
-		image2 = new Texture(Gdx.files.internal("images/energy_ball_2.png"));
+		image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
+		image2 = new Texture(Gdx.files.internal("images/bullets/energy_ball_2.png"));
 		interval = (float) 0.01;
 	}
 	

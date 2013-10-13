@@ -340,7 +340,7 @@ public class PlayerModel {
 			boolean used = false;
 			if (action == Action.USE_BRICK && brick.getAmount() > 0) {
 				WallModel wall = (WallModel) tile.getWall(direction);
-				if (!wall.isBuilt()) {
+				if (!wall.isBuilt() && !wall.isInBox()) {
 					brick.removeOne();
 					wall.build(this);
 					used = true;

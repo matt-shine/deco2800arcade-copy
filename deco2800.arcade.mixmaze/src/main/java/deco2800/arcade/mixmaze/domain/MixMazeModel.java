@@ -298,7 +298,8 @@ public class MixMazeModel implements IMixMazeModel {
 					int x = spawner.nextInt(boardSize);
 					int y = spawner.nextInt(boardSize);
 					while (getSpawnedItem(x, y) != null
-							|| getBoardTile(x, y).isBoxBuilt()) {
+							|| getBoardTile(x, y).isBoxBuilt()
+							|| isPlayerAtPosition(x, y)) {
 						x = spawner.nextInt(boardSize);
 						y = spawner.nextInt(boardSize);
 					}
@@ -398,9 +399,8 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @return <code>true</code> if player is present at specified (x, y),
 	 *         <code>false</code> otherwise
 	 */
-	private boolean hasPlayerAtPosition(int x, int y) {
-		return (player[0].getX() == x && player[0].getY() == y)
-				|| (player[1].getX() == x && player[1].getY() == y);
+	private boolean isPlayerAtPosition(int x, int y) {
+		return player[0].isAtLocation(x, y) || player[1].isAtLocation(x, y);
 	}
 
 	/**
@@ -523,7 +523,7 @@ public class MixMazeModel implements IMixMazeModel {
 	 *         <code>false</code> otherwise.
 	 */
 	private boolean canMove(PlayerModel p, int x, int y, int dir) {
-		boolean res = checkCoordinates(x, y) && !hasPlayerAtPosition(x, y);
+		boolean res = checkCoordinates(x, y) && !isPlayerAtPosition(x, y);
 
 		/* No extra movement restriction on BEGINNER */
 

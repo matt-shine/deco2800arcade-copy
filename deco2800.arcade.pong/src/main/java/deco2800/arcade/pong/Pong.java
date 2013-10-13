@@ -1,6 +1,8 @@
 package deco2800.arcade.pong;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +20,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
@@ -83,18 +86,22 @@ public class Pong extends GameClient {
         //Creating new HighscoreClient connection
         HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
         
-        //Single score
-        hsd.storeScore("Number", 11290193);
-        hsd.storeScore("Number", 30879);
+        //Single scores
+        //hsd.storeScore("Number", 1234567890);
+        //hsd.storeScore("Number", 5211);
         
         //Multiple scores
-//        hsd.addMultiScoreItem("Number", 10);
-//        hsd.addMultiScoreItem("Distance", 1234043);
-//        hsd.sendMultiScoreItems();
+        hsd.addMultiScoreItem("Number", 1234567890);
+        hsd.addMultiScoreItem("Number", 12);
+        //hsd.addMultiScoreItem("Distance", 1234043);
+        hsd.sendMultiScoreItems();
         
         
         //Getting top scores
-        hsd.getGameTopPlayers(10, true);
+        List<Highscore> topPlayers = hsd.getGameTopPlayers(10, false, "Number");
+        
+        //Print the scores
+        HighscoreClient.printHighscores(topPlayers);
 	}
 	
 	/**

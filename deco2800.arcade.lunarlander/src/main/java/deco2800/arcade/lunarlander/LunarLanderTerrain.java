@@ -46,7 +46,7 @@ public static List<List<Integer>> createMap(){
 		int arrayPosition = 1;
 		
 		//automatically adds lines to the right of the landing pad
-		while (pointX < 1300){
+		while (pointX < 1300) {
 
 			int newPointX = randNum(50, 200);
 			int newPointY = randNum(100, 400);
@@ -81,11 +81,12 @@ public static List<List<Integer>> createMap(){
 			
 			pointX2 = pointX2 - newPointX2;
 			pointY2 = newPointY2;
-			arrayPosition2++;
-			
-			
+			arrayPosition2++;	
+		}	
+		System.out.println(terrain.size());
+		for (int i = 0; i < terrain.size(); i++) {
+			System.out.println(terrain.get(i).size());
 		}
-		
 		
 		return terrain;
 	}
@@ -93,8 +94,7 @@ public static List<List<Integer>> createMap(){
 	public static void renderMap(List<List<Integer>> terrain){
 		shapeRenderer = new ShapeRenderer();
 		randomMap = true;
-		
-		
+
 		//Begin drawing of shapes
 	    shapeRenderer.begin(ShapeType.Line);
 	    Gdx.gl.glLineWidth(5);

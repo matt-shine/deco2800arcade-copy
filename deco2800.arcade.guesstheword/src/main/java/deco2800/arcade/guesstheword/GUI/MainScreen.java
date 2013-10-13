@@ -44,30 +44,20 @@ public class MainScreen implements Screen {
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-				//Users will start the game in a default mode
-				// Level 1 and category is .....
-				game.getterSetter.setLevel("Default");
-				
-				//Retrieving of category and texture.
-				String category = "" + game.picture.getLevel1().keySet().toArray()[0]; 
-				String categoryItem = "" + game.picture.getLevel1().get(category).keySet().toArray()[0];
-				Texture texture = game.picture.getLevel1().get(category).get(categoryItem);
-				
-				System.out.println("Category!! = " + category + " and the word is " + categoryItem);
-				game.getterSetter.setCategory(category);
-				game.getterSetter.setCategoryItem(categoryItem);
-				game.getterSetter.setTexture(texture);
-				
-				System.out.println("Changing to Game Screen");
+				clearLabel();
 				clearTextfield();
+				//Users will start the game in a default mode
+				game.getterSetter.setLevel("Default");
+				System.out.println("Changing to Game Screen");
 				game.setScreen(game.gameScreen);
-				
 			}
 		});
 		settingsButton = new TextButton("Game Settings" , skin);
 		settingsButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				System.out.println("Changing to Settings Screen");
+				clearLabel();
+				clearTextfield();
 				game.setScreen(game.settingsScreen);
 			}
 		});
@@ -93,6 +83,11 @@ public class MainScreen implements Screen {
 
 		stage.addActor(mainTable);
 		
+	}
+	
+	private void clearLabel(){
+		game.getterSetter.setScore(0);
+		game.getterSetter.setLevel("");
 	}
 	
 	private void clearTextfield(){

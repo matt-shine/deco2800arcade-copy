@@ -16,6 +16,15 @@ public class GetterSetter {
 	
 	private String button1 = "";
 	private String button2 = "";
+	
+	private int score ;
+	//score
+	public void setScore(int score){
+		this.score = score;
+	}
+	public int getScore(){
+		return score;
+	}
 	//LEVEL
 	public void setLevel(String level){
 		this.level = level;

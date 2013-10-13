@@ -1,9 +1,7 @@
 package deco2800.arcade.guesstheword.gameplay;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 /**
  * This is the class that will "add" all the images required for the game. 
@@ -33,10 +31,6 @@ public class Pictures {
 	public void loadPictures(){
 		// Declarations for HashMap for the different levels 
 		// DO NOT AMEND!
-//		level1pict = new HashMap<String, Texture>();
-//		level2pict = new HashMap<String, Texture>();
-//		level3pict = new HashMap<String, Texture>();
-		
 		level1Cat =  new HashMap<String, HashMap<String, Texture>>();
 		level2Cat =  new HashMap<String, HashMap<String, Texture>>();
 		level3Cat =  new HashMap<String, HashMap<String, Texture>>();
@@ -56,7 +50,7 @@ public class Pictures {
 		animalsMap.put("FROG", frog1 );
 		animalsMap.put("HARE", hare1 );
 		
-		System.out.println(animalsMap.keySet());
+//		System.out.println(animalsMap.keySet());
 		
 		//animals textures level 2
 		Texture birds1 = new Texture("Images/level2/animals/birds/birds_1.png");
@@ -71,7 +65,7 @@ public class Pictures {
 		animalsMap2.put("WOLFS", wolfs1 );
 		animalsMap2.put("TIGER", tiger1 );
 		
-		System.out.println(animalsMap2.keySet());
+//		System.out.println(animalsMap2.keySet());
 		
 		//animals textures level 3
 		Texture baboon1 = new Texture("Images/level3/animals/baboon/baboon_1.png");
@@ -86,23 +80,8 @@ public class Pictures {
 		animalsMap3.put("CATFISH", catfish1 );
 		animalsMap3.put("TURKEY", turkey1 );
 				
-		System.out.println(animalsMap3.keySet());
-		
-//		System.out.println(bear1.getTextureData());
-//		Texture bear2 = new Texture("Images/level1/animals/bear/bear_2.png");
-//		Texture bear3 = new Texture("Images/level1/animals/bear/bear_3.png");
-		
-//		Texture bull1 = new Texture("bull1.png");
-//		Texture bull2 = new Texture("Images/level1/animals/bull/bull_2.png");
-//		Texture bull3 = new Texture("Images/level1/animals/bull/bull_3.png");
-		
-//		Texture fish1 = new Texture("fish1.png");
-//		Texture fish2 = new Texture("Images/level1/animals/fish/fish_2.png");
-//		Texture fish3 = new Texture("Images/level1/animals/fish/fish_3.png");
-		
-//		Texture hare1 = new Texture("hare1.png");
-//		Texture hare2 = new Texture("Images/level1/animals/hare/hare_2.png");
-//		Texture hare3 = new Texture("Images/level1/animals/hare/hare_3.png");
+//		System.out.println(animalsMap3.keySet());
+
 		
 		//brands textures level 1
 		Texture dell1 = new Texture("Images/level1/brands/dell/dell_1.png");
@@ -136,8 +115,8 @@ public class Pictures {
 		//brands textures level 3
 		Texture adidas1 = new Texture("Images/level3/brands/adidas/adidas_1.png");
 		Texture qantas1 = new Texture("Images/level3/brands/qantas/qantas_1.png");	
-		Texture target1 = new Texture("Images/level3/brands/targer/target_1.png");
-		Texture hermes1 = new Texture("Images/level3/brands/hermes/hermes_1.png");	
+		Texture target1 = new Texture("Images/level3/brands/target/target_1.png");
+		Texture hermes1 = new Texture("Images/level3/brands/hermes/hermes.png");	
 		Texture kitkat1 = new Texture("Images/level3/brands/kitkat/kitkat_1.png");	
 		HashMap<String, Texture> brandsMap3 = new HashMap<String, Texture>();
 		brandsMap3.put("ADIDAS", adidas1);
@@ -188,7 +167,7 @@ public class Pictures {
 		//countries textures level 3
 		Texture africa1 = new Texture("Images/level3/countries/africa/africa_1.png");
 		Texture mexico1 = new Texture("Images/level3/countries/mexico/mexico_1.png");
-		Texture russia1 = new Texture("Images/level3/countries/russia/russian_1.png");
+		Texture russia1 = new Texture("Images/level3/countries/russia/russia_1.png");
 		Texture turkey2 = new Texture("Images/level3/countries/turkey/turkeyflag_1.png");
 		Texture zambia1 = new Texture("Images/level3/countries/zambia/zambia_1.png");
 		HashMap<String, Texture> countriesMap3 = new HashMap<String, Texture>();
@@ -211,7 +190,7 @@ public class Pictures {
 //		Texture peru3 = new Texture("Images/level1/countries/peru/peru3.png");
 
 		//Sports textures level 1
-		Texture judo1 = new Texture("Images/level1/sports/judo/judo_3.png");
+		Texture judo1 = new Texture("Images/level1/sports/judo/judo_1.png");
 		Texture polo1 = new Texture("Images/level1/sports/polo/polo_1.png");
 		Texture epee1 = new Texture("Images/level1/sports/epee/epee_1.png");
 		Texture golf1 = new Texture("Images/level1/sports/golf/golf_1.png");
@@ -307,7 +286,6 @@ public class Pictures {
 		level2Cat.put("TRANSPORTS", transportsMap2);
 		
 		level3Cat.put("ANIMALS", animalsMap3);
-		level3Cat.put("BRANDS", brandsMap3);
 		level3Cat.put("COUNTRIES", countriesMap3);
 		level3Cat.put("SPORTS", sportsMap3);
 		level3Cat.put("TRANSPORTS", transportsMap3);

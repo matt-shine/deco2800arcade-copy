@@ -1,5 +1,7 @@
 package deco2800.arcade.server.database;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -56,6 +58,7 @@ public class TestPlayerStorage {
 	public void setUp() throws Exception {
 		playerStorage = new PlayerStorage();
         playerStorage.initialise();
+        
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
 		databaseTester.onSetup();
@@ -80,8 +83,7 @@ public class TestPlayerStorage {
 			playerData.add("BE");
 			playerData.add("I am bob.");
 			playerData.add("86");
-			playerStorage.getPlayerData(1);
-			
+			assertEquals(playerData, playerStorage.getPlayerData(1));
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -84,7 +84,7 @@ public class DoodadList {
                     DoodadInfo.wayPoint(DIRS.LEFT).specialCase(),
 
                     //23: puddle of water
-                    DoodadInfo.nonsolidScenery("puddle"),
+                    DoodadInfo.nonsolidScenery("blank"),
 
                     //24: oil drum
                     DoodadInfo.solidScenery("plant"),
@@ -159,7 +159,7 @@ public class DoodadList {
                     DoodadInfo.healthPickup("health", 10, 0),
 
                     //48: medkit
-                    DoodadInfo.healthPickup("medkit", 25, 0),
+                    DoodadInfo.healthPickup("clownnurse", 25, 0),
 
                     //49: ammo pickup
                     DoodadInfo.ammoPickup("ammo", 5, 0),

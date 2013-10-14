@@ -9,12 +9,16 @@ public class MultiplayerServer {
 
 	private int player1Id;
 	private int player2Id;
+	private int p1Rating = 0;
+	private int p2Rating = 0;
 	private Connection player1;
 	private Connection player2;
 	private String gameId;
 	private int sessionId;
 	private MatchmakerQueue queue;
 	private Boolean matchmakerGame;
+
+	
 
 	/**
 	 * Creates a multiplayer server for a matchmaking game.
@@ -26,7 +30,8 @@ public class MultiplayerServer {
 	 * @param sessionId
 	 * @param queue
 	 */
-	public MultiplayerServer(int player1Id, int player2Id, Connection player1, Connection player2, String gameId, int sessionId, MatchmakerQueue queue) {
+	public MultiplayerServer(int player1Id, int player2Id, Connection player1, Connection player2, String gameId, int sessionId, 
+			MatchmakerQueue queue, int p1Rating, int p2Rating) {
 		this.player1Id = player1Id;
 		this.player2Id = player2Id;
 		this.player1 = player1;
@@ -35,6 +40,8 @@ public class MultiplayerServer {
 		this.sessionId = sessionId;
 		this.queue = queue;
 		this.matchmakerGame = true;
+		this.p1Rating = p1Rating;
+		this.p2Rating = p2Rating;
 		player1.sendTCP(this.sessionId);
 		player2.sendTCP(this.sessionId);
 	}
@@ -76,7 +83,19 @@ public class MultiplayerServer {
 	public int getSessionId() {
 		return sessionId;
 	}
+	
+	public int getPlayer1Rating() {
+		return p1Rating;
+	}
+	
+	public int getPlayer2Rating() {
+		return p2Rating;
+	}
 
+	public Boolean getServerType() {
+		return matchmakerGame;
+	}
+	
 	public void stateUpdate(GameStateUpdateRequest request) {
 		//if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
 		System.out.println(request.playerID);

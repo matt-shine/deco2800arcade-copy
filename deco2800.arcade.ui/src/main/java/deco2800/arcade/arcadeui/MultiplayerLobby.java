@@ -284,7 +284,14 @@ public class MultiplayerLobby implements Screen {
 				table5.add(chat).padRight(200);
 				table5.row();
 				chatfield.setText("");
+				
+				
+				final ScrollPane scroller = new ScrollPane(table5);
 
+		        final Table table8 = new Table();
+		        table8.setFillParent(true);
+		        table8.add(scroller).fill().expand();
+		        stage.addActor(table8);
 
 			}
 		});

@@ -35,7 +35,7 @@ final class SplashScreen implements Screen {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param game
 	 *            the MixMaze game
 	 */
@@ -49,8 +49,8 @@ final class SplashScreen implements Screen {
 	public void render(float delta) {
 		if (TimeUtils.millis() - showTime > MIN_SHOW_TIME
 				&& Gdx.input.isKeyPressed(ANY_KEY)) {
-			logger.debug("switch to menu screen");
-			game.setScreen(game.menuScreen);
+			logger.debug("switch to settings screen");
+			game.setScreen(game.settingsScreen);
 		}
 
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);

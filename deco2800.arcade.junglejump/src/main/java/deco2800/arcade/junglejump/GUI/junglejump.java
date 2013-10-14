@@ -156,7 +156,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
-			File file = new File("junglejumpassets/soundtrack.wav");
+			File file = new File("soundtrack.wav");
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -173,7 +173,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			File file2 = new File("junglejumpassets/menu.wav");
+			File file2 = new File("menu.wav");
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
 			menuSound.open(audioIn2);
@@ -197,24 +197,24 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void create() {
 		super.create();
 		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(("junglejumpassets/mainscreen.png"));
-		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));
-		monkeySitRIGHT = new Texture(("junglejumpassets/monkeySit.png"));
-		monkeySitLEFT = new Texture(("junglejumpassets/monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(("junglejumpassets/monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(("junglejumpassets/monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(("junglejumpassets/monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(("junglejumpassets/monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("junglejumpassets/gameBackground2.png"));
-		levelText = new Texture(("junglejumpassets/level.png"));
-		hyphenText = new Texture(("junglejumpassets/-.png"));
-		livesText = new Texture(("junglejumpassets/lives.png"));
-		worldNumText = new Texture(("junglejumpassets/1.png"));
-		livesNumText = new Texture(("junglejumpassets/3.png"));
-		levelNumText = new Texture(("junglejumpassets/1.png"));
-		//platform = new Texture("junglejumpassets/platform.png");
+		texture = new Texture(("mainscreen.png"));
+		monkeySit = new Texture(("monkeySit.png"));
+		monkeySitRIGHT = new Texture(("monkeySit.png"));
+		monkeySitLEFT = new Texture(("monkeySitLEFT.png"));
+		monkeyRun1 = new Texture(("monkeyRun1.png"));
+		monkeyRun1RIGHT = new Texture(("monkeyRun1.png"));
+		monkeyRun1LEFT = new Texture(("monkeyRun1LEFT.png"));
+		monkeyRun2 = new Texture(("monkeyRun2.png"));
+		monkeyRun2RIGHT = new Texture(("monkeyRun2.png"));
+		monkeyRun2LEFT = new Texture(("monkeyRun2LEFT.png"));
+		gameBackground = new Texture(("gameBackground2.png"));
+		levelText = new Texture(("level.png"));
+		hyphenText = new Texture(("-.png"));
+		livesText = new Texture(("lives.png"));
+		worldNumText = new Texture(("1.png"));
+		livesNumText = new Texture(("3.png"));
+		levelNumText = new Texture(("1.png"));
+		//platform = new Texture("platform.png");
 
 		/* ACHIEVEMENT STUFF */
 		AchievementClient achClient = this.getAchievementClient();
@@ -236,7 +236,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementNameFont        = new BitmapFont(false);
 		achievementDescriptionFont = new BitmapFont(false);
 		achievementThresholdFont   = new BitmapFont(false);
-		achievementIconTexture     = new Texture(("junglejumpassets/monkeySit.png"));
+		achievementIconTexture     = new Texture(("monkeySit.png"));
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
@@ -455,7 +455,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		} else {
 			lives = 5;
 		}
-		livesNumText = new Texture(("junglejumpassets/" + lives + ".png"));
+		livesNumText = new Texture(("" + lives + ".png"));
 	}
 
 	public static void drawLevel() {
@@ -488,7 +488,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					
 					// Play banana sound
 					try{ 
-						File file = new File("junglejumpassets/pickup.wav");
+						File file = new File("pickup.wav");
 						FileHandle fileh = new FileHandle(file);
 						AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 						Clip clip = AudioSystem.getClip();
@@ -663,7 +663,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				
 				// Play sound effect for jumping
 				try{ 
-					File file = new File("junglejumpassets/jump.wav");
+					File file = new File("jump.wav");
 					FileHandle fileh = new FileHandle(file);
 					AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 					Clip clip = AudioSystem.getClip();

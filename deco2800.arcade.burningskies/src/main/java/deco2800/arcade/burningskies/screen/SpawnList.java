@@ -25,7 +25,7 @@ public class SpawnList {
 	public SpawnList(PlayScreen s){
 		this.screen = s;
 		currentInterval = 0;
-		interval = (float) 5;		
+		interval = (float) 2;		
 		counter = 0;
 		mapCounter = 1;
 		list = new ArrayList<Object>();
@@ -76,7 +76,7 @@ public class SpawnList {
 	 */	
 	private void spawnEnemy(Object object) {
 		Vector2[] v = (Vector2[]) object;
-		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, screen.getPlayer()) );
+//		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, screen.getPlayer()) );
 	}
 
 	/* Testing purposes, but still may still use later
@@ -92,29 +92,29 @@ public class SpawnList {
 					
 			int direction = (int) Math.ceil(Math.random() * 4);
 			
-			System.out.println("Direction num: " + direction);
+//			System.out.println("Direction num: " + direction);
 			
 			// Determine where the enemy will start to spawn
 			switch (direction) {
-			case 1:
+			case 1: // top
 				startY = (float) 720;
 				startX = (float) Math.ceil(Math.random() * 1000) + 100;
 				dirY = -1;
 				dirX = randDirection();
 				break;
-			case 2:
+			case 2: // right
 				startX = 1280;
 				startY = (float) Math.ceil(Math.random() * 600) + 50;
 				dirX = -1;
 				dirY = randDirection();				
 				break;
-			case 3:
+			case 3: // bottom
 				startY = 0;
 				startX = (float) Math.ceil(Math.random() * 1000) + 100;
 				dirX = randDirection();
 				dirY = 1;				
 				break;
-			case 4:
+			case 4: // left
 				startX = 0;
 				startY = (float) Math.ceil(Math.random() * 600) + 50;
 				dirX = 1;
@@ -125,8 +125,8 @@ public class SpawnList {
 			float vY = (float) Math.ceil(Math.random() * (heightC - startY))/7 + (heightC - startY)/5;
 //	    	float vX = (float) (Math.ceil(Math.random() * 150) + 50) * dirX;
 //	    	float vY = (float) (Math.ceil(Math.random() * 150) + 50) * dirY;
-			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
-	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), screen, screen.getPlayer()) );    	
+//			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
+	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer()) );    	
 	}
 	
 	private int randDirection() {

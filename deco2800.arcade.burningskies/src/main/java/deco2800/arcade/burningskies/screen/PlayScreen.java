@@ -264,7 +264,7 @@ public class PlayScreen implements Screen
     	float startY = 700f;
 
 //    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
-    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, player) );    	
+//    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, player) );    	
     }
     
     public void addPowerup(PowerUp p) {

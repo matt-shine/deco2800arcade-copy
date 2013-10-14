@@ -16,6 +16,7 @@ import deco2800.arcade.pacman.PacChar.PacState;
 
 public class Ghost extends Mover {
 	
+	
 	private enum GhostState {
 	CHASE, SCATTER, FRIGHT, DEAD
 	}

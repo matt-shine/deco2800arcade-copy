@@ -294,10 +294,22 @@ public class ReplayHandler {
 		this.playback.playbackSession( this.lastSessionId );
 	}
 	
-	public void requestEventsForSession( int sessionId ) {
-		throw new RuntimeException( "This method is no longer supported." );
+	/**
+	 * Start playback for a session with the given ID
+	 * 
+	 * @param sessionId, the ID of the session to play back
+	 */
+	public void playbackSession( int sessionId ) {
+		this.playback.playbackSession( sessionId );
 	}
 	
+	/**
+	 * No longer used, as the game ID is now a string
+	 * 
+	 * @deprecated
+	 * @param gameId, the ID of the game to start a session for
+	 * @param username, the username of the client starting the game
+	 */
 	public void startSession(int gameId, String username) {
 		throw new RuntimeException( "This method is no longer supported." );
 	}

@@ -81,8 +81,8 @@ public class HighscoreDatabase {
 		try {
 		switch (gsReq.requestID) {
 			case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 1
-			case 2: return getUserHighScore("Matt", "Pong", "Number", gsReq.highestIsBest); //Return value of query with requestID 2
-			case 3: return null; //Return value of query with requestID 3
+			case 2: return getUserHighScore(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 2
+			case 3: return getUserRanking(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 3
 			case 4: return null;
 			case 5: return null;
 
@@ -189,9 +189,11 @@ public class HighscoreDatabase {
 					"PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_type='" + 
 					type + "' AND H.Player='" + Username + "' ORDER BY D.Score " + order);
 			while(resultSet.next()) {
-				System.out.println("Player: " + resultSet.getString("Player"));
-				System.out.println("Score: " + resultSet.getInt("Score"));
-				System.out.println("query passed........");
+				data.add(String.valueOf(resultSet.getString("Player")));
+				data.add(String.valueOf(resultSet.getInt("Score")));
+				data.add(String.valueOf(resultSet.getDate("Date")));
+				data.add(String.valueOf(resultSet.getString("Score_Type")));
+				break;
 			}
 
 			return data;
@@ -204,6 +206,7 @@ public class HighscoreDatabase {
 		}
 	}
 	
+	
 	/**
 	 * Displays the users ranking in the highscores for the specified game and score type
 	 * @param User_ID - users id to query against
@@ -211,13 +214,20 @@ public class HighscoreDatabase {
 	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
-	public String getUserRanking(String Username, String Game_ID, String type) throws DatabaseException{
-		/*String data = null;
-
+	public List<String> getUserRanking(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
+		List<String> data = new ArrayList<String>();
+		String order;
+		
 		if (!initialised) {
 			initialise();
 		}
 
+		if(highestIsBest) {
+			order = "DESC";
+		} else {
+			order = "ASC";
+		}
+		
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 
@@ -225,12 +235,14 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT s2.RANK FROM (SELECT h.Username, RANK() OVER (ORDER BY s.SCORE DESC) AS 'RANK' from HIGHSCORES_PLAYER h INNER JOIN " +
+			String select = "SELECT s2.RANK FROM (SELECT h.Username, RANK() OVER (ORDER BY s.SCORE " + order + ") AS 'RANK' from HIGHSCORES_PLAYER h INNER JOIN " +
 					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
-					type + "' ORDER BY s.SCORE desc) s2 WHERE s2.Username='" + Username + "';");
-			while(resultSet.next())
-			{
-				data = resultSet.getString("RANK");
+					type + "' ORDER BY s.SCORE desc) s2 WHERE s2.Username='" + Username + "'";
+			System.out.println("Ranked: " + select);
+			resultSet = statement.executeQuery(select);
+			
+			while(resultSet.next())	{
+				System.out.println("got data back....");
 			}
 
 			return data;
@@ -239,21 +251,8 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-				if (connection != null) {
-					connection.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}*/
-		return null;
+			connectionCleanup(connection, statement, resultSet);
+		}
 	}
 	
 	
@@ -439,7 +438,6 @@ public class HighscoreDatabase {
 	 */
 	private static Timestamp getCurrentTimeStamp() {
 		Timestamp time = new java.sql.Timestamp(new Timestamp(0).getTime());
-		System.out.println("Current time =" + time);
 		return time;
 		
  

@@ -201,7 +201,7 @@ public class HighscoreClient {
 	/**
 	 * Still requires some work in regards to returning a String as per the Api Docs.
 	 * 
-	 * requestID: 2. This function is user INDEPENDENT.
+	 * requestID: 2. This function is user DEPENDENT.
 	 * 
 	 * @param highestIsBest If having a high score is best for your game, then
 	 * set this to true. If having a low score is best, then set this to false.
@@ -221,6 +221,29 @@ public class HighscoreClient {
 		return this.scoreResponseList;
 	}
 	
+	/**
+	 * Still requires some work in regards to returning a String as per the Api Docs.
+	 * 
+	 * requestID: 3. This function is user DEPENDENT.
+	 * 
+	 * @param highestIsBest If having a high score is best for your game, then
+	 * set this to true. If having a low score is best, then set this to false.
+	 * 
+	 * @return A list of Highscore objects. 
+	 */
+	public List<Highscore> getUserRanking(boolean highestIsBest, String type) {
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.requestID = 3; //Telling the server which query to run
+		gsReq.type = type;
+		gsReq.username = Username;
+		gsReq.highestIsBest = highestIsBest;
+		
+		//Send the request off, waiting for response before continuing
+		sendScoreRequest(gsReq);
+		
+		//Now that the response is back, return the data to the user
+		return this.scoreResponseList;
+	}
 	
 	
 	//=============================================================

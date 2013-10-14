@@ -122,44 +122,51 @@ penguin
   orig: 320, 320
   offset: 0, 0
   index: -1
-redbrick
+plant
   rotate: false
   xy: 645, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-snowman
+redbrick
   rotate: false
   xy: 967, 967
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-steel
+snowman
   rotate: false
   xy: 1289, 1289
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-unknown
+steel
   rotate: false
   xy: 1611, 1611
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-woodwall
+unknown
   rotate: false
   xy: 323, 1
   size: 320, 320
   orig: 320, 320
   offset: 0, 0
   index: -1
-worm
+woodwall
   rotate: false
   xy: 645, 323
+  size: 320, 320
+  orig: 320, 320
+  offset: 0, 0
+  index: -1
+worm
+  rotate: false
+  xy: 967, 645
   size: 320, 320
   orig: 320, 320
   offset: 0, 0

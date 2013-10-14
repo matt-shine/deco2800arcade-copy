@@ -160,4 +160,8 @@ public class PlayerShip extends Ship {
 			if(playerBullets.isFiring()) playerBullets.stop();
 		}
 	}
+	
+	public int healthRemaining() {
+		return this.health;
+	}
 }

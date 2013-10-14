@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,10 +32,25 @@ public class PlayScreen implements Screen
 	private OrthographicCamera camera;
 	private Stage stage;
 	private ShapeRenderer debugRender;
+	private ShapeRenderer healthBar;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
+	private int health = 100;
+	
+	private Color healthBarRed = new Color(1, 0, 0, 1);
+	private Color healthBarOrange = new Color(1, (float)0.65, 0, 1);
+	private Color healthBarGreen = new Color(0, 1, 0, 1);	
+	
+	private static final int width = BurningSkies.SCREENWIDTH;
+    private static final int height = BurningSkies.SCREENHEIGHT;
+    
+	private final int healthBarLengthMultiplier = 7;
+	private final float healthBarWidth = (float) (height * 0.02);
+	private final float healthBarHeight = health * healthBarLengthMultiplier;
+	private final float healthBarX = (float) (width * 0.985);
+	private final float healthBarY = height/2 - (healthBarHeight)/2;
 	
 	private PlayerShip player;
 	public Level level;
@@ -59,6 +75,9 @@ public class PlayScreen implements Screen
     	
     	debugRender = new ShapeRenderer();
     	debugRender.setProjectionMatrix(camera.combined);
+    	
+    	healthBar = new ShapeRenderer();
+    	healthBar.setProjectionMatrix(camera.combined);
     	
         game.playSong("level1");
     	
@@ -94,6 +113,8 @@ public class PlayScreen implements Screen
     {
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    	
+    	
     	
     	if(!game.isPaused()) {
 
@@ -159,14 +180,28 @@ public class PlayScreen implements Screen
 				}
 			}	
     	}
-    	
-    	
+    	    	
     	// Draws the map
     	stage.draw();
     	debugRender.begin(ShapeType.Circle);
     	debugRender.circle(player.getCenterX(), player.getCenterY(), 5);
     	debugRender.circle(player.getRotatedX(), player.getRotatedY(), 5);
     	debugRender.end();
+    	
+    	healthBar.begin(ShapeType.FilledRectangle);
+    	
+    	health = player.healthRemaining();
+    	
+    	if (health <= 25) {
+    		healthBar.setColor(healthBarRed);
+    	} else if (health > 25 && health <= 75) {
+    		healthBar.setColor(healthBarOrange);
+    	} else {
+    		healthBar.setColor(healthBarGreen);
+    	}
+    	
+    	healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
+    	healthBar.end();
     }
     
     private boolean outOfBounds(Entity e) {

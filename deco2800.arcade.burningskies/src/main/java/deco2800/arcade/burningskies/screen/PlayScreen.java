@@ -16,6 +16,7 @@ import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.GameMap;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
+import deco2800.arcade.burningskies.entities.DemoPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -33,9 +34,12 @@ public class PlayScreen implements Screen
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
 	
 	private PlayerShip player;
-	private GameMap map;
+	public GameMap map;
 	
-	public PlayScreen(BurningSkies game){
+	private SpawnList sp;
+	
+	
+	public PlayScreen( BurningSkies game){
 		this.game = game;
 	}	
 	 
@@ -52,7 +56,7 @@ public class PlayScreen implements Screen
     	
         game.playSong("level1");
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/jet_debug.png"));
+    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
     	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
     	map = new GameMap("fixme");
 
@@ -63,11 +67,13 @@ public class PlayScreen implements Screen
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	// Test code
-    	PowerUp test = new PowerUp();
+    	PowerUp test = new DemoPowerUp(this);
     	addPowerup(test);
-    	Texture testText = new Texture(Gdx.files.internal("enemies/enemy1.png"));
-    	Enemy e = new Enemy(200, testText, new Vector2(300,400), this);
-    	addEnemy(e);
+    	
+    	sp = new SpawnList(this);
+    			
+    	// Add an enemy
+    	addRandomEnemy();
     }
     
     @Override
@@ -84,12 +90,16 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	if(!game.isPaused()) {
+
+    		sp.checkList(delta);
+    		
+    		//System.out.println("Num of enemies: " + enemies.size() );
+    		
     		stage.act(delta);
     		for(int i=0; i<bullets.size(); i++) {
     			Bullet b = bullets.get(i);
         		if(outOfBounds(b)) {
-        			b.remove();
-        			bullets.remove(i);
+        			removeEntity(b);
         			i--;
         			continue;
         		}
@@ -97,18 +107,29 @@ public class PlayScreen implements Screen
     			if(b.getAffinity() == Affinity.PLAYER) {
     				for(int j=0; j<enemies.size(); j++) {
     					Enemy e = enemies.get(j);
-    					if(b.hasCollided(e)) {
-    						//TODO: HANDLE DAMAGE FROM THIS YA MUPPETS
-    						b.remove();
-    	        			bullets.remove(i);
-    	        			i--;
+    					if(outOfBounds(e)) {
+    						removeEntity(e);
+    						j--;
+    						continue;
+    						
+    					}
+    					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
+    						e.damage(b.getDamage());
+    						if(!e.isAlive()) {
+    							removeEntity(e);
+    						}
+    						removeEntity(b);
+//    	        			i--; TODO this was causing trouble after making the SpawnList class, may need this later
     						continue;
     					}
+    					
     				}
     			} else if(b.hasCollided(player)) {
     				//TODO: DAMAGE THE PLAYER YOU NUGGET
-    				b.remove();
-        			bullets.remove(i);
+    				player.damage(b.getDamage());
+    				//TODO: Player death/respawn checker.
+    				//if (!player.isAlive()) { }
+    				removeEntity(b);
         			i--;
     				continue;
     			}
@@ -117,13 +138,25 @@ public class PlayScreen implements Screen
 				PowerUp p = powerups.get(i);
 				if(p.hasCollidedUnscaled(player)) {
 					//TODO: POWERUPS WOO
-					p.remove();
-					powerups.remove(i);
+					p.powerOn(player);
+					removeEntity(p);
 					i--;
 					continue;
 				}
 			}
+			// checks if the enemy is out of screen, if so remove it
+			for(int i=0; i<enemies.size(); i++) {
+				Enemy e = enemies.get(i);
+				if(outOfBounds(e)) {
+					removeEntity(e);
+					i--;
+					continue;
+					
+				}
+			}	
     	}
+    	
+    	
     	// Draws the map
     	stage.draw();
     }
@@ -165,8 +198,40 @@ public class PlayScreen implements Screen
     	enemies.add(enemy);
     }
     
+    private void addRandomEnemy() {
+    	final Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
+    	float startY = 700f;
+    	int direction;
+    	
+    	if((int) Math.floor(Math.random() * 2) == 1 )
+    		direction = 1;
+    	else
+    		direction = -1;
+    	
+    	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
+    	float vY = (float) Math.ceil(Math.random() * -150) - 50;
+//    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
+    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, new Vector2(vX,vY)) );    	
+    }
+    
     public void addPowerup(PowerUp p) {
     	stage.addActor(p);
     	powerups.add(p);
+    }
+    
+    public void removeEntity(Bullet b) {
+    	b.remove();
+		bullets.remove(b);
+    }
+    
+    public void removeEntity(Enemy e) {
+    	e.remove();
+    	enemies.remove(e);
+    }
+    
+    public void removeEntity(PowerUp p) {
+    	p.remove();
+    	powerups.remove(p);
     }
 }

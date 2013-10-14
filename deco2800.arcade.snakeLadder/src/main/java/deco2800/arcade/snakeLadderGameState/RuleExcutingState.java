@@ -47,7 +47,7 @@ public class RuleExcutingState extends GameState {
 	 * Updating the score of the game player and print it out on the scoreLabel
 	 * @param gp the Game Player its referring to
 	 */
-	public void excuteRules(int playerNum, String rule, SnakeLadder context){
+	public void excuteRules(int playerNum, String rule, SnakeLadder context,GamePlayer context2){
 		if (isScore(rule))
 		{
 			context.gamePlayers[playerNum].setScore(Integer.parseInt(rule));

@@ -70,14 +70,14 @@ public class GameStorage {
         String inserts = "TRUNCATE TABLE GAMES;" +
                 "INSERT INTO GAMES values (0, 'Pong', 'Pong', 0, 'Tennis, without that annoying 3rd dimension!', '');" +
                 "INSERT INTO GAMES values (1, 'deerforest', 'deerforest', 0, 'N/A', '');" +
-                "INSERT INTO GAMES values (2, 'mixmaze', 'Mix Maze', 0, 'N/A', '');" +
+                "INSERT INTO GAMES values (2, 'Mixmaze', 'Mix Maze', 0, 'N/A', '');" +
                 "INSERT INTO GAMES values (3, 'Breakout', 'Breakout', 0, 'Bounce the ball off your paddle to keep it from falling off the bottom of the screen.', '');" +
                 "INSERT INTO GAMES values (4, 'burningskies', 'Burning Skies', 0, 'N/A', '');" +
                 "INSERT INTO GAMES values (5, 'Checkers', 'Checkers', 0, 'It is checkers', '');" +
                 "INSERT INTO GAMES values (6, 'chess', 'Chess', 0, 'N/A', '');" +
                 "INSERT INTO GAMES values (7, 'Connect4', 'Connect4', 0, 'Fun old connect 4!', '');" +
                 "INSERT INTO GAMES values (8, 'LandInvaders', 'LandInvaders', 0, 'funny game!', '');" +
-                "INSERT INTO GAMES values (9, 'pacman', 'Pac man', 0, 'An implementation of the classic arcade game Pac ', '');" +
+                "INSERT INTO GAMES values (9, 'Pacman', 'Pac man', 0, 'An implementation of the classic arcade game Pac ', '');" +
                 "INSERT INTO GAMES values (10, 'Raiden', 'Raiden', 0, 'Flight fighter', '');" +
                 "INSERT INTO GAMES values (11, 'towerdefence', 'Tower Defence', 0, 'N/A', '');" +
                 "INSERT INTO GAMES values (12, 'Wolfenstein 3D', 'Wolfenstein 3D', 0, 'Killin Natzis', '');" +

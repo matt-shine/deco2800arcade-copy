@@ -17,8 +17,9 @@ public class GamePlayer {
 	public static final float SPEEDINCREMENT = 60; // How much is the playerTexture's speed each time throw the dice
 	private Texture playerTexture;
 	private String playerName;
-	private int coordinate=-1;
-	//private int[] scores = new int[2];
+	//private int coordinate=-1;
+	private int coordinate=0;
+	//private int[] scores = new dint[2];
 	private int score;
 	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the playerTexture
 	private Vector2 velocity = new Vector2(); // The current velocity of the playerTexture as x,y
@@ -129,6 +130,10 @@ public class GamePlayer {
     
    public int getDnumber(int diceNumber){
     	coordinate+=diceNumber;
+    	if(coordinate>=100)
+    	{
+    		coordinate=100;
+    	}
     	return coordinate;
     }
    
@@ -136,7 +141,11 @@ public class GamePlayer {
    {
 	   return coordinate;
    }
-   
+   public int setNewPosition(int newpoint)
+   {
+	   coordinate=newpoint;
+	   return coordinate;
+   }
    /*
    public void score(int winner){
 		scores[winner]++;

@@ -84,7 +84,6 @@ public class Arcade extends JFrame {
     
     private static boolean playerBetting;
     
-    private static boolean bettingLobby;
     
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
     
@@ -600,11 +599,4 @@ public class Arcade extends JFrame {
         client.sendNetworkObject(gameLibraryRequest);
     }
 
-	public boolean isBettingLobby() {
-		return bettingLobby;
-	}
-
-	public void setBetLobby(boolean bettingLobby) {
-		Arcade.bettingLobby = bettingLobby;
-	}
 }

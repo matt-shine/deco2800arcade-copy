@@ -320,9 +320,8 @@ public class MultiplayerLobby implements Screen {
 	    	arcadeUI.setScreen(arcadeUI.getBetting());
 	    }
 		if (Gdx.input.isKeyPressed(Keys.L)) {
-			dispose();
-		    	ArcadeSystem.setBetLobby(true);
-		    	arcadeUI.setScreen(arcadeUI.getBetLobby());
+			
+			
 		}
 
 		stage.act(Gdx.graphics.getDeltaTime());

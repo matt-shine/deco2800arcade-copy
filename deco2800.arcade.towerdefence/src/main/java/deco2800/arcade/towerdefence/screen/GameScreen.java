@@ -36,7 +36,10 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TexturePart;
 import deco2800.arcade.towerdefence.TowerDefence;
 
-
+/* GameScreen is where the game will take place
+ * There are many buttons on the HUD for selecting different towers, etc.
+ * @author Tuddz
+ */
 public class GameScreen implements Screen{
 	
 	private TowerDefence game;

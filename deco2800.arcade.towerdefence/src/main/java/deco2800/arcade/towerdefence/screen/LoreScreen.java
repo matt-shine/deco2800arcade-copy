@@ -21,6 +21,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 
+/* A screen for the lore of the game
+ * @author Tuddz
+ */
 public class LoreScreen implements Screen{
 	
 	private final TowerDefence game;
@@ -109,12 +112,12 @@ public class LoreScreen implements Screen{
 		
 		words = new Label("", new Label.LabelStyle(white, WHITE));
 		words.setWrap(true);
-		words.setText("LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
-				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
-				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
-				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
-				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n" +
-				"LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE LORE \n");
+		words.setText("In a galaxy not so far away \n" +
+				"In a time that doesn't vary much from our own \n" +
+				"DUN DUN DUN!!!!! \n" +
+				"ALIENS TD STORY GOES HERE \n" +
+				"LORE LORE LORE LORE LORE LORE LORE LORE \n" +
+				"LORE LORE LORE LORE LORE LORE LORE LORE \n");
 		
 		table.add(backButton).top().right();
 		table.row();

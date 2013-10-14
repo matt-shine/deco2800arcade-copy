@@ -114,6 +114,8 @@ public class TowerDefence extends GameClient {
 		game = new Game();
 		game.id = "towerdefence";
 		game.name = "Tower Defence";
+		game.description = "The player is the ship AI defending itself against a horde of alien enemies, using various upgradable towers. "
+				+ "The objective of the alien horde is the destruction of the human race through reaching the special portal to the hidden human home-world.";
 	}
 
 	public Game getGame() {

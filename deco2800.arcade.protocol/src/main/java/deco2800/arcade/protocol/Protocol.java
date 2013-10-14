@@ -45,9 +45,10 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
+import deco2800.arcade.protocol.packman.FetchGameRequest;
+import deco2800.arcade.protocol.packman.FetchGameResponse;
 import deco2800.arcade.protocol.game.*;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
-import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.highscore.GetScoreRequest;
 import deco2800.arcade.protocol.highscore.GetScoreResponse;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
@@ -158,6 +159,8 @@ public class Protocol {
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
+    kryo.register(FetchGameRequest.class);
+    kryo.register(FetchGameResponse.class);
 		
 		//Lobby classes
 		kryo.register(NewLobbyRequest.class);
@@ -172,7 +175,7 @@ public class Protocol {
         kryo.register(GameUpdateCheckResponse.class);
         kryo.register(JoinLobbyMatchResponse.class);
         kryo.register(JoinLobbyMatchResponseType.class);
-        
+
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);

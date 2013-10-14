@@ -1,17 +1,20 @@
 package deco2800.arcade.packman;
 
-import java.util.List;
+import java.lang.String;
+import java.lang.System;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.Logger;
-import org.apache.log4j.Level;
-import org.apache.log4j.ConsoleAppender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import deco2800.arcade.packman.PackCompress;
 import deco2800.arcade.packman.PackageUtils;
@@ -23,20 +26,19 @@ import deco2800.arcade.packman.PackageUtils;
  *
  */
 public class Pack {
-    private List<String> games = new ArrayList<String>();
+	final static Logger logger = LoggerFactory.getLogger(Pack.class);
+	
+    private ArrayList<String> games = new ArrayList<String>();
     
-    private static final String SP = File.separator;
+    private static final String sp = File.separator;
     
-    private static final String RELEASE_FOLDER = ".." + SP + 
+    private static final String releaseFolder = ".." + sp + 
     											"deco2800.arcade.server" +
-    											SP + "Release";
+    											sp + "Release";
     
-    private static final String VERSION_0 = "0.0.0";
     
-	private static Logger log;
     
-
-    public Pack() {
+    public Pack(String[] args) {
 
     }
 
@@ -46,32 +48,17 @@ public class Pack {
      * @param args
      */
     public static void main(String[] args) {
-    	// Init custom logging
-
-    	// Define layout
-    	PatternLayout layout = new PatternLayout();
-    	layout.setConversionPattern("%d{ISO8601} %c:%t %-5p  - %m%n");
-
-    	// Create appender
-    	ConsoleAppender appender = new ConsoleAppender();
-    	appender.setLayout(layout);
-    	appender.activateOptions();
-
-    	// Get our logger and add appender.
-    	log = Logger.getLogger("[Packman]");
-    	log.setLevel(Level.INFO);
-    	log.addAppender(appender);
-    	
+    	 
 		// Create the release folder
-		log.info("Creating directory: " + RELEASE_FOLDER);
-		if (PackageUtils.createDirectory(RELEASE_FOLDER)) {
-			log.info("Created: " + RELEASE_FOLDER);
+		logger.debug("Creating directory: {}", releaseFolder);
+		if (PackageUtils.createDirectory(releaseFolder)) {
+			logger.debug("Created: {}", releaseFolder);
 		} else {
-			log.info("Failed creating: " + RELEASE_FOLDER);
+			logger.debug("Failed creating: {}", releaseFolder);
 		}
     	
     	
-        Pack pack = new Pack();
+        Pack pack = new Pack(args);
 
         pack.populateGames();
 
@@ -84,7 +71,7 @@ public class Pack {
      * Assumes games has already been populated.
      */
     public void populateRelease() {
-        List<String> versions;
+        ArrayList<String> versions;
         String version;
         String releaseVersion;
         
@@ -98,23 +85,23 @@ public class Pack {
                 version = versions.get(0);
                 releaseVersion = versions.get(1);
 
-                if (version.equals(VERSION_0) && releaseVersion.equals(VERSION_0)) {
-                    log.error("No version specified: " + game);
+                if (version.equals("0.0.0") && releaseVersion.equals("0.0.0")) {
+                    logger.debug("No version specified: {}", game);
                 } else if (releaseVersion.compareTo(version) > 0) {
-                    log.warn("RELEASE_VERSION > VERSION. Not releasing: " + game);
+                    logger.debug("RELEASE_VERSION > VERSION. Not releasing: {}", game);
                 } else if (version.compareTo(releaseVersion) > 0) {
-                    log.warn("VERSION > RELEASE_VERSION. Not releasing: " + game);
+                    logger.debug("VERSION > RELEASE_VERSION. Not releasing: {}", game);
                 } else if (version.equals(releaseVersion)) {
-                    log.info("Copying JAR to Releases: " + game);
+                    logger.debug("Copying JAR to Releases: {}", game);
 
                     File src = null;
                     File dest = null;
-                    String srcPath = ".." + SP + "deco2800.arcade." + game + 
-                    				 SP + "build" + SP + "libs" + SP + 
+                    String srcPath = ".." + sp + "deco2800.arcade." + game + 
+                    				 sp + "build" + sp + "libs" + sp + 
                     				 "deco2800.arcade." + game + "-" + 
                     				 version + ".jar";
                     
-                    String destPath = RELEASE_FOLDER + SP + game + 
+                    String destPath = releaseFolder + sp + game + 
                     				  "-" + version + ".tar.gz";
 
                     src = new File(srcPath);
@@ -122,11 +109,12 @@ public class Pack {
 
                     if (src != null && dest != null) {
                         try {
+                            //copyFile(src, dest);
                         	packer.compress(srcPath, destPath);
-                        	//packer.expand(destPath, RELEASE_FOLDER + SP + 
-                        	//				game + "-" + version + ".jar");
+                        	//packer.Expand(destPath, releaseFolder + sp + game + "-" + version + ".jar");
                         } catch (IOException e) {
-                            log.error("[Packman] Failed to copy JAR to Release directory", e);
+                            logger.error("[Packman] Failed to copy JAR to Release directory");
+                            e.printStackTrace();
                         }
                     }
                 }
@@ -134,13 +122,25 @@ public class Pack {
         }
     }
 
-    private List<String> getVersions(String game) {
-        List<String> versions = new ArrayList<String>(2);
-        versions.add(VERSION_0); // Defaults
-        versions.add(VERSION_0);
+    private void copyFile(File src, File dest) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dest);
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) > 0) {
+            out.write(buf, 0, len);
+        }
+        in.close();
+        out.close();
+    }
+
+    private ArrayList<String> getVersions(String game) {
+        ArrayList<String> versions = new ArrayList<String>(2);
+        versions.add("0.0.0"); // Defaults
+        versions.add("0.0.0");
         String[] split;
 
-        List<String> fileContents = readFile("../deco2800.arcade." + game + "/VERSION");
+        ArrayList<String> fileContents = readFile("../deco2800.arcade." + game + "/VERSION");
 
         for (String line : fileContents) {
             // Skip comments and newlines
@@ -166,20 +166,20 @@ public class Pack {
      * Helper method to populate the games list
      */
     public void populateGames() {
-        List<String> fileContents = readFile("games.txt");
+        ArrayList<String> file_contents = readFile("games.txt");
 
-        for (String game : fileContents) {
+        for (String game : file_contents) {
             if (game.charAt(0) != '#' && game.charAt(0) != '\n') {
                 games.add(game);
             }
         }
     }
 
-    private List<String> readFile(String filename) {
+    private ArrayList<String> readFile(String filename) {
         BufferedReader reader = null;
         File file = new File(filename);
         String line;
-        List<String> file_contents = new ArrayList<String>();
+        ArrayList<String> file_contents = new ArrayList<String>();
 
         try {
             reader = new BufferedReader(new FileReader(file));
@@ -187,9 +187,9 @@ public class Pack {
                 file_contents.add(line);
             }
         } catch (FileNotFoundException e) {
-            //log.error("File not found: " + filename);
+            //System.err.println("File not found: " + filename);
         } catch (IOException e) {
-            log.error("IO Error", e);
+            e.printStackTrace();
         } finally {
             try {
                 if (reader != null) {

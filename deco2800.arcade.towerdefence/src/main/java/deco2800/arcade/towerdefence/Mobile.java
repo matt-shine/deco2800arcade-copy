@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.towerdefence.pathfinding.Path;
+import deco2800.arcade.towerdefence.pathfinding.Path.Step;
+
 /**
  * The interface for objects that can move to different positions on the grid.
  * 
@@ -23,6 +26,8 @@ public abstract class Mobile extends Mortal {
 	private ArrayList<Sprite> upMovingSprites;
 	// The GridObject's sprites to animate movement right.
 	private ArrayList<Sprite> rightMovingSprites;
+	// THe path the object is following
+	private Path path;
 
 	// Constructor
 	public Mobile(int maxHealth, int armour) {
@@ -114,6 +119,30 @@ public abstract class Mobile extends Mortal {
 
 	// Methods
 	/**
+	 * Follows the path until the object reached the end. If obstacles are
+	 * encountered, recalculate the path.
+	 */
+	public void followPath() {
+		Step current;
+		// Infinite loop - continue while path is being followed
+		while (true) {
+			for (int i = 0; i < path.getLength(); i++) {
+				current = path.getStep(i);
+				// Make a vector based on the current position and next step
+				// position
+				if (!moving(positionInTiles().sub(current.getX(),
+						current.getY()))) {
+					path = grid.pathfinder.findPath(this,
+							(int) this.positionInTiles().x,
+							(int) this.positionInTiles().y, 50, 50);
+					break;
+				}
+			}
+			// Mobile object has reached the target, what do TODO
+		}
+	}
+
+	/**
 	 * Move the GridObject one unit in the vector specified.
 	 * 
 	 * @param vector
@@ -126,14 +155,16 @@ public abstract class Mobile extends Mortal {
 	 * Move the GridObject one tile in the specified direction at its speed.
 	 * 
 	 * @param vector
+	 *            A vector of length 1 (or sqrt 2) to indicate the movement
+	 *            direction
 	 */
-	public void moving(Vector2 vector) {
+	public boolean moving(Vector2 vector) {
 		// Check for block in given direction
 		if (grid.blocked(this, (int) position().add(vector).x, (int) position()
 				.add(vector).y)) {
-			grid.pathfinder.findPath(this, (int) this.positionInTiles().x,
-					(int) this.positionInTiles().y, 50, 50);
-			return;
+			// Grid is blocked return false to indicate a new path should be
+			// found
+			return false;
 		}
 		// Move it from this grid position to the next one
 		grid.moveObject(this, position, position().add(vector));
@@ -146,7 +177,7 @@ public abstract class Mobile extends Mortal {
 		}
 		long t0, t1;
 		Vector2 addVector = vector.mul(speed / 33);
-		for (int i = 0; i < distance; i += speed) {
+		for (int i = 0; i < distance; i += addVector.len()) {
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move
@@ -156,6 +187,8 @@ public abstract class Mobile extends Mortal {
 				t1 = System.currentTimeMillis();
 			}
 		}
+		// Moved to the next tile successfully
+		return true;
 	}
 
 	/**

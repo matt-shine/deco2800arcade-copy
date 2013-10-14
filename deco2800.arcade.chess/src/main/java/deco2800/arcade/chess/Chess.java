@@ -59,6 +59,15 @@ import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor, Screen {
+	private static final Game game;
+	
+	static {
+		game = new Game();
+		game.id = "chess";
+		game.name = "Chess";
+		game.description = "A game of Chess.";	//<-------Need to write an adequate description.
+	}
+	
 	private ReplayHandler replayHandler;
 	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
@@ -572,9 +581,21 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					/* If the easy computer opponent is playing, and black teams turn
 					*  (computer controlled team)
 					*/
-					System.out.println("turn: " + board.whoseTurn());
 					if(EasyComputerOpponent && board.whoseTurn()) {
 						Piece AIPiece = board.chooseAIPiece();
+						List<int[]> allowed = board.allowedMoves(AIPiece);
+						System.out.println("AI is: " + AIPiece);
+						System.out.println("Allowed Moves: ");
+						for(int[] move : allowed) {
+							System.out.print("[" + move[0] + ", " + move[1] + "], ");
+						}
+						System.out.println("");
+						List<int[]> removed = board.removeCheckMoves(AIPiece);
+						System.out.println("Allowed Moves check removed: ");
+						for(int[] move : removed) {
+							System.out.print("[" + move[0] + ", " + move[1] + "], ");
+						}
+						System.out.println("");
 						int[] prevAI = board.findPiece(AIPiece);
 						board.moveAIPieceEasy(AIPiece);
 						int[] newAI = board.findPiece(AIPiece);
@@ -591,7 +612,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					}
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {
-						
 						if (!board.whoseTurn()) {
 							//player1.logLoss(); <- this is not working
 						} else {
@@ -601,7 +621,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					}
 					return true;
 				}
-				board.checkForCheckmate(board.whoseTurn());
 				
 				movingPiece = board.nullPiece;
 				moving = false;

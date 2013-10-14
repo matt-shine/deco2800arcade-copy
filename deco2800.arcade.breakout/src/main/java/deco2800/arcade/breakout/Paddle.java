@@ -85,7 +85,7 @@ public abstract class Paddle {
 	 * @param render
 	 */
 	public void render(ShapeRenderer render) {
-		render.setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		render.setColor(1f, 1f, 1f, 0.5f);
 		render.filledRect(paddleShape.x, paddleShape.y, paddleShape.width,
 				paddleShape.height);
 	}

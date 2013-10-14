@@ -132,7 +132,7 @@ public class GameScreen implements Screen  {
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
 		setBall(new Ball());
-		getBall().setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		getBall().setColor(1f, 1f, 1f, 0.5f);
 		
 		if (getLevel() == 4) {
 			game.incrementAchievement("breakout.basic");
@@ -711,4 +711,19 @@ public class GameScreen implements Screen  {
 		return slowBallsActivated;
 	}
 	
+	public void incrementBumpCount(){
+		bumpCount++;
+	}
+	
+	public int getBumpCount(){
+		return bumpCount;
+	}
+	
+	public void incrementBrickBreak(){
+		brickBreak++;
+	}
+	
+	public int getBrickBreak() {
+		return brickBreak;
+	}
 }

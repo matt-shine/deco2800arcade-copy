@@ -20,7 +20,6 @@ import com.badlogic.gdx.math.Intersector;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.breakout.PongBall;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;

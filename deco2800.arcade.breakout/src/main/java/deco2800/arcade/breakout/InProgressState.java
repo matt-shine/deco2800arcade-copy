@@ -81,6 +81,7 @@ public class InProgressState extends GameState {
 				&& context.getPowerupBall().getYVelocity() < 0) {
 			context.getPowerupBall().updateVelocity(context.getLastHitX(), context.getLastHitY(), context.getPaddle());
 			context.bump.play();
+			context.incrementBumpCount();
 			context.getPowerupBall().bounceY(0);
 
 		}
@@ -155,6 +156,7 @@ public class InProgressState extends GameState {
 				&& context.getBall().getYVelocity() < 0) {
 			context.getBall().updateVelocity(context.getLastHitX(), context.getLastHitY(), context.getPaddle());
 			context.bump.play();
+			context.incrementBumpCount();
 			context.getBall().bounceY(0);
 
 		}

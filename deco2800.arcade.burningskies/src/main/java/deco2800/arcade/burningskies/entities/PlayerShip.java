@@ -17,10 +17,10 @@ public class PlayerShip extends Ship {
 	private int maxHealth; //For health powerups.
 	private PlayScreen screen;
 	
-	//brute force way to handle timer
-	private long initialTime;
+	private float speedTimer = 0f;
 	private boolean speedUp = false;
-	private boolean patternTimer = false;
+	private float patternTimer = 0f;
+	private boolean patternUp = false;
 	
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
@@ -77,18 +77,17 @@ public class PlayerShip extends Ship {
 		//resets any powerups if needed. Initial testing on speedup only.
 		//easily applies to a bullet pattern.
 		if (speedUp) {	
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - initialTime) >= 10000) {
+			speedTimer -= delta;
+			if (speedTimer <= 0) {
 				maxVelocity = 300;
 				speedUp = false;
 			}
 		}
-		if (patternTimer) {	
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - initialTime) >= 10000) {
-				playerBullets.remove();
-				this.playerBullets = null;
-				patternTimer = false;
+		if (patternUp) {	
+			patternTimer -= delta;
+			if (patternTimer <= 0) {
+				setBulletPattern(null);
+				patternUp = false;
 			}
 		}
 		
@@ -158,20 +157,29 @@ public class PlayerShip extends Ship {
 	 */
 	public void setMaxSpeed(float velocity) {
 		speedUp = true;
-		initialTime = System.currentTimeMillis();
 		maxVelocity = velocity;
+		speedTimer = 10f;
 	}
 	
 	/**
 	 * Changes the players current bullet type.
-	 * @ensure pattern != NULL
 	 */
 	public void setBulletPattern(BulletPattern pattern, boolean timeLimited) {
-		this.patternTimer = timeLimited;
-		initialTime = System.currentTimeMillis();
-		playerBullets.remove();
+		if(playerBullets != null) {
+			playerBullets.remove();
+		}
 		playerBullets = pattern;
-		getStage().addActor(playerBullets);
+		if(playerBullets != null) {
+			getStage().addActor(playerBullets);
+		}
+		if(timeLimited) {
+			patternUp = true;
+			patternTimer = 10f;
+		}
+	}
+	
+	public void setBulletPattern(BulletPattern pattern) {
+		setBulletPattern(pattern, false);
 	}
 	
 	/**
@@ -193,8 +201,7 @@ public class PlayerShip extends Ship {
 	
 	public void respawn() {
 		this.health = 100;
-		playerBullets.remove();
-		this.playerBullets = null;
+		setBulletPattern(null);
 		this.maxVelocity = 300;
 		this.speedUp = false;
 		this.flash = 0f;

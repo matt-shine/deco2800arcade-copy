@@ -95,6 +95,6 @@ public class Enemy extends Ship {
 		
     	setX(position.x);
 		setY(position.y);
-//		setRotation(dirAccel.angle() - 90);
+		setRotation(currentDirVel.angle() - 90);
 	}
 }

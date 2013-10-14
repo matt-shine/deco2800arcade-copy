@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
+import java.lang.String;
 import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -25,6 +26,7 @@ import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.GameListener;
 import deco2800.arcade.client.network.listener.PackmanListener;
+import deco2800.arcade.client.FileClient;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
@@ -279,37 +281,15 @@ public class Arcade extends JFrame {
 
     /**
      * Fetch the JAR for a given game/version from the server
+     *
+     * A thread is spawned to fetch the game
      * @param gameID
      * @param version
      */
     public void fetchGameJar(String gameID, String version) {
-        FetchGameResponse resp;
-
-        FetchGameRequest fetchGameRequest = new
-                FetchGameRequest();
-        fetchGameRequest.gameID = gameID;
-        fetchGameRequest.version = version;
-        fetchGameRequest.byteOffset = 0;
-        fetchGameRequest.blockSize = 512;
-
-        int bytesReceived = 0;
-
-        // Fetch the file
-        do {
-            BlockingMessage r = BlockingMessage.request(fileClient.kryoClient(),
-                    fetchGameRequest);
-
-            resp = (FetchGameResponse) r;
-
-            fetchGameRequest.byteOffset = fetchGameRequest.byteOffset + resp.byteCount;
-
-            bytesReceived = bytesReceived + resp.byteCount;
-
-        } while (resp.status == 1 && bytesReceived < resp.totalBytes);
-
-        if (resp.status != 1) {
-            System.out.println("Error fetching game JAR: " + resp);
-        }
+        FileClient fc = new FileClient(gameID, version, fileClient);
+        Thread t = new Thread(fc);
+        t.start();
     }
 
 	/**

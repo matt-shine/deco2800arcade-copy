@@ -13,6 +13,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import deco2800.arcade.packman.PackCompress;
 import deco2800.arcade.packman.PackageUtils;
 
@@ -23,6 +26,8 @@ import deco2800.arcade.packman.PackageUtils;
  *
  */
 public class Pack {
+	final static Logger logger = LoggerFactory.getLogger(Pack.class);
+	
     private ArrayList<String> games = new ArrayList<String>();
     
     private static final String sp = File.separator;
@@ -31,7 +36,8 @@ public class Pack {
     											"deco2800.arcade.server" +
     											sp + "Release";
     
-
+    
+    
     public Pack(String[] args) {
 
     }
@@ -42,12 +48,13 @@ public class Pack {
      * @param args
      */
     public static void main(String[] args) {
+    	 
 		// Create the release folder
-		System.out.println("Creating directory: " + releaseFolder);
+		logger.debug("Creating directory: {}", releaseFolder);
 		if (PackageUtils.createDirectory(releaseFolder)) {
-			System.out.println("Created: " + releaseFolder);
+			logger.debug("Created: {}", releaseFolder);
 		} else {
-			System.out.println("Failed creating: " + releaseFolder);
+			logger.debug("Failed creating: {}", releaseFolder);
 		}
     	
     	
@@ -79,13 +86,13 @@ public class Pack {
                 releaseVersion = versions.get(1);
 
                 if (version.equals("0.0.0") && releaseVersion.equals("0.0.0")) {
-                    System.out.println("No version specified: " + game);
+                    logger.debug("No version specified: {}", game);
                 } else if (releaseVersion.compareTo(version) > 0) {
-                    System.out.println("RELEASE_VERSION > VERSION. Not releasing: " + game);
+                    logger.debug("RELEASE_VERSION > VERSION. Not releasing: {}", game);
                 } else if (version.compareTo(releaseVersion) > 0) {
-                    System.out.println("VERSION > RELEASE_VERSION. Not releasing: " + game);
+                    logger.debug("VERSION > RELEASE_VERSION. Not releasing: {}", game);
                 } else if (version.equals(releaseVersion)) {
-                    System.out.println("Copying JAR to Releases: " + game);
+                    logger.debug("Copying JAR to Releases: {}", game);
 
                     File src = null;
                     File dest = null;
@@ -103,10 +110,10 @@ public class Pack {
                     if (src != null && dest != null) {
                         try {
                             //copyFile(src, dest);
-                        	packer.Compress(srcPath, destPath);
+                        	packer.compress(srcPath, destPath);
                         	//packer.Expand(destPath, releaseFolder + sp + game + "-" + version + ".jar");
                         } catch (IOException e) {
-                            System.err.println("[Packman] Failed to copy JAR to Release directory");
+                            logger.error("[Packman] Failed to copy JAR to Release directory");
                             e.printStackTrace();
                         }
                     }

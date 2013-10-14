@@ -15,6 +15,8 @@ public abstract class Paddle {
 
 	private float width = 128f;
 	private static final float HEIGHT = 20f;
+	private static final float STANDARDWIDTH = 128f;
+	
 
 	Rectangle paddleShape = new Rectangle();
 	
@@ -30,12 +32,20 @@ public abstract class Paddle {
 		this.paddleShape.height = HEIGHT;
 	}
 	
+	public float getStandardWidth() {
+		return STANDARDWIDTH;
+	}
+	
 	public void decreaseSize() {
-		this.paddleShape.width = width/2;
+		this.paddleShape.width = getPaddleShapeWidth()/2;
 	}
 	
 	public void increaseSize() {
-		this.paddleShape.width = width*2;
+		this.paddleShape.width = getPaddleShapeWidth()*2;
+	}
+	
+	public float getPaddleShapeWidth() {
+		return this.paddleShape.width;
 	}
 	
 	public void resizePaddle() {
@@ -75,7 +85,7 @@ public abstract class Paddle {
 	 * @param render
 	 */
 	public void render(ShapeRenderer render) {
-		render.setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		render.setColor(1f, 1f, 1f, 0.5f);
 		render.filledRect(paddleShape.x, paddleShape.y, paddleShape.width,
 				paddleShape.height);
 	}

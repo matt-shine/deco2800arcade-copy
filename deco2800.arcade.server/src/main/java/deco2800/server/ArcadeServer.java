@@ -13,6 +13,8 @@ import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ReplayStorage;
 import deco2800.server.listener.CommunicationListener;
+import deco2800.server.listener.LobbyListener;
+import deco2800.server.listener.MultiplayerListener;
 import deco2800.server.listener.ReplayListener;
 import deco2800.server.listener.ConnectionListener;
 import deco2800.server.listener.CreditListener;
@@ -20,9 +22,11 @@ import deco2800.server.listener.GameListener;
 import deco2800.server.listener.PackmanListener;
 import deco2800.server.listener.HighscoreListener;
 import deco2800.server.database.HighscoreDatabase;
+import deco2800.server.database.*;
+import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
-import deco2800.server.database.AchievementStorage;
-import deco2800.server.listener.AchievementListener;
+
+import deco2800.server.webserver.ArcadeWebserver;
 
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
@@ -41,13 +45,19 @@ public class ArcadeServer {
 	//singleton pattern
 	private static ArcadeServer instance;
 	
+	private MatchmakerQueue matchmakerQueue;
+	
 	// Package manager
-	@SuppressWarnings("unused")
 	private PackageServer packServ;
+
+    private GameStorage gameStorage;
 	
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
 	private static final int UDP_PORT = 54777;
+    private static final int FILE_TCP_PORT = 54666;
+
+    private Server fileServer;
 	
 	/**
 	 * Retrieve the singleton instance of the server
@@ -69,6 +79,8 @@ public class ArcadeServer {
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
+    server.startFileserver();
+		ArcadeWebserver.startServer( );
 	}
 
 	//Achievement storage service
@@ -92,13 +104,23 @@ public class ArcadeServer {
 		return this.creditStorage;
 	}
 	
+
+
 	/**
-	 * * Access the Serer's achievement storage facility
+	 * * Access the server's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
 	 */
 	public AchievementStorage getAchievementStorage() {
 		return this.achievementStorage;
 	}
+    
+    /**
+     * Accessor for the server's image storage.
+     * @return ImageStorage currently in use by the arcade
+     */
+    public ImageStorage getImageStorage() {
+	return this.imageStorage;
+    }
 	
 	/**
 	 * Access the replay records.
@@ -115,6 +137,14 @@ public class ArcadeServer {
 	public HighscoreDatabase getHighscoreDatabase() {
 		return this.highscoreDatabase;
 	}
+
+    /**
+     * Access the server's game storage
+     * @return gameStorage
+     */
+    public GameStorage getGameStorageDatabase() {
+        return gameStorage;
+    }
 	
 	/**
 	 * Create a new Arcade Server.
@@ -122,7 +152,19 @@ public class ArcadeServer {
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
-		this.creditStorage = new CreditStorage();
+
+        instance = this;
+
+        this.gameStorage = new GameStorage();
+        try {
+            this.creditStorage = new CreditStorage();
+        } catch (Exception e) {
+            //Do nothing, yet ;P
+        }
+        
+        
+        
+        //CODE SMELL
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
@@ -132,18 +174,26 @@ public class ArcadeServer {
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
 		this.highscoreDatabase = new HighscoreDatabase();
-		
+		this.matchmakerQueue = MatchmakerQueue.instance();
 		this.packServ = new PackageServer();
+
+
+		
+		//Init highscore database
+		try {
+			highscoreDatabase.initialise();
+		} catch (DatabaseException e) {
+			e.printStackTrace();
+		}
 		
 		//initialize database classes
 		try {
+            gameStorage.initialise();
 			creditStorage.initialise();
             imageStorage.initialise();
 			//playerStorage.initialise();
             
 			achievementStorage.initialise();
-			
-			highscoreDatabase.initialise();
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -151,13 +201,14 @@ public class ArcadeServer {
 
 		// once the db is fine, load in achievement data from disk
 		this.achievementStorage.loadAchievementData();
+		
 	}
 	
 	/**
 	 * Start the server running
 	 */
 	public void start() {
-		Server server = new Server();
+		Server server = new Server(131072, 16384);
 		System.out.println("Server starting");
 		server.start();
 		try {
@@ -170,16 +221,43 @@ public class ArcadeServer {
 			e.printStackTrace();
 		}
 		
-		Protocol.register(server.getKryo());
-		server.addListener(new ConnectionListener(connectedUsers));
-		server.addListener(new CreditListener());
-		server.addListener(new GameListener());
-		server.addListener(new AchievementListener());
-		server.addListener(new ReplayListener());
-		server.addListener(new HighscoreListener());
-		server.addListener(new CommunicationListener(server));
+        Protocol.register(server.getKryo());
+        server.addListener(new ConnectionListener(connectedUsers));
+        server.addListener(new CreditListener());
+        server.addListener(new GameListener());
+        server.addListener(new AchievementListener());
+        server.addListener(new ReplayListener());
+        server.addListener(new HighscoreListener());
+        server.addListener(new CommunicationListener(server));
         server.addListener(new PackmanListener());
-	}
+        server.addListener(new MultiplayerListener(matchmakerQueue));
+        server.addListener(new LobbyListener());
+        server.addListener(new LibraryListener());
+        server.addListener(new PlayerListener());
+        server.addListener(new ImageListener());
+
+    }
+
+    /**
+     * Start the server running
+     */
+    public void startFileserver() {
+        Server server = new Server();
+        System.out.println("File Server starting");
+        server.start();
+        try {
+            server.bind(FILE_TCP_PORT);
+            System.out.println("File Server bound");
+        } catch (BindException b) {
+            System.err.println("Error binding file server: Address already in use");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Protocol.register(server.getKryo());
+        server.addListener(new FileServerListener());
+    }
 
     /**
      * Return the packServ object.
@@ -191,4 +269,5 @@ public class ArcadeServer {
     public PackageServer packServ() {
         return packServ;
     }
+
 }

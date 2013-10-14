@@ -9,7 +9,7 @@ import deco2800.arcade.protocol.UserRequest;
  */
 public class StartSessionRequest extends UserRequest {
 
-    public Integer gameId;
+    public String gameId;
     public String username;
 
 }

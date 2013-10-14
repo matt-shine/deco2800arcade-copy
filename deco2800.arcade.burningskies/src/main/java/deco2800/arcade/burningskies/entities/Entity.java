@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 public class Entity extends Image {
 	
 	// how much we scale our image by to create our hitbox
-	protected float hitboxScale = 1;
+	protected float hitboxScale = 1f;
 	
 	public Entity(Texture tex) {
 		super(tex);

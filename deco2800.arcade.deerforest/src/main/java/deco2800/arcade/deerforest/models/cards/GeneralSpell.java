@@ -7,7 +7,6 @@ public class GeneralSpell extends AbstractSpell {
 	public GeneralSpell(SpellEffect effect, String cardFilePath) {
 		super("General", effect, cardFilePath);
 		this.cardFilePath = cardFilePath;
-		// TODO Auto-generated constructor stub
 	}
 
 }

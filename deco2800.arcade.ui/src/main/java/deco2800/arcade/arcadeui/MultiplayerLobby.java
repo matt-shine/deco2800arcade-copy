@@ -38,6 +38,7 @@ public class MultiplayerLobby implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private ArcadeUI arcadeUI;
 	private MultiplayerLobby lobby;
+	private ChatArray;
 	ArrayList<ActiveMatchDetails> matches; 
 
 	public MultiplayerLobby(ArcadeUI ui) {
@@ -283,15 +284,8 @@ public class MultiplayerLobby implements Screen {
 				table5.center().right();
 				table5.add(chat).padRight(200);
 				table5.row();
+				//table5.add(" ").padRight(200);
 				chatfield.setText("");
-				
-				
-				final ScrollPane scroller = new ScrollPane(table5);
-
-		        final Table table8 = new Table();
-		        table8.setFillParent(true);
-		        table8.add(scroller).fill().expand();
-		        stage.addActor(table8);
 
 			}
 		});

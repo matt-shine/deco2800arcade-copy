@@ -102,6 +102,10 @@ public class LunarLander extends GameClient {
 		this.networkClient = networkClient;  
 	}
 
+	/*backgroundTexture1 = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png")); 
+	backgroundTexture2 = new Texture(Gdx.files.internal("lunarlanderassets/deep_space.png")); 
+	backgroundTexture3 = new Texture(Gdx.files.internal("lunarlanderassets/pelican_nebula.png")); 
+	backgroundTexture4 = new Texture(Gdx.files.internal("lunarlanderassets/stars.png")); */
 
 	/**
 	 * Creates the game
@@ -111,16 +115,14 @@ public class LunarLander extends GameClient {
 		// setting up various Gdx tools	
 		batch = new SpriteBatch();
 		backgroundTexture1 = new Texture(Gdx.files.internal("lunarlanderassets/rose_nebula.png")); 
-		//backgroundTexture2 = new Texture(Gdx.files.internal("lunarlanderassets/carina_nebula.png")); 
-		backgroundTexture3 = new Texture(Gdx.files.internal("lunarlanderassets/deep_space.png")); 
-		backgroundTexture4 = new Texture(Gdx.files.internal("lunarlanderassets/pelican_nebula.png")); 
-		backgroundTexture5 = new Texture(Gdx.files.internal("lunarlanderassets/stars.png")); 
+		backgroundTexture2 = new Texture(Gdx.files.internal("lunarlanderassets/deep_space.png")); 
+		backgroundTexture3 = new Texture(Gdx.files.internal("lunarlanderassets/pelican_nebula.png")); 
+		backgroundTexture4 = new Texture(Gdx.files.internal("lunarlanderassets/stars.png"));
 		Array<Texture> backgrounds = new Array<Texture>();
 		backgrounds.add(backgroundTexture1);
-		//backgrounds.add(backgroundTexture2);
+		backgrounds.add(backgroundTexture2);
 		backgrounds.add(backgroundTexture3);
 		backgrounds.add(backgroundTexture4);
-		backgrounds.add(backgroundTexture5);
 		surfaceTexture = new Texture(Gdx.files.internal("lunarlanderassets/moon_surface2.png"));
 		pauseScreen = new Texture(Gdx.files.internal("lunarlanderassets/pause_screen.png"));
 		splashScreenBackground = new Texture(Gdx.files.internal("lunarlanderassets/LL_splash.png"));
@@ -244,7 +246,7 @@ public class LunarLander extends GameClient {
 			speed += velY * 1; // should be *=
 			//for debugging purposes, can be used when game is over or not
 			if (Gdx.input.isKeyPressed(Keys.Q)) {
-				System.out.println("debug button has been pressed!");
+				//System.out.println("debug button has been pressed!");
 			}
 			//renders the map using the list of lists "terrain"
 			LunarLanderTerrain.renderMap(terrain);
@@ -276,12 +278,10 @@ public class LunarLander extends GameClient {
 					batch.begin();
 					batch.draw(explodeTexture, landerX, landerY, landerWidth, landerHeight);
 					batch.end();
-					System.out.println("Collided with the ground!");
 					gameOver = true;
 					gameState = GameState.GAME_OVER_LOSE;
 				} else if(landerX > terrain.get(0).get(0) && landerX < terrain.get(0).get(2)){
 					if(landerY - 5 < terrain.get(0).get(1)){
-						System.out.println("You win!");
 						//score += 10; not incrementing properly
 						gameOver = true;
 						velY = 0;

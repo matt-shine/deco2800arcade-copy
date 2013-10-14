@@ -19,7 +19,7 @@ public class GameMap extends Image {
 	
 	public GameMap(String filename) {
 		//TODO: Remove this and make it dynamic
-		super(new Texture(Gdx.files.internal("maps/demomap.png")));
+		super(new Texture(Gdx.files.internal("images/maps/demomap.png")));
 		//TODO: load mapfile, initialise TileMap and textures etc
 		mapTime = 0; //TODO: load from map file
 		mapSpeed = 40; //TODO: load from map file

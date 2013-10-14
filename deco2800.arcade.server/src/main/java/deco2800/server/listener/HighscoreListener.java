@@ -72,18 +72,14 @@ public class HighscoreListener extends Listener {
 			 AddScoreRequest asr = (AddScoreRequest)object;
 			 String[] scoreQueue = deserialisedScores(asr.scoreQueue);
 			 
+			 //Create lists to send off to HighscoreDatabase
 			 LinkedList<String> types = new LinkedList<String>();
 			 LinkedList<Integer> scores = new LinkedList<Integer>();
 			 
-			 /*This following is temporary, simply for showing that the 
-			  * connection has succeeded and the data has been sent correctly.*/
-			 System.out.println("Recieved add score request for username:" 
-					 + asr.username +" and Game_ID:" + asr.game_ID + ". Scores: "); 
+			 //Populate the lists with the scores
 			 for (int i = 0; i < scoreQueue.length; i+=2) {
 				 types.addLast(scoreQueue[i]);
 				 scores.addLast(Integer.parseInt(scoreQueue[i+1]));
-				 
-				 System.out.println("    Type: " + scoreQueue[i] + "; Value: " + scoreQueue[i+1] + ".");
 			 }
 			 
 			 try {

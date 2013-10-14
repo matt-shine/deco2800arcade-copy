@@ -38,7 +38,8 @@ public class User extends Observable{
 	}
 	
 	public String toString(){
-		return "" + this.playerID;
+		String str = "" + this.playerID;
+		return str;
 	}
 	
 	public boolean equals(Object o){

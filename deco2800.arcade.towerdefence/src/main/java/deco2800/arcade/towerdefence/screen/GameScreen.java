@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -32,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.towerdefence.TexturePart;
 import deco2800.arcade.towerdefence.TowerDefence;
 
 
@@ -39,16 +41,18 @@ public class GameScreen implements Screen{
 	
 	private TowerDefence game;
 	
-	private Stage stage;
+	private Stage stage, hudStage;
 	//private ShapeRenderer shapeRenderer;
 	private static float STATUS_HEIGHT = 50f;
 	private static float BOTTOM_HEIGHT = 150f;
-	Button frostB, fireB, holyB, darknessB, piercingB, auraB, backB; //TowerButtons
+	Button frostB, fireB, holyB, darknessB, piercingB, auraB, backB, randomBut1, randomBut2; //TowerButtons
 	private Label towerInfo;
 	BitmapFont black;
     BitmapFont white;
     Skin skin;
-	TextureAtlas atlas;
+	TextureAtlas atlas, barsAtlas;
+	TextureRegion healthBarRegion, attackBarRegion, costBarRegion, penetrationBarRegion, armorBarRegion;
+	TexturePart healthBar, attackBar, costBar, penetrationBar, armorBar;
 	SpriteBatch batch;
 	TextField resourceTF;
 	private OrthographicCamera camera;
@@ -58,10 +62,7 @@ public class GameScreen implements Screen{
 	//static final int WIDTH  = 480;
     //static final int HEIGHT = 320;
 
-    private OrthographicCamera				cam;
-    private Texture                         texture, crystalsTexture;
-    private Mesh                            mesh;
-    private Rectangle                       glViewport;
+	Texture crystalsTexture;
     private float                           rotationSpeed;
 	
 	/*
@@ -71,6 +72,8 @@ public class GameScreen implements Screen{
 	public GameScreen(TowerDefence game){
 		this.game = game;
 		stage = new Stage();
+		hudStage = new Stage();
+		hudStage.setViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - BOTTOM_HEIGHT - STATUS_HEIGHT, true);
 		
 		//setting style for resource textfield
 		TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
@@ -85,30 +88,10 @@ public class GameScreen implements Screen{
         crystalsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		Sprite crystals = new Sprite(crystalsTexture);
 		
-		towerInfo = new Label("Blah BLAH Yada YADA\nTower Info goes here.", //Label for displaying each tower's info
+		towerInfo = new Label("......\n......\nTower Info goes here.", //Label for displaying each tower's info
 				new Label.LabelStyle(new BitmapFont(),
 				WHITE));
 		towerInfo.setWrap(true);
-		
-		//
-		
-		rotationSpeed = 0.5f;
-        mesh = new Mesh(true, 4, 6,
-                        new VertexAttribute(VertexAttributes.Usage.Position, 3,"attr_Position"),
-                        new VertexAttribute(Usage.TextureCoordinates, 2, "attr_texCoords"));
-        texture = new Texture(Gdx.files.internal("sc_map.png"));
-        mesh.setVertices(new float[] { 
-                         -1024f, -1024f, 0, 0, 1,
-                          1024f, -1024f, 0, 1, 1,
-                          1024f,  1024f, 0, 1, 0,
-                         -1024f,  1024f, 0, 0, 0
-        });
-        mesh.setIndices(new short[] { 0, 1, 2, 2, 3, 0 });
-
-        cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());            
-        cam.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
-
-        glViewport = new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override
@@ -119,12 +102,13 @@ public class GameScreen implements Screen{
 		white.dispose();
 		black.dispose();
 		stage.dispose();
+		hudStage.dispose();
 		game.gameScreen.dispose();
 	}
 
 	@Override
 	public void hide() {
-		ArcadeInputMux.getInstance().removeProcessor(stage);
+		ArcadeInputMux.getInstance().removeProcessor(hudStage);
 	}
 
 	@Override
@@ -143,18 +127,30 @@ public class GameScreen implements Screen{
 		
 		stage.act(delta);
 		stage.draw();
-		Table.drawDebug(stage);
-		if(!game.isPaused()) {
+		
+		hudStage.act(delta);
+		hudStage.draw();
+
+		Table.drawDebug(hudStage);
+		if(!game.isPaused()) {			
 			stage.act(delta);
+			hudStage.act(delta);
 		}
 		
 		batch.begin();
 		batch.draw(crystalsTexture, 5, Gdx.graphics.getHeight() - crystalsTexture.getHeight() - 5);
+		healthBar.Draw(batch);
+		attackBar.Draw(batch);
+		costBar.Draw(batch);
+		penetrationBar.Draw(batch);
+		armorBar.Draw(batch);
 		batch.end();
 		
 	}
 	
-	
+	/* Taken from libGDX google docs, tweaked very slightly
+	 * 
+	 */
 	private void handleInput() {
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
                 camera.zoom += 0.02;
@@ -162,19 +158,19 @@ public class GameScreen implements Screen{
         if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
                 camera.zoom -= 0.02;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 if (camera.position.x > 0)
                         camera.translate(-3, 0, 0);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 if (camera.position.x < 1024)
                         camera.translate(3, 0, 0);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 if (camera.position.y > 0)
                         camera.translate(0, -3, 0);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 if (camera.position.y < 1024)
                         camera.translate(0, 3, 0);
         }
@@ -188,9 +184,12 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
+		if(hudStage == null) {
+			hudStage = new Stage(width, height, true);
+		}
 		if(stage == null) {
 			stage = new Stage(width, height, true);
-		} 
+		}
 		camera = (OrthographicCamera) stage.getCamera();
 		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 				
@@ -200,7 +199,6 @@ public class GameScreen implements Screen{
 		style.down = skin.getDrawable("buttonpressed");
 		style.font = white;
 
-		//tower buttons will probably change to Image button once we have mini-button-sized sprites.
 		frostB = new TextButton("1", style);
 		frostB.setWidth(BUTTON_WIDTH);
 		frostB.setHeight(BUTTON_HEIGHT);
@@ -307,6 +305,35 @@ public class GameScreen implements Screen{
 		backB.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 5);
 		backB.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 5);
 		
+		//random buttons for testing the stage-camera movement
+		randomBut1 = new TextButton("T", style);
+		randomBut1.setWidth(BUTTON_WIDTH);
+		randomBut1.setHeight(BUTTON_HEIGHT);
+		randomBut1.addListener(new InputListener() { 
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        	}
+		 });
+		randomBut1.setX(200);
+		randomBut1.setY(200);
+		
+		randomBut2 = new TextButton("T", style);
+		randomBut2.setWidth(BUTTON_WIDTH);
+		randomBut2.setHeight(BUTTON_HEIGHT);
+		randomBut2.addListener(new InputListener() { 
+        	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		return true; //do nothing
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        	}
+		 });
+		randomBut2.setX(300);
+		randomBut2.setY(300);
+		
 		resourceTF.setX(45);
 		resourceTF.setY(Gdx.graphics.getHeight() - resourceTF.getHeight() - 15);
 		resourceTF.setDisabled(true);
@@ -314,15 +341,26 @@ public class GameScreen implements Screen{
 		towerInfo.setX(piercingB.getX() + towerInfo.getWidth()/2 + 10);
 		towerInfo.setY(69);
 		
-		stage.addActor(frostB);
-		stage.addActor(fireB);
-		stage.addActor(darknessB);
-		stage.addActor(holyB);
-		stage.addActor(auraB);
-		stage.addActor(piercingB);
-		stage.addActor(backB);
-		stage.addActor(resourceTF);
-		stage.addActor(towerInfo);
+		//adding bars for showing information
+		healthBar = new TexturePart(healthBarRegion, towerInfo.getX() + towerInfo.getWidth() + 20, towerInfo.getY() + 50);
+		attackBar = new TexturePart(attackBarRegion, healthBar.getX(), healthBar.getY() - 26);
+		costBar = new TexturePart(costBarRegion, healthBar.getX(), attackBar.getY()- 26);
+		penetrationBar = new TexturePart(penetrationBarRegion, healthBar.getX(), costBar.getY() - 26);
+		armorBar = new TexturePart(armorBarRegion, healthBar.getX(), penetrationBar.getY() - 26);
+		
+		//adding actors to the HUD
+		hudStage.addActor(frostB);
+		hudStage.addActor(fireB);
+		hudStage.addActor(darknessB);
+		hudStage.addActor(holyB);
+		hudStage.addActor(auraB);
+		hudStage.addActor(piercingB);
+		hudStage.addActor(backB);
+		hudStage.addActor(resourceTF);
+		hudStage.addActor(towerInfo);
+		//adding actors for the camera
+		stage.addActor(randomBut2);
+		stage.addActor(randomBut1);
 	}
 
 	@Override
@@ -331,12 +369,23 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void show() {
-		ArcadeInputMux.getInstance().addProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(hudStage);
+		
+		//adding styles for buttons
 		atlas = new TextureAtlas(Gdx.files.internal("black_button.pack"));
 		skin = new Skin();
         skin.addRegions(atlas);
         white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
+        
         batch = new SpriteBatch();
+        
+        //adding textures for the coloured bars
+        barsAtlas = new TextureAtlas(Gdx.files.internal("Bars.pack"));
+		healthBarRegion = barsAtlas.findRegion("Red_Bar");
+		attackBarRegion = barsAtlas.findRegion("Blue_Bar");
+		costBarRegion = barsAtlas.findRegion("Orange_Bar");
+		penetrationBarRegion = barsAtlas.findRegion("Purple_Bar");
+		armorBarRegion = barsAtlas.findRegion("White_Bar");
 	}
 }

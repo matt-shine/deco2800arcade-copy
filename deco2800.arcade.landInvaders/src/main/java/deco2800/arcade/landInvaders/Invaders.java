@@ -26,6 +26,7 @@ public class Invaders extends JFrame implements Runnable {
 	private String imgString;
 	private Image frame = null;
 	private int healthBar;
+	private int score;
 
 	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
@@ -38,7 +39,10 @@ public class Invaders extends JFrame implements Runnable {
 		WallList = new ArrayList<blockWall>();
 		
 		healthBar = 3;
-		JLabel label = new JLabel ("3");
+		score = 0;
+		JLabel lscore = new JLabel (score +"aaaaaaaaaaaaaaa");
+		
+		
 		
 
 		
@@ -66,11 +70,14 @@ public class Invaders extends JFrame implements Runnable {
 		mains = bg.getGraphics();
 		mains.drawImage(background, 0, 0, Width, Height, panel);
 		mains.drawImage(frame, 0, 0, Width, 1000, panel);
+		
+		
 
 		setBackground(Color.black);
 		setVisible(true);
 		setSize(Width, Height);
 		startGame();
+		
 
 	}
 
@@ -94,10 +101,12 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	public void paint(Graphics g) {
-
+		String drawString = "Sample Text";
+		
 		mains.clearRect(0, 0, Width, Height);
 		mains.drawImage(background, 0, 0, Width, Height, panel);
 		mains.drawImage(frame, 10, 20, Width, 662, panel);
+		mains.drawString("aaaaaaaa", 300, 400);
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
 
@@ -141,6 +150,7 @@ public class Invaders extends JFrame implements Runnable {
 		for (int i = 0; i < shots.size(); i++) {
 			if (enemyG.checkHit(shots.get(i)) == true) {
 				shots.remove(i);
+				score++;
 			}
 
 		}

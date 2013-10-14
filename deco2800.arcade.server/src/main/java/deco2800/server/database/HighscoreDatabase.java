@@ -105,13 +105,9 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public List<String> getGameTopPlayers(String Game_ID, int top, String type, boolean highestIsBest) throws DatabaseException{
-		System.out.println("getGameTopPlayers..");
-		
 		List<String> data = new ArrayList<String>();
 		int topCount = 0;
 		String order;
-		
-		System.out.println("Game: " + Game_ID + ", limit: " + top + ", type: " + type);
 		
 		if (!initialised) {
 			initialise();
@@ -132,17 +128,14 @@ public class HighscoreDatabase {
 			statement = connection.createStatement();
 			String getTop = "SELECT * FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
 			resultSet = statement.executeQuery(getTop);
-			//System.out.println(getTop);
 			
 			while(resultSet.next() && topCount <= top) {
-				//System.out.println("Player: " + resultSet.getString("Player"));
 				data.add(String.valueOf(resultSet.getString("Player")));
 				data.add(String.valueOf(resultSet.getInt("Score")));
 				data.add(String.valueOf(resultSet.getDate("Date")));
 				data.add(String.valueOf(resultSet.getString("Score_Type")));
 				topCount++;
 			}
-			System.out.println("Data size: " + data.size());
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -437,10 +430,10 @@ public class HighscoreDatabase {
 	 * @return A string representation of the current date and time.
 	 */
 	private static Timestamp getCurrentTimeStamp() {
-		Timestamp time = new java.sql.Timestamp(new Timestamp(0).getTime());
-		return time;
-		
- 
+
+		java.util.Date date= new java.util.Date();
+		return new Timestamp(date.getTime());
+
 	}
 	
 	/**

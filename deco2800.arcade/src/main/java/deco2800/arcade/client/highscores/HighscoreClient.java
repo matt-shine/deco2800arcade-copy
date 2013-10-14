@@ -142,6 +142,11 @@ public class HighscoreClient {
 		List<Highscore> output = new ArrayList<Highscore>();
 		Highscore currentItem = new Highscore();
 		
+		//If the data being sent back is incorrect, just return an empty list
+		if ((splitScores.length % numberOfColumns) != 0) {
+			return output;
+		}
+		
 		for (String scoreItem : splitScores) {
 			//Set the properties for the score items in the list
 			switch (currentColumn) {
@@ -206,19 +211,27 @@ public class HighscoreClient {
 	 * @param highestIsBest If having a high score is best for your game, then
 	 * set this to true. If having a low score is best, then set this to false.
 	 * 
-	 * @return A list of Highscore objects. 
+	 * @return A list of Highscore objects.
 	 */
-	public List<Highscore> getUserHighScore(boolean highestIsBest, String type) {
+	public Highscore getUserHighScore(boolean highestIsBest, String type) {
 		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 2; //Telling the server which query to run
 		gsReq.type = type;
 		gsReq.highestIsBest = highestIsBest;
 		
+		//This function requires a user, throw and exception if there not not one available.
+		requireUsername();
+		
 		//Send the request off, waiting for response before continuing
 		sendScoreRequest(gsReq);
 		
 		//Now that the response is back, return the data to the user
-		return this.scoreResponseList;
+		if (this.scoreResponseList.isEmpty()) {
+			return null;
+		} else {
+			return this.scoreResponseList.get(0);
+		}
+		
 	}
 	
 	/**
@@ -425,8 +438,12 @@ public class HighscoreClient {
 	
 	
 	//=============================================================
-	//Public General Utility Methods
+	//General Utility Methods
 	//=============================================================
+	
+	//--------------------
+	//Public
+	//--------------------
 	/**
 	 * Prints out all of the scores in hs to the console. This can be used for 
 	 * debugging to ensure that scores are being stored correctly.
@@ -445,4 +462,18 @@ public class HighscoreClient {
 		}
 	}
 	
+	//--------------------
+	//Private
+	//--------------------
+	/**
+	 * Throws a NoUsernameAvailableException is the class was instantiated 
+	 * without a username.
+	 */
+	private void requireUsername() {
+		if (this.Username == null) {
+			throw new NoUsernameAvailableException("HighscoreClient must be" +
+					" instantiated with a username in order to be able to" + 
+					" add scores");
+		}
+	}
 }

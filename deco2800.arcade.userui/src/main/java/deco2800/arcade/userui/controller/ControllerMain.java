@@ -11,6 +11,7 @@ import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
 import deco2800.arcade.userui.view.EditScreen;
 import deco2800.arcade.userui.view.AddFriendScreen;
+import deco2800.arcade.userui.view.InviteScreen;
 import deco2800.arcade.userui.view.RemoveFriendScreen;
 import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
@@ -22,6 +23,7 @@ public class ControllerMain {
 	private StatusScreen statusView;
 	private AddFriendScreen addfriendView;
 	private RemoveFriendScreen removefriendView;
+	private InviteScreen inviteView;
 	
 	private AchievementScreen achievementView;
 	private Model theModel;
@@ -50,6 +52,7 @@ public class ControllerMain {
 		this.userView.addAchievementListener(new AchievementListener());
 		this.userView.addFriendListener(new AddFriendListener());
 		this.userView.addRemoveFriendListener(new RemoveFriendListener());
+		this.userView.addInviteListener(new InviteListener());
 					
 		checkstatus();
 			
@@ -182,6 +185,19 @@ public class ControllerMain {
 			userView.dispose();
 			achievementView = new AchievementScreen(theModel);
 			ControllerAchievement achievementcontrol = new ControllerAchievement(theModel, achievementView);
+			
+		}
+		
+	}
+	
+	class InviteListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			//Open invites Screen
+			inviteView = new InviteScreen(theModel);
+			Invite invite = new Invite(theModel, inviteView, userView);
 			
 		}
 		

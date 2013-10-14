@@ -42,6 +42,7 @@ public class UserScreen extends JFrame{
 	private JButton addfriendbutton, removefriendbutton, editbutton, statusbutton;
 	private JButton achievementbar;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
+	private JButton invitesbutton;
 	
 	//Declare Labels 
 	private JLabel avatar;
@@ -276,6 +277,11 @@ public class UserScreen extends JFrame{
 	    removefriendbutton.setForeground(Color.RED);
 	    removefriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    removefriendbutton.setContentAreaFilled(false);
+	    invitesbutton = new JButton("Invites");
+	    invitesbutton.setFont(blacksmall);
+	    invitesbutton.setForeground(Color.white);
+	    invitesbutton.setBorder(BorderFactory.createEmptyBorder());
+	    invitesbutton.setContentAreaFilled(false);
 	    
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
@@ -283,6 +289,7 @@ public class UserScreen extends JFrame{
 	    friendpanel.add(friendbar, "gap left 10px, gap bottom 110px");
 	    friendpanel.add(addfriendbutton,"gap left 10px");
 	    friendpanel.add(removefriendbutton,"gap left 10px");
+	    friendpanel.add(invitesbutton,"gap left 110px");
         friendpanel.add(friendscroll, "width :500px, height :100px, gap top 30px");    
 		
 	}
@@ -551,6 +558,16 @@ public class UserScreen extends JFrame{
 	}
 	
 	/**
+	 * Remove a friend from the list
+	 * @param listenForAddFriendButton
+	 */
+	public void addInviteListener(ActionListener listenForInviteButton){
+		
+		invitesbutton.addActionListener(listenForInviteButton);
+		
+	}
+	
+	/**
 	 * 
 	 * @param icon
 	 */
@@ -560,15 +577,6 @@ public class UserScreen extends JFrame{
 		
 	}
 	
-	public void statusclick(){
-		
-		statusbutton.doClick();
-		
-	}
-	
-	/**
-	 * 
-	 */
 	public void updateFriends(){
 		
 	}

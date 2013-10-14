@@ -143,7 +143,7 @@ public abstract class Mobile extends Mortal {
 	}
 
 	/**
-	 * Move the GridObject one unit in the vector specified.
+	 * Move the GridObject a number of pixels based on the given vector.
 	 * 
 	 * @param vector
 	 */
@@ -171,10 +171,6 @@ public abstract class Mobile extends Mortal {
 
 		// Go into a wait-while loop changing the position 30 times per second
 		int distance = grid.getTileSize();
-		// Check if it is moving diagonally
-		if (vector.x != 0 && vector.y != 0) {
-			distance = (int) Math.sqrt((double) (2 * (distance * distance)));
-		}
 		long t0, t1;
 		Vector2 addVector = vector.mul(speed / 33);
 		for (int i = 0; i < distance; i += addVector.len()) {

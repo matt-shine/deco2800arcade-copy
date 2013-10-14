@@ -74,6 +74,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private String info;
 	BitmapFont gameInfo;
 	// Piece positions
+	
 	// x-co-ords
 	int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
 			whiteQueenPos, whiteBishop2Pos, whiteKnight2Pos, whiteRook2Pos;
@@ -177,7 +178,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	    replayHandler.addReplayEventListener(initReplayEventListener());
 		ReplayNodeFactory.registerEvent("movePiece", new String[]{"start_x", "start_y", "target_x", "target_y"});
 		
-		EasyComputerOpponent = false;
+		//True means AI is playing, false if it isn't
+		EasyComputerOpponent = true;
 		
 		URL resource = this.getClass().getResource("/");
 		
@@ -525,6 +527,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					if (movingPiece.getTeam() == board.whoseTurn()) {
 						moving = true;
 						showPossibleMoves(movingPiece);
+						System.out.println("Moving: " + moving);
 						return true;
 					}
 				} catch (NullPointerException e) {
@@ -542,12 +545,13 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 							prevPos[1],
 							newPos[0], 
 							newPos[1]));
+					
 					}
 					movePieceGraphic();
 					
-					
 					// Push the move that was just performed
 					moving = false;
+					System.out.println(7);
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {
 						if (!board.whoseTurn()) {
@@ -568,15 +572,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					/* If the easy computer opponent is playing, and black teams turn
 					*  (computer controlled team)
 					*/
+					System.out.println("turn: " + board.whoseTurn());
 					if(EasyComputerOpponent && board.whoseTurn()) {
-						board.moveAIPieceEasy();
+						Piece AIPiece = board.chooseAIPiece();
+						int[] prevAI = board.findPiece(AIPiece);
+						board.moveAIPieceEasy(AIPiece);
+						int[] newAI = board.findPiece(AIPiece);
 						if(recording){
 						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
 								"movePiece", 
-								prevPos[0],
-								prevPos[1],
-								newPos[0], 
-								newPos[1]));
+								prevAI[0],
+								prevAI[1],
+								newAI[0], 
+								newAI[1]));
 						}
 						movePieceGraphic();
 						

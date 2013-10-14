@@ -1495,10 +1495,11 @@ public class Board {
 	 * Moves a piece on the computer controlled team using basic logic for
 	 * easy mode.
 	 */
-	public void moveAIPieceEasy() {
-		Piece movePiece = chooseAIPiece();
+	public void moveAIPieceEasy(Piece movePiece) {
+		//Piece movePiece = chooseAIPiece();
 		
 		int[] moveSquare = chooseAISquare(movePiece);
+		System.out.println("board3");
 		
 		System.out.println("AI move: " + movePiece);
 		System.out.println("AI move: [" + moveSquare[0] + ", " + moveSquare[1] + "]");
@@ -1515,7 +1516,7 @@ public class Board {
 	 * @return
 	 * 		The piece that will be moved by the computer controlled player.
 	 */
-	private Piece chooseAIPiece() {
+	Piece chooseAIPiece() {
 		List<Piece> activePieces = findActivePieces(turn);
 		int numPieces = activePieces.size();
 		
@@ -1524,6 +1525,7 @@ public class Board {
 		Piece returnPiece = activePieces.get(pieceIndex);
 		while(allowedMoves(returnPiece).size() == 0) {
 			pieceIndex = (int)(Math.random() * ((numPieces - 1) + 1));
+			returnPiece = activePieces.get(pieceIndex);
 		}
 		
 		return returnPiece;
@@ -1540,7 +1542,7 @@ public class Board {
 	 */
 	private int[] chooseAISquare(Piece movePiece) {
 		
-		List<int[]> moves = allowedMoves(movePiece);
+		List<int[]> moves = removeCheckMoves(movePiece);
 		
 		int numMoves = moves.size();
 		

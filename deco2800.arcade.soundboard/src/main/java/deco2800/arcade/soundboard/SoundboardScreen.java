@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import deco2800.arcade.client.network.listener.ReplayListener;
 import deco2800.arcade.client.replay.ReplayHandler;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.soundboard.actions.SoundButtonChangeListener;
@@ -44,7 +43,7 @@ public class SoundboardScreen implements Screen {
     private static final int BUTTON_HEIGHT = 33;
     private static final int INIT_Y = 580;
     private static final int BUTTON_OFFSET_Y = 35;
-    private static final int BUTTON_OFFSET_X = 200;
+    private static final int BUTTON_OFFSET_X = 250;
     private static final int BUTTON_SAMPLE_OFFSET_Y = 50;
     private static final int SAMPLE_BUTTON_ROW_COUNT = 4;
     private static final int WIDTH = 1024;
@@ -84,7 +83,7 @@ public class SoundboardScreen implements Screen {
         this.player = player;
 
         session = -1;
-        libSkin = new Skin(Gdx.files.internal("libSkin.json"));
+        libSkin = new Skin(Gdx.files.classpath("Assets/libSkin.json"));
         setupUI();
     }
 
@@ -265,6 +264,7 @@ public class SoundboardScreen implements Screen {
 
     @Override
     public void dispose() {
+        reset();
         stage.dispose();
         batch.dispose();
     }
@@ -275,14 +275,6 @@ public class SoundboardScreen implements Screen {
      */
     public boolean isRecording() {
         return this.recording;
-    }
-
-    /**
-     * Set recording
-     * @param recording boolean
-     */
-    public void setRecording(boolean recording) {
-        this.recording = recording;
     }
 
     /**
@@ -318,14 +310,13 @@ public class SoundboardScreen implements Screen {
 
     /**
      * Play a sound
-     * @param name Name of the sound
      * @param type Type of sound
      * @param index index in array
      */
-    public void playSound(String name, int type, int index) {
+    public void playSound(int type, int index) {
         if (type == LOOPS) {
             loops.get(index).play();
-        } else if (type == SAMPLES) {
+        } else {
             samples.get(index).play();
         }
     }

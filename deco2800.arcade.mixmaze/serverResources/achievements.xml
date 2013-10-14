@@ -1,0 +1,8 @@
+<achievements>
+    <achievement id="mixmaze.playa">
+        <name>Playa!</name>
+        <description>Play a game of Mix Maze.</description>
+        <awardThreshold>1</awardThreshold>
+        <icon>mixmaze.playa.png</icon>
+    </achievement>
+</achievements>

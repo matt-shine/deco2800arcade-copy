@@ -2,7 +2,6 @@ package deco2800.arcade.snakeLadderModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -12,9 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameMap {
-	
-	private HashMap<String,String> ruleTextureMapping;
-	private Texture backgroundBoard;
+	private Texture backgroundBoard = new Texture(Gdx.files.classpath("images/board.png"));;
 	private Tile[] tileList = new Tile[100]; 
 	public Tile[] getTileList() {
 		return tileList;
@@ -26,24 +23,7 @@ public class GameMap {
 
 	private List<SnakeLadderBridge> snakeLadderList = new ArrayList<SnakeLadderBridge>();
 	
-	public void ini()
-	{
-		//loading of background game board
-		backgroundBoard = new Texture(Gdx.files.classpath("images/board.png"));
-		//initialise rule texture mapping
-		ruleTextureMapping = new HashMap<String,String>();
-		ruleTextureMapping.put("+10","plus_10.png");
-		ruleTextureMapping.put("+20", "plus_20.png");
-		ruleTextureMapping.put("+50", "plus_50.png");
-		ruleTextureMapping.put("+100", "plus_100.png");
-		ruleTextureMapping.put("-10", "minus_10.png");
-		ruleTextureMapping.put("-20", "minus_20.png");
-		ruleTextureMapping.put("-50", "minus_50.png");
-		ruleTextureMapping.put("-100", "minus_100.png");
-		ruleTextureMapping.put("#", "stop.png");
-	}
-	
-	public boolean loadMap(String filePath) {		
+	public boolean loadMap(String filePath, HashMap<String,RuleMapping> ruleMapping) {		
 		//reading file
 		FileHandle handle = Gdx.files.classpath(filePath);
 		BufferedReader file = handle.reader(2048);
@@ -78,7 +58,7 @@ public class GameMap {
 					}
 					else if(!t.getRule().equals("."))
 					{
-						t.setTexture(new Texture(Gdx.files.classpath("images/"+ruleTextureMapping.get(t.getRule()))));
+						t.setTexture(new Texture(Gdx.files.classpath("images/"+ ruleMapping.get(t.getRule()).getIcon())));
 					}
 					tileList[index-1]=t;
 				}

@@ -1,29 +1,4 @@
-INFO main org.reflections.Reflections - Reflections took 155 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 153 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 227 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -34,10 +9,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -48,7 +24,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 334 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 334 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -59,10 +35,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -73,7 +50,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 258 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 287 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -84,10 +61,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -98,7 +76,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 239 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 1172 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -109,10 +87,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -123,7 +102,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 308 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 349 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -134,10 +113,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -148,7 +128,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 264 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 345 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -159,10 +139,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -173,7 +154,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 1522 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 252 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -184,10 +165,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -198,7 +180,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 239 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 270 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -209,10 +191,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -223,7 +206,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 283 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 322 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -234,10 +217,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -248,7 +232,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 279 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 267 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -259,10 +243,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -273,7 +258,7 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 298 ms to scan 23 urls, producing 88 keys and 384 values 
+INFO main org.reflections.Reflections - Reflections took 271 ms to scan 24 urls, producing 101 keys and 448 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
@@ -284,10 +269,11 @@ file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/m
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
+jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.gamelibrary/build/libs/deco2800.arcade.gamelibrary-1.0.jar!/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
@@ -298,806 +284,4 @@ jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/dec
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
 file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 487 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 263 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 258 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 243 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 258 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 247 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 270 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 238 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 268 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 277 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 251 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 226 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 251 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 267 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 252 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 280 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 285 ms to scan 23 urls, producing 88 keys and 384 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 315 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 241 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 245 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 271 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 244 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-<<<<<<< HEAD
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-jar:file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/home/delan/Code/Uni/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-INFO main org.reflections.Reflections - Reflections took 939 ms to scan 23 urls, producing 88 keys and 385 values 
-=======
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 284 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 224 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 267 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 159 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 168 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 163 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 155 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 182 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 156 ms to scan 23 urls, producing 88 keys and 385 values 
-DEBUG main org.reflections.Reflections - going to scan these urls:
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pong/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.tictactoe/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.wl6/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.checkers/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.ui/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/libs/deco2800.arcade-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.protocol/build/libs/deco2800.arcade.protocol-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.chess/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.landInvaders/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.raiden/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.towerdefence/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.pacman/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.utils/build/libs/deco2800.arcade.utils-1.0.jar!/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.packman/build/libs/deco2800.arcade.packman-1.0.jar!/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.junglejump/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.snakeLadder/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.breakout/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade/build/classes/main/
-file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.burningskies/build/classes/main/
-jar:file:/Users/Segmelsian/deco2800-2013/deco2800.arcade.model/build/libs/deco2800.arcade.model-1.0.jar!/
-INFO main org.reflections.Reflections - Reflections took 158 ms to scan 23 urls, producing 88 keys and 385 values 
->>>>>>> b2f6c3a938709281ca8ac439e67401cebaee91c9
+INFO main org.reflections.Reflections - Reflections took 265 ms to scan 24 urls, producing 101 keys and 448 values 

@@ -29,8 +29,7 @@ public class GameStore implements Screen, StoreScreen {
 
     Sprite left = new Sprite(new Texture(Gdx.files.internal("left_glow.png")), 0, 0, 39, 31);
     
-    private float textfade = 100;
-    private float iconfade = 100;
+    private float fade = 1;
     private Label description;
     private TextButton icon;
     
@@ -47,8 +46,8 @@ public class GameStore implements Screen, StoreScreen {
 		stage.addActor(bg);
 		
 		icon = new TextButton("", skin, "icon");
-		icon.setSize(160, 160);
-		icon.setPosition(100, 450);
+		icon.setSize(140, 158);
+		icon.setPosition(262, 453);
 		stage.addActor(icon);
 		
 		final TextField searchField = new TextField("", skin);
@@ -91,6 +90,12 @@ public class GameStore implements Screen, StoreScreen {
 		reviewsButton.setPosition(834, 50);
 		stage.addActor(reviewsButton);
 		
+		icon.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				System.out.println("Something");
+			}
+		});
+		
 		libraryButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				System.out.println("Library clicked");
@@ -127,14 +132,14 @@ public class GameStore implements Screen, StoreScreen {
 			gameGrid.setSize(160, 169);
 			gameGrid.setName("" + ArcadeSystem.getGamesList().toArray()[(number+i)%16]);
 			if (i < 4) {
-				gameGrid.setPosition(112 + (i%4)*172, 255);
+				gameGrid.setPosition(112 + (i%4) * 172, 255);
 			} else {
-				gameGrid.setPosition(112 + (i%4)*172, 76);
+				gameGrid.setPosition(112 + (i%4) * 172, 76);
 			}
 			gameGrid.addListener(new ChangeListener() {
 				public void changed (ChangeEvent event, Actor actor) {
 					setSelected(gameGrid.getName());
-					featuredScroll(featured);
+					fade--; // Will trigger textFade and iconFade in render.
 					System.out.println(featured.id);
 				}
 			});
@@ -142,58 +147,45 @@ public class GameStore implements Screen, StoreScreen {
 		}
 	}
 	private void textFade() {
-		if (textfade != 100) {
-			naptime(3);
-			if (--textfade < -100) {
-				textfade = 100;
-			} else if (textfade == 33) {
-				if(featured.getDescription() == null
-						|| featured.getDescription().equals("N/A")) {
+		if (fade <= -100) {
+			fade = 100;
+			description.setColor(1, 1, 1, 1);
+		}
+		if (fade < 50 && fade > -50) {
+			fade--;
+			iconFade();
+			if (fade == 0) {
+				if(featured.getDescription() == null || featured.getDescription().equals("N/A")) {
 		            description.setText(featured.name + "\nNo Description Available");
 		        } else {
 		        	description.setText(featured.name + "\n" + featured.getDescription());
 		        }
-				iconfade = 99;
 			}
-			if (textfade < 33 && textfade > -33) {
-				description.setColor(1, 1, 1, 0);
-				return;
-			}
-			description.setColor(1, 1, 1, (Math.abs(textfade) - 33)/66);
-		} else {
-			description.setColor(1, 1, 1, 1);
+			description.setColor(1, 1, 1, 0);
+		} else if (fade < 100 && fade > -100) {
+			fade--;
+			description.setColor(1, 1, 1, (Math.abs(fade) - 50) / 50);
 		}
 	}
 	
 	private void iconFade() {
 		// Used to reset icon movement in case it breaks due to spamming
-		if (iconfade != 100) { // reset counter
-			iconfade -= 3;
-			if (iconfade < -100) {
-				icon.setX(icon.getX() + 2);
-				iconfade = 100;
-			} else if (iconfade > 0) {
-				icon.setX(icon.getX() + 2); // move right
-			} else if (iconfade < 0) {
-				icon.setX(icon.getX() - 2); // move back left
-			} else if (iconfade == 0) {
-				naptime(400); // stay hidden for a short while
-			}
-			icon.setColor(1, 1, 1, Math.abs(iconfade)/100);
+		if (fade > 0) {
+			icon.setX(icon.getX() + 3); // move right
+		} else if (fade < 0) {
+			icon.setX(icon.getX() - 3); // move back left
+		} else if (fade == 0) {
+			naptime(300); // stay hidden for a short while
 		}
+		icon.setColor(1, 1, 1, Math.abs(fade) / 50);
 	}
 	
-	private void featuredScroll(Game game) {
-		textfade--; // will trigger textfade and iconfade in render.
-	}
-    
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
 		textFade();
-		iconFade();
 		batch.begin();
 		//bgSprite.draw(batch);
 		batch.end();

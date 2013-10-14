@@ -20,6 +20,7 @@ public class PlayerShip extends Ship {
 	//brute force way to handle timer
 	private long initialTime;
 	private boolean speedUp = false;
+	private boolean patternTimer = false;
 	
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
@@ -80,6 +81,14 @@ public class PlayerShip extends Ship {
 			if ((currentTime - initialTime) >= 10000) {
 				maxVelocity = 300;
 				speedUp = false;
+			}
+		}
+		if (patternTimer) {	
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - initialTime) >= 10000) {
+				playerBullets.remove();
+				this.playerBullets = null;
+				patternTimer = false;
 			}
 		}
 		
@@ -157,7 +166,9 @@ public class PlayerShip extends Ship {
 	 * Changes the players current bullet type.
 	 * @ensure pattern != NULL
 	 */
-	public void setBulletPattern(BulletPattern pattern) {
+	public void setBulletPattern(BulletPattern pattern, boolean timeLimited) {
+		this.patternTimer = timeLimited;
+		initialTime = System.currentTimeMillis();
 		playerBullets.remove();
 		playerBullets = pattern;
 		getStage().addActor(playerBullets);
@@ -182,6 +193,10 @@ public class PlayerShip extends Ship {
 	
 	public void respawn() {
 		this.health = 100;
+		playerBullets.remove();
+		this.playerBullets = null;
+		this.maxVelocity = 300;
+		this.speedUp = false;
 		this.flash = 0f;
 		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
 	}

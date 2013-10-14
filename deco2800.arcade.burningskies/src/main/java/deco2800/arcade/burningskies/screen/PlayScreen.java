@@ -20,6 +20,7 @@ import deco2800.arcade.burningskies.entities.Level;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
 import deco2800.arcade.burningskies.entities.DemoPowerUp;
+import deco2800.arcade.burningskies.entities.HealthPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -94,7 +95,9 @@ public class PlayScreen implements Screen
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	// Test code
-    	PowerUp test = new DemoPowerUp(this);
+    	PowerUp test = new DemoPowerUp(this, "images/items/health.png");
+    	addPowerup(test);
+    	test = new HealthPowerUp("images/items/health.png");
     	addPowerup(test);
     	
     	sp = new SpawnList(this);
@@ -107,6 +110,7 @@ public class PlayScreen implements Screen
     public void hide() {
     	//TODO: Make sure this resets properly
     	ArcadeInputMux.getInstance().removeProcessor(processor);
+    	game.stopSong();
     	stage.dispose();
     }
     

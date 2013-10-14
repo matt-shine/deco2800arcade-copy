@@ -1,11 +1,8 @@
 package deco2800.arcade.guesstheword.GUI;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -57,7 +54,7 @@ public class GameScreen implements Screen {
 	
 	private ScrollPane scrollpane;
 	
-//	private final BitmapFont font;
+	private final BitmapFont font;
 	
 	private ArrayList<TextButton> buttonList;
 	private ArrayList<Integer> lettersKeyed;
@@ -86,7 +83,7 @@ public class GameScreen implements Screen {
 		word =  new WordShuffler();
 		lettersKeyed = new ArrayList<Integer>();
 		catList = new ArrayList<String>();
-//		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
+		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
 	}
 
 	/**
@@ -98,17 +95,17 @@ public class GameScreen implements Screen {
 		catList.add(game.getterSetter.getCategory());
 		if(level.equalsIgnoreCase("Level 1 - 4 letters") 
 				|| level.equalsIgnoreCase("Default")){
-			this.level = "Level 1";	
+			this.level = "LEVEL 1";	
 			setGameContext(game.picture.getLevel1());
-			gametime = 62; // 60 secs for level 1
+			gametime = 5; // 60 secs for level 1
 		}else if(level.equalsIgnoreCase("Level 2 - 5 letters")){
-			this.level = "Level 2";
+			this.level = "LEVEL 2";
 			setGameContext(game.picture.getLevel2());
-			gametime = 52; // 50 secs for level 2
+			gametime = 5; // 50 secs for level 2
 		}else if(level.equalsIgnoreCase("Level 3 - 6 letters")){
-			this.level = "Level 3";
+			this.level = "LEVEL 3";
 			setGameContext(game.picture.getLevel3());
-			gametime = 42; // 40 secs for level 3
+			gametime = 5; // 40 secs for level 3
 		}
 	}// end of setLevel()
 	
@@ -162,11 +159,11 @@ public class GameScreen implements Screen {
 		Table rootTable =  new Table();
 		rootTable.setFillParent(true);
 
-//		font.setColor(Color.WHITE);	
-//		labelStyle = new LabelStyle();
-//		labelStyle.font = font;
+		font.setColor(Color.WHITE);	
+		labelStyle = new LabelStyle();
+		labelStyle.font = font;
 		
-		levelLabel = new Label(level , skin);
+		levelLabel = new Label(level , labelStyle);
 		backButton =  new TextButton("Back", skin);
 		
 		backButton.addListener(new ChangeListener(){
@@ -460,11 +457,22 @@ public class GameScreen implements Screen {
 		hintTaken = false;
 		Texture newTexture = null;
 		
-		Object[] next = game.picture.getLevel1().get(category).keySet().toArray();
+		HashMap<String, HashMap<String, Texture>> hm = null;
+		Object[] next = null;
+		
+		if(level.equalsIgnoreCase("Level 1")){
+			hm = game.picture.getLevel1();
+		}else if(level.equalsIgnoreCase("Level 2")){
+			hm = game.picture.getLevel2();
+		}else if(level.equalsIgnoreCase("Level 3")){
+			hm = game.picture.getLevel3();
+		}
+		next = hm.get(category).keySet().toArray();
+		
 		for(int i = 0; i < next.length-1; i ++){
 			if(next[i].equals(answer)){
 				
-				newTexture = game.picture.getLevel1().get(category).get(next[i+1]);
+				newTexture = hm.get(category).get(next[i+1]);
 				answer = next[i+1].toString();
 				game.getterSetter.setCategoryItem(answer);
 				game.getterSetter.setTexture(newTexture);
@@ -537,8 +545,8 @@ public class GameScreen implements Screen {
 			scoreLabel =  new Label("Score: 0" , skin);
 			this.add(scoreLabel).padBottom(30).width(100).row();
 			
-			timeLabel = new Label("Time: " , skin);
-			this.add(timeLabel).padBottom(30).width(100).row();
+//			timeLabel = new Label("Time: " , skin);
+//			this.add(timeLabel).padBottom(30).width(100).row();
 		}
 	}
 	
@@ -781,6 +789,8 @@ public class GameScreen implements Screen {
 				game.getterSetter.setTexture(texture);
 				game.getterSetter.setCategoryItem(word);
 				catList.add(category);	
+				//Start timer();
+				timer();
 //				new PicturePanel();
 				checkButtons();
 				getWindow().setVisible(false);

@@ -24,7 +24,7 @@ towerdefence
 pacman
 connect4
 raiden
-GuessTheWord
+guesstheword
 =======
 =======
 >>>>>>> master
@@ -51,7 +51,7 @@ towerdefence
 pacman
 connect4
 raiden
-GuessTheWord
+guesstheword
 <<<<<<< HEAD
 statistics
 >>>>>>> master
@@ -86,4 +86,5 @@ raiden
 wl6
 statistics
 snakeLadder
+guesstheword
 >>>>>>> master

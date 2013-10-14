@@ -1,10 +1,7 @@
 package deco2800.arcade.guesstheword.GUI;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import deco2800.arcade.client.GameClient;

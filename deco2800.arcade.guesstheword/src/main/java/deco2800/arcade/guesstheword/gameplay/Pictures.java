@@ -178,16 +178,6 @@ public class Pictures {
 		countriesMap3.put("ZAMBIA", zambia1);
 //		System.out.println(countriesMap3.keySet());
 		
-//		Texture cuba2 = new Texture("Images/level1/countries/cuba/cuba2.png");
-//		Texture cuba3 = new Texture("Images/level1/countries/cuba/cuba3.png");
-//		Texture iran2 = new Texture("Images/level1/countries/iran/iran2.png");
-//		Texture iran3 = new Texture("Images/level1/countries/iran/iran3.png");
-//		Texture iraq2 = new Texture("Images/level1/countries/iraq/iraq2.png");
-//		Texture iraq3 = new Texture("Images/level1/countries/iraq/iraq3.png");		
-//		Texture laos2 = new Texture("Images/level1/countries/laos/laos2.png");
-//		Texture laos3 = new Texture("Images/level1/countries/laos/laos3.png");				
-//		Texture peru2 = new Texture("Images/level1/countries/peru/peru2.png");
-//		Texture peru3 = new Texture("Images/level1/countries/peru/peru3.png");
 
 		//Sports textures level 1
 		Texture judo1 = new Texture("Images/level1/sports/judo/judo_1.png");
@@ -230,14 +220,6 @@ public class Pictures {
 		sportsMap.put("SQUASH" , squash1); 
 		sportsMap.put("SKIING" , skiing1); 
 //		System.out.println(sportsMap3.keySet());
-		
-//		Texture judo2 = new Texture("Images/level1/sports/judo/judo2.jpg");
-//		Texture judo3 = new Texture("Images/level1/sports/judo/judo3.png");	
-//		Texture polo2 = new Texture("Images/level1/sports/polo/polo2.png");
-//		Texture polo3 = new Texture("Images/level1/sports/polo/polo3.png");
-//		Texture silat1 = new Texture("Images/level1/sports/silat/silat1.png");
-//		Texture silat2 = new Texture("Images/level1/sports/silat/silat2.png");
-//		Texture silat3 = new Texture("Images/level1/sports/silat/silat3.png");
 		
 		//Transport textures level 1
 		Texture bike1 = new Texture("Images/level1/transports/bike/bike_1.png");

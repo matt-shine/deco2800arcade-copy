@@ -323,6 +323,6 @@ public class TileModel {
 
 	@Override
 	public String toString() {
-		return String.format("<TileModel: %i,%i>", x, y);
+		return String.format("<TileModel: %d,%d>", x, y);
 	}
 }

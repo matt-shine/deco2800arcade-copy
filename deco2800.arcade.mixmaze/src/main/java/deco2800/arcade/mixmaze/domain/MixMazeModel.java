@@ -53,7 +53,15 @@ public class MixMazeModel implements IMixMazeModel {
 	 * </table>
 	 */
 	public enum Difficulty {
-		BEGINNER, INTERMEDIATE, ADVANCED
+		BEGINNER (5),
+		INTERMEDIATE (3),
+		ADVANCED (2);
+
+		final int maxItems;
+
+		Difficulty(int maxItems) {
+			this.maxItems = maxItems;
+		}
 	}
 
 	/**
@@ -318,7 +326,7 @@ public class MixMazeModel implements IMixMazeModel {
 
 	@Override
 	public void spawnItems() {
-		double spawnWait = (10 * 1000) / getMaxItemCount();
+		double spawnWait = (10 * 1000) / Math.max(10, getMaxItemCount());
 		if (getItemCount() < getMaxItemCount()
 				&& (System.currentTimeMillis() - lastSpawned) >= spawnWait) {
 			for (int i = getItemCount(); i < getMaxItemCount(); ++i) {
@@ -438,12 +446,15 @@ public class MixMazeModel implements IMixMazeModel {
 	 * @return maximum number of items that can spawn at the same time
 	 */
 	private int getMaxItemCount() {
-		if (difficulty == Difficulty.BEGINNER) {
-			return 5;
-		} else if (difficulty == Difficulty.INTERMEDIATE) {
-			return 3;
-		}
-		return 2; // Advanced
+		int count = 0;
+
+		for (int i = 0; i < boardSize; i++)
+			for (int j = 0; j < boardSize; j++)
+				if (!(board[i][j].isBoxBuilt()
+						|| player[0].isAtLocation(j, i)
+						|| player[1].isAtLocation(j, i)))
+					count++;
+		return Math.min(difficulty.maxItems, count);
 	}
 
 	/**

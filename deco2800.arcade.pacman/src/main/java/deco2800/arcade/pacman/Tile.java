@@ -62,6 +62,8 @@ public class Tile {
 				+ gameMap.getTileCoords(this).getX() + ", " + 
 				gameMap.getTileCoords(this).getY() + ")";
 	}
+	
+	
 
 	// Equals method which compares tiles based on position
 	public boolean equals(Tile tile) {

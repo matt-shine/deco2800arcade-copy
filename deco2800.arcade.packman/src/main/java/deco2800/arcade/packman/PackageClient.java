@@ -39,7 +39,7 @@ public class PackageClient {
 	 * the game's class name and return it. If the game does not exist on the 
 	 * client's file system, the method will return null.
 	 */
-	public String getClassName(int gameID) {
+	public static String getClassName(int gameID) {
 		
 		return null;
 	}

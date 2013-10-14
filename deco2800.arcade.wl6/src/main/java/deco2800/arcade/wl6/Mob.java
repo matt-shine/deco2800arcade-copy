@@ -38,6 +38,7 @@ public class Mob extends Doodad {
         setHealth(getHealth() - damage);
     }
 
+    // FIXME: this currently stops secret doors from being opened
     public void setPos(Vector2 pos, Vector2 vel) {
         int checkX = vel.x > 0 ? (int) (pos.x + vel.x + 0.1) : (int) (pos.x + vel.y - 0.1);
         int checkY = vel.y > 0 ? (int) (pos.y + vel.y + 0.1) : (int) (pos.y + vel.y - 0.1);
@@ -58,8 +59,11 @@ public class Mob extends Doodad {
         this.angle = angle;
     }
 
-    public void canSee(Doodad d) {
-        //TODO
+    public boolean canSee(Doodad d) {
+        Vector2 selfPos = this.getPos();
+        Vector2 targetPos = d.getPos();
+
+        return false;
     }
 
     public Vector2 getVel() {

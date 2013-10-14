@@ -1,10 +1,10 @@
-package deco2800.arcade.arcadeui;
+package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
-public class ChatWindow extends OverlayWindowContent {
+public class ChatWindow extends WindowContent {
 
     Overlay overlay = null;
     Skin skin = null;

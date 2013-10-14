@@ -46,8 +46,8 @@ public class GameStore implements Screen, StoreScreen {
 		stage.addActor(bg);
 		
 		icon = new TextButton("", skin, "icon");
-		icon.setSize(140, 158);
-		icon.setPosition(262, 453);
+		icon.setSize(158, 158);
+		icon.setPosition(226, 453);
 		stage.addActor(icon);
 		
 		final TextField searchField = new TextField("", skin);
@@ -147,11 +147,12 @@ public class GameStore implements Screen, StoreScreen {
 		}
 	}
 	private void textFade() {
-		if (fade <= -100) {
-			fade = 100;
+		if (fade <= -70) {
+			fade = 70;
 			description.setColor(1, 1, 1, 1);
-		}
-		if (fade < 50 && fade > -50) {
+			icon.setColor(1, 1, 1, 1);
+			icon.setX(112);
+		} else if (fade < 40 && fade > -40) {
 			fade--;
 			iconFade();
 			if (fade == 0) {
@@ -162,22 +163,21 @@ public class GameStore implements Screen, StoreScreen {
 		        }
 			}
 			description.setColor(1, 1, 1, 0);
-		} else if (fade < 100 && fade > -100) {
+		} else if (fade < 70 && fade > -70) {
 			fade--;
-			description.setColor(1, 1, 1, (Math.abs(fade) - 50) / 50);
+			description.setColor(1, 1, 1, (Math.abs(fade) - 40) / 30);
 		}
 	}
 	
 	private void iconFade() {
-		// Used to reset icon movement in case it breaks due to spamming
-		if (fade > 0) {
+		if (fade > -1) {
 			icon.setX(icon.getX() + 3); // move right
-		} else if (fade < 0) {
+		} else if (fade < -1) {
 			icon.setX(icon.getX() - 3); // move back left
-		} else if (fade == 0) {
-			naptime(300); // stay hidden for a short while
+		} else if (fade == -1) {
+			naptime(400); // stay hidden for a short while
 		}
-		icon.setColor(1, 1, 1, Math.abs(fade) / 50);
+		icon.setColor(1, 1, 1, Math.abs(fade) / 40);
 	}
 	
 	@Override

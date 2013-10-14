@@ -86,25 +86,38 @@ public class ArcadeWebserver implements Container {
                 
 			    setAppropriateImageMimeType(response, request.getPath().toString());
 			    
-                ByteBuffer file = FileReader.readBinaryFile("webserver/image" + request.getPath());
-                OutputStream out = response.getOutputStream(file.capacity());
+			    try
+			    {
+			        ByteBuffer file = FileReader.readBinaryFile("webserver/image" + request.getPath());
+
+                    OutputStream out = response.getOutputStream(file.capacity());
+                    
+                    out.write(file.array());
+                    out.close();
                 
-                out.write(file.array());
-                out.close();
+                } catch (Exception e)
+                {
+                    badRequest(response);
+                }
                 
                 System.out.println( "Served css: " + "webserver/image" + request.getPath() );
             } else {
 			    
-				response.setStatus( Status.BAD_REQUEST );
-
-				PrintStream body = response.getPrintStream();
-				body.println( "404 Not Found" );
-				body.close();
+                badRequest(response);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	} 
+	
+	private void badRequest(Response response) throws IOException
+	{
+        response.setStatus( Status.BAD_REQUEST );
+
+        PrintStream body = response.getPrintStream();
+        body.println( "404 Not Found" );
+        body.close();
+	}
 	
 	/**
 	 * Given a response and a file path to an image, set the HTTP content type appropriately.

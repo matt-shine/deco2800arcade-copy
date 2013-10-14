@@ -154,14 +154,24 @@ public class ReplayHandler {
 	        return;
 	    }
 	    
-	    System.out.println("Sessions for game: " + sessions.get(0).gameId + "\n {");
+	    //System.out.println("Sessions for game: " + sessions.get(0).gameId + "\n {");
+	    
+	    StringBuilder sb = new StringBuilder();
 	    
 	    for (Session s : sessions)
 	    {
-	        System.out.println(s.sessionId);
+	        //System.out.println(s.sessionId);
+	        sb.append(s.sessionId);
+	        sb.append(",");
 	    }
 	    
-	    System.out.println("}");
+	    String s = sb.subSequence(0, sb.length() - 1).toString();
+	    
+	    ReplayNodeFactory.registerEvent("session_list", "sessions");
+	    ReplayNode rn = ReplayNodeFactory.createReplayNode("session_list", s);
+	    this.dispatchReplayEvent(rn.getType(), rn);
+	    
+	    //System.out.println("}");
 	    
 	  //TODO Implement
 	}

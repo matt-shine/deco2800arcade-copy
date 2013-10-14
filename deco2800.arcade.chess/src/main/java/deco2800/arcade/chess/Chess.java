@@ -438,8 +438,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	}
 	public void startReplay(int num){
-		replayHandler.requestEventsForSession(num);
-		replayHandler.startPlayback();
+		//replayHandler.requestEventsForSession(num);
+		replayHandler.playbackLastSession();
+	    //replayHandler.startPlayback();
     	isReplaying = true;
 	}
 
@@ -1298,7 +1299,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             	board = new Board();
             	movePieceGraphic();
             	drawButton();
-            	replayHandler.endSession(replayHandler.getSessionId());
+            	//replayHandler.endSession(replayHandler.getSessionId());
+            	replayHandler.endCurrentSession();
             	startReplay(replayHandler.getSessionId());
             	recording = false;
             	}

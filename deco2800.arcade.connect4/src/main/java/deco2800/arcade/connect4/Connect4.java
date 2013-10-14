@@ -124,6 +124,9 @@ public class Connect4 extends GameClient {
                 if ( eType.equals( "event_pushed" ) ) {
                     System.out.println( eType );
                 }
+                if ( eType.equals( "session_list" ) ) {
+                    System.out.println( eData );
+                }
                 if ( eType.equals( "replay_reset" ) ) {
                     System.out.println( "replay reset" );
                 }

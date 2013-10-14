@@ -207,4 +207,10 @@ public class PlayerShip extends Ship {
 		this.flash = 0f;
 		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
 	}
+
+	public void upgradeBullets() {
+		if(playerBullets instanceof PlayerPattern) {
+			((PlayerPattern)playerBullets).upgrade();
+		}
+	}
 }

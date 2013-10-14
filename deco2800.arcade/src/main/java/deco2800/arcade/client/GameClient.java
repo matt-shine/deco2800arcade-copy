@@ -11,11 +11,14 @@ import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.PlayerClient;
-import deco2800.arcade.client.ImageClient;
+import deco2800.arcade.client.image.ImageClient;
+import deco2800.arcade.client.image.ImageManager;
 import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.EncodedImage;
+import deco2800.arcade.utils.Handler;
 
 public abstract class GameClient extends com.badlogic.gdx.Game implements AchievementListener {
 
@@ -27,7 +30,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	private boolean overlayInitialised = false;
 	private int width, height;
     private AchievementClient achievementClient;
+    private ImageClient imageClient;
     private PlayerClient playerClient;
+    private ImageManager imageManager;
     private boolean hasF11PressedLast = false;
     
 	private PackageClient packClient;
@@ -40,8 +45,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
         this.achievementClient = new AchievementClient(networkClient);
         this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
-		
+		this.imageClient = new ImageClient(networkClient);
 		this.packClient = new PackageClient();
+		this.imageManager = new ImageManager(imageClient);
 	}
 
 	public abstract Game getGame();
@@ -50,35 +56,37 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	if (this.overlayBridge == null)
 	    return;
 	
-
-
-	this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
-		
-	    @Override
-	    public String getMessage() {
-		return "Achievement " + ach.name + " awarded!";
-	    }
-	        
+	this.imageClient.get(ach.icon, true).setHandler(new Handler<EncodedImage>() {
+		public void handle(EncodedImage encodedImg) {
+		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+		        @Override
+		        public String getMessage() {
+			    return "Achievement " + ach.name + " awarded!";
+			}		       
+		    });
+		}
 	});	
     }
 
     public void progressIncremented(final Achievement ach, final int progress) {
 	if (this.overlayBridge == null)
 	    return;
-
-        this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
-		
-        	@Override
-        	public String getMessage() {
-        		return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
-        	}
-	        
-        });
+	this.imageClient.get(ach.icon, true).setHandler(new Handler<EncodedImage>() {
+		public void handle(EncodedImage encodedImg) {
+		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+		        @Override
+		        public String getMessage() {
+			    return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
+			}		       
+		    });
+		}
+	});
     }
 
     public void setNetworkClient(NetworkClient client) {
         achievementClient.setNetworkClient(client);
         playerClient.setNetworkClient(client);
+	imageClient.setNetworkClient(client);
     }
 
     public void incrementAchievement(final String achievementID) {

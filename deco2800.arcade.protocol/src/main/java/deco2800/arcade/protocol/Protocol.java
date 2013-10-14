@@ -9,6 +9,7 @@ import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
 import deco2800.arcade.protocol.achievement.*;
+import deco2800.arcade.protocol.image.*;
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
@@ -78,6 +79,13 @@ public class Protocol {
 		kryo.register(ProgressForPlayerRequest.class);
 		kryo.register(ProgressForPlayerResponse.class);
 		kryo.register(java.util.ArrayList.class);
+
+		// Image messages
+		Class<?>[] imageClasses = { GetImageRequest.class, GetImageResponse.class,
+					    SetImageRequest.class, SetImageResponse.class };
+		for (Class<?> c : imageClasses) {
+		    kryo.register(c);
+		}
 		
 		// High Score Messages
 		kryo.register(AddScoreRequest.class);

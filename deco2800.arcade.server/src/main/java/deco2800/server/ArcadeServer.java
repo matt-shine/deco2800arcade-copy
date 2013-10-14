@@ -182,7 +182,7 @@ public class ArcadeServer {
 	 * Start the server running
 	 */
 	public void start() {
-		Server server = new Server();
+	    Server server = new Server(16384, 16384); // 16K read/write - need to look into this more for images
 		System.out.println("Server starting");
 		server.start();
 		try {
@@ -203,9 +203,10 @@ public class ArcadeServer {
 		server.addListener(new ReplayListener());
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
-        server.addListener(new PackmanListener());
-        server.addListener(new LibraryListener());
-        server.addListener(new PlayerListener());
+		server.addListener(new PackmanListener());
+		server.addListener(new LibraryListener());
+		server.addListener(new PlayerListener());
+		server.addListener(new ImageListener());
 	}
 
     /**

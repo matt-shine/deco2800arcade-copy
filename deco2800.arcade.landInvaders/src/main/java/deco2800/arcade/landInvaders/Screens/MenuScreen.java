@@ -31,7 +31,7 @@ import deco2800.arcade.landInvaders.Screens.InstructionScreen.mouse1;
 public class MenuScreen extends JFrame{
 	private JPanel p = new JPanel();
 	private JLabel intro = new JLabel();
-    private JLabel t = new JLabel();
+	private JLabel t = new JLabel();
 	private JButton instructionBtn = new JButton();
 	private JButton newGameBtn = new JButton();
 	private JFrame s = this;
@@ -39,7 +39,6 @@ public class MenuScreen extends JFrame{
 
 	public MenuScreen(){
 		super("LandInvaders");
-	
 		this.add(p);
 		p.add(t);
 		t.setIcon(new ImageIcon(
@@ -75,29 +74,25 @@ public class MenuScreen extends JFrame{
 		instructionBtn.addMouseListener(new mouse2());
 		instructionBtn.addActionListener(new btnClick1());
 		t.add(instructionBtn, gbc);
-		
+
 		intro.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/rule.png"))).getImage()).getScaledInstance(800, 500, java.awt.Image.SCALE_SMOOTH)));
-        intro.setLayout(new GridBagLayout());
-        GridBagConstraints gbd = new GridBagConstraints();
-        gbd.gridx = 2; 
-        gbd.gridy = 2;
-        gbd.gridwidth = 1; 
-        gbd.gridheight = 1;
-        gbd.weighty = 0;
-        gbd.weightx = 1;
-        gbd.insets = new Insets(300, 2, 2, 2);
-        gbd.anchor = GridBagConstraints.SOUTHEAST;
+		intro.setLayout(new GridBagLayout());
+		GridBagConstraints gbd = new GridBagConstraints();
+		gbd.gridx = 2; 
+		gbd.gridy = 2;
+		gbd.gridwidth = 1; 
+		gbd.gridheight = 1;
+		gbd.weighty = 0;
+		gbd.weightx = 1;
+		gbd.insets = new Insets(300, 2, 2, 2);
+		gbd.anchor = GridBagConstraints.SOUTHEAST;
 		backBtn.setOpaque(false);
 		backBtn.setContentAreaFilled(false);
 		backBtn.setBorderPainted(false);
 		backBtn.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/Button5.png"))).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
 		backBtn.addMouseListener(new back());
-        intro.add(backBtn, gbd);
-		
-		
-		
-		
-		
+		intro.add(backBtn, gbd);
+
 		this.setVisible(true);
 		this.setSize(800,530);
 
@@ -153,16 +148,11 @@ public class MenuScreen extends JFrame{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			
+
 			p.removeAll();
 			p.add(intro);
 			p.revalidate();
 			p.repaint();
-			
-			
-		
-			
-
 		}
 
 		@Override
@@ -189,18 +179,17 @@ public class MenuScreen extends JFrame{
 	class btnClick1 implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			 
+
 		}
 	}
-	
-	
-	
-public class back implements MouseListener {
-		
+
+
+	public class back implements MouseListener {
+
 		public void mouseEntered(MouseEvent evt) {
-			
+
 			backBtn.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/Button6.png"))).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
-	    }
+		}
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -208,34 +197,29 @@ public class back implements MouseListener {
 			p.add(t);
 			p.revalidate();
 			p.repaint();
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
 			backBtn.setIcon(new ImageIcon(((new ImageIcon(this.getClass().getResource("/image/Button5.png"))).getImage()).getScaledInstance(200, 50, java.awt.Image.SCALE_SMOOTH)));
-			
+
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
-	
+
 	public static void main (String args[]) throws IOException {
 		MenuScreen w = new MenuScreen();
-			
-		}
-	
-	
-	
-	
+	}
 }

@@ -2,7 +2,7 @@ package deco2800.arcade.landInvaders;
 
 
 import javax.swing.JFrame;
-
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.landInvaders.Screens.MenuScreen;
@@ -18,6 +18,9 @@ public class LandInvaders extends GameClient  {
 
 	public LandInvaders(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
+		this.networkClient = networkClient;
+		HighscoreClient player1 = new HighscoreClient(player.getUsername(), GAME.id, networkClient);
+		//player1.storeScore("points", score);
 		MenuScreen w = new MenuScreen();
 	}
 

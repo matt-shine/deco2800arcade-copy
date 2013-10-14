@@ -1,6 +1,9 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
+
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 public class Mob extends Doodad {
@@ -62,8 +65,24 @@ public class Mob extends Doodad {
     public boolean canSee(Doodad d) {
         Vector2 selfPos = this.getPos();
         Vector2 targetPos = d.getPos();
+        Line2D line = new Line2D.Double(selfPos.x, selfPos.y, targetPos.x, targetPos.y);
+        float dist = selfPos.dst(targetPos);
+        //System.out.println(dist);
+        /*if (dist > 10) {
+            return false;
+        }*/
+        for (int i = 0; i < WL6.MAP_DIM; i++) {
+            for (int j = 0; j < WL6.MAP_DIM; j++) {
+                if (WL6Meta.block(game.getMap().getTerrainAt(i, j)).solid) {
+                    Rectangle2D rect = new Rectangle2D.Double(i, j, i+1, j+1);
+                    if (rect.intersectsLine(line)) {
+                        return false;
+                    }
+                }
+            }
+        }
 
-        return false;
+        return true;
     }
 
     public Vector2 getVel() {

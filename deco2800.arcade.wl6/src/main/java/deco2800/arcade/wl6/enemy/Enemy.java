@@ -1,5 +1,6 @@
 package deco2800.arcade.wl6.enemy;
 
+import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
 
@@ -57,6 +58,10 @@ public class Enemy extends Mob {
         this.state = state;
     }
 
+    private void calculatePath() {
+
+    }
+
     /**
      * Tells the enemy to change states
      * @param oldState state the enemy is currently in
@@ -75,9 +80,10 @@ public class Enemy extends Mob {
 
     // detect player
     public void detectPlayer() {
-        // check to see if the enemy can see the player
-        canSee(game.getPlayer());
-        // check to see if the enemy can hear the player fighting
+        if (canSee(game.getPlayer())) {
+            setState(STATES.ATTACK);
+            doDamage();
+        }
     }
 
     // chase player
@@ -95,6 +101,15 @@ public class Enemy extends Mob {
     // die
     public void die() {
 
+    }
+
+    @Override
+    public void doDamage() {
+        float dist = this.getPos().dst(game.getPlayer().getPos());
+        boolean speed = false;
+        boolean look = false;
+        int damage = calcDamage((int)dist, speed, look);
+        game.getPlayer().takeDamage(damage);
     }
 
     /**

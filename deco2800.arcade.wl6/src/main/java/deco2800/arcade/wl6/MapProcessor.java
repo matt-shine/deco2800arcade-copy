@@ -6,6 +6,7 @@ import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
 import deco2800.arcade.wl6.enemy.Dog;
 import deco2800.arcade.wl6.enemy.EnemyType;
 import deco2800.arcade.wl6.enemy.Guard;
+import deco2800.arcade.wl6.enemy.SS;
 
 public class MapProcessor {
 
@@ -116,6 +117,7 @@ public class MapProcessor {
                 case OFFICER:
                     break;
                 case SS:
+                    dd = new SS(doodadID());
                     break;
                 case DOG:
                     dd = new Dog(doodadID());

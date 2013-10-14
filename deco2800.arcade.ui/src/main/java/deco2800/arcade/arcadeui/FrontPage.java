@@ -400,8 +400,6 @@ public class FrontPage implements Screen {
         final Label logo = new Label("VAPOR", skin, "cgothic");
         logo.setAlignment(Align.left);
         
-        //FIXME Dynamic Label
-        
         final Label username = new Label(pName , skin, "cgothic");
         
         System.out.println("The label is showing:" + " " + username.getText().toString());
@@ -421,7 +419,7 @@ public class FrontPage implements Screen {
         
         final Table topBox = new Table();
         
-      //set panel sizes and positions
+        //set panel sizes and positions
         topBox.setSize(1279, 30);
         topBox.setPosition(1, 690);
         topBox.setColor(255, 255, 255, 1);

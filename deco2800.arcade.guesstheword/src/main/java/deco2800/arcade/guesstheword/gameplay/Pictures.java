@@ -251,8 +251,16 @@ public class Pictures {
 		
 		//Transport textures level 3
 		Texture subway1 = new Texture("Images/level3/transports/subway/subway_1.png");
+		Texture barrow1 = new Texture("Images/level3/transports/barrow/barrow_1.png");
+		Texture convoy1 = new Texture("Images/level3/transports/convoy/Convoy_1.jpg");
+		Texture boxcar1 = new Texture("Images/level3/transports/boxcar/boxcar_1.png");
+		Texture glider1 = new Texture("Images/level3/transports/glider/glider_1.png");
 		HashMap<String, Texture> transportsMap3 = new HashMap<String, Texture>();
 		transportsMap3.put("SUBWAY" , subway1);
+		transportsMap3.put("BARROW" , barrow1);
+		transportsMap3.put("CONVOY" , convoy1);
+		transportsMap3.put("BOXCAR" , boxcar1);
+		transportsMap3.put("GLIDER" , glider1);
 //		System.out.println(transportsMap3.keySet());
 				
 		level1Cat.put("ANIMALS", animalsMap);
@@ -268,6 +276,7 @@ public class Pictures {
 		level2Cat.put("TRANSPORTS", transportsMap2);
 		
 		level3Cat.put("ANIMALS", animalsMap3);
+		level3Cat.put("BRANDS", brandsMap3);
 		level3Cat.put("COUNTRIES", countriesMap3);
 		level3Cat.put("SPORTS", sportsMap3);
 		level3Cat.put("TRANSPORTS", transportsMap3);

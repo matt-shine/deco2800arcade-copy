@@ -9,20 +9,14 @@ import java.lang.String;
 import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import java.util.*;
-
 
 import javax.swing.JFrame;
 
 import deco2800.arcade.client.network.listener.*;
+import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.protocol.game.GameLibraryRequest;
+
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -87,12 +81,14 @@ public class Arcade extends JFrame {
 
     private CommunicationNetwork communicationNetwork;
     
+	@SuppressWarnings("unused")
+	private static PackageClient packClient;
+
     private static boolean multiplayerEnabled;
     
     private static boolean playerBetting;
     
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
-    
 
     // Width and height of the Arcade window
     private static final int ARCADE_WIDTH = 1280;
@@ -116,6 +112,9 @@ public class Arcade extends JFrame {
         ArcadeSystem.setArcadeInstance(arcade);
 
         arcade.addCanvas();
+        
+		System.out.println("Packman opened");
+		packClient = new PackageClient();
 
         ArcadeSystem.goToGame(ArcadeSystem.UI);
     }

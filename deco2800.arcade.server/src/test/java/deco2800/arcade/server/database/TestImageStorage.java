@@ -1,4 +1,4 @@
-package deco2800.arcade.server.database;
+package deco2800.arcade.server;
 
 import static org.junit.Assert.assertEquals;
 

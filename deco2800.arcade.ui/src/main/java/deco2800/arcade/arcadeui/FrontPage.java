@@ -104,11 +104,7 @@ public class FrontPage implements Screen {
         rP.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         rpSprite = new Sprite(rP);
         
-        /*skin.add("blue", new Texture("iconBlue.png"));
-        
-        TextButtonStyle textButtonStyle = new TextButtonStyle();
-        
-        textButtonStyle.up = skin.newDrawable("blue");*/
+       
         
         
         //Text Buttons
@@ -137,24 +133,7 @@ public class FrontPage implements Screen {
         final Label logo = new Label("VAPOR", skin, "cgothic");
         logo.setAlignment(Align.left);
         
-        //FIXME Dynamic Label
-        /*
-        final Label username = new Label(pName , skin, "cgothic");
-        
-        System.out.println("The label is showing:" + " " + username.getText().toString());
-        
-        if (username.getText() != pName){
-        	System.out.println("Label is null");
-        	
-        	username.setText(pName);
-        }
-        
-        username.setAlignment(Align.right);
-        
-        final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
-        credits.setAlignment(Align.right);
-        final Label divider = new Label("|", skin, "cgothic");
-        divider.setAlignment(Align.right);*/
+    
        
         //Bottom Box Labels
         final Label divider2 = new Label("|", skin, "cgothic");
@@ -200,18 +179,7 @@ public class FrontPage implements Screen {
 //        final Table topBox = new Table();
         final Table bottomBox = new Table();
         
-        /*//set panel sizes and positions
-        topBox.setSize(1279, 30);
-        topBox.setPosition(1, 690);
-        topBox.setColor(255, 255, 255, 1);
-        topBox.setBackground(skin.getDrawable("menuBar"));
-        topBox.setZIndex(999);
-        
-        //set top bar labels
-        topBox.add(logo).width(500);
-        topBox.add(username).width(615);
-        topBox.add(divider).width(5).pad(20);
-        topBox.add(credits).width(100);*/
+     
         
         //set bottom bar properties
         bottomBox.setSize(1279, 30);
@@ -225,20 +193,9 @@ public class FrontPage implements Screen {
         bottomBox.add(chatLink).width(100);
         
         //adding to stage
-//        stage.addActor(topBox);
         stage.addActor(bottomBox);
         
-        //float height = storeButton.getHeight();
-    	//float width = storeButton.getWidth();
-        
-      /*  chatLink.addListener((new ClickListener() {
-		    public void enter (InputEvent event, Actor actor) {
-		    	System.out.println("I got here");
-		    	chatTable.setSize(150, nFriends * 20);
-		    	stage.addActor(chatTable);
-		    	System.out.println("It should be here somewhere");
-		    }
-		})); 
+   
 */		
         
         /*ONLY TESTING */
@@ -275,9 +232,9 @@ public class FrontPage implements Screen {
            
             }
             public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-            	//recentButton.setSize(bWidth, bHeight);
-				//recentButton.setPosition(bX, bY);	
-            	//recentButton.setPosition(recentButton.getX() + (enlarge/2), recentButton.getY() + (enlarge/2));
+            	/*recentButton.setSize(bWidth, bHeight);
+				recentButton.setPosition(bX, bY);	
+            	recentButton.setPosition(recentButton.getX() + (enlarge/2), recentButton.getY() + (enlarge/2));*/
             	
             	//get original position and shrink
             	float cSizeX = recentButton.getWidth();
@@ -305,34 +262,7 @@ public class FrontPage implements Screen {
     			recentgame1.setZIndex(2);
 		    	recentgame2.setZIndex(2);
 		    	recentgame3.setZIndex(2);
-    			//arcadeUI.setScreen(arcadeUI.recent);
-		    	//System.out.println("recent clicked");
-		    	//stage.addActor(recentgame1);
-		        //stage.addActor(recentgame2);
-		    	
-		    	//if it doesnt have the actors, add them.
-		    	/*for (int i = 0; i < stage.getActors().size ; i++){
-		    		//System.out.println(stage.getActors().get(i));
-		    		//System.out.println(recentgame1);
-		    		
-		    		
-		    		//Needs Fixing. This checks for the actors on stage. if recent game is in it, then remove, otherwise add.
-		    		if (stage.getActors().get(i) == recentgame1){
-		    			
-		    			System.out.println("boxes removed");
-		    			
-		    			//stage.getActors().get(i).remove();
-		    			//recentgame1.remove();
-		    		//	recentgame2.remove();
-		    			
-		    		}else{
-		    			recentButton.remove();
-		    			stage.addActor(recentgame1);
-		    			stage.addActor(recentgame2);
-		    			stage.addActor(recentgame3);
-		    		}
-		    	}
-		    	*/
+    			
 		    	
 		    }
 		})); 

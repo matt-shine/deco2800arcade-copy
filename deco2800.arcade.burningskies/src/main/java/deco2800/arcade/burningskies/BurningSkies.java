@@ -51,8 +51,8 @@ public class BurningSkies extends GameClient {
 	 */
 	public BurningSkies(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		players[0] = player.getUsername();
-		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
+		//players[0] = player.getUsername();
+		//players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
 		this.networkClient = networkClient;
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);

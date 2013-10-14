@@ -2,70 +2,49 @@ package deco2800.arcade.burningskies.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
+
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
 //TODO abstract?
 public class Enemy extends Ship {
+	
+	private PlayerShip player;
 
-	private float xPos;
-	private float yPos;
+	private float speed = 200;
+
+	private Vector2 playerDir = new Vector2();
 	
-	//test parameters
-	//private float xMin = 50;
-	//private float xMax = 1050;
-	//private float velocity = 400;
-	
-	// parameters to control direction and speed
-	//private float speed;
-	private Vector2 direction;
-	
-	public Enemy(int health, Texture image, Vector2 pos, PlayScreen screen) {
+	public Enemy(int health, Texture image, Vector2 pos, PlayScreen screen, PlayerShip player) {
 		super(health, image, pos);
-
-		xPos = pos.x;
-		yPos = pos.y;
+		
+		this.player = player;
+		position = pos;
 		setWidth(getWidth()/3);
 		setHeight(getHeight()/3);
-		setPosition(xPos, yPos);
-	}
-	
-	public Enemy(int health, Texture image, Vector2 pos, PlayScreen screen, Vector2 dir) {
-		super(health, image, pos);
-
-		xPos = pos.x;
-		yPos = pos.y;
-		
-		this.direction = dir;
-//		this.speed = speed;
-		
-		setWidth(getWidth()/3);
-		setHeight(getHeight()/3);
-		setPosition(xPos, yPos);
 	}
 	
 	public void onRender(float delta) {
 		super.onRender(delta);
-		/*
-		if(xPos < xMax && velocity > 0) { // check to make sure it can still move right
-			xPos += (float) velocity*delta;
-			if(xPos >= xMax)
-				velocity *= -1;
-		}
-		else if(xPos > xMin && velocity < 0) { // check to make sure it can still move left
-			xPos += (float) velocity*delta;
-			if(xPos <= xMin)
-				velocity *= -1;
-		}		
-		
-		this.setPosition(xPos, yPos);
-		*/
-		linear(delta);
+		move(delta);
 	}
 	
-	private void linear(float delta) {		
-		xPos += (float) direction.x * delta;
-		yPos += (float) direction.y * delta;
-				
-		this.setPosition(xPos, yPos);		
+	private void move(float delta) {
+		//home in to the player
+		playerDir.set(player.getCenterX() - this.getCenterX(), player.getCenterY() - this.getCenterY());
+		playerDir.nor();
+		playerDir.mul(5);
+		if((this.getRotation() + 90 - playerDir.angle()) > 0) {
+			playerDir.rotate(-45);
+		} else {
+			playerDir.rotate(45);
+		}
+		velocity.add(playerDir);
+		//normalise our velocity
+    	velocity.nor();
+    	velocity.mul(speed);
+    	position.add( velocity.x * delta, velocity.y * delta );
+    	setX(position.x);
+		setY(position.y);
+		setRotation(velocity.angle() - 90);
 	}
 }

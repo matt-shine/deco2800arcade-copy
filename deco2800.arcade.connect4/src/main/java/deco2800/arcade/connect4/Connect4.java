@@ -21,6 +21,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+
 import java.util.*;
 /**
  * A Connect4 game for use in the Arcade
@@ -238,7 +239,11 @@ public class Connect4 extends GameClient {
 	}
 	
 	public void init() {
-
+		ArrayList<String> ButtonList =  new ArrayList<String>();
+		//Test setup button list
+		ButtonList.add("Quit");
+		ButtonList.add("Replay");
+		
 		//Set the current player's turn
 		playerTurn = 0;
 		
@@ -251,6 +256,7 @@ public class Connect4 extends GameClient {
 		buttons = new Buttons();
 		buttons.setX(Gdx.graphics.getWidth());
 		buttons.setY(Gdx.graphics.getHeight() - 20);
+		buttons.AddButtonsFromList(ButtonList);
 		buttons.hide();
 		
 		//Create the cursor disc

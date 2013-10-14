@@ -42,11 +42,15 @@ public class ArcadeUI extends GameClient {
 
         // Initialise the different screens.
         login = new LoginScreen(this);
+<<<<<<< HEAD
         home = new HomeScreen();
         store = new StoreScreen();
         main = new FrontPage(this);
+=======
         home = new HomeScreen(this);
         store = new GameStore();
+        main = new FrontPage();
+>>>>>>> master
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);
         betting = new BettingWindow(this);
@@ -98,7 +102,6 @@ public class ArcadeUI extends GameClient {
 	public Game getGame() {
 		return game;
 	}
-		
 	
 	public HomeScreen getHome() {
 		return home;

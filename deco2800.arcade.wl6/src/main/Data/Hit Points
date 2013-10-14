@@ -1,0 +1,24 @@
+ENEMY        | BABY MODE | DON'T HURT ME MODE | BRING 'EM ON MODE | DEATH INCARNATE MODE
+guards       |    25     |        25          |        25         |         25
+officer      |    50     |        50          |        50         |         50
+SS           |    100    |        100         |        100        |         100
+dogs         |    1      |        1           |        1          |         1
+Hans         |    850    |        950         |        1050       |         1200
+Schabbs      |    850    |        950         |        1550       |         2400
+fake hitler  |    200    |        300         |        400        |         500
+mecha hitler |    800    |        950         |        1050       |         1200
+mutants      |    45     |        55          |        55         |         65
+ghosts       |    25     |        25          |        25         |         25
+ghosts       |    25     |        25          |        25         |         25
+ghosts       |    25     |        25          |        25         |         25
+ghosts       |    25     |        25          |        25         |         25
+Gretel       |    850    |        950         |        1050       |         1200
+Gift         |    850    |        950         |        1050       |         1200
+Fat          |    850    |        950         |        1050       |         1200
+             |           |                    |                   |
+en_spectre,  |    5      |        10          |        15         |         25
+en_angel,    |    1450   |        1550        |        1650       |         2000
+en_trans,    |    850    |        950         |        1050       |         1200
+en_uber,     |    1050   |        1150        |        1250       |         1400
+en_will,     |    950    |        1050        |        1150       |         1300
+en_death     |    1250   |        1350        |        1450       |         1600

@@ -91,9 +91,7 @@ public abstract class Paddle {
 		//Clamp paddle within screen boundaries
     	if (bounds.y > Pong.SCREENHEIGHT - bounds.height) {
     		bounds.y = Pong.SCREENHEIGHT - bounds.height;
-    	}
-    	
-    	if (bounds.y < 0) {
+    	} else if (bounds.y < 0) { 
     		bounds.y = 0;
     	}
 	}

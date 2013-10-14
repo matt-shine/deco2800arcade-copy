@@ -22,6 +22,7 @@ import deco2800.arcade.protocol.NetworkObject;
 import deco2800.arcade.protocol.Protocol;
 import deco2800.arcade.protocol.SealedListenerProxy;
 import deco2800.arcade.protocol.SymmetricSealer;
+import deco2800.arcade.utils.AsyncFuture;
 
 /**
  * Encapsulates the underlying network calls, providing a layer of security so
@@ -54,9 +55,10 @@ public class NetworkClient {
 	 * @param udpPort
 	 * @throws NetworkException
 	 */
-	public NetworkClient(String serverAddress, int tcpPort, int udpPort)
-			throws NetworkException {
-		this.client = new Client();
+	public NetworkClient(String serverAddress, int tcpPort, int udpPort) 
+			throws NetworkException{
+
+		this.client = new Client(131072, 131072);
 		this.client.start();
 
 		try {
@@ -161,4 +163,8 @@ public class NetworkClient {
 			this.keyPair = null;
 		}
 	}
+
+    public AsyncFuture<NetworkObject> request(final NetworkObject req) {
+	return NetworkObject.request(client, req);
+    }
 }

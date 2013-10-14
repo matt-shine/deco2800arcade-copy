@@ -5,8 +5,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.Blob;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ImageStorage {
@@ -15,74 +18,140 @@ public class ImageStorage {
 
     public void initialise() throws DatabaseException {
         Connection connection = Database.getConnection();
+        Statement statement = null;
+        ResultSet tableData = null;
         try {
-            ResultSet tableData = connection.getMetaData().getTables(null, null,
+            tableData = connection.getMetaData().getTables(null, null,
 					"IMAGES", null);
 			if (!tableData.next()){
-				Statement statement = connection.createStatement();
+				statement = connection.createStatement();
 				statement.execute("CREATE TABLE IMAGES(id VARCHAR(255) PRIMARY KEY," +
 						"data BLOB(1M) NOT NULL)");
 			}
         } catch(SQLException e) {
             e.printStackTrace();
             throw new DatabaseException("Couldn't create images table", e);
+        } finally {           
+            try {
+                if (statement != null) statement.close();
+                tableData.close();
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-    }
-
-    /**
-     * Associates the image stored in `imgFile` with `id`.
-     * 
-     * @param id The id to associate the image with
-     * @param imgFile The file containing the image to store
-     */
-    public void set(String id, File imgFile) throws FileNotFoundException {
-        // Read in the data and create an EncodedImage
-        FileInputStream is = new FileInputStream(imgFile);
-        EncodedImage img = new EncodedImage();
-
-        // use our set(String,EncodedImage) overload to do the DB work
-        set(id, img);
     }
     
     /**
      * Associates an image with an id. The image can be retrieved from the database
-     * with a call to get
+     * with a call to get using the same id. Any previous image associated with this
+     * ID is replaced.
+     * 
+     * @param id    The id of the image
+     * @param image The image to store
      */
-    public void set(String id, EncodedImage image) {
+    public void set(String id, EncodedImage image) throws DatabaseException {      
+        Connection conn = Database.getConnection();
+        ByteArrayInputStream bis = image.getInputStream();
+        PreparedStatement ps = null;
 
+        try {
+	    if (contains(id)) {
+		ps = conn.prepareStatement("UPDATE IMAGES SET data = ? WHERE id = ?");
+		ps.setString(2, id);
+		ps.setBinaryStream(1, bis);
+		ps.execute();
+
+	    } else {
+		ps = conn.prepareStatement("INSERT INTO IMAGES VALUES (?, ?)");		
+		ps.setString(1, id);
+		ps.setBinaryStream(2, bis);
+		ps.execute();
+	    }
+	} catch(SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ps.close();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }         
+    }
+
+    /**
+     * Helper method for taking an image from a file and associating it with an id
+     * in the storage. This calls through to set(imageID, *the image in the file*).
+     */
+    public void set(String imageID, File imageFile) 
+	throws DatabaseException, FileNotFoundException, IOException {
+	if (!imageFile.isFile())
+	    throw new FileNotFoundException();
+
+	set(imageID, new EncodedImage(imageFile));
     }
 
     /**
      * Returns the image associated with the given id.
      */
     public EncodedImage get(String id) throws DatabaseException {
-        //Get a connection to the database
-		Connection connection = Database.getConnection();
+        Connection conn = Database.getConnection();
+        PreparedStatement ps = null;        
 
-		Statement statement = null;
-		ResultSet resultSet = null;
-		try {
-		    statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM IMAGES" +
-						" WHERE ID='" + id + "'");
+        try {
+            ps = conn.prepareStatement(
+                "SELECT data FROM IMAGES WHERE id = ?");
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to get image with id " + id, e);
-		} finally {
-			try {
-				if (resultSet != null) resultSet.close();
-				if (statement != null) statement.close();
-  				if (connection != null)	connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+            if (!rs.next()) {
+                return null; // nothing in the DB
+            }
 
-        return new EncodedImage();
+            // there was something in the set, read it
+            Blob dataBlob = rs.getBlob(1);
+            return new EncodedImage(dataBlob.getBinaryStream(), dataBlob.length());
+        } catch(SQLException e) {
+            e.printStackTrace();
+            return null;
+        } catch(IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                ps.close(); // closes rs as well
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
-    public boolean contains(String id) {
-        return false;
+    public boolean contains(String id) throws DatabaseException {
+	Connection conn = Database.getConnection();
+        PreparedStatement ps = null;        
+
+        try {
+            ps = conn.prepareStatement(
+                "SELECT id FROM IMAGES WHERE id = ?");
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (!rs.next())
+		return false;
+	    else
+		return true;
+
+        } catch(SQLException e) {
+            throw new DatabaseException("SQLException caught", e);            
+        } finally {
+            try {
+                ps.close(); // closes rs as well
+                conn.close();
+            } catch (SQLException e) {
+		throw new DatabaseException("Couldn't close connections", e);
+            }
+        }
     }
 }

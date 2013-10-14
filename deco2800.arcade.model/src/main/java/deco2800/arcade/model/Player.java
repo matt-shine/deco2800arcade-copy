@@ -1,48 +1,163 @@
 package deco2800.arcade.model;
 
+import java.util.List;
 import java.util.Set;
 
 public class Player extends User {
 
-	// TODO shared between server & client?
+	public static final int USERNAME_ID = 1;
+	public static final int NAME_ID = 2;
+	public static final int EMAIL_ID = 3;
+	public static final int PROGRAM_ID = 4;
+	public static final int BIO_ID = 5;
 
-	private String username;
+	public static final int NAME_PRIVACY_ID = 1;
+	public static final int EMAIL_PRIVACY_IDNAME_ID = 2;
+	public static final int PROGRAM_PRIVACY_ID = 3;
+	public static final int BIO_PRIVACY_ID = 4;
+	public static final int FRIENDS_PRIVACY_ID = 5;
+	public static final int GAMES_PRIVACY_ID = 6;
+	public static final int ACHIEVMENTS_PRIVACY_ID = 7;
+
+
+	private Field username;
+
+	private Field name;
+	private Field email;
+	private Field program;
+	private Field bio;
+
+	private PrivacyField namePrivacy;
+	private PrivacyField emailPrivacy;
+	private PrivacyField programPrivacy;
+	private PrivacyField bioPrivacy;
+	private PrivacyField friendsPrivacy;
+	private PrivacyField gamesPrivacy;
+	private PrivacyField achievementsPrivacy;
 
 	private Games games;
-
 	private Friends friends;
-
 	private Blocked blocked;
-
 	private FriendInvites friendInvites;
+    
+    private LibraryStyle libraryStyle;
 
 	private Icon icon;
+    
+    @Deprecated
+    /**
+     * DO NOT USE THIS METHOD, AT ALL, EVER.
+     */
+    public Player(int playerID, String username, String filepath) {
+        // Do nothing
+    }
 
-	// private String realName;
+	@Deprecated
+	/**
+	 * DO NOT USE THIS
+	 */
+	public Player(int playerID, String username, String filepath,
+			boolean[] privacy) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, username);
+		this.games = new Games();
+		this.friends = new Friends();
+		this.friendInvites = new FriendInvites();
+		this.blocked = new Blocked();
 
-	// private String location;
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
+				privacy[1]);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, privacy[2]);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, privacy[3]);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, privacy[4]);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				privacy[6]);
+        this.libraryStyle = new LibraryStyle();
 
-	// private String biography;
+		/*
+		 * Note that exception handling could be done in-method, however if it
+		 * cannot be loaded there is no way (other than changing the return type
+		 * to boolean/int and specifying error range) to communicate this.
+		 */
 
-	// private String onlineStatus;
+		// TODO: UTILISE REVIDES ICON API TO AVOID EXCEPTIONS - DEFAULT TO
+		// PLACEHOLDER
+		// this.icon = new Icon(filepath);
+		/*
+		 * @throws IOException Throws exception when the image cannot be found
+		 * at the designated filepath.
+		 */
+		this.icon = null;
+	}
 
 	/**
 	 * Creates a new Player given a name, achievement set and icon filename.
 	 * 
 	 * @param playerID
 	 *            The Player's nameID
-	 * @param username
-	 *            The Player's name
 	 * @param filepath
 	 *            The Player's icon filepath
+	 * @param details
+	 *            An array of strings containing the player's username, name,
+	 *            email, program and bio.
+     * @param friendsList
+     * @param friendRequestsList
+     * @param blockedList
+     * @param gamesList
+	 * @param privacy
+	 *            A boolean array of privacy settings.
+	 * @require There are at least 7 elements in privacy array. Elements 1
+	 *          through 7 (indexes 0 through 6) represent name, email, program,
+	 *          bio, friends, games and achievements' privacy settings
+	 *          respectively.
+	 * 
+	 *          There are 5 elements in the details array. Elements 1 through 5
+	 *          (indexes 0 to 4) represent username, name, email, program and
+	 *          bio of the player.
 	 */
-	public Player(int playerID, String username, String filepath) {
+	public Player(int playerID, String filepath, List<String> details,
+			Set<User> friendsList, Set<User> friendRequestsList,
+			Set<User> blockedList, Set<Game> gamesList, boolean[] privacy) {
 		super(playerID);
-		this.username = username;
+		this.username = new Field(USERNAME_ID, details.get(0));
+		this.name = new Field(NAME_ID, details.get(1));
+		this.email = new Field(EMAIL_ID, details.get(2));
+		this.program = new Field(PROGRAM_ID, details.get(3));
+		this.bio = new Field(BIO_ID, details.get(4));
+
 		this.games = new Games();
+		if(gamesList != null){
+			this.games.addAll(gamesList);
+		}
+				
 		this.friends = new Friends();
+		if(friendsList != null){
+			this.friends.addAll(friendsList);
+		}
+		
 		this.friendInvites = new FriendInvites();
+		if(friendRequestsList != null){
+			this.friendInvites.addAll(friendRequestsList);
+		}
+		
 		this.blocked = new Blocked();
+		if(blockedList != null){
+			this.blocked.addAll(blockedList);
+		}
+		
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
+				privacy[1]);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, privacy[2]);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, privacy[3]);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, privacy[4]);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				privacy[6]);
+        this.libraryStyle = new LibraryStyle();
+
 		/*
 		 * Note that exception handling could be done in-method, however if it
 		 * cannot be loaded there is no way (other than changing the return type
@@ -59,24 +174,98 @@ public class Player extends User {
 		this.icon = null;
 	}
 
+
 	/**
 	 * getUsername returns a string of the player created
 	 * 
 	 * @return a string of the username
 	 */
 	public String getUsername() {
-		return username;
+		return username.getValue();
 	}
 
 	/**
 	 * Sets the name of the user.
-	 * 
-	 * @param username
+	 * @param username string of username
 	 */
 	public void setUsername(String username) {
 		if (username != null) {
-			this.username = username;
+			this.username.setValue(username);
 		}
+	}
+
+	/**
+	 * getEmail is an access method for the players email
+	 * 
+	 * @return a string of email
+	 */
+	public String getEmail() {
+		return email.getValue();
+	}
+
+	/**
+	 * Sets the email of the player
+	 * 
+	 * @param email
+	 */
+	public void setEmail(String email) {
+		this.email.setValue(email);
+		// TODO
+		// Do we want to add in any checking for valid email format here?
+	}
+
+	/**
+	 * getBio is an access method for the players biography
+	 * 
+	 * @return a string of the players biography
+	 */
+	public String getBio() {
+		return bio.getValue();
+	}
+
+	/**
+	 * Sets the biography of the player
+	 * 
+	 * @param bio
+	 */
+	public void setBio(String bio) {
+		this.bio.setValue(bio);
+	}
+
+	/**
+	 * An access method for the players name
+	 * 
+	 * @return a String of the players name
+	 */
+	public String getName() {
+		return name.getValue();
+	}
+
+	/**
+	 * Sets the name of the player
+	 * 
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.name.setValue(name);
+	}
+
+	/**
+	 * An access method for the players program
+	 * 
+	 * @return a String of the players program
+	 */
+	public String getProgram() {
+		return program.getValue();
+	}
+
+	/**
+	 * Sets the players program
+	 * 
+	 * @param program
+	 */
+	public void setProgram(String program) {
+		this.program.setValue(program);
 	}
 
 	/**
@@ -172,14 +361,15 @@ public class Player extends User {
 	}
 
 	/**
-	 * Adds a friend to the player's friends set.
+	 * Adds a friend to the player's friends set, given that
+	 * player.hasInvite(friend).
 	 * 
 	 * @param friend
 	 *            The friend to be added to the friends set.
 	 * @ensure this.friends.contains(friend)
 	 */
 	public void addFriend(User friend) {
-		if (friend != null) {
+		if (friend != null /* && this.hasInvite(friend) */) {
 			this.friends.add(friend);
 			setChanged();
 			notifyObservers(friends);
@@ -301,7 +491,7 @@ public class Player extends User {
 	 *            player to be removed from blocked list.
 	 * @ensure !this.blocked.contains(player)
 	 */
-	public void removeBlocked(User player) throws Exception {
+	public void removeBlocked(User player) {
 		if (player != null) {
 			this.blocked.remove(player);
 			setChanged();
@@ -309,4 +499,215 @@ public class Player extends User {
 			clearChanged();
 		}
 	}
+
+	/**
+	 * Set's a Player's name privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's name is to be publicly visible, false for
+	 *            friends only.
+	 */
+	public void setNamePrivacy(boolean v) {
+		namePrivacy.setValue(v);
+		setChanged();
+		notifyObservers(namePrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's name privacy setting.
+	 * 
+	 * @return True if the Player's name is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getNamePrivacy() {
+		return namePrivacy.getValue();
+	}
+
+	/**
+	 * Set's a Player's email privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's email is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setEmailPrivacy(boolean v) {
+		emailPrivacy.setValue(v);
+		namePrivacy.setValue(v);
+		setChanged();
+		notifyObservers(emailPrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's email privacy setting.
+	 * 
+	 * @return True if the Player's email is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getEmailPrivacy() {
+		return emailPrivacy.getValue();
+	}
+
+	/**
+	 * Set's a Player's email program setting
+	 * 
+	 * @param v
+	 *            True if the Player's program is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setProgramPrivacy(boolean v) {
+		programPrivacy.setValue(v);
+		namePrivacy.setValue(v);
+		setChanged();
+		notifyObservers(programPrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's program privacy setting.
+	 * 
+	 * @return True if the Player's program is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getProgramPrivacy() {
+		return programPrivacy.getValue();
+	}
+
+	/**
+	 * Set's a Player's bio program setting
+	 * 
+	 * @param v
+	 *            True if the Player's bio is to be publicly visible, false for
+	 *            friends only.
+	 */
+	public void setBioPrivacy(boolean v) {
+		bioPrivacy.setValue(v);
+		namePrivacy.setValue(v);
+		setChanged();
+		notifyObservers(bioPrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's bio privacy setting.
+	 * 
+	 * @return True if the Player's bio is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getBioPrivacy() {
+		return bioPrivacy.getValue();
+	}
+
+	/**
+	 * Set's a Player's friends privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's friends is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setFriendsPrivacy(boolean v) {
+		friendsPrivacy.setValue(v);
+		namePrivacy.setValue(v);
+		setChanged();
+		notifyObservers(friendsPrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's friends privacy setting.
+	 * 
+	 * @return True if the Player's friends is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getFriendsPrivacy() {
+		return friendsPrivacy.getValue();
+	}
+
+	/**
+	 * Set's a Player's games privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's games is to be publicly visible, false
+	 *            for friends only.
+	 */
+	public void setGamesPrivacy(boolean v) {
+		gamesPrivacy.setValue(v);
+		namePrivacy.setValue(v);
+		setChanged();
+		notifyObservers(gamesPrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's games privacy setting.
+	 * 
+	 * @return True if the Player's games is to be publicly visible, false for
+	 *         friends only.
+	 */
+	public boolean getGamesPrivacy() {
+		return gamesPrivacy.getValue();
+	}
+
+	/**
+	 * Set's a Player's achievements privacy setting
+	 * 
+	 * @param v
+	 *            True if the Player's achievements is to be publicly visible,
+	 *            false for friends only.
+	 */
+	public void setAchievementsPrivacy(boolean v) {
+		achievementsPrivacy.setValue(v);
+		namePrivacy.setValue(v);
+		setChanged();
+		notifyObservers(achievementsPrivacy);
+		clearChanged();
+
+	}
+
+	/**
+	 * Access method for the Player's achievements privacy setting.
+	 * 
+	 * @return True if the Player's achievements is to be publicly visible,
+	 *         false for friends only.
+	 */
+	public boolean getAchievementsPrivacy() {
+		return achievementsPrivacy.getValue();
+	}
+
+    /**
+     * Update Player's library style
+     * @param style Library Style
+     */
+    public void updateLibraryLayout(int style) {
+        libraryStyle.setLayout(style);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
+    /**
+     * Update Player's library colour
+     * @param colour Colour Scheme
+     */
+    public void updateLibraryColour(int colour) {
+        libraryStyle.setColourScheme(colour);
+        setChanged();
+        notifyObservers(libraryStyle);
+        clearChanged();
+    }
+
+    /**
+     * Get Player's Library Style
+     * @return libraryStyle
+     */
+    public LibraryStyle getLibraryStyle() {
+        return libraryStyle;
+    }
 }

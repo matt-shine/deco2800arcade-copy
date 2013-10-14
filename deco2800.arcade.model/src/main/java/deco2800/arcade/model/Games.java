@@ -12,6 +12,8 @@ import java.util.Set;
 public class Games {
 
 	private Set<Game> games;
+	private String updatedID;
+	private boolean added;
 
 	/**
 	 * Creates a new Games.
@@ -46,7 +48,22 @@ public class Games {
 	 *            The Game to be added.
 	 */
 	public void add(Game game) {
-		this.games.add(game);
+		if (!contains(game)) {
+			this.games.add(game);
+			updatedID = game.id;
+			added = true;
+		}
+	}
+	
+	/**
+	 * Adds a Set of Games to this.  THIS METHOD IS NOT TO BE USED FOR PURPOSES
+	 * OTHER THAN LOADING PLAYER DATA FROM DATABASE.
+	 * 
+	 * @param games
+	 *            The Set of Games to be added.
+	 */
+	public void addAll(Set<Game> games) {
+		this.games.addAll(games);
 	}
 
 	/**
@@ -56,7 +73,11 @@ public class Games {
 	 *            The Game to be removed.
 	 */
 	public void remove(Game game) {
-		this.games.remove(game);
+		if (contains(game)) {
+			this.games.remove(game);
+			updatedID = game.id;
+			added = false;
+		}
 	}
 
 	/**
@@ -68,6 +89,25 @@ public class Games {
 	 */
 	public boolean contains(Game game) {
 		return this.games.contains(game);
+	}
+	
+	/**
+	 * Access method for the most recent change ID.
+	 * 
+	 * @return Returns the ID of the field in the most recent change.
+	 */
+	public String getUpdatedID() {
+		return updatedID;
+	}
+
+	/**
+	 * Access method for most recent change flag.
+	 * 
+	 * @return Returns true if the last change was an addition, and false if it
+	 *         was a deletion.
+	 */
+	public boolean getAdded() {
+		return added;
 	}
 
 }

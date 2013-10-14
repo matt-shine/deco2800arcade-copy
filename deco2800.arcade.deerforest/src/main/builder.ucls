@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="deco2800.arcade.deerforest.models.gameControl.DeckSystem" 
+    project="deco2800.arcade.deerforest" 
+    file="/deco2800.arcade.deerforest/src/main/java/deco2800/arcade/deerforest/models/gameControl/DeckSystem.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="282" y="476"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="deco2800.arcade.deerforest.models.cardContainers.Deck" 
+    project="deco2800.arcade.deerforest" 
+    file="/deco2800.arcade.deerforest/src/main/java/deco2800/arcade/deerforest/models/cardContainers/Deck.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="231" y="651"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="deco2800.arcade.deerforest.GUI.DeckBuilderInputProcessor" 
+    project="deco2800.arcade.deerforest" 
+    file="/deco2800.arcade.deerforest/src/main/java/deco2800/arcade/deerforest/GUI/DeckBuilderInputProcessor.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="849" y="91"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="deco2800.arcade.deerforest.GUI.DeckBuilderScreen" 
+    project="deco2800.arcade.deerforest" 
+    file="/deco2800.arcade.deerforest/src/main/java/deco2800/arcade/deerforest/GUI/DeckBuilderScreen.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="251" y="168"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="deco2800.arcade.deerforest.GUI.DeckBuilder" project="deco2800.arcade.deerforest" 
+    file="/deco2800.arcade.deerforest/src/main/java/deco2800/arcade/deerforest/GUI/DeckBuilder.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="515" y="435"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="deco2800.arcade.deerforest.GUI.BuilderArena" project="deco2800.arcade.deerforest" 
+    file="/deco2800.arcade.deerforest/src/main/java/deco2800/arcade/deerforest/GUI/BuilderArena.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="-93" y="384"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="deco2800.arcade.deerforest.GUI.DeerForest" project="deco2800.arcade.deerforest" 
+    file="/deco2800.arcade.deerforest/src/main/java/deco2800/arcade/deerforest/GUI/DeerForest.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="829" y="427"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="8">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="9" name="model"/>      
+      <multiplicity id="10" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="11">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="12" name="deckBuilder"/>      
+      <multiplicity id="13" minimum="0" maximum="1">        
+        <position height="15" width="23" x="599" y="435"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="14">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="15" name="deckBuilder">        
+        <position height="17" width="63" x="396" y="303"/>      
+      </attribute>      
+      <multiplicity id="16" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="17">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="18" name="arena"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <bendpoint x="1001" y="272"/>    
+    <bendpoint x="981" y="635"/>    
+    <bendpoint x="696" y="619"/>    
+    <bendpoint x="669" y="472"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="21" name="game">        
+        <position height="17" width="35" x="609" y="476"/>      
+      </attribute>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="23">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="24" name="view"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="26">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="27" name="deckBuilderView"/>      
+      <multiplicity id="28" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="29">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="30" name="deck"/>      
+      <multiplicity id="31" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="33" name="deckInputProcessor"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

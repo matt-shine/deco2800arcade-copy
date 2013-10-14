@@ -155,7 +155,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
-			File file = new File("src/main/resources/soundtrack.wav");
+			File file = new File("deco2800.arcade.junglejump/src/main/resources/soundtrack.wav");
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -172,7 +172,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			File file2 = new File("src/main/resources/menu.wav");
+			File file2 = new File("deco2800.arcade.junglejump/src/main/resources/menu.wav");
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
 			menuSound.open(audioIn2);
@@ -196,24 +196,24 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void create() {
 		super.create();
 		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(("src/main/resources/mainscreen.png"));
-		monkeySit = new Texture(("src/main/resources/monkeySit.png"));
-		monkeySitRIGHT = new Texture(("src/main/resources/monkeySit.png"));
-		monkeySitLEFT = new Texture(("src/main/resources/monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(("src/main/resources/monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(("src/main/resources/monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(("src/main/resources/monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(("src/main/resources/monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(("src/main/resources/monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(("src/main/resources/monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("src/main/resources/gameBackground2.png"));
-		levelText = new Texture(("src/main/resources/level.png"));
-		hyphenText = new Texture(("src/main/resources/-.png"));
-		livesText = new Texture(("src/main/resources/lives.png"));
-		worldNumText = new Texture(("src/main/resources/1.png"));
-		livesNumText = new Texture(("src/main/resources/3.png"));
-		levelNumText = new Texture(("src/main/resources/1.png"));
-		//platform = new Texture("src/main/resources/platform.png");
+		texture = new Texture(("deco2800.arcade.junglejump/src/main/resources/mainscreen.png"));
+		monkeySit = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeySit.png"));
+		monkeySitRIGHT = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeySit.png"));
+		monkeySitLEFT = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeySitLEFT.png"));
+		monkeyRun1 = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeyRun1.png"));
+		monkeyRun1RIGHT = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeyRun1.png"));
+		monkeyRun1LEFT = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeyRun1LEFT.png"));
+		monkeyRun2 = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeyRun2.png"));
+		monkeyRun2RIGHT = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeyRun2.png"));
+		monkeyRun2LEFT = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeyRun2LEFT.png"));
+		gameBackground = new Texture(("deco2800.arcade.junglejump/src/main/resources/gameBackground2.png"));
+		levelText = new Texture(("deco2800.arcade.junglejump/src/main/resources/level.png"));
+		hyphenText = new Texture(("deco2800.arcade.junglejump/src/main/resources/-.png"));
+		livesText = new Texture(("deco2800.arcade.junglejump/src/main/resources/lives.png"));
+		worldNumText = new Texture(("deco2800.arcade.junglejump/src/main/resources/1.png"));
+		livesNumText = new Texture(("deco2800.arcade.junglejump/src/main/resources/3.png"));
+		levelNumText = new Texture(("deco2800.arcade.junglejump/src/main/resources/1.png"));
+		//platform = new Texture("deco2800.arcade.junglejump/src/main/resources/platform.png");
 
 		/* ACHIEVEMENT STUFF */
 		AchievementClient achClient = this.getAchievementClient();
@@ -235,7 +235,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementNameFont        = new BitmapFont(false);
 		achievementDescriptionFont = new BitmapFont(false);
 		achievementThresholdFont   = new BitmapFont(false);
-		achievementIconTexture     = new Texture(("src/main/resources/monkeySit.png"));
+		achievementIconTexture     = new Texture(("deco2800.arcade.junglejump/src/main/resources/monkeySit.png"));
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
@@ -454,7 +454,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		} else {
 			lives = 5;
 		}
-		livesNumText = new Texture(("src/main/resources/" + lives + ".png"));
+		livesNumText = new Texture(("deco2800.arcade.junglejump/src/main/resources/" + lives + ".png"));
 	}
 
 	public static void drawLevel() {
@@ -487,7 +487,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					
 					// Play banana sound
 					try{ 
-						File file = new File("src/main/resources/pickup.wav");
+						File file = new File("deco2800.arcade.junglejump/src/main/resources/pickup.wav");
 						FileHandle fileh = new FileHandle(file);
 						AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 						Clip clip = AudioSystem.getClip();
@@ -662,7 +662,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				
 				// Play sound effect for jumping
 				try{ 
-					File file = new File("src/main/resources/jump.wav");
+					File file = new File("deco2800.arcade.junglejump/src/main/resources/jump.wav");
 					FileHandle fileh = new FileHandle(file);
 					AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 					Clip clip = AudioSystem.getClip();

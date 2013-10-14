@@ -49,17 +49,10 @@ public class ArcadeSystem {
     }
 
     /**
-     * Open connection to server
+     * Open connection to both server and file server
      */
 	public static void openConnection() {
-		arcade.startConnection();
-		/*
-		try {		
-			arcade.connectToServer();
-		} catch (ArcadeException e) {
-			e.printStackTrace();
-		}
-		*/
+	    arcade.startConnection();
 	}
 
     /**

@@ -8,13 +8,11 @@ import com.esotericsoftware.kryo.serializers.FieldSerializer;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
-import deco2800.arcade.protocol.achievement.AchievementListRequest;
 import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
 import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
 //import deco2800.arcade.model.Achievement;
 import deco2800.arcade.protocol.achievement.AchievementsForIDsRequest;
 import deco2800.arcade.protocol.achievement.AchievementsForIDsResponse;
-import deco2800.arcade.protocol.achievement.AddAchievementRequest;
 import deco2800.arcade.protocol.achievement.IncrementProgressRequest;
 import deco2800.arcade.protocol.achievement.IncrementProgressResponse;
 import deco2800.arcade.protocol.achievement.ProgressForPlayerRequest;
@@ -38,6 +36,10 @@ import deco2800.arcade.protocol.game.NewGameResponse;
 import deco2800.arcade.protocol.highscore.AddScoreRequest;
 import deco2800.arcade.protocol.highscore.GetScoreRequest;
 import deco2800.arcade.protocol.highscore.GetScoreResponse;
+import deco2800.arcade.protocol.image.GetImageRequest;
+import deco2800.arcade.protocol.image.GetImageResponse;
+import deco2800.arcade.protocol.image.SetImageRequest;
+import deco2800.arcade.protocol.image.SetImageResponse;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
@@ -54,6 +56,8 @@ import deco2800.arcade.protocol.multiplayerGame.NewMatchmakingRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
+import deco2800.arcade.protocol.packman.FetchGameRequest;
+import deco2800.arcade.protocol.packman.FetchGameResponse;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
@@ -68,6 +72,7 @@ import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
+import deco2800.arcade.protocol.replay.types.Session;
 
 public class Protocol {
 	
@@ -109,8 +114,13 @@ public class Protocol {
 		kryo.register(ProgressForPlayerRequest.class);
 		kryo.register(ProgressForPlayerResponse.class);
 		kryo.register(java.util.ArrayList.class);
-		kryo.register(AchievementListRequest.class);
-		kryo.register(AddAchievementRequest.class);
+
+		// Image messages
+		Class<?>[] imageClasses = { GetImageRequest.class, GetImageResponse.class,
+					    SetImageRequest.class, SetImageResponse.class };
+		for (Class<?> c : imageClasses) {
+		    kryo.register(c);
+		}
 		
 		// High Score Messages
 		kryo.register(AddScoreRequest.class);
@@ -130,6 +140,7 @@ public class Protocol {
 		kryo.register(PushEventResponse.class);
 		kryo.register(GetEventsRequest.class);
 		kryo.register(GetEventsResponse.class);
+		kryo.register(Session.class);
 		
 		//Game messages
 		kryo.register(GameStatusUpdate.class);
@@ -159,6 +170,8 @@ public class Protocol {
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
+    kryo.register(FetchGameRequest.class);
+    kryo.register(FetchGameResponse.class);
 		
 		//Lobby classes
 		kryo.register(NewLobbyRequest.class);
@@ -173,7 +186,7 @@ public class Protocol {
         kryo.register(GameUpdateCheckResponse.class);
         kryo.register(JoinLobbyMatchResponse.class);
         kryo.register(JoinLobbyMatchResponseType.class);
-        
+
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);

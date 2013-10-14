@@ -3,26 +3,55 @@ package deco2800.arcade.client.communication.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
+import com.esotericsoftware.kryonet.Connection;
+
+import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationTest {
 
-	Player player1 = new Player(789, "Chuck Norris", null);
-	Player player2 = new Player(987, "Jackie Chan", null);
-	Player player3 = new Player(897, "Bruce Lee", null);
-	// NetworkClient client = Mockito.mock(NetworkClient.class);
-	// Not sure how to set up mock NetworkCleint or CommNetwork as they try
-	// to connect to the server in their constructors.
-	CommunicationNetwork comm1 = new CommunicationNetwork(player1, null);
-	CommunicationNetwork comm2 = new CommunicationNetwork(player2, null);
-	CommunicationNetwork comm3 = new CommunicationNetwork(player3, null);
+	private Player player1;
+	private Player player2;
+
+	private CommunicationNetwork comm1;
+	private CommunicationNetwork comm2;
+
+	@Before
+	public void initialise() {
+		boolean[] privset = { true, true, true, true, true, true, true };
+
+		List<String> info = new ArrayList<String>();
+		info.add("Ricky");
+		info.add("Rick Astley");
+		info.add("rick@astley.giveyouup");
+		info.add("ARTS");
+		info.add("#Rickroll");
+		info.add("20");
+
+		List<String> info2 = new ArrayList<String>();
+		info2.add("Stewie");
+		info2.add("Stewie Griffin");
+		info2.add("stewie@griffin.killlouis");
+		info2.add("Nope");
+		info2.add("Kill Louis");
+		info2.add("2");
+
+		player1 = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
+				null, null, null, privset);
+		player2 = new Player(234, "THIS IS NOT A VALID PATH.html", info2, null,
+				null, null, null, privset);
+		comm1 = new CommunicationNetwork(player1, null);
+		comm2 = new CommunicationNetwork(player2, null);
+	}
 
 	/**
 	 * Tests the creating of CommunicationNetwork.
@@ -30,16 +59,9 @@ public class CommunicationTest {
 	@Test
 	public void initTest() {
 		assertEquals(player1, comm1.getPlayer());
-		assertEquals(789, comm1.getPlayer().getID());
-		assertEquals("Chuck Norris", comm1.getPlayer().getUsername());
+		assertEquals(123, comm1.getPlayer().getID());
 		assertEquals(player2, comm2.getPlayer());
-		assertEquals(987, comm2.getPlayer().getID());
-		assertEquals("Jackie Chan", comm2.getPlayer().getUsername());
-		assertEquals(player3, comm3.getPlayer());
-		assertEquals(897, comm3.getPlayer().getID());
-		assertEquals("Bruce Lee", comm3.getPlayer().getUsername());
-		Mockito.mock(CommunicationNetwork.class);
-		CommunicationNetwork dud = Mockito.mock(CommunicationNetwork.class);
+		assertEquals(234, comm2.getPlayer().getID());
 	}
 
 	/**
@@ -50,7 +72,6 @@ public class CommunicationTest {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
 		chatParticipants.add(player2.getID());
-		chatParticipants.add(player3.getID());
 		comm1.createChat(chatParticipants);
 
 		assertEquals(chatParticipants.hashCode(), comm1.getCurrentChat()
@@ -67,7 +88,6 @@ public class CommunicationTest {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
 		chatParticipants.add(player2.getID());
-		chatParticipants.add(player3.getID());
 
 		comm1.createChat(chatParticipants);
 		comm1.getCurrentChat().removeParticipant(chatParticipants.remove(0));
@@ -86,26 +106,28 @@ public class CommunicationTest {
 	}
 
 	/**
-	 * Not sure how to check chat history at the moment. No getHistory() method?
+	 * Tests the chat history. Mostly just tests the transferring of ChatHistory
+	 * object between CommunicationListener -> CommunicationNetwork
 	 */
 	@Test
 	public void chatHistory() {
-		List<Integer> chatParticipants = new ArrayList<Integer>();
-		List<String> chatHistory = new ArrayList<String>();
-		chatParticipants.add(player1.getID());
-		chatParticipants.add(player2.getID());
-		chatParticipants.add(player3.getID());
-		comm1.createChat(chatParticipants);
-		comm1.getCurrentChat().addMessage("TESTING 1");
-		comm1.getCurrentChat().addMessage("TESTING 2");
-		comm1.getCurrentChat().addMessage("NANANANANANAN BATMAN!");
-		comm1.getCurrentChat().addMessage("suicidal W4t3RM3L0N !@#$%^&*()");
-		chatHistory.add("TESTING 1");
-		chatHistory.add("TESTING 2");
-		chatHistory.add("NANANANANANAN BATMAN!");
-		chatHistory.add("suicidal W4t3RM3L0N !@#$%^&*()");
+		CommunicationListener listener = new CommunicationListener(comm1);
+		Connection connection = null;
+		ChatHistory chathistory = new ChatHistory();
+		HashMap<Integer, List<String>> history = new HashMap<Integer, List<String>>();
+		List<String> chat = new ArrayList<String>();
 
-		// assertEquals(chatHistory, comm1.getCurrentChat().getHistory());
+		chat.add("This is a test1");
+		chat.add("This is a test2");
+		chat.add("This is not a test");
+		chat.add("The cake is a lie");
+		chat.add("Aquaman is the best");
+
+		history.put(123, chat);
+		chathistory.updateChatHistory(history);
+		listener.received(connection, chathistory);
+		assertEquals(history.get(player1.getID()),
+				comm1.getChatHistory(comm1.getPlayer().getID()));
 	}
 
 	/**
@@ -117,7 +139,6 @@ public class CommunicationTest {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
 		chatParticipants.add(player2.getID());
-		chatParticipants.add(player3.getID());
 		comm1.createChat(chatParticipants);
 		TextMessage message = new TextMessage();
 		message.recipients = chatParticipants;

@@ -9,18 +9,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import java.util.*;
-
-
 import javax.swing.JFrame;
 
-import deco2800.arcade.client.network.listener.*;
-import deco2800.arcade.protocol.game.GameLibraryRequest;
 import org.reflections.Reflections;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -30,7 +26,9 @@ import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
+import deco2800.arcade.client.network.listener.FileServerListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.LibraryResponseListener;
 import deco2800.arcade.client.network.listener.LobbyListener;
 import deco2800.arcade.client.network.listener.MultiplayerListener;
 import deco2800.arcade.client.network.listener.PackmanListener;
@@ -38,10 +36,12 @@ import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
+import deco2800.arcade.protocol.game.GameLibraryRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
@@ -66,6 +66,8 @@ public class Arcade extends JFrame {
 
     private NetworkClient client;
 
+    private NetworkClient fileClient;
+
     private Player player;
 
     private int width, height;
@@ -80,18 +82,25 @@ public class Arcade extends JFrame {
 
     private CommunicationNetwork communicationNetwork;
     
+	@SuppressWarnings("unused")
+	private static PackageClient packClient;
+
     private static boolean multiplayerEnabled;
     
     private static boolean playerBetting;
     
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
-    
 
     // Width and height of the Arcade window
     private static final int ARCADE_WIDTH = 1280;
     private static final int ARCADE_HEIGHT = 720;
     private static final int MIN_ARCADE_WIDTH = 640;
     private static final int MIN_ARCADE_HEIGHT = 480;
+
+    // Server will communicate over these ports
+    private static final int TCP_PORT = 54555;
+    private static final int UDP_PORT = 54777;
+    private static final int FILE_TCP_PORT = 54666;
 
     /**
      * ENTRY POINT
@@ -104,6 +113,9 @@ public class Arcade extends JFrame {
         ArcadeSystem.setArcadeInstance(arcade);
 
         arcade.addCanvas();
+        
+		System.out.println("Packman opened");
+		packClient = new PackageClient();
 
         ArcadeSystem.goToGame(ArcadeSystem.UI);
     }
@@ -166,7 +178,18 @@ public class Arcade extends JFrame {
                 connected = true;
             } catch (ArcadeException e) {
                 // TODO: error on connection failure
-                System.out.println("Connection failed... Trying again.");
+                System.out.println("Server Connection failed... Trying again.");
+            }
+        }
+
+        connected = false;
+        while (!connected){
+            try {
+                connectToFileServer();
+                connected = true;
+            } catch (ArcadeException e) {
+                // TODO: error on connection failure
+                System.out.println("File Server connection failed... Trying again.");
             }
         }
 
@@ -180,9 +203,9 @@ public class Arcade extends JFrame {
      */
     public void connectToServer() throws ArcadeException {
         try {
-            // TODO allow server/port as optional runtime arguments xor user inputs.
+            // TODO allow server/port as optional runtime arguments or user inputs.
             System.out.println("connecting to server");
-			client = new NetworkClient(serverIPAddress, 54555, 54777);
+			client = new NetworkClient(serverIPAddress, TCP_PORT, UDP_PORT);
 
             client.sendNetworkObject(new GameLibraryRequest());
 
@@ -193,6 +216,25 @@ public class Arcade extends JFrame {
 					+ serverIPAddress + ")", e);
 		}
 	}
+
+    /**
+     * Attempt to initiate a connection with the file server.
+     *
+     * @throws ArcadeException
+     *             if the connection failed.
+     */
+    public void connectToFileServer() throws ArcadeException {
+        try {
+            // TODO allow server/port as optional runtime arguments xor user inputs.
+            System.out.println("connecting to file server");
+            fileClient = new NetworkClient(serverIPAddress, FILE_TCP_PORT);
+            addFileClientListeners();
+        } catch (NetworkException e) {
+            throw new ArcadeException("Unable to connect to Arcade File Server ("
+                    + serverIPAddress + ")", e);
+        }
+        fetchGameJar("pong", "1.0");
+    }
 
     /**
      * Add Listeners to the network client
@@ -207,6 +249,13 @@ public class Arcade extends JFrame {
         this.client.addListener(new LobbyListener());
         this.client.addListener(new LibraryResponseListener());
 	}
+
+    /**
+     * Add Listeners to the network client
+     */
+    private void addFileClientListeners() {
+        this.fileClient.addListener(new FileServerListener());
+    }
 
 	public void connectAsUser(String username) {
 		//This should really GET the player with the details that were provided at login, not create a new player!
@@ -278,12 +327,31 @@ public class Arcade extends JFrame {
 
         GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
        
-        getCurrentGame().setPlayer(this.player);
-        getCurrentGame().setThisNetworkClient(this.client);
-        
+        if (getCurrentGame() != null) {
+        	getCurrentGame().setPlayer(this.player);
+            getCurrentGame().setThisNetworkClient(this.client);
+            
+        }
+
+        // This is how you fetch game JARs
+        //fetchGameJar("pong", "1.0");
+
         System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}
 	
+
+    /**
+     * Fetch the JAR for a given game/version from the server
+     *
+     * A thread is spawned to fetch the game
+     * @param gameID
+     * @param version
+     */
+    public void fetchGameJar(String gameID, String version) {
+        FileClient fc = new FileClient(gameID, version, fileClient);
+        Thread t = new Thread(fc);
+        t.start();
+    }
 
 	/**
 	 * Ask the server to play a given game.

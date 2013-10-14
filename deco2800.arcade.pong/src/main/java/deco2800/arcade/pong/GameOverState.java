@@ -9,7 +9,7 @@ public class GameOverState extends GameState {
 	@Override
 	public void handleInput(Pong context) {
 		if (Gdx.input.isTouched()) {
-    		context.gameOver();
+		    // the arcade system calls gameOver for us
     		ArcadeSystem.goToGame(ArcadeSystem.UI);
     	}
 	}

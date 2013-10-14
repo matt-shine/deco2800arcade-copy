@@ -193,5 +193,9 @@ public class CommunicationNetwork {
 			System.out.println("History with: " + entry);
 		}
 	}
-
+	
+	public List<String> getChatHistory(int playerID) {
+		return chatHistory.getChatHistory(playerID);
+		
+	}
 }

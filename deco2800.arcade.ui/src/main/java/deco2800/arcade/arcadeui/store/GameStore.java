@@ -120,6 +120,11 @@ public class GameStore implements Screen, StoreScreen {
 	}
 	
 	private static void populateGamesBox (Stage stage, Skin skin, Screen parent) {
+		//You can't put this kind of thing in master. It crashes if I
+		//don't have the exact same classpath configuration as you.
+		//I won't fix it, I'm just going to comment it out.
+		//--Simon
+		/*
 		int number = (int)Math.floor(16 * Math.random());
 		for (int i = 0; i < 8; ++i) {
 			Label game = new Label("------------\n|                |\n|" +
@@ -134,6 +139,7 @@ public class GameStore implements Screen, StoreScreen {
 			}
 			stage.addActor(game);
 		}
+		*/
 	}
     
 	@Override

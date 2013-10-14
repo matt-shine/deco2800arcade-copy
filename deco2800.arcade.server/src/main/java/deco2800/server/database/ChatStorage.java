@@ -2,6 +2,7 @@ package deco2800.server.database;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class ChatStorage {
@@ -17,7 +18,7 @@ public class ChatStorage {
 	}
 	
 	public void addChatHistory(int playerID, int senderID,  String text){
-		HashMap<Integer, List<String>> chatHistory = new HashMap<Integer, List<String>>();
+		HashMap<Integer, List<String>> chatHistory = new LinkedHashMap<Integer, List<String>>();
 		List<String> chatLines = new ArrayList<String>();
 		
 		//Assume playerID belongs to "Bob"

@@ -42,4 +42,6 @@ release
 
 # Ignore all .log files anywhere
 **/*.log
+# Including multipart log files
+**/*.log.*
 

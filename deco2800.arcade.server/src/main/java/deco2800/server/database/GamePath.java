@@ -22,10 +22,9 @@ public class GamePath {
 					null, "GAMEPATH", null);
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
-				statement
-						.execute("CREATE TABLE GAMEPATH(gameID INT PRIMARY KEY,"
-								+ "path VARCHAR(200),"
-								+ "md5Hash LONGVARCHAR(2048));");
+				statement.execute("CREATE TABLE GAMEPATH(gameID INT PRIMARY KEY,"
+								+ "path VARCHAR(200) NOT NULL,"
+								+ "md5Hash LONG VARCHAR NOT NULL)");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -52,9 +51,9 @@ public class GamePath {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT path FROM GAMEPATH WHERE"
+			resultSet = statement.executeQuery("SELECT * FROM GAMEPATH WHERE"
 					+ " gameID=" + gameID);
-			String result = resultSet.getString(1);
+			String result = findPath(resultSet, gameID);
 
 			return result;
 		} catch (SQLException e) {
@@ -77,6 +76,20 @@ public class GamePath {
 			}
 		}
 	}
+	
+	private String findPath(ResultSet results, int gameID) throws SQLException {
+		String result = "";
+		
+		while (results.next()){
+			int id = results.getInt("gameID");
+			if (id == gameID){
+				result = results.getString("path");
+				break;
+			}
+		}
+		
+		return result;
+	}
 	/**
 	 * adds a game to the table with the specified ID and Path
 	 * @param gameID
@@ -91,7 +104,7 @@ public class GamePath {
 
 		String gameMd5 = PackageUtils.genMD5(gamePath);
 		Statement statement = null;
-		String query = "INSERT INTO GAMEPATH VALUES ('"+gameID+"','"+
+		String query = "INSERT INTO GAMEPATH VALUES ("+gameID+",'"+
 		gamePath+"','"+gameMd5+"')";
 		try {
 			statement = connection.createStatement();
@@ -122,9 +135,9 @@ public class GamePath {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT md5Hash FROM GAMEPATH WHERE"
+			resultSet = statement.executeQuery("SELECT * FROM GAMEPATH WHERE"
 					+ " gameID=" + gameID);
-			String result = resultSet.getString(1);
+			String result = findMD5(resultSet, gameID);
 
 			return result;
 		} catch (SQLException e) {
@@ -146,6 +159,20 @@ public class GamePath {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private String findMD5(ResultSet results, int gameID) throws SQLException {
+		String result = "";
+		
+		while (results.next()){
+			int id = results.getInt("gameID");
+			if (id == gameID){
+				result = results.getString("md5Hash");
+				break;
+			}
+		}
+		
+		return result;
 	}
 
 }

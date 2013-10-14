@@ -87,10 +87,10 @@ public class DoodadList {
                     DoodadInfo.nonsolidScenery("puddle"),
 
                     //24: oil drum
-                    DoodadInfo.solidScenery("oildrum"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //25: table and chairs
-                    DoodadInfo.solidScenery("tablechairs"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //26: lamp
                     DoodadInfo.nonsolidScenery("manfried"),

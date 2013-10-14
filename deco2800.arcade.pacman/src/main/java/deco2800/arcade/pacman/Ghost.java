@@ -1,5 +1,6 @@
 package deco2800.arcade.pacman;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -16,9 +17,8 @@ import deco2800.arcade.pacman.PacChar.PacState;
 
 public class Ghost extends Mover {
 	
-	
 	private enum GhostState {
-	CHASE, SCATTER, FRIGHT, DEAD
+		CHASE, SCATTER, FRIGHT, DEAD
 	}
 	
 	public enum GhostName {
@@ -75,7 +75,7 @@ public class Ghost extends Mover {
 		width = walkFrames[1].getRegionWidth() * 2;
 		height = walkFrames[1].getRegionHeight() * 2;
 		updatePosition();
-		moveDist = 0; //made it so he can't move at the moment, because he
+		moveDist = 1; //made it so he can't move at the moment, because he
 						// currently goes through walls and crashes it.
 		currentTile.addMover(this);
 		//System.out.println(this);
@@ -149,7 +149,11 @@ public class Ghost extends Mover {
 				", " + drawY + "}, " + currentState + " in " + currentTile;
 	}
 		
-	
+	/**returns the target tile of the ghost.
+	 * so far only does blinky and pinky
+	 * 
+	 * @return
+	 */
 	public Tile getTargetTile() {
 		if (ghost == GhostName.BLINKY) {
 			return player.getTile();
@@ -162,6 +166,13 @@ public class Ghost extends Mover {
 		}
 	}
 	
+	/**
+	 * calculates the straight line distance between the current (start) tile and 
+	 * the target tile.
+	 * @param start
+	 * @param target
+	 * @return
+	 */
 	public double calcDist(Tile start, Tile target) {
 		Point startPoint = gameMap.getTilePos(start);
 		Point targetPoint = gameMap.getTilePos(target);
@@ -178,6 +189,95 @@ public class Ghost extends Mover {
 
 	public void setTargetTile(Tile targetTile) {
 		this.targetTile = targetTile;
+	}
+	
+	/**
+	 * returns a list of testTiles that can be walked into.
+	 * returns them in the order of left, down, up, right
+	 * @param current
+	 * @return
+	 */
+	public List<Tile> getTestTiles(Tile current) {
+		
+		Point currentPoint = gameMap.getTilePos(current);
+		List<Tile> testTiles = new ArrayList<Tile>();
+		int currentX = currentPoint.getX();
+		int currentY = currentPoint.getY();
+		
+		int upY = currentY + 1;
+		int leftX = currentX - 1;
+		int downY = currentY - 1;
+		int rightX = currentX + 1;
+		
+		Tile upTile = gameMap.getGrid()[currentX][upY];
+		Tile leftTile = gameMap.getGrid()[leftX][currentY];
+		Tile downTile = gameMap.getGrid()[currentX][downY];
+		Tile rightTile = gameMap.getGrid()[rightX][currentY];
+		
+		if (checkNoWallCollision(upTile)) {
+			testTiles.add(upTile);
+		}
+		if (checkNoWallCollision(leftTile)) {
+			testTiles.add(leftTile);
+		}
+		if (checkNoWallCollision(downTile)) {
+			testTiles.add(downTile);
+		}
+		if (checkNoWallCollision(rightTile)) {
+			testTiles.add(rightTile);
+		}
+		
+		
+		return testTiles;
+	}
+	/**
+	 * returns a list of distances in the same order of the testTiles
+	 * @param testTiles
+	 * @param current
+	 * @return
+	 */
+	public List<Double> getDists (List<Tile> testTiles, Tile current) {
+		
+		Tile temp;
+		double tempDist;
+		List<Double> dists = new ArrayList<Double>();
+		for (int i = 0; i < testTiles.size(); i++) {
+			temp = testTiles.get(0);
+			tempDist = calcDist(current, temp);
+			dists.add(tempDist);
+			
+			
+		}
+		
+		return dists;
+	}
+	
+	/**
+	 * Returns the direction that the nextTile is in, in relation to the current tile
+	 * @param current
+	 * @param nextTile
+	 * @return
+	 */
+	public Dir getDirection(Tile current, Tile nextTile) {
+		
+		Point currentPoint = gameMap.getTilePos(current);
+		Point nextPoint = gameMap.getTilePos(nextTile);
+		
+		int currentX = currentPoint.getX();
+		int currentY = currentPoint.getY();
+		int nextX = nextPoint.getX();
+		int nextY = nextPoint.getY();
+		
+		if (nextX > currentX) {
+			return Dir.RIGHT;
+		}
+		if (nextX < currentX) {
+			return Dir.LEFT;
+		}
+		if (nextY > currentY) {
+			return Dir.UP;
+		}
+		return Dir.DOWN;
 	}
 	
 

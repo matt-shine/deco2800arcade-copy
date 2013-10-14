@@ -19,8 +19,6 @@ public class Enemy extends Ship {
 		
 		this.player = player;
 		position = pos;
-		setWidth(getWidth()/3);
-		setHeight(getHeight()/3);
 	}
 	
 	public void onRender(float delta) {

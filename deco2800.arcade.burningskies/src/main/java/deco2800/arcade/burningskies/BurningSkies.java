@@ -27,7 +27,7 @@ public class BurningSkies extends GameClient {
 	public static final int SCREENWIDTH = 1280;
 	public static final int SCREENHEIGHT = 720;
 	
-	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	//private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
 	private Music nowPlaying;
 	private boolean isPaused = false;

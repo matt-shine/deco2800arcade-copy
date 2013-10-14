@@ -1,49 +1,7 @@
-loginSkin.png
+cursor.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-CenturyGothic20Bold
-  rotate: false
-  xy: 853, 598
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-SFAtarianSystem24
-  rotate: false
-  xy: 853, 340
-  size: 256, 256
-  orig: 256, 256
-  offset: 0, 0
-  index: -1
-textbox
-  rotate: false
-  xy: 853, 78
-  size: 400, 47
-  orig: 400, 47
-  offset: 0, 0
-  index: -1
-Manteka18
-  rotate: false
-  xy: 1470, 185
-  size: 256, 128
-  orig: 256, 128
-  offset: 0, 0
-  index: -1
-CenturyGothic18Bold
-  rotate: false
-  xy: 1728, 185
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
-Manteka16
-  rotate: false
-  xy: 1858, 185
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: -1
 cursor
   rotate: false
   xy: 1, 1
@@ -59,7 +17,7 @@ selection
   offset: 0, 0
   index: -1
 
-textField.png
+../textField.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -68,6 +26,18 @@ textField
   xy: 1, 1
   size: 2130, 2167
   orig: 2130, 2167
+  offset: 0, 0
+  index: -1
+
+textbox.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+textbox
+  rotate: false
+  xy: 1, 1
+  size: 400, 47
+  orig: 400, 47
   offset: 0, 0
   index: -1
 

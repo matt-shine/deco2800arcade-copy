@@ -20,7 +20,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 public class GameStore implements Screen, StoreScreen {
-    private Skin skin = new Skin(Gdx.files.internal("storeSkin.json"));
+    private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
     private Stage stage = new Stage();
     private static Game featured = new Game();;
     
@@ -29,29 +29,34 @@ public class GameStore implements Screen, StoreScreen {
     private TextButton icon;
     
     //private ArcadeUI arcadeUI;
-
+    
+    /**
+     * @author Addison Gourluck
+     * @param ui
+     */
     public GameStore(ArcadeUI ui) {
     	//arcadeUI = ui;
-		skin.add("background", new Texture("main_bg.png"));
-		// new Texture(Gdx.files.internal("data/tiles.png"));
+		skin.add("background", new Texture(Gdx.files.internal("store/main_bg.png")));
 		Table bg = new Table();
 		bg.setFillParent(true);
 		bg.setBackground(skin.getDrawable("background"));
 		stage.addActor(bg);
+		
+		final TextField searchField = new TextField("", skin);
+		final TextButton searchButton = new TextButton("Search", skin);
+		final TextButton libraryButton = new TextButton("Library", skin);
+		final TextButton transactionsButton = new TextButton("Transactions", skin);
+		final TextButton wishlistButton = new TextButton("Wishlist", skin);
+		final TextButton reviewsButton = new TextButton("Reviews", skin);
+		
+		populateGamesBox(stage, skin);
 		
 		icon = new TextButton("", skin, "icon");
 		icon.setSize(158, 158);
 		icon.setPosition(226, 453);
 		stage.addActor(icon);
 		
-		final TextField searchField = new TextField("", skin);
-		final TextButton searchButton = new TextButton("Search", skin, "green");
-		final TextButton libraryButton = new TextButton("Library", skin, "green");
-		final TextButton transactionsButton = new TextButton("Transactions", skin, "green");
-		final TextButton wishlistButton = new TextButton("Wishlist", skin, "green");
-		final TextButton reviewsButton = new TextButton("Reviews", skin, "green");
-		
-		description = new Label("de fault", skin);
+		description = new Label("Loading...", skin);
 		description.setWrap(true);
 		description.setSize(400, 120);
 		description.setPosition(350, 480);
@@ -65,8 +70,6 @@ public class GameStore implements Screen, StoreScreen {
 		searchButton.setSize(140, 40);
 		searchButton.setPosition(1025, 480);
 		stage.addActor(searchButton);
-		
-		populateGamesBox(stage, skin, this);
 		
 		libraryButton.setSize(360, 95);
 		libraryButton.setPosition(834, 354.5f);
@@ -118,13 +121,29 @@ public class GameStore implements Screen, StoreScreen {
 		});
 	}
 	
-	private void populateGamesBox(Stage stage, Skin skin, Screen parent) {
-		int number = (int)Math.floor(16 * Math.random());
-		featured.id = ArcadeSystem.getGamesList().toArray()[number%16] + "";
+    /**
+     * This places 8 icons into the a grid pattern in the display section in
+     * the centre of the main store page. The icons are randomly assigned a
+     * game to represent, and have a listener which will change the "featured"
+     * section.
+     * 
+     * @author Addison Gourluck
+     * @param stage
+     * @param skin
+     */
+	private void populateGamesBox(Stage stage, Skin skin) {
+		int number = (int)Math.floor(ArcadeSystem.getGamesList().size() * Math.random());
+		// ^Used to find the first of the 8 games to be displayed.
+		featured = (Game)ArcadeSystem.getArcadeGames().toArray()
+				[number%ArcadeSystem.getGamesList().size()];
 		for (int i = 0; i < 8; ++i) {
-			final TextButton gameGrid = new TextButton("\n\n\n\n\n" + ArcadeSystem.getGamesList().toArray()[(number+i)%16], skin);
+			final TextButton gameGrid = new TextButton("\n\n\n\n\n" +
+					ArcadeSystem.getGamesList().toArray()
+					[(number+i)%ArcadeSystem.getGamesList().size()], skin, "icon");
 			gameGrid.setSize(160, 169);
-			gameGrid.setName("" + ArcadeSystem.getGamesList().toArray()[(number+i)%16]);
+			gameGrid.setName("" + ArcadeSystem.getGamesList().toArray()
+					[(number+i)%ArcadeSystem.getGamesList().size()]);
+			// ^This sets the games 
 			if (i < 4) {
 				gameGrid.setPosition(112 + (i%4) * 172, 255);
 			} else {
@@ -132,14 +151,28 @@ public class GameStore implements Screen, StoreScreen {
 			}
 			gameGrid.addListener(new ChangeListener() {
 				public void changed (ChangeEvent event, Actor actor) {
-					setSelected(gameGrid.getName());
-					fade--; // Will trigger textFade and iconFade in render.
-					System.out.println(featured.id);
+					if (fade == 70) {
+						setSelected(gameGrid.getName());
+						fade--; // Will trigger textFade and iconFade in render.
+					}
+					//System.out.println(featured.id);//#debug
 				}
 			});
 			stage.addActor(gameGrid);
 		}
 	}
+	
+	/**
+	 * Checks every frame if 'fade' has changed. If so, then we get action!
+	 * Text will fade out, then in, in the first 30 and last 30 frames.
+	 * The icon will fade/slide out in the middle 80 frames (40, then 40).
+	 * While 'description' is hidden, it will change to the new text.
+	 * 'fade' is then reset.
+	 * 
+	 * @author Addison Gourluck
+	 * @param fade < 70
+	 * @param fade > -70
+	 */
 	private void textFade() {
 		if (fade <= -70) {
 			fade = 70;
@@ -150,10 +183,13 @@ public class GameStore implements Screen, StoreScreen {
 			fade--;
 			iconFade();
 			if (fade == 0) {
-				if(featured.getDescription() == null || featured.getDescription().equals("N/A")) {
-		            description.setText(featured.name + "\nNo Description Available");
+				if(featured.getDescription() == null
+						|| featured.getDescription().equals("N/A")) {
+		            description.setText(featured.name
+		            		+ "\nNo Description Available");
 		        } else {
-		        	description.setText(featured.name + "\n" + featured.getDescription());
+		        	description.setText(featured.name
+		        			+ "\n" + featured.getDescription());
 		        }
 			}
 			description.setColor(1, 1, 1, 0);
@@ -163,6 +199,15 @@ public class GameStore implements Screen, StoreScreen {
 		}
 	}
 	
+	/**
+	 * The other half of the fading on the 'featured' box. This is called when
+	 * the text first becomes invisible. It will fade the icon out, and slide
+	 * it out at the same sign, then do the reverse. Also has a small pause.
+	 * 
+	 * @author Addison Gourluck
+	 * @param fade < 40
+	 * @param fade > -40
+	 */
 	private void iconFade() {
 		if (fade > -1) {
 			icon.setX(icon.getX() + 3); // move right

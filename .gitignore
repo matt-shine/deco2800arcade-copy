@@ -34,12 +34,12 @@ bin
 
 # Release
 release
+*.bin
 
 # Gradle settings and build files
 .gradle/
 
-*.log.1
 
-*.1
+# Ignore all .log files anywhere
+**/*.log
 
-*.log

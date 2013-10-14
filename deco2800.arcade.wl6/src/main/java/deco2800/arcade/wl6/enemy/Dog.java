@@ -2,12 +2,13 @@ package deco2800.arcade.wl6.enemy;
 
 public class Dog extends Enemy {
 
+    private int STARTING_HEALTH = 1;
+
     public Dog(int uid) {
         super(uid);
 
         state = STATES.PATH;
-        maxHealth = 1;
-        health = maxHealth;
+        setHealth(STARTING_HEALTH);
         pathSpeed = 1500;
         chaseSpeed = 3000;
         pain = false;

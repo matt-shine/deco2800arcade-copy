@@ -8,6 +8,7 @@ public abstract class Ship extends Entity {
 	protected int health;	
 	protected Vector2 velocity;
 	protected Vector2 position;
+	private float flash = 0f;
 	
 	/**
 	 * Basic constructor for a ship.
@@ -34,11 +35,23 @@ public abstract class Ship extends Entity {
         super.act(delta);
 	}
 	
+	@Override
+	public boolean remove() {
+		if(getStage() != null) {
+			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2));
+		}
+		return super.remove();
+	}
+	
 	/**
-	 * Modifies the current health of the ship accordingly.
-	 * May be negative or positive value.
+	 * Damages the ship
 	 */
-	public void setHealth(int healthchange) {
+	public void damage(int healthchange) {
+		this.health -= healthchange;
+		flash = 1f;
+	}
+
+	public void heal(int healthchange) {
 		this.health += healthchange;
 	}
 	
@@ -52,11 +65,15 @@ public abstract class Ship extends Entity {
 	
 	/**
 	 * What to do every frame. Perhaps bounds checking etc.
-	 * You really want to override this.
+	 * Make sure to super.onRender so you implement damage flashes
 	 */
 	void onRender(float delta) {
-		position.add( velocity.x * delta, velocity.y * delta );
-		setX(position.x);
-		setY(position.y);
+		if(flash > 0) {
+			setColor(1, 1-flash, 1-flash, 1);
+			flash -= delta*25;
+			if(flash <= 0) {
+				setColor(1, 1, 1, 1);
+			}
+		}
 	}
 }

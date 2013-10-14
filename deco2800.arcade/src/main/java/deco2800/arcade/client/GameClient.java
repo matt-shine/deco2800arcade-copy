@@ -25,6 +25,8 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	protected Player player;
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
+	private int multiplayerOn = 0;
+	private int multiplayerSession;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
@@ -87,6 +89,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
         achievementClient.setNetworkClient(client);
         playerClient.setNetworkClient(client);
 	imageClient.setNetworkClient(client);
+    }
+    
+    public void setThisNetworkClient(NetworkClient client) {
+    	this.networkClient = client;
+    }
+    
+    public void setPlayer(Player player) {
+    	this.player = player;
     }
 
     public void incrementAchievement(final String achievementID) {
@@ -235,5 +245,33 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		return player;
 	}
 	
+	public void setMultiplayerOn() {
+		multiplayerOn = 1;
+	}
+	
+	public void setMultiplayerOff() {
+		multiplayerOn = 0;
+	}
+	
+	public boolean multiplayerMode() {
+		if (multiplayerOn == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void setMultiSession(int session) {
+		multiplayerSession = session;
+		startMultiplayerGame();
+	}
+	
+	public void startMultiplayerGame() {
+	}
+	
+	public void updateGameState(Object update) {
+	}
 	
 }
+	
+

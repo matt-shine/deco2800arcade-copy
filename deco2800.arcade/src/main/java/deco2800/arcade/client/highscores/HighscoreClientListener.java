@@ -1,7 +1,6 @@
 package deco2800.arcade.client.highscores;
 
 import deco2800.arcade.client.network.listener.NetworkListener;
-import deco2800.arcade.protocol.credit.CreditBalanceResponse;
 import deco2800.arcade.protocol.highscore.*;
 import com.esotericsoftware.kryonet.Connection;
 

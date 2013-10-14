@@ -1,41 +1,97 @@
 package deco2800.arcade.mixmaze.domain;
 
-import deco2800.arcade.mixmaze.domain.PlayerModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import deco2800.arcade.mixmaze.domain.PlayerModel;
+
 /**
- * WallModel represents a wall on a tile, which can be either active or 
+ * WallModel represents a wall on a tile, which can be either active or
  * inactive.
  */
-class WallModel {
+public class WallModel {
 
-	/** Adjacent tiles */
-	private final List<TileModel> tiles;
+	/**
+	 * The tile of the left side of the wall if
+	 * you were facing from end-to-end.
+	 */
+	private TileModel leftTile;
+
+	/**
+	 * The tile of the right side of the wall if
+	 * you were facing from end-to-end.
+	 */
+	private TileModel rightTile;
 
 	/** Whether this wall is built or not */
 	private boolean isBuilt;
-	
+
 	/** The player who builds this wall, <code>null</code> if not built */
 	private PlayerModel builder;
 
+	/** Observers to this tile */
+	private List<WallModelObserver> observers =
+			new ArrayList<WallModelObserver>();
+
 	/**
-	 * Constructor
+	 * Adds an observer to this wall.
+	 *
+	 * @param observer	the observer
 	 */
-	WallModel() {
-		tiles = new ArrayList<TileModel>();
+	public void addObserver(WallModelObserver observer) {
+		observers.add(observer);
 	}
 
 	/**
-	 * Adds a tile adjacent to this wall.
-	 * 
-	 * @param tile	the tile to add
+	 * Updates all observers on the wall status.
 	 */
-	void addTile(TileModel tile) {
-		if (tiles.contains(tile))
-			throw new IllegalStateException("The tile is already present.");
-		else
-			tiles.add(tile);
+	private void updateWall() {
+		for (WallModelObserver o : observers) {
+			o.updateWall(isBuilt);
+		}
+	}
+
+	/**
+	 * Gets the tile on the left side of the wall.
+	 *
+	 * @return <code>null</code> if there is
+	 * no tile on the left side, otherwise the associated
+	 * <code>TileModel</code>
+	 */
+	public TileModel getLeftTile() {
+		return leftTile;
+	}
+
+	/**
+	 * Specifies the tile on the left side of the wall if
+	 * you were facing from end-to-end.
+	 *
+	 * @param left	tile on the left side of the wall
+	 */
+	public void setLeftTile(TileModel left) {
+		leftTile = left;
+	}
+
+	/**
+	 * Gets the tile on the right side of
+	 * the wall.
+	 *
+	 * @return <code>null</code> if there is
+	 * no tile on the right side, otherwise the associated
+	 * <code>TileModel</code>
+	 */
+	public TileModel getRightTile() {
+		return rightTile;
+	}
+
+	/**
+	 * Specifies the tile on the right side of the wall if
+	 * you were facing from end-to-end.
+	 *
+	 * @param right	tile on the right side of the wall
+	 */
+	public void setRightTile(TileModel right) {
+		rightTile = right;
 	}
 
 	/**
@@ -59,48 +115,55 @@ class WallModel {
 
 	/**
 	 * Builds this wall.
-	 * 
+	 *
 	 * @param player	the builder
 	 */
 	void build(PlayerModel player) {
-		if (player == null)
+		if (player == null) {
 			throw new IllegalArgumentException("player cannot be null");
-		if (isBuilt)
+		}
+		if (isBuilt) {
 			throw new IllegalStateException("this wall is already built");
-		
+		}
+
 		isBuilt = true;
 		builder = player;
-		
-		for (TileModel t : tiles) {
-			t.validateBox(player);
-			t.updateWall(this, true);
-		}
+		updateWall();
+		updateTiles(player);
 	}
 
 	/**
 	 * Destroys this wall.
-	 * 
+	 *
 	 * @param player	the player who destroys this wall
 	 */
 	public void destroy(PlayerModel player) {
-		if (!isBuilt)
+		if (!isBuilt) {
 			throw new IllegalStateException("wall not built");
+		}
 
 		isBuilt = false;
 		builder = null;
-		
-		for (TileModel t : tiles) {
-			t.validateBox(player);
-			t.updateWall(this, false);
+		updateWall();
+		updateTiles(player);
+	}
+
+	/**
+	 * Validates the box status of both associated tiles.
+	 *
+	 * @param player	the player that builds/destroys this wall
+	 */
+	private void updateTiles(PlayerModel player) {
+		if (leftTile != null) {
+			leftTile.validateBox(player);
+		}
+		if (rightTile != null) {
+			rightTile.validateBox(player);
 		}
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder str = new StringBuilder("<WallModel: ");
-		
-		str.append((isBuilt) ? "built" : "not built");
-		str.append(">");
-		return str.toString();
+		return String.format("<WallModel: %s>", ((isBuilt) ? "built" : "not built"));
 	}
 }

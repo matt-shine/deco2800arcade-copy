@@ -192,7 +192,11 @@ public class PlayerModel {
 	void setY(int y) {
 		this.y = y;
 	}
-
+	
+	public boolean isAtLocation(int x, int y) {
+		return this.x == x && this.y == y;
+	}
+	
 	/**
 	 * Checks if this player can move. The player can only make a move 
 	 * after 300 milliseconds since the previous move.
@@ -316,7 +320,9 @@ public class PlayerModel {
 	/**
 	 * Uses the active action of this player.
 	 *
-	 * @param tile the tile where this player is
+	 * @param tile	the tile where this player is
+	 * @return <code>true</code> if this player used the action,
+	 * <code>false</code> otherwise.
 	 */
 	boolean useAction(TileModel tile) {
 		/* XXX: too many indentation levels */
@@ -337,6 +343,7 @@ public class PlayerModel {
 					wall.destroy(this);
 					updatePick(false);
 					used = true;
+					switchAction();
 				}
 			} else if(action == Action.USE_TNT && tnt != null) {
 				tnt = null;
@@ -348,6 +355,7 @@ public class PlayerModel {
 				}
 				updateTnt(false);
 				used = true;
+				switchAction();
 			}
 			lastAction = used ? System.currentTimeMillis() : lastAction;
 			return used;

@@ -1,8 +1,5 @@
 package deco2800.arcade.mixmaze.domain;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Brick model represents a collection of bricks.
  */
@@ -15,12 +12,10 @@ class BrickModel extends ItemModel {
 	 * Thrown when an operation results in an invalid amount of bricks.
 	 */
 	private static final IllegalArgumentException NUM_OUT_OF_RANGE =
-			new IllegalArgumentException("number must result in a amount greater than 0 and less then maxBricks.");
+			new IllegalArgumentException("number must result in an amount no less than 0 and no more than max bricks");
 
 	/** The maximum number of bricks in every stack */
 	private static int maxBricks = DEFAULT_MAX_BRICKS;
-
-	final Logger logger = LoggerFactory.getLogger(BrickModel.class);
 
 	/** The amount of bricks in this stack */
 	private int amount;
@@ -134,10 +129,11 @@ class BrickModel extends ItemModel {
 	void mergeBricks(BrickModel brick) {
 		int pickup;
 
-		if (this.amount +  brick.getAmount() <= maxBricks)
+		if (this.amount +  brick.getAmount() <= maxBricks) {
 			pickup = brick.getAmount();
-		else
+		} else {
 			pickup = maxBricks - this.amount;
+		}
 
 		brick.removeAmount(pickup);
 		this.amount += pickup;

@@ -1,5 +1,6 @@
 package deco2800.arcade.wl6.enemy;
 
+import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
 
 public class Enemy extends Mob {
@@ -42,6 +43,20 @@ public class Enemy extends Mob {
         super(uid);
     }
 
+    @Override
+    public void tick(GameModel game) {
+        super.tick(game);
+        detectPlayer();
+    }
+
+    public STATES getState() {
+        return state;
+    }
+
+    public void setState(STATES state) {
+        this.state = state;
+    }
+
     /**
      * Tells the enemy to change states
      * @param oldState state the enemy is currently in
@@ -50,7 +65,7 @@ public class Enemy extends Mob {
      *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
      */
     public void changeStates(STATES oldState, STATES newState, int delay) {
-
+        setState(newState);
     }
 
     // follow patrol path (walk from waypoint to waypoint)
@@ -59,7 +74,11 @@ public class Enemy extends Mob {
     }
 
     // detect player
-
+    public void detectPlayer() {
+        // check to see if the enemy can see the player
+        canSee(game.getPlayer());
+        // check to see if the enemy can hear the player fighting
+    }
 
     // chase player
 
@@ -74,7 +93,9 @@ public class Enemy extends Mob {
 
 
     // die
+    public void die() {
 
+    }
 
     /**
      * Damage Calculation

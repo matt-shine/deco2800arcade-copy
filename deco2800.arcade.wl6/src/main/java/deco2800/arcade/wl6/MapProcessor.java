@@ -107,7 +107,6 @@ public class MapProcessor {
         }
         else if (d.enemytype != EnemyType.NOT_AN_ENEMY)
         {
-            //TODO spawn an enemy
             switch (d.enemytype) {
                 case NOT_AN_ENEMY:
                     break;

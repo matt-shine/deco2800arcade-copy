@@ -64,8 +64,13 @@ public class WL6Meta {
                 id >= WL6Meta.DOOR_ELEVATOR && id < WL6Meta.DOOR_ELEVATOR + 2;
     }
 
+    public static boolean hasSecretDoorAt(int x, int y, Level map) {
+        int id = map.getDoodadAt(x, y);
+        return id >= WL6Meta.SECRET_DOOR;
+    }
+
     /**
-     * Check to see if there is a solid block at the specified map coordinates.
+     * Check to see if there is a solid (non-transparent) block at the specified map coordinates.
      * This counts normal doors, but not secret doors.
      * @param x x map coordinate
      * @param y y map coordinate
@@ -101,10 +106,18 @@ public class WL6Meta {
         return surrounded == 4;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param map
+     * @return
+     */
     public static boolean hasSolidBlockAt(int x, int y, Level map) {
         if (x >= 64 || x <= 0 || y >= 64 || y <=0) {
             return true;
         }
+        // TODO Change this so to check actually spawned doodads rather than all potential ones
         if (WL6Meta.block(map.getTerrainAt(x, y)).solid ||
                 WL6Meta.doodad(map.getDoodadAt(x, y)).solid) {
             return true;

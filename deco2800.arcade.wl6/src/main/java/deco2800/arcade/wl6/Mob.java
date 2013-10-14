@@ -38,11 +38,12 @@ public class Mob extends Doodad {
         setHealth(getHealth() - damage);
     }
 
-    // need to round the float either up or down depending on what direction we are approaching from
-    // ie if vel is +ve, round down, if vel is -ve round up.
+    // FIXME: this currently stops secret doors from being opened
     public void setPos(Vector2 pos, Vector2 vel) {
-        if (WL6Meta.hasSolidBlockAt((int) (pos.x + vel.x), (int) (pos.y + vel.y), game.getMap())) {
-            // New position has a solid block or doodad.  Don't move position.
+        int checkX = vel.x > 0 ? (int) (pos.x + vel.x + 0.1) : (int) (pos.x + vel.y - 0.1);
+        int checkY = vel.y > 0 ? (int) (pos.y + vel.y + 0.1) : (int) (pos.y + vel.y - 0.1);
+
+        if (WL6Meta.hasSolidBlockAt(checkX, checkY, game.getMap())) {
             setPos(pos);
         }
         else {
@@ -58,8 +59,11 @@ public class Mob extends Doodad {
         this.angle = angle;
     }
 
-    public void canSee(Doodad d) {
-        //TODO
+    public boolean canSee(Doodad d) {
+        Vector2 selfPos = this.getPos();
+        Vector2 targetPos = d.getPos();
+
+        return false;
     }
 
     public Vector2 getVel() {

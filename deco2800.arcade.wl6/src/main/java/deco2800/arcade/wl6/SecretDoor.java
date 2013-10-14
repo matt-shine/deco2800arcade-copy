@@ -17,8 +17,6 @@ public class SecretDoor extends Doodad {
         super(uid);
     }
 
-
-
     @Override
     public void tick(GameModel g) {
 
@@ -44,7 +42,6 @@ public class SecretDoor extends Doodad {
 
     }
 
-
     /**
      * returns true if there is a tile that blocks the secret door
      * @param x
@@ -55,8 +52,6 @@ public class SecretDoor extends Doodad {
     private boolean hasTileAt(int x, int y, Level m) {
         return WL6Meta.block(m.getTerrainAt(x, y)).texture != null;
     }
-
-
 
     @Override
     public void draw(Renderer r) {
@@ -90,9 +85,4 @@ public class SecretDoor extends Doodad {
         r.drawBasicSprite(getTextureName(), x + offset.x - 0.5f, y + offset.y, 90);
 
     }
-
-
-
-
-
 }

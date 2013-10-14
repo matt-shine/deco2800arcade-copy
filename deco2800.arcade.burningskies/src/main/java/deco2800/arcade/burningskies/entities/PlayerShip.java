@@ -1,6 +1,7 @@
 package deco2800.arcade.burningskies.entities;
 
 import deco2800.arcade.burningskies.*;
+import deco2800.arcade.burningskies.entities.bullets.BombPattern;
 import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
 import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
@@ -53,6 +54,7 @@ public class PlayerShip extends Ship {
 	public void damage(int damage) {
 		super.damage(damage);
 		if(!isAlive()) {
+			new BombPattern(this, screen).fire(0, getCenterX(), getCenterY());
 			screen.killPlayer();
 		}
 	}

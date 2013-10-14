@@ -49,22 +49,8 @@ public class ReplayStorage {
 			throw new DatabaseException("Unable to create table", e);
 		}finally{
 			//free resources
-			try{
-				if ( sessionsState != null ){
-					sessionsState.close();
-				}
-				if ( eventsState != null ){
-					eventsState.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Something went awry.", e);
-			}
+			cleanUp(connection, sessionsState);
+			cleanUp(connection, eventsState);
 		}	
 	}
 	
@@ -90,20 +76,8 @@ public class ReplayStorage {
 			throw new DatabaseException("Unable to update.", e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Something went awry.", e);
-			}			
-		}
+			cleanUp(connection,state);		
+		}	
 	}
 	
 	/** 
@@ -134,20 +108,9 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to retrieve sessions.", e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Something went awry.", e);
-			}			
-		}
+			cleanUp(connection,state);		
+		}	
+		
 		return gamesList;	
 	}
 	
@@ -192,20 +155,9 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to retrieve sessions.", e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Something went awry.", e);
-			}			
-		}
+			cleanUp(connection,state);		
+		}	
+		
 		return sessionsList;	
 	}
 	
@@ -241,20 +193,8 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to retrieve events.", e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Something went awry.", e);
-			}
-		}
+			cleanUp(connection,state);		
+		}	
 		
 		return eventList;	
 	}	
@@ -302,20 +242,9 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to insert into " + sessions, e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Insertion went awry.", e);
-			}			
-		}
+			cleanUp(connection,state);		
+		}	
+		
 		return sessionID;
 	}
 	
@@ -348,20 +277,8 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to insert into " + events, e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Insertion went awry.", e);
-			}			
-		}
+			cleanUp(connection,state);		
+		}	
 	}
 	
 	/**
@@ -392,20 +309,8 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to remove.", e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Removal went awry.", e);
-			}			
-		}
+			cleanUp(connection,state);		
+		}	
 	}
 	
 	/**
@@ -450,22 +355,29 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to retrieve.", e);
 		}finally{
 			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Insertion went awry.", e);
-			}			
+			cleanUp(connection,state);		
 		}	
 		return events;
 	}	
+	
+	
+	private void cleanUp (Connection connection, Statement state) throws DatabaseException {
+		
+		try{
+			if ( state != null ){
+				state.close();
+			}
+			if ( connection != null ){
+				connection.close();
+			}
+			
+		}catch ( Exception e ){
+			//Shouldn't occur
+			e.printStackTrace();
+			throw new DatabaseException("Insertion went awry.", e);
+		}	
+		
+	}
 }
 	
 	

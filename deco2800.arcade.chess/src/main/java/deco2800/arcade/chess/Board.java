@@ -1552,7 +1552,7 @@ public class Board {
 	/**
 	 * Initialises all pieces on the board
 	 */
-	private void initialisePieces() {
+	public void initialisePieces() {
 		// Initialise white pieces
 		whitePawn1 = new Pawn(false, 1);
 		whitePawn2 = new Pawn(false, 2);
@@ -1642,34 +1642,6 @@ public class Board {
 	/**
 	 * Basic test that moves pieces for to compare to actual board
 	 */
-	private void micksTest() {
-		int[] a = { 2, 2 };
-		int[] b = { 4, 7 };
-		int[] c = { 2, 1 };
-		int[] d = { 5, 7 };
-		int[] e = { 2, 0 };
-		int[] f = { 4, 4 };
-		int[] g = { 3, 7 };
-		int[] h = { 5, 4 };
-		int[] i = { 0, 2 };
-		int[] j = { 2, 1 };
-
-		movePiece(whiteKnight1, a);
-		movePiece(blackPawn8, b);
-		movePiece(whitePawn2, c);
-		movePiece(blackRook2, d);
-		movePiece(whiteBishop1, e);
-		movePiece(blackPawn5, f);
-		movePiece(whitePawn8, g);
-		movePiece(blackQueen, h);
-		movePiece(whiteKing, i);
-		movePiece(blackQueen, j);
-		
-
-		System.out.println(Board_State);
-		System.out.println(blackGraveyard);
-		System.out.println(whiteGraveyard);
-
-	}
+	
 
 }

@@ -10,7 +10,9 @@ import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
 public class AddFriend {
-	
+	/** this is a comment
+	 * 
+	 */
 	private UserScreen userView;
 	private AddFriendScreen friendView;
 	private Model theModel;

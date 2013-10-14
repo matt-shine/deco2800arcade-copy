@@ -1,5 +1,7 @@
 package deco2800.arcade.burningskies.screen;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -9,8 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.entities.Enemy;
+import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.GameMap;
 import deco2800.arcade.burningskies.entities.PlayerShip;
+import deco2800.arcade.burningskies.entities.PowerUp;
+import deco2800.arcade.burningskies.entities.DemoPowerUp;
+import deco2800.arcade.burningskies.entities.bullets.Bullet;
+import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
+import deco2800.arcade.client.ArcadeInputMux;
 
 
 public class PlayScreen implements Screen
@@ -19,9 +28,16 @@ public class PlayScreen implements Screen
 	
 	private OrthographicCamera camera;
 	private Stage stage;
+	private PlayerInputProcessor processor;
+	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
 	
 	private PlayerShip player;
-	private GameMap map;
+	public GameMap map;
+	
+	private SpawnList sp;
+	
 	
 	public PlayScreen( BurningSkies game){
 		this.game = game;
@@ -40,30 +56,120 @@ public class PlayScreen implements Screen
     	
         game.playSong("level1");
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/Jet1.png"));
-    	player = new PlayerShip(100, shiptext, new Vector2(400, 100));
+    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
+    	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
     	map = new GameMap("fixme");
-    	stage.addActor(player);
+
     	stage.addActor(map);
+    	stage.addActor(player);
+    	
+    	processor = new PlayerInputProcessor(player);
+    	ArcadeInputMux.getInstance().addProcessor(processor);
+    	
+    	// Test code
+    	PowerUp test = new DemoPowerUp(this);
+    	addPowerup(test);
+    	
+    	sp = new SpawnList(this);
+    			
+    	// Add an enemy
+    	addRandomEnemy();
     }
     
     @Override
     public void hide() {
     	//TODO: Make sure this resets properly
+    	ArcadeInputMux.getInstance().removeProcessor(processor);
     	stage.dispose();
-    } 
+    }
     
     @Override
     public void render(float delta)
-    {    	
+    {
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+    	
     	if(!game.isPaused()) {
+
+    		sp.checkList(delta);
+    		
+    		//System.out.println("Num of enemies: " + enemies.size() );
+    		
     		stage.act(delta);
+    		for(int i=0; i<bullets.size(); i++) {
+    			Bullet b = bullets.get(i);
+        		if(outOfBounds(b)) {
+        			removeEntity(b);
+        			i--;
+        			continue;
+        		}
+        		//deal with collisions
+    			if(b.getAffinity() == Affinity.PLAYER) {
+    				for(int j=0; j<enemies.size(); j++) {
+    					Enemy e = enemies.get(j);
+    					if(outOfBounds(e)) {
+    						removeEntity(e);
+    						j--;
+    						continue;
+    						
+    					}
+    					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
+    						e.damage(b.getDamage());
+    						if(!e.isAlive()) {
+    							removeEntity(e);
+    						}
+    						removeEntity(b);
+//    	        			i--; TODO this was causing trouble after making the SpawnList class, may need this later
+    						continue;
+    					}
+    					
+    				}
+    			} else if(b.hasCollided(player)) {
+    				//TODO: DAMAGE THE PLAYER YOU NUGGET
+    				player.damage(b.getDamage());
+    				//TODO: Player death/respawn checker.
+    				//if (!player.isAlive()) { }
+    				removeEntity(b);
+        			i--;
+    				continue;
+    			}
+    		}
+			for(int i=0; i<powerups.size(); i++) {
+				PowerUp p = powerups.get(i);
+				if(p.hasCollidedUnscaled(player)) {
+					//TODO: POWERUPS WOO
+					p.powerOn(player);
+					removeEntity(p);
+					i--;
+					continue;
+				}
+			}
+			// checks if the enemy is out of screen, if so remove it
+			for(int i=0; i<enemies.size(); i++) {
+				Enemy e = enemies.get(i);
+				if(outOfBounds(e)) {
+					removeEntity(e);
+					i--;
+					continue;
+					
+				}
+			}	
     	}
+    	
+    	
     	// Draws the map
     	stage.draw();
+    }
+    
+    private boolean outOfBounds(Entity e) {
+    	// are we in bounds? if not, goodbye
+		float left = e.getX() + e.getWidth();
+		float right = e.getY() + e.getHeight();
+		// 10 pixels in case they're flying off the sides
+		if(left < -10 || right < -10 || e.getX() > stage.getWidth() + 10 || e.getY() > stage.getHeight() + 10) {
+			return true;
+		} 
+		return false;
     }
     
     @Override
@@ -80,5 +186,52 @@ public class PlayScreen implements Screen
     
     @Override
     public void dispose() {
+    }
+    
+    public void addBullet(Bullet bullet) {
+    	stage.addActor(bullet);
+    	bullets.add(bullet);
+    }
+    
+    public void addEnemy(Enemy enemy) {
+    	stage.addActor(enemy);
+    	enemies.add(enemy);
+    }
+    
+    private void addRandomEnemy() {
+    	final Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
+    	float startY = 700f;
+    	int direction;
+    	
+    	if((int) Math.floor(Math.random() * 2) == 1 )
+    		direction = 1;
+    	else
+    		direction = -1;
+    	
+    	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
+    	float vY = (float) Math.ceil(Math.random() * -150) - 50;
+//    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
+    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, new Vector2(vX,vY)) );    	
+    }
+    
+    public void addPowerup(PowerUp p) {
+    	stage.addActor(p);
+    	powerups.add(p);
+    }
+    
+    public void removeEntity(Bullet b) {
+    	b.remove();
+		bullets.remove(b);
+    }
+    
+    public void removeEntity(Enemy e) {
+    	e.remove();
+    	enemies.remove(e);
+    }
+    
+    public void removeEntity(PowerUp p) {
+    	p.remove();
+    	powerups.remove(p);
     }
 }

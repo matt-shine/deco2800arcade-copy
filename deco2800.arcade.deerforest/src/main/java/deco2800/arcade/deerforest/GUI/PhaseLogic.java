@@ -1,10 +1,6 @@
 package deco2800.arcade.deerforest.GUI;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
-
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.Field;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
@@ -13,8 +9,18 @@ import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles all the phase logic (mostly comprised of the battle logic)
+ */
 public class PhaseLogic {
 
+    /**
+     * Given current selection, takes in a point and tries to do battle between
+     * a sprite at that location
+     *
+     * @param x the x point to battle against
+     * @param y the y point to battle against
+     */
     public static void battlePhaseSelection(int x, int y) {
 
         ExtendedSprite currentSelection = DeerForestSingletonGetter.getDeerForest().inputProcessor.getCurrentSelection();
@@ -56,6 +62,14 @@ public class PhaseLogic {
         }
     }
 
+    /**
+     * Battles two sprites against each other, subtracting the attacking cards
+     * attack from the others health. Removes any card that dies due to the battling
+     *
+     * @param player the player who initiated the battling
+     * @param s1 the attacking card
+     * @param s2 the defending card
+     */
     public static void doBattle(int player, ExtendedSprite s1, ExtendedSprite s2) {
 
         AbstractMonster m1 = (AbstractMonster) s1.getCard();
@@ -80,7 +94,6 @@ public class PhaseLogic {
             view.removeSprite(s2);
             view.getArena().removeSprite(s2);
 
-            //TODO make this not be a hack way of fixing movement problem
             //if field is empty in view, remove all model stuff
             String area;
             if(defendingPlayer==1) {
@@ -102,6 +115,13 @@ public class PhaseLogic {
         s1.setHasAttacked(true);
     }
 
+    /**
+     * Does a direct battle against the opposing player, subtracting the cards
+     * attack from their lifepoints
+     *
+     * @param player the player who is attacking
+     * @param s1 the card that is attacking
+     */
     public static void doDirectBattle(int player, ExtendedSprite s1) {
 
         System.out.println("Direct attack Player: " + player + " s1: " + s1);

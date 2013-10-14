@@ -1,13 +1,13 @@
-/*
- * GameScreen
- */
 package deco2800.arcade.mixmaze;
 
-import deco2800.arcade.mixmaze.domain.MixMazeModel;
-import deco2800.arcade.mixmaze.domain.MixMazeModel.MixMazeDifficulty;
+import deco2800.arcade.mixmaze.domain.IMixMazeModel;
 import deco2800.arcade.mixmaze.domain.PlayerModel;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,54 +20,54 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Timer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static deco2800.arcade.mixmaze.TileViewModel.*;
-import static com.badlogic.gdx.graphics.GL20.*;
 
 /**
  * GameScreen draws all elements in a game session.
  */
-final class GameScreen implements Screen {
-	private static final String LOG = GameScreen.class.getSimpleName();
+abstract class GameScreen implements Screen {
 
-	private final MixMaze game;
-	private final Stage stage;
-	private final ShapeRenderer renderer;
+	final Logger logger = LoggerFactory.getLogger(GameScreen.class);
+
+	protected final Stage stage;
+	protected final ShapeRenderer renderer;
+
+	protected Group gameArea;
+	protected PlayerViewModel p1;
+	protected PlayerViewModel p2;
+	protected IMixMazeModel model;
+	protected Table tileTable;
+	protected int countdown;
+	protected Label timerLabel;
+	protected Table endGameTable;
+	protected TextButton backMenu;
+	protected Label resultLabel;
+	protected SidePanel left;
+	protected SidePanel right;
+	protected ScoreBar[] scorebar;
+
+	protected final MixMaze game;
 	private final Skin skin;
-
-	private Label timerLabel;
-	private int elapsed;
-	private Table tileTable;
-	private Group gameArea;
-	private Table endGameTable;
-	private PlayerViewModel p1;
-	private PlayerViewModel p2;
-	private Label[] userLabels;
-	private Label[] scoreLabels;
-	private MixMazeModel model;
-	private TextButton backMenu;
-	private Label resultLabel;
-	private SidePanel left;
-	private SidePanel right;
+	
+	protected  int[] p1Controls = {Keys.G,Keys.H,Keys.W,Keys.A,Keys.S,Keys.D};
+	protected int[] p2Controls = {Keys.O,Keys.P,Keys.UP,Keys.LEFT,Keys.DOWN,Keys.RIGHT};
 
 	/**
 	 * Constructor
+	 *
+	 * @param game	the MixMaze game
 	 */
-	GameScreen(final MixMaze game) {
+	GameScreen(MixMaze game) {
 		this.game = game;
 		this.skin = game.skin;
 
-		/*
-		 * This should be the only ShapeRender used in this
-		 * stage.
-		 */
-		renderer = new ShapeRenderer();
-
-		stage = new Stage();
-
+		/* This should be the only ShapeRender used on this stage. */
+		this.renderer = new ShapeRenderer();
+		this.stage = new Stage();
 		setupLayout();
-
 	}
 
 	/**
@@ -76,19 +76,18 @@ final class GameScreen implements Screen {
 	private void setupLayout() {
 		Stack gameBoard = new Stack();
 		Table root = new Table();
+		Table middle = new Table();
+		root.debug();
 
 		left = new SidePanel();
 		right = new SidePanel();
 
-		userLabels = new Label[2];
-		scoreLabels = new Label[2];
+		scorebar = new ScoreBar[2];
+		scorebar[0] = new ScoreBar(true);
+		scorebar[1] = new ScoreBar(false);
 
-		userLabels[0] = new Label("Player 1", skin);
-		userLabels[1] = new Label("Player 2", skin);
-		scoreLabels[0] = new Label("Player 1 box: 0", skin);
-		scoreLabels[1] = new Label("Player 2 box: 0", skin);
-
-		timerLabel = new Label("timer", skin);
+		timerLabel = new Label("timer", skin, "timer-white");
+		timerLabel.setFontScale(2f);
 		tileTable = new Table();
 		gameArea = new Group();
 		endGameTable = new Table();
@@ -100,21 +99,18 @@ final class GameScreen implements Screen {
 		endGameTable.row();
 		endGameTable.add(backMenu);
 
+		middle.add(scorebar[0]).left();
+		middle.add(timerLabel);
+		middle.add(scorebar[1]).right();
+		middle.row();
+		middle.add(gameBoard).colspan(3);
+
 		root.setFillParent(true);
 		root.debug();
 		stage.addActor(root);
 
-		/* header */
-		root.add(userLabels[0]).width(320);
-		root.add(scoreLabels[0]);
-		root.add(timerLabel).expandX();
-		root.add(scoreLabels[1]);
-		root.add(userLabels[1]).width(320);
-		root.row();
-
-		/* body */
 		root.add(left);
-		root.add(gameBoard).colspan(3);
+		root.add(middle);
 		root.add(right);
 
 		/*
@@ -128,73 +124,24 @@ final class GameScreen implements Screen {
 		gameBoard.add(tileTable);
 		gameBoard.add(gameArea);
 		gameBoard.add(endGameTable);
-	}
-
-	private void setupGameBoard() {
-		int tileSize = 640 / model.getBoardSize();
-
-		for (int j = 0; j < model.getBoardSize(); j++) {
-			for (int i = 0; i < model.getBoardSize(); i++) {
-				tileTable.add(new TileViewModel(
-						model.getBoardTile(i, j),
-						renderer,
-						tileSize))
-						.size(tileSize, tileSize);
-			}
-
-			/*
-			 * Luran:
-			 * Not sure if an extra row() after boardHeight
-			 * will cause problem, but it is easy to check.
-			 */
-			if (j < model.getBoardSize())
-				tileTable.row();
-		}
-
-		// Might rcommend not passing the entire model to the PlayerViewModel, just to keep good seperation
-		p1 = new PlayerViewModel(model.getPlayer1(), model, tileSize,
-				1);
-		p2 = new PlayerViewModel(model.getPlayer2(), model, tileSize,
-				2);
-		gameArea.addActor(p1);
-		gameArea.addActor(p2);
-
-	}
-
-	@Override
-	public void render(float delta) {
-		Gdx.gl20.glClearColor(0.13f, 0.13f, 0.13f, 1);
-		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		/*
-		 * TODO: these status updates should be encapsulated
-		 * in a method or a class.
+		 * This listener should be added only once.
 		 */
-		left.update(p1);
-		right.update(p2);
+		gameArea.addListener(new InputListener() {
+			public boolean keyDown(InputEvent event, int keycode) {
+				for (Actor child : gameArea.getChildren()) {
+					if (child.notify(event, false))
+						return true;
+				}
 
-		userLabels[0].setText("player 1: " + p1.getActionName());
-		userLabels[1].setText("player 2: " + p2.getActionName());
-		scoreLabels[0].setText("boxes: " + p1.getScore());
-		scoreLabels[1].setText("boxes: " + p2.getScore());
-
-		stage.act(delta);
-		stage.draw();
-		Table.drawDebug(stage);
-
-		if (endGameTable.isVisible() && backMenu.isChecked()) {
-			backMenu.toggle();
-			endGameTable.setVisible(false);
-			tileTable.clear();
-			gameArea.clear();
-			game.setScreen(game.menuScreen);
-		}
+				return false;
+			}
+		});
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		Gdx.app.debug(LOG, "resizing");
-
 		stage.setViewport(1280, 720, true);
 		stage.getCamera().translate(-stage.getGutterWidth(),
 				-stage.getGutterHeight(), 0);
@@ -207,63 +154,14 @@ final class GameScreen implements Screen {
 	}
 
 	@Override
-	public void hide() {
-		Gdx.app.debug(LOG, "hiding");
-		Gdx.input.setInputProcessor(null);
+	public void show() {
+		newGame();
 	}
 
 	@Override
-	public void show() {
-		Gdx.app.debug(LOG, "showing");
-
-		/* FIXME: game size and time limit should be passed from UI */
-		model = new MixMazeModel(5, MixMazeDifficulty.Beginner, 60);
-		setupGameBoard();
-
-		/* set timer */
-		elapsed = 0;
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				elapsed += 1;
-				timerLabel.setText("Timer: "
-						 + elapsed);
-			}
-		}, 1, 1, model.getGameMaxTime());
-		Timer.schedule(new Timer.Task() {
-			public void run() {
-				PlayerModel winner;
-
-				stage.setKeyboardFocus(null);
-				winner = model.endGame();
-				if (winner == null) {
-					/* draw */
-					resultLabel.setText("Draw");
-				} else {
-					/* winner */
-					resultLabel.setText("Player "
-							+ winner.getPlayerID()
-							+ " win");
-				}
-				endGameTable.setVisible(true);
-			}
-		}, model.getGameMaxTime());
-
-		/* start game */
-		Gdx.input.setInputProcessor(stage);
-		gameArea.addListener(new InputListener() {
-			public boolean keyDown(InputEvent event, int keycode) {
-				Actor actor = event.getListenerActor();
-
-				for (Actor child : gameArea.getChildren()) {
-					if (child.notify(event, false))
-						return true;
-				}
-
-				return false;
-			}
-		});
-		stage.setKeyboardFocus(gameArea);
-		model.startGame();
+	public void hide() {
+		Gdx.input.setInputProcessor(null);
+		logger.debug("hided");
 	}
 
 	@Override
@@ -274,58 +172,92 @@ final class GameScreen implements Screen {
 	public void resume() {
 	}
 
-	/*
-	 * Draw the player item status on side panel.
+	/**
+	 * Starts a new game session.
 	 */
-	private class SidePanel extends Table {
+	protected abstract void newGame();
+
+	/**
+	 * Sets up the game board.
+	 */
+	protected abstract void setupGameBoard();
+
+	/**
+	 * Sets up the timers for a game session.
+	 * 
+	 * @param timeLimit	the time limit of this session
+	 */
+	protected abstract void setupTimer(int timeLimit);
+
+	/**
+	 * SidePanel displays the player status.
+	 */
+	protected class SidePanel extends Table {
+
+		private Label nameLabel;
 		private Image[] frameImages;
 		private Image[] brickImages;
 		private Image pickImage;
+		private Image emptyPickImage;
 		private Image tntImage;
+		private Image emptyTntImage;
 
 		SidePanel() {
 			Table brickTable = new Table();
 			Stack[] itemStacks = new Stack[3];
 
+			nameLabel = new Label("", skin);
 			frameImages = new Image[3];
 			brickImages = new Image[10];
 			pickImage = new Image(PICK_REGION);
+			emptyPickImage = new Image(EMPTY_PICK_REGION);
 			tntImage = new Image(TNT_REGION);
+			emptyTntImage = new Image(EMPTY_TNT_REGION);
+			pickImage = new Image(PICK_REGION);
 
 			/* layout */
+			this.add(nameLabel).height(48);
+			this.row();
+
 			for (int i = 0; i < 3; i++) {
 				itemStacks[i] = new Stack();
-				this.add(itemStacks[i]);
+				this.add(itemStacks[i]).size(210, 210);
 				if (i < 2)
 					this.row();
 
-				frameImages[i] = new Image(UNKNOWN_REGION);
+				frameImages[i] = new Image(SELECTION_REGION);
 				itemStacks[i].add(frameImages[i]);
 			}
 
 			itemStacks[0].add(brickTable);
+			itemStacks[1].add(emptyPickImage);
 			itemStacks[1].add(pickImage);
+			itemStacks[2].add(emptyTntImage);
 			itemStacks[2].add(tntImage);
 
 			/* bricks */
 			for (int i = 0; i < 10; i++) {
 				brickImages[i] = new Image(BRICK_REGION);
-				brickTable.add(brickImages[i]).size(64, 64);
+				brickTable.add(brickImages[i]).size(48, 48);
 				if ((i + 1) % 4 == 0)
 					brickTable.row();
 			}
 		}
 
-		void update(PlayerViewModel p) {
-			for (int i = 0, n = p.getBrickAmount(); i < 10; i++)
-				brickImages[i].setVisible(i < n);
-			pickImage.setVisible(p.hasPick());
-			tntImage.setVisible(p.hasTNT());
+		void setPlayerName(String name) {
+			nameLabel.setText(name);
+		}
 
+		void updateBrick(int amount) {
+			for (int i = 0; i < 10; i++)
+				brickImages[i].setVisible(i < amount);
+		}
+
+		void updateAction(PlayerModel.Action action) {
 			for (int i = 0; i < 3; i++)
 				frameImages[i].setVisible(false);
 
-			switch (p.getAction()) {
+			switch (action) {
 			case USE_BRICK:
 				frameImages[0].setVisible(true);
 				break;
@@ -336,6 +268,74 @@ final class GameScreen implements Screen {
 				frameImages[2].setVisible(true);
 				break;
 			}
+		}
+
+		void updatePick(boolean hasPick) {
+			pickImage.setVisible(hasPick);
+			emptyPickImage.setVisible(!hasPick);
+		}
+
+		void updateTnt(boolean hasTnt) {
+			tntImage.setVisible(hasTnt);
+			emptyTntImage.setVisible(!hasTnt);
+		}
+
+	}
+
+	/**
+	 * ScoreBar displays the player score.
+	 */
+	protected class ScoreBar extends Table {
+
+		private Scorebox box;
+		private Label scoreLabel;
+
+		ScoreBar(boolean alignLeft) {
+			box = new Scorebox(WHITE_REGION);
+			scoreLabel = new Label("0", skin);
+
+			if (alignLeft) {
+				this.add(box).size(60, 60).pad(4);
+				this.add(scoreLabel);
+			} else {
+				this.add(scoreLabel);
+				this.add(box).size(60, 60).pad(4);
+			}
+		}
+
+		void setBoxColor(Color c) {
+			box.setColor(c);
+		}
+
+		void update(int score) {
+			scoreLabel.setText(String.valueOf(score));
+		}
+
+		private class Scorebox extends Image {
+
+			Scorebox(TextureRegion region) {
+				super(region);
+			}
+
+			public void draw(SpriteBatch batch, float parentAlpha) {
+				Color old = batch.getColor();
+
+				batch.setColor(this.getColor());
+				super.draw(batch, parentAlpha);
+				batch.setColor(old);
+			}
+
+		};
+
+	}
+	
+	 class Settings{		 
+		public Settings(int[] innerP1Controls,int[] innerP2Controls){
+			p1Controls = innerP1Controls;
+			p2Controls = innerP2Controls;
+		}
+		public Settings(){
+			
 		}
 	}
 }

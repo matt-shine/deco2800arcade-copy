@@ -30,7 +30,7 @@ import java.util.*;
  */
 @ArcadeGame(id="Connect4")
 public class Connect4 extends GameClient {
-	
+	//FIXME some big methods in this class
 	private OrthographicCamera camera;
 	
 	private Disc cursorDisc;
@@ -54,7 +54,7 @@ public class Connect4 extends GameClient {
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
-	private final int AI_DELAY = 500;
+	private final int AI_DELAY = 100;
 	
 	private final int KEY_LEFT = 0;
 	private final int KEY_RIGHT = 1;
@@ -78,7 +78,7 @@ public class Connect4 extends GameClient {
 	int nextComputerCol = -1;
 
 	/**
-	 * Basic constructor for the Checkers game
+	 * Basic constructor for the Connect4 game
 	 * @param player The name of the player
 	 * @param networkClient The network client for sending/receiving messages to/from the server
 	 */
@@ -91,13 +91,13 @@ public class Connect4 extends GameClient {
 		keyCodes[KEY_RIGHT] = 0; //Right Key
 		keyCodes[KEY_ENTER] = 0; //Enter Key
 		
-        this.networkClient = networkClient; //this is a bit of a hack  
+        this.networkClient = networkClient; //this is a bit of a hack 
         
         replayHandler = new ReplayHandler( this.networkClient );
 		replayListener = new ReplayListener(replayHandler);
 		
 		this.networkClient.addListener(replayListener);
-
+		
 		replayHandler.addReplayEventListener(initReplayEventListener());
 		
 		//Declare an event to be registered in the factory, we can pass arrays.
@@ -110,9 +110,10 @@ public class Connect4 extends GameClient {
 						                    new String[]{"col"}
 						                       );
 		
-		replayHandler.startSession( 1, "replayers" );
+		replayHandler.requestSessionList(getGame().id);
+		
+		replayHandler.startSession( getGame().id, players[ 0 ] );
 	}
-	
 
 	private ReplayEventListener initReplayEventListener() {
 	    return new ReplayEventListener() {
@@ -485,7 +486,11 @@ public class Connect4 extends GameClient {
 			   			//Replay button has been pressed
 			   			reset();
 				    	gameState = GameState.REPLAY;
-				    	replayHandler.startPlayback();
+				    	//replayHandler.startPlayback();
+				    	//replayHandler.requestEventsForSession(replayHandler.getSessionId());
+				    	//replayHandler.endSession(replayHandler.getSessionId());
+				    	replayHandler.playbackLastSession();
+				    	
 				    	isReplaying = true;
 				    	buttons.hide();
 			   		}
@@ -510,12 +515,14 @@ public class Connect4 extends GameClient {
 		if (player == 0){
 	    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
 	    		gameState = GameState.GAMEOVER;
+		    	replayHandler.endCurrentSession();
 	    		endGame( 0 );
 	    	}
 	    	//renderCursorDisc(1);
 	    } else {
 	    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
 	    		gameState = GameState.GAMEOVER;
+		    	replayHandler.endCurrentSession();
 	    		endGame( 1 );
 	    	}
 	    	//renderCursorDisc(0);

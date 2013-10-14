@@ -1,10 +1,5 @@
 package deco2800.arcade.deerforest.models.cards;
 
-import java.util.List;
-
-import deco2800.arcade.deerforest.models.effects.Attack;
-import deco2800.arcade.deerforest.models.effects.MonsterEffect;
-
 public abstract class AbstractMonster extends AbstractCard {
 
 	private String type;
@@ -46,6 +41,19 @@ public abstract class AbstractMonster extends AbstractCard {
     public void resetStats() {
         this.attack = this.originalAttack;
         this.currentHealth = this.health;
+    }
+
+    public void buffAttack(int amount) {
+        this.attack = this.attack + amount;
+    }
+
+    public void buffHealth(int amount) {
+        this.currentHealth = this.currentHealth + amount;
+    }
+
+    public void buff(int amount) {
+        this.currentHealth = this.currentHealth + amount;
+        this.attack = this.attack + amount;
     }
 
 	//get weakness

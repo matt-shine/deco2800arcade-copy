@@ -8,7 +8,7 @@ import deco2800.arcade.protocol.UserRequest;
  *
  */
 public class EndSessionRequest extends UserRequest {
-
+	
     public Integer sessionId;
-
+    
 }

@@ -7,20 +7,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 import deco2800.arcade.deerforest.models.gameControl.GameSystem;
 
-//This class functions as sort of a higher level game system controller
-//As well as (most importantly) being an instance of a game (according to Gdx)
-//to run
+/**
+ * This class functions as sort of a higher level game system controller
+ * As well as (most importantly) being an instance of a game (according to Gdx)
+ * to run
+ */
 public class MainGame extends Game {
 
 	SpriteBatch batch;
@@ -28,7 +28,6 @@ public class MainGame extends Game {
 	final private GameSystem model;
     private Music bgLoop;
     private Sound battleSoundEffect;
-    private Sound phaseSoundEffect;
     private boolean effectsMuted;
     private boolean musicMuted;
     private final boolean muted = false;
@@ -37,7 +36,10 @@ public class MainGame extends Game {
 	public MainGame(GameSystem model) {
 		this.model = model;
 	}
-	
+
+    /**
+     * Creates the main game, setting up the sounds, game screens, model and fonts
+     */
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
@@ -60,13 +62,15 @@ public class MainGame extends Game {
             bgLoop.play();
         }
         battleSoundEffect = null;
-        phaseSoundEffect = null;
 	}
 	
 	public void render() {
         super.render();
 	}
-	
+
+    /**
+     * Dispose of all resources
+     */
 	public void dispose() {
 		batch.dispose();
 		font.dispose();
@@ -76,7 +80,10 @@ public class MainGame extends Game {
 	public GameSystem getModel() {
 		return this.model;
 	}
-	
+
+    /**
+     * Changes between player turns
+     */
 	public void changeTurns() {
 		
 		//check to see if we are on start phase already
@@ -87,12 +94,19 @@ public class MainGame extends Game {
 			model.nextPhase();
 		}
 	}
-	
+
+    /**
+     * Sets the model to go to the next phase
+     */
 	public void nextPhase() {
         playPhaseSound();
 		model.nextPhase();
 	}
-	
+
+    /**
+     * Getters
+     */
+
 	public String getPhase() {
 		return model.getPhase();
 	}
@@ -116,13 +130,26 @@ public class MainGame extends Game {
 	public CardCollection getCardCollection(int player, String area) {
 		return model.getCardCollection(player, area);
 	}
-	
+
+    /**
+     * Draws a card from given players deck and then returns it
+     * @param player the player who is drawing
+     * @return the card that was drawn
+     */
 	public AbstractCard draw(int player) {
 		return model.draw(player);
 	}
-	
+
+    /**
+     * Moves a list of cards between player locations
+     * @param player the player who owns the cards
+     * @param cards the cards to move
+     * @param oldLocation the location where the cards currently are
+     * @param newLocation the place to move the cards to
+     * @return true if the cards were moved successfully
+     */
 	public boolean moveCards(int player, List<AbstractCard> cards, String oldLocation, String newLocation) {
-		
+		//Check not null
 		if(cards == null || oldLocation == null || newLocation == null) return false;
 		
 		CardCollection srcCards = null;
@@ -160,6 +187,9 @@ public class MainGame extends Game {
 		return b;
 	}
 
+    /**
+     * toggles if the sound effects are playing or not
+     */
     public void toggleMuted() {
 
         this.effectsMuted = !effectsMuted;
@@ -172,6 +202,9 @@ public class MainGame extends Game {
         this.musicMuted = !musicMuted;
     }
 
+    /**
+     * Plays the battle sound effect
+     */
     public void playBattleSound() {
         //dispose previous sound
         if(battleSoundEffect != null) {
@@ -186,22 +219,22 @@ public class MainGame extends Game {
     }
 
     public void playPhaseSound() {
-//        //dispose previous sound
-//        if(phaseSoundEffect != null) {
-//            phaseSoundEffect.dispose();
-//        }
-//        //Play sound
-//        if(!effectsMuted) {
-//            phaseSoundEffect = Gdx.audio.newSound(new FileHandle("DeerForestAssets/PhaseChange.wav"));
-//            long id = phaseSoundEffect.play();
-//            phaseSoundEffect.setVolume(id, 1.0f);
-//        }
+
     }
 
+    /**
+     * Inflicts damage to the specified players life points
+     * @param player the player to do the damage to
+     * @param amount the amount of damage to do
+     */
     public void inflictDamage(int player, int amount) {
         model.inflictDamage(player, amount);
     }
 
+    /**
+     * Resets all the stats of the monsters in the list
+     * @param cards the monsters to reset
+     */
     private void resetMonsters(List<AbstractCard> cards) {
         for(AbstractCard c : cards) {
             if(c instanceof AbstractMonster) {
@@ -210,12 +243,20 @@ public class MainGame extends Game {
         }
     }
 
+    /**
+     * Sets the current player to player
+     * @param player
+     */
     public void setCurrentPlayer(int player) {
         if(player == 1 || player == 2) {
             this.model.setCurrentPlayer(player);
         }
     }
 
+    /**
+     * Sets the first turn to be b
+     * @param b
+     */
     public void setFirstTurn(boolean b) {
         model.setFirstTurn(b);
     }

@@ -28,15 +28,12 @@ public interface UIOverlay {
 	
 	/**
 	 * For achievements, chat messages, etc.
-	 * @param s
+	 * @param p
 	 */
 	void addPopup(PopupMessage p);
 	
 	GameClient getHost();
-	
-	
+		
 	void setHost(GameClient host);
-	
-	
 	
 }

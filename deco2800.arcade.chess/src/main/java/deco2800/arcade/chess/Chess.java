@@ -1,38 +1,76 @@
 package deco2800.arcade.chess;
 
+//import deco2800.arcade.chess.screen.HelpScreen;
+//import deco2800.arcade.chess.MenuScreen;
+import deco2800.arcade.chess.SplashScreen;
+
+import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
+import deco2800.arcade.client.UIOverlay.PopupMessage;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.listener.ReplayListener;
+import deco2800.arcade.client.replay.ReplayEventListener;
+import deco2800.arcade.client.replay.ReplayHandler;
+import deco2800.arcade.client.replay.ReplayNode;
+import deco2800.arcade.client.replay.ReplayNodeFactory;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.chess.pieces.King;
 import deco2800.arcade.chess.pieces.Piece;
 
+
 import java.awt.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
-public class Chess extends GameClient implements InputProcessor {
-
+public class Chess extends GameClient implements InputProcessor, Screen {
+	private ReplayHandler replayHandler;
+	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
-	Piece movingPiece = null;
-
+	static Piece movingPiece = null;
+	static boolean isReplaying = false;
 	// Sprite offsets
 	int horizOff = SCREENWIDTH / 2 - 256;
 	int verticOff = SCREENHEIGHT / 2 - 256;
 	int pieceHorizOff = 24;
 	int pieceVerticOff = 24;
-
+	boolean flag = true;
 	// Piece positions
 	// x-co-ords
 	int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
@@ -44,11 +82,10 @@ public class Chess extends GameClient implements InputProcessor {
 	int[] blackPawn0Pos, blackPawn1Pos, blackPawn2Pos, blackPawn3Pos,
 			blackPawn4Pos, blackPawn5Pos, blackPawn6Pos, blackPawn7Pos;
 
-	Board board;
-
+	static Board board;
+	
 	boolean players_move;
 	boolean playing;
-	Piece piece = new King(false);
 	private String[] players = new String[2]; // The names of the players: the
 												// local player is always
 												// players[0]
@@ -56,21 +93,27 @@ public class Chess extends GameClient implements InputProcessor {
 	private OrthographicCamera camera;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
-
+	
+	private static boolean recording;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
-	public static final int NUM_1 = 8;
-	public static final int NUM_2 = 9;
-	public static final int NUM_3 = 10;
-	public static final int NUM_4 = 11;
+	public static final int NUM_1 = 8, NUM_2 = 9, NUM_3 = 10, NUM_4 = 11;
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private BitmapFont font;
 
-	private String statusMessage;
-
 	private Texture chessBoard;
-
+	
+	//Stuff for menu return etc
+	private TextButton replayButton, startreplayButton, backButton, newGameButton;
+	private Stage stage;
+    private BitmapFont BmFontA, BmFontB;
+    private TextureAtlas map;
+    private Skin skin;
+    Texture splashTexture;
+	Texture splashTexture2;
+	Sprite splashSprite;
+    
 	private Sprite blackBishop1, blackBishop2, blackRook1, blackRook2,
 			blackKnight1, blackKnight2, blackKing, blackQueen, blackPawn0,
 			blackPawn1, blackPawn2, blackPawn3, blackPawn4, blackPawn5,
@@ -78,31 +121,91 @@ public class Chess extends GameClient implements InputProcessor {
 			whiteRook2, whiteKnight1, whiteKnight2, whiteKing, whiteQueen,
 			whitePawn0, whitePawn1, whitePawn2, whitePawn3, whitePawn4,
 			whitePawn5, whitePawn6, whitePawn7;
+	
+	private int loadedStyle;
+	private ArrayList<String> styles;
+	
+	//Stores the instance of the UIOverlay
+	private UIOverlay Overlay;
+	
+	//Tracks whether the game is paused
+	boolean paused = false;
+	//Tracks level of single player mode
+	boolean EasyComputerOpponent;
+	boolean HardComputerOpponent;
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
-	private NetworkClient networkClient;
+	private NetworkClient networkClient;	
+	
+	public SplashScreen splashScreen;
+	public MenuScreen menuScreen;
+	
+	private HashMap<Piece, int[]> pieceMaps = new HashMap<Piece, int[]>();
 
-	private Texture texture;
-
+	
+	
 	/**
 	 * Initialises a new game
 	 */
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
+		
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
-		this.networkClient = networkClient; // this is a bit of a hack
+		splashScreen = new SplashScreen(this);
+		menuScreen = new MenuScreen(this);
+		setScreen(splashScreen);
+		this.networkClient = networkClient;
 		players[0] = player.getUsername();
-		players[1] = "Player 2"; // TODO eventually the server may send back the
-									// opponent's actual username
-	}
+		players[1] = "Player 2";
+		//setup highscore client
+		HighscoreClient player1 = new HighscoreClient(players[0], "chess",
+				networkClient);
+		//replay stuff
+		replayHandler = new ReplayHandler( this.networkClient );
+		replayListener = new ReplayListener(replayHandler);
+		this.networkClient.addListener(replayListener);
+		
+		
+		// Set up the movePiece event to take a piece id, target_x position and target_y position
+	    	
+	    replayHandler.addReplayEventListener(initReplayEventListener());
+		ReplayNodeFactory.registerEvent("movePiece", new String[]{"start_x", "start_y", "target_x", "target_y"});
+		
+		EasyComputerOpponent = false;
+		
+		URL resource = this.getClass().getResource("/");
+		
+		String path = resource.toString().replace(".arcade/build/classes/main/", 
+				".arcade.chess/src/main/").replace("file:", "") + 
+				"resources/imgs/styles.txt";
+		
+		styles = new ArrayList<String>();
+		
+	    try {
+	    	BufferedReader br = new BufferedReader(new FileReader(path));
+	        String line = br.readLine();
 
+	        while (line != null) {
+	            styles.add(line);
+	            line = br.readLine();
+	        }
+	        br.close();
+	    } catch (FileNotFoundException e) {
+	    	System.err.println(e.getMessage());
+	    } catch (IOException e) {
+	    	System.err.println(e.getMessage());
+		}
+	    
+	    loadedStyle = 0;	    
+	}
 	@Override
 	public void create() {
 		super.create();
+		
 		// Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false);
@@ -115,38 +218,42 @@ public class Chess extends GameClient implements InputProcessor {
 
 		Texture.setEnforcePotImages(false);
 
+		//Add in correct multiplexer
 		inputMultiplexer.addProcessor(this);
-		Gdx.input.setInputProcessor(inputMultiplexer);
+		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
+		
+	
+		Overlay = this.getOverlay();
 
 		// load the images for the droplet and the bucket, 512x512 pixels each
-		chessBoard = new Texture(Gdx.files.classpath("imgs/chessboard.png"));
+		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
 
 		// Pieces
 		blackBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black B.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black B.png")));
 		blackRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black R.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black R.png")));
 		blackKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black N.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black N.png")));
 		blackKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black K.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black K.png")));
 		blackQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black Q.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black Q.png")));
 		blackPawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/Black P.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black P.png")));
 
 		whiteBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White B.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White B.png")));
 		whiteRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White R.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White R.png")));
 		whiteKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White N.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White N.png")));
 		whiteKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White K.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White K.png")));
 		whiteQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White Q.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White Q.png")));
 		whitePawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/try2/White P.png")));
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White P.png")));
 
 		whiteRook2 = whiteRook1;
 		whiteBishop2 = whiteBishop1;
@@ -169,17 +276,79 @@ public class Chess extends GameClient implements InputProcessor {
 		blackPawn5 = blackPawn0;
 		blackPawn6 = blackPawn0;
 		blackPawn7 = blackPawn0;
-
+		
+		this.getOverlay().setListeners(new Screen() {
+			@Override
+			public void hide() {
+			}
+		
+			@Override
+			public void show() {
+			}
+			@Override
+			public void pause() {
+				int a=0;
+			}
+			@Override
+			public void render(float arg0) {
+			}
+			@Override
+			public void resize(int arg0, int arg1) {}
+			@Override
+			public void resume() {}
+			@Override
+			public void dispose() {}
+		});
+		drawButton();
 	}
+	private static ReplayEventListener initReplayEventListener()
+	{
+	    return new ReplayEventListener() {
+	        public void replayEventReceived( String eType, ReplayNode eData ) {
+	        	System.out.println( "Got event!" );
+	        	
+	            //Built in event types
+	            if ( eType.equals( "node_pushed" ) ) {
+	                System.out.println( eType );
+	                System.out.println( eData );
+	            }
+	            if ( eType.equals( "event_pushed" ) ) {
+	                System.out.println( eType );
+	            }
+	            if ( eType.equals( "replay_reset" ) ) {
+	                System.out.println( "replay reset" );
+	            }
+	            if ( eType.equals( "playback_complete" ) ) {
+	                System.out.println( "playback finished" );
+	                isReplaying = false;
+	            }
 
-	@Override
-	public void dispose() {
-		super.dispose();
-	}
+	            //Custom events
+	        
+	            if ( eType.equals( "movePiece" ) ) {
+	            	int startx = eData.getItemForString( "start_x" ).intVal();
+	            	int starty = eData.getItemForString( "start_y" ).intVal();
+	            	System.out.println( "Move from: " + startx + "," + starty ); 
+	            	for ( Piece piece : board.findActivePieces() ) {
+	            		if ( board.findPiece( piece )[ 0 ] == startx && board.findPiece( piece )[ 1 ] == starty ) {
+	            			int [] movement = {eData.getItemForString( "target_x" ).intVal(),
+	    	            			eData.getItemForString( "target_y" ).intVal()};
 
-	@Override
-	public void pause() {
-		super.pause();
+	    	                board.movePiece(
+	    	                		piece,
+	    	                		movement);
+	    	                
+	    	                break;
+	            		}
+	            	}                
+	            }
+	    
+	            if ( eType.equals( "playback_complete" ) ) {
+	                System.out.println( "playback finished" );
+
+	            }
+	        }
+	    }; 
 	}
 
 	/**
@@ -187,72 +356,36 @@ public class Chess extends GameClient implements InputProcessor {
 	 */
 	@Override
 	public void render() {
-		// Pieces
-
-		// White background
-		Gdx.gl.glClearColor(255, 255, 255, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		
 		// tell the camera to update its matrices.
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
-
-		batch.begin();
-
-		// Board
-		batch.draw(chessBoard, horizOff, verticOff);
-
-		// monkey balls
-
-		// black pieces
-		batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
-		batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
-		batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
-		batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
-		batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
-		batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
-		batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
-		batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
-
-		// whitepieces
-		batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
-		batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
-		batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
-		batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
-		batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
-		batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
-		batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
-		batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
-
-		// pawns white
-		batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
-		batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
-		batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
-		batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
-		batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
-		batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
-		batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
-		batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
-		// pawns black
-		batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
-		batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
-		batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
-		batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
-		batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
-		batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
-		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
-		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
-
-		batch.end();
+	    drawPieces();
+		stage.draw();
+		
+		if(moving) {
+			showPossibleMoves(movingPiece);
+		}
+			
+		if(isReplaying){
+			movePieceGraphic();
+			replayHandler.runLoop();
+		}
 
 		super.render();
-
+		
 	}
+	public void reset(){
+		board = new Board();
+		movePieceGraphic();
+		drawButton();
+	}
+
 
 	@Override
 	public void resize(int arg0, int arg1) {
-		super.resize(arg0, arg1);
+		//super.resize(arg0, arg1);
 	}
 
 	@Override
@@ -263,8 +396,25 @@ public class Chess extends GameClient implements InputProcessor {
 	/**
 	 * Ends the game
 	 */
-	private void finishGame() {
-
+	private void finishGame(boolean loser) {
+		System.err.println("GAME OVER");
+		//loser was black i.e. not this player, increment achievement
+		//if (loser == true) {
+			//this.incrementAchievement("chess.winGame");
+		//}
+		
+	
+		//reset board
+		board = new Board();
+		movePieceGraphic();
+		drawButton();
+		//go back to menuscreen
+		//setScreen(menuScreen);
+		//move pieces into starting positions
+		
+		
+		
+		return;
 	}
 
 	/**
@@ -287,18 +437,34 @@ public class Chess extends GameClient implements InputProcessor {
 	public void paint(Graphics g) {
 
 	}
+	public void startReplay(int num){
+		replayHandler.requestEventsForSession(num);
+		replayHandler.startPlayback();
+    	isReplaying = true;
+	}
 
 	@Override
 	public boolean keyDown(int arg0) {
-
-		if (arg0 == NUM_2) {
-			colorChange("blue");
-		} else if (arg0 == NUM_3) {
-			colorChange("brown");
-		} else if (arg0 == NUM_1) {
-			create();
-			render();
+		if(arg0 == Keys.CONTROL_LEFT) {
+			if(loadedStyle == styles.size()-1) {
+				loadedStyle = 0;
+			} else {
+				loadedStyle++;
+			}
+			
+			setPiecePics();
+			drawPieces();
 		}
+		
+		if(arg0 == Keys.T) {
+			paused = !paused;
+			onPause();
+		}
+		
+		if(arg0 == Keys.G) {
+			createPopup("WORKING");
+		}
+
 		return true;
 	}
 
@@ -328,33 +494,97 @@ public class Chess extends GameClient implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		if (!moving) {
-			movingPiece = checkSquare(x, y);
-			try {
-				if (board.isNullPiece(movingPiece)) {
-					return false;
+		
+		if(!paused) {
+			if (!moving) {
+				movingPiece = checkSquare(x, y);
+				try {
+					if (board.isNullPiece(movingPiece)) {
+						return false;
+					}
+					if (movingPiece.getTeam() == board.whoseTurn()) {
+						moving = true;
+						showPossibleMoves(movingPiece);
+						return true;
+					}
+				} catch (NullPointerException e) {
+					System.err.println("No valid square selected");
 				}
-				if (movingPiece.getTeam() == board.whoseTurn()) {
-					moving = true;
+				return false;
+			} else {
+				int[] newPos = determineSquare(x, y);
+				int[] prevPos = board.findPiece( movingPiece );
+				if (board.movePiece(movingPiece, newPos)) {
+					if(recording){
+					replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
+							"movePiece", 
+							prevPos[0],
+							prevPos[1],
+							newPos[0], 
+							newPos[1]));
+					}
+					movePieceGraphic();
+					
+					
+					// Push the move that was just performed
+					moving = false;
+					//if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						if (!board.whoseTurn()) {
+							//player1.logLoss(); <- this is not working
+						} else {
+							//player1.logWin(); <- this is not working
+						}
+						if(recording){
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
+								"movePiece", 
+								prevPos[0],
+								prevPos[1],
+								newPos[0], 
+								newPos[1]));
+						this.finishGame(board.whoseTurn());
+						}
+					}
+					/* If the easy computer opponent is playing, and black teams turn
+					*  (computer controlled team)
+					*/
+					if(EasyComputerOpponent && board.whoseTurn()) {
+						board.moveAIPieceEasy();
+						if(recording){
+						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
+								"movePiece", 
+								prevPos[0],
+								prevPos[1],
+								newPos[0], 
+								newPos[1]));
+						}
+						movePieceGraphic();
+						
+					}
+					//if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						
+						if (!board.whoseTurn()) {
+							//player1.logLoss(); <- this is not working
+						} else {
+							//player1.logWin(); <- this is not working
+						}
+						this.finishGame(board.whoseTurn());
+					}
 					return true;
 				}
-			} catch (NullPointerException e) {
-				System.err.println("No valid square selected");
-			}
-			return false;
-		} else {
-			int[] newPos = determineSquare(x, y);
-			if (board.movePiece(movingPiece, newPos)) {
-				movePieceGraphic();
+				board.checkForCheckmate(board.whoseTurn());
+				
+				movingPiece = board.nullPiece;
 				moving = false;
-				return true;
+				return false;
+				
 			}
-			movingPiece = board.nullPiece;
-			moving = false;
-			return false;
 		}
+		return true;
 
 	}
+	
 
 	@Override
 	public boolean touchDragged(int arg0, int arg1, int arg2) {
@@ -378,7 +608,7 @@ public class Chess extends GameClient implements InputProcessor {
 	 *            Y co-ordinate of mouse click
 	 * @return Piece on the square that was clicked on
 	 */
-	private Piece checkSquare(int x, int y) {
+	Piece checkSquare(int x, int y) {
 
 		int[] square = determineSquare(x, y);
 		Piece onSquare;
@@ -392,7 +622,7 @@ public class Chess extends GameClient implements InputProcessor {
 		return onSquare;
 	}
 
-	private int[] determineSquare(int x, int y) {
+	int[] determineSquare(int x, int y) {
 		int xSquare = -1;
 		int ySquare = -1;
 
@@ -445,6 +675,24 @@ public class Chess extends GameClient implements InputProcessor {
 
 		int[] returnValue = { xSquare, ySquare };
 		return returnValue;
+	}
+	
+	private void showPossibleMoves(Piece piece) {
+		
+		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
+		Sprite allowedSquare = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/spot.png")));
+		List<Sprite> neededPics = new ArrayList<Sprite>();
+		
+		for(int i=0; i<possibleMoves.size(); i++) {
+			neededPics.add(allowedSquare);
+			int xcoord = pieceHorizOff + horizOff + (59) * possibleMoves.get(i)[1];
+			int ycoord = pieceVerticOff + verticOff + (59) * possibleMoves.get(i)[0];
+			batch.begin();
+			batch.draw(neededPics.get(i), xcoord, ycoord);
+			batch.end();
+		}
+		
 	}
 
 	/**
@@ -525,7 +773,7 @@ public class Chess extends GameClient implements InputProcessor {
 	 * Moves all the pieces to their correct places on the board
 	 */
 	void movePieceGraphic() {
-
+		
 		for (FixedSizeList<Piece> row : board.Board_State) {
 			for (Piece piece : row) {
 				if (piece.equals(board.whiteRook1)) {
@@ -832,196 +1080,259 @@ public class Chess extends GameClient implements InputProcessor {
 
 	}
 
-	public void colorChange(String color) {
-		if (color == "blue") {
-			blackBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue B.png")));
-			blackRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue R.png")));
-			blackKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue N.png")));
-			blackKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue K.png")));
-			blackQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue Q.png")));
-			blackPawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue P.png")));
-			whiteBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 B.png")));
-			whiteRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 R.png")));
-			whiteKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 N.png")));
-			whiteKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 K.png")));
-			whiteQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 Q.png")));
-			whitePawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try3/Blue2 P.png")));
-			whiteRook2 = whiteRook1;
-			whiteBishop2 = whiteBishop1;
-			whiteKnight2 = whiteKnight1;
-			blackBishop2 = blackBishop1;
-			blackKnight2 = blackKnight1;
-			blackRook2 = blackRook1;
-			whitePawn1 = whitePawn0;
-			whitePawn2 = whitePawn0;
-			whitePawn3 = whitePawn0;
-			whitePawn4 = whitePawn0;
-			whitePawn5 = whitePawn0;
-			whitePawn6 = whitePawn0;
-			whitePawn7 = whitePawn0;
-			blackPawn1 = blackPawn0;
-			blackPawn2 = blackPawn0;
-			blackPawn3 = blackPawn0;
-			blackPawn4 = blackPawn0;
-			blackPawn5 = blackPawn0;
-			blackPawn6 = blackPawn0;
-			blackPawn7 = blackPawn0;
-			chessBoard = new Texture(Gdx.files.classpath("imgs/Board_blue.png"));
-			camera.update();
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.setProjectionMatrix(camera.combined);
-			batch.begin();
-
-			// Board - blue
-			batch.draw(chessBoard, horizOff, verticOff);
-
-			// monkey balls
-
-			// black pieces - dark blue
-			batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
-			batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
-			batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
-			batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
-			batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
-			batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
-			batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
-			batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
-			// whitepieces - light blue
-			batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
-			batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
-			batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
-			batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
-			batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
-			batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
-			batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
-			batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
-			// pawns white
-			batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
-			batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
-			batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
-			batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
-			batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
-			batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
-			batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
-			batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
-			// pawns black
-			batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
-			batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
-			batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
-			batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
-			batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
-			batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
-			batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
-			batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
-			batch.end();
-		} else if (color == "brown") {
-
-			blackBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown B.png")));
-			blackRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown R.png")));
-			blackKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown N.png")));
-			blackKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown K.png")));
-			blackQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown Q.png")));
-			blackPawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Brown P.png")));
-			whiteBishop1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow B.png")));
-			whiteRook1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow R.png")));
-			whiteKnight1 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow N.png")));
-			whiteKing = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow K.png")));
-			whiteQueen = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow Q.png")));
-			whitePawn0 = new Sprite(new Texture(
-					Gdx.files.classpath("imgs/try4/Yellow P.png")));
-			whiteRook2 = whiteRook1;
-			whiteBishop2 = whiteBishop1;
-			whiteKnight2 = whiteKnight1;
-			blackBishop2 = blackBishop1;
-			blackKnight2 = blackKnight1;
-			blackRook2 = blackRook1;
-			whitePawn1 = whitePawn0;
-			whitePawn2 = whitePawn0;
-			whitePawn3 = whitePawn0;
-			whitePawn4 = whitePawn0;
-			whitePawn5 = whitePawn0;
-			whitePawn6 = whitePawn0;
-			whitePawn7 = whitePawn0;
-			blackPawn1 = blackPawn0;
-			blackPawn2 = blackPawn0;
-			blackPawn3 = blackPawn0;
-			blackPawn4 = blackPawn0;
-			blackPawn5 = blackPawn0;
-			blackPawn6 = blackPawn0;
-			blackPawn7 = blackPawn0;
-			chessBoard = new Texture(
-					Gdx.files.classpath("imgs/Board_brown.png"));
-			camera.update();
-			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.setProjectionMatrix(camera.combined);
-			batch.begin();
-
-			// Board - blue
-			batch.draw(chessBoard, horizOff, verticOff);
-
-			// monkey balls
-
-			// black pieces - dark blue
-			batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
-			batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
-			batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
-			batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
-			batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
-			batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
-			batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
-			batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
-			// whitepieces - light blue
-			batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
-			batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
-			batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
-			batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
-			batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
-			batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
-			batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
-			batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
-			// pawns white
-			batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
-			batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
-			batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
-			batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
-			batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
-			batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
-			batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
-			batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
-			// pawns black
-			batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
-			batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
-			batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
-			batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
-			batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
-			batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
-			batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
-			batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
-			batch.end();
-		}
+	private void getPieceCoords(Piece piece) {
+		
 	}
+	
+	void drawPieces() {
+		whiteRook2 = whiteRook1; whiteBishop2 = whiteBishop1; 
+		whiteKnight2 = whiteKnight1; blackBishop2 = blackBishop1;
+		blackKnight2 = blackKnight1; blackRook2 = blackRook1;
+		whitePawn1 = whitePawn0; whitePawn2 = whitePawn0;
+		whitePawn3 = whitePawn0; whitePawn4 = whitePawn0;
+		whitePawn5 = whitePawn0; whitePawn6 = whitePawn0;
+		whitePawn7 = whitePawn0; blackPawn1 = blackPawn0;
+		blackPawn2 = blackPawn0; blackPawn3 = blackPawn0;
+		blackPawn4 = blackPawn0; blackPawn5 = blackPawn0;
+		blackPawn6 = blackPawn0; blackPawn7 = blackPawn0;
+		
+		camera.update();
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
 
+		// Board - blue
+		batch.draw(chessBoard, horizOff, verticOff);
+
+		// black pieces - dark blue
+		batch.draw(blackRook1, blackRook1Pos[0], blackRook1Pos[1]);
+		batch.draw(blackKnight1, blackKnight1Pos[0], blackKnight1Pos[1]);
+		batch.draw(blackBishop1, blackBishop1Pos[0], blackBishop1Pos[1]);
+		batch.draw(blackQueen, blackQueenPos[0], blackQueenPos[1]);
+		batch.draw(blackKing, blackKingPos[0], blackKingPos[1]);
+		batch.draw(blackBishop2, blackBishop2Pos[0], blackBishop2Pos[1]);
+		batch.draw(blackKnight2, blackKnight2Pos[0], blackKnight2Pos[1]);
+		batch.draw(blackRook2, blackRook2Pos[0], blackRook2Pos[1]);
+		// whitepieces - light blue
+		batch.draw(whiteRook1, whiteRook1Pos[0], whiteRook1Pos[1]);
+		batch.draw(whiteBishop1, whiteBishop1Pos[0], whiteBishop1Pos[1]);
+		batch.draw(whiteKnight1, whiteKnight1Pos[0], whiteKnight1Pos[1]);
+		batch.draw(whiteQueen, whiteQueenPos[0], whiteQueenPos[1]);
+		batch.draw(whiteKing, whiteKingPos[0], whiteKingPos[1]);
+		batch.draw(whiteBishop2, whiteBishop2Pos[0], whiteBishop2Pos[1]);
+		batch.draw(whiteKnight2, whiteKnight2Pos[0], whiteKnight2Pos[1]);
+		batch.draw(whiteRook2, whiteRook2Pos[0], whiteRook2Pos[1]);
+		// pawns white
+		batch.draw(whitePawn0, whitePawn0Pos[0], whitePawn0Pos[1]);
+		batch.draw(whitePawn1, whitePawn1Pos[0], whitePawn1Pos[1]);
+		batch.draw(whitePawn2, whitePawn2Pos[0], whitePawn2Pos[1]);
+		batch.draw(whitePawn3, whitePawn3Pos[0], whitePawn3Pos[1]);
+		batch.draw(whitePawn4, whitePawn4Pos[0], whitePawn4Pos[1]);
+		batch.draw(whitePawn5, whitePawn5Pos[0], whitePawn5Pos[1]);
+		batch.draw(whitePawn6, whitePawn6Pos[0], whitePawn6Pos[1]);
+		batch.draw(whitePawn7, whitePawn7Pos[0], whitePawn7Pos[1]);
+		// pawns black
+		batch.draw(blackPawn0, blackPawn0Pos[0], blackPawn0Pos[1]);
+		batch.draw(blackPawn1, blackPawn1Pos[0], blackPawn1Pos[1]);
+		batch.draw(blackPawn2, blackPawn2Pos[0], blackPawn2Pos[1]);
+		batch.draw(blackPawn3, blackPawn3Pos[0], blackPawn3Pos[1]);
+		batch.draw(blackPawn4, blackPawn4Pos[0], blackPawn4Pos[1]);
+		batch.draw(blackPawn5, blackPawn5Pos[0], blackPawn5Pos[1]);
+		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
+		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
+		batch.end();
+		//Im sorry i just made an even more awfulling long code longer
+		
+	}
+	
+	private void setPiecePics() {
+		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
+		
+		blackBishop1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black B.png")));
+		blackRook1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black R.png")));
+		blackKnight1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black N.png")));
+		blackKing = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black K.png")));
+		blackQueen = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black Q.png")));
+		blackPawn0 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black P.png")));
+		whiteBishop1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White B.png")));
+		whiteRook1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White R.png")));
+		whiteKnight1 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White N.png")));
+		whiteKing = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White K.png")));
+		whiteQueen = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White Q.png")));
+		whitePawn0 = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White P.png")));
+	}
+	
+	private String[] readLines(String filename) throws IOException {
+        FileReader fileReader = new FileReader(filename);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        ArrayList<String> lines = new ArrayList<String>();
+        String line = null;
+        while ((line = bufferedReader.readLine()) != null) {
+            lines.add(line);
+        }
+        bufferedReader.close();
+        return lines.toArray(new String[lines.size()]);
+    }
+	
+	private void onPause() {
+		
+		if(paused) {
+			createPopup("Game is paused");
+		} else {
+			createPopup("Game is active");
+		}
+		
+	}
+	
+	private void createPopup(final String message) {
+		Overlay.addPopup(new UIOverlay.PopupMessage() {
+
+			@Override
+			public String getMessage() {
+				return message;
+			}
+
+		});
+	}
+	
+	@Override
+	public void hide() {
+		
+		
+	}
+	@Override
+	public void render(float arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void show() {
+		drawButton();
+		
+		
+		
+	}
+	public void drawButton(){
+		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
+		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
+		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashSprite = new Sprite(splashTexture);
+		//moves sprite to centre of screen
+		splashSprite.setX(Gdx.graphics.getWidth() / 2 - (splashSprite.getWidth() / 2));
+        splashSprite.setY(Gdx.graphics.getHeight() / 2 - (splashSprite.getHeight() / 2));
+		batch = new SpriteBatch();
+		map = new TextureAtlas("b.pack");
+        skin = new Skin();
+        skin.addRegions(map);
+        BmFontA = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"), false);
+        BmFontB = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"), false);
+        
+        int width = Chess.SCREENWIDTH;
+        int height = Chess.SCREENHEIGHT;
+        
+        stage = new Stage(width, height, true);
+	
+        ArcadeInputMux.getInstance().addProcessor(stage);
+	
+	    TextButtonStyle style = new TextButtonStyle();
+	    style.up = skin.getDrawable("buttonnormal");
+	    style.down = skin.getDrawable("buttonpressed");
+	    style.font = BmFontB;
+	    
+	    backButton = new TextButton("Quit to Menu", style);
+	    backButton.setWidth(200);
+	    backButton.setHeight(50);
+	    backButton.setX((float)(width*0.02));
+	    backButton.setY((float)(height*0.02));
+	    
+	    replayButton = new TextButton("Replay", style);
+	    replayButton .setWidth(200);
+	    replayButton .setHeight(50);
+	    replayButton .setX((float)(width*0.78));
+	    replayButton .setY((float)(height*0.68));
+	    
+	    startreplayButton = new TextButton("Start Recording", style);
+	    startreplayButton .setWidth(200);
+	    startreplayButton .setHeight(50);
+	    startreplayButton .setX((float)(width*0.78));
+	    startreplayButton .setY((float)(height*0.78));
+	    
+	   
+	    
+	    newGameButton = new TextButton("Start New Game", style);
+	    newGameButton .setWidth(200);
+	    newGameButton .setHeight(50);
+	    newGameButton .setX((float)(width*0.78));
+	    newGameButton .setY((float)(height*0.28));
+	    
+	    backButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	setScreen(menuScreen);
+            }
+	    });   
+	    replayButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	
+            if(replayHandler.getSessionId() != null){
+            	board = new Board();
+            	movePieceGraphic();
+            	drawButton();
+            	replayHandler.endSession(replayHandler.getSessionId());
+            	startReplay(replayHandler.getSessionId());
+            	recording = false;
+            	}
+            	else {
+            		System.out.println("Nothing to replay");
+            	}
+            }
+	    });    
+	    startreplayButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            	recording = true;
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	recording = true;
+            	replayHandler.startSession(1, player.getUsername());
+        		replayHandler.startRecording();
+            }
+	    });  
+	    newGameButton.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	board = new Board();
+        		movePieceGraphic();
+        		drawButton();
+            }
+	    });  
+	    stage.addActor(replayButton);
+	    stage.addActor(backButton);
+	    stage.addActor(startreplayButton);
+	    stage.addActor(newGameButton);
+	}
 }

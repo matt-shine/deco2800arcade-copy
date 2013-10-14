@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -24,10 +22,7 @@ import deco2800.arcade.model.Player;
 public class GameStore implements Screen, StoreScreen {
     private Skin skin = new Skin(Gdx.files.internal("storeSkin.json"));
     private Stage stage = new Stage();
-    private SpriteBatch batch = new SpriteBatch();
     private static Game featured = new Game();;
-
-    Sprite left = new Sprite(new Texture(Gdx.files.internal("left_glow.png")), 0, 0, 39, 31);
     
     private float fade = 1;
     private Label description;
@@ -38,8 +33,7 @@ public class GameStore implements Screen, StoreScreen {
     public GameStore(ArcadeUI ui) {
     	//arcadeUI = ui;
 		skin.add("background", new Texture("main_bg.png"));
-		skin.add("temp", new Texture("right_glow.png"));
-		
+		// new Texture(Gdx.files.internal("data/tiles.png"));
 		Table bg = new Table();
 		bg.setFillParent(true);
 		bg.setBackground(skin.getDrawable("background"));
@@ -184,11 +178,7 @@ public class GameStore implements Screen, StoreScreen {
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
 		textFade();
-		batch.begin();
-		//bgSprite.draw(batch);
-		batch.end();
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 	}

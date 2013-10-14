@@ -26,6 +26,10 @@ public class WL6Meta {
         DOWN,
         LEFT,
         RIGHT,
+        UPRIGHT,
+        UPLEFT,
+        DOWNRIGHT,
+        DOWNLEFT,
     }
 
     public static enum KEY_TYPE {
@@ -36,16 +40,24 @@ public class WL6Meta {
 
     public static float dirToAngle(DIRS d) {
         switch (d) {
-        case UP:
-            return 0;
-        case LEFT:
-            return 90;
-        case DOWN:
-            return 180;
-        case RIGHT:
-            return 270;
-        default:
-            return 0;
+            case UP:
+                return 0;
+            case LEFT:
+                return 90;
+            case DOWN:
+                return 180;
+            case RIGHT:
+                return 270;
+            case UPRIGHT:
+                return 315;
+            case UPLEFT:
+                return 45;
+            case DOWNRIGHT:
+                return 225;
+            case DOWNLEFT:
+                return 135;
+            default:
+                return 0;
         }
     }
 

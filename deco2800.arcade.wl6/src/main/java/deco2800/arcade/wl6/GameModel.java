@@ -32,6 +32,9 @@ public class GameModel {
     //All the entities
     private LinkedList<Doodad> doodads = new LinkedList<Doodad>();
 
+    //Array of the waypoints
+    private float[][] waypoints = new float[64][64];
+
     //Delta time
     private float delta = 0;
 
@@ -157,6 +160,13 @@ public class GameModel {
     public Iterator<Doodad> getDoodadIterator() {
         return this.doodads.iterator();
     }
+
+
+    public void addWaypoint(float angle, int x, int y) {
+        waypoints[x][y] = angle;
+    }
+
+
 
 
     /**

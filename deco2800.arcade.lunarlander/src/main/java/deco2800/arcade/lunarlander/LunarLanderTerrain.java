@@ -83,9 +83,7 @@ public static List<List<Integer>> createMap(){
 			pointY2 = newPointY2;
 			arrayPosition2++;	
 		}	
-		System.out.println(terrain.size());
 		for (int i = 0; i < terrain.size(); i++) {
-			System.out.println(terrain.get(i).size());
 		}
 		
 		return terrain;

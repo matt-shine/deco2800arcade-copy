@@ -76,7 +76,7 @@ public class SpawnList {
 	 */	
 	private void spawnEnemy(Object object) {
 		Vector2[] v = (Vector2[]) object;
-		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, new Vector2(v[1].x, v[1].y)) );
+		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, screen.getPlayer()) );
 	}
 
 	/* Testing purposes, but still may still use later
@@ -126,7 +126,7 @@ public class SpawnList {
 //	    	float vX = (float) (Math.ceil(Math.random() * 150) + 50) * dirX;
 //	    	float vY = (float) (Math.ceil(Math.random() * 150) + 50) * dirY;
 			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
-	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), screen, new Vector2(vX,vY)) );    	
+	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), screen, screen.getPlayer()) );    	
 	}
 	
 	private int randDirection() {
@@ -135,5 +135,4 @@ public class SpawnList {
 		else
 			return -1;
 	}
-
 }

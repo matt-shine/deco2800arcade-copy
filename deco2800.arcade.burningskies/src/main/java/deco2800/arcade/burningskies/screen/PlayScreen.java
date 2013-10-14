@@ -254,17 +254,9 @@ public class PlayScreen implements Screen
     	final Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
     	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
     	float startY = 700f;
-    	int direction;
-    	
-    	if((int) Math.floor(Math.random() * 2) == 1 )
-    		direction = 1;
-    	else
-    		direction = -1;
-    	
-    	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
-    	float vY = (float) Math.ceil(Math.random() * -150) - 50;
+
 //    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
-    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, new Vector2(vX,vY)) );    	
+    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, player) );    	
     }
     
     public void addPowerup(PowerUp p) {
@@ -290,5 +282,9 @@ public class PlayScreen implements Screen
 	public void killPlayer() {
 		player.remove();
 		respawnTimer  = 2f;
+	}
+
+	public PlayerShip getPlayer() {
+		return player;
 	}
 }

@@ -3,11 +3,9 @@ package deco2800.server;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 import deco2800.server.database.DatabaseException;
@@ -55,7 +53,15 @@ public class MatchmakerQueue {
 		ArrayList<ArrayList<Object>> map = new ArrayList<ArrayList<Object>>(queuedUsers);
 		return map;
 	}
-
+	
+	
+	/**
+	 * Returns a copy of the current server list
+	 */
+	public Map<Integer, MultiplayerServer> getServerList() {
+		Map<Integer, MultiplayerServer> map = new HashMap<Integer, MultiplayerServer>(activeServers);
+		return map;
+	}
 	/**
 	 * Returns a copy of the given games current queue.
 	 * @param gameId - the gameId of the game.
@@ -124,13 +130,21 @@ public class MatchmakerQueue {
 			player1.add(connection);
 			ArrayList<Object> player2 = queuedUsers.get(i);
 			if (goodGame(player1, player2)) {
+				int p1Rating = 0, p2Rating = 0;
 				int player1ID = (Integer)player1.get(2);
 				int player2ID = (Integer)player2.get(2);
 				Connection player1Conn = (Connection)player1.get(3);
 				Connection player2Conn = (Connection)player2.get(3);
 				String game = (String)player1.get(0);
+				try {
+					p1Rating = database.getPlayerRating(player1ID, game);
+					p2Rating = database.getPlayerRating(player2ID, game);
+				} catch (DatabaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				MultiplayerServer gameServer = new MultiplayerServer(player1ID, player2ID, player1Conn,
-						player2Conn, game, serverNumber, this);
+						player2Conn, game, serverNumber, this, p1Rating, p2Rating);
 				activeServers.put(serverNumber, gameServer);
 				queuedUsers.remove(i);
 				NewMultiSessionResponse session = new NewMultiSessionResponse();

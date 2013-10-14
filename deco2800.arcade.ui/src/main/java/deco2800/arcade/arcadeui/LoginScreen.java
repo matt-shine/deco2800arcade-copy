@@ -77,6 +77,7 @@ public class LoginScreen implements Screen {
                     // no username entered, throw error
                     errorLabel.setText("No Username Supplied");
                 }
+<<<<<<< HEAD
                 else if (usernameText.getText().toLowerCase().equals("store")) {
                     // TEMPORARY
                     arcadeUI.setScreen(arcadeUI.store);
@@ -85,6 +86,8 @@ public class LoginScreen implements Screen {
                     // TEMPORARY
                     arcadeUI.setScreen(arcadeUI.main);
                 }
+=======
+>>>>>>> origin/master
                 else if (usernameText.getText().toLowerCase().equals("multi")) {
                     // TEMPORARY
                     ArcadeSystem.login("debuguser");

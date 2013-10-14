@@ -42,9 +42,16 @@ public class ArcadeUI extends GameClient {
 
         // Initialise the different screens.
         login = new LoginScreen(this);
+
         home = new HomeScreen(this);
+<<<<<<< HEAD
         store = new GameStore(this);
         main = new FrontPage(this);
+=======
+        store = new GameStore();
+        main = new FrontPage(this);
+
+>>>>>>> origin/master
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);
         betting = new BettingWindow(this);

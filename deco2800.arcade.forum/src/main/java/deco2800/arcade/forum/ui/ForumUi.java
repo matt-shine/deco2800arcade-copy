@@ -24,11 +24,9 @@ import java.awt.event.MouseEvent;
  * @author TeamForum
  */
 public class ForumUi {
-	private static JTextField textField;
-
-	   public static void main(String[] args) {
-	      //Initialise new JFrame for forum interface
-	      JFrame f = new JFrame("Arcade Forum");
+	private JTextField textField;
+	   public ForumUi(JFrame f) {
+	      //Initialize new JFrame for forum interface
 	      f.setSize(1024, 768);
 	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
@@ -94,9 +92,7 @@ public class ForumUi {
 	      lblGeneralDiscussion.addMouseListener(new MouseAdapter(){      //Guys I struck on this for very long, need help. Click on 
 	    	  public void mouseClicked(MouseEvent e)					//GeneralDiscussion and will open the GeneralDiscussion.java
 	    	  {
-	    		  
-	    		  GeneralDiscussion s = new GeneralDiscussion();
-	    		  s.setVisible(true);
+	    		  //new GeneralDiscussion(f);
 	    	  }
 	      });
 	     

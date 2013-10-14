@@ -23,11 +23,10 @@ import java.awt.event.ActionEvent;
  * @author TeamForum
  */
 public class GeneralDiscussion {
-	private static JTextField textField;
+	private JTextField textField;
 
-	   public static void main(String[] args) {
-	      
-	      JFrame f = new JFrame("Arcade Forum");
+	   public GeneralDiscussion(JFrame f) {
+
 	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	      f.setSize(1024, 768);
 	      f.setLocation(300,200);

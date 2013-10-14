@@ -438,11 +438,8 @@ public class HighscoreDatabase {
 	 * @return A string representation of the current date and time.
 	 */
 	private static Timestamp getCurrentTimeStamp() {
-		Timestamp time = new java.sql.Timestamp(new Timestamp(0).getTime());
-		System.out.println("Current time =" + time);
-		return time;
-		
- 
+		java.util.Date date= new java.util.Date();
+		return new Timestamp(date.getTime());
 	}
 	
 	/**

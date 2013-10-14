@@ -45,20 +45,10 @@ public class Pacman extends GameClient {
 	private ShapeRenderer shaper;
 	private PacChar player;
 	private Ghost blinky;
-	//takes keyboard input
+	private String mapName; // name of level map
 
-	
-	private PacController controller;
-	private GameMap map1;
-	private ArrayList<char[]> map1Array;
-	
-	
-	private List<ArrayList<Tile>> map;
-	
-	
-	
-
-	
+	//takes keyboard input	
+	private PacController controller;	
 	private GameMap gameMap;
 	private BitmapFont scoreText; 
 
@@ -71,9 +61,23 @@ public class Pacman extends GameClient {
 	private Logger logger = new Logger("Pacman");
 	
 	
-	public Pacman(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-		// TODO is there stuff we need to happen here?
+	public Pacman(Player player1, NetworkClient networkClient) {
+		super(player1, networkClient);
+		// level map file
+		mapName = "levelMap.txt";
+		//initialise gamemap
+		gameMap = new GameMap(450, 100);
+		gameMap.createTiles(gameMap.readMap(mapName));
+		//initialise pacman
+		player = new PacChar(gameMap);
+		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
+		//initialise receiver for input- use the multiplexer from Arcade
+		// because overlay group said to in log messages
+		controller = new PacController(player, gameMap);
+
+		ArcadeInputMux.getInstance().addProcessor(controller);
+		//Initialise game state
+		gameState = GameState.READY;	
 	}	
 		
 	/**
@@ -115,33 +119,14 @@ public class Pacman extends GameClient {
 			}			
         });           
 		super.create();			
-		// level map file
-		String file = "levelMap.txt";
-
+		
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
-		shaper = new ShapeRenderer();
-		//initialise gamemap
-		gameMap = new GameMap(450, 100);
-		gameMap.createTiles(gameMap.readMap(file));
-		//initialise pacman
-		player = new PacChar(gameMap);
-		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
-		//initialise receiver for input- use the multiplexer from Arcade
-
-		// because overlay group said to in log messages
-		
-		
-
-		controller = new PacController(player, gameMap);
-
-		ArcadeInputMux.getInstance().addProcessor(controller);
-		//Initialise game state
-		gameState = GameState.READY;		
+		shaper = new ShapeRenderer();	
 	}
 	
 	/**
@@ -278,5 +263,14 @@ public class Pacman extends GameClient {
 
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
+	}
+	
+	//Getters added for testing
+	public String getMapName() {
+		return mapName;
+	}
+
+	public GameMap getGameMap() {
+		return gameMap;
 	}
 }

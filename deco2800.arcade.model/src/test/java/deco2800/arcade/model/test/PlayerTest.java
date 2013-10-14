@@ -172,12 +172,17 @@ public class PlayerTest {
 
 	@Test
 	public void hasGamesTest() {
-		Assert.assertTrue(true);
+		player1.addGame(game3);
+		player1.addGame(game4);
+		Assert.assertTrue(player1.hasGame(game3));
+		Assert.assertTrue(player1.hasGame(game4));
 	}
 
 	@Test
 	public void getFriendsTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getFriends().isEmpty());
+		Assert.assertTrue(!player2.getFriends().isEmpty());
+		Assert.assertTrue(player2.getFriends().contains(user3));
 	}
 
 	@Test
@@ -197,22 +202,38 @@ public class PlayerTest {
 
 	@Test
 	public void getFriendInvitesTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getInvites().isEmpty());
+		Assert.assertTrue(!player2.getInvites().isEmpty());
+		Assert.assertTrue(player2.getInvites().contains(user1));
 	}
 
 	@Test
 	public void addFriendInvitesTest() {
-		Assert.assertTrue(true);
+		player1.addInvite(user1);
+		player1.addInvite(user2);
+		Assert.assertTrue(player1.getInvites().size() == 2);
+		Assert.assertTrue(player1.getInvites().contains(user1));
+		Assert.assertTrue(player1.getInvites().contains(user2));
 	}
 
 	@Test
 	public void removeFriendInvitesTest() {
-		Assert.assertTrue(true);
+		player2.addInvite(user3);
+		player2.addInvite(user4);
+		Assert.assertTrue(player2.getInvites().contains(user3));
+		Assert.assertTrue(player2.getInvites().contains(user4));
+		player2.removeInvite(user3);
+		player2.removeInvite(user4);
+		Assert.assertTrue(!player2.getInvites().contains(user3));
+		Assert.assertTrue(!player2.getInvites().contains(user4));
 	}
 
 	@Test
 	public void hasFriendInvitesTest() {
-		Assert.assertTrue(true);
+		player1.addInvite(user3);
+		player1.addInvite(user4);
+		Assert.assertTrue(player1.hasInvite(user3));
+		Assert.assertTrue(player1.hasInvite(user4));
 	}
 
 	@Test

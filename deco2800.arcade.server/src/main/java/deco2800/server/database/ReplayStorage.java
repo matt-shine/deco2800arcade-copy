@@ -18,18 +18,14 @@ public class ReplayStorage {
 			sessionsState = connection.createStatement();
 			try {
 				sessionsState.execute( "DROP TABLE " + sessions );
-			} catch ( Exception e ) {
-				
-			}
+			} catch ( Exception e ) { }
+			
 			try {
 				sessionsState.execute( "DROP TABLE " + events );
-			} catch ( Exception e ) {
-				
-			}
+			} catch ( Exception e ) { }
 			
 			ResultSet sessionsTable = connection.getMetaData().getTables(null, null, sessions, null);
 			if ( !sessionsTable.next() ){
-				
 				sessionsState = connection.createStatement();
 				sessionsState.execute( "CREATE TABLE " + sessions + "(SessionID INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),"
 						+ "GameID VARCHAR(255) NOT NULL,"
@@ -37,7 +33,6 @@ public class ReplayStorage {
 						+ "UserName VARCHAR(30) NOT NULL,"
 						+ "DateTime BIGINT NOT NULL, "
 						+ "Comments VARCHAR(255) NOT NULL)");
-			    
 			}
 			
 			ResultSet eventsTable = connection.getMetaData().getTables(null, null, events, null);
@@ -72,10 +67,6 @@ public class ReplayStorage {
 			}
 		}	
 	}
-	
-
-	//create sessionID?
-	//set recording = true
 	
 	/**
 	 * Sets recording = FALSE for given session.
@@ -115,8 +106,8 @@ public class ReplayStorage {
 		}
 	}
 	
-	/**
-	 * Gets a list of all of the game ids that currently have replays
+	/** 
+	 * Returns a list of all GameIDs with replay data.
 	 * 
 	 * @return a List of Strings, where each string is the id of a game with replays
 	 * @throws DatabaseException
@@ -168,7 +159,6 @@ public class ReplayStorage {
 	 * @return an ArrayList of all information pertaining to specific gameID
 	 */
 	public ArrayList<String> getSessionsForGame( String gameID ) throws DatabaseException{
-		//return list of everything from sessions table for that ID
 		
 		ArrayList<String> sessionsList = new ArrayList <String>();
 		Connection connection = null;
@@ -183,8 +173,6 @@ public class ReplayStorage {
 					+ "Recording, UserName, DateTime, Comments FROM " + sessions + " WHERE"
 					+ " GameID = '" + gameID + "'");
 			
-
-			
 			while ( results.next() ){
 				int sessionID = results.getInt( "SessionID" );
 				boolean recording = results.getBoolean( "Recording" );
@@ -195,7 +183,7 @@ public class ReplayStorage {
 				concat = sessionID + ", " + recording + ", " + user + ", " +
 				dateTime + ", " + comments; 
 				
-				sessionsList.add( concat );//.add?
+				sessionsList.add( concat );
 				concat = "";
 			}
 			
@@ -233,9 +221,7 @@ public class ReplayStorage {
 		
 		Connection connection = null;
 		Statement state = null;
-		//String [] events;
-		// HashMap <Integer, String> events =  new HashMap <Integer, String>();
-		 
+
 		List<String> eventList = new ArrayList<String>();
 		
 		try{
@@ -246,10 +232,6 @@ public class ReplayStorage {
 			ResultSet results = state.executeQuery
 					("SELECT Event FROM " + events + " WHERE SessionID =" + sessionID + " ORDER BY EventIndex");
 			
-			//int rows = results.last() ? results.getRow() : 0; //get number of rows from output\
-			//might have to set cursor to beforeFirst() row
-			
-		//	events = new String[rows];
 			while( results.next() ){
 				String event = results.getString("Event");
 				eventList.add( event);
@@ -293,7 +275,6 @@ public class ReplayStorage {
 		
 		Connection connection = null;
 		Statement state = null;
-		
 		int sessionID = -1;
 		
 		try{
@@ -321,7 +302,6 @@ public class ReplayStorage {
 			throw new DatabaseException("Failed to insert into " + sessions, e);
 		}finally{
 			//free resources
-			
 			try{
 				if ( state != null ){
 					state.close();
@@ -334,10 +314,8 @@ public class ReplayStorage {
 				//Shouldn't occur
 				e.printStackTrace();
 				throw new DatabaseException("Insertion went awry.", e);
-				
 			}			
 		}
-		
 		return sessionID;
 	}
 	
@@ -361,7 +339,7 @@ public class ReplayStorage {
 			String insert = "INSERT INTO " + events + " (SessionID, EventIndex, Event) " 
 						+ "VALUES (" + sessionID 
 							+ ", " + eventIndex 
-							+ ", '" +event + "')";
+							+ ", '" + event + "')";
 					
 			state.executeUpdate(insert);
 		
@@ -387,7 +365,7 @@ public class ReplayStorage {
 	}
 	
 	/**
-	 * Removes a given session from the database.
+	 * Removes a given sessionID from the database.
 	 * 
 	 * @param sessionID, the ID of the session to remove
 	 * @throws DatabaseException
@@ -405,8 +383,6 @@ public class ReplayStorage {
 					      + "WHERE SessionID =" + sessionID;
 			state.executeUpdate(insert);
 			
-			//need to remove from both like so?	
-				
 			insert = "DELETE FROM " + events + " " 
 				   + "WHERE SessionID =" + sessionID;
 			state.executeUpdate(insert);
@@ -437,9 +413,9 @@ public class ReplayStorage {
 	 *  the time at which the spectator began viewing.
 	 *  
 	 * @param sessionID - SessionID of game being viewed.
-	 * @param dateTime - Time when spectator initiated viewing.
-	 * @return a HashMap of Integer to String, where the key is the index of the event and 
-	 * 			the string is the flattened event data.
+	 * @param dateTime - Time at which spectator began viewing.
+	 * @return a HashMap<Integer, String>, where the key is the index of the event and 
+	 * 			the string is the serialized event data.
 	 * @throws DatabaseException 
 	 */
 	//for spectator mode
@@ -463,15 +439,9 @@ public class ReplayStorage {
 
 			ResultSet results = state.executeQuery(insert);
 			
-		//	int rows = results.last() ? results.getRow() : 0; //get number of rows from output\
-			//might have to set cursor to beforeFirst() row
-			
-		//	events = new String[rows];
-			
 			while( results.next() ){
 				String event = results.getString("Event");
 				int eventIndex = results.getInt("EventIndex");
-				//events.add(event);
 				events.put(eventIndex, event);
 			}
 			
@@ -495,47 +465,7 @@ public class ReplayStorage {
 			}			
 		}	
 		return events;
-	}
-	
-	
-/*	
-   //spectator mode
-	public Boolean missedEvents( int sessionID ){
-		Statement state;
-		Connection connection;
-		
-		try{
-			connection = Database.getConnection();
-			state = connection.createStatement();
-			
-			String insert = "INSERT INTO EVENTS " + "VALUES (" + eventID + ", " + sessionID + ", '"
-							+ event + "')";
-					
-			state.executeUpdate(insert);
-		
-		}catch( Exception e ){
-			e.printStackTrace();
-			throw new DatabaseException("Failed to insert into EVENTS", e);
-		}finally{
-			//free resources
-			try{
-				if ( state != null ){
-					state.close();
-				}
-				if ( connection != null ){
-					connection.close();
-				}
-				
-			}catch ( Exception e ){
-				//Shouldn't occur
-				e.printStackTrace();
-				throw new DatabaseException("Insertion went awry.", e);
-			}			
-		}
-		
-	}*/
-	
-	
+	}	
 }
 	
 	

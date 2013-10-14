@@ -4,6 +4,7 @@ import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
@@ -23,10 +24,10 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class modelscreen implements Screen  {
+public class HelpScreen1 implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
-	//private final Texture texture;
+	private final Texture texture;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 	Stage stage;
@@ -40,39 +41,13 @@ public class modelscreen implements Screen  {
 	   ImageButton backbutton;
 	  
 	  
-	modelscreen(final Breakout game) {
+	HelpScreen1(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
-		//texture = new Texture(Gdx.files.classpath("imgs/menu.png"));
-		tex = new Texture(Gdx.files.classpath("imgs/button.png"));
-		TextureRegion[][] tmp = TextureRegion.split(tex, 130, 45);
+		texture = new Texture(Gdx.files.classpath("imgs/HelpScreen1.png"));
 		
-	    //backbutton
-	    backbuttonUp=tmp[2][2];
-	    backbuttonDown=tmp[2][3];
-	    backup = new TextureRegionDrawable(backbuttonUp);
-	    backdown = new TextureRegionDrawable(backbuttonDown);
-	    backbutton = new ImageButton(backup, backdown);
-	    backbutton.setPosition(480, 290);
-	    backbutton.addListener(new InputListener(){
-	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
-	        		return true; 
-	        	}
-	        	
-	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.MenuScreen); 
-	        		
-	        	}}
-	    	   );
-	  
-	  
-	       stage = new Stage(480, 640, true);
-	       //Gdx.input.setInputProcessor(stage);
-	     
-	      stage.addActor(backbutton);
 	     
 	}
 	
@@ -82,6 +57,8 @@ public class modelscreen implements Screen  {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		texture.dispose();
+		
 		
 	}
 
@@ -100,13 +77,19 @@ public class modelscreen implements Screen  {
 	@Override
 	public void render(float arg0) {
 		
-		//	game.setScreen(game.gamescreen);
+		
+		if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
+			
+			game.setScreen(game.helpscreen2);
+		}
 	
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		 Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		 
-			stage.act();
-		       stage.draw();
+		 batch.begin();
+			batch.draw(texture, 0, 0);
+			batch.end();
+			
 	       
 	}
 

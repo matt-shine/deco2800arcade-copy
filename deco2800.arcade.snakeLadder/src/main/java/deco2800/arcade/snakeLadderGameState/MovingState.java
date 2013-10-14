@@ -25,7 +25,7 @@ public class MovingState extends GameState {
 	 */
 	private void movePlayer(SnakeLadder context, GamePlayer gamePlayer) {
 		gamePlayer.move(Gdx.graphics.getDeltaTime());
-		if(context.getMap().getTileList()[gamePlayer.newposition()].getIndex()>=100)
+		if(context.getMap().getTileList()[gamePlayer.newposition()].getIndex()>=99)
 		{
 			context.gameState=new GameOverState();
 		}

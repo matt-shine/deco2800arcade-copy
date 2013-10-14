@@ -12,29 +12,32 @@ import com.badlogic.gdx.math.Vector2;
 
 
 public class GamePlayer {
-	public static final float WIDTH = 20f; //How big is the player (its a square)
-	public static final float INITIALSPEED = 60; // How fast is the player going at the start of a point
-	public static final float SPEEDINCREMENT = 60; // How much is the player's speed each time throw the dice
-	protected Texture player;
-	private int coordinate=-1;
-	//private int[] scores = new int[2];
+	public static final float WIDTH = 20f; //How big is the playerTexture (its a square)
+	public static final float INITIALSPEED = 60; // How fast is the playerTexture going at the start of a point
+	public static final float SPEEDINCREMENT = 60; // How much is the playerTexture's speed each time throw the dice
+	private Texture playerTexture;
+	private String playerName;
+	//private int coordinate=-1;
+	private int coordinate=0;
+	//private int[] scores = new dint[2];
 	private int score;
-	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the player
-	Vector2 velocity = new Vector2(); // The current velocity of the player as x,y
+	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the playerTexture
+	private Vector2 velocity = new Vector2(); // The current velocity of the playerTexture as x,y
 	
 	
-	
+	public GamePlayer()
+	{
+	}
 	/**
-	 * Basic constructor for player. Set position and dimensions to the default
+	 * Basic constructor for playerTexture. Set position and dimensions to the default
 	 */
-	public GamePlayer(String playerTexture) {
-    	//loading player icon
-		this.player =new Texture(Gdx.files.classpath("images/"+playerTexture));
+	public GamePlayer(String playerName) {
 		getBounds().x = 0;
 		getBounds().y = 0;
 		getBounds().height = WIDTH;
 		getBounds().width = WIDTH;
-		score = 0; //initial score of the player
+		score = 0; //initial score of the playerTexture
+		this.playerName = playerName;
 	}
 
 	public Rectangle getBounds() {
@@ -46,8 +49,8 @@ public class GamePlayer {
 	}
 	
 	/**
-	 * Modify the velocity of the player
-	 * @param newVelocity the new velocity of player as x,y
+	 * Modify the velocity of the playerTexture
+	 * @param newVelocity the new velocity of playerTexture as x,y
 	 */
 	public void setVelocity(Vector2 newVelocity) {
 		this.velocity.x = newVelocity.x;
@@ -55,8 +58,8 @@ public class GamePlayer {
 	}
 	
 	/**
-	 * Modify the position of the player
-	 * @param newPosition the new position of the player as x,y
+	 * Modify the position of the playerTexture
+	 * @param newPosition the new position of the playerTexture as x,y
 	 */
 	public void setPosition(Vector2 newPosition) {
 		getBounds().x = newPosition.x;
@@ -66,41 +69,41 @@ public class GamePlayer {
 
 	
 	/**
-	 * Move the player according to its current velocity over the given time period.
+	 * Move the playerTexture according to its current velocity over the given time period.
 	 * @param time the time elapsed in seconds
 	 * seconds of time = numbers of dice
 	 */	
 	public void move(float time) {
-	  getBounds().x += time*velocity.x;
-	  getBounds().y += time*velocity.y;
+	  getBounds().x += time*getVelocity().x;
+	  getBounds().y += time*getVelocity().y;
 	 
 //      setCoordinate(diceNumber);
 	}
 	
 	
 	public void moveUp() {
-		//if player reacher left/right edge, it moves up one row
-		velocity.x *= -1;
+		//if playerTexture reacher left/right edge, it moves up one row
+		getVelocity().x *= -1;
 		getBounds().y = getBounds().y + 60f;		
 	}
 	
 	/**
-	 * Reset the player to its initial position and velocity
+	 * Reset the playerTexture to its initial position and velocity
 	 */
 	public void reset() {
-		velocity.x = 0;
-		velocity.y = 0;
+		getVelocity().x = 0;
+		getVelocity().y = 0;
 	}
 	
 	
     
     /**
-     * Render the player.
+     * Render the playerTexture.
      * @param 
      */
     public void renderPlayer(SpriteBatch batch)
     {
-    	batch.draw(this.player,getBounds().x,getBounds().y);   	
+    	batch.draw(this.getPlayerTexture(),getBounds().x,getBounds().y);   	
     }
     
     public void initializeVelocity() {
@@ -116,17 +119,21 @@ public class GamePlayer {
 		// if it is even row
 		if (getBounds().y % 120 == 0)
 		{
-			velocity.x = 60;
+			getVelocity().x = 60;
 		}
 		// if it is odd row
 		else 
 		{
-			velocity.x = -60;
+			getVelocity().x = -60;
 		}
 	}
     
    public int getDnumber(int diceNumber){
     	coordinate+=diceNumber;
+    	if(coordinate>=100)
+    	{
+    		coordinate=100;
+    	}
     	return coordinate;
     }
    
@@ -134,7 +141,11 @@ public class GamePlayer {
    {
 	   return coordinate;
    }
-   
+   public int setNewPosition(int newpoint)
+   {
+	   coordinate=newpoint;
+	   return coordinate;
+   }
    /*
    public void score(int winner){
 		scores[winner]++;
@@ -146,20 +157,37 @@ public class GamePlayer {
 	}*/
    
    /**
-    * Calling the score of this player
-    * @return the score of the player
+    * Calling the score of this playerTexture
+    * @return the score of the playerTexture
     */
    public int getScore(){
 	   return this.score;
    }
    
    /**
-    * Updating the score of this player based on the tile command
+    * Updating the score of this playerTexture based on the tile command
     * @param score the score gain after each move
     */
    public void setScore(int score){
 	   this.score += score;
    }
 
+	public String getPlayerName() {
+		return playerName;
+	}
+	
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
+	public Texture getPlayerTexture() {
+		return playerTexture;
+	}
+	public void setPlayerTexture(String playerTexture) {
+		//loading playerTexture icon
+		this.playerTexture = new Texture(Gdx.files.classpath("images/"+playerTexture));
+	}
+	public Vector2 getVelocity() {
+		return velocity;
+	}
 
 }

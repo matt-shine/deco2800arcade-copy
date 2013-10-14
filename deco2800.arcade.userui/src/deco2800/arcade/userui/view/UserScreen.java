@@ -17,6 +17,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.apache.log4j.Logger;
+
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
@@ -30,14 +32,9 @@ public class UserScreen extends JFrame{
 	
 	//Declare JPanel and ImagePanels
 	private JPanel parentContainer;	
-	private ImagePanel menupanel;	
+	private ImagePanel menupanel, achievementpanel, historypanel, sidepanel, friendpanel, aboutpanel;	
 	private JPanel contentpanel;
-	private ImagePanel achievementpanel;
-	private ImagePanel historypanel;	
-	private ImagePanel sidepanel;
 	private JPanel playerinfopanel, playerpanel;
-	private ImagePanel friendpanel;
-	private ImagePanel aboutpanel;
 	private JPanel friendlist;
 	private JScrollPane friendscroll;
 	
@@ -49,20 +46,17 @@ public class UserScreen extends JFrame{
 	//Declare Labels 
 	private JLabel avatar;
 	private JLabel playername, playerlastonline, realname, program, description;
-	private JLabel addfriend, status;
 	private JLabel aboutbar, friendbar, historybar;
 	private JLabel history1, history2, history3, history4, history5;
 	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
 	achievement6;
 	
 	//Declare Text Areas
-	private JTextArea achievementarea;
 	private JTextArea historyarea;
 	
 	//Declare Images 
-	private ImageIcon picavatar, picaddfriend, 
-	pichistorybar, piclocked, picunlocked, piceditbutton,
-	picfriendonline, picfriendoffline, piconline, picoffline;
+	private ImageIcon picavatar, pichistorybar, piclocked, picunlocked, piceditbutton,
+	piconline, picoffline;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
@@ -71,7 +65,6 @@ public class UserScreen extends JFrame{
 	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
 	Font linkbold = new Font("Verdana", Font.BOLD, 14);
 	Font sidebold = new Font("Verdana", Font.BOLD, 12);
-
 		
 	public UserScreen(Model model) throws HeadlessException{
 		
@@ -83,13 +76,10 @@ public class UserScreen extends JFrame{
 		 * 
 		 */		
 		picavatar = new ImageIcon("assets/images/stark.png");
-		picaddfriend = new ImageIcon("assets/images/add_friend.png");
 		pichistorybar = new ImageIcon("assets/images/history_bar.png");
 		piclocked = new ImageIcon("assets/images/achievement_locked.png");
 		picunlocked = new ImageIcon("assets/images/achievement_unlocked.png");
 		piceditbutton = new ImageIcon("assets/images/edit_button.png");
-		picfriendonline = new ImageIcon("assets/images/addfriendonline.png");
-		picfriendoffline = new ImageIcon("assets/images/addfriendoffline.png");
 		piconline = new ImageIcon("assets/images/online.png");
 		picoffline = new ImageIcon("assets/images/offline.png");
 				
@@ -97,8 +87,7 @@ public class UserScreen extends JFrame{
 		 *  Create all Panels 
 		 *  (Page split into 3 main panels inside a parent container 
 		 *  ie. sidepanel, contentpanel, menupanel )
-		 */
-			    
+		 */			    
 	    addmenupanel();
 	    addplayerinfopanel();
 	    addplayerpanel();
@@ -112,8 +101,7 @@ public class UserScreen extends JFrame{
 	    
 	    /*Add panels to Main Panel	
 	     *                
-	     */
-	    
+	     */	    
 	    parentContainer = new JPanel(new MigLayout());
 		parentContainer.add(menupanel, "dock north");
 		parentContainer.add(sidepanel, "west");
@@ -260,6 +248,7 @@ public class UserScreen extends JFrame{
 		friendscroll.setOpaque(false);
 		friendscroll.setBorder(BorderFactory.createEmptyBorder());
 		friendscroll.getViewport().setOpaque(false);
+		friendscroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		//Label
 		friendbar = new JLabel("FRIEND LIST");
 	    friendbar.setFont(sidebold);
@@ -548,9 +537,26 @@ public class UserScreen extends JFrame{
 		
 	}
 	
+	/**
+	 * 
+	 * @param icon
+	 */
 	public void setStatus(ImageIcon icon){
 		
 		statusbutton.setIcon(icon);
+		
+	}
+	
+	public void statusclick(){
+		
+		statusbutton.doClick();
+		
+	}
+	
+	/**
+	 * 
+	 */
+	public void updateFriends(){
 		
 	}
 	

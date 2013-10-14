@@ -8,7 +8,7 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-final class PackageUtils {
+public final class PackageUtils {
 	
 	private static final int CHUNK_SIZE = 1024;
 	private static final int UPPER_BYTE = 0xF0;

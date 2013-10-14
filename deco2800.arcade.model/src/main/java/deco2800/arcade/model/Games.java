@@ -56,7 +56,8 @@ public class Games {
 	}
 	
 	/**
-	 * Adds a Set of Games to this.
+	 * Adds a Set of Games to this.  THIS METHOD IS NOT TO BE USED FOR PURPOSES
+	 * OTHER THAN LOADING PLAYER DATA FROM DATABASE.
 	 * 
 	 * @param games
 	 *            The Set of Games to be added.

@@ -6,12 +6,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import deco2800.arcade.packman.PackageUtils;
 
 /**
  * Client for package manager
  */
 public class PackageClient {
+	final static Logger logger = LoggerFactory.getLogger(PackageClient.class);
 	
 	private static final String SP = File.separator;
 	private static final String GAME_FOLDER = ".." + SP + "games";
@@ -25,13 +29,13 @@ public class PackageClient {
 	public PackageClient() {
 		
 		// Create the games folder
-		System.out.println("Creating directory: " + GAME_FOLDER);
+		logger.debug("Creating directory: {}", GAME_FOLDER);
 		if (PackageUtils.createDirectory(GAME_FOLDER)) {
-			System.out.println("Created: " + GAME_FOLDER);
+			logger.debug("Created: {}", GAME_FOLDER);
 		} else {
-			System.out.println("Failed creating: " + GAME_FOLDER);
+			logger.debug("Failed creating: {}", GAME_FOLDER);
 		}
-		
+			
 		// Get a list of files in the game folder
 		String fileName;
 		File folder = new File(GAME_FOLDER);
@@ -91,7 +95,7 @@ public class PackageClient {
 	 * the game's class name and return it. If the game does not exist on the 
 	 * client's file system, the method will return null.
 	 */
-	public String getClassName(int gameID) {
+	public static String getClassName(int gameID) {
 		
 		return null;
 	}

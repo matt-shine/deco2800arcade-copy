@@ -43,6 +43,19 @@ public abstract class AbstractMonster extends AbstractCard {
         this.currentHealth = this.health;
     }
 
+    public void buffAttack(int amount) {
+        this.attack = this.attack + amount;
+    }
+
+    public void buffHealth(int amount) {
+        this.currentHealth = this.currentHealth + amount;
+    }
+
+    public void buff(int amount) {
+        this.currentHealth = this.currentHealth + amount;
+        this.attack = this.attack + amount;
+    }
+
 	//get weakness
 	public String getWeakness() {
 		return null;

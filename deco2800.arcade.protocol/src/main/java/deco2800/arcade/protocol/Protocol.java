@@ -1,17 +1,6 @@
 package deco2800.arcade.protocol;
 
 import java.util.ArrayList;
-
-
-
-
-
-
-
-
-
-
-
 import java.util.UUID;
 
 import com.esotericsoftware.kryo.Kryo;
@@ -19,19 +8,10 @@ import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 
 import deco2800.arcade.model.Achievement;
-import deco2800.arcade.protocol.achievement.AchievementListRequest;
-import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
-import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
-import deco2800.arcade.protocol.achievement.AchievementsForIDsRequest;
-import deco2800.arcade.protocol.achievement.AchievementsForIDsResponse;
-import deco2800.arcade.protocol.achievement.AddAchievementRequest;
-import deco2800.arcade.protocol.achievement.IncrementProgressRequest;
-import deco2800.arcade.protocol.achievement.IncrementProgressResponse;
-import deco2800.arcade.protocol.achievement.ProgressForPlayerRequest;
-import deco2800.arcade.protocol.achievement.ProgressForPlayerResponse;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
 import deco2800.arcade.protocol.achievement.*;
+import deco2800.arcade.protocol.image.*;
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
@@ -123,8 +103,13 @@ public class Protocol {
 		kryo.register(ProgressForPlayerRequest.class);
 		kryo.register(ProgressForPlayerResponse.class);
 		kryo.register(java.util.ArrayList.class);
-		kryo.register(AchievementListRequest.class);
-		kryo.register(AddAchievementRequest.class);
+
+		// Image messages
+		Class<?>[] imageClasses = { GetImageRequest.class, GetImageResponse.class,
+					    SetImageRequest.class, SetImageResponse.class };
+		for (Class<?> c : imageClasses) {
+		    kryo.register(c);
+		}
 		
 		// High Score Messages
 		kryo.register(AddScoreRequest.class);

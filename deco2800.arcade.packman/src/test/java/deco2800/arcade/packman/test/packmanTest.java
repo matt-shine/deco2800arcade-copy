@@ -26,7 +26,7 @@ public class packmanTest {
 	
 	@Test
 	public void MD5Test() {
-		assertTrue(PackageUtils.genMD5("Test.txt") != null);
+		assertTrue(PackageUtils.genMD5("games.txt") != null);
 	}
 	
 /**	@Test

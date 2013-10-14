@@ -104,12 +104,20 @@ public class ArcadeServer {
 
 
 	/**
-	 * * Access the Serer's achievement storage facility
+	 * * Access the server's achievement storage facility
 	 * @return AchievementStorage currently in use by the arcade
 	 */
 	public AchievementStorage getAchievementStorage() {
 		return this.achievementStorage;
 	}
+    
+    /**
+     * Accessor for the server's image storage.
+     * @return ImageStorage currently in use by the arcade
+     */
+    public ImageStorage getImageStorage() {
+	return this.imageStorage;
+    }
 	
 	/**
 	 * Access the replay records.
@@ -197,7 +205,7 @@ public class ArcadeServer {
 	 * Start the server running
 	 */
 	public void start() {
-		Server server = new Server(131072, 2048);
+		Server server = new Server(131072, 16384);
 		System.out.println("Server starting");
 		server.start();
 		try {
@@ -218,11 +226,14 @@ public class ArcadeServer {
 		server.addListener(new ReplayListener());
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
+
         server.addListener(new PackmanListener());
         server.addListener(new MultiplayerListener(matchmakerQueue));
         server.addListener(new LobbyListener());
         server.addListener(new LibraryListener());
         server.addListener(new PlayerListener());
+        server.addListener(new ImageListener());
+
 	}
 
     /**
@@ -237,4 +248,3 @@ public class ArcadeServer {
     }
 
 }
-

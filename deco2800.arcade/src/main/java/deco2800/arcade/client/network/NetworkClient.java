@@ -3,10 +3,12 @@ package deco2800.arcade.client.network;
 import java.io.IOException;
 
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.protocol.NetworkObject;
 import deco2800.arcade.protocol.Protocol;
+import deco2800.arcade.utils.AsyncFuture;
 
 public class NetworkClient {
 
@@ -25,6 +27,7 @@ public class NetworkClient {
 	 */
 	public NetworkClient(String serverAddress, int tcpPort, int udpPort) 
 			throws NetworkException{
+
 		this.client = new Client(131072, 131072);
 		this.client.start();
 		
@@ -66,6 +69,12 @@ public class NetworkClient {
 	public void removeListener(NetworkListener listener){
 		this.client.removeListener(listener);
 	}
-	
+
+    public AsyncFuture<NetworkObject> request(final NetworkObject req) {
+	return NetworkObject.request(client, req);
+    }
+
+
+
 	
 }

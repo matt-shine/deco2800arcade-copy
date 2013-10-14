@@ -1,6 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -31,9 +32,9 @@ public class GridObject {
 	// The direction the object is facing.
 	private Direction facing;
 	// The standing sprites this object uses.
-	private ArrayList<Sprite> standingSprites;
+	private List<Sprite> standingSprites;
 	// The death sprite this object uses.
-	private ArrayList<Sprite> deathSprites;
+	private List<Sprite> deathSprites;
 	// The team this object belongs to.
 	private Team team;
 
@@ -110,7 +111,7 @@ public class GridObject {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Sprite> sprites() {
+	public List<Sprite> sprites() {
 		return standingSprites;
 	}
 
@@ -147,7 +148,7 @@ public class GridObject {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Sprite> deathSprites() {
+	public List<Sprite> deathSprites() {
 		return deathSprites;
 	}
 
@@ -230,7 +231,7 @@ public class GridObject {
 	 * 
 	 * @param standingSprites
 	 */
-	public void standingSprites(ArrayList<Sprite> standingSprites) {
+	public void standingSprites(List<Sprite> standingSprites) {
 		this.standingSprites = standingSprites;
 	}
 
@@ -239,7 +240,7 @@ public class GridObject {
 	 * 
 	 * @param standingSprites
 	 */
-	public void deathSprites(ArrayList<Sprite> deathSprites) {
+	public void deathSprites(List<Sprite> deathSprites) {
 		this.deathSprites = deathSprites;
 	}
 

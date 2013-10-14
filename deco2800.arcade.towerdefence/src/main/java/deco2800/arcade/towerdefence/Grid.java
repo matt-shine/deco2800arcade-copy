@@ -5,6 +5,7 @@ import deco2800.arcade.towerdefence.pathfinding.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import com.badlogic.gdx.math.Vector2;
@@ -30,7 +31,7 @@ public class Grid implements TileBasedMap {
 	private int gridWidth, gridDepth;
 	// The contents of the grid. 0 means clear, 1 means tower, 2 means wall, 3
 	// means wall with tower, and 4 means blocked.
-	private ArrayList<ArrayList<ArrayList<GridObject>>> gridContents;
+	private List<List<List<GridObject>>> gridContents;
 	// The ship that is using this grid
 	private Ship ship;
 	//The pathfinder used by objects in the grid
@@ -53,7 +54,7 @@ public class Grid implements TileBasedMap {
 		this.ship = ship;
 		gridWidth = width / tileSize;
 		gridDepth = depth / tileSize;
-		gridContents = new ArrayList<ArrayList<ArrayList<GridObject>>>();
+		gridContents = new ArrayList<List<List<GridObject>>>();
 	}
 
 	// Getters
@@ -171,6 +172,9 @@ public class Grid implements TileBasedMap {
 			// Check for block wall
 			// Check for towers
 			// Check for aliens
+			if(current.getClass() == Enemy.class){
+				return false;
+			}
 		}
 
 		// Start the object AI and add it to the grid
@@ -180,7 +184,7 @@ public class Grid implements TileBasedMap {
 		return true;
 	}
 
-	private ArrayList<GridObject> getGridContents(int x, int y) {
+	private List<GridObject> getGridContents(int x, int y) {
 		return gridContents.get(x).get(y);
 	}
 

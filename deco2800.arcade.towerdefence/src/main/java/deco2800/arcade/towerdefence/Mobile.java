@@ -1,6 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -19,13 +20,13 @@ public abstract class Mobile extends Mortal {
 	// The GridObject's speed in pixels per second.
 	private float speed;
 	// The GridObject's sprites to animate movement down.
-	private ArrayList<Sprite> downMovingSprites;
+	private List<Sprite> downMovingSprites;
 	// The GridObject's sprites to animate movement left.
-	private ArrayList<Sprite> leftMovingSprites;
+	private List<Sprite> leftMovingSprites;
 	// The GridObject's sprites to animate movement up.
-	private ArrayList<Sprite> upMovingSprites;
+	private List<Sprite> upMovingSprites;
 	// The GridObject's sprites to animate movement right.
-	private ArrayList<Sprite> rightMovingSprites;
+	private List<Sprite> rightMovingSprites;
 	// THe path the object is following
 	private Path path;
 
@@ -40,7 +41,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Sprite> downMovingSprites() {
+	public List<Sprite> downMovingSprites() {
 		return downMovingSprites;
 	}
 
@@ -49,7 +50,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Sprite> leftMovingSprites() {
+	public List<Sprite> leftMovingSprites() {
 		return leftMovingSprites;
 	}
 
@@ -58,7 +59,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Sprite> upMovingSprites() {
+	public List<Sprite> upMovingSprites() {
 		return upMovingSprites;
 	}
 
@@ -67,7 +68,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public ArrayList<Sprite> rightMovingSprites() {
+	public List<Sprite> rightMovingSprites() {
 		return rightMovingSprites;
 	}
 
@@ -86,7 +87,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param downMovingSprites
 	 */
-	public void downMovingSprites(ArrayList<Sprite> downMovingSprites) {
+	public void downMovingSprites(List<Sprite> downMovingSprites) {
 		this.downMovingSprites = downMovingSprites;
 	}
 
@@ -95,7 +96,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param leftMovingSprites
 	 */
-	public void leftMovingSprites(ArrayList<Sprite> leftMovingSprites) {
+	public void leftMovingSprites(List<Sprite> leftMovingSprites) {
 		this.leftMovingSprites = leftMovingSprites;
 	}
 
@@ -104,7 +105,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param upMovingSprites
 	 */
-	public void rightMovingSprites(ArrayList<Sprite> upMovingSprites) {
+	public void rightMovingSprites(List<Sprite> upMovingSprites) {
 		this.upMovingSprites = upMovingSprites;
 	}
 
@@ -113,7 +114,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param rightMovingSprites
 	 */
-	public void movingSprites(ArrayList<Sprite> rightMovingSprites) {
+	public void movingSprites(List<Sprite> rightMovingSprites) {
 		this.rightMovingSprites = rightMovingSprites;
 	}
 

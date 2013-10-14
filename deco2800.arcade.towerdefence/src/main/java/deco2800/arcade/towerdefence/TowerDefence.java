@@ -18,9 +18,8 @@ import deco2800.arcade.towerdefence.screen.SplashScreen;
 
 @ArcadeGame(id = "towerdefence")
 public class TowerDefence extends GameClient {
-	Screen splashScreen;
 	public Screen menuScreen, loreScreen, gameScreen, creditsScreen,
-			optionsScreen;
+			optionsScreen, splashScreen;
 	private boolean isPaused = false;
 	private static final String LOG = TowerDefence.class.getSimpleName();
 

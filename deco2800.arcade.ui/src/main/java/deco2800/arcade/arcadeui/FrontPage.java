@@ -31,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
+import deco2800.arcade.arcadeui.store.GameStore;
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -375,7 +376,7 @@ public class FrontPage implements Screen {
         
         storeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	arcadeUI.setScreen(arcadeUI.store);
+            	arcadeUI.setScreen(new GameStore());
             }
         })); 
         

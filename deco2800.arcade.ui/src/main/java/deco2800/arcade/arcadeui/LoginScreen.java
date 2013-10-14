@@ -84,11 +84,11 @@ public class LoginScreen implements Screen {
                     arcadeUI.setScreen(new GameStore());
                 }
                 else if (usernameText.getText().toLowerCase().equals("home")) {
-<<<<<<< HEAD
+
                 	FrontPage.setName(usernameText.getText());
                 	arcadeUI.setScreen(arcadeUI.main);
                 	
-=======
+
                     // TEMPORARY
                     arcadeUI.setScreen(arcadeUI.main);
                 }
@@ -99,7 +99,7 @@ public class LoginScreen implements Screen {
                     // TEMPORARY
                     ArcadeSystem.login(usernameText.getText());
                     ArcadeSystem.goToGame("gamelibrary");
->>>>>>> master
+
                 }
                 else {
                     ArcadeSystem.login(usernameText.getText());

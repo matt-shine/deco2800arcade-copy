@@ -56,6 +56,8 @@ public class PlayScreen implements Screen
 	public Level level;
 	
 	private SpawnList sp;
+
+	private float respawnTimer = 0f;;
 	
 	
 	public PlayScreen( BurningSkies game){
@@ -117,6 +119,14 @@ public class PlayScreen implements Screen
     	
     	
     	if(!game.isPaused()) {
+    		
+    		if(!player.isAlive()) {
+    			respawnTimer -= delta;
+    			if(respawnTimer <= 0) {
+    				stage.addActor(player);
+    				player.respawn();
+    			}
+    		}
 
     		sp.checkList(delta);
     		
@@ -178,19 +188,18 @@ public class PlayScreen implements Screen
 					continue;
 					
 				}
+				if(e.hasCollided(player) && player.isAlive()) {
+					removeEntity(e);
+					player.damage(40);
+				}
 			}	
     	}
     	    	
     	// Draws the map
     	stage.draw();
-    	debugRender.begin(ShapeType.Circle);
-    	debugRender.circle(player.getCenterX(), player.getCenterY(), 5);
-    	debugRender.circle(player.getRotatedX(), player.getRotatedY(), 5);
-    	debugRender.end();
-    	
     	healthBar.begin(ShapeType.FilledRectangle);
     	
-    	health = player.healthRemaining();
+    	health = player.getHealth();
     	
     	if (health <= 25) {
     		healthBar.setColor(healthBarRed);
@@ -277,4 +286,9 @@ public class PlayScreen implements Screen
     	p.remove();
     	powerups.remove(p);
     }
+
+	public void killPlayer() {
+		player.remove();
+		respawnTimer  = 2f;
+	}
 }

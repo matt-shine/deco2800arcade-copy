@@ -49,6 +49,23 @@ public class PlayerShip extends Ship {
 		}
 	}
 	
+	@Override
+	public void damage(int damage) {
+		super.damage(damage);
+		if(!isAlive()) {
+			screen.killPlayer();
+		}
+	}
+	
+	@Override
+	public boolean remove() {
+		if(getStage() != null) {
+			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2));
+		}
+		return super.remove();
+	}
+	
+	
 	/**
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */
@@ -161,7 +178,9 @@ public class PlayerShip extends Ship {
 		}
 	}
 	
-	public int healthRemaining() {
-		return this.health;
+	public void respawn() {
+		this.health = 100;
+		this.flash = 0f;
+		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
 	}
 }

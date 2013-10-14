@@ -54,20 +54,7 @@ public class Player extends User {
 
 	@Deprecated
 	/**
-	 * Creates a new Player given a name, achievement set and icon filename.
-	 * 
-	 * @param playerID
-	 *            The Player's nameID
-	 * @param username
-	 *            The Player's name
-	 * @param filepath
-	 *            The Player's icon filepath
-	 * @param privacy
-	 *            A boolean array of privacy settings.
-	 * @require There are at least 7 elements in privacy array. Elements 1
-	 *          through 7 (indexes 0 through 6) represent name, email, program,
-	 *          bio, friends, games and achievements' privacy settings
-	 *          respectively.
+	 * DO NOT USE THIS
 	 */
 	public Player(int playerID, String username, String filepath,
 			boolean[] privacy) {
@@ -141,14 +128,25 @@ public class Player extends User {
 		this.bio = new Field(BIO_ID, details.get(4));
 
 		this.games = new Games();
-		this.games.addAll(gamesList);
+		if(gamesList != null){
+			this.games.addAll(gamesList);
+		}
+				
 		this.friends = new Friends();
-		this.friends.addAll(friendsList);
+		if(friendsList != null){
+			this.friends.addAll(friendsList);
+		}
+		
 		this.friendInvites = new FriendInvites();
-		this.friendInvites.addAll(friendRequestsList);
+		if(friendRequestsList != null){
+			this.friendInvites.addAll(friendRequestsList);
+		}
+		
 		this.blocked = new Blocked();
-		this.blocked.addAll(blockedList);
-
+		if(blockedList != null){
+			this.blocked.addAll(blockedList);
+		}
+		
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
 				privacy[1]);
@@ -372,7 +370,7 @@ public class Player extends User {
 	 */
 	public void addFriend(User friend) {
 		if (friend != null /* && this.hasInvite(friend) */) {
-			this.friends.add(friend);
+			this.friends.add(new User(friend.getID()));
 			setChanged();
 			notifyObservers(friends);
 			clearChanged();
@@ -426,7 +424,7 @@ public class Player extends User {
 	 */
 	public void addInvite(User player) {
 		if (player != null) {
-			this.friendInvites.add(player);
+			this.friendInvites.add(new User(player.getID()));
 			setChanged();
 			notifyObservers(friendInvites);
 			clearChanged();
@@ -479,7 +477,7 @@ public class Player extends User {
 	 */
 	public void blockPlayer(User player) {
 		if (player != null) {
-			this.blocked.add(player);
+			this.blocked.add(new User(player.getID()));
 			setChanged();
 			notifyObservers(blocked);
 			clearChanged();
@@ -684,7 +682,7 @@ public class Player extends User {
 	}
 
     /**
-     * Update user's library style
+     * Update Player's library style
      * @param style Library Style
      */
     public void updateLibraryLayout(int style) {
@@ -695,7 +693,7 @@ public class Player extends User {
     }
 
     /**
-     * Update User's library colour
+     * Update Player's library colour
      * @param colour Colour Scheme
      */
     public void updateLibraryColour(int colour) {
@@ -706,7 +704,7 @@ public class Player extends User {
     }
 
     /**
-     * Get User's Library Style
+     * Get Player's Library Style
      * @return libraryStyle
      */
     public LibraryStyle getLibraryStyle() {

@@ -1,4 +1,4 @@
-package deco2800.arcade.model.test;
+	package deco2800.arcade.model.test;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -5,18 +5,27 @@ import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
 import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
-	private final float MAXVELOCITY = 600;
+	private float maxVelocity = 300; //Changed from static to dynamic.
+	private int maxHealth; //For health powerups.
 	private PlayScreen screen;
+	
+	//brute force way to handle timer
+	private long initialTime;
+	private boolean speedUp = false;
 	
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
 	private boolean shooting = false;
+	
+	//mouse pointer
+	private Vector2 mousePos = new Vector2();
 
 	/**
 	 * Construct a playable ship for the user(s).
@@ -25,27 +34,70 @@ public class PlayerShip extends Ship {
 	public PlayerShip(int health, Texture image, Vector2 position, PlayScreen screen) {
 		super(health, image, position);
 		this.screen = screen;
+		this.maxHealth = health;
 		hitboxScale = 0.25f; // lets the player 'just miss' bullets
 	}
+	
+	@Override
+	public void heal(int healthchange) {
+		this.health += healthchange;
+		//Just for the sake of the health bar being consistent.
+		//This probably will have to be changed if we plan to be able to heal over the maxHealth
+		//though.
+		if (health > maxHealth) {
+			this.health = maxHealth;
+		}
+	}
+	
+	@Override
+	public void damage(int damage) {
+		super.damage(damage);
+		if(!isAlive()) {
+			screen.killPlayer();
+		}
+	}
+	
+	@Override
+	public boolean remove() {
+		if(getStage() != null) {
+			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2));
+		}
+		return super.remove();
+	}
+	
 	
 	/**
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */
 	public void onRender(float delta) {
+		super.onRender(delta);
+		//resets any powerups if needed. Initial testing on speedup only.
+		//easily applies to a bullet pattern.
+		if (speedUp) {	
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - initialTime) >= 10000) {
+				maxVelocity = 300;
+				speedUp = false;
+			}
+		}
+		
 		// reset
 		velocity.set(0, 0);
     	if(up) {
-    		velocity.add(0, MAXVELOCITY);
+    		velocity.add(0, maxVelocity);
     	}
     	if(down) {
-    		velocity.add(0, -MAXVELOCITY);
+    		velocity.add(0, -maxVelocity);
     	}
     	if(left) {
-    		velocity.add(-MAXVELOCITY, 0);
+    		velocity.add(-maxVelocity, 0);
     	}
     	if(right) {
-    		velocity.add(MAXVELOCITY, 0);
+    		velocity.add(maxVelocity, 0);
     	}
+    	//normalise our velocity
+    	velocity.nor();
+    	velocity.mul(maxVelocity);
     	position.add( velocity.x * delta, velocity.y * delta );
 		if (position.x + getWidth() > BurningSkies.SCREENWIDTH) {
 			position.x = BurningSkies.SCREENWIDTH - getImageWidth();
@@ -58,7 +110,10 @@ public class PlayerShip extends Ship {
     	if (position.y < 0) position.y = 0;
 		setX(position.x);
 		setY(position.y);
-		this.setZIndex(getStage().getActors().size); // this is silly, but no better way
+		mousePos.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()); // reversed y
+		mousePos.sub(getCenterX(), getCenterY()); // gotta have it centered
+		setRotation(mousePos.angle()-90);
+		setZIndex(getStage().getActors().size); // this is silly, but no better way
 		shoot(delta);
 		
 	}
@@ -88,6 +143,25 @@ public class PlayerShip extends Ship {
 	}
 	
 	/**
+	 * Changes the max velocity of the ship.
+	 */
+	public void setMaxSpeed(float velocity) {
+		speedUp = true;
+		initialTime = System.currentTimeMillis();
+		maxVelocity = velocity;
+	}
+	
+	/**
+	 * Changes the players current bullet type.
+	 * @ensure pattern != NULL
+	 */
+	public void setBulletPattern(BulletPattern pattern) {
+		playerBullets.remove();
+		playerBullets = pattern;
+		getStage().addActor(playerBullets);
+	}
+	
+	/**
 	 * Fire a shot.
 	 */
 	public void shoot(float delta) {
@@ -102,5 +176,11 @@ public class PlayerShip extends Ship {
 		} else {
 			if(playerBullets.isFiring()) playerBullets.stop();
 		}
+	}
+	
+	public void respawn() {
+		this.health = 100;
+		this.flash = 0f;
+		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
 	}
 }

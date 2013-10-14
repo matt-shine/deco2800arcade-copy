@@ -32,12 +32,18 @@ bin
 *.iml
 *.eml
 
-# Release
+# Release directories
 release
 *.bin
+deco2800.arcade.server/Release
+games/
 
 # Gradle settings and build files
 .gradle/
 
+
 # Ignore all .log files anywhere
 **/*.log
+# Including multipart log files
+**/*.log.*
+

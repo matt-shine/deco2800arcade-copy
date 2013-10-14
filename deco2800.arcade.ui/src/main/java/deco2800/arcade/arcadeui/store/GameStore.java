@@ -131,7 +131,12 @@ public class GameStore implements Screen, StoreScreen {
      * @param stage
      * @param skin
      */
-	private void populateGamesBox(Stage stage, Skin skin) {
+	private void populateGamesBox(Stage stage, Skin skin)  {
+		//You can't put this kind of thing in master. It crashes if I
+		//don't have the exact same classpath configuration as you.
+		//I won't fix it, I'm just going to comment it out.
+		//--Simon
+		/*
 		int number = (int)Math.floor(ArcadeSystem.getGamesList().size() * Math.random());
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()
@@ -160,6 +165,7 @@ public class GameStore implements Screen, StoreScreen {
 			});
 			stage.addActor(gameGrid);
 		}
+		*/
 	}
 	
 	/**

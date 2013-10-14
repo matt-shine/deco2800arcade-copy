@@ -32,8 +32,10 @@ public class GameModel {
     //All the entities
     private LinkedList<Doodad> doodads = new LinkedList<Doodad>();
 
-    //Array of the waypoints
-    private float[][] waypoints = new float[64][64];
+    //Array of the waypoints on the current map
+    private WL6Meta.DIRS[][] waypoints = new WL6Meta.DIRS[64][64];
+
+
 
     //Delta time
     private float delta = 0;
@@ -65,6 +67,7 @@ public class GameModel {
         for (Doodad d : doodads) {
         	this.destroyDoodad(d);
         }
+        waypoints = new WL6Meta.DIRS[64][64];
         
         MapProcessor.processEverything(this);
 
@@ -162,7 +165,7 @@ public class GameModel {
     }
 
 
-    public void addWaypoint(float angle, int x, int y) {
+    public void addWaypoint(WL6Meta.DIRS angle, int x, int y) {
         waypoints[x][y] = angle;
     }
 

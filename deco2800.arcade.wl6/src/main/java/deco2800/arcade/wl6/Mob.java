@@ -30,7 +30,13 @@ public class Mob extends Doodad {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        if (health <= 0) {
+            this.health = 0;
+            die();
+        }
+        else {
+            this.health = health;
+        }
     }
 
     public void doDamage() {
@@ -39,6 +45,10 @@ public class Mob extends Doodad {
 
     public void takeDamage(int damage) {
         setHealth(getHealth() - damage);
+    }
+
+    public void die() {
+
     }
 
     // FIXME: this currently stops secret doors from being opened

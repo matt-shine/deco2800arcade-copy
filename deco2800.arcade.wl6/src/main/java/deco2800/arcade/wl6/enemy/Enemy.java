@@ -116,11 +116,6 @@ public class Enemy extends Mob {
     // react to pain
 
 
-    // die
-    public void die() {
-
-    }
-
     @Override
     public void doDamage() {
         float dist = this.getPos().dst(game.getPlayer().getPos());

@@ -105,7 +105,7 @@ public class MapProcessor {
         {
             // This doodad is invisible so it must be a waypoint or something
             if (d.facingDir != null) {
-                model.addWaypoint(WL6Meta.dirToAngle(d.facingDir), x, y);
+                model.addWaypoint(d.facingDir, x, y);
             }
         }
         else if (d.enemytype != EnemyType.NOT_AN_ENEMY)

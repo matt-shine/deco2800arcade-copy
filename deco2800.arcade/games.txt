@@ -24,3 +24,4 @@ connect4
 raiden
 wl6
 statistics
+snakeLadder

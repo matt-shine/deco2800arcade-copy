@@ -25,7 +25,7 @@ public class RegisterScreen implements Screen {
         skin.add("background", new Texture("homescreen_bg.png"));
 
         stage = new RegisterScreenStage();
-        
+
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
@@ -43,7 +43,7 @@ public class RegisterScreen implements Screen {
         passwordTextCheck.setPasswordMode(true);
         passwordTextCheck.setPasswordCharacter('*');
         TextButton registerButton = new TextButton("Register", skin);
-        TextButton cancelButton = new TextButton("Cancel", skin, "alt");
+        TextButton cancelButton = new TextButton("Cancel", skin, "default-red");
 
         table.add(errorLabel).colspan(2);
         table.row();
@@ -53,8 +53,8 @@ public class RegisterScreen implements Screen {
         table.row();
         table.add(passwordTextCheck).width(400).pad(5).colspan(2);
         table.row();
-        table.add(registerButton).width(200).pad(5);
-        table.add(cancelButton).width(200).pad(5);
+        table.add(registerButton).width(190).height(50).pad(5);
+        table.add(cancelButton).width(190).height(50).pad(5);
 
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
@@ -76,7 +76,7 @@ public class RegisterScreen implements Screen {
     }
 
     @Override
-    public void resize(int arg0, int arg1) {
+    public void resize(int width, int height) {
     }
 
     @Override

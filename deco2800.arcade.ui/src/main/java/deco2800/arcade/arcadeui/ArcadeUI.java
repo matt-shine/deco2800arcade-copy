@@ -1,5 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -25,6 +27,7 @@ public class ArcadeUI extends GameClient {
     RegisterScreen register = null;
     MultiplayerLobby lobby = null;
     BettingWindow betting = null;
+    BettingLobby betLobby = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -46,7 +49,7 @@ public class ArcadeUI extends GameClient {
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);
         betting = new BettingWindow(this);
-
+        betLobby = new BettingLobby(this);
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
             this.setScreen(home);
@@ -57,6 +60,7 @@ public class ArcadeUI extends GameClient {
         if (ArcadeSystem.isMultiplayerEnabled()) {
         	this.setScreen(lobby);
         }
+        
 
         super.create();
     }
@@ -104,5 +108,9 @@ public class ArcadeUI extends GameClient {
 	}
 	public BettingWindow getBetting() {
 		return betting;
+	}
+
+	public BettingLobby getBetLobby() {
+		return betLobby;
 	}
 }

@@ -13,23 +13,24 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+/*
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;*/
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+
 
 import deco2800.arcade.arcadeui.store.GameStore;
 import deco2800.arcade.client.Arcade;
@@ -40,6 +41,16 @@ import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Player;
 
+//adee added
+import deco2800.arcade.arcadeui.Overlay.*;
+import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.arcadeui.store.StoreScreen;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Game.ArcadeGame;
+import deco2800.arcade.model.Game.InternalGame;
+
+@ArcadeGame(id="frontpage")
 public class FrontPage implements Screen {
 	
 	private class FrontPageStage extends Stage {}
@@ -84,7 +95,6 @@ public class FrontPage implements Screen {
         skin.add("recentBar", new Texture("recent.png"));
         skin.add("chatOverlay", new Texture("overlayPopUp.png"));
         stage = new FrontPageStage();
-        
         
         Table table = new Table();
         table.setFillParent(true);
@@ -194,18 +204,18 @@ public class FrontPage implements Screen {
         
         //adding to stage
         stage.addActor(bottomBox);
-        
-   
-*/		
+     	
         
         /*ONLY TESTING */
         final TextButton chatButtonx = new TextButton("Online (" + nFriends + ")", skin, "magenta");
         chatButtonx.setSize(150, 50);
         chatButtonx.setPosition(640, 580);
+        
         stage.addActor(chatButtonx);
         chatButtonx.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	displayChat();
+		    //	arcadeUI.render();
 		    }
 		}));
         /*testing end*/
@@ -380,7 +390,6 @@ public class FrontPage implements Screen {
     	}
     }
    
-    
 	@Override
 	public void show() {
 		ArcadeInputMux.getInstance().addProcessor(stage);

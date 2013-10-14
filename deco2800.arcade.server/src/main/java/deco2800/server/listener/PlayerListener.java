@@ -76,6 +76,9 @@ public class PlayerListener extends Listener{
 				response.player = null;
                 BlockingMessage.respond(connection, request, response);
             }
-		}
+		} else if (object instanceof LibraryStyleUpdateRequest) {
+            LibraryStyleUpdateRequest request = (LibraryStyleUpdateRequest) object;
+            PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+        }
 	}
 }

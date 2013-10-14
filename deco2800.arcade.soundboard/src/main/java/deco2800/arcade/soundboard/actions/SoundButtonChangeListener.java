@@ -39,7 +39,7 @@ public class SoundButtonChangeListener extends ChangeListener {
             replayHandler.pushEvent(
                     ReplayNodeFactory.createReplayNode(
                     "sound_pushed",
-                    sound.getLabel(), sound.isLoop() ? SoundboardScreen.LOOPS : SoundboardScreen.SAMPLES, index
+                    sound.isLoop() ? SoundboardScreen.LOOPS : SoundboardScreen.SAMPLES, index
             ));
         }
     }

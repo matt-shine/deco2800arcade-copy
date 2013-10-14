@@ -119,7 +119,6 @@ public class GamesTest {
 		f1.remove(game5);
 		f1.remove(game5);
 		Assert.assertTrue(!f1.contains(game5));
-		System.out.println(f1.getUpdatedID());
 		Assert.assertTrue(f1.getUpdatedID() == game5.id);
 		Assert.assertTrue(!f1.getAdded());
 

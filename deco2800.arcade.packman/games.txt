@@ -10,6 +10,8 @@ tictactoe
 ui
 breakout
 deerforest
+gamelibrary
+soundboard
 mixmaze
 chess
 landInvaders
@@ -22,3 +24,4 @@ pacman
 connect4
 raiden
 wl6
+snakeLadder

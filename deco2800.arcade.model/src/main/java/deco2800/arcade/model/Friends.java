@@ -12,6 +12,8 @@ import java.util.Set;
 public class Friends {
 
 	private Set<User> friends;
+	private int updatedID;
+	private boolean added;
 
 	/**
 	 * Creates a new Friends.
@@ -46,7 +48,22 @@ public class Friends {
 	 *            The User to be added.
 	 */
 	public void add(User user) {
-		this.friends.add(new User(user));
+		if (!contains(user)) {
+			this.friends.add(new User(user));
+			updatedID = user.getID();
+			added = true;
+		}
+	}
+
+	/**
+	 * Adds a Set of Users to this. THIS METHOD IS NOT TO BE USED FOR PURPOSES
+	 * OTHER THAN LOADING PLAYER DATA FROM DATABASE.
+	 * 
+	 * @param user
+	 *            The Set of Users to be added.
+	 */
+	public void addAll(Set<User> user) {
+		this.friends.addAll(user);
 	}
 
 	/**
@@ -56,7 +73,11 @@ public class Friends {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		this.friends.remove(new User(user));
+		if (contains(user)) {
+			this.friends.remove(new User(user));
+			updatedID = user.getID();
+			added = false;
+		}
 	}
 
 	/**
@@ -70,4 +91,22 @@ public class Friends {
 		return this.friends.contains(new User(user));
 	}
 
+	/**
+	 * Access method for the most recent change ID.
+	 * 
+	 * @return Returns the ID of the field in the most recent change.
+	 */
+	public int getUpdatedID() {
+		return updatedID;
+	}
+
+	/**
+	 * Access method for most recent change flag.
+	 * 
+	 * @return Returns true if the last change was an addition, and false if it
+	 *         was a deletion.
+	 */
+	public boolean getAdded() {
+		return added;
+	}
 }

@@ -1,21 +1,25 @@
 package deco2800.arcade.towerdefence.screen;
 
 import static com.badlogic.gdx.graphics.Color.*;
-import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static com.badlogic.gdx.graphics.GL20.GL_DEPTH_BUFFER_BIT;
-
-import java.awt.TextArea;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,6 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 
 
@@ -36,56 +41,47 @@ public class GameScreen implements Screen{
 	
 	private Stage stage;
 	//private ShapeRenderer shapeRenderer;
-	private Table table;
-	private Table gameTable;
-	private Table topStatus;
-	private Table bottomBar, bottomBarRight, bottomBarLeft;
 	private static float STATUS_HEIGHT = 50f;
-	private static float BOTTOM_HEIGHT = 128f;
+	private static float BOTTOM_HEIGHT = 150f;
 	Button frostB, fireB, holyB, darknessB, piercingB, auraB, backB; //TowerButtons
-	private Label randomLabel3, towerInfo;
+	private Label towerInfo;
 	BitmapFont black;
     BitmapFont white;
     Skin skin;
 	TextureAtlas atlas;
 	SpriteBatch batch;
 	TextField resourceTF;
-	private static final float BUTTON_HEIGHT = 64f;
-	private static final float BUTTON_WIDTH = 64f;
+	private OrthographicCamera camera;
+	private static final float BUTTON_HEIGHT = 64f, CAMERA_HEIGHT = (720- STATUS_HEIGHT - BOTTOM_HEIGHT), BUTTON_WIDTH = 64f;
 	int resource; //int for player's resources.
+	
+	//static final int WIDTH  = 480;
+    //static final int HEIGHT = 320;
+
+    private OrthographicCamera				cam;
+    private Texture                         texture, crystalsTexture;
+    private Mesh                            mesh;
+    private Rectangle                       glViewport;
+    private float                           rotationSpeed;
 	
 	/*
 	 * Constructor for GameScreen, creates the platform for which the game will be played.
+	 * 720p (720 x 1024) pixels
 	 */
 	public GameScreen(TowerDefence game){
 		this.game = game;
 		stage = new Stage();
-		table = new Table();
-		topStatus = new Table();
-		gameTable = new Table();
-		bottomBar = new Table();
-		bottomBarLeft = new Table();
-		bottomBarRight = new Table();
-		table.setFillParent(true);
-		
-		//Remove below block comment for debugging
-		/*table.debug();
-		bottomBar.debug();
-		bottomBarLeft.debug();
-		bottomBarRight.debug();
-		topStatus.debug(); */
 		
 		//setting style for resource textfield
 		TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
 	    textFieldStyle.font = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
 	    textFieldStyle.fontColor = Color.WHITE;
 	       
-		//skin = new Skin();
 		resource = 0;
 		resourceTF = new TextField("", textFieldStyle);
 		
 		//Need to work out how to add this sprite to the table.
-		Texture crystalsTexture = new Texture(Gdx.files.internal("crystals.png"));
+		crystalsTexture = new Texture(Gdx.files.internal("crystals.png"));
         crystalsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		Sprite crystals = new Sprite(crystalsTexture);
 		
@@ -94,9 +90,25 @@ public class GameScreen implements Screen{
 				WHITE));
 		towerInfo.setWrap(true);
 		
-		randomLabel3 = new Label("Game screen here?", 
-				new Label.LabelStyle(new BitmapFont(),
-				MAGENTA));
+		//
+		
+		rotationSpeed = 0.5f;
+        mesh = new Mesh(true, 4, 6,
+                        new VertexAttribute(VertexAttributes.Usage.Position, 3,"attr_Position"),
+                        new VertexAttribute(Usage.TextureCoordinates, 2, "attr_texCoords"));
+        texture = new Texture(Gdx.files.internal("sc_map.png"));
+        mesh.setVertices(new float[] { 
+                         -1024f, -1024f, 0, 0, 1,
+                          1024f, -1024f, 0, 1, 1,
+                          1024f,  1024f, 0, 1, 0,
+                         -1024f,  1024f, 0, 0, 0
+        });
+        mesh.setIndices(new short[] { 0, 1, 2, 2, 3, 0 });
+
+        cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());            
+        cam.position.set(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 0);
+
+        glViewport = new Rectangle(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	}
 
 	@Override
@@ -112,8 +124,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void hide() {
-		Gdx.input.setInputProcessor(null);
-		
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 
 	@Override
@@ -122,34 +133,71 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
+        handleInput();
 		Gdx.gl20.glClearColor(0, 0, 0, 1);
-		Gdx.gl20.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		resourceTF.setMessageText("Resources: " + resource);
+		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		
+		camera.update();
+		
+		resourceTF.setMessageText("" + resource);
+		
 		stage.act(delta);
 		stage.draw();
 		Table.drawDebug(stage);
 		if(!game.isPaused()) {
 			stage.act(delta);
-		}		
+		}
+		
+		batch.begin();
+		batch.draw(crystalsTexture, 5, Gdx.graphics.getHeight() - crystalsTexture.getHeight() - 5);
+		batch.end();
+		
 	}
+	
+	
+	private void handleInput() {
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+                camera.zoom += 0.02;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                camera.zoom -= 0.02;
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                if (camera.position.x > 0)
+                        camera.translate(-3, 0, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if (camera.position.x < 1024)
+                        camera.translate(3, 0, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (camera.position.y > 0)
+                        camera.translate(0, -3, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                if (camera.position.y < 1024)
+                        camera.translate(0, 3, 0);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+                camera.rotate(-rotationSpeed, 0, 0, 1);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.E)) {
+                camera.rotate(rotationSpeed, 0, 0, 1);
+        }
+}
 
 	@Override
 	public void resize(int width, int height) {
 		if(stage == null) {
 			stage = new Stage(width, height, true);
-		}
-		stage.clear();
-		table.clear();
-		topStatus.clear();
-		bottomBar.clear();
-		bottomBarLeft.clear();
-		bottomBarRight.clear();
-		//stage.setViewport(1280, 720, true);
+		} 
+		camera = (OrthographicCamera) stage.getCamera();
+		camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 				
 		// Setting the "Style of a TextButton",
 		TextButtonStyle style = new TextButtonStyle();
-		style.up = skin.getDrawable("black_button1");
-		style.down = skin.getDrawable("black_button2");
+		style.up = skin.getDrawable("buttonnormal");
+		style.down = skin.getDrawable("buttonpressed");
 		style.font = white;
 
 		//tower buttons will probably change to Image button once we have mini-button-sized sprites.
@@ -165,6 +213,8 @@ public class GameScreen implements Screen{
         		towerInfo.setText("Frost Tower\nCost: One Million Dollars >:)"); 
         	}
 		 });
+		frostB.setX(5);
+		frostB.setY(69);
 
 		fireB = new TextButton("2", style);
 		fireB.setWidth(BUTTON_WIDTH);
@@ -178,6 +228,8 @@ public class GameScreen implements Screen{
         		towerInfo.setText("Fire Tower\nCost: "); 
         	}
 		 });
+		fireB.setX(5);
+		fireB.setY(5);
 		
 		holyB = new TextButton("3", style);
 		holyB.setWidth(BUTTON_WIDTH);
@@ -191,6 +243,9 @@ public class GameScreen implements Screen{
         		towerInfo.setText("Holy Tower\nCost: "); 
         	}
 		 });
+		holyB.setX(frostB.getX() + BUTTON_WIDTH + 5);
+		holyB.setY(69);
+		
 		
 		darknessB = new TextButton("4", style);
 		darknessB.setWidth(BUTTON_WIDTH);
@@ -204,6 +259,8 @@ public class GameScreen implements Screen{
         		towerInfo.setText("Darkness Tower\nCost: "); 
         	}
 		 });
+		darknessB.setX(fireB.getX() + BUTTON_WIDTH + 5);
+		darknessB.setY(5);
 		
 		piercingB = new TextButton("5", style);
 		piercingB.setWidth(BUTTON_WIDTH);
@@ -217,6 +274,8 @@ public class GameScreen implements Screen{
         		towerInfo.setText("Piercing Tower\nCost: "); 
         	}
 		 });
+		piercingB.setX(holyB.getX() + BUTTON_WIDTH + 5);
+		piercingB.setY(69);
 		
 		auraB = new TextButton("6", style);
 		auraB.setWidth(BUTTON_WIDTH);
@@ -230,8 +289,10 @@ public class GameScreen implements Screen{
         		towerInfo.setText("Aura Tower\nCost: "); 
         	}
 		 });
+		auraB.setX(darknessB.getX() + BUTTON_WIDTH + 5);
+		auraB.setY(5);
 		
-		backB = new TextButton("Back", style);
+		backB = new TextButton("X", style);
 		backB.setWidth(BUTTON_WIDTH);
 		backB.setHeight(BUTTON_HEIGHT);
 		backB.addListener(new InputListener() { 
@@ -243,34 +304,25 @@ public class GameScreen implements Screen{
         		game.setScreen(game.menuScreen); 
         	}
         });
+		backB.setX(Gdx.graphics.getWidth() - BUTTON_WIDTH - 5);
+		backB.setY(Gdx.graphics.getHeight() - BUTTON_HEIGHT - 5);
 		
-		//Tables for layout of gamescreen
-		topStatus.add(resourceTF).expandX().fill();
-		topStatus.add(backB).right();
+		resourceTF.setX(45);
+		resourceTF.setY(Gdx.graphics.getHeight() - resourceTF.getHeight() - 15);
+		resourceTF.setDisabled(true);
 		
-		table.add(topStatus).height(STATUS_HEIGHT).expandX().fill();
-		table.row();
-		table.add(randomLabel3).center().expandY().fill(); // row for gameTable
-		table.row();
+		towerInfo.setX(piercingB.getX() + towerInfo.getWidth()/2 + 10);
+		towerInfo.setY(69);
 		
-		bottomBarLeft.add(frostB).left().expandY(); //adding buttons
-		bottomBarLeft.add(fireB);
-		bottomBarLeft.add(holyB);
-		bottomBarLeft.row();
-		bottomBarLeft.add(darknessB).left().expandY();
-		bottomBarLeft.add(piercingB);
-		bottomBarLeft.add(auraB);
-		
-		bottomBarRight.add(towerInfo).expandX().fill(); //adding label for text, will need to add buttons to this table also.
-		
-		bottomBar.add(bottomBarLeft).left().fill();
-		bottomBar.add(bottomBarRight).right().expand().fill();
-		
-		table.add(bottomBar).bottom().height(BOTTOM_HEIGHT).expandX().fill(); // row for bottomBar 
-		
-		stage.addActor(table);
-		stage.addActor(bottomBar);
-		stage.addActor(topStatus);
+		stage.addActor(frostB);
+		stage.addActor(fireB);
+		stage.addActor(darknessB);
+		stage.addActor(holyB);
+		stage.addActor(auraB);
+		stage.addActor(piercingB);
+		stage.addActor(backB);
+		stage.addActor(resourceTF);
+		stage.addActor(towerInfo);
 	}
 
 	@Override
@@ -279,7 +331,7 @@ public class GameScreen implements Screen{
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
+		ArcadeInputMux.getInstance().addProcessor(stage);
 		atlas = new TextureAtlas(Gdx.files.internal("black_button.pack"));
 		skin = new Skin();
         skin.addRegions(atlas);

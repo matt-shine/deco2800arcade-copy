@@ -10,21 +10,25 @@ import com.badlogic.gdx.Input.Keys;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.AchievementListener;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.PlayerClient;
 import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 
-public abstract class GameClient extends com.badlogic.gdx.Game implements AchievementListener {
+public abstract class GameClient extends com.badlogic.gdx.Game {
 
 	protected Player player;
 	protected NetworkClient networkClient;
 	protected List<GameOverListener> gameOverListeners;
+	private int multiplayerOn = 0;
+	private int multiplayerSession;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
 	private int width, height;
     private AchievementClient achievementClient;
+    private PlayerClient playerClient;
     private boolean hasF11PressedLast = false;
     
 	private PackageClient packClient;
@@ -33,8 +37,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		
 		this.player = player;
 		this.networkClient = networkClient;
+		this.playerClient = new PlayerClient(networkClient);
         this.achievementClient = new AchievementClient(networkClient);
-        this.achievementClient.addListener(this);
+        //this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
 		
 		this.packClient = new PackageClient();
@@ -53,6 +58,15 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
     public void setNetworkClient(NetworkClient client) {
         achievementClient.setNetworkClient(client);
+        playerClient.setNetworkClient(client);
+    }
+    
+    public void setThisNetworkClient(NetworkClient client) {
+    	this.networkClient = client;
+    }
+    
+    public void setPlayer(Player player) {
+    	this.player = player;
     }
 
     public void incrementAchievement(final String achievementID) {
@@ -78,6 +92,10 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
     public AchievementClient getAchievementClient() {
         return this.achievementClient;
+    }
+    
+    public PlayerClient getPlayerClient() {
+    	return this.playerClient;
     }
 
 	/**
@@ -209,5 +227,33 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		return player;
 	}
 	
+	public void setMultiplayerOn() {
+		multiplayerOn = 1;
+	}
+	
+	public void setMultiplayerOff() {
+		multiplayerOn = 0;
+	}
+	
+	public boolean multiplayerMode() {
+		if (multiplayerOn == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void setMultiSession(int session) {
+		multiplayerSession = session;
+		startMultiplayerGame();
+	}
+	
+	public void startMultiplayerGame() {
+	}
+	
+	public void updateGameState(Object update) {
+	}
 	
 }
+	
+

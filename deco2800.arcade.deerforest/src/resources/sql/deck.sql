@@ -1,0 +1,9 @@
+CREATE TABLE DECK
+(
+DeckID int NOT NULL AUTO_INCREMENT,
+PlayerID int NOT NULL,
+DeckName varchar(30),
+-- Keys
+PRIMARY KEY (DeckID),
+FOREIGN KEY (PlayerID) REFERENCE DEER_PLAYER(PlayerID)
+);

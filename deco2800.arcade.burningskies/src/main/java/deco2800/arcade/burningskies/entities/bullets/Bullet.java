@@ -20,7 +20,7 @@ public abstract class Bullet extends Entity {
 	}
 	
 	protected Affinity affinity;
-	protected int damage;
+	protected int damage; 
 	protected Vector2 velocity;
 	protected Vector2 position;
 	protected Vector2 acceleration;

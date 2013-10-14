@@ -11,23 +11,31 @@ public class IncreasePaddle extends Powerup{
 	private final String img = "increasepaddle.png";
 	private Sprite sprite = new Sprite(new Texture(Gdx.files.classpath("imgs/" + img)));
 	private GameScreen context;
+	//A variable for comparing floats
 	private final float EPSILON = 0.0001f;
 	
+	/**
+	 * Instantiate a new instance of the increase paddle class
+	 * @param gs - the current game screen
+	 */
 	public IncreasePaddle(GameScreen gs) {
 		context = gs;
 	}
-	//TODO: Create a timer so that the paddle returns to the original size after a certain time has passed 
+	
+	/**
+	 * Increase the size of the paddle.
+	 * Adds to the score if the increase power up is already active.
+	 */
 	public void applyPowerup() {
-		System.out.println("Paddle width for increase: " + context.getPaddle().getPaddleShapeWidth() + " and standardWidth: " + context.getPaddle().getStandardWidth());
 		if ((context.getPaddle().getPaddleShapeWidth() - context.getPaddle().getStandardWidth()) > EPSILON) {
-			System.out.println("Increase score for increase paddle size");
 			context.incrementScore(20 * context.getLevel());
 			return;
 		}
 		context.getPaddle().increaseSize();
-		//context.getPaddle().setWidth(context.getPaddle().getWidth()*2);
 	}
-	
+	/**
+	 * @return the sprite for this powerup 
+	 */
 	public Sprite getSprite() {
 		return this.sprite;
 	}

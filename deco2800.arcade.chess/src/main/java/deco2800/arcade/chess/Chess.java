@@ -1317,7 +1317,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	recording = true;
-            	replayHandler.startSession(1, player.getUsername());
+            	replayHandler.startSession("chess", player.getUsername() );
         		replayHandler.startRecording();
             }
 	    });  

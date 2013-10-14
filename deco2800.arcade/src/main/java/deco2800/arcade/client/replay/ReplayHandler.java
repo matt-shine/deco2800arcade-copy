@@ -324,6 +324,16 @@ public class ReplayHandler {
 		throw new RuntimeException( "This method is no longer supported." );
 	}
 	
+	/**
+	 * No longer used, see playbackSession
+	 * 
+	 * @deprecated
+	 * @param sessionId, the id of the session to request
+	 */
+	public void requestEventsForSession( int sessionId ) {
+		throw new RuntimeException( "This method is no longer supported, see the playbackSession method" );
+	}
+	
 	/*
 	 * 
 	 * Methods to handle the Observers (ReplayEventListeners)

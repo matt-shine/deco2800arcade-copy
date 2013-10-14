@@ -199,7 +199,9 @@ public class HighscoreClient {
 	}
 	
 	/**
-	 * requestID: 1. This function is user INDEPENDENT.
+	 * Still requires some work in regards to returning a String as per the Api Docs.
+	 * 
+	 * requestID: 2. This function is user INDEPENDENT.
 	 * 
 	 * @param highestIsBest If having a high score is best for your game, then
 	 * set this to true. If having a low score is best, then set this to false.

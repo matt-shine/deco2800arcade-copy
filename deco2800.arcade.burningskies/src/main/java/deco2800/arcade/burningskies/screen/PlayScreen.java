@@ -211,6 +211,15 @@ public class PlayScreen implements Screen
     	
     	healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
     	healthBar.end();
+    	
+    	if(player.isAlive()) {
+	    	debugRender.begin(ShapeType.FilledCircle);
+	    	float[] hitbox = player.getHitbox().getTransformedVertices();
+	    	for(int i=0;i<hitbox.length;i+=2) {
+	    		debugRender.filledCircle(hitbox[i], hitbox[i+1], 3);
+	    	}
+	    	debugRender.end();
+    	}
     }
     
     private boolean outOfBounds(Entity e) {

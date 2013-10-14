@@ -1,6 +1,8 @@
 package deco2800.arcade.burningskies.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -20,11 +22,11 @@ public class Entity extends Image {
 	}
 
 	public boolean hasCollided(Entity other) {
-		return getHitbox().overlaps(other.getHitbox());
+		return Intersector.overlapConvexPolygons(getHitbox(), other.getHitbox());
 	}
 	
 	public boolean hasCollidedUnscaled(Entity other) {
-		return getUnscaledHitbox().overlaps(other.getUnscaledHitbox());
+		return Intersector.overlapConvexPolygons(getUnscaledHitbox(), other.getUnscaledHitbox());
 	}
 	
 	public float getCenterX() {
@@ -47,15 +49,27 @@ public class Entity extends Image {
 		return pos.y+getCenterY();
 	}
 
-	private Rectangle getHitbox() {
-		float newW = getWidth()*hitboxScale;
-		float newH = getHeight()*hitboxScale;
-		float newX = (getWidth()-newW)/2 + getX();
-		float newY = (getHeight()-newH)/2 + getY();
-		return new Rectangle(newX, newY, newW, newH);
+	public Polygon getHitbox() {
+		float w = getWidth()*hitboxScale;
+		float h = getHeight()*hitboxScale;
+		float x = (getWidth()-w)/2 + getX();
+		float y = (getHeight()-h)/2 + getY();
+		float[] points = {x,y,x+w,y,x+w,y+h,x,y+h};
+		Polygon hitbox = new Polygon(points);
+		hitbox.setOrigin(this.getCenterX(), this.getCenterY());
+		hitbox.setRotation(this.getRotation());
+		return hitbox;
 	}
 	
-	private Rectangle getUnscaledHitbox() {
-		return new Rectangle(getX(), getY(), getWidth(), getHeight());
+	public Polygon getUnscaledHitbox() {
+		float x = getX();
+		float y = getY();
+		float w = getWidth();
+		float h = getHeight();
+		float[] points = {x,y,x+w,y,x+w,y+h,x,y+h};
+		Polygon hitbox = new Polygon(points);
+		hitbox.setOrigin(this.getCenterX(), this.getCenterY());
+		hitbox.setRotation(this.getRotation());
+		return hitbox;
 	}
 }

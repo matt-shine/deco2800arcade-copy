@@ -231,9 +231,13 @@ public class MultiplayerLobby implements Screen {
 				//add to matchmaking queue method
 				//add overlay to say 'waiting for match'
 				//add second overlay (or modify first) to 'accept' or 'decline' match
-				
-				
+				dispose();
+				arcadeUI.setScreen(arcadeUI.getMultigame());
 				//ArcadeSystem.setMultiplayerEnabled(false);
+				
+				
+				//Code below has been commented out for overlay
+				/*
 				NewMultiGameRequest request = new NewMultiGameRequest();
             	Set<String> games = ArcadeSystem.getGamesList();
             	int i = 0;
@@ -249,7 +253,7 @@ public class MultiplayerLobby implements Screen {
             	request.requestType = MultiGameRequestType.NEW;
             	ArcadeSystem.goToGame(gameid);
             	ArcadeSystem.createMultiplayerGame(request);
-				
+				*/
 			}
 		});
 

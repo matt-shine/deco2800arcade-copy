@@ -15,6 +15,7 @@ public class Guard extends Enemy {
 
         damage = 0;
         dType = HITSCAN;
+        this.setTextureName("snowman");
     }
 
 

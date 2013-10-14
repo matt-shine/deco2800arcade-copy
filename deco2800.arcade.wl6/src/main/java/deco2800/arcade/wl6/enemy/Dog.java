@@ -13,6 +13,7 @@ public class Dog extends Enemy {
         chaseSpeed = 3000;
         pain = false;
         points = 200;
+        this.setTextureName("penguin");
     }
 
     @Override

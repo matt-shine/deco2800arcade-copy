@@ -18,12 +18,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+/**
+ * Main class for forum interface
+ *
+ * @author TeamForum
+ */
 public class ForumUi {
 	private static JTextField textField;
 
 	   public static void main(String[] args) {
-	      
+	      //Initialise new JFrame for forum interface
 	      JFrame f = new JFrame("Arcade Forum");
 	      f.setSize(1024, 768);
 	      f.setLocation(300,200);
@@ -44,12 +48,14 @@ public class ForumUi {
 	      lblHome.setFont(new Font("Cambria", Font.BOLD, 15));
 	      lblHome.setBounds(26, 76, 56, 16);
 	      f.getContentPane().add(lblHome);
-	      
+
+          //FAQ
 	      JLabel lblFaq = new JLabel("FAQ");
 	      lblFaq.setFont(new Font("Cambria", Font.BOLD, 15));
 	      lblFaq.setBounds(147, 76, 74, 16);
 	      f.getContentPane().add(lblFaq);
-	      
+
+          //Search Button
 	      JButton btnSearch = new JButton("Search");
 	      btnSearch.setBounds(897, 73, 97, 25);
 	      f.getContentPane().add(btnSearch);
@@ -95,12 +101,13 @@ public class ForumUi {
 	      });
 	     
 	     
-	      
+	      //Tutorial Label
 	      JLabel lblTutorial = new JLabel("Tutorial ");
 	      lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 13));
 	      lblTutorial.setBounds(12, 280, 141, 16);
 	      f.getContentPane().add(lblTutorial);
-	      
+
+          //Bug Reporting
 	      JLabel lblReportBug = new JLabel("Report Bug");
 	      lblReportBug.setFont(new Font("Tahoma", Font.BOLD, 13));
 	      lblReportBug.setBounds(12, 432, 141, 16);

@@ -17,6 +17,11 @@ import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Tutorial page for users requiring help with use of the forum
+ *
+ * @author TeamForum
+ */
 public class Tutorial {
 	private static JTextField textField;
 

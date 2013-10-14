@@ -27,11 +27,8 @@ public class ArcadeUI extends GameClient {
     RegisterScreen register = null;
     MultiplayerLobby lobby = null;
     BettingWindow betting = null;
-<<<<<<< HEAD
     BettingLobby betLobby = null;
-=======
 	MultiGamelist multigame = null;
->>>>>>> 96c172362b313be3a8dbdab563db9544da506779
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -53,12 +50,9 @@ public class ArcadeUI extends GameClient {
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);
         betting = new BettingWindow(this);
-<<<<<<< HEAD
         betLobby = new BettingLobby(this);
-=======
 		multigame = new MultiGamelist();
 
->>>>>>> 96c172362b313be3a8dbdab563db9544da506779
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
             this.setScreen(home);
@@ -118,13 +112,11 @@ public class ArcadeUI extends GameClient {
 	public BettingWindow getBetting() {
 		return betting;
 	}
-<<<<<<< HEAD
 
 	public BettingLobby getBetLobby() {
 		return betLobby;
-=======
+	}
 	public MultiGamelist getMultigame() {
 		return multigame;
->>>>>>> 96c172362b313be3a8dbdab563db9544da506779
 	}
 }

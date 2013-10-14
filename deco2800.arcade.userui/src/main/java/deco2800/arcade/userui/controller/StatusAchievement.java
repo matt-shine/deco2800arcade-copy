@@ -39,6 +39,7 @@ public class StatusAchievement {
 			statusView.dispose();
 			statusView.getStatusSelection();
 			achievementView.setStatus(theModel.statusIcon);
+			achievementView.setEnabled(true);
 			
 		}
 		
@@ -50,6 +51,7 @@ public class StatusAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			statusView.dispose();
+			achievementView.setEnabled(true);
 			
 		}
 		

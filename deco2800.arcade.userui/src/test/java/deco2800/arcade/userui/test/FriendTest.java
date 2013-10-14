@@ -17,10 +17,7 @@ public class FriendTest {
 
 	@Test
 	public void inituser() {
-		
-		userView = new UserScreen(theModel);
-		statusView = new StatusScreen(theModel);
-		
+
 	}
 
 }

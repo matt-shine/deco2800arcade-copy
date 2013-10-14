@@ -67,7 +67,6 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			editView = new EditScreen(theModel);
-			
 						
 		}
 		
@@ -140,6 +139,7 @@ public class ControllerMain {
 			//Add Friend to List
 			addfriendView = new AddFriendScreen(theModel);
 			AddFriend addfriend = new AddFriend(theModel, addfriendView, userView);
+			userView.setEnabled(false);
 			
 		}
 		
@@ -153,6 +153,7 @@ public class ControllerMain {
 			//Remove a friend
 			removefriendView = new RemoveFriendScreen(theModel);
 			RemoveFriend removefriend = new RemoveFriend(theModel, removefriendView, userView);
+			userView.setEnabled(false);
 			
 		}
 		
@@ -166,6 +167,7 @@ public class ControllerMain {
 			//Open status popup
 			statusView = new StatusScreen(theModel);
 			StatusMain statuscontrol = new StatusMain(theModel, statusView, userView);
+			userView.setEnabled(false);
 			
 		}
 		

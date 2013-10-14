@@ -39,6 +39,7 @@ public class StatusMain {
 			statusView.dispose();
 			statusView.getStatusSelection();
 			userView.setStatus(theModel.statusIcon);
+			userView.setEnabled(true);
 			
 		}
 		
@@ -50,6 +51,7 @@ public class StatusMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			statusView.dispose();
+			userView.setEnabled(true);
 			
 		}
 		

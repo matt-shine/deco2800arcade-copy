@@ -207,55 +207,6 @@ public class StatusScreen extends JFrame{
 		}
 		
 	}
-	
-	/*
-	 *  Classes used for Testing 
-	 */
-	
-	/**
-	 *  Simulates onlinebutton click
-	 */
-	public void onlineclick(){
-		
-		onlinebutton.doClick();
-		
-	}
-	
-	/**
-	 *  Simulates offlinebutton click
-	 */
-	public void offlineclick(){
-		
-		offlinebutton.doClick();
-		
-	}
-	
-	/**
-	 *  Simulates awaybutton click
-	 */
-	public void awayclick(){
-		
-		awaybutton.doClick();
-		
-	}
-	
-	/**
-	 *  Simulates busybutton click
-	 */
-	public void busyclick(){
-		
-		busybutton.doClick();
-		
-	}
-	
-	/**
-	 *  Simulates savebutton click
-	 */
-	public void saveclick(){
-		
-		savebutton.doClick();
-		
-	}
 
 }
 

@@ -37,6 +37,7 @@ public class AddFriend {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			friendView.dispose();
+			userView.setEnabled(true);
 			
 		}
 		
@@ -48,6 +49,7 @@ public class AddFriend {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			friendView.dispose();
+			userView.setEnabled(true);
 			
 		}
 		

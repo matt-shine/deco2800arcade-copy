@@ -81,6 +81,7 @@ public class PlayerTest {
 	@Test
 	public void setUsernameTest() {
 		player2.setUsername("Peter Rabbit");
+		player2.setUsername(null);
 		Assert.assertTrue(player2.getUsername().equals("Peter Rabbit"));
 	}
 
@@ -149,6 +150,7 @@ public class PlayerTest {
 	public void addGamesTest() {
 		player1.addGame(game1);
 		player1.addGame(game2);
+		player1.addGame(null);
 		Assert.assertTrue(player1.getGames().size() == 2);
 		Assert.assertTrue(player1.getGames().contains(game1));
 		Assert.assertTrue(player1.getGames().contains(game2));
@@ -207,6 +209,7 @@ public class PlayerTest {
 	public void addFriendInvitesTest() {
 		player1.addInvite(user1);
 		player1.addInvite(user2);
+		player1.addInvite(null);
 		Assert.assertTrue(player1.getInvites().size() == 2);
 		Assert.assertTrue(player1.getInvites().contains(user1));
 		Assert.assertTrue(player1.getInvites().contains(user2));
@@ -218,6 +221,7 @@ public class PlayerTest {
 		player2.addInvite(user4);
 		Assert.assertTrue(player2.getInvites().contains(user3));
 		Assert.assertTrue(player2.getInvites().contains(user4));
+		player2.removeInvite(null);
 		player2.removeInvite(user3);
 		player2.removeInvite(user4);
 		Assert.assertTrue(!player2.getInvites().contains(user3));
@@ -243,6 +247,7 @@ public class PlayerTest {
 	public void addBlockedTest() {
 		player1.blockPlayer(user1);
 		player1.blockPlayer(user2);
+		player1.blockPlayer(null);
 		Assert.assertTrue(player1.getBlockedList().size() == 2);
 		Assert.assertTrue(player1.getBlockedList().contains(user1));
 		Assert.assertTrue(player1.getBlockedList().contains(user2));
@@ -254,6 +259,7 @@ public class PlayerTest {
 		player2.blockPlayer(user4);
 		Assert.assertTrue(player2.getBlockedList().contains(user3));
 		Assert.assertTrue(player2.getBlockedList().contains(user4));
+		player2.removeBlocked(null);
 		player2.removeBlocked(user3);
 		player2.removeBlocked(user4);
 		Assert.assertTrue(!player2.getBlockedList().contains(user3));

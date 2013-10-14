@@ -39,8 +39,8 @@ public class NetworkClient {
 	 */
 	public NetworkClient(String serverAddress, int tcpPort, int udpPort) 
 			throws NetworkException{
-    this.client = new Client();
-    this.client.start();
+		this.client = new Client(131072, 131072);
+		this.client.start();
 		
 		try {
             if (udpPort == -1)

@@ -26,6 +26,8 @@ import deco2800.server.database.*;
 import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
 
+import deco2800.server.webserver.ArcadeWebserver;
+
 /** 
  * Implements the KryoNet server for arcade games which uses TCP and UDP
  * transport layer protocols. 
@@ -78,6 +80,7 @@ public class ArcadeServer {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
     server.startFileserver();
+		ArcadeWebserver.startServer( );
 	}
 
 	//Achievement storage service
@@ -201,23 +204,23 @@ public class ArcadeServer {
 		
 	}
 	
-    /**
-     * Start the server running
-     */
-    public void start() {
-        Server server = new Server();
-        System.out.println("Server starting");
-        server.start();
-        try {
-            server.bind(TCP_PORT, UDP_PORT);
-            System.out.println("Server bound");
-        } catch (BindException b) {
-            System.err.println("Error binding server: Address already in use");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+	/**
+	 * Start the server running
+	 */
+	public void start() {
+		Server server = new Server(131072, 16384);
+		System.out.println("Server starting");
+		server.start();
+		try {
+			server.bind(TCP_PORT, UDP_PORT);
+			System.out.println("Server bound");
+		} catch (BindException b) {
+			System.err.println("Error binding server: Address already in use");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
         Protocol.register(server.getKryo());
         server.addListener(new ConnectionListener(connectedUsers));
         server.addListener(new CreditListener());

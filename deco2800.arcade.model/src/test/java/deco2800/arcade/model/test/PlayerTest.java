@@ -72,6 +72,13 @@ public class PlayerTest {
 		player2 = new Player(123, "THIS IS NOT A VALID PATH.html", info2,
 				friendSet, requestSet, blockSet, gameSet, privset2);
 	}
+	
+	@Test
+	public void playerFactoryTest(){
+		Player steve = PlayerTestFactory.createPlayer(1, "Steve");
+		Assert.assertTrue(steve.getUsername().equals("Steve"));
+		Assert.assertTrue(steve.getID() == 1);
+	}
 
 	@Test
 	public void getUsernameTest() {

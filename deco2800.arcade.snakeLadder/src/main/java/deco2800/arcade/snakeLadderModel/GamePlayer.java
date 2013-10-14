@@ -121,9 +121,9 @@ public class GamePlayer {
     
    public int getDnumber(int diceNumber){
     	coordinate+=diceNumber;
-    	if(coordinate>=100)
+    	if(coordinate>=99)
     	{
-    		coordinate=100;
+    		coordinate=99;
     	}
     	return coordinate;
     }

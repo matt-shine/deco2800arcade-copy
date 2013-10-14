@@ -2,7 +2,7 @@ package deco2800.server.listener;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import deco2800.arcade.server.FileServer;
+import deco2800.server.FileServer;
 import deco2800.arcade.protocol.packman.FetchGameRequest;
 
 public class FileServerListener extends Listener {

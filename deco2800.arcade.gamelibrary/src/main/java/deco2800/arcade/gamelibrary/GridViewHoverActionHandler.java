@@ -13,16 +13,14 @@ public class GridViewHoverActionHandler extends ClickListener {
 
     private LibraryScreen screen;
     private Game game;
-    private boolean down = false;
 
     public GridViewHoverActionHandler(LibraryScreen libraryScreen) {
         screen = libraryScreen;
         game = null;
     }
 
-
     /**
-     * Grid View Play Buttons
+     * Grid View Hover
      * @param libraryScreen library screen
      * @param g Game
      */
@@ -32,7 +30,7 @@ public class GridViewHoverActionHandler extends ClickListener {
     }
 
     /**
-     * Grid View Play Buttons
+     * Grid View Hover
      * @param libraryScreen library screen
      * @param gameID ArcadeID of the game
      */
@@ -45,7 +43,11 @@ public class GridViewHoverActionHandler extends ClickListener {
 
     @Override
     public void enter(InputEvent event, float x, float y, int pointer, Actor actor) {
-        screen.setDescriptonText(game.getDescription());
+        if(game.getDescription() == null || game.getDescription().equals("N/A")) {
+            screen.setDescriptonText("No Description Available");
+        } else {
+            screen.setDescriptonText(game.getDescription());
+        }
     }
 
     @Override

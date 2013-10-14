@@ -50,5 +50,9 @@ public interface LibraryScreen {
      */
     public void showMore();
 
+    /**
+     * Sets the description text for the GridView
+     * @param text String
+     */
     public void setDescriptonText(String text);
 }

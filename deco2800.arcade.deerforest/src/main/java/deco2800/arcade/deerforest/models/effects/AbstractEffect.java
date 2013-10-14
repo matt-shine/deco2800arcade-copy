@@ -32,28 +32,25 @@ public abstract class AbstractEffect {
 	 * 		"Destroy" category:
 	 * 			- Amount of cards
 	 * 			- Location of cards
-	 * 				0 = Deck
-	 * 				1 = Hand
-	 * 				2 = Field
-	 * 				3 = Graveyard
+	 * 				0 = Hand
+	 * 				1 = Field
 	 * 			- Player
 	 * 				0 = Self
 	 * 				1 = Opponent
-	 * 				2 = Both (so each player destroys the amount of cards)
-	 * 				3 = Either (so amount of cards is destroyed from whoever)
-	 * 			- Frequency
-	 * 				0 = On activation / Summon
-	 * 				1 = once per turn (yours)
-	 * 				2 = once per turn (opponents)
-	 * 				3 = once per turn (each players turn)
+	 * 				2 = Either (so amount of cards is destroyed from whoever)
 	 * 			- Category of card affected
 	 * 				0 = Monsters
 	 * 				1 = Spells
 	 * 				2 = Both
+ 	 * 			- Frequency
+	 * 				0 = On activation / Summon
+	 * 				1 = once per turn (yours)
+	 * 				2 = once per turn (opponents)
+	 * 				3 = once per turn (each players turn)
 	 * 			- Type card affects
 	 * 				0 = any
-	 * 				1 = Fire (if monster) / General (if spell)
-	 * 				2 = Nature (if monster) / Field (if spell)
+	 * 				1 = Fire (if monster)  / Field (if spell)
+	 * 				2 = Nature (if monster)
 	 * 				3 = Water
 	 * 				4 = Dark
 	 * 				5 = Light
@@ -82,12 +79,6 @@ public abstract class AbstractEffect {
 	 * 				1 = Health
 	 * 				2 = Both
 	 * 			- Amount to affect by (can be negative for losing attack / health)
-	 * 			- Frequency
-	 * 				0 = while on field
-	 * 				1 = during turn of activation
-	 * 				2 = once per turn (yours)
-	 * 				3 = once per turn (opponents)
-	 * 				4 = once per turn (each players turn)
 	 * 			- Type card affects
 	 * 				0 = any
 	 * 				1 = Fire
@@ -95,6 +86,12 @@ public abstract class AbstractEffect {
 	 * 				3 = Water
 	 * 				4 = Dark
 	 * 				5 = Light
+	 * 			- Frequency
+	 * 				0 = while on field
+	 * 				1 = during turn of activation
+	 * 				2 = once per turn (yours)
+	 * 				3 = once per turn (opponents)
+	 * 				4 = once per turn (each players turn)
 	 * 
 	 * 		"Search" category:
 	 * 			- Amount of cards
@@ -108,14 +105,14 @@ public abstract class AbstractEffect {
 	 * 				1 = Hand
 	 * 				2 = Field
 	 * 				3 = Graveyard
-	 * 			- Frequency
-	 * 				0 = On activation / Summon
-	 * 				1 = once per turn (yours)
-	 * 				2 = once per turn (opponents)
 	 * 			- Category of card searched
 	 * 				0 = Monsters
 	 * 				1 = Spells
 	 * 				2 = Both
+	 * 			- Frequency
+	 * 				0 = On activation / Summon
+	 * 				1 = once per turn (yours)
+	 * 				2 = once per turn (opponents)
 	 * 			- Min attack (irrelevant if spell searching, still needs to exist)
 	 * 				-1 = N/A
 	 * 			- Max attack (irrelevant if spell searching, still needs to exist)
@@ -155,7 +152,7 @@ public abstract class AbstractEffect {
 	 * @param typeEffects Set of all the monster types that the effect affects
 	 * 			null if it can affect any type
 	 * 
-	 * @param effectCategory List of each effect category that this effect has
+	 * @param effectCategories List of each effect category that this effect has
 	 * 			must be in same order as the parameters list
 	 * 
 	 * @param effectParams List of list of parameters, with one list for each 
@@ -348,29 +345,36 @@ public abstract class AbstractEffect {
 		try {
 			//check amount of cards is valid
 			if(params.get(0) < 0) {
+                System.out.println("amount problem");
 				return false;
 			}
 			//check location of cards is valid
-			if(params.get(1) < 0 || params.get(1) > 3) {
+			if(params.get(1) < 0 || params.get(1) > 1) {
+                System.out.println("location problem");
 				return false;
 			}
 			//check player affected is valid
 			if(params.get(2) < 0 || params.get(2) > 3) {
+                System.out.println("player problem");
 				return false;
 			}
-			//check frequency is valid
-			if(params.get(3) < 0 || params.get(3) > 3) {
+            //check category of card affected is valid
+			if(params.get(3) < 0 || params.get(3) > 2) {
+                System.out.println("category problem");
 				return false;
 			}
-			//check category of card affected is valid
-			if(params.get(4) < 0 || params.get(4) > 2) {
+            //check frequency is valid
+			if(params.get(4) < 0 || params.get(4) > 3) {
+                System.out.println("frequency problem");
 				return false;
 			}
 			//check type of card affected is valid
 			if(params.get(5) < 0 || params.get(5) > 5) {
+                System.out.println("type problem");
 				return false;
 			}
 		} catch(IndexOutOfBoundsException e) {
+            System.out.println("index problem");
 			return false;
 		}
 		
@@ -414,24 +418,24 @@ public abstract class AbstractEffect {
 	private boolean checkMonster(List<Integer> params) {
 		
 		try {
+            //check no monsters
+            if(params.get(0) < 0) {
+                return false;
+            }
 			//check player is valid
-			if(params.get(0) < 0 || params.get(0) > 2) {
-				return false;
-			}
-			//check stat is valid
 			if(params.get(1) < 0 || params.get(1) > 2) {
 				return false;
 			}
-			//check amount to affect by is valid
-			if(params.get(2) < 0) {
+			//check stat is valid
+			if(params.get(2) < 0 || params.get(2) > 2) {
 				return false;
 			}
 			//check frequency is valid
-			if(params.get(3) < 0 || params.get(3) > 4) {
+			if(params.get(4) < 0 || params.get(4) > 3) {
 				return false;
 			}
 			//check type is valid
-			if(params.get(4) < 0 || params.get(4) > 5) {
+			if(params.get(5) < 0 || params.get(5) > 5) {
 				return false;
 			}
 		} catch(IndexOutOfBoundsException e) {
@@ -510,6 +514,10 @@ public abstract class AbstractEffect {
 			if(params.get(2) < 0) {
 				return false;
 			}
+            //check frequency is valid
+            if(params.get(4) < 0 || params.get(4) > 4) {
+                return false;
+            }
 		} catch(IndexOutOfBoundsException e) {
 			return false;
 		}
@@ -517,6 +525,10 @@ public abstract class AbstractEffect {
 		return true;
 	}
 
+    /**
+     * Defines the hashcode method, used for determining how each card is unique
+     * @return the hashcode
+     */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -531,6 +543,11 @@ public abstract class AbstractEffect {
 		return result;
 	}
 
+    /**
+     * compares this effect to another object
+     * @param obj the object to compare against
+     * @return true if the object is the same as this one, false otherwise
+     */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

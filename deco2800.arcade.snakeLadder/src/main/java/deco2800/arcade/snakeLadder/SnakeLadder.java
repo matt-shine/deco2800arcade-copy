@@ -121,6 +121,7 @@ public class SnakeLadder extends GameClient {
 		
 		font = new BitmapFont();
 		font.setScale(2);
+		
 		//Initialise the game state
 		//gameState = GameState.READY;
 		gameState = new WaitingState();
@@ -131,12 +132,13 @@ public class SnakeLadder extends GameClient {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         
-      //rendering scoreboard UI
+        //rendering scoreboard UI
   		renderScoreBoard();
         
   		for (int i = 0; i < gamePlayers.length; i++){
   			dices.add(new Dice());
   		}
+  		
         //setDice(new Dice());
         //setDiceAI(new Dice());
         
@@ -192,7 +194,7 @@ public class SnakeLadder extends GameClient {
 			gamePlayer.renderPlayer(batch);
 		}
 		
-		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
+		//If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
 	    	font.setColor(Color.WHITE);
@@ -214,11 +216,7 @@ public class SnakeLadder extends GameClient {
 	 * Handle player input from mouse click
 	 */
 	private void handleInput() {
-//		switch(gameState) {		    
-//		    case READY: //Ready to start a new point		    			    	
-//		    case INPROGRESS: 		    	
-//		    case GAMEOVER: //The game has been won, wait to exit		    	
-//		    }
+		//use gameState to handle user input
 		gameState.handleInput(this);
 	}
 	

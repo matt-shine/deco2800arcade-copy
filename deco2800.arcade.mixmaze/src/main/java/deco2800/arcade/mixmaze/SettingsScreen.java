@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -56,16 +58,31 @@ public class SettingsScreen implements Screen {
 	private Image p1AvatarImage;
 	private TextureRegion p2AvatarTexRegion;
 	private Image p2AvatarImage;
-
+	private Stack p1Avatarstack;
+	private Stack p2Avatarstack;
+	private TextureRegion p1HeadRegion;
+	private Image p1BodyImage;
+	private Image p1HeadImage;
+	private Image p2HeadImage;
+	private TextureRegion p2HeadRegion;
+	private Image p1BackImage;
+	private Image p2BackImage;
+	private Image p2BodyImage;
+	
+	
 	SettingsScreen(final MixMaze game) {
 		this.game = game;
 		
 		startDebug();
 		initialize();
+		createAvatarStack(p1Avatarstack, 
+				p1BackImage, p1BodyImage, p1HeadImage, p1HeadRegion, "avatars.png");
+		createAvatarStack(p2Avatarstack, 
+				p2BackImage, p2BodyImage, p2HeadImage, p2HeadRegion, "avatars.png");
 		setTableLayout();
 		createSettingsPanel();
-		createPlayerPanel(playerOnePanel, p1Texts, p1Buttons, p1AvatarImage);
-		createPlayerPanel(playerTwoPanel, p2Texts, p2Buttons, p2AvatarImage);
+		createPlayerPanel(playerOnePanel, p1Texts, p1Buttons, p1Avatarstack);
+		createPlayerPanel(playerTwoPanel, p2Texts, p2Buttons, p2Avatarstack);
 
 		stage.addActor(rootTable);
 		addTextFeildListeners(p1Texts);
@@ -87,10 +104,10 @@ public class SettingsScreen implements Screen {
 
 		});
 
-		p1Buttons[1].addListener(new ChangeListnr(p1AvatarTexRegion, true));
-		p1Buttons[0].addListener(new ChangeListnr(p1AvatarTexRegion, false));
-		p2Buttons[1].addListener(new ChangeListnr(p2AvatarTexRegion, true));
-		p2Buttons[0].addListener(new ChangeListnr(p2AvatarTexRegion, false));
+		p1Buttons[1].addListener(new ChangeListnr(p1HeadRegion, true));
+		p1Buttons[0].addListener(new ChangeListnr(p1HeadRegion, false));
+		p2Buttons[1].addListener(new ChangeListnr(p2HeadRegion, true));
+		p2Buttons[0].addListener(new ChangeListnr(p2HeadRegion, false));
 
 	}
 
@@ -154,11 +171,49 @@ public class SettingsScreen implements Screen {
 		p1AvatarImage.setScaling(Scaling.fill);
 		p2AvatarImage = new Image(p2AvatarTexRegion);
 		p2AvatarImage.setScaling(Scaling.fill);
-
+		
+		p1BackImage = new Image(new TextureRegion(new Texture(
+				Gdx.files.internal("grey.png"))));		
+		p1BodyImage = new Image(new TextureRegion(new Texture(
+				Gdx.files.internal("body.png"))));
+		p1HeadRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("avatars.png")), 256, 0, 256, 256);
+		p1HeadImage = new Image(p1HeadRegion);
+		
+		p2BackImage = new Image(new TextureRegion(new Texture(
+				Gdx.files.internal("grey.png"))));		
+		p2BodyImage = new Image(new TextureRegion(new Texture(
+				Gdx.files.internal("body.png"))));
+		p2HeadRegion = new TextureRegion(new Texture(
+				Gdx.files.internal("avatars.png")), 0, 0, 256, 256);
+		p2HeadImage = new Image(p2HeadRegion);
+		
+		p1Avatarstack = new Stack();
+		p2Avatarstack = new Stack();
+	
+		
+		//bodyImage.setColor(Color.YELLOW);
+		//p1HeadImage.setColor(Color.YELLOW);
 	}
+	private void createAvatarStack(Stack stack, Image background, Image body,
+			Image head,TextureRegion headReigion,String bodyName){
 
+		
+		background.setScaling(Scaling.fill);
+		
+		
+		body.setScaling(Scaling.fill);		
+		
+				
+		
+		head.setScaling(Scaling.fill);
+		
+		stack.add(background);
+		stack.add(body);
+		stack.add(head);
+	}
 	private void createPlayerPanel(Table panel, TextField[] playerDetails,
-			TextButton[] playerButtons, Image avatar) {
+			TextButton[] playerButtons, Stack avatar) {
 		panel.row().padBottom(20).padTop(165);
 		panel.add(playerButtons[0]);
 		panel.add(avatar).prefHeight(150);
@@ -385,7 +440,7 @@ public class SettingsScreen implements Screen {
 
 		@Override
 		public void clicked(InputEvent event, float x, float y) {
-			if (isNext == true && avatar.getRegionX() < 513) {
+			if (isNext == true && avatar.getRegionX() < 1281) {
 				avatar.setRegion(avatar.getRegionX() + 256, 0, 256, 256);
 			}
 			if (isNext == false && avatar.getRegionX() > 255) {

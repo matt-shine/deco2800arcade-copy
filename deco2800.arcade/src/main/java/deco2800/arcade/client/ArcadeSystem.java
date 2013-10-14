@@ -9,6 +9,8 @@ import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 //TODO commenting?
 import deco2800.arcade.model.Game;
@@ -38,7 +40,7 @@ public class ArcadeSystem {
 		arcade.stopGame();
 		arcade.startGame(gameid);
 	}
-
+	
     /**
      * Start GameClient
      * @param gameClient GameClient to start
@@ -48,7 +50,32 @@ public class ArcadeSystem {
         arcade.setGame(gameClient);
         arcade.startGame(gameClient);
     }
-
+    
+	/**
+	 * Helper function to convert strings relative to game/src/resources to the proper format for the new GDX version.
+	 * Also prints more meaningful info on failure
+	 * @param path
+	 * @return
+	 */
+	public static FileHandle arcadeFile(String path) {
+		if(arcade.getCurrentGame() != null) {
+			String name = arcade.getCurrentGame().getClass().getCanonicalName();
+			String[] parts = name.split(".");
+			String folder;
+			try{
+				folder = parts[0]+"."+parts[1]+"."+parts[2];
+			}
+			catch(Exception e){
+				System.out.println("Couldn't get all name parts, contact William Toohey as this is a bug.");
+				return null;
+			}
+			return Gdx.files.internal("../"+folder+path);
+		} else {
+			System.out.println("Could not load file " + path + " due to missing arcade game. Huh?");
+			return null;
+		}
+	}
+	
     /**
      * Open connection to server
      */

@@ -74,7 +74,7 @@ public class FileClient implements Runnable {
         try {
             // Extract the JAR
             PackCompress unpack = new PackCompress();
-            unpack.Expand(filebase + ".tar.gz", filebase + ".jar");
+            unpack.expand(filebase + ".tar.gz", filebase + ".jar");
 
             // Delete the .tar.gz file
             File del = new File(filebase + ".tar.gz");

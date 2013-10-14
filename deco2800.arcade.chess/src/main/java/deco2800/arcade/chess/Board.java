@@ -1542,7 +1542,7 @@ public class Board {
 	 */
 	private int[] chooseAISquare(Piece movePiece) {
 		
-		List<int[]> moves = removeCheckMoves(movePiece);
+		List<int[]> moves = allowedMoves(movePiece);
 		
 		int numMoves = moves.size();
 		

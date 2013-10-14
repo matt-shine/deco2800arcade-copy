@@ -34,7 +34,7 @@ public class ControllerEdit {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			//Saves changes, leaves Edit Profile Page
 			editView.dispose();
 			
 		}
@@ -45,7 +45,7 @@ public class ControllerEdit {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			//Changes are not saved, leaves Edit Profile Page
 			editView.dispose();
 			
 		}
@@ -56,7 +56,7 @@ public class ControllerEdit {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			
+			//Uploads and updates avatar, leaves Edit Profile Page
 			editView.dispose();
 			
 		}

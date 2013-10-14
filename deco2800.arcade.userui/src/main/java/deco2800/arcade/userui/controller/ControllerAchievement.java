@@ -10,19 +10,22 @@ import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
 public class ControllerAchievement {
-	
+	/**
+	 * Public class for the Achievement Controller
+	 * 
+	 */
 	private AchievementScreen achievementView;
 	private StatusScreen statusView;
 	private Model theModel;
 	private UserScreen userView;
 	
-	/**
-	 * Controller for the achievement page
-	 * @param theModel
-	 * @param achievementView
-	 */
+	
 	public ControllerAchievement(Model theModel, AchievementScreen achievementView){
-		
+		/**
+		 * Controller for the achievement page
+		 * @param theModel
+		 * @param achievementView
+		 */
 		this.theModel = theModel;
 		this.achievementView = achievementView;
 		
@@ -39,7 +42,10 @@ public class ControllerAchievement {
 	}
 	
 	public void checkstatus(){
-		
+		/**
+		 * Checks the Status of Achievements (eg. Number of Achievements Unlocked)
+		 * 
+		 */
 		achievementView.setStatus(theModel.getStatusIcon());
 
 	}
@@ -108,6 +114,7 @@ public class ControllerAchievement {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			//Opens the Profile page
 			System.out.println("My Profile Button Works");
 			achievementView.dispose();
 			userView = new UserScreen(theModel);

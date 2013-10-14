@@ -10,7 +10,8 @@ import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
 public class AddFriend {
-	/** this is a comment
+	/** 
+	 * Public class for adding friends
 	 * 
 	 */
 	private UserScreen userView;
@@ -34,6 +35,11 @@ public class AddFriend {
 	}
 
 	class AddFriendListener implements ActionListener{
+		/**
+		 * AddFriendListener; listens for user input on Add Friend pop up
+		 * Removes pop up when user clicks "Add Friend"
+		 * 
+		 */
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -46,7 +52,11 @@ public class AddFriend {
 	}
 	
 	public class CancelListener implements ActionListener{
-
+		/**
+		 * CancelListener; listens for user input on Add Friend pop up
+		 * Removes pop up when user clicks "Cancel" Button
+		 * 
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			

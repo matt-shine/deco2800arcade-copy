@@ -75,24 +75,6 @@ public class SpawnList {
 	 */	
 	private void spawnEnemy(Object object) {
 		Vector2[] v = (Vector2[]) object;
-		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, new Vector2(v[1].x, v[1].y)) );
+		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, screen.getPlayer()) );
 	}
-
-	/* Testing purposes, but still may still use later
-	 */
-	private void addRandomEnemy() {
-	    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
-	    	float startY = (float) 700;
-	    	int direction;
-	    	
-	    	if((int) Math.floor(Math.random() * 2) == 1 )
-	    		direction = 1;
-	    	else
-	    		direction = -1;
-	    	
-	    	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
-	    	float vY = (float) Math.ceil(Math.random() * -150) - 50;
-	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), screen, new Vector2(vX,vY)) );    	
-	}
-
 }

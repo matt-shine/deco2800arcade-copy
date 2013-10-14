@@ -60,16 +60,18 @@ public class ArcadeSystem {
 	public static FileHandle arcadeFile(String path) {
 		if(arcade.getCurrentGame() != null) {
 			String name = arcade.getCurrentGame().getClass().getCanonicalName();
-			String[] parts = name.split(".");
+			String[] parts = name.split("\\.");
 			String folder;
 			try{
-				folder = parts[0]+"."+parts[1]+"."+parts[2];
+				folder = parts[0]+"."+parts[1]+"."+parts[2]+"/src/main/resources/";
 			}
 			catch(Exception e){
 				System.out.println("Couldn't get all name parts, contact William Toohey as this is a bug.");
+				System.out.println("Name was "+name);
 				return null;
 			}
 			return Gdx.files.internal("../"+folder+path);
+			
 		} else {
 			System.out.println("Could not load file " + path + " due to missing arcade game. Huh?");
 			return null;

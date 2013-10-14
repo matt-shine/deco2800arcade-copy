@@ -182,14 +182,9 @@ public class PlayScreen implements Screen
 			// checks if the enemy is out of screen, if so remove it
 			for(int i=0; i<enemies.size(); i++) {
 				Enemy e = enemies.get(i);
-				if(outOfBounds(e)) {
-					removeEntity(e);
-					i--;
-					continue;
-					
-				}
 				if(e.hasCollided(player) && player.isAlive()) {
 					removeEntity(e);
+					i--;
 					player.damage(40);
 				}
 			}	

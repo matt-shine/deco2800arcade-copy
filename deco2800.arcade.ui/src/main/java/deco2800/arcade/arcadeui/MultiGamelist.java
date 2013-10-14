@@ -32,8 +32,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
@@ -52,7 +50,7 @@ public class MultiGamelist implements Screen {
 	
     private float funds;
     private int tokens;
-    
+    boolean multiplayerEnabled;
     private boolean bclicked;
     
     Texture bg;
@@ -79,6 +77,16 @@ public class MultiGamelist implements Screen {
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
+		
+		//Scrolling code
+		/*
+		final ScrollPane scroller = new ScrollPane(table);
+
+        final Table table8 = new Table();
+        table8.setFillParent(true);
+        table8.add(scroller).fill().expand();
+        stage.addActor(table8);
+		*/
         
         bg = new Texture("homescreen_bg.png");
         bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -129,10 +137,29 @@ public class MultiGamelist implements Screen {
         //adding to stage
         stage.addActor(topBox);
         stage.addActor(bottomBox);
+		
+		TextButton button3 = new TextButton("Return to Lobby", skin);
+		TextButton button4 = new TextButton("<", skin);
+		TextButton button5 = new TextButton(">", skin);
+		
+		table.add(button4).width(60).height(40).padTop(10).padLeft(310);
+		table.add(button3).width(300).height(40).padTop(600).padRight(390).padLeft(390);
+		table.add(button5).width(60).height(40).padTop(10).padRight(290);
         
         //this somehow makes it show up
-        topBox.debug();
-        bottomBox.debug();
+        //topBox.debug();
+        //bottomBox.debug();
+		
+		// Return to lobby event listener
+		 button3.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	dispose();
+				ArcadeSystem.setMultiplayerEnabled(true);
+				arcadeUI.setScreen(arcadeUI.getLobby());
+
+            }
+        });
+		
         
         pongButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	

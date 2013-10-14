@@ -121,7 +121,6 @@ public class GameStore implements Screen, StoreScreen {
 		});
 	}
 	
-<<<<<<< HEAD
     /**
      * This places 8 icons into the a grid pattern in the display section in
      * the centre of the main store page. The icons are randomly assigned a
@@ -133,22 +132,15 @@ public class GameStore implements Screen, StoreScreen {
      * @param skin
      */
 	private void populateGamesBox(Stage stage, Skin skin)  {
-=======
-	private static void populateGamesBox (Stage stage, Skin skin, Screen parent) {
->>>>>>> origin/master
 		//You can't put this kind of thing in master. It crashes if I
 		//don't have the exact same classpath configuration as you.
 		//I won't fix it, I'm just going to comment it out.
 		//--Simon
 		/*
-<<<<<<< HEAD
 		int number = (int)Math.floor(ArcadeSystem.getGamesList().size() * Math.random());
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()
 				[number%ArcadeSystem.getGamesList().size()];
-=======
-		int number = (int)Math.floor(16 * Math.random());
->>>>>>> origin/master
 		for (int i = 0; i < 8; ++i) {
 			final TextButton gameGrid = new TextButton("\n\n\n\n\n" +
 					ArcadeSystem.getGamesList().toArray()

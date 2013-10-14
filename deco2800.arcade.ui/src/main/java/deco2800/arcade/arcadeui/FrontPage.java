@@ -376,11 +376,7 @@ public class FrontPage implements Screen {
         
         storeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-<<<<<<< HEAD
             	arcadeUI.setScreen(arcadeUI.store);
-=======
-            	arcadeUI.setScreen(new GameStore());
->>>>>>> origin/master
             }
         })); 
         

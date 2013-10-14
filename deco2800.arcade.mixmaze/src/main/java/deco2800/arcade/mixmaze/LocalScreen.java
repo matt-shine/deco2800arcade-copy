@@ -73,9 +73,9 @@ class LocalScreen extends GameScreen {
 		}
 
 		p1 = new PlayerViewModel(model, tileSize, 1, p1Controls, scorebar[0],
-				left);
+				left, GameScreen.p1HeadRegion);
 		p2 = new PlayerViewModel(model, tileSize, 2, p2Controls, scorebar[1],
-				right);
+				right, GameScreen.p2HeadRegion);
 		model.getPlayer(1).addViewer(p1);
 		model.getPlayer(2).addViewer(p2);
 		gameArea.addActor(p1);

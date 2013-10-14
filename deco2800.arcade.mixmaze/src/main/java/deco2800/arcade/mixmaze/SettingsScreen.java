@@ -176,16 +176,20 @@ public class SettingsScreen implements Screen {
 				Gdx.files.internal("grey.png"))));		
 		p1BodyImage = new Image(new TextureRegion(new Texture(
 				Gdx.files.internal("body.png"))));
+		p1BodyImage.setColor(1f, 0f, 0f, 1f);
 		p1HeadRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("avatars.png")), 256, 0, 256, 256);
+		GameScreen.p1HeadRegion = p1HeadRegion;
 		p1HeadImage = new Image(p1HeadRegion);
 		
 		p2BackImage = new Image(new TextureRegion(new Texture(
 				Gdx.files.internal("grey.png"))));		
 		p2BodyImage = new Image(new TextureRegion(new Texture(
 				Gdx.files.internal("body.png"))));
+		p2BodyImage.setColor(0f, 0f, 1f, 1f);
 		p2HeadRegion = new TextureRegion(new Texture(
 				Gdx.files.internal("avatars.png")), 0, 0, 256, 256);
+		GameScreen.p2HeadRegion = p2HeadRegion;
 		p2HeadImage = new Image(p2HeadRegion);
 		
 		p1Avatarstack = new Stack();

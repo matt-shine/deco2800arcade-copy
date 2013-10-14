@@ -46,7 +46,8 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 	 */
 	PlayerViewModel(IMixMazeModel gameModel, int tileSize, int id,
 			int[] playerControls, GameScreen.ScoreBar scorebar,
-			GameScreen.SidePanel sidePanel) {
+			GameScreen.SidePanel sidePanel,
+			TextureRegion headRegion) {
 		Texture texture;
 		HashMap<Integer, Integer> mapping = new HashMap<Integer, Integer>();
 
@@ -74,9 +75,11 @@ public final class PlayerViewModel extends Actor implements PlayerModelObserver 
 		/* load texture */
 		texture = new Texture(Gdx.files.internal("body.png"));
 		bodyRegion = new TextureRegion(texture);
+		/*
 		texture = new Texture(Gdx.files.internal((id == 1) ? "miner.png"
 				: "cowboy.png"));
-		headRegion = new TextureRegion(texture);
+		*/
+		this.headRegion = headRegion;
 
 		if (id == 1)
 			this.setColor(1f, 0f, 0f, 1f);

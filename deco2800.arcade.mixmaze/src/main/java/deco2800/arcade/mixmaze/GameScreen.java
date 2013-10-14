@@ -31,6 +31,9 @@ import static deco2800.arcade.mixmaze.TileViewModel.*;
 abstract class GameScreen implements Screen {
 
 	final Logger logger = LoggerFactory.getLogger(GameScreen.class);
+	
+	static TextureRegion p1HeadRegion;
+	static TextureRegion p2HeadRegion;
 
 	protected final Stage stage;
 	protected final ShapeRenderer renderer;

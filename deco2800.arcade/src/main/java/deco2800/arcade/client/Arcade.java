@@ -274,7 +274,8 @@ public class Arcade extends JFrame {
 
         GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
 
-        fetchGameJar("pong", "1.0");
+        // This is how you fetch game JARs
+        //fetchGameJar("pong", "1.0");
 
         System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
 	}

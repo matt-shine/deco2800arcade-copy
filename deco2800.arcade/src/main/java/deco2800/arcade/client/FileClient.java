@@ -5,10 +5,13 @@ import deco2800.arcade.protocol.packman.FetchGameRequest;
 import deco2800.arcade.protocol.packman.FetchGameResponse;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.packman.PackCompress;
 
 import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.lang.*;
+import java.lang.String;
 import java.lang.System;
 
 /**
@@ -40,9 +43,11 @@ public class FileClient implements Runnable {
 
         int bytesReceived = 0;
 
+        String filebase = "../games/" + gameID + "-" + version;
+
+        // Get the file
         try {
-            FileOutputStream fout = new FileOutputStream("../games/" + gameID +
-                    "-" + version + ".tar.gz");
+            FileOutputStream fout = new FileOutputStream(filebase + ".tar.gz");
 
             // Fetch the file
             do {
@@ -63,6 +68,19 @@ public class FileClient implements Runnable {
             fout.close();
         } catch (IOException e) {
             System.out.println("Error saving downloaded game: ");
+            e.printStackTrace();
+        }
+
+        try {
+            // Extract the JAR
+            PackCompress unpack = new PackCompress();
+            unpack.Expand(filebase + ".tar.gz", filebase + ".jar");
+
+            // Delete the .tar.gz file
+            File del = new File(filebase + ".tar.gz");
+            del.delete();
+        } catch (IOException e) {
+            System.out.println("Error extracting downloaded game: ");
             e.printStackTrace();
         }
 

@@ -1,13 +1,12 @@
 package deco2800.arcade.hunter;
 
-import deco2800.arcade.hunter.Hunter.Config;
+import java.util.ArrayList;
+import java.util.Collections;
+
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class PhysicsHandler {
     /**

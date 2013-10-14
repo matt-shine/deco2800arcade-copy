@@ -2,7 +2,6 @@ package deco2800.arcade.hunter.model;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -47,33 +46,18 @@ public class Animal extends Entity {
 	private EntityCollection entities;
 
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
-			String filepath) {
+			String animalType, Animation anim) {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
-		currAnim = loadAnimation(filepath);
-		if (filepath =="zebra") {
+		currAnim = anim;
+		if (animalType =="zebra") {
 			hunt = Type.PREY;
 			moveSpeed = 4;
 		} else {
 			hunt = Type.PREDATOR;
 			moveSpeed = -2;
 		}
-	}
-
-	/**
-	 * Takes a file path and loads all the animations in that file path
-	 */
-	private Animation loadAnimation(String animal) {
-		Texture text = new Texture("textures/Animals/"+ animal + ".png");
-		TextureRegion[][] tmp = TextureRegion.split(text, text.getWidth() / 2,
-				text.getHeight());
-		TextureRegion[] animFrames = new TextureRegion[2];
-		int index = 0;
-		for (int i = 0; i < 2; i++) {
-			animFrames[index++] = tmp[0][i];
-		}
-		return new Animation(0.5f,animFrames);
 	}
 
 	private enum State {

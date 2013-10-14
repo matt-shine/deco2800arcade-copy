@@ -21,9 +21,9 @@ public class MapEntity extends Entity{
 	
 	private String Type;
 	
-	public MapEntity(Vector2 pos, float width, float height, String file){
+	public MapEntity(Vector2 pos, float width, float height, String file,Texture texture ){
 		super(pos, width, height);
-		text = new Texture("textures/" + file +".png");
+		this.text = texture;
 		if (file == "arrow"){
 			moveSpeed = 20;
 		}else{

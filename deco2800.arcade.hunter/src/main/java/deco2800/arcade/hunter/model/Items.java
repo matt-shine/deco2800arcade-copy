@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
@@ -18,16 +17,6 @@ public class Items extends Entity {
 	 * The Texture of the item
 	 */
 	private Texture texture;
-	
-	/**
-	 * String array of possible power ups
-	 */
-	private String[] powerups = {"DoublePoints", "ExtraLife", "Invulnerability"};
-	
-	/**
-	 * String array of possible weapons
-	 */
-	private String[] weapons = {"KnifeandFork","Spear","Trident"};
 	
 	private String classType = "Items";
 	
@@ -44,40 +33,18 @@ public class Items extends Entity {
 	 */
 	private Type type;
 
-	public Items(Vector2 pos, float width, float height, boolean weapon) {
+	public Items(Vector2 pos, float width, float height, String item, Texture text) {
 		super(pos, width, height);
-		//Randomises item depending on type
-		if (weapon){
-			type = Type.WEAPON;
-			switch(Config.randomGenerator.nextInt(3)){
-			case 0:item = weapons[0];
-				break;
-			case 1:item = weapons[1];
-				break;
-			case 2:item = weapons[2];
-				break;
-			}
+		this.item = item;
+		this.texture = text;
+		if (item != "DoublePoints" && item != "ExtraLife" && item != "Invulnerability"){
+			this.type = Type.WEAPON;
+		}else{
+			this.type = Type.POWERUP;
 		}
-		else{
-			type = Type.POWERUP;
-			switch(Config.randomGenerator.nextInt(3)){
-			case 0:item = powerups[0];
-				break;
-			case 1:item = powerups[1];
-				break;
-			case 2:item = powerups[2];
-				break;
-			}
-		}
-		loadImage();
+		
 	}
 
-	/**
-	 * Loads the texture image for the item
-	 */
-	private void loadImage() {
-		texture = new Texture("textures/Items/" + item + ".png");
-	}
 	
 	/**
 	 * Checks collisions with other entities

@@ -12,7 +12,6 @@ import java.util.Random;
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
 	private static PreferencesManager prefManage;
-	private MusicManager musicManager;
 
 	public static class Config {
 		public static int screenWidth = 1280;
@@ -39,7 +38,6 @@ public class Hunter extends PlatformerGame {
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		prefManage = new PreferencesManager();
-		musicManager = new MusicManager();
 		setHighScores();
 	}
 
@@ -53,9 +51,6 @@ public class Hunter extends PlatformerGame {
 		return prefManage;
 	}
 
-	public MusicManager getMusicManager() {
-		return musicManager;
-	}
 
 	/**
 	 * Sets the highScores

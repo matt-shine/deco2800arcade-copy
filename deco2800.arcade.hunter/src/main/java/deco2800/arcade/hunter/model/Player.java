@@ -356,12 +356,10 @@ public class Player extends Entity {
 
 				}
 				if (e.getType() == "Items") {
-					System.out.println("Item Collision");
 					collisions.add(new EntityCollision(player, e,
 							CollisionType.ITEM_C_PLAYER));
 				}
 				if (e.getType() == "MapEntity"){
-					System.out.println("Map Entity Collision");
 					collisions.add(new EntityCollision(player,e,CollisionType.MAP_ENTITY_C_PLAYER));
 				}
 			}
@@ -391,14 +389,11 @@ public class Player extends Entity {
 			}
 		}else if (e.getType() == "Animal") {
 			if (getState() == State.ATTACK){
-				System.out.println("Attack Animal");
 				score = score + 200*multiplier;
 				animalsKilled++;
 				entities.remove(e);
 //				((Animal)e).dead(entities);
 			}else{
-				System.out.println(getState());
-				System.out.println("Animal Collision");
 				if (!invulnerable && !blink){
 					if (Config.getPreferencesManager().isSoundEnabled()){
 						hurt.play(Config.getPreferencesManager().getVolume());
@@ -410,7 +405,6 @@ public class Player extends Entity {
 				}
 			}
 		}else if(e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() != "arrow"){
-			System.out.println("MapEntityCollision");
 			if (!invulnerable && !blink){
 				if (Config.getPreferencesManager().isSoundEnabled()){
 					hurt.play(Config.getPreferencesManager().getVolume());

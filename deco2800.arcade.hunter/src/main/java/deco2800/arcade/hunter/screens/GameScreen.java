@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.hunter.EntityHandler;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.PhysicsHandler;
@@ -47,6 +48,7 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch = new SpriteBatch();
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
+	private EntityHandler entityHandler;
 	private Music musicResource;
 	private float stateTime;	
 	private float counter;
@@ -78,11 +80,13 @@ public class GameScreen implements Screen {
 		int numPanes = (int) (Math.ceil(Config.screenWidth / (double) Config.PANE_SIZE_PX) + 1);
 		foregroundLayer = new ForegroundLayer(1, numPanes);
 
+		entityHandler = new EntityHandler(entities);
+		
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
-		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo");
-		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion");
-		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, false);
+		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"));
+		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"));
+		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "DoublePoints",entityHandler.getItemTexture("DoublePoints"));
 
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
@@ -228,19 +232,19 @@ public class GameScreen implements Screen {
 
 	
 	private void createMapEntity() {
-		System.out.println("New Map Entity");
-		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64, "spike trap"));
+		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64, "spike trap", entityHandler.getMapEntity("spike trap")));
 	}
 	
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
-		System.out.println("New Animal");
-		entities.add(new Animal(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)),64,64,Config.randomGenerator.nextBoolean(), anims[Config.randomGenerator.nextInt(3)]));
+		String animal = anims[Config.randomGenerator.nextInt(3)];
+		entities.add(new Animal(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)),64,64,Config.randomGenerator.nextBoolean(),animal,entityHandler.getAnimalAnimation(animal)));
 	}
 	
 	private void createItems(boolean weapon){
-		System.out.println("New Item");
-		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, weapon));
+		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability","Bow","Spear","Trident"};
+		String item =  textures[Config.randomGenerator.nextInt(6)];
+		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item)));
 	}
 
 	private void pollInput() {
@@ -248,7 +252,7 @@ public class GameScreen implements Screen {
 			// Attack
 			player.attack();
 			if (player.getWeapon() == "Bow" && attackTime + Config.PLAYER_ATTACK_COOLDOWN <= System.currentTimeMillis()){
-				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),32,32,"arrow"));
+				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),32,32,"arrow",entityHandler.getMapEntity("arrow")));
 				attackTime = System.currentTimeMillis();
 			}
 		}

@@ -93,7 +93,7 @@ public class DoodadList {
                     DoodadInfo.solidScenery("tablechairs"),
 
                     //26: lamp
-                    DoodadInfo.nonsolidScenery("lamp"),
+                    DoodadInfo.nonsolidScenery("manfried"),
 
                     //27: chandelier
                     DoodadInfo.nonsolidScenery("manfried"),
@@ -132,7 +132,7 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //39: armor
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("armour"),
 
                     //40: empty cage
                     new DoodadInfo(),

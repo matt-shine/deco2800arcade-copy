@@ -43,5 +43,17 @@ public class Invite {
 		
 	}
 	
+	class DeclineListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			inviteView.dispose();
+			userView.setEnabled(true);
+			
+		}
+		
+	}
+	
 
 }

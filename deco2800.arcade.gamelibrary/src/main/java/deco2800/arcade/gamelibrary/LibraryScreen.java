@@ -49,4 +49,6 @@ public interface LibraryScreen {
      * Show more games if screen is full
      */
     public void showMore();
+
+    public void setDescriptonText(String text);
 }

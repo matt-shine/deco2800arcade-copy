@@ -317,4 +317,8 @@ public class ListScreen implements Screen, LibraryScreen {
         }
     }
 
+    public void setDescriptonText(String text) {
+
+    }
+
 }

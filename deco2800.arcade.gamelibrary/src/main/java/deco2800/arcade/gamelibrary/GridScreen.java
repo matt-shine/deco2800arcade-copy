@@ -41,6 +41,7 @@ public class GridScreen implements Screen, LibraryScreen {
     private Texture splashTexture;
     private Texture gridTexture;
     private Actor image;
+    private Label descriptionLabel;
     private Skin libSkin;
 
     private Texture listIconTexture;
@@ -118,6 +119,7 @@ public class GridScreen implements Screen, LibraryScreen {
                 Actor background = new Image(gridTexture);
                 background.setX(gridX);
                 background.setY(gridY);
+                background.addListener(new GridViewHoverActionHandler(this, game));
 
                 Label gridLabel = new Label(game.name, libSkin);
                 gridLabel.setAlignment(2, 2);
@@ -125,6 +127,7 @@ public class GridScreen implements Screen, LibraryScreen {
                 gridLabel.setHeight(40);
                 gridLabel.setX(gridX);
                 gridLabel.setY(gridY + background.getHeight() - 40);
+                gridLabel.addListener(new GridViewHoverActionHandler(this, game));
 
                 TextButton gamePlay = new TextButton("Play", libSkin, "green");
                 gamePlay.setWidth(152);
@@ -132,6 +135,7 @@ public class GridScreen implements Screen, LibraryScreen {
                 gamePlay.setX(gridX + 5);
                 gamePlay.setY(gridY + 45 - gridLabel.getHeight());
                 gamePlay.addListener(new PlayButtonActionHandler(this, game));
+                gamePlay.addListener(new GridViewHoverActionHandler(this, game));
 
                 if (++count % 7 == 0) {
                     gridX = 25;
@@ -145,6 +149,12 @@ public class GridScreen implements Screen, LibraryScreen {
                 stage.addActor(gamePlay);
             }
         }
+
+        descriptionLabel = new Label("", libSkin);
+        descriptionLabel.setWidth(250);
+        descriptionLabel.setHeight(80);
+        descriptionLabel.setX(10);
+        stage.addActor(descriptionLabel);
 
         homeButton = new TextButton("Home", libSkin);
         homeButton.setWidth(150);
@@ -248,5 +258,9 @@ public class GridScreen implements Screen, LibraryScreen {
 
     public void showMore() {
 
+    }
+
+    public void setDescriptonText(String text) {
+        descriptionLabel.setText(text);
     }
 }

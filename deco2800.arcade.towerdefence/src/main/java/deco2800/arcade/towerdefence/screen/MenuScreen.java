@@ -19,6 +19,9 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 import static com.badlogic.gdx.graphics.GL20.*;
 
+/* Main Menu GUI, for advancing to numerous screens in the game
+ * @author Tuddz
+ */
 public class MenuScreen implements Screen{
 	private static final String LOG = MenuScreen.class.getSimpleName();
 

@@ -59,6 +59,15 @@ import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor, Screen {
+	private static final Game game;
+	
+	static {
+		game = new Game();
+		game.id = "chess";
+		game.name = "Chess";
+		game.description = "A game of Chess.";	//<-------Need to write an adequate description.
+	}
+	
 	private ReplayHandler replayHandler;
 	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
@@ -74,6 +83,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private String info;
 	BitmapFont gameInfo;
 	// Piece positions
+	
 	// x-co-ords
 	int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
 			whiteQueenPos, whiteBishop2Pos, whiteKnight2Pos, whiteRook2Pos;
@@ -177,7 +187,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	    replayHandler.addReplayEventListener(initReplayEventListener());
 		ReplayNodeFactory.registerEvent("movePiece", new String[]{"start_x", "start_y", "target_x", "target_y"});
 		
-		EasyComputerOpponent = false;
+		//True means AI is playing, false if it isn't
+		EasyComputerOpponent = true;
 		
 		URL resource = this.getClass().getResource("/");
 		
@@ -458,8 +469,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	}
 	public void startReplay(int num){
-		replayHandler.requestEventsForSession(num);
-		replayHandler.startPlayback();
+		//replayHandler.requestEventsForSession(num);
+		replayHandler.playbackLastSession();
+	    //replayHandler.startPlayback();
     	isReplaying = true;
 	}
 
@@ -525,6 +537,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					if (movingPiece.getTeam() == board.whoseTurn()) {
 						moving = true;
 						showPossibleMoves(movingPiece);
+						System.out.println("Moving: " + moving);
 						return true;
 					}
 				} catch (NullPointerException e) {
@@ -542,12 +555,13 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 							prevPos[1],
 							newPos[0], 
 							newPos[1]));
+					
 					}
 					movePieceGraphic();
 					
-					
 					// Push the move that was just performed
 					moving = false;
+					System.out.println(7);
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {
 						if (!board.whoseTurn()) {
@@ -569,21 +583,36 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					*  (computer controlled team)
 					*/
 					if(EasyComputerOpponent && board.whoseTurn()) {
-						board.moveAIPieceEasy();
+						Piece AIPiece = board.chooseAIPiece();
+						List<int[]> allowed = board.allowedMoves(AIPiece);
+						System.out.println("AI is: " + AIPiece);
+						System.out.println("Allowed Moves: ");
+						for(int[] move : allowed) {
+							System.out.print("[" + move[0] + ", " + move[1] + "], ");
+						}
+						System.out.println("");
+						List<int[]> removed = board.removeCheckMoves(AIPiece);
+						System.out.println("Allowed Moves check removed: ");
+						for(int[] move : removed) {
+							System.out.print("[" + move[0] + ", " + move[1] + "], ");
+						}
+						System.out.println("");
+						int[] prevAI = board.findPiece(AIPiece);
+						board.moveAIPieceEasy(AIPiece);
+						int[] newAI = board.findPiece(AIPiece);
 						if(recording){
 						replayHandler.pushEvent(ReplayNodeFactory.createReplayNode(
 								"movePiece", 
-								prevPos[0],
-								prevPos[1],
-								newPos[0], 
-								newPos[1]));
+								prevAI[0],
+								prevAI[1],
+								newAI[0], 
+								newAI[1]));
 						}
 						movePieceGraphic();
 						
 					}
 					//if team in checkmate, gameover, log win/loss
 					if (board.checkForCheckmate(board.whoseTurn())) {
-						
 						if (!board.whoseTurn()) {
 							//player1.logLoss(); <- this is not working
 						} else {
@@ -593,7 +622,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					}
 					return true;
 				}
-				board.checkForCheckmate(board.whoseTurn());
 				
 				movingPiece = board.nullPiece;
 				moving = false;
@@ -1319,7 +1347,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             	board = new Board();
             	movePieceGraphic();
             	drawButton();
-            	replayHandler.endSession(replayHandler.getSessionId());
+            	//replayHandler.endSession(replayHandler.getSessionId());
+            	replayHandler.endCurrentSession();
             	startReplay(replayHandler.getSessionId());
             	recording = false;
             	}
@@ -1336,7 +1365,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	recording = true;
-            	replayHandler.startSession(1, player.getUsername());
+            	replayHandler.startSession("chess", player.getUsername() );
         		replayHandler.startRecording();
             }
 	    });  

@@ -18,7 +18,7 @@ public class GamePlayer {
 	private Texture playerTexture;
 	private String playerName;
 	//private int coordinate=-1;
-	private int coordinate=0;
+	private int positionIndex=0;
 	//private int[] scores = new dint[2];
 	private int score;
 	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the playerTexture
@@ -120,22 +120,23 @@ public class GamePlayer {
 	}
     
    public int getDnumber(int diceNumber){
-    	coordinate+=diceNumber;
-    	if(coordinate>=99)
+//    	positionIndex+=diceNumber;
+	    positionIndex = 59;
+    	if(positionIndex>=100)
     	{
-    		coordinate=99;
+    		positionIndex=100;
     	}
-    	return coordinate;
+    	return positionIndex;
     }
    
    public int newposition()
    {
-	   return coordinate;
+	   return positionIndex;
    }
    public int setNewPosition(int newpoint)
    {
-	   coordinate=newpoint;
-	   return coordinate;
+	   positionIndex=newpoint;
+	   return positionIndex;
    }
    /*
    public void score(int winner){

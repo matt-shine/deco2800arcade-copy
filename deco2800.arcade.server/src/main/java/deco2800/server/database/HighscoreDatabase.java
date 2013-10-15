@@ -430,9 +430,9 @@ public class HighscoreDatabase {
 	 * @return A string representation of the current date and time.
 	 */
 	private static Timestamp getCurrentTimeStamp() {
-
 		java.util.Date date= new java.util.Date();
 		return new Timestamp(date.getTime());
+
 
 	}
 	

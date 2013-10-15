@@ -3,22 +3,18 @@ package deco2800.arcade.burningskies.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-public class PowerUp extends EntityAnimated {
+public abstract class PowerUp extends Entity {
 	
 	float stateTime;
 
 	// Recommend to implement animation only to one specific class  
-	public PowerUp() {
-		super(new Texture(Gdx.files.internal("items/test_ani.png")), 10, 7);
+	public PowerUp(String iconPath) {
+		super(new Texture(Gdx.files.internal(iconPath)));//, 10, 7, 0.15f);
 		//TODO: TEST CODE REMOVE
-		setX(500);
-		setY(500);
+		setX((float) (Math.random()*1280));
+		setY((float) (Math.random()*720f));
 	}
 
-	@Override
-	public void move(float delta) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void powerOn(PlayerShip player);
 
 }

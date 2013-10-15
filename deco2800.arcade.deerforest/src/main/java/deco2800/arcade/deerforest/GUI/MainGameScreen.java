@@ -12,18 +12,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
+import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
+import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
 
+/**
+ * This class functions as the 'view' of the game. It is responsible for drawing
+ * all of the sprites and text to the screen in the correct way.
+ */
 public class MainGameScreen implements Screen {
-	//FIXME some big methods that could use whitespace or shrinking to be more readable
+    //Variables for actually setting up the screen
 	private final MainGame game;
 	private OrthographicCamera camera;
 	AssetManager manager;
 	private ShapeRenderer shapeRenderer;
-
-	//Variables for Card locations and what they contain
-//	private int p1DeckSize;
-//	private int p2DeckSize;
 
     //boolean for phase displayed
     private boolean displayedPhaseMessage;
@@ -40,19 +43,24 @@ public class MainGameScreen implements Screen {
     private ExtendedSprite cardBack;
     private ExtendedSprite p1Deck;
     private ExtendedSprite p2Deck;
-    private final static float healthBarX = 0.065625f;
-    private final static float healthBarWidth = 0.01875f;
-    private final static float P1HealthBarY = 0.65833336f;
-    private final static float P2HealthBarY = 0.093055554f;
-    private final static float healthBarHeight = 0.247222246f;
-    private final static float lifePointsX = 0.103f;
-    private final static float lifePointsP1Y = 0.65055555f;
-    private final static float lifePointsP2Y = 0.089277776f;
-    private final static float deckX = 0.21471875f;
-    private final static float deckWidth = 0.07265625f;
-    private final static float deckHeight = 0.1375f;
-    private final static float P1DeckY = 0.7361111f;
-    private final static float P2DeckY = 0.16527778f;
+    //Positions of extra sprites relative to width / height of screen
+    private final static float healthBarX = 0.04921875f;
+    private final static float healthBarWidth = 0.0109375f;
+    private final static float P1HealthBarY = 0.44444445f;
+    private final static float P2HealthBarY = 0.055555556f;
+    private final static float healthBarHeight = 0.21805555f;
+    private final static float lifePointsX = 0.08125f;
+    private final static float lifePointsP1Y = 0.43888888f;
+    private final static float lifePointsP2Y = 0.05138889f;
+    private final static float deckX = 0.09609375f;
+    private final static float deckWidth = 0.05703125f;
+    private final static float deckHeight = 0.12361114f;
+    private final static float P1DeckY = 0.61388886f;
+    private final static float P2DeckY = 0.21944444f;
+    private final static float phaseX = 0.30859375f;
+    private final static float phaseY = 0.7986111f;
+    private final static float phaseWidth = 0.38828124f;
+    private final static float phaseHeight = 0.18194443f;
 
 	//assets
 	private Map<String, Set<ExtendedSprite>> spriteMap;
@@ -68,6 +76,14 @@ public class MainGameScreen implements Screen {
     private int currentBattleDisplayTime;
     private final int battleFadeRatio = 5;
 
+    //Effect Message variable
+    private String effectMessage;
+
+    /**
+     * Constructor for the screen. Loads all the assets and sets up objects so
+     * that we can render in the draw method
+     * @param gam
+     */
 	public MainGameScreen(final MainGame gam) {
 		this.game = gam;
 		
@@ -113,46 +129,55 @@ public class MainGameScreen implements Screen {
         currentDisplayTime = 0;
 	}
 
+    /**
+     * Loads all the assets from the deerForestAssets that are required. It
+     * goes through all cards in both players deck to achieve this, as well as
+     * loading the non card related images
+     */
 	private void loadAssets() {
-		manager.load("DeerForestAssets/LightMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/DarkMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/FireMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/WaterMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/NatureMonsterShell.png", Texture.class);
-		manager.load("DeerForestAssets/GeneralSpellShell.png", Texture.class);
-		manager.load("DeerForestAssets/FieldSpellShell.png", Texture.class);
-		manager.load("DeerForestAssets/background.png", Texture.class);
-        manager.load("DeerForestAssets/MainPhase.png", Texture.class);
-        manager.load("DeerForestAssets/BattlePhase.png", Texture.class);
-        manager.load("DeerForestAssets/EndPhase.png", Texture.class);
-        manager.load("DeerForestAssets/Player1.png", Texture.class);
-        manager.load("DeerForestAssets/Player2.png", Texture.class);
-        manager.load("DeerForestAssets/HealthBar.png", Texture.class);
-        manager.load("DeerForestAssets/CardBack.png", Texture.class);
-        manager.load("DeerForestAssets/Player1Victory.png", Texture.class);
-        manager.load("DeerForestAssets/Player2Victory.png", Texture.class);
-        manager.load("DeerForestAssets/Deck.png", Texture.class);
+
+        CardCollection deck = game.getCardCollection(1, "Deck");
+        deck.addAll(game.getCardCollection(1, "Deck"));
+        ArrayList<AbstractCard> decks = new ArrayList<AbstractCard>(deck);
+        for(AbstractCard card : decks) {
+            manager.load(Gdx.files.classpath(card.getPictureFilePath()).toString(), Texture.class);
+        }
+
+		manager.load(Gdx.files.classpath("DeerForestAssets/background.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/MainPhase.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/BattlePhase.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/EndPhase.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/Player1.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/Player2.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/HealthBar.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/CardBack.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/Player1Victory.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/Player2Victory.png").toString(), Texture.class);
+        manager.load(Gdx.files.classpath("DeerForestAssets/Deck.png").toString(), Texture.class);
 	}
 
+    /**
+     * Draws all the sprites to the screen in there correct positions / alpha
+     * @param delta
+     */
 	@Override
 	public void render(float delta) {
 		//clear the screen with a dark blue color
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
 		//tell the camera to update its matrices
 		camera.update();
-		
 		//tell the SpriteBatch to render in the
 		//coordinate system specified by the camera
 		game.batch.setProjectionMatrix(camera.combined);
-	 
 		//Begin drawing the sprites
 		game.batch.begin();
-		
 		//Draw game board
 	    arena.draw(game.batch);
-	    
+        //Draw the phase message if needed
+        drawPhaseMessage();
+        //Draw the effect message if any
+        drawEffectMessage();
 	    //draw the sprites currently in map (if not players turn their hand is cardBack)
 	    for(String key : spriteMap.keySet()) {
 	    	for(ExtendedSprite s : spriteMap.get(key)) {
@@ -164,36 +189,17 @@ public class MainGameScreen implements Screen {
                 }
 		    }
 	    }
-
-	    //Print the model / game data (for debugging)
-	    game.font.draw(game.batch, "Press SPACE for next phase", 0.80f*getWidth(), 0.2f*getHeight());
-	    game.font.draw(game.batch, "Press RIGHT_ALT for debug info", 0.80f*getWidth(), 0.25f*getHeight());
-	    game.font.draw(game.batch, "Press LEFT_ALT for next turn", 0.80f*getWidth(), 0.3f*getHeight());
-        game.font.draw(game.batch, "Press LEFT_SHIFT for zoom", 0.80f*getWidth(), 0.35f*getHeight());
-        game.font.draw(game.batch, "Current Player: " + game.getCurrentPlayer(), 0.80f*getWidth(), 0.4f*getHeight());
-	    game.font.draw(game.batch, "Current Phase: " + game.getPhase(), 0.80f*getWidth(), 0.45f*getHeight());
-	    game.font.draw(game.batch, "Summoned this turn: " + game.getSummoned(), 0.80f*getWidth(), 0.5f*getHeight());
-
         // draw health bars / print LP
         drawHealthBars();
         game.font.draw(game.batch,String.valueOf(game.getPlayerLP(1)), lifePointsX*getWidth(), lifePointsP1Y*getHeight());
         game.font.draw(game.batch, String.valueOf(game.getPlayerLP(2)), lifePointsX * getWidth(), lifePointsP2Y * getHeight());
-
         //Draw deck images
         drawDeckImages();
-
         game.batch.flush();
-
         //draw highlighted zone
         highlightZones();
-
         game.batch.flush();
-
-        //Draw the phase message if needed
-        drawPhaseMessage();
-
 	    game.batch.end();
-
         //Draw zoomed sprite
         ExtendedSprite zoomed = DeerForestSingletonGetter.getDeerForest().inputProcessor.getCurrentZoomed();
         if(zoomed != null) {
@@ -209,7 +215,6 @@ public class MainGameScreen implements Screen {
             }
             game.batch.end();
         }
-
         //Draw battling cards
         if(showBattle) {
             drawBattle();
@@ -220,12 +225,14 @@ public class MainGameScreen implements Screen {
                 currentBattleDisplayTime++;
             }
         }
-
         //Draw victorious players
         drawVictory();
-
 	}
 
+    /**
+     * Draws the players health bars to the screen scaled to the % of health
+     * remaining for each player
+     */
     private void drawHealthBars() {
 
         float x = Gdx.graphics.getWidth();
@@ -244,6 +251,10 @@ public class MainGameScreen implements Screen {
         p2Health.draw(game.batch);
     }
 
+    /**
+     * Draw the images of the deck to the screen. If it is the draw phase then
+     * flash the deck until the user draws a card
+     */
     private void drawDeckImages() {
 
         float x = Gdx.graphics.getWidth();
@@ -271,6 +282,10 @@ public class MainGameScreen implements Screen {
         p2Deck.draw(game.batch);
     }
 
+    /**
+     * Draws the back of a card with the dimensions given by the Extended sprite
+     * @param s the sprite to set the card back dimensions to
+     */
     private void drawCardBack(ExtendedSprite s) {
 
         cardBack.setPosition(s.getX(), s.getY());
@@ -282,6 +297,10 @@ public class MainGameScreen implements Screen {
         cardBack.draw(game.batch);
     }
 
+    /**
+     * If the highlighted zones list has rectangles in it then draw a semitransparent
+     * rectangle on each one of them, which glows slightly
+     */
 	private void highlightZones() {
 		
 		shapeRenderer.setProjectionMatrix(camera.combined);
@@ -316,6 +335,10 @@ public class MainGameScreen implements Screen {
         else glowSize -= 0.07;
 	}
 
+    /**
+     * Draws the message if a new phase has been entered. Fades in and out of
+     * the messages.
+     */
     private void drawPhaseMessage() {
         //Draw the phase image if it hasn't already been drawn
         if(!displayedPhaseMessage) {
@@ -351,8 +374,11 @@ public class MainGameScreen implements Screen {
                     }
                 }
 
-                s.setScale(Gdx.graphics.getWidth()/(3*s.getWidth()/2), Gdx.graphics.getHeight()/(2*s.getHeight()));
-                s.setPosition(Gdx.graphics.getWidth()/2 - s.getBoundingRectangle().getWidth()/2,Gdx.graphics.getHeight()/2 - s.getBoundingRectangle().getHeight()/2);
+                float x = Gdx.graphics.getWidth();
+                float y = Gdx.graphics.getHeight();
+
+                s.setPosition(x * phaseX, y * phaseY);
+                s.setScale(x * phaseWidth / s.getWidth(), y * phaseHeight / s.getHeight());
                 s.draw(game.batch);
 
                 Gdx.gl.glDisable(GL10.GL_BLEND);
@@ -360,6 +386,30 @@ public class MainGameScreen implements Screen {
         }
     }
 
+    /**
+     * If there is a current effect message then display that on the screen
+     */
+    private void drawEffectMessage() {
+
+        float x = Gdx.graphics.getWidth();
+        float y = Gdx.graphics.getHeight();
+
+        if(this.effectMessage != null) {
+            Scanner s = new Scanner(this.effectMessage);
+            int i = 0;
+            while(s.hasNext()) {
+                String line = s.nextLine();
+                game.font.draw(game.batch, line, x * phaseX + i*20, y * phaseY + i*20);
+                i++;
+            }
+
+        }
+    }
+
+    /**
+     * If there is a current battle between two cards then display that zoomed
+     * in the middle of the screen
+     */
     private void drawBattle() {
 
         game.batch.begin();
@@ -409,6 +459,9 @@ public class MainGameScreen implements Screen {
         game.batch.end();
     }
 
+    /**
+     * If a player is victorious then draw the winning image to the screen
+     */
     private void drawVictory() {
         //Show victorious player if exists
         if(game.getPlayerLP(1) <= 0) {
@@ -432,6 +485,9 @@ public class MainGameScreen implements Screen {
         }
     }
 
+    /**
+     * Dispose of screens assets
+     */
 	@Override
 	public void dispose() {
 		manager.dispose();
@@ -448,6 +504,11 @@ public class MainGameScreen implements Screen {
 
 	}
 
+    /**
+     * Resize the screen to new dimensions
+     * @param x the new width
+     * @param y the new height
+     */
 	@Override
 	public void resize(int x, int y) {
 		arena.resize(x, y);
@@ -465,6 +526,10 @@ public class MainGameScreen implements Screen {
 
 	}
 
+    /**
+     * Getters for variables that other classes use
+     */
+
 	public Map<String, Set<ExtendedSprite>> getSpriteMap() {
 		return spriteMap;
 	}
@@ -480,7 +545,11 @@ public class MainGameScreen implements Screen {
 	public int getHeight() {
 		return Gdx.graphics.getHeight();
 	}
-	
+
+    /**
+     * Setters for variables that need them
+     */
+
 	public void setHighlightedZones(List<Rectangle> highlight) {
 		highlightedZones = highlight;
 	}
@@ -493,6 +562,20 @@ public class MainGameScreen implements Screen {
 		return false;
 	}
 
+
+    public void setEffectMessage(String message) {
+        this.effectMessage = message;
+    }
+
+    public void setPhaseDisplayed(boolean b) {
+        displayedPhaseMessage = b;
+    }
+
+    /**
+     * Removes the first instance of a sprite from the screen
+     * @param s the sprite to remove
+     * @return true if remove succeeded, false otherwise
+     */
     public boolean removeSprite(ExtendedSprite s) {
         for(String key : spriteMap.keySet()) {
             if(spriteMap.get(key).contains(s)) {
@@ -501,7 +584,13 @@ public class MainGameScreen implements Screen {
         }
         return false;
     }
-	
+
+    /**
+     * Removes the first instance of a sprite from a given area
+     * @param s the sprite to remove
+     * @param area the area to remove it from
+     * @return true if remove succeeded, false otherwise
+     */
 	public boolean removeSpriteFromArea(ExtendedSprite s, String area) {
 		Set<ExtendedSprite> listToAddTo = spriteMap.get(area);
 		if(listToAddTo != null) {
@@ -509,7 +598,14 @@ public class MainGameScreen implements Screen {
 		}
 		return false;
 	}
-	
+
+    /**
+     * Returns what player owns the given sprite. Note its behaviour is undefined
+     * if the instance of the sprite exists on both players side
+     * (though this should never happen)
+     * @param s the sprite to check
+     * @return 1 if belongs to player 1, 2 if player2
+     */
 	public int getSpritePlayer(ExtendedSprite s) {
 		for(String key : spriteMap.keySet()) {
 			if(spriteMap.get(key).contains(s)) {
@@ -522,17 +618,23 @@ public class MainGameScreen implements Screen {
 		}
 		return 0;
 	}
-	
+
+    /**
+     * Prints the sprite map
+     */
 	public void printSpriteMap() {
 		for(String key : spriteMap.keySet()) {
 			System.out.println("Key: " + key + " list: " + spriteMap.get(key));
 		}
 	}
 
-    public void setPhaseDisplayed(boolean b) {
-        displayedPhaseMessage = b;
-    }
-
+    /**
+     * Sets the sprites that are currently doing battle and how much damage has
+     * been done
+     * @param attackingCard the card that is attacking
+     * @param defendingCard the card that is defending
+     * @param damage how much damage is being dealt by the attack
+     */
     public void setBattleSprites(ExtendedSprite attackingCard, ExtendedSprite defendingCard, int damage) {
 
         //Set up attacking card
@@ -567,12 +669,22 @@ public class MainGameScreen implements Screen {
         this.showBattle = true;
     }
 
-    //Checks if there is a deck at the given point
+    /**
+     * Checks if there is a deck at the given point x,y
+     * @param x the x point to check
+     * @param y the y point to check
+     * @return true if a deck exits at point x,y
+     */
     public boolean deckAtPoint(int x, int y) {
         if(p1Deck.containsPoint(x, y) || p2Deck.containsPoint(x, y)) return true;
         return false;
     }
 
+    /**
+     * Sets a sprite to be located at the deck of player 1 or 2
+     * @param player the player who owns the deck
+     * @param s the sprite to set to the deck
+     */
     public void setSpriteToDeck(int player, ExtendedSprite s) {
         if(player == 1) {
             Rectangle r = p1Deck.getBoundingRectangle();
@@ -584,4 +696,5 @@ public class MainGameScreen implements Screen {
             s.setScale(r.getWidth()/s.getWidth(), r.getHeight()/s.getHeight());
         }
     }
+
 }

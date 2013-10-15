@@ -1,6 +1,8 @@
 package deco2800.arcade.pong;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -18,6 +20,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
@@ -75,26 +78,19 @@ public class Pong extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
-        this.achievementClient = new AchievementClient(networkClient);
+        //this.achievementClient = new AchievementClient(networkClient);
 
         
         //These methods are just used for testing HighscoreClient 
-        
         //Creating new HighscoreClient connection
-        HighscoreClient hsd = new HighscoreClient("Dylan", "Connect4", networkClient);
+        HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
         
-        //Single score
-        //hsd.storeScore("Number", 1290193);
+        //Single scores
+        //hsd.storeScore("Number", 1234567890);
+        //hsd.storeScore("Number", 5211);
         
-        //Multiple scores
-        //hsd.addMultiScoreItem("Number", 123345);
-        //hsd.addMultiScoreItem("Distance", 123456543);
-        //hsd.sendMultiScoreItems();
-        
-        
-        //Getting scores
-        	//Not done yet.
-		System.out.println("Request ID: " + hsd.responseTest(1));
+        //Getting top scores
+        List<Highscore> topPlayers = hsd.getGameTopPlayers(10, false, "Number");
 	}
 	
 	/**
@@ -143,7 +139,7 @@ public class Pong extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		camera.setToOrtho(false, SCREENWIDTH/2, SCREENHEIGHT/2);
 		
 		// Create the paddles
 		setLeftPaddle(new LocalUserPaddle(
@@ -188,6 +184,7 @@ public class Pong extends GameClient {
         for(Achievement ach : achievements) {
             System.out.println(ach.toString());
         }
+        
 	}
 
 	@Override
@@ -275,7 +272,7 @@ public class Pong extends GameClient {
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
 		    	incrementAchievement("pong.winGame");
-                incrementAchievement("pong.master");
+			incrementAchievement("pong.master");
 		    }
 		} else {
 			// No winner yet, get ready for another point

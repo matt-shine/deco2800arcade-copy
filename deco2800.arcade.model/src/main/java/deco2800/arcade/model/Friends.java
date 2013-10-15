@@ -54,9 +54,10 @@ public class Friends {
 			added = true;
 		}
 	}
-	
+
 	/**
-	 * Adds a Set of Users to this.
+	 * Adds a Set of Users to this. THIS METHOD IS NOT TO BE USED FOR PURPOSES
+	 * OTHER THAN LOADING PLAYER DATA FROM DATABASE.
 	 * 
 	 * @param user
 	 *            The Set of Users to be added.

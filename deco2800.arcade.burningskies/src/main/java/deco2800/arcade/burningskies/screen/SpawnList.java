@@ -1,0 +1,138 @@
+package deco2800.arcade.burningskies.screen;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+
+import deco2800.arcade.burningskies.entities.Enemy;
+
+public class SpawnList {
+	
+	private PlayScreen screen;
+	private float currentInterval;
+	private float interval;
+	private int counter;
+	private int mapCounter;
+	
+	private List<Object> list;
+	
+	// TODO more variable pointing to other types of enemies
+	private Texture enemy1 = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+	
+	public SpawnList(PlayScreen s){
+		this.screen = s;
+		currentInterval = 0;
+		interval = (float) 5;		
+		counter = 0;
+		mapCounter = 1;
+		list = new ArrayList<Object>();
+		makeList1();
+	}
+	
+	/* Just a dummy function, but still keep
+	 * TODO make each function call setup a
+	 * level for enemy spawn sequence
+	 */
+	private void makeList1() {
+		list.add((float) 2); // when to spawn on map
+		list.add((float) 1); // interval
+		list.add((int) 10); // number of times
+		Vector2[] test = new Vector2[2];
+		test[0] = new Vector2(1000, 600); // x and y position
+		test[1] = new Vector2(-50,-50); // x and y velocity
+		list.add(test); 
+	}
+	
+	/* Main function that spawn the enemies at specified intervals
+	 * The conditional to check for screen.map.getY() can be further
+	 * improved TODO make a list in order contain the spawn sequence of 
+	 * enemies
+	 */
+	public void checkList(float delta) {
+		// TODO make an auto queue for the enemies
+//		if(screen.level.getTimer() > (Float) list.get(0) && mapCounter != 0)  {
+//			interval = (Float) list.get(1);
+//			counter = (Integer) list.get(2);
+//			mapCounter = 0;
+//		}
+
+//		if(interval == (float) 0 || counter == 0)
+//			return;
+		
+		if(currentInterval >= interval) {
+//			spawnEnemy(list.get(3));
+//			--counter;
+			addRandomEnemy();
+			currentInterval -= interval;
+		}
+		currentInterval += delta;
+	}
+	
+	/* Still requires more complementary function calls
+	 * to assist spawning specific types of enemies
+	 */	
+	private void spawnEnemy(Object object) {
+		Vector2[] v = (Vector2[]) object;
+		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, screen.getPlayer()) );
+	}
+
+	/* Testing purposes, but still may still use later
+	 */
+	private void addRandomEnemy() {
+			int dirX = 0;
+			int dirY = 0;
+			float startX = (float) 0;
+			float startY = (float) 0;
+			
+			float widthC = (float) 740;
+			float heightC = (float) 360;
+					
+			int direction = (int) Math.ceil(Math.random() * 4);
+			
+			System.out.println("Direction num: " + direction);
+			
+			// Determine where the enemy will start to spawn
+			switch (direction) {
+			case 1:
+				startY = (float) 720;
+				startX = (float) Math.ceil(Math.random() * 1000) + 100;
+				dirY = -1;
+				dirX = randDirection();
+				break;
+			case 2:
+				startX = 1280;
+				startY = (float) Math.ceil(Math.random() * 600) + 50;
+				dirX = -1;
+				dirY = randDirection();				
+				break;
+			case 3:
+				startY = 0;
+				startX = (float) Math.ceil(Math.random() * 1000) + 100;
+				dirX = randDirection();
+				dirY = 1;				
+				break;
+			case 4:
+				startX = 0;
+				startY = (float) Math.ceil(Math.random() * 600) + 50;
+				dirX = 1;
+				dirY = randDirection();				
+				break;			
+			}
+			float vX = (float) Math.ceil(Math.random() * (widthC - startX))/10 + (widthC - startX)/10;
+			float vY = (float) Math.ceil(Math.random() * (heightC - startY))/7 + (heightC - startY)/5;
+//	    	float vX = (float) (Math.ceil(Math.random() * 150) + 50) * dirX;
+//	    	float vY = (float) (Math.ceil(Math.random() * 150) + 50) * dirY;
+			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
+	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), screen, screen.getPlayer()) );    	
+	}
+	
+	private int randDirection() {
+		if ((int) Math.floor(Math.random() * 2) == 1)
+			return 1;
+		else
+			return -1;
+	}
+}

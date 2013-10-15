@@ -1,14 +1,10 @@
 package deco2800.arcade.burningskies.entities;
 
-import deco2800.arcade.burningskies.screen.PlayScreen;
-
 public class DemoPowerUp extends PowerUp {
 	
-	private PlayScreen screen;
 	//Either have all PowerUps inherit a screen, or only the BulletPattern ones.
-	public DemoPowerUp(PlayScreen screen, String iconPath) {
-			super(iconPath);
-			this.screen = screen;			
+	public DemoPowerUp(String iconPath) {
+			super(iconPath);		
 	}
 	
 	@Override

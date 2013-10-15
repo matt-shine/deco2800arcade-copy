@@ -103,15 +103,12 @@ public class PlayScreen implements Screen
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	// Test code
-    	PowerUp test = new DemoPowerUp(this, "images/items/health.png");
+    	PowerUp test = new DemoPowerUp("images/items/health.png");
     	addPowerup(test);
     	test = new HealthPowerUp("images/items/health.png");
     	addPowerup(test);
     	
     	sp = new SpawnList(this);
-    			
-    	// Add an enemy
-    	addRandomEnemy();
     }
     
     @Override
@@ -280,16 +277,7 @@ public class PlayScreen implements Screen
     	stage.addActor(enemy);
     	enemies.add(enemy);
     }
-    
-    private void addRandomEnemy() {
-    	final Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
-    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
-    	float startY = 700f;
 
-//    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
-//    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, player) );    	
-    }
-    
     public void addPowerup(PowerUp p) {
     	stage.addActor(p);
     	powerups.add(p);

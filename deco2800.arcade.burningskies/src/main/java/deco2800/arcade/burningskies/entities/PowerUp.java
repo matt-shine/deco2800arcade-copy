@@ -3,7 +3,7 @@ package deco2800.arcade.burningskies.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
-public class PowerUp extends Entity {
+public abstract class PowerUp extends Entity {
 	
 	float stateTime;
 
@@ -15,14 +15,6 @@ public class PowerUp extends Entity {
 		setY((float) (Math.random()*720f));
 	}
 
-	public void powerOn(PlayerShip player) {
-		//Abstract method to be filled?
-	}
-	
-	//@Override
-	//public void onRender(float delta) {
-		// TODO Auto-generated method stub
-		
-	//}
+	public abstract void powerOn(PlayerShip player);
 
 }

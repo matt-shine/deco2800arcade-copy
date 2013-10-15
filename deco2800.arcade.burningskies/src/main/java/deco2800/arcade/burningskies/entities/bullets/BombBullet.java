@@ -7,8 +7,6 @@ import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.Ship;
 
 public class BombBullet extends Bullet {
-	
-	private float spiralMult;
 
 	public BombBullet(Affinity affinity, int damage, Ship parent,
 			PlayerShip player, Vector2 initialPosition, float direction, Texture image) {

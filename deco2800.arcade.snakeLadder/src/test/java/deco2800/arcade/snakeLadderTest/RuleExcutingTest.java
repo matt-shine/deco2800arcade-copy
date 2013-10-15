@@ -23,7 +23,7 @@ public class RuleExcutingTest {
 		context = new SnakeLadder(null, null, "test", xmlFile, mapFile);
 	}
 	
-	@Test
+	//@Test
 	public void ScoringRuleTest() {
 		iniContext();
 		ScoreRule scoringRule = new ScoreRule();

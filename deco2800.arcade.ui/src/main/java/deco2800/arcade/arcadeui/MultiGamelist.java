@@ -52,6 +52,7 @@ public class MultiGamelist implements Screen {
     private int tokens;
     boolean multiplayerEnabled;
     private boolean bclicked;
+	private int scrollcheck;
     
     Texture bg;
     Sprite bgSprite;
@@ -77,17 +78,7 @@ public class MultiGamelist implements Screen {
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
-		
-		//Scrolling code
-		/*
-		final ScrollPane scroller = new ScrollPane(table);
 
-        final Table table8 = new Table();
-        table8.setFillParent(true);
-        table8.add(scroller).fill().expand();
-        stage.addActor(table8);
-		*/
-        
         bg = new Texture("homescreen_bg.png");
         bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         bgSprite = new Sprite(bg);
@@ -99,8 +90,27 @@ public class MultiGamelist implements Screen {
         final TextButton chatButton = new TextButton("Chat", skin);
         final TextButton towerButton = new TextButton("Tower Defence", skin, "magenta");
         final TextButton pongButton = new TextButton("Pong", skin, "blue");
-        
-        
+		
+		final TextButton chessButton2 = new TextButton("Chess", skin, "green");
+        final TextButton towerButton2 = new TextButton("Tower Defence", skin, "magenta");
+        final TextButton pongButton2 = new TextButton("Pong", skin, "blue");
+		
+		final TextButton raidenButton = new TextButton("Raiden", skin, "green");
+		final TextButton snakeButton = new TextButton("Snakes & Ladders", skin, "magenta");
+        final TextButton tictacButton = new TextButton("TicTacToe", skin, "blue");
+		
+		final TextButton burnButton = new TextButton("Burning Skies", skin, "green");
+		final TextButton checkersButton = new TextButton("Checkers", skin, "magenta");
+        final TextButton connect4Button = new TextButton("Connect 4", skin, "blue");
+		
+		final TextButton pacmanButton = new TextButton("Pacman", skin, "green");
+		final TextButton deerButton = new TextButton("Deer Forest", skin, "magenta");
+        final TextButton jungleButton = new TextButton("Jungle Jump", skin, "blue");
+		
+		final TextButton mixmazeButton = new TextButton("Mix Maze", skin, "green");
+		final TextButton landButton = new TextButton("Land Invaders", skin, "magenta");
+
+		
         final int bWidth = 300;
         final int bHeight = 300;
         final int bX = 150;
@@ -108,9 +118,14 @@ public class MultiGamelist implements Screen {
         final int enlarge = 50;
         final int bX2= bX + bWidth + (enlarge);
         final int bX3= bX + 2*(bWidth + enlarge);
-        //make button sizes and positioning
         
+        
+		final Table listtable = new Table();
+		listtable.setFillParent(true);
+		stage.addActor(listtable);
+
       
+	    //make button sizes and positioning
         pongButton.setSize(bWidth, bHeight);        
         pongButton.setPosition(bX, bY);
        
@@ -146,9 +161,685 @@ public class MultiGamelist implements Screen {
 		table.add(button3).width(300).height(40).padTop(600).padRight(390).padLeft(390);
 		table.add(button5).width(60).height(40).padTop(10).padRight(290);
         
-        //this somehow makes it show up
-        //topBox.debug();
-        //bottomBox.debug();
+		/*<--SCROLLER START-->*/
+		
+		//Scroll Right
+		button5.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+			
+            	if (chessButton.getStage() != null || chessButton2.getStage() != null){
+
+				listtable.clear();
+
+				raidenButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			raidenButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		raidenButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		raidenButton.setText(null);
+         		raidenButton.setText("Raiden");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	raidenButton.setSize(bWidth, bHeight);
+                raidenButton.setPosition(bX3, bY);
+                raidenButton.setText(null);
+     			raidenButton.setText("Raiden");
+            }}));   
+        
+        raidenButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Raiden clicked");	
+	
+            }
+        })); 
+		
+		snakeButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			snakeButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		snakeButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		snakeButton.setText(null);
+         		snakeButton.setText("Snakes & Ladders");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	snakeButton.setSize(bWidth, bHeight);
+                snakeButton.setPosition(bX3, bY);
+                snakeButton.setText(null);
+     			snakeButton.setText("Snakes & Ladders");
+            }}));   
+        
+        snakeButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Snakes & Ladders clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		tictacButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			tictacButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		tictacButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		tictacButton.setText(null);
+         		tictacButton.setText("TicTacToe");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	tictacButton.setSize(bWidth, bHeight);
+                tictacButton.setPosition(bX3, bY);
+                tictacButton.setText(null);
+     			tictacButton.setText("TicTacToe");
+            }}));   
+        
+        tictacButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("TicTacToe clicked");	
+	
+            }
+        })); 
+		
+		listtable.add(raidenButton).width(300).height(300);
+		listtable.add(snakeButton).width(300).height(300);
+		listtable.add(tictacButton).width(300).height(300);
+				
+				}
+				
+				
+				else if (raidenButton.getStage() != null){
+
+				listtable.clear();
+
+				burnButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			burnButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		burnButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		burnButton.setText(null);
+         		burnButton.setText("Burning Skies");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	burnButton.setSize(bWidth, bHeight);
+                burnButton.setPosition(bX3, bY);
+                burnButton.setText(null);
+     			burnButton.setText("Burning Skies");
+            }}));   
+        
+        burnButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Burning Skies clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		checkersButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			checkersButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		checkersButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		checkersButton.setText(null);
+         		checkersButton.setText("Checkers");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	checkersButton.setSize(bWidth, bHeight);
+                checkersButton.setPosition(bX3, bY);
+                checkersButton.setText(null);
+     			checkersButton.setText("Checkers");
+            }}));   
+        
+        checkersButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Checkers clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		connect4Button.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			connect4Button.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		connect4Button.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		connect4Button.setText(null);
+         		connect4Button.setText("Connect 4");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	connect4Button.setSize(bWidth, bHeight);
+                connect4Button.setPosition(bX3, bY);
+                connect4Button.setText(null);
+     			connect4Button.setText("Connect 4");
+            }}));   
+        
+        connect4Button.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Connect4 clicked");	
+
+            }
+        })); 
+		
+		listtable.add(burnButton).width(300).height(300);
+		listtable.add(checkersButton).width(300).height(300);
+		listtable.add(connect4Button).width(300).height(300);
+				
+				}
+				
+				
+				else if (burnButton.getStage() != null){
+
+				listtable.clear();
+
+				pacmanButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			pacmanButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		pacmanButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		pacmanButton.setText(null);
+         		pacmanButton.setText("Pacman");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	pacmanButton.setSize(bWidth, bHeight);
+                pacmanButton.setPosition(bX3, bY);
+                pacmanButton.setText(null);
+     			pacmanButton.setText("Pacman");
+            }}));   
+        
+        pacmanButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Pacman clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		deerButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			deerButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		deerButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		deerButton.setText(null);
+         		deerButton.setText("Deer Jungle");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	deerButton.setSize(bWidth, bHeight);
+                deerButton.setPosition(bX3, bY);
+                deerButton.setText(null);
+     			deerButton.setText("Deer Jungle");
+            }}));   
+        
+        deerButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Deer Jungle clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		jungleButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			jungleButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		jungleButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		jungleButton.setText(null);
+         		jungleButton.setText("Jungle Jump");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	jungleButton.setSize(bWidth, bHeight);
+                jungleButton.setPosition(bX3, bY);
+                jungleButton.setText(null);
+     			jungleButton.setText("Jungle Jump");
+            }}));   
+        
+        jungleButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Jungle Jump clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		listtable.add(pacmanButton).width(300).height(300);
+		listtable.add(deerButton).width(300).height(300);
+		listtable.add(jungleButton).width(300).height(300);
+				
+				}
+				
+				
+				
+				else if (pacmanButton.getStage() != null){
+
+				listtable.clear();
+
+			mixmazeButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			mixmazeButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		mixmazeButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		mixmazeButton.setText(null);
+         		mixmazeButton.setText("Mix Maze");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	mixmazeButton.setSize(bWidth, bHeight);
+                mixmazeButton.setPosition(bX3, bY);
+                mixmazeButton.setText(null);
+     			mixmazeButton.setText("Mix Maze");
+            }}));   
+        
+        mixmazeButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Mixmaze clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		landButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			landButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		landButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		landButton.setText(null);
+         		landButton.setText("Land Invaders");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	landButton.setSize(bWidth, bHeight);
+                landButton.setPosition(bX3, bY);
+                landButton.setText(null);
+     			landButton.setText("Land Invaders");
+            }}));   
+        
+        landButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Land Invaders clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		listtable.add(mixmazeButton).width(300).height(300);
+		listtable.add(landButton).width(300).height(300);
+		//listtable.add(jungleButton).width(300).height(300);
+				
+				}
+				
+				else if (mixmazeButton.getStage() != null){
+				//Do Nothing
+				}
+
+            }
+        });
+		
+		
+		//Scroll Left
+		button4.addListener(new ChangeListener() {
+            public void changed (ChangeEvent event, Actor actor) {
+            	if (chessButton.getStage() != null || chessButton2.getStage() != null){
+				//Do Nothing
+				}
+				
+				if (raidenButton.getStage() != null){
+				
+				listtable.clear();
+				
+	pongButton2.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+           		pongButton2.setSize(bWidth + enlarge,  bHeight + enlarge);
+           		pongButton2.setPosition(bX -(enlarge/2), bY-(enlarge/2));
+           		pongButton2.setText(null);
+               	pongButton2.setText("Pong");
+
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	pongButton2.setSize(bWidth, bHeight);
+            	pongButton2.setPosition(bX, bY);
+            	pongButton2.setText(null);
+            	pongButton2.setText("Pong");
+            }}));   
+        
+	    
+		pongButton2.addListener((new ChangeListener() {
+		    public void changed (ChangeEvent event, Actor actor) {
+		    	//ArcadeSystem.login("pong");
+		    	//bclicked = true;
+		    	System.out.println("Pong clicked");
+		    }
+		})); 
+        
+        towerButton2.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
+           		 towerButton2.setSize(bWidth + enlarge,  bHeight + enlarge);
+           		 towerButton2.setPosition(bX2 -(enlarge/2), bY-(enlarge/2));	
+           		 towerButton2.setText(null);
+           		 towerButton2.setText("Tower Defence");
+            	 
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	towerButton2.setSize(bWidth, bHeight);
+            	towerButton2.setPosition(bX2, bY);
+            	towerButton2.setText(null);
+            	towerButton2.setText("Tower Defence");
+            }}));   
+        
+	    towerButton2.addListener((new ChangeListener() {
+	        public void changed (ChangeEvent event, Actor actor) {
+	        	//ArcadeSystem.login("Tower Defence");
+	        	//bclicked = true;
+	        	System.out.println("Tower Defence clicked");
+	        }
+	    })); 
+	    
+        
+        chessButton2.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			chessButton2.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		chessButton2.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		chessButton2.setText(null);
+         		chessButton2.setText("Chess");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	chessButton2.setSize(bWidth, bHeight);
+                chessButton2.setPosition(bX3, bY);
+                chessButton2.setText(null);
+     			chessButton2.setText("Chess");
+            }}));   
+        
+        chessButton2.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Chess clicked");	
+	
+				
+            }
+        })); 
+		
+		listtable.add(pongButton2).width(300).height(300);
+		listtable.add(towerButton2).width(300).height(300);
+		listtable.add(chessButton2).width(300).height(300);
+				
+				}
+				
+				else if (burnButton.getStage() != null){
+
+				listtable.clear();
+
+				raidenButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			raidenButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		raidenButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		raidenButton.setText(null);
+         		raidenButton.setText("Raiden");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	raidenButton.setSize(bWidth, bHeight);
+                raidenButton.setPosition(bX3, bY);
+                raidenButton.setText(null);
+     			raidenButton.setText("Raiden");
+            }}));   
+        
+        raidenButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Raiden clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		snakeButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			snakeButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		snakeButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		snakeButton.setText(null);
+         		snakeButton.setText("Snakes & Ladders");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	snakeButton.setSize(bWidth, bHeight);
+                snakeButton.setPosition(bX3, bY);
+                snakeButton.setText(null);
+     			snakeButton.setText("Snakes & Ladders");
+            }}));   
+        
+        snakeButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Snakes & Ladders clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		tictacButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			tictacButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		tictacButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		tictacButton.setText(null);
+         		tictacButton.setText("TicTacToe");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	tictacButton.setSize(bWidth, bHeight);
+                tictacButton.setPosition(bX3, bY);
+                tictacButton.setText(null);
+     			tictacButton.setText("TicTacToe");
+            }}));   
+        
+        tictacButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("TicTacToe clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		listtable.add(raidenButton).width(300).height(300);
+		listtable.add(snakeButton).width(300).height(300);
+		listtable.add(tictacButton).width(300).height(300);
+				
+				}
+				
+				
+				else if (mixmazeButton.getStage() != null){
+
+				listtable.clear();
+
+						pacmanButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			pacmanButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		pacmanButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		pacmanButton.setText(null);
+         		pacmanButton.setText("Pacman");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	pacmanButton.setSize(bWidth, bHeight);
+                pacmanButton.setPosition(bX3, bY);
+                pacmanButton.setText(null);
+     			pacmanButton.setText("Pacman");
+            }}));   
+        
+        pacmanButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Pacman clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		deerButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			deerButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		deerButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		deerButton.setText(null);
+         		deerButton.setText("Deer Jungle");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	deerButton.setSize(bWidth, bHeight);
+                deerButton.setPosition(bX3, bY);
+                deerButton.setText(null);
+     			deerButton.setText("Deer Jungle");
+            }}));   
+        
+        deerButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Deer Jungle clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		jungleButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			jungleButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		jungleButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		jungleButton.setText(null);
+         		jungleButton.setText("Jungle Jump");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	jungleButton.setSize(bWidth, bHeight);
+                jungleButton.setPosition(bX3, bY);
+                jungleButton.setText(null);
+     			jungleButton.setText("Jungle Jump");
+            }}));   
+        
+        jungleButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Jungle Jump clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		listtable.add(pacmanButton).width(300).height(300);
+		listtable.add(deerButton).width(300).height(300);
+		listtable.add(jungleButton).width(300).height(300);
+
+				}
+
+							else if (pacmanButton.getStage() != null){
+
+				listtable.clear();
+
+				burnButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			burnButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		burnButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		burnButton.setText(null);
+         		burnButton.setText("Burning Skies");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	burnButton.setSize(bWidth, bHeight);
+                burnButton.setPosition(bX3, bY);
+                burnButton.setText(null);
+     			burnButton.setText("Burning Skies");
+            }}));   
+        
+        burnButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Burning Skies clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		checkersButton.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			checkersButton.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		checkersButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		checkersButton.setText(null);
+         		checkersButton.setText("Checkers");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	checkersButton.setSize(bWidth, bHeight);
+                checkersButton.setPosition(bX3, bY);
+                checkersButton.setText(null);
+     			checkersButton.setText("Checkers");
+            }}));   
+        
+        checkersButton.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Checkers clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		connect4Button.addListener((new ClickListener() {        	
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
+            	  
+       			connect4Button.setSize(bWidth + enlarge,  bHeight + enlarge);
+         		connect4Button.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
+         		connect4Button.setText(null);
+         		connect4Button.setText("Connect 4");
+            }
+            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+            	connect4Button.setSize(bWidth, bHeight);
+                connect4Button.setPosition(bX3, bY);
+                connect4Button.setText(null);
+     			connect4Button.setText("Connect 4");
+            }}));   
+        
+        connect4Button.addListener((new ChangeListener() {	
+            public void changed (ChangeEvent event, Actor actor) {
+            	//ArcadeSystem.login("chess");
+            	System.out.println("Connect4 clicked");	
+            	
+				
+				
+            }
+        })); 
+		
+		listtable.add(burnButton).width(300).height(300);
+		listtable.add(checkersButton).width(300).height(300);
+		listtable.add(connect4Button).width(300).height(300);
+				
+				}
+				
+            }
+        });
+
+       
+		
+		/*<--SCROLLER END-->*/
+		
 		
 		// Return to lobby event listener
 		 button3.addListener(new ChangeListener() {
@@ -160,7 +851,8 @@ public class MultiGamelist implements Screen {
             }
         });
 		
-        
+       
+		
         pongButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
            		pongButton.setSize(bWidth + enlarge,  bHeight + enlarge);
@@ -235,13 +927,14 @@ public class MultiGamelist implements Screen {
 				
             }
         })); 
-        
 		
-        
-        //adding to stage
-        stage.addActor(pongButton);
-        stage.addActor(towerButton);
-        stage.addActor(chessButton);
+		
+		listtable.add(pongButton).width(300).height(300);
+		listtable.add(towerButton).width(300).height(300);
+		listtable.add(chessButton).width(300).height(300);
+		listtable.row();
+	
+		
     }
 
         

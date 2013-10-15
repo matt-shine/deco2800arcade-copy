@@ -224,22 +224,12 @@ public class ReplayHandler {
 	}
 	
 	/**
-	 * Waits for at most millis for a session to be ready, can be used to
-     * resolve concurrency issues.
-	 * @param millis How long to wait
+	 * Is the handler currently ready to start recording?
+	 * @return Ready to record?
 	 */
-	public void waitForSessionReady(long millis)
+	public Boolean readyForRecording()
 	{
-	    long waited = System.currentTimeMillis();
-	    
-	    if (!isReadyToRecord && !waitingForSession)
-            throw new RuntimeException("Need to request a session " +
-                                       "before waiting.");
-        
-        //Wait for a session for one second if we don't have one, but should
-        while (!isReadyToRecord &&
-               waitingForSession &&
-               (System.currentTimeMillis() - waited < millis)) { } 
+	    return isReadyToRecord;
 	}
 	
 	/**

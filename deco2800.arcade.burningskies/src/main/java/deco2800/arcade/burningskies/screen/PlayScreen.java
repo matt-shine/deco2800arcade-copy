@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -38,7 +39,7 @@ public class PlayScreen implements Screen
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
-	private int health = 100;
+	private SpriteBatch batch;
 	
 	private Color healthBarRed = new Color(1, 0, 0, 1);
 	private Color healthBarOrange = new Color(1, (float)0.65, 0, 1);
@@ -47,11 +48,18 @@ public class PlayScreen implements Screen
 	private static final int width = BurningSkies.SCREENWIDTH;
     private static final int height = BurningSkies.SCREENHEIGHT;
     
-	private final int healthBarLengthMultiplier = 7;
-	private final float healthBarWidth = (float) (height * 0.02);
-	private final float healthBarHeight = health * healthBarLengthMultiplier;
-	private final float healthBarX = (float) (width * 0.985);
-	private final float healthBarY = height/2 - (healthBarHeight)/2;
+	private int health = 100;
+	private int healthBarLengthMultiplier = 7;
+	private float healthBarHeight = health * healthBarLengthMultiplier;
+	private float healthBarWidth = (float) (height * 0.02);
+	private float healthBarX = (float) (width * 0.985);
+	private float healthBarY = height/2 - (healthBarHeight)/2;
+	
+	private int lives = 3;
+	private float lifePositionX = 10;
+	private float lifePositionY = height - 130;
+	private Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
+	private float lifePositionOffset = (float) (lifeIcon.getWidth() + lifeIcon.getHeight() * 0.1);
 	
 	private PlayerShip player;
 	public Level level;
@@ -120,7 +128,7 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
-    	
+    	batch = new SpriteBatch();
     	
     	if(!game.isPaused()) {
     		
@@ -196,9 +204,17 @@ public class PlayScreen implements Screen
     	    	
     	// Draws the map
     	stage.draw();
+    	
+    	for (int i = 0; i < lives; i++) {
+	    	batch.begin();
+	    	batch.draw(lifeIcon, lifePositionX + lifePositionOffset*i, lifePositionY);
+	    	batch.end();
+    	}
+    	
     	healthBar.begin(ShapeType.FilledRectangle);
     	
     	health = player.getHealth();
+    	healthBarHeight = Math.max(0, health * healthBarLengthMultiplier);
     	
     	if (health <= 25) {
     		healthBar.setColor(healthBarRed);

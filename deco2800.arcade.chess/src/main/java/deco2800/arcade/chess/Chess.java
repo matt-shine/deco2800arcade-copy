@@ -117,7 +117,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private Texture chessBoard;
 	
 	//Stuff for menu return etc
-	private TextButton replayButton, startreplayButton, backButton, newGameButton;
+	private TextButton replayButton, startreplayButton, backButton, newGameButton, 
+	newGameButtonEasy, newGameButtonHard;
 	private Stage stage;
     private BitmapFont BmFontA, BmFontB;
     private TextureAtlas map;
@@ -188,7 +189,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		ReplayNodeFactory.registerEvent("movePiece", new String[]{"start_x", "start_y", "target_x", "target_y"});
 		
 		//True means AI is playing, false if it isn't
-		EasyComputerOpponent = true;
+		//EasyComputerOpponent = false;
 		
 		URL resource = this.getClass().getResource("/");
 		
@@ -1319,13 +1320,23 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	    startreplayButton .setX((float)(width*0.78));
 	    startreplayButton .setY((float)(height*0.78));
 	    
-	   
-	    
 	    newGameButton = new TextButton("Start New Game", style);
 	    newGameButton .setWidth(200);
 	    newGameButton .setHeight(50);
 	    newGameButton .setX((float)(width*0.78));
 	    newGameButton .setY((float)(height*0.28));
+	    
+	    newGameButtonEasy = new TextButton("Easy Computer Game", style);
+	    newGameButtonEasy .setWidth(300);
+	    newGameButtonEasy .setHeight(50);
+	    newGameButtonEasy .setX((float)(width*0.02));
+	    newGameButtonEasy .setY((float)(height*0.70));
+	    
+	    newGameButtonHard = new TextButton("Hard Computer Game", style);
+	    newGameButtonHard .setWidth(300);
+	    newGameButtonHard .setHeight(50);
+	    newGameButtonHard .setX((float)(width*0.02));
+	    newGameButtonHard .setY((float)(height*0.60));
 	    
 	    backButton.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -1366,7 +1377,13 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	recording = true;
             	replayHandler.startSession("chess", player.getUsername() );
+            	try{
         		replayHandler.startRecording();
+            	}
+            	catch(NullPointerException e){
+            		System.out.println("no replay to start");
+            	}
+        		
             }
 	    });  
 	    newGameButton.addListener(new InputListener() {
@@ -1375,14 +1392,42 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	EasyComputerOpponent =false;
+            	HardComputerOpponent =false;
             	board = new Board();
         		movePieceGraphic();
         		drawButton();
             }
-	    });  
+	    });
+	    newGameButtonEasy.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	EasyComputerOpponent = true;
+            	board = new Board();
+        		movePieceGraphic();
+        		drawButton();
+            }
+	    });   
+	    newGameButtonHard.addListener(new InputListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+            }
+
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	HardComputerOpponent = true;
+            	board = new Board();
+        		movePieceGraphic();
+        		drawButton();
+            }
+	    });   
 	    stage.addActor(replayButton);
 	    stage.addActor(backButton);
 	    stage.addActor(startreplayButton);
 	    stage.addActor(newGameButton);
+	    stage.addActor( newGameButtonEasy);
+	    stage.addActor( newGameButtonHard);
 	}
 }

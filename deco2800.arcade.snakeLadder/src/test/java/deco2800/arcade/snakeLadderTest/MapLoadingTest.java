@@ -51,6 +51,29 @@ public class MapLoadingTest {
 	}
 	
 	@Test
+	public void ruleXMLLoading()
+	{
+		HashMap<String,RuleMapping> ruleMapping = RuleMapping.iniRuleMapping(new FileHandle(new File(fileDir+"ruleMappingTest.xml")));
+		assertEquals(ruleMapping.get("+10").getImplementationClass(),"ScoreRule");
+		assertEquals(ruleMapping.get("-10").getImplementationClass(),"ScoreRule");
+		assertEquals(ruleMapping.get("+20").getImplementationClass(),"ScoreRule");
+		assertEquals(ruleMapping.get("-20").getImplementationClass(),"ScoreRule");
+		assertEquals(ruleMapping.get("+50").getImplementationClass(),"ScoreRule");
+		assertEquals(ruleMapping.get("-50").getImplementationClass(),"ScoreRule");
+		assertEquals(ruleMapping.get("+100").getImplementationClass(),"ScoreRule");
+		assertEquals(ruleMapping.get("-100").getImplementationClass(),"ScoreRule");
+		
+		assertEquals(ruleMapping.get("+10").getIcon(),"plus_10.png");
+		assertEquals(ruleMapping.get("-10").getIcon(),"minus_10.png");
+		assertEquals(ruleMapping.get("+20").getIcon(),"plus_20.png");
+		assertEquals(ruleMapping.get("-20").getIcon(),"minus_20.png");
+		assertEquals(ruleMapping.get("+50").getIcon(),"plus_50.png");
+		assertEquals(ruleMapping.get("-50").getIcon(),"minus_50.png");
+		assertEquals(ruleMapping.get("+100").getIcon(),"plus_100.png");
+		assertEquals(ruleMapping.get("-100").getIcon(),"minus_100.png");
+	}
+	
+	@Test
 	public void tileRuleLoading()
 	{
 		GameMap gp = new GameMap();
@@ -69,6 +92,40 @@ public class MapLoadingTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertEquals(0, 0);
+		assertEquals(gp.getTileList()[0].getRule(), "+10");
+		assertEquals(gp.getTileList()[1].getRule(), "-10");
+		assertEquals(gp.getTileList()[2].getRule(), "+20");
+		assertEquals(gp.getTileList()[3].getRule(), "-20");
+		assertEquals(gp.getTileList()[4].getRule(), "+50");
+		assertEquals(gp.getTileList()[5].getRule(), "-50");
+		assertEquals(gp.getTileList()[6].getRule(), "+100");
+		assertEquals(gp.getTileList()[7].getRule(), "-100");
+		assertEquals(gp.getTileList()[29].getRule(), "L50");
+		assertEquals(gp.getTileList()[40].getRule(), "S21");
+	}
+	
+	@Test
+	public void emptyRuleLoading()
+	{
+		GameMap gp = new GameMap();
+		//mock the ruleMapping
+		HashMap<String,RuleMapping> ruleMapping = RuleMapping.iniRuleMapping(new FileHandle(new File(fileDir+"ruleMappingTest.xml")));
+		//load testing file 
+		try {
+			gp.populateTileListFromMapFile(new FileHandle(new File(fileDir+"mapLoadingTest2.txt")), ruleMapping);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for(Tile t:gp.getTileList())
+		{
+			assertEquals(t.getRule(), ".");
+		}
 	}
 }

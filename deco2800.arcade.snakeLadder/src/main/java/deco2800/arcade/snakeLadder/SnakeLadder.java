@@ -96,15 +96,27 @@ public class SnakeLadder extends GameClient {
 	}
 	
 	//constructor for testing
-//	public SnakeLadder(Player player, NetworkClient networkClient, String username,String mapStr) {
-//		super(player, networkClient);
-//		gamePlayers[0] = new GamePlayer(username);
-//		gamePlayers[1] = new GamePlayer("AI Player");
-//		//creating level loading background board and initializing the rule mapping
-//		map =new GameMap();
-//		//loading game map
-//		map.loadMap(mapStr,getRuleMapping());
-//	}
+	public SnakeLadder(Player player, NetworkClient networkClient, String username,FileHandle xmlFile, FileHandle mapFile) {
+		super(player, networkClient);
+		gamePlayers[0] = new GamePlayer(username);
+		gamePlayers[1] = new GamePlayer("AI Player");
+		map = new GameMap();
+		//initialize the rules from xml file
+		ruleMapping = RuleMapping.iniRuleMapping(xmlFile);
+		//loading game map
+		try {
+			map.populateTileListFromMapFile(mapFile,getRuleMapping());
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public int getturns() {
 		return this.turn%2;

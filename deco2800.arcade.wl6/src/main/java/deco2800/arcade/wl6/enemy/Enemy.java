@@ -1,9 +1,7 @@
 package deco2800.arcade.wl6.enemy;
 
-import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
-import deco2800.arcade.wl6.WL6Meta;
 
 public class Enemy extends Mob {
 

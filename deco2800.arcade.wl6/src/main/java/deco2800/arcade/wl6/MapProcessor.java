@@ -39,6 +39,18 @@ public class MapProcessor {
                     door.setTextureName(dInfo.texture);
                     door.setPos(new Vector2(i + 0.5f, j + 0.5f));
                     model.addDoodad(door);
+                    
+                } else if (id == WL6Meta.GOLDKEY) {
+                	
+                    Pickup key = new Pickup(doodadID(), KEY_TYPE.GOLD);
+                    key.setPos(new Vector2(i + 0.5f, j + 0.5f));
+                    model.addDoodad(key);
+                    
+                } else if (id == WL6Meta.SILVERKEY) {
+                	
+                    Pickup key = new Pickup(doodadID(), KEY_TYPE.SILVER);
+                    key.setPos(new Vector2(i + 0.5f, j + 0.5f));
+                    model.addDoodad(key);
 
                 } else {
 
@@ -73,8 +85,14 @@ public class MapProcessor {
     }
 
     public static void spawnDoor(GameModel model, BlockInfo bInfo, int id, int x, int y) {
-        //TODO: respect door types
-        Door door = new Door(doodadID(), id % 2 != 0, KEY_TYPE.NONE);
+        KEY_TYPE k = null;
+        if (id == WL6Meta.DOOR_GOLDKEY || id == WL6Meta.DOOR_GOLDKEY + 1) {
+        	k = KEY_TYPE.GOLD;
+        }
+        if (id == WL6Meta.DOOR_SILVERKEY || id == WL6Meta.DOOR_SILVERKEY + 1) {
+        	k = KEY_TYPE.SILVER;
+        }
+        Door door = new Door(doodadID(), id % 2 != 0, k);
         door.setTextureName(bInfo.texture);
         door.setPos(new Vector2(x + 0.5f, y + 0.5f));
         model.addDoodad(door);

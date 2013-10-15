@@ -22,12 +22,12 @@ public class DeckBuilderScreen implements Screen {
 	private final DeckBuilder deckBuilder;
 	private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
-	private Map<String, Map<Rectangle, BuilderSpriteLogic>> all;
+	private Map<String, Map<Rectangle, BuilderSprite>> all;
 	
 	AssetManager manager;
 
 	//assets
-	private Map<String, Set<BuilderSpriteLogic>> spriteMap;
+	private Map<String, Set<BuilderSprite>> spriteMap;
 	private BuilderArena arena;
 
 	/**
@@ -56,11 +56,11 @@ public class DeckBuilderScreen implements Screen {
 		arena = new BuilderArena(manager.get("DeerForestAssets/builderBackground.png", Texture.class));
 		
 		//create map of sprites
-		spriteMap = new HashMap<String, Set<BuilderSpriteLogic>>();
+		spriteMap = new HashMap<String, Set<BuilderSprite>>();
 		
-		spriteMap.put("Card", new HashSet<BuilderSpriteLogic>());
-	    spriteMap.put("Deck", new HashSet<BuilderSpriteLogic>());
-	    spriteMap.put("Zoom", new HashSet<BuilderSpriteLogic>());
+		spriteMap.put("Card", new HashSet<BuilderSprite>());
+	    spriteMap.put("Deck", new HashSet<BuilderSprite>());
+	    spriteMap.put("Zoom", new HashSet<BuilderSprite>());
 		
 	}
 
@@ -76,7 +76,6 @@ public class DeckBuilderScreen implements Screen {
             manager.load(card.getPictureFilePath(), Texture.class);
         }
 	}
-	
 	
 	/**
 	 * Overrides the render function - draws the screen
@@ -102,14 +101,14 @@ public class DeckBuilderScreen implements Screen {
 		arena.draw(deckBuilder.batch);
 		
 		for(String key : spriteMap.keySet()) {
-	    	for(BuilderSpriteLogic s : spriteMap.get(key)) {
+	    	for(BuilderSprite s : spriteMap.get(key)) {
                     s.draw(deckBuilder.batch);
 		    }
 	    }
 
 	    deckBuilder.batch.end();
 	    
-	    Map<String, Map<Rectangle, BuilderSpriteLogic>> map = BuilderArena.getMap();
+	    Map<String, Map<Rectangle, BuilderSprite>> map = BuilderArena.getMap();
 	    
 	   /* shapeRenderer.begin(ShapeType.FilledRectangle);
 	    
@@ -171,7 +170,7 @@ public class DeckBuilderScreen implements Screen {
 	 * 
 	 * @return spriteMap
 	 */
-	public Map<String, Set<BuilderSpriteLogic>> getSpriteMap() {
+	public Map<String, Set<BuilderSprite>> getSpriteMap() {
 		return spriteMap;
 	}
 	
@@ -209,15 +208,15 @@ public class DeckBuilderScreen implements Screen {
 	 * @param area to set the sprite in
 	 * @return boolean
 	 */
-	public boolean setSpriteToArea(BuilderSpriteLogic currentSelection, String area) {
-		Set<BuilderSpriteLogic> listToAddTo = spriteMap.get(area);
+	public boolean setSpriteToArea(BuilderSprite currentSelection, String area) {
+		Set<BuilderSprite> listToAddTo = spriteMap.get(area);
 		if(listToAddTo != null) {
 			return listToAddTo.add(currentSelection);
 		}
 		return false;
 	}
 	
-	public boolean removeSprite(BuilderSpriteLogic s) {
+	public boolean removeSprite(BuilderSprite s) {
         for(String key : spriteMap.keySet()) {
             if(spriteMap.get(key).contains(s)) {
                 return spriteMap.get(key).remove(s);
@@ -226,8 +225,8 @@ public class DeckBuilderScreen implements Screen {
         return false;
    }
 	
-	public boolean removeSpriteFromArea(BuilderSpriteLogic s, String area) {
-		Set<BuilderSpriteLogic> listToAddTo = spriteMap.get(area);
+	public boolean removeSpriteFromArea(BuilderSprite s, String area) {
+		Set<BuilderSprite> listToAddTo = spriteMap.get(area);
 		if(listToAddTo != null) {
 			return listToAddTo.remove(s);
 		}

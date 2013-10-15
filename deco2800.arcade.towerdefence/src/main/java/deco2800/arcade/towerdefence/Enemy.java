@@ -1,6 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -58,7 +59,7 @@ public class Enemy extends Mobile implements Melee {
 	/**
 	 * Return the sprites for melee attacking animation.
 	 */
-	public ArrayList<Sprite> meleeSprites() {
+	public List<Sprite> meleeSprites() {
 		return null;
 	}
 	
@@ -102,7 +103,7 @@ public class Enemy extends Mobile implements Melee {
 	/**
 	 * Sets the sprites for melee attacking animation.
 	 */
-	public void meleeSprites(ArrayList<Sprite> meleeSprites) {
+	public void meleeSprites(List<Sprite> meleeSprites) {
 	}
 	
 	// Methods	

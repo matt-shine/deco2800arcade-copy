@@ -53,8 +53,9 @@ public class PlayScreen implements Screen
 	private static final int width = BurningSkies.SCREENWIDTH;
     private static final int height = BurningSkies.SCREENHEIGHT;
     
-	private int health = 100;
+	private float health = 100;
 	private int healthBarLengthMultiplier = 7;
+	private int healthBarStaticHeight = 100 * healthBarLengthMultiplier;
 	private float healthBarHeight = health * healthBarLengthMultiplier;
 	private float healthBarWidth = (float) (height * 0.02);
 	private float healthBarX = (float) (width * 0.985);
@@ -107,7 +108,7 @@ public class PlayScreen implements Screen
         game.playSong("level1");
     	
     	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
-    	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
+    	player = new PlayerShip(1000, shiptext, new Vector2(400, 100), this);
     	level = new Level("fixme");
 
     	stage.addActor(level);
@@ -215,7 +216,7 @@ public class PlayScreen implements Screen
 				if(e.hasCollided(player) && player.isAlive()) {
 					removeEntity(e);
 					i--;
-					player.damage(40);
+					player.damage(e.getHealth());
 				}
 			}	
     	}
@@ -231,16 +232,18 @@ public class PlayScreen implements Screen
     	
     	healthBar.begin(ShapeType.FilledRectangle);
     	
-    	score += 131;
+//    	score += 131;
     	health = player.getHealth();
     	lives = player.getLives();
     	scoreLabel.setText("Scores: " + score);
     	
-    	healthBarHeight = Math.max(0, health * healthBarLengthMultiplier);
+    	healthBarHeight = Math.max(0, healthBarStaticHeight * (player.getHealth()/player.getMaxHealth()) );
     	
-    	if (health <= 25) {
+//    	System.out.println("health: " + healthBarHeight + ",  player health: " + player.getHealth()  );
+    	
+    	if (player.getHealth() <= (player.getMaxHealth()/4) ) {
     		healthBar.setColor(healthBarRed);
-    	} else if (health > 25 && health <= 75) {
+    	} else if (player.getHealth() > (player.getMaxHealth()/4) && player.getHealth() <= (player.getMaxHealth()*3/4)) {
     		healthBar.setColor(healthBarOrange);
     	} else {
     		healthBar.setColor(healthBarGreen);

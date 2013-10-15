@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public abstract class Ship extends Entity {
 
-	protected int health;	
+	protected float health;	
 	protected Vector2 velocity;
 	protected Vector2 position;
 	protected float flash = 0f;
@@ -29,7 +29,7 @@ public abstract class Ship extends Entity {
 		} else return true;
 	}
 	
-	public int getHealth() {
+	public float getHealth() {
 		return health;
 	}
 	
@@ -47,7 +47,7 @@ public abstract class Ship extends Entity {
 	/**
 	 * Damages the ship
 	 */
-	public void damage(int healthchange) {
+	public void damage(float healthchange) {
 		this.health -= healthchange;
 		flash = 1f;
 	}

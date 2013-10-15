@@ -50,7 +50,7 @@ public class Pack {
      */
     public static void main(String[] args) {
     	//Configure log4j
-    	BasicConfigurator. configure();
+    	BasicConfigurator.configure();
 		// Create the release folder
 		logger.debug("Creating directory: {}", releaseFolder);
 		if (PackageUtils.createDirectory(releaseFolder)) {

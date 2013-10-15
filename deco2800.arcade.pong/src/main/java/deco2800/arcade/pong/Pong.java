@@ -139,7 +139,7 @@ public class Pong extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREENWIDTH/2, SCREENHEIGHT/2);
+		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		// Create the paddles
 		setLeftPaddle(new LocalUserPaddle(

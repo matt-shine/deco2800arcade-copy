@@ -7,8 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 
 /* Class for drawing parts of an image
- * @author Rahul_Srivastava
- * @Tuddz added some methods
+ * Rahul Srivastava
  */
 public class TexturePart {
 
@@ -92,19 +91,4 @@ public class TexturePart {
 
 		sp.draw(tex, position.x - targetWidth / 2, position.y - targetHeight / 2, targetWidth / 2, targetHeight / 2, clipWidth, clipHeight, 1, 1, 0, startX, startY, clipSrcWidth, clipSrcHeight, false, false);
 }
-	public float getY() {
-		return position.y;
-	}
-	
-	public float getX() {
-		return position.x;
-	}
-
-	public float getHeight() {
-		return srcHeight;
-	}
-	
-	public float getWidth() {
-		return srcWidth;
-	}
 }

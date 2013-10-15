@@ -89,6 +89,10 @@ public class Ship {
 	}
 
 	public boolean placeObject(int x, int y, GridObject object) {
-		return grid.buildObject(x, y, object);
+		if (grid.buildObject(x, y, object)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

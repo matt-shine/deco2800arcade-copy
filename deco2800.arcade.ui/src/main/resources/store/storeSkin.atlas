@@ -64,27 +64,3 @@ green_button_glow
   orig: 360, 98
   offset: 0, 0
   index: -1
-
-search_button.png
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-search_button
-  rotate: false
-  xy: 1, 1
-  size: 126, 55
-  orig: 126, 55
-  offset: 0, 0
-  index: -1
-
-search_button_glow.png
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
-search_button_glow
-  rotate: false
-  xy: 1, 1
-  size: 126, 55
-  orig: 126, 55
-  offset: 0, 0
-  index: -1

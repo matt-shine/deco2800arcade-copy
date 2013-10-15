@@ -58,13 +58,13 @@ public class MultiGamelist implements Screen {
     Sprite bgSprite;
     SpriteBatch batch;
 	
-		private ArcadeUI arcadeUI;
-		
-		private MultiplayerLobby lobby;
+	private ArcadeUI arcadeUI;	
+	private MultiplayerLobby lobby;
+	
 	ArrayList<ActiveMatchDetails> matches;
 	
 	public MultiGamelist(ArcadeUI ui) {
-		arcadeUI = ui;
+		this.arcadeUI = ui;
 	}
     
     public MultiGamelist() {
@@ -845,8 +845,10 @@ public class MultiGamelist implements Screen {
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
             	dispose();
-				ArcadeSystem.setMultiplayerEnabled(true);
+            	ArcadeSystem.setMultiplayerEnabled(true);
+				ArcadeSystem.setPlayerBetting(false);
 				arcadeUI.setScreen(arcadeUI.getLobby());
+				//this.ui.setScreen(this.ui.getLobby());
 
             }
         });

@@ -258,15 +258,6 @@ public class PlayScreen implements Screen
     	enemies.add(enemy);
     }
     
-    private void addRandomEnemy() {
-    	final Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
-    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
-    	float startY = 700f;
-
-//    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
-//    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, player) );    	
-    }
-    
     public void addPowerup(PowerUp p) {
     	stage.addActor(p);
     	powerups.add(p);

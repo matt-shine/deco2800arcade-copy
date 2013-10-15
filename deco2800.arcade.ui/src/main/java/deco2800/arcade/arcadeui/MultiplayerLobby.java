@@ -234,6 +234,7 @@ public class MultiplayerLobby implements Screen {
 				//add second overlay (or modify first) to 'accept' or 'decline' match
 				dispose();
 				arcadeUI.setScreen(arcadeUI.getMultigame());
+				//arcadeUI.setScreen(arcadeUI.getWait());
 				//ArcadeSystem.setMultiplayerEnabled(false);
 				
 				

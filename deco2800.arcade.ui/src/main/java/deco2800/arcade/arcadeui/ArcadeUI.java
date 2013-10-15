@@ -28,7 +28,7 @@ public class ArcadeUI extends GameClient {
     MultiplayerLobby lobby = null;
     BettingWindow betting = null;
 	MultiGamelist multigame = null;
-
+	Gamewaiting wait = null;
 
 
 
@@ -53,6 +53,7 @@ public class ArcadeUI extends GameClient {
         lobby = new MultiplayerLobby(this);
         betting = new BettingWindow(this);
 		multigame = new MultiGamelist();
+		wait = new Gamewaiting();
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
@@ -118,4 +119,9 @@ public class ArcadeUI extends GameClient {
 	public MultiGamelist getMultigame() {
 		return multigame;
 	}
+	
+	public Gamewaiting getWait() {
+		return wait;
+	}
+	
 }

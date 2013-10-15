@@ -1,8 +1,6 @@
 package deco2800.arcade.towerdefence;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -16,11 +14,10 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class GridObject {
 	// Fields
-	private UUID id;
 	// The grid this object is on.
-	protected Grid grid;
+	private Grid grid;
 	// The position of this object on the grid.
-	protected Vector2 position = new Vector2();
+	private Vector2 position = new Vector2();
 	// Whether the object is visible.
 	private boolean visible;
 	// The list of status effects this GridObject can apply.
@@ -32,13 +29,11 @@ public class GridObject {
 	// The direction the object is facing.
 	private Direction facing;
 	// The standing sprites this object uses.
-	private List<Sprite> standingSprites;
+	private ArrayList<Sprite> standingSprites;
 	// The death sprite this object uses.
-	private List<Sprite> deathSprites;
+	private ArrayList<Sprite> deathSprites;
 	// The team this object belongs to.
 	private Team team;
-
-	// Constructor
 
 	// Getters
 	/**
@@ -111,17 +106,8 @@ public class GridObject {
 	 * 
 	 * @return
 	 */
-	public List<Sprite> sprites() {
+	public ArrayList<Sprite> sprites() {
 		return standingSprites;
-	}
-
-	/**
-	 * Returns the ID of this object.
-	 * 
-	 * @return
-	 */
-	public UUID getID() {
-		return id;
 	}
 
 	/**
@@ -148,7 +134,7 @@ public class GridObject {
 	 * 
 	 * @return
 	 */
-	public List<Sprite> deathSprites() {
+	public ArrayList<Sprite> deathSprites() {
 		return deathSprites;
 	}
 
@@ -231,7 +217,7 @@ public class GridObject {
 	 * 
 	 * @param standingSprites
 	 */
-	public void standingSprites(List<Sprite> standingSprites) {
+	public void standingSprites(ArrayList<Sprite> standingSprites) {
 		this.standingSprites = standingSprites;
 	}
 
@@ -240,7 +226,7 @@ public class GridObject {
 	 * 
 	 * @param standingSprites
 	 */
-	public void deathSprites(List<Sprite> deathSprites) {
+	public void deathSprites(ArrayList<Sprite> deathSprites) {
 		this.deathSprites = deathSprites;
 	}
 
@@ -318,36 +304,4 @@ public class GridObject {
 	public void start() {
 
 	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((deathSprites == null) ? 0 : deathSprites.hashCode());
-		result = prime * result + ((effects == null) ? 0 : effects.hashCode());
-		result = prime * result + ((facing == null) ? 0 : facing.hashCode());
-		result = prime * result + ((grid == null) ? 0 : grid.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + opaqueness;
-		result = prime * result + (physical ? 1231 : 1237);
-		result = prime * result
-				+ ((position == null) ? 0 : position.hashCode());
-		result = prime * result
-				+ ((standingSprites == null) ? 0 : standingSprites.hashCode());
-		result = prime * result + ((team == null) ? 0 : team.hashCode());
-		result = prime * result + (visible ? 1231 : 1237);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o.getClass() == GridObject.class && ((GridObject) o).getID() == this.id) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	
 }

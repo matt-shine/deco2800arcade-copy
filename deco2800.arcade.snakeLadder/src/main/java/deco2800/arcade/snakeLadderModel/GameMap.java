@@ -11,17 +11,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameMap {
-	private Texture backgroundBoard;
+	private Texture backgroundBoard = new Texture(Gdx.files.classpath("images/board.png"));;
 	private Tile[] tileList = new Tile[100]; 
-	
-	//This is the empty constructor for testing
-	public GameMap(){}
-	
-	public GameMap(FileHandle file)
-	{
-		this.backgroundBoard = new Texture(file);
-	}
-	
 	public Tile[] getTileList() {
 		return tileList;
 	}
@@ -32,47 +23,11 @@ public class GameMap {
 
 	private List<SnakeLadderBridge> snakeLadderList = new ArrayList<SnakeLadderBridge>();
 	
-	public boolean loadMap(FileHandle handle, HashMap<String,RuleMapping> ruleMapping) {
-		try {
-			populateTileListFromMapFile(handle, ruleMapping);
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		//loading textures for plugin rules
-		for(Tile t:tileList)
-		{
-			if(!(t.getRule().equals(".")||t.getRule().startsWith("L")||t.getRule().startsWith("S")))
-			{
-				t.setTexture(new Texture(Gdx.files.classpath("images/"+ ruleMapping.get(t.getRule()).getIcon())));
-			}
-		}
-		//initialize ladder rotation and scalling 
-		for(SnakeLadderBridge l: snakeLadderList)
-		{
-			l.createLadder(tileList);
-		}
-		return true;
-	}
-
-	/**
-	 * @param handle
-	 * @param ruleMapping
-	 * @throws NumberFormatException
-	 */
-	public void populateTileListFromMapFile(FileHandle handle,
-			HashMap<String, RuleMapping> ruleMapping)
-			throws NumberFormatException,IOException,Exception {
+	public boolean loadMap(String filePath, HashMap<String,RuleMapping> ruleMapping) {		
+		//reading file
+		FileHandle handle = Gdx.files.classpath(filePath);
 		BufferedReader file = handle.reader(2048);
+		
 		int counter = 0;
 		try {
 			String line = "";
@@ -93,29 +48,34 @@ public class GameMap {
 					Tile t = new Tile(index,tileRules[i]);
 					if(t.getRule().startsWith("L"))
 					{
-						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),true);
+						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),"ladder");
 						snakeLadderList.add(sl);
 					}
 					else if(t.getRule().startsWith("S"))
 					{
-						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),false);
+						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),"snake");
 						snakeLadderList.add(sl);
 					}
-//					else if(!t.getRule().equals("."))
-//					{
-//						t.setTexture(new Texture(Gdx.files.classpath("images/"+ ruleMapping.get(t.getRule()).getIcon())));
-//					}
+					else if(!t.getRule().equals("."))
+					{
+						t.setTexture(new Texture(Gdx.files.classpath("images/"+ ruleMapping.get(t.getRule()).getIcon())));
+					}
 					tileList[index-1]=t;
 				}
 				counter++;
 			}
 			file.close();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (Exception e){
-			e.printStackTrace();
+			return false;
 		}
-		
+		//initialize ladder rotation and scalling 
+		for(SnakeLadderBridge l: snakeLadderList)
+		{
+			l.createLadder(tileList);
+		}
+		return true;
 	}
 	
 	public void renderMap(SpriteBatch batch)

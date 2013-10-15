@@ -10,6 +10,7 @@ import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.screens.GameScreen;
 
 public class Items extends Entity {
 	
@@ -32,8 +33,10 @@ public class Items extends Entity {
 	 * Type of item: Weapon or Power up
 	 */
 	private Type type;
+	
+	private GameScreen gameScreen;
 
-	public Items(Vector2 pos, float width, float height, String item, Texture text) {
+	public Items(Vector2 pos, float width, float height, String item, Texture text, GameScreen game) {
 		super(pos, width, height);
 		this.item = item;
 		this.texture = text;
@@ -42,6 +45,7 @@ public class Items extends Entity {
 		}else{
 			this.type = Type.POWERUP;
 		}
+		this.gameScreen = game;
 		
 	}
 

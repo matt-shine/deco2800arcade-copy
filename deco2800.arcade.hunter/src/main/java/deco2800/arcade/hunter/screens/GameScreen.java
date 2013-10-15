@@ -52,7 +52,6 @@ public class GameScreen implements Screen {
 	private Music musicResource;
 	private float stateTime;	
 	private float counter;
-	private float timer;
 	private int multiplier;
 	private long animalTime;
 	private long itemTime;
@@ -74,19 +73,19 @@ public class GameScreen implements Screen {
         //If you want to make it work the same as a previous run, manually set the seed at the start
         Config.randomGenerator = new Random((long) (Math.random() * Long.MAX_VALUE));
 
-		backgroundLayer = new BackgroundLayer(0);
-		spriteLayer = new SpriteLayer((float) 0.6);
+		backgroundLayer = new BackgroundLayer(0, this);
+		spriteLayer = new SpriteLayer((float) 0.6, this);
 
 		int numPanes = (int) (Math.ceil(Config.screenWidth / (double) Config.PANE_SIZE_PX) + 1);
-		foregroundLayer = new ForegroundLayer(1, numPanes);
+		foregroundLayer = new ForegroundLayer(1, numPanes, this);
 
 		entityHandler = new EntityHandler(entities);
 		
 		// Spawn entities
-		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128);
-		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"));
-		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"));
-		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "DoublePoints",entityHandler.getItemTexture("DoublePoints"));
+		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
+		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
+		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
+		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "DoublePoints",entityHandler.getItemTexture("DoublePoints"),this);
 
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
@@ -204,47 +203,32 @@ public class GameScreen implements Screen {
 			}
 			
 			
-			timer -= delta;
-			if (timer <= 0f && timer > -1f){
-				player.setInvulnerability(false);
-				player.setMultiplier(1);
-				multiplier = 1;
-			}
-			if (timer <= -1f){
-				checkBuffs();
-			}
-			
 		}
 	}
 	
 
-	/**
-	 * Checks if any player buffs are applied
-	 */
-	private void checkBuffs() {
-		if (player.isInvulnerable()){
-			timer = 5f;
-		}else if(player.getMultiplier() != 1){
-			timer = 5f;
-			multiplier = player.getMultiplier();
-		}
+	public void setMultiplier(int m){
+		multiplier = m;
 	}
-
+	
+	public EntityCollection getEntites(){
+		return entities;
+	}
 	
 	private void createMapEntity() {
-		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64, "spike trap", entityHandler.getMapEntity("spike trap")));
+		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64, "spike trap", entityHandler.getMapEntity("spike trap"),this));
 	}
 	
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
 		String animal = anims[Config.randomGenerator.nextInt(3)];
-		entities.add(new Animal(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)),64,64,Config.randomGenerator.nextBoolean(),animal,entityHandler.getAnimalAnimation(animal)));
+		entities.add(new Animal(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)),64,64,Config.randomGenerator.nextBoolean(),animal,entityHandler.getAnimalAnimation(animal),this));
 	}
 	
 	private void createItems(boolean weapon){
 		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability","Bow","Spear","Trident"};
 		String item =  textures[Config.randomGenerator.nextInt(6)];
-		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item)));
+		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item),this));
 	}
 
 	private void pollInput() {
@@ -252,7 +236,7 @@ public class GameScreen implements Screen {
 			// Attack
 			player.attack();
 			if (player.getWeapon() == "Bow" && attackTime + Config.PLAYER_ATTACK_COOLDOWN <= System.currentTimeMillis()){
-				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),32,32,"arrow",entityHandler.getMapEntity("arrow")));
+				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),8,8,"arrow",entityHandler.getMapEntity("arrow"),this));
 				attackTime = System.currentTimeMillis();
 			}
 		}
@@ -337,7 +321,7 @@ public class GameScreen implements Screen {
 		return foregroundLayer;
 	}
 
-	private void gameOver(){
+	public void gameOver(){
 		musicResource.stop();
 		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),player.getAnimalsKilled()));
 	}

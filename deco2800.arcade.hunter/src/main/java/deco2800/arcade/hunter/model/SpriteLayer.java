@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
+import deco2800.arcade.hunter.screens.GameScreen;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,7 +23,9 @@ public class SpriteLayer extends Map {
 
     private float CHANCE_OF_CLOUDS = 0.05f;
     private float CHANCE_OF_TREES = 0.1f;
-
+    private GameScreen gameScreen;
+    
+    
     public Vector2 randomScreenCoordinate() {
         int randX, randY;
         randX = (int) Math.round(Math.random() * Hunter.Config.screenWidth);
@@ -30,8 +33,9 @@ public class SpriteLayer extends Map {
         return new Vector2(randX, randY);
     }
 
-	public SpriteLayer(float speedModifier) {
+	public SpriteLayer(float speedModifier, GameScreen gameScreen) {
 		super(speedModifier);
+		this.gameScreen = gameScreen;
 
         sprites.put("cloud", new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/cloud.png"))));
 

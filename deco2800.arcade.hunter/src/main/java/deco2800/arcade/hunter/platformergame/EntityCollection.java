@@ -1,8 +1,8 @@
 package deco2800.arcade.hunter.platformergame;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -11,7 +11,7 @@ public class EntityCollection implements Iterable<Entity> {
 	 * Store a collection of entities, and maintain a unique id for each one
 	 * Expose HashMap methods here as needed 
 	 */
-	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
+	private ConcurrentHashMap<Integer, Entity> entities = new ConcurrentHashMap<Integer, Entity>();
 	
 	public EntityCollection() {
 		

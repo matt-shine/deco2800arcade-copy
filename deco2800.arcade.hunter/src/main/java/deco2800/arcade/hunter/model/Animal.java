@@ -1,6 +1,7 @@
 package deco2800.arcade.hunter.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +13,7 @@ import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.screens.GameScreen;
 
 public class Animal extends Entity {
 
@@ -44,9 +46,11 @@ public class Animal extends Entity {
 	private long deathTimer;
 	
 	private EntityCollection entities;
+	
+	private GameScreen gameScreen;
 
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
-			String animalType, Animation anim) {
+			String animalType, Animation anim, GameScreen game) {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
@@ -58,6 +62,8 @@ public class Animal extends Entity {
 			hunt = Type.PREDATOR;
 			moveSpeed = -2;
 		}
+		this.gameScreen = game;
+		entities = gameScreen.getEntites();
 	}
 
 	private enum State {
@@ -78,7 +84,11 @@ public class Animal extends Entity {
 		
 		if(this.state == State.DEAD){
 			if (deathTimer + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()){
-				entities.remove(this);
+				Iterator it = entities.iterator();
+				while (it.hasNext()){
+						if(it.next().equals(this))
+							it.remove();
+				}
 			}
 		}
 	}
@@ -102,13 +112,19 @@ public class Animal extends Entity {
 		return hunt;
 	}
 
-	public void dead(EntityCollection entities){
+	public boolean isDead(){
+		if (state == State.DEAD){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	public void dead(){
 		//draw a dead animal sprite
 		//play sound
 		moveSpeed = 0;
 		this.state = State.DEAD;
 		deathTimer = System.currentTimeMillis();
-		this.entities = entities;
 	}
 	
 	/**
@@ -138,7 +154,7 @@ public class Animal extends Entity {
 		if (e == null){
 			entities.remove(this);
 		}else if (e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() == "arrow"){
-			entities.remove(this);
+			this.dead();
 			entities.remove(e);
 		}
 	}

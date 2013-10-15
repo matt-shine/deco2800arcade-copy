@@ -25,6 +25,7 @@ import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.screens.GameScreen;
 
 public class Player extends Entity {
 	/**
@@ -54,6 +55,8 @@ public class Player extends Entity {
     private long attackTime = 0;
     private long damageTime = 0; //Time when last hit by a monster.
     private long cooldownModifier = 0;
+    private long buffTime = 0;
+    private GameScreen gamescreen;
 	
 	// States used to determine how to draw the player
 	private int score = 0;
@@ -77,8 +80,10 @@ public class Player extends Entity {
 	private Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
 	private int animalsKilled;
 	private int weaponAmmo;
+	private long deathTime = 0;
+	private boolean dead;
 	
-	public Player(Vector2 pos, float width, float height) {
+	public Player(Vector2 pos, float width, float height, GameScreen game) {
 		super(pos, width, height);
 		loadAnims();
 		lives = 3;
@@ -86,6 +91,8 @@ public class Player extends Entity {
 		currAnim = runAnimation();
 		multiplier = 1;
 		weaponAmmo = 10;
+		this.gamescreen = game;
+		dead = false;
 	}
 
 	
@@ -219,30 +226,49 @@ public class Player extends Entity {
 
 		setJumpVelocity(getJumpVelocity() - delta * Config.gravity);
 		setY(getY() + getJumpVelocity());
-		if (attackTime + Config.PLAYER_ATTACK_TIMEOUT > System.currentTimeMillis()){
+		
+		if (attackTime + Config.PLAYER_ATTACK_TIMEOUT > System.currentTimeMillis() && !dead){
 			this.state = State.ATTACK;			
 			currAnim = attackAnimation();
 		}else{
             this.state = State.RUNNING;
         }
 
-        if (damageTime + Config.PLAYER_BLINK_TIMEOUT > System.currentTimeMillis()) {
+        if (damageTime + Config.PLAYER_BLINK_TIMEOUT > System.currentTimeMillis() && !dead) {
             this.state = State.DAMAGED;
             currAnim = damageAnimation();
         }else{
         	this.blink = false;
         }
 
+        if (deathTime  + Config.PLAYER_BLINK_TIMEOUT > System.currentTimeMillis()){
+        	this.state = State.DEAD;
+        	currAnim = deathAnimation();
+        }else{
+        	if (dead){
+        		gamescreen.gameOver();
+        	}
+        }
+        
+        if (buffTime + 3000 < System.currentTimeMillis()){
+        	if (invulnerable == true)
+        		invulnerable = false;
+        	if (multiplier != 1){
+        		multiplier = 1;
+        		gamescreen.setMultiplier(1);
+        	}
+        }
+        
 		// Update the player state
 		// Pretending the DEAD state doesn't exist for now... TODO
-		if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED) {
+		if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
 			this.velocity.y = 0;
 			this.state = State.RUNNING;
 			currAnim = runAnimation();
-		} else if (this.velocity.y > 0 && this.state != State.ATTACK) {
+		} else if (this.velocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
 			this.state = State.JUMPING;
 			currAnim = jumpAnimation();
-		} else if (this.velocity.y < -1 && this.state != State.ATTACK) {
+		} else if (this.velocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
 			this.state = State.FALLING;
 			currAnim = fallAnimation();
 		}
@@ -391,10 +417,9 @@ public class Player extends Entity {
 			if (getState() == State.ATTACK){
 				score = score + 200*multiplier;
 				animalsKilled++;
-				entities.remove(e);
-//				((Animal)e).dead(entities);
+				((Animal)e).dead();
 			}else{
-				if (!invulnerable && !blink){
+				if (!invulnerable && !blink && !((Animal)e).isDead()) {
 					if (Config.getPreferencesManager().isSoundEnabled()){
 						hurt.play(Config.getPreferencesManager().getVolume());
 					}
@@ -421,10 +446,15 @@ public class Player extends Entity {
 	 * Checks if the player has any lives left
 	 */
 	private void checkLives() {
-		if(lives <= 0){
+		if(lives == 0){
 			if (Config.getPreferencesManager().isSoundEnabled()){
 				death.play(Config.getPreferencesManager().getVolume());
 			}
+			this.state = State.DEAD;
+			velocity = new Vector2(0,0);
+			deathTime = System.currentTimeMillis();
+			this.currAnim = deathAnimation();
+			dead = true;
 		}
 	}
 
@@ -435,6 +465,8 @@ public class Player extends Entity {
 	private void applyPlayerBuff(String item) {
 		if (item == "DoublePoints"){
 			multiplier = multiplier * 2;
+			gamescreen.setMultiplier(multiplier);
+			buffTime = System.currentTimeMillis();
 		}
 			
 		if (item == "ExtraLife"){
@@ -442,9 +474,7 @@ public class Player extends Entity {
 		}
 		if (item == "Invulnerability"){
 			invulnerable = true;
-		}
-		if (item == "AttackX2"){
-			
+			buffTime = System.currentTimeMillis();
 		}
 	}
 

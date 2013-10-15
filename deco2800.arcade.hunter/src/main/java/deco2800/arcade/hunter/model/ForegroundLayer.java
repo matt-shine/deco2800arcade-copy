@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.MapPane.MapType;
+import deco2800.arcade.hunter.screens.GameScreen;
 
 public class ForegroundLayer extends Map {
 	private ArrayList<MapPane> panes;
@@ -20,14 +21,17 @@ public class ForegroundLayer extends Map {
     //Key is one of the MapType enums, value is a list of pane objects which can be instantiated
     private HashMap<MapType, ArrayList<MapPane>> mapPanes = new HashMap<MapType, ArrayList<MapPane>>();
 	
+    private GameScreen gameScreen;
 	/**
      * @param speedModifier How fast the pane should move relative to the camera. 1 is the same speed as the camera.
 	 * @param paneCount map panes to keep loaded at a time
+	 * @param gameScreen 
 	 */
-	public ForegroundLayer(float speedModifier, int paneCount) {
+	public ForegroundLayer(float speedModifier, int paneCount, GameScreen gameScreen) {
 		super(speedModifier);
 		this.paneCount = paneCount;
-
+		this.gameScreen = gameScreen;
+		
         loadPanes(Gdx.files.internal("maps/maplist.txt"));
 		
 		panes = new ArrayList<MapPane>(paneCount);

@@ -10,6 +10,7 @@ import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
+import deco2800.arcade.hunter.screens.GameScreen;
 
 public class MapEntity extends Entity{
 
@@ -21,7 +22,9 @@ public class MapEntity extends Entity{
 	
 	private String Type;
 	
-	public MapEntity(Vector2 pos, float width, float height, String file,Texture texture ){
+	private GameScreen gameScreen;
+	
+	public MapEntity(Vector2 pos, float width, float height, String file,Texture texture , GameScreen game){
 		super(pos, width, height);
 		this.text = texture;
 		if (file == "arrow"){
@@ -30,6 +33,7 @@ public class MapEntity extends Entity{
 			moveSpeed = 0;
 		}
 		Type = file;
+		this.gameScreen = game;
 	}
 	
 	public String getEntityType(){

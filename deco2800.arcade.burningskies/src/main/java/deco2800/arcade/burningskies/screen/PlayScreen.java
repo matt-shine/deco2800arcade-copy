@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
@@ -40,6 +43,8 @@ public class PlayScreen implements Screen
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
 	private SpriteBatch batch;
+	private Label scoreLabel;
+    private BitmapFont white;
 	
 	private Color healthBarRed = new Color(1, 0, 0, 1);
 	private Color healthBarOrange = new Color(1, (float)0.65, 0, 1);
@@ -57,9 +62,11 @@ public class PlayScreen implements Screen
 	
 	private int lives = 3;
 	private float lifePositionX = 10;
-	private float lifePositionY = height - 130;
+	private float lifePositionY = height - 70;
 	private Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
 	private float lifePositionOffset = (float) (lifeIcon.getWidth() + lifeIcon.getHeight() * 0.1);
+	
+	private long score = 0;
 	
 	private PlayerShip player;
 	public Level level;
@@ -78,7 +85,14 @@ public class PlayScreen implements Screen
     {
     	// Initialising variables
 		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true);
+		white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
 
+		LabelStyle scoreLabelStyle = new LabelStyle(white, Color.WHITE);
+		scoreLabel = new Label("Scores: " + score, scoreLabelStyle);
+		scoreLabel.setX(10);
+		scoreLabel.setY((float)(height*0.95));
+		scoreLabel.setWidth(0);
+		
 		// Setting up the camera view for the game
 		camera = (OrthographicCamera) stage.getCamera();
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
@@ -98,6 +112,7 @@ public class PlayScreen implements Screen
 
     	stage.addActor(level);
     	stage.addActor(player);
+    	stage.addActor(scoreLabel);
     	
     	processor = new PlayerInputProcessor(player);
     	ArcadeInputMux.getInstance().addProcessor(processor);
@@ -165,6 +180,7 @@ public class PlayScreen implements Screen
     					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
     						e.damage(b.getDamage());
     						if(!e.isAlive()) {
+    							score += e.getPoints();
     							removeEntity(e);
     						}
     						removeEntity(b);
@@ -215,8 +231,10 @@ public class PlayScreen implements Screen
     	
     	healthBar.begin(ShapeType.FilledRectangle);
     	
+    	score += 131;
     	health = player.getHealth();
     	lives = player.getLives();
+    	scoreLabel.setText("Scores: " + score);
     	
     	healthBarHeight = Math.max(0, health * healthBarLengthMultiplier);
     	

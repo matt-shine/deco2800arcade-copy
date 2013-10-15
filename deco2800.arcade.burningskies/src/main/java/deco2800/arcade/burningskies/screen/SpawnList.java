@@ -16,6 +16,8 @@ public class SpawnList {
 	private float interval;
 	private List<Object> list;
 	
+	private static final long standardEnemyPoints = 1006493;
+	
 	// TODO more variable pointing to other types of enemies
 	private Texture enemy1 = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
 	
@@ -103,6 +105,6 @@ public class SpawnList {
 //	    	float vX = (float) (Math.ceil(Math.random() * 150) + 50) * dirX;
 //	    	float vY = (float) (Math.ceil(Math.random() * 150) + 50) * dirY;
 //			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
-	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer()) );    	
+	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
 	}
 }

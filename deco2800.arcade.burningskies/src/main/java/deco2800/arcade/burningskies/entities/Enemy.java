@@ -23,13 +23,16 @@ public class Enemy extends Ship {
 	
 	private boolean homing;
 
+	private long points;
+
 //	private Vector2 playerDir = new Vector2();
 	
-	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player) {
+	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
 		super(health, image, pos);
 		this.player = player;
 		position = pos;
 		currentDirVel = dir;
+		this.points = points;
 		
 		dirAccel.x = 0;
 		dirAccel.y = 0;
@@ -43,6 +46,10 @@ public class Enemy extends Ship {
 	public void onRender(float delta) {
 		super.onRender(delta);
 		move(delta);
+	}
+	
+	public long getPoints() {
+		return points;
 	}
 	
 	private void move(float delta) {

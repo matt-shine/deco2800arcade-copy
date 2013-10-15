@@ -14,7 +14,7 @@ import deco2800.server.ArcadeServer;
 
 public class AchievementResponder implements WebResponder {
 	
-	public void respond( Response response ) throws Exception {
+	public void respond( Response response, String param) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();
@@ -54,8 +54,9 @@ public class AchievementResponder implements WebResponder {
 			
 			String gameAchievements = "";
 			for ( Achievement achievement : achievements ) {
+			    
 				gameAchievements += String.format( "<tr><td>%s</td><td class='text left'>%s</td></tr>", 
-						achievement.name, 
+				        achievement.name, 
 						achievement.description );
 			}
 			

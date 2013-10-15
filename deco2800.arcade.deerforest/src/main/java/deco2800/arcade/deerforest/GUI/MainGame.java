@@ -45,16 +45,16 @@ public class MainGame extends Game {
 		batch = new SpriteBatch();
 
 		//Use LibGDX's default Arial font
-        Texture texture = new Texture(Gdx.files.internal("DeerForestAssets/Deco_0.tga"), true); // true enables mipmaps
+        Texture texture = new Texture(Gdx.files.classpath("DeerForestAssets/Deco_0.tga"), true); // true enables mipmaps
         texture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
-        font = new BitmapFont(Gdx.files.internal("DeerForestAssets/Deco.fnt"), true);
+        font = new BitmapFont(Gdx.files.classpath("DeerForestAssets/Deco.fnt"), true);
         font.setScale(0.5f);
 
 		this.setScreen(new MainGameScreen(this));	
 		model.startgame(true);
 
         //Play music
-        FileHandle audioPath = new FileHandle("DeerForestAssets/QuickSilver.wav");
+        FileHandle audioPath = Gdx.files.classpath("DeerForestAssets/QuickSilver.wav");
         bgLoop = Gdx.audio.newMusic(audioPath);
         bgLoop.setLooping(true);
         bgLoop.setVolume(0.5f);

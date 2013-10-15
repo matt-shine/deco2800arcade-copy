@@ -84,7 +84,8 @@ public class GameStorage {
                 "INSERT INTO GAMES values (13, 'snakeLadder', 'snakeLadder', 0, 'N/A', '');" +
                 "INSERT INTO GAMES values (14, 'tictactoe', 'Tic Tac Toe', 0, 'N/A', '');" +
                 "INSERT INTO GAMES values (15, 'junglejump', 'Jungle Jump', 0, 'N/A', '');" +
-                "INSERT INTO GAMES values (16, 'soundboard', 'UQ Soundboard', 0, 'The epic DECO2800 Soundboard!! Enjoy the master sounds of UQ!', '');";
+                "INSERT INTO GAMES values (16, 'soundboard', 'UQ Soundboard', 0, 'The epic DECO2800 Soundboard!! Enjoy the master sounds of UQ!', '');" + 
+                "INSERT INTO GAMES values (17, 'lunarlander', 'LunarLander', 0, 'Can your Lunar Lander make it to the surface safely?', '');";
         String[] cmds = inserts.split(";");
 
         for (String cmd : cmds) {

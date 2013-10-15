@@ -435,16 +435,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		//if (loser == true) {
 			//this.incrementAchievement("chess.winGame");
 		//}
-		
+		if(recording){
+			stage.addActor(replayButton);
+			board = new Board();
+			movePieceGraphic();
+			drawButton();
+		}
+		else{
 	
 		//reset board
 		board = new Board();
 		movePieceGraphic();
 		drawButton();
-		//go back to menuscreen
-		//setScreen(menuScreen);
-		//move pieces into starting positions
-		
+		}
 		
 		
 		return;
@@ -728,7 +731,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	}
 	
 	private void showPossibleMoves(Piece piece) {
-		
+		startreplayButton.remove();
 		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
 		Sprite allowedSquare = new Sprite(new Texture(
 				Gdx.files.classpath("imgs/spot.png")));
@@ -1271,9 +1274,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	@Override
 	public void show() {
 		drawButton();
-		
-		
-		
 	}
 	public void drawButton(){
 		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
@@ -1315,11 +1315,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	    replayButton .setX((float)(width*0.78));
 	    replayButton .setY((float)(height*0.68));
 	    
-	    startreplayButton = new TextButton("Start Recording", style);
-	    startreplayButton .setWidth(200);
+	    startreplayButton = new TextButton("Record The Next Game", style);
+	    startreplayButton .setWidth(300);
 	    startreplayButton .setHeight(50);
-	    startreplayButton .setX((float)(width*0.78));
-	    startreplayButton .setY((float)(height*0.78));
+	    startreplayButton .setX((float)(width*0.6));
+	    startreplayButton .setY((float)(height*0.02));
 	    
 	    newGameButton = new TextButton("Start New Game", style);
 	    newGameButton .setWidth(200);
@@ -1354,12 +1354,11 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            	
+            if(recording){
             if(replayHandler.getSessionId() != null){
             	board = new Board();
             	movePieceGraphic();
             	drawButton();
-            	//replayHandler.endSession(replayHandler.getSessionId());
             	replayHandler.endCurrentSession();
             	startReplay(replayHandler.getSessionId());
             	recording = false;
@@ -1367,6 +1366,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             	else {
             		System.out.println("Nothing to replay");
             	}
+            	}
+            else {
+            	System.out.println("Nothing to replay");
+            }
             }
 	    });    
 	    startreplayButton.addListener(new InputListener() {
@@ -1374,11 +1377,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             	recording = true;
                     return true;
             }
-
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	
-            	recording = true;
             	try{
+            	recording = true;
         		replayHandler.startRecording();
             	}
             	catch(NullPointerException e){
@@ -1393,11 +1395,20 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	if(recording){
+            		stage.addActor(replayButton);
+            	}
+            	else{
             	EasyComputerOpponent =false;
             	HardComputerOpponent =false;
+            	recording = false;
+            	replayHandler.endCurrentSession();
+            	
+            	
             	board = new Board();
         		movePieceGraphic();
         		drawButton();
+            	}
             }
 	    });
 	    newGameButtonEasy.addListener(new InputListener() {
@@ -1407,6 +1418,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	EasyComputerOpponent = true;
+            	recording = false;
+            	replayHandler.endCurrentSession();
             	board = new Board();
         		movePieceGraphic();
         		drawButton();
@@ -1419,16 +1432,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	HardComputerOpponent = true;
+            	recording = false;
+            	replayHandler.endCurrentSession();
             	board = new Board();
         		movePieceGraphic();
         		drawButton();
             }
 	    });   
-	    stage.addActor(replayButton);
+	   // stage.addActor(replayButton);
 	    stage.addActor(backButton);
 	    stage.addActor(startreplayButton);
 	    stage.addActor(newGameButton);
 	    stage.addActor( newGameButtonEasy);
 	    stage.addActor( newGameButtonHard);
+	    
 	}
 }

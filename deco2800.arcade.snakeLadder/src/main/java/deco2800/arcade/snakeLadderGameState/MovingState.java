@@ -25,9 +25,16 @@ public class MovingState extends GameState {
 	 */
 	private void movePlayer(SnakeLadder context, GamePlayer gamePlayer) {
 		gamePlayer.move(Gdx.graphics.getDeltaTime());
+		//get turns for player and AI
+		int turn=context.getturns();
+		int playerIndex = turn%context.gamePlayers.length;
 		if(context.getMap().getTileList()[gamePlayer.newposition()].getIndex()>=99)
 		{
-			context.gameState=new GameOverState();
+			context.gameState=new GameOverState();		
+			//If the local player has won, send an achievement
+		    if (playerIndex == 0) {
+		    	context.incrementAchievement("snakeLadder.winGame");
+		    }
 		}
 		//player stop move once he get relatively closed to desitination position
 		if(Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorX() - gamePlayer.getBounds().x) <(1f)&&Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorY() - gamePlayer.getBounds().y) <(1f))

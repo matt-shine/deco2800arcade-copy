@@ -112,12 +112,13 @@ public class LoreScreen implements Screen{
 		
 		words = new Label("", new Label.LabelStyle(white, WHITE));
 		words.setWrap(true);
-		words.setText("In a galaxy not so far away \n" +
-				"In a time that doesn't vary much from our own \n" +
-				"DUN DUN DUN!!!!! \n" +
-				"ALIENS TD STORY GOES HERE \n" +
-				"LORE LORE LORE LORE LORE LORE LORE LORE \n" +
-				"LORE LORE LORE LORE LORE LORE LORE LORE \n");
+		words.setText("The year is 2800, and humanity has spread across the stars, \n"
+				+ "colonising many worlds across the galaxy. 2 months ago, Earth lost contact\n"
+				+ " with several isolated planets, and a Defence of Earth Colonies Organization\n"
+				+ " (DECO) vessel, the Arcadia, was sent to investigate. After the entire crew \n"
+				+ "was killed by a strange alien bio-weapon and the ship crippled during an ambush,\n"
+				+ " it is up to you, the AI of the Arcadia, to prevent hordes of monstrous aliens\n"
+				+ " from reaching the portal to Earth on the bridge of the ship.");
 		
 		table.add(backButton).top().right();
 		table.row();

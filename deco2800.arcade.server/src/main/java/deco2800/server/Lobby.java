@@ -73,8 +73,10 @@ public class Lobby {
 	public void createMatch(String gameId, int playerId, Connection connection) {
 		//TODO: handle user joining multiple matches?
 		if (userHasMatch(playerId)) {
-			//return false;
-		}
+			CreateMatchResponse response = new CreateMatchResponse();
+			//TODO: Failure Response or null check on other end.
+			connection.sendTCP(response);
+		} else {
 		/* Create the match and add to array of matches */
 		LobbyMatch match = new LobbyMatch(gameId, playerId, connection, this.matchIdCounter);
 		this.matchIdCounter++;
@@ -84,6 +86,7 @@ public class Lobby {
 		connection.sendTCP(response);
 		
 		this.sendGamesToLobbyUsers();
+		}
 	}
 
 	public void joinMatch(int matchId, int playerId, Connection connection) {
@@ -96,6 +99,7 @@ public class Lobby {
 		} else {
 			/* Match found */
 			MatchmakerQueue.instance().addLobbyGame(match.getHostPlayerId(), playerId, match.getHostConnection(), connection, match.getGameId());
+			this.lobbyGames.remove(match);
 			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
 			response.responseType = JoinLobbyMatchResponseType.OK;
 			connection.sendTCP(response);
@@ -139,7 +143,6 @@ public class Lobby {
 	public void removePlayerFromLobby(int playerId) {
 		if (connectedPlayers.containsKey(playerId)) {
 			connectedPlayers.remove(playerId);
-			System.out.println("Removed player " + playerId + " from lobby");
 		}
 	}
 	
@@ -151,8 +154,6 @@ public class Lobby {
 	 */
 	public void sendGamesToLobbyUsers() {
 		if (connectedPlayers.size() > 0 && lobbyGames.size() > 0) {
-		
-		
 			for (int i=0;i<connectedPlayers.size();i++) {
 				ClearListRequest clr = new ClearListRequest();
 				connectedPlayers.get(i).sendTCP(clr);
@@ -213,12 +214,32 @@ public class Lobby {
 	 * Removes the match from the lobby.
 	 * @param gameId - the id of the game the match is for
 	 */
-	public void destroyMatch(int playerId) {
+	public void destroyMatch(int matchId) {
 		for (int i = 0; i < lobbyGames.size(); i++) {
-			if (lobbyGames.get(i).getHostPlayerId() == playerId) {
+			if (lobbyGames.get(i).getMatchId() == matchId) {
 				lobbyGames.remove(i);
 			}
 		}
 		this.sendGamesToLobbyUsers();
+	}
+	
+	/**
+	 * Returns the list of current matches in the lobby.
+	 * @return
+	 */
+	public ArrayList<LobbyMatch> getLobbyGames() {
+		return lobbyGames;
+	}
+	
+	/**
+	 * Returns the list of connected players in the lobby.
+	 * @return
+	 */
+	public Map<Integer, Connection> getConnectedPlayers() {
+		return connectedPlayers;
+	}
+	
+	public int getMatchIdCounter() {
+		return this.matchIdCounter;
 	}
 }

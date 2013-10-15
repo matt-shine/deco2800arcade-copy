@@ -6,6 +6,8 @@ import javax.swing.JTextArea;
 import java.awt.TextField;
 import javax.swing.JButton;
 import javax.swing.JToolBar;
+
+import java.awt.Container;
 import java.awt.Label;
 import java.awt.Button;
 import java.awt.Font;
@@ -24,7 +26,22 @@ import java.awt.event.MouseEvent;
  * @author TeamForum
  */
 public class ForumUi {
-	private JTextField textField;
+	public JTextField textField;
+	public JLabel lblFaq;
+	public JLabel lblHome;
+	public JButton btnSearch;
+	public JTextArea textArea;
+	public JLabel lblAnn;
+	public JTextArea textArea_1;
+	public JLabel lblTag;
+	public JLabel lblGeneralDiscussion;
+	public JLabel lblTutorial;
+	public JLabel lblReportBug;
+	public JTextPane txtpnForDiscussionOf;
+	public JTextPane txtpnTipsAndTrick;
+	public JTextPane txtpnFacingBugIssue;
+	public JPanel panel;
+	public JPanel panel_1;
 	   public ForumUi(JFrame f) {
 	      //Initialize new JFrame for forum interface
 	      f.setSize(1024, 768);
@@ -42,52 +59,52 @@ public class ForumUi {
 	      f.getContentPane().add(btnLogIn);	      
 
 	      //Menu bar 
-	      JLabel lblHome = new JLabel("HOME");
-	      lblHome.setFont(new Font("Cambria", Font.BOLD, 15));
-	      lblHome.setBounds(26, 76, 56, 16);
-	      f.getContentPane().add(lblHome);
+	      this.lblHome = new JLabel("HOME");
+	      this.lblHome.setFont(new Font("Cambria", Font.BOLD, 15));
+	      this.lblHome.setBounds(26, 76, 56, 16);
+	      f.getContentPane().add(this.lblHome);
 
           //FAQ
-	      JLabel lblFaq = new JLabel("FAQ");
-	      lblFaq.setFont(new Font("Cambria", Font.BOLD, 15));
+	      this.lblFaq = new JLabel("FAQ");
+	      this.lblFaq.setFont(new Font("Cambria", Font.BOLD, 15));
 	      lblFaq.setBounds(147, 76, 74, 16);
-	      f.getContentPane().add(lblFaq);
+	      f.getContentPane().add(this.lblFaq);
 
           //Search Button
-	      JButton btnSearch = new JButton("Search");
-	      btnSearch.setBounds(897, 73, 97, 25);
-	      f.getContentPane().add(btnSearch);
+	      this.btnSearch = new JButton("Search");
+	      this.btnSearch.setBounds(897, 73, 97, 25);
+	      f.getContentPane().add(this.btnSearch);
 	      
-	      textField = new JTextField();
-	      textField.setBounds(769, 74, 116, 22);
-	      f.getContentPane().add(textField);
-	      textField.setColumns(10);
+	      this.textField = new JTextField();
+	      this.textField.setBounds(769, 74, 116, 22);
+	      f.getContentPane().add(this.textField);
+	      this.textField.setColumns(10);
 
 	      //Body
-	      JTextArea textArea = new JTextArea();
-	      textArea.setBackground(new Color(192, 192, 192));
-	      textArea.setBounds(776, 152, 218, 220);
-	      f.getContentPane().add(textArea);
+	      this.textArea = new JTextArea();
+	      this.textArea.setBackground(new Color(192, 192, 192));
+	      this.textArea.setBounds(776, 152, 218, 220);
+	      f.getContentPane().add(this.textArea);
 	      
-	      JLabel lblAnn = new JLabel("Announcement");
-	      lblAnn.setFont(new Font("Tahoma", Font.BOLD, 15));
-	      lblAnn.setBounds(776, 129, 141, 16);
-	      f.getContentPane().add(lblAnn);
+	      this.lblAnn = new JLabel("Announcement");
+	      this.lblAnn.setFont(new Font("Tahoma", Font.BOLD, 15));
+	      this.lblAnn.setBounds(776, 129, 141, 16);
+	      f.getContentPane().add(this.lblAnn);
 	      
-	      JTextArea textArea_1 = new JTextArea();
-	      textArea_1.setBackground(new Color(30, 144, 255));
-	      textArea_1.setBounds(546, 152, 218, 496);
-	      f.getContentPane().add(textArea_1);
+	      this.textArea_1 = new JTextArea();
+	      this.textArea_1.setBackground(new Color(30, 144, 255));
+	      this.textArea_1.setBounds(546, 152, 218, 496);
+	      f.getContentPane().add(this.textArea_1);
 	      
-	      JLabel lblTag = new JLabel("Tag");
-	      lblTag.setFont(new Font("Tahoma", Font.BOLD, 15));
-	      lblTag.setBounds(546, 129, 97, 16);
-	      f.getContentPane().add(lblTag);
+	      this.lblTag = new JLabel("Tag");
+	      this.lblTag.setFont(new Font("Tahoma", Font.BOLD, 15));
+	      this.lblTag.setBounds(546, 129, 97, 16);
+	      f.getContentPane().add(this.lblTag);
 	      
-	      JLabel lblGeneralDiscussion = new JLabel("General Discussion");
-	      lblGeneralDiscussion.setFont(new Font("Tahoma", Font.BOLD, 13));
-	      lblGeneralDiscussion.setBounds(12, 155, 141, 16);
-	      f.getContentPane().add(lblGeneralDiscussion);
+	      this.lblGeneralDiscussion = new JLabel("General Discussion");
+	      this.lblGeneralDiscussion.setFont(new Font("Tahoma", Font.BOLD, 13));
+	      this.lblGeneralDiscussion.setBounds(12, 155, 141, 16);
+	      f.getContentPane().add(this.lblGeneralDiscussion);
 	      
 	      lblGeneralDiscussion.addMouseListener(new MouseAdapter(){      //Guys I struck on this for very long, need help. Click on 
 	    	  public void mouseClicked(MouseEvent e)					//GeneralDiscussion and will open the GeneralDiscussion.java
@@ -98,56 +115,52 @@ public class ForumUi {
 	     
 	     
 	      //Tutorial Label
-	      JLabel lblTutorial = new JLabel("Tutorial ");
-	      lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 13));
-	      lblTutorial.setBounds(12, 280, 141, 16);
-	      f.getContentPane().add(lblTutorial);
+	      this.lblTutorial = new JLabel("Tutorial ");
+	      this.lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 13));
+	      this.lblTutorial.setBounds(12, 280, 141, 16);
+	      f.getContentPane().add(this.lblTutorial);
 
           //Bug Reporting
-	      JLabel lblReportBug = new JLabel("Report Bug");
-	      lblReportBug.setFont(new Font("Tahoma", Font.BOLD, 13));
-	      lblReportBug.setBounds(12, 432, 141, 16);
-	      f.getContentPane().add(lblReportBug);
+	      this.lblReportBug = new JLabel("Report Bug");
+	      this.lblReportBug.setFont(new Font("Tahoma", Font.BOLD, 13));
+	      this.lblReportBug.setBounds(12, 432, 141, 16);
+	      f.getContentPane().add(this.lblReportBug);
 	      
-	      JTextPane txtpnForDiscussionOf = new JTextPane();
-	      txtpnForDiscussionOf.setEnabled(false);
-	      txtpnForDiscussionOf.setEditable(false);
-	      txtpnForDiscussionOf.setFont(new Font("Tahoma", Font.ITALIC, 13));
-	      txtpnForDiscussionOf.setText("For discussion of non technical stuff");
-	      txtpnForDiscussionOf.setBounds(12, 184, 520, 73);
-	      f.getContentPane().add(txtpnForDiscussionOf);
+	      this.txtpnForDiscussionOf = new JTextPane();
+	      this.txtpnForDiscussionOf.setEnabled(false);
+	      this.txtpnForDiscussionOf.setEditable(false);
+	      this.txtpnForDiscussionOf.setFont(new Font("Tahoma", Font.ITALIC, 13));
+	      this.txtpnForDiscussionOf.setText("For discussion of non technical stuff");
+	      this.txtpnForDiscussionOf.setBounds(12, 184, 520, 73);
+	      f.getContentPane().add(this.txtpnForDiscussionOf);
 	      
-	      JTextPane txtpnTipsAndTrick = new JTextPane();
-	      txtpnTipsAndTrick.setEnabled(false);
-	      txtpnTipsAndTrick.setText("Tips and trick of doing work");
-	      txtpnTipsAndTrick.setFont(new Font("Tahoma", Font.ITALIC, 13));
-	      txtpnTipsAndTrick.setBounds(12, 309, 520, 73);
-	      f.getContentPane().add(txtpnTipsAndTrick);
+	      this.txtpnTipsAndTrick = new JTextPane();
+	      this.txtpnTipsAndTrick.setEnabled(false);
+	      this.txtpnTipsAndTrick.setText("Tips and trick of doing work");
+	      this.txtpnTipsAndTrick.setFont(new Font("Tahoma", Font.ITALIC, 13));
+	      this.txtpnTipsAndTrick.setBounds(12, 309, 520, 73);
+	      f.getContentPane().add(this.txtpnTipsAndTrick);
 	      
-	      JTextPane txtpnFacingBugIssue = new JTextPane();
-	      txtpnFacingBugIssue.setEditable(false);
-	      txtpnFacingBugIssue.setEnabled(false);
-	      txtpnFacingBugIssue.setText("Facing bug issue? Report here");
-	      txtpnFacingBugIssue.setFont(new Font("Tahoma", Font.ITALIC, 13));
-	      txtpnFacingBugIssue.setBounds(14, 461, 520, 73);
-	      f.getContentPane().add(txtpnFacingBugIssue);
+	      this.txtpnFacingBugIssue = new JTextPane();
+	      this.txtpnFacingBugIssue.setEditable(false);
+	      this.txtpnFacingBugIssue.setEnabled(false);
+	      this.txtpnFacingBugIssue.setText("Facing bug issue? Report here");
+	      this.txtpnFacingBugIssue.setFont(new Font("Tahoma", Font.ITALIC, 13));
+	      this.txtpnFacingBugIssue.setBounds(14, 461, 520, 73);
+	      f.getContentPane().add(this.txtpnFacingBugIssue);
 
-	      JPanel panel = new JPanel();
-	      panel.setBackground(Color.ORANGE);
-	      panel.setBounds(0, 59, 1006, 57);
-	      f.getContentPane().add(panel);
+	      this.panel = new JPanel();
+	      this.panel.setBackground(Color.ORANGE);
+	      this.panel.setBounds(0, 59, 1006, 57);
+	      f.getContentPane().add(this.panel);
 	      
-	      JPanel panel_1 = new JPanel();
-	      panel_1.setBackground(Color.DARK_GRAY);
-	      panel_1.setBounds(0, 0, 1006, 57);
-	      f.getContentPane().add(panel_1);
+	      this.panel_1 = new JPanel();
+	      this.panel_1.setBackground(Color.DARK_GRAY);
+	      this.panel_1.setBounds(0, 0, 1006, 57);
+	      f.getContentPane().add(this.panel_1);
 	      f.setVisible(true);
 	      
 	    }
+}
 	   
 	   
-	public void addListener(ActionListener dummy, JButton button) {
-		button.addActionListener(dummy);
-		}
-	}
-

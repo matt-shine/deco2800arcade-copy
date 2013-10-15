@@ -3,56 +3,56 @@
     <name>Level 1 Cleared!</name>
     <description>Level 1 completed.</description>
     <awardThreshold>1</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>level1.png</icon>
   </achievement>
 
   <achievement id="guesstheword.level2">
     <name>Level 2 Cleared!</name>
     <description>Level 2 completed.</description>
     <awardThreshold>1</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>level2.png</icon>
   </achievement>
 
 <achievement id="guesstheword.level3">
     <name>Level 3 Cleared!</name>
     <description>Level 3 completed.</description>
     <awardThreshold>1</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>level3.png</icon>
   </achievement>
 
 <achievement id="guesstheword.animals">
     <name>Animal Category Complete!</name>
     <description>Animal Category completed.</description>
     <awardThreshold>5</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>animal.png</icon>
   </achievement>
   
 <achievement id="guesstheword.brands">
     <name>Brand Category Complete!</name>
     <description>Brand Category completed.</description>
     <awardThreshold>5</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>brand.png</icon>
   </achievement>
   
 <achievement id="guesstheword.countries">
     <name>Country Category Complete!</name>
     <description>Country Category completed.</description>
     <awardThreshold>5</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>country.png</icon>
   </achievement>
   
 <achievement id="guesstheword.sports">
     <name>Sport Category Complete!</name>
     <description>Sport Category completed.</description>
     <awardThreshold>5</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>sports.png</icon>
   </achievement>
  
 <achievement id="guesstheword.transports">
     <name>Transport Category Complete!</name>
     <description>Transport Category completed.</description>
     <awardThreshold>5</awardThreshold>
-    <icon>winner.png</icon>
+    <icon>transport.png</icon>
   </achievement>
   
 </achievements>

@@ -106,7 +106,7 @@ public class GameScreen implements Screen {
 		if(level.equalsIgnoreCase("Level 1 - 4 letters") 
 				|| level.equalsIgnoreCase("Default")){
 			this.level = "LEVEL 1";	
-			gametime = 62; // 60 secs for level 1
+			gametime = 5; // 60 secs for level 1
 			hm = game.picture.getLevel1();
 			setGameContext();
 			

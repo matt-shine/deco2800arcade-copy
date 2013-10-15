@@ -3,9 +3,11 @@ package deco2800.arcade.guesstheword.GUI;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -22,6 +24,9 @@ public class MainScreen implements Screen {
 	private final Skin skin;
 	private final Stage stage;
 	private final Label titleLabel;
+	private final Texture texture;
+	private final SpriteBatch batch;
+	
 	private final TextButton startButton;
 	private final TextButton settingsButton;
 	private final TextButton achieveButton;
@@ -36,10 +41,13 @@ public class MainScreen implements Screen {
 		this.game = game;
 		this.skin = game.skin;
 		this.stage = new Stage();
+	
+		batch = new SpriteBatch();
 		
+		texture = new Texture(Gdx.files.internal("mainScreen.png"));
 
-		
 		titleLabel = new Label("Welcome to Guess The Word!" , skin);
+		titleLabel.setFontScale(1);
 		
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {
@@ -82,7 +90,6 @@ public class MainScreen implements Screen {
 		mainTable.add(achieveButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
 
 		stage.addActor(mainTable);
-		
 	}
 	
 	private void clearLabel(){
@@ -103,7 +110,13 @@ public class MainScreen implements Screen {
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f );
-        Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		batch.begin();
+		batch.draw(texture, 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
+		batch.end();
+		
+		
 		stage.act(arg0);
 		stage.draw();
 

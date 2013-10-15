@@ -19,8 +19,7 @@ public class SplashScreen implements Screen {
 		this.game = game;
 		batch = new SpriteBatch();
 		texture = new Texture(Gdx.files.internal("splashScreen.png"));
-		// we set the linear texture filter to improve the stretching
-		//texture.setFilter( TextureFilter.Linear, TextureFilter.Linear );
+
 	}
 
 	@Override

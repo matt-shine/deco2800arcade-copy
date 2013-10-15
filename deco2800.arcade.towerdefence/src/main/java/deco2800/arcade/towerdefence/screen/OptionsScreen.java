@@ -18,6 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.towerdefence.TowerDefence;
 
+/* Options screen was left just in case. Serves no purpose at this point in time.
+ * @author Tuddz
+ */
 public class OptionsScreen implements Screen {
 	
 	private final TowerDefence game;

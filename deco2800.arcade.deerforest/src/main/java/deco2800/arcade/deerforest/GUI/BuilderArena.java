@@ -26,10 +26,10 @@ public class BuilderArena extends Sprite{
   	final private float zoomZoneWidth = 0.15f;
   	
   	//40 Deck zones
-  	final private float deckZoneY1 = 0.38f; //constant for all P1 monster zones
-	final private float deckZoneY2 = 0.27f; //constant for all P2 monster zones
-	final private float deckZoneY3 = 0.16f;
-	final private float deckZoneY4 = 0.05f;
+  	final private float deckZoneY1 = 0.84f; // 0.38
+	final private float deckZoneY2 = 0.73f; // 0.27
+	final private float deckZoneY3 = 0.62f; // 0.16
+	final private float deckZoneY4 = 0.51f; // 0.05
 	
 	final private float deckZoneX1 = 0.1f;
 	final private float deckZoneX2 = 0.17f;
@@ -67,7 +67,7 @@ public class BuilderArena extends Sprite{
 	final private float zoomZoneX = 0.831f;
 	
 	//Map to store all zones
-	private static Map<String, Map<Rectangle, BuilderSpriteLogic>> zones;
+	private static Map<String, Map<Rectangle, BuilderSprite>> zones;
 	
 	/**
 	 * Sets the background
@@ -95,12 +95,12 @@ public class BuilderArena extends Sprite{
 		float yScale = y / this.getHeight();
 		this.setScale(xScale, yScale);
 		
-		zones = new LinkedHashMap<String, Map<Rectangle, BuilderSpriteLogic>>();
+		zones = new LinkedHashMap<String, Map<Rectangle, BuilderSprite>>();
 		
 		//Create zones
-		Map<Rectangle, BuilderSpriteLogic> deckZones = new LinkedHashMap<Rectangle, BuilderSpriteLogic>();
-		Map<Rectangle, BuilderSpriteLogic> cardZones = new LinkedHashMap<Rectangle, BuilderSpriteLogic>();
-		Map<Rectangle, BuilderSpriteLogic> zoomZones = new LinkedHashMap<Rectangle, BuilderSpriteLogic>();
+		Map<Rectangle, BuilderSprite> deckZones = new LinkedHashMap<Rectangle, BuilderSprite>();
+		Map<Rectangle, BuilderSprite> cardZones = new LinkedHashMap<Rectangle, BuilderSprite>();
+		Map<Rectangle, BuilderSprite> zoomZones = new LinkedHashMap<Rectangle, BuilderSprite>();
 		
 		//Put card rectangles into zones
 		for(int i = 0; i < 7; i++) {
@@ -141,7 +141,7 @@ public class BuilderArena extends Sprite{
 	 * 
 	 * @return A map of all the zones with strings as keys
 	 */
-	public static Map<String, Map<Rectangle, BuilderSpriteLogic>> getMap() {
+	public static Map<String, Map<Rectangle, BuilderSprite>> getMap() {
 		return zones;
 	}
 	
@@ -154,13 +154,13 @@ public class BuilderArena extends Sprite{
 	private void resizeZones(int x, int y) {
 		//FIXME big method
 		//create new cardZones zones
-		Map<Rectangle, BuilderSpriteLogic> cardZones = new LinkedHashMap<Rectangle, BuilderSpriteLogic>();
+		Map<Rectangle, BuilderSprite> cardZones = new LinkedHashMap<Rectangle, BuilderSprite>();
 		
 		//Resize currently placed sprites and rectangles
 		int i = 0;
-		for(Map.Entry<Rectangle, BuilderSpriteLogic> e : zones.get("cardZone").entrySet()) {
+		for(Map.Entry<Rectangle, BuilderSprite> e : zones.get("cardZone").entrySet()) {
 			//get this zones sprite
-			BuilderSpriteLogic s = zones.get("cardZone").get(e.getKey());
+			BuilderSprite s = zones.get("cardZone").get(e.getKey());
 			//define new rectangle to insert
 			Rectangle r2 = new Rectangle(x*cardZonesX[i], y*cardZonesY, x*cardZoneWidth, y*cardZoneHeight);
 			//insert zone
@@ -172,13 +172,13 @@ public class BuilderArena extends Sprite{
 		}
 		
 		//create new p2Monster zones
-		Map<Rectangle, BuilderSpriteLogic> deckZones = new LinkedHashMap<Rectangle, BuilderSpriteLogic>();
+		Map<Rectangle, BuilderSprite> deckZones = new LinkedHashMap<Rectangle, BuilderSprite>();
 		
 		//Resize currently placed sprites and rectangles
 		i = 0;
-		for(Map.Entry<Rectangle, BuilderSpriteLogic> e : zones.get("deckZone").entrySet()) {
+		for(Map.Entry<Rectangle, BuilderSprite> e : zones.get("deckZone").entrySet()) {
 			//get this zones sprite
-			BuilderSpriteLogic s = zones.get("deckZone").get(e.getKey());
+			BuilderSprite s = zones.get("deckZone").get(e.getKey());
 			int j = i/10;
 			//define new rectangle to insert
 			Rectangle r2 = new Rectangle(x*deckZonesX[i], y*deckZonesY[j], x*deckZoneWidth, y*deckZoneHeight);
@@ -191,13 +191,13 @@ public class BuilderArena extends Sprite{
 		}
 
 		//create new p1HandZones
-		Map<Rectangle, BuilderSpriteLogic> zoomZones = new LinkedHashMap<Rectangle, BuilderSpriteLogic>();
+		Map<Rectangle, BuilderSprite> zoomZones = new LinkedHashMap<Rectangle, BuilderSprite>();
 		
 		//Resize currently placed sprites and rectangles
 		i = 0;
-		for(Map.Entry<Rectangle, BuilderSpriteLogic> e : zones.get("zoomZone").entrySet()) {
+		for(Map.Entry<Rectangle, BuilderSprite> e : zones.get("zoomZone").entrySet()) {
 			//get this zones sprite
-			BuilderSpriteLogic s = zones.get("zoomZone").get(e.getKey());
+			BuilderSprite s = zones.get("zoomZone").get(e.getKey());
 			//define new rectangle to insert
 			Rectangle r2 = new Rectangle(x*zoomZoneX, y*zoomZoneY, x*zoomZoneWidth, y*zoomZoneHeight);
 			//insert zone
@@ -209,7 +209,7 @@ public class BuilderArena extends Sprite{
 		}
 		
 		//clear zones list
-		zones = new LinkedHashMap<String, Map<Rectangle, BuilderSpriteLogic>>();
+		zones = new LinkedHashMap<String, Map<Rectangle, BuilderSprite>>();
 		
 		zones.put("cardZone", cardZones);
 		zones.put("deckZone", deckZones);
@@ -222,7 +222,7 @@ public class BuilderArena extends Sprite{
 	 * @param r rectangle to scale to
 	 * @param s sprite to scale
 	 */
-	private void setSpriteToRectangleSize(Rectangle r, BuilderSpriteLogic s) {
+	private void setSpriteToRectangleSize(Rectangle r, BuilderSprite s) {
 		float xScale = r.getWidth() / s.getWidth();
 		float yScale = r.getHeight() / s.getHeight();
 		float xPoint = r.getX();
@@ -239,7 +239,7 @@ public class BuilderArena extends Sprite{
 	 * 
 	 * @return zone in which the sprite was inserted
 	 */
-	public String setSpriteToZone(BuilderSpriteLogic s, Rectangle r) {
+	public String setSpriteToZone(BuilderSprite s, Rectangle r) {
 		
 		for(String key : zones.keySet()) {
 			for(Rectangle zone : zones.get(key).keySet()) {
@@ -303,7 +303,7 @@ public class BuilderArena extends Sprite{
 	public List<Rectangle> getAvailableZones(String whichArea) {
 		List<Rectangle> freeZones = new ArrayList<Rectangle>();
 		
-		Map<Rectangle, BuilderSpriteLogic> mapToCheck = null;
+		Map<Rectangle, BuilderSprite> mapToCheck = null;
 		
 		if(whichArea == "Deck") {
 			mapToCheck = zones.get("deckZone");
@@ -322,7 +322,7 @@ public class BuilderArena extends Sprite{
 	
 	public Rectangle emptyZoneAtRectangle(Rectangle r, String where) {
 		
-		Map<Rectangle, BuilderSpriteLogic> mapToCheck = null;
+		Map<Rectangle, BuilderSprite> mapToCheck = null;
 		
 		if(where == "Deck") {
 			mapToCheck = zones.get("deckZone");
@@ -364,7 +364,7 @@ public class BuilderArena extends Sprite{
 		return (rightSide - leftSide)*(bottomSide - topSide);
 	}
 
-	public void removeSprite(BuilderSpriteLogic currentSelection) {
+	public void removeSprite(BuilderSprite currentSelection) {
 		// TODO Auto-generated method stub
 		
 	}

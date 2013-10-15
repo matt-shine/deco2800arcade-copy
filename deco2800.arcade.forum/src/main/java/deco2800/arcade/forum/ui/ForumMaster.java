@@ -17,6 +17,7 @@ public class ForumMaster {
 	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
 	      
-	      new ForumUi(f);
+	      ForumUi view = new ForumUi(f);
+	      new ForumUIControl(view);
 	    }
 }

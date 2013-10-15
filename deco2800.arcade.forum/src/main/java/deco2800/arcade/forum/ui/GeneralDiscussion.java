@@ -28,8 +28,6 @@ public class GeneralDiscussion {
 	   public GeneralDiscussion(JFrame f) {
 
 	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	      f.setSize(1024, 768);
-	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
 	      
 	      JButton btnLogIn = new JButton("LOG IN");

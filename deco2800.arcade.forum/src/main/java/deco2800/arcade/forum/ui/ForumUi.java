@@ -42,8 +42,10 @@ public class ForumUi {
 	public JTextPane txtpnFacingBugIssue;
 	public JPanel panel;
 	public JPanel panel_1;
-	   public ForumUi(JFrame f) {
+	private JFrame f;
+	   public ForumUi(JFrame window) {
 	      //Initialize new JFrame for forum interface
+		  this.f = window;
 	      f.setSize(1024, 768);
 	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
@@ -104,14 +106,8 @@ public class ForumUi {
 	      this.lblGeneralDiscussion = new JLabel("General Discussion");
 	      this.lblGeneralDiscussion.setFont(new Font("Tahoma", Font.BOLD, 13));
 	      this.lblGeneralDiscussion.setBounds(12, 155, 141, 16);
+	      addGDLabelListener(this.lblGeneralDiscussion);
 	      f.getContentPane().add(this.lblGeneralDiscussion);
-	      
-	      lblGeneralDiscussion.addMouseListener(new MouseAdapter(){      //Guys I struck on this for very long, need help. Click on 
-	    	  public void mouseClicked(MouseEvent e)					//GeneralDiscussion and will open the GeneralDiscussion.java
-	    	  {
-	    		  //new GeneralDiscussion(f);
-	    	  }
-	      });
 	     
 	     
 	      //Tutorial Label
@@ -161,6 +157,22 @@ public class ForumUi {
 	      f.setVisible(true);
 	      
 	    }
+	   
+	   public void open_general_discussion() {
+		   this.f.setContentPane(new JPanel(new BorderLayout()));
+		   new GeneralDiscussion(this.f);
+	   }
+	   
+	   private void addGDLabelListener(JLabel label) {
+		   label.addMouseListener(new MouseAdapter()
+		   {
+			   public void mouseClicked(MouseEvent e)
+			   {
+				   System.out.println("ASDASDA");
+				   open_general_discussion();
+			   }
+		   });
+	   }
 }
 	   
 	   

@@ -30,9 +30,9 @@ public class ScoreScreen implements Screen {
     private Skin skin;
     private SpriteBatch batch;
     private TextButton backButton;
-    private Label label;
     private Image background;
 	private MenuInputProcessor processor;
+	private Image scoreTableImage;
 	
 	public ScoreScreen(BurningSkies game) {
 		this.game = game;
@@ -89,6 +89,7 @@ public class ScoreScreen implements Screen {
         white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));
+        scoreTableImage = new Image(new Texture(Gdx.files.internal("images/menu/dual_score_table.png")));
         
         int width = BurningSkies.SCREENWIDTH;
         int height = BurningSkies.SCREENHEIGHT;
@@ -116,16 +117,9 @@ public class ScoreScreen implements Screen {
             }
 	    });
 	    
-	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    label = new Label("Scores", ls);
-	    label.setX(0);
-	    label.setY((float)(height*0.95));
-	    label.setWidth(width);
-	    label.setAlignment(Align.center);
-	    
-	    stage.addActor(backButton);
-	    stage.addActor(label);	
 	    stage.addActor(background);
+	    stage.addActor(scoreTableImage);
+	    stage.addActor(backButton);
 	    background.toBack();    
 	}
 }

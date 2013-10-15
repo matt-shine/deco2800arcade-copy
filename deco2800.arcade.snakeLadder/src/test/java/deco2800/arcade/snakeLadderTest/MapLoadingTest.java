@@ -20,7 +20,7 @@ import deco2800.arcade.snakeLadderModel.Tile;
 public class MapLoadingTest {
 	private static final String fileDir = "src/test/java/deco2800/arcade/snakeLadderTest/";
 
-	//@Test
+	@Test
 	public void tileCoorTest() {
 		Tile[] tiles = new Tile[100];
 		//create a tile map without anyrules
@@ -50,7 +50,7 @@ public class MapLoadingTest {
 		assertEquals(tiles[9].getCoorY(), 0);
 	}
 	
-	//@Test
+	@Test
 	public void ruleXMLLoading()
 	{
 		HashMap<String,RuleMapping> ruleMapping = RuleMapping.iniRuleMapping(new FileHandle(new File(fileDir+"ruleMappingTest.xml")));
@@ -73,7 +73,7 @@ public class MapLoadingTest {
 		assertEquals(ruleMapping.get("-100").getIcon(),"minus_100.png");
 	}
 	
-	//@Test
+	@Test
 	public void tileRuleLoading()
 	{
 		GameMap gp = new GameMap();
@@ -104,7 +104,7 @@ public class MapLoadingTest {
 		assertEquals(gp.getTileList()[40].getRule(), "S21");
 	}
 	
-	//@Test
+	@Test
 	public void emptyRuleLoading()
 	{
 		GameMap gp = new GameMap();

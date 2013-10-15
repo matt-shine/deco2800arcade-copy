@@ -40,7 +40,6 @@ public class Invaders extends JFrame implements Runnable {
 		
 		healthBar = 3;
 		score = 0;
-		JLabel lscore = new JLabel (score +"aaaaaaaaaaaaaaa");
 		
 		
 		
@@ -102,11 +101,14 @@ public class Invaders extends JFrame implements Runnable {
 
 	public void paint(Graphics g) {
 		String drawString = "Sample Text";
+		mains.setColor(Color.white);
+		mains.setFont(new Font("Algerian",1,28));
 		
 		mains.clearRect(0, 0, Width, Height);
 		mains.drawImage(background, 0, 0, Width, Height, panel);
 		mains.drawImage(frame, 10, 20, Width, 662, panel);
-		mains.drawString("aaaaaaaa", 300, 400);
+		
+		mains.drawString(score + "", 420, 54);
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
 
@@ -236,14 +238,16 @@ public class Invaders extends JFrame implements Runnable {
 			WallList.add(new blockWall(580, 350, 4, 8, imgString + "WallD.png"));
 		}
 		if(bglevel ==3 && level ==1){
-			bglevel = 1;
 			WallList = new ArrayList<blockWall>();
 		}
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
 		if(bglevel==1) imgString = "/tank/";
 		if(bglevel==2) imgString = "/plane/";
-		if(bglevel==3) imgString = "/ship/";
+		if(bglevel==3){
+			imgString = "/ship/";
+			bglevel = 1;
+		}
 		setGameImg(imgString);
 		move = 0;
 		direction = 1;

@@ -270,11 +270,11 @@ public class GameScreen implements Screen  {
 			shapeRenderer.begin(ShapeType.FilledRectangle);
 
 			getPaddle().render(shapeRenderer);
-			getPowerupManager().renderAll(batch);
 			
 
 			// Render the level
 			levelSystem.render(bricks, outer, inner, this, shapeRenderer, batch);
+			getPowerupManager().renderAll(batch);
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
 			// Ball is a Circle
@@ -646,6 +646,7 @@ public class GameScreen implements Screen  {
 	
 	public void destroyPowerupBall() {
 		if (powerupBall != null) {
+			System.out.println("Triggers");
 			setNumBalls(getNumBalls() - 1);
 			powerupBall = null;
 		}

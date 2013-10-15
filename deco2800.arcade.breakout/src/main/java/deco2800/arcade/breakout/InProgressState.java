@@ -36,6 +36,7 @@ public class InProgressState extends GameState {
 		
 		if (context.getBrickNum() == 0) {
 			context.setLevel(context.getLevel() + 1);
+			context.destroyPowerupBall();
 			if (context.getLevel() > 10) {
 				context.win();
 			} else {

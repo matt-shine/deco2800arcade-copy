@@ -45,6 +45,8 @@ public class LevelScreen1 implements Screen {
 	TextureRegionDrawable level5down;
 	TextureRegionDrawable nextup;
 	TextureRegionDrawable nextdown;
+	TextureRegionDrawable backup;
+	TextureRegionDrawable backdown;
 
 	TextureRegion level1buttonUp;
 	TextureRegion level1buttonDown;
@@ -58,15 +60,18 @@ public class LevelScreen1 implements Screen {
 	TextureRegion level5buttonDown;
 	TextureRegion nextbuttonUp;
 	TextureRegion nextbuttonDown;
+	TextureRegion backbuttonUp;
+	TextureRegion backbuttonDown;
 
 	Texture tex;
+	Texture tex2;
 	ImageButton level1button;
 	ImageButton level2button;
 	ImageButton level3button;
 	ImageButton level4button;
 	ImageButton level5button;
 	ImageButton nextbutton;
-
+	ImageButton backbutton;
 
 	private int index = 0;
 
@@ -76,6 +81,7 @@ public class LevelScreen1 implements Screen {
 				int pointer, int button) {
 			return true;
 		}
+
 		// on button release do this
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
@@ -86,13 +92,14 @@ public class LevelScreen1 implements Screen {
 			game.setScreen(game.gamescreen);
 		}
 	};
-	
+
 	InputListener input2 = new InputListener() {
 		// touch down method is needed for the rest to work
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
+
 		// on button release do this
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
@@ -103,13 +110,14 @@ public class LevelScreen1 implements Screen {
 			game.setScreen(game.gamescreen);
 		}
 	};
-	
+
 	InputListener input3 = new InputListener() {
 		// touch down method is needed for the rest to work
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
+
 		// on button release do this
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
@@ -120,13 +128,14 @@ public class LevelScreen1 implements Screen {
 			game.setScreen(game.gamescreen);
 		}
 	};
-	
+
 	InputListener input4 = new InputListener() {
 		// touch down method is needed for the rest to work
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
+
 		// on button release do this
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
@@ -137,13 +146,14 @@ public class LevelScreen1 implements Screen {
 			game.setScreen(game.gamescreen);
 		}
 	};
-	
+
 	InputListener input5 = new InputListener() {
 		// touch down method is needed for the rest to work
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 			return true;
 		}
+
 		// on button release do this
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
@@ -165,9 +175,25 @@ public class LevelScreen1 implements Screen {
 		// on button release do this
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
-			//game.gamescreen.gamearea();
-			dispose();
+			// game.gamescreen.gamearea();
+			// dispose();
 			game.setScreen(game.LevelScreen2);
+		}
+	};
+
+	InputListener backmenu = new InputListener() {
+		// touch down method is needed for the rest to work
+		public boolean touchDown(InputEvent event, float x, float y,
+				int pointer, int button) {
+			return true;
+		}
+
+		// on button release do this
+		public void touchUp(InputEvent event, float x, float y, int pointer,
+				int button) {
+			// game.gamescreen.gamearea();
+			// dispose();
+			game.setScreen(game.MenuScreen);
 		}
 	};
 
@@ -177,7 +203,9 @@ public class LevelScreen1 implements Screen {
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/Level_Select1.png"));
 		tex = new Texture(Gdx.files.classpath("imgs/buttons1.png"));
+		tex2 = new Texture(Gdx.files.classpath("imgs/button.png"));
 		TextureRegion[][] tmp = TextureRegion.split(tex, 350, 210);
+		TextureRegion[][] tmp2 = TextureRegion.split(tex2, 130, 45);
 		level1buttonUp = tmp[0][0];
 		level1buttonDown = tmp[0][1];
 		level2buttonUp = tmp[0][2];
@@ -190,12 +218,15 @@ public class LevelScreen1 implements Screen {
 		level5buttonDown = tmp[2][1];
 		nextbuttonUp = tmp[2][2];
 		nextbuttonDown = tmp[2][3];
+		backbuttonUp = tmp2[2][2];
+		backbuttonDown = tmp2[2][3];
 		Button1();
 		Button2();
 		Button3();
 		Button4();
 		Button5();
 		Next();
+		backmenu();
 
 		stage = new Stage(480, 640, true);
 
@@ -205,6 +236,7 @@ public class LevelScreen1 implements Screen {
 		stage.addActor(level4button);
 		stage.addActor(level5button);
 		stage.addActor(nextbutton);
+		stage.addActor(backbutton);
 
 	}
 
@@ -272,6 +304,7 @@ public class LevelScreen1 implements Screen {
 		level4button.removeListener(this.input4);
 		level5button.removeListener(this.input5);
 		nextbutton.removeListener(this.levelScreen2);
+		backbutton.removeListener(this.backmenu);
 
 	}
 
@@ -304,7 +337,7 @@ public class LevelScreen1 implements Screen {
 	}
 
 	public void Button3() {
-	
+
 		level3up = new TextureRegionDrawable(level3buttonUp);
 		level3down = new TextureRegionDrawable(level3buttonDown);
 		level3button = new ImageButton(level3up, level3down);
@@ -340,5 +373,14 @@ public class LevelScreen1 implements Screen {
 		nextbutton = new ImageButton(nextup, nextdown);
 		nextbutton.setPosition(750, 100);
 		nextbutton.addListener(levelScreen2);
+	}
+
+	public void backmenu() {
+
+		backup = new TextureRegionDrawable(backbuttonUp);
+		backdown = new TextureRegionDrawable(backbuttonDown);
+		backbutton = new ImageButton(backup, backdown);
+		backbutton.setPosition(0, 590);
+		backbutton.addListener(backmenu);
 	}
 }

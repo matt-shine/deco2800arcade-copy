@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.badlogic.gdx.files.FileHandle;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
+import deco2800.arcade.snakeLadderGameState.*;
 import deco2800.arcade.snakeLadderModel.*;
 
 public class RuleExcutingTest {
@@ -29,6 +30,7 @@ public class RuleExcutingTest {
 		ScoreRule scoringRule = new ScoreRule();
 		scoringRule.processRule(0, "+10", context);
 		assertEquals(context.gamePlayers[0].getScore(),10);
+		assertTrue(context.gameState instanceof WaitingState);
 	}
 
 }

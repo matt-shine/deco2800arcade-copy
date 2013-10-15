@@ -33,6 +33,7 @@ public class SoundboardScreen implements Screen {
     private boolean recording = false;
     private boolean playback;
     private int session;
+    private String gamename;
 
     public static final int LOOPS = 0;
     public static final int SAMPLES = 1;
@@ -76,11 +77,12 @@ public class SoundboardScreen implements Screen {
      * Basic Constructor
      */
     public SoundboardScreen(List<SoundFileHolder> loops, List<SoundFileHolder> samples,
-                            ReplayHandler replayHandler, Player player) {
+                            ReplayHandler replayHandler, Player player, String game) {
         this.loops = loops;
         this.samples = samples;
         this.replayHandler = replayHandler;
         this.player = player;
+        this.gamename = game;
 
         session = -1;
         libSkin = new Skin(Gdx.files.classpath("Assets/libSkin.json"));
@@ -123,19 +125,28 @@ public class SoundboardScreen implements Screen {
         recordButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                if (recording) {
-                    recordButton.setText("Start Recording");
-                    session = replayHandler.getSessionId();
-                    replayHandler.endSession(session);
-                } else {
-                    reset();
-                    recordButton.setText("Stop Recording");
-                    replayHandler.startSession(1, player.getUsername());
-                    replayHandler.startRecording();
+                if (!playback) {
+                    if (recording) {
+                        recordButton.setText("Start Recording");
+                        session = replayHandler.getSessionId();
+                        replayHandler.endSession(session);
+                    } else {
+                        reset();
+                        replayHandler.startSession(gamename, player.getUsername());
+
+                        /* Need to sleep for server to get session request */
+                        try {
+                            Thread.sleep(250);
+                        } catch (InterruptedException e) {
+                            // Doesn't matter
+                        }
+                        recordButton.setText("Stop Recording");
+                        replayHandler.startRecording();
+                    }
+                    recordButton.remove();
+                    stage.addActor(recordButton);
+                    recording = !recording;
                 }
-                recordButton.remove();
-                stage.addActor(recordButton);
-                recording = !recording;
             }
         });
 
@@ -151,7 +162,7 @@ public class SoundboardScreen implements Screen {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 if (session != -1 && !recording) {
                     reset();
-                    replayHandler.requestEventsForSession(session);
+                    replayHandler.playbackSession(session);
                     playback = true;
                 }
             }

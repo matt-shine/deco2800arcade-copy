@@ -123,7 +123,7 @@ public class Soundboard extends GameClient {
     @Override
     public void create() {
         ArcadeSystem.openConnection();
-        screen = new SoundboardScreen(loops, samples, replayHandler, player);
+        screen = new SoundboardScreen(loops, samples, replayHandler, player, game.id);
         setScreen(screen);
         super.create();
 

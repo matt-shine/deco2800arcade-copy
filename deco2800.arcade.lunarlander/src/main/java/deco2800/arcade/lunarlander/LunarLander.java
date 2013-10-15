@@ -28,7 +28,7 @@ import deco2800.arcade.client.network.NetworkClient;
 // in progress - please excuse the commented-out code and 
 // sections that aren't fully functional.
 
-@ArcadeGame(id="LunarLander")
+@ArcadeGame(id="lunarlander")
 public class LunarLander extends GameClient {
 	
 	private enum GameState {

@@ -57,6 +57,34 @@ public class DeckBuilder extends Game {
 
 	}
 	
+	public boolean moveCards(List<AbstractCard> cards, String oldLocation, String newLocation) {
+		//Check not null
+		if(cards == null || oldLocation == null || newLocation == null) return false;
+		
+		CardCollection srcCards = null;
+		CardCollection destCards = null;
+		
+		if(oldLocation.contains("Deck")) {
+			srcCards = model.getCardCollection("Deck");
+		} else if(oldLocation.contains("Card")) {
+			srcCards = model.getCardCollection("Card");
+		} 
+		
+		if(newLocation.contains("Deck")) {
+			destCards = model.getCardCollection("Deck");
+		} else if(newLocation.contains("Card")) {
+			destCards = model.getCardCollection("Card");
+		} 
+
+        boolean b = model.moveCards(cards, srcCards, destCards);
+        if(!b) {
+            System.out.println("Error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+        } else {
+            System.out.println("No error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+        }
+		return b;
+	}
+	
 	public CardCollection getCardCollection(String area) {
 		return model.getCardCollection(area);
 	}

@@ -1,0 +1,17 @@
+# These are the version numbers for the package manager.
+# If VERSION is the same as RELEASE_VERSION then the current build
+# will be copied into the Release directory on the server. This will
+# release the game.
+# If the VERSION is different to the RELEASE_VERSION then nothing will
+# be copied.
+# If VERSION and RELEASE_VERSION are 0.0.0 (defaults) then nothing
+# will be copied.
+# If RELEASE_VERSION is greater than VERSION then nothing will be copied.
+#
+# This version number must also be the same as the version number in
+# your packaged JAR file created by running "gradle jar". This file is
+# located at:
+# deco2800.arcade.GAME/build/libs/deco2800.arcade.GAME-VERSION.jar
+
+VERSION=1.0
+RELEASE_VERSION=1.0

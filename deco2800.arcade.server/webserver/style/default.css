@@ -1,0 +1,32 @@
+body {
+	height: 100%;
+}
+
+.content {
+	height: 100%;
+}
+
+body > header .logo {
+    margin-top: 8px;
+    margin-right: 8px;
+    max-height: 30px;
+}
+
+body > footer img {
+    height: 18px;
+    position: relative;
+    top: 5px;
+    left: 2px;
+}
+
+div.img.avatar {
+    height: 46px;
+    width: 46px;
+    float: left;
+    margin: 1%;
+}
+
+.game-icon {
+	width: 64px;
+	height: 64px;
+}	

@@ -12,15 +12,12 @@ import deco2800.server.ArcadeServer;
 
 public class GameResponder implements WebResponder {
 	
-	public void respond( Response response ) throws Exception {
+	public void respond( Response response, String param ) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();
 
-		response.setValue("Content-Type", "text/html");
-		response.setValue("Server", "HelloWorld/1.0 (Simple 4.0)");
-		response.setDate("Date", time);
-		response.setDate("Last-Modified", time);
+		ArcadeWebserver.setResponseValues(response, "text/html");
 		
 		String bodyString = "";
 		
@@ -44,7 +41,8 @@ public class GameResponder implements WebResponder {
 			
 			contentString = contentString.replace( "#{{gamename}}", game.name );
 			contentString = contentString.replace( "#{{gamedescription}}", game.description );
-			
+			contentString = contentString.replace( "#{{gamelogo}}", "/logo/" + game.id + ".png");
+
 			contentString = contentString.replace( "#{{price}}", String.valueOf( game.pricePerPlay ) );
 			
 		}

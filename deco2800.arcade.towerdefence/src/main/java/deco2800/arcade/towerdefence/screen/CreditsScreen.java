@@ -11,6 +11,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import deco2800.arcade.towerdefence.TowerDefence;
 
+/* Credits screen, any key to exit
+ * @author Tuddz
+ */
 public class CreditsScreen implements Screen{
 	private static final String LOG = CreditsScreen.class.getSimpleName();
 	private final TowerDefence game;
@@ -51,6 +54,8 @@ public class CreditsScreen implements Screen{
 		batch.draw(texture, 0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
 		batch.end();
+		
+		
 	}
 
 	@Override

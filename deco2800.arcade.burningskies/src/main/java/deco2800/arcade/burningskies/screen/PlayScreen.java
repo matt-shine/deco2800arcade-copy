@@ -23,7 +23,7 @@ import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.Level;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
-import deco2800.arcade.burningskies.entities.DemoPowerUp;
+import deco2800.arcade.burningskies.entities.UpgradePowerUp;
 import deco2800.arcade.burningskies.entities.HealthPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
@@ -118,9 +118,9 @@ public class PlayScreen implements Screen
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	// Test code
-    	PowerUp test = new DemoPowerUp("images/items/health.png");
+    	PowerUp test = new UpgradePowerUp(400,400);
     	addPowerup(test);
-    	test = new HealthPowerUp("images/items/health.png");
+    	test = new HealthPowerUp(200,200);
     	addPowerup(test);
     	
     	sp = new SpawnList(this);

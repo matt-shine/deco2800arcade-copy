@@ -1,10 +1,15 @@
 package deco2800.arcade.burningskies.entities;
 
-public class DemoPowerUp extends PowerUp {
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+
+public class UpgradePowerUp extends PowerUp {
+	
+	static final Texture texture = new Texture(Gdx.files.internal("images/items/health.png"));
 	
 	//Either have all PowerUps inherit a screen, or only the BulletPattern ones.
-	public DemoPowerUp(String iconPath) {
-			super(iconPath);		
+	public UpgradePowerUp(float x, float y) {
+			super(texture, x, y);		
 	}
 	
 	@Override

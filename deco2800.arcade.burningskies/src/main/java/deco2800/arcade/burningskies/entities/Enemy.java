@@ -24,23 +24,22 @@ public class Enemy extends Ship {
 	private boolean homing;
 
 	private long points;
+	
+	private PlayScreen screen;
 
 //	private Vector2 playerDir = new Vector2();
 	
 	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
 		super(health, image, pos);
+		this.screen = screen;
 		this.player = player;
-		position = pos;
-		currentDirVel = dir;
+		this.position = pos;
+		this.currentDirVel = dir;
 		this.points = points;
 		
-		dirAccel.x = 0;
-		dirAccel.y = 0;
+		dirAccel.set(0,0);
 		homing = true;
 		accelIntensity = (float) 0.95;
-		
-		setWidth(getWidth());
-		setHeight(getHeight());
 	}
 	
 	public void onRender(float delta) {
@@ -56,6 +55,10 @@ public class Enemy extends Ship {
 	public boolean remove() {
 		if(getStage() != null) {
 			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 1));
+		}
+		// Randomly drop powerups
+		if(Math.random() <= 0.3) {
+			screen.addPowerup(new UpgradePowerUp(getCenterX(), getCenterY()));
 		}
 		return super.remove();
 	}

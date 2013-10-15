@@ -31,23 +31,22 @@ public class ModelScreen implements Screen  {
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 	Stage stage;
-	   TextureRegionDrawable model1up;
-	   TextureRegionDrawable model1down;
-	   TextureRegion model1Up;
-	   TextureRegion model1Down;
-	   TextureRegion model1buttonUp;
-	   TextureRegion model1buttonDown;
-	   TextureRegionDrawable model2up;
-	   TextureRegionDrawable model2down;
-	   TextureRegion model2Up;
-	   TextureRegion model2Down;
-	   TextureRegion model2buttonUp;
-	   TextureRegion model2buttonDown;
-	   Texture tex;
-	   ImageButton model1button;
-	   ImageButton model2button;
+	TextureRegionDrawable model1up;
+	TextureRegionDrawable model1down;
+	TextureRegion model1Up;
+	TextureRegion model1Down;
+	TextureRegion model1buttonUp;
+	TextureRegion model1buttonDown;
+	TextureRegionDrawable model2up;
+	TextureRegionDrawable model2down;
+	TextureRegion model2Up;
+	TextureRegion model2Down;
+	TextureRegion model2buttonUp;
+	TextureRegion model2buttonDown;
+	Texture tex;
+	ImageButton model1button;
+	ImageButton model2button;
 	   
-	  
 	  
 	ModelScreen(final Breakout game) {
 		
@@ -87,29 +86,20 @@ public class ModelScreen implements Screen  {
 		model2button.setPosition(550, 100);
 	    
 		model2button.addListener(new InputListener(){
-	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
-	        		return true; 
-	        	}
-	        	
-	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.gamescreen.switchGameMode(true);
-	        		game.setScreen(game.LevelScreen1); 
-	        		
-	        	}}
-	    	   );
-		 stage = new Stage(480, 640, true);
-	      
-	       
-	       
-	       
-	       stage.addActor(model1button);
-	       stage.addActor(model2button);     
-	      
-	       
-		
-		
-	   
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+        		
+        		return true; 
+        	}
+        	
+        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+        		game.gamescreen.switchGameMode(true);
+        		game.setScreen(game.LevelScreen1); 
+        		
+        	}}
+    	   );
+		 stage = new Stage(480, 640, true); 
+	     stage.addActor(model1button);
+	     stage.addActor(model2button);     
 	     
 	}
 	
@@ -137,19 +127,13 @@ public class ModelScreen implements Screen  {
 
 	@Override
 	public void render(float arg0) {
-		
-
-	
-
 		Gdx.gl.glClearColor(1, 1, 1, 1);
-		 Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		 
-		
-	       batch.begin();
-			batch.draw(texture, 0, 0);
-			batch.end();
-			stage.act();
-		       stage.draw();
+		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+	    batch.begin();
+		batch.draw(texture, 0, 0);
+		batch.end();
+		stage.act();
+		stage.draw();
 	       
 	}
 

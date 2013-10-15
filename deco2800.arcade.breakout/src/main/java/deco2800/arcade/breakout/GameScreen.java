@@ -435,13 +435,20 @@ public class GameScreen implements Screen  {
 	@Override
 	public void pause() {
 		game.pause();
-		if(Gdx.input.isKeyPressed(Keys.R)){
-			resume();
-		}
+		
+		
 	}
 
+//	public void inGamePause() {
+//		while(!Gdx.input.isKeyPressed(Keys.R)) {
+//			try {
+//				Thread.currentThread().sleep(1000);
+//			} catch(Exception e) {
+//				
+//			}
+//		}
+//	}
 	
-
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub

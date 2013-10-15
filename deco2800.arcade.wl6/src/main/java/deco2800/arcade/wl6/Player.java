@@ -13,7 +13,7 @@ public class Player extends Mob {
     private int points = 0;
     private int currentGun = 1;
     private HashSet<Integer> guns = new HashSet<Integer>();
-    private int ammo = 10;
+    private int ammo = 16;
     private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
 	
     
@@ -24,9 +24,6 @@ public class Player extends Mob {
         setHealth(STARTING_HEALTH);
         guns.add(0);
         guns.add(1);
-        
-        
-        
     }
 
 

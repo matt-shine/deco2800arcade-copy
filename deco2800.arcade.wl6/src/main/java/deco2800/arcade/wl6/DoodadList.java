@@ -105,28 +105,28 @@ public class DoodadList {
                     DoodadInfo.healthPickup("health", 5, 0),
 
                     //30: white column
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("column"),
 
                     //31: green plant
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("plant"),
 
                     //32: skeleton
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("skeleton"),
 
                     //33: sink
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("sink"),
 
                     //34: brown plant
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("plant"),
 
                     //35: vase
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("vase"),
 
                     //36: table
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("table"),
 
                     //37: ceiling light (green)
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("manfried"),
 
                     //38: utensils brown
                     new DoodadInfo(),
@@ -138,22 +138,22 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //41: cage / skeleton
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("cage"),
 
                     //42: bones 1
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("skeleton"),
 
                     //43: gold key
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //44: silver key
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //45: bed
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("bed"),
 
                     //46: basket
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("dogbed"),
 
                     //47: food
                     DoodadInfo.healthPickup("health", 10, 0),
@@ -172,49 +172,49 @@ public class DoodadList {
                     DoodadInfo.gunPickup("machinegun", 1, 0),
 
                     //52: cross
-                    DoodadInfo.treasurePickup("worm", 100),
+                    DoodadInfo.treasurePickup("worm", 100, 1),
 
                     //53: chalice
-                    DoodadInfo.treasurePickup("worm", 500),
+                    DoodadInfo.treasurePickup("worm", 500, 1),
 
                     //54: treasure chest
-                    DoodadInfo.treasurePickup("worm", 1000),
+                    DoodadInfo.treasurePickup("worm", 1000, 1),
 
                     //55: crown
-                    DoodadInfo.treasurePickup("worm", 5000),
+                    DoodadInfo.treasurePickup("worm", 5000, 1),
 
                     //56: extra life
-                    new DoodadInfo(),
+                    DoodadInfo.treasurePickup("fullheal", 10000, 150),
 
                     //57: bones / blood
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //58: barrel
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("barrel"),
 
                     //59: well / water
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("well"),
 
                     //60: well
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("well"),
 
                     //61: pool of blood
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("blood"),
 
                     //62: flag
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("flag"),
 
                     //63: nothing
                     new DoodadInfo(),
 
                     //64: bones 2
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //65: bones 3
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //66: bones 4
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //67: utensils blue
                     new DoodadInfo(),
@@ -226,7 +226,7 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //70: vines
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("vines"),
 
                     //71: nothing
                     new DoodadInfo(),
@@ -310,10 +310,10 @@ public class DoodadList {
                     DoodadInfo.wayPoint(DIRS.DOWNRIGHT),
 
                     //98: Secret door
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //99: Endgame trigger
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //100: nothing
                     new DoodadInfo(),
@@ -388,7 +388,7 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //124: dead guard
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("corpse"),
 
                     //125: nothing
                     new DoodadInfo(),

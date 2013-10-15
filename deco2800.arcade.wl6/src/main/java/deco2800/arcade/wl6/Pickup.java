@@ -9,8 +9,6 @@ public class Pickup extends Doodad {
     private int gun = 0;
     private int ammo = 0;
     private KEY_TYPE key = null;
-    
-    private boolean overheal = false;//TODO overhealing
 
     public Pickup(int uid, int health, int points, int ammo, int gun) {
         super(uid);
@@ -31,14 +29,36 @@ public class Pickup extends Doodad {
     	Player p = game.getPlayer();
     	
         if (getPos().dst(p.getPos()) < 0.8) {
-            game.destroyDoodad(this);
+            boolean destroy = false;
             
-            p.addAmmo(ammo);
-            p.addPoints(points);
-            p.addGun(gun);
-            p.addHealth(health, overheal);
+            
+            if (p.getAmmo() < 99 && ammo > 0) {
+            	p.addAmmo(ammo);
+            	destroy = true;
+            }
+            
+            if (points > 0) {
+            	p.addPoints(points);
+            	destroy = true;
+            }
+            
+            if (this.gun != 0) {
+            	p.addGun(gun);
+            	destroy = true;
+            }
+            
+            if (p.getHealth() < 100 || points > 0) {
+            	p.addHealth(health, (points == 0 ? false : true));
+            	destroy = true;
+            }
+            
             if (key != null) {
             	p.addKey(key);
+            	destroy = true;
+            }
+            
+            if (destroy) {
+            	game.destroyDoodad(this);
             }
             
         }

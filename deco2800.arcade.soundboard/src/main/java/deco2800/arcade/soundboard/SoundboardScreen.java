@@ -33,7 +33,7 @@ public class SoundboardScreen implements Screen {
     private boolean recording = false;
     private boolean playback;
     private int session;
-    private String gamename;
+    private String gameName;
 
     public static final int LOOPS = 0;
     public static final int SAMPLES = 1;
@@ -82,7 +82,7 @@ public class SoundboardScreen implements Screen {
         this.samples = samples;
         this.replayHandler = replayHandler;
         this.player = player;
-        this.gamename = game;
+        this.gameName = game;
 
         session = -1;
         libSkin = new Skin(Gdx.files.classpath("Assets/libSkin.json"));
@@ -132,7 +132,7 @@ public class SoundboardScreen implements Screen {
                         replayHandler.endSession(session);
                     } else {
                         reset();
-                        replayHandler.startSession(gamename, player.getUsername());
+                        replayHandler.startSession(gameName, player.getUsername());
 
                         /* Need to sleep for server to get session request */
                         try {

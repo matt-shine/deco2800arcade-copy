@@ -31,6 +31,15 @@ public class Soundboard extends GameClient {
     private List<SoundFileHolder> loops;
     private List<SoundFileHolder> samples;
 
+    /* Game Information */
+    private static final Game game;
+    static {
+        game = new Game();
+        game.id = "soundboard";
+        game.name = "UQ Soundboard";
+        game.description = "The epic DECO2800 Soundboard!! Enjoy the master sounds of UQ!";
+    }
+
     /**
      * Basic Constructor for Soundboard game
      * @param player1 Current Player
@@ -153,16 +162,6 @@ public class Soundboard extends GameClient {
         if (screen != null) {
             screen.dispose();
         }
-    }
-
-
-    /* Game Information */
-    private static final Game game;
-    static {
-        game = new Game();
-        game.id = "soundboard";
-        game.name = "UQ Soundboard";
-        game.description = "The epic DECO2800 Soundboard!! Enjoy the master sounds of UQ!";
     }
 
     @Override

@@ -1,8 +1,16 @@
 package deco2800.arcade.client;
 
-import deco2800.arcade.model.Game;
 
+import java.util.ArrayList;
 import java.util.Set;
+
+import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
+
+//TODO commenting?
+import deco2800.arcade.model.Game;
 
 public class ArcadeSystem {
 	
@@ -41,14 +49,10 @@ public class ArcadeSystem {
     }
 
     /**
-     * Open connection to server
+     * Open connection to both server and file server
      */
 	public static void openConnection() {
-		try {
-			arcade.connectToServer();
-		} catch (ArcadeException e) {
-			e.printStackTrace();
-		}
+	    arcade.startConnection();
 	}
 
     /**
@@ -104,6 +108,56 @@ public class ArcadeSystem {
 	public static GameClient getCurrentGame() {
 		return arcade.getCurrentGame();
 	}
+	
+    public static void setMultiplayerEnabled(boolean b) {
+    	arcade.setMultiplayerEnabled(b);
+    }
+    
+    public static boolean isMultiplayerEnabled() {
+    	return arcade.isMultiplayerEnabled();
+    }
+    
+    public static ArrayList<ActiveMatchDetails> requestLobbyGamesList() {
+    	return Arcade.getMatches();
+    }
+    
+    public static void createMultiplayerGame(NewMultiGameRequest multigameRequest) {
+    	arcade.createMultiplayerGame(multigameRequest);
+    }
+    
+    public static void createMatch(CreateMatchRequest matchRequest) {
+    	arcade.createMatch(matchRequest);
+    }
+    
+    public static void addPlayerToLobby() {
+    	arcade.addPlayerToLobby();
+    }
+    
+    public static void removePlayerFromLobby() {
+    	arcade.removePlayerFromLobby();
+    }
+
+	public static void setPlayerBetting(boolean b) {
+		arcade.setPlayerBetting(b);
+		
+	}
+	 public static boolean isPlayerBetting() {
+	    	return arcade.isPlayerBetting();
+    }
+	 
+	 public static void initializeLobbyMatchList() {
+		 arcade.populateMatchList();
+	 }
+    
+    public static void newMultiplayerGame(NewMultiSessionResponse response) {
+    	int playerID = response.playerID;
+    	String gameID = response.gameId;
+    	int session = response.sessionId;
+    	goToGame(gameID);
+    	
+    }
+
+
 
     /**
      * Update set of available games
@@ -120,4 +174,5 @@ public class ArcadeSystem {
     public static Set<Game> getArcadeGames() {
         return gameSet;
     }
+
 }

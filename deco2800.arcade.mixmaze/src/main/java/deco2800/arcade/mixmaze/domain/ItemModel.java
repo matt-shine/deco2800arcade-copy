@@ -9,7 +9,20 @@ public abstract class ItemModel {
 	 * Item types
 	 */
 	public enum Type {
-		BRICK, PICK, TNT, UNKNOWN, NONE
+		/** Brick */
+		BRICK,
+
+		/** Pick */
+		PICK,
+
+		/** TNT */
+		TNT,
+
+		/** Unrecognised item */
+		UNKNOWN,
+
+		/** Not an item */
+		NONE
 	}
 
 	/** The type of this item */

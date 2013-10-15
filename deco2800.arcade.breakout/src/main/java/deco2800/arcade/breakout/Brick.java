@@ -158,7 +158,7 @@ public class Brick {
 //		sBatch = new SpriteBatch();
 	}
 	
-	public void render(ShapeRenderer render, int num, int level, SpriteBatch b, int index) {
+	public void render(ShapeRenderer render, int level, SpriteBatch b, int index) {
 //		brickImg = new Sprite(new Texture(Gdx.files.classpath("imgs/brick.png")));
 //		brickImg.setSize(width, height);
 //		sBatch = batch;
@@ -166,7 +166,7 @@ public class Brick {
 //		sBatch.draw(brickImg, brickShape.x, brickShape.y);
 //		sBatch.end();
 		if (level == 1) {
-			renderLevelOne(num, b);
+			renderLevelOne(index/8, b);
 		}
 		if (level == 2) {
 			renderLevelTwo(b, index);
@@ -192,6 +192,19 @@ public class Brick {
 		if (level == 9){
 			renderLevelNine(b, index);
 		}
+		if (level == 10) {
+			renderLevelTen(b, index);
+		}
+//		if (level == 11) {
+//			renderLevelEleven(b);
+//		}
+	}
+	
+	public void renderLevelEleven(SpriteBatch b) {
+		sBatch = b;
+		sBatch.begin();
+		sBatch.draw(brickImgs[0], brickShape.x, brickShape.y);
+		sBatch.end();
 	}
 	
 	public void renderLevelOne(int num, SpriteBatch b) {
@@ -351,6 +364,24 @@ public class Brick {
 			sBatch.draw(brickImgs[5], brickShape.x, brickShape.y, getWidth(), getHeight());
 		} else {
 			sBatch.draw(brickImgs[1], brickShape.x, brickShape.y, getWidth(), getHeight());
+		}
+		sBatch.end();
+	}
+	public void renderLevelTen(SpriteBatch b, int index) {
+		sBatch = b;
+		sBatch.begin();
+		if (index < 26) {
+			sBatch.draw(brickImgs[2], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 26 && index < 52) {
+			sBatch.draw(brickImgs[0], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 52 && index < 74) {
+			sBatch.draw(brickImgs[1], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 74 && index < 107){
+			sBatch.draw(brickImgs[3], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else if (index >= 107 && index < 137){
+			sBatch.draw(brickImgs[4], brickShape.x, brickShape.y, getWidth(), getHeight());
+		} else {
+			sBatch.draw(brickImgs[5], brickShape.x, brickShape.y, getWidth(), getHeight());
 		}
 		sBatch.end();
 	}

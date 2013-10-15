@@ -41,7 +41,7 @@ public class ReplayResponder implements WebResponder {
         return replays;
 	}
 	
-	public void respond( Response response ) throws Exception {
+	public void respond( Response response, String param) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();

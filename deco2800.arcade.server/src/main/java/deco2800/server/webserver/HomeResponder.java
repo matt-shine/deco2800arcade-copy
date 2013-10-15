@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 import org.simpleframework.http.Response;
 
 public class HomeResponder implements WebResponder {
-	public void respond( Response response ) throws IOException  {
+	public void respond( Response response, String param ) throws IOException  {
 		PrintStream body = response.getPrintStream();
 		long time = System.currentTimeMillis();
 

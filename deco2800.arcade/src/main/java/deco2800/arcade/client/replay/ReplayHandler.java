@@ -30,6 +30,9 @@ public class ReplayHandler {
 	ReplayRecorder recorder;
 	ReplayPlayback playback;
 	
+	private Boolean waitingForSession = false;
+	private Boolean isReadyToRecord = false;
+	
 	/**
 	 * Basic constructor for the ReplayHandler
 	 * 
@@ -80,6 +83,8 @@ public class ReplayHandler {
 	    ssr.gameId = gameId;
 	    ssr.username = username;
 	    client.sendNetworkObject(ssr);
+	    isReadyToRecord = false;
+	    waitingForSession = true;
 	}
 	
 	/**
@@ -94,6 +99,8 @@ public class ReplayHandler {
 		System.out.println( "Session started" );
 	    
 		recorder = new ReplayRecorder( this, this.client, this.sessionId );
+		waitingForSession = false;
+		isReadyToRecord = true;
 	}
 	
 	/**
@@ -217,11 +224,36 @@ public class ReplayHandler {
 	}
 	
 	/**
+	 * Waits for at most millis for a session to be ready, can be used to
+     * resolve concurrency issues.
+	 * @param millis How long to wait
+	 */
+	public void waitForSessionReady(long millis)
+	{
+	    long waited = System.currentTimeMillis();
+	    
+	    if (!isReadyToRecord && !waitingForSession)
+            throw new RuntimeException("Need to request a session " +
+                                       "before waiting.");
+        
+        //Wait for a session for one second if we don't have one, but should
+        while (!isReadyToRecord &&
+               waitingForSession &&
+               (System.currentTimeMillis() - waited < millis)) { } 
+	}
+	
+	/**
 	 * Signals the start of a recording. Note that all time offsets will be
 	 * taken from the time this method is called.
 	 */
 	public void startRecording() {
-		this.recorder.startRecording();
+	    try {
+	        this.recorder.startRecording();
+	    } catch( NullPointerException e)
+	    {
+	        throw new RuntimeException("Session was not started " +
+	        		                   "before recording began.");
+	    }
 	}
 	
 	/**

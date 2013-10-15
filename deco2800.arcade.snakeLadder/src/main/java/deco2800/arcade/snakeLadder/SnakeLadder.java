@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -76,6 +77,10 @@ public class SnakeLadder extends GameClient {
 	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
+	//NetworkClient for communicating with the server
+	private NetworkClient networkClient;
+	//use AchievementClient
+	private AchievementClient achievementClient;
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);

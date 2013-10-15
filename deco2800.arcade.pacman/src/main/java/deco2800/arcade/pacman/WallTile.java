@@ -10,8 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class WallTile extends Tile {
 
 	//Game map should be 28x31 tiles
-	/** A char representing the type of wallTile. Same char used in file
-	 *  
+	/** A char representing the type of wallTile. Same char used in file  
 	 */
 	private final char type;
 	

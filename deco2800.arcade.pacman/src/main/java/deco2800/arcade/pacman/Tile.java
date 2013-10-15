@@ -15,7 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class Tile {
 
-	protected static int sideLength = 16; // length of side of square- should be
+	protected int sideLength; // length of side of square- should be
 											// same for all tiles
 	// sprite sheet, divided into array of arrays of 8x8 tile images
 	protected static final TextureRegion[][] tileSprites = TextureRegion.split(
@@ -30,15 +30,12 @@ public class Tile {
 	public Tile(GameMap gameMap) {
 		moversHere = new ArrayList<Mover>();
 		this.gameMap = gameMap;
+		sideLength = gameMap.getTileSideLength();
 	}
 
 	public void render(SpriteBatch batch, float x, float y) {
 		batch.draw(tileSprites[7][1], x, y, sideLength, sideLength);
-	}
-
-	public static int getSideLength() {
-		return sideLength;
-	}
+	}	
 
 	public List<Mover> getMovers() {
 		return moversHere;

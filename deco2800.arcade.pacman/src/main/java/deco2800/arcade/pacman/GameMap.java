@@ -23,14 +23,14 @@ public class GameMap {
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int hOffset;
 	private int vOffset;
-	private int side;
+	private int tileSideLength = 16;// length of side of square- should be
+	// same for all tiles 
 	
 	public GameMap(int hOffset, int vOffset) {
 		vsym = false;
 		ghostDoors = new ArrayList<WallTile>();
 		this.hOffset = hOffset;
-		this.vOffset = vOffset;
-		side = Tile.getSideLength();		
+		this.vOffset = vOffset;;		
 	}
 	
 
@@ -178,7 +178,7 @@ public class GameMap {
 		//instead of what I've done here with just setting them to a value I picked		
 		for (int x = 0; x < grid.length; x++) {
 			for (int y = 0; y < grid[x].length; y++) {
-				grid[x][y].render(batch, hOffset + x*side, vOffset + y*side);
+				grid[x][y].render(batch, hOffset + x*tileSideLength, vOffset + y*tileSideLength);
 			}
 		}
 	}
@@ -201,7 +201,7 @@ public class GameMap {
 	 */
 	public Point getTileCoords(Tile tile) {
 		Point xy = getTilePos(tile);
-		return new Point(hOffset + xy.getX()*side, vOffset + xy.getY()*side);
+		return new Point(hOffset + xy.getX()*tileSideLength, vOffset + xy.getY()*tileSideLength);
 	}
 	
 	/**
@@ -211,13 +211,12 @@ public class GameMap {
 	public Tile findMoverTile(Mover mover) {
 		int x = mover.getMidX();
 		int y = mover.getMidY();
-		int side = Tile.getSideLength();
 		for (int i = 0; i < grid.length; i++) {
 			int tileX = getTileCoords(grid[i][0]).getX();
-			if (x > tileX && x <= tileX + side) {
+			if (x > tileX && x <= tileX + tileSideLength) {
 				for (int j = 0; j < grid[i].length; j++) {
 					int tileY = getTileCoords(grid[i][j]).getY(); 
-					if (y > tileY && y <= tileY + side) {
+					if (y > tileY && y <= tileY + tileSideLength) {
 						return grid[i][j];
 					}
 				}
@@ -255,4 +254,7 @@ public class GameMap {
 		return vOffset;
 	}
 
+	public int getTileSideLength() {
+		return tileSideLength;
+	}
 }

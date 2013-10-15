@@ -63,21 +63,7 @@ public class Pacman extends GameClient {
 	
 	public Pacman(Player player1, NetworkClient networkClient) {
 		super(player1, networkClient);
-		// level map file
-		mapName = "levelMap.txt";
-		//initialise gamemap
-		gameMap = new GameMap(450, 100);
-		gameMap.createTiles(gameMap.readMap(mapName));
-		//initialise pacman
-		player = new PacChar(gameMap);
-		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
-		//initialise receiver for input- use the multiplexer from Arcade
-		// because overlay group said to in log messages
-		controller = new PacController(player, gameMap);
 
-		ArcadeInputMux.getInstance().addProcessor(controller);
-		//Initialise game state
-		gameState = GameState.READY;	
 	}	
 		
 	/**
@@ -127,6 +113,21 @@ public class Pacman extends GameClient {
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
 		shaper = new ShapeRenderer();	
+		// level map file
+		mapName = "levelMap.txt";
+		//initialise gamemap
+		gameMap = new GameMap(450, 100);
+		gameMap.createTiles(gameMap.readMap(mapName));
+		//initialise pacman
+		player = new PacChar(gameMap);
+		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
+		//initialise receiver for input- use the multiplexer from Arcade
+		// because overlay group said to in log messages
+		controller = new PacController(player, gameMap);
+
+		ArcadeInputMux.getInstance().addProcessor(controller);
+		//Initialise game state
+		gameState = GameState.READY;	
 	}
 	
 	/**

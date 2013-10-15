@@ -4,20 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.guesstheword.gameplay.Achievements;
 import deco2800.arcade.guesstheword.gameplay.GetterSetter;
 import deco2800.arcade.guesstheword.gameplay.Pictures;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 
-
 //Main Class
 @ArcadeGame(id = "GuessTheWord")
 public class GuessTheWord extends GameClient{
 	
 	private static final Game GAME;
+	
+	private NetworkClient networkClient;
+	private AchievementClient achievementClient;
+	private Player player;
 	
 	GetterSetter getterSetter;
 	Pictures picture;
@@ -32,14 +37,15 @@ public class GuessTheWord extends GameClient{
 
 	public GuessTheWord(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
+		
+		this.player = player;
+		this.networkClient = networkClient;
+		this.achievementClient = new AchievementClient(networkClient);
+//		Achievements.createAchievementInstance(this);
 	}
 	
 	@Override
 	public void create() {
-		
-		Gdx.graphics.setContinuousRendering(false);
-//		Gdx.graphics.requestRendering();
-		
 		getterSetter = new GetterSetter();
 		picture = new Pictures();
 		
@@ -50,6 +56,7 @@ public class GuessTheWord extends GameClient{
 		gameScreen = new GameScreen(this);
 		settingsScreen = new SettingScreen(this);
 	//	acheivementScreen = new AchievementScreen(this);
+		
 		picture.loadPictures();
 		setScreen(splashScreen);
 	}
@@ -66,11 +73,12 @@ public class GuessTheWord extends GameClient{
 		GAME = new Game();
 		GAME.id = "GuessTheWord";
 		GAME.name = "GuessTheWord";
-		GAME.description = "GuessTheWord game!";
+		GAME.description = "This word guessing is popular with people of all ages. " +
+				"Its challenging and exciting at the same time!";
 	}
+	
 	@Override
-	public Game getGame() {
-		
+	public Game getGame() {		
 		return GAME;
 	}
 }

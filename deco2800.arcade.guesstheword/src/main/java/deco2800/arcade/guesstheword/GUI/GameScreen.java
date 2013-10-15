@@ -27,11 +27,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
+import deco2800.arcade.client.GameClient;
+import deco2800.arcade.guesstheword.gameplay.Achievements;
 import deco2800.arcade.guesstheword.gameplay.WordShuffler;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.Game;
 
 public class GameScreen implements Screen {
-	
-	@SuppressWarnings("unused")
+
 	private GuessTheWord game;
 	private Skin skin;
 	private SpriteBatch batch;
@@ -42,20 +45,22 @@ public class GameScreen implements Screen {
 	private LeftPanel leftPanel;
 	private WordShuffler word;
 
+	// The letters buttons for the games
 	private TextButton button1, button2, button3, button4, button5, 
 	button6	, button7, button8, button9, button10 , backButton, playButton;
 	
-	
+	// The letters textfield for the game
 	private TextField textfield1, textfield2, textfield3, 
 					  textfield4, textfield5, textfield6;  
 	
-	private Label scoreLabel, levelLabel , timeLabel;
+	private Label scoreLabel, levelLabel;
 	private LabelStyle labelStyle;
 	
 	private ScrollPane scrollpane;
 	
 	private final BitmapFont font;
 	
+	private HashMap<String, HashMap<String, Texture>> hm;
 	private ArrayList<TextButton> buttonList;
 	private ArrayList<Integer> lettersKeyed;
 	private ArrayList<String> catList;
@@ -64,7 +69,9 @@ public class GameScreen implements Screen {
     
     private Boolean hintTaken = false ;
     
-    private int score = 0, count = 0 , hintPosition ;
+    private int score = 0;     
+    private int  count = 0;
+    private int  hintPosition ;
     
     private float gametime = 0;    
     
@@ -78,12 +85,14 @@ public class GameScreen implements Screen {
 		this.skin = game.skin;
 		batch =  new SpriteBatch();
 		stage =  new Stage();
-		
+		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
+
 		//Creating Instances of the wordshuffler class 
 		word =  new WordShuffler();
+		
+		hm = new HashMap<String, HashMap<String, Texture>>();
 		lettersKeyed = new ArrayList<Integer>();
 		catList = new ArrayList<String>();
-		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
 	}
 
 	/**
@@ -93,19 +102,26 @@ public class GameScreen implements Screen {
 	private void setLevel(){		
 		String level = game.getterSetter.getLevel();
 		catList.add(game.getterSetter.getCategory());
+		
 		if(level.equalsIgnoreCase("Level 1 - 4 letters") 
 				|| level.equalsIgnoreCase("Default")){
 			this.level = "LEVEL 1";	
-			setGameContext(game.picture.getLevel1());
-			gametime = 5; // 60 secs for level 1
+			gametime = 62; // 60 secs for level 1
+			hm = game.picture.getLevel1();
+			setGameContext();
+			
+			
 		}else if(level.equalsIgnoreCase("Level 2 - 5 letters")){
 			this.level = "LEVEL 2";
-			setGameContext(game.picture.getLevel2());
-			gametime = 5; // 50 secs for level 2
+			hm = game.picture.getLevel2();
+			setGameContext();
+			gametime = 52; // 50 secs for level 2
+			
 		}else if(level.equalsIgnoreCase("Level 3 - 6 letters")){
 			this.level = "LEVEL 3";
-			setGameContext(game.picture.getLevel3());
-			gametime = 5; // 40 secs for level 3
+			hm = game.picture.getLevel3();
+			setGameContext();
+			gametime = 42; // 40 secs for level 3  , 5 sec for testing purposes
 		}
 	}// end of setLevel()
 	
@@ -113,13 +129,13 @@ public class GameScreen implements Screen {
 	 * This method will set the  timer for the game.
 	 * When the duration is up, the next word will be shown, 
 	 * irregardless of correct or wrong answer. No points will be awarded.
+	 * 
 	 * */
 	public void timer(){
 		System.out.println("Timer started!!!");
 		Timer.schedule(new Task(){
 		    @Override
 		    public void run() {
-		        // Do your work
 		    	System.out.println("Timer UP!!!");
 		    	nextWord(game.getterSetter.getCategoryItem(),
 		    			game.getterSetter.getCategory());
@@ -127,19 +143,28 @@ public class GameScreen implements Screen {
 		}, gametime);
 	}
 	
-	private void setGameContext(HashMap<String, 
-			HashMap<String, Texture>> catMap){
-		//Random select a category!
-		int num = new Random().nextInt(catMap.size()); 
-		//Retrieving of category and texture.
-		String category = "" + catMap.keySet().toArray()[num];
-		String categoryItem = "" + catMap.get(category).keySet().toArray()[0];
-		Texture texture = catMap.get(category).get(categoryItem);
+	private void setGameContext(){
 		
-		System.out.println("Category!! = " + category + " and the word is " + categoryItem);
+		Object[] cat =  hm.keySet().toArray();
+		
+		//Random select a category!
+		int num = new Random().nextInt(hm.size() - 1); 
+		if(catList.contains(cat[num])){
+			num = new Random().nextInt(hm.size() - 1); 
+		}
+
+		//Retrieving of category and texture.
+		String category = "" + hm.keySet().toArray()[num];
+		String categoryItem = "" + hm.get(category).keySet().toArray()[0];
+		Texture texture = hm.get(category).get(categoryItem);
+		
 		game.getterSetter.setCategory(category);
 		game.getterSetter.setCategoryItem(categoryItem);
 		game.getterSetter.setTexture(texture);
+
+		checkButtons();
+
+		System.out.println(category);
 	}
 	
 	/**
@@ -159,16 +184,17 @@ public class GameScreen implements Screen {
 		Table rootTable =  new Table();
 		rootTable.setFillParent(true);
 
-		font.setColor(Color.WHITE);	
 		labelStyle = new LabelStyle();
 		labelStyle.font = font;
 		
-		levelLabel = new Label(level , labelStyle);
+		levelLabel = new Label(level, labelStyle);
+		
 		backButton =  new TextButton("Back", skin);
 		
 		backButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
+
 				game.setScreen(game.mainScreen);
 			}});
 		
@@ -308,13 +334,7 @@ public class GameScreen implements Screen {
 				}
 				
 			}else {
-				game.getterSetter.setText1("");
-				game.getterSetter.setText2("");
-				game.getterSetter.setText3("");
-				game.getterSetter.setText4("");
-				game.getterSetter.setText5("");
-				game.getterSetter.setText6("");
-				
+				clearInputText();
 				for(int i = 0; i < buttonList.size(); i++){
 				buttonList.get(i).setText(breakword[i]);
 				}	
@@ -325,6 +345,9 @@ public class GameScreen implements Screen {
 		// back to main menu
 		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
 			System.out.println("Back to MainScreen");
+			clearInputText();
+			// Clear all the task in the timer
+//			Timer.instance.clear();
 			game.setScreen(game.mainScreen);
 		} 
 		
@@ -348,11 +371,15 @@ public class GameScreen implements Screen {
 		// F2 - CATEGORY
 		if(Gdx.input.isKeyPressed(Input.Keys.F2)){
 			System.out.println("Change Category"); 
+			
+			// Stop the timer
+//			Timer.instance.stop();
+			
 			getWindow().setVisible(true);
 		}
 		
 		
-	} 
+	}// end of check keyboards method 
 	
 	// this method will check the button clicked and 
 	// empty the button text. 
@@ -427,23 +454,19 @@ public class GameScreen implements Screen {
 //			String word = game.getterSetter.getCategoryItem();
 			
 			if(count > 5){
-				changeCategory(category);
+				clearInputText();
+				setGameContext();
+				
 				count = 0; 
 			}else {
 				score += 10;
 				scoreLabel.setText("Score: " + score);
-				
+				game.incrementAchievement("guesstheword.animals");
 				nextWord(answer, category);
 
 			}
 		}else{
-			game.getterSetter.setText1("");
-			game.getterSetter.setText2("");
-			game.getterSetter.setText3("");
-			game.getterSetter.setText4("");
-			game.getterSetter.setText5("");
-			game.getterSetter.setText6("");
-			
+			clearInputText();
 			for(int i = 0; i < buttonList.size(); i++){
 				//System.out.print(breakword[i]+ " ");
 				buttonList.get(i).setText(breakword[i]);
@@ -454,19 +477,11 @@ public class GameScreen implements Screen {
 	
 	// Search for the next word. used by check answers and timer. 
 	private void nextWord(String answer ,  String category){
+		// Changing of word, then the hint is reset
 		hintTaken = false;
 		Texture newTexture = null;
-		
-		HashMap<String, HashMap<String, Texture>> hm = null;
 		Object[] next = null;
-		
-		if(level.equalsIgnoreCase("Level 1")){
-			hm = game.picture.getLevel1();
-		}else if(level.equalsIgnoreCase("Level 2")){
-			hm = game.picture.getLevel2();
-		}else if(level.equalsIgnoreCase("Level 3")){
-			hm = game.picture.getLevel3();
-		}
+
 		next = hm.get(category).keySet().toArray();
 		
 		for(int i = 0; i < next.length-1; i ++){
@@ -476,49 +491,18 @@ public class GameScreen implements Screen {
 				answer = next[i+1].toString();
 				game.getterSetter.setCategoryItem(answer);
 				game.getterSetter.setTexture(newTexture);
-				timer();    // reset the timer. 
+				clearInputText();
 				checkButtons();
-	
+				// Clear all the task in the timer
+				// and start the timer again
+//				timer.clear();
+//				timer.start();    // reset the timer. 
+				
 				break;
 			}// end of nested if
 		}// end of  for loop
 	}
 	
-	private void changeCategory(String category){
-		int size =  0;
-		Object[] cat =  null ;
-		
-		game.getterSetter.setText1("");
-		game.getterSetter.setText2("");
-		game.getterSetter.setText3("");
-		game.getterSetter.setText4("");
-		game.getterSetter.setText5("");
-		game.getterSetter.setText6("");
-		
-		if(level.equalsIgnoreCase("Level 1")){
-			size =  game.picture.getLevel1().size();
-			cat = game.picture.getLevel1().keySet().toArray();
-		}else if(level.equalsIgnoreCase("Level 2")){
-			size =  game.picture.getLevel2().size();
-			cat = game.picture.getLevel2().keySet().toArray();
-		}else if(level.equalsIgnoreCase("Level 3")){
-			size =  game.picture.getLevel3().size();
-			cat = game.picture.getLevel3().keySet().toArray();
-		}
-		int num = new Random().nextInt(size); 
-		if(catList.contains(cat[num])){
-			num = new Random().nextInt(size); 
-		}
-		category = cat[num].toString();
-		String word =  "" + game.picture.getLevel1().get(category).keySet().toArray()[0];
-		Texture texture = game.picture.getLevel1().get(category).get(word);
-		game.getterSetter.setCategory(category);
-		game.getterSetter.setTexture(texture);
-		game.getterSetter.setCategoryItem(word);
-//		catList.add(category);
-		checkButtons();
-			System.out.println(category);
-	}
 	
 	// SET TEXTFIELD BASED ON INPUT.
 	private void getInputText(String input){
@@ -534,6 +518,15 @@ public class GameScreen implements Screen {
 			game.getterSetter.setText5(input);
 		else if(game.getterSetter.getText6().isEmpty())
 			game.getterSetter.setText6(input);
+	}
+	
+	private void clearInputText(){
+		game.getterSetter.setText1("");
+		game.getterSetter.setText2("");
+		game.getterSetter.setText3("");
+		game.getterSetter.setText4("");
+		game.getterSetter.setText5("");
+		game.getterSetter.setText6("");
 	}
 
 	//----------RIGHT PANEL-------------//
@@ -749,7 +742,6 @@ public class GameScreen implements Screen {
 	
 	// Category Window
 	private Window getWindow(){
-		
 		HashMap<String, HashMap<String, Texture>> hm = null ;
 		if(level.equalsIgnoreCase("Level 1")){
 			hm = game.picture.getLevel1();
@@ -781,7 +773,6 @@ public class GameScreen implements Screen {
 				}else if(level.equalsIgnoreCase("Level 3")){
 					hm = game.picture.getLevel3();
 				}
-				
 				String category = categoryList.getSelection();
 				String word =  "" + hm.get(category).keySet().toArray()[0];
 				Texture texture = hm.get(category).get(word);
@@ -789,11 +780,11 @@ public class GameScreen implements Screen {
 				game.getterSetter.setTexture(texture);
 				game.getterSetter.setCategoryItem(word);
 				catList.add(category);	
-				//Start timer();
-				timer();
-//				new PicturePanel();
+				
+				clearInputText();
 				checkButtons();
-				getWindow().setVisible(false);
+
+				categoryWindow.setVisible(false);
 			}});
 		
 		categoryWindow.add(scrollpane).width(categoryWindow.getWidth()).row();
@@ -820,9 +811,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void show() { 
 		setLevel();
-		timer();
 		createGameScreen();
 		checkButtons();
+//		timer();
+		
 		Gdx.input.setInputProcessor(stage);
 	}
 	
@@ -849,4 +841,6 @@ public class GameScreen implements Screen {
 	@Override
 	public void resume() {
 	}
+
+
 }// end of GameScreen

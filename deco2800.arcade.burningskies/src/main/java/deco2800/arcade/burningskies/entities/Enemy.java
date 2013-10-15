@@ -52,6 +52,14 @@ public class Enemy extends Ship {
 		return points;
 	}
 	
+	@Override
+	public boolean remove() {
+		if(getStage() != null) {
+			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 1));
+		}
+		return super.remove();
+	}
+	
 	private void move(float delta) {
 		
 //		playerDir.set(player.getCenterX() - this.getCenterX(), player.getCenterY() - this.getCenterY());

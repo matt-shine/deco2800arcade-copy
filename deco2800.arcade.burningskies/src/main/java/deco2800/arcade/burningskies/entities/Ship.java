@@ -41,9 +41,6 @@ public abstract class Ship extends Entity {
 	
 	@Override
 	public boolean remove() {
-		if(getStage() != null) {
-			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2));
-		}
 		return super.remove();
 	}
 	

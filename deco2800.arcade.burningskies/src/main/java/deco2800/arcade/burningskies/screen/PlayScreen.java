@@ -136,7 +136,12 @@ public class PlayScreen implements Screen
     			respawnTimer -= delta;
     			if(respawnTimer <= 0) {
     				stage.addActor(player);
-    				player.respawn();
+    				if (lives > 0) {
+    					player.respawn();
+    				} else {
+    					// Create a game over screen
+    					game.setScreen(game.menuScreen);
+    				}
     			}
     		}
 
@@ -214,6 +219,8 @@ public class PlayScreen implements Screen
     	healthBar.begin(ShapeType.FilledRectangle);
     	
     	health = player.getHealth();
+    	lives = player.getLives();
+    	
     	healthBarHeight = Math.max(0, health * healthBarLengthMultiplier);
     	
     	if (health <= 25) {

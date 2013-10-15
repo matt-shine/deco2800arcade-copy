@@ -15,6 +15,7 @@ public class PlayerShip extends Ship {
 	private BulletPattern playerBullets;
 	private float maxVelocity = 300; //Changed from static to dynamic.
 	private int maxHealth; //For health powerups.
+	private int lives = 3;
 	private PlayScreen screen;
 	
 	private float speedTimer = 0f;
@@ -56,6 +57,7 @@ public class PlayerShip extends Ship {
 		super.damage(damage);
 		if(!isAlive()) {
 			new BombPattern(this, screen).fire(0, getCenterX(), getCenterY());
+			lives -= 1;
 			screen.killPlayer();
 		}
 	}
@@ -212,5 +214,9 @@ public class PlayerShip extends Ship {
 		if(playerBullets instanceof PlayerPattern) {
 			((PlayerPattern)playerBullets).upgrade();
 		}
+	}
+	
+	public int getLives() {
+		return lives;
 	}
 }

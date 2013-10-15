@@ -245,19 +245,37 @@ public class HighscoreClient {
 	 * @return A list of Highscore objects. 
 	 */
 	public List<Highscore> getUserRanking(boolean highestIsBest, String type) {
-		GetScoreRequest gsReq = new GetScoreRequest();
+		/*GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 3; //Telling the server which query to run
 		gsReq.type = type;
-		gsReq.username = Username;
 		gsReq.highestIsBest = highestIsBest;
+		
+		//This function requires a user, throw and exception if there not not one available.
+		requireUsername();
 		
 		//Send the request off, waiting for response before continuing
 		sendScoreRequest(gsReq);
 		
 		//Now that the response is back, return the data to the user
-		return this.scoreResponseList;
+		return this.scoreResponseList;*/
+		return null;
 	}
 	
+	private List<Highscore> getWinLoss() {
+		List<Highscore> winLoss = new ArrayList<Highscore>();
+		
+		
+		return null;
+	}
+	
+	public Highscore getWin(){
+		return getWinLoss().get(0);
+		
+	}
+	
+	public Highscore getLoss(){
+		return getWinLoss().get(1);
+	}
 	
 	//=============================================================
 	//Adding Score Methods

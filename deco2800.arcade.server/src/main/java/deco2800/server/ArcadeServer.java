@@ -199,8 +199,8 @@ public class ArcadeServer {
 		}
 		
 		Protocol.register(server.getKryo());
-		server.addListener(new ConnectionListener(connectedUsers));
-		server.addListener(new CreditListener());
+		//server.addListener(new ConnectionListener(connectedUsers));
+		//server.addListener(new CreditListener());
 		server.addListener(new GameListener());
 		server.addListener(new AchievementListener());
 		server.addListener(new ReplayListener());
@@ -209,6 +209,7 @@ public class ArcadeServer {
         server.addListener(new PackmanListener());
         server.addListener(new LibraryListener());
 		server.addListener(new ForumListener());
+		System.out.println("Server listeners are registered");
 	}
 
     /**

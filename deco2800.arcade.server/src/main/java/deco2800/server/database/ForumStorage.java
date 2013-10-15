@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.forum.ForumUser;
@@ -40,6 +39,7 @@ public class ForumStorage {
 	private boolean initialized = false;
 	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
 	private static final String TAG_SPLITTER = "#";
+	private int uid;
 	
 	/**
 	 * Return initialized flag
@@ -119,7 +119,7 @@ public class ForumStorage {
 				throw new DatabaseException("Fail to close DB connectoin: " + e);
 			}
 		}
-		
+		this.uid = 0;
 	}
 	
 	/* Utilities */
@@ -199,6 +199,7 @@ public class ForumStorage {
 				con.setAutoCommit(true);
 				con.close();
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new DatabaseException("Fail to close DB connectoin: " + e);
 			}
 		}
@@ -219,7 +220,7 @@ public class ForumStorage {
 		ArrayList<String> result = new ArrayList<String>();
 		
 		if (limit < 0) {
-			return new String[0];
+			throw new DatabaseException("Invalid Parameter: limit must be non-negative int.");
 		}
 		Connection con = Database.getConnection();
 		boolean isLimit = false;
@@ -275,7 +276,7 @@ public class ForumStorage {
 		ParentThread result;
 		
 		if (pid < 0) {
-			return null;
+			throw new DatabaseException("Invalid parameter: pid must be non-negative int");
 		}
 		
 		Connection con = Database.getConnection();
@@ -321,7 +322,7 @@ public class ForumStorage {
 		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
 		Connection con = Database.getConnection();
 		if (tag == "") {
-			return new ParentThread[0];
+			throw new DatabaseException("Invalid parameter: tag must not be empty string");
 		}
 		try {
 			PreparedStatement st = con.prepareStatement(query);
@@ -798,15 +799,32 @@ public class ForumStorage {
 			} else {
 				result = null;
 			}
+			rs.close();
+			st.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException("Failed to get user information: " + e.getMessage());
 		} finally {
 			try {
 				con.close();
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
 			}
 		}
+		return result;
+	}
+	
+	/**
+	 * Partially implemented. getForumUser based on username.
+	 * 
+	 * @param username	String, username
+	 * @return	ForumUser containing id and name of forum user.
+	 */
+	public ForumUser getForumUser(String username) {
+		ForumUser result;
+		result = new ForumUser(uid, username);
+		uid++;
 		return result;
 	}
 	
@@ -843,11 +861,13 @@ public class ForumStorage {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException("Fail to get total votes: " + e.getMessage());
 		} finally {
 			try {
 				con.close();
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
 			}
 		}
@@ -887,11 +907,13 @@ public class ForumStorage {
 			rs.close();
 			st.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseException("Fail to get total votes: " + e.getMessage());
 		} finally {
 			try {
 				con.close();
 			} catch (SQLException e) {
+				e.printStackTrace();
 				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
 			}
 		}

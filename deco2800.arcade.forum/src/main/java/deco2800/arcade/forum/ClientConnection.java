@@ -2,18 +2,19 @@ package deco2800.arcade.forum;
 
 import java.io.IOException;
 
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.protocol.Protocol;
-import deco2800.arcade.protocol.forum.ForumTestResponse;
+import deco2800.arcade.protocol.forum.*;
 
 /**
  * This models client connection to server. 
  * It connects to the ArcadeServer to communicate the forum data.
  * 
- * @author Junya
+ * @author Junya, Unreal Estate
  * @see deco2800.arcade.client.network.NetworkClient
  */
 public class ClientConnection {
@@ -58,7 +59,7 @@ public class ClientConnection {
 			System.out.println("Client is connected");
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new ForumException("Unable to connect to the server" + e);
+			throw new ForumException("Unable to connect to the server, " + e.getMessage());
 		}
 	}
 	
@@ -66,5 +67,35 @@ public class ClientConnection {
 		return this.client;
 	}
 	
+	public static ClientConnection getClientConnection(String serverAddress, int tcpPort, int udpPort) throws ForumException {
+		return new ClientConnection(serverAddress, tcpPort, udpPort);
+	}
 	
+	public static Client getClient(String serverAddress, int tcpPort, int udpPort) throws ForumException {
+		if (tcpPort < 0 || udpPort < 0) {
+			throw new ForumException("Invalid port numbers.");
+		}
+		if (serverAddress == "") {
+			serverAddress = DEFAULT_SERVER_ADDRESS;
+		}
+		if (tcpPort == 0) {
+			tcpPort = DEFAULT_TPC_PORT;
+		}
+		if (udpPort == 0) {
+			udpPort = DEFAULT_UDP_PORT;
+		}
+		Client connection = new Client();
+		connection.start();
+		try {
+			connection.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
+			Kryo kryo = connection.getKryo();
+			kryo.register(GetForumUserRequest.class);
+			kryo.register(GetForumUserResponse.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ForumException("Unable to connect to the server, " + e.getMessage());
+		}
+		System.out.println("Client is connected");
+		return connection;
+	}
 }

@@ -3,7 +3,7 @@ package deco2800.arcade.forum;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
-import deco2800.arcade.protocol.forum.ForumTestResponse;
+import deco2800.arcade.protocol.forum.*;
 
 /**
  * This implements kryonet.Listener for client-side listener for Forum
@@ -19,6 +19,8 @@ public class ForumClientListener extends Listener {
 		if (object instanceof ForumTestResponse) {
 			ForumTestResponse response = (ForumTestResponse) object;
 			System.out.println(response.result);
+		} else if (object instanceof LoginResponse) {
+			
 		}
 	}
 }

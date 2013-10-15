@@ -1,9 +1,11 @@
 package deco2800.arcade.model.forum;
 
+import java.util.Observable;
+
 /**
  * This models user for Forum (Forum version of Arcade User).
  */
-public class ForumUser {
+public class ForumUser extends Observable {
 	private int id;
 	private String name;
 	
@@ -14,6 +16,7 @@ public class ForumUser {
 	 * @param name	String, name (username) of an user.
 	 */
 	public ForumUser(int id, String name) {
+		super();
 		this.id = id;
 		this.name = name;
 	}
@@ -46,5 +49,13 @@ public class ForumUser {
 		sd.append(": ");
 		sd.append(this.name);
 		return new String(sd);
+	}
+	
+	/* Methods for client's MVC */
+	public void setData(int id, String name) {
+		this.id = id;
+		this.name = name;
+		setChanged();
+		notifyObservers();
 	}
 }

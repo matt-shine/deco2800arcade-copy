@@ -23,7 +23,7 @@ public class ForumListener extends Listener {
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
-
+		System.out.println("Some request is received (debug purpose)");
 		if (object instanceof ForumTestRequest){
 			ForumTestRequest request = (ForumTestRequest) object;
 			ForumTestResponse response = new ForumTestResponse();
@@ -155,6 +155,29 @@ public class ForumListener extends Listener {
 				response.error = e.getMessage();
 			} finally {
 				connection.sendTCP(response);
+			}
+		} 
+		
+		if (object instanceof GetForumUserRequest) {
+			System.out.println("GetForumUserRequest is received (debug purpose)");
+			GetForumUserRequest request = (GetForumUserRequest) object;
+			GetForumUserResponse response = new GetForumUserResponse();
+			response.error = "";
+			response.result = null;
+			try {
+				if (request.userId == 0 && request.userName != "") {
+					response.result = ArcadeServer.instance().getForumStorage().getForumUser(request.userName);
+				} else if (request.userId != 0 && request.userName == "") {
+					response.result = ArcadeServer.instance().getForumStorage().getForumUser(request.userId);
+				} else {
+					response.error = "Invalid request";
+				}
+			} catch (DatabaseException e) {
+				e.printStackTrace();
+				response.error = e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+				System.out.println("GetForumUserResponse is sent (debug purpose)");
 			}
 		}
 	}

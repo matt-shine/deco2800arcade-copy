@@ -128,6 +128,8 @@ public class Protocol {
 		// Forum Protocols
 		kryo.register(ForumTestResponse.class);
 		kryo.register(ForumTestRequest.class);
+		kryo.register(GetForumUserRequest.class);
+		kryo.register(GetForumUserResponse.class);
 	}
 	
 	/**

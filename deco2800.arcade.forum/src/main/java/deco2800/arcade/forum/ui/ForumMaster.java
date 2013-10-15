@@ -15,6 +15,7 @@ public class ForumMaster {
 	      JFrame f = new JFrame("Arcade Forum");
 	      f.setSize(1024, 768);
 	      f.setLocation(300,200);
+	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	      f.getContentPane().setLayout(null);
 	      
 	      ForumUi view = new ForumUi(f);

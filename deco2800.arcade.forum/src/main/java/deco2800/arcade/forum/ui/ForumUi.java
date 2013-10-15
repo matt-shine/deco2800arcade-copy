@@ -46,8 +46,6 @@ public class ForumUi {
 	   public ForumUi(JFrame window) {
 	      //Initialize new JFrame for forum interface
 		  this.f = window;
-	      f.setSize(1024, 768);
-	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
 	      
 	      //Header
@@ -168,7 +166,6 @@ public class ForumUi {
 		   {
 			   public void mouseClicked(MouseEvent e)
 			   {
-				   System.out.println("ASDASDA");
 				   open_general_discussion();
 			   }
 		   });

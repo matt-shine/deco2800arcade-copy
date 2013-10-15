@@ -18,8 +18,6 @@ public class PlayerTest {
 	private User user2;
 	private User user3;
 	private User user4;
-	private User user5;
-	private User user6;
 
 	private Game game1;
 	private Game game2;
@@ -32,8 +30,6 @@ public class PlayerTest {
 		user2 = new User(2);
 		user3 = new User(3);
 		user4 = new User(4);
-		user5 = new User(5);
-		user6 = new User(6);
 
 		game1 = new Game();
 		game1.id = "1";
@@ -76,6 +72,13 @@ public class PlayerTest {
 		player2 = new Player(123, "THIS IS NOT A VALID PATH.html", info2,
 				friendSet, requestSet, blockSet, gameSet, privset2);
 	}
+	
+	@Test
+	public void playerFactoryTest(){
+		Player steve = PlayerTestFactory.createPlayer(1, "Steve");
+		Assert.assertTrue(steve.getUsername().equals("Steve"));
+		Assert.assertTrue(steve.getID() == 1);
+	}
 
 	@Test
 	public void getUsernameTest() {
@@ -85,6 +88,7 @@ public class PlayerTest {
 	@Test
 	public void setUsernameTest() {
 		player2.setUsername("Peter Rabbit");
+		player2.setUsername(null);
 		Assert.assertTrue(player2.getUsername().equals("Peter Rabbit"));
 	}
 
@@ -153,6 +157,7 @@ public class PlayerTest {
 	public void addGamesTest() {
 		player1.addGame(game1);
 		player1.addGame(game2);
+		player1.addGame(null);
 		Assert.assertTrue(player1.getGames().size() == 2);
 		Assert.assertTrue(player1.getGames().contains(game1));
 		Assert.assertTrue(player1.getGames().contains(game2));
@@ -172,12 +177,17 @@ public class PlayerTest {
 
 	@Test
 	public void hasGamesTest() {
-		Assert.assertTrue(true);
+		player1.addGame(game3);
+		player1.addGame(game4);
+		Assert.assertTrue(player1.hasGame(game3));
+		Assert.assertTrue(player1.hasGame(game4));
 	}
 
 	@Test
 	public void getFriendsTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getFriends().isEmpty());
+		Assert.assertTrue(!player2.getFriends().isEmpty());
+		Assert.assertTrue(player2.getFriends().contains(user3));
 	}
 
 	@Test
@@ -197,112 +207,155 @@ public class PlayerTest {
 
 	@Test
 	public void getFriendInvitesTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getInvites().isEmpty());
+		Assert.assertTrue(!player2.getInvites().isEmpty());
+		Assert.assertTrue(player2.getInvites().contains(user1));
 	}
 
 	@Test
 	public void addFriendInvitesTest() {
-		Assert.assertTrue(true);
+		player1.addInvite(user1);
+		player1.addInvite(user2);
+		player1.addInvite(null);
+		Assert.assertTrue(player1.getInvites().size() == 2);
+		Assert.assertTrue(player1.getInvites().contains(user1));
+		Assert.assertTrue(player1.getInvites().contains(user2));
 	}
 
 	@Test
 	public void removeFriendInvitesTest() {
-		Assert.assertTrue(true);
+		player2.addInvite(user3);
+		player2.addInvite(user4);
+		Assert.assertTrue(player2.getInvites().contains(user3));
+		Assert.assertTrue(player2.getInvites().contains(user4));
+		player2.removeInvite(null);
+		player2.removeInvite(user3);
+		player2.removeInvite(user4);
+		Assert.assertTrue(!player2.getInvites().contains(user3));
+		Assert.assertTrue(!player2.getInvites().contains(user4));
 	}
 
 	@Test
 	public void hasFriendInvitesTest() {
-		Assert.assertTrue(true);
+		player1.addInvite(user3);
+		player1.addInvite(user4);
+		Assert.assertTrue(player1.hasInvite(user3));
+		Assert.assertTrue(player1.hasInvite(user4));
 	}
 
 	@Test
 	public void getBlockedTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getBlockedList().isEmpty());
+		Assert.assertTrue(!player2.getBlockedList().isEmpty());
+		Assert.assertTrue(player2.getBlockedList().contains(user2));
 	}
 
 	@Test
 	public void addBlockedTest() {
-		Assert.assertTrue(true);
+		player1.blockPlayer(user1);
+		player1.blockPlayer(user2);
+		player1.blockPlayer(null);
+		Assert.assertTrue(player1.getBlockedList().size() == 2);
+		Assert.assertTrue(player1.getBlockedList().contains(user1));
+		Assert.assertTrue(player1.getBlockedList().contains(user2));
 	}
 
 	@Test
 	public void removeBlockedTest() {
-		Assert.assertTrue(true);
+		player2.blockPlayer(user3);
+		player2.blockPlayer(user4);
+		Assert.assertTrue(player2.getBlockedList().contains(user3));
+		Assert.assertTrue(player2.getBlockedList().contains(user4));
+		player2.removeBlocked(null);
+		player2.removeBlocked(user3);
+		player2.removeBlocked(user4);
+		Assert.assertTrue(!player2.getBlockedList().contains(user3));
+		Assert.assertTrue(!player2.getBlockedList().contains(user4));
 	}
 
 	@Test
 	public void hasBlockedTest() {
-		Assert.assertTrue(true);
+		player1.blockPlayer(user3);
+		player1.blockPlayer(user4);
+		Assert.assertTrue(player1.isBlocked(user3));
+		Assert.assertTrue(player1.isBlocked(user4));
 	}
 
 	@Test
 	public void getNamePrivacyTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getNamePrivacy());
 	}
 
 	@Test
 	public void setNamePrivacyTest() {
-		Assert.assertTrue(true);
+		player1.setNamePrivacy(false);
+		Assert.assertTrue(!player1.getNamePrivacy());
 	}
 
 	@Test
 	public void getEmailPrivacyTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getEmailPrivacy());
 	}
 
 	@Test
 	public void setEmailPrivacyTest() {
-		Assert.assertTrue(true);
+		player1.setEmailPrivacy(false);
+		Assert.assertTrue(!player1.getEmailPrivacy());
 	}
 
 	@Test
 	public void getProgramPrivacyTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getProgramPrivacy());
 	}
 
 	@Test
 	public void setProgramPrivacyTest() {
-		Assert.assertTrue(true);
+		player1.setProgramPrivacy(false);
+		Assert.assertTrue(!player1.getProgramPrivacy());
 	}
 
 	@Test
 	public void getBioPrivacyTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getBioPrivacy());
 	}
 
 	@Test
 	public void setBioPrivacyTest() {
-		Assert.assertTrue(true);
+		player1.setBioPrivacy(false);
+		Assert.assertTrue(!player1.getBioPrivacy());
 	}
 
 	@Test
 	public void getFriendsPrivacyTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getFriendsPrivacy());
 	}
 
 	@Test
 	public void setFriendsPrivacyTest() {
-		Assert.assertTrue(true);
+		player1.setFriendsPrivacy(false);
+		Assert.assertTrue(!player1.getFriendsPrivacy());
 	}
 
 	@Test
 	public void getGamesPrivacyTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getGamesPrivacy());
 	}
 
 	@Test
 	public void setGamesPrivacyTest() {
-		Assert.assertTrue(true);
+		player1.setGamesPrivacy(false);
+		Assert.assertTrue(!player1.getGamesPrivacy());
 	}
 
 	@Test
 	public void getAchievementsPrivacyTest() {
-		Assert.assertTrue(true);
+		Assert.assertTrue(player1.getAchievementsPrivacy());
 	}
 
 	@Test
 	public void setAchievementsPrivacyTest() {
-		Assert.assertTrue(true);
+		player1.setAchievementsPrivacy(false);
+		Assert.assertTrue(!player1.getAchievementsPrivacy());
 	}
 
 }

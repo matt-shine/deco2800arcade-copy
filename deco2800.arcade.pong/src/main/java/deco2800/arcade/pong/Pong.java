@@ -139,7 +139,7 @@ public class Pong extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		camera.setToOrtho(false, SCREENWIDTH/2, SCREENHEIGHT/2);
 		
 		// Create the paddles
 		setLeftPaddle(new LocalUserPaddle(
@@ -184,6 +184,7 @@ public class Pong extends GameClient {
         for(Achievement ach : achievements) {
             System.out.println(ach.toString());
         }
+        
 	}
 
 	@Override
@@ -271,7 +272,7 @@ public class Pong extends GameClient {
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
 		    	incrementAchievement("pong.winGame");
-                incrementAchievement("pong.master");
+			incrementAchievement("pong.master");
 		    }
 		} else {
 			// No winner yet, get ready for another point

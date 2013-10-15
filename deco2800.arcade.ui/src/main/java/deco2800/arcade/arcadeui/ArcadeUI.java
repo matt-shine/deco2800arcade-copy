@@ -21,7 +21,7 @@ import deco2800.arcade.model.Player;
 public class ArcadeUI extends GameClient {
 	
 	LoginScreen login = null;
-	StoreScreen store = null;
+	GameStore store = null;
 	HomeScreen home = null;
     FrontPage main = null;
     RegisterScreen register = null;
@@ -42,16 +42,17 @@ public class ArcadeUI extends GameClient {
 
         // Initialise the different screens.
         login = new LoginScreen(this);
+
         home = new HomeScreen(this);
-        store = new GameStore();
-        main = new FrontPage();
+        store = new GameStore(this);
+        main = new FrontPage(this);
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);
         betting = new BettingWindow(this);
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
-            this.setScreen(home);
+            this.setScreen(main);
         } else {
             this.setScreen(login);
         }
@@ -99,6 +100,10 @@ public class ArcadeUI extends GameClient {
 	
 	public HomeScreen getHome() {
 		return home;
+	}
+	
+	public GameStore getStore() {
+		return store;
 	}
 	
 	public MultiplayerLobby getLobby() {

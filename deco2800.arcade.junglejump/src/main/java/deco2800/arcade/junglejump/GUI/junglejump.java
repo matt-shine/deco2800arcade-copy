@@ -1,4 +1,5 @@
 package deco2800.arcade.junglejump.GUI;
+import java.net.URL;
 
 
 import java.io.File;
@@ -67,6 +68,10 @@ public class junglejump extends GameClient implements InputProcessor {
 	public float QUIT = (float) (242 - 37.5 * 5);
 	
 	public int BANANAS_FOUND = 0;
+	
+	URL path = this.getClass().getResource("/");
+	String resource = path.toString().replace(".arcade/build/classes/main/",
+			".arcade.junglejump/src/main/").replace("file:", "") + "resources/";
 
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS
@@ -154,9 +159,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyX = monkeyDefaultX;
 		monkeyY = monkeyDefaultY;
 		monkeyYoriginal = 0f;
+		System.out.println(resource);
 		// Replace "file" with chosen music
 		try {
-			File file = new File("soundtrack.wav");
+			File file = new File(resource + "soundtrack.wav");
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -197,7 +203,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void create() {
 		super.create();
 		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(("mainscreen.png"));
+		texture = new Texture((resource + "mainscreen.png"));
 		monkeySit = new Texture(("monkeySit.png"));
 		monkeySitRIGHT = new Texture(("monkeySit.png"));
 		monkeySitLEFT = new Texture(("monkeySitLEFT.png"));

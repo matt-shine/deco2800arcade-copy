@@ -38,7 +38,7 @@ public class MultiplayerLobby implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private ArcadeUI arcadeUI;
 	private MultiplayerLobby lobby;
-	private ChatArray;
+	//private ChatArray;
 	ArrayList<ActiveMatchDetails> matches; 
 
 	public MultiplayerLobby(ArcadeUI ui) {

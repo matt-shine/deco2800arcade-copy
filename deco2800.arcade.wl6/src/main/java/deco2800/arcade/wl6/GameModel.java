@@ -16,31 +16,31 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class GameModel {
 
-    //the current level map
+    // The current level map
     private Level currentMap = null;
 
-    //the name of the current level
+    // The name of the current level
     private String currentLevel = "nothing";
 
-    //the player
+    // The player
     private Player player = null;
 
-    //the player spawn point
+    // The player spawn point
     private Vector2 spawn = new Vector2(0, 0);
     private float spawnAngle = 0;
 
-    //All the entities
+    // All the entities
     private LinkedList<Doodad> doodads = new LinkedList<Doodad>();
 
-    //Array of the waypoints on the current map
+    // Array of the waypoints on the current map
     private WL6Meta.DIRS[][] waypoints = new WL6Meta.DIRS[64][64];
 
 
 
-    //Delta time
+    // Delta time
     private float delta = 0;
 
-    //Doodads to delete
+    // Doodads to delete
     private ArrayList<Doodad> toDelete = new ArrayList<Doodad>();
 
 	private int difficulty = 1;

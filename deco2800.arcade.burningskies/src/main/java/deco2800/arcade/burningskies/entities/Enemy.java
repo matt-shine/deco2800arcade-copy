@@ -24,7 +24,7 @@ public class Enemy extends Ship {
 	}
 	
 	public void onRender(float delta) {
-		super.onRender(delta);
+		super.onRender(delta); 
 		move(delta);
 	}
 	

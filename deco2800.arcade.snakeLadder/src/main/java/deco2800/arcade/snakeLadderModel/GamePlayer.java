@@ -25,9 +25,9 @@ public class GamePlayer {
 	private Vector2 velocity = new Vector2(); // The current velocity of the playerTexture as x,y
 	
 	
-	public GamePlayer()
-	{
-	}
+//	public GamePlayer()
+//	{
+//	}
 	
 	/**
 	 * Basic constructor for playerTexture. Set position and dimensions to the default
@@ -120,11 +120,12 @@ public class GamePlayer {
 	}
     
    public int getDnumber(int diceNumber){
-//    	positionIndex+=diceNumber;
-	    positionIndex = 59;
-    	if(positionIndex>=100)
+    	positionIndex+=diceNumber;
+	   // positionIndex = 59;
+       // positionIndex=45;
+    	if(positionIndex>=99)
     	{
-    		positionIndex=100;
+    		positionIndex=99;
     	}
     	return positionIndex;
     }

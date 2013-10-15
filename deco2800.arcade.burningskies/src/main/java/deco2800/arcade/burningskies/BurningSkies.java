@@ -162,7 +162,10 @@ public class BurningSkies extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
+		game.id = "burningskies";
 		game.name = "Burning Skies";
+		game.description = "Engage in one of the most thrilling space combat battles this side of the galaxy in the critically acclaimed" +
+		", user verified and robot tested GoTY 2101! Kill aliens! Get powerups! Shoot things! Eat lead! Don't die! Hold on to your hats, it's about to get crazy.";
 	}
 	
 	public Game getGame() {

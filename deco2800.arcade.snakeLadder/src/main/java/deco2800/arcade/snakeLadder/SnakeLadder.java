@@ -70,7 +70,7 @@ public class SnakeLadder extends GameClient {
 	private Stage stage;
 	private Skin skin;
 	private BitmapFont font;
-	private TextButton diceButton;
+	public TextButton diceButton;
 	public String statusMessage;
 	private Dice dice;
 	private Dice diceAI;
@@ -150,7 +150,7 @@ public class SnakeLadder extends GameClient {
 //            }
 //        });
  
-    
+        
 	}
 	
 	@Override

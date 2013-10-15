@@ -25,7 +25,7 @@ public class SpawnList {
 	public SpawnList(PlayScreen s){
 		this.screen = s;
 		currentInterval = 0;
-		interval = (float) 0;		
+		interval = (float) 5;		
 		counter = 0;
 		mapCounter = 1;
 		list = new ArrayList<Object>();
@@ -37,7 +37,7 @@ public class SpawnList {
 	 * level for enemy spawn sequence
 	 */
 	private void makeList1() {
-		list.add((float) -100); // when to spawn on map
+		list.add((float) 2); // when to spawn on map
 		list.add((float) 1); // interval
 		list.add((int) 10); // number of times
 		Vector2[] test = new Vector2[2];
@@ -53,18 +53,19 @@ public class SpawnList {
 	 */
 	public void checkList(float delta) {
 		// TODO make an auto queue for the enemies
-		if(screen.map.getY() < (Float) list.get(0) && mapCounter != 0)  {
-			interval = (Float) list.get(1);
-			counter = (Integer) list.get(2);
-			mapCounter = 0;
-		}
+//		if(screen.level.getTimer() > (Float) list.get(0) && mapCounter != 0)  {
+//			interval = (Float) list.get(1);
+//			counter = (Integer) list.get(2);
+//			mapCounter = 0;
+//		}
 
-		if(interval == (float) 0 || counter == 0)
-			return;
+//		if(interval == (float) 0 || counter == 0)
+//			return;
 		
 		if(currentInterval >= interval) {
-			spawnEnemy(list.get(3));
-			--counter;
+//			spawnEnemy(list.get(3));
+//			--counter;
+			addRandomEnemy();
 			currentInterval -= interval;
 		}
 		currentInterval += delta;
@@ -75,24 +76,63 @@ public class SpawnList {
 	 */	
 	private void spawnEnemy(Object object) {
 		Vector2[] v = (Vector2[]) object;
-		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, new Vector2(v[1].x, v[1].y)) );
+		screen.addEnemy(new Enemy(200, enemy1, new Vector2(v[0].x, v[0].y),  screen, screen.getPlayer()) );
 	}
 
 	/* Testing purposes, but still may still use later
 	 */
 	private void addRandomEnemy() {
-	    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
-	    	float startY = (float) 700;
-	    	int direction;
-	    	
-	    	if((int) Math.floor(Math.random() * 2) == 1 )
-	    		direction = 1;
-	    	else
-	    		direction = -1;
-	    	
-	    	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
-	    	float vY = (float) Math.ceil(Math.random() * -150) - 50;
-	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), screen, new Vector2(vX,vY)) );    	
+			int dirX = 0;
+			int dirY = 0;
+			float startX = (float) 0;
+			float startY = (float) 0;
+			
+			float widthC = (float) 740;
+			float heightC = (float) 360;
+					
+			int direction = (int) Math.ceil(Math.random() * 4);
+			
+			System.out.println("Direction num: " + direction);
+			
+			// Determine where the enemy will start to spawn
+			switch (direction) {
+			case 1:
+				startY = (float) 720;
+				startX = (float) Math.ceil(Math.random() * 1000) + 100;
+				dirY = -1;
+				dirX = randDirection();
+				break;
+			case 2:
+				startX = 1280;
+				startY = (float) Math.ceil(Math.random() * 600) + 50;
+				dirX = -1;
+				dirY = randDirection();				
+				break;
+			case 3:
+				startY = 0;
+				startX = (float) Math.ceil(Math.random() * 1000) + 100;
+				dirX = randDirection();
+				dirY = 1;				
+				break;
+			case 4:
+				startX = 0;
+				startY = (float) Math.ceil(Math.random() * 600) + 50;
+				dirX = 1;
+				dirY = randDirection();				
+				break;			
+			}
+			float vX = (float) Math.ceil(Math.random() * (widthC - startX))/10 + (widthC - startX)/10;
+			float vY = (float) Math.ceil(Math.random() * (heightC - startY))/7 + (heightC - startY)/5;
+//	    	float vX = (float) (Math.ceil(Math.random() * 150) + 50) * dirX;
+//	    	float vY = (float) (Math.ceil(Math.random() * 150) + 50) * dirY;
+			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
+	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), screen, screen.getPlayer()) );    	
 	}
-
+	
+	private int randDirection() {
+		if ((int) Math.floor(Math.random() * 2) == 1)
+			return 1;
+		else
+			return -1;
+	}
 }

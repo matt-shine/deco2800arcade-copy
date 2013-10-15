@@ -25,10 +25,11 @@ public class GameStore implements Screen, StoreScreen {
     private Stage stage = new Stage();
     private static Game featured = new Game();;
     
-    private float fade = 1;
-    private Label description;
-    private Button featured_bg;
-    private Button featured_icon;
+    private float fade = 1; // Used for the featured bar fade-out.
+    // Initially set to 1, so that the icon and text will fade in upon load.
+    private Label description; // featured text
+    private Button featured_icon; // featured icon
+    private Button featured_bg; // featured icon glow/box
     
     //private ArcadeUI arcadeUI;
     
@@ -50,13 +51,14 @@ public class GameStore implements Screen, StoreScreen {
 			}
 		}
 		
+		// The background for the store.
 		Table bg = new Table();
 		bg.setFillParent(true);
 		bg.setBackground(skin.getDrawable("background"));
 		stage.addActor(bg);
 		
 		final TextField searchField = new TextField("", skin);
-		final TextButton searchButton = new TextButton("Search", skin);
+		final Button searchButton = new Button(skin, "search");
 		final TextButton libraryButton = new TextButton("Library", skin);
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
@@ -85,8 +87,8 @@ public class GameStore implements Screen, StoreScreen {
 		searchField.setMessageText("Search");
 		stage.addActor(searchField);
 		
-		searchButton.setSize(140, 40);
-		searchButton.setPosition(1025, 480);
+		searchButton.setSize(126, 55);
+		searchButton.setPosition(1039, 480);
 		stage.addActor(searchButton);
 		
 		libraryButton.setSize(360, 95);
@@ -107,7 +109,6 @@ public class GameStore implements Screen, StoreScreen {
 		
 		libraryButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Library clicked");
 				//arcadeUI.setScreen(arcadeUI.getLobby());
 				dispose();
 				ArcadeSystem.goToGame("arcadeui");
@@ -146,8 +147,7 @@ public class GameStore implements Screen, StoreScreen {
 	private void populateGamesBox(Stage stage, Skin skin)  {
 		int number = (int)Math.floor(ArcadeSystem.getGamesList().size() * Math.random());
 		// ^Used to find the first of the 8 games to be displayed.
-		featured = (Game)ArcadeSystem.getArcadeGames().toArray()
-				[number%ArcadeSystem.getGamesList().size()];
+		featured = (Game)ArcadeSystem.getArcadeGames().toArray()[number];
 		for (int i = 0; i < 8; ++i) {
 			String Gamename = ArcadeSystem.getGamesList().toArray()
 					[(number+i)%ArcadeSystem.getGamesList().size()] + "";
@@ -202,6 +202,7 @@ public class GameStore implements Screen, StoreScreen {
 	 */
 	private void textFade() {
 		if (fade <= -70) {
+			// reset text, in case some terrible occurrence occurred.
 			fade = 70;
 			description.setColor(1, 1, 1, 1);
 			featured_bg.setColor(1, 1, 1, 1);
@@ -209,6 +210,9 @@ public class GameStore implements Screen, StoreScreen {
 			featured_icon.setColor(1, 1, 1, 1);
 			featured_icon.setX(121);
 		} else if (fade < 40 && fade > -40) {
+			// While 'fade' is between 40 and -40, it will call iconfade.
+			// The text will remain invisible, and will update to the new
+			// description when fade == 0.
 			fade--;
 			iconFade();
 			if (fade == 0) {
@@ -224,6 +228,7 @@ public class GameStore implements Screen, StoreScreen {
 			}
 			description.setColor(1, 1, 1, 0);
 		} else if (fade < 70 && fade > -70) {
+			// text fade in and out.
 			fade--;
 			description.setColor(1, 1, 1, (Math.abs(fade) - 40) / 30);
 		}
@@ -240,16 +245,17 @@ public class GameStore implements Screen, StoreScreen {
 	 */
 	private void iconFade() {
 		if (fade > -1) {
-			featured_bg.setX(featured_bg.getX() + 3); // move right
+			featured_bg.setX(featured_bg.getX() + 3); // move right first
 			featured_icon.setX(featured_icon.getX() + 3);
 		} else if (fade < -1) {
-			featured_bg.setX(featured_bg.getX() - 3); // move back left
+			featured_bg.setX(featured_bg.getX() - 3); // then move back left
 			featured_icon.setX(featured_icon.getX() - 3);
 		} else if (fade == -1) {
 			naptime(400); // stay hidden for a short while
 		}
 		featured_bg.setColor(1, 1, 1, Math.abs(fade) / 40);
 		featured_icon.setColor(1, 1, 1, Math.abs(fade) / 40);
+		// fade out icon
 	}
 	
 	@Override
@@ -263,7 +269,7 @@ public class GameStore implements Screen, StoreScreen {
 	
 	public void naptime(int zzzz) {
 		try {
-		    Thread.sleep(zzzz);
+		    Thread.sleep(zzzz); // Zzzzzzz *snore*
 		} catch(InterruptedException ex) {
 		    Thread.currentThread().interrupt();
 		}

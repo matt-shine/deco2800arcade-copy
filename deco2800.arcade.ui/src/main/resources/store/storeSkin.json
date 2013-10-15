@@ -26,6 +26,7 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
     	default: { up: green_button, down: green_button, over: green_button_glow },
+    	search: { up: search_button, down: search_button, over: search_button_glow },
     	icon: { up: textField }
     }
 }

@@ -83,11 +83,23 @@ public class SnakeLadder extends GameClient {
 		gamePlayers[1] = new GamePlayer("AI Player");
 	}
 	
+	//constructor for testing
 	public SnakeLadder(Player player, NetworkClient networkClient, String username) {
 		super(player, networkClient);
 		gamePlayers[0] = new GamePlayer(username);
 		gamePlayers[1] = new GamePlayer("AI Player");
 	}
+	
+	//constructor for testing
+//	public SnakeLadder(Player player, NetworkClient networkClient, String username,String mapStr) {
+//		super(player, networkClient);
+//		gamePlayers[0] = new GamePlayer(username);
+//		gamePlayers[1] = new GamePlayer("AI Player");
+//		//creating level loading background board and initializing the rule mapping
+//		map =new GameMap();
+//		//loading game map
+//		map.loadMap(mapStr,getRuleMapping());
+//	}
 
 	public int getturns() {
 		return this.turn%2;
@@ -109,11 +121,12 @@ public class SnakeLadder extends GameClient {
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
 		
-		iniRuleMapping();
+		//initialize the rules from xml file
+		ruleMapping = RuleMapping.iniRuleMapping(Gdx.files.classpath("ruleMapping.xml"));
 		//creating level loading background board and initializing the rule mapping
-		map =new GameMap();
+		map =new GameMap(Gdx.files.classpath("images/board.png"));
 		//loading game map
-		map.loadMap("maps/lvl1.txt",getRuleMapping());
+		map.loadMap(Gdx.files.classpath("maps/lvl1.txt"),getRuleMapping());
 		
 		//loading the icon for each player
 		gamePlayers[0].setPlayerTexture("player.png");
@@ -363,25 +376,6 @@ public class SnakeLadder extends GameClient {
         table.row();
 	}
 	
-	public void iniRuleMapping()
-	{
-		XmlReader reader = new XmlReader();
-		try {
-			Element root = reader.parse(Gdx.files.classpath("ruleMapping.xml"));
-			Array<Element> entries = root.getChildrenByName("entry");
-			for (Element entry : entries)
-			{
-				String rule = entry.getChildByName("rule").getText();
-				String icon = entry.getChildByName("icon").getText();
-				String implementationClass = entry.getChildByName("implementationClass").getText();
-				getRuleMapping().put(rule, new RuleMapping(icon,implementationClass));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-
 	public HashMap<String,RuleMapping> getRuleMapping() {
 		return ruleMapping;
 	}

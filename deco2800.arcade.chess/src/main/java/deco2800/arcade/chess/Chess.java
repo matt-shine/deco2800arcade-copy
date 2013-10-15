@@ -317,6 +317,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			public void dispose() {}
 		});
 		drawButton();
+		replayHandler.startSession("chess", player.getUsername() );
 	}
 	private static ReplayEventListener initReplayEventListener()
 	{
@@ -1375,8 +1376,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	
             	recording = true;
-            	replayHandler.startSession("chess", player.getUsername() );
             	try{
         		replayHandler.startRecording();
             	}

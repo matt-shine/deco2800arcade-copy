@@ -429,10 +429,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	/**
 	 * Ends the game
 	 */
-	private void finishGame(boolean loser) {
+	private void finishGame(boolean loser, boolean stalemate) {
 		System.err.println("GAME OVER");
 		//loser was black i.e. not this player, increment achievement
-		//if (loser == true) {
+		//if ((loser == true) && (!stalemate)) {
 			//this.incrementAchievement("chess.winGame");
 		//}
 		if(recording){
@@ -581,7 +581,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 								prevPos[1],
 								newPos[0], 
 								newPos[1]));
-						this.finishGame(board.whoseTurn());
+						this.finishGame(board.whoseTurn(), false);
 						}
 					}
 					/* If the easy computer opponent is playing, and black teams turn
@@ -623,7 +623,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 						} else {
 							//player1.logWin(); <- this is not working
 						}
-						this.finishGame(board.whoseTurn());
+						this.finishGame(board.whoseTurn(), false);
+					}
+					if (board.checkForStaleMate(board.whoseTurn())) {
+						this.finishGame(board.whoseTurn(), true);
 					}
 					return true;
 				}

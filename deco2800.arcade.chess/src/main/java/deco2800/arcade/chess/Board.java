@@ -223,12 +223,19 @@ public class Board {
 	 * @return
 	 * 		True if a stalemate has been reached, false otherwise.
 	 */
-	private boolean checkForStaleMate(boolean Team) {
+	public boolean checkForStaleMate(boolean team) {
 
 		boolean staleMate = false;
+		//if only kings remain also stalemate, check for this
+		List<Piece> blackPieces = this.findActivePieces(true);
+		List<Piece> whitePieces = this.findActivePieces(false);
+		//if only one piece remains on each team it is the king, in stalemate
+		if ((blackPieces.size() == 1) && (whitePieces.size() == 1)) {
+			return true;
+		}
 		// check that the king isn't in check, then check all the pieces to see
 		// if they can move anywhere, if they can't then it's a stalemate
-		if (!checkForCheck(Team) && !checkMoves().contains(true)) {
+		if (!checkForCheck(team) && !checkMoves(team).contains(true)) {
 			staleMate = true;
 		}
 		return staleMate;
@@ -323,6 +330,11 @@ public class Board {
 
 		// Pawn Movement
 		if (piece.getClass() == blackPawn1.getClass()) {
+			if (!piece.getFirstMove()) {
+				if (this.occupiedSpace(possibleMoves.get(1))) {
+					possibleMoves.remove(0);
+				}
+			}
 			for (int i = 0; i < possibleMoves.size(); i++) {
 				if (occupiedSpace(possibleMoves.get(i))) {
 					// If the space is occupied check by which team
@@ -1443,8 +1455,8 @@ public class Board {
 	 * Checks all active pieces on the board to see whether any pieces can move
 	 * and returns a list of boolean values
 	 */
-	public List<Boolean> checkMoves() {
-		List<Piece> activePieces = findActivePieces();
+	public List<Boolean> checkMoves(boolean team) {
+		List<Piece> activePieces = findActivePieces(team);
 		List<Boolean> canMove = new ArrayList<Boolean>();
 
 		for (int i = 0; i < activePieces.size(); i++) {

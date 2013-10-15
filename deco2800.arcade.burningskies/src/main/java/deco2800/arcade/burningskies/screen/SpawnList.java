@@ -62,13 +62,19 @@ public class SpawnList {
 		if(currentInterval >= interval) {
 //			spawnEnemy(list.get(3));
 //			--counter;
+			interval -= 0.1;
+			if(interval < 0.25) {
+				interval = (float) 0.25;
+			}
+			
 			addRandomEnemy();
 			currentInterval -= interval;
 		}
 		currentInterval += delta;
 	}
 
-	/* Testing purposes, but still may still use later
+	/**
+	 * Automatically random spawn an enemy around the edge of the screen
 	 */
 	private void addRandomEnemy() {
 			float startX = (float) 0;
@@ -79,7 +85,6 @@ public class SpawnList {
 					
 			int direction = (int) Math.ceil(Math.random() * 4);
 			
-//			System.out.println("Direction num: " + direction);
 			
 			// Determine where the enemy will start to spawn
 			switch (direction) {
@@ -100,11 +105,12 @@ public class SpawnList {
 				startY = (float) Math.ceil(Math.random() * 600) + 50;
 				break;			
 			}
+			
+			// Randomly set the x and y velocity
 			float vX = (float) Math.ceil(Math.random() * (widthC - startX))/10 + (widthC - startX)/10;
 			float vY = (float) Math.ceil(Math.random() * (heightC - startY))/7 + (heightC - startY)/5;
-//	    	float vX = (float) (Math.ceil(Math.random() * 150) + 50) * dirX;
-//	    	float vY = (float) (Math.ceil(Math.random() * 150) + 50) * dirY;
-//			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
-	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
+
+			// Add the enemy to the screen
+			screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
 	}
 }

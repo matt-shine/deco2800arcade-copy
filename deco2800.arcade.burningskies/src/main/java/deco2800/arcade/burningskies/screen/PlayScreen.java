@@ -219,7 +219,7 @@ public class PlayScreen implements Screen
 					player.damage(e.getHealth());
 				}
 			}	
-    	}
+    	} 
     	    	
     	// Draws the map
     	stage.draw();

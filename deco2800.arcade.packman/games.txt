@@ -10,6 +10,8 @@ tictactoe
 ui
 breakout
 deerforest
+gamelibrary
+soundboard
 mixmaze
 chess
 landInvaders
@@ -23,4 +25,8 @@ connect4
 raiden
 wl6
 snakeLadder
+<<<<<<< HEAD
 guesstheword
+=======
+lunarlander
+>>>>>>> master

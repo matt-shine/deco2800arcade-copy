@@ -109,15 +109,17 @@ public class ForumUi {
 	     
 	     
 	      //Tutorial Label
-	      this.lblTutorial = new JLabel("Tutorial ");
+	      this.lblTutorial = new JLabel("Tutorial");
 	      this.lblTutorial.setFont(new Font("Tahoma", Font.BOLD, 13));
 	      this.lblTutorial.setBounds(12, 280, 141, 16);
+	      addTUTLabelListener(this.lblTutorial);
 	      f.getContentPane().add(this.lblTutorial);
 
           //Bug Reporting
 	      this.lblReportBug = new JLabel("Report Bug");
 	      this.lblReportBug.setFont(new Font("Tahoma", Font.BOLD, 13));
 	      this.lblReportBug.setBounds(12, 432, 141, 16);
+	      addRBLabelListener(this.lblReportBug);
 	      f.getContentPane().add(this.lblReportBug);
 	      
 	      this.txtpnForDiscussionOf = new JTextPane();
@@ -170,6 +172,39 @@ public class ForumUi {
 			   }
 		   });
 	   }
+	   
+	   
+	   public void open_tutorial() {
+		   this.f.setContentPane(new JPanel(new BorderLayout()));
+		   new Tutorial(this.f);
+	   }
+	   
+	   private void addTUTLabelListener(JLabel label) {
+		   label.addMouseListener(new MouseAdapter()
+		   {
+			   public void mouseClicked(MouseEvent e)
+			   {
+				   open_tutorial();
+			   }
+		   });
+	   }
+	   
+	   public void open_Report_Bug() {
+		   this.f.setContentPane(new JPanel(new BorderLayout()));
+		   new ReportBug(this.f);
+	   }
+	   
+	   private void addRBLabelListener(JLabel label) {
+		   label.addMouseListener(new MouseAdapter()
+		   {
+			   public void mouseClicked(MouseEvent e)
+			   {
+				   open_Report_Bug();
+			   }
+		   });
+	   }
+	   
+	   
 }
 	   
 	   

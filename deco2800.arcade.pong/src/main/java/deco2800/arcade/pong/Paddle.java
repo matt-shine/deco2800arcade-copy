@@ -22,7 +22,7 @@ public abstract class Paddle {
     
     // we use this to keep track of what way we're moving so that
     // we can award the Slider achievement
-    public int direction = 0;
+    public float direction = 0;
 
 	/**
 	 * Basic constructor for paddle
@@ -40,7 +40,8 @@ public abstract class Paddle {
 	 * @param y distance to move the paddle up (y<0 for down)
 	 */
 	public void move(float y) {
-		bounds.y += y;
+	    direction = y;
+	    bounds.y += y;		
 	}
 	
 	/**

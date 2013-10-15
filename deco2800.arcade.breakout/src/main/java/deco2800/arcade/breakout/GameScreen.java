@@ -372,7 +372,7 @@ public class GameScreen implements Screen  {
 	public void cheatBonus(int bonus) {
 		incrementLives(bonus);
 		incrementScore(bonus*10);
-		setSequence(null);
+		setSequence();
 		game.incrementAchievement("breakout.secret");
 		achieve.play();
 	}
@@ -486,8 +486,8 @@ public class GameScreen implements Screen  {
 	/**
 	 * @param sequence the sequence to set
 	 */
-	public void setSequence(int[] sequence) {
-		this.sequence = sequence;
+	public void setSequence() {
+		this.sequence = null;
 	}
 	/**
 	 * @return the currentButton

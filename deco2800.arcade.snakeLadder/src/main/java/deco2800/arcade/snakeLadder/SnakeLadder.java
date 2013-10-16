@@ -52,7 +52,7 @@ import deco2800.arcade.snakeLadderModel.*;
 
 /**
  * This is the main class for game snake&Ladder
- * @author s4310055,s43146400,s43146884,s4243072
+ * @author s4310055,s4314640,s43146884,s4243072
  *
  */
 
@@ -178,17 +178,6 @@ public class SnakeLadder extends GameClient {
   			dices.add(new Dice());
   		}
   		
-        //setDice(new Dice());
-        //setDiceAI(new Dice());
-        
-        //TODO: button should be disabled when its others player turn or when player is on the move
-       // diceButton listener for when the button is pressed
-//        diceButton.addListener(new ChangeListener() {
-//            public void changed (ChangeEvent event, Actor actor) {
-//            	dice.rollDice();
-//            }
-//        });
- 
         
 	}
 	
@@ -252,41 +241,14 @@ public class SnakeLadder extends GameClient {
 	}
 
 	/**
-	 * Handle player input from mouse click
+	 * Handle player input from button click
 	 */
 	private void handleInput() {
 		//use gameState to handle user input
 		gameState.handleInput(this);
 	}
 	
-//	public void stopPoint() {
-//		this.updateScore(gamePlayer);
-//		gamePlayer.reset();
-//		AIPlayer.reset();
-//		// If we've reached the victory point then update the display
-//		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
-//			gameState = new GameOverState();
-//		    //Update the game state to the server
-//		    //networkClient.sendNetworkObject(createScoreUpdate());
-//		} 
-//		if (AIPlayer.getBounds().x<=(60-20f)&& AIPlayer.getBounds().y>=540){
-//			gameState = new GameOverState();
-//		}
-//		else {
-//			// No winner yet, get ready for another point
-//			gameState = new ReadyState();
-//			statusMessage = "Throw the dice again";
-//		}
-//
-//	}
-	
-//	public void startPoint() {
-//		gamePlayer.initializeVelocity();
-//		getDice().rollDice();	
-//		AIPlayer.initializeVelocity();
-//		gameState = new InProgressState();
-//		statusMessage = null;
-//	}
+
 	public int taketurns() {
 		turn++;
 		return this.turn;
@@ -316,21 +278,6 @@ public class SnakeLadder extends GameClient {
 		dices.set(num, dice);
 	}
 
-	/*public Dice getDice() {
-		return dice;
-	}
-
-	public void setDice(Dice dice) {
-		this.dice = dice;
-	}
-	
-	public Dice getDiceAI() {
-		return diceAI;
-	}
-
-	public void setDiceAI(Dice dice) {
-		this.diceAI = dice;
-	}*/
 	
 	public GameMap getMap() {
 		return map;

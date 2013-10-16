@@ -24,13 +24,56 @@ public class RuleExcutingTest {
 		context = new SnakeLadder(null, null, "test", xmlFile, mapFile);
 	}
 	
-	//@Test
+	@Test
 	public void ScoringRuleTest() {
 		iniContext();
 		ScoreRule scoringRule = new ScoreRule();
 		scoringRule.processRule(0, "+10", context);
 		assertEquals(context.gamePlayers[0].getScore(),10);
 		assertTrue(context.gameState instanceof WaitingState);
+		
+		iniContext();
+		ScoreRule scoringRule1=new ScoreRule();
+		scoringRule1.processRule(0,"-10",context);
+		assertEquals(context.gamePlayers[0].getScore(),-10);
+		assertTrue(context.gameState instanceof WaitingState);
+		
+		iniContext();
+		ScoreRule scoringRule2=new ScoreRule();
+		scoringRule2.processRule(0, "+20", context);
+		assertEquals(context.gamePlayers[0].getScore(),20);
+		assertTrue(context.gameState instanceof WaitingState);
+		
+		iniContext();
+		ScoreRule scoringRule3=new ScoreRule();
+		scoringRule3.processRule(0, "-20", context);
+		assertEquals(context.gamePlayers[0].getScore(),-20);
+		assertTrue(context.gameState instanceof WaitingState);
+		
+		iniContext();
+		ScoreRule scoringRule4=new ScoreRule();
+		scoringRule4.processRule(0, "+50", context);
+		assertEquals(context.gamePlayers[0].getScore(),50);
+		assertTrue(context.gameState instanceof WaitingState);
+		
+		iniContext();
+		ScoreRule scoringRule5=new ScoreRule();
+		scoringRule5.processRule(0, "-50", context);
+		assertEquals(context.gamePlayers[0].getScore(),-50);
+		assertTrue(context.gameState instanceof WaitingState);
+		
+		iniContext();
+		ScoreRule scoringRule6=new ScoreRule();
+		scoringRule6.processRule(0, "+100", context);
+		assertEquals(context.gamePlayers[0].getScore(),100);
+		assertTrue(context.gameState instanceof WaitingState);
+		
+		iniContext();
+		ScoreRule scoringRule7=new ScoreRule();
+		scoringRule7.processRule(0, "-100", context);
+		assertEquals(context.gamePlayers[0].getScore(),-100);
+		assertTrue(context.gameState instanceof WaitingState);
+		
 	}
 
 }

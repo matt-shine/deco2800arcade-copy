@@ -9,9 +9,10 @@ public class MovingState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {
+		//get turns, to check whether is the player or the AI
 		int turn=context.getturns();
 		int playerIndex = turn%context.gamePlayers.length;
-		//int playerIndex=turn;
+		// Move the player accordingly
 		movePlayer(context,context.gamePlayers[playerIndex]);	    	
 	}
 
@@ -27,11 +28,12 @@ public class MovingState extends GameState {
 				gamePlayer.reset();
 				if(gamePlayer.newposition()==99)
 				{
+					// Winner comes out, change to GameOverState
 					context.gameState=new GameOverState();
 				}
 				else 
 				{
-					// No winner yet, get ready for another point
+					// No winner yet, user reaches the destination position. Change to RuleExcutingState to run the rules at destination position
 					context.gameState = new RuleExcutingState();					
 				}
 		}

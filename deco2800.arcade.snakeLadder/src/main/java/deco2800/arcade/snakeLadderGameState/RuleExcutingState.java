@@ -19,7 +19,7 @@ public class RuleExcutingState extends GameState {
 			context.statusMessage = "Throw the dice again";
 			context.taketurns();
 		}
-		//else excute the rule
+		//else execute the rule
 		else
 		{
 			//Snake and Ladder rules are two special rules hard-coded into game
@@ -52,7 +52,7 @@ public class RuleExcutingState extends GameState {
 
 	/***
 	 * Updating the score of the game player and print it out on the scoreLabel
-	 * @param gp the Game Player its referring to
+	 * 
 	 */
 	public void excuteRules(int playerNum, String rule, SnakeLadder context,GamePlayer context2){
 		if (isScore(rule))

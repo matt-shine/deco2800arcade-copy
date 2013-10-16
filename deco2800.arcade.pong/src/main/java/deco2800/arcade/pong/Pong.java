@@ -81,27 +81,10 @@ public class Pong extends GameClient {
         //this.achievementClient = new AchievementClient(networkClient);
 
         
-        //These methods are just used for testing HighscoreClient 
+        //These calls are just used for testing HighscoreClient 
         //Creating new HighscoreClient connection
         HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
-        
-        //Single scores
-        //hsd.storeScore("Number", 1234567890);
-        //hsd.storeScore("Number", 5211);
-        hsd.logLoss();
-        hsd.logWin();
-        
-        //Getting top scores
-        List<Highscore> topPlayers = hsd.getGameTopPlayers(10, false, "Number");
-        Highscore userHighScore = hsd.getUserHighScore(true, "Number");
-        List<Highscore> ranked = hsd.getUserRanking(true, "Number");
-        
-        List<Highscore> winLoss = hsd.getWinLoss();
-        
-        
-        
-        //store wins losses
-        
+
 	}
 	
 	/**

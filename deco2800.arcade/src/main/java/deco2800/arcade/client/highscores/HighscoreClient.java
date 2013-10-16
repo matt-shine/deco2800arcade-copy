@@ -326,7 +326,7 @@ public class HighscoreClient {
 		int lossCount = winLoss.get(1).score;
 		int total = winCount + lossCount;
 		
-		float ratio = winCount / total;
+		float ratio = (float)winCount / (float)total;
 		
 		return ratio;
 	}
@@ -346,7 +346,7 @@ public class HighscoreClient {
 		int lossCount = winLoss.get(1).score;
 		int total = winCount + lossCount;
 		
-		float ratio = lossCount / total;
+		float ratio = (float)lossCount / (float)total;
 		
 		return ratio;
 	} 

@@ -1,5 +1,6 @@
 package deco2800.arcade.client.highscores.test;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import org.junit.*;
@@ -8,6 +9,8 @@ import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.highscore.*;
+
 
 public class HighscoreClientTest {
 	
@@ -16,22 +19,30 @@ public class HighscoreClientTest {
 	 * can't be created without the server running. So, I can really only test 
 	 * that the initiliser throws the correct exception for null valued 
 	 * paramaters.*/
-	
+	private HighscoreClient highscoreClient;	
 	private NetworkClient networkClient;
 	private Player player;
+	private GetScoreRequest getScoreRequest;
 	private boolean[] privacy = {false, false, false, false, false, false, false, false};
 	
 	/**
 	 * Create a new highscore class object
+	 * @param networkClient 
 	 * @throws Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.networkClient = networkClient; //this is a bit of a hack	
 		this.player = new Player(0, "Player One", "", privacy);
-		this.player.setUsername("Player One");
+		this.player.setUsername("Player One");		
 	}
 	
+	
+	@Test (expected=NullPointerException.class)
+	public void TestGetGameTopPlayers() {
+		HighscoreClient player1 = new HighscoreClient("Dylan", "Pong", networkClient);
+		List<Highscore> listHighscore = player1.getGameTopPlayers(10, true, "Number");
+		System.out.println("return: " + listHighscore.toString());
+	}
 	
 	@Test (expected=NullPointerException.class)
 	public void initTest1() {

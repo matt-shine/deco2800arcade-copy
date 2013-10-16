@@ -68,18 +68,18 @@ public class CommunicationNetwork {
 		// If you don't have the window open, then display a notification in the
 		// chat area
 		// else, display the message in the open chat window
-		int chatID = textMessage.chatID;
+		int chatID = textMessage.getChatID();
 		ChatNode node = chatNodes.get(chatID);
 		if (node == null) {
-			node = new ChatNode(textMessage.recipients);
-			chatNodes.put(textMessage.recipients.hashCode(), node);
+			node = new ChatNode(textMessage.getRecipients());
+			chatNodes.put(textMessage.getRecipients().hashCode(), node);
 		}
-		node.addMessage(textMessage.text);
+		node.addMessage(textMessage.getText());
 		currentChat = node;
 
 		// Temporary:
 		System.out
-				.println(textMessage.senderUsername + ": " + textMessage.text);
+				.println(textMessage.getSenderUsername() + ": " + textMessage.getText());
 	}
 
 	/**

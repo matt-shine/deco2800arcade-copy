@@ -1,4 +1,4 @@
-package deco2800.arcade.client.communication.test;
+package deco2800.arcade.communication.communication.test;
 
 import static org.junit.Assert.assertEquals;
 
@@ -191,18 +191,18 @@ public class CommunicationTest {
 		comm1.createChat(chatParticipants2);
 
 		TextMessage message1 = new TextMessage();
-		message1.recipients = chatParticipants1;
-		message1.chatID = chatParticipants1.hashCode();
-		message1.senderID = 123;
-		message1.senderUsername = "Chuck Norris";
-		message1.text = "New Game";
+		message1.setRecipients(chatParticipants1);
+		message1.setChatID(chatParticipants1.hashCode());
+		message1.setSenderID(123);
+		message1.setSenderUsername("Chuck Norris");
+		message1.setText("New Game");
 
 		TextMessage message2 = new TextMessage();
-		message2.recipients = chatParticipants2;
-		message2.chatID = chatParticipants2.hashCode();
-		message2.senderID = 123;
-		message2.senderUsername = "Chuck Norris";
-		message2.text = "QWERTYUIOP";
+		message2.setRecipients(chatParticipants2);
+		message2.setChatID(chatParticipants2.hashCode());
+		message2.setSenderID(123);
+		message2.setSenderUsername("Chuck Norris");
+		message2.setText("QWERTYUIOP");
 		comm1.sendTextMessage(message1);
 		comm1.sendTextMessage(message2);
 
@@ -214,20 +214,20 @@ public class CommunicationTest {
 		// Tests two methods of getting data (using chatID
 		// (participants.hashcode()) and using current chat (the chat that the
 		// last message recieved belongs to.
-		assertEquals(comm1.getCurrentChats().get(message1.chatID).getID(),
-				comm2.getCurrentChats().get(message1.chatID).getID());
-		assertEquals(comm1.getCurrentChats().get(message2.chatID).getID(),
+		assertEquals(comm1.getCurrentChats().get(message1.getChatID()).getID(),
+				comm2.getCurrentChats().get(message1.getChatID()).getID());
+		assertEquals(comm1.getCurrentChats().get(message2.getChatID()).getID(),
 				comm3.getCurrentChat().getID());
 
-		assertEquals(comm1.getCurrentChats().get(message1.chatID)
+		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
 				.getParticipants(), comm2.getCurrentChats()
-				.get(message1.chatID).getParticipants());
-		assertEquals(comm1.getCurrentChats().get(message2.chatID)
+				.get(message1.getChatID()).getParticipants());
+		assertEquals(comm1.getCurrentChats().get(message2.getChatID())
 				.getParticipants(), comm3.getCurrentChat().getParticipants());
 
-		assertEquals(comm1.getCurrentChats().get(message1.chatID).getText(),
-				comm2.getCurrentChats().get(message1.chatID).getText());
-		assertEquals(comm1.getCurrentChats().get(message2.chatID)
+		assertEquals(comm1.getCurrentChats().get(message1.getChatID()).getText(),
+				comm2.getCurrentChats().get(message1.getChatID()).getText());
+		assertEquals(comm1.getCurrentChats().get(message2.getChatID())
 				.getParticipants(), comm3.getCurrentChat().getParticipants());
 	}
 }

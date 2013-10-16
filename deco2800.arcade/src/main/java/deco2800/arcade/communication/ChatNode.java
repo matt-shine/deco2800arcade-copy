@@ -34,7 +34,7 @@ public class ChatNode extends JLabel {
 	 */
 	public ChatNode(int participant) {
 		participants = new ArrayList<Integer>();
-		addParticipant(participant);
+		participants.add(participant);
 	}
 
 	public int getID() {

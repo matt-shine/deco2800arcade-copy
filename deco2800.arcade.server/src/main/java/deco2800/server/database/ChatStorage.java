@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChatStorage {
 
-	private HashMap<Integer, HashMap<Integer, List<String>>> chatStorage;
+	private Map<Integer, HashMap<Integer, List<String>>> chatStorage;
 	
 	public ChatStorage(){
 		this.chatStorage = new HashMap<Integer, HashMap<Integer, List<String>>>();
 	}
 		
-	public HashMap<Integer, List<String>> getChatHistory(int playerID){
+	public Map<Integer, List<String>> getChatHistory(int playerID){
 		return chatStorage.get(playerID);
 	}
 	

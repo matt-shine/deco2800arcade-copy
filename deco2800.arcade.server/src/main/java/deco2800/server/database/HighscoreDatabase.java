@@ -137,7 +137,6 @@ public class HighscoreDatabase {
 			}
 			return data;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
@@ -187,7 +186,6 @@ public class HighscoreDatabase {
 
 			return data;
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
@@ -368,7 +366,6 @@ public class HighscoreDatabase {
 	        	hid = resultSet.getInt(1);
 	        }
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to add highscore information to database", e);
 		} finally {
@@ -413,7 +410,6 @@ public class HighscoreDatabase {
 				System.out.println("InsertQUERY:" + insertTableSQL);
 				System.out.println("inserted correctly");
 			} catch (SQLException e) {
-				e.printStackTrace();
 				throw new DatabaseException(
 						"Unable to get player information from database", e);
 			} finally {

@@ -1,4 +1,4 @@
-package deco2800.arcade.wl6.screen;
+package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.Screen;
 import deco2800.arcade.wl6.WL6;

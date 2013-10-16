@@ -1,4 +1,4 @@
-package deco2800.arcade.wl6.screen;
+package deco2800.arcade.wl6;
 
 import java.util.Iterator;
 
@@ -26,7 +26,6 @@ public class MainGameScreen implements Screen {
 		this.game = game;
 		
 		input = new WL6InputProcessor(game, model);
-		ArcadeInputMux.getInstance().addProcessor(input);
 		
 		b.setGame(model, game);
 		
@@ -35,11 +34,11 @@ public class MainGameScreen implements Screen {
 	@Override
 	public void dispose() {
 		b.dispose();
-		ArcadeInputMux.getInstance().removeProcessor(input);
 	}
 
 	@Override
 	public void hide() {
+        ArcadeInputMux.getInstance().removeProcessor(input);
 	}
 
 	@Override
@@ -79,6 +78,9 @@ public class MainGameScreen implements Screen {
 
 	@Override
 	public void show() {
+        Gdx.input.setCursorCatched(true);
+        ArcadeInputMux.getInstance().addProcessor(input);
+
 	}
 	
 	public void toggleDebugMode() {

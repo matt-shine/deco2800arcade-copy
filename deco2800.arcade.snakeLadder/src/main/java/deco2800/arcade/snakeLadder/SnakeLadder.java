@@ -166,7 +166,7 @@ public class SnakeLadder extends GameClient {
 		//Initialise the game state
 		//gameState = GameState.READY;
 		gameState = new WaitingState();
-		statusMessage = "Click to start!";
+		statusMessage = "Roll the dice to start!";
 		
 		
 		//creating the stage

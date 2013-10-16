@@ -10,8 +10,6 @@ dependencies {
   testCompile group: "org.slf4j", name: "slf4j-simple", version: "1.7.5"
 
   testCompile group: "org.dbunit", name: "dbunit", version: "2.4.9"
-
-  compile group: "org.simpleframework", name: "simple", version: "5.1.6"
 }
 
 task(runServer, dependsOn: "classes", type: JavaExec) {

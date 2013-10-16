@@ -24,8 +24,8 @@ public interface StoreScreen {
      * Set selected game, displayed in the "featured" bar.
      * @param Game game
      */
-    public void setSelected(String game);
-    
+    public void setSelected(Game game);
+
     /**
      * Get selected game, displayed in the "featured" bar.
      * @return Game game

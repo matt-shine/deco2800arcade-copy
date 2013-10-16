@@ -1,14 +1,11 @@
 package deco2800.arcade.packman;
 
+import java.lang.System;
 import deco2800.arcade.packman.PackageUtils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class PackageServer {
-	final static Logger logger = LoggerFactory.getLogger(PackageServer.class);
 	
-	private static final String RELEASE_FOLDER = "Release";
+	private static final String releaseFolder = "Release";
 	
 	/**
 	 * Initialiser
@@ -18,11 +15,11 @@ public class PackageServer {
 	public PackageServer() {
 		
 		// Create the release folder
-		logger.debug("Creating directory: {}", RELEASE_FOLDER);
-		if (PackageUtils.createDirectory(RELEASE_FOLDER)) {
-			logger.debug("Created: {}", RELEASE_FOLDER);
+		System.out.println("Creating directory: " + releaseFolder);
+		if (PackageUtils.createDirectory(releaseFolder)) {
+			System.out.println("Created: " + releaseFolder);
 		} else {
-			logger.debug("Failed creating: {}", RELEASE_FOLDER);
+			System.out.println("Failed creating: " + releaseFolder);
 		}
 	}
 
@@ -30,7 +27,7 @@ public class PackageServer {
      * Print confirmation of successful connection by client to package server
      */
     public void printSuccess() {
-        logger.info("PACKMAN: Client connection success");
+        System.out.println("PACKMAN: Client connection success");
     }
 
     /**

@@ -4,5 +4,4 @@ service.properties
 
 *.class
 /bin
-*.log
 Release

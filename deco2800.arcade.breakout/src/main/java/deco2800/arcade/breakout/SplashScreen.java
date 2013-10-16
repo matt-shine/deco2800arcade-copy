@@ -31,9 +31,9 @@ public class SplashScreen implements Screen  {
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/splashscreen.png"));
+		//camera = new OrthographicCamera();
+		//camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 	}
-		
-		
 
 	@Override
 	public void render(float delta) {

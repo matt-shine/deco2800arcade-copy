@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Intersector;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.breakout.PongBall;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
@@ -36,13 +37,11 @@ import deco2800.arcade.client.highscores.HighscoreClient;
 public class Breakout extends GameClient {
 	SplashScreen splashScreen;
 	GameScreen gamescreen;
-	MenuScreen MenuScreen;
-	LevelScreen1 LevelScreen1;
-	LevelScreen2 LevelScreen2;
-	HelpScreen1 helpscreen1;
-	RankingScreen RankingScreen;
-	//ModelScreen modelscreen;
-	HelpScreen2 helpscreen2;
+	menuscreen MenuScreen;
+	levelscreen LevelScreen;
+	achivementscreen AchivementScreen;
+	rankingscreen RankingScreen;
+	modelscreen modelscreen;
 
 
 	/*
@@ -112,14 +111,12 @@ public class Breakout extends GameClient {
 			
         });
 		splashScreen = new SplashScreen(this);
-		MenuScreen=new MenuScreen(this);
+		MenuScreen=new menuscreen(this);
 		gamescreen = new GameScreen(this);
-		LevelScreen1=new LevelScreen1(this);
-		LevelScreen2=new LevelScreen2(this);
-		helpscreen1=new HelpScreen1(this);
-		helpscreen2=new HelpScreen2(this);
-		RankingScreen=new RankingScreen(this);
-		//modelscreen=new ModelScreen(this);
+		LevelScreen=new levelscreen(this);
+		AchivementScreen=new achivementscreen(this);
+		RankingScreen=new rankingscreen(this);
+		modelscreen=new modelscreen(this);
 		setScreen(splashScreen);
 		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
 	}
@@ -129,9 +126,9 @@ public class Breakout extends GameClient {
 		
 		splashScreen.dispose();
 		gamescreen.dispose();
-		LevelScreen1.dispose();
+		LevelScreen.dispose();
 		MenuScreen.dispose();
-		helpscreen1.dispose();
+		AchivementScreen.dispose();
 		RankingScreen.dispose();
 		super.dispose();
 	}

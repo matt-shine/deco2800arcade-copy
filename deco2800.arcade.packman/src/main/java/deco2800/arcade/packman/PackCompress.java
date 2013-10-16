@@ -11,8 +11,8 @@ import java.util.jar.Pack200.*;
 
 public class PackCompress {
 	
-	private Packer packer;
-	private Map<String, String> p;
+	Packer packer;
+	Map<String, String> p;
 	
 	/**
 	 * Initialiser
@@ -39,7 +39,7 @@ public class PackCompress {
 	    // transmitting a single request to use "store" mode.
 	    //p.put(Packer.DEFLATE_HINT, Packer.FALSE);
 	    // discard debug attributes
-	    //p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
+	    p.put(Packer.CODE_ATTRIBUTE_PFX+"LineNumberTable", Packer.STRIP);
 	    // throw an error if an attribute is unrecognized
 	    p.put(Packer.UNKNOWN_ATTRIBUTE, Packer.ERROR);
 	}
@@ -52,7 +52,7 @@ public class PackCompress {
 	 * @param outputPath Relative path to the desired location of the compressed file
 	 * @throws IOException If file cannot be compressed
 	 */
-	public void compress(String inputPath, String outputPath) throws IOException {
+	public void Compress(String inputPath, String outputPath) throws IOException {
         JarFile jarFile = new JarFile(inputPath);
         FileOutputStream fos = new FileOutputStream(outputPath);
         
@@ -69,7 +69,7 @@ public class PackCompress {
 	 * @param outputPath Relative path to the desired location of the jar file
 	 * @throws IOException If the file cannot be expanded
 	 */
-	public void expand(String inputPath, String outputPath) throws IOException {
+	public void Expand(String inputPath, String outputPath) throws IOException {
 		File f = new File(inputPath);
 		FileOutputStream fostream = new FileOutputStream(outputPath);
 		JarOutputStream jostream = new JarOutputStream(fostream);

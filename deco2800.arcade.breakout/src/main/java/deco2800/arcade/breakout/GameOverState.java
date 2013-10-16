@@ -15,7 +15,6 @@ public class GameOverState extends GameState {
 			context.dispose();
 			// may need to change this if bumpCount becomes private
 			context.bumpCount++;
-			//ArcadeSystem.goToGame("breakout");
 			ArcadeSystem.goToGame(ArcadeSystem.UI);
 			//game.setScreen(game.MenuScreen);
 		}

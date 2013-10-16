@@ -22,9 +22,7 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.towerdefence.TowerDefence;
 
-/* SplashScreen for game, press any key to advance to main menu screen
- * @author Tuddz
- */
+
 public class SplashScreen implements Screen{
 
 	Texture splashTexture;

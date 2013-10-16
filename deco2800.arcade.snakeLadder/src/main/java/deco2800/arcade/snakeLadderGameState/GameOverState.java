@@ -11,7 +11,6 @@ public class GameOverState extends GameState {
 	public void handleInput(SnakeLadder context) {
 		if (Gdx.input.isTouched()) {
     		context.gameOver();
-    		//auto go back to ArcadeSystem.UI game menu
     		ArcadeSystem.goToGame(ArcadeSystem.UI);
     	}
 	}

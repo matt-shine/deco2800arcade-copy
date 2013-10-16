@@ -56,9 +56,7 @@ public class ReplaySystemDemo {
 	    Thread.sleep( 1000 );
 	
 	    //Start the session with a game id and username
-	    replayHandler.startSession("replay_handler_demo", "max_koopman");
-	    
-	    Thread.sleep( 1000 );
+	    replayHandler.startSession(123, "max_koopman");
 	    
 		replayHandler.startRecording();
 		
@@ -98,24 +96,18 @@ public class ReplaySystemDemo {
 
 		Integer session = replayHandler.getSessionId();
 		
-		//replayHandler.endSession( replayHandler.getSessionId() );
-		
-		replayHandler.endCurrentSession();
+		replayHandler.endSession( replayHandler.getSessionId() );
 		
 		Thread.sleep( 1000 );
 		
-		//replayHandler.requestEventsForSession( session );
-		//replayHandler.playbackCurrentSession();
-		
-		replayHandler.playbackLastSession();
-		
+		replayHandler.requestEventsForSession( session );
+	
 		playbackFinished = false;
 		while (!playbackFinished) {
 			replayHandler.runLoop();
 		}
 		
 		System.out.println( "Exiting demo." );
-		
 		/*
 		 
 		//Can still create nodes the old way too.

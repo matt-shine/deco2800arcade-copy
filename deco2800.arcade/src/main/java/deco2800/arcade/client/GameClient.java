@@ -14,6 +14,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.PlayerClient;
 import deco2800.arcade.client.image.ImageClient;
 import deco2800.arcade.client.image.ImageManager;
+import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
@@ -37,6 +38,8 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
     private ImageManager imageManager;
     private boolean hasF11PressedLast = false;
     
+	private PackageClient packClient;
+    
 	public GameClient(Player player, NetworkClient networkClient) {
 		
 		this.player = player;
@@ -46,6 +49,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
         this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
 		this.imageClient = new ImageClient(networkClient);
+		this.packClient = new PackageClient();
 		this.imageManager = new ImageManager(imageClient);
 	}
 
@@ -70,7 +74,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 		        @Override
 			public float displayTime() {
-			    return 2.5f;
+			    return 1.8f;
 			}
 		    });
 		}
@@ -80,7 +84,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
     public void progressIncremented(final Achievement ach, final int progress) {
 	if (this.overlayBridge == null)
 	    return;
-	this.imageManager.getTexture(ach.icon).setHandler(new Handler<Texture>() {
+	this.imageManager.getTexture("derp").setHandler(new Handler<Texture>() {
 		public void handle(final Texture texture) {
 		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 		        @Override
@@ -95,7 +99,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 			@Override
 			public float displayTime() {
-			    return 2.5f;
+			    return 1.8f;
 			}
 		    });
 		}
@@ -122,6 +126,10 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
     public AchievementClient getAchievementClient() {
         return this.achievementClient;
+    }
+
+    public ImageManager getImageManager() {
+	return this.imageManager;
     }
     
     public PlayerClient getPlayerClient() {

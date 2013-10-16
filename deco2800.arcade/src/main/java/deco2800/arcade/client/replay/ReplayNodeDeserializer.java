@@ -1,9 +1,6 @@
 package deco2800.arcade.client.replay;
 
 import com.google.gson.*;
-
-import deco2800.arcade.client.replay.exception.BadReplayItemCastException;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -46,10 +43,9 @@ public class ReplayNodeDeserializer implements JsonDeserializer<ReplayNode> {
 	
 	/**
 	 * Create a {@link ReplayItem} given the type expected and the Json representation.
-	 * 
 	 * @param type 
 	 * @param entryObject
-	 * @return a ReplayItem with the given data
+	 * @return
 	 */
 	private ReplayItem getReplayItem(int type, JsonObject entryObject)
 	{
@@ -66,8 +62,8 @@ public class ReplayNodeDeserializer implements JsonDeserializer<ReplayNode> {
             temp = new ReplayItem( entryObject.get( "data" ).getAsString() );
             break;
         default:
-            throw new BadReplayItemCastException(
-                                    "Could not cast JSON string to ReplayNode");
+            // TODO: make our own exception
+            throw new ClassCastException( "Could not cast JSON string to ReplayNode" );
         }
         
         return temp;

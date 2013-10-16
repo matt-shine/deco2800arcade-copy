@@ -13,7 +13,7 @@ public class ReplayNodeFactory {
      * Create a replay node from a registered event name.
      * @param eName
      * @param eData An array of data corresponding to registered keys, or use varargs.
-     * @return the ReplayNode that was created.
+     * @return
      * @throws Exception
      */
     public static ReplayNode createReplayNode(String eName, Object... eData)

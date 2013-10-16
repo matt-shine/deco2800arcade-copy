@@ -8,19 +8,7 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public final class PackageUtils {
-	
-	private static final int CHUNK_SIZE = 1024;
-	private static final int UPPER_BYTE = 0xF0;
-	private static final int LOWER_BYTE = 0x0F;
-	private static final int NO_DATA = -1;
-	
-	/**
-	 * Do nothing. This should never be called.
-	 */
-	private PackageUtils() {
-		
-	}
+public class PackageUtils {
 	
 	
 	/**
@@ -35,15 +23,20 @@ public final class PackageUtils {
 		File releaseDir = new File(dirName);
 		
 		// Create the Release directory if it doesn't exist
-		if (!releaseDir.exists() && releaseDir.mkdirs() == false) {
-			return false;
-		} 
+		if (!releaseDir.exists()) {
+			
+			if (releaseDir.mkdirs()) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 		
 		return true;
 	}
 	
 	/** Look up table for hex characters */
-	final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+	final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
 	
 	/**
 	 * Convert a byte array to a string
@@ -56,8 +49,8 @@ public final class PackageUtils {
 	    int j=0;
 	    
 	    for ( final byte b : bytes ) {
-	        hexChars[j * 2] = hexArray[(b & UPPER_BYTE) >> 4];
-	        hexChars[j * 2 + 1] = hexArray[b & LOWER_BYTE];
+	        hexChars[j * 2] = hexArray[(b & 0xF0) >> 4];
+	        hexChars[j * 2 + 1] = hexArray[b & 0x0F];
 	        j++;
 	    }
 	    return new String(hexChars);
@@ -73,7 +66,7 @@ public final class PackageUtils {
 	public static String genMD5(String fileName) {
 		MessageDigest md;
 		InputStream fis;
-		byte[] dataBytes = new byte[CHUNK_SIZE];
+		byte[] dataBytes = new byte[1024];
 		
 		try {
 			md = MessageDigest.getInstance("MD5");
@@ -89,13 +82,7 @@ public final class PackageUtils {
 		DigestInputStream dis = new DigestInputStream(fis, md);
 		
 		try {
-			// Can't use a single line while loop due to Sonar
-			while (true) {
-				if (dis.read(dataBytes) == NO_DATA) {
-					break;
-				}
-			}
-			
+			while (dis.read(dataBytes) != -1);
 			dis.close();
 		} catch (IOException e) {
 			e.printStackTrace();

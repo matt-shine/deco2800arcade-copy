@@ -1,13 +1,9 @@
 package deco2800.arcade.towerdefence;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-
-import deco2800.arcade.towerdefence.pathfinding.Path;
-import deco2800.arcade.towerdefence.pathfinding.Path.Step;
 
 /**
  * The interface for objects that can move to different positions on the grid.
@@ -17,18 +13,16 @@ import deco2800.arcade.towerdefence.pathfinding.Path.Step;
  */
 public abstract class Mobile extends Mortal {
 	// Fields
-	// The GridObject's speed in pixels per second.
-	private float speed;
+	// The GridObject's speed in moves per second.
+	private Vector2 vector = new Vector2();
 	// The GridObject's sprites to animate movement down.
-	private List<Sprite> downMovingSprites;
+	private ArrayList<Sprite> downMovingSprites;
 	// The GridObject's sprites to animate movement left.
-	private List<Sprite> leftMovingSprites;
+	private ArrayList<Sprite> leftMovingSprites;
 	// The GridObject's sprites to animate movement up.
-	private List<Sprite> upMovingSprites;
+	private ArrayList<Sprite> upMovingSprites;
 	// The GridObject's sprites to animate movement right.
-	private List<Sprite> rightMovingSprites;
-	// THe path the object is following
-	private Path path;
+	private ArrayList<Sprite> rightMovingSprites;
 
 	// Constructor
 	public Mobile(int maxHealth, int armour) {
@@ -41,7 +35,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public List<Sprite> downMovingSprites() {
+	public ArrayList<Sprite> downMovingSprites() {
 		return downMovingSprites;
 	}
 
@@ -50,7 +44,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public List<Sprite> leftMovingSprites() {
+	public ArrayList<Sprite> leftMovingSprites() {
 		return leftMovingSprites;
 	}
 
@@ -59,7 +53,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public List<Sprite> upMovingSprites() {
+	public ArrayList<Sprite> upMovingSprites() {
 		return upMovingSprites;
 	}
 
@@ -68,7 +62,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public List<Sprite> rightMovingSprites() {
+	public ArrayList<Sprite> rightMovingSprites() {
 		return rightMovingSprites;
 	}
 
@@ -78,7 +72,7 @@ public abstract class Mobile extends Mortal {
 	 * @return
 	 */
 	public float speed() {
-		return speed;
+		return vector.len();
 	}
 
 	// Setters
@@ -87,7 +81,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param downMovingSprites
 	 */
-	public void downMovingSprites(List<Sprite> downMovingSprites) {
+	public void downMovingSprites(ArrayList<Sprite> downMovingSprites) {
 		this.downMovingSprites = downMovingSprites;
 	}
 
@@ -96,7 +90,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param leftMovingSprites
 	 */
-	public void leftMovingSprites(List<Sprite> leftMovingSprites) {
+	public void leftMovingSprites(ArrayList<Sprite> leftMovingSprites) {
 		this.leftMovingSprites = leftMovingSprites;
 	}
 
@@ -105,7 +99,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param upMovingSprites
 	 */
-	public void rightMovingSprites(List<Sprite> upMovingSprites) {
+	public void rightMovingSprites(ArrayList<Sprite> upMovingSprites) {
 		this.upMovingSprites = upMovingSprites;
 	}
 
@@ -114,78 +108,31 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @param rightMovingSprites
 	 */
-	public void movingSprites(List<Sprite> rightMovingSprites) {
+	public void movingSprites(ArrayList<Sprite> rightMovingSprites) {
 		this.rightMovingSprites = rightMovingSprites;
 	}
 
 	// Methods
 	/**
-	 * Follows the path until the object reached the end. If obstacles are
-	 * encountered, recalculate the path.
-	 */
-	public void followPath() {
-		Step current;
-		// Infinite loop - continue while path is being followed
-		while (true) {
-			for (int i = 0; i < path.getLength(); i++) {
-				current = path.getStep(i);
-				// Make a vector based on the current position and next step
-				// position
-				if (!moving(positionInTiles().sub(current.getX(),
-						current.getY()))) {
-					path = grid.pathfinder.findPath(this,
-							(int) this.positionInTiles().x,
-							(int) this.positionInTiles().y, 50, 50);
-					break;
-				}
-			}
-			// Mobile object has reached the target, what do TODO
-		}
-	}
-
-	/**
-	 * Move the GridObject a number of pixels based on the given vector.
+	 * Move the GridObject one unit in the vector specified.
 	 * 
 	 * @param vector
 	 */
 	public void move(Vector2 vector) {
-		position.add(vector);
+		/**
+		 * TODO implement position modifier based on vector given.
+		 */
 	}
 
 	/**
-	 * Move the GridObject one tile in the specified direction at its speed.
+	 * Move the GridObject some speed calculated units in the direction
+	 * specified over one second.
+	 * 
+	 * TODO implement position modifier based on vector given.
 	 * 
 	 * @param vector
-	 *            A vector of length 1 (or sqrt 2) to indicate the movement
-	 *            direction
 	 */
-	public boolean moving(Vector2 vector) {
-		// Check for block in given direction
-		if (grid.blocked(this, (int) position().add(vector).x, (int) position()
-				.add(vector).y)) {
-			// Grid is blocked return false to indicate a new path should be
-			// found
-			return false;
-		}
-		// Move it from this grid position to the next one
-		grid.moveObject(this, position, position().add(vector));
-
-		// Go into a wait-while loop changing the position 30 times per second
-		int distance = grid.getTileSize();
-		long t0, t1;
-		Vector2 addVector = vector.mul(speed / 33);
-		for (int i = 0; i < distance; i += addVector.len()) {
-			t0 = System.currentTimeMillis();
-			t1 = t0;
-			// Move
-			move(addVector);
-			// Wait 1/30th of a second before moving again
-			while (t1 - t0 < 33) {
-				t1 = System.currentTimeMillis();
-			}
-		}
-		// Moved to the next tile successfully
-		return true;
+	public void moving(Vector2 vector) {
 	}
 
 	/**

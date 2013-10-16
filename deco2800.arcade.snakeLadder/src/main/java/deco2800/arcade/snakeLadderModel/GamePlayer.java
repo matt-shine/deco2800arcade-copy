@@ -18,7 +18,7 @@ public class GamePlayer {
 	private Texture playerTexture;
 	private String playerName;
 	//private int coordinate=-1;
-	private int positionIndex=0;
+	private int coordinate=0;
 	//private int[] scores = new dint[2];
 	private int score;
 	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the playerTexture
@@ -28,7 +28,6 @@ public class GamePlayer {
 	public GamePlayer()
 	{
 	}
-	
 	/**
 	 * Basic constructor for playerTexture. Set position and dimensions to the default
 	 */
@@ -66,7 +65,9 @@ public class GamePlayer {
 		getBounds().x = newPosition.x;
 		getBounds().y = newPosition.y;
 	}
-		
+	
+
+	
 	/**
 	 * Move the playerTexture according to its current velocity over the given time period.
 	 * @param time the time elapsed in seconds
@@ -79,10 +80,9 @@ public class GamePlayer {
 //      setCoordinate(diceNumber);
 	}
 	
-	/**
-	 * If playerTexture reacher left/right edge, it moves up one row
-	 */
+	
 	public void moveUp() {
+		//if playerTexture reacher left/right edge, it moves up one row
 		getVelocity().x *= -1;
 		getBounds().y = getBounds().y + 60f;		
 	}
@@ -95,6 +95,8 @@ public class GamePlayer {
 		getVelocity().y = 0;
 	}
 	
+	
+    
     /**
      * Render the playerTexture.
      * @param 
@@ -104,39 +106,45 @@ public class GamePlayer {
     	batch.draw(this.getPlayerTexture(),getBounds().x,getBounds().y);   	
     }
     
-    public void initializeVelocity() {  	
+    public void initializeVelocity() {
+    	
+//    	if(getBounds().y==0 || getBounds().y==120 || getBounds().y==240 || getBounds().y==360 || getBounds().y==480){
+//			velocity.x = 60;
+//		}
+//		else if(getBounds().y==60 || getBounds().y==180 || getBounds().y==300 || getBounds().y==420 || getBounds().y==540)
+//		{
+//			velocity.x = -60;
+//		}
+    	
 		// if it is even row
 		if (getBounds().y % 120 == 0)
 		{
-			// the vector of x-velocity goes to right direction 
 			getVelocity().x = 60;
 		}
 		// if it is odd row
 		else 
 		{
-			// the vector of x-velocity goes to left direction
 			getVelocity().x = -60;
 		}
 	}
     
    public int getDnumber(int diceNumber){
-//    	positionIndex+=diceNumber;
-	    positionIndex = 59;
-    	if(positionIndex>=100)
+    	coordinate+=diceNumber;
+    	if(coordinate>=100)
     	{
-    		positionIndex=100;
+    		coordinate=100;
     	}
-    	return positionIndex;
+    	return coordinate;
     }
    
    public int newposition()
    {
-	   return positionIndex;
+	   return coordinate;
    }
    public int setNewPosition(int newpoint)
    {
-	   positionIndex=newpoint;
-	   return positionIndex;
+	   coordinate=newpoint;
+	   return coordinate;
    }
    /*
    public void score(int winner){

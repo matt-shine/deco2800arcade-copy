@@ -21,7 +21,6 @@ public class Ball {
 	public static float MAX_X_VELOCITY = 800f;
 	private float multiplier = 1;
 	
-	
 	// velocity of the ball
 	Vector2 velocity = new Vector2();
 	// Circle representing ball
@@ -119,15 +118,15 @@ public class Ball {
 			cosAngle *= 1.5;
 		}
 		float pX = paddle.getPaddleX();
-		float pWidth = paddle.getPaddleShapeWidth();
+		float pWidth = paddle.getWidth();
 		float bX = ballCirc.x;
 		float newVelocity = 0f;
 		// Handles the ball if it hits the left end of the paddle
-		if (bX < pX + 2*pWidth/9) {
+		if (bX < pX + pWidth/7) {
 			newVelocity = - (Math.abs(getXVelocity()) + 100 + 80
 					* cosAngle);
 		// Handles the ball if it hits between the left end and the middle	
-		} else if (bX >= pX + 2*pWidth/9 && bX < pX + 4*pWidth/9) {
+		} else if (bX >= pX + pWidth/7 && bX < pX + 3*pWidth/7) {
 			if (getXVelocity() < 0) {
 				newVelocity = (getXVelocity() + 40
 					* cosAngle);
@@ -136,11 +135,11 @@ public class Ball {
 						* cosAngle);
 			}
 		// Handles the ball if it hit in the middle of the paddle	
-		} else if (bX >= pX + 4*pWidth/9 && bX < pX + 5*pWidth/9) {
+		} else if (bX >= pX + 3*pWidth/7 && bX < pX + 4*pWidth/7) {
 			newVelocity = (getXVelocity()
 					* Math.abs(cosAngle));
 		// Handles the ball if it hits between the right end and the middle
-		} else if (bX >= pX + 5*pWidth/9 && bX < pX + 7*pWidth/9) {
+		} else if (bX >= pX + 4*pWidth/7 && bX < pX + 6*pWidth/7) {
 			if (getXVelocity() < 0) {
 				newVelocity = (getXVelocity() + 40
 					* cosAngle);
@@ -150,7 +149,7 @@ public class Ball {
 						* cosAngle);
 			}
 		// Handles the ball if it hits the right end of the paddle
-		} else if (bX >= pX + 7*pWidth/9 && bX <= pX + pWidth) {
+		} else if (bX >= pX + 6*pWidth/7 && bX <= pX + pWidth) {
 			newVelocity = 100 + (Math.abs(getXVelocity()) + 80
 					* cosAngle);
 		}
@@ -158,14 +157,12 @@ public class Ball {
 	}
 
 	// Reverse the X direction
-	public void bounceX(int offset) {
-		this.ballCirc.x += offset;
+	public void bounceX() {
 		velocity.x *= -1;
 	}
 
 	// Reverse the Y direction
-	public void bounceY(int offset) {
-		this.ballCirc.y += offset;
+	public void bounceY() {
 		velocity.y *= -1;
 	}
 	
@@ -200,10 +197,8 @@ public class Ball {
 	 * Method for powerup to slow the ball
 	 */
 	public void slowBall () {
-		this.multiplier = 0.7f;
+		this.multiplier = 0.8f;
 		this.velocity.y *= multiplier;
 	}
-	
-	
 
 }

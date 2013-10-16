@@ -11,8 +11,8 @@ public class Buttons {
 	private BitmapFont font;
 	private long xPos;
 	private long yPos;
-	private final int BUTTONWIDTH = 100;
-	private final int BUTTONHEIGHT = 50;
+	private final int WIDTH = 100;
+	private final int spaceAmt = 50;
 	private boolean isDisplayed;
 	private ArrayList<ButtonSingle> buttons =  new ArrayList<ButtonSingle>();
 	
@@ -24,19 +24,11 @@ public class Buttons {
 		font.setScale(2);
 		batch = new SpriteBatch();
 		
-		/*ButtonSingle a = new ButtonSingle(1, 1, "Quit", Color.RED, yPos, xPos, BUTTONWIDTH, BUTTONHEIGHT);
+		ButtonSingle a = new ButtonSingle(1, "Quit", Color.RED, yPos);
 		buttons.add(a);
-		ButtonSingle b = new ButtonSingle(2, 2, "Replay", Color.RED, yPos - BUTTONHEIGHT, xPos, BUTTONWIDTH, BUTTONHEIGHT);
-		buttons.add(b);*/
-	}
-	
-	public void AddButtonsFromList(ArrayList<String> listToAddFrom) {
-		int i = 1;
-		for (String y: listToAddFrom) {
-			ButtonSingle a = new ButtonSingle(i, 1, y, Color.RED, yPos - (BUTTONHEIGHT * (i-1)), xPos, BUTTONWIDTH, BUTTONHEIGHT);
-			buttons.add(a);
-			i++;
-		}
+		System.out.println(a.buttonText);
+		ButtonSingle b = new ButtonSingle(2, "Replay", Color.RED, yPos - spaceAmt);
+		buttons.add(b);
 	}
 	
 	public void display(){
@@ -48,17 +40,11 @@ public class Buttons {
 	}
 	
 	public void setX(long xSet){
-		xPos = xSet - BUTTONWIDTH;
-		for (ButtonSingle x: buttons) {
-			x.setXPos(xPos);
-		}
+		xPos = xSet - WIDTH;
 	}
 	
 	public void setY(long ySet){
 		yPos = ySet;
-		for (ButtonSingle x: buttons) {
-			x.setYPos(yPos - BUTTONHEIGHT * (x.buttonNo - 1) );
-		}
 	}
 
     public void render()
@@ -67,31 +53,58 @@ public class Buttons {
     		batch.begin();
     		for (ButtonSingle x: buttons){
     			font.setColor(x.buttonColor);   			
-    			font.draw(batch, x.buttonText, x.GetXPos(), x.GetYPos() );
+    			font.draw(batch, x.buttonText, xPos, yPos - (spaceAmt * (x.buttonNo-1)) );
     		}
     		batch.end();
+    		//font.setColor(Color.RED);
+    		//font.draw(batch, "Quit", xPos, yPos); //button 1
+    		//System.out.println(xPos);
+    		//System.out.println(yPos);
+    		//System.out.println("Font button 1 ^");
+    		//font.draw(batch, "Replay", xPos, yPos - spaceAmt); //button 2
+    		//System.out.println(xPos);
+    		//System.out.println(yPos - spaceAmt);
+    		//batch.end();
     	}
     }
     
     public void checkHovered(long mouseX1, long mouseY1){
     	double mouseX = mouseX1 * 1.6;
     	double mouseY = mouseY1 * 1.6;
-    	
-    	for (ButtonSingle x: buttons){
-    		x.CheckHovered(mouseX, mouseY);
+    	if ( (mouseX >= xPos) && ( mouseX <= ( xPos + WIDTH)) ) {
+    		for (ButtonSingle x: buttons){
+    			if ( (mouseY >= yPos - (spaceAmt*(x.buttonNo-1))) && (mouseY < (yPos - (spaceAmt*(x.buttonNo-1)) + spaceAmt )) ) {
+    				buttons.get(x.buttonNo-1).buttonColor = Color.YELLOW;
+    			} else {
+    				buttons.get(x.buttonNo-1).buttonColor = Color.RED;
+    			}
+    		}
+    		
+    		
+    		/*if ( (mouseY >= yPos) && (mouseY < yPos + spaceAmt) ){
+    			buttons.get(0).buttonColor = Color.YELLOW;
+    		} else {
+    			buttons.get(0).buttonColor = Color.RED;
+    		}
+    		
+    		if ( (mouseY >= yPos - spaceAmt) && (mouseY < yPos) ){
+    			buttons.get(1).buttonColor = Color.YELLOW;
+    		} else {
+    			buttons.get(1).buttonColor = Color.RED;
+    		}*/
     	}
     }
     
     public int checkButtonsPressed(long mouseX1, long mouseY1){
     	double mouseX = mouseX1 * 1.6;
     	double mouseY = mouseY1 * 1.6;
-    	
-    	for (ButtonSingle x: buttons) {
-    		if (x.CheckPressed(mouseX, mouseY)) {
-    			return x.buttonNo;
+    	if ( (mouseX >= xPos) && ( mouseX <= ( xPos + WIDTH)) ) {
+    		if ( (mouseY >= yPos) && (mouseY < yPos + spaceAmt) ){
+    			return 1;
+    		} else if ( (mouseY >= yPos - spaceAmt) && (mouseY < yPos) ){
+    			return 2;
     		}
     	}
-    	
     	return 0;
     }	
 }

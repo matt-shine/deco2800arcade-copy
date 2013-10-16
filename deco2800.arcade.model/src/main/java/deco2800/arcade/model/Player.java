@@ -370,7 +370,7 @@ public class Player extends User {
 	 */
 	public void addFriend(User friend) {
 		if (friend != null /* && this.hasInvite(friend) */) {
-			this.friends.add(new User(friend.getID()));
+			this.friends.add(friend);
 			setChanged();
 			notifyObservers(friends);
 			clearChanged();
@@ -424,7 +424,7 @@ public class Player extends User {
 	 */
 	public void addInvite(User player) {
 		if (player != null) {
-			this.friendInvites.add(new User(player.getID()));
+			this.friendInvites.add(player);
 			setChanged();
 			notifyObservers(friendInvites);
 			clearChanged();
@@ -477,7 +477,7 @@ public class Player extends User {
 	 */
 	public void blockPlayer(User player) {
 		if (player != null) {
-			this.blocked.add(new User(player.getID()));
+			this.blocked.add(player);
 			setChanged();
 			notifyObservers(blocked);
 			clearChanged();

@@ -36,7 +36,7 @@ public class InProgressState extends GameState {
 		
 		if (context.getBrickNum() == 0) {
 			context.setLevel(context.getLevel() + 1);
-			if (context.getLevel() > 10) {
+			if (context.getLevel() > 9) {
 				context.win();
 			} else {
 				context.dispose();
@@ -81,8 +81,7 @@ public class InProgressState extends GameState {
 				&& context.getPowerupBall().getYVelocity() < 0) {
 			context.getPowerupBall().updateVelocity(context.getLastHitX(), context.getLastHitY(), context.getPaddle());
 			context.bump.play();
-			context.incrementBumpCount();
-			context.getPowerupBall().bounceY(0);
+			context.getPowerupBall().bounceY();
 
 		}
 
@@ -90,22 +89,18 @@ public class InProgressState extends GameState {
 			System.out.println("balls y: " + context.getPowerupBall().ballCirc.y);
 			context.setLastHitX(context.getPowerupBall().getX());
 			context.setLastHitY(context.getPowerupBall().getY());
-			context.getPowerupBall().bounceY(-5);
+			context.getPowerupBall().bounceY();
 		}
 
-		if (context.getPowerupBall().ballCirc.x - context.getPowerupBall().getRadius() <= 0) {
+		if (context.getPowerupBall().ballCirc.x - context.getPowerupBall().getRadius() <= 0
+				|| context.getPowerupBall().ballCirc.x + context.getPowerupBall().getRadius() > context.SCREENWIDTH) {
 			context.setLastHitX(context.getPowerupBall().getX());
 			context.setLastHitY(context.getPowerupBall().getY());
-			context.getPowerupBall().bounceX(5);
-		}
-		
-		if (context.getPowerupBall().ballCirc.x + context.getPowerupBall().getRadius() > context.SCREENWIDTH) {
-			context.setLastHitX(context.getPowerupBall().getX());
-			context.setLastHitY(context.getPowerupBall().getY());
-			context.getPowerupBall().bounceX(-5);
+			context.getPowerupBall().bounceX();
 		}
 
 		if (context.getPowerupBall().ballCirc.y <= 0) {
+			context.setNumBalls(context.getNumBalls() - 1);
 			context.destroyPowerupBall();
 			if (context.getNumBalls() <= 0) {
 				context.roundOver();
@@ -156,8 +151,7 @@ public class InProgressState extends GameState {
 				&& context.getBall().getYVelocity() < 0) {
 			context.getBall().updateVelocity(context.getLastHitX(), context.getLastHitY(), context.getPaddle());
 			context.bump.play();
-			context.incrementBumpCount();
-			context.getBall().bounceY(0);
+			context.getBall().bounceY();
 
 		}
 
@@ -165,21 +159,14 @@ public class InProgressState extends GameState {
 			System.out.println("balls y: " + context.getBall().ballCirc.y);
 			context.setLastHitX(context.getBall().getX());
 			context.setLastHitY(context.getBall().getY());
-			context.getBall().bounceY(-5);
+			context.getBall().bounceY();
 		}
 
-		// check normal wall against left wall
-		if (context.getBall().ballCirc.x - context.getBall().getRadius() <= 0) {
+		if (context.getBall().ballCirc.x - context.getBall().getRadius() <= 0
+				|| context.getBall().ballCirc.x + context.getBall().getRadius() > context.SCREENWIDTH) {
 			context.setLastHitX(context.getBall().getX());
 			context.setLastHitY(context.getBall().getY());
-			context.getBall().bounceX(5);
-		}
-		
-		// Check normal ball against right wall
-		if (context.getBall().ballCirc.x + context.getBall().getRadius() > context.SCREENWIDTH) {
-			context.setLastHitX(context.getBall().getX());
-			context.setLastHitY(context.getBall().getY());
-			context.getBall().bounceX(-5);
+			context.getBall().bounceX();
 		}
 
 		if (context.getBall().ballCirc.y <= 0) {

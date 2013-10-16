@@ -77,6 +77,11 @@ public class GameScreen implements Screen  {
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 
+	// Game States
+//	private enum GameState {
+//		READY, INPROGRESS, GAMEOVER;
+//	}
+
 	private GameState gameState;
 	private Level levelSystem;
 
@@ -98,17 +103,15 @@ public class GameScreen implements Screen  {
 	// Power up manager and details
 	private boolean powerupsOn = false;
 	private PowerupManager powerupManager;
-	private int slowBallsActivated = 0;
-	
 	
 	GameScreen(final Breakout game) {
 		this.levelSystem = new Level();
-		resetScore();
+		setScore();
 		setLives(3);
 		this.game = game;
 		this.player = game.playerName();
 		this.powerupManager = new PowerupManager(this);
-		//gamearea();
+		gamearea();
 	}
 	
 	public void gamearea() {
@@ -132,27 +135,17 @@ public class GameScreen implements Screen  {
 		// setting the ball and paddle
 		setPaddle(new LocalPlayer(new Vector2(SCREENWIDTH / 2, 10)));
 		setBall(new Ball());
-		getBall().setColor(1f, 1f, 1f, 0.5f);
+		getBall().setColor(0.7f, 0.7f, 0.7f, 0.5f);
 		
-		if (getLevel() == 4) {
-			game.incrementAchievement("breakout.basic");
-			achieve.play();
-			gameState = new GameOverState();
-		}
 		
-		if (getLevel() == 7) {
-			game.incrementAchievement("breakout.intermediate");
-			achieve.play();
-			gameState = new GameOverState();
-		}
 
-		if (getLevel() == 10) {
+		if (level > 10) {
 			game.incrementAchievement("breakout.pro");
 			achieve.play();
 			gameState = new GameOverState();
 		}
 		try {
-			bricks = levelSystem.readFile("levels/level" + getLevel() + ".txt",
+			bricks = levelSystem.readFile("levels/level" + level + ".txt",
 				bricks, this);
 			setBrickNum(bricks.length);
 		} catch (Exception e) {
@@ -194,14 +187,13 @@ public class GameScreen implements Screen  {
 	}
 	
 	private void powerupCheck(Brick b) {
-		if (!isPowerupOn()) {
+		if (isPowerupOn()) {
 			return;
 		}
-		if (Math.random() < 0.4) {
+		if (Math.random() < 0.2) {
 			Rectangle r = b.getShape();
 			getPowerupManager().handlePowerup(r.x + r.width/2, r.y);
 		}
-		
 	}
 	
 	/*
@@ -212,12 +204,12 @@ public class GameScreen implements Screen  {
 		if (pBall) {
 			if (powerupBall != null) {
 				if (bounce == 0) {
-					getPowerupBall().bounceX(0);
+					getPowerupBall().bounceX();
 				} else if (bounce == 1) {
-					getPowerupBall().bounceY(0);
+					getPowerupBall().bounceY();
 				} else {
-					getPowerupBall().bounceX(0);
-					getPowerupBall().bounceY(0);
+					getPowerupBall().bounceX();
+					getPowerupBall().bounceY();
 				}
 				setLastHitX(getPowerupBall().getX());
 				setLastHitY(getPowerupBall().getY());
@@ -225,12 +217,12 @@ public class GameScreen implements Screen  {
 		} else {
 			if (ball != null) {
 				if (bounce == 0) {
-					getBall().bounceX(0);
+					getBall().bounceX();
 				} else if (bounce == 1) {
-					getBall().bounceY(0);
+					getBall().bounceY();
 				} else {
-					getBall().bounceX(0);
-					getBall().bounceY(0);
+					getBall().bounceX();
+					getBall().bounceY();
 				}
 				
 				setLastHitX(getBall().getX());
@@ -392,7 +384,6 @@ public class GameScreen implements Screen  {
 			}
 			getBall().reset(new Vector2(getPaddle().getPaddleX(), getPaddle().getPaddleY()));
 			setNumBalls(1);
-			slowBallsActivated = 0;
 			destroyPowerupBall();
 			decrementLives(1);
 			decrementScore(5);
@@ -423,7 +414,8 @@ public class GameScreen implements Screen  {
 		music.dispose();
 		bump.dispose();
 		achieve.dispose();
-		powerupManager.dispose();
+		
+		// TODO Auto-generated method stub
 		
 	}
 
@@ -545,13 +537,6 @@ public class GameScreen implements Screen  {
 			setNumBalls(2);
 			this.powerupBall.randomizeVelocity();
 			this.powerupBall.setColor(0.7f, 0.7f, 0.7f, 0.5f);
-		} else {
-			this.ball = new Ball();
-			System.out.println("Runs");
-			this.ball.reset(position);
-			setNumBalls(2);
-			this.ball.randomizeVelocity();
-			this.ball.setColor(0.7f, 0.7f, 0.7f, 0.5f);
 		}
 		
 	}
@@ -639,7 +624,6 @@ public class GameScreen implements Screen  {
 	
 	public void destroyPowerupBall() {
 		if (powerupBall != null) {
-			setNumBalls(getNumBalls() - 1);
 			powerupBall = null;
 		}
 	}
@@ -670,9 +654,10 @@ public class GameScreen implements Screen  {
 		return score;
 	}
 	
-	public void resetScore(){
+	public void setScore(){
 		this.score = 0;
 	}
+	
 	
 	public void incrementScore(int value){
 		this.score = this.score + value;
@@ -685,7 +670,7 @@ public class GameScreen implements Screen  {
 	public void setHighScore(int score){
 		if (score > 0){
 			this.highScore = score;
-			game.highscoreUser.storeScore("Number", score);
+			game.highscoreUser.storeScore("Score", getHighScore());
 		} else {
 			this.highScore = 0;
 		}
@@ -703,27 +688,4 @@ public class GameScreen implements Screen  {
 		music.stop();
 	}
 	
-	public void incrementNumSlowBallsActivated() {
-		slowBallsActivated++;
-	}
-	
-	public int getNumSlowBallsActivated() {
-		return slowBallsActivated;
-	}
-	
-	public void incrementBumpCount(){
-		bumpCount++;
-	}
-	
-	public int getBumpCount(){
-		return bumpCount;
-	}
-	
-	public void incrementBrickBreak(){
-		brickBreak++;
-	}
-	
-	public int getBrickBreak() {
-		return brickBreak;
-	}
 }

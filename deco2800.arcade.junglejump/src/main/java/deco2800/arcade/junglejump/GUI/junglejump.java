@@ -1,5 +1,4 @@
 package deco2800.arcade.junglejump.GUI;
-import java.net.URL;
 
 
 import java.io.File;
@@ -68,10 +67,6 @@ public class junglejump extends GameClient implements InputProcessor {
 	public float QUIT = (float) (242 - 37.5 * 5);
 	
 	public int BANANAS_FOUND = 0;
-	
-	URL path = this.getClass().getResource("/");
-	String resource = path.toString().replace(".arcade/build/classes/main/",
-			".arcade.junglejump/src/main/").replace("file:", "") + "resources/";
 
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS
@@ -159,10 +154,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyX = monkeyDefaultX;
 		monkeyY = monkeyDefaultY;
 		monkeyYoriginal = 0f;
-		System.out.println(resource);
 		// Replace "file" with chosen music
 		try {
-			File file = new File(resource + "soundtrack.wav");
+			File file = new File("/soundtrack.wav");
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -203,23 +197,23 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void create() {
 		super.create();
 		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture((resource + "mainscreen.png"));
-		monkeySit = new Texture(("monkeySit.png"));
-		monkeySitRIGHT = new Texture(("monkeySit.png"));
-		monkeySitLEFT = new Texture(("monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(("monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(("monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(("monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(("monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(("monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(("monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("gameBackground2.png"));
-		levelText = new Texture(("level.png"));
-		hyphenText = new Texture(("-.png"));
-		livesText = new Texture(("lives.png"));
-		worldNumText = new Texture(("1.png"));
-		livesNumText = new Texture(("3.png"));
-		levelNumText = new Texture(("1.png"));
+		texture = new Texture(Gdx.files.internal("mainscreen.png"));
+		monkeySit = new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitRIGHT = new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitLEFT = new Texture(Gdx.files.internal("monkeySitLEFT.png"));
+		monkeyRun1 = new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1RIGHT = new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1LEFT = new Texture(Gdx.files.internal("monkeyRun1LEFT.png"));
+		monkeyRun2 = new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2RIGHT = new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2LEFT = new Texture(Gdx.files.internal("monkeyRun2LEFT.png"));
+		gameBackground = new Texture(Gdx.files.internal("gameBackground2.png"));
+		levelText = new Texture(Gdx.files.internal("level.png"));
+		hyphenText = new Texture(Gdx.files.internal("-.png"));
+		livesText = new Texture(Gdx.files.internal("lives.png"));
+		worldNumText = new Texture(Gdx.files.internal("1.png"));
+		livesNumText = new Texture(Gdx.files.internal("3.png"));
+		levelNumText = new Texture(Gdx.files.internal("1.png"));
 		//platform = new Texture("platform.png");
 
 		/* ACHIEVEMENT STUFF */
@@ -242,7 +236,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementNameFont        = new BitmapFont(false);
 		achievementDescriptionFont = new BitmapFont(false);
 		achievementThresholdFont   = new BitmapFont(false);
-		achievementIconTexture     = new Texture(("monkeySit.png"));
+		achievementIconTexture     = new Texture(Gdx.files.internal("monkeySit.png"));
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();

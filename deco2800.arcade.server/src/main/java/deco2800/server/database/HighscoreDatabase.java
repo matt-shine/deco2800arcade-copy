@@ -20,8 +20,10 @@ public class HighscoreDatabase {
 	//Database Setup Methods
 	//======================
 	
-	/** 
-	 * Create the highscore database if it does not exist 
+	/**
+	 * Creates a new highscore database if one does not already exist.
+	 * 
+	 * @throws DatabaseException If the database can't be initialised.
 	 */
 	public void initialise() throws DatabaseException{
 		// Get a connection to the database
@@ -32,7 +34,6 @@ public class HighscoreDatabase {
 			
 			//Create high scores base table
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "PLAYER_HIGHSCORES", null);
-			
 			
 			if (!tableData.next()) {
 				statement.execute("CREATE TABLE PLAYER_HIGHSCORES(HID INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)," + 
@@ -52,9 +53,9 @@ public class HighscoreDatabase {
 			}
 			
 		} catch (SQLException e) {
-			//e.printStackTrace();
 			throw new DatabaseException("Unable to create highscores tables\n", e);
 		}
+		
 		initialised = true;
 	}
 	
@@ -109,9 +110,7 @@ public class HighscoreDatabase {
 		int topCount = 0;
 		String order;
 		
-		if (!initialised) {
-			initialise();
-		}
+		if (!initialised) initialise();
 		
 		if (highestIsBest){
 			order = "DESC";
@@ -150,20 +149,17 @@ public class HighscoreDatabase {
 	 * requestID: 2
 	 * 
 	 * Displays a string representation of the users score for the specified game and type of score
+	 * 
 	 * @param User_ID - users id to query against
 	 * @param Game_ID - game id to query against
 	 * @param type - type of score that needs to be retrieved
 	 * @throws DatabaseException 
 	 */
 	public List<String> getUserHighScore(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
-		System.out.println("get User high score request..");
-		
 		List<String> data = new ArrayList<String>();
 		String order;
 		
-		if (!initialised) {
-			initialise();
-		}
+		if (!initialised) initialise();
 		
 		if(highestIsBest){
 			order = "DESC";
@@ -339,6 +335,17 @@ public class HighscoreDatabase {
 	//Adding Score Methods
 	//======================
 	
+	/**
+	 * Inserts a new score entity into the database.
+	 * 
+	 * @param Game_ID The game that the score is being stored for
+	 * @param Username The user that the score is being stored for
+	 * 
+	 * @return The id of the new score entity that has been entered.
+	 * 
+	 * @throws DatabaseException If the insert query fails
+	 * @throws SQLException
+	 */
 	private int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
 		int hid = 0;
 		Connection connection = null;
@@ -354,17 +361,13 @@ public class HighscoreDatabase {
 			// Get a connection to the database
 			connection = Database.getConnection();
 			statement = connection.createStatement();
-			
 			statement.execute(insertTableSQL, Statement.RETURN_GENERATED_KEYS);
-			
 			resultSet = statement.getGeneratedKeys();
-	        while(resultSet.next()){
+			
+	        while (resultSet.next()){
 	        	hid = resultSet.getInt(1);
 	        }
-			
-	        
-
-		} catch 	(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to add highscore information to database", e);
@@ -376,24 +379,25 @@ public class HighscoreDatabase {
 		return hid;
 	}
 	
-	/** Used for games 
+	/** Inserts a set of non-null score, type pairs into the database,
+	 * linking them to user and game.
 	 * 
-	 * @param Game_ID
-	 * @param User_ID
-	 * @param type
-	 * @param score - the players score to store in the database
-	 * @throws DatabaseException 
+	 * @param game_ID The ID of the game that the scores are being stored for
+	 * @param username The user that the scores are being stored for
+	 * @param types The types of all of the scores that are being stored
+	 * @param score The score that is being stored for the type
+	 * 
+	 * @throws DatabaseException If the insert query fails.
 	 * @throws SQLException 
 	 */
-	public void updateScore(String Game_ID, String username, LinkedList<Integer> scores, LinkedList<String> types) throws DatabaseException, SQLException{
-		int hid = addHighscore(Game_ID, username);
+	public void updateScore(String game_ID, String username, LinkedList<Integer> scores, LinkedList<String> types) throws DatabaseException, SQLException{
+		int hid = addHighscore(game_ID, username);
 		System.out.println("new HighScore ID = " + hid);
-		if (!initialised) {
-			initialise();
-		}
+		
+		if (!initialised) initialise();
 		
 		for(int i = 0; i < scores.size(); i++){
-			System.out.println("Score to be added > game: " + Game_ID + ", player: " + username + ", type: " + types.get(i) + ", score: " + scores.get(i));
+			System.out.println("Score to be added > game: " + game_ID + ", player: " + username + ", type: " + types.get(i) + ", score: " + scores.get(i));
 			
 			//Get a connection to the database
 			Connection connection = Database.getConnection();
@@ -468,23 +472,4 @@ public class HighscoreDatabase {
 			//Silently fail, no need to worry
 		}
 	}
-	
-	/**** 
-	public void main() throws DatabaseException {
-		 
-		try {
- 
-			updateScore("Pong", "Haydn", "Win", 66);
-			System.out.println("Highscore: " + getUserHighScore("Haydn", "Pong", "Win"));
- 
-		} catch (SQLException e) {
- 
-			
- 
-		}
- 
-	}
-	**/
-	
-	
 }

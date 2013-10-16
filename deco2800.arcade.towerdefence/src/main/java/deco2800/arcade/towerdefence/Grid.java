@@ -54,7 +54,14 @@ public class Grid implements TileBasedMap {
 		this.ship = ship;
 		gridWidth = width / tileSize;
 		gridDepth = depth / tileSize;
-		gridContents = new ArrayList<List<List<GridObject>>>();
+		gridContents = new ArrayList<List<List<GridObject>>>(gridWidth);
+		//initialize the contents of GridContents
+		for (int i = 0; i < gridWidth; i++){
+			gridContents.add(new ArrayList<List<GridObject>>());
+			for (int j = 0; j < gridDepth; j++){
+				gridContents.get(i).add(new ArrayList<GridObject>());
+			}
+		}
 	}
 
 	// Getters

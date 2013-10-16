@@ -34,6 +34,7 @@ public class MenuScreen extends JFrame{
 	private JLabel t = new JLabel();
 	private JButton instructionBtn = new JButton();
 	private JButton newGameBtn = new JButton();
+	private JButton highScoreBtn = new JButton();
 	private JFrame s = this;
 	private JButton backBtn = new JButton();
 

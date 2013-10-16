@@ -68,7 +68,7 @@ public class MultiGamelist implements Screen {
 	ArrayList<ActiveMatchDetails> matches;
 	
 	public MultiGamelist(ArcadeUI ui) {
-		this.arcadeUI = ui;
+		arcadeUI = ui;
 	}
     
     public MultiGamelist() {
@@ -886,8 +886,7 @@ public class MultiGamelist implements Screen {
 		    	//bclicked = true;
 		    	dispose();
 		    	ArcadeSystem.goToGame("Pong");
-		    	pause();
-		    	
+		    	arcadeUI.setScreen(arcadeUI.getWait());
 		    	System.out.println("paused");
 		    }
 		})); 

@@ -2,13 +2,13 @@ package deco2800.arcade.wl6.enemy;
 
 import deco2800.arcade.wl6.Mob;
 
-import java.util.Random;
-
 public class Enemy extends Mob {
 
-    // Six possible states
-    // An enemy starts in either Stand or Path states.  Enters chase state when player is spotted.
-    // Once enemy has left stand or path states, it cannot reenter them.
+    /**
+     * Six possible states
+     * An enemy starts in either Stand or Path states.  Enters chase state when player is spotted or gunfire is heard.
+     * Once enemy has left the stand or path states, it cannot reenter them.
+     */
     public enum STATES {
         NO_STATE,   // No state, error
         STAND,      // Idle state 1, motionless
@@ -21,10 +21,6 @@ public class Enemy extends Mob {
 
     // current state
     public STATES state = STATES.NO_STATE;
-    // maximum health
-    public int maxHealth;
-    // current health
-    public int health;
     // speed while pathing
     public int pathSpeed;
     // speed while chasing
@@ -40,16 +36,19 @@ public class Enemy extends Mob {
     public int HITSCAN = 0;
     public int PROJECTILE = 1;
     public int dType;
-    // random variable
-    Random rand;
+
 
     public Enemy(int uid) {
         super(uid);
-        rand = new Random();
     }
 
-    // change states
-    // delay is the time between animations (e.g. an officer transitions between chasing and attacking a lot faster then a guard)
+    /**
+     * Tells the enemy to change states
+     * @param oldState state the enemy is currently in
+     * @param newState state to change the enemy to
+     * @param delay time taken to change states
+     *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
+     */
     public void changeStates(STATES oldState, STATES newState, int delay) {
 
     }
@@ -87,11 +86,11 @@ public class Enemy extends Mob {
      */
     public int calcDamage(int dist, boolean speed, boolean look) {
         boolean hit = false;
-        if (randInt(0, 255, this.rand) < ((speed ? 160 : 256) - (dist * (look ? 16 : 8)))) {
+        if (randInt(0, 255, rand) < ((speed ? 160 : 256) - (dist * (look ? 16 : 8)))) {
             hit = true;
         }
 
-        damage = randInt(0, 255, this.rand);
+        damage = randInt(0, 255, rand);
 
         if (hit) {
             if (dist < 2) {
@@ -112,21 +111,6 @@ public class Enemy extends Mob {
         }
 
         return damage;
-    }
-
-    /**
-     * Returns a psuedo-random number between min and max, inclusive.
-     * The difference between min and max can be at most
-     * <code>Integer.MAX_VALUE - 1</code>.
-     *
-     * @param min Minimum value.
-     * @param max Maximum value.  Must be greater than min.
-     * @param rand Random value.
-     * @return Integer between min and max, inclusive.
-     * @see java.util.Random#nextInt(int)
-     */
-    public static int randInt(int min, int max, Random rand) {
-        return rand.nextInt((max - min) + 1) + min;
     }
 }
 

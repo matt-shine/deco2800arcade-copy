@@ -40,8 +40,10 @@ public class IngameUI extends Stage {
     	int ammo = game.getPlayer().getAmmo();
     	int gun = game.getPlayer().getCurrentGun();
     	int points = game.getPlayer().getPoints();
+    	String level = game.getLevel();
+    	int dif = game.getDifficulty();
     	
-    	text.setText("Health: " + health + " Ammo: " + ammo + " Gun: " + gun + " Points: " + points);
+    	text.setText("Health: " + health + " Ammo: " + ammo + " Gun: " + gun + " Points: " + points + " Level: " + level + " Difficulty: " + dif);
     	
     }
 

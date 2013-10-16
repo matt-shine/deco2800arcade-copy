@@ -27,8 +27,9 @@ final class MenuScreen implements Screen {
 
 	/**
 	 * This constructor associate MenuScreen with MixMaze.
-	 *
-	 * @param game	the MixMaze game
+	 * 
+	 * @param game
+	 *            the MixMaze game
 	 */
 	MenuScreen(final MixMaze game) {
 		Table rootTable = new Table();
@@ -50,7 +51,7 @@ final class MenuScreen implements Screen {
 		rootTable.add(settingsButton);
 
 		settingsButton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 				game.setScreen(game.settingsScreen);
 			}
 		});
@@ -60,15 +61,15 @@ final class MenuScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		if (localButton.isChecked()) {
-			localButton.toggle();	// set back to unchecked
+			localButton.toggle(); // set back to unchecked
 			logger.debug("switching to single screen");
 			game.setScreen(game.localScreen);
 		} else if (hostButton.isChecked()) {
-			hostButton.toggle();	// set back to unchecked
+			hostButton.toggle(); // set back to unchecked
 			logger.debug("switching to host screen");
 			game.setScreen(game.hostScreen);
 		} else if (clientButton.isChecked()) {
-			clientButton.toggle();	// set back to unchecked
+			clientButton.toggle(); // set back to unchecked
 			logger.debug("switching to client screen");
 			game.setScreen(game.clientScreen);
 		}

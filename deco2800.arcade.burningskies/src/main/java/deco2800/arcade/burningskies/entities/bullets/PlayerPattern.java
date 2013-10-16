@@ -16,7 +16,6 @@ public class PlayerPattern extends BulletPattern {
 		new Texture(Gdx.files.internal("images/bullets/energy_ball_2.png"))
 	};
 	private int upgrade = 0;
-	private static final int equalizer = 1;
 	
 	public PlayerPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
@@ -54,17 +53,5 @@ public class PlayerPattern extends BulletPattern {
 		if(upgrade > 5) {
 			upgrade = 5;
 		}
-	}
-	
-	public int getEquals() {
-		return equalizer;
-	}
-	
-	public boolean equals(Object o) {
-		if (!(o instanceof PlayerPattern)) {
-			return false;
-		}
-		PlayerPattern f = (PlayerPattern) o;
-		return equalizer == f.getEquals();
 	}
 }

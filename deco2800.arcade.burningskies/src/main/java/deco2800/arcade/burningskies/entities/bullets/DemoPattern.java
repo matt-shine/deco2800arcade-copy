@@ -16,8 +16,6 @@ public class DemoPattern extends BulletPattern {
 	private static Texture image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
 	private static Texture image2 = new Texture(Gdx.files.internal("images/bullets/energy_ball_2.png"));
 	
-	private static final int equalizer = 2;
-	
 	public DemoPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
 		interval = (float) 0.01;
@@ -31,17 +29,5 @@ public class DemoPattern extends BulletPattern {
 		bullet.act(lag);
 		bullet2.act(lag);
 		angle = (angle+5);
-	}
-	
-	public int getEquals() {
-		return equalizer;
-	}
-	
-	public boolean equals(Object o) {
-		if (!(o instanceof DemoPattern)) {
-			return false;
-		}
-		DemoPattern f = (DemoPattern) o;
-		return equalizer == f.getEquals();
 	}
 }

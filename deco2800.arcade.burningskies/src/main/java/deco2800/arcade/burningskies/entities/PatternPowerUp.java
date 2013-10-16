@@ -12,9 +12,6 @@ import deco2800.arcade.burningskies.entities.bullets.BombPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
 public class PatternPowerUp extends PowerUp {
-
-	private ArrayList<BulletPattern> patterns = new ArrayList<BulletPattern>();
-	private static final int equalizer = 2;
 	
 	static final Texture texture = new Texture(Gdx.files.internal("images/items/slow_down.png"));
 	private PlayScreen screen;
@@ -31,28 +28,16 @@ public class PatternPowerUp extends PowerUp {
 
 	private BulletPattern randomPattern(PlayerShip player) {
 		BulletPattern currentPattern = player.getPattern();
-		if (currentPattern == null) currentPattern = new PlayerPattern(player, screen);
+		ArrayList<BulletPattern> patterns = new ArrayList<BulletPattern>();
 		patterns.add(new DemoPattern(player, screen));
 		patterns.add(new PlayerPattern(player, screen));
 		patterns.add(new BombPattern(player, screen));
-		for (int i=0; i<2; i++) {
-			if (currentPattern.equals(patterns.get(i))) {
+		for (int i=0; i<patterns.size(); i++) {
+			if (patterns.get(i).getClass() == currentPattern.getClass()) {
 				patterns.remove(i);
 				break;
 			}
 		}
-		return patterns.get((int)Math.round(Math.random()));
-	}
-	
-	public int getEquals() {
-		return equalizer;
-	}
-	
-	public boolean equals(Object o) {
-		if (!(o instanceof DemoPattern)) {
-			return false;
-		}
-		DemoPattern f = (DemoPattern) o;
-		return equalizer == f.getEquals();
+		return patterns.get((int)(Math.random() * (patterns.size() + 1)));
 	}
 }

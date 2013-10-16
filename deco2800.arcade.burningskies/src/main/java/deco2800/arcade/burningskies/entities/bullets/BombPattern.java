@@ -13,8 +13,6 @@ public class BombPattern extends BulletPattern {
 	
 	private static Texture image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
 	private static Texture image2 = new Texture(Gdx.files.internal("images/bullets/energy_ball_2.png"));
-
-	private static final int equalizer = 3;
 	
 	public BombPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
@@ -33,18 +31,5 @@ public class BombPattern extends BulletPattern {
 			screen.addBullet(bullet);
 			//bullet.act(lag);
 		}
-	}
-	
-	public int getEquals() {
-		return equalizer;
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof BombPattern)) {
-			return false;
-		}
-		BombPattern f = (BombPattern) o;
-		return equalizer == f.getEquals();
 	}
 }

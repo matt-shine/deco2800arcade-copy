@@ -24,7 +24,7 @@ public class MiniGolf extends GameClient {
 	public MiniGolf(Player player, NetworkClient network){
 		super(player, network); 
 		this.playerName = player.getUsername();
-		this.incrementAchievement("minigolf.360");
+		
 	}
 	
 	
@@ -98,6 +98,7 @@ public class MiniGolf extends GameClient {
 	 */
 	public void render() {
 		 super.render();
+		 incrementAchievement("minigolf.360");
 
 	}
 

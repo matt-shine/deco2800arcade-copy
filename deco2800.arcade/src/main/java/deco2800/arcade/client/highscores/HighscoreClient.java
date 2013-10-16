@@ -264,6 +264,16 @@ public class HighscoreClient {
 		return null;
 	}
 	
+	/**
+	 * requestID: 4. This function is user DEPENDENT.
+	 * 
+	 * Gets the count of wins and losses for the current user and game. If
+	 * only one of these values is required, the getWin() and getLoss()
+	 * methods can be used.
+	 * 
+	 * @return A list of Highscore objects 
+	 */
+
 	public List<Highscore> getWinLoss() {
 		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 4;
@@ -277,14 +287,69 @@ public class HighscoreClient {
 		return this.scoreResponseList;
 	}
 	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the total number of wins for the current user and game.
+	 * 
+	 * @return A Highscore object with the score property set to the total
+	 * number of wins for the user.
+	 */
 	public Highscore getWin(){
 		return getWinLoss().get(0);
-		
 	}
 	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the total number of losses for the current user and game.
+	 * 
+	 * @return A Highscore object with the score property set to the total
+	 * number of losses for the user.
+	 */
 	public Highscore getLoss(){
 		return getWinLoss().get(1);
 	}
+	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the win ratio of the current user for the current game.
+	 * 
+	 * @return A number between 0 and 1 (inclusive) indicating the win 
+	 * ratio.
+	 */
+	public float winRatio() {
+		List<Highscore> winLoss = this.getWinLoss();
+		
+		int winCount = winLoss.get(0).score;
+		int lossCount = winLoss.get(1).score;
+		int total = winCount + lossCount;
+		
+		float ratio = winCount / total;
+		
+		return ratio;
+	}
+	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the loss ratio of the current user for the current game.
+	 * 
+	 * @return A number between 0 and 1 (inclusive) indicating the loss 
+	 * ratio.
+	 */
+	public float lossRatio() {
+		List<Highscore> winLoss = this.getWinLoss();
+		
+		int winCount = winLoss.get(0).score;
+		int lossCount = winLoss.get(1).score;
+		int total = winCount + lossCount;
+		
+		float ratio = lossCount / total;
+		
+		return ratio;
+	} 
 	
 	//=============================================================
 	//Adding Score Methods

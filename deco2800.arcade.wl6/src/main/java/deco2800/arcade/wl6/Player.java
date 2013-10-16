@@ -2,6 +2,8 @@ package deco2800.arcade.wl6;
 
 import java.util.HashSet;
 
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+
 public class Player extends Mob {
 
     public static final float SPEED = 3f;
@@ -11,8 +13,9 @@ public class Player extends Mob {
     private int points = 0;
     private int currentGun = 1;
     private HashSet<Integer> guns = new HashSet<Integer>();
-    private int ammo = 10;
-
+    private int ammo = 16;
+    private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
+	
     
 
 
@@ -104,6 +107,15 @@ public class Player extends Mob {
 		
 		this.guns.add(gun);
 		
+	}
+	
+	
+	public void addKey(KEY_TYPE k) {
+		keys.add(k);
+	}
+	
+	public boolean hasKey(KEY_TYPE k) {
+		return keys.contains(k);
 	}
 	
 }

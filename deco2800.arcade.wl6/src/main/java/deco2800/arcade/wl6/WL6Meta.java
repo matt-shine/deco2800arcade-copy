@@ -16,8 +16,10 @@ public class WL6Meta {
     public static final int SPAWN_POINT = 19;
     public static final int DOOR = 90;
     public static final int DOOR_GOLDKEY = 92;
-    public static final int DOOR_SOLVERKEY = 94;
+    public static final int DOOR_SILVERKEY = 94;
     public static final int DOOR_ELEVATOR = 100;
+    public static final int GOLDKEY = 43;
+    public static final int SILVERKEY = 44;
     public static final int SECRET_DOOR = 98;
 
 
@@ -33,7 +35,6 @@ public class WL6Meta {
     }
 
     public static enum KEY_TYPE {
-        NONE,
         GOLD,
         SILVER,
     }
@@ -72,7 +73,7 @@ public class WL6Meta {
         int id = map.getTerrainAt(x, y);
         return id >= WL6Meta.DOOR && id < WL6Meta.DOOR + 2 ||
                 id >= WL6Meta.DOOR_GOLDKEY && id < WL6Meta.DOOR_GOLDKEY + 2 ||
-                id >= WL6Meta.DOOR_SOLVERKEY && id < WL6Meta.DOOR_SOLVERKEY + 2 ||
+                id >= WL6Meta.DOOR_SILVERKEY && id < WL6Meta.DOOR_SILVERKEY + 2 ||
                 id >= WL6Meta.DOOR_ELEVATOR && id < WL6Meta.DOOR_ELEVATOR + 2;
     }
 

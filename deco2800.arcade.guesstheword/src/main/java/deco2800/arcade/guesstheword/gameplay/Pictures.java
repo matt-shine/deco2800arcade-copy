@@ -5,7 +5,9 @@ import java.util.HashMap;
 import com.badlogic.gdx.graphics.Texture;
 /**
  * This is the class that will "add" all the images required for the game. 
- * */
+ * 
+ * @author Xu Duangui
+ * @author Yeo Tze Tian*/
 public class Pictures {
 	
 	/**
@@ -79,8 +81,6 @@ public class Pictures {
 		animalsMap3.put("BULLDOG", bulldog1 );
 		animalsMap3.put("CATFISH", catfish1 );
 		animalsMap3.put("TURKEY", turkey1 );
-				
-//		System.out.println(animalsMap3.keySet());
 
 		
 		//brands textures level 1
@@ -95,7 +95,6 @@ public class Pictures {
 		brandsMap.put("NIKE", nike1);
 		brandsMap.put("SONY", sony1);
 		brandsMap.put("FORD", ford1);
-//		System.out.println(brandsMap.keySet());
 		
 		
 		//brands textures level 2
@@ -110,7 +109,6 @@ public class Pictures {
 		brandsMap2.put("INTEL", intel1);
 		brandsMap2.put("HONDA", honda1);
 		brandsMap2.put("KRAFT", kraft1);
-//		System.out.println(brandsMap2.keySet());
 		
 		//brands textures level 3
 		Texture adidas1 = new Texture("Images/level3/brands/adidas/adidas_1.png");
@@ -124,17 +122,6 @@ public class Pictures {
 		brandsMap3.put("TARGET", target1);
 		brandsMap3.put("HERMES", hermes1);
 		brandsMap3.put("KITKAT", kitkat1);
-		
-//		System.out.println(brandsMap3.keySet());
-		
-//		Texture dell2 = new Texture("Images/level1/brands/dell/dell2.png");
-//		Texture dell3 = new Texture("Images/level1/brands/dell/dell3.png");
-//		Texture ikea2 = new Texture("Images/level1/brands/ikea/ikea2.png");
-//		Texture ikea3 = new Texture("Images/level1/brands/ikea/ikea3.png");
-//		Texture nike2 = new Texture("Images/level1/brands/nike/nike2.png");
-//		Texture nike3 = new Texture("Images/level1/brands/nike/nike3.png");
-//		Texture sony2 = new Texture("Images/level1/brands/sony/sony2.png");
-//		Texture sony3 = new Texture("Images/level1/brands/sony/sony3.png");
 
 		//countries textures level 1
 		Texture cuba1 = new Texture("Images/level1/countries/cuba/cuba_2.png");

@@ -76,7 +76,7 @@ public class GameScreen implements Screen {
     private float gametime = 0;    
     
 //    private long startTime = System.currentTimeMillis();
-	Texture texture;
+	private Texture backGroudTexture;
 	
 	String level;
 
@@ -106,21 +106,21 @@ public class GameScreen implements Screen {
 		if(level.equalsIgnoreCase("Level 1 - 4 letters") 
 				|| level.equalsIgnoreCase("Default")){
 			this.level = "LEVEL 1";	
-			gametime = 5; // 60 secs for level 1
+			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
 			hm = game.picture.getLevel1();
-			setGameContext();
-			
+			gametime = 62; // 60 secs for level 1
 			
 		}else if(level.equalsIgnoreCase("Level 2 - 5 letters")){
 			this.level = "LEVEL 2";
+//			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
+
 			hm = game.picture.getLevel2();
-			setGameContext();
 			gametime = 52; // 50 secs for level 2
 			
 		}else if(level.equalsIgnoreCase("Level 3 - 6 letters")){
 			this.level = "LEVEL 3";
+//			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
 			hm = game.picture.getLevel3();
-			setGameContext();
 			gametime = 42; // 40 secs for level 3  , 5 sec for testing purposes
 		}
 	}// end of setLevel()
@@ -163,7 +163,7 @@ public class GameScreen implements Screen {
 		game.getterSetter.setTexture(texture);
 
 		checkButtons();
-
+		
 		System.out.println(category);
 	}
 	
@@ -205,7 +205,7 @@ public class GameScreen implements Screen {
 		stage.addActor(rightPanel.right());
 		stage.addActor(leftPanel.left());
 		stage.addActor(buttonPanel.bottom()); 
-		
+		setGameContext();
 	}
 	
 	
@@ -461,7 +461,7 @@ public class GameScreen implements Screen {
 			}else {
 				score += 10;
 				scoreLabel.setText("Score: " + score);
-				game.incrementAchievement("guesstheword.animals");
+//				game.incrementAchievement("guesstheword.animals");
 				nextWord(answer, category);
 
 			}
@@ -493,11 +493,6 @@ public class GameScreen implements Screen {
 				game.getterSetter.setTexture(newTexture);
 				clearInputText();
 				checkButtons();
-				// Clear all the task in the timer
-				// and start the timer again
-//				timer.clear();
-//				timer.start();    // reset the timer. 
-				
 				break;
 			}// end of nested if
 		}// end of  for loop
@@ -711,12 +706,14 @@ public class GameScreen implements Screen {
 
 	//----------PICTURE PANEL-------------//
 	private class PicturePanel{
-		
 		PicturePanel(){
+			checkKeyboardInputs();	
+			checkTextfield();
 			Texture texture = game.getterSetter.getTexture(); 
 			batch.begin(); 
 			batch.draw(texture, 350, 200, 600,400);
 	        batch.end();
+	        getWindow().setVisible(false);
 		}
 	}
 	//----------LEFT PANEL-------------//
@@ -742,6 +739,9 @@ public class GameScreen implements Screen {
 	
 	// Category Window
 	private Window getWindow(){
+		
+		hintTaken = false;
+		
 		HashMap<String, HashMap<String, Texture>> hm = null ;
 		if(level.equalsIgnoreCase("Level 1")){
 			hm = game.picture.getLevel1();
@@ -800,12 +800,19 @@ public class GameScreen implements Screen {
 		Gdx.graphics.setContinuousRendering(false);
 		Gdx.gl.glClearColor( 0f, 0f, 75f, 70f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+        batch.begin();
+		batch.draw(backGroudTexture, 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
+		batch.end();
        
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-		checkKeyboardInputs();	
-		checkTextfield();
+		
+		
+		
 		picturePanel =  new PicturePanel();
+		
+		
 	}
 	
 	@Override
@@ -820,7 +827,7 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void dispose() {
-		texture.dispose();
+		backGroudTexture.dispose();
 		batch.dispose();
 		skin.dispose();
 		stage.dispose();

@@ -25,8 +25,5 @@ connect4
 raiden
 wl6
 snakeLadder
-<<<<<<< HEAD
 guesstheword
-=======
 lunarlander
->>>>>>> master

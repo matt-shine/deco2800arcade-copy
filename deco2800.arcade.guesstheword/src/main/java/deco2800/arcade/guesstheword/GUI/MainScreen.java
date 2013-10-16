@@ -47,7 +47,7 @@ public class MainScreen implements Screen {
 		texture = new Texture(Gdx.files.internal("mainScreen.png"));
 
 		titleLabel = new Label("Welcome to Guess The Word!" , skin);
-		titleLabel.setFontScale(1);
+		titleLabel.setFontScale(2);
 		
 		startButton = new TextButton("Click to Play" , skin);
 		startButton.addListener(new ChangeListener() {

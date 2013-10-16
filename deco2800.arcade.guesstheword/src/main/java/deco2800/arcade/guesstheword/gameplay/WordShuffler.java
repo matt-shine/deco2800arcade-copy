@@ -3,7 +3,11 @@ package deco2800.arcade.guesstheword.gameplay;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * The word shuffler class. The word will be shuffled and the length of 
+ * each word is 10. 
+ * 
+ * @author Li Zixuan Tony*/
 public class WordShuffler {
 	public WordShuffler(){}
 	

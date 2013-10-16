@@ -23,7 +23,7 @@ import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class rankingscreen implements Screen  {
+public class RankingScreen implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	//private final Texture texture;
@@ -40,7 +40,7 @@ public class rankingscreen implements Screen  {
 	   ImageButton backbutton;
 	  
 	  
-	rankingscreen(final Breakout game) {
+	RankingScreen(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();

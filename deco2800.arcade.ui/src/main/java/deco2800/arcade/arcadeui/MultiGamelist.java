@@ -68,8 +68,7 @@ public class MultiGamelist implements Screen {
 	}
     
     public MultiGamelist() {
-    	
-        
+ 
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
         stage = new FrontPageStage();

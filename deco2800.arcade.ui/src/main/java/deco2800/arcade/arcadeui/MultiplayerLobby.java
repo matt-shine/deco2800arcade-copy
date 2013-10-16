@@ -220,8 +220,14 @@ public class MultiplayerLobby implements Screen {
 		// "Create Match" Button Event Listener
 		 createbutton.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
+			
+			dispose();
+			arcadeUI.setScreen(arcadeUI.getMultigame2());
+			
+			//Code below commented out for overlay
+			/*
             	createMatch();
-
+			*/
             }
         });
 

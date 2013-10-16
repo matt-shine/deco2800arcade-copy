@@ -68,7 +68,7 @@ public class MultiGamelist2 implements Screen {
 	}
     
     public MultiGamelist2() {
-    	
+    		
         
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
@@ -567,6 +567,8 @@ public class MultiGamelist2 implements Screen {
             	//ArcadeSystem.login("chess");
             	System.out.println("Chess clicked");	
 	
+				createChessMatch();
+				System.out.println("Chess Match Created.");
 				
             }
         })); 
@@ -928,9 +930,9 @@ public class MultiGamelist2 implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
             	//ArcadeSystem.login("chess");
             	System.out.println("Chess clicked");	
-            	dispose();
-				arcadeUI.setScreen(arcadeUI.getWait());
-				
+            	
+				createChessMatch();
+				System.out.println("Chess Match Created.");
 				
             }
         })); 
@@ -1001,4 +1003,12 @@ public class MultiGamelist2 implements Screen {
 	@Override
 	public void resize(int arg0, int arg1) {
 	}
+	
+	private void createChessMatch() {
+		CreateMatchRequest request = new CreateMatchRequest();
+    	request.gameId = "chess";
+    	request.playerID = arcadeUI.getPlayer().getID();
+    	arcadeUI.getNetworkClient().sendNetworkObject(request);
+	}
+	
 }

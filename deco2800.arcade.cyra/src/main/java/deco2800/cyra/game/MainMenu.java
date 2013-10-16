@@ -16,31 +16,36 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import deco2800.cyra.world.Sounds;
 
 public class MainMenu extends AbstractScreen{
-	Texture cyra;
 	Stage stage;
 	BitmapFont blackFont;
 	TextureAtlas atlas;
 	Skin skin;
 	//SpriteBatch batch;
 	TextButton button;
+	TextButton button2;
 	Label label;
 	private int framecount = 0;
 	private int framecountmax = 80;
 	private int buttonframe = 0;
 	private boolean keydown = false;
 	
+	float[] difficulty = new float[3];
+	int difficultyIndex = 1;
+	
 	public MainMenu(Cyra game) {
 		super(game);
 		
+		difficulty[0] = 0.21f;
+		difficulty[1] = 0.76f;
+		difficulty[2] = 0.91f;
 	}
 	
 	@Override
-	public void show() {
-		cyra = new Texture("data/cyra.png");
-		
+	public void show() {		
 		atlas = new TextureAtlas("data/buttons.txt");
 		skin = new Skin();
 		skin.addRegions(atlas);
@@ -58,7 +63,6 @@ public class MainMenu extends AbstractScreen{
 		batch.begin();
 		stage.draw();
 		//blackFont.draw(batch, "Test Game Of DOOOOOOOOOOOOOOOOOOOM", 50, 50);
-		batch.draw(cyra, 485, Gdx.graphics.getHeight()/2-cyra.getHeight()/2 + 20);
 		batch.end();
 		
 		if (framecount++ == framecountmax) {
@@ -71,16 +75,16 @@ public class MainMenu extends AbstractScreen{
 		if (++buttonframe == 9) {
 			buttonframe = 0;
 		}
-		if(keydown && buttonframe%3==0) {
-			TextButtonStyle style = new TextButtonStyle();
-			style.up = skin.getDrawable("buttonopen");
-			style.down = skin.getDrawable("buttonclose" + buttonframe/3);
-			style.font = blackFont;
-			button.setStyle(style);
-			
+		
+		if(((buttonframe % 3) == 0)) {
+			button.setVisible(false);
+		} else if(((buttonframe % 3) != 0)) {
+			button.setVisible(true);
 		}
 		
-		
+		if(keydown) {
+			button.setVisible(true);
+		}
 	}
 	
 	@Override
@@ -96,9 +100,8 @@ public class MainMenu extends AbstractScreen{
 		style.down = skin.getDrawable("buttonclose0");
 		
 		style.font = blackFont;
-		button = new TextButton("Click here to start!", style);
-		button.setWidth(400);
-		button.setHeight(100);
+		button = new TextButton("START!", style);
+		button.setHeight(90);
 		button.setX(Gdx.graphics.getWidth()/2 - button.getWidth()/2);
 		button.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 200);
 		
@@ -111,20 +114,62 @@ public class MainMenu extends AbstractScreen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				keydown = false;
-				game.setScreen(new GameScreen(game));
+				game.setScreen(new GameScreen(game, difficulty[difficultyIndex]));
+			}
+		});
+		
+		button2 = new TextButton("Difficulty: Medium", style);
+		button2.setX(Gdx.graphics.getWidth()/2 - button2.getWidth()/2);
+		button2.setY(Gdx.graphics.getHeight()/2 - button.getHeight()/2 - 270);
+		button2.setHeight(90);
+		button2.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				return true;
+			}
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				switch(difficultyIndex) {
+					case 0:
+						difficultyIndex++;
+						button2.setText("Difficulty: Medium");
+						break;
+					case 1:
+						difficultyIndex++;
+						button2.setText("Difficulty: Hard");
+						break;
+					case 2:
+						difficultyIndex = 0;
+						button2.setText("Difficulty: Easy");
+						break;
+					default:
+						break;
+				}
 			}
 		});
 		
 		LabelStyle ls = new LabelStyle(blackFont, Color.WHITE);
 		label = new Label("CYRA", ls);
 		label.setX(85);
-		label.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 20);
+		label.setY(Gdx.graphics.getHeight()/2 - label.getHeight()/2 + 115);
 		label.setWidth(width);
 		label.setAlignment(Align.center);
 		
+		Image cyra = new Image(new Texture("data/cyra.png"));
+		cyra.setX(Gdx.graphics.getWidth()/2 - cyra.getWidth()/2 - 90);
+		cyra.setY(Gdx.graphics.getHeight()/2 - cyra.getHeight()/2 + 115);
+		
+		Image bg = new Image(new Texture("data/main_bg.png"));
+		bg.setX(Gdx.graphics.getWidth()/2 - bg.getWidth()*0.75f/2);
+		bg.setY(Gdx.graphics.getHeight() - bg.getHeight()*0.75f + 30);
+		bg.setScale(0.75f);
+		
+		stage.addActor(bg);
 		stage.addActor(button);
+		stage.addActor(button2);
 		stage.addActor(label);
 		
+		stage.addActor(cyra);
 	}
 	
 	

@@ -21,7 +21,6 @@ import deco2800.cyra.model.*;
 /** World class controls all objects in the specified level including any collisions
  * and links Object references where needed
  * @author Game Over
- *
  */
 public class World {
 	public static final float WORLD_WIDTH = 618f;
@@ -62,9 +61,10 @@ public class World {
 	// if not using mouse then remove this
 	//WorldRenderer wr;
 	
-	public World(Cyra game, int level, ParallaxCamera cam) {
+	public World(Cyra game, int level, float difficulty, ParallaxCamera cam) {
 		curLevel = new Level(level);
 		this.cam = cam;
+		this.rank = difficulty;
 		Sounds.loadAll();
 		callingInitAfterReloadLevel = false;
 		initCount = 2.5f;
@@ -754,9 +754,6 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-		//rank = 0.91f;
-		rank = 0.76f;
-		//rank = 0.21f;
 		if (callingInitAfterReloadLevel) {
 			scenePosition = 0;
 			ship = new Player(new Vector2(PLAYER_INIT_X, 6));

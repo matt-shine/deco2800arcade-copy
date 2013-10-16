@@ -12,7 +12,6 @@ import deco2800.arcade.model.Game;
  * GameScreen.java might need to get merged with this one, so that this will
  * be the class in control of level progression 
  * @author Game Over
- *
  */
 @ArcadeGame(id = "Cyra")
 public class Cyra extends GameClient {

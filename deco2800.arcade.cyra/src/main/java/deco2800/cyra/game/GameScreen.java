@@ -14,12 +14,12 @@ public class GameScreen extends AbstractScreen {
 	int level = 2;
 	//boolean firstUpdate = true;
 	
-	public GameScreen(Cyra game) {
+	public GameScreen(Cyra game, float difficulty) {
 		super(game);
 		float width = Gdx.graphics.getWidth()/45;
 		float height = Gdx.graphics.getHeight()/45;
 		ParallaxCamera cam = new ParallaxCamera(width, height);
-		world = new World(game, level, cam);
+		world = new World(game, level, difficulty, cam);
 		render = new WorldRenderer(world, cam);
 
 	}

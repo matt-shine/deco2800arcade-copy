@@ -25,7 +25,7 @@ public class Enemy extends Mob {
     }
 
     // current state
-    private STATES state = STATES.NO_STATE;;
+    private STATES state = STATES.NO_STATE;
     //
     protected float pathSpeed;
     //
@@ -49,8 +49,8 @@ public class Enemy extends Mob {
     @Override
     public void tick(GameModel gameModel) {
         super.tick(gameModel);
-        detectPlayer();
-        if (health <= 0) {
+        detectPlayer(gameModel);
+        if (this.getHealth() <= 0) {
             changeStates(STATES.DIE, 0);
             gameModel.destroyDoodad(this);
         }
@@ -76,10 +76,10 @@ public class Enemy extends Mob {
     }
 
     // detect player
-    public void detectPlayer() {
-        if (canSee(gameModel.getPlayer())) {
+    public void detectPlayer(GameModel gameModel) {
+        if (canSee(gameModel.getPlayer(), gameModel)) {
             changeStates(STATES.ATTACK, 0);
-            doDamage();
+            doDamage(gameModel);
             changeStates(STATES.CHASE, 0);
         }
     }
@@ -108,8 +108,8 @@ public class Enemy extends Mob {
         }
     }
 
-    @Override
-    public void doDamage() {
+    
+    public void doDamage(GameModel gameModel) {
         float dist = this.getPos().dst(gameModel.getPlayer().getPos());
         boolean speed = false;
         boolean look = false;
@@ -127,11 +127,11 @@ public class Enemy extends Mob {
      */
     public int calcDamage(int dist, boolean speed, boolean look) {
         boolean hit = false;
-        if (randInt(0, 255, rand) < ((speed ? 160 : 256) - (dist * (look ? 16 : 8)))) {
+        if (randInt(0, 255, getRand()) < ((speed ? 160 : 256) - (dist * (look ? 16 : 8)))) {
             hit = true;
         }
 
-        damage = randInt(0, 255, rand);
+        damage = randInt(0, 255, getRand());
 
         if (hit) {
             if (dist < 2) {
@@ -155,7 +155,7 @@ public class Enemy extends Mob {
     }
 
     // Ugly mess that I need to change.  Working on it atm
-    public void calculatePath() {
+    public void calculatePath(GameModel gameModel) {
         path = new LinkedList<Vector2>();
         WL6Meta.DIRS[][] waypoints = gameModel.getWapoints();
 

@@ -19,7 +19,28 @@ public class MapProcessor {
     public static void processEverything(GameModel model) {
 
         Level map = model.getMap();
+        
+        
+        
+        //spawn all the blocks that are actually doodads
+        //and initialise the collision map
+        for (int i = 0; i < WL6.MAP_DIM; i++) {
+            for (int j = 0; j < WL6.MAP_DIM; j++) {
 
+                int id = map.getTerrainAt(i, j);
+                BlockInfo dInfo = WL6Meta.block(id);
+
+                if (WL6Meta.hasDoorAt(i, j, map)) {
+                    spawnDoor(model, dInfo, id, i, j);
+                }
+                
+                model.getCollisionGrid().setSolidAt(i, j, dInfo.solid ? 1 : 0);
+            }
+        }
+        
+        
+        
+        //spawn all the doodads
         for (int i = 0; i < WL6.MAP_DIM; i++) {
             for (int j = 0; j < WL6.MAP_DIM; j++) {
 
@@ -61,18 +82,7 @@ public class MapProcessor {
             }
         }
 
-        //spawn all the blocks that are actually doodads
-        for (int i = 0; i < WL6.MAP_DIM; i++) {
-            for (int j = 0; j < WL6.MAP_DIM; j++) {
 
-                int id = map.getTerrainAt(i, j);
-                BlockInfo dInfo = WL6Meta.block(id);
-
-                if (WL6Meta.hasDoorAt(i, j, map)) {
-                    spawnDoor(model, dInfo, id, i, j);
-                }
-            }
-        }
     }
 
     /**
@@ -175,9 +185,9 @@ public class MapProcessor {
         }
         else if (d.solid)
         {
-            //TODO make these solid
             dd = new Doodad(doodadID());
             dd.setTextureName(d.texture);
+            model.getCollisionGrid().setSolidAt(x, y, 1);
         }
         else
         {

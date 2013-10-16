@@ -28,11 +28,11 @@ public class Dog extends Enemy {
     @Override
     public int calcDamage(int dist, boolean speed, boolean look) {
         boolean hit = false;
-        if (randInt(0, 255, this.rand) < 180 && dist == 1) {
+        if (randInt(0, 255, getRand()) < 180 && dist == 1) {
             hit = true;
         }
 
-        damage = randInt(0, 255, this.rand);
+        damage = randInt(0, 255, getRand());
 
         if (hit) {
             damage = damage / 16;

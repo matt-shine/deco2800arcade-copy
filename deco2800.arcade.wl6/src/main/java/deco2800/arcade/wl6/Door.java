@@ -26,6 +26,9 @@ public class Door extends Doodad {
         } else {
             openness = (float) Math.max(openness - speed, 0.0f);
         }
+        
+        //update collisions
+        g.getCollisionGrid().setSolidAt((int) this.getPos().x, (int) this.getPos().y, openness > 0.9f ? 0 : 1);
 
     }
 

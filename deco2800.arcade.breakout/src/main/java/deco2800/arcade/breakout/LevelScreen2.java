@@ -197,7 +197,7 @@ public class LevelScreen2 implements Screen {
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/Level_Select2.png"));
-		tex = new Texture(Gdx.files.classpath("imgs/buttons1.png"));
+		tex = new Texture(Gdx.files.classpath("imgs/buttons2.png"));
 		tex2 = new Texture(Gdx.files.classpath("imgs/button.png"));
 		TextureRegion[][] tmp = TextureRegion.split(tex, 350, 210);
 		TextureRegion[][] tmp2 = TextureRegion.split(tex2, 130, 45);

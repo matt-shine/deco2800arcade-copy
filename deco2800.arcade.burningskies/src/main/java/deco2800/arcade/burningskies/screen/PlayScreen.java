@@ -23,8 +23,6 @@ import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.Level;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
-import deco2800.arcade.burningskies.entities.UpgradePowerUp;
-import deco2800.arcade.burningskies.entities.HealthPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -63,7 +61,7 @@ public class PlayScreen implements Screen
 	private int lives = 3;
 	private float lifePositionX = 10;
 	private float lifePositionY = height - 70;
-	private Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
+	private static Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
 	private float lifePositionOffset = (float) (lifeIcon.getWidth() + lifeIcon.getHeight() * 0.1);
 	
 	private long score = 0;
@@ -73,7 +71,7 @@ public class PlayScreen implements Screen
 	
 	private SpawnList sp;
 
-	private float respawnTimer = 0f;;
+	private float respawnTimer = 0f;
 	
 	
 	public PlayScreen( BurningSkies game){
@@ -113,12 +111,6 @@ public class PlayScreen implements Screen
     	
     	processor = new PlayerInputProcessor(player);
     	ArcadeInputMux.getInstance().addProcessor(processor);
-    	
-    	// Test code
-    	PowerUp test = new UpgradePowerUp(400,400);
-    	addPowerup(test);
-    	test = new HealthPowerUp(200,200);
-    	addPowerup(test);
     	
     	sp = new SpawnList(this);
     }

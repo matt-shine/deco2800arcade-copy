@@ -66,13 +66,14 @@ public class MultiGamelist implements Screen {
 		
 		private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches;
-	
+	/*
 	public MultiGamelist(ArcadeUI ui) {
 		arcadeUI = ui;
 	}
-    
-    public MultiGamelist() {
+    */
+    public MultiGamelist(ArcadeUI ui) {
  
+		arcadeUI = ui;
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
         stage = new FrontPageStage();
@@ -885,7 +886,10 @@ public class MultiGamelist implements Screen {
 		    	//ArcadeSystem.login("pong");
 		    	//bclicked = true;
 		    	dispose();
-		    	ArcadeSystem.goToGame("Pong");
+				ArcadeSystem.setMatchMaking(true);
+				ArcadeSystem.setGameWaiting(true);
+				
+		    	//ArcadeSystem.goToGame("Pong");
 		    	arcadeUI.setScreen(arcadeUI.getWait());
 		    	System.out.println("paused");
 		    }

@@ -152,6 +152,15 @@ public class ArcadeSystem {
 	public static boolean isMatchMaking() {
 		    return arcade.isMatchMaking();
 	    }
+		
+	public static void setGameWaiting(boolean b) {
+			arcade.setGameWaiting(b);	
+		}
+	
+	public static boolean isGameWaiting() {
+		    return arcade.isGameWaiting();
+	    }
+
 	 
 	 public static void initializeLobbyMatchList() {
 		 arcade.populateMatchList();

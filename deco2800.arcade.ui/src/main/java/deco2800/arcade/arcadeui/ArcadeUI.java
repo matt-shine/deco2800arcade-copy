@@ -57,9 +57,9 @@ public class ArcadeUI extends GameClient {
         register = new RegisterScreen(this);
         lobby = new MultiplayerLobby(this);
         betting = new BettingWindow(this);
-		multigame = new MultiGamelist();
+		multigame = new MultiGamelist(this);
 		wait = new Gamewaiting(this);
-		multigame2 = new MultiGamelist2();
+		multigame2 = new MultiGamelist2(this);
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {

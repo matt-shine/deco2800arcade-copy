@@ -90,6 +90,8 @@ public class Arcade extends JFrame {
     private static boolean playerBetting;
     
     private static boolean matchMaking;
+	
+	private static boolean gameWaiting;
     
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
 
@@ -667,6 +669,15 @@ public class Arcade extends JFrame {
 	public void setMatchMaking(boolean matchMaking) {
 		Arcade.matchMaking = matchMaking;
 	}
+	
+	public boolean isGameWaiting() {
+		return gameWaiting;
+	}
+	
+	public void setGameWaiting(boolean gameWaiting) {
+		Arcade.gameWaiting = gameWaiting;
+	}
+
 	
     /**
      * Set selected game client

@@ -9,6 +9,6 @@ public interface WebResponder {
      * @param response
      * @throws Exception
      */
-    public void respond( Response response ) throws Exception;
+    public void respond( Response response, String param ) throws Exception;
 
 }

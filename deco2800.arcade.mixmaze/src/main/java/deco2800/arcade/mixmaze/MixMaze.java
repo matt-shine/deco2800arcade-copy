@@ -8,18 +8,16 @@ import deco2800.arcade.model.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@ArcadeGame(id="Mixmaze")
+@ArcadeGame(id = "Mixmaze")
 public final class MixMaze extends GameClient {
 
 	final Logger logger = LoggerFactory.getLogger(MixMaze.class);
 
-	private Music surgeLoop;
 	Skin skin;
 	Screen splashScreen;
 	Screen menuScreen;
@@ -30,11 +28,13 @@ public final class MixMaze extends GameClient {
 
 	/**
 	 * Constructor. Note this constructor will be called before any
-	 * gdx.Application exists, and therefore all initialisation should
-	 * be done in the method create.
-	 *
-	 * @param player	TODO
-	 * @param networkClient	TODO
+	 * gdx.Application exists, and therefore all initialisation should be done
+	 * in the method create.
+	 * 
+	 * @param player
+	 *            TODO
+	 * @param networkClient
+	 *            TODO
 	 */
 	public MixMaze(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -42,14 +42,18 @@ public final class MixMaze extends GameClient {
 	}
 
 	@Override
+	public void setScreen(Screen screen) {
+		super.setScreen(screen);
+		if(screen instanceof GameScreen) {
+			Sounds.playAction();
+		} else {
+			Sounds.playMenu();
+		}
+	}
+	
+	@Override
 	public void create() {
 		super.create();
-
-		// Play Mix Maze music
-		surgeLoop = Gdx.audio.newMusic(Gdx.files.internal("lls_surge.mp3"));
-		surgeLoop.setLooping(true);
-		surgeLoop.setVolume(0.5f);
-		surgeLoop.play();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		splashScreen = new SplashScreen(this);
@@ -58,7 +62,6 @@ public final class MixMaze extends GameClient {
 		localScreen = new LocalScreen(this);
 		hostScreen = new HostScreen(this);
 		clientScreen = new ClientScreen(this);
-
 		setScreen(splashScreen);
 	}
 
@@ -75,7 +78,7 @@ public final class MixMaze extends GameClient {
 
 	@Override
 	public void dispose() {
-		surgeLoop.stop();
+		Sounds.stop();
 		splashScreen.dispose();
 		menuScreen.dispose();
 		localScreen.dispose();
@@ -86,8 +89,7 @@ public final class MixMaze extends GameClient {
 	}
 
 	/**
-	 * This method is called just before the application
-	 * is destroyed.
+	 * This method is called just before the application is destroyed.
 	 */
 	@Override
 	public void pause() {
@@ -108,6 +110,8 @@ public final class MixMaze extends GameClient {
 		game = new Game();
 		game.id = "mixmaze";
 		game.name = "Mix Maze";
+		game.description = "Build as much box as you can, "
+				+ "stop your opponent from building theirs.";
 	}
 
 	@Override

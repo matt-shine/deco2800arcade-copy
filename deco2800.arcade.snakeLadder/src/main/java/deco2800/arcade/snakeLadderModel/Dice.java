@@ -11,8 +11,8 @@ public class Dice {
 	
 	private int num;
 	protected Texture diceOne, diceTwo, diceThree, diceFour, diceFive, diceSix;
-	private static final int XPOS = 200; //x position of the dice
-	private static final int YPOS = 680; //y position of the dice
+	private static final int XPOS = 750; //x position of the dice
+	private static final int YPOS = 450; //y position of the dice
 	
 	/**
 	 * Constructor for Dice object. Initiate the dice number to 0.
@@ -49,33 +49,35 @@ public class Dice {
 	/**
 	 * Render the dice image based on the dice number. Initially the dice image should be empty.
 	 * @param batch used the draw into the stage
-	 * @param plaernum to indicate the which dice belongs to which player. Player numbering start at 0 for the
+	 * @param playernum to indicate the which dice belongs to which player. Player numbering start at 0 for the
 	 * default player and 1 for AI
 	 */
 	public void renderDice(SpriteBatch batch, int playernum){
+		int x = XPOS + 100*(playernum);
 		switch (this.num){
 		case 1:
-			batch.draw(this.diceOne,XPOS*(playernum+1),YPOS);
+			batch.draw(this.diceOne,x,YPOS);
 			break;
 		case 2:
-			batch.draw(this.diceTwo,XPOS*(playernum+1),YPOS);
+			batch.draw(this.diceTwo,x,YPOS);
 			break;
 		case 3:
-			batch.draw(this.diceThree,XPOS*(playernum+1),YPOS);
+			batch.draw(this.diceThree,x,YPOS);
 			break;
 		case 4:
-			batch.draw(this.diceFour,XPOS*(playernum+1),YPOS);
+			batch.draw(this.diceFour,x,YPOS);
 			break;
 		case 5:
-			batch.draw(this.diceFive,XPOS*(playernum+1),YPOS);
+			batch.draw(this.diceFive,x,YPOS);
 			break;
 		case 6:
-			batch.draw(this.diceSix,XPOS*(playernum+1),YPOS);
+			batch.draw(this.diceSix,x,YPOS);
 			break;
 		default:
 			//batch.draw(this.diceOne,0,0);
 			break;
 		}
 	}
+
 
 }

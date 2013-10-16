@@ -270,11 +270,11 @@ public class GameScreen implements Screen  {
 			shapeRenderer.begin(ShapeType.FilledRectangle);
 
 			getPaddle().render(shapeRenderer);
-			getPowerupManager().renderAll(batch);
 			
 
 			// Render the level
 			levelSystem.render(bricks, outer, inner, this, shapeRenderer, batch);
+			getPowerupManager().renderAll(batch);
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);
 			// Ball is a Circle
@@ -435,13 +435,20 @@ public class GameScreen implements Screen  {
 	@Override
 	public void pause() {
 		game.pause();
-		if(Gdx.input.isKeyPressed(Keys.R)){
-			resume();
-		}
+		
+		
 	}
 
+//	public void inGamePause() {
+//		while(!Gdx.input.isKeyPressed(Keys.R)) {
+//			try {
+//				Thread.currentThread().sleep(1000);
+//			} catch(Exception e) {
+//				
+//			}
+//		}
+//	}
 	
-
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
@@ -639,6 +646,7 @@ public class GameScreen implements Screen  {
 	
 	public void destroyPowerupBall() {
 		if (powerupBall != null) {
+			System.out.println("Triggers");
 			setNumBalls(getNumBalls() - 1);
 			powerupBall = null;
 		}

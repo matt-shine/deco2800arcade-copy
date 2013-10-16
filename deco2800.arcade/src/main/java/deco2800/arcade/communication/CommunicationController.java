@@ -2,48 +2,46 @@ package deco2800.arcade.communication;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import deco2800.arcade.communication.CommunicationView;
-import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.protocol.communication.TextMessage;
-//TODO commenting?
+
 public class CommunicationController {
-	
-	private CommunicationView window;
-	private NetworkClient networkClient;
-	private TextMessage textMessage;
+
+	private CommunicationView view;
+	private CommunicationNetwork network;
 	private CommunicationModel model;
 
-	public CommunicationController(CommunicationView window, CommunicationModel model, NetworkClient networkClient){
-		this.window = window;
+	public CommunicationController(CommunicationView view, CommunicationModel model, CommunicationNetwork network){
+		this.view = view;
 		this.model = model;
-		this.networkClient = networkClient;
+		this.network = network;
 		
-		window.addSendButtonListener(new SendButtonActionListener());
+		view.addSendListener(new SendListener());
 	}
 	
-	private class SendButtonActionListener implements ActionListener {
-		
-		public void actionPerformed(ActionEvent event) {
-			sendTextMessage(window.getTextInput());
+	private class SendListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent event) { //You pressed Send
+			ChatNode node = network.getCurrentChat();
+			//This should never be null, because the chat window won't be open if it leads to nowhere... but it is during testing
+			if (node != null){				
+				TextMessage message = new TextMessage();
+				message.chatID = node.getID(); //Is this right?
+				message.senderID = network.getPlayer().getID();
+				message.text = view.getMessage();
+				
+				if (node.getParticipants() == null){
+					System.out.println("You are trying to send to nobody! This won't happen normally because a chat window will only be open if you have someone to talk to. "
+							+ "It will however, happen during testing because this chat window is open by default!");
+				} else {
+					message.recipients = node.getParticipants();
+					network.sendTextMessage(message);
+				}
+			}
 		}
 	}
 	
-	private void sendTextMessage(String message){
-		ArrayList<String> participants = model.getParticipants();
-		textMessage.text = message;
-		
-		for(String username : participants){
-			textMessage.recipient = username;
-			this.networkClient.sendNetworkObject(textMessage);
-		}
-		
-		window.setTextInput("");
-	}
 	
-	public void updateChat(String message){
-		window.appendTextArea(message);
-	}
 	
 }

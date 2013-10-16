@@ -43,7 +43,7 @@
     </achievement>
     <achievement id="mixmaze.strategist">
         <name>Strategist!</name>
-        <desciption>Build a region consist of 10 boxes</desciption>
+        <description>Build a region consist of 10 boxes</description>
         <awardThreshold>1</awardThreshold>
         <icon></icon>
     </achievement>
@@ -67,7 +67,7 @@
     </achievement>
     <achievement id="mixmaze.usetnt">
         <name>BOOM!</name>
-        <desciption>Used your first TNT</desciption>
+        <description>Used your first TNT</description>
         <awardThreshold>1</awardThreshold>
         <icon></icon>
     </achievement>

@@ -9,11 +9,9 @@ public class GameOverState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {
-		if (Gdx.input.isTouched()) {
-    		context.gameOver();
-    		//auto go back to ArcadeSystem.UI game menu
-    		ArcadeSystem.goToGame(ArcadeSystem.UI);
-    	}
+		int turn=context.getturns();
+		int playerIndex = turn%context.gamePlayers.length;
+		context.statusMessage = context.gamePlayers[playerIndex].getPlayerName() +" Win! ";
 	}
 
 }

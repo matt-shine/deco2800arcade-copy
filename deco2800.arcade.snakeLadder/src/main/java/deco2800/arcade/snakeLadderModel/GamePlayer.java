@@ -120,11 +120,10 @@ public class GamePlayer {
 	}
     
    public int getDnumber(int diceNumber){
-//    	positionIndex+=diceNumber;
-	    positionIndex = 59;
-    	if(positionIndex>=100)
+    	positionIndex+=diceNumber;
+    	if(positionIndex>=99)
     	{
-    		positionIndex=100;
+    		positionIndex=99;
     	}
     	return positionIndex;
     }

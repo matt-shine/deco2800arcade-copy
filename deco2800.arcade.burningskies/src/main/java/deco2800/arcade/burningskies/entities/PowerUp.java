@@ -1,16 +1,14 @@
 package deco2800.arcade.burningskies.entities;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 
 public abstract class PowerUp extends Entity {
 	
 	float stateTime;
 	
-	private float x;
-	private float y;
-		
-	private float velocityX;
-	private float velocityY;
+	private Vector2 position;
+	private Vector2 velocity;
 
 	/**
 	 * Initialise the power up and randomly set the velocity
@@ -21,14 +19,9 @@ public abstract class PowerUp extends Entity {
 	public PowerUp(Texture texture, float x, float y) {
 		super(texture);//, 10, 7, 0.15f);
 		//TODO: TEST CODE REMOVE
-		this.x = x;
-		this.y = y;
-		this.velocityX = randVel() * randDirection();
-		this.velocityY = randVel() * randDirection();
-		System.out.println("Power up --> vx: " + velocityX + ", vy: " + velocityY);
-		
-		setX(x);
-		setY(y);
+		position = new Vector2(x, y);
+		velocity = new Vector2(randVel() * randDirection(), randVel() * randDirection());
+		setPosition(x, y);
 	}
 
 	public abstract void powerOn(PlayerShip player);
@@ -38,11 +31,8 @@ public abstract class PowerUp extends Entity {
 	 */
 	@Override
 	public void act(float delta) {
-		x += velocityX * delta;
-		y += velocityY * delta;
-		
-		setX(x);
-		setY(y);		
+		position.add(velocity.x*delta, velocity.y*delta);
+		setPosition(position.x, position.y);
 	}
 	
 	/**
@@ -50,11 +40,11 @@ public abstract class PowerUp extends Entity {
 	 * @return 
 	 */	
 	private float randVel() {
-		return (float) Math.floor(Math.random() * 50) + 50;
+		return (float) (Math.random()*50 + 50);
 	}
 	
 	private int randDirection() {
-		if(Math.floor(Math.random() * 2) == 1) {
+		if(Math.random() > 0.5) {
 			return 1;
 		}
 		else {

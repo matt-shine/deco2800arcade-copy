@@ -19,12 +19,12 @@ public class SpawnList {
 	private static final long standardEnemyPoints = 1006493;
 	
 	// TODO more variable pointing to other types of enemies
-	private Texture enemy1 = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+	private static Texture enemy1 = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
 	
 	public SpawnList(PlayScreen s){
 		this.screen = s;
 		currentInterval = 0;
-		interval = (float) 2;		
+		interval = 2f;		
 		list = new ArrayList<Object>();
 		makeList1();
 	}

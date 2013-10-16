@@ -93,6 +93,9 @@ public class Pong extends GameClient {
         List<Highscore> topPlayers = hsd.getGameTopPlayers(10, false, "Number");
         Highscore userHighScore = hsd.getUserHighScore(true, "Number");
         List<Highscore> ranked = hsd.getUserRanking(true, "Number");
+        
+        //store wins losses
+        
 	}
 	
 	/**

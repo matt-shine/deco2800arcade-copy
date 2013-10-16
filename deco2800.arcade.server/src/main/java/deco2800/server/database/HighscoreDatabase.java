@@ -200,6 +200,39 @@ public class HighscoreDatabase {
 	}
 	
 	
+	
+	public List<String> getWinsGetLosses(String Username, String Game_ID) throws DatabaseException {
+		int wins;
+		int losses;
+		
+		if (!initialised) {
+			initialise();
+		}
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+
+		Statement statement = null;
+		ResultSet resultSet = null;
+		
+		
+		try {
+			statement = connection.createStatement();
+			String getWinLoss = "SELECT COUNT(*) AS WINS FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID = '" + Game_ID + "' AND H.Player='" + Username + "' D.Score = 1";
+			System.out.println("query: " + getWinLoss);
+			resultSet = statement.executeQuery(getWinLoss);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to get player information from database", e);
+		} finally {
+			connectionCleanup(connection, statement, resultSet);
+		}
+		
+		return null;
+	}
+	
+	
 	/**
 	 * Displays the users ranking in the highscores for the specified game and score type
 	 * @param User_ID - users id to query against
@@ -211,7 +244,7 @@ public class HighscoreDatabase {
 		List<String> data = new ArrayList<String>();
 		String order;
 		
-		if (!initialised) {
+		/*if (!initialised) {
 			initialise();
 		}
 
@@ -245,7 +278,8 @@ public class HighscoreDatabase {
 					"Unable to get player information from database", e);
 		} finally {
 			connectionCleanup(connection, statement, resultSet);
-		}
+		}*/
+		return null;
 	}
 	
 	
@@ -300,45 +334,12 @@ public class HighscoreDatabase {
 		} */
 		return null;
 	}
-	
-	
-	public String getTopPlayers() throws DatabaseException, SQLException{
-		String data = null;
-		/*
-		Connection connection = null;
-		Statement statement = null;
-		ResultSet resultSet = null;
 		
-		String selectTableSQL = "SELECT * FROM HIGHSCORES_PLAYER";
-		
-		try {
-			// Get a connection to the database
-			connection = Database.getConnection();
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(selectTableSQL);
-			
-			while(resultSet.next())
-			{
-				data = data.concat(resultSet.getString("Username")+ ",");
-			}
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException(
-					"Unable to add highscore information to database", e);
-		} finally {
-			connectionCleanup(connection, statement, resultSet);
-		}*/
-		
-		return data;
-	}
-	
-	
 	//======================
 	//Adding Score Methods
 	//======================
 	
-	public int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
+	private int addHighscore(String Game_ID, String Username) throws DatabaseException, SQLException {
 		int hid = 0;
 		Connection connection = null;
 		Statement statement = null;
@@ -374,7 +375,6 @@ public class HighscoreDatabase {
 		
 		return hid;
 	}
-	
 	
 	/** Used for games 
 	 * 

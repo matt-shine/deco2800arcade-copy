@@ -16,12 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-<<<<<<< HEAD:deco2800.arcade.cyra/src/main/java/deco2800/cyra/game/MainMenu.java
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import deco2800.cyra.world.Sounds;
-=======
 import deco2800.arcade.cyra.world.Sounds;
->>>>>>> 751e215d9a1c1d163f3b19764e7f60ad802a1232:deco2800.arcade.cyra/src/main/java/deco2800/arcade/cyra/game/MainMenu.java
 
 public class MainMenu extends AbstractScreen{
 	Stage stage;

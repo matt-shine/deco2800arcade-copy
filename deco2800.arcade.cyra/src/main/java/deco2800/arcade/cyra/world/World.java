@@ -43,7 +43,7 @@ public class World {
 	private ResultsScreen resultsScreen;
 	private int score;
 	
-	private float rank;
+	public float rank;
 	private Level curLevel;
 	private LevelScenes levelScenes;
 	private InputHandler inputHandler;
@@ -61,19 +61,11 @@ public class World {
 	// if not using mouse then remove this
 	//WorldRenderer wr;
 	
-<<<<<<< HEAD:deco2800.arcade.cyra/src/main/java/deco2800/cyra/world/World.java
 	public World(Cyra game, int level, float difficulty, ParallaxCamera cam) {
-		curLevel = new Level(level);
-=======
-	public World(Cyra game, int level, ParallaxCamera cam) {
-		//rank = 0.91f;
-		rank = 0.76f;
-		//rank = 0.99f;
-		//rank = 0.21f;
-		curLevel = new Level(level, rank);
->>>>>>> 751e215d9a1c1d163f3b19764e7f60ad802a1232:deco2800.arcade.cyra/src/main/java/deco2800/arcade/cyra/world/World.java
-		this.cam = cam;
 		this.rank = difficulty;
+		this.cam = cam;
+		curLevel = new Level(level, rank);
+		
 		Sounds.loadAll();
 		callingInitAfterReloadLevel = false;
 		initCount = 2.5f;
@@ -764,10 +756,7 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-<<<<<<< HEAD:deco2800.arcade.cyra/src/main/java/deco2800/cyra/world/World.java
-=======
-		
->>>>>>> 751e215d9a1c1d163f3b19764e7f60ad802a1232:deco2800.arcade.cyra/src/main/java/deco2800/arcade/cyra/world/World.java
+
 		if (callingInitAfterReloadLevel) {
 			scenePosition = 0;
 			ship = new Player(new Vector2(PLAYER_INIT_X, 6));

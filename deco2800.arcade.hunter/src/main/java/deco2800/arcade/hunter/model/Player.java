@@ -273,7 +273,7 @@ public class Player extends Entity {
 			currAnim = fallAnimation();
 		}
 		
-		score += 0.4; 
+		score += 1; 
 	}
 
 	/**
@@ -342,7 +342,7 @@ public class Player extends Entity {
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
 		if (invulnerable){
-			Texture inv = new Texture("textures/Items/Invulnerability.png");
+			Texture inv = new Texture("textures/invulnerability.png");
 			batch.draw(inv,getX()-10,getY()-10,getWidth()+20,getHeight()+20);
 		}
 		if(state == State.RUNNING){
@@ -357,8 +357,11 @@ public class Player extends Entity {
         } else {
             batch.setColor(1f, 1f, 1f, 1f);
         }
-		batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
-
+        if (dead){
+        	batch.draw(currFrame, getX(), getY(), getWidth()*2, getHeight()/2);
+        }else{
+        	batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
+        }
         batch.setColor(1f, 1f, 1f, 1f);
 	}
 
@@ -416,8 +419,10 @@ public class Player extends Entity {
 		}else if (e.getType() == "Animal") {
 			if (getState() == State.ATTACK){
 				score = score + 200*multiplier;
-				animalsKilled++;
 				((Animal)e).dead();
+				if(!((Animal)e).isDead()){
+					animalsKilled++;
+				}
 			}else{
 				if (!invulnerable && !blink && !((Animal)e).isDead()) {
 					if (Config.getPreferencesManager().isSoundEnabled()){
@@ -458,6 +463,18 @@ public class Player extends Entity {
 		}
 	}
 
+	public boolean isDead(){
+		return dead;
+	}
+	
+	public void addAnimalKilled(){
+		animalsKilled++;
+	}
+	
+	public void addScore(int score){
+		this.score += score * multiplier;
+	}
+	
 	/**
 	 * Applies the buffs that the player receives
 	 * @param item - String of item to be applied
@@ -475,6 +492,9 @@ public class Player extends Entity {
 		if (item == "Invulnerability"){
 			invulnerable = true;
 			buffTime = System.currentTimeMillis();
+		}
+		if (item == "Coin"){
+			score += 500;
 		}
 	}
 

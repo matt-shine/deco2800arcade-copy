@@ -10,8 +10,6 @@ public class PreferencesManager {
 	private static final String PREF_VOLUME = "volume";
 	private static final String PREF_MUSIC_ENABLED = "music.enabled";
 	private static final String PREF_SOUND_ENABLED = "sound.enabled";
-	private static final String[] HIGH_SCORE_LIST = { "HIGHSCORE1",
-			"HIGHSCORE2", "HIGHSCORE3" };
 
 	public PreferencesManager() {
 	}
@@ -80,38 +78,5 @@ public class PreferencesManager {
 		getPreferences().flush();
 	}
 
-	/**
-	 * Returns a list of highscores in the form of HashMap
-	 * 
-	 * @return HashMap of highscores
-	 */
-	public HashMap<String, Integer> getHighScore() {
-		HashMap<String, Integer> highScoreList = new HashMap<String, Integer>();
-		for (int x = 0; x < 3; x++) {
-			highScoreList.put(HIGH_SCORE_LIST[x],
-					getPreferences().getInteger(HIGH_SCORE_LIST[x], 1));
-		}
-		return highScoreList;
-	}
-
-	/**
-	 * Adds a highscore, the highscore is checked to see whether it can be
-	 * classified in the top 3
-	 * 
-	 * @param score
-	 *            Integer of the high score to be added
-	 */
-	public void addHighScore(int score) {
-		HashMap<String, Integer> highScoreList = getHighScore();
-		if (highScoreList.get(HIGH_SCORE_LIST[0]) < score) {
-			getPreferences().putInteger(HIGH_SCORE_LIST[0], score);
-			getPreferences().flush();
-		} else if (highScoreList.get(HIGH_SCORE_LIST[1]) < score) {
-			getPreferences().putInteger(HIGH_SCORE_LIST[1], score);
-			getPreferences().flush();
-		} else if (highScoreList.get(HIGH_SCORE_LIST[2]) < score) {
-			getPreferences().putInteger(HIGH_SCORE_LIST[2], score);
-		}
-
-	}
+	
 }

@@ -94,7 +94,7 @@ public class Pong extends GameClient {
         
         //Getting scores
         	//Not done yet.
-		System.out.println("Request ID: " + hsd.responseTest(1));
+//		System.out.println("Request ID: " + hsd.responseTest(1));
 	}
 	
 	/**

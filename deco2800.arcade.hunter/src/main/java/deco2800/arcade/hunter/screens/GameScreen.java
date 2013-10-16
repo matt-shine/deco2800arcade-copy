@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch = new SpriteBatch();
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
-	private EntityHandler entityHandler;
+	public EntityHandler entityHandler;
 	private Music musicResource;
 	private float stateTime;	
 	private float counter;
@@ -85,7 +85,7 @@ public class GameScreen implements Screen {
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
 		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
 		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
-		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "DoublePoints",entityHandler.getItemTexture("DoublePoints"),this);
+		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "Invulnerability",entityHandler.getItemTexture("Invulnerability"),this);
 
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
@@ -211,6 +211,14 @@ public class GameScreen implements Screen {
 		multiplier = m;
 	}
 	
+	public void addScore(int score){
+		player.addScore(score);
+	}
+	
+	public void addAnimalKilled(){
+		player.addAnimalKilled();
+	}
+	
 	public EntityCollection getEntites(){
 		return entities;
 	}
@@ -226,7 +234,7 @@ public class GameScreen implements Screen {
 	}
 	
 	private void createItems(boolean weapon){
-		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability","Bow","Spear","Trident"};
+		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
 		String item =  textures[Config.randomGenerator.nextInt(6)];
 		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item),this));
 	}
@@ -245,7 +253,7 @@ public class GameScreen implements Screen {
 			gameOver();
 		}
 				
-		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
+		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded() && !player.isDead()) {
 			// Jump
 			player.jump();
 			Sound jump = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
@@ -323,6 +331,9 @@ public class GameScreen implements Screen {
 
 	public void gameOver(){
 		musicResource.stop();
+//		hunter.highscore.addMultiScoreItem("Distance", (int)player.getCurrentDistance());
+//		hunter.highscore.addMultiScoreItem("Number", player.getCurrentScore());
+//		hunter.highscore.sendMultiScoreItems();
 		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),player.getAnimalsKilled()));
 	}
 	

@@ -41,11 +41,18 @@ public class EntityHandler {
 				animFrames[index++] = tmp[0][i];
 			}
 			animalAnims.put(x, new Animation(0.5f,animFrames));
+			
+			Texture text2 = new Texture("textures/Animals/" + x + "Dead.png");
+			TextureRegion[][] tmp2 = TextureRegion.split(text2, text2.getWidth(), text2.getHeight());
+			TextureRegion[] animFrames2 = new TextureRegion[1];
+			animFrames2[0] = tmp2[0][0]; 
+			animalAnims.put(x + "DEAD", new Animation(0.5f,animFrames2));
 		}
+		
 	}
 	
 	private void loadItems(){
-		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability","Bow","Spear","Trident"};
+		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
 		for (String x:textures){
 			Texture texture = new Texture("textures/Items/" + x + ".png");
 			itemTextures.put(x, texture);

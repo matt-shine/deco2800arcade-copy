@@ -46,7 +46,6 @@ public class OptionScreen implements Screen {
 		getPreferences();
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
-		
 		Table table = new Table(skin);
 		table.setFillParent(true);
 		table.padRight(600f);

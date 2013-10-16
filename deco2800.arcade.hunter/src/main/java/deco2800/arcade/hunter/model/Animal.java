@@ -49,6 +49,8 @@ public class Animal extends Entity {
 	
 	private GameScreen gameScreen;
 
+	private String animal;
+	
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
 			String animalType, Animation anim, GameScreen game) {
 		super(pos, width, height);
@@ -63,6 +65,7 @@ public class Animal extends Entity {
 			moveSpeed = -2;
 		}
 		this.gameScreen = game;
+		this.animal = animalType;
 		entities = gameScreen.getEntites();
 	}
 
@@ -125,6 +128,7 @@ public class Animal extends Entity {
 		moveSpeed = 0;
 		this.state = State.DEAD;
 		deathTimer = System.currentTimeMillis();
+		currAnim = gameScreen.entityHandler.getAnimalAnimation(animal + "DEAD");
 	}
 	
 	/**
@@ -153,8 +157,10 @@ public class Animal extends Entity {
 	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null){
 			entities.remove(this);
-		}else if (e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() == "arrow"){
+		}else if (e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() == "arrow" && this.state != State.DEAD){
 			this.dead();
+			gameScreen.addScore(200);
+			gameScreen.addAnimalKilled();
 			entities.remove(e);
 		}
 	}

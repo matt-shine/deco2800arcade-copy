@@ -30,27 +30,19 @@ public class GameOverScreen implements Screen {
 	private Hunter hunter;
 	private Stage stage;
 	private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-	private static final String[] HIGH_SCORE_LIST = {"HIGHSCORE1","HIGHSCORE2","HIGHSCORE3"};
-	private HashMap<String,Integer> highScoreList;
-	
-	private ArrayList<Integer> highscore = new ArrayList<Integer>();
-	
 	private Texture background;
 	private SpriteBatch batch;
+	
 	public GameOverScreen(Hunter p, float distance, int score, int killCount) {
 		hunter = p;
 		stage= new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
-		highScoreList = hunter.getPreferencesManager().getHighScore();
 		
 		Texture.setEnforcePotImages(false);
 		background = new Texture("textures/mainmenu.png");
 		batch = new SpriteBatch();
-		for(int x = 0; x <3; x++){
-			highscore.add(highScoreList.get(HIGH_SCORE_LIST[x]));
-		}
-		System.out.println(highScoreList);
 		
+		System.out.println(score);
 		Table table = new Table(skin);
 		table.setFillParent(true);
 		table.padRight(600f);

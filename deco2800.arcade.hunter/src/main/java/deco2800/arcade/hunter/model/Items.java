@@ -40,7 +40,7 @@ public class Items extends Entity {
 		super(pos, width, height);
 		this.item = item;
 		this.texture = text;
-		if (item != "DoublePoints" && item != "ExtraLife" && item != "Invulnerability"){
+		if (item != "DoublePoints" && item != "ExtraLife" && item != "Invulnerability" && item != "Coin"){
 			this.type = Type.WEAPON;
 		}else{
 			this.type = Type.POWERUP;

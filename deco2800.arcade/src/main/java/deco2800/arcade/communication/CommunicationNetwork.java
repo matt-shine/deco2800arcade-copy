@@ -191,7 +191,7 @@ public class CommunicationNetwork {
 //		for (Map.Entry<Integer, List<String>> entry : chatHistory
 //				.getAllHistory().entrySet()) {
 //			System.out.println("History with: " + entry);
-		}
+//		}
 	}
 	
 	public List<String> getChatHistory(int playerID) {

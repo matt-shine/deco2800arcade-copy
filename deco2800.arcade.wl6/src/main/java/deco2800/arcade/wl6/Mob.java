@@ -10,7 +10,7 @@ public class Mob extends Doodad {
 
     private float angle = 0;
     private Vector2 vel = new Vector2();
-    protected GameModel game;
+    protected GameModel gameModel;
     protected Random rand;
     protected int health;
 
@@ -20,8 +20,8 @@ public class Mob extends Doodad {
     }
 
     @Override
-    public void tick(GameModel game) {
-        this.game = game;
+    public void tick(GameModel gameModel) {
+        this.gameModel = gameModel;
         setPos(getPos(), vel);
     }
 
@@ -51,12 +51,12 @@ public class Mob extends Doodad {
 
     }
 
-    // FIXME: this currently stops secret doors from being opened
+    // FIXME: this currently stops secret doors from being walked through
     public void setPos(Vector2 pos, Vector2 vel) {
         int checkX = vel.x > 0 ? (int) (pos.x + vel.x + 0.1) : (int) (pos.x + vel.y - 0.1);
         int checkY = vel.y > 0 ? (int) (pos.y + vel.y + 0.1) : (int) (pos.y + vel.y - 0.1);
 
-        if (WL6Meta.hasSolidBlockAt(checkX, checkY, game.getMap())) {
+        if (WL6Meta.hasSolidBlockAt(checkX, checkY, gameModel.getMap())) {
             setPos(pos);
         }
         else {
@@ -84,8 +84,8 @@ public class Mob extends Doodad {
 
         for (int i = 0; i < WL6.MAP_DIM; i++) {
             for (int j = 0; j < WL6.MAP_DIM; j++) {
-                if (WL6Meta.block(game.getMap().getTerrainAt(i, j)).solid) {
-                    Rectangle2D rect = new Rectangle2D.Double(i, j, i+1, j+1);
+                if (WL6Meta.block(gameModel.getMap().getTerrainAt(i, j)).solid) {
+                    Rectangle2D rect = new Rectangle2D.Double(i, j, 1, 1);
                     if (rect.intersectsLine(line)) {
                         return false;
                     }

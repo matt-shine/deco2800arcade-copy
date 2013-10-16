@@ -340,28 +340,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //108: Guard 1 (Standing)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.RIGHT, null),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //109: Guard 1 (Standing)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP, null),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //110: Guard 1 (Standing)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.LEFT, null),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //111: Guard 1 (Standing)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, null),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //112: Guard 1 (Moving)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //113: Guard 1 (Moving)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //114: Guard 1 (Moving)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //115: Guard 1 (Moving)
-                    new DoodadInfo(true, "snowman", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //116: nothing
                     new DoodadInfo(),

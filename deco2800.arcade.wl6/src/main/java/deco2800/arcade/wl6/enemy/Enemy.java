@@ -1,7 +1,11 @@
 package deco2800.arcade.wl6.enemy;
 
+import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
+import deco2800.arcade.wl6.WL6Meta;
+
+import java.util.LinkedList;
 
 public class Enemy extends Mob {
 
@@ -21,22 +25,21 @@ public class Enemy extends Mob {
     }
 
     // current state
-    public STATES state = STATES.NO_STATE;
-    // speed while pathing
-    public int pathSpeed;
-    // speed while chasing
-    public int chaseSpeed;
-    // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
-    public boolean pain;
-    // points awarded when killed
-    public int points;
+    private STATES state = STATES.NO_STATE;;
+    //
+    protected float pathSpeed;
+    //
+    protected float chaseSpeed;
+    //
+    protected Vector2 faceDir = new Vector2();
 
+
+    // path list
+    protected LinkedList<Vector2> path;
+    // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
+    protected boolean pain;
     // damage
-    public int damage;
-    // damage type (hitscan, projectile)
-    public int HITSCAN = 0;
-    public int PROJECTILE = 1;
-    public int dType;
+    protected int damage;
 
 
     public Enemy(int uid) {
@@ -44,85 +47,40 @@ public class Enemy extends Mob {
     }
 
     @Override
-    public void tick(GameModel game) {
-        super.tick(game);
+    public void tick(GameModel gameModel) {
+        super.tick(gameModel);
         detectPlayer();
-    }
-
-    public STATES getState() {
-        return state;
+        if (health <= 0) {
+            changeStates(STATES.DIE, 0);
+            gameModel.destroyDoodad(this);
+        }
     }
 
     public void setState(STATES state) {
         this.state = state;
     }
 
-    private void calculatePath() {
-        float initX = this.getPos().x;
-        float initY = this.getPos().y;
-        int initAngle = (int)this.getAngle();
-
-        float x;
-        float y;
-        int angle;
-
-        switch (initAngle){
-            case 0:
-                x = initX;
-                y = initY + 1;
-                angle = initAngle;
-            case 45:
-                x = initX - 1;
-                y = initY + 1;
-                angle = initAngle;
-            case 90:
-                x = initX - 1;
-                y = initY;
-                angle = initAngle;
-            case 135:
-                x = initX - 1;
-                y = initY - 1;
-                angle = initAngle;
-            case 180:
-                x = initX;
-                y = initY - 1;
-                angle = initAngle;
-            case 225:
-                x = initX + 1;
-                y = initY - 1;
-                angle = initAngle;
-            case 270:
-                x = initX + 1;
-                y = initY;
-                angle = initAngle;
-            case 315:
-                x = initX + 1;
-                y = initY + 1;
-                angle = initAngle;
-        }
-    }
-
     /**
      * Tells the enemy to change states
-     * @param oldState state the enemy is currently in
-     * @param newState state to change the enemy to
+     * @param State state to change the enemy to
      * @param delay time taken to change states
      *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
      */
-    public void changeStates(STATES oldState, STATES newState, int delay) {
-        setState(newState);
+    public void changeStates(STATES State, int delay) {
+        setState(State);
     }
 
-    // follow patrol path (walk from waypoint to waypoint)
-    public void walk(int nextWaypoint) {
+    // follow patrol path
+    public void path() {
 
     }
 
     // detect player
     public void detectPlayer() {
-        if (canSee(game.getPlayer())) {
-            setState(STATES.ATTACK);
+        if (canSee(gameModel.getPlayer())) {
+            changeStates(STATES.ATTACK, 0);
             doDamage();
+            changeStates(STATES.CHASE, 0);
         }
     }
 
@@ -139,12 +97,24 @@ public class Enemy extends Mob {
 
 
     @Override
+    public void takeDamage(int damage) {
+        if (pain) {
+            changeStates(STATES.PAIN, 0);
+            setHealth(getHealth() - damage);
+            changeStates(STATES.CHASE, 0);
+        }
+        else {
+            setHealth(getHealth() - damage);
+        }
+    }
+
+    @Override
     public void doDamage() {
-        float dist = this.getPos().dst(game.getPlayer().getPos());
+        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
         boolean speed = false;
         boolean look = false;
         int damage = calcDamage((int)dist, speed, look);
-        game.getPlayer().takeDamage(damage);
+        gameModel.getPlayer().takeDamage(damage);
     }
 
     /**
@@ -182,6 +152,66 @@ public class Enemy extends Mob {
         }
 
         return damage;
+    }
+
+    // Ugly mess that I need to change.  Working on it atm
+    public void calculatePath() {
+        path = new LinkedList<Vector2>();
+        WL6Meta.DIRS[][] waypoints = gameModel.getWapoints();
+
+        int x = (int)getPos().x;
+        int y = (int)getPos().y;
+        int angle = (int)this.getAngle();
+        path.addFirst(new Vector2(x, y));
+
+        boolean complete = false;
+
+        while (!complete) {
+            switch (angle) {
+                case 0:
+                    x = x + 1;
+                    y = y + 0;
+                    break;
+                case 45:
+                    x = x + 1;
+                    y = y + 1;
+                    break;
+                case 90:
+                    x = x + 0;
+                    y = y + 1;
+                    break;
+                case 135:
+                    x = x - 1;
+                    y = y + 1;
+                    break;
+                case 180:
+                    x = x - 1;
+                    y = y + 0;
+                    break;
+                case 225:
+                    x = x - 1;
+                    y = y - 1;
+                    break;
+                case 270:
+                    x = x + 0;
+                    y = y - 1;
+                    break;
+                case 315:
+                    x = x + 1;
+                    y = y - 1;
+                    break;
+            }
+
+            if (waypoints[x][y] != null) {
+                if(path.contains(new Vector2(x, y))) {
+                    complete = true;
+                }
+                else {
+                    path.add(new Vector2(x, y));
+                    angle = (int)WL6Meta.dirToAngle(waypoints[x][y]);
+                }
+            }
+        }
     }
 }
 

@@ -132,15 +132,15 @@ public class MapProcessor {
                 case NOT_AN_ENEMY:
                     break;
                 case GUARD:
-                    dd = new Guard(doodadID());
+                    dd = new Guard(doodadID(), d);
                     break;
                 case OFFICER:
                     break;
                 case SS:
-                    dd = new SS(doodadID());
+                    dd = new SS(doodadID(), d);
                     break;
                 case DOG:
-                    dd = new Dog(doodadID());
+                    dd = new Dog(doodadID(), d);
                     break;
                 case MUTANT:
                     break;

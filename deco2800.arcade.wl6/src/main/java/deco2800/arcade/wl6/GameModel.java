@@ -169,7 +169,9 @@ public class GameModel {
         waypoints[x][y] = angle;
     }
 
-
+    public WL6Meta.DIRS[][] getWapoints() {
+        return waypoints.clone();
+    }
 
 
     /**

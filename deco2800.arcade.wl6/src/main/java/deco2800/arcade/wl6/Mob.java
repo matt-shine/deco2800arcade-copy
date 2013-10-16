@@ -77,10 +77,11 @@ public class Mob extends Doodad {
         Vector2 targetPos = d.getPos();
         Line2D line = new Line2D.Double(selfPos.x, selfPos.y, targetPos.x, targetPos.y);
         float dist = selfPos.dst(targetPos);
-        //System.out.println(dist);
-        /*if (dist > 10) {
+
+        if (dist > 15) {
             return false;
-        }*/
+        }
+
         for (int i = 0; i < WL6.MAP_DIM; i++) {
             for (int j = 0; j < WL6.MAP_DIM; j++) {
                 if (WL6Meta.block(game.getMap().getTerrainAt(i, j)).solid) {

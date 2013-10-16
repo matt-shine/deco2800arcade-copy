@@ -1,9 +1,7 @@
 package deco2800.arcade.wl6.enemy;
 
-import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
-import deco2800.arcade.wl6.WL6Meta;
 
 public class Enemy extends Mob {
 
@@ -73,10 +71,34 @@ public class Enemy extends Mob {
                 x = initX;
                 y = initY + 1;
                 angle = initAngle;
-
             case 45:
-
+                x = initX - 1;
+                y = initY + 1;
+                angle = initAngle;
             case 90:
+                x = initX - 1;
+                y = initY;
+                angle = initAngle;
+            case 135:
+                x = initX - 1;
+                y = initY - 1;
+                angle = initAngle;
+            case 180:
+                x = initX;
+                y = initY - 1;
+                angle = initAngle;
+            case 225:
+                x = initX + 1;
+                y = initY - 1;
+                angle = initAngle;
+            case 270:
+                x = initX + 1;
+                y = initY;
+                angle = initAngle;
+            case 315:
+                x = initX + 1;
+                y = initY + 1;
+                angle = initAngle;
         }
     }
 

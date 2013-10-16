@@ -1,6 +1,7 @@
 package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -33,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.Arcade;
+import deco2800.arcade.Pong;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
@@ -888,8 +890,7 @@ public class MultiGamelist implements Screen {
 		    	dispose();
 				ArcadeSystem.setMatchMaking(true);
 				ArcadeSystem.setGameWaiting(true);
-				
-		    	//ArcadeSystem.goToGame("Pong");
+		    	ArcadeSystem.goToGame("Pong");
 		    	arcadeUI.setScreen(arcadeUI.getWait());
 		    	System.out.println("paused");
 		    }

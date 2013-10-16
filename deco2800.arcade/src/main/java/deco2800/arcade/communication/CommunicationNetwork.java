@@ -20,7 +20,7 @@ public class CommunicationNetwork {
 	private NetworkClient networkClient;
 	private Map<Integer, ChatNode> chatNodes = new HashMap<Integer, ChatNode>();
 	private TextMessage textMessage;
-	private CommunicationView view = new CommunicationView();
+	//private CommunicationView view = new CommunicationView();
 	private ChatNode currentChat;
 	private CommunicationController controller;
 	private ChatHistory chatHistory;
@@ -45,7 +45,7 @@ public class CommunicationNetwork {
 		ChatNode node = new ChatNode(chatParticipants);
 		chatNodes.put(chatParticipants.hashCode(), node);
 		currentChat = node;
-		view.addChatNode(node);
+		//view.addChatNode(node);
 	}
 
 	/**
@@ -161,9 +161,9 @@ public class CommunicationNetwork {
 		this.chatNodes = new HashMap<Integer, ChatNode>();
 		this.textMessage = new TextMessage();
 		this.chatHistory = new ChatHistory();
-		this.view = new CommunicationView();
-		// this.model = new CommunicationModel();
-		this.controller = new CommunicationController(view, null, this);
+		//this.view = new CommunicationView();
+		//this.model = new CommunicationModel();
+		//this.controller = new CommunicationController(view, null, this);
 	}
 
 	/**

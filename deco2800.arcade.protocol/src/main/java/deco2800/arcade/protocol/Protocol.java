@@ -72,7 +72,7 @@ import deco2800.arcade.protocol.replay.StartSessionResponse;
 import deco2800.arcade.protocol.replay.demo.ReplayRequest;
 import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 import deco2800.arcade.protocol.replay.types.Session;
-//import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.Achievement;
 
 public class Protocol {
 	
@@ -104,7 +104,7 @@ public class Protocol {
 		kryo.register(CreditBalanceResponse.class);
 
 		// Achievement messages
-		//kryo.register(Achievement.class);
+		kryo.register(Achievement.class);
 		kryo.register(AchievementsForIDsRequest.class);
 		kryo.register(AchievementsForIDsResponse.class);
 		kryo.register(AchievementsForGameRequest.class);
@@ -170,8 +170,8 @@ public class Protocol {
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);
-    kryo.register(FetchGameRequest.class);
-    kryo.register(FetchGameResponse.class);
+		kryo.register(FetchGameRequest.class);
+		kryo.register(FetchGameResponse.class);
 		
 		//Lobby classes
 		kryo.register(NewLobbyRequest.class);

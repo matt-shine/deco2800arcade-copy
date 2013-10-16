@@ -23,22 +23,24 @@ public class GamePlayer {
 	private int score;
 	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the playerTexture
 	private Vector2 velocity = new Vector2(); // The current velocity of the playerTexture as x,y
+	private boolean isAI;
 	
-	
-	public GamePlayer()
-	{
-	}
+//	public GamePlayer()
+//	{
+//	}
 	
 	/**
 	 * Basic constructor for playerTexture. Set position and dimensions to the default
+	 * @param isAI TODO
 	 */
-	public GamePlayer(String playerName) {
+	public GamePlayer(String playerName, boolean isAI) {
 		getBounds().x = 0;
 		getBounds().y = 0;
 		getBounds().height = WIDTH;
 		getBounds().width = WIDTH;
 		score = 0; //initial score of the playerTexture
 		this.playerName = playerName;
+		this.isAI = isAI;
 	}
 
 	public Rectangle getBounds() {
@@ -120,11 +122,10 @@ public class GamePlayer {
 	}
     
    public int getDnumber(int diceNumber){
-//    	positionIndex+=diceNumber;
-	    positionIndex = 59;
-    	if(positionIndex>=100)
+    	positionIndex+=diceNumber;
+    	if(positionIndex>=99)
     	{
-    		positionIndex=100;
+    		positionIndex=99;
     	}
     	return positionIndex;
     }
@@ -180,6 +181,14 @@ public class GamePlayer {
 	}
 	public Vector2 getVelocity() {
 		return velocity;
+	}
+
+	public boolean isAI() {
+		return isAI;
+	}
+
+	public void setAI(boolean isAI) {
+		this.isAI = isAI;
 	}
 
 }

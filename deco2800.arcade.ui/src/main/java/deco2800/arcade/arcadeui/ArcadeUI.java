@@ -1,5 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import deco2800.arcade.arcadeui.store.StoreHome;
+import deco2800.arcade.arcadeui.store.StoreScreen;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -7,6 +9,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+
 
 /**
  * This class is the main interface for the arcade.
@@ -16,15 +19,18 @@ import deco2800.arcade.model.Player;
 @InternalGame
 @ArcadeGame(id="arcadeui")
 public class ArcadeUI extends GameClient {
-
-    LoginScreen login = null;
-    StoreScreen store = null;
-    HomeScreen home = null;
+	
+	LoginScreen login = null;
+	StoreHome store = null;
+	HomeScreen home = null;
+    FrontPage main = null;
     RegisterScreen register = null;
+    MultiplayerLobby lobby = null;
+    BettingWindow betting = null;
 
-    public ArcadeUI(Player player, NetworkClient networkClient) {
-        super(player, networkClient);
-    }
+	public ArcadeUI(Player player, NetworkClient networkClient) {
+		super(player, networkClient);
+	}
 
     @Override
     public void create() {
@@ -36,49 +42,75 @@ public class ArcadeUI extends GameClient {
 
         // Initialise the different screens.
         login = new LoginScreen(this);
-        home = new HomeScreen();
-        store = new StoreScreen();
+
+        home = new HomeScreen(this);
+        store = new StoreHome(this);
+        main = new FrontPage(this);
+
         register = new RegisterScreen(this);
+        lobby = new MultiplayerLobby(this);
+        betting = new BettingWindow(this);
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
-            this.setScreen(home);
+            this.setScreen(main);
         } else {
             this.setScreen(login);
+        }
+        
+        if (ArcadeSystem.isMultiplayerEnabled()) {
+        	this.setScreen(lobby);
         }
 
         super.create();
     }
+    
+    
+    
 
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
+	
+	@Override
+	public void pause() {
+		super.pause();
+	}
+	
+	@Override
+	public void render() {
+		super.render();
+	}
 
-    @Override
-    public void pause() {
-        super.pause();
-    }
+	@Override
+	public void resume() {
+		super.resume();
+	}
 
-    @Override
-    public void render() {
-        super.render();
-    }
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "arcadeui";
+		game.name = "Arcade UI";
+	}
 
-    @Override
-    public void resume() {
-        super.resume();
-    }
-
-    private static final Game game;
-    static {
-        game = new Game();
-        game.id = "arcadeui";
-        game.name = "Arcade UI";
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
+	public Game getGame() {
+		return game;
+	}
+	
+	public HomeScreen getHome() {
+		return home;
+	}
+	
+	public StoreHome getStore() {
+		return store;
+	}
+	
+	public MultiplayerLobby getLobby() {
+		return lobby;
+	}
+	public BettingWindow getBetting() {
+		return betting;
+	}
 }

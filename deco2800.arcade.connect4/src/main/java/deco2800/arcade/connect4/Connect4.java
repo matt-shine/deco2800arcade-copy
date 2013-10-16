@@ -21,7 +21,7 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.highscores.*;
+
 import java.util.*;
 /**
  * A Connect4 game for use in the Arcade
@@ -54,7 +54,7 @@ public class Connect4 extends GameClient {
 	public static final int SCREENHEIGHT = 480;
 	public static final int SCREENWIDTH = 800;
 	
-	private final int AI_DELAY = 500;
+	private final int AI_DELAY = 100;
 	
 	private final int KEY_LEFT = 0;
 	private final int KEY_RIGHT = 1;
@@ -78,7 +78,7 @@ public class Connect4 extends GameClient {
 	int nextComputerCol = -1;
 
 	/**
-	 * Basic constructor for the Checkers game
+	 * Basic constructor for the Connect4 game
 	 * @param player The name of the player
 	 * @param networkClient The network client for sending/receiving messages to/from the server
 	 */
@@ -91,7 +91,7 @@ public class Connect4 extends GameClient {
 		keyCodes[KEY_RIGHT] = 0; //Right Key
 		keyCodes[KEY_ENTER] = 0; //Enter Key
 		
-        this.networkClient = networkClient; //this is a bit of a hack  
+        this.networkClient = networkClient; //this is a bit of a hack 
         
         replayHandler = new ReplayHandler( this.networkClient );
 		replayListener = new ReplayListener(replayHandler);
@@ -110,9 +110,10 @@ public class Connect4 extends GameClient {
 						                    new String[]{"col"}
 						                       );
 		
-		replayHandler.startSession( 1, "replayers" );
+		replayHandler.requestSessionList(getGame().id);
+		
+		replayHandler.startSession( getGame().id, players[ 0 ] );
 	}
-	
 
 	private ReplayEventListener initReplayEventListener() {
 	    return new ReplayEventListener() {
@@ -123,6 +124,9 @@ public class Connect4 extends GameClient {
                 }
                 if ( eType.equals( "event_pushed" ) ) {
                     System.out.println( eType );
+                }
+                if ( eType.equals( "session_list" ) ) {
+                    System.out.println( eData );
                 }
                 if ( eType.equals( "replay_reset" ) ) {
                     System.out.println( "replay reset" );
@@ -239,7 +243,11 @@ public class Connect4 extends GameClient {
 	}
 	
 	public void init() {
-
+		ArrayList<String> ButtonList =  new ArrayList<String>();
+		//Test setup button list
+		ButtonList.add("Quit");
+		ButtonList.add("Replay");
+		
 		//Set the current player's turn
 		playerTurn = 0;
 		
@@ -252,6 +260,7 @@ public class Connect4 extends GameClient {
 		buttons = new Buttons();
 		buttons.setX(Gdx.graphics.getWidth());
 		buttons.setY(Gdx.graphics.getHeight() - 20);
+		buttons.AddButtonsFromList(ButtonList);
 		buttons.hide();
 		
 		//Create the cursor disc
@@ -480,7 +489,11 @@ public class Connect4 extends GameClient {
 			   			//Replay button has been pressed
 			   			reset();
 				    	gameState = GameState.REPLAY;
-				    	replayHandler.startPlayback();
+				    	//replayHandler.startPlayback();
+				    	//replayHandler.requestEventsForSession(replayHandler.getSessionId());
+				    	//replayHandler.endSession(replayHandler.getSessionId());
+				    	replayHandler.playbackLastSession();
+				    	
 				    	isReplaying = true;
 				    	buttons.hide();
 			   		}
@@ -505,12 +518,14 @@ public class Connect4 extends GameClient {
 		if (player == 0){
 	    	if (table.checkFieldWinner( Disc.PLAYER1 )) {
 	    		gameState = GameState.GAMEOVER;
+		    	replayHandler.endCurrentSession();
 	    		endGame( 0 );
 	    	}
 	    	//renderCursorDisc(1);
 	    } else {
 	    	if (table.checkFieldWinner( Disc.PLAYER2 )) {
 	    		gameState = GameState.GAMEOVER;
+		    	replayHandler.endCurrentSession();
 	    		endGame( 1 );
 	    	}
 	    	//renderCursorDisc(0);

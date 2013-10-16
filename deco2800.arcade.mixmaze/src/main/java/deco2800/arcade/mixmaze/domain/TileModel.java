@@ -1,264 +1,328 @@
 package deco2800.arcade.mixmaze.domain;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static deco2800.arcade.mixmaze.domain.Direction.*;
-import static deco2800.arcade.mixmaze.domain.PlayerModel.PlayerAction.USE_BRICK;
 
 /**
- * TileModel represents a tile on game board.
+ * TileModel represents a tile on the game board.
  */
 public class TileModel {
-	private static final String LOG = "TileModel: ";
-	static int ITEMSCOUNT = 0;
 
-	// Tile data
-	private int tileX;
-	private int tileY;
-	private WallModel[] walls;
+	/** Column number */
+	private int x;
 
-	private PlayerModel boxer;
+	/** Row number */
+	private int y;
 
-	//private Random spawner = new Random(1);
-	private Random spawner;
-	private ItemModel spawnedItem;
-	private long lastSpawned;
+	/** Whether the box is built or not */
+	private boolean isBoxBuilt = false;
+
+	/** Tiles adjacent to this tile */
+	private TileModel[] adjacentTiles;
+
+	/** Walls adjacent to this tile */
+	private WallModel[] walls = new WallModel[4];
+
+	/** Player who built the box or <code>null</code> if not built */
+	private PlayerModel boxer = null;
+
+	/** Observers to this tile */
+	private List<TileModelObserver> observers = new ArrayList<TileModelObserver>();
 
 	/**
-	 * Returns the column number of this tile on game board. origin is at the top left corner.
-	 *
-	 * @return the column number
+	 * Constructs a new <code>TileModel</code> at (<code>x</code>,
+	 * <code>y</code>) with <code>adjWalls</code> surrounding this
+	 * <code>TileModel</>.
+	 * 
+	 * @param x
+	 *            the column number (origin at top left)
+	 * @param y
+	 *            the row number (origin at top left)
+	 * @param adjacentTiles
+	 *            the tiles adjacent to this tile
 	 */
-	public int getX() {
-		return tileX;
+	public TileModel(int x, int y, TileModel[] adjacentTiles) {
+		this.x = x;
+		this.y = y;
+		if (adjacentTiles == null) {
+			this.adjacentTiles = new TileModel[0];
+		} else {
+			this.adjacentTiles = Arrays.copyOf(adjacentTiles,
+					adjacentTiles.length);
+		}
+		initializeWalls();
 	}
 
 	/**
-	 * Returns the row number of this tile on game board.origin is at the top left corner.
-	 *
+	 * Initialises the walls adjacent to this tile.
+	 */
+	private void initializeWalls() {
+		for (int direction = 0; direction < 4; ++direction) {
+			TileModel adjTile = adjacentTiles[direction];
+
+			if (adjTile != null) {
+				int polarDir = Direction.getPolarDirection(direction);
+				walls[direction] = adjTile.getWall(polarDir);
+				adjTile.addAdjacentTile(this, polarDir);
+			} else {
+				walls[direction] = new WallModel();
+			}
+
+			if (direction == Direction.NORTH || direction == Direction.EAST) {
+				walls[direction].setLeftTile(this);
+			} else {
+				walls[direction].setRightTile(this);
+			}
+		}
+	}
+
+	/**
+	 * Adds an observer to this tile.
+	 * 
+	 * @param observer
+	 *            the observer
+	 */
+	public void addObserver(TileModelObserver observer) {
+		observers.add(observer);
+	}
+
+	/**
+	 * Updates all observers on the item status.
+	 * 
+	 * @param type
+	 *            the item type
+	 */
+	public void updateType(ItemModel.Type type) {
+		for (TileModelObserver o : observers) {
+			o.updateType(type);
+		}
+	}
+
+	/**
+	 * Updates all observers on the boxer on this tile.
+	 * 
+	 * @param id
+	 *            the id of the boxer
+	 */
+	private void updateBoxer(int id) {
+		for (TileModelObserver o : observers) {
+			o.updateBoxer(id);
+		}
+	}
+
+	private TileModel getAdjacentTile(int direction) {
+		if (!Direction.isDirection(direction)) {
+			throw Direction.NOT_A_DIRECTION;
+		}
+		return adjacentTiles[direction];
+	}
+
+	/**
+	 * Records an adjacent tile to this tile.
+	 * 
+	 * @param tile
+	 *            the adjacent tile
+	 * @param direction
+	 *            the direction of the adjacent tile to this tile
+	 */
+	private void addAdjacentTile(TileModel tile, int direction) {
+		TileModel cTile = adjacentTiles[direction];
+
+		if (cTile != null && cTile != tile) {
+			throw new IllegalStateException(
+					"tile adjacency cannot be changed once set.");
+		}
+		adjacentTiles[direction] = tile;
+	}
+
+	/**
+	 * Determines if the tile is on the edge of the game board.
+	 * 
+	 * @return <CODE>true</CODE> if the tile is at the edge of of the game
+	 *         board, <CODE>false</CODE> otherwise
+	 */
+	public boolean isEdgeTile() {
+		for (int direction = 0; direction < 4; ++direction) {
+			if (adjacentTiles[direction] == null) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean isBoxBuilt() {
+		return isBoxBuilt;
+	}
+
+	/**
+	 * Returns the column number of this tile on game board. Origin is at the
+	 * top left corner.
+	 * 
+	 * @return the column number
+	 */
+	public int getX() {
+		return x;
+	}
+
+	/**
+	 * Returns the row number of this tile on game board. Origin is at the top
+	 * left corner.
+	 * 
 	 * @return the row number
 	 */
 	public int getY() {
-		return tileY;
+		return y;
 	}
 
 	/**
 	 * Returns the adjacent wall specified by <code>direction</code>.
-	 *
-	 * @param direction a direction specifying the adjacent wall this tile.
+	 * 
+	 * @param direction
+	 *            the direction of the requested wall
 	 * @return the adjacent wall in the specified <code>direction</code>
-	 * @throws IllegalArgumentException If <code>direction</code> is not one
-	 * 				    of <code>WEST</code>,
-	 * 				    <code>NORTH</code>,
-	 *				    <code>EAST</code>,
-	 *				    or <code>SOUTH</code>.
+	 * @throws IllegalArgumentException
+	 *             If <code>direction</code> is not one of <code>WEST</code>,
+	 *             <code>NORTH</code>, <code>EAST</code>, or <code>SOUTH</code>.
 	 */
 	public WallModel getWall(int direction) {
-		// Check the specified direction is in range.
 		if (!isDirection(direction)) {
 			throw NOT_A_DIRECTION;
 		}
+
 		return walls[direction];
 	}
 
 	/**
-	 * Tries to build a wall on this tile facing the specified <code>direction</code>.
-	 * A wall is built if these conditions are satisfied:
-	 * <ul>
-	 *   <li>there is no wall already in the specified <code>direction</code>
-	 *   <li>the <code>player</code> has at least one brick
-	 *   <li>the <code>player</code>'s active action is to use brick
-	 * </ul>
-	 *
-	 * @param player the player in this tile
-	 * @param direction the direction which the wall needs to be built.
-	 * @throws IllegalArgumentException If <code>player</code> is
-	 * 				    <code>null</code>
-	 * @return <code>true</code> if the wall is built,<code>false</code> otherwise
+	 * Checks if the wall on the specified <code>direction</code> is built.
+	 * 
+	 * @param direction
+	 *            the direction
+	 * @return <code>true</code> if the wall is built, <code>false</code>
+	 *         otherwise.
 	 */
-	public boolean buildWall(PlayerModel player, int direction) {
-		if (player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
-		}
-
-		WallModel wall = getWall(player.getDirection());
-
-		if (wall.isBuilt() || player.getBrick().getAmount() <= 0
-				|| player.getPlayerAction() != USE_BRICK) {
-			return false;
-		} else {
-			player.getBrick().removeOne();
-			wall.build(player);
-			return true;
-		}
-	}
-
-	/**
-	 * Tries to destroy the wall on the specified <code>direction</code> of this tile.
-	 * A wall is destroyed if these conditions are satisfied:
-	 * <ul>
-	 *   <li>the wall is already built
-	 *   <li>the <code>player</code> is using a pick or TNT.
-	 * </ul>
-	 *
-	 * @param player the player in this tile
-	 * @param direction the direction which the wall needs to be destroyed.
-	 * @throws IllegalArgumentException If <code>player</code> is
-	 * 				    <code>null</code>
-	 * @return <code>true</code> if the wall is destroyed,<code>false</code> otherwise
-	 */
-	public boolean destroyWall(PlayerModel player, int direction) {
-		if (player == null) {
-			throw new IllegalArgumentException(
-					"player cannot be null.");
-		}
-
-		WallModel wall = getWall(direction);
-		if (!wall.isBuilt() || player.getPlayerAction() == USE_BRICK) {
-			return false;
-		} else {
-			wall.destroy(player);
-			return true;
-		}
-	}
-
-	/**
-	 * Assign this tile's boxer to the specified <code>player</code>.
-	 * Boxer is only assign to this tile given that this tile is a complete box.
-	 * Otherwise, the boxer is set to <code>null</code>.
-	 *
-	 * @param player the player in this tile
-	 */
-	//probably good if the method name can be changed to something like assignBoxer
-	public void checkBox(PlayerModel player) {
-		if (player == null) {
-			throw new IllegalArgumentException("player cannot be null.");
-		}
-
-		boxer = isBox() ? player : null;
+	public boolean isWallBuilt(int direction) {
+		return getWall(direction).isBuilt();
 	}
 
 	/**
 	 * Checks if this tile is a complete box.
-	 *
-	 * @return <code>true</code> if this tile is a complete box, <code>false</code> otherwise.
+	 * 
+	 * @return <code>true</code> if this tile is a complete box,
+	 *         <code>false</code> otherwise.
 	 */
-	public boolean isBox() {
-		return getWall(WEST).isBuilt()
-				&& getWall(NORTH).isBuilt()
-				&& getWall(EAST).isBuilt()
-				&& getWall(SOUTH).isBuilt();
+	public boolean isWallBox() {
+		return isWallBuilt(WEST) && isWallBuilt(NORTH) && isWallBuilt(EAST)
+				&& isWallBuilt(SOUTH);
 	}
 
 	/**
 	 * Returns the boxer of this tile.
-	 *
-	 * @return the <code>player</code>, if there is a complete box, <code>null</code> otherwise
+	 * 
+	 * @return the <code>player</code> if there is a complete box,
+	 *         <code>null</code> otherwise
 	 */
 	public PlayerModel getBoxer() {
 		return boxer;
 	}
 
 	/**
-	 * Returns the current <code>item</code> on this tile.The item can be one of <code>Brick</code>,
-	 * <code>Pick</code>,<code> TNT</code>
-	 *
-	 * @return the <code>item</item> if it's present, <code>null</code> otherwise.
+	 * Sets the boxer of this tile.
+	 * 
+	 * @param p
+	 *            the builder
 	 */
-	public ItemModel getSpawnedItem() {
-		return spawnedItem;
-	}
-
-	private ItemModel getRandomItem() {
-		double spawnFactor = spawner.nextDouble();
-
-		if(spawnFactor <= 0.1) {
-			//System.err.println(LOG + "spawning TNT");
-			return new TNTModel(this);
-		} else if(spawnFactor <= 0.2) {
-			//System.err.println(LOG + "spawning pick");
-			return new PickModel(this);
-		} else {
-			int amount = spawner.nextInt(3) + 1;
-			//System.err.println(LOG + "spawning brick");
-			return new BrickModel(this, amount);
-		}
+	public void setBoxer(PlayerModel p) {
+		boxer = p;
 	}
 
 	/**
-	 * Spawns a item on this tile. The item can be a <code>Pick</code>,<code> TNT</code> or a
-	 *  collection of <code>Bricks</code>
+	 * Validates the status of the box on this tile, and modifies the
+	 * <code>boxer</code> based on any change.
+	 * 
+	 * @param player
+	 *            the player who used an action against this tile
 	 */
-	public void spawnItem() {
-		if (spawnedItem == null && (System.currentTimeMillis() - lastSpawned) >= (10 * 1000)) {
-			if(spawner.nextDouble() <= 0.15 && ITEMSCOUNT < 3) {
-				spawnedItem = getRandomItem();
-				ITEMSCOUNT++;
+	public void validateBox(PlayerModel player) {
+		validateBox(player, false, false);
+	}
+
+	private void validateBox(PlayerModel player, boolean multiboxing,
+			boolean build) {
+		// Check multi-boxing
+		if (!multiboxing) {
+			List<TileModel> boxes = new ArrayList<TileModel>();
+			List<TileModel> builtBoxes = new ArrayList<TileModel>();
+			if (findBoxes(this, boxes) != null) {
+				for (TileModel box : boxes) {
+					box.validateBox(player, true, true);
+				}
+				return;
+			} else if (findBuiltBoxes(this, builtBoxes) != null) {
+				for (TileModel box : builtBoxes) {
+					box.validateBox(player, true, false);
+				}
+				return;
 			}
-			lastSpawned = System.currentTimeMillis();
+		}
+
+		if (!isBoxBuilt() && ((multiboxing && build) || isWallBox())) {
+			isBoxBuilt = true;
+			boxer = player;
+			boxer.incrementScore();
+			updateBoxer(player.getId());
+		} else if (isBoxBuilt() && ((multiboxing && !build) || !isWallBox())) {
+			isBoxBuilt = false;
+			boxer.decrementScore();
+			boxer = null;
+			updateBoxer(0);
 		}
 	}
 
-	/**
-	 * Destroy the <code>item</code> on this tile. If there is no spawned item in this tile, an
-	 * <code>IllegalStateException</code> is thrown
-	 *
-	 * @throws IllegalStateException if there is no item present in this tile
-	 */
-	//probably a good idea to change the method name to destroyItem. coz this method get confused
-	// with the playermodel.pickUpItem and also it destroy rhe spawned item? dumi
-	public void pickUpItem() {
-		if(spawnedItem == null) {
-			throw new IllegalStateException("No spawnedItem to consume.");
+	private List<TileModel> findBoxes(TileModel tile, List<TileModel> tileList) {
+		if (tile == null) {
+			return null;
 		}
-		spawnedItem = null;
-		ITEMSCOUNT--;
+
+		List<TileModel> tiles = (tileList != null) ? tileList
+				: new ArrayList<TileModel>();
+		tiles.add(tile);
+		for (int direction = 0; direction < 4; ++direction) {
+			WallModel wall = tile.getWall(direction);
+			if (!wall.isBuilt()) {
+				TileModel adjTile = tile.getAdjacentTile(direction);
+				if (!tiles.contains(adjTile)
+						&& findBoxes(adjTile, tiles) == null) {
+					return null;
+				}
+			}
+		}
+		return tiles;
 	}
 
-	/**
-	 * checks if the an <code>item</code> is present in this tile.If so,
-	 * <code>player</code> picks up the item.
-	 *
-	 * @param player the player in this tile
-	 *
-	 * @throws IllegalStateException if the <code>player's</code> coordinates doesn't match up with this tile's coordinates
-	 */
-	public void onPlayerEnter(PlayerModel player) {
-		if(player.getX() != tileX || player.getY() != tileY) {
-			throw new IllegalStateException("The player did not enter the tile.");
+	private List<TileModel> findBuiltBoxes(TileModel tile,
+			List<TileModel> tileList) {
+		if (tile == null || !tile.isBoxBuilt()) {
+			return null;
 		}
 
-		if(spawnedItem != null) {
-			player.pickUpItem(spawnedItem);
+		List<TileModel> tiles = (tileList != null) ? tileList
+				: new ArrayList<TileModel>();
+		tiles.add(tile);
+		for (int direction = 0; direction < 4; ++direction) {
+			WallModel wall = tile.getWall(direction);
+			TileModel adjacentTile = tile.getAdjacentTile(direction);
+			if (!tileList.contains(adjacentTile) && !wall.isBuilt()) {
+				findBuiltBoxes(adjacentTile, tiles);
+			}
 		}
+		return tiles;
 	}
 
 	@Override
 	public String toString() {
-		return LOG + "row: " + tileY + "\tcolumn: " + tileX;
-	}
-
-	/**
-	 * Constructs a new <code>TileModel</code> at <code>x</code>, <code>y</code> with <code>adjWalls</code>
-	 * surrouding the this <code>TileModel</>
-	 *
-	 * @param x		the column number on game board. origin starts at top left
-	 * @param y		the row number on game board.origin starts at top left
-	 * @param adjWalls	the wall adjacent to this tile
-	 */
-	public TileModel(int x, int y, WallModel[] adjWalls, Random spawner) {
-		tileX = x;
-		tileY = y;
-		walls = new WallModel[4];
-		for (int direction = 0; direction < 4; ++direction) {
-			if (adjWalls[direction] == null) {
-				walls[direction] = new WallModel(direction);
-			} else {
-				walls[direction] = adjWalls[direction];
-			}
-			walls[direction].addTile(this);
-		}
-
-		this.spawner = spawner;
+		return String.format("<TileModel: %d,%d>", x, y);
 	}
 }

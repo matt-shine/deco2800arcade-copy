@@ -3,7 +3,6 @@ package deco2800.arcade.packman;
 import java.lang.String;
 import java.lang.System;
 import java.util.ArrayList;
-import java.util.Set;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,6 +13,12 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import deco2800.arcade.packman.PackCompress;
+import deco2800.arcade.packman.PackageUtils;
+
 
 /**
  * The class for executing the "gradle pack" task to populate the Release folder
@@ -21,8 +26,18 @@ import java.io.OutputStream;
  *
  */
 public class Pack {
+	final static Logger logger = LoggerFactory.getLogger(Pack.class);
+	
     private ArrayList<String> games = new ArrayList<String>();
-
+    
+    private static final String sp = File.separator;
+    
+    private static final String releaseFolder = ".." + sp + 
+    											"deco2800.arcade.server" +
+    											sp + "Release";
+    
+    
+    
     public Pack(String[] args) {
 
     }
@@ -33,6 +48,16 @@ public class Pack {
      * @param args
      */
     public static void main(String[] args) {
+    	 
+		// Create the release folder
+		logger.debug("Creating directory: {}", releaseFolder);
+		if (PackageUtils.createDirectory(releaseFolder)) {
+			logger.debug("Created: {}", releaseFolder);
+		} else {
+			logger.debug("Failed creating: {}", releaseFolder);
+		}
+    	
+    	
         Pack pack = new Pack(args);
 
         pack.populateGames();
@@ -49,6 +74,9 @@ public class Pack {
         ArrayList<String> versions;
         String version;
         String releaseVersion;
+        
+        PackCompress packer = new PackCompress();
+        
         for (String game : games) {
 
             versions = getVersions(game);
@@ -58,29 +86,34 @@ public class Pack {
                 releaseVersion = versions.get(1);
 
                 if (version.equals("0.0.0") && releaseVersion.equals("0.0.0")) {
-                    System.out.println("No version specified: " + game);
+                    logger.debug("No version specified: {}", game);
                 } else if (releaseVersion.compareTo(version) > 0) {
-                    System.out.println("RELEASE_VERSION > VERSION. Not releasing: " + game);
+                    logger.debug("RELEASE_VERSION > VERSION. Not releasing: {}", game);
                 } else if (version.compareTo(releaseVersion) > 0) {
-                    System.out.println("VERSION > RELEASE_VERSION. Not releasing: " + game);
+                    logger.debug("VERSION > RELEASE_VERSION. Not releasing: {}", game);
                 } else if (version.equals(releaseVersion)) {
-                    System.out.println("Copying JAR to Releases: " + game);
+                    logger.debug("Copying JAR to Releases: {}", game);
 
                     File src = null;
                     File dest = null;
-                    String srcPath = "../deco2800.arcade." + game +
-                            "/build/libs/deco2800.arcade." + game + "-" + version + ".jar";
-                    String destPath = "../deco2800.arcade.server/Release/" + game + "-" +
-                            version + ".jar";
+                    String srcPath = ".." + sp + "deco2800.arcade." + game + 
+                    				 sp + "build" + sp + "libs" + sp + 
+                    				 "deco2800.arcade." + game + "-" + 
+                    				 version + ".jar";
+                    
+                    String destPath = releaseFolder + sp + game + 
+                    				  "-" + version + ".tar.gz";
 
                     src = new File(srcPath);
                     dest = new File(destPath);
 
                     if (src != null && dest != null) {
                         try {
-                            copyFile(src, dest);
+                            //copyFile(src, dest);
+                        	packer.compress(srcPath, destPath);
+                        	//packer.Expand(destPath, releaseFolder + sp + game + "-" + version + ".jar");
                         } catch (IOException e) {
-                            System.err.println("[Packman] Failed to copy JAR to Releases directory");
+                            logger.error("[Packman] Failed to copy JAR to Release directory");
                             e.printStackTrace();
                         }
                     }

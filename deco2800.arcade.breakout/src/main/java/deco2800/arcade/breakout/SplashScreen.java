@@ -31,15 +31,15 @@ public class SplashScreen implements Screen  {
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/splashscreen.png"));
-		//camera = new OrthographicCamera();
-		//camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 	}
+		
+		
 
 	@Override
 	public void render(float delta) {
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
 		
-			game.setScreen(game.gamescreen);
+			game.setScreen(game.MenuScreen);
 		}
 
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);

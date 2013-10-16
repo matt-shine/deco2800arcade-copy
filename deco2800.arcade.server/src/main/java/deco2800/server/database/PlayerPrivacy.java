@@ -151,7 +151,7 @@ public class PlayerPrivacy {
 	 */
 	public void updateName(int playerID, boolean privacySetting)
 			throws DatabaseException {
-		
+
 
 		if(privacySetting){
 			updateField(playerID, PUBLIC, "name");
@@ -159,8 +159,8 @@ public class PlayerPrivacy {
 			updateField(playerID, FRIENDS_ONLY, "name");
 		}
 	}
-	
-	
+
+
 	/**
 	 * Sets a player's email privacy setting to the provided modes.
 	 *  
@@ -173,7 +173,7 @@ public class PlayerPrivacy {
 	 */
 	public void updateEmail(int playerID, boolean privacySetting)
 			throws DatabaseException {
-		
+
 
 		if(privacySetting){
 			updateField(playerID, PUBLIC, "email");
@@ -181,7 +181,7 @@ public class PlayerPrivacy {
 			updateField(playerID, FRIENDS_ONLY, "email");
 		}
 	}
-	
+
 	/**
 	 * Sets a player's program privacy setting to the provided modes.
 	 *  
@@ -194,7 +194,7 @@ public class PlayerPrivacy {
 	 */
 	public void updateProgram(int playerID, boolean privacySetting)
 			throws DatabaseException {
-		
+
 
 		if(privacySetting){
 			updateField(playerID, PUBLIC, "program");
@@ -202,7 +202,7 @@ public class PlayerPrivacy {
 			updateField(playerID, FRIENDS_ONLY, "program");
 		}
 	}
-	
+
 	/**
 	 * Sets a player's bio privacy setting to the provided modes.
 	 *  
@@ -215,7 +215,7 @@ public class PlayerPrivacy {
 	 */
 	public void updateBio(int playerID, boolean privacySetting)
 			throws DatabaseException {
-		
+
 
 		if(privacySetting){
 			updateField(playerID, PUBLIC, "bio");
@@ -223,7 +223,7 @@ public class PlayerPrivacy {
 			updateField(playerID, FRIENDS_ONLY, "bio");
 		}
 	}
-	
+
 	/**
 	 * Sets a player's games privacy setting to the provided modes.
 	 *  
@@ -236,7 +236,7 @@ public class PlayerPrivacy {
 	 */
 	public void updateGames(int playerID, boolean privacySetting)
 			throws DatabaseException {
-		
+
 
 		if(privacySetting){
 			updateField(playerID, PUBLIC, "games");
@@ -244,7 +244,7 @@ public class PlayerPrivacy {
 			updateField(playerID, FRIENDS_ONLY, "games");
 		}
 	}
-	
+
 	/**
 	 * Sets a player's achievements privacy setting to the provided modes.
 	 *  
@@ -257,7 +257,7 @@ public class PlayerPrivacy {
 	 */
 	public void updateAchievements(int playerID, boolean privacySetting)
 			throws DatabaseException {
-		
+
 
 		if(privacySetting){
 			updateField(playerID, PUBLIC, "achievements");

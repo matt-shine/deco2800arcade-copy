@@ -82,6 +82,9 @@ public class Achievement {
 
     // Static helper stuff
     public static String idForComponentID(String componentID) {
+	if (!isComponentID(componentID)) // don't bother if it's not a component id already
+	    return componentID;
+
         String[] parts = componentID.split("\\.");
         return parts[0] + "." + parts[1];
     }

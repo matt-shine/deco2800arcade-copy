@@ -7,26 +7,37 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.TimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.badlogic.gdx.Input.Keys.ANY_KEY;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static com.badlogic.gdx.utils.TimeUtils.millis;
 
 /**
- * This is the entry of the game application, and the next
- * should be the menu screen.
+ * This is the entry of the game application, and the next should be the menu
+ * screen.
  */
 final class SplashScreen implements Screen {
-	private static final String LOG = SplashScreen.class.getSimpleName();
+
+	/**
+	 * The minimum show time of this screen in milliseconds.
+	 */
+	static final long MIN_SHOW_TIME = 500;
+
+	final Logger logger = LoggerFactory.getLogger(SplashScreen.class);
 
 	private final MixMaze game;
 	private final SpriteBatch batch;
 	private final Texture texture;
 
-	private long startTime;
+	private long showTime;
 
 	/**
-	 * Constructor
+	 * Constructor.
+	 *
+	 * @param game
+	 *            the MixMaze game
 	 */
 	SplashScreen(final MixMaze game) {
 		this.game = game;
@@ -36,10 +47,10 @@ final class SplashScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		if (millis() - startTime > 500
+		if (TimeUtils.millis() - showTime > MIN_SHOW_TIME
 				&& Gdx.input.isKeyPressed(ANY_KEY)) {
-			Gdx.app.debug(LOG, "switching to menu screen");
-			game.setScreen(game.menuScreen);
+			logger.debug("switch to settings screen");
+			game.setScreen(game.settingsScreen);
 		}
 
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
@@ -65,7 +76,7 @@ final class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
-		startTime = millis();
+		showTime = TimeUtils.millis();
 	}
 
 	@Override
@@ -75,4 +86,5 @@ final class SplashScreen implements Screen {
 	@Override
 	public void resume() {
 	}
+
 }

@@ -10,7 +10,10 @@ tictactoe
 ui
 breakout
 deerforest
+gamelibrary
+soundboard
 mixmaze
+minigolf
 chess
 landInvaders
 junglejump
@@ -21,3 +24,5 @@ towerdefence
 pacman
 connect4
 raiden
+wl6
+snakeLadder

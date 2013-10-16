@@ -14,6 +14,7 @@ public class DemoPattern extends BulletPattern {
 	private int angle = 0;
 	private Texture image;
 	private Texture image2;
+	private static final int equalizer = 2;
 	
 	public DemoPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
@@ -30,5 +31,17 @@ public class DemoPattern extends BulletPattern {
 		bullet.act(lag);
 		bullet2.act(lag);
 		angle = (angle+5);
+	}
+	
+	public int getEquals() {
+		return equalizer;
+	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof DemoPattern)) {
+			return false;
+		}
+		DemoPattern f = (DemoPattern) o;
+		return equalizer == f.getEquals();
 	}
 }

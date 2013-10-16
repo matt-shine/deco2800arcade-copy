@@ -5,20 +5,22 @@ import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.burningskies.entities.bullets.DemoPattern;
 
-public class HealthPowerUp extends PowerUp {
+public class SpeedPowerUp extends PowerUp {
 	
-	private static final int equalizer = 3;
-	static final Texture texture = new Texture(Gdx.files.internal("images/items/health.png"));
+	private static final int equalizer = 1;
+	
+	static final Texture texture = new Texture(Gdx.files.internal("images/items/speed_up.png"));
 
-	public HealthPowerUp(float x, float y) {
+	public SpeedPowerUp(float x, float y) {
 		super(texture, x, y);
 	}
-	
+
 	@Override
 	public void powerOn(PlayerShip player) {
-		player.heal(30);
-	}
+		player.setMaxSpeed(1200f);
 
+	}
+	
 	public int getEquals() {
 		return equalizer;
 	}

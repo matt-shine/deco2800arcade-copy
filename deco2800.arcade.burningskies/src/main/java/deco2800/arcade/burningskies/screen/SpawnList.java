@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.entities.Enemy;
+import deco2800.arcade.burningskies.entities.HealthPowerUp;
+import deco2800.arcade.burningskies.entities.PatternPowerUp;
+import deco2800.arcade.burningskies.entities.PowerUp;
+import deco2800.arcade.burningskies.entities.SpeedPowerUp;
 
 public class SpawnList {
 	
@@ -15,6 +19,8 @@ public class SpawnList {
 	private float currentInterval;
 	private float interval;
 	private List<Object> list;
+	private int occurence = 0;
+	private PowerUp currentPowerUp = null;
 	
 	private static final long standardEnemyPoints = 1006493;
 	
@@ -112,5 +118,27 @@ public class SpawnList {
 
 			// Add the enemy to the screen
 			screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
+	}
+	
+	private void addRandomPowerUp() {
+		ArrayList<PowerUp> powers = new ArrayList<PowerUp>();
+		float X = (float)Math.random()*12800;
+		float Y = (float)Math.random()*720;
+		powers.add(new HealthPowerUp(X, Y));
+		powers.add(new SpeedPowerUp(X, Y));
+		powers.add(new PatternPowerUp(screen, X, Y));
+		PowerUp toAdd = powers.get((int)Math.round(Math.random()*2));
+		if (occurence >= 3) {
+			powers.remove(currentPowerUp);
+			toAdd = powers.get((int)Math.round(Math.random()));
+			this.occurence = 0;
+		}
+		if (toAdd.equals(currentPowerUp)) {
+			this.occurence++;
+		} else {
+			currentPowerUp = toAdd;
+			this.occurence = 1;
+		}
+		screen.addPowerup(toAdd);
 	}
 }

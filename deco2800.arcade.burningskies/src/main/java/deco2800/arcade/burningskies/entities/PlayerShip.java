@@ -223,4 +223,8 @@ public class PlayerShip extends Ship {
 	public float getMaxHealth() {
 		return maxHealth;
 	}
+	
+	public BulletPattern getPattern() {
+		return this.playerBullets;
+	}
 }

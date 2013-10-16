@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class UpgradePowerUp extends PowerUp {
 	
-	static final Texture texture = new Texture(Gdx.files.internal("images/items/health.png"));
+	static final Texture texture = new Texture(Gdx.files.internal("images/items/bullet_upgrade.png"));
 	
 	//Either have all PowerUps inherit a screen, or only the BulletPattern ones.
 	public UpgradePowerUp(float x, float y) {

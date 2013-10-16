@@ -13,6 +13,7 @@ public class BombPattern extends BulletPattern {
 	
 	private Texture image;
 	private Texture image2;
+	private static final int equalizer = 3;
 	
 	public BombPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
@@ -33,5 +34,18 @@ public class BombPattern extends BulletPattern {
 			screen.addBullet(bullet);
 			//bullet.act(lag);
 		}
+	}
+	
+	public int getEquals() {
+		return equalizer;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof BombPattern)) {
+			return false;
+		}
+		BombPattern f = (BombPattern) o;
+		return equalizer == f.getEquals();
 	}
 }

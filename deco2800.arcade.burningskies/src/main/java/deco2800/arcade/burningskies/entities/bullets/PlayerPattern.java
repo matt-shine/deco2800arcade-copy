@@ -13,6 +13,7 @@ public class PlayerPattern extends BulletPattern {
 	
 	private Texture image;
 	private int upgrade = 0;
+	private static final int equalizer = 1;
 	
 	public PlayerPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
@@ -44,5 +45,17 @@ public class PlayerPattern extends BulletPattern {
 	
 	public void upgrade() {
 		upgrade++;
+	}
+	
+	public int getEquals() {
+		return equalizer;
+	}
+	
+	public boolean equals(Object o) {
+		if (!(o instanceof PlayerPattern)) {
+			return false;
+		}
+		PlayerPattern f = (PlayerPattern) o;
+		return equalizer == f.getEquals();
 	}
 }

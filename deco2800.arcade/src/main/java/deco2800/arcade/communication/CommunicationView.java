@@ -47,7 +47,7 @@ public class CommunicationView extends JFrame {
 		container.add(inputArea, BorderLayout.CENTER);
 		container.add(sendButton, BorderLayout.SOUTH);
 
-		setVisible(true);
+//		setVisible(true);
 
 	}
 

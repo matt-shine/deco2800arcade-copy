@@ -61,8 +61,6 @@ public class ArcadeWebserver implements Container {
         if (s.length > 1) r.route = s[1];
         if (s.length > 2) r.param = s[2];
         
-        System.out.println("route: " + r.route + ", param: " + r.param);
-        
         return r;
 	}
 	
@@ -87,7 +85,6 @@ public class ArcadeWebserver implements Container {
 				body.println( FileReader.readFileUtf8( "webserver/javascript" + request.getPath() ) );
 				body.close();
 				
-				//System.out.println( "Served js: " + "webserver/javascript" + request.getPath() );
 			} else if ( request.getPath().toString().contains( "css" ) ){
 				
 				PrintStream body = response.getPrintStream();
@@ -96,7 +93,6 @@ public class ArcadeWebserver implements Container {
 				body.println( FileReader.readFileUtf8("webserver/style" + request.getPath()) );
 				body.close();
 				
-				//System.out.println( "Served css: " + "webserver/style" + request.getPath() );
 			//Serve an image if one is requested
 			} else if ( request.getPath().toString().matches( "(?i).*\\.(jpg|jpeg|png|gif)" ) ){
                 
@@ -116,7 +112,6 @@ public class ArcadeWebserver implements Container {
                     badRequest(response);
                 }
                 
-                //System.out.println( "Served img: " + "webserver/image" + request.getPath() );
             } else {
 			    
                 badRequest(response);

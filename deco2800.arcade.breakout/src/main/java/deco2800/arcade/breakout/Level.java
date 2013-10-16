@@ -54,7 +54,7 @@ public class Level {
 		int index = 0;
 		while (index < bricks.length) {
 			if (bricks[index].getState()) {
-				bricks[index].render(shapeRenderer, context.getLevel(), b, index);
+				bricks[index].render(context.getLevel(), b, index);
 			}
 			index++;
 		}

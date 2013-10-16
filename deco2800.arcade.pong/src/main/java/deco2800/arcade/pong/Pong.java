@@ -88,11 +88,17 @@ public class Pong extends GameClient {
         //Single scores
         //hsd.storeScore("Number", 1234567890);
         //hsd.storeScore("Number", 5211);
+        hsd.logLoss();
+        hsd.logWin();
         
         //Getting top scores
         List<Highscore> topPlayers = hsd.getGameTopPlayers(10, false, "Number");
         Highscore userHighScore = hsd.getUserHighScore(true, "Number");
         List<Highscore> ranked = hsd.getUserRanking(true, "Number");
+        
+        List<Highscore> winLoss = hsd.getWinLoss();
+        
+        
         
         //store wins losses
         
@@ -103,8 +109,6 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void create() {
-		
-        
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 

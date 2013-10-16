@@ -82,8 +82,8 @@ public class HighscoreDatabase {
 		switch (gsReq.requestID) {
 			case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 1
 			case 2: return getUserHighScore(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 2
-			case 3: return getUserRanking(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 3
-			case 4: return null;
+			case 3: return null; //getUserRanking(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 3
+			case 4: return getWinsGetLosses(gsReq.username, gsReq.game_ID);
 			case 5: return null;
 
 			}
@@ -195,6 +195,7 @@ public class HighscoreDatabase {
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
+			System.out.println("getUserhighscore executed correctly.");
 			connectionCleanup(connection, statement, resultSet);
 		}
 	}
@@ -202,8 +203,8 @@ public class HighscoreDatabase {
 	
 	
 	public List<String> getWinsGetLosses(String Username, String Game_ID) throws DatabaseException {
-		int wins;
-		int losses;
+		System.out.println("Getting the wins and losses");
+		List<String> data = new ArrayList<String>();
 		
 		if (!initialised) {
 			initialise();
@@ -213,23 +214,38 @@ public class HighscoreDatabase {
 
 		Statement statement = null;
 		ResultSet resultSet = null;
-		
-		
+	
+
 		try {
 			statement = connection.createStatement();
-			String getWinLoss = "SELECT COUNT(*) AS WINS FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID = '" + Game_ID + "' AND H.Player='" + Username + "' D.Score = 1";
-			System.out.println("query: " + getWinLoss);
-			resultSet = statement.executeQuery(getWinLoss);
+			String getWins = "SELECT COUNT(*) AS WINS FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID = '" + Game_ID + "' AND H.Player = '" + Username + "' AND D.Score = 1 AND D.Score_Type = 'WinLoss'";
+			resultSet = statement.executeQuery(getWins);
+			System.out.println("query: " + getWins);
+			while(resultSet.next()) {
+				data.add(Username);
+				data.add(String.valueOf(resultSet.getInt("WINS")));
+				data.add("");
+				data.add("wins");
+			}
 			
+			String getLosses = "SELECT COUNT(*) AS LOSS FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID = '" + Game_ID + "' AND H.Player='" + Username + "' AND D.Score = -1 AND D.Score_Type = 'WinLoss'";
+			resultSet = statement.executeQuery(getLosses);
+			while(resultSet.next()) {
+				data.add(Username);
+				data.add(String.valueOf(resultSet.getInt("LOSS")));
+				data.add("");
+				data.add("losses");
+			}
+			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
+			System.out.println("get win/loss success.");
 			connectionCleanup(connection, statement, resultSet);
 		}
 		
-		return null;
 	}
 	
 	
@@ -241,8 +257,8 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public List<String> getUserRanking(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
-		List<String> data = new ArrayList<String>();
-		String order;
+		//List<String> data = new ArrayList<String>();
+		//String order;
 		
 		/*if (!initialised) {
 			initialise();
@@ -468,23 +484,7 @@ public class HighscoreDatabase {
 			//Silently fail, no need to worry
 		}
 	}
-	
-	/**** 
-	public void main() throws DatabaseException {
-		 
-		try {
- 
-			updateScore("Pong", "Haydn", "Win", 66);
-			System.out.println("Highscore: " + getUserHighScore("Haydn", "Pong", "Win"));
- 
-		} catch (SQLException e) {
- 
-			
- 
-		}
- 
-	}
-	**/
+
 	
 	
 }

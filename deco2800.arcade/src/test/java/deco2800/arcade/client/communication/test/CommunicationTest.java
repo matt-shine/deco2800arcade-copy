@@ -141,23 +141,35 @@ public class CommunicationTest {
 	 */
 	@Test
 	public void chatHistory() {
-		CommunicationListener listener = new CommunicationListener(comm1);
 		Connection connection = null;
 		ChatHistory chathistory = new ChatHistory();
 		HashMap<Integer, List<String>> history = new HashMap<Integer, List<String>>();
-		List<String> chat = new ArrayList<String>();
+		List<String> chat1 = new ArrayList<String>();
+		List<String> chat2 = new ArrayList<String>();
+		List<String> chat3 = new ArrayList<String>();
 
-		chat.add("This is a test1");
-		chat.add("This is a test2");
-		chat.add("This is not a test");
-		chat.add("The cake is a lie");
-		chat.add("Aquaman is the best");
+		chat1.add("This is a test1");
+		chat1.add("This is a test2");
+		chat2.add("This is not a test");
+		chat2.add("The cake is a lie");
+		chat3.add("Aquaman is the best");
 
-		history.put(123, chat);
+		history.put(123, chat1);
+		history.put(234, chat2);
 		chathistory.updateChatHistory(history);
-		listener.received(connection, chathistory);
-		assertEquals(history.get(player1.getID()),
+		chathistory.updateChatHistory(123, chat3);
+		listener1.received(connection, chathistory);
+		listener2.received(connection, chathistory);
+
+		assertEquals(chathistory.getChatHistory(123),
 				comm1.getChatHistory(comm1.getPlayer().getID()));
+		assertEquals(chathistory.getChatHistory(234),
+				comm1.getChatHistory(comm2.getPlayer().getID()));
+		assertEquals(chathistory.getChatHistory(123),
+				comm2.getChatHistory(comm1.getPlayer().getID()));
+		assertEquals(chathistory.getChatHistory(234),
+				comm2.getChatHistory(comm2.getPlayer().getID()));
+
 	}
 
 	/**

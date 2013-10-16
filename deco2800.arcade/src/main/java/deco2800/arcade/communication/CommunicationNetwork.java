@@ -188,9 +188,9 @@ public class CommunicationNetwork {
 		 */
 
 		// Temporary:
-		for (Map.Entry<Integer, List<String>> entry : chatHistory
-				.getAllHistory().entrySet()) {
-			System.out.println("History with: " + entry);
+//		for (Map.Entry<Integer, List<String>> entry : chatHistory
+//				.getAllHistory().entrySet()) {
+//			System.out.println("History with: " + entry);
 		}
 	}
 	

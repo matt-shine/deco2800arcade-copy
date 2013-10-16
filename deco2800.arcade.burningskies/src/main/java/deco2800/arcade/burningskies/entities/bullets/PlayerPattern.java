@@ -11,12 +11,11 @@ import deco2800.arcade.burningskies.screen.PlayScreen;
 
 public class PlayerPattern extends BulletPattern {
 	
-	private Texture image;
+	private static Texture image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));;
 	private int upgrade = 0;
 	
 	public PlayerPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
-		image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
 		interval = (float) 0.03;
 	}
 	
@@ -44,5 +43,8 @@ public class PlayerPattern extends BulletPattern {
 	
 	public void upgrade() {
 		upgrade++;
+		if(upgrade > 3) {
+			upgrade = 2;
+		}
 	}
 }

@@ -269,9 +269,13 @@ public class Arcade extends JFrame {
 			myID = 777;
 		}
 		
-		System.out.println("My ID is: " + myID);
+		System.out.println("My playerID is: " + myID);
+		
 		this.player = new Player(myID, username, "path/to/avatar");
-		this.player.setUsername(username);
+		
+		//This method has been removed from the deprecated Player(...); Waiting for new Player(...) method to be created.
+		//this.player.setUsername(username);
+		
 		this.communicationNetwork.loggedIn(this.player);
 	
 		ConnectionRequest connectionRequest = new ConnectionRequest();
@@ -291,6 +295,8 @@ public class Arcade extends JFrame {
 		creditBalanceRequest.username = username;
 		this.client.sendNetworkObject(creditBalanceRequest);
 
+		/*
+		 * As above, waiting for new Player(...) method
 		//For testing chat:		
 		if (player.getID() == 888){ //This ID belongs to debug1
 			List<Integer> chat = new ArrayList<Integer>();
@@ -305,15 +311,15 @@ public class Arcade extends JFrame {
 			chat.add(777); //debug2
 			this.communicationNetwork.createChat(chat);
 		}
+		*/
 		
         //TODO FIX THIS!! - Causing Errors when logging in see https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
         boolean[] privacy = {false, false, false, false, false, false, false, false};
         this.player = new Player(0, username, "", privacy);
 
 
-		this.player.setUsername(username);
-
-		// this.communicationNetwork.createNewChat(username);
+        //This method has been removed from the deprecated Player(...); Waiting for new Player(...) method to be created.
+        //this.player.setUsername(username);
 
         // TODO move this call to be internal to Packman class
         // TODO iterate over actual game ids rather than just

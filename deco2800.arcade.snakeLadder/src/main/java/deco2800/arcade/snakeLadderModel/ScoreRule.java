@@ -8,7 +8,9 @@ public class ScoreRule implements Rule {
 
 	/***
 	 * Updating the score of the game player and print it out on the scoreLabel
-	 * @param gp the Game Player its referring to
+	 * @param playerNum 
+	 * @param rule
+	 * @param context
 	 */
 	@Override
 	public void excuteRules(int playerNum, String rule, SnakeLadder context) {

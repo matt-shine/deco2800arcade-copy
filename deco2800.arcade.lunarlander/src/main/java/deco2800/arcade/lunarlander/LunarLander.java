@@ -1,5 +1,6 @@
 package deco2800.arcade.lunarlander;
 
+import java.awt.Graphics;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -15,6 +16,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+
+
+
+
 
 
 
@@ -68,8 +73,13 @@ public class LunarLander extends GameClient {
 	private float velXleft;
 	private float velXright;
 
+	//asteroid stuff
+	private float asteroidX;
+	private float asteroidY;
+	
 	//terrain generation
 	private List<List<Integer>> terrain;
+	private List<List<Integer>> asteroidArray;
 	private boolean gameOver;
 	private boolean upKey;
 
@@ -180,6 +190,7 @@ public class LunarLander extends GameClient {
 		fuel = 1000;
 		//creates the map using the method in LunarLanderTerrain file
 		terrain = LunarLanderTerrain.createMap();
+		asteroidArray = LunarLanderTerrain.generateAsteroidArray();
 		//set game state
 		gameState = GameState.AT_MENU;
 	}
@@ -193,6 +204,8 @@ public class LunarLander extends GameClient {
 		velY = 1;
 		velXleft = 0;
 		velXright = 0;
+		asteroidX = 500;
+		asteroidY = 500;
 		speed = 1;
 		this.fuel = fuel;
 		this.score = score;
@@ -209,7 +222,9 @@ public class LunarLander extends GameClient {
 	
 	private void drawAsteroids(){
 		batch.begin();
-		batch.draw(asteroidTexture, 500, 500, 50, 50);
+		for (int i = 0; i < asteroidArray.size(); i++){
+			batch.draw(asteroidTexture, asteroidArray.get(i).get(0), asteroidArray.get(0).get(1), 20, 20);
+		}
 		batch.end();
 	}
 	
@@ -248,7 +263,7 @@ public class LunarLander extends GameClient {
 					isPointBelowLine(landerX + landerWidth, landerY, 
 							terrain.get(i).get(0),
 							terrain.get(i).get(1), terrain.get(i).get(2), 
-							terrain.get(i).get(3))) {
+							terrain.get(i).get(3)) || hasCollidedWithAsteroid(landerX, landerY)) {
 				landerTexture.dispose();
 				gameOver = true;
 //				if (fuel > 0) {
@@ -273,6 +288,20 @@ public class LunarLander extends GameClient {
 		}
 	}
 	
+	private boolean hasCollidedWithAsteroid(float landerX2, float landerY2) {
+		for (int i = 0; i < asteroidArray.size(); i++){
+			if ((landerX2 > asteroidArray.get(i).get(0) && landerX2 < asteroidArray.get(i).get(0) + 20) &&
+				(landerY2 > asteroidArray.get(i).get(1) && landerY2 < asteroidArray.get(i).get(1) + 20)){
+				landerTexture.dispose();
+				gameOver = true;
+				velY = 0;
+				gameState = GameState.GAME_OVER_LOSE;
+				gameOverLoseScreen();
+			}
+		}
+		return false;
+	}
+	
 	private void landerMovement() {
 		
 		if(!(gameOver == true)) {
@@ -280,14 +309,14 @@ public class LunarLander extends GameClient {
 			if ((Gdx.input.isKeyPressed(Keys.A)) || 
 					(Gdx.input.isKeyPressed(Keys.LEFT))) {
 				landerX -= Gdx.graphics.getDeltaTime() * sideSpeed;
-				velXleft += 0.01;
+				velXleft += 0.005;
 				fuel -= 0.025;
 			}
 			// move lander right
 			if ((Gdx.input.isKeyPressed(Keys.D)) || 
 					(Gdx.input.isKeyPressed(Keys.RIGHT))) {
 				landerX += Gdx.graphics.getDeltaTime() * sideSpeed;
-				velXright += 0.01;
+				velXright += 0.005;
 				fuel -= 0.025;
 			}
 			// boost the lander's speed
@@ -306,7 +335,7 @@ public class LunarLander extends GameClient {
 	
 	private void velocity() {
 		if(!(gameOver == true) ) {
-			velY += 0.01;
+			velY += 0.005;
 			landerY -= (0.10 + velY);
 			landerX += velXright;
 			landerX -= velXleft;
@@ -315,7 +344,17 @@ public class LunarLander extends GameClient {
 				velXleft -= 0.001;
 			} else if(velXright > 0) {
 				velXright -= 0.001;
-			}	
+			}
+			//moves asteroids
+			for (int i = 0; i < asteroidArray.size(); i++){
+				int tempAsteroidX = asteroidArray.get(i).get(0);
+				int tempAsteroidY = asteroidArray.get(i).get(1);
+				tempAsteroidX -= 0.10;
+				tempAsteroidY -= 0.10;
+				asteroidArray.get(i).clear();
+				asteroidArray.get(i).add(tempAsteroidX);
+				asteroidArray.get(i).add(tempAsteroidY);
+			}
 		}
 	}
 	

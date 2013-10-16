@@ -148,7 +148,21 @@ public static List<List<Integer>> createMap(){
 	    	}
 	    }
 	}
-
+	
+	//generates random placement of asteroids in an array
+	public static List<List<Integer>> generateAsteroidArray(){
+		List<List<Integer>> asteroidArray = new ArrayList<List<Integer>>();
+		int asteroidY = 750;
+		for (int i = 0; i < 7; i++){
+			asteroidArray.add(new ArrayList<Integer>());
+			int asteroidX = randNum(600, 1200);
+			asteroidArray.get(i).add(asteroidX);
+			asteroidArray.get(i).add(asteroidY);
+		}
+		return asteroidArray;
+	}
+	
+	
 	//creates a random length of a line, used by createMap()
 	public static int randNum(int start, int finish){
 		int number = start + new Random().nextInt(finish - start + 1 );

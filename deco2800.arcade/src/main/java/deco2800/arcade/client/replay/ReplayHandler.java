@@ -29,6 +29,11 @@ public class ReplayHandler {
 	
 	ReplayRecorder recorder;
 	ReplayPlayback playback;
+
+	private Boolean waitingToStartSession = false;
+	private Boolean isReadyToRecord = false;
+
+
 	
 	/**
 	 * Basic constructor for the ReplayHandler
@@ -80,6 +85,7 @@ public class ReplayHandler {
 	    ssr.gameId = gameId;
 	    ssr.username = username;
 	    client.sendNetworkObject(ssr);
+	    waitingToStartSession = true;
 	}
 	
 	/**
@@ -94,6 +100,8 @@ public class ReplayHandler {
 		System.out.println( "Session started" );
 	    
 		recorder = new ReplayRecorder( this, this.client, this.sessionId );
+		waitingToStartSession = false;
+		isReadyToRecord = true;
 	}
 	
 	/**

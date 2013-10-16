@@ -30,8 +30,9 @@ public abstract class ItemModel {
 
 	/**
 	 * Constructor
-	 *
-	 * @param type	the item type
+	 * 
+	 * @param type
+	 *            the item type
 	 */
 	protected ItemModel(Type type) {
 		this.type = type;
@@ -39,7 +40,7 @@ public abstract class ItemModel {
 
 	/**
 	 * Returns the type of this item.
-	 *
+	 * 
 	 * @return the type
 	 */
 	Type getType() {

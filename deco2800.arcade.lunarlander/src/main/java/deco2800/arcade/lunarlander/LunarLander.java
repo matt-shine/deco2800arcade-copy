@@ -290,7 +290,7 @@ public class LunarLander extends GameClient {
 					velY -= 0.015;
 					fuel -= 0.05;
 					//flameSound.setVolume(1);
-					flameSound.play(1);
+					flameSound.play(0.1f);
 					upKey = true;
 				}
 			}

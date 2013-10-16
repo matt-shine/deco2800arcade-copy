@@ -110,7 +110,9 @@ public class HighscoreDatabase {
 		int topCount = 0;
 		String order;
 		
-		if (!initialised) initialise();
+		if (!initialised) {
+			initialise();
+		}
 		
 		if (highestIsBest){
 			order = "DESC";
@@ -158,7 +160,9 @@ public class HighscoreDatabase {
 		List<String> data = new ArrayList<String>();
 		String order;
 		
-		if (!initialised) initialise();
+		if (!initialised) {
+			initialise();
+		}
 		
 		if(highestIsBest){
 			order = "DESC";
@@ -354,7 +358,6 @@ public class HighscoreDatabase {
 				+ "(Player, GameID, Date) VALUES"
 				+ "('" + Username + "','" + Game_ID +  "', '"
 				+ getCurrentTimeStamp() + "')";
-		System.out.println(insertTableSQL);
 		try {
 			// Get a connection to the database
 			connection = Database.getConnection();
@@ -389,13 +392,12 @@ public class HighscoreDatabase {
 	 */
 	public void updateScore(String game_ID, String username, LinkedList<Integer> scores, LinkedList<String> types) throws DatabaseException, SQLException{
 		int hid = addHighscore(game_ID, username);
-		System.out.println("new HighScore ID = " + hid);
 		
-		if (!initialised) initialise();
+		if (!initialised) {
+			initialise();
+		}
 		
 		for(int i = 0; i < scores.size(); i++){
-			System.out.println("Score to be added > game: " + game_ID + ", player: " + username + ", type: " + types.get(i) + ", score: " + scores.get(i));
-			
 			//Get a connection to the database
 			Connection connection = Database.getConnection();
 			Statement statement = null;
@@ -407,8 +409,6 @@ public class HighscoreDatabase {
 						+ "('" + types.get(i) + "'," + hid +  ", " + scores.get(i) + ")";
 				
 				statement.executeUpdate(insertTableSQL);
-				System.out.println("InsertQUERY:" + insertTableSQL);
-				System.out.println("inserted correctly");
 			} catch (SQLException e) {
 				throw new DatabaseException(
 						"Unable to get player information from database", e);
@@ -432,8 +432,6 @@ public class HighscoreDatabase {
 	private static Timestamp getCurrentTimeStamp() {
 		java.util.Date date= new java.util.Date();
 		return new Timestamp(date.getTime());
-
-
 	}
 	
 	/**
@@ -449,21 +447,27 @@ public class HighscoreDatabase {
 	private void connectionCleanup(Connection c, Statement s, ResultSet r) {
 		//Close the Connection
 		try {
-			if (c != null) c.close();
+			if (c != null) {
+				c.close();
+			}
 		} catch (SQLException e) {
 			//Silently fail, no need to worry
 		}
 		
 		//Close the Statement
 		try {
-			if (s != null) s.close();
+			if (s != null) {
+				s.close();
+			}
 		} catch (SQLException e) {
 			//Silently fail, no need to worry
 		}
 		
 		//Close the ResultSet
 		try {
-			if (r != null) r.close();
+			if (r != null) {
+				r.close();
+			}
 		} catch (SQLException e) {
 			//Silently fail, no need to worry
 		}

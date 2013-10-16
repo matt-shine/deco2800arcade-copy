@@ -213,7 +213,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	    } catch (IOException e) {
 	    	System.err.println(e.getMessage());
 		}
-	    
+	  
 	    loadedStyle = 0;	    
 	}
 	@Override
@@ -316,7 +316,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			@Override
 			public void dispose() {}
 		});
-		drawButton();
+		makeButtons();
 		replayHandler.startSession("chess", player.getUsername() );
 	}
 	private static ReplayEventListener initReplayEventListener()
@@ -435,14 +435,18 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		//if ((loser == true) && (!stalemate)) {
 			//this.incrementAchievement("chess.winGame");
 		//}
+		
 		if(recording){
-			stage.addActor(replayButton);
+			drawButton();
+    		replayHandler.endCurrentSession();
+        	replayHandler.finishRecording();
+        	stage.addActor(replayButton);
 			board = new Board();
 			movePieceGraphic();
-			drawButton();
+			replayButton.setVisible(true);
+			recording =false;
 		}
 		else{
-	
 		//reset board
 		board = new Board();
 		movePieceGraphic();
@@ -735,6 +739,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	
 	private void showPossibleMoves(Piece piece) {
 		startreplayButton.remove();
+		replayButton.remove();
 		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
 		Sprite allowedSquare = new Sprite(new Texture(
 				Gdx.files.classpath("imgs/spot.png")));
@@ -1278,7 +1283,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public void show() {
 		drawButton();
 	}
-	public void drawButton(){
+	
+	public void makeButtons(){
 		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
@@ -1341,7 +1347,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	    newGameButtonHard .setHeight(50);
 	    newGameButtonHard .setX((float)(width*0.02));
 	    newGameButtonHard .setY((float)(height*0.60));
-	    
+	}
+	public void drawButton(){
+		makeButtons();
 	    backButton.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     return true;
@@ -1357,27 +1365,24 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            if(recording){
-            if(replayHandler.getSessionId() != null){
+            	drawButton();
+            try{
             	board = new Board();
             	movePieceGraphic();
-            	drawButton();
-            	replayHandler.endCurrentSession();
-            	startReplay(replayHandler.getSessionId());
-            	recording = false;
+            	recording =false;
+            	//replayHandler.endCurrentSession();
+            	replayHandler.playbackLastSession();
+            	isReplaying = true;
+            	
             	}
-            	else {
-            		System.out.println("Nothing to replay");
-            	}
-            	}
-            else {
-            	System.out.println("Nothing to replay");
+            catch (NullPointerException e){
+            	System.out.println("nothing to replay");
             }
             }
-	    });    
+	    });   
+	    //record  the next game
 	    startreplayButton.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            	recording = true;
                     return true;
             }
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -1386,8 +1391,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             	recording = true;
         		replayHandler.startRecording();
             	}
-            	catch(NullPointerException e){
-            		System.out.println("no replay to start");
+            	catch(Exception e){
+            		System.out.println("Already Recording");
             	}
         		
             }
@@ -1398,21 +1403,18 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	drawButton();
             	if(recording){
-            		stage.addActor(replayButton);
+            		replayHandler.endCurrentSession();
+                	replayHandler.finishRecording();
+                	replayButton.setVisible(true);
             	}
-            	else{
             	EasyComputerOpponent =false;
             	HardComputerOpponent =false;
             	recording = false;
-            	replayHandler.endCurrentSession();
-            	
-            	
             	board = new Board();
         		movePieceGraphic();
-        		drawButton();
             	}
-            }
 	    });
 	    newGameButtonEasy.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -1420,12 +1422,18 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	drawButton();
+            	if(recording){
+            		replayHandler.endCurrentSession();
+                	replayHandler.finishRecording();
+                	replayButton.setVisible(true);
+            	}
             	EasyComputerOpponent = true;
+            	HardComputerOpponent = false;
             	recording = false;
-            	replayHandler.endCurrentSession();
             	board = new Board();
         		movePieceGraphic();
-        		drawButton();
+	
             }
 	    });   
 	    newGameButtonHard.addListener(new InputListener() {
@@ -1434,15 +1442,21 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            	drawButton();
+            	if(recording){
+            		replayHandler.endCurrentSession();
+                	replayHandler.finishRecording();
+                	replayButton.setVisible(true);
+            	}
             	HardComputerOpponent = true;
+             	EasyComputerOpponent = false;
             	recording = false;
-            	replayHandler.endCurrentSession();
             	board = new Board();
         		movePieceGraphic();
-        		drawButton();
             }
 	    });   
-	   // stage.addActor(replayButton);
+	    stage.addActor(replayButton);
+	    replayButton.setVisible(false);
 	    stage.addActor(backButton);
 	    stage.addActor(startreplayButton);
 	    stage.addActor(newGameButton);

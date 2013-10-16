@@ -91,13 +91,16 @@ public class HighscoreClient {
 	 * @param requestID An integer representing the request that is being 
 	 * sent.
 	 */
-	private void sendScoreRequest(GetScoreRequest gsReq) {
+	private void sendScoreRequest(GetScoreRequest gsReq, boolean checkType) {
 		//Build the request
 		gsReq.username = this.Username;
 		gsReq.game_ID = this.Game_ID;
 		
 		//Check the type is valid
-		checkTypeValidity(gsReq.type);
+		if(checkType){
+			checkTypeValidity(gsReq.type);
+		}
+		
 		
 		//Send the response, and wait for a reply
 		this.gsRes = null;
@@ -197,7 +200,7 @@ public class HighscoreClient {
 		gsReq.highestIsBest = highestIsBest;
 		
 		//Send the request off, waiting for response before continuing
-		sendScoreRequest(gsReq);
+		sendScoreRequest(gsReq, true);
 		
 		//Now that the response is back, return the data to the user
 		return this.scoreResponseList;
@@ -223,7 +226,7 @@ public class HighscoreClient {
 		requireUsername();
 		
 		//Send the request off, waiting for response before continuing
-		sendScoreRequest(gsReq);
+		sendScoreRequest(gsReq, true);
 		
 		//Now that the response is back, return the data to the user
 		if (this.scoreResponseList.isEmpty()) {
@@ -270,11 +273,18 @@ public class HighscoreClient {
 	 * 
 	 * @return A list of Highscore objects 
 	 */
-	private List<Highscore> getWinLoss() {
-		List<Highscore> winLoss = new ArrayList<Highscore>();
+
+	public List<Highscore> getWinLoss() {
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.requestID = 4;
 		
+		//This function requires a user, throw and exception if there not not one available.
+		requireUsername();
 		
-		return null;
+		//Send the request off, waiting for response before continuing
+		sendScoreRequest(gsReq, false);
+		
+		return this.scoreResponseList;
 	}
 	
 	/**
@@ -316,7 +326,7 @@ public class HighscoreClient {
 		int lossCount = winLoss.get(1).score;
 		int total = winCount + lossCount;
 		
-		float ratio = winCount / total;
+		float ratio = (float)winCount / (float)total;
 		
 		return ratio;
 	}
@@ -336,7 +346,7 @@ public class HighscoreClient {
 		int lossCount = winLoss.get(1).score;
 		int total = winCount + lossCount;
 		
-		float ratio = lossCount / total;
+		float ratio = (float)lossCount / (float)total;
 		
 		return ratio;
 	} 

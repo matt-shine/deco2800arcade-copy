@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import com.esotericsoftware.kryonet.Connection;
 
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Player;
@@ -25,8 +27,14 @@ public class CommunicationTest {
 	private CommunicationNetwork comm1;
 	private CommunicationNetwork comm2;
 
+	private NetworkClient client1;
+	private NetworkClient client2;
+	
+	private CommunicationListener listener1;
+	private CommunicationListener listener2;
+	
 	@Before
-	public void initialise() {
+	public void initialise() throws NetworkException {
 		boolean[] privset = { true, true, true, true, true, true, true };
 
 		List<String> info = new ArrayList<String>();
@@ -44,19 +52,25 @@ public class CommunicationTest {
 		info2.add("Nope");
 		info2.add("Kill Louis");
 		info2.add("2");
-
+		client1 = new NetworkClient("127.0.0.1", 54555, 54777);
+		
+		client2 = new NetworkClient("127.0.0.1", 54555, 54777);
 		player1 = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);
 		player2 = new Player(234, "THIS IS NOT A VALID PATH.html", info2, null,
 				null, null, null, privset);
-		comm1 = new CommunicationNetwork(player1, null);
-		comm2 = new CommunicationNetwork(player2, null);
+		comm1 = new CommunicationNetwork(player1, client1);
+		comm2 = new CommunicationNetwork(player2, client2);
+		listener1 = new CommunicationListener(comm1);
+		listener2 = new CommunicationListener(comm2);
+		client1.addListener(listener1);
+		client2.addListener(listener2);
 	}
 
 	/**
 	 * Tests the creating of CommunicationNetwork.
 	 */
-	//@Test
+	@Test
 	public void initTest() {
 		assertEquals(player1, comm1.getPlayer());
 		assertEquals(123, comm1.getPlayer().getID());
@@ -67,7 +81,7 @@ public class CommunicationTest {
 	/**
 	 * Tests the creating of a node and adding participants into it.
 	 */
-	//@Test
+	@Test
 	public void initChat() {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
@@ -83,7 +97,7 @@ public class CommunicationTest {
 	 * Need to update this to use the CommuncationNetwork inviteUser method once
 	 * NetworkClient mock is working
 	 */
-	//@Test
+	@Test
 	public void addAndRemove() {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
@@ -109,7 +123,7 @@ public class CommunicationTest {
 	 * Tests the chat history. Mostly just tests the transferring of ChatHistory
 	 * object between CommunicationListener -> CommunicationNetwork
 	 */
-	//@Test
+	@Test
 	public void chatHistory() {
 		CommunicationListener listener = new CommunicationListener(comm1);
 		Connection connection = null;
@@ -134,19 +148,28 @@ public class CommunicationTest {
 	 * Not Sure how to test this when server is down and many methods in
 	 * ChatNode are currently commented out.
 	 */
-	//@Test
+	@Test
 	public void sendMessage() {
+		Connection connection = null;
+		TextMessage message = new TextMessage();
 		List<Integer> chatParticipants = new ArrayList<Integer>();
+		
 		chatParticipants.add(player1.getID());
 		chatParticipants.add(player2.getID());
 		comm1.createChat(chatParticipants);
-		TextMessage message = new TextMessage();
+		
 		message.recipients = chatParticipants;
 		message.chatID = 1111;
-		message.senderID = 789;
+		message.senderID = 123;
 		message.senderUsername = "Chuck Norris";
 		message.text = "QWERTYUIOP";
-		// comm1.sendTextMessage(message);
-		// assertEquals(something, something);
+		comm1.sendTextMessage(message);
+		
+		
+		listener2.received(connection, message);
+		
+		assertEquals(comm1.getCurrentChat().getID(), comm2.getCurrentChat().getID());
+		assertEquals(comm1.getCurrentChat().getParticipants().get(0), comm2.getCurrentChat().getParticipants().get(0));
+		assertEquals(comm1.getCurrentChat().getText(), comm2.getCurrentChat().getText());
 	}
 }

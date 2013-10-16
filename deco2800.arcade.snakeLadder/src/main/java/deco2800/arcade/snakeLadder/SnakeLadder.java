@@ -84,22 +84,22 @@ public class SnakeLadder extends GameClient {
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		gamePlayers[0] = new GamePlayer(this.player.getUsername());
-		gamePlayers[1] = new GamePlayer("AI Player");
+		gamePlayers[0] = new GamePlayer(this.player.getUsername(), false);
+		gamePlayers[1] = new GamePlayer("AI Player", true);
 	}
 	
 	//constructor for testing
 	public SnakeLadder(Player player, NetworkClient networkClient, String username) {
 		super(player, networkClient);
-		gamePlayers[0] = new GamePlayer(username);
-		gamePlayers[1] = new GamePlayer("AI Player");
+		gamePlayers[0] = new GamePlayer(username, false);
+		gamePlayers[1] = new GamePlayer("AI Player", true);
 	}
 	
 	//constructor for testing
 	public SnakeLadder(Player player, NetworkClient networkClient, String username,FileHandle xmlFile, FileHandle mapFile) {
 		super(player, networkClient);
-		gamePlayers[0] = new GamePlayer(username);
-		gamePlayers[1] = new GamePlayer("AI Player");
+		gamePlayers[0] = new GamePlayer(username, false);
+		gamePlayers[1] = new GamePlayer("AI Player", true);
 		map = new GameMap();
 		//initialize the rules from xml file
 		ruleMapping = RuleMapping.iniRuleMapping(xmlFile);

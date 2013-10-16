@@ -25,9 +25,9 @@ public class GamePlayer {
 	private Vector2 velocity = new Vector2(); // The current velocity of the playerTexture as x,y
 	private boolean isAI;
 	
-	public GamePlayer()
-	{
-	}
+//	public GamePlayer()
+//	{
+//	}
 	
 	/**
 	 * Basic constructor for playerTexture. Set position and dimensions to the default

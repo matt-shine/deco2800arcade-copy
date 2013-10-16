@@ -2,6 +2,10 @@ package deco2800.arcade.client.replay;
 
 import java.util.List;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.*;
 
 import deco2800.arcade.client.network.NetworkClient;
@@ -28,11 +32,14 @@ public class ReplayPlayback {
 	private List<String> replayHistory;
 	
 	private Gson deserializer;
-	
+
+    private Logger logger = LoggerFactory.getLogger( ReplayHandler.class );
+    
 	public ReplayPlayback( ReplayHandler handler, NetworkClient client ) {
 		this.client = client;
 		this.handler = handler;
-		
+
+        PropertyConfigurator.configure( "src/main/resources/replay_log4j.properties" );
 
 	    GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES);
@@ -83,7 +90,7 @@ public class ReplayPlayback {
 	}
 	
 	public void playbackSession( Integer sessionId ) {
-		System.out.println( "Playing back " + sessionId );
+		logger.info( "Playing back session " + sessionId + "." );
 		requestEventsForSession( sessionId );
 	}
 	

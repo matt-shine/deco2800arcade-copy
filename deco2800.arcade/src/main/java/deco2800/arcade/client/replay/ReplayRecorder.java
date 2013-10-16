@@ -1,5 +1,9 @@
 package deco2800.arcade.client.replay;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gson.Gson;
 
 import deco2800.arcade.client.network.NetworkClient;
@@ -22,7 +26,8 @@ public class ReplayRecorder {
 	private Integer sessionId;
 	
 	private boolean recording;
-	
+
+    private Logger logger = LoggerFactory.getLogger( ReplayHandler.class );
 	
 	public ReplayRecorder(ReplayHandler handler, NetworkClient client, Integer sessionId) { 
 		this.startTime = -1;
@@ -31,6 +36,8 @@ public class ReplayRecorder {
 		this.handler = handler;
 		
 		this.recording = false;
+		
+        PropertyConfigurator.configure( "src/main/resources/replay_log4j.properties" );
 	    
 	    serializer = new Gson();
 	}
@@ -107,7 +114,7 @@ public class ReplayRecorder {
 		toAdd.setTime( timeOffset );
 		String nodeString = serializer.toJson( toAdd );
 		
-		System.out.println( nodeString );
+		logger.info( "Pushed event: " + nodeString );
 		pushEventToServer( replayIndex, nodeString, sessionId );
 		replayIndex ++;
 		

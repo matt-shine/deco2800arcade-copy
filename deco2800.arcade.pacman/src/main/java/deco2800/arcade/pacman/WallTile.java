@@ -71,7 +71,7 @@ public class WallTile extends Tile {
 		case 'Y': row = 10; col = 2; break;
 		case 'Z': row = 10; col = 3; break;
 		}
-		batch.draw(tileSprites[row][col], x, y, sideLength, sideLength);
+		batch.draw(PacView.tileSprites[row][col], x, y, sideLength, sideLength);
 	}
 	
 	public String toString() {

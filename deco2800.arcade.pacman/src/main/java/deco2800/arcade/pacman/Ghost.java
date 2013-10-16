@@ -29,16 +29,16 @@ public class Ghost extends Mover {
 	// Static variables for pulling sprites from sprite sheet
 	private static final int FRAME_COLS = 8;
 	private static final int FRAME_ROWS = 1;
-
+	
+	private static int widthVal = 26;
+	private static int heightVal = 26;
 	
 	// the distance ghost moves each frame
 	private PacChar player;
 	private float moveDist;
 	private Tile targetTile;
 	private Animation walkAnimation;
-	private Texture walkSheet;
-	private TextureRegion[] walkFrames;
-	private TextureRegion currentFrame;
+	
 	
 	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
 		super(gameMap);
@@ -57,30 +57,19 @@ public class Ghost extends Mover {
 		case CLYDE : file = "orangeghostmove.png"; break;
 		}
 		
-		walkSheet = new Texture(Gdx.files.internal(file));
-		// splits into columns and rows then puts them into one array in order
-		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-		walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
-							/ FRAME_ROWS);
-		walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-		int index = 0;
-		for (int i = 0; i < FRAME_ROWS; i++) {
-			for (int j = 0; j < FRAME_COLS; j++) {
-				walkFrames[index++] = tmp[i][j];
-			}
-		}
+		
 		// initialise some variables
 		currentState = GhostState.CHASE;
 		facing = Dir.LEFT;
-		width = walkFrames[1].getRegionWidth() * 2;
-		height = walkFrames[1].getRegionHeight() * 2;
+		width = widthVal;
+		height = heightVal;
 		updatePosition();
 		moveDist = 1; //made it so he can't move at the moment, because he
 						// currently goes through walls and crashes it.
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
-//		walkAnimation = new Animation(0.025f, walkFrames);
+//		walkAnimation = new Animation(0.025f, pacmanFrames);
 //		stateTime = 0f;	
 	}
 	
@@ -116,8 +105,9 @@ public class Ghost extends Mover {
     		}			
 			updatePosition();			
     	} 
-		//draw pacman facing the appropriate direction
-		batch.draw(walkFrames[spritePos], drawX, drawY, width, height);
+		//draw ghost facing the appropriate direction
+		// TODO NOTE CURRENTLY ONLY DRAWS RED GHOST WHICHEVER GHOST IT IS
+		batch.draw(PacView.ghostFrames[0][spritePos], drawX, drawY, width, height);
 	}
 	 
 	public Dir getFacing() {

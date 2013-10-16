@@ -23,8 +23,8 @@ public class GameMap {
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int hOffset;
 	private int vOffset;
-	private int tileSideLength = 16;// length of side of square- should be
-	// same for all tiles 
+	private final int tileSideLength = 16;// length of side of square- should be
+	// same for all tiles in a GameMap
 	
 	public GameMap(int hOffset, int vOffset) {
 		vsym = false;
@@ -43,12 +43,12 @@ public class GameMap {
 		// each array contains all the characters from that line
 		ArrayList<char[]> resultArray = new ArrayList<char[]>();
 		String[] lineArray = contents.split(System.getProperty("line.separator"));
-		for (int i = 0; i < lineArray.length; i++) {
-			String line = lineArray[i];
-			if (line.contains("VSYM")) {
-				vsym = true;
-				continue;
-			}
+		String line = lineArray[0];
+		if (line.contains("VSYM")) {
+			vsym = true;
+		}
+		for (int i = 1; i < lineArray.length; i++) {
+			line = lineArray[i];			
 			if (vsym) {
 				line = useVSymmetry(line); 
 			}
@@ -173,16 +173,6 @@ public class GameMap {
 //		}
 	}
 	
-	public void render(SpriteBatch batch) {
-		//should do some fancy stuff to position pacman grid in middle of screen horizontally
-		//instead of what I've done here with just setting them to a value I picked		
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y++) {
-				grid[x][y].render(batch, hOffset + x*tileSideLength, vOffset + y*tileSideLength);
-			}
-		}
-	}
-
 	public List<WallTile> getGhostDoors() {
 		return ghostDoors;
 	}

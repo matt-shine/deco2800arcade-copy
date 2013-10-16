@@ -8,6 +8,7 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.ArcadeSystem;
 import com.badlogic.gdx.Screen;
+import deco2800.arcade.client.AchievementClient;
 
 /* main game class, sets the screens to be displayed */
 

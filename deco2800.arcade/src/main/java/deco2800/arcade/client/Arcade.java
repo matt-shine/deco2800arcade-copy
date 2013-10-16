@@ -232,7 +232,6 @@ public class Arcade extends JFrame {
             throw new ArcadeException("Unable to connect to Arcade File Server ("
                     + serverIPAddress + ")", e);
         }
-        fetchGameJar("pong", "1.0");
     }
 
     /**

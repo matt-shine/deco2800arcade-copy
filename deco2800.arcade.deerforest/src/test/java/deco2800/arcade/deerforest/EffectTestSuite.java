@@ -73,10 +73,10 @@ public class EffectTestSuite {
 		//create destroy effect category list
 		ArrayList<Integer> destroyParam = new ArrayList<Integer>();
 		destroyParam.add(intGenerator.nextInt(10));
-		destroyParam.add(intGenerator.nextInt(4));
-		destroyParam.add(intGenerator.nextInt(4));
-		destroyParam.add(intGenerator.nextInt(4));
+		destroyParam.add(intGenerator.nextInt(2));
 		destroyParam.add(intGenerator.nextInt(3));
+		destroyParam.add(intGenerator.nextInt(3));
+		destroyParam.add(intGenerator.nextInt(4));
 		destroyParam.add(intGenerator.nextInt(6));
 		effectParam.add(destroyParam);
 		//create draw effect category list
@@ -89,10 +89,11 @@ public class EffectTestSuite {
 		effectParam.add(drawParam);
 		//create monster effect category list
 		ArrayList<Integer> monsterParam = new ArrayList<Integer>();
+        monsterParam.add(intGenerator.nextInt(6));
 		monsterParam.add(intGenerator.nextInt(3));
 		monsterParam.add(intGenerator.nextInt(3));
 		monsterParam.add(intGenerator.nextInt(10));
-		monsterParam.add(intGenerator.nextInt(5));
+		monsterParam.add(intGenerator.nextInt(4));
 		monsterParam.add(intGenerator.nextInt(6));
 		effectParam.add(monsterParam);
 		//create search effect category list
@@ -113,6 +114,8 @@ public class EffectTestSuite {
 		playerParam.add(intGenerator.nextInt(3));
 		playerParam.add(intGenerator.nextInt(2));
 		playerParam.add(intGenerator.nextInt(10));
+        playerParam.add(intGenerator.nextInt(1));
+        playerParam.add(intGenerator.nextInt(4));
 		effectParam.add(playerParam);
 		
 		try {

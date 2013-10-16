@@ -64,7 +64,7 @@ public class GridScreen implements Screen, LibraryScreen {
      * Setup required styles
      */
     private void styleSetup() {
-        libSkin = new Skin(Gdx.files.internal("libSkin.json"));
+        libSkin = new Skin(Gdx.files.classpath("Assets/libSkin.json"));
     }
 
     /**
@@ -74,13 +74,13 @@ public class GridScreen implements Screen, LibraryScreen {
 
         stage = new Stage();
         batch = new SpriteBatch();
-        splashTexture = new Texture("Assets/splashscreen-grid.jpg");
-        gridTexture = new Texture("Assets/gridbk.png");
+        splashTexture = new Texture(Gdx.files.classpath("Assets/splashscreen-grid.jpg"));
+        gridTexture = new Texture(Gdx.files.classpath("Assets/gridbk.png"));
         image = new Image(splashTexture);
         stage.addActor(image);
 
-        listIconTexture = new Texture("Assets/list-icon.png");
-        gridIconTexture = new Texture("Assets/grid-icon.png");
+        listIconTexture = new Texture(Gdx.files.classpath("Assets/list-icon.png"));
+        gridIconTexture = new Texture(Gdx.files.classpath("Assets/grid-icon.png"));
         listImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(listIconTexture)));
         gridImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(gridIconTexture)));
 

@@ -64,6 +64,7 @@ public class PlayerShip extends Ship {
 	
 	@Override
 	public boolean remove() {
+		if(playerBullets != null) playerBullets.stop();
 		if(getStage() != null) {
 			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 0));
 		}

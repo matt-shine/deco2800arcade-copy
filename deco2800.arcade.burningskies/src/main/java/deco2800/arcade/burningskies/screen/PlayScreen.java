@@ -23,8 +23,6 @@ import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.Level;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
-import deco2800.arcade.burningskies.entities.UpgradePowerUp;
-import deco2800.arcade.burningskies.entities.HealthPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -36,7 +34,6 @@ public class PlayScreen implements Screen
 	
 	private OrthographicCamera camera;
 	private Stage stage;
-	private ShapeRenderer debugRender;
 	private ShapeRenderer healthBar;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
@@ -64,7 +61,7 @@ public class PlayScreen implements Screen
 	private int lives = 3;
 	private float lifePositionX = 10;
 	private float lifePositionY = height - 70;
-	private Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
+	private static Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
 	private float lifePositionOffset = (float) (lifeIcon.getWidth() + lifeIcon.getHeight() * 0.1);
 	
 	private long score = 0;
@@ -74,7 +71,7 @@ public class PlayScreen implements Screen
 	
 	private SpawnList sp;
 
-	private float respawnTimer = 0f;;
+	private float respawnTimer = 0f;
 	
 	
 	public PlayScreen( BurningSkies game){
@@ -99,9 +96,6 @@ public class PlayScreen implements Screen
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
     	
-    	debugRender = new ShapeRenderer();
-    	debugRender.setProjectionMatrix(camera.combined);
-    	
     	healthBar = new ShapeRenderer();
     	healthBar.setProjectionMatrix(camera.combined);
     	
@@ -117,12 +111,6 @@ public class PlayScreen implements Screen
     	
     	processor = new PlayerInputProcessor(player);
     	ArcadeInputMux.getInstance().addProcessor(processor);
-    	
-    	// Test code
-    	PowerUp test = new UpgradePowerUp(400,400);
-    	addPowerup(test);
-    	test = new HealthPowerUp(200,200);
-    	addPowerup(test);
     	
     	sp = new SpawnList(this);
     }
@@ -251,15 +239,6 @@ public class PlayScreen implements Screen
     	
     	healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
     	healthBar.end();
-    	
-    	if(player.isAlive()) {
-	    	debugRender.begin(ShapeType.FilledCircle);
-	    	float[] hitbox = player.getHitbox().getTransformedVertices();
-	    	for(int i=0;i<hitbox.length;i+=2) {
-	    		debugRender.filledCircle(hitbox[i], hitbox[i+1], 3);
-	    	}
-	    	debugRender.end();
-    	}
     }
     
     private boolean outOfBounds(Entity e) {

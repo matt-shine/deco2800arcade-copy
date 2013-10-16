@@ -17,7 +17,7 @@ public class Level extends Image {
 	
 	public Level(String filename) {
 		//TODO: Remove this and make it dynamic
-		super(new Texture(Gdx.files.internal("images/maps/demomap.png")));
+		super(new Texture(Gdx.files.internal("images/maps/space_720p.png")));
 		mapTime = 0; //TODO: load from map file
 		//TODO: Load spawn times
 		spawnTimes = new ArrayList<Float>();

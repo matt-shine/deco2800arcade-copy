@@ -156,7 +156,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
-			File file = new File("soundtrack.wav");
+			File file = new File("src/main/resources/soundtrack.wav");
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -173,7 +173,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			File file2 = new File("menu.wav");
+			File file2 = new File("src/main/resources/menu.wav");
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
 			menuSound.open(audioIn2);
@@ -197,23 +197,23 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void create() {
 		super.create();
 		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(("mainscreen.png"));
-		monkeySit = new Texture(("monkeySit.png"));
-		monkeySitRIGHT = new Texture(("monkeySit.png"));
-		monkeySitLEFT = new Texture(("monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(("monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(("monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(("monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(("monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(("monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(("monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("gameBackground2.png"));
-		levelText = new Texture(("level.png"));
-		hyphenText = new Texture(("-.png"));
-		livesText = new Texture(("lives.png"));
-		worldNumText = new Texture(("1.png"));
-		livesNumText = new Texture(("3.png"));
-		levelNumText = new Texture(("1.png"));
+		texture = new Texture(("src/main/resources/mainscreen.png"));
+		monkeySit = new Texture(("src/main/resources/monkeySit.png"));
+		monkeySitRIGHT = new Texture(("src/main/resources/monkeySit.png"));
+		monkeySitLEFT = new Texture(("src/main/resources/monkeySitLEFT.png"));
+		monkeyRun1 = new Texture(("src/main/resources/monkeyRun1.png"));
+		monkeyRun1RIGHT = new Texture(("src/main/resources/monkeyRun1.png"));
+		monkeyRun1LEFT = new Texture(("src/main/resources/monkeyRun1LEFT.png"));
+		monkeyRun2 = new Texture(("src/main/resources/monkeyRun2.png"));
+		monkeyRun2RIGHT = new Texture(("src/main/resources/monkeyRun2.png"));
+		monkeyRun2LEFT = new Texture(("src/main/resources/monkeyRun2LEFT.png"));
+		gameBackground = new Texture(("src/main/resources/gameBackground2.png"));
+		levelText = new Texture(("src/main/resources/level.png"));
+		hyphenText = new Texture(("src/main/resources/-.png"));
+		livesText = new Texture(("src/main/resources/lives.png"));
+		worldNumText = new Texture(("src/main/resources/1.png"));
+		livesNumText = new Texture(("src/main/resources/3.png"));
+		levelNumText = new Texture(("src/main/resources/1.png"));
 		//platform = new Texture("platform.png");
 
 		/* ACHIEVEMENT STUFF */

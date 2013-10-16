@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.Hunter.Config;
 
 public class HighScoreScreen implements Screen {
 
@@ -146,6 +145,6 @@ public class HighScoreScreen implements Screen {
 	}
 
 	private void drawBackground(){
-		batch.draw(background, 0f, 0f, Config.screenWidth, Config.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+		batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
 	}
 }

@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.Hunter.Config;
 
 /**
  * A Hunter game for use in the Arcade
@@ -58,8 +57,8 @@ public class MenuScreen implements Screen {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+                stage.clear(); //Stops buttons being clickable when you move out of this screen. See: http://stackoverflow.com/questions/13890472/ligbdx-touch-listener-on-wrong-screen for a potentially better way TODO
 				hunter.setScreen(new GameScreen(hunter));
-				stage.clear(); //Stops buttons being clickable when you move out of this screen. See: http://stackoverflow.com/questions/13890472/ligbdx-touch-listener-on-wrong-screen for a potentially better way TODO
 			}
 
 		});
@@ -147,11 +146,10 @@ public class MenuScreen implements Screen {
 		drawBackground();
 		batch.end();
 		
-		Gdx.input.setInputProcessor(stage);
+		//Gdx.input.setInputProcessor(stage);
+        ArcadeInputMux.getInstance().addProcessor(stage);
 		stage.act(delta);
 		stage.draw();
-		
-		
 	}
 
 	@Override
@@ -172,7 +170,7 @@ public class MenuScreen implements Screen {
 	}
 	
 	private void drawBackground(){
-		batch.draw(background, 0f, 0f, Config.screenWidth, Config.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+		batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
 	}
 	
 }

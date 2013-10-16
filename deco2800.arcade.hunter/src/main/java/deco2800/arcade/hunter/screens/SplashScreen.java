@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
 
-public class SplashScreen implements Screen{
+public class SplashScreen implements Screen {
 	
 	private Hunter hunter;
 	private Stage stage;
@@ -30,7 +30,7 @@ public class SplashScreen implements Screen{
 		splashImage.getColor().a = 0f;
 		
 		
-		splashImage.addAction( Actions.sequence(Actions.fadeIn(0.75f), Actions.delay(0.5f), Actions.fadeOut(0.75f),
+		splashImage.addAction(Actions.sequence(Actions.fadeIn(0.75f), Actions.delay(0.5f), Actions.fadeOut(0.75f),
 			new RunnableAction() {
 				public void run() {
 					hunter.setScreen(new MenuScreen(hunter));

@@ -13,12 +13,8 @@ import java.util.Random;
 public class Hunter extends PlatformerGame {
 	private static PreferencesManager prefManage;
 
-	public static class Config {
-		public static int screenWidth = 1280;
-		public static int screenHeight = 720;
-		public static int gameSpeed = 512;
-        public static float gravity = 2*9.81f;
-		public final static int TILE_SIZE = 64;
+	public final static class Config {
+        public final static int TILE_SIZE = 64;
 		public final static int PANE_SIZE = 16;
 		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
 		public final static int MAX_SPEED = 1024;
@@ -27,22 +23,32 @@ public class Hunter extends PlatformerGame {
 
         public final static int PLAYER_ATTACK_TIMEOUT = 300; // Attack timeout in msec
         public final static int PLAYER_ATTACK_COOLDOWN = 600;
-        public static long PLAYER_BLINK_TIMEOUT = 1000;
+        public final static long PLAYER_BLINK_TIMEOUT = 1000;
 
+    }
+
+    public static class State {
+        public static boolean paused = false;
+        public static int screenWidth = 1280;
+        public static int screenHeight = 720;
+        public static int gameSpeed = 512;
+        public static float gravity = 2*9.81f;
         public static Random randomGenerator;
+
         public static PreferencesManager getPreferencesManager() {
     		return prefManage;
     	}
-	}
+    }
 
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		prefManage = new PreferencesManager();
 		setHighScores();
+        State.paused = false;
 	}
 
 	/**
-	 * Returns the preferences manager of the game which stores all the option
+	 * Returns the preferences manager of the game which stores all the player configurable option
 	 * settings
 	 * 
 	 * @return PreferencesManager
@@ -69,11 +75,13 @@ public class Hunter extends PlatformerGame {
 			@Override
 			public void hide() {
 				// Unpause your game here
+                State.paused = false;
 			}
 
 			@Override
 			public void show() {
 				// Pause your game here
+                State.paused = true;
 			}
 
 			@Override

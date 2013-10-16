@@ -22,6 +22,7 @@ public class Sidebar extends Group {
     private Overlay overlay;
     private NinePatch texture;
     private Window window;
+	private boolean isUIOpen;
 
     public Sidebar(Overlay overlay, Window window) {
 
@@ -66,12 +67,16 @@ public class Sidebar extends Group {
                     if (e.toString().equals("touchDown")) {
                         if (buttonNum == 0) {
                             addAchievementsWindow();
+                        } else if(buttonNum == 1) {
+                        	addChatWindow();
                         } else if (buttonNum == 3) {
                             ArcadeSystem.goToGame(ArcadeSystem.UI);
                         }
                     }
                     if (buttonNum == 0 && e.toString().equals("touchDown")) {
                         addAchievementsWindow();
+                    } else if (buttonNum == 1 && e.toString().equals("touchDown")) {
+                        addChatWindow();
                     }
                     return true;
                 }
@@ -108,6 +113,11 @@ public class Sidebar extends Group {
 
     public void addAchievementsWindow() {
         window.setContent(new AchievementList(overlay, skin));
+    }
+    
+    public void addChatWindow() {
+        window.setContent(new ChatWindow(overlay, skin));
+        this.isUIOpen = true;
     }
 
 

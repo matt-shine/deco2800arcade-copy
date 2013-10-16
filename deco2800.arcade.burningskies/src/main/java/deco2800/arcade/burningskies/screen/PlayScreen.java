@@ -53,12 +53,12 @@ public class PlayScreen implements Screen
 	private final float healthBarY = height/2 - (healthBarHeight)/2;
 	
 	private PlayerShip player;
+	
 	public Level level;
 	
 	private SpawnList sp;
 
 	private float respawnTimer = 0f;;
-	
 	
 	public PlayScreen( BurningSkies game){
 		this.game = game;
@@ -118,8 +118,7 @@ public class PlayScreen implements Screen
     	
     	
     	
-    	if(!game.isPaused()) {
-    		
+    	if(!game.isPaused()) {    		
     		if(!player.isAlive()) {
     			respawnTimer -= delta;
     			if(respawnTimer <= 0) {

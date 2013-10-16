@@ -25,7 +25,9 @@ public class SpawnList {
 	public SpawnList(PlayScreen s){
 		this.screen = s;
 		currentInterval = 0;
+
 		interval = (float) 5;		
+
 		counter = 0;
 		mapCounter = 1;
 		list = new ArrayList<Object>();
@@ -38,6 +40,7 @@ public class SpawnList {
 	 */
 	private void makeList1() {
 		list.add((float) 2); // when to spawn on map
+
 		list.add((float) 1); // interval
 		list.add((int) 10); // number of times
 		Vector2[] test = new Vector2[2];

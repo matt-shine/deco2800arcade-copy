@@ -91,9 +91,10 @@ public class SnakeLadder extends GameClient {
 		super(player, networkClient);
 		gamePlayers[0] = new GamePlayer(this.player.getUsername(), false);
 		gamePlayers[1] = new GamePlayer("AI Player", true);
-		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", networkClient);
-		hsc = new HighscoreClient("snakeLadder", this.networkClient);
-		//dumpingScores();
+		this.networkClient = networkClient;
+		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", this.networkClient);
+		hsc = new HighscoreClient("snakeLadder", networkClient);
+		dumpingScores();
 	}
 	
 	//constructor for testing
@@ -101,9 +102,6 @@ public class SnakeLadder extends GameClient {
 		super(player, networkClient);
 		gamePlayers[0] = new GamePlayer(username, false);
 		gamePlayers[1] = new GamePlayer("AI Player", true);
-		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", networkClient);
-		hsc = new HighscoreClient("snakeLadder", this.networkClient);
-		//dumpingScores();
 	}
 	
 	//constructor for testing

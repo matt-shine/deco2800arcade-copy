@@ -102,13 +102,10 @@ public class Bishop implements Piece{
 			}
 			
 		}
-		/*for (int f = 0; f<moves.size(); f++){
-			
-		System.out.println(Arrays.toString((moves).get(f)));
-		}*/
+
 		return moves;
 	}
-//monkey balls
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

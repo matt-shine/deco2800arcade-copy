@@ -146,6 +146,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	//Tracks level of single player mode
 	boolean EasyComputerOpponent;
 	boolean HardComputerOpponent;
+	
+	//Tracks if multiplayer is on
+	boolean Multiplayer = false;
 
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
@@ -181,7 +184,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		replayHandler = new ReplayHandler( this.networkClient );
 		replayListener = new ReplayListener(replayHandler);
 		this.networkClient.addListener(replayListener);
-		
 		
 		// Set up the movePiece event to take a piece id, target_x position and target_y position
 	    	
@@ -304,7 +306,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			}
 			@Override
 			public void pause() {
-				int a=0;
+				
 			}
 			@Override
 			public void render(float arg0) {
@@ -318,7 +320,13 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		});
 		makeButtons();
 		replayHandler.startSession("chess", player.getUsername() );
+		//Pause game and wait for connection if multiplayer is selected
+		if(Multiplayer) {
+			paused = true;
+		}
 	}
+	
+	
 	private static ReplayEventListener initReplayEventListener()
 	{
 	    return new ReplayEventListener() {
@@ -546,7 +554,6 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 					if (movingPiece.getTeam() == board.whoseTurn()) {
 						moving = true;
 						showPossibleMoves(movingPiece);
-						System.out.println("Moving: " + moving);
 						return true;
 					}
 				} catch (NullPointerException e) {
@@ -585,8 +592,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 								prevPos[1],
 								newPos[0], 
 								newPos[1]));
-						this.finishGame(board.whoseTurn(), false);
 						}
+						this.finishGame(board.whoseTurn(), false);
 					}
 					/* If the easy computer opponent is playing, and black teams turn
 					*  (computer controlled team)
@@ -668,9 +675,16 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 *            Y co-ordinate of mouse click
 	 * @return Piece on the square that was clicked on
 	 */
-	Piece checkSquare(int x, int y) {
+	private Piece checkSquare(int x, int y) {
 
 		int[] square = determineSquare(x, y);
+		
+		if(square[0] < 0) {
+			return null;
+		} else if(square[1] < 0) {
+			return null;
+		}
+		
 		Piece onSquare;
 
 		try {
@@ -682,7 +696,17 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		return onSquare;
 	}
 
-	int[] determineSquare(int x, int y) {
+	/**
+	 * Determine the square that was clicked on.
+	 * 
+	 * @param x
+	 * 		x co-ordinate of the mouse click
+	 * @param y
+	 * 		y co-ordinate of the mouse click
+	 * @return
+	 * 		An int[] represent the [row, column] of the square that was clicked
+	 */
+	private int[] determineSquare(int x, int y) {
 		int xSquare = -1;
 		int ySquare = -1;
 
@@ -735,6 +759,10 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 		int[] returnValue = { xSquare, ySquare };
 		return returnValue;
+	}
+	
+	public void startMultiplayerGame() {
+		paused = false;
 	}
 	
 	private void showPossibleMoves(Piece piece) {
@@ -971,171 +999,300 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 		}
 
+		int blackCount = 0;
 		for (Piece piece : board.blackGraveyard) {
 			if (piece.equals(board.blackRook1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackRook1);
 				blackRook1Pos[0] = (horizOff - 59);
-				blackRook1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackRook1));
+				if(blackCount > 8) {
+					blackRook1Pos[0] -= 59;
+				}
+				blackRook1Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackRook1)) % (59*8));
 			} else if (piece.equals(board.blackKnight1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackKnight1);
 				blackKnight1Pos[0] = (horizOff - 59);
-				blackKnight1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackKnight1));
+				if(blackCount > 8) {
+					blackKnight1Pos[0] -= 59;
+				}
+				blackKnight1Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackKnight1)) % (59*8));
 			} else if (piece.equals(board.blackBishop1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackBishop1);
 				blackBishop1Pos[0] = (horizOff - 59);
-				blackBishop1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackBishop1));
+				if(blackCount > 8) {
+					blackBishop1Pos[0] -= 59;
+				}
+				blackBishop1Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackBishop1)) % (59*8));
 			} else if (piece.equals(board.blackQueen)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackQueen);
 				blackQueenPos[0] = (horizOff - 59);
-				blackQueenPos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackQueen));
+				if(blackCount > 8) {
+					blackQueenPos[0] -= 59;
+				}
+				blackQueenPos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackQueen)) % (59*8));
 			} else if (piece.equals(board.blackKing)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackKing);
 				blackKingPos[0] = (horizOff - 59);
-				blackKingPos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackKing));
+				if(blackCount > 8) {
+					blackKingPos[0] -= 59;
+				}
+				blackKingPos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackKing)) % (59*8));
 			} else if (piece.equals(board.blackBishop2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackBishop2);
 				blackBishop2Pos[0] = (horizOff - 59);
-				blackBishop2Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackBishop2));
+				if(blackCount > 8) {
+					blackBishop2Pos[0] -= 59;
+				}
+				blackBishop2Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackBishop2)) % (59*8));
 			} else if (piece.equals(board.blackKnight2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackKnight2);
 				blackKnight2Pos[0] = (horizOff - 59);
-				blackKnight2Pos[1] = (verticOff + pieceVerticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackKnight2));
+				if(blackCount > 8) {
+					blackKnight2Pos[0] -= 59;
+				}
+				blackKnight2Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackKnight2)) % (59*8));
 			} else if (piece.equals(board.blackRook2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackRook2);
 				blackRook2Pos[0] = (horizOff - 59);
-				blackRook2Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackRook2));
+				if(blackCount > 8) {
+					blackRook2Pos[0] -= 59;
+				}
+				blackRook2Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackRook2)) % (59*8));
 			} else if (piece.equals(board.blackPawn1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn0);
 				blackPawn0Pos[0] = (horizOff - 59);
-				blackPawn0Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn1));
+				if(blackCount > 8) {
+					blackPawn0Pos[0] -= 59;
+				}
+				blackPawn0Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn1)) % (59*8));
 			} else if (piece.equals(board.blackPawn2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn1);
 				blackPawn1Pos[0] = (horizOff - 59);
-				blackPawn1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn2));
+				if(blackCount > 8) {
+					blackPawn1Pos[0] -= 59;
+				}
+				blackPawn1Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn2)) % (59*8));
 			} else if (piece.equals(board.blackPawn3)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn2);
 				blackPawn2Pos[0] = (horizOff - 59);
-				blackPawn2Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn3));
+				if(blackCount > 8) {
+					blackPawn2Pos[0] -= 59;
+				}
+				blackPawn2Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn3)) % (59*8));
 			} else if (piece.equals(board.blackPawn4)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn3);
 				blackPawn3Pos[0] = (horizOff - 59);
-				blackPawn3Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn4));
+				if(blackCount > 8) {
+					blackPawn3Pos[0] -= 59;
+				}
+				blackPawn3Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn4)) % (59*8));
 			} else if (piece.equals(board.blackPawn5)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn4);
 				blackPawn4Pos[0] = (horizOff - 59);
-				blackPawn4Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn5));
+				if(blackCount > 8) {
+					blackPawn4Pos[0] -= 59;
+				}
+				blackPawn4Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn5)) % (59*8));
 			} else if (piece.equals(board.blackPawn6)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn5);
 				blackPawn5Pos[0] = (horizOff - 59);
-				blackPawn5Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn6));
+				if(blackCount > 8) {
+					blackPawn5Pos[0] -= 59;
+				}
+				blackPawn5Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn6)) % (59*8));
 			} else if (piece.equals(board.blackPawn7)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn6);
 				blackPawn6Pos[0] = (horizOff - 59);
-				blackPawn6Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn7));
+				if(blackCount > 8) {
+					blackPawn6Pos[0] -= 59;
+				}
+				blackPawn6Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn7)) % (59*8));
 			} else if (piece.equals(board.blackPawn8)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn7);
 				blackPawn7Pos[0] = (horizOff - 59);
-				blackPawn7Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn8));
+				if(blackCount > 8) {
+					blackPawn7Pos[0] -= 59;
+				}
+				blackPawn7Pos[1] = pieceVerticOff + verticOff + ((59 * board.blackGraveyard
+						.indexOf(board.blackPawn8)) % (59*8));
 			}
 		}
-
+		int whiteCount = 0;
 		for (Piece piece : board.whiteGraveyard) {
 			if (piece.equals(board.whiteRook1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteRook1);
 				whiteRook1Pos[0] = (horizOff + 512);
-				whiteRook1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteRook1));
+				if(whiteCount > 8) {
+					whiteRook1Pos[0] += 59;
+				}
+				whiteRook1Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteRook1)) % (59*8));
 			} else if (piece.equals(board.whiteKnight1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteKnight1);
 				whiteKnight1Pos[0] = (horizOff + 512);
-				whiteKnight1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteKnight1));
+				if(whiteCount > 8) {
+					whiteKnight1Pos[0] += 59;
+				}
+				whiteKnight1Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteKnight1)) % (59*8));
 			} else if (piece.equals(board.whiteBishop1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteBishop1);
 				whiteBishop1Pos[0] = (horizOff + 512);
-				whiteBishop1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteBishop1));
+				if(whiteCount > 8) {
+					whiteBishop1Pos[0] += 59;
+				}
+				whiteBishop1Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteBishop1)) % (59*8));
 			} else if (piece.equals(board.whiteQueen)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteQueen);
 				whiteQueenPos[0] = (horizOff + 512);
-				whiteQueenPos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteQueen));
+				if(whiteCount > 8) {
+					whiteQueenPos[0] += 59;
+				}
+				whiteQueenPos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteQueen)) % (59*8));
 			} else if (piece.equals(board.whiteKing)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteKing);
 				whiteKingPos[0] = (horizOff + 512);
-				whiteKingPos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteKing));
+				if(whiteCount > 8) {
+					whiteKingPos[0] += 59;
+				}
+				whiteKingPos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteKing)) % (59*8));
 			} else if (piece.equals(board.whiteBishop2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteBishop2);
 				whiteBishop2Pos[0] = (horizOff + 512);
-				whiteBishop2Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteBishop2));
+				if(whiteCount > 8) {
+					whiteBishop2Pos[0] += 59;
+				}
+				whiteBishop2Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteBishop2)) % (59*8));
 			} else if (piece.equals(board.whiteKnight2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteKnight2);
 				whiteKnight2Pos[0] = (horizOff + 512);
-				whiteKnight2Pos[1] = (verticOff + pieceVerticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteKnight2));
+				if(whiteCount > 8) {
+					whiteKnight2Pos[0] += 59;
+				}
+				whiteKnight2Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteKnight2)) % (59*8));
 			} else if (piece.equals(board.whiteRook2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteRook2);
 				whiteRook2Pos[0] = (horizOff + 512);
-				whiteRook2Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteRook2));
+				if(whiteCount > 8) {
+					whiteRook2Pos[0] += 59;
+				}
+				whiteRook2Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whiteRook2)) % (59*8));
 			} else if (piece.equals(board.whitePawn1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn0);
 				whitePawn0Pos[0] = (horizOff + 512);
-				whitePawn0Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn1));
+				if(whiteCount > 8) {
+					whitePawn0Pos[0] += 59;
+				}
+				whitePawn0Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn1)) % (59*8));
 			} else if (piece.equals(board.whitePawn2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn1);
 				whitePawn1Pos[0] = (horizOff + 512);
-				whitePawn1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn2));
+				if(whiteCount > 8) {
+					whitePawn1Pos[0] += 59;
+				}
+				whitePawn1Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn2)) % (59*8));
 			} else if (piece.equals(board.whitePawn3)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn2);
 				whitePawn2Pos[0] = (horizOff + 512);
-				whitePawn2Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn3));
+				if(whiteCount > 8) {
+					whitePawn2Pos[0] += 59;
+				}
+				whitePawn2Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn3)) % (59*8));
 			} else if (piece.equals(board.whitePawn4)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn3);
 				whitePawn3Pos[0] = (horizOff + 512);
-				whitePawn3Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn4));
+				if(whiteCount > 8) {
+					whitePawn3Pos[0] += 59;
+				}
+				whitePawn3Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn4)) % (59*8));
 			} else if (piece.equals(board.whitePawn5)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn4);
 				whitePawn4Pos[0] = (horizOff + 512);
-				whitePawn4Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn5));
+				if(whiteCount > 8) {
+					whitePawn4Pos[0] += 59;
+				}
+				whitePawn4Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn5)) % (59*8));
 			} else if (piece.equals(board.whitePawn6)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn5);
 				whitePawn5Pos[0] = (horizOff + 512);
-				whitePawn5Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn6));
+				if(whiteCount > 8) {
+					whitePawn5Pos[0] += 59;
+				}
+				whitePawn5Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn6)) % (59*8));
 			} else if (piece.equals(board.whitePawn7)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn6);
 				whitePawn6Pos[0] = (horizOff + 512);
-				whitePawn6Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn7));
+				if(whiteCount > 8) {
+					whitePawn6Pos[0] += 59;
+				}
+				whitePawn6Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn7)) % (59*8));
 			} else if (piece.equals(board.whitePawn8)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn7);
 				whitePawn7Pos[0] = (horizOff + 512);
-				whitePawn7Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn8));
+				if(whiteCount > 8) {
+					whitePawn7Pos[0] += 59;
+				}
+				whitePawn7Pos[1] = pieceVerticOff + verticOff + ((59 * board.whiteGraveyard
+						.indexOf(board.whitePawn8)) % (59*8));
 			}
 		}
 

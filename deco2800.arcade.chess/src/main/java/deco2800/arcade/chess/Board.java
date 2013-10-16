@@ -70,16 +70,6 @@ public class Board {
 	}
 
 	/**
-	 * Initialises board to the given saved state
-	 * 
-	 * @param savedState
-	 *            The saved board from a previous match
-	 */
-	public Board(Board savedState) {
-
-	}
-
-	/**
 	 * Check if either team is in 'Check'
 	 * 
 	 * @param Team
@@ -171,9 +161,12 @@ public class Board {
 	}
 	
 	/**
+	 * Creates a list of only the moves that don't put the team in check
 	 * 
 	 * @param piece
+	 * 		The piece for which moves will be determined
 	 * @return
+	 * 		The list of all allowable moves
 	 */
 	public List<int[]> removeCheckMoves(Piece piece) {
 		int index = 0;
@@ -242,16 +235,6 @@ public class Board {
 	}
 
 	/**
-	 * Deactivates the piece from play and adds it to the graveyard
-	 * 
-	 * @param removalPiece
-	 *            Piece to be removed from play
-	 */
-	private void removePiece(Piece removalPiece) {
-
-	}
-
-	/**
 	 * Reactivates the piece into play and removes it from the graveyard
 	 * 
 	 * @param retrievalPiece
@@ -279,13 +262,6 @@ public class Board {
 		} else {
 			return true;
 		}
-	}
-
-	/**
-	 * Reset the board to it's default state
-	 */
-	private void reset() {
-
 	}
 
 	/**
@@ -420,9 +396,6 @@ public class Board {
 		int x = newPosition[0];
 		int y = newPosition[1];
 		boolean kingCastleSwap = false;
-		//boolean inCheck;
-
-		//inCheck = checkForCheck(whoseTurn());
 
 		List<int[]> allowedMoves = removeCheckMoves(piece);
 
@@ -641,8 +614,6 @@ public class Board {
 			if ((upRight[0] >= 0) && (upRight[0] <= 7) && (upRight[1] >= 0)
 					&& (upRight[1] <= 7)) {
 
-				// int g = possibleMoves.get(i)[0];
-				// int f = possibleMoves.get(i)[1];
 				// if space is not occupied continue
 				if (!occupiedSpace(upRight)) {
 					continue;
@@ -1533,7 +1504,6 @@ public class Board {
 		
 		List<Piece> activePieces = findActivePieces(turn);
 		int numPieces;
-		System.out.println("HELLO MICK");
 		List<Piece> allowedPieces = new ArrayList<Piece>();
 
 		for(Piece piece : activePieces) {

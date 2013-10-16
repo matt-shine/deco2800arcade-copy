@@ -1,12 +1,14 @@
 package deco2800.arcade.hunter;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
+import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class PhysicsHandler {
     /**
@@ -59,8 +61,9 @@ public class PhysicsHandler {
 		// (should be player, animals & projectiles)
 
 		// Move the item so that it no longer intersects with the map
-
-		for (Entity e : entities) {
+        Iterator<Entity> i = entities.iterator();
+		while (i.hasNext()) {
+            Entity e = i.next();
 			e.getCollider().clear();
 
             int mid, colTop;
@@ -87,6 +90,12 @@ public class PhysicsHandler {
                 e.setY(colTop);
                 e.getCollider().bottom = true;
             }
+            // Check for entities going outside the bounds of the map
+//            int pane = foregroundLayer.getPane(e.getX());
+//            if (pane != -1 && e.getY() <= foregroundLayer.getPaneOffset(pane)) {
+//                System.out.println("Animal: ("+ e.getX() + ", " + e.getY() + ")");
+//                i.remove();
+//            }
 		}
 	}
 }

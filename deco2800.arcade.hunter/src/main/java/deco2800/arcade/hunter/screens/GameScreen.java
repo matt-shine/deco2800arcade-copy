@@ -44,7 +44,6 @@ public class GameScreen implements Screen {
 	private SpriteLayer spriteLayer;
 	private ForegroundLayer foregroundLayer;
 	private float speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
-	private boolean paused = false;
 	private SpriteBatch batch = new SpriteBatch();
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
@@ -65,19 +64,18 @@ public class GameScreen implements Screen {
 		
 		// Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Config.screenWidth, Config.screenHeight);
+		camera.setToOrtho(false, Hunter.State.screenWidth, Hunter.State.screenHeight);
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		
         //Generate random seed and feed it to the random number generator here.
         //If you want to make it work the same as a previous run, manually set the seed at the start
-        Config.randomGenerator = new Random((long) (Math.random() * Long.MAX_VALUE));
+        Hunter.State.randomGenerator = new Random((long) (Math.random() * Long.MAX_VALUE));
 
+        int numPanes = (int) (Math.ceil(Hunter.State.screenWidth / (double) Config.PANE_SIZE_PX) + 1);
+        foregroundLayer = new ForegroundLayer(1, numPanes, this);
 		backgroundLayer = new BackgroundLayer(0, this);
 		spriteLayer = new SpriteLayer((float) 0.6, this);
-
-		int numPanes = (int) (Math.ceil(Config.screenWidth / (double) Config.PANE_SIZE_PX) + 1);
-		foregroundLayer = new ForegroundLayer(1, numPanes, this);
 
 		entityHandler = new EntityHandler(entities);
 		
@@ -94,7 +92,7 @@ public class GameScreen implements Screen {
 		entities.add(item);
 		
 		// Plays the music
-		if(Config.getPreferencesManager().isMusicEnabled() && Config.getPreferencesManager().isSoundEnabled()){
+		if(Hunter.State.getPreferencesManager().isMusicEnabled() && Hunter.State.getPreferencesManager().isSoundEnabled()){
 			FileHandle musicFile = Gdx.files.internal("gamemusic.mp3");
 			musicResource = Gdx.audio.newMusic(musicFile);
 			musicResource.setVolume(hunter.getPreferencesManager().getVolume());
@@ -114,7 +112,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-
+        batch.dispose();
+        staticBatch.dispose();
+        musicResource.dispose();
+        font.dispose();
 	}
 
 	@Override
@@ -141,15 +142,15 @@ public class GameScreen implements Screen {
 		if (speedIncreaseCountdown <= 0) {
 			speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
 
-			if (Config.gameSpeed < Config.MAX_SPEED) {
-				Config.gameSpeed++;
+			if (Hunter.State.gameSpeed < Config.MAX_SPEED) {
+				Hunter.State.gameSpeed++;
 			}
 		}
 	}
 
 	@Override
 	public void render(float delta) {
-		if (!paused) {
+		if (!Hunter.State.paused) {
 			pollInput();
 
 			stateTime += Gdx.graphics.getDeltaTime();
@@ -166,37 +167,21 @@ public class GameScreen implements Screen {
 			backgroundLayer.update(delta, camera.position);
 			spriteLayer.update(delta, camera.position);
 			foregroundLayer.update(delta, camera.position);
-
-			staticBatch.begin();
-			backgroundLayer.draw(staticBatch);
-			staticBatch.end();
-
-			batch.begin();
-            spriteLayer.draw(batch);
-			foregroundLayer.draw(batch);
-
-			entities.drawAll(batch, stateTime);
-
-			batch.end();
-
-			staticBatch.begin();
-			drawGameUI(staticBatch);
-			staticBatch.end();
 			
 			if (animalTime + 2500 <= System.currentTimeMillis()){
-				if (Config.randomGenerator.nextFloat() >= 0.5){
+				if (Hunter.State.randomGenerator.nextFloat() >= 0.5){
 					createAnimals();
 				}
 				animalTime = System.currentTimeMillis();
 			}
 			if (itemTime + 5000 <= System.currentTimeMillis()){
-				if (Config.randomGenerator.nextFloat() >= 0.5){
-					createItems(Config.randomGenerator.nextBoolean());
+				if (Hunter.State.randomGenerator.nextFloat() >= 0.5){
+					createItems(Hunter.State.randomGenerator.nextBoolean());
 				}
 				itemTime = System.currentTimeMillis();
 			}
 			if (mapEntityTime + 4000 <= System.currentTimeMillis()){
-				if (Config.randomGenerator.nextFloat() >= 0.5){
+				if (Hunter.State.randomGenerator.nextFloat() >= 0.5){
 					createMapEntity();
 				}
 				mapEntityTime = System.currentTimeMillis();
@@ -204,6 +189,22 @@ public class GameScreen implements Screen {
 			
 			
 		}
+        //Draw everything
+        staticBatch.begin();
+        backgroundLayer.draw(staticBatch);
+        staticBatch.end();
+
+        batch.begin();
+        spriteLayer.draw(batch);
+        foregroundLayer.draw(batch);
+
+        entities.drawAll(batch, stateTime);
+
+        batch.end();
+
+        staticBatch.begin();
+        drawGameUI(staticBatch);
+        staticBatch.end();
 	}
 	
 
@@ -224,18 +225,18 @@ public class GameScreen implements Screen {
 	}
 	
 	private void createMapEntity() {
-		entities.add(new MapEntity(new Vector2(player.getX()+Config.screenWidth, getForeground().getColumnTop(player.getX()+Config.screenWidth)),64,64, "spike trap", entityHandler.getMapEntity("spike trap"),this));
+		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),64,64, "spike trap", entityHandler.getMapEntity("spike trap"), this));
 	}
 	
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
-		String animal = anims[Config.randomGenerator.nextInt(3)];
-		entities.add(new Animal(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)),64,64,Config.randomGenerator.nextBoolean(),animal,entityHandler.getAnimalAnimation(animal),this));
+		String animal = anims[Hunter.State.randomGenerator.nextInt(3)];
+		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)),64,64,Hunter.State.randomGenerator.nextBoolean(), animal, entityHandler.getAnimalAnimation(animal), this));
 	}
 	
 	private void createItems(boolean weapon){
 		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
-		String item =  textures[Config.randomGenerator.nextInt(6)];
+		String item =  textures[Hunter.State.randomGenerator.nextInt(7)];
 		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item),this));
 	}
 
@@ -244,20 +245,20 @@ public class GameScreen implements Screen {
 			// Attack
 			player.attack();
 			if (player.getWeapon() == "Bow" && attackTime + Config.PLAYER_ATTACK_COOLDOWN <= System.currentTimeMillis()){
-				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),8,8,"arrow",entityHandler.getMapEntity("arrow"),this));
+				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),8,8, "arrow", entityHandler.getMapEntity("arrow"), this));
 				attackTime = System.currentTimeMillis();
 			}
 		}
 
 		if (Gdx.input.isKeyPressed(Keys.V)){
-			gameOver();
+			gameOver();      //TEMPORARY, DON'T FORGET TO REMOVE! TODO
 		}
 				
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded() && !player.isDead()) {
 			// Jump
 			player.jump();
 			Sound jump = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
-			if (Config.getPreferencesManager().isSoundEnabled()){
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
 				jump.play(hunter.getPreferencesManager().getVolume());
 			}
 		}
@@ -277,15 +278,15 @@ public class GameScreen implements Screen {
 	}
 
 	private void drawScore(SpriteBatch batch) {
-		int x = Config.screenWidth / 2;
-		int y = Config.screenHeight - 16;
+		int x = Hunter.State.screenWidth / 2;
+		int y = Hunter.State.screenHeight - 16;
 		CharSequence scoreText = Integer.toString(player.getCurrentScore())+ "     X " + multiplier + " MULTIPLIER";
 		font.draw(batch, scoreText, x, y);
 	}
 	
 	private void drawDistance(SpriteBatch batch) {
 		int x = 16;
-		int y = Config.screenHeight - 16;
+		int y = Hunter.State.screenHeight - 16;
 		CharSequence scoreText = Float.toString(player.getCurrentDistance()) + "m";
 		font.draw(batch, scoreText, x, y);
 	}
@@ -295,8 +296,8 @@ public class GameScreen implements Screen {
 		TextureRegion life = new TextureRegion(lives);
 		for (int x = 1; x <= player.getLives(); x++) {
 			batch.draw(life,
-					(Config.screenWidth - (x * (life.getRegionWidth() / 2f + 16))),
-					(Config.screenHeight - (life.getRegionHeight() / 2f) - 16),
+					(Hunter.State.screenWidth - (x * (life.getRegionWidth() / 2f + 16))),
+					(Hunter.State.screenHeight - (life.getRegionHeight() / 2f) - 16),
                     life.getRegionWidth() / 2f, life.getRegionHeight() / 2f);
 		}
 	}
@@ -313,8 +314,8 @@ public class GameScreen implements Screen {
 	 */
 	private void moveCamera() {
 		camera.position.set(player.getX() - (player.getWidth() / 2)
-				+ Config.screenWidth / 3, player.getY()
-				- (player.getHeight() / 2) + Config.screenHeight / 3, 0);
+				+ Hunter.State.screenWidth / 3, player.getY()
+				- (player.getHeight() / 2) + Hunter.State.screenHeight / 3, 0);
 
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import deco2800.arcade.hunter.Hunter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -218,13 +219,13 @@ public class Player extends Entity {
 
 		if (collider.right) {
 			velocity.x = 0;
-		} else if (velocity.x < Config.gameSpeed) {
+		} else if (velocity.x < Hunter.State.gameSpeed) {
 			velocity.x++;
 		}
 
 		setX(getX() + delta * velocity.x);
 
-		setJumpVelocity(getJumpVelocity() - delta * Config.gravity);
+		setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
 		setY(getY() + getJumpVelocity());
 		
 		if (attackTime + Config.PLAYER_ATTACK_TIMEOUT > System.currentTimeMillis() && !dead){
@@ -404,11 +405,11 @@ public class Player extends Entity {
 	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null) {
 			gameOver();
-		}else if (e.getType() == "Items") {
+		} else if (e.getType() == "Items") {
 			System.out.println(((Items) e).getItem());
 			entities.remove(e);
-			if (Config.getPreferencesManager().isSoundEnabled()){
-				pickup.play(Config.getPreferencesManager().getVolume());
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+				pickup.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			if (((Items)e).getItemType() == Items.Type.WEAPON){
 				setWeapon(((Items)e).getItem());
@@ -416,7 +417,7 @@ public class Player extends Entity {
 			}else{
 				applyPlayerBuff(((Items)e).getItem());
 			}
-		}else if (e.getType() == "Animal") {
+		} else if (e.getType() == "Animal") {
 			if (getState() == State.ATTACK){
 				score = score + 200*multiplier;
 				((Animal)e).dead();
@@ -425,8 +426,8 @@ public class Player extends Entity {
 				}
 			}else{
 				if (!invulnerable && !blink && !((Animal)e).isDead()) {
-					if (Config.getPreferencesManager().isSoundEnabled()){
-						hurt.play(Config.getPreferencesManager().getVolume());
+					if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+						hurt.play(Hunter.State.getPreferencesManager().getVolume());
 					}
 					this.blink = true;
                     damageTime = System.currentTimeMillis();
@@ -434,10 +435,10 @@ public class Player extends Entity {
 					checkLives();
 				}
 			}
-		}else if(e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() != "arrow"){
+		} else if(e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() != "arrow"){
 			if (!invulnerable && !blink){
-				if (Config.getPreferencesManager().isSoundEnabled()){
-					hurt.play(Config.getPreferencesManager().getVolume());
+				if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+					hurt.play(Hunter.State.getPreferencesManager().getVolume());
 				}
 				this.blink = true;
 				damageTime = System.currentTimeMillis();
@@ -451,9 +452,9 @@ public class Player extends Entity {
 	 * Checks if the player has any lives left
 	 */
 	private void checkLives() {
-		if(lives == 0){
-			if (Config.getPreferencesManager().isSoundEnabled()){
-				death.play(Config.getPreferencesManager().getVolume());
+		if(lives <= 0){
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+				death.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			this.state = State.DEAD;
 			velocity = new Vector2(0,0);
@@ -584,8 +585,8 @@ public class Player extends Entity {
     	if (attackTime + Config.PLAYER_ATTACK_COOLDOWN - cooldownModifier< System.currentTimeMillis()){
     		if (this.state != State.ATTACK && this.state != State.DAMAGED) {
     			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
-    			if (Config.getPreferencesManager().isSoundEnabled()){
-    				attack.play(Config.getPreferencesManager().getVolume());
+    			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+    				attack.play(Hunter.State.getPreferencesManager().getVolume());
     			}
         		state = State.ATTACK;
         		currAnim = attackAnimation();

@@ -14,11 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
-import deco2800.arcade.hunter.Hunter.Config;
 
 /**
  * A Hunter game for use in the Arcade
@@ -149,6 +147,6 @@ public class GameOverScreen implements Screen {
 	}
 
 	private void drawBackground(){
-		batch.draw(background, 0f, 0f, Config.screenWidth, Config.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+		batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
 	}
 }

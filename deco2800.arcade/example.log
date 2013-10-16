@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INFO main org.reflections.Reflections - Reflections took 350 ms to scan 25 urls, producing 113 keys and 511 values 
 DEBUG main org.reflections.Reflections - going to scan these urls:
 file:/C:/Users/Darryl/Documents/GitHub4/deco2800-2013/deco2800.arcade.mixmaze/build/classes/main/
@@ -917,3 +918,5 @@ file:/C:/Users/Darryl/Documents/GitHub4/deco2800-2013/deco2800.arcade.wl6/build/
 file:/C:/Users/Darryl/Documents/GitHub4/deco2800-2013/deco2800.arcade.connect4/build/classes/main/
 file:/C:/Users/Darryl/Documents/GitHub4/deco2800-2013/deco2800.arcade.deerforest/build/classes/main/
 INFO main org.reflections.Reflections - Reflections took 264 ms to scan 25 urls, producing 113 keys and 511 values 
+=======
+>>>>>>> f3aa3f780598d4442df4e3c2a5e340fb2e11a827

@@ -3,6 +3,7 @@ package deco2800.arcade.hunter.model;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -83,7 +84,7 @@ public class Animal extends Entity {
 			setX(getX() + moveSpeed);
 		}
 
-		setY(getY() - Hunter.Config.gravity);
+		setY(getY() - Hunter.State.gravity);
 		
 		if(this.state == State.DEAD){
 			if (deathTimer + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()){

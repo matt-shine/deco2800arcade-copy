@@ -81,9 +81,9 @@ public class ArcadeWebserver implements Container {
 		    Route r = processPath(request.getPath().toString());
 		    
 		    //If we have a request to serve a page, use the appropriate responder
-			if ( responders.containsKey(r.route) ) {
+			if ( responders.containsKey( r.route ) ) {
 			    
-				responders.get(r.route).respond( response, r.param );
+				responders.get( r.route ).respond( response, r.param );
 				
 			} else if ( request.getPath().toString().contains( "js" ) ) {
 			    
@@ -167,6 +167,7 @@ public class ArcadeWebserver implements Container {
 	    responders.put("replays", new ReplayResponder());
 	    responders.put("games", new GameResponder());
 	    responders.put("logo", new LogoResponder());
+	    responders.put("achievement_icon", new AchievementIconResponder());
 	}
 
 	public static void startServer( ) {

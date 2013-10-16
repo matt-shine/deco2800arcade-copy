@@ -12,10 +12,13 @@ import deco2800.server.ArcadeServer;
 
 public class GameResponder implements WebResponder {
 	
+	public GameResponder() {
+		super();
+	}
+	
 	public void respond( Response response, String param ) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
-		long time = System.currentTimeMillis();
 
 		ArcadeWebserver.setResponseValues(response, "text/html");
 		

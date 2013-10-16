@@ -13,7 +13,11 @@ import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.server.ArcadeServer;
 
 public class ReplayResponder implements WebResponder {
-	private static ArrayList<Session> stringsToSessions( ArrayList<String> replayStrings ) {
+	public ReplayResponder() {
+		super();
+	}
+	
+	private ArrayList<Session> stringsToSessions( ArrayList<String> replayStrings ) {
 		ArrayList<Session> replays = new ArrayList<Session>();
 		//Convert back to sessions
         if (replayStrings != null)
@@ -54,8 +58,6 @@ public class ReplayResponder implements WebResponder {
 		String bodyString = "";
 		
 		List<String> gameIds = ArcadeServer.instance().getReplayStorage().getGameIds();
-		
-		//gameIds.add( "test" );
 		
 		bodyString = FileReader.readFile( "webserver/html/template.html", Charset.forName("UTF-8" ) );
 		

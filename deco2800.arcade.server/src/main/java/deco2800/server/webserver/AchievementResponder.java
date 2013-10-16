@@ -14,6 +14,10 @@ import deco2800.server.ArcadeServer;
 
 public class AchievementResponder implements WebResponder {
 	
+	public AchievementResponder() {
+		super();
+	}
+	
 	public void respond( Response response, String param) throws Exception {
 		
 		PrintStream body = response.getPrintStream();
@@ -54,9 +58,11 @@ public class AchievementResponder implements WebResponder {
 			
 			String gameAchievements = "";
 			for ( Achievement achievement : achievements ) {
-			    
-				gameAchievements += String.format( "<tr><td>%s</td><td class='text left'>%s</td></tr>", 
-				        achievement.name, 
+			    System.out.println( achievement.icon );
+			    System.out.println( ArcadeServer.instance().getImageStorage().get( achievement.icon ) );
+				gameAchievements += String.format( "<tr><td class='achievement-icon-holder'><img src='achievement_icon/%s' class='achievement-icon'></td><td>%s</td><td class='text left'>%s</td></tr>", 
+				        achievement.icon.replace( "/", "-" ),
+						achievement.name, 
 						achievement.description );
 			}
 			

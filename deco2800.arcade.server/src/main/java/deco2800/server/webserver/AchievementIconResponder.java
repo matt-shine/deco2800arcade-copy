@@ -5,9 +5,11 @@ import java.nio.ByteBuffer;
 
 import org.simpleframework.http.Response;
 
-public class LogoResponder implements WebResponder {
+import deco2800.server.ArcadeServer;
 
-    public LogoResponder() {
+public class AchievementIconResponder implements WebResponder {
+
+    public AchievementIconResponder() {
 		super();
     }
 
@@ -16,17 +18,16 @@ public class LogoResponder implements WebResponder {
         
         ArcadeWebserver.setResponseValues(response, "image/png");
         
-        try
-        {
-            ByteBuffer file = FileReader.readBinaryFile("../deco2800.arcade.ui/src/main/resources/logos/" + param);
-
-            OutputStream out = response.getOutputStream(file.capacity());
+        try {
+            byte[] data = ArcadeServer.instance().getImageStorage().get( param.replace( "-", "/" ) ).getData();
             
-            out.write(file.array());
+            OutputStream out = response.getOutputStream( data.length );
+            
+            out.write( data );
             out.close();
         
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
+        	//TODO: Load the default image from ImageStorage.get() when they push to master
             ByteBuffer file = FileReader.readBinaryFile("../deco2800.arcade.ui/src/main/resources/logos/" + "default.png");
 
             OutputStream out = response.getOutputStream(file.capacity());

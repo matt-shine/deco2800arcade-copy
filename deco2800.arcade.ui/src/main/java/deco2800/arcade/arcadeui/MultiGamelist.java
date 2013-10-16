@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.Arcade;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
@@ -40,6 +41,9 @@ import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import java.util.*;
 import com.badlogic.gdx.Input.Keys;
+
+
+import deco2800.*;
 
 public class MultiGamelist implements Screen {
 	
@@ -514,10 +518,9 @@ public class MultiGamelist implements Screen {
             }}));   
         
 	    
+		//AFTER SCROLLED
 		pongButton2.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
-		    	//ArcadeSystem.login("pong");
-		    	//bclicked = true;
 		    	System.out.println("Pong clicked");
 		    }
 		})); 
@@ -876,11 +879,16 @@ public class MultiGamelist implements Screen {
             }}));   
         
 	    
+        //SCROLLHERE
 		pongButton.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	//ArcadeSystem.login("pong");
 		    	//bclicked = true;
-		    	System.out.println("Pong clicked");
+		    	dispose();
+		    	ArcadeSystem.goToGame("Pong");
+		    	pause();
+		    	
+		    	System.out.println("paused");
 		    }
 		})); 
         
@@ -927,9 +935,12 @@ public class MultiGamelist implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
             	//ArcadeSystem.login("chess");
             	System.out.println("Chess clicked");	
-            	dispose();
-				arcadeUI.setScreen(arcadeUI.getWait());
-				
+            	//dispose();
+				//arcadeUI.setScreen(arcadeUI.getWait());
+				dispose();
+		    	ArcadeSystem.goToGame("junglejump");
+		    	//junglejump.cats();
+		    	System.out.println("paused");
 				
             }
         })); 

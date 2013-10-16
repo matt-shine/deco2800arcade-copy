@@ -84,6 +84,7 @@ public class Arcade extends JFrame {
     
     private static boolean playerBetting;
     
+    private static boolean matchMaking;
     
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
     
@@ -554,6 +555,15 @@ public class Arcade extends JFrame {
 	public void setPlayerBetting(boolean playerBetting) {
 		Arcade.playerBetting = playerBetting;
 	}
+	
+	public boolean isMatchMaking() {
+		return matchMaking;
+	}
+	
+	public void setMatchMaking(boolean matchMaking) {
+		Arcade.matchMaking = matchMaking;
+	}
+	
     /**
      * Set selected game client
      * @param gameClient GameClient

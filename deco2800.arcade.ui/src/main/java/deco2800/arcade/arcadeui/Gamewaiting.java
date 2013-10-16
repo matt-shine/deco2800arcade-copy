@@ -66,12 +66,9 @@ public class Gamewaiting implements Screen {
 	ArrayList<ActiveMatchDetails> matches;
 	
 	public Gamewaiting(ArcadeUI ui) {
-		arcadeUI = ui;
-	}
+		System.out.println("Gamewaiting UI: " + ui);
+		arcadeUI = ui;    	
 
-    public Gamewaiting() {
-    	
-        
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
         stage = new FrontPageStage();
@@ -108,11 +105,13 @@ public class Gamewaiting implements Screen {
 		   
    }    
    */
+	
 
 		// Return to lobby event listener
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
             	dispose();
+            	ArcadeSystem.setMatchMaking(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
 				arcadeUI.setScreen(arcadeUI.getLobby());
 				

@@ -42,7 +42,7 @@ public class ArcadeSystem {
      * Start GameClient
      * @param gameClient GameClient to start
      */
-    public static void goToGame(GameClient gameClient) {
+    public static void goToGame(GameClient gameClient, Boolean isMultiPlayer) {
         arcade.stopGame();
         arcade.setGame(gameClient);
         arcade.startGame(gameClient);
@@ -148,6 +148,14 @@ public class ArcadeSystem {
 	 public static boolean isPlayerBetting() {
 	    	return arcade.isPlayerBetting();
     }
+	 
+	public static void setMatchMaking(boolean b) {
+			arcade.setMatchMaking(b);	
+		}
+	
+	public static boolean isMatchMaking() {
+		    return arcade.isMatchMaking();
+	    }
 	 
 	 public static void initializeLobbyMatchList() {
 		 arcade.populateMatchList();

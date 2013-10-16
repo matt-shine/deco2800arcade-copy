@@ -38,10 +38,10 @@ public class MultiplayerLobby implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private ArcadeUI arcadeUI;
 	private MultiplayerLobby lobby;
-	//private ChatArray;
 	ArrayList<ActiveMatchDetails> matches; 
 
 	public MultiplayerLobby(ArcadeUI ui) {
+		System.out.println(ui);
 		arcadeUI = ui;
 		lobby = this;
 	}
@@ -240,8 +240,11 @@ public class MultiplayerLobby implements Screen {
 				//add second overlay (or modify first) to 'accept' or 'decline' match
 				dispose();
 				arcadeUI.setScreen(arcadeUI.getMultigame());
+				
+				ArcadeSystem.setMatchMaking(true);
+				ArcadeSystem.setMultiplayerEnabled(true);
 				//arcadeUI.setScreen(arcadeUI.getWait());
-				//ArcadeSystem.setMultiplayerEnabled(false);
+				
 				
 				
 				//Code below has been commented out for overlay

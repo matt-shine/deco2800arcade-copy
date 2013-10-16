@@ -167,22 +167,6 @@ public class GameScreen implements Screen {
 			backgroundLayer.update(delta, camera.position);
 			spriteLayer.update(delta, camera.position);
 			foregroundLayer.update(delta, camera.position);
-
-			staticBatch.begin();
-			backgroundLayer.draw(staticBatch);
-			staticBatch.end();
-
-			batch.begin();
-            spriteLayer.draw(batch);
-			foregroundLayer.draw(batch);
-
-			entities.drawAll(batch, stateTime);
-
-			batch.end();
-
-			staticBatch.begin();
-			drawGameUI(staticBatch);
-			staticBatch.end();
 			
 			if (animalTime + 2500 <= System.currentTimeMillis()){
 				if (Hunter.State.randomGenerator.nextFloat() >= 0.5){
@@ -205,6 +189,22 @@ public class GameScreen implements Screen {
 			
 			
 		}
+        //Draw everything
+        staticBatch.begin();
+        backgroundLayer.draw(staticBatch);
+        staticBatch.end();
+
+        batch.begin();
+        spriteLayer.draw(batch);
+        foregroundLayer.draw(batch);
+
+        entities.drawAll(batch, stateTime);
+
+        batch.end();
+
+        staticBatch.begin();
+        drawGameUI(staticBatch);
+        staticBatch.end();
 	}
 	
 

@@ -232,7 +232,7 @@ public class ForegroundLayer extends Map {
             if (collisionType == -1) {
                 return -1;
             } else {
-                switch(collisionType) {
+                switch (collisionType) {
                     case 0:
                         //Empty tile, do nothing
                         break;
@@ -245,6 +245,18 @@ public class ForegroundLayer extends Map {
                     case 3:
                         // |_\ slope
                         return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (int) (x % Config.TILE_SIZE);
+                    case 4:
+                        // /| slope piece
+                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (int) (x % (Config.TILE_SIZE / 2) + Config.TILE_SIZE / 2);
+                    case 5:
+                        // /__ slope piece
+                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (int) (x % (Config.TILE_SIZE / 2));
+                    case 6:
+                        // |\
+                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (int) (x % (Config.TILE_SIZE / 2) + Config.TILE_SIZE / 2);
+                    case 7:
+                        // __\
+                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (int) (x % (Config.TILE_SIZE / 2));
                     default:
                         return -1;
                 }

@@ -1,7 +1,6 @@
 package deco2800.arcade.towerdefence;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -45,6 +44,6 @@ public interface Melee {
 	 * Returns the array of sprites to animate melee attacking.
 	 * @return
 	 */
-	public List<Sprite> meleeSprites();
+	public ArrayList<Sprite> meleeSprites();
 
 }

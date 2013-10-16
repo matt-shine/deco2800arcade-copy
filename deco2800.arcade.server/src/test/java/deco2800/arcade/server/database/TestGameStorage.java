@@ -19,7 +19,7 @@ import org.junit.Test;
  */
 public class TestGameStorage {
 
-	@Test
+	//@Test
 	public void testBoundaries() throws DatabaseException {
 		GameStorage gs = new GameStorage();
 		gs.initialise();

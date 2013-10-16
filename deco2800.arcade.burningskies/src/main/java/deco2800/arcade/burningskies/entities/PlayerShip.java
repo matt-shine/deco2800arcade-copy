@@ -1,7 +1,6 @@
 package deco2800.arcade.burningskies.entities;
 
 import deco2800.arcade.burningskies.*;
-import deco2800.arcade.burningskies.entities.bullets.BombPattern;
 import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
 import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
@@ -15,13 +14,11 @@ public class PlayerShip extends Ship {
 	private BulletPattern playerBullets;
 	private float maxVelocity = 300; //Changed from static to dynamic.
 	private int maxHealth; //For health powerups.
-	private int lives = 3;
 	private PlayScreen screen;
 	
-	private float speedTimer = 0f;
+	//brute force way to handle timer
+	private long initialTime;
 	private boolean speedUp = false;
-	private float patternTimer = 0f;
-	private boolean patternUp = false;
 	
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
@@ -56,8 +53,6 @@ public class PlayerShip extends Ship {
 	public void damage(int damage) {
 		super.damage(damage);
 		if(!isAlive()) {
-			new BombPattern(this, screen).fire(0, getCenterX(), getCenterY());
-			lives -= 1;
 			screen.killPlayer();
 		}
 	}
@@ -70,7 +65,6 @@ public class PlayerShip extends Ship {
 		return super.remove();
 	}
 	
-	
 	/**
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */
@@ -79,17 +73,10 @@ public class PlayerShip extends Ship {
 		//resets any powerups if needed. Initial testing on speedup only.
 		//easily applies to a bullet pattern.
 		if (speedUp) {	
-			speedTimer -= delta;
-			if (speedTimer <= 0) {
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - initialTime) >= 10000) {
 				maxVelocity = 300;
 				speedUp = false;
-			}
-		}
-		if (patternUp) {	
-			patternTimer -= delta;
-			if (patternTimer <= 0) {
-				setBulletPattern(null);
-				patternUp = false;
 			}
 		}
 		
@@ -159,29 +146,18 @@ public class PlayerShip extends Ship {
 	 */
 	public void setMaxSpeed(float velocity) {
 		speedUp = true;
+		initialTime = System.currentTimeMillis();
 		maxVelocity = velocity;
-		speedTimer = 10f;
 	}
 	
 	/**
 	 * Changes the players current bullet type.
+	 * @ensure pattern != NULL
 	 */
-	public void setBulletPattern(BulletPattern pattern, boolean timeLimited) {
-		if(playerBullets != null) {
-			playerBullets.remove();
-		}
-		playerBullets = pattern;
-		if(playerBullets != null) {
-			getStage().addActor(playerBullets);
-		}
-		if(timeLimited) {
-			patternUp = true;
-			patternTimer = 10f;
-		}
-	}
-	
 	public void setBulletPattern(BulletPattern pattern) {
-		setBulletPattern(pattern, false);
+		playerBullets.remove();
+		playerBullets = pattern;
+		getStage().addActor(playerBullets);
 	}
 	
 	/**
@@ -203,20 +179,7 @@ public class PlayerShip extends Ship {
 	
 	public void respawn() {
 		this.health = 100;
-		setBulletPattern(null);
-		this.maxVelocity = 300;
-		this.speedUp = false;
 		this.flash = 0f;
 		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
-	}
-
-	public void upgradeBullets() {
-		if(playerBullets instanceof PlayerPattern) {
-			((PlayerPattern)playerBullets).upgrade();
-		}
-	}
-	
-	public int getLives() {
-		return lives;
 	}
 }

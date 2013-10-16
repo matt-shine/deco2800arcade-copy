@@ -12,10 +12,30 @@ public class ScoreRule implements Rule {
 	 */
 	@Override
 	public void excuteRules(int playerNum, String rule, SnakeLadder context) {
-		context.gamePlayers[playerNum].setScore(Integer.parseInt(rule));
+		processRule(playerNum, rule, context);
+		renderRule(playerNum, context);
+		
+	}
+
+	/**
+	 * @param playerNum
+	 * @param context
+	 */
+	public void renderRule(int playerNum, SnakeLadder context) {
 		context.getScoreLabels().get(playerNum).setText(""+context.gamePlayers[playerNum].getScore());
-		context.gameState = new WaitingState();
 		context.statusMessage = "Throw the dice again";
+	}
+
+	/**
+	 * @param playerNum
+	 * @param rule
+	 * @param context
+	 * @throws NumberFormatException
+	 */
+	public void processRule(int playerNum, String rule, SnakeLadder context)
+			throws NumberFormatException {
+		context.gamePlayers[playerNum].setScore(Integer.parseInt(rule));
+		context.gameState = new WaitingState();
 		context.taketurns();
 	}
 

@@ -42,13 +42,6 @@ public class DeckSystem {
 		
 		return null;
 	}
-
-	public boolean moveCards(List<AbstractCard> cardsToMove, CardCollection locSrc, CardCollection locDest) {
-		for(AbstractCard card: cardsToMove) {
-			if(!locSrc.remove(card) || !locDest.add(card)) return false;
-		}
-		return true;
-	}
 	
 	
 	

@@ -29,10 +29,10 @@ public class CommunicationTest {
 
 	private NetworkClient client1;
 	private NetworkClient client2;
-	
+
 	private CommunicationListener listener1;
 	private CommunicationListener listener2;
-	
+
 	@Before
 	public void initialise() throws NetworkException {
 		boolean[] privset = { true, true, true, true, true, true, true };
@@ -53,7 +53,7 @@ public class CommunicationTest {
 		info2.add("Kill Louis");
 		info2.add("2");
 		client1 = new NetworkClient("127.0.0.1", 54555, 54777);
-		
+
 		client2 = new NetworkClient("127.0.0.1", 54555, 54777);
 		player1 = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);
@@ -145,31 +145,34 @@ public class CommunicationTest {
 	}
 
 	/**
-	 * Not Sure how to test this when server is down and many methods in
-	 * ChatNode are currently commented out.
+	 * Test currently calls the listeners recieved method manually, once proper
+	 * sending has been set up this should be done automatically. Must change
+	 * test when this happens.
 	 */
 	@Test
 	public void sendMessage() {
 		Connection connection = null;
 		TextMessage message = new TextMessage();
 		List<Integer> chatParticipants = new ArrayList<Integer>();
-		
+
 		chatParticipants.add(player1.getID());
 		chatParticipants.add(player2.getID());
 		comm1.createChat(chatParticipants);
-		
+
 		message.recipients = chatParticipants;
 		message.chatID = 1111;
 		message.senderID = 123;
 		message.senderUsername = "Chuck Norris";
 		message.text = "QWERTYUIOP";
 		comm1.sendTextMessage(message);
-		
-		
+
 		listener2.received(connection, message);
-		
-		assertEquals(comm1.getCurrentChat().getID(), comm2.getCurrentChat().getID());
-		assertEquals(comm1.getCurrentChat().getParticipants().get(0), comm2.getCurrentChat().getParticipants().get(0));
-		assertEquals(comm1.getCurrentChat().getText(), comm2.getCurrentChat().getText());
+
+		assertEquals(comm1.getCurrentChat().getID(), comm2.getCurrentChat()
+				.getID());
+		assertEquals(comm1.getCurrentChat().getParticipants().get(0), comm2
+				.getCurrentChat().getParticipants().get(0));
+		assertEquals(comm1.getCurrentChat().getText(), comm2.getCurrentChat()
+				.getText());
 	}
 }

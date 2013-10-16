@@ -354,7 +354,7 @@ public class FrontPage implements Screen {
         
 	    libraryButton.addListener((new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	arcadeUI.setScreen(arcadeUI.home);
+	        	ArcadeSystem.goToGame("gamelibrary");
 	        }
 	    })); 
 	    

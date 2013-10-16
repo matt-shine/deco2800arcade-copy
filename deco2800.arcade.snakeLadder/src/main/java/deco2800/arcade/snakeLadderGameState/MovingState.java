@@ -13,11 +13,6 @@ public class MovingState extends GameState {
 		int playerIndex = turn%context.gamePlayers.length;
 		//int playerIndex=turn;
 		movePlayer(context,context.gamePlayers[playerIndex]);	    	
-    	if (context.gamePlayers[playerIndex].getBounds().x <= (60-20f) && context.gamePlayers[0].getBounds().y >= (540)) {
-    		context.gamePlayers[playerIndex].reset();
-    		context.statusMessage = context.gamePlayers[playerIndex].getPlayerName() +" Win! ";
-    		context.gameState = GameState.GAMEOVER;
-    	}
 	}
 
 	/**
@@ -25,18 +20,17 @@ public class MovingState extends GameState {
 	 */
 	private void movePlayer(SnakeLadder context, GamePlayer gamePlayer) {
 		gamePlayer.move(Gdx.graphics.getDeltaTime());
-		if(context.getMap().getTileList()[gamePlayer.newposition()].getIndex()>=99)
-		{
-			context.gameState=new GameOverState();
-		}
+		
 		//player stop move once he get relatively closed to desitination position
 		if(Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorX() - gamePlayer.getBounds().x) <(1f)&&Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorY() - gamePlayer.getBounds().y) <(1f))
 		{
 				gamePlayer.reset();
-				if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
-					context.gameState = new GameOverState();
-				} 
-				else {
+				if(gamePlayer.newposition()==99)
+				{
+					context.gameState=new GameOverState();
+				}
+				else 
+				{
 					// No winner yet, get ready for another point
 					context.gameState = new RuleExcutingState();					
 				}

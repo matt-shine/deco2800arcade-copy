@@ -196,7 +196,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
-<<<<<<< HEAD
+
 		System.out.println(System.getProperty("user.dir"));
 		texture = new Texture(("src/main/resources/mainscreen.png"));
 		monkeySit = new Texture(("src/main/resources/monkeySit.png"));
@@ -216,21 +216,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		livesNumText = new Texture(("src/main/resources/3.png"));
 		levelNumText = new Texture(("src/main/resources/1.png"));
 		//platform = new Texture("platform.png");
-=======
-        System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(("junglejumpassets/mainscreen.png"));
-		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));
-		monkeySitRIGHT = new Texture(("junglejumpassets/monkeySit.png"));
-		monkeySitLEFT = new Texture(("junglejumpassets/monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(("junglejumpassets/monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(("junglejumpassets/monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(("junglejumpassets/monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(("junglejumpassets/monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("junglejumpassets/gameBackground2.png"));
-		//platform = new Texture("junglejumpassets/platform.png");
->>>>>>> master
+
 
 		/* ACHIEVEMENT STUFF */
 		AchievementClient achClient = this.getAchievementClient();

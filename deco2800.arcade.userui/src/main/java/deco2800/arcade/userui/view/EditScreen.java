@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -60,7 +61,7 @@ public class EditScreen extends JFrame{
 	private JButton savebutton;
 
 	// Declare JTextFields for later use
-	private JTextField upload;
+	public JTextField upload;
 	private JTextField profile;
 	private JTextField realname;
 	private JTextArea aboutme;
@@ -74,6 +75,9 @@ public class EditScreen extends JFrame{
 
 	// Declare model
 	private Model m;
+	
+	//Declare storage variables
+	private String aboutmetext;
 
 	Font big = new Font("Verdana", Font.BOLD, 26);
 	Font normal = new Font("Verdana", Font.PLAIN, 15);
@@ -111,7 +115,7 @@ public class EditScreen extends JFrame{
 
 		titlepanel = new JPanel(new MigLayout());
 		editprofilebar = new JLabel("Edit Profile");
-		editprofilebar.setForeground(Color.black);
+		editprofilebar.setForeground(Color.white);
 		editprofilebar.setFont(big);
 		titlepanel.add(editprofilebar, "dock north, wrap, align center, gapleft 110px");
 		titlepanel.setBorder(BorderFactory.createEmptyBorder(0,0,30,0)); 
@@ -364,4 +368,23 @@ public class EditScreen extends JFrame{
 		browsebutton.addActionListener(listenForUploadButton);
 	
 	}
-}
+	
+	/**
+	 * Get functions to store in variables
+	 */
+	
+	public String getAboutMeText(){
+		return aboutme.getText();
+	}
+	
+	public String getUsernameText(){
+		return profile.getText();
+	}
+	
+	public String getRealNameText(){
+		return realname.getText();
+	}
+	
+	
+		
+	}

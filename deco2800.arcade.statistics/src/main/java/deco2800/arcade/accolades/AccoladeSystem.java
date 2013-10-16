@@ -1,4 +1,4 @@
-package deco2800.arcade.statistics;
+package deco2800.arcade.accolades;
 
 public class AccoladeSystem {
 	//TODO organise the methods so that all the string operations are at the bottom

@@ -1,4 +1,4 @@
-package deco2800.arcade.statistics;
+package deco2800.arcade.accolades;
 
 
 import deco2800.arcade.model.Game;

@@ -15,11 +15,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  */
 public class Tile {
 
-	protected static int sideLength = 16; // length of side of square- should be
+	protected int sideLength; // length of side of square- should be
 											// same for all tiles
-	// sprite sheet, divided into array of arrays of 8x8 tile images
-	protected static final TextureRegion[][] tileSprites = TextureRegion.split(
-			new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);
 	private List<Mover> moversHere; // list of pacman/ghosts for whom this is
 									// the current tile
 	private GameMap gameMap;
@@ -30,15 +27,12 @@ public class Tile {
 	public Tile(GameMap gameMap) {
 		moversHere = new ArrayList<Mover>();
 		this.gameMap = gameMap;
+		sideLength = gameMap.getTileSideLength();
 	}
 
 	public void render(SpriteBatch batch, float x, float y) {
-		batch.draw(tileSprites[7][1], x, y, sideLength, sideLength);
-	}
-
-	public static int getSideLength() {
-		return sideLength;
-	}
+		batch.draw(PacView.tileSprites[7][1], x, y, sideLength, sideLength);
+	}	
 
 	public List<Mover> getMovers() {
 		return moversHere;

@@ -32,9 +32,9 @@ public class DotTile extends Tile {
 	public void render(SpriteBatch batch, float x, float y) {
 		if (exists) {
 			if (energiser) {
-				batch.draw(tileSprites[1][1], x, y, sideLength, sideLength);	
+				batch.draw(PacView.tileSprites[1][1], x, y, sideLength, sideLength);	
 			} else {
-				batch.draw(tileSprites[4][1], x, y, sideLength, sideLength);
+				batch.draw(PacView.tileSprites[4][1], x, y, sideLength, sideLength);
 			} 
 		} 
 	}

@@ -37,33 +37,18 @@ public class Pacman extends GameClient {
 		GAMEOVER
 	}
 	
-	private OrthographicCamera camera;			
 	private GameState gameState;
-	public static final int SCREENHEIGHT = 720;
-	public static final int SCREENWIDTH = 1280;	
-	private SpriteBatch batch;
-	private ShapeRenderer shaper;
 	private PacChar player;
 	private Ghost blinky;
-	//takes keyboard input
+	private String mapName; // name of level map
 
-	
-	private PacController controller;
-	private GameMap map1;
-	private ArrayList<char[]> map1Array;
-	
-	
-	private List<ArrayList<Tile>> map;
-	
-	
-	
-
+	//takes keyboard input	
+	private PacController controller;	
 	
 	private GameMap gameMap;
-	private BitmapFont scoreText; 
-
-
-
+	
+	private boolean notSetUp;
+	
 	//not used yet
 	//private NetworkClient networkClient;
 	
@@ -71,9 +56,9 @@ public class Pacman extends GameClient {
 	private Logger logger = new Logger("Pacman");
 	
 	
-	public Pacman(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-		// TODO is there stuff we need to happen here?
+	public Pacman(Player player1, NetworkClient networkClient) {
+		super(player1, networkClient);
+		
 	}	
 		
 	/**
@@ -115,33 +100,25 @@ public class Pacman extends GameClient {
 			}			
         });           
 		super.create();			
+		notSetUp = true;
+		
 		// level map file
-		String file = "levelMap.txt";
-
-		//Initialize camera
-		camera = new OrthographicCamera();
-		// set resolution
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		// initialise spriteBatch for drawing things
-		batch = new SpriteBatch();		
-		shaper = new ShapeRenderer();
+		//view = new PacView();
+		mapName = "levelMap.txt";
 		//initialise gamemap
-		gameMap = new GameMap(450, 100);
-		gameMap.createTiles(gameMap.readMap(file));
+		//TODO move offset to PacView
+		gameMap = new GameMap(450, 100);	
+		
+		gameMap.createTiles(gameMap.readMap(mapName));
 		//initialise pacman
 		player = new PacChar(gameMap);
 		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
 		//initialise receiver for input- use the multiplexer from Arcade
-
 		// because overlay group said to in log messages
-		
-		
-
 		controller = new PacController(player, gameMap);
-
 		ArcadeInputMux.getInstance().addProcessor(controller);
 		//Initialise game state
-		gameState = GameState.READY;		
+		gameState = GameState.READY;	
 	}
 	
 	/**
@@ -192,40 +169,13 @@ public class Pacman extends GameClient {
 	 */
 	@Override
 	public void render() {	
-		//FIXME big method
-		//make changes to location of object etc, then draw
-		//makeChanges();
-		
-		//Black background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-	    // updating camera is something we should do once per frame
-	    camera.update();
-	    //tell the spritebatch to use the coordinate system of the camera
-	    batch.setProjectionMatrix(camera.combined);	    
-	    shaper.setProjectionMatrix(camera.combined);
-	    // start the drawing
-	    batch.begin();
-	    gameMap.render(batch);
-	    
-	    //testing bitmap text print
-//	    scoreText.setColor(Color.WHITE);
-//	    scoreText.draw(batch, "Pacman!", 10, 10);
-	    
-	    // check if pacman is trying to move into a wall
-	    // this stops him even if no key is pressed
-	    if (!player.checkNoWallCollision(player.getTile())) {
-			player.setCurrentState(PacState.IDLE);
+		// need to make sure this only happens once, using boolean
+		if (notSetUp) {
+			PacView.setUp(gameMap);
+			notSetUp = false;
 		}
-	    player.render(batch);
-	    blinky.render(batch);
-	    //end the drawing
-	    batch.end();
-	    
-	    //currently ShapeRenderer not being used
-	    shaper.begin(ShapeType.Line);
-	    shaper.end();
-	    //do any stuff the superclass normally does for rendering
+		PacView.render(gameMap, player, blinky);
+		//do any stuff the superclass normally does for rendering
 		super.render();		
 	}
 	
@@ -234,12 +184,12 @@ public class Pacman extends GameClient {
 	 * When support for multiple player-controlled movers is implemented, printing
 	 * will have to occur in different positions.
 	 */
-	public void displayScore(Mover mover) {
-		batch.begin();
-		scoreText.setColor(Color.WHITE);
-		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
-		batch.end();
-	}
+//	public void displayScore(Mover mover) {
+//		batch.begin();
+//		scoreText.setColor(Color.WHITE);
+//		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
+//		batch.end();
+//	}
 	
 	private void startGame() {	
 		logger.debug("Game is now running");		
@@ -278,5 +228,18 @@ public class Pacman extends GameClient {
 
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
+	}
+	
+	//Getters added for testing
+	public String getMapName() {
+		return mapName;
+	}
+
+	public GameMap getGameMap() {
+		return gameMap;
+	}
+
+	public PacController getController() {
+		return controller;
 	}
 }

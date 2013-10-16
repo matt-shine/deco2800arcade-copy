@@ -47,3 +47,7 @@ games/
 # Including multipart log files
 **/*.log.*
 
+
+*.bin
+
+*.bin

@@ -44,6 +44,7 @@ public class LunarLander extends GameClient {
 	private SpriteBatch batch;
 	private ShapeRenderer shapeRenderer;
 	private Texture landerTexture;
+	private Texture asteroidTexture;
 	private Texture backgroundTexture1;
 	private Texture backgroundTexture2;
 	private Texture backgroundTexture3;
@@ -162,8 +163,8 @@ public class LunarLander extends GameClient {
 				("lunarlanderassets/flames.png"));
 		landerTexture = new Texture(Gdx.files.internal
 				("lunarlanderassets/lander.png")); 
-		//explodeTexture = new Texture(Gdx.files.internal
-				//("lunarlanderassets/landerExplode1.png"));
+		asteroidTexture = new Texture(Gdx.files.internal
+				("lunarlanderassets/asteroid.png"));
 		font = new BitmapFont(Gdx.files.internal
 				("lunarlanderassets/game_font_half.fnt"),
 				Gdx.files.internal
@@ -203,6 +204,12 @@ public class LunarLander extends GameClient {
 	private void drawLander() {
 		batch.begin();
 		batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
+		batch.end();
+	}
+	
+	private void drawAsteroids(){
+		batch.begin();
+		batch.draw(asteroidTexture, 500, 500, 50, 50);
 		batch.end();
 	}
 	
@@ -290,7 +297,7 @@ public class LunarLander extends GameClient {
 					velY -= 0.015;
 					fuel -= 0.05;
 					//flameSound.setVolume(1);
-					flameSound.play(0.1f);
+					flameSound.play(0.01f);
 					upKey = true;
 				}
 			}
@@ -366,6 +373,7 @@ public class LunarLander extends GameClient {
 		case IN_GAME:	
 			drawBackground();
 			drawLander();
+			drawAsteroids();
 			drawMap();
 			camera.update();
 			shapeRenderer.setProjectionMatrix(camera.combined);

@@ -68,13 +68,13 @@ public class AchievementScreen extends JFrame{
 	private ImageIcon home, homehover, forum, forumhover, store, storehover,
 	library, libraryhover, profile, profilehover;
 			
-	//Declare Fonts to use here
-	Font blackbold = new Font("Verdana", Font.BOLD, 16);
-	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
-	Font blacksmall = new Font("Verdana", Font.PLAIN, 12);
-	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
-	Font linkbold = new Font("Verdana", Font.BOLD, 14);
-	Font sidebold = new Font("Verdana", Font.BOLD, 12);
+	//Declare Fonts
+	Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
+	Font blacknormal = new Font("Century Gothic", Font.PLAIN, 16);
+	Font blacksmall = new Font("Century Gothic", Font.PLAIN, 12);
+	Font blacklink = new Font("Century Gothic", Font.PLAIN, 16);
+	Font linkbold = new Font("Century Gothic", Font.BOLD, 15);
+	Font sidebold = new Font("Century Gothic", Font.BOLD, 14);
 	
 	//Logger
 	static Logger log = Logger.getLogger(AchievementScreen.class);
@@ -178,7 +178,7 @@ public class AchievementScreen extends JFrame{
 	    gamename.setFont(linkbold);
 	    gamename.setForeground(Color.white);
 	    gameachievementcount = new JLabel("15/100");
-	    gameachievementcount.setFont(blackbold);
+	    gameachievementcount.setFont(linkbold);
 	    gameachievementcount.setForeground(Color.white);
 	    gamedescription = new JTextArea("Some description about the game");
 	    gamedescription.setFont(blacksmall);
@@ -223,9 +223,10 @@ public class AchievementScreen extends JFrame{
 	    achievementlist = new JTextArea();
 	    achievementlist.setLineWrap(true);
 	    achievementlist.setFont(blacknormal);
-	    achievementlist.setBackground(Color.white);
+	    achievementlist.setForeground(Color.white);
 	    achievementlist.setEditable(false);
 	    achievementlist.setMargin(new Insets(10,10,10,10));
+	    achievementlist.setOpaque(false);
 	    
 	    achievementbarpanel.add(achievementbar);
         achievementbarpanel.setOpaque(false);
@@ -428,8 +429,7 @@ public void addplayerinfopanel(){
 	 */
 	public String getGameSelection(){
 		
-		//Set selected game identifier
-		System.out.println(gameselect.getSelectedItem().toString());
+		log.info(gameselect.getSelectedItem().toString());
 		return gameselect.getSelectedItem().toString();
 		
 	}
@@ -465,6 +465,15 @@ public void addplayerinfopanel(){
 	public void setGameDescription(){
 		
 		
+		
+	}
+	
+	/**
+	 *  Set the game's Logo
+	 * @param logo ImageIcon of the game logo
+	 */
+	public void setGameLogo(ImageIcon logo){
+
 		
 	}
 

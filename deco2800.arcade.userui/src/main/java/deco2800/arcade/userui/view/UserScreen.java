@@ -1,6 +1,7 @@
 package deco2800.arcade.userui.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -62,12 +63,12 @@ public class UserScreen extends JFrame{
 	library, libraryhover, profile, profilehover;
 	
 	//Declare Fonts
-	Font blackbold = new Font("Verdana", Font.BOLD, 16);
-	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
-	Font blacksmall = new Font("Verdana", Font.PLAIN, 12);
-	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
-	Font linkbold = new Font("Verdana", Font.BOLD, 14);
-	Font sidebold = new Font("Verdana", Font.BOLD, 12);
+	Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
+	Font blacknormal = new Font("Century Gothic", Font.PLAIN, 14);
+	Font blacksmall = new Font("Century Gothic", Font.PLAIN, 12);
+	Font blacklink = new Font("Century Gothic", Font.PLAIN, 16);
+	Font linkbold = new Font("Century Gothic", Font.BOLD, 15);
+	Font sidebold = new Font("Century Gothic", Font.BOLD, 14);
 		
 	public UserScreen(Model model) throws HeadlessException{
 		
@@ -410,20 +411,43 @@ public class UserScreen extends JFrame{
         history1 = new JLabel();
         history2 = new JLabel();
         history3 = new JLabel();
-        history4 = new JLabel();
-        history5 = new JLabel();
         
-        history1.setIcon(piclocked);
-        history2.setIcon(piclocked);
-        history3.setIcon(piclocked);
-        history4.setIcon(piclocked);
-        history5.setIcon(piclocked);
+        history1.setIcon(model.astrosonicLogo);
+        history2.setIcon(model.breakoutLogo);
+        history3.setIcon(model.chessLogo);
+        
+        JLabel game1name = new JLabel("Burning Skies");
+        game1name.setFont(linkbold);
+        game1name.setForeground(Color.white);
+        JLabel game2name = new JLabel("Breakout");
+        game2name.setFont(linkbold);
+        game2name.setForeground(Color.white);
+        JLabel game3name = new JLabel("Chess");
+        game3name.setFont(linkbold);
+        game3name.setForeground(Color.white);
+        
+        JLabel game1time = new JLabel("10:21 20/10/13");
+        game1time.setFont(blacknormal);
+        game1time.setForeground(Color.white);
+        JLabel game2time = new JLabel("18:51 19/10/13");
+        game2time.setFont(blacknormal);
+        game2time.setForeground(Color.white);
+        JLabel game3time = new JLabel("14:43 18/10/13");
+        game3time.setFont(blacknormal);
+        game3time.setForeground(Color.white);
 
         JPanel historytext1 = new JPanel(new MigLayout());
+        historytext1.setOpaque(false);
+        historytext1.add(game1name,"wrap");
+        historytext1.add(game1time);
         JPanel historytext2 = new JPanel(new MigLayout());
+        historytext2.setOpaque(false);
+        historytext2.add(game2name,"wrap");
+        historytext2.add(game2time);
         JPanel historytext3 = new JPanel(new MigLayout());
-        JPanel historytext4 = new JPanel(new MigLayout());
-        JPanel historytext5 = new JPanel(new MigLayout());
+        historytext3.setOpaque(false);
+        historytext3.add(game3name,"wrap");
+        historytext3.add(game3time);
         
 	    historybar = new JLabel("Game History");
 	    historybar.setFont(linkbold);
@@ -442,10 +466,6 @@ public class UserScreen extends JFrame{
         historylistpanel.add(historytext2,"growy, width :110");
         historylistpanel.add(history3);
         historylistpanel.add(historytext3,"wrap, growy, width :110");
-        historylistpanel.add(history4);
-        historylistpanel.add(historytext4,"growy, width :110");
-        historylistpanel.add(history5);
-        historylistpanel.add(historytext5,"growy, width :110");
         
 	    historypanel = new ImagePanel(new ImageIcon("assets/images/green_box.png").getImage());
 	    historypanel.setLayout(new MigLayout());       

@@ -27,6 +27,7 @@ public class Invaders extends JFrame implements Runnable {
 	private Image frame = null;
 	private int healthBar;
 	private int score;
+	private int totalLevel;
 
 	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
@@ -40,10 +41,9 @@ public class Invaders extends JFrame implements Runnable {
 		
 		healthBar = 3;
 		score = 0;
+		totalLevel = 1;
 		
 		
-		
-
 		
 		setGameImg("/tank/");
 		imgString = "/tank/";
@@ -100,7 +100,6 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	public void paint(Graphics g) {
-		String drawString = "Sample Text";
 		mains.setColor(Color.white);
 		mains.setFont(new Font("Algerian",1,28));
 		
@@ -109,6 +108,8 @@ public class Invaders extends JFrame implements Runnable {
 		mains.drawImage(frame, 10, 20, Width, 662, panel);
 		
 		mains.drawString(score + "", 420, 54);
+		mains.drawString(healthBar + "", 150, 659);
+		mains.drawString(totalLevel + "", 580, 54);
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).drawshot(mains);
 
@@ -229,13 +230,10 @@ public class Invaders extends JFrame implements Runnable {
 
 	
 	public void restart() {
-		
+		boolean createWall =false;
 		if(bglevel != 3 && level ==1){
 			bglevel ++;
-			WallList = new ArrayList<blockWall>();
-			WallList.add(new blockWall(180, 350, 4, 8, imgString + "WallD.png"));
-			WallList.add(new blockWall(380, 350, 4, 8, imgString + "WallD.png"));
-			WallList.add(new blockWall(580, 350, 4, 8, imgString + "WallD.png"));
+			
 		}
 		if(bglevel ==3 && level ==1){
 			WallList = new ArrayList<blockWall>();
@@ -247,6 +245,14 @@ public class Invaders extends JFrame implements Runnable {
 		if(bglevel==3){
 			imgString = "/ship/";
 			bglevel = 1;
+		}
+		
+		if(createWall==true){
+			WallList = new ArrayList<blockWall>();
+			WallList.add(new blockWall(180, 350, 4, 8, imgString + "WallD.png"));
+			WallList.add(new blockWall(380, 350, 4, 8, imgString + "WallD.png"));
+			WallList.add(new blockWall(580, 350, 4, 8, imgString + "WallD.png"));
+			createWall =false;
 		}
 		setGameImg(imgString);
 		move = 0;

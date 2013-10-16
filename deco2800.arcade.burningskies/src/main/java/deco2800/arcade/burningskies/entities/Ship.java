@@ -9,6 +9,7 @@ public abstract class Ship extends Entity {
 	protected Vector2 velocity;
 	protected Vector2 position;
 	protected float flash = 0f;
+
 	
 	/**
 	 * Basic constructor for a ship.

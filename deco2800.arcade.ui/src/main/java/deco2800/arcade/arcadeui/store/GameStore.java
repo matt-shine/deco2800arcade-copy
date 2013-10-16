@@ -141,6 +141,7 @@ public class GameStore implements Screen, StoreScreen {
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()
 				[number%ArcadeSystem.getGamesList().size()];
+		int number = (int)Math.floor(16 * Math.random());
 		for (int i = 0; i < 8; ++i) {
 			final TextButton gameGrid = new TextButton("\n\n\n\n\n" +
 					ArcadeSystem.getGamesList().toArray()

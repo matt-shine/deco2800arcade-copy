@@ -14,8 +14,13 @@ public class LogoResponder implements WebResponder {
     @Override
     public void respond(Response response, String param) throws Exception {
         
+    	// Specify that we will be returning a png image
         ArcadeWebserver.setResponseValues(response, "image/png");
         
+        /*
+         * Attempt to serve the image file from the logo resources folder, 
+         * serving the default image if this fails.
+         */
         try
         {
             ByteBuffer file = FileReader.readBinaryFile("../deco2800.arcade.ui/src/main/resources/logos/" + param);

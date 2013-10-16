@@ -18,6 +18,11 @@ public class AchievementIconResponder implements WebResponder {
         
         ArcadeWebserver.setResponseValues(response, "image/png");
         
+        /*
+         * Attempt to load the requested image from the ImageStorage database, where '/' were 
+         * modified to '-' for transmission as '/' has significance as a route in this context.
+         * If the image is not found in the database, the default image will be loaded and returned.
+         */
         try {
             byte[] data = ArcadeServer.instance().getImageStorage().get( param.replace( "-", "/" ) ).getData();
             

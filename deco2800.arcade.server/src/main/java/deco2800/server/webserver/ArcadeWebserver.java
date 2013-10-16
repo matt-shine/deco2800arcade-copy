@@ -8,7 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +21,8 @@ import org.simpleframework.transport.Server;
 import org.simpleframework.transport.connect.Connection;
 import org.simpleframework.transport.connect.SocketConnection;
 
+import deco2800.arcade.model.Game;
+
 public class ArcadeWebserver implements Container {
 
 	private static final int SERVER_PORT = 8080;
@@ -28,6 +30,7 @@ public class ArcadeWebserver implements Container {
 	
 	/**
 	 * Set HTTP headers easily.
+	 * 
 	 * @param response
 	 * @param contentType The HTTP content type
 	 */
@@ -41,16 +44,7 @@ public class ArcadeWebserver implements Container {
         response.setDate("Last-Modified", time);
 	}
 	
-	/**
-	 * Get File contents as a UTF-8 String
-	 * @param path Path to file
-	 * @return File contents
-	 * @throws IOException
-	 */
-	private String fileContents(String path) throws IOException
-	{
-	    return FileReader.readFile( path, Charset.forName("UTF-8" ) );
-	}
+	
 	
 	private class Route
 	{
@@ -90,7 +84,7 @@ public class ArcadeWebserver implements Container {
 				PrintStream body = response.getPrintStream();
 				setResponseValues(response, "text/javascript");
 
-				body.println( fileContents( "webserver/javascript" + request.getPath() ) );
+				body.println( FileReader.readFileUtf8( "webserver/javascript" + request.getPath() ) );
 				body.close();
 				
 				//System.out.println( "Served js: " + "webserver/javascript" + request.getPath() );
@@ -99,7 +93,7 @@ public class ArcadeWebserver implements Container {
 				PrintStream body = response.getPrintStream();
 				setResponseValues(response, "text/css");
 
-				body.println( fileContents("webserver/style" + request.getPath()) );
+				body.println( FileReader.readFileUtf8("webserver/style" + request.getPath()) );
 				body.close();
 				
 				//System.out.println( "Served css: " + "webserver/style" + request.getPath() );
@@ -139,6 +133,26 @@ public class ArcadeWebserver implements Container {
         PrintStream body = response.getPrintStream();
         body.println( "404 Not Found" );
         body.close();
+	}
+
+	/**
+	 * Simple comparator to sort the games in alphabetical order, as GameStorageDatabase 
+	 * getServerGames() returns an unordered map.
+	 */
+	
+	/**
+	 * Simple comparator to sort the games in alphabetical order
+	 * @return a comparator to alphabetically sort games by name
+	 */
+	public static Comparator<Game> alphabeticalGameComparator() {
+		return new Comparator<Game>() {  
+	        @Override  
+	        public int compare(Game o1, Game o2) {  
+	            int rval = Integer.valueOf( ( o1.name ).compareTo( o2.name) );  
+	            if (rval != 0) return rval;  
+	            return o1.compareTo(o2);  
+	        }  
+	    };
 	}
 	
 	/**

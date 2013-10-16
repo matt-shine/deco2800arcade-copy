@@ -2,26 +2,25 @@ package deco2800.server.webserver;
 
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.charset.Charset;
 
 import org.simpleframework.http.Response;
 
 public class HomeResponder implements WebResponder {
+	
 	public HomeResponder() {
 		super();
 	}
+	
 	public void respond( Response response, String param ) throws IOException  {
 		PrintStream body = response.getPrintStream();
-		long time = System.currentTimeMillis();
 
-		response.setValue("Content-Type", "text/html");
-		response.setValue("Server", "HelloWorld/1.0 (Simple 4.0)");
-		response.setDate("Date", time);
-		response.setDate("Last-Modified", time);
+        ArcadeWebserver.setResponseValues(response, "text/html");
 
-		String bodyString = FileReader.readFile( "webserver/html/template.html", Charset.forName("UTF-8" ) );
-		String contentString = FileReader.readFile( "webserver/html/_home.html", Charset.forName("UTF-8" ) );
-		
+        /*
+         * Read in the template and populate it with static html from the _home partial
+         */
+		String bodyString = FileReader.readFileUtf8( "webserver/html/template.html" );
+		String contentString = FileReader.readFileUtf8( "webserver/html/_home.html" );
 		bodyString = bodyString.replace( "#{{content}}", contentString );
 		
 		body.println( bodyString );

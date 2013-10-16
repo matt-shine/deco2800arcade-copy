@@ -4,7 +4,10 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 
+
 public class ConnectionListener extends NetworkListener {
+	
+	public boolean loggedIn = false;
 	
 	@Override
 	public void connected(Connection connection) {
@@ -27,10 +30,16 @@ public class ConnectionListener extends NetworkListener {
 		
 		if (object instanceof ConnectionResponse){
 			
-			@SuppressWarnings("unused")
+			
 			ConnectionResponse connectionResponse = (ConnectionResponse)object;
-
-			//TODO something
+			loggedIn = true;
+			if (connectionResponse == ConnectionResponse.OK) {
+				loggedIn = true;
+				//LoginScreen.setUI("home");
+			}
+			if (connectionResponse == ConnectionResponse.ERROR) {
+				System.err.println("Error in login.\n");
+			}
 		}
 	}
 

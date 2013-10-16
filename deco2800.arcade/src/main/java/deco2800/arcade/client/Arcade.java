@@ -176,7 +176,7 @@ public class Arcade extends JFrame {
      * Add Listeners to the network client
      */
     private void addListeners() {
-		this.client.addListener(new ConnectionListener());
+		//this.client.addListener(new ConnectionListener());
 		this.client.addListener(new CreditListener());
 		this.client.addListener(new GameListener());
 		this.client.addListener(new CommunicationListener(communicationNetwork));
@@ -184,13 +184,17 @@ public class Arcade extends JFrame {
         this.client.addListener(new LibraryResponseListener());
 	}
 
-	public void connectAsUser(String username) {
+	public void connectAsUser(String username, String password) {
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.username = username;
+		connectionRequest.password = password;
 		
 		//Protocol.registerEncrypted(connectionRequest);
 		
-		this.client.sendNetworkObject(connectionRequest);
+		if (!password.equals("")) {
+			this.client.sendNetworkObject(connectionRequest);
+			
+		}
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.username = username;

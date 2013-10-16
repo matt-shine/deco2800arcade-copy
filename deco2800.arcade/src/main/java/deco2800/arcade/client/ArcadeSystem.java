@@ -68,11 +68,20 @@ public class ArcadeSystem {
     }
 
     /**
-     * Login to arcade
+     * Debug login command
      * @param username User to login
      */
 	public static void login(String username) {
-		arcade.connectAsUser(username);
+		arcade.connectAsUser(username, "");
+	}
+	
+	/**
+     * Login to arcade
+     * @param username User to login
+     * @param password password for login
+     */
+	public static void login(String username, String password) {
+		arcade.connectAsUser(username, password);
 	}
 
     /**

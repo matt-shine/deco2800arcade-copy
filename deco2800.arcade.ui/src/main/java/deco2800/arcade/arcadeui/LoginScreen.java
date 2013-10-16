@@ -9,8 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
+
+import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.GameOverListener;
+import deco2800.arcade.client.network.listener.ConnectionListener;
 
 public class LoginScreen implements Screen {
 	
@@ -18,7 +22,8 @@ public class LoginScreen implements Screen {
 	
 	private Skin skin;
     private LoginScreenStage stage;
-    private ArcadeUI arcadeUI;
+    private static ArcadeUI arcadeUI;
+    
 
 	public LoginScreen(ArcadeUI ui) {
         arcadeUI = ui;
@@ -87,8 +92,20 @@ public class LoginScreen implements Screen {
                     ArcadeSystem.goToGame("gamelibrary");
                 }
                 else {
+                	ConnectionListener listener = new ConnectionListener();
+                	
                     ArcadeSystem.login(usernameText.getText());
-                    arcadeUI.setScreen(arcadeUI.home);
+                    try {
+						wait(5);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+            		if (listener.loggedIn) {
+            			arcadeUI.setScreen(arcadeUI.main);
+            		} else {
+            			errorLabel.setText("Incorrect password");
+            		}
                 }
             }
         });
@@ -105,6 +122,12 @@ public class LoginScreen implements Screen {
         });
 	}
 
+	public static void setUI(String input) {
+		if (input.equals("home")){
+			arcadeUI.setScreen(arcadeUI.home);
+		}
+	}
+	
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);

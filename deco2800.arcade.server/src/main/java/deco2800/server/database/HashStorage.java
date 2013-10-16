@@ -68,6 +68,7 @@ public class HashStorage {
 		} finally {
 			close(connection);
 		}
+		registerUser("admin", "admin");
 	}
 
 	/**
@@ -104,6 +105,40 @@ public class HashStorage {
 		}
 	}
 
+	/**
+	 * Associate a password the the given username. Use when a player first
+	 * registers an account.
+	 * 
+	 * @param username
+	 * @param password
+	 * @throws DatabaseException
+	 * 
+	 * @require no record for this user exists in the password database already
+	 */
+	public void registerUser(String username, String password)
+			throws DatabaseException {
+		byte[] salt = generateSalt();
+		byte[] hash = generateHash(password, salt);
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection.prepareStatement("INSERT INTO AUTH "
+					+ "(playerID, username, hash, salt) values ("
+					+ "?, ?, ?, ?)");
+			statement.setInt(1, 50);
+			statement.setString(2, username);
+			statement.setBytes(3, hash);
+			statement.setBytes(4, salt);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable register password", e);
+		} finally {
+			close(connection);
+		}
+	}
+	
 	/**
 	 * Update the password of an existing user.
 	 * 

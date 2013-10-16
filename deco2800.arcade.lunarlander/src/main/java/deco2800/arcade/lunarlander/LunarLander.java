@@ -5,7 +5,7 @@ import java.util.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.Color;
@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
+
 
 
 import deco2800.arcade.client.ArcadeSystem;
@@ -54,14 +55,14 @@ public class LunarLander extends GameClient {
 	private Texture flames;
 	Texture textureSolid;
 	private TextureRegion backgroundTextureRegion; 
-	private BitmapFont font;  
-	Music flameSound;
+	private BitmapFont font;
+	Sound flameSound;
 	
 	// lander variables
 	private float landerWidth; // the width of the lander png
 	private float landerHeight; // the height of the lander png
 	private float landerX; // initial position of the lander - x coordinate
-	private float landerY; // initial postiion of the lander - y coordinate
+	private float landerY; // initial position of the lander - y coordinate
 	private float velY;
 	private float velXleft;
 	private float velXright;
@@ -71,8 +72,6 @@ public class LunarLander extends GameClient {
 	private boolean gameOver;
 	private boolean upKey;
 
-	//private boolean gamePaused;
-
 	// statistics to be displayed on game screen
 	private int score;
 	private int fuel;
@@ -81,8 +80,6 @@ public class LunarLander extends GameClient {
 
 	// speed of movement when lander is moved left or right 
 	private float sideSpeed = 40.0f;
-
-	//private NetworkClient networkClient;
 
 	/**
 	 * Basic constructor for Lunar Lander 
@@ -136,7 +133,7 @@ public class LunarLander extends GameClient {
 			
         });
 		
-		// setting up various Gdx tools	
+		// setting up various GDX tools	
 		batch = new SpriteBatch();
 		backgroundTexture1 = new Texture(Gdx.files.internal
 				("lunarlanderassets/rose_nebula.png")); 
@@ -151,8 +148,6 @@ public class LunarLander extends GameClient {
 		backgrounds.add(backgroundTexture2);
 		backgrounds.add(backgroundTexture3);
 		backgrounds.add(backgroundTexture4);
-		//surfaceTexture = new Texture(Gdx.files.internal
-				//("lunarlanderassets/moon_surface2.png"));
 		pauseScreen = new Texture(Gdx.files.internal
 				("lunarlanderassets/pause_screen.png"));
 		splashScreenBackground = new Texture(Gdx.files.internal
@@ -176,7 +171,7 @@ public class LunarLander extends GameClient {
 		shapeRenderer = new ShapeRenderer();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
-		flameSound = Gdx.audio.newMusic(Gdx.files.internal
+		flameSound = Gdx.audio.newSound(Gdx.files.internal
 				("lunarlanderassets/flame.ogg"));
 
 		// setting up game variables 
@@ -202,14 +197,12 @@ public class LunarLander extends GameClient {
 		this.score = score;
 		gameOver = false;
 		upKey = false;
-		//gamePaused = false;
 		gameState = GameState.IN_GAME;	
 	}
 	
 	private void drawLander() {
 		batch.begin();
-		batch.draw(landerTexture, landerX, landerY, 
-				landerWidth, landerHeight);
+		batch.draw(landerTexture, landerX, landerY, landerWidth, landerHeight);
 		batch.end();
 	}
 	
@@ -296,8 +289,8 @@ public class LunarLander extends GameClient {
 				if(fuel > 0){
 					velY -= 0.015;
 					fuel -= 0.05;
-					flameSound.setVolume(1);
-					flameSound.play();
+					//flameSound.setVolume(1);
+					flameSound.play(1);
 					upKey = true;
 				}
 			}

@@ -3,13 +3,14 @@ package deco2800.arcade.protocol.communication;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import deco2800.arcade.protocol.UserRequest;
 
 
 public class ChatHistory extends UserRequest {
 
-	private HashMap<Integer, List<String>> history;
+	private Map<Integer, List<String>> history;
 	
 	public ChatHistory(){
 		this.history = new HashMap<Integer, List<String>>();
@@ -25,11 +26,11 @@ public class ChatHistory extends UserRequest {
 		}
 	}
 	
-	public void updateChatHistory(HashMap<Integer, List<String>> chatHistory){
+	public void updateChatHistory(Map<Integer, List<String>> chatHistory){
 		history = chatHistory;
 	}
 
-	public HashMap<Integer, List<String>> getAllHistory() {
+	public Map<Integer, List<String>> getAllHistory() {
 		return history;
 	}
 	

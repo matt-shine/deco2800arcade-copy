@@ -27,15 +27,15 @@ public class CommunicationController {
 			//This should never be null, because the chat window won't be open if it leads to nowhere... but it is during testing
 			if (node != null){				
 				TextMessage message = new TextMessage();
-				message.chatID = node.getID(); //Is this right?
-				message.senderID = network.getPlayer().getID();
-				message.text = view.getMessage();
+				message.setChatID(node.getID()); //Is this right?
+				message.setSenderID(network.getPlayer().getID());
+				message.setText(view.getMessage());
 				
 				if (node.getParticipants() == null){
 					System.out.println("You are trying to send to nobody! This won't happen normally because a chat window will only be open if you have someone to talk to. "
 							+ "It will however, happen during testing because this chat window is open by default!");
 				} else {
-					message.recipients = node.getParticipants();
+					message.setRecipients(node.getParticipants());
 					network.sendTextMessage(message);
 				}
 			}

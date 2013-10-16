@@ -460,8 +460,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 	}
 	public void startReplay(int num){
-		replayHandler.requestEventsForSession(num);
-		replayHandler.startPlayback();
+		//replayHandler.requestEventsForSession(num);
+		replayHandler.playbackLastSession();
+	    //replayHandler.startPlayback();
     	isReplaying = true;
 	}
 
@@ -1327,7 +1328,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
             	board = new Board();
             	movePieceGraphic();
             	drawButton();
-            	replayHandler.endSession(replayHandler.getSessionId());
+            	//replayHandler.endSession(replayHandler.getSessionId());
+            	replayHandler.endCurrentSession();
             	startReplay(replayHandler.getSessionId());
             	recording = false;
             	}
@@ -1344,7 +1346,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             	recording = true;
-            	replayHandler.startSession(1, player.getUsername());
+            	replayHandler.startSession("chess", player.getUsername() );
         		replayHandler.startRecording();
             }
 	    });  

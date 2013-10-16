@@ -8,7 +8,6 @@ import deco2800.arcade.model.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import org.slf4j.Logger;
@@ -111,6 +110,8 @@ public final class MixMaze extends GameClient {
 		game = new Game();
 		game.id = "mixmaze";
 		game.name = "Mix Maze";
+		game.description = "Build as much box as you can, "
+				+ "stop your opponent from building theirs.";
 	}
 
 	@Override

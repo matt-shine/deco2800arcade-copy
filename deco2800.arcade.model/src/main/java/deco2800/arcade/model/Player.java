@@ -11,7 +11,7 @@ public class Player extends User {
 	public static final int PROGRAM_ID = 4;
 	public static final int BIO_ID = 5;
 	public static final int AGE_ID = 6;
-	
+
 	public static final int NAME_PRIVACY_ID = 1;
 	public static final int EMAIL_PRIVACY_IDNAME_ID = 2;
 	public static final int PROGRAM_PRIVACY_ID = 3;
@@ -40,18 +40,41 @@ public class Player extends User {
 	private Friends friends;
 	private Blocked blocked;
 	private FriendInvites friendInvites;
-    
-    private LibraryStyle libraryStyle;
+
+	private LibraryStyle libraryStyle;
 
 	private Icon icon;
-    
-    @Deprecated
-    /**
-     * DO NOT USE THIS METHOD, AT ALL, EVER.
-     */
-    public Player(int playerID, String username, String filepath) {
-        // Do nothing
-    }
+
+	/**
+	 * Creates a new player instance with PlayerID, username DO NOT USE THIS
+	 * METHOD EXCEPT FOR TESTING PURPOSES
+	 */
+	public Player(int playerID, String username) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, username);
+		this.name = new Field(NAME_ID, null);
+		this.email = new Field(EMAIL_ID, null);
+		this.program = new Field(PROGRAM_ID, null);
+		this.bio = new Field(BIO_ID, null);
+
+		this.games = new Games();
+
+		this.friends = new Friends();
+
+		this.friendInvites = new FriendInvites();
+
+		this.blocked = new Blocked();
+
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, false);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID, false);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, false);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, false);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, false);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, false);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				false);
+		this.libraryStyle = new LibraryStyle();
+	}
 
 	@Deprecated
 	/**
@@ -74,7 +97,7 @@ public class Player extends User {
 		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
 				privacy[6]);
-        this.libraryStyle = new LibraryStyle();
+		this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -123,37 +146,42 @@ public class Player extends User {
 		this.program = new Field(PROGRAM_ID, details.get(3));
 		this.bio = new Field(BIO_ID, details.get(4));
 		this.age = new Field(AGE_ID, details.get(5));
-		
+
 		this.games = new Games();
-		if(gamesList != null){
+		if (gamesList != null) {
 			this.games.addAll(gamesList);
 		}
-				
+
 		this.friends = new Friends();
-		if(friendsList != null){
+		if (friendsList != null) {
 			this.friends.addAll(friendsList);
 		}
-		
+
 		this.friendInvites = new FriendInvites();
-		if(friendRequestsList != null){
+		if (friendRequestsList != null) {
 			this.friendInvites.addAll(friendRequestsList);
 		}
-		
+
 		this.blocked = new Blocked();
-		if(blockedList != null){
+		if (blockedList != null) {
 			this.blocked.addAll(blockedList);
 		}
-		
-		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
+
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID,
+				privacy[NAME_PRIVACY_ID - 1]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
-				privacy[1]);
-		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, privacy[2]);
-		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, privacy[3]);
-		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, privacy[4]);
-		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
+				privacy[EMAIL_PRIVACY_IDNAME_ID - 1]);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID,
+				privacy[PROGRAM_PRIVACY_ID - 1]);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID,
+				privacy[BIO_PRIVACY_ID - 1]);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID,
+				privacy[FRIENDS_PRIVACY_ID]);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID,
+				privacy[GAMES_PRIVACY_ID]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
-				privacy[6]);
-        this.libraryStyle = new LibraryStyle();
+				privacy[ACHIEVMENTS_PRIVACY_ID - 1]);
+		this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -171,7 +199,6 @@ public class Player extends User {
 		this.icon = null;
 	}
 
-
 	/**
 	 * getUsername returns a string of the player created
 	 * 
@@ -183,7 +210,9 @@ public class Player extends User {
 
 	/**
 	 * Sets the name of the user.
-	 * @param username string of username
+	 * 
+	 * @param username
+	 *            string of username
 	 */
 	public void setUsername(String username) {
 		if (username != null) {
@@ -246,7 +275,7 @@ public class Player extends User {
 	public void setName(String name) {
 		this.name.setValue(name);
 	}
-	
+
 	/**
 	 * An access method for the players age
 	 * 
@@ -255,7 +284,7 @@ public class Player extends User {
 	public String getAge() {
 		return age.getValue();
 	}
-	
+
 	/**
 	 * Set the players age
 	 * 
@@ -264,7 +293,7 @@ public class Player extends User {
 	public void setAge(String age) {
 		this.age.setValue(age);
 	}
-	
+
 	/**
 	 * An access method for the players program
 	 * 
@@ -696,33 +725,38 @@ public class Player extends User {
 		return achievementsPrivacy.getValue();
 	}
 
-    /**
-     * Update Player's library style
-     * @param style Library Style
-     */
-    public void updateLibraryLayout(int style) {
-        libraryStyle.setLayout(style);
-        setChanged();
-        notifyObservers(libraryStyle);
-        clearChanged();
-    }
+	/**
+	 * Update Player's library style
+	 * 
+	 * @param style
+	 *            Library Style
+	 */
+	public void updateLibraryLayout(int style) {
+		libraryStyle.setLayout(style);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
+	}
 
-    /**
-     * Update Player's library colour
-     * @param colour Colour Scheme
-     */
-    public void updateLibraryColour(int colour) {
-        libraryStyle.setColourScheme(colour);
-        setChanged();
-        notifyObservers(libraryStyle);
-        clearChanged();
-    }
+	/**
+	 * Update Player's library colour
+	 * 
+	 * @param colour
+	 *            Colour Scheme
+	 */
+	public void updateLibraryColour(int colour) {
+		libraryStyle.setColourScheme(colour);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
+	}
 
-    /**
-     * Get Player's Library Style
-     * @return libraryStyle
-     */
-    public LibraryStyle getLibraryStyle() {
-        return libraryStyle;
-    }
+	/**
+	 * Get Player's Library Style
+	 * 
+	 * @return libraryStyle
+	 */
+	public LibraryStyle getLibraryStyle() {
+		return libraryStyle;
+	}
 }

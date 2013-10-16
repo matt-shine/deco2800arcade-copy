@@ -24,7 +24,7 @@ public class MiniGolf extends GameClient {
 	public MiniGolf(Player player, NetworkClient network){
 		super(player, network); 
 		this.playerName = player.getUsername();
-		incrementAchievement("minigolf.360");
+		this.incrementAchievement("minigolf.360");
 	}
 	
 	
@@ -67,11 +67,6 @@ public class MiniGolf extends GameClient {
 		hole = new GameScreen(this, 1);
 		setScreen(menu);
 		
-		AchievementClient achClient = getAchievementClient();
-        ArrayList<Achievement> achievements = achClient.achievementsForGame(getGame());
-        for(Achievement ach : achievements) {
-            System.out.println(ach.toString());
-        }
 		
 		
 	}	

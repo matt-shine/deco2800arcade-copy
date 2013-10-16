@@ -380,10 +380,25 @@ public class PlayerDatabaseManager {
 			}
 		}
 
-		Player player = new Player(playerID, null, playerData, friendsSet,
-				invitesSet, blockedSet, gameSet, privacy);
-
-		return player;
+		/**
+		 * What's this?! I hear you ask.
+		 * 
+		 * Well, this check shouldn't be necessary when we have playerID's under control, but for the moment
+		 * the client is sending any old playerID over here and the database most likely won't find a player
+		 * with that ID. Hence this check.
+		 * 
+		 * When playerID's are ready to go, this method "should" only be called with legitimate ID's and this
+		 * can be removed.
+		 * 
+		 */
+		if (!playerData.isEmpty()){
+			Player player = new Player(playerID, null, playerData, friendsSet,
+					invitesSet, blockedSet, gameSet, privacy);
+			return player;
+		} else{
+			return null;
+		}
+		
 	}
 
 }

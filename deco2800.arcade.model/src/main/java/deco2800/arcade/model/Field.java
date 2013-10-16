@@ -13,6 +13,12 @@ public class Field {
 	private String value;
 
 	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public Field(){
+	}
+	
+	/**
 	 * Creates a new field given an ID and value.
 	 * 
 	 * @param id

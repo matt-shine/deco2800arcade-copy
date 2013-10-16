@@ -49,7 +49,7 @@ public class PlayerPrivacy {
 								+ "bio INT,"
 								+ "games INT, achievements INT, "
 								+ "PRIMARY KEY (playerID), "
-								+ "FOREIGN KEY (playerID) REFERENCES PLAYER(playerID);");
+								+ "FOREIGN KEY (playerID) REFERENCES PLAYERS(playerID))");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -82,7 +82,7 @@ public class PlayerPrivacy {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from PLAYERPRIVACY;");
+			resultSet = statement.executeQuery("SELECT * from PLAYERPRIVACY");
 			data.add(findPlayerInfo(playerID, resultSet, "name"));
 			data.add(findPlayerInfo(playerID, resultSet, "email"));
 			data.add(findPlayerInfo(playerID, resultSet, "program"));

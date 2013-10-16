@@ -41,6 +41,13 @@ public class Game implements Comparable<Game> {
 	public int pricePerPlay = 1;
 	
 	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public Game(){
+	}
+	
+	
+	/**
 	 * Sets the description for a game
 	 * @param description Game Description
 	 */

@@ -35,7 +35,9 @@ import deco2800.arcade.client.network.listener.PackmanListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.model.User;
 import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
@@ -258,8 +260,11 @@ public class Arcade extends JFrame {
     }
 
 	public void connectAsUser(String username) {
-		//This should really GET the player with the details that were provided at login, not create a new player!
-		//For testing purposes, a specific ID number is given to debug users and random users get a random ID
+		/**
+		 * We should have our playerID at this point (connectAsUser(int playerID)), but alas, we do not.
+		 * Until that is ready, we will use a random ID as follows.
+		 * 
+		 */
 		int myID = 1 + (int)(Math.random() * ((500 - 1) + 1));
 		if (username.equals("debug")){
 			myID = 999;
@@ -269,30 +274,49 @@ public class Arcade extends JFrame {
 			myID = 777;
 		}
 		
-		System.out.println("My playerID is: " + myID);
+		PlayerClient pc = new PlayerClient(this.client);
+		Player myPlayer = pc.loadPlayer(myID);
+		if (myPlayer != null){
+			System.out.println("my ID is: " + myPlayer.getID());
+			System.out.println("my Username is: " + myPlayer.getUsername());
+			System.out.println("my Email is: " + myPlayer.getEmail());
+			System.out.println("my Friends are: " + myPlayer.getFriends());
+		} else { //As previously mentioned, due to playerID shortages at this time, a null Player is almost guaranteed
+			List<String> details = new ArrayList<String>();
+			details.add("debug");
+			details.add("debug smith");
+			details.add("debug@arcade.com");
+			details.add("debugging");
+			details.add("debugger 4 lyfe");
+			Set<User> friendsSet = new HashSet<User>();
+			friendsSet.add(new User(1));
+			Set<User> invitesSet = new HashSet<User>();
+			invitesSet.add(new User(2));
+			Set<User> blockedSet = new HashSet<User>();
+			blockedSet.add(new User(3));
+			Set<Game> gameSet = new HashSet<Game>();
+			boolean[] privacy = {false, false, false, false, false, false, false};
+			myPlayer = new Player(myID, null, details, friendsSet, invitesSet, blockedSet, gameSet, privacy);
+		}
 		
-		this.player = new Player(myID, username, "path/to/avatar");
-		
-		//This method has been removed from the deprecated Player(...); Waiting for new Player(...) method to be created.
-		//this.player.setUsername(username);
-		
+		this.player = myPlayer;
 		this.communicationNetwork.loggedIn(this.player);
 	
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.playerID = myID;
-		connectionRequest.username = username;
+		connectionRequest.username = myPlayer.getUsername();
 		//This breaks network communication at the moment!
 		//Protocol.registerEncrypted(connectionRequest); 
 		this.client.sendNetworkObject(connectionRequest);
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
 		communicationRequest.playerID = myID;
-		communicationRequest.username = username;
+		communicationRequest.username = myPlayer.getUsername();
 		this.client.sendNetworkObject(communicationRequest);
 
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
 		creditBalanceRequest.playerID = myID;
-		creditBalanceRequest.username = username;
+		creditBalanceRequest.username = myPlayer.getUsername();
 		this.client.sendNetworkObject(creditBalanceRequest);
 
 		/*
@@ -313,26 +337,13 @@ public class Arcade extends JFrame {
 		}
 		*/
 		
-        //TODO FIX THIS!! - Causing Errors when logging in see https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
-        boolean[] privacy = {false, false, false, false, false, false, false, false};
-        this.player = new Player(0, username, "", privacy);
-
-
-        //This method has been removed from the deprecated Player(...); Waiting for new Player(...) method to be created.
-        //this.player.setUsername(username);
-
         // TODO move this call to be internal to Packman class
         // TODO iterate over actual game ids rather than just
         // using pong
-        GameUpdateCheckRequest gameUpdateCheckRequest = new
-                GameUpdateCheckRequest();
+        GameUpdateCheckRequest gameUpdateCheckRequest = new GameUpdateCheckRequest();
         gameUpdateCheckRequest.gameID = "pong";
-
-        BlockingMessage r = BlockingMessage.request(client.kryoClient(),
-                gameUpdateCheckRequest);
-
+        BlockingMessage r = BlockingMessage.request(client.kryoClient(),gameUpdateCheckRequest);
         GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
-       
         if (getCurrentGame() != null) {
         	getCurrentGame().setPlayer(this.player);
             getCurrentGame().setThisNetworkClient(this.client);

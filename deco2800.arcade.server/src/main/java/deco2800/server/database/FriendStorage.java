@@ -1,5 +1,6 @@
 package deco2800.server.database;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -29,18 +30,22 @@ public class FriendStorage {
 
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "FRIENDS", null);
+			
 			if (!tableData.next()){
 				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE FRIENDS(U1 INT NOT NULL,"
+				String sql = "CREATE TABLE FRIENDS "
+						+ "(U1 INT NOT NULL,"
 						+ "U2 INT NOT NULL,"
 						+ "STATUS INT NOT NULL,"
-						+ "BLOCKED INT NOT NULL"
+						+ "BLOCKED INT NOT NULL,"
 						+ "PRIMARY KEY(U1, U2),"
-						+ "FOREIGN KEY U1 REFERENCES PLAYER(playerID),"
-						+ "FOREIGN KEY U2 REFERENCES PLAYER(playerID)");
+						+ "FOREIGN KEY (U1) REFERENCES PLAYERS(playerID),"
+						+ "FOREIGN KEY (U2) REFERENCES PLAYERS(playerID))";
+				statement.executeUpdate(sql);
 			}
+			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			throw new DatabaseException("Unable to create friends table", e);
 		}
 		initialised = true;

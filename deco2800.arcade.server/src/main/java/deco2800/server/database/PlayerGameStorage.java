@@ -25,10 +25,11 @@ public class PlayerGameStorage {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "PLAYERGAMES", null);
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT PRIMARY KEY," 
-				+ "gameID VARCHAR(30) PRIMARY KEY," 
-				+ "Rating INT));");
+				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT NOT NULL," 
+				+ "gameID VARCHAR(30) NOT NULL," 
+				+ "Rating INT, PRIMARY KEY (playerID, gameID), FOREIGN KEY (playerID) REFERENCES PLAYERS(playerID))");
 				//Check if need anything for foreign keys
+				//Hey guys, I fixed up your primary keys and added your foreign key in here for playerID (Justin from Team 03)
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -57,7 +58,7 @@ public class PlayerGameStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES;");
+			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES");
 			Set<String> result = findGames(playerID, resultSet);
 
 			return result;

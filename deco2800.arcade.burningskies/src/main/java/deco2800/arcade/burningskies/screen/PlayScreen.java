@@ -36,7 +36,6 @@ public class PlayScreen implements Screen
 	
 	private OrthographicCamera camera;
 	private Stage stage;
-	private ShapeRenderer debugRender;
 	private ShapeRenderer healthBar;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
@@ -98,9 +97,6 @@ public class PlayScreen implements Screen
 		camera = (OrthographicCamera) stage.getCamera();
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
-    	
-    	debugRender = new ShapeRenderer();
-    	debugRender.setProjectionMatrix(camera.combined);
     	
     	healthBar = new ShapeRenderer();
     	healthBar.setProjectionMatrix(camera.combined);
@@ -251,15 +247,6 @@ public class PlayScreen implements Screen
     	
     	healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
     	healthBar.end();
-    	
-    	if(player.isAlive()) {
-	    	debugRender.begin(ShapeType.FilledCircle);
-	    	float[] hitbox = player.getHitbox().getTransformedVertices();
-	    	for(int i=0;i<hitbox.length;i+=2) {
-	    		debugRender.filledCircle(hitbox[i], hitbox[i+1], 3);
-	    	}
-	    	debugRender.end();
-    	}
     }
     
     private boolean outOfBounds(Entity e) {

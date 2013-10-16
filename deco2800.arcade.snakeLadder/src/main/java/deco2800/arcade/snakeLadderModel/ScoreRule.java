@@ -36,6 +36,12 @@ public class ScoreRule implements Rule {
 	 */
 	public void processRule(int playerNum, String rule, SnakeLadder context)
 			throws NumberFormatException {
+		// workaround: Integer.parseInt doesn't allow a leading + (it only allows a leading -), so
+		// test for that case ourselves
+		if (rule.charAt(0) == '+') {
+			rule = rule.substring(1);
+		}
+
 		context.gamePlayers[playerNum].setScore(Integer.parseInt(rule));
 		context.gameState = new WaitingState();
 		context.taketurns();

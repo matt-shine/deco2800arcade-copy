@@ -63,7 +63,7 @@ public class StoreHome implements Screen, StoreScreen {
 		stage.addActor(bg);
 		
 		final TextField searchField = new TextField("", skin);
-		final Button searchButton = new Button(skin, "search");
+		final Button searchButton = new Button(skin, " search");
 		final TextButton libraryButton = new TextButton("Library", skin);
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
@@ -94,17 +94,18 @@ public class StoreHome implements Screen, StoreScreen {
 		// Entry field for search term. Will update the featured game, as well
 		// as the search result located below it.
 		searchField.setSize(300, 42);
-		searchField.setPosition(860, 535);
+		searchField.setPosition(860, 536);
 		searchField.setMessageText("Search");
 		stage.addActor(searchField);
 		
-		// Search button. Will 
+		// Search button. Will re-direct user to the (valid) "SearchResult" game page
 		searchButton.setSize(126, 55);
-		searchButton.setPosition(1039, 480);
+		searchButton.setPosition(1039, 475);
 		stage.addActor(searchButton);
-		
+
+		// The auto-changing text that displays the current game to be searched for.
 		searchResult.setSize(165, 55);
-		searchResult.setPosition(860, 480);
+		searchResult.setPosition(860, 475);
 		stage.addActor(searchResult);
 		
 		libraryButton.setSize(360, 95);
@@ -125,7 +126,6 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		libraryButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				//arcadeUI.setScreen(arcadeUI.getLobby());
 				dispose();
 				ArcadeSystem.goToGame("arcadeui");
 			}
@@ -133,7 +133,8 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Transactions clicked");
+				dispose();
+				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
 			}
 		});
 		
@@ -410,12 +411,17 @@ public class StoreHome implements Screen, StoreScreen {
 	public Game getSelected() {
 		return featured;
 	}
-
+	
 	@Override
-	public boolean buyTokens(int amount, Game game) {
+	public boolean buyTokens(int amount) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean buyGame(Game game) {
+		return false;
+	}
+	
 	@Override
 	public void setSelected(String game) {
 		for (Game search : ArcadeSystem.getArcadeGames()) {

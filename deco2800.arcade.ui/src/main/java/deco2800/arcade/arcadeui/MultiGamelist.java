@@ -888,6 +888,7 @@ public class MultiGamelist implements Screen {
 		    	//bclicked = true;
 		    	dispose();
 				ArcadeSystem.setMatchMaking(true);
+				ArcadeSystem.setMultiplayerEnabled(true);
 				ArcadeSystem.setGameWaiting(true);
 				arcadeUI.setScreen(arcadeUI.getWait());
 		    	ArcadeSystem.goToGame("Pong");

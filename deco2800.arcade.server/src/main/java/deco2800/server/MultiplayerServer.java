@@ -107,11 +107,8 @@ public class MultiplayerServer {
 			player1.sendTCP(request);	
 			player2.sendTCP(request);
 		} else {
-			if (request.playerID == player1Id) {
-				System.out.println("Sending init request");
-				player2.sendTCP(request);
-			}
-			
+			System.out.println("Sending init request");
+			player2.sendTCP(request);			
 		}
 		//}
 	}

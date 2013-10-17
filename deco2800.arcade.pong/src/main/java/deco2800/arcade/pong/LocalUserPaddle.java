@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.client.ArcadeSystem;
+
 /**
  * Takes user input for paddle in pong.
  * @see Paddle
@@ -41,6 +43,7 @@ public class LocalUserPaddle extends Paddle {
             double prevY = bounds.y;
     		bounds.y = -touchPos.y - bounds.height / 2 + Pong.SCREENHEIGHT;
             direction += sign(bounds.y - prevY);
+            ArcadeSystem.getCurrentGame().sendStateUpdate();
         }
 
     	//Move the left paddle (keyboard)

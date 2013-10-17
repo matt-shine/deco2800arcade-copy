@@ -36,6 +36,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	private PlayerClient playerClient;
 	private ImageManager imageManager;
 	private boolean hasF11PressedLast = false;
+	private boolean host = false;
 
 	public GameClient(Player player, NetworkClient networkClient) {
 
@@ -256,13 +257,23 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 	public void setMultiSession(int session) {
 		multiplayerSession = session;
-		startMultiplayerGame();
+		if (getMPHost()) {
+			startMultiplayerGame();
+		}
 	}
 	
 	public int getMultiSession() {
 		return multiplayerSession;
 	}
 
+	public void setHost(boolean host) {
+		this.host = host;
+	}
+	
+	public boolean getMPHost() {
+		return host;
+	}
+	
 	public void startMultiplayerGame() {
 	}
 

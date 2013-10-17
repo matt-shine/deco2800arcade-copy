@@ -151,7 +151,9 @@ public class MatchmakerQueue {
 				session.sessionId = serverNumber;
 				serverNumber++;
 				session.gameId = gameId;
+				session.host = true;
 				connection.sendTCP(session);
+				session.host = false;
 				((Connection) player2.get(3)).sendTCP(session);
 				return;
 			}		

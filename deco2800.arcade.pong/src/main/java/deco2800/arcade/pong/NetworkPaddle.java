@@ -64,7 +64,7 @@ public class NetworkPaddle extends Paddle {
 	
 	public void move(float y) {
 		super.move(y);
-		pong.sendStateUpdate();
+		//pong.sendStateUpdate();
 	}
 
 }

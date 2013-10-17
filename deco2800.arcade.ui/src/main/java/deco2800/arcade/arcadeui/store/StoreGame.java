@@ -28,13 +28,14 @@ public class StoreGame implements Screen, StoreScreen {
 	private Stage stage = new Stage();
 	private static Game featured;
 	private ArcadeUI arcadeUI;
+	private int rating = 0;
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ui
 	 */
 	public StoreGame(ArcadeUI ui, Game featuredGame) {
-		setSelected(featuredGame.id);
+		featured = featuredGame;
 		arcadeUI = ui;
 		
 		final Table bg = new Table();
@@ -42,9 +43,10 @@ public class StoreGame implements Screen, StoreScreen {
 		final Button logoGlow = new Button(skin, "icon");
 		final Label gameTitle = new Label(featuredGame.name, skin, "default-34");
 		final Label gameDescription = new Label(featuredGame.description, skin);
-		final Label ratingTitle = new Label("Ratings + Reviews", skin, "default-34");
+		final Label ratingTitle = new Label("Ratings + Reviews", skin, "default-28");
 		final Label ratingScore = new Label("0.0", skin, "rating-score");
 		final Label ratingScoreText = new Label("Average Rating", skin, "default-14");
+		final Table star_bg = new Table();
 		final Button homeButton = new Button(skin, "home");
 		final Button buyButton = new Button(skin, "buy");
 		final Button reviewButton = new Button(skin, "review");
@@ -56,59 +58,81 @@ public class StoreGame implements Screen, StoreScreen {
 		bg.setBackground(skin.getDrawable("background"));
 		stage.addActor(bg);
 		
+		// Home button at top right corner of screen.
 		homeButton.setSize(51, 46);
 		homeButton.setPosition(1149, 650);
 		stage.addActor(homeButton);
 		
+		// Title of the featured game, located center of screen.
 		gameTitle.setSize(380, 40);
 		gameTitle.setPosition(96, 513);
 		stage.addActor(gameTitle);
 		
-		gameDescription.setSize(430, 250);
-		gameDescription.setPosition(141, 50);
+		// Main text body, located in center of screen.
+		gameDescription.setSize(430, 228);
+		gameDescription.setPosition(141, 40);
 		gameDescription.setWrap(true);
 		gameDescription.setAlignment(Align.top | Align.left);
 		stage.addActor(gameDescription);
 		
+		// Static element: text "Ratings + Reviews", located at top of right bar.
 		ratingTitle.setSize(400, 50);
 		ratingTitle.setPosition(870, 520);
 		stage.addActor(ratingTitle);
 		
+		// The average rating of the game, located at top of right bar.
 		ratingScore.setSize(90, 60);
 		ratingScore.setPosition(870, 450);
 		ratingScore.setAlignment(Align.bottom | Align.left);
 		stage.addActor(ratingScore);
 		
+		// Static element: text "Average Rating", located right beside the Score.
 		ratingScoreText.setSize(130, 30);
-		ratingScoreText.setPosition(955, 455);
+		ratingScoreText.setPosition(956, 455);
 		ratingScoreText.setAlignment(Align.bottom | Align.left);
 		stage.addActor(ratingScoreText);
 		
-		logoGlow.setSize(136, 136);
-		logoGlow.setPosition(137, 322);
+		// Static element: glow effect around logo, at the left of the screen.
+		logoGlow.setSize(160, 160);
+		logoGlow.setPosition(135, 300);
 		stage.addActor(logoGlow);
 		
+		// Attempt to load the featured game's logo, else load default logo.
 		try {
 			skin.add("logo", new Texture(Gdx.files.internal("logos/" + featured.id + ".png")));
 		} catch (Exception e) {
 			skin.add("logo", new Texture(Gdx.files.internal("logos/default.png")));
 		}
+		
+		// Logo for the featured game, located at left of screen.
 		logo.setBackground(skin.getDrawable("logo"));
-		logo.setSize(120, 120);
-		logo.setPosition(145, 330);
+		logo.setSize(140, 140);
+		logo.setPosition(145, 310);
 		stage.addActor(logo);
 		
+		// Static Element (Variable Listener). Will open transactions pop-up.
 		buyButton.setSize(149, 62);
-		buyButton.setPosition(275, 335);
+		buyButton.setPosition(298, 335);
 		stage.addActor(buyButton);
 		
+		// Static Element (Variable Listener). Checkable, to add/remove from wishlist
 		wishButton.setSize(158, 62);
-		wishButton.setPosition(420, 335);
+		wishButton.setPosition(443, 335);
 		stage.addActor(wishButton);
 		
+		// Static Element (Variable Listener). Will re-direct to review screen.
 		reviewButton.setSize(186, 68);
 		reviewButton.setPosition(863, 335);
 		stage.addActor(reviewButton);
+		
+		skin.add("star_bg", new Texture(Gdx.files.internal("store/big_stars.png")));
+		star_bg.setBackground(skin.getDrawable("star_bg"));
+		star_bg.setColor(0.5f, 0.5f, 0.5f, 1);
+		star_bg.setPosition(881, 414);
+		star_bg.setSize(142, 23);
+		stage.addActor(star_bg);
+		
+		placeRatingStars(stage, skin);
 		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
@@ -136,20 +160,29 @@ public class StoreGame implements Screen, StoreScreen {
 		});
 	}
 	
+	private void placeRatingStars(Stage stage, Skin skin) {
+		for (int i = 5; i >= 1; --i) {
+			final CheckBox star = new CheckBox("", skin, "star" + i);
+			star.setSize(i * 28.4f, 23);
+			star.setName("star" + i);
+			star.setPosition(882, 413);
+			
+			star.addListener(new ChangeListener() {
+				public void changed(ChangeEvent event, Actor actor) {
+					rating = (int)actor.getName().toCharArray()[4] - 48;
+					System.out.println("pressed star " + rating);
+				}
+			});
+			stage.addActor(star);
+		}
+	}
+	
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-	}
-	
-	public void naptime(int zzzz) {
-		try {
-			Thread.sleep(zzzz); // Zzzzzzz *snore*
-		} catch(InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
 	}
 	
 	@Override

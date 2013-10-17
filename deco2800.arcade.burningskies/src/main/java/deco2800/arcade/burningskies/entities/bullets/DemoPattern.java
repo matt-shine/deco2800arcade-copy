@@ -12,13 +12,12 @@ import deco2800.arcade.burningskies.screen.PlayScreen;
 public class DemoPattern extends BulletPattern {
 	
 	private int angle = 0;
-	private Texture image;
-	private Texture image2;
+
+	private static Texture image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
+	private static Texture image2 = new Texture(Gdx.files.internal("images/bullets/energy_ball_2.png"));
 	
 	public DemoPattern(Ship emitter, PlayScreen screen) {
 		super(emitter, screen);
-		image = new Texture(Gdx.files.internal("images/bullets/energy_ball_1.png"));
-		image2 = new Texture(Gdx.files.internal("images/bullets/energy_ball_2.png"));
 		interval = (float) 0.01;
 	}
 	

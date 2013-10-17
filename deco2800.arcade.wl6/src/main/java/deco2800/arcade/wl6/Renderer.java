@@ -164,12 +164,12 @@ public class Renderer {
         Gdx.gl.glClearColor(0.48f, 0.48f, 0.48f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.graphics.getGL20().glEnable(GL20.GL_TEXTURE_2D);
-        Gdx.gl20.glEnable(GL20.GL_BLEND);
         texture.bind();
 
         IngameUI.drawCeiling(getCeilingColor(), wl6.getWidth(), wl6.getHeight());
         Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
-
+        Gdx.gl20.glEnable(GL20.GL_BLEND);
+        
 
         //draw terrain
         terrainShader.begin();

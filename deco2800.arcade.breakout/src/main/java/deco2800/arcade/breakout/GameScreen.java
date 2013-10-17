@@ -350,7 +350,7 @@ public class GameScreen implements Screen  {
 		}
 		System.out.println("Congratulations " + player
 				+ " your final score is: " + getScore());
-		if (getLives() == 3) {
+		if (getLives() > 3) {
 			game.incrementAchievement("breakout.prefect");
 		} else if (getLives() == 0) {
 			game.incrementAchievement("breakout.closeOne");

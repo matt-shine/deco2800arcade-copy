@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import deco2800.arcade.chess.FixedSizeList;
+
 public class Rook extends Piece {
 
 	/**
@@ -16,12 +18,10 @@ public class Rook extends Piece {
 		this.preference = 3;
 	}
 
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];// current row position
 		int y = currentPos[1];// current column position
-
-		// int [] castle = {x, y+2};
 		
 		// moves.add(castle);
 		for (int i = 1; i <= 7; i++) {
@@ -80,6 +80,8 @@ public class Rook extends Piece {
 		moves.addAll(hs);
 		
 		return moves;
+		
+		
 	}
 	
 	public String toString() {

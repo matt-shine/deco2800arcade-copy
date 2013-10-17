@@ -241,7 +241,7 @@ public class Board {
 	 *            The position to be checked for occupation
 	 * @return True if the space is occupied, false if available
 	 */
-	private boolean occupiedSpace(int[] position) {
+	public boolean occupiedSpace(int[] position) {
 		int x = position[0];
 		int y = position[1];
 		FixedSizeList<Piece> row = Board_State.get(x);
@@ -265,63 +265,29 @@ public class Board {
 	public List<int[]> allowedMoves(Piece piece) {
 		int[] currentPos = findPiece(piece);
 
-		List<int[]> possibleMoves = piece.possibleMoves(currentPos);
+		List<int[]> possibleMoves = piece.possibleMoves(currentPos, Board_State);
 		List<int[]> allowableMoves = new ArrayList<int[]>();
+		
 		/*
-		 * Checks if possibleMoves spaces are occupied, if occupied by own team
-		 * don't allow, if occupied by other team allow.
+		 * THIS CLASS SHOULD BECOME SIMPLY:
+		 * 
+		 * return possibleMoves;
+		 * 
+		 * ALL PIECE MOVEMENT MUST BE MOVED INTO THE PIECE CLASSES AS SHOWN BY
+		 * MY BEAUTIFUL KNIGHT....NEIGH!!!
 		 */
+		
+		
 		// Used by: knight
-		if (piece.getClass() == blackKnight1.getClass()) {
-			for (int i = 0; i < possibleMoves.size(); i++) {
-				// If the space is unoccupied add to list of allowable
-				if (!occupiedSpace(possibleMoves.get(i))) {
-					allowableMoves.add(possibleMoves.get(i));
-				} else {
-					// If the space is occupied check by which team
-					int x = possibleMoves.get(i)[0];
-					int y = possibleMoves.get(i)[1];
-					List<Piece> row = Board_State.get(x);
-					Piece onSquare = row.get(y);
-
-					// If piece on the space is on opposing team add to
-					// allowable
-					if (piece.getTeam() != onSquare.getTeam()) {
-						allowableMoves.add(possibleMoves.get(i));
-					}
-				}
-			}
+		if(piece.getClass() == blackKnight1.getClass()) {
+			return possibleMoves;
 		}
-
+		
 		// Pawn Movement
 		if (piece.getClass() == blackPawn1.getClass()) {
-			if (!piece.getFirstMove()) {
-				if (this.occupiedSpace(possibleMoves.get(1))) {
-					possibleMoves.remove(0);
-				}
-			}
-			for (int i = 0; i < possibleMoves.size(); i++) {
-				if (occupiedSpace(possibleMoves.get(i))) {
-					// If the space is occupied check by which team
-					int x = possibleMoves.get(i)[0];
-					int y = possibleMoves.get(i)[1];
-					List<Piece> row = Board_State.get(x);
-					Piece onSquare = row.get(y);
-					/*
-					 * If piece on the space is on opposing team add to
-					 * allowable if diagonal
-					 */
-					if ((piece.getTeam() != onSquare.getTeam())
-							&& (possibleMoves.get(i)[1] != currentPos[1])) {
-						allowableMoves.add(possibleMoves.get(i));
-					}
-				} else { // If diagonal squares are empty don't add
-					if (possibleMoves.get(i)[1] == currentPos[1]) {
-						allowableMoves.add(possibleMoves.get(i));
-					}
-				}
-			}
+			return possibleMoves;
 		}
+		
 		// Rook movement
 		if (piece.getClass() == blackRook1.getClass()) {
 			allowableMoves = new ArrayList<int[]>(this.removeJumpsUp(

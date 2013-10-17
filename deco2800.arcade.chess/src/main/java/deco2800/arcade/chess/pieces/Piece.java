@@ -1,5 +1,7 @@
 package deco2800.arcade.chess.pieces;
 
+import deco2800.arcade.chess.*;
+
 import java.util.*;
 public abstract class Piece {
 	boolean team;
@@ -21,7 +23,7 @@ public abstract class Piece {
 	 * @return
 	 * 		List of the locations of all possible moves.
 	 */
-	public abstract List<int[]> possibleMoves(int[] currentPos);
+	public abstract List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state);
 	
 	/**
 	 * Remove the piece from gameplay and send to the graveyard
@@ -93,5 +95,26 @@ public abstract class Piece {
 	 */
 	public void hasMoved() {
 		this.firstMove = true;
+	}
+	
+	/**
+	 * Checks whether a space is currently occupied
+	 * 
+	 * @param position
+	 *            The position to be checked for occupation
+	 * @return True if the space is occupied, false if available
+	 */
+	public boolean occupiedSpace(FixedSizeList<FixedSizeList<Piece>> board_state, int[] position) {
+		int x = position[0];
+		int y = position[1];
+		FixedSizeList<Piece> row = board_state.get(x);
+		Piece onSpace = row.get(y);
+
+		Piece nullPiece = new Null(true);;
+		if (onSpace.getClass() == nullPiece .getClass()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

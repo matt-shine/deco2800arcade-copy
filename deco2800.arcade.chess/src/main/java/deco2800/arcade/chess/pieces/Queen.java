@@ -3,6 +3,8 @@ package deco2800.arcade.chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import deco2800.arcade.chess.FixedSizeList;
+
 
 public class Queen extends Piece {
 	
@@ -16,7 +18,7 @@ public class Queen extends Piece {
 		this.preference = 5;
 	}
 
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];
 		int y = currentPos[1];

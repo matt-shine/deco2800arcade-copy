@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import deco2800.arcade.chess.Board;
+import deco2800.arcade.chess.FixedSizeList;
 public class King extends Piece {
 
 	boolean isChecked;
@@ -19,7 +20,7 @@ public class King extends Piece {
 		this.preference = 6;
 	}
 
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];// current row position
 		int y = currentPos[1];// current column position

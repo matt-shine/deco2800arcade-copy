@@ -2,6 +2,8 @@ package deco2800.arcade.chess.pieces;
 
 import java.util.List;
 
+import deco2800.arcade.chess.FixedSizeList;
+
 public class Null extends Piece {
 	
 	public Null(boolean team) {
@@ -37,7 +39,7 @@ public class Null extends Piece {
 	}
 
 	@Override
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		// TODO Auto-generated method stub
 		return null;
 	}

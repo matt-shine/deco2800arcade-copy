@@ -98,13 +98,21 @@ public class MultiplayerServer {
 	
 	public void stateUpdate(GameStateUpdateRequest request) {
 		//if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
-		System.out.println(request.playerID);
+		System.out.println("GAME UPDATE REQUEST FROM: " + request.playerID);
 		if (request.gameOver == true && this.matchmakerGame) {
 			queue.gameOver(sessionId, player1Id, player2Id, gameId, request.winner);
 			return;
 		}
-		player1.sendTCP(request);	
-		player2.sendTCP(request);
+		if (request.initial == false) {
+			player1.sendTCP(request);	
+			player2.sendTCP(request);
+		} else {
+			if (request.playerID == player1Id) {
+				System.out.println("Sending init request");
+				player2.sendTCP(request);
+			}
+			
+		}
 		//}
 	}
 }

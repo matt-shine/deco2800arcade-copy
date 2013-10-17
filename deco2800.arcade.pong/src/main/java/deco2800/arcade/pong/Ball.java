@@ -43,6 +43,17 @@ public class Ball {
 	}
 	
 	/**
+	 * Return the velocity of the ball
+	 * @return the velocity of the ball
+	 */
+	public Vector2 getVelocity() {
+		Vector2 vect = new Vector2();
+		vect.x = this.velocity.x;
+		vect.y = this.velocity.y;
+		return vect;
+	}
+	
+	/**
 	 * Modify the position of the ball
 	 * @param newPosition the new position of the ball as x,y
 	 */

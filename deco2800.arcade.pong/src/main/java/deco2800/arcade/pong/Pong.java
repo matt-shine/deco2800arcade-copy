@@ -305,11 +305,10 @@ public class Pong extends GameClient {
 	 * Start a new point: start the ball moving and change the game state
 	 */
 	void startPoint() {
-		if (!ArcadeSystem.isGameWaiting()) { 
-			getBall().randomizeVelocity();
-			gameState = new InProgressState();
-			statusMessage = null;
-		}
+		getBall().randomizeVelocity();
+		Ball ball = getBall();
+		gameState = new InProgressState();
+		statusMessage = null;
 	}
 
 	@Override
@@ -367,6 +366,7 @@ public class Pong extends GameClient {
 	
 	public void startMultiplayerGame() {
 		getBall().randomizeVelocity();
+		sendInitState();
 		gameState = new InProgressState();
 		statusMessage = null;
 	}
@@ -376,16 +376,35 @@ public class Pong extends GameClient {
 		request.playerID = player.getID();
 		request.gameId = "pong";
 		request.gameSession = super.getMultiSession();
+		request.initial = false;
 		request.gameOver = false;
 		request.stateChange = (Object) getLeftPaddle().getPosition();
 		networkClient.sendNetworkObject((request));	
 	}
 	
+	private void sendInitState() {
+		GameStateUpdateRequest request = new GameStateUpdateRequest();
+		request.playerID = player.getID();
+		request.gameId = "pong";
+		request.gameSession = super.getMultiSession();
+		request.initial = true;
+		request.gameOver = false;
+		Vector2 vect = getBall().getVelocity();
+		vect.x = -1 * vect.x;
+		request.stateChange = (Object) vect;
+		networkClient.sendNetworkObject((request));
+	}
+	
 	public void updateGameState(GameStateUpdateRequest request) {
 		if (request.playerID != player.getID()) {
-			Vector2 vector = (Vector2) request.stateChange;
-			vector.x = getRightPaddle().getPosition().x;
-			getRightPaddle().setPosition(vector);
+			if (request.initial == false) {
+				Vector2 vector = (Vector2) request.stateChange;
+				vector.x = getRightPaddle().getPosition().x;
+				getRightPaddle().setPosition(vector);
+			} else {
+				System.out.println("Updating Ball");
+				getBall().setVelocity((Vector2) request.stateChange);
+			}
 		}
 	}
 	

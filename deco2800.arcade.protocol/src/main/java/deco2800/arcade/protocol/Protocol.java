@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
-
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.model.Game;
@@ -169,6 +168,8 @@ public class Protocol {
 		kryo.register(GameStateUpdateRequest.class);
 		kryo.register(NewMultiSessionResponse.class);
 		kryo.register(NewMatchmakingRequest.class);
+		
+		//Multiplayer Pong Messages
 		kryo.register(com.badlogic.gdx.math.Vector2.class);
 
 		// Package Manager

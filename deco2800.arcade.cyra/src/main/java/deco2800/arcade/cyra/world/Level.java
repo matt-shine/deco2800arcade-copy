@@ -43,15 +43,15 @@ public class Level {
 		randomEnemySpawners = new Array<RandomizedEnemySpawner>();
 		movablePlatformSpawners = new Array<MovablePlatformSpawner>();
 		
-		map = TiledLoader.createMap(Gdx.files.internal("data/tiles/level"+"2_new"+".tmx"));
-		//map = TiledLoader.createMap(Gdx.files.internal("data/level"+levelNum+".tmx"));
-		//map = TiledLoader.createMap(Gdx.files.internal("data/levelOld.tmx"));
+		map = TiledLoader.createMap(Gdx.files.internal("tiles/level"+"2_new"+".tmx"));
+		//map = TiledLoader.createMap(Gdx.files.internal("level"+levelNum+".tmx"));
+		//map = TiledLoader.createMap(Gdx.files.internal("levelOld.tmx"));
 		
 		collisionLayer = (TiledLayer) ( map.layers.get(2) );
 		
 
-		atlas = new TileAtlas(map, Gdx.files.internal("data/tiles/"));
-		//atlas = new TileAtlas(map, Gdx.files.internal("data/tiles/"));
+		atlas = new TileAtlas(map, Gdx.files.internal("tiles/"));
+		//atlas = new TileAtlas(map, Gdx.files.internal("tiles/"));
 		//renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, 1/32f);
 		
 		renderer = new com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer(map, atlas, 16,16, 1, 1);
@@ -86,7 +86,7 @@ public class Level {
 		} else {
 		*/
 			// Add the log parts for the waterfall
-			Texture logTex = new Texture("data/log.png");
+			Texture logTex = new Texture(Gdx.files.internal("log.png"));
 			logTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			MovablePlatform log =  new MovablePlatform(logTex, new Vector2(-1, -1), 2, 4, 1.5f);
 			MovablePlatformSpawner logS0 = new MovablePlatformSpawner(log, new Vector2(202, 59), new Vector2(200, -9), 0f, 5f, 0, 10);

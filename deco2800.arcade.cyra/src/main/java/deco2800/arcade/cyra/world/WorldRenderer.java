@@ -108,8 +108,8 @@ public class WorldRenderer {
 		//world.setRenderer(this);
 		
 		//make the map NOT SURE IF GOOD
-		/*map = TiledLoader.createMap(Gdx.files.internal("data/level.tmx"));
-		mapAtlas = new TileAtlas(map, Gdx.files.internal("data/level1"));
+		/*map = TiledLoader.createMap(Gdx.files.internal("level.tmx"));
+		mapAtlas = new TileAtlas(map, Gdx.files.internal("level1"));
 		
 		tileMapRenderer = new TileMapRenderer(map, mapAtlas, 32, 32, 1, 1);*/
 		
@@ -755,8 +755,8 @@ public class WorldRenderer {
 		csObjects = new Array<CutsceneObject>();
 
 		textBatch = new SpriteBatch();
-		font = new BitmapFont(Gdx.files.internal("data/font/fredericka_the_great/fredericka_the_great.fnt"), false);
-		fontBig = new BitmapFont(Gdx.files.internal("data/font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		font = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		fontBig = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		fontBig.setScale(3f);
 		
 		sceneBarHeight = 0f;
@@ -775,30 +775,30 @@ public class WorldRenderer {
 		AssetManager manager = new AssetManager();
 		TextureParameter linearFilteringParam = new TextureParameter();
 		linearFilteringParam.minFilter = TextureFilter.Linear;
-		//manager.load("data/enemysprite1-small.png", Texture.class, linearFilteringParam);
-		manager.load("data/stephen.txt", TextureAtlas.class);
-		manager.load("data/stephenram.txt", TextureAtlas.class);
-		manager.load("data/firestarter.txt", TextureAtlas.class);
-		manager.load("data/bg2.png", Texture.class, linearFilteringParam);
-		manager.load("data/ship.png", Texture.class, linearFilteringParam);
-		manager.load("data/cyra.png", Texture.class, linearFilteringParam);
-		manager.load("data/body-jumper.png", Texture.class, linearFilteringParam);
-		manager.load("data/frontarm-normal-jumper.png", Texture.class, linearFilteringParam);
-		manager.load("data/frontleg-normal1-jumper.png", Texture.class, linearFilteringParam);
-		manager.load("data/frontleg-jumping-jumper.png", Texture.class, linearFilteringParam);
-		manager.load("data/frontarm-jumping-jumper.png", Texture.class, linearFilteringParam);
-		manager.load("data/heart.png", Texture.class, linearFilteringParam);
-		manager.load("data/projectiles/lightningball.png", Texture.class, linearFilteringParam);
-		manager.load("data/projectiles/lasers.txt", TextureAtlas.class);
-		manager.load("data/projectiles/explosion.txt", TextureAtlas.class);
-		manager.load("data/follower.txt", TextureAtlas.class);
-		manager.load("data/cyraRightMovement.txt", TextureAtlas.class);
-		manager.load("data/cyraLeftMovement.txt", TextureAtlas.class);
-		manager.load("data/modular3.txt", TextureAtlas.class);
-		manager.load("data/level packfile", TextureAtlas.class);
+		//manager.load("enemysprite1-small.png", Texture.class, linearFilteringParam);
+		manager.load("stephen.txt", TextureAtlas.class);
+		manager.load("stephenram.txt", TextureAtlas.class);
+		manager.load("firestarter.txt", TextureAtlas.class);
+		manager.load("bg2.png", Texture.class, linearFilteringParam);
+		manager.load("ship.png", Texture.class, linearFilteringParam);
+		manager.load("cyra.png", Texture.class, linearFilteringParam);
+		manager.load("body-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("frontarm-normal-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("frontleg-normal1-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("frontleg-jumping-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("frontarm-jumping-jumper.png", Texture.class, linearFilteringParam);
+		manager.load("heart.png", Texture.class, linearFilteringParam);
+		manager.load("projectiles/lightningball.png", Texture.class, linearFilteringParam);
+		manager.load("projectiles/lasers.txt", TextureAtlas.class);
+		manager.load("projectiles/explosion.txt", TextureAtlas.class);
+		manager.load("follower.txt", TextureAtlas.class);
+		manager.load("cyraRightMovement.txt", TextureAtlas.class);
+		manager.load("cyraLeftMovement.txt", TextureAtlas.class);
+		manager.load("modular3.txt", TextureAtlas.class);
+		manager.load("level packfile", TextureAtlas.class);
 		manager.finishLoading();
 		
-		boss1Atlas = manager.get("data/stephen.txt", TextureAtlas.class);
+		boss1Atlas = manager.get("stephen.txt", TextureAtlas.class);
 		Array<AtlasRegion> exRegions = boss1Atlas.findRegions("a");
 		for (int i=0; i< exRegions.size; i++) {
 			exRegions.get(i).getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -813,7 +813,7 @@ public class WorldRenderer {
 		boss1head0.flip(true, false);
 		boss1head1 = boss1Atlas.findRegion("steaphenhead1");
 		boss1head1.flip(true, false);
-		bossRam = manager.get("data/stephenram.txt", TextureAtlas.class);
+		bossRam = manager.get("stephenram.txt", TextureAtlas.class);
 		TextureRegion frame0 = bossRam.findRegion("stephenram",0);
 		frame0.flip(true, false);
 		TextureRegion frame1 = bossRam.findRegion("stephenram", 1);
@@ -823,52 +823,52 @@ public class WorldRenderer {
 		TextureRegion frame3 = bossRam.findRegion("stephenram", 3);
 		frame3.flip(true, false);
 		
-		firestarter = manager.get("data/firestarter.txt", TextureAtlas.class);
+		firestarter = manager.get("firestarter.txt", TextureAtlas.class);
 		//bossRamAnimation = new Animation(FOLLOWER_FRAME_DURATION, bossRamFrames);
 		
 		
-		bg = manager.get("data/bg2.png", Texture.class);
+		bg = manager.get("bg2.png", Texture.class);
 		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
-		shipTexture = manager.get("data/ship.png", Texture.class);
+		shipTexture = manager.get("ship.png", Texture.class);
 		shipTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		heartsTexture = manager.get("data/heart.png", Texture.class);
+		heartsTexture = manager.get("heart.png", Texture.class);
 		heartsTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		
-		bulletTexture = manager.get("data/projectiles/lightningball.png");
+		bulletTexture = manager.get("projectiles/lightningball.png");
 		bulletTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		laserTextures = manager.get("data/projectiles/lasers.txt");
-		explosionTextures = manager.get("data/projectiles/explosion.txt");
+		laserTextures = manager.get("projectiles/lasers.txt");
+		explosionTextures = manager.get("projectiles/explosion.txt");
 		//laserTextures.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 			/* Load follower texture */
-		//followerTexture = new Texture("data/follower.png");
-		followerTexture = manager.get("data/ship.png");
+		//followerTexture = new Texture("follower.png");
+		followerTexture = manager.get("ship.png");
 		followerTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		jumperBodyTexture = manager.get("data/body-jumper.png");
+		jumperBodyTexture = manager.get("body-jumper.png");
 		jumperBodyTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		jumperFrontArmTexture = manager.get("data/frontarm-normal-jumper.png");
+		jumperFrontArmTexture = manager.get("frontarm-normal-jumper.png");
 		jumperFrontArmTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		jumperFrontLegTexture = manager.get("data/frontleg-normal1-jumper.png");
+		jumperFrontLegTexture = manager.get("frontleg-normal1-jumper.png");
 		jumperFrontLegTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		jumperFrontLegJumpingTexture = manager.get("data/frontleg-jumping-jumper.png");
+		jumperFrontLegJumpingTexture = manager.get("frontleg-jumping-jumper.png");
 		jumperFrontLegJumpingTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		jumperFrontArmJumpingTexture = manager.get("data/frontarm-jumping-jumper.png");
+		jumperFrontArmJumpingTexture = manager.get("frontarm-jumping-jumper.png");
 		jumperFrontArmJumpingTexture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
-		TextureAtlas cyraRightAtlas = manager.get("data/cyraRightMovement.txt", TextureAtlas.class);
-		TextureAtlas cyraLeftAtlas = manager.get("data/cyraRightMovement.txt", TextureAtlas.class);
+		TextureAtlas cyraRightAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
+		TextureAtlas cyraLeftAtlas = manager.get("cyraRightMovement.txt", TextureAtlas.class);
 		
 		
 		
-		TextureAtlas atlas = manager.get("data/follower.txt", TextureAtlas.class);
+		TextureAtlas atlas = manager.get("follower.txt", TextureAtlas.class);
 		/*TextureRegion[] followerFrames = new TextureRegion[3];
 		for (int i=0; i<3;i++) {
 			followerFrames[i] = atlas.findRegion("follower_"+(i+1));
@@ -895,8 +895,8 @@ public class WorldRenderer {
 		
 		
 			/* Load walker texture */
-		//walkerTexture = new Texture("data/walker.png");
-		TextureAtlas walkerAtlas = manager.get("data/modular3.txt", TextureAtlas.class);
+		//walkerTexture = new Texture("walker.png");
+		TextureAtlas walkerAtlas = manager.get("modular3.txt", TextureAtlas.class);
 		walkerRegions = walkerAtlas.findRegions("a");
 				
 		for (int i=0; i<walkerRegions.size; i++) {
@@ -905,7 +905,7 @@ public class WorldRenderer {
 		}
 		System.out.println("Found " + walkerRegions.size + " walker parts");
 		
-		groundTextureAtlas = manager.get("data/level packfile", TextureAtlas.class);
+		groundTextureAtlas = manager.get("level packfile", TextureAtlas.class);
 			/* Load walker texture - END */
 		return;
 		

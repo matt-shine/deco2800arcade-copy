@@ -25,7 +25,7 @@ public class Sounds {
 			explosion2 = loadSound("explosion02.wav");
 			shoot0 = loadSound("shoot03.wav");
 			new5 = loadSound("new05.wav");
-			boss1bgm = Gdx.audio.newMusic(Gdx.files.internal("data/sounds/boss1music_prototype.mp3"));
+			boss1bgm = Gdx.audio.newMusic(Gdx.files.internal("sounds/boss1music_prototype.mp3"));
 			
 			
 			
@@ -36,7 +36,7 @@ public class Sounds {
 		}
 		
 		private static Sound loadSound (String filename) {
-			return Gdx.audio.newSound(Gdx.files.internal("data/sounds/"+filename));
+			return Gdx.audio.newSound(Gdx.files.internal("sounds/"+filename));
 		}
 		
 		public static void stopPlay (Sound sound, float pan) {

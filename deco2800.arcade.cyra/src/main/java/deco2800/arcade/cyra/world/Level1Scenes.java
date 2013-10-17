@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,7 +34,7 @@ public class Level1Scenes extends LevelScenes{
 	
 	public Level1Scenes (Player ship, ParallaxCamera cam, ResultsScreen resultsScreen) {
 		super(ship, cam, resultsScreen);
-		copterTex = new Texture("data/copter.png");
+		copterTex = new Texture(Gdx.files.internal("copter.png"));
 		copterTex.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		
 		

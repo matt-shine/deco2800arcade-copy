@@ -6,6 +6,7 @@ import aurelienribon.tweenengine.TweenCallback;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.math.Vector2;
@@ -76,7 +77,7 @@ public class Level2Scenes extends LevelScenes {
 		
 		if (scenePosition == 0) {
 			ship.getVelocity().x = 0;
-			Texture logTex = new Texture("data/log.png"); //need to move this to WorldRenderer
+			Texture logTex = new Texture(Gdx.files.internal("log.png")); //need to move this to WorldRenderer
 			logTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			destructLog =  new MovablePlatform(logTex, new Vector2(267, 60), 2, 14, new Vector2(267,46.1f), 10f, false, 0f);
 			MovablePlatform log1 =  new MovablePlatform(logTex, new Vector2(235, 60), 2, 14, new Vector2(235,46.1f), 10f, false, 0f);

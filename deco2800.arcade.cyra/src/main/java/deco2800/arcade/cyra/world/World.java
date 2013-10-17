@@ -773,7 +773,7 @@ public class World {
 		
 		
 		//enemies.add( new SoldierEnemy(new Vector2 (15f, 9f), false));
-		Texture copterTex = new Texture("data/copter.png");
+		Texture copterTex = new Texture(Gdx.files.internal("copter.png"));
 		copterTex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		movablePlatforms.add(new MovablePlatform(copterTex, new Vector2(361, 8), 4f, 2f, new Vector2(361,42), 4.5f, true, 3.5f));
 		testBeam = new LaserBeam(75f, new Vector2(20f,6f), 5f, false, 0.1f);

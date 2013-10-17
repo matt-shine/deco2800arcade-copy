@@ -46,11 +46,11 @@ public class MainMenu extends AbstractScreen{
 	
 	@Override
 	public void show() {		
-		atlas = new TextureAtlas("data/buttons.txt");
+		atlas = new TextureAtlas("buttons.txt");
 		skin = new Skin();
 		skin.addRegions(atlas);
-		//blackFont = new BitmapFont(Gdx.files.internal("data/whitefont.fnt"), false);
-		blackFont = new BitmapFont(Gdx.files.internal("data/font/fredericka_the_great/fredericka_the_great.fnt"), false);
+		//blackFont = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
+		blackFont = new BitmapFont(Gdx.files.internal("font/fredericka_the_great/fredericka_the_great.fnt"), false);
 		Sounds.load();
 		
 	}
@@ -155,11 +155,11 @@ public class MainMenu extends AbstractScreen{
 		label.setWidth(width);
 		label.setAlignment(Align.center);
 		
-		Image cyra = new Image(new Texture("data/cyra.png"));
+		Image cyra = new Image(new Texture(Gdx.files.internal("cyra.png")));
 		cyra.setX(Gdx.graphics.getWidth()/2 - cyra.getWidth()/2 - 90);
 		cyra.setY(Gdx.graphics.getHeight()/2 - cyra.getHeight()/2 + 115);
 		
-		Image bg = new Image(new Texture("data/main_bg.png"));
+		Image bg = new Image(new Texture(Gdx.files.internal("main_bg.png")));
 		bg.setX(Gdx.graphics.getWidth()/2 - bg.getWidth()*0.75f/2);
 		bg.setY(Gdx.graphics.getHeight() - bg.getHeight()*0.75f + 30);
 		bg.setScale(0.75f);

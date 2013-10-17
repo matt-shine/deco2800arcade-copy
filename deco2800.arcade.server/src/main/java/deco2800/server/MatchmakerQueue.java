@@ -243,7 +243,6 @@ public class MatchmakerQueue {
 	
 	
 	private void checkList() {
-		System.out.println("Checking List");
 		if (queuedUsers.size() < 2) {
 			return;
 		}

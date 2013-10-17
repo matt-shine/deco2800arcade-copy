@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import deco2800.arcade.client.ArcadeInputMux;
+
 
  
 public class SplashScreen implements Screen  {
@@ -31,12 +33,10 @@ public class SplashScreen implements Screen  {
 		texture = new Texture(Gdx.files.classpath("imgs/splashscreen.png"));
 	}
 		
-		
 
 	@Override
 	public void render(float delta) {
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-		
 			game.setScreen(game.MenuScreen);
 		}
 
@@ -64,7 +64,6 @@ public class SplashScreen implements Screen  {
 
 	@Override
 	public void show() {
-		
 	}
 
 	@Override

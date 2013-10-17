@@ -11,8 +11,6 @@ import org.junit.Test;
 
 import com.esotericsoftware.kryonet.Connection;
 
-import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Player;
@@ -24,8 +22,6 @@ public class CommunicationTest {
 	private Player player1, player2, player3;
 
 	private CommunicationNetwork comm1, comm2, comm3;
-
-	private NetworkClient client1, client2, client3;
 
 	private CommunicationListener listener1, listener2, listener3;
 

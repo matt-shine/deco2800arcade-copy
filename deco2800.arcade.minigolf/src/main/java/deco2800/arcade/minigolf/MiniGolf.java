@@ -8,7 +8,7 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.ArcadeSystem;
 import com.badlogic.gdx.Screen;
-import deco2800.arcade.client.AchievementClient;
+
 
 /* main game class, sets the screens to be displayed */
 
@@ -33,17 +33,19 @@ public class MiniGolf extends GameClient {
 	
 	
 		this.getOverlay().setListeners(new Screen() {
-
+			
 			@Override
 			public void dispose() {
+			
 			}
 
 			@Override
 			public void hide() {
 			}
-
+			
 			@Override
 			public void pause() {
+			
 			}
 
 			@Override
@@ -67,7 +69,7 @@ public class MiniGolf extends GameClient {
 		hole = new GameScreen(this, 1);
 		setScreen(menu);
 		
-		
+		this.incrementAchievement("minigolf.360");
 		
 	}	
 		
@@ -98,7 +100,6 @@ public class MiniGolf extends GameClient {
 	 */
 	public void render() {
 		 super.render();
-		 incrementAchievement("minigolf.360");
 
 	}
 

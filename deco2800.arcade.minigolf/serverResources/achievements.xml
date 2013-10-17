@@ -14,16 +14,16 @@
         </achievement>
 
 	<achievement id="minigolf.360">
-	        <name>360 Overlay Check</name>
-	        <description>Check the overlay</description>
-	        <awardThreshold>1</awardThreshold>
-	        <icon>youwon</icon>
-        </achievement>
+		<name>360 Overlay Check</name>
+		<description>Check the overlay</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>youwon</icon>
+	</achievement>
 
 	<achievement id="minigolf.whoneedsamap">
-	        <name>Who needs a map</name>
-	        <description>Make a course.</description>
-	        <awardThreshold>1</awardThreshold>
-	        <icon>youwon</icon>
-        </achievement>
+		<name>Who needs a map</name>
+		<description>Make a course.</description>
+		<awardThreshold>1</awardThreshold>
+		<icon>youwon</icon>
+	</achievement>
 </achievements>

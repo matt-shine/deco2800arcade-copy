@@ -10,6 +10,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.dbunit.IDatabaseTester;
+import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.DefaultTable;
+import org.dbunit.dataset.DefaultDataSet;
+import org.dbunit.dataset.datatype.DataType;
+import org.dbunit.dataset.Column;
 
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.HighscoreDatabase;
@@ -20,7 +28,8 @@ import deco2800.server.database.HighscoreDatabase;
  * @see deco2800.arcade.server.database.HighscoreDatabase
  */
 public class TestHighscoreDatabase {
-
+   
+	private static IDatabaseTester databaseTester;
 	private HighscoreDatabase highscoreDatabase; //storage object to test
 
 	/**
@@ -29,7 +38,9 @@ public class TestHighscoreDatabase {
 	 */
 	@BeforeClass
 	public static void setUpClass() throws Exception {
-		
+		databaseTester = new JdbcDatabaseTester(
+			"org.apache.derby.jdbc.EmbeddedDriver",
+			"jdbc:derby:Arcade;user=server;password=server;create=true");		
 	}
 
 	/**
@@ -38,7 +49,10 @@ public class TestHighscoreDatabase {
 	 */
 	@Before
 	public void setUp() throws Exception {
+		databaseTester.setDataSet(new DefaultDataSet());
+		databaseTester.onSetup();
 		highscoreDatabase = new HighscoreDatabase();		
+		highscoreDatabase.initialise();
 	}
 	
 	/**
@@ -47,7 +61,7 @@ public class TestHighscoreDatabase {
 	 */
 	@After
 	public void  tearDown() throws Exception {
-		
+		databaseTester.onTearDown();
 	}
 	
 	

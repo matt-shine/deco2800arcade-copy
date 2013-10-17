@@ -5,6 +5,11 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Explosion extends EntityAnimated {
 	
+	private static Texture[] splode = { // optimisation is pretty sick
+		new Texture(Gdx.files.internal("images/explosions/explosion0.png")),
+		new Texture(Gdx.files.internal("images/explosions/explosion1.png"))
+	};
+	
 	float length;
 	
 	public Explosion(Texture walkSheet, int cols, int rows, float speed, float x, float y) {
@@ -15,8 +20,8 @@ public class Explosion extends EntityAnimated {
 	}
 	
 	//for testing
-	public Explosion(float x, float y) {
-		this(new Texture(Gdx.files.internal("images/ships/explosion_placeholder.png")), 8, 1, 0.1f, x, y);
+	public Explosion(float x, float y, int index) {
+		this(splode[index], 8, 1, 0.06f, x, y);
 	}
 
 	@Override

@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-//import deco2800.arcade.snakeLadderModel.Dice;
 
 
 
@@ -25,9 +24,6 @@ public class GamePlayer {
 	private Vector2 velocity = new Vector2(); // The current velocity of the playerTexture as x,y
 	private boolean isAI;
 	
-//	public GamePlayer()
-//	{
-//	}
 	
 	/**
 	 * Basic constructor for playerTexture. Set position and dimensions to the default
@@ -99,7 +95,7 @@ public class GamePlayer {
 	
     /**
      * Render the playerTexture.
-     * @param 
+     *  
      */
     public void renderPlayer(SpriteBatch batch)
     {
@@ -108,7 +104,7 @@ public class GamePlayer {
     
     public void initializeVelocity() {  	
 		// if it is even row
-		if (getBounds().y % 120 == 0)
+		if (((this.positionIndex-1)/10)%2 == 0)
 		{
 			// the vector of x-velocity goes to right direction 
 			getVelocity().x = 60;
@@ -139,15 +135,7 @@ public class GamePlayer {
 	   positionIndex=newpoint;
 	   return positionIndex;
    }
-   /*
-   public void score(int winner){
-		scores[winner]++;
-	}
-
-	public void initialScore(){
-		scores[0] = 0;
-		scores[1] = 0;
-	}*/
+   
    
    /**
     * Calling the score of this playerTexture

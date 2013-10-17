@@ -105,7 +105,7 @@ public class AchievementStorage {
     }
 
 	
-    private void loadAchievement(Element achElem, String achFolder) throws DatabaseException {
+    private void loadAchievement(Element achElem, String achFolder, String achXMLFilePath) throws DatabaseException {
 	String id = achElem.getAttribute("id");
 	Statement statement = null;
 	ResultSet resultSet = null;
@@ -123,8 +123,6 @@ public class AchievementStorage {
 	    resultSet = statement.executeQuery("SELECT * FROM ACHIEVEMENTS " +
 					       "WHERE ID = '" + id + "'");
 	    if(!resultSet.next()) {
-		// still need to bring in icon
-				
 		LinkedList<AchievementComponent> components = new LinkedList<AchievementComponent>();
 		NodeList achInfo = achElem.getChildNodes();
 		int n = achInfo.getLength();
@@ -158,7 +156,7 @@ public class AchievementStorage {
 			    components.addLast(component);
 			}
 		    } else {
-			throw new RuntimeException("Unsupported tag: " + elemName);
+			throw new RuntimeException("Unsupported tag: " + elemName + " in " + achXMLFilePath);
 		    }
 		}
 
@@ -168,6 +166,16 @@ public class AchievementStorage {
 
 		if (components.size() > 0) {
                     awardThreshold = -1;
+		}
+
+		// actually see if we've got the icon - if not just log an error and set the Achievement
+		// to have the unknown image so we don't throw and have bad data in the DB
+		File icon = ResourceLoader.load(iconPath);
+		if (icon.isFile()) {
+		    imageStorage.set(iconPath, icon);
+		} else {
+		    logger.error("Achievement " + name + "'s icon doesn't exist at path: " + iconPath);
+		    iconPath = ImageStorage.UNKNOWN_IMAGE_ID;
 		}
 
 		// load into DB
@@ -181,9 +189,7 @@ public class AchievementStorage {
 					    "','__component','__component','__component'," + 
 					    c.awardThreshold + ")");
                 }
-		File icon = ResourceLoader.load(iconPath);
-		System.out.println(iconPath);
-		imageStorage.set(iconPath, icon);
+		
 		logger.info("Achievement: {} added", name);
 	    }
 	} catch (SQLException e) {
@@ -235,7 +241,7 @@ public class AchievementStorage {
 				continue;
 			    }
 
-			    loadAchievement((Element)achNode, folder);
+			    loadAchievement((Element)achNode, folder, f.getPath());
 			}
 		    } catch(Exception e) {
 			logger.error("Unable to load in data for achievements");

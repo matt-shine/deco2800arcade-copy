@@ -142,6 +142,7 @@ public class PlayScreen implements Screen
     				stage.addActor(player);
     				if (lives > 0) {
     					player.respawn();
+    					sp.setTimer((float) 2.5);
     				} else {
     					// Create a game over screen
     					game.setScreen(game.menuScreen);

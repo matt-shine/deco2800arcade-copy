@@ -64,8 +64,8 @@ public class SpawnList {
 		if(currentInterval >= interval) {
 //			spawnEnemy(list.get(3));
 //			--counter;
-			interval -= 0.1;
-			if(interval < 0.25) {
+			interval -= 0.05;
+			if(interval < 0.2) {
 				interval = (float) 0.25;
 			}
 			
@@ -114,5 +114,9 @@ public class SpawnList {
 
 			// Add the enemy to the screen
 			screen.addEnemy(new Enemy(200, enemyTex[0], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
+	}
+	
+	public void setTimer(float time) {
+		interval = time;
 	}
 }

@@ -14,7 +14,6 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * create an empty Accolade container
      */
     public AccoladeContainer() {
-
         this.size = 0;
         this.head = null;
         this.tail = null;
@@ -40,6 +39,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
      */
     public void clearAccolades(){
     	/** TODO implement stub*/
+    	this.size = 0;
     	head = null;
     	tail = null;
     	//current = null;
@@ -108,15 +108,15 @@ public class AccoladeContainer implements Iterable<Accolade> {
     }
  
     public boolean isEmpty() {
-        return size == 0;
+        return this.size == 0;
     }
  
-    private boolean hasHead() {
+    public boolean hasHead() {
         return head != null;
     }
  
-    private boolean hasTail() {
-        return tail == null;
+    public boolean hasTail() {
+        return tail != null;
     }
  
     public Iterator<Accolade> iterator() {

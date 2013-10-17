@@ -33,6 +33,7 @@ public class Accolade {
 			String Image){
 		this.id = ID;
 		this.value = Value;
+		this.name = Name;
 		this.modifier = modifier;
 		this.string = String.replace("$VALUE", "%s").replace("$UNIT", "%s");
 		
@@ -66,9 +67,11 @@ public class Accolade {
 	}
 	
 	public String getName(){
-		return name;
+		return this.name;
 	}
-	
+	public String getString(){
+		return this.string;
+	}
 	public String getUnit(){
 		return this.unit;
 	}

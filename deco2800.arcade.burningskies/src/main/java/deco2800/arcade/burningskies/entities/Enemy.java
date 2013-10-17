@@ -2,7 +2,10 @@ package deco2800.arcade.burningskies.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import deco2800.arcade.burningskies.screen.PlayScreen;
 import deco2800.arcade.burningskies.PowerUpGenerator;
@@ -33,11 +36,17 @@ public class Enemy extends Ship {
 	
 	// shhh
 	private static Texture secret = new Texture(Gdx.files.internal("images/ships/secret2.cim"));
-
-//	private Vector2 playerDir = new Vector2();
+	private static Texture secret2 = new Texture(Gdx.files.internal("images/ships/secret3.cim"));
 	
 	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
 		super(health, (screen.zalgo() == 0)? image: secret, pos);
+		// this is a lot of effort for one simple easter egg
+		if(this instanceof Boss && screen.zalgo() != 0) {
+			this.setDrawable(new TextureRegionDrawable(new TextureRegion(secret2)));
+			this.setHeight(320);
+			this.setWidth(320);
+			this.setOrigin(160, 160);
+		}
 		this.screen = screen;
 		this.player = player;
 		this.position = pos;

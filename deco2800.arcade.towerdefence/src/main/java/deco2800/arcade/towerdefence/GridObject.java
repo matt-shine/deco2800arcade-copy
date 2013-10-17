@@ -39,7 +39,10 @@ public class GridObject {
 	private Team team;
 
 	// Constructor
-
+	public GridObject(int x, int y, Grid grid){
+		this.position = new Vector2(x, y);
+		this.grid = grid;
+	}
 	// Getters
 	/**
 	 * Returns the grid the object belongs to.

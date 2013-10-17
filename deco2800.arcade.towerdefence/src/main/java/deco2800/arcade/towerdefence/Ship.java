@@ -1,5 +1,9 @@
 package deco2800.arcade.towerdefence;
 
+import com.badlogic.gdx.Gdx;
+
+import deco2800.arcade.towerdefence.screen.GameScreen;
+
 /**
  * The interface for the creation of a player ship. For single player games one
  * ship per player only. For cooperative play one ship only and n(starting with
@@ -29,6 +33,13 @@ public class Ship {
 	 */
 
 	private Grid grid;
+	private GameScreen game;
+
+	public Ship(GameScreen game) {
+		this.game = game;
+		this.grid = new Grid(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
+				"shipGrid", 25, this);
+	}
 
 	public void updateGameState(Object gameState, int change) {
 	}
@@ -88,7 +99,7 @@ public class Ship {
 	public void setWave(int n) {
 	}
 
-	public boolean placeObject(int x, int y, GridObject object) {
-		return grid.buildObject(x, y, object);
+	public boolean placeObject(GridObject object) {
+		return grid.buildObject(object);
 	}
 }

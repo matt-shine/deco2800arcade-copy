@@ -18,7 +18,7 @@ import deco2800.arcade.towerdefence.pathfinding.Path.Step;
 public abstract class Mobile extends Mortal {
 	// Fields
 	// The GridObject's speed in pixels per second.
-	private float speed;
+	private double speed;
 	// The GridObject's sprites to animate movement down.
 	private List<Sprite> downMovingSprites;
 	// The GridObject's sprites to animate movement left.
@@ -31,8 +31,9 @@ public abstract class Mobile extends Mortal {
 	private Path path;
 
 	// Constructor
-	public Mobile(int maxHealth, int armour) {
-		super(maxHealth, armour);
+	public Mobile(int maxHealth, int armour, int x, int y, double speed, Grid grid) {
+		super(maxHealth, armour, x, y, grid);
+		this.speed = speed;
 	}
 
 	// Getters
@@ -77,7 +78,7 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return
 	 */
-	public float speed() {
+	public double speed() {
 		return speed;
 	}
 
@@ -173,7 +174,7 @@ public abstract class Mobile extends Mortal {
 		// Go into a wait-while loop changing the position 30 times per second
 		int distance = grid.getTileSize();
 		long t0, t1;
-		Vector2 addVector = vector.mul(speed / 33);
+		Vector2 addVector = vector.mul((float)speed / 33);
 		for (int i = 0; i < distance; i += addVector.len()) {
 			t0 = System.currentTimeMillis();
 			t1 = t0;

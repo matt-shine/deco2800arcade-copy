@@ -34,7 +34,7 @@ public class Grid implements TileBasedMap {
 	private List<List<List<GridObject>>> gridContents;
 	// The ship that is using this grid
 	private Ship ship;
-	//The pathfinder used by objects in the grid
+	// The pathfinder used by objects in the grid
 	public AStarPathFinder pathfinder;
 
 	// Constructor
@@ -55,10 +55,10 @@ public class Grid implements TileBasedMap {
 		gridWidth = width / tileSize;
 		gridDepth = depth / tileSize;
 		gridContents = new ArrayList<List<List<GridObject>>>(gridWidth);
-		//initialize the contents of GridContents
-		for (int i = 0; i < gridWidth; i++){
+		// initialize the contents of GridContents
+		for (int i = 0; i < gridWidth; i++) {
 			gridContents.add(new ArrayList<List<GridObject>>());
-			for (int j = 0; j < gridDepth; j++){
+			for (int j = 0; j < gridDepth; j++) {
 				gridContents.get(i).add(new ArrayList<GridObject>());
 			}
 		}
@@ -167,19 +167,21 @@ public class Grid implements TileBasedMap {
 	 * Try and build an object at the specified grid. If it is blocked, return
 	 * false, otherwise return true and modify the gridContents appropriately.
 	 * 
-	 * @param x
-	 *            the x-coordinate of the object
-	 * @param y
-	 *            the y-coordinate of the object
+	 * @param object
+	 *            The grid object to place. Its coordinates are determined via
+	 *            the position of the object.
 	 */
-	public boolean buildObject(int x, int y, GridObject object) {
+	public boolean buildObject(GridObject object) {
+		int x, y;
+		x = (int) object.positionInTiles().x;
+		y = (int) object.positionInTiles().y;
 		Iterator<GridObject> thisGridObjects = getGridContents(x, y).iterator();
 		while (thisGridObjects.hasNext()) {
 			GridObject current = thisGridObjects.next();
 			// Check for block wall
 			// Check for towers
 			// Check for aliens
-			if(current.getClass() == Enemy.class){
+			if (current.getClass() == Enemy.class) {
 				return false;
 			}
 		}
@@ -203,18 +205,24 @@ public class Grid implements TileBasedMap {
 	public int getTileSize() {
 		return tileSize;
 	}
-	
+
 	/**
 	 * Move the given object from its previous position to the new position.
-	 * @param object The object to be moved
-	 * @param position The object's current position
-	 * @param newPosition The position to move the object to
+	 * 
+	 * @param object
+	 *            The object to be moved
+	 * @param position
+	 *            The object's current position
+	 * @param newPosition
+	 *            The position to move the object to
 	 */
-	public void moveObject (GridObject object, Vector2 position, Vector2 newPosition){
-		//Remove it from the old position
-		gridContents.get((int)position.x).get((int)position.y).remove(object);
-		//Add it to the new one
-		gridContents.get((int)newPosition.x).get((int)newPosition.y).add(object);
+	public void moveObject(GridObject object, Vector2 position,
+			Vector2 newPosition) {
+		// Remove it from the old position
+		gridContents.get((int) position.x).get((int) position.y).remove(object);
+		// Add it to the new one
+		gridContents.get((int) newPosition.x).get((int) newPosition.y)
+				.add(object);
 	}
 
 }

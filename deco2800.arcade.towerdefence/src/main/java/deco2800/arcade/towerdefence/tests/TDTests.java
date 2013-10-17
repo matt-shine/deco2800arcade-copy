@@ -1,16 +1,16 @@
-package deco2800.arcade.towerdefence;
+package deco2800.arcade.towerdefence.tests;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import deco2800.arcade.towerdefence.Enemy;
+import deco2800.arcade.towerdefence.*;
 
-public class BasicTests {
+public class TDTests {
 	
 	@Test
 	public void EnemyDamageTest(){
-		Enemy unarmoured = new Enemy(50, 0);
-		Enemy armoured = new Enemy(50, 10);
+		Enemy unarmoured = new Enemy(50, 0, 0, 0, 0.0, null);
+		Enemy armoured = new Enemy(50, 10, 0, 0, 0.0, null);
 		
 		//Damage the unarmoured Enemy with a non-penetrating attack
 		unarmoured.takeDamage(25);
@@ -35,7 +35,7 @@ public class BasicTests {
 	
 	@Test
 	public void EnemyHealingTest(){
-		Enemy meatbag = new Enemy(50, 0);
+		Enemy meatbag = new Enemy(50, 0, 0, 0, 0.0, null);
 		//Try healing from maximum health
 		meatbag.heal(100);
 		Assert.assertEquals(50, meatbag.health());
@@ -44,10 +44,15 @@ public class BasicTests {
 		//Heal them a small amount
 		meatbag.heal(10);
 		Assert.assertEquals(20, meatbag.health());
-		//Healt them over the maximum
+		//Heal them over the maximum
 		meatbag.heal(100);
 		Assert.assertEquals(50, meatbag.health());
 	}
 	
-
+	@Test
+	public void gridMovementTest(){
+		Grid grid = new Grid(200, 200, "grid", 20, null);
+		GridObject object = new GridObject(0, 0, grid);
+		Assert.assertTrue(grid.buildObject(object));
+	}
 }

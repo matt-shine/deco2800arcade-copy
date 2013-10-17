@@ -23,8 +23,8 @@ public class Enemy extends Mobile implements Melee {
 	private GridObject target;
 
 	// Constructor
-	public Enemy(int maxHealth, int armour) {
-		super(maxHealth, armour);
+	public Enemy(int maxHealth, int armour, int x, int y, double speed, Grid grid) {
+		super(maxHealth, armour, x, y, speed, grid);
 	}
 
 	// Getters
@@ -62,7 +62,7 @@ public class Enemy extends Mobile implements Melee {
 	public List<Sprite> meleeSprites() {
 		return null;
 	}
-	
+
 	// Setters
 	/**
 	 * Sets the attacks per second the enemy can make.
@@ -99,12 +99,12 @@ public class Enemy extends Mobile implements Melee {
 	public void target(GridObject target) {
 		this.target = target;
 	}
-	
+
 	/**
 	 * Sets the sprites for melee attacking animation.
 	 */
 	public void meleeSprites(List<Sprite> meleeSprites) {
 	}
-	
-	// Methods	
+
+	// Methods
 }

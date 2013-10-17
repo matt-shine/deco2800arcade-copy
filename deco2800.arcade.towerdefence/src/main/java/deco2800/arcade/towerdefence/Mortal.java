@@ -22,7 +22,8 @@ public class Mortal extends GridObject {
 	 * Should only be used for super, don't instantiate a pure mortal, it should
 	 * be an enemy sub-type.
 	 */
-	public Mortal(int maxHealth, int armour) {
+	public Mortal(int maxHealth, int armour, int x, int y, Grid grid) {
+		super(x, y, grid);
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
 		this.armour = armour;
@@ -37,7 +38,7 @@ public class Mortal extends GridObject {
 	public int maxHealth() {
 		return maxHealth;
 	}
-	
+
 	/**
 	 * Return the current health of the mortal, nonnegative.
 	 * 

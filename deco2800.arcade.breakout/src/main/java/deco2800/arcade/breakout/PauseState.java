@@ -11,11 +11,21 @@ public class PauseState extends GameState {
 	private Vector2 prevBallVelocity;
 	private Vector2 prevPowerupBallVelocity;
 	
+	/**
+	 * Sets the velocity of the ball to be 0 when the game is paused
+	 * @param context - the current game screen
+	 * @param ballVelocity - the regular ball's velocity
+	 * @param pBallVelocity - the powerup ball's velocity
+	 */
 	public PauseState(GameScreen context, Vector2 ballVelocity, Vector2 pBallVelocity) {
 		prevBallVelocity = new Vector2(ballVelocity);
 		prevPowerupBallVelocity = new Vector2(pBallVelocity);
 	}
 	
+	/**
+	 * A method for handling the state of the game after the game has been
+	 * paused i.e. either resumes the game or returns to the arcade
+	 */
 	@Override
 	public void handleState(GameScreen context) {
 		context.setStatus("Press Space to Resume, Tab for Overlay or Esc to exit!");

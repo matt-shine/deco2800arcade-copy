@@ -5,6 +5,11 @@ import com.badlogic.gdx.Input.Keys;
 
 public class ReadyState extends GameState {
 
+	/**
+	 * A method for handling the state of the game before game play. 
+	 * Handles when to start the game, when the cheat code has been 
+	 * inputed correctly and when the game should be muted
+	 */
 	@Override
 	public void handleState(GameScreen context) {
 		context.setStatus("Press Space or Touch the screen to Start!");
@@ -19,7 +24,6 @@ public class ReadyState extends GameState {
 			        .getCurrentButton()]) && context.getPressed() == 1){
 				context.setCurrentButton(context.getCurrentButton() + 1);
 				context.setPressed(0);
-				System.out.println(context.getCurrentButton());
 			}
 			if (context.getSequence().length == context.getCurrentButton()) {
 				context.setCurrentButton(0);

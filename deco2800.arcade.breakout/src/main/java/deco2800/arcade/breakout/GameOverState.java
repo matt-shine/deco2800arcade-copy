@@ -6,18 +6,16 @@ import com.badlogic.gdx.Input.Keys;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class GameOverState extends GameState {
-	//private  Breakout game;
+	
+	/**
+	 * Handles when the game is over i.e. return to the arcade 
+	 */
 	@Override
 	public void handleState(GameScreen context) {
 		if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Keys.SPACE)) {
-			// gameOver();
-			// call dispose() method.
 			context.dispose();
-			// may need to change this if bumpCount becomes private
 			context.bumpCount++;
-			//ArcadeSystem.goToGame("breakout");
 			ArcadeSystem.goToGame(ArcadeSystem.UI);
-			//game.setScreen(game.MenuScreen);
 		}
 
 	}

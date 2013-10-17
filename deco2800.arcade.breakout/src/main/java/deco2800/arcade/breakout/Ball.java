@@ -257,11 +257,20 @@ public class Ball {
 		this.velocity.y *= multiplier;
 	}	
 	
+	/**
+	 * Sets the x and y velocity of the ball to be 0
+	 */
 	public void stopBall() {
 		this.velocity.x = 0;
 		this.velocity.y = 0;
 	}
 	
+	/**
+	 * Restores the balls velocity to be the same as it was
+	 * before the game was paused
+	 * @param prevVelocity - the balls velocity before the game
+	 * was paused
+	 */
 	public void resumeBall(Vector2 prevVelocity) {
 		this.velocity.x = prevVelocity.x;
 		this.velocity.y = prevVelocity.y;

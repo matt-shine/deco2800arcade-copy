@@ -273,7 +273,7 @@ public class GameScreen implements Screen  {
 			
 
 			// Render the level
-			levelSystem.render(bricks, outer, inner, this, shapeRenderer, batch);
+			levelSystem.render(bricks, this, batch);
 			getPowerupManager().renderAll(batch);
 			shapeRenderer.end();
 			shapeRenderer.begin(ShapeType.FilledCircle);

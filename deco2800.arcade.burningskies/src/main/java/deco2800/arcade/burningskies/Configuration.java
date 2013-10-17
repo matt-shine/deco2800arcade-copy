@@ -1,5 +1,7 @@
 package deco2800.arcade.burningskies;
 
+import java.util.*;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -11,6 +13,7 @@ public class Configuration {
 	private static int backgroundVolume = 50;
 	// Difficulty stored as integer from 0 to 4, with 4 being insane mode
 	private static int difficulty = 2;
+	private static Map<Long, String> highScoresMap = new TreeMap<Long, String>();
 	
 	/* 
 	 * Initialises all variables on game start up. Checks if config file exists, 
@@ -96,6 +99,31 @@ public class Configuration {
 			}
 		}
 	}
+	
+	public static void writeLocalHighScores() {
+		FileHandle scoresFile = Gdx.files.external("BurningSkies/high_scores.txt");
+		StringBuilder toWriteStrings = new StringBuilder();
+		
+		for (Map.Entry<Long, String> entry : highScoresMap.entrySet()) {
+			toWriteStrings.append(entry.getValue() + ":" + entry.getKey() + System.getProperty("line.separator"));
+		}
+		
+		scoresFile.writeString(toWriteStrings.toString(), false);
+	}
+	
+	public static void readLocalHighScores() {
+		FileHandle scoresFile = Gdx.files.external("BurningSkies/high_scores.txt");
+		String scores = scoresFile.readString();
+		
+		highScoresMap = new TreeMap<Long, String>();
+		
+		String[] scoresArray = scores.split(System.getProperty("line.separator"));
+		
+		for (int i = 0; i < scoresArray.length && i < 5; i++) {
+			String[] currentScore = scoresArray[i].split(":");
+			highScoresMap.put(Long.parseLong(currentScore[1]), currentScore[0]);
+		}
+	}
 		
 	public static int getMasterVolumeInt() {
 		return masterVolume;
@@ -135,6 +163,15 @@ public class Configuration {
 	
 	public static void setDifficulty(int difficulty) {
 		Configuration.difficulty = difficulty;
+	}
+	
+	public static void addScore(String name, long score) {
+		long inverseScore = score * -1;
+		highScoresMap.put(new Long(inverseScore), name);
+	}
+	
+	public static Map<Long, String> getScores() {
+		return highScoresMap;
 	}
 	
 }

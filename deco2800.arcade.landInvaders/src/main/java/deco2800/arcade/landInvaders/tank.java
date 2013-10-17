@@ -53,13 +53,6 @@ public class tank implements KeyListener {
 		if (key == KeyEvent.VK_RIGHT ) {
 			Mright =true;
 		}
-		
-		
-		
-		
-		
-		
-
 	}
 
 	@Override
@@ -67,29 +60,19 @@ public class tank implements KeyListener {
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_SPACE){
 			shotState = true;
-			
 		}
 		if (key == KeyEvent.VK_LEFT) {
 			Mleft =false;
-			
-			
 		}
-		
-
 		if (key == KeyEvent.VK_RIGHT ) {
-			Mright=false;
-			
+			Mright=false;	
 		}
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		
 	}
-	
-	
-	
 	
 	/**
 	 * Check input of keyboard listener and move player(tank) sprite accordingly

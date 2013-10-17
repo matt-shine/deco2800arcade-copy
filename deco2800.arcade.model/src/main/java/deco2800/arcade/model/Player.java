@@ -42,7 +42,6 @@ public class Player extends User {
     
     private LibraryStyle libraryStyle;
 
-	private Icon icon;
     
     @Deprecated
     /**
@@ -89,7 +88,7 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
+
 	}
 
 	/**
@@ -171,7 +170,7 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
+		
 	}
 
 
@@ -268,25 +267,7 @@ public class Player extends User {
 		this.program.setValue(program);
 	}
 
-	/**
-	 * Access method for the Player's icon
-	 * 
-	 * @return The Player's icon
-	 */
-	public Icon getIcon() {
-		return this.icon.clone();
-	}
-
-	/**
-	 * Sets the Player's icon that the provided icon.
-	 * 
-	 * @param icon
-	 *            The icon to set to the Player.
-	 * @require icon != null
-	 */
-	public void setIcon(Icon icon) {
-		this.icon = icon.clone();
-	}
+	
 
 	/**
 	 * Access method for player's Games set.

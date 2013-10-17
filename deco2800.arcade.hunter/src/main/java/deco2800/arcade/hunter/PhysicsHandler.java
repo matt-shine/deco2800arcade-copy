@@ -1,6 +1,5 @@
 package deco2800.arcade.hunter;
 
-import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.ForegroundLayer;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;

@@ -1,9 +1,10 @@
 package deco2800.arcade.hunter;
 
 import com.badlogic.gdx.Screen;
-
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.hunter.screens.SplashScreen;
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 
@@ -12,6 +13,9 @@ import java.util.Random;
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
 	private static PreferencesManager prefManage;
+	public HighscoreClient highscore;
+	
+	
 
 	public final static class Config {
         public final static int TILE_SIZE = 64;
@@ -38,12 +42,20 @@ public class Hunter extends PlatformerGame {
         public static PreferencesManager getPreferencesManager() {
     		return prefManage;
     	}
-    }
+	}
+	
+	private static final Game game;
+	static{
+		game = new Game();
+		game.id = "hunter";
+		game.name = "Hunter Game";
+		game.description = "A 2D platformer running game where you hunt animals before they eat you!";
+	}
 
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		prefManage = new PreferencesManager();
-		setHighScores();
+//		highscore = new HighscoreClient(player.getName(),"Hunter",networkClient);
         State.paused = false;
 	}
 
@@ -55,18 +67,6 @@ public class Hunter extends PlatformerGame {
 	 */
 	public PreferencesManager getPreferencesManager() {
 		return prefManage;
-	}
-
-
-	/**
-	 * Sets the highScores
-	 */
-	public void setHighScores() {
-		getPreferencesManager().addHighScore(100000);
-		getPreferencesManager().addHighScore(10000);
-		getPreferencesManager().addHighScore(1000);
-		getPreferencesManager().addHighScore(20000);
-		getPreferencesManager().addHighScore(2);
 	}
 
 	@Override

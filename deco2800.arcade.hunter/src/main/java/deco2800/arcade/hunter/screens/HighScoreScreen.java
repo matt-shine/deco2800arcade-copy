@@ -1,8 +1,5 @@
 package deco2800.arcade.hunter.screens;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -14,19 +11,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.hunter.Hunter;
+
+import java.util.List;
 
 public class HighScoreScreen implements Screen {
 
 	private Hunter hunter;
 	private Stage stage;
 	private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-	private static final String[] HIGH_SCORE_LIST = {"HIGHSCORE1","HIGHSCORE2","HIGHSCORE3"};
-	private HashMap<String,Integer> highScoreList;
+	private List<Highscore> topPlayers;
 	
-	private ArrayList<Integer> highscore = new ArrayList<Integer>();
 	
 	private Texture background;
 	private SpriteBatch batch;
@@ -35,16 +32,12 @@ public class HighScoreScreen implements Screen {
 		hunter = h;
 		stage= new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
-		highScoreList = hunter.getPreferencesManager().getHighScore();
 		
+		topPlayers = hunter.highscore.getGameTopPlayers(3, true, "Number");
 		Texture.setEnforcePotImages(false);
 		background = new Texture("textures/mainmenu.png");
 		batch = new SpriteBatch();
-		for(int x = 0; x <3; x++){
-			highscore.add(highScoreList.get(HIGH_SCORE_LIST[x]));
-		}
-		System.out.println(highScoreList);
-		
+
 		Table table = new Table(skin);
 		table.setFillParent(true);
 		table.padRight(600f);
@@ -59,16 +52,16 @@ public class HighScoreScreen implements Screen {
 		table.add("HighScore Menu!").colspan(2);
 		table.row();
 		
-		table.add("HighScore 1: ");
-		table.add(String.valueOf(highscore.get(0))).colspan(2);
+		table.add("HighScore 1 - " + topPlayers.get(0).playerName + " : ");
+		table.add(String.valueOf(topPlayers.get(0).score)).colspan(2);
 		table.row();
 		
-		table.add("HighScore 2: ");
-		table.add(String.valueOf(highscore.get(1))).colspan(2);
+		table.add("HighScore 2 - " + topPlayers.get(1).playerName + " : ");
+		table.add(String.valueOf(topPlayers.get(1).score)).colspan(2);
 		table.row();
 		
-		table.add("HighScore 3: ");
-		table.add(String.valueOf(highscore.get(2))).colspan(2);
+		table.add("HighScore 3 - " + topPlayers.get(2).playerName + " : ");
+		table.add(String.valueOf(topPlayers.get(2).score)).colspan(2);
 		table.row();
 		
 		TextButton backButton = new TextButton("Back to main menu", skin);

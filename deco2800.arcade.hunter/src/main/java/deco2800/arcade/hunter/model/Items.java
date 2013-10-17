@@ -1,16 +1,15 @@
 package deco2800.arcade.hunter.model;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
+
+import java.util.ArrayList;
 
 public class Items extends Entity {
 	
@@ -40,7 +39,7 @@ public class Items extends Entity {
 		super(pos, width, height);
 		this.item = item;
 		this.texture = text;
-		if (item != "DoublePoints" && item != "ExtraLife" && item != "Invulnerability"){
+		if (!item.equals("DoublePoints") && !item.equals("ExtraLife") && !item.equals("Invulnerability") && !item.equals("Coin")){
 			this.type = Type.WEAPON;
 		}else{
 			this.type = Type.POWERUP;

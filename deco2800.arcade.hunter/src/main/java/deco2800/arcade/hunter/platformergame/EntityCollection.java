@@ -1,10 +1,10 @@
 package deco2800.arcade.hunter.platformergame;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class EntityCollection implements Iterable<Entity> {
 	/**

@@ -12,9 +12,9 @@
 		<icon>yay.png</icon>
 		
 		<components>
-			<component id="hunter.played.play10sec" awardThreshold="1"></component>
-			<component id="hunter.played.play20sec" awardThreshold="1"></component>
-			<component id="hunter.played.play30sec" awardThreshold="1"></component>
+			<component id="hunter.played.play10sec" awardThreshold="1"/>
+			<component id="hunter.played.play20sec" awardThreshold="1"/>
+			<component id="hunter.played.play30sec" awardThreshold="1"/>
 		</components>
 	</achievement>
 	<achievement id="hunter.played.play10sec">

@@ -1,20 +1,18 @@
 package deco2800.arcade.hunter.model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Animal extends Entity {
 
@@ -50,13 +48,15 @@ public class Animal extends Entity {
 	
 	private GameScreen gameScreen;
 
+	private String animal;
+	
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
 			String animalType, Animation anim, GameScreen game) {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
 		currAnim = anim;
-		if (animalType =="zebra") {
+		if (animalType.equals("zebra")) {
 			hunt = Type.PREY;
 			moveSpeed = 4;
 		} else {
@@ -64,6 +64,7 @@ public class Animal extends Entity {
 			moveSpeed = -2;
 		}
 		this.gameScreen = game;
+		this.animal = animalType;
 		entities = gameScreen.getEntites();
 	}
 
@@ -114,11 +115,7 @@ public class Animal extends Entity {
 	}
 
 	public boolean isDead(){
-		if (state == State.DEAD){
-			return true;
-		}else{
-			return false;
-		}
+		return state == State.DEAD;
 	}
 	public void dead(){
 		//draw a dead animal sprite
@@ -126,6 +123,7 @@ public class Animal extends Entity {
 		moveSpeed = 0;
 		this.state = State.DEAD;
 		deathTimer = System.currentTimeMillis();
+		currAnim = gameScreen.entityHandler.getAnimalAnimation(animal + "DEAD");
 	}
 	
 	/**
@@ -139,7 +137,7 @@ public class Animal extends Entity {
 				collisions.add(new EntityCollision(this, null,
 						CollisionType.PREDATOR_C_LEFT_EDGE));
 			if (this.getBounds().overlaps(e.getBounds())){
-				if (e.getType() == "MapEntity"){
+				if (e.getType().equals("MapEntity")){
 					collisions.add(new EntityCollision(this, e, CollisionType.MAP_ENTITY_C_ANIMAL));
 				}
 			}
@@ -154,8 +152,10 @@ public class Animal extends Entity {
 	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null){
 			entities.remove(this);
-		}else if (e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() == "arrow"){
+		} else if (e.getType().equals("MapEntity") && ((MapEntity) e).getEntityType().equals("arrow") && this.state != State.DEAD){
 			this.dead();
+			gameScreen.addScore(200);
+			gameScreen.addAnimalKilled();
 			entities.remove(e);
 		}
 	}
@@ -167,11 +167,7 @@ public class Animal extends Entity {
 
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
-		if (state == State.DEAD) {
-			animLoop = false;
-		} else {
-			animLoop = true;
-		}
+        animLoop = state != State.DEAD;
 		TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
 		batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
 	}

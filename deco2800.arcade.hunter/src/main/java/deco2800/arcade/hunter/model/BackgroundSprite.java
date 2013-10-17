@@ -1,7 +1,6 @@
 package deco2800.arcade.hunter.model;
 
 import com.badlogic.gdx.math.Vector2;
-
 import deco2800.arcade.hunter.platformergame.Entity;
 
 public class BackgroundSprite extends Entity {

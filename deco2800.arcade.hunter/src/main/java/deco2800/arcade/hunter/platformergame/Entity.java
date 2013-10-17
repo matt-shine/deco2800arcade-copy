@@ -1,10 +1,10 @@
 package deco2800.arcade.hunter.platformergame;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.ArrayList;
 
 
 public abstract class Entity {

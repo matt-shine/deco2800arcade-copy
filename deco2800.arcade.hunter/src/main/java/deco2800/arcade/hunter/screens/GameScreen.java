@@ -1,7 +1,5 @@
 package deco2800.arcade.hunter.screens;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -14,20 +12,15 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import deco2800.arcade.hunter.EntityHandler;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.PhysicsHandler;
-import deco2800.arcade.hunter.model.Animal;
-import deco2800.arcade.hunter.model.BackgroundLayer;
-import deco2800.arcade.hunter.model.ForegroundLayer;
-import deco2800.arcade.hunter.model.Items;
-import deco2800.arcade.hunter.model.MapEntity;
-import deco2800.arcade.hunter.model.Player;
-import deco2800.arcade.hunter.model.SpriteLayer;
+import deco2800.arcade.hunter.model.*;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
+
+import java.util.Random;
 
 /**
  * A Hunter game for use in the Arcade
@@ -47,7 +40,7 @@ public class GameScreen implements Screen {
 	private SpriteBatch batch = new SpriteBatch();
 	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
-	private EntityHandler entityHandler;
+	public EntityHandler entityHandler;
 	private Music musicResource;
 	private float stateTime;	
 	private float counter;
@@ -83,7 +76,7 @@ public class GameScreen implements Screen {
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
 		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
 		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
-		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "DoublePoints",entityHandler.getItemTexture("DoublePoints"),this);
+		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "Invulnerability",entityHandler.getItemTexture("Invulnerability"),this);
 
 		entities.add(player);
 		hunter.incrementAchievement("hunter.beginner");
@@ -212,6 +205,14 @@ public class GameScreen implements Screen {
 		multiplier = m;
 	}
 	
+	public void addScore(int score){
+		player.addScore(score);
+	}
+	
+	public void addAnimalKilled(){
+		player.addAnimalKilled();
+	}
+	
 	public EntityCollection getEntites(){
 		return entities;
 	}
@@ -227,16 +228,16 @@ public class GameScreen implements Screen {
 	}
 	
 	private void createItems(boolean weapon){
-		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability","Bow","Spear","Trident"};
-		String item =  textures[Hunter.State.randomGenerator.nextInt(6)];
-		entities.add(new Items(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item), this));
+		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
+		String item =  textures[Hunter.State.randomGenerator.nextInt(7)];
+		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item),this));
 	}
 
 	private void pollInput() {
 		if (Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			// Attack
 			player.attack();
-			if (player.getWeapon() == "Bow" && attackTime + Config.PLAYER_ATTACK_COOLDOWN <= System.currentTimeMillis()){
+			if (player.getWeapon().equals("Bow") && attackTime + Config.PLAYER_ATTACK_COOLDOWN <= System.currentTimeMillis()){
 				entities.add(new MapEntity(new Vector2(player.getX() + player.getWidth(), player.getY()+20),8,8, "arrow", entityHandler.getMapEntity("arrow"), this));
 				attackTime = System.currentTimeMillis();
 			}
@@ -246,7 +247,7 @@ public class GameScreen implements Screen {
 			gameOver();      //TEMPORARY, DON'T FORGET TO REMOVE! TODO
 		}
 				
-		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded()) {
+		if (Gdx.input.isKeyPressed(Keys.SPACE) && player.isGrounded() && !player.isDead()) {
 			// Jump
 			player.jump();
 			Sound jump = Gdx.audio.newSound(Gdx.files.internal("jump.wav"));
@@ -324,6 +325,9 @@ public class GameScreen implements Screen {
 
 	public void gameOver(){
 		musicResource.stop();
+//		hunter.highscore.addMultiScoreItem("Distance", (int)player.getCurrentDistance());
+//		hunter.highscore.addMultiScoreItem("Number", player.getCurrentScore());
+//		hunter.highscore.sendMultiScoreItems();
 		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),player.getAnimalsKilled()));
 	}
 	

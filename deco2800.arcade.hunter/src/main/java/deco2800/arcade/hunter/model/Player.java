@@ -1,18 +1,5 @@
 package deco2800.arcade.hunter.model;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import deco2800.arcade.hunter.Hunter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,13 +7,23 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
+import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Player extends Entity {
 	/**
@@ -70,7 +67,7 @@ public class Player extends Entity {
     //States used to determine how to draw the player
 	private enum State {
 		RUNNING, JUMPING, ATTACK, FALLING, DEAD, DAMAGED
-	};
+	}
 
 	private State state = State.RUNNING;
 	private boolean invulnerable;
@@ -252,7 +249,7 @@ public class Player extends Entity {
         }
         
         if (buffTime + 3000 < System.currentTimeMillis()){
-        	if (invulnerable == true)
+        	if (invulnerable = true)
         		invulnerable = false;
         	if (multiplier != 1){
         		multiplier = 1;
@@ -274,7 +271,7 @@ public class Player extends Entity {
 			currAnim = fallAnimation();
 		}
 		
-		score += 0.4; 
+		score += 1; 
 	}
 
 	/**
@@ -343,14 +340,10 @@ public class Player extends Entity {
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
 		if (invulnerable){
-			Texture inv = new Texture("textures/Items/Invulnerability.png");
+			Texture inv = new Texture("textures/invulnerability.png");
 			batch.draw(inv,getX()-10,getY()-10,getWidth()+20,getHeight()+20);
 		}
-		if(state == State.RUNNING){
-			animLoop = true;
-		}else{
-			animLoop = false;
-		}
+        animLoop = state == State.RUNNING;
 		TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
 
         if (blink) {
@@ -358,8 +351,11 @@ public class Player extends Entity {
         } else {
             batch.setColor(1f, 1f, 1f, 1f);
         }
-		batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
-
+        if (dead){
+        	batch.draw(currFrame, getX(), getY(), getWidth()*2, getHeight()/2);
+        }else{
+        	batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
+        }
         batch.setColor(1f, 1f, 1f, 1f);
 	}
 
@@ -372,7 +368,7 @@ public class Player extends Entity {
 		Player player = this;
 		for (Entity e : entities) {
 			if (player.getBounds().overlaps(e.getBounds())) {
-				if (e.getType() == "Animal") {
+				if (e.getType().equals("Animal")) {
 					if (player.state == State.ATTACK)
 						collisions.add(new EntityCollision(player, e,
 								CollisionType.PLAYER_PROJECTILE_C_ANIMAL));
@@ -382,11 +378,11 @@ public class Player extends Entity {
 								CollisionType.WORLD_PROJECTILE_C_PLAYER));
 
 				}
-				if (e.getType() == "Items") {
+				if (e.getType().equals("Items")) {
 					collisions.add(new EntityCollision(player, e,
 							CollisionType.ITEM_C_PLAYER));
 				}
-				if (e.getType() == "MapEntity"){
+				if (e.getType().equals("MapEntity")){
 					collisions.add(new EntityCollision(player,e,CollisionType.MAP_ENTITY_C_PLAYER));
 				}
 			}
@@ -402,7 +398,7 @@ public class Player extends Entity {
 	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null) {
 			gameOver();
-		} else if (e.getType() == "Items") {
+		} else if (e.getType().equals("Items")) {
 			System.out.println(((Items) e).getItem());
 			entities.remove(e);
 			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
@@ -414,12 +410,14 @@ public class Player extends Entity {
 			}else{
 				applyPlayerBuff(((Items)e).getItem());
 			}
-		} else if (e.getType() == "Animal") {
+		} else if (e.getType().equals("Animal")) {
 			if (getState() == State.ATTACK){
 				score = score + 200*multiplier;
-				animalsKilled++;
 				((Animal)e).dead();
-			} else {
+				if(!((Animal)e).isDead()){
+					animalsKilled++;
+				}
+			}else{
 				if (!invulnerable && !blink && !((Animal)e).isDead()) {
 					if (Hunter.State.getPreferencesManager().isSoundEnabled()){
 						hurt.play(Hunter.State.getPreferencesManager().getVolume());
@@ -430,7 +428,7 @@ public class Player extends Entity {
 					checkLives();
 				}
 			}
-		} else if(e.getType() == "MapEntity" && ((MapEntity)e).getEntityType() != "arrow"){
+		} else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")){
 			if (!invulnerable && !blink){
 				if (Hunter.State.getPreferencesManager().isSoundEnabled()){
 					hurt.play(Hunter.State.getPreferencesManager().getVolume());
@@ -459,23 +457,38 @@ public class Player extends Entity {
 		}
 	}
 
+	public boolean isDead(){
+		return dead;
+	}
+	
+	public void addAnimalKilled(){
+		animalsKilled++;
+	}
+	
+	public void addScore(int score){
+		this.score += score * multiplier;
+	}
+	
 	/**
 	 * Applies the buffs that the player receives
 	 * @param item - String of item to be applied
 	 */
 	private void applyPlayerBuff(String item) {
-		if (item == "DoublePoints"){
+		if (item.equals("DoublePoints")){
 			multiplier = multiplier * 2;
 			gamescreen.setMultiplier(multiplier);
 			buffTime = System.currentTimeMillis();
 		}
 			
-		if (item == "ExtraLife"){
+		if (item.equals("ExtraLife")){
 			addLife();
 		}
-		if (item == "Invulnerability"){
+		if (item.equals("Invulnerability")){
 			invulnerable = true;
 			buffTime = System.currentTimeMillis();
+		}
+		if (item.equals("Coin")){
+			score += 500;
 		}
 	}
 
@@ -575,15 +588,15 @@ public class Player extends Entity {
         		if (weaponAmmo <= 0){
         			Weapon = "KnifeandFork";
         		}
-        		if (Weapon == "KnifeandFork"){
+        		if (Weapon.equals("KnifeandFork")){
         			attackTime -= 200;
         			cooldownModifier = 0;
-        		}else if(Weapon == "Trident"){
+        		}else if(Weapon.equals("Trident")){
         			cooldownModifier = 100;
-        		}else if(Weapon == "Spear"){
+        		}else if(Weapon.equals("Spear")){
         			attackTime += 100;
         			cooldownModifier = -200;
-        		}else if (Weapon == "Bow"){
+        		}else if (Weapon.equals("Bow")){
         			cooldownModifier = 0;
         		}
         	}
@@ -599,7 +612,7 @@ public class Player extends Entity {
 	}
 	
 	public int getWeaponAmmo(){
-		if (Weapon != "KnifeandFork"){
+		if (!Weapon.equals("KnifeandFork")){
 			return weaponAmmo;
 		}else{
 			return 0;

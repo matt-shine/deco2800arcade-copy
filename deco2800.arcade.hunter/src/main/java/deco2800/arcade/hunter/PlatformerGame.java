@@ -2,7 +2,6 @@ package deco2800.arcade.hunter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;

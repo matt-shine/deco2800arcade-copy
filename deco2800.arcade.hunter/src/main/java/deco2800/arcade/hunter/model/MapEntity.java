@@ -1,16 +1,15 @@
 package deco2800.arcade.hunter.model;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
 import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.platformergame.EntityCollision;
 import deco2800.arcade.hunter.platformergame.EntityCollision.CollisionType;
 import deco2800.arcade.hunter.screens.GameScreen;
+
+import java.util.ArrayList;
 
 public class MapEntity extends Entity{
 
@@ -27,7 +26,7 @@ public class MapEntity extends Entity{
 	public MapEntity(Vector2 pos, float width, float height, String file,Texture texture , GameScreen game){
 		super(pos, width, height);
 		this.text = texture;
-		if (file == "arrow"){
+		if (file.equals("arrow")){
 			moveSpeed = 20;
 		}else{
 			moveSpeed = 0;
@@ -56,7 +55,7 @@ public class MapEntity extends Entity{
 			if (this.getX() <= 0)
 				collisions.add(new EntityCollision(this, null,
 						CollisionType.MAP_ENTITY_C_LEFT_EDGE));
-			if (e.getType() == "Animal"){
+			if (e.getType().equals("Animal")){
 				collisions.add(new EntityCollision(this,e,CollisionType.MAP_ENTITY_C_ANIMAL));
 			}
 		}

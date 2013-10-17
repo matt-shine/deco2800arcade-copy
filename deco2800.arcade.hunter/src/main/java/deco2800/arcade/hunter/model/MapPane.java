@@ -3,7 +3,6 @@ package deco2800.arcade.hunter.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import deco2800.arcade.hunter.Hunter.Config;
 
 public class MapPane {

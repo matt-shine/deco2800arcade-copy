@@ -1,18 +1,20 @@
 package deco2800.arcade.hunter.model;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
 import deco2800.arcade.hunter.model.MapPane.MapType;
 import deco2800.arcade.hunter.screens.GameScreen;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ForegroundLayer extends Map {
 	private ArrayList<MapPane> panes;

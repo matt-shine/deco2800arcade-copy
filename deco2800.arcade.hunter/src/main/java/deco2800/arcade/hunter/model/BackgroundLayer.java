@@ -3,14 +3,13 @@ package deco2800.arcade.hunter.model;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import com.badlogic.gdx.math.Vector3;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.screens.GameScreen;
 
 public class BackgroundLayer extends Map {
 
-	TextureRegion background = new TextureRegion(new Texture("textures/background.png"));
+	private TextureRegion background = new TextureRegion(new Texture("textures/background.png"));
 	private GameScreen gamescreen;
 
 

@@ -64,11 +64,11 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		final TextField searchField = new TextField("", skin);
 		final Button searchButton = new Button(skin, "search");
+		final Label searchResult = new Label("", skin);
 		final TextButton libraryButton = new TextButton("Library", skin);
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
 		final TextButton reviewsButton = new TextButton("Reviews", skin);
-		final Label searchResult = new Label("", skin);
 		
 		populateGamesBox(stage, skin);
 		
@@ -140,7 +140,8 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		wishlistButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Wishlist clicked");
+				dispose();
+				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
 			}
 		});
 		
@@ -152,7 +153,7 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
-				Game result = search(searchField.getText());
+				Game result = Utilities.helper.search(searchField.getText());
 				if (result == null) {
 					searchResult.setText("No results.");
 					return;
@@ -170,7 +171,7 @@ public class StoreHome implements Screen, StoreScreen {
 		searchButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
-					setSelected(search(searchResult.getText() + "").id);
+					setSelected(Utilities.helper.search(searchResult.getText() + "").id);
 					dispose();
 					arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
 				} catch (Exception e) {
@@ -312,45 +313,6 @@ public class StoreHome implements Screen, StoreScreen {
 		featured_bg.setColor(1, 1, 1, Math.abs(fade) / 30);
 		featured_icon.setColor(1, 1, 1, Math.abs(fade) / 30);
 		// fade out icon
-	}
-	
-	/**
-	 * This method will return the game with the name that matches most closely.
-	 * 
-	 * @author Addison Gourluck
-	 * @param String input
-	 * @return Game
-	 */
-	private Game search(String input) {
-		if (input.length() <= 2) {
-			return null; // No searches for 0, 1 or 2 chars.
-		}
-		input = input.toLowerCase();
-		// Check if the input is a substring of a game.
-		for (Game game : ArcadeSystem.getArcadeGames()) {
-			if (game.name.toLowerCase().contains(input)
-					|| game.id.toLowerCase().contains(input)) {
-				return game;
-			}
-		}
-		if (input.length() > 6) {
-			input = input.substring(0, 6); // crop to first 6 chars for regex.
-		}
-		// If no results are produced yet, get desperate. Proceed to look
-		// for a game that includes search, with 1 wrong/missing char.
-		String regex;
-		for (Game game : ArcadeSystem.getArcadeGames()) {
-			for (int i = 0; i < input.length(); ++i) {
-				// Super duper awesome regex, that will find any combination of
-				// the string, with 1 letter missing or wrong. Really cool.
-				regex = "(.*)" + input.substring(0, i) + "(.?)"
-						+ input.substring(i + 1, input.length()) + "(.*)";
-				if (game.name.toLowerCase().matches(regex)) {
-					return game;
-				}
-			}
-		}
-		return null; // No results at all.
 	}
 	
 	@Override

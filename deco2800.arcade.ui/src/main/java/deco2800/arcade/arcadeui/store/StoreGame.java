@@ -66,7 +66,7 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		// Title of the featured game, located center of screen.
 		gameTitle.setSize(380, 40);
-		gameTitle.setPosition(96, 513);
+		gameTitle.setPosition(96, 515);
 		stage.addActor(gameTitle);
 		
 		// Main text body, located in center of screen.
@@ -150,7 +150,9 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		wishButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("wish");
+				System.out.println("wishlist");
+				//dispose();
+				//arcadeUI.setScreen(new StoreWishlist(arcadeUI));
 			}
 		});
 		

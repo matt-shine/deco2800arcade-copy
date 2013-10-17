@@ -81,6 +81,7 @@ public class Ghost extends Mover {
 		
 		int spritePos = 3;
 		facing = getDirection(currentTile);
+		targetTile = getTargetTile();
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -196,9 +197,9 @@ public class Ghost extends Mover {
 		int currentX = currentPoint.getX();
 		int currentY = currentPoint.getY();
 		
-		int upY = currentY + 1;
+		int upY = currentY - 1;
 		int leftX = currentX - 1;
-		int downY = currentY - 1;
+		int downY = currentY + 1;
 		int rightX = currentX + 1;
 		
 		Tile upTile = gameMap.getGrid()[currentX][upY];

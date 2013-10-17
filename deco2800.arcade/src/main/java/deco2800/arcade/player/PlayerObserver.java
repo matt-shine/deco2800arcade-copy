@@ -23,7 +23,9 @@ public class PlayerObserver implements Observer {
 	private NameUpdateRequest nameUpdateRequest;
 	private ProgramUpdateRequest programUpdateRequest;
 	private UsernameUpdateRequest usernameUpdateRequest;
+    private LibraryStyleUpdateRequest libraryStyleUpdateRequest;
 	private AgeUpdateRequest ageUpdateRequest;
+
 	private static NetworkClient networkClient;
 
 	/**
@@ -151,7 +153,15 @@ public class PlayerObserver implements Observer {
 					networkClient.sendNetworkObject(ageUpdateRequest);
 				}
 
-			}
+			} else if (object instanceof LibraryStyle) {
+                LibraryStyle libraryStyle = (LibraryStyle) object;
+
+                libraryStyleUpdateRequest = new LibraryStyleUpdateRequest();
+                libraryStyleUpdateRequest.view = libraryStyle.getLayout();
+                libraryStyleUpdateRequest.colour = libraryStyle.getColourScheme();
+                networkClient.sendNetworkObject(libraryStyleUpdateRequest);
+
+            }
 		}
 
 	}

@@ -13,6 +13,7 @@ import com.esotericsoftware.tablelayout.BaseTableLayout;
 import deco2800.arcade.arcadeui.store.GameStore;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.arcadeui.FrontPage;
 
 public class LoginScreen implements Screen {
 
@@ -77,26 +78,27 @@ public class LoginScreen implements Screen {
                 if (usernameText.getText().equals("")) {
                     // no username entered, throw error
                     errorLabel.setText("No Username Supplied");
-                }
-                else if (usernameText.getText().toLowerCase().equals("store")) {
+                //}
+                //else if (usernameText.getText().toLowerCase().equals("store")) {
                     // TEMPORARY
-                    arcadeUI.setScreen(new GameStore());
-                }
-                else if (usernameText.getText().toLowerCase().equals("home")) {
-                    // TEMPORARY
-                    arcadeUI.setScreen(arcadeUI.main);
+                //    arcadeUI.setScreen(new GameStore());
+                //}
+                //else if (usernameText.getText().toLowerCase().equals("home")) {
+
+                
                 }
                 else if (usernameText.getText().toLowerCase().equals("multi")) {
                 	arcadeUI.setScreen(arcadeUI.lobby);
                 }
-                else if (usernameText.getText().toLowerCase().equals("games")) {
+                //else if (usernameText.getText().toLowerCase().equals("games")) {
                     // TEMPORARY
-                    ArcadeSystem.login(usernameText.getText());
-                    ArcadeSystem.goToGame("gamelibrary");
-                }
+                //    ArcadeSystem.login(usernameText.getText());
+                //    ArcadeSystem.goToGame("gamelibrary");
+
+                //}
                 else {
-                    ArcadeSystem.login(usernameText.getText());
-                    arcadeUI.setScreen(arcadeUI.home);
+            	FrontPage.setName(usernameText.getText());
+            	arcadeUI.setScreen(arcadeUI.main);
                 }
             }
         });

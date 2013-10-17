@@ -231,6 +231,8 @@ public class AccoladeSystem {
 		}
 		
 		public void run(){
+			//TODO add a function that allows the developers to do a manual push 
+			// before their variable is reset (say the player dies and their score is reset to zero
 			int newValue = Integer.valueOf((String)this.variable);
 			//push different if more, or push full value if lower
 			if( newValue > this.prevValue){

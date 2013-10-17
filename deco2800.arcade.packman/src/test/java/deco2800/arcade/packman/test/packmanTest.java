@@ -20,17 +20,22 @@ public class packmanTest {
 	}
 */	
 	@Test
-	public void Test() {
+	public void test() {
 		assertEquals(1,1);
 	}
 	
 	@Test
+	public void MD5TestNotNull() {
+		assertTrue(PackageUtils.genMD5("test.txt") != null);
+	}
+	
+	@Test
 	public void MD5Test() {
-		assertTrue(PackageUtils.genMD5("games.txt") != null);
+		assertEquals(PackageUtils.genMD5("test.txt"), "016FD69CDBF285D51490D1FF753B7436");
 	}
 	
 /**	@Test
-	public void CompressionTest() {	
+	public void compressionTest() {	
 		PackCompress.Compress("slf4j-api-1.7.5.jar", "test1.tar.gz");
 		PackCompress.Expand("test1.tar.gz", "test2.jar");
 		BufferedReader bfr2 = new BufferedReader(new InputStreamReader(

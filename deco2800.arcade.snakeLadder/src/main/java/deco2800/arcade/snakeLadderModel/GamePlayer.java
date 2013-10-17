@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-//import deco2800.arcade.snakeLadderModel.Dice;
 
 
 
@@ -18,27 +17,26 @@ public class GamePlayer {
 	private Texture playerTexture;
 	private String playerName;
 	//private int coordinate=-1;
-	private int coordinate=0;
+	private int positionIndex=0;
 	//private int[] scores = new dint[2];
 	private int score;
 	private Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the playerTexture
 	private Vector2 velocity = new Vector2(); // The current velocity of the playerTexture as x,y
+	private boolean isAI;
 	
-	
-	public GamePlayer()
-	{
-	}
 	
 	/**
 	 * Basic constructor for playerTexture. Set position and dimensions to the default
+	 * @param isAI TODO
 	 */
-	public GamePlayer(String playerName) {
+	public GamePlayer(String playerName, boolean isAI) {
 		getBounds().x = 0;
 		getBounds().y = 0;
 		getBounds().height = WIDTH;
 		getBounds().width = WIDTH;
 		score = 0; //initial score of the playerTexture
 		this.playerName = playerName;
+		this.isAI = isAI;
 	}
 
 	public Rectangle getBounds() {
@@ -97,7 +95,7 @@ public class GamePlayer {
 	
     /**
      * Render the playerTexture.
-     * @param 
+     *  
      */
     public void renderPlayer(SpriteBatch batch)
     {
@@ -120,32 +118,24 @@ public class GamePlayer {
 	}
     
    public int getDnumber(int diceNumber){
-    	coordinate+=diceNumber;
-    	if(coordinate>=100)
+    	positionIndex+=diceNumber;
+    	if(positionIndex>=99)
     	{
-    		coordinate=100;
+    		positionIndex=99;
     	}
-    	return coordinate;
+    	return positionIndex;
     }
    
    public int newposition()
    {
-	   return coordinate;
+	   return positionIndex;
    }
    public int setNewPosition(int newpoint)
    {
-	   coordinate=newpoint;
-	   return coordinate;
+	   positionIndex=newpoint;
+	   return positionIndex;
    }
-   /*
-   public void score(int winner){
-		scores[winner]++;
-	}
-
-	public void initialScore(){
-		scores[0] = 0;
-		scores[1] = 0;
-	}*/
+   
    
    /**
     * Calling the score of this playerTexture
@@ -179,6 +169,14 @@ public class GamePlayer {
 	}
 	public Vector2 getVelocity() {
 		return velocity;
+	}
+
+	public boolean isAI() {
+		return isAI;
+	}
+
+	public void setAI(boolean isAI) {
+		this.isAI = isAI;
 	}
 
 }

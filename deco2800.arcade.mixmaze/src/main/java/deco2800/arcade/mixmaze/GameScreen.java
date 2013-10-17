@@ -31,6 +31,9 @@ import static deco2800.arcade.mixmaze.TileViewModel.*;
 abstract class GameScreen implements Screen {
 
 	final Logger logger = LoggerFactory.getLogger(GameScreen.class);
+	
+	static TextureRegion p1HeadRegion;
+	static TextureRegion p2HeadRegion;
 
 	protected final Stage stage;
 	protected final ShapeRenderer renderer;
@@ -51,14 +54,17 @@ abstract class GameScreen implements Screen {
 
 	protected final MixMaze game;
 	private final Skin skin;
-	
-	protected  int[] p1Controls = {Keys.G,Keys.H,Keys.W,Keys.A,Keys.S,Keys.D};
-	protected int[] p2Controls = {Keys.O,Keys.P,Keys.UP,Keys.LEFT,Keys.DOWN,Keys.RIGHT};
+
+	protected int[] p1Controls = { Keys.G, Keys.H, Keys.W, Keys.A, Keys.S,
+			Keys.D };
+	protected int[] p2Controls = { Keys.O, Keys.P, Keys.UP, Keys.LEFT,
+			Keys.DOWN, Keys.RIGHT };
 
 	/**
 	 * Constructor
-	 *
-	 * @param game	the MixMaze game
+	 * 
+	 * @param game
+	 *            the MixMaze game
 	 */
 	GameScreen(MixMaze game) {
 		this.game = game;
@@ -114,12 +120,12 @@ abstract class GameScreen implements Screen {
 		root.add(right);
 
 		/*
-		 * gameBoard has two layers. The bottom one is
-		 * the tileTable and the top is gameArea.
-		 *
-		 * gameArea is used as a place holder as Stack
-		 * always places its children at (0, 0), but
-		 * children of gameArea can move freely in stage.
+		 * gameBoard has two layers. The bottom one is the tileTable and the top
+		 * is gameArea.
+		 * 
+		 * gameArea is used as a place holder as Stack always places its
+		 * children at (0, 0), but children of gameArea can move freely in
+		 * stage.
 		 */
 		gameBoard.add(tileTable);
 		gameBoard.add(gameArea);
@@ -185,7 +191,8 @@ abstract class GameScreen implements Screen {
 	/**
 	 * Sets up the timers for a game session.
 	 * 
-	 * @param timeLimit	the time limit of this session
+	 * @param timeLimit
+	 *            the time limit of this session
 	 */
 	protected abstract void setupTimer(int timeLimit);
 
@@ -328,14 +335,15 @@ abstract class GameScreen implements Screen {
 		};
 
 	}
-	
-	 class Settings{		 
-		public Settings(int[] innerP1Controls,int[] innerP2Controls){
+
+	public class Settings {
+		public Settings(int[] innerP1Controls, int[] innerP2Controls) {
 			p1Controls = innerP1Controls;
 			p2Controls = innerP2Controls;
 		}
-		public Settings(){
-			
+
+		public Settings() {
+
 		}
 	}
 }

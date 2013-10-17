@@ -83,7 +83,6 @@ public class MenuScreen implements Screen {
 		 */
 		tex = new Texture(Gdx.files.classpath("imgs/button.png"));
 		TextureRegion[][] tmp = TextureRegion.split(tex, 130, 45);
-<<<<<<< HEAD
 
 		/*
 		 * set the new game button
@@ -216,7 +215,7 @@ public class MenuScreen implements Screen {
 		stage.addActor(quitbutton);
 		stage.addActor(helpbutton);
 
-=======
+
 		
 		//new game
 	    newgamebuttonUp = tmp[0][0];
@@ -303,7 +302,7 @@ public class MenuScreen implements Screen {
 	       //stage.addActor(rankingbutton);
 	       stage.addActor(helpbutton);
 		
->>>>>>> fixed quitting errors and 'stolen listener' problem
+
 	}
 
 	@Override
@@ -315,12 +314,12 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void hide() {
-<<<<<<< HEAD
+
 		// TODO Auto-generated method stub
 
-=======
+
 		ArcadeInputMux.getInstance().removeProcessor(stage);		
->>>>>>> fixed quitting errors and 'stolen listener' problem
+
 	}
 
 	@Override
@@ -360,12 +359,12 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-<<<<<<< HEAD
+
 		Gdx.input.setInputProcessor(stage);
 
-=======
+
 		ArcadeInputMux.getInstance().addProcessor(stage);		
->>>>>>> fixed quitting errors and 'stolen listener' problem
+
 	}
 
 }

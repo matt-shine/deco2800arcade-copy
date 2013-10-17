@@ -104,7 +104,7 @@ public class GamePlayer {
     
     public void initializeVelocity() {  	
 		// if it is even row
-		if (getBounds().y % 120 == 0)
+		if (((this.positionIndex-1)/10)%2 == 0)
 		{
 			// the vector of x-velocity goes to right direction 
 			getVelocity().x = 60;

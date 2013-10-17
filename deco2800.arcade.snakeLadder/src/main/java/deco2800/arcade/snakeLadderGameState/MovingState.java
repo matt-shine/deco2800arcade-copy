@@ -45,9 +45,17 @@ public class MovingState extends GameState {
 				}
 		}
 
-		//If the player reaches the end of each line , move up to another line
-		if ((gamePlayer.getBounds().x >= (600-20f) || gamePlayer.getBounds().x <=0))
+		//If the player reaches the right end of each line , move up to another line
+		if (gamePlayer.getBounds().x >= (600-20f))
 		{
+			gamePlayer.getBounds().x -= 0.1;
+			gamePlayer.moveUp();
+		}
+		
+		//If the player reaches the left end of each line , move up to another line
+		if(gamePlayer.getBounds().x <=0)
+		{
+			gamePlayer.getBounds().x += 0.1;
 			gamePlayer.moveUp();
 		}
 		

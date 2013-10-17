@@ -44,7 +44,7 @@ public class SplashScreen extends AbstractScreen {
 
 			
 		};
-		Tween.to(splashSpr, SpriteTween.ALPHA, 1.5f).target(1).ease(TweenEquations.easeInQuad).repeatYoyo(1, 2.5f).
+		Tween.to(splashSpr, SpriteTween.ALPHA, 0.6f).target(1).ease(TweenEquations.easeInQuad).repeatYoyo(1, 1.6f).
 				setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 		
 		//Version for use with Scene2d

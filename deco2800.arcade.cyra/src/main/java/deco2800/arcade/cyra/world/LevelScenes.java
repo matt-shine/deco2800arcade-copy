@@ -1,5 +1,6 @@
 package deco2800.arcade.cyra.world;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.model.CutsceneObject;
 import deco2800.arcade.cyra.model.MovableEntity;
@@ -20,11 +21,14 @@ public abstract class LevelScenes {
 	}
 	
 	public boolean isPlaying() {
+		
 		return isPlaying;
 	}
 	
 	public abstract Array<Object> start(int scenePosition, float rank, int time);
 	public abstract boolean update(float delta);
 	public abstract float[] getStartValues();
+	public abstract Vector2 getPlayerReloadPosition(int scene);
+	public abstract int getScenePositionAfterReload(int scene);
 	//public abstract boolean isPlaying();
 }

@@ -134,6 +134,7 @@ public class Player extends MovableEntity{
 			doubleTapTime = 0.2f;
 		}
 		bounceBack(false);
+		System.out.println("telling to move right");
 	}
 	
 	public void moveLeft() {
@@ -180,6 +181,9 @@ public class Player extends MovableEntity{
 	
 	public void decrementHearts() {
 		hearts--;
+		if (hearts <= 0 ){
+			state = State.DEATH;
+		}
 		return;
 	}
 	
@@ -289,6 +293,15 @@ public class Player extends MovableEntity{
 		//position.add(tmp1.mul(Gdx.graphics.getDeltaTime()));
 		//System.out.println(velocity.x);
 		//System.out.println("Velocity before scl " + velocity.x+","+velocity.y);
+		//System.out.println("BEFORE State="+state+" canMove="+canMove+" velocity="+velocity + "position="+position);
+		if (state == State.DEATH){
+			if (facingRight && rotation < 90) {
+				rotation += Gdx.graphics.getDeltaTime() * 10;
+			} else if (!facingRight && rotation > -90){
+				rotation -= Gdx.graphics.getDeltaTime() * 10;
+			}
+			return;
+		}
 		
 		Vector2 deltaNextPos = velocity.mul(Gdx.graphics.getDeltaTime());
 		if(canMove) {
@@ -372,5 +385,7 @@ public class Player extends MovableEntity{
 		if (doubleTapTime > 0f) {
 			doubleTapTime -= Gdx.graphics.getDeltaTime();
 		}
+		//System.out.println("AFTER State="+state+" canMove="+canMove+" velocity="+velocity+ "position="+position);
+		
 	}
 }

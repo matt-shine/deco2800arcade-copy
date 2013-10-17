@@ -110,4 +110,14 @@ public class Level1Scenes extends LevelScenes{
 	public boolean isPlaying() {
 		return isPlaying;
 	}
+	
+	@Override
+	public Vector2 getPlayerReloadPosition(int scene) {
+		return new Vector2(6,6);
+	}
+
+	@Override
+	public int getScenePositionAfterReload(int scene) {
+		return 0;
+	}
 }

@@ -27,6 +27,7 @@ public class World {
 	public static final float WORLD_HEIGHT = 60f;
 	public static final float PLAYER_INIT_X = 20f;
 	public static final float GAME_INIT_X = 602.5f;
+	public static final int DEFAULT_LIVES = 3;
 	
 	private AchievementsTracker at = new AchievementsTracker();
 	
@@ -42,6 +43,8 @@ public class World {
 	private ParallaxCamera cam;
 	private ResultsScreen resultsScreen;
 	private int score;
+	private int lives;
+	private Vector2 respawnPosition;
 	
 	public float rank;
 	private Level curLevel;
@@ -49,6 +52,7 @@ public class World {
 	private InputHandler inputHandler;
 	
 	private float time;
+	private float count;
 	private boolean isPaused;
 	private int scenePosition;
 	private boolean callingInitAfterReloadLevel;
@@ -73,7 +77,7 @@ public class World {
 		Sounds.loadAll();
 		callingInitAfterReloadLevel = false;
 		initCount = 2.5f;
-		init();
+		init(true);
 		//hardcode
 				if(level == 1) {
 					levelScenes = new Level1Scenes(ship, cam, resultsScreen);
@@ -165,9 +169,9 @@ public class World {
 		if( (int)(ship.getNextPos().x) < 2)
 			ship.setCanMove(false);
 		// Check if sprite has gone out of level bounds to the bottom.
-		if( (int)(ship.getPosition().y) < -1 ) {
+		/*if( (int)(ship.getPosition().y) < -1 ) {
 			resetLevel();
-		}
+		}*/
 		if( (int)(ship.getPosition().x)-1 < -1 ) {
 			
 		}
@@ -179,17 +183,35 @@ public class World {
 			}
 		}
 		// Reset if health = 0
-		if( ship.getHearts() == 0 ) {
-			resetLevel();
+		if( ship.getHearts() == 0 || ship.getPosition().y < -3) {
+			/*if (--lives == 0) {
+				gameOver();
+			} else {
+				resetLevel();
+			}*/
+			//ship.setState(Player.State.DEATH);
+			count -= Gdx.graphics.getDeltaTime();
+			if (count <= 0) {
+				if (--lives == 0) {
+					gameOver();
+				} else {
+					resetLevel();
+				}
+			}
+			System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
+			inputHandler.cancelInput();
+		} else {
+			inputHandler.acceptInput();
 		}
 
-		if (!callingInitAfterReloadLevel) {
+		/*if (!callingInitAfterReloadLevel) {
 			initCount -= Gdx.graphics.getDeltaTime();
 			if (initCount <0) {
 				resetLevel();
 				Sounds.setSoundEnabled(true);
 			}
-		}
+		}*/
+		Sounds.setSoundEnabled(true);
 		
 		updateBlockMakers();
 		
@@ -728,6 +750,10 @@ public class World {
 		return score;
 	}
 	
+	public int getLives() {
+		return lives;
+	}
+	
 	public ResultsScreen getResultsScreen() {
 		return resultsScreen;
 	}
@@ -741,13 +767,14 @@ public class World {
 	
 	
 	/* ----- Setter methods ----- */
-	public void init() {
+	public void init(boolean completeInit) {
 		
-		
+		count = 3f;
 		at.printStats();
 		
 		//Sounds.playBossMusic();
-		time = 0;
+		
+		
 		firstUpdate = true;
 		//ship = new Ship(new Vector2(220f, 60));
 		
@@ -760,13 +787,19 @@ public class World {
 		movablePlatforms = new Array<MovablePlatform>();
 		blockMakers = new Array<BlockMaker>();
 		//resetCamera();
-
-		if (callingInitAfterReloadLevel) {
+		if (completeInit) {
+			time = 0;
+			score = 0;
+			lives = DEFAULT_LIVES;
+		//if (callingInitAfterReloadLevel) {
 			scenePosition = 0;
 			ship = new Player(new Vector2(PLAYER_INIT_X, 6));
+		//} else {
+		//	ship = new Player(new Vector2(GAME_INIT_X, 6));
+		//	scenePosition = 4;
+		//}
 		} else {
-			ship = new Player(new Vector2(GAME_INIT_X, 6));
-			scenePosition = 4;
+			ship = new Player(respawnPosition);
 		}
 		resultsScreen = new ResultsScreen();
 		
@@ -787,6 +820,7 @@ public class World {
 		
 		//addStaticEnemies();
 		
+		
 		return;
 	}
 	
@@ -794,6 +828,10 @@ public class World {
 
 	public void resetLevel() {
 		at.addToTime( (int)time );
+		
+		respawnPosition = new Vector2(levelScenes.getPlayerReloadPosition(scenePosition));
+		scenePosition = levelScenes.getScenePositionAfterReload(scenePosition);
+		
 		
 		ship = null;
 		sword = null;
@@ -803,15 +841,18 @@ public class World {
 		movablePlatforms = null;
 		levelScenes = null;
 		cam.setFollowShip(true);
+		inputHandler.acceptInput();
 
 		curLevel.reloadLevel();
-		callingInitAfterReloadLevel = true;
-		init();
+		//callingInitAfterReloadLevel = true;
+		init(false);
 		levelScenes = new Level2Scenes(ship, cam, resultsScreen);
 		return;
 	}
 	
-	
+	public void gameOver() {
+		// go back to menu
+	}
 	
 	public void dispose() {
 		

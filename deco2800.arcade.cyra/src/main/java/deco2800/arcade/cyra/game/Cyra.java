@@ -67,9 +67,9 @@ public class Cyra extends GameClient {
 		super.create();
 		//setScreen(new MainMenu(this));
 		//Set to splash screen
-		setScreen(getSplashScreen());
+		//setScreen(getSplashScreen());
 		//OR go straight to the action
-		//setScreen(new GameScreen(this));
+		setScreen(new GameScreen(this, 0.71f));
 		
 		
 	}

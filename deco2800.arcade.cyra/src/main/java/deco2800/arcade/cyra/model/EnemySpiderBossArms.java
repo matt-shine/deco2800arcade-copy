@@ -18,8 +18,8 @@ public class EnemySpiderBossArms extends Enemy {
 	private static final float PARENT_OFFSET_Y = 4.35f;
 	private static final float PHASE2_OFFSET_X = 5.4f;
 	private static final float PHASE2_OFFSET_Y = 4.35f;
-	private static final float PHASE3_OFFSET_X = 7f;
-	private static final float PHASE3_OFFSET_Y = 7f;
+	private static final float PHASE3_OFFSET_X = 5f;
+	private static final float PHASE3_OFFSET_Y = 5f;
 	public static final float PHASE3_SCALE = 2.5f;
 	
 	

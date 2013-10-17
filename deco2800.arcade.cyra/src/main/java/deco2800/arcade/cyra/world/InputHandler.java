@@ -32,13 +32,17 @@ public class InputHandler implements InputProcessor{
 	
 	@Override
 	public boolean keyDown(int keycode) {
+		
 		switch(keycode){
 			case Keys.LEFT:
 				if (acceptInput) ship.moveLeft();
 				break;
 
 			case Keys.RIGHT:
-				if (acceptInput) ship.moveRight();
+				if (acceptInput) {
+					System.out.println("telling ship to move right from InputHandler");
+					ship.moveRight();
+				}
 				break;
 
 			case Keys.Z:

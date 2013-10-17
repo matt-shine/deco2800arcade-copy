@@ -53,7 +53,7 @@ public class InProgressState extends GameState {
 		}
 		
 		if (Gdx.input.isKeyPressed(Keys.P)) {
-			context.pause();
+			context.inGamePause();
 		}
 		
 		if (Gdx.input.isKeyPressed(Keys.M)) {

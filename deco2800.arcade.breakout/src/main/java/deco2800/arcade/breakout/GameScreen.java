@@ -330,7 +330,6 @@ public class GameScreen implements Screen  {
 		setStatus(null);
 		gameState = new InProgressState();
 		setStatus(null);
-
 	}
 	 /**
 	 * Adds the remaining lives as a score and checks whether any achievement
@@ -439,15 +438,30 @@ public class GameScreen implements Screen  {
 		
 	}
 
-//	public void inGamePause() {
-//		while(!Gdx.input.isKeyPressed(Keys.R)) {
-//			try {
-//				Thread.currentThread().sleep(1000);
-//			} catch(Exception e) {
-//				
-//			}
-//		}
-//	}
+	public void inGamePause() {
+		Vector2 prevBallVelocity = new Vector2(0,0);
+		Vector2 prevPowerupBallVelocity = new Vector2(0,0);
+		if (getBall() != null) {
+			prevBallVelocity = new Vector2(getBall().velocity);
+			getBall().stopBall();
+		}
+		if (getPowerupBall() != null) {
+			prevPowerupBallVelocity = new Vector2(getPowerupBall().velocity);
+			getPowerupBall().stopBall();
+		}
+		gameState = new PauseState(this, prevBallVelocity, prevPowerupBallVelocity);
+	}
+	
+	public void inGameUnpause(Vector2 prevVelocity, Vector2 prevPowerupBallVelocity) {
+		setStatus(null);
+		if (getBall() != null) {
+			getBall().resumeBall(prevVelocity);
+		}
+		if (getPowerupBall() != null) {
+			getPowerupBall().resumeBall(prevPowerupBallVelocity);
+		}
+		gameState = new InProgressState();
+	}
 	
 	@Override
 	public void resize(int width, int height) {

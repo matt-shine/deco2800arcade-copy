@@ -114,6 +114,14 @@ public class Ball {
 	public float getXVelocity() {
 		return this.velocity.x;
 	}
+	
+	/**
+	 * 
+	 * @return the velocity as a vector
+	 */
+	public Vector2 getVelocity() {
+		return this.velocity;
+	}
 
 	/**
 	 * 
@@ -248,4 +256,14 @@ public class Ball {
 		this.multiplier = 0.7f;
 		this.velocity.y *= multiplier;
 	}	
+	
+	public void stopBall() {
+		this.velocity.x = 0;
+		this.velocity.y = 0;
+	}
+	
+	public void resumeBall(Vector2 prevVelocity) {
+		this.velocity.x = prevVelocity.x;
+		this.velocity.y = prevVelocity.y;
+	}
 }

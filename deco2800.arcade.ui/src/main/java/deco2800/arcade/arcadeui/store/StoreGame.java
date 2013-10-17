@@ -32,7 +32,8 @@ public class StoreGame implements Screen, StoreScreen {
 	
 	/**
 	 * @author Addison Gourluck
-	 * @param ui
+	 * @param ArcadeUI ui
+	 * @param Game featuredGame
 	 */
 	public StoreGame(ArcadeUI ui, Game featuredGame) {
 		featured = featuredGame;
@@ -226,12 +227,17 @@ public class StoreGame implements Screen, StoreScreen {
 	public Game getSelected() {
 		return featured;
 	}
-
+	
 	@Override
-	public boolean buyTokens(int amount, Game game) {
+	public boolean buyTokens(int amount) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean buyGame(Game game) {
+		return false;
+	}
+	
 	@Override
 	public void setSelected(String game) {
 		for (Game search : ArcadeSystem.getArcadeGames()) {

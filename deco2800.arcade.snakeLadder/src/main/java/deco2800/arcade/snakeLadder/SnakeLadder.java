@@ -36,9 +36,14 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.Highscore;
+import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -46,10 +51,11 @@ import deco2800.arcade.snakeLadderGameState.GameOverState;
 import deco2800.arcade.snakeLadderGameState.GameState;
 import deco2800.arcade.snakeLadderGameState.WaitingState;
 import deco2800.arcade.snakeLadderModel.*;
+import deco2800.arcade.utils.AsyncFuture;
 
 /**
  * This is the main class for game snake&Ladder
- * @author s4310055,s43146400,s43146884,s4243072
+ * @author s4310055,s4314640,s43146884,s4243072
  *
  */
 
@@ -64,27 +70,61 @@ public class SnakeLadder extends GameClient {
 
 	public GameState gameState;
 	private ArrayList<Label> userLabels = new ArrayList<Label>(); //labels for users
-    private ArrayList<Label> scoreLabels = new ArrayList<Label>(); 
+    private ArrayList<Label> scoreLabels = new ArrayList<Label>();
+    private ArrayList<Dice> dices = new ArrayList<Dice>();
 
 	private Stage stage;
 	private Skin skin;
 	private BitmapFont font;
-	private TextButton diceButton;
+	public TextButton diceButton;
 	public String statusMessage;
 	private Dice dice;
+	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
+	public HighscoreClient player1;
+	private HighscoreClient hsc;
+	private int highestScoreNum = 5;
 
 	public SnakeLadder(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		gamePlayers[0] = new GamePlayer(this.player.getUsername());
-		gamePlayers[1] = new GamePlayer("AI Player");
+		gamePlayers[0] = new GamePlayer(this.player.getUsername(), false);
+		gamePlayers[1] = new GamePlayer("AI Player", true);
+		this.networkClient = networkClient;
+		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", this.networkClient);
+		hsc = new HighscoreClient("snakeLadder", networkClient);
+		dumpingScores();
+		//this.achievementClient = new AchievementClient(networkClient);
 	}
 	
+	//constructor for testing
 	public SnakeLadder(Player player, NetworkClient networkClient, String username) {
 		super(player, networkClient);
-		gamePlayers[0] = new GamePlayer(username);
-		gamePlayers[1] = new GamePlayer("AI Player");
+		gamePlayers[0] = new GamePlayer(username, false);
+		gamePlayers[1] = new GamePlayer("AI Player", true);
+	}
+	
+	//constructor for testing
+	public SnakeLadder(Player player, NetworkClient networkClient, String username,FileHandle xmlFile, FileHandle mapFile) {
+		super(player, networkClient);
+		gamePlayers[0] = new GamePlayer(username, false);
+		gamePlayers[1] = new GamePlayer("AI Player", true);
+		map = new GameMap();
+		//initialize the rules from xml file
+		ruleMapping = RuleMapping.iniRuleMapping(xmlFile);
+		//loading game map
+		try {
+			map.populateTileListFromMapFile(mapFile,getRuleMapping());
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int getturns() {
@@ -107,11 +147,12 @@ public class SnakeLadder extends GameClient {
 		camera.setToOrtho(false, 1280, 800);
 		batch = new SpriteBatch();
 		
-		iniRuleMapping();
+		//initialize the rules from xml file
+		ruleMapping = RuleMapping.iniRuleMapping(Gdx.files.classpath("ruleMapping.xml"));
 		//creating level loading background board and initializing the rule mapping
-		map =new GameMap();
+		map =new GameMap(Gdx.files.classpath("images/board.png"));
 		//loading game map
-		map.loadMap("maps/lvl1.txt",getRuleMapping());
+		map.loadMap(Gdx.files.classpath("maps/lvl1.txt"),getRuleMapping());
 		
 		//loading the icon for each player
 		gamePlayers[0].setPlayerTexture("player.png");
@@ -119,30 +160,24 @@ public class SnakeLadder extends GameClient {
 		
 		font = new BitmapFont();
 		font.setScale(2);
+		
 		//Initialise the game state
 		//gameState = GameState.READY;
 		gameState = new WaitingState();
-		statusMessage = "Click to start!";
-		
-		
+		statusMessage = "Roll the dice to start!";
+        
 		//creating the stage
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         
-      //rendering scoreboard UI
+        //rendering scoreboard UI
   		renderScoreBoard();
         
-        setDice(new Dice());
+  		for (int i = 0; i < gamePlayers.length; i++){
+  			dices.add(new Dice());
+  		}
+  		
         
-        //TODO: button should be disabled when its others player turn or when player is on the move
-       // diceButton listener for when the button is pressed
-//        diceButton.addListener(new ChangeListener() {
-//            public void changed (ChangeEvent event, Actor actor) {
-//            	dice.rollDice();
-//            }
-//        });
- 
-    
 	}
 	
 	@Override
@@ -175,13 +210,18 @@ public class SnakeLadder extends GameClient {
 		// render map for this level
 		map.renderMap(batch);
 		
-		getDice().renderDice(batch);
+		
+		for (int i = 0; i < gamePlayers.length; i++){
+  			getDice(i).renderDice(batch, i);
+  		}
+		//getDice().renderDice(batch,1);
+		//getDiceAI().renderDice(batch,2);
 		for(GamePlayer gamePlayer: gamePlayers)
 		{
 			gamePlayer.renderPlayer(batch);
 		}
 		
-		 //If there is a current status message (i.e. if the game is in the ready or gameover state)
+		//If there is a current status message (i.e. if the game is in the ready or gameover state)
 	    // then show it in the middle of the screen
 	    if (statusMessage != null) {
 	    	font.setColor(Color.WHITE);
@@ -200,45 +240,14 @@ public class SnakeLadder extends GameClient {
 	}
 
 	/**
-	 * Handle player input from mouse click
+	 * Handle player input from button click
 	 */
 	private void handleInput() {
-//		switch(gameState) {		    
-//		    case READY: //Ready to start a new point		    			    	
-//		    case INPROGRESS: 		    	
-//		    case GAMEOVER: //The game has been won, wait to exit		    	
-//		    }
+		//use gameState to handle user input
 		gameState.handleInput(this);
 	}
 	
-//	public void stopPoint() {
-//		this.updateScore(gamePlayer);
-//		gamePlayer.reset();
-//		AIPlayer.reset();
-//		// If we've reached the victory point then update the display
-//		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
-//			gameState = new GameOverState();
-//		    //Update the game state to the server
-//		    //networkClient.sendNetworkObject(createScoreUpdate());
-//		} 
-//		if (AIPlayer.getBounds().x<=(60-20f)&& AIPlayer.getBounds().y>=540){
-//			gameState = new GameOverState();
-//		}
-//		else {
-//			// No winner yet, get ready for another point
-//			gameState = new ReadyState();
-//			statusMessage = "Throw the dice again";
-//		}
-//
-//	}
-	
-//	public void startPoint() {
-//		gamePlayer.initializeVelocity();
-//		getDice().rollDice();	
-//		AIPlayer.initializeVelocity();
-//		gameState = new InProgressState();
-//		statusMessage = null;
-//	}
+
 	public int taketurns() {
 		turn++;
 		return this.turn;
@@ -259,14 +268,15 @@ public class SnakeLadder extends GameClient {
 	public void resume() {
 		super.resume();
 	}
-
-	public Dice getDice() {
-		return dice;
+	
+	public Dice getDice(int num){
+		return dices.get(num);
+	}
+	
+	public void setDice(Dice dice, int num){
+		dices.set(num, dice);
 	}
 
-	public void setDice(Dice dice) {
-		this.dice = dice;
-	}
 	
 	public GameMap getMap() {
 		return map;
@@ -314,49 +324,70 @@ public class SnakeLadder extends GameClient {
 	    }
         		        
         
-        //table to place all the GUI
+      //table to place all the GUI
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        table.top().left();
+        table.padLeft((gamePlayers.length+1)*100).padBottom(200-(highestScoreNum*25)-45);
         
         //adding player name
-        table.add(new Label("Players' Name", skin)).width(200).top().left();
+        table.add(new Label("Players' Name", skin)).width(100).top().left();
         for(int i = 0; i < gamePlayers.length; i++){
-        	table.add(userLabels.get(i)).width(200).top().left();
+        	table.add(userLabels.get(i)).width(100).top().left().spaceLeft(10);
 	    } 
         table.row();
         //add player score
-        table.add(new Label("Players' Score", skin)).width(200).top().left();
+        table.add(new Label("Players' Score", skin)).width(100).top().left();
         for(int i = 0; i < gamePlayers.length; i++){
-        	table.add(getScoreLabels().get(i)).width(200).top().left();
+        	table.add(getScoreLabels().get(i)).width(100).top().left().spaceLeft(10);
 	    } 
         table.row();     
         //adding dice button to GUI
-        table.add(diceButton).width(100).height(50).pad(10);
+        table.add(diceButton).width(100).height(50).spaceTop(10);
         
+        //adding highscore list
         table.row();
+        table.add(new Label("Highest Scores", skin)).spaceTop(20);
+        table.row();
+        table.add(new Label("Username", skin)).width(100).top().left();
+        table.add(new Label("Scores", skin)).width(100).top().left();
+        table.row();
+         
+        List<Highscore> topPlayers = hsc.getGameTopPlayers(highestScoreNum, true, "Number");
+        
+        for (int i=0; i<this.highestScoreNum;i++){
+        	//table.add(new Label("Player"+i, skin)).width(100).top().left();
+            //table.add(new Label("Scores"+i, skin)).width(100).top().left();
+        	table.add(new Label(topPlayers.get(i).playerName, skin)).width(100).top().left();
+        	table.add(new Label(topPlayers.get(i).score+"", skin)).width(100).top().left();
+            table.row();
+        }
+        
+        //adding achievements list
+        table.row();
+        table.add(new Label("Your Achievements", skin)).spaceTop(20);
+        table.row();
+        
+//        //getting achievements for a game and getting the player's progress in them
+//        AchievementClient achClient = new AchievementClient(networkClient);
+//        AsyncFuture<ArrayList<Achievement>> achievements = achClient.getAchievementsForGame(getGame());
+//        AsyncFuture<AchievementProgress> playerProgress = achClient.getProgressForPlayer(player);
+//        for(Achievement ach : achievements.get()) {
+//            int achProgress = playerProgress.get().progressForAchievement(ach);
+//           double percentage = 100 * (achProgress / (double)ach.awardThreshold);
+//        }
+//        
+//        //getting a list of the achievements a player has been awarded
+//        ArrayList<String> awardedIDs = playerProgress.awardedAchievementIDs();
+//        achievements = achClient.getAchievementsForIDs(awardedIDs);
+//        
+//        //display player's achievement in table
+//        for(Achievement ach : achievements.get()) {
+//        	table.add(new Label(ach.toString(), skin)).width(100).top().left();
+//          table.row();
+//        }
 	}
 	
-	public void iniRuleMapping()
-	{
-		XmlReader reader = new XmlReader();
-		try {
-			Element root = reader.parse(Gdx.files.classpath("ruleMapping.xml"));
-			Array<Element> entries = root.getChildrenByName("entry");
-			for (Element entry : entries)
-			{
-				String rule = entry.getChildByName("rule").getText();
-				String icon = entry.getChildByName("icon").getText();
-				String implementationClass = entry.getChildByName("implementationClass").getText();
-				getRuleMapping().put(rule, new RuleMapping(icon,implementationClass));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-
 	public HashMap<String,RuleMapping> getRuleMapping() {
 		return ruleMapping;
 	}
@@ -364,5 +395,21 @@ public class SnakeLadder extends GameClient {
 	public void setRuleMapping(HashMap<String,RuleMapping> ruleMapping) {
 		this.ruleMapping = ruleMapping;
 	}
+	
+	private void dumpingScores(){
+		HighscoreClient player1 = new HighscoreClient("Dylan", "snakeLadder", networkClient);
+		HighscoreClient player2 = new HighscoreClient("Matt", "snakeLadder", networkClient);
+		HighscoreClient player3 = new HighscoreClient("Bejo5", "snakeLadder", networkClient);
+		HighscoreClient player4 = new HighscoreClient("Bejo4", "snakeLadder", networkClient);
+		HighscoreClient player5 = new HighscoreClient("Bejo3", "snakeLadder", networkClient);
+		
+		player1.storeScore("Number", 129);
+		player2.storeScore("Number", 12993);
+		player3.storeScore("Number", 10193);
+		player4.storeScore("Number", 193);
+		player5.storeScore("Number", 1093);
+		
+	}
+
 }
 

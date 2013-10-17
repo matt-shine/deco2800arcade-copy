@@ -37,7 +37,10 @@ public class Renderer {
     private HashMap<String, Rectangle> texturePositions = new HashMap<String, Rectangle>();
     private Texture texture = null;
     private int ceilingColor = -1;
-
+    private String level = "";
+    
+    
+    
     public Renderer() {
     }
 
@@ -77,8 +80,7 @@ public class Renderer {
             //gl init
             Gdx.gl20.glEnable(GL20.GL_DEPTH_TEST);
             Gdx.gl20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            Gdx.gl20.glEnable(GL20.GL_BLEND);
-
+            
 
             //load terrain shader
             String vertexShader = loadFile("wl6TerrainVertShader.glsl");
@@ -87,10 +89,8 @@ public class Renderer {
             terrainShader = new ShaderProgram(vertexShader, fragmentShader);
             VertexAttribute pos = new VertexAttribute(Usage.Position, 3, "a_position");
             VertexAttribute tex = new VertexAttribute(Usage.TextureCoordinates, 2, "a_texpos");
-            float[] posData = toPrimativeArray(generateTerrain(game.getMap(), false));
-            terrainMesh = new Mesh(true, posData.length, 0, pos, tex);
-            terrainMesh.setVertices(posData);
-
+            
+            loadTerrainMesh();
 
 
             //load doodad shader
@@ -100,7 +100,7 @@ public class Renderer {
             doodadShader = new ShaderProgram(vertexShader, fragmentShader);
             pos = new VertexAttribute(Usage.Position, 3, "a_position");
             tex = new VertexAttribute(Usage.TextureCoordinates, 2, "a_texpos");
-            posData = toPrimativeArray(generateQuadMesh());
+            float[] posData = toPrimativeArray(generateQuadMesh());
             quadMesh = new Mesh(true, posData.length, 0, pos, tex);
             quadMesh.setVertices(posData);
 
@@ -111,9 +111,28 @@ public class Renderer {
 
 
         } else {
-            //empty buffer
+        	
+        	loadTerrainMesh();
+        	
         }
     }
+    
+    
+    
+    public void loadTerrainMesh() {
+    	if (terrainMesh != null) {
+    		terrainMesh.dispose();
+    		
+    	}
+    	
+    	float[] posData = toPrimativeArray(generateTerrain(game.getMap(), false));
+    	VertexAttribute pos = new VertexAttribute(Usage.Position, 3, "a_position");
+        VertexAttribute tex = new VertexAttribute(Usage.TextureCoordinates, 2, "a_texpos");
+        terrainMesh = new Mesh(true, posData.length, 0, pos, tex);
+        terrainMesh.setVertices(posData);
+
+    }
+    
 
 
     public Matrix4 getProjectionViewMatrix() {
@@ -134,6 +153,12 @@ public class Renderer {
     public void draw(boolean debug) {
         debugMode = debug;
 
+        
+        //reload the level if we've changed levels
+        if (!game.getLevel().equals(level)) {
+        	this.load();
+        }
+        
 
         //prepare
         Gdx.gl.glClearColor(0.48f, 0.48f, 0.48f, 1);
@@ -143,7 +168,8 @@ public class Renderer {
 
         IngameUI.drawCeiling(getCeilingColor(), wl6.getWidth(), wl6.getHeight());
         Gdx.gl.glClear(GL20.GL_DEPTH_BUFFER_BIT);
-
+        Gdx.gl20.glEnable(GL20.GL_BLEND);
+        
 
         //draw terrain
         terrainShader.begin();

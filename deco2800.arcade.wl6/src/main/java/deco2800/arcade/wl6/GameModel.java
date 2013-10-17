@@ -16,29 +16,34 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class GameModel {
 
-    //the current level map
+    // The current level map
     private Level currentMap = null;
 
-    //the name of the current level
+    // The name of the current level
     private String currentLevel = "nothing";
 
-    //the player
+    // The player
     private Player player = null;
 
-    //the player spawn point
+    // The player spawn point
     private Vector2 spawn = new Vector2(0, 0);
     private float spawnAngle = 0;
 
-    //All the entities
+    // All the entities
     private LinkedList<Doodad> doodads = new LinkedList<Doodad>();
 
-    //Delta time
+    // Array of the waypoints on the current map
+    private WL6Meta.DIRS[][] waypoints = new WL6Meta.DIRS[64][64];
+
+    private CollisionGrid collisionGrid = new CollisionGrid();
+
+    // Delta time
     private float delta = 0;
 
-    //Doodads to delete
+    // Doodads to delete
     private ArrayList<Doodad> toDelete = new ArrayList<Doodad>();
 
-
+	private int difficulty = 1;
 
 
 
@@ -53,17 +58,17 @@ public class GameModel {
      */
     public void goToLevel(String level) {
         //create the map
-        if (currentLevel != level) {
+        if (!currentLevel.equals(level)) {
             currentMap = new Level(loadFile("wl6maps/" + level + ".json"));
         }
 
         currentLevel = level;
 
-        //remove the old player and create a new one
-        if (doodads.contains(player)) {
-            destroyDoodad(player);
+        for (Doodad d : doodads) {
+        	this.destroyDoodad(d);
         }
-
+        waypoints = new WL6Meta.DIRS[64][64];
+        
         MapProcessor.processEverything(this);
 
         player = new Player(MapProcessor.doodadID());
@@ -138,6 +143,7 @@ public class GameModel {
      */
     public void addDoodad(Doodad doodad) {
         doodads.add(doodad);
+        doodad.init(this);
     }
 
 
@@ -157,6 +163,15 @@ public class GameModel {
      */
     public Iterator<Doodad> getDoodadIterator() {
         return this.doodads.iterator();
+    }
+
+
+    public void addWaypoint(WL6Meta.DIRS angle, int x, int y) {
+        waypoints[x][y] = angle;
+    }
+
+    public WL6Meta.DIRS[][] getWapoints() {
+        return waypoints.clone();
     }
 
 
@@ -196,6 +211,83 @@ public class GameModel {
             doodads.remove(d);
         }
     }
-    
-    
+
+    /**
+     * get game difficulty
+     * @return
+     */
+    public int getDifficulty() {
+		return difficulty;
+	}
+
+
+    /**
+     * set game difficulty
+     * @param difficulty
+     */
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+		this.reset();
+	}
+
+	
+	/**
+	 * get the current episode as a string like "1" to "6"
+	 * @return
+	 */
+	public String getChapter() {
+		return currentLevel.substring(1, 2);
+	}
+	
+	/**
+	 * get the current level as a string like "1" to "8" or "b" or "s"
+	 * @return
+	 */
+	public String getLevelInChapter() {
+		if (!currentLevel.substring(2, 3).equals("l")) {
+			return currentLevel.substring(2, 3);
+		}
+		return currentLevel.substring(3, 4);
+	}
+	
+	
+	/**
+	 * Sends the player to the next level
+	 * if current level = 1-7 : current level++
+	 * if current level = 8 : current level = b
+	 * if current level = b : chapter++, current level = 1
+	 * if current level = s : current level = 2
+	 */
+	public void nextLevel() {
+		if (getLevelInChapter().equals("b")) {
+			if (getChapter().equals("6")) {
+				goToLevel("e1l1");
+			} else {
+				goToLevel("e" + (Integer.parseInt(getChapter()) + 1) + "l1");
+			}
+		} else if (getLevelInChapter().equals("s")) {
+			goToLevel("e" + getChapter() + "l2");
+		} else if (getLevelInChapter().equals("8")) {
+			goToLevel("e" + getChapter() + "boss");
+		} else {
+			goToLevel("e" + getChapter() + "l" + (Integer.parseInt(getLevelInChapter()) + 1));
+		}
+	}
+
+	
+	/**
+	 * go to the secret level
+	 */
+	public void secretLevel() {
+		goToLevel("e" + (Integer.parseInt(getChapter())) + "secret");
+	}
+
+
+	/**
+	 * gets the collision grid
+	 * @return
+	 */
+    public CollisionGrid getCollisionGrid() {
+    	return this.collisionGrid;
+    }
 }

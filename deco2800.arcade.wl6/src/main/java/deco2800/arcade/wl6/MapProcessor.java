@@ -3,7 +3,10 @@ package deco2800.arcade.wl6;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+import deco2800.arcade.wl6.enemy.Dog;
 import deco2800.arcade.wl6.enemy.EnemyType;
+import deco2800.arcade.wl6.enemy.Guard;
+import deco2800.arcade.wl6.enemy.SS;
 
 public class MapProcessor {
 
@@ -16,7 +19,28 @@ public class MapProcessor {
     public static void processEverything(GameModel model) {
 
         Level map = model.getMap();
+        
+        
+        
+        //spawn all the blocks that are actually doodads
+        //and initialise the collision map
+        for (int i = 0; i < WL6.MAP_DIM; i++) {
+            for (int j = 0; j < WL6.MAP_DIM; j++) {
 
+                int id = map.getTerrainAt(i, j);
+                BlockInfo dInfo = WL6Meta.block(id);
+
+                if (WL6Meta.hasDoorAt(i, j, map)) {
+                    spawnDoor(model, dInfo, id, i, j);
+                }
+                
+                model.getCollisionGrid().setSolidAt(i, j, dInfo.solid ? 1 : 0);
+            }
+        }
+        
+        
+        
+        //spawn all the doodads
         for (int i = 0; i < WL6.MAP_DIM; i++) {
             for (int j = 0; j < WL6.MAP_DIM; j++) {
 
@@ -28,7 +52,7 @@ public class MapProcessor {
                 //spawn points
                 if (id >= WL6Meta.SPAWN_POINT && id < WL6Meta.SPAWN_POINT + 4) {
 
-                    model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.direction));
+                    model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.facingDir));
 
                 } else if (id == WL6Meta.SECRET_DOOR) {
 
@@ -36,6 +60,18 @@ public class MapProcessor {
                     door.setTextureName(dInfo.texture);
                     door.setPos(new Vector2(i + 0.5f, j + 0.5f));
                     model.addDoodad(door);
+                    
+                } else if (id == WL6Meta.GOLDKEY) {
+                	
+                    Pickup key = new Pickup(doodadID(), KEY_TYPE.GOLD);
+                    key.setPos(new Vector2(i + 0.5f, j + 0.5f));
+                    model.addDoodad(key);
+                    
+                } else if (id == WL6Meta.SILVERKEY) {
+                	
+                    Pickup key = new Pickup(doodadID(), KEY_TYPE.SILVER);
+                    key.setPos(new Vector2(i + 0.5f, j + 0.5f));
+                    model.addDoodad(key);
 
                 } else {
 
@@ -46,24 +82,12 @@ public class MapProcessor {
             }
         }
 
-        //spawn all the blocks that are actually doodads
-        for (int i = 0; i < WL6.MAP_DIM; i++) {
-            for (int j = 0; j < WL6.MAP_DIM; j++) {
 
-                int id = map.getTerrainAt(i, j);
-                BlockInfo dInfo = WL6Meta.block(id);
-
-                if (WL6Meta.hasDoorAt(i, j, map)) {
-                    spawnDoor(model, dInfo, id, i, j);
-                }
-            }
-        }
     }
 
     /**
      * Unique ids for doodads. TODO make this better
-     * @param x
-     * @param y
+     *
      * @return
      */
     public static int doodadID() {
@@ -71,8 +95,14 @@ public class MapProcessor {
     }
 
     public static void spawnDoor(GameModel model, BlockInfo bInfo, int id, int x, int y) {
-        //TODO: respect door types
-        Door door = new Door(doodadID(), id % 2 != 0, KEY_TYPE.NONE);
+        KEY_TYPE k = null;
+        if (id == WL6Meta.DOOR_GOLDKEY || id == WL6Meta.DOOR_GOLDKEY + 1) {
+        	k = KEY_TYPE.GOLD;
+        }
+        if (id == WL6Meta.DOOR_SILVERKEY || id == WL6Meta.DOOR_SILVERKEY + 1) {
+        	k = KEY_TYPE.SILVER;
+        }
+        Door door = new Door(doodadID(), id % 2 != 0, k);
         door.setTextureName(bInfo.texture);
         door.setPos(new Vector2(x + 0.5f, y + 0.5f));
         model.addDoodad(door);
@@ -95,16 +125,57 @@ public class MapProcessor {
             return;
         }
 
+        if (d.difficulty > model.getDifficulty()) {
+        	return;
+        }
+        
         if (d.texture == null)
         {
             // This doodad is invisible so it must be a waypoint or something
-            // we don't need to do anything
+            if (d.facingDir != null) {
+                model.addWaypoint(d.facingDir, x, y);
+            }
         }
         else if (d.enemytype != EnemyType.NOT_AN_ENEMY)
         {
-            //TODO spawn an enemy
             switch (d.enemytype) {
-
+                case NOT_AN_ENEMY:
+                    break;
+                case GUARD:
+                    dd = new Guard(doodadID(), d);
+                    break;
+                case OFFICER:
+                    break;
+                case SS:
+                    dd = new SS(doodadID(), d);
+                    break;
+                case DOG:
+                    dd = new Dog(doodadID(), d);
+                    break;
+                case MUTANT:
+                    break;
+                case FAKE_HITLER:
+                    break;
+                case GHOSTS_1:
+                    break;
+                case GHOSTS_2:
+                    break;
+                case GHOSTS_3:
+                    break;
+                case GHOSTS_4:
+                    break;
+                case HANS:
+                    break;
+                case SCHABBS:
+                    break;
+                case HITLER:
+                    break;
+                case GIFTMACHER:
+                    break;
+                case GRETEL:
+                    break;
+                case FETTGESICHT:
+                    break;
             }
         }
         else if (d.health != 0 || d.points != 0 || d.ammo != 0 || d.gun != 0)
@@ -114,9 +185,9 @@ public class MapProcessor {
         }
         else if (d.solid)
         {
-            //TODO make these solid
             dd = new Doodad(doodadID());
             dd.setTextureName(d.texture);
+            model.getCollisionGrid().setSolidAt(x, y, 1);
         }
         else
         {

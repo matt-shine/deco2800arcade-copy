@@ -9,8 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
+
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.arcadeui.FrontPage;
 
 public class LoginScreen implements Screen {
 
@@ -33,7 +35,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the store\nlogin with username: store\nTo access homepage\nlogin with username:home\nTo access games library\n login with username: games\nTo access the games list\nlogin with any username as normal", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with any username", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);
@@ -76,22 +78,15 @@ public class LoginScreen implements Screen {
                     // no username entered, throw error
                     errorLabel.setText("No Username Supplied");
                 }
-                else if (usernameText.getText().toLowerCase().equals("store")) {
+                else if (usernameText.getText().toLowerCase().equals("multi")) {
                     // TEMPORARY
-                    arcadeUI.setScreen(arcadeUI.store);
-                }
-                else if (usernameText.getText().toLowerCase().equals("home")) {
-                    // TEMPORARY
-                    arcadeUI.setScreen(arcadeUI.main);
-                }
-                else if (usernameText.getText().toLowerCase().equals("games")) {
-                    // TEMPORARY
-                    ArcadeSystem.login(usernameText.getText());
-                    ArcadeSystem.goToGame("gamelibrary");
+                    ArcadeSystem.login("debuguser");
+                	arcadeUI.setScreen(arcadeUI.lobby);
                 }
                 else {
                     ArcadeSystem.login(usernameText.getText());
-                    arcadeUI.setScreen(arcadeUI.home);
+            	    FrontPage.setName(usernameText.getText());  // This may need to be moved to somewhere more appropriate.
+            	    arcadeUI.setScreen(arcadeUI.main);
                 }
             }
         });

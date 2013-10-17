@@ -1,14 +1,19 @@
 package deco2800.arcade.wl6.enemy;
 
+import com.badlogic.gdx.math.Vector2;
+import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
+import deco2800.arcade.wl6.WL6Meta;
 
-import java.util.Random;
+import java.util.LinkedList;
 
 public class Enemy extends Mob {
 
-    // Six possible states
-    // An enemy starts in either Stand or Path states.  Enters chase state when player is spotted.
-    // Once enemy has left stand or path states, it cannot reenter them.
+    /**
+     * Six possible states
+     * An enemy starts in either Stand or Path states.  Enters chase state when player is spotted or gunfire is heard.
+     * Once enemy has left the stand or path states, it cannot reenter them.
+     */
     public enum STATES {
         NO_STATE,   // No state, error
         STAND,      // Idle state 1, motionless
@@ -20,47 +25,64 @@ public class Enemy extends Mob {
     }
 
     // current state
-    public STATES state = STATES.NO_STATE;
-    // maximum health
-    public int maxHealth;
-    // current health
-    public int health;
-    // speed while pathing
-    public int pathSpeed;
-    // speed while chasing
-    public int chaseSpeed;
-    // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
-    public boolean pain;
-    // points awarded when killed
-    public int points;
+    private STATES state = STATES.NO_STATE;
+    //
+    protected float pathSpeed;
+    //
+    protected float chaseSpeed;
+    //
+    protected Vector2 faceDir = new Vector2();
 
+
+    // path list
+    protected LinkedList<Vector2> path;
+    // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
+    protected boolean pain;
     // damage
-    public int damage;
-    // damage type (hitscan, projectile)
-    public int HITSCAN = 0;
-    public int PROJECTILE = 1;
-    public int dType;
-    // random variable
-    Random rand;
+    protected int damage;
+
 
     public Enemy(int uid) {
         super(uid);
-        rand = new Random();
     }
 
-    // change states
-    // delay is the time between animations (e.g. an officer transitions between chasing and attacking a lot faster then a guard)
-    public void changeStates(STATES oldState, STATES newState, int delay) {
-
+    @Override
+    public void tick(GameModel gameModel) {
+        super.tick(gameModel);
+        detectPlayer(gameModel);
+        if (this.getHealth() <= 0) {
+            changeStates(STATES.DIE, 0);
+            gameModel.destroyDoodad(this);
+        }
     }
 
-    // follow patrol path (walk from waypoint to waypoint)
-    public void walk(int nextWaypoint) {
+    public void setState(STATES state) {
+        this.state = state;
+    }
+
+    /**
+     * Tells the enemy to change states
+     * @param State state to change the enemy to
+     * @param delay time taken to change states
+     *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
+     */
+    public void changeStates(STATES State, int delay) {
+        setState(State);
+    }
+
+    // follow patrol path
+    public void path() {
 
     }
 
     // detect player
-
+    public void detectPlayer(GameModel gameModel) {
+        if (canSee(gameModel.getPlayer(), gameModel)) {
+            changeStates(STATES.ATTACK, 0);
+            doDamage(gameModel);
+            changeStates(STATES.CHASE, 0);
+        }
+    }
 
     // chase player
 
@@ -74,8 +96,26 @@ public class Enemy extends Mob {
     // react to pain
 
 
-    // die
+    @Override
+    public void takeDamage(int damage) {
+        if (pain) {
+            changeStates(STATES.PAIN, 0);
+            setHealth(getHealth() - damage);
+            changeStates(STATES.CHASE, 0);
+        }
+        else {
+            setHealth(getHealth() - damage);
+        }
+    }
 
+    
+    public void doDamage(GameModel gameModel) {
+        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
+        boolean speed = false;
+        boolean look = false;
+        int damage = calcDamage((int)dist, speed, look);
+        gameModel.getPlayer().takeDamage(damage);
+    }
 
     /**
      * Damage Calculation
@@ -87,11 +127,11 @@ public class Enemy extends Mob {
      */
     public int calcDamage(int dist, boolean speed, boolean look) {
         boolean hit = false;
-        if (randInt(0, 255, this.rand) < ((speed ? 160 : 256) - (dist * (look ? 16 : 8)))) {
+        if (randInt(0, 255, getRand()) < ((speed ? 160 : 256) - (dist * (look ? 16 : 8)))) {
             hit = true;
         }
 
-        damage = randInt(0, 255, this.rand);
+        damage = randInt(0, 255, getRand());
 
         if (hit) {
             if (dist < 2) {
@@ -114,19 +154,64 @@ public class Enemy extends Mob {
         return damage;
     }
 
-    /**
-     * Returns a psuedo-random number between min and max, inclusive.
-     * The difference between min and max can be at most
-     * <code>Integer.MAX_VALUE - 1</code>.
-     *
-     * @param min Minimum value.
-     * @param max Maximum value.  Must be greater than min.
-     * @param rand Random value.
-     * @return Integer between min and max, inclusive.
-     * @see java.util.Random#nextInt(int)
-     */
-    public static int randInt(int min, int max, Random rand) {
-        return rand.nextInt((max - min) + 1) + min;
+    // Ugly mess that I need to change.  Working on it atm
+    public void calculatePath(GameModel gameModel) {
+        path = new LinkedList<Vector2>();
+        WL6Meta.DIRS[][] waypoints = gameModel.getWapoints();
+
+        int x = (int)getPos().x;
+        int y = (int)getPos().y;
+        int angle = (int)this.getAngle();
+        path.addFirst(new Vector2(x, y));
+
+        boolean complete = false;
+
+        while (!complete) {
+            switch (angle) {
+                case 0:
+                    x = x + 1;
+                    y = y + 0;
+                    break;
+                case 45:
+                    x = x + 1;
+                    y = y + 1;
+                    break;
+                case 90:
+                    x = x + 0;
+                    y = y + 1;
+                    break;
+                case 135:
+                    x = x - 1;
+                    y = y + 1;
+                    break;
+                case 180:
+                    x = x - 1;
+                    y = y + 0;
+                    break;
+                case 225:
+                    x = x - 1;
+                    y = y - 1;
+                    break;
+                case 270:
+                    x = x + 0;
+                    y = y - 1;
+                    break;
+                case 315:
+                    x = x + 1;
+                    y = y - 1;
+                    break;
+            }
+
+            if (waypoints[x][y] != null) {
+                if(path.contains(new Vector2(x, y))) {
+                    complete = true;
+                }
+                else {
+                    path.add(new Vector2(x, y));
+                    angle = (int)WL6Meta.dirToAngle(waypoints[x][y]);
+                }
+            }
+        }
     }
 }
 

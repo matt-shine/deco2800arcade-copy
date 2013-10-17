@@ -1,19 +1,27 @@
 package deco2800.arcade.wl6.enemy;
 
+import deco2800.arcade.wl6.DoodadInfo;
+
 public class Guard extends Enemy {
 
-    public Guard(int uid) {
+    private int STARTING_HEALTH = 25;
+
+    public Guard(int uid, DoodadInfo d) {
         super(uid);
 
-        maxHealth = 25;
-        health = maxHealth;
+        setHealth(STARTING_HEALTH);
+        if (d.pathingDir == null) {
+            setState(STATES.STAND);
+        }
+        else {
+            setState(STATES.PATH);
+        }
         pathSpeed = 512;
         chaseSpeed = 1536;
         pain = true;
-        points = 100;
 
         damage = 0;
-        damage = HITSCAN;
+        setTextureName(d.texture);
     }
 
 

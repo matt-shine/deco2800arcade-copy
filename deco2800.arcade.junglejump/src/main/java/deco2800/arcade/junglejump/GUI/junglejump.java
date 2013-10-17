@@ -156,13 +156,13 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
-			File file = new File("src/main/resources/soundtrack.wav");
+			/*File file = new File(soundtrack.wav");
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioIn);
 			clip.start();
-			clip.loop(clip.LOOP_CONTINUOUSLY);
+			clip.loop(clip.LOOP_CONTINUOUSLY);*/
 
 			// System.out.println(file.getCanonicalPath());
 			// themeMusic = Gdx.audio.newMusic(fileh);
@@ -173,10 +173,10 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			File file2 = new File("src/main/resources/menu.wav");
+			/*File file2 = new FileGdx.files.internal("menu.wav");
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
-			menuSound.open(audioIn2);
+			menuSound.open(audioIn2);*/
 		} catch (Exception e) {
 			// IO Exception or problem with sound format
 		}
@@ -198,23 +198,23 @@ public class junglejump extends GameClient implements InputProcessor {
 		super.create();
 
 		System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(("src/main/resources/mainscreen.png"));
-		monkeySit = new Texture(("src/main/resources/monkeySit.png"));
-		monkeySitRIGHT = new Texture(("src/main/resources/monkeySit.png"));
-		monkeySitLEFT = new Texture(("src/main/resources/monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(("src/main/resources/monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(("src/main/resources/monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(("src/main/resources/monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(("src/main/resources/monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(("src/main/resources/monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(("src/main/resources/monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("src/main/resources/gameBackground2.png"));
-		levelText = new Texture(("src/main/resources/level.png"));
-		hyphenText = new Texture(("src/main/resources/-.png"));
-		livesText = new Texture(("src/main/resources/lives.png"));
-		worldNumText = new Texture(("src/main/resources/1.png"));
-		livesNumText = new Texture(("src/main/resources/3.png"));
-		levelNumText = new Texture(("src/main/resources/1.png"));
+		texture = new Texture(Gdx.files.internal("mainscreen.png"));
+		monkeySit = new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitRIGHT = new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitLEFT = new Texture(Gdx.files.internal("monkeySitLEFT.png"));
+		monkeyRun1 = new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1RIGHT = new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1LEFT = new Texture(Gdx.files.internal("monkeyRun1LEFT.png"));
+		monkeyRun2 = new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2RIGHT = new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2LEFT = new Texture(Gdx.files.internal("monkeyRun2LEFT.png"));
+		gameBackground = new Texture(Gdx.files.internal("gameBackground2.png"));
+		levelText = new Texture(Gdx.files.internal("level.png"));
+		hyphenText = new Texture(Gdx.files.internal("-.png"));
+		livesText = new Texture(Gdx.files.internal("lives.png"));
+		worldNumText = new Texture(Gdx.files.internal("1.png"));
+		livesNumText = new Texture(Gdx.files.internal("3.png"));
+		levelNumText = new Texture(Gdx.files.internal("1.png"));
 		//platform = new Texture("platform.png");
 
 

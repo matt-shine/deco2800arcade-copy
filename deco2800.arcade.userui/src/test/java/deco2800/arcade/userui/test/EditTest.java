@@ -48,7 +48,7 @@ public class EditTest {
 	}
 	@Test
 	public void initialTest(){
-		Assert.assertTrue(player.getUsername().equals("Jason"));
+		Assert.assertTrue(player.getUsername().equals("Foo"));
 		Assert.assertTrue(player.getID() == 123);
 	}
 	

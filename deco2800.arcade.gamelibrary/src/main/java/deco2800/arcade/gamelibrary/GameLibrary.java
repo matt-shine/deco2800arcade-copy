@@ -155,16 +155,20 @@ public class GameLibrary extends GameClient {
         createRequest();
         loadGameList();
 
-        switch (player.getLibraryStyle().getLayout()) {
-            case LibraryStyle.LIST_VIEW:
-                updateScreen(new ListScreen(this, false));
-                break;
-            case LibraryStyle.GRID_VIEW:
-                updateScreen(new GridScreen(this));
-                break;
-            default:
-                updateScreen(new ListScreen(this, false));
-                break;
+        if (player.getLibraryStyle() != null) {
+            switch (player.getLibraryStyle().getLayout()) {
+                case LibraryStyle.LIST_VIEW:
+                    updateScreen(new ListScreen(this, false));
+                    break;
+                case LibraryStyle.GRID_VIEW:
+                    updateScreen(new GridScreen(this));
+                    break;
+                default:
+                    updateScreen(new ListScreen(this, false));
+                    break;
+            }
+        } else {
+            updateScreen(new ListScreen(this, false));
         }
     }
 

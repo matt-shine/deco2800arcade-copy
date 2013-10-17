@@ -76,7 +76,29 @@ public class King extends Piece {
 			moves.remove(g);
 			moves.remove(h);
 		}
-		return moves;
+		
+		List<int[]> allowableMoves = new ArrayList<int[]>();
+		
+		for (int i = 0; i < moves.size(); i++) {
+			// If the space is unoccupied add to list of allowable
+			if (!occupiedSpace(board_state, moves.get(i))) {
+				allowableMoves.add(moves.get(i));
+			} else {
+				// If the space is occupied check by which team
+				int occx = moves.get(i)[0];
+				int occy = moves.get(i)[1];
+				List<Piece> row = board_state.get(occx);
+				Piece onSquare = row.get(occy);
+				// If piece on the space is on opposing team add to
+				// allowable
+				if (getTeam() != onSquare.getTeam()) {
+					allowableMoves.add(moves.get(i));
+				}
+			}
+		}
+		
+		
+		return allowableMoves;
 	}
 
 	public boolean isChecked() {

@@ -22,9 +22,13 @@ public class Test {
 			//System.out.println("[" + a[0] + "," + a[1] + "]");
 		}
 		
-		System.out.println(board.blackPawn1);
+		System.out.println(board.whiteBishop1);
+		int[] move1 = {2,3}, move2 = {2,4}, move3 = {2,5};
+		board.movePiece(board.whitePawn4, move1);
+//		board.movePiece(board.whitePawn5, move2);
+//		board.movePiece(board.whitePawn6, move3);
 		
-		List<int[]> allowed2 = board.blackPawn1.possibleMoves(board.findPiece(board.blackPawn1), board.Board_State);
+		List<int[]> allowed2 = board.whiteBishop1.possibleMoves(board.findPiece(board.whiteBishop1), board.Board_State);
 		for(int[] a : allowed2) {
 			System.out.println("[" + a[0] + "," + a[1] + "]");
 		}

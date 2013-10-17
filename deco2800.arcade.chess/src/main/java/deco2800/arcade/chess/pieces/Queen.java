@@ -55,7 +55,14 @@ public class Queen extends Piece {
 				j--;
 			}
 		}
-		return moves;
+		
+		List<int[]> allowableMoves;
+		
+		removeJumpsUp(moves, currentPos, board_state);
+		allowableMoves = new ArrayList<int[]>(removeJumpsUp(
+				moves, currentPos, board_state));
+		
+		return allowableMoves;
 	}
 
 	public String toString() {

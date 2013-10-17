@@ -48,7 +48,13 @@ public class Bishop extends Piece{
 				j--;
 			}
 		}
-		return moves;
+		
+		List<int[]> allowableMoves;
+		
+		allowableMoves = new ArrayList<int[]>(removeJumpsDiagonal(
+				moves, currentPos, board_state));
+		
+		return allowableMoves;
 	}
 	
 	public String toString() {

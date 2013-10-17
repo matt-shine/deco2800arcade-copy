@@ -79,7 +79,12 @@ public class Rook extends Piece {
 		moves.clear();
 		moves.addAll(hs);
 		
-		return moves;
+		List<int[]> allowableMoves;
+		
+		allowableMoves = new ArrayList<int[]>(removeJumpsUp(
+				moves, currentPos, board_state));
+		
+		return allowableMoves;
 		
 		
 	}

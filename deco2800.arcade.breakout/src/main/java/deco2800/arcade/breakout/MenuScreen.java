@@ -342,7 +342,8 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void show() {
-		ArcadeInputMux.getInstance().addProcessor(stage);		
+		//ArcadeInputMux.getInstance().addProcessor(stage);		
+		Gdx.input.setInputProcessor(stage);
 	}
 
 }

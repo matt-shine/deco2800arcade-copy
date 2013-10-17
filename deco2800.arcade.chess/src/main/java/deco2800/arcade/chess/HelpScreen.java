@@ -21,7 +21,7 @@ import deco2800.arcade.client.ArcadeInputMux;
 public class HelpScreen implements Screen {
 	
 	Texture splashTexture;
-	Texture splashTexture2;
+	Texture splashTexture2, splashTexture3;
 	Sprite splashSprite;
 	private Chess game;
     private Stage stage;
@@ -70,6 +70,10 @@ public class HelpScreen implements Screen {
         batch.end();
         
         batch.begin();
+        batch.draw(splashTexture3, 30, 120);
+        batch.end();
+        
+        batch.begin();
         stage.draw();
         batch.end();
 	}
@@ -88,6 +92,8 @@ public class HelpScreen implements Screen {
 		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
 		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashTexture3 = new Texture(Gdx.files.internal("helpScreen.png"));
+		splashTexture3.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		splashSprite = new Sprite(splashTexture);
 		//moves sprite to centre of screen
 		splashSprite.setX(Gdx.graphics.getWidth() / 2 - (splashSprite.getWidth() / 2));

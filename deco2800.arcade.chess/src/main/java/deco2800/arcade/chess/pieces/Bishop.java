@@ -100,12 +100,9 @@ public class Bishop implements Piece{
 				moves.remove(coords);
 				j--;
 			}
-			
 		}
-
 		return moves;
 	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -143,10 +140,5 @@ public class Bishop implements Piece{
 	@Override
 	public void hasMoved() {
 		// TODO Auto-generated method stub
-		
 	}
-
-	
-	
-
 }

@@ -3,6 +3,8 @@ package deco2800.server;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.esotericsoftware.kryonet.Connection;
 
@@ -20,6 +22,7 @@ public class MatchmakerQueue {
 	private Map<Integer, MultiplayerServer> activeServers;
 	PlayerGameStorage database;
 	private int serverNumber;
+	private Timer timer;
 
 	/* Singleton */
 	private static MatchmakerQueue instance;
@@ -31,6 +34,13 @@ public class MatchmakerQueue {
 		this.activeServers = new HashMap<Integer, MultiplayerServer>();
 		this.database = new PlayerGameStorage();
 		this.serverNumber = 0;
+		this.timer = new Timer();
+		class ListTask extends TimerTask {
+			public void run() {
+				checkList();
+			}
+		}
+		timer.schedule(new ListTask(), 0, 10000);
 	}
 
 	/**
@@ -119,6 +129,12 @@ public class MatchmakerQueue {
 	public void checkForGame(NewMultiGameRequest request, Connection connection) {
 		int playerID = request.playerID;
 		String gameId = request.gameId;
+		try {
+			System.out.println("Rating: " + database.getPlayerRating(playerID, gameId));
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for (int i = 0; i < queuedUsers.size(); i++) {
 			if (!gameId.equals(queuedUsers.get(i).get(0))) {
 				continue;
@@ -129,32 +145,9 @@ public class MatchmakerQueue {
 			player1.add(playerID);
 			player1.add(connection);
 			ArrayList<Object> player2 = queuedUsers.get(i);
-			if (goodGame(player1, player2)) {
-				int p1Rating = 0, p2Rating = 0;
-				int player1ID = (Integer)player1.get(2);
-				int player2ID = (Integer)player2.get(2);
-				Connection player1Conn = (Connection)player1.get(3);
-				Connection player2Conn = (Connection)player2.get(3);
-				String game = (String)player1.get(0);
-				try {
-					p1Rating = database.getPlayerRating(player1ID, game);
-					p2Rating = database.getPlayerRating(player2ID, game);
-				} catch (DatabaseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				MultiplayerServer gameServer = new MultiplayerServer(player1ID, player2ID, player1Conn,
-						player2Conn, game, serverNumber, this, p1Rating, p2Rating);
-				activeServers.put(serverNumber, gameServer);
+			if (goodGame(player1, player2)) {			
+				launchGame(player1, player2);
 				queuedUsers.remove(i);
-				NewMultiSessionResponse session = new NewMultiSessionResponse();
-				session.sessionId = serverNumber;
-				serverNumber++;
-				session.gameId = gameId;
-				session.host = true;
-				connection.sendTCP(session);
-				session.host = false;
-				((Connection) player2.get(3)).sendTCP(session);
 				return;
 			}		
 		}
@@ -220,6 +213,59 @@ public class MatchmakerQueue {
 		}
 	}
 	
+	private void launchGame(ArrayList<Object> player1, ArrayList<Object> player2) {
+		int p1Rating = 0, p2Rating = 0;
+		int player1ID = (Integer)player1.get(2);
+		int player2ID = (Integer)player2.get(2);
+		Connection player1Conn = (Connection)player1.get(3);
+		Connection player2Conn = (Connection)player2.get(3);
+		String game = (String)player1.get(0);
+		try {
+			p1Rating = database.getPlayerRating(player1ID, game);
+			p2Rating = database.getPlayerRating(player2ID, game);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MultiplayerServer gameServer = new MultiplayerServer(player1ID, player2ID, player1Conn,
+				player2Conn, game, serverNumber, this, p1Rating, p2Rating);
+		activeServers.put(serverNumber, gameServer);
+		
+		NewMultiSessionResponse session = new NewMultiSessionResponse();
+		session.sessionId = serverNumber;
+		serverNumber++;
+		session.gameId = ((String) player1.get(0));
+		session.host = true;
+		((Connection) player1.get(3)).sendTCP(session);
+		session.host = false;
+		((Connection) player2.get(3)).sendTCP(session);
+	}
+	
+	
+	private void checkList() {
+		System.out.println("Checking List");
+		if (queuedUsers.size() < 2) {
+			return;
+		}
+		for (int i = 0; i + 1 < queuedUsers.size(); i++) {
+			for (int j = i+1; j < queuedUsers.size(); j++) {
+				if (((String)queuedUsers.get(i).get(0)).equals(((String)queuedUsers.get(j).get(0)))) {
+					if (goodGame(queuedUsers.get(i), queuedUsers.get(j))) {
+						ArrayList<Object> player1 = new ArrayList<Object>(queuedUsers.get(i));
+						ArrayList<Object> player2 = new ArrayList<Object>(queuedUsers.get(j));
+						launchGame(player1, player2);
+						queuedUsers.remove(j);
+						queuedUsers.remove(i);
+						j--;
+						i--;
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
 	public void gameOver(int session, int player1ID, int player2ID, String gameID, int winner) {
 		System.out.println("GAME OVER WINNER IS : " + winner);
 		int player1Rating = 0;
@@ -245,7 +291,8 @@ public class MatchmakerQueue {
 	}
 	
 	public Map<Integer, MultiplayerServer> getActiveServers() {
-		return activeServers;
+		Map<Integer, MultiplayerServer> mapCopy = new HashMap<Integer, MultiplayerServer>(activeServers);
+		return mapCopy;
 	}
 	
 	public int[] elo(int p1ID, int p1Rating, int p2ID, int p2Rating, int winner) {

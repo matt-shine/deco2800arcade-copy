@@ -217,6 +217,9 @@ public class Player extends User {
 	public void setUsername(String username) {
 		if (username != null) {
 			this.username.setValue(username);
+			setChanged();
+			notifyObservers(this.username);
+			clearChanged();
 		}
 	}
 
@@ -236,6 +239,9 @@ public class Player extends User {
 	 */
 	public void setEmail(String email) {
 		this.email.setValue(email);
+		setChanged();
+		notifyObservers(this.email);
+		clearChanged();
 		// TODO
 		// Do we want to add in any checking for valid email format here?
 	}
@@ -256,6 +262,9 @@ public class Player extends User {
 	 */
 	public void setBio(String bio) {
 		this.bio.setValue(bio);
+		setChanged();
+		notifyObservers(this.bio);
+		clearChanged();
 	}
 
 	/**
@@ -274,6 +283,9 @@ public class Player extends User {
 	 */
 	public void setName(String name) {
 		this.name.setValue(name);
+		setChanged();
+		notifyObservers(this.name);
+		clearChanged();
 	}
 
 	/**
@@ -292,6 +304,9 @@ public class Player extends User {
 	 */
 	public void setAge(String age) {
 		this.age.setValue(age);
+		setChanged();
+		notifyObservers(this.age);
+		clearChanged();
 	}
 
 	/**
@@ -310,6 +325,9 @@ public class Player extends User {
 	 */
 	public void setProgram(String program) {
 		this.program.setValue(program);
+		setChanged();
+		notifyObservers(this.program);
+		clearChanged();
 	}
 
 	/**
@@ -330,6 +348,9 @@ public class Player extends User {
 	 */
 	public void setIcon(Icon icon) {
 		this.icon = icon.clone();
+		setChanged();
+		notifyObservers(this.icon);
+		clearChanged();
 	}
 
 	/**

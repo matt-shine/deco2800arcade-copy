@@ -57,7 +57,7 @@ public class GeneralDiscussion {
 	    this.btnNewButton = new JButton("New Thread");
 	    this.btnNewButton.setBounds(7, 194, 116, 25);
 	    f.getContentPane().add(this.btnNewButton);
-	   // addMakeThreadListener(this.btnNewButton);
+	    addMakeThreadListener(this.btnNewButton);
 	      
 	    this.lblArcadeForum = new JLabel("ARCADE FORUM");
 	    this.lblArcadeForum.setForeground(Color.WHITE);
@@ -132,22 +132,16 @@ public class GeneralDiscussion {
 		});
 	}
 	   
- /**
- * 
-* 	
-	   	public void open_MakeThread() {
-	   		this.f.setContentPane(new JPanel(new BorderLayout()));
-	   		new MakeThread();
-	   	}
+	public void open_MakeThread() {
+		this.f.setContentPane(new JPanel(new BorderLayout()));
+	   	new MakeThread();
+	}
 	   	
-	   	private void addMakeThreadListener(JButton button) {
-	   		button.addMouseListener(new MouseAdapter() {
-	   			public void mouseClicked(MouseEvent e) {
-	   				open_MakeThread();
-	   			}
-	   		});
-	   	}
-**/		   
-	   
-	   
+	private void addMakeThreadListener(JButton button) {
+		button.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				open_MakeThread();
+			}
+		});
+	}   
 }

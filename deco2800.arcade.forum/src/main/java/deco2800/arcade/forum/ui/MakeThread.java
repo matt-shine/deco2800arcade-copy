@@ -24,10 +24,10 @@ import java.awt.event.MouseEvent;
  * @author TeamForum
  */
 public class MakeThread {
-	private static JTextField TitleTBox;
-	private static JTextField TagsTBox;
+	private JTextField TitleTBox;
+	private JTextField TagsTBox;
 
-	   public static void main(String[] args) {
+	   public MakeThread() {
 	      //Initialize new JFrame for forum interface
 	      JFrame f = new JFrame("Arcade Forum");
 	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

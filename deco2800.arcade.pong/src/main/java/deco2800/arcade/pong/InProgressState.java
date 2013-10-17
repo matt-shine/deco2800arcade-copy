@@ -24,9 +24,9 @@ public class InProgressState extends GameState {
        	boolean hitRight = ball.bounds.overlaps(right.bounds);
        	
         if (hitLeft) {
-            if (left.direction == -1) {
+            if (left.direction < 0) {
             	context.incrementAchievement("pong.slider.moveUp");
-            } else if (left.direction == 1) {
+            } else if (left.direction > 0) {
             	context.incrementAchievement("pong.slider.moveDown");
             }
         }

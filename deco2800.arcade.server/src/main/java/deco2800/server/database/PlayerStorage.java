@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * PlayerStorage deals with database access for player data.
  * 
@@ -36,11 +39,13 @@ public class PlayerStorage {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 
+		ResultSet resultSet = null;
+		Statement statement = null;
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null,
+			resultSet = connection.getMetaData().getTables(null,
 					null, "PLAYERS", null);
-			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
+			if (!resultSet.next()) {
+				statement = connection.createStatement();
 				statement
 						.execute("CREATE TABLE PLAYERS(playerID INT PRIMARY KEY,"
 								+ "username VARCHAR(30) NOT NULL,"
@@ -51,8 +56,24 @@ public class PlayerStorage {
 								+ "age VARCHAR(30))");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create players table", e);
+			 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException("Unable to create PLAYERS table.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+				 logger.error(e.getStackTrace().toString());
+			}
 		}
 		initialised = true;
 	}
@@ -77,8 +98,10 @@ public class PlayerStorage {
 			resultSet.updateString("age", age);
 			resultSet.insertRow();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			 throw new DatabaseException(
+						"Unable to add player to database", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -92,7 +115,8 @@ public class PlayerStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -132,7 +156,8 @@ public class PlayerStorage {
 			data.add(details.get(5));
 			return data;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to get player information from database", e);
 		} finally {
@@ -147,7 +172,8 @@ public class PlayerStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -294,7 +320,8 @@ public class PlayerStorage {
 					+ " = " + newValue + " WHERE playerID = " + playerID + ";");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to update player username in database", e);
 		} finally {
@@ -309,7 +336,8 @@ public class PlayerStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(PlayerStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}

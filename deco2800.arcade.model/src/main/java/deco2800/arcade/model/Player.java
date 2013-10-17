@@ -43,6 +43,7 @@ public class Player extends User {
 
 	private LibraryStyle libraryStyle;
 
+<<<<<<< HEAD
 	private Icon icon;
 
 	/**
@@ -63,6 +64,18 @@ public class Player extends User {
 
 		this.friendInvites = new FriendInvites();
 
+=======
+	@Deprecated
+	/**
+	 * DO NOT USE THIS METHOD, AT ALL, EVER.
+	 */
+	public Player(int playerID, String username, String filepath) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, username);
+		this.games = new Games();
+		this.friends = new Friends();
+		this.friendInvites = new FriendInvites();
+>>>>>>> master
 		this.blocked = new Blocked();
 
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, false);
@@ -112,7 +125,7 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
+
 	}
 
 	/**
@@ -125,6 +138,15 @@ public class Player extends User {
 	 * @param details
 	 *            An array of strings containing the player's username, name,
 	 *            email, program, bio and age.
+	 * @param friendsList
+	 * 			A set of Users which represents a Player's friends list.
+	 * @param friendRequestsList
+	 * 			A set of Users which represents a Player's 
+	 * 			received friend request list.
+	 * @param blockedList
+	 * 			A set of Users which represents a Player's blocked list.
+	 * @param gamesList
+	 * 			A set of Games which represent a Player's games.
 	 * @param privacy
 	 *            A boolean array of privacy settings.
 	 * @require There are at least 7 elements in privacy array. Elements 1
@@ -196,8 +218,8 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
 	}
+
 
 	/**
 	 * getUsername returns a string of the player created
@@ -217,6 +239,9 @@ public class Player extends User {
 	public void setUsername(String username) {
 		if (username != null) {
 			this.username.setValue(username);
+			setChanged();
+			notifyObservers(this.username);
+			clearChanged();
 		}
 	}
 
@@ -236,6 +261,9 @@ public class Player extends User {
 	 */
 	public void setEmail(String email) {
 		this.email.setValue(email);
+		setChanged();
+		notifyObservers(this.email);
+		clearChanged();
 		// TODO
 		// Do we want to add in any checking for valid email format here?
 	}
@@ -256,6 +284,9 @@ public class Player extends User {
 	 */
 	public void setBio(String bio) {
 		this.bio.setValue(bio);
+		setChanged();
+		notifyObservers(this.bio);
+		clearChanged();
 	}
 
 	/**
@@ -274,6 +305,9 @@ public class Player extends User {
 	 */
 	public void setName(String name) {
 		this.name.setValue(name);
+		setChanged();
+		notifyObservers(this.name);
+		clearChanged();
 	}
 
 	/**
@@ -292,6 +326,9 @@ public class Player extends User {
 	 */
 	public void setAge(String age) {
 		this.age.setValue(age);
+		setChanged();
+		notifyObservers(this.age);
+		clearChanged();
 	}
 
 	/**
@@ -310,26 +347,9 @@ public class Player extends User {
 	 */
 	public void setProgram(String program) {
 		this.program.setValue(program);
-	}
-
-	/**
-	 * Access method for the Player's icon
-	 * 
-	 * @return The Player's icon
-	 */
-	public Icon getIcon() {
-		return this.icon.clone();
-	}
-
-	/**
-	 * Sets the Player's icon that the provided icon.
-	 * 
-	 * @param icon
-	 *            The icon to set to the Player.
-	 * @require icon != null
-	 */
-	public void setIcon(Icon icon) {
-		this.icon = icon.clone();
+		setChanged();
+		notifyObservers(this.program);
+		clearChanged();
 	}
 
 	/**
@@ -412,9 +432,9 @@ public class Player extends User {
 	 *            The friend to be added to the friends set.
 	 * @ensure this.friends.contains(friend)
 	 */
-	public void addFriend(User friend) {
-		if (friend != null /* && this.hasInvite(friend) */) {
-			this.friends.add(new User(friend.getID()));
+	public void acceptFriendInvite(User friend) {
+		if (friend != null  && this.hasInvite(friend)) {
+			this.friends.add(friend);
 			setChanged();
 			notifyObservers(friends);
 			clearChanged();

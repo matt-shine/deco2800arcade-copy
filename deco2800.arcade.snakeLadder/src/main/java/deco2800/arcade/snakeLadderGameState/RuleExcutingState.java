@@ -27,6 +27,15 @@ public class RuleExcutingState extends GameState {
 			{
 				Rule r = new LadderSnakeRule();
 				r.excuteRules(playerIndex, rule, context);
+				//if player reaches the ladder and get a short cut
+				if(rule.startsWith("L"))
+				{
+					//check if the player is local player instead of AI
+					if (!context.gamePlayers[playerIndex].isAI()) {
+						//add one achievement to reachLadder achievement
+				    	context.incrementAchievement("snakeLadder.reachLadder");
+				    }
+				}
 			}
 			//search the implementation class for the plugin rules
 			else if(!rule.equals("."))

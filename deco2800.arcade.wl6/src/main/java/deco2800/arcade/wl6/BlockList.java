@@ -21,10 +21,10 @@ public class BlockList {
                     new BlockInfo(true, "greybrick"),
 
                     //3: grey brick wall with nazi flag
-                    new BlockInfo(true, "greybrick"),
+                    new BlockInfo(true, "greybrickflag"),
 
                     //4: grey brick wall with hitler portrait
-                    new BlockInfo(true, "greybrick"),
+                    new BlockInfo(true, "greybrickportrait"),
 
                     //5: prison cell (blue brick)
                     new BlockInfo(true, "cell"),

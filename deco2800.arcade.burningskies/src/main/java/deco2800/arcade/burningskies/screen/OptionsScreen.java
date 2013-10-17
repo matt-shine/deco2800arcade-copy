@@ -38,7 +38,6 @@ public class OptionsScreen implements Screen {
     private Skin skin;
     private SpriteBatch batch;
     private TextButton backButton;
-    private Label label;
     private Image background;
 	private MenuInputProcessor processor;
 	private Slider masterVolumeSlider;
@@ -127,7 +126,6 @@ public class OptionsScreen implements Screen {
 	    createLabels();
 	    
 	    stage.addActor(backButton);
-	    stage.addActor(label);
 	    stage.addActor(masterVolumeLabel);
 	    stage.addActor(effectsVolumeLabel);
 	    stage.addActor(backgroundVolumeLabel);
@@ -141,12 +139,7 @@ public class OptionsScreen implements Screen {
 	}
 	public void createLabels() {
 		LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    label = new Label("Options", ls);
-	    label.setX(0);
-	    label.setY((float)(height*0.95));
-	    label.setWidth(width);
-	    label.setAlignment(Align.center);
-	    
+
 	    masterVolumeLabel = new Label("Master Volume", ls);
 	    masterVolumeLabel.setX(0);
 	    masterVolumeLabel.setY(height/2 + 130);

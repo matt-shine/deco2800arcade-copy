@@ -7,6 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+
 public class IngameUI extends Stage {
 
     private static ShapeRenderer r = new ShapeRenderer();
@@ -43,7 +45,15 @@ public class IngameUI extends Stage {
     	String level = game.getLevel();
     	int dif = game.getDifficulty();
     	
-    	text.setText("Health: " + health + " Ammo: " + ammo + " Gun: " + gun + " Points: " + points + " Level: " + level + " Difficulty: " + dif);
+    	text.setText(
+    			"Health: " + health +
+    			" Ammo: " + ammo +
+    			" Gun: " + gun +
+    			" Points: " + points +
+    			" Level: " + level +
+    			" Difficulty: " + dif +
+    			" Keys: " + (game.getPlayer().hasKey(KEY_TYPE.GOLD) ? "Gold " : "") + (game.getPlayer().hasKey(KEY_TYPE.SILVER) ? "Silver " : "")
+    	);
     	
     }
 

@@ -208,4 +208,11 @@ public class ArcadeSystem {
         return gameSet;
     }
 
+    public static boolean isBettingLobby() {
+    	return arcade.isBettingLobby();
+    }
+    public static void setBettingLobby(boolean b) {
+    	 arcade.setBettingLobby(b);	
+    }
+
 }

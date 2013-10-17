@@ -7,8 +7,8 @@ public abstract class PowerUp extends Entity {
 	
 	float stateTime;
 	
-	private Vector2 position;
-	private Vector2 velocity;
+	private Vector2 position = new Vector2();
+	private Vector2 velocity = new Vector2();
 
 	/**
 	 * Initialise the power up and randomly set the velocity
@@ -17,10 +17,9 @@ public abstract class PowerUp extends Entity {
 	 * @param y
 	 */
 	public PowerUp(Texture texture, float x, float y) {
-		super(texture);//, 10, 7, 0.15f);
-		//TODO: TEST CODE REMOVE
-		position = new Vector2(x, y);
-		velocity = new Vector2(randVel() * randDirection(), randVel() * randDirection());
+		super(texture);
+		position.set(x, y);
+		velocity.set(randVel() * randDirection(), randVel() * randDirection());
 		setPosition(x, y);
 	}
 
@@ -40,7 +39,7 @@ public abstract class PowerUp extends Entity {
 	 * @return 
 	 */	
 	private float randVel() {
-		return (float) (Math.random()*50 + 50);
+		return (float) (Math.random()*30 + 30);
 	}
 	
 	private int randDirection() {

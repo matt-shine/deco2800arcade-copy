@@ -136,6 +136,7 @@ public class BurningSkies extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
+		stopSong();
 	}
 
 	@Override

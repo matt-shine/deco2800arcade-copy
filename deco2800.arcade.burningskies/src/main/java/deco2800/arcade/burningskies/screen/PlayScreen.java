@@ -103,7 +103,7 @@ public class PlayScreen implements Screen
     	healthBar = new ShapeRenderer();
     	healthBar.setProjectionMatrix(camera.combined);
     	
-        game.playSong("level1");
+        game.playSong("level" + (int)(Math.random()+0.5));
     	
     	player = new PlayerShip(1000, shipTex[game.zalgo], new Vector2(400, 100), this);
     	level = new Level(this);
@@ -120,9 +120,7 @@ public class PlayScreen implements Screen
     
     @Override
     public void hide() {
-    	//TODO: Make sure this resets properly
     	ArcadeInputMux.getInstance().removeProcessor(processor);
-    	game.stopSong();
     	stage.dispose();
     }
     
@@ -145,6 +143,7 @@ public class PlayScreen implements Screen
     					sp.setTimer((float) 2.5);
     				} else {
     					// Create a game over screen
+    					game.playSong("gameover");
     					game.setScreen(game.menuScreen);
     				}
     			}

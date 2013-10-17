@@ -20,9 +20,9 @@ public class Enemy extends Ship {
 	
 	private Vector2 dirAccel = new Vector2();
 	
-	private float accelIntensity;
+	protected float accelIntensity;
 	
-	private boolean homing;
+	protected boolean homing;
 
 	private long points;
 	
@@ -59,30 +59,15 @@ public class Enemy extends Ship {
 	public boolean remove() {
 		if(getStage() != null) {
 			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 1));
-		}
-		// Randomly drop powerups
-		if(Math.random() <= 0.05) {
-			screen.addPowerup(new UpgradePowerUp(getCenterX(), getCenterY()));
+			// Randomly drop powerups
+			if(Math.random() <= 0.05) {
+				screen.addPowerup(new UpgradePowerUp(getCenterX(), getCenterY()));
+			}
 		}
 		return super.remove();
 	}
 	
-	private void move(float delta) {
-		
-//		playerDir.set(player.getCenterX() - this.getCenterX(), player.getCenterY() - this.getCenterY());
-//		playerDir.nor();
-//		playerDir.mul(5);
-//		if((this.getRotation() + 90 - playerDir.angle()) > 0) {
-//			playerDir.rotate(-45);
-//		} else {
-//			playerDir.rotate(45);
-//		}
-//		velocity.add(playerDir);
-		//normalise our velocity
-//    	velocity.nor();
-//    	velocity.mul(speed);
-//    	position.add( velocity.x * delta, velocity.y * delta );
-		
+	private void move(float delta) {		
 		//home in to the player
 		if(homing) {
 //			System.out.println("Player x : " + player.getX() + ", y: " + player.getY());

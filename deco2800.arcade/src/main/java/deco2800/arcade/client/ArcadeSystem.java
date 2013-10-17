@@ -1,5 +1,6 @@
 package deco2800.arcade.client;
 
+import deco2800.arcade.client.network.listener.NetworkListener;
 import deco2800.arcade.model.Game;
 
 import java.util.Set;
@@ -97,6 +98,15 @@ public class ArcadeSystem {
      */
 	public static boolean isLoggedIn() {
 		return arcade.hasPlayer();
+	}
+	
+	/**
+     * Adds listener to client
+	 * @param listener 
+     * @return true if logged in, false otherwise
+     */
+	public static void addListener(NetworkListener listener) {
+		arcade.getClient().addListener(listener);
 	}
 
     /**

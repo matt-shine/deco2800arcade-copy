@@ -8,13 +8,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
 
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameOverListener;
-import deco2800.arcade.client.network.listener.ConnectionListener;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.NetworkException;
+import deco2800.arcade.client.network.listener.NetworkListener;
+import deco2800.arcade.protocol.connect.ConnectionResponse;
 
 public class LoginScreen implements Screen {
 	
@@ -75,6 +79,50 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(forgotLogButton).width(400).height(35).pad(5).colspan(2);
         
+        class ConnectionListener extends NetworkListener {
+
+        	@Override
+        	public void connected(Connection connection) {
+        		super.connected(connection);
+        	}
+
+        	@Override
+        	public void disconnected(Connection connection) {
+        		super.disconnected(connection);
+        	}
+
+        	@Override
+        	public void idle(Connection connection) {
+        		super.idle(connection);
+        	}
+
+        	@Override
+        	public void received(Connection connection, Object object) {
+        		super.received(connection, object);
+        		
+        		if (object instanceof ConnectionResponse){
+        			
+
+        			ConnectionResponse connectionResponse = (ConnectionResponse)object;
+        			
+        			if (connectionResponse == ConnectionResponse.OK) {
+        				arcadeUI.setScreen(arcadeUI.main);
+        			}
+        			if (connectionResponse == ConnectionResponse.ERROR) {
+                        errorLabel.setText("Error loggin in");
+        			} else if (connectionResponse == ConnectionResponse.REFUSED) {
+                        errorLabel.setText("Incorrect password");
+        			}
+        		}
+        	}
+
+        	
+        }
+        
+        ConnectionListener listener = new ConnectionListener();
+        ArcadeSystem.addListener(listener);        
+
+        
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 if (usernameText.getText().equals("")) {
@@ -92,20 +140,7 @@ public class LoginScreen implements Screen {
                     ArcadeSystem.goToGame("gamelibrary");
                 }
                 else {
-                	ConnectionListener listener = new ConnectionListener();
-                	
-                    ArcadeSystem.login(usernameText.getText());
-                    try {
-						wait(5);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-            		if (listener.loggedIn) {
-            			arcadeUI.setScreen(arcadeUI.main);
-            		} else {
-            			errorLabel.setText("Incorrect password");
-            		}
+                    ArcadeSystem.login(usernameText.getText(), passwordText.getText());
                 }
             }
         });

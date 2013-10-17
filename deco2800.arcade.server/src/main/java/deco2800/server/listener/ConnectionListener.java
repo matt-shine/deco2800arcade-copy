@@ -9,6 +9,7 @@ import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.HashStorage;
+import deco2800.server.database.PlayerDatabaseManager;
 
 
 public class ConnectionListener extends Listener {
@@ -16,6 +17,8 @@ public class ConnectionListener extends Listener {
 	private Set<String> connectedUsers;
 	private boolean initialised = false;
 	private HashStorage hashStorage = new HashStorage();
+
+    
 	
 	public ConnectionListener(Set<String> connectedUsers){
 		this.connectedUsers = connectedUsers;
@@ -31,10 +34,10 @@ public class ConnectionListener extends Listener {
 	 */
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
-		
 		if (object instanceof ConnectionRequest) {
 			ConnectionRequest request = (ConnectionRequest) object;
-			
+
+            
 			if (initialised == false) {
 				try {
 					hashStorage.initialise();
@@ -47,6 +50,7 @@ public class ConnectionListener extends Listener {
 			
 			try {
 				if (hashStorage.checkPassword(request.username, request.password) == true) {
+					System.out.println("user authenticated.........................................\n");
 					connection.sendTCP(ConnectionResponse.OK);
 					connectedUsers.add(request.username);
 				} else {
@@ -56,6 +60,7 @@ public class ConnectionListener extends Listener {
 				connection.sendTCP(ConnectionResponse.ERROR);
 				e.printStackTrace();
 			}
+			System.out.println("sending login response.........................................\n");
 		}
 	}
 

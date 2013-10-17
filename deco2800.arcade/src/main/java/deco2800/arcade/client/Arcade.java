@@ -193,7 +193,8 @@ public class Arcade extends JFrame {
 		
 		if (!password.equals("")) {
 			this.client.sendNetworkObject(connectionRequest);
-			
+
+            System.out.println("sending login request.........................................\n");
 		}
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
@@ -219,6 +220,7 @@ public class Arcade extends JFrame {
         // TODO move this call to be internal to Packman class
         // TODO iterate over actual game ids rather than just
         // using pong
+		/*
         GameUpdateCheckRequest gameUpdateCheckRequest = new
                 GameUpdateCheckRequest();
         gameUpdateCheckRequest.gameID = "pong";
@@ -228,7 +230,7 @@ public class Arcade extends JFrame {
 
         GameUpdateCheckResponse resp = (GameUpdateCheckResponse) r;
 
-        System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
+        System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);*/
 	}
 
 	/**
@@ -425,6 +427,14 @@ public class Arcade extends JFrame {
      */
     public GameClient getCurrentGame() {
         return selectedGame;
+    }
+    
+    /**
+     * Get the network client
+     * @return client
+     */
+    public NetworkClient getClient() {
+        return client;
     }
 
     /**

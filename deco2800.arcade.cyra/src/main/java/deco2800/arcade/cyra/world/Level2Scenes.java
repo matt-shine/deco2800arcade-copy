@@ -158,6 +158,9 @@ public class Level2Scenes extends LevelScenes {
 	public boolean update(float delta) {
 		System.out.println("playing "+scenePosition);
 		if (scenePosition == 0) {
+			if (soldierBoss.getPosition().y > 45) {
+				soldierBoss.getPosition().y -= delta * 4f;
+			}
 			if (ship.getPosition().x < 248f) {
 				ship.getPosition().x += delta * Player.SPEED;
 			} else {
@@ -188,7 +191,9 @@ public class Level2Scenes extends LevelScenes {
 			//Scene to introduce the boss
 			manager.update(delta);
 			//ship.getVelocity().x = Ship.SPEED / 1.5f;
-			ship.getVelocity().x = 12f / 1.5f; //after changed ship's default speed
+			//ship.getVelocity().x = 12f / 1.5f; //after changed ship's default speed
+			ship.getPosition().x += delta * (cam.position.x - ship.getPosition().x) * 0.5f;
+			ship.getPosition().y = 4f;
 			boss.getArms().resetPosition();
 			float lerp = 0.8f;
 			targetPos -= delta * 1.5;

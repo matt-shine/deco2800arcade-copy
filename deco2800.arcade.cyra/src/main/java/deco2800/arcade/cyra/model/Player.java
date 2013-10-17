@@ -38,6 +38,7 @@ public class Player extends MovableEntity{
 	float wallTime = WALL_ATTACH_TIME;
 	private boolean wallClimbEnabled = true;
 	private float doubleTapTime = 0;
+	private boolean isOverForeground = false;
 	
 	public Player(Vector2 pos) {
 		super (SPEED, 0, pos, WIDTH, HEIGHT);
@@ -274,6 +275,13 @@ public class Player extends MovableEntity{
 		this.wallClimbEnabled = wallClimbEnabled;
 	}
 	
+	public void setOverForeground(boolean overForeground) {
+		isOverForeground = overForeground;
+	}
+	
+	public boolean isOverForeground() {
+		return isOverForeground;
+	}
 	
 	
 	public void update(Player ship) {

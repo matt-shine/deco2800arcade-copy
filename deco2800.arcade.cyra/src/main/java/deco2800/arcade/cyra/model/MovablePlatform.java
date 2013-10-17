@@ -76,6 +76,7 @@ public class MovablePlatform extends MovableEntity{
 	}
 	
 	public Vector2 getPositionDelta() {
+		
 		return positionDelta;
 	}
 	

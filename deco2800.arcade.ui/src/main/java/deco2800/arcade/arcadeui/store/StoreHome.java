@@ -41,16 +41,21 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @param ui
 	 */
 	public StoreHome(ArcadeUI ui) {
-		arcadeUI = ui; // Do I need this for something? Switching pages maybe?
-		skin.add("background", new Texture(Gdx.files.internal("store/main_bg.png")));
-		
-		for (String gamename : ArcadeSystem.getGamesList()) {
-			try {
-				skin.add(gamename, new Texture(Gdx.files.internal("logos/" + gamename + ".png")));
-			} catch (Exception e) {
-				skin.add(gamename, new Texture(Gdx.files.internal("logos/default.png")));
-			}
-		}
+		arcadeUI = ui;
+		skin.add("background", new Texture
+				(Gdx.files.internal("store/main_bg.png")));
+
+		// Load the logo for all of the games (or default), and store them
+		// in the skin, with their name as their key.
+//		for (Game gamename : ArcadeSystem.getArcadeGames()) {
+//			try {
+//				skin.add(gamename.id, new Texture
+//						(Gdx.files.internal("logos/" + gamename.id + ".png")));
+//			} catch (Exception e) {
+//				skin.add(gamename.id, new Texture
+//						(Gdx.files.internal("logos/default.png")));
+//			}
+//		}
 		
 		// The background for the store.
 		Table bg = new Table();
@@ -68,27 +73,33 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		populateGamesBox(stage, skin);
 		
+		// The glowing border of the icon in the featured box.
 		featured_bg = new Button(skin, "icon_bg");
 		featured_bg.setSize(158, 158);
-		featured_bg.setPosition(226, 453);
+		featured_bg.setPosition(224, 453);
 		stage.addActor(featured_bg);
 		
+		// The featured game's icon, located at the left of the top bar.
 		featured_icon = new Button(skin, "icon");
 		featured_icon.setSize(140, 140);
-		featured_icon.setPosition(235, 462);
+		featured_icon.setPosition(233, 462);
 		stage.addActor(featured_icon);
 		
+		// The description of the featured game, 
 		description = new Label("Loading...", skin);
 		description.setWrap(true);
 		description.setSize(400, 120);
 		description.setPosition(350, 470);
 		stage.addActor(description);
 		
+		// Entry field for search term. Will update the featured game, as well
+		// as the search result located below it.
 		searchField.setSize(300, 42);
 		searchField.setPosition(860, 535);
 		searchField.setMessageText("Search");
 		stage.addActor(searchField);
 		
+		// Search button. Will 
 		searchButton.setSize(126, 55);
 		searchButton.setPosition(1039, 480);
 		stage.addActor(searchButton);
@@ -148,8 +159,8 @@ public class StoreHome implements Screen, StoreScreen {
 				}
 				searchResult.setText(result.name);
 				if (featured.id != result.id) {
-					setSelected(result.id);
-					if (fade == 70) {
+					featured = result;
+					if (fade == 60) {
 						fade--; // Will trigger textFade and iconFade in render.
 					}
 				}
@@ -187,20 +198,21 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @param skin
 	 */
 	private void populateGamesBox(Stage stage, Skin skin)  {
+		/*
 		int number = (int)Math.floor(ArcadeSystem.getGamesList().size() * Math.random());
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()[number];
 		for (int i = 0; i < 8; ++i) {
-			String Gamename = ArcadeSystem.getGamesList().toArray()
+			String gameName = ArcadeSystem.getGamesList().toArray()
 					[(number+i)%ArcadeSystem.getGamesList().size()] + "";
 			final TextButton gameGrid =
-					new TextButton("\n\n\n\n\n" + Gamename, skin, "icon");
+					new TextButton("\n\n\n\n\n" + gameName, skin, "icon");
 			gameGrid.setSize(160, 170);
-			gameGrid.setName(Gamename);
+			gameGrid.setName(gameName);
 			
-			final Button gameGridIcon = new Button(skin.getDrawable(Gamename));
+			final Button gameGridIcon = new Button(skin.getDrawable(gameName));
 			gameGridIcon.setSize(120, 112);
-			gameGridIcon.setName(Gamename);
+			gameGridIcon.setName(gameName);
 			
 			// ^This sets the games 
 			if (i < 4) {
@@ -212,7 +224,7 @@ public class StoreHome implements Screen, StoreScreen {
 			}
 			gameGrid.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					if (fade == 70) {
+					if (fade == 60) {
 						setSelected(gameGrid.getName());
 						fade--; // Will trigger textFade and iconFade in render.
 					}
@@ -220,7 +232,7 @@ public class StoreHome implements Screen, StoreScreen {
 			});
 			gameGridIcon.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					if (fade == 70) {
+					if (fade == 60) {
 						setSelected(gameGrid.getName());
 						fade--; // Will trigger textFade and iconFade in render.
 					}
@@ -229,6 +241,7 @@ public class StoreHome implements Screen, StoreScreen {
 			stage.addActor(gameGrid);
 			stage.addActor(gameGridIcon);
 		}
+		*/
 	}
 	
 	/**
@@ -243,16 +256,16 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @param fade > -70
 	 */
 	private void textFade() {
-		if (fade <= -70) {
+		if (fade <= -60) {
 			// reset text, in case some terrible occurrence occurred.
-			fade = 70;
+			fade = 60;
 			description.setColor(1, 1, 1, 1);
 			featured_bg.setColor(1, 1, 1, 1);
 			featured_bg.setX(112);
 			featured_icon.setColor(1, 1, 1, 1);
 			featured_icon.setX(121);
-		} else if (fade < 40 && fade > -40) {
-			// While 'fade' is between 40 and -40, it will call iconfade.
+		} else if (fade < 30 && fade > -30) {
+			// While 'fade' is between 30 and -30, it will call iconfade.
 			// The text will remain invisible, and will update to the new
 			// description when fade == 0.
 			fade--;
@@ -263,17 +276,18 @@ public class StoreHome implements Screen, StoreScreen {
 						|| featured.description.equals("N/A")) {
 					description.setText(featured.name
 							+ "\nNo Description Available");
+				} else if (featured.description.length() > 100) {
+					description.setText(featured.name + "\n"
+							+ featured.description.substring(0, 100));
 				} else {
-					description.setText(featured.name
-							+ "\n" + featured.description);
-					// TODO consider cropping description to max length of ~100 chars.
+					description.setText(featured.name + "\n" + featured.description);
 				}
 			}
 			description.setColor(1, 1, 1, 0);
-		} else if (fade < 70 && fade > -70) {
+		} else if (fade < 60 && fade > -60) {
 			// text fade in and out.
 			fade--;
-			description.setColor(1, 1, 1, (Math.abs(fade) - 40) / 30);
+			description.setColor(1, 1, 1, (Math.abs(fade) - 30) / 30);
 		}
 	}
 	
@@ -283,21 +297,21 @@ public class StoreHome implements Screen, StoreScreen {
 	 * it out at the same sign, then do the reverse. Also has a small pause.
 	 * 
 	 * @author Addison Gourluck
-	 * @param fade < 40
-	 * @param fade > -40
+	 * @param fade < 30
+	 * @param fade > -30
 	 */
 	private void iconFade() {
 		if (fade > -1) {
-			featured_bg.setX(featured_bg.getX() + 3); // move right first
-			featured_icon.setX(featured_icon.getX() + 3);
+			featured_bg.setX(featured_bg.getX() + 4); // move right first
+			featured_icon.setX(featured_icon.getX() + 4);
 		} else if (fade < -1) {
-			featured_bg.setX(featured_bg.getX() - 3); // then move back left
-			featured_icon.setX(featured_icon.getX() - 3);
+			featured_bg.setX(featured_bg.getX() - 4); // then move back left
+			featured_icon.setX(featured_icon.getX() - 4);
 		} else if (fade == -1) {
 			naptime(300); // stay hidden for a short while
 		}
-		featured_bg.setColor(1, 1, 1, Math.abs(fade) / 40);
-		featured_icon.setColor(1, 1, 1, Math.abs(fade) / 40);
+		featured_bg.setColor(1, 1, 1, Math.abs(fade) / 30);
+		featured_icon.setColor(1, 1, 1, Math.abs(fade) / 30);
 		// fade out icon
 	}
 	
@@ -309,13 +323,14 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @return Game
 	 */
 	private Game search(String input) {
-		if (input.length() <= 1) {
-			return null; // No searches for 0 or 1 chars.
+		if (input.length() <= 2) {
+			return null; // No searches for 0, 1 or 2 chars.
 		}
 		input = input.toLowerCase();
+		// Check if the input is a substring of a game.
 		for (Game game : ArcadeSystem.getArcadeGames()) {
-			if (game.name.toLowerCase().startsWith(input)
-					|| game.id.toLowerCase().startsWith(input)) {
+			if (game.name.toLowerCase().contains(input)
+					|| game.id.toLowerCase().contains(input)) {
 				return game;
 			}
 		}
@@ -343,7 +358,7 @@ public class StoreHome implements Screen, StoreScreen {
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		textFade();
+		//textFade();
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}

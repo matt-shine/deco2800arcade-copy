@@ -39,6 +39,7 @@ public class GeneralDiscussion {
 	private JButton btnNewButton;
 	private JButton btnSearch;
 	private JFrame f;
+	private MakeThreadView makeThread;
 	
 
 	public GeneralDiscussion(JFrame window) {
@@ -57,6 +58,7 @@ public class GeneralDiscussion {
 	    this.btnNewButton = new JButton("New Thread");
 	    this.btnNewButton.setBounds(7, 194, 116, 25);
 	    f.getContentPane().add(this.btnNewButton);
+	    addMakeThreadListener(this.btnNewButton);
 	      
 	    this.lblArcadeForum = new JLabel("ARCADE FORUM");
 	    this.lblArcadeForum.setForeground(Color.WHITE);
@@ -121,6 +123,7 @@ public class GeneralDiscussion {
 		this.f.setContentPane(new JPanel(new BorderLayout()));
 		new ForumUi(this.f);
 	}
+
 	   
 	private void addHomeLabelListener(JLabel label) {
 		label.addMouseListener(new MouseAdapter() {
@@ -129,4 +132,17 @@ public class GeneralDiscussion {
 			}
 		});
 	}
+	   
+	public void open_MakeThread() {
+		this.f.setContentPane(new JPanel(new BorderLayout()));
+	   	this.makeThread = new MakeThreadView();
+	}
+	   	
+	private void addMakeThreadListener(JButton button) {
+		button.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				open_MakeThread();
+			}
+		});
+	}   
 }

@@ -1,5 +1,7 @@
 package deco2800.arcade.cyra.game;
 
+import com.badlogic.gdx.Screen;
+
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -18,12 +20,14 @@ public class Cyra extends GameClient {
 
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
+	private boolean isPaused;
 	
       
     public Cyra(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.networkClient = networkClient; //this is a bit of a hack
         this.achievementClient = new AchievementClient(networkClient);
+        isPaused = false;
         
 	}
 
@@ -34,6 +38,32 @@ public class Cyra extends GameClient {
 	@Override
 	public void create() {		
 	
+		//Set overlay
+		this.getOverlay().setListeners(new Screen() {
+			@Override
+			public void hide() {
+				//Unpause your game here
+				isPaused = false;
+			}
+			
+			@Override
+			public void show() {
+				//Pause your game here
+				isPaused = true;
+			}
+			
+			@Override
+			public void pause() {}
+			@Override
+			public void render(float arg0) {}
+			@Override
+			public void resize(int arg0, int arg1) {}
+			@Override
+			public void resume() {}
+			@Override
+			public void dispose() {}
+		});
+		
 		super.create();
 		//setScreen(new MainMenu(this));
 		//Set to splash screen
@@ -41,6 +71,11 @@ public class Cyra extends GameClient {
 		//OR go straight to the action
 		//setScreen(new GameScreen(this));
 		
+		
+	}
+	
+	public boolean isPaused() {
+		return isPaused;
 	}
 
 	@Override

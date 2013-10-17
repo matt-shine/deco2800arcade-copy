@@ -139,6 +139,7 @@ public class ForumListener extends Listener {
 						.insertParentThread(request.topic, request.message, request.createdBy, request.category, request.tags);
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();
+				response.result = 0;
 			} finally {
 				connection.sendTCP(response);
 			}

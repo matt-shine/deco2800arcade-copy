@@ -13,11 +13,11 @@ import deco2800.arcade.protocol.forum.*;
 
 public class MakeThreadController implements ActionListener {
 	private MakeThreadView view;
-	private Client connection;
+	private ClientConnection connection;
 	
 	public MakeThreadController (MakeThreadView viewModel) throws ForumException {
 		this.view = viewModel;
-		this.connection = ClientConnection.getClient("", 0, 0);
+		this.connection = new ClientConnection("", 0, 0);
 		this.connection.addListener(new Listener() {
 			public void received(Connection con, Object object) {
 				if (object instanceof InsertParentThreadResponse) {
@@ -26,7 +26,7 @@ public class MakeThreadController implements ActionListener {
 					if (response.error != "") {
 						System.out.println("yeah... didnt work");
 					} else {
-						if (response.result != -1) {
+						if (response.result != 0) {
 							System.out.println("Thread Posted");
 						} else {
 							System.out.println("Thread failed to post");
@@ -48,7 +48,7 @@ public class MakeThreadController implements ActionListener {
 		request.createdBy = 0;
 		request.category = "roflmao";
 		request.tags = this.view.TagsTBox.getText();
-		this.connection.sendTCP(request);
+		this.connection.getClient().sendTCP(request);
 		System.out.println("pThread request is sent");
 		return;
 	}

@@ -20,14 +20,13 @@ public class Cyra extends GameClient {
 
 	private NetworkClient networkClient;
 	private AchievementClient achievementClient;
-	private boolean isPaused;
+	private boolean isPaused = false;
 	
       
     public Cyra(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.networkClient = networkClient; //this is a bit of a hack
         this.achievementClient = new AchievementClient(networkClient);
-        isPaused = false;
         
 	}
 
@@ -38,7 +37,17 @@ public class Cyra extends GameClient {
 	@Override
 	public void create() {		
 	
-		//Set overlay
+
+		
+		super.create();
+		//setScreen(new MainMenu(this));
+		//Set to splash screen
+		//setScreen(getSplashScreen());
+		//OR go straight to the action
+		setScreen(new GameScreen(this, 0.71f));
+		
+		
+		//Overlay
 		this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
@@ -63,14 +72,7 @@ public class Cyra extends GameClient {
 			@Override
 			public void dispose() {}
 		});
-		
-		super.create();
-		//setScreen(new MainMenu(this));
-		//Set to splash screen
-		//setScreen(getSplashScreen());
-		//OR go straight to the action
-		setScreen(new GameScreen(this, 0.71f));
-		
+		// End Overlay
 		
 	}
 	

@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * FriendStorage handles database access for Friends and Friend Request data
@@ -13,7 +14,6 @@ import java.util.ArrayList;
  */
 
 public class FriendStorage {
-	//FIXME seems to be a lot of repeated code through the methods
 	private boolean initialised = false;
 	
 	/**
@@ -21,16 +21,19 @@ public class FriendStorage {
 	 * 
 	 * @throws DatabaseException 
 	 * 		If SQLException occurs
+	 * @throws SQLException 
 	 */
 	public void initialise() throws DatabaseException {
 		
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
 
+		ResultSet resultSet = null;
+		Statement statement = null;
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "FRIENDS", null);
-			if (!tableData.next()){
-				Statement statement = connection.createStatement();
+			resultSet = connection.getMetaData().getTables(null, null, "FRIENDS", null);
+			if (!resultSet.next()){
+			statement = connection.createStatement();
 				statement.execute("CREATE TABLE FRIENDS(U1 INT NOT NULL,"
 						+ "U2 INT NOT NULL,"
 						+ "STATUS INT NOT NULL,"
@@ -41,7 +44,21 @@ public class FriendStorage {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to create friends table", e);
+			throw new DatabaseException("Unable to create FRIENDS table.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		initialised = true;
 	}
@@ -54,7 +71,7 @@ public class FriendStorage {
 	 * 		Returns a list of playerIDs which represent the player's friends. 
 	 * @throws DatabaseException
 	 */
-	public ArrayList<Integer> getFriendsList(int playerID) throws DatabaseException {
+	public List<Integer> getFriendsList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -73,7 +90,7 @@ public class FriendStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
-					"Unable to get to get friends information from database", e);
+					"Unable to get to get friends list from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -101,7 +118,7 @@ public class FriendStorage {
 	 * 		which the player has not yet responded to.
 	 * @throws DatabaseException
 	 */
-	public ArrayList<Integer> getFriendInviteList(int playerID) throws DatabaseException {
+	public List<Integer> getFriendInviteList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -148,7 +165,7 @@ public class FriendStorage {
 	 * 			The list of blocked players of the player represented by the playerID.
 	 * @throws DatabaseException
 	 */
-	public ArrayList<Integer> getBlockedList(int playerID) throws DatabaseException {
+	public List<Integer> getBlockedList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -167,7 +184,7 @@ public class FriendStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(
-					"Unable to get player's blocked information from database", e);
+					"Unable to get player's blocked list from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -196,7 +213,7 @@ public class FriendStorage {
 	 * @return Returns the player's friends.
 	 * @throws SQLException
 	 */
-	private ArrayList<Integer> findPlayers(int playerID, ResultSet results)
+	private List<Integer> findPlayers(int playerID, ResultSet results)
 			throws SQLException {
 		ArrayList<Integer> players = new ArrayList<Integer>();
 		while (results.next()) {
@@ -248,8 +265,8 @@ public class FriendStorage {
 				resultSet.moveToCurrentRow();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DatabaseException("Unable to block player in database.", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -292,8 +309,8 @@ public class FriendStorage {
 				resultSet.updateRow();
 			} 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DatabaseException("Unable to unblock player in database.", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -351,8 +368,8 @@ public class FriendStorage {
 			resultSet.moveToCurrentRow();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DatabaseException("Unable to add friend request to database.", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -398,8 +415,9 @@ public class FriendStorage {
 				resultSet.updateRow();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new DatabaseException(
+					"Unable to accept friend request in database", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -430,11 +448,11 @@ public class FriendStorage {
 	 */
 	public void removeFriend(int playerID, int friendID) throws DatabaseException {
 		Connection connection = Database.getConnection();
-		Statement stmt = null;
+		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
-			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS");
+			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			resultSet = statement.executeQuery("SELECT * FROM FRIENDS");
 			while (resultSet.next()) {
 				int user1 = resultSet.getInt("U1");
 				int user2 = resultSet.getInt("U2");
@@ -446,7 +464,6 @@ public class FriendStorage {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			//clean up JDBC objects
@@ -454,8 +471,8 @@ public class FriendStorage {
 				if (resultSet != null){
 					resultSet.close();
 				}
-				if (stmt != null){
-					stmt.close();
+				if (statement != null){
+					statement.close();
 				}
 				if (connection != null){
 					connection.close();
@@ -476,7 +493,7 @@ public class FriendStorage {
 	 */
 	public boolean isBlocked(int player1, int player2) throws DatabaseException {
 		
-		ArrayList<Integer> blocked = getBlockedList(player1);
+		ArrayList<Integer> blocked = (ArrayList<Integer>) getBlockedList(player1);
 		return blocked.contains(player2);
 	}
 	
@@ -490,7 +507,7 @@ public class FriendStorage {
 	 */
 	public boolean isFriends(int player1, int player2) throws DatabaseException {
 		
-		ArrayList<Integer> friends = getFriendsList(player1);
+		ArrayList<Integer> friends = (ArrayList<Integer>) getFriendsList(player1);
 		return friends.contains(player2);
 	}
 }

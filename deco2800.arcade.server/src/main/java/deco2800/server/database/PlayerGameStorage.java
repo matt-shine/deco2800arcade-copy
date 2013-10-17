@@ -21,10 +21,12 @@ public class PlayerGameStorage {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		
+		ResultSet resultSet = null;
+		Statement statement = null;
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "PLAYERGAMES", null);
-			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
+			resultSet = connection.getMetaData().getTables(null, null, "PLAYERGAMES", null);
+			if (!resultSet.next()) {
+				statement = connection.createStatement();
 				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT PRIMARY KEY," 
 				+ "gameID VARCHAR(30) PRIMARY KEY," 
 				+ "Rating INT));");
@@ -32,9 +34,24 @@ public class PlayerGameStorage {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to create playergames table", e);
+			throw new DatabaseException(
+					"Unable to create PLAYERGAMES table.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-	initialised = true;
+		initialised = true;
 	}
 	
 	/**
@@ -123,7 +140,6 @@ public class PlayerGameStorage {
 				}
 			}
 		} catch (SQLException e) {
-			//TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new DatabaseException("Unable to remove player game from database", e);
 		} finally {
@@ -164,7 +180,6 @@ public class PlayerGameStorage {
 			resultSet.updateString("gameID", gameID);
 			resultSet.insertRow();
 		} catch (SQLException e) {
-			//TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new DatabaseException("Unable to add player game to database", e);
 		} finally {
@@ -185,6 +200,15 @@ public class PlayerGameStorage {
 		}
 	}
 	
+	/** Checks if a given player has the specified game.
+	 * 
+	 * @param playerID
+	 * 			The playerID of the given player.
+	 * @param gameID
+	 * 			The gameID of the game we are cheecking.
+	 * @return
+	 * @throws DatabaseException
+	 */
 	public boolean hasGame(int playerID, String gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
@@ -196,9 +220,8 @@ public class PlayerGameStorage {
 											+ "AND gameID=" + gameID);
 			return (resultSet.next()) ? true : false;
 		} catch (SQLException e) {
-			//TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new DatabaseException("Unable to add player game to database", e);
+			throw new DatabaseException("Unable to retrieve player game to database", e);
 		} finally {
 			//clean up JDBC objects
 			try {

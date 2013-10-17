@@ -22,13 +22,13 @@ public class GameStorage {
 
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
-
-		
+		ResultSet resultSet = null;
+		Statement statement = null;
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "GAMES", null);
+			resultSet = connection.getMetaData().getTables(null, null, "GAMES", null);
 
-			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
+			if (!resultSet.next()) {
+				statement = connection.createStatement();
 				statement.execute("CREATE TABLE GAMES(gameID INT NOT NULL," +
                         "ID VARCHAR (30) NOT NULL," +
                         "NAME VARCHAR(30) NOT NULL," +
@@ -41,7 +41,21 @@ public class GameStorage {
             }
         } catch (SQLException e) {
 			e.printStackTrace();
-			throw new DatabaseException("Unable to create games table", e);
+			throw new DatabaseException("Unable to create Games table", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	    initialised = true;
 	}

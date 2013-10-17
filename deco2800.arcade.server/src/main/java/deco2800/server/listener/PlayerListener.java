@@ -63,17 +63,17 @@ public class PlayerListener extends Listener{
 		} else if (object instanceof PlayerRequest) {
 			PlayerRequest request = (PlayerRequest)object;
             PlayerResponse response = new PlayerResponse();
-            int playerID =  request.playerID;
+            int playerID =  request.getPlayerID();
             PlayerDatabaseManager pdm = new PlayerDatabaseManager();
             
             try {
 				//update database
-            	response.player = pdm.loadPlayer(playerID);
+            	response.setPlayer(pdm.loadPlayer(playerID));
                 BlockingMessage.respond(connection, request, response);
 			} catch (DatabaseException e) {
 				e.printStackTrace();
                 // can't let the client keep blocking, just send an empty list
-				response.player = null;
+				response.setPlayer(null);
                 BlockingMessage.respond(connection, request, response);
             }
 		} else if (object instanceof LibraryStyleUpdateRequest) {

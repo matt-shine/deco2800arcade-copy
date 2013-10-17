@@ -84,12 +84,16 @@ public class PacChar extends Mover{
 		if (currentState == PacState.MOVING) {
 			if (facing == Dir.LEFT){
     			drawX -= moveDist;
+    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
     		} else if (facing == Dir.RIGHT) {
     			drawX += moveDist;
+    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
     		} else if (facing == Dir.UP) {
     			drawY += moveDist;
+    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
     		} else if (facing == Dir.DOWN){ 
     			drawY -= moveDist;
+    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
     		} else {
     			currentState = PacState.IDLE;
     			facing = Dir.LEFT;

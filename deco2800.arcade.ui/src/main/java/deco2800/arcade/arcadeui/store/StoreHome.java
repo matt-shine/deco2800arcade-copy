@@ -44,18 +44,17 @@ public class StoreHome implements Screen, StoreScreen {
 		arcadeUI = ui;
 		skin.add("background", new Texture
 				(Gdx.files.internal("store/main_bg.png")));
-
 		// Load the logo for all of the games (or default), and store them
 		// in the skin, with their name as their key.
-//		for (Game gamename : ArcadeSystem.getArcadeGames()) {
-//			try {
-//				skin.add(gamename.id, new Texture
-//						(Gdx.files.internal("logos/" + gamename.id + ".png")));
-//			} catch (Exception e) {
-//				skin.add(gamename.id, new Texture
-//						(Gdx.files.internal("logos/default.png")));
-//			}
-//		}
+		for (Game gamename : ArcadeSystem.getArcadeGames()) {
+			try {
+				skin.add(gamename.id, new Texture(Gdx.files.internal("logos/"
+						+ gamename.id.toLowerCase() + ".png")));
+			} catch (Exception e) {
+				skin.add(gamename.id, new Texture
+						(Gdx.files.internal("logos/default.png")));
+			}
+		}
 		
 		// The background for the store.
 		Table bg = new Table();
@@ -198,21 +197,21 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @param skin
 	 */
 	private void populateGamesBox(Stage stage, Skin skin)  {
-		/*
-		int number = (int)Math.floor(ArcadeSystem.getGamesList().size() * Math.random());
+		int number = (int)Math.floor(ArcadeSystem.getArcadeGames().size()
+				* Math.random());
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()[number];
 		for (int i = 0; i < 8; ++i) {
-			String gameName = ArcadeSystem.getGamesList().toArray()
-					[(number+i)%ArcadeSystem.getGamesList().size()] + "";
+			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
+					[(number+i)%ArcadeSystem.getArcadeGames().size()];
 			final TextButton gameGrid =
-					new TextButton("\n\n\n\n\n" + gameName, skin, "icon");
+					new TextButton("\n\n\n\n\n" + game.name, skin, "icon");
 			gameGrid.setSize(160, 170);
-			gameGrid.setName(gameName);
+			gameGrid.setName(game.id);
 			
-			final Button gameGridIcon = new Button(skin.getDrawable(gameName));
+			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
 			gameGridIcon.setSize(120, 112);
-			gameGridIcon.setName(gameName);
+			gameGridIcon.setName(game.id);
 			
 			// ^This sets the games 
 			if (i < 4) {
@@ -241,7 +240,6 @@ public class StoreHome implements Screen, StoreScreen {
 			stage.addActor(gameGrid);
 			stage.addActor(gameGridIcon);
 		}
-		*/
 	}
 	
 	/**
@@ -278,7 +276,7 @@ public class StoreHome implements Screen, StoreScreen {
 							+ "\nNo Description Available");
 				} else if (featured.description.length() > 100) {
 					description.setText(featured.name + "\n"
-							+ featured.description.substring(0, 100));
+							+ featured.description.substring(0, 100) + "...");
 				} else {
 					description.setText(featured.name + "\n" + featured.description);
 				}
@@ -358,7 +356,7 @@ public class StoreHome implements Screen, StoreScreen {
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		//textFade();
+		textFade();
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}

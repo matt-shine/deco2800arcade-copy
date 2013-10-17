@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 
 public class MenuScreen implements Screen {
@@ -214,6 +215,88 @@ public class MenuScreen implements Screen {
 		stage.addActor(quitbutton);
 		stage.addActor(helpbutton);
 
+
+		
+		//new game
+	    newgamebuttonUp = tmp[0][0];
+	    newgamebuttonDown = tmp[0][1];
+	    gameup = new TextureRegionDrawable(newgamebuttonUp);
+	    gamedown = new TextureRegionDrawable(newgamebuttonDown);
+	    gamebutton = new ImageButton(gameup, gamedown);
+	    gamebutton.setPosition(485, 350);
+	    gamebutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		game.setScreen(game.modelscreen);
+	        	}}
+	    	   );
+	  
+	 /*
+	    //ranking
+	    rankingbuttonUp=tmp[1][0];
+	    rankingbuttonDown=tmp[1][1];
+	    rankingup = new TextureRegionDrawable(rankingbuttonUp);
+	    rankingdown = new TextureRegionDrawable(rankingbuttonDown);
+	    rankingbutton = new ImageButton(rankingup, rankingdown);
+	    rankingbutton.setPosition(480, 270);
+	    rankingbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		game.setScreen(game.RankingScreen); 
+	        		
+	        	}}
+	    	   );
+	    	   */
+	    
+	    //help
+	    helpbuttonUp=tmp[1][2];
+	    helpbuttonDown=tmp[1][3];
+	    helpup = new TextureRegionDrawable(helpbuttonUp);
+	    helpdown = new TextureRegionDrawable(helpbuttonDown);
+	    helpbutton = new ImageButton(helpup, helpdown);
+	    helpbutton.setPosition(485, 250);
+	    helpbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		game.setScreen(game.helpscreen1); 
+	        	}}
+	    	   );
+	    //quit
+	    quitbuttonUp=tmp[2][0];
+	    quitbuttonDown=tmp[2][1];
+	    quitup = new TextureRegionDrawable(quitbuttonUp);
+	    quitdown = new TextureRegionDrawable(quitbuttonDown);
+	    quitbutton = new ImageButton(quitup, quitdown);
+	    quitbutton.setPosition(485, 150);
+	    quitbutton.addListener(new InputListener(){
+	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
+	        		
+	        		return true; 
+	        	}
+	        	
+	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
+	        		ArcadeSystem.goToGame(ArcadeSystem.UI);
+	        	}}
+	    	   );
+	    
+	       stage = new Stage(480, 640, true);
+	       
+	       stage.addActor(gamebutton);
+	       stage.addActor(quitbutton);     
+	       stage.addActor(helpbutton);
+		
+
 	}
 
 	@Override
@@ -225,14 +308,11 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-
+		ArcadeInputMux.getInstance().removeProcessor(stage);		
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -254,20 +334,15 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(stage);
-
+		ArcadeInputMux.getInstance().addProcessor(stage);		
 	}
 
 }

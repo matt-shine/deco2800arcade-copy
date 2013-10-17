@@ -418,10 +418,18 @@ public class GameScreen implements Screen  {
 	
 	@Override
 	public void dispose() {
-		breaking.dispose();
-		music.dispose();
-		bump.dispose();
-		achieve.dispose();
+		if (breaking != null) {
+			breaking.dispose();
+		}
+		if (music != null){
+			music.dispose();
+		}
+		if (bump != null){
+			bump.dispose();
+		}
+		if (achieve != null){
+			achieve.dispose();
+		}
 		powerupManager.dispose();
 		
 	}

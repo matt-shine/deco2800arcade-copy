@@ -20,8 +20,8 @@ import deco2800.server.database.ImageStorage;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import deco2800.arcade.accolades.Accolade;
-import deco2800.arcade.accolades.AccoladeContainer;
+import deco2800.arcade.model.Accolade;
+import deco2800.arcade.model.AccoladeContainer;
 
 /**
  * Implements Accolades storage on database.
@@ -60,7 +60,7 @@ public class AccoladeStorage{
 					"ACCOLADES", null);
 			if (!tableData.next()){
 				Statement statement = connection.createStatement();
-				
+				/**
 				String String, String Unit, int modifier, String Tag,
 				String Image
 				statement.execute("CREATE TABLE ACCOLADES(ID INT RIMARY KEY," +
@@ -70,7 +70,8 @@ public class AccoladeStorage{
 						"UNIT VARCHAR(10) NOT NULL" +
 						"MODIFIER INT NOT NULL" +
 						"TAG VARCHAR(20) NOT NULL" + 
-						"IMAGEPATH VARCHAR(255) NOT NULL)";
+						"IMAGEPATH VARCHAR(255) NOT NULL)");
+						**/
 			}
 			/**
 			 * Create the Player_accolades table
@@ -80,9 +81,9 @@ public class AccoladeStorage{
 			 */
 			tableData = connection.getMetaData().getTables(null, null, "PLAYER_ACCOLADES", null);
 			if (!tableData.next()) {
-				statement.execute("CREATE TABLE PLAYER_ACCOLADES(ID INTEGER NOT NULL," +
-							"ACCOLADEID INT," +
-							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+				//statement.execute("CREATE TABLE PLAYER_ACCOLADES(ID INTEGER NOT NULL," +
+						//	"ACCOLADEID INT," +
+						//	"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
 			}
 			/**
 			 * Create the Game_accolades table
@@ -92,9 +93,9 @@ public class AccoladeStorage{
 			 */
 			tableData = connection.getMetaData().getTables(null, null, "GAME_ACCOLADES", null);
 			if (!tableData.next()) {
-				statement.execute("CREATE TABLE GAME_ACCOLADES(ID INTEGER NOT NULL," +
-							"ACCOLADEID INT," +
-							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+				//statement.execute("CREATE TABLE GAME_ACCOLADES(ID INTEGER NOT NULL," +
+							//"ACCOLADEID INT," +
+							//"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
 			}
 			
 		}
@@ -180,10 +181,10 @@ public class AccoladeStorage{
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from PLAYER_ACCOLADES " +
-					"WHERE ID = '" + plaerID + "'");
+					"WHERE ID = '" + playerID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
-				result.add(a);
+				//result.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -228,7 +229,7 @@ public class AccoladeStorage{
 					"WHERE ID = '" + gameID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
-				result.add(a);
+				//TODO fix result.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

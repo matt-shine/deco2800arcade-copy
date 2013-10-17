@@ -146,8 +146,8 @@ public class Pong extends GameClient {
 		getLeftPaddle().setColor(1, 0, 0, 1);
 		
 		if (ArcadeSystem.isMultiplayerEnabled()) {
-			setRightPaddle(new LocalUserPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - 
-						Paddle.INITHEIGHT/2)));
+			setRightPaddle(new NetworkPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - 
+						Paddle.INITHEIGHT/2), this));
 			getRightPaddle().setColor(0, 0, 1, 1);
 		} else {		
 			setRightPaddle(new AIPaddle(
@@ -362,7 +362,6 @@ public class Pong extends GameClient {
 		request.playerID = this.getPlayer().getID();
 		request.gameId = this.getGame().getID();
 		request.requestType = MultiGameRequestType.MATCHMAKING;
-		System.out.println("Request sent: " + request.playerID + " " + request.gameId);
 		networkClient.sendNetworkObject(request);
 	}
 	
@@ -379,13 +378,15 @@ public class Pong extends GameClient {
 		request.gameSession = super.getMultiSession();
 		request.gameOver = false;
 		request.stateChange = (Object) getLeftPaddle().getPosition();
-		System.out.println("sending state update");
 		networkClient.sendNetworkObject((request));	
 	}
 	
 	public void updateGameState(GameStateUpdateRequest request) {
-		System.out.println("recieved state update");
-		getRightPaddle().setPosition((Vector2) request.stateChange); 
+		if (request.playerID != player.getID()) {
+			Vector2 vector = (Vector2) request.stateChange;
+			vector.x = getRightPaddle().getPosition().x;
+			getRightPaddle().setPosition(vector);
+		}
 	}
 	
 }

@@ -1,7 +1,12 @@
 package deco2800.arcade.pong;
 
-import com.badlogic.gdx.math.Vector2;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+
+import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 
 /**
@@ -14,6 +19,7 @@ import deco2800.arcade.client.network.NetworkClient;
 public class NetworkPaddle extends Paddle {
 
 	private NetworkClient client;
+	private GameClient pong;
 	
 	/**
 	 * Instantiates a new NetworkPaddle
@@ -28,16 +34,37 @@ public class NetworkPaddle extends Paddle {
 		//client.addListener(new NetworkPaddleListener());
 	}
 
-	@Override
-	public void update(Ball ball) {
-		// TODO Auto-generated method stub
 
-	}
-	
-	/*
-	private class NetworkPaddleListener extends NetworkListener {
+	public static final int KBPADDLESPEED = 200;
+    
+	/**
+	 * Sets the user's paddle position
+	 * @param position
+	 */
+	public NetworkPaddle(Vector2 position, GameClient pong) {
+		super(position);
+		this.pong = pong;
 		
 	}
+
+    private static int sign(double x) {
+        if(x == 0) return 0;
+        else if(x > 0) return 1;
+        else return -1;
+    }
+
+	/**
+	* Updates direction of ball based on the direction the paddle was moving
 	*/
+	
+	@Override
+	public void update(Ball ball) {
+		super.update(ball);
+	}
+	
+	public void move(float y) {
+		super.move(y);
+		pong.sendStateUpdate();
+	}
 
 }

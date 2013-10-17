@@ -20,8 +20,6 @@ public abstract class Paddle {
 	private float renderColourBlue;
 	private float renderColourAlpha;
 	
-	private boolean hasMoved;
-	
 	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the paddle
     
     // we use this to keep track of what way we're moving so that

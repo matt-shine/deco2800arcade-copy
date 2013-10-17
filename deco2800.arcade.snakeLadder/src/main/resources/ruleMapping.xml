@@ -39,4 +39,8 @@
 		<icon>minus_100.png</icon>
 		<implementationClass>ScoreRule</implementationClass>
 	</entry>
+	<entry>
+		<icon>stop.png</icon>
+		<implementationClass>StopRule</implementationClass>
+		<rule>!1</rule></entry>
 </ruleMapping>

@@ -3,7 +3,6 @@ package deco2800.arcade.chess;
 //import deco2800.arcade.chess.screen.HelpScreen;
 //import deco2800.arcade.chess.MenuScreen;
 import deco2800.arcade.chess.SplashScreen;
-
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -30,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -193,16 +193,16 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 		URL resource = this.getClass().getResource("/");
 
-		String path = resource
+		/*String path = resource
 				.toString()
 				.replace(".arcade/build/classes/main/",
 						".arcade.chess/src/main/").replace("file:", "")
-				+ "resources/imgs/styles.txt";
+				+ "resources/imgs/styles.txt";*/
 
 		styles = new ArrayList<String>();
 
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(path));
+			BufferedReader br = Gdx.files.internal("imgs/styles.txt").reader(512);
 			String line = br.readLine();
 
 			while (line != null) {
@@ -701,7 +701,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 * @return An int[] represent the [row, column] of the square that was
 	 *         clicked
 	 */
-	private int[] determineSquare(int x, int y) {
+	public int[] determineSquare(int x, int y) {
 		int xSquare = -1;
 		int ySquare = -1;
 

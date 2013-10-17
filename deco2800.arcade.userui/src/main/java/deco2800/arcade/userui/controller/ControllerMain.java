@@ -24,10 +24,8 @@ public class ControllerMain {
 	private AddFriendScreen addfriendView;
 	private RemoveFriendScreen removefriendView;
 	private InviteScreen inviteView;
-	
 	private AchievementScreen achievementView;
 	private Model theModel;
-	
 
 	//Logger
 	static Logger log = Logger.getLogger(UserScreen.class);
@@ -85,6 +83,7 @@ public class ControllerMain {
 			//Open the home page
 			System.out.println("this works");
 			System.out.println(theModel.arcadesystem.getArcadeGames().toString());
+			
 		}
 		
 	}

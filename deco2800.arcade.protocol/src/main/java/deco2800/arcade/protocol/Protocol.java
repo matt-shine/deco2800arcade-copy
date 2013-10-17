@@ -6,6 +6,8 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 
+import com.badlogic.gdx.math.Vector2;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
 import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
@@ -167,6 +169,7 @@ public class Protocol {
 		kryo.register(GameStateUpdateRequest.class);
 		kryo.register(NewMultiSessionResponse.class);
 		kryo.register(NewMatchmakingRequest.class);
+		kryo.register(com.badlogic.gdx.math.Vector2.class);
 
 		// Package Manager
 		kryo.register(GameUpdateCheckRequest.class);

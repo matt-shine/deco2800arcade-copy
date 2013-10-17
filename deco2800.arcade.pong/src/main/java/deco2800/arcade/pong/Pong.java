@@ -18,6 +18,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.client.ArcadeSystem;
@@ -26,6 +27,7 @@ import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
+
 
 
 
@@ -143,10 +145,16 @@ public class Pong extends GameClient {
 				new Vector2(20,SCREENHEIGHT/2 - Paddle.INITHEIGHT/2)));
 		getLeftPaddle().setColor(1, 0, 0, 1);
 		
-		setRightPaddle(new AIPaddle(
-				new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - 
+		if (ArcadeSystem.isMultiplayerEnabled()) {
+			setRightPaddle(new LocalUserPaddle(new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - 
 						Paddle.INITHEIGHT/2)));
-		getRightPaddle().setColor(0, 0, 1, 1);
+			getRightPaddle().setColor(0, 0, 1, 1);
+		} else {		
+			setRightPaddle(new AIPaddle(
+					new Vector2(SCREENWIDTH-Paddle.WIDTH-20,SCREENHEIGHT/2 - 
+							Paddle.INITHEIGHT/2)));
+			getRightPaddle().setColor(0, 0, 1, 1);
+		}
 		
 		/**
 		 * TODO Allow network games
@@ -362,6 +370,22 @@ public class Pong extends GameClient {
 		getBall().randomizeVelocity();
 		gameState = new InProgressState();
 		statusMessage = null;
+	}
+	
+	public void sendStateUpdate() {
+		GameStateUpdateRequest request = new GameStateUpdateRequest();
+		request.playerID = player.getID();
+		request.gameId = "pong";
+		request.gameSession = super.getMultiSession();
+		request.gameOver = false;
+		request.stateChange = (Object) getLeftPaddle().getPosition();
+		System.out.println("sending state update");
+		networkClient.sendNetworkObject((request));	
+	}
+	
+	public void updateGameState(GameStateUpdateRequest request) {
+		System.out.println("recieved state update");
+		getRightPaddle().setPosition((Vector2) request.stateChange); 
 	}
 	
 }

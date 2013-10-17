@@ -13,7 +13,7 @@ import deco2800.arcade.client.network.NetworkClient;
  */
 public class NetworkPaddle extends Paddle {
 
-	//private NetworkClient client;
+	private NetworkClient client;
 	
 	/**
 	 * Instantiates a new NetworkPaddle

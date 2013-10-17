@@ -17,6 +17,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.EncodedImage;
+import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.utils.Handler;
 
 public abstract class GameClient extends com.badlogic.gdx.Game implements AchievementListener {
@@ -257,16 +258,23 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		multiplayerSession = session;
 		startMultiplayerGame();
 	}
+	
+	public int getMultiSession() {
+		return multiplayerSession;
+	}
 
 	public void startMultiplayerGame() {
 	}
 
-	public void updateGameState(Object update) {
+	public void updateGameState(GameStateUpdateRequest request) {
 	}
 	
-	private void requestMultiplayerGame() {
-		
+	public void sendStateUpdate() {
 	}
+	
+	private void requestMultiplayerGame() {	
+	}
+	
 }
 
 

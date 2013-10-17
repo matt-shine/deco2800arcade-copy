@@ -3,6 +3,8 @@ package deco2800.arcade.pong;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import deco2800.arcade.client.ArcadeSystem;
 /**
  * A basic implementation of a Paddle for the pong game.
  * @author uqjstee8
@@ -17,6 +19,8 @@ public abstract class Paddle {
 	private float renderColourGreen;
 	private float renderColourBlue;
 	private float renderColourAlpha;
+	
+	private boolean hasMoved;
 	
 	Rectangle bounds = new Rectangle(); // The position (x,y) and dimensions (width,height) of the paddle
     
@@ -40,7 +44,11 @@ public abstract class Paddle {
 	 * @param y distance to move the paddle up (y<0 for down)
 	 */
 	public void move(float y) {
+		float oldBounds = bounds.y;
 		bounds.y += y;
+		if (oldBounds != bounds.y) {
+			ArcadeSystem.getCurrentGame().sendStateUpdate();
+		}
 	}
 	
 	/**
@@ -81,6 +89,17 @@ public abstract class Paddle {
 	public void setPosition(Vector2 newPosition) {
 		bounds.x = newPosition.x;
 		bounds.y = newPosition.y;
+	}
+	
+	/**
+	 * Get the position of the paddle
+	 * @return the position of the paddle
+	 */
+	public Vector2 getPosition() {
+		Vector2 vect = new Vector2();
+		vect.x = bounds.x;
+		vect.y = bounds.y;
+		return vect;
 	}
 	
 	/**

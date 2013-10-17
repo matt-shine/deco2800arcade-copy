@@ -51,8 +51,7 @@ public class MultiplayerListener extends NetworkListener {
 			arcade.getCurrentGame().setMultiSession(sessionId);
 			ArcadeSystem.setGameWaiting(false);
 		} else if (object instanceof GameStateUpdateRequest) {
-			Object update = ((GameStateUpdateRequest) object).stateChange;
-			arcade.getCurrentGame().updateGameState(update);
+			arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
 			System.out.println("Game State Updated");
 		} 
 	}

@@ -41,7 +41,6 @@ public class Breakout extends GameClient {
 	LevelScreen1 LevelScreen1;
 	LevelScreen2 LevelScreen2;
 	HelpScreen1 helpscreen1;
-	RankingScreen RankingScreen;
 	ModelScreen modelscreen;
 	HelpScreen2 helpscreen2;
 
@@ -119,7 +118,7 @@ public class Breakout extends GameClient {
 		LevelScreen2=new LevelScreen2(this);
 		helpscreen1=new HelpScreen1(this);
 		helpscreen2=new HelpScreen2(this);
-		RankingScreen=new RankingScreen(this);
+		
 		modelscreen=new ModelScreen(this);
 		setScreen(splashScreen);
 		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
@@ -133,7 +132,7 @@ public class Breakout extends GameClient {
 		LevelScreen1.dispose();
 		MenuScreen.dispose();
 		helpscreen1.dispose();
-		RankingScreen.dispose();
+		
 		super.dispose();
 	}
 

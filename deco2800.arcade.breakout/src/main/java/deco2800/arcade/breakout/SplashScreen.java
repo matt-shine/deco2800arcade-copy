@@ -8,14 +8,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
  
 public class SplashScreen implements Screen  {
-	private OrthographicCamera camera;
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;

@@ -77,14 +77,14 @@ public class ModelScreen implements Screen {
 
 		model1button.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) { // touch down method is needed
-												// for the rest to work
+					int pointer, int button) { 
+												
 
 				return true;
 			}
 
 			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) { // on button release do this
+					int pointer, int button) { 
 				game.gamescreen.switchGameMode(false);
 				game.setScreen(game.LevelScreen1);
 
@@ -100,14 +100,14 @@ public class ModelScreen implements Screen {
 
 		model2button.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) { // touch down method is needed
-												// for the rest to work
+					int pointer, int button) { 
+												
 
 				return true;
 			}
 
 			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) { // on button release do this
+					int pointer, int button) { 
 				game.gamescreen.switchGameMode(true);
 				game.setScreen(game.LevelScreen1);
 
@@ -120,17 +120,17 @@ public class ModelScreen implements Screen {
 		backdown = new TextureRegionDrawable(backbuttonDown);
 		backbutton = new ImageButton(backup, backdown);
 		backbutton.setPosition(0, 590);
-		// backbutton.setSize(700f, 550f);
+		
 		backbutton.addListener(new InputListener() {
 			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) { // touch down method is needed
-												// for the rest to work
+					int pointer, int button) { 
+												
 
 				return true;
 			}
 
 			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) { // on button release do this
+					int pointer, int button) { 
 				game.setScreen(game.MenuScreen);
 
 			}

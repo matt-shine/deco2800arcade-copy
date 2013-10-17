@@ -23,11 +23,12 @@ import java.awt.event.MouseEvent;
  *
  * @author TeamForum
  */
-public class MakeThread {
+public class MakeThreadView {
 	private JTextField TitleTBox;
 	private JTextField TagsTBox;
+	private JTextPane textPane;
 
-	   public MakeThread() {
+	   public MakeThreadView() {
 	      //Initialize new JFrame for forum interface
 	      JFrame f = new JFrame("Arcade Forum");
 	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,9 +38,9 @@ public class MakeThread {
 	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
 	      
-	      JTextPane textPane = new JTextPane();
-	      textPane.setBounds(42, 97, 575, 190);
-	      f.getContentPane().add(textPane);
+	      this.textPane = new JTextPane();
+	      this.textPane.setBounds(42, 97, 575, 190);
+	      f.getContentPane().add(this.textPane);
 	      
 	      Button SubmitBtn = new Button("Submit New Thread");
 	      SubmitBtn.setForeground(Color.BLACK);
@@ -48,18 +49,17 @@ public class MakeThread {
 	      
 	      Button CancelBtn = new Button("Cancel");
 	      CancelBtn.addActionListener(new ActionListener() {
-	      	public void actionPerformed(ActionEvent arg0) {
-	      		
-	      		System.exit(0);
-	      	}
+	    	  public void actionPerformed(ActionEvent arg0) {
+	    		  System.exit(0);
+	      	  }
 	      });
 	      CancelBtn.setBounds(464, 378, 79, 24);
 	      f.getContentPane().add(CancelBtn);
 	      
-	      TitleTBox = new JTextField();
-	      TitleTBox.setBounds(42, 32, 262, 22);
-	      f.getContentPane().add(TitleTBox);
-	      TitleTBox.setColumns(10);
+	      this.TitleTBox = new JTextField();
+	      this.TitleTBox.setBounds(42, 32, 262, 22);
+	      f.getContentPane().add(this.TitleTBox);
+	      this.TitleTBox.setColumns(10);
 	      
 	      JLabel lblTitle = new JLabel("Title:");
 	      lblTitle.setBounds(40, 13, 56, 16);
@@ -69,10 +69,10 @@ public class MakeThread {
 	      lblMessage.setBounds(42, 79, 56, 16);
 	      f.getContentPane().add(lblMessage);
 	      
-	      TagsTBox = new JTextField();
-	      TagsTBox.setBounds(42, 321, 167, 22);
-	      f.getContentPane().add(TagsTBox);
-	      TagsTBox.setColumns(10);
+	      this.TagsTBox = new JTextField();
+	      this.TagsTBox.setBounds(42, 321, 167, 22);
+	      f.getContentPane().add(this.TagsTBox);
+	      this.TagsTBox.setColumns(10);
 	      
 	      JLabel lblTags = new JLabel("Tags:");
 	      lblTags.setBounds(42, 302, 56, 16);

@@ -10,8 +10,7 @@ public class MovingState extends GameState {
 	@Override
 	public void handleInput(SnakeLadder context) {
 		//get turns, to check whether is the player or the AI
-		int turn=context.getturns();
-		int playerIndex = turn%context.gamePlayers.length;
+		int playerIndex=context.getturns();
 		// Move the player accordingly
 		movePlayer(context,context.gamePlayers[playerIndex]);	    	
 	}
@@ -21,8 +20,6 @@ public class MovingState extends GameState {
 	 */
 	private void movePlayer(SnakeLadder context, GamePlayer gamePlayer) {
 		gamePlayer.move(Gdx.graphics.getDeltaTime());
-		int turn=context.getturns();
-		int playerIndex = turn%context.gamePlayers.length;
 		//player stop move once he get relatively closed to desitination position
 		if(Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorX() - gamePlayer.getBounds().x) <(1f)&&Math.abs(context.getMap().getTileList()[gamePlayer.newposition()].getCoorY() - gamePlayer.getBounds().y) <(1f))
 		{				

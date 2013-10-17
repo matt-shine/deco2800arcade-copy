@@ -9,8 +9,7 @@ public class RuleExcutingState extends GameState {
 
 	@Override
 	public void handleInput(SnakeLadder context) {
-		int turn=context.getturns();
-		int playerIndex = turn%context.gamePlayers.length;
+		int playerIndex=context.getturns();
 		String rule = context.getMap().getTileList()[context.gamePlayers[playerIndex].newposition()].getRule();
 		
 		//if no rules specified in this position, transit to waiting state
@@ -41,7 +40,7 @@ public class RuleExcutingState extends GameState {
 			else if(!rule.equals("."))
 			{
 				try {
-					Rule r = (Rule) Class.forName("deco2800.arcade.snakeLadderModel."+context.getRuleMapping().get(rule).getImplementationClass()).newInstance();
+					Rule r = (Rule) Class.forName("deco2800.arcade.snakeLadderRulePlugin."+context.getRuleMapping().get(rule).getImplementationClass()).newInstance();
 					r.excuteRules(playerIndex, rule, context);
 				} catch (InstantiationException e) {
 					// TODO Auto-generated catch block

@@ -57,11 +57,12 @@ public class SpriteLayer extends Map {
             float tX = randomScreenCoordinate().x;
             float tY = gameScreen.getForeground().getColumnTop(tX);
 
-            int id = trees.add(new BackgroundSprite(new Vector2(tX, tY), 0, 0));
-            System.out.println("Num Trees: " + treeSprites.size() + ", id: " + id + ", tree: " + id % treeSprites.size());
+            int id = trees.add(new BackgroundSprite(new Vector2(tX, 0), 0, 0));
+
             TextureRegion sprite = treeSprites.get(id % treeSprites.size());
             trees.getById(id).setWidth(sprite.getRegionWidth());
             trees.getById(id).setHeight(sprite.getRegionHeight());
+            trees.getById(id).setY(gameScreen.getForeground().getColumnTop(tX + sprite.getRegionWidth() / 2) - Hunter.Config.TILE_SIZE);
         }
     }
 

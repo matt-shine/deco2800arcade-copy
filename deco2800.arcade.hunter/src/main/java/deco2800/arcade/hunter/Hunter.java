@@ -45,12 +45,17 @@ public class Hunter extends PlatformerGame {
 	}
 	
 	private static final Game game;
-	static{
+	static {
 		game = new Game();
 		game.id = "hunter";
 		game.name = "Hunter Game";
 		game.description = "A 2D platformer running game where you hunt animals before they eat you!";
 	}
+
+    @Override
+    public Game getGame() {
+        return game;
+    }
 
 	public Hunter(Player player, NetworkClient networkClient) {
 		super(player, networkClient);

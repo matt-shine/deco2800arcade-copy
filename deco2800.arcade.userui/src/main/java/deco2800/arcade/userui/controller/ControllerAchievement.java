@@ -2,6 +2,7 @@ package deco2800.arcade.userui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.userui.Model;
@@ -19,6 +20,7 @@ public class ControllerAchievement {
 	private Model theModel;
 	private UserScreen userView;
 	
+	static Logger log = Logger.getAnonymousLogger();
 	
 	public ControllerAchievement(Model theModel, AchievementScreen achievementView){
 		/**
@@ -42,10 +44,7 @@ public class ControllerAchievement {
 	}
 	
 	public void checkstatus(){
-		/**
-		 * Checks the Status of Achievements (eg. Number of Achievements Unlocked)
-		 * 
-		 */
+
 		achievementView.setStatus(theModel.getStatusIcon());
 
 	}
@@ -67,7 +66,7 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the home page
-			System.out.println("Home Button Works");
+			log.info("Home Button Works");
 			
 		}
 		
@@ -79,7 +78,7 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the forum
-			System.out.println("Forum Button Works");
+			log.info("Forum Button Works");
 			
 		}
 		
@@ -91,7 +90,7 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the game store
-			System.out.println("Store Button Works");
+			log.info("Store Button Works");
 			
 		}
 		
@@ -103,7 +102,6 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the Library page
-			System.out.println("Library Button Works");
 			
 		}
 		
@@ -115,7 +113,7 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Opens the Profile page
-			System.out.println("My Profile Button Works");
+			log.info("My Profile Button Works");
 			achievementView.dispose();
 			userView = new UserScreen(theModel);
 			ControllerMain maincontroller = new ControllerMain(theModel,userView);
@@ -130,7 +128,7 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Add Friend to List
-			System.out.println("Add Friend Button");
+			log.info("Add Friend Button");
 			
 		}
 		
@@ -155,7 +153,36 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 
 			//Calls the method to set achievement list based on game selection
-			achievementView.setAchievementList();
+			//achievementView.setAchievementList();
+			if (achievementView.getGameSelection() == "Pong"){
+				achievementView.setGameName(theModel.PONG.getName());
+				achievementView.setGameDescription(theModel.PONG.getDescription());
+				achievementView.setGameLogo(theModel.pacmanlogo);
+			} else if (achievementView.getGameSelection() == "Chess"){
+				achievementView.setGameName(theModel.CHESS.getName());
+				achievementView.setGameDescription(theModel.CHESS.getDescription());
+				achievementView.setGameLogo(theModel.chessLogo);
+			} else if (achievementView.getGameSelection() == "Breakout"){
+				achievementView.setGameName(theModel.BREAKOUT.getName());
+				achievementView.setGameDescription(theModel.BREAKOUT.getDescription());
+				achievementView.setGameLogo(theModel.breakoutLogo);
+			} else if (achievementView.getGameSelection() == "Burning Skies"){
+				achievementView.setGameName(theModel.BURNINGSKIES.getName());
+				achievementView.setGameDescription(theModel.BURNINGSKIES.getDescription());
+				achievementView.setGameLogo(theModel.astrosonicLogo);
+			} else if (achievementView.getGameSelection() == "Mix Maze"){
+				achievementView.setGameName(theModel.MIXMAZE.getName());
+				achievementView.setGameDescription(theModel.MIXMAZE.getDescription());
+				achievementView.setGameLogo(theModel.mixmazeLogo);
+			} else if (achievementView.getGameSelection() == "Land Invaders"){
+				achievementView.setGameName(theModel.LANDINVADERS.getName());
+				achievementView.setGameDescription(theModel.LANDINVADERS.getDescription());
+				achievementView.setGameLogo(theModel.landinvaderslogo);
+			} else if (achievementView.getGameSelection() == "Pacman"){
+				achievementView.setGameName(theModel.PACMAN.getName());
+				achievementView.setGameDescription(theModel.PACMAN.getDescription());
+				achievementView.setGameLogo(theModel.pacmanlogo);
+			}
 			
 		}
 		

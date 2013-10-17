@@ -2,7 +2,6 @@ package deco2800.arcade.snakeLadderModel;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.*;
 
 import com.badlogic.gdx.Gdx;
@@ -12,10 +11,17 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class GameMap {
-	
-	private HashMap<String,String> ruleTextureMapping;
 	private Texture backgroundBoard;
 	private Tile[] tileList = new Tile[100]; 
+	
+	//This is the empty constructor for testing
+	public GameMap(){}
+	
+	public GameMap(FileHandle file)
+	{
+		this.backgroundBoard = new Texture(file);
+	}
+	
 	public Tile[] getTileList() {
 		return tileList;
 	}
@@ -26,28 +32,47 @@ public class GameMap {
 
 	private List<SnakeLadderBridge> snakeLadderList = new ArrayList<SnakeLadderBridge>();
 	
-	public void ini()
-	{
-		//loading of background game board
-		backgroundBoard = new Texture(Gdx.files.classpath("images/board.png"));
-		//initialise rule texture mapping
-		ruleTextureMapping = new HashMap<String,String>();
-		ruleTextureMapping.put("+10","plus_10.png");
-		ruleTextureMapping.put("+20", "plus_20.png");
-		ruleTextureMapping.put("+50", "plus_50.png");
-		ruleTextureMapping.put("+100", "plus_100.png");
-		ruleTextureMapping.put("-10", "minus_10.png");
-		ruleTextureMapping.put("-20", "minus_20.png");
-		ruleTextureMapping.put("-50", "minus_50.png");
-		ruleTextureMapping.put("-100", "minus_100.png");
-		ruleTextureMapping.put("#", "stop.png");
+	public boolean loadMap(FileHandle handle, HashMap<String,RuleMapping> ruleMapping) {
+		try {
+			populateTileListFromMapFile(handle, ruleMapping);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+		//loading textures for plugin rules
+		for(Tile t:tileList)
+		{
+			if(!(t.getRule().equals(".")||t.getRule().startsWith("L")||t.getRule().startsWith("S")))
+			{
+				t.setTexture(new Texture(Gdx.files.classpath("images/"+ ruleMapping.get(t.getRule()).getIcon())));
+			}
+		}
+		//initialize ladder rotation and scalling 
+		for(SnakeLadderBridge l: snakeLadderList)
+		{
+			l.createLadder(tileList);
+		}
+		return true;
 	}
-	
-	public boolean loadMap(String filePath) {		
-		//reading file
-		FileHandle handle = Gdx.files.classpath(filePath);
+
+	/**
+	 * @param handle
+	 * @param ruleMapping
+	 * @throws NumberFormatException
+	 */
+	public void populateTileListFromMapFile(FileHandle handle,
+			HashMap<String, RuleMapping> ruleMapping)
+			throws NumberFormatException,IOException,Exception {
 		BufferedReader file = handle.reader(2048);
-		
 		int counter = 0;
 		try {
 			String line = "";
@@ -68,34 +93,29 @@ public class GameMap {
 					Tile t = new Tile(index,tileRules[i]);
 					if(t.getRule().startsWith("L"))
 					{
-						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),"ladder");
+						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),true);
 						snakeLadderList.add(sl);
 					}
 					else if(t.getRule().startsWith("S"))
 					{
-						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),"snake");
+						SnakeLadderBridge sl = new SnakeLadderBridge(index, (int)Integer.parseInt(t.getRule().substring(1)),false);
 						snakeLadderList.add(sl);
 					}
-					else if(!t.getRule().equals("."))
-					{
-						t.setTexture(new Texture(Gdx.files.classpath("images/"+ruleTextureMapping.get(t.getRule()))));
-					}
+//					else if(!t.getRule().equals("."))
+//					{
+//						t.setTexture(new Texture(Gdx.files.classpath("images/"+ ruleMapping.get(t.getRule()).getIcon())));
+//					}
 					tileList[index-1]=t;
 				}
 				counter++;
 			}
 			file.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return false;
+		} catch (Exception e){
+			e.printStackTrace();
 		}
-		//initialize ladder rotation and scalling 
-		for(SnakeLadderBridge l: snakeLadderList)
-		{
-			l.createLadder(tileList);
-		}
-		return true;
+		
 	}
 	
 	public void renderMap(SpriteBatch batch)

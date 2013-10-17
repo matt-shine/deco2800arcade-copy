@@ -53,10 +53,10 @@ public abstract class BulletPattern extends Actor {
 		timer += delta;
 		if(timer < interval) return;
 		float x = 0, y = 0, timeDiff;
-		thisEmit.x = emitter.getX() + emitter.getWidth()/2;
-		thisEmit.y = emitter.getY() + emitter.getHeight()/2;
+		thisEmit.x = emitter.getCenterX();
+		thisEmit.y = emitter.getCenterY();
 		if(lastEmit == null) lastEmit = new Vector2(thisEmit);
-		// Compensate for frame drops - it happens always, bloody java
+		// Compensate for frame drops - it happens always, bloody GC
 		int loop = (int) Math.floor(timer / interval) - 1;
 		for(int i=0;i<=loop;i++) {
 			timeDiff = timer-delta-i*interval;

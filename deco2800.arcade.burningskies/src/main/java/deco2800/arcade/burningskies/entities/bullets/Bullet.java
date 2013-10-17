@@ -20,7 +20,7 @@ public abstract class Bullet extends Entity {
 	}
 	
 	protected Affinity affinity;
-	protected int damage;
+	protected int damage; 
 	protected Vector2 velocity;
 	protected Vector2 position;
 	protected Vector2 acceleration;
@@ -32,7 +32,7 @@ public abstract class Bullet extends Entity {
 	 * Creates a new bullet
 	 * @param affinity
 	 * @param damage
-	 * @param initialPosition
+	 * @param initialPosition the unrotated initial position - this will be adjusted for rotation automatically
 	 * @param parent
 	 * @param player
 	 */
@@ -45,6 +45,10 @@ public abstract class Bullet extends Entity {
 		velocity = new Vector2(0,0);
 		acceleration = new Vector2(0,0);
 		position = initialPosition;
+		position.sub(parent.getCenterX(), parent.getCenterY());
+		position.rotate(parent.getRotation());
+		position.add(parent.getCenterX(), parent.getCenterY());
+		position.sub(getWidth()/2, getHeight()/2); // bullet has dimensions too
 		direction = initialDirection;
 	}
 	

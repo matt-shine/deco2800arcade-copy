@@ -50,7 +50,6 @@ public class ConnectionListener extends Listener {
 			
 			try {
 				if (hashStorage.checkPassword(request.username, request.password) == true) {
-					System.out.println("user authenticated.........................................\n");
 					connection.sendTCP(ConnectionResponse.OK);
 					connectedUsers.add(request.username);
 				} else {

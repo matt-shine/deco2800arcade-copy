@@ -1,6 +1,7 @@
 package deco2800.arcade.breakout;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.audio.Music;
@@ -16,15 +17,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 
-
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.breakout.PongBall;
+import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
-import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.highscores.HighscoreClient;
 
 /**
  * 
@@ -36,22 +36,38 @@ import deco2800.arcade.client.ArcadeSystem;
 public class Breakout extends GameClient {
 	SplashScreen splashScreen;
 	GameScreen gamescreen;
+	MenuScreen MenuScreen;
+	LevelScreen1 LevelScreen1;
+	LevelScreen2 LevelScreen2;
+	HelpScreen1 helpscreen1;
+	RankingScreen RankingScreen;
+	ModelScreen modelscreen;
+	HelpScreen2 helpscreen2;
+
 
 	/*
 	 * Creates private instance variables for each element of The
 	 */
-	private String player;
+	public String player;
+	private NetworkClient networkClient;
+	private AchievementClient achievementClient;
+	HighscoreClient highscoreUser;
+	//private AccoladeSystem accolades;
 	
 	// Screen Parameters
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
+	
+
 
 
 	public Breakout(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		this.player = player.getUsername();
-		
-		// this.nc = networkClient;
+		this.networkClient = networkClient;
+		this.achievementClient = new AchievementClient(networkClient);
+		this.highscoreUser = new HighscoreClient(player.getUsername(), "Breakout", networkClient);
+		//this.accolades = new AccoladeSystem();
 	}
 
 	/**
@@ -61,10 +77,51 @@ public class Breakout extends GameClient {
 	public void create() {
 		super.create();
 		
+        //add the overlay listeners
+        this.getOverlay().setListeners(new Screen() {
+
+			@Override
+			public void dispose() {
+			}
+
+			@Override
+			public void hide() {
+				resume();
+			}
+
+			@Override
+			public void pause() {
+			}
+
+			@Override
+			public void render(float arg0) {
+			}
+
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void show() {
+				pause();
+			}
+			
+        });
 		splashScreen = new SplashScreen(this);
-		
+		MenuScreen=new MenuScreen(this);
 		gamescreen = new GameScreen(this);
+		LevelScreen1=new LevelScreen1(this);
+		LevelScreen2=new LevelScreen2(this);
+		helpscreen1=new HelpScreen1(this);
+		helpscreen2=new HelpScreen2(this);
+		RankingScreen=new RankingScreen(this);
+		modelscreen=new ModelScreen(this);
 		setScreen(splashScreen);
+		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
 	}
 
 	@Override
@@ -72,7 +129,10 @@ public class Breakout extends GameClient {
 		
 		splashScreen.dispose();
 		gamescreen.dispose();
-		
+		LevelScreen1.dispose();
+		MenuScreen.dispose();
+		helpscreen1.dispose();
+		RankingScreen.dispose();
 		super.dispose();
 	}
 
@@ -105,7 +165,9 @@ public class Breakout extends GameClient {
 		return game;
 	}
 
-	
+	public String playerName() {
+		return player;
+	}
 
 	/**
 	 * Provides details about the game to the Arcade system.

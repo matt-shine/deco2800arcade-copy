@@ -19,7 +19,7 @@ public class RuleExcutingState extends GameState {
 			context.statusMessage = "Throw the dice again";
 			context.taketurns();
 		}
-		//else excute the rule
+		//else execute the rule
 		else
 		{
 			//Snake and Ladder rules are two special rules hard-coded into game
@@ -27,6 +27,15 @@ public class RuleExcutingState extends GameState {
 			{
 				Rule r = new LadderSnakeRule();
 				r.excuteRules(playerIndex, rule, context);
+				//if player reaches the ladder and get a short cut
+				if(rule.startsWith("L"))
+				{
+					//check if the player is local player instead of AI
+					if (playerIndex == 0) {
+						//add one achievement to reachLadder achievement
+				    	context.incrementAchievement("snakeLadder.reachLadder");
+				    }
+				}
 			}
 			//search the implementation class for the plugin rules
 			else if(!rule.equals("."))
@@ -52,7 +61,7 @@ public class RuleExcutingState extends GameState {
 
 	/***
 	 * Updating the score of the game player and print it out on the scoreLabel
-	 * @param gp the Game Player its referring to
+	 * 
 	 */
 	public void excuteRules(int playerNum, String rule, SnakeLadder context,GamePlayer context2){
 		if (isScore(rule))

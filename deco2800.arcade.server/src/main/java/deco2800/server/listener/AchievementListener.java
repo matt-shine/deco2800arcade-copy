@@ -71,6 +71,7 @@ public class AchievementListener extends Listener {
             AchievementsForGameResponse resp = new AchievementsForGameResponse();
             
             try {
+
 		resp.achievements = storage.achievementsForGame(req.gameID);
 	    } catch (DatabaseException e) {
 		resp.achievements = null;

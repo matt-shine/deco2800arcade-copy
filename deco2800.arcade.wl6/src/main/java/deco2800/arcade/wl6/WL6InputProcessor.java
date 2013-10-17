@@ -58,8 +58,6 @@ public class WL6InputProcessor implements InputProcessor {
         	model.setDifficulty(model.getDifficulty() - 1);
         }
 
-
-
         if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
             updatePlayerSpeed();
         }

@@ -319,7 +319,7 @@ public class Arcade extends JFrame {
 		
         //TODO FIX THIS!! - Causing Errors when logging in see https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
         boolean[] privacy = {false, false, false, false, false, false, false, false};
-        this.player = new Player(0, username, "", privacy);
+        this.player = new Player(myID, username, "", privacy);
 
 
         //This method has been removed from the deprecated Player(...); Waiting for new Player(...) method to be created.
@@ -625,6 +625,7 @@ public class Arcade extends JFrame {
 	public void populateMatchList() {
 		NewLobbyRequest request = new NewLobbyRequest();
 		request.requestType = LobbyRequestType.POPULATE;
+		request.playerID = player.getID();
 		this.client.sendNetworkObject(request);
 	}
 	

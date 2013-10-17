@@ -25,9 +25,10 @@ public class PlayerGameStorage {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "PLAYERGAMES", null);
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
-				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT PRIMARY KEY," 
-				+ "gameID VARCHAR(30) PRIMARY KEY," 
-				+ "Rating INT));");
+				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT," 
+				+ "gameID VARCHAR(30)," 
+				+ "Rating INT,"
+				+ "PRIMARY KEY(playerID, gameID))");
 				//Check if need anything for foreign keys
 			}
 		} catch (SQLException e) {
@@ -239,7 +240,7 @@ public class PlayerGameStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES WHERE playerID = " 
-					+ playerID + " AND gameID = " + gameID + ";");
+			+ playerID + " AND gameID = '" + gameID + "'");
 			int result = resultSet.findColumn("Rating");
 
 			return result;
@@ -284,7 +285,7 @@ public class PlayerGameStorage {
 		try {
 			statement = connection.createStatement();
 			statement.executeQuery("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
-					+ playerID + " AND gameID = " + gameID + ";");
+					+ playerID + " AND gameID = '" + gameID + "'");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Unable to get playergames from database", e);

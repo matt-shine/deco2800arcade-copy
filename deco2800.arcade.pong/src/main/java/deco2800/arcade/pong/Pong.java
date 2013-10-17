@@ -18,6 +18,8 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.highscores.Highscore;
@@ -26,7 +28,10 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
 
+
+
 import java.util.ArrayList;
+
 import deco2800.arcade.model.Achievement;
 
 /**
@@ -176,6 +181,9 @@ public class Pong extends GameClient {
         for(Achievement ach : achievements) {
             System.out.println(ach.toString());
         }
+        if (ArcadeSystem.isGameWaiting()) {
+        	requestMultiplayerGame();
+        }
         
 	}
 
@@ -289,9 +297,11 @@ public class Pong extends GameClient {
 	 * Start a new point: start the ball moving and change the game state
 	 */
 	void startPoint() {
-		getBall().randomizeVelocity();
-		gameState = new InProgressState();
-		statusMessage = null;
+		if (!ArcadeSystem.isGameWaiting()) { 
+			getBall().randomizeVelocity();
+			gameState = new InProgressState();
+			statusMessage = null;
+		}
 	}
 
 	@Override
@@ -337,6 +347,21 @@ public class Pong extends GameClient {
 
 	public void setRightPaddle(Paddle rightPaddle) {
 		this.rightPaddle = rightPaddle;
+	}
+	
+	private void requestMultiplayerGame() {
+		NewMultiGameRequest request = new NewMultiGameRequest();
+		request.playerID = this.getPlayer().getID();
+		request.gameId = this.getGame().getID();
+		request.requestType = MultiGameRequestType.MATCHMAKING;
+		System.out.println("Request sent: " + request.playerID + " " + request.gameId);
+		networkClient.sendNetworkObject(request);
+	}
+	
+	public void startMultiplayerGame() {
+		getBall().randomizeVelocity();
+		gameState = new InProgressState();
+		statusMessage = null;
 	}
 	
 }

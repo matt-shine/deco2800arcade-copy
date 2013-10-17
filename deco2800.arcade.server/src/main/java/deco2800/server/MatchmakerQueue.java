@@ -153,8 +153,10 @@ public class MatchmakerQueue {
 				session.gameId = gameId;
 				connection.sendTCP(session);
 				((Connection) player2.get(3)).sendTCP(session);
+				return;
 			}		
 		}
+		add(request, connection);
 	}
 	
 	public void addLobbyGame(int player1Id, int player2Id, Connection player1Connection, 
@@ -183,9 +185,23 @@ public class MatchmakerQueue {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (p1Rating == 0 || p2Rating == 0) {
+		if (p1Rating == 0) {
 			p1Rating = 1500;
+			try {
+				database.updatePlayerRating(p1ID, gameID, 1500);
+			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if (p2Rating == 0) {	
 			p2Rating = 1500;
+			try {
+				database.updatePlayerRating(p2ID, gameID, 1500);
+			} catch (DatabaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		long time = (Long)player2.get(1);
 		timeAllowance = (((System.currentTimeMillis() - time) / 60000)+1)*100;

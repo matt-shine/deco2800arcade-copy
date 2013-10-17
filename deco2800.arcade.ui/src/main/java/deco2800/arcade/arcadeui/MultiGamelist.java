@@ -888,10 +888,10 @@ public class MultiGamelist implements Screen {
 		    	dispose();
 				ArcadeSystem.setMatchMaking(true);
 				ArcadeSystem.setGameWaiting(true);
-				
-		    	//ArcadeSystem.goToGame("Pong");
-		    	arcadeUI.setScreen(arcadeUI.getWait());
-		    	System.out.println("paused");
+				arcadeUI.setScreen(arcadeUI.getWait());
+		    	ArcadeSystem.goToGame("Pong");
+		    	
+		    	//System.out.println("paused");
 		    }
 		})); 
         

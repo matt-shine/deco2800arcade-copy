@@ -385,8 +385,8 @@ public class Player extends User {
 	 *            The friend to be added to the friends set.
 	 * @ensure this.friends.contains(friend)
 	 */
-	public void addFriend(User friend) {
-		if (friend != null /* && this.hasInvite(friend) */) {
+	public void acceptFriendInvite(User friend) {
+		if (friend != null  && this.hasInvite(friend)) {
 			this.friends.add(friend);
 			setChanged();
 			notifyObservers(friends);

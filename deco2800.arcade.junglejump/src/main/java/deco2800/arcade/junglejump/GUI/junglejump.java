@@ -173,7 +173,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			File file2 = new FileGdx.files.internal("menu.wav");
+			File file2 = new File("menu.wav");
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
 			menuSound.open(audioIn2);

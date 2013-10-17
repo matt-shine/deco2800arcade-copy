@@ -60,9 +60,13 @@ public class AccoladeStorage{
 					"ACCOLADES", null);
 			if (!tableData.next()){
 				Statement statement = connection.createStatement();
-				/**
+				/** HERE JERRY: the statement.execute was throwing an error 
+				 * and i'm not sure about the lines immeadiatly below this comment
+				 * 
+				 * (I think i had jsut accidentally deleted the semicolon)
+				 * 
 				String String, String Unit, int modifier, String Tag,
-				String Image
+				String Image;
 				statement.execute("CREATE TABLE ACCOLADES(ID INT RIMARY KEY," +
 						"VALUE INT NOT NULL" +
 						"NAME VARCHAR(30) NOT NULL," +
@@ -93,9 +97,12 @@ public class AccoladeStorage{
 			 */
 			tableData = connection.getMetaData().getTables(null, null, "GAME_ACCOLADES", null);
 			if (!tableData.next()) {
-				//statement.execute("CREATE TABLE GAME_ACCOLADES(ID INTEGER NOT NULL," +
-							//"ACCOLADEID INT," +
-							//"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+				/** HERE AGAIN JERRY: I think statement jsut isn't being resolved to a variable type,
+				 * I think i might have deleted one of your imports by mistake
+				statement.execute("CREATE TABLE GAME_ACCOLADES(ID INTEGER NOT NULL," +
+							"ACCOLADEID INT," +
+							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+							 * **/
 			}
 			
 		}
@@ -184,6 +191,7 @@ public class AccoladeStorage{
 					"WHERE ID = '" + playerID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
+				//TODO JERRY ANOTHER ONE HERE: it couldnt do the .add (jsut uncomment it to see it
 				//result.add(a);
 			}
 		} catch (SQLException e) {
@@ -229,7 +237,8 @@ public class AccoladeStorage{
 					"WHERE ID = '" + gameID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
-				//TODO fix result.add(a);
+				//TODO JERRY ANOTHER ONE HERE: it couldnt do the .add (jsut uncomment it to see it
+				//result.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

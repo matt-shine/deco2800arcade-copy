@@ -68,7 +68,16 @@ public class AccoladeSystem {
 			System.console().printf("There was an error creating the Name and "
 					+ "primary key pairs for the accolades: " + error.toString());
 			error.printStackTrace();
-		}		
+		}	
+		/**
+		 * *load in the xml file
+		 * *check each xml module
+		 * *if a key isn't assigned, then create new accolade server side and modify xml to include the 
+		 * the newly assigned AccoladeID (this allows developers to later modify their accolade information by just changing the accolade xml file
+		 * *also check for an <imageUpdated>1</imageUpdated> flag, to tell the game to store the new image (also stores the new image if)
+		 * *Additionally, if the new filepath is different an manual image update occurs. (IE use the image update flag if the file has the same name)
+		 */
+		
 	}
 	
 	/** Increments an accolade by {@param increment} amount. Uses an integer for

@@ -8,7 +8,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     private Accolade tail;
     private int gameID;
     private int size;
-    private int playerID
+    private int playerID;
  
     /**
      * create an empty Accolade container

@@ -63,7 +63,7 @@ public class StoreHome implements Screen, StoreScreen {
 		stage.addActor(bg);
 		
 		final TextField searchField = new TextField("", skin);
-		final Button searchButton = new Button(skin, " search");
+		final Button searchButton = new Button(skin, "search");
 		final TextButton libraryButton = new TextButton("Library", skin);
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
@@ -95,7 +95,7 @@ public class StoreHome implements Screen, StoreScreen {
 		// as the search result located below it.
 		searchField.setSize(300, 42);
 		searchField.setPosition(860, 536);
-		searchField.setMessageText("Search");
+		searchField.setMessageText(" Search");
 		stage.addActor(searchField);
 		
 		// Search button. Will re-direct user to the (valid) "SearchResult" game page

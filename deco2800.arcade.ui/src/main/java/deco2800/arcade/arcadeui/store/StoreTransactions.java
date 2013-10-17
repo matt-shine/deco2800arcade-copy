@@ -43,7 +43,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
 		final Label Title = new Label("Buy More Coins", skin, "default-34");
-		final Button searchButton = new Button(skin, " search");
+		final Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
 		final Label balanceNumber = new Label(balance + "", skin, "current-coins");
@@ -70,7 +70,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 		// as the search result located below it.
 		searchField.setSize(300, 42);
 		searchField.setPosition(860, 536);
-		searchField.setMessageText("Search");
+		searchField.setMessageText(" Search");
 		stage.addActor(searchField);
 		
 		// Search button. Will re-direct user to the (valid) "SearchResult" game page.

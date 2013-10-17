@@ -36,21 +36,22 @@ public class MakeThreadController implements ActionListener {
 				return;
 			}
 		});
-		
+		this.view.submitBtn.addActionListener(this);
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent arg0) {
 		System.out.println("submit clicked");
 		InsertParentThreadRequest request = new InsertParentThreadRequest();
-		request.topic = "SSSS";
-		request.message = "AAA";
+		request.topic = this.view.TitleTBox.getText();
+		request.message = this.view.textPane.getText();
 		request.createdBy = 0;
 		request.category = "roflmao";
-		request.tags = "lol";
+		request.tags = this.view.TagsTBox.getText();
 		this.connection.sendTCP(request);
 		System.out.println("pThread request is sent");
 		return;
 	}
+	
 	
 }

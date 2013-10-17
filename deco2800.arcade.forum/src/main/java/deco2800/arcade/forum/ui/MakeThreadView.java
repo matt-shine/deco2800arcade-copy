@@ -24,67 +24,61 @@ import java.awt.event.MouseEvent;
  * @author TeamForum
  */
 public class MakeThreadView {
-	private JTextField TitleTBox;
-	private JTextField TagsTBox;
-	private JTextPane textPane;
-	private JButton submitBtn;
+	public JTextField TitleTBox;
+	public JTextField TagsTBox;
+	public JTextPane textPane;
+	public JButton submitBtn;
+	private JFrame f;
 
-	   public MakeThreadView() {
+	   public MakeThreadView(JFrame frame) {
+		   this.f = frame;
 	      //Initialize new JFrame for forum interface
-	      JFrame f = new JFrame("Arcade Forum");
-	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	      f.setResizable(false);
-	      f.getContentPane().setBackground(new Color(211, 211, 211));
-	      f.setSize(694, 465);
-	      f.setLocation(300,200);
-	      f.getContentPane().setLayout(null);
+		   this.f.getContentPane().setLayout(null);
 	      
-	      this.textPane = new JTextPane();
-	      this.textPane.setBounds(42, 97, 575, 190);
-	      f.getContentPane().add(this.textPane);
+		   this.textPane = new JTextPane();
+		   this.textPane.setBounds(42, 97, 575, 190);
+		   this.f.getContentPane().add(this.textPane);
 	      
-	      this.submitBtn = new JButton("Submit New Thread");
-	      this.submitBtn.setForeground(Color.BLACK);
-	      this.submitBtn.setBounds(111, 378, 127, 24);
-	      f.getContentPane().add(this.submitBtn);
+		   this.submitBtn = new JButton("Submit New Thread");
+		   this.submitBtn.setForeground(Color.BLACK);
+		   this.submitBtn.setBounds(111, 378, 127, 24);
+		   this.f.getContentPane().add(this.submitBtn);
 	      
-	      JButton CancelBtn = new JButton("Cancel");
-	      CancelBtn.addActionListener(new ActionListener() {
-	    	  public void actionPerformed(ActionEvent arg0) {
-	    		  System.exit(0);
-	      	  }
-	      });
-	      CancelBtn.setBounds(464, 378, 79, 24);
-	      f.getContentPane().add(CancelBtn);
+		   JButton CancelBtn = new JButton("Cancel");
+		   CancelBtn.addActionListener(new ActionListener() {
+			   public void actionPerformed(ActionEvent arg0) {
+				   System.exit(0);
+			   }
+		   });
+		   CancelBtn.setBounds(464, 378, 79, 24);
+		   this.f.getContentPane().add(CancelBtn);
 	      
-	      this.TitleTBox = new JTextField();
-	      this.TitleTBox.setBounds(42, 32, 262, 22);
-	      f.getContentPane().add(this.TitleTBox);
-	      this.TitleTBox.setColumns(10);
+		   this.TitleTBox = new JTextField();
+		   this.TitleTBox.setBounds(42, 32, 262, 22);
+		   this.f.getContentPane().add(this.TitleTBox);
+		   this.TitleTBox.setColumns(10);
 	      
-	      JLabel lblTitle = new JLabel("Title:");
-	      lblTitle.setBounds(40, 13, 56, 16);
-	      f.getContentPane().add(lblTitle);
+		   JLabel lblTitle = new JLabel("Title:");
+		   lblTitle.setBounds(40, 13, 56, 16);
+		   this.f.getContentPane().add(lblTitle);
 	      
-	      JLabel lblMessage = new JLabel("Message:");
-	      lblMessage.setBounds(42, 79, 56, 16);
-	      f.getContentPane().add(lblMessage);
+		   JLabel lblMessage = new JLabel("Message:");
+		   lblMessage.setBounds(42, 79, 56, 16);
+		   this.f.getContentPane().add(lblMessage);
 	      
-	      this.TagsTBox = new JTextField();
-	      this.TagsTBox.setBounds(42, 321, 167, 22);
-	      f.getContentPane().add(this.TagsTBox);
-	      this.TagsTBox.setColumns(10);
+		   this.TagsTBox = new JTextField();
+		   this.TagsTBox.setBounds(42, 321, 167, 22);
+		   this.f.getContentPane().add(this.TagsTBox);
+		   this.TagsTBox.setColumns(10);
 	      
-	      JLabel lblTags = new JLabel("Tags:");
-	      lblTags.setBounds(42, 302, 56, 16);
-	      f.getContentPane().add(lblTags);
-	      f.setVisible(true);
-	      
-	    }
+		   JLabel lblTags = new JLabel("Tags:");
+		   lblTags.setBounds(42, 302, 56, 16);
+		   this.f.getContentPane().add(lblTags);
+		   this.f.setVisible(true);
+	   }
 	   
-	   
-	public void addListener(ActionListener dummy, JButton button) {
-		button.addActionListener(dummy);
-		}
-	}
+	   public void addListener(ActionListener dummy, JButton button) {
+		   button.addActionListener(dummy);
+	   }
+}
 

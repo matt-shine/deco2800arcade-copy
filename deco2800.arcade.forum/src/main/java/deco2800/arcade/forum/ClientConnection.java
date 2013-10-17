@@ -90,6 +90,8 @@ public class ClientConnection {
 			connection.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
 			Kryo kryo = connection.getKryo();
 			kryo.register(GetForumUserRequest.class);
+			kryo.register(InsertParentThreadRequest.class);
+			kryo.register(InsertParentThreadResponse.class);
 			kryo.register(GetForumUserResponse.class);
 		} catch (IOException e) {
 			e.printStackTrace();

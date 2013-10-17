@@ -4,12 +4,14 @@ package deco2800.arcade.userui.test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import deco2800.arcade.model.Player;
-import deco2800.arcade.model.test.PlayerTestFactory;
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.controller.ControllerEdit;
 import deco2800.arcade.userui.view.EditScreen;
@@ -30,12 +32,24 @@ public class EditTest {
 		this.theModel = new Model();
 		this.editView = new EditScreen(theModel);
 		this.editController = new ControllerEdit(theModel, editView, userView);
-		this.player = PlayerTestFactory.createPlayer(1, "Jason");
+		
+		
+		List<String> info = new ArrayList<String>();
+		info.add("Foo");
+		info.add("Foo Bar");
+		info.add("foo@bar.com");
+		info.add("IT");
+		info.add("#Rickroll");
+		info.add("20");
+		boolean[] privset = { true, true, true, true, true, true, true };
+
+		player = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
+				null, null, null, privset);
 	}
 	@Test
 	public void initialTest(){
 		Assert.assertTrue(player.getUsername().equals("Jason"));
-		Assert.assertTrue(player.getID() == 1);
+		Assert.assertTrue(player.getID() == 123);
 	}
 	
 	@Test

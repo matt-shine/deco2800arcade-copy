@@ -68,7 +68,7 @@ public class Enemy extends Ship {
 		return super.remove();
 	}
 	
-	private void move(float delta) {		
+	protected void move(float delta) {		
 		//home in to the player
 		if(homing) {
 //			System.out.println("Player x : " + player.getX() + ", y: " + player.getY());

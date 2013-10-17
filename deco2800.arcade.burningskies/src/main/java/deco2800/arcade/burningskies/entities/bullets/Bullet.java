@@ -50,6 +50,8 @@ public abstract class Bullet extends Entity {
 		position.add(parent.getCenterX(), parent.getCenterY());
 		position.sub(getWidth()/2, getHeight()/2); // bullet has dimensions too
 		direction = initialDirection;
+		setPosition(position.x, position.y);
+		setRotation(direction);
 	}
 	
 	@Override

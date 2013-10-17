@@ -127,8 +127,7 @@ public class PlayerShip extends Ship {
 		mousePos.sub(getCenterX(), getCenterY()); // gotta have it centered
 		setRotation(mousePos.angle()-90);
 		setZIndex(getStage().getActors().size); // this is silly, but no better way
-		shoot(delta);
-		
+		shoot(delta);		
 	}
 	
 	public void setUp(boolean dir) {

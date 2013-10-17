@@ -3,6 +3,7 @@ package deco2800.arcade.burningskies.screen;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.entities.Boss;
 import deco2800.arcade.burningskies.entities.Enemy;
 import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.Level;
@@ -73,9 +75,11 @@ public class PlayScreen implements Screen
 	private PlayerShip player;
 	public Level level;
 	
+	private boolean bossActive = false;
 	private SpawnList sp;
 
 	private float respawnTimer = 0f;
+	private float levelTimer = 0f;
 	
 	
 	public PlayScreen( BurningSkies game){
@@ -149,9 +153,19 @@ public class PlayScreen implements Screen
     					game.setScreen(game.menuScreen);
     				}
     			}
+    		} else {
+    			levelTimer += delta;
+    		}
+    		//TODO: PRESS B TO SPAWN BOSS, REMOVE AFTER DEBUG
+    		if(!bossActive && (levelTimer > 60 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
+    			bossActive = true;
+    			game.playSong("boss");
+    			addEnemy(new Boss(this, player));
     		}
 
-    		sp.checkList(delta);
+    		if(!bossActive) {
+    			sp.checkList(delta);
+    		}
     		
     		stage.act(delta);
     		for(int i=0; i<bullets.size(); i++) {
@@ -165,12 +179,6 @@ public class PlayScreen implements Screen
     			if(b.getAffinity() == Affinity.PLAYER) {
     				for(int j=0; j<enemies.size(); j++) {
     					Enemy e = enemies.get(j);
-    					if(outOfBounds(e)) {
-    						removeEntity(e);
-    						j--;
-    						continue;
-    						
-    					}
     					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
     						e.damage(b.getDamage());
     						if(!e.isAlive()) {
@@ -200,10 +208,9 @@ public class PlayScreen implements Screen
 					continue;
 				}
 			}
-			// checks if the enemy is out of screen, if so remove it
 			for(int i=0; i<enemies.size(); i++) {
 				Enemy e = enemies.get(i);
-				if(e.hasCollided(player) && player.isAlive()) {
+				if(e.hasCollided(player) && player.isAlive() && !(e instanceof Boss)) {
 					removeEntity(e);
 					i--;
 					player.damage(e.getHealth());

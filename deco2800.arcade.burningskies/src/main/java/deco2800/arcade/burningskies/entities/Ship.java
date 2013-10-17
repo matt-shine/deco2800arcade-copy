@@ -72,9 +72,8 @@ public abstract class Ship extends Entity {
 		if(flash > 0) {
 			setColor(1, 1-flash, 1-flash, 1);
 			flash -= delta*25;
-			if(flash <= 0) {
-				setColor(1, 1, 1, 1);
-			}
+		} else {
+			setColor(1, 1, 1, 1);
 		}
 	}
 }

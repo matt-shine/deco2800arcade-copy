@@ -3,6 +3,8 @@ package deco2800.arcade.userui;
 import javax.swing.ImageIcon;
 
 import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Game;
@@ -34,6 +36,7 @@ public class Model {
 	public ImageIcon statusIcon = new ImageIcon("assets/images/online.png");
 	public Friends friends;
 	public AchievementClient achievements;
+	public ArcadeSystem arcadesystem;
 	
 	static {
 		PONG = new Game();
@@ -72,7 +75,7 @@ public class Model {
 		PACMAN.description = "Eat the ghosts before they eat you!";
 	
 	}
-
+	
 	public String getStatus() {
 		return status;	
 	}

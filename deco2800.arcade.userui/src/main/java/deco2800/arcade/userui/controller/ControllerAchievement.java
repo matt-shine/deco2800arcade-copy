@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.userui.Model;
 import deco2800.arcade.userui.view.AchievementScreen;
@@ -55,7 +56,6 @@ public class ControllerAchievement {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the edit page
-			
 		}
 		
 	}

@@ -83,8 +83,8 @@ public class ControllerMain {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			//Open the home page
-			log.info("this works");
-			
+			System.out.println("this works");
+			System.out.println(theModel.arcadesystem.getArcadeGames().toString());
 		}
 		
 	}

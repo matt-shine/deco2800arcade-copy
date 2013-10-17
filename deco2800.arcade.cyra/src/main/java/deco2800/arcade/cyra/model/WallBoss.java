@@ -59,6 +59,7 @@ public class WallBoss extends Enemy{
 		health--;
 		if (health==0) {
 			isDead = true;
+			startingNextScene = true;
 		}
 	}
 

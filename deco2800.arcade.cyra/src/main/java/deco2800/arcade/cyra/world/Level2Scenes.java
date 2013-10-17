@@ -73,7 +73,7 @@ public class Level2Scenes extends LevelScenes {
 		closeNextUpdate = false;
 		Array<Object> output = new Array<Object>();
 		
-		System.out.println("Starting scene " + scenePosition);
+		System.out.println("***********************Starting scene " + scenePosition+"******************");
 		
 		if (scenePosition == 0) {
 			ship.getVelocity().x = 0;
@@ -148,12 +148,15 @@ public class Level2Scenes extends LevelScenes {
 			cutsceneLaser = new LaserBeam(-160, new Vector2(boss.getPosition().x-15f, 
 					boss.getPosition().y+EnemySpiderBoss.MOUTH_OFFSET_Y), 4f, false, 3f);
 			output.add(cutsceneLaser);
+		} else if (scenePosition == 7) {
+			resultsScreen.showResults(time, ship.getHearts());
 		}
 		return output;
 	}
 
 	@Override
 	public boolean update(float delta) {
+		System.out.println("playing "+scenePosition);
 		if (scenePosition == 0) {
 			if (ship.getPosition().x < 248f) {
 				ship.getPosition().x += delta * Player.SPEED;
@@ -177,6 +180,10 @@ public class Level2Scenes extends LevelScenes {
 				return true;
 			}
 			return false;
+		} else if (scenePosition == 3) {
+			//defeated wall boss
+			isPlaying = false;
+			return true;
 		} else if (scenePosition == 4) {
 			//Scene to introduce the boss
 			manager.update(delta);
@@ -276,6 +283,17 @@ public class Level2Scenes extends LevelScenes {
 				return true;
 			}
 			return false;
+		
+			
+		} else if (scenePosition == 7) {
+			//win game scene
+			count += delta;
+			if (count >= 5f) {
+				isPlaying = false;
+				return true;
+			}
+			return false;
+			
 		} else {
 			return false;
 		}
@@ -300,6 +318,27 @@ public class Level2Scenes extends LevelScenes {
 		blockMaker.setActive(true);
 		blockMaker.camHasReachedStartPosition();
 		ship.getVelocity().x = 0;
+	}
+
+	@Override
+	public Vector2 getPlayerReloadPosition(int scene) {
+		Array<Vector2> outputs = new Array<Vector2>();
+		outputs.add(new Vector2(20f, 6f)); // before first boss
+		outputs.add(new Vector2(20f, 6f)); // during first boss
+		outputs.add(new Vector2(20f, 6f)); // during first boss
+		outputs.add(new Vector2(272f, 50f)); // before second boss
+		outputs.add(new Vector2(272f, 50f)); // during second boss
+		outputs.add(new Vector2(272f, 50f)); //before thrird boss
+		outputs.add(new Vector2(600f, 6f)); // during third boss
+		outputs.add(new Vector2(600f, 6f)); // during third boss
+		outputs.add(new Vector2(600f, 6f)); // during third boss
+		return outputs.get(scene);
+	}
+
+	@Override
+	public int getScenePositionAfterReload(int scene) {
+		int[] scenes = {0,0,0,2,2,2,4,4,4};
+		return scenes[scene];
 	}
 
 }

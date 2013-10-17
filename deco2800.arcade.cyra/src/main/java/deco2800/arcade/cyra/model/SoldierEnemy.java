@@ -96,7 +96,7 @@ public class SoldierEnemy extends Enemy {
 		velocity.add(0, GRAVITY);
 		
 		if (state == State.INIT && (ship.getPosition().x > position.x - 10f || ship.getPosition().x < position.x +10f)) {
-			System.out.println("cancelled init at ship"+ship.getPosition()+" and enemy"+position);
+			//System.out.println("cancelled init at ship"+ship.getPosition()+" and enemy"+position);
 			stateTime = 0f;
 		}
 		

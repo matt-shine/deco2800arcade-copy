@@ -77,6 +77,7 @@ public class WorldRenderer {
 	private boolean enemyWithHealthOnScreen = false;
 	private float healthPercentage;
 	private String healthName;
+	private float redScreenAlpha;
 	
 	//attempting to use maps
 	TileMapRenderer tileMapRenderer;
@@ -101,6 +102,7 @@ public class WorldRenderer {
 		rightCyraCount = 0;
 		leftCyraCount = 0;
 		rightFrameCounter = 0;
+		redScreenAlpha = 0;
 		cam.update();
 		
 		
@@ -173,6 +175,8 @@ public class WorldRenderer {
 	}
 	
 	private void drawShip() {
+		
+		
 		if (ship.isFacingRight()) {
 			leftCyraCount = 0;
 			leftFrameCounter = 0;
@@ -185,7 +189,7 @@ public class WorldRenderer {
 			
 			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
 			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
-					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, 0);
+					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, ship.getRotation());
 			
 			/*batch.draw(shipTexture, ship.getPosition().x, ship.getPosition().y+ship.getHeight()/2, ship.getWidth() /2, ship.getHeight()/2,
 					1f, 1f, 2, 2, ship.getRotation(), 0, 0, shipTexture.getWidth(),
@@ -225,7 +229,7 @@ public class WorldRenderer {
 			
 			cyraFrame = cyraRightAnimation.getKeyFrame(rightCyraCount+1, true);
 			batch.draw(cyraFrame, ship.getPosition().x, ship.getPosition().y, ship.getWidth()/2,
-					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, 0);
+					ship.getHeight()/2, ship.getWidth(), ship.getHeight(), 1.8f, 1f, ship.getRotation());
 		}
 	}
 	
@@ -311,6 +315,29 @@ public class WorldRenderer {
 						mvPlat.getTexture().getHeight(), false, false);
 			}
 		}
+		
+		if (ship.getState() == Player.State.DEATH) {
+			
+			redScreenAlpha += Gdx.graphics.getDeltaTime() / 3;
+			if (redScreenAlpha > 1.0f) {
+				redScreenAlpha = 1.0f;
+			}
+			batch.end();
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			sr.begin(ShapeType.FilledRectangle);
+			
+			sr.setColor(new Color(255f, 0f, 0f,redScreenAlpha));
+			sr.filledRect(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2, cam.viewportWidth, cam.viewportHeight);
+			
+			sr.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			
+			batch.begin();
+		} else {
+			redScreenAlpha = 0f;
+		}
+		
 		
 		/* Draw ship */
 		if(ship.isInvincible()) {
@@ -621,6 +648,16 @@ public class WorldRenderer {
 		CharSequence str = "Time: " + (int)world.getTime(); //(int)ship.getPosition().x;
 		int strXPos = Gdx.graphics.getWidth() - 223; //Offset from right
 		int strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
+		font.draw(textBatch, str, strXPos, strYPos);
+		
+		str = "Score: " + (int)world.getScore();
+		strXPos = Gdx.graphics.getWidth() - 2*223;
+		strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
+		font.draw(textBatch, str, strXPos, strYPos);
+		
+		str = "Lives: " + (int)world.getLives();
+		strXPos = Gdx.graphics.getWidth() - 850;
+		strYPos = Gdx.graphics.getHeight() - 4; //Offset from top
 		font.draw(textBatch, str, strXPos, strYPos);
 		
 		

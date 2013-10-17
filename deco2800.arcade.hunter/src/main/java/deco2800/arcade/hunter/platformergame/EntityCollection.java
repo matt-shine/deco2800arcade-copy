@@ -21,7 +21,7 @@ public class EntityCollection implements Iterable<Entity> {
 		//Get a random integer that isn't in the key set
 		int id;
 		Random random = new Random();
-		while (entities.containsKey(id = random.nextInt()));
+		while (entities.containsKey(id = random.nextInt()) || id < 0);
 		return id;
 	}
 	
@@ -35,9 +35,11 @@ public class EntityCollection implements Iterable<Entity> {
 		}
 	}
 	
-	public void add(Entity e) {
+	public int add(Entity e) {
 		//Add an entity to the entities map, with a unique id
-		entities.put(generateId(), e);
+        int id = generateId();
+		entities.put(id, e);
+        return id;
 	}
 
 	
@@ -45,6 +47,10 @@ public class EntityCollection implements Iterable<Entity> {
 	public Iterator<Entity> iterator() {
 		return entities.values().iterator();
 	}
+
+    public Iterable<Integer> idSet() {
+        return entities.keySet();
+    }
 	
 	public void updateAll(float delta) {
 		for (Entity e : this) {
@@ -57,6 +63,10 @@ public class EntityCollection implements Iterable<Entity> {
 			e.draw(batch, stateTime);
 		}
 	}
+
+    public Entity getById(int id) {
+        return entities.get(id);
+    }
 
     public int size() {
         return entities.size();

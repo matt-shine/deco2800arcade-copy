@@ -12,13 +12,13 @@ import deco2800.arcade.hunter.platformergame.Entity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 import deco2800.arcade.hunter.screens.GameScreen;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 
 public class SpriteLayer extends Map {
-    private HashMap<String, TextureRegion> treeSprites = new HashMap<String, TextureRegion>();
-    private HashMap<String, TextureRegion> cloudSprites = new HashMap<String, TextureRegion>();
+    private ArrayList<TextureRegion> treeSprites = new ArrayList<TextureRegion>();
+    private ArrayList<TextureRegion> cloudSprites = new ArrayList<TextureRegion>();
 	private EntityCollection clouds = new EntityCollection();
     private EntityCollection trees = new EntityCollection();
 
@@ -37,21 +37,32 @@ public class SpriteLayer extends Map {
 		super(speedModifier);
 		this.gameScreen = gameScreen;
 
-        cloudSprites.put("cloud", new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/cloud.png"))));
-        treeSprites.put("tree", new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/tree.png"))));
-        treeSprites.put("tree2", new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/tree2.png"))));
+        for (int c = 1; c <= 5; c++) {
+            cloudSprites.add(new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/cloud" + c + ".png"))));
+        }
+        for (int t = 1; t <= 5; t++) {
+            treeSprites.add(new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/tree" + t + ".png"))));
+        }
 
         //Create clouds
         for (int c = 0; c < 10; c++) {
             //No need for seeded rng here, doesn't affect gameplay
-            clouds.add(new BackgroundSprite(randomScreenCoordinate(),
-                    cloudSprites.get("cloud").getRegionWidth(), cloudSprites.get("cloud").getRegionHeight()));
+            int id = clouds.add(new BackgroundSprite(randomScreenCoordinate(), 0, 0));
+            TextureRegion sprite = cloudSprites.get(id % cloudSprites.size());
+            clouds.getById(id).setWidth(sprite.getRegionWidth());
+            clouds.getById(id).setHeight(sprite.getRegionHeight());
         }
+
         //Create trees
         for (int t = 0; t < 2; t++) {
             float tX = randomScreenCoordinate().x;
             float tY = gameScreen.getForeground().getColumnTop(tX);
-            trees.add(new BackgroundSprite(new Vector2(tX, tY), treeSprites.get("tree").getRegionWidth(), treeSprites.get("tree").getRegionHeight()));
+
+            int id = trees.add(new BackgroundSprite(new Vector2(tX, tY), 0, 0));
+            System.out.println("Num Trees: " + treeSprites.size() + ", id: " + id + ", tree: " + id % treeSprites.size());
+            TextureRegion sprite = treeSprites.get(id % treeSprites.size());
+            trees.getById(id).setWidth(sprite.getRegionWidth());
+            trees.getById(id).setHeight(sprite.getRegionHeight());
         }
     }
 
@@ -69,28 +80,34 @@ public class SpriteLayer extends Map {
         if (Math.random() < CHANCE_OF_CLOUDS) {
             cloudLocation = randomScreenCoordinate();
             cloudLocation.set(cameraPos.x + Hunter.State.screenWidth / 2, cloudLocation.y + cameraPos.y);
-            clouds.add(new BackgroundSprite(cloudLocation,
-                    cloudSprites.get("cloud").getRegionWidth(), cloudSprites.get("cloud").getRegionHeight()));
+
+            int id = clouds.add(new BackgroundSprite(cloudLocation, 0, 0));
+            TextureRegion sprite = cloudSprites.get(id % cloudSprites.size());
+            clouds.getById(id).setWidth(sprite.getRegionWidth());
+            clouds.getById(id).setHeight(sprite.getRegionHeight());
         }
 
         Vector2 treeLocation = new Vector2();
         if (Math.random() < CHANCE_OF_TREES) {
             treeLocation.x = cameraPos.x + Hunter.State.screenWidth / 2;
-            treeLocation.y = gameScreen.getForeground().getColumnTop(treeLocation.x + treeSprites.get("tree").getRegionWidth() / 2 - Hunter.Config.TILE_SIZE);
 
-            trees.add(new BackgroundSprite(treeLocation, treeSprites.get("tree").getRegionWidth(), treeSprites.get("tree").getRegionHeight()));
+            int id = trees.add(new BackgroundSprite(treeLocation, 0, 0));
+            TextureRegion sprite = treeSprites.get(id % treeSprites.size());
+            trees.getById(id).setWidth(sprite.getRegionWidth());
+            trees.getById(id).setHeight(sprite.getRegionHeight());
+            trees.getById(id).setY(gameScreen.getForeground().getColumnTop(treeLocation.x + sprite.getRegionWidth() / 2) - Hunter.Config.TILE_SIZE);
         }
 	}
 
 	@Override
 	public void draw(SpriteBatch batch) {
 		// TODO Auto-generated method stub
-        for (Entity c : clouds) {
-            batch.draw(cloudSprites.get("cloud"), c.getX(), c.getY());
+        for (int c : clouds.idSet()) {
+            batch.draw(cloudSprites.get(c % cloudSprites.size()), clouds.getById(c).getX(), clouds.getById(c).getY());
         }
 
-        for (Entity t : trees) {
-            batch.draw(treeSprites.get("tree"), t.getX(), t.getY());
+        for (int t : trees.idSet()) {
+            batch.draw(treeSprites.get(t % treeSprites.size()), trees.getById(t).getX(), trees.getById(t).getY());
         }
 	}
 }

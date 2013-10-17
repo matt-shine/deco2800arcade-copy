@@ -53,6 +53,14 @@ public abstract class Entity {
 	public void setY(float y) {
 		this.bounds.y = y;
 	}
+
+    public void setWidth(float width) {
+        this.bounds.width = width;
+    }
+
+    public void setHeight(float height) {
+        this.bounds.height = height;
+    }
 	
 	public EdgeCollider getCollider() {
 		return collider;

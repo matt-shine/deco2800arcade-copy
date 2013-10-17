@@ -24,7 +24,8 @@ import java.awt.event.MouseEvent;
  * @author TeamForum
  */
 public class MakeThread {
-	private static JTextField textField;
+	private static JTextField TitleTBox;
+	private static JTextField TagsTBox;
 
 	   public static void main(String[] args) {
 	      //Initialize new JFrame for forum interface
@@ -32,7 +33,7 @@ public class MakeThread {
 	      f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	      f.setResizable(false);
 	      f.getContentPane().setBackground(new Color(211, 211, 211));
-	      f.setSize(673, 427);
+	      f.setSize(694, 465);
 	      f.setLocation(300,200);
 	      f.getContentPane().setLayout(null);
 	      
@@ -42,7 +43,7 @@ public class MakeThread {
 	      
 	      Button SubmitBtn = new Button("Submit New Thread");
 	      SubmitBtn.setForeground(Color.BLACK);
-	      SubmitBtn.setBounds(106, 324, 127, 24);
+	      SubmitBtn.setBounds(111, 378, 127, 24);
 	      f.getContentPane().add(SubmitBtn);
 	      
 	      Button CancelBtn = new Button("Cancel");
@@ -52,13 +53,13 @@ public class MakeThread {
 	      		System.exit(0);
 	      	}
 	      });
-	      CancelBtn.setBounds(448, 324, 79, 24);
+	      CancelBtn.setBounds(464, 378, 79, 24);
 	      f.getContentPane().add(CancelBtn);
 	      
-	      textField = new JTextField();
-	      textField.setBounds(42, 32, 262, 22);
-	      f.getContentPane().add(textField);
-	      textField.setColumns(10);
+	      TitleTBox = new JTextField();
+	      TitleTBox.setBounds(42, 32, 262, 22);
+	      f.getContentPane().add(TitleTBox);
+	      TitleTBox.setColumns(10);
 	      
 	      JLabel lblTitle = new JLabel("Title:");
 	      lblTitle.setBounds(40, 13, 56, 16);
@@ -67,6 +68,15 @@ public class MakeThread {
 	      JLabel lblMessage = new JLabel("Message:");
 	      lblMessage.setBounds(42, 79, 56, 16);
 	      f.getContentPane().add(lblMessage);
+	      
+	      TagsTBox = new JTextField();
+	      TagsTBox.setBounds(42, 321, 167, 22);
+	      f.getContentPane().add(TagsTBox);
+	      TagsTBox.setColumns(10);
+	      
+	      JLabel lblTags = new JLabel("Tags:");
+	      lblTags.setBounds(42, 302, 56, 16);
+	      f.getContentPane().add(lblTags);
 	      f.setVisible(true);
 	      
 	    }

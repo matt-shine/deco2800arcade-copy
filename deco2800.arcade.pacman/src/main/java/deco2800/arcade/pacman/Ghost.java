@@ -114,6 +114,7 @@ public class Ghost extends Mover {
 			return facing;
 		}
 	
+		
 	public void setFacing(Dir facing) {
 		this.facing = facing;
 	}
@@ -270,5 +271,25 @@ public class Ghost extends Mover {
 		return Dir.DOWN;
 	}
 	
+	/**
+	 * Returns the next tile. uses other methods to determine the tile.
+	 * @return
+	 */
+	public Tile get_next_tile() {
+		
+		List<Tile> testTiles = getTestTiles(currentTile);
+		List<Double> dists = getDists(testTiles, currentTile);
+		int Tilenum = -1;
+		double dist = 9999;
+		
+		for (int i=0; i< dists.size(); i++) {
+			double temp = dists.get(i);
+			if (temp < dist) {
+				dist = temp;
+				Tilenum++;
+			}
+		}
+		return testTiles.get(Tilenum);
+	}
 
 }

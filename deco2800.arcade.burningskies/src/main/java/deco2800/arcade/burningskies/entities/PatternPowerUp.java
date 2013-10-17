@@ -38,6 +38,7 @@ public class PatternPowerUp extends PowerUp {
 				break;
 			}
 		}
-		return patterns.get((int)(Math.random() * (patterns.size() + 1)));
+		//Have to use rounding function, int casting always floors.
+		return patterns.get((int)Math.round(Math.random() * (patterns.size() - 1)));
 	}
 }

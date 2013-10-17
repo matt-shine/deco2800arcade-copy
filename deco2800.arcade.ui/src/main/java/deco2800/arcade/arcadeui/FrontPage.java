@@ -127,10 +127,6 @@ public class FrontPage implements Screen {
         //buttons for recent games
         final TextButton recentgame1 = new TextButton(game1, skin, "blue");
         final TextButton recentgame2 = new TextButton(game2, skin, "blue");
-
-        
-       //Top Box Labels
-
         final TextButton recentgame3 = new TextButton(game3, skin, "blue");
         
         final Table recentTable = new Table();
@@ -143,8 +139,6 @@ public class FrontPage implements Screen {
         final Label logo = new Label("VAPOR", skin, "cgothic");
         logo.setAlignment(Align.left);
         
-    
-       
         //Bottom Box Labels
         final Label divider2 = new Label("|", skin, "cgothic");
         divider2.setAlignment(Align.right);
@@ -317,6 +311,7 @@ public class FrontPage implements Screen {
         storeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
             	arcadeUI.setScreen(new GameStore());
+            	GameStore.setName(pName);
             }
         })); 
         
@@ -330,7 +325,7 @@ public class FrontPage implements Screen {
         
     }
    
-    //FIXME Making the label dynamic
+    //FIXME Better implementation
     
     public static void setName(String playerName){
 		pName = playerName;
@@ -342,8 +337,6 @@ public class FrontPage implements Screen {
         logo.setAlignment(Align.left);
         
         final Label username = new Label(pName , skin, "cgothic");
-        
-        System.out.println("The label is showing:" + " " + username.getText().toString());
         
         if (username.getText() != pName){
         	System.out.println("Label is null");

@@ -23,16 +23,30 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 public class GameStore implements Screen, StoreScreen {
-    private Skin skin;
-    private Stage stage;
+    private static Skin skin;
+    //private Skin skin2;
+    private static Stage stage;
 	
     Texture bg;
     Sprite bgSprite;
     SpriteBatch batch;
+    
+    private static int creditVal = 0;
+    private String[] onlineFriends = {"adeleen", "alina", "moji", "will"};
+    private int nFriends = onlineFriends.length;
+    
+    public static String pName = "<USERNAME>";
 
     public GameStore() {
 		skin = new Skin(Gdx.files.internal("storeSkin.json"));
+		//skin2 = new Skin(Gdx.files.internal("loginSkin.json"));
 		skin.add("background", new Texture("homescreen_bg.png"));
+		
+		skin.add("background", new Texture("homescreen_bg.png"));
+        skin.add("menuBar", new Texture("menuBar.png"));
+        skin.add("recentBar", new Texture("recent.png"));
+        skin.add("chatOverlay", new Texture("overlayPopUp.png"));
+		
 		stage = new Stage();
 		
 		Table table = new Table();
@@ -94,6 +108,28 @@ public class GameStore implements Screen, StoreScreen {
 		reviewsButton.setPosition(860, 20);
 		stage.addActor(reviewsButton);
 		
+		//Bottom Box Labels
+        final Label divider2 = new Label("|", skin, "menu");
+        divider2.setAlignment(Align.right);
+        final Label chatLink = new Label("Online (" + nFriends +")" , skin, "menu");
+        chatLink.setAlignment(Align.right);
+        
+        final Table bottomBox = new Table();
+        
+        //set bottom bar properties
+        bottomBox.setSize(1279, 30);
+        bottomBox.setPosition(0, 0);
+        bottomBox.setColor(255, 255, 255, 1);
+        bottomBox.setBackground(skin.getDrawable("menuBar"));
+        
+        //add bottom labels
+        
+        bottomBox.add(divider2).width(1100).pad(20);
+        bottomBox.add(chatLink).width(100);
+        
+        //adding to stage
+        stage.addActor(bottomBox);
+		
 		libraryButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				System.out.println("Library clicked");
@@ -141,6 +177,49 @@ public class GameStore implements Screen, StoreScreen {
 		}
 		*/
 	}
+	
+	//FIXME There has to be a better way to implement a menu bar that has to be called/made on each screen
+	
+	public static void setName(String playerName){
+		pName = playerName;
+		System.out.println("Logged in as:" + " " + pName);
+		
+		//Top Box Labels
+        final Label logo = new Label("VAPOR", skin, "menu");
+        logo.setAlignment(Align.left);
+        
+        final Label username = new Label(pName , skin, "menu");
+        
+        if (username.getText() != pName){
+        	System.out.println("Label is null");
+        	
+        	username.setText(pName);
+        }
+        
+        username.setAlignment(Align.right);
+        
+        final Label credits = new Label( creditVal + " Credits", skin, "menu");
+        credits.setAlignment(Align.right);
+        final Label divider = new Label("|", skin, "menu");
+        divider.setAlignment(Align.right);
+        
+        final Table topBox = new Table();
+        
+        //set panel sizes and positions
+        topBox.setSize(1279, 30);
+        topBox.setPosition(1, 690);
+        topBox.setColor(255, 255, 255, 1);
+        topBox.setBackground(skin.getDrawable("menuBar"));
+        
+        //set top bar labels
+        topBox.add(logo).width(500);
+        topBox.add(username).width(615);
+        topBox.add(divider).width(5).pad(20);
+        topBox.add(credits).width(100);
+        
+        stage.addActor(topBox);
+		
+    }
     
 	@Override
 	public void show() {

@@ -72,26 +72,26 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private ReplayHandler replayHandler;
 	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
-	boolean moving = false;
-	static Piece movingPiece = null;
-	static boolean isReplaying = false;
+	private boolean moving = false;
+	private static Piece movingPiece = null;
+	private static boolean isReplaying = false;
 	// Sprite offsets
-	int horizOff = SCREENWIDTH / 2 - 256;
-	int verticOff = SCREENHEIGHT / 2 - 256;
-	int pieceHorizOff = 24;
-	int pieceVerticOff = 24;
-	boolean flag = true;
+	private int horizOff = SCREENWIDTH / 2 - 256;
+	private int verticOff = SCREENHEIGHT / 2 - 256;
+	private int pieceHorizOff = 24;
+	private int pieceVerticOff = 24;
+	private boolean flag = true;
 	private String info;
 	BitmapFont gameInfo;
 	
 	// Piece positions
-	int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
+	private int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
 			whiteQueenPos, whiteBishop2Pos, whiteKnight2Pos, whiteRook2Pos;
-	int[] blackRook1Pos, blackKnight1Pos, blackBishop1Pos, blackKingPos,
+	private int[] blackRook1Pos, blackKnight1Pos, blackBishop1Pos, blackKingPos,
 			blackQueenPos, blackBishop2Pos, blackKnight2Pos, blackRook2Pos;
-	int[] whitePawn0Pos, whitePawn1Pos, whitePawn2Pos, whitePawn3Pos,
+	private int[] whitePawn0Pos, whitePawn1Pos, whitePawn2Pos, whitePawn3Pos,
 			whitePawn4Pos, whitePawn5Pos, whitePawn6Pos, whitePawn7Pos;
-	int[] blackPawn0Pos, blackPawn1Pos, blackPawn2Pos, blackPawn3Pos,
+	private int[] blackPawn0Pos, blackPawn1Pos, blackPawn2Pos, blackPawn3Pos,
 			blackPawn4Pos, blackPawn5Pos, blackPawn6Pos, blackPawn7Pos;
 
 	static Board board;

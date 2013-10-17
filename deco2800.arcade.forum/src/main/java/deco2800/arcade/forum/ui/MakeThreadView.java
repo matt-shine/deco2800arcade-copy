@@ -27,6 +27,7 @@ public class MakeThreadView {
 	private JTextField TitleTBox;
 	private JTextField TagsTBox;
 	private JTextPane textPane;
+	private JButton submitBtn;
 
 	   public MakeThreadView() {
 	      //Initialize new JFrame for forum interface
@@ -42,12 +43,12 @@ public class MakeThreadView {
 	      this.textPane.setBounds(42, 97, 575, 190);
 	      f.getContentPane().add(this.textPane);
 	      
-	      Button SubmitBtn = new Button("Submit New Thread");
-	      SubmitBtn.setForeground(Color.BLACK);
-	      SubmitBtn.setBounds(111, 378, 127, 24);
-	      f.getContentPane().add(SubmitBtn);
+	      this.submitBtn = new JButton("Submit New Thread");
+	      this.submitBtn.setForeground(Color.BLACK);
+	      this.submitBtn.setBounds(111, 378, 127, 24);
+	      f.getContentPane().add(this.submitBtn);
 	      
-	      Button CancelBtn = new Button("Cancel");
+	      JButton CancelBtn = new JButton("Cancel");
 	      CancelBtn.addActionListener(new ActionListener() {
 	    	  public void actionPerformed(ActionEvent arg0) {
 	    		  System.exit(0);

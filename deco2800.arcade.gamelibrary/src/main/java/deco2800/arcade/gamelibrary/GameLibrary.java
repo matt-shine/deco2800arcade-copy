@@ -71,7 +71,7 @@ public class GameLibrary extends GameClient {
      * Update the current screen being display
      */
     public void updateScreen(Screen screen) {
-        //if (curentScreen != null) curentScreen.dispose();
+        if (curentScreen != null) curentScreen.dispose();
         curentScreen = screen;
         setScreen(curentScreen);
     }

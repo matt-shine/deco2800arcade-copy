@@ -42,6 +42,8 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -49,6 +51,7 @@ import deco2800.arcade.snakeLadderGameState.GameOverState;
 import deco2800.arcade.snakeLadderGameState.GameState;
 import deco2800.arcade.snakeLadderGameState.WaitingState;
 import deco2800.arcade.snakeLadderModel.*;
+import deco2800.arcade.utils.AsyncFuture;
 
 /**
  * This is the main class for game snake&Ladder
@@ -79,10 +82,6 @@ public class SnakeLadder extends GameClient {
 	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
-	//NetworkClient for communicating with the server
-	private NetworkClient networkClient;
-	//use AchievementClient
-	private AchievementClient achievementClient;
 	public HighscoreClient player1;
 	private HighscoreClient hsc;
 	private int highestScoreNum = 5;
@@ -95,6 +94,7 @@ public class SnakeLadder extends GameClient {
 		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", this.networkClient);
 		hsc = new HighscoreClient("snakeLadder", networkClient);
 		dumpingScores();
+		//this.achievementClient = new AchievementClient(networkClient);
 	}
 	
 	//constructor for testing
@@ -165,8 +165,7 @@ public class SnakeLadder extends GameClient {
 		//gameState = GameState.READY;
 		gameState = new WaitingState();
 		statusMessage = "Roll the dice to start!";
-		
-		
+        
 		//creating the stage
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -363,6 +362,30 @@ public class SnakeLadder extends GameClient {
         	table.add(new Label(topPlayers.get(i).score+"", skin)).width(100).top().left();
             table.row();
         }
+        
+        //adding achievements list
+        table.row();
+        table.add(new Label("Your Achievements", skin)).spaceTop(20);
+        table.row();
+        
+//        //getting achievements for a game and getting the player's progress in them
+//        AchievementClient achClient = new AchievementClient(networkClient);
+//        AsyncFuture<ArrayList<Achievement>> achievements = achClient.getAchievementsForGame(getGame());
+//        AsyncFuture<AchievementProgress> playerProgress = achClient.getProgressForPlayer(player);
+//        for(Achievement ach : achievements.get()) {
+//            int achProgress = playerProgress.get().progressForAchievement(ach);
+//           double percentage = 100 * (achProgress / (double)ach.awardThreshold);
+//        }
+//        
+//        //getting a list of the achievements a player has been awarded
+//        ArrayList<String> awardedIDs = playerProgress.awardedAchievementIDs();
+//        achievements = achClient.getAchievementsForIDs(awardedIDs);
+//        
+//        //display player's achievement in table
+//        for(Achievement ach : achievements.get()) {
+//        	table.add(new Label(ach.toString(), skin)).width(100).top().left();
+//          table.row();
+//        }
 	}
 	
 	public HashMap<String,RuleMapping> getRuleMapping() {

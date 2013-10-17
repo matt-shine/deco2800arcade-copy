@@ -45,7 +45,8 @@ public class PacController implements InputProcessor {
 		}
 		// check for collisions
 		Tile pTile = player.getTile();
-		Dir tempFacing = player.getFacing();
+//		Dir tempFacing = player.getFacing();
+		if (player.checkNoWallCollision(pTile)) 
 		player.setFacing(facing);
 		System.out.println("Can pacman move? Next tile is " + 
 							player.nextTile(pTile, 1));
@@ -64,20 +65,6 @@ public class PacController implements InputProcessor {
 //		}
 		//checkGhostCollision(pTile);			
 		return true;
-	}
-
-	private void checkGhostCollision(Tile pTile) {	
-		List<Mover> colList = pTile.getMovers();
-		if (colList.size() > 1) {
-			for (int i=0; i < colList.size(); i++) {
-				if (colList.get(i).getClass() == Ghost.class) {
-					System.out.println("Pacman hit a ghost!");
-					//TODO some death thing
-					player.setCurrentState(PacState.DEAD);
-				}
-			}
-		}
-		
 	}
 	
 	

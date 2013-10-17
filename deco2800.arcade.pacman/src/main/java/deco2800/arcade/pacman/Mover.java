@@ -9,9 +9,10 @@ public abstract class Mover {
 	public enum Dir {
 		LEFT, RIGHT, UP, DOWN, TEST
 	}
-		
+	
 	protected Dir facing; // 1: Right, 2: Left
 						// 3: Up, 4: Down
+	protected Dir drawFacing;
 	
 	// the coordinates of the bottom left corner of the pacman/ghost (for
 	// drawing)
@@ -66,6 +67,10 @@ public abstract class Mover {
 		return facing;
 	}
 	
+	public Dir getDrawFacing() {
+		return facing;
+	}
+	
 	public Tile getTile() {
 		return currentTile;
 	}
@@ -85,6 +90,8 @@ public abstract class Mover {
 					+ newTile);
 			currentTile.removeMover(this);
 			currentTile = newTile;
+			// Update the way pacman is shown to be facing
+			
 			currentTile.addMover(this);
 			checkTile(currentTile);
 		}
@@ -100,7 +107,7 @@ public abstract class Mover {
 		int y = gameMap.getTilePos(tile).getY();
 		Tile[][] grid = gameMap.getGrid();
 		//System.out.println(x + ", " + y);
-		switch(this.getFacing()) {
+		switch(this.getDrawFacing()) {
 		case LEFT: x -= offset; break;
 		case RIGHT: x += offset; break;
 		case UP: y += offset; break;
@@ -145,21 +152,28 @@ public abstract class Mover {
 		int y = gameMap.getTilePos(pTile).getY();
 		Tile[][] grid = gameMap.getGrid();
 		//System.out.println(x + ", " + y);
-		switch(this.getFacing()) {
-		case LEFT: x -= 1; break;
-		case RIGHT: x += 1; break;
-		case UP: y += 1; break;
-		case DOWN: y -= 1; break;
-		case TEST: break;
-		}		
-		if (!test.equals(this + " wants to move to " + grid[x][y] + 
-				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
-			test = this + " wants to move to " + grid[x][y] + 
-					" allowed=" + (grid[x][y].getClass() != WallTile.class);
-			System.out.println(test);
-		}
-		return grid[x][y].getClass() != WallTile.class;
+		return !(this.nextTile(pTile, 1).getClass() == WallTile.class);
 	}
+//	public boolean checkNoWallCollision(Tile pTile) {
+//		int x = gameMap.getTilePos(pTile).getX();
+//		int y = gameMap.getTilePos(pTile).getY();
+//		Tile[][] grid = gameMap.getGrid();
+//		//System.out.println(x + ", " + y);
+//		switch(this.getFacing()) {
+//		case LEFT: x -= 1; break;
+//		case RIGHT: x += 1; break;
+//		case UP: y += 1; break;
+//		case DOWN: y -= 1; break;
+//		case TEST: break;
+//		}		
+//		if (!test.equals(this + " wants to move to " + grid[x][y] + 
+//				" allowed=" + (grid[x][y].getClass() != WallTile.class))) {
+//			test = this + " wants to move to " + grid[x][y] + 
+//					" allowed=" + (grid[x][y].getClass() != WallTile.class);
+//			System.out.println(test);
+//		}
+//		return grid[x][y].getClass() != WallTile.class;
+//	}
 	/**
 	 * Overrides toString() so that trying to print the list won't crash the
 	 * program

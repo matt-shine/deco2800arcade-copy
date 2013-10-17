@@ -80,8 +80,7 @@ public class Ghost extends Mover {
 	public void render(SpriteBatch batch) {
 		
 		int spritePos = 3;
-		facing = getDirection(currentTile);
-		targetTile = getTargetTile();
+		ghost_move();
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -292,6 +291,15 @@ public class Ghost extends Mover {
 			}
 		}
 		return testTiles.get(Tilenum);
+	}
+	
+	private void ghost_move() {
+				
+		if ((drawX % 16 == 7) && (drawY % 16 == 7)) {
+			facing = getDirection(currentTile);
+			targetTile = getTargetTile();
+		}
+		
 	}
 
 }

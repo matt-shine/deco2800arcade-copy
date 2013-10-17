@@ -61,6 +61,7 @@ public class World {
 	private boolean turnOffScenes = false;
 	private LaserBeam testBeam;
 	
+	private Cyra game;
 	//He says this creates circular logic and hence is very bad. It's only really to get touchDown to access camera
 	// if not using mouse then remove this
 	//WorldRenderer wr;
@@ -68,7 +69,10 @@ public class World {
 	public World(Cyra game, int level, float difficulty, ParallaxCamera cam) {
 		this.rank = difficulty;
 		this.cam = cam;
+		this.game = game;
 		curLevel = new Level(level, rank);
+		
+		
 		
 		Sounds.loadAll();
 		callingInitAfterReloadLevel = false;
@@ -89,7 +93,7 @@ public class World {
 		
 
 		//If game is in paused state immediately return
-		if (isPaused) return;
+		if (game.isPaused()) return;
 		//If showing results Screen, update it and do nothing else
 		if (resultsScreen.isShowing()) {
 			score += resultsScreen.update(Gdx.graphics.getDeltaTime());

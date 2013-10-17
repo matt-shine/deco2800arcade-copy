@@ -3,11 +3,6 @@ package deco2800.arcade.pacman;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import org.lwjgl.util.Point;
 import static java.lang.Math.*; 
 
@@ -34,7 +29,7 @@ public class Ghost extends Mover {
 	private PacChar player;
 	private float moveDist;
 	private Tile targetTile;
-	private Animation walkAnimation;
+	//private Animation walkAnimation; this should move to PacView
 	private int spritePos;
 	
 	
@@ -47,6 +42,7 @@ public class Ghost extends Mover {
 		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
 		
+		// this section should be deleted once I check it works with the view, or merged into it or something.
 		String file = "";
 		switch (ghost) {
 		case BLINKY : file = "redghostmove.png"; break;
@@ -62,8 +58,7 @@ public class Ghost extends Mover {
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
-		moveDist = 1; //made it so he can't move at the moment, because he
-						// currently goes through walls and crashes it.
+		moveDist = 1; 
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
@@ -76,6 +71,7 @@ public class Ghost extends Mover {
 	 */
 	public void prepareDraw() {		
 		spritePos = 3;
+		ghost_move();
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -111,6 +107,7 @@ public class Ghost extends Mover {
 			return facing;
 		}
 	
+		
 	public void setFacing(Dir facing) {
 		this.facing = facing;
 	}
@@ -191,9 +188,9 @@ public class Ghost extends Mover {
 		int currentX = currentPoint.getX();
 		int currentY = currentPoint.getY();
 		
-		int upY = currentY + 1;
+		int upY = currentY - 1;
 		int leftX = currentX - 1;
-		int downY = currentY - 1;
+		int downY = currentY + 1;
 		int rightX = currentX + 1;
 		
 		Tile upTile = gameMap.getGrid()[currentX][upY];
@@ -245,8 +242,8 @@ public class Ghost extends Mover {
 	 * @param nextTile
 	 * @return
 	 */
-	public Dir getDirection(Tile current, Tile nextTile) {
-		
+	public Dir getDirection(Tile current) {
+		Tile nextTile = get_next_tile();
 		Point currentPoint = gameMap.getTilePos(current);
 		Point nextPoint = gameMap.getTilePos(nextTile);
 		
@@ -267,5 +264,34 @@ public class Ghost extends Mover {
 		return Dir.DOWN;
 	}
 	
+	/**
+	 * Returns the next tile. uses other methods to determine the tile.
+	 * @return
+	 */
+	public Tile get_next_tile() {
+		
+		List<Tile> testTiles = getTestTiles(currentTile);
+		List<Double> dists = getDists(testTiles, currentTile);
+		int Tilenum = -1;
+		double dist = 9999;
+		
+		for (int i=0; i< dists.size(); i++) {
+			double temp = dists.get(i);
+			if (temp < dist) {
+				dist = temp;
+				Tilenum++;
+			}
+		}
+		return testTiles.get(Tilenum);
+	}
+	
+	private void ghost_move() {
+				
+		if ((drawX % 16 == 7) && (drawY % 16 == 7)) {
+			facing = getDirection(currentTile);
+			targetTile = getTargetTile();
+		}
+		
+	}
 
 }

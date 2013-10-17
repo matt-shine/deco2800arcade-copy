@@ -3,11 +3,6 @@ package deco2800.arcade.pacman;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 /**
  * A square in the grid of pacman. Can be either a dot, energiser, fruit, wall,
  * door to ghost pen or teleporter TODO work out how slowtiles (ghosts slow down
@@ -52,6 +47,8 @@ public class Tile {
 				+ gameMap.getTileCoords(this).getX() + ", " + 
 				gameMap.getTileCoords(this).getY() + ")";
 	}
+	
+	
 
 	// Equals method which compares tiles based on position
 	public boolean equals(Tile tile) {

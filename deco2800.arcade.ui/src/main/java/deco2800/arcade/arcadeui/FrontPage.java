@@ -1,7 +1,12 @@
 package deco2800.arcade.arcadeui;
 
+import java.util.Random;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -24,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -67,10 +73,11 @@ public class FrontPage implements Screen {
     private String[] onlineFriends = {"adeleen", "alina", "moji", "will"};
     private int nFriends = onlineFriends.length;
     private static String uName = "Adeleen Pavia";
-
-    private String game1 = "Chess";
-    private String game2 = "Pong";
-    private String game3 = "Snakes and Ladders";
+    private static Set<String> games = ArcadeSystem.getGamesList();
+   /* private String[] games = {"Pong", "Tower Defence", "Connect 4", "Tic Tac Toe", "Chess", "Jungle Jump",
+    		"Sound Board", "Pacman", "Raiden", "Wolfenstein 3D", "Burning Skies", "Snake and Ladders", "Deer Forest",
+    		"Mix Maze", "Land Invaders", "Checkers","Breakout"};*/
+   
     
     public static String pName = "<USERNAME>";
     
@@ -124,16 +131,13 @@ public class FrontPage implements Screen {
         final TextButton libraryButton = new TextButton("Library", skin, "magenta");
         final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
        
-        //buttons for recent games
-        final TextButton recentgame1 = new TextButton(game1, skin, "blue");
-        final TextButton recentgame2 = new TextButton(game2, skin, "blue");
-        final TextButton recentgame3 = new TextButton(game3, skin, "blue");
+       
         
         final Table recentTable = new Table();
         //recentTable.setFillParent(true);
         recentTable.setBackground(skin.getDrawable("recentBar"));
-        recentTable.setSize(400, 800);
-    	recentTable.setPosition(75, 0);
+        recentTable.setSize(350, 800);
+    	recentTable.setPosition(125, 0);
     	
         //Top Box Labels
         final Label logo = new Label("VAPOR", skin, "cgothic");
@@ -160,16 +164,7 @@ public class FrontPage implements Screen {
         recentButton.setSize(bWidth, bHeight);        
         recentButton.setPosition(bX, bY);
         
-        //recent games, 1 2 and 3
-        recentgame1.setSize(bWidth - 50, bHeight - 50);   //250px x 250px     
-        recentgame1.setPosition(bX + 25, bY + 250); 
-       
-        
-        recentgame2.setSize(bWidth - 50, bHeight - 50);        
-        recentgame2.setPosition(bX + 25, bY);
-        
-        recentgame3.setSize(bWidth - 50, bHeight - 50);        
-        recentgame3.setPosition(bX + 25, bY - 250);
+      
        
         
         libraryButton.setSize(bWidth, bHeight);
@@ -199,21 +194,7 @@ public class FrontPage implements Screen {
         //adding to stage
         stage.addActor(bottomBox);
      	
-        
-        /*ONLY TESTING */
-        final TextButton chatButtonx = new TextButton("Online (" + nFriends + ")", skin, "magenta");
-        chatButtonx.setSize(150, 50);
-        chatButtonx.setPosition(640, 580);
-        
-        stage.addActor(chatButtonx);
-        chatButtonx.addListener((new ChangeListener() {
-		    public void changed (ChangeEvent event, Actor actor) {
-		    	displayChat();
-		    //	arcadeUI.render();
-		    }
-		}));
-        /*testing end*/
-        
+ 
         
         // Icon event listeners, mouseOver and mouseClick
         recentButton.addListener((new ClickListener() {        	
@@ -256,18 +237,65 @@ public class FrontPage implements Screen {
 	    
 		recentButton.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
-		    	recentButton.remove();
 		    	
+		    	recentButton.remove();
+		    	//It doesnt like it when mathutils.random is IN the brackets of games[].
+		    	
+		    	//For prototype reasons this will be in random, Original plan was getting data from the most frequently played games.
+		    	/*int k = MathUtils.random(games.size());
+		    	int l = MathUtils.random(games.size());
+		    	int m = MathUtils.random(games.size());*/
+		    	
+		    /*	String game1 = games[k];
+		    	String game2 = games[l];
+		    	String game3 = games[m];
+		    	 */
+		    	final String game1 = getRandomGame();
+		    	final String game2 = getRandomGame();
+		    	final String game3 = getRandomGame();
+			    
+		    	//buttons for recent games
+		        final TextButton recentgame1 = new TextButton(game1, skin, "blue");
+		        final TextButton recentgame2 = new TextButton(game2, skin, "blue");
+		        final TextButton recentgame3 = new TextButton(game3, skin, "blue");
+		         
+		    	//recent games, 1 2 and 3
+		        recentgame1.setSize(bWidth - 50, bHeight - 50);   //250px x 250px     
+		        recentgame1.setPosition(bX + 25, bY + 250); 
+		      
+		        recentgame2.setSize(bWidth - 50, bHeight - 50);        
+		        recentgame2.setPosition(bX + 25, bY);
+		        
+		        recentgame3.setSize(bWidth - 50, bHeight - 50);        
+		        recentgame3.setPosition(bX + 25, bY - 250);
+		        
+		        
 		    	stage.addActor(recentTable);
     			stage.addActor(recentgame1);
     			stage.addActor(recentgame2);
     			stage.addActor(recentgame3);
+    			
     			recentTable.setZIndex(1);
     			recentgame1.setZIndex(2);
 		    	recentgame2.setZIndex(2);
 		    	recentgame3.setZIndex(2);
-    			
-		    	
+		    	 
+		        
+			    recentgame1.addListener((new ChangeListener() {
+			        public void changed (ChangeEvent event, Actor actor) {
+			        	ArcadeSystem.goToGame(game1);
+			        }
+			    })); 
+			    recentgame2.addListener((new ChangeListener() {
+			        public void changed (ChangeEvent event, Actor actor) {
+			        	ArcadeSystem.goToGame(game2);
+			        }
+			    })); 
+			    recentgame3.addListener((new ChangeListener() {
+			        public void changed (ChangeEvent event, Actor actor) {
+			        	ArcadeSystem.goToGame(game3);
+			        }
+			    })); 
 		    }
 		})); 
        
@@ -368,8 +396,21 @@ public class FrontPage implements Screen {
         stage.addActor(topBox);
 		
     }
-    
-    public void displayChat(){
+    /*for getting index out of the String Set*/
+    public static String getRandomGame() {
+    	int size = games.size();
+		int item = new Random().nextInt(size);
+		int i = 0;
+		String thisgame = "";
+		for(String game : games){
+		    if (i == item)
+		    	thisgame = game;
+		    	//break;
+		    	i++;
+		}
+		return thisgame;
+    } 
+    /*public void displayChat(){
     	Table chatTable = new Table();
         //table.setFillParent(true);
         chatTable.setBackground(skin.getDrawable("menuBar"));
@@ -381,7 +422,7 @@ public class FrontPage implements Screen {
     		Label user = new Label(onlineFriends[i], skin, "cgothic");
     		chatTable.add(user).width(80);
     	}
-    }
+    }*/
    
 	@Override
 	public void show() {

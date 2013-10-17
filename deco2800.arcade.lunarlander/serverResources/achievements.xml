@@ -1,0 +1,62 @@
+<achievements>
+	<achievement id="lunarlander.landed">
+		<name>Landed</name>
+		<description>Successfully landed the lander.</description>
+		<awardThreshold>1</awardThreshold>
+		<icon></icon>
+	</achievement>
+	<achievement id="lunarlander.fiftytimes">
+	  <name>FiftyTimes</name>
+	  <description>Successfully landed the lander 50 times.</description>
+	  <awardThreshold>50</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.grabachocolate">
+	  <name>Grab a Chocolate</name>
+	  <description>Successfully landed the lander 250 times.</description>
+	  <awardThreshold>250</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.closecall">
+	  <name>Close Call</name>
+	  <description>Landed the lander with less than 10.</description>
+	  <awardThreshold>1</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.incrediblyimpossible">
+	  <name>Incredibly Impossible</name>
+	  <description>Landed the lander with less than 1.</description>
+	  <awardThreshold>1</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.expresstrip">
+	  <name>Express Trip</name>
+	  <description>Landed the lander using less than 100 fuel.</description>
+	  <awardThreshold>1</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.plummet">
+	  <name>Plummet To The Ground</name>
+	  <description>Falling to the ground at incredible high speed.</description>
+	  <awardThreshold>1</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.smashed">
+	  <name>Smashed</name>
+	  <description>Ouch. Got hit by a meteor.</description>
+	  <awardThreshold>1</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.nojuice">
+	  <name>No Juice</name>
+	  <description>You ran out of juice!</description>
+	  <awardThreshold>1</awardThreshold>
+	  <icon></icon>
+	</achievement>
+	<achievement id="lunarlander.emergencylanding">
+	  <name>Emergency Landing</name>
+	  <description>You ran out of juice! and landed safely! Congratz</description>
+	  <awardThreshold>1</awardThreshold>
+	  <icon></icon>
+	</achievement>
+</achievements>

@@ -49,6 +49,7 @@ public class Enemy extends Ship {
 	public void onRender(float delta) {
 		super.onRender(delta);
 		move(delta);
+		fire(delta);
 	}
 	
 	public long getPoints() {
@@ -92,9 +93,7 @@ public class Enemy extends Ship {
 				else {
 					currentDirVel.y =  (-1) * maxDirVel.y;
 				}
-				
 			}
-			
 		}
 		
 		position.x += currentDirVel.x * delta;
@@ -103,5 +102,13 @@ public class Enemy extends Ship {
     	setX(position.x);
 		setY(position.y);
 		setRotation(currentDirVel.angle() - 90);
+	}
+	
+	/**
+	 * Override this as needed
+	 * @param delta
+	 */
+	protected void fire(float delta) {
+		
 	}
 }

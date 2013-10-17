@@ -141,6 +141,9 @@ public class PlayScreen implements Screen
     				if (lives > 0) {
     					player.respawn();
     					sp.setTimer((float) 2.5);
+    					while(bullets.size() != 0) {
+    						removeEntity(bullets.get(0));
+    					}
     				} else {
     					// Create a game over screen
     					game.playSong("gameover");
@@ -181,11 +184,8 @@ public class PlayScreen implements Screen
     					}
     					
     				}
-    			} else if(b.hasCollided(player)) {
-    				//TODO: DAMAGE THE PLAYER YOU NUGGET
+    			} else if(b.hasCollided(player) && player.isAlive()) {
     				player.damage(b.getDamage());
-    				//TODO: Player death/respawn checker.
-    				//if (!player.isAlive()) { }
     				removeEntity(b);
         			i--;
     				continue;
@@ -193,7 +193,7 @@ public class PlayScreen implements Screen
     		}
 			for(int i=0; i<powerups.size(); i++) {
 				PowerUp p = powerups.get(i);
-				if(p.hasCollidedUnscaled(player)) {
+				if(p.hasCollidedUnscaled(player) && player.isAlive()) {
 					//TODO: POWERUPS WOO
 					p.powerOn(player);
 					removeEntity(p);

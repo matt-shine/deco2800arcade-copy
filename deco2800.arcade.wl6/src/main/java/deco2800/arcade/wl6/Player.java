@@ -85,8 +85,6 @@ public class Player extends Mob {
     	return true;
     	
     }
-    
-    
 
     
     public void addHealth(int health, boolean overheal) {
@@ -167,9 +165,7 @@ public class Player extends Mob {
 		return keys.contains(k);
 	}
 
-
-    @Override
-    public void doDamage() {
+    public void doDamage(GameModel gameModel) {
         float dist = this.getPos().dst(gameModel.getPlayer().getPos());
         int damage = calcDamage((int)dist);
         gameModel.getPlayer().takeDamage(damage);
@@ -184,7 +180,7 @@ public class Player extends Mob {
     public int calcDamage(int dist) {
         boolean hit = false;
         if (dist > 4) {
-            if (randInt(0, 255, rand) / 12 < dist) {
+            if (randInt(0, 255, getRand()) / 12 < dist) {
                 hit = true;
             }
         }
@@ -192,7 +188,7 @@ public class Player extends Mob {
             hit = true;
         }
 
-        int damage = randInt(0, 255, rand);
+        int damage = randInt(0, 255, getRand());
 
         if (hit) {
             if (dist < 2) {

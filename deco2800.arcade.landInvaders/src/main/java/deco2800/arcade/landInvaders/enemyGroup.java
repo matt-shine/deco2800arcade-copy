@@ -13,6 +13,13 @@ public class enemyGroup {
 	private enemy[][] lists;
 	private int shotRow;
 
+	/**
+	 * @param rowNum number of enemy rows
+	 * @param rowEnemyNum create number of enemies per row
+	 * @param EsizeW width of a single enemy sprite
+	 * @param EsizeH height of a single enemy sprite
+	 * @param img
+	 */
 	public enemyGroup(int rowNum, int rowEnemyNum, int EsizeW, int EsizeH, String img) {
 
 		this.rowNum = rowNum;
@@ -24,6 +31,11 @@ public class enemyGroup {
 
 	}
 
+	/**
+	 * @param img
+	 * @param EsizeW width of a single enemy sprite
+	 * @param EsizeH height of a single enemy sprite
+	 */
 	public void createGroup(String img ,int EsizeW, int EsizeH) {
 
 		for (int n = 0; n < rowNum; n++) {
@@ -37,6 +49,10 @@ public class enemyGroup {
 
 	}
 
+	/**
+	 * @param g
+	 * @param p
+	 */
 	public void drawGroup(Graphics g,JFrame p) {
 
 		for (int n = 0; n < rowNum; n++) {
@@ -50,6 +66,10 @@ public class enemyGroup {
 
 	}
 	
+	/**
+	 * @param move
+	 * @param moveDown
+	 */
 	public void moveUpdate(int move, boolean moveDown){
 		for (int n = 0; n < rowNum; n++) {
 			for (int i = 0; i < rowEnemyNum; i++) {
@@ -63,6 +83,10 @@ public class enemyGroup {
 		
 	}
 
+	/**
+	 * @param shot determine if shot of player(tank) has hit a single enemy sprite
+	 * @return true if player shot has hit enemy, false otherwise
+	 */
 	public boolean checkHit(tankshot shot) {
 
 		for (int n = 0; n < rowNum; n++) {
@@ -76,20 +100,17 @@ public class enemyGroup {
 
 						lists[n][i] = null;
 						return true;
-
 					}
-					
-					
-					
 				}
 			}
 		}
 		return false;
 	}
 	
-	
-	
-	
+	/**
+	 * @param count controls the rate of shots fired by enemy sprites
+	 * @return arraylist of enemy shots
+	 */
 	public ArrayList<enemyShot> enemyShot(int count){
 		ArrayList<enemyShot> shots =new ArrayList<enemyShot>();
 		if(count%50==0){
@@ -97,10 +118,7 @@ public class enemyGroup {
 			for (int i = 0; i < rowEnemyNum; i++) {
 				if (lists[shotRow-1][i] != null) {
 					shots.add(new enemyShot(lists[shotRow-1][i].positionX(),lists[shotRow-1][i].positionY()));
-					
-				}
-				
-
+				}		
 			}
 			if(shotRow != 3){
 				shotRow ++;
@@ -111,6 +129,9 @@ public class enemyGroup {
 		return shots;
 	}
 	
+	/**
+	 * @return true if enemy group is empty, false otherwise
+	 */
 	public boolean isEmpty(){
 		
 		for (int n = 0; n < rowNum; n++) {

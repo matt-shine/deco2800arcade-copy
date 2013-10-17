@@ -19,6 +19,9 @@ public class tank implements KeyListener {
 /**
  * Tank initial starting point
  */
+	/**
+	 * @param img
+	 */
 	public tank(String img) {
 		p_x = 370;
 		p_y = 400;
@@ -26,6 +29,10 @@ public class tank implements KeyListener {
 
 	}
 	// testing
+	/**
+	 * @param g
+	 * @param p
+	 */
 	public void drawTank(Graphics g, JFrame p) {
 		g.setColor(Color.green);
 		im = new javax.swing.ImageIcon(this.getClass().getResource(img)).getImage();
@@ -84,24 +91,39 @@ public class tank implements KeyListener {
 	
 	
 	
+	/**
+	 * Check input of keyboard listener and move player(tank) sprite accordingly
+	 */
 	public void tankMove(){
 		if(Mleft == true && p_x > 10)p_x -= 7;
 		if(Mright == true&& p_x < 750)p_x += 7;
 	}
 	
+	/**
+	 * @return true if tank has fired a shot else false otherwise
+	 */
 	public boolean shotCheck(){
 		return shotState;
 		
 	}
 	
+	/**
+	 * @return x-coordinate of player sprite
+	 */
 	public int PositionX(){
 		return p_x;
 	}
 	
+	/**
+	 * @return y-coordinate of player sprite
+	 */
 	public int PositionY(){
 		return p_y;
 	}
 	
+	/**
+	 * Reset the state of shots fired by player
+	 */
 	public void finishShot(){
 		shotState = false;
 	}

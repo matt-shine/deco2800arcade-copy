@@ -33,6 +33,9 @@ public class Invaders extends JFrame implements Runnable {
 	private ArrayList<tankshot> shots;
 	private ArrayList<enemyShot> Eshots;
 
+	/**
+	 * Initialize objects in the game and allocate values to player, score and level
+	 */
 	public Invaders() {
 
 		super("Land Invaders");
@@ -42,9 +45,7 @@ public class Invaders extends JFrame implements Runnable {
 		healthBar = 3;
 		score = 0;
 		totalLevel = 1;
-		
-		
-		
+
 		setGameImg("/tank/");
 		imgString = "/tank/";
 		WallList.add(new blockWall(180, 350, 4, 8, imgString + "WallD.png"));
@@ -64,35 +65,34 @@ public class Invaders extends JFrame implements Runnable {
 		moveDown = false;
 
 		bg = new BufferedImage(Width, Height, BufferedImage.TYPE_INT_RGB);
-
 		
 		mains = bg.getGraphics();
 		mains.drawImage(background, 0, 0, Width, Height, panel);
 		mains.drawImage(frame, 0, 0, Width, 1000, panel);
-		
-		
 
 		setBackground(Color.black);
 		setVisible(true);
 		setSize(Width, Height);
 		startGame();
-		
-
 	}
 
+	/**
+	 * @param type selection of game sprite to be used in game
+	 * 
+	 * Sets the game theme and sprites for different stages
+	 */
 	public void setGameImg(String type) {
-		
-
 		
 		enemyG = new enemyGroup(3, 6, 50, 83, type + "TankE.png");
 		tank = new tank(type +"TankP.png");
 		addKeyListener(tank);
 		background = new javax.swing.ImageIcon(this.getClass().getResource(
 				type + "BGD.png")).getImage();
-		
-		
 	}
 
+	/**
+	 * Starts the game using thread class
+	 */
 	public void startGame() {
 
 		Thread thread = new Thread(this);
@@ -100,6 +100,7 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	public void paint(Graphics g) {
+		
 		mains.setColor(Color.white);
 		mains.setFont(new Font("Algerian",1,28));
 		
@@ -131,6 +132,9 @@ public class Invaders extends JFrame implements Runnable {
 		paint(g);
 	}
 
+	/**
+	 * Constantly check if shots made by both player and enemy have hit an object, if it does not hit anything then the shots will be removed once it's out of the frame
+	 */
 	public void shotUpdate() {
 		for (int i = 0; i < shots.size(); i++) {
 			shots.get(i).Update();
@@ -148,6 +152,9 @@ public class Invaders extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * Check if shots made by player have hit an enemy based on location of shot and enemy object. If the shot hit an enemy, remove both enemy and shot objects.
+	 */
 	public void hitEnemy() {
 
 		for (int i = 0; i < shots.size(); i++) {
@@ -161,6 +168,11 @@ public class Invaders extends JFrame implements Runnable {
 
 	}
 
+	/**
+	 * Check if any shots made by enemy and player hit a wall. If the condition is met, remove a part of the wall
+	 * 
+	 * 
+	 */
 	public void hitwall() {
 		for (int n = 0; n < WallList.size(); n++) {
 			blockWall = WallList.get(n);
@@ -178,6 +190,10 @@ public class Invaders extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * @param count determine the amount of time before enemy object change position
+	 * @param moveD determines the boolean condition if the enemy group is allowed to move down or not
+	 */
 	public void enemyMove(int count, boolean moveD) {
 
 		if (count % 10 == 0) {
@@ -197,6 +213,11 @@ public class Invaders extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * @param count determine the level of the game
+	 * 
+	 * Select the action level of the game. Game has 3 levels.
+	 */
 	public void levelSelect(int count) {
 
 		switch (level) {
@@ -216,7 +237,11 @@ public class Invaders extends JFrame implements Runnable {
 		}
 	}
 
+	/**
+	 * Check if any enemies are left. If no enemies are left and level is not 3, increase the action level of the game.
+	 */
 	public void levelCheck() {
+		
 		if (enemyG.isEmpty() == true) {
 			if (level != 3) {
 				level++;
@@ -229,6 +254,9 @@ public class Invaders extends JFrame implements Runnable {
 	}
 
 	
+	/**
+	 * Restart the games and reset sprites for the new game level
+	 */
 	public void restart() {
 		boolean createWall =false;
 		if(bglevel != 3 && level ==1){
@@ -261,6 +289,9 @@ public class Invaders extends JFrame implements Runnable {
 	}
 	
 
+	/**
+	 * @param count controls the rate of shots fired by enemy sprites
+	 */
 	public void levelTwo(int count) {
 
 		Eshots.addAll(enemyG.enemyShot(count));

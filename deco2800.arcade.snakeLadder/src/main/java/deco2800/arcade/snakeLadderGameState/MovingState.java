@@ -30,7 +30,7 @@ public class MovingState extends GameState {
 				if(gamePlayer.newposition()==99)
 				{
 					//check if the player is local player instead of AI
-					if (playerIndex == 0) {
+					if (!gamePlayer.isAI()) {
 						//add one achievement to winGame achievement
 				    	context.incrementAchievement("snakeLadder.winGame");
 				    }

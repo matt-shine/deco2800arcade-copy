@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.util.Point;
-import static java.lang.Math.*; 
-
-import deco2800.arcade.model.Player;
-import deco2800.arcade.pacman.PacChar.PacState;
+import static java.lang.Math.*;
 
 
 public class Ghost extends Mover {
@@ -39,8 +36,14 @@ public class Ghost extends Mover {
 		this.ghost = ghost;
 		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost start
 		//set up pacman to be drawn in the right place- this is defintely right
-		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
-		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
+//		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
+//		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
+		drawX = gameMap.getTileCoords(currentTile).getX() + 6; // drawX % 16 was 6, so make it 8
+		drawY = gameMap.getTileCoords(currentTile).getY() + 4; // was 0, so make it 8
+		
+		//DEBUGGING PRINT
+		System.out.println("drawX % 16 is: " + (drawX % 16) + "drawY % 16 is: " + (drawY % 16));
+		
 		
 		// this section should be deleted once I check it works with the view, or merged into it or something.
 		String file = "";
@@ -72,6 +75,12 @@ public class Ghost extends Mover {
 	public void prepareDraw() {		
 		spritePos = 3;
 		ghost_move();
+//		if ((drawX % 16 == 6) && (drawY % 16 == 0)) {
+//			facing = getDirection(currentTile);
+//			targetTile = getTargetTile();
+//		} else{
+//			//STOP MOVEMENT
+//		}
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -229,8 +238,6 @@ public class Ghost extends Mover {
 			temp = testTiles.get(0);
 			tempDist = calcDist(current, temp);
 			dists.add(tempDist);
-			
-			
 		}
 		
 		return dists;
@@ -253,12 +260,15 @@ public class Ghost extends Mover {
 		int nextY = nextPoint.getY();
 		
 		if (nextX > currentX) {
+//		if (nextX < currentX) { //test
 			return Dir.RIGHT;
 		}
 		if (nextX < currentX) {
+//		if (nextX > currentX) { //test
 			return Dir.LEFT;
 		}
 		if (nextY > currentY) {
+//		if (nextY < currentY) { //test
 			return Dir.UP;
 		}
 		return Dir.DOWN;
@@ -272,14 +282,17 @@ public class Ghost extends Mover {
 		
 		List<Tile> testTiles = getTestTiles(currentTile);
 		List<Double> dists = getDists(testTiles, currentTile);
-		int Tilenum = -1;
+//		int Tilenum = -1;
+		int Tilenum = 0;
 		double dist = 9999;
 		
 		for (int i=0; i< dists.size(); i++) {
 			double temp = dists.get(i);
 			if (temp < dist) {
 				dist = temp;
-				Tilenum++;
+//				Tilenum += 1;
+				//equivalent to int Tilenum = i;
+				Tilenum = i;
 			}
 		}
 		return testTiles.get(Tilenum);
@@ -287,9 +300,11 @@ public class Ghost extends Mover {
 	
 	private void ghost_move() {
 				
-		if ((drawX % 16 == 7) && (drawY % 16 == 7)) {
+		if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
 			facing = getDirection(currentTile);
 			targetTile = getTargetTile();
+		} else {
+			// Don't move!!
 		}
 		
 	}

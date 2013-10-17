@@ -91,7 +91,7 @@ public abstract class Mover {
 	}
 
 	/**
-	 * Returns the next tile in the direction pacman is facing.
+	 * Returns the next tile in the direction Mover is facing.
 	 * @param tile
 	 * @return
 	 */
@@ -118,6 +118,7 @@ public abstract class Mover {
 	 * @param tile
 	 */
 	public void checkTile(Tile tile){
+		if (this.getClass() != PacChar.class) return; // Only Pac man can use special tiles!
 		if (tile.getClass() == DotTile.class) {
 			if (!((DotTile) tile).isEaten()) {
 				((DotTile) tile).dotEaten();

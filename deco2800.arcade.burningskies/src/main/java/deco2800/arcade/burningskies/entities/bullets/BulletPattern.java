@@ -12,7 +12,7 @@ public abstract class BulletPattern extends Actor {
 	protected boolean firing;
 	protected float interval; // how often bullets are fired
 	protected PlayScreen screen; // so we can spawn things
-	private float timer;
+	protected float timer;
 	private Vector2 lastEmit; // lag compensation on movement of emitter
 	private Vector2 thisEmit = new Vector2();
 	

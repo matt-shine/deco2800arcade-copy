@@ -1,0 +1,8 @@
+<achievements>
+  <achievement id="burningskies.die">
+    <name>Dead</name>
+    <description>Experience your first death.</description>
+    <awardThreshold>1</awardThreshold>
+    <icon>some.png</icon>
+  </achievement>
+</achievements>

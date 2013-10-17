@@ -6,7 +6,7 @@ import deco2800.arcade.chess.pieces.*;
 
 public class Board {
 	List<Piece> pieces = new ArrayList<Piece>();
-	FixedSizeList<FixedSizeList<Piece>> Board_State;
+	public FixedSizeList<FixedSizeList<Piece>> Board_State;
 	// used to check if moves will move you into check without altering actual
 	// board
 	ArrayList<Piece> whiteGraveyard, blackGraveyard;
@@ -20,16 +20,16 @@ public class Board {
 	boolean blackCheckmate;
 	
 	// Initialise pieces
-	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
-	Pawn whitePawn5, whitePawn6, whitePawn7, whitePawn8;
-	Pawn blackPawn1, blackPawn2, blackPawn3, blackPawn4;
-	Pawn blackPawn5, blackPawn6, blackPawn7, blackPawn8;
-	Rook whiteRook1, whiteRook2, blackRook1, blackRook2;
-	Knight whiteKnight1, whiteKnight2, blackKnight1, blackKnight2;
-	Bishop whiteBishop1, whiteBishop2, blackBishop1, blackBishop2;
-	King whiteKing, blackKing;
-	Queen whiteQueen, blackQueen;
-	Null nullPiece;
+	public Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
+	public Pawn whitePawn5, whitePawn6, whitePawn7, whitePawn8;
+	public Pawn blackPawn1, blackPawn2, blackPawn3, blackPawn4;
+	public Pawn blackPawn5, blackPawn6, blackPawn7, blackPawn8;
+	public Rook whiteRook1, whiteRook2, blackRook1, blackRook2;
+	public Knight whiteKnight1, whiteKnight2, blackKnight1, blackKnight2;
+	public Bishop whiteBishop1, whiteBishop2, blackBishop1, blackBishop2;
+	public King whiteKing, blackKing;
+	public Queen whiteQueen, blackQueen;
+	public Null nullPiece;
 
 	String NEWLINE = System.getProperty("line.separator");
 	boolean blackCheck, whiteCheck;
@@ -376,11 +376,9 @@ public class Board {
 	 * @return True if the piece moved, false if the move failed.
 	 */
 	public boolean movePiece(Piece piece, int[] newPosition) {
-		// FIXME big method
 		int[] oldPos = findPiece(piece);
 		int x = newPosition[0];
 		int y = newPosition[1];
-		boolean kingCastleSwap = false;
 
 		List<int[]> allowedMoves = removeCheckMoves(piece);
 
@@ -397,31 +395,8 @@ public class Board {
 		if ((piece.getClass() == blackKing.getClass())
 				|| (piece.getClass() == whiteKing.getClass())) {
 			// Check if the kingCastle swap can be performed, if so allow move
-			if (kingCastleSwap(piece)) {
-				boolean team = piece.getTeam();
-				int[] bKingPos = {7,6}, bCastlePos = {7,5}, wKingPos = {0,6}, wCastlePos = {0,5};
-				int[] kingSwapPos =  team ? bKingPos : wKingPos;
-				int[] castleSwapPos = team ? bCastlePos : wCastlePos;
-
-				// Check they attempted the swap
-				if( ((piece.getClass() == blackKing.getClass()) || (piece.getClass() == whiteKing.getClass())) 
-						&& (newPosition[0] == kingSwapPos[0]) && (newPosition[1] == kingSwapPos[1])) {
-
-					// Move King to new position
-					Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
-					Board_State.get(x).add(y, piece);
-
-					// Move Rook to new position
-					Piece rook = piece.getTeam() ? blackRook2 : whiteRook2;
-					
-					Board_State.get(findPiece(rook)[0]).add(
-							findPiece(rook)[1], nullPiece);
-							
-					Board_State.get(castleSwapPos[0]).add(castleSwapPos[1],
-							rook);
-					allowed = true;
-					kingCastleSwap = true;
-					this.nextTurn();
+			if (checkKingCastleSwap(piece)) {
+				if(performKingCastleSwap(piece, newPosition, oldPos)) {
 					return true;
 				}
 			}
@@ -433,24 +408,23 @@ public class Board {
 			return false;
 		}
 
+		if (piece.getClass() == whitePawn1.getClass()) {
+			piece.hasMoved();
+		}
+		
 		/*
 		 * If space is occupied (can only be by other team due to possibleMoves)
 		 * deactivate the piece, add it to the graveyard and move new piece to
 		 * that square
 		 */
-		if (piece.getClass() == whitePawn1.getClass()) {
-			piece.hasMoved();
-		}
-		if (occupiedSpace(newPosition) && !kingCastleSwap) {
+		if (occupiedSpace(newPosition)) {
 			// Remove enemy piece on the newPosition
 			Piece onSquare = Board_State.get(x).get(y);
 			onSquare.deActivate();
 
-			if (onSquare.getTeam()) {
-				blackGraveyard.add(onSquare);
-			} else {
-				whiteGraveyard.add(onSquare);
-			}
+			boolean temp = onSquare.getTeam() ? blackGraveyard.add(onSquare) : 
+													whiteGraveyard.add(onSquare);
+			
 			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
 			Board_State.get(x).add(y, piece);
 			moves.add(newPosition);
@@ -465,8 +439,53 @@ public class Board {
 			this.nextTurn();
 			return true;
 		}
+		
 	}
 
+	/**
+	 * Piece the king castle swap if the user attempted to.
+	 * 
+	 * @param piece
+	 * 		The piece that is being attempted to move
+	 * @param newPosition
+	 * 		The position that the given piece was attempted to move to
+	 * @param oldPos
+	 * 		The position that the given piece began in
+	 * @return
+	 * 		True if the swap succeeded, false otherwise
+	 */
+	private boolean performKingCastleSwap(Piece piece, int[] newPosition, int[] oldPos) {
+		boolean team = piece.getTeam();
+		int x = newPosition[0];
+		int y = newPosition[1];
+		
+		int[] bKingPos = {7,6}, bCastlePos = {7,5}, wKingPos = {0,6}, wCastlePos = {0,5};
+		int[] kingSwapPos =  team ? bKingPos : wKingPos;
+		int[] castleSwapPos = team ? bCastlePos : wCastlePos;
+
+		// Check they attempted the swap
+		if( ((piece.getClass() == blackKing.getClass()) || (piece.getClass() == whiteKing.getClass())) 
+				&& (newPosition[0] == kingSwapPos[0]) && (newPosition[1] == kingSwapPos[1])) {
+
+			// Move King to new position
+			Board_State.get(oldPos[0]).add(oldPos[1], nullPiece);
+			Board_State.get(x).add(y, piece);
+
+			// Move Rook to new position
+			Piece rook = piece.getTeam() ? blackRook2 : whiteRook2;
+			
+			Board_State.get(findPiece(rook)[0]).add(
+					findPiece(rook)[1], nullPiece);
+					
+			Board_State.get(castleSwapPos[0]).add(castleSwapPos[1],
+					rook);
+			this.nextTurn();
+			return true;
+		} else {
+			return false;
+		}
+	}
+		
 	/**
 	 * Finds and returns the board co-ordinates for the given piece
 	 * 
@@ -544,17 +563,17 @@ public class Board {
 	}
 
 	/**
-	 * Returns a list with all impossible jumps removed from the queens possible
+	 * Returns a list with all impossible diagonal jumps removed from the possible
 	 * moves.
 	 * 
 	 * @param possibleMoves
-	 *            List of all possible moves the queen can make, not
+	 *            List of all possible moves the piece can make, not
 	 *            disregarding disallowed moves
 	 * @param currentPos
-	 *            The current position of the given queen
+	 *            The current position of the given piece
 	 * @param piece
-	 *            The queen for whom the moves are being removed from
-	 * @return A list of all possible moves the queen can make without the
+	 *            The piece for whom the moves are being removed from
+	 * @return A list of all possible moves the piece can make without the
 	 *         impossible jumps included in possibleMoves
 	 */
 	private List<int[]> removeJumpsDiagonal(List<int[]> possibleMoves,
@@ -732,6 +751,20 @@ public class Board {
 		return possible;
 	}
 
+	/**
+	 * Returns a list with all impossible up jumps removed from the possible
+	 * moves.
+	 * 
+	 * @param possibleMoves
+	 *            List of all possible moves the piece can make, not
+	 *            disregarding disallowed moves
+	 * @param currentPos
+	 *            The current position of the given piece
+	 * @param piece
+	 *            The piece for whom the moves are being removed from
+	 * @return A list of all possible moves the piece can make without the
+	 *         impossible jumps included in possibleMoves
+	 */
 	private List<int[]> removeJumpsUp(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
 		int x = currentPos[0];
@@ -926,10 +959,12 @@ public class Board {
 		return row.get(pos[1]);
 	}
 
-	/**
+	/**Takes in a piece and determines whether it is the null piece or not.
 	 * 
 	 * @param piece
-	 * @return Boolean whether a null piece exists
+	 * 		Piece to test if null
+	 * @return 
+	 * 		True if the given piece in Null. i.e the square is empty
 	 */
 	public boolean isNullPiece(Piece piece) {
 		if (piece.getClass() == nullPiece.getClass()) {
@@ -938,15 +973,17 @@ public class Board {
 		return false;
 	}
 
-	/**
+	/**Returns whose turn it is to make the next move
 	 * 
-	 * @return the current team's turn
+	 * @return 
+	 * 		True if it is the black teams turn, false if whites
 	 */
 	public boolean whoseTurn() {
 		return turn;
 	}
 
 	/**
+	 * 
 	 * @return the next team's turn
 	 */
 	public void nextTurn() {
@@ -954,8 +991,14 @@ public class Board {
 	}
 
 	/**
-	 * Checks all active pieces on the board to see whether any pieces can move
-	 * and returns a list of boolean values
+	 * Returns a list of booleans corresponding to the pieces on the team that
+	 * can and cannot move
+	 * 
+	 * @param team
+	 * 		Team that is being checked for possible moves
+	 * @return
+	 * 		Return a list of boolean values, corresponding to the pieces that
+	 * 		can move
 	 */
 	public List<Boolean> checkMoves(boolean team) {
 		List<Piece> activePieces = findActivePieces(team);
@@ -976,10 +1019,11 @@ public class Board {
 	 * king-castle swap and false otherwise
 	 * 
 	 * @param piece
-	 *            Piece who's team is to be checked
-	 * @return True if piece's team can perform the move, false otherwise
+	 * 		Piece who's team is to be checked
+	 * @return 
+	 * 		True if piece's team can perform the move, false otherwise
 	 */
-	private boolean kingCastleSwap(Piece piece) {
+	private boolean checkKingCastleSwap(Piece piece) {
 		// If on the black team and king and rook1 haven't moved
 		if (piece.getTeam() && !blackKing.getFirstMove()
 				&& !blackRook1.getFirstMove()) {
@@ -1006,11 +1050,13 @@ public class Board {
 	}
 
 	/**
-	 * Moves a piece on the computer controlled team using basic logic for easy
-	 * mode.
+	 * Makes a computer determined move of the given piece based on basic
+	 * logic
+	 * 
+	 * @param movePiece
+	 * 		The piece that will be moves
 	 */
 	public void moveAIPieceEasy(Piece movePiece) {
-		// Piece movePiece = chooseAIPiece();
 
 		int[] moveSquare = chooseAISquare(movePiece);
 		System.out.println("board3");

@@ -49,7 +49,7 @@ public class Dice {
 	/**
 	 * Render the dice image based on the dice number. Initially the dice image should be empty.
 	 * @param batch used the draw into the stage
-	 * @param plaernum to indicate the which dice belongs to which player. Player numbering start at 0 for the
+	 * @param playernum to indicate the which dice belongs to which player. Player numbering start at 0 for the
 	 * default player and 1 for AI
 	 */
 	public void renderDice(SpriteBatch batch, int playernum){

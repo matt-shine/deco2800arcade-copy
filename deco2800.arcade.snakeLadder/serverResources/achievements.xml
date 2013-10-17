@@ -1,7 +1,7 @@
 <achievements>
 	<achievement id="snakeLadder.winGame">
         <name>Winning</name>
-        <description>Win 1 game of Snake&Ladder.</description>
+        <description>Win 1 game of Snake&amp;Ladder.</description>
         <awardThreshold>1</awardThreshold>
         <icon>winIcon.png</icon>
     </achievement>

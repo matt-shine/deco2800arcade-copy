@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
+import deco2800.arcade.model.forum.*;
 import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
@@ -39,14 +40,14 @@ import deco2800.arcade.protocol.forum.ForumTestResponse;
 
 public class Protocol {
 	
-	private static Kryo kryo;
+	private static Kryo Kryo;
 	
 	/**
 	 * Keeps the kryo instance for use with registerEncrypted()
 	 * @param kryo
 	 */
 	public static void setKryo(Kryo kryo) {
-		Protocol.kryo = kryo;
+		Protocol.Kryo = kryo;
 	}
 
 	/**
@@ -55,9 +56,9 @@ public class Protocol {
 	 * @param kryo
 	 */
 	public static void register(Kryo kryo) {
+		Protocol.setKryo(kryo);
 		//Connection messages
 		kryo.register(ConnectionRequest.class);
-		Protocol.setKryo(kryo);
 		
 		// Connection messages
 		kryo.register(ConnectionResponse.class);
@@ -126,6 +127,10 @@ public class Protocol {
         kryo.register(java.awt.image.BufferedImage.class);
 		
 		// Forum Protocols
+        //kryo.register(java.util.Vector.class);
+        kryo.register(ForumUserProtocol.class);
+        //kryo.register(ParentThread.class);
+        //kryo.register(ChildThread.class);
 		kryo.register(ForumTestResponse.class);
 		kryo.register(ForumTestRequest.class);
 		kryo.register(GetForumUserRequest.class);
@@ -142,8 +147,8 @@ public class Protocol {
 		
 		// Ensures any ConnectionRequests are sent over the network using the 
 		// Blowfish encryption algorithm
-		kryo.register(ConnectionRequest.class, new BlowfishSerializer(
-				new FieldSerializer<Object>(kryo, ConnectionRequest.class), connectionRequest.key));
+		Kryo.register(ConnectionRequest.class, new BlowfishSerializer(
+				new FieldSerializer<Object>(Kryo, ConnectionRequest.class), connectionRequest.key));
 	}
 
 }

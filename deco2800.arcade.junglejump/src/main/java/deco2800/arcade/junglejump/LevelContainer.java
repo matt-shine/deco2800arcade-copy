@@ -58,7 +58,7 @@ public class LevelContainer {
 		
 		try {
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
-					".arcade.junglejump/src/main").replace("file:", "") + 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
 					"levels/world" + (worldNum+1) + "/level" + 
 					(levelNum+1) + ".txt" ;
 			System.out.println(resource);

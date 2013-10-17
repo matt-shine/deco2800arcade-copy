@@ -80,6 +80,7 @@ public class Ghost extends Mover {
 	public void render(SpriteBatch batch) {
 		
 		int spritePos = 3;
+		facing = getDirection(currentTile);
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -249,8 +250,8 @@ public class Ghost extends Mover {
 	 * @param nextTile
 	 * @return
 	 */
-	public Dir getDirection(Tile current, Tile nextTile) {
-		
+	public Dir getDirection(Tile current) {
+		Tile nextTile = get_next_tile();
 		Point currentPoint = gameMap.getTilePos(current);
 		Point nextPoint = gameMap.getTilePos(nextTile);
 		

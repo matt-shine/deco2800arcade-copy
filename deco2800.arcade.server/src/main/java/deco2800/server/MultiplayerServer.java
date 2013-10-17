@@ -42,6 +42,7 @@ public class MultiplayerServer {
 		this.matchmakerGame = true;
 		this.p1Rating = p1Rating;
 		this.p2Rating = p2Rating;
+		System.out.println("P1: " + p1Rating + " P2: " + p2Rating);
 		player1.sendTCP(this.sessionId);
 		player2.sendTCP(this.sessionId);
 	}

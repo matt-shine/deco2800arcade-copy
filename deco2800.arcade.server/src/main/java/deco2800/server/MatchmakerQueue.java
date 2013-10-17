@@ -139,6 +139,7 @@ public class MatchmakerQueue {
 				try {
 					p1Rating = database.getPlayerRating(player1ID, game);
 					p2Rating = database.getPlayerRating(player2ID, game);
+					System.out.println("RATINGS: P1: " + p1Rating + " P2: " + p2Rating);
 				} catch (DatabaseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -220,6 +221,7 @@ public class MatchmakerQueue {
 	}
 	
 	public void gameOver(int session, int player1ID, int player2ID, String gameID, int winner) {
+		System.out.println("GAME OVER WINNER IS : " + winner);
 		int player1Rating = 0;
 		int player2Rating = 0;
 		try {
@@ -231,7 +233,7 @@ public class MatchmakerQueue {
 		int[] newScore = elo(player1ID, player1Rating, player2ID, player2Rating, winner);
 		try {
 			database.updatePlayerRating(player1ID, gameID, newScore[0]);
-			database.updatePlayerRating(player1ID, gameID, newScore[1]);
+			database.updatePlayerRating(player2ID, gameID, newScore[1]);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -259,21 +261,24 @@ public class MatchmakerQueue {
 		if (winner == p1ID) {
 			double score;
 			double diff = p1Rating - p2Rating;
-			score = k * (1 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));			
+			double change = (1 - (1.0f / (Math.pow(10, ((-diff / 400) + 1)))));
+			score = k * change;			
 			newElo[0] = (int) Math.floor(p1Rating += score);
-			score = k * (0 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));
+			score = -k * change;
 			newElo[1] = (int) Math.floor(p2Rating += score);
 		} else if (winner == p2ID) {
 			double score;
-			double diff = p1Rating - p2Rating;
-			score = k * (0 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));			
+			double diff = p2Rating - p1Rating;
+			double change = (1 - (1.0f / (Math.pow(10, ((-diff / 400) + 1)))));
+			score = -k * change;			
 			newElo[0] = (int) Math.floor(p1Rating += score);
-			score = k * (1 - (1.0 / (Math.pow(10, (-(diff / 400) + 1)))));
+			score = k * change;
 			newElo[1] = (int) Math.floor(p2Rating += score);
 		} else {
 			newElo[0] = p1Rating;
 			newElo[1] = p2Rating;
 		}
+		System.out.println("New ELO: " + newElo[0] + " " + newElo[1]);
 		return newElo;
 	}
 }

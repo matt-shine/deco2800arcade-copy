@@ -238,11 +238,19 @@ public class PlayerGameStorage {
 		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
-			statement = connection.createStatement();
+			statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES WHERE playerID = " 
 			+ playerID + " AND gameID = '" + gameID + "'");
-			int result = resultSet.findColumn("Rating");
-
+			int result;
+			if (resultSet.next()) {
+				result = resultSet.findColumn("Rating");
+				resultSet.first();
+				result = resultSet.getInt(result);
+			} else {
+				result = 1500;
+				statement.executeUpdate("INSERT INTO PLAYERGAMES VALUES(" + playerID 
+						+ ",'" + gameID + "'," + 1500 + ")");
+			}
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -284,7 +292,7 @@ public class PlayerGameStorage {
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
-			statement.executeQuery("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
+			statement.executeUpdate("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
 					+ playerID + " AND gameID = '" + gameID + "'");
 		} catch (SQLException e) {
 			e.printStackTrace();

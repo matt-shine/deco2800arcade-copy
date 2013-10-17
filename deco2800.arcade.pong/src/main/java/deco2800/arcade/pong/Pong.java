@@ -274,13 +274,16 @@ public class Pong extends GameClient {
 		if (scores[winner] == WINNINGSCORE) {	
 		    int loser = winner == 1 ? 0 : 1; //The loser is the player who didn't win!
 		    statusMessage = players[winner] + " Wins " + scores[winner] + " - " + scores[loser] + "!";
+		    if (winner == 0 && ArcadeSystem.isMultiplayerEnabled()) {
+		    	multiGameOver();		    	
+		    }
 		    gameState = new GameOverState();
 		    //Update the game state to the server
 		    networkClient.sendNetworkObject(createScoreUpdate());
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
 		    	incrementAchievement("pong.winGame");
-			incrementAchievement("pong.master");
+		    	incrementAchievement("pong.master");
 		    }
 		} else {
 			// No winner yet, get ready for another point
@@ -415,6 +418,17 @@ public class Pong extends GameClient {
 			vector.x = getRightPaddle().getPosition().x;
 			getRightPaddle().setPosition(vector); 
 		} 
+	}
+	
+	private void multiGameOver() {
+		GameStateUpdateRequest request = new GameStateUpdateRequest();
+		request.gameId = "pong";
+		request.gameOver = true;
+		request.winner = player.getID();
+		request.playerID = player.getID();
+		request.gameSession = super.getMultiSession();
+		request.initial = false;
+		networkClient.sendNetworkObject(request);
 	}
 	
 }

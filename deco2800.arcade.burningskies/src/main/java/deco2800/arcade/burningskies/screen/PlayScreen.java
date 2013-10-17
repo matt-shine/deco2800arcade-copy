@@ -106,7 +106,7 @@ public class PlayScreen implements Screen
         game.playSong("level1");
     	
     	player = new PlayerShip(1000, shipTex[game.zalgo], new Vector2(400, 100), this);
-    	level = new Level("fixme");
+    	level = new Level(this);
 
     	stage.addActor(level);
     	stage.addActor(player);

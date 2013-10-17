@@ -848,8 +848,9 @@ public class MultiGamelist implements Screen {
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
             	dispose();
+				ArcadeSystem.setMatchMaking(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
-				ArcadeSystem.setPlayerBetting(false);
+				
 
 
 

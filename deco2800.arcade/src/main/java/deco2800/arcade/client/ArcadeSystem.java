@@ -160,6 +160,14 @@ public class ArcadeSystem {
 	public static boolean isGameWaiting() {
 		    return arcade.isGameWaiting();
 	    }
+		
+		public static void setMatchMaking2(boolean b) {
+			arcade.setMatchMaking2(b);	
+		}
+	
+	public static boolean isMatchMaking2() {
+		    return arcade.isMatchMaking2();
+	    }
 
 	 
 	 public static void initializeLobbyMatchList() {

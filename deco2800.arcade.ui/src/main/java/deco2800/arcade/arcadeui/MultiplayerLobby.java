@@ -43,7 +43,7 @@ public class MultiplayerLobby implements Screen {
 	public MultiplayerLobby(ArcadeUI ui) {
 		System.out.println(ui);
 		arcadeUI = ui;
-		lobby = this;
+		//lobby = this;
 	}
 	
 	public void show() {
@@ -222,6 +222,7 @@ public class MultiplayerLobby implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
 			
 			dispose();
+			ArcadeSystem.setMatchMaking2(true);
 			arcadeUI.setScreen(arcadeUI.getMultigame2());
 			
 			//Code below commented out for overlay
@@ -239,10 +240,12 @@ public class MultiplayerLobby implements Screen {
 				//add overlay to say 'waiting for match'
 				//add second overlay (or modify first) to 'accept' or 'decline' match
 				dispose();
-				arcadeUI.setScreen(arcadeUI.getMultigame());
 				
 				ArcadeSystem.setMatchMaking(true);
-				ArcadeSystem.setMultiplayerEnabled(true);
+				
+				arcadeUI.setScreen(arcadeUI.getMultigame());
+				
+				
 				//arcadeUI.setScreen(arcadeUI.getWait());
 				
 				

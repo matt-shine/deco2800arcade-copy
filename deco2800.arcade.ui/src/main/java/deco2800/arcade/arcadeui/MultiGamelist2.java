@@ -62,14 +62,14 @@ public class MultiGamelist2 implements Screen {
 		
 		private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches;
-	
+	/*
 	public MultiGamelist2(ArcadeUI ui) {
 		this.arcadeUI = ui;
 	}
-    
-    public MultiGamelist2() {
+    */
+    public MultiGamelist2(ArcadeUI ui) {
     		
-        
+        arcadeUI = ui;
         skin = new Skin(Gdx.files.internal("loginSkin.json"));
         skin.add("background", new Texture("homescreen_bg.png"));
         stage = new FrontPageStage();
@@ -847,8 +847,9 @@ public class MultiGamelist2 implements Screen {
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
             	dispose();
+				ArcadeSystem.setMatchMaking2(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
-				ArcadeSystem.setPlayerBetting(false);
+				
 
 
 

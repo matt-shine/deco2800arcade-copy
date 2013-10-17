@@ -91,6 +91,8 @@ public class Arcade extends JFrame {
     
     private static boolean matchMaking;
 	
+	private static boolean matchMaking2;
+	
 	private static boolean gameWaiting;
     
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
@@ -677,6 +679,14 @@ public class Arcade extends JFrame {
 	
 	public void setGameWaiting(boolean gameWaiting) {
 		Arcade.gameWaiting = gameWaiting;
+	}
+	
+	public boolean isMatchMaking2() {
+		return matchMaking2;
+	}
+	
+	public void setMatchMaking2(boolean matchMaking2) {
+		Arcade.matchMaking2 = matchMaking2;
 	}
 
 	

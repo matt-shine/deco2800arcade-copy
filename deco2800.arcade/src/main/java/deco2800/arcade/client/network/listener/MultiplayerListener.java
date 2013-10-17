@@ -38,23 +38,14 @@ public class MultiplayerListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
-		if (object instanceof NewMultiResponse) { //Connected to Server
-			NewMultiResponse response = (NewMultiResponse) object;
-			if (response.OK == NewMultiResponse.OK) {
-				System.out.println("Connect OK");
-			}
-		}
-		else if (object instanceof NewMultiSessionResponse) { //Game Found
+		if (object instanceof NewMultiSessionResponse) { //Game Found
 			int sessionId = ((NewMultiSessionResponse) object).sessionId;
-			System.out.println("Game Found");
-			System.out.println("session id: " + sessionId);
 			arcade.getCurrentGame().setHost(((NewMultiSessionResponse) object).host);
 			arcade.getCurrentGame().setMultiSession(sessionId);			
 			ArcadeSystem.setGameWaiting(false);
 		} else if (object instanceof GameStateUpdateRequest) {
 			if (((GameStateUpdateRequest) object).initial == false) {
 				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
-				System.out.println("Game State Updated");
 			} else {
 				arcade.getCurrentGame().startMultiplayerGame();
 				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);

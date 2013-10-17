@@ -41,9 +41,14 @@ public class LocalUserPaddle extends Paddle {
     		Vector2 touchPos = new Vector2();
     		touchPos.set(Gdx.input.getX(), Gdx.input.getY());
             double prevY = bounds.y;
-    		bounds.y = -touchPos.y - bounds.height / 2 + Pong.SCREENHEIGHT;
+            int currentHeight = ArcadeSystem.getCurrentGame().getHeight();
+            double newY = ((currentHeight - touchPos.y)/currentHeight)*Pong.SCREENHEIGHT - bounds.height/2;//-touchPos.y - bounds.height / 2 + Pong.SCREENHEIGHT;
+            System.out.println(currentHeight);
+            move(KBPADDLESPEED*Gdx.graphics.getDeltaTime() * sign(newY-prevY));
             direction += sign(bounds.y - prevY);
-            ArcadeSystem.getCurrentGame().sendStateUpdate();
+    		/*bounds.y = -touchPos.y - bounds.height / 2 + Pong.SCREENHEIGHT;
+            direction += sign(bounds.y - prevY);
+            ArcadeSystem.getCurrentGame().sendStateUpdate();*/
         }
 
     	//Move the left paddle (keyboard)

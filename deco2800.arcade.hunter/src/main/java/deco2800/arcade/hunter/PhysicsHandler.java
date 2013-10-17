@@ -69,27 +69,13 @@ public class PhysicsHandler {
             int mid, colTop;
             mid = (int) (e.getX() + (e.getWidth() / 2));
 
-            //Handle horizontal collisions with solid blocks
-//            if (foregroundLayer.getCollisionTileAt(mid + e.getWidth() / 4, e.getY() + Config.TILE_SIZE) == 1 ||
-//                    foregroundLayer.getCollisionTileAt(mid - e.getWidth() / 4, e.getY() + Config.TILE_SIZE) == 1) {
-//                int newX = foregroundLayer.getNearestEmptyColumn(e.getX(), e.getY());
-//                if (newX % Config.TILE_SIZE > Config.TILE_SIZE / 2) { //Collision right
-//                    newX = ((newX + Config.TILE_SIZE) / Config.TILE_SIZE - 1) * Config.TILE_SIZE;
-//                    e.getCollider().right = true;
-//                } else {
-//                    newX = (newX / Config.TILE_SIZE + 1) * Config.TILE_SIZE;
-//                    e.getCollider().left = true;
-//                }
-//
-//                e.setX(newX);
-//            }
-
-            //Handle bottom collision
+            //Handle collision between the bottom of the entity and the map
             colTop = foregroundLayer.getColumnTop(mid);
             if (colTop > e.getY()) {
                 e.setY(colTop);
                 e.getCollider().bottom = true;
             }
+
             // Check for entities going outside the bounds of the map
 //            int pane = foregroundLayer.getPane(e.getX());
 //            if (pane != -1 && e.getY() <= foregroundLayer.getPaneOffset(pane)) {

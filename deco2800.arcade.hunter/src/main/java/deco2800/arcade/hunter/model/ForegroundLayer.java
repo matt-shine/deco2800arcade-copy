@@ -232,6 +232,7 @@ public class ForegroundLayer extends Map {
             if (collisionType == -1) {
                 return -1;
             } else {
+                int tileX = (int) (x % Config.TILE_SIZE);
                 switch (collisionType) {
                     case 0:
                         //Empty tile, do nothing
@@ -240,23 +241,23 @@ public class ForegroundLayer extends Map {
                         //Solid tile
                         return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane);
                     case 2:
-                        // /_| slope
-                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (int) (x % Config.TILE_SIZE);
+                        // /_| 45 degree upward slope
+                        return Config.TILE_SIZE * i + getPaneOffset(pane) + tileX;
                     case 3:
-                        // |_\ slope
-                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (int) (x % Config.TILE_SIZE);
+                        // |_\ 45 degree downward slope
+                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - tileX;
                     case 4:
-                        // /| slope piece
-                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (int) (x % (Config.TILE_SIZE / 2) + Config.TILE_SIZE / 2);
+                        // Slope from 0 to (Config.TILE_SIZE / 2)
+                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (tileX / 2);
                     case 5:
-                        // /__ slope piece
-                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (int) (x % (Config.TILE_SIZE / 2));
+                        // Slope from (Config.TILE_SIZE / 2) to Config.TILE_SIZE
+                        return Config.TILE_SIZE * i + getPaneOffset(pane) + (tileX / 2 + Config.TILE_SIZE / 2);
                     case 6:
-                        // |\
-                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (int) (x % (Config.TILE_SIZE / 2) + Config.TILE_SIZE / 2);
+                        // Slope from (Config.TILE_SIZE / 2) to 0
+                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (tileX / 2);
                     case 7:
-                        // __\
-                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (int) (x % (Config.TILE_SIZE / 2));
+                        // Slope from Config.TILE_SIZE to (Config.TILE_SIZE / 2)
+                        return Config.TILE_SIZE * (i + 1) + getPaneOffset(pane) - (tileX / 2 + (Config.TILE_SIZE / 2));
                     default:
                         return -1;
                 }

@@ -1,25 +1,9 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
-//import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.regex.Pattern;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.AchievementProgress;
-import deco2800.server.ResourceLoader;
-import deco2800.server.ResourceHandler;
-import deco2800.server.database.ImageStorage;
-import org.w3c.dom.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 import deco2800.arcade.model.Accolade;
 import deco2800.arcade.model.AccoladeContainer;
 
@@ -60,13 +44,6 @@ public class AccoladeStorage{
 					"ACCOLADES", null);
 			if (!tableData.next()){
 				Statement statement = connection.createStatement();
-				/** HERE JERRY: the statement.execute was throwing an error 
-				 * and i'm not sure about the lines immeadiatly below this comment
-				 * 
-				 * (I think i had jsut accidentally deleted the semicolon)
-				 * 
-				String String, String Unit, int modifier, String Tag,
-				String Image;
 				statement.execute("CREATE TABLE ACCOLADES(ID INT RIMARY KEY," +
 						"VALUE INT NOT NULL" +
 						"NAME VARCHAR(30) NOT NULL," +
@@ -75,7 +52,6 @@ public class AccoladeStorage{
 						"MODIFIER INT NOT NULL" +
 						"TAG VARCHAR(20) NOT NULL" + 
 						"IMAGEPATH VARCHAR(255) NOT NULL)");
-						**/
 			}
 			/**
 			 * Create the Player_accolades table
@@ -85,9 +61,10 @@ public class AccoladeStorage{
 			 */
 			tableData = connection.getMetaData().getTables(null, null, "PLAYER_ACCOLADES", null);
 			if (!tableData.next()) {
-				//statement.execute("CREATE TABLE PLAYER_ACCOLADES(ID INTEGER NOT NULL," +
-						//	"ACCOLADEID INT," +
-						//	"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+				Statement statement = connection.createStatement();
+				statement.execute("CREATE TABLE PLAYER_ACCOLADES(ID INTEGER NOT NULL," +
+							"ACCOLADEID INT," +
+							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
 			}
 			/**
 			 * Create the Game_accolades table
@@ -97,12 +74,11 @@ public class AccoladeStorage{
 			 */
 			tableData = connection.getMetaData().getTables(null, null, "GAME_ACCOLADES", null);
 			if (!tableData.next()) {
-				/** HERE AGAIN JERRY: I think statement jsut isn't being resolved to a variable type,
-				 * I think i might have deleted one of your imports by mistake
+				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE GAME_ACCOLADES(ID INTEGER NOT NULL," +
 							"ACCOLADEID INT," +
 							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
-							 * **/
+
 			}
 			
 		}
@@ -191,8 +167,7 @@ public class AccoladeStorage{
 					"WHERE ID = '" + playerID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
-				//TODO JERRY ANOTHER ONE HERE: it couldnt do the .add (jsut uncomment it to see it
-				//result.add(a);
+				result.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -237,8 +212,7 @@ public class AccoladeStorage{
 					"WHERE ID = '" + gameID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
-				//TODO JERRY ANOTHER ONE HERE: it couldnt do the .add (jsut uncomment it to see it
-				//result.add(a);
+				result.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

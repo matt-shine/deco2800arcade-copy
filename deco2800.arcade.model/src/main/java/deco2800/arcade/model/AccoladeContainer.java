@@ -63,6 +63,19 @@ public class AccoladeContainer implements Iterable<Accolade> {
         this.tail = accolade;
         size++;
     }
+    /**
+     * Add accolade into accolade container
+     */
+    public void add(Accolade a) {
+        if (!hasHead()) {
+            //current for enumeration
+            head = a;
+        } else {
+            tail.setNext(a);
+        }
+        this.tail = a;
+        size++;
+    }
  
     /**
      * Testing stuff *

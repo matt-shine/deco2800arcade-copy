@@ -145,6 +145,12 @@ public class PlayerTest {
 	public void setIconTest() {
 		Assert.assertTrue(true);
 	}
+	
+	@Test
+	public void checkFriendsTest() {
+		player1.addFriend(player2);
+		Assert.assertSame(player1.isFriend(player2), true);
+	}
 
 	@Test
 	public void getGamesTest() {

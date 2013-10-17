@@ -128,7 +128,7 @@ public class SnakeLadder extends GameClient {
 	}
 
 	public int getturns() {
-		return this.turn%2;
+		return this.turn;
 	}
 
 	public ArrayList<Label> getScoreLabels() {
@@ -144,7 +144,7 @@ public class SnakeLadder extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1280, 800);
+		camera.setToOrtho(false, 960, 600);
 		batch = new SpriteBatch();
 		
 		//initialize the rules from xml file
@@ -248,9 +248,9 @@ public class SnakeLadder extends GameClient {
 	}
 	
 
-	public int taketurns() {
+	public void taketurns() {
 		turn++;
-		return this.turn;
+		turn = turn%this.gamePlayers.length;
 	}
 	
 	@Override
@@ -328,7 +328,8 @@ public class SnakeLadder extends GameClient {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        table.padLeft((gamePlayers.length+1)*100).padBottom(200-(highestScoreNum*25)-45);
+//        table.padLeft((gamePlayers.length+1)*100).padBottom(200-(highestScoreNum*25)-45);
+        table.top().right();
         
         //adding player name
         table.add(new Label("Players' Name", skin)).width(100).top().left();

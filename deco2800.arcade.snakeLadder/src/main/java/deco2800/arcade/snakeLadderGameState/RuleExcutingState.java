@@ -31,7 +31,7 @@ public class RuleExcutingState extends GameState {
 				if(rule.startsWith("L"))
 				{
 					//check if the player is local player instead of AI
-					if (playerIndex == 0) {
+					if (!context.gamePlayers[playerIndex].isAI()) {
 						//add one achievement to reachLadder achievement
 				    	context.incrementAchievement("snakeLadder.reachLadder");
 				    }

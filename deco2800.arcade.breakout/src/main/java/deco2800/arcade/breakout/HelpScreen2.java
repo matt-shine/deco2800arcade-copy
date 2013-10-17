@@ -56,7 +56,7 @@ public class HelpScreen2 implements Screen  {
 	    backup = new TextureRegionDrawable(backbuttonUp);
 	    backdown = new TextureRegionDrawable(backbuttonDown);
 	    backbutton = new ImageButton(backup, backdown);
-	    backbutton.setPosition(1000, 0);
+	    backbutton.setPosition(0, 590);
 	   // backbutton.setSize(700f, 550f);
 	    backbutton.addListener(new InputListener(){
 	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work

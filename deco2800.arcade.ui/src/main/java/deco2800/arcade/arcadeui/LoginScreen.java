@@ -12,6 +12,7 @@ import com.esotericsoftware.tablelayout.BaseTableLayout;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.arcadeui.FrontPage;
 
 public class LoginScreen implements Screen {
 

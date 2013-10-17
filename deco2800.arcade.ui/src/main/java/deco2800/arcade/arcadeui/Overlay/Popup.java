@@ -20,21 +20,26 @@ public class Popup extends Actor {
 
     private PopupMessage current = null;
 
-    private int state = 0;
+    private final int STATE_WAITING = 0;
+    private final int STATE_RISING = 1;
+    private final int STATE_EXPANDING = 2;
+    private final int STATE_DISPLAYING = 3;
+    private final int STATE_SHRINKING = 4;
+    private final int STATE_FALLING = 5;
+    private int state = STATE_WAITING;
 
-    private static float MINSIZE = 90;
-    private static float YPOS_GOAL = 40;
-    private static float YPOS_START = -MINSIZE;
-    private static float EXPAND_GOAL = 400;
-    private static float EXPAND_START = MINSIZE;
-    private static float EXPAND_ACC = 1;
-    private static float YPOS_ACC = 1;
-
-    private float ypos = 0;
-    private float yvel = 0;
-    private float expandedTime = 0;
-    private float expandedAmt = EXPAND_START;
-    private float expandedVel = 0;
+    private final float IMAGE_SIZE = 64.0f;
+    private final float PADDING_X = 24.0f;
+    private final float PADDING_Y = 24.0f;
+    private final float IMAGE_LABEL_PADDING = 15.0f;
+    private final float WIDTH_ACCEL = 1.0f;
+    private final float HEIGHT_ACCEL = 1.0f;
+    private float height = 0;
+    private float heightVel = 0;
+    private float displayTime = 0;
+    private float width = 0;
+    private float widthVel = 0;    
+    private float messageHeight = 0;
 
     private NinePatch texture;
     private BitmapFont font;
@@ -42,115 +47,128 @@ public class Popup extends Actor {
 
     public Popup(Overlay overlay) {
         super();
-
         font = new BitmapFont(false);
         this.overlay = overlay;
-
-        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen.png")), 100, 100, 100, 100);
-
-        ypos = YPOS_START;
-
+        texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen_small.png")), (int)PADDING_X, (int)PADDING_X, (int)PADDING_Y, (int)PADDING_Y);
+	state = STATE_WAITING;
     }
 
     public void addMessageToQueue(PopupMessage p) {
         msgs.add(p);
     }
 
+    private float getHeightTarget() {
+	return 60.0f;
+    }
 
+    private float getWidthTarget() {
+	float target = font.getBounds(current.getMessage()).width; // start with our message
+	target += 2 * PADDING_X; // add in the far left and far right padding
+	if (current.getTexture() != null) {
+	    // add in the image if we have one
+	    target += IMAGE_SIZE;
+	    target += IMAGE_LABEL_PADDING; // padding between the image and message
+	}
+	
+	return target;
+    }
+
+    private float getMessageHeight() {
+	return 2 * PADDING_Y + IMAGE_SIZE;
+    }
 
     @Override
     public void act(float d) {
         super.act(d);
-
-        if (state == 0) {
-
-            yvel = 0;
-            ypos = YPOS_START;
-            if (msgs.size() != 0) {
+	
+	switch (state) {
+	case STATE_WAITING:
+	    heightVel = 0;
+	    height = 0 - getMessageHeight();
+            if (!msgs.isEmpty()) {
                 current = msgs.remove(0);
-                state++;
+                state = STATE_RISING;
             }
-
-        } else if (state == 1) {
-
-            if (ypos > YPOS_GOAL) {
-                yvel = 0;
-                state++;
-            } else {
-                yvel += YPOS_ACC;
+	    break;
+	case STATE_RISING:
+	    if (height > getHeightTarget()) {
+		heightVel = 0;
+		height = getHeightTarget();
+		width = 2 * PADDING_X;
+                state = STATE_EXPANDING;
+	    } else {
+		heightVel += HEIGHT_ACCEL;
+	    }
+	    break;
+	case STATE_EXPANDING:
+	    widthVel += WIDTH_ACCEL;
+            if (width > getWidthTarget()) {
+		width = getWidthTarget();
+		widthVel = 0;
+                state = STATE_DISPLAYING;
             }
+	    break;
+	case STATE_DISPLAYING:
+	    displayTime += d;
+	    if (displayTime > current.displayTime()) {
+		displayTime = 0;
+		state = STATE_SHRINKING;
+	    }
+	    break;
+	case STATE_SHRINKING:
+	    widthVel -= WIDTH_ACCEL;
+            if (width < 2 * PADDING_X) {
+                width = 2 * PADDING_X;
+		widthVel = 0;
 
-        } else if (state == 2) {
-
-            expandedVel += EXPAND_ACC;
-            expandedAmt += expandedVel;
-            if (expandedAmt > EXPAND_GOAL) {
-
-                expandedAmt = EXPAND_GOAL;
-                expandedVel = 0;
-                state++;
-
+		// reopen immediately if we have more messages to show
+		if (!msgs.isEmpty()) {
+		    current = msgs.remove(0);
+		    state = STATE_EXPANDING;
+		} else {
+		    state = STATE_FALLING;
+		}
+            }	    
+	    break;
+	case STATE_FALLING:
+	    heightVel -= HEIGHT_ACCEL;
+	    if (height < 0 - getMessageHeight()) {
+                height = 0 - getMessageHeight();
+                state = STATE_WAITING;
             }
+	    break;
+	}
 
-        } else if (state == 3) {
-
-            expandedTime += d;
-            if (expandedTime > 0.8) {
-                expandedTime = 0;
-                state++;
-            }
-
-        } else if (state == 4) {
-
-            expandedVel -= EXPAND_ACC;
-            expandedAmt += expandedVel;
-            if (expandedAmt < EXPAND_START) {
-
-                expandedAmt = EXPAND_START;
-                expandedVel = 0;
-
-                if (msgs.size() == 0) {
-                    state++;
-                } else {
-                    state = 2;
-                    current = msgs.remove(0);
-                }
-
-            }
-
-        } else if (state == 5) {
-
-            if (ypos < YPOS_START) {
-                yvel = 0;
-                state = 0;
-            } else {
-                yvel -= YPOS_ACC;
-            }
-
-        }
-
-        ypos += yvel;
-        this.setX(overlay.getWidth() / 2 - expandedAmt / 2);
-        this.setY(ypos);
-
+	width += widthVel;
+	height += heightVel;
+        this.setX(overlay.getWidth() / 2 - width / 2);
+        this.setY(height);
+	texture.setMiddleWidth(width - 2 * PADDING_X);
+	texture.setMiddleHeight(height - 2 * PADDING_Y);
     }
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-
         OrthographicCamera camera = new OrthographicCamera();
         camera.setToOrtho(false, overlay.getWidth(), overlay.getHeight());
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-
         if (state != 0) {
-            texture.draw(batch, getX(), getY(), expandedAmt, MINSIZE);
+            texture.draw(batch, getX(), getY(), width, getMessageHeight());
             font.setColor(Color.WHITE);
-            if (current != null && expandedAmt == EXPAND_GOAL) {
-                TextBounds b = font.getBounds(current.getMessage());
-                font.draw(batch, current.getMessage(), getX() + expandedAmt / 2 - b.width / 2, getY() + MINSIZE / 2 + b.height / 2);
+            if (state == STATE_DISPLAYING) {
+ 		float x = getX() + PADDING_X;
 
+		// first draw the image (it's on the left)
+		Texture currTex = current.getTexture();
+		if (currTex != null) {
+		    batch.draw(current.getTexture(), x, getY() + PADDING_Y, IMAGE_SIZE, IMAGE_SIZE);
+		    x += IMAGE_SIZE + IMAGE_LABEL_PADDING;
+		}
+
+		// then our text		
+                font.draw(batch, current.getMessage(), x, getY() + (getMessageHeight() / 2.0f) + (font.getBounds(current.getMessage()).height / 2.0f));
             }
         }
 

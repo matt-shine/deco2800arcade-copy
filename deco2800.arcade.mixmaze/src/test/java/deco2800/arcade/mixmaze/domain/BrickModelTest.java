@@ -19,7 +19,7 @@ public class BrickModelTest {
 		brick = new BrickModel(5);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void initWithNegativeAmount() {
 		new BrickModel(-1);
 	}
@@ -59,7 +59,7 @@ public class BrickModelTest {
 		assertEquals(1, brick.getAmount());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void setInvalidAmount() {
 		brick.setAmount(-1);
 	}
@@ -77,7 +77,7 @@ public class BrickModelTest {
 		assertEquals(6, brick.getAmount());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void addInvalidAmount() {
 		brick.addAmount(BrickModel.getMaxBricks() + 1);
 	}
@@ -95,7 +95,7 @@ public class BrickModelTest {
 		assertEquals(4, brick.getAmount());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void removeInvalidAmount() {
 		brick.removeAmount(BrickModel.getMaxBricks() + 1);
 	}
@@ -113,7 +113,7 @@ public class BrickModelTest {
 		assertEquals(4, brick.getAmount());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void removeTooMany() {
 		BrickModel brick = new BrickModel(1);
 
@@ -137,7 +137,6 @@ public class BrickModelTest {
 
 		brick.mergeBricks(other);
 		assertEquals(BrickModel.getMaxBricks(), brick.getAmount());
-		assertEquals(7 + old - BrickModel.getMaxBricks(),
-				other.getAmount());
+		assertEquals(7 + old - BrickModel.getMaxBricks(), other.getAmount());
 	}
 }

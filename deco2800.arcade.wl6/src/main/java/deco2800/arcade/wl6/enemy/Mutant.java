@@ -1,11 +1,31 @@
 package deco2800.arcade.wl6.enemy;
 
-/**
- * Created with IntelliJ IDEA.
- * User: john
- * Date: 22/09/13
- * Time: 20:52
- * To change this template use File | Settings | File Templates.
- */
-public class Mutant {
+import deco2800.arcade.wl6.DoodadInfo;
+
+public class Mutant extends Enemy {
+
+    // Difficulty 1 = 45 health
+    // Difficulty 2-4 = 55 health
+    private int STARTING_HEALTH = 25;
+
+    public Mutant(int uid, DoodadInfo d) {
+        super(uid);
+
+        setHealth(STARTING_HEALTH);
+        if (d.pathingDir == null) {
+            setState(STATES.STAND);
+        }
+        else {
+            setState(STATES.PATH);
+        }
+        pathSpeed = 512;
+        chaseSpeed = 1536;
+        pain = true;
+
+        damage = 0;
+        setTextureName(d.texture);
+    }
+
+
+
 }

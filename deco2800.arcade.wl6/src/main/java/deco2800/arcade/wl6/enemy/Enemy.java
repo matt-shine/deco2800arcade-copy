@@ -25,7 +25,7 @@ public class Enemy extends Mob {
     }
 
     // current state
-    private STATES state = STATES.NO_STATE;;
+    private STATES state = STATES.NO_STATE;
     //
     protected float pathSpeed;
     //
@@ -111,8 +111,8 @@ public class Enemy extends Mob {
     @Override
     public void doDamage() {
         float dist = this.getPos().dst(gameModel.getPlayer().getPos());
-        boolean speed = false;
-        boolean look = false;
+        boolean speed = true;
+        boolean look = true;
         int damage = calcDamage((int)dist, speed, look);
         gameModel.getPlayer().takeDamage(damage);
     }

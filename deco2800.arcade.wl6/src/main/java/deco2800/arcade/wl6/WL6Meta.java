@@ -131,11 +131,8 @@ public class WL6Meta {
             return true;
         }
         // TODO Change this so to check actually spawned doodads rather than all potential ones
-        if (WL6Meta.block(map.getTerrainAt(x, y)).solid ||
-                WL6Meta.doodad(map.getDoodadAt(x, y)).solid) {
-            return true;
-        }
-        return false;
+        return WL6Meta.block(map.getTerrainAt(x, y)).solid ||
+                WL6Meta.doodad(map.getDoodadAt(x, y)).solid;
     }
 
     private static BlockList blockList = new BlockList();

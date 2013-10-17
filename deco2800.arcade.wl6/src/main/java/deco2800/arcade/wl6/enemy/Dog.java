@@ -5,6 +5,7 @@ import deco2800.arcade.wl6.GameModel;
 
 public class Dog extends Enemy {
 
+    // All difficulties = 1 health
     private int STARTING_HEALTH = 1;
 
     public Dog(int uid, DoodadInfo d) {

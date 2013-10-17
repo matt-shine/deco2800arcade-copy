@@ -4,6 +4,7 @@ import deco2800.arcade.wl6.DoodadInfo;
 
 public class Guard extends Enemy {
 
+    // All difficulties = 25 health
     private int STARTING_HEALTH = 25;
 
     public Guard(int uid, DoodadInfo d) {

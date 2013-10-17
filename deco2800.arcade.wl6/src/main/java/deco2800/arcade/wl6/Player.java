@@ -117,6 +117,48 @@ public class Player extends Mob {
 	public boolean hasKey(KEY_TYPE k) {
 		return keys.contains(k);
 	}
+
+
+    @Override
+    public void doDamage() {
+        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
+        int damage = calcDamage((int)dist);
+        gameModel.getPlayer().takeDamage(damage);
+    }
+
+    /**
+     * Damage Calculation
+     *
+     * @param dist Distance between enemy and player (in number of squares)
+     * @return Damage to be dealt.
+     */
+    public int calcDamage(int dist) {
+        boolean hit = false;
+        if (dist > 4) {
+            if (randInt(0, 255, rand) / 12 < dist) {
+                hit = true;
+            }
+        }
+        else {
+            hit = true;
+        }
+
+        int damage = randInt(0, 255, rand);
+
+        if (hit) {
+            if (dist < 2) {
+                damage = damage / 4;
+            }
+            else {
+                damage = damage / 6;
+            }
+        }
+        else {
+            damage = 0;
+        }
+
+        return damage;
+    }
 	
 }
 

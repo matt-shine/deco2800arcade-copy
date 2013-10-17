@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Bishop implements Piece{
-
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
+public class Bishop extends Piece{
 	
 	/**
 	 * Initialises the piece
@@ -18,60 +12,11 @@ public class Bishop implements Piece{
 	 * @param team
 	 */
 	public Bishop(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 2;
-		this.pieceNo = pieceNo;
+
 	}
 
-	@Override
-	public void deActivate() {
-		active = false;
-		
-	}
-
-	@Override
-	public void reActivate() {
-		active = true;
-		
-	}
-	
-	public String toString() {
-		String toString = "";
-		
-		if(!team) {
-			toString+="white ";
-		} else {
-			toString+="black ";
-		}
-		
-		toString+="Bishop";
-		
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
 	public List<int[]> possibleMoves(int[] currentPos) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];
@@ -103,6 +48,21 @@ public class Bishop implements Piece{
 		}
 		return moves;
 	}
+	
+	public String toString() {
+		String toString = "";
+		
+		if(!team) {
+			toString+="white ";
+		} else {
+			toString+="black ";
+		}
+		
+		toString+="Bishop";
+		
+		return toString;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -137,8 +97,4 @@ public class Bishop implements Piece{
 		return true;
 	}
 
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-	}
 }

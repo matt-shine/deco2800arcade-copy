@@ -2,13 +2,13 @@ package deco2800.arcade.chess.pieces;
 
 import java.util.List;
 
-public class Null implements Piece {
-	int piece = 0;
-	@Override
-	public void deActivate() {
-		// TODO Auto-generated method stub
-		
+public class Null extends Piece {
+	
+	public Null(boolean team) {
+		super(team, 0);
 	}
+
+	int piece = 0;
 
 	@Override
 	public int hashCode() {
@@ -31,36 +31,6 @@ public class Null implements Piece {
 			return false;
 		return true;
 	}
-
-	@Override
-	public void reActivate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getTeam() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int getPreference() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	
 	public String toString() {
 		return "Empty Square";
@@ -71,13 +41,5 @@ public class Null implements Piece {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 }

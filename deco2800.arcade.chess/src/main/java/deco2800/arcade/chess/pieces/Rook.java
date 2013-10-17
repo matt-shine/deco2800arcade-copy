@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class Rook implements Piece {
-
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
+public class Rook extends Piece {
 
 	/**
 	 * Initialises the piece
@@ -18,60 +12,10 @@ public class Rook implements Piece {
 	 * @param team
 	 */
 	public Rook(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 3;
-		this.pieceNo = pieceNo;
 	}
 
-	@Override
-	public void deActivate() {
-		active = false;
-
-	}
-
-	@Override
-	public void reActivate() {
-		active = true;
-
-	}
-
-	public String toString() {
-		String toString = "";
-
-		if (!team) {
-			toString += "white ";
-		} else {
-			toString += "black ";
-		}
-
-		toString += "Rook";
-
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
 	public List<int[]> possibleMoves(int[] currentPos) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];// current row position
@@ -129,23 +73,29 @@ public class Rook implements Piece {
 				moves.remove(a);
 			}
 			
-
-		
-			
-		// if (!firstMove){
-		// moves.remove(castle);
-		// }
 		}
 		HashSet<int []> hs = new HashSet<int []>();
 		hs.addAll(moves);
 		moves.clear();
 		moves.addAll(hs);
-		//for(int v =0; v<moves.size(); v++){
-			//System.out.println(Arrays.toString(moves.get(v)));
-		//}
 		
 		return moves;
 	}
+	
+	public String toString() {
+		String toString = "";
+
+		if (!team) {
+			toString += "white ";
+		} else {
+			toString += "black ";
+		}
+
+		toString += "Rook";
+
+		return toString;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -180,13 +130,5 @@ public class Rook implements Piece {
 			return false;
 		return true;
 	}
-
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 }

@@ -44,7 +44,7 @@ public class Board {
 		pieceMoved = new ArrayList<Piece>();
 		blackGraveyard = new ArrayList<Piece>();
 		whiteGraveyard = new ArrayList<Piece>();
-		nullPiece = new Null();
+		nullPiece = new Null(true);
 
 		blackCheck = false;
 		whiteCheck = false;

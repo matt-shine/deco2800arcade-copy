@@ -4,12 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import deco2800.arcade.chess.Board;
-public class King implements Piece {
+public class King extends Piece {
 
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
 	boolean isChecked;
 
 	/**
@@ -18,59 +14,11 @@ public class King implements Piece {
 	 * @param team
 	 */
 	public King(boolean team) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, 0);
+		isChecked = false;
 		this.preference = 6;
 	}
 
-	@Override
-	public void deActivate() {
-		active = false;
-
-	}
-
-	@Override
-	public void reActivate() {
-		active = true;
-
-	}
-
-	public String toString() {
-		String toString = "";
-
-		if (!team) {
-			toString += "white ";
-		} else {
-			toString += "black ";
-		}
-
-		toString += "King";
-
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
 	public List<int[]> possibleMoves(int[] currentPos) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];// current row position
@@ -152,19 +100,19 @@ public class King implements Piece {
 			}
 		}
 	}
+	
+	public String toString() {
+		String toString = "";
 
-	public ArrayList<int[]> getChecks(Board board) {
+		if (!team) {
+			toString += "white ";
+		} else {
+			toString += "black ";
+		}
 
-		@SuppressWarnings("unused")
-		ArrayList<int[]> possibleChecks = new ArrayList<int[]>();
-		return null;
+		toString += "King";
 
-	}
-
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
+		return toString;
 	}
 	
 	@Override

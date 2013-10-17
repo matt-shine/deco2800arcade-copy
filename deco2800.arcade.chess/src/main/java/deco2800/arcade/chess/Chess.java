@@ -701,7 +701,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 * @return An int[] represent the [row, column] of the square that was
 	 *         clicked
 	 */
-	private int[] determineSquare(int x, int y) {
+	public int[] determineSquare(int x, int y) {
 		int xSquare = -1;
 		int ySquare = -1;
 

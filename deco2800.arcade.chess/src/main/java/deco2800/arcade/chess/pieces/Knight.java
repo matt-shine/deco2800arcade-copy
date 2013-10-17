@@ -3,13 +3,7 @@ package deco2800.arcade.chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Knight implements Piece {
-
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
+public class Knight extends Piece {
 	
 	/**
 	 * Initialises the piece
@@ -17,60 +11,10 @@ public class Knight implements Piece {
 	 * @param team
 	 */
 	public Knight(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 4;
-		this.pieceNo = pieceNo;
 	}
 
-	@Override
-	public void deActivate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reActivate() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public String toString() {
-		String toString = "";
-		
-		if(!team) {
-			toString+="white ";
-		} else {
-			toString+="black ";
-		}
-		
-		toString+="Knight";
-		
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
 	public List<int[]> possibleMoves(int[] currentPos) {
 		List<int[]> possibleMoves = new ArrayList<int[]>();
 		int x = currentPos[0];
@@ -104,6 +48,20 @@ public class Knight implements Piece {
 		}
 		
 		return movesToReturn;
+	}
+	
+	public String toString() {
+		String toString = "";
+		
+		if(!team) {
+			toString+="white ";
+		} else {
+			toString+="black ";
+		}
+		
+		toString+="Knight";
+		
+		return toString;
 	}
 
 	@Override
@@ -139,14 +97,5 @@ public class Knight implements Piece {
 			return false;
 		return true;
 	}
-
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	
 
 }

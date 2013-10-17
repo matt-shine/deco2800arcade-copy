@@ -4,28 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Pawn implements Piece {
+public class Pawn extends Piece {
 
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
-	
 	/**
 	 * Initialises the piece
 	 * 
 	 * @param team
 	 */
 	public Pawn(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 1;
-		this.pieceNo = pieceNo;
 	}
 	
-	@Override
 	public List<int[]> possibleMoves(int[] currentPos) {
 		List<int[]> possibleMoves = new ArrayList<int[]>();
 		int x = currentPos[0];
@@ -69,18 +59,6 @@ public class Pawn implements Piece {
 		
 		return movesToReturn;
 	}
-
-	@Override
-	public void deActivate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reActivate() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public String toString() {
 		String toString = "";
@@ -94,27 +72,6 @@ public class Pawn implements Piece {
 		toString+="Pawn";
 		
 		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 	@Override
@@ -150,13 +107,5 @@ public class Pawn implements Piece {
 			return false;
 		return true;
 	}
-
-	@Override
-	public void hasMoved() {
-		firstMove = true;
-		
-	}
-
-
 
 }

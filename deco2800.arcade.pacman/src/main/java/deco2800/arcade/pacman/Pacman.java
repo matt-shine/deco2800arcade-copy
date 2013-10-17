@@ -1,19 +1,7 @@
 package deco2800.arcade.pacman;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.Logger;
 
 import deco2800.arcade.client.ArcadeInputMux;
@@ -48,6 +36,7 @@ public class Pacman extends GameClient {
 	private GameMap gameMap;
 	
 	private boolean notSetUp;
+	private PacView view;
 	
 	//not used yet
 	//private NetworkClient networkClient;
@@ -103,7 +92,6 @@ public class Pacman extends GameClient {
 		notSetUp = true;
 		
 		// level map file
-		//view = new PacView();
 		mapName = "levelMap.txt";
 		//initialise gamemap
 		//TODO move offset to PacView
@@ -171,10 +159,12 @@ public class Pacman extends GameClient {
 	public void render() {	
 		// need to make sure this only happens once, using boolean
 		if (notSetUp) {
-			PacView.setUp(gameMap);
+			view = new PacView(gameMap, player, blinky);
 			notSetUp = false;
 		}
-		PacView.render(gameMap, player, blinky);
+		player.prepareDraw();
+		blinky.prepareDraw();
+		view.render(gameMap, player, blinky);
 		//do any stuff the superclass normally does for rendering
 		super.render();		
 	}

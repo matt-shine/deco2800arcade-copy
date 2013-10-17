@@ -17,7 +17,7 @@ import deco2800.arcade.pacman.PacChar.PacState;
 
 public class Ghost extends Mover {
 	
-	private enum GhostState {
+	public enum GhostState {
 		CHASE, SCATTER, FRIGHT, DEAD
 	}
 	
@@ -26,9 +26,6 @@ public class Ghost extends Mover {
 	}
 	private GhostName ghost;
 	private GhostState currentState;
-	// Static variables for pulling sprites from sprite sheet
-	private static final int FRAME_COLS = 8;
-	private static final int FRAME_ROWS = 1;
 	
 	private static int widthVal = 26;
 	private static int heightVal = 26;
@@ -38,6 +35,7 @@ public class Ghost extends Mover {
 	private float moveDist;
 	private Tile targetTile;
 	private Animation walkAnimation;
+	private int spritePos;
 	
 	
 	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
@@ -74,12 +72,10 @@ public class Ghost extends Mover {
 	}
 	
 	/**
-	 * Called everytime the main render method happens.
-	 * Draws the Ghost
+	 * Prepares to draw a Ghost
 	 */
-	public void render(SpriteBatch batch) {
-		
-		int spritePos = 3;
+	public void prepareDraw() {		
+		spritePos = 3;
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -104,12 +100,13 @@ public class Ghost extends Mover {
     			facing = Dir.LEFT;
     		}			
 			updatePosition();			
-    	} 
-		//draw ghost facing the appropriate direction
-		// TODO NOTE CURRENTLY ONLY DRAWS RED GHOST WHICHEVER GHOST IT IS
-		batch.draw(PacView.ghostFrames[0][spritePos], drawX, drawY, width, height);
+    	} 		
 	}
 	 
+	public int getSpritePos() {
+		return spritePos;
+	}
+
 	public Dir getFacing() {
 			return facing;
 		}

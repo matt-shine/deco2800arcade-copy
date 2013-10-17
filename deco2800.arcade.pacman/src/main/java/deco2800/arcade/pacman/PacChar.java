@@ -24,6 +24,8 @@ public class PacChar extends Mover{
 	
 	// the distance pacman moves each frame
 	private float moveDist;
+	private int spritePos;
+
 
 	private Animation walkAnimation;
 	
@@ -48,12 +50,11 @@ public class PacChar extends Mover{
 	}
 	
 	/**
-	 * Called everytime the main render method happens.
-	 * Draws the Pacman
+	 * Prepare to draw pacman
 	 */
-	public void render(SpriteBatch batch) {
+	public void prepareDraw() {
 		
-		int spritePos = 3;
+		spritePos = 3;
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -79,8 +80,6 @@ public class PacChar extends Mover{
     		}			
 			updatePosition();			
     	} 
-		//draw pacman facing the appropriate direction
-		batch.draw(PacView.pacmanFrames[spritePos], drawX, drawY, width, height);
 	}
 	 
 	
@@ -102,6 +101,10 @@ public class PacChar extends Mover{
 
 	public void setMoveDist(float moveDist) {
 		this.moveDist = moveDist;
+	}
+
+	public int getSpritePos() {
+		return spritePos;
 	}
 	
 	public String toString() {

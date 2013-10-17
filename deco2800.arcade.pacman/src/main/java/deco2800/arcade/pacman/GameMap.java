@@ -7,7 +7,6 @@ import java.util.List;
 import org.lwjgl.util.Point;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * The map of the pacman game, containing the list of tiles and which tiles 

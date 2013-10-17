@@ -1,9 +1,6 @@
 package deco2800.arcade.pacman;
 
 import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -32,6 +29,13 @@ import deco2800.arcade.model.Player;
  * thread, or something like that. I've decided to separate out all the drawing stuff from everything else
  * So basically model view controller
  */		
+
+
+/**
+ * A main test class for Pacman
+ * Note that the tests run successfully although the OpenAL context doesn't get disposed of properly
+ * The render thread has a GdxRuntimeException, but it can test anything before that point
+ */
 
 public class MainTest {
 
@@ -111,15 +115,13 @@ public class MainTest {
 			Assert.assertEquals(gameMap.readMap(file).get(i).length, lineArray[i].length()*2);
 		}
 	}
-	
+	/** Helper method for map file tests */
 	private String[] getLines() {
 		String contents = Gdx.files.internal(pacGame.getMapName()).readString();
 		return contents.split(System.getProperty("line.separator"));		
 	}
 	
-	/**
-	 * Checks to see if the multiplexer works properly TODO not finished, check the assertion method does right thing
-	 */
+	/** Checks to see if the multiplexer works properly */
 	@Test
 	public void checkMultiplexerExists() {
 		ArcadeInputMux.getInstance().addProcessor(pacGame.getController());

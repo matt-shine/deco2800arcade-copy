@@ -30,10 +30,6 @@ public class Tile {
 		sideLength = gameMap.getTileSideLength();
 	}
 
-	public void render(SpriteBatch batch, float x, float y) {
-		batch.draw(PacView.tileSprites[7][1], x, y, sideLength, sideLength);
-	}	
-
 	public List<Mover> getMovers() {
 		return moversHere;
 	}

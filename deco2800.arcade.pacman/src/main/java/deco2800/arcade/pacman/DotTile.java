@@ -1,6 +1,5 @@
 package deco2800.arcade.pacman;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class DotTile extends Tile {
 
@@ -25,18 +24,8 @@ public class DotTile extends Tile {
 		return !exists;
 	}
 	
-	public void eaten() {
+	public void dotEaten() {
 		exists = false;
-	}
-	
-	public void render(SpriteBatch batch, float x, float y) {
-		if (exists) {
-			if (energiser) {
-				batch.draw(PacView.tileSprites[1][1], x, y, sideLength, sideLength);	
-			} else {
-				batch.draw(PacView.tileSprites[4][1], x, y, sideLength, sideLength);
-			} 
-		} 
 	}
 	
 	public String toString() {

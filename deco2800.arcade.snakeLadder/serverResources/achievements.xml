@@ -5,4 +5,10 @@
         <awardThreshold>1</awardThreshold>
         <icon>winIcon.png</icon>
     </achievement>
+    <achievement id="snakeLadder.reachLadder">
+        <name>ReachLadder</name>
+        <description>Local player reaches the ladder once and get short cut.</description>
+        <awardThreshold>1</awardThreshold>
+        <icon>reachLadderIcon.png</icon>
+    </achievement>
 </achievements>

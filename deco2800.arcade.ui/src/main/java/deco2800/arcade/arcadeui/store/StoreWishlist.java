@@ -1,7 +1,5 @@
 package deco2800.arcade.arcadeui.store;
 
-import java.util.Arrays;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
@@ -15,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.arcadeui.ArcadeUI;
@@ -26,31 +23,28 @@ import deco2800.arcade.model.Player;
 /**
  * @author Addison Gourluck
  */
-public class StoreTransactions implements Screen, StoreScreen {
+public class StoreWishlist implements Screen, StoreScreen {
 	private Skin skin = new Skin(Gdx.files.internal("store/storeSkin.json"));
 	private Stage stage = new Stage();
 	private ArcadeUI arcadeUI;
-	private int balance = 0;
 	
 	/**
 	 * @author Addison Gourluck
 	 * @param ArcadeUI ui
 	 */
-	public StoreTransactions(ArcadeUI ui) {
+	public StoreWishlist(ArcadeUI ui) {
 		arcadeUI = ui;
 		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
-		final Label Title = new Label("Buy More Coins", skin, "default-34");
+		final Label Title = new Label("Wish List", skin, "default-34");
 		final Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
-		final Label balanceNumber = new Label(balance + "", skin, "current-coins");
-		final Label balanceTitle = new Label("Current Balance", skin, "default-28");
-		final TextButton wishlistButton = new TextButton("Wishlist", skin);
+		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		
 		// The background for the store.
-		skin.add("background", new Texture(Gdx.files.internal("store/transactions_bg.png")));
+		skin.add("background", new Texture(Gdx.files.internal("store/wishlist_bg.png")));
 		bg.setFillParent(true);
 		bg.setBackground(skin.getDrawable("background"));
 		stage.addActor(bg);
@@ -82,27 +76,21 @@ public class StoreTransactions implements Screen, StoreScreen {
 		searchResult.setPosition(860, 475);
 		stage.addActor(searchResult);
 		
-		// Static element: text "Current Balance", located at top of right bar.
-		balanceTitle.setSize(300, 50);
-		balanceTitle.setPosition(862, 365);
-		stage.addActor(balanceTitle);
-		
-		// The amount of tokens/coins the user has. Located below balanceTitle.
-		balanceNumber.setSize(90, 50);
-		balanceNumber.setPosition(966, 308);
-		balanceNumber.setAlignment(Align.center);
-		stage.addActor(balanceNumber);
-		
-		wishlistButton.setSize(360, 95);
-		wishlistButton.setPosition(833, 176);
-		stage.addActor(wishlistButton);
-		
-		addCoins();
-		
+		transactionsButton.setSize(360, 95);
+		transactionsButton.setPosition(834, 353);
+		stage.addActor(transactionsButton);
+
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
 				arcadeUI.setScreen(new StoreHome(arcadeUI));
+			}
+		});
+		
+		transactionsButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				dispose();
+				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
 			}
 		});
 		
@@ -132,59 +120,6 @@ public class StoreTransactions implements Screen, StoreScreen {
 				}
 			}
 		});
-		
-		wishlistButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
-			}
-		});
-	}
-	
-	private void addCoins() {
-		int i = 0;
-		for (int check : Arrays.asList(5, 10, 20, 50, 100)) {
-			skin.add("coin" + check, new Texture(Gdx.files.internal("store/coin_" + check + ".png")));
-			
-			// Buy options icons.
-			final Table coins = new Table();
-			coins.setBackground(skin.getDrawable("coin" + check));
-			coins.setSize(57, 39);
-			coins.setPosition(130, 390 - (i * 80));
-			stage.addActor(coins);
-			
-			// Buy options text.
-			final Label buyText = new Label("", skin, "default-26");
-			if (check == 5) {
-				buyText.setText("Booster Pack [5 coins]");
-			} else if (check == 10) {
-				buyText.setText("Super Pack [10 coins]");
-			} else if (check == 20) {
-				buyText.setText("Mega Pack [20 coins]");
-			} else if (check == 50) {
-				buyText.setText("Ultra Pack [50 coins]");
-			} else {
-				buyText.setText("Ultimate Pack [100 coins]");
-			}
-			buyText.setSize(149, 62);
-			buyText.setPosition(200, 379 - (i * 80));
-			stage.addActor(buyText);
-			
-			// Buy options 'Buy' buttons.
-			final Button buyButton = new Button(skin, "buy");
-			buyButton.setSize(149, 62);
-			buyButton.setPosition(620, 377 - (i * 80));
-			buyButton.setName(check + "");
-			stage.addActor(buyButton);
-			
-			buyButton.addListener(new ChangeListener() {
-				public void changed(ChangeEvent event, Actor actor) {
-					System.out.println("buying " + Integer.parseInt(actor.getName()));
-					buyTokens(Integer.parseInt(actor.getName()));
-				}
-			});
-			i++;
-		}
 	}
 	
 	@Override
@@ -249,6 +184,6 @@ public class StoreTransactions implements Screen, StoreScreen {
 	
 	@Override
 	public void setSelected(String game) {
-		// No selected game for transactions screen.
+		// No selected game for wishlist screen.
 	}
 }

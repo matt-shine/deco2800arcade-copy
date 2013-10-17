@@ -37,7 +37,7 @@ public class MultiplayerListener extends Listener {
 			
 			MultiGameRequestType requestType = multiRequest.requestType;
 
-			switch (requestType){
+			switch (requestType) {
 			case NEW:
 				connection.sendTCP(NewMultiResponse.OK);
 				NewMultiSessionResponse response = new NewMultiSessionResponse();
@@ -58,7 +58,7 @@ public class MultiplayerListener extends Listener {
 		} else if (object instanceof GameStateUpdateRequest) {
 			//Sends update to server to broadcast
 			GameStateUpdateRequest request = (GameStateUpdateRequest) object;
-			Map<Integer, MultiplayerServer> activeServers = matchmakerQueue.getActiveServers();
+			Map<Integer, MultiplayerServer> activeServers = matchmakerQueue.getServerList();
 			MultiplayerServer server = activeServers.get(request.gameSession);
 			server.stateUpdate(request);
 		}

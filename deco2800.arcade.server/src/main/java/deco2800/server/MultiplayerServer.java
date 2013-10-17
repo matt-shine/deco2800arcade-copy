@@ -67,37 +67,68 @@ public class MultiplayerServer {
 		player1.sendTCP(this.sessionId);
 		player2.sendTCP(this.sessionId);
 	}
-
+	
+	/**
+	 * Returns the ID of player 1
+	 * @return The ID of player 1
+	 */
 	public int getPlayer1() {
 		return player1Id;
 	}
 
+	/**
+	 * Returns the ID of player 2
+	 * @return The ID of player 2
+	 */
 	public int getplayer2() {
 		return player2Id;
 	}
 
+	/**
+	 * Returns the ID of the game
+	 * @return The ID of the game
+	 */
 	public String getGameId() {
 		return gameId;
 	}
 
+	/**
+	 * Returns the session (server) number
+	 * @return the Session number
+	 */
 	public int getSessionId() {
 		return sessionId;
 	}
 	
+	/**
+	 * Returns player 1's rating
+	 * @return Player 1's rating
+	 */
 	public int getPlayer1Rating() {
 		return p1Rating;
 	}
 	
+	/**
+	 * Returns player 2's rating
+	 * @return Player 2's rating
+	 */
 	public int getPlayer2Rating() {
 		return p2Rating;
 	}
 
+	/**
+	 * Whether the server is being used for a matchmaking or lobby game
+	 * @return true if the server is a matchmaking server, false otherwise
+	 */
 	public Boolean getServerType() {
 		return matchmakerGame;
 	}
 	
+	/**
+	 * Responsible for forwarding on state update requests from game clients
+	 * @param request The request sent by the client
+	 */
 	public void stateUpdate(GameStateUpdateRequest request) {
-		//if (playerId.equals(player1Id) || playerId.equals(player2Id)) {
 		if (request.gameOver == true && this.matchmakerGame) {
 			queue.gameOver(sessionId, player1Id, player2Id, gameId, request.winner);
 			return;
@@ -108,6 +139,5 @@ public class MultiplayerServer {
 		} else {
 			player2.sendTCP(request);			
 		}
-		//}
 	}
 }

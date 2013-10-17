@@ -47,12 +47,6 @@ public class NetworkPaddle extends Paddle {
 		
 	}
 
-    private static int sign(double x) {
-        if(x == 0) return 0;
-        else if(x > 0) return 1;
-        else return -1;
-    }
-
 	/**
 	* Updates direction of ball based on the direction the paddle was moving
 	*/
@@ -61,7 +55,10 @@ public class NetworkPaddle extends Paddle {
 	public void update(Ball ball) {
 		super.update(ball);
 	}
-	
+	/**
+	 * Moves the paddle up distance y
+	 * @param y the distance up to move the paddle
+	 */
 	public void move(float y) {
 		super.move(y);
 	}

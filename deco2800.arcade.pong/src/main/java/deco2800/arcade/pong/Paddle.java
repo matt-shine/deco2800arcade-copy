@@ -44,6 +44,7 @@ public abstract class Paddle {
 	public void move(float y) {
 		float oldBounds = bounds.y;
 		bounds.y += y;
+		//If the paddle has moved inform the server
 		if (oldBounds != bounds.y) {
 			ArcadeSystem.getCurrentGame().sendStateUpdate();
 		}

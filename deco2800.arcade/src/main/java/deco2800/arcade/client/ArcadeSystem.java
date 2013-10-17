@@ -121,8 +121,12 @@ public class ArcadeSystem {
     	return Arcade.getMatches();
     }
     
-    public static void createMultiplayerGame(NewMultiGameRequest multigameRequest) {
-    	arcade.createMultiplayerGame(multigameRequest);
+    /**
+     * Forwards on a request from the game to create a new multiplayer game
+     * @param multiGameRequest the request for the game
+     */
+    public static void createMultiplayerGame(NewMultiGameRequest multiGameRequest) {
+    	arcade.createMultiplayerGame(multiGameRequest);
     }
     
     public static void createMatch(CreateMatchRequest matchRequest) {
@@ -174,13 +178,17 @@ public class ArcadeSystem {
 		 arcade.populateMatchList();
 	 }
     
-    public static void newMultiplayerGame(NewMultiSessionResponse response) {
+	 /**
+	  * Creates a new multiplayer game based off a response from the server
+	  * @param response The server's response
+	  */
+	 public static void newMultiplayerGame(NewMultiSessionResponse response) {
     	int playerID = response.playerID;
     	String gameID = response.gameId;
     	int session = response.sessionId;
     	goToGame(gameID);
     	
-    }
+     }
 
 
 

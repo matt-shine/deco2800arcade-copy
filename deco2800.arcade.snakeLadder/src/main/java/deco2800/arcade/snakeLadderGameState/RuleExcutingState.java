@@ -13,39 +13,55 @@ public class RuleExcutingState extends GameState {
 		int playerIndex = turn%context.gamePlayers.length;
 		String rule = context.getMap().getTileList()[context.gamePlayers[playerIndex].newposition()].getRule();
 		
-		//Snake and Ladder rules are two special rules hard-coded into game
-		if(rule.startsWith("S")||rule.startsWith("L"))
-		{
-			Rule r = new LadderSnakeRule();
-			r.excuteRules(playerIndex, rule, context);
+		//if no rules specified in this position, transit to waiting state
+		if(rule.equals(".")){
+			context.gameState = new WaitingState();
+			context.statusMessage = "Throw the dice again";
+			context.taketurns();
 		}
-		//search the implementation class for the plugin rules
-		else if(!rule.equals("."))
+		//else execute the rule
+		else
 		{
-			try {
-				Rule r = (Rule) Class.forName("deco2800.arcade.snakeLadderModel."+context.getRuleMapping().get(rule).getImplementationClass()).newInstance();
+			//Snake and Ladder rules are two special rules hard-coded into game
+			if(rule.startsWith("S")||rule.startsWith("L"))
+			{
+				Rule r = new LadderSnakeRule();
 				r.excuteRules(playerIndex, rule, context);
-			} catch (InstantiationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//if player reaches the ladder and get a short cut
+				if(rule.startsWith("L"))
+				{
+					//check if the player is local player instead of AI
+					if (playerIndex == 0) {
+						//add one achievement to reachLadder achievement
+				    	context.incrementAchievement("snakeLadder.reachLadder");
+				    }
+				}
+			}
+			//search the implementation class for the plugin rules
+			else if(!rule.equals("."))
+			{
+				try {
+					Rule r = (Rule) Class.forName("deco2800.arcade.snakeLadderModel."+context.getRuleMapping().get(rule).getImplementationClass()).newInstance();
+					r.excuteRules(playerIndex, rule, context);
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
-		//after excuting all the rule go back to waiting state
-		context.gameState = new WaitingState();
-		context.statusMessage = "Throw the dice again";
-		context.taketurns();
+		
 	}
 
 	/***
 	 * Updating the score of the game player and print it out on the scoreLabel
-	 * @param gp the Game Player its referring to
+	 * 
 	 */
 	public void excuteRules(int playerNum, String rule, SnakeLadder context,GamePlayer context2){
 		if (isScore(rule))

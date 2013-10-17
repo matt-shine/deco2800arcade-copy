@@ -32,7 +32,7 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
             sample.setVolume(DEFAULT_VOLUME);
             sample.setLooping(this.loop);
         } catch (Exception e) {
-            e.printStackTrace();
+            // Gdx could not open audio file
         }
     }
 

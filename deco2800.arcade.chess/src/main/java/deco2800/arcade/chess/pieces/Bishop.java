@@ -100,15 +100,9 @@ public class Bishop implements Piece{
 				moves.remove(coords);
 				j--;
 			}
-			
 		}
-		/*for (int f = 0; f<moves.size(); f++){
-			
-		System.out.println(Arrays.toString((moves).get(f)));
-		}*/
 		return moves;
 	}
-//monkey balls
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -146,10 +140,5 @@ public class Bishop implements Piece{
 	@Override
 	public void hasMoved() {
 		// TODO Auto-generated method stub
-		
 	}
-
-	
-	
-
 }

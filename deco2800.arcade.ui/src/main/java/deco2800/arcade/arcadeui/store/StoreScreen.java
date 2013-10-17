@@ -12,25 +12,30 @@ public interface StoreScreen {
     /**
      * Disable background and create pop-up for transactions.
      */
-    public void popup();
+    void popup();
 
     /**
      * Get currently logged in player.
      * @return Player currentPlayer
      */
-    public Player getPlayer();
+    Player getPlayer();
 
     /**
-     * Set selected game, displayed in the "featured" bar.
-     * @param Game game
+     * Set selected game, which will be the current focus of the store.
+     * This will be different from screen to screen.
+     * HOME: Displayed in the "featured" bar. Set by search or clicking on grid.
+     * GAME: The featured is the game currently being looked at.
+     * BUY: N/A
+     * PROFILE: N/A
+     * @param String game
      */
-    public void setSelected(Game game);
-
+    void setSelected(String game);
+    
     /**
-     * Get selected game, displayed in the "featured" bar.
-     * @return Game game
+     * Get selected game, which is the current focus of the store.
+     * @return Game
      */
-    public Game getSelected();
+    Game getSelected();
 
     /**
      * Adds 'amount' tokens to players account, for the game 'game'.
@@ -38,5 +43,5 @@ public interface StoreScreen {
      * @param int amount
      * @param Game game
      */
-    public boolean buyTokens(int amount, Game game);
+    boolean buyTokens(int amount, Game game);
 }

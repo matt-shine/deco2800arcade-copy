@@ -8,7 +8,8 @@ public abstract class Ship extends Entity {
 	protected int health;	
 	protected Vector2 velocity;
 	protected Vector2 position;
-	private float flash = 0f;
+	protected float flash = 0f;
+
 	
 	/**
 	 * Basic constructor for a ship.
@@ -27,6 +28,10 @@ public abstract class Ship extends Entity {
 		if (health <= 0) {
 			return false;
 		} else return true;
+	}
+	
+	public int getHealth() {
+		return health;
 	}
 	
 	@Override

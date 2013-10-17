@@ -42,8 +42,7 @@ public class WallModelTest {
 
 	@Test
 	public void updateObserver() {
-		WallModelObserver mockedObserver =
-				mock(WallModelObserver.class);
+		WallModelObserver mockedObserver = mock(WallModelObserver.class);
 
 		wall.addObserver(mockedObserver);
 		wall.build(mockedPlayer);

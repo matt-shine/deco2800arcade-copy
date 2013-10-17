@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.screen.PlayScreen;
+import deco2800.arcade.burningskies.PowerUpGenerator;
 
 //TODO abstract?
 public class Enemy extends Ship {
@@ -28,6 +29,8 @@ public class Enemy extends Ship {
 	
 	private PlayScreen screen;
 	
+	private PowerUpGenerator powerGenerator;
+	
 	// shhh
 	private static Texture secret = new Texture(Gdx.files.internal("images/ships/secret2.cim"));
 
@@ -40,6 +43,7 @@ public class Enemy extends Ship {
 		this.position = pos;
 		this.currentDirVel = dir;
 		this.points = points;
+		this.powerGenerator = new PowerUpGenerator(this.screen);
 		
 		dirAccel.set(0,0);
 		homing = true;
@@ -62,7 +66,7 @@ public class Enemy extends Ship {
 			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 1));
 			// Randomly drop powerups
 			if(Math.random() <= 0.05) {
-				screen.addPowerup(new UpgradePowerUp(getCenterX(), getCenterY()));
+				powerGenerator.randomPowerUp(getCenterX(), getCenterY());
 			}
 		}
 		return super.remove();

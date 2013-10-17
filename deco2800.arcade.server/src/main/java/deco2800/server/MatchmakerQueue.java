@@ -139,7 +139,6 @@ public class MatchmakerQueue {
 				try {
 					p1Rating = database.getPlayerRating(player1ID, game);
 					p2Rating = database.getPlayerRating(player2ID, game);
-					System.out.println("RATINGS: P1: " + p1Rating + " P2: " + p2Rating);
 				} catch (DatabaseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -206,6 +205,7 @@ public class MatchmakerQueue {
 				e.printStackTrace();
 			}
 		}
+		
 		long time = (Long)player2.get(1);
 		timeAllowance = (((System.currentTimeMillis() - time) / 60000)+1)*100;
 		if (p1Rating >= p2Rating) {
@@ -278,7 +278,6 @@ public class MatchmakerQueue {
 			newElo[0] = p1Rating;
 			newElo[1] = p2Rating;
 		}
-		System.out.println("New ELO: " + newElo[0] + " " + newElo[1]);
 		return newElo;
 	}
 }

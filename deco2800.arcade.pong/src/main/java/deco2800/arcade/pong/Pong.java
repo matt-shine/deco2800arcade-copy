@@ -181,7 +181,11 @@ public class Pong extends GameClient {
 		scores[1] = 0;
 		//gameState = GameState.READY;
 		gameState = new ReadyState();
-		statusMessage = "Click to start!";
+		if (!ArcadeSystem.isMultiplayerEnabled()) {
+			statusMessage = "Click to start!";
+		} else { 
+			statusMessage = "Waiting for Opponent!";
+		}
 		
         // achievements demo
         AchievementClient achClient = getAchievementClient();
@@ -288,7 +292,11 @@ public class Pong extends GameClient {
 		} else {
 			// No winner yet, get ready for another point
 			gameState = new ReadyState();
-			statusMessage = "Click to start!";
+			if (!ArcadeSystem.isMultiplayerEnabled() || getMPHost()) {
+				statusMessage = "Click to start!";
+			} else {
+				statusMessage = "Waiting for host!";
+			}
 		}
 	}
 	
@@ -373,7 +381,8 @@ public class Pong extends GameClient {
 	public void startMultiplayerGame() {
 		getBall().randomizeVelocity();
 		if (getMPHost()) {
-			System.out.println("Host sending state");
+			long time = System.currentTimeMillis();
+			while (time + 3000 > System.currentTimeMillis());
 			sendInitState();
 		}
 		gameState = new InProgressState();
@@ -402,12 +411,10 @@ public class Pong extends GameClient {
 		vect.x = -1 * vect.x;
 		request.stateChange = (Object) vect;
 		networkClient.sendNetworkObject((request));
-		System.out.println("Init state sent");
 	}
 	
 	public void updateGameState(GameStateUpdateRequest request) {
 		if (request.initial == true) {
-			System.out.println("Updating Ball");
 			startMultiplayerGame();
 			getBall().setVelocity((Vector2) request.stateChange);
 			

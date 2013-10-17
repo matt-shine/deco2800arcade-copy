@@ -24,7 +24,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.CommunicationListener;
-import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
 import deco2800.arcade.client.network.listener.FileServerListener;
 import deco2800.arcade.client.network.listener.GameListener;

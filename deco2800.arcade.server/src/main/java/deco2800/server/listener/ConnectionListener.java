@@ -36,13 +36,14 @@ public class ConnectionListener extends Listener {
 		super.received(connection, object);
 		if (object instanceof ConnectionRequest) {
 			ConnectionRequest request = (ConnectionRequest) object;
-
+			ConnectionResponse response = new ConnectionResponse();
             
 			if (initialised == false) {
 				try {
 					hashStorage.initialise();
 				} catch (DatabaseException e) {
-					connection.sendTCP(ConnectionResponse.ERROR);
+					response.playerID = -2;
+					connection.sendTCP(response);
 					e.printStackTrace();
 				}
 				initialised = true;
@@ -50,16 +51,18 @@ public class ConnectionListener extends Listener {
 			
 			try {
 				if (hashStorage.checkPassword(request.username, request.password) == true) {
-					connection.sendTCP(ConnectionResponse.OK);
+					response.playerID = hashStorage.getPlayerID(request.username);
+					connection.sendTCP(response);
 					connectedUsers.add(request.username);
 				} else {
-					connection.sendTCP(ConnectionResponse.REFUSED);
+					response.playerID = -1;
+					connection.sendTCP(response);
 				}
 			} catch (DatabaseException e) {
-				connection.sendTCP(ConnectionResponse.ERROR);
+				response.playerID = -2;
+				connection.sendTCP(response);
 				e.printStackTrace();
 			}
-			System.out.println("sending login response.........................................\n");
 		}
 	}
 

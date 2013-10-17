@@ -315,6 +315,35 @@ public class HashStorage {
 		}
 		return null;
 	}
+	
+	/**
+	 * Retrieve playerID from the database.
+	 * 
+	 * @param username
+	 * @return playerID
+	 * @throws DatabaseException
+	 */
+	public int getPlayerID(String username) throws DatabaseException {
+		// Get a connection to the database
+		Connection connection = Database.getConnection();
+		try {
+			PreparedStatement statement = null;
+			statement = connection.prepareStatement("SELECT playerid FROM PLAYERS " +
+					"WHERE PLAYERS.username = ?");
+			statement.setString(1, username);
+			ResultSet result = statement.executeQuery();
+			if (result.next()) {
+				return result.getInt("playerID");
+			} else {
+				return -1;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Unable to get salt", e);
+		} finally {
+			close(connection);
+		}
+	}
 
 	/**
 	 * Generate a hash value using the given password prefixed with the salt.

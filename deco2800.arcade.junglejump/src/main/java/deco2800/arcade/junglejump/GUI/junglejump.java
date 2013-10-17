@@ -156,13 +156,13 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
 		try {
-			/*File file = new File(soundtrack.wav");
+			File file = new File("soundtrack.wav");
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioIn);
 			clip.start();
-			clip.loop(clip.LOOP_CONTINUOUSLY);*/
+			clip.loop(clip.LOOP_CONTINUOUSLY);
 
 			// System.out.println(file.getCanonicalPath());
 			// themeMusic = Gdx.audio.newMusic(fileh);
@@ -173,10 +173,10 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			/*File file2 = new FileGdx.files.internal("menu.wav");
+			File file2 = new FileGdx.files.internal("menu.wav");
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
-			menuSound.open(audioIn2);*/
+			menuSound.open(audioIn2);
 		} catch (Exception e) {
 			// IO Exception or problem with sound format
 		}

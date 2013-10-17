@@ -59,15 +59,16 @@ import com.badlogic.gdx.Input.Keys;
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor, Screen {
 	private static final Game game;
-
+	public List<int []> pieces = new ArrayList<int []>();
 	static {
 		game = new Game();
 		game.id = "chess";
 		game.name = "Chess";
-		game.description = "A game of Chess."; // <-------Need to write an
-												// adequate description.
+		game.description = "A game of Chess, where players duke it out dubbed " +
+				"a team white or black with the aim of " +
+				"the game being to capture the enemy's king, " +
+				"this is called 'CheckMate'."; 
 	}
-
 	private ReplayHandler replayHandler;
 	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
@@ -215,7 +216,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 			System.err.println(e.getMessage());
 		}
 
-		loadedStyle = 0;
+		loadedStyle = 2;
 	}
 
 	@Override
@@ -764,7 +765,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		replayButton.remove();
 		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
 		Sprite allowedSquare = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/spot.png")));
+				Gdx.files.classpath("imgs/spot2.png")));
 		List<Sprite> neededPics = new ArrayList<Sprite>();
 
 		for (int i = 0; i < possibleMoves.size(); i++) {
@@ -852,6 +853,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		blackPawn6Pos = pos30;
 		int[] pos31 = { 435 + horizOff, 380 + verticOff };
 		blackPawn7Pos = pos31;
+	
 	}
 
 	/**

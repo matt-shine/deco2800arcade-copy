@@ -5,7 +5,7 @@ import java.util.*;
 import deco2800.arcade.chess.pieces.*;
 
 public class Board {
-
+	List<Piece> pieces = new ArrayList<Piece>();
 	FixedSizeList<FixedSizeList<Piece>> Board_State;
 	// used to check if moves will move you into check without altering actual
 	// board
@@ -18,9 +18,7 @@ public class Board {
 	// true if respective team is in checkmate
 	boolean whiteCheckmate;
 	boolean blackCheckmate;
-
-	// boolean teamCheckmate;
-
+	
 	// Initialise pieces
 	Pawn whitePawn1, whitePawn2, whitePawn3, whitePawn4;
 	Pawn whitePawn5, whitePawn6, whitePawn7, whitePawn8;
@@ -34,7 +32,6 @@ public class Board {
 	Null nullPiece;
 
 	String NEWLINE = System.getProperty("line.separator");
-
 	boolean blackCheck, whiteCheck;
 
 	/**
@@ -588,7 +585,6 @@ public class Board {
 	 */
 	private List<int[]> removeJumpsDiagonal(List<int[]> possibleMoves,
 			int[] currentPos, Piece piece) {
-		// FIXME big method
 		int x = currentPos[0];
 		int y = currentPos[1];
 		int xCheck;
@@ -1146,7 +1142,7 @@ public class Board {
 	 */
 	public void addPieces() {
 		// Add white pieces to row 1
-		List<Piece> pieces = new ArrayList<Piece>();
+
 		FixedSizeList<Piece> row = Board_State.get(0);
 		row.add(0, whiteRook1);
 		row.add(1, whiteKnight1);

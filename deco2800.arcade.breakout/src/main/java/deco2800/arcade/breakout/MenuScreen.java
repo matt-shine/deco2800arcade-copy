@@ -292,14 +292,8 @@ public class MenuScreen implements Screen {
 	    
 	       stage = new Stage(480, 640, true);
 	       
-	      // gamebutton.setSize(width, height)
-	      // gamebutton.setHeight(100f);
-	      // quitbutton.setWidth(200f);
-	      // quitbutton.setHeight(50f);
-	       
 	       stage.addActor(gamebutton);
 	       stage.addActor(quitbutton);     
-	       //stage.addActor(rankingbutton);
 	       stage.addActor(helpbutton);
 		
 
@@ -314,18 +308,11 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void hide() {
-
-		// TODO Auto-generated method stub
-
-
 		ArcadeInputMux.getInstance().removeProcessor(stage);		
-
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -347,24 +334,15 @@ public class MenuScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void show() {
-
-		Gdx.input.setInputProcessor(stage);
-
-
 		ArcadeInputMux.getInstance().addProcessor(stage);		
-
 	}
 
 }

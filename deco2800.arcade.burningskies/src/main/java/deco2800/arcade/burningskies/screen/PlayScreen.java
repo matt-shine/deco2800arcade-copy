@@ -66,6 +66,10 @@ public class PlayScreen implements Screen
 	
 	private long score = 0;
 	
+	private static Texture[] shipTex = {
+			new Texture(Gdx.files.internal("images/ships/jet.png")),
+			new Texture(Gdx.files.internal("images/ships/secret.cim"))
+	};
 	private PlayerShip player;
 	public Level level;
 	
@@ -101,8 +105,7 @@ public class PlayScreen implements Screen
     	
         game.playSong("level1");
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
-    	player = new PlayerShip(1000, shiptext, new Vector2(400, 100), this);
+    	player = new PlayerShip(1000, shipTex[game.zalgo], new Vector2(400, 100), this);
     	level = new Level("fixme");
 
     	stage.addActor(level);
@@ -305,5 +308,9 @@ public class PlayScreen implements Screen
 
 	public PlayerShip getPlayer() {
 		return player;
+	}
+	
+	public int zalgo() {
+		return game.zalgo;
 	}
 }

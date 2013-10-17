@@ -19,7 +19,9 @@ public class SpawnList {
 	private static final long standardEnemyPoints = 1006493;
 	
 	// TODO more variable pointing to other types of enemies
-	private static Texture enemy1 = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+	private static Texture[] enemyTex = {
+		new Texture(Gdx.files.internal("images/ships/enemy1.png"))
+	};
 	
 	public SpawnList(PlayScreen s){
 		this.screen = s;
@@ -111,6 +113,6 @@ public class SpawnList {
 			float vY = (float) Math.ceil(Math.random() * (heightC - startY))/7 + (heightC - startY)/5;
 
 			// Add the enemy to the screen
-			screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
+			screen.addEnemy(new Enemy(200, enemyTex[0], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
 	}
 }

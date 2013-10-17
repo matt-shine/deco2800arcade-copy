@@ -1,5 +1,6 @@
 package deco2800.arcade.burningskies.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -26,11 +27,14 @@ public class Enemy extends Ship {
 	private long points;
 	
 	private PlayScreen screen;
+	
+	// shhh
+	private static Texture secret = new Texture(Gdx.files.internal("images/ships/secret2.cim"));
 
 //	private Vector2 playerDir = new Vector2();
 	
 	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
-		super(health, image, pos);
+		super(health, (screen.zalgo() == 0)? image: secret, pos);
 		this.screen = screen;
 		this.player = player;
 		this.position = pos;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.burningskies.screen.GameOverScreen;
 import deco2800.arcade.burningskies.screen.HelpScreen;
 import deco2800.arcade.burningskies.screen.MenuScreen;
 import deco2800.arcade.burningskies.screen.OptionsScreen;
@@ -46,6 +47,7 @@ public class BurningSkies extends GameClient {
 	public HelpScreen helpScreen;
 	public ScoreScreen scoreScreen;
 	public PlayScreen gameScreen;
+	public GameOverScreen gameOverScreen;
 
 	/**
 	 * Basic constructor for the Burning Skies game
@@ -62,6 +64,7 @@ public class BurningSkies extends GameClient {
 		optionsScreen = new OptionsScreen(this);
 		helpScreen = new HelpScreen(this);
 		scoreScreen = new ScoreScreen(this);
+		gameOverScreen = new GameOverScreen(this);
 	}
 	
 	public void playSong(String songName, boolean loop) {

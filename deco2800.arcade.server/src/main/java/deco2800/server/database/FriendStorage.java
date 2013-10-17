@@ -6,6 +6,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * FriendStorage handles database access for Friends and Friend Request data
  * 
@@ -43,7 +46,8 @@ public class FriendStorage {
 						+ "FOREIGN KEY (U2) REFERENCES PLAYERS(playerID))");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to create FRIENDS table.", e);
 		} finally {
 			try {
@@ -57,7 +61,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 		initialised = true;
@@ -88,7 +93,8 @@ public class FriendStorage {
 					+ " AND STATUS=1");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to get to get friends list from database", e);
 		} finally {
@@ -103,7 +109,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -136,7 +143,8 @@ public class FriendStorage {
 					" AND BLOCKED=0");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to get friend invite information from database", e);
 		} finally {
@@ -151,7 +159,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -182,7 +191,8 @@ public class FriendStorage {
 											+ " AND BLOCKED=1");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to get player's blocked list from database", e);
 		} finally {
@@ -197,7 +207,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -265,7 +276,8 @@ public class FriendStorage {
 				resultSet.moveToCurrentRow();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to block player in database.", e);
 		} finally {
 			//clean up JDBC objects
@@ -280,7 +292,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -309,7 +322,8 @@ public class FriendStorage {
 				resultSet.updateRow();
 			} 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to unblock player in database.", e);
 		} finally {
 			//clean up JDBC objects
@@ -324,7 +338,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -368,7 +383,8 @@ public class FriendStorage {
 			resultSet.moveToCurrentRow();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to add friend request to database.", e);
 		} finally {
 			//clean up JDBC objects
@@ -383,7 +399,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -415,7 +432,8 @@ public class FriendStorage {
 				resultSet.updateRow();
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to accept friend request in database", e);
 		} finally {
@@ -431,7 +449,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -464,7 +483,8 @@ public class FriendStorage {
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -478,7 +498,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}

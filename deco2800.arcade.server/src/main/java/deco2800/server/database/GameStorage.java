@@ -7,6 +7,9 @@ import java.sql.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class GameStorage {
 	private boolean initialised = false;
@@ -40,7 +43,8 @@ public class GameStorage {
                 runScript(connection);
             }
         } catch (SQLException e) {
-			e.printStackTrace();
+        	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to create Games table", e);
 		} finally {
 			try {
@@ -54,7 +58,8 @@ public class GameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	    initialised = true;
@@ -96,7 +101,8 @@ public class GameStorage {
             try {
                 statement.addBatch(cmd);
             } catch (SQLException e) {
-                e.printStackTrace();
+            	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+    			 logger.error(e.getStackTrace().toString());
             }
             //System.out.println(cmd);
         }
@@ -133,7 +139,8 @@ public class GameStorage {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+        	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+			 logger.error(e.getStackTrace().toString());
             throw new DatabaseException("Unable to get game set from database", e);
         } finally {
             try {
@@ -147,7 +154,8 @@ public class GameStorage {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+            	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+    			 logger.error(e.getStackTrace().toString());
             }
         }
         return games;
@@ -173,7 +181,8 @@ public class GameStorage {
 			resultSet = statement.executeQuery("SELECT * from GAMES");
 			return findGameName(gameID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to get game name from database", e);
 		} finally {
 			try {
@@ -187,7 +196,8 @@ public class GameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -213,7 +223,8 @@ public class GameStorage {
             return findGameID(gameID, resultSet);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+        	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+			 logger.error(e.getStackTrace().toString());
             throw new DatabaseException("Unable to get game id from database", e);
         } finally {
             try {
@@ -227,7 +238,8 @@ public class GameStorage {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+            	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+    			 logger.error(e.getStackTrace().toString());
             }
         }
     }
@@ -252,7 +264,8 @@ public class GameStorage {
             resultSet = statement.executeQuery("SELECT * from GAMES");
             return findGamePrice(gameID, resultSet);
         } catch (SQLException e) {
-            e.printStackTrace();
+        	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+			 logger.error(e.getStackTrace().toString());
             throw new DatabaseException("Unable to get game price from database", e);
         } finally {
             try {
@@ -266,7 +279,8 @@ public class GameStorage {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+            	 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+    			 logger.error(e.getStackTrace().toString());
             }
         }
     }
@@ -291,7 +305,8 @@ public class GameStorage {
 			resultSet = statement.executeQuery("SELECT * from GAMES");
 			return findGameDescription(gameID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to get game description from database", e);
 		} finally {
 			try {
@@ -305,7 +320,8 @@ public class GameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -330,7 +346,8 @@ public class GameStorage {
 			resultSet = statement.executeQuery("SELECT * from GAMES");
 			return findIconPath(gameID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to get game iconpath from database", e);
 		} finally {
 			try {
@@ -344,7 +361,8 @@ public class GameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(GameStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}

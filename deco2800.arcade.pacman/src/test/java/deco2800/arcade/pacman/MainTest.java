@@ -43,7 +43,7 @@ public class MainTest {
 	private static GameMap gameMap;
 	private static LwjglApplication app;
 	
-	@BeforeClass
+	//@BeforeClass
 	public static void init() {
 		//necessary stuff to initialise libGdx
 		try {
@@ -65,14 +65,14 @@ public class MainTest {
 	/** Attempts to dispose of things. The AL library doesn't close properly 
 	 * but I don't know how to fix it. Everything still works fine, as the 
 	 * computer closes the leak */
-	@AfterClass
+	//@AfterClass
 	public static void tearDown() {
 		pacGame.dispose();
 		app.exit();
 		AL.destroy();
 	}
 	
-	@Test
+	//@Test
 	/** Checks if the map file exists in the directory */
 	public void mapFileExists() {
 		gameMap.readMap(pacGame.getMapName());
@@ -80,7 +80,7 @@ public class MainTest {
 	
 	//these next two should move to a GameMaptests class when i make that
 	
-	@Test
+	//@Test
 	/**
 	 * Checks if the map file is formatted correctly
 	 * TODO needs to be altered to manage characters that can't be vsymmed as well
@@ -102,7 +102,7 @@ public class MainTest {
 		}				
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Checks if a line with vertical symmetry has its linelength doubled
 	 * Note that this doesn't actually check if symbols were changed appropriately
@@ -122,7 +122,7 @@ public class MainTest {
 	}
 	
 	/** Checks to see if the multiplexer works properly */
-	@Test
+	//@Test
 	public void checkMultiplexerExists() {
 		ArcadeInputMux.getInstance().addProcessor(pacGame.getController());
 		Array<InputProcessor> processors = ArcadeInputMux.getInstance().getProcessors();

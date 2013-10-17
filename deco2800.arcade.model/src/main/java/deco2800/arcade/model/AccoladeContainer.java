@@ -1,4 +1,4 @@
-package deco2800.arcade.statistics;
+package deco2800.arcade.model;
 import java.util.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {
@@ -8,11 +8,13 @@ public class AccoladeContainer implements Iterable<Accolade> {
     private Accolade tail;
     private int gameID;
     private int size;
+    private int playerID;
  
     /**
      * create an empty Accolade container
      */
     public AccoladeContainer() {
+
         this.size = 0;
         this.head = null;
         this.tail = null;
@@ -22,6 +24,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * TODO implmenet server communication and return non-dummydata
      */
     public void populateAccoladesPlayer(int playerID){
+    	this.playerID = playerID;
     	BUILDDUMMYDATA();
     }
     
@@ -29,6 +32,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * TODO implmenet server communication and return non-dummydata
      */
     public void populateAccoladesGame(int gameID){
+    	this.gameID = gameID;
     	BUILDDUMMYDATA();
     }
     
@@ -78,6 +82,12 @@ public class AccoladeContainer implements Iterable<Accolade> {
         addAccolade(003, 300, "grenades Exploded",
                 "The player has detonated $VALUE $UNIT", "grnades", 4,
                 "explosions", "/images/accolades/grandes.img");
+    }
+    public int getGameID(){
+    	return this.gameID;
+    }
+    public int getPlayerID(){
+    	return this.playerID;
     }
  
     public int size() {

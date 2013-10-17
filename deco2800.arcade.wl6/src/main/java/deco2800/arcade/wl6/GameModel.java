@@ -35,7 +35,7 @@ public class GameModel {
     // Array of the waypoints on the current map
     private WL6Meta.DIRS[][] waypoints = new WL6Meta.DIRS[64][64];
 
-
+    private CollisionGrid collisionGrid = new CollisionGrid();
 
     // Delta time
     private float delta = 0;
@@ -143,6 +143,7 @@ public class GameModel {
      */
     public void addDoodad(Doodad doodad) {
         doodads.add(doodad);
+        doodad.init(this);
     }
 
 
@@ -211,20 +212,37 @@ public class GameModel {
         }
     }
 
+    /**
+     * get game difficulty
+     * @return
+     */
     public int getDifficulty() {
 		return difficulty;
 	}
 
 
+    /**
+     * set game difficulty
+     * @param difficulty
+     */
 	public void setDifficulty(int difficulty) {
 		this.difficulty = difficulty;
 		this.reset();
 	}
 
+	
+	/**
+	 * get the current episode as a string like "1" to "6"
+	 * @return
+	 */
 	public String getChapter() {
 		return currentLevel.substring(1, 2);
 	}
 	
+	/**
+	 * get the current level as a string like "1" to "8" or "b" or "s"
+	 * @return
+	 */
 	public String getLevelInChapter() {
 		if (!currentLevel.substring(2, 3).equals("l")) {
 			return currentLevel.substring(2, 3);
@@ -265,5 +283,11 @@ public class GameModel {
 	}
 
 
-    
+	/**
+	 * gets the collision grid
+	 * @return
+	 */
+    public CollisionGrid getCollisionGrid() {
+    	return this.collisionGrid;
+    }
 }

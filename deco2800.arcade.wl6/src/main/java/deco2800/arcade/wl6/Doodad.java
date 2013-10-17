@@ -1,6 +1,5 @@
 package deco2800.arcade.wl6;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Renderer;
@@ -32,6 +31,10 @@ public class Doodad {
         bounds.height = 0.5f;
         return bounds;
     }*/
+    
+    public void init(GameModel g) {
+    	
+    }
 
 
     public int getUid() {

@@ -12,12 +12,24 @@ public class SecretDoor extends Doodad {
     private float openness = 0;
     private Vector2 movementDirection = null;
     private boolean firstDraw = true;
-
+    private Vector2 gridPosition = null;
+    
     public SecretDoor(int uid) {
         super(uid);
     }
 
     @Override
+    public void init(GameModel g) {
+    	
+    	gridPosition = new Vector2((float) Math.floor(this.getPos().x), (float) Math.floor(getPos().y));
+    	g.getCollisionGrid().setSolidAt((int) this.gridPosition.x, (int) this.gridPosition.y, 0);
+    	
+    }
+    
+    
+    
+    
+	@Override
     public void tick(GameModel g) {
 
         float speed = 0.8f * g.delta();
@@ -39,6 +51,19 @@ public class SecretDoor extends Doodad {
         if (movementDirection != null) {
             openness = (float) Math.min(openness + speed, 2.0f);
         }
+        
+        
+        //update the collision grid
+        if (movementDirection != null) {
+        	Vector2 newGridPosition = new Vector2((float) Math.floor(this.getPos().x), (float) Math.floor(getPos().y));
+        	newGridPosition.add(new Vector2(movementDirection).nor().mul(openness));
+            if (!newGridPosition.equals(this.gridPosition)) {
+            	g.getCollisionGrid().setSolidAt((int) this.gridPosition.x, (int) this.gridPosition.y, 0);
+        		g.getCollisionGrid().setSolidAt((int) newGridPosition.x, (int) newGridPosition.y, 1);
+        	}
+        	gridPosition = newGridPosition;
+        }
+        
 
     }
 

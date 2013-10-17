@@ -50,6 +50,7 @@ public class PacController implements InputProcessor {
 		System.out.println("Can pacman move? Next tile is " + 
 							player.nextTile(pTile, 1));
 		// Check for teleport tile
+		
 		if (player.nextTile(pTile, 1).getClass() == TeleportTile.class){
 			
 		}

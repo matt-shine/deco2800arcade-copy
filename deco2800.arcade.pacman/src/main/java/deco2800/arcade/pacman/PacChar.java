@@ -64,6 +64,22 @@ public class PacChar extends Mover{
 		} else {
 			facing = Dir.LEFT;
 		}
+		
+		
+//		if (this.nextTile(this.getTile(), 1).getClass() == TeleportTile.class){
+//			
+//		}
+//	
+		// check collision
+		if (checkNoWallCollision(this.getTile())) {
+			this.setCurrentState(PacState.MOVING);
+		} else {
+			this.setCurrentState(PacState.IDLE);
+			// stops pacman changing facing if he can't move in that direction
+			this.setFacing(facing);
+		}
+		
+		
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
 			if (facing == Dir.LEFT){

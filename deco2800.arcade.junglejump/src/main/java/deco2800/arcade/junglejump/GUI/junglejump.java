@@ -3,6 +3,7 @@ package deco2800.arcade.junglejump.GUI;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -155,8 +156,15 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyY = monkeyDefaultY;
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
+		
+		URL path = this.getClass().getResource("/");
+		
 		try {
-			File file = new File("soundtrack.wav");
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"resources/soundtrack.wav";
+			System.out.println(resource);
+			File file = new File(resource);
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -173,7 +181,11 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			File file2 = new File("menu.wav");
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"resources/menu.wav";
+			System.out.println(resource);
+			File file2 = new File(resource);
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
 			menuSound.open(audioIn2);

@@ -1,4 +1,4 @@
-package deco2800.arcade.accolades;
+package deco2800.arcade.model;
 import java.util.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {

@@ -162,9 +162,11 @@ public class ForumListener extends Listener {
 			response.result = null;
 			try {
 				if (request.userId == 0 && request.userName != "") {
-					response.result = ArcadeServer.instance().getForumStorage().getForumUser(request.userName);
+					response.result = ForumUserProtocol.getForumUserProtocol(
+							ArcadeServer.instance().getForumStorage().getForumUser(request.userName));
 				} else if (request.userId != 0 && request.userName == "") {
-					response.result = ArcadeServer.instance().getForumStorage().getForumUser(request.userId);
+					response.result = ForumUserProtocol.getForumUserProtocol(
+							ArcadeServer.instance().getForumStorage().getForumUser(request.userId));
 				} else {
 					response.error = "Invalid request";
 				}

@@ -62,7 +62,7 @@ public class ClientConnection {
 		this.client.start();
 		try {
 			client.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
-			registerProtocol(this.client);
+			this.registerProtocol();
 			System.out.println("Client is connected");
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -88,6 +88,10 @@ public class ClientConnection {
 			throw new ForumException("Fail to add listener: " + e.getMessage());
 		}
 		return;
+	}
+	
+	public void registerProtocol() {
+		Protocol.register(this.client.getKryo());
 	}
 	
 	public void closeConnection() {

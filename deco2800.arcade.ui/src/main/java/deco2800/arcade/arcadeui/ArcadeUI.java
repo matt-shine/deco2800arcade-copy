@@ -53,7 +53,7 @@ public class ArcadeUI extends GameClient {
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
-            this.setScreen(home);
+            this.setScreen(main);
         } else {
             this.setScreen(login);
         }

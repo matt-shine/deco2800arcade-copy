@@ -1,10 +1,7 @@
 package deco2800.server.listener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -38,7 +35,7 @@ public class ReplayListener extends Listener {
     @Override
     public void received(Connection connection, Object object) {
         super.received(connection, object);
-
+        
         //We got a request for the replay handler
         if (object instanceof ReplayRequest) {
             ReplayRequest replayRequest = (ReplayRequest) object;
@@ -55,15 +52,12 @@ public class ReplayListener extends Listener {
             StartSessionRequest ssr = (StartSessionRequest) object;
             StartSessionResponse response = new StartSessionResponse();
             
-            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
-            System.out.println(dateFormat.format(date));
             
             int sessionID = -1;
             
             try {
-                //TODO, DB should sent US the sessionId, also date format is wrong.
-                sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId.intValue(), ssr.username, 000, "");
+                sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId, ssr.username, date.getTime(), "");
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
@@ -74,7 +68,6 @@ public class ReplayListener extends Listener {
             
             log("Got a StartSessionRequest: " + ssr.gameId + ", " + ssr.username);
             
-            //TODO Generate Session ID
             response.sessionId = sessionID;
             connection.sendTCP(response);
         } else if (object instanceof EndSessionRequest)
@@ -97,15 +90,44 @@ public class ReplayListener extends Listener {
         {
             ListSessionsRequest lsr = (ListSessionsRequest) object;
             ListSessionsResponse response = new ListSessionsResponse();
+            response.sessions = new ArrayList<Session>();
+            
+            System.out.println("Got list sessions request");
+
+            ArrayList<String> sessionStrings = null;
             
             try {
-                ArrayList<String> sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId.intValue());
+                sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);
+                System.out.println(sessionStrings);
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
             
-            //TODO convert session strings into actual sessions?
-            response.sessions = new ArrayList<Session>();
+            //Convert back to sessions
+            if (sessionStrings != null)
+            {
+                for (String s : sessionStrings)
+                {
+                    String[] tokens = s.split(",");
+
+                    int sessionId = Integer.parseInt(tokens[0].replaceAll("\\s+",""));
+                    boolean recording = Boolean.parseBoolean(tokens[1]);
+                    String user = tokens[2];
+                    long dateTime = Long.parseLong(tokens[3].replaceAll("\\s+",""));
+                    String comments = tokens[4];
+                    
+                    Session session = new Session();
+                    session.gameId = lsr.gameId;
+                    session.sessionId = sessionId;
+                    session.time = dateTime;
+                    session.username = user;
+                    session.recording = recording;
+                    session.comments = comments;
+                    
+                    response.sessions.add(session);
+                }
+            }
+            
             connection.sendTCP(response);
             
         } else if (object instanceof PushEventRequest)
@@ -130,21 +152,17 @@ public class ReplayListener extends Listener {
             GetEventsRequest ger = (GetEventsRequest) object;
             GetEventsResponse response = new GetEventsResponse();
             
-            System.out.println("Served replay of session: " + ger.sessionId);
-            
             try {
                 response.nodes = ArcadeServer.instance().getReplayStorage().getReplay(ger.sessionId);
             } catch (DatabaseException e) {
                 e.printStackTrace();
             }
 
-            System.out.println(response.nodes);
+            System.out.println("Served " + response.nodes.size() + " events for session " + ger.sessionId);
             
             response.serverOffset = 0;
             
             connection.sendTCP(response);
-            
-            //TODO deal with the data that comes back.
         }
     }
     

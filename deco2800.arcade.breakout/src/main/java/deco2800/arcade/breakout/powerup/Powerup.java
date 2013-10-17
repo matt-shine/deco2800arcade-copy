@@ -20,22 +20,34 @@ public class Powerup {
 		
 	}
 	
+	/**
+	 * Move the powerup down
+	 */  
 	public void move() {
 		this.y -= 2;
 	}
 	
+	/**
+	 * 
+	 * @return - the number of active powerups
+	 */
 	public int getNumActive() {
 		return this.numActive;
 	}
 	
-	public void setNumActive(int change) {
-		numActive += change;
-	}
-	
+	/**
+	 * 
+	 * @return - getter method for sprite
+	 */
 	public Sprite getSprite() {
 		return this.sprite;
 	}
 	
+	/**
+	 * 
+	 * @param b - contains rendering details
+	 * @param s - sprite to be rendered
+	 */
 	public void render(SpriteBatch b, Sprite s) {
 		sBatch = b;
 		sBatch.begin();
@@ -43,10 +55,19 @@ public class Powerup {
 		sBatch.end();
 	}
 	
+	/**
+	 * 
+	 * @return - a rectangular shape associated with a powerup
+	 */
 	public Rectangle getBounds() {
-		return new Rectangle(this.x, this.y, 128, 40);
+		return new Rectangle(this.x, this.y, 50, 50);
 	}
 	
+	/**
+	 * 
+	 * @param x - set the x coordinate of the powerup
+	 * @param y - set the y position of the powerup
+	 */
 	public void setPos(float x, float y) {
 		this.x = x;
 		this.y = y;

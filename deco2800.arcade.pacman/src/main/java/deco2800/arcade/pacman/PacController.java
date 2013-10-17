@@ -28,7 +28,7 @@ public class PacController implements InputProcessor {
 	@Override
 	public boolean keyDown(int key) {
 		Dir facing;
-		//move based on key pressed
+		//Change facing based on key press if that direction is valid
 		if (key == Keys.RIGHT) {
 			facing = Dir.RIGHT;
 		} else if (key == Keys.LEFT){
@@ -51,17 +51,17 @@ public class PacController implements InputProcessor {
 							player.nextTile(pTile, 1));
 		// Check for teleport tile
 		
-		if (player.nextTile(pTile, 1).getClass() == TeleportTile.class){
-			
-		}
-		
-		if (player.nextTile(pTile, 1).getClass() != WallTile.class) {
-			player.setCurrentState(PacState.MOVING);
-		} else {
-			player.setCurrentState(PacState.IDLE);
-			//stops pacman changing facing if he can't move in that direction			
-			player.setFacing(tempFacing);
-		}
+//		if (player.nextTile(pTile, 1).getClass() == TeleportTile.class){
+//			
+//		}
+//		
+//		if (player.nextTile(pTile, 1).getClass() != WallTile.class) {
+//			player.setCurrentState(PacState.MOVING);
+//		} else {
+//			player.setCurrentState(PacState.IDLE);
+//			//stops pacman changing facing if he can't move in that direction			
+//			player.setFacing(tempFacing);
+//		}
 		//checkGhostCollision(pTile);			
 		return true;
 	}

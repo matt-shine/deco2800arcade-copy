@@ -128,7 +128,10 @@ public abstract class Mover {
 					this.setScore(this.getScore() + 10);
 				}
 			}
-		} 
+		} else if (tile.getClass() == TeleportTile.class){
+			this.drawX = 1;
+			this.drawY = 2;
+		}
 //		System.out.println("score: " + this.getScore());
 //		displayScore(this); // This is broken at the moment
 	}

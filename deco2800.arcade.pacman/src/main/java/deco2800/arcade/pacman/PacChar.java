@@ -79,7 +79,6 @@ public class PacChar extends Mover{
 			this.setFacing(facing);
 		}
 		
-		
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
 			if (facing == Dir.LEFT){
@@ -97,8 +96,9 @@ public class PacChar extends Mover{
     		} else {
     			currentState = PacState.IDLE;
     			facing = Dir.LEFT;
-    		}			
-			updatePosition();			
+    		}
+//			checkTile(this.nextTile(currentTile, 1));
+			updatePosition();
     	} 
 	}
 	 

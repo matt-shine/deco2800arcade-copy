@@ -30,7 +30,7 @@ public class CommunicationTest {
 	private CommunicationListener listener1, listener2, listener3;
 
 	@Before
-	public void initialise() throws NetworkException {
+	public void initialise() {
 		boolean[] privset = { true, true, true, true, true, true, true };
 
 		List<String> info = new ArrayList<String>();
@@ -57,12 +57,6 @@ public class CommunicationTest {
 		info3.add("Skill");
 		info3.add("7");
 
-		client1 = new NetworkClient("127.0.0.1", 54555, 54777);
-
-		client2 = new NetworkClient("127.0.0.1", 54555, 54777);
-
-		client3 = new NetworkClient("127.0.0.1", 54555, 54777);
-
 		player1 = new Player(123, "THIS IS NOT A VALID PATH.html", info, null,
 				null, null, null, privset);
 		player2 = new Player(234, "THIS IS NOT A VALID PATH.html", info2, null,
@@ -70,15 +64,12 @@ public class CommunicationTest {
 		player3 = new Player(235, "THIS IS NOT A VALID PATH.html", info3, null,
 				null, null, null, privset);
 
-		comm1 = new CommunicationNetwork(player1, client1);
-		comm2 = new CommunicationNetwork(player2, client2);
-		comm3 = new CommunicationNetwork(player3, client3);
+		comm1 = new CommunicationNetwork(player1, null);
+		comm2 = new CommunicationNetwork(player2, null);
+		comm3 = new CommunicationNetwork(player3, null);
 		listener1 = new CommunicationListener(comm1);
 		listener2 = new CommunicationListener(comm2);
 		listener3 = new CommunicationListener(comm3);
-		client1.addListener(listener1);
-		client2.addListener(listener2);
-		client3.addListener(listener3);
 	}
 
 	/**
@@ -203,8 +194,6 @@ public class CommunicationTest {
 		message2.setSenderID(123);
 		message2.setSenderUsername("Chuck Norris");
 		message2.setText("QWERTYUIOP");
-		comm1.sendTextMessage(message1);
-		comm1.sendTextMessage(message2);
 
 		listener1.received(connection, message1);
 		listener1.received(connection, message2);
@@ -220,13 +209,15 @@ public class CommunicationTest {
 				comm3.getCurrentChat().getID());
 
 		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
-				.getParticipants(), comm2.getCurrentChats()
-				.get(message1.getChatID()).getParticipants());
+				.getParticipants(),
+				comm2.getCurrentChats().get(message1.getChatID())
+						.getParticipants());
 		assertEquals(comm1.getCurrentChats().get(message2.getChatID())
 				.getParticipants(), comm3.getCurrentChat().getParticipants());
 
-		assertEquals(comm1.getCurrentChats().get(message1.getChatID()).getText(),
-				comm2.getCurrentChats().get(message1.getChatID()).getText());
+		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
+				.getText(), comm2.getCurrentChats().get(message1.getChatID())
+				.getText());
 		assertEquals(comm1.getCurrentChats().get(message2.getChatID())
 				.getParticipants(), comm3.getCurrentChat().getParticipants());
 	}

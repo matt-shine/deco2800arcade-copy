@@ -32,6 +32,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.model.*;
+import deco2800.arcade.cyra.model.SoldierBoss.State;
 
 /**World Renderer takes the object from the World class and draws them to the screen
  * 
@@ -58,7 +59,7 @@ public class WorldRenderer {
 	jumperBodyTexture, jumperFrontArmTexture, jumperFrontLegTexture, jumperFrontArmJumpingTexture,jumperFrontLegJumpingTexture;
 	private TextureRegion followerFrame, cyraFrame;
 	private TextureRegion walkerRegion;
-	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter;
+	private TextureAtlas groundTextureAtlas, laserTextures, explosionTextures, boss1Atlas, bossRam, firestarter, myEnemy;
 	private TextureRegion boss1body, boss1head0, boss1head1, boss1arms;
 	private Array<AtlasRegion> walkerRegions;
 	private Animation followerAnimation, cyraRightAnimation, cyraLeftAnimation; 
@@ -168,6 +169,10 @@ public class WorldRenderer {
 		
 		drawLevel(batch);
 		drawGameObjects(batch);
+		if (ship.isOverForeground()) {
+			//tileMapRenderer.render(cam, new int[]{3,4,5}); // Don't know how to make this transparent
+			
+		}
 		drawHUD(batch);
 		if(debugMode) drawDebugAids();
 		
@@ -258,10 +263,10 @@ public class WorldRenderer {
 		//tileMapRenderer.render(cam.position.x-cam.viewportWidth/2, cam.position.y-cam.viewportHeight/2,
 			//	cam.viewportWidth, cam.viewportHeight);
 		//tileMapRenderer.render(cam.position.x, cam.position.y, cam.viewportWidth*2, cam.viewportHeight*2);
-		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.25f, 1));
+		/*tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.25f, 1));
 		tileMapRenderer.render(cam, new int[]{0});
 		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(0.5f, 1));
-		tileMapRenderer.render(cam, new int[]{1});
+		tileMapRenderer.render(cam, new int[]{1});*/
 		//tileMapRenderer.render(cam.);
 		tileMapRenderer.getProjectionMatrix().set(cam.calculateParallaxMatrix(1, 1));
 		//tileMapRenderer.getProjectionMatrix().set(cam.combined);
@@ -272,7 +277,10 @@ public class WorldRenderer {
 		tileMapRenderer.render((int) tmp.x, (int) tmp.y, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());*/
 		tileMapRenderer.render(cam, new int[]{3}); // THIS IS ONLY UNTIL layer 2's graphics are complete
 		tileMapRenderer.render(cam, new int[]{2});
-		tileMapRenderer.render(cam, new int[]{0,1,2,3,4,5});
+		tileMapRenderer.render(cam, new int[]{0,1,2});
+		if (!ship.isOverForeground()) {
+			tileMapRenderer.render(cam, new int[]{3,4,5});
+		}
 		
 		
 		//tileMapRenderer.render((int) cam.position.x-cam.viewportWidth/2, (int) cam.position.y-cam.viewportHeight/2, 999, 999,
@@ -481,6 +489,21 @@ public class WorldRenderer {
 								0,0, fireRegion.getRegionWidth()/32f, fireRegion.getRegionHeight()/32f, 1,1,0);
 					}
 				}
+			} else if (e.getClass() == SoldierBoss.class) {
+				SoldierBoss sb = (SoldierBoss)e;
+				//if (sb.getState() == 
+				
+				TextureRegion bossRegion = myEnemy.findRegion("myEnemy",sb.getAnimationFrame());
+				if ( (!sb.isFacingRight() && !bossRegion.isFlipX()) || (sb.isFacingRight() && bossRegion.isFlipX())) {
+					bossRegion.flip(true, false);
+				}
+				batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
+						0,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,0);
+				if (sb.getState() == State.RAM && !sb.isPerformingTell()) {
+					bossRegion = myEnemy.findRegion("drill", sb.getOtherAnimationFrame());
+					batch.draw(bossRegion, e.getPosition().x+e.getWidth()/2-bossRegion.getRegionWidth()/32f/2f, e.getPosition().y+e.getHeight()/2-bossRegion.getRegionHeight()/32f/2f,
+							0,0, bossRegion.getRegionWidth()/32f, bossRegion.getRegionHeight()/32f, 2,2,90);
+				}
 			} else if (e.getClass() == Explosion.class) {
 				int frame = ((Explosion)e).getFrame();
 				if (frame >= 0 && frame <= 5) {
@@ -588,7 +611,7 @@ public class WorldRenderer {
 		}
 		
 		for (CutsceneObject csObj: csObjects) {
-			System.out.println("Texture: "+csObj.getTexture());
+			//System.out.println("Texture: "+csObj.getTexture());
 			//batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y);
 			batch.draw(csObj.getTexture(), csObj.getPosition().x, csObj.getPosition().y, csObj.getWidth() /2, csObj.getHeight()/2,
 					csObj.getWidth(),csObj.getHeight(), 1, 1, csObj.getRotation(), 0, 0, csObj.getTexture().getWidth(),
@@ -635,10 +658,10 @@ public class WorldRenderer {
 			sr.filledRect(cam.position.x-barWidth/2+0.05f, cam.position.y-barHeight /2+0.05f-8f, barWidth * healthPercentage, barHeight-0.1f);
 			sr.end();
 			textBatch.begin();
-			System.out.println(cam);
-			System.out.println(font);
-			System.out.println(textBatch);
-			System.out.println(healthName);
+			//System.out.println(cam);
+			//System.out.println(font);
+			//System.out.println(textBatch);
+			//System.out.println(healthName);
 			//font.draw(textBatch, healthName, cam.position.x-cam.viewportWidth/2-4f, cam.position.y-cam.viewportHeight/2+4f);
 			font.draw(textBatch, healthName, 16f, 64f);
 			textBatch.end();
@@ -700,7 +723,7 @@ public class WorldRenderer {
 			font.draw(textBatch, timeText, cam.position.x-14f, Gdx.graphics.getHeight()-122);
 			font.draw(textBatch, healthText, cam.position.x-14f, Gdx.graphics.getHeight()-172);
 			font.draw(textBatch, scoreText, cam.position.x-14f, Gdx.graphics.getHeight()-272);
-			System.out.println("Drawing TotalScore at "+ (cam.position.x-14f) + ","+ (Gdx.graphics.getHeight()-272));
+			//System.out.println("Drawing TotalScore at "+ (cam.position.x-14f) + ","+ (Gdx.graphics.getHeight()-272));
 			textBatch.end();
 			
 			
@@ -817,6 +840,7 @@ public class WorldRenderer {
 		manager.load("stephen.txt", TextureAtlas.class);
 		manager.load("stephenram.txt", TextureAtlas.class);
 		manager.load("firestarter.txt", TextureAtlas.class);
+		manager.load("myEnemy.txt", TextureAtlas.class);
 		manager.load("bg2.png", Texture.class, linearFilteringParam);
 		manager.load("ship.png", Texture.class, linearFilteringParam);
 		manager.load("cyra.png", Texture.class, linearFilteringParam);
@@ -863,7 +887,7 @@ public class WorldRenderer {
 		
 		firestarter = manager.get("firestarter.txt", TextureAtlas.class);
 		//bossRamAnimation = new Animation(FOLLOWER_FRAME_DURATION, bossRamFrames);
-		
+		myEnemy = manager.get("myEnemy.txt", TextureAtlas.class);
 		
 		bg = manager.get("bg2.png", Texture.class);
 		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);

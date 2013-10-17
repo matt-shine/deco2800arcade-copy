@@ -8,7 +8,7 @@ public class Sword extends MovableEntity {
 
 	private static final float BASE_WIDTH = 0.2f;
 	private static final float BASE_HEIGHT = 0.2f;
-	private static final float FRAME_LENGTH = 0.13f;
+	private static final float FRAME_LENGTH = 0.10f;
 	
 	private float frame = 0;
 	private boolean facingRight = false;

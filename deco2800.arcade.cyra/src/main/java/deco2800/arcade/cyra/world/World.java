@@ -155,6 +155,25 @@ public class World {
 			firstUpdate = false;
 		} else {
 			updateCamera();
+			if( ship.getHearts() == 0 || ship.getPosition().y < -3) {
+				/*if (--lives == 0) {
+					gameOver();
+				} else {
+					resetLevel();
+				}*/
+				//ship.setState(Player.State.DEATH);
+				System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
+				inputHandler.cancelInput();
+				count -= Gdx.graphics.getDeltaTime();
+				if (count <= 0) {
+					if (--lives == 0) {
+						gameOver();
+					} else {
+						resetLevel();
+					}
+				}
+				
+			}
 		}
 		
 		//System.out.println("End of World update " + ship.getVelocity().x);
@@ -179,26 +198,20 @@ public class World {
 			}
 		}
 		// Reset if health = 0
-		if( ship.getHearts() == 0 || ship.getPosition().y < -3) {
-			/*if (--lives == 0) {
-				gameOver();
-			} else {
-				resetLevel();
-			}*/
-			//ship.setState(Player.State.DEATH);
-			count -= Gdx.graphics.getDeltaTime();
-			if (count <= 0) {
-				if (--lives == 0) {
-					gameOver();
-				} else {
-					resetLevel();
-				}
+		//check if player is near foreground section
+		float[] starts = curLevel.getForegroundStarts();
+		float[] ends = curLevel.getForegroundEnds();
+		float x = ship.getPosition().x;
+		boolean isOverForeground = false;
+		for (int i=0; i<starts.length; i++) {
+			if (x >starts[i] && x < ends[i]) {
+				
+				isOverForeground = true;
+				break;
 			}
-			System.out.println("SHIP IN BAD POSITION!!!! hearts="+ship.getHearts()+" ship.getPosition().y"+ship.getPosition().y);
-			inputHandler.cancelInput();
-		} else {
-			inputHandler.acceptInput();
 		}
+		ship.setOverForeground(isOverForeground);
+		
 
 		/*if (!callingInitAfterReloadLevel) {
 			initCount -= Gdx.graphics.getDeltaTime();
@@ -266,6 +279,10 @@ public class World {
 		
 		
 		/* Tile collisions code */
+		
+		
+		
+		
 		//Check player to tile collisions
 		//get tiles near player
 		TiledLayer collisionLayer = curLevel.getCollisionLayer();
@@ -365,6 +382,9 @@ public class World {
 		}
 		//System.out.println("after both state="+ship.getState());
 		//ship.update(ship);
+		
+		
+		
 		
 		return;
 	}

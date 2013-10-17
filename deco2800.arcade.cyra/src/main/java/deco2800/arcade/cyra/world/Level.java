@@ -159,6 +159,14 @@ public class Level {
 		init();
 	}
 	
+	public float[] getForegroundStarts() {
+		return new float[]{352, 514};
+	}
+	
+	public float[] getForegroundEnds() {
+		return new float[]{372, 611};
+	}
+	
 	/* Getter methods */
 	public Array<EnemySpawner> getEnemySpawners() {
 		return enemySpawners;

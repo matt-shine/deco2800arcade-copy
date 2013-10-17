@@ -272,7 +272,6 @@ public class GameStore implements Screen, StoreScreen {
 		return null;
 	}
 
-	@Override
 	public void setSelected(Game game) {
 	}
 
@@ -284,5 +283,11 @@ public class GameStore implements Screen, StoreScreen {
 	@Override
 	public boolean buyTokens(int amount, Game game) {
 		return false;
+	}
+
+	@Override
+	public void setSelected(String game) {
+		// TODO Auto-generated method stub
+		
 	}
 }

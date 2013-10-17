@@ -1,6 +1,7 @@
 package deco2800.arcade.junglejump;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -19,7 +20,7 @@ public class LevelContainer {
 	public static int currentLevel;
 	public static int currentWorld;
 	private static int levelAmount;
-	private static int worldAmount = 3;
+	private static int worldAmount;
 	
 	/**
 	 * Constructor where levels are created and placed
@@ -30,6 +31,7 @@ public class LevelContainer {
 		currentLevel = 0;
 		currentWorld = 0;
 		levelAmount = 5;
+		worldAmount = 3;
 		
 		// Read level from file
 		for(int i=0;i<worldAmount;i++) {
@@ -51,8 +53,16 @@ public class LevelContainer {
 		int bananaCounter = 0;
 		Level level = new Level(); // Creating and adding to a level
 		
+		URL path = this.getClass().getResource("/");
+		
+		
 		try {
-			br = new BufferedReader(new FileReader("junglejumpassets/levels/world" + (worldNum+1) + "/level" + (levelNum+1) + ".txt"));
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"/levels/world" + (worldNum+1) + "/level" + 
+					(levelNum+1) + ".txt" ;
+			System.out.println(resource);
+			br = new BufferedReader(new FileReader(resource));
 		} catch (FileNotFoundException e1) {
 			System.out.println("No file");
 			return;
@@ -129,8 +139,8 @@ public class LevelContainer {
 		levels.add(level);
 	}
 	
-	public static Level getLevel(int i) {
-		return levels.get((currentWorld * levelAmount) + i);
+	public static Level getLevel(int currentLevel) {
+		return levels.get((currentWorld * levelAmount) + currentLevel);
 	}
 	
 	/**

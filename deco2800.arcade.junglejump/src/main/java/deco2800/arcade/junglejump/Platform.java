@@ -2,6 +2,7 @@
 package deco2800.arcade.junglejump;
 
 import java.io.File;
+import com.badlogic.gdx.*;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -101,7 +102,8 @@ public class Platform {
 			break;
 		}
 		
-		platText = new Texture("junglejumpassets/world" + (junglejump.world + 1) + "/" + platformType + ".png");
+		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + 
+				"/" + platformType + ".png"));
 		
 	}
 	

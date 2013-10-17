@@ -65,7 +65,6 @@ public class PlayerShip extends Ship {
 		return super.remove();
 	}
 	
-	
 	/**
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */

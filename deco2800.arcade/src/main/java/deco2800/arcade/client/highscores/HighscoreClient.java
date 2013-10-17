@@ -91,13 +91,16 @@ public class HighscoreClient {
 	 * @param requestID An integer representing the request that is being 
 	 * sent.
 	 */
-	private void sendScoreRequest(GetScoreRequest gsReq) {
+	private void sendScoreRequest(GetScoreRequest gsReq, boolean checkType) {
 		//Build the request
 		gsReq.username = this.Username;
 		gsReq.game_ID = this.Game_ID;
 		
 		//Check the type is valid
-		checkTypeValidity(gsReq.type);
+		if(checkType){
+			checkTypeValidity(gsReq.type);
+		}
+		
 		
 		//Send the response, and wait for a reply
 		this.gsRes = null;
@@ -141,6 +144,11 @@ public class HighscoreClient {
 		//Make the list that will be output once created
 		List<Highscore> output = new ArrayList<Highscore>();
 		Highscore currentItem = new Highscore();
+		
+		//If the data being sent back is incorrect, just return an empty list
+		if ((splitScores.length % numberOfColumns) != 0) {
+			return output;
+		}
 		
 		for (String scoreItem : splitScores) {
 			//Set the properties for the score items in the list
@@ -192,13 +200,156 @@ public class HighscoreClient {
 		gsReq.highestIsBest = highestIsBest;
 		
 		//Send the request off, waiting for response before continuing
-		sendScoreRequest(gsReq);
+		sendScoreRequest(gsReq, true);
 		
 		//Now that the response is back, return the data to the user
 		return this.scoreResponseList;
 	}
 	
+	/**
+	 * Still requires some work in regards to returning a String as per the Api Docs.
+	 * 
+	 * requestID: 2. This function is user DEPENDENT.
+	 * 
+	 * @param highestIsBest If having a high score is best for your game, then
+	 * set this to true. If having a low score is best, then set this to false.
+	 * 
+	 * @return A list of Highscore objects.
+	 */
+	public Highscore getUserHighScore(boolean highestIsBest, String type) {
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.requestID = 2; //Telling the server which query to run
+		gsReq.type = type;
+		gsReq.highestIsBest = highestIsBest;
+		
+		//This function requires a user, throw and exception if there not not one available.
+		requireUsername();
+		
+		//Send the request off, waiting for response before continuing
+		sendScoreRequest(gsReq, true);
+		
+		//Now that the response is back, return the data to the user
+		if (this.scoreResponseList.isEmpty()) {
+			return null;
+		} else {
+			return this.scoreResponseList.get(0);
+		}
+		
+	}
 	
+	/**
+	 * Still requires some work in regards to returning a String as per the Api Docs.
+	 * 
+	 * requestID: 3. This function is user DEPENDENT.
+	 * 
+	 * @param highestIsBest If having a high score is best for your game, then
+	 * set this to true. If having a low score is best, then set this to false.
+	 * 
+	 * @return A list of Highscore objects. 
+	 */
+	public List<Highscore> getUserRanking(boolean highestIsBest, String type) {
+		/*GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.requestID = 3; //Telling the server which query to run
+		gsReq.type = type;
+		gsReq.highestIsBest = highestIsBest;
+		
+		//This function requires a user, throw and exception if there not not one available.
+		requireUsername();
+		
+		//Send the request off, waiting for response before continuing
+		sendScoreRequest(gsReq);
+		
+		//Now that the response is back, return the data to the user
+		return this.scoreResponseList;*/
+		return null;
+	}
+	
+	/**
+	 * requestID: 4. This function is user DEPENDENT.
+	 * 
+	 * Gets the count of wins and losses for the current user and game. If
+	 * only one of these values is required, the getWin() and getLoss()
+	 * methods can be used.
+	 * 
+	 * @return A list of Highscore objects 
+	 */
+
+	public List<Highscore> getWinLoss() {
+		GetScoreRequest gsReq = new GetScoreRequest();
+		gsReq.requestID = 4;
+		
+		//This function requires a user, throw and exception if there not not one available.
+		requireUsername();
+		
+		//Send the request off, waiting for response before continuing
+		sendScoreRequest(gsReq, false);
+		
+		return this.scoreResponseList;
+	}
+	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the total number of wins for the current user and game.
+	 * 
+	 * @return A Highscore object with the score property set to the total
+	 * number of wins for the user.
+	 */
+	public Highscore getWin(){
+		return getWinLoss().get(0);
+	}
+	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the total number of losses for the current user and game.
+	 * 
+	 * @return A Highscore object with the score property set to the total
+	 * number of losses for the user.
+	 */
+	public Highscore getLoss(){
+		return getWinLoss().get(1);
+	}
+	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the win ratio of the current user for the current game.
+	 * 
+	 * @return A number between 0 and 1 (inclusive) indicating the win 
+	 * ratio.
+	 */
+	public float winRatio() {
+		List<Highscore> winLoss = this.getWinLoss();
+		
+		int winCount = winLoss.get(0).score;
+		int lossCount = winLoss.get(1).score;
+		int total = winCount + lossCount;
+		
+		float ratio = (float)winCount / (float)total;
+		
+		return ratio;
+	}
+	
+	/**
+	 * This function is user DEPENDENT. Uses this.getWinLoss()
+	 * 
+	 * Gets the loss ratio of the current user for the current game.
+	 * 
+	 * @return A number between 0 and 1 (inclusive) indicating the loss 
+	 * ratio.
+	 */
+	public float lossRatio() {
+		List<Highscore> winLoss = this.getWinLoss();
+		
+		int winCount = winLoss.get(0).score;
+		int lossCount = winLoss.get(1).score;
+		int total = winCount + lossCount;
+		
+		float ratio = (float)lossCount / (float)total;
+		
+		return ratio;
+	} 
 	
 	//=============================================================
 	//Adding Score Methods
@@ -379,8 +530,12 @@ public class HighscoreClient {
 	
 	
 	//=============================================================
-	//Public General Utility Methods
+	//General Utility Methods
 	//=============================================================
+	
+	//--------------------
+	//Public
+	//--------------------
 	/**
 	 * Prints out all of the scores in hs to the console. This can be used for 
 	 * debugging to ensure that scores are being stored correctly.
@@ -399,4 +554,18 @@ public class HighscoreClient {
 		}
 	}
 	
+	//--------------------
+	//Private
+	//--------------------
+	/**
+	 * Throws a NoUsernameAvailableException is the class was instantiated 
+	 * without a username.
+	 */
+	private void requireUsername() {
+		if (this.Username == null) {
+			throw new NoUsernameAvailableException("HighscoreClient must be" +
+					" instantiated with a username in order to be able to" + 
+					" add scores");
+		}
+	}
 }

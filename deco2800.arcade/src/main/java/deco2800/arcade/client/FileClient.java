@@ -1,18 +1,14 @@
 package deco2800.arcade.client;
 
-import com.esotericsoftware.kryonet.Connection;
-import deco2800.arcade.protocol.packman.FetchGameRequest;
-import deco2800.arcade.protocol.packman.FetchGameResponse;
-import deco2800.arcade.protocol.BlockingMessage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.packman.PackCompress;
-
-import java.io.FileOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.lang.*;
-import java.lang.String;
-import java.lang.System;
+import deco2800.arcade.protocol.BlockingMessage;
+import deco2800.arcade.protocol.packman.FetchGameRequest;
+import deco2800.arcade.protocol.packman.FetchGameResponse;
 
 /**
  * This class spawns a thread and sends a request to the server for a given file

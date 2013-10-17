@@ -5,17 +5,17 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Insets;
 import java.awt.event.WindowEvent;
-import java.lang.String;
-import java.lang.System;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFrame;
-
-import deco2800.arcade.client.network.listener.*;
-import deco2800.arcade.packman.PackageClient;
-import deco2800.arcade.protocol.game.GameLibraryRequest;
 
 import org.reflections.Reflections;
 
@@ -26,19 +26,22 @@ import deco2800.arcade.client.network.NetworkException;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.client.network.listener.ConnectionListener;
 import deco2800.arcade.client.network.listener.CreditListener;
+import deco2800.arcade.client.network.listener.FileServerListener;
 import deco2800.arcade.client.network.listener.GameListener;
+import deco2800.arcade.client.network.listener.LibraryResponseListener;
 import deco2800.arcade.client.network.listener.LobbyListener;
 import deco2800.arcade.client.network.listener.MultiplayerListener;
 import deco2800.arcade.client.network.listener.PackmanListener;
-import deco2800.arcade.client.FileClient;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.packman.PackageClient;
 import deco2800.arcade.protocol.BlockingMessage;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.connect.ConnectionRequest;
 import deco2800.arcade.protocol.credit.CreditBalanceRequest;
+import deco2800.arcade.protocol.game.GameLibraryRequest;
 import deco2800.arcade.protocol.game.GameRequestType;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
@@ -49,8 +52,6 @@ import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
-import deco2800.arcade.protocol.packman.FetchGameRequest;
-import deco2800.arcade.protocol.packman.FetchGameResponse;
 
 /**
  * The client application for running arcade games.
@@ -257,32 +258,68 @@ public class Arcade extends JFrame {
     }
 
 	public void connectAsUser(String username) {
+		//This should really GET the player with the details that were provided at login, not create a new player!
+		//For testing purposes, a specific ID number is given to debug users and random users get a random ID
+		int myID = 1 + (int)(Math.random() * ((500 - 1) + 1));
+		if (username.equals("debug")){
+			myID = 999;
+		} else if (username.equals("debug1")){
+			myID = 888;
+		} else if (username.equals("debug2")){
+			myID = 777;
+		}
+		
+		System.out.println("My playerID is: " + myID);
+		
+		this.player = new Player(myID, username, "path/to/avatar");
+		
+		//This method has been removed from the deprecated Player(...); Waiting for new Player(...) method to be created.
+		//this.player.setUsername(username);
+		
+		this.communicationNetwork.loggedIn(this.player);
+	
 		ConnectionRequest connectionRequest = new ConnectionRequest();
+		connectionRequest.playerID = myID;
 		connectionRequest.username = username;
-		
-		//Protocol.registerEncrypted(connectionRequest);
-		
+		//This breaks network communication at the moment!
+		//Protocol.registerEncrypted(connectionRequest); 
 		this.client.sendNetworkObject(connectionRequest);
 
 		CommunicationRequest communicationRequest = new CommunicationRequest();
+		communicationRequest.playerID = myID;
 		communicationRequest.username = username;
-
 		this.client.sendNetworkObject(communicationRequest);
 
 		CreditBalanceRequest creditBalanceRequest = new CreditBalanceRequest();
+		creditBalanceRequest.playerID = myID;
 		creditBalanceRequest.username = username;
-
 		this.client.sendNetworkObject(creditBalanceRequest);
 
+		/*
+		 * As above, waiting for new Player(...) method
+		//For testing chat:		
+		if (player.getID() == 888){ //This ID belongs to debug1
+			List<Integer> chat = new ArrayList<Integer>();
+			chat.add(999); //debug
+			chat.add(888); //debug1
+			this.communicationNetwork.createChat(chat);
+		}
+		
+		if (player.getID() == 777){ //This ID belongs to debug2
+			List<Integer> chat = new ArrayList<Integer>();
+			chat.add(999); //debug
+			chat.add(777); //debug2
+			this.communicationNetwork.createChat(chat);
+		}
+		*/
 		
         //TODO FIX THIS!! - Causing Errors when logging in see https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
         boolean[] privacy = {false, false, false, false, false, false, false, false};
         this.player = new Player(0, username, "", privacy);
 
 
-		this.player.setUsername(username);
-
-		// this.communicationNetwork.createNewChat(username);
+        //This method has been removed from the deprecated Player(...); Waiting for new Player(...) method to be created.
+        //this.player.setUsername(username);
 
         // TODO move this call to be internal to Packman class
         // TODO iterate over actual game ids rather than just

@@ -94,6 +94,7 @@ public class PlayScreen implements Screen
 		scoreLabel.setX(10);
 		scoreLabel.setY((float)(height*0.95));
 		scoreLabel.setWidth(0);
+		batch = new SpriteBatch();
 		
 		// Setting up the camera view for the game
 		camera = (OrthographicCamera) stage.getCamera();
@@ -129,8 +130,6 @@ public class PlayScreen implements Screen
     {
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-    	
-    	batch = new SpriteBatch();
     	
     	if(!game.isPaused()) {
     		

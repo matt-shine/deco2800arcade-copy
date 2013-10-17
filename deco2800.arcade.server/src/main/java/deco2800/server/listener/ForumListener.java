@@ -9,7 +9,6 @@ import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ForumStorage;
 
-
 /**
  * ForumListener models listener for forum's server service
  */
@@ -28,9 +27,8 @@ public class ForumListener extends Listener {
 			ForumTestRequest request = (ForumTestRequest) object;
 			ForumTestResponse response = new ForumTestResponse();
 			int num = request.num;
-			
 			response.result = "Received integer is " + String.valueOf(num);
-			
+			response.error = "";
 			connection.sendTCP(response);
 		} else if (object instanceof LoginRequest) {
 			/* Try to login and send back the result */
@@ -156,9 +154,7 @@ public class ForumListener extends Listener {
 			} finally {
 				connection.sendTCP(response);
 			}
-		} 
-		
-		if (object instanceof GetForumUserRequest) {
+		} else if (object instanceof GetForumUserRequest) {
 			System.out.println("GetForumUserRequest is received (debug purpose)");
 			GetForumUserRequest request = (GetForumUserRequest) object;
 			GetForumUserResponse response = new GetForumUserResponse();

@@ -104,8 +104,14 @@ public class GameOverScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             	return true;
             }
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {        		
-        		Configuration.addScore(playerNameInput.getText(), score);
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {   
+            	String name = playerNameInput.getText();
+            	
+            	if (name.length() > 6) {
+            		name = name.substring(0,6);
+            	}
+            	
+            	Configuration.addScore(name, score);
             	game.setScreen(game.scoreScreen);
             }
 		});

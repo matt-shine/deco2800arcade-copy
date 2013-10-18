@@ -87,15 +87,17 @@ public class GameOverScreen implements Screen {
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	playerNameInput = new TextField("Enter your name", skin);
-    	playerNameInput.setX(100);
-    	playerNameInput.setY(100);
+    	playerNameInput.setWidth(200);
+    	playerNameInput.setHeight(50);
+    	playerNameInput.setX((width/2) - playerNameInput.getWidth());
+    	playerNameInput.setY(height/2 + playerNameInput.getHeight()/2);
     	
 	    submitButton = new TextButton("Submit", skin);
 	    submitButton.setWidth(200);
 	    submitButton.setHeight(50);
 
-	    submitButton.setY((float)(width*0.02));
-	    submitButton.setX((float)(height*0.02));
+	    submitButton.setX(width/2);
+	    submitButton.setY(height/2 + submitButton.getHeight()/2);
 	    
 	    submitButton.addListener(new InputListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

@@ -61,6 +61,7 @@ public class TestForumStorage {
 		this.forumStorage.insertChildThread("This is child thread 4.", 2, 1);
 		this.forumStorage.insertChildThread("This is child thread 5.", 3, 2);
 		this.forumStorage.insertChildThread("This is child thread 6.", 3, 2);
+		this.forumStorage.setMaxPid();
 	}
 	
 	@After
@@ -71,7 +72,7 @@ public class TestForumStorage {
 	/* Parent thread-related test cases */
 	@Test
 	public void getParentThreadsTest() throws Exception {
-		ParentThread[] threads = this.forumStorage.getParentThreads(0, 0, 0);
+		ParentThread[] threads = this.forumStorage.getParentThreads(1000, 0, 0);
 		for (ParentThread thread : threads) {
 			System.out.println(thread.toString());
 		}
@@ -82,10 +83,10 @@ public class TestForumStorage {
 		ParentThread[] threads = this.forumStorage.getParentThreads(0, 0, 0);
 		assertEquals("Test topic 1", forumStorage.getParentThread(1).getTopic());
 		assertEquals("Test topic 2", this.forumStorage.getParentThread(2).getTopic());
-		threads = this.forumStorage.getParentThreads(2, 4, 0);
+		threads = this.forumStorage.getParentThreads(4, 2, 0);
 		assertEquals(3, threads.length);
-		threads = this.forumStorage.getParentThreads(2, 5, 1);
-		assertEquals("Test topic 2", threads[0].getTopic());
+		threads = this.forumStorage.getParentThreads(5, 2, 1);
+		assertEquals("Test topic 4", threads[0].getTopic());
 		threads = this.forumStorage.getParentThreads(0, 0, 0, 1);
 		for (ParentThread thread : threads) {
 			assertEquals(1, thread.getCreatedBy().getId());

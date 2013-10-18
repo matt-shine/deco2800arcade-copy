@@ -25,7 +25,8 @@
         default-28: { font: default-28, fontColor: white },
         default-34: { font: default-34, fontColor: white },
         current-coins: { font: default-52, fontColor: yellow },
-        rating-score: { font: default-52, fontColor: magenta }
+        rating-score: { font: default-52, fontColor: magenta },
+	cgothic: {font: textbox, fontColor: white}
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }

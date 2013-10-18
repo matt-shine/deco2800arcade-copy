@@ -17,9 +17,9 @@ public class SS extends Enemy {
         else {
             setState(STATES.PATH);
         }
-        pathSpeed = 512;
-        chaseSpeed = 1536;
-        pain = true;
+        setPathSpeed(512);
+        setChaseSpeed(1536);
+        setPain(true);
 
         this.setTextureName(d.texture);
     }

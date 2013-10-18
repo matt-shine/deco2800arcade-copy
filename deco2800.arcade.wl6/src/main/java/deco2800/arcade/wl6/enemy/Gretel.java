@@ -20,11 +20,11 @@ public class Gretel extends Enemy {
         else {
             setState(STATES.PATH);
         }
-        pathSpeed = 512;
-        chaseSpeed = 1536;
-        pain = true;
-
-        damage = 0;
+        setPathSpeed(512);
+        setChaseSpeed(1536);
+        setPain(true);
+        setDamage(0);
+        
         setTextureName(d.texture);
     }
 

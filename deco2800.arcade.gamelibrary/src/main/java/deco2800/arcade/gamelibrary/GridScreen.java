@@ -18,7 +18,6 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
-
 /**
  * GDX Screen class for Grid View
  * @author Aaron Hayes
@@ -38,6 +37,7 @@ public class GridScreen implements Screen, LibraryScreen {
     private Stage stage;
     private TextButton storeButton;
     private TextButton userProfileButton;
+    private TextButton multiplayerLobbyButton;
     private TextButton currentButton;
     private TextButton homeButton;
     private Texture splashTexture;
@@ -168,10 +168,18 @@ public class GridScreen implements Screen, LibraryScreen {
         userProfileButton.setX(500);
         userProfileButton.setY(650);
         userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
+        
+        multiplayerLobbyButton = new TextButton("Multiplayer Lobby", libSkin);
+        multiplayerLobbyButton.setWidth(150);
+        multiplayerLobbyButton.setHeight(40);
+        multiplayerLobbyButton.setX(700);
+        multiplayerLobbyButton.setY(650);
+        multiplayerLobbyButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
 
         stage.addActor(homeButton);
         stage.addActor(storeButton);
         stage.addActor(userProfileButton);
+        stage.addActor(multiplayerLobbyButton);
         
         //you cannot use this method
         //Gdx.input.setInputProcessor(stage);

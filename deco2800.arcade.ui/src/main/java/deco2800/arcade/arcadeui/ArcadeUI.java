@@ -1,6 +1,6 @@
 package deco2800.arcade.arcadeui;
 
-import deco2800.arcade.arcadeui.store.GameStore;
+import deco2800.arcade.arcadeui.store.StoreHome;
 import deco2800.arcade.arcadeui.store.StoreScreen;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
@@ -21,7 +21,7 @@ import deco2800.arcade.model.Player;
 public class ArcadeUI extends GameClient {
 	
 	LoginScreen login = null;
-	GameStore store = null;
+	StoreHome store = null;
 	HomeScreen home = null;
     FrontPage main = null;
     RegisterScreen register = null;
@@ -44,7 +44,7 @@ public class ArcadeUI extends GameClient {
         login = new LoginScreen(this);
 
         home = new HomeScreen(this);
-        store = new GameStore(this);
+        store = new StoreHome(this);
         main = new FrontPage(this);
 
         register = new RegisterScreen(this);
@@ -103,7 +103,7 @@ public class ArcadeUI extends GameClient {
 		return home;
 	}
 	
-	public GameStore getStore() {
+	public StoreHome getStore() {
 		return store;
 	}
 	

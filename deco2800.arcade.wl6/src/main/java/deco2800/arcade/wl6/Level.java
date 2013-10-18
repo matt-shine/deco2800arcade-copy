@@ -34,7 +34,7 @@ public class Level {
      * @return
      */
     public int getTerrainAt(int x, int y) {
-        if (x > 64 || x < 0 || y > 64 || y < 0) return 0;
+        if (x >= 64 || x < 0 || y >= 64 || y < 0) return 0;
         return terrain[x][y];
     }
 
@@ -48,7 +48,7 @@ public class Level {
      * @return
      */
     public int getDoodadAt(int x, int y) {
-        if (x > 64 || x < 0 || y > 64 || y < 0) return 0;
+        if (x >= 64 || x < 0 || y >= 64 || y < 0) return 0;
         return doodads[x][y];
     }
 

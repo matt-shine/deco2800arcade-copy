@@ -16,8 +16,10 @@ public class WL6Meta {
     public static final int SPAWN_POINT = 19;
     public static final int DOOR = 90;
     public static final int DOOR_GOLDKEY = 92;
-    public static final int DOOR_SOLVERKEY = 94;
+    public static final int DOOR_SILVERKEY = 94;
     public static final int DOOR_ELEVATOR = 100;
+    public static final int GOLDKEY = 43;
+    public static final int SILVERKEY = 44;
     public static final int SECRET_DOOR = 98;
 
 
@@ -26,26 +28,37 @@ public class WL6Meta {
         DOWN,
         LEFT,
         RIGHT,
+        UPRIGHT,
+        UPLEFT,
+        DOWNRIGHT,
+        DOWNLEFT,
     }
 
     public static enum KEY_TYPE {
-        NONE,
         GOLD,
         SILVER,
     }
 
     public static float dirToAngle(DIRS d) {
         switch (d) {
-        case UP:
-            return 0;
-        case LEFT:
-            return 90;
-        case DOWN:
-            return 180;
-        case RIGHT:
-            return 270;
-        default:
-            return 0;
+            case UP:
+                return 0;
+            case LEFT:
+                return 90;
+            case DOWN:
+                return 180;
+            case RIGHT:
+                return 270;
+            case UPRIGHT:
+                return 315;
+            case UPLEFT:
+                return 45;
+            case DOWNRIGHT:
+                return 225;
+            case DOWNLEFT:
+                return 135;
+            default:
+                return 0;
         }
     }
 
@@ -60,12 +73,17 @@ public class WL6Meta {
         int id = map.getTerrainAt(x, y);
         return id >= WL6Meta.DOOR && id < WL6Meta.DOOR + 2 ||
                 id >= WL6Meta.DOOR_GOLDKEY && id < WL6Meta.DOOR_GOLDKEY + 2 ||
-                id >= WL6Meta.DOOR_SOLVERKEY && id < WL6Meta.DOOR_SOLVERKEY + 2 ||
+                id >= WL6Meta.DOOR_SILVERKEY && id < WL6Meta.DOOR_SILVERKEY + 2 ||
                 id >= WL6Meta.DOOR_ELEVATOR && id < WL6Meta.DOOR_ELEVATOR + 2;
     }
 
+    public static boolean hasSecretDoorAt(int x, int y, Level map) {
+        int id = map.getDoodadAt(x, y);
+        return id >= WL6Meta.SECRET_DOOR;
+    }
+
     /**
-     * Check to see if there is a solid block at the specified map coordinates.
+     * Check to see if there is a solid (non-transparent) block at the specified map coordinates.
      * This counts normal doors, but not secret doors.
      * @param x x map coordinate
      * @param y y map coordinate
@@ -101,10 +119,18 @@ public class WL6Meta {
         return surrounded == 4;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param map
+     * @return
+     */
     public static boolean hasSolidBlockAt(int x, int y, Level map) {
         if (x >= 64 || x <= 0 || y >= 64 || y <=0) {
             return true;
         }
+        // TODO Change this so to check actually spawned doodads rather than all potential ones
         if (WL6Meta.block(map.getTerrainAt(x, y)).solid ||
                 WL6Meta.doodad(map.getDoodadAt(x, y)).solid) {
             return true;

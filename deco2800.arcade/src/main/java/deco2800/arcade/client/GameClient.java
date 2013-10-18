@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.AchievementListener;
@@ -54,12 +55,22 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	if (this.overlayBridge == null)
 	    return;
 
-	this.imageClient.get(ach.icon, true).setHandler(new Handler<EncodedImage>() {
-		public void handle(EncodedImage encodedImg) {
+	this.imageManager.getTexture(ach.icon).setHandler(new Handler<Texture>() {
+		public void handle(final Texture texture) {
 		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 		        @Override
 		        public String getMessage() {
 			    return "Achievement " + ach.name + " awarded!";
+			}		       
+
+			@Override
+			public Texture getTexture() {
+			    return texture;
+			}
+
+		        @Override
+			public float displayTime() {
+			    return 2.5f;
 			}
 		    });
 		}
@@ -69,12 +80,22 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
     public void progressIncremented(final Achievement ach, final int progress) {
 	if (this.overlayBridge == null)
 	    return;
-	this.imageClient.get(ach.icon, true).setHandler(new Handler<EncodedImage>() {
-		public void handle(EncodedImage encodedImg) {
+	this.imageManager.getTexture(ach.icon).setHandler(new Handler<Texture>() {
+		public void handle(final Texture texture) {
 		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 		        @Override
 		        public String getMessage() {
 			    return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
+			}		  
+
+			@Override
+			public Texture getTexture() {
+			    return texture;
+			}
+
+			@Override
+			public float displayTime() {
+			    return 2.5f;
 			}
 		    });
 		}

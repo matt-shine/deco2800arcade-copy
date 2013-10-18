@@ -64,5 +64,16 @@ public class ReplayItemTest {
         ri = new ReplayItem("This is a string");
         assertEquals("This is a string", ri.toString());   
     }
+    
+    @Test
+    public void testHashCode()
+    {
+        ReplayItem r1 = new ReplayItem(123);
+        ReplayItem r2 = new ReplayItem(123);
+        
+        assertEquals(true, r1.equals(r2));
+        assertEquals(r1.hashCode(), r1.hashCode());
+        
+    }
 
 }

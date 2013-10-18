@@ -68,14 +68,10 @@ public class ArcadeServer {
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
 	private static final int UDP_PORT = 54777;
-<<<<<<< HEAD
-
-=======
     private static final int FILE_TCP_PORT = 54666;
 
     private Server fileServer;
 	
->>>>>>> master
 	/**
 	 * Retrieve the singleton instance of the server
 	 * 
@@ -245,35 +241,17 @@ public class ArcadeServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
 
 		generateKeyPair();
 
 		Protocol.register(server.getKryo());
-
-		// Connection listener manages the handshake process and associates
-		// clients with a shared secret key.
-		server.addListener(new ConnectionListener(sessionManager, keyPair));
-
-		// FIXME these need to be behind a proxy that unseals messages
-		server.addListener(new CreditListener());
-		server.addListener(new GameListener());
-		server.addListener(new AchievementListener());
-		server.addListener(new ReplayListener());
-		server.addListener(new HighscoreListener());
-		server.addListener(new CommunicationListener(server));
-
-=======
-		
-        Protocol.register(server.getKryo());
-        server.addListener(new ConnectionListener(connectedUsers));
+        //server.addListener(new ConnectionListener(connectedUsers));
         server.addListener(new CreditListener());
         server.addListener(new GameListener());
         server.addListener(new AchievementListener());
         server.addListener(new ReplayListener());
         server.addListener(new HighscoreListener());
         server.addListener(new CommunicationListener(server));
->>>>>>> master
         server.addListener(new PackmanListener());
         server.addListener(new MultiplayerListener(matchmakerQueue));
         server.addListener(new LobbyListener());

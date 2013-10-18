@@ -46,17 +46,7 @@ public class StoreHome implements Screen, StoreScreen {
 		arcadeUI = ui;
 		skin.add("background", new Texture
 				(Gdx.files.internal("store/main_bg.png")));
-		// Load the logo for all of the games (or default), and store them
-		// in the skin, with their name as their key.
-		for (Game gamename : ArcadeSystem.getArcadeGames()) {
-			try {
-				skin.add(gamename.id, new Texture(Gdx.files.internal("logos/"
-						+ gamename.id.toLowerCase() + ".png")));
-			} catch (Exception e) {
-				skin.add(gamename.id, new Texture
-						(Gdx.files.internal("logos/default.png")));
-			}
-		}
+		Utilities.helper.loadIcons(skin);
 		
 		// The background for the store.
 		Table bg = new Table();
@@ -71,8 +61,9 @@ public class StoreHome implements Screen, StoreScreen {
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
 		final TextButton reviewsButton = new TextButton("Reviews", skin);
+		final Button greyOverlay = new Button(skin, "black");
 		
-		populateGamesBox(stage, skin);
+		populateGamesBox();
 		
 		// The glowing border of the icon in the featured box.
 		featured_bg = new Button(skin, "icon_bg");
@@ -126,6 +117,16 @@ public class StoreHome implements Screen, StoreScreen {
 		reviewsButton.setPosition(834, 50);
 		stage.addActor(reviewsButton);
 		
+		greyOverlay.setFillParent(true);
+		greyOverlay.setColor(0.5f, 0.5f, 0.5f, 0.5f);
+		
+		// Make grey table disappear upon being clicked
+		greyOverlay.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				greyOverlay.remove();
+			}
+		});
+		
 		libraryButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
@@ -135,8 +136,9 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
+				//dispose();
+				stage.addActor(greyOverlay);
+				//arcadeUI.setScreen(new StoreTransactions(arcadeUI));
 			}
 		});
 		
@@ -193,27 +195,26 @@ public class StoreHome implements Screen, StoreScreen {
 	}
 	
 	/**
-	 * This places 8 icons into the a grid pattern in the display section in
-	 * the centre of the main store page. The icons are randomly assigned a
-	 * game to represent, and have a listener which will change the "featured"
-	 * section.
+	 * This places 8 icons into a grid pattern in the display section in the
+	 * centre of the main store page. The icons are randomly assigned a game to
+	 * represent, and have a listener which will change the "featured" section.
 	 * 
 	 * @author Addison Gourluck
-	 * @param stage
-	 * @param skin
+	 * @param Stage stage
+	 * @param Skin skin
 	 */
-	private void populateGamesBox(Stage stage, Skin skin)  {
+	private void populateGamesBox() {
 		int number = (int)Math.floor(ArcadeSystem.getArcadeGames().size()
 				* Math.random());
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()[number];
 		for (int i = 0; i < 8; ++i) {
 			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
-					[(number+i)%ArcadeSystem.getArcadeGames().size()];
-			final TextButton gameGrid =
+					[(number + i)%ArcadeSystem.getArcadeGames().size()];
+			final TextButton gameGridGlow =
 					new TextButton("\n\n\n\n\n" + game.name, skin, "icon");
-			gameGrid.setSize(160, 170);
-			gameGrid.setName(game.id);
+			gameGridGlow.setSize(160, 170);
+			gameGridGlow.setName(game.id);
 			
 			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
 			gameGridIcon.setSize(120, 112);
@@ -221,29 +222,29 @@ public class StoreHome implements Screen, StoreScreen {
 			
 			// ^This sets the games 
 			if (i < 4) {
-				gameGrid.setPosition(112 + (i%4) * 172, 255);
-				gameGridIcon.setPosition(132 + (i%4) * 172, 294);
+				gameGridGlow.setPosition(112 + i * 172, 255); // removed %4 on i. testing
+				gameGridIcon.setPosition(132 + i * 172, 294);
 			} else {
-				gameGrid.setPosition(112 + (i%4) * 172, 76);
-				gameGridIcon.setPosition(132 + (i%4) * 172, 115);
-			}
-			gameGrid.addListener(new ChangeListener() {
+				gameGridGlow.setPosition(112 + i%4 * 172, 76);
+				gameGridIcon.setPosition(132 + i%4 * 172, 115);
+			}/*
+			gameGridGlow.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
 					if (fade == 60) {
-						setSelected(gameGrid.getName());
+						setSelected(gameGridGlow.getName());
 						fade--; // Will trigger textFade and iconFade in render.
 					}
 				}
-			});
+			});*/
 			gameGridIcon.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
 					if (fade == 60) {
-						setSelected(gameGrid.getName());
+						setSelected(gameGridIcon.getName());
 						fade--; // Will trigger textFade and iconFade in render.
 					}
 				}
 			});
-			stage.addActor(gameGrid);
+			stage.addActor(gameGridGlow);
 			stage.addActor(gameGridIcon);
 		}
 	}
@@ -396,5 +397,10 @@ public class StoreHome implements Screen, StoreScreen {
 				return;
 			}
 		}
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

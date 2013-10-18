@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.arcadeui.ArcadeUI;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
@@ -34,6 +35,8 @@ public class StoreWishlist implements Screen, StoreScreen {
 	 */
 	public StoreWishlist(ArcadeUI ui) {
 		arcadeUI = ui;
+		
+		Utilities.helper.loadIcons(skin);
 		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
@@ -79,6 +82,8 @@ public class StoreWishlist implements Screen, StoreScreen {
 		transactionsButton.setSize(360, 95);
 		transactionsButton.setPosition(834, 353);
 		stage.addActor(transactionsButton);
+		
+		populateWishlist(8);
 
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
@@ -120,6 +125,59 @@ public class StoreWishlist implements Screen, StoreScreen {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * This places 6 icons into a grid pattern in the display section in
+	 * the centre of the wishlist page. The icons are assigned according to
+	 * the index given, and given a listener that links to their store page
+	 * on click.
+	 * 
+	 * For example, a player who has 10 games, index 0 will display game 0 to
+	 * 6 on their wishlist, whereas index 6 would display games 6 - 9, and 0
+	 * to 2. It uses modulo, so any index is a valid index. E.g: Index 10 will
+	 * show games 0 - 6.
+	 * 
+	 * @author Addison Gourluck
+	 * @param Stage stage
+	 * @param Skin skin
+	 * @param int index
+	 */
+	private void populateWishlist(int index) {
+		for (int i = 0; i < 6; ++i) {
+			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
+					[(index + i)%ArcadeSystem.getArcadeGames().size()];
+			final Button gameGridGlow = new Button(skin, "icon");
+			gameGridGlow.setSize(120, 120);
+			gameGridGlow.setName(game.id);
+			
+			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
+			gameGridIcon.setSize(110, 110);
+			gameGridIcon.setName(game.id);
+			
+			if (i < 2) { // Top 2 games
+				gameGridGlow.setPosition(125 + i * 320, 50);
+				gameGridIcon.setPosition(130 + i * 320, 55);
+			} else if (i < 4) { // Middle 2 games
+				gameGridGlow.setPosition(125 + i%2 * 320, 195);
+				gameGridIcon.setPosition(130 + i%2 * 320, 200);
+			} else { // Bottom 2 games
+				gameGridGlow.setPosition(125 + i%2 * 320, 345);
+				gameGridIcon.setPosition(130 + i%2 * 320, 350);
+			}
+			gameGridGlow.addListener(new ChangeListener() {
+				public void changed(ChangeEvent event, Actor actor) {
+					//
+				}
+			});
+			gameGridIcon.addListener(new ChangeListener() {
+				public void changed(ChangeEvent event, Actor actor) {
+					//
+				}
+			});
+			stage.addActor(gameGridGlow);
+			stage.addActor(gameGridIcon);
+		}
 	}
 	
 	@Override
@@ -185,5 +243,10 @@ public class StoreWishlist implements Screen, StoreScreen {
 	@Override
 	public void setSelected(String game) {
 		// No selected game for wishlist screen.
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

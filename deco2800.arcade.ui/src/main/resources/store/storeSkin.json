@@ -12,8 +12,9 @@
     },
     com.badlogic.gdx.graphics.Color: {
         magenta: { a: 1, r: 1, g: 0, b: 1 },
-        yellow: { a: 1, r: 1, g: 1, b: 0 },
+        yellow:  { a: 1, r: 1, g: 1, b: 0 },
         white:   { a: 1, r: 1, g: 1, b: 1 },
+        grey:    { a: 0.5, r: 0.5, g: 0.5, b: 1 },
         black:   { a: 1, r: 0, g: 0, b: 0 }
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
@@ -26,7 +27,7 @@
         default-34: { font: default-34, fontColor: white },
         current-coins: { font: default-52, fontColor: yellow },
         rating-score: { font: default-52, fontColor: magenta },
-	cgothic: {font: textbox, fontColor: white}
+		cgothic: {font: textbox, fontColor: white}
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }
@@ -41,6 +42,8 @@
     	search: { up: search_button, down: search_button, over: search_button_glow },
     	buy: { up: buy_button, down: buy_button, over: buy_button_glow },
     	review: { up: review_button, down: review_button, over: review_button_glow },
+    	black: { up: black },
+    	white: { up: white },
     	icon: { up: textField },
     	icon_bg: { up: textField }
     },

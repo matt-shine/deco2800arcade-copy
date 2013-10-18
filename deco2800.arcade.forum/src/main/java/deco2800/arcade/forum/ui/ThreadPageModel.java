@@ -5,14 +5,15 @@ import java.util.*;
 
 public class ThreadPageModel {
 	private String category;
+	private int size;
 	private List<ParentThread> list;
 	private final int MAX_THREAD = 10;
 	
 	//assume page var is between 1-4
 	public ThreadPageModel(int page) {
 		set_category(page);
-		list = new ArrayList<ParentThread>();
-		
+		this.list = new ArrayList<ParentThread>();
+		this.size = 0;
 	}
 	
 	/**
@@ -20,12 +21,20 @@ public class ThreadPageModel {
 	 * @param threads
 	 * @return int, amount of Parent Threads loaded.
 	 */
-	public int thread_load(ParentThread[] threads) {
+	public void thread_load(ParentThread[] threads) {
 		int i;
 		for (i = 0; i < threads.length; i++) {
 			this.list.add(threads[i]);
 		}
-		return i;
+		this.size = i;
+	}
+	
+	public ParentThread get_thread(int index) {
+		return this.list.get(index);
+	}
+	
+	public int get_size() {
+		return this.size;
 	}
 	
 	private void set_category(int page) {

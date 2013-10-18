@@ -26,15 +26,6 @@ public class RuleExcutingState extends GameState {
 			{
 				Rule r = new LadderSnakeRule();
 				r.excuteRules(playerIndex, rule, context);
-				//if player reaches the ladder and get a short cut
-				if(rule.startsWith("L"))
-				{
-					//check if the player is local player instead of AI
-					if (!context.gamePlayers[playerIndex].isAI()) {
-						//add one achievement to reachLadder achievement
-				    	context.incrementAchievement("snakeLadder.reachLadder");
-				    }
-				}
 			}
 			//search the implementation class for the plugin rules
 			else if(!rule.equals("."))
@@ -54,34 +45,5 @@ public class RuleExcutingState extends GameState {
 				}
 			}
 		}
-		
-		
-	}
-
-	/***
-	 * Updating the score of the game player and print it out on the scoreLabel
-	 * 
-	 */
-	public void excuteRules(int playerNum, String rule, SnakeLadder context,GamePlayer context2){
-		if (isScore(rule))
-		{
-			context.gamePlayers[playerNum].setScore(Integer.parseInt(rule));
-			context.getScoreLabels().get(playerNum).setText(""+context.gamePlayers[playerNum].getScore());
-		}
-	}
-	
-	/***
-	 * Check whether the rule is score related or not
-	 * @param rule The rule of the tile the player is currently in
-	 * @return true if the rule have something to do with score, false otherwise
-	 */
-	private boolean isScore (String rule) {
-	    try { 
-	        Integer.parseInt(rule); 
-	    } catch(NumberFormatException e) { 
-	        return false; 
-	    }
-	    // only got here if we didn't return false
-	    return true;
 	}
 }

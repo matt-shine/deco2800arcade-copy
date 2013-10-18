@@ -22,28 +22,15 @@ public class LadderSnakeRule implements Rule {
 	    context.gamePlayers[playerNum].setVelocity(velocity);
 	    context.gameState = new MovingState();
 
-		
-
-//		if(context.gamePlayers[playerNum].getBounds().x>=180 &&context.gamePlayers[playerNum].getBounds().y>=180)
-//		{
-//			context.gamePlayers[playerNum].getVelocity().x=60;
-//			context.gamePlayers[playerNum].getVelocity().y=60;
-//			context.gamePlayers[playerNum].move(2);
-//			context.gamePlayers[playerNum].reset();
-//			context.gamePlayers[playerNum].setNewPosition(68);
-//			context.gameState = new WaitingState();
-//		}
-//		if(context.gamePlayers[playerNum].getBounds().x<=(60-20f) && context.gamePlayers[playerNum].getBounds().y>=300)
-//		{
-//			context.gamePlayers[playerNum].getVelocity().x=60;
-//			context.gamePlayers[playerNum].getVelocity().y=-60;
-//			context.gamePlayers[playerNum].move(2);
-//			context.gamePlayers[playerNum].reset();
-//			context.gamePlayers[playerNum].setNewPosition(38);
-//			context.gameState=new WaitingState();
-//		}
-
-
+	    //if player reaches the ladder and get a short cut
+		if(rule.startsWith("L"))
+		{
+			//check if the player is local player instead of AI
+			if (!context.gamePlayers[playerNum].isAI()) {
+				//add one achievement to reachLadder achievement
+		    	context.incrementAchievement("snakeLadder.reachLadder");
+		    }
+		}
 	}
 
 }

@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 */
 import org.junit.Test;
 
-import deco2800.arcade.packman.*;
+import deco2800.arcade.packman.PackageUtils;
 
 
 public class packmanTest {

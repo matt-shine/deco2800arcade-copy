@@ -1,5 +1,6 @@
 package deco2800.arcade.burningskies.screen;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 
@@ -17,21 +18,21 @@ public class PlayerInputProcessor extends InputAdapter {
 	@Override
 	public boolean keyDown(int keycode) {
 		switch(keycode) {
-		case Keys.LEFT:
-			checkL = true;
-			player.setLeft(true);
-			break;
-		case Keys.RIGHT:
-			checkR = true;
-			player.setRight(true);
-			break;
-		case Keys.UP:
+		case Keys.W:
 			checkU = true;
 			player.setUp(true);
 			break;
-		case Keys.DOWN:
+		case Keys.A:
+			checkL = true;
+			player.setLeft(true);
+			break;
+		case Keys.S:
 			checkD = true;
 			player.setDown(true);
+			break;
+		case Keys.D:
+			checkR = true;
+			player.setRight(true);
 			break;
 		case Keys.SPACE:
 			player.setShooting(true);
@@ -43,29 +44,45 @@ public class PlayerInputProcessor extends InputAdapter {
 	@Override
 	public boolean keyUp(int keycode) {
 		switch(keycode) {
-		case Keys.LEFT:
-			player.setLeft(false);
-			checkL = false;
-			if(checkR) player.setRight(true);
-			break;
-		case Keys.RIGHT:
-			player.setRight(false);
-			checkR = false;
-			if(checkL) player.setLeft(true);
-			break;
-		case Keys.DOWN:
-			player.setDown(false);
-			checkD = false;
-			if(checkU) player.setUp(true);
-			break;
-		case Keys.UP:
+		case Keys.W:
 			player.setUp(false);
 			checkU = false;
 			if(checkD) player.setDown(true);
 			break;
+		case Keys.A:
+			player.setLeft(false);
+			checkL = false;
+			if(checkR) player.setRight(true);
+			break;
+		case Keys.S:
+			player.setDown(false);
+			checkD = false;
+			if(checkU) player.setUp(true);
+			break;
+		case Keys.D:
+			player.setRight(false);
+			checkR = false;
+			if(checkL) player.setLeft(true);
+			break;
 		case Keys.SPACE:
 			player.setShooting(false);
 			break;
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			player.setShooting(true);
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			player.setShooting(false);
 		}
 		return false;
 	}

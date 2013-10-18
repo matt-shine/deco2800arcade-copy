@@ -1,10 +1,12 @@
 package deco2800.arcade.burningskies.entities;
 
 import deco2800.arcade.burningskies.*;
+import deco2800.arcade.burningskies.entities.bullets.BombPattern;
 import deco2800.arcade.burningskies.entities.bullets.BulletPattern;
 import deco2800.arcade.burningskies.entities.bullets.PlayerPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -12,16 +14,21 @@ public class PlayerShip extends Ship {
 	
 	private BulletPattern playerBullets;
 	private float maxVelocity = 300; //Changed from static to dynamic.
-	private int maxHealth; //For health powerups.
+	private float maxHealth; //For health powerups.
+	private int lives = 3;
 	private PlayScreen screen;
 	
-	//brute force way to handle timer
-	private long initialTime;
+	private float speedTimer = 0f;
 	private boolean speedUp = false;
+	private float patternTimer = 0f;
+	private boolean patternUp = false;
 	
 	//direction handling
 	private boolean left = false, right = false, up = false, down = false;
 	private boolean shooting = false;
+	
+	//mouse pointer
+	private Vector2 mousePos = new Vector2();
 
 	/**
 	 * Construct a playable ship for the user(s).
@@ -45,6 +52,26 @@ public class PlayerShip extends Ship {
 		}
 	}
 	
+	@Override
+	public void damage(float damage) {
+		super.damage(damage);
+		if(!isAlive()) {
+			new BombPattern(this, screen).fire(0, getCenterX(), getCenterY());
+			lives -= 1;
+			screen.killPlayer();
+		}
+	}
+	
+	@Override
+	public boolean remove() {
+		if(playerBullets != null) playerBullets.stop();
+		if(getStage() != null) {
+			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 0));
+		}
+		return super.remove();
+	}
+	
+	
 	/**
 	 * Keeps the player within the screen bounds.(hopefully)
 	 */
@@ -53,10 +80,17 @@ public class PlayerShip extends Ship {
 		//resets any powerups if needed. Initial testing on speedup only.
 		//easily applies to a bullet pattern.
 		if (speedUp) {	
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - initialTime) >= 10000) {
+			speedTimer -= delta;
+			if (speedTimer <= 0) {
 				maxVelocity = 300;
 				speedUp = false;
+			}
+		}
+		if (patternUp) {	
+			patternTimer -= delta;
+			if (patternTimer <= 0) {
+				setBulletPattern(null);
+				patternUp = false;
 			}
 		}
 		
@@ -89,7 +123,10 @@ public class PlayerShip extends Ship {
     	if (position.y < 0) position.y = 0;
 		setX(position.x);
 		setY(position.y);
-		this.setZIndex(getStage().getActors().size); // this is silly, but no better way
+		mousePos.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()); // reversed y
+		mousePos.sub(getCenterX(), getCenterY()); // gotta have it centered
+		setRotation(mousePos.angle()-90);
+		setZIndex(getStage().getActors().size); // this is silly, but no better way
 		shoot(delta);
 		
 	}
@@ -123,18 +160,29 @@ public class PlayerShip extends Ship {
 	 */
 	public void setMaxSpeed(float velocity) {
 		speedUp = true;
-		initialTime = System.currentTimeMillis();
 		maxVelocity = velocity;
+		speedTimer = 10f;
 	}
 	
 	/**
 	 * Changes the players current bullet type.
-	 * @ensure pattern != NULL
 	 */
-	public void setBulletPattern(BulletPattern pattern) {
-		playerBullets.remove();
+	public void setBulletPattern(BulletPattern pattern, boolean timeLimited) {
+		if(playerBullets != null) {
+			playerBullets.remove();
+		}
 		playerBullets = pattern;
-		getStage().addActor(playerBullets);
+		if(playerBullets != null) {
+			getStage().addActor(playerBullets);
+		}
+		if(timeLimited) {
+			patternUp = true;
+			patternTimer = 10f;
+		}
+	}
+	
+	public void setBulletPattern(BulletPattern pattern) {
+		setBulletPattern(pattern, false);
 	}
 	
 	/**
@@ -152,5 +200,32 @@ public class PlayerShip extends Ship {
 		} else {
 			if(playerBullets.isFiring()) playerBullets.stop();
 		}
+	}
+	
+	public void respawn() {
+		this.health = this.maxHealth;
+		setBulletPattern(null);
+		this.maxVelocity = 300;
+		this.speedUp = false;
+		this.flash = 0f;
+		position.set(getStage().getWidth()/2 - this.getOriginX(),getStage().getHeight()/2 - this.getOriginY());
+	}
+
+	public void upgradeBullets() {
+		if(playerBullets instanceof PlayerPattern) {
+			((PlayerPattern)playerBullets).upgrade();
+		}
+	}
+	
+	public int getLives() {
+		return lives;
+	}
+	
+	public float getMaxHealth() {
+		return maxHealth;
+	}
+	
+	public BulletPattern getPattern() {
+		return this.playerBullets;
 	}
 }

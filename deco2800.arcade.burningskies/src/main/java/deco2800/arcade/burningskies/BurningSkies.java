@@ -27,10 +27,13 @@ public class BurningSkies extends GameClient {
 	public static final int SCREENWIDTH = 1280;
 	public static final int SCREENHEIGHT = 720;
 	
-	private String[] players = new String[2]; // The names of the players: the local player is always players[0]
+	//private String[] players = new String[2]; // The names of the players: the local player is always players[0]
 	
 	private Music nowPlaying;
 	private boolean isPaused = false;
+	
+	//shh
+	public int zalgo = 0;
 
 	//TODO: ACHIEVEMENTS
 
@@ -51,8 +54,8 @@ public class BurningSkies extends GameClient {
 	 */
 	public BurningSkies(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
-		players[0] = player.getUsername();
-		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
+		//players[0] = player.getUsername();
+		//players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
 		this.networkClient = networkClient;
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
@@ -133,6 +136,7 @@ public class BurningSkies extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
+		stopSong();
 	}
 
 	@Override
@@ -162,11 +166,13 @@ public class BurningSkies extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
+		game.id = "burningskies";
 		game.name = "Burning Skies";
+		game.description = "Engage in one of the most thrilling space combat battles this side of the galaxy in the critically acclaimed" +
+		", user verified and robot tested GoTY 2101! Kill aliens! Get powerups! Shoot things! Eat lead! Don't die! Hold on to your hats, it's about to get crazy.";
 	}
 	
 	public Game getGame() {
 		return game;
 	}
-	
 }

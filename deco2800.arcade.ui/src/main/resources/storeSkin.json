@@ -15,7 +15,8 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
         default: { font: default, fontColor: white, background: textField },
-        default-large: { font: default-large, fontColor: white }
+        default-large: { font: default-large, fontColor: white },
+	menu: {font: textbox, fontColor: white},
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }

@@ -13,6 +13,7 @@ import java.net.BindException;
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
+import deco2800.server.database.ChatStorage;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
 import deco2800.server.database.DatabaseException;
@@ -67,7 +68,14 @@ public class ArcadeServer {
 	// Server will communicate over these ports
 	private static final int TCP_PORT = 54555;
 	private static final int UDP_PORT = 54777;
+<<<<<<< HEAD
 
+=======
+    private static final int FILE_TCP_PORT = 54666;
+
+    private Server fileServer;
+	
+>>>>>>> master
 	/**
 	 * Retrieve the singleton instance of the server
 	 * 
@@ -88,12 +96,15 @@ public class ArcadeServer {
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
-
+    server.startFileserver();
 		ArcadeWebserver.startServer( );
 	}
 
 	//Achievement storage service
 	private AchievementStorage achievementStorage;
+	
+	//Chat History storage
+	private ChatStorage chatStorage;
 	
 	// Credit storage service
 	private CreditStorage creditStorage;
@@ -154,6 +165,14 @@ public class ArcadeServer {
     }
 	
 	/**
+	 * Access the server's chat history storage
+	 * @return
+	 */
+	public ChatStorage getChatStorage(){
+		return this.chatStorage;
+	}
+	
+	/**
 	 * Create a new Arcade Server.
 	 * This should generally not be called.
 	 * @see ArcadeServer.instance()
@@ -175,6 +194,7 @@ public class ArcadeServer {
 		this.replayStorage = new ReplayStorage();
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
+		this.chatStorage = new ChatStorage();
 		
         this.imageStorage = new ImageStorage();
 
@@ -225,6 +245,7 @@ public class ArcadeServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+<<<<<<< HEAD
 
 		generateKeyPair();
 
@@ -242,6 +263,17 @@ public class ArcadeServer {
 		server.addListener(new HighscoreListener());
 		server.addListener(new CommunicationListener(server));
 
+=======
+		
+        Protocol.register(server.getKryo());
+        server.addListener(new ConnectionListener(connectedUsers));
+        server.addListener(new CreditListener());
+        server.addListener(new GameListener());
+        server.addListener(new AchievementListener());
+        server.addListener(new ReplayListener());
+        server.addListener(new HighscoreListener());
+        server.addListener(new CommunicationListener(server));
+>>>>>>> master
         server.addListener(new PackmanListener());
         server.addListener(new MultiplayerListener(matchmakerQueue));
         server.addListener(new LobbyListener());
@@ -249,7 +281,28 @@ public class ArcadeServer {
         server.addListener(new PlayerListener());
         server.addListener(new ImageListener());
 
-	}
+    }
+
+    /**
+     * Start the server running
+     */
+    public void startFileserver() {
+        Server server = new Server();
+        System.out.println("File Server starting");
+        server.start();
+        try {
+            server.bind(FILE_TCP_PORT);
+            System.out.println("File Server bound");
+        } catch (BindException b) {
+            System.err.println("Error binding file server: Address already in use");
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Protocol.register(server.getKryo());
+        server.addListener(new FileServerListener());
+    }
 
 	/**
 	 * Generate the server public and private key that is used to handshake with

@@ -19,7 +19,6 @@ public class Player extends User {
 	public static final int GAMES_PRIVACY_ID = 6;
 	public static final int ACHIEVMENTS_PRIVACY_ID = 7;
 
-
 	private Field username;
 
 	private Field name;
@@ -39,18 +38,31 @@ public class Player extends User {
 	private Friends friends;
 	private Blocked blocked;
 	private FriendInvites friendInvites;
-    
-    private LibraryStyle libraryStyle;
 
-	private Icon icon;
-    
-    @Deprecated
-    /**
-     * DO NOT USE THIS METHOD, AT ALL, EVER.
-     */
-    public Player(int playerID, String username, String filepath) {
-        // Do nothing
-    }
+	private LibraryStyle libraryStyle;
+
+	@Deprecated
+	/**
+	 * DO NOT USE THIS METHOD, AT ALL, EVER.
+	 */
+	public Player(int playerID, String username, String filepath) {
+		super(playerID);
+		this.username = new Field(USERNAME_ID, username);
+		this.games = new Games();
+		this.friends = new Friends();
+		this.friendInvites = new FriendInvites();
+		this.blocked = new Blocked();
+
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, false);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID, false);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID, false);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID, false);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID, false);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, false);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				false);
+		this.libraryStyle = new LibraryStyle();
+	}
 
 	@Deprecated
 	/**
@@ -74,7 +86,7 @@ public class Player extends User {
 		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
 				privacy[6]);
-        this.libraryStyle = new LibraryStyle();
+		this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -89,7 +101,7 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
+
 	}
 
 	/**
@@ -102,10 +114,10 @@ public class Player extends User {
 	 * @param details
 	 *            An array of strings containing the player's username, name,
 	 *            email, program and bio.
-     * @param friendsList
-     * @param friendRequestsList
-     * @param blockedList
-     * @param gamesList
+	 * @param friendsList
+	 * @param friendRequestsList
+	 * @param blockedList
+	 * @param gamesList
 	 * @param privacy
 	 *            A boolean array of privacy settings.
 	 * @require There are at least 7 elements in privacy array. Elements 1
@@ -128,25 +140,25 @@ public class Player extends User {
 		this.bio = new Field(BIO_ID, details.get(4));
 
 		this.games = new Games();
-		if(gamesList != null){
+		if (gamesList != null) {
 			this.games.addAll(gamesList);
 		}
-				
+
 		this.friends = new Friends();
-		if(friendsList != null){
+		if (friendsList != null) {
 			this.friends.addAll(friendsList);
 		}
-		
+
 		this.friendInvites = new FriendInvites();
-		if(friendRequestsList != null){
+		if (friendRequestsList != null) {
 			this.friendInvites.addAll(friendRequestsList);
 		}
-		
+
 		this.blocked = new Blocked();
-		if(blockedList != null){
+		if (blockedList != null) {
 			this.blocked.addAll(blockedList);
 		}
-		
+
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, privacy[0]);
 		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
 				privacy[1]);
@@ -156,7 +168,7 @@ public class Player extends User {
 		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID, privacy[5]);
 		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
 				privacy[6]);
-        this.libraryStyle = new LibraryStyle();
+		this.libraryStyle = new LibraryStyle();
 
 		/*
 		 * Note that exception handling could be done in-method, however if it
@@ -171,9 +183,8 @@ public class Player extends User {
 		 * @throws IOException Throws exception when the image cannot be found
 		 * at the designated filepath.
 		 */
-		this.icon = null;
-	}
 
+	}
 
 	/**
 	 * getUsername returns a string of the player created
@@ -186,7 +197,9 @@ public class Player extends User {
 
 	/**
 	 * Sets the name of the user.
-	 * @param username string of username
+	 * 
+	 * @param username
+	 *            string of username
 	 */
 	public void setUsername(String username) {
 		if (username != null) {
@@ -266,26 +279,6 @@ public class Player extends User {
 	 */
 	public void setProgram(String program) {
 		this.program.setValue(program);
-	}
-
-	/**
-	 * Access method for the Player's icon
-	 * 
-	 * @return The Player's icon
-	 */
-	public Icon getIcon() {
-		return this.icon.clone();
-	}
-
-	/**
-	 * Sets the Player's icon that the provided icon.
-	 * 
-	 * @param icon
-	 *            The icon to set to the Player.
-	 * @require icon != null
-	 */
-	public void setIcon(Icon icon) {
-		this.icon = icon.clone();
 	}
 
 	/**
@@ -370,7 +363,7 @@ public class Player extends User {
 	 */
 	public void addFriend(User friend) {
 		if (friend != null /* && this.hasInvite(friend) */) {
-			this.friends.add(friend);
+			this.friends.add(new User(friend.getID()));
 			setChanged();
 			notifyObservers(friends);
 			clearChanged();
@@ -424,7 +417,7 @@ public class Player extends User {
 	 */
 	public void addInvite(User player) {
 		if (player != null) {
-			this.friendInvites.add(player);
+			this.friendInvites.add(new User(player.getID()));
 			setChanged();
 			notifyObservers(friendInvites);
 			clearChanged();
@@ -477,7 +470,7 @@ public class Player extends User {
 	 */
 	public void blockPlayer(User player) {
 		if (player != null) {
-			this.blocked.add(player);
+			this.blocked.add(new User(player.getID()));
 			setChanged();
 			notifyObservers(blocked);
 			clearChanged();
@@ -681,33 +674,38 @@ public class Player extends User {
 		return achievementsPrivacy.getValue();
 	}
 
-    /**
-     * Update Player's library style
-     * @param style Library Style
-     */
-    public void updateLibraryLayout(int style) {
-        libraryStyle.setLayout(style);
-        setChanged();
-        notifyObservers(libraryStyle);
-        clearChanged();
-    }
+	/**
+	 * Update Player's library style
+	 * 
+	 * @param style
+	 *            Library Style
+	 */
+	public void updateLibraryLayout(int style) {
+		libraryStyle.setLayout(style);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
+	}
 
-    /**
-     * Update Player's library colour
-     * @param colour Colour Scheme
-     */
-    public void updateLibraryColour(int colour) {
-        libraryStyle.setColourScheme(colour);
-        setChanged();
-        notifyObservers(libraryStyle);
-        clearChanged();
-    }
+	/**
+	 * Update Player's library colour
+	 * 
+	 * @param colour
+	 *            Colour Scheme
+	 */
+	public void updateLibraryColour(int colour) {
+		libraryStyle.setColourScheme(colour);
+		setChanged();
+		notifyObservers(libraryStyle);
+		clearChanged();
+	}
 
-    /**
-     * Get Player's Library Style
-     * @return libraryStyle
-     */
-    public LibraryStyle getLibraryStyle() {
-        return libraryStyle;
-    }
+	/**
+	 * Get Player's Library Style
+	 * 
+	 * @return libraryStyle
+	 */
+	public LibraryStyle getLibraryStyle() {
+		return libraryStyle;
+	}
 }

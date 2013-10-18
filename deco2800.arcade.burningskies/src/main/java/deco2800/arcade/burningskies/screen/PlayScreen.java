@@ -4,19 +4,25 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.burningskies.entities.Enemy;
 import deco2800.arcade.burningskies.entities.Entity;
-import deco2800.arcade.burningskies.entities.GameMap;
+import deco2800.arcade.burningskies.entities.Level;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
-import deco2800.arcade.burningskies.entities.DemoPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -28,15 +34,48 @@ public class PlayScreen implements Screen
 	
 	private OrthographicCamera camera;
 	private Stage stage;
+	private ShapeRenderer healthBar;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	private ArrayList<PowerUp> powerups = new ArrayList<PowerUp>();
+	private SpriteBatch batch;
+	private Label scoreLabel;
+    private BitmapFont white;
 	
+	private Color healthBarRed = new Color(1, 0, 0, 1);
+	private Color healthBarOrange = new Color(1, (float)0.65, 0, 1);
+	private Color healthBarGreen = new Color(0, 1, 0, 1);	
+	
+	private static final int width = BurningSkies.SCREENWIDTH;
+    private static final int height = BurningSkies.SCREENHEIGHT;
+    
+	private float health = 100;
+	private int healthBarLengthMultiplier = 7;
+	private int healthBarStaticHeight = 100 * healthBarLengthMultiplier;
+	private float healthBarHeight = health * healthBarLengthMultiplier;
+	private float healthBarWidth = (float) (height * 0.02);
+	private float healthBarX = (float) (width * 0.985);
+	private float healthBarY = height/2 - (healthBarHeight)/2;
+	
+	private int lives = 3;
+	private float lifePositionX = 10;
+	private float lifePositionY = height - 70;
+	private static Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
+	private float lifePositionOffset = (float) (lifeIcon.getWidth() + lifeIcon.getHeight() * 0.1);
+	
+	private long score = 0;
+	
+	private static Texture[] shipTex = {
+			new Texture(Gdx.files.internal("images/ships/jet.png")),
+			new Texture(Gdx.files.internal("images/ships/secret.cim"))
+	};
 	private PlayerShip player;
-	public GameMap map;
+	public Level level;
 	
 	private SpawnList sp;
+
+	private float respawnTimer = 0f;
 	
 	
 	public PlayScreen( BurningSkies game){
@@ -48,37 +87,39 @@ public class PlayScreen implements Screen
     {
     	// Initialising variables
 		this.stage = new Stage( BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT, true);
+		white = new BitmapFont(Gdx.files.internal("images/menu/whitefont.fnt"), false);
 
+		LabelStyle scoreLabelStyle = new LabelStyle(white, Color.WHITE);
+		scoreLabel = new Label("Scores: " + score, scoreLabelStyle);
+		scoreLabel.setX(10);
+		scoreLabel.setY((float)(height*0.95));
+		scoreLabel.setWidth(0);
+		
 		// Setting up the camera view for the game
 		camera = (OrthographicCamera) stage.getCamera();
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
     	
-        game.playSong("level1");
+    	healthBar = new ShapeRenderer();
+    	healthBar.setProjectionMatrix(camera.combined);
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
-    	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
-    	map = new GameMap("fixme");
+        game.playSong("level" + (int)(Math.random()+0.5));
+    	
+    	player = new PlayerShip(1000, shipTex[game.zalgo], new Vector2(400, 100), this);
+    	level = new Level(this);
 
-    	stage.addActor(map);
+    	stage.addActor(level);
     	stage.addActor(player);
+    	stage.addActor(scoreLabel);
     	
     	processor = new PlayerInputProcessor(player);
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
-    	// Test code
-    	PowerUp test = new DemoPowerUp(this);
-    	addPowerup(test);
-    	
     	sp = new SpawnList(this);
-    			
-    	// Add an enemy
-    	addRandomEnemy();
     }
     
     @Override
     public void hide() {
-    	//TODO: Make sure this resets properly
     	ArcadeInputMux.getInstance().removeProcessor(processor);
     	stage.dispose();
     }
@@ -89,11 +130,29 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClearColor(0, 0, 0, 1);
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
+    	batch = new SpriteBatch();
+    	
     	if(!game.isPaused()) {
+    		
+    		if(!player.isAlive()) {
+    			respawnTimer -= delta;
+    			if(respawnTimer <= 0) {
+    				stage.addActor(player);
+    				if (lives > 0) {
+    					player.respawn();
+    					sp.setTimer((float) 2.5);
+    					while(bullets.size() != 0) {
+    						removeEntity(bullets.get(0));
+    					}
+    				} else {
+    					// Create a game over screen
+    					game.playSong("gameover");
+    					game.setScreen(game.menuScreen);
+    				}
+    			}
+    		}
 
     		sp.checkList(delta);
-    		
-    		//System.out.println("Num of enemies: " + enemies.size() );
     		
     		stage.act(delta);
     		for(int i=0; i<bullets.size(); i++) {
@@ -116,6 +175,7 @@ public class PlayScreen implements Screen
     					if(e.isAlive() && b.hasCollided(e)) { // must check if alive if they're playing the explode animation
     						e.damage(b.getDamage());
     						if(!e.isAlive()) {
+    							score += e.getPoints();
     							removeEntity(e);
     						}
     						removeEntity(b);
@@ -124,11 +184,8 @@ public class PlayScreen implements Screen
     					}
     					
     				}
-    			} else if(b.hasCollided(player)) {
-    				//TODO: DAMAGE THE PLAYER YOU NUGGET
+    			} else if(b.hasCollided(player) && player.isAlive()) {
     				player.damage(b.getDamage());
-    				//TODO: Player death/respawn checker.
-    				//if (!player.isAlive()) { }
     				removeEntity(b);
         			i--;
     				continue;
@@ -136,7 +193,7 @@ public class PlayScreen implements Screen
     		}
 			for(int i=0; i<powerups.size(); i++) {
 				PowerUp p = powerups.get(i);
-				if(p.hasCollidedUnscaled(player)) {
+				if(p.hasCollidedUnscaled(player) && player.isAlive()) {
 					//TODO: POWERUPS WOO
 					p.powerOn(player);
 					removeEntity(p);
@@ -147,18 +204,44 @@ public class PlayScreen implements Screen
 			// checks if the enemy is out of screen, if so remove it
 			for(int i=0; i<enemies.size(); i++) {
 				Enemy e = enemies.get(i);
-				if(outOfBounds(e)) {
+				if(e.hasCollided(player) && player.isAlive()) {
 					removeEntity(e);
 					i--;
-					continue;
-					
+					player.damage(e.getHealth());
 				}
 			}	
-    	}
-    	
-    	
+    	} 
+    	    	
     	// Draws the map
     	stage.draw();
+    	
+    	for (int i = 0; i < lives; i++) {
+	    	batch.begin();
+	    	batch.draw(lifeIcon, lifePositionX + lifePositionOffset*i, lifePositionY);
+	    	batch.end();
+    	}
+    	
+    	healthBar.begin(ShapeType.FilledRectangle);
+    	
+//    	score += 131;
+    	health = player.getHealth();
+    	lives = player.getLives();
+    	scoreLabel.setText("Scores: " + score);
+    	
+    	healthBarHeight = Math.max(0, healthBarStaticHeight * (player.getHealth()/player.getMaxHealth()) );
+    	
+//    	System.out.println("health: " + healthBarHeight + ",  player health: " + player.getHealth()  );
+    	
+    	if (player.getHealth() <= (player.getMaxHealth()/4) ) {
+    		healthBar.setColor(healthBarRed);
+    	} else if (player.getHealth() > (player.getMaxHealth()/4) && player.getHealth() <= (player.getMaxHealth()*3/4)) {
+    		healthBar.setColor(healthBarOrange);
+    	} else {
+    		healthBar.setColor(healthBarGreen);
+    	}
+    	
+    	healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
+    	healthBar.end();
     }
     
     private boolean outOfBounds(Entity e) {
@@ -197,24 +280,7 @@ public class PlayScreen implements Screen
     	stage.addActor(enemy);
     	enemies.add(enemy);
     }
-    
-    private void addRandomEnemy() {
-    	final Texture testTex = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
-    	float startX = (float) Math.ceil(Math.random() * 1000) + 100;
-    	float startY = 700f;
-    	int direction;
-    	
-    	if((int) Math.floor(Math.random() * 2) == 1 )
-    		direction = 1;
-    	else
-    		direction = -1;
-    	
-    	float vX = (float) Math.ceil(Math.random() * 75 * direction) ;
-    	float vY = (float) Math.ceil(Math.random() * -150) - 50;
-//    	System.out.println("x: " + startX + ",y: " + startY + ",vX: " + vX + ",vY: " + vY);
-    	addEnemy(new Enemy(200, testTex, new Vector2(startX,startY), this, new Vector2(vX,vY)) );    	
-    }
-    
+
     public void addPowerup(PowerUp p) {
     	stage.addActor(p);
     	powerups.add(p);
@@ -234,4 +300,17 @@ public class PlayScreen implements Screen
     	p.remove();
     	powerups.remove(p);
     }
+
+	public void killPlayer() {
+		player.remove();
+		respawnTimer  = 2f;
+	}
+
+	public PlayerShip getPlayer() {
+		return player;
+	}
+	
+	public int zalgo() {
+		return game.zalgo;
+	}
 }

@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 
 public abstract class Ship extends Entity {
 
-	protected int health;	
+	protected float health;	
 	protected Vector2 velocity;
 	protected Vector2 position;
-	private float flash = 0f;
+	protected float flash = 0f;
 	
 	/**
 	 * Basic constructor for a ship.
@@ -29,6 +29,10 @@ public abstract class Ship extends Entity {
 		} else return true;
 	}
 	
+	public float getHealth() {
+		return health;
+	}
+	
 	@Override
     public void act(float delta) {
 		onRender(delta);
@@ -37,16 +41,13 @@ public abstract class Ship extends Entity {
 	
 	@Override
 	public boolean remove() {
-		if(getStage() != null) {
-			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2));
-		}
 		return super.remove();
 	}
 	
 	/**
 	 * Damages the ship
 	 */
-	public void damage(int healthchange) {
+	public void damage(float healthchange) {
 		this.health -= healthchange;
 		flash = 1f;
 	}

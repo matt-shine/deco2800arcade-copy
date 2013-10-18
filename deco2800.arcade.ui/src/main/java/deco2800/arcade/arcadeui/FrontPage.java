@@ -19,13 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-/*
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;*/
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -37,7 +30,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-
 
 import deco2800.arcade.arcadeui.store.StoreHome;
 import deco2800.arcade.client.Arcade;
@@ -70,8 +62,8 @@ public class FrontPage implements Screen {
     //need to get values for
 
     private static int creditVal = 0;
-    private String[] onlineFriends = {"adeleen", "alina", "moji", "will"};
-    private int nFriends = onlineFriends.length;
+    private static String[] onlineFriends = {"adeleen", "alina", "moji", "will"};
+    private static int nFriends = onlineFriends.length;
     private static String uName = "Adeleen Pavia";
     private static Set<String> games = ArcadeSystem.getGamesList();
    /* private String[] games = {"Pong", "Tower Defence", "Connect 4", "Tic Tac Toe", "Chess", "Jungle Jump",
@@ -138,10 +130,6 @@ public class FrontPage implements Screen {
         recentTable.setBackground(skin.getDrawable("recentBar"));
         recentTable.setSize(350, 800);
     	recentTable.setPosition(125, 0);
-    	
-        //Top Box Labels
-        final Label logo = new Label("VAPOR", skin, "cgothic");
-        logo.setAlignment(Align.left);
         
         //Bottom Box Labels
         final Label divider2 = new Label("|", skin, "cgothic");
@@ -172,28 +160,6 @@ public class FrontPage implements Screen {
         
         storeButton.setSize(bWidth, bHeight);
         storeButton.setPosition(bX3, bY);
-        
-        
-        //adding panel for top and bottom bar
-//        final Table topBox = new Table();
-        final Table bottomBox = new Table();
-        
-        
-        //set bottom bar properties
-        bottomBox.setSize(1279, 30);
-        bottomBox.setPosition(0, 0);
-        bottomBox.setColor(255, 255, 255, 1);
-        bottomBox.setBackground(skin.getDrawable("menuBar"));
-        
-        //add bottom labels
-        
-        bottomBox.add(divider2).width(1100).pad(20);
-        bottomBox.add(chatLink).width(100);
-        
-        //adding to stage
-        stage.addActor(bottomBox);
-     	
- 
         
         // Icon event listeners, mouseOver and mouseClick
         recentButton.addListener((new ClickListener() {        	
@@ -341,8 +307,6 @@ public class FrontPage implements Screen {
             }
         })); 
         
-		
-        
         //adding to stage
         stage.addActor(recentButton);
         stage.addActor(libraryButton);
@@ -354,46 +318,60 @@ public class FrontPage implements Screen {
     //FIXME Better implementation
     
     public static void setName(String playerName){
-		pName = playerName;
-		System.out.println("Logged in as:" + " " + pName);
-		uName = pName;
-		
-		//Top Box Labels
-        final Label logo = new Label("VAPOR", skin, "cgothic");
-        logo.setAlignment(Align.left);
-        
-        final Label username = new Label(pName , skin, "cgothic");
-        
-        if (username.getText() != pName){
-        	System.out.println("Label is null");
-        	
-        	username.setText(pName);
-        }
-        
-        username.setAlignment(Align.right);
-        
-        final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
-        credits.setAlignment(Align.right);
-        final Label divider = new Label("|", skin, "cgothic");
-        divider.setAlignment(Align.right);
-        
-        final Table topBox = new Table();
-        
-        //set panel sizes and positions
-        topBox.setSize(1279, 30);
+    	final Table topBox = new Table();
+    	
+    	topBox.setSize(1279, 30);
         topBox.setPosition(1, 690);
         topBox.setColor(255, 255, 255, 1);
         topBox.setBackground(skin.getDrawable("menuBar"));
         
-        //set top bar labels
-        topBox.add(logo).width(500);
-        topBox.add(username).width(615);
-        topBox.add(divider).width(5).pad(20);
-        topBox.add(credits).width(100);
-        
+        final float boxHeight = 695;
+    	
         stage.addActor(topBox);
-		
+        
+        final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
+    	credits.setPosition(stage.getWidth() - credits.getWidth() - 10, boxHeight);
+    	stage.addActor(credits);
+    	
+    	final Label divider = new Label("|", skin, "cgothic");
+    	divider.setPosition(credits.getX() - divider.getWidth() - 10, boxHeight);
+    	stage.addActor(divider);
+        
+    	final Label username = new Label(playerName, skin, "cgothic");
+    	username.setPosition(divider.getX() - username.getWidth() - 10, boxHeight);
+    	stage.addActor(username);
+    	
+    	final Label vapor = new Label("VAPOR", skin, "cgothic");
+    	vapor.setPosition(10, boxHeight);
+    	stage.addActor(vapor);
+    	
+    	final Table bottomBox = new Table();
+        
+        
+        //set bottom bar properties
+        bottomBox.setSize(1279, 30);
+        bottomBox.setPosition(0, 0);
+        bottomBox.setColor(255, 255, 255, 1);
+        bottomBox.setBackground(skin.getDrawable("menuBar"));
+
+        //adding to stage
+        stage.addActor(bottomBox);
+        
+        final Label chatLink = new Label("Online (" + nFriends +")" , skin, "cgothic");
+        chatLink.setPosition(stage.getWidth() - chatLink.getWidth() - 10, 5);
+        stage.addActor(chatLink);
+        
+        final Label divider2 = new Label("|", skin, "cgothic");
+        divider2.setPosition(chatLink.getX() - divider2.getWidth(), 5);
+        stage.addActor(divider2);
+        
+     	
     }
+    
+    public static String getName(){
+    	return pName;
+    }
+    
     /*for getting index out of the String Set*/
     public static String getRandomGame() {
     	int size = games.size();

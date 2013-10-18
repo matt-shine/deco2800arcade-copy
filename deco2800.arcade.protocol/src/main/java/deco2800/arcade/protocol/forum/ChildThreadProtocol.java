@@ -1,6 +1,7 @@
 package deco2800.arcade.protocol.forum;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 import deco2800.arcade.model.forum.ChildThread;
 import deco2800.arcade.model.forum.ForumUser;
@@ -32,5 +33,29 @@ public class ChildThreadProtocol {
 	
 	public static ChildThread getChildThread(ChildThreadProtocol object) {
 		return new ChildThread(object.id, object.message, ForumUserProtocol.getForumUser(object.createdBy), object.timestamp, object.vote);
+	}
+	
+	public static ChildThreadProtocol[] getChildThreadProtocols(ChildThread[] threads) {
+		if (threads == null) {
+			return null;
+		}
+		ArrayList<ChildThreadProtocol> result = new ArrayList<ChildThreadProtocol>();
+		for (ChildThread thread : threads) {
+			ChildThreadProtocol object = ChildThreadProtocol.getChildThreadProtocol(thread);
+			result.add(object);
+		}
+		return result.toArray(new ChildThreadProtocol[0]);
+	}
+	
+	public static ChildThread[] getChildThreads(ChildThreadProtocol[] threads) {
+		if (threads == null) {
+			return null;
+		}
+		ArrayList<ChildThread> result = new ArrayList<ChildThread>();
+		for (ChildThreadProtocol thread : threads) {
+			ChildThread object = ChildThreadProtocol.getChildThread(thread);
+			result.add(object);
+		}
+		return result.toArray(new ChildThread[0]);
 	}
 }

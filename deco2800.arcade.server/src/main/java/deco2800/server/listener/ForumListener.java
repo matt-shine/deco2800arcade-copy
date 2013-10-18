@@ -25,6 +25,7 @@ public class ForumListener extends Listener {
 		super.received(connection, object);
 		System.out.println("Some request is received (debug purpose)");
 		if (object instanceof ForumTestRequest){
+			/* For test */
 			ForumTestRequest request = (ForumTestRequest) object;
 			ForumTestResponse response = new ForumTestResponse();
 			int num = request.num;
@@ -106,6 +107,7 @@ public class ForumListener extends Listener {
 				connection.sendTCP(response);
 			}
 		} else if (object instanceof GetParentThreadsRequest){
+			/* Get parent threads by specifying pid range and category or userId */
 			GetParentThreadsRequest request = (GetParentThreadsRequest) object;
 			GetParentThreadsResponse response = new GetParentThreadsResponse();
 			response.error = "";
@@ -121,13 +123,42 @@ public class ForumListener extends Listener {
 					threads = ArcadeServer.instance().getForumStorage().getParentThreads(request.start
 							, request.end, request.limit);
 				}
-				response.result = ParentThreadProtocol.getParentThreadProtocols(threads);
+				if (threads == null) {
+					response.result = null;
+				} else {
+					response.result = ParentThreadProtocol.getParentThreadProtocols(threads);
+				}
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();
 				response.result = null;
 			} finally {
 				connection.sendTCP(response);
 			}
+		} else if (object instanceof GetChildThreadsRequest) {
+			/* Get child threads with passing conditions */
+			GetChildThreadsRequest request = (GetChildThreadsRequest) object;
+			GetChildThreadsResponse response = new GetChildThreadsResponse();
+			response.error = "";
+			try {
+				ChildThread[] threads;
+				if (request.userId > 0) {
+					threads = ArcadeServer.instance().getForumStorage().getChildThreads(
+							request.pid, request.start, request.end, request.limit, request.userId);
+				} else if (request.start != 0 || request.end != 0 || request.limit != 0) {
+					threads = ArcadeServer.instance().getForumStorage().getChildThreads(
+							request.pid, request.start, request.end, request.limit);
+				} else {
+					threads = ArcadeServer.instance().getForumStorage().getChildThreads(
+							request.pid);
+				}
+				response.result = ChildThreadProtocol.getChildThreadProtocols(threads);
+			} catch (DatabaseException e) {
+				response.error = e.getMessage();
+				response.result = null;
+			} finally {
+				connection.sendTCP(response);
+			}
+		
 		} else if (object instanceof DeleteRequest) {
 			/* Delete parent_thread record for given pid, and sends error if occur */
 			DeleteRequest request = (DeleteRequest) object;
@@ -156,6 +187,7 @@ public class ForumListener extends Listener {
 				connection.sendTCP(response);
 			}
 		} else if (object instanceof UpdateParentThreadRequest) {
+			/* Update parent thread, pid is not updatable */
 			UpdateParentThreadRequest request = (UpdateParentThreadRequest) object;
 			UpdateParentThreadResponse response = new UpdateParentThreadResponse();
 			response.error = "";
@@ -168,6 +200,7 @@ public class ForumListener extends Listener {
 				connection.sendTCP(response);
 			}
 		} else if (object instanceof GetForumUserRequest) {
+			/* For getting ForumUser */
 			System.out.println("GetForumUserRequest is received (debug purpose)");
 			GetForumUserRequest request = (GetForumUserRequest) object;
 			GetForumUserResponse response = new GetForumUserResponse();

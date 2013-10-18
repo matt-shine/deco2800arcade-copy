@@ -54,6 +54,9 @@ public class ParentThreadProtocol {
 	}
 	
 	public static ParentThreadProtocol[] getParentThreadProtocols(ParentThread[] threads) {
+		if (threads == null) {
+			return null;
+		}
 		ArrayList<ParentThreadProtocol> list = new ArrayList<ParentThreadProtocol>();
 		for (ParentThread thread : threads) {
 			list.add(ParentThreadProtocol.getParentThreadProtocol(thread));
@@ -62,6 +65,9 @@ public class ParentThreadProtocol {
 	}
 	
 	public static ParentThread[] getParentThreads(ParentThreadProtocol[] objs) {
+		if (objs == null) {
+			return null;
+		}
 		ArrayList<ParentThread> list = new ArrayList<ParentThread>();
 		for (ParentThreadProtocol obj : objs) {
 			list.add(ParentThreadProtocol.getParentThread(obj));

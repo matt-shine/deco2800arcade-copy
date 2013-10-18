@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Icon;
-import deco2800.arcade.model.forum.*;
 import deco2800.arcade.protocol.achievement.*;
 import deco2800.arcade.protocol.communication.ChatRequest;
 import deco2800.arcade.protocol.communication.ContactListUpdate;
@@ -144,7 +143,11 @@ public class Protocol {
 		kryo.register(TagsResponse.class);
 		kryo.register(GetParentThreadsRequest.class);
 		kryo.register(GetParentThreadsResponse.class);
-	
+		kryo.register(GetChildThreadsRequest.class);
+		kryo.register(GetChildThreadsResponse.class);
+		kryo.register(UpdateParentThreadRequest.class);
+		kryo.register(UpdateParentThreadResponse.class);
+		
 	}
 	
 	/**

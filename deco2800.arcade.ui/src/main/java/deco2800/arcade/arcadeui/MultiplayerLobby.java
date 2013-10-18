@@ -397,7 +397,7 @@ public class MultiplayerLobby implements Screen {
 	
 	private void createMatch() {
 		CreateMatchRequest request = new CreateMatchRequest();
-    	request.gameId = "chess";
+    	request.gameId = "pong";
     	request.playerID = arcadeUI.getPlayer().getID();
     	arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}

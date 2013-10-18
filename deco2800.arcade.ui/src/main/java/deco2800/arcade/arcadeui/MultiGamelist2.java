@@ -520,6 +520,7 @@ public class MultiGamelist2 implements Screen {
 		    	//ArcadeSystem.login("pong");
 		    	//bclicked = true;
 		    	System.out.println("Pong clicked");
+				createPongMatch();
 		    }
 		})); 
         
@@ -879,6 +880,7 @@ public class MultiGamelist2 implements Screen {
 		    	//ArcadeSystem.login("pong");
 		    	//bclicked = true;
 		    	System.out.println("Pong clicked");
+				createPongMatch();
 		    }
 		})); 
         
@@ -1002,6 +1004,13 @@ public class MultiGamelist2 implements Screen {
 	private void createChessMatch() {
 		CreateMatchRequest request = new CreateMatchRequest();
     	request.gameId = "chess";
+    	request.playerID = arcadeUI.getPlayer().getID();
+    	arcadeUI.getNetworkClient().sendNetworkObject(request);
+	}
+	
+	private void createPongMatch() {
+		CreateMatchRequest request = new CreateMatchRequest();
+    	request.gameId = "pong";
     	request.playerID = arcadeUI.getPlayer().getID();
     	arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}

@@ -525,6 +525,12 @@ public class MultiGamelist implements Screen {
 		pongButton2.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	System.out.println("Pong clicked");
+				dispose();
+				ArcadeSystem.setMatchMaking(true);
+				ArcadeSystem.setMultiplayerEnabled(true);
+				ArcadeSystem.setGameWaiting(true);
+				arcadeUI.setScreen(arcadeUI.getWait());
+		    	ArcadeSystem.goToGame("Pong");
 		    }
 		})); 
         
@@ -939,10 +945,10 @@ public class MultiGamelist implements Screen {
             	System.out.println("Chess clicked");	
             	//dispose();
 				//arcadeUI.setScreen(arcadeUI.getWait());
-				dispose();
-		    	ArcadeSystem.goToGame("junglejump");
+				//dispose();
+		    	//ArcadeSystem.goToGame("junglejump");
 		    	//junglejump.cats();
-		    	System.out.println("paused");
+		    	//System.out.println("paused");
 				
             }
         })); 

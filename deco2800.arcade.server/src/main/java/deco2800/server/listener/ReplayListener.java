@@ -56,11 +56,9 @@ public class ReplayListener extends Listener {
                 e.printStackTrace();
             }
             
-            if ( sessionID < 0 ) {
-            	// something went wrong
+            if ( sessionID >= 0 ) {
+                logger.info("Got a start replay session request for game ID '" + ssr.gameId + "' with username '" + ssr.username + "'");
             }
-            
-            logger.info("Got a start replay session request for game ID '" + ssr.gameId + "' with username '" + ssr.username + "'");
             
             response.sessionId = sessionID;
             connection.sendTCP(response);
@@ -76,7 +74,6 @@ public class ReplayListener extends Listener {
             
             logger.info("Got an end replay session event for event ID " + esr.sessionId);
             
-            //TODO check if session is not already terminated.
             response.success = true;
             connection.sendTCP(response);
             

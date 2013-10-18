@@ -25,7 +25,7 @@ import deco2800.arcade.model.forum.ParentThread;
  * 
  * @author Junya, Team Forum
  * @see deco2800.arcade.server.database.ForumStorage
- * @see deco2800.arcade.model.forum
+ * @see deco2800.arcade.model.forum.*
  */
 public class TestForumStorage {
 	private static IDatabaseTester tester;
@@ -139,6 +139,12 @@ public class TestForumStorage {
 			assertEquals(1, thread.getCreatedBy().getId());
 		}
 		assertEquals(2, threads.length);
+		threads = this.forumStorage.getChildThreads(1, 0, 0, 2, 2);
+		for (ChildThread thread : threads) {
+			assertEquals(2, thread.getCreatedBy().getId());
+		}
+		assertEquals(2, threads.length);
+		assertEquals("This is child thread 4.", threads[0].getMessage());
 	}
 	
 	@Test

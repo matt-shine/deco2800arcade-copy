@@ -3,7 +3,6 @@ package deco2800.arcade.arcadeui;
 import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
@@ -37,7 +36,6 @@ public class FrontPage implements Screen {
 	private final static Label menuInfo = new Label("Loading...", skin, "cgothic");
 
 	public FrontPage(ArcadeUI ui) {
-		//FIXME big method
 		arcadeUI = ui;
 		
 		skin.add("background", new Texture("homescreen_bg.png"));

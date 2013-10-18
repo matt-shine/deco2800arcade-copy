@@ -20,7 +20,6 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.arcadeui.FrontPage;
 
 /**
  * @author Addison Gourluck
@@ -34,6 +33,8 @@ public class StoreHome implements Screen, StoreScreen {
 	private Label description; // featured text
 	private Button featured_icon; // featured icon
 	private Button featured_bg; // featured icon glow/box
+	private Button greyOverlay = new Button(skin, "black");
+	private Button popupBox = new Button(skin, "white");
 	
 	private ArcadeUI arcadeUI;
 	
@@ -42,13 +43,12 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @param ui
 	 */
 	public StoreHome(ArcadeUI ui) {
-		
+		skin.add("blue_frame", new Texture(Gdx.files.internal("store/blue_frame.png")));
 		arcadeUI = ui;
-		skin.add("background", new Texture
-				(Gdx.files.internal("store/main_bg.png")));
 		Utilities.helper.loadIcons(skin);
 		
 		// The background for the store.
+		skin.add("background", new Texture(Gdx.files.internal("store/main_bg.png")));
 		Table bg = new Table();
 		bg.setFillParent(true);
 		bg.setBackground(skin.getDrawable("background"));
@@ -61,7 +61,6 @@ public class StoreHome implements Screen, StoreScreen {
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
 		final TextButton reviewsButton = new TextButton("Reviews", skin);
-		final Button greyOverlay = new Button(skin, "black");
 		
 		populateGamesBox();
 		
@@ -117,15 +116,7 @@ public class StoreHome implements Screen, StoreScreen {
 		reviewsButton.setPosition(834, 50);
 		stage.addActor(reviewsButton);
 		
-		greyOverlay.setFillParent(true);
-		greyOverlay.setColor(0.5f, 0.5f, 0.5f, 0.5f);
-		
-		// Make grey table disappear upon being clicked
-		greyOverlay.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				greyOverlay.remove();
-			}
-		});
+		generatePopup();
 		
 		libraryButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
@@ -136,9 +127,8 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				//dispose();
-				stage.addActor(greyOverlay);
-				//arcadeUI.setScreen(new StoreTransactions(arcadeUI));
+				dispose();
+				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
 			}
 		});
 		
@@ -151,7 +141,8 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		reviewsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Reviews clicked");
+				stage.addActor(greyOverlay);
+				stage.addActor(popupBox);
 			}
 		});
 		
@@ -190,10 +181,37 @@ public class StoreHome implements Screen, StoreScreen {
 				arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
 			}
 		});
-		
-		//FrontPage.setName("bob");
 	}
 	
+	private void generatePopup() {
+		greyOverlay.setFillParent(true);
+		greyOverlay.setColor(0.5f, 0.5f, 0.5f, 0.5f);
+		
+		popupBox.getStyle().up = skin.getDrawable("blue_frame");
+		popupBox.setSize(545, 300);
+		popupBox.setPosition(368, 210);
+		
+		Button buy = new Button(skin, "buy");
+		buy.setSize(149, 62);
+		buy.setPosition(198, 10);
+		popupBox.addActor(buy);
+		
+		// Buy button listener
+		greyOverlay.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				System.out.println("DO BUY MANY TOKEN.");
+			}
+		});
+		
+		// Make grey table disappear upon being clicked
+		greyOverlay.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				popupBox.remove();
+				greyOverlay.remove();
+			}
+		});
+	}
+
 	/**
 	 * This places 8 icons into a grid pattern in the display section in the
 	 * centre of the main store page. The icons are randomly assigned a game to
@@ -222,12 +240,12 @@ public class StoreHome implements Screen, StoreScreen {
 			
 			// ^This sets the games 
 			if (i < 4) {
-				gameGridGlow.setPosition(112 + i * 172, 255); // removed %4 on i. testing
+				gameGridGlow.setPosition(112 + i * 172, 255);
 				gameGridIcon.setPosition(132 + i * 172, 294);
 			} else {
 				gameGridGlow.setPosition(112 + i%4 * 172, 76);
 				gameGridIcon.setPosition(132 + i%4 * 172, 115);
-			}/*
+			}
 			gameGridGlow.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
 					if (fade == 60) {
@@ -235,7 +253,7 @@ public class StoreHome implements Screen, StoreScreen {
 						fade--; // Will trigger textFade and iconFade in render.
 					}
 				}
-			});*/
+			});
 			gameGridIcon.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
 					if (fade == 60) {
@@ -281,9 +299,9 @@ public class StoreHome implements Screen, StoreScreen {
 						|| featured.description.equals("N/A")) {
 					description.setText(featured.name
 							+ "\nNo Description Available");
-				} else if (featured.description.length() > 100) {
+				} else if (featured.description.length() > 105) {
 					description.setText(featured.name + "\n"
-							+ featured.description.substring(0, 100) + "...");
+							+ featured.description.substring(0, 105) + "...");
 				} else {
 					description.setText(featured.name + "\n" + featured.description);
 				}
@@ -351,6 +369,7 @@ public class StoreHome implements Screen, StoreScreen {
 	
 	@Override
 	public void hide() {
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override
@@ -367,6 +386,7 @@ public class StoreHome implements Screen, StoreScreen {
 
 	@Override
 	public void popup() {
+		
 	}
 
 	@Override

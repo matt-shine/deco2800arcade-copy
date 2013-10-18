@@ -38,6 +38,8 @@ public class StoreWishlist implements Screen, StoreScreen {
 		
 		Utilities.helper.loadIcons(skin);
 		
+		skin.add("big_star", new Texture(Gdx.files.internal("store/big_stars.png")));
+		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
 		final Label Title = new Label("Wish List", skin, "default-34");
@@ -84,7 +86,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 		stage.addActor(transactionsButton);
 		
 		populateWishlist(8);
-
+		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
@@ -148,22 +150,40 @@ public class StoreWishlist implements Screen, StoreScreen {
 			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
 					[(index + i)%ArcadeSystem.getArcadeGames().size()];
 			final Button gameGridGlow = new Button(skin, "icon");
-			gameGridGlow.setSize(120, 120);
+			gameGridGlow.setSize(122, 122);
 			gameGridGlow.setName(game.id);
 			
 			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
 			gameGridIcon.setSize(110, 110);
 			gameGridIcon.setName(game.id);
 			
-			if (i < 2) { // Top 2 games
-				gameGridGlow.setPosition(125 + i * 320, 50);
-				gameGridIcon.setPosition(130 + i * 320, 55);
+			final Table star = new Table();
+			star.setBackground(skin.getDrawable("big_star"));
+			star.setSize(142, 23);
+			
+			final Label gameName;
+			if (game.name.length() > 12) {
+				gameName = new Label(game.name, skin, "default-22");
+			} else {
+				gameName = new Label(game.name, skin, "default-24");
+			}
+			gameName.setSize(200, 40);
+			
+			if (i < 2) { // Bottom 2 games
+				gameGridGlow.setPosition(124 + i * 320, 54);
+				gameGridIcon.setPosition(130 + i * 320, 60);
+				gameName.setPosition(260 + i * 320, 120);
+				star.setPosition(260 + i * 320, 80);
 			} else if (i < 4) { // Middle 2 games
-				gameGridGlow.setPosition(125 + i%2 * 320, 195);
+				gameGridGlow.setPosition(124 + i%2 * 320, 194);
 				gameGridIcon.setPosition(130 + i%2 * 320, 200);
-			} else { // Bottom 2 games
-				gameGridGlow.setPosition(125 + i%2 * 320, 345);
-				gameGridIcon.setPosition(130 + i%2 * 320, 350);
+				gameName.setPosition(260 + i%2 * 320, 260);
+				star.setPosition(260 + i%2 * 320, 220);
+			} else { // Top 2 games
+				gameGridGlow.setPosition(124 + i%2 * 320, 334);
+				gameGridIcon.setPosition(130 + i%2 * 320, 340);
+				gameName.setPosition(260 + i%2 * 320, 400);
+				star.setPosition(260 + i%2 * 320, 360);
 			}
 			gameGridGlow.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
@@ -177,6 +197,8 @@ public class StoreWishlist implements Screen, StoreScreen {
 			});
 			stage.addActor(gameGridGlow);
 			stage.addActor(gameGridIcon);
+			stage.addActor(gameName);
+			stage.addActor(star);
 		}
 	}
 	

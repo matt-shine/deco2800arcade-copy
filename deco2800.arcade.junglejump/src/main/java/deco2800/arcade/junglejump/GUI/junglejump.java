@@ -160,11 +160,15 @@ public class junglejump extends GameClient implements InputProcessor {
 		URL path = this.getClass().getResource("/");
 		
 		try {
+<<<<<<< Updated upstream
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
 					".arcade.junglejump/src/main/").replace("file:", "") + 
 					"resources/soundtrack.wav";
 			System.out.println(resource);
 			File file = new File(resource);
+=======
+			File file = new File("soundtrack.wav");
+>>>>>>> Stashed changes
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -181,11 +185,15 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
+<<<<<<< Updated upstream
 			String resource = path.toString().replace(".arcade/build/classes/main/", 
 					".arcade.junglejump/src/main/").replace("file:", "") + 
 					"resources/menu.wav";
 			System.out.println(resource);
 			File file2 = new File(resource);
+=======
+			File file2 = new File("menu.wav");
+>>>>>>> Stashed changes
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
 			menuSound.open(audioIn2);

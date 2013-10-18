@@ -1,7 +1,11 @@
 package deco2800.arcade.server.database;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.dbunit.IDatabaseTester;
 import org.dbunit.JdbcDatabaseTester;
@@ -11,7 +15,9 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Test;
 
+import deco2800.server.database.DatabaseException;
 import deco2800.server.database.PlayerGameStorage;
 
 public class TestPlayerGameStorage {
@@ -64,5 +70,54 @@ public class TestPlayerGameStorage {
 	@After
 	public void  tearDown() throws Exception {
 		databaseTester.onTearDown();
+	}
+	
+	//@Test
+	/**
+	 * Tests retrieving a player's games.
+	 */
+	public void testGetPlayerGames() throws DatabaseException {
+		Set<Integer> expectedResult = new HashSet<Integer>();
+		expectedResult.add(Integer.parseInt("1"));
+		expectedResult.add(Integer.parseInt("2"));
+		Set<Integer> actualResult = playerGameStorage.getPlayerGames(1);
+		assertEquals(expectedResult, actualResult);
+	}
+	
+	//@Test
+	/**
+	 * Tests removing one of a player's games.
+	 */
+	public void testRemoveGame() throws DatabaseException {
+		playerGameStorage.removeGame(1, 2);
+		assertFalse(playerGameStorage.hasGame(1, 2));
+	}
+	
+	//@Test
+	/**
+	 * Tests adding a game to a player's games. 
+	 */
+	public void testAddGame() throws DatabaseException {
+		playerGameStorage.addPlayerGames(1, 3);
+		assertTrue(playerGameStorage.hasGame(1, 3));
+	}
+	
+	//@Test
+	/**
+	 * Tests retrieving a player's rating for one of their games.
+	 */
+	public void testGetRating() throws DatabaseException {
+		int expectedResult = 9;
+		int actualResult = playerGameStorage.getPlayerRating(1, 1);
+		assertEquals(expectedResult, actualResult);
+	}
+	
+	//@Test
+	/**
+	 * Tests updating a player's rating for one of their games. 
+	 */
+	public void testUpdateRating() throws DatabaseException {
+		playerGameStorage.updatePlayerRating(1, 1, 8);
+		assertEquals(8, playerGameStorage.getPlayerRating(1, 1));
 	}
 }

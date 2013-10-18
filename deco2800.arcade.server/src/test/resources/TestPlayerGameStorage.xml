@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dataset>
+<PLAYERGAMES playerID='1' gameID='1' rating='9' />
+<PLAYERGAMES playerID='1' gameID='2' rating='10' />
+</dataset>

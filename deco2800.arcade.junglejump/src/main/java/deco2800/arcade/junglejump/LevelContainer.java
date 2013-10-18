@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.junglejump.GUI.junglejump;
@@ -84,7 +85,7 @@ public class LevelContainer {
 		        			level.addPlatform(p);
 		        			bananaCounter++;
 	        		}
-	        		if(c!='*') {
+	        		if(c!='*' && c!= '.') {
 	        			p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);
 	        		}
@@ -120,12 +121,12 @@ public class LevelContainer {
 				currentWorld = 0;
 			}
 			junglejump.world = currentWorld;
-			junglejump.gameBackground = new Texture(("junglejumpassets/world" + (currentWorld+1) + "/background.png"));
-			junglejump.worldNumText = new Texture(("junglejumpassets/" + (currentWorld + 1) + ".png"));
+			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (currentWorld+1) + "/background.png"));
+			junglejump.worldNumText = new Texture(Gdx.files.internal((currentWorld + 1) + ".png"));
 		}
 		junglejump.currentLevel = getLevel(currentLevel);
 		//currentLevel = newLevel;
-		junglejump.levelNumText = new Texture(("junglejumpassets/" + (currentLevel + 1) + ".png"));
+		junglejump.levelNumText = new Texture(Gdx.files.internal((currentLevel + 1) + ".png"));
 		junglejump.monkeyX = junglejump.monkeyDefaultX;
 		junglejump.monkeyY = junglejump.monkeyDefaultY;
 		return;

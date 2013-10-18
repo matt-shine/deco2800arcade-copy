@@ -104,7 +104,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	float velocity = 5.0f;
 	boolean correct = false;
 	boolean onPlatform, isFalling = false;
-	public int lives = 3;
+	public static int lives = 3;
 
 //	public int currentLevelIndex = 0;
 	static LevelContainer currentCont = new LevelContainer();
@@ -461,12 +461,13 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	}
 
-	public void killMonkey() {
+	public static void killMonkey() {
 		monkeyY = 100;
 		monkeyX = 10;
 		lives--;
 		if(lives > 0) {
 		} else {
+			// TODO Change to gameover screen 
 			lives = 5;
 		}
 		livesNumText = new Texture(("" + lives + ".png"));
@@ -484,7 +485,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
 			// Check x and y are within the platform boundaries and monkey is on it
-			if (x > (p.getX() - monkeyLength)
+			if (p.platType != '=' &&  x > (p.getX() - monkeyLength)
 					&& x < (p.getX()+p.getWidth() - 10)
 					&& y <= p.getY() + p.getHeight() // Top of platform
 					&& y >= p.getY() - monkeyHeight) {				// Bottom of platform
@@ -496,6 +497,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				
 				if( p.platType == 'b') {
 					p.visible = false;
+					// TODO change this to a function to count bananas
 					BANANAS_FOUND++;
 					System.out.println(BANANAS_FOUND/2);
 					p.setY(10000);

@@ -49,7 +49,6 @@ public class Platform {
 		this.width = 40;
 		this.height = 40;
 		
-		//String platformType = "";
 		switch(type) {
 		case '-': 
 			platformType = "branch";
@@ -96,6 +95,31 @@ public class Platform {
 			platformType = "banana";
 			this.width = 30;
 			this.height = 30;
+			break;
+		case 'x': // Spike
+			platformType = "banana";
+			this.width = 20;
+			this.height = 20;
+			break;
+		case '~': // Tunnel floor
+			platformType = "banana";
+			this.width = 40;
+			this.height = 20;
+			break;
+		case '=': // Tunnel
+			platformType = "banana";
+			this.width = 40;
+			this.height = 40;
+			break;
+		case 'J': // Jim
+			platformType = "banana";
+			this.width = 80;
+			this.height = 60;
+			break;
+		case 'Z': // Princess monkey
+			platformType = "banana";
+			this.width = 50;
+			this.height = 50;
 			break;
 		default:
 			platformType = "branch_short";
@@ -209,8 +233,11 @@ public class Platform {
 		}
 		if(this.platType == 'j') {
 			junglejump.monkeyY += 50;
+			this.active = true;
 		}
-		this.active = true;
+		if(this.platType == 'x') {
+			junglejump.killMonkey();
+		}
 	}
 	
 	/**

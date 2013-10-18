@@ -127,8 +127,8 @@ public class WL6 extends GameClient {
     static {
         GAME = new Game();
         GAME.id = "Wolfenstein 3D";
-        GAME.name = "Wolfenstein 3D";
-        GAME.description = "Killin' Natzis";
+        GAME.name = "Wolfenstein Time";
+        GAME.description = "Fight through a maze of classic wolfenstein levels against the iceking and his minions.";
     }
 
     public Game getGame() {

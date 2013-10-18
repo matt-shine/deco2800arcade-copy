@@ -84,19 +84,19 @@ public class DoodadList {
                     DoodadInfo.wayPoint(DIRS.LEFT).specialCase(),
 
                     //23: puddle of water
-                    DoodadInfo.nonsolidScenery("puddle"),
+                    DoodadInfo.nonsolidScenery("blank"),
 
                     //24: oil drum
-                    DoodadInfo.solidScenery("oildrum"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //25: table and chairs
-                    DoodadInfo.solidScenery("tablechairs"),
+                    DoodadInfo.solidScenery("plant"),
 
                     //26: lamp
-                    DoodadInfo.nonsolidScenery("lamp"),
+                    DoodadInfo.nonsolidScenery("manfried"),
 
                     //27: chandelier
-                    DoodadInfo.nonsolidScenery("chandelier"),
+                    DoodadInfo.nonsolidScenery("manfried"),
 
                     //28: hanging skeleton
                     new DoodadInfo(),
@@ -105,61 +105,61 @@ public class DoodadList {
                     DoodadInfo.healthPickup("health", 5, 0),
 
                     //30: white column
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("column"),
 
                     //31: green plant
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("plant"),
 
                     //32: skeleton
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("skeleton"),
 
                     //33: sink
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("sink"),
 
                     //34: brown plant
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("plant"),
 
                     //35: vase
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("vase"),
 
                     //36: table
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("table"),
 
                     //37: ceiling light (green)
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("manfried"),
 
                     //38: utensils brown
                     new DoodadInfo(),
 
                     //39: armor
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("armour"),
 
                     //40: empty cage
                     new DoodadInfo(),
 
                     //41: cage / skeleton
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("cage"),
 
                     //42: bones 1
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("skeleton"),
 
                     //43: gold key
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //44: silver key
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //45: bed
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("bed"),
 
                     //46: basket
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("dogbed"),
 
                     //47: food
                     DoodadInfo.healthPickup("health", 10, 0),
 
                     //48: medkit
-                    DoodadInfo.healthPickup("medkit", 25, 0),
+                    DoodadInfo.healthPickup("clownnurse", 25, 0),
 
                     //49: ammo pickup
                     DoodadInfo.ammoPickup("ammo", 5, 0),
@@ -172,49 +172,49 @@ public class DoodadList {
                     DoodadInfo.gunPickup("machinegun", 1, 0),
 
                     //52: cross
-                    DoodadInfo.treasurePickup("worm", 100),
+                    DoodadInfo.treasurePickup("worm", 100, 1),
 
                     //53: chalice
-                    DoodadInfo.treasurePickup("worm", 500),
+                    DoodadInfo.treasurePickup("worm", 500, 1),
 
                     //54: treasure chest
-                    DoodadInfo.treasurePickup("worm", 1000),
+                    DoodadInfo.treasurePickup("worm", 1000, 1),
 
                     //55: crown
-                    DoodadInfo.treasurePickup("worm", 5000),
+                    DoodadInfo.treasurePickup("worm", 5000, 1),
 
                     //56: extra life
-                    new DoodadInfo(),
+                    DoodadInfo.treasurePickup("fullheal", 10000, 150),
 
                     //57: bones / blood
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //58: barrel
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("barrel"),
 
                     //59: well / water
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("well"),
 
                     //60: well
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("well"),
 
                     //61: pool of blood
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("blood"),
 
                     //62: flag
-                    new DoodadInfo(),
+                    DoodadInfo.solidScenery("flag"),
 
                     //63: nothing
                     new DoodadInfo(),
 
                     //64: bones 2
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //65: bones 3
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //66: bones 4
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("bones"),
 
                     //67: utensils blue
                     new DoodadInfo(),
@@ -226,7 +226,7 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //70: vines
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("vines"),
 
                     //71: nothing
                     new DoodadInfo(),
@@ -285,35 +285,35 @@ public class DoodadList {
                     //89: nothing
                     new DoodadInfo(),
 
-                    //90: Turning point
-                    new DoodadInfo(),
+                    //90: Turning point (right)
+                    DoodadInfo.wayPoint(DIRS.RIGHT),
 
-                    //91: Turning point
-                    new DoodadInfo(),
+                    //91: Turning point (upright)
+                    DoodadInfo.wayPoint(DIRS.UPRIGHT),
 
-                    //92: Turning point
-                    new DoodadInfo(),
+                    //92: Turning point (up)
+                    DoodadInfo.wayPoint(DIRS.UP),
 
-                    //93: Turning point
-                    new DoodadInfo(),
+                    //93: Turning point (upleft)
+                    DoodadInfo.wayPoint(DIRS.UPLEFT),
 
-                    //94: Turning point
-                    new DoodadInfo(),
+                    //94: Turning point (left)
+                    DoodadInfo.wayPoint(DIRS.LEFT),
 
-                    //95: Turning point
-                    new DoodadInfo(),
+                    //95: Turning point (downleft)
+                    DoodadInfo.wayPoint(DIRS.DOWNLEFT),
 
-                    //96: Turning point
-                    new DoodadInfo(),
+                    //96: Turning point (down)
+                    DoodadInfo.wayPoint(DIRS.DOWN),
 
-                    //97: Turning point
-                    new DoodadInfo(),
+                    //97: Turning point (downright)
+                    DoodadInfo.wayPoint(DIRS.DOWNRIGHT),
 
                     //98: Secret door
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //99: Endgame trigger
-                    new DoodadInfo(),
+                    new DoodadInfo().specialCase(),
 
                     //100: nothing
                     new DoodadInfo(),
@@ -340,28 +340,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //108: Guard 1 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //109: Guard 1 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //110: Guard 1 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //111: Guard 1 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //112: Guard 1 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //113: Guard 1 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //114: Guard 1 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //115: Guard 1 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 1, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 100, 0, 0, 1, EnemyType.GUARD, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //116: nothing
                     new DoodadInfo(),
@@ -388,34 +388,34 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //124: dead guard
-                    new DoodadInfo(),
+                    DoodadInfo.nonsolidScenery("corpse"),
 
                     //125: nothing
                     new DoodadInfo(),
 
                     //126: SS 1 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //127: SS 1 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //128: SS 1 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //129: SS 1 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //130: SS 1 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //131: SS 1 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //132: SS 1 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //133: SS 1 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //134: nothing
                     new DoodadInfo(),
@@ -430,16 +430,16 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //138: Dog 1 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //139: Dog 1 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //140: Dog 1 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //141: Dog 1 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 1, EnemyType.DOG, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //142: nothing
                     new DoodadInfo(),
@@ -448,28 +448,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //144: Guard 3 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //145: Guard 3 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //146: Guard 3 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //147: Guard 3 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //148: Guard 3 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //149: Guard 3 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //150: Guard 3 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //151: Guard 3 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //152: nothing
                     new DoodadInfo(),
@@ -502,28 +502,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //162: SS 3 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //163: SS 3 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //164: SS 3 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //165: SS 3 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //166: SS 3 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //167: SS 3 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //168: SS 3 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //169: SS 3 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 3, EnemyType.SS, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //170: nothing
                     new DoodadInfo(),
@@ -538,16 +538,16 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //174: Dog 3 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //175: Dog 3 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //176: Dog 3 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //177: Dog 3 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //178: nothing
                     new DoodadInfo(),
@@ -556,28 +556,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //180: Guard 4 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //181: Guard 4 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //182: Guard 4 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //183: Guard 4 (Standing)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //184: Guard 4 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //185: Guard 4 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //186: Guard 4 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //187: Guard 4 (Moving)
-                    new DoodadInfo(true, "guard", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //188: nothing
                     new DoodadInfo(),
@@ -610,28 +610,28 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //198: SS 4 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //199: SS 4 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //200: SS 4 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //201: SS 4 (Standing)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //202: SS 4 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //203: SS 4 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.UP, null),  // FIXME Not complete
 
                     //204: SS 4 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.LEFT, null),  // FIXME Not complete
 
                     //205: SS 4 (Moving)
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.DOWN, null),  // FIXME Not complete
 
                     //206: nothing
                     new DoodadInfo(),
@@ -646,16 +646,16 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //210: Dog 4 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.RIGHT, DIRS.RIGHT),  // FIXME Not complete
 
                     //211: Dog 4 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP, DIRS.UP),  // FIXME Not complete
 
                     //212: Dog 4 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.LEFT, DIRS.LEFT),  // FIXME Not complete
 
                     //213: Dog 4 (Moving)
-                    new DoodadInfo(true, "dog", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.UP),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, DIRS.DOWN),  // FIXME Not complete
 
                     //214: Hans Grosse
                     new DoodadInfo(),

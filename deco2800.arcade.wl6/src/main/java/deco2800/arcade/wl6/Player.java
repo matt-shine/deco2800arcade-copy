@@ -2,17 +2,23 @@ package deco2800.arcade.wl6;
 
 import java.util.HashSet;
 
+import com.badlogic.gdx.math.Vector2;
+
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
+
 public class Player extends Mob {
 
     public static final float SPEED = 3f;
 
     
     private int STARTING_HEALTH = 100;
+    private float BB_SIZE = 0.4f;
     private int points = 0;
     private int currentGun = 1;
     private HashSet<Integer> guns = new HashSet<Integer>();
-    private int ammo = 10;
-
+    private int ammo = 16;
+    private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
+	
     
 
 
@@ -31,22 +37,60 @@ public class Player extends Mob {
         //no super call
     }
 
+    
+    
     @Override
     public void tick(GameModel model) {
-        super.tick(model);
+    	
+    	Vector2 adjustedVelocity = new Vector2(getVel()).mul(model.delta() * 60);
+    	
+    	if (move(model, adjustedVelocity)) {
+    		//we just moved as intended
+    	} else if (move(model, new Vector2(adjustedVelocity.x, 0))) {
+    		//we just moved, but only in the x direction
+    	} else if (move(model, new Vector2(0, adjustedVelocity.y))) {
+    		//we just moved, but only in the y direction
+    	} else {
+    		//we are stuck
+    	}
+    	
+    	
+    	
     }
+    
+    
+    /**
+     * tries to move the object. returns true if successful
+     * @param model
+     * @param vec
+     * @return
+     */
+    private boolean move(GameModel model, Vector2 vec) {
+    	
+    	Vector2 targetPos = this.getPos().add(vec);
+    	int x1 = (int) Math.floor(targetPos.x - BB_SIZE / 2);
+    	int y1 = (int) Math.floor(targetPos.y - BB_SIZE / 2);
+    	int x2 = (int) Math.floor(targetPos.x + BB_SIZE / 2);
+    	int y2 = (int) Math.floor(targetPos.y + BB_SIZE / 2);
+    	
+    	for (int x = x1; x <= x2; x++) {
+    		for (int y = y1; y <= y2; y++) {
+    		    if (model.getCollisionGrid().getSolidAt(x, y) != 0) {
+    		    	return false;
+    		    }
+	    	}
+    	}
+    	
+    	setPos(getPos().add(vec));
+    	return true;
+    	
+    }
+    
+    
 
-
-	/*public void setHealth(int health, boolean overheal) {
-		this.health = Math.min(this.health + health, overheal ? 150 : 100);
-	}
-	
-	
-	public void addHealth(int health, boolean overheal) {
-		setHealth(this.health + health, overheal);
-	}*/
+    
     public void addHealth(int health, boolean overheal) {
-        setHealth(Math.min(this.health + health, overheal ? 150 : 100));
+        setHealth(Math.min(this.getHealth() + health, overheal ? 150 : 100));
     }
 
 
@@ -112,6 +156,15 @@ public class Player extends Mob {
 		
 		this.guns.add(gun);
 		
+	}
+	
+	
+	public void addKey(KEY_TYPE k) {
+		keys.add(k);
+	}
+	
+	public boolean hasKey(KEY_TYPE k) {
+		return keys.contains(k);
 	}
 	
 }

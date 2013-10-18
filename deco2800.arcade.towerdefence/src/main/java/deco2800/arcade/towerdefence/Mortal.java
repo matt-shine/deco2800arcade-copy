@@ -104,11 +104,11 @@ public class Mortal extends GridObject {
 	 * @param amount
 	 */
 	public void takeDamage(int amount) {
-		int damage = amount - armour;
-		if (damage <= 0) {
+		amount -= armour;
+		if (amount <= 0) {
 			return;
 		}
-		health -= damage;
+		health -= amount;
 		if (health <= 0) {
 			die();
 		}
@@ -123,15 +123,14 @@ public class Mortal extends GridObject {
 	 * @param penetration
 	 */
 	public void takeDamage(int amount, int penetration) {
-		int damage = amount;
 		if (penetration < armour) {
-			damage -= (armour - penetration);
+			amount -= (armour - penetration);
 		}
 
-		if (damage <= 0) {
+		if (amount <= 0) {
 			return;
 		}
-		health -= damage;
+		health -= amount;
 		if (health <= 0) {
 			die();
 		}

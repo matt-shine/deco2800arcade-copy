@@ -25,8 +25,6 @@ import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
-
-import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 
 /**
@@ -81,16 +79,11 @@ public class Pong extends GameClient {
         //this.achievementClient = new AchievementClient(networkClient);
 
         
-        //These methods are just used for testing HighscoreClient 
+        //These calls are just used for testing HighscoreClient 
         //Creating new HighscoreClient connection
         HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
         
-        //Single scores
         //hsd.storeScore("Number", 1234567890);
-        //hsd.storeScore("Number", 5211);
-        
-        //Getting top scores
-        List<Highscore> topPlayers = hsd.getGameTopPlayers(10, false, "Number");
 	}
 	
 	/**
@@ -98,8 +91,6 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void create() {
-		
-        
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
@@ -139,7 +130,7 @@ public class Pong extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, SCREENWIDTH/2, SCREENHEIGHT/2);
+		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		
 		// Create the paddles
 		setLeftPaddle(new LocalUserPaddle(

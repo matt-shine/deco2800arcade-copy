@@ -31,6 +31,9 @@ public class BurningSkies extends GameClient {
 	
 	private Music nowPlaying;
 	private boolean isPaused = false;
+	
+	//shh
+	public int zalgo = 0;
 
 	//TODO: ACHIEVEMENTS
 
@@ -133,6 +136,7 @@ public class BurningSkies extends GameClient {
 	@Override
 	public void dispose() {
 		super.dispose();
+		stopSong();
 	}
 
 	@Override
@@ -171,5 +175,4 @@ public class BurningSkies extends GameClient {
 	public Game getGame() {
 		return game;
 	}
-	
 }

@@ -73,12 +73,12 @@ ui
 breakout
 deerforest
 mixmaze
+minigolf
 chess
 landInvaders
 junglejump
 burningskies
 checkers
-lunarlander
 landInvaders
 towerdefence
 pacman

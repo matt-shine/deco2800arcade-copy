@@ -13,6 +13,7 @@ deerforest
 gamelibrary
 soundboard
 mixmaze
+minigolf
 chess
 landInvaders
 junglejump
@@ -27,3 +28,4 @@ wl6
 snakeLadder
 guesstheword
 lunarlander
+

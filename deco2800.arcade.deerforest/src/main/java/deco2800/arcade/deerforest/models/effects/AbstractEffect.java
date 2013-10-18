@@ -188,6 +188,7 @@ public abstract class AbstractEffect {
 	/**
 	 * @return shallow copy of the typeEffect set
 	 */
+	//
 	public Set<String> affectsTypes() {
 		//check null
 		if(this.typeEffects == null) {

@@ -212,6 +212,7 @@ public class ForumUi {
      * Send requests to retrieve some tags from server. 
      * Before calling this, the corresponding listener must be added to the client. 
      * Set NUM_TAGS for numbers of tags to be retrieved.
+     * You may move this to ForumUIControl (but still accessible from another class).
      * 
      * @param con	ClientConnection instance.
      */

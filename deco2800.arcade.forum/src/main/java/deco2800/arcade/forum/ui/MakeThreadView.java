@@ -18,6 +18,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 /**
  * Main class for forum interface
  *
@@ -29,6 +31,7 @@ public class MakeThreadView {
 	public JTextPane textPane;
 	public JButton submitBtn;
 	public JButton cancelBtn;
+	public JComboBox CategoryCBox;
 	public JFrame f;
 
 	   public MakeThreadView(JFrame frame) {
@@ -37,17 +40,17 @@ public class MakeThreadView {
 		   this.f.getContentPane().setLayout(null);
 	      
 		   this.textPane = new JTextPane();
-		   this.textPane.setBounds(42, 97, 575, 190);
+		   this.textPane.setBounds(42, 97, 848, 190);
 		   this.f.getContentPane().add(this.textPane);
 	      
-		   this.submitBtn = new JButton("Submit New Thread");
+		   this.submitBtn = new JButton("Submit Thread");
 		   this.submitBtn.setForeground(Color.BLACK);
-		   this.submitBtn.setBounds(111, 378, 127, 24);
+		   this.submitBtn.setBounds(316, 378, 127, 24);
 		   this.f.getContentPane().add(this.submitBtn);
 	      
 		   this.cancelBtn = new JButton("Cancel");
 		 
-		   this.cancelBtn.setBounds(464, 378, 79, 24);
+		   this.cancelBtn.setBounds(516, 378, 79, 24);
 		   this.f.getContentPane().add(this.cancelBtn);
 	      
 		   this.TitleTBox = new JTextField();
@@ -71,7 +74,22 @@ public class MakeThreadView {
 		   JLabel lblTags = new JLabel("Tags:");
 		   lblTags.setBounds(42, 302, 56, 16);
 		   this.f.getContentPane().add(lblTags);
+		   
+		   
+		   this.CategoryCBox = new JComboBox();
+		   this.CategoryCBox.setModel(new DefaultComboBoxModel(new String[] {"General Discussion", "Tutorial", "Report Bug", "Others"}));
+		   this.CategoryCBox.setBounds(748, 321, 142, 22);
+		   this.f.getContentPane().add(CategoryCBox);
+		      
+		   JLabel lblCatgory = new JLabel("Category:");
+		   lblCatgory.setBounds(751, 300, 56, 16);
+		   f.getContentPane().add(lblCatgory);
+		   
+		   
+		   
 		   this.f.setVisible(true);
+		   
+		   
 	   }
 	   
 	   public void addListener(ActionListener dummy, JButton button) {

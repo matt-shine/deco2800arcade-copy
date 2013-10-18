@@ -1,12 +1,12 @@
 package deco2800.arcade.protocol.forum;
 
-import deco2800.arcade.model.forum.*;
+import deco2800.arcade.protocol.forum.ParentThreadProtocol;;
 
 /**
  * Response to GetParentThreadsRequest
  *
  */
 public class GetParentThreadsResponse {
-	public ParentThread[] result;
+	public ParentThreadProtocol[] result;
 	public String error;
 }

@@ -109,7 +109,8 @@ public class ForumListener extends Listener {
 			GetParentThreadsResponse response = new GetParentThreadsResponse();
 			response.error = "";
 			try {
-				response.result = ArcadeServer.instance().getForumStorage().getParentThreads(request.start, request.end, request.limit);
+				ParentThread[] threads = ArcadeServer.instance().getForumStorage().getParentThreads(request.start, request.end, request.limit);
+				response.result = ParentThreadProtocol.getParentThreadProtocols(threads);
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();
 				response.result = null;

@@ -130,8 +130,10 @@ public class Protocol {
         kryo.register(String[].class);
         //kryo.register(java.util.Vector.class);
         kryo.register(ForumUserProtocol.class);
-        //kryo.register(ParentThread.class);
-        //kryo.register(ChildThread.class);
+        kryo.register(ParentThreadProtocol.class);
+        kryo.register(ChildThreadProtocol.class);
+        kryo.register(ParentThreadProtocol[].class);
+        kryo.register(ChildThreadProtocol[].class);
 		kryo.register(ForumTestResponse.class);
 		kryo.register(ForumTestRequest.class);
 		kryo.register(GetForumUserRequest.class);
@@ -140,6 +142,8 @@ public class Protocol {
 		kryo.register(InsertParentThreadResponse.class);
 		kryo.register(TagsRequest.class);
 		kryo.register(TagsResponse.class);
+		kryo.register(GetParentThreadsRequest.class);
+		kryo.register(GetParentThreadsResponse.class);
 	}
 	
 	/**

@@ -43,28 +43,7 @@ public class Player extends User {
 
 	private LibraryStyle libraryStyle;
 
-<<<<<<< HEAD
-	private Icon icon;
 
-	/**
-	 * Creates a new player instance with PlayerID, username DO NOT USE THIS
-	 * METHOD EXCEPT FOR TESTING PURPOSES
-	 */
-	public Player(int playerID, String username) {
-		super(playerID);
-		this.username = new Field(USERNAME_ID, username);
-		this.name = new Field(NAME_ID, null);
-		this.email = new Field(EMAIL_ID, null);
-		this.program = new Field(PROGRAM_ID, null);
-		this.bio = new Field(BIO_ID, null);
-
-		this.games = new Games();
-
-		this.friends = new Friends();
-
-		this.friendInvites = new FriendInvites();
-
-=======
 	@Deprecated
 	/**
 	 * DO NOT USE THIS METHOD, AT ALL, EVER.
@@ -75,7 +54,6 @@ public class Player extends User {
 		this.games = new Games();
 		this.friends = new Friends();
 		this.friendInvites = new FriendInvites();
->>>>>>> master
 		this.blocked = new Blocked();
 
 		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID, false);

@@ -56,8 +56,6 @@ public class FrontPage implements Screen {
     public static Skin skin;
     private static FrontPageStage stage;
 	
-    private float funds;
-    private int tokens;
     
     //need to get values for
 
@@ -75,6 +73,7 @@ public class FrontPage implements Screen {
     
     private boolean bclicked;
     private ArcadeUI arcadeUI;
+   // private TextButton recentGame;
     
     Texture bg;
     Texture mB;
@@ -118,6 +117,7 @@ public class FrontPage implements Screen {
         
         //Text Buttons
         final TextButton storeButton = new TextButton("Store", skin, "green");
+        
         //skin.add("Store", new Texture("homescreen_bg.png"));
         final TextButton chatButton = new TextButton("Chat", skin);
         final TextButton libraryButton = new TextButton("Library", skin, "magenta");
@@ -130,6 +130,9 @@ public class FrontPage implements Screen {
         recentTable.setBackground(skin.getDrawable("recentBar"));
         recentTable.setSize(350, 800);
     	recentTable.setPosition(125, 0);
+    	recentTable.setName("recenticon");
+        final Label logo = new Label("VAPOR", skin, "cgothic");
+        logo.setAlignment(Align.left);
         
         //Bottom Box Labels
         final Label divider2 = new Label("|", skin, "cgothic");
@@ -153,14 +156,39 @@ public class FrontPage implements Screen {
         recentButton.setPosition(bX, bY);
         
       
-       
-        
         libraryButton.setSize(bWidth, bHeight);
         libraryButton.setPosition(bX2, bY);
         
         storeButton.setSize(bWidth, bHeight);
         storeButton.setPosition(bX3, bY);
         
+        final Table bottomBox = new Table();
+        
+        
+        //set bottom bar properties
+        bottomBox.setSize(1279, 30);
+        bottomBox.setPosition(0, 0);
+        bottomBox.setColor(255, 255, 255, 1);
+        bottomBox.setBackground(skin.getDrawable("menuBar"));
+        
+        //add bottom labels
+        
+        bottomBox.add(divider2).width(1100).pad(20);
+        bottomBox.add(chatLink).width(100);
+        
+        //adding to stage
+        stage.addActor(bottomBox);
+ 
+        for (Game gamename : ArcadeSystem.getArcadeGames()) {
+			try {
+				skin.add(gamename.id, new Texture(Gdx.files.internal("logos/"
+						+ gamename.id.toLowerCase() + ".png")));
+			} catch (Exception e) {
+				skin.add(gamename.id, new Texture
+						(Gdx.files.internal("logos/default.png")));
+			}
+		}
+
         // Icon event listeners, mouseOver and mouseClick
         recentButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
@@ -203,64 +231,48 @@ public class FrontPage implements Screen {
 		recentButton.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
 		    	
-		    	recentButton.remove();
-		    	//It doesnt like it when mathutils.random is IN the brackets of games[].
-		    	
-		    	//For prototype reasons this will be in random, Original plan was getting data from the most frequently played games.
-		    	/*int k = MathUtils.random(games.size());
-		    	int l = MathUtils.random(games.size());
-		    	int m = MathUtils.random(games.size());*/
-		    	
-		    /*	String game1 = games[k];
-		    	String game2 = games[l];
-		    	String game3 = games[m];
-		    	 */
-		    	final String game1 = getRandomGame();
-		    	final String game2 = getRandomGame();
-		    	final String game3 = getRandomGame();
-			    
-		    	//buttons for recent games
-		        final TextButton recentgame1 = new TextButton(game1, skin, "blue");
-		        final TextButton recentgame2 = new TextButton(game2, skin, "blue");
-		        final TextButton recentgame3 = new TextButton(game3, skin, "blue");
-		         
-		    	//recent games, 1 2 and 3
-		        recentgame1.setSize(bWidth - 50, bHeight - 50);   //250px x 250px     
-		        recentgame1.setPosition(bX + 25, bY + 250); 
-		      
-		        recentgame2.setSize(bWidth - 50, bHeight - 50);        
-		        recentgame2.setPosition(bX + 25, bY);
-		        
-		        recentgame3.setSize(bWidth - 50, bHeight - 50);        
-		        recentgame3.setPosition(bX + 25, bY - 250);
-		        
-		        
-		    	stage.addActor(recentTable);
-    			stage.addActor(recentgame1);
-    			stage.addActor(recentgame2);
-    			stage.addActor(recentgame3);
-    			
-    			recentTable.setZIndex(1);
-    			recentgame1.setZIndex(2);
-		    	recentgame2.setZIndex(2);
-		    	recentgame3.setZIndex(2);
-		    	 
-		        
-			    recentgame1.addListener((new ChangeListener() {
-			        public void changed (ChangeEvent event, Actor actor) {
-			        	ArcadeSystem.goToGame(game1);
-			        }
-			    })); 
-			    recentgame2.addListener((new ChangeListener() {
-			        public void changed (ChangeEvent event, Actor actor) {
-			        	ArcadeSystem.goToGame(game2);
-			        }
-			    })); 
-			    recentgame3.addListener((new ChangeListener() {
-			        public void changed (ChangeEvent event, Actor actor) {
-			        	ArcadeSystem.goToGame(game3);
-			        }
-			    })); 
+				Set<Game> gamesList = ArcadeSystem.getArcadeGames();
+				int listSize = gamesList.size();
+				int item = new Random().nextInt(listSize);
+				for (int i = 0; i < 3; i++) {
+					Game myGame = (Game)gamesList.toArray()[item + i];
+					
+				 	//Game myGame = (Game)ArcadeSystem.getGamesList().toArray()[item + i];
+				 	
+				 	final String gameName = myGame.getName();
+				 	final TextButton recentGame = new TextButton("\n\n\n\n\n\n\n" +
+				 		myGame.name, skin, "blue");
+				 	recentGame.setName("recenticon");
+				 	recentGame.setSize(250, 250);
+				 	recentGame.setPosition(175, 220 + (250 * ((i%3)-1)));
+				 	//recentGame.setName("recenticon");
+				 	
+				 	final Button recentIcon = new Button(skin.getDrawable(myGame.id));
+				 	recentIcon.setName("recenticon");
+				 	recentIcon.setSize(150, 150);
+					recentIcon.setPosition(225, 280 + (250 * ((i%3)-1)));
+					
+					
+					 recentGame.addListener((new ChangeListener() {
+						public void changed (ChangeEvent event, Actor actor) {
+							ArcadeSystem.goToGame(gameName);
+						}
+					})); 
+					
+					 recentIcon.addListener((new ChangeListener() {
+						public void changed (ChangeEvent event, Actor actor) {
+							ArcadeSystem.goToGame(gameName);
+						}
+					})); 
+					
+					recentButton.remove();
+					stage.addActor(recentTable);
+					stage.addActor(recentGame);
+					stage.addActor(recentIcon);
+					recentTable.setZIndex(1);
+					recentGame.setZIndex(2);
+					recentIcon.setZIndex(3);
+				 }
 		    }
 		})); 
        
@@ -312,7 +324,36 @@ public class FrontPage implements Screen {
         stage.addActor(libraryButton);
         stage.addActor(storeButton);
         
-        
+        /**
+         * This function listens for a click outside the text boxes.
+         * It checks if 'Recently Played' button is on the stage,
+         * if not, its add it to stage
+         * 
+         */
+        stage.addListener((new ClickListener() {
+    	    public void clicked(InputEvent event, float x, float y) {
+    	    	
+    	    	//checking for clicks at specific coordinates in the screen
+    	    	if ((x > 0 && x < 125) || (x > 475 && x < 1280)){
+
+ 
+    	    		//Checking for 'Recently Played' Button is not on stage
+	    	    	if (!stage.getActors().contains(recentButton, true)){
+	    	    		recentTable.remove();
+	    	    		stage.addActor(recentButton);
+	    	    		
+	    	    		for (int i = 0; i < stage.getActors().size ; i++){
+	    	    			if (stage.getActors().toArray()[i].getName() == "recenticon"){
+	    	    				stage.getActors().toArray()[i].remove();
+	    	    				i--;
+	    	    			}
+	    	    		}
+	    	    		
+	    	    	}
+        		}
+    	    }
+    	})); 
+       
     }
    
     //FIXME Better implementation
@@ -400,6 +441,7 @@ public class FrontPage implements Screen {
     	}
     }*/
    
+
 	@Override
 	public void show() {
 		ArcadeInputMux.getInstance().addProcessor(stage);

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<dataset>
+<PLAYERS playerID='1' username='U1' name='bob' email='bob@gmail.com' program='BE' bio='I am bob.' age='86'/>
+<PLAYERS playerID='2' username='U2' name='james' email='james@gmail.com' program='BSc' bio='I am james.' age='9001'/>
+<PLAYERS playerID='3' username='U3' name='rick' email='rick@gmail.com' program='BSc' bio='I am Rick Astley.' age='60'/>
+<PLAYERS playerID='4' username='U4' name='walter' email='heisenberg@gmail.com' program='BSc' bio='Say my name.' age='52'/>
+</dataset>

@@ -25,8 +25,6 @@ import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
-
-import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 
 /**

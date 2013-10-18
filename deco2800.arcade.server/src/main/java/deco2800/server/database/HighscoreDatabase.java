@@ -207,6 +207,7 @@ public class HighscoreDatabase {
 		if (!initialised) {
 			initialise();
 		}
+		
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 

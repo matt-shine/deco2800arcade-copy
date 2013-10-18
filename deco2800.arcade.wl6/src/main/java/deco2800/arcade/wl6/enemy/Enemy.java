@@ -33,7 +33,9 @@ public class Enemy extends Mob {
     private float tick;
     private STATES nextState;
     //
-    private WL6Meta.DIRS pathDir;
+    private WL6Meta.DIRS faceDir;
+    //
+    private boolean pathing;
     //
     private float pathSpeed;
     //
@@ -63,7 +65,7 @@ public class Enemy extends Mob {
     @Override
     public void init(GameModel model) {
         super.init(model);
-        if (pathDir != null) {
+        if (pathing) {
             calculatePath(model);
         }
 
@@ -72,6 +74,7 @@ public class Enemy extends Mob {
     @Override
     public void tick(GameModel gameModel) {
         super.tick(gameModel);
+
         tick += gameModel.delta();
         if (tick > 1 && nextState != null) {
             setState(nextState);
@@ -93,12 +96,16 @@ public class Enemy extends Mob {
         }
     }
 
-    public WL6Meta.DIRS getPathDir() {
-        return pathDir;
+    public WL6Meta.DIRS getFaceDir() {
+        return faceDir;
     }
 
-    public void setPathDir(WL6Meta.DIRS dir) {
-        pathDir = dir;
+    public void setFaceDir(WL6Meta.DIRS dir) {
+        faceDir = dir;
+    }
+
+    public void setPathing(boolean pathing) {
+        this.pathing = pathing;
     }
 
     public void setState(STATES state) {

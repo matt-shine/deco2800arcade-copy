@@ -17,7 +17,6 @@ public class ReplayNodeFactory {
      * @throws Exception
      */
     public static ReplayNode createReplayNode(String eName, Object... eData)
-            throws ReplayItemDataInvalidException
     {
         HashMap<String, ReplayItem> data = new HashMap<String, ReplayItem>();
         ReplayItem riTemp;

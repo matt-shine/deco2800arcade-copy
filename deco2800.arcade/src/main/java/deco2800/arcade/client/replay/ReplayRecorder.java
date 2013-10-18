@@ -15,7 +15,7 @@ import deco2800.arcade.protocol.replay.PushEventResponse;
 
 public class ReplayRecorder {
 	
-	ReplayHandler handler;
+	private ReplayHandler handler;
 
 	private NetworkClient client;
 	private Gson serializer;

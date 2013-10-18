@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.replay.exception.DeprecatedMethodException;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.ListSessionsRequest;
@@ -22,15 +23,15 @@ import java.util.*;
  * 
  */
 public class ReplayHandler {
-    protected EventListenerList listenerList = new EventListenerList();
+    private EventListenerList listenerList = new EventListenerList();
     
     private NetworkClient client;
     
     private Integer sessionId;
     private Integer lastSessionId;
     
-    ReplayRecorder recorder;
-    ReplayPlayback playback;
+    private ReplayRecorder recorder;
+    private ReplayPlayback playback;
 
     private Boolean isReadyToRecord = false;
 
@@ -310,7 +311,7 @@ public class ReplayHandler {
      * @param username, the username of the client starting the game
      */
     public void startSession(int gameId, String username) {
-        throw new RuntimeException( "This method is no longer supported." );
+        throw new DeprecatedMethodException( "This method is no longer supported." );
     }
     
     /**
@@ -320,7 +321,7 @@ public class ReplayHandler {
      * @param sessionId, the id of the session to request
      */
     public void requestEventsForSession( int sessionId ) {
-        throw new RuntimeException( "This method is no longer supported, see the playbackSession method" );
+        throw new DeprecatedMethodException( "This method is no longer supported, see the playbackSession method" );
     }
     
     /*

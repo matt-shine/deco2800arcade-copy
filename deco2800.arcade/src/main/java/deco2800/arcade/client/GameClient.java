@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.AchievementListener;
@@ -30,19 +31,19 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
 	private int width, height;
-    private AchievementClient achievementClient;
-    private ImageClient imageClient;
-    private PlayerClient playerClient;
-    private ImageManager imageManager;
-    private boolean hasF11PressedLast = false;
-    
+	private AchievementClient achievementClient;
+	private ImageClient imageClient;
+	private PlayerClient playerClient;
+	private ImageManager imageManager;
+	private boolean hasF11PressedLast = false;
+
 	public GameClient(Player player, NetworkClient networkClient) {
-		
+
 		this.player = player;
 		this.networkClient = networkClient;
 		this.playerClient = new PlayerClient(networkClient);
-        this.achievementClient = new AchievementClient(networkClient);
-        this.achievementClient.addListener(this);
+		this.achievementClient = new AchievementClient(networkClient);
+		this.achievementClient.addListener(this);
 		gameOverListeners = new ArrayList<GameOverListener>();
 		this.imageClient = new ImageClient(networkClient);
 		this.imageManager = new ImageManager(imageClient);
@@ -53,62 +54,83 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
     public void achievementAwarded(final Achievement ach) {
 	if (this.overlayBridge == null)
 	    return;
-	
-	this.imageClient.get(ach.icon, true).setHandler(new Handler<EncodedImage>() {
-		public void handle(EncodedImage encodedImg) {
+
+	this.imageManager.getTexture(ach.icon).setHandler(new Handler<Texture>() {
+		public void handle(final Texture texture) {
 		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
 		        @Override
 		        public String getMessage() {
 			    return "Achievement " + ach.name + " awarded!";
 			}		       
-		    });
-		}
-	});	
-    }
 
-    public void progressIncremented(final Achievement ach, final int progress) {
-	if (this.overlayBridge == null)
-	    return;
-	this.imageClient.get(ach.icon, true).setHandler(new Handler<EncodedImage>() {
-		public void handle(EncodedImage encodedImg) {
-		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+			@Override
+			public Texture getTexture() {
+			    return texture;
+			}
+
 		        @Override
-		        public String getMessage() {
-			    return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
-			}		       
+			public float displayTime() {
+			    return 2.5f;
+			}
 		    });
 		}
 	});
     }
 
-    public void setNetworkClient(NetworkClient client) {
-        achievementClient.setNetworkClient(client);
-        playerClient.setNetworkClient(client);
-	imageClient.setNetworkClient(client);
-    }
-    
-    public void setThisNetworkClient(NetworkClient client) {
-    	this.networkClient = client;
-    }
-    
-    public void setPlayer(Player player) {
-    	this.player = player;
+    public void progressIncremented(final Achievement ach, final int progress) {
+	if (this.overlayBridge == null)
+	    return;
+	this.imageManager.getTexture(ach.icon).setHandler(new Handler<Texture>() {
+		public void handle(final Texture texture) {
+		    GameClient.this.overlayBridge.addPopup(new UIOverlay.PopupMessage() {
+		        @Override
+		        public String getMessage() {
+			    return "Progress in achievement " + ach.name + " (" + progress + "/" + ach.awardThreshold + ")";
+			}		  
+
+			@Override
+			public Texture getTexture() {
+			    return texture;
+			}
+
+			@Override
+			public float displayTime() {
+			    return 2.5f;
+			}
+		    });
+		}
+	});
     }
 
-    public void incrementAchievement(final String achievementID) {
-        achievementClient.incrementProgress(achievementID, player);
-    }
+	public void setNetworkClient(NetworkClient client) {
+		achievementClient.setNetworkClient(client);
+		playerClient.setNetworkClient(client);
+		imageClient.setNetworkClient(client);
+	}
 
-    public AchievementClient getAchievementClient() {
-        return this.achievementClient;
-    }
-    
-    public PlayerClient getPlayerClient() {
-    	return this.playerClient;
-    }
+	public void setThisNetworkClient(NetworkClient client) {
+		this.networkClient = client;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public void incrementAchievement(final String achievementID) {
+		achievementClient.incrementProgress(achievementID, player);
+	}
+
+	public AchievementClient getAchievementClient() {
+		return this.achievementClient;
+	}
+
+	public PlayerClient getPlayerClient() {
+		return this.playerClient;
+	}
 
 	/**
 	 * Adds the in game overlay
+	 *
 	 * @param overlay
 	 */
 	public void addOverlay(ApplicationListener overlay) {
@@ -118,6 +140,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 	/**
 	 * Adds the in game overlay
+	 *
 	 * @param overlay
 	 */
 	public void addOverlayBridge(UIOverlay overlay) {
@@ -134,7 +157,6 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		return overlayBridge;
 	}
 
-
 	/**
 	 * Updates the in game overlay
 	 */
@@ -149,15 +171,14 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 		}
 	}
 
-
 	/**
 	 * Adds gameOverListener's to the GameClient
+	 *
 	 * @param gameOverListener
 	 */
 	public void addGameOverListener(GameOverListener gameOverListener) {
 		gameOverListeners.add(gameOverListener);
 	}
-
 
 	/**
 	 * Controls what happens when the game is over
@@ -191,25 +212,23 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	@Override
 	public void render() {
 		super.render();
-	    processOverlay();
-	    
+		processOverlay();
 
-		//toggles fullscreen on F11
-		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast &&
-				(hasF11PressedLast = !hasF11PressedLast)) {
-			
+		// toggles fullscreen on F11
+		if (Gdx.input.isKeyPressed(Keys.F11) != hasF11PressedLast
+				&& (hasF11PressedLast = !hasF11PressedLast)) {
+
 			Gdx.graphics.setDisplayMode(
 					Gdx.graphics.getDesktopDisplayMode().width,
 					Gdx.graphics.getDesktopDisplayMode().height,
-					!Gdx.graphics.isFullscreen()
-			);
+					!Gdx.graphics.isFullscreen());
 		}
-		
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		
+
 		this.width = width;
 		this.height = height;
 		if (overlay != null) {
@@ -222,12 +241,11 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	public void resume() {
 		super.resume();
 	}
-	
+
 	public int getWidth() {
 		return width;
 	}
-	
-	
+
 	public int getHeight() {
 		return height;
 	}
@@ -235,20 +253,19 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	public NetworkClient getNetworkClient() {
 		return this.networkClient;
 	}
-	
-	
+
 	public Player getPlayer() {
 		return player;
 	}
-	
+
 	public void setMultiplayerOn() {
 		multiplayerOn = 1;
 	}
-	
+
 	public void setMultiplayerOff() {
 		multiplayerOn = 0;
 	}
-	
+
 	public boolean multiplayerMode() {
 		if (multiplayerOn == 1) {
 			return true;
@@ -256,18 +273,17 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 			return false;
 		}
 	}
-	
+
 	public void setMultiSession(int session) {
 		multiplayerSession = session;
 		startMultiplayerGame();
 	}
-	
+
 	public void startMultiplayerGame() {
 	}
-	
+
 	public void updateGameState(Object update) {
 	}
-	
 }
-	
+
 

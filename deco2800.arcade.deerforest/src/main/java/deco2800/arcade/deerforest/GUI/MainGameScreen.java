@@ -140,20 +140,20 @@ public class MainGameScreen implements Screen {
         deck.addAll(game.getCardCollection(1, "Deck"));
         ArrayList<AbstractCard> decks = new ArrayList<AbstractCard>(deck);
         for(AbstractCard card : decks) {
-            manager.load(Gdx.files.classpath(card.getPictureFilePath()).toString(), Texture.class);
+            manager.load(card.getPictureFilePath(), Texture.class);
         }
 
-		manager.load(Gdx.files.classpath("DeerForestAssets/background.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/MainPhase.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/BattlePhase.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/EndPhase.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/Player1.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/Player2.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/HealthBar.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/CardBack.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/Player1Victory.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/Player2Victory.png").toString(), Texture.class);
-        manager.load(Gdx.files.classpath("DeerForestAssets/Deck.png").toString(), Texture.class);
+		manager.load("DeerForestAssets/background.png", Texture.class);
+        manager.load("DeerForestAssets/MainPhase.png", Texture.class);
+        manager.load("DeerForestAssets/BattlePhase.png", Texture.class);
+        manager.load("DeerForestAssets/EndPhase.png", Texture.class);
+        manager.load("DeerForestAssets/Player1.png", Texture.class);
+        manager.load("DeerForestAssets/Player2.png", Texture.class);
+        manager.load("DeerForestAssets/HealthBar.png", Texture.class);
+        manager.load("DeerForestAssets/CardBack.png", Texture.class);
+        manager.load("DeerForestAssets/Player1Victory.png", Texture.class);
+        manager.load("DeerForestAssets/Player2Victory.png", Texture.class);
+        manager.load("DeerForestAssets/Deck.png", Texture.class);
 	}
 
     /**

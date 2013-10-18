@@ -4,13 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class Rook implements Piece {
+import deco2800.arcade.chess.FixedSizeList;
 
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
+public class Rook extends Piece {
 
 	/**
 	 * Initialises the piece
@@ -18,66 +14,14 @@ public class Rook implements Piece {
 	 * @param team
 	 */
 	public Rook(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 3;
-		this.pieceNo = pieceNo;
 	}
 
-	@Override
-	public void deActivate() {
-		active = false;
-
-	}
-
-	@Override
-	public void reActivate() {
-		active = true;
-
-	}
-
-	public String toString() {
-		String toString = "";
-
-		if (!team) {
-			toString += "white ";
-		} else {
-			toString += "black ";
-		}
-
-		toString += "Rook";
-
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];// current row position
 		int y = currentPos[1];// current column position
-
-		// int [] castle = {x, y+2};
 		
 		// moves.add(castle);
 		for (int i = 1; i <= 7; i++) {
@@ -129,23 +73,36 @@ public class Rook implements Piece {
 				moves.remove(a);
 			}
 			
-
-		
-			
-		// if (!firstMove){
-		// moves.remove(castle);
-		// }
 		}
 		HashSet<int []> hs = new HashSet<int []>();
 		hs.addAll(moves);
 		moves.clear();
 		moves.addAll(hs);
-		//for(int v =0; v<moves.size(); v++){
-			//System.out.println(Arrays.toString(moves.get(v)));
-		//}
 		
-		return moves;
+		List<int[]> allowableMoves;
+		
+		allowableMoves = new ArrayList<int[]>(removeJumpsUp(
+				moves, currentPos, board_state));
+		
+		return allowableMoves;
+		
+		
 	}
+	
+	public String toString() {
+		String toString = "";
+
+		if (!team) {
+			toString += "white ";
+		} else {
+			toString += "black ";
+		}
+
+		toString += "Rook";
+
+		return toString;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -180,13 +137,5 @@ public class Rook implements Piece {
 			return false;
 		return true;
 	}
-
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 }

@@ -19,17 +19,15 @@ public class PacChar extends Mover{
 	}
 			
 	private PacState currentState;
-	// Static variables for pulling sprites from sprite sheet
-	private static final int FRAME_COLS = 2;
-	private static final int FRAME_ROWS = 4;
+	private static int widthVal = 26;
+	private static int heightVal = 26;
 	
 	// the distance pacman moves each frame
 	private float moveDist;
+	private int spritePos;
+
 
 	private Animation walkAnimation;
-	private Texture walkSheet;
-	private TextureRegion[] walkFrames;
-	private TextureRegion currentFrame;
 	
 	public PacChar(GameMap gameMap) {
 		super(gameMap);
@@ -37,40 +35,26 @@ public class PacChar extends Mover{
 		//set up pacman to be drawn in the right place- this is defintely right
 		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
-		//grabs file- should be pacMove2.png, pacTest marks the edges and middle pixel in red
-		walkSheet = new Texture(Gdx.files.internal("pacMove2.png"));
-		// splits into columns and rows then puts them into one array in order
-		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-		walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
-							/ FRAME_ROWS);
-		walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-		int index = 0;
-		for (int i = 0; i < FRAME_ROWS; i++) {
-			for (int j = 0; j < FRAME_COLS; j++) {
-				walkFrames[index++] = tmp[i][j];
-			}
-		}
 		// initialise some variables
 		currentState = PacState.IDLE;
 		facing = Dir.LEFT;
-		width = walkFrames[1].getRegionWidth() * 2;
-		height = walkFrames[1].getRegionHeight() * 2;
+		width = widthVal;
+		height = heightVal;
 		updatePosition();
 		moveDist = 1;
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
-//		walkAnimation = new Animation(0.025f, walkFrames);
+//		walkAnimation = new Animation(0.025f, pacmanFrames);
 //		stateTime = 0f;	
 	}
 	
 	/**
-	 * Called everytime the main render method happens.
-	 * Draws the Pacman
+	 * Prepare to draw pacman
 	 */
-	public void render(SpriteBatch batch) {
+	public void prepareDraw() {
 		
-		int spritePos = 3;
+		spritePos = 3;
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -80,24 +64,42 @@ public class PacChar extends Mover{
 		} else {
 			facing = Dir.LEFT;
 		}
+		
+		
+//		if (this.nextTile(this.getTile(), 1).getClass() == TeleportTile.class){
+//			
+//		}
+//	
+		// check collision
+		if (checkNoWallCollision(this.getTile())) {
+			this.setCurrentState(PacState.MOVING);
+		} else {
+			this.setCurrentState(PacState.IDLE);
+			// stops pacman changing facing if he can't move in that direction
+			this.setFacing(facing);
+		}
+		
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
 			if (facing == Dir.LEFT){
     			drawX -= moveDist;
+    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
     		} else if (facing == Dir.RIGHT) {
     			drawX += moveDist;
+    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
     		} else if (facing == Dir.UP) {
     			drawY += moveDist;
+    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
     		} else if (facing == Dir.DOWN){ 
     			drawY -= moveDist;
+    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
     		} else {
     			currentState = PacState.IDLE;
     			facing = Dir.LEFT;
-    		}			
-			updatePosition();			
+    		}
+//			checkTile(this.nextTile(currentTile, 1));
+			updatePosition();
     	} 
-		//draw pacman facing the appropriate direction
-		batch.draw(walkFrames[spritePos], drawX, drawY, width, height);
 	}
 	 
 	
@@ -119,6 +121,10 @@ public class PacChar extends Mover{
 
 	public void setMoveDist(float moveDist) {
 		this.moveDist = moveDist;
+	}
+
+	public int getSpritePos() {
+		return spritePos;
 	}
 	
 	public String toString() {

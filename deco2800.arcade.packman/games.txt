@@ -13,6 +13,7 @@ deerforest
 gamelibrary
 soundboard
 mixmaze
+minigolf
 chess
 landInvaders
 junglejump
@@ -25,4 +26,3 @@ connect4
 raiden
 wl6
 snakeLadder
-lunarlander

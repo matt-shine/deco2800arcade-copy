@@ -31,7 +31,7 @@ public class ArcadeWebserver implements Container {
 	 * @param response
 	 * @param contentType The HTTP content type
 	 */
-	public static void setResponseValues(Response response, String contentType)
+	private void setResponseValues(Response response, String contentType)
 	{
         long time = System.currentTimeMillis();
         
@@ -52,38 +52,16 @@ public class ArcadeWebserver implements Container {
 	    return FileReader.readFile( path, Charset.forName("UTF-8" ) );
 	}
 	
-	private class Route
-	{
-	    String route;
-	    String param;
-	}
-	
-	private Route processPath(String p)
-	{
-	    Route r = new Route();
-	    r.route = "";
-	    r.param = "";
-        String[] s = p.split("/");
-        if (s.length > 1) r.route = s[1];
-        if (s.length > 2) r.param = s[2];
-        
-        System.out.println("route: " + r.route + ", param: " + r.param);
-        
-        return r;
-	}
-	
 	/**
 	 * Handle an incoming webrequest.
 	 */
 	public void handle(Request request, Response response) {
 		try {
 			
-		    Route r = processPath(request.getPath().toString());
-		    
 		    //If we have a request to serve a page, use the appropriate responder
-			if ( responders.containsKey(r.route) ) {
+			if ( responders.containsKey(request.getPath().toString()) ) {
 			    
-				responders.get(r.route).respond( response, r.param );
+				responders.get(request.getPath().toString()).respond( response );
 				
 			} else if ( request.getPath().toString().contains( "js" ) ) {
 			    
@@ -132,7 +110,7 @@ public class ArcadeWebserver implements Container {
 		}
 	} 
 	
-	public static void badRequest(Response response) throws IOException
+	private void badRequest(Response response) throws IOException
 	{
         response.setStatus( Status.BAD_REQUEST );
 
@@ -162,11 +140,10 @@ public class ArcadeWebserver implements Container {
 	public void initialiseHandlers()
 	{
 	    responders = new HashMap<String, WebResponder>();
-	    responders.put("", new HomeResponder());
-	    responders.put("achievements", new AchievementResponder());
-	    responders.put("replays", new ReplayResponder());
-	    responders.put("games", new GameResponder());
-	    responders.put("logo", new LogoResponder());
+	    responders.put("/", new HomeResponder());
+	    responders.put("/achievements", new AchievementResponder());
+	    responders.put("/replays", new ReplayResponder());
+	    responders.put("/games", new GameResponder());
 	}
 
 	public static void startServer( ) {

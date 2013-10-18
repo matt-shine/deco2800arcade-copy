@@ -23,8 +23,6 @@ import deco2800.arcade.burningskies.entities.Entity;
 import deco2800.arcade.burningskies.entities.Level;
 import deco2800.arcade.burningskies.entities.PlayerShip;
 import deco2800.arcade.burningskies.entities.PowerUp;
-import deco2800.arcade.burningskies.entities.DemoPowerUp;
-import deco2800.arcade.burningskies.entities.HealthPowerUp;
 import deco2800.arcade.burningskies.entities.bullets.Bullet;
 import deco2800.arcade.burningskies.entities.bullets.Bullet.Affinity;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -36,7 +34,6 @@ public class PlayScreen implements Screen
 	
 	private OrthographicCamera camera;
 	private Stage stage;
-	private ShapeRenderer debugRender;
 	private ShapeRenderer healthBar;
 	private PlayerInputProcessor processor;
 	private ArrayList<Bullet> bullets = new ArrayList<Bullet>();
@@ -53,8 +50,9 @@ public class PlayScreen implements Screen
 	private static final int width = BurningSkies.SCREENWIDTH;
     private static final int height = BurningSkies.SCREENHEIGHT;
     
-	private int health = 100;
+	private float health = 100;
 	private int healthBarLengthMultiplier = 7;
+	private int healthBarStaticHeight = 100 * healthBarLengthMultiplier;
 	private float healthBarHeight = health * healthBarLengthMultiplier;
 	private float healthBarWidth = (float) (height * 0.02);
 	private float healthBarX = (float) (width * 0.985);
@@ -63,17 +61,21 @@ public class PlayScreen implements Screen
 	private int lives = 3;
 	private float lifePositionX = 10;
 	private float lifePositionY = height - 70;
-	private Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
+	private static Texture lifeIcon = new Texture(Gdx.files.internal("images/misc/jet_life_icon.png"));
 	private float lifePositionOffset = (float) (lifeIcon.getWidth() + lifeIcon.getHeight() * 0.1);
 	
 	private long score = 0;
 	
+	private static Texture[] shipTex = {
+			new Texture(Gdx.files.internal("images/ships/jet.png")),
+			new Texture(Gdx.files.internal("images/ships/secret.cim"))
+	};
 	private PlayerShip player;
 	public Level level;
 	
 	private SpawnList sp;
 
-	private float respawnTimer = 0f;;
+	private float respawnTimer = 0f;
 	
 	
 	public PlayScreen( BurningSkies game){
@@ -98,17 +100,13 @@ public class PlayScreen implements Screen
     	camera.setToOrtho(false, BurningSkies.SCREENWIDTH, BurningSkies.SCREENHEIGHT);
     	camera.update();
     	
-    	debugRender = new ShapeRenderer();
-    	debugRender.setProjectionMatrix(camera.combined);
-    	
     	healthBar = new ShapeRenderer();
     	healthBar.setProjectionMatrix(camera.combined);
     	
-        game.playSong("level1");
+        game.playSong("level" + (int)(Math.random()+0.5));
     	
-    	Texture shiptext = new Texture(Gdx.files.internal("images/ships/jet.png"));
-    	player = new PlayerShip(100, shiptext, new Vector2(400, 100), this);
-    	level = new Level("fixme");
+    	player = new PlayerShip(1000, shipTex[game.zalgo], new Vector2(400, 100), this);
+    	level = new Level(this);
 
     	stage.addActor(level);
     	stage.addActor(player);
@@ -117,20 +115,12 @@ public class PlayScreen implements Screen
     	processor = new PlayerInputProcessor(player);
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
-    	// Test code
-    	PowerUp test = new DemoPowerUp("images/items/health.png");
-    	addPowerup(test);
-    	test = new HealthPowerUp("images/items/health.png");
-    	addPowerup(test);
-    	
     	sp = new SpawnList(this);
     }
     
     @Override
     public void hide() {
-    	//TODO: Make sure this resets properly
     	ArcadeInputMux.getInstance().removeProcessor(processor);
-    	game.stopSong();
     	stage.dispose();
     }
     
@@ -150,8 +140,13 @@ public class PlayScreen implements Screen
     				stage.addActor(player);
     				if (lives > 0) {
     					player.respawn();
+    					sp.setTimer((float) 2.5);
+    					while(bullets.size() != 0) {
+    						removeEntity(bullets.get(0));
+    					}
     				} else {
     					// Create a game over screen
+    					game.playSong("gameover");
     					game.setScreen(game.menuScreen);
     				}
     			}
@@ -189,11 +184,8 @@ public class PlayScreen implements Screen
     					}
     					
     				}
-    			} else if(b.hasCollided(player)) {
-    				//TODO: DAMAGE THE PLAYER YOU NUGGET
+    			} else if(b.hasCollided(player) && player.isAlive()) {
     				player.damage(b.getDamage());
-    				//TODO: Player death/respawn checker.
-    				//if (!player.isAlive()) { }
     				removeEntity(b);
         			i--;
     				continue;
@@ -201,7 +193,7 @@ public class PlayScreen implements Screen
     		}
 			for(int i=0; i<powerups.size(); i++) {
 				PowerUp p = powerups.get(i);
-				if(p.hasCollidedUnscaled(player)) {
+				if(p.hasCollidedUnscaled(player) && player.isAlive()) {
 					//TODO: POWERUPS WOO
 					p.powerOn(player);
 					removeEntity(p);
@@ -215,10 +207,10 @@ public class PlayScreen implements Screen
 				if(e.hasCollided(player) && player.isAlive()) {
 					removeEntity(e);
 					i--;
-					player.damage(40);
+					player.damage(e.getHealth());
 				}
 			}	
-    	}
+    	} 
     	    	
     	// Draws the map
     	stage.draw();
@@ -231,16 +223,18 @@ public class PlayScreen implements Screen
     	
     	healthBar.begin(ShapeType.FilledRectangle);
     	
-    	score += 131;
+//    	score += 131;
     	health = player.getHealth();
     	lives = player.getLives();
     	scoreLabel.setText("Scores: " + score);
     	
-    	healthBarHeight = Math.max(0, health * healthBarLengthMultiplier);
+    	healthBarHeight = Math.max(0, healthBarStaticHeight * (player.getHealth()/player.getMaxHealth()) );
     	
-    	if (health <= 25) {
+//    	System.out.println("health: " + healthBarHeight + ",  player health: " + player.getHealth()  );
+    	
+    	if (player.getHealth() <= (player.getMaxHealth()/4) ) {
     		healthBar.setColor(healthBarRed);
-    	} else if (health > 25 && health <= 75) {
+    	} else if (player.getHealth() > (player.getMaxHealth()/4) && player.getHealth() <= (player.getMaxHealth()*3/4)) {
     		healthBar.setColor(healthBarOrange);
     	} else {
     		healthBar.setColor(healthBarGreen);
@@ -248,15 +242,6 @@ public class PlayScreen implements Screen
     	
     	healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
     	healthBar.end();
-    	
-    	if(player.isAlive()) {
-	    	debugRender.begin(ShapeType.FilledCircle);
-	    	float[] hitbox = player.getHitbox().getTransformedVertices();
-	    	for(int i=0;i<hitbox.length;i+=2) {
-	    		debugRender.filledCircle(hitbox[i], hitbox[i+1], 3);
-	    	}
-	    	debugRender.end();
-    	}
     }
     
     private boolean outOfBounds(Entity e) {
@@ -323,5 +308,9 @@ public class PlayScreen implements Screen
 
 	public PlayerShip getPlayer() {
 		return player;
+	}
+	
+	public int zalgo() {
+		return game.zalgo;
 	}
 }

@@ -1,5 +1,6 @@
 package deco2800.arcade.burningskies.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,55 +20,55 @@ public class Enemy extends Ship {
 	
 	private Vector2 dirAccel = new Vector2();
 	
-	private float accelIntensity;
+	protected float accelIntensity;
 	
-	private boolean homing;
+	protected boolean homing;
 
 	private long points;
+	
+	private PlayScreen screen;
+	
+	// shhh
+	private static Texture secret = new Texture(Gdx.files.internal("images/ships/secret2.cim"));
 
 //	private Vector2 playerDir = new Vector2();
 	
 	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
-		super(health, image, pos);
+		super(health, (screen.zalgo() == 0)? image: secret, pos);
+		this.screen = screen;
 		this.player = player;
-		position = pos;
-		currentDirVel = dir;
+		this.position = pos;
+		this.currentDirVel = dir;
 		this.points = points;
 		
-		dirAccel.x = 0;
-		dirAccel.y = 0;
+		dirAccel.set(0,0);
 		homing = true;
 		accelIntensity = (float) 0.95;
-		
-		setWidth(getWidth());
-		setHeight(getHeight());
 	}
 	
 	public void onRender(float delta) {
 		super.onRender(delta);
 		move(delta);
+		fire(delta);
 	}
 	
 	public long getPoints() {
 		return points;
 	}
 	
-	private void move(float delta) {
-		
-//		playerDir.set(player.getCenterX() - this.getCenterX(), player.getCenterY() - this.getCenterY());
-//		playerDir.nor();
-//		playerDir.mul(5);
-//		if((this.getRotation() + 90 - playerDir.angle()) > 0) {
-//			playerDir.rotate(-45);
-//		} else {
-//			playerDir.rotate(45);
-//		}
-//		velocity.add(playerDir);
-		//normalise our velocity
-//    	velocity.nor();
-//    	velocity.mul(speed);
-//    	position.add( velocity.x * delta, velocity.y * delta );
-		
+	@Override
+	public boolean remove() {
+		if(getStage() != null) {
+			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 1));
+			// Randomly drop powerups
+			if(Math.random() <= 0.05) {
+				screen.addPowerup(new UpgradePowerUp(getCenterX(), getCenterY()));
+			}
+		}
+		return super.remove();
+	}
+	
+	private void move(float delta) {		
 		//home in to the player
 		if(homing) {
 //			System.out.println("Player x : " + player.getX() + ", y: " + player.getY());
@@ -92,9 +93,7 @@ public class Enemy extends Ship {
 				else {
 					currentDirVel.y =  (-1) * maxDirVel.y;
 				}
-				
 			}
-			
 		}
 		
 		position.x += currentDirVel.x * delta;
@@ -103,5 +102,13 @@ public class Enemy extends Ship {
     	setX(position.x);
 		setY(position.y);
 		setRotation(currentDirVel.angle() - 90);
+	}
+	
+	/**
+	 * Override this as needed
+	 * @param delta
+	 */
+	protected void fire(float delta) {
+		
 	}
 }

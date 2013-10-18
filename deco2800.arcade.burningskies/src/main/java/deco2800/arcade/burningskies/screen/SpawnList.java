@@ -7,7 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.burningskies.entities.Enemy;
+import deco2800.arcade.burningskies.entities.BoringEnemy;
+import deco2800.arcade.burningskies.entities.Level1Enemy;
 
 public class SpawnList {
 	
@@ -19,12 +20,16 @@ public class SpawnList {
 	private static final long standardEnemyPoints = 1006493;
 	
 	// TODO more variable pointing to other types of enemies
-	private Texture enemy1 = new Texture(Gdx.files.internal("images/ships/enemy1.png"));
+	private static Texture[] enemyTex = {
+		new Texture(Gdx.files.internal("images/ships/enemy1.png")),
+		new Texture(Gdx.files.internal("images/ships/enemy2.png")),
+		new Texture(Gdx.files.internal("images/ships/enemy3.png"))
+	};
 	
 	public SpawnList(PlayScreen s){
 		this.screen = s;
 		currentInterval = 0;
-		interval = (float) 2;		
+		interval = 2f;		
 		list = new ArrayList<Object>();
 		makeList1();
 	}
@@ -62,13 +67,19 @@ public class SpawnList {
 		if(currentInterval >= interval) {
 //			spawnEnemy(list.get(3));
 //			--counter;
+			interval -= 0.05;
+			if(interval < 0.2) {
+				interval = (float) 0.25;
+			}
+			
 			addRandomEnemy();
 			currentInterval -= interval;
 		}
 		currentInterval += delta;
 	}
 
-	/* Testing purposes, but still may still use later
+	/**
+	 * Automatically random spawn an enemy around the edge of the screen
 	 */
 	private void addRandomEnemy() {
 			float startX = (float) 0;
@@ -79,7 +90,6 @@ public class SpawnList {
 					
 			int direction = (int) Math.ceil(Math.random() * 4);
 			
-//			System.out.println("Direction num: " + direction);
 			
 			// Determine where the enemy will start to spawn
 			switch (direction) {
@@ -100,11 +110,21 @@ public class SpawnList {
 				startY = (float) Math.ceil(Math.random() * 600) + 50;
 				break;			
 			}
+			
+			// Randomly set the x and y velocity
 			float vX = (float) Math.ceil(Math.random() * (widthC - startX))/10 + (widthC - startX)/10;
 			float vY = (float) Math.ceil(Math.random() * (heightC - startY))/7 + (heightC - startY)/5;
-//	    	float vX = (float) (Math.ceil(Math.random() * 150) + 50) * dirX;
-//	    	float vY = (float) (Math.ceil(Math.random() * 150) + 50) * dirY;
-//			System.out.println("startx: " + startX + ", starty: " + startY + ", vx: " + vX + ", vy: " + vY);
-	    	screen.addEnemy(new Enemy(200, enemy1, new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );    	
+
+			// Add some random enemies
+			double test = Math.random();
+			if(test < 0.1) {
+				screen.addEnemy(new Level1Enemy(200, enemyTex[1], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
+			} else {
+				screen.addEnemy(new BoringEnemy(200, enemyTex[0], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
+			}
+	}
+	
+	public void setTimer(float time) {
+		interval = time;
 	}
 }

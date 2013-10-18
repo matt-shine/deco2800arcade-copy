@@ -1,3 +1,4 @@
+
 package deco2800.arcade.client;
 
 
@@ -13,7 +14,6 @@ public class PlayerClient extends NetworkListener {
 	
 	public PlayerClient(NetworkClient networkClient) {
 		//TODO
-		this.networkClient = networkClient;
 	}
 
 	public void setNetworkClient(NetworkClient client) {
@@ -34,11 +34,15 @@ public class PlayerClient extends NetworkListener {
 	 * @return Returns the Player with the specified playerID.
 	 */
 	public Player loadPlayer(int playerID) {
+
 		PlayerRequest request = new PlayerRequest();
-		request.playerID = playerID;
-		PlayerResponse response = (PlayerResponse)BlockingMessage.request(networkClient.kryoClient(), request);
-		return response.player;
+		request.setPlayerID(playerID);
+		PlayerResponse response = (PlayerResponse)BlockingMessage.request(
+				networkClient.kryoClient(), request);
+
+		return response.getPlayer();
 	}
 
 
 }
+

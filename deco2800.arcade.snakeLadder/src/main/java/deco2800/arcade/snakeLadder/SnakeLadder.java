@@ -42,6 +42,8 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -49,10 +51,11 @@ import deco2800.arcade.snakeLadderGameState.GameOverState;
 import deco2800.arcade.snakeLadderGameState.GameState;
 import deco2800.arcade.snakeLadderGameState.WaitingState;
 import deco2800.arcade.snakeLadderModel.*;
+import deco2800.arcade.utils.AsyncFuture;
 
 /**
  * This is the main class for game snake&Ladder
- * @author s4310055,s43146400,s43146884,s4243072
+ * @author s4310055,s4314640,s43146884,s4243072
  *
  */
 
@@ -79,10 +82,6 @@ public class SnakeLadder extends GameClient {
 	private Dice diceAI;
 	private int turn=0;
 	private HashMap<String,RuleMapping> ruleMapping = new HashMap<String,RuleMapping>();
-	//NetworkClient for communicating with the server
-	private NetworkClient networkClient;
-	//use AchievementClient
-	private AchievementClient achievementClient;
 	public HighscoreClient player1;
 	private HighscoreClient hsc;
 	private int highestScoreNum = 5;
@@ -91,9 +90,11 @@ public class SnakeLadder extends GameClient {
 		super(player, networkClient);
 		gamePlayers[0] = new GamePlayer(this.player.getUsername(), false);
 		gamePlayers[1] = new GamePlayer("AI Player", true);
-		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", networkClient);
-		hsc = new HighscoreClient("snakeLadder", this.networkClient);
-		//dumpingScores();
+		this.networkClient = networkClient;
+		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", this.networkClient);
+		hsc = new HighscoreClient("snakeLadder", networkClient);
+		dumpingScores();
+		//this.achievementClient = new AchievementClient(networkClient);
 	}
 	
 	//constructor for testing
@@ -101,9 +102,6 @@ public class SnakeLadder extends GameClient {
 		super(player, networkClient);
 		gamePlayers[0] = new GamePlayer(username, false);
 		gamePlayers[1] = new GamePlayer("AI Player", true);
-		player1 = new HighscoreClient(this.player.getUsername(), "snakeLadder", networkClient);
-		hsc = new HighscoreClient("snakeLadder", this.networkClient);
-		//dumpingScores();
 	}
 	
 	//constructor for testing
@@ -130,7 +128,7 @@ public class SnakeLadder extends GameClient {
 	}
 
 	public int getturns() {
-		return this.turn%2;
+		return this.turn;
 	}
 
 	public ArrayList<Label> getScoreLabels() {
@@ -146,7 +144,7 @@ public class SnakeLadder extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1280, 800);
+		camera.setToOrtho(false, 960, 600);
 		batch = new SpriteBatch();
 		
 		//initialize the rules from xml file
@@ -167,8 +165,7 @@ public class SnakeLadder extends GameClient {
 		//gameState = GameState.READY;
 		gameState = new WaitingState();
 		statusMessage = "Roll the dice to start!";
-		
-		
+        
 		//creating the stage
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
@@ -180,17 +177,6 @@ public class SnakeLadder extends GameClient {
   			dices.add(new Dice());
   		}
   		
-        //setDice(new Dice());
-        //setDiceAI(new Dice());
-        
-        //TODO: button should be disabled when its others player turn or when player is on the move
-       // diceButton listener for when the button is pressed
-//        diceButton.addListener(new ChangeListener() {
-//            public void changed (ChangeEvent event, Actor actor) {
-//            	dice.rollDice();
-//            }
-//        });
- 
         
 	}
 	
@@ -254,44 +240,17 @@ public class SnakeLadder extends GameClient {
 	}
 
 	/**
-	 * Handle player input from mouse click
+	 * Handle player input from button click
 	 */
 	private void handleInput() {
 		//use gameState to handle user input
 		gameState.handleInput(this);
 	}
 	
-//	public void stopPoint() {
-//		this.updateScore(gamePlayer);
-//		gamePlayer.reset();
-//		AIPlayer.reset();
-//		// If we've reached the victory point then update the display
-//		if (gamePlayer.getBounds().x <= (60-20f) && gamePlayer.getBounds().y >= (540)) {			   
-//			gameState = new GameOverState();
-//		    //Update the game state to the server
-//		    //networkClient.sendNetworkObject(createScoreUpdate());
-//		} 
-//		if (AIPlayer.getBounds().x<=(60-20f)&& AIPlayer.getBounds().y>=540){
-//			gameState = new GameOverState();
-//		}
-//		else {
-//			// No winner yet, get ready for another point
-//			gameState = new ReadyState();
-//			statusMessage = "Throw the dice again";
-//		}
-//
-//	}
-	
-//	public void startPoint() {
-//		gamePlayer.initializeVelocity();
-//		getDice().rollDice();	
-//		AIPlayer.initializeVelocity();
-//		gameState = new InProgressState();
-//		statusMessage = null;
-//	}
-	public int taketurns() {
+
+	public void taketurns() {
 		turn++;
-		return this.turn;
+		turn = turn%this.gamePlayers.length;
 	}
 	
 	@Override
@@ -318,21 +277,6 @@ public class SnakeLadder extends GameClient {
 		dices.set(num, dice);
 	}
 
-	/*public Dice getDice() {
-		return dice;
-	}
-
-	public void setDice(Dice dice) {
-		this.dice = dice;
-	}
-	
-	public Dice getDiceAI() {
-		return diceAI;
-	}
-
-	public void setDiceAI(Dice dice) {
-		this.diceAI = dice;
-	}*/
 	
 	public GameMap getMap() {
 		return map;
@@ -384,7 +328,8 @@ public class SnakeLadder extends GameClient {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        table.padLeft((gamePlayers.length+1)*100).padBottom(200-(highestScoreNum*25)-45);
+//        table.padLeft((gamePlayers.length+1)*100).padBottom(200-(highestScoreNum*25)-45);
+        table.top().right();
         
         //adding player name
         table.add(new Label("Players' Name", skin)).width(100).top().left();
@@ -403,7 +348,7 @@ public class SnakeLadder extends GameClient {
         
         //adding highscore list
         table.row();
-        table.add(new Label("Highest Scores", skin)).spaceTop(20);
+        table.add(new Label("Highest Scores", skin)).spaceTop(100);
         table.row();
         table.add(new Label("Username", skin)).width(100).top().left();
         table.add(new Label("Scores", skin)).width(100).top().left();

@@ -1,15 +1,17 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
+
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 public class Mob extends Doodad {
 
     private float angle = 0;
     private Vector2 vel = new Vector2();
-    protected GameModel game;
-    protected Random rand;
-    protected int health;
+    private Random rand;
+    private int health;
 
     public Mob(int uid) {
         super(uid);
@@ -17,9 +19,7 @@ public class Mob extends Doodad {
     }
 
     @Override
-    public void tick(GameModel game) {
-        this.game = game;
-        setPos(getPos(), vel);
+    public void tick(GameModel gameModel) {
     }
 
     public int getHealth() {
@@ -27,28 +27,23 @@ public class Mob extends Doodad {
     }
 
     public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public void doDamage() {
-
+        if (health <= 0) {
+            this.health = 0;
+            die();
+        }
+        else {
+            this.health = health;
+        }
     }
 
     public void takeDamage(int damage) {
         setHealth(getHealth() - damage);
     }
 
-    // need to round the float either up or down depending on what direction we are approaching from
-    // ie if vel is +ve, round down, if vel is -ve round up.
-    public void setPos(Vector2 pos, Vector2 vel) {
-        if (WL6Meta.hasSolidBlockAt((int) (pos.x + vel.x), (int) (pos.y + vel.y), game.getMap())) {
-            // New position has a solid block or doodad.  Don't move position.
-            setPos(pos);
-        }
-        else {
-            setPos(pos.add(vel));
-        }
+    public void die() {
+
     }
+
 
     public float getAngle() {
         return angle;
@@ -58,8 +53,28 @@ public class Mob extends Doodad {
         this.angle = angle;
     }
 
-    public void canSee(Doodad d) {
-        //TODO
+    public boolean canSee(Doodad d, GameModel model) {
+        Vector2 selfPos = this.getPos();
+        Vector2 targetPos = d.getPos();
+        Line2D line = new Line2D.Double(selfPos.x, selfPos.y, targetPos.x, targetPos.y);
+        float dist = selfPos.dst(targetPos);
+
+        if (dist > 15) {
+            return false;
+        }
+
+        for (int i = 0; i < WL6.MAP_DIM; i++) {
+            for (int j = 0; j < WL6.MAP_DIM; j++) {
+                if (WL6Meta.block(model.getMap().getTerrainAt(i, j)).solid) {
+                    Rectangle2D rect = new Rectangle2D.Double(i, j, 1, 1);
+                    if (rect.intersectsLine(line)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     public Vector2 getVel() {
@@ -83,6 +98,11 @@ public class Mob extends Doodad {
      */
     public static int randInt(int min, int max, Random rand) {
         return rand.nextInt((max - min) + 1) + min;
+    }
+    
+    
+    public Random getRand() {
+    	return rand;
     }
 
 }

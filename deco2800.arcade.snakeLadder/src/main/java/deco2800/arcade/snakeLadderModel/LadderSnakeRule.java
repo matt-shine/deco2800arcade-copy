@@ -21,29 +21,6 @@ public class LadderSnakeRule implements Rule {
 	    //set this velocity to player's velocity
 	    context.gamePlayers[playerNum].setVelocity(velocity);
 	    context.gameState = new MovingState();
-
-		
-
-//		if(context.gamePlayers[playerNum].getBounds().x>=180 &&context.gamePlayers[playerNum].getBounds().y>=180)
-//		{
-//			context.gamePlayers[playerNum].getVelocity().x=60;
-//			context.gamePlayers[playerNum].getVelocity().y=60;
-//			context.gamePlayers[playerNum].move(2);
-//			context.gamePlayers[playerNum].reset();
-//			context.gamePlayers[playerNum].setNewPosition(68);
-//			context.gameState = new WaitingState();
-//		}
-//		if(context.gamePlayers[playerNum].getBounds().x<=(60-20f) && context.gamePlayers[playerNum].getBounds().y>=300)
-//		{
-//			context.gamePlayers[playerNum].getVelocity().x=60;
-//			context.gamePlayers[playerNum].getVelocity().y=-60;
-//			context.gamePlayers[playerNum].move(2);
-//			context.gamePlayers[playerNum].reset();
-//			context.gamePlayers[playerNum].setNewPosition(38);
-//			context.gameState=new WaitingState();
-//		}
-
-
 	}
 
 }

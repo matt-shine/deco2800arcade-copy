@@ -1,3 +1,4 @@
+
 package deco2800.server.database;
 
 import java.sql.Connection;
@@ -306,5 +307,10 @@ public class PlayerStorage {
 		} catch (SQLException e) {
 			throw new DatabaseException("There was an error adding the player to the database", e);
 		}
+	}
+
+	public void updateAge(int playerID, String age) {
+		// TODO Auto-generated method stub
+		
 	}
 }

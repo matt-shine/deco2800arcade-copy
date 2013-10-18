@@ -5,6 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FriendStorage handles database access for Friends and Friend Request data
@@ -14,7 +18,6 @@ import java.util.ArrayList;
  */
 
 public class FriendStorage {
-	//FIXME seems to be a lot of repeated code through the methods
 	private boolean initialised = false;
 	
 	/**
@@ -22,12 +25,14 @@ public class FriendStorage {
 	 * 
 	 * @throws DatabaseException 
 	 * 		If SQLException occurs
+	 * @throws SQLException 
 	 */
 	public void initialise() throws DatabaseException {
 		
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
 
+		ResultSet resultSet = null;
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "FRIENDS", null);
 			
@@ -59,7 +64,7 @@ public class FriendStorage {
 	 * 		Returns a list of playerIDs which represent the player's friends. 
 	 * @throws DatabaseException
 	 */
-	public ArrayList<Integer> getFriendsList(int playerID) throws DatabaseException {
+	public List<Integer> getFriendsList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -71,12 +76,15 @@ public class FriendStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM FRIENDS WHERE STATUS=1 AND BLOCKED=0");
+			resultSet = statement.executeQuery("SELECT * FROM FRIENDS"
+					+ " WHERE U1=" + playerID
+					+ " AND STATUS=1");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
-					"Unable to get to get friends information from database", e);
+					"Unable to get to get friends list from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -89,7 +97,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -104,7 +113,7 @@ public class FriendStorage {
 	 * 		which the player has not yet responded to.
 	 * @throws DatabaseException
 	 */
-	public ArrayList<Integer> getFriendInviteList(int playerID) throws DatabaseException {
+	public List<Integer> getFriendInviteList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -116,10 +125,14 @@ public class FriendStorage {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM FRIENDS WHERE STATUS=0 AND BLOCKED=0");
+			resultSet = statement.executeQuery("SELECT * FROM FRIENDS" + 
+					" WHERE U1=" + playerID + 
+					" AND STATUS=0" +
+					" AND BLOCKED=0");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to get friend invite information from database", e);
 		} finally {
@@ -134,7 +147,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -148,7 +162,7 @@ public class FriendStorage {
 	 * 			The list of blocked players of the player represented by the playerID.
 	 * @throws DatabaseException
 	 */
-	public ArrayList<Integer> getBlockedList(int playerID) throws DatabaseException {
+	public List<Integer> getBlockedList(int playerID) throws DatabaseException {
 		if (!initialised) {
 			initialise();
 		}
@@ -161,12 +175,14 @@ public class FriendStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * FROM FRIENDS" 
-											+" WHERE BLOCKED=1");
+											+" WHERE U1=" + playerID 
+											+ " AND BLOCKED=1");
 			return findPlayers(playerID, resultSet);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
-					"Unable to get player's blocked information from database", e);
+					"Unable to get player's blocked list from database", e);
 		} finally {
 			try {
 				if (resultSet != null) {
@@ -179,7 +195,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -195,7 +212,7 @@ public class FriendStorage {
 	 * @return Returns the player's friends.
 	 * @throws SQLException
 	 */
-	private ArrayList<Integer> findPlayers(int playerID, ResultSet results)
+	private List<Integer> findPlayers(int playerID, ResultSet results)
 			throws SQLException {
 		ArrayList<Integer> players = new ArrayList<Integer>();
 		while (results.next()) {
@@ -227,21 +244,29 @@ public class FriendStorage {
 										+ " WHERE U1=" + playerID
 										+ " AND U2=" + player );
 			// if player-friend relationship exists, block the player
-			if (resultSet.first()) {
+			if (resultSet.next()) {
 				resultSet.updateInt("BLOCKED", 1);
 				resultSet.updateRow();
-			} else { // else add a new row with blocked set to 1
+			} else { // else add new player-player relationships with playerID:player blocked
 				resultSet.moveToInsertRow();
 				resultSet.updateInt("U1", playerID);
 				resultSet.updateInt("U2", player);
 				resultSet.updateInt("STATUS", 0);
 				resultSet.updateInt("BLOCKED", 1);
 				resultSet.insertRow();
+				
+				resultSet.moveToInsertRow();
+				resultSet.updateInt("U1", player);
+				resultSet.updateInt("U2", playerID);
+				resultSet.updateInt("STATUS", 0);
+				resultSet.updateInt("BLOCKED", 0);
+				resultSet.insertRow();
+				resultSet.moveToCurrentRow();
 			}
-	
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException("Unable to block player in database.", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -255,7 +280,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -276,16 +302,17 @@ public class FriendStorage {
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS" 
-										+ " WHERE U1='" + playerID + "'"
-										+ " AND U2='" + player + "'");
+										+ " WHERE U1=" + playerID
+										+ " AND U2=" + player);
 			// if player-friend relationship exists, unblock the player
 			if (resultSet.first()) {
 				resultSet.updateInt("BLOCKED", 0);
 				resultSet.updateRow();
 			} 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException("Unable to unblock player in database.", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -299,7 +326,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -322,6 +350,9 @@ public class FriendStorage {
 		try {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS");
+			
+			// TODO CHECK TO SEE IF PLAYER-PLAYER RELATIONSHIPS ALREADY EXISTS
+			
 			// add friendID as a friend for playerID
 			resultSet.moveToInsertRow();
 			resultSet.updateInt("U1", playerID);
@@ -340,8 +371,9 @@ public class FriendStorage {
 			resultSet.moveToCurrentRow();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException("Unable to add friend request to database.", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -355,7 +387,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -377,8 +410,8 @@ public class FriendStorage {
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			// retrieve the unaccepted friend request from the database
 			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS" 
-										+ " WHERE U1='" + playerID + "'"
-										+ " AND U2='" + friendID + "'"
+										+ " WHERE U1=" + playerID
+										+ " AND U2=" + friendID
 										+ " AND STATUS=0"
 										+ " AND BLOCKED=0");
 			// accept the friend request
@@ -387,8 +420,10 @@ public class FriendStorage {
 				resultSet.updateRow();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException(
+					"Unable to accept friend request in database", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -402,7 +437,8 @@ public class FriendStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -419,11 +455,11 @@ public class FriendStorage {
 	 */
 	public void removeFriend(int playerID, int friendID) throws DatabaseException {
 		Connection connection = Database.getConnection();
-		Statement stmt = null;
+		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
-			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-			resultSet = stmt.executeQuery("SELECT * FROM FRIENDS");
+			statement = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			resultSet = statement.executeQuery("SELECT * FROM FRIENDS");
 			while (resultSet.next()) {
 				int user1 = resultSet.getInt("U1");
 				int user2 = resultSet.getInt("U2");
@@ -435,23 +471,52 @@ public class FriendStorage {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 		} finally {
 			//clean up JDBC objects
 			try {
 				if (resultSet != null){
 					resultSet.close();
 				}
-				if (stmt != null){
-					stmt.close();
+				if (statement != null){
+					statement.close();
 				}
 				if (connection != null){
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
+	}
+	
+	/**
+	 * Checks if player1 has blocked player2.
+	 * @param player1
+	 * 			The playerID of the blocker.
+	 * @param player2
+	 * 			The playerID of the blockee.
+	 * @throws DatabaseException
+	 */
+	public boolean isBlocked(int player1, int player2) throws DatabaseException {
+		
+		ArrayList<Integer> blocked = (ArrayList<Integer>) getBlockedList(player1);
+		return blocked.contains(player2);
+	}
+	
+	/**
+	 * Checks if player1 is friends with player2.
+	 * @param player1
+	 * 			The playerID of the befriender.
+	 * @param player2
+	 * 			The playerID of the friend.
+	 * @throws DatabaseException
+	 */
+	public boolean isFriends(int player1, int player2) throws DatabaseException {
+		
+		ArrayList<Integer> friends = (ArrayList<Integer>) getFriendsList(player1);
+		return friends.contains(player2);
 	}
 }

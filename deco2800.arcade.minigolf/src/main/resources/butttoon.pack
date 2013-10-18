@@ -1,0 +1,21 @@
+
+butttoon.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+butdown
+  rotate: false
+  xy: 1, 1
+  size: 30, 30
+  split: 14, 14, 14, 15
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+butup
+  rotate: false
+  xy: 33, 1
+  size: 30, 30
+  split: 0, 30, 15, 14
+  orig: 30, 30
+  offset: 0, 0
+  index: -1

@@ -43,7 +43,7 @@ public class TestPlayerStorage {
 	 * @throws IOException
 	 */
 	private IDataSet getDataSet() throws DataSetException, IOException {
-		URL url = TestCreditStorage.class.getClassLoader().getResource("TestPlayerStorage.xml");
+		URL url = TestPlayerStorage.class.getClassLoader().getResource("TestPlayerStorage.xml");
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return builder.build(url);
@@ -59,9 +59,10 @@ public class TestPlayerStorage {
 	public void setUp() throws Exception {
 		playerStorage = new PlayerStorage();
         playerStorage.initialise();
+        
 		IDataSet ds = getDataSet();
         databaseTester.setDataSet(ds);
-		databaseTester.onSetup();
+        databaseTester.onSetup();
 	}
 	
 	/**
@@ -94,5 +95,6 @@ public class TestPlayerStorage {
 		assertTrue(playerData.get(2).equals("guybrush@monkey.island"));
 		assertTrue(playerData.get(3).equals("BE"));
 		assertTrue(playerData.get(4).equals("Escape artist"));
+
 	}
 }

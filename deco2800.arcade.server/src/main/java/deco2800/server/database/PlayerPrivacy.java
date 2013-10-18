@@ -1,3 +1,4 @@
+
 package deco2800.server.database;
 
 import java.sql.Connection;
@@ -6,6 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * PlayerPrivacy deals with database access for player privacy data.
@@ -36,12 +40,13 @@ public class PlayerPrivacy {
 
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
-
+		ResultSet resultSet = null;
+		Statement statement = null;
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null,
+			resultSet = connection.getMetaData().getTables(null,
 					null, "PLAYERPRIVACY", null);
-			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
+			if (!resultSet.next()) {
+				statement = connection.createStatement();
 				statement
 						.execute("CREATE TABLE PLAYERPRIVACY( "
 								+ "playerID INT NOT NULL, "
@@ -49,11 +54,28 @@ public class PlayerPrivacy {
 								+ "bio INT,"
 								+ "games INT, achievements INT, "
 								+ "PRIMARY KEY (playerID), "
-								+ "FOREIGN KEY (playerID) REFERENCES PLAYERS(playerID))");
+								+ "FOREIGN KEY (playerID) REFERENCES PLAYER(playerID);");
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create players table", e);
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException(
+					"Unable to create PLAYERPRIVACY table.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
+			}
 		}
 		initialised = true;
 	}
@@ -82,7 +104,7 @@ public class PlayerPrivacy {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * from PLAYERPRIVACY");
+			resultSet = statement.executeQuery("SELECT * from PLAYERPRIVACY;");
 			data.add(findPlayerInfo(playerID, resultSet, "name"));
 			data.add(findPlayerInfo(playerID, resultSet, "email"));
 			data.add(findPlayerInfo(playerID, resultSet, "program"));
@@ -92,7 +114,8 @@ public class PlayerPrivacy {
 
 			return data;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to get player privacy informtion from database", e);
 		} finally {
@@ -107,7 +130,8 @@ public class PlayerPrivacy {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -295,7 +319,8 @@ public class PlayerPrivacy {
 					+ " = " + newValue + " WHERE playerID = " + playerID + ";");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException(
 					"Unable to update player username in database", e);
 		} finally {
@@ -310,7 +335,8 @@ public class PlayerPrivacy {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}

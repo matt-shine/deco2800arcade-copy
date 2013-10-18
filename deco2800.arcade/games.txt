@@ -11,6 +11,7 @@ ui
 breakout
 deerforest
 mixmaze
+minigolf
 chess
 landInvaders
 junglejump

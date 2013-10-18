@@ -28,6 +28,9 @@ import deco2800.arcade.protocol.forum.*;
 public class ClientConnection {
 	/* KryoNet client connection */
 	private Client client;
+	private String serverAddress;
+	private int tcpPort;
+	private int udpPort;
 	/* Timeout for connection waits */
 	private static final int TIMEOUT = 10000;
 	/* Default server information */
@@ -64,6 +67,9 @@ public class ClientConnection {
 			client.connect(TIMEOUT, serverAddress, tcpPort, udpPort);
 			this.registerProtocol();
 			System.out.println("Client is connected");
+			this.serverAddress = serverAddress;
+			this.tcpPort = tcpPort;
+			this.udpPort = udpPort;
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new ForumException("Unable to connect to the server, " + e.getMessage());
@@ -90,12 +96,44 @@ public class ClientConnection {
 		return;
 	}
 	
+	public void removeListener(Listener listener) throws ForumException {
+		try {
+			this.client.removeListener(listener);
+		} catch (KryoNetException e) {
+			e.printStackTrace();
+			throw new ForumException("Fail to add listener: " + e.getMessage());
+		}
+		return;
+	}
+	
 	public void registerProtocol() {
 		Protocol.register(this.client.getKryo());
 	}
 	
 	public void closeConnection() {
 		this.client.close();
+	}
+	
+	/**
+	 * Reconnect server by using stored connect information. It does not do anything if client is connected.
+	 * 
+	 * @throws ForumException
+	 */
+	public void reconnect() throws ForumException {
+		if (this.client.isConnected() == true) {
+			return;
+		}
+		this.client = new Client();
+		this.client.start();
+		try {
+			client.connect(TIMEOUT, this.serverAddress, this.tcpPort, this.udpPort);
+			this.registerProtocol();
+			System.out.println("Client is connected");
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new ForumException("Unable to connect to the server, " + e.getMessage());
+		}
+		return;
 	}
 	
 	/**

@@ -189,10 +189,10 @@ public class Grid implements TileBasedMap {
 		while (thisGridObjects.hasNext()) {
 			GridObject current = thisGridObjects.next();
 			if (current.getClass() != Enemy.class) {
-				return false;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	public float getCost(Mobile mover, int sx, int sy, int tx, int ty) {
@@ -239,7 +239,7 @@ public class Grid implements TileBasedMap {
 	 *            The y-coordinate, in tiles
 	 * @return A list of objects at that coordinate
 	 */
-	private List<GridObject> getGridContents(int x, int y) {
+	public List<GridObject> getGridContents(int x, int y) {
 		return gridContents.get(x).get(y);
 	}
 

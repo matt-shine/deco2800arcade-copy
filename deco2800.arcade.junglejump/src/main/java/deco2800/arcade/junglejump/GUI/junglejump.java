@@ -484,8 +484,9 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
+			System.out.println(currentLevel.platformAmount());
 			// Check x and y are within the platform boundaries and monkey is on it
-			if (p.platType != '=' &&  x > (p.getX() - monkeyLength)
+			if (x > (p.getX() - monkeyLength)
 					&& x < (p.getX()+p.getWidth() - 10)
 					&& y <= p.getY() + p.getHeight() // Top of platform
 					&& y >= p.getY() - monkeyHeight) {				// Bottom of platform

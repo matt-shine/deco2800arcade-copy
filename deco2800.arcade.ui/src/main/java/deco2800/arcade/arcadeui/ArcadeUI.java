@@ -12,14 +12,14 @@ import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 
-
 /**
  * This class is the main interface for the arcade.
+ * 
  * @author Simon
- *
+ * 
  */
 @InternalGame
-@ArcadeGame(id="arcadeui")
+@ArcadeGame(id = "arcadeui")
 public class ArcadeUI extends GameClient {
 
 	LoginScreen login = null;
@@ -34,8 +34,6 @@ public class ArcadeUI extends GameClient {
 	MultiGamelist2 multigame2 = null;
 	BettingLobby bettingLobby = null;
 
-
-
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 	}
@@ -44,7 +42,8 @@ public class ArcadeUI extends GameClient {
 	public void create() {
 		// TODO Move this to somewhere more appropriate.
 		// FIXME This really needs to be fixed.
-		// The connection should be attempted to be opened after a user has pressed login on the loginScreen
+		// The connection should be attempted to be opened after a user has
+		// pressed login on the loginScreen
 		// But I don't know the best way or place to do this - abbjohn
 		ArcadeSystem.openConnection();
 
@@ -74,12 +73,8 @@ public class ArcadeUI extends GameClient {
 			this.setScreen(lobby);
 		}
 
-
 		super.create();
 	}
-
-
-
 
 	@Override
 	public void dispose() {
@@ -123,10 +118,10 @@ public class ArcadeUI extends GameClient {
 	public MultiplayerLobby getLobby() {
 		return lobby;
 	}
+
 	public BettingWindow getBetting() {
 		return betting;
 	}
-
 
 	public MultiGamelist getMultigame() {
 		return multigame;

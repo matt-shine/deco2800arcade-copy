@@ -16,7 +16,8 @@ import deco2800.arcade.arcadeui.FrontPage;
 
 public class LoginScreen implements Screen {
 
-	private class LoginScreenStage extends Stage {}
+	private class LoginScreenStage extends Stage {
+	}
 
 	private Skin skin;
 	private LoginScreenStage stage;
@@ -35,7 +36,9 @@ public class LoginScreen implements Screen {
 		table.setBackground(skin.getDrawable("background"));
 		stage.addActor(table);
 
-		final Label tempLabel = new Label("To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with any username", skin);  // Temporary label to display a message
+		final Label tempLabel = new Label(
+				"To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with any username",
+				skin); // Temporary label to display a message
 		tempLabel.setAlignment(Align.center);
 		final Label errorLabel = new Label("", skin, "error");
 		errorLabel.setAlignment(Align.center);
@@ -46,16 +49,18 @@ public class LoginScreen implements Screen {
 		passwordText.setPasswordMode(true);
 		passwordText.setPasswordCharacter('*');
 		final TextField serverText = new TextField("", skin);
-		serverText.setMessageText("Server") ;
+		serverText.setMessageText("Server");
 		CheckBox rememberBox = new CheckBox("Remember Me", skin);
 		rememberBox.getCells().get(0).size(25, 25);
 		rememberBox.getCells().get(0).pad(5);
 		rememberBox.getCells().get(1).pad(2);
 		TextButton loginButton = new TextButton("Login", skin);
-		TextButton registerButton = new TextButton("Register", skin, "default-blue");
-		TextButton forgotLogButton = new TextButton("Forgot Login?", skin, "default-red");
+		TextButton registerButton = new TextButton("Register", skin,
+				"default-blue");
+		TextButton forgotLogButton = new TextButton("Forgot Login?", skin,
+				"default-red");
 
-		table.add(tempLabel).colspan(2);  // Temporary label to display a message
+		table.add(tempLabel).colspan(2); // Temporary label to display a message
 		table.row();
 		table.add(errorLabel).width(400).pad(5).colspan(2);
 		table.row();
@@ -65,7 +70,8 @@ public class LoginScreen implements Screen {
 		table.row();
 		table.add(serverText).width(400).pad(5).colspan(2);
 		table.row();
-		table.add(rememberBox).width(190).height(25).pad(5).colspan(2).align(BaseTableLayout.LEFT);
+		table.add(rememberBox).width(190).height(25).pad(5).colspan(2)
+				.align(BaseTableLayout.LEFT);
 		table.row();
 		table.add(loginButton).width(190).height(50).pad(5);
 		table.add(registerButton).width(190).height(50).pad(5);
@@ -77,15 +83,17 @@ public class LoginScreen implements Screen {
 				if (usernameText.getText().equals("")) {
 					// no username entered, throw error
 					errorLabel.setText("No Username Supplied");
-				}
-				else if (usernameText.getText().toLowerCase().equals("multi")) {
+				} else if (usernameText.getText().toLowerCase().equals("multi")) {
 					// TEMPORARY
 					ArcadeSystem.login("debuguser");
 					arcadeUI.setScreen(arcadeUI.lobby);
-				}
-				else {
+				} else {
 					ArcadeSystem.login(usernameText.getText());
-					FrontPage.setName(usernameText.getText());  // This may need to be moved to somewhere more appropriate.
+					FrontPage.setName(usernameText.getText()); // This may need
+																// to be moved
+																// to somewhere
+																// more
+																// appropriate.
 					arcadeUI.setScreen(arcadeUI.main);
 				}
 			}

@@ -26,7 +26,7 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 /**
  * 
  * @author Kieran Burke
- *
+ * 
  */
 
 public class MultiplayerLobby implements Screen {
@@ -38,29 +38,27 @@ public class MultiplayerLobby implements Screen {
 	private ShapeRenderer shapeRenderer;
 	private ArcadeUI arcadeUI;
 	private MultiplayerLobby lobby;
-	ArrayList<ActiveMatchDetails> matches; 
+	ArrayList<ActiveMatchDetails> matches;
 
 	public MultiplayerLobby(ArcadeUI ui) {
 		System.out.println(ui);
 		arcadeUI = ui;
-		//lobby = this;
+		// lobby = this;
 	}
 
 	public void show() {
 		ArcadeSystem.addPlayerToLobby();
 		ArcadeSystem.initializeLobbyMatchList();
 		ArcadeSystem.setMultiplayerEnabled(true);
-		matches  = ArcadeSystem.requestLobbyGamesList();
+		matches = ArcadeSystem.requestLobbyGamesList();
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
 
-
 		/* Add player to servers list of lobby users */
 		ArcadeSystem.addPlayerToLobby();
 
-
-		// Gui button & label Styles 		
+		// Gui button & label Styles
 		skin = new Skin();
 		final Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
 		skin.add("background", new Texture("homescreen_bg.png"));
@@ -101,7 +99,7 @@ public class MultiplayerLobby implements Screen {
 
 		skin2.add("default", textButtonStyle);
 
-		//Create buttons, labels and tables for layout purposes 
+		// Create buttons, labels and tables for layout purposes
 		TextButton createbutton = new TextButton("Create Match", skin);
 		TextButton refreshButton = new TextButton("Refresh", skin);
 		TextButton button4 = new TextButton("Match Me!", skin);
@@ -116,10 +114,9 @@ public class MultiplayerLobby implements Screen {
 		final Table table4 = new Table();
 		final Table table = new Table();
 		final Table table2 = new Table();
-		final Table table3 = new Table();	
+		final Table table3 = new Table();
 		final Table table5 = new Table();
 		final Table bettingButtonTable = new Table();
-
 
 		Table chattable = new Table();
 
@@ -133,7 +130,7 @@ public class MultiplayerLobby implements Screen {
 
 		table3.setBackground(skin.getDrawable("background"));
 
-		//Add tables to stage.
+		// Add tables to stage.
 		stage.addActor(table3);
 		stage.addActor(table5);
 		stage.addActor(chattable);
@@ -154,22 +151,23 @@ public class MultiplayerLobby implements Screen {
 
 		table.add(refreshButton).width(300).height(40).padRight(20).padTop(600);
 
-		//table.add(button).width(300).height(40).padRight(20).padLeft(20).padTop(600);
+		// table.add(button).width(300).height(40).padRight(20).padLeft(20).padTop(600);
 
-		table.add(button4).width(300).height(40).padRight(20).padLeft(20).padTop(600);
+		table.add(button4).width(300).height(40).padRight(20).padLeft(20)
+				.padTop(600);
 
 		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
 
-		bettingButtonTable.add(bettingButton).width(40).height(40).padRight(50).padTop(25);
+		bettingButtonTable.add(bettingButton).width(40).height(40).padRight(50)
+				.padTop(25);
 
-
-
-
-		if (matches.size() > 0 ) {
+		if (matches.size() > 0) {
 			matches = ArcadeSystem.requestLobbyGamesList();
 			for (int i = 0; i < matches.size(); i++) {
-				Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
-				Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
+				Label matchLabel = new Label(
+						"GameId: " + matches.get(i).gameId, skin2);
+				Label player = new Label("Player: "
+						+ matches.get(i).hostPlayerId, skin2);
 				final TextButton button5 = new TextButton("Join", skin);
 				final int matchId = matches.get(i).matchId;
 
@@ -183,116 +181,101 @@ public class MultiplayerLobby implements Screen {
 			}
 		}
 
-
-
-
-
-
-		/** Test Button Event Listener 
-		 * Simulates creating a match on the server.
+		/**
+		 * Test Button Event Listener Simulates creating a match on the server.
 		 */
-		/*button.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
-
-            	CreateMatchRequest request = new CreateMatchRequest();
-            	request.gameId = Integer.toString((int)(Math.random()*10000));
-            	request.hostPlayerId = (int) (Math.random()*1000);
-            	ArcadeSystem.createMatch(request);
-            }
-        });*/
+		/*
+		 * button.addListener(new ChangeListener() { public void changed
+		 * (ChangeEvent event, Actor actor) {
+		 * 
+		 * CreateMatchRequest request = new CreateMatchRequest(); request.gameId
+		 * = Integer.toString((int)(Math.random()*10000)); request.hostPlayerId
+		 * = (int) (Math.random()*1000); ArcadeSystem.createMatch(request); }
+		 * });
+		 */
 
 		// "Refresh" button event listener.
 		refreshButton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 				table2.clear();
 
-
-				if (matches.size() > 0 ) {
+				if (matches.size() > 0) {
 					for (int i = 0; i < matches.size(); i++) {
-						Label matchLabel = new Label("GameId: " + matches.get(i).gameId, skin2);
-						Label player = new Label("Player: " + matches.get(i).hostPlayerId, skin2);
+						Label matchLabel = new Label("GameId: "
+								+ matches.get(i).gameId, skin2);
+						Label player = new Label("Player: "
+								+ matches.get(i).hostPlayerId, skin2);
 						final TextButton button5 = new TextButton("Join", skin);
 						final int matchId = matches.get(i).matchId;
 
 						table2.center().left();
-						table2.add(matchLabel).width(130).padTop(5).padLeft(150);
+						table2.add(matchLabel).width(130).padTop(5)
+								.padLeft(150);
 						table2.add(player).width(130).padTop(5).padLeft(130);
 						table2.add(button5).width(130).height(20).padTop(5);
 						table2.row();
 
 						button5.addListener(new JoinGameListener(matchId, lobby));
 					}
-				}	
+				}
 			}
 		});
 
-
 		// "Create Match" Button Event Listener
 		createbutton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 
 				dispose();
 				arcadeUI.setScreen(arcadeUI.getMultigame2());
 
-				//Code below commented out for overlay
+				// Code below commented out for overlay
 				/*
-            	createMatch();
+				 * createMatch();
 				 */
 			}
 		});
 
-
-		//"Match Me" button event listener
+		// "Match Me" button event listener
 		button4.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
-				//add to matchmaking queue method
-				//add overlay to say 'waiting for match'
-				//add second overlay (or modify first) to 'accept' or 'decline' match
+			public void changed(ChangeEvent event, Actor actor) {
+				// add to matchmaking queue method
+				// add overlay to say 'waiting for match'
+				// add second overlay (or modify first) to 'accept' or 'decline'
+				// match
 				dispose();
 
 				ArcadeSystem.setMatchMaking(true);
 
 				arcadeUI.setScreen(arcadeUI.getMultigame());
 
+				// arcadeUI.setScreen(arcadeUI.getWait());
 
-				//arcadeUI.setScreen(arcadeUI.getWait());
-
-
-
-				//Code below has been commented out for overlay
+				// Code below has been commented out for overlay
 				/*
-				NewMultiGameRequest request = new NewMultiGameRequest();
-            	Set<String> games = ArcadeSystem.getGamesList();
-            	int i = 0;
-            	String gameid = "";
-            	for (String game : games) {
-            		if (game.equals("chess")) {
-            			gameid = game;
-            			break;
-            		}
-            	}
-            	request.gameId = gameid;
-            	request.playerID = arcadeUI.getPlayer().getID();
-            	request.requestType = MultiGameRequestType.NEW;
-            	ArcadeSystem.goToGame(gameid);
-            	ArcadeSystem.createMultiplayerGame(request);
+				 * NewMultiGameRequest request = new NewMultiGameRequest();
+				 * Set<String> games = ArcadeSystem.getGamesList(); int i = 0;
+				 * String gameid = ""; for (String game : games) { if
+				 * (game.equals("chess")) { gameid = game; break; } }
+				 * request.gameId = gameid; request.playerID =
+				 * arcadeUI.getPlayer().getID(); request.requestType =
+				 * MultiGameRequestType.NEW; ArcadeSystem.goToGame(gameid);
+				 * ArcadeSystem.createMultiplayerGame(request);
 				 */
 			}
 		});
 
-		//Betting Button: Betting Lobby
+		// Betting Button: Betting Lobby
 		bettingButton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
 				ArcadeSystem.setBettingLobby(true);
 				arcadeUI.setScreen(arcadeUI.getBettingLobby());
 			}
 		});
 
-
 		// "Return to Menu" Button Event Listener
 		button2.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
 				ArcadeSystem.removePlayerFromLobby();
 				ArcadeSystem.setMultiplayerEnabled(false);
@@ -303,8 +286,7 @@ public class MultiplayerLobby implements Screen {
 
 		// "Chat" [>>] Button Event Listener
 		button3.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
-
+			public void changed(ChangeEvent event, Actor actor) {
 
 				chatfield.getText();
 				System.out.println("You Said: " + chatfield.getText());
@@ -315,7 +297,7 @@ public class MultiplayerLobby implements Screen {
 				table5.center().right();
 				table5.add(chat).padRight(200);
 				table5.row();
-				//table5.add(" ").padRight(200);
+				// table5.add(" ").padRight(200);
 				chatfield.setText("");
 
 			}
@@ -324,9 +306,8 @@ public class MultiplayerLobby implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, 1280, 720);
 
-		//Gdx.app.exit();
+		// Gdx.app.exit();
 	}
-
 
 	@Override
 	public void render(float arg0) {
@@ -334,17 +315,15 @@ public class MultiplayerLobby implements Screen {
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 
-		//Gdx.gl.glClearColor(0.9f, 0, 0, 1);
+		// Gdx.gl.glClearColor(0.9f, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		/*
-		shapeRenderer.begin(ShapeType.FilledRectangle);
-
-	    shapeRenderer.filledRect(50,
-	        100,
-	        1280 - 100,
-	        720 - 200);
-
-	    shapeRenderer.end();*/
+		 * shapeRenderer.begin(ShapeType.FilledRectangle);
+		 * 
+		 * shapeRenderer.filledRect(50, 100, 1280 - 100, 720 - 200);
+		 * 
+		 * shapeRenderer.end();
+		 */
 
 		if (Gdx.input.isKeyPressed(Keys.B)) {
 			dispose();
@@ -353,14 +332,12 @@ public class MultiplayerLobby implements Screen {
 		}
 		if (Gdx.input.isKeyPressed(Keys.L)) {
 
-
 		}
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
 	}
-
 
 	@Override
 	public void dispose() {

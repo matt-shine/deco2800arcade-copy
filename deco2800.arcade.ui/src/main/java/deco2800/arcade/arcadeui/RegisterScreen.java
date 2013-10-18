@@ -12,7 +12,8 @@ import deco2800.arcade.client.ArcadeInputMux;
 
 public class RegisterScreen implements Screen {
 
-	private class RegisterScreenStage extends Stage {}
+	private class RegisterScreenStage extends Stage {
+	}
 
 	private Skin skin;
 	private RegisterScreenStage stage;

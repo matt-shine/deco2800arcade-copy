@@ -19,20 +19,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
-
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 
 import java.util.*;
 
-
-
-
-
 public class BettingLobby implements Screen {
 
-	private class FrontPageStage extends Stage {}
+	private class FrontPageStage extends Stage {
+	}
 
 	private Skin skin;
 	private FrontPageStage stage;
@@ -41,7 +37,6 @@ public class BettingLobby implements Screen {
 	private int tokens;
 	boolean multiplayerEnabled;
 	private boolean bclicked;
-
 
 	Texture bg;
 	Sprite bgSprite;
@@ -90,16 +85,15 @@ public class BettingLobby implements Screen {
 
 		titleTable.add(gameLabel).width(150).height(30).padTop(150).padLeft(30);
 		titleTable.add(betLabel).width(150).height(30).padTop(150).padLeft(550);
-		table.add(updateButton).width(150).height(40).padBottom(100).padLeft(30);
-		table.add(placeBetButton).width(150).height(40).padBottom(100).padLeft(30);
+		table.add(updateButton).width(150).height(40).padBottom(100)
+				.padLeft(30);
+		table.add(placeBetButton).width(150).height(40).padBottom(100)
+				.padLeft(30);
 		table2.add(returnButton).width(300).height(40).padBottom(50);
-
-
-
 
 		// Return to lobby event listener
 		returnButton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 
 				ArcadeSystem.setBettingLobby(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
@@ -125,16 +119,12 @@ public class BettingLobby implements Screen {
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-		Table.drawDebug(stage);  // Shows table debug lines
-
-
+		Table.drawDebug(stage); // Shows table debug lines
 
 		if (bclicked == true) {
 			System.out.println("going to arcadeui");
 			ArcadeSystem.goToGame("arcadeui");
 		}
-
-
 
 	}
 

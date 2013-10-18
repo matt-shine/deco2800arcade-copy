@@ -42,10 +42,10 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 import java.util.*;
 import com.badlogic.gdx.Input.Keys;
 
-
 public class Gamewaiting implements Screen {
 
-	private class FrontPageStage extends Stage {}
+	private class FrontPageStage extends Stage {
+	}
 
 	private Skin skin;
 	private FrontPageStage stage;
@@ -67,7 +67,7 @@ public class Gamewaiting implements Screen {
 
 	public Gamewaiting(ArcadeUI ui) {
 		System.out.println("Gamewaiting UI: " + ui);
-		arcadeUI = ui;    	
+		arcadeUI = ui;
 
 		skin = new Skin(Gdx.files.internal("loginSkin.json"));
 		skin.add("background", new Texture("homescreen_bg.png"));
@@ -94,34 +94,29 @@ public class Gamewaiting implements Screen {
 
 		table.add(button3).width(300).height(40).padTop(600);
 
-		//Timer code coming soon...
+		// Timer code coming soon...
 		/*
-		if (button3.getStage() != null){
-
-		TimerTask task = new RunMeTask();
-
-    	Timer timer = new Timer();
-    	timer.schedule(task, 0,30000);
-
-   }    
+		 * if (button3.getStage() != null){
+		 * 
+		 * TimerTask task = new RunMeTask();
+		 * 
+		 * Timer timer = new Timer(); timer.schedule(task, 0,30000);
+		 * 
+		 * }
 		 */
-
 
 		// Return to lobby event listener
 		button3.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
+			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
 				ArcadeSystem.setMatchMaking(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
 				arcadeUI.setScreen(arcadeUI.getLobby());
 
-
 			}
 		});
 
-
 	}
-
 
 	@Override
 	public void show() {
@@ -139,8 +134,7 @@ public class Gamewaiting implements Screen {
 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-		Table.drawDebug(stage);  // Shows table debug lines
-
+		Table.drawDebug(stage); // Shows table debug lines
 
 	}
 

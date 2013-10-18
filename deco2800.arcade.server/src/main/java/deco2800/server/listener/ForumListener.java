@@ -10,12 +10,13 @@ import deco2800.server.database.DatabaseException;
 import deco2800.server.database.ForumStorage;
 
 /**
- * ForumListener models listener for forum's server service
+ * ForumListener models listener for forum's server service.
+ * 
+ * @author Junya, Team Forum
+ * @see deco2800.arcade.protocol.forum.*
+ * @see deco2800.arcade.server.ForumStorage
  */
 public class ForumListener extends Listener {
-	/**
-	 * TODO Add more listener actions
-	 */
 	/**
 	 * Execute process in response to client request
 	 */
@@ -109,7 +110,17 @@ public class ForumListener extends Listener {
 			GetParentThreadsResponse response = new GetParentThreadsResponse();
 			response.error = "";
 			try {
-				ParentThread[] threads = ArcadeServer.instance().getForumStorage().getParentThreads(request.start, request.end, request.limit);
+				ParentThread[] threads;
+				if (request.userId > 0) {
+					threads = ArcadeServer.instance().getForumStorage().getParentThreads(request.start
+							, request.end, request.limit, request.userId);
+				} else if (request.category != "") {
+					threads = ArcadeServer.instance().getForumStorage().getParentThreads(request.start
+							, request.end, request.limit, request.category);
+				} else {
+					threads = ArcadeServer.instance().getForumStorage().getParentThreads(request.start
+							, request.end, request.limit);
+				}
 				response.result = ParentThreadProtocol.getParentThreadProtocols(threads);
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();

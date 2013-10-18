@@ -10,6 +10,7 @@ import deco2800.server.database.AchievementStorage;
 import deco2800.server.database.DatabaseException;
 import java.util.ArrayList;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +21,14 @@ import deco2800.arcade.model.Game;
 public class AchievementListener extends Listener {
 	
     private static Logger logger = LoggerFactory.getLogger(AchievementListener.class);
+    
 
 
     @Override
     public void received(Connection connection, Object object) {
+    	//TODO this is a hack to be removed once I hear back from replay team about merging
+    	//server logging -Josh team null
+    	PropertyConfigurator.configure("src/main/resources/log4j.properties");
 	super.received(connection, object);
 	AchievementStorage storage = ArcadeServer.instance().getAchievementStorage();
 

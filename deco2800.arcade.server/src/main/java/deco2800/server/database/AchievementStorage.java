@@ -19,8 +19,9 @@ import deco2800.server.database.ImageStorage;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import org.slf4j.*;
+
 import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.*;
 
 
 /**
@@ -39,9 +40,10 @@ public class AchievementStorage {
 	
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
-		//Configure logger
+		//TODO This is a hack to ensure serverLog messages go where I want them rather
+		//then getting caught by replay teams logger and printed to console, to be removed
+		//when I hear back from them about merging our loggers into a serverLogger -Josh Team null
 		PropertyConfigurator.configure("src/main/resources/log4j.properties");
-	
 			
 		try {
 		    ResultSet tableData = connection.getMetaData().getTables(null, null,

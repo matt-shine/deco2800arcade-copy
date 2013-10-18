@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 import java.awt.Color;
 import javax.swing.JTextPane;
 
@@ -33,6 +34,8 @@ public class GeneralDiscussion {
 	private JTextField textField;
 	private JPanel panel_1;
 	private JPanel panel;
+	private JPanel ThreadPanel;
+	private JPanel InnerThreadPanel;
 	private JTextArea textArea_1;
 	private JTextArea textArea;
 	private JLabel lblNewLabel;
@@ -120,7 +123,16 @@ public class GeneralDiscussion {
 	    this.panel_1.setBackground(Color.DARK_GRAY);
 	    this.panel_1.setBounds(0, 0, 1006, 57);
 	    f.getContentPane().add(this.panel_1);
-	    f.setVisible(true);      
+	    f.setVisible(true);
+	    
+	    this.ThreadPanel = new JPanel();
+	    this.ThreadPanel.setBorder(new LineBorder(new Color(0, 0, 0)));
+	    this.ThreadPanel.setBounds(17, 232, 520, 464);
+	    f.getContentPane().add(ThreadPanel);
+	      
+	    this.InnerThreadPanel = new JPanel();
+	    this.ThreadPanel.add(InnerThreadPanel);
+	    f.setVisible(true);
 	    
 	    
 	    try {

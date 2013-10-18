@@ -225,6 +225,8 @@ public class Player extends Entity {
 		setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
 		setY(getY() + getJumpVelocity());
 		
+		checkDist();
+		
 		if (attackTime + Config.PLAYER_ATTACK_TIMEOUT > System.currentTimeMillis() && !dead){
 			this.state = State.ATTACK;			
 			currAnim = attackAnimation();
@@ -272,6 +274,24 @@ public class Player extends Entity {
 		}
 		
 		score += 1; 
+	}
+	
+	private void checkDist() {
+		if (this.getCurrentDistance() >= 100){
+			gamescreen.getGameReference().incrementAchievement("hunter.100m");
+		}
+		if (this.getCurrentDistance() >= 200){
+			gamescreen.getGameReference().incrementAchievement("hunter.200m");
+		}
+		if (this.getCurrentDistance() >= 400){
+			gamescreen.getGameReference().incrementAchievement("hunter.400m");
+		}
+		if (this.getCurrentDistance() >= 800){
+			gamescreen.getGameReference().incrementAchievement("hunter.800m");
+		}
+		if (this.getCurrentDistance() >= 2000){
+			gamescreen.getGameReference().incrementAchievement("hunter.Marathoner");
+		}
 	}
 
 	/**
@@ -407,6 +427,7 @@ public class Player extends Entity {
 			if (((Items)e).getItemType() == Items.Type.WEAPON){
 				setWeapon(((Items)e).getItem());
 				weaponAmmo = 10;
+				gamescreen.getGameReference().incrementAchievement("hunter.arsenal." + ((Items)e).getItem());
 			}else{
 				applyPlayerBuff(((Items)e).getItem());
 			}
@@ -416,6 +437,10 @@ public class Player extends Entity {
 				((Animal)e).dead();
 				if(!((Animal)e).isDead()){
 					animalsKilled++;
+					gamescreen.getGameReference().incrementAchievement("hunter.amatuerHunter");
+					gamescreen.getGameReference().incrementAchievement("hunter.professionalHunter");
+					gamescreen.getGameReference().incrementAchievement("hunter.masterHunter");
+					gamescreen.getGameReference().incrementAchievement("hunter.Hitman");
 				}
 			}else{
 				if (!invulnerable && !blink && !((Animal)e).isDead()) {
@@ -478,17 +503,22 @@ public class Player extends Entity {
 			multiplier = multiplier * 2;
 			gamescreen.setMultiplier(multiplier);
 			buffTime = System.currentTimeMillis();
+			gamescreen.getGameReference().incrementAchievement("hunter.superpowered.DoublePoints");
 		}
 			
 		if (item.equals("ExtraLife")){
 			addLife();
+			gamescreen.getGameReference().incrementAchievement("hunter.superpowered.ExtraLife");
 		}
 		if (item.equals("Invulnerability")){
 			invulnerable = true;
 			buffTime = System.currentTimeMillis();
+			gamescreen.getGameReference().incrementAchievement("hunter.superpowered.Invulnerability");
 		}
 		if (item.equals("Coin")){
 			score += 500;
+			gamescreen.getGameReference().incrementAchievement("hunter.superpowered.Coin");
+			gamescreen.getGameReference().incrementAchievement("hunter.10Coins");
 		}
 	}
 

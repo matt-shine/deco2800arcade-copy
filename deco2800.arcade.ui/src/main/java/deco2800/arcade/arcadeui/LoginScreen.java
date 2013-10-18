@@ -37,8 +37,7 @@ public class LoginScreen implements Screen {
 		stage.addActor(table);
 
 		final Label tempLabel = new Label(
-				"To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with any username",
-				skin); // Temporary label to display a message
+				"To proceed as normal\nlogin with any username", skin);
 		tempLabel.setAlignment(Align.center);
 		final Label errorLabel = new Label("", skin, "error");
 		errorLabel.setAlignment(Align.center);
@@ -83,10 +82,10 @@ public class LoginScreen implements Screen {
 				if (usernameText.getText().equals("")) {
 					// no username entered, throw error
 					errorLabel.setText("No Username Supplied");
-				} else if (usernameText.getText().toLowerCase().equals("multi")) {
-					// TEMPORARY
-					ArcadeSystem.login("debuguser");
-					arcadeUI.setScreen(arcadeUI.lobby);
+//				} else if (usernameText.getText().toLowerCase().equals("multi")) {
+//					// TEMPORARY
+//					ArcadeSystem.login("debuguser");
+//					arcadeUI.setScreen(arcadeUI.lobby);
 				} else {
 					ArcadeSystem.login(usernameText.getText());
 					FrontPage.setName(usernameText.getText()); // This may need

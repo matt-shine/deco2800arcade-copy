@@ -1,4 +1,5 @@
 package deco2800.arcade.landInvaders;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,23 +12,29 @@ public class tank implements KeyListener {
 
 	private int p_x;
 	private int p_y;
-	private Image im =null;
+	private Image im = null;
 	private boolean shotState = false;
-	private boolean Mleft=false;
-	private boolean Mright=false;
+	private boolean Mleft = false;
+	private boolean Mright = false;
 	private String img;
-/**
- * Tank initial starting point
- */
+	private int width;
+	private int height;
+
+	/**
+	 * Tank initial starting point
+	 */
 	/**
 	 * @param img
 	 */
 	public tank(String img) {
 		p_x = 370;
-		p_y = 400;
-		this.img= img;
+		p_y = 550;
+		this.img = img;
+		width = 40;
+		height = 80;
 
 	}
+
 	// testing
 	/**
 	 * @param g
@@ -35,8 +42,9 @@ public class tank implements KeyListener {
 	 */
 	public void drawTank(Graphics g, JFrame p) {
 		g.setColor(Color.green);
-		im = new javax.swing.ImageIcon(this.getClass().getResource(img)).getImage();
-		g.drawImage(im,p_x, p_y,40,80,p);
+		im = new javax.swing.ImageIcon(this.getClass().getResource(img))
+				.getImage();
+		g.drawImage(im, p_x, p_y, width, height, p);
 
 	}
 
@@ -46,69 +54,78 @@ public class tank implements KeyListener {
 
 		if (key == KeyEvent.VK_LEFT) {
 			Mleft = true;
-			
-		}
-		
 
-		if (key == KeyEvent.VK_RIGHT ) {
-			Mright =true;
+		}
+
+		if (key == KeyEvent.VK_RIGHT) {
+			Mright = true;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
-		if(key == KeyEvent.VK_SPACE){
+		if (key == KeyEvent.VK_SPACE) {
 			shotState = true;
 		}
 		if (key == KeyEvent.VK_LEFT) {
-			Mleft =false;
+			Mleft = false;
 		}
-		if (key == KeyEvent.VK_RIGHT ) {
-			Mright=false;	
+		if (key == KeyEvent.VK_RIGHT) {
+			Mright = false;
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
+
 	}
-	
+
 	/**
 	 * Check input of keyboard listener and move player(tank) sprite accordingly
 	 */
-	public void tankMove(){
-		if(Mleft == true && p_x > 10)p_x -= 7;
-		if(Mright == true&& p_x < 750)p_x += 7;
+	public void tankMove() {
+		if (Mleft == true && p_x > 10)
+			p_x -= 7;
+		if (Mright == true && p_x < 750)
+			p_x += 7;
 	}
-	
+
 	/**
 	 * @return true if tank has fired a shot else false otherwise
 	 */
-	public boolean shotCheck(){
+	public boolean shotCheck() {
 		return shotState;
-		
+
 	}
-	
+
 	/**
 	 * @return x-coordinate of player sprite
 	 */
-	public int PositionX(){
+	public int PositionX() {
 		return p_x;
 	}
-	
+
 	/**
 	 * @return y-coordinate of player sprite
 	 */
-	public int PositionY(){
+	public int PositionY() {
 		return p_y;
 	}
-	
+
 	/**
 	 * Reset the state of shots fired by player
 	 */
-	public void finishShot(){
+	public void finishShot() {
 		shotState = false;
+	}
+
+	public int width() {
+		return width;
+	}
+
+	public int height() {
+		return height;
 	}
 
 }

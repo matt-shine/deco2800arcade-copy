@@ -48,9 +48,9 @@ public class Invaders extends JFrame implements Runnable {
 
 		setGameImg("/tank/");
 		imgString = "/tank/";
-		WallList.add(new blockWall(180, 350, 4, 8, imgString + "WallD.png"));
-		WallList.add(new blockWall(380, 350, 4, 8, imgString + "WallD.png"));
-		WallList.add(new blockWall(580, 350, 4, 8, imgString + "WallD.png"));
+		WallList.add(new blockWall(180, 480, 4, 8, imgString + "WallD.png"));
+		WallList.add(new blockWall(380, 480, 4, 8, imgString + "WallD.png"));
+		WallList.add(new blockWall(580, 480, 4, 8, imgString + "WallD.png"));
 		shotsNmb = 6;
 		level = 1;
 		shots = new ArrayList<tankshot>();
@@ -277,9 +277,9 @@ public class Invaders extends JFrame implements Runnable {
 		
 		if(createWall==true){
 			WallList = new ArrayList<blockWall>();
-			WallList.add(new blockWall(180, 350, 4, 8, imgString + "WallD.png"));
-			WallList.add(new blockWall(380, 350, 4, 8, imgString + "WallD.png"));
-			WallList.add(new blockWall(580, 350, 4, 8, imgString + "WallD.png"));
+			WallList.add(new blockWall(180, 480, 4, 8, imgString + "WallD.png"));
+			WallList.add(new blockWall(380, 480, 4, 8, imgString + "WallD.png"));
+			WallList.add(new blockWall(580, 480, 4, 8, imgString + "WallD.png"));
 			createWall =false;
 		}
 		setGameImg(imgString);
@@ -297,6 +297,21 @@ public class Invaders extends JFrame implements Runnable {
 		Eshots.addAll(enemyG.enemyShot(count));
 
 	}
+	
+	public void hitPlayer(){
+		for(int i= 0; i< Eshots.size(); i ++){
+			if((tank.PositionX()+ tank.width()> Eshots.get(i).positionX())&&
+					(Eshots.get(i).positionX()> (tank.PositionX() - Eshots.get(i).width()))&&
+					(Eshots.get(i).positionY() > (tank.PositionY() - Eshots.get(i).height()))&&
+					(Eshots.get(i).positionY()< tank.PositionY() + tank.height())
+					){
+				Eshots.remove(i);
+				healthBar--;
+				
+			}
+		}
+	}
+	
 
 	@Override
 	public void run() {
@@ -307,7 +322,7 @@ public class Invaders extends JFrame implements Runnable {
 				Thread.sleep(50);
 			} catch (InterruptedException ie) {
 			}
-
+			hitPlayer();
 			if (tank.shotCheck() == true) {
 				if (shots.size() < shotsNmb)
 					shots.add(new tankshot(tank.PositionX(), tank.PositionY()));

@@ -95,6 +95,8 @@ public class Arcade extends JFrame {
 	
 	private static boolean gameWaiting;
 
+	private static boolean bettingLobby;
+    
     private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
 
     // Width and height of the Arcade window
@@ -411,10 +413,19 @@ public class Arcade extends JFrame {
 		proxy.setTarget(new DummyApplicationListener());
 	}
 
-	public boolean isMultiplayerEnabled() {
+    
+    /**
+     * Whether the arcade is currently being used for a multiplayer game
+     * @return True if the arcade is being used for a multiplayer game
+     */
+    public boolean isMultiplayerEnabled() {
 		return multiplayerEnabled;
 	}
-
+    
+    /**
+     * Sets the variable defining whether the arcade is being used for multiplayer games
+     * @param multiplayerEnabled Whether or not the arcade is being used for multiplayer
+     */
 	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
 		Arcade.multiplayerEnabled = multiplayerEnabled;
 	}
@@ -616,6 +627,11 @@ public class Arcade extends JFrame {
 		return matches;
 	}
 
+	
+	/**
+	 * Forwards on a request for a new Multiplayer game to the client
+	 * @param request
+	 */
 	public void createMultiplayerGame(NewMultiGameRequest request) {
 		request.playerID = player.getID();
 		this.client.sendNetworkObject(request);
@@ -675,18 +691,34 @@ public class Arcade extends JFrame {
 		Arcade.playerBetting = playerBetting;
 	}
 	
+	/**
+	 * Whether the client is currently involved in a matchmaking game
+	 * @return True if the client is in a matchmaking game
+	 */
 	public boolean isMatchMaking() {
 		return matchMaking;
 	}
 	
+	/**
+	 * Sets whether the client is involved in a matchmaking game
+	 * @param matchMaking True if the game is matchmaking, false otherwise
+	 */
 	public void setMatchMaking(boolean matchMaking) {
 		Arcade.matchMaking = matchMaking;
 	}
 	
+	/**
+	 * Returns whether the game is paused waiting for a multiplayer opponent
+	 * @return True if the game is paused, false otherwise
+	 */
 	public boolean isGameWaiting() {
 		return gameWaiting;
 	}
 	
+	/**
+	 * Sets whether the game should be waiting for an opponent
+	 * @param gameWaiting Whether or not to wait for opponent
+	 */
 	public void setGameWaiting(boolean gameWaiting) {
 		Arcade.gameWaiting = gameWaiting;
 	}
@@ -744,5 +776,14 @@ public class Arcade extends JFrame {
         GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
         client.sendNetworkObject(gameLibraryRequest);
     }
+
+	public void setBettingLobby(boolean b) {
+		Arcade.bettingLobby = b;
+		
+	}
+	
+	public boolean isBettingLobby() {
+		return bettingLobby;
+	}
 
 }

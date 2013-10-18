@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.client.ArcadeSystem;
+
 /**
  * Takes user input for paddle in pong.
  * @see Paddle
@@ -39,7 +41,9 @@ public class LocalUserPaddle extends Paddle {
     		Vector2 touchPos = new Vector2();
     		touchPos.set(Gdx.input.getX(), Gdx.input.getY());
             double prevY = bounds.y;
-    		bounds.y = -touchPos.y - bounds.height / 2 + Pong.SCREENHEIGHT;
+            int currentHeight = ArcadeSystem.getCurrentGame().getHeight();
+            double newY = ((currentHeight - touchPos.y)/currentHeight)*Pong.SCREENHEIGHT - bounds.height/2;
+            move(KBPADDLESPEED*Gdx.graphics.getDeltaTime() * sign(newY-prevY));
             direction += sign(bounds.y - prevY);
         }
 

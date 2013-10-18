@@ -186,6 +186,44 @@ public class PlayerGameStorage {
 		}
 	}
 	
+	/**
+	 * Adds a player game entry to the database with the given PlayerID, 
+	 * gameID and rating
+	 * 
+	 * @param playerID, gameID, Rating
+	 * 				the IDs and Rating for the player and game to be added
+	 * @throws DatabaseException
+	 */
+	public void addPlayerGameRating(int playerID, String gameID, int rating) throws DatabaseException {
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		try {
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+			stmt.executeUpdate("INSERT INTO PLAYERGAMES VALUES(" + playerID 
+					+ ",'" + gameID + "'," + rating + ")");
+		} catch (SQLException e) {
+			//TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new DatabaseException("Unable to add player game to database", e);
+		} finally {
+			//clean up JDBC objects
+			try {
+				if (resultSet != null){
+					resultSet.close();
+				}
+				if (stmt != null){
+					stmt.close();
+				}
+				if (connection != null){
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public boolean hasGame(int playerID, String gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
@@ -238,11 +276,18 @@ public class PlayerGameStorage {
 		Statement statement = null;
 		ResultSet resultSet = null;
 		try {
-			statement = connection.createStatement();
+			statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES WHERE playerID = " 
 			+ playerID + " AND gameID = '" + gameID + "'");
-			int result = resultSet.findColumn("Rating");
-
+			int result;
+			if (resultSet.next()) {
+				result = resultSet.findColumn("Rating");
+				resultSet.first();
+				result = resultSet.getInt(result);
+			} else {
+				result = 1500;
+				addPlayerGameRating(playerID, gameID, result);
+			}
 			return result;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -284,7 +329,7 @@ public class PlayerGameStorage {
 		Statement statement = null;
 		try {
 			statement = connection.createStatement();
-			statement.executeQuery("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
+			statement.executeUpdate("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
 					+ playerID + " AND gameID = '" + gameID + "'");
 		} catch (SQLException e) {
 			e.printStackTrace();

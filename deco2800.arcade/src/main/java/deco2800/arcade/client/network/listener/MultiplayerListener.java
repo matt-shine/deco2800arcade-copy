@@ -10,11 +10,20 @@ import deco2800.arcade.protocol.multiplayerGame.NewMultiResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 
-
+/**
+ * A listener for requests related to the multiplayer matchmaking system
+ * @author Joey
+ *
+ */
 public class MultiplayerListener extends NetworkListener {
 	
 	Arcade arcade;
 	
+	/**
+	 * The constructor for the listener.
+	 * Takes an arcade to allow methods to be called
+	 * @param arcade The client arcade
+	 */
 	public MultiplayerListener(Arcade arcade) {
 		this.arcade = arcade;
 	}
@@ -38,21 +47,21 @@ public class MultiplayerListener extends NetworkListener {
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
 		
-		if (object instanceof NewMultiResponse) { //Connected to Server
-			NewMultiResponse response = (NewMultiResponse) object;
-			if (response.OK == NewMultiResponse.OK) {
-				System.out.println("Connect OK");
-			}
-		}
-		else if (object instanceof NewMultiSessionResponse) { //Game Found
+		//Game is found -- Start the game, set host, give the game the session number and pause it
+		if (object instanceof NewMultiSessionResponse) {
 			int sessionId = ((NewMultiSessionResponse) object).sessionId;
-			System.out.println("Game Found");
-			System.out.println("session id: " + sessionId);
-			arcade.getCurrentGame().setMultiSession(sessionId);
+			arcade.getCurrentGame().setHost(((NewMultiSessionResponse) object).host);
+			arcade.getCurrentGame().setMultiSession(sessionId);			
 			ArcadeSystem.setGameWaiting(false);
+		//State updates -- If it is the inital update only send it to the non-host player
+		//Otherwise send it to both
 		} else if (object instanceof GameStateUpdateRequest) {
-			arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
-			System.out.println("Game State Updated");
+			if (((GameStateUpdateRequest) object).initial == false) {
+				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
+			} else {
+				arcade.getCurrentGame().startMultiplayerGame();
+				arcade.getCurrentGame().updateGameState((GameStateUpdateRequest) object);
+			}
 		} 
 	}
 

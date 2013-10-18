@@ -105,6 +105,7 @@ public class MultiplayerLobby implements Screen {
 		TextButton refreshButton = new TextButton("Refresh", skin);
 		TextButton button4 = new TextButton("Match Me!", skin);
 		TextButton button2 = new TextButton("Return to Menu", skin);
+		TextButton bettingButton = new TextButton("BL", skin);
 
 		TextButton button3 = new TextButton(">>", skin);
 
@@ -116,6 +117,8 @@ public class MultiplayerLobby implements Screen {
 		final Table table2 = new Table();
 		final Table table3 = new Table();	
 		final Table table5 = new Table();
+		final Table bettingButtonTable = new Table();
+		
 
 		Table chattable = new Table();
 
@@ -125,6 +128,7 @@ public class MultiplayerLobby implements Screen {
 		chattable.setFillParent(true);
 		table4.setFillParent(true);
 		table5.setFillParent(true);
+		bettingButtonTable.setFillParent(true);
 
 		table3.setBackground(skin.getDrawable("background"));
 
@@ -134,6 +138,9 @@ public class MultiplayerLobby implements Screen {
 		stage.addActor(chattable);
 		stage.addActor(table2);
 		stage.addActor(table);
+		stage.addActor(bettingButtonTable);
+		
+		bettingButtonTable.center().top().right();
 
 		// Add tables and set position.
 		table3.add(chatfield).width(200).height(35).padLeft(960).padTop(440);
@@ -151,6 +158,8 @@ public class MultiplayerLobby implements Screen {
 		table.add(button4).width(300).height(40).padRight(20).padLeft(20).padTop(600);
 
 		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
+		
+		bettingButtonTable.add(bettingButton).width(40).height(40).padRight(50).padTop(25);
 		
 		
 
@@ -270,6 +279,15 @@ public class MultiplayerLobby implements Screen {
 				*/
 			}
 		});
+		
+		//Betting Button: Betting Lobby
+				bettingButton.addListener(new ChangeListener() {
+					public void changed (ChangeEvent event, Actor actor) {
+						dispose();
+						ArcadeSystem.setBettingLobby(true);
+						arcadeUI.setScreen(arcadeUI.getBettingLobby());
+					}
+				});
 
 
 		// "Return to Menu" Button Event Listener

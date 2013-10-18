@@ -181,7 +181,12 @@ public class Pong extends GameClient {
 		scores[1] = 0;
 		//gameState = GameState.READY;
 		gameState = new ReadyState();
-		statusMessage = "Click to start!";
+		//Multiplayer games show different message
+		if (!ArcadeSystem.isMultiplayerEnabled()) {
+			statusMessage = "Click to start!";
+		} else { 
+			statusMessage = "Waiting for Opponent!";
+		}
 		
         // achievements demo
         AchievementClient achClient = getAchievementClient();
@@ -189,6 +194,7 @@ public class Pong extends GameClient {
         for(Achievement ach : achievements) {
             System.out.println(ach.toString());
         }
+        //Multiplayer Game waiting for opponent
         if (ArcadeSystem.isGameWaiting()) {
         	requestMultiplayerGame();
         }
@@ -274,18 +280,27 @@ public class Pong extends GameClient {
 		if (scores[winner] == WINNINGSCORE) {	
 		    int loser = winner == 1 ? 0 : 1; //The loser is the player who didn't win!
 		    statusMessage = players[winner] + " Wins " + scores[winner] + " - " + scores[loser] + "!";
+		    //Game was multiplayer and may therefore affect player matchmaking rating
+		    if (winner == 0 && ArcadeSystem.isMultiplayerEnabled()) {
+		    	multiGameOver();		    	
+		    }
 		    gameState = new GameOverState();
 		    //Update the game state to the server
 		    networkClient.sendNetworkObject(createScoreUpdate());
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
 		    	incrementAchievement("pong.winGame");
-			incrementAchievement("pong.master");
+		    	incrementAchievement("pong.master");
 		    }
 		} else {
 			// No winner yet, get ready for another point
 			gameState = new ReadyState();
-			statusMessage = "Click to start!";
+			//Define messages based off host/multiplayer variables
+			if (!ArcadeSystem.isMultiplayerEnabled() || getMPHost()) {
+				statusMessage = "Click to start!";
+			} else {
+				statusMessage = "Waiting for host!";
+			}
 		}
 	}
 	
@@ -305,10 +320,14 @@ public class Pong extends GameClient {
 	 * Start a new point: start the ball moving and change the game state
 	 */
 	void startPoint() {
-		getBall().randomizeVelocity();
-		Ball ball = getBall();
-		gameState = new InProgressState();
-		statusMessage = null;
+		//Do not allow game to start if it is multiplayer without an opponent
+		if (getMPHost() || !ArcadeSystem.isMultiplayerEnabled()) {
+			getBall().randomizeVelocity();
+			Ball ball = getBall();
+			sendInitState();
+			gameState = new InProgressState();
+			statusMessage = null;
+		}
 	}
 
 	@Override
@@ -356,6 +375,10 @@ public class Pong extends GameClient {
 		this.rightPaddle = rightPaddle;
 	}
 	
+	
+	/**
+	 * Sends a request to the server to start a Multiplayer Matchmaking game
+	 */
 	private void requestMultiplayerGame() {
 		NewMultiGameRequest request = new NewMultiGameRequest();
 		request.playerID = this.getPlayer().getID();
@@ -364,13 +387,25 @@ public class Pong extends GameClient {
 		networkClient.sendNetworkObject(request);
 	}
 	
+	/**
+	 * Starts the Multiplayer Game once an opponent is found
+	 */
 	public void startMultiplayerGame() {
 		getBall().randomizeVelocity();
-		sendInitState();
+		if (getMPHost()) {
+			long time = System.currentTimeMillis();
+			while (time + 3000 > System.currentTimeMillis());
+			sendInitState();
+		}
 		gameState = new InProgressState();
 		statusMessage = null;
 	}
 	
+	/**
+	 * Update the state of the game. 
+	 * For pong each client can keep track of the ball so the important
+	 * issue is each user's paddle.
+	 */
 	public void sendStateUpdate() {
 		GameStateUpdateRequest request = new GameStateUpdateRequest();
 		request.playerID = player.getID();
@@ -382,6 +417,10 @@ public class Pong extends GameClient {
 		networkClient.sendNetworkObject((request));	
 	}
 	
+	/**
+	 * Sends the initial state of the game.
+	 * Pong randomly chooses the velocity of the ball so this is the initial state.
+	 */
 	private void sendInitState() {
 		GameStateUpdateRequest request = new GameStateUpdateRequest();
 		request.playerID = player.getID();
@@ -390,22 +429,45 @@ public class Pong extends GameClient {
 		request.initial = true;
 		request.gameOver = false;
 		Vector2 vect = getBall().getVelocity();
+		// *-1 to make both users see their paddle on the left side
 		vect.x = -1 * vect.x;
 		request.stateChange = (Object) vect;
 		networkClient.sendNetworkObject((request));
 	}
 	
+	/**
+	 * Updates the game state based off network communication
+	 * For pong this updates the location of the opponent's paddle
+	 * @param request The update request sent by the server
+	 */
 	public void updateGameState(GameStateUpdateRequest request) {
-		if (request.playerID != player.getID()) {
-			if (request.initial == false) {
-				Vector2 vector = (Vector2) request.stateChange;
-				vector.x = getRightPaddle().getPosition().x;
-				getRightPaddle().setPosition(vector);
-			} else {
-				System.out.println("Updating Ball");
-				getBall().setVelocity((Vector2) request.stateChange);
-			}
+		//The first request will contain information about the ball
+		if (request.initial == true) {
+			startMultiplayerGame();
+			getBall().setVelocity((Vector2) request.stateChange);	
+			return;
 		}
+		//Each one after moves opponent paddle
+		if (request.playerID != player.getID()) {
+			Vector2 vector = (Vector2) request.stateChange;
+			vector.x = getRightPaddle().getPosition().x;
+			getRightPaddle().setPosition(vector); 
+		} 
+	}
+	
+	/**
+	 * Informs the server that the game is complete and who won
+	 * to allow for matchmaking rating calculations
+	 */
+	private void multiGameOver() {
+		GameStateUpdateRequest request = new GameStateUpdateRequest();
+		request.gameId = "pong";
+		request.gameOver = true;
+		request.winner = player.getID();
+		request.playerID = player.getID();
+		request.gameSession = super.getMultiSession();
+		request.initial = false;
+		networkClient.sendNetworkObject(request);
 	}
 	
 }

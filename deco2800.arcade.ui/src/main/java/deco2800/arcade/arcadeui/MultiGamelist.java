@@ -33,14 +33,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.Arcade;
-
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+
 import java.util.*;
+
 import com.badlogic.gdx.Input.Keys;
+
 
 
 import deco2800.*;
@@ -847,15 +849,10 @@ public class MultiGamelist implements Screen {
 		// Return to lobby event listener
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-            	dispose();
+            	
 				ArcadeSystem.setMatchMaking(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
-				
-
-
-
 				arcadeUI.setScreen(arcadeUI.getLobby());
-				//this.ui.setScreen(this.ui.getLobby());
 				
 
             }
@@ -888,6 +885,7 @@ public class MultiGamelist implements Screen {
 		    	//bclicked = true;
 		    	dispose();
 				ArcadeSystem.setMatchMaking(true);
+				ArcadeSystem.setMultiplayerEnabled(true);
 				ArcadeSystem.setGameWaiting(true);
 				arcadeUI.setScreen(arcadeUI.getWait());
 		    	ArcadeSystem.goToGame("Pong");

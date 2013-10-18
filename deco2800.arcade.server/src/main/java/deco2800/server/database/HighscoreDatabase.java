@@ -279,7 +279,7 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			String select = "SELECT DISTINCT Player FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
+			String select = "SELECT DISTINCT Player FROM PLAYER_HIGHSCORES WHERE Player IN (SELECT H.Player, D.Score FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order + ")";
 			resultSet = statement.executeQuery(select);
 			
 			while(resultSet.next())	{

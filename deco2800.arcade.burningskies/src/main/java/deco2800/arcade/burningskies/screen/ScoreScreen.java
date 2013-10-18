@@ -189,12 +189,12 @@ public class ScoreScreen implements Screen {
 		for (Map.Entry<Long, String> entry : localScoresMap.entrySet()) {
 			localNameLabelArray[i] = new Label(entry.getValue(), ls);
 			localNameLabelArray[i].setX(65); //X will always be the same
-			localNameLabelArray[i].setY(720 - 225 - 100 - 100*i); //Y will be some multiple of i
+			localNameLabelArray[i].setY(720 - 225 - 70 - 66*i); //Y will be some multiple of i
 			localNameLabelArray[i].setWidth(115);
 			
 			localScoreLabelArray[i] = new Label(String.valueOf(-1 * entry.getKey()), ls);
 			localScoreLabelArray[i].setX(225);
-			localScoreLabelArray[i].setY(720 - 225 - 80 - 100*i);
+			localScoreLabelArray[i].setY(720 - 225 - 70 - 66*i);
 			localScoreLabelArray[i].setWidth(115);
 			
 			i++;

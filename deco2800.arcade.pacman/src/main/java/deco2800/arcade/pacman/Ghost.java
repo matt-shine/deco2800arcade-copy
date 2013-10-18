@@ -153,9 +153,11 @@ public class Ghost extends Mover {
 		if (ghost == GhostName.BLINKY) {
 			return player.getTile();
 		}
-//		else if (ghost == GhostName.PINKY) {
-//			return player.nextTile(player.getTile(), 4);
-//		}
+		else if (ghost == GhostName.PINKY) {
+			//need to check this tile exists, otherwise crashes
+			return player.nextTile(player.getTile(), 4);
+		}
+
 		else {
 			return player.getTile();
 		}

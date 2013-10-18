@@ -228,7 +228,7 @@ public class GameScreen implements Screen {
 	}
 	
 	private void createItems(boolean weapon){
-		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
+		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin", "Bow", "Spear", "Trident"};
 		String item =  textures[Hunter.State.randomGenerator.nextInt(7)];
 		entities.add(new Items(new Vector2(player.getX()+Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX()+Config.PANE_SIZE_PX)), 64, 64, item,entityHandler.getItemTexture(item),this));
 	}

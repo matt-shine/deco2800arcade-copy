@@ -25,6 +25,11 @@ public class Hunter extends PlatformerGame {
 		public final static int SPEED_INCREASE_COUNTDOWN_START = 128;
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
 
+        public final static float CLOUD_MIN_SPEED = 0.6f;
+        public final static float CLOUD_MAX_SPEED = 1.4f;
+        public final static float TREE_MIN_SPEED = 0.6f;
+        public final static float TREE_MAX_SPEED = 1f;
+
         public final static int PLAYER_ATTACK_TIMEOUT = 300; // Attack timeout in msec
         public final static int PLAYER_ATTACK_COOLDOWN = 600;
         public final static long PLAYER_BLINK_TIMEOUT = 1000;

@@ -43,7 +43,6 @@ public class ListScreen implements Screen, LibraryScreen {
     private TextButton userProfileButton;
     private TextButton currentButton;
     private TextButton homeButton;
-    private TextButton multiplayerLobbyButton;
 
     private String description;
     private String gameTitle;
@@ -214,20 +213,12 @@ public class ListScreen implements Screen, LibraryScreen {
         userProfileButton.setX(500);
         userProfileButton.setY(650);
         userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
-        
-        multiplayerLobbyButton = new TextButton("Multiplayer Lobby", libSkin);
-        multiplayerLobbyButton.setWidth(150);
-        multiplayerLobbyButton.setHeight(40);
-        multiplayerLobbyButton.setX(700);
-        multiplayerLobbyButton.setY(650);
-        multiplayerLobbyButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
 
         stage.addActor(label);
         stage.addActor(homeButton);
         stage.addActor(titleLabel);
         stage.addActor(storeButton);
         stage.addActor(userProfileButton);
-        stage.addActor(multiplayerLobbyButton);
         stage.addActor(playButton);
         
         

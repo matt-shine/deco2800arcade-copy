@@ -20,6 +20,7 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.arcadeui.FrontPage;
 
 /**
  * @author Addison Gourluck
@@ -41,6 +42,7 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @param ui
 	 */
 	public StoreHome(ArcadeUI ui) {
+		
 		arcadeUI = ui;
 		skin.add("background", new Texture
 				(Gdx.files.internal("store/main_bg.png")));
@@ -186,6 +188,8 @@ public class StoreHome implements Screen, StoreScreen {
 				arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
 			}
 		});
+		
+		//FrontPage.setName("bob");
 	}
 	
 	/**

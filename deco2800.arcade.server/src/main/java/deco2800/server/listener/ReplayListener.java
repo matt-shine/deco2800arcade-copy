@@ -33,7 +33,7 @@ public class ReplayListener extends Listener {
 		try {
 			ArcadeServer.instance().getReplayStorage().initialise();
 		} catch( DatabaseException e ) {
-			// ouch
+            logger.error( e.toString() );
 		}
 	}
 	
@@ -53,7 +53,7 @@ public class ReplayListener extends Listener {
             try {
                 sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId, ssr.username, date.getTime(), "");
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
             if ( sessionID >= 0 ) {
@@ -69,7 +69,7 @@ public class ReplayListener extends Listener {
             try {
                 ArcadeServer.instance().getReplayStorage().endRecording(esr.sessionId);
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
             logger.info("Got an end replay session event for event ID " + esr.sessionId);
@@ -91,7 +91,7 @@ public class ReplayListener extends Listener {
                 sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);
                 logger.info( "Served replay session list as " + sessionStrings );
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
             //Convert back to sessions
@@ -131,7 +131,7 @@ public class ReplayListener extends Listener {
             try {
                 ArcadeServer.instance().getReplayStorage().insertEvent( per.sessionId, per.eventIndex, per.nodeString); 
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
             response.success = true;
@@ -146,7 +146,7 @@ public class ReplayListener extends Listener {
             try {
                 response.nodes = ArcadeServer.instance().getReplayStorage().getReplay(ger.sessionId);
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
 
             logger.info("Served " + response.nodes.size() + " replay events for session " + ger.sessionId);

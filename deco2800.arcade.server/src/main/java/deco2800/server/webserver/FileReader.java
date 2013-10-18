@@ -9,6 +9,13 @@ import java.nio.charset.Charset;
 public class FileReader {
 	
 	/**
+	 * Ensures that the class can never be instantiated
+	 */
+	private FileReader() {
+		
+	}
+	
+	/**
 	 * Reads the contents of a file and outputs the data in the specified encoding
 	 * 
 	 * @param path, the local path of the file to read as a string

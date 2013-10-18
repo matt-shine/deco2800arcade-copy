@@ -1,5 +1,6 @@
 package deco2800.server.webserver;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
@@ -12,7 +13,7 @@ public class LogoResponder implements WebResponder {
     }
 
     @Override
-    public void respond(Response response, String param) throws Exception {
+    public void respond(Response response, String param) throws IOException {
         
     	// Specify that we will be returning a png image
         ArcadeWebserver.setResponseValues(response, "image/png");

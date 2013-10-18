@@ -1,5 +1,6 @@
 package deco2800.server.webserver;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import org.simpleframework.http.Response;
 
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.server.ArcadeServer;
+import deco2800.server.database.DatabaseException;
 
 public class ReplayResponder implements WebResponder {
 	
@@ -23,8 +25,8 @@ public class ReplayResponder implements WebResponder {
 	 * @param replayStrings, the array of strings to parse
 	 * @return a List of the Session objects parsed from the strings
 	 */
-	private List<Session> stringsToSessions( ArrayList<String> replayStrings ) {
-		ArrayList<Session> replays = new ArrayList<Session>();
+	private List<Session> stringsToSessions( List<String> replayStrings ) {
+		List<Session> replays = new ArrayList<Session>();
 		
         if (replayStrings != null) {
             for (String s : replayStrings) {
@@ -59,7 +61,7 @@ public class ReplayResponder implements WebResponder {
         return replays;
 	}
 	
-	public void respond( Response response, String param) throws Exception {
+	public void respond( Response response, String param) throws IOException, DatabaseException {
 		
 		PrintStream body = response.getPrintStream();
 
@@ -76,7 +78,7 @@ public class ReplayResponder implements WebResponder {
 		for ( String gameId : gameIds ) {
 			/* For each game ID, get the list of Sessions recorded against for that game
 			 */
-			ArrayList<String> replayStrings = new ArrayList<String>();
+			List<String> replayStrings = new ArrayList<String>();
 			replayStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame( gameId );
 			List<Session> replays = stringsToSessions( replayStrings );
 			

@@ -1,5 +1,6 @@
 package deco2800.server.webserver;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.TreeSet;
 
@@ -7,6 +8,7 @@ import org.simpleframework.http.Response;
 
 import deco2800.arcade.model.Game;
 import deco2800.server.ArcadeServer;
+import deco2800.server.database.DatabaseException;
 
 public class GameResponder implements WebResponder {
 	
@@ -14,7 +16,7 @@ public class GameResponder implements WebResponder {
 		super();
 	}
 	
-	public void respond( Response response, String param ) throws Exception {
+	public void respond( Response response, String param ) throws IOException, DatabaseException {
 		
 		PrintStream body = response.getPrintStream();
 		ArcadeWebserver.setResponseValues(response, "text/html");

@@ -140,12 +140,14 @@ public class ArcadeWebserver implements Container {
 	 * @return a comparator to alphabetically sort games by name
 	 */
 	public static Comparator<Game> alphabeticalGameComparator() {
-		return new Comparator<Game>() {  
+		return new Comparator<Game>() {
 	        @Override  
 	        public int compare(Game o1, Game o2) {  
 	            int rval = Integer.valueOf( ( o1.name ).compareTo( o2.name) );  
-	            if (rval != 0) return rval;  
-	            return o1.compareTo(o2);  
+	            if ( rval != 0 ) {
+	            	return rval;  
+	            }
+	            return o1.compareTo( o2 );  
 	        }  
 	    };
 	}
@@ -157,12 +159,18 @@ public class ArcadeWebserver implements Container {
 	 */
 	private void setAppropriateImageMimeType(Response response, String path)
 	{
-        int lastDot = path.lastIndexOf('.');
+        int lastDot = path.lastIndexOf( '.' );
         String ext = path.substring(lastDot + 1);
         
-        if (ext.matches("(?i).*\\.(jpg|jpeg)")) setResponseValues(response, "image/jpeg");
-        if (ext.matches("(?i).*\\.(png)")) setResponseValues(response, "image/png");
-        if (ext.matches("(?i).*\\.(gif)")) setResponseValues(response, "image/gif");
+        if ( ext.matches( "(?i).*\\.(jpg|jpeg)" ) ) {
+        	setResponseValues(response, "image/jpeg" );
+        }
+        if ( ext.matches( "(?i).*\\.(png)" ) ) {
+        	setResponseValues(response, "image/png" );
+        }
+        if ( ext.matches( "(?i).*\\.(gif)" ) ) {
+        	setResponseValues(response, "image/gif" );
+        }
 	}
 	
 	/**

@@ -1,11 +1,13 @@
 package deco2800.server.webserver;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 
 import org.simpleframework.http.Response;
 
 import deco2800.server.ArcadeServer;
+import deco2800.server.database.DatabaseException;
 
 public class AchievementIconResponder implements WebResponder {
 
@@ -14,7 +16,7 @@ public class AchievementIconResponder implements WebResponder {
     }
 
     @Override
-    public void respond(Response response, String param) throws Exception {
+    public void respond(Response response, String param) throws IOException, DatabaseException {
         
         ArcadeWebserver.setResponseValues(response, "image/png");
         

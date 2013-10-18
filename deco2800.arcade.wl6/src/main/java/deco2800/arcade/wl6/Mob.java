@@ -1,15 +1,19 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
+
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 public class Mob extends Doodad {
 
     private float angle = 0;
     private Vector2 vel = new Vector2();
-    protected GameModel game;
-    protected Random rand;
-    protected int health;
+    private Random rand;
+    private int health;
+    private float BB_SIZE = 0.4f;
+
 
     public Mob(int uid) {
         super(uid);
@@ -17,9 +21,52 @@ public class Mob extends Doodad {
     }
 
     @Override
-    public void tick(GameModel game) {
-        this.game = game;
-        setPos(getPos(), vel);
+    public void tick(GameModel model) {
+    	smoothMove(new Vector2(getVel()).mul(model.delta() * 60), model);
+
+    }
+
+    
+    public void smoothMove(Vector2 avel, GameModel model) {
+
+        if (move(model, avel)) {
+            //we just moved as intended
+        } else if (move(model, new Vector2(avel.x, 0))) {
+            //we just moved, but only in the x direction
+        } else if (move(model, new Vector2(0, avel.y))) {
+            //we just moved, but only in the y direction
+        } else {
+            //we are stuck
+        }
+
+    }
+    
+    
+    /**
+     * tries to move the object. returns true if successful
+     * @param model
+     * @param vec
+     * @return
+     */
+    private boolean move(GameModel model, Vector2 vec) {
+
+        Vector2 targetPos = this.getPos().add(vec);
+        int x1 = (int) Math.floor(targetPos.x - BB_SIZE / 2);
+        int y1 = (int) Math.floor(targetPos.y - BB_SIZE / 2);
+        int x2 = (int) Math.floor(targetPos.x + BB_SIZE / 2);
+        int y2 = (int) Math.floor(targetPos.y + BB_SIZE / 2);
+
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                if (model.getCollisionGrid().getSolidAt(x, y) != 0) {
+                    return false;
+                }
+            }
+        }
+
+        setPos(getPos().add(vec));
+        return true;
+
     }
 
     public int getHealth() {
@@ -27,28 +74,27 @@ public class Mob extends Doodad {
     }
 
     public void setHealth(int health) {
-        this.health = health;
+        if (health <= 0) {
+            this.health = 0;
+            die();
+        }
+        else {
+            this.health = health;
+        }
     }
 
-    public void doDamage() {
+    public void doDamage(GameModel gameModel) {
 
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(GameModel model, int damage) {
         setHealth(getHealth() - damage);
     }
 
-    // need to round the float either up or down depending on what direction we are approaching from
-    // ie if vel is +ve, round down, if vel is -ve round up.
-    public void setPos(Vector2 pos, Vector2 vel) {
-        if (WL6Meta.hasSolidBlockAt((int) (pos.x + vel.x), (int) (pos.y + vel.y), game.getMap())) {
-            // New position has a solid block or doodad.  Don't move position.
-            setPos(pos);
-        }
-        else {
-            setPos(pos.add(vel));
-        }
+    public void die() {
+
     }
+
 
     public float getAngle() {
         return angle;
@@ -58,8 +104,29 @@ public class Mob extends Doodad {
         this.angle = angle;
     }
 
-    public void canSee(Doodad d) {
-        //TODO
+    // TODO take facing into account
+    public boolean canSee(Doodad d, GameModel model) {
+        Vector2 selfPos = this.getPos();
+        Vector2 targetPos = d.getPos();
+        Line2D line = new Line2D.Double(selfPos.x, selfPos.y, targetPos.x, targetPos.y);
+        float dist = selfPos.dst(targetPos);
+
+        if (dist > 15) {
+            return false;
+        }
+
+        for (int i = 0; i < WL6.MAP_DIM; i++) {
+            for (int j = 0; j < WL6.MAP_DIM; j++) {
+                if (WL6Meta.block(model.getMap().getTerrainAt(i, j)).solid) {
+                    Rectangle2D rect = new Rectangle2D.Double(i, j, 1, 1);
+                    if (rect.intersectsLine(line)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     public Vector2 getVel() {
@@ -83,6 +150,11 @@ public class Mob extends Doodad {
      */
     public static int randInt(int min, int max, Random rand) {
         return rand.nextInt((max - min) + 1) + min;
+    }
+    
+    
+    public Random getRand() {
+    	return rand;
     }
 
 }

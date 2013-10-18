@@ -28,11 +28,11 @@ public class SoundFileHolder implements Comparable<SoundFileHolder> {
         this.label = label;
 
         try {
-            sample = Gdx.audio.newMusic(Gdx.files.classpath(file));
+            sample = Gdx.audio.newMusic(Gdx.files.internal(file));
             sample.setVolume(DEFAULT_VOLUME);
             sample.setLooping(this.loop);
         } catch (Exception e) {
-            e.printStackTrace();
+            // Gdx could not open audio file
         }
     }
 

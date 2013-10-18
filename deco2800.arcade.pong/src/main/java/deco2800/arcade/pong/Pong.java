@@ -25,8 +25,6 @@ import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
-
-import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 
 /**
@@ -84,7 +82,8 @@ public class Pong extends GameClient {
         //These calls are just used for testing HighscoreClient 
         //Creating new HighscoreClient connection
         HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
-
+        
+        //hsd.storeScore("Number", 1234567890);
 	}
 	
 	/**

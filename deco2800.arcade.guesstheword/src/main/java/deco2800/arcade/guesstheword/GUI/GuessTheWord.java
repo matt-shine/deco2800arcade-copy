@@ -47,7 +47,7 @@ public class GuessTheWord extends GameClient{
 	@Override
 	public void create() {
 		getterSetter = new GetterSetter();
-		picture = new Pictures();
+		loadGamePicture();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));
 		
@@ -57,8 +57,15 @@ public class GuessTheWord extends GameClient{
 		settingsScreen = new SettingScreen(this);
 	//	acheivementScreen = new AchievementScreen(this);
 		
-		picture.loadPictures();
+		
 		setScreen(splashScreen);
+	}
+	
+	public Pictures loadGamePicture(){
+		picture = new Pictures();
+		picture.loadPictures();
+		
+		return picture;
 	}
 
 	public void resume() {

@@ -15,20 +15,17 @@ public class Pictures {
 	 * String is categories they are in.
 	 * */
 	private HashMap<String, HashMap<String, Texture>> level1Cat;
-//	private HashMap<String, Texture> level1pict;
 	/**
 	 * This hashmap is used for storing the level2 pictures.  
 	 * String is Name of the picture
 	 * */
 	private HashMap<String, HashMap<String, Texture>> level2Cat;
-//	private HashMap<String, Texture> level2pict;
 	
 	/**
 	 * This hashmap is used for storing the level3 pictures.  
 	 * String is Name of the picture
 	 * */
 	private HashMap<String, HashMap<String, Texture>> level3Cat;
-//	private HashMap<String, Texture> level3pict;
 	
 	public void loadPictures(){
 		// Declarations for HashMap for the different levels 
@@ -280,4 +277,5 @@ public class Pictures {
 	public HashMap<String, HashMap<String, Texture>> getLevel3(){
 		return level3Cat;
 	}
+	
 }

@@ -13,7 +13,7 @@ public class GameStarter {
 		cfg.width = 1280;
 		cfg.height = 720;
 		GuessTheWord game =  new GuessTheWord(null, null);
-//		game.loadPictures();
+//		game.picture.loadPictures();
 		new LwjglApplication(game, cfg);
 		
 	}

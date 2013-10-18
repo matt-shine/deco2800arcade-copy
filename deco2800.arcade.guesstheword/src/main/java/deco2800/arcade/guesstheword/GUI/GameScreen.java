@@ -39,6 +39,8 @@ public class GameScreen implements Screen {
 	private Skin skin;
 	private SpriteBatch batch;
 	private Stage stage;
+	
+	// The different panels for the game screen 
 	private ButtonPanel buttonPanel;
 	private PicturePanel picturePanel;
 	private RightPanel rightPanel;
@@ -85,7 +87,8 @@ public class GameScreen implements Screen {
 		this.skin = game.skin;
 		batch =  new SpriteBatch();
 		stage =  new Stage();
-		font = new BitmapFont(Gdx.files.internal("blackfont.fnt"), false);
+		
+		font = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 
 		//Creating Instances of the wordshuffler class 
 		word =  new WordShuffler();
@@ -108,18 +111,17 @@ public class GameScreen implements Screen {
 			this.level = "LEVEL 1";	
 			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
 			hm = game.picture.getLevel1();
-			gametime = 62; // 60 secs for level 1
+			gametime = 5; // 60 secs for level 1
 			
 		}else if(level.equalsIgnoreCase("Level 2 - 5 letters")){
 			this.level = "LEVEL 2";
-//			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
-
+			backGroudTexture = new Texture(Gdx.files.internal("level2Screen.png"));
 			hm = game.picture.getLevel2();
 			gametime = 52; // 50 secs for level 2
 			
 		}else if(level.equalsIgnoreCase("Level 3 - 6 letters")){
 			this.level = "LEVEL 3";
-//			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
+			backGroudTexture = new Texture(Gdx.files.internal("level3Screen.png"));
 			hm = game.picture.getLevel3();
 			gametime = 42; // 40 secs for level 3  , 5 sec for testing purposes
 		}
@@ -347,7 +349,9 @@ public class GameScreen implements Screen {
 			System.out.println("Back to MainScreen");
 			clearInputText();
 			// Clear all the task in the timer
-//			Timer.instance.clear();
+			System.out.println(Timer.instance.toString());
+			Timer.instance.stop();
+			Timer.instance.clear();
 			game.setScreen(game.mainScreen);
 		} 
 		
@@ -370,12 +374,11 @@ public class GameScreen implements Screen {
 		
 		// F2 - CATEGORY
 		if(Gdx.input.isKeyPressed(Input.Keys.F2)){
-			System.out.println("Change Category"); 
+			getWindow().setVisible(true);
+			System.out.println("Change Category");
 			
 			// Stop the timer
 //			Timer.instance.stop();
-			
-			getWindow().setVisible(true);
 		}
 		
 		
@@ -397,7 +400,12 @@ public class GameScreen implements Screen {
 		}
 	}
 	
-	//  PROVIDE HINTS
+	/**
+	 * The method will provide the user with hint. The hint will be generated
+	 * from the string of word and the hint will be placed in the correct order
+	 * in the text field. 
+	 * 
+	 * @return the position which textfield contain the hint.*/
 	private int getHints(){
 		// For each hint, 5 points will be deducted
 		score -= 5;
@@ -432,7 +440,9 @@ public class GameScreen implements Screen {
 		return position;
 		
 	}
-	// CHECK ANSWER
+	/**
+	 * This method will check the answer in which the user type. 
+	 * */
 	private void checkAnswer(){
 		StringBuilder userAnswer = new StringBuilder();
 		userAnswer.append(textfield1.getText());
@@ -461,7 +471,8 @@ public class GameScreen implements Screen {
 			}else {
 				score += 10;
 				scoreLabel.setText("Score: " + score);
-//				game.incrementAchievement("guesstheword.animals");
+				game.incrementAchievement("guesstheword.animals");
+
 				nextWord(answer, category);
 
 			}
@@ -472,7 +483,6 @@ public class GameScreen implements Screen {
 				buttonList.get(i).setText(breakword[i]);
 			}
 		}
-//		System.out.println(userAnswer.toString());	
 	}
 	
 	// Search for the next word. used by check answers and timer. 
@@ -605,6 +615,9 @@ public class GameScreen implements Screen {
 		}
 	}
 	
+	/**
+	 * Method to set the textfield based on user input. 
+	 * */
 	private void checkTextfield(){	
 		textfield1.setText(game.getterSetter.getText1()); 
 		textfield2.setText(game.getterSetter.getText2()); 
@@ -614,7 +627,9 @@ public class GameScreen implements Screen {
 		textfield6.setText(game.getterSetter.getText6()); 
 	}// end of checkTextfield
 	
-	// Set the buttons text to the letters from the word.
+	/**
+	 * Method to set the buttons text based on the word generated.
+	 * */
 	private void checkButtons(){
 		String category =  game.getterSetter.getCategoryItem();
 		
@@ -623,72 +638,28 @@ public class GameScreen implements Screen {
 		for(int i = 0; i < buttonList.size(); i++){
 			buttonList.get(i).setText(breakword[i]);
 		}
-	}
+	}//end of checkButtons
 	
+	/**
+	 * Method where all the buttons listeners are created. */
 	private void buttonListeners(){
-		button1.addListener(new ChangeListener(){
+		
+		for(final TextButton btn : buttonList){
+			btn.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
-				System.out.println("Button1 = " + button1.getText());
-				getButtonText(button1);
-				button1.setText("");
+				getButtonText(btn);
+				btn.setText("");
 			}});
-		button2.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button2);
-				button2.setText("");
-			}});	
-		button3.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button3);
-				button3.setText("");
-			}});	
-		button4.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button4);
-				button4.setText("");
-			}});	
-		button5.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button5);
-				button5.setText("");
-			}});	
-		button6.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button6);
-				button6.setText("");
-			}});
-		button7.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button7);
-				button7.setText("");
-			}});
-		button8.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button8);
-				button8.setText("");
-			}});
-		button9.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button9);
-				button9.setText("");
-			}});
-		button10.addListener(new ChangeListener(){
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-				getButtonText(button10);
-				button10.setText("");
-			}});
+		}
 	}
 	
+	/**
+	 * This method will called the getText and setText method to pass the 
+	 * value from the button to the textfield 
+	 * 
+	 * @param button -  the button that is clicked
+	 * */
 	private void getButtonText(TextButton button){
 		if(game.getterSetter.getText1().isEmpty())
 			game.getterSetter.setText1("" + button.getText());
@@ -705,10 +676,13 @@ public class GameScreen implements Screen {
 	}
 
 	//----------PICTURE PANEL-------------//
+	/**
+	 * PicturePanel class is used for drawing the 
+	 * new picture (texture on the screen)
+	 * 
+	 * */
 	private class PicturePanel{
 		PicturePanel(){
-			checkKeyboardInputs();	
-			checkTextfield();
 			Texture texture = game.getterSetter.getTexture(); 
 			batch.begin(); 
 			batch.draw(texture, 350, 200, 600,400);
@@ -717,12 +691,15 @@ public class GameScreen implements Screen {
 		}
 	}
 	//----------LEFT PANEL-------------//
+	/**
+	 * Left Panel class is use to create the labels for the game. 
+	 * */
 	private class LeftPanel extends Table{
 		
 		LeftPanel(){
 			this.setFillParent(true);
 			
-			Label EscLabel =  new Label("ESC - Back to Main Menu",skin); 
+			Label EscLabel =  new Label("ESC - Back to Arcade",skin); 
 
 			Label EnterLabel =  new Label("ENTER - Check Answer",skin); 
 			
@@ -738,8 +715,12 @@ public class GameScreen implements Screen {
 	}
 	
 	// Category Window
+	/**
+	 * This method will create a window for the categories. 
+	 * 
+	 * @return Category Window
+	 * */
 	private Window getWindow(){
-		
 		hintTaken = false;
 		
 		HashMap<String, HashMap<String, Texture>> hm = null ;
@@ -765,6 +746,10 @@ public class GameScreen implements Screen {
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
 				
+				// Clear all the task in the timer
+				Timer.instance.stop();
+				Timer.instance.clear();
+				
 				HashMap<String, HashMap<String, Texture>> hm = null ;
 				if(level.equalsIgnoreCase("Level 1")){
 					hm = game.picture.getLevel1();
@@ -783,8 +768,9 @@ public class GameScreen implements Screen {
 				
 				clearInputText();
 				checkButtons();
-
-				categoryWindow.setVisible(false);
+				
+				Timer.instance.start();
+				 getWindow().setVisible(false);
 			}});
 		
 		categoryWindow.add(scrollpane).width(categoryWindow.getWidth()).row();
@@ -797,22 +783,23 @@ public class GameScreen implements Screen {
 	
 	@Override
 	public void render(float arg0) {
-		Gdx.graphics.setContinuousRendering(false);
 		Gdx.gl.glClearColor( 0f, 0f, 75f, 70f );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+        
+        // Draw the background 
         batch.begin();
 		batch.draw(backGroudTexture, 0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
 		batch.end();
-       
+		
+		
+		checkKeyboardInputs();	
+		
+		checkTextfield();
+		
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-		
-		
-		
 		picturePanel =  new PicturePanel();
-		
-		
 	}
 	
 	@Override
@@ -820,9 +807,13 @@ public class GameScreen implements Screen {
 		setLevel();
 		createGameScreen();
 		checkButtons();
-//		timer();
-		
 		Gdx.input.setInputProcessor(stage);
+		
+//		Timer.instance.start();
+//		System.out.println("Start Timer Instance: " + Timer.instance.toString());
+		
+		
+		
 	}
 	
 	@Override

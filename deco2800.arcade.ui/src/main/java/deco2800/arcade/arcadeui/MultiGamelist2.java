@@ -30,25 +30,17 @@ public class MultiGamelist2 implements Screen {
     private Skin skin;
     private FrontPageStage stage;
 	
-    private float funds;
-    private int tokens;
     boolean multiplayerEnabled;
     private boolean bclicked;
-	private int scrollcheck;
     
     Texture bg;
     Sprite bgSprite;
     SpriteBatch batch;
 	
-		private ArcadeUI arcadeUI;
+	private ArcadeUI arcadeUI;
 		
-		private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches;
-	/*
-	public MultiGamelist2(ArcadeUI ui) {
-		this.arcadeUI = ui;
-	}
-    */
+
     public MultiGamelist2(ArcadeUI ui) {
     		
         arcadeUI = ui;
@@ -414,17 +406,12 @@ public class MultiGamelist2 implements Screen {
         
         landButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Land Invaders clicked");	
-            	
-				
-				
+            	createMatch("landinvaders");
             }
         })); 
 		
 		listtable.add(mixmazeButton).width(300).height(300);
 		listtable.add(landButton).width(300).height(300);
-		//listtable.add(jungleButton).width(300).height(300);
 				
 				}
 				
@@ -668,7 +655,7 @@ public class MultiGamelist2 implements Screen {
 
 				}
 
-							else if (pacmanButton.getStage() != null){
+				else if (pacmanButton.getStage() != null){
 
 				listtable.clear();
 
@@ -880,7 +867,6 @@ public class MultiGamelist2 implements Screen {
         
         
 		if (bclicked == true) {
-        	System.out.println("going to arcadeui");
 	    	ArcadeSystem.goToGame("arcadeui");
 	    }
     	

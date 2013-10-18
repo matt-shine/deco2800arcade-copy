@@ -26,25 +26,25 @@ public class HomeScreen implements Screen {
 	boolean multiplayerEnabled;
 	Set<String> games = null;
 	private MultiplayerLobby lobby;
-	
-	
-	
-	
+
+
+
+
 	public HomeScreen(ArcadeUI ui) {
 		arcadeUI = ui;
 		//check that no input listeners are left
 		if (ArcadeInputMux.getInstance().getProcessors().size != 0) {
 			System.err.println("Home Screen: Input listener leak detected. The following " +
 					ArcadeInputMux.getInstance().getProcessors().size + " listener(s) remain:");
-			
+
 			for (int i = ArcadeInputMux.getInstance().getProcessors().size - 1; i >= 0; i--) {
 				System.err.println("Home Screen: " + ArcadeInputMux.getInstance().getProcessors().get(i));
 			}
 		}
-		
+
 	}
-	
-	
+
+
 
 	@Override
 	public void show() {
@@ -53,70 +53,70 @@ public class HomeScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(true, 1280, 720);
 		shapeRenderer = new ShapeRenderer();
-		
+
 		games = ArcadeSystem.getGamesList();
-	    
+
 	}
-	
+
 	@Override
 	public void render(float arg0) {
-		
+
 		camera.update();
-	    shapeRenderer.setProjectionMatrix(camera.combined);
-	    batch.setProjectionMatrix(camera.combined);
-	    
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		batch.setProjectionMatrix(camera.combined);
+
 		Gdx.gl.glClearColor(0.2f, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		//draw a placeholder shape
-	    shapeRenderer.begin(ShapeType.FilledRectangle);
-	    
-	    shapeRenderer.filledRect(100,
-	        100,
-	        1280 - 200,
-	        720 - 200);
-	    
-	    shapeRenderer.end();
-	    
-	    batch.begin();
-	    font.setColor(Color.BLACK);
-	    
-	    int h = 110;
-	    int index = 0;
-	    font.draw(batch, "Select a game by pressing a number key:", 110, h);
-	    font.draw(batch, "Press 'Z' for Multiplayer Lobby", 110, h+20);
-	    h += 20;
-	    
-	    if (Gdx.input.isKeyPressed(Keys.Z)) {
-	    	ArcadeSystem.setMultiplayerEnabled(true);
-	    	arcadeUI.setScreen(arcadeUI.getLobby());
-	    }
-	    
-	    
-	    
-	    
-	    for (String game : games) {
-	    	h += 16;
-		    font.draw(batch, "" + (char)(index + 65) + ". " + game, 110, h);
-		    
-		    if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
-		    		ArcadeSystem.goToGame(game);
-		    	}
-		    if (Gdx.input.isKeyPressed(Keys.A + index)) {
-		    	ArcadeSystem.goToGame(game);
-		    }
-		    
-		    
-		    index++;
-	    }
-	    
-	    batch.end();
-	    
-	    
-	    //TODO implement this better
-	    
-	    
-		
+		shapeRenderer.begin(ShapeType.FilledRectangle);
+
+		shapeRenderer.filledRect(100,
+				100,
+				1280 - 200,
+				720 - 200);
+
+		shapeRenderer.end();
+
+		batch.begin();
+		font.setColor(Color.BLACK);
+
+		int h = 110;
+		int index = 0;
+		font.draw(batch, "Select a game by pressing a number key:", 110, h);
+		font.draw(batch, "Press 'Z' for Multiplayer Lobby", 110, h+20);
+		h += 20;
+
+		if (Gdx.input.isKeyPressed(Keys.Z)) {
+			ArcadeSystem.setMultiplayerEnabled(true);
+			arcadeUI.setScreen(arcadeUI.getLobby());
+		}
+
+
+
+
+		for (String game : games) {
+			h += 16;
+			font.draw(batch, "" + (char)(index + 65) + ". " + game, 110, h);
+
+			if (Gdx.input.isKeyPressed(Keys.NUM_0 + index)) {
+				ArcadeSystem.goToGame(game);
+			}
+			if (Gdx.input.isKeyPressed(Keys.A + index)) {
+				ArcadeSystem.goToGame(game);
+			}
+
+
+			index++;
+		}
+
+		batch.end();
+
+
+		//TODO implement this better
+
+
+
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class HomeScreen implements Screen {
 	@Override
 	public void resize(int arg0, int arg1) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

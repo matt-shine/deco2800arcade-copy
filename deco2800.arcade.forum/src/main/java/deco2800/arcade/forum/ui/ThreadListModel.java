@@ -3,14 +3,14 @@ package deco2800.arcade.forum.ui;
 import deco2800.arcade.model.forum.*;
 import java.util.*;
 
-public class ThreadPageModel {
+public class ThreadListModel {
 	private String category;
 	private int size;
 	private List<ParentThread> list;
 	private final int MAX_THREAD = 10;
 	
 	//assume page var is between 1-4
-	public ThreadPageModel(int page) {
+	public ThreadListModel(int page) {
 		set_category(page);
 		this.list = new ArrayList<ParentThread>();
 		this.size = 0;
@@ -35,6 +35,10 @@ public class ThreadPageModel {
 	
 	public int get_size() {
 		return this.size;
+	}
+	
+	public void clear_threads() {
+		this.list = new ArrayList<ParentThread>();
 	}
 	
 	private void set_category(int page) {

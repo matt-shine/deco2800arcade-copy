@@ -30,10 +30,12 @@ public class PlayerGameStorage {
 			resultSet = connection.getMetaData().getTables(null, null, "PLAYERGAMES", null);
 			if (!resultSet.next()) {
 				statement = connection.createStatement();
-				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT PRIMARY KEY," 
-				+ "gameID VARCHAR(30) PRIMARY KEY," 
-				+ "Rating INT));");
-				//Check if need anything for foreign keys
+				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT NOT NULL," 
+						+ "gameID INT NOT NULL," 
+						+ "Rating INT" 
+						+ "PRIMARY KEY(playerID, gameID)," 
+						+ "FOREIGN KEY (playerID) REFERENCES PLAYERS(playerID),"
+						+ "FOREIGN KEY (gameID) REFERENCES GAMES(gameID));");
 			}
 		} catch (SQLException e) {
 			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
@@ -62,10 +64,10 @@ public class PlayerGameStorage {
 	/**
 	 * Searches for all games belonging to a certain player
 	 * @param playerID
-	 * @return A Set containing the names of all gameIDs for a playerID
+	 * @return A Set containing the Integer gameID's for every game the player owns
 	 * @throws DatabaseException
 	 */
-	public Set<String> getPlayerGames(int playerID) throws DatabaseException {
+	public Set<Integer> getPlayerGames(int playerID) throws DatabaseException {
 		//Check whether or not the database has been intitialised
 		if (!initialised){
 			//Not initialised yet - initialise it
@@ -80,7 +82,7 @@ public class PlayerGameStorage {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery("SELECT * from PLAYERGAMES;");
-			Set<String> result = findGames(playerID, resultSet);
+			Set<Integer> result = findGames(playerID, resultSet);
 
 			return result;
 		} catch (SQLException e) {
@@ -115,12 +117,12 @@ public class PlayerGameStorage {
 	 * @return The players games
 	 * @throws SQLException
 	 */
-	private Set<String> findGames(int playerID, ResultSet results) throws SQLException{
-		Set<String> result = new HashSet<String>();
+	private Set<Integer> findGames(int playerID, ResultSet results) throws SQLException{
+		Set<Integer> result = new HashSet<Integer>();
 		while (results.next()){
-			String user = results.getString("playerID");
-			if (user.equals(playerID)){
-				result.add(results.getString("gameID"));
+			int user = results.getInt("playerID");
+			if (user == playerID) {
+				result.add(results.getInt("gameID"));
 			}
 		}
 		return result;
@@ -132,7 +134,7 @@ public class PlayerGameStorage {
 	 * 				The ID for the player and game to be removed
 	 * @throws DatabaseException
 	 */
-	public void removeGame(int playerID, String gameID) throws DatabaseException {
+	public void removeGame(int playerID, int gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
 		ResultSet resultSet = null;
@@ -141,7 +143,7 @@ public class PlayerGameStorage {
 			resultSet = stmt.executeQuery("SELECT * FROM PLAYERGAMES");
 			while (resultSet.next()) {
 				int player = resultSet.getInt("playerID");
-				String game = resultSet.getString("gameID");
+				int game = resultSet.getInt("gameID");
 				if (player ==playerID && game ==gameID) {
 					resultSet.deleteRow();
 				}
@@ -177,7 +179,7 @@ public class PlayerGameStorage {
 	 * 				the IDs for the player and game to be added
 	 * @throws DatabaseException
 	 */
-	public void addPlayerGames(int playerID, String gameID) throws DatabaseException {
+	public void addPlayerGames(int playerID, int gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
 		ResultSet resultSet = null;
@@ -186,7 +188,7 @@ public class PlayerGameStorage {
 			resultSet = stmt.executeQuery("SELECT * FROM PLAYERGAMES");
 			resultSet.moveToInsertRow();
 			resultSet.updateInt("playerID", playerID);
-			resultSet.updateString("gameID", gameID);
+			resultSet.updateInt("gameID", gameID);
 			resultSet.insertRow();
 		} catch (SQLException e) {
 			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
@@ -216,11 +218,11 @@ public class PlayerGameStorage {
 	 * @param playerID
 	 * 			The playerID of the given player.
 	 * @param gameID
-	 * 			The gameID of the game we are cheecking.
+	 * 			The gameID of the game we are checking.
 	 * @return
 	 * @throws DatabaseException
 	 */
-	public boolean hasGame(int playerID, String gameID) throws DatabaseException {
+	public boolean hasGame(int playerID, int gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
 		ResultSet resultSet = null;

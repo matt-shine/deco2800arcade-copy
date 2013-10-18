@@ -222,7 +222,7 @@ public class PlayerDatabaseManager {
 	 * @require Player does not already have the Game. Players with playerID
 	 *          exists, and Game with gameID exists.
 	 */
-	public void addGame(int playerID, String gameID) {
+	public void addGame(int playerID, int gameID) {
 		try {
 			playerGameStorage.addPlayerGames(playerID, gameID);
 		} catch (DatabaseException e) {
@@ -240,7 +240,7 @@ public class PlayerDatabaseManager {
 	 * @require Player already has the Game. Players with playerID exists, and
 	 *          Game with gameID exists.
 	 */
-	public void removeGame(int playerID, String gameID) {
+	public void removeGame(int playerID, int gameID) {
 		try {
 			playerGameStorage.removeGame(playerID, gameID);
 		} catch (DatabaseException e) {
@@ -365,7 +365,7 @@ public class PlayerDatabaseManager {
 				.getFriendInviteList(playerID);
 		List<Integer> blocked = friendStorage.getBlockedList(playerID);
 		List<Integer> privacyData = playerPrivacy.getPlayerData(playerID);
-		Set<String> gameData = playerGameStorage.getPlayerGames(playerID);
+		Set<Integer> gameData = playerGameStorage.getPlayerGames(playerID);
 
 		Set<User> friendsSet = new HashSet<User>();
 		Set<User> invitesSet = new HashSet<User>();

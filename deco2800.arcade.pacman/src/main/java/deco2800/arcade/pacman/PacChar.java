@@ -72,30 +72,32 @@ public class PacChar extends Mover{
 //			
 //		}
 //	
-		// check collision
-		if (checkNoWallCollision(this.getTile())) {
+		// If pacman is able to turn, update drawFacing
+		if (canTurn(this.getTile())) {
 			drawFacing = facing;
 			this.setCurrentState(PacState.MOVING);
-		} else {
-//			this.setCurrentState(PacState.IDLE);
-			// stops pacman changing facing if he can't move in that direction
-			this.setFacing(facing);
 		}
+		
+		if (!this.checkNoWallCollision(this.getTile())){
+			this.setCurrentState(PacState.IDLE);
+		}
+		
 		
 		// checks if pacman is moving, and if so keeps him moving in that direction
 		if (currentState == PacState.MOVING) {
+			int corr = 2; // a correction factor to ensure pacman is properly centred.
 			if (drawFacing == Dir.LEFT){
     			drawX -= moveDist;
-    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
+    			drawY = gameMap.getTileCoords(currentTile).getY() - corr;
     		} else if (drawFacing == Dir.RIGHT) {
     			drawX += moveDist;
-    			drawY = gameMap.getTileCoords(currentTile).getY() - 2;
+    			drawY = gameMap.getTileCoords(currentTile).getY() - corr;
     		} else if (drawFacing == Dir.UP) {
     			drawY += moveDist;
-    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
+    			drawX = gameMap.getTileCoords(currentTile).getX() - corr;
     		} else if (drawFacing == Dir.DOWN){ 
     			drawY -= moveDist;
-    			drawX = gameMap.getTileCoords(currentTile).getX() - 2;
+    			drawX = gameMap.getTileCoords(currentTile).getX() - corr;
     		} else {
     			currentState = PacState.IDLE;
     			facing = Dir.LEFT;

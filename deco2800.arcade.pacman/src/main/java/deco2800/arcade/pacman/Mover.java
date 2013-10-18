@@ -68,7 +68,7 @@ public abstract class Mover {
 	}
 	
 	public Dir getDrawFacing() {
-		return facing;
+		return drawFacing;
 	}
 	
 	public Tile getTile() {
@@ -99,22 +99,56 @@ public abstract class Mover {
 
 	/**
 	 * Returns the next tile in the direction Mover is facing.
-	 * @param tile
-	 * @return
+	 * @param tile, offset
+	 * @return Tile
 	 */
 	public Tile nextTile(Tile tile, int offset){
 		int x = gameMap.getTilePos(tile).getX();
 		int y = gameMap.getTilePos(tile).getY();
 		Tile[][] grid = gameMap.getGrid();
 		//System.out.println(x + ", " + y);
-		switch(this.getDrawFacing()) {
-		case LEFT: x -= offset; break;
-		case RIGHT: x += offset; break;
-		case UP: y += offset; break;
-		case DOWN: y -= offset; break;
+		
+		if (this.getClass() == PacChar.class){
+			switch(this.getDrawFacing()) {
+			case LEFT: x -= offset; break;
+			case RIGHT: x += offset; break;
+			case UP: y += offset; break;
+			case DOWN: y -= offset; break;
+			case TEST: break;
+			}
+		} else {
+			switch(this.getFacing()) {
+			case LEFT: x -= offset; break;
+			case RIGHT: x += offset; break;
+			case UP: y += offset; break;
+			case DOWN: y -= offset; break;
+			case TEST: break;
+			}
+		}
+		
+		
+		return grid[x][y];
+		
+	}
+	
+	/**
+	 * Checks whether 
+	 * @param tile
+	 * @return boolean
+	 */
+	public boolean canTurn(Tile tile){
+		int x = gameMap.getTilePos(tile).getX();
+		int y = gameMap.getTilePos(tile).getY();
+		Tile[][] grid = gameMap.getGrid();
+		//System.out.println(x + ", " + y);
+		switch(this.getFacing()) {
+		case LEFT: x -= 1; break;
+		case RIGHT: x += 1; break;
+		case UP: y += 1; break;
+		case DOWN: y -= 1; break;
 		case TEST: break;
 		}
-		return grid[x][y];
+		return !(grid[x][y].getClass() == WallTile.class);
 	}
 
 	
@@ -136,8 +170,8 @@ public abstract class Mover {
 				}
 			}
 		} else if (tile.getClass() == TeleportTile.class){
-			this.drawX = 1;
-			this.drawY = 2;
+			this.drawX = 100;
+			this.drawY = 100;
 		}
 //		System.out.println("score: " + this.getScore());
 //		displayScore(this); // This is broken at the moment
@@ -148,10 +182,6 @@ public abstract class Mover {
 	 * Returns true if he can move and false if he can't
 	 */
 	public boolean checkNoWallCollision(Tile pTile) {
-		int x = gameMap.getTilePos(pTile).getX();
-		int y = gameMap.getTilePos(pTile).getY();
-		Tile[][] grid = gameMap.getGrid();
-		//System.out.println(x + ", " + y);
 		return !(this.nextTile(pTile, 1).getClass() == WallTile.class);
 	}
 //	public boolean checkNoWallCollision(Tile pTile) {

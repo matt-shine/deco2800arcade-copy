@@ -36,7 +36,11 @@ public class Mob extends Doodad {
         }
     }
 
-    public void takeDamage(int damage) {
+    public void doDamage(GameModel gameModel) {
+
+    }
+
+    public void takeDamage(GameModel model, int damage) {
         setHealth(getHealth() - damage);
     }
 
@@ -53,6 +57,7 @@ public class Mob extends Doodad {
         this.angle = angle;
     }
 
+    // TODO take facing into account
     public boolean canSee(Doodad d, GameModel model) {
         Vector2 selfPos = this.getPos();
         Vector2 targetPos = d.getPos();

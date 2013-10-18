@@ -165,10 +165,22 @@ public class Player extends Mob {
 		return keys.contains(k);
 	}
 
+    @Override
     public void doDamage(GameModel gameModel) {
+        // FIXME this is currently doing damage to yourself :P
         float dist = this.getPos().dst(gameModel.getPlayer().getPos());
         int damage = calcDamage((int)dist);
-        gameModel.getPlayer().takeDamage(damage);
+        gameModel.getPlayer().takeDamage(gameModel, damage);
+    }
+
+    @Override
+    public void takeDamage(GameModel model, int damage) {
+        if (model.getDifficulty() == 1) {
+            setHealth(getHealth() - (damage / 4));
+        }
+        else {
+            setHealth(getHealth() - damage);
+        }
     }
 
     /**

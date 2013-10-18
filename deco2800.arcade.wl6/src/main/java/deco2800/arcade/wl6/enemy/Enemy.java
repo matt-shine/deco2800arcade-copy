@@ -97,24 +97,28 @@ public class Enemy extends Mob {
 
 
     @Override
-    public void takeDamage(int damage) {
+    public void takeDamage(GameModel model, int damage) {
+        int d = damage;
+        if (state == STATES.STAND || state == STATES.PATH) {
+            d = d * 2;
+        }
         if (pain) {
             changeStates(STATES.PAIN, 0);
-            setHealth(getHealth() - damage);
+            setHealth(getHealth() - d);
             changeStates(STATES.CHASE, 0);
         }
         else {
-            setHealth(getHealth() - damage);
+            setHealth(getHealth() - d);
         }
     }
 
-    
+    @Override
     public void doDamage(GameModel gameModel) {
         float dist = this.getPos().dst(gameModel.getPlayer().getPos());
         boolean speed = true;
         boolean look = true;
         int damage = calcDamage((int)dist, speed, look);
-        gameModel.getPlayer().takeDamage(damage);
+        gameModel.getPlayer().takeDamage(gameModel, damage);
     }
 
     /**
@@ -154,7 +158,7 @@ public class Enemy extends Mob {
         return damage;
     }
 
-    // Ugly mess that I need to change.  Working on it atm
+    // TODO Ugly mess that I need to change.  Working on it atm
     public void calculatePath(GameModel gameModel) {
         path = new LinkedList<Vector2>();
         WL6Meta.DIRS[][] waypoints = gameModel.getWapoints();

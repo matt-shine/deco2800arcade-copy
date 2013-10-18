@@ -117,7 +117,8 @@ public class WL6InputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-        // TODO Auto-generated method stub
+        Player p = model.getPlayer();
+        p.doDamage(model);
         return false;
     }
 

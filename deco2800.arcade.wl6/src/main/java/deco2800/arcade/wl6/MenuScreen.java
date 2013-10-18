@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import deco2800.arcade.client.ArcadeInputMux;
 
 public class MenuScreen implements Screen {
@@ -20,15 +21,14 @@ public class MenuScreen implements Screen {
     private class MenuScreenStage extends Stage {}
 
     private WL6 wl6;
-    private GameModel model;
-    private WL6InputProcessor input;
+    @SuppressWarnings("unused")
+	private GameModel model;
     private Skin skin;
     private MenuScreenStage stage;
 
     public MenuScreen(WL6 game) {
         wl6 = game;
         model = new GameModel();
-        input = new WL6InputProcessor(game, model);
 
         stage = new MenuScreenStage();
 

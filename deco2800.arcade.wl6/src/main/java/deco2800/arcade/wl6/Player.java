@@ -33,6 +33,7 @@ public class Player extends Mob {
         if (renderer.isDebugMode()) {
             renderer.drawBasicSprite(getTextureName(), getPos().x, getPos().y, -getAngle());
         }
+
         //no super call
     }
 
@@ -41,6 +42,32 @@ public class Player extends Mob {
     @Override
     public void tick(GameModel model) {
     	
+        
+        Vector2 blockPos = getBlockPos();
+        int neighbours = 0;
+        if (model.getMap().getTerrainAt((int) blockPos.x + 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x - 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y + 1) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y - 1) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (neighbours >= 3) {
+        	model.nextLevel();
+        }
+        
+        
+    	
+    	super.tick(model);
     }
     
 

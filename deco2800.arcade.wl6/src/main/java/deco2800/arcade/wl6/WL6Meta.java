@@ -13,7 +13,8 @@ public class WL6Meta {
      * The ID of the first spawn point. There are 3 others, they
      * are consecutive.
      */
-    public static final int SPAWN_POINT = 19;
+	public static final int SPAWN_POINT = 19;
+	public static final int ELEVATOR = 21;
     public static final int DOOR = 90;
     public static final int DOOR_GOLDKEY = 92;
     public static final int DOOR_SILVERKEY = 94;

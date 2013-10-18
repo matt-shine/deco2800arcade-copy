@@ -22,21 +22,26 @@ public class Mob extends Doodad {
 
     @Override
     public void tick(GameModel model) {
+    	smoothMove(new Vector2(getVel()).mul(model.delta() * 60), model);
 
-        Vector2 adjustedVelocity = new Vector2(getVel()).mul(model.delta() * 60);
+    }
 
-        if (move(model, adjustedVelocity)) {
+    
+    public void smoothMove(Vector2 avel, GameModel model) {
+
+        if (move(model, avel)) {
             //we just moved as intended
-        } else if (move(model, new Vector2(adjustedVelocity.x, 0))) {
+        } else if (move(model, new Vector2(avel.x, 0))) {
             //we just moved, but only in the x direction
-        } else if (move(model, new Vector2(0, adjustedVelocity.y))) {
+        } else if (move(model, new Vector2(0, avel.y))) {
             //we just moved, but only in the y direction
         } else {
             //we are stuck
         }
 
     }
-
+    
+    
     /**
      * tries to move the object. returns true if successful
      * @param model

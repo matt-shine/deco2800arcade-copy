@@ -21,6 +21,7 @@ public class GameModel {
 
     // The name of the current level
     private String currentLevel = "nothing";
+    private String nextLevel = null;
 
     // The player
     private Player player = null;
@@ -63,7 +64,8 @@ public class GameModel {
         }
 
         currentLevel = level;
-
+        nextLevel = null;
+        
         for (Doodad d : doodads) {
         	this.destroyDoodad(d);
         }
@@ -199,7 +201,9 @@ public class GameModel {
      * Call this before ticking.
      */
     public void beginTick() {
-        //nothing to do yet
+        if (nextLevel != null) {
+        	goToLevel(nextLevel);
+        }
     }
 
 
@@ -261,16 +265,16 @@ public class GameModel {
 	public void nextLevel() {
 		if (getLevelInChapter().equals("b")) {
 			if (getChapter().equals("6")) {
-				goToLevel("e1l1");
+				nextLevel = "e1l1";
 			} else {
-				goToLevel("e" + (Integer.parseInt(getChapter()) + 1) + "l1");
+				nextLevel = "e" + (Integer.parseInt(getChapter()) + 1) + "l1";
 			}
 		} else if (getLevelInChapter().equals("s")) {
-			goToLevel("e" + getChapter() + "l2");
+			nextLevel = "e" + getChapter() + "l2";
 		} else if (getLevelInChapter().equals("8")) {
-			goToLevel("e" + getChapter() + "boss");
+			nextLevel = "e" + getChapter() + "boss";
 		} else {
-			goToLevel("e" + getChapter() + "l" + (Integer.parseInt(getLevelInChapter()) + 1));
+			nextLevel = "e" + getChapter() + "l" + (Integer.parseInt(getLevelInChapter()) + 1);
 		}
 	}
 
@@ -279,7 +283,7 @@ public class GameModel {
 	 * go to the secret level
 	 */
 	public void secretLevel() {
-		goToLevel("e" + (Integer.parseInt(getChapter())) + "secret");
+		nextLevel = "e" + (Integer.parseInt(getChapter())) + "secret";
 	}
 
 

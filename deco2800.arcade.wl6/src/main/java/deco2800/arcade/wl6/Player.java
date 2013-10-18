@@ -12,7 +12,6 @@ public class Player extends Mob {
 
     
     private int STARTING_HEALTH = 100;
-    private float BB_SIZE = 0.4f;
     private int points = 0;
     private int currentGun = 1;
     private HashSet<Integer> guns = new HashSet<Integer>();
@@ -42,49 +41,8 @@ public class Player extends Mob {
     @Override
     public void tick(GameModel model) {
     	
-    	Vector2 adjustedVelocity = new Vector2(getVel()).mul(model.delta() * 60);
-    	
-    	if (move(model, adjustedVelocity)) {
-    		//we just moved as intended
-    	} else if (move(model, new Vector2(adjustedVelocity.x, 0))) {
-    		//we just moved, but only in the x direction
-    	} else if (move(model, new Vector2(0, adjustedVelocity.y))) {
-    		//we just moved, but only in the y direction
-    	} else {
-    		//we are stuck
-    	}
-    	
-    	
-    	
     }
     
-    
-    /**
-     * tries to move the object. returns true if successful
-     * @param model
-     * @param vec
-     * @return
-     */
-    private boolean move(GameModel model, Vector2 vec) {
-    	
-    	Vector2 targetPos = this.getPos().add(vec);
-    	int x1 = (int) Math.floor(targetPos.x - BB_SIZE / 2);
-    	int y1 = (int) Math.floor(targetPos.y - BB_SIZE / 2);
-    	int x2 = (int) Math.floor(targetPos.x + BB_SIZE / 2);
-    	int y2 = (int) Math.floor(targetPos.y + BB_SIZE / 2);
-    	
-    	for (int x = x1; x <= x2; x++) {
-    		for (int y = y1; y <= y2; y++) {
-    		    if (model.getCollisionGrid().getSolidAt(x, y) != 0) {
-    		    	return false;
-    		    }
-	    	}
-    	}
-    	
-    	setPos(getPos().add(vec));
-    	return true;
-    	
-    }
 
     
     public void addHealth(int health, boolean overheal) {

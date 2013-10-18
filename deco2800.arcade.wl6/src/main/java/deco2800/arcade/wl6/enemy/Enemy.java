@@ -5,6 +5,8 @@ import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
 import deco2800.arcade.wl6.WL6Meta;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.LinkedList;
 
 public class Enemy extends Mob {
@@ -26,6 +28,11 @@ public class Enemy extends Mob {
 
     // current state
     private STATES state = STATES.NO_STATE;
+    // State tick
+    private float tick;
+    private STATES nextState;
+    //
+    private WL6Meta.DIRS pathDir;
     //
     protected float pathSpeed;
     //
@@ -35,7 +42,7 @@ public class Enemy extends Mob {
 
 
     // path list
-    protected LinkedList<Vector2> path;
+    private Deque<Vector2> path;
     // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
     protected boolean pain;
     // damage
@@ -44,16 +51,50 @@ public class Enemy extends Mob {
 
     public Enemy(int uid) {
         super(uid);
+        tick = 0;
+
+    }
+
+    @Override
+    public void init(GameModel model) {
+        super.init(model);
+        System.out.println("dir" + pathDir);
+        if (pathDir != null) {
+            calculatePath(model);
+        }
+
     }
 
     @Override
     public void tick(GameModel gameModel) {
         super.tick(gameModel);
+        tick += gameModel.delta();
+        if (tick > 1 && nextState != null) {
+            setState(nextState);
+            nextState = null;
+        }
+
         detectPlayer(gameModel);
+        if (state == STATES.ATTACK) {
+            attackPlayer(gameModel);
+        }
+
+        if (state == STATES.PATH && path != null && path.size() != 0) {
+            path();
+        }
+
         if (this.getHealth() <= 0) {
             changeStates(STATES.DIE, 0);
             gameModel.destroyDoodad(this);
         }
+    }
+
+    public WL6Meta.DIRS getPathDir() {
+        return pathDir;
+    }
+
+    public void setPathDir(WL6Meta.DIRS dir) {
+        pathDir = dir;
     }
 
     public void setState(STATES state) {
@@ -67,20 +108,22 @@ public class Enemy extends Mob {
      *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
      */
     public void changeStates(STATES State, int delay) {
+
         setState(State);
     }
 
     // follow patrol path
     public void path() {
-
+        Vector2 nextPos = path.poll();
+        path.addLast(nextPos);
+        setPos(nextPos);
     }
 
     // detect player
     public void detectPlayer(GameModel gameModel) {
         if (canSee(gameModel.getPlayer(), gameModel)) {
-            changeStates(STATES.ATTACK, 0);
-            doDamage(gameModel);
-            changeStates(STATES.CHASE, 0);
+            nextState = STATES.ATTACK;
+            tick = 0;
         }
     }
 
@@ -91,7 +134,10 @@ public class Enemy extends Mob {
 
 
     // attack player
-
+    public void attackPlayer(GameModel gameModel) {
+        doDamage(gameModel);
+        setState(STATES.CHASE);
+    }
 
     // react to pain
 
@@ -158,9 +204,9 @@ public class Enemy extends Mob {
         return damage;
     }
 
-    // TODO Ugly mess that I need to change.  Working on it atm
     public void calculatePath(GameModel gameModel) {
-        path = new LinkedList<Vector2>();
+        System.out.println("got here");
+        path = new ArrayDeque<Vector2>();
         WL6Meta.DIRS[][] waypoints = gameModel.getWapoints();
 
         int x = (int)getPos().x;
@@ -206,16 +252,21 @@ public class Enemy extends Mob {
                     break;
             }
 
+            if (WL6Meta.block(gameModel.getMap().getTerrainAt(x, y)).texture == null) {
+                System.out.println(path);
+                return;
+            }
             if (waypoints[x][y] != null) {
                 if(path.contains(new Vector2(x, y))) {
                     complete = true;
                 }
                 else {
-                    path.add(new Vector2(x, y));
+                    path.addLast(new Vector2(x, y));
                     angle = (int)WL6Meta.dirToAngle(waypoints[x][y]);
                 }
             }
         }
+        System.out.println(path);
     }
 }
 

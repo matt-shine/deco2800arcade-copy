@@ -1,6 +1,7 @@
 package deco2800.arcade.wl6.enemy;
 
 import deco2800.arcade.wl6.DoodadInfo;
+import deco2800.arcade.wl6.GameModel;
 
 public class Guard extends Enemy {
 
@@ -9,8 +10,9 @@ public class Guard extends Enemy {
 
     public Guard(int uid, DoodadInfo d) {
         super(uid);
-
         setHealth(STARTING_HEALTH);
+
+        setPathDir(d.pathingDir);
         if (d.pathingDir == null) {
             setState(STATES.STAND);
         }
@@ -25,6 +27,10 @@ public class Guard extends Enemy {
         setTextureName(d.texture);
     }
 
+    @Override
+    public void init(GameModel model) {
+        super.init(model);
 
+    }
 
 }

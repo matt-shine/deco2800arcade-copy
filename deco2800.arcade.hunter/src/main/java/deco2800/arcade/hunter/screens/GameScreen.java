@@ -74,8 +74,8 @@ public class GameScreen implements Screen {
 		
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
-		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
-		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
+		Animal animal = new Animal(new Vector2(800, 10 * Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
+		Animal prey = new Animal(new Vector2(700,10 * Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
 		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "Invulnerability",entityHandler.getItemTexture("Invulnerability"),this);
 
 		entities.add(player);
@@ -224,7 +224,7 @@ public class GameScreen implements Screen {
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
 		String animal = anims[Hunter.State.randomGenerator.nextInt(3)];
-		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)),64,64,Hunter.State.randomGenerator.nextBoolean(), animal, entityHandler.getAnimalAnimation(animal), this));
+		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)),128,128,Hunter.State.randomGenerator.nextBoolean(), animal, entityHandler.getAnimalAnimation(animal), this));
 	}
 	
 	private void createItems(boolean weapon){

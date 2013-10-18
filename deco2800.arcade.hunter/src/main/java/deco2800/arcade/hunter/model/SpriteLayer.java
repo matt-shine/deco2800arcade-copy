@@ -68,6 +68,8 @@ public class SpriteLayer extends Map {
 
 	public void update(float delta, Vector3 cameraPos) {
 		// TODO Auto-generated method stub
+
+        //Remove clouds that are off the left edge of the screen
         Iterator<Entity> cl = clouds.iterator();
         while (cl.hasNext()) {
             Entity cloud = cl.next();
@@ -76,6 +78,18 @@ public class SpriteLayer extends Map {
                 cl.remove();
             }
         }
+
+        //Remove trees that are off the left edge of the screen
+        Iterator<Entity> tr = trees.iterator();
+        while (tr.hasNext()) {
+            Entity tree = tr.next();
+            tree.update(delta * speedModifier);
+            if (tree.getX() + tree.getWidth() < cameraPos.x * speedModifier - Hunter.State.screenWidth) {
+                tr.remove();
+            }
+        }
+
+        //Add new clouds randomly
         Vector2 cloudLocation;
         if (Math.random() < CHANCE_OF_CLOUDS) {
             cloudLocation = randomScreenCoordinate();
@@ -87,6 +101,7 @@ public class SpriteLayer extends Map {
             clouds.getById(id).setHeight(sprite.getRegionHeight());
         }
 
+        //Add new trees randomly
         Vector2 treeLocation = new Vector2();
         if (Math.random() < CHANCE_OF_TREES) {
             treeLocation.x = cameraPos.x + Hunter.State.screenWidth / 2;

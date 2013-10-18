@@ -20,6 +20,7 @@ import com.badlogic.gdx.math.Intersector;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.breakout.screens.*;
 import deco2800.arcade.client.AchievementClient;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
@@ -28,21 +29,20 @@ import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.accolades.AccoladeSystem;
 
 /**
- * 
- * 
- * 
- * 
+ * The game client
+ * @author Carlie Smits and Naveen Kumar
+ *
  */
 @ArcadeGame(id = "Breakout")
 public class Breakout extends GameClient {
-	SplashScreen splashScreen;
-	GameScreen gamescreen;
-	MenuScreen MenuScreen;
-	LevelScreen1 LevelScreen1;
-	LevelScreen2 LevelScreen2;
-	HelpScreen1 helpscreen1;
-	ModelScreen modelscreen;
-	HelpScreen2 helpscreen2;
+	public SplashScreen splashScreen;
+	public GameScreen gamescreen;
+	public MenuScreen MenuScreen;
+	public LevelScreen1 LevelScreen1;
+	public LevelScreen2 LevelScreen2;
+	public HelpScreen1 helpscreen1;
+	public ModelScreen modelscreen;
+	public HelpScreen2 helpscreen2;
 
 
 	/*
@@ -178,6 +178,10 @@ public class Breakout extends GameClient {
 		game.id = "breakout";
 		game.name = "Breakout";
 		game.description = "Bounce the ball off your paddle to keep it from falling off the bottom of the screen.";
+	}
+	
+	public HighscoreClient getHighScoreClient() {
+		return this.highscoreUser;
 	}
 	
 }

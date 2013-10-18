@@ -1,4 +1,4 @@
-package deco2800.arcade.breakout;
+package deco2800.arcade.breakout.screens;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import deco2800.arcade.breakout.Breakout;
 import deco2800.arcade.client.ArcadeInputMux;
 
 
@@ -26,7 +27,7 @@ public class SplashScreen implements Screen  {
 	/**
 	 * Constructor
 	 */
-	SplashScreen(final Breakout game) {
+	public SplashScreen(final Breakout game) {
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);

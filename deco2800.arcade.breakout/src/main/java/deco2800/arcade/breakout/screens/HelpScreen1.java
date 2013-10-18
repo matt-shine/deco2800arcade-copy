@@ -1,4 +1,4 @@
-package deco2800.arcade.breakout;
+package deco2800.arcade.breakout.screens;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 
@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import deco2800.arcade.breakout.Breakout;
 import deco2800.arcade.client.ArcadeSystem;
 
 
@@ -41,7 +42,7 @@ public class HelpScreen1 implements Screen  {
 	   ImageButton backbutton;
 	  
 	  
-	HelpScreen1(final Breakout game) {
+	public HelpScreen1(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();

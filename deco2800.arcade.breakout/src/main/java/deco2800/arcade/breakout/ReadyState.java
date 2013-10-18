@@ -3,6 +3,12 @@ package deco2800.arcade.breakout;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 
+import deco2800.arcade.breakout.screens.GameScreen;
+/**
+ * Handles the game at the start of each round
+ * @author Carlie Smits and Naveen Kumar
+ *
+ */
 public class ReadyState extends GameState {
 
 	/**

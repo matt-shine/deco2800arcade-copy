@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import deco2800.arcade.breakout.GameScreen;
-
+import deco2800.arcade.breakout.screens.GameScreen;
+/**
+ * Decreases the paddle size for the decrease paddle powerup
+ * @author Carlie Smits
+ *
+ */
 public class DecreasePaddle extends Powerup{
 
 	private final String img = "decreasepaddle.png";

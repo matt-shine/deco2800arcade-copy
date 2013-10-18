@@ -8,6 +8,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
+import deco2800.arcade.breakout.screens.GameScreen;
+/**
+ * Sets the individual levels
+ * @author Carlie Smits
+ *
+ */
 public class Level {
 	
 	private final int SCREENHEIGHT = 720;

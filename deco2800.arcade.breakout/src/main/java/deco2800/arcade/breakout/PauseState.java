@@ -4,8 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.breakout.screens.GameScreen;
 import deco2800.arcade.client.ArcadeSystem;
-
+/**
+ * Handles when the game is paused
+ * @author Carlie Smits
+ *
+ */
 public class PauseState extends GameState {
 
 	private Vector2 prevBallVelocity;

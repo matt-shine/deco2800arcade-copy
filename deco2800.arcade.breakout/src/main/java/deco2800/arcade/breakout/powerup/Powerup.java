@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 /**
- * 
+ * The superclass for all powerups
  * @author Carlie Smits
  *
  */

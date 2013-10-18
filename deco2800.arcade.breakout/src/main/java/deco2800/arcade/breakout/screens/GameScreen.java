@@ -1,4 +1,4 @@
-package deco2800.arcade.breakout;
+package deco2800.arcade.breakout.screens;
 
 
 import java.io.IOException;
@@ -22,10 +22,25 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.breakout.Ball;
+import deco2800.arcade.breakout.Breakout;
+import deco2800.arcade.breakout.Brick;
+import deco2800.arcade.breakout.GameOverState;
+import deco2800.arcade.breakout.GameState;
+import deco2800.arcade.breakout.InProgressState;
+import deco2800.arcade.breakout.Level;
+import deco2800.arcade.breakout.LocalPlayer;
+import deco2800.arcade.breakout.Paddle;
+import deco2800.arcade.breakout.PauseState;
+import deco2800.arcade.breakout.ReadyState;
 import deco2800.arcade.breakout.powerup.PowerupManager;
 import deco2800.arcade.client.*;
 
-
+/**
+ * Handles the current game screen
+ * @author Carlie Smits and Naveen Kumar
+ *
+ */
 public class GameScreen implements Screen  {
 	// Orthographic Camera is how the is displayed.
 	
@@ -101,7 +116,7 @@ public class GameScreen implements Screen  {
 	private int slowBallsActivated = 0;
 	
 	
-	GameScreen(final Breakout game) {
+	public GameScreen(final Breakout game) {
 		this.levelSystem = new Level();
 		resetScore();
 		setLives(3);
@@ -325,7 +340,7 @@ public class GameScreen implements Screen  {
 	}
 
 	
-	 void Start() {
+	public void Start() {
 		getBall().randomizeVelocity();
 		setStatus(null);
 		gameState = new InProgressState();
@@ -335,7 +350,7 @@ public class GameScreen implements Screen  {
 	 * Adds the remaining lives as a score and checks whether any achievement
 	 * criteria has been met. Also sets the gameState to GAMEOVER.
 	 */
-	void win() {
+	public void win() {
 		incrementScore(getLives() * 5);
 
 		if (getHighScore() < getScore()){
@@ -450,11 +465,11 @@ public class GameScreen implements Screen  {
 		Vector2 prevBallVelocity = new Vector2(0,0);
 		Vector2 prevPowerupBallVelocity = new Vector2(0,0);
 		if (getBall() != null) {
-			prevBallVelocity = new Vector2(getBall().velocity);
+			prevBallVelocity = new Vector2(getBall().getVelocity());
 			getBall().stopBall();
 		}
 		if (getPowerupBall() != null) {
-			prevPowerupBallVelocity = new Vector2(getPowerupBall().velocity);
+			prevPowerupBallVelocity = new Vector2(getPowerupBall().getVelocity());
 			getPowerupBall().stopBall();
 		}
 		gameState = new PauseState(this, prevBallVelocity, prevPowerupBallVelocity);
@@ -715,7 +730,7 @@ public class GameScreen implements Screen  {
 	public void setHighScore(int score){
 		if (score > 0){
 			this.highScore = score;
-			game.highscoreUser.storeScore("Number", score);
+			game.getHighScoreClient().storeScore("Number", score);
 		} else {
 			this.highScore = 0;
 		}
@@ -755,5 +770,9 @@ public class GameScreen implements Screen  {
 	
 	public int getBrickBreak() {
 		return brickBreak;
+	}
+	
+	public Brick[] getBrickArray() {
+		return this.bricks;
 	}
 }

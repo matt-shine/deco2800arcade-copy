@@ -6,6 +6,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 
+import deco2800.arcade.breakout.screens.GameScreen;
+/**
+ * Handles when the game is in progress
+ * @author Carlie Smits
+ *
+ */
 public class InProgressState extends GameState {
 
 	private Intersector intersect;
@@ -127,7 +133,7 @@ public class InProgressState extends GameState {
 	 * @param context - the current game screen
 	 */
 	private void handlePowerupBallBrickCollision(GameScreen context) {
-		for (Brick b : context.bricks) {
+		for (Brick b : context.getBrickArray()) {
 			if (b.getState()) {
 				if (b.checkLeftCollision(context.getPowerupBall().ballCirc)) {
 					b.setState(false);
@@ -220,7 +226,7 @@ public class InProgressState extends GameState {
 	 * @param context - current game screen
 	 */
 	public void handleBrickCollision(GameScreen context) {
-		for (Brick b : context.bricks) {
+		for (Brick b : context.getBrickArray()) {
 			if (b.getState()) {
 				if (b.checkLeftCollision(context.getBall().ballCirc)) {
 					b.setState(false);

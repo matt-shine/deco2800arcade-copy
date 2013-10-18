@@ -3,6 +3,8 @@ package deco2800.arcade.towerdefence.tests;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.badlogic.gdx.math.Vector2;
+
 import deco2800.arcade.towerdefence.*;
 
 public class TDTests {
@@ -50,10 +52,24 @@ public class TDTests {
 	}
 
 	@Test
-	public void gridMovementTest() {
+	public void gridTest() {
 		Grid grid = new Grid(200, 200, "grid", 20, null);
 		GridObject object = new GridObject(0, 0, grid);
 		// Check the object can be placed
 		Assert.assertTrue(grid.buildObject(object));
+		Assert.assertEquals(1, grid.getGridContents(0,0).size());
+		//Move the object
+		grid.moveObject(object, new Vector2(0,0), new Vector2(1,1));
+		Assert.assertEquals(0, grid.getGridContents(0,0).size());
+		Assert.assertEquals(1, grid.getGridContents(1,1).size());
+		//Try building something on top of an alien - should be at 3,3 due to tilesize
+		//Place the alien
+		Enemy testAlien = new Enemy(5, 5, 60, 60, 5, grid);
+		grid.buildObject(testAlien);
+		Assert.assertEquals(1, grid.getGridContents(3,3).size());
+		//Build something on it
+		Assert.assertFalse(grid.buildObject(new GridObject(60, 60, grid)));
+		//Check if a tile is blocked for pathing purposes
+		Assert.assertTrue(grid.blocked(testAlien, 1, 1));
 	}
 }

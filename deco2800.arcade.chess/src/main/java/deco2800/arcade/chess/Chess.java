@@ -59,7 +59,6 @@ import com.badlogic.gdx.Input.Keys;
 @ArcadeGame(id = "chess")
 public class Chess extends GameClient implements InputProcessor, Screen {
 	private static final Game game;
-	public List<int []> pieces = new ArrayList<int []>();
 	static {
 		game = new Game();
 		game.id = "chess";
@@ -69,6 +68,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 				"the game being to capture the enemy's king, " +
 				"this is called 'CheckMate'."; 
 	}
+	
 	private ReplayHandler replayHandler;
 	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
@@ -163,13 +163,14 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
-
+		
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
 		splashScreen = new SplashScreen(this);
 		menuScreen = new MenuScreen(this);
 		setScreen(splashScreen);
+
 		this.networkClient = networkClient;
 		players[0] = player.getUsername();
 		players[1] = "Player 2";
@@ -180,7 +181,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		replayHandler = new ReplayHandler(this.networkClient);
 		replayListener = new ReplayListener(replayHandler);
 		this.networkClient.addListener(replayListener);
-
+		
+	
 		// Set up the movePiece event to take a piece id, target_x position and
 		// target_y position
 
@@ -445,6 +447,7 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	 */
 	private void finishGame(boolean loser, boolean stalemate) {
 		System.err.println("GAME OVER");
+		this.incrementAchievement("chess.winGame");
 		// loser was black i.e. not this player, increment achievement
 		// if ((loser == true) && (!stalemate)) {
 		// this.incrementAchievement("chess.winGame");

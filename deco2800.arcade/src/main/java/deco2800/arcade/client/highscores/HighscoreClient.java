@@ -245,12 +245,15 @@ public class HighscoreClient {
 	 * is, if p1 has the first 10 scores for a game, and p2 has the 11th 
 	 * score, then p2's ranking will be 2.
 	 * 
+	 * If this user has not scored in this game, then the ranking value will be 
+	 * set to -1.
+	 * 
 	 * @param highestIsBest If having a high score is best for your game, then
 	 * set this to true. If having a low score is best, then set this to false.
 	 * 
 	 * @return A list of Highscore objects. 
 	 */
-	public List<Highscore> getUserRanking(boolean highestIsBest, String type) {
+	public Highscore getUserRanking(boolean highestIsBest, String type) {
 		GetScoreRequest gsReq = new GetScoreRequest();
 		gsReq.requestID = 3; //Telling the server which query to run
 		gsReq.type = type;
@@ -263,7 +266,7 @@ public class HighscoreClient {
 		sendScoreRequest(gsReq, true);
 		
 		//Now that the response is back, return the data to the user
-		return this.scoreResponseList;
+		return this.scoreResponseList.get(0);
 	}
 	
 	/**

@@ -83,7 +83,7 @@ public class HighscoreDatabase {
 		switch (gsReq.requestID) {
 			case 1: return getGameTopPlayers(gsReq.game_ID, gsReq.limit, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 1
 			case 2: return getUserHighScore(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 2
-			case 3: return null; //getUserRanking(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 3
+			case 3: return getUserRanking(gsReq.username, gsReq.game_ID, gsReq.type, gsReq.highestIsBest); //Return value of query with requestID 3
 			case 4: return getWinsGetLosses(gsReq.username, gsReq.game_ID);
 			case 5: return null;
 
@@ -255,10 +255,13 @@ public class HighscoreDatabase {
 	 * @throws DatabaseException 
 	 */
 	public List<String> getUserRanking(String Username, String Game_ID, String type, boolean highestIsBest) throws DatabaseException{
-		//List<String> data = new ArrayList<String>();
-		//String order;
+		System.out.println("get user ranking");
+		List<String> data = new ArrayList<String>();
+		int ranking = 1;
+		String order;
+		boolean userFound = false;
 		
-		/*if (!initialised) {
+		if (!initialised) {
 			initialise();
 		}
 
@@ -275,16 +278,26 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			String select = "SELECT s2.RANK FROM (SELECT h.Username, RANK() OVER (ORDER BY s.SCORE " + order + ") AS 'RANK' from HIGHSCORES_PLAYER h INNER JOIN " +
-					"HIGHSCORES_DATA s on h.HID = s.HID WHERE h.GameId='" + Game_ID + "' AND Score_type='" + 
-					type + "' ORDER BY s.SCORE desc) s2 WHERE s2.Username='" + Username + "'";
-			System.out.println("Ranked: " + select);
+			String select = "SELECT DISTINCT Player FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
 			resultSet = statement.executeQuery(select);
 			
 			while(resultSet.next())	{
-				System.out.println("got data back....");
+				if(resultSet.getString("Player").equals(Username)) {
+					userFound = true;
+					break;
+				} else {
+					ranking++;
+				}
 			}
-
+			
+			data.add(Username);
+			if(userFound){
+				data.add(String.valueOf(ranking));
+			} else {
+				data.add("-1");
+			}
+			data.add("");
+			data.add("rank");
 			return data;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -292,8 +305,7 @@ public class HighscoreDatabase {
 					"Unable to get player information from database", e);
 		} finally {
 			connectionCleanup(connection, statement, resultSet);
-		}*/
-		return null;
+		}
 	}
 	
 	

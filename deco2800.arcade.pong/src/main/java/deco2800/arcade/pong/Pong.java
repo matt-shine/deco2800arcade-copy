@@ -84,6 +84,9 @@ public class Pong extends GameClient {
         //These calls are just used for testing HighscoreClient 
         //Creating new HighscoreClient connection
         HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
+        
+        
+        hsd.getUserRanking(true, "Number");
 
 	}
 	

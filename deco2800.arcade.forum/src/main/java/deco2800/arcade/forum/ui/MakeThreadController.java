@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import javax.swing.JOptionPane;
+
 import deco2800.arcade.forum.ClientConnection;
 import deco2800.arcade.forum.ForumException;
 import deco2800.arcade.model.forum.ForumUser;
@@ -28,8 +30,11 @@ public class MakeThreadController implements ActionListener {
 					} else {
 						if (response.result != 0) {
 							System.out.println("Thread Posted");
+							view.closeWindow();
 						} else {
 							System.out.println("Thread failed to post");
+							JOptionPane.showMessageDialog(null, "Failed to post thread", 
+									"Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				}
@@ -37,6 +42,7 @@ public class MakeThreadController implements ActionListener {
 			}
 		});
 		this.view.submitBtn.addActionListener(this);
+		this.view.cancelBtn.addActionListener(new CloseActionListener());
 	}
 
 	@Override
@@ -46,12 +52,16 @@ public class MakeThreadController implements ActionListener {
 		request.topic = this.view.TitleTBox.getText();
 		request.message = this.view.textPane.getText();
 		request.createdBy = 0;
-		request.category = "roflmao";
+		request.category = "Others";
 		request.tags = this.view.TagsTBox.getText();
 		this.connection.getClient().sendTCP(request);
 		System.out.println("pThread request is sent");
 		return;
 	}
 	
-	
+	private class CloseActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			view.closeWindow();
+		}
+	}
 }

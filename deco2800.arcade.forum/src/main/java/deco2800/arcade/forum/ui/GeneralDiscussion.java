@@ -42,7 +42,6 @@ public class GeneralDiscussion {
 	private JButton btnNewButton;
 	private JButton btnSearch;
 	private JFrame f;
-	private MakeThreadView makeThread;
 	
 
 	public GeneralDiscussion(JFrame window) {
@@ -138,8 +137,7 @@ public class GeneralDiscussion {
 	   
 	public void open_MakeThread() throws ForumException {
 		this.f.setContentPane(new JPanel(new BorderLayout()));
-	   	this.makeThread = new MakeThreadView(this.f);
-	   	new MakeThreadController(this.makeThread);
+	   	new MakeThreadController(new MakeThreadView(this.f));
 	}
 	   	
 	private void addMakeThreadListener(JButton button) {

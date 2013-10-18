@@ -28,7 +28,8 @@ public class MakeThreadView {
 	public JTextField TagsTBox;
 	public JTextPane textPane;
 	public JButton submitBtn;
-	private JFrame f;
+	public JButton cancelBtn;
+	public JFrame f;
 
 	   public MakeThreadView(JFrame frame) {
 		   this.f = frame;
@@ -44,14 +45,10 @@ public class MakeThreadView {
 		   this.submitBtn.setBounds(111, 378, 127, 24);
 		   this.f.getContentPane().add(this.submitBtn);
 	      
-		   JButton CancelBtn = new JButton("Cancel");
-		   CancelBtn.addActionListener(new ActionListener() {
-			   public void actionPerformed(ActionEvent arg0) {
-				   System.exit(0);
-			   }
-		   });
-		   CancelBtn.setBounds(464, 378, 79, 24);
-		   this.f.getContentPane().add(CancelBtn);
+		   this.cancelBtn = new JButton("Cancel");
+		 
+		   this.cancelBtn.setBounds(464, 378, 79, 24);
+		   this.f.getContentPane().add(this.cancelBtn);
 	      
 		   this.TitleTBox = new JTextField();
 		   this.TitleTBox.setBounds(42, 32, 262, 22);
@@ -79,6 +76,11 @@ public class MakeThreadView {
 	   
 	   public void addListener(ActionListener dummy, JButton button) {
 		   button.addActionListener(dummy);
+	   }
+	   
+	   public void closeWindow() {
+		   this.f.setContentPane(new JPanel(new BorderLayout()));
+		   new ForumUi(this.f);
 	   }
 }
 

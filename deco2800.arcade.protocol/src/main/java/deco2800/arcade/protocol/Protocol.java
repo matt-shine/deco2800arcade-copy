@@ -137,7 +137,7 @@ public class Protocol {
 		kryo.register(GetForumUserRequest.class);
 		kryo.register(GetForumUserResponse.class);
 		kryo.register(InsertParentThreadRequest.class);
-		kryo.register(InsertParentThreadRequest.class);
+		kryo.register(InsertParentThreadResponse.class);
 		kryo.register(TagsRequest.class);
 		kryo.register(TagsResponse.class);
 	}

@@ -8,12 +8,14 @@ public class ThreadListModel {
 	private int size;
 	private List<ParentThread> list;
 	private final int MAX_THREAD = 10;
+	private int page;
 	
-	//assume page var is between 1-4
-	public ThreadListModel(int page) {
-		set_category(page);
+	//assume cat var is between 1-4
+	public ThreadListModel(int cat) {
+		set_category(cat);
 		this.list = new ArrayList<ParentThread>();
 		this.size = 0;
+		this.page = 1;
 	}
 	
 	/**

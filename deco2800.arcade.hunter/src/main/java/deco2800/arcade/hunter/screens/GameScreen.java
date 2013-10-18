@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+
+import deco2800.arcade.client.GameClient;
 import deco2800.arcade.hunter.EntityHandler;
 import deco2800.arcade.hunter.Hunter;
 import deco2800.arcade.hunter.Hunter.Config;
@@ -100,6 +102,10 @@ public class GameScreen implements Screen {
 		itemTime = 0;
 		mapEntityTime = 0;
 		attackTime = 0;
+		
+		hunter.incrementAchievement("hunter.beginnings");
+		hunter.incrementAchievement("hunter.smallsteps");
+		hunter.incrementAchievement("hunter.expert");
 	}
 
 	@Override
@@ -351,5 +357,10 @@ public class GameScreen implements Screen {
 	public void show() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public GameClient getGameReference() {
+		// TODO Auto-generated method stub
+		return hunter;
 	}
 }

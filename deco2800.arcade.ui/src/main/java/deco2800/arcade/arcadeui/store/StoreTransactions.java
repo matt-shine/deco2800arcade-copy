@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.arcadeui.ArcadeUI;
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
@@ -63,7 +62,7 @@ public class StoreTransactions implements Screen, StoreScreen {
 		
 		// Title "Buy More Coins", located center of screen.
 		Title.setSize(380, 40);
-		Title.setPosition(96, 513);
+		Title.setPosition(96, 515);
 		stage.addActor(Title);
 		
 		// Entry field for search term. Will update the featured game, as well.
@@ -98,6 +97,51 @@ public class StoreTransactions implements Screen, StoreScreen {
 		wishlistButton.setPosition(833, 176);
 		stage.addActor(wishlistButton);
 		
+		addCoins();
+		
+		homeButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				dispose();
+				arcadeUI.setScreen(new StoreHome(arcadeUI));
+			}
+		});
+		
+		searchField.setTextFieldListener(new TextFieldListener() {
+			public void keyTyped(TextField textField, char key) {
+				Game result = Utilities.helper.search(searchField.getText());
+				if (result == null) {
+					searchResult.setText("No results.");
+					return;
+				}
+				searchResult.setText(result.name);
+			}
+		});
+		
+		searchButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				try {
+					Game result = Utilities.helper.search(searchField.getText());
+					if (result == null) {
+						searchResult.setText("No results.");
+						return;
+					}
+					dispose();
+					arcadeUI.setScreen(new StoreGame(arcadeUI, result));
+				} catch (Exception e) {
+					searchResult.setText("Invalid Search");
+				}
+			}
+		});
+		
+		wishlistButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				dispose();
+				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
+			}
+		});
+	}
+	
+	private void addCoins() {
 		int i = 0;
 		for (int check : Arrays.asList(5, 10, 20, 50, 100)) {
 			skin.add("coin" + check, new Texture(Gdx.files.internal("store/coin_" + check + ".png")));
@@ -141,86 +185,6 @@ public class StoreTransactions implements Screen, StoreScreen {
 			});
 			i++;
 		}
-		
-		homeButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				dispose();
-				arcadeUI.setScreen(new StoreHome(arcadeUI));
-			}
-		});
-		
-		searchField.setTextFieldListener(new TextFieldListener() {
-			public void keyTyped(TextField textField, char key) {
-				Game result = search(searchField.getText());
-				if (result == null) {
-					searchResult.setText("No results.");
-					return;
-				}
-				searchResult.setText(result.name);
-			}
-		});
-		
-		searchButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				try {
-					Game result = search(searchField.getText());
-					if (result == null) {
-						searchResult.setText("No results.");
-						return;
-					}
-					dispose();
-					arcadeUI.setScreen(new StoreGame(arcadeUI, result));
-				} catch (Exception e) {
-					searchResult.setText("Invalid Search");
-				}
-			}
-		});
-		
-		wishlistButton.addListener(new ChangeListener() {
-			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Wishlist clicked");
-			}
-		});
-	}
-	
-
-	/**
-	 * This method will return the game with the name that matches most closely.
-	 * 
-	 * @author Addison Gourluck
-	 * @param String input
-	 * @return Game
-	 */
-	private Game search(String input) {
-		if (input.length() <= 2) {
-			return null; // No searches for 0, 1 or 2 chars.
-		}
-		input = input.toLowerCase();
-		// Check if the input is a substring of a game.
-		for (Game game : ArcadeSystem.getArcadeGames()) {
-			if (game.name.toLowerCase().contains(input)
-					|| game.id.toLowerCase().contains(input)) {
-				return game;
-			}
-		}
-		if (input.length() > 6) {
-			input = input.substring(0, 6); // crop to first 6 chars for regex.
-		}
-		// If no results are produced yet, get desperate. Proceed to look
-		// for a game that includes search, with 1 wrong/missing char.
-		String regex;
-		for (Game game : ArcadeSystem.getArcadeGames()) {
-			for (int i = 0; i < input.length(); ++i) {
-				// Super duper awesome regex, that will find any combination of
-				// the string, with 1 letter missing or wrong. Really cool.
-				regex = "(.*)" + input.substring(0, i) + "(.?)"
-						+ input.substring(i + 1, input.length()) + "(.*)";
-				if (game.name.toLowerCase().matches(regex)) {
-					return game;
-				}
-			}
-		}
-		return null; // No results at all.
 	}
 	
 	@Override

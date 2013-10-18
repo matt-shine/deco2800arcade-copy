@@ -3,14 +3,10 @@ package deco2800.arcade.chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import deco2800.arcade.chess.FixedSizeList;
 
-public class Bishop implements Piece{
 
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
+public class Bishop extends Piece{
 	
 	/**
 	 * Initialises the piece
@@ -18,61 +14,12 @@ public class Bishop implements Piece{
 	 * @param team
 	 */
 	public Bishop(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 2;
-		this.pieceNo = pieceNo;
+
 	}
 
-	@Override
-	public void deActivate() {
-		active = false;
-		
-	}
-
-	@Override
-	public void reActivate() {
-		active = true;
-		
-	}
-	
-	public String toString() {
-		String toString = "";
-		
-		if(!team) {
-			toString+="white ";
-		} else {
-			toString+="black ";
-		}
-		
-		toString+="Bishop";
-		
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];
 		int y = currentPos[1];
@@ -101,8 +48,29 @@ public class Bishop implements Piece{
 				j--;
 			}
 		}
-		return moves;
+		
+		List<int[]> allowableMoves;
+		
+		allowableMoves = new ArrayList<int[]>(removeJumpsDiagonal(
+				moves, currentPos, board_state));
+		
+		return allowableMoves;
 	}
+	
+	public String toString() {
+		String toString = "";
+		
+		if(!team) {
+			toString+="white ";
+		} else {
+			toString+="black ";
+		}
+		
+		toString+="Bishop";
+		
+		return toString;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -137,8 +105,4 @@ public class Bishop implements Piece{
 		return true;
 	}
 
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-	}
 }

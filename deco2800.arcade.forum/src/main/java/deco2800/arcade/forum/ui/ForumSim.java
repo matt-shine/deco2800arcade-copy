@@ -1,7 +1,7 @@
 package deco2800.arcade.forum.ui;
 
 /**
- * This class provides the main method that runs the Spy Simulator.
+ * This class provides the main method that runs the Forum.
  */
 public class ForumSim {
 

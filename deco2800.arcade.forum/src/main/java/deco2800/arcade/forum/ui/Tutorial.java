@@ -20,7 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 /**
- * Main class for General Discussion page
+ * Main class for Tutorial page
  *
  * @author TeamForum
  */

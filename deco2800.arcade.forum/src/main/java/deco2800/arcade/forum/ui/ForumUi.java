@@ -29,7 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 /**
- * Main class for forum interface
+ * Main class for Forum Interface
  *
  * @author TeamForum
  */

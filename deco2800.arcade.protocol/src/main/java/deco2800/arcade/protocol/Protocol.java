@@ -127,6 +127,7 @@ public class Protocol {
         kryo.register(java.awt.image.BufferedImage.class);
 		
 		// Forum Protocols
+        kryo.register(String[].class);
         //kryo.register(java.util.Vector.class);
         kryo.register(ForumUserProtocol.class);
         //kryo.register(ParentThread.class);
@@ -137,6 +138,8 @@ public class Protocol {
 		kryo.register(GetForumUserResponse.class);
 		kryo.register(InsertParentThreadRequest.class);
 		kryo.register(InsertParentThreadRequest.class);
+		kryo.register(TagsRequest.class);
+		kryo.register(TagsResponse.class);
 	}
 	
 	/**

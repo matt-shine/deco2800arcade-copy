@@ -16,6 +16,14 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import java.awt.Color;
 import javax.swing.JTextPane;
+
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
+
+import deco2800.arcade.forum.ClientConnection;
+import deco2800.arcade.protocol.forum.TagsRequest;
+import deco2800.arcade.protocol.forum.TagsResponse;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -43,6 +51,8 @@ public class ForumUi {
 	public JPanel panel;
 	public JPanel panel_1;
 	private JFrame f;
+	
+	public static final int NUM_TAGS = 20;
 	
 	public ForumUi(JFrame window) {
 		//Initialize new JFrame for forum interface
@@ -196,7 +206,65 @@ public class ForumUi {
 			   open_Report_Bug();
 		   }
     	});
-    }	   
+    }
+    
+    /**
+     * Send requests to retrieve some tags from server. 
+     * Before calling this, the corresponding listener must be added to the client. 
+     * Set NUM_TAGS for numbers of tags to be retrieved.
+     * 
+     * @param con	ClientConnection instance.
+     */
+    public void sendTagsRequest(ClientConnection con) {
+    	if (con.getClient().isConnected() == false) {
+    		System.err.println("Not connected");
+    		return;
+    	}
+    	
+    	TagsRequest request = new TagsRequest();
+    	request.limit = NUM_TAGS;
+    	con.getClient().sendTCP(request);
+    	return;
+    }
+    
+    /**
+     * Controller for KryoNet connection listener. Remove this listener before closing the ForumUi
+     * if not the client is closed.
+     * <p>
+     * Supported protocols;
+     * <ul>
+     * 	<li>TagsResponse</li>
+     * </ul>
+     * 
+     * @author Junya, Team Forum
+     */
+    private class NetworkController extends Listener {
+    	@Override
+    	public void disconnected(Connection connection) {
+    		super.disconnected(connection);
+    		System.out.println("disconnected"); 
+    	}
+    	
+    	@Override
+    	public void received(Connection connection, Object object) {
+    		super.received(connection, object);
+    		if (object instanceof TagsResponse) {
+    			TagsResponse response = (TagsResponse) object;
+    			if (response.error == "") {
+    				System.err.println(response.error);
+    			} else {
+    				// Change followings to do something if tags are received.
+    				StringBuilder sd = new StringBuilder("Tags: ");
+    				for (String tag : response.result) {
+    					sd.append(tag);
+    					sd.append("#");
+    				}
+    				System.out.println(new String(sd));
+    			}
+    			return;
+    		}
+    	}
+    }
 }
 	   
 	   

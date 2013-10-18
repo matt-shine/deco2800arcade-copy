@@ -94,11 +94,13 @@ public class TestForumLogin extends JFrame {
 						System.out.println("Server response is received");
 						GetForumUserResponse response = (GetForumUserResponse) object;
 						if (response.error != "") {
-							LoginView.this.statusField.setText("Error: " + response.error);
+							System.err.println("ResponseError:" + response.error);
 						} else {
 							if (response.result != null) {
 								System.out.println("Login success");
 								LoginView.this.userModel.setData(response.result.id, response.result.name);
+								LoginView.this.statusField.setText(LoginView.this.userModel.toString());
+								con.close();
 							} else {
 								LoginView.this.statusField.setText("Not registered");
 							}

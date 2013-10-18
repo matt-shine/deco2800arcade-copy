@@ -68,6 +68,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public float QUIT = (float) (242 - 37.5 * 5);
 	
 	public int BANANAS_FOUND = 0;
+	public static int deaths = 0;
 
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS
@@ -456,6 +457,10 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyY = 100;
 		monkeyX = 10;
 		lives--;
+		deaths++;
+		if(deaths > 100) {
+			// TODO achievement for deaths
+		}
 		if(lives > 0) {
 		} else {
 			// TODO Change to gameover screen 

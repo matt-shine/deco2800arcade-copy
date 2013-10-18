@@ -42,6 +42,7 @@ public class PacView {
 	private PacChar player;
 	private Ghost blinky;
 	
+	
 	/** TODO make the gameMap the model and have them added on to that in 
 	 * the main Pacman class, then just pass the gameMap here like it currently is.
 	 */
@@ -84,6 +85,7 @@ public class PacView {
 		this.gameMap = gameMap;
 		this.player = player;
 		this.blinky = blinky;
+		
 		
 	}
 	public void setUp(GameMap gameMap) {

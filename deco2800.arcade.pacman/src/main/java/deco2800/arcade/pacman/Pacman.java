@@ -28,6 +28,7 @@ public class Pacman extends GameClient {
 	private GameState gameState;
 	private PacChar player;
 	private Ghost blinky;
+	private Ghost pinky;
 	private String mapName; // name of level map
 
 	//takes keyboard input	
@@ -101,6 +102,7 @@ public class Pacman extends GameClient {
 		//initialise pacman
 		player = new PacChar(gameMap);
 		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
+		pinky = new Ghost(gameMap, GhostName.PINKY, player);
 		//initialise receiver for input- use the multiplexer from Arcade
 		// because overlay group said to in log messages
 		controller = new PacController(player, gameMap);
@@ -164,6 +166,7 @@ public class Pacman extends GameClient {
 		}
 		player.prepareDraw();
 		blinky.prepareDraw();
+		pinky.prepareDraw();
 		view.render(gameMap, player, blinky);
 		//do any stuff the superclass normally does for rendering
 		super.render();		

@@ -26,6 +26,7 @@ public class Ghost extends Mover {
 	private PacChar player;
 	private float moveDist;
 	private Tile targetTile;
+	private Tile previousTile;
 	//private Animation walkAnimation; this should move to PacView
 	private int spritePos;
 	
@@ -35,6 +36,7 @@ public class Ghost extends Mover {
 		this.player = player;
 		this.ghost = ghost;
 		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost start
+		previousTile = currentTile;
 		//set up pacman to be drawn in the right place- this is defintely right
 //		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 //		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
@@ -208,16 +210,24 @@ public class Ghost extends Mover {
 		Tile rightTile = gameMap.getGrid()[rightX][currentY];
 		
 		if (checkNoWallCollision(upTile)) {
-			testTiles.add(upTile);
+			if (!upTile.equals(previousTile)) {
+				testTiles.add(upTile);
+			}
 		}
 		if (checkNoWallCollision(leftTile)) {
-			testTiles.add(leftTile);
+			if (!leftTile.equals(previousTile)) {
+				testTiles.add(leftTile);
+			}
 		}
 		if (checkNoWallCollision(downTile)) {
-			testTiles.add(downTile);
+			if (!downTile.equals(previousTile)) {
+				testTiles.add(downTile);
+			}
 		}
 		if (checkNoWallCollision(rightTile)) {
-			testTiles.add(rightTile);
+			if (!rightTile.equals(previousTile)) {
+				testTiles.add(rightTile);
+			}
 		}
 		
 		

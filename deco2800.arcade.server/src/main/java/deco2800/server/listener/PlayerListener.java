@@ -61,7 +61,6 @@ public class PlayerListener extends Listener{
             PlayerResponse response = new PlayerResponse();
             int playerID =  request.playerID;
             PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-            
             try {
 				//update database
             	response.player = pdm.loadPlayer(playerID);

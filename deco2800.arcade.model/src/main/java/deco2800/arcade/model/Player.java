@@ -44,6 +44,12 @@ public class Player extends User {
 
 	private Icon icon;
     
+	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public Player(){
+	}
+	
     @Deprecated
     /**
      * DO NOT USE THIS METHOD, AT ALL, EVER.

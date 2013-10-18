@@ -13,6 +13,13 @@ public class PrivacyField {
 	private boolean value;
 
 	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public PrivacyField(){
+	}
+	
+	
+	/**
 	 * Creates a new PrivacyField given an ID and value.
 	 * 
 	 * @param id

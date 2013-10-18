@@ -6,8 +6,17 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 
+import deco2800.arcade.model.Blocked;
+import deco2800.arcade.model.Field;
+import deco2800.arcade.model.FriendInvites;
+import deco2800.arcade.model.Friends;
 import deco2800.arcade.model.Game;
+import deco2800.arcade.model.Games;
 import deco2800.arcade.model.Icon;
+import deco2800.arcade.model.LibraryStyle;
+import deco2800.arcade.model.Player;
+import deco2800.arcade.model.PrivacyField;
+import deco2800.arcade.model.User;
 import deco2800.arcade.protocol.achievement.AchievementsForGameRequest;
 import deco2800.arcade.protocol.achievement.AchievementsForGameResponse;
 import deco2800.arcade.protocol.achievement.AchievementsForIDsRequest;
@@ -59,6 +68,8 @@ import deco2800.arcade.protocol.packman.FetchGameRequest;
 import deco2800.arcade.protocol.packman.FetchGameResponse;
 import deco2800.arcade.protocol.packman.GameUpdateCheckRequest;
 import deco2800.arcade.protocol.packman.GameUpdateCheckResponse;
+import deco2800.arcade.protocol.player.PlayerRequest;
+import deco2800.arcade.protocol.player.PlayerResponse;
 import deco2800.arcade.protocol.replay.EndSessionRequest;
 import deco2800.arcade.protocol.replay.EndSessionResponse;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
@@ -92,13 +103,25 @@ public class Protocol {
 	 * @param kryo
 	 */
 	public static void register(Kryo kryo) {
-		//Connection messages
-		kryo.register(ConnectionRequest.class);
 		Protocol.setKryo(kryo);
 		
-		// Connection messages
+		//Connection messages
+		kryo.register(ConnectionRequest.class);
 		kryo.register(ConnectionResponse.class);
-
+		
+		// Player messages
+		kryo.register(Player.class);
+		kryo.register(User.class);
+		kryo.register(Field.class);
+		kryo.register(Blocked.class);
+		kryo.register(FriendInvites.class);
+		kryo.register(Friends.class);
+		kryo.register(Games.class);
+		kryo.register(PrivacyField.class);
+		kryo.register(LibraryStyle.class);
+		kryo.register(PlayerRequest.class);
+		kryo.register(PlayerResponse.class);
+		
 		// Credit messages
 		kryo.register(CreditBalanceRequest.class);
 		kryo.register(CreditBalanceResponse.class);
@@ -193,6 +216,7 @@ public class Protocol {
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
+        kryo.register(java.util.Vector.class);
 	}
 	
 	/**

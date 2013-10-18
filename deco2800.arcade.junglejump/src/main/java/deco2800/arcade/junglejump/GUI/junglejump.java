@@ -481,10 +481,28 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		batch.end();
 	}
+	
+	public  void playPickupSound() {
+		URL path = this.getClass().getResource("/");
+		try{ 
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"resources/pickup.wav";
+			System.out.println(resource);
+			File file = new File(resource);
+			FileHandle fileh = new FileHandle(file);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.start();
+		} catch (Exception e) {
+			Gdx.app.log(junglejump.messages,
+					"Audio File for Banana Music Not Found");
+		}
+	}
 
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
-			System.out.println(currentLevel.platformAmount());
 			// Check x and y are within the platform boundaries and monkey is on it
 			if (x > (p.getX() - monkeyLength)
 					&& x < (p.getX()+p.getWidth() - 10)
@@ -504,17 +522,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					p.setY(10000);
 					
 					// Play banana sound
-					try{ 
-						File file = new File("pickup.wav");
-						FileHandle fileh = new FileHandle(file);
-						AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
-						Clip clip = AudioSystem.getClip();
-						clip.open(audioIn);
-						clip.start();
-					} catch (Exception e) {
-						Gdx.app.log(junglejump.messages,
-								"Audio File for Banana Music Not Found");
-					}
+					playPickupSound();
 					
 					return true;
 				} else {

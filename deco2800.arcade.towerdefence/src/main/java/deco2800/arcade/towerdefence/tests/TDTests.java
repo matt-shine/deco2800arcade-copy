@@ -6,6 +6,7 @@ import org.junit.Test;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.*;
+import deco2800.arcade.towerdefence.pathfinding.Path;
 
 public class TDTests {
 
@@ -71,5 +72,13 @@ public class TDTests {
 		Assert.assertFalse(grid.buildObject(new GridObject(60, 60, grid)));
 		//Check if a tile is blocked for pathing purposes
 		Assert.assertTrue(grid.blocked(testAlien, 1, 1));
+	}
+	
+	@Test
+	public void mobileTest(){
+		Grid grid = new Grid(200, 200, "grid", 20, null);
+		Enemy mobile = new Enemy(10, 10, 0, 0, 5, grid);
+		mobile.moving(new Vector2(1,1));
+		Assert.assertTrue(grid.getGridContents(1,1).size() == 1);
 	}
 }

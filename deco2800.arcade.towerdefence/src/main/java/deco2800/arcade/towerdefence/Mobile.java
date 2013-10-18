@@ -140,6 +140,16 @@ public abstract class Mobile extends Mortal {
 		this.rightMovingSprites = rightMovingSprites;
 	}
 
+	/**
+	 * Set the path to the given path.
+	 * 
+	 * @param path
+	 *            The new path to follow
+	 */
+	public void path(Path path) {
+		this.path = path;
+	}
+
 	// Methods
 	/**
 	 * Follows the path until the object reached the end. If obstacles are
@@ -153,7 +163,7 @@ public abstract class Mobile extends Mortal {
 				current = path.getStep(i);
 				// Make a vector based on the current position and next step
 				// position
-				if (!moving(positionInTiles().sub(current.getX(),
+				if (!moving(positionInTiles().add(current.getX(),
 						current.getY()))) {
 					path = grid.pathfinder.findPath(this,
 							(int) this.positionInTiles().x,
@@ -184,20 +194,21 @@ public abstract class Mobile extends Mortal {
 	 */
 	public boolean moving(Vector2 vector) {
 		// Check for block in given direction
-		if (grid.blocked(this, (int) position().add(vector).x, (int) position()
+		if (grid.blocked(this, (int) positionInTiles().add(vector).x, (int) positionInTiles()
 				.add(vector).y)) {
 			// Grid is blocked return false to indicate a new path should be
 			// found
 			return false;
 		}
 		// Move it from this grid position to the next one
-		grid.moveObject(this, position, position().add(vector));
+		grid.moveObject(this, positionInTiles(), positionInTiles().add(vector));
 
 		// Go into a wait-while loop changing the position 30 times per second
 		int distance = grid.getTileSize();
 		long t0, t1;
 		Vector2 addVector = vector.mul((float) speed / 33);
-		for (int i = 0; i < distance; i += addVector.len()) {
+		for (float i = 0; i < distance; i += addVector.len()) {
+			System.out.println("addvector len: " + addVector.len() + " i: " + i + " distance: "+ distance);
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move

@@ -20,11 +20,11 @@ public class Fettgesicht extends Enemy {
         else {
             setState(STATES.PATH);
         }
-        pathSpeed = 512;
-        chaseSpeed = 1536;
-        pain = true;
+        setPathSpeed(512);
+        setChaseSpeed(1536);
+        setPain(true);
 
-        damage = 0;
+        setDamage(0);
         setTextureName(d.texture);
     }
 

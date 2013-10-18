@@ -1,13 +1,14 @@
 package deco2800.arcade.wl6.enemy;
 
 import com.badlogic.gdx.math.Vector2;
+
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
 import deco2800.arcade.wl6.WL6Meta;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 public class Enemy extends Mob {
 
@@ -34,19 +35,23 @@ public class Enemy extends Mob {
     //
     private WL6Meta.DIRS pathDir;
     //
-    protected float pathSpeed;
+    private float pathSpeed;
     //
-    protected float chaseSpeed;
+    private float chaseSpeed;
     //
-    protected Vector2 faceDir = new Vector2();
-
-
+    private int pathGoal = 1;
+    @SuppressWarnings("unused")
+	private int pathLast = 0;
+    @SuppressWarnings("unused")
+	private int pathLoopStart = 0;
+    
+    
     // path list
-    private Deque<Vector2> path;
+    private List<Vector2> path;
     // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
-    protected boolean pain;
+    private boolean pain;
     // damage
-    protected int damage;
+    private int damage;
 
 
     public Enemy(int uid) {
@@ -58,7 +63,6 @@ public class Enemy extends Mob {
     @Override
     public void init(GameModel model) {
         super.init(model);
-        System.out.println("dir" + pathDir);
         if (pathDir != null) {
             calculatePath(model);
         }
@@ -114,9 +118,30 @@ public class Enemy extends Mob {
 
     // follow patrol path
     public void path() {
-        Vector2 nextPos = path.poll();
-        path.addLast(nextPos);
-        setPos(nextPos);
+    	//if we've passed the next pathing node...
+    	
+    	//this code is for clean navigation through paths but is broken right now
+    	
+    	/*if (path.get(pathLast).dst(path.get(pathGoal)) <= 
+    			path.get(pathLast).dst(getPos())) {
+    		
+    		setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
+    		pathLast++;
+    		pathGoal++;
+    		if (pathGoal >= path.size()) {
+    			pathGoal = this.pathLoopStart;
+    		}
+    	}
+    	this.setVel(
+    			new Vector2().add(path.get(pathGoal)).sub(path.get(pathLast)).nor().mul(0.2f)
+    	);*/
+    	
+    	
+    	//rough navigation through path
+    	pathGoal++;
+    	pathGoal = pathGoal % path.size();
+    	setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
+		
     }
 
     // detect player
@@ -148,7 +173,7 @@ public class Enemy extends Mob {
         if (state == STATES.STAND || state == STATES.PATH) {
             d = d * 2;
         }
-        if (pain) {
+        if (isPain()) {
             changeStates(STATES.PAIN, 0);
             setHealth(getHealth() - d);
             changeStates(STATES.CHASE, 0);
@@ -181,92 +206,125 @@ public class Enemy extends Mob {
             hit = true;
         }
 
-        damage = randInt(0, 255, getRand());
+        setDamage(randInt(0, 255, getRand()));
 
         if (hit) {
             if (dist < 2) {
-                damage = damage / 4;
+                setDamage(getDamage() / 4);
             }
             else if (dist >= 2 && dist < 4) {
-                damage = damage / 8;
+                setDamage(getDamage() / 8);
             }
             else if (dist >= 4) {
-                damage = damage / 16;
+                setDamage(getDamage() / 16);
             }
             else {
-                damage = 0;
+                setDamage(0);
             }
         }
         else {
-            damage = 0;
+            setDamage(0);
         }
 
-        return damage;
+        return getDamage();
     }
 
     public void calculatePath(GameModel gameModel) {
-        System.out.println("got here");
-        path = new ArrayDeque<Vector2>();
-        WL6Meta.DIRS[][] waypoints = gameModel.getWapoints();
+        path = new ArrayList<Vector2>();
+        HashSet<Vector2> usedWaypoints = new HashSet<Vector2>();
 
         int x = (int)getPos().x;
         int y = (int)getPos().y;
         int angle = (int)this.getAngle();
-        path.addFirst(new Vector2(x, y));
+        path.add(new Vector2(x, y));
 
         boolean complete = false;
 
         while (!complete) {
             switch (angle) {
                 case 0:
-                    x = x + 1;
-                    y = y + 0;
+                    x = x + 0;
+                    y = y - 1;
                     break;
                 case 45:
-                    x = x + 1;
-                    y = y + 1;
+                    x = x - 1;
+                    y = y - 1;
                     break;
                 case 90:
-                    x = x + 0;
-                    y = y + 1;
+                    x = x - 1;
+                    y = y + 0;
                     break;
                 case 135:
-                    x = x - 1;
+                	x = x - 1;
                     y = y + 1;
                     break;
                 case 180:
-                    x = x - 1;
-                    y = y + 0;
+                    x = x + 0;
+                    y = y + 1;
                     break;
                 case 225:
-                    x = x - 1;
-                    y = y - 1;
+                	x = x + 1;
+                    y = y + 1;
                     break;
                 case 270:
-                    x = x + 0;
-                    y = y - 1;
+                    x = x + 1;
+                    y = y + 0;
                     break;
                 case 315:
-                    x = x + 1;
+                	x = x + 1;
                     y = y - 1;
                     break;
             }
-
-            if (WL6Meta.block(gameModel.getMap().getTerrainAt(x, y)).texture == null) {
-                System.out.println(path);
+            if (path.size() > 10000) {
+            	System.out.println("infinite loop in a path");
                 return;
             }
-            if (waypoints[x][y] != null) {
-                if(path.contains(new Vector2(x, y))) {
+            if (WL6Meta.block(gameModel.getMap().getTerrainAt(x, y)).texture != null) {
+                System.out.println("waypoints led into a wall");
+                return;
+            }
+            path.add(new Vector2(x, y));
+            if (gameModel.getWaypoint(x, y) != null) {
+                if(usedWaypoints.contains(new Vector2(x, y))) {
+                	pathLoopStart = path.indexOf(new Vector2(x, y));
                     complete = true;
-                }
-                else {
-                    path.addLast(new Vector2(x, y));
-                    angle = (int)WL6Meta.dirToAngle(waypoints[x][y]);
+                } else {
+                    angle = (int)WL6Meta.dirToAngle(gameModel.getWaypoint(x, y));
                 }
             }
         }
-        System.out.println(path);
     }
+
+	public float getPathSpeed() {
+		return pathSpeed;
+	}
+
+	public void setPathSpeed(float pathSpeed) {
+		this.pathSpeed = pathSpeed;
+	}
+
+	public boolean isPain() {
+		return pain;
+	}
+
+	public void setPain(boolean pain) {
+		this.pain = pain;
+	}
+
+	public float getChaseSpeed() {
+		return chaseSpeed;
+	}
+
+	public void setChaseSpeed(float chaseSpeed) {
+		this.chaseSpeed = chaseSpeed;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
 }
 

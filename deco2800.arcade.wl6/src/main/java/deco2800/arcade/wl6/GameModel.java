@@ -47,7 +47,8 @@ public class GameModel {
 
 	private int difficulty = 1;
 
-
+	private boolean suspendInit = false;
+	
 
     public GameModel() {
     }
@@ -73,8 +74,14 @@ public class GameModel {
         waypoints = new WL6Meta.DIRS[64][64];
         collisionGrid = new CollisionGrid();
         
+        suspendInit = true;
         MapProcessor.processEverything(this);
-
+        suspendInit = false;
+        
+        for (Doodad d : doodads) {
+        	d.init(this);
+        }
+        
         player = new Player(MapProcessor.doodadID());
         player.setPos(spawn);
         player.setAngle(this.spawnAngle);
@@ -147,7 +154,9 @@ public class GameModel {
      */
     public void addDoodad(Doodad doodad) {
         doodads.add(doodad);
-        doodad.init(this);
+        if (!suspendInit) {
+        	doodad.init(this);
+        }
     }
 
 
@@ -174,8 +183,8 @@ public class GameModel {
         waypoints[x][y] = angle;
     }
 
-    public WL6Meta.DIRS[][] getWapoints() {
-        return waypoints.clone();
+    public WL6Meta.DIRS getWaypoint(int x, int y) {
+        return waypoints[x][y];
     }
 
 

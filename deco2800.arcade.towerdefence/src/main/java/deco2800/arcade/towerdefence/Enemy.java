@@ -5,7 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * The class for enemys invading the ship.
+ * The class for enemies invading the ship.
  * 
  * @author hadronn
  * 

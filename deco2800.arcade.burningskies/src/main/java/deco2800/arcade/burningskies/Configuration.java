@@ -103,9 +103,16 @@ public class Configuration {
 	public static void writeLocalHighScores() {
 		FileHandle scoresFile = Gdx.files.external("BurningSkies/high_scores.txt");
 		StringBuilder toWriteStrings = new StringBuilder();
+		int limit = 0;
 		
 		for (Map.Entry<Long, String> entry : highScoresMap.entrySet()) {
-			toWriteStrings.append(entry.getValue() + ":" + entry.getKey() + System.getProperty("line.separator"));
+			//We only care about the top five scores
+			if (limit < 5) {
+				toWriteStrings.append(entry.getValue() + ":" + entry.getKey() + System.getProperty("line.separator"));
+				limit++;
+			} else {
+				break;
+			}
 		}
 		
 		scoresFile.writeString(toWriteStrings.toString(), false);
@@ -168,6 +175,7 @@ public class Configuration {
 	public static void addScore(String name, long score) {
 		long inverseScore = score * -1;
 		highScoresMap.put(new Long(inverseScore), name);
+		writeLocalHighScores();
 	}
 	
 	public static Map<Long, String> getScores() {

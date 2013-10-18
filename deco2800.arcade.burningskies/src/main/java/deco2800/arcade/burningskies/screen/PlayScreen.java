@@ -150,7 +150,8 @@ public class PlayScreen implements Screen
     				} else {
     					// Create a game over screen
     					game.playSong("gameover");
-    					game.setScreen(game.menuScreen);
+    					GameOverScreen.setScore(score);
+    					game.setScreen(game.gameOverScreen);
     				}
     			}
     		} else {

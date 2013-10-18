@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.client.ArcadeInputMux;
 
 public class GameOverScreen implements Screen {
@@ -26,14 +27,14 @@ public class GameOverScreen implements Screen {
     private Skin skin;
 	private MenuInputProcessor processor;
 	private TextField playerNameInput;
-	private String playerName;
+	private static long score;
 
 	private int width = BurningSkies.SCREENWIDTH;
     private int height = BurningSkies.SCREENHEIGHT;
 
     
 	public GameOverScreen( BurningSkies game){
-		this.game = game;		
+		this.game = game;	
 	}
 
 	@Override
@@ -104,11 +105,7 @@ public class GameOverScreen implements Screen {
             	return true;
             }
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {        		
-        		playerName = playerNameInput.getMessageText();
-        		
-//        		if (playerName.length() > 3) {
-//        			// Display a popup saying that only the first three characters will be used
-//        		}
+        		Configuration.addScore(playerNameInput.getText(), score);
             	game.setScreen(game.scoreScreen);
             }
 		});
@@ -118,7 +115,7 @@ public class GameOverScreen implements Screen {
 	    stage.addActor(playerNameInput);
 	}
 	
-	public String getLastScoreName() {
-		return playerName;
+	public static void setScore(long lastGameScore) {
+		score = lastGameScore;
 	}
 }

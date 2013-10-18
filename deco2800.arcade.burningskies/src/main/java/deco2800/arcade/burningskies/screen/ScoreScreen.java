@@ -97,9 +97,7 @@ public class ScoreScreen implements Screen {
         black = new BitmapFont(Gdx.files.internal("images/menu/font.fnt"), false);
         background = new Image(new Texture(Gdx.files.internal("images/menu/menu_background.png")));
         scoreTableImage = new Image(new Texture(Gdx.files.internal("images/menu/dual_score_table.png")));
-        
 
-        
         stage = new Stage(width, height, true);
 	
         ArcadeInputMux.getInstance().addProcessor(stage);

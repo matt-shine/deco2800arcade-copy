@@ -180,8 +180,8 @@ public class MenuScreen implements Screen {
 	                return true;
 	        }
 	        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-	        	//game.setScreen(game.scoreScreen);
-	        	game.setScreen(game.gameOverScreen);
+	        	game.setScreen(game.scoreScreen);
+	        	//game.setScreen(game.gameOverScreen);
 	        }
 	    });
     

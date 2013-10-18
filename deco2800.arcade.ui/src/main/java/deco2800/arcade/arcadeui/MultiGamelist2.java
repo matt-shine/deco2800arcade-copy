@@ -846,17 +846,11 @@ public class MultiGamelist2 implements Screen {
 		// Return to lobby event listener
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-            	dispose();
+            	
 				ArcadeSystem.setMatchMaking2(false);
 				ArcadeSystem.setMultiplayerEnabled(true);
-				
-
-
-
 				arcadeUI.setScreen(arcadeUI.getLobby());
-				//this.ui.setScreen(this.ui.getLobby());
-				
-
+		
             }
         });
 		

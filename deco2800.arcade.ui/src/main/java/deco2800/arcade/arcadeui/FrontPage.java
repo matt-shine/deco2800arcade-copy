@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.arcadeui.store.StoreHome;
@@ -45,6 +46,7 @@ import deco2800.arcade.arcadeui.Overlay.*;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.arcadeui.store.StoreScreen;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.gamelibrary.PlayButtonActionHandler;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
@@ -57,7 +59,7 @@ public class FrontPage implements Screen {
 
 	public static Skin skin;
 	private static FrontPageStage stage;
-
+	
 	private float funds;
 	private int tokens;
 
@@ -71,7 +73,6 @@ public class FrontPage implements Screen {
 	private String game1 = "Chess";
 	private String game2 = "Pong";
 	private String game3 = "Snakes and Ladders";
-
 	public static String pName = "<USERNAME>";
 
 	private boolean bclicked;
@@ -122,11 +123,13 @@ public class FrontPage implements Screen {
 				"magenta");
 		final TextButton recentButton = new TextButton("Recently Played", skin,
 				"blue");
+		
 
 		// buttons for recent games
 		final TextButton recentgame1 = new TextButton(game1, skin, "blue");
 		final TextButton recentgame2 = new TextButton(game2, skin, "blue");
 		final TextButton recentgame3 = new TextButton(game3, skin, "blue");
+		
 
 		final Table recentTable = new Table();
 		// recentTable.setFillParent(true);
@@ -205,8 +208,23 @@ public class FrontPage implements Screen {
 				// arcadeUI.render();
 			}
 		}));
+	
 		/* testing end */
-
+		
+		/* Lobby button */
+		final TextButton lobbyButton = new TextButton("Multiplayer Lobby", skin, "magenta");
+		lobbyButton.setSize(210, 50);
+		lobbyButton.setPosition(800, 580);
+	
+		stage.addActor(lobbyButton);
+		lobbyButton.addListener((new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				arcadeUI.setScreen(arcadeUI.lobby);
+			}
+		}));
+		
+		/* End Lobby Button */
+	
 		// Icon event listeners, mouseOver and mouseClick
 		recentButton.addListener((new ClickListener() {
 			public void enter(InputEvent event, float x, float y, int pointer,

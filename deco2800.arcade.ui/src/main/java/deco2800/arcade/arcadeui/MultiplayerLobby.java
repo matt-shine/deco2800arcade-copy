@@ -183,18 +183,7 @@ public class MultiplayerLobby implements Screen {
 			}
 		}
 
-		/**
-		 * Test Button Event Listener Simulates creating a match on the server.
-		 */
-		/*
-		 * button.addListener(new ChangeListener() { public void changed
-		 * (ChangeEvent event, Actor actor) {
-		 * 
-		 * CreateMatchRequest request = new CreateMatchRequest(); request.gameId
-		 * = Integer.toString((int)(Math.random()*10000)); request.hostPlayerId
-		 * = (int) (Math.random()*1000); ArcadeSystem.createMatch(request); }
-		 * });
-		 */
+		
 
 		// "Refresh" button event listener.
 		refreshButton.addListener(new ChangeListener() {
@@ -281,7 +270,7 @@ public class MultiplayerLobby implements Screen {
 				dispose();
 				ArcadeSystem.removePlayerFromLobby();
 				ArcadeSystem.setMultiplayerEnabled(false);
-				arcadeUI.setScreen(arcadeUI.getHome());
+				arcadeUI.setScreen(arcadeUI.main);
 
 			}
 		});

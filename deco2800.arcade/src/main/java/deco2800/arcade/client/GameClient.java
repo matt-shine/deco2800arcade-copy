@@ -18,6 +18,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.EncodedImage;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.utils.Handler;
 
@@ -306,6 +307,10 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	
 	private void requestMultiplayerGame() {	
 	}
+	
+	public void displayChat(LobbyMessageResponse response) {
+	}
+	
 	
 }
 

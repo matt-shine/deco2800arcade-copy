@@ -11,6 +11,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 
 /**
  * This class is the main interface for the arcade.
@@ -55,7 +56,8 @@ public class ArcadeUI extends GameClient {
 		main = new FrontPage(this);
 
 		register = new RegisterScreen(this);
-		lobby = new MultiplayerLobby(this);
+		System.out.println("PLAYER: " + player);
+		lobby = new MultiplayerLobby(this, player);
 		betting = new BettingWindow(this);
 		multigame = new MultiGamelist(this);
 		wait = new Gamewaiting(this);
@@ -137,6 +139,17 @@ public class ArcadeUI extends GameClient {
 
 	public BettingLobby getBettingLobby() {
 		return bettingLobby;
+	}
+	
+	public void displayChat(LobbyMessageResponse response) {
+		lobby.displayChat(response);
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
+		if (lobby != null) { 
+			lobby.setPlayer(player);
+		}
 	}
 
 }

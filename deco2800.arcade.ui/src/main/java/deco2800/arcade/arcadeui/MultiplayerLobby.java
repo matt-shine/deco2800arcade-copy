@@ -17,6 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.listener.LobbyListener;
+import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
@@ -41,10 +44,12 @@ public class MultiplayerLobby implements Screen {
 	private ArcadeUI arcadeUI;
 	private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches;
+	private Player player;
 
-	public MultiplayerLobby(ArcadeUI ui) {
+	public MultiplayerLobby(ArcadeUI ui, Player player) {
 		System.out.println(ui);
 		arcadeUI = ui;
+		this.player = player;
 		// lobby = this;
 	}
 
@@ -279,19 +284,20 @@ public class MultiplayerLobby implements Screen {
 		button3.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 
-				chatfield.getText();
+				String message = chatfield.getText();
 				System.out.println("You Said: " + chatfield.getText());
 
-				Label chat = new Label(chatfield.getText(), skin2);
+				//Label chat = new Label(chatfield.getText(), skin2);
 
-				table5.clear();
-				table5.center().right();
-				table5.add(chat).padRight(200);
-				table5.row();
+				//table5.clear();
+				//table5.center().right();
+				//table5.add(chat).padRight(200);
+				//table5.row();
 				// table5.add(" ").padRight(200);
+				chat(message);
 				chatfield.setText("");
 				
-				chat();
+				
 
 			}
 		});
@@ -364,6 +370,10 @@ public class MultiplayerLobby implements Screen {
 		// TODO Auto-generated method stub
 
 	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 
 	public void joinGame(int matchId) {
 		JoinLobbyMatchRequest request = new JoinLobbyMatchRequest();
@@ -372,13 +382,27 @@ public class MultiplayerLobby implements Screen {
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}
 	
-		public void chat() {
+	public void chat(String message) {
 		LobbyMessageRequest request = new LobbyMessageRequest();
 		request.playerID = arcadeUI.getPlayer().getID();
-		request.message = "Message";
+		request.user = player.getUsername();
+		request.message = message;
 		//chatfield.getText();
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
 		//client.sendTCP(Request);
+	}
+	
+	public void displayChat(LobbyMessageResponse request) {
+		String message = request.message;
+		String username = request.username;
+		System.out.println(username + ": " + message);
+		/*Label chat = new Label(username + ": " + chatfield.getText(), skin2);
+
+		table5.clear();
+		table5.center().right();
+		table5.add(chat).padRight(200);
+		table5.row();
+		table5.add(" ").padRight(200);*/
 	}
 
 

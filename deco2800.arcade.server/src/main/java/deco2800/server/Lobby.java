@@ -18,6 +18,8 @@ import deco2800.arcade.protocol.lobby.CreateMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
+import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 
 /**
@@ -209,6 +211,25 @@ public class Lobby {
 			connectedPlayers.get(playerId).sendTCP(amd);
 		}
 	}
+	
+	
+	/**
+	 * Forwards a chat message to all lobby users
+	 * @param request the chat request to forward
+	 */
+	public void sendChat(LobbyMessageRequest request) {
+		int playerID = request.playerID;
+		String message = request.message;
+		String username = request.user;
+		LobbyMessageResponse response = new LobbyMessageResponse();
+		response.message = message;
+		response.username = username;
+		for (Map.Entry<Integer, Connection> e : connectedPlayers.entrySet()) {
+			e.getValue().sendTCP(response);
+		}
+	}
+	
+	
 
 	/**
 	 * Checks if the user is hosting a match in the lobby.

@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.*;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.replay.exception.PlaybackException;
 import deco2800.arcade.protocol.replay.GetEventsRequest;
 import deco2800.arcade.protocol.replay.GetEventsResponse;
 
@@ -99,7 +100,7 @@ public class ReplayPlayback {
 	 */
 	private void startPlayback() {
 		if ( this.replayHistory == null ) {
-			throw new RuntimeException( "Started replay with no data" );
+			throw new PlaybackException( "Started replay with no data" );
 		}
 		playbackStartTime = System.currentTimeMillis();
 		lastPlaybackTime = playbackStartTime;
@@ -136,7 +137,6 @@ public class ReplayPlayback {
 	private void playNextNode()
 	{
         if ( this.nextReplayIndex < 0 ) {
-            // NOPE
             return;
         }
         ReplayNode node = deserializer.fromJson(

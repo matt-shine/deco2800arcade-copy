@@ -130,13 +130,14 @@ public class HighscoreDatabase {
 			String getTop = "SELECT * FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
 			resultSet = statement.executeQuery(getTop);
 			
-			while(resultSet.next() && topCount <= top) {
+			while(resultSet.next() && topCount < top) {
 				data.add(String.valueOf(resultSet.getString("Player")));
 				data.add(String.valueOf(resultSet.getInt("Score")));
 				data.add(String.valueOf(resultSet.getDate("Date")));
 				data.add(String.valueOf(resultSet.getString("Score_Type")));
 				topCount++;
 			}
+			
 			return data;
 		} catch (SQLException e) {
 			throw new DatabaseException(
@@ -266,7 +267,7 @@ public class HighscoreDatabase {
 			initialise();
 		}
 
-		if(highestIsBest) {
+		if (highestIsBest) {
 			order = "DESC";
 		} else {
 			order = "ASC";
@@ -279,15 +280,22 @@ public class HighscoreDatabase {
 		ResultSet resultSet = null;
 		try {
 			statement = connection.createStatement();
-			String select = "SELECT DISTINCT Player FROM PLAYER_HIGHSCORES WHERE Player IN (SELECT H.Player, D.Score FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order + ")";
+			String select = "SELECT DISTINCT H.Player, Score FROM PLAYER_HIGHSCORES AS H, PLAYER_HIGHSCORES_DATA AS D WHERE H.HID = D.HID AND H.GameID='" + Game_ID + "' AND D.Score_Type='" + type + "' ORDER BY D.Score " + order;
 			resultSet = statement.executeQuery(select);
 			
-			while(resultSet.next())	{
-				if(resultSet.getString("Player").equals(Username)) {
+			LinkedList<String> foundUsers = new LinkedList<String>();
+			
+			while (resultSet.next()) {
+				String user = resultSet.getString("Player");
+				
+				if (user.equals(Username)) {
 					userFound = true;
 					break;
 				} else {
-					ranking++;
+					if (!foundUsers.contains(user)) {
+						foundUsers.add(user);
+						ranking++;
+					}
 				}
 			}
 			

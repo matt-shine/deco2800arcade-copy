@@ -83,9 +83,7 @@ public class Pong extends GameClient {
         //Creating new HighscoreClient connection
         HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
         
-        
-        hsd.getUserRanking(true, "Number");
-
+        //hsd.storeScore("Number", 1234567890);
 	}
 	
 	/**

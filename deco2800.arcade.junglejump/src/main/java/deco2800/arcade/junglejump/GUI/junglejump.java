@@ -332,14 +332,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.setProjectionMatrix(camera.combined);
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			if (movingLeft) {
-				monkeyX -= 2*3;
+				monkeyX -= 2;
 				monkeyRun--;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
 			if (movingRight) {
-				monkeyX += 2*3;
+				monkeyX += 2;
 				monkeyRun++;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
@@ -496,7 +496,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
 			// Check x and y are within the platform boundaries and monkey is on it
-			if (x > (p.getX() - monkeyLength)
+			if (p.platType != '=' && x > (p.getX() - monkeyLength)
 					&& x < (p.getX()+p.getWidth() - 10)
 					&& y <= p.getY() + p.getHeight() // Top of platform
 					&& y >= p.getY() - monkeyHeight) {				// Bottom of platform

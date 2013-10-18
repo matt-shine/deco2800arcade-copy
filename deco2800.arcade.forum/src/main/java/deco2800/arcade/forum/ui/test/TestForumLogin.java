@@ -14,14 +14,27 @@ import deco2800.arcade.model.forum.ForumUser;
 import deco2800.arcade.protocol.forum.*;
 
 /**
- * Test version of ForumLogin.java
+ * Test version of ForumLogin.java. MVC is not implemented.
+ * Tips: 
+ * <ul>
+ * 	<li>Set network listener when a view is created.</li>
+ *  <li>Use internal class make easy to read and fix</li>
+ *  <li>Do not sent a class or a class which contains classes that have 
+ *  a constructor which requires arguments (cause serialization error). </li>
+ *  <li>To run this, off course, you need run server beforehand.</li>
+ * </ul>
+ * 
  * @author Junya, Team Forum
- *
  */
 public class TestForumLogin extends JFrame {
 	private ForumUser userModel;
 	private ClientConnection connection;
 	
+	/**
+	 * Constructor: create interface and model and establish connection.
+	 * 
+	 * @throws ForumException
+	 */
 	public TestForumLogin() throws ForumException {
 		super("Login");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -31,6 +44,10 @@ public class TestForumLogin extends JFrame {
 		
 		this.connection = new ClientConnection("", 0, 0);
 		this.connection.addListener(new Listener() {
+			/* print disconnected message if connection is disconnected 
+			 * Generally caused by server's error
+			 * @see com.esotericsoftware.kryonet.Listener#disconnected(com.esotericsoftware.kryonet.Connection)
+			 */
 			public void disconnected(Connection connection) {
 				System.out.println("disconnected");
 			}
@@ -39,6 +56,9 @@ public class TestForumLogin extends JFrame {
 		this.getContentPane().add(new LoginView(this.connection, this.userModel));
 	}
 	
+	/**
+	 * GUI of LoginView
+	 */
 	public class LoginView extends JPanel implements Observer {
 		private static final long serialVersionUID = 1L;
 		private ForumUser userModel;
@@ -48,6 +68,13 @@ public class TestForumLogin extends JFrame {
 		private LoginController controller;
 		private ClientConnection connection;
 		
+		/**
+		 * Constructor: some parameters are passed from the top-level class. 
+		 * It creates interface, controller (for view and connection).
+		 * @param connection
+		 * @param userModel
+		 * @throws ForumException
+		 */
 		public LoginView(ClientConnection connection, ForumUser userModel) throws ForumException {
 			super();
 			this.setLayout(new GridLayout(3, 1));
@@ -61,6 +88,7 @@ public class TestForumLogin extends JFrame {
 			this.add(this.loginButton);
 			this.add(this.statusField);
 			this.connection.addListener(new Listener() {
+				/* Actions if server's response is received */
 				public void received(Connection con, Object object) {
 					if (object instanceof GetForumUserResponse) {
 						System.out.println("Server response is received");
@@ -81,6 +109,9 @@ public class TestForumLogin extends JFrame {
 			});
 		}
 		
+		/**
+		 * Controller for on-click mouse event (Action Listener).
+		 */
 		private class LoginController implements ActionListener {
 			private ForumUser userModel;
 			private ClientConnection connection;
@@ -99,6 +130,7 @@ public class TestForumLogin extends JFrame {
 				GetForumUserRequest request = new GetForumUserRequest();
 				request.userId = 0;
 				request.userName = userName;
+				/* Send request to server */
 				this.connection.getClient().sendTCP(request);
 				System.out.println("Request is sent");
 				return;

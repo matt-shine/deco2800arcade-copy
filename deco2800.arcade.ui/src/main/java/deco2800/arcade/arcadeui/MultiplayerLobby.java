@@ -22,6 +22,8 @@ import deco2800.arcade.protocol.lobby.CreateMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 
 /**
  * 
@@ -299,6 +301,8 @@ public class MultiplayerLobby implements Screen {
 				table5.row();
 				// table5.add(" ").padRight(200);
 				chatfield.setText("");
+				
+				chat();
 
 			}
 		});
@@ -378,5 +382,15 @@ public class MultiplayerLobby implements Screen {
 		request.playerID = arcadeUI.getPlayer().getID();
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}
+	
+		public void chat() {
+		LobbyMessageRequest request = new LobbyMessageRequest();
+		request.playerID = arcadeUI.getPlayer().getID();
+		request.message = "Message";
+		//chatfield.getText();
+		arcadeUI.getNetworkClient().sendNetworkObject(request);
+		//client.sendTCP(Request);
+	}
+
 
 }

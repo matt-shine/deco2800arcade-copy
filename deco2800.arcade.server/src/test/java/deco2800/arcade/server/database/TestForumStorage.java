@@ -104,6 +104,28 @@ public class TestForumStorage {
 			assertEquals(1, thread.getCreatedBy().getId());
 		}
 		assertEquals(2, result[0].getId());
+		result = this.forumStorage.getTaggedParentThreads("tag4");
+		assertEquals(1, result.length);
+	}
+	
+	@Test
+	public void getTaggedParentThreadsTest2() throws Exception {
+		this.forumStorage.insertParentThread("Test topic 5", "Test content this is.", 3, "Others", "tag10#tag11#tag12");
+		this.forumStorage.insertParentThread("Test topic 6", "Test content this is.", 3, "Others", "tag10");
+		this.forumStorage.insertParentThread("Test topic 7", "Test content this is.", 3, "Others", "tag10");
+		this.forumStorage.insertParentThread("Test topic 8", "Test content this is.", 3, "Others", "tag10#tag11");
+		this.forumStorage.insertParentThread("Test topic 9", "Test content this is.", 3, "Others", "tag10#tag11");
+		this.forumStorage.insertParentThread("Test topic 10", "Test content this is.", 3, "Others", "tag12#tag10");
+		ParentThread[] result = this.forumStorage.getTaggedParentThreads("tag10", 9, 7, 0);
+		assertEquals(3, result.length);
+		assertEquals("Test topic 9", result[0].getTopic());
+		result = this.forumStorage.getTaggedParentThreads("tag11", 0, 0, 2);
+		assertEquals(2, result.length);
+		assertEquals("Test topic 9", result[0].getTopic());
+		result = this.forumStorage.getTaggedParentThreads("tag12", 0, 0, 0);
+		assertEquals(2, result.length);
+		assertEquals("Test topic 10", result[0].getTopic());
+		assertEquals("Test topic 5", result[1].getTopic());
 	}
 	
 	@Test

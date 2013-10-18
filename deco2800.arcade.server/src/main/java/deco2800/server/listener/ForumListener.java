@@ -96,9 +96,20 @@ public class ForumListener extends Listener {
 			response.result = null;
 			response.error = "";
 			try {
-				response.result = ArcadeServer.instance().getForumStorage().getTaggedParentThreads(request.tag);
-				if (response.result == null) {
+				ParentThread[] result;
+				if (request.userId > 0) {
+					result = ArcadeServer.instance().getForumStorage().getTaggedParentThreads(
+							request.tag, request.userId);
+				} else if (request.start != 0 || request.end != 0 || request.limit != 0) {
+					result = ArcadeServer.instance().getForumStorage().getTaggedParentThreads(
+							request.tag, request.start, request.end, request.limit);
+				} else {
+					result = ArcadeServer.instance().getForumStorage().getTaggedParentThreads(request.tag);
+				}
+				if (result == null) {
 					response.error = "No result found";
+				} else {
+					response.result = ParentThreadProtocol.getParentThreadProtocols(result);
 				}
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();

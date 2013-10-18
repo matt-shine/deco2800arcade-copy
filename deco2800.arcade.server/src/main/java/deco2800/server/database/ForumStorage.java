@@ -72,7 +72,7 @@ public class ForumStorage {
 				+ ", message long varchar NOT NULL"
 				+ ", created_by int NOT NULL"
 				+ ", timestamp timestamp"
-				+ ", category varchar(30) DEFAULT 'General Admin'"
+				+ ", category varchar(30) DEFAULT 'General_Discussion'"
 				+ ", tags long varchar"
 				+ ", vote int DEFAULT 0"
 				+ ")";
@@ -481,6 +481,98 @@ public class ForumStorage {
 			}
 		}
 		return result.toArray(new ParentThread[0]);
+	}
+	
+	/**
+	 * Return parent threads that have a specific tag, user id
+	 * , id range and limit of records to be retrieved. <br>
+	 * It is similar to getParentThreads(), but this specifies tag 
+	 * and this is more costly.
+	 * 
+	 * @param tag	String, tag to be searched.
+	 * @param start	int, starting id to be searched (i.e. highest id). 
+	 * 				If 0, it will search from the highest id.
+	 * @param end	int, ending id to be searched. If 0, no ending id.
+	 * @param limit	int, limit to numbers of records to be retrieved. If 0,
+	 * 				no limit. 
+	 * @return	Array of ParentThread. Null if no results.
+	 * @throws DatabaseException	if invalid parameter or SQLException. 
+	 */
+	public ParentThread[] getTaggedParentThreads(String tag
+			, int start, int end, int limit) throws DatabaseException {
+		String query1 = "SELECT * FROM parent_thread WHERE ? >= pid AND pid >= ?";
+		String query2 = "SELECT * FROM parent_thread WHERE ? >= pid";
+		String queryAddOn = " ORDER BY pid DESC";
+		String query;
+		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
+		
+		/* Check params */
+		if (start < 0 || end < 0 || limit < 0) {
+			throw new DatabaseException("Invalid parameter.");
+		}
+		tag.trim();
+		/* Get DB connection */
+		Connection con = Database.getConnection();
+		
+		/* Begin query */
+		if (start == 0) {
+			/* Since result will be descending, set the highest pid for start */
+			start = this.maxPid;
+		}
+		if (end == 0) {
+			query = query2;
+		} else {
+			query = query1;
+		}
+		query += queryAddOn;
+		int numRecords = 0;
+		
+		try {
+			/* Prepare st */
+			PreparedStatement st = con.prepareStatement(query);
+			if (end == 0) {
+				st.setInt(1, start);
+			} else {
+				st.setInt(1, start);
+				st.setInt(2, end);
+			}
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				if (limit != 0 && numRecords == limit) {
+					break;
+				}
+				/* Since tags contains multiple tag, every record is needed to check */
+				String tags = rs.getString("tags");
+				String[] tag_array = tags.split(TAG_SPLITTER);
+				for (String temp : tag_array) {
+					temp.trim();
+					if (temp.equals(tag)) {
+						result.add(new ParentThread(rs.getInt("pid"), rs.getString("topic"), rs.getString("message")
+								, new ForumUser(rs.getInt("created_by"), "no name"), rs.getTimestamp("timestamp"), rs.getString("category")
+								, rs.getString("tags"), rs.getInt("vote")));
+						numRecords++;
+					}
+				}
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to retrieve parent threads: " + e);
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close DB connection: " + e);
+			}
+		}
+		if (result.size() == 0) {
+			return null;
+		} else {
+			/* Convert ArrayList to ParentThread[] */
+			return result.toArray(new ParentThread[0]);
+		}
 	}
 	
 	/**
@@ -1169,6 +1261,7 @@ public class ForumStorage {
 			/* Execute */
 			st.executeUpdate();
 			st.close();
+			this.maxPid++;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("InsertError: " + e);

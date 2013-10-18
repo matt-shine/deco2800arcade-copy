@@ -1,14 +1,14 @@
 package deco2800.arcade.protocol.forum;
 
-import deco2800.arcade.model.forum.ParentThread;
 
 /**
  * Response for GetTaggedParentThreadsRequest
  * result contains array of parent threads
- * error is if give.
+ * error is if give. result = null if no result.
  *
+ * @author Junya, Team Forum
  */
 public class GetTaggedParentThreadsResponse {
-	public ParentThread[] result;
+	public ParentThreadProtocol[] result;
 	public String error;
 }

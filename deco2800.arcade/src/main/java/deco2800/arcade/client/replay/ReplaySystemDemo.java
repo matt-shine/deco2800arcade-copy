@@ -97,6 +97,7 @@ public class ReplaySystemDemo {
 		Thread.sleep( 500 );
 
 		//You can get the session ID from the current session...
+		@SuppressWarnings("unused")
 		Integer session = replayHandler.getSessionId();
 		
 		//End the current session

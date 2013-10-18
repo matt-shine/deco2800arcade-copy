@@ -13,11 +13,8 @@ import deco2800.arcade.protocol.replay.ListSessionsRequest;
 import deco2800.arcade.protocol.replay.ListSessionsResponse;
 import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
-import deco2800.arcade.protocol.replay.demo.ReplayRequest;
-import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 import deco2800.arcade.protocol.replay.types.Session;
 
-import java.sql.Connection;
 import java.util.*;
 
 /**
@@ -35,7 +32,6 @@ public class ReplayHandler {
     ReplayRecorder recorder;
     ReplayPlayback playback;
 
-    private Boolean waitingToStartSession = false;
     private Boolean isReadyToRecord = false;
 
 
@@ -92,7 +88,6 @@ public class ReplayHandler {
         ssr.gameId = gameId;
         ssr.username = username;
         client.sendNetworkObject(ssr);
-        waitingToStartSession = true;
     }
     
     /**
@@ -106,7 +101,6 @@ public class ReplayHandler {
         logger.info( "Replay session started." );
         
         recorder = new ReplayRecorder( this, this.client, this.sessionId );
-        waitingToStartSession = false;
         isReadyToRecord = true;
     }
     
@@ -200,27 +194,6 @@ public class ReplayHandler {
     public Integer getSessionId()
     {
         return sessionId;
-    }
-    
-    /**
-     * Send a simple ping message to the server.
-     */
-    public void sendSimpleMessageToServer()
-    {
-        ReplayRequest rr = new ReplayRequest();
-        rr.random = Math.random();
-        client.sendNetworkObject(rr);
-    }
-    
-    /**
-     * A simple method for demonstrating the networking flow.
-     * @param rr
-     *          the response sent from the server
-     */
-    public void printOutServerResponse(ReplayResponse rr)
-    {
-        logger.info( "Response:" );
-        logger.info( rr.toString() );
     }
     
     /**

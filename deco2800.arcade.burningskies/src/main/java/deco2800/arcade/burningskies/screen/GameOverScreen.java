@@ -101,9 +101,7 @@ public class GameOverScreen implements Screen {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             	return true;
             }
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-        		game.stopSong();
-        		
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {        		
         		playerName = playerNameInput.getMessageText();
         		
 //        		if (playerName.length() > 3) {

@@ -169,12 +169,6 @@ public class Pong extends GameClient {
 		gameState = new ReadyState();
 		statusMessage = "Click to start!";
 		
-        // achievements demo
-        AchievementClient achClient = getAchievementClient();
-        ArrayList<Achievement> achievements = achClient.achievementsForGame(getGame());
-        for(Achievement ach : achievements) {
-            System.out.println(ach.toString());
-        }
         
 	}
 

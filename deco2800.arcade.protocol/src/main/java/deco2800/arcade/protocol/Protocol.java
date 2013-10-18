@@ -144,6 +144,7 @@ public class Protocol {
 		kryo.register(TagsResponse.class);
 		kryo.register(GetParentThreadsRequest.class);
 		kryo.register(GetParentThreadsResponse.class);
+	
 	}
 	
 	/**

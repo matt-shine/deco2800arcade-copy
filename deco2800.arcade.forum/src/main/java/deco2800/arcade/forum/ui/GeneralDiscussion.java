@@ -9,6 +9,8 @@ import javax.swing.JToolBar;
 import java.awt.Label;
 import java.awt.Button;
 import java.awt.Font;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -119,6 +121,15 @@ public class GeneralDiscussion {
 	    this.panel_1.setBounds(0, 0, 1006, 57);
 	    f.getContentPane().add(this.panel_1);
 	    f.setVisible(true);      
+	    
+	    
+	    try {
+			new ThreadListController(this, new ThreadListModel(1));
+		} catch (ForumException e) {
+			System.out.println("Thread failed to post");
+			JOptionPane.showMessageDialog(null, "Failed to post thread", 
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public void open_home() {

@@ -15,9 +15,11 @@ import deco2800.arcade.protocol.forum.*;
 
 public class ThreadListController {
 	private GeneralDiscussion view;
+	private ThreadListModel model;
 	private ClientConnection connection;
-	public ThreadListController (GeneralDiscussion viewModel) throws ForumException {
-		this.view = viewModel;
+	public ThreadListController (GeneralDiscussion v, ThreadListModel m) throws ForumException {
+		this.view = v;
+		this.model = m;
 		this.connection = new ClientConnection("", 0, 0);
 		
 		System.out.println("Request load");
@@ -38,10 +40,11 @@ public class ThreadListController {
 						System.out.println("yeah... didnt work");
 					} else {
 						if (response.result != null) {
-							System.out.println("Thread achieved");
+							model.thread_load(ParentThreadProtocol.getParentThreads(response.result));
+							System.out.println("Thread loaded");
 						} else {
-							System.out.println("Failed to get thread");
-							JOptionPane.showMessageDialog(null, "Failed to get thread", 
+							System.out.println("Failed to load thread");
+							JOptionPane.showMessageDialog(null, "Failed to load threads", 
 									"Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}

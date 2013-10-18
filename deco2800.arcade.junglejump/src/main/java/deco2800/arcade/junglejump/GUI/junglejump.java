@@ -332,14 +332,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.setProjectionMatrix(camera.combined);
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			if (movingLeft) {
-				monkeyX -= 2;
+				monkeyX -= 2*3;
 				monkeyRun--;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
 			if (movingRight) {
-				monkeyX += 2;
+				monkeyX += 2*3;
 				monkeyRun++;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
@@ -404,15 +404,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			} else if (!leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
-			// Add platforms from platform coordinate array
-//			currentLevel = LevelContainer.getLevel(currentLevelIndex);
-//			for(int i=0; i<currentLevel.platformAmount(); i++) {
-//				Platform p = currentLevel.getPlatforms().get(i);
-//				float platY = p.getY() + (currentLevelIndex * SCREENHEIGHT); // Because levels are stacked on each other
-//				batch.draw(p.getTexture(), p.getX(), platY);
-//			}
 			for (Platform p : currentLevel.getPlatforms()) {
-				p.onActive();
+				// Place platform onto screen
 				if(p.getX() >= 1000) {
 					p.setX(p.getX()-1000);
 				}
@@ -475,7 +468,6 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	public static void drawLevel() {
 		batch.begin();
-		System.out.println(currentLevel);
 		for (Platform p : currentLevel.getPlatforms()) {
 			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 		}
@@ -687,8 +679,13 @@ public class junglejump extends GameClient implements InputProcessor {
 				
 				
 				// Play sound effect for jumping
+				URL path = this.getClass().getResource("/");
 				try{ 
-					File file = new File("jump.wav");
+					String resource = path.toString().replace(".arcade/build/classes/main/", 
+							".arcade.junglejump/src/main/").replace("file:", "") + 
+							"resources/jump.wav";
+					System.out.println(resource);
+					File file = new File(resource);
 					FileHandle fileh = new FileHandle(file);
 					AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 					Clip clip = AudioSystem.getClip();

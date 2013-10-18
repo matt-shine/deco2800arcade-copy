@@ -114,21 +114,24 @@ public class Configuration {
 				break;
 			}
 		}
-		
 		scoresFile.writeString(toWriteStrings.toString(), false);
 	}
 	
 	public static void readLocalHighScores() {
 		FileHandle scoresFile = Gdx.files.external("BurningSkies/high_scores.txt");
-		String scores = scoresFile.readString();
-		
-		highScoresMap = new TreeMap<Long, String>();
-		
-		String[] scoresArray = scores.split(System.getProperty("line.separator"));
-		
-		for (int i = 0; i < scoresArray.length && i < 5; i++) {
-			String[] currentScore = scoresArray[i].split(":");
-			highScoresMap.put(Long.parseLong(currentScore[1]), currentScore[0]);
+		if (scoresFile.exists()) {
+			String scores = scoresFile.readString();
+			
+			highScoresMap = new TreeMap<Long, String>();
+			
+			String[] scoresArray = scores.split(System.getProperty("line.separator"));
+			
+			for (int i = 0; i < scoresArray.length && i < 5; i++) {
+				String[] currentScore = scoresArray[i].split(":");
+				highScoresMap.put(Long.parseLong(currentScore[1]), currentScore[0]);
+			}
+		} else {
+			System.out.println("No scores exist.");
 		}
 	}
 		
@@ -174,6 +177,9 @@ public class Configuration {
 	
 	public static void addScore(String name, long score) {
 		long inverseScore = score * -1;
+		while (highScoresMap.containsKey(inverseScore)) {
+			inverseScore += 1;
+		}
 		highScoresMap.put(new Long(inverseScore), name);
 		writeLocalHighScores();
 	}

@@ -49,6 +49,7 @@ public class MultiplayerLobby implements Screen {
 	public void show() {
 		ArcadeSystem.addPlayerToLobby();
 		ArcadeSystem.initializeLobbyMatchList();
+		ArcadeSystem.setMultiplayerEnabled(true);
 		matches  = ArcadeSystem.requestLobbyGamesList();
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
@@ -231,7 +232,6 @@ public class MultiplayerLobby implements Screen {
             public void changed (ChangeEvent event, Actor actor) {
 			
 			dispose();
-			ArcadeSystem.setMatchMaking2(true);
 			arcadeUI.setScreen(arcadeUI.getMultigame2());
 			
 			//Code below commented out for overlay
@@ -393,13 +393,6 @@ public class MultiplayerLobby implements Screen {
 	public void resume() {
 		// TODO Auto-generated method stub
 
-	}
-	
-	private void createMatch() {
-		CreateMatchRequest request = new CreateMatchRequest();
-    	request.gameId = "pong";
-    	request.playerID = arcadeUI.getPlayer().getID();
-    	arcadeUI.getNetworkClient().sendNetworkObject(request);
 	}
 
 	public void joinGame(int matchId) {

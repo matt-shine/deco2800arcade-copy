@@ -4,6 +4,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -154,9 +155,12 @@ public class Lobby {
 	 */
 	public void sendGamesToLobbyUsers() {
 		if (connectedPlayers.size() > 0 && lobbyGames.size() > 0) {
-			for (int i=0;i<connectedPlayers.size();i++) {
-				ClearListRequest clr = new ClearListRequest();
-				connectedPlayers.get(i).sendTCP(clr);
+				Iterator it = connectedPlayers.entrySet().iterator();
+				while (it.hasNext()) {
+					Map.Entry<Integer, Connection> pairs = (Entry<Integer, Connection>)it.next();
+					ClearListRequest clr = new ClearListRequest();
+					pairs.getValue().sendTCP(clr);
+
 				for (int j=0;j<lobbyGames.size();j++) {
 					/* Create the ActiveMatchDetails object to send */
 					ActiveMatchDetails amd = new ActiveMatchDetails();
@@ -165,7 +169,7 @@ public class Lobby {
 					amd.matchId = lobbyGames.get(j).getMatchId();
 					
 					/* Send it to the client */
-					connectedPlayers.get(i).sendTCP(amd);
+					pairs.getValue().sendTCP(amd);
 				}
 			}
 		}

@@ -188,9 +188,7 @@ public class MultiGamelist2 implements Screen {
         
         raidenButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Raiden clicked");	
-	
+            	createMatch("Raiden");
             }
         })); 
 		
@@ -211,11 +209,7 @@ public class MultiGamelist2 implements Screen {
         
         snakeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Snakes & Ladders clicked");	
-            	
-				
-				
+            	createMatch("snakeladder");
             }
         })); 
 		
@@ -236,9 +230,7 @@ public class MultiGamelist2 implements Screen {
         
         tictacButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("TicTacToe clicked");	
-	
+            	createMatch("tictactoe");
             }
         })); 
 		
@@ -270,11 +262,7 @@ public class MultiGamelist2 implements Screen {
         
         burnButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Burning Skies clicked");	
-            	
-				
-				
+            	createMatch("burningskies");
             }
         })); 
 		
@@ -295,11 +283,7 @@ public class MultiGamelist2 implements Screen {
         
         checkersButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Checkers clicked");	
-            	
-				
-				
+            	createMatch("Checkers");
             }
         })); 
 		
@@ -320,9 +304,7 @@ public class MultiGamelist2 implements Screen {
         
         connect4Button.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Connect4 clicked");	
-
+            	createMatch("Connect4");
             }
         })); 
 		
@@ -354,11 +336,7 @@ public class MultiGamelist2 implements Screen {
         
         pacmanButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Pacman clicked");	
-            	
-				
-				
+            	createMatch("Pacman");
             }
         })); 
 		
@@ -368,22 +346,18 @@ public class MultiGamelist2 implements Screen {
        			deerButton.setSize(bWidth + enlarge,  bHeight + enlarge);
          		deerButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
          		deerButton.setText(null);
-         		deerButton.setText("Deer Jungle");
+         		deerButton.setText("Deer Forest");
             }
             public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
             	deerButton.setSize(bWidth, bHeight);
                 deerButton.setPosition(bX3, bY);
                 deerButton.setText(null);
-     			deerButton.setText("Deer Jungle");
+     			deerButton.setText("Deer Forest");
             }}));   
         
         deerButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Deer Jungle clicked");	
-            	
-				
-				
+            	createMatch("deerforest");
             }
         })); 
 		
@@ -404,11 +378,7 @@ public class MultiGamelist2 implements Screen {
         
         jungleButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Jungle Jump clicked");	
-            	
-				
-				
+            	createMatch("junglejump");
             }
         })); 
 		
@@ -441,11 +411,7 @@ public class MultiGamelist2 implements Screen {
         
         mixmazeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Mixmaze clicked");	
-            	
-				
-				
+            	createMatch("Mixmaze");
             }
         })); 
 		
@@ -517,10 +483,7 @@ public class MultiGamelist2 implements Screen {
 	    
 		pongButton2.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
-		    	//ArcadeSystem.login("pong");
-		    	//bclicked = true;
-		    	System.out.println("Pong clicked");
-				createPongMatch();
+		    	createMatch("pong");
 		    }
 		})); 
         
@@ -541,9 +504,7 @@ public class MultiGamelist2 implements Screen {
         
 	    towerButton2.addListener((new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	//ArcadeSystem.login("Tower Defence");
-	        	//bclicked = true;
-	        	System.out.println("Tower Defence clicked");
+	        	createMatch("towerdefence");
 	        }
 	    })); 
 	    
@@ -565,12 +526,7 @@ public class MultiGamelist2 implements Screen {
         
         chessButton2.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Chess clicked");	
-	
-				createChessMatch();
-				System.out.println("Chess Match Created.");
-				
+            	createMatch("chess");
             }
         })); 
 		
@@ -601,11 +557,7 @@ public class MultiGamelist2 implements Screen {
         
         raidenButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Raiden clicked");	
-            	
-				
-				
+            	createMatch("Raiden");
             }
         })); 
 		
@@ -626,11 +578,7 @@ public class MultiGamelist2 implements Screen {
         
         snakeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Snakes & Ladders clicked");	
-            	
-				
-				
+            	createMatch("snakeladder");
             }
         })); 
 		
@@ -651,11 +599,7 @@ public class MultiGamelist2 implements Screen {
         
         tictacButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("TicTacToe clicked");	
-            	
-				
-				
+            	createMatch("tictactoe");
             }
         })); 
 		
@@ -687,8 +631,7 @@ public class MultiGamelist2 implements Screen {
         
         pacmanButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Pacman clicked");	
+            	createMatch("Pacman");
             	
 				
 				
@@ -701,22 +644,18 @@ public class MultiGamelist2 implements Screen {
        			deerButton.setSize(bWidth + enlarge,  bHeight + enlarge);
          		deerButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
          		deerButton.setText(null);
-         		deerButton.setText("Deer Jungle");
+         		deerButton.setText("Deer Forest");
             }
             public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
             	deerButton.setSize(bWidth, bHeight);
                 deerButton.setPosition(bX3, bY);
                 deerButton.setText(null);
-     			deerButton.setText("Deer Jungle");
+     			deerButton.setText("Deer Forest");
             }}));   
         
         deerButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Deer Jungle clicked");	
-            	
-				
-				
+            	createMatch("deerforest");	
             }
         })); 
 		
@@ -737,11 +676,7 @@ public class MultiGamelist2 implements Screen {
         
         jungleButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Jungle Jump clicked");	
-            	
-				
-				
+            	createMatch("junglejump");	
             }
         })); 
 		
@@ -772,11 +707,7 @@ public class MultiGamelist2 implements Screen {
         
         burnButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Burning Skies clicked");	
-            	
-				
-				
+            	createMatch("burningskies");	
             }
         })); 
 		
@@ -797,8 +728,7 @@ public class MultiGamelist2 implements Screen {
         
         checkersButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Checkers clicked");	
+            	createMatch("Checkers");
             	
 				
 				
@@ -822,8 +752,7 @@ public class MultiGamelist2 implements Screen {
         
         connect4Button.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Connect4 clicked");	
+            	createMatch("Connect4");	
             	
 				
 				
@@ -847,11 +776,7 @@ public class MultiGamelist2 implements Screen {
 		// Return to lobby event listener
 		 button3.addListener(new ChangeListener() {
             public void changed (ChangeEvent event, Actor actor) {
-            	
-				ArcadeSystem.setMatchMaking2(false);
-				ArcadeSystem.setMultiplayerEnabled(true);
 				arcadeUI.setScreen(arcadeUI.getLobby());
-		
             }
         });
 		
@@ -877,10 +802,8 @@ public class MultiGamelist2 implements Screen {
 	    
 		pongButton.addListener((new ChangeListener() {
 		    public void changed (ChangeEvent event, Actor actor) {
-		    	//ArcadeSystem.login("pong");
-		    	//bclicked = true;
-		    	System.out.println("Pong clicked");
-				createPongMatch();
+		    	createMatch("Pong");
+
 		    }
 		})); 
         
@@ -901,9 +824,7 @@ public class MultiGamelist2 implements Screen {
         
 	    towerButton.addListener((new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	//ArcadeSystem.login("Tower Defence");
-	        	//bclicked = true;
-	        	System.out.println("Tower Defence clicked");
+	        	createMatch("towerdefence");
 	        }
 	    })); 
 	    
@@ -925,12 +846,7 @@ public class MultiGamelist2 implements Screen {
         
         chessButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Chess clicked");	
-            	
-				createChessMatch();
-				System.out.println("Chess Match Created.");
-				
+            	createMatch("chess");
             }
         })); 
 		
@@ -942,6 +858,19 @@ public class MultiGamelist2 implements Screen {
 	
 		
     }
+    
+    private void createMatch(String gameId) {
+		CreateMatchRequest request = new CreateMatchRequest();
+    	request.gameId = gameId;
+    	request.playerID = arcadeUI.getPlayer().getID();
+    	arcadeUI.getNetworkClient().sendNetworkObject(request);
+    	arcadeUI.setScreen(arcadeUI.getLobby());
+    	ArcadeSystem.setGameWaiting(true);
+		arcadeUI.setScreen(arcadeUI.getWait());
+    	ArcadeSystem.goToGame(gameId);
+    	
+	}
+	
 
         
     
@@ -1001,12 +930,6 @@ public class MultiGamelist2 implements Screen {
 	public void resize(int arg0, int arg1) {
 	}
 	
-	private void createChessMatch() {
-		CreateMatchRequest request = new CreateMatchRequest();
-    	request.gameId = "chess";
-    	request.playerID = arcadeUI.getPlayer().getID();
-    	arcadeUI.getNetworkClient().sendNetworkObject(request);
-	}
 	
 	private void createPongMatch() {
 		CreateMatchRequest request = new CreateMatchRequest();

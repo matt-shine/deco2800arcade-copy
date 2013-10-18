@@ -1,0 +1,55 @@
+body {
+	height: 100%;
+}
+
+.content {
+	height: 100%;
+}
+
+body > header .logo {
+    margin-top: 8px;
+    margin-right: 8px;
+    max-height: 30px;
+}
+
+body > footer img {
+    height: 18px;
+    position: relative;
+    top: 5px;
+    left: 2px;
+}
+
+/*
+div.img.avatar {
+    height: 46px;
+    width: 46px;
+    float: left;
+    margin: 1%;
+}
+*/
+
+td {
+	vertical-align: middle;
+}
+
+.game-icon {
+	width: 30%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.game-content {
+	width: 65%;
+	margin-left: 4%;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+img.achievement-icon {
+	width: 32px;
+	height: 32px;
+}
+
+.achievement-icon-holder {
+	width: 32px;
+}

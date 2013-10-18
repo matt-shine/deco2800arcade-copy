@@ -3,7 +3,6 @@ package deco2800.arcade.burningskies.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,11 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 
 import deco2800.arcade.burningskies.BurningSkies;
 import deco2800.arcade.client.ArcadeInputMux;
@@ -30,7 +26,6 @@ public class HelpScreen implements Screen {
     private Skin skin;
     private SpriteBatch batch;
     private TextButton backButton;
-    private Label label;
     private Image background;	
 	private MenuInputProcessor processor;
     private Image controls;
@@ -115,18 +110,9 @@ public class HelpScreen implements Screen {
                     game.setScreen(game.menuScreen);
             }
 	    });
-	    
-	    LabelStyle ls = new LabelStyle(white, Color.WHITE);
-	    label = new Label("Help", ls);
-	    label.setX(0);
-	    label.setY((float)(height*0.95));
-	    label.setWidth(width);
-	    label.setAlignment(Align.center);
-	    
-	    
+	      
 	    stage.addActor(background);
 	    stage.addActor(controls);
-	    stage.addActor(label);
 	    stage.addActor(backButton);
 	    background.toBack();
 	}

@@ -59,6 +59,18 @@ public class HighscoreClient {
 			throw new NullPointerException("Game_ID and client can't be null");
 		}
 	}
+	
+	/**
+	 * THIS IS FOR TESTING ONLY
+	 */
+	public HighscoreClient(String user, String game) {
+			this.Username = user;
+			this.Game_ID = game;
+			this.client = null;
+
+			//Init the score list that is used for sending scores
+			scoreQueue = new LinkedList<String>();
+	}
 
 	/**
 	 * Creates a new HighscoreClient object without a user. This is only used 

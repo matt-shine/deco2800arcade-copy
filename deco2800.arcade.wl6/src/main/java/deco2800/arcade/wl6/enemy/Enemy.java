@@ -30,6 +30,7 @@ public class Enemy extends Mob {
     // current state
     private STATES state = STATES.NO_STATE;
     // State tick
+    private float stateTime;
     private float tick;
     private STATES nextState;
     //
@@ -59,7 +60,8 @@ public class Enemy extends Mob {
     public Enemy(int uid) {
         super(uid);
         tick = 0;
-
+        stateTime = 0;
+        nextState = null;
     }
 
     @Override
@@ -76,9 +78,14 @@ public class Enemy extends Mob {
         super.tick(gameModel);
 
         tick += gameModel.delta();
-        if (tick > 1 && nextState != null) {
+        stateTime += gameModel.delta();
+        if (stateTime > 1 && nextState != null) {
             setState(nextState);
             nextState = null;
+        }
+
+        if (tick > 0.5 && state == STATES.PATH && path != null && path.size() != 0) {
+            path();
         }
 
         detectPlayer(gameModel);
@@ -86,12 +93,8 @@ public class Enemy extends Mob {
             attackPlayer(gameModel);
         }
 
-        if (state == STATES.PATH && path != null && path.size() != 0) {
-            path();
-        }
-
         if (this.getHealth() <= 0) {
-            changeStates(STATES.DIE, 0);
+            setState(STATES.DIE);
             gameModel.destroyDoodad(this);
         }
     }
@@ -108,19 +111,13 @@ public class Enemy extends Mob {
         this.pathing = pathing;
     }
 
-    public void setState(STATES state) {
-        this.state = state;
-    }
-
     /**
      * Tells the enemy to change states
-     * @param State state to change the enemy to
-     * @param delay time taken to change states
-     *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
+     * @param state state to change the enemy to
      */
-    public void changeStates(STATES State, int delay) {
-
-        setState(State);
+    public void setState(STATES state) {
+        this.state = state;
+        stateTime = 0;
     }
 
     // follow patrol path
@@ -148,6 +145,7 @@ public class Enemy extends Mob {
     	pathGoal++;
     	pathGoal = pathGoal % path.size();
     	setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
+        tick = 0;
 		
     }
 
@@ -155,7 +153,6 @@ public class Enemy extends Mob {
     public void detectPlayer(GameModel gameModel) {
         if (canSee(gameModel.getPlayer(), gameModel)) {
             nextState = STATES.ATTACK;
-            tick = 0;
         }
     }
 
@@ -181,9 +178,9 @@ public class Enemy extends Mob {
             d = d * 2;
         }
         if (isPain()) {
-            changeStates(STATES.PAIN, 0);
+            setState(STATES.PAIN);
             setHealth(getHealth() - d);
-            changeStates(STATES.CHASE, 0);
+            setState(STATES.CHASE);
         }
         else {
             setHealth(getHealth() - d);

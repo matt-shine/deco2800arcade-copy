@@ -87,7 +87,7 @@ public class GameOverScreen implements Screen {
         processor = new MenuInputProcessor(game);
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
-    	playerNameInput = new TextField("Enter your name", skin);
+    	playerNameInput = new TextField(game.getPlayerName(), skin);
     	playerNameInput.setWidth(200);
     	playerNameInput.setHeight(50);
     	playerNameInput.setX((width/2) - playerNameInput.getWidth());

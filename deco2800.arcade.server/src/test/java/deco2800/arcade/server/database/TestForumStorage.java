@@ -51,10 +51,10 @@ public class TestForumStorage {
 		tester.setDataSet(ds);
 		tester.onSetup();
 		this.forumStorage.resetTables();
-		this.forumStorage.insertParentThread("Test topic 1", "Test content this is.", 1, "General Admin", "tag1#tag2");
-		this.forumStorage.insertParentThread("Test topic 2", "Test content this is.", 1, "General Admin", "tag3#tag4");
-		this.forumStorage.insertParentThread("Test topic 3", "Test content this is.", 2, "General Admin", "tag3#tag5");
-		this.forumStorage.insertParentThread("Test topic 4", "Test content this is.", 3, "General Admin", "tag6#tag7");
+		this.forumStorage.insertParentThread("Test topic 1", "Test content this is.", 1, "General_Discussion", "tag1#tag2");
+		this.forumStorage.insertParentThread("Test topic 2", "Test content this is.", 1, "General_Discussion", "tag3#tag4");
+		this.forumStorage.insertParentThread("Test topic 3", "Test content this is.", 2, "Tutorial", "tag3#tag5");
+		this.forumStorage.insertParentThread("Test topic 4", "Test content this is.", 3, "Others", "tag6#tag7");
 		this.forumStorage.insertChildThread("This is child thread 1.", 1, 1);
 		this.forumStorage.insertChildThread("This is child thread 2.", 1, 1);
 		this.forumStorage.insertChildThread("This is child thread 3.", 2, 1);
@@ -113,10 +113,10 @@ public class TestForumStorage {
 	
 	@Test 
 	public void updateParentThreadTest() throws Exception {
-		this.forumStorage.updateParentThread(1, "This is new topic", "", "Game Bug", "");
+		this.forumStorage.updateParentThread(1, "This is new topic", "", "Report_Bug", "");
 		assertEquals("This is new topic", this.forumStorage.getParentThread(1).getTopic());
 		assertEquals("Test content this is.", this.forumStorage.getParentThread(1).getMessage());
-		assertEquals("Game Bug", this.forumStorage.getParentThread(1).getCategory());
+		assertEquals("Report_Bug", this.forumStorage.getParentThread(1).getCategory());
 	}
 	
 	/* Child thread-related test cases */

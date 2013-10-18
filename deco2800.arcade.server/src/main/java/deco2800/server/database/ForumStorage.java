@@ -37,7 +37,7 @@ import deco2800.arcade.model.forum.ParentThread;
 public class ForumStorage {
 	/* Fields */
 	private boolean initialized = false;
-	private String[] category = {"General Admin", "Game Bug", "New Game Idea", "News", "Others"};
+	private String[] category = {"General_Discussion", "Report_Bug", "Tutorial", "Others"};
 	private static final String TAG_SPLITTER = "#";
 	private int uid;
 	
@@ -86,19 +86,21 @@ public class ForumStorage {
 			ResultSet rs = con.getMetaData().getTables(null, null, "PARENT_THREAD", null);
 			if (!rs.next()) {
 				st.execute(createParentThreadTable);
+				st.execute("ALTER TABLE parent_thread DROP CONSTRAINT CHK_CATEGORY");
 				st.execute(this.getCategoryConstraint());
-				this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "General Admin", "Test#Parent thread");
 			}
 			rs.close();
 			rs = con.getMetaData().getTables(null, null, "CHILD_THREAD", null);
 			if (!rs.next()) {
 				st.execute(createChildThreadTable);
 				st.execute(addFkPThread);
-				this.insertChildThread("Very first child thread.", 1, 1);
 			}
+			this.resetTables();
 			rs.close();
 			con.commit();
 			st.close();
+			this.insertParentThread("Test parent thread", "Very fist parent thread", 1, "Others", "Test#Parent thread");
+			this.insertChildThread("Very first child thread.", 1, 1);
 			this.initialized = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -165,7 +167,7 @@ public class ForumStorage {
 	 * Do not call this function unless special reasons. You may want to use resetTables() instead.
 	 * Drop all tables of Forum Storage.
 	 */
-	public void dropAllTables() throws DatabaseException {
+	public static void dropAllTables() throws DatabaseException {
 		String update1 = "DROP TABLE parent_thread";
 		String update2 = "DROP TABLE child_thread";
 		Connection con = Database.getConnection();
@@ -184,7 +186,6 @@ public class ForumStorage {
 			rs.close();
 			con.commit();
 			st.close();
-			this.initialized = false;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {
@@ -192,7 +193,6 @@ public class ForumStorage {
 			} catch (SQLException er) {
 				throw new DatabaseException("Fail to rollback: ", er);
 			} 
-			this.initialized = false;
 			throw new DatabaseException("Fail to create table: " + e);
 		} finally {
 			try {
@@ -1275,7 +1275,7 @@ public class ForumStorage {
 	
 	/* Private methods */
 	private String getCategoryConstraint() {
-		String result = "ALTER TABLE parent_thread ADD CHECK (category IN (";
+		String result = "ALTER TABLE parent_thread ADD CONSTRAINT chk_category CHECK (category IN (";
 		for (int i = 0; i < this.category.length; i++) {
 			result += "'" + this.category[i] + "'";
 			if (i != this.category.length-1) {

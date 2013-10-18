@@ -42,7 +42,7 @@ public class Player extends Mob {
     @Override
     public void tick(GameModel model) {
     	
-        
+        //detect the end of a level
         Vector2 blockPos = getBlockPos();
         int neighbours = 0;
         if (model.getMap().getTerrainAt((int) blockPos.x + 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
@@ -62,7 +62,16 @@ public class Player extends Mob {
         }
         
         if (neighbours >= 3) {
-        	model.nextLevel();
+        	//if we're standing on a secret elevator, go to secret floor, also if we're if this
+        	//magic position (10, 51) because the secret elevator isn't in the map file on the first level
+        	//for god knows why. It looks like the real wolfenstein game hard codes this too.
+        	if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y) == WL6Meta.SECRET_ELEVATOR ||
+        			(model.getChapter().equals("1") && ((int) blockPos.x) == 10 && ((int) blockPos.y) == 51)) {
+        		model.secretLevel();
+        	} else {
+        		model.nextLevel();
+        	}
+        	
         }
         
         

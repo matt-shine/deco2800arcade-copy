@@ -22,6 +22,7 @@ public class GameModel {
     // The name of the current level
     private String currentLevel = "nothing";
     private String nextLevel = null;
+    private String levelAfterSecret = null;
 
     // The player
     private Player player = null;
@@ -58,7 +59,9 @@ public class GameModel {
      * @param level
      */
     public void goToLevel(String level) {
-        //create the map
+        //create the new level
+        doodads.clear();
+
         if (!currentLevel.equals(level)) {
             currentMap = new Level(loadFile("wl6maps/" + level + ".json"));
         }
@@ -66,10 +69,9 @@ public class GameModel {
         currentLevel = level;
         nextLevel = null;
         
-        for (Doodad d : doodads) {
-        	this.destroyDoodad(d);
-        }
+
         waypoints = new WL6Meta.DIRS[64][64];
+        collisionGrid = new CollisionGrid();
         
         MapProcessor.processEverything(this);
 
@@ -214,6 +216,7 @@ public class GameModel {
         for (Doodad d : toDelete) {
             doodads.remove(d);
         }
+        toDelete.clear();
     }
 
     /**
@@ -260,7 +263,7 @@ public class GameModel {
 	 * if current level = 1-7 : current level++
 	 * if current level = 8 : current level = b
 	 * if current level = b : chapter++, current level = 1
-	 * if current level = s : current level = 2
+	 * if current level = s : current level = levelAfterSecret
 	 */
 	public void nextLevel() {
 		if (getLevelInChapter().equals("b")) {
@@ -270,7 +273,11 @@ public class GameModel {
 				nextLevel = "e" + (Integer.parseInt(getChapter()) + 1) + "l1";
 			}
 		} else if (getLevelInChapter().equals("s")) {
-			nextLevel = "e" + getChapter() + "l2";
+			if (levelAfterSecret != null) {
+				nextLevel = levelAfterSecret;
+			} else {
+				nextLevel = "e" + getChapter() + "l1";
+			}
 		} else if (getLevelInChapter().equals("8")) {
 			nextLevel = "e" + getChapter() + "boss";
 		} else {
@@ -283,6 +290,8 @@ public class GameModel {
 	 * go to the secret level
 	 */
 	public void secretLevel() {
+		nextLevel();
+		levelAfterSecret = nextLevel;
 		nextLevel = "e" + (Integer.parseInt(getChapter())) + "secret";
 	}
 

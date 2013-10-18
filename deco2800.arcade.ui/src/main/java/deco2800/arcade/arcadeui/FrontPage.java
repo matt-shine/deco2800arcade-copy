@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;*/
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -38,7 +39,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 
 
-import deco2800.arcade.arcadeui.store.GameStore;
+import deco2800.arcade.arcadeui.store.StoreHome;
 import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -55,7 +56,6 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Game.InternalGame;
-
 @ArcadeGame(id="frontpage")
 public class FrontPage implements Screen {
 	
@@ -178,7 +178,6 @@ public class FrontPage implements Screen {
 //        final Table topBox = new Table();
         final Table bottomBox = new Table();
         
-     
         
         //set bottom bar properties
         bottomBox.setSize(1279, 30);
@@ -316,7 +315,7 @@ public class FrontPage implements Screen {
         
 	    libraryButton.addListener((new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	arcadeUI.setScreen(arcadeUI.home);
+	        	ArcadeSystem.goToGame("gamelibrary");
 	        }
 	    })); 
 	    
@@ -338,8 +337,7 @@ public class FrontPage implements Screen {
         
         storeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	arcadeUI.setScreen(new GameStore());
-            	GameStore.setName(pName);
+            	arcadeUI.setScreen(arcadeUI.store);
             }
         })); 
         

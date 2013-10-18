@@ -4,6 +4,5 @@ public class LobbyMessageRequest extends LobbyRequest {
 
 	public String message;
 	public int playerID;
-	
 
 }

@@ -85,31 +85,30 @@ public class Arcade extends JFrame {
 	@SuppressWarnings("unused")
 	private static PackageClient packClient;
 
-    private static boolean multiplayerEnabled;
-    
-    private static boolean playerBetting;
-    
-    private static boolean matchMaking;
-	
+	private static boolean multiplayerEnabled;
+
+	private static boolean playerBetting;
+
+	private static boolean matchMaking;
+
 	private static boolean matchMaking2;
-	
+
 	private static boolean gameWaiting;
 
 	private static boolean bettingLobby;
-    
-    private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
 
-    // Width and height of the Arcade window
-    private static final int ARCADE_WIDTH = 1280;
-    private static final int ARCADE_HEIGHT = 720;
-    private static final int MIN_ARCADE_WIDTH = 640;
-    private static final int MIN_ARCADE_HEIGHT = 480;
+	private static ArrayList<ActiveMatchDetails> matches = new ArrayList<ActiveMatchDetails>();
 
-    // Server will communicate over these ports
-    private static final int TCP_PORT = 54555;
-    private static final int UDP_PORT = 54777;
-    private static final int FILE_TCP_PORT = 54666;
+	// Width and height of the Arcade window
+	private static final int ARCADE_WIDTH = 1280;
+	private static final int ARCADE_HEIGHT = 720;
+	private static final int MIN_ARCADE_WIDTH = 640;
+	private static final int MIN_ARCADE_HEIGHT = 480;
 
+	// Server will communicate over these ports
+	private static final int TCP_PORT = 54555;
+	private static final int UDP_PORT = 54777;
+	private static final int FILE_TCP_PORT = 54666;
 
 	/**
 	 * ENTRY POINT
@@ -208,8 +207,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Attempt to initiate a connection with the server.
 	 * 
-	 * @throws ArcadeException
-	 *             if the connection failed.
+	 * @throws ArcadeException: if the connection failed.
 	 */
 	public void connectToServer() throws ArcadeException {
 		try {
@@ -231,8 +229,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Attempt to initiate a connection with the file server.
 	 * 
-	 * @throws ArcadeException
-	 *             if the connection failed.
+	 * @throws ArcadeException: if the connection failed.
 	 */
 	public void connectToFileServer() throws ArcadeException {
 		try {
@@ -325,9 +322,10 @@ public class Arcade extends JFrame {
 
 		// TODO FIX THIS!! - Causing Errors when logging in see
 		// https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
-		/*boolean[] privacy = { false, false, false, false, false, false, false,
-				false };
-		this.player = new Player(0, username, "", privacy);*/
+		/*
+		 * boolean[] privacy = { false, false, false, false, false, false,
+		 * false, false }; this.player = new Player(0, username, "", privacy);
+		 */
 
 		// This method has been removed from the deprecated Player(...); Waiting
 		// for new Player(...) method to be created.
@@ -350,32 +348,31 @@ public class Arcade extends JFrame {
 
 		}
 
-        // This is how you fetch game JARs
-        //fetchGameJar("pong", "1.0");
+		// This is how you fetch game JARs
+		// fetchGameJar("pong", "1.0");
 
-        System.out.println("[CLIENT] GameUpdateCheckResponse received: " + resp.md5);
+		System.out.println("[CLIENT] GameUpdateCheckResponse received: "
+				+ resp.md5);
 	}
-	
 
-    /**
-     * Fetch the JAR for a given game/version from the server
-     *
-     * A thread is spawned to fetch the game
-     * @param gameID
-     * @param version
-     */
-    public void fetchGameJar(String gameID, String version) {
-        FileClient fc = new FileClient(gameID, version, fileClient);
-        Thread t = new Thread(fc);
-        t.start();
-    }
-
+	/**
+	 * Fetch the JAR for a given game/version from the server
+	 * 
+	 * A thread is spawned to fetch the game
+	 * 
+	 * @param gameID
+	 * @param version
+	 */
+	public void fetchGameJar(String gameID, String version) {
+		FileClient fc = new FileClient(gameID, version, fileClient);
+		Thread t = new Thread(fc);
+		t.start();
+	}
 
 	/**
 	 * Ask the server to play a given game.
 	 * 
-	 * @param gameClient
-	 *            the type of game to play
+	 * @param gameClient: the type of game to play
 	 */
 	public void requestGameSession(GameClient gameClient) {
 		NewGameRequest newGameRequest = new NewGameRequest();
@@ -413,19 +410,22 @@ public class Arcade extends JFrame {
 		proxy.setTarget(new DummyApplicationListener());
 	}
 
-    
-    /**
-     * Whether the arcade is currently being used for a multiplayer game
-     * @return True if the arcade is being used for a multiplayer game
-     */
-    public boolean isMultiplayerEnabled() {
+	/**
+	 * Whether the arcade is currently being used for a multiplayer game
+	 * 
+	 * @return True if the arcade is being used for a multiplayer game
+	 */
+	public boolean isMultiplayerEnabled() {
 		return multiplayerEnabled;
 	}
-    
-    /**
-     * Sets the variable defining whether the arcade is being used for multiplayer games
-     * @param multiplayerEnabled Whether or not the arcade is being used for multiplayer
-     */
+
+	/**
+	 * Sets the variable defining whether the arcade is being used for
+	 * multiplayer games
+	 * 
+	 * @param multiplayerEnabled:
+	 *            Whether or not the arcade is being used for multiplayer
+	 */
 	public void setMultiplayerEnabled(boolean multiplayerEnabled) {
 		Arcade.multiplayerEnabled = multiplayerEnabled;
 	}
@@ -536,8 +536,8 @@ public class Arcade extends JFrame {
 	/**
 	 * Get a GameClient Instance of a game
 	 * 
-	 * @param id
-	 *            Game id
+	 * @param id: Game id
+	 * 
 	 * @return GameClient
 	 */
 	public GameClient getInstanceOfGame(String id) {
@@ -592,8 +592,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Adds a lobby match to the clients list of matches.
 	 * 
-	 * @param response
-	 *            - The match to add.
+	 * @param response: The match to add.
 	 */
 	public static void addToMatchList(ActiveMatchDetails response) {
 		matches.add(response);
@@ -609,8 +608,7 @@ public class Arcade extends JFrame {
 	/**
 	 * Removes a match from the client's list of lobby matches.
 	 * 
-	 * @param response
-	 *            - The match to remove.
+	 * @param response: The match to remove.
 	 */
 	public static void removeFromMatchList(RemovedMatchDetails response) {
 		if (matches.contains(response)) {
@@ -627,9 +625,9 @@ public class Arcade extends JFrame {
 		return matches;
 	}
 
-	
 	/**
 	 * Forwards on a request for a new Multiplayer game to the client
+	 * 
 	 * @param request
 	 */
 	public void createMultiplayerGame(NewMultiGameRequest request) {
@@ -690,98 +688,104 @@ public class Arcade extends JFrame {
 	public void setPlayerBetting(boolean playerBetting) {
 		Arcade.playerBetting = playerBetting;
 	}
-	
+
 	/**
 	 * Whether the client is currently involved in a matchmaking game
+	 * 
 	 * @return True if the client is in a matchmaking game
 	 */
 	public boolean isMatchMaking() {
 		return matchMaking;
 	}
-	
+
 	/**
 	 * Sets whether the client is involved in a matchmaking game
-	 * @param matchMaking True if the game is matchmaking, false otherwise
+	 * 
+	 * @param matchMaking:
+	 *            True if the game is matchmaking, false otherwise
 	 */
 	public void setMatchMaking(boolean matchMaking) {
 		Arcade.matchMaking = matchMaking;
 	}
-	
+
 	/**
 	 * Returns whether the game is paused waiting for a multiplayer opponent
+	 * 
 	 * @return True if the game is paused, false otherwise
 	 */
 	public boolean isGameWaiting() {
 		return gameWaiting;
 	}
-	
+
 	/**
 	 * Sets whether the game should be waiting for an opponent
-	 * @param gameWaiting Whether or not to wait for opponent
+	 * 
+	 * @param gameWaiting:
+	 *            Whether or not to wait for opponent
 	 */
 	public void setGameWaiting(boolean gameWaiting) {
 		Arcade.gameWaiting = gameWaiting;
 	}
-	
+
 	public boolean isMatchMaking2() {
 		return matchMaking2;
 	}
-	
+
 	public void setMatchMaking2(boolean matchMaking2) {
 		Arcade.matchMaking2 = matchMaking2;
 	}
 
-	
-    /**
-     * Set selected game client
-     * @param gameClient GameClient
-     */
-    public void setGame(GameClient gameClient) {
-        selectedGame = gameClient;
-    }
+	/**
+	 * Set selected game client
+	 * 
+	 * @param gameClient: GameClient
+	 */
+	public void setGame(GameClient gameClient) {
+		selectedGame = gameClient;
+	}
 
-    /**
-     * Return all playable games
-     * @return Set of Playable Games
-     */
-    public Set<GameClient> findPlayableGames() {
-        Map<String, Class<? extends GameClient>> games = getGameMap();
+	/**
+	 * Return all playable games
+	 * 
+	 * @return Set of Playable Games
+	 */
+	public Set<GameClient> findPlayableGames() {
+		Map<String, Class<? extends GameClient>> games = getGameMap();
 
-        Set<GameClient> gameSet = new HashSet<GameClient>();
+		Set<GameClient> gameSet = new HashSet<GameClient>();
 
-        Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games.entrySet().iterator();
+		Iterator<Map.Entry<String, Class<? extends GameClient>>> it = games
+				.entrySet().iterator();
 
-        while (it.hasNext()) {
-            Map.Entry<String, Class<? extends GameClient>> pair = it.next();
-            if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
-                it.remove();
-            } else {
-                GameClient gameClient = getInstanceOfGame(pair.getKey());
-                if (gameClient != null) {
-                    gameSet.add(gameClient);
-                }
+		while (it.hasNext()) {
+			Map.Entry<String, Class<? extends GameClient>> pair = it.next();
+			if (pair.getValue().isAnnotationPresent(InternalGame.class)) {
+				it.remove();
+			} else {
+				GameClient gameClient = getInstanceOfGame(pair.getKey());
+				if (gameClient != null) {
+					gameSet.add(gameClient);
+				}
 
-            }
+			}
 
-        }
-        return gameSet;
-    }
-    
-   
+		}
+		return gameSet;
+	}
 
-    /**
-     * Send a request for a list of games to the server
-     */
-    public void requestGames() {
-        GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
-        client.sendNetworkObject(gameLibraryRequest);
-    }
+	/**
+	 * Send a request for a list of games to the server
+	 */
+	public void requestGames() {
+		GameLibraryRequest gameLibraryRequest = new GameLibraryRequest();
+		client.sendNetworkObject(gameLibraryRequest);
+	}
 
 	public void setBettingLobby(boolean b) {
 		Arcade.bettingLobby = b;
-		
+
 	}
-	
+
 	public boolean isBettingLobby() {
 		return bettingLobby;
 	}

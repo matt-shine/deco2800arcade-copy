@@ -16,23 +16,25 @@ import deco2800.arcade.model.forum.ParentThread;
 
 /**
  * This models the server storage for a forum into Java derby's DB 
- * with JDBC driver.
+ * with JDBC driver. <br>
  * Forum consists of parent_thread and child_thread tables, and 
  * child_thread's p_thread attribute references parent_thread's pid.
  * <p>
  * Features:
  * <ul>
- * <li>PreparedStatement for all query and update command.</li>
- * <li>One commit algorithm for every functions (methods). I.e. if a function
- * has multiple update commands (i.e. change DB states), it commits the change 
- * manually.</li>
- * <li>Forum uses the user information from PlayerStorage.</li>
+ * 	<li>PreparedStatement for all query and update command.</li>
+ * 	<li>One commit algorithm for every functions (methods). I.e. if a function
+ * 	has multiple update commands (i.e. change DB states), it commits the change 
+ * 	manually.</li>
+ * 	<li>Forum uses the user information from PlayerStorage.</li>
+ * 	<li>Most query results are ordered by PK on descending. So, threads 
+ * 	are retrieved from latest to oldest (i.e. high id to low id).</li>
  * </ul>
  * 
  * @author Junya, Team Forum
  * @see java.sql
- * @see deco2800.arcade.model.forum
- * @see deco2800.arcade.protocol.forum
+ * @see deco2800.arcade.model.forum.*
+ * @see deco2800.arcade.protocol.forum.*
  */
 public class ForumStorage {
 	/* Fields */
@@ -45,6 +47,8 @@ public class ForumStorage {
 	 * setMaxPid() in initialise().
 	 */
  	private int maxPid;
+ 	/* Similar to maxPid */
+ 	private int maxCid;
 	
 	/**
 	 * Return initialized flag
@@ -130,6 +134,7 @@ public class ForumStorage {
 		}
 		this.uid = 0;
 		this.setMaxPid();
+		this.setMaxCid();
 	}
 	
 	/* Utilities */
@@ -209,6 +214,72 @@ public class ForumStorage {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new DatabaseException("Fail to close DB connectoin: " + e);
+			}
+		}
+	}
+	
+	/**
+	 * Set this.maxPid which will be used for SQL queries. It is useful for when 
+	 * retrieving threads from highest to lowest (ORDER BY pid DESC).
+	 * This should be called in initialize().
+	 * 
+	 * @throws DatabaseException	if SQLException or fail to set maxPid.
+	 */
+	public void setMaxPid() throws DatabaseException {
+		Connection con = Database.getConnection();
+		this.maxPid = 0;
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT MAX(pid) AS maxpid FROM parent_thread");
+			if (rs.next()) {
+				this.maxPid = rs.getInt("maxpid");
+				rs.close();
+				st.close();
+				//System.out.println("MaxPid: " + this.maxPid);
+			} else {
+				throw new DatabaseException("Fail to set this.maxPid");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to retrieve maxPid, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Set this.maxCid based on child_thread table. Similar to setMaxPid().
+	 * 
+	 * @throws DatabaseException	if SQLException
+	 */
+	public void setMaxCid() throws DatabaseException {
+		Connection con = Database.getConnection();
+		this.maxCid = 0;
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery("SELECT MAX(cid) AS maxcid FROM child_thread");
+			if (rs.next()) {
+				this.maxCid = rs.getInt("maxcid");
+				rs.close();
+				st.close();
+				//System.out.println("MaxCid: " + this.maxCid);
+			} else {
+				throw new DatabaseException("Fail to set this.maxCid");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to retrieve maxCid, " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close connection, " + e.getMessage());
 			}
 		}
 	}
@@ -326,7 +397,7 @@ public class ForumStorage {
 	 * @throws DatabaseException	if SQLException.
 	 */
 	public ParentThread[] getTaggedParentThreads(String tag) throws DatabaseException {
-		String query = "SELECT * FROM parent_thread";
+		String query = "SELECT * FROM parent_thread ORDER BY pid DESC";
 		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
 		Connection con = Database.getConnection();
 		if (tag == "") {
@@ -372,7 +443,7 @@ public class ForumStorage {
 	 * @throws DatabaseException	if invalid parameter and SQLException.
 	 */
 	public ParentThread[] getTaggedParentThreads(String tag, int userId) throws DatabaseException {
-		String query = "SELECT * FROM parent_thread WHERE created_by = ?";
+		String query = "SELECT * FROM parent_thread WHERE created_by = ? ORDER BY pid DESC";
 		ArrayList<ParentThread> result = new ArrayList<ParentThread>();
 		Connection con = Database.getConnection();
 		if (tag == "") {
@@ -721,36 +792,44 @@ public class ForumStorage {
 	}
 	
 	/**
-	 * Return array of ParentThreads with specifying id range and having a specific parent thread. 
-	 * See param specification for how to set the id range. All params must be non-negative.
+	 * Return array of ChildThreads with specifying id range and having a specific parent thread. 
+	 * See param specification for how to set the id range. All params must be non-negative.<br>
+	 * The results will be ordered by cid descending.
 	 * Overload method exists.
-	 * Query to be executed =	SELECT * FROM parent_thread
-	 * 							WHERE [pid <= start [AND end <= pid]]
+	 * <p>
+	 * Query to be executed =	SELECT * FROM child_thread
+	 * 							WHERE p_thread = pid AND cid >= start [AND end >= cid]
+	 * 							ORDER BY cid DESC
 	 * 							[FETCH FIRST limit ROWS ONLY]
 	 * 
 	 * @param pid	int, id of referencing parent thread
-	 * @param start	int, starting cid to be retrieved. If 0, from first record.
+	 * @param start	int, starting cid to be retrieved. If 0, from last record.
 	 * @param end	int, ending cid to be retrieved. If 0, no end.
 	 * @param limit	int, number of records (child threads) to retrieve.
 	 * @return	Array of ChildThread instances.
 	 * @throws DatabaseException	if SQLException or invalid parameter.
 	 */
 	public ChildThread[] getChildThreads(int pid, int start, int end, int limit) throws DatabaseException {
-		String query1 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? <= cid AND cid <= ?";
-		String query2 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? <= cid";
+		String query1 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? >= cid AND cid >= ?";
+		String query2 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? >= cid";
+		String queryAddOn = " ORDER BY cid DESC";
 		String query;
 		ArrayList<ChildThread> result = new ArrayList<ChildThread>();
 		
-		if (pid < 0 || start < 0 || end < 0 || start > end || limit < 0) {
+		if (pid < 0 || start < 0 || end < 0 || limit < 0) {
 			throw new DatabaseException("Invalid parameters.");
 		}
 		
 		Connection con = Database.getConnection();
+		if (start == 0) {
+			start = this.maxCid;
+		}
 		if (end == 0) {
 			query = query2;
 		} else {
 			query = query1;
 		}
+		query += queryAddOn;
 		if (limit != 0) {
 			query += " FETCH FIRST " + String.valueOf(limit) + " ROWS ONLY";
 		}
@@ -791,37 +870,46 @@ public class ForumStorage {
 	}
 	
 	/**
-	 * Return array of ParentThreads with specifying id range and having a specific parent thread and user id. 
-	 * See param specification for how to set the id range. All params must be non-negative.
+	 * Return array of ChildThreads with specifying id range and having a specific parent thread 
+	 * that are made by a specific user. 
+	 * See param specification for how to set the id range. All params must be non-negative.<br>
+	 * The results will be ordered by cid descending.
 	 * Overload method exists.
-	 * Query to be executed =	SELECT * FROM parent_thread
-	 * 							WHERE [pid <= start [AND end <= pid]] AND created_by = userId
+	 * <p>
+	 * Query to be executed =	SELECT * FROM child_thread
+	 * 							WHERE p_thread = pid AND cid >= start [AND end >= cid] AND created_by = ?
+	 * 							ORDER BY cid DESC
 	 * 							[FETCH FIRST limit ROWS ONLY]
 	 * 
 	 * @param pid	int, id of referencing parent thread
-	 * @param start	int, starting cid to be retrieved. If 0, from first record.
+	 * @param start	int, starting cid to be retrieved. If 0, from last record.
 	 * @param end	int, ending cid to be retrieved. If 0, no end.
 	 * @param limit	int, number of records (child threads) to retrieve.
-	 * @param userId	int, user id who creates thrreads.
+	 * @param usderId	int, id of a user who created threads.
 	 * @return	Array of ChildThread instances.
 	 * @throws DatabaseException	if SQLException or invalid parameter.
 	 */
 	public ChildThread[] getChildThreads(int pid, int start, int end, int limit, int userId) throws DatabaseException {
-		String query1 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? <= cid AND cid <= ? AND created_by = ?";
-		String query2 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? <= cid AND created_by = ?";
+		String query1 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? >= cid AND cid >= ? AND created_by = ?";
+		String query2 = "SELECT * FROM child_thread WHERE p_thread = ? AND ? >= cid AND created_by = ?";
+		String queryAddOn = " ORDER BY cid DESC";
 		String query;
 		ArrayList<ChildThread> result = new ArrayList<ChildThread>();
 		
-		if (pid < 0 || start < 0 || end < 0 || start > end || limit < 0 || userId < 0) {
+		if (pid < 0 || start < 0 || end < 0 || limit < 0 || userId < 0) {
 			throw new DatabaseException("Invalid parameters.");
 		}
 		
 		Connection con = Database.getConnection();
+		if (start == 0) {
+			start = this.maxCid;
+		}
 		if (end == 0) {
 			query = query2;
 		} else {
 			query = query1;
 		}
+		query += queryAddOn;
 		if (limit != 0) {
 			query += " FETCH FIRST " + String.valueOf(limit) + " ROWS ONLY";
 		}
@@ -1169,6 +1257,7 @@ public class ForumStorage {
 		
 	}
 	
+	
 	/**
 	 * Update child thread record having a specific cid.
 	 * 
@@ -1201,6 +1290,7 @@ public class ForumStorage {
 		}
 		return;
 	}
+	
 	
 	/**
 	 * Delete parent thread of given pid.
@@ -1236,6 +1326,7 @@ public class ForumStorage {
 		}
 	}
 	
+	
 	/**
 	 * Insert a new child thread. pThread(id of parent thread) must be one of existing parent threads.
 	 * 
@@ -1259,6 +1350,7 @@ public class ForumStorage {
 			st.setInt(4, pThread);
 			st.executeUpdate();
 			st.close();
+			this.maxCid++;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException("Fail to insert new child_thread, " + e.getMessage());
@@ -1271,6 +1363,7 @@ public class ForumStorage {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Delete child thread having a specific id.
@@ -1299,6 +1392,7 @@ public class ForumStorage {
 		}
 	}
 	
+	
 	/**
 	 * Delete all threads having a specific user id.
 	 * 
@@ -1325,6 +1419,7 @@ public class ForumStorage {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Increase/decrease like value of threads. 
@@ -1375,40 +1470,6 @@ public class ForumStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseException(e.getMessage());
-		} finally {
-			try {
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new DatabaseException("Fail to close connection, " + e.getMessage());
-			}
-		}
-	}
-	
-	/**
-	 * Set this.maxPid which will be used for SQL queries. It is useful for when 
-	 * retrieving threads from highest to lowest (ORDER BY pid DESC).
-	 * This should be called in initialize().
-	 * 
-	 * @throws DatabaseException	if SQLException or fail to set maxPid.
-	 */
-	public void setMaxPid() throws DatabaseException {
-		Connection con = Database.getConnection();
-		this.maxPid = 0;
-		try {
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery("SELECT MAX(pid) AS total FROM parent_thread");
-			if (rs.next()) {
-				this.maxPid = rs.getInt("total");
-				rs.close();
-				st.close();
-				//System.out.println("MaxPid: " + this.maxPid);
-			} else {
-				throw new DatabaseException("Fail to set this.maxPid");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Fail to retrieve maxPid, " + e.getMessage());
 		} finally {
 			try {
 				con.close();
@@ -1483,6 +1544,12 @@ public class ForumStorage {
 			}
 		}
 	}
+	
+	/**
+	 * Print all threads into standard output. Useful for debug.
+	 * 
+	 * @throws DatabaseException
+	 */
 	
 	public void printAllThreads() throws DatabaseException {
 		System.out.println("Print all threads: ");

@@ -97,8 +97,8 @@ public class TestForumStorage {
 	@Test
 	public void getTaggedParentThreadsTest() throws Exception {
 		ParentThread[] result = this.forumStorage.getTaggedParentThreads("tag3");
-		assertEquals(2, result[0].getId());
-		assertEquals(3, result[1].getId());
+		assertEquals(3, result[0].getId());
+		assertEquals(2, result[1].getId());
 		result = this.forumStorage.getTaggedParentThreads("tag3", 1);
 		for (ParentThread thread : result) {
 			assertEquals(1, thread.getCreatedBy().getId());
@@ -131,9 +131,9 @@ public class TestForumStorage {
 	
 	@Test
 	public void getChildThreadTest2() throws Exception {
-		ChildThread[] threads = this.forumStorage.getChildThreads(1, 1, 4, 3);
+		ChildThread[] threads = this.forumStorage.getChildThreads(1, 4, 1, 3);
 		assertEquals(threads.length, 3);
-		assertEquals(threads[0].getMessage(), "This is child thread 1.");
+		assertEquals(threads[0].getMessage(), "This is child thread 4.");
 		threads = this.forumStorage.getChildThreads(1, 1);
 		for (ChildThread thread : threads) {
 			assertEquals(1, thread.getCreatedBy().getId());

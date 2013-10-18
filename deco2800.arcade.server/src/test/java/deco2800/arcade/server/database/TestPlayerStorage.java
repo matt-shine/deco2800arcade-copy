@@ -73,7 +73,7 @@ public class TestPlayerStorage {
 		databaseTester.onTearDown();
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Get a player's data from the database.
 	 */
@@ -94,7 +94,7 @@ public class TestPlayerStorage {
 		}
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Tests updating a player's username.
 	 */
@@ -103,7 +103,7 @@ public class TestPlayerStorage {
 		assertEquals("xXxMLGx420x1337x5n1pZ0rxXx", playerStorage.getPlayerData(1).get(1));
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Tests updating a player's name.
 	 */
@@ -112,7 +112,7 @@ public class TestPlayerStorage {
 		assertEquals("Saul Goodman", playerStorage.getPlayerData(1).get(2));
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Tests updating a player's email address.
 	 */
@@ -121,7 +121,7 @@ public class TestPlayerStorage {
 		assertEquals("cod4pro4life@hotmail.com", playerStorage.getPlayerData(1).get(3));
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Tests updating a player's program.
 	 */
@@ -130,7 +130,7 @@ public class TestPlayerStorage {
 		assertEquals("LLB", playerStorage.getPlayerData(1).get(4));
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Tests updating a player's bio.
 	 */
@@ -139,7 +139,7 @@ public class TestPlayerStorage {
 		assertEquals("Better call Saul! Also Huell's head looks hilarious.", playerStorage.getPlayerData(1).get(5));
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Tests updating a player's age.
 	 */
@@ -148,7 +148,7 @@ public class TestPlayerStorage {
 		assertEquals("9001", playerStorage.getPlayerData(1).get(6));
 	}
 	
-	@Test
+	//@Test
 	/**
 	 * Tests adding a player and then retrieving their results.
 	 */

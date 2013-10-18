@@ -124,7 +124,7 @@ public class Platform {
 			this.height = 50;
 			break;
 		default:
-			platformType = "branch_short";
+			platformType = "branch";
 			break;
 		}
 		
@@ -244,7 +244,7 @@ public class Platform {
 		if(this.platType == 'x') {
 			junglejump.killMonkey();
 		}
-		this.active = true;
+		//this.active = true;
 	}
 	
 	/**

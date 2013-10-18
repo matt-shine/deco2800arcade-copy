@@ -210,10 +210,6 @@ public class FrontPage implements Screen {
            
             }
             public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-            	/*recentButton.setSize(bWidth, bHeight);
-				recentButton.setPosition(bX, bY);	
-            	recentButton.setPosition(recentButton.getX() + (enlarge/2), recentButton.getY() + (enlarge/2));*/
-            	
             	//get original position and shrink
             	float cSizeX = recentButton.getWidth();
            		float cSizeY = recentButton.getHeight();

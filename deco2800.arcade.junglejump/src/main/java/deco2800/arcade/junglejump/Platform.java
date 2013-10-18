@@ -2,6 +2,8 @@
 package deco2800.arcade.junglejump;
 
 import java.io.File;
+import java.net.URL;
+
 import com.badlogic.gdx.*;
 
 import javax.sound.sampled.AudioInputStream;
@@ -151,7 +153,7 @@ public class Platform {
 			// World 3 texture
 			break;
 		} */
-		platText = new Texture("junglejumpassets/world" + (junglejump.world + 1) + "/" + platformType + ".png");
+		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + "/" + platformType + ".png"));
 		return this.platText;
 	}
 	
@@ -218,8 +220,13 @@ public class Platform {
 	public void setActive() {
 		if(this.platType == '^') {
 			// Play banana sound
+			URL path = this.getClass().getResource("/");
 			try{ 
-				File file = new File("junglejumpassets/pickup.wav");
+				String resource = path.toString().replace(".arcade/build/classes/main/", 
+						".arcade.junglejump/src/main/").replace("file:", "") + 
+						"resources/pickup.wav";
+				System.out.println(resource);
+				File file = new File(resource);
 				FileHandle fileh = new FileHandle(file);
 				AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 				Clip clip = AudioSystem.getClip();

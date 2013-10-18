@@ -240,11 +240,11 @@ public class Platform {
 		}
 		if(this.platType == 'j') {
 			junglejump.monkeyY += 50;
-			this.active = true;
 		}
 		if(this.platType == 'x') {
 			junglejump.killMonkey();
 		}
+		this.active = true;
 	}
 	
 	/**

@@ -1,6 +1,5 @@
 package deco2800.server.listener;
 
-
 import java.util.Map;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -34,7 +33,7 @@ public class MultiplayerListener extends Listener {
 
 		if (object instanceof NewMultiGameRequest) {
 			NewMultiGameRequest multiRequest = (NewMultiGameRequest) object;
-			
+
 			MultiGameRequestType requestType = multiRequest.requestType;
 
 			switch (requestType) {
@@ -47,28 +46,26 @@ public class MultiplayerListener extends Listener {
 				connection.sendTCP(response);
 				break;
 			case JOIN:
-				//TODO: 2+ player games
+				// TODO: 2+ player games
 				handleJoinMultiRequest();
 				break;
 			case MATCHMAKING:
 				matchmakerQueue.checkForGame(multiRequest, connection);
 			default:
 				break;
-			}	
+			}
 		} else if (object instanceof GameStateUpdateRequest) {
-			//Sends update to server to broadcast
+			// Sends update to server to broadcast
 			GameStateUpdateRequest request = (GameStateUpdateRequest) object;
-			Map<Integer, MultiplayerServer> activeServers = matchmakerQueue.getServerList();
+			Map<Integer, MultiplayerServer> activeServers = matchmakerQueue
+					.getServerList();
 			MultiplayerServer server = activeServers.get(request.gameSession);
 			server.stateUpdate(request);
 		}
 	}
 
-
 	private void handleJoinMultiRequest() {
 		System.out.println("JOIN GAME REQUEST HERE");
 	}
-
-
 
 }

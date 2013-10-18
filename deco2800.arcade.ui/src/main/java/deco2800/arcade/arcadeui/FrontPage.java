@@ -299,6 +299,19 @@ public class FrontPage implements Screen {
 	        }
 	    })); 
 	    
+	    /* Lobby button */
+	    final TextButton lobbyButton = new TextButton("Multiplayer Lobby", skin, "magenta");
+	    lobbyButton.setSize(210, 50);
+	    lobbyButton.setPosition(800, 580);
+
+	    stage.addActor(lobbyButton);
+	    lobbyButton.addListener((new ChangeListener() {
+	    public void changed(ChangeEvent event, Actor actor) {
+	    	arcadeUI.setScreen(arcadeUI.lobby);
+	    }
+	    }));
+	    /* End Lobby button */
+	    
         
         storeButton.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	

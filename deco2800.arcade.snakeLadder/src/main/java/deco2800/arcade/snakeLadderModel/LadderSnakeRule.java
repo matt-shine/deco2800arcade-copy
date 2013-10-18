@@ -21,16 +21,6 @@ public class LadderSnakeRule implements Rule {
 	    //set this velocity to player's velocity
 	    context.gamePlayers[playerNum].setVelocity(velocity);
 	    context.gameState = new MovingState();
-
-	    //if player reaches the ladder and get a short cut
-		if(rule.startsWith("L"))
-		{
-			//check if the player is local player instead of AI
-			if (!context.gamePlayers[playerNum].isAI()) {
-				//add one achievement to reachLadder achievement
-		    	context.incrementAchievement("snakeLadder.reachLadder");
-		    }
-		}
 	}
 
 }

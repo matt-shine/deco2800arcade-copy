@@ -2,50 +2,26 @@ package deco2800.arcade.arcadeui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
-import deco2800.arcade.protocol.lobby.CreateMatchRequest;
-import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
-import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
-import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 
 import java.util.*;
 
-import com.badlogic.gdx.Input.Keys;
-
-
-
-import deco2800.*;
 
 public class MultiGamelist implements Screen {
 	
@@ -54,19 +30,15 @@ public class MultiGamelist implements Screen {
     private Skin skin;
     private FrontPageStage stage;
 	
-    private float funds;
-    private int tokens;
     boolean multiplayerEnabled;
     private boolean bclicked;
-	private int scrollcheck;
     
     Texture bg;
     Sprite bgSprite;
     SpriteBatch batch;
 	
-		private ArcadeUI arcadeUI;
+	private ArcadeUI arcadeUI;
 		
-		private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches;
 	/*
 	public MultiGamelist(ArcadeUI ui) {
@@ -194,9 +166,7 @@ public class MultiGamelist implements Screen {
         
         raidenButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Raiden clicked");	
-	
+            	//TODO
             }
         })); 
 		
@@ -217,11 +187,7 @@ public class MultiGamelist implements Screen {
         
         snakeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Snakes & Ladders clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -242,9 +208,7 @@ public class MultiGamelist implements Screen {
         
         tictacButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("TicTacToe clicked");	
-	
+            	//TODO
             }
         })); 
 		
@@ -276,11 +240,7 @@ public class MultiGamelist implements Screen {
         
         burnButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Burning Skies clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -301,11 +261,7 @@ public class MultiGamelist implements Screen {
         
         checkersButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Checkers clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -326,9 +282,7 @@ public class MultiGamelist implements Screen {
         
         connect4Button.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Connect4 clicked");	
-
+            	//TODO
             }
         })); 
 		
@@ -360,11 +314,7 @@ public class MultiGamelist implements Screen {
         
         pacmanButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Pacman clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -385,11 +335,7 @@ public class MultiGamelist implements Screen {
         
         deerButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Deer Jungle clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -410,11 +356,7 @@ public class MultiGamelist implements Screen {
         
         jungleButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Jungle Jump clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -447,11 +389,7 @@ public class MultiGamelist implements Screen {
         
         mixmazeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Mixmaze clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -472,17 +410,12 @@ public class MultiGamelist implements Screen {
         
         landButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Land Invaders clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
 		listtable.add(mixmazeButton).width(300).height(300);
 		listtable.add(landButton).width(300).height(300);
-		//listtable.add(jungleButton).width(300).height(300);
 				
 				}
 				
@@ -505,7 +438,7 @@ public class MultiGamelist implements Screen {
 				
 				listtable.clear();
 				
-	pongButton2.addListener((new ClickListener() {        	
+		pongButton2.addListener((new ClickListener() {        	
             public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
            		pongButton2.setSize(bWidth + enlarge,  bHeight + enlarge);
            		pongButton2.setPosition(bX -(enlarge/2), bY-(enlarge/2));
@@ -551,9 +484,7 @@ public class MultiGamelist implements Screen {
         
 	    towerButton2.addListener((new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	//ArcadeSystem.login("Tower Defence");
-	        	//bclicked = true;
-	        	System.out.println("Tower Defence clicked");
+	        	//TODO
 	        }
 	    })); 
 	    
@@ -575,10 +506,7 @@ public class MultiGamelist implements Screen {
         
         chessButton2.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Chess clicked");	
-	
-				
+            	//TODO
             }
         })); 
 		
@@ -609,11 +537,7 @@ public class MultiGamelist implements Screen {
         
         raidenButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Raiden clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -634,11 +558,7 @@ public class MultiGamelist implements Screen {
         
         snakeButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Snakes & Ladders clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -659,11 +579,7 @@ public class MultiGamelist implements Screen {
         
         tictacButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("TicTacToe clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -695,11 +611,7 @@ public class MultiGamelist implements Screen {
         
         pacmanButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Pacman clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -720,11 +632,7 @@ public class MultiGamelist implements Screen {
         
         deerButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Deer Jungle clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -745,11 +653,7 @@ public class MultiGamelist implements Screen {
         
         jungleButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Jungle Jump clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -780,11 +684,7 @@ public class MultiGamelist implements Screen {
         
         burnButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Burning Skies clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -805,11 +705,7 @@ public class MultiGamelist implements Screen {
         
         checkersButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Checkers clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -830,11 +726,7 @@ public class MultiGamelist implements Screen {
         
         connect4Button.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Connect4 clicked");	
-            	
-				
-				
+            	//TODO
             }
         })); 
 		
@@ -917,9 +809,7 @@ public class MultiGamelist implements Screen {
         
 	    towerButton.addListener((new ChangeListener() {
 	        public void changed (ChangeEvent event, Actor actor) {
-	        	//ArcadeSystem.login("Tower Defence");
-	        	//bclicked = true;
-	        	System.out.println("Tower Defence clicked");
+	        	//TODO
 	        }
 	    })); 
 	    
@@ -941,15 +831,7 @@ public class MultiGamelist implements Screen {
         
         chessButton.addListener((new ChangeListener() {	
             public void changed (ChangeEvent event, Actor actor) {
-            	//ArcadeSystem.login("chess");
-            	System.out.println("Chess clicked");	
-            	//dispose();
-				//arcadeUI.setScreen(arcadeUI.getWait());
-				//dispose();
-		    	//ArcadeSystem.goToGame("junglejump");
-		    	//junglejump.cats();
-		    	//System.out.println("paused");
-				
+            	//TODO
             }
         })); 
 		

@@ -1,4 +1,4 @@
-package deco2800.arcade.communication;
+package deco2800.arcade.model;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ public class ChatNode extends JLabel {
 
 	private List<Integer> participants;
 	private Queue<String> chatHistory;
+	
 
 	/**
 	 * Creates a chat with a list of participants.

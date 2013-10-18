@@ -1,8 +1,15 @@
 package deco2800.arcade.arcadeui.Overlay;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class ChatWindow extends WindowContent {
 
@@ -31,17 +38,44 @@ public class ChatWindow extends WindowContent {
     }
     
     private void generateInterface() {
-    	//skin.add("TextFieldStyle", new Texture("textField.png"));
+    	float width = getWidth();
+    	float height = getHeight();
     	
-        final TextField inputField = new TextField("Input", skin); 
-        final TextField outputField = new TextField("Output", skin);
+        final Label outputField = new Label("", skin, "chat"); 
+        final TextField inputField = new TextField("", skin);
+        final TextButton send = new TextButton("Send", skin);
+        final ScrollPane scroll = new ScrollPane(outputField);
         
-        inputField.setSize(this.getWidth() - 220, 50);
-        inputField.setPosition(110, 75);
+        scroll.setSize(width - 120, height - 180);
+        scroll.setPosition(60, 120);
+        
+        outputField.setFillParent(true);
+        outputField.setWrap(true);
+        outputField.setAlignment(Align.bottom | Align.left);
+        
+        this.addActor(scroll);
+        
+        inputField.setSize(width - 120, 47);
+        inputField.setPosition(60, 60);
+        inputField.setCursorPosition(10);
+        
         this.addActor(inputField);
         
-        outputField.setSize(this.getWidth() - 220, 250);
-        outputField.setPosition(110, 165);
-        this.addActor(outputField);
+        send.setSize(100, 47);
+        send.setPosition(width - 155, 60);
+        this.addActor(send);
+
+        
+        send.addListener((new ChangeListener() {
+		    public void changed (ChangeEvent event, Actor actor) {
+
+            	String message = inputField.getText();
+            	inputField.setText("");
+            	
+            	CharSequence output = outputField.getText();
+            	outputField.setText(output + "\n" + message);
+		    }
+		}));
+        
     }
 }

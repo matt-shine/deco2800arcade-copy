@@ -1,44 +1,41 @@
 package deco2800.server.database;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
+
+import deco2800.arcade.model.*;
+import deco2800.arcade.protocol.communication.TextMessage;
 
 public class ChatStorage {
 
-	private Map<Integer, HashMap<Integer, List<String>>> chatStorage;
+	private Map<Integer, HashMap<Integer, ChatNode>> chatStorage;
 	
 	public ChatStorage(){
-		this.chatStorage = new HashMap<Integer, HashMap<Integer, List<String>>>();
+		this.chatStorage = new HashMap<Integer, HashMap<Integer, ChatNode>>();
 	}
 		
-	public Map<Integer, List<String>> getChatHistory(int playerID){
+	public HashMap<Integer, ChatNode> getChatHistory(int playerID){
 		return chatStorage.get(playerID);
 	}
 	
-	public void addChatHistory(int playerID, int senderID,  String text){
-		HashMap<Integer, List<String>> chatHistory = new LinkedHashMap<Integer, List<String>>();
-		List<String> chatLines = new ArrayList<String>();
+	public void addChatHistory(TextMessage textMessage, int playerID){
+		HashMap<Integer, ChatNode> chatHistory = new HashMap<Integer, ChatNode>();
+		int nodeID = textMessage.getChatID();
 		
-		//Assume playerID belongs to "Bob"
-		if (chatStorage.get(playerID) == null){ //This means Bob has no chat history saved at all
-			chatLines.add(text);
-			chatHistory.put(senderID, chatLines);	//Start a new ChatHistory for this sender
-			chatStorage.put(playerID, chatHistory);	
-		} else { //Bob has chat history saved for SOMEONE
-			chatHistory = chatStorage.get(playerID);
-			if (chatStorage.get(playerID).get(senderID) == null){ //But it turns out it wasn't for our sender
-				chatLines.add(text);
-				chatHistory.put(senderID, chatLines);	//Start a new ChatHistory for this sender
-				chatStorage.put(playerID, chatHistory);	
-			} else { //Bob already has some chat history with this sender!
-				chatLines = chatStorage.get(playerID).get(senderID); //Get the existing chat history so the new text can be added to it
-				chatLines.add(text);
-				chatHistory.put(senderID, chatLines);
-				chatStorage.put(playerID, chatHistory);
+		if(chatStorage.containsKey(playerID)) {
+			if(chatStorage.get(playerID).containsKey(nodeID)) {
+				ChatNode node = chatStorage.get(playerID).get(nodeID);
+				node.addMessage(textMessage.getText());
+			} else {
+				ChatNode node = new ChatNode(textMessage.getRecipients());
+				node.addMessage(textMessage.getText());
+				chatStorage.get(playerID).put(nodeID, node);
 			}
+		} else {
+			ChatNode node = new ChatNode(textMessage.getRecipients());
+			node.addMessage(textMessage.getText());
+			chatHistory.put(nodeID, node);
+			chatStorage.put(playerID, chatHistory);	
 		}
 	}
 	

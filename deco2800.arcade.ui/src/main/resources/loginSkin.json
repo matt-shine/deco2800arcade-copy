@@ -18,7 +18,8 @@
         error: { font: default, fontColor: red },
 		cgothic: { font: textbox, fontColor: white},
         default-large: { font: default-large, fontColor: white },
-        error: { font: default, fontColor: red }
+        error: { font: default, fontColor: red },
+        chat: { font: textbox, fontColor: white, background: textbox }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }

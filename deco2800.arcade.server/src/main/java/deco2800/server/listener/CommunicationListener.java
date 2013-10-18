@@ -3,9 +3,12 @@ package deco2800.server.listener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+
+import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -32,15 +35,17 @@ public class CommunicationListener extends Listener {
 		super.received(connection, object);
 
 		if (object instanceof CommunicationRequest){
+			
 			CommunicationRequest contact = (CommunicationRequest) object;
 			connectedUsers.put(contact.playerID, connection.getID());
 			userAliases.put(contact.playerID, contact.username);
 			
 			//A user has just logged in, get there chat history and send it to them
-			Map<Integer, List<String>> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
+			Map<Integer, ChatNode> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
+			
 			if (personalChatHistory != null){
 				ChatHistory chatHistory = new ChatHistory();
-				chatHistory.updateChatHistory(personalChatHistory);
+				chatHistory.setChatHistory(personalChatHistory);
 				server.sendToTCP(connectedUsers.get(contact.playerID), chatHistory);
 			}
 		}
@@ -48,20 +53,13 @@ public class CommunicationListener extends Listener {
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
 			textMessage.setSenderUsername(userAliases.get(textMessage.getSenderID()));
-			String chatLine = textMessage.getSenderUsername() + ": " + textMessage.getText();
 
 			//Need a way to get a Player object from somewhere... Or at least the ability to check stuff like IsBlocked from just two playerIDs...
 			//In the mean time, forward the message without checking if blocked:
 			for (int recipientID : textMessage.getRecipients()){
-				if (connectedUsers.get(recipientID) != null){ //Recipient is online
-					if (recipientID != textMessage.getSenderID()){
-						ArcadeServer.instance().getChatStorage().addChatHistory(recipientID, textMessage.getSenderID(), chatLine);
-						ArcadeServer.instance().getChatStorage().addChatHistory(textMessage.getSenderID(), recipientID, chatLine);
-					}
+				ArcadeServer.instance().getChatStorage().addChatHistory(textMessage, recipientID);
+				if(recipientID != textMessage.getSenderID()) {
 					server.sendToTCP(connectedUsers.get(recipientID), textMessage);
-				} else { //Recipient is offline
-					ArcadeServer.instance().getChatStorage().addChatHistory(recipientID, textMessage.getSenderID(), chatLine);
-					ArcadeServer.instance().getChatStorage().addChatHistory(textMessage.getSenderID(), recipientID, chatLine);
 				}
 			}
 			

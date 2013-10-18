@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
@@ -42,10 +43,11 @@ public class CommunicationNetwork {
 	 * @param chatParticipants
 	 */
 	public void createChat(List<Integer> chatParticipants) {
-		ChatNode node = new ChatNode(chatParticipants);
-		chatNodes.put(chatParticipants.hashCode(), node);
-		currentChat = node;
-		//view.addChatNode(node);
+		if(!chatNodes.containsKey(chatParticipants.hashCode())) {
+			ChatNode node = new ChatNode(chatParticipants);
+			chatNodes.put(chatParticipants.hashCode(), node);
+			currentChat = node;
+		}
 	}
 
 	/**
@@ -173,7 +175,7 @@ public class CommunicationNetwork {
 	 * @param receivedHistory
 	 */
 	public void receiveChatHistory(ChatHistory receivedHistory) {
-		chatHistory = receivedHistory;
+		chatNodes = receivedHistory.getChatHistory();
 
 		/*
 		 * TODO If the chat history is with someone who is not in the active
@@ -194,8 +196,4 @@ public class CommunicationNetwork {
 //		}
 	}
 	
-	public List<String> getChatHistory(int playerID) {
-		return chatHistory.getChatHistory(playerID);
-		
-	}
 }

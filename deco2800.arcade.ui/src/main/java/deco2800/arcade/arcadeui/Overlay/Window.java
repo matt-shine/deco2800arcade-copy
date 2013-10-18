@@ -2,6 +2,7 @@ package deco2800.arcade.arcadeui.Overlay;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -27,6 +28,7 @@ public class Window extends Group {
 
         this.overlay = overlay;
         texture = new NinePatch(new Texture(Gdx.files.internal("iconGreen.png")), 100, 100, 100, 100);
+        texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
         contentStage.addActor(contentGroup);
         ArcadeInputMux.getInstance().addProcessor(contentStage);
     }

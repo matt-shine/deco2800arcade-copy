@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import deco2800.arcade.communication.CommunicationView;
+import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationController {

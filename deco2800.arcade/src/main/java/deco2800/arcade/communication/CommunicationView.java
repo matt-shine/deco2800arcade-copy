@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import deco2800.arcade.model.ChatNode;
+
 public class CommunicationView extends JFrame {
 
 	private JScrollPane scrollPane;

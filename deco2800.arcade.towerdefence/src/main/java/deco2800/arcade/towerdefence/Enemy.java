@@ -1,6 +1,5 @@
 package deco2800.arcade.towerdefence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -23,7 +22,8 @@ public class Enemy extends Mobile implements Melee {
 	private GridObject target;
 
 	// Constructor
-	public Enemy(int maxHealth, int armour, int x, int y, double speed, Grid grid) {
+	public Enemy(int maxHealth, int armour, int x, int y, double speed,
+			Grid grid) {
 		super(maxHealth, armour, x, y, speed, grid);
 	}
 
@@ -68,6 +68,7 @@ public class Enemy extends Mobile implements Melee {
 	 * Sets the attacks per second the enemy can make.
 	 * 
 	 * @param ar
+	 *            The new attack rate, in attacks per second
 	 */
 	public void attackRate(float ar) {
 		this.attackRate = ar;
@@ -77,6 +78,7 @@ public class Enemy extends Mobile implements Melee {
 	 * Sets the amount of damage per attack the enemy can do.
 	 * 
 	 * @param dmg
+	 *            The new amount of damage dealt by each attack
 	 */
 	public void damage(int dmg) {
 		this.damage = dmg;
@@ -86,6 +88,7 @@ public class Enemy extends Mobile implements Melee {
 	 * Sets the amount of penetration each enemy's attack has.
 	 * 
 	 * @param pen
+	 *            The armour penetration of each attack
 	 */
 	public void penetration(int pen) {
 		this.penetration = pen;
@@ -95,6 +98,7 @@ public class Enemy extends Mobile implements Melee {
 	 * Sets the current target of the enemy.
 	 * 
 	 * @param target
+	 *            The new object to target
 	 */
 	public void target(GridObject target) {
 		this.target = target;

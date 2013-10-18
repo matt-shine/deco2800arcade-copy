@@ -21,25 +21,41 @@ public class Projectile extends GridObject {
 	private float range;
 
 	// Constructor
-	public Projectile(int x, int y, Grid grid) {
+	/**
+	 * The Projectile constructor.
+	 * 
+	 * @param x
+	 *            The starting x position of the object
+	 * @param y
+	 *            The starting y position of the object
+	 * @param grid
+	 *            The grid the object belongs to
+	 * @param speed
+	 *            The speed and direction of the object in pixels per second,
+	 *            represented as a vector
+	 * @param range
+	 */
+	public Projectile(int x, int y, Grid grid, Vector2 speed, float range) {
 		super(x, y, grid);
+		this.speed = speed;
+		this.range = range;
 	}
 
 	// Getters
 	/**
 	 * Returns the damage the projectile inflicts on collision.
 	 * 
-	 * @return
+	 * @return The damage dealt by the projectile.
 	 */
 	public int damage() {
 		return damage;
 	}
 
 	/**
-	 * Returns the penetration amount on the projectile. The amount of armor
+	 * Returns the penetration amount on the projectile. The amount of armour
 	 * this projectile ignores.
 	 * 
-	 * @return
+	 * @return The armour penetration of the projectile.
 	 */
 	public int penetration() {
 		return penetration;
@@ -50,6 +66,7 @@ public class Projectile extends GridObject {
 	 * Set the damage this projectile inflicts on collision.
 	 * 
 	 * @param damage
+	 *            The new damage dealt by the projectile.
 	 */
 	public void damage(int damage) {
 		this.damage = damage;
@@ -59,12 +76,17 @@ public class Projectile extends GridObject {
 	 * Set the amount of penetration on the projectile.
 	 * 
 	 * @param penetration
+	 *            The new penetration of the projectile.
 	 */
 	public void penetration(int penetration) {
 		this.penetration = penetration;
 	}
 
 	// Methods
+	/**
+	 * Continually move in the given vector until a collision, or the maximum
+	 * range is reached.
+	 */
 	private void move() {
 		// Move at speed in the object's direction until it collides with
 		// something

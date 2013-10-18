@@ -19,8 +19,18 @@ public class Mortal extends GridObject {
 
 	// Constructor
 	/**
-	 * Should only be used for super, don't instantiate a pure mortal, it should
-	 * be an enemy sub-type.
+	 * The constructor for Mortal.
+	 * 
+	 * @param maxHealth
+	 *            The maximum health of the object.
+	 * @param armour
+	 *            The armor of the object.
+	 * @param x
+	 *            The x position of the object, in pixels
+	 * @param y
+	 *            The y position of the object, in pixels
+	 * @param grid
+	 *            The grid the object belongs to
 	 */
 	public Mortal(int maxHealth, int armour, int x, int y, Grid grid) {
 		super(x, y, grid);
@@ -33,7 +43,7 @@ public class Mortal extends GridObject {
 	/**
 	 * Return the maximum health of the mortal, nonnegative.
 	 * 
-	 * @return
+	 * @return The maximum health of the object.
 	 */
 	public int maxHealth() {
 		return maxHealth;
@@ -42,7 +52,7 @@ public class Mortal extends GridObject {
 	/**
 	 * Return the current health of the mortal, nonnegative.
 	 * 
-	 * @return
+	 * @return The current health of the object.
 	 */
 	public int health() {
 		return health;
@@ -51,7 +61,7 @@ public class Mortal extends GridObject {
 	/**
 	 * Return the armour of the mortal, nonnegative.
 	 * 
-	 * @return
+	 * @return The armour of the object.
 	 */
 	public int armour() {
 		return armour;
@@ -59,18 +69,24 @@ public class Mortal extends GridObject {
 
 	// Setters
 	/**
-	 * Sets the maximum health of the Mortal.
+	 * Sets the maximum health of the Mortal. If current health is above this
+	 * value, reduce it.
 	 * 
 	 * @param maxHealth
+	 *            The new maximum health.
 	 */
 	public void maxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
+		if (health > maxHealth) {
+			health = maxHealth;
+		}
 	}
 
 	/**
 	 * Sets the current health of the Mortal.
 	 * 
 	 * @param health
+	 *            The new current health.
 	 */
 	public void health(int health) {
 		this.health = health;
@@ -80,6 +96,7 @@ public class Mortal extends GridObject {
 	 * Sets the armour of the Mortal.
 	 * 
 	 * @param armour
+	 *            The new armour.
 	 */
 	public void armour(int armour) {
 		this.armour = armour;
@@ -90,6 +107,7 @@ public class Mortal extends GridObject {
 	 * Increase the current health, not beyond maxHealth().
 	 * 
 	 * @param amount
+	 *            The amount to be healed.
 	 */
 	public void heal(int amount) {
 		health += amount;
@@ -103,6 +121,7 @@ public class Mortal extends GridObject {
 	 * Decrease the current health, not below 0.
 	 * 
 	 * @param amount
+	 *            The amount of damage dealt
 	 */
 	public void takeDamage(int amount) {
 		int damage = amount - armour;
@@ -121,7 +140,9 @@ public class Mortal extends GridObject {
 	 * Penetration is a direct armour debuff for that attack alone.
 	 * 
 	 * @param amount
+	 *            The amount of damage dealt
 	 * @param penetration
+	 *            The amount of armour ignored by the damage
 	 */
 	public void takeDamage(int amount, int penetration) {
 		int damage = amount;

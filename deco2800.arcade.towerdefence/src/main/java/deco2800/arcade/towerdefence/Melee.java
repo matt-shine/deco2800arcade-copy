@@ -1,6 +1,5 @@
 package deco2800.arcade.towerdefence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -16,34 +15,35 @@ public interface Melee {
 	/**
 	 * Returns the number of attacks per second it is capable of
 	 * 
-	 * @return
+	 * @return The number of attacks per second as a floating point number.
 	 */
 	public float attackRate();
 
 	/**
 	 * Returns the damage of an attack
 	 * 
-	 * @return
+	 * @return The amount of damage dealt with each attack.
 	 */
 	public int damage();
 
 	/**
 	 * Returns the penetration of the attack
 	 * 
-	 * @return
+	 * @return The penetration of each attack
 	 */
 	public int penetration();
 
 	/**
 	 * Returns the target the GridObject is currently focused on.
 	 * 
-	 * @return
+	 * @return The current target.
 	 */
 	public GridObject target();
-	
+
 	/**
 	 * Returns the array of sprites to animate melee attacking.
-	 * @return
+	 * 
+	 * @return The list of sprites for the melee animation.
 	 */
 	public List<Sprite> meleeSprites();
 

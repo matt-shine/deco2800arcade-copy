@@ -1,6 +1,6 @@
 package deco2800.arcade.towerdefence;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -17,7 +17,7 @@ public interface Ranged {
 	 * second, for simplicity's sake this is the same as the attack rate if
 	 * ranged and melee.
 	 * 
-	 * @return
+	 * @return The attack rate of the object in attacks per second.
 	 */
 	public float attackRate();
 
@@ -30,27 +30,28 @@ public interface Ranged {
 	 * Returns the maximum distance a GridObject can be from another GridObject
 	 * in order to fire at it.
 	 * 
-	 * @return
+	 * @return The maximum range of projectiles created by this object.
 	 */
 	public float range();
 
 	/**
 	 * Returns the projectile that the GridObject currently fires.
 	 * 
-	 * @return
+	 * @return The projectile fired by this object.
 	 */
 	public Projectile projectile();
 
 	/**
 	 * Returns the target the GridObject is currently focused on.
 	 * 
-	 * @return
+	 * @return The current target of this object.
 	 */
 	public GridObject target();
-	
+
 	/**
 	 * Returns the array of sprites to animate shooting.
-	 * @return
+	 * 
+	 * @return A list of sprites for the shooting animation.
 	 */
-	public ArrayList<Sprite> shootingSprites();
+	public List<Sprite> shootingSprites();
 }

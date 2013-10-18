@@ -32,9 +32,17 @@ public class Ship {
 	 * keep track of and increment/decrement as the game plays.
 	 */
 
+	// The grid used by this ship
 	private Grid grid;
+	// The GameScreen that is using this ship
 	private GameScreen game;
 
+	/**
+	 * THe constructor for the ship. Sets the game as well as creating the grid.
+	 * 
+	 * @param game
+	 *            The GameScreen which this ship belongs to.
+	 */
 	public Ship(GameScreen game) {
 		this.game = game;
 		this.grid = new Grid(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
@@ -99,6 +107,14 @@ public class Ship {
 	public void setWave(int n) {
 	}
 
+	/**
+	 * Try and place an object in the grid.
+	 * 
+	 * @param object
+	 *            The GridObject to be placed. The placement position is
+	 *            determined by the object's position vector.
+	 * @return A boolean representing whether the placement was successful.
+	 */
 	public boolean placeObject(GridObject object) {
 		return grid.buildObject(object);
 	}

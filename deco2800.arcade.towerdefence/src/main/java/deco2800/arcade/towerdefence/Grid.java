@@ -4,7 +4,6 @@ import deco2800.arcade.towerdefence.pathfinding.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,8 +41,15 @@ public class Grid implements TileBasedMap {
 	 * Instantiates a grid with a unique UUID, length, width and name.
 	 * 
 	 * @param width
+	 *            The width of the grid, in pixels
 	 * @param depth
+	 *            The depth of the grid, in pixels
 	 * @param name
+	 *            The name for this grid, for extensibility
+	 * @param tileSize
+	 *            The size of each grid tile, in pixels
+	 * @param ship
+	 *            The ship which this grid belongs to
 	 */
 	public Grid(int width, int depth, String name, int tileSize, Ship ship) {
 		id = UUID.randomUUID();
@@ -68,7 +74,7 @@ public class Grid implements TileBasedMap {
 	/**
 	 * Returns the max width of the grid
 	 * 
-	 * @return int
+	 * @return int The width of the grid
 	 */
 	public int width() {
 		return this.width;
@@ -77,7 +83,7 @@ public class Grid implements TileBasedMap {
 	/**
 	 * Returns the max depth of the grid
 	 * 
-	 * @return int
+	 * @return int The depth of the grid
 	 */
 	public int depth() {
 		return this.depth;
@@ -86,7 +92,7 @@ public class Grid implements TileBasedMap {
 	/**
 	 * Returns the name of the grid
 	 * 
-	 * @return String
+	 * @return String The name of the grid
 	 */
 	public String name() {
 		return this.name;
@@ -95,10 +101,28 @@ public class Grid implements TileBasedMap {
 	/**
 	 * Returns the unique id of the grid.
 	 * 
-	 * @return UUID
+	 * @return UUID The ID of the grid
 	 */
 	public UUID id() {
 		return this.id;
+	}
+	
+	/**
+	 * Get the width of the grid, in tiles.
+	 * 
+	 * @return The width of the grid in tiles.
+	 */
+	public int getWidthInTiles() {
+		return gridWidth;
+	}
+
+	/**
+	 * Get the height of the grid, in tiles.
+	 * 
+	 * @return The height of the grid in tiles.
+	 */
+	public int getHeightInTiles() {
+		return gridDepth;
 	}
 
 	// Setters
@@ -106,18 +130,22 @@ public class Grid implements TileBasedMap {
 	 * Sets the width of the grid to be drawn as integer a.
 	 * 
 	 * @param a
+	 *            The new width
 	 */
 	public void width(int a) {
 		this.width = a;
+		this.gridWidth = a / tileSize;
 	}
 
 	/**
 	 * Sets the depth of the grid to be drawn as integer a.
 	 * 
 	 * @param a
+	 *            The new depth
 	 */
 	public void depth(int a) {
 		this.depth = a;
+		this.gridDepth = a / tileSize;
 	}
 
 	/**
@@ -125,19 +153,32 @@ public class Grid implements TileBasedMap {
 	 * UUID id.
 	 * 
 	 * @param newName
+	 *            The new name
 	 */
 	public void name(String newName) {
 		this.name = newName;
 	}
-
-	public int getWidthInTiles() {
-		return gridWidth;
+	
+	/**
+	 * Sets the size of the tiles to the given value.
+	 * @param tileSize The new tile size.
+	 */
+	public void tileSize(int tileSize){
+		this.tileSize = tileSize;
+		this.gridWidth = width/tileSize;
+		this.gridDepth = depth/tileSize;
 	}
-
-	public int getHeightInTiles() {
-		return gridDepth;
+	
+	/**
+	 * Get the ship which this grid belongs to.
+	 * 
+	 * @return The ship which this grid belongs to
+	 */
+	public Ship ship() {
+		return ship;
 	}
-
+	
+	//Methods
 	public void pathFinderVisited(int x, int y) {
 		// do nothing - not needed
 
@@ -157,10 +198,6 @@ public class Grid implements TileBasedMap {
 	public float getCost(Mobile mover, int sx, int sy, int tx, int ty) {
 		// Currently no special tiles to consider - always return 1
 		return 1;
-	}
-
-	public Ship ship() {
-		return ship;
 	}
 
 	/**
@@ -193,6 +230,15 @@ public class Grid implements TileBasedMap {
 		return true;
 	}
 
+	/**
+	 * Get the contents of the specified grid location
+	 * 
+	 * @param x
+	 *            The x-coordinate, in tiles
+	 * @param y
+	 *            The y-coordinate, in tiles
+	 * @return A list of objects at that coordinate
+	 */
 	private List<GridObject> getGridContents(int x, int y) {
 		return gridContents.get(x).get(y);
 	}

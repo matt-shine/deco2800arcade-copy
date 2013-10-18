@@ -1,6 +1,5 @@
 package deco2800.arcade.towerdefence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -31,7 +30,24 @@ public abstract class Mobile extends Mortal {
 	private Path path;
 
 	// Constructor
-	public Mobile(int maxHealth, int armour, int x, int y, double speed, Grid grid) {
+	/**
+	 * The Mobile constructor.
+	 * 
+	 * @param maxHealth
+	 *            The maximum health of the object
+	 * @param armour
+	 *            The armour of the object
+	 * @param x
+	 *            The x position of the object, in pixels
+	 * @param y
+	 *            The y position of the object, in pixels
+	 * @param speed
+	 *            The speed of the object, in pixels per second
+	 * @param grid
+	 *            The grid the object belongs to
+	 */
+	public Mobile(int maxHealth, int armour, int x, int y, double speed,
+			Grid grid) {
 		super(maxHealth, armour, x, y, grid);
 		this.speed = speed;
 	}
@@ -40,7 +56,7 @@ public abstract class Mobile extends Mortal {
 	/**
 	 * Returns the GridObject's sprites to animate movement down.
 	 * 
-	 * @return
+	 * @return The sprites used in the downwards moving animation
 	 */
 	public List<Sprite> downMovingSprites() {
 		return downMovingSprites;
@@ -49,7 +65,7 @@ public abstract class Mobile extends Mortal {
 	/**
 	 * Returns the GridObject's sprites to animate movement left.
 	 * 
-	 * @return
+	 * @return The sprites used in the left moving animation
 	 */
 	public List<Sprite> leftMovingSprites() {
 		return leftMovingSprites;
@@ -58,7 +74,7 @@ public abstract class Mobile extends Mortal {
 	/**
 	 * Returns the GridObject's sprites to animate movement up.
 	 * 
-	 * @return
+	 * @return The sprites used in the up moving animation
 	 */
 	public List<Sprite> upMovingSprites() {
 		return upMovingSprites;
@@ -67,16 +83,17 @@ public abstract class Mobile extends Mortal {
 	/**
 	 * Returns the GridObject's sprites to animate movement right.
 	 * 
-	 * @return
+	 * @return The sprites used in the right moving animation
 	 */
 	public List<Sprite> rightMovingSprites() {
 		return rightMovingSprites;
 	}
 
 	/**
-	 * Returns the GridObject's speed in moves per second.
+	 * Returns the GridObject's speed in pixels per second.
 	 * 
-	 * @return
+	 * @return The object's speed in pixels per second, represented by a
+	 *         floating point number.
 	 */
 	public double speed() {
 		return speed;
@@ -87,6 +104,7 @@ public abstract class Mobile extends Mortal {
 	 * Sets the GridObject's sprites to animate movement down.
 	 * 
 	 * @param downMovingSprites
+	 *            The new list of sprites to use for the down moving animation.
 	 */
 	public void downMovingSprites(List<Sprite> downMovingSprites) {
 		this.downMovingSprites = downMovingSprites;
@@ -96,6 +114,7 @@ public abstract class Mobile extends Mortal {
 	 * Sets the GridObject's sprites to animate movement left.
 	 * 
 	 * @param leftMovingSprites
+	 *            The new list of sprites to use for the left moving animation.
 	 */
 	public void leftMovingSprites(List<Sprite> leftMovingSprites) {
 		this.leftMovingSprites = leftMovingSprites;
@@ -105,6 +124,7 @@ public abstract class Mobile extends Mortal {
 	 * Sets the GridObject's sprites to animate movement up.
 	 * 
 	 * @param upMovingSprites
+	 *            The new list of sprites to use for the up moving animation.
 	 */
 	public void rightMovingSprites(List<Sprite> upMovingSprites) {
 		this.upMovingSprites = upMovingSprites;
@@ -114,6 +134,7 @@ public abstract class Mobile extends Mortal {
 	 * Sets the GridObject's sprites to animate movement right.
 	 * 
 	 * @param rightMovingSprites
+	 *            The new list of sprites to use for the right moving animation.
 	 */
 	public void movingSprites(List<Sprite> rightMovingSprites) {
 		this.rightMovingSprites = rightMovingSprites;
@@ -148,6 +169,7 @@ public abstract class Mobile extends Mortal {
 	 * Move the GridObject a number of pixels based on the given vector.
 	 * 
 	 * @param vector
+	 *            The relative position to move to.
 	 */
 	public void move(Vector2 vector) {
 		position.add(vector);
@@ -174,7 +196,7 @@ public abstract class Mobile extends Mortal {
 		// Go into a wait-while loop changing the position 30 times per second
 		int distance = grid.getTileSize();
 		long t0, t1;
-		Vector2 addVector = vector.mul((float)speed / 33);
+		Vector2 addVector = vector.mul((float) speed / 33);
 		for (int i = 0; i < distance; i += addVector.len()) {
 			t0 = System.currentTimeMillis();
 			t1 = t0;

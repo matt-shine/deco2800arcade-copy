@@ -39,15 +39,26 @@ public class GridObject {
 	private Team team;
 
 	// Constructor
-	public GridObject(int x, int y, Grid grid){
+	/**
+	 * The GridObject constructor.
+	 * 
+	 * @param x
+	 *            The x position of the object, in pixels.
+	 * @param y
+	 *            The y position of the object, in pixels.
+	 * @param grid
+	 *            The grid the object belongs to.
+	 */
+	public GridObject(int x, int y, Grid grid) {
 		this.position = new Vector2(x, y);
 		this.grid = grid;
 	}
+
 	// Getters
 	/**
 	 * Returns the grid the object belongs to.
 	 * 
-	 * @return
+	 * @return The grid the object belongs to.
 	 */
 	public Grid grid() {
 		return grid;
@@ -56,7 +67,7 @@ public class GridObject {
 	/**
 	 * Returns the x and y coordinates of the object.
 	 * 
-	 * @return
+	 * @return The position of the object as a 2D vector.
 	 */
 	public Vector2 position() {
 		return position;
@@ -65,7 +76,7 @@ public class GridObject {
 	/**
 	 * Returns whether the object should be drawn to the grid.
 	 * 
-	 * @return
+	 * @return Whether the object is visible.
 	 */
 	public boolean visible() {
 		return visible;
@@ -75,16 +86,16 @@ public class GridObject {
 	 * Returns a list of status effects it can apply to the grid or other
 	 * objects at any time.
 	 * 
-	 * @return
+	 * @return A list of effects belonging to this object.
 	 */
-	public ArrayList<Effect> effects() {
+	public List<Effect> effects() {
 		return effects;
 	}
 
 	/**
 	 * Returns whether the object currently has collision or not.
 	 * 
-	 * @return
+	 * @return Whether the object can collide.
 	 */
 	public boolean physical() {
 		return physical;
@@ -93,7 +104,7 @@ public class GridObject {
 	/**
 	 * All grid objects must have an opaqueness value for drawing.
 	 * 
-	 * @return
+	 * @return The opaqueness of the object, as a percentage.
 	 */
 	public int opaqueness() {
 		return opaqueness;
@@ -103,7 +114,7 @@ public class GridObject {
 	 * Returns the direction the object is facing, for determining sprite to
 	 * use.
 	 * 
-	 * @return
+	 * @return A Direction representing where the object is facing.
 	 */
 	public Direction facing() {
 		return facing;
@@ -112,7 +123,7 @@ public class GridObject {
 	/**
 	 * Returns the ArrayList of sprites for the object.
 	 * 
-	 * @return
+	 * @return A List of sprites for the standing animation.
 	 */
 	public List<Sprite> sprites() {
 		return standingSprites;
@@ -121,7 +132,7 @@ public class GridObject {
 	/**
 	 * Returns the ID of this object.
 	 * 
-	 * @return
+	 * @return The ID of the object, as a UUID.
 	 */
 	public UUID getID() {
 		return id;
@@ -140,7 +151,8 @@ public class GridObject {
 	 * sprites().get(0) would return facing down sprite
 	 * 
 	 * @param facing
-	 * @return
+	 *            The direction to get the sprite for.
+	 * @return The sprite for the given direction.
 	 */
 	public Sprite standingSprite(Direction facing) {
 		return null;
@@ -149,7 +161,7 @@ public class GridObject {
 	/**
 	 * Returns the sprites to display on death.
 	 * 
-	 * @return
+	 * @return A List of sprites for the death animation.
 	 */
 	public List<Sprite> deathSprites() {
 		return deathSprites;
@@ -159,7 +171,7 @@ public class GridObject {
 	 * Return the side the object is affiliated with, for score and avoiding
 	 * friendly-fire.
 	 * 
-	 * @return
+	 * @return A Team representing which side the object belongs to.
 	 */
 	public Team team() {
 		return team;
@@ -170,6 +182,7 @@ public class GridObject {
 	 * Set the grid the object belongs to.
 	 * 
 	 * @param grid
+	 *            The grid the object now belongs to.
 	 */
 	public void grid(Grid grid) {
 		this.grid = grid;
@@ -179,6 +192,7 @@ public class GridObject {
 	 * Set the position the GridObject has on the grid.
 	 * 
 	 * @param vector
+	 *            The new position of the object.
 	 */
 	public void position(Vector2 vector) {
 		this.position = vector;
@@ -188,6 +202,7 @@ public class GridObject {
 	 * Set whether the GridObject is visible on the grid.
 	 * 
 	 * @param visibility
+	 *            THe new visibility state of the object.
 	 */
 	public void visible(Boolean visibility) {
 		this.visible = visibility;
@@ -197,6 +212,7 @@ public class GridObject {
 	 * Set the effects that this GridObject can apply.
 	 * 
 	 * @param effects
+	 *            The new list of effects for the object
 	 */
 	public void effects(ArrayList<Effect> effects) {
 		this.effects = effects;
@@ -206,6 +222,7 @@ public class GridObject {
 	 * Set whether the GridObject has collision or not.
 	 * 
 	 * @param physical
+	 *            The new state of collision for the object
 	 */
 	public void physical(Boolean physical) {
 		this.physical = physical;
@@ -215,6 +232,7 @@ public class GridObject {
 	 * Set the opaqueness value of the GridObject.
 	 * 
 	 * @param opaqueness
+	 *            The new percentage opacity of the object.
 	 */
 	public void opaqueness(int opaqueness) {
 		this.opaqueness = opaqueness;
@@ -224,6 +242,7 @@ public class GridObject {
 	 * Set the facing of the GridObject.
 	 * 
 	 * @param facing
+	 *            The new direction the object is facing.
 	 */
 	public void facing(Direction facing) {
 		this.facing = facing;
@@ -233,6 +252,7 @@ public class GridObject {
 	 * Set the array list of standing sprites this object uses.
 	 * 
 	 * @param standingSprites
+	 *            The new standing sprites for the object
 	 */
 	public void standingSprites(List<Sprite> standingSprites) {
 		this.standingSprites = standingSprites;
@@ -241,7 +261,8 @@ public class GridObject {
 	/**
 	 * Set the array list of death sprites this object uses.
 	 * 
-	 * @param standingSprites
+	 * @param deathSprites
+	 *            The new death sprites for the object.
 	 */
 	public void deathSprites(List<Sprite> deathSprites) {
 		this.deathSprites = deathSprites;
@@ -251,6 +272,7 @@ public class GridObject {
 	 * Set the team this GridObject is on.
 	 * 
 	 * @param team
+	 *            The new team for the object.
 	 */
 	public void team(Team team) {
 		this.team = team;
@@ -284,7 +306,7 @@ public class GridObject {
 	 * Returns whether the number of effects in its effect list is greater than
 	 * 0.
 	 * 
-	 * @return
+	 * @return Whether the object has status effects.
 	 */
 	public boolean canApplyStatusEffects() {
 		if (effects.size() == 0) {
@@ -345,12 +367,12 @@ public class GridObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o.getClass() == GridObject.class && ((GridObject) o).getID() == this.id) {
+		if (o.getClass() == GridObject.class
+				&& ((GridObject) o).getID() == this.id) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	
 }

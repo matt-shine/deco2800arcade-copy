@@ -17,13 +17,16 @@ public class Items extends Entity {
 	 * The Texture of the item
 	 */
 	private Texture texture;
-	
+	/**
+	 * The class type of the entity
+	 */
 	private String classType = "Items";
 	
 	/**
 	 * Name of the item
 	 */
 	private String item;
+	//Item type
 	public enum Type {
 		WEAPON, POWERUP
 	}
@@ -32,19 +35,23 @@ public class Items extends Entity {
 	 * Type of item: Weapon or Power up
 	 */
 	private Type type;
-	
+	/**
+	 * The GameScreen which the item is in
+	 */
 	private GameScreen gameScreen;
 
 	public Items(Vector2 pos, float width, float height, String item, Texture text, GameScreen game) {
 		super(pos, width, height);
 		this.item = item;
 		this.texture = text;
+		this.gameScreen = game;
+		//Checks the item type
 		if (!item.equals("DoublePoints") && !item.equals("ExtraLife") && !item.equals("Invulnerability") && !item.equals("Coin")){
 			this.type = Type.WEAPON;
 		}else{
 			this.type = Type.POWERUP;
 		}
-		this.gameScreen = game;
+		
 		
 	}
 

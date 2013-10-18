@@ -48,21 +48,27 @@ public class Player extends Entity {
 	 * A hashmap list of all the players
 	 */
 	private HashMap<String, Animation> animationList = new HashMap<String, Animation>();
-	private String Weapon;
-	private boolean animLoop;
-    private long attackTime = 0;
+	private String Weapon; //Weapon that the player is wielding
+	private boolean animLoop; //Boolean if the animation loops
+    private long attackTime = 0; //Time when the player last attacked
     private long damageTime = 0; //Time when last hit by a monster.
-    private long cooldownModifier = 0;
-    private long buffTime = 0;
-    private GameScreen gamescreen;
-	
-	// States used to determine how to draw the player
-	private int score = 0;
-	
+    private long cooldownModifier = 0; //Modifies the cooldown of the attacks
+    private long buffTime = 0; //Time when item was picked up
+    private GameScreen gamescreen; //Gamescreen which the player is in
+	private int animalsKilled; //Number of animals killed by the player
+	private int weaponAmmo; //Ammunition for the weapon the player is wielding
+	private long deathTime = 0; //The time when the player is declared as dead
+	private boolean dead; //Boolean of whether the player is dead or not
+	private int score = 0; //The player's score
+	/**
+	 * The class type of the entity
+	 */
 	private String classType = "Player";
 	
-	private int multiplier;
-    private boolean blink = false;
+	private int multiplier; //The score multiplier
+	private boolean invulnerable; //Boolean of whether the player is invulnerable
+	
+    private boolean blink = false;//Boolean of whether they were 
 
     //States used to determine how to draw the player
 	private enum State {
@@ -70,16 +76,11 @@ public class Player extends Entity {
 	}
 
 	private State state = State.RUNNING;
-	private boolean invulnerable;
-
-
+	//Sound files to be loaded
 	private Sound pickup = Gdx.audio.newSound(Gdx.files.internal("powerup.wav"));
 	private Sound death = Gdx.audio.newSound(Gdx.files.internal("death.wav"));
 	private Sound hurt = Gdx.audio.newSound(Gdx.files.internal("hit.wav"));
-	private int animalsKilled;
-	private int weaponAmmo;
-	private long deathTime = 0;
-	private boolean dead;
+	
 	
 	public Player(Vector2 pos, float width, float height, GameScreen game) {
 		super(pos, width, height);
@@ -93,7 +94,9 @@ public class Player extends Entity {
 		dead = false;
 	}
 
-	
+	/**
+	 * Loads all the player animations and stores them in a HashMap
+	 */
 	private void loadAnims(){
 		try{
 			File fXmlfile = Gdx.files.internal("../deco2800.arcade.hunter/src/main/resources/player.xml").file();
@@ -142,34 +145,12 @@ public class Player extends Entity {
 		return new Animation(speed, animFrames);
 	}
 
-	/**
-	 * Returns whether the player is grounded
+	/*
 	 * 
-	 * @return grounded
-	 */
-	public boolean isGrounded() {
-		return collider.bottom;
-	}
-
-	/**
-	 * Sets whether the player is grounded
+	 * Player Methods
 	 * 
-	 * @param grounded
-	 *            Boolean value of whether its grounded
 	 */
-	public void setGrounded(boolean grounded) {
-		this.collider.bottom = grounded;
-	}
-
-	/**
-	 * Gets the jump velocity
-	 * 
-	 * @return float value of the JumpVelocity
-	 */
-	public float getJumpVelocity() {
-		return this.velocity.y;
-	}
-
+	
 	/**
 	 * Makes the player jump
 	 */
@@ -179,26 +160,35 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * Sets the jump velocity
-	 * 
-	 * @param jumpVelocity
-	 *            Float value of what the jump velocity will be set to
+	 * Attack trigger for the player
 	 */
-	public void setJumpVelocity(float jumpVelocity) {
-		this.velocity.y = jumpVelocity;
-	}
-
-	/**
-	 * Returns the Player State
-	 * 
-	 * @return State
-	 */
-	public State getState() {
-		return this.state;
-	}
-
-	public void setWeapon(String s){
-		Weapon = s;
+	public void attack() {
+    	if (attackTime + Config.PLAYER_ATTACK_COOLDOWN - cooldownModifier< System.currentTimeMillis()){
+    		if (this.state != State.ATTACK && this.state != State.DAMAGED) {
+    			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
+    			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+    				attack.play(Hunter.State.getPreferencesManager().getVolume());
+    			}
+        		state = State.ATTACK;
+        		currAnim = attackAnimation();
+        		attackTime = System.currentTimeMillis();
+        		weaponAmmo -= 1;
+        		if (weaponAmmo <= 0){
+        			Weapon = "KnifeandFork";
+        		}
+        		if (Weapon.equals("KnifeandFork")){
+        			attackTime -= 200;
+        			cooldownModifier = 0;
+        		}else if(Weapon.equals("Trident")){
+        			cooldownModifier = 100;
+        		}else if(Weapon.equals("Spear")){
+        			attackTime += 100;
+        			cooldownModifier = -200;
+        		}else if (Weapon.equals("Bow")){
+        			cooldownModifier = 0;
+        		}
+        	}
+        }
 	}
 	
 	@Override
@@ -226,7 +216,35 @@ public class Player extends Entity {
 		setY(getY() + getJumpVelocity());
 		
 		checkDist();
+		checkTimers();
+		       
+		// Update the player state
+		// Pretending the DEAD state doesn't exist for now... TODO
+		if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
+			this.velocity.y = 0;
+			this.state = State.RUNNING;
+			currAnim = runAnimation();
+		} else if (this.velocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
+			this.state = State.JUMPING;
+			currAnim = jumpAnimation();
+		} else if (this.velocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
+			this.state = State.FALLING;
+			currAnim = fallAnimation();
+		}
 		
+		score += 1; 
+	}
+	
+	/*
+	 * 
+	 * Checkers
+	 * 
+	 */
+	
+	/**
+	 * Checks the Timers
+	 */
+	private void checkTimers(){
 		if (attackTime + Config.PLAYER_ATTACK_TIMEOUT > System.currentTimeMillis() && !dead){
 			this.state = State.ATTACK;			
 			currAnim = attackAnimation();
@@ -249,7 +267,6 @@ public class Player extends Entity {
         		gamescreen.gameOver();
         	}
         }
-        
         if (buffTime + 3000 < System.currentTimeMillis()){
         	if (invulnerable = true)
         		invulnerable = false;
@@ -258,24 +275,10 @@ public class Player extends Entity {
         		gamescreen.setMultiplier(1);
         	}
         }
-        
-		// Update the player state
-		// Pretending the DEAD state doesn't exist for now... TODO
-		if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
-			this.velocity.y = 0;
-			this.state = State.RUNNING;
-			currAnim = runAnimation();
-		} else if (this.velocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
-			this.state = State.JUMPING;
-			currAnim = jumpAnimation();
-		} else if (this.velocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
-			this.state = State.FALLING;
-			currAnim = fallAnimation();
-		}
-		
-		score += 1; 
 	}
-	
+	/**
+	 * Checks the distances for achievement purposes
+	 */
 	private void checkDist() {
 		if (this.getCurrentDistance() >= 100){
 			gamescreen.getGameReference().incrementAchievement("hunter.100m");
@@ -295,68 +298,21 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * Returns the current animation
-	 * 
-	 * @return Animation - Current Animation
+	 * Checks if the player has any lives left
 	 */
-	public Animation getAnimation() {
-		return currAnim;
+	private void checkLives() {
+		if(lives <= 0){
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+				death.play(Hunter.State.getPreferencesManager().getVolume());
+			}
+			this.state = State.DEAD;
+			velocity = new Vector2(0,0);
+			deathTime = System.currentTimeMillis();
+			this.currAnim = deathAnimation();
+			dead = true;
+		}
 	}
 
-	/**
-	 * Return the hurt Animation
-	 * 
-	 * @return Animation - Hurt Animation
-	 */
-	public Animation hurtAnimation() {
-		return animationList.get(Weapon + "damage");
-	}
-
-	/**
-	 * Returns the death Animation
-	 * 
-	 * @return Animation - Death animation
-	 */
-	public Animation deathAnimation() {
-		return animationList.get(Weapon + "death");
-	}
-
-	/**
-	 * Returns the attack animation
-	 * 
-	 * @return Animation - Attack Animation
-	 */
-	public Animation attackAnimation() {
-		return animationList.get(Weapon + "attack");
-	}
-
-	/**
-	 * Returns the jump animation
-	 * 
-	 * @return Animation - Jump Animation
-	 */
-	public Animation jumpAnimation() {
-		return animationList.get(Weapon + "jump");
-	}
-
-	public Animation fallAnimation(){
-		return animationList.get(Weapon + "fall");
-	}
-	
-	public Animation damageAnimation(){
-		return animationList.get(Weapon + "damage");
-	}
-	
-	/**
-	 * Returns the run animation
-	 * 
-	 * @return Animation - Run animation
-	 */
-	public Animation runAnimation() {
-		return animationList.get(Weapon + "running");
-	}
-
-	
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
 		if (invulnerable){
@@ -417,7 +373,7 @@ public class Player extends Entity {
 	@Override
 	public void handleCollision(Entity e, EntityCollection entities) {
 		if (e == null) {
-			gameOver();
+			lives = 0;
 		} else if (e.getType().equals("Items")) {
 			System.out.println(((Items) e).getItem());
 			entities.remove(e);
@@ -466,33 +422,7 @@ public class Player extends Entity {
 		}
 	}
 
-	/**
-	 * Checks if the player has any lives left
-	 */
-	private void checkLives() {
-		if(lives <= 0){
-			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
-				death.play(Hunter.State.getPreferencesManager().getVolume());
-			}
-			this.state = State.DEAD;
-			velocity = new Vector2(0,0);
-			deathTime = System.currentTimeMillis();
-			this.currAnim = deathAnimation();
-			dead = true;
-		}
-	}
-
-	public boolean isDead(){
-		return dead;
-	}
 	
-	public void addAnimalKilled(){
-		animalsKilled++;
-	}
-	
-	public void addScore(int score){
-		this.score += score * multiplier;
-	}
 	
 	/**
 	 * Applies the buffs that the player receives
@@ -522,6 +452,26 @@ public class Player extends Entity {
 		}
 	}
 
+	/*
+	 *
+	 * Modifiers
+	 * 
+	 */
+	
+	/**
+	 * Adds an animal to animalsKilled
+	 */
+	public void addAnimalKilled(){
+		animalsKilled++;
+	}
+	
+	/**
+	 * @param score - Integer to be added to the player's score
+	 */
+	public void addScore(int score){
+		this.score += score * multiplier;
+	}
+	
 	/**
 	 * Reduces the players life by 1;
 	 */
@@ -536,12 +486,17 @@ public class Player extends Entity {
 		lives += 1;
 	}
 
-	/**
-	 * Sets if the player is invulnerable;
-	 * @param inv - Boolean of invulnerability
+	/*
+	 * 
+	 * Boolean checking conditions 
+	 * 
 	 */
-	public void setInvulnerability(boolean inv){
-		invulnerable = inv;
+	
+	/**
+	 * @return Boolean of whether the player is dead
+	 */
+	public boolean isDead(){
+		return dead;
 	}
 	
 	/**
@@ -553,12 +508,19 @@ public class Player extends Entity {
 	}
 	
 	/**
-	 * Sets a score multiplier for the player
-	 * @param multi - int of multiplier
+	 * Returns whether the player is grounded
+	 * 
+	 * @return grounded
 	 */
-	public void setMultiplier(int multi){
-		multiplier = multi;
+	public boolean isGrounded() {
+		return collider.bottom;
 	}
+		
+	/*
+	 * 
+	 * The Getters and Setters
+	 * 
+	 */
 	
 	/**
 	 * Returns the multiplier
@@ -600,47 +562,22 @@ public class Player extends Entity {
 		return getX() / Config.TILE_SIZE;
 	}
 	
-	private void gameOver() {
-		System.out.println("Game Over!");
-	}
-
-	public void attack() {
-    	if (attackTime + Config.PLAYER_ATTACK_COOLDOWN - cooldownModifier< System.currentTimeMillis()){
-    		if (this.state != State.ATTACK && this.state != State.DAMAGED) {
-    			Sound attack = Gdx.audio.newSound(Gdx.files.internal("attack.wav"));
-    			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
-    				attack.play(Hunter.State.getPreferencesManager().getVolume());
-    			}
-        		state = State.ATTACK;
-        		currAnim = attackAnimation();
-        		attackTime = System.currentTimeMillis();
-        		weaponAmmo -= 1;
-        		if (weaponAmmo <= 0){
-        			Weapon = "KnifeandFork";
-        		}
-        		if (Weapon.equals("KnifeandFork")){
-        			attackTime -= 200;
-        			cooldownModifier = 0;
-        		}else if(Weapon.equals("Trident")){
-        			cooldownModifier = 100;
-        		}else if(Weapon.equals("Spear")){
-        			attackTime += 100;
-        			cooldownModifier = -200;
-        		}else if (Weapon.equals("Bow")){
-        			cooldownModifier = 0;
-        		}
-        	}
-        }
-	}
-	
+	/**
+	 * @return String - Weapon that is currently used by the player
+	 */
 	public String getWeapon(){
 		return Weapon;
 	}
-	
+	/**
+	 * @return Long - Time of the last attack
+	 */
 	public long getAttackTime(){
 		return attackTime;
 	}
 	
+	/**
+	 * @return Integer of the ammo remaining on the current weapon, if the weapon is default then 0 is returned
+	 */
 	public int getWeaponAmmo(){
 		if (!Weapon.equals("KnifeandFork")){
 			return weaponAmmo;
@@ -654,4 +591,140 @@ public class Player extends Entity {
 		return classType;
 	}
 	
+	/**
+	 * Sets whether the player is grounded
+	 * 
+	 * @param grounded
+	 *            Boolean value of whether its grounded
+	 */
+	public void setGrounded(boolean grounded) {
+		this.collider.bottom = grounded;
+	}
+	
+	/**
+	 * Sets the jump velocity
+	 * 
+	 * @param jumpVelocity
+	 *            Float value of what the jump velocity will be set to
+	 */
+	public void setJumpVelocity(float jumpVelocity) {
+		this.velocity.y = jumpVelocity;
+	}
+	
+	/**
+	 * Sets the weapon
+	 * @param s String
+	 */
+	public void setWeapon(String s){
+		Weapon = s;
+	}
+	
+	/**
+	 * Sets if the player is invulnerable;
+	 * @param inv - Boolean of invulnerability
+	 */
+	public void setInvulnerability(boolean inv){
+		invulnerable = inv;
+	}
+	
+	/**
+	 * Sets a score multiplier for the player
+	 * @param multi - int of multiplier
+	 */
+	public void setMultiplier(int multi){
+		multiplier = multi;
+	}
+	
+	/**
+	 * Gets the jump velocity
+	 * 
+	 * @return float value of the JumpVelocity
+	 */
+	public float getJumpVelocity() {
+		return this.velocity.y;
+	}
+	
+	/**
+	 * Returns the Player State
+	 * 
+	 * @return State
+	 */
+	public State getState() {
+		return this.state;
+	}
+	
+	/**
+	 * Returns the current animation
+	 * 
+	 * @return Animation - Current Animation
+	 */
+	public Animation getAnimation() {
+		return currAnim;
+	}
+	
+	/*
+	 * 
+	 * Animation Loaders
+	 * 
+	 */
+	
+	/**
+	 * Return the hurt Animation
+	 * 
+	 * @return Animation - Hurt Animation
+	 */
+	public Animation hurtAnimation() {
+		return animationList.get(Weapon + "damage");
+	}
+
+	/**
+	 * Returns the death Animation
+	 * 
+	 * @return Animation - Death animation
+	 */
+	public Animation deathAnimation() {
+		return animationList.get(Weapon + "death");
+	}
+
+	/**
+	 * Returns the attack animation
+	 * 
+	 * @return Animation - Attack Animation
+	 */
+	public Animation attackAnimation() {
+		return animationList.get(Weapon + "attack");
+	}
+
+	/**
+	 * Returns the jump animation
+	 * 
+	 * @return Animation - Jump Animation
+	 */
+	public Animation jumpAnimation() {
+		return animationList.get(Weapon + "jump");
+	}
+	
+	/**
+	 * Returns the fall animation
+	 * @return Animation - Fall Animation
+	 */
+	public Animation fallAnimation(){
+		return animationList.get(Weapon + "fall");
+	}
+	/**
+	 * Returns the damage animation
+	 * @return Animation - Damage Animation
+	 */
+	public Animation damageAnimation(){
+		return animationList.get(Weapon + "damage");
+	}
+	
+	/**
+	 * Returns the run animation
+	 * 
+	 * @return Animation - Run animation
+	 */
+	public Animation runAnimation() {
+		return animationList.get(Weapon + "running");
+	}
 }

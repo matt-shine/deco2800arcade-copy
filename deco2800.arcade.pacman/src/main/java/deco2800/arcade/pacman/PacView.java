@@ -27,16 +27,15 @@ public class PacView {
 	
 	
 	// sprite sheet, divided into array of arrays of 8x8 tile images
-	private final TextureRegion[][] tileSprites = TextureRegion.split(
-			new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);
+	private final TextureRegion[][] tileSprites;
 	// Static variables for pulling sprites from pacman sheet
-	private static final int FRAME_COLS = 2;
-	private static final int FRAME_ROWS = 4;
-	private TextureRegion[] pacmanFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+	private static final int MOVER_SPRITE_NUM = 8;
+	private static final int PACMAN_SIDE_PIX = 13;
+	private static final int GHOST_SIDE_PIX = 14;
+	private TextureRegion[] pacmanFrames = new TextureRegion[MOVER_SPRITE_NUM];
 	private TextureRegion currentFrame; // for pacman animation
-	private static final int GHOST_LENGTH = 8;
 	private static final int GHOST_NUM = 4;
-	private TextureRegion[][] ghostFrames = new TextureRegion[GHOST_NUM][GHOST_LENGTH];
+	private TextureRegion[][] ghostFrames = new TextureRegion[GHOST_NUM][MOVER_SPRITE_NUM];
 	
 	private GameMap gameMap;
 	private PacChar player;
@@ -53,14 +52,16 @@ public class PacView {
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
+		//get tile sprites
+			tileSprites = TextureRegion.split(
+				new Texture(Gdx.files.internal("wallsAndPellets.png")), 8, 8);		
 		//grabs file- should be pacMove2.png, pacTest marks the edges and middle pixel in red
 		Texture spriteSheet = new Texture(Gdx.files.internal("pacMove2.png"));		
 		TextureRegion[][] tmp = TextureRegion.split(spriteSheet,
-				spriteSheet.getWidth() / FRAME_COLS, spriteSheet.getHeight()
-									/ FRAME_ROWS);	
+				PACMAN_SIDE_PIX, PACMAN_SIDE_PIX);	
 		int index = 0;
-		for (int i = 0; i < FRAME_ROWS; i++) {
-			for (int j = 0; j < FRAME_COLS; j++) {
+		for (int i = 0; i < tmp.length; i++) {
+			for (int j = 0; j < tmp[i].length; j++) {
 				pacmanFrames[index++] = tmp[i][j];
 			}
 		}
@@ -75,19 +76,17 @@ public class PacView {
 			}
 			spriteSheet = new Texture(Gdx.files.internal(colour + "ghostmove.png"));
 			// splits into columns and rows then puts them into one array in order
-			tmp = TextureRegion.split(spriteSheet,
-			spriteSheet.getWidth() / GHOST_LENGTH, spriteSheet.getHeight());
-			index = 0;
-			for (int j = 0; j < GHOST_LENGTH; j++) {
-				ghostFrames[i][index++] = tmp[0][j];
+			tmp = TextureRegion.split(spriteSheet, GHOST_SIDE_PIX, GHOST_SIDE_PIX);
+			for (int j = 0; j < MOVER_SPRITE_NUM; j++) {
+				ghostFrames[i][j] = tmp[0][j];
 			}			
 		}
 		this.gameMap = gameMap;
 		this.player = player;
-		this.blinky = blinky;
-		
-		
+		this.blinky = blinky;		
 	}
+	
+	
 	public void setUp(GameMap gameMap) {
 		
 	}

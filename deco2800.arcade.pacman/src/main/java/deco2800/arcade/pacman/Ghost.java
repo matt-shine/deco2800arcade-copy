@@ -154,6 +154,7 @@ public class Ghost extends Mover {
 			return player.getTile();
 		}
 		else if (ghost == GhostName.PINKY) {
+			//need to check this tile exists, otherwise crashes
 			return player.nextTile(player.getTile(), 4);
 		}
 		else {

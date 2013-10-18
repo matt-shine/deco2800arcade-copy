@@ -5,23 +5,21 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.lwjgl.openal.AL;
 import org.mockito.Mockito;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.openal.OpenALAudio;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.UIOverlay;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Player;
 
-/* 
- * so Gdx.files itself is null, I can happily make a Gdx() which isn't null, 
+/* so Gdx.files itself is null, I can happily make a Gdx() which isn't null, 
  * but if I try to .files it, that's still null which is odd because it's static
  * just read that there's initialisation stuff which causes this problem (that Gdx.files is null)
  * 
@@ -33,7 +31,6 @@ import deco2800.arcade.model.Player;
 
 /**
  * A main test class for Pacman
- * Note that the tests run successfully although the OpenAL context doesn't get disposed of properly
  * The render thread has a GdxRuntimeException, but it can test anything before that point
  */
 
@@ -46,30 +43,25 @@ public class MainTest {
 	@BeforeClass
 	public static void init() {
 		//necessary stuff to initialise libGdx
-		try {
-			LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-			cfg.title = "Pacman Test Window";
-			cfg.useGL20 = false;
-			cfg.width = 480;
-			cfg.height = 320;
-			app = new LwjglApplication(pacGame = new Pacman(Mockito.mock(Player.class), Mockito.mock(NetworkClient.class)), cfg);
-			UIOverlay overlayMock = Mockito.mock(UIOverlay.class);
-			pacGame.addOverlayBridge(overlayMock);
-			pacGame.create();
-			gameMap = pacGame.getGameMap();
-		} catch (GdxRuntimeException e) {
-			e.printStackTrace();
-		}
+		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+		cfg.title = "Pacman Test Window";
+		cfg.useGL20 = false;
+		cfg.width = 480;
+		cfg.height = 320;
+		app = new LwjglApplication(pacGame = new Pacman(Mockito.mock(Player.class), Mockito.mock(NetworkClient.class)), cfg);
+		UIOverlay overlayMock = Mockito.mock(UIOverlay.class);
+		pacGame.addOverlayBridge(overlayMock);
+		pacGame.create();
+		gameMap = pacGame.getGameMap();
 	}
 	
-	/** Attempts to dispose of things. The AL library doesn't close properly 
-	 * but I don't know how to fix it. Everything still works fine, as the 
-	 * computer closes the leak */
+	/** Disposes of things. AL library still seems to cause occasional errors. */
 	@AfterClass
 	public static void tearDown() {
 		pacGame.dispose();
 		app.exit();
-		AL.destroy();
+		//dispose of audio properly
+		((OpenALAudio) app.getAudio()).dispose();
 	}
 	
 	@Test

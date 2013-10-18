@@ -1,7 +1,8 @@
-package deco2800.arcade.snakeLadderModel;
+package deco2800.arcade.snakeLadderRulePlugin;
 
 import deco2800.arcade.snakeLadder.SnakeLadder;
 import deco2800.arcade.snakeLadderGameState.WaitingState;
+import deco2800.arcade.snakeLadderModel.Rule;
 
 
 public class ScoreRule implements Rule {

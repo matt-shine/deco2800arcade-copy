@@ -347,6 +347,4 @@ public class PlayerGameStorage {
 			}
 		}
 	}
-	
-
 }

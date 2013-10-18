@@ -32,7 +32,8 @@ public class StoreGame implements Screen, StoreScreen {
 	
 	/**
 	 * @author Addison Gourluck
-	 * @param ui
+	 * @param ArcadeUI ui
+	 * @param Game featuredGame
 	 */
 	public StoreGame(ArcadeUI ui, Game featuredGame) {
 		featured = featuredGame;
@@ -65,7 +66,7 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		// Title of the featured game, located center of screen.
 		gameTitle.setSize(380, 40);
-		gameTitle.setPosition(96, 513);
+		gameTitle.setPosition(96, 515);
 		stage.addActor(gameTitle);
 		
 		// Main text body, located in center of screen.
@@ -149,7 +150,9 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		wishButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("wish");
+				System.out.println("wishlist");
+				//dispose();
+				//arcadeUI.setScreen(new StoreWishlist(arcadeUI));
 			}
 		});
 		
@@ -226,12 +229,17 @@ public class StoreGame implements Screen, StoreScreen {
 	public Game getSelected() {
 		return featured;
 	}
-
+	
 	@Override
-	public boolean buyTokens(int amount, Game game) {
+	public boolean buyTokens(int amount) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean buyGame(Game game) {
+		return false;
+	}
+	
 	@Override
 	public void setSelected(String game) {
 		for (Game search : ArcadeSystem.getArcadeGames()) {

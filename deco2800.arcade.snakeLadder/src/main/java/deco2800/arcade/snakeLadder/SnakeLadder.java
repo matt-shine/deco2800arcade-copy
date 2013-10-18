@@ -128,7 +128,7 @@ public class SnakeLadder extends GameClient {
 	}
 
 	public int getturns() {
-		return this.turn%2;
+		return this.turn;
 	}
 
 	public ArrayList<Label> getScoreLabels() {
@@ -248,9 +248,9 @@ public class SnakeLadder extends GameClient {
 	}
 	
 
-	public int taketurns() {
+	public void taketurns() {
 		turn++;
-		return this.turn;
+		turn = turn%this.gamePlayers.length;
 	}
 	
 	@Override

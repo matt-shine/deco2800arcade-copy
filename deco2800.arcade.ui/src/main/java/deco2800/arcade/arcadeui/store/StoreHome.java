@@ -44,18 +44,17 @@ public class StoreHome implements Screen, StoreScreen {
 		arcadeUI = ui;
 		skin.add("background", new Texture
 				(Gdx.files.internal("store/main_bg.png")));
-
 		// Load the logo for all of the games (or default), and store them
 		// in the skin, with their name as their key.
-//		for (Game gamename : ArcadeSystem.getArcadeGames()) {
-//			try {
-//				skin.add(gamename.id, new Texture
-//						(Gdx.files.internal("logos/" + gamename.id + ".png")));
-//			} catch (Exception e) {
-//				skin.add(gamename.id, new Texture
-//						(Gdx.files.internal("logos/default.png")));
-//			}
-//		}
+		for (Game gamename : ArcadeSystem.getArcadeGames()) {
+			try {
+				skin.add(gamename.id, new Texture(Gdx.files.internal("logos/"
+						+ gamename.id.toLowerCase() + ".png")));
+			} catch (Exception e) {
+				skin.add(gamename.id, new Texture
+						(Gdx.files.internal("logos/default.png")));
+			}
+		}
 		
 		// The background for the store.
 		Table bg = new Table();
@@ -65,11 +64,11 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		final TextField searchField = new TextField("", skin);
 		final Button searchButton = new Button(skin, "search");
+		final Label searchResult = new Label("", skin);
 		final TextButton libraryButton = new TextButton("Library", skin);
 		final TextButton transactionsButton = new TextButton("Transactions", skin);
 		final TextButton wishlistButton = new TextButton("Wishlist", skin);
 		final TextButton reviewsButton = new TextButton("Reviews", skin);
-		final Label searchResult = new Label("", skin);
 		
 		populateGamesBox(stage, skin);
 		
@@ -95,17 +94,18 @@ public class StoreHome implements Screen, StoreScreen {
 		// Entry field for search term. Will update the featured game, as well
 		// as the search result located below it.
 		searchField.setSize(300, 42);
-		searchField.setPosition(860, 535);
-		searchField.setMessageText("Search");
+		searchField.setPosition(860, 536);
+		searchField.setMessageText(" Search");
 		stage.addActor(searchField);
 		
-		// Search button. Will 
+		// Search button. Will re-direct user to the (valid) "SearchResult" game page
 		searchButton.setSize(126, 55);
-		searchButton.setPosition(1039, 480);
+		searchButton.setPosition(1039, 475);
 		stage.addActor(searchButton);
-		
+
+		// The auto-changing text that displays the current game to be searched for.
 		searchResult.setSize(165, 55);
-		searchResult.setPosition(860, 480);
+		searchResult.setPosition(860, 475);
 		stage.addActor(searchResult);
 		
 		libraryButton.setSize(360, 95);
@@ -126,7 +126,6 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		libraryButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				//arcadeUI.setScreen(arcadeUI.getLobby());
 				dispose();
 				ArcadeSystem.goToGame("arcadeui");
 			}
@@ -134,13 +133,15 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		transactionsButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Transactions clicked");
+				dispose();
+				arcadeUI.setScreen(new StoreTransactions(arcadeUI));
 			}
 		});
 		
 		wishlistButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("Wishlist clicked");
+				dispose();
+				arcadeUI.setScreen(new StoreWishlist(arcadeUI));
 			}
 		});
 		
@@ -152,7 +153,7 @@ public class StoreHome implements Screen, StoreScreen {
 		
 		searchField.setTextFieldListener(new TextFieldListener() {
 			public void keyTyped(TextField textField, char key) {
-				Game result = search(searchField.getText());
+				Game result = Utilities.helper.search(searchField.getText());
 				if (result == null) {
 					searchResult.setText("No results.");
 					return;
@@ -170,7 +171,7 @@ public class StoreHome implements Screen, StoreScreen {
 		searchButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				try {
-					setSelected(search(searchResult.getText() + "").id);
+					setSelected(Utilities.helper.search(searchResult.getText() + "").id);
 					dispose();
 					arcadeUI.setScreen(new StoreGame(arcadeUI, featured));
 				} catch (Exception e) {
@@ -198,21 +199,21 @@ public class StoreHome implements Screen, StoreScreen {
 	 * @param skin
 	 */
 	private void populateGamesBox(Stage stage, Skin skin)  {
-		/*
-		int number = (int)Math.floor(ArcadeSystem.getGamesList().size() * Math.random());
+		int number = (int)Math.floor(ArcadeSystem.getArcadeGames().size()
+				* Math.random());
 		// ^Used to find the first of the 8 games to be displayed.
 		featured = (Game)ArcadeSystem.getArcadeGames().toArray()[number];
 		for (int i = 0; i < 8; ++i) {
-			String gameName = ArcadeSystem.getGamesList().toArray()
-					[(number+i)%ArcadeSystem.getGamesList().size()] + "";
+			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
+					[(number+i)%ArcadeSystem.getArcadeGames().size()];
 			final TextButton gameGrid =
-					new TextButton("\n\n\n\n\n" + gameName, skin, "icon");
+					new TextButton("\n\n\n\n\n" + game.name, skin, "icon");
 			gameGrid.setSize(160, 170);
-			gameGrid.setName(gameName);
+			gameGrid.setName(game.id);
 			
-			final Button gameGridIcon = new Button(skin.getDrawable(gameName));
+			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
 			gameGridIcon.setSize(120, 112);
-			gameGridIcon.setName(gameName);
+			gameGridIcon.setName(game.id);
 			
 			// ^This sets the games 
 			if (i < 4) {
@@ -241,7 +242,6 @@ public class StoreHome implements Screen, StoreScreen {
 			stage.addActor(gameGrid);
 			stage.addActor(gameGridIcon);
 		}
-		*/
 	}
 	
 	/**
@@ -278,7 +278,7 @@ public class StoreHome implements Screen, StoreScreen {
 							+ "\nNo Description Available");
 				} else if (featured.description.length() > 100) {
 					description.setText(featured.name + "\n"
-							+ featured.description.substring(0, 100));
+							+ featured.description.substring(0, 100) + "...");
 				} else {
 					description.setText(featured.name + "\n" + featured.description);
 				}
@@ -315,50 +315,11 @@ public class StoreHome implements Screen, StoreScreen {
 		// fade out icon
 	}
 	
-	/**
-	 * This method will return the game with the name that matches most closely.
-	 * 
-	 * @author Addison Gourluck
-	 * @param String input
-	 * @return Game
-	 */
-	private Game search(String input) {
-		if (input.length() <= 2) {
-			return null; // No searches for 0, 1 or 2 chars.
-		}
-		input = input.toLowerCase();
-		// Check if the input is a substring of a game.
-		for (Game game : ArcadeSystem.getArcadeGames()) {
-			if (game.name.toLowerCase().contains(input)
-					|| game.id.toLowerCase().contains(input)) {
-				return game;
-			}
-		}
-		if (input.length() > 6) {
-			input = input.substring(0, 6); // crop to first 6 chars for regex.
-		}
-		// If no results are produced yet, get desperate. Proceed to look
-		// for a game that includes search, with 1 wrong/missing char.
-		String regex;
-		for (Game game : ArcadeSystem.getArcadeGames()) {
-			for (int i = 0; i < input.length(); ++i) {
-				// Super duper awesome regex, that will find any combination of
-				// the string, with 1 letter missing or wrong. Really cool.
-				regex = "(.*)" + input.substring(0, i) + "(.?)"
-						+ input.substring(i + 1, input.length()) + "(.*)";
-				if (game.name.toLowerCase().matches(regex)) {
-					return game;
-				}
-			}
-		}
-		return null; // No results at all.
-	}
-	
 	@Override
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		//textFade();
+		textFade();
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 	}
@@ -412,12 +373,17 @@ public class StoreHome implements Screen, StoreScreen {
 	public Game getSelected() {
 		return featured;
 	}
-
+	
 	@Override
-	public boolean buyTokens(int amount, Game game) {
+	public boolean buyTokens(int amount) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean buyGame(Game game) {
+		return false;
+	}
+	
 	@Override
 	public void setSelected(String game) {
 		for (Game search : ArcadeSystem.getArcadeGames()) {

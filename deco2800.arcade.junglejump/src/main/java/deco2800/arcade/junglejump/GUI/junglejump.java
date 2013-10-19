@@ -340,14 +340,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (isFalling) {
 				if (isOnPlatform(monkeyX, monkeyY)) {
 					isFalling = false;
-				} else monkeyY += (-9.8f / 2f) * SPEED_MULTIPLIER;
+				} else monkeyY += (-9.8f / 2f);
 			}
 			if(monkeyY <= 5) {
 				playDeathSound();
 				killMonkey();
 			}
 			if (jumping) {
-				velocity = (velocity - 9.8f / 75f) * SPEED_MULTIPLIER;
+				velocity = (velocity - 9.8f / 75f);
 				//System.out.println("monkeyY " + monkeyY + " monkeyYor " + monkeyYoriginal + " == " + (monkeyY > monkeyYoriginal) +(monkeyY + velocity < 1f) + velocity + " " + monkeyY);
 				System.out.println(monkeyY > monkeyYoriginal);
 				System.out.println(!isOnPlatform(monkeyX, monkeyY)); //this is false :(

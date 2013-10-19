@@ -26,6 +26,12 @@ public class Configuration {
 		} else {
 			readConfig();
 		}
+		
+		if (!Gdx.files.external("BurningSkies/high_scores.txt").exists()) {
+			writeLocalHighScores();
+		} else {
+			readLocalHighScores();
+		}
 	}
 	
 	/*

@@ -52,7 +52,8 @@ public class MapProcessor {
 
                 int id = map.getDoodadAt(i, j);
                 DoodadInfo dInfo = WL6Meta.doodad(id);
-
+                
+                
                 //spawn points
                 if (id >= WL6Meta.SPAWN_POINT && id < WL6Meta.SPAWN_POINT + 4) {
 
@@ -81,7 +82,7 @@ public class MapProcessor {
 
                     //everything else
                     spawnDoodadFromInfo(model, dInfo, id, i, j);
-
+                    
                 }
             }
         }

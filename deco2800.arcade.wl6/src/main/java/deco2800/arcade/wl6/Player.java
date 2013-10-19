@@ -81,10 +81,13 @@ public class Player extends Mob {
     
 
     public void shoot(GameModel g) {
-    	Projectile bullet = new Projectile(0, 10, false, "worm");
-    	g.addDoodad(bullet);
-    	bullet.setPos(this.getPos());
-    	bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));
+    	if (ammo > 0) {
+    		Projectile bullet = new Projectile(0, 10, false, "worm");
+        	g.addDoodad(bullet);
+        	bullet.setPos(this.getPos());
+        	bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));
+        	this.ammo = Math.max(ammo - 1, 0);
+    	}
     }
     
     

@@ -495,8 +495,8 @@ public class DoodadList {
                     //159: nothing
                     new DoodadInfo(),
 
-                    //160: nothing
-                    new DoodadInfo(),
+                    //160: fake hitler
+                    new DoodadInfo(true, "iceking_clone", 0, 0, 0, 0, EnemyType.FAKE_HITLER, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //161: nothing
                     new DoodadInfo(),
@@ -550,10 +550,10 @@ public class DoodadList {
                     new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.DOG, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //178: nothing
-                    new DoodadInfo(),
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HITLER, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //179: nothing
-                    new DoodadInfo(),
+                    //179: fettgeicht
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.FETTGESICHT, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //180: Guard 4 (Standing)
                     new DoodadInfo(true, "snowman", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.RIGHT, false),  // FIXME Not complete
@@ -603,11 +603,11 @@ public class DoodadList {
                     //195: nothing
                     new DoodadInfo(),
 
-                    //196: nothing
-                    new DoodadInfo(),
+                    //196: schabbs
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.SCHABBS, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
-                    //197: nothing
-                    new DoodadInfo(),
+                    //197: gretel
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GRETEL, 0, DIRS.RIGHT, false),  // FIXME Not complete
 
                     //198: SS 4 (Standing)
                     new DoodadInfo(true, "lemongrab", 0, 0, 0, 4, EnemyType.SS, 0, DIRS.RIGHT, false),  // FIXME Not complete
@@ -658,6 +658,10 @@ public class DoodadList {
                     new DoodadInfo(true, "penguin", 0, 0, 0, 4, EnemyType.GUARD, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //214: Hans Grosse
-                    new DoodadInfo(true, "hans", 0, 0, 0, 4, EnemyType.HANS, 0, DIRS.RIGHT, false),
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.HANS, 0, DIRS.RIGHT, false),
+                    
+                    //215: otto
+                    new DoodadInfo(true, "iceking", 0, 0, 0, 0, EnemyType.GUARD, 0, DIRS.RIGHT, false),  // FIXME Not complete
+
             };
 }

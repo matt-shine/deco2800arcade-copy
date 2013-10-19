@@ -17,7 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
@@ -26,11 +28,15 @@ import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import java.util.*;
 
 public class BettingLobby implements Screen {
+	
+	private static String pName = "<USERNAME>";
+	private static int pCredits = 165;
+	
 
 	private class FrontPageStage extends Stage {
 	}
 
-	private Skin skin;
+	
 	private FrontPageStage stage;
 
 	private float funds;
@@ -41,18 +47,27 @@ public class BettingLobby implements Screen {
 	Texture bg;
 	Sprite bgSprite;
 	SpriteBatch batch;
-
+	Skin skin = new Skin();
 	private ArcadeUI arcadeUI;
+	static Label menuInfo;
 
 	private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches;
 
 	public BettingLobby(ArcadeUI ui) {
-
+		
 		arcadeUI = ui;
 		skin = new Skin(Gdx.files.internal("loginSkin.json"));
 		skin.add("background", new Texture("homescreen_bg.png"));
 		stage = new FrontPageStage();
+		
+		menuInfo = new Label("Loading...", skin, "cgothic");
+		
+		// The text at the right of the top MenuBar.
+        menuInfo.setSize(500, 25);
+        menuInfo.setPosition(780, 695);
+        menuInfo.setAlignment(Align.right);
+        stage.addActor(menuInfo);
 
 		Table table = new Table();
 		table.setFillParent(true);
@@ -71,6 +86,10 @@ public class BettingLobby implements Screen {
 		Table titleTable = new Table();
 		titleTable.setFillParent(true);
 		stage.addActor(titleTable);
+		
+		final Table gamesTable = new Table();
+		gamesTable.setFillParent(true);
+		stage.addActor(gamesTable);
 
 		Label gameLabel = new Label("Games to bet on:", skin);
 		Label betLabel = new Label("Bets made:", skin);
@@ -100,8 +119,38 @@ public class BettingLobby implements Screen {
 				arcadeUI.setScreen(arcadeUI.getLobby());
 			}
 		});
+		
+		updateButton.addListener(new ChangeListener() {
+			public void changed(ChangeEvent event, Actor actor) {
+				gamesTable.clear();
+
+				if (matches.size() > 0) {
+					for (int i = 0; i < matches.size(); i++) {
+						Label matchLabel = new Label("GameId: "
+								+ matches.get(i).gameId, skin);
+						Label player = new Label("Player: "
+								+ matches.get(i).hostPlayerId, skin);
+						final TextButton button5 = new TextButton("Join", skin);
+						final int matchId = matches.get(i).matchId;
+
+						gamesTable.center().left();
+						gamesTable.add(matchLabel).width(130).padTop(5).padLeft(150);
+						gamesTable.add(player).width(130).padTop(5).padLeft(130);
+						gamesTable.add(button5).width(130).height(20).padTop(5);
+						gamesTable.row();
+
+						//button5.addListener(new JoinGameListener(matchId, lobby));
+					}
+				}
+			}
+		});
 
 	}
+	public static void setName(String playerName) {
+        pName = playerName;
+        menuInfo.setText(pName + " | " + pCredits + " Credits");
+	}
+	
 
 	@Override
 	public void show() {

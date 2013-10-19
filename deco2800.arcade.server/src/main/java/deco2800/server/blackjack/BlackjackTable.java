@@ -13,9 +13,7 @@ import org.apache.derby.impl.sql.execute.CardinalityCounter;
 import com.esotericsoftware.kryonet.Connection;
 import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
-import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
-import deco2800.arcade.client.network.NetworkClient;
 
 /**
  * The Blackjack table that people play and connect to.
@@ -35,7 +33,6 @@ public class BlackjackTable extends Thread {
 	private String token;
 	private boolean betsplaced;
 	private int numofplayersbet;
-	private NetworkClient NetworkClient;
 	/**
 	 * Creates a new Blackjack table.
 	 * Default method and should not be used.

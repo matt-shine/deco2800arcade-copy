@@ -48,7 +48,7 @@ public class Pickup extends Doodad {
             }
             
             if (p.getHealth() < 100 || points > 0) {
-            	p.addHealth(health, (points == 0 ? false : true));
+            	p.addHealth(health, points != 0);
             	destroy = true;
             }
             

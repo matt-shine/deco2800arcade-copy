@@ -3,6 +3,10 @@ package deco2800.server.listener;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -16,19 +20,20 @@ import deco2800.arcade.protocol.replay.PushEventRequest;
 import deco2800.arcade.protocol.replay.PushEventResponse;
 import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
-import deco2800.arcade.protocol.replay.demo.ReplayRequest;
-import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.server.ArcadeServer;
 import deco2800.server.database.DatabaseException;
 
 public class ReplayListener extends Listener {
-	
+
+	private Logger logger = LoggerFactory.getLogger( ReplayListener.class );
+    
 	public ReplayListener() {
+        PropertyConfigurator.configure( "src/main/resources/replay_log4j.properties" );
 		try {
 			ArcadeServer.instance().getReplayStorage().initialise();
 		} catch( DatabaseException e ) {
-			// ouch
+            logger.error( e.toString() );
 		}
 	}
 	
@@ -36,18 +41,7 @@ public class ReplayListener extends Listener {
     public void received(Connection connection, Object object) {
         super.received(connection, object);
         
-        //We got a request for the replay handler
-        if (object instanceof ReplayRequest) {
-            ReplayRequest replayRequest = (ReplayRequest) object;
-            
-            System.out.println("Replay Listener got something : " + replayRequest.random);
-            
-            ReplayResponse replayResponse = new ReplayResponse();
-            replayResponse.test = "HELLO! " + replayRequest.random;
-            
-            connection.sendTCP(replayResponse);
-            
-        } else if (object instanceof StartSessionRequest)
+        if (object instanceof StartSessionRequest)
         {
             StartSessionRequest ssr = (StartSessionRequest) object;
             StartSessionResponse response = new StartSessionResponse();
@@ -59,14 +53,12 @@ public class ReplayListener extends Listener {
             try {
                 sessionID = ArcadeServer.instance().getReplayStorage().insertSession( ssr.gameId, ssr.username, date.getTime(), "");
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
-            if ( sessionID < 0 ) {
-            	// something went wrong
+            if ( sessionID >= 0 ) {
+                logger.info("Got a start replay session request for game ID '" + ssr.gameId + "' with username '" + ssr.username + "'");
             }
-            
-            log("Got a StartSessionRequest: " + ssr.gameId + ", " + ssr.username);
             
             response.sessionId = sessionID;
             connection.sendTCP(response);
@@ -77,12 +69,11 @@ public class ReplayListener extends Listener {
             try {
                 ArcadeServer.instance().getReplayStorage().endRecording(esr.sessionId);
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
-            log("Got an EndSessionRequest: " + esr.sessionId);
+            logger.info("Got an end replay session event for event ID " + esr.sessionId);
             
-            //TODO check if session is not already terminated.
             response.success = true;
             connection.sendTCP(response);
             
@@ -92,15 +83,15 @@ public class ReplayListener extends Listener {
             ListSessionsResponse response = new ListSessionsResponse();
             response.sessions = new ArrayList<Session>();
             
-            System.out.println("Got list sessions request");
+            logger.info("Got list replay session event.");
 
             ArrayList<String> sessionStrings = null;
             
             try {
                 sessionStrings = ArcadeServer.instance().getReplayStorage().getSessionsForGame(lsr.gameId);
-                System.out.println(sessionStrings);
+                logger.info( "Served replay session list as " + sessionStrings );
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
             //Convert back to sessions
@@ -135,12 +126,12 @@ public class ReplayListener extends Listener {
             PushEventRequest per = (PushEventRequest) object;
             PushEventResponse response = new PushEventResponse();
             
-            System.out.println( "Got push event: " + per.eventIndex );
+            logger.info( "Got replay push event for session " + per.sessionId + " at index " + per.eventIndex );
             
             try {
                 ArcadeServer.instance().getReplayStorage().insertEvent( per.sessionId, per.eventIndex, per.nodeString); 
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
             
             response.success = true;
@@ -155,20 +146,15 @@ public class ReplayListener extends Listener {
             try {
                 response.nodes = ArcadeServer.instance().getReplayStorage().getReplay(ger.sessionId);
             } catch (DatabaseException e) {
-                e.printStackTrace();
+                logger.error( e.toString() );
             }
 
-            System.out.println("Served " + response.nodes.size() + " events for session " + ger.sessionId);
+            logger.info("Served " + response.nodes.size() + " replay events for session " + ger.sessionId);
             
             response.serverOffset = 0;
             
             connection.sendTCP(response);
         }
-    }
-    
-    private void log(String s)
-    {
-        System.out.println(s);
     }
 
 }

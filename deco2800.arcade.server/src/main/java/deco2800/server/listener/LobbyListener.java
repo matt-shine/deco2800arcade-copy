@@ -1,13 +1,14 @@
 package deco2800.server.listener;
 
 
-import deco2800.arcade.protocol.lobby.CreateMatchRequest;
-import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
-import deco2800.arcade.protocol.lobby.NewLobbyRequest;
-import deco2800.server.Lobby;
-
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import deco2800.arcade.protocol.lobby.CreateMatchRequest;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
+import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
+import deco2800.arcade.protocol.lobby.NewLobbyRequest;
+import deco2800.server.Lobby;
 
 public class LobbyListener extends Listener {
 
@@ -55,6 +56,9 @@ public class LobbyListener extends Listener {
 			int matchId = request.matchId;
 			int playerId = request.playerID;
 			lobby.joinMatch(matchId, playerId, connection);
+		} else if (object instanceof LobbyMessageRequest) {
+			LobbyMessageRequest request = (LobbyMessageRequest) object;
+			Lobby.instance().sendChat(request);
 		}
 
 	}

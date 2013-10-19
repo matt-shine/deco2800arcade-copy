@@ -17,11 +17,11 @@ public class Mutant extends Enemy {
         this.setAngle(WL6Meta.dirToAngle(d.direction));
         if (!d.pathing) {
             setPathing(false);
-            setState(STATES.STAND);
+            addInstantStateChange(STATES.STAND);
         }
         else {
             setPathing(true);
-            setState(STATES.PATH);
+            addInstantStateChange(STATES.PATH);
         }
         setPathSpeed(512);
         setChaseSpeed(1536);

@@ -16,7 +16,7 @@ public class Gretel extends Enemy {
         setHealth(STARTING_HEALTH);
         setFaceDir(d.direction);
         setPathing(false);
-        setState(STATES.STAND);
+        addInstantStateChange(STATES.STAND);
         setPathSpeed(512);
         setChaseSpeed(1536);
         setPain(false);

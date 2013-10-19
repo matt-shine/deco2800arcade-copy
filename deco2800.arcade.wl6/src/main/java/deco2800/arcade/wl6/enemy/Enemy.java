@@ -31,7 +31,6 @@ public class Enemy extends Mob {
     private STATES state = STATES.NO_STATE;
     // State tick
     private float stateTime;
-    private float tick;
     private STATES nextState;
     //
     private WL6Meta.DIRS faceDir;
@@ -43,10 +42,8 @@ public class Enemy extends Mob {
     private float chaseSpeed;
     //
     private int pathGoal = 1;
-    @SuppressWarnings("unused")
-	private int pathLast = 0;
-    @SuppressWarnings("unused")
-	private int pathLoopStart = 0;
+    private int pathLast = 0;
+    private int pathLoopStart = 0;
     
     
     // path list
@@ -59,7 +56,6 @@ public class Enemy extends Mob {
 
     public Enemy(int uid) {
         super(uid);
-        tick = 0;
         stateTime = 0;
         nextState = null;
     }
@@ -77,28 +73,45 @@ public class Enemy extends Mob {
     public void tick(GameModel gameModel) {
         super.tick(gameModel);
 
-        tick += gameModel.delta();
+        if (state == STATES.DIE) {
+        	return;
+        }
+        
         stateTime += gameModel.delta();
         if (stateTime > 1 && nextState != null) {
-            setState(nextState);
+            this.addInstantStateChange(nextState);
             nextState = null;
         }
-
-        if (tick > 0.5 && state == STATES.PATH && path != null && path.size() != 0) {
+        
+        
+        if (canSee(gameModel.getPlayer(), gameModel)){
+        	addDelayedStateChange(STATES.ATTACK);
+        }
+        
+        
+        if (state == STATES.PATH && path != null && path.size() > 1) {
             path();
         }
+        
 
-        detectPlayer(gameModel);
+        
         if (state == STATES.ATTACK) {
-            attackPlayer(gameModel);
+            doDamage(gameModel);
+            addInstantStateChange(STATES.CHASE);
+            addDelayedStateChange(STATES.ATTACK);
         }
 
         if (this.getHealth() <= 0) {
-            setState(STATES.DIE);
-            gameModel.destroyDoodad(this);
+        	addInstantStateChange(STATES.DIE);
+        	this.setTextureName("grave");
+        	this.setVel(new Vector2(0, 0));
         }
     }
 
+    
+    
+    
+    
     public WL6Meta.DIRS getFaceDir() {
         return faceDir;
     }
@@ -115,60 +128,40 @@ public class Enemy extends Mob {
      * Tells the enemy to change states
      * @param state state to change the enemy to
      */
-    public void setState(STATES state) {
+    public void addDelayedStateChange(STATES state) {
+    	if (nextState != state) {
+	        this.state = state;
+	        stateTime = 0;
+    	}
+    }
+    
+    
+    public void addInstantStateChange(STATES state) {
         this.state = state;
         stateTime = 0;
     }
 
     // follow patrol path
     public void path() {
+    	
     	//if we've passed the next pathing node...
-    	
-    	//this code is for clean navigation through paths but is broken right now
-    	
-    	/*if (path.get(pathLast).dst(path.get(pathGoal)) <= 
-    			path.get(pathLast).dst(getPos())) {
+    	Vector2 goal = path.get(pathGoal).cpy().add(0.5f, 0.5f);
+    	Vector2 last = path.get(pathLast).cpy().add(0.5f, 0.5f);
+    	if (last.dst(goal) <= last.dst(getPos())) {
     		
-    		setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
-    		pathLast++;
+    		setPos(goal);
+    		pathLast = pathGoal;
     		pathGoal++;
     		if (pathGoal >= path.size()) {
     			pathGoal = this.pathLoopStart;
     		}
+    		
     	}
-    	this.setVel(
-    			new Vector2().add(path.get(pathGoal)).sub(path.get(pathLast)).nor().mul(0.2f)
-    	);*/
+    	this.setVel(new Vector2().add(goal).sub(last).nor().mul(0.1f));
+
     	
-    	
-    	//rough navigation through path
-    	pathGoal++;
-    	pathGoal = pathGoal % path.size();
-    	setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
-        tick = 0;
-		
     }
 
-    // detect player
-    public void detectPlayer(GameModel gameModel) {
-        if (canSee(gameModel.getPlayer(), gameModel)) {
-            nextState = STATES.ATTACK;
-        }
-    }
-
-    // chase player
-
-
-    // dodge (same as chase player, but with some randomized movement to 'dodge' players attacks)
-
-
-    // attack player
-    public void attackPlayer(GameModel gameModel) {
-        doDamage(gameModel);
-        setState(STATES.CHASE);
-    }
-
-    // react to pain
 
 
     @Override
@@ -177,15 +170,16 @@ public class Enemy extends Mob {
         if (state == STATES.STAND || state == STATES.PATH) {
             d = d * 2;
         }
-        if (isPain()) {
-            setState(STATES.PAIN);
-            setHealth(getHealth() - d);
-            setState(STATES.CHASE);
+        if (feelsPain()) {
+        	addInstantStateChange(STATES.PAIN);
+        	addDelayedStateChange(STATES.CHASE);
+        	setHealth(getHealth() - d);
         }
         else {
             setHealth(getHealth() - d);
         }
     }
+    
 
     @Override
     public void doDamage(GameModel gameModel) {
@@ -307,7 +301,7 @@ public class Enemy extends Mob {
 		this.pathSpeed = pathSpeed;
 	}
 
-	public boolean isPain() {
+	public boolean feelsPain() {
 		return pain;
 	}
 

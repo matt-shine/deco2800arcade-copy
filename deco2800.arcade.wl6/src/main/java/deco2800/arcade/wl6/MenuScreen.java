@@ -42,15 +42,23 @@ public class MenuScreen implements Screen {
             "I am Death incarnate!"
     };
     private static final String[] episodeStrings = new String[] {
-            "Episode 1\nEscape from Wolfenstein",
-            "Episode 2\nOperation: Eisenfaust",
-            "Episode 3\nDie, Fuhrer, Die!",
-            "Episode 4\nA Dark Secret",
-            "Episode 5\nTrail of the Madman",
-            "Episode 6\nConfrontation"
+            "Episode 1: Escape from Wolfenstein",
+            "Episode 2: Operation: Eisenfaust",
+            "Episode 3: Die, Fuhrer, Die!",
+            "Episode 4: A Dark Secret",
+            "Episode 5: Trail of the Madman",
+            "Episode 6: Confrontation",
     };
-    private static final Integer[] levelStrings = new Integer[] {
-            1, 2, 3, 4, 5, 6
+    private static final String[] levelStrings = new String[] {
+	    	"Level 1",
+	    	"Level 2",
+	    	"Level 3",
+	    	"Level 4",
+	    	"Level 5",
+	    	"Level 6",
+	    	"Level 7",
+	    	"Level 8",
+	    	"Boss",
     };
 
     public MenuScreen(WL6 game) {

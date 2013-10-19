@@ -43,7 +43,7 @@ public class MenuScreen implements Screen {
 		ArcadeInputMux.getInstance().addProcessor(stage);
 		
 		Table table = new Table();
-		table.padRight(450f);
+		table.padRight(400f);
 		table.padTop(300f);
 		table.setFillParent(true);
 		stage.addActor(table);

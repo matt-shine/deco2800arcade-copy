@@ -1,4 +1,4 @@
-/*package deco2800.arcade.landInvaders.Tests;
+package deco2800.arcade.landInvaders.Tests;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,9 +9,9 @@ import java.io.*;
 
 
 
-*//**
+/**
  * Basic tests for the LandInvaders Game implementation class.
- *//*
+ */
 public class LandInvadersGameTest {
 
 	@Test
@@ -20,4 +20,3 @@ public class LandInvadersGameTest {
 	}
 
 }
-*/

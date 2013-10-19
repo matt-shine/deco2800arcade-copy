@@ -24,7 +24,7 @@ public class tank implements KeyListener {
 	 * Tank initial starting point
 	 */
 	/**
-	 * @param img
+	 * @param img set the name of the image of the enemy sprite
 	 */
 	public tank(String img) {
 		p_x = 370;
@@ -35,10 +35,9 @@ public class tank implements KeyListener {
 
 	}
 
-	// testing
 	/**
-	 * @param g
-	 * @param p
+	 * @param g the graphic of the player sprite, tank
+	 * @param p the main frame of the game
 	 */
 	public void drawTank(Graphics g, JFrame p) {
 		g.setColor(Color.green);
@@ -120,10 +119,16 @@ public class tank implements KeyListener {
 		shotState = false;
 	}
 
+	/**
+	 * @return width of player sprite tank
+	 */
 	public int width() {
 		return width;
 	}
 
+	/**
+	 * @return height of player sprite tank
+	 */
 	public int height() {
 		return height;
 	}

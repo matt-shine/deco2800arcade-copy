@@ -42,24 +42,24 @@ public class CommunicationView extends JPanel {
 	private CommunicationNetwork communicationNetwork;
 
 	public CommunicationView() {
-
-		setLayout(cardLayout);
+		setPreferredSize(new Dimension(250, 600)); //Top bar messes up when you remove this
 		
+		setLayout(cardLayout);
 		createViewOne();
 		createViewTwo();
-
 		add(viewOne, "1");
 		add(viewTwo, "2");
-		
-
 	}
 	
 	private void createViewOne() {
-		
 		scrollablePanel = new JPanel();
 		scrollablePanel.setPreferredSize(new Dimension(250, 800));
 		
-		viewOne = new JPanel(new GridLayout(1,1,0,0));
+		//viewOne = new JPanel(new GridLayout(1,1,0,0));
+		viewOne = new JPanel();
+		viewOne.setBorder(null);
+		viewOne.setPreferredSize(new Dimension(250, 800));
+		
 		scrollPane = new JScrollPane(scrollablePanel);
 		
 		JLabel l = new JLabel("Michael, Smith");
@@ -70,8 +70,10 @@ public class CommunicationView extends JPanel {
 		l.setName("test1");
 		addMouseListener(l);
 		
-		scrollablePanel.add(l);
-		viewOne.add(scrollPane);
+		//scrollablePanel.add(l);
+		scrollablePanel.add(l, BorderLayout.PAGE_START);
+		//viewOne.add(scrollPane);
+		viewOne.add(scrollPane, BorderLayout.PAGE_START);
 		
 	}
 	

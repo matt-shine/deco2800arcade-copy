@@ -86,7 +86,7 @@ public class LoginScreen implements Screen {
                 else {
                     ArcadeSystem.login(usernameText.getText());
             	    FrontPage.setName(usernameText.getText());  // This may need to be moved to somewhere more appropriate.
-            	    arcadeUI.setScreen(arcadeUI.main);
+            	    arcadeUI.setScreen(arcadeUI.main); // It would be wise to pass a 'Player' to the Front page -Addison
                 }
             }
         });

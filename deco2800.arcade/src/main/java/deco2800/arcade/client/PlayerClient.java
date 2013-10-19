@@ -35,11 +35,11 @@ public class PlayerClient extends NetworkListener {
 	public Player loadPlayer(int playerID) {
 
 		PlayerRequest request = new PlayerRequest();
-		request.playerID = playerID;
+		request.setPlayerID(playerID);
 		PlayerResponse response = (PlayerResponse)BlockingMessage.request(
 				networkClient.kryoClient(), request);
 
-		return response.player;
+		return response.getPlayer();
 	}
 
 

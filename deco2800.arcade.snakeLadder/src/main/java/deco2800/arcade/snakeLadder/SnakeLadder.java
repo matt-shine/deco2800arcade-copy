@@ -128,7 +128,7 @@ public class SnakeLadder extends GameClient {
 	}
 
 	public int getturns() {
-		return this.turn%2;
+		return this.turn;
 	}
 
 	public ArrayList<Label> getScoreLabels() {
@@ -144,7 +144,7 @@ public class SnakeLadder extends GameClient {
 		
 		//Initialise camera
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1280, 800);
+		camera.setToOrtho(false, 960, 600);
 		batch = new SpriteBatch();
 		
 		//initialize the rules from xml file
@@ -248,9 +248,9 @@ public class SnakeLadder extends GameClient {
 	}
 	
 
-	public int taketurns() {
+	public void taketurns() {
 		turn++;
-		return this.turn;
+		turn = turn%this.gamePlayers.length;
 	}
 	
 	@Override
@@ -328,7 +328,8 @@ public class SnakeLadder extends GameClient {
         Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
-        table.padLeft((gamePlayers.length+1)*100).padBottom(200-(highestScoreNum*25)-45);
+//        table.padLeft((gamePlayers.length+1)*100).padBottom(200-(highestScoreNum*25)-45);
+        table.top().right();
         
         //adding player name
         table.add(new Label("Players' Name", skin)).width(100).top().left();
@@ -347,7 +348,7 @@ public class SnakeLadder extends GameClient {
         
         //adding highscore list
         table.row();
-        table.add(new Label("Highest Scores", skin)).spaceTop(20);
+        table.add(new Label("Highest Scores", skin)).spaceTop(100);
         table.row();
         table.add(new Label("Username", skin)).width(100).top().left();
         table.add(new Label("Scores", skin)).width(100).top().left();
@@ -362,30 +363,6 @@ public class SnakeLadder extends GameClient {
         	table.add(new Label(topPlayers.get(i).score+"", skin)).width(100).top().left();
             table.row();
         }
-        
-        //adding achievements list
-        table.row();
-        table.add(new Label("Your Achievements", skin)).spaceTop(20);
-        table.row();
-        
-//        //getting achievements for a game and getting the player's progress in them
-//        AchievementClient achClient = new AchievementClient(networkClient);
-//        AsyncFuture<ArrayList<Achievement>> achievements = achClient.getAchievementsForGame(getGame());
-//        AsyncFuture<AchievementProgress> playerProgress = achClient.getProgressForPlayer(player);
-//        for(Achievement ach : achievements.get()) {
-//            int achProgress = playerProgress.get().progressForAchievement(ach);
-//           double percentage = 100 * (achProgress / (double)ach.awardThreshold);
-//        }
-//        
-//        //getting a list of the achievements a player has been awarded
-//        ArrayList<String> awardedIDs = playerProgress.awardedAchievementIDs();
-//        achievements = achClient.getAchievementsForIDs(awardedIDs);
-//        
-//        //display player's achievement in table
-//        for(Achievement ach : achievements.get()) {
-//        	table.add(new Label(ach.toString(), skin)).width(100).top().left();
-//          table.row();
-//        }
 	}
 	
 	public HashMap<String,RuleMapping> getRuleMapping() {

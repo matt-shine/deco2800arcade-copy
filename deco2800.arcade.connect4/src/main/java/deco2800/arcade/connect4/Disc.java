@@ -6,12 +6,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Disc {
 
-	public static final float WIDTH = 20f; //How big is the ball (its a square)
-	public static final float INITIALSPEED = 200; // How fast is the ball going at the start of a point
-	public static final float BOUNCEINCREMENT = 1.1f; // How much does the ball speed up each time it gets hit
+	public static final float WIDTH = 20f;
 	
-	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the ball
-	Vector2 velocity = new Vector2(); // The current velocity of the ball as x,y
+	Rectangle bounds = new Rectangle(); //The position (x,y) and dimensions (width,height) of the disc
 	
 	public int currentPos = 0;
 	
@@ -30,13 +27,13 @@ public class Disc {
     private float renderColourAlpha;
 	
 	/**
-	 * Basic constructor for Disc. Set position and dimensions to the default
+	 * Setup the disc.
+	 * 
+	 * Set position and dimensions to the default.
 	 */
 	public Disc() {
 		bounds.x = 10;
 		bounds.y = 10;
-		//bounds.x = Connect4.SCREENWIDTH/2 - Disc.WIDTH/2;
-		//bounds.y = Connect4.SCREENHEIGHT/2 - Disc.WIDTH/2;
 		bounds.height = WIDTH;
 		bounds.width = WIDTH;
 	}
@@ -67,7 +64,6 @@ public class Disc {
 	
 	public Integer moveLeft() {
 		if (currentPos > 0) {
-			//bounds.x -= bounds.width*2 + 5;
 			currentPos -= 1;
 			return currentPos;
 		} else {
@@ -78,7 +74,6 @@ public class Disc {
 	
 	public Integer moveRight(){
 		if (currentPos < (Table.TABLECOLS - 1)) {
-			//bounds.x += bounds.width*2 + 5;
 			currentPos += 1;
 			return currentPos;
 		} else {
@@ -88,7 +83,7 @@ public class Disc {
 	}
 	
 	/**
-	 * Reset the ball to its initial position and velocity
+	 * Reset the disc to the inital position.
 	 */
 	public void reset() {
 		bounds.x = 20;

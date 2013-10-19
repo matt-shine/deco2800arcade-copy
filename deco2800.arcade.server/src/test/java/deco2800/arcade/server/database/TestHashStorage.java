@@ -9,6 +9,7 @@ import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;

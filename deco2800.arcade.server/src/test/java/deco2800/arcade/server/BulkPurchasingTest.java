@@ -18,136 +18,197 @@ import deco2800.server.database.CreditStorage;
 public class BulkPurchasingTest {
 
 	PurchasingService purchasingService;
-	Player algernon;
-	Game tiddlywinks;
 	CreditStorage mockCS = mock(CreditStorage.class);
-	private Player barnaby;
+	private Player alpha;
+	private Player beta;
+	Game pong;
 	
 	@Before
 	public void setup() {
 		purchasingService = new PurchasingService();
 		
-		algernon = new Player(0, "Algernon", null);
-		barnaby = new Player(1, "Barnaby", null);
+		alpha = new Player(0, "Alpha", null);
+		beta = new Player(1, "Beta", null);
 		
-		tiddlywinks = new Game();
-		tiddlywinks.name = "tiddlywinks";
-		tiddlywinks.pricePerPlay = 1;
+		pong = new Game();
+		pong.name = "Pong";
+		pong.pricePerPlay = 1;
 		purchasingService.setCreditStorage(mockCS);
 	}
-	
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
 	@Test
 	public void canAffordIt() throws Exception {		
-		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(50);
 		
-		GamePlayToken gpt = purchasingService.bulkPurchase(
-				algernon,
-				tiddlywinks,
-				1
-		);
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 1);
 		
-		verify(mockCS).getUserCredits(algernon.getID());
+		verify(mockCS).getUserCredits(alpha.getID());
 		
-		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
-		assertEquals("Wrong number of plays",
-				1, gpt.getPlays());
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 1, gpt.getPlays());
 	}
-	
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
 	@Test
 	public void cannotAffordIt() throws Exception {		
-		when(mockCS.getUserCredits(algernon.getID())).thenReturn(0);
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(0);
 		
-		GamePlayToken gpt = purchasingService.bulkPurchase(
-				algernon,
-				tiddlywinks,
-				1
-		);
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 1);
 		
-		verify(mockCS).getUserCredits(algernon.getID());
+		verify(mockCS).getUserCredits(alpha.getID());
 		
 		assertEquals("Wrong game", null, gpt);
 	}
-	
-	@Test
-	public void discountOnFive() throws Exception {		
-		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
-		
-		GamePlayToken gpt = purchasingService.bulkPurchase(
-				algernon,
-				tiddlywinks,
-				5
-		);
-		
-		verify(mockCS).getUserCredits(algernon.getID());
-		verify(mockCS).deductUserCredits(algernon.getID(), 3);
-		
-		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
-		assertEquals("Wrong number of plays",
-				5, gpt.getPlays());
-	}	
-	
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
 	@Test
 	public void discountOnTen() throws Exception {		
-		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
 		
-		GamePlayToken gpt = purchasingService.bulkPurchase(
-				algernon,
-				tiddlywinks,
-				10
-		);
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 10);
 		
-		verify(mockCS).getUserCredits(algernon.getID());
-		verify(mockCS).deductUserCredits(algernon.getID(), 5);
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 8);
 		
-		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
-		assertEquals("Wrong number of plays",
-				10, gpt.getPlays());
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 10, gpt.getPlays());
+	}	
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void discountOnTwenty() throws Exception {		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 20);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 12);
+		
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 20, gpt.getPlays());
 	}		
-	
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void discountOnFifty() throws Exception {		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 50);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 25);
+		
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 50, gpt.getPlays());
+	}
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
 	@Test
 	public void discountOnHundred() throws Exception {		
-		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
 		
-		GamePlayToken gpt = purchasingService.bulkPurchase(
-				algernon,
-				tiddlywinks,
-				100
-		);
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 100);
 		
-		verify(mockCS).getUserCredits(algernon.getID());
-		verify(mockCS).deductUserCredits(algernon.getID(), 40);
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 40);
 		
-		assertEquals("Wrong game", tiddlywinks, gpt.getGame());
-		assertEquals("Wrong number of plays",
-				100, gpt.getPlays());
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 100, gpt.getPlays());
 	}
-	
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
 	@Test
 	public void testTwentyTeamPlay() throws Exception {
 		HashSet<Player> players = new HashSet<Player>();
-		players.add(algernon);
-		players.add(barnaby);
+		players.add(alpha);
+		players.add(beta);
 		
-		when(mockCS.getUserCredits(algernon.getID())).thenReturn(50);
-		when(mockCS.getUserCredits(barnaby.getID())).thenReturn(50);
-
-		Set<GamePlayToken> gpts = purchasingService.teamBulkPurchase(players, 
-				tiddlywinks,
-				25
-		);
-
-		verify(mockCS).getUserCredits(algernon.getID());
-		verify(mockCS).deductUserCredits(algernon.getID(), 10);
-		verify(mockCS).getUserCredits(barnaby.getID());
-		verify(mockCS).deductUserCredits(barnaby.getID(), 10);
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		when(mockCS.getUserCredits(beta.getID())).thenReturn(500);
+		
+		Set<GamePlayToken> gpts =
+				purchasingService.teamBulkPurchase(players, pong, 20);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 10);
+		verify(mockCS).getUserCredits(beta.getID());
+		verify(mockCS).deductUserCredits(beta.getID(), 10);
 
 		for (GamePlayToken gpt : gpts) {
-			assertEquals("Wrong game", tiddlywinks, gpt.getGame());
-			assertEquals("Wrong number of plays",
-					25, gpt.getPlays());
+			assertEquals("Wrong game", pong, gpt.getGame());
+			assertEquals("Wrong number of plays", 20, gpt.getPlays());
 		}
+	}
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void testThreeHundredTeamPlay() throws Exception {
+		HashSet<Player> players = new HashSet<Player>();
+		players.add(alpha);
+		players.add(beta);
 		
-	
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		when(mockCS.getUserCredits(beta.getID())).thenReturn(500);
+		
+		Set<GamePlayToken> gpts =
+				purchasingService.teamBulkPurchase(players, pong, 100);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 30);
+		verify(mockCS).getUserCredits(beta.getID());
+		verify(mockCS).deductUserCredits(beta.getID(), 30);
+
+		for (GamePlayToken gpt : gpts) {
+			assertEquals("Wrong game", pong, gpt.getGame());
+			assertEquals("Wrong number of plays", 100, gpt.getPlays());
+		}
 	}
 	
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void testPlayerCannotAfford() throws Exception {
+		HashSet<Player> players = new HashSet<Player>();
+		players.add(alpha);
+		players.add(beta);
+		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		when(mockCS.getUserCredits(beta.getID())).thenReturn(10);
+		
+		assertEquals("One Player cannot afford the purchase", null,
+				purchasingService.teamBulkPurchase(players, pong, 200));
+	}
 }

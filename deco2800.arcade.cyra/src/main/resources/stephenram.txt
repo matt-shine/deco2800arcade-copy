@@ -1,0 +1,32 @@
+stephenram.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+stephenram
+  rotate: false
+  xy: 2, 532
+  size: 570, 263
+  orig: 570, 263
+  offset: 0, 0
+  index: 2
+stephenram
+  rotate: false
+  xy: 2, 797
+  size: 570, 263
+  orig: 570, 263
+  offset: 0, 0
+  index: 3
+stephenram
+  rotate: false
+  xy: 2, 2
+  size: 570, 263
+  orig: 570, 263
+  offset: 0, 0
+  index: 0
+stephenram
+  rotate: false
+  xy: 2, 267
+  size: 570, 263
+  orig: 570, 263
+  offset: 0, 0
+  index: 1

@@ -1,7 +1,6 @@
 package deco2800.arcade.towerdefence.model;
 
-import deco2800.arcade.towerdefence.model.creationobjects.Enemy;
-import deco2800.arcade.towerdefence.model.creationobjects.Ship;
+import deco2800.arcade.towerdefence.model.creationclasses.Enemy;
 import deco2800.arcade.towerdefence.model.pathfinding.*;
 
 import java.util.ArrayList;

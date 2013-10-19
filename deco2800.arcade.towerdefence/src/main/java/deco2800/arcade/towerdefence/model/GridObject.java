@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.towerdefence.model.creationobjects.Effect;
+import deco2800.arcade.towerdefence.model.creationclasses.Effect;
 
 /**
  * The class for an object that can be created on a grid, required to be

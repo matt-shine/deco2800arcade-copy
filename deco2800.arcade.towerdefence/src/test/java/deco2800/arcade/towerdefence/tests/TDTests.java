@@ -6,7 +6,7 @@ import org.junit.Test;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.*;
-import deco2800.arcade.towerdefence.model.creationobjects.Enemy;
+import deco2800.arcade.towerdefence.model.creationclasses.Enemy;
 import deco2800.arcade.towerdefence.model.pathfinding.Path;
 import deco2800.arcade.towerdefence.model.pathfinding.Path.Step;
 

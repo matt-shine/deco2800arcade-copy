@@ -1,4 +1,4 @@
-package deco2800.arcade.towerdefence.model.creationobjects;
+package deco2800.arcade.towerdefence.model.creationclasses;
 
 import java.util.List;
 

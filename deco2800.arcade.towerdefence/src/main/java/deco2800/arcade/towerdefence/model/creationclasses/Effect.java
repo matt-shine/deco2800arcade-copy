@@ -1,4 +1,4 @@
-package deco2800.arcade.towerdefence.model.creationobjects;
+package deco2800.arcade.towerdefence.model.creationclasses;
 
 import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.model.Mobile;

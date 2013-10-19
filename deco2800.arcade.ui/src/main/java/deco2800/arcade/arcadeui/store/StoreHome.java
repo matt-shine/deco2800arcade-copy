@@ -197,7 +197,7 @@ public class StoreHome implements Screen, StoreScreen {
 		popupBox.addActor(buy);
 		
 		// Buy button listener
-		buy.addListener(new ChangeListener() {
+		greyOverlay.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				System.out.println("DO BUY MANY TOKEN.");
 			}

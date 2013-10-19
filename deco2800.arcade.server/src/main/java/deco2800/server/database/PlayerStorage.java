@@ -204,6 +204,20 @@ public class PlayerStorage {
 			throws DatabaseException {
 		updateField(playerID, newValue, "name");
 	}
+	
+	/**
+	 * Sets a player's age to the provided name.
+	 * 
+	 * @param playerID
+	 *            The player's playerID.
+	 * @param newValue
+	 *            The player's new age.
+	 * @throws DatabaseException
+	 */
+	public void updateAge(int playerID, String newValue)
+			throws DatabaseException {
+		updateField(playerID, newValue, "age");
+	}
 
 	/**
 	 * Updates a database field, given a playerID, the field to be updated and
@@ -252,5 +266,11 @@ public class PlayerStorage {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public void addPlayer(int parseInt, String string, String string2,
+			String string3, String string4, String string5, String string6) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,27 +1,54 @@
 {
     com.badlogic.gdx.graphics.g2d.BitmapFont: {
-        default: { file: Fonts/Manteka18.fnt },
-        default-small: { file: Fonts/Manteka14.fnt },
-        default-large: { file: Fonts/Manteka34.fnt },
+        default:    { file: Fonts/Manteka18.fnt },
+        default-14: { file: Fonts/Manteka14.fnt },
+        default-18: { file: Fonts/Manteka18.fnt },
+        default-24: { file: Fonts/Manteka24.fnt },
+        default-26: { file: Fonts/Manteka26.fnt },
+        default-28: { file: Fonts/Manteka28.fnt },
+        default-34: { file: Fonts/Manteka34.fnt },
+        default-52: { file: Fonts/Manteka52.fnt },
         textbox: { file: Fonts/CenturyGothic20Bold.fnt }
     },
     com.badlogic.gdx.graphics.Color: {
-        red:    { a: 1, r: 1, g: 0, b: 0 },
-        green:  { a: 1, r: 0, g: 1, b: 0 },
-        blue:   { a: 1, r: 0, g: 0, b: 1 },
-        white:  { a: 1, r: 1, g: 1, b: 1 },
-        black:  { a: 1, r: 0, g: 0, b: 0 },
-        grey:   { a: 1, r: 0.5, g: 0.5, b: 0.5 }
+        magenta: { a: 1, r: 1, g: 0, b: 1 },
+        yellow: { a: 1, r: 1, g: 1, b: 0 },
+        white:   { a: 1, r: 1, g: 1, b: 1 },
+        black:   { a: 1, r: 0, g: 0, b: 0 }
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
     	default: { font: default, fontColor: white },
-        default-large: { font: default-large, fontColor: white }
+    	default-14: { font: default-14, fontColor: white },
+        default-18: { font: default-18, fontColor: white },
+        default-24: { font: default-24, fontColor: white },
+        default-26: { font: default-26, fontColor: white },
+        default-28: { font: default-28, fontColor: white },
+        default-34: { font: default-34, fontColor: white },
+        current-coins: { font: default-52, fontColor: yellow },
+        rating-score: { font: default-52, fontColor: magenta }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
         default: { font: textbox, fontColor: white, selection: selection, cursor: cursor, background: textbox }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-    	default: { font: default, fontColor: white, up: green_button, down: green_button, over: green_button_glow },
+    	default: { font: default-28, fontColor: white, up: green_button, down: green_button, over: green_button_glow },
     	icon: { font: default, fontColor: white, up: textField }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+    	default: { up: green_button, down: green_button, over: green_button_glow },
+    	home: { up: home_button },
+    	search: { up: search_button, down: search_button, over: search_button_glow },
+    	buy: { up: buy_button, down: buy_button, over: buy_button_glow },
+    	review: { up: review_button, down: review_button, over: review_button_glow },
+    	icon: { up: textField },
+    	icon_bg: { up: textField }
+    },
+    com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+    	wish: { font: default, checkboxOn: wish_button_glow, checkboxOff: wish_button },
+    	star1: { font: default, checkboxOn: star1, checkboxOff: clear, checkboxOver: star1 },
+    	star2: { font: default, checkboxOn: star2, checkboxOff: clear, checkboxOver: star2 },
+    	star3: { font: default, checkboxOn: star3, checkboxOff: clear, checkboxOver: star3 },
+    	star4: { font: default, checkboxOn: star4, checkboxOff: clear, checkboxOver: star4 },
+    	star5: { font: default, checkboxOn: star5, checkboxOff: clear, checkboxOver: star5 }
     }
 }

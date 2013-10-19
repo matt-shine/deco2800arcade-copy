@@ -11,10 +11,29 @@ public class Doodad {
     private String textureName = null;
     private int uid = 0;
 
-
+    // Holds this doodad's bounding rectangle
+    //private final Rectangle bounds;  //Ignore for now, just testing
 
     public Doodad(int uid) {
         this.uid = uid;
+        //bounds = new Rectangle();//Ignore for now, just testing
+    }
+
+    /**
+     * Returns this <code>Doodad</code>'s bounding rectangle.
+     * @return the bounding rectangle
+     */
+    //Ignore for now, just testing
+    /*public Rectangle bounds() {
+        bounds.x = getPos().x;
+        bounds.y = getPos().y;
+        bounds.width = 0.5f;
+        bounds.height = 0.5f;
+        return bounds;
+    }*/
+    
+    public void init(GameModel g) {
+    	
     }
 
 
@@ -63,7 +82,4 @@ public class Doodad {
     public void tick(GameModel m) {
 
     }
-
-
-
 }

@@ -1,7 +1,9 @@
 package deco2800.arcade.junglejump.GUI;
 
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -79,7 +81,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	private static SpriteBatch batch;
 
 	Frustum camGone = new Frustum();
-	private World world;
+	public static int world;
 	// Store details about the activity of junglejump and the players
 	public static final String messages = junglejump.class.getSimpleName();
 	// FPS Animation helper
@@ -102,6 +104,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	float velocity = 5.0f;
 	boolean correct = false;
 	boolean onPlatform, isFalling = false;
+	public int lives = 3;
 
 //	public int currentLevelIndex = 0;
 	static LevelContainer currentCont = new LevelContainer();
@@ -116,7 +119,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	Texture monkeySit, monkeyRun1, monkeyRun2;
 	Texture monkeySitLEFT, monkeyRun1LEFT, monkeyRun2LEFT;
 	Texture monkeySitRIGHT, monkeyRun1RIGHT, monkeyRun2RIGHT;
-	Texture gameBackground, platform;
+	public static Texture gameBackground;
+	public static Texture platform, levelText, hyphenText, livesText, levelNumText, 
+	worldNumText, livesNumText;
 	ShapeRenderer shapeRenderer;
 
 	/* ACHIEVEMENT VARIABLES */
@@ -151,8 +156,15 @@ public class junglejump extends GameClient implements InputProcessor {
 		monkeyY = monkeyDefaultY;
 		monkeyYoriginal = 0f;
 		// Replace "file" with chosen music
+		
+		URL path = this.getClass().getResource("/");
+		
 		try {
-			File file = new File("junglejumpassets/soundtrack.wav");
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"resources/soundtrack.wav";
+			System.out.println(resource);
+			File file = new File(resource);
 			FileHandle fileh = new FileHandle(file);
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 			Clip clip = AudioSystem.getClip();
@@ -169,7 +181,11 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Theme Music Not Found");
 		}
 		try {
-			File file2 = new File("junglejumpassets/menu.wav");
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"resources/menu.wav";
+			System.out.println(resource);
+			File file2 = new File(resource);
 			AudioInputStream audioIn2 = AudioSystem.getAudioInputStream(file2);
 			menuSound = AudioSystem.getClip();
 			menuSound.open(audioIn2);
@@ -192,19 +208,27 @@ public class junglejump extends GameClient implements InputProcessor {
 	@Override
 	public void create() {
 		super.create();
-        System.out.println(System.getProperty("user.dir"));
-		texture = new Texture(("junglejumpassets/mainscreen.png"));
-		monkeySit = new Texture(("junglejumpassets/monkeySit.png"));
-		monkeySitRIGHT = new Texture(("junglejumpassets/monkeySit.png"));
-		monkeySitLEFT = new Texture(("junglejumpassets/monkeySitLEFT.png"));
-		monkeyRun1 = new Texture(("junglejumpassets/monkeyRun1.png"));
-		monkeyRun1RIGHT = new Texture(("junglejumpassets/monkeyRun1.png"));
-		monkeyRun1LEFT = new Texture(("junglejumpassets/monkeyRun1LEFT.png"));
-		monkeyRun2 = new Texture(("junglejumpassets/monkeyRun2.png"));
-		monkeyRun2RIGHT = new Texture(("junglejumpassets/monkeyRun2.png"));
-		monkeyRun2LEFT = new Texture(("junglejumpassets/monkeyRun2LEFT.png"));
-		gameBackground = new Texture(("junglejumpassets/gameBackground2.png"));
-		//platform = new Texture("junglejumpassets/platform.png");
+
+		System.out.println(System.getProperty("user.dir"));
+		texture = new Texture(Gdx.files.internal("mainscreen.png"));
+		monkeySit = new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitRIGHT = new Texture(Gdx.files.internal("monkeySit.png"));
+		monkeySitLEFT = new Texture(Gdx.files.internal("monkeySitLEFT.png"));
+		monkeyRun1 = new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1RIGHT = new Texture(Gdx.files.internal("monkeyRun1.png"));
+		monkeyRun1LEFT = new Texture(Gdx.files.internal("monkeyRun1LEFT.png"));
+		monkeyRun2 = new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2RIGHT = new Texture(Gdx.files.internal("monkeyRun2.png"));
+		monkeyRun2LEFT = new Texture(Gdx.files.internal("monkeyRun2LEFT.png"));
+		gameBackground = new Texture(Gdx.files.internal("gameBackground2.png"));
+		levelText = new Texture(Gdx.files.internal("level.png"));
+		hyphenText = new Texture(Gdx.files.internal("-.png"));
+		livesText = new Texture(Gdx.files.internal("lives.png"));
+		worldNumText = new Texture(Gdx.files.internal("1.png"));
+		livesNumText = new Texture(Gdx.files.internal("3.png"));
+		levelNumText = new Texture(Gdx.files.internal("1.png"));
+		//platform = new Texture("platform.png");
+
 
 		/* ACHIEVEMENT STUFF */
 		AchievementClient achClient = this.getAchievementClient();
@@ -226,7 +250,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementNameFont        = new BitmapFont(false);
 		achievementDescriptionFont = new BitmapFont(false);
 		achievementThresholdFont   = new BitmapFont(false);
-		achievementIconTexture     = new Texture(("junglejumpassets/monkeySit.png"));
+		achievementIconTexture     = new Texture(("monkeySit.png"));
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
@@ -396,7 +420,12 @@ public class junglejump extends GameClient implements InputProcessor {
 					batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 				}
 			}
-			//batch.draw(platform, 100, 50);
+			batch.draw(levelText, 5, 5, 80, 30);
+			batch.draw(hyphenText, 105, 5, 30, 30);
+			batch.draw(livesText, 5, 30, 80, 30);
+			batch.draw(levelNumText, 125, 5, 30, 30);
+			batch.draw(worldNumText, 85, 5, 30, 30);
+			batch.draw(livesNumText, 85, 30, 30, 30);
 
 			batch.end();
 			camera.update();
@@ -435,6 +464,12 @@ public class junglejump extends GameClient implements InputProcessor {
 	public void killMonkey() {
 		monkeyY = 100;
 		monkeyX = 10;
+		lives--;
+		if(lives > 0) {
+		} else {
+			lives = 5;
+		}
+		livesNumText = new Texture(("" + lives + ".png"));
 	}
 
 	public static void drawLevel() {
@@ -467,7 +502,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					
 					// Play banana sound
 					try{ 
-						File file = new File("junglejumpassets/pickup.wav");
+						File file = new File("pickup.wav");
 						FileHandle fileh = new FileHandle(file);
 						AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 						Clip clip = AudioSystem.getClip();
@@ -642,7 +677,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				
 				// Play sound effect for jumping
 				try{ 
-					File file = new File("junglejumpassets/jump.wav");
+					File file = new File("jump.wav");
 					FileHandle fileh = new FileHandle(file);
 					AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
 					Clip clip = AudioSystem.getClip();

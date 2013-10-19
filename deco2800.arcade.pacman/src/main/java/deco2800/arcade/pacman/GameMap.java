@@ -7,7 +7,6 @@ import java.util.List;
 import org.lwjgl.util.Point;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * The map of the pacman game, containing the list of tiles and which tiles 
@@ -23,14 +22,14 @@ public class GameMap {
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int hOffset;
 	private int vOffset;
-	private int side;
+	private final int tileSideLength = 16;// length of side of square- should be
+	// same for all tiles in a GameMap
 	
 	public GameMap(int hOffset, int vOffset) {
 		vsym = false;
 		ghostDoors = new ArrayList<WallTile>();
 		this.hOffset = hOffset;
-		this.vOffset = vOffset;
-		side = Tile.getSideLength();		
+		this.vOffset = vOffset;;		
 	}
 	
 
@@ -43,12 +42,12 @@ public class GameMap {
 		// each array contains all the characters from that line
 		ArrayList<char[]> resultArray = new ArrayList<char[]>();
 		String[] lineArray = contents.split(System.getProperty("line.separator"));
-		for (int i = 0; i < lineArray.length; i++) {
-			String line = lineArray[i];
-			if (line.contains("VSYM")) {
-				vsym = true;
-				continue;
-			}
+		String line = lineArray[0];
+		if (line.contains("VSYM")) {
+			vsym = true;
+		}
+		for (int i = 1; i < lineArray.length; i++) {
+			line = lineArray[i];			
 			if (vsym) {
 				line = useVSymmetry(line); 
 			}
@@ -173,16 +172,6 @@ public class GameMap {
 //		}
 	}
 	
-	public void render(SpriteBatch batch) {
-		//should do some fancy stuff to position pacman grid in middle of screen horizontally
-		//instead of what I've done here with just setting them to a value I picked		
-		for (int x = 0; x < grid.length; x++) {
-			for (int y = 0; y < grid[x].length; y++) {
-				grid[x][y].render(batch, hOffset + x*side, vOffset + y*side);
-			}
-		}
-	}
-
 	public List<WallTile> getGhostDoors() {
 		return ghostDoors;
 	}
@@ -201,7 +190,7 @@ public class GameMap {
 	 */
 	public Point getTileCoords(Tile tile) {
 		Point xy = getTilePos(tile);
-		return new Point(hOffset + xy.getX()*side, vOffset + xy.getY()*side);
+		return new Point(hOffset + xy.getX()*tileSideLength, vOffset + xy.getY()*tileSideLength);
 	}
 	
 	/**
@@ -211,13 +200,12 @@ public class GameMap {
 	public Tile findMoverTile(Mover mover) {
 		int x = mover.getMidX();
 		int y = mover.getMidY();
-		int side = Tile.getSideLength();
 		for (int i = 0; i < grid.length; i++) {
 			int tileX = getTileCoords(grid[i][0]).getX();
-			if (x > tileX && x <= tileX + side) {
+			if (x > tileX && x <= tileX + tileSideLength) {
 				for (int j = 0; j < grid[i].length; j++) {
 					int tileY = getTileCoords(grid[i][j]).getY(); 
-					if (y > tileY && y <= tileY + side) {
+					if (y > tileY && y <= tileY + tileSideLength) {
 						return grid[i][j];
 					}
 				}
@@ -255,4 +243,7 @@ public class GameMap {
 		return vOffset;
 	}
 
+	public int getTileSideLength() {
+		return tileSideLength;
+	}
 }

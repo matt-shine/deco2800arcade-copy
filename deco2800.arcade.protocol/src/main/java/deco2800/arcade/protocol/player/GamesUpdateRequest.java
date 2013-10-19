@@ -1,6 +1,8 @@
 package deco2800.arcade.protocol.player;
 
-public class GamesUpdateRequest extends PlayerNetworkObject {
+import deco2800.arcade.protocol.NetworkObject;
+
+public class GamesUpdateRequest extends NetworkObject {
 	private int playerID;
 	private String gameID;
 	private boolean add;

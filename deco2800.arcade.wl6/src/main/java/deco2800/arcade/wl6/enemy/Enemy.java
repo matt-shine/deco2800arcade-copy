@@ -30,13 +30,10 @@ public class Enemy extends Mob {
     // current state
     private STATES state = STATES.NO_STATE;
     // State tick
-    private float stateTime;
     private float tick;
     private STATES nextState;
     //
-    private WL6Meta.DIRS faceDir;
-    //
-    private boolean pathing;
+    private WL6Meta.DIRS pathDir;
     //
     private float pathSpeed;
     //
@@ -60,14 +57,13 @@ public class Enemy extends Mob {
     public Enemy(int uid) {
         super(uid);
         tick = 0;
-        stateTime = 0;
-        nextState = null;
+
     }
 
     @Override
     public void init(GameModel model) {
         super.init(model);
-        if (pathing) {
+        if (pathDir != null) {
             calculatePath(model);
         }
 
@@ -76,16 +72,10 @@ public class Enemy extends Mob {
     @Override
     public void tick(GameModel gameModel) {
         super.tick(gameModel);
-
         tick += gameModel.delta();
-        stateTime += gameModel.delta();
-        if (stateTime > 1 && nextState != null) {
+        if (tick > 1 && nextState != null) {
             setState(nextState);
             nextState = null;
-        }
-
-        if (tick > 0.5 && state == STATES.PATH && path != null && path.size() != 0) {
-            path();
         }
 
         detectPlayer(gameModel);
@@ -93,31 +83,37 @@ public class Enemy extends Mob {
             attackPlayer(gameModel);
         }
 
+        if (state == STATES.PATH && path != null && path.size() != 0) {
+            path();
+        }
+
         if (this.getHealth() <= 0) {
-            setState(STATES.DIE);
+            changeStates(STATES.DIE, 0);
             gameModel.destroyDoodad(this);
         }
     }
 
-    public WL6Meta.DIRS getFaceDir() {
-        return faceDir;
+    public WL6Meta.DIRS getPathDir() {
+        return pathDir;
     }
 
-    public void setFaceDir(WL6Meta.DIRS dir) {
-        faceDir = dir;
+    public void setPathDir(WL6Meta.DIRS dir) {
+        pathDir = dir;
     }
 
-    public void setPathing(boolean pathing) {
-        this.pathing = pathing;
+    public void setState(STATES state) {
+        this.state = state;
     }
 
     /**
      * Tells the enemy to change states
-     * @param state state to change the enemy to
+     * @param State state to change the enemy to
+     * @param delay time taken to change states
+     *              (e.g. An officer takes less time to go CHASE -> ATTACK then a guard)
      */
-    public void setState(STATES state) {
-        this.state = state;
-        stateTime = 0;
+    public void changeStates(STATES State, int delay) {
+
+        setState(State);
     }
 
     // follow patrol path
@@ -145,7 +141,6 @@ public class Enemy extends Mob {
     	pathGoal++;
     	pathGoal = pathGoal % path.size();
     	setPos(new Vector2(path.get(pathGoal)).add(0.5f, 0.5f));
-        tick = 0;
 		
     }
 
@@ -153,6 +148,7 @@ public class Enemy extends Mob {
     public void detectPlayer(GameModel gameModel) {
         if (canSee(gameModel.getPlayer(), gameModel)) {
             nextState = STATES.ATTACK;
+            tick = 0;
         }
     }
 
@@ -178,9 +174,9 @@ public class Enemy extends Mob {
             d = d * 2;
         }
         if (isPain()) {
-            setState(STATES.PAIN);
+            changeStates(STATES.PAIN, 0);
             setHealth(getHealth() - d);
-            setState(STATES.CHASE);
+            changeStates(STATES.CHASE, 0);
         }
         else {
             setHealth(getHealth() - d);

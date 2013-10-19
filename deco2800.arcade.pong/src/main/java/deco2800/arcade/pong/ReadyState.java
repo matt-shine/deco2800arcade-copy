@@ -9,8 +9,8 @@ public class ReadyState extends GameState {
 	@Override
 	public void handleInput(Pong context) {
 		if (Gdx.input.isTouched()) {
-			context.startPoint();
-		}
-	}
+    		context.startPoint();
+    	}
+	}	
 
 }

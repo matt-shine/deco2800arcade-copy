@@ -69,146 +69,146 @@ public class BulkPurchasingTest {
 		assertEquals("Wrong game", null, gpt);
 	}
 
-//	/**
-//	 * @author Addison Gourluck
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void discountOnTen() throws Exception {		
-//		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
-//		
-//		GamePlayToken gpt =
-//				purchasingService.bulkPurchase(alpha, pong, 10);
-//		
-//		verify(mockCS).getUserCredits(alpha.getID());
-//		verify(mockCS).deductUserCredits(alpha.getID(), 8);
-//		
-//		assertEquals("Wrong game", pong, gpt.getGame());
-//		assertEquals("Wrong number of plays", 10, gpt.getPlays());
-//	}	
-//
-//	/**
-//	 * @author Addison Gourluck
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void discountOnTwenty() throws Exception {		
-//		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
-//		
-//		GamePlayToken gpt =
-//				purchasingService.bulkPurchase(alpha, pong, 20);
-//		
-//		verify(mockCS).getUserCredits(alpha.getID());
-//		verify(mockCS).deductUserCredits(alpha.getID(), 12);
-//		
-//		assertEquals("Wrong game", pong, gpt.getGame());
-//		assertEquals("Wrong number of plays", 20, gpt.getPlays());
-//	}		
-//
-//	/**
-//	 * @author Addison Gourluck
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void discountOnFifty() throws Exception {		
-//		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
-//		
-//		GamePlayToken gpt =
-//				purchasingService.bulkPurchase(alpha, pong, 50);
-//		
-//		verify(mockCS).getUserCredits(alpha.getID());
-//		verify(mockCS).deductUserCredits(alpha.getID(), 25);
-//		
-//		assertEquals("Wrong game", pong, gpt.getGame());
-//		assertEquals("Wrong number of plays", 50, gpt.getPlays());
-//	}
-//
-//	/**
-//	 * @author Addison Gourluck
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void discountOnHundred() throws Exception {		
-//		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
-//		
-//		GamePlayToken gpt =
-//				purchasingService.bulkPurchase(alpha, pong, 100);
-//		
-//		verify(mockCS).getUserCredits(alpha.getID());
-//		verify(mockCS).deductUserCredits(alpha.getID(), 40);
-//		
-//		assertEquals("Wrong game", pong, gpt.getGame());
-//		assertEquals("Wrong number of plays", 100, gpt.getPlays());
-//	}
-//
-//	/**
-//	 * @author Addison Gourluck
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void testTwentyTeamPlay() throws Exception {
-//		HashSet<Player> players = new HashSet<Player>();
-//		players.add(alpha);
-//		players.add(beta);
-//		
-//		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
-//		when(mockCS.getUserCredits(beta.getID())).thenReturn(500);
-//		
-//		Set<GamePlayToken> gpts =
-//				purchasingService.teamBulkPurchase(players, pong, 20);
-//		
-//		verify(mockCS).getUserCredits(alpha.getID());
-//		verify(mockCS).deductUserCredits(alpha.getID(), 10);
-//		verify(mockCS).getUserCredits(beta.getID());
-//		verify(mockCS).deductUserCredits(beta.getID(), 10);
-//
-//		for (GamePlayToken gpt : gpts) {
-//			assertEquals("Wrong game", pong, gpt.getGame());
-//			assertEquals("Wrong number of plays", 20, gpt.getPlays());
-//		}
-//	}
-//
-//	/**
-//	 * @author Addison Gourluck
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void testThreeHundredTeamPlay() throws Exception {
-//		HashSet<Player> players = new HashSet<Player>();
-//		players.add(alpha);
-//		players.add(beta);
-//		
-//		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
-//		when(mockCS.getUserCredits(beta.getID())).thenReturn(500);
-//		
-//		Set<GamePlayToken> gpts =
-//				purchasingService.teamBulkPurchase(players, pong, 100);
-//		
-//		verify(mockCS).getUserCredits(alpha.getID());
-//		verify(mockCS).deductUserCredits(alpha.getID(), 30);
-//		verify(mockCS).getUserCredits(beta.getID());
-//		verify(mockCS).deductUserCredits(beta.getID(), 30);
-//
-//		for (GamePlayToken gpt : gpts) {
-//			assertEquals("Wrong game", pong, gpt.getGame());
-//			assertEquals("Wrong number of plays", 100, gpt.getPlays());
-//		}
-//	}
-//	
-//	/**
-//	 * @author Addison Gourluck
-//	 * @throws Exception
-//	 */
-//	@Test
-//	public void testPlayerCannotAfford() throws Exception {
-//		HashSet<Player> players = new HashSet<Player>();
-//		players.add(alpha);
-//		players.add(beta);
-//		
-//		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
-//		when(mockCS.getUserCredits(beta.getID())).thenReturn(10);
-//		
-//		assertEquals("One Player cannot afford the purchase", null,
-//				purchasingService.teamBulkPurchase(players, pong, 200));
-//	}
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void discountOnTen() throws Exception {		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 10);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 8);
+		
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 10, gpt.getPlays());
+	}	
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void discountOnTwenty() throws Exception {		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 20);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 12);
+		
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 20, gpt.getPlays());
+	}		
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void discountOnFifty() throws Exception {		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 50);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 25);
+		
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 50, gpt.getPlays());
+	}
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void discountOnHundred() throws Exception {		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		
+		GamePlayToken gpt =
+				purchasingService.bulkPurchase(alpha, pong, 100);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 40);
+		
+		assertEquals("Wrong game", pong, gpt.getGame());
+		assertEquals("Wrong number of plays", 100, gpt.getPlays());
+	}
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void testTwentyTeamPlay() throws Exception {
+		HashSet<Player> players = new HashSet<Player>();
+		players.add(alpha);
+		players.add(beta);
+		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		when(mockCS.getUserCredits(beta.getID())).thenReturn(500);
+		
+		Set<GamePlayToken> gpts =
+				purchasingService.teamBulkPurchase(players, pong, 20);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 10);
+		verify(mockCS).getUserCredits(beta.getID());
+		verify(mockCS).deductUserCredits(beta.getID(), 10);
+
+		for (GamePlayToken gpt : gpts) {
+			assertEquals("Wrong game", pong, gpt.getGame());
+			assertEquals("Wrong number of plays", 20, gpt.getPlays());
+		}
+	}
+
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void testThreeHundredTeamPlay() throws Exception {
+		HashSet<Player> players = new HashSet<Player>();
+		players.add(alpha);
+		players.add(beta);
+		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		when(mockCS.getUserCredits(beta.getID())).thenReturn(500);
+		
+		Set<GamePlayToken> gpts =
+				purchasingService.teamBulkPurchase(players, pong, 100);
+		
+		verify(mockCS).getUserCredits(alpha.getID());
+		verify(mockCS).deductUserCredits(alpha.getID(), 30);
+		verify(mockCS).getUserCredits(beta.getID());
+		verify(mockCS).deductUserCredits(beta.getID(), 30);
+
+		for (GamePlayToken gpt : gpts) {
+			assertEquals("Wrong game", pong, gpt.getGame());
+			assertEquals("Wrong number of plays", 100, gpt.getPlays());
+		}
+	}
+	
+	/**
+	 * @author Addison Gourluck
+	 * @throws Exception
+	 */
+	@Test
+	public void testPlayerCannotAfford() throws Exception {
+		HashSet<Player> players = new HashSet<Player>();
+		players.add(alpha);
+		players.add(beta);
+		
+		when(mockCS.getUserCredits(alpha.getID())).thenReturn(500);
+		when(mockCS.getUserCredits(beta.getID())).thenReturn(10);
+		
+		assertEquals("One Player cannot afford the purchase", null,
+				purchasingService.teamBulkPurchase(players, pong, 200));
+	}
 }

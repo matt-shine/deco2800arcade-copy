@@ -93,7 +93,7 @@ public class UserScreen extends JFrame{
 		forum = new ImageIcon("assets/images/forum.png");
 		profilehover = new ImageIcon("assets/images/profilehover.png");
 		profile = new ImageIcon("assets/images/profile.png");
-
+				
 		/*
 		 *  Create all Panels 
 		 *  (Page split into 3 main panels inside a parent container 
@@ -336,43 +336,23 @@ public class UserScreen extends JFrame{
 	    achievement1 = new JLabel();
 	    achievement2 = new JLabel();
 	    achievement3 = new JLabel();
+	    achievement4 = new JLabel();
+	    achievement5 = new JLabel();
+	    achievement6 = new JLabel();
 	    
-	    achievement1.setIcon(model.masterpaddle);
-	    achievement2.setIcon(model.offthewall);
-	    achievement3.setIcon(model.paddlewar);
+	    achievement1.setIcon(piclocked);
+	    achievement2.setIcon(piclocked);
+	    achievement3.setIcon(piclocked);
+	    achievement4.setIcon(piclocked);
+	    achievement5.setIcon(piclocked);
+	    achievement6.setIcon(piclocked);
 	    
-	    JLabel game1name = new JLabel("Pong");
-        game1name.setFont(linkbold);
-        game1name.setForeground(Color.white);
-        JLabel game2name = new JLabel("Pong");
-        game2name.setFont(linkbold);
-        game2name.setForeground(Color.white);
-        JLabel game3name = new JLabel("Pong");
-        game3name.setFont(linkbold);
-        game3name.setForeground(Color.white);
-        
-        JLabel achievement1time = new JLabel("Win 5 Points");
-        achievement1time.setFont(blacknormal);
-        achievement1time.setForeground(Color.white);
-        JLabel achievement2time = new JLabel("Win 3 Games Straight");
-        achievement2time.setFont(blacknormal);
-        achievement2time.setForeground(Color.white);
-        JLabel achievement3time = new JLabel("20 Hits or More");
-        achievement3time.setFont(blacknormal);
-        achievement3time.setForeground(Color.white);
-
-        JPanel achievementtext1 = new JPanel(new MigLayout());
-        achievementtext1.setOpaque(false);
-        achievementtext1.add(game1name,"wrap");
-        achievementtext1.add(achievement1time);
-        JPanel achievementtext2 = new JPanel(new MigLayout());
-        achievementtext2.setOpaque(false);
-        achievementtext2.add(game2name,"wrap");
-        achievementtext2.add(achievement2time);
-        JPanel achievementtext3 = new JPanel(new MigLayout());
-        achievementtext3.setOpaque(false);
-        achievementtext3.add(game3name,"wrap");
-        achievementtext3.add(achievement3time);
+	    JPanel achievementtext1 = new JPanel(new MigLayout());
+	    JPanel achievementtext2 = new JPanel(new MigLayout());
+	    JPanel achievementtext3 = new JPanel(new MigLayout());
+	    JPanel achievementtext4 = new JPanel(new MigLayout());
+	    JPanel achievementtext5 = new JPanel(new MigLayout());
+	    JPanel achievementtext6 = new JPanel(new MigLayout());
 	    
 	    JPanel achievementbarpanel = new JPanel(new MigLayout());
 	    JPanel achievementlistpanel = new JPanel(new MigLayout());
@@ -396,6 +376,12 @@ public class UserScreen extends JFrame{
         achievementlistpanel.add(achievementtext2,"growy, width :110");
         achievementlistpanel.add(achievement3);
         achievementlistpanel.add(achievementtext3,"wrap, growy, width :110");
+        achievementlistpanel.add(achievement4);
+        achievementlistpanel.add(achievementtext4,"growy, width :110");
+        achievementlistpanel.add(achievement5);
+        achievementlistpanel.add(achievementtext5,"growy, width :110");
+        achievementlistpanel.add(achievement6);
+        achievementlistpanel.add(achievementtext6,"growy, width :110");
         
         achievementlistpanel.setOpaque(false);
 		

@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
 
 public class RegisterScreen implements Screen {
 
@@ -17,7 +16,7 @@ public class RegisterScreen implements Screen {
 
     private Skin skin;
     private RegisterScreenStage stage;
-        private ArcadeUI arcadeUI;
+	private ArcadeUI arcadeUI;
 
     public RegisterScreen(ArcadeUI ui) {
         arcadeUI = ui;
@@ -32,8 +31,7 @@ public class RegisterScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label errorLabel = new Label("Passwords are invalid", skin, "error");
-        errorLabel.setVisible(false);
+        Label errorLabel = new Label("Placeholder Error Message", skin, "error");
         final TextField usernameText = new TextField("", skin);
         usernameText.setMessageText("Enter Username");
         final TextField passwordText = new TextField("", skin);
@@ -60,11 +58,7 @@ public class RegisterScreen implements Screen {
 
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                    if (!passwordText.getText().equals(passwordTextCheck.getText()) || passwordText.getText().equals("")) {
-                            errorLabel.setVisible(true);
-                    } else {
-                            ArcadeSystem.registerUser(usernameText.getText(), passwordText.getText());
-                    }
+
             }
         });
         cancelButton.addListener(new ChangeListener() {

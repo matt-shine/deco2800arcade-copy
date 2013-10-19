@@ -10,8 +10,7 @@ public class LobbyMatch {
 	private String gameId;
 	private int matchId;
 
-	public LobbyMatch(String gameId, int hostPlayerId, Connection connection,
-			int matchId) {
+	public LobbyMatch(String gameId, int hostPlayerId, Connection connection, int matchId) {
 		this.hostPlayerId = hostPlayerId;
 		this.hostConnection = connection;
 		this.gameId = gameId;
@@ -21,7 +20,7 @@ public class LobbyMatch {
 	public int getHostPlayerId() {
 		return this.hostPlayerId;
 	}
-
+	
 	public int getMatchId() {
 		return this.matchId;
 	}
@@ -33,5 +32,7 @@ public class LobbyMatch {
 	public String getGameId() {
 		return this.gameId;
 	}
+
+
 
 }

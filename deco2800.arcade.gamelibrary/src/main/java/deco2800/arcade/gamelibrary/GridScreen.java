@@ -18,6 +18,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
 import deco2800.arcade.model.Player;
 
+
 /**
  * GDX Screen class for Grid View
  * @author Aaron Hayes
@@ -167,7 +168,7 @@ public class GridScreen implements Screen, LibraryScreen {
         userProfileButton.setX(500);
         userProfileButton.setY(650);
         userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
-        
+
         stage.addActor(homeButton);
         stage.addActor(storeButton);
         stage.addActor(userProfileButton);

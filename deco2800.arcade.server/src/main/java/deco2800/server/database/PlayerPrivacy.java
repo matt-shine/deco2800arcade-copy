@@ -50,9 +50,8 @@ public class PlayerPrivacy {
 						.execute("CREATE TABLE PLAYERPRIVACY( "
 								+ "playerID INT NOT NULL, "
 								+ "name INT NOT NULL, email INT, program INT, "
-								+ "bio INT, "
+								+ "bio INT,"
 								+ "games INT, achievements INT, "
-								+ "age INT, "
 								+ "PRIMARY KEY (playerID), "
 								+ "FOREIGN KEY (playerID) REFERENCES PLAYER(playerID);");
 			}
@@ -111,7 +110,6 @@ public class PlayerPrivacy {
 			data.add(findPlayerInfo(playerID, resultSet, "bio"));
 			data.add(findPlayerInfo(playerID, resultSet, "games"));
 			data.add(findPlayerInfo(playerID, resultSet, "achievements"));
-			data.add(findPlayerInfo(playerID, resultSet, "age"));
 
 			return data;
 		} catch (SQLException e) {
@@ -288,27 +286,6 @@ public class PlayerPrivacy {
 			updateField(playerID, PUBLIC, "achievements");
 		} else {
 			updateField(playerID, FRIENDS_ONLY, "achievements");
-		}
-	}
-	
-	/**
-	 * Sets a player's age privacy setting to the provided modes.
-	 *  
-	 * @param playerID
-	 *            The player's playerID.
-	 * @param privacySetting
-	 *            True if information is public, false if information is for
-	 *            friends only.
-	 * @throws DatabaseException
-	 */
-	public void updateAge(int playerID, boolean privacySetting)
-			throws DatabaseException {
-
-
-		if(privacySetting){
-			updateField(playerID, PUBLIC, "age");
-		} else {
-			updateField(playerID, FRIENDS_ONLY, "age");
 		}
 	}
 

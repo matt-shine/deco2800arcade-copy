@@ -9,107 +9,76 @@ import deco2800.server.database.DatabaseException;
 import deco2800.server.database.PlayerDatabaseManager;
 import deco2800.arcade.model.*;
 
-public class PlayerListener extends Listener {
-
-	// uses DatabaseManager to talk to database
+public class PlayerListener extends Listener{
+	
+	
+	//uses DatabaseManager to talk to database
 	public PlayerListener() {
-
+		
 	}
-
+	
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
-
-		if (object instanceof PlayerNetworkObject) {
-			if (object instanceof BioUpdateRequest) {
-				BioUpdateRequest request = (BioUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				pdm.updateBio(request.getPlayerID(), request.getBio());
-
-			} else if (object instanceof AgeUpdateRequest) {
-				AgeUpdateRequest request = (AgeUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				pdm.updateAge(request.getPlayerID(), request.getAge());
-
-			} else if (object instanceof BlockedUpdateRequest) {
-				BlockedUpdateRequest request = (BlockedUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				if(request.isAdd()){
-					pdm.addBlocked(request.getPlayerID(), request.getPlayerID2());
-				} else {
-					pdm.removeBlocked(request.getPlayerID(), request.getPlayerID2());
-				}				
-
-			} else if (object instanceof EmailUpdateRequest) {
-				EmailUpdateRequest request = (EmailUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				pdm.updateEmail(request.getPlayerID(), request.getEmail());
-
-			} else if (object instanceof FriendInvitesUpdateRequest) {
-				FriendInvitesUpdateRequest request = (FriendInvitesUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				request.
-				
-
-			} else if (object instanceof FriendsUpdateRequest) {
-				FriendsUpdateRequest request = (FriendsUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				if(request.isAdd()){
-					pdm.addFriend(request.getPlayerID(), request.getFriendID());
-				} else {
-					pdm.removeFriend(request.getPlayerID(), request.getFriendID());
-				}
-
-			} else if (object instanceof GamesUpdateRequest) {
-				GamesUpdateRequest request = (GamesUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				if(request.isAdd()){
-					pdm.addGame(request.getPlayerID(), request.getGameID());
-				} else {
-					pdm.removeGame(request.getPlayerID(), request.getGameID());
-				}
-
-			} else if (object instanceof NameUpdateRequest) {
-				NameUpdateRequest request = (NameUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				pdm.updateName(request.getPlayerID(), request.getName());
-
-			} else if (object instanceof ProgramUpdateRequest) {
-				ProgramUpdateRequest request = (ProgramUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				pdm.updateProgram(request.getPlayerID(), request.getProgram());
-
-			} else if (object instanceof UsernameUpdateRequest) {
-				UsernameUpdateRequest request = (UsernameUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				pdm.updateUsername(request.getPlayerID(), request.getUsername());
-				
-			} else if (object instanceof PlayerRequest) {
-				PlayerRequest request = (PlayerRequest) object;
-				PlayerResponse response = new PlayerResponse();
-				int playerID = request.getPlayerID();
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-
-				try {
-					// update database
-					response.setPlayer(pdm.loadPlayer(playerID));
-					BlockingMessage.respond(connection, request, response);
-				} catch (DatabaseException e) {
-					e.printStackTrace();
-					// can't let the client keep blocking, just send an empty
-					// list
-					response.setPlayer(null);
-					BlockingMessage.respond(connection, request, response);
-				}
-			} else if (object instanceof LibraryStyleUpdateRequest) {
-				LibraryStyleUpdateRequest request = (LibraryStyleUpdateRequest) object;
-				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				/*
-				 * This needs to be completed by the Library Team.
-				 */
-			}
-
-		}
-
+		
+		if (object instanceof BioUpdateRequest) {
+			BioUpdateRequest request = (BioUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+		
+		} else if (object instanceof AgeUpdateRequest) {
+			AgeUpdateRequest request = (AgeUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof BlockedUpdateRequest) {
+			BlockedUpdateRequest request  = (BlockedUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof EmailUpdateRequest) {
+			EmailUpdateRequest request = (EmailUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof FriendInvitesUpdateRequest) {
+			FriendInvitesUpdateRequest request = (FriendInvitesUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof FriendsUpdateRequest) {
+			FriendsUpdateRequest request = (FriendsUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof GamesUpdateRequest) {
+			GamesUpdateRequest request = (GamesUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof NameUpdateRequest) {
+			NameUpdateRequest request = (NameUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof ProgramUpdateRequest) {
+			ProgramUpdateRequest request = (ProgramUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+			
+		} else if (object instanceof UsernameUpdateRequest) {
+			UsernameUpdateRequest request = (UsernameUpdateRequest) object;
+			PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+		} else if (object instanceof PlayerRequest) {
+			PlayerRequest request = (PlayerRequest)object;
+            PlayerResponse response = new PlayerResponse();
+            int playerID =  request.getPlayerID();
+            PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+            
+            try {
+				//update database
+            	response.setPlayer(pdm.loadPlayer(playerID));
+                BlockingMessage.respond(connection, request, response);
+			} catch (DatabaseException e) {
+				e.printStackTrace();
+                // can't let the client keep blocking, just send an empty list
+				response.setPlayer(null);
+                BlockingMessage.respond(connection, request, response);
+            }
+		} else if (object instanceof LibraryStyleUpdateRequest) {
+            LibraryStyleUpdateRequest request = (LibraryStyleUpdateRequest) object;
+            PlayerDatabaseManager pdm = new PlayerDatabaseManager();
+        }
 	}
 }

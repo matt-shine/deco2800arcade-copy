@@ -35,8 +35,6 @@ public class Player extends User {
 	private PrivacyField friendsPrivacy;
 	private PrivacyField gamesPrivacy;
 	private PrivacyField achievementsPrivacy;
-	
-	private PlayerPrivacyGlob playerPrivacy;
 
 	private Games games;
 	private Friends friends;
@@ -168,8 +166,21 @@ public class Player extends User {
 		if (blockedList != null) {
 			this.blocked.addAll(blockedList);
 		}
-		
-		this.playerPrivacy = new PlayerPrivacyGlob(privacy);
+
+		this.namePrivacy = new PrivacyField(NAME_PRIVACY_ID,
+				privacy[NAME_PRIVACY_ID - 1]);
+		this.emailPrivacy = new PrivacyField(EMAIL_PRIVACY_IDNAME_ID,
+				privacy[EMAIL_PRIVACY_IDNAME_ID - 1]);
+		this.programPrivacy = new PrivacyField(PROGRAM_PRIVACY_ID,
+				privacy[PROGRAM_PRIVACY_ID - 1]);
+		this.bioPrivacy = new PrivacyField(BIO_PRIVACY_ID,
+				privacy[BIO_PRIVACY_ID - 1]);
+		this.friendsPrivacy = new PrivacyField(FRIENDS_PRIVACY_ID,
+				privacy[FRIENDS_PRIVACY_ID]);
+		this.gamesPrivacy = new PrivacyField(GAMES_PRIVACY_ID,
+				privacy[GAMES_PRIVACY_ID]);
+		this.achievementsPrivacy = new PrivacyField(ACHIEVMENTS_PRIVACY_ID,
+				privacy[ACHIEVMENTS_PRIVACY_ID - 1]);
 		this.libraryStyle = new LibraryStyle();
 
 		/*
@@ -539,10 +550,11 @@ public class Player extends User {
 	 *            friends only.
 	 */
 	public void setNamePrivacy(boolean v) {
-		this.playerPrivacy.setNamePrivacy(v);
+		namePrivacy.setValue(v);
 		setChanged();
-		notifyObservers(this.playerPrivacy);
+		notifyObservers(namePrivacy);
 		clearChanged();
+
 	}
 
 	/**
@@ -552,7 +564,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getNamePrivacy() {
-		return this.playerPrivacy.isNamePrivacy();
+		return namePrivacy.getValue();
 	}
 
 	/**
@@ -563,10 +575,12 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setEmailPrivacy(boolean v) {
-		this.playerPrivacy.setEmailPrivacy(v);
+		emailPrivacy.setValue(v);
+		namePrivacy.setValue(v);
 		setChanged();
-		notifyObservers(this.playerPrivacy);
+		notifyObservers(emailPrivacy);
 		clearChanged();
+
 	}
 
 	/**
@@ -576,7 +590,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getEmailPrivacy() {
-		return this.playerPrivacy.isEmailPrivacy();
+		return emailPrivacy.getValue();
 	}
 
 	/**
@@ -587,10 +601,12 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setProgramPrivacy(boolean v) {
-		this.playerPrivacy.setProgramPrivacy(v);
+		programPrivacy.setValue(v);
+		namePrivacy.setValue(v);
 		setChanged();
-		notifyObservers(this.playerPrivacy);
+		notifyObservers(programPrivacy);
 		clearChanged();
+
 	}
 
 	/**
@@ -600,7 +616,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getProgramPrivacy() {
-		return this.playerPrivacy.isProgramPrivacy();
+		return programPrivacy.getValue();
 	}
 
 	/**
@@ -611,10 +627,12 @@ public class Player extends User {
 	 *            friends only.
 	 */
 	public void setBioPrivacy(boolean v) {
-		this.playerPrivacy.setBioPrivacy(v);
+		bioPrivacy.setValue(v);
+		namePrivacy.setValue(v);
 		setChanged();
-		notifyObservers(this.playerPrivacy);
+		notifyObservers(bioPrivacy);
 		clearChanged();
+
 	}
 
 	/**
@@ -624,7 +642,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getBioPrivacy() {
-		return this.playerPrivacy.isBioPrivacy();
+		return bioPrivacy.getValue();
 	}
 
 	/**
@@ -635,9 +653,10 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setFriendsPrivacy(boolean v) {
-		this.playerPrivacy.setFriendsPrivacy(v);
+		friendsPrivacy.setValue(v);
+		namePrivacy.setValue(v);
 		setChanged();
-		notifyObservers(this.playerPrivacy);
+		notifyObservers(friendsPrivacy);
 		clearChanged();
 
 	}
@@ -649,7 +668,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getFriendsPrivacy() {
-		return this.playerPrivacy.isFriendsPrivacy();
+		return friendsPrivacy.getValue();
 	}
 
 	/**
@@ -660,10 +679,12 @@ public class Player extends User {
 	 *            for friends only.
 	 */
 	public void setGamesPrivacy(boolean v) {
-		this.playerPrivacy.setGamesPrivacy(v);
+		gamesPrivacy.setValue(v);
+		namePrivacy.setValue(v);
 		setChanged();
-		notifyObservers(this.playerPrivacy);
+		notifyObservers(gamesPrivacy);
 		clearChanged();
+
 	}
 
 	/**
@@ -673,7 +694,7 @@ public class Player extends User {
 	 *         friends only.
 	 */
 	public boolean getGamesPrivacy() {
-		return this.playerPrivacy.isGamesPrivacy();
+		return gamesPrivacy.getValue();
 	}
 
 	/**
@@ -684,10 +705,12 @@ public class Player extends User {
 	 *            false for friends only.
 	 */
 	public void setAchievementsPrivacy(boolean v) {
-		this.playerPrivacy.setAchievementsPrivacy(v);
+		achievementsPrivacy.setValue(v);
+		namePrivacy.setValue(v);
 		setChanged();
-		notifyObservers(this.playerPrivacy);
+		notifyObservers(achievementsPrivacy);
 		clearChanged();
+
 	}
 
 	/**
@@ -697,7 +720,7 @@ public class Player extends User {
 	 *         false for friends only.
 	 */
 	public boolean getAchievementsPrivacy() {
-		return this.playerPrivacy.isAchievementsPrivacy();
+		return achievementsPrivacy.getValue();
 	}
 
 	/**

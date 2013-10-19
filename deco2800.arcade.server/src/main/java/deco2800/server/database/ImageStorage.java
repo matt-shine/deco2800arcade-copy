@@ -11,10 +11,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import deco2800.server.ResourceLoader;
 
 public class ImageStorage {
@@ -33,18 +29,12 @@ public class ImageStorage {
      * that always exists, and whose image cannot be modified.
      */
     public static final String GENERIC_AVATAR_ID = "ImageStorage.reserved.GENERIC_AVATER";
-    
-    /**
-     * Get a logger for this class
-     */
-    private static Logger logger = LoggerFactory.getLogger(ImageStorage.class);
 
 
     // private toggle to allow us to initially load in reserved IDs
     private boolean allowSettingReservedIDs = false;
 
     public void initialise() throws DatabaseException {
-    	logger.debug("ImageStorage about to be initialised");
         Connection connection = Database.getConnection();
         Statement statement = null;
         ResultSet tableData = null;
@@ -52,12 +42,9 @@ public class ImageStorage {
             tableData = connection.getMetaData().getTables(null, null,
 					"IMAGES", null);
 	    if (!tableData.next()){
-	    logger.info("Images table not in database, creating now");
 		statement = connection.createStatement();
-		
 		statement.execute("CREATE TABLE IMAGES(id VARCHAR(255) PRIMARY KEY," +
 				  "data BLOB(1M) NOT NULL)");
-		logger.info("Images table created.");
 	    }
 	    
 	    // load in our reserved ids
@@ -66,15 +53,13 @@ public class ImageStorage {
 		set(UNKNOWN_IMAGE_ID, ResourceLoader.load("reservedImages/unknown.png"));
 		set(GENERIC_AVATAR_ID, ResourceLoader.load("reservedImages/avatar.png"));		
 	    } catch (IOException e) {
-	    	logger.error("Could not load in reserved images.");
-	    	throw new DatabaseException("Couldn't load in reserved image", e);
+		throw new DatabaseException("Couldn't load in reserved image", e);
 	    } finally {
 		allowSettingReservedIDs = false;
 	    }
 		
 	} catch(SQLException e) {
             e.printStackTrace();
-            logger.error("Could not create imagees table.");
             throw new DatabaseException("Couldn't create images table", e);
         } finally {           
             try {
@@ -96,8 +81,7 @@ public class ImageStorage {
      * @param id    The id of the image
      * @param image The image to store
      */
-    public void set(String id, EncodedImage image) throws DatabaseException {
-    logger.debug("Attempting to associate id: {} with an image", id);
+    public void set(String id, EncodedImage image) throws DatabaseException {      
 	if (!allowSettingReservedIDs && id.startsWith("ImageStorage.reserved."))
 	    throw new DatabaseException("Attempted to set an image with a reserved ID");
 
@@ -138,10 +122,9 @@ public class ImageStorage {
      */
     public void set(String imageID, File imageFile) 
 	throws DatabaseException, FileNotFoundException, IOException {
-	if (!imageFile.isFile()){
-		logger.error("Attempted to set image ID: {} but could not load file", imageID);
+	if (!imageFile.isFile())
 	    throw new FileNotFoundException();
-	}
+
 	set(imageID, new EncodedImage(imageFile));
     }    
 
@@ -152,7 +135,6 @@ public class ImageStorage {
      *
      */
     public EncodedImage get(String id) throws DatabaseException {
-    	logger.debug("Associating image ID: {} with default unknown image file", id);
         Connection conn = Database.getConnection();
         PreparedStatement ps = null;        
 
@@ -173,7 +155,6 @@ public class ImageStorage {
             Blob dataBlob = rs.getBlob(1);
             return new EncodedImage(dataBlob.getBinaryStream(), dataBlob.length());
         } catch(SQLException e) {
-        	logger.error("Attempting to associate image ID: {} with default image failed");
             e.printStackTrace();
             return null;
         } catch(IOException e) {
@@ -205,10 +186,8 @@ public class ImageStorage {
 	if (contains(id))
 	    img = get(id);
 	if (img == null)
-		logger.info("Failed to get requested image (with ID: {}), attempting to get fallback");
 	    img = get(fallback);
 	if (img == null)
-		logger.info("Failed to get fallback image (with ID: {}), returning default unknown image.");
 	    img = get(UNKNOWN_IMAGE_ID);
 
 	return img;
@@ -236,7 +215,6 @@ public class ImageStorage {
 		return true;
 
         } catch(SQLException e) {
-        	logger.error("Attempted to check if database contains an image but failed");
             throw new DatabaseException("SQLException caught", e);            
         } finally {
             try {

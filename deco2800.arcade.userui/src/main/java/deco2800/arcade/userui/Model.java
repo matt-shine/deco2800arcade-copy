@@ -30,11 +30,6 @@ public class Model {
 	public static final Game LANDINVADERS;
 	public static final Game PACMAN;
 	
-	//Achievement Icons
-	public ImageIcon offthewall = new ImageIcon("assets/images/achievement/offwall.png");
-	public ImageIcon masterpaddle = new ImageIcon("assets/images/achievement/masterpaddle.png");
-	public ImageIcon paddlewar = new ImageIcon("assets/images/achievement/paddlewar.png");
-	
 	//Status Values
 	public String status = "online";
 	public ImageIcon statusIcon = new ImageIcon("assets/images/online.png");

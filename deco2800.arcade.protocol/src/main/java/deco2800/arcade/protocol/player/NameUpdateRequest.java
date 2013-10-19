@@ -1,6 +1,8 @@
 package deco2800.arcade.protocol.player;
 
-public class NameUpdateRequest extends PlayerNetworkObject {
+import deco2800.arcade.protocol.NetworkObject;
+
+public class NameUpdateRequest extends NetworkObject {
 	private int playerID;
 	private String name;
 	

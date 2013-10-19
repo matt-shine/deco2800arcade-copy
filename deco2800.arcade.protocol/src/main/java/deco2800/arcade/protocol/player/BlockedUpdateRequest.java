@@ -1,6 +1,8 @@
 package deco2800.arcade.protocol.player;
 
-public class BlockedUpdateRequest  extends PlayerNetworkObject {
+import deco2800.arcade.protocol.NetworkObject;
+
+public class BlockedUpdateRequest  extends NetworkObject {
 	private int playerID;
 	private int playerID2;
 	private boolean add;

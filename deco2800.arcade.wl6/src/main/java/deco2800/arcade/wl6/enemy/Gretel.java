@@ -8,20 +8,23 @@ public class Gretel extends Enemy {
     // Difficulty 2 = 950 health
     // Difficulty 3 = 1050 health
     // Difficulty 4 = 1200 health
-    private int STARTING_HEALTH = 850;
+    private int STARTING_HEALTH = 25;
 
     public Gretel(int uid, DoodadInfo d) {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setFaceDir(d.direction);
-        setPathing(false);
-        setState(STATES.STAND);
+        if (d.pathingDir == null) {
+            setState(STATES.STAND);
+        }
+        else {
+            setState(STATES.PATH);
+        }
         setPathSpeed(512);
         setChaseSpeed(1536);
-        setPain(false);
+        setPain(true);
         setDamage(0);
-
+        
         setTextureName(d.texture);
     }
 

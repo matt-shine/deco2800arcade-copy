@@ -5,14 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.net.BindException;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.esotericsoftware.kryonet.Server;
 
 import deco2800.arcade.protocol.Protocol;
-import deco2800.server.database.AchievementStorage;
 import deco2800.server.database.ChatStorage;
 import deco2800.server.database.CreditStorage;
 import deco2800.server.database.ImageStorage;
@@ -27,6 +22,7 @@ import deco2800.server.listener.CreditListener;
 import deco2800.server.listener.GameListener;
 import deco2800.server.listener.PackmanListener;
 import deco2800.server.listener.HighscoreListener;
+import deco2800.server.database.HighscoreDatabase;
 import deco2800.server.database.*;
 import deco2800.server.listener.*;
 import deco2800.arcade.packman.PackageServer;
@@ -40,9 +36,6 @@ import deco2800.server.webserver.ArcadeWebserver;
  * @see http://code.google.com/p/kryonet/ 
  */
 public class ArcadeServer {
-	
-	//Create a logger for ArcadeServer
-	private static Logger logger = LoggerFactory.getLogger(ArcadeServer.class);
 
 	// Keep track of which users are connected
 	private Set<String> connectedUsers = new HashSet<String>();
@@ -87,7 +80,7 @@ public class ArcadeServer {
 	public static void main(String[] args) {
 		ArcadeServer server = new ArcadeServer();
 		server.start();
-		server.startFileserver();
+    server.startFileserver();
 		ArcadeWebserver.startServer( );
 	}
 
@@ -130,7 +123,7 @@ public class ArcadeServer {
      * @return ImageStorage currently in use by the arcade
      */
     public ImageStorage getImageStorage() {
-    	return this.imageStorage;
+	return this.imageStorage;
     }
 	
 	/**
@@ -171,17 +164,12 @@ public class ArcadeServer {
 	 * @see ArcadeServer.instance()
 	 */
 	public ArcadeServer() {
-		//Configure logger to save to ServerLogs.log as per file
-		PropertyConfigurator.configure("src/main/resources/log4j.properties");
-		
+
         instance = this;
 
         this.gameStorage = new GameStorage();
-        logger.debug("gameStorage added to ArcadeServer");
-        
         try {
             this.creditStorage = new CreditStorage();
-            logger.debug("creditStorage added to ArcadeServer");
         } catch (Exception e) {
             //Do nothing, yet ;P
         }
@@ -190,33 +178,23 @@ public class ArcadeServer {
         
         //CODE SMELL
 		this.replayStorage = new ReplayStorage();
-		logger.debug("replayStorage added to ArcadeServer");
 		//this.playerStorage = new PlayerStorage();
 		//this.friendStorage = new FriendStorage();
 		this.chatStorage = new ChatStorage();
-		logger.debug("chatStorage added to ArcadeServer");
 		
         this.imageStorage = new ImageStorage();
-        logger.debug("imageStorage added to ArcadeServer");
 
 		//do achievement database initialisation
 		this.achievementStorage = new AchievementStorage(imageStorage);
-		logger.debug("achievementStorage added to ArcadeServer");
 		this.highscoreDatabase = new HighscoreDatabase();
-		logger.debug("highscoreDatabase added to ArcadeServer");
 		this.matchmakerQueue = MatchmakerQueue.instance();
-		logger.debug("matchmakerQueue added to ArcadeServer");
 		this.packServ = new PackageServer();
-		logger.debug("PackageServer added to ArcadeServer");
-		
-		logger.info("Added all databases to Server, about to initialise them");
 
 
 		
 		//Init highscore database
 		try {
 			highscoreDatabase.initialise();
-			logger.debug("highscoreDatabase initialised");
 		} catch (DatabaseException e) {
 			e.printStackTrace();
 		}
@@ -224,15 +202,11 @@ public class ArcadeServer {
 		//initialize database classes
 		try {
             gameStorage.initialise();
-            logger.debug("gameStorage initialised");
 			creditStorage.initialise();
-			logger.debug("creditStorage initialised");
             imageStorage.initialise();
-            logger.debug("imageStorage initialised");
 			//playerStorage.initialise();
             
 			achievementStorage.initialise();
-			logger.debug("achievementStorage initialised");
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -240,9 +214,7 @@ public class ArcadeServer {
 
 		// once the db is fine, load in achievement data from disk
 		this.achievementStorage.loadAchievementData();
-		logger.debug("Achievement Data loaded into database");
 		
-		logger.info("All databases added and initialised, ArcadeServer Started");
 	}
 	
 	/**
@@ -250,13 +222,13 @@ public class ArcadeServer {
 	 */
 	public void start() {
 		Server server = new Server(131072, 16384);
-		logger.info("Server starting");
+		System.out.println("Server starting");
 		server.start();
 		try {
 			server.bind(TCP_PORT, UDP_PORT);
-			logger.info("Server bound, TCP_PORT: {}, UDP_PORT: {}", TCP_PORT, UDP_PORT);
+			System.out.println("Server bound");
 		} catch (BindException b) {
-			logger.error("Error binding server: Address already in use");
+			System.err.println("Error binding server: Address already in use");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -284,13 +256,13 @@ public class ArcadeServer {
      */
     public void startFileserver() {
         Server server = new Server();
-        logger.info("File Server starting");
+        System.out.println("File Server starting");
         server.start();
         try {
             server.bind(FILE_TCP_PORT);
-            logger.info("File Server bound, TCP_PORT: {}, UDP_PORT: {}", TCP_PORT, UDP_PORT);
+            System.out.println("File Server bound");
         } catch (BindException b) {
-            logger.error("Error binding file server: Address already in use");
+            System.err.println("Error binding file server: Address already in use");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

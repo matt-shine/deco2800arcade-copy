@@ -52,7 +52,7 @@ public class MapProcessor {
                 //spawn points
                 if (id >= WL6Meta.SPAWN_POINT && id < WL6Meta.SPAWN_POINT + 4) {
 
-                    model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.direction));
+                    model.setSpawnPoint(i + 0.5f, j + 0.5f, WL6Meta.dirToAngle(dInfo.facingDir));
 
                 } else if (id == WL6Meta.SECRET_DOOR) {
 
@@ -132,8 +132,8 @@ public class MapProcessor {
         if (d.texture == null)
         {
             // This doodad is invisible so it must be a waypoint or something
-            if (d.direction != null) {
-                model.addWaypoint(d.direction, x, y);
+            if (d.facingDir != null) {
+                model.addWaypoint(d.facingDir, x, y);
             }
         }
         else if (d.enemytype != EnemyType.NOT_AN_ENEMY)

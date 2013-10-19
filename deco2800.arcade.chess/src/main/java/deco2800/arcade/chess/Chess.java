@@ -1505,9 +1505,9 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		map = new TextureAtlas("b.pack");
 		skin = new Skin();
 		skin.addRegions(map);
-		BmFontA = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
+		BmFontA = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"),
 				false);
-		BmFontB = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
+		BmFontB = new BitmapFont(Gdx.files.internal("imgs/GameFont2.fnt"),
 				false);
 
 		int width = Chess.SCREENWIDTH;

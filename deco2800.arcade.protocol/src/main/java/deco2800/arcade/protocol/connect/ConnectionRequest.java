@@ -9,7 +9,6 @@ import javax.crypto.KeyGenerator;
 public class ConnectionRequest extends UserRequest {
 	public String password;
 	public byte[] key;
-	public boolean register;
 	
 	/**
 	 * Generates the symmetric key used by both the server and client 

@@ -1,6 +1,8 @@
 package deco2800.arcade.protocol.player;
 
-public class EmailUpdateRequest extends PlayerNetworkObject {
+import deco2800.arcade.protocol.NetworkObject;
+
+public class EmailUpdateRequest extends NetworkObject {
 	private int playerID;
 	private String email;
 	

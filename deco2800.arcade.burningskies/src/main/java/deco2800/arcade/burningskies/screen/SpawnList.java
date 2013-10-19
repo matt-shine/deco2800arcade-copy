@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.entities.BoringEnemy;
+import deco2800.arcade.burningskies.entities.Enemy8;
 import deco2800.arcade.burningskies.entities.Level1Enemy;
 
 public class SpawnList {
@@ -25,7 +26,8 @@ public class SpawnList {
 	private static Texture[] enemyTex = {
 		new Texture(Gdx.files.internal("images/ships/enemy1.png")),
 		new Texture(Gdx.files.internal("images/ships/enemy2.png")),
-		new Texture(Gdx.files.internal("images/ships/enemy3.png"))
+		new Texture(Gdx.files.internal("images/ships/enemy3.png")),
+		new Texture(Gdx.files.internal("images/ships/enemy8.png"))
 	};
 	
 	public SpawnList(PlayScreen s){
@@ -101,6 +103,8 @@ public class SpawnList {
 			double test = Math.random();
 			if(test < 0.1) {
 				screen.addEnemy(new Level1Enemy(400, enemyTex[1], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
+			} else if (test >= 0.1 && test < 0.75) {
+				screen.addEnemy(new Enemy8(400, enemyTex[3], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
 			} else {
 				screen.addEnemy(new BoringEnemy(200, enemyTex[0], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
 			}

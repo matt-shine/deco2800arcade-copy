@@ -67,13 +67,11 @@ public class Tower extends Mortal implements Ranged {
 	 * 			The in order list of Standing sprites
 	 * @param sprShooting
 	 * 			The in order list of Shooting sprites
-	 * @param sprDying
-	 * 			The in order list of Dying sprites
 	 * @param sprDeath
 	 * 			The in order list of Death sprites
 	 */
-	public Tower(int maxHealth, int armour, int x, int y, Grid grid, Team team, TowerType type, double attackRate, double range, Projectile projectile, List<Sprite> sprStanding, List<Sprite> sprShooting, List<Sprite> sprDying, List<Sprite> sprDeath) {
-		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDying, sprDeath);
+	public Tower(int maxHealth, int armour, int x, int y, Grid grid, Team team, TowerType type, double attackRate, double range, Projectile projectile, List<Sprite> sprStanding, List<Sprite> sprShooting, List<Sprite> sprDeath) {
+		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
 		this.health = maxHealth;
 		this.type = type;
 		this.attackRate = attackRate;

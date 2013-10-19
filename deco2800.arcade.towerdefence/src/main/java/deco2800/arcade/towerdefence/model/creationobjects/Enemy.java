@@ -66,7 +66,7 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
 			Grid grid, Team team, double attackRate, int damage, int penetration, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath, List<Sprite> sprAttacking) {
-		super(maxHealth, armour, x, y, speed, grid, team, sprStanding, sprMoving, sprDeath, sprDeath);
+		super(maxHealth, armour, x, y, speed, grid, team, sprStanding, sprMoving, sprDying, sprDeath);
 		this.sprAttacking = sprAttacking;
 		this.attackRate = attackRate;
 		this.damage = damage;

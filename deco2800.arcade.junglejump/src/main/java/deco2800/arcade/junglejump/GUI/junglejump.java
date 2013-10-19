@@ -56,6 +56,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	
 	public int BANANAS_FOUND = 0;
 	public static int deaths = 0;
+	
+	int SPEED_MULTIPLIER = 2;
 
 	private enum GameState {
 		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE
@@ -319,14 +321,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.setProjectionMatrix(camera.combined);
 			shapeRenderer.setProjectionMatrix(camera.combined);
 			if (movingLeft) {
-				monkeyX -= 2;
+				monkeyX -= 2 * SPEED_MULTIPLIER;
 				monkeyRun--;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
 				} else isFalling = false;
 			}
 			if (movingRight) {
-				monkeyX += 2;
+				monkeyX += 2 * SPEED_MULTIPLIER;
 				monkeyRun++;
 				if (!isOnPlatform(monkeyX, monkeyY) && !jumping) {
 					isFalling = true;
@@ -338,14 +340,14 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (isFalling) {
 				if (isOnPlatform(monkeyX, monkeyY)) {
 					isFalling = false;
-				} else monkeyY += -9.8f / 2f;
+				} else monkeyY += (-9.8f / 2f) * SPEED_MULTIPLIER;
 			}
 			if(monkeyY <= 5) {
 				playDeathSound();
 				killMonkey();
 			}
 			if (jumping) {
-				velocity = (velocity - 9.8f / 75f);
+				velocity = (velocity - 9.8f / 75f) * SPEED_MULTIPLIER;
 				//System.out.println("monkeyY " + monkeyY + " monkeyYor " + monkeyYoriginal + " == " + (monkeyY > monkeyYoriginal) +(monkeyY + velocity < 1f) + velocity + " " + monkeyY);
 				System.out.println(monkeyY > monkeyYoriginal);
 				System.out.println(!isOnPlatform(monkeyX, monkeyY)); //this is false :(

@@ -102,7 +102,7 @@ public class Platform {
 			platformType = "banana";
 			this.width = 20;
 			this.height = 20;
-			this.xPos -= 20;
+			this.yPos -= 20;
 			break;
 		case '~': // Tunnel floor
 			platformType = "banana";

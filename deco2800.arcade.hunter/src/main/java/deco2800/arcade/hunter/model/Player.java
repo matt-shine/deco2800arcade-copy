@@ -2,7 +2,6 @@ package deco2800.arcade.hunter.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,7 +21,6 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -374,15 +372,11 @@ public class Player extends Entity {
             }
         } else if (e.getType().equals("Animal")) {
             if (getState() == State.ATTACK) {
-                score = score + 200 * multiplier;
-                ((Animal) e).dead();
                 if (!((Animal) e).isDead()) {
-                    animalsKilled++;
-                    gamescreen.getGameReference().incrementAchievement("hunter.amatuerHunter");
-                    gamescreen.getGameReference().incrementAchievement("hunter.professionalHunter");
-                    gamescreen.getGameReference().incrementAchievement("hunter.masterHunter");
-                    gamescreen.getGameReference().incrementAchievement("hunter.Hitman");
+                    addAnimalKilled();
+                    score = score + 200 * multiplier;
                 }
+                ((Animal) e).dead();
             } else {
                 if (!invulnerable && !blink && !((Animal) e).isDead()) {
                     if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
@@ -441,6 +435,7 @@ public class Player extends Entity {
      */
     public void addAnimalKilled() {
         animalsKilled++;
+        gamescreen.getGameReference().incrementAchievement("hunter.Hitman");
     }
 
 	/*

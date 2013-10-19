@@ -22,7 +22,7 @@ public class Hunter extends PlatformerGame {
         public final static int PANE_SIZE = 16;
         public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
         public final static int MAX_SPEED = 1024;
-        public final static int SPEED_INCREASE_COUNTDOWN_START = 128;
+        public final static int SPEED_INCREASE_COUNTDOWN_START = 3;
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
 
         public final static float CLOUD_MIN_SPEED = 0.3f;

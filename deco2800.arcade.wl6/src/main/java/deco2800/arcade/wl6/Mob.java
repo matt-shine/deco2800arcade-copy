@@ -12,6 +12,8 @@ public class Mob extends Doodad {
     private Vector2 vel = new Vector2();
     private Random rand;
     private int health;
+    private float BB_SIZE = 0.4f;
+
 
     public Mob(int uid) {
         super(uid);
@@ -19,7 +21,52 @@ public class Mob extends Doodad {
     }
 
     @Override
-    public void tick(GameModel gameModel) {
+    public void tick(GameModel model) {
+    	smoothMove(new Vector2(getVel()).mul(model.delta() * 60), model);
+
+    }
+
+    
+    public void smoothMove(Vector2 avel, GameModel model) {
+
+        if (move(model, avel)) {
+            //we just moved as intended
+        } else if (move(model, new Vector2(avel.x, 0))) {
+            //we just moved, but only in the x direction
+        } else if (move(model, new Vector2(0, avel.y))) {
+            //we just moved, but only in the y direction
+        } else {
+            //we are stuck
+        }
+
+    }
+    
+    
+    /**
+     * tries to move the object. returns true if successful
+     * @param model
+     * @param vec
+     * @return
+     */
+    private boolean move(GameModel model, Vector2 vec) {
+
+        Vector2 targetPos = this.getPos().add(vec);
+        int x1 = (int) Math.floor(targetPos.x - BB_SIZE / 2);
+        int y1 = (int) Math.floor(targetPos.y - BB_SIZE / 2);
+        int x2 = (int) Math.floor(targetPos.x + BB_SIZE / 2);
+        int y2 = (int) Math.floor(targetPos.y + BB_SIZE / 2);
+
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                if (model.getCollisionGrid().getSolidAt(x, y) != 0) {
+                    return false;
+                }
+            }
+        }
+
+        setPos(getPos().add(vec));
+        return true;
+
     }
 
     public int getHealth() {
@@ -36,7 +83,11 @@ public class Mob extends Doodad {
         }
     }
 
-    public void takeDamage(int damage) {
+    public void doDamage(GameModel gameModel) {
+
+    }
+
+    public void takeDamage(GameModel model, int damage) {
         setHealth(getHealth() - damage);
     }
 
@@ -53,6 +104,7 @@ public class Mob extends Doodad {
         this.angle = angle;
     }
 
+    // TODO take facing into account
     public boolean canSee(Doodad d, GameModel model) {
         Vector2 selfPos = this.getPos();
         Vector2 targetPos = d.getPos();

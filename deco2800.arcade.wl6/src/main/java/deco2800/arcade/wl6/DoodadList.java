@@ -141,7 +141,7 @@ public class DoodadList {
                     DoodadInfo.solidScenery("cage"),
 
                     //42: bones 1
-                    DoodadInfo.solidScenery("skeleton"),
+                    DoodadInfo.solidScenery("headstone"),
 
                     //43: gold key
                     new DoodadInfo().specialCase(),
@@ -187,7 +187,7 @@ public class DoodadList {
                     DoodadInfo.treasurePickup("fullheal", 10000, 150),
 
                     //57: bones / blood
-                    DoodadInfo.nonsolidScenery("bones"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //58: barrel
                     DoodadInfo.solidScenery("barrel"),
@@ -199,7 +199,7 @@ public class DoodadList {
                     DoodadInfo.solidScenery("well"),
 
                     //61: pool of blood
-                    DoodadInfo.nonsolidScenery("blood"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //62: flag
                     DoodadInfo.solidScenery("flag"),
@@ -208,13 +208,13 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //64: bones 2
-                    DoodadInfo.nonsolidScenery("bones"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //65: bones 3
-                    DoodadInfo.nonsolidScenery("bones"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //66: bones 4
-                    DoodadInfo.nonsolidScenery("bones"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //67: utensils blue
                     DoodadInfo.solidScenery("utensils"),
@@ -388,7 +388,7 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //124: dead guard
-                    DoodadInfo.nonsolidScenery("corpse"),
+                    DoodadInfo.nonsolidScenery("headstone"),
 
                     //125: nothing
                     new DoodadInfo(),

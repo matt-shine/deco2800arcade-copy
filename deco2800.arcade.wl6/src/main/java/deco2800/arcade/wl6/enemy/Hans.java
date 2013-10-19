@@ -14,15 +14,13 @@ public class Hans extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setFaceDir(d.direction);
-        setPathing(false);
-        instantStateChange(STATES.STAND);
         setPathSpeed(512);
         setChaseSpeed(1536);
         setPain(false);
         setDamage(0);
 
-        setTextureName(d.texture);
+        initialiseFromEnemyData(d);
+        
     }
 
 

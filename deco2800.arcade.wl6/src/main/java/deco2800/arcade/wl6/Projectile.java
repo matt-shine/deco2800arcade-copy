@@ -31,7 +31,7 @@ public class Projectile extends Mob {
         while (itr.hasNext()) {
 			Doodad d = itr.next();
 			if (d instanceof Mob) {
-				if (d.getPos().dst(this.getPos()) < 0.6f) {
+				if (d.getPos().dst(this.getPos()) < 0.4f) {
 
 					if (evil && d instanceof Player) {
 						              //important to set overheal to true because the 

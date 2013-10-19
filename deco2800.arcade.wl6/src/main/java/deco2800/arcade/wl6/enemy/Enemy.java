@@ -2,6 +2,7 @@ package deco2800.arcade.wl6.enemy;
 
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.wl6.DoodadInfo;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
 import deco2800.arcade.wl6.Player;
@@ -34,8 +35,6 @@ public class Enemy extends Mob {
     // State tick
     private float stateTime;
     private STATES nextState;
-    //
-    private WL6Meta.DIRS faceDir;
     //
     private boolean pathing;
     //
@@ -105,22 +104,25 @@ public class Enemy extends Mob {
 
         if (this.getHealth() <= 0) {
         	instantStateChange(STATES.DIE);
-        	this.setTextureName("grave");
+        	this.setTextureName("headstone");
         	this.setVel(new Vector2(0, 0));
         }
     }
 
     
-    
-    
-    
-    public WL6Meta.DIRS getFaceDir() {
-        return faceDir;
+    public void initialiseFromEnemyData(DoodadInfo d) {
+    	
+    	setTextureName(d.texture);
+        setPathing(d.pathing);
+        if (d.pathing) {
+        	instantStateChange(STATES.PATH);
+        } else {
+        	instantStateChange(STATES.STAND);
+        }
+        this.setAngle(WL6Meta.dirToAngle(d.direction));
+        
     }
-
-    public void setFaceDir(WL6Meta.DIRS dir) {
-        faceDir = dir;
-    }
+    
 
     public void setPathing(boolean pathing) {
         this.pathing = pathing;
@@ -150,7 +152,7 @@ public class Enemy extends Mob {
     	Projectile bullet = new Projectile(0, 10, true, "worm");
     	g.addDoodad(bullet);
     	bullet.setPos(this.getPos());
-    	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.5f));
+    	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
     }
     
     

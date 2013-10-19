@@ -11,15 +11,13 @@ public class Dog extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setFaceDir(d.direction);
-        setPathing(true);
-        instantStateChange(STATES.PATH);
         setPathSpeed(1500);
         setChaseSpeed(1536);
         setPain(false);
         setDamage(0);
 
-        setTextureName(d.texture);
+        initialiseFromEnemyData(d);
+        
     }
 
     @Override
@@ -40,4 +38,7 @@ public class Dog extends Enemy {
 	
         return getDamage();
     }
+    
+    
+    
 }

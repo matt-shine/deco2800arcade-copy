@@ -5,7 +5,11 @@ import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
 import deco2800.arcade.wl6.enemy.Dog;
 import deco2800.arcade.wl6.enemy.EnemyType;
+import deco2800.arcade.wl6.enemy.FakeHitler;
 import deco2800.arcade.wl6.enemy.Guard;
+import deco2800.arcade.wl6.enemy.Hans;
+import deco2800.arcade.wl6.enemy.Mutant;
+import deco2800.arcade.wl6.enemy.Officer;
 import deco2800.arcade.wl6.enemy.SS;
 
 public class MapProcessor {
@@ -129,15 +133,16 @@ public class MapProcessor {
         	return;
         }
         
-        if (d.texture == null)
-        {
+        if (d.texture == null) {
             // This doodad is invisible so it must be a waypoint or something
+        	
+        	
             if (d.direction != null) {
                 model.addWaypoint(d.direction, x, y);
             }
-        }
-        else if (d.enemytype != EnemyType.NOT_AN_ENEMY)
-        {
+            
+            
+        } else if (d.enemytype != EnemyType.NOT_AN_ENEMY) {
             switch (d.enemytype) {
                 case NOT_AN_ENEMY:
                     break;
@@ -145,7 +150,8 @@ public class MapProcessor {
                     dd = new Guard(doodadID(), d);
                     break;
                 case OFFICER:
-                    break;
+                	dd = new Officer(doodadID(), d);
+                	break;
                 case SS:
                     dd = new SS(doodadID(), d);
                     break;
@@ -153,9 +159,11 @@ public class MapProcessor {
                     dd = new Dog(doodadID(), d);
                     break;
                 case MUTANT:
-                    break;
+                	dd = new Mutant(doodadID(), d);
+                	break;
                 case FAKE_HITLER:
-                    break;
+                	dd = new FakeHitler(doodadID(), d);
+                	break;
                 case GHOSTS_1:
                     break;
                 case GHOSTS_2:
@@ -165,17 +173,23 @@ public class MapProcessor {
                 case GHOSTS_4:
                     break;
                 case HANS:
-                    break;
+                	dd = new Hans(doodadID(), d);
+                	break;
                 case SCHABBS:
-                    break;
+                	dd = new Hans(doodadID(), d);
+                	break;
                 case HITLER:
-                    break;
+                	dd = new Hans(doodadID(), d);
+                	break;
                 case GIFTMACHER:
-                    break;
+                	dd = new Hans(doodadID(), d);
+                	break;
                 case GRETEL:
-                    break;
+                	dd = new Hans(doodadID(), d);
+                	break;
                 case FETTGESICHT:
-                    break;
+                	dd = new Hans(doodadID(), d);
+                	break;
             }
         }
         else if (d.health != 0 || d.points != 0 || d.ammo != 0 || d.gun != 0)

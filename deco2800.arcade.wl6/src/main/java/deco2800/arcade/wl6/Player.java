@@ -84,7 +84,7 @@ public class Player extends Mob {
     	Projectile bullet = new Projectile(0, 10, false, "worm");
     	g.addDoodad(bullet);
     	bullet.setPos(this.getPos());
-    	bullet.setVel((new Vector2(0, -1)).rotate(-this.getAngle()));
+    	bullet.setVel((new Vector2(0, -0.2f)).rotate(-this.getAngle()));
     }
     
     

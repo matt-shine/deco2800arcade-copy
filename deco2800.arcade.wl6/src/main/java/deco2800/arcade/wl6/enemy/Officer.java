@@ -12,22 +12,13 @@ public class Officer extends Enemy {
         super(uid);
 
         setHealth(STARTING_HEALTH);
-        setFaceDir(d.direction);
-        this.setAngle(WL6Meta.dirToAngle(d.direction));
-        if (!d.pathing) {
-            setPathing(false);
-            instantStateChange(STATES.STAND);
-        }
-        else {
-            setPathing(true);
-            instantStateChange(STATES.PATH);
-        }
         setPathSpeed(512);
         setChaseSpeed(1536);
         setPain(true);
         setDamage(0);
 
-        setTextureName(d.texture);
+        initialiseFromEnemyData(d);
+        
     }
 
 

@@ -24,12 +24,15 @@ public class GameMap {
 	private int vOffset;
 	private final int tileSideLength = 16;// length of side of square- should be
 	// same for all tiles in a GameMap
+	public final int SCREENHEIGHT;
+	public final int SCREENWIDTH;
 	
-	public GameMap(int hOffset, int vOffset) {
+	
+	public GameMap(int SCREENHEIGHT, int SCREENWIDTH) {
 		vsym = false;
-		ghostDoors = new ArrayList<WallTile>();
-		this.hOffset = hOffset;
-		this.vOffset = vOffset;;		
+		ghostDoors = new ArrayList<WallTile>();		
+		this.SCREENHEIGHT = SCREENHEIGHT;
+		this.SCREENWIDTH = SCREENWIDTH;
 	}
 	
 
@@ -123,6 +126,8 @@ public class GameMap {
 		//initialise size of map grid
 		int ySize = map.size(); // number of lines
 		int xSize = map.get(0).length; //length of each line
+		hOffset = (SCREENWIDTH - xSize * tileSideLength) /2;
+		vOffset = (SCREENHEIGHT - ySize * tileSideLength) /2;
 		grid = new Tile[xSize][ySize];
 		//set up teleport target making- currently supports any even number 
 		//of teleporters, each targeting the next one which appears in the list
@@ -185,15 +190,6 @@ public class GameMap {
 	}
 	
 	/**
-	 *  Returns the coordinates of the bottom left corner of the tile
-	 *  @param the position of the tile in the grid
-	 */
-	public Point getTileCoords(Tile tile) {
-		Point xy = getTilePos(tile);
-		return new Point(hOffset + xy.getX()*tileSideLength, vOffset + xy.getY()*tileSideLength);
-	}
-	
-	/**
 	 * Returns the tile the middle pixel of the mover is currently in
 	 * Returns null if the mover is not in a tile (shouldn't happen)
 	 */
@@ -213,6 +209,15 @@ public class GameMap {
 		}
 		return null;
 	}
+	
+	/**
+	 *  Returns the coordinates of the bottom left corner of the tile
+	 *  @param the position of the tile in the grid
+	 */
+	public Point getTileCoords(Tile tile) {
+		Point xy = getTilePos(tile);
+		return new Point(hOffset + xy.getX()*tileSideLength, vOffset + xy.getY()*tileSideLength);
+	} 
 	
 	/**
 	 * Returns the position of the tile in the grid

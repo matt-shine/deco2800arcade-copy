@@ -16,7 +16,7 @@ public class Ghost extends Mover {
 	public enum GhostName {
 		BLINKY, PINKY, INKY, CLYDE
 	}
-	private GhostName ghost;
+	private GhostName ghostName;
 	private GhostState currentState;
 	
 	private static int widthVal = 26;
@@ -34,9 +34,11 @@ public class Ghost extends Mover {
 	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
 		super(gameMap);
 		this.player = player;
-		this.ghost = ghost;
+		this.ghostName = ghost;
 		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost start
-		previousTile = currentTile;
+		//makes the previous tile the one to right, since he's facing left
+		Point current = gameMap.getTilePos(currentTile);
+		previousTile = gameMap.getGrid()[current.getX()+1][current.getY()];
 		//set up pacman to be drawn in the right place- this is defintely right
 //		drawX = gameMap.getTileCoords(currentTile).getX() + 4;
 //		drawY = gameMap.getTileCoords(currentTile).getY() - 4;
@@ -44,7 +46,7 @@ public class Ghost extends Mover {
 		drawY = gameMap.getTileCoords(currentTile).getY() + 4; // was 0, so make it 8
 		
 		//DEBUGGING PRINT
-		System.out.println("drawX % 16 is: " + (drawX % 16) + "drawY % 16 is: " + (drawY % 16));
+		System.out.println("drawX % 16 is: " + (drawX % 16) + ", drawY % 16 is: " + (drawY % 16));
 		
 		
 		// this section should be deleted once I check it works with the view, or merged into it or something.
@@ -59,7 +61,7 @@ public class Ghost extends Mover {
 		
 		// initialise some variables
 		currentState = GhostState.CHASE;
-		facing = Dir.LEFT;
+		
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
@@ -76,7 +78,7 @@ public class Ghost extends Mover {
 	 */
 	public void prepareDraw() {		
 		spritePos = 3;
-		ghost_move();
+//		ghost_move();
 //		if ((drawX % 16 == 6) && (drawY % 16 == 0)) {
 //			facing = getDirection(currentTile);
 //			targetTile = getTargetTile();
@@ -92,7 +94,7 @@ public class Ghost extends Mover {
 		} else {
 			facing = Dir.LEFT;
 		}
-		// checks if pacman is moving, and if so keeps him moving in that direction
+		// checks if ghost is moving, and if so keeps him moving in that direction
 		if (currentState == GhostState.CHASE) {
 			if (facing == Dir.LEFT){
     			drawX -= moveDist;
@@ -108,59 +110,38 @@ public class Ghost extends Mover {
     		}			
 			updatePosition();			
     	} 		
-	}
-	 
-	public int getSpritePos() {
-		return spritePos;
-	}
-
-	public Dir getFacing() {
-			return facing;
-		}
-	
+	}	
 		
-	public void setFacing(Dir facing) {
-		this.facing = facing;
-	}
+//	private void ghost_move() {				
+//		if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
+//			facing = getDirection();
+//			updateTargetTile();
+//		} else {
+//			// Don't move!!
+//		}		
+//	}
 	
-	public GhostState getCurrentState() {
-		return currentState;
-	}
 
-	public void setCurrentState(GhostState currentState) {
-		this.currentState = currentState;
-	}
-
-	public float getMoveDist() {
-		return moveDist;
-	}
-
-	public void setMoveDist(float moveDist) {
-		this.moveDist = moveDist;
-	}
-	
 	public String toString() {
-		return this.ghost + " at (" + midX + ", " + midY + ") drawn at {" + drawX + 
+		return this.ghostName + " at (" + midX + ", " + midY + ") drawn at {" + drawX + 
 				", " + drawY + "}, " + currentState + " in " + currentTile;
 	}
 		
-	/**returns the target tile of the ghost.
-	 * so far only does blinky and pinky
-	 * 
-	 * @return
-	 */
-	public Tile getTargetTile() {
-		if (ghost == GhostName.BLINKY) {
-			System.out.println(this + " target tile is now: " + player.getTile());
-			return player.getTile();
-		}
-//		else if (ghost == GhostName.PINKY) {
-//			//need to check this tile exists, otherwise crashes
-//			return player.nextTile(player.getTile(), 4);
-//		}
 
+	/** Updates the target tile for the ghost
+	 * so far only does blinky and pinky
+	 */
+
+	public void updateTargetTile() {
+		if (ghostName == GhostName.BLINKY) {
+			targetTile = player.getTile();
+		}
+//		else if (ghostName == GhostName.PINKY) {
+//			//need to check this tile exists, otherwise crashes
+//			targetTile = player.nextTile(player.getTile(), 4);
+//		}
 		else {
-			return player.getTile();
+			targetTile = player.getTile();
 		}
 	}
 	
@@ -262,10 +243,9 @@ public class Ghost extends Mover {
 	 * @param nextTile
 	 * @return
 	 */
-	public Dir getDirection(Tile current) {
-		Tile nextTile = get_next_tile();
-		Point currentPoint = gameMap.getTilePos(current);
-		Point nextPoint = gameMap.getTilePos(nextTile);
+	public Dir getDirection() {
+		Point currentPoint = gameMap.getTilePos(currentTile);
+		Point nextPoint = gameMap.getTilePos(getNextTile());
 		
 		int currentX = currentPoint.getX();
 		int currentY = currentPoint.getY();
@@ -275,28 +255,26 @@ public class Ghost extends Mover {
 		if (nextX > currentX) {
 //		if (nextX < currentX) { //test
 			return Dir.RIGHT;
-		}
-		if (nextX < currentX) {
+		} else if (nextX < currentX) {
 //		if (nextX > currentX) { //test
 			return Dir.LEFT;
-		}
-		if (nextY > currentY) {
+		} else if (nextY > currentY) {
 //		if (nextY < currentY) { //test
 			return Dir.UP;
+		} else {
+			return Dir.DOWN;
 		}
-		return Dir.DOWN;
 	}
 	
 	/**
 	 * Returns the next tile. uses other methods to determine the tile.
-	 * @return
 	 */
-	public Tile get_next_tile() {
-		previousTile = currentTile;
+
+	public Tile getNextTile() {
 		List<Tile> testTiles = getTestTiles(currentTile);
 		List<Double> dists = getDists(testTiles, currentTile);
 //		int Tilenum = -1;
-		int Tilenum = 0;
+		int tileNum = 0;
 		double dist = 9999;
 		double temp;
 		
@@ -306,39 +284,67 @@ public class Ghost extends Mover {
 			System.out.println("OKAY: testTiles NOT empty...");
 		}
 		
-		if (dists.size() > 0) {
-			for (int i=0; i< dists.size(); i++) {
-				temp = dists.get(i);
-				if (temp < dist) {
-					dist = temp;
-//					Tilenum += 1;
-					//equivalent to int Tilenum = i;
-					Tilenum = i;
-				}
+
+		for (int i=0; i< dists.size(); i++) {
+			temp = dists.get(i);
+			if (temp < dist) {
+				dist = temp;
+				tileNum = i;
 			}
-		} else {
-			System.out.println("ERROR: dists is empty...");
+
+//<<<<<<< HEAD
+//		
+//		
+//		return testTiles.get(Tilenum);
+//	}
+//	
+//	private void ghost_move() {
+//		if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
+//			System.out.println(this + " drawX % 16: " + drawX % 16 +
+//					"drawY % 16: " + drawY % 16);
+//			facing = getDirection(currentTile);
+//			setTargetTile(getTargetTile());
+//		} else {
+//			facing = getDirection(currentTile);
+////			targetTile = getTargetTile();
+//			setTargetTile(getTargetTile());
+//			System.out.println("OH NO! drawX % 16: " + drawX % 16 +
+//					"drawY % 16: " + drawY % 16);
+//			// Don't move!!
+//=======
+		
 		}
+		return testTiles.get(tileNum);
+	}
 		
+	public int getSpritePos() {
+		return spritePos;
+	}
+
+	public Dir getFacing() {
+			return facing;
+		}
+	
 		
-		return testTiles.get(Tilenum);
+	public void setFacing(Dir facing) {
+		this.facing = facing;
 	}
 	
-	private void ghost_move() {
-		if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
-			System.out.println(this + " drawX % 16: " + drawX % 16 +
-					"drawY % 16: " + drawY % 16);
-			facing = getDirection(currentTile);
-			setTargetTile(getTargetTile());
-		} else {
-			facing = getDirection(currentTile);
-//			targetTile = getTargetTile();
-			setTargetTile(getTargetTile());
-			System.out.println("OH NO! drawX % 16: " + drawX % 16 +
-					"drawY % 16: " + drawY % 16);
-			// Don't move!!
-		}
-		
+	public GhostState getCurrentState() {
+		return currentState;
 	}
+
+	public void setCurrentState(GhostState currentState) {
+		this.currentState = currentState;
+	}
+
+	public float getMoveDist() {
+		return moveDist;
+	}
+
+	public void setMoveDist(float moveDist) {
+		this.moveDist = moveDist;
+	}
+	
 
 }

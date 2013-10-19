@@ -14,41 +14,34 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.pacman.PacChar.PacState;
 import deco2800.arcade.pacman.Ghost.GhostName;
 
-//note: no 'implements ApplicationListener is relevant anywhere in our program,
-// as GameClient extends Game which implements it. As far as I can tell
+/**
+ * The main Pacman game class, which sets up the model, view and controller 
+ * and forms the LibGdx backend stuff.
+ *
+ */
 @ArcadeGame(id="Pacman")
 public class Pacman extends GameClient {
 	
-	private enum GameState {
-		READY,
-		RUNNING,
-		GAMEOVER
-	}
+	public final int SCREENHEIGHT = 720;
+	public final int SCREENWIDTH = 1280;	
 	
-	private GameState gameState;
-	private PacChar player;
-	private Ghost blinky;
-	private Ghost pinky;
-	private String mapName; // name of level map
+	private PacModel model; // model for Pacman	
+	private PacView view; // view for Pacman	
+	private PacController controller; //takes keyboard input for Pacman
 
-	//takes keyboard input	
-	private PacController controller;	
-	
-	private GameMap gameMap;
-	
-	private boolean notSetUp;
-	private PacView view;
+	/** Checks to make sure View isn't set up more than once
+	 * View can't be set up normally until the rendering starts because
+	 *  it causes NullPointers for the tests when it tries to load Textures */
+	private boolean viewNotSetUp; 
 	
 	//not used yet
 	//private NetworkClient networkClient;
 	
-	//lets us log stuff, doesn't seem to work yet
-	private Logger logger = new Logger("Pacman");
-	
-	
-	public Pacman(Player player1, NetworkClient networkClient) {
-		super(player1, networkClient);
+	//lets us log stuff, left package private so we don't have to make a new one in each class
+	Logger logger = new Logger("Pacman");
 		
+	public Pacman(Player player1, NetworkClient networkClient) {
+		super(player1, networkClient);		
 	}	
 		
 	/**
@@ -61,11 +54,13 @@ public class Pacman extends GameClient {
         this.getOverlay().setListeners(new Screen() {
 
 			@Override
-			public void dispose() {				
-			}
-
-			@Override
 			public void hide() {
+				//TODO implement stuff to pause game here
+			}
+			 
+			@Override
+			public void show() {
+				//TODO implement stuff to unpause game here
 			}
 
 			@Override
@@ -85,30 +80,15 @@ public class Pacman extends GameClient {
 			}
 
 			@Override
-			public void show() {
-
-			}			
+			public void dispose() {				
+			}
         });           
-		super.create();			
-		notSetUp = true;
-		
-		// level map file
-		mapName = "levelMap.txt";
-		//initialise gamemap
-		//TODO move offset to PacView
-		gameMap = new GameMap(450, 100);	
-		
-		gameMap.createTiles(gameMap.readMap(mapName));
-		//initialise pacman
-		player = new PacChar(gameMap);
-		blinky = new Ghost(gameMap, GhostName.BLINKY, player);
-		pinky = new Ghost(gameMap, GhostName.PINKY, player);
-		//initialise receiver for input- use the multiplexer from Arcade
-		// because overlay group said to in log messages
-		controller = new PacController(player, gameMap);
+		super.create();		
+		viewNotSetUp = true;		
+		model = new PacModel(SCREENHEIGHT, SCREENWIDTH);		
+		//initialise receiver for input- use the Arcade Multiplexer
+		controller = new PacController(model);
 		ArcadeInputMux.getInstance().addProcessor(controller);
-		//Initialise game state
-		gameState = GameState.READY;	
 	}
 	
 	/**
@@ -118,6 +98,7 @@ public class Pacman extends GameClient {
 	public void dispose() {
 		super.dispose();
 		ArcadeInputMux.getInstance().removeProcessor(controller);
+		//TODO dispose more stuff here? Perhaps the view things?
 	}
 
 	@Override
@@ -125,6 +106,7 @@ public class Pacman extends GameClient {
 		super.pause();
 	}
 	
+	/* Commenting this out because it's not being used and is really old
 	private void makeChanges() {
 		
 		 // Respond to user input depending on the game state
@@ -152,41 +134,27 @@ public class Pacman extends GameClient {
 	    	}
 	    	break;
 	    }	    
-	}
+	}*/
 	
 	/**
 	 * Called continually to draw the screen unless specifically told not to be
 	 */
 	@Override
 	public void render() {	
-		// need to make sure this only happens once, using boolean
-		if (notSetUp) {
-			view = new PacView(gameMap, player, blinky);
-			notSetUp = false;
+		// makes sure view is only set up once
+		if (viewNotSetUp) {
+			view = new PacView(model);
+			viewNotSetUp = false;
 		}
-		player.prepareDraw();
-		blinky.prepareDraw();
-		pinky.prepareDraw();
-		view.render(gameMap, player, blinky);
-		//do any stuff the superclass normally does for rendering
+		//make changes in the model to prepare for rendering
+		model.prepareDraw();
+		view.render();
 		super.render();		
 	}
 	
-	/**
-	 * Displays the score of the current Mover.
-	 * When support for multiple player-controlled movers is implemented, printing
-	 * will have to occur in different positions.
-	 */
-//	public void displayScore(Mover mover) {
-//		batch.begin();
-//		scoreText.setColor(Color.WHITE);
-//		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
-//		batch.end();
-//	}
-	
 	private void startGame() {	
 		logger.debug("Game is now running");		
-		gameState = GameState.RUNNING;	
+		//gameState = GameState.RUNNING;	
 	}
 		
 	@Override
@@ -215,24 +183,11 @@ public class Pacman extends GameClient {
 		return game;
 	}
 
-	public GameState getGameState() {
-		return gameState;
-	}
-
-	public void setGameState(GameState gameState) {
-		this.gameState = gameState;
-	}
-	
-	//Getters added for testing
-	public String getMapName() {
-		return mapName;
-	}
-
-	public GameMap getGameMap() {
-		return gameMap;
-	}
-
 	public PacController getController() {
 		return controller;
+	}
+	
+	public PacModel getModel() {
+		return model;
 	}
 }

@@ -22,9 +22,6 @@ public class PacView {
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private BitmapFont scoreText; 
-	public final int SCREENHEIGHT = 720;
-	public final int SCREENWIDTH = 1280;	
-	
 	
 	// sprite sheet, divided into array of arrays of 8x8 tile images
 	private final TextureRegion[][] tileSprites;
@@ -45,11 +42,11 @@ public class PacView {
 	/** TODO make the gameMap the model and have them added on to that in 
 	 * the main Pacman class, then just pass the gameMap here like it currently is.
 	 */
-	public PacView(GameMap gameMap, PacChar player, Ghost blinky) {
+	public PacView(PacModel model) {
 		//Initialize camera
 		camera = new OrthographicCamera();
 		// set resolution
-		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
+		camera.setToOrtho(false, model.getSCREENWIDTH(), model.getSCREENHEIGHT());
 		// initialise spriteBatch for drawing things
 		batch = new SpriteBatch();		
 		//get tile sprites
@@ -81,25 +78,16 @@ public class PacView {
 				ghostFrames[i][j] = tmp[0][j];
 			}			
 		}
-		this.gameMap = gameMap;
-		this.player = player;
-		this.blinky = blinky;		
+		this.gameMap = model.getGameMap();
+		this.player = model.getPlayer();
+		this.blinky = model.getBlinky();
 	}
 	
-	
-	public void setUp(GameMap gameMap) {
-		
-	}
-
 	/**
 	 * Render method for pacman- called by main Pacman class and calls all
 	 * private methods for drawing
 	 */
-	public void render(GameMap gameMap, PacChar player, Ghost blinky) {
-		//FIXME big method
-		//make changes to location of object etc, then draw
-		//makeChanges();
-		
+	public void render() {
 		//Black background
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -110,7 +98,8 @@ public class PacView {
 	    // start the drawing
 	    batch.begin();
 	    drawGameMap();
-
+	    drawPacman();
+	    drawGhost();
 	    
 	    //testing bitmap text print
 //	    scoreText.setColor(Color.WHITE);
@@ -121,8 +110,7 @@ public class PacView {
 //	    if (!player.checkNoWallCollision(player.getTile())) {
 //			player.setCurrentState(PacState.IDLE);
 //		}
-	    drawPacman();
-	    drawGhost();
+	    
 	    //end the drawing
 	    batch.end();
 	}
@@ -220,5 +208,17 @@ public class PacView {
 		batch.draw(pacmanFrames[player.getSpritePos()], player.getDrawX(), 
 				player.getDrawY(), player.getWidth(), player.getHeight());
 	}
+	
+	/**
+	 * Displays the score of the current Mover.
+	 * When support for multiple player-controlled movers is implemented, printing
+	 * will have to occur in different positions.
+	 */
+//	public void displayScore(Mover mover) {
+//		batch.begin();
+//		scoreText.setColor(Color.WHITE);
+//		scoreText.draw(batch, "Score:" + mover.getScore(), 50, 50);
+//		batch.end();
+//	}
 	
 }

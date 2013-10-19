@@ -19,9 +19,9 @@ public class PacController implements InputProcessor {
 	private PacChar player;
 	private GameMap gameMap;
 	
-	public PacController(PacChar player, GameMap gameMap) {
-		this.player = player;
-		this.gameMap = gameMap;
+	public PacController(PacModel model) {
+		this.player = model.getPlayer();
+		this.gameMap = model.getGameMap();
 	}
 	
 		

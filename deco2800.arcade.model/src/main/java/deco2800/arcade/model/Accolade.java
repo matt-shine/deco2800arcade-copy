@@ -1,10 +1,7 @@
 package deco2800.arcade.model;
 import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
-//TODO Fix the comment section to allow the helped popup in other java classes
-
-
-
+//TODO Add in a popup string method
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptEngine;
@@ -14,12 +11,11 @@ public class Accolade {
 	//TODO move the container specific overrides to the AccoladeContainer class	
 	
 	//BASE variables - IE the accolade must at the very least have these
-	private int id, popup,gameID;
+	private int  popup;
 	private double modifier;
 	private String name, message, popupMessage, unit, tag, imagePath;
 	//OPTIONAL variables - these are assigned as needed through .setX commands
-	private int value;
-	private String resolvedMessage;
+	private Integer id, gameID, value;
 	private Accolade next, prev; //FOR THE ACCOLADECONTAINER
 	
 	
@@ -50,9 +46,14 @@ public class Accolade {
 		//this.modifiedValue = resolveValue();
 	}
 	
+	//SET STUFF
 	public Accolade setID(int key){
 		this.id = key;
 		return this;
+	}
+	
+	public String getRawString(){
+		return this.message;
 	}
 	
 	public Accolade setValue(int value){
@@ -65,47 +66,19 @@ public class Accolade {
 		return this;
 	}
 	
-	//returns the accolade ID
+	//GET STUFF
 	public int getID(){
-		return this.id;
-	}
+		return this.id;}
 	
 	public int getValue(){
-		return this.value;
-	}
+		return this.value;}
 	
 	public int getGameID(){
 		//TODO add in error throwing for a nullpointer exception
-		return this.gameID;
-	}
+		return this.gameID;}
 	
 	public String getName(){
-		return this.name;
-	}
-	public String getRawString(){
-		//TODO make a toString method
-		return this.message;
-	}
-	public String toString(){
-		String s = this.message.replace("%VALUE", "%s").replace("%UNIT", "%s");
-		String firstReplace, secondReplace;
-		double value = this.value*this.modifier;
-		
-		//In some instances the unit might occur before the value
-		if(this.message.indexOf("%VALUE")<this.message.indexOf("%UNIT")){
-			firstReplace = String.valueOf((long) value);
-			secondReplace = this.unit;
-		} else {
-			firstReplace = this.unit;
-			secondReplace = String.valueOf((long) value);
-		}
-		
-		if(value > 1){
-		value = Math.ceil(value);
-		//It's expected that if the value is smaller than 1 the developer intended it to be small
-		}
-		return String.format(s, firstReplace, secondReplace);
-	}
+		return this.name;}
 	
 	public String getUnit(){
 		return this.unit;
@@ -121,6 +94,45 @@ public class Accolade {
 	public String getImagePath(){
 		return this.imagePath;
 	}
+	
+	public String toString(){
+		return parseString(this.message);}
+	
+	public String getPopup(){
+		return parseString(this.popupMessage);}
+	
+	//HAS STUFF
+	
+	public boolean hasID(){
+		return this.id==null;
+	}
+	public boolean hasValue(){
+		return this.value==null;
+	}
+	
+	//OTHER STUFF	
+	private String parseString(String message){
+		String s = message.replace("%VALUE", "%s").replace("%UNIT", "%s");
+		String firstReplace, secondReplace;
+		double value = this.value*this.modifier;
+		
+		//In some instances the unit might occur before the value
+		if( message.indexOf("%VALUE")< message.indexOf("%UNIT")){
+			firstReplace = String.valueOf((long) value);
+			secondReplace = this.unit;
+		} else {
+			firstReplace = this.unit;
+			secondReplace = String.valueOf((long) value);
+		}
+		
+		if(value > 1){
+		value = Math.ceil(value);
+		//It's expected that if the value is smaller than 1 the developer intended it to be small
+		}
+		return String.format(s, firstReplace, secondReplace);
+	}
+	
+
 		
 	public void setNext(Accolade accolade){
 		//maybe add in some error checking - not an accolade etc
@@ -144,30 +156,6 @@ public class Accolade {
 				"accolades before " + name);}
 		return prev;
 	}
-	
-	private double resolveValue(){
-		//TODO figure this out
-		return this.value / this.modifier;
-	}
-		/**
-		ScriptEngineManager mgr = new ScriptEngineManager();
-		 ScriptEngine scriptEngine = mgr.getEngineByName("Javascript");
-		
-		System.out.println("modifier: " + modifier);
-		modifier = String.format(modifier, value).replaceAll("\\s+","");
-		System.out.println("modifier: " + modifier);
-		
-		try{
-			System.out.println("testing 3+2");
-			System.out.println(scriptEngine.eval("3+2"));
-			//modifiedValue = scriptEngine.eval(modifier);
-		} catch (ScriptException e){
-			System.out.println("There was an error parsing the equation :" +
-								modifier);
-			System.out.println(e + e.toString());
-		}
-		return modifiedValue;
-	} **/
 	
 	private boolean hasNext(){
 		return next==null;

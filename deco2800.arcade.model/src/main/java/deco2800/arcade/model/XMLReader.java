@@ -1,59 +1,69 @@
 package deco2800.arcade.model;
 
-import java.io.File;
-import java.util.List;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import deco2800.arcade.model.Accolade;
-import deco2800.arcade.model.AccoladeContainer;
- 
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import javax.xml.stream.*;
 
 public class XMLReader {
-	String fileLocation;
+	XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+	//TODO add in a general read xml file
 	
 	public AccoladeContainer getAccolades(String fileLocation){
-		Accolade temp;
-		Element element;
-		String tmpName, tmpMessage, tmpPopupMessage, tmpUnit, tmpTag, tmpImagePath;
-		int tmpPopup;
-		//The container to be stored to
+		//Probably should test the file exists before this is ran
+		String tmpName, tmpMessage, tmpPopupMessage, tmpUnit, 
+				tmpTag, tmpImage;
+		//Supplying a value is for developers during alpha testing
+		//Supply an ID signifies an existing accolade is to be changed
+		//A missing ID signifies a new accolade must be created in the server
+		//the update image flag means the image should be forced to update
+		int tmpPopup, tmpValue, tmpID, tmpGameID;
+		double tmpModifier;
 		AccoladeContainer accoladeContainer = new AccoladeContainer();
 		try {
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            File file = new File(fileLocation);
-            if (file.exists()) {
-                Document doc = db.parse(file);
-                Element xmlDoc = doc.getDocumentElement();
+			XMLStreamReader xmlFile = inputFactory.createXMLStreamReader(
+					new FileInputStream(fileLocation));
+			while(xmlFile.hasNext()){
+				if(xmlFile.isStartElement()){
+					String tag = xmlFile.getLocalName(); //Assigned here so it only needs to be fetched once
+					if(tag.equals("id")){ 
+						tmpID = Integer.parseInt(xmlFile.getElementText());
+					} else if(tag.equals("name")){ 
+						tmpName = xmlFile.getElementText();
+					} else if (tag.equals("message")){
+						tmpMessage = xmlFile.getElementText();
+					} else if (tag.equals("modifier")){
+						tmpModifier = Double.parseDouble(xmlFile.getElementText());
+					} else if (tag.equals("popup")){
+						tmpPopup = Integer.parseInt(xmlFile.getElementText());
+					} else if (tag.equals("popupMessage")){
+						tmpPopupMessage = xmlFile.getElementText();
+					} else if (tag.equals("unit")){
+						tmpUnit = xmlFile.getElementText();
+					}else if (tag.equals("tag")){
+						tmpTag = xmlFile.getElementText();
+					} else if (tag.equals("image")){
+						tmpImage = xmlFile.getElementText();
+					} else if (tag.equals("value")){
+						tmpValue = Integer.parseInt(xmlFile.getElementText());
+					} else if (tag.equals("gameID")){
+						tmpGameID = Integer.parseInt(xmlFile.getElementText());
+					}//END OF PSUDEOSWITCH
+				} else if(xmlFile.isEndElement() && 
+						xmlFile.getLocalName().equals("accolade")){
+					//check that all the minimal items are set
+					//Make the accolade here
+					//add it to the container
+				}
+			}
+			
+
                 
-                NodeList accolades = xmlDoc.getElementsByTagName("accolade");
-                
-                if (accolades !=null && accolades.getLength() > 0){
-                	for(int x = 0; x < accolades.getLength(); x++){
-                		element = (Element) accolades.item(x);
-                		//Repeat for each eccential field
-                		tmpName = element.getElementsByTagName("name").item(0).getTextContent();
-                					//getTextContent();
-                		//temp = new Accolade();
-                		
-                		//TODO create accolade after reading in from xml
-                		/** make the accolade without ID
-                		 * if the xml has an id, then assign it afterwards
-                		 */
-                				//getString("name");
-                		
-                	}//END OF FOR
-                }//END OF IF
-                
-            }//END OF IF EXISTS
-		} catch(Exception E){
+		} catch (FileNotFoundException fileNotFound){
+			//add in some sort of throw here for file not found
+			
+		}catch(Exception E){
 			//TODO add in catch statements for each exception
 		
 		}//END OF TRYCATCH

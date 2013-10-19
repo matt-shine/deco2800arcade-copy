@@ -2,12 +2,15 @@ package deco2800.arcade.wl6.enemy;
 
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.wl6.Doodad;
 import deco2800.arcade.wl6.DoodadInfo;
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
+import deco2800.arcade.wl6.Pickup;
 import deco2800.arcade.wl6.Player;
 import deco2800.arcade.wl6.Projectile;
 import deco2800.arcade.wl6.WL6Meta;
+import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -63,6 +66,11 @@ public class Enemy extends Mob {
     // damage
     private int damage;
 
+    private int ammoDrop = 0;
+    @SuppressWarnings("unused")
+	private int gunDrop = 0;
+    private KEY_TYPE keyDrop = null;
+    
 
     public Enemy(int uid) {
         super(uid);
@@ -115,6 +123,7 @@ public class Enemy extends Mob {
         	instantStateChange(STATES.DIE);
         	this.setTextureName("headstone");
         	this.setVel(new Vector2(0, 0));
+        	this.dropItems(gameModel);
         }
     }
 
@@ -123,6 +132,16 @@ public class Enemy extends Mob {
     	
     	setTextureName(d.texture);
         setPathing(d.pathing);
+        ammoDrop = d.ammo;
+        EnemyType e = d.enemytype;
+        if (e == EnemyType.FETTGESICHT ||
+        		e == EnemyType.GIFTMACHER ||
+        		e == EnemyType.GRETEL ||
+        		e == EnemyType.HANS ||
+        		e == EnemyType.HITLER ||
+        		e == EnemyType.SCHABBS) {
+        	this.keyDrop = KEY_TYPE.GOLD;
+        }
         if (d.pathing) {
         	instantStateChange(STATES.PATH);
         } else {
@@ -250,6 +269,32 @@ public class Enemy extends Mob {
 
         return getDamage();
     }
+    
+    
+    protected void dropItems(GameModel g) {
+    	
+    	Doodad d = null;
+    	
+    	if (this.keyDrop != null) {
+    		d = new Pickup(0, this.keyDrop);
+    		d.setTextureName("goldkey");
+    	} else {
+    		d = new Pickup(0, 0, 0, ammoDrop, 0);
+    		d.setTextureName("ammo");
+    	}
+    	
+    	
+    	do {
+    		
+    		d.setPos(this.getPos().add((float) (0.7 * Math.random() - 0.35), (float) (0.7 * Math.random() - 0.35)));
+    		
+    	} while (WL6Meta.hasSolidBlockAt((int) d.getBlockPos().x, (int) d.getBlockPos().y, g.getMap()));
+    	
+    	System.out.println("drop has " + ammoDrop + " ammo and is at " + d.getPos());
+    		
+    	g.addDoodad(d);
+    }
+    
 
     public void calculatePath(GameModel gameModel) {
         path = new ArrayList<Vector2>();

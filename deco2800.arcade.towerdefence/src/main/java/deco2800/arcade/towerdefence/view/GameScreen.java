@@ -345,10 +345,10 @@ public class GameScreen implements Screen{
 		
 		//adding bars for showing information
 		healthBar = new TexturePart(healthBarRegion, towerInfo.getX() + towerInfo.getWidth() + 20, towerInfo.getY() + 50);
-		attackBar = new TexturePart(attackBarRegion, healthBar.getX(), healthBar.getY() - 26);
-		costBar = new TexturePart(costBarRegion, healthBar.getX(), attackBar.getY()- 26);
-		penetrationBar = new TexturePart(penetrationBarRegion, healthBar.getX(), costBar.getY() - 26);
-		armorBar = new TexturePart(armorBarRegion, healthBar.getX(), penetrationBar.getY() - 26);
+		//getClass().attackBar = new TexturePart(attackBarRegion, healthBar.getX(), healthBar.getY() - 26);
+		//costBar = new TexturePart(costBarRegion, healthBar.getX(), attackBar.getY()- 26);
+		//penetrationBar = new TexturePart(penetrationBarRegion, healthBar.getX(), costBar.getY() - 26);
+		//armorBar = new TexturePart(armorBarRegion, healthBar.getX(), penetrationBar.getY() - 26);
 		
 		//adding actors to the HUD
 		hudStage.addActor(frostB);

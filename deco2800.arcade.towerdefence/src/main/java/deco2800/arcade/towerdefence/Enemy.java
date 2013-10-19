@@ -21,6 +21,8 @@ public class Enemy extends Mobile implements Melee {
 	private int penetration;
 	// The current target.
 	private GridObject target;
+	// The sprites for the melee attacking animation.
+	private List<Sprite> sprAttacking; 
 
 	// Constructor
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
@@ -60,8 +62,8 @@ public class Enemy extends Mobile implements Melee {
 	/**
 	 * Return the sprites for melee attacking animation.
 	 */
-	public List<Sprite> meleeSprites() {
-		return null;
+	public List<Sprite> sprAttacking() {
+		return sprAttacking;
 	}
 
 	// Setters
@@ -108,7 +110,8 @@ public class Enemy extends Mobile implements Melee {
 	/**
 	 * Sets the sprites for melee attacking animation.
 	 */
-	public void meleeSprites(List<Sprite> meleeSprites) {
+	public void sprAttacking(List<Sprite> sprites) {
+		this.sprAttacking = sprites;
 	}
 
 	// Methods

@@ -45,6 +45,6 @@ public interface Melee {
 	 * 
 	 * @return The list of sprites for the melee animation.
 	 */
-	public List<Sprite> meleeSprites();
+	public List<Sprite> sprAttacking();
 
 }

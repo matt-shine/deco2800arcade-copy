@@ -472,7 +472,7 @@ public class MainGameScreen implements Screen {
     			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.winGame");
     		}
             
-            // Store the score (turns taken to win?)
+            // Store the score (turns taken to win? [less is better])
             DeerForest.playerScore.storeScore("Number", MainInputProcessor.turns);
         	
             game.batch.begin();

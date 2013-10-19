@@ -1,25 +1,25 @@
 package deco2800.arcade.model;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
-
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 
 /**
  * A ChatNode is a single chat instance. It contains the participants of the
  * chat and a queue containing the chat history.
  * 
  */
-public class ChatNode extends JLabel {
+public class ChatNode {
 
 	private List<Integer> participants;
 	private Queue<String> chatHistory;
 	
+	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public ChatNode(){
+	}
 
 	/**
 	 * Creates a chat with a list of participants.
@@ -29,7 +29,6 @@ public class ChatNode extends JLabel {
 	public ChatNode(List<Integer> chatParticipants) {
 		participants = new ArrayList<Integer>(chatParticipants);
 		chatHistory = new ArrayDeque<String>();
-		setUpLabel();
 	}
 
 	/**
@@ -40,15 +39,8 @@ public class ChatNode extends JLabel {
 	public ChatNode(int participant) {
 		participants = new ArrayList<Integer>();
 		participants.add(participant);
-		setUpLabel();
 	}
-	
-	private void setUpLabel() {
-		setBackground(Color.WHITE);
-		setOpaque(true);
-		setHorizontalAlignment(SwingConstants.CENTER);
-		setPreferredSize(new Dimension(250, 50));
-	}
+
 
 	public int getID() {
 		return participants.hashCode();
@@ -86,6 +78,10 @@ public class ChatNode extends JLabel {
 	 */
 	public void addMessage(String message) {
 		chatHistory.add(message);
+	}
+	
+	public Queue<String> getChatHistory(){
+		return chatHistory;
 	}
 
 }

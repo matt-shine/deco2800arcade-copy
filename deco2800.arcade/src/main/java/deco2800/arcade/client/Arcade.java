@@ -90,6 +90,8 @@ public class Arcade extends JFrame {
 
 	private CommunicationNetwork communicationNetwork;
 
+	private CommunicationView view;
+
 	@SuppressWarnings("unused")
 	private static PackageClient packClient;
 
@@ -290,9 +292,9 @@ public class Arcade extends JFrame {
 		Player myPlayer = pc.loadPlayer(myID);
 		if (myPlayer == null){  //As previously mentioned, due to playerID shortages at this time, a null Player is almost guaranteed
 			List<String> details = new ArrayList<String>();
-			details.add("debug");
-			details.add("Debug Smith");
-			details.add("debug@arcade.com");
+			details.add(username);
+			details.add(username + " Smith");
+			details.add(username + "@arcade.com");
 			details.add("debugging");
 			details.add("debugger 4 lyfe");
 			details.add("21");
@@ -306,14 +308,9 @@ public class Arcade extends JFrame {
 			boolean[] privacy = {false, false, false, false, false, false, false};
 			myPlayer = new Player(myID, null, details, friendsSet, invitesSet, blockedSet, gameSet, privacy);
 		}
-		
-		System.out.println("my ID is: " + myPlayer.getID());
-		System.out.println("my Username is: " + myPlayer.getUsername());
-		System.out.println("my Name is: " + myPlayer.getName());
-		System.out.println("my Email is: " + myPlayer.getEmail());
-		
+
 		this.player = myPlayer;
-		this.communicationNetwork.loggedIn(this.player);
+		this.communicationNetwork.loggedIn(this.player, this.view);
 
 		ConnectionRequest connectionRequest = new ConnectionRequest();
 		connectionRequest.playerID = myID;
@@ -332,17 +329,21 @@ public class Arcade extends JFrame {
 		creditBalanceRequest.playerID = myID;
 		creditBalanceRequest.username = myPlayer.getUsername();
 		this.client.sendNetworkObject(creditBalanceRequest);
-
+		
+		
+		if (player.getID() == 888){ //This ID belongs to debug1 
+			List<Integer> chat = new ArrayList<Integer>(); 
+			chat.add(999); //debug
+			chat.add(888); //debug1 
+			this.communicationNetwork.createChat(chat);
+		}
 		/*
-		 * As above, waiting for new Player(...) method //For testing chat: if
-		 * (player.getID() == 888){ //This ID belongs to debug1 List<Integer>
-		 * chat = new ArrayList<Integer>(); chat.add(999); //debug
-		 * chat.add(888); //debug1 this.communicationNetwork.createChat(chat); }
-		 * 
-		 * if (player.getID() == 777){ //This ID belongs to debug2 List<Integer>
-		 * chat = new ArrayList<Integer>(); chat.add(999); //debug
-		 * chat.add(777); //debug2 this.communicationNetwork.createChat(chat); }
-		 */
+		if (player.getID() == 777){ //This ID belongs to debug2 
+			List<Integer> chat = new ArrayList<Integer>(); chat.add(999); //debug
+			chat.add(777); //debug2 
+			this.communicationNetwork.createChat(chat); 
+		}
+		*/
 
 		// TODO move this call to be internal to Packman class
 		// TODO iterate over actual game ids rather than just
@@ -453,11 +454,12 @@ public class Arcade extends JFrame {
 		synchronized (mon) {
 			proxy.setThreadMonitor(mon);
 			
-			CommunicationView view = new CommunicationView();
+			//CommunicationView view = new CommunicationView();
+			this.view = new CommunicationView();
 
 			Container container = this.getContentPane();
 			container.add(this.canvas.getCanvas(), BorderLayout.CENTER);
-			container.add(view, BorderLayout.EAST);
+			container.add(this.view, BorderLayout.EAST);
 			
 			this.pack();
 			

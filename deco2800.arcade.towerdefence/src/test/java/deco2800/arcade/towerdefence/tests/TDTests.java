@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.*;
 import deco2800.arcade.towerdefence.model.pathfinding.Path;
+import deco2800.arcade.towerdefence.model.pathfinding.Path.Step;
 
 public class TDTests {
 
@@ -91,5 +92,22 @@ public class TDTests {
 		((Mobile) grid.getGridContents(1, 1).get(0)).followPath();
 		Assert.assertTrue(grid.getGridContents(1,1).size() == 0);
 		Assert.assertTrue(grid.getGridContents(2,2).size() == 1);
+	}
+	
+	@Test
+	public void pathfindingTest(){
+		//Create a grid
+		Grid grid = new Grid(100, 100, "grid", 10, null, new Vector2(9,4));
+		//Add some obstacles
+		grid.buildObject(new GridObject(1,2,grid));
+		grid.buildObject(new GridObject(1,3,grid));
+		grid.buildObject(new GridObject(1,4,grid));
+		grid.buildObject(new GridObject(1,5,grid));
+		grid.buildObject(new GridObject(3,5,grid));
+		grid.buildObject(new GridObject(3,6,grid));
+		//Try finding a path
+		Path path = grid.pathfinder().findPath(null, 0, 4, 9, 4);
+		Assert.assertEquals(9, path.getStep(path.getLength()-1).getX());
+		Assert.assertEquals(4, path.getStep(path.getLength()-1).getY());
 	}
 }

@@ -36,7 +36,7 @@ public class Grid implements TileBasedMap {
 	// The ship that is using this grid
 	private Ship ship;
 	// The pathfinder used by objects in the grid
-	public AStarPathFinder pathfinder;
+	private AStarPathFinder pathfinder;
 	// The target of pathfinding movement (portal)
 	private Vector2 targetPosition;
 
@@ -75,6 +75,7 @@ public class Grid implements TileBasedMap {
 			}
 		}
 		this.targetPosition = targetPosition;
+		this.pathfinder = new AStarPathFinder(this, 100, true);
 	}
 
 	// Getters
@@ -196,14 +197,21 @@ public class Grid implements TileBasedMap {
 	}
 	
 	/**
+	 * Get the pathfinder used for this grid.
+	 * @return The pathfinder in use.
+	 */
+	public AStarPathFinder pathfinder(){
+		return pathfinder;
+	}
+	
+	/**
 	 * Set the position of the portal to Earth.
 	 * @param position
 	 */
 	public void targetPosition(Vector2 position) {
 		this.targetPosition = position;
 	}
-
-
+	
 	// Methods
 	public void pathFinderVisited(int x, int y) {
 		// do nothing - not needed
@@ -256,6 +264,36 @@ public class Grid implements TileBasedMap {
 		return true;
 	}
 
+	/**
+	 * Try and place an alien at the specified grid. If it is blocked, return
+	 * false, otherwise return true and modify the gridContents appropriately.
+	 * 
+	 * @param object
+	 *            The alien to place. Its coordinates are determined via
+	 *            the position of the object.
+	 */
+	public boolean placeAlien(Enemy object) {
+		int x, y;
+		x = (int) object.positionInTiles().x;
+		y = (int) object.positionInTiles().y;
+		Iterator<GridObject> thisGridObjects = getGridContents(x, y).iterator();
+		while (thisGridObjects.hasNext()) {
+			GridObject current = thisGridObjects.next();
+			// Check for block wall
+			// Check for towers
+			if (current.getClass() == Enemy.class) {
+				return false;
+			}
+		}
+
+		// Start the object AI and add it to the grid
+		object.start();
+		getGridContents(x, y).add(object);
+
+		return true;
+	}
+
+	
 	/**
 	 * Get the contents of the specified grid location
 	 * 

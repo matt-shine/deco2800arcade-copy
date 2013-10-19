@@ -107,7 +107,7 @@ public abstract class Mobile extends Mortal {
 				// position
 				if (!moving((new Vector2(current.getX(), current.getY())
 						.sub(positionInTiles())))) {
-					path = grid.pathfinder.findPath(this,
+					path = grid.pathfinder().findPath(this,
 							(int) this.positionInTiles().x,
 							(int) this.positionInTiles().y, 50, 50);
 					break;

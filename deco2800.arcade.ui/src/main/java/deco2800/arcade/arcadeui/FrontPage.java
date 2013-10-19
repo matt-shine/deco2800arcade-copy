@@ -123,7 +123,7 @@ public class FrontPage implements Screen {
                 /* Lobby button */
         	    final TextButton lobbyButton = new TextButton("Multiplayer Lobby", skin, "magenta");
         	    lobbyButton.setSize(210, 50);
-        	    lobbyButton.setPosition(800, 580);
+        	    lobbyButton.setPosition(760, 550);
 
         	    stage.addActor(lobbyButton);
         	    lobbyButton.addListener((new ChangeListener() {

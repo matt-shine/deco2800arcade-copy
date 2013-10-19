@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.TreeSet;
-
 import org.simpleframework.http.Response;
-
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.server.ArcadeServer;

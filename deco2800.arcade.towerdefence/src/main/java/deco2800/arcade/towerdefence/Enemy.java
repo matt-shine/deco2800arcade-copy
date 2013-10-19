@@ -5,7 +5,8 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * The class for enemies invading the ship.
+ * The class for enemies invading the ship. Every enemy is able to use Melee, but only some will be able to use Ranged.
+ * Those that are Ranged should extend Enemy and implement Ranged.
  * 
  * @author hadronn
  * 

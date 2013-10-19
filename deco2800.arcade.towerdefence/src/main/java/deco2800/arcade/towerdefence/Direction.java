@@ -1,7 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 /**
- * A simple enumeration to set expected sprite on a grid.
+ * A simple enumeration of possible movement directions for a GridObject on a Grid.
  * 
  * @author hadronn
  * 
@@ -10,5 +10,5 @@ public enum Direction {
 	/**
 	 * Direction in relation to the current square.
 	 */
-	UP, DOWN, LEFT, RIGHT;
+	N, NE, E, SE, S, SW, W, NW;
 }

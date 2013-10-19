@@ -28,14 +28,16 @@ public class Grid implements TileBasedMap {
 	private int tileSize;
 	// The dimensions of the grid in grid squares
 	private int gridWidth, gridDepth;
-	// The contents of the grid. 0 means clear, 1 means tower, 2 means wall, 3
-	// means wall with tower, and 4 means blocked.
+	// A 3 dimensional Array of the following format
+	// (x, y, GridObject).
+	// If an area is meant to be blocked entirely initialise a "Blocked" GridObject and place it inside the gridContents.
+	// For any grid the blocked areas should be hard-coded and loaded from a file on load.
 	private List<List<List<GridObject>>> gridContents;
 	// The ship that is using this grid
 	private Ship ship;
 	// The pathfinder used by objects in the grid
 	public AStarPathFinder pathfinder;
-
+	
 	// Constructor
 	/**
 	 * Instantiates a grid with a unique UUID, length, width and name.

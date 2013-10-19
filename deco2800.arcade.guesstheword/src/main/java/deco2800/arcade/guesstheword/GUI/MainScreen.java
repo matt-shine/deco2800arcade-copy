@@ -150,7 +150,7 @@ public class MainScreen implements Screen {
 
 				for(Achievement ach  : achievements.get())
 					System.out.println(ach);
-				achieveText.setMessageText("Your Achievement: ");
+//				achieveText.setMessageText("Your Achievement: ");
 			}
 		});
 		

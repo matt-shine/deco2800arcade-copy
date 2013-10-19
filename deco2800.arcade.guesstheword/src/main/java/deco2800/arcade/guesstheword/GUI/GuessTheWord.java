@@ -22,9 +22,9 @@ public class GuessTheWord extends GameClient{
 	
 	private static final Game GAME;
 	
-	private NetworkClient networkClient;
+	private static NetworkClient networkClient;
 	private AchievementClient achievementClient;
-	private Player player;
+	private static Player player;
 	
 	public GetterSetter getterSetter;
 	public Pictures picture;
@@ -37,7 +37,9 @@ public class GuessTheWord extends GameClient{
 //	Screen acheivementScreen;
 	Skin skin;
 
-
+//	public GuessTheWord(){
+//		super(player, networkClient);
+//	}
 	public GuessTheWord(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
 		

@@ -35,7 +35,7 @@ public class Pictures {
 		level3Cat =  new HashMap<String, HashMap<String, Texture>>();
 		// Creating of the new Texture, in other words each picture 
 		// has their own texture. 
-		
+
 		//animals textures level 1
 		Texture bear1 = new Texture("Images/level1/animals/bear/bear_1.png");
 		Texture bull1 = new Texture("Images/level1/animals/bull/bull_1.png");

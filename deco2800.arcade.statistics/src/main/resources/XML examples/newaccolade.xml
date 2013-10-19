@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<accolades>
+<gameID>"8"</gameID>
+	<accolade>
+		<!-- NOTICE THERE IS NO <id> SET. THIS IS ADDED ON YOUR FIRST RUN -->
+		<name> "Grenades Exploded" </name>
+		<message> "The equivalent of $VALUE $UNIT of grenades have been detonated." </message>
+		<!-- This will multiplied against the value to produce the final value-->
+		<modifier>4</modifier> 
+		<unit>"megatonnes"</unit>
+		<!-- When the value reaches a multiple of this, the popup occurs -->	
+		<popup>100 </popup>
+		<!-- Message for ingame popup - contains an example of hardcoded $unit (use if different) -->
+		<popupMessage>"You've thrown a whopping $VALUE grenades!"</popupMessage>
+		<tag>"explosion"</tag>
+		<!-- This is the relative local file lovation - should be your server resources folder -->
+		<image>"\images\accolades\grenades.jpg"</image>  
+	</accolade>
+</accolades>

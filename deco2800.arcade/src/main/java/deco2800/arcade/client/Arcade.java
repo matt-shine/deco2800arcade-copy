@@ -219,26 +219,23 @@ public class Arcade extends JFrame {
 		}
 	}
 
-	/**
-	 * Attempt to initiate a connection with the file server.
-	 * 
-	 * @throws ArcadeException
-	 *             if the connection failed.
-	 */
-	public void connectToFileServer() throws ArcadeException {
-		try {
-			// TODO allow server/port as optional runtime arguments xor user
-			// inputs.
-			System.out.println("connecting to file server");
-			fileClient = new NetworkClient(serverIPAddress, FILE_TCP_PORT);
-			addFileClientListeners();
-		} catch (NetworkException e) {
-			throw new ArcadeException(
-					"Unable to connect to Arcade File Server ("
-							+ serverIPAddress + ")", e);
-		}
-		fetchGameJar("pong", "1.0");
-	}
+  /**
+    * Attempt to initiate a connection with the file server.
+    *
+    * @throws ArcadeException
+    *             if the connection failed.
+    */
+  public void connectToFileServer() throws ArcadeException {
+      try {
+          // TODO allow server/port as optional runtime arguments xor user inputs.
+          System.out.println("connecting to file server");
+          fileClient = new NetworkClient(serverIPAddress, FILE_TCP_PORT);
+          addFileClientListeners();
+      } catch (NetworkException e) {
+          throw new ArcadeException("Unable to connect to Arcade File Server ("
+                  + serverIPAddress + ")", e);
+      }
+  }
 
 	/**
 	 * Add Listeners to the network client

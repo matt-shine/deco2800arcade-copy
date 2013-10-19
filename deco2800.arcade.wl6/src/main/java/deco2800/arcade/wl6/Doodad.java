@@ -1,6 +1,7 @@
 package deco2800.arcade.wl6;
 
 import com.badlogic.gdx.math.Vector2;
+
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Renderer;
 
@@ -82,4 +83,10 @@ public class Doodad {
     public void tick(GameModel m) {
 
     }
+    
+    public Vector2 getBlockPos() {
+    	return new Vector2((int) Math.floor(getPos().x), (int) Math.floor(getPos().y));
+    }
+    
+    
 }

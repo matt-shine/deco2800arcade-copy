@@ -52,6 +52,9 @@ public class FileClient implements Runnable {
 
                 resp = (FetchGameResponse) r;
 
+                //stops the file server from crashing every two seconds.
+                if (resp.data == null) return;
+                
                 fout.write(resp.data, 0, resp.byteCount);
                 fout.flush();
 

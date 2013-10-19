@@ -32,7 +32,8 @@ public class StoreGame implements Screen, StoreScreen {
 	
 	/**
 	 * @author Addison Gourluck
-	 * @param ui
+	 * @param ArcadeUI ui
+	 * @param Game featuredGame
 	 */
 	public StoreGame(ArcadeUI ui, Game featuredGame) {
 		featured = featuredGame;
@@ -65,7 +66,7 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		// Title of the featured game, located center of screen.
 		gameTitle.setSize(380, 40);
-		gameTitle.setPosition(96, 513);
+		gameTitle.setPosition(96, 515);
 		stage.addActor(gameTitle);
 		
 		// Main text body, located in center of screen.
@@ -132,7 +133,7 @@ public class StoreGame implements Screen, StoreScreen {
 		star_bg.setSize(142, 23);
 		stage.addActor(star_bg);
 		
-		placeRatingStars(stage, skin);
+		placeRatingStars();
 		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
@@ -149,7 +150,9 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		wishButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("wish");
+				System.out.println("wishlist");
+				//dispose();
+				//arcadeUI.setScreen(new StoreWishlist(arcadeUI));
 			}
 		});
 		
@@ -160,7 +163,7 @@ public class StoreGame implements Screen, StoreScreen {
 		});
 	}
 	
-	private void placeRatingStars(Stage stage, Skin skin) {
+	private void placeRatingStars() {
 		for (int i = 5; i >= 1; --i) {
 			final CheckBox star = new CheckBox("", skin, "star" + i);
 			star.setSize(i * 28.4f, 23);
@@ -226,12 +229,17 @@ public class StoreGame implements Screen, StoreScreen {
 	public Game getSelected() {
 		return featured;
 	}
-
+	
 	@Override
-	public boolean buyTokens(int amount, Game game) {
+	public boolean buyTokens(int amount) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean buyGame(Game game) {
+		return false;
+	}
+	
 	@Override
 	public void setSelected(String game) {
 		for (Game search : ArcadeSystem.getArcadeGames()) {
@@ -240,5 +248,10 @@ public class StoreGame implements Screen, StoreScreen {
 				return;
 			}
 		}
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

@@ -243,7 +243,9 @@ public class GameScreen implements Screen {
 	 * Creates a new map entity
 	 */
 	private void createMapEntity() {
-		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),64,64, "spike trap", entityHandler.getMapEntity("spike trap"), this));
+		String[] mapents = {"bomb", "net", "spike trap", "deathShroom"};
+		String mapent = mapents[Hunter.State.randomGenerator.nextInt(4)];
+		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),64,64, "net", entityHandler.getMapEntity("net"), this));
 	}
 	
 	/**

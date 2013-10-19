@@ -27,11 +27,11 @@ public class MapEntity extends Entity{
 		super(pos, width, height);
 		this.text = texture;
 		if (file.equals("arrow")){
-			moveSpeed = 20;
+			moveSpeed = 40;
 		}else{
 			moveSpeed = 0;
 		}
-		Type = file;
+		this.Type = file;
 		this.gameScreen = game;
 	}
 	

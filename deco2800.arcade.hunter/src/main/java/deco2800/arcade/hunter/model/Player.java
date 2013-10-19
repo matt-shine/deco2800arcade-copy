@@ -316,10 +316,6 @@ public class Player extends Entity {
 
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
-		if (invulnerable) {
-			Texture inv = new Texture("textures/invulnerability.png");
-			batch.draw(inv,getX()-10,getY()-10,getWidth()+20,getHeight()+20);
-		}
         animLoop = state == State.RUNNING;
 		TextureRegion currFrame = currAnim.getKeyFrame(stateTime, animLoop);
 
@@ -334,6 +330,10 @@ public class Player extends Entity {
         	batch.draw(currFrame, getX(), getY(), getWidth(), getHeight());
         }
         batch.setColor(1f, 1f, 1f, 1f);
+        if (invulnerable) {
+			Texture inv = new Texture("textures/invulnerability.png");
+			batch.draw(inv,getX()-10,getY()-10,getWidth()+20,getHeight()+20);
+		}
 	}
 
 	/**
@@ -412,18 +412,29 @@ public class Player extends Entity {
 			}
 		} else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")){
 			if (!invulnerable && !blink && !dead){
-				if (Hunter.State.getPreferencesManager().isSoundEnabled()){
-					hurt.play(Hunter.State.getPreferencesManager().getVolume());
-				}
-				this.blink = true;
-				damageTime = System.currentTimeMillis();
-				loseLife();
-				checkLives();
+				String type = ((MapEntity)e).getType();
+				applyPlayerDebuff(type);
 			}
 		}
 	}
 
-	
+	private void applyPlayerDebuff(String item){
+		if (item.equals("net")){
+			Hunter.State.playerVelocity.x = 0;
+		}else if(item.equals("bomb")){
+			
+		}else if(item.equals("spike trap")){
+			if (Hunter.State.getPreferencesManager().isSoundEnabled()){
+				hurt.play(Hunter.State.getPreferencesManager().getVolume());
+			}
+			this.blink = true;
+			damageTime = System.currentTimeMillis();
+			loseLife();
+			checkLives();
+		}else if(item.equals("deathShroom")){
+			score -= 1000;
+		}
+	}
 	
 	/**
 	 * Applies the buffs that the player receives

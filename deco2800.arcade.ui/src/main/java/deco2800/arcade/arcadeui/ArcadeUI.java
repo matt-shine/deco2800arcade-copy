@@ -112,6 +112,9 @@ public class ArcadeUI extends GameClient {
 	public HomeScreen getHome() {
 		return home;
 	}
+	public FrontPage getMain() {
+		return main;
+	}
 
 	public StoreHome getStore() {
 		return store;

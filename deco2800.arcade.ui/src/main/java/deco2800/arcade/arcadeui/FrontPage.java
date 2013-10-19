@@ -257,6 +257,7 @@ public class FrontPage implements Screen {
                 return friends; // REALLY BAD. HOPEFULLY TEMPORARY.
         }
         
+        
         public static String[] getOnlineFriends() {
                 String[] onlineFriends = null;
                 /*for (Player friend : friends) {

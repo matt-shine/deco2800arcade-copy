@@ -392,6 +392,7 @@ public class Player extends Entity {
 			if (!invulnerable && !blink && !dead){
 				String type = ((MapEntity)e).getType();
 				applyPlayerDebuff(type);
+				entities.remove(e);
 			}
 		}
 	}

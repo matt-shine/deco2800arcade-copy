@@ -36,7 +36,7 @@ public abstract class Enemy extends MovableEntity{
 	
 	@Override
 	public void handleTopOfMovingPlatform(MovablePlatform movablePlatform) {
-		System.out.println("enemy had top of moving platform collision");
+		//System.out.println("enemy had top of moving platform collision");
 		getPosition().y = movablePlatform.getPosition().y + 
 				movablePlatform.getCollisionRectangle().height+1/32f;
 		

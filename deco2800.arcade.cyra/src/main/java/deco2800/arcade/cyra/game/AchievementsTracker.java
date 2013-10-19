@@ -1,4 +1,4 @@
-package deco2800.arcade.cyra.model;
+package deco2800.arcade.cyra.game;
 
 public class AchievementsTracker {
 	/* Tracks the time, hearts lost, enemies killed  */

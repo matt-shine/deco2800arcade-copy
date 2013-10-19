@@ -15,7 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import deco2800.arcade.cyra.game.Cyra;
-import deco2800.arcade.cyra.model.AchievementsTracker;
+import deco2800.arcade.cyra.game.AchievementsTracker;
 import deco2800.arcade.cyra.model.Block;
 import deco2800.arcade.cyra.model.BlockMaker;
 import deco2800.arcade.cyra.model.Bullet;
@@ -502,7 +502,7 @@ public class World {
 						(spp.y > camY - cam.viewportHeight/2 - 1f && spp.y < camY - cam.viewportHeight/2 && ship.getVelocity().y < 0)) &&
 						(spp.x >camX - cam.viewportWidth/2 && spp.x < camX + cam.viewportWidth/2))
 						) {
-					System.out.println("Spawn! Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
+					//System.out.println("Spawn! Sxy:"+s.getPosition().x+","+s.getPosition().y+" Shipxy"+ship.getPosition().x+","+ship.getPosition().y);
 					enemies.add(s.spawnNew());
 				}
 			}
@@ -548,8 +548,11 @@ public class World {
 				Array<Enemy> newEnemies = e.advance(Gdx.graphics.getDeltaTime(), ship, rank, cam);
 				
 				if (e.isDead()) {			
-					System.out.println("removing " + e.getClass()+ " because dead");
+					//System.out.println("removing " + e.getClass()+ " because dead");
 					eItr.remove();
+					//Enemy is dead - achievement
+					System.out.println("ACHIEVE INC");
+					game.incrementAchievement("cyra.slayer");
 					//System.out.println("removed enemy");
 					for (EnemySpawner spns: curLevel.getEnemySpawners() ) {
 						spns.removeEnemy(e);
@@ -861,6 +864,12 @@ public class World {
 		return;
 	}
 	
+	
+	public void testOverlay(String message) {
+		//overlay test
+				game.createPopup(message);
+				
+	}
 	
 
 	public void resetLevel() {

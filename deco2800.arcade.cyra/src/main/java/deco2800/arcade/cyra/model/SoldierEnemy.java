@@ -358,7 +358,7 @@ public class SoldierEnemy extends Enemy {
 		
 		}
 		
-		System.out.println("Picked new state: "+ state);
+		//System.out.println("Picked new state: "+ state);
 	}
 	
 	
@@ -378,7 +378,7 @@ public class SoldierEnemy extends Enemy {
 		if (velocity.y < 0 && state == State.JUMP && !performingTell) {
 			state = State.WAIT;
 			velocity.x = 0;
-			System.out.println("hit ground");
+			//System.out.println("hit ground");
 		}
 		super.handleYCollision(tile, onMovablePlatform, movablePlatform);
 		

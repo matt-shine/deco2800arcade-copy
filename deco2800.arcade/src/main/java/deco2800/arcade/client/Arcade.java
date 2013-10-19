@@ -454,7 +454,6 @@ public class Arcade extends JFrame {
 		synchronized (mon) {
 			proxy.setThreadMonitor(mon);
 			
-			//CommunicationView view = new CommunicationView();
 			this.view = new CommunicationView();
 
 			Container container = this.getContentPane();

@@ -50,36 +50,6 @@ public class CommunicationView extends JPanel {
 		add(viewOne, "1");
 		add(viewTwo, "2");
 		
-		
-//		label.addMouseListener(new MouseListener() {
-//			public void mouseClicked(MouseEvent e) {
-//				cardLayout.show(cardPanel, "2");
-//				JLabel chatNode = (JLabel) e.getSource();
-//			}
-//
-//			public void mouseEntered(MouseEvent e) {
-//				JLabel chatNode = (JLabel) e.getSource();
-//				chatNode.setBackground(Color.GRAY);
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//				JLabel chatNode = (JLabel) e.getSource();
-//				chatNode.setBackground(Color.WHITE);
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//
-//			@Override
-//			public void mouseReleased(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
 
 	}
 	
@@ -100,7 +70,6 @@ public class CommunicationView extends JPanel {
 		addMouseListener(l);
 		
 		scrollablePanel.add(l);
-		
 		viewOne.add(scrollPane);
 		
 	}
@@ -139,6 +108,7 @@ public class CommunicationView extends JPanel {
 		viewTwo.add(sendButton, BorderLayout.SOUTH);
 		
 	}
+	
 
 	public void addChatNode(ChatNode node) {
 		Integer nodeID = node.getID();
@@ -187,13 +157,15 @@ public class CommunicationView extends JPanel {
 				}
 			}
 
-			public void mouseEntered(MouseEvent arg0) {
+			public void mouseEntered(MouseEvent e) {
+				JLabel label = (JLabel) e.getSource();
+				label.setBackground(Color.GRAY);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				JLabel label = (JLabel) e.getSource();
+				label.setBackground(Color.WHITE);
 			}
 
 			@Override

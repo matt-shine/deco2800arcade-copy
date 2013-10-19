@@ -69,7 +69,7 @@ public class EntityHandler {
 	 * Loads all the map entity textures
 	 */
 	private void loadMapEntities(){
-		String[] textures = {"arrow", "spike trap","net","bomb","deathShroom"};
+		String[] textures = {"arrow", "spike trap", "net","bomb","deathShroom"};
         for (int t = 0, tl = textures.length; t < tl; t++) {
 			Texture texture = new Texture("textures/MapEntities/" + textures[t] + ".png");
 			mapEntityTextures.put(textures[t], texture);

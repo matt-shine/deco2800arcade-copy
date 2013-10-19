@@ -33,15 +33,16 @@ public class PhysicsHandler {
 
         ArrayList<EntityCollision> collisions = new ArrayList<EntityCollision>();
 
-        for (Entity e : entities) {
-            collisions.addAll(e.getCollisions(entities));
+        Iterator<Entity> e = entities.iterator();
+        while (e.hasNext()) {
+            collisions.addAll(e.next().getCollisions(entities));
         }
 
         Collections.sort(collisions);
 
-        for (EntityCollision c : collisions) {
+        for (int c = 0, cl = collisions.size(); c < cl; c++) {
             // Handle the collision
-            c.getEntityOne().handleCollision(c.getEntityTwo(), entities);
+            collisions.get(c).getEntityOne().handleCollision(collisions.get(c).getEntityTwo(), entities);
         }
     }
 

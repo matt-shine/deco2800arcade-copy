@@ -352,7 +352,6 @@ public class Player extends Entity {
         if (e == null) {
             lives = 0;
         } else if (e.getType().equals("Items")) {
-            System.out.println(((Items) e).getItem());
             entities.remove(e);
             if (Hunter.State.getPreferencesManager().isSoundEnabled()) {
                 pickup.play(Hunter.State.getPreferencesManager().getVolume());
@@ -384,7 +383,7 @@ public class Player extends Entity {
 			}
 		} else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")){
 			if (!invulnerable && !blink && !dead){
-				String type = ((MapEntity)e).getType();
+				String type = ((MapEntity)e).getEntityType();
 				applyPlayerDebuff(type);
 			}
 		}

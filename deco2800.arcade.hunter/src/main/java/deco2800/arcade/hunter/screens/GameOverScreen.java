@@ -35,7 +35,6 @@ public class GameOverScreen implements Screen {
         background = new Texture("textures/mainmenu.png");
         batch = new SpriteBatch();
 
-        System.out.println(score);
         Table table = new Table(skin);
         table.setFillParent(true);
         table.padRight(400f);

@@ -1,57 +1,71 @@
 package deco2800.arcade.model;
+import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
+//TODO Fix the comment section to allow the helped popup in other java classes
+
+
+
 
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 public class Accolade {
+	//TODO move the container specific overrides to the AccoladeContainer class	
 	
-
-	private String name;
-	private int id, gameID, value, modifier, modifiedValue;
-	private String string, unit, tag, image;
-	private Accolade next, prev;
+	//BASE variables - IE the accolade must at the very least have these
+	private int id, popup;
+	private double modifier;
+	private String name, message, popupMessage, unit, tag, imagePath;
+	//OPTIONAL variables - these are assigned as needed through .setX commands
+	private int value;
+	private String gameID, resolvedMessage;
+	private Accolade next, prev; //FOR THE ACCOLADECONTAINER
 	
 	
-	
-	
-	/** game Based Constructor - GAMEID is store in the container class to 
-	 * reduce redundancy
+	/** Create a new accolade. Use .setID and .setValue as required.
 	 * @param ID The accolade ID.
 	 * @param Value The progress of the accolade.
 	 * @param Name The plain name identifier
 	 * @param String The display string that will be used to make toString
 	 * @param Unit The unit to be used as part of toString
 	 * @param modifier This is to modify the accolade into something interesting,
-	 * 			say grenades as tonnes of TNT or something similar
-	 * @param Tag Combined tag that is used as part of Global_Accolades.Table
-	 * @param Image The location of the associated accolade image.
+	 * 			eg grenades as tonnes of TNT etc
+	 * @param tag Combined tag that is used as part of Global_Accolades.Table
+	 * @param popup When the accolade is a multiple of this a message overlays on screen
+	 * @param popupMessage The message to appear onscreeen
+	 * @param image The location of the associated accolade image.
 	 */
-	public Accolade(int ID, int Value, 
-			String Name,String String, String Unit, int modifier, String Tag,
-			String Image){
-		this.id = ID;
-		this.value = Value;
-		this.name = Name;
+	public Accolade(String name, String message, int popup, String popupMessage, 
+			double modifier, String unit, String tag, String imagePath){
+		this.name = name;
+		this.message = message;
+		this.popup = popup;
+		this.popupMessage = popupMessage;
+		//.replace("%VALUE", "{0}").replace("%%UNIT", "{1}")
 		this.modifier = modifier;
-		this.string = String.replace("$VALUE", "%s").replace("$UNIT", "%s");
-		
-		this.unit = Unit;
-		//this.modifier = modifier.replace("$VALUE", "%s"); //depreciated
-		this.tag = Tag; //might not need this
-		this.image = Image; //this might end up being stored as a directory type.
-		this.modifiedValue = resolveValue();
+		this.unit = unit;
+		this.tag = tag; 
+		this.imagePath = imagePath; //this might end up being stored as a directory type.
+		//TODO - properly get the resolved path
+		//We'll make the tostring path return the resolved string and the getstring return the literal string.
+		//this.modifiedValue = resolveValue();
 	}
 	
-//	/** Player Centric constructor - 
-//	 */
-//	public accolade(int GameID, int ID, int Value, 
-//			String Name,String String, String Unit, String Modifier, String Tag,
-//			String Image){
-//		this.gameID = GameID;
-//		accolade(ID, Value, Name, String, Unit, Modifier, Tag, Image);
-//	}
+	public Accolade setID(int key){
+		this.id = key;
+		return this;
+	}
+	
+	public Accolade setValue(int value){
+		this.value = value;
+		return this;
+	}
+	
+	public Accolade setGameID(String gameID){
+		this.gameID = gameID;
+		return this;
+	}
 	
 	//returns the accolade ID
 	public int getID(){
@@ -62,21 +76,44 @@ public class Accolade {
 		return this.value;
 	}
 	
-	public int getGameID(){
+	public String getGameID(){
+		//TODO add in error throwing for a nullpointer exception
 		return this.gameID;
 	}
 	
 	public String getName(){
 		return this.name;
 	}
-	public String getString(){
-		return this.string;
+	public String getRawString(){
+		//TODO make a toString method
+		return this.message;
 	}
+	public String toString(){
+		String s = this.message.replace("%VALUE", "%s").replace("%UNIT", "%s");
+		String firstReplace, secondReplace;
+		double value = this.value*this.modifier;
+		
+		//In some instances the unit might occur before the value
+		if(this.message.indexOf("%VALUE")<this.message.indexOf("%UNIT")){
+			firstReplace = String.valueOf((long) value);
+			secondReplace = this.unit;
+		} else {
+			firstReplace = this.unit;
+			secondReplace = String.valueOf((long) value);
+		}
+		
+		if(value > 1){
+		value = Math.ceil(value);
+		//It's expected that if the value is smaller than 1 the developer intended it to be small
+		}
+		return String.format(s, firstReplace, secondReplace);
+	}
+	
 	public String getUnit(){
 		return this.unit;
 	}
 	
-	public int getModifier(){
+	public double getModifier(){
 		return this.modifier;
 	}
 	
@@ -84,15 +121,9 @@ public class Accolade {
 		return this.tag;
 	}
 	public String getImagePath(){
-		return this.image;
+		return this.imagePath;
 	}
-	
-	//Only an avalible option because it's possible to construct an accolade 
-	//without it
-	public void setGameID(int GameID){
-		gameID = GameID;
-	}
-	
+		
 	public void setNext(Accolade accolade){
 		//maybe add in some error checking - not an accolade etc
 		next = accolade;
@@ -116,15 +147,9 @@ public class Accolade {
 		return prev;
 	}
 	
-	public String toString(){
-		String s = "";
-		//{0} and {1} were added on creation
-		s = String.format(string, modifiedValue, unit);
-		return s;
-	}
-	
-	private int resolveValue(){
-		return value / modifier;
+	private double resolveValue(){
+		//TODO figure this out
+		return this.value / this.modifier;
 	}
 		/**
 		ScriptEngineManager mgr = new ScriptEngineManager();

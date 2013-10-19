@@ -23,7 +23,7 @@ public class AccoladeSystem {
 	private ResultSet serverData; 
 	private int playerID;
 	private int gameID;
-	private boolean timerRunning = false; 
+	private boolean timerRunning = false;
 	
 	//when progress%popup = 0 a popup is overlayed on screen
 	private static final int PROGRESS = 0;
@@ -43,12 +43,13 @@ public class AccoladeSystem {
 	 * @param gameID The primary DBkey of your game.
 	 * @param playerID The primary DBkey of the player.
 	 */
-	public AccoladeSystem(int gameID, int playerID){
+	public AccoladeSystem(int gameID, int playerID, String accoladeFolder){
 		//start the local variables for the overlay system
 		this.playerID = playerID;
 		this.gameID = gameID;
 		//this.serverData = server.getTable(this.playerID + "," + this.gameID);
 		
+		//TODO put these try catches into the methods of each function.
 		//This is the local copy of the accolade progress, it's to save 
 		//bandwidth for checking when to do the accolade popup message
 		try {

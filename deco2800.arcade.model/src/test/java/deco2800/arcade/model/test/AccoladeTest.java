@@ -1,4 +1,5 @@
 package deco2800.arcade.model.test;
+import java.io.Console;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ import org.junit.Test;
 import deco2800.arcade.model.AccoladeContainer;
 import deco2800.arcade.model.Accolade;
 
-
+//TODO Add in extra tests to see if an error is thrown when trying to get an optional field when no set (id, gameid etc)
 public class AccoladeTest {
 	private Accolade a1;
 	private Accolade a2;
@@ -26,11 +27,23 @@ public class AccoladeTest {
 	
 	@Before
 	public void initialise(){
-		a1 = new Accolade(1,100,"Name1", "String of Accolade1", "Unit1",5,"Tag1","Path1");
-		a2 = new Accolade(2,200,"Name2", "String of Accolade2", "Unit2",5,"Tag2","Path2");
-		a3 = new Accolade(3,300,"Name3", "String of Accolade3", "Unit3",5,"Tag3","Path3");
-		a4 = new Accolade(4,400,"Name4", "String of Accolade4", "Unit4",5,"Tag4","Path4");
-		a5 = new Accolade(5,500,"Name5", "String of Accolade5", "Unit5",5,"Tag5","Path5");
+		/** Accolade(String name, String message, int popup, String popupMessage, 
+		* float modifier, String unit, String tag, String imagePath) **/
+		a1 = new Accolade("Name1", "String of Accolade1: %VALUE %UNIT", 10, 
+				"PopUp Message of Accolade1: %VALUE %UNIT", 1, "Unit1", "Tag1", 
+				"Path1").setID(1).setValue(100);
+		a2 = new Accolade("Name2", "String of Accolade2: %VALUE %UNIT", 20, 
+				"PopUp Message of Accolade2: %VALUE %UNIT", 2, "Unit2", "Tag2", 
+				"Path2").setID(2).setValue(200);
+		a3 = new Accolade("Name3", "String of Accolade3: %VALUE %UNIT", 30, 
+				"PopUp Message of Accolade3: %VALUE %UNIT", 3, "Unit3", "Tag3", 
+				"Path3").setID(3).setValue(300);
+		a4 = new Accolade("Name4", "String of Accolade4: %VALUE %UNIT", 40, 
+				"PopUp Message of Accolade4: %VALUE %UNIT", 4, "Unit4", "Tag4", 
+				"Path4").setID(4).setValue(400);
+		a5 = new Accolade("Name5", "String of Accolade5: %VALUE %UNIT", 50, 
+				"PopUp Message of Accolade5: %VALUE %UNIT", 5, "Unit5", "Tag5", 
+				"Path5").setID(5).setValue(500);
 	}
 	
 	@Test
@@ -42,8 +55,11 @@ public class AccoladeTest {
 	 * for Accolade
 	 */
 	public void AccoladeTest1(){
-		a1.setGameID(999);
-		Assert.assertTrue(a1.getGameID() == 999);
+		//CHANGED THIS TO A STRING AS PER THE NEW GETGAMEID FUNCTIONS
+		a1.setGameID("game1");
+		Assert.assertTrue("Accolade a1.gameID was set to \"game1\", "
+				+ "a1.getGameID() returned " + a1.getGameID(),
+				a1.getGameID().compareTo("game1")==0);
 	}
 	
 	@Test
@@ -60,8 +76,12 @@ public class AccoladeTest {
 		Assert.assertTrue(a2.getID() == 2);
 		Assert.assertTrue(a2.getValue() == 200);
 		Assert.assertTrue(a2.getName().equals("Name2"));
-		Assert.assertTrue(a2.getUnit().equals("Unit2"));
-		Assert.assertTrue(a2.getModifier() == 5);
+		Assert.assertTrue("The test failed for accolade.getUnit(). "
+				+ "Instead of \"Unit2\" a2.getUnit() returned " + a2.getUnit(), 
+				a2.getUnit().equals("Unit2"));
+		Assert.assertTrue("The test failed for accolade.getModifier(). " +
+				"Instead of \"2\" a2.getModifier() returned " + a2.getModifier(),
+				a2.getModifier() == 2);
 		Assert.assertTrue(a2.getTag().equals("Tag2"));
 		Assert.assertTrue(a2.getImagePath().equals("Path2"));
 	}
@@ -75,8 +95,9 @@ public class AccoladeTest {
 	 * for Accolade
 	 */
 	public void AccoladeTest3(){
-		String s = "";
-		s = String.format(a3.getString(), a3.getModifier(), a3.getUnit());
+		String rawString = "String of Accolade3: %VALUE %UNIT";
+		Assert.assertTrue(a3.getRawString().equals(rawString));
+		String s = "String of Accolade3: 900 Unit3";
 		Assert.assertTrue(a3.toString().equals(s));
 	}
 	
@@ -123,7 +144,10 @@ public class AccoladeTest {
 	 */
 	public void AccoladeTest6(){
 		ac4 = new AccoladeContainer();
-		ac4.addAccolade(6, 600, "Name6", "String of Accolade6", "Unit6", 5, "Tag6", "Path6");
+		ac4.addAccolade("Name4", "String of Accolade4: %VALUE %UNIT", 40, 
+				"PopUp Message of Accolade4: %VALUE %UNIT", 4, "Unit4", "Tag4", 
+				"Path4");
+				//.setID(4).setValue(400);
 		ac4.add(a4);
 		ac4.add(a5);
 		Assert.assertTrue(ac4.size() == 3);

@@ -46,8 +46,17 @@ public class Enemy extends Mob {
     private int pathLast = 0;
     private int pathLoopStart = 0;
     
+    private float stateChangeTime = 1;
     
-    // path list
+    public float getStateChangeTime() {
+		return stateChangeTime;
+	}
+
+	public void setStateChangeTime(float stateChangeTime) {
+		this.stateChangeTime = stateChangeTime;
+	}
+
+	// path list
     private List<Vector2> path;
     // suffers from pain (they have an animation that they do nothing in when they get hit, interrupts their current action)
     private boolean pain;
@@ -67,7 +76,7 @@ public class Enemy extends Mob {
         if (pathing) {
             calculatePath(model);
         }
-
+        
     }
 
     @Override
@@ -79,7 +88,7 @@ public class Enemy extends Mob {
         }
         
         stateTime += gameModel.delta();
-        if (stateTime > 1 && nextState != null) {
+        if (stateTime > stateChangeTime && nextState != null) {
             this.instantStateChange(nextState);
             nextState = null;
         }
@@ -339,5 +348,11 @@ public class Enemy extends Mob {
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
+	
+	public boolean isDead() {
+		return this.state == STATES.DIE;
+	}
+	
+	
 }
 

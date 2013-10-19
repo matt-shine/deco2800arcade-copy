@@ -15,7 +15,8 @@ public class SS extends Enemy {
         setChaseSpeed(1536);
         setPain(true);
         setDamage(0);
-
+        this.setStateChangeTime(0.33f);
+        
         initialiseFromEnemyData(d);
         
     }

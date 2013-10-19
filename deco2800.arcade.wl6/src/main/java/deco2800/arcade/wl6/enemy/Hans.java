@@ -18,7 +18,8 @@ public class Hans extends Enemy {
         setChaseSpeed(1536);
         setPain(false);
         setDamage(0);
-
+        this.setStateChangeTime(0.1f);
+        
         initialiseFromEnemyData(d);
         
     }

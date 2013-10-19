@@ -1,6 +1,9 @@
 package deco2800.arcade.wl6.enemy;
 
 import deco2800.arcade.wl6.DoodadInfo;
+import deco2800.arcade.wl6.GameModel;
+import deco2800.arcade.wl6.Player;
+import deco2800.arcade.wl6.Projectile;
 
 public class Dog extends Enemy {
 
@@ -40,5 +43,19 @@ public class Dog extends Enemy {
     }
     
     
+    @Override
+    public void shootAtPlayer(GameModel g) {
+    	
+    	Player p = g.getPlayer();
+    	if (p.getPos().dst(this.getPos()) < 1) {
+        	Projectile bullet = new Projectile(0, 10, true, "blank");
+        	g.addDoodad(bullet);
+        	bullet.setPos(this.getPos());
+        	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.2f));
+    	}
+    	
+    	
+    	
+    }
     
 }

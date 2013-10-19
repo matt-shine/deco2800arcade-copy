@@ -12,7 +12,6 @@ public class MainGameScreen implements Screen {
 	private GameModel model;
 	private WL6 game;
 	private boolean debugMode = false;
-	@SuppressWarnings("unused")
 	private boolean overlayPause = false;
 	private WL6InputProcessor input = null;
 	private IngameUI ui = new IngameUI();

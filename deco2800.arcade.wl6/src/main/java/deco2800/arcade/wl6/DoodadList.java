@@ -538,16 +538,16 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //174: Dog 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.RIGHT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.DOG, 0, DIRS.RIGHT, true),  // FIXME Not complete
 
                     //175: Dog 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.UP, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.DOG, 0, DIRS.UP, true),  // FIXME Not complete
 
                     //176: Dog 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.LEFT, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.DOG, 0, DIRS.LEFT, true),  // FIXME Not complete
 
                     //177: Dog 3 (Moving)
-                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.GUARD, 0, DIRS.DOWN, true),  // FIXME Not complete
+                    new DoodadInfo(true, "penguin", 0, 0, 0, 3, EnemyType.DOG, 0, DIRS.DOWN, true),  // FIXME Not complete
 
                     //178: nothing
                     new DoodadInfo(),

@@ -43,9 +43,11 @@ public class Projectile extends Mob {
 					
 					
 					if (!evil && d instanceof Enemy) {
-						((Enemy) d).takeDamage(g, damage);
-						g.destroyDoodad(this);
-						break;
+						if (!((Enemy) d).isDead()) {
+							((Enemy) d).takeDamage(g, damage);
+							g.destroyDoodad(this);
+							break;
+						}
 					}
 					
 				}

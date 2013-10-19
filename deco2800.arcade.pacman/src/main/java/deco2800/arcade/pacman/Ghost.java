@@ -8,7 +8,7 @@ import org.lwjgl.util.Point;
 import deco2800.arcade.pacman.PacChar.PacState;
 import static java.lang.Math.*;
 
-public class Ghost extends Mover {
+public final class Ghost extends Mover {
 
 	public enum GhostState {
 		CHASE, SCATTER, FRIGHT, DEAD

@@ -80,6 +80,14 @@ public class Player extends Mob {
     }
     
 
+    public void shoot(GameModel g) {
+    	Projectile bullet = new Projectile(0, 10, false, "worm");
+    	g.addDoodad(bullet);
+    	bullet.setPos(this.getPos());
+    	bullet.setVel((new Vector2(0, -1)).rotate(-this.getAngle()));
+    }
+    
+    
     
     public void addHealth(int health, boolean overheal) {
         setHealth(Math.min(this.getHealth() + health, overheal ? 150 : 100));

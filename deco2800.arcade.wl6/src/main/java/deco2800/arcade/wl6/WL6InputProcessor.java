@@ -57,6 +57,13 @@ public class WL6InputProcessor implements InputProcessor {
         if (c == Keys.NUM_7) {
         	model.setDifficulty(model.getDifficulty() - 1);
         }
+        
+        
+        //shoot
+        if (c == Keys.SPACE) {
+        	model.getPlayer().shoot(model);
+        }
+        
 
         if (c == Keys.W || c == Keys.S || c == Keys.A || c == Keys.D) {
             updatePlayerSpeed();
@@ -117,9 +124,8 @@ public class WL6InputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int arg0, int arg1, int arg2, int arg3) {
-        Player p = model.getPlayer();
-        p.doDamage(model);
-        return false;
+    	model.getPlayer().shoot(model);
+        return true;
     }
 
     @Override

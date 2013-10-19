@@ -96,4 +96,8 @@ public class Items extends Entity {
     public String getItem() {
         return item;
     }
+
+    public void dispose() {
+        texture.dispose();
+    }
 }

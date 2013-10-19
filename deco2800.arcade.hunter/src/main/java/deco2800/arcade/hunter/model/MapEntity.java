@@ -85,4 +85,8 @@ public class MapEntity extends Entity {
 		batch.draw(text, getX(), getY(), 64, 32);
 	}
 
+    public void dispose() {
+        text.dispose();
+    }
+
 }

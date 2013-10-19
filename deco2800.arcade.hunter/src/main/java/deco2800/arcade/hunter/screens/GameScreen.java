@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.hunter.EntityHandler;
 import deco2800.arcade.hunter.Hunter;
@@ -112,6 +113,11 @@ public class GameScreen implements Screen {
         staticBatch.dispose();
         musicResource.dispose();
         font.dispose();
+        MapPaneRenderer.dispose();
+        backgroundLayer.dispose();
+        player.dispose();
+        spriteLayer.dispose();
+        entityHandler.dispose();
     }
 
     @Override

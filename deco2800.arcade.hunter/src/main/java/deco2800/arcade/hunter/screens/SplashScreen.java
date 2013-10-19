@@ -20,7 +20,6 @@ public class SplashScreen implements Screen {
     public SplashScreen(Hunter h) {
         hunter = h;
         stage = new Stage();
-        ArcadeInputMux.getInstance().addProcessor(stage);
         Texture text = new Texture("textures/splashscreen.png");
 
         splashImage = new Image(text);
@@ -61,7 +60,7 @@ public class SplashScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose();
+
     }
 
     @Override
@@ -78,8 +77,6 @@ public class SplashScreen implements Screen {
 
     @Override
     public void dispose() {
-        //stage.dispose();
+        stage.dispose();
     }
-
-
 }

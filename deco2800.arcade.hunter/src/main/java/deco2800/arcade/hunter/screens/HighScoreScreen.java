@@ -71,7 +71,6 @@ public class HighScoreScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 System.out.println("Going back to the main menu!");
                 hunter.setScreen(new MenuScreen(hunter));
-                stage.clear();
             }
         });
 
@@ -95,7 +94,6 @@ public class HighScoreScreen implements Screen {
         drawBackground();
         batch.end();
 
-        Gdx.input.setInputProcessor(stage);
         stage.act(delta);
         stage.draw();
 
@@ -110,13 +108,12 @@ public class HighScoreScreen implements Screen {
     @Override
     public void show() {
         // TODO Auto-generated method stub
-
+        ArcadeInputMux.getInstance().addProcessor(stage);
     }
 
     @Override
     public void hide() {
-        dispose();
-
+        ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 
     @Override
@@ -134,7 +131,6 @@ public class HighScoreScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
-        ArcadeInputMux.getInstance().removeProcessor(stage);
     }
 
     private void drawBackground() {

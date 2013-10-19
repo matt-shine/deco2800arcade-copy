@@ -28,4 +28,8 @@ public class BackgroundLayer extends Map {
         // TODO Auto-generated method stub
 
     }
+
+    public void dispose() {
+        background.getTexture().dispose();
+    }
 }

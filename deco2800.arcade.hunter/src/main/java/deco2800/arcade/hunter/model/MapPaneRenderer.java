@@ -41,4 +41,8 @@ public class MapPaneRenderer {
         tile.dispose();
         return tr;
     }
+
+    public static void dispose() {
+        tileMap.dispose();
+    }
 }

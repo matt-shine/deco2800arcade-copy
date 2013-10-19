@@ -191,7 +191,6 @@ public class Player extends Entity {
             }
 
             // Update the player state
-            // Pretending the DEAD state doesn't exist for now... TODO
             if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
                 Hunter.State.playerVelocity.y = 0;
                 this.state = State.RUNNING;
@@ -728,5 +727,11 @@ public class Player extends Entity {
     //States used to determine how to draw the player
     private enum State {
         RUNNING, JUMPING, ATTACK, FALLING, DEAD, DAMAGED
+    }
+
+    public void dispose() {
+        pickup.dispose();
+        death.dispose();
+        hurt.dispose();
     }
 }

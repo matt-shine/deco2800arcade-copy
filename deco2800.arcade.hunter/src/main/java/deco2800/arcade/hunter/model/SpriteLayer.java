@@ -135,4 +135,14 @@ public class SpriteLayer extends Map {
             batch.draw(treeSprite, tree.getX(), tree.getY(), treeSprite.getRegionWidth() * ((BackgroundSprite) tree).speedModifier, treeSprite.getRegionHeight() * ((BackgroundSprite) tree).speedModifier);
         }
     }
+
+    public void dispose() {
+        for (TextureRegion c : cloudSprites) {
+            c.getTexture().dispose();
+        }
+
+        for (TextureRegion t : treeSprites) {
+            t.getTexture().dispose();
+        }
+    }
 }

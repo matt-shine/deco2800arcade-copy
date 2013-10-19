@@ -3,6 +3,7 @@ package deco2800.arcade.hunter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import deco2800.arcade.hunter.model.MapEntity;
 import deco2800.arcade.hunter.platformergame.EntityCollection;
 
 import java.util.HashMap;
@@ -100,4 +101,14 @@ public class EntityHandler {
 	public Texture getMapEntity(String map){
 		return mapEntityTextures.get(map);
 	}
+
+    public void dispose() {
+        for (Texture me : mapEntityTextures.values()) {
+            me.dispose();
+        }
+
+        for (Texture i : itemTextures.values()) {
+            i.dispose();
+        }
+    }
 }

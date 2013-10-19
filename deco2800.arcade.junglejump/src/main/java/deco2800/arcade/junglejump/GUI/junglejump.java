@@ -357,6 +357,7 @@ public class junglejump extends GameClient implements InputProcessor {
 				} else monkeyY += -9.8f / 2f;
 			}
 			if(monkeyY <= 5) {
+				playDeathSound();
 				killMonkey();
 			}
 			if (jumping) {
@@ -529,6 +530,24 @@ public class junglejump extends GameClient implements InputProcessor {
 					"Audio File for Banana Music Not Found");
 		}
 	}
+	public void playDeathSound() {
+		URL path = this.getClass().getResource("/");
+		try{ 
+			String resource = path.toString().replace(".arcade/build/classes/main/", 
+					".arcade.junglejump/src/main/").replace("file:", "") + 
+					"resources/death.wav";
+			System.out.println(resource);
+			File file = new File(resource);
+			FileHandle fileh = new FileHandle(file);
+			AudioInputStream audioIn = AudioSystem.getAudioInputStream(file);
+			Clip clip = AudioSystem.getClip();
+			clip.open(audioIn);
+			clip.start();
+		} catch (Exception e) {
+			Gdx.app.log(junglejump.messages,
+					"Audio File for Death Music Not Found");
+		}
+	}
 
 	public boolean isOnPlatform(float x, float y) {
 		for (Platform p : currentLevel.getPlatforms()) {
@@ -685,7 +704,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (butY == NEW_GAME) {
 				monkeyX = monkeyDefaultX;
 				monkeyY = monkeyDefaultY;
-				//this.getCurrentCont().setCurrentLevel(0);
+				// Reset Bananas, Platforms and Level
 				currentCont = new LevelContainer();
 				currentLevel = getCurrentCont().getLevel(getCurrentCont().getCurrentLevel());
 				gameState = GameState.INPROGRESS;

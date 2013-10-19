@@ -57,11 +57,7 @@ public class PacChar extends Mover{
 			drawFacing = Dir.LEFT;
 		}
 		
-		
-//		if (this.nextTile(this.getTile(), 1).getClass() == TeleportTile.class){
-//			
-//		}
-//	
+	
 		// If pacman is able to turn, update drawFacing
 		if (canTurn(this.getTile())) {
 			drawFacing = facing;

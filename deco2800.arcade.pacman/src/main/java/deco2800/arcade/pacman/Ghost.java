@@ -46,19 +46,13 @@ public class Ghost extends Mover {
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
-		// set up ghost to be drawn in the right place- this is defintely right
-		//NOEWSDY I altered the +8 to nothing because when he starts in the ghost pen
-		// he otherwise ends up on a wallTile
-		drawX = gameMap.getTileCoords(currentTile).getX(); // drawX % 16 was
-																// 6, so make it
-																// 8
-		drawY = gameMap.getTileCoords(currentTile).getY(); // was 0, so make
-																// it 8
+		drawX = gameMap.getTileCoords(currentTile).getX(); 
+		drawY = gameMap.getTileCoords(currentTile).getY(); 
 
 		facing = Dir.LEFT;
 		// DEBUGGING PRINT
-		System.out.println("drawX % 16 is: " + (drawX % 16)
-				+ ", drawY % 16 is: " + (drawY % 16));
+//		System.out.println("drawX % 16 is: " + (drawX % 16)
+//				+ ", drawY % 16 is: " + (drawY % 16));
 
 		
 		currentState = GhostState.CHASE;
@@ -129,16 +123,19 @@ public class Ghost extends Mover {
 	 */
 
 	public void updateTargetTile() {
+		System.out.println("<!> " + this.ghostName + " Target is: "
+				+ player.getTile());
 		if (ghostName == GhostName.BLINKY) {
 			targetTile = player.getTile();
-			System.out.println("player: " + player);
-			System.out.println("<!> " + this.ghostName + " Target is: " + player.getTile());
-		}
-		// else if (ghostName == GhostName.PINKY) {
-		// //need to check this tile exists, otherwise crashes
-		// targetTile = player.nextTile(player.getTile(), 4);
-		// }
-		else {
+		} else if (ghostName == GhostName.PINKY) {
+			try {
+				targetTile = player.nextTile(player.getTile(), 4);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				// Trying to finda tile outside the map.
+				targetTile = player.nextTile(player.getTile(), 1);
+			}
+
+		} else {
 			targetTile = player.getTile();
 		}
 	}
@@ -218,13 +215,13 @@ public class Ghost extends Mover {
 	 * @param current
 	 * @return
 	 */
-	public List<Double> getDists(List<Tile> testTiles, Tile current) {
+	public List<Double> getDists(List<Tile> testTiles, Tile target) {
 		double tempDist;
 		List<Double> dists = new ArrayList<Double>();
 
-		for (Tile temp : testTiles) {
-			System.out.println("current: " + current + "temp: " + temp );
-			tempDist = calcDist(current, temp);
+		for (Tile tTile : testTiles) {
+			System.out.println("target: " + target + "tTile: " + tTile );
+			tempDist = calcDist(target, tTile);
 			dists.add(tempDist);
 		}
 		System.out.println(dists);
@@ -272,7 +269,6 @@ public class Ghost extends Mover {
 		List<Tile> testTiles = getTestTiles(currentTile);
 		List<Double> dists = getDists(testTiles, this.targetTile);
 		System.out.println(dists);
-		// int Tilenum = -1;
 		int tileNum = 0;
 		double dist = 9999;
 		double temp;
@@ -289,21 +285,7 @@ public class Ghost extends Mover {
 
 	private void ghost_move() {
 		updateTargetTile();
-//		System.out.println(this + " drawX % 16: " + drawX % 16
-//				+ " drawY % 16: " + drawY % 16);
 		facing = getDirection();
-		if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
-//			facing = getDirection();
-		} else {
-//			System.out.println("Well I'm a ghost and I'm floaatingg freeeee");
-//			facing = getDirection();
-			// // targetTile = getTargetTile();
-			// updateTargetTile();
-			// System.out.println("OH NO! drawX % 16: " + drawX % 16 +
-			// "drawY % 16: " + drawY % 16);
-			// // Don't move!!
-		}
-		//
 	}
 
 	public GhostState getCurrentState() {

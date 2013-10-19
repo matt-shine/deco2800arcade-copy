@@ -137,8 +137,8 @@ public abstract class Mover {
 				}
 			}
 		} else if (tile.getClass() == TeleportTile.class){
-			this.drawX = 100;
-			this.drawY = 100;
+//			this.drawX = ((TeleportTile) tile).getTargetX();
+//			this.drawY = ((TeleportTile) tile).getTargetY();
 		}
 //		System.out.println("score: " + this.getScore());
 //		displayScore(this); // This is broken at the moment

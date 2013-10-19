@@ -127,6 +127,11 @@ public class GameMapTest {
 		Assert.assertEquals(28, grid.length);
 		Assert.assertEquals(416, map.getHOffset());
 		Assert.assertEquals(112, map.getVOffset());
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				Assert.assertNotNull(grid[i][j]);
+			}
+		}
 	}
 
 }

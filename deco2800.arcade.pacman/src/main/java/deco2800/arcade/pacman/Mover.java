@@ -98,7 +98,6 @@ public abstract class Mover {
 		case RIGHT: x += offset; break;
 		case UP: y += offset; break;
 		case DOWN: y -= offset; break;
-		case TEST: break;
 		}
 		return grid[x][y];
 	}

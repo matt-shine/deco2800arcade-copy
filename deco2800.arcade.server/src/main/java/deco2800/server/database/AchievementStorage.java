@@ -592,44 +592,6 @@ public class AchievementStorage {
 	}
     }
     
-    /**
-     * Return the PLAYERS_ACHIEVEMENT table.
-     * 
-     * @throws DatabaseException
-     */
-    public void returnPlayersAchievement() throws DatabaseException {
-    	// Get a connection to the database
-    	Connection connection = Database.getConnection();
-    	
-    	Statement statement = null;
-    	ResultSet resultSet = null;
-    	
-    	try {
-	    statement = connection.createStatement();
-	    resultSet = statement.executeQuery("SELECT * FROM PLAYER_ACHIEVEMENT");
-  
-    	} catch (SQLException e) {
-	    e.printStackTrace();
-	    logger.error("Failed to return players_achievement table from AchievementStorage database");
-	    throw new DatabaseException("Unable to get achievements from database", e);
-	} finally {
-	    try {
-		if (resultSet != null){
-		    resultSet.close();
-		}
-		if (statement != null){
-		    statement.close();
-		}
-		if (connection != null){
-		    connection.close();
-		}
-	    } catch (SQLException e) {
-		e.printStackTrace();
-	    }
-	}
-    	
-    }
-    
     
     /**
      * Increments the player's progress for the achievement with ID

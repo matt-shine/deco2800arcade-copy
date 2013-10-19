@@ -30,6 +30,7 @@ public class AccoladeStorage{
 			 * Create the accolades table
 			 * 
 			 * ID-The accolade ID.
+			 * GameID- the ID of the game for the accolade
 			 * Value-The progress of the accolade.
 			 * Name-The plain name identifier
 			 * Description-The display string that will be used to make toString
@@ -83,7 +84,7 @@ public class AccoladeStorage{
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE GAME_ACCOLADES(" + 
-							"ID INTEGER NOT NULL," +
+							"ID VARCHAR(30) NOT NULL," +
 							"ACCOLADEID INT," +
 							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
 
@@ -210,7 +211,7 @@ public class AccoladeStorage{
 	 * @throws SQLException
 	 * 
 	 */
-	public AccoladeContainer getAccoladesByGameID(int gameID) throws DatabaseException{
+	public AccoladeContainer getAccoladesByGameID(String gameID) throws DatabaseException{
 		if (!initialised) {
 			initialise();
 		}

@@ -24,10 +24,8 @@ public class Accolade {
 	
 	
 	/** Create a new accolade. Use .setID and .setValue as required.
-	 * @param ID The accolade ID.
-	 * @param Value The progress of the accolade.
 	 * @param Name The plain name identifier
-	 * @param String The display string that will be used to make toString
+	 * @param Message The display string that will be used to make toString
 	 * @param Unit The unit to be used as part of toString
 	 * @param modifier This is to modify the accolade into something interesting,
 	 * 			eg grenades as tonnes of TNT etc

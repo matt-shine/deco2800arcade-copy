@@ -22,7 +22,6 @@ public class AccoladeTest {
 	private AccoladeContainer ac3;
 	private AccoladeContainer ac4;
 	private AccoladeContainer ac5;
-	private AccoladeContainer ac6;
 	
 	
 	@Before
@@ -113,9 +112,9 @@ public class AccoladeTest {
 	public void AccoladeTest4(){
 		ac1 = new AccoladeContainer();
 		ac2 = new AccoladeContainer();
-		ac1.populateAccoladesGame(999);
+		ac1.populateAccoladesGame("game999");
 		ac2.populateAccoladesPlayer(101);
-		Assert.assertTrue(ac1.getGameID() == 999);
+		Assert.assertTrue(ac1.getGameID().equals("game999"));
 		Assert.assertTrue(ac2.getPlayerID() == 101);
 	}
 	

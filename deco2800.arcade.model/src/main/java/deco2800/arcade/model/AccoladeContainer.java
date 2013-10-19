@@ -6,7 +6,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     //instantiate variables
     private Accolade head;
     private Accolade tail;
-    private int gameID;
+    private String gameID;
     private int size;
     private int playerID;
  
@@ -30,7 +30,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     /**Retrieves all accolades totals for game with gameID
      * TODO implmenet server communication and return non-dummydata
      */
-    public void populateAccoladesGame(int gameID){
+    public void populateAccoladesGame(String gameID){
     	this.gameID = gameID;
     	BUILDDUMMYDATA();
     }
@@ -99,7 +99,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
     	//TODO Add in the dummb data stuff
        
     }
-    public int getGameID(){
+    public String getGameID(){
     	return this.gameID;
     }
     public int getPlayerID(){

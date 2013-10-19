@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.towerdefence.controller.TowerDefence;
 import static com.badlogic.gdx.graphics.GL20.*;
 
@@ -30,6 +32,7 @@ public class MenuScreen implements Screen{
 	BitmapFont black;
     BitmapFont white;
 	TextureAtlas atlas;
+	Texture texture;
 	Skin skin;
 	SpriteBatch batch;
 	Music music;
@@ -44,7 +47,11 @@ public class MenuScreen implements Screen{
 	
 	public MenuScreen(final TowerDefence game) {
 		this.game = game;
+		batch = new SpriteBatch();
+		/*Background texture*/
+		texture = new Texture(Gdx.files.internal("TDtile.png"));
 		buttonSpacing = (Gdx.graphics.getHeight() - 7*buttonHeight)/6;
+		/*Sound for button press*/
 		click = Gdx.audio.newSound(Gdx.files.internal("menu_click.wav"));
 		}
 
@@ -73,12 +80,14 @@ public class MenuScreen implements Screen{
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
-				
-		stage.act(delta);
-		
+		/*Drawing background texture*/		
 		batch.begin();
-		stage.draw();
+		batch.draw(texture, 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
 		batch.end();
+		/*Drawing stage - Buttons*/
+		stage.act(delta);
+		stage.draw();
 	}
 
 	@Override
@@ -192,18 +201,18 @@ public class MenuScreen implements Screen{
         quitButton.setY(creditsButton.getY() - creditsButton.getHeight() - buttonSpacing); 
         quitButton.addListener(new InputListener() { //adding listener to newGameButton
         	public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-        		music.stop();
+        		
         		return true; //do nothing
         	}
         	
         	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-        		//implement quit
-        	}
-        	
+        		music.stop();
+        		ArcadeSystem.goToGame(ArcadeSystem.UI);
+        	}	
         });
 
         buttonSpacing = (Gdx.graphics.getHeight() - (7*(newGameButton.getHeight())))/6;
-        //adding the buttons to the stage
+        /*adding the buttons to the stage*/
         stage.addActor(newGameButton);
         stage.addActor(continueButton);
         stage.addActor(multiplayerButton);
@@ -228,7 +237,7 @@ public class MenuScreen implements Screen{
         white = new BitmapFont(Gdx.files.internal("white_font.fnt"), false);
         black = new BitmapFont(Gdx.files.internal("black_font.fnt"), false);
         music = Gdx.audio.newMusic(Gdx.files.internal("space_menu_sound.wav")); //new music
-    	//music.play(); //start playing music. Comment this out if you are sick of the music...
+    	music.play(); //start playing music.
     	music.setLooping(true); //once finished loops to start
 	}
 }

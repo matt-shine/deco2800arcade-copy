@@ -42,7 +42,7 @@ public class PacChar extends Mover{
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
-		moveDist = 1;
+		moveDist = 2;
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		

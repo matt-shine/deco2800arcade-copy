@@ -75,6 +75,7 @@ public abstract class Mover {
 		return currentTile;
 	}
 	
+	
 	/**
 	 * Updates the middle coordinate of the mover and its tile. Also updates the
 	 * tile's list of movers
@@ -86,7 +87,7 @@ public abstract class Mover {
 		Tile newTile = gameMap.findMoverTile(this);
 		// Pacman has moved!
 		if (!currentTile.equals(newTile)) {
-			System.out.println("Current is " + currentTile + ", new is "
+			System.out.println(this.getClass() + "Current is " + currentTile + ", new is "
 					+ newTile);
 			currentTile.removeMover(this);
 			currentTile = newTile;

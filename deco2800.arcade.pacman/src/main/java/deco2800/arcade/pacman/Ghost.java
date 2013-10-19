@@ -140,7 +140,7 @@ public class Ghost extends Mover {
 	}
 	
 	public String toString() {
-		return "Ghost at (" + midX + ", " + midY + ") drawn at {" + drawX + 
+		return this.ghost + " at (" + midX + ", " + midY + ") drawn at {" + drawX + 
 				", " + drawY + "}, " + currentState + " in " + currentTile;
 	}
 		
@@ -151,12 +151,13 @@ public class Ghost extends Mover {
 	 */
 	public Tile getTargetTile() {
 		if (ghost == GhostName.BLINKY) {
+			System.out.println(this + " target tile is now: " + player.getTile());
 			return player.getTile();
 		}
-		else if (ghost == GhostName.PINKY) {
-			//need to check this tile exists, otherwise crashes
-			return player.nextTile(player.getTile(), 4);
-		}
+//		else if (ghost == GhostName.PINKY) {
+//			//need to check this tile exists, otherwise crashes
+//			return player.nextTile(player.getTile(), 4);
+//		}
 
 		else {
 			return player.getTile();
@@ -180,6 +181,8 @@ public class Ghost extends Mover {
 		double dist;
 		int distx = startx - targetx;
 		int disty = starty - targety;
+//		int distx = targetx - startx;
+//		int disty = targety - starty;
 		dist = sqrt((distx*distx + disty*disty));
 		return dist;
 	}
@@ -211,22 +214,22 @@ public class Ghost extends Mover {
 		Tile downTile = gameMap.getGrid()[currentX][downY];
 		Tile rightTile = gameMap.getGrid()[rightX][currentY];
 		
-		if (checkNoWallCollision(upTile)) {
+		if (!checkNoWallCollision(upTile)) {
 			if (!upTile.equals(previousTile)) {
 				testTiles.add(upTile);
 			}
 		}
-		if (checkNoWallCollision(leftTile)) {
+		if (!checkNoWallCollision(leftTile)) {
 			if (!leftTile.equals(previousTile)) {
 				testTiles.add(leftTile);
 			}
 		}
-		if (checkNoWallCollision(downTile)) {
+		if (!checkNoWallCollision(downTile)) {
 			if (!downTile.equals(previousTile)) {
 				testTiles.add(downTile);
 			}
 		}
-		if (checkNoWallCollision(rightTile)) {
+		if (!checkNoWallCollision(rightTile)) {
 			if (!rightTile.equals(previousTile)) {
 				testTiles.add(rightTile);
 			}
@@ -242,12 +245,10 @@ public class Ghost extends Mover {
 	 * @return
 	 */
 	public List<Double> getDists (List<Tile> testTiles, Tile current) {
-		
-		Tile temp;
 		double tempDist;
 		List<Double> dists = new ArrayList<Double>();
-		for (int i = 0; i < testTiles.size(); i++) {
-			temp = testTiles.get(0);
+		
+		for (Tile temp: testTiles){
 			tempDist = calcDist(current, temp);
 			dists.add(tempDist);
 		}
@@ -291,31 +292,50 @@ public class Ghost extends Mover {
 	 * @return
 	 */
 	public Tile get_next_tile() {
-		
+		previousTile = currentTile;
 		List<Tile> testTiles = getTestTiles(currentTile);
 		List<Double> dists = getDists(testTiles, currentTile);
 //		int Tilenum = -1;
 		int Tilenum = 0;
 		double dist = 9999;
+		double temp;
 		
-		for (int i=0; i< dists.size(); i++) {
-			double temp = dists.get(i);
-			if (temp < dist) {
-				dist = temp;
-//				Tilenum += 1;
-				//equivalent to int Tilenum = i;
-				Tilenum = i;
-			}
+		if (testTiles.size() == 0) {
+			System.out.println("SHIT: testTiles is empty");
+		} else {
+			System.out.println("OKAY: testTiles NOT empty...");
 		}
+		
+		if (dists.size() > 0) {
+			for (int i=0; i< dists.size(); i++) {
+				temp = dists.get(i);
+				if (temp < dist) {
+					dist = temp;
+//					Tilenum += 1;
+					//equivalent to int Tilenum = i;
+					Tilenum = i;
+				}
+			}
+		} else {
+			System.out.println("ERROR: dists is empty...");
+		}
+		
+		
 		return testTiles.get(Tilenum);
 	}
 	
 	private void ghost_move() {
-				
 		if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
+			System.out.println(this + " drawX % 16: " + drawX % 16 +
+					"drawY % 16: " + drawY % 16);
 			facing = getDirection(currentTile);
-			targetTile = getTargetTile();
+			setTargetTile(getTargetTile());
 		} else {
+			facing = getDirection(currentTile);
+//			targetTile = getTargetTile();
+			setTargetTile(getTargetTile());
+			System.out.println("OH NO! drawX % 16: " + drawX % 16 +
+					"drawY % 16: " + drawY % 16);
 			// Don't move!!
 		}
 		

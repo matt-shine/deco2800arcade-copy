@@ -108,7 +108,6 @@ public abstract class Mover {
 		int y = gameMap.getTilePos(tile).getY();
 		Tile[][] grid = gameMap.getGrid();
 		//System.out.println(x + ", " + y);
-		
 		if (this.getClass() == PacChar.class){
 			switch(this.getDrawFacing()) {
 			case LEFT: x -= offset; break;
@@ -126,8 +125,6 @@ public abstract class Mover {
 			case TEST: break;
 			}
 		}
-		
-		
 		return grid[x][y];
 		
 	}

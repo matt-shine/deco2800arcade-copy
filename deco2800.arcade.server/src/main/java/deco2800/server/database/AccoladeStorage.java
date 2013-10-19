@@ -1,25 +1,9 @@
 package deco2800.server.database;
 
 import java.sql.Connection;
-//import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.regex.Pattern;
-import java.io.File;
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.AchievementProgress;
-import deco2800.server.ResourceLoader;
-import deco2800.server.ResourceHandler;
-import deco2800.server.database.ImageStorage;
-import org.w3c.dom.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
 import deco2800.arcade.model.Accolade;
 import deco2800.arcade.model.AccoladeContainer;
 
@@ -46,12 +30,14 @@ public class AccoladeStorage{
 			 * Create the accolades table
 			 * 
 			 * ID-The accolade ID.
+			 * GameID- the ID of the game for the accolade
 			 * Value-The progress of the accolade.
 			 * Name-The plain name identifier
 			 * Description-The display string that will be used to make toString
+			 * PopUp - When the raw value is a multiple of this a message appears on the game client
+			 * PopUpMessage - This is the message that appears when the accolade popup value is reached
 			 * Unit-The unit to be used as part of toString
-			 * Modifier-This is to modify the accolade into something interesting,
-			 * 			say grenades as tonnes of TNT or something similar
+			 * Modifier- This is multiplied against the value to produce the final value (hint:use fractions for division)
 			 * Tag-Combined tag that is used as part of Global_Accolades.Table
 			 * Imagepath-The location of the associated accolade image.
 			 * 
@@ -60,18 +46,19 @@ public class AccoladeStorage{
 					"ACCOLADES", null);
 			if (!tableData.next()){
 				Statement statement = connection.createStatement();
-				/**
-				String String, String Unit, int modifier, String Tag,
-				String Image
-				statement.execute("CREATE TABLE ACCOLADES(ID INT RIMARY KEY," +
-						"VALUE INT NOT NULL" +
-						"NAME VARCHAR(30) NOT NULL," +
-						"DESCRIPTION VARCHAR(100) NOT NULL," +
-						"UNIT VARCHAR(10) NOT NULL" +
-						"MODIFIER INT NOT NULL" +
-						"TAG VARCHAR(20) NOT NULL" + 
+				statement.execute("CREATE TABLE ACCOLADES(" +
+						"ID INT PRIMARY KEY, " +
+						"GAMEID INT NOT NULL," +
+						"VALUE INT NOT NULL, " +
+						"NAME VARCHAR(30) NOT NULL, " +
+						"DESCRIPTION VARCHAR(100) NOT NULL, " +
+						"POPUP INT NOT NULL, " +
+						"POPUPMESSAGE VARCHAR(100) NOT NULL, " +
+						"UNIT VARCHAR(10) NOT NULL, " +
+						"MODIFIER REAL NOT NULL, " +
+						"TAG VARCHAR(20) NOT NULL, " + 
 						"IMAGEPATH VARCHAR(255) NOT NULL)");
-						**/
+				
 			}
 			/**
 			 * Create the Player_accolades table
@@ -81,9 +68,11 @@ public class AccoladeStorage{
 			 */
 			tableData = connection.getMetaData().getTables(null, null, "PLAYER_ACCOLADES", null);
 			if (!tableData.next()) {
-				//statement.execute("CREATE TABLE PLAYER_ACCOLADES(ID INTEGER NOT NULL," +
-						//	"ACCOLADEID INT," +
-						//	"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+				Statement statement = connection.createStatement();
+				statement.execute("CREATE TABLE PLAYER_ACCOLADES("+
+							"ID INTEGER NOT NULL," +
+							"ACCOLADEID INT," +
+							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
 			}
 			/**
 			 * Create the Game_accolades table
@@ -93,9 +82,12 @@ public class AccoladeStorage{
 			 */
 			tableData = connection.getMetaData().getTables(null, null, "GAME_ACCOLADES", null);
 			if (!tableData.next()) {
-				//statement.execute("CREATE TABLE GAME_ACCOLADES(ID INTEGER NOT NULL," +
-							//"ACCOLADEID INT," +
-							//"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+				Statement statement = connection.createStatement();
+				statement.execute("CREATE TABLE GAME_ACCOLADES(" + 
+							"ID INT NOT NULL," +
+							"ACCOLADEID INT," +
+							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
+
 			}
 			
 		}
@@ -131,15 +123,20 @@ public class AccoladeStorage{
 			if(resultSet == null){
 				System.out.println("No such a accolade exist!");
 			}else{
-				result = new Accolade(accoladeID,
-									resultSet.getInt("value"),
-									resultSet.getString("name"),
+				//TODO FIX THIS 
+				 
+				result = new Accolade(resultSet.getString("name"),
 									resultSet.getString("description"),
+									resultSet.getInt("popup"), 
+									resultSet.getString("popupMessage"),
+									resultSet.getDouble("modifier"),
 									resultSet.getString("unit"),
-									resultSet.getInt("modifier"),
 									resultSet.getString("tag"),
 									resultSet.getString("imagepath")
-							);
+									).setID(accoladeID
+									).setValue(resultSet.getInt("value")
+									).setGameID(resultSet.getInt("gameID")
+									);							
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -184,7 +181,7 @@ public class AccoladeStorage{
 					"WHERE ID = '" + playerID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
-				//result.add(a);
+				result.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -229,7 +226,7 @@ public class AccoladeStorage{
 					"WHERE ID = '" + gameID + "'");
 			while(resultSet.next()){
 				Accolade a = getAccolade(resultSet.getInt("accoladeid"));
-				//TODO fix result.add(a);
+				result.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

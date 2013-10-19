@@ -24,15 +24,15 @@ public class MapPaneRenderer {
 
         //Temporary pixmap to hold the image of one tile
         Pixmap tile = new Pixmap(Config.TILE_SIZE, Config.TILE_SIZE, Format.RGBA8888);
+        tile.setColor(Color.CLEAR);
 
         for (int row = 0; row < Config.PANE_SIZE; row++) {
             for (int col = 0; col < Config.PANE_SIZE; col++) {
                 int tileX = (paneData[row][col] % tileMapWidthTiles) * Config.TILE_SIZE;
                 int tileY = paneData[row][col] / tileMapWidthTiles * Config.TILE_SIZE;
 
-                tile.setColor(Color.CLEAR);
                 tile.fill();
-                //Draw the foreground tile image to the temporary pixmap
+                //Draw the tile image to the temporary pixmap
                 tile.drawPixmap(tileMap, 0, 0, tileX, tileY, Config.TILE_SIZE, Config.TILE_SIZE);
                 //Draw the tile to the main MapPane render
                 tr.getTexture().draw(tile, col * Config.TILE_SIZE, row * Config.TILE_SIZE);

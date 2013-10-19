@@ -59,9 +59,9 @@ public class EntityHandler {
 	 */
 	private void loadItems(){
 		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
-		for (String x:textures){
-			Texture texture = new Texture("textures/Items/" + x + ".png");
-			itemTextures.put(x, texture);
+        for (int t = 0, tl = textures.length; t < tl; t++) {
+			Texture texture = new Texture("textures/Items/" + textures[t] + ".png");
+			itemTextures.put(textures[t], texture);
 		}
 	}
 	
@@ -70,9 +70,9 @@ public class EntityHandler {
 	 */
 	private void loadMapEntities(){
 		String[] textures = {"arrow", "spike trap","net","bomb","deathShroom"};
-		for (String x: textures){
-			Texture texture = new Texture("textures/MapEntities/" + x + ".png");
-			mapEntityTextures.put(x, texture);
+        for (int t = 0, tl = textures.length; t < tl; t++) {
+			Texture texture = new Texture("textures/MapEntities/" + textures[t] + ".png");
+			mapEntityTextures.put(textures[t], texture);
 		}
 	}
 	

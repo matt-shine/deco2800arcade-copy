@@ -77,6 +77,4 @@ public class PreferencesManager {
         getPreferences().putFloat(PREF_VOLUME, volume);
         getPreferences().flush();
     }
-
-
 }

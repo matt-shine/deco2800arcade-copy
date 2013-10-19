@@ -53,14 +53,16 @@ public class EntityCollection implements Iterable<Entity> {
     }
 
     public void updateAll(float delta) {
-        for (Entity e : this) {
-            e.update(delta);
+        Iterator<Entity> e = iterator();
+        while (e.hasNext()) {
+            e.next().update(delta);
         }
     }
 
     public void drawAll(SpriteBatch batch, float stateTime) {
-        for (Entity e : this) {
-            e.draw(batch, stateTime);
+        Iterator<Entity> e = iterator();
+        while (e.hasNext()) {
+            e.next().draw(batch, stateTime);
         }
     }
 

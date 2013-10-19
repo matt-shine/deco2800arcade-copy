@@ -11,8 +11,8 @@ public class tankshot {
 	private int height;
 
 	/**
-	 * @param x
-	 * @param y
+	 * @param x x-coordinate of player sprite
+	 * @param y y-coordinate of player sprite
 	 */
 	public tankshot(int x, int y) {
 		p_x = x +20;
@@ -23,7 +23,7 @@ public class tankshot {
 	}
 
 	/**
-	 * @param g
+	 * @param g the graphic of the tank shot sprite
 	 */
 	public void drawshot(Graphics g) {
 
@@ -33,28 +33,28 @@ public class tankshot {
 	}
 
 	/**
-	 * 
+	 * Reduces the y-coordinate of player by 7
 	 */
 	public void Update() {
 		p_y -= 7;
 	}
 
 	/**
-	 * @return
+	 * @return x-coordinate of player sprite
 	 */
 	public int positionX() {
 		return p_x;
 	}
 
 	/**
-	 * @return
+	 * @return y-coordinate of player sprite
 	 */
 	public int positionY() {
 		return p_y;
 	}
 
 	/**
-	 * @return
+	 * @return width of shot sprite
 	 */
 	public int width() {
 
@@ -62,7 +62,7 @@ public class tankshot {
 	}
 
 	/**
-	 * @return
+	 * @return height of shot sprite
 	 */
 	public int height() {
 

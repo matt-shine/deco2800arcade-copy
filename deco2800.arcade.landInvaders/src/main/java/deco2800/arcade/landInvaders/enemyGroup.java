@@ -18,7 +18,7 @@ public class enemyGroup {
 	 * @param rowEnemyNum create number of enemies per row
 	 * @param EsizeW width of a single enemy sprite
 	 * @param EsizeH height of a single enemy sprite
-	 * @param img
+	 * @param img set the name of the image of the enemy sprite
 	 */
 	public enemyGroup(int rowNum, int rowEnemyNum, int EsizeW, int EsizeH, String img) {
 
@@ -32,7 +32,7 @@ public class enemyGroup {
 	}
 
 	/**
-	 * @param img
+	 * @param img set the name of the image of the enemy sprite
 	 * @param EsizeW width of a single enemy sprite
 	 * @param EsizeH height of a single enemy sprite
 	 */
@@ -50,8 +50,8 @@ public class enemyGroup {
 	}
 
 	/**
-	 * @param g
-	 * @param p
+	 * @param g the graphic of the enemy group
+	 * @param p the main frame of the game
 	 */
 	public void drawGroup(Graphics g,JFrame p) {
 
@@ -67,8 +67,8 @@ public class enemyGroup {
 	}
 	
 	/**
-	 * @param move
-	 * @param moveDown
+	 * @param move distance enemy group will travel
+	 * @param moveDown direction of enemy group movement
 	 */
 	public void moveUpdate(int move, boolean moveDown){
 		for (int n = 0; n < rowNum; n++) {

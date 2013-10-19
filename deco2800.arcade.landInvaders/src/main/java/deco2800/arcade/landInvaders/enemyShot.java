@@ -10,6 +10,10 @@ public class enemyShot {
 	private int width;
 	private int height;
 
+	/**
+	 * @param x x-coordinate of enemy shot sprite
+	 * @param y y-coordinate of enemy shot sprite
+	 */
 	public enemyShot(int x, int y) {
 		p_x = x +15;
 		p_y = y+30;
@@ -18,6 +22,9 @@ public class enemyShot {
 
 	}
 
+	/**
+	 * @param g the graphic of shot sprite
+	 */
 	public void drawshot(Graphics g) {
 
 		g.setColor(Color.red);
@@ -25,30 +32,42 @@ public class enemyShot {
 		g.fillRect(p_x, p_y, width, height);
 	}
 
+	/**
+	 * Increase y-coordinate of player sprite
+	 */
 	public void Update() {
 		p_y += 6;
 	}
 
+	/**
+	 * @return y-coordinate of enemy shot sprite
+	 */
 	public int positionX() {
 		return p_x;
 	}
 
+	/**
+	 * @return y-coordinate of enemy shot sprite
+	 */
 	public int positionY() {
 		return p_y;
 	}
 
+	/**
+	 * @return width of enemy shot sprite
+	 */
 	public int width() {
 
 		return width;
 	}
 
+	/**
+	 * @return height of enemy shot sprite
+	 */
 	public int height() {
 
 		return height;
 	}
-	
-	
-
 }
 
 

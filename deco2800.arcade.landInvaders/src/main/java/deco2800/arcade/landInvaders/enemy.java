@@ -52,20 +52,32 @@ public void moveUpdate(int move,boolean moveDown){
 	else position_x += move;
 }
 
+/**
+ * @return x-coordinate of enemy sprite
+ */
 public int positionX(){
 	
 	return position_x;
 }
 
+/**
+ * @return y-coordinate of enemy sprite
+ */
 public int positionY(){
 	
 	return position_y;
 }
 
+/**
+ * @return width of enemy sprite 
+ */
 public int width(){
 	return width;
 }
 
+/**
+ * @return height of enemy sprite
+ */
 public int height(){
 	return height;
 }

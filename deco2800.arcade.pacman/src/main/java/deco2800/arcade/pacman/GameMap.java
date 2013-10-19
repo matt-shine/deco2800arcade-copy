@@ -18,6 +18,7 @@ public class GameMap {
 	private Tile[][] grid; //game map
 	private List<WallTile> ghostDoors; //list of ghost doors for ghosts to access
 	private Tile pacStart; //the right starting tile for pacman (appears on two tiles)
+	private Tile[] ghostStarts; //starting positions for ghosts
 	private Tile blinkyStart;
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int hOffset;
@@ -28,11 +29,12 @@ public class GameMap {
 	public final int SCREEN_WIDTH;
 	
 	
-	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT) {
+	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT, int numGhosts) {
 		vsym = false;
 		ghostDoors = new ArrayList<WallTile>();		
 		this.SCREEN_HEIGHT = SCREEN_HEIGHT;
 		this.SCREEN_WIDTH = SCREEN_WIDTH;
+		ghostStarts = new Tile[numGhosts];
 	}
 	
 
@@ -111,6 +113,9 @@ public class GameMap {
 			// s is left tile pacman starts on
 			case 'r': replacer = " "; break;
 			case 's': replacer = " "; break;
+			// !, @, #, $ are the 4 ghost starting positions
+			case '!': replacer = "@"; break;
+			case '#': replacer = "$"; break;
 			}
 			if (replacer !=  null) {
 				reverse.replace(i, i+1, replacer);
@@ -151,12 +156,16 @@ public class GameMap {
 					} else {
 						target = square;
 					}
-				} else if (type == ' ' || type == 'r' || type == 's'){
+				} else if (type == ' ' || type == 'r' || type == 's' 
+					|| type == '!' || type == '@' || type == '#' || type == '$'){
 					square = new Tile(this);
-					if (type == 'r') {
-						fruitRight = square;
-					} else if (type == 's'){
-						pacStart = square;
+					switch(type) {
+					case 'r': fruitRight = square; break;
+					case 's': pacStart = square; break;
+					case '!': ghostStarts[0] = square; break;
+					case '@': ghostStarts[1] = square; break;
+					case '#': ghostStarts[2] = square; break;
+					case '$': ghostStarts[3] = square; break;
 					}
 				} else {
 					square = new WallTile(this, type);
@@ -166,15 +175,8 @@ public class GameMap {
 					}
 				}
 				grid[i][lineNum] = square;
-				//square.setGridPos(new Point(i, lineNum));
 			}
 		}
-//		for (Tile[] a: grid) {
-//			for (Tile t: a) {
-//				System.out.println(t);
-//			}
-//			System.out.println();
-//		}
 	}
 	
 	public List<WallTile> getGhostDoors() {
@@ -185,7 +187,7 @@ public class GameMap {
 		return pacStart;
 	}
 
-	public Tile getFruitLeft() {
+	public Tile getFruitRight() {
 		return fruitRight;
 	}
 	
@@ -250,5 +252,10 @@ public class GameMap {
 
 	public int getTileSideLength() {
 		return tileSideLength;
+	}
+
+
+	public Tile[] getGhostStarts() {
+		return ghostStarts;
 	}
 }

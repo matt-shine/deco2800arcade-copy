@@ -21,6 +21,7 @@ public class Pacman extends GameClient {
 	
 	public final int SCREEN_HEIGHT = 720;
 	public final int SCREEN_WIDTH = 1280;	
+	private final int NUM_GHOSTS = 4;
 	
 	private PacModel model; // model for Pacman	
 	private PacView view; // view for Pacman	
@@ -82,7 +83,7 @@ public class Pacman extends GameClient {
         });           
 		super.create();		
 		viewNotSetUp = true;		
-		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT);		
+		model = new PacModel(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);		
 		//initialise receiver for input- use the Arcade Multiplexer
 		controller = new PacController(model);
 		ArcadeInputMux.getInstance().addProcessor(controller);

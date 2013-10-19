@@ -31,8 +31,8 @@ public class PacView {
 	private static final int GHOST_SIDE_PIX = 14;
 	private TextureRegion[] pacmanFrames = new TextureRegion[MOVER_SPRITE_NUM];
 	private TextureRegion currentFrame; // for pacman animation
-	private static final int GHOST_NUM = 4;
-	private TextureRegion[][] ghostFrames = new TextureRegion[GHOST_NUM][MOVER_SPRITE_NUM];
+	private static final int NUM_GHOSTS = 4;
+	private TextureRegion[][] ghostFrames = new TextureRegion[NUM_GHOSTS][MOVER_SPRITE_NUM];
 	
 	private GameMap gameMap;
 	private PacChar player;

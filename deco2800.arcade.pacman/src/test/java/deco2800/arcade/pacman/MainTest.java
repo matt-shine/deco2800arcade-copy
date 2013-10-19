@@ -1,13 +1,11 @@
 package deco2800.arcade.pacman;
 
-import static org.junit.Assert.fail;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -70,10 +68,4 @@ public class MainTest {
 		Assert.assertTrue(processors.contains(pacGame.getController(), false));
 	}
 	
-	//File Access tests follow:
-	
-	
-	
-
-
 }

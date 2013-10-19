@@ -37,7 +37,7 @@ public class GameMapTest {
 		Pacman pacGame;
 		app = new LwjglApplication(pacGame = new Pacman(Mockito.mock(Player.class), Mockito.mock(NetworkClient.class)), cfg);
 		pacGame.addOverlayBridge(Mockito.mock(UIOverlay.class));
-		model = new PacModel(1280, 720);
+		model = new PacModel(1280, 720, 4);
 		gameMap = model.getGameMap();
 	}
 	
@@ -51,7 +51,7 @@ public class GameMapTest {
 	@Test
 	/** Tests initial form of gameMap */
 	public void testInit() {
-		GameMap map = new GameMap(1280, 720);
+		GameMap map = new GameMap(1280, 720, 4);
 		Assert.assertEquals(new ArrayList<WallTile>(), map.getGhostDoors());
 		Assert.assertEquals(1280, map.SCREEN_WIDTH);
 		Assert.assertEquals(720, map.SCREEN_HEIGHT);
@@ -66,7 +66,7 @@ public class GameMapTest {
 		for (int x = 0; x < lineArrays.length; x++) {
 			int startPoint = lineArrays[x][0].contains("VSYM") ? 1 : 0;
 			char[] result;
-			String allowedChars = "ACDEFHacdefh13456890RSXZWYxzwyJLKMrsBpbP gG2QT7";
+			String allowedChars = "ACDEFHacdefh13456890RSXZWYxzwyJLKMrsBpbP gG2QT7!@#$";
 			for (int i = startPoint; i < lineArrays[x].length; i++) {
 				result = lineArrays[x][i].toCharArray();
 				for (int j = 0; j < lineArrays[x][i].length(); j++) {
@@ -118,7 +118,7 @@ public class GameMapTest {
 	@Test
 	/** Tests the createTiles() method */
 	public void testGridSize() {
-		GameMap map = new GameMap(1280, 720);
+		GameMap map = new GameMap(1280, 720, 4);
 		map.createTiles(map.readMap("levelMap.txt"));
 		Tile[][] grid = map.getGrid();
 		for (int i = 0; i < grid.length; i++) {
@@ -127,6 +127,16 @@ public class GameMapTest {
 		Assert.assertEquals(28, grid.length);
 		Assert.assertEquals(416, map.getHOffset());
 		Assert.assertEquals(112, map.getVOffset());
+		Assert.assertEquals(grid[13][13], map.getFruitRight());
+		Assert.assertEquals(grid[13][7], map.getPacStart());
+		Assert.assertEquals(grid[12][17], map.getGhostStarts()[0]);
+		Assert.assertEquals(grid[15][17], map.getGhostStarts()[1]);
+		Assert.assertEquals(grid[12][16], map.getGhostStarts()[2]);
+		Assert.assertEquals(grid[15][16], map.getGhostStarts()[3]);
+		ArrayList<WallTile> ghostDoors = new ArrayList<WallTile>();
+		ghostDoors.add((WallTile) grid[13][18]);
+		ghostDoors.add((WallTile) grid[14][18]);
+		Assert.assertEquals(ghostDoors, map.getGhostDoors());
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				Assert.assertNotNull(grid[i][j]);

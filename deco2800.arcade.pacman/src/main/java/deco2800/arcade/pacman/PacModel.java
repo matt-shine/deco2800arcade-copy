@@ -25,13 +25,13 @@ public class PacModel {
 	private String mapName; // name of level map
 	private GameMap gameMap;
 	
-	public PacModel(int SCREENWIDTH, int SCREENHEIGHT) {
+	public PacModel(int SCREENWIDTH, int SCREENHEIGHT, int NUM_GHOSTS) {
 		this.SCREEN_HEIGHT = SCREENHEIGHT;
 		this.SCREEN_WIDTH = SCREENWIDTH;
 		// level map file
 		mapName = "levelMap.txt";
 		//initialise gamemap
-		gameMap = new GameMap(SCREEN_WIDTH, SCREEN_HEIGHT);			
+		gameMap = new GameMap(SCREEN_WIDTH, SCREEN_HEIGHT, NUM_GHOSTS);			
 		gameMap.createTiles(gameMap.readMap(mapName));
 		//initialise pacman
 		player = new PacChar(gameMap);

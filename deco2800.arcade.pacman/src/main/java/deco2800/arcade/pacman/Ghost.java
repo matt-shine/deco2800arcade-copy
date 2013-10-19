@@ -32,8 +32,14 @@ public class Ghost extends Mover {
 		super(gameMap);
 		this.player = player;
 		this.ghostName = ghost;
-		currentTile = gameMap.getFruitLeft(); // CHANGE TO appropriate ghost
-												// start
+		int num;
+		switch (ghost) {
+		case PINKY: num = 1; break;
+		case INKY: num = 2; break;
+		case CLYDE: num = 3; break;
+		default: num = 0; break;
+		}
+		currentTile = gameMap.getGhostStarts()[num];
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
@@ -49,25 +55,7 @@ public class Ghost extends Mover {
 		System.out.println("drawX % 16 is: " + (drawX % 16)
 				+ ", drawY % 16 is: " + (drawY % 16));
 
-		// this section should be deleted once I check it works with the view,
-		// or merged into it or something.
-		String file = "";
-		switch (ghost) {
-		case BLINKY:
-			file = "redghostmove.png";
-			break;
-		case PINKY:
-			file = "pinkghostmove.png";
-			break;
-		case INKY:
-			file = "tealghostmove.png";
-			break;
-		case CLYDE:
-			file = "orangeghostmove.png";
-			break;
-		}
-
-		// initialise some variables
+		
 		currentState = GhostState.CHASE;
 
 		width = widthVal;

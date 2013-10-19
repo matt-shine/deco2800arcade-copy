@@ -1,14 +1,12 @@
 package deco2800.server.database;
 
 import java.util.HashMap;
-import java.util.Map;
-
-import deco2800.arcade.model.*;
+import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class ChatStorage {
 
-	private Map<Integer, HashMap<Integer, ChatNode>> chatStorage;
+	private HashMap<Integer, HashMap<Integer, ChatNode>> chatStorage;
 	
 	public ChatStorage(){
 		this.chatStorage = new HashMap<Integer, HashMap<Integer, ChatNode>>();

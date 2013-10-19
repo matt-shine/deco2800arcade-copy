@@ -17,7 +17,6 @@ public class CommunicationController {
 		this.view = view;
 		this.model = model;
 		this.network = network;
-		
 		view.addSendListener(new SendListener());
 	}
 	
@@ -25,11 +24,13 @@ public class CommunicationController {
 
 		public void actionPerformed(ActionEvent event) { //You pressed Send
 			ChatNode node = network.getCurrentChat();
+
 			//This should never be null, because the chat window won't be open if it leads to nowhere... but it is during testing
-			if (node != null){				
+			if (node != null){
 				TextMessage message = new TextMessage();
 				message.setChatID(node.getID()); //Is this right?
 				message.setSenderID(network.getPlayer().getID());
+				message.setSenderUsername(network.getPlayer().getUsername());
 				message.setText(view.getMessage());
 				
 				if (node.getParticipants() == null){
@@ -38,6 +39,7 @@ public class CommunicationController {
 				} else {
 					message.setRecipients(node.getParticipants());
 					network.sendTextMessage(message);
+					view.clearInput();
 				}
 			}
 		}

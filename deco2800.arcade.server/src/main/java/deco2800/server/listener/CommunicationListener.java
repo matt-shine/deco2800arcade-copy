@@ -18,8 +18,10 @@ import deco2800.server.database.ChatStorage;
 public class CommunicationListener extends Listener {
 	
 	private Server server;
-	private Map<Integer, Integer> connectedUsers;
-	private Map<Integer, String> userAliases;
+	//private Map<Integer, Integer> connectedUsers;
+	private HashMap<Integer, Integer> connectedUsers;
+	//private Map<Integer, String> userAliases;
+	private HashMap<Integer, String> userAliases;
 	private TextMessage textMessage;
 	
 	
@@ -41,7 +43,8 @@ public class CommunicationListener extends Listener {
 			userAliases.put(contact.playerID, contact.username);
 			
 			//A user has just logged in, get there chat history and send it to them
-			Map<Integer, ChatNode> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
+			//Map<Integer, ChatNode> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
+			HashMap<Integer, ChatNode> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
 			
 			if (personalChatHistory != null){
 				ChatHistory chatHistory = new ChatHistory();
@@ -52,13 +55,13 @@ public class CommunicationListener extends Listener {
 							
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
-			textMessage.setSenderUsername(userAliases.get(textMessage.getSenderID()));
+			//textMessage.setSenderUsername(userAliases.get(textMessage.getSenderID()));
 
 			//Need a way to get a Player object from somewhere... Or at least the ability to check stuff like IsBlocked from just two playerIDs...
 			//In the mean time, forward the message without checking if blocked:
 			for (int recipientID : textMessage.getRecipients()){
-				ArcadeServer.instance().getChatStorage().addChatHistory(textMessage, recipientID);
-				if(recipientID != textMessage.getSenderID()) {
+				ArcadeServer.instance().getChatStorage().addChatHistory(textMessage, recipientID);				
+				if (connectedUsers.containsKey(recipientID)){
 					server.sendToTCP(connectedUsers.get(recipientID), textMessage);
 				}
 			}

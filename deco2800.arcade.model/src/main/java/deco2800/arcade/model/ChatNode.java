@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-import javax.swing.JLabel;
-
 /**
  * A ChatNode is a single chat instance. It contains the participants of the
  * chat and a queue containing the chat history.
  * 
  */
-public class ChatNode extends JLabel {
+public class ChatNode {
 
 	private List<Integer> participants;
 	private Queue<String> chatHistory;
 	
+	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public ChatNode(){
+	}
 
 	/**
 	 * Creates a chat with a list of participants.
@@ -74,6 +77,10 @@ public class ChatNode extends JLabel {
 	 */
 	public void addMessage(String message) {
 		chatHistory.add(message);
+	}
+	
+	public Queue<String> getChatHistory(){
+		return chatHistory;
 	}
 
 }

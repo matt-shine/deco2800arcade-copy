@@ -3,7 +3,6 @@ package deco2800.arcade.communication.communication.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
@@ -14,7 +13,6 @@ import com.esotericsoftware.kryonet.Connection;
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.communication.CommunicationNetwork;
 import deco2800.arcade.model.Player;
-import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationTest {
@@ -211,9 +209,15 @@ public class CommunicationTest {
 		assertEquals(comm1.getCurrentChats().get(message2.getChatID())
 				.getParticipants(), comm3.getCurrentChat().getParticipants());
 
+		/*
 		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
 				.getText(), comm2.getCurrentChats().get(message1.getChatID())
 				.getText());
+		*/
+		
+		//This replaces the commented out test above (.getText() shouldn't be used, it isn't part of ChatNode)
+		assertEquals(comm1.getCurrentChats().get(message1.getChatID()).getChatHistory().toString(), comm2.getCurrentChats().get(message1.getChatID()).getChatHistory().toString());
+		
 		assertEquals(comm1.getCurrentChats().get(message2.getChatID())
 				.getParticipants(), comm3.getCurrentChat().getParticipants());
 	}

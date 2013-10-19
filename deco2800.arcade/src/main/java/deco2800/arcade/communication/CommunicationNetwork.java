@@ -3,6 +3,7 @@ package deco2800.arcade.communication;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.ChatNode;
@@ -19,9 +20,10 @@ public class CommunicationNetwork {
 
 	private Player player;
 	private NetworkClient networkClient;
-	private Map<Integer, ChatNode> chatNodes = new HashMap<Integer, ChatNode>();
+	//private Map<Integer, ChatNode> chatNodes = new HashMap<Integer, ChatNode>();
+	private HashMap<Integer, ChatNode> chatNodes = new HashMap<Integer, ChatNode>();
 	private TextMessage textMessage;
-	//private CommunicationView view = new CommunicationView();
+	private CommunicationView view = null;
 	private ChatNode currentChat;
 	private CommunicationController controller;
 	private ChatHistory chatHistory;
@@ -79,9 +81,13 @@ public class CommunicationNetwork {
 		node.addMessage(textMessage.getText());
 		currentChat = node;
 
+		//Shouldn't be null, but current tests are written from the point of view that no-one is logged in I believe
+		if (view != null){
+			view.receiveText(textMessage);
+		}
+		
 		// Temporary:
-		System.out
-				.println(textMessage.getSenderUsername() + ": " + textMessage.getText());
+		//System.out.println(textMessage.getSenderUsername() + ": " + textMessage.getText());
 	}
 
 	/**
@@ -109,7 +115,8 @@ public class CommunicationNetwork {
 	/**
 	 * Returns a map of current chat instances.
 	 */
-	public Map<Integer, ChatNode> getCurrentChats() {
+	//public Map<Integer, ChatNode> getCurrentChats() {
+	public HashMap<Integer, ChatNode> getCurrentChats() {
 		return chatNodes;
 	}
 
@@ -157,15 +164,17 @@ public class CommunicationNetwork {
 	 * Updates the Communication Network for the logged-in Player
 	 * 
 	 * @param player
+	 * @param view 
 	 */
-	public void loggedIn(Player player) {
+	public void loggedIn(Player player, CommunicationView view) {
 		this.player = player;
 		this.chatNodes = new HashMap<Integer, ChatNode>();
 		this.textMessage = new TextMessage();
 		this.chatHistory = new ChatHistory();
-		//this.view = new CommunicationView();
+		this.view = view;
+		this.view.setCommunicationNetwork(this);
 		//this.model = new CommunicationModel();
-		//this.controller = new CommunicationController(view, null, this);
+		this.controller = new CommunicationController(view, null, this);
 	}
 
 	/**
@@ -175,8 +184,12 @@ public class CommunicationNetwork {
 	 * @param receivedHistory
 	 */
 	public void receiveChatHistory(ChatHistory receivedHistory) {
-		chatNodes = receivedHistory.getChatHistory();
-
+		chatNodes = receivedHistory.getChatHistory();		
+		
+		//A ChatNode probably needs to contain the usernames of the participants
+		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
+			view.addChatNode(entry.getValue());
+		}
 		/*
 		 * TODO If the chat history is with someone who is not in the active
 		 * chat window, display a notification and then load the chat history
@@ -188,12 +201,11 @@ public class CommunicationNetwork {
 		 * Finally, there may have to be a limit imposed on how much history is
 		 * sent/received as it could clog the network, let alone the chat window
 		 */
-
+		
 		// Temporary:
-//		for (Map.Entry<Integer, List<String>> entry : chatHistory
-//				.getAllHistory().entrySet()) {
-//			System.out.println("History with: " + entry);
-//		}
+		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
+			System.out.println("History with: " + entry.getKey() + " is: " + entry.getValue().getChatHistory().toString());
+		}
 	}
 	
 }

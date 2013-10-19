@@ -7,6 +7,7 @@ import com.esotericsoftware.kryo.serializers.BlowfishSerializer;
 import com.esotericsoftware.kryo.serializers.FieldSerializer;
 
 import deco2800.arcade.model.Blocked;
+import deco2800.arcade.model.ChatNode;
 import deco2800.arcade.model.Field;
 import deco2800.arcade.model.FriendInvites;
 import deco2800.arcade.model.Friends;
@@ -136,7 +137,7 @@ public class Protocol {
 		kryo.register(IncrementProgressResponse.class);
 		kryo.register(ProgressForPlayerRequest.class);
 		kryo.register(ProgressForPlayerResponse.class);
-		kryo.register(java.util.ArrayList.class);
+		
 
 		// Image messages
 		Class<?>[] imageClasses = { GetImageRequest.class, GetImageResponse.class,
@@ -180,6 +181,7 @@ public class Protocol {
 		kryo.register(CommunicationRequest.class);
 		kryo.register(ContactListUpdate.class);
 		kryo.register(ChatHistory.class);
+		kryo.register(ChatNode.class);
 		kryo.register(TextMessage.class);
 		kryo.register(VoiceMessage.class);
 		
@@ -213,10 +215,16 @@ public class Protocol {
 		// Register miscellaneous classes
 		kryo.register(byte[].class);
 		kryo.register(ArrayList.class);
+		kryo.register(java.util.List.class);
+		kryo.register(java.util.Queue.class);
+		kryo.register(java.util.ArrayDeque.class);
+		kryo.register(java.util.ArrayList.class);
         kryo.register(java.util.Set.class);
         kryo.register(java.util.HashSet.class);
         kryo.register(java.awt.image.BufferedImage.class);
         kryo.register(java.util.Vector.class);
+        kryo.register(java.util.HashMap.class);
+
 	}
 	
 	/**

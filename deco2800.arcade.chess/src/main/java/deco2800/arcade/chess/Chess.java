@@ -83,6 +83,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 	private boolean flag = true;
 	private String info;
 	BitmapFont gameInfo;
+	private String teamCheck;
+	BitmapFont checkInfo;
 	
 	// Piece positions
 	private int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
@@ -237,6 +239,8 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 
 		info = "White teams turn";
 		gameInfo = new BitmapFont();
+		teamCheck = "";
+		checkInfo = new BitmapFont();
 
 		Texture.setEnforcePotImages(false);
 
@@ -399,10 +403,19 @@ public class Chess extends GameClient implements InputProcessor, Screen {
 		batch.draw(splashTexture, 0, 0);
 		batch.draw(splashTexture2, 0, (float) ((float) height * 0.88));
 		gameInfo.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		checkInfo.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		if (board.whoseTurn()) {
 			info = "Black teams turn";
 		} else {
 			info = "White teams turn";
+		}
+		if (board.checkForCheck(true)) {
+			teamCheck = "Black team in check";
+			gameInfo.draw(batch, teamCheck, 600, 50);
+		}
+		if (board.checkForCheck(false)) {
+			teamCheck = "White team in check";
+			gameInfo.draw(batch, teamCheck, 600, 50);
 		}
 		gameInfo.draw(batch, info, 600, 70);
 		batch.end();

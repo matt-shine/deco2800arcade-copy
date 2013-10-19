@@ -15,7 +15,7 @@ public class Bishop extends Piece{
 	 */
 	public Bishop(boolean team, int pieceNo) {
 		super(team, pieceNo);
-		this.preference = 2;
+		this.preference = 3;
 
 	}
 

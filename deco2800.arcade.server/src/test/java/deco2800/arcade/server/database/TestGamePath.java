@@ -80,9 +80,9 @@ public class TestGamePath {
 	
 	@Test
 	public void testInsertGame() throws DatabaseException {
-		gamePath.insertGame(1, "games.txt");
-		assertEquals("games.txt", gamePath.getPath(1));
-		assertEquals(PackageUtils.genMD5("games.txt"), gamePath.getMD5(1));
+		gamePath.insertGame(1, "test.txt");
+		assertEquals("test.txt", gamePath.getPath(1));
+		assertEquals(PackageUtils.genMD5("test.txt"), gamePath.getMD5(1));
 	}
 	
 	/**

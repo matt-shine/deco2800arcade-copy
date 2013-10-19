@@ -133,7 +133,7 @@ public class StoreGame implements Screen, StoreScreen {
 		star_bg.setSize(142, 23);
 		stage.addActor(star_bg);
 		
-		placeRatingStars(stage, skin);
+		placeRatingStars();
 		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
@@ -163,7 +163,7 @@ public class StoreGame implements Screen, StoreScreen {
 		});
 	}
 	
-	private void placeRatingStars(Stage stage, Skin skin) {
+	private void placeRatingStars() {
 		for (int i = 5; i >= 1; --i) {
 			final CheckBox star = new CheckBox("", skin, "star" + i);
 			star.setSize(i * 28.4f, 23);
@@ -248,5 +248,10 @@ public class StoreGame implements Screen, StoreScreen {
 				return;
 			}
 		}
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

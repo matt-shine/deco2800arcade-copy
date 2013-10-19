@@ -7,6 +7,9 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class PlayerGameStorage {
 	private boolean initialised = false;
@@ -21,20 +24,39 @@ public class PlayerGameStorage {
 		// Get a connection to the database
 		Connection connection = Database.getConnection();
 		
+		ResultSet resultSet = null;
+		Statement statement = null;
 		try {
-			ResultSet tableData = connection.getMetaData().getTables(null, null, "PLAYERGAMES", null);
-			if (!tableData.next()) {
-				Statement statement = connection.createStatement();
+			resultSet = connection.getMetaData().getTables(null, null, "PLAYERGAMES", null);
+			if (!resultSet.next()) {
+				statement = connection.createStatement();
 				statement.execute("CREATE TABLE PLAYERGAMES(playerID INT PRIMARY KEY," 
 				+ "gameID VARCHAR(30) PRIMARY KEY," 
 				+ "Rating INT));");
 				//Check if need anything for foreign keys
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseException("Unable to create playergames table", e);
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException(
+					"Unable to create PLAYERGAMES table.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
+			}
 		}
-	initialised = true;
+		initialised = true;
 	}
 	
 	/**
@@ -62,7 +84,8 @@ public class PlayerGameStorage {
 
 			return result;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to get playergames from database", e);
 		} finally {
 			try {
@@ -76,7 +99,8 @@ public class PlayerGameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -123,8 +147,8 @@ public class PlayerGameStorage {
 				}
 			}
 		} catch (SQLException e) {
-			//TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to remove player game from database", e);
 		} finally {
 			//clean up JDBC objects
@@ -139,7 +163,8 @@ public class PlayerGameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -164,8 +189,8 @@ public class PlayerGameStorage {
 			resultSet.updateString("gameID", gameID);
 			resultSet.insertRow();
 		} catch (SQLException e) {
-			//TODO Auto-generated catch block
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to add player game to database", e);
 		} finally {
 			//clean up JDBC objects
@@ -180,11 +205,21 @@ public class PlayerGameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
 	
+	/** Checks if a given player has the specified game.
+	 * 
+	 * @param playerID
+	 * 			The playerID of the given player.
+	 * @param gameID
+	 * 			The gameID of the game we are cheecking.
+	 * @return
+	 * @throws DatabaseException
+	 */
 	public boolean hasGame(int playerID, String gameID) throws DatabaseException {
 		Connection connection = Database.getConnection();
 		Statement stmt = null;
@@ -196,9 +231,9 @@ public class PlayerGameStorage {
 											+ "AND gameID=" + gameID);
 			return (resultSet.next()) ? true : false;
 		} catch (SQLException e) {
-			//TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new DatabaseException("Unable to add player game to database", e);
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException("Unable to retrieve player game to database", e);
 		} finally {
 			//clean up JDBC objects
 			try {
@@ -212,7 +247,8 @@ public class PlayerGameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -244,7 +280,8 @@ public class PlayerGameStorage {
 
 			return result;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to get playergames from database", e);
 		} finally {
 			try {
@@ -258,7 +295,8 @@ public class PlayerGameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}
@@ -286,7 +324,8 @@ public class PlayerGameStorage {
 			statement.executeQuery("UPDATE PLAYERGAMES SET Rating = " + newRating + " WHERE playerID = " 
 					+ playerID + " AND gameID = " + gameID + ";");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+			 logger.error(e.getStackTrace().toString());
 			throw new DatabaseException("Unable to get playergames from database", e);
 		} finally {
 			try {
@@ -297,7 +336,8 @@ public class PlayerGameStorage {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				 Logger logger = LoggerFactory.getLogger(FriendStorage.class);
+				 logger.error(e.getStackTrace().toString());
 			}
 		}
 	}

@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * @author li.tang
+ * This is the class to store the snake or ladder object
+ */
 public class SnakeLadderBridge {
 	
 	private Sprite sprite;
@@ -28,7 +32,11 @@ public class SnakeLadderBridge {
 		this.sprite = sprite;
 	}
 	
-	public void createLadder(Tile[] tileList)
+	/**
+	 * This method initialize a ladder or a snake including scaling and rotation angle.
+	 * @param tileList a full list of tiles in the map
+	 */
+	public void createSnakeLadder(Tile[] tileList)
 	{
 		String type = this.isLadder?"ladder":"snake";
 		this.texture = new Texture(Gdx.files.classpath("images/"+type+".png"));

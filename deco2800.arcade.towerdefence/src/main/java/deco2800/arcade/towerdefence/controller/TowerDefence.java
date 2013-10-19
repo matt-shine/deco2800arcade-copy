@@ -1,4 +1,4 @@
-package deco2800.arcade.towerdefence.model;
+package deco2800.arcade.towerdefence.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

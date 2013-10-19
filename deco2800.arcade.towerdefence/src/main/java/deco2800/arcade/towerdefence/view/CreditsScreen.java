@@ -10,7 +10,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import deco2800.arcade.towerdefence.model.TowerDefence;
+import deco2800.arcade.towerdefence.controller.TowerDefence;
 
 /* Credits screen, any key to exit
  * @author Tuddz

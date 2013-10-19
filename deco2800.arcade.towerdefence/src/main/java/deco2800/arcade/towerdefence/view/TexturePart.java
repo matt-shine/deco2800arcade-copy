@@ -1,4 +1,4 @@
-package deco2800.arcade.towerdefence.model;
+package deco2800.arcade.towerdefence.view;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

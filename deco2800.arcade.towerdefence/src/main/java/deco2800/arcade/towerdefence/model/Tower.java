@@ -2,7 +2,7 @@ package deco2800.arcade.towerdefence.model;
 
 /**
  * The interface for all Towers available throughout the game to the player. Do
- * implement the interface Ranged or if created AreaEffect alongside Tower.
+ * implement the interface Ranged or, if created, AreaEffect alongside Tower.
  * 
  * @author hadronn
  * 

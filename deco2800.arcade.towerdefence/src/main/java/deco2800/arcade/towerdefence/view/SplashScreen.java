@@ -20,7 +20,7 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.towerdefence.model.TowerDefence;
+import deco2800.arcade.towerdefence.controller.TowerDefence;
 
 /* SplashScreen for game, press any key to advance to main menu screen
  * @author Tuddz

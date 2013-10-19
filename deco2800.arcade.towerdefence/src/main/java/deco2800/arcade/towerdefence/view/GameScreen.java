@@ -33,8 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.towerdefence.model.TexturePart;
-import deco2800.arcade.towerdefence.model.TowerDefence;
+import deco2800.arcade.towerdefence.controller.TowerDefence;
 
 /* GameScreen is where the game will take place
  * There are many buttons on the HUD for selecting different towers, etc.

@@ -1,6 +1,5 @@
 package deco2800.arcade.towerdefence.model;
 
-import deco2800.arcade.towerdefence.controller.Ship;
 import deco2800.arcade.towerdefence.model.pathfinding.*;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class Grid implements TileBasedMap {
 	private Ship ship;
 	// The pathfinder used by objects in the grid
 	public AStarPathFinder pathfinder;
-	
 	// The target of pathfinding movement (portal)
 	private Vector2 targetPosition;
 
@@ -133,6 +131,14 @@ public class Grid implements TileBasedMap {
 	public int getHeightInTiles() {
 		return gridDepth;
 	}
+	
+	/**
+	 * Get the position of the portal to Earth.
+	 * @return
+	 */
+	public Vector2 targetPosition() {
+		return targetPosition;
+	}
 
 	// Setters
 	/**
@@ -188,6 +194,15 @@ public class Grid implements TileBasedMap {
 	public Ship ship() {
 		return ship;
 	}
+	
+	/**
+	 * Set the position of the portal to Earth.
+	 * @param position
+	 */
+	public void targetPosition(Vector2 position) {
+		this.targetPosition = position;
+	}
+
 
 	// Methods
 	public void pathFinderVisited(int x, int y) {

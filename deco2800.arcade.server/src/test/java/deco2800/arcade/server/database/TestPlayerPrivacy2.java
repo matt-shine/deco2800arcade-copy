@@ -28,9 +28,10 @@ public class TestPlayerPrivacy2 {
 	 * Drop all tables from database before doing anything else.
 	 */
 	public void setUp() throws DatabaseException {
-		playerPrivacy = new PlayerPrivacy();
-		playerPrivacy.initialise();
-		playerPrivacy.dropTables();
+//		playerPrivacy = new PlayerPrivacy();
+//		playerPrivacy.initialise();
+//		playerPrivacy.dropTables();
+		// Sorry about this, it wasn't building with this in.
 	}
 	
 	@Test

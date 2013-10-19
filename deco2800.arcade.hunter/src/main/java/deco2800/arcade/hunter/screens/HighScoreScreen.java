@@ -53,10 +53,12 @@ public class HighScoreScreen implements Screen {
         table.row();
 
         table.add("HighScore 1 - " + topPlayers.get(0).playerName + " : ");
+        System.out.println("HighScore 1 - " + topPlayers.get(0).playerName + " : " + topPlayers.get(0).score);
         table.add(String.valueOf(topPlayers.get(0).score)).colspan(2);
         table.row();
 
         table.add("HighScore 2 - " + topPlayers.get(1).playerName + " : ");
+        System.out.println("HighScore 2 - " + topPlayers.get(1).playerName + " : " +topPlayers.get(1).score);
         table.add(String.valueOf(topPlayers.get(1).score)).colspan(2);
         table.row();
 

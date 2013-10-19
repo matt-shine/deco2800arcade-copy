@@ -15,6 +15,7 @@ import java.util.Random;
 public class Hunter extends PlatformerGame {
     private static PreferencesManager prefManage;
     public HighscoreClient highscore;
+    private NetworkClient networkClient;
 
 
     public final static class Config {
@@ -71,7 +72,8 @@ public class Hunter extends PlatformerGame {
     public Hunter(Player player, NetworkClient networkClient) {
         super(player, networkClient);
         prefManage = new PreferencesManager();
-//		highscore = new HighscoreClient(player.getName(),"Hunter",networkClient);
+        this.networkClient = networkClient;
+		highscore = new HighscoreClient(player.getUsername(),"Hunter",networkClient);
         State.paused = false;
     }
 

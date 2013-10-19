@@ -20,6 +20,8 @@ public class SpawnList {
 	private float currentTimer;
 	private float decrementTimer;
 	
+	private int difficulty;
+	
 	private static final long standardEnemyPoints = 1006493;
 	
 	// TODO more variable pointing to other types of enemies
@@ -30,12 +32,13 @@ public class SpawnList {
 		new Texture(Gdx.files.internal("images/ships/enemy8.png"))
 	};
 	
-	public SpawnList(PlayScreen s){
+	public SpawnList(PlayScreen s, int difficulty){
 		this.screen = s;
 		currentInterval = 0;
 		interval = 2f;	
 		currentTimer = 0;
 		decrementTimer = 5f;
+		this.difficulty = difficulty;
 	}
 		
 	/**
@@ -104,7 +107,8 @@ public class SpawnList {
 			if(test < 0.1) {
 				screen.addEnemy(new Level1Enemy(400, enemyTex[1], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
 			} else if (test >= 0.1 && test < 0.75) {
-				screen.addEnemy(new Enemy8(400, enemyTex[3], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
+				screen.addEnemy(new Enemy8(400, enemyTex[3], new Vector2(startX,startY), new Vector2(vX, vY), screen, 
+						screen.getPlayer(), standardEnemyPoints, difficulty) );
 			} else {
 				screen.addEnemy(new BoringEnemy(200, enemyTex[0], new Vector2(startX,startY), new Vector2(vX, vY), screen, screen.getPlayer(), standardEnemyPoints) );
 			}

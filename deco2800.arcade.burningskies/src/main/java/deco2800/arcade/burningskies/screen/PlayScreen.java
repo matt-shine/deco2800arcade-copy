@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.burningskies.BurningSkies;
+import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.burningskies.entities.Boss;
 import deco2800.arcade.burningskies.entities.Enemy;
 import deco2800.arcade.burningskies.entities.Entity;
@@ -71,8 +72,7 @@ public class PlayScreen implements Screen
 	private float bossHealthBarWidth;
 	private float bossHealthBarX;
 	private float bossHealthBarY;
-	
-	private int noDeaths = 0;
+
 	private int lives = 3;
 	private float lifePositionX = 10;
 	private float lifePositionY = height - 70;
@@ -135,7 +135,7 @@ public class PlayScreen implements Screen
     	processor = new PlayerInputProcessor(player);
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
-    	sp = new SpawnList(this);
+    	sp = new SpawnList(this, (Configuration.getDifficulty() + 1));
     
     }
     
@@ -155,10 +155,8 @@ public class PlayScreen implements Screen
     		if(!player.isAlive()) {
     			respawnTimer -= delta;
     			if(respawnTimer <= 0) {
-    				this.noDeaths++;
-        			if (noDeaths == 1) {
-        				game.incrementAchievement("burningskies.die");
-        			}
+    				game.incrementAchievement("burningskies.die");
+        			game.incrementAchievement("burningskies.twenth");
     				stage.addActor(player);
     				if (lives > 0) {
     					player.respawn();

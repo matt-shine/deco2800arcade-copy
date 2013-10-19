@@ -9,16 +9,24 @@ import deco2800.arcade.burningskies.screen.PlayScreen;
 public class Enemy8 extends Enemy {
 	
 	private Enemy8Pattern pattern;
+	
 	float interval =3f;
-	float length = 0.25f;
+	float length;
 	float timer = interval;
 	
-	public Enemy8(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
+	public Enemy8(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, 
+			PlayerShip player, long points, int difficulty) {
 		super(health, image, pos, dir, screen, player, points);
 
 		homing = true;
-		accelIntensity = (float) 0.80;
+		if (difficulty < 3) {
+			accelIntensity = 0.6f;
+		} else {
+			accelIntensity = 0.2f * difficulty;
+		}	
 		pattern = new Enemy8Pattern(this, player, screen);
+		
+		this.length = 0.12f * difficulty;
 	}
 	
 	@Override

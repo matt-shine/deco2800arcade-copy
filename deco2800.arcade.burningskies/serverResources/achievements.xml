@@ -3,6 +3,13 @@
     <name>Dead</name>
     <description>Experience your first death.</description>
     <awardThreshold>1</awardThreshold>
+    <icon>winner.png</icon>
+  </achievement>
+  
+  <achievement id="burningskies.twenth">
+    <name>Alien food</name>
+    <description>Die 20 times.</description>
+    <awardThreshold>20</awardThreshold>
     <icon>some.png</icon>
   </achievement>
 </achievements>

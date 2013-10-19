@@ -34,10 +34,12 @@ import com.badlogic.gdx.utils.Array;
 import deco2800.arcade.cyra.model.*;
 import deco2800.arcade.cyra.model.SoldierBoss.State;
 
-/**World Renderer takes the object from the World class and draws them to the screen
+/** WorldRenderer describes the View component of the game's MVC model.
+ * This class draws the game based on the game's state described in World
+ * class. It will draw specific region of the level depending on the
+ * position of camera.
  * 
  * @author Game Over
- *
  */
 public class WorldRenderer {
 

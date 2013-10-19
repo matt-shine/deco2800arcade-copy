@@ -17,6 +17,15 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+
+/** Level class describes various characteristics of a level. This class will
+ * load a level file and store the level graphics as well as the collision
+ * layer. The collision layer represents solid tiles which solid entities in
+ * the game can stand on and cannot go through. This class also describes
+ * the positions of different enemy spawners spread across the level.
+ *
+ * @author Game Over
+ */
 public class Level {
 	private int levelNum;
 	private com.badlogic.gdx.graphics.g2d.tiled.TileMapRenderer renderer;

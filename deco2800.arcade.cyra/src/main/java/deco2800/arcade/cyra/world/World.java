@@ -35,8 +35,12 @@ import deco2800.arcade.cyra.model.ResultsScreen;
 import deco2800.arcade.cyra.model.Sword;
 import deco2800.arcade.cyra.model.Zombie;
 
-/** World class controls all objects in the specified level including any collisions
- * and links Object references where needed
+/** World class describes the Model component of the game's MVC model.
+ * It controls the interactions between various game objects - interactions
+ * among entities, interactions between entities and the specified level
+ * including any collisions. This class also links Object references where
+ * needed.
+ *
  * @author Game Over
  */
 public class World {

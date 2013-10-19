@@ -1,7 +1,12 @@
 package deco2800.arcade.cyra.game;
 
-public class AchievementsTracker {
-	/* Tracks the time, hearts lost, enemies killed  */
+/** This class tracks various information that will be used for current user's
+ * achievements, for example the number of hearts lost and also the time taken
+ * until the user completes the game.
+ *
+ * @author Game Over
+ */
+public class AchievementsTracker {	
 	int time = 0;
 	int heartsLost = 0;
 	int enemiesKilled = 0;

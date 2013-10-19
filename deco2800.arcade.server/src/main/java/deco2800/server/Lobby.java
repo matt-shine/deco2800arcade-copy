@@ -106,6 +106,7 @@ public class Lobby {
 					match.getHostPlayerId(), connection, match.getHostConnection(),
 					match.getGameId());
 			this.lobbyGames.remove(match);
+			this.sendGamesToLobbyUsers();
 			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
 			response.responseType = JoinLobbyMatchResponseType.OK;
 			response.session = sessionID;

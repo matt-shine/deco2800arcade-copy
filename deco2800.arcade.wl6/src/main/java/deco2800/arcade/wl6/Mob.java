@@ -56,7 +56,7 @@ public class Mob extends Doodad {
 
         for (int x = x1; x <= x2; x++) {
             for (int y = y1; y <= y2; y++) {
-                if (model.getCollisionGrid().getSolidAt(x, y) != 0) {
+                if (!isWalkableTile(model, x, y)) {
                     return false;
                 }
             }
@@ -67,6 +67,12 @@ public class Mob extends Doodad {
 
     }
 
+    
+    public boolean isWalkableTile(GameModel model, int x, int y) {
+    	return model.getCollisionGrid().getSolidAt(x, y) == 0;
+    }
+    
+    
     public int getHealth() {
         return health;
     }

@@ -87,7 +87,7 @@ public class MenuScreen implements Screen {
 
         button.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                wl6.setScreen(wl6.gameScreen);
+                wl6.goToGame();
             }
         });
     }

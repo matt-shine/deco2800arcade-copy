@@ -27,7 +27,7 @@ public class SplashScreen implements Screen {
         batch.end();
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            wl6.setScreen(wl6.menuScreen);
+            wl6.goToMenu();
         }
     }
 

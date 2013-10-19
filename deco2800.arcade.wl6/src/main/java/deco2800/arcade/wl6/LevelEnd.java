@@ -1,6 +1,6 @@
 package deco2800.arcade.wl6;
 
-public class LevelEnd extends SecretDoor {
+public class LevelEnd extends Doodad {
 	
 	
 	public LevelEnd(int uid) {
@@ -9,7 +9,6 @@ public class LevelEnd extends SecretDoor {
 
 	@Override
 	public void tick(GameModel g) {
-		//no call to super.tick
 		
 		if (g.getPlayer().getBlockPos().equals(this.getBlockPos())) {
 			

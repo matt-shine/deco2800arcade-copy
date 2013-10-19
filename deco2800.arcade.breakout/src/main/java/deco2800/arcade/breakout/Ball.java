@@ -202,7 +202,7 @@ public class Ball {
 						* cosAngle);
 			}
 		// Handles the ball if it hits the right end of the paddle
-		} else if (bX >= pX + 7*pWidth/9 && bX <= pX + pWidth) {
+		} else if (bX >= pX + 7*pWidth/9) { 
 			newVelocity = 100 + (Math.abs(getXVelocity()) + 80
 					* cosAngle);
 		}

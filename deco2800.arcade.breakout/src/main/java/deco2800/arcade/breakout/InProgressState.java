@@ -182,7 +182,6 @@ public class InProgressState extends GameState {
 		}
 
 		if (context.getBall().ballCirc.y >= context.SCREENHEIGHT - 2*context.getBall().getRadius()) {
-			System.out.println("balls y: " + context.getBall().ballCirc.y);
 			context.setLastHitX(context.getBall().getX());
 			context.setLastHitY(context.getBall().getY());
 			context.getBall().bounceY(-5);

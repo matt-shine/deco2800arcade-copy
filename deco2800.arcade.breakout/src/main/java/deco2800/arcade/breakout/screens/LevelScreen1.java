@@ -273,6 +273,7 @@ public class LevelScreen1 implements Screen {
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
+			game.LevelScreen2.enableButtons();
 			game.setScreen(game.LevelScreen2);
 		}
 	};
@@ -424,6 +425,22 @@ public class LevelScreen1 implements Screen {
 		nextbutton.removeListener(this.levelScreen2);
 		backbutton.removeListener(this.backmenu);
 
+	}
+	
+	/**
+	 * Add all the button input listeners if they no longer exist
+	 */
+	public void enableButtons() {
+		if (level1button.getCaptureListeners().contains(input1, true)) {
+			return;
+		}
+		level1button.addListener(this.input1);
+		level2button.addListener(this.input2);
+		level3button.addListener(this.input3);
+		level4button.addListener(this.input4);
+		level5button.addListener(this.input5);
+		nextbutton.addListener(this.levelScreen2);
+		backbutton.addListener(this.backmenu);
 	}
 
 	/**

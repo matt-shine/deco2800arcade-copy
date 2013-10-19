@@ -486,6 +486,10 @@ public class GameScreen implements Screen  {
 		gameState = new InProgressState();
 	}
 	
+	public void setMenuScreen() {
+		game.setScreen(game.MenuScreen);
+	}
+	
 	@Override
 	public void resize(int width, int height) {
 		// TODO Auto-generated method stub
@@ -584,14 +588,12 @@ public class GameScreen implements Screen  {
 	public void createNewBall(Vector2 position) {
 		if (powerupBall == null) {
 			this.powerupBall = new Ball();
-			System.out.println("Runs");
 			this.powerupBall.reset(position);
 			setNumBalls(2);
 			this.powerupBall.randomizeVelocity();
 			this.powerupBall.setColor(0.7f, 0.7f, 0.7f, 0.5f);
 		} else {
 			this.ball = new Ball();
-			System.out.println("Runs");
 			this.ball.reset(position);
 			setNumBalls(2);
 			this.ball.randomizeVelocity();
@@ -683,7 +685,6 @@ public class GameScreen implements Screen  {
 	
 	public void destroyPowerupBall() {
 		if (powerupBall != null) {
-			System.out.println("Triggers");
 			setNumBalls(getNumBalls() - 1);
 			powerupBall = null;
 		}

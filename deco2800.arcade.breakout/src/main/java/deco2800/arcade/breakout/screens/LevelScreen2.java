@@ -369,7 +369,23 @@ public class LevelScreen2 implements Screen {
 		previousbutton.removeListener(this.levelScreen1);
 		backbutton.removeListener(this.backmenu);
 	}
-
+	
+	/**
+	 * Add all the button input listeners if they no longer exist
+	 */
+	public void enableButtons() {
+		if (level6button.getCaptureListeners().contains(input6, true)) {
+			return;
+		}
+		level6button.addListener(this.input6);
+		level7button.addListener(this.input7);
+		level8button.addListener(this.input8);
+		level9button.addListener(this.input9);
+		level10button.addListener(this.input10);
+		previousbutton.addListener(this.levelScreen1);
+		backbutton.addListener(this.backmenu);
+	}
+	
 	@Override
 	public void dispose() {
 		texture.dispose();

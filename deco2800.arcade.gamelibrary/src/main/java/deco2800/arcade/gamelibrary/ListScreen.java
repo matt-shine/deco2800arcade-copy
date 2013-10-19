@@ -212,7 +212,7 @@ public class ListScreen implements Screen, LibraryScreen {
         userProfileButton.setHeight(40);
         userProfileButton.setX(500);
         userProfileButton.setY(650);
-        userProfileButton.addListener(new PlayButtonActionHandler(this, "arcadeui"));
+        userProfileButton.addListener(new PlayButtonActionHandler(this, "profileui"));
 
         stage.addActor(label);
         stage.addActor(homeButton);

@@ -2,9 +2,7 @@ package deco2800.arcade.userui.view;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -39,7 +37,7 @@ public class UserScreen extends JFrame{
 	private JScrollPane friendscroll;
 	
 	//Declare Buttons 
-	private JButton addfriendbutton, removefriendbutton, editbutton, statusbutton;
+	private JButton addfriendbutton, removefriendbutton, editbutton, statusbutton, blockbutton;
 	private JButton achievementbar;
 	private JButton homelink, storelink, librarylink, forumlink, myprofilelink;
 	private JButton invitesbutton;
@@ -48,9 +46,8 @@ public class UserScreen extends JFrame{
 	private JLabel avatar;
 	private JLabel playername, playerlastonline, realname, program, description;
 	private JLabel aboutbar, friendbar, historybar;
-	private JLabel history1, history2, history3, history4, history5;
-	private JLabel achievement1, achievement2, achievement3, achievement4, achievement5, 
-	achievement6;
+	private JLabel history1, history2, history3;
+	private JLabel achievement1, achievement2, achievement3;
 	
 	//Declare Text Areas
 	private JTextArea historyarea;
@@ -62,12 +59,12 @@ public class UserScreen extends JFrame{
 	library, libraryhover, profile, profilehover;
 	
 	//Declare Fonts
-	Font blackbold = new Font("Verdana", Font.BOLD, 16);
-	Font blacknormal = new Font("Verdana", Font.PLAIN, 14);
-	Font blacksmall = new Font("Verdana", Font.PLAIN, 12);
-	Font blacklink = new Font("Verdana", Font.PLAIN, 15);
-	Font linkbold = new Font("Verdana", Font.BOLD, 14);
-	Font sidebold = new Font("Verdana", Font.BOLD, 12);
+	Font blackbold = new Font("Century Gothic", Font.BOLD, 20);
+	Font blacknormal = new Font("Century Gothic", Font.PLAIN, 14);
+	Font blacksmall = new Font("Century Gothic", Font.PLAIN, 12);
+	Font blacklink = new Font("Century Gothic", Font.PLAIN, 16);
+	Font linkbold = new Font("Century Gothic", Font.BOLD, 15);
+	Font sidebold = new Font("Century Gothic", Font.BOLD, 14);
 		
 	public UserScreen(Model model) throws HeadlessException{
 		
@@ -277,6 +274,11 @@ public class UserScreen extends JFrame{
 	    removefriendbutton.setForeground(Color.RED);
 	    removefriendbutton.setBorder(BorderFactory.createEmptyBorder());
 	    removefriendbutton.setContentAreaFilled(false);
+	    blockbutton = new JButton("Block List");
+	    blockbutton.setFont(blacksmall);
+	    blockbutton.setForeground(Color.white);
+	    blockbutton.setBorder(BorderFactory.createEmptyBorder());
+	    blockbutton.setContentAreaFilled(false);
 	    invitesbutton = new JButton("Invites");
 	    invitesbutton.setFont(blacksmall);
 	    invitesbutton.setForeground(Color.white);
@@ -286,10 +288,12 @@ public class UserScreen extends JFrame{
 		//Add Elements to Panel
 	    friendpanel = new ImagePanel(new ImageIcon("assets/images/Blue_Box.png").getImage());
         friendpanel.setLayout(new MigLayout());
+		friendpanel.setOpaque(false);
 	    friendpanel.add(friendbar, "gap left 10px, gap bottom 110px");
 	    friendpanel.add(addfriendbutton,"gap left 10px");
 	    friendpanel.add(removefriendbutton,"gap left 10px");
-	    friendpanel.add(invitesbutton,"gap left 110px");
+	    friendpanel.add(invitesbutton,"gap left 50px");
+	    friendpanel.add(blockbutton,"gap left 30px");
         friendpanel.add(friendscroll, "width :500px, height :100px, gap top 30px");    
 		
 	}
@@ -338,24 +342,44 @@ public class UserScreen extends JFrame{
 	    achievement1 = new JLabel();
 	    achievement2 = new JLabel();
 	    achievement3 = new JLabel();
-	    achievement4 = new JLabel();
-	    achievement5 = new JLabel();
-	    achievement6 = new JLabel();
 	    
 	    achievement1.setIcon(piclocked);
 	    achievement2.setIcon(piclocked);
 	    achievement3.setIcon(piclocked);
-	    achievement4.setIcon(piclocked);
-	    achievement5.setIcon(piclocked);
-	    achievement6.setIcon(piclocked);
 	    
-	    JPanel achievementtext1 = new JPanel(new MigLayout());
-	    JPanel achievementtext2 = new JPanel(new MigLayout());
-	    JPanel achievementtext3 = new JPanel(new MigLayout());
-	    JPanel achievementtext4 = new JPanel(new MigLayout());
-	    JPanel achievementtext5 = new JPanel(new MigLayout());
-	    JPanel achievementtext6 = new JPanel(new MigLayout());
-	    
+	    JLabel achievement1name = new JLabel("Master of Paddle");
+	    achievement1name.setFont(linkbold);
+	    achievement1name.setForeground(Color.white);
+        JLabel achievement2name = new JLabel("Off the Wall");
+        achievement2name.setFont(linkbold);
+        achievement2name.setForeground(Color.white);
+        JLabel achievement3name = new JLabel("What a Rally");
+        achievement3name.setFont(linkbold);
+        achievement3name.setForeground(Color.white);
+        
+        JLabel achievement1time = new JLabel("Score 5 Points");
+        achievement1time.setFont(blacknormal);
+        achievement1time.setForeground(Color.white);
+        JLabel achievement2time = new JLabel("Win 3 games Straight");
+        achievement2time.setFont(blacknormal);
+        achievement2time.setForeground(Color.white);
+        JLabel achievement3time = new JLabel("Over 20 hits");
+        achievement3time.setFont(blacknormal);
+        achievement3time.setForeground(Color.white);
+
+        JPanel achievementtext1 = new JPanel(new MigLayout());
+        achievementtext1.setOpaque(false);
+        achievementtext1.add(achievement1name,"wrap");
+        achievementtext1.add(achievement1time);
+        JPanel achievementtext2 = new JPanel(new MigLayout());
+        achievementtext2.setOpaque(false);
+        achievementtext2.add(achievement2name,"wrap");
+        achievementtext2.add(achievement2time);
+        JPanel achievementtext3 = new JPanel(new MigLayout());
+        achievementtext3.setOpaque(false);
+        achievementtext3.add(achievement3name,"wrap");
+        achievementtext3.add(achievement3time);
+        
 	    JPanel achievementbarpanel = new JPanel(new MigLayout());
 	    JPanel achievementlistpanel = new JPanel(new MigLayout());
 	    
@@ -378,12 +402,6 @@ public class UserScreen extends JFrame{
         achievementlistpanel.add(achievementtext2,"growy, width :110");
         achievementlistpanel.add(achievement3);
         achievementlistpanel.add(achievementtext3,"wrap, growy, width :110");
-        achievementlistpanel.add(achievement4);
-        achievementlistpanel.add(achievementtext4,"growy, width :110");
-        achievementlistpanel.add(achievement5);
-        achievementlistpanel.add(achievementtext5,"growy, width :110");
-        achievementlistpanel.add(achievement6);
-        achievementlistpanel.add(achievementtext6,"growy, width :110");
         
         achievementlistpanel.setOpaque(false);
 		
@@ -394,7 +412,7 @@ public class UserScreen extends JFrame{
 	
 	/**
 	 *  Creates a panel displaying the most recently played games.
-	 *  (Up to 6 can be showed at a time)
+	 *  (Up to 3 can be showed at a time)
 	 */
 	public void addhistorypanel(){
 				
@@ -410,20 +428,43 @@ public class UserScreen extends JFrame{
         history1 = new JLabel();
         history2 = new JLabel();
         history3 = new JLabel();
-        history4 = new JLabel();
-        history5 = new JLabel();
         
-        history1.setIcon(piclocked);
-        history2.setIcon(piclocked);
-        history3.setIcon(piclocked);
-        history4.setIcon(piclocked);
-        history5.setIcon(piclocked);
+        history1.setIcon(model.astrosonicLogo);
+        history2.setIcon(model.breakoutLogo);
+        history3.setIcon(model.chessLogo);
+        
+        JLabel game1name = new JLabel("Burning Skies");
+        game1name.setFont(linkbold);
+        game1name.setForeground(Color.white);
+        JLabel game2name = new JLabel("Breakout");
+        game2name.setFont(linkbold);
+        game2name.setForeground(Color.white);
+        JLabel game3name = new JLabel("Chess");
+        game3name.setFont(linkbold);
+        game3name.setForeground(Color.white);
+        
+        JLabel game1time = new JLabel("10:21 20/10/13");
+        game1time.setFont(blacknormal);
+        game1time.setForeground(Color.white);
+        JLabel game2time = new JLabel("18:51 19/10/13");
+        game2time.setFont(blacknormal);
+        game2time.setForeground(Color.white);
+        JLabel game3time = new JLabel("14:43 18/10/13");
+        game3time.setFont(blacknormal);
+        game3time.setForeground(Color.white);
 
         JPanel historytext1 = new JPanel(new MigLayout());
+        historytext1.setOpaque(false);
+        historytext1.add(game1name,"wrap");
+        historytext1.add(game1time);
         JPanel historytext2 = new JPanel(new MigLayout());
+        historytext2.setOpaque(false);
+        historytext2.add(game2name,"wrap");
+        historytext2.add(game2time);
         JPanel historytext3 = new JPanel(new MigLayout());
-        JPanel historytext4 = new JPanel(new MigLayout());
-        JPanel historytext5 = new JPanel(new MigLayout());
+        historytext3.setOpaque(false);
+        historytext3.add(game3name,"wrap");
+        historytext3.add(game3time);
         
 	    historybar = new JLabel("Game History");
 	    historybar.setFont(linkbold);
@@ -442,10 +483,6 @@ public class UserScreen extends JFrame{
         historylistpanel.add(historytext2,"growy, width :110");
         historylistpanel.add(history3);
         historylistpanel.add(historytext3,"wrap, growy, width :110");
-        historylistpanel.add(history4);
-        historylistpanel.add(historytext4,"growy, width :110");
-        historylistpanel.add(history5);
-        historylistpanel.add(historytext5,"growy, width :110");
         
 	    historypanel = new ImagePanel(new ImageIcon("assets/images/green_box.png").getImage());
 	    historypanel.setLayout(new MigLayout());       
@@ -568,8 +605,18 @@ public class UserScreen extends JFrame{
 	}
 	
 	/**
-	 * 
-	 * @param icon
+	 * Block a friend
+	 * @param listenForBlockButton
+	 */
+	public void addBlockListener(ActionListener listenForBlockButton){
+		
+		blockbutton.addActionListener(listenForBlockButton);
+		
+	}
+	
+	/**
+	 * Set the status button to specified ImageIcon
+	 * @param icon ImageIcon of status
 	 */
 	public void setStatus(ImageIcon icon){
 		
@@ -577,13 +624,12 @@ public class UserScreen extends JFrame{
 		
 	}
 	
+	/**
+	 *  Update the friends list
+	 */
 	public void updateFriends(){
 		
-	}
-	
-	public void buttonhover(){
 		
-		forumlink.setBackground(Color.red);
 		
 	}
 	

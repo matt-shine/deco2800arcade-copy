@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import deco2800.arcade.userui.Model;
 import net.miginfocom.swing.MigLayout;
 
-public class InviteScreen extends JFrame{
+public class BlockScreen extends JFrame{
 	
 	/**
 	 * The view class for Invites
@@ -33,7 +33,7 @@ public class InviteScreen extends JFrame{
 	private JPanel textpanel;
 	
 	//Declare Buttons
-	private JButton acceptbutton, declinebutton;
+	private JButton blockbutton, unblockbutton;
 	
 	//Declare text
 	private JTextArea invites;
@@ -43,24 +43,24 @@ public class InviteScreen extends JFrame{
 	private JLabel username;
 	
 	//Declare Images 
-	private ImageIcon accept, accepthover, decline, declinehover;
+	private ImageIcon add, addhover, remove, removehover;
 	
 	//Declare Fonts
 	Font blackbold = new Font("Verdana", Font.BOLD, 16);
 
-	public InviteScreen(Model model) throws HeadlessException{
+	public BlockScreen(Model model) throws HeadlessException{
 		
-		super("Invites");
+		super("Blocked List");
 		
 		this.model = model;
 		
 		/*
 		 * Create Image Icons
 		 */		
-		accept = new ImageIcon("assets/images/accept.png");
-		accepthover = new ImageIcon("assets/images/accepthover.png");
-		decline = new ImageIcon("assets/images/decline.png");
-		declinehover = new ImageIcon("assets/images/declinehover.png");
+		add = new ImageIcon("assets/images/add.png");
+		addhover = new ImageIcon("assets/images/addhover.png");
+		remove = new ImageIcon("assets/images/remove.png");
+		removehover = new ImageIcon("assets/images/removehover.png");
 	
 	    /*Add panels to main panel	
 	     *                
@@ -71,7 +71,7 @@ public class InviteScreen extends JFrame{
 		addactionpanel();
 	    
 	    parentContainer = new JPanel(new MigLayout());
-	    parentContainer.setBackground(Color.orange);
+	    parentContainer.setBackground(Color.pink);
 	    parentContainer.add(titlepanel,"wrap, gap right 30px");
 	    parentContainer.add(contentpanel,"wrap");
 	    parentContainer.add(textpanel,"wrap");
@@ -94,7 +94,7 @@ public class InviteScreen extends JFrame{
 	 */
 	public void addtitlepanel(){
 
-		JLabel title = new JLabel("Invites");
+		JLabel title = new JLabel("Block List");
 		title.setFont(blackbold);
 		
 		titlepanel = new JPanel(new MigLayout());
@@ -140,31 +140,31 @@ public class InviteScreen extends JFrame{
 	 */
 	public void addactionpanel(){
 		
-		acceptbutton = new JButton();
-		acceptbutton.setBorder(BorderFactory.createEmptyBorder());
-	    acceptbutton.setContentAreaFilled(false);
-	    acceptbutton.setIcon(accept);
-	    acceptbutton.setRolloverIcon(accepthover);
-	    declinebutton = new JButton();
-		declinebutton.setBorder(BorderFactory.createEmptyBorder());
-	    declinebutton.setContentAreaFilled(false);
-	    declinebutton.setIcon(decline);
-	    declinebutton.setRolloverIcon(declinehover);
+		blockbutton = new JButton();
+		blockbutton.setBorder(BorderFactory.createEmptyBorder());
+	    blockbutton.setContentAreaFilled(false);
+	    blockbutton.setIcon(add);
+	    blockbutton.setRolloverIcon(addhover);
+	    unblockbutton = new JButton();
+		unblockbutton.setBorder(BorderFactory.createEmptyBorder());
+	    unblockbutton.setContentAreaFilled(false);
+	    unblockbutton.setIcon(remove);
+	    unblockbutton.setRolloverIcon(removehover);
 
 		actionpanel = new JPanel(new MigLayout());
 		actionpanel.setOpaque(false);
-	    actionpanel.add(acceptbutton,"gap after 30px");
-		actionpanel.add(declinebutton);
+	    actionpanel.add(blockbutton,"gap after 30px");
+		actionpanel.add(unblockbutton);
 	     		
 	}
 
 	/**
-	 * Listener for the acceptbutton
-	 * @param listenForAcceptButton
+	 * Listener for the blockbutton
+	 * @param listenForBlockButton
 	 */
-	public void addAcceptListener(ActionListener listenForAcceptButton){
+	public void addBlockListener(ActionListener listenForBlockButton){
 		
-		acceptbutton.addActionListener(listenForAcceptButton);
+		blockbutton.addActionListener(listenForBlockButton);
 	
 	}
 	
@@ -172,9 +172,9 @@ public class InviteScreen extends JFrame{
 	 * Listener for the declinebutton
 	 * @param listenForDeclineButton
 	 */
-	public void addDeclineListener(ActionListener listenForDeclineButton){
+	public void addUnblockListener(ActionListener listenForUnblockButton){
 		
-		declinebutton.addActionListener(listenForDeclineButton);
+		unblockbutton.addActionListener(listenForUnblockButton);
 	
 	}
 	

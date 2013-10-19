@@ -471,6 +471,9 @@ public class MainGameScreen implements Screen {
             if (DeerForestSingletonGetter.getDeerForest() != null) {
     			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.winGame");
     		}
+            
+            // Store the score (turns taken to win?)
+            DeerForest.playerScore.storeScore("Number", MainInputProcessor.turns);
         	
             game.batch.begin();
             ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player2Victory.png", Texture.class));

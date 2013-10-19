@@ -8,6 +8,9 @@ import java.util.logging.Logger;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.NetworkClient;
+
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -40,9 +43,13 @@ public class DeerForest extends GameClient {
 	static DeckBuilderInputProcessor deckInputProcessor;
 	
 	static Logger logger;
+	
+	private NetworkClient networkClient;
+	static HighscoreClient playerScore;
 
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
+		this.networkClient = networkClient;
 	}
 
     /**
@@ -76,6 +83,9 @@ public class DeerForest extends GameClient {
 		
 		// Create the logger
 		logger = Logger.getLogger("GUILogger");
+		
+		// Initialise the highscore client
+		playerScore = new HighscoreClient(getPlayer().getUsername(), "DeerForest", networkClient);
     }
 
     /**

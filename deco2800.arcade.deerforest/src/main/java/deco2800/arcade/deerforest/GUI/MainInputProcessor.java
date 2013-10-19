@@ -36,6 +36,7 @@ public class MainInputProcessor implements InputProcessor {
     private boolean gameStarted;
     
     private int cardsDrawn;
+    static int turns;
 
     SpellLogic spellHandler;
 
@@ -376,6 +377,9 @@ public class MainInputProcessor implements InputProcessor {
         currentSelection = null;
         view.setPhaseDisplayed(false);
         view.setHighlightedZones(new ArrayList<Rectangle>());
+        
+        // Increment the number of turns
+        turns++;
     }
 
     /**

@@ -15,7 +15,7 @@ public class Rook extends Piece {
 	 */
 	public Rook(boolean team, int pieceNo) {
 		super(team, pieceNo);
-		this.preference = 3;
+		this.preference = 4;
 	}
 
 	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {

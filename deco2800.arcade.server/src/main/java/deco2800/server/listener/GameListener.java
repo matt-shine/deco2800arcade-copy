@@ -109,8 +109,8 @@ public class GameListener extends Listener {
 		} else {
 			//Currently no sessions
 			userConnections = new HashMap<String, Set<Connection>>();
-			if (gameId.equals("Blackjack")) {
-				gameServers.put("Blackjack", new BlackjackServer());
+			if (gameId.equals("blackjack")) {
+				gameServers.put("blackjack", new BlackjackServer());
 			}
 		}
 		

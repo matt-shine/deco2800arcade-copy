@@ -150,6 +150,8 @@ public class Ghost extends Mover {
 	public void updateTargetTile() {
 		if (ghostName == GhostName.BLINKY) {
 			targetTile = player.getTile();
+			System.out.println("player: " + player);
+			System.out.println("<!> " + this.ghostName + " Target is: " + player.getTile());
 		}
 		// else if (ghostName == GhostName.PINKY) {
 		// //need to check this tile exists, otherwise crashes
@@ -176,10 +178,10 @@ public class Ghost extends Mover {
 		int targetx = targetPoint.getX();
 		int targety = targetPoint.getY();
 		double dist;
-		int distx = startx - targetx;
-		int disty = starty - targety;
-		// int distx = targetx - startx;
-		// int disty = targety - starty;
+//		int distx = startx - targetx;
+//		int disty = starty - targety;
+		int distx = targetx - startx;
+		int disty = targety - starty;
 		dist = sqrt((distx * distx + disty * disty));
 		return dist;
 	}
@@ -213,24 +215,39 @@ public class Ghost extends Mover {
 		Tile downTile = gameMap.getGrid()[currentX][downY];
 		Tile rightTile = gameMap.getGrid()[rightX][currentY];
 
-		if ((checkNoWallCollision(upTile) && 
-				!upTile.equals(previousTile))) {
-				testTiles.add(upTile);
-		} else if (checkNoWallCollision(leftTile) && 
-				!leftTile.equals(previousTile)) {
-				testTiles.add(leftTile);
-		} else if (checkNoWallCollision(downTile) && 
-				!downTile.equals(previousTile)) {
-				testTiles.add(downTile);
-		} else if (checkNoWallCollision(rightTile)) {
-			if (!rightTile.equals(previousTile)) {
-				testTiles.add(rightTile);
-			}
-		} else {
-			//Something's not right here, no where to move...
-			this.setCurrentState(GhostState.DEAD);
-			
+//		if ((checkNoWallCollision(upTile) && 
+//				!upTile.equals(previousTile))) {
+//				testTiles.add(upTile);
+//		} else if (checkNoWallCollision(leftTile) && 
+//				!leftTile.equals(previousTile)) {
+//				testTiles.add(leftTile);
+//		} else if (checkNoWallCollision(downTile) && 
+//				!downTile.equals(previousTile)) {
+//				testTiles.add(downTile);
+//		} else if (checkNoWallCollision(rightTile)) {
+//			if (!rightTile.equals(previousTile)) {
+//				testTiles.add(rightTile);
+//			}
+//		} else {
+//			//Something's not right here, no where to move...
+//			System.out.println("<<GetTestTiles>> no valid directions!");
+//			this.setCurrentState(GhostState.DEAD);
+//		}
+		
+		if (this.nextTile(this.currentTile, 1, Dir.UP).getClass() != WallTile.class &&
+				!this.nextTile(this.currentTile, 1, Dir.UP).equals(previousTile)){
+			testTiles.add(upTile);
+		} else if (this.nextTile(this.currentTile, 1, Dir.DOWN).getClass() != WallTile.class &&
+				!this.nextTile(this.currentTile, 1, Dir.DOWN).equals(previousTile)){
+			testTiles.add(downTile);
+		} else if (this.nextTile(this.currentTile, 1, Dir.LEFT).getClass() != WallTile.class &&
+				!this.nextTile(this.currentTile, 1, Dir.LEFT).equals(previousTile)){
+			testTiles.add(leftTile);
+		} else if (this.nextTile(this.currentTile, 1, Dir.RIGHT).getClass() != WallTile.class &&
+				!this.nextTile(this.currentTile, 1, Dir.RIGHT).equals(previousTile)){
+			testTiles.add(rightTile);
 		}
+		
 		if (testTiles.size() == 0) {
 			System.out.println("BAD! testTiles is empty!");
 		} else {
@@ -277,16 +294,16 @@ public class Ghost extends Mover {
 		System.out.println("<<getDirection>> current: [" + currentX +
 				 "," + currentY + "]  next: [" + nextX + "," + nextY + "]");
 		if (nextX > currentX) {
-			System.out.println("next tile is RIGHT");
+			System.out.println("\t next tile is RIGHT");
 			return Dir.RIGHT;
 		} else if (nextX < currentX) {
-			System.out.println("next tile is LEFT");
+			System.out.println("\t next tile is LEFT");
 			return Dir.LEFT;
 		} else if (nextY > currentY) {
-			System.out.println("next tile is UP");
+			System.out.println("\t next tile is UP");
 			return Dir.UP;
 		} else {
-			System.out.println("next tile is DOWN");
+			System.out.println("\t next tile is DOWN");
 			return Dir.DOWN;
 		}
 	}

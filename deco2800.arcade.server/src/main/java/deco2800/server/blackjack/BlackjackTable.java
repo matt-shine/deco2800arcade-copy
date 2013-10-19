@@ -280,25 +280,6 @@ public class BlackjackTable extends Thread {
 		}
 	}
 	
-	public int convertNum(String card) {
-		int result = 0;
-		String cardstr = card.substring(1);
-		if (cardstr.matches("\\d") == true ||cardstr.matches("\\d\\d") == true) {
-			int cardint = Integer.parseInt(cardstr);
-			if (cardint >= 2 && cardint <= 10) {
-				result = cardint;
-			}
-		}
-		
-		if (cardstr.equals("K") || cardstr.equals("Q") || cardstr.equals("J")) {
-			result = 10;
-		}
-		if (cardstr.equals("A")) {
-			result = 2;
-		}
-		return result;
-	}
-	
 	public void bet(BlackjackPlayer player, int amount){
 		player.bet = amount;
 		player.chippile = player.chippile - player.bet;
@@ -370,11 +351,30 @@ public class BlackjackTable extends Thread {
 	}
 	
 	public int totalhandNum(ArrayList<String> Hand) {
-		int result = 0;
-		for (int i = 0; i < Hand.size(); i++) {
-			result = result + convertNum(Hand.get(i));
+		int value = 0;
+		int aces = 0;
+		for(int i=0;i<Hand.size();i++){
+			String card = Hand.get(i);
+			if (card == "H2" || card == "D2" || card == "C2" || card == "S2"){value += 2;}
+			else if (card == "H3" || card == "D3" || card == "C3" || card == "S3"){value += 3;}
+			else if (card == "H4" || card == "D4" || card == "C4" || card == "S4"){value += 4;}
+			else if (card == "H5" || card == "D5" || card == "C5" || card == "S5"){value += 5;}
+			else if (card == "H6" || card == "D6" || card == "C6" || card == "S6"){value += 6;}
+			else if (card == "H7" || card == "D7" || card == "C7" || card == "S7"){value += 7;}
+			else if (card == "H8" || card == "D8" || card == "C8" || card == "S8"){value += 8;}
+			else if (card == "H9" || card == "D9" || card == "C9" || card == "S9"){value += 9;}
+			else if (card == "H10" || card == "D10" || card == "C10" || card == "S10" || 
+					card == "SJ" || card == "SJ" || card == "SJ" || card == "SJ" || 
+					card == "SQ" || card == "SQ" || card == "SQ" || card == "SQ" || 
+					card == "SK" || card == "SK" || card == "SK" || card == "SK"){value += 10;}
+			else if (card == "HA" || card == "DA" || card == "CA" || card == "SA"){aces += 1;}
+			//Apparently switch can't be used on Strings.
 		}
-		return result;
+		for(int a=0;a<aces;a++){
+			if (value+11<=21){value += 11;}
+			else{value += 1;}
+		}
+		return value;
 	}
 	
 	public int playercount(ArrayList Array) {

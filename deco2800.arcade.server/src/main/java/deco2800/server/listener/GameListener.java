@@ -13,20 +13,17 @@ import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdateResponse;
 import deco2800.arcade.protocol.game.NewGameRequest;
 import deco2800.arcade.protocol.game.NewGameResponse;
-import deco2800.server.GameServer;
-import deco2800.server.blackjack.BlackjackServer;
 
 public class GameListener extends Listener {
 	
 	private Map<String, Map<String, Set<Connection>>> gameSessions;
-	private Map<String, GameServer> gameServers;  // Dane's addition to host the game servers.
+
 	
 	/**
 	 * Instantiates a HashMap of game sessions
 	 */
 	public GameListener(){
 		this.gameSessions = new HashMap<String, Map<String, Set<Connection>>>();
-		this.gameServers = new HashMap<String, GameServer>();
 	}
 	
 	@Override
@@ -106,9 +103,6 @@ public class GameListener extends Listener {
 		} else {
 			//Currently no sessions
 			userConnections = new HashMap<String, Set<Connection>>();
-			if (gameId.equals("blackjack")) {
-				gameServers.put("blackjack", new BlackjackServer());
-			}
 		}
 		
 		//Check if there is already a session registered under the username

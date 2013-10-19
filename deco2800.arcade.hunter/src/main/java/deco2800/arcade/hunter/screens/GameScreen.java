@@ -32,24 +32,25 @@ import java.util.Random;
  */
 public class GameScreen implements Screen {
 	private OrthographicCamera camera;
-	private Hunter hunter; //GameClient entity
-	private EntityCollection entities = new EntityCollection(); //Collection of entities on the game screen
-	private Player player; //Player entity
-	private BackgroundLayer backgroundLayer; //BackgroundLayer used to draw background
-	private SpriteLayer spriteLayer; //SpriteLayer used to draw sprites
-	private ForegroundLayer foregroundLayer; //ForgroundLayer used to draw map
+	private Hunter hunter;
+	private EntityCollection entities = new EntityCollection();
+	private Player player;
+	private BackgroundLayer backgroundLayer;
+	private SpriteLayer spriteLayer;
+	private ForegroundLayer foregroundLayer;
 	private float speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
-	private SpriteBatch batch = new SpriteBatch(); //Used to draw entities
-	private SpriteBatch staticBatch = new SpriteBatch(); //Used to draw onscreen static UI
+	private SpriteBatch batch = new SpriteBatch();
+	private SpriteBatch staticBatch = new SpriteBatch();
 	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
-	public EntityHandler entityHandler; //EntityHandler 
-	private Music musicResource; //Music for the game
-	private float stateTime; //Time for 
-	private int multiplier;	//Multiplier for the player score
-	private long animalTime; //Timer for which animals spawn
-	private long itemTime; //Timer for which items spawn
-	private long mapEntityTime; //Timer for which map entity spawn
-	private long attackTime; //Timer for which player last attacked
+	public EntityHandler entityHandler;
+	private Music musicResource;
+	private float stateTime;	
+	private float counter;
+	private int multiplier;
+	private long animalTime;
+	private long itemTime;
+	private long mapEntityTime;
+	private long attackTime;
 	
 	public GameScreen(Hunter hunter) {
 	
@@ -75,8 +76,8 @@ public class GameScreen implements Screen {
 		
 		// Spawn entities
 		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
-		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 64, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
-		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE),128,64,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
+		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 128, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
+		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE), 128, 128,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
 		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "Invulnerability",entityHandler.getItemTexture("Invulnerability"),this);
 
 		entities.add(player);
@@ -93,7 +94,7 @@ public class GameScreen implements Screen {
 			musicResource.setLooping(true);
 			musicResource.play();
 		}
-		//Sets the timers
+		
 		stateTime = 0f;
 		multiplier = 1;
 		animalTime = 0;
@@ -251,7 +252,7 @@ public class GameScreen implements Screen {
 	private void createAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
 		String animal = anims[Hunter.State.randomGenerator.nextInt(3)];
-		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)),64,64,Hunter.State.randomGenerator.nextBoolean(), animal, entityHandler.getAnimalAnimation(animal), this));
+		entities.add(new Animal(new Vector2(player.getX() + Config.PANE_SIZE_PX, getForeground().getColumnTop(player.getX() + Config.PANE_SIZE_PX)),128,128,Hunter.State.randomGenerator.nextBoolean(), animal, entityHandler.getAnimalAnimation(animal), this));
 	}
 	
 	/**

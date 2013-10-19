@@ -46,7 +46,7 @@ public class SpriteLayer extends Map {
         //Create clouds
         for (int c = 0; c < 10; c++) {
             //No need for seeded rng here, doesn't affect gameplay
-            int id = clouds.add(new BackgroundSprite(randomScreenCoordinate(), 0, 0));
+            int id = clouds.add(new BackgroundSprite(randomScreenCoordinate(), 0, 0, randomCloudSpeed()));
             TextureRegion sprite = cloudSprites.get(id % cloudSprites.size());
             clouds.getById(id).setWidth(sprite.getRegionWidth());
             clouds.getById(id).setHeight(sprite.getRegionHeight());
@@ -55,9 +55,8 @@ public class SpriteLayer extends Map {
         //Create trees
         for (int t = 0; t < 2; t++) {
             float tX = randomScreenCoordinate().x;
-            float tY = gameScreen.getForeground().getColumnTop(tX);
 
-            int id = trees.add(new BackgroundSprite(new Vector2(tX, 0), 0, 0));
+            int id = trees.add(new BackgroundSprite(new Vector2(tX, 0), 0, 0, randomTreeSpeed()));
 
             TextureRegion sprite = treeSprites.get(id % treeSprites.size());
             trees.getById(id).setWidth(sprite.getRegionWidth());
@@ -66,8 +65,18 @@ public class SpriteLayer extends Map {
         }
     }
 
+    private float randomTreeSpeed() {
+        return (float) (Hunter.Config.TREE_MIN_SPEED + (Math.random() * ((Hunter.Config.TREE_MAX_SPEED - Hunter.Config.TREE_MIN_SPEED) + 1)));
+    }
+
+    private float randomCloudSpeed() {
+        return (float) (Hunter.Config.CLOUD_MIN_SPEED + (Math.random() * ((Hunter.Config.CLOUD_MAX_SPEED - Hunter.Config.CLOUD_MIN_SPEED) + 1)));
+    }
+
 	public void update(float delta, Vector3 cameraPos) {
 		// TODO Auto-generated method stub
+
+        //Remove clouds that are off the left edge of the screen, update the position of the cloud
         Iterator<Entity> cl = clouds.iterator();
         while (cl.hasNext()) {
             Entity cloud = cl.next();
@@ -76,26 +85,40 @@ public class SpriteLayer extends Map {
                 cl.remove();
             }
         }
+
+        //Remove trees that are off the left edge of the screen, update the position of the tree
+        Iterator<Entity> tr = trees.iterator();
+        while (tr.hasNext()) {
+            Entity tree = tr.next();
+            tree.update(delta * speedModifier);
+            if (tree.getX() + tree.getWidth() < cameraPos.x * speedModifier - Hunter.State.screenWidth) {
+                tr.remove();
+            }
+        }
+
+        //Add new clouds randomly
         Vector2 cloudLocation;
         if (Math.random() < CHANCE_OF_CLOUDS) {
             cloudLocation = randomScreenCoordinate();
             cloudLocation.set(cameraPos.x + Hunter.State.screenWidth / 2, cloudLocation.y + cameraPos.y);
 
-            int id = clouds.add(new BackgroundSprite(cloudLocation, 0, 0));
+            int id = clouds.add(new BackgroundSprite(cloudLocation, 0, 0, randomCloudSpeed()));
             TextureRegion sprite = cloudSprites.get(id % cloudSprites.size());
             clouds.getById(id).setWidth(sprite.getRegionWidth());
             clouds.getById(id).setHeight(sprite.getRegionHeight());
         }
 
+        //Add new trees randomly
         Vector2 treeLocation = new Vector2();
         if (Math.random() < CHANCE_OF_TREES) {
             treeLocation.x = cameraPos.x + Hunter.State.screenWidth / 2;
 
-            int id = trees.add(new BackgroundSprite(treeLocation, 0, 0));
+            int id = trees.add(new BackgroundSprite(treeLocation, 0, 0, randomTreeSpeed()));
             TextureRegion sprite = treeSprites.get(id % treeSprites.size());
             trees.getById(id).setWidth(sprite.getRegionWidth());
             trees.getById(id).setHeight(sprite.getRegionHeight());
-            trees.getById(id).setY(gameScreen.getForeground().getColumnTop(treeLocation.x + sprite.getRegionWidth() / 2) - Hunter.Config.TILE_SIZE);
+            trees.getById(id).setY(gameScreen.getForeground().getColumnTop(treeLocation.x) - Hunter.Config.TILE_SIZE * 3);
+            //gameScreen.getForeground().getColumnTop(treeLocation.x + sprite.getRegionWidth() / 2) - Hunter.Config.TILE_SIZE);
         }
 	}
 
@@ -107,7 +130,9 @@ public class SpriteLayer extends Map {
         }
 
         for (int t : trees.idSet()) {
-            batch.draw(treeSprites.get(t % treeSprites.size()), trees.getById(t).getX(), trees.getById(t).getY());
+            TextureRegion treeSprite = treeSprites.get(t % treeSprites.size());
+            Entity tree = trees.getById(t);
+            batch.draw(treeSprite, tree.getX(), tree.getY(), treeSprite.getRegionWidth() * ((BackgroundSprite)tree).speedModifier, treeSprite.getRegionHeight() * ((BackgroundSprite)tree).speedModifier);
         }
 	}
 }

@@ -3,13 +3,9 @@ package deco2800.arcade.chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Knight implements Piece {
+import deco2800.arcade.chess.FixedSizeList;
 
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
+public class Knight extends Piece {
 	
 	/**
 	 * Initialises the piece
@@ -17,61 +13,11 @@ public class Knight implements Piece {
 	 * @param team
 	 */
 	public Knight(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 4;
-		this.pieceNo = pieceNo;
 	}
 
-	@Override
-	public void deActivate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void reActivate() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public String toString() {
-		String toString = "";
-		
-		if(!team) {
-			toString+="white ";
-		} else {
-			toString+="black ";
-		}
-		
-		toString+="Knight";
-		
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> possibleMoves = new ArrayList<int[]>();
 		int x = currentPos[0];
 		int y = currentPos[1];
@@ -103,7 +49,44 @@ public class Knight implements Piece {
 			}
 		}
 		
-		return movesToReturn;
+		List<int[]> allowableMoves = new ArrayList<int[]>();
+		
+		for (int i = 0; i < movesToReturn.size(); i++) {
+			// If the space is unoccupied add to list of allowable
+			if (!occupiedSpace(board_state, movesToReturn.get(i))) {
+				allowableMoves.add(movesToReturn.get(i));
+			} else {
+				// If the space is occupied check by which team
+				int occx = movesToReturn.get(i)[0];
+				int occy = movesToReturn.get(i)[1];
+				List<Piece> row = board_state.get(occx);
+				Piece onSquare = row.get(occy);
+
+				// If piece on the space is on opposing team add to
+				// allowable
+				if (getTeam() != onSquare.getTeam()) {
+					allowableMoves.add(movesToReturn.get(i));
+				}
+			}
+		}
+		
+		
+		
+		return allowableMoves;
+	}
+	
+	public String toString() {
+		String toString = "";
+		
+		if(!team) {
+			toString+="white ";
+		} else {
+			toString+="black ";
+		}
+		
+		toString+="Knight";
+		
+		return toString;
 	}
 
 	@Override
@@ -139,14 +122,5 @@ public class Knight implements Piece {
 			return false;
 		return true;
 	}
-
-	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	
 
 }

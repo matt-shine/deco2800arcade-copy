@@ -3,30 +3,22 @@ package deco2800.arcade.chess.pieces;
 import java.util.ArrayList;
 import java.util.List;
 
+import deco2800.arcade.chess.FixedSizeList;
 
-public class Pawn implements Piece {
 
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
-	int pieceNo;
-	
+public class Pawn extends Piece {
+
 	/**
 	 * Initialises the piece
 	 * 
 	 * @param team
 	 */
 	public Pawn(boolean team, int pieceNo) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, pieceNo);
 		this.preference = 1;
-		this.pieceNo = pieceNo;
 	}
 	
-	@Override
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> possibleMoves = new ArrayList<int[]>();
 		int x = currentPos[0];
 		int y = currentPos[1];
@@ -67,19 +59,36 @@ public class Pawn implements Piece {
 			}
 		}
 		
-		return movesToReturn;
-	}
-
-	@Override
-	public void deActivate() {
-		// TODO Auto-generated method stub
+		List<int[]> allowableMoves = new ArrayList<int[]>();
 		
-	}
-
-	@Override
-	public void reActivate() {
-		// TODO Auto-generated method stub
+		if (!getFirstMove()) {
+			if (occupiedSpace(board_state, movesToReturn.get(1))) {
+				movesToReturn.remove(0);
+			}
+		}
+		for (int i = 0; i < movesToReturn.size(); i++) {
+			if (occupiedSpace(board_state, movesToReturn.get(i))) {
+				// If the space is occupied check by which team
+				int occx = movesToReturn.get(i)[0];
+				int occy = movesToReturn.get(i)[1];
+				List<Piece> row = board_state.get(occx);
+				Piece onSquare = row.get(occy);
+				/*
+				 * If piece on the space is on opposing team add to
+				 * allowable if diagonal
+				 */
+				if ((getTeam() != onSquare.getTeam())
+						&& (movesToReturn.get(i)[1] != currentPos[1])) {
+					allowableMoves.add(movesToReturn.get(i));
+				}
+			} else { // If diagonal squares are empty don't add
+				if (movesToReturn.get(i)[1] == currentPos[1]) {
+					allowableMoves.add(movesToReturn.get(i));
+				}
+			}
+		}
 		
+		return allowableMoves;
 	}
 	
 	public String toString() {
@@ -94,27 +103,6 @@ public class Pawn implements Piece {
 		toString+="Pawn";
 		
 		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 	
 	@Override
@@ -150,13 +138,5 @@ public class Pawn implements Piece {
 			return false;
 		return true;
 	}
-
-	@Override
-	public void hasMoved() {
-		firstMove = true;
-		
-	}
-
-
 
 }

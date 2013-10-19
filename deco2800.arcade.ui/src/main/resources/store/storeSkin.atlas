@@ -17,7 +17,7 @@ selection
   offset: 0, 0
   index: -1
 
-../textField.png
+textField.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -170,5 +170,81 @@ home_button
   xy: 1, 1
   size: 51, 46
   orig: 51, 46
+  offset: 0, 0
+  index: -1
+
+big_stars.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+star1
+  rotate: false
+  xy: 1, 1
+  size: 28, 23
+  orig: 28, 23
+  offset: 0, 0
+  index: -1
+star2
+  rotate: false
+  xy: 1, 1
+  size: 57, 23
+  orig: 57, 23
+  offset: 0, 0
+  index: -1
+star3
+  rotate: false
+  xy: 1, 1
+  size: 85, 23
+  orig: 85, 23
+  offset: 0, 0
+  index: -1
+star4
+  rotate: false
+  xy: 1, 1
+  size: 114, 23
+  orig: 114, 23
+  offset: 0, 0
+  index: -1
+star5
+  rotate: false
+  xy: 1, 1
+  size: 142, 23
+  orig: 142, 23
+  offset: 0, 0
+  index: -1
+
+clear.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+clear
+  rotate: false
+  xy: 1, 1
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+
+white.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+white
+  rotate: false
+  xy: 1, 1
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+
+black.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+black
+  rotate: false
+  xy: 1, 1
+  size: 1, 1
+  orig: 1, 1
   offset: 0, 0
   index: -1

@@ -8,11 +8,20 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.tablelayout.BaseTableLayout;
-
+import deco2800.arcade.client.Arcade;
+import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
+import deco2800.arcade.client.GameOverListener;
+import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.network.NetworkException;
+import deco2800.arcade.client.network.listener.NetworkListener;
+import deco2800.arcade.protocol.connect.ConnectionResponse;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.arcadeui.FrontPage;
+
 
 public class LoginScreen implements Screen {
 
@@ -20,7 +29,8 @@ public class LoginScreen implements Screen {
 
     private Skin skin;
     private LoginScreenStage stage;
-    private ArcadeUI arcadeUI;
+    private static ArcadeUI arcadeUI;
+    
 
     public LoginScreen(ArcadeUI ui) {
         arcadeUI = ui;
@@ -35,7 +45,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with any username", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with any username:admin password:admin", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);
@@ -72,6 +82,60 @@ public class LoginScreen implements Screen {
         table.row();
         table.add(forgotLogButton).width(400).height(35).pad(5).colspan(2);
 
+        
+        class ConnectionListener extends NetworkListener {
+
+        	@Override
+        	public void connected(Connection connection) {
+        		super.connected(connection);
+        	}
+
+        	@Override
+        	public void disconnected(Connection connection) {
+        		super.disconnected(connection);
+        	}
+
+        	@Override
+        	public void idle(Connection connection) {
+        		super.idle(connection);
+        	}
+
+			@Override
+			public void received(Connection connection, Object object) {
+				super.received(connection, object);
+
+				if (object instanceof ConnectionResponse) {
+
+					ConnectionResponse connectionResponse = (ConnectionResponse) object;
+					if (connectionResponse.register) {
+						errorLabel.setText("User registered!");
+						arcadeUI.setScreen(arcadeUI.login);
+					} else {
+						if (connectionResponse.playerID >= 0) {
+							FrontPage.setName(usernameText.getText());
+							arcadeUI.setScreen(arcadeUI.main);
+						}
+					}
+					if (connectionResponse.playerID == -2) {
+						errorLabel.setText("Error loggin in");
+						arcadeUI.setScreen(arcadeUI.login);
+					} else if (connectionResponse.playerID == -1) {
+						errorLabel.setText("Incorrect password");
+						arcadeUI.setScreen(arcadeUI.login);
+					} else if (connectionResponse.playerID == -3) {
+						errorLabel.setText("Cannot register user. User already exists.");
+						arcadeUI.setScreen(arcadeUI.login);
+					}
+				}
+			}
+        	
+        }
+        
+        ConnectionListener listener = new ConnectionListener();
+        ArcadeSystem.addListener(listener);        
+
+        
+
         loginButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 if (usernameText.getText().equals("")) {
@@ -84,9 +148,7 @@ public class LoginScreen implements Screen {
                 	arcadeUI.setScreen(arcadeUI.lobby);
                 }
                 else {
-                    ArcadeSystem.login(usernameText.getText());
-            	    FrontPage.setName(usernameText.getText());  // This may need to be moved to somewhere more appropriate.
-            	    arcadeUI.setScreen(arcadeUI.main);
+                    ArcadeSystem.login(usernameText.getText(), passwordText.getText());
                 }
             }
         });
@@ -102,6 +164,13 @@ public class LoginScreen implements Screen {
             }
         });
     }
+
+
+	public static void setUI(String input) {
+		if (input.equals("home")){
+			arcadeUI.setScreen(arcadeUI.home);
+		}
+	}
 
     @Override
     public void render(float arg0) {

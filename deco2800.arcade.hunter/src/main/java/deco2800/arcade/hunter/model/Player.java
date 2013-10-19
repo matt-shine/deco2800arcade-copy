@@ -30,13 +30,8 @@ public class Player extends Entity {
 	 * Constant of JUMP VELOCITY
 	 */
 	private static final int JUMP_VELOCITY = 12;
-	/**
-	 * Velocity of the player
-	 */
-	
-	private Vector2 velocity = new Vector2(1, 0);
 
-	/**
+    /**
 	 * The current animation for the player
 	 */
 	private Animation currAnim;
@@ -196,21 +191,25 @@ public class Player extends Entity {
         // Everything depends on everything else here, may have to rearrange, or
         // even double up on checks
 
-		if (collider.top && velocity.y > 0) {
+        setX(getX() + delta * Hunter.State.playerVelocity.x);
+        setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
+        setY(getY() + getJumpVelocity());
+
+		if (collider.top && Hunter.State.playerVelocity.y > 0) {
 			setJumpVelocity(0);
 		}
 
-		if (collider.bottom && velocity.y < 0) {
+		if (collider.bottom && Hunter.State.playerVelocity.y < 0) {
 			setJumpVelocity(0);
 		}
 
 		if (collider.right) {
-			velocity.x = 0;
-		} else if (velocity.x < Hunter.State.gameSpeed) {
-			velocity.x++;
+			Hunter.State.playerVelocity.x = 0;
+		} else if (Hunter.State.playerVelocity.x < Hunter.State.gameSpeed) {
+			Hunter.State.playerVelocity.x += 100 * delta;
 		}
 
-		setX(getX() + delta * velocity.x);
+		setX(getX() + delta * Hunter.State.playerVelocity.x);
 
 		setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
 		setY(getY() + getJumpVelocity());
@@ -221,18 +220,18 @@ public class Player extends Entity {
 		// Update the player state
 		// Pretending the DEAD state doesn't exist for now... TODO
 		if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
-			this.velocity.y = 0;
+			Hunter.State.playerVelocity.y = 0;
 			this.state = State.RUNNING;
 			currAnim = runAnimation();
-		} else if (this.velocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
+		} else if (Hunter.State.playerVelocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
 			this.state = State.JUMPING;
 			currAnim = jumpAnimation();
-		} else if (this.velocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
+		} else if (Hunter.State.playerVelocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
 			this.state = State.FALLING;
 			currAnim = fallAnimation();
 		}
 		
-		score += 1; 
+		score += 100 * delta * multiplier;
 	}
 	
 	/*
@@ -267,6 +266,7 @@ public class Player extends Entity {
         		gamescreen.gameOver();
         	}
         }
+        
         if (buffTime + 3000 < System.currentTimeMillis()){
         	if (invulnerable = true)
         		invulnerable = false;
@@ -306,7 +306,8 @@ public class Player extends Entity {
 				death.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			this.state = State.DEAD;
-			velocity = new Vector2(0,0);
+            multiplier = 0;
+			Hunter.State.playerVelocity = new Vector2(0,0);
 			deathTime = System.currentTimeMillis();
 			this.currAnim = deathAnimation();
 			dead = true;
@@ -315,7 +316,7 @@ public class Player extends Entity {
 
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
-		if (invulnerable){
+		if (invulnerable) {
 			Texture inv = new Texture("textures/invulnerability.png");
 			batch.draw(inv,getX()-10,getY()-10,getWidth()+20,getHeight()+20);
 		}
@@ -608,7 +609,7 @@ public class Player extends Entity {
 	 *            Float value of what the jump velocity will be set to
 	 */
 	public void setJumpVelocity(float jumpVelocity) {
-		this.velocity.y = jumpVelocity;
+		Hunter.State.playerVelocity.y = jumpVelocity;
 	}
 	
 	/**
@@ -641,7 +642,7 @@ public class Player extends Entity {
 	 * @return float value of the JumpVelocity
 	 */
 	public float getJumpVelocity() {
-		return this.velocity.y;
+		return Hunter.State.playerVelocity.y;
 	}
 	
 	/**

@@ -12,7 +12,6 @@ public class Player extends Mob {
 
     
     private int STARTING_HEALTH = 100;
-    private float BB_SIZE = 0.4f;
     private int points = 0;
     private int currentGun = 1;
     private HashSet<Integer> guns = new HashSet<Integer>();
@@ -34,6 +33,7 @@ public class Player extends Mob {
         if (renderer.isDebugMode()) {
             renderer.drawBasicSprite(getTextureName(), getPos().x, getPos().y, -getAngle());
         }
+
         //no super call
     }
 
@@ -42,50 +42,42 @@ public class Player extends Mob {
     @Override
     public void tick(GameModel model) {
     	
-    	Vector2 adjustedVelocity = new Vector2(getVel()).mul(model.delta() * 60);
+        //detect the end of a level
+        Vector2 blockPos = getBlockPos();
+        int neighbours = 0;
+        if (model.getMap().getTerrainAt((int) blockPos.x + 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x - 1, (int) blockPos.y) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y + 1) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y - 1) == WL6Meta.ELEVATOR) {
+        	neighbours++;
+        }
+        
+        if (neighbours >= 3) {
+        	//if we're standing on a secret elevator, go to secret floor, also if we're if this
+        	//magic position (10, 51) because the secret elevator isn't in the map file on the first level
+        	//for god knows why. It looks like the real wolfenstein game hard codes this too.
+        	if (model.getMap().getTerrainAt((int) blockPos.x, (int) blockPos.y) == WL6Meta.SECRET_ELEVATOR ||
+        			(model.getChapter().equals("1") && ((int) blockPos.x) == 10 && ((int) blockPos.y) == 51)) {
+        		model.secretLevel();
+        	} else {
+        		model.nextLevel();
+        	}
+        	
+        }
+        
+        
     	
-    	if (move(model, adjustedVelocity)) {
-    		//we just moved as intended
-    	} else if (move(model, new Vector2(adjustedVelocity.x, 0))) {
-    		//we just moved, but only in the x direction
-    	} else if (move(model, new Vector2(0, adjustedVelocity.y))) {
-    		//we just moved, but only in the y direction
-    	} else {
-    		//we are stuck
-    	}
-    	
-    	
-    	
+    	super.tick(model);
     }
-    
-    
-    /**
-     * tries to move the object. returns true if successful
-     * @param model
-     * @param vec
-     * @return
-     */
-    private boolean move(GameModel model, Vector2 vec) {
-    	
-    	Vector2 targetPos = this.getPos().add(vec);
-    	int x1 = (int) Math.floor(targetPos.x - BB_SIZE / 2);
-    	int y1 = (int) Math.floor(targetPos.y - BB_SIZE / 2);
-    	int x2 = (int) Math.floor(targetPos.x + BB_SIZE / 2);
-    	int y2 = (int) Math.floor(targetPos.y + BB_SIZE / 2);
-    	
-    	for (int x = x1; x <= x2; x++) {
-    		for (int y = y1; y <= y2; y++) {
-    		    if (model.getCollisionGrid().getSolidAt(x, y) != 0) {
-    		    	return false;
-    		    }
-	    	}
-    	}
-    	
-    	setPos(getPos().add(vec));
-    	return true;
-    	
-    }
-    
     
 
     
@@ -166,6 +158,58 @@ public class Player extends Mob {
 	public boolean hasKey(KEY_TYPE k) {
 		return keys.contains(k);
 	}
+
+    @Override
+    public void doDamage(GameModel gameModel) {
+        // FIXME this is currently doing damage to yourself :P
+        float dist = this.getPos().dst(gameModel.getPlayer().getPos());
+        int damage = calcDamage((int)dist);
+        gameModel.getPlayer().takeDamage(gameModel, damage);
+    }
+
+    @Override
+    public void takeDamage(GameModel model, int damage) {
+        if (model.getDifficulty() == 1) {
+            setHealth(getHealth() - (damage / 4));
+        }
+        else {
+            setHealth(getHealth() - damage);
+        }
+    }
+
+    /**
+     * Damage Calculation
+     *
+     * @param dist Distance between enemy and player (in number of squares)
+     * @return Damage to be dealt.
+     */
+    public int calcDamage(int dist) {
+        boolean hit = false;
+        if (dist > 4) {
+            if (randInt(0, 255, getRand()) / 12 < dist) {
+                hit = true;
+            }
+        }
+        else {
+            hit = true;
+        }
+
+        int damage = randInt(0, 255, getRand());
+
+        if (hit) {
+            if (dist < 2) {
+                damage = damage / 4;
+            }
+            else {
+                damage = damage / 6;
+            }
+        }
+        else {
+            damage = 0;
+        }
+
+        return damage;
+    }
 	
 }
 

@@ -26,7 +26,7 @@ public class SplashScreen implements Screen
         Configuration.initialise();
         logo = new Texture(Gdx.files.internal("images/menu/splash.png"));
         spriteBatch = new SpriteBatch();
-        game.playSong("splash", false);
+        game.playSong("splash" + (int)(Math.random()+0.5), false);
     }
     @Override
     public void hide() {

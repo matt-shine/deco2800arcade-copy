@@ -1,6 +1,7 @@
 package deco2800.arcade.hunter;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.math.Vector2;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.hunter.screens.SplashScreen;
@@ -25,6 +26,11 @@ public class Hunter extends PlatformerGame {
 		public final static int SPEED_INCREASE_COUNTDOWN_START = 128;
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
 
+        public final static float CLOUD_MIN_SPEED = 0.3f;
+        public final static float CLOUD_MAX_SPEED = 0.7f;
+        public final static float TREE_MIN_SPEED = 0.4f;
+        public final static float TREE_MAX_SPEED = 0.8f;
+
         public final static int PLAYER_ATTACK_TIMEOUT = 300; // Attack timeout in msec
         public final static int PLAYER_ATTACK_COOLDOWN = 600;
         public final static long PLAYER_BLINK_TIMEOUT = 1000;
@@ -38,6 +44,11 @@ public class Hunter extends PlatformerGame {
         public static int gameSpeed = 512;
         public static float gravity = 2*9.81f;
         public static Random randomGenerator;
+        /**
+         * Velocity of the player
+         */
+
+        public static Vector2 playerVelocity = new Vector2(1, 0);
 
         public static PreferencesManager getPreferencesManager() {
     		return prefManage;

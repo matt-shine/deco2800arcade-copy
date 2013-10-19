@@ -122,7 +122,7 @@ public class MenuScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				game.setScreen(game.modelscreen);
+				game.setScreen(game.getModelscreen());
 			}
 		});
 
@@ -162,7 +162,7 @@ public class MenuScreen implements Screen {
 			 */
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) { // on button release do this
-				game.setScreen(game.helpscreen1);
+				game.setScreen(game.getHelpscreen1());
 			}
 		});
 		/*
@@ -232,7 +232,7 @@ public class MenuScreen implements Screen {
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.modelscreen);
+	        		game.setScreen(game.getModelscreen());
 	        	}}
 	    	   );
 	  
@@ -270,7 +270,7 @@ public class MenuScreen implements Screen {
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.helpscreen1); 
+	        		game.setScreen(game.getHelpscreen1()); 
 	        	}}
 	    	   );
 	    //quit

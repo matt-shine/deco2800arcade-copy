@@ -81,7 +81,7 @@ public class HelpScreen1 implements Screen  {
 		
 		if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
 			
-			game.setScreen(game.helpscreen2);
+			game.setScreen(game.getHelpscreen2());
 		}
 	
 		Gdx.gl.glClearColor(1, 1, 1, 1);

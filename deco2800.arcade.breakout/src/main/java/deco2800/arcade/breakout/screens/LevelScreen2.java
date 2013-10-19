@@ -99,10 +99,10 @@ public class LevelScreen2 implements Screen {
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
 			disableButton();
-			game.gamescreen.setLevel(6);
+			game.getGamescreen().setLevel(6);
 			dispose();
-			game.gamescreen.gamearea();
-			game.setScreen(game.gamescreen);
+			game.getGamescreen().gamearea();
+			game.setScreen(game.getGamescreen());
 		}
 	};
 	// Instantiate a input listener called input7
@@ -133,10 +133,10 @@ public class LevelScreen2 implements Screen {
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
 			disableButton();
-			game.gamescreen.setLevel(7);
+			game.getGamescreen().setLevel(7);
 			dispose();
-			game.gamescreen.gamearea();
-			game.setScreen(game.gamescreen);
+			game.getGamescreen().gamearea();
+			game.setScreen(game.getGamescreen());
 		}
 	};
 	// Instantiate a input listener called input8
@@ -167,10 +167,10 @@ public class LevelScreen2 implements Screen {
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
 			disableButton();
-			game.gamescreen.setLevel(8);
+			game.getGamescreen().setLevel(8);
 			dispose();
-			game.gamescreen.gamearea();
-			game.setScreen(game.gamescreen);
+			game.getGamescreen().gamearea();
+			game.setScreen(game.getGamescreen());
 		}
 	};
 	// Instantiate a input listener called input9
@@ -201,10 +201,10 @@ public class LevelScreen2 implements Screen {
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
 			disableButton();
-			game.gamescreen.setLevel(9);
+			game.getGamescreen().setLevel(9);
 			dispose();
-			game.gamescreen.gamearea();
-			game.setScreen(game.gamescreen);
+			game.getGamescreen().gamearea();
+			game.setScreen(game.getGamescreen());
 		}
 	};
 	// Instantiate a input listener called input10
@@ -236,10 +236,10 @@ public class LevelScreen2 implements Screen {
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) { // on button release do this
 			disableButton();
-			game.gamescreen.setLevel(10);
+			game.getGamescreen().setLevel(10);
 			dispose();
-			game.gamescreen.gamearea();
-			game.setScreen(game.gamescreen);
+			game.getGamescreen().gamearea();
+			game.setScreen(game.getGamescreen());
 
 		}
 	};
@@ -269,7 +269,7 @@ public class LevelScreen2 implements Screen {
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
-			game.setScreen(game.LevelScreen1);
+			game.setScreen(game.getLevelScreen1());
 		}
 	};
 	// Instantiate a input listener called backmenu screen
@@ -297,7 +297,7 @@ public class LevelScreen2 implements Screen {
 		 */
 		public void touchUp(InputEvent event, float x, float y, int pointer,
 				int button) {
-			game.setScreen(game.MenuScreen);
+			game.setScreen(game.getMenuScreen());
 		}
 	};
 

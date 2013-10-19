@@ -36,15 +36,15 @@ import deco2800.arcade.accolades.AccoladeSystem;
 @ArcadeGame(id = "Breakout")
 public class Breakout extends GameClient {
 
-		SplashScreen splashScreen;
-		GameScreen gamescreen;
-		MenuScreen MenuScreen;
-		LevelScreen1 LevelScreen1;
-		LevelScreen2 LevelScreen2;
-		HelpScreen1 helpscreen1;
-		RankingScreen RankingScreen;
-		//ModelScreen modelscreen;
-		HelpScreen2 helpscreen2;
+		private SplashScreen splashScreen;
+		private GameScreen gamescreen;
+		private MenuScreen MenuScreen;
+		private LevelScreen1 LevelScreen1;
+		private LevelScreen2 LevelScreen2;
+		private HelpScreen1 helpscreen1;
+		//RankingScreen RankingScreen;
+		private ModelScreen modelscreen;
+		private HelpScreen2 helpscreen2;
 
 
 
@@ -122,8 +122,7 @@ public class Breakout extends GameClient {
 		helpscreen1=new HelpScreen1(this);
 		helpscreen2=new HelpScreen2(this);		
 		modelscreen=new ModelScreen(this);
-		RankingScreen=new RankingScreen(this);
-		//modelscreen=new ModelScreen(this);
+		//RankingScreen=new RankingScreen(this);
 
 		setScreen(splashScreen);
 		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
@@ -187,6 +186,38 @@ public class Breakout extends GameClient {
 	
 	public HighscoreClient getHighScoreClient() {
 		return this.highscoreUser;
+	}
+
+	public SplashScreen getSplashScreen() {
+		return splashScreen;
+	}
+
+	public GameScreen getGamescreen() {
+		return gamescreen;
+	}
+
+	public MenuScreen getMenuScreen() {
+		return MenuScreen;
+	}
+
+	public LevelScreen1 getLevelScreen1() {
+		return LevelScreen1;
+	}
+
+	public LevelScreen2 getLevelScreen2() {
+		return LevelScreen2;
+	}
+
+	public HelpScreen1 getHelpscreen1() {
+		return helpscreen1;
+	}
+
+	public ModelScreen getModelscreen() {
+		return modelscreen;
+	}
+
+	public HelpScreen2 getHelpscreen2() {
+		return helpscreen2;
 	}
 	
 }

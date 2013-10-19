@@ -66,7 +66,7 @@ public class HelpScreen2 implements Screen  {
 	        	}
 	        	
 	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.MenuScreen); 
+	        		game.setScreen(game.getMenuScreen()); 
 	        		
 	        	}}
 	    	   );

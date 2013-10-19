@@ -86,9 +86,9 @@ public class ModelScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) { 
-				game.gamescreen.switchGameMode(false);
-				game.LevelScreen1.enableButtons();
-				game.setScreen(game.LevelScreen1);
+				game.getGamescreen().switchGameMode(false);
+				game.getLevelScreen1().enableButtons();
+				game.setScreen(game.getLevelScreen1());
 
 			}
 		});
@@ -110,9 +110,9 @@ public class ModelScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) { 
-				game.gamescreen.switchGameMode(true);
-				game.LevelScreen1.enableButtons();
-				game.setScreen(game.LevelScreen1);
+				game.getGamescreen().switchGameMode(true);
+				game.getLevelScreen1().enableButtons();
+				game.setScreen(game.getLevelScreen1());
 
 			}
 		});
@@ -134,7 +134,7 @@ public class ModelScreen implements Screen {
 
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) { 
-				game.setScreen(game.MenuScreen);
+				game.setScreen(game.getMenuScreen());
 
 			}
 		});

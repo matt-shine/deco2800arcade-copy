@@ -25,28 +25,28 @@ public class PaddleTest {
  			assertEquals(mockPaddle.getStandardWidth()/2, mockPaddle.getPaddleShapeWidth(),0.001);
 		}
 	
-				@Test
-				public void increasePaddle() throws Exception {
-					mockPaddle.setWidth(mockPaddle.getStandardWidth());
-					mockPaddle.increaseSize();
-					assertEquals(mockPaddle.getStandardWidth()*2, mockPaddle.getPaddleShapeWidth(),0.001);
-				}
-				
-				@Test
-				public void setPaddleWidth() throws Exception {
-					float width = (float) 77.7;
-					mockPaddle.setWidth(width);
-					assertEquals(mockPaddle.getStandardWidth()/2, mockPaddle.getPaddleShapeWidth(),0.001);
-				}
-				
-			/*	@Test
-				public void moveTest() throws Exception {
-					mockPaddle.setWidth(mockPaddle.getStandardWidth());
-					mockV2 = new Vector2(Breakout.SCREENWIDTH / 2, 10);
-					mockPaddle.setPosition(mockV2);
-					mockPaddle.update(mockBall);
-					float expectedX = Breakout.SCREENWIDTH - mockPaddle.getWidth();
-					assertEquals(expectedX,  mockPaddle.getPaddleX(),0.001);
-				}*/
+		@Test
+		public void increasePaddle() throws Exception {
+			mockPaddle.setWidth(mockPaddle.getStandardWidth());
+			mockPaddle.increaseSize();
+			assertEquals(mockPaddle.getStandardWidth()*2, mockPaddle.getPaddleShapeWidth(),0.001);
+		}
+		
+		@Test
+		public void setPaddleWidth() throws Exception {
+			float width = (float) 77.7;
+			mockPaddle.setWidth(width);
+			assertEquals(mockPaddle.getStandardWidth()/2, mockPaddle.getPaddleShapeWidth(),0.001);
+		}
+		
+	/*	@Test
+		public void moveTest() throws Exception {
+			mockPaddle.setWidth(mockPaddle.getStandardWidth());
+			mockV2 = new Vector2(Breakout.SCREENWIDTH / 2, 10);
+			mockPaddle.setPosition(mockV2);
+			mockPaddle.update(mockBall);
+			float expectedX = Breakout.SCREENWIDTH - mockPaddle.getWidth();
+			assertEquals(expectedX,  mockPaddle.getPaddleX(),0.001);
+		}*/
 
 }

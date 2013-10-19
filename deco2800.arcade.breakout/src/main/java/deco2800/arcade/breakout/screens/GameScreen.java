@@ -489,7 +489,7 @@ public class GameScreen implements Screen  {
 	}
 	
 	public void setMenuScreen() {
-		game.setScreen(game.MenuScreen);
+		game.setScreen(game.getMenuScreen());
 	}
 	
 	@Override

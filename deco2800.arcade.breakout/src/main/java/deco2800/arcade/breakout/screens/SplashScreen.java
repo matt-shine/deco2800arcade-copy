@@ -38,7 +38,7 @@ public class SplashScreen implements Screen  {
 	@Override
 	public void render(float delta) {
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-			game.setScreen(game.MenuScreen);
+			game.setScreen(game.getMenuScreen());
 		}
 
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);

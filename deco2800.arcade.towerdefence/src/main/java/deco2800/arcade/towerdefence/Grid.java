@@ -37,13 +37,10 @@ public class Grid implements TileBasedMap {
 	private Ship ship;
 	// The pathfinder used by objects in the grid
 	public AStarPathFinder pathfinder;
-<<<<<<< HEAD
 	
-=======
 	// The target of pathfinding movement (portal)
 	private Vector2 targetPosition;
 
->>>>>>> New test
 	// Constructor
 	/**
 	 * Instantiates a grid with a unique UUID, length, width and name.

@@ -24,11 +24,9 @@ public class Ghost extends Mover {
 
 	// the distance ghost moves each frame
 	private PacChar player;
-	private float moveDist;
 	private Tile targetTile;
 	private Tile previousTile;
 	// private Animation walkAnimation; this should move to PacView
-	private int spritePos;
 
 	public Ghost(GameMap gameMap, GhostName ghost, PacChar player) {
 		super(gameMap);
@@ -335,32 +333,12 @@ public class Ghost extends Mover {
 		//
 	}
 
-	public int getSpritePos() {
-		return spritePos;
-	}
-
-	public Dir getFacing() {
-		return facing;
-	}
-
-	public void setFacing(Dir facing) {
-		this.facing = facing;
-	}
-
 	public GhostState getCurrentState() {
 		return currentState;
 	}
 
 	public void setCurrentState(GhostState currentState) {
 		this.currentState = currentState;
-	}
-
-	public float getMoveDist() {
-		return moveDist;
-	}
-
-	public void setMoveDist(float moveDist) {
-		this.moveDist = moveDist;
 	}
 
 }

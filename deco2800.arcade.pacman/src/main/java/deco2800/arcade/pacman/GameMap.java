@@ -24,15 +24,15 @@ public class GameMap {
 	private int vOffset;
 	private final int tileSideLength = 16;// length of side of square- should be
 	// same for all tiles in a GameMap
-	public final int SCREENHEIGHT;
-	public final int SCREENWIDTH;
+	public final int SCREEN_HEIGHT;
+	public final int SCREEN_WIDTH;
 	
 	
-	public GameMap(int SCREENHEIGHT, int SCREENWIDTH) {
+	public GameMap(int SCREEN_WIDTH, int SCREEN_HEIGHT) {
 		vsym = false;
 		ghostDoors = new ArrayList<WallTile>();		
-		this.SCREENHEIGHT = SCREENHEIGHT;
-		this.SCREENWIDTH = SCREENWIDTH;
+		this.SCREEN_HEIGHT = SCREEN_HEIGHT;
+		this.SCREEN_WIDTH = SCREEN_WIDTH;
 	}
 	
 
@@ -126,8 +126,8 @@ public class GameMap {
 		//initialise size of map grid
 		int ySize = map.size(); // number of lines
 		int xSize = map.get(0).length; //length of each line
-		hOffset = (SCREENWIDTH - xSize * tileSideLength) /2;
-		vOffset = (SCREENHEIGHT - ySize * tileSideLength) /2;
+		hOffset = (SCREEN_WIDTH - xSize * tileSideLength) /2;
+		vOffset = (SCREEN_HEIGHT - ySize * tileSideLength) /2;
 		grid = new Tile[xSize][ySize];
 		//set up teleport target making- currently supports any even number 
 		//of teleporters, each targeting the next one which appears in the list

@@ -5,9 +5,9 @@ package deco2800.arcade.pacman;
  */
 public abstract class Mover {
 
-	//describes a direction- test will be removed later
+	//describes a direction
 	public enum Dir {
-		LEFT, RIGHT, UP, DOWN, TEST
+		LEFT, RIGHT, UP, DOWN
 	}
 	
 	protected Dir facing; // 1: Right, 2: Left
@@ -26,55 +26,13 @@ public abstract class Mover {
 	private int score;
 	protected Tile currentTile; // current tile of the pacman/ghost
 	protected GameMap gameMap;
+	protected float moveDist; //the distance moved each frame
+	protected int spritePos; //location of current sprite in sprite array
 
 	public Mover(GameMap gameMap) {
 		this.gameMap = gameMap;
 	}
 
-	public int getDrawX() {
-		return drawX;
-	}
-
-	public void setDrawX(int x) {
-		drawX = x;
-	}
-
-	public int getDrawY() {
-		return drawY;
-	}
-
-	public void setDrawY(int y) {
-		drawY = y;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public Dir getFacing() {
-		return facing;
-	}
-	
-	public Dir getDrawFacing() {
-		return drawFacing;
-	}
-	
-	public Tile getTile() {
-		return currentTile;
-	}
-	
 	
 	/**
 	 * Updates the middle coordinate of the mover and its tile. Also updates the
@@ -114,7 +72,6 @@ public abstract class Mover {
 			case RIGHT: x += offset; break;
 			case UP: y += offset; break;
 			case DOWN: y -= offset; break;
-			case TEST: break;
 			}
 		} else {
 			switch(this.getFacing()) {
@@ -122,7 +79,6 @@ public abstract class Mover {
 			case RIGHT: x += offset; break;
 			case UP: y += offset; break;
 			case DOWN: y -= offset; break;
-			case TEST: break;
 			}
 		}
 		return grid[x][y];
@@ -144,11 +100,9 @@ public abstract class Mover {
 		case RIGHT: x += 1; break;
 		case UP: y += 1; break;
 		case DOWN: y -= 1; break;
-		case TEST: break;
 		}
 		return !(grid[x][y].getClass() == WallTile.class);
 	}
-
 	
 	/**
 	 * On movement, check if the Mover has 'eaten' a dot and update score accordingly.
@@ -202,6 +156,8 @@ public abstract class Mover {
 //		}
 //		return grid[x][y].getClass() != WallTile.class;
 //	}
+	
+	
 	/**
 	 * Overrides toString() so that trying to print the list won't crash the
 	 * program
@@ -228,4 +184,61 @@ public abstract class Mover {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	
+	public float getMoveDist() {
+		return moveDist;
+	}
+
+	public void setMoveDist(float moveDist) {
+		this.moveDist = moveDist;
+	}
+
+	public int getSpritePos() {
+		return spritePos;
+	}
+	
+	public int getDrawX() {
+		return drawX;
+	}
+
+	public void setDrawX(int x) {
+		drawX = x;
+	}
+
+	public int getDrawY() {
+		return drawY;
+	}
+
+	public void setDrawY(int y) {
+		drawY = y;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public Dir getFacing() {
+		return facing;
+	}
+	
+	public Dir getDrawFacing() {
+		return drawFacing;
+	}
+	
+	public Tile getTile() {
+		return currentTile;
+	}
+	
 }

@@ -37,8 +37,6 @@ public class PacController implements InputProcessor {
 			facing = Dir.UP;
 		} else if (key == Keys.DOWN){ 
 			facing = Dir.DOWN;	
-		} else if (key == Keys.ENTER) {
-			facing = Dir.TEST;			
 		} else {
 			// if not one of the arrow keys
 			return false;

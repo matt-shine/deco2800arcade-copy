@@ -17,10 +17,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import deco2800.arcade.arcadeui.ArcadeUI;
 import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
+ * The Store's wishlist page, featuring the currently logged in users games
+ * wishlist, and all of their ratings. From this page they can search to
+ * navigate to any other games page, and can click on any game to bring up the
+ * transactions screen.
  * @author Addison Gourluck
  */
 public class StoreWishlist implements Screen, StoreScreen {
@@ -35,9 +40,13 @@ public class StoreWishlist implements Screen, StoreScreen {
 	public StoreWishlist(ArcadeUI ui) {
 		arcadeUI = ui;
 		
+		Utilities.helper.loadIcons(skin);
+		
+		skin.add("big_star", new Texture(Gdx.files.internal("store/big_stars.png")));
+		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
-		final Label Title = new Label("Wish List", skin, "default-34");
+		final Label title = new Label("Wish List", skin, "default-34");
 		final Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
@@ -55,9 +64,9 @@ public class StoreWishlist implements Screen, StoreScreen {
 		stage.addActor(homeButton);
 		
 		// Title "Buy More Coins", located center of screen.
-		Title.setSize(380, 40);
-		Title.setPosition(96, 515);
-		stage.addActor(Title);
+		title.setSize(380, 40);
+		title.setPosition(96, 515);
+		stage.addActor(title);
 		
 		// Entry field for search term. Will update the featured game, as well.
 		// as the search result located below it.
@@ -79,7 +88,9 @@ public class StoreWishlist implements Screen, StoreScreen {
 		transactionsButton.setSize(360, 95);
 		transactionsButton.setPosition(834, 353);
 		stage.addActor(transactionsButton);
-
+		
+		populateWishlist(8);
+		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
 				dispose();
@@ -120,6 +131,79 @@ public class StoreWishlist implements Screen, StoreScreen {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * This places 6 icons into a grid pattern in the display section in
+	 * the centre of the wishlist page. The icons are assigned according to
+	 * the index given, and given a listener that links to their store page
+	 * on click.
+	 * 
+	 * For example, a player who has 10 games, index 0 will display game 0 to
+	 * 6 on their wishlist, whereas index 6 would display games 6 - 9, and 0
+	 * to 2. It uses modulo, so any index is a valid index. E.g: Index 10 will
+	 * show games 0 - 6.
+	 * 
+	 * @author Addison Gourluck
+	 * @param Stage stage
+	 * @param Skin skin
+	 * @param int index
+	 */
+	private void populateWishlist(int index) {
+		for (int i = 0; i < 6; ++i) {
+			Game game = (Game)ArcadeSystem.getArcadeGames().toArray()
+					[(index + i)%ArcadeSystem.getArcadeGames().size()];
+			final Button gameGridGlow = new Button(skin, "icon");
+			gameGridGlow.setSize(122, 122);
+			gameGridGlow.setName(game.id);
+			
+			final Button gameGridIcon = new Button(skin.getDrawable(game.id));
+			gameGridIcon.setSize(110, 110);
+			gameGridIcon.setName(game.id);
+			
+			final Table star = new Table();
+			star.setBackground(skin.getDrawable("big_star"));
+			star.setSize(142, 23);
+			
+			final Label gameName;
+			if (game.name.length() > 12) {
+				gameName = new Label(game.name, skin, "default-22");
+			} else {
+				gameName = new Label(game.name, skin, "default-24");
+			}
+			gameName.setSize(200, 40);
+			
+			if (i < 2) { // Bottom 2 games
+				gameGridGlow.setPosition(124 + i * 320, 54);
+				gameGridIcon.setPosition(130 + i * 320, 60);
+				gameName.setPosition(260 + i * 320, 120);
+				star.setPosition(260 + i * 320, 80);
+			} else if (i < 4) { // Middle 2 games
+				gameGridGlow.setPosition(124 + i%2 * 320, 194);
+				gameGridIcon.setPosition(130 + i%2 * 320, 200);
+				gameName.setPosition(260 + i%2 * 320, 260);
+				star.setPosition(260 + i%2 * 320, 220);
+			} else { // Top 2 games
+				gameGridGlow.setPosition(124 + i%2 * 320, 334);
+				gameGridIcon.setPosition(130 + i%2 * 320, 340);
+				gameName.setPosition(260 + i%2 * 320, 400);
+				star.setPosition(260 + i%2 * 320, 360);
+			}
+			gameGridGlow.addListener(new ChangeListener() {
+				public void changed(ChangeEvent event, Actor actor) {
+					//
+				}
+			});
+			gameGridIcon.addListener(new ChangeListener() {
+				public void changed(ChangeEvent event, Actor actor) {
+					//
+				}
+			});
+			stage.addActor(gameGridGlow);
+			stage.addActor(gameGridIcon);
+			stage.addActor(gameName);
+			stage.addActor(star);
+		}
 	}
 	
 	@Override
@@ -185,5 +269,10 @@ public class StoreWishlist implements Screen, StoreScreen {
 	@Override
 	public void setSelected(String game) {
 		// No selected game for wishlist screen.
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

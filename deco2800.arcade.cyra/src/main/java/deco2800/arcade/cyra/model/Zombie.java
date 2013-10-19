@@ -1,0 +1,38 @@
+package deco2800.arcade.cyra.model;
+
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
+import java.lang.Math;
+
+public class Zombie extends Enemy {
+	public final static float WIDTH = 1f;
+	public final static float HEIGHT = 1f;
+
+	public Zombie(Vector2 pos) {
+		super(1, 0, pos, WIDTH, HEIGHT);
+		System.out.println("IT'S HAPPENING");
+	}
+
+	@Override
+	public Array<Enemy> advance(float delta, Player ship, float rank, OrthographicCamera cam) {
+		velocity.x = -1 * (float)(Math.sin(4*position.x) + 1.5);
+		
+		position.add(velocity.mul(delta));
+		velocity.mul(1/delta);
+		return null;
+	}
+
+	@Override
+	public boolean isSolid() {
+		return true;
+	}
+
+	@Override
+	public void handleNoTileUnderneath() {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

@@ -146,12 +146,25 @@ public class PlayerDatabaseManager {
 	 * @require Player and Friend are not already friends. Players with playerID
 	 *          and friendID exist.
 	 */
-	public void addFriend(int playerID, int friendID) {
+	public void acceptFriendRequest(int playerID, int friendID) {
 		try {
-			// TODO verify that this is the correct method
 			friendStorage.acceptFriendRequest(playerID, friendID);
 		} catch (DatabaseException e) {
 			// TODO Error catch?
+		}
+	}
+	
+	/**
+	 * Adds a new set of player-player relationships in the FRIENDS database
+	 * table between playerID and friendID
+	 * @param playerID
+	 * @param friendID
+	 */
+	public void addFriendRequest(int playerID, int friendID) {
+		try {
+			friendStorage.addFriendRequest(playerID, friendID);
+		} catch (DatabaseException e) {
+			//TODO Error catch?
 		}
 	}
 
@@ -167,7 +180,6 @@ public class PlayerDatabaseManager {
 	 */
 	public void removeFriend(int playerID, int friendID) {
 		try {
-			// TODO verify that this is the correct method
 			friendStorage.removeFriend(playerID, friendID);
 		} catch (DatabaseException e) {
 			// TODO Error catch?

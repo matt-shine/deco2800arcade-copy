@@ -1,6 +1,5 @@
 package deco2800.arcade.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -9,16 +8,13 @@ import java.util.Set;
  * @author iamwinrar
  * 
  */
-public class Blocked {
-	private Set<User> blocked;
-	private int updatedID;
-	private boolean added;
-
+public class Blocked extends UserSet{
+	
 	/**
 	 * Creates a new Blocked.
 	 */
 	public Blocked() {
-		this.blocked = new HashSet<User>();
+		super();
 	}
 
 	/**
@@ -28,7 +24,7 @@ public class Blocked {
 	 *            The Blocked instance to be copied.
 	 */
 	public Blocked(Blocked b) {
-		this.blocked = new HashSet<User>(b.blocked);
+		super(b);
 	}
 
 	/**
@@ -37,7 +33,7 @@ public class Blocked {
 	 * @return Returns a Set representation of this.
 	 */
 	public Set<User> getSet() {
-		return new HashSet<User>(blocked);
+		return super.getSet();
 	}
 
 	/**
@@ -47,11 +43,7 @@ public class Blocked {
 	 *            The User to be added.
 	 */
 	public void add(User user) {
-		if (!contains(user)) {
-			this.blocked.add(new User(user));
-			updatedID = user.getID();
-			added = true;
-		}
+		super.add(user);
 	}
 	
 	/**
@@ -62,7 +54,7 @@ public class Blocked {
 	 *            The Set of Users to be added.
 	 */
 	public void addAll(Set<User> user) {
-		this.blocked.addAll(user);
+		super.addAll(user);
 	}
 
 	/**
@@ -72,11 +64,7 @@ public class Blocked {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		if (contains(user)) {
-			this.blocked.remove(new User(user));
-			updatedID = user.getID();
-			added = false;
-		}
+		super.remove(user);
 	}
 
 	/**
@@ -87,7 +75,7 @@ public class Blocked {
 	 * @return Returns true if the User is in this, false otherwise.
 	 */
 	public boolean contains(User user) {
-		return this.blocked.contains(new User(user));
+		return super.contains(user);
 	}
 	
 	/**
@@ -96,7 +84,7 @@ public class Blocked {
 	 * @return Returns the ID of the field in the most recent change.
 	 */
 	public int getUpdatedID() {
-		return updatedID;
+		return super.getUpdatedID();
 	}
 
 	/**
@@ -106,6 +94,6 @@ public class Blocked {
 	 *         was a deletion.
 	 */
 	public boolean getAdded() {
-		return added;
+		return super.getAdded();
 	}
 }

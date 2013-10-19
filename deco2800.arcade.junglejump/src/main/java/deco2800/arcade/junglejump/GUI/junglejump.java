@@ -430,9 +430,9 @@ public class junglejump extends GameClient implements InputProcessor {
 		case CONTINUE:
 			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
 //			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			batch.setProjectionMatrix(camera.combined);
+			batchContinue.setProjectionMatrix(camera.combined);
 //			shapeRenderer.setProjectionMatrix(camera.combined);
-			batch.begin();
+			batchContinue.begin();
 			// Load Previous game? If yes, continue to game, if not go back to menu.
 			Gdx.gl.glEnable(GL10.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
@@ -441,8 +441,8 @@ public class junglejump extends GameClient implements InputProcessor {
 					Color.BLUE, Color.BLUE, Color.BLUE);
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL10.GL_BLEND);
-			achievementTitleFont.draw(batch, "Are you sure you want to continue?", 290, 90);
-			batch.end();
+			achievementTitleFont.draw(batchContinue, "Are you sure you want to continue?", 290, 90);
+			batchContinue.end();
 			camera.update();
 			super.render();
 			break;

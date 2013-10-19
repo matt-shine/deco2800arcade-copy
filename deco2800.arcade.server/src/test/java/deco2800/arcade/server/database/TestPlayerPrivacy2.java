@@ -23,7 +23,7 @@ import deco2800.server.database.PlayerPrivacy;
 public class TestPlayerPrivacy2 {
 	private PlayerPrivacy playerPrivacy;
 	
-	@Before
+	//@Before
 	/**
 	 * Drop all tables from database before doing anything else.
 	 */
@@ -34,7 +34,7 @@ public class TestPlayerPrivacy2 {
 		// Sorry about this, it wasn't building with this in.
 	}
 	
-	@Test
+	//@Test
 	public void basicTest() throws DatabaseException {
 		
 	}

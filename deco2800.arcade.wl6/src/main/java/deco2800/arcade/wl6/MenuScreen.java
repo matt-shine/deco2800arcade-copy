@@ -9,8 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
@@ -25,17 +24,19 @@ public class MenuScreen implements Screen {
 	private GameModel model;
     private Skin skin;
     private MenuScreenStage stage;
+    private Actor background;
 
     public MenuScreen(WL6 game) {
         wl6 = game;
         model = new GameModel();
-
         stage = new MenuScreenStage();
+
+        background = new Image(new Texture("wolf_background.png"));
+        stage.addActor(background);
 
         // A skin can be loaded via JSON or defined programmatically, either is fine. Using a skin is optional but strongly
         // recommended solely for the convenience of getting a texture, region, etc as a drawable, tinted drawable, etc.
         skin = new Skin();
-        skin.add("background", new Texture("wolf_background.png"));
 
         // Generate a 1x1 white texture and store it in the skin named "white".
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -57,8 +58,6 @@ public class MenuScreen implements Screen {
 
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
-        table.setFillParent(true);
-        table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
         // Create a button with the "default" TextButtonStyle. A 3rd parameter can be used to specify a name other than "default".

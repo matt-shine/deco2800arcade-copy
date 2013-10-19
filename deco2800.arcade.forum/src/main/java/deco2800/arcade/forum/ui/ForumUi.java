@@ -21,6 +21,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import deco2800.arcade.forum.ClientConnection;
+import deco2800.arcade.model.forum.ParentThread;
+import deco2800.arcade.protocol.forum.GetParentThreadsRequest;
+import deco2800.arcade.protocol.forum.GetParentThreadsResponse;
+import deco2800.arcade.protocol.forum.ParentThreadProtocol;
 import deco2800.arcade.protocol.forum.TagsRequest;
 import deco2800.arcade.protocol.forum.TagsResponse;
 
@@ -52,7 +56,10 @@ public class ForumUi {
 	public JPanel panel_1;
 	private JFrame f;
 	
+	/* Numbers of tags to be retrieved */
 	public static final int NUM_TAGS = 20;
+	/* Numbers of threads to be retrieved */
+	public static final int NUM_THREADS = 5;
 	
 	public ForumUi(JFrame window) {
 		//Initialize new JFrame for forum interface
@@ -228,6 +235,21 @@ public class ForumUi {
     	return;
     }
     
+    public void sendThreadsRequest(ClientConnection con, String category) {
+    	if (con.getClient().isConnected() == false) {
+    		System.err.println("Not connected");
+    		return;
+    	}
+    	
+    	GetParentThreadsRequest request = new GetParentThreadsRequest();
+    	request.start = 0;
+    	request.end = 0;
+    	request.limit = NUM_THREADS;
+    	request.category = category;
+    	con.getClient().sendTCP(request);
+    	return;
+    }
+    
     /**
      * Controller for KryoNet connection listener. Remove this listener before closing the ForumUi
      * if not the client is closed.
@@ -261,6 +283,22 @@ public class ForumUi {
     					sd.append("#");
     				}
     				System.out.println(new String(sd));
+    			}
+    			return;
+    		} else if (object instanceof GetParentThreadsResponse) {
+    			GetParentThreadsResponse response = (GetParentThreadsResponse) object;
+    			if (response.error == "") {
+    				System.err.println(response.error);
+    			} else {
+    				ParentThread[] threads = ParentThreadProtocol.getParentThreads(response.result);
+    				if (threads == null) {
+    					System.out.println("No result");
+    				} else {
+    					System.out.println("Parent threads in " + threads[0].getCategory() + ":");
+    					for (ParentThread thread : threads) {
+    						System.out.println(thread.toString());
+    					}
+    				}
     			}
     			return;
     		}

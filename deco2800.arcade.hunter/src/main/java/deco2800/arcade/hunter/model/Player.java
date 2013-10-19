@@ -231,7 +231,7 @@ public class Player extends Entity {
 			currAnim = fallAnimation();
 		}
 		
-		score += 1; 
+		score += 100 * delta * multiplier;
 	}
 	
 	/*
@@ -306,6 +306,7 @@ public class Player extends Entity {
 				death.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			this.state = State.DEAD;
+            multiplier = 0;
 			Hunter.State.playerVelocity = new Vector2(0,0);
 			deathTime = System.currentTimeMillis();
 			this.currAnim = deathAnimation();

@@ -89,6 +89,7 @@ public class Lobby {
 			this.matchIdCounter++;
 			lobbyGames.add(match);
 			this.sendGamesToLobbyUsers();
+
 		}
 	}
 

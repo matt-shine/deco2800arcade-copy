@@ -367,7 +367,7 @@ public class GridObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o.getClass() == GridObject.class
+		if (o.getClass() == this.getClass()
 				&& ((GridObject) o).getID() == this.id) {
 			return true;
 		} else {

@@ -1,6 +1,7 @@
 package deco2800.arcade.towerdefence;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.screen.GameScreen;
 
@@ -42,11 +43,12 @@ public class Ship {
 	 * 
 	 * @param game
 	 *            The GameScreen which this ship belongs to.
+	 * @Param targetPosition A vector representing the target (portal)
 	 */
-	public Ship(GameScreen game) {
+	public Ship(GameScreen game, Vector2 targetPosition) {
 		this.game = game;
 		this.grid = new Grid(Gdx.graphics.getHeight(), Gdx.graphics.getWidth(),
-				"shipGrid", 25, this);
+				"shipGrid", 25, this, targetPosition);
 	}
 
 	public void updateGameState(Object gameState, int change) {

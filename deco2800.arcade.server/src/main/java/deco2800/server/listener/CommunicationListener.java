@@ -1,9 +1,6 @@
 package deco2800.server.listener;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -13,14 +10,11 @@ import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.CommunicationRequest;
 import deco2800.arcade.protocol.communication.TextMessage;
 import deco2800.server.ArcadeServer;
-import deco2800.server.database.ChatStorage;
 
 public class CommunicationListener extends Listener {
 	
 	private Server server;
-	//private Map<Integer, Integer> connectedUsers;
 	private HashMap<Integer, Integer> connectedUsers;
-	//private Map<Integer, String> userAliases;
 	private HashMap<Integer, String> userAliases;
 	private TextMessage textMessage;
 	
@@ -42,8 +36,7 @@ public class CommunicationListener extends Listener {
 			connectedUsers.put(contact.playerID, connection.getID());
 			userAliases.put(contact.playerID, contact.username);
 			
-			//A user has just logged in, get there chat history and send it to them
-			//Map<Integer, ChatNode> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
+			//A user has just logged in, get their chat history and send it to them
 			HashMap<Integer, ChatNode> personalChatHistory = ArcadeServer.instance().getChatStorage().getChatHistory(contact.playerID);
 			
 			if (personalChatHistory != null){
@@ -55,9 +48,7 @@ public class CommunicationListener extends Listener {
 							
 		if(object instanceof TextMessage){
 			textMessage = (TextMessage) object;
-			//textMessage.setSenderUsername(userAliases.get(textMessage.getSenderID()));
 
-			//Need a way to get a Player object from somewhere... Or at least the ability to check stuff like IsBlocked from just two playerIDs...
 			//In the mean time, forward the message without checking if blocked:
 			for (int recipientID : textMessage.getRecipients()){
 				ArcadeServer.instance().getChatStorage().addChatHistory(textMessage, recipientID);				
@@ -65,9 +56,7 @@ public class CommunicationListener extends Listener {
 					server.sendToTCP(connectedUsers.get(recipientID), textMessage);
 				}
 			}
-			
-			//What about something like this?
-			//ArcadeServer.instance().getplayers?
+
 			
 			/*
 			//This stuff was for the case where userAliases was <playerID, Player> but that broke the network passing around Players for some reason

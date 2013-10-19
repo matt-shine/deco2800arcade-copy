@@ -1,5 +1,7 @@
 package deco2800.arcade.communication;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +22,14 @@ public class CommunicationNetwork {
 
 	private Player player;
 	private NetworkClient networkClient;
-	//private Map<Integer, ChatNode> chatNodes = new HashMap<Integer, ChatNode>();
 	private HashMap<Integer, ChatNode> chatNodes = new HashMap<Integer, ChatNode>();
 	private TextMessage textMessage;
 	private CommunicationView view = null;
 	private ChatNode currentChat;
 	private CommunicationController controller;
 	private ChatHistory chatHistory;
+	private Date date;
+	private SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
 
 	/**
 	 * Initialises an empty list of chat instances.
@@ -49,6 +52,10 @@ public class CommunicationNetwork {
 			ChatNode node = new ChatNode(chatParticipants);
 			chatNodes.put(chatParticipants.hashCode(), node);
 			currentChat = node;
+			
+			//This will need to be fixed. It is assumed that the chatTitle can be created when clicking on a friend in the friend's list
+			String chatTitle = "placeholder";
+			view.addChatNode(node, chatTitle);
 		}
 	}
 
@@ -68,26 +75,24 @@ public class CommunicationNetwork {
 	 * @param textMessage
 	 */
 	public void recieveTextMesage(TextMessage textMessage) {
-		// TO DO:
-		// If you don't have the window open, then display a notification in the
-		// chat area
-		// else, display the message in the open chat window
 		int chatID = textMessage.getChatID();
 		ChatNode node = chatNodes.get(chatID);
 		if (node == null) {
 			node = new ChatNode(textMessage.getRecipients());
 			chatNodes.put(textMessage.getRecipients().hashCode(), node);
-		}
-		node.addMessage(textMessage.getText());
-		currentChat = node;
-
-		//Shouldn't be null, but current tests are written from the point of view that no-one is logged in I believe
-		if (view != null){
-			view.receiveText(textMessage);
+			view.addChatNode(node, textMessage.getSenderUsername());
 		}
 		
-		// Temporary:
-		//System.out.println(textMessage.getSenderUsername() + ": " + textMessage.getText());
+		//Create chat-friendly string
+		date = new Date();
+		String chatLine = sdf.format(date) + " - " + textMessage.getSenderUsername() + ": " + textMessage.getText();
+		node.addMessage(chatLine);
+		
+		if (currentChat == node){
+			view.receiveText(textMessage);
+		} else if (currentChat == null) {
+			view.chatNotification(node);
+		}
 	}
 
 	/**
@@ -115,7 +120,6 @@ public class CommunicationNetwork {
 	/**
 	 * Returns a map of current chat instances.
 	 */
-	//public Map<Integer, ChatNode> getCurrentChats() {
 	public HashMap<Integer, ChatNode> getCurrentChats() {
 		return chatNodes;
 	}
@@ -185,26 +189,8 @@ public class CommunicationNetwork {
 	 */
 	public void receiveChatHistory(ChatHistory receivedHistory) {
 		chatNodes = receivedHistory.getChatHistory();		
-		
-		//A ChatNode probably needs to contain the usernames of the participants
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			view.addChatNode(entry.getValue());
-		}
-		/*
-		 * TODO If the chat history is with someone who is not in the active
-		 * chat window, display a notification and then load the chat history
-		 * when you click them
-		 * 
-		 * Also, only display a notification if the history has changed since
-		 * last time
-		 * 
-		 * Finally, there may have to be a limit imposed on how much history is
-		 * sent/received as it could clog the network, let alone the chat window
-		 */
-		
-		// Temporary:
-		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			System.out.println("History with: " + entry.getKey() + " is: " + entry.getValue().getChatHistory().toString());
+			view.addChatNode(entry.getValue(), "who sent this?"); //This doesn't know who sent it yet
 		}
 	}
 	

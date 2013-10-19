@@ -337,13 +337,14 @@ public class Arcade extends JFrame {
 			chat.add(888); //debug1 
 			this.communicationNetwork.createChat(chat);
 		}
-		/*
+		
 		if (player.getID() == 777){ //This ID belongs to debug2 
-			List<Integer> chat = new ArrayList<Integer>(); chat.add(999); //debug
+			List<Integer> chat = new ArrayList<Integer>(); 
+			chat.add(999); //debug
 			chat.add(777); //debug2 
 			this.communicationNetwork.createChat(chat); 
 		}
-		*/
+		
 
 		// TODO move this call to be internal to Packman class
 		// TODO iterate over actual game ids rather than just

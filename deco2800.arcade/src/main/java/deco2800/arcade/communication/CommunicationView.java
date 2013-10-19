@@ -42,6 +42,7 @@ public class CommunicationView extends JPanel {
 	private SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
 	
 	private HashMap<Integer, ChatNode> chatNodes = new HashMap<Integer, ChatNode>();
+	private HashMap<Integer, JLabel> chatNodeLabels = new HashMap<Integer, JLabel>();
 	private CommunicationNetwork communicationNetwork;
 
 	public CommunicationView() {
@@ -99,26 +100,35 @@ public class CommunicationView extends JPanel {
 		backButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(cardPanel, "1");
+				communicationNetwork.setCurrentChat(null);
+				outputArea.setText("");
 			}
 		});
 		
 	}
 
 
-	public void addChatNode(ChatNode node) {
+	public void addChatNode(ChatNode node, String senderUsername) {
 		Integer nodeID = node.getID();
 		chatNodes.put(nodeID, node);
+		JLabel nodeLabel = null;
 		
-		//This will be the sender(s)'s username eventually. For now, just get the playerID of the first participant
-		String labelID = node.getParticipants().get(0).toString();
+		int numParticipants = node.getParticipants().size();
+		if (numParticipants == 2){
+			nodeLabel = new JLabel(senderUsername);
+		} else if (numParticipants == 3){
+			nodeLabel = new JLabel(senderUsername + " and 1 other");
+		} else {
+			nodeLabel = new JLabel(senderUsername + " and " + (numParticipants-2) + " others");
+		}
 		
-		JLabel nodeLabel = new JLabel(labelID);
 		nodeLabel.setName(nodeID.toString());
 		nodeLabel.setBackground(Color.WHITE);
 		nodeLabel.setOpaque(true);
 		nodeLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		nodeLabel.setPreferredSize(new Dimension(250, 50));
 		
+		chatNodeLabels.put(nodeID, nodeLabel);
 		scrollablePanel.add(nodeLabel, BorderLayout.NORTH);
 		addMouseListener(nodeLabel);
 		viewOne.revalidate();
@@ -142,6 +152,8 @@ public class CommunicationView extends JPanel {
 				}
 				
 				if (chatNode != null){
+					label.setBackground(Color.white);
+					chatNodeLabels.put(chatNode.getID(), label);
 					if (communicationNetwork.getCurrentChat() != chatNode){
 						communicationNetwork.setCurrentChat(chatNode);
 						for (String line : chatNode.getChatHistory()){
@@ -186,6 +198,15 @@ public class CommunicationView extends JPanel {
 	
 	public void clearInput(){
 		inputArea.setText("");
+	}
+	
+	public void chatNotification(ChatNode node){
+		int nodeID = node.getID();
+		JLabel nodeLabel = chatNodeLabels.get(nodeID);
+		nodeLabel.setBackground(Color.RED);
+		chatNodeLabels.put(nodeID, nodeLabel);
+		viewOne.revalidate();
+		viewOne.repaint();
 	}
 
 	public void setCommunicationNetwork(CommunicationNetwork communicationNetwork) {

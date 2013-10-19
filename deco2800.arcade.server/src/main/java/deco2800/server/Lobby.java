@@ -1,21 +1,16 @@
 package deco2800.server;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.UUID;
 
 import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.protocol.lobby.ActiveMatchDetails;
 import deco2800.arcade.protocol.lobby.ClearListRequest;
 import deco2800.arcade.protocol.lobby.CreateMatchResponse;
-import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
 import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
@@ -29,7 +24,7 @@ import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
  * @author matt-shine
  * 
  */
-public class Lobby {
+final public class Lobby {
 
 	/* The Lobby instance */
 	private static Lobby instance;
@@ -106,6 +101,8 @@ public class Lobby {
 					match.getHostPlayerId(), connection, match.getHostConnection(),
 					match.getGameId());
 			this.lobbyGames.remove(match);
+			this.connectedPlayers.remove(playerId);
+			this.connectedPlayers.remove(match.getHostPlayerId());
 			this.sendGamesToLobbyUsers();
 			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
 			response.responseType = JoinLobbyMatchResponseType.OK;
@@ -114,6 +111,7 @@ public class Lobby {
 			connection.sendTCP(response);
 			response.host = false;
 			match.getHostConnection().sendTCP(response);
+			
 		}
 	}
 
@@ -219,7 +217,6 @@ public class Lobby {
 	 * @param request the chat request to forward
 	 */
 	public void sendChat(LobbyMessageRequest request) {
-		int playerID = request.playerID;
 		String message = request.message;
 		String username = request.user;
 		LobbyMessageResponse response = new LobbyMessageResponse();

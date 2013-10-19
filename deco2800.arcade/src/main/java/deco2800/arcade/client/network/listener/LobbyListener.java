@@ -59,6 +59,7 @@ public class LobbyListener extends NetworkListener {
 		}
 		else if (object instanceof ClearListRequest) {
 			Arcade.clearMatchList();
+			
 		}
 		else if (object instanceof JoinLobbyMatchResponse) {
 			JoinLobbyMatchResponse response = (JoinLobbyMatchResponse) object;

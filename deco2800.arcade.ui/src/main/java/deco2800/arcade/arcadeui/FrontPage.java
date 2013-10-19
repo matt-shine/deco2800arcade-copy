@@ -19,7 +19,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -31,6 +30,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+
 
 
 import deco2800.arcade.arcadeui.store.StoreHome;
@@ -58,6 +58,7 @@ public class FrontPage implements Screen {
         public static Skin skin;
         public static String pName = "<USERNAME>";
         private static FrontPageStage stage;
+        
         private static int creditVal = 0;//temp placeholder for credits
         //temp array of online friends
         private String[] onlineFriends = {"adeleen", "alina", "moji", "will"};
@@ -79,13 +80,20 @@ public class FrontPage implements Screen {
         final int enlarge = 50;
         final int bX2= bX + bSize + (enlarge);
         final int bX3= bX + 2*(bSize + enlarge);
+        
     
         public FrontPage(ArcadeUI ui) {
+        	
+        	
             //FIXME big method
             
             /*
              * Creating Skin and Textures
              */
+        	
+        	// this.setName(pName);
+        	
+        	
             arcadeUI = ui;
             skin = new Skin(Gdx.files.internal("loginSkin.json"));
             skin.add("background", new Texture("homescreen_bg.png"));
@@ -133,6 +141,10 @@ public class FrontPage implements Screen {
             recentButton.setSize(300, 300);        
             recentButton.setPosition(bX, bY);
             
+            final TextButton lobbyButton = new TextButton("Multiplayer", skin, "default-red");
+            recentButton.setSize(100, 200);        
+            recentButton.setPosition(bX2, bY-enlarge);
+            
             final Table recentTable = new Table();
             recentTable.setBackground(skin.getDrawable("recentBar"));
             recentTable.setSize(350, 800);
@@ -161,6 +173,7 @@ public class FrontPage implements Screen {
             stage.addActor(recentButton);
             stage.addActor(libraryButton);
             stage.addActor(storeButton);
+            stage.addActor(lobbyButton);
             
             //Creating Game Icons
             for (Game game : games) {
@@ -288,6 +301,28 @@ public class FrontPage implements Screen {
             storeButton.addListener((new ChangeListener() {	
                 public void changed (ChangeEvent event, Actor actor) {
                 	arcadeUI.setScreen(arcadeUI.store);
+                }
+            })); 
+            
+            //Mouse Over Listener for Lobby Button
+            lobbyButton.addListener((new ClickListener() {        	
+                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
+                	lobbyButton.setSize(bSize + enlarge,  bSize + enlarge);
+                	lobbyButton.setPosition(bX2 -(enlarge/2), (bY-enlarge)-(enlarge/2));	
+                    lobbyButton.setText(null);
+                    lobbyButton.setText("Lobby");
+                }
+                public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
+                	lobbyButton.setSize(bSize, bSize);
+                	lobbyButton.setPosition(bX2, bY-(enlarge));
+                	lobbyButton.setText(null);
+                	lobbyButton.setText("Lobby");
+            }}));   
+            
+           //Click Listener for Lobby Button
+            lobbyButton.addListener((new ChangeListener() {
+                public void changed (ChangeEvent event, Actor actor) {
+                	ArcadeSystem.goToGame("lobby");
                 }
             })); 
             

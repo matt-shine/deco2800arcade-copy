@@ -26,10 +26,10 @@ public class BuilderArena extends Sprite{
   	final private float zoomZoneWidth = 0.15f;
   	
   	//40 Deck zones
-  	final private float deckZoneY1 = 0.84f; // 0.38
-	final private float deckZoneY2 = 0.73f; // 0.27
-	final private float deckZoneY3 = 0.62f; // 0.16
-	final private float deckZoneY4 = 0.51f; // 0.05
+  	final private float deckZoneY1 = 0.84f; 
+	final private float deckZoneY2 = 0.73f; 
+	final private float deckZoneY3 = 0.62f; 
+	final private float deckZoneY4 = 0.51f; 
 	
 	final private float deckZoneX1 = 0.1f;
 	final private float deckZoneX2 = 0.17f;
@@ -63,7 +63,7 @@ public class BuilderArena extends Sprite{
 			cardZoneX4, cardZoneX5, cardZoneX6, cardZoneX7};
 	
 	//1 Zoom Zone
-	final private float zoomZoneY = 0.408f;
+	final private float zoomZoneY = 0.188f;
 	final private float zoomZoneX = 0.831f;
 	
 	//Map to store all zones
@@ -152,7 +152,6 @@ public class BuilderArena extends Sprite{
 	 * @param y
 	 */
 	private void resizeZones(int x, int y) {
-		//FIXME big method
 		//create new cardZones zones
 		Map<Rectangle, BuilderSprite> cardZones = new LinkedHashMap<Rectangle, BuilderSprite>();
 		
@@ -300,6 +299,12 @@ public class BuilderArena extends Sprite{
 		}
 	}
 	
+	/**
+	 * Gets the available zones in specified area
+	 * 
+	 * @param whichArea - specifies the area to look for available rectangles 
+	 * @return a list of available zones
+	 */
 	public List<Rectangle> getAvailableZones(String whichArea) {
 		List<Rectangle> freeZones = new ArrayList<Rectangle>();
 		
@@ -309,6 +314,8 @@ public class BuilderArena extends Sprite{
 			mapToCheck = zones.get("DeckZone");
 		} else if(whichArea == "CardZone") {
 			mapToCheck = zones.get("CardZone");
+		} else if(whichArea == "ZoomZone") {
+			mapToCheck = zones.get("ZoomZone");
 		}
 		
 		for(Rectangle zone : mapToCheck.keySet()) {
@@ -320,6 +327,13 @@ public class BuilderArena extends Sprite{
 		return freeZones;
 	}
 	
+	/**
+	 * Gets an empty rectangle to place card into
+	 * 
+	 * @param r 
+	 * @param where which area to look in
+	 * @return a rectangle that is empty 
+	 */
 	public Rectangle emptyZoneAtRectangle(Rectangle r, String where) {
 		
 		Map<Rectangle, BuilderSprite> mapToCheck = null;
@@ -328,6 +342,8 @@ public class BuilderArena extends Sprite{
 			mapToCheck = zones.get("DeckZone");
 		} else if(where == "CardZone") {
 			mapToCheck = zones.get("CardZone");
+		} else if(where == "ZoomZone") {
+			mapToCheck = zones.get("ZoomZone");
 		} 
 		
 		for(Rectangle zone : mapToCheck.keySet()) {
@@ -345,6 +361,13 @@ public class BuilderArena extends Sprite{
 		return null;
 	}
 	
+	/**
+     * Gets the area of intersection between two rectangle
+     *
+     * @param r1 first rectangle
+     * @param r2 second rectangle
+     * @return the area of the rectangles that is overlapping
+     */
 	private double rectangleIntersectionArea(Rectangle r1, Rectangle r2) {
 		double r1X = r1.getX();
 		double r1Y = r1.getY();
@@ -364,6 +387,11 @@ public class BuilderArena extends Sprite{
 		return (rightSide - leftSide)*(bottomSide - topSide);
 	}
 
+	/**
+	 * Removes a sprite form zones list
+	 * @param s sprite to remove
+	 * @return return true if successful
+	 */
 	public boolean removeSprite(BuilderSprite s) {
 		for(String key : zones.keySet()) {
 			for(Rectangle zone : zones.get(key).keySet()) {

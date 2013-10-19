@@ -14,8 +14,15 @@ public class BuilderSpriteMover {
 	
 	final static String[] Keys = {"DeckZone", "CardZone", "ZoomZone"};
 	
+	/**
+     * Sets the currentSelection to fit within the given rectangle
+     * @precondition currentSelection != null
+     * @param r the rectangle to check whether it overlaps a zone
+     * @return true if sprite was set to a zone, false if couldn't set to zone or
+     * if there was no zone that overlapped enough
+     */
 	public static boolean setCurrentSelectionToRectangle(Rectangle r) {
-		
+		//TODO Fix this
     	BuilderSprite currentSelection = DeerForest.deckInputProcessor.getCurrentSelection();
     	DeckBuilderScreen view = DeerForest.deckBuilderView;
     	DeckBuilder game = DeerForest.deckBuilder;
@@ -53,6 +60,12 @@ public class BuilderSpriteMover {
     	return false;
 	}
 	
+	/**
+     * returns the AbstractCard based on the given sprite and what area it is in (area based on model)
+     * @param sprite the sprite to use
+     * @param area the area to search for the sprite
+     * @return the card the sprite represents
+     */
 	public static AbstractCard getCardModelFromSprite(BuilderSprite sprite, String area) {
 		
 		CardCollection collection = new CardCollectionList();
@@ -72,6 +85,13 @@ public class BuilderSpriteMover {
 		return null;
 	}
 	
+	/**
+     * Returns a boolean array with information about the type of zone the
+     * sprite is in. b[0] is if the card is on the field, b[1] is if the card
+     * is a monster card
+     * @param s the sprite to check
+     * @return a boolean array defining what zone type the sprite is in
+     */
 	public static boolean[] getSpriteZoneType(BuilderSprite s) {
 		
 		boolean[] b = new boolean[2];
@@ -91,8 +111,16 @@ public class BuilderSpriteMover {
 					}
 				} else if(key.contains("CardZone")) {
 					String filepath = deerForest.view.manager.getAssetFileName(s.getTexture());
+					for(AbstractCard c : deerForest.deckBuilder.getCardCollection("CardZone")) {
+						b[0] = false;
+						b[1] = true;
+						
+					}
+				
+				} else if(key.contains("ZoomZone")) {
+					String filepath = deerForest.view.manager.getAssetFileName(s.getTexture());
 					b[0] = false;
-					b[1] = true;
+					b[1] = false;
 				}
 				return b;
 			}
@@ -100,19 +128,32 @@ public class BuilderSpriteMover {
 		return null;
 	}
 	
+	/**
+	 * Gets the current selection area
+	 * @param deck
+	 * @param card
+	 * @return String indicating the current selection area
+	 */
 	public static String getCurrentSelectionArea( boolean deck, boolean card) {
-    	
 			if(deck) {
 				return "DeckZone";
-			} else {
+			} else if(card){
 				return "CardZone";
+			} else {
+				return "ZoomZone";
 			}
 		
 		
 	}
 	
+	/**
+     * Sets the data of the current selection based on it containing the point
+     * x, y.
+     * @precondition currentSelection is not null (with nullPointerException otherwise)
+     * @param x an x point within current selection
+     * @param y a y point within current selection
+     */
 	public static void setCurrentSelectionData(int x, int y) {
-    	
     	DeckBuilderScreen view = DeerForestSingletonGetter.getDeerForest().deckBuilderView;
     	BuilderSprite currentSelection = DeerForestSingletonGetter.getDeerForest().deckInputProcessor.getCurrentSelection();
     	DeckBuilderInputProcessor deckInputProcessor = DeerForestSingletonGetter.getDeerForest().deckInputProcessor;
@@ -125,47 +166,42 @@ public class BuilderSpriteMover {
 		currentSelection.setCard(b[1]);
 		currentSelection.setArea(BuilderSpriteMover.getCurrentSelectionArea(currentSelection.isDeck(), currentSelection.isCard()));
 		
-		//Set the correct zones to highlight based on selection
-		
 		//Get the offset of where the user clicked on the card compared to its actual position
 		deckInputProcessor.setOffset(x - currentSelection.getX(), y - currentSelection.getY());
     }
 	
+	 /**
+     * Sets the current selection to be at the zone contained by the point x,y
+     * @precondition currentSelection != null
+     * @param x an x point within the zone to set the currentSelection to
+     * @param y a y point within the zone to set the currentSelection to
+     * @return true if successfully set it to a zone, false if couldn't set or
+     * their was no zone containing that point
+     */
 	public static boolean setCurrentSelectionToPoint(int x, int y) {
     	
     	BuilderSprite currentSelection = DeerForestSingletonGetter.getDeerForest().deckInputProcessor.getCurrentSelection();
     	DeckBuilderScreen view = DeerForestSingletonGetter.getDeerForest().deckBuilderView;
     	DeckBuilder game = DeerForestSingletonGetter.getDeerForest().deckBuilder;
     	
-    	boolean currentSelectionDeck = currentSelection.isDeck();
-    	boolean currentSelectionCard = currentSelection.isCard();
     	String currentSelectionArea = currentSelection.getArea();
     	
     	Rectangle emptyZone = null;
-		//get the empty zone at point (only check zones allowed) 
-    	//Hand can only go to field if main phase and no summoned (if monster)
-    	/*if(!currentSelectionField && currentSelectionMonster) {
-    		//Monster in hand
-        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, true, true);
-    	} else if(!currentSelectionField && !currentSelectionMonster) {
-    		//Spell Card in hand
-        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, true, false);
-    	} else if(currentSelectionField) {
-    		//On field
-        	emptyZone = view.getArena().emptyZoneAtPoint(x, y, true, currentSelectionMonster);
-    	}
-    	//if current zone is a hand zone then check for empty zone at that point
-    	if(!currentSelectionField && emptyZone == null) {
-    		emptyZone = view.getArena().emptyZoneAtPoint(x, y, false, currentSelectionMonster);
-    	}*/
-
-    	if(emptyZone != null) {
-            setSelectionHelper(view, game, currentSelection, emptyZone, currentSelectionArea);
-    		return true;
-    	}
+    	
+    	//TODO change this!
+   
     	return false;
     }
 	
+	
+	/**
+     * returns the sprite at the point, if one exists and belongs to the
+     * player
+     * 
+     * @param x
+     * @param y
+     * @return Sprite intersecting the 
+     */
 	public static BuilderSprite checkIntersection(int x, int y) {
 	    	
 			DeerForest deerForest = DeerForestSingletonGetter.getDeerForest();
@@ -184,19 +220,6 @@ public class BuilderSpriteMover {
 	    	}
 	    	return null;
 	 }
-	
-	private static void setSelectionHelper(DeckBuilderScreen view, DeckBuilder game, BuilderSprite currentSelection,
-            Rectangle emptyZone, String currentSelectionArea) {
-
-        //reassign the currentSelection to the emptyZone in arena
-        view.getArena().removeSprite(currentSelection);
-        String newArea = view.getArena().setSpriteToZone(currentSelection, emptyZone);
-
-        //reassign the currentSelection to emptyZone in the view
-        view.removeSpriteFromArea(currentSelection, currentSelectionArea);
-        view.setSpriteToArea(currentSelection, newArea);
-
-    }
 	
 	
 }

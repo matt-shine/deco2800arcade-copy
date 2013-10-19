@@ -34,15 +34,20 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 	private float xClickOffset;
 	private float yClickOffset;
 	private boolean dragged;
-    private boolean zoomed;
     private boolean gameStarted;
 	
 	final String[] AreaKeys = {"DeckZone", "ZoomZone", "CardZone"};
 	
+	/**
+	 * Initialize input processor
+	 * @param deckBuilder
+	 * @param deckBuilderView
+	 */
 	public DeckBuilderInputProcessor(DeckBuilder deckBuilder, DeckBuilderScreen deckBuilderView) {
 		this.game = deckBuilder;
 		this.view = deckBuilderView;
 		this.gameStarted = false;
+		zoomSelection = null;
 	}
 
 	@Override
@@ -52,13 +57,31 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 	         gameStarted = true;
 	         return true;
 	        }
+		 
 		if(keycode == Keys.NUM_0){
 			DeerForestSingletonGetter.getDeerForest().changeScreen("game");
 			return true;
 		}
 		if(keycode == Keys.SHIFT_LEFT){
 			if(currentSelection != null) {
-				 view.setSpriteToArea(currentSelection, "ZoomZone");
+				if(zoomSelection != null) {
+					view.getArena().removeSprite(zoomSelection);
+					view.removeSpriteFromArea(zoomSelection, "ZoomZone");
+				}
+				zoomSelection = currentSelection;
+				zoomSelection.setArea("ZoomZone");
+				AbstractCard c = currentSelection.getCard();
+				
+				//update currentSelection to be the drawn card
+				currentSelection = new BuilderSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
+			    currentSelection.setCard(c);
+			    currentSelection.setArea("ZoomZone");
+				//set the current selection data
+			    view.setSpriteToArea(currentSelection, "ZoomZone");
+	 
+			    //Set to hand rectangle
+				Rectangle r = view.getArena().getAvailableZones("ZoomZone").get(0);
+				BuilderSpriteMover.setCurrentSelectionToRectangle(r);
 			}
 		}
         return false;
@@ -88,24 +111,29 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		System.out.println("Touch Down");
 		//Check it was a single click
-        if(button != Buttons.LEFT) return false;
-    	
-    	//Get the current Selection at point if it exists
-        System.out.println("got here");
-        currentSelection = null;
-        if(BuilderSpriteMover.checkIntersection(x,y)!= null) {
-        	currentSelection = BuilderSpriteMover.checkIntersection(x, y);
-        }
-    	System.out.println("Current selection is: " + currentSelection);
-    	System.out.println("Current selection area is: " + currentSelection.getArea());
-    	//There is a new currentSelection, set its parameters accordingly
-    	if(currentSelection != null) {
-    		BuilderSpriteMover.setCurrentSelectionData(x,y);
-    		return true;
-    	} else {
-    		//TODO set highlighted zones
-    		return true;
-    	}
+		try{
+		    if(button != Buttons.LEFT) return false;
+			
+			//Get the current Selection at point if it exists
+		    System.out.println("got here");
+		    currentSelection = null;
+		    if(BuilderSpriteMover.checkIntersection(x,y)!= null) {
+		    	currentSelection = BuilderSpriteMover.checkIntersection(x, y);
+		    }
+			System.out.println("Current selection is: " + currentSelection);
+			System.out.println("Current selection area is: " + currentSelection.getArea());
+			//There is a new currentSelection, set its parameters accordingly
+			if(currentSelection != null) {
+				BuilderSpriteMover.setCurrentSelectionData(x,y);
+				return true;
+			} else {
+				//TODO set highlighted zones
+				return true;
+			}
+		}catch(NullPointerException e) {
+			System.out.println("Didnt click on card.");
+		}
+		return true;
 	}
 
 	@Override
@@ -148,17 +176,28 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 		
 	}
 	
+	/**
+	 * Get the current Selection
+	 * @return current Selection
+	 */
 	public BuilderSprite getCurrentSelection() {
     	return currentSelection;
     }
 	
+	/**
+	 * Get the currentZoomed
+	 * @return currentZoomed
+	 */
 	public BuilderSprite getCurrentZoomed() {
         return currentZoomed;
     }
 	
+	/**
+	 * Loads all the initial cards
+	 */
 	public void loadAll(){
 		for (int i = 0; i < 40; i++) {
-			AbstractCard c = game.getModel().deck.draw();
+			AbstractCard c = game.getModel().getDeck().draw();
 				
 			//update currentSelection to be the drawn card
 			currentSelection = new BuilderSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
@@ -173,7 +212,7 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 		}
 		
 		for(int i = 0; i < 7; i++) {
-			AbstractCard c = game.getModel().cards.draw();
+			AbstractCard c = game.getModel().getCards().draw();
 			
 			currentSelection = new BuilderSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
 		    currentSelection.setCard(c);
@@ -186,10 +225,15 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 		}
 	}
 	
-	 public void setOffset(float x, float y) {
+	/**
+	 * Sets the offset
+	 * @param x
+	 * @param y
+	 */
+	public void setOffset(float x, float y) {
 	    	xClickOffset = x;
 	    	yClickOffset = y;
-	    }
+	}
 	
 }
 

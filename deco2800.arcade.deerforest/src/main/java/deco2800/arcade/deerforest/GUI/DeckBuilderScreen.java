@@ -31,7 +31,7 @@ public class DeckBuilderScreen implements Screen {
 	private BuilderArena arena;
 
 	/**
-	 * Initialises DeckBuilderScreen
+	 * Initializes DeckBuilderScreen
 	 * 
 	 * @param DeckBuilder builder
 	 */
@@ -69,8 +69,8 @@ public class DeckBuilderScreen implements Screen {
 	 */
 	private void loadAssets() {
 		manager.load("DeerForestAssets/builderBackground.png", Texture.class);
-		CardCollection deck = deckBuilder.getModel().deck;
-        deck.addAll(deckBuilder.getModel().deck);
+		CardCollection deck = deckBuilder.getModel().getDeck();
+        deck.addAll(deckBuilder.getModel().getDeck());
         ArrayList<AbstractCard> decks = new ArrayList<AbstractCard>(deck);
         for(AbstractCard card : decks) {
             manager.load(Gdx.files.classpath(card.getPictureFilePath()).toString(), Texture.class);
@@ -109,21 +109,6 @@ public class DeckBuilderScreen implements Screen {
 	    deckBuilder.batch.end();
 	    
 	    Map<String, Map<Rectangle, BuilderSprite>> map = BuilderArena.getMap();
-	    
-	   /* shapeRenderer.begin(ShapeType.FilledRectangle);
-	    
-	    for (String key : map.keySet()) {
-	    	for(Rectangle r : map.get(key).keySet()) {
-	    		if(key == "cardZone"){
-	    			shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.GREEN, Color.CLEAR, Color.CLEAR, Color.CLEAR);
-	    		} else if (key =="zoomZone") {
-	    			shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.RED, Color.CLEAR, Color.CLEAR, Color.CLEAR);
-	    		} else {
-	    			shapeRenderer.filledRect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.BLUE, Color.CLEAR, Color.CLEAR, Color.CLEAR);
-	    		}
-	    	}
-	    }
-	    shapeRenderer.end();*/
 	}
 	
 
@@ -183,11 +168,18 @@ public class DeckBuilderScreen implements Screen {
 		return arena;
 	}
 	
-	
+	/**
+	 * Gets the width of the screen
+	 * @return width
+	 */
 	public int getWidth() {
 		return Gdx.graphics.getWidth();
 	}
 	
+	/**
+	 * Gets the height of the screen
+	 * @return height
+	 */
 	public int getHeight() {
 		return Gdx.graphics.getHeight();
 	}
@@ -216,6 +208,12 @@ public class DeckBuilderScreen implements Screen {
 		return false;
 	}
 	
+	/**
+	 * Removes a sprite from the spriteMap
+	 * 
+	 * @param s the BuilderSprite to be removed
+	 * @return true if sprite was removed
+	 */
 	public boolean removeSprite(BuilderSprite s) {
         for(String key : spriteMap.keySet()) {
             if(spriteMap.get(key).contains(s)) {
@@ -223,8 +221,15 @@ public class DeckBuilderScreen implements Screen {
             }
         }
         return false;
-   }
+	}
 	
+	/**
+	 * Removes a given sprite from a given area
+	 * 
+	 * @param s the BuilderSprite to remove
+	 * @param area String - Area you want the sprite removed from
+	 * @return
+	 */
 	public boolean removeSpriteFromArea(BuilderSprite s, String area) {
 		Set<BuilderSprite> listToAddTo = spriteMap.get(area);
 		if(listToAddTo != null) {

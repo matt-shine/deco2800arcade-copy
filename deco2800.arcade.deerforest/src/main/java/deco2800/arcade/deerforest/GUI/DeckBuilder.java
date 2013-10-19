@@ -29,6 +29,10 @@ public class DeckBuilder extends Game {
 	BitmapFont font;
 	final private DeckSystem model;
 	
+	/**
+	 * Initializes DeckBuilder 
+	 * @param model
+	 */
 	public DeckBuilder(DeckSystem model) {
 		this.model = model;
 	}
@@ -36,7 +40,6 @@ public class DeckBuilder extends Game {
 	@Override
 	public void create() {
 		batch = new SpriteBatch();
-
 		//Use LibGDX's default Arial font
         Texture texture = new Texture(Gdx.files.internal("DeerForestAssets/Deco_0.tga"), true); // true enables mipmaps
         texture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
@@ -47,6 +50,9 @@ public class DeckBuilder extends Game {
 
 	}
 	
+	/**
+	 * Renders the screen
+	 */
 	public void render() {
         super.render();
 	}
@@ -54,9 +60,15 @@ public class DeckBuilder extends Game {
 	public void dispose() {
 		batch.dispose();
 		font.dispose();
-
 	}
 	
+	/**
+	 * Moves a list of cards from one location to another
+	 * @param cards
+	 * @param oldLocation
+	 * @param newLocation
+	 * @return
+	 */
 	public boolean moveCards(List<AbstractCard> cards, String oldLocation, String newLocation) {
 		//Check not null
 		if(cards == null || oldLocation == null || newLocation == null) return false;
@@ -85,10 +97,20 @@ public class DeckBuilder extends Game {
 		return b;
 	}
 	
+	/**
+	 * Gets all the cards within an area
+	 * 
+	 * @return the card collection in that area
+	 */
 	public CardCollection getCardCollection(String area) {
 		return model.getCardCollection(area);
 	}
 	
+	/**
+	 * Gets the model
+	 * 
+	 * @return DeckSystem model
+	 */
 	public DeckSystem getModel() {
 		return this.model;
 	}

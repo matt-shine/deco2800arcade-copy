@@ -67,10 +67,18 @@ public class Field extends AbstractCardCollection {
 		return sizeMonsters() + sizeSpells();
 	}
 	
+	/**
+	 * Makes an array of monsters
+	 * @return the monsters on the field in array form
+	 */
 	public Object[] monstersToArray() {
 		return fieldMonster.toArray();
 	}
 	
+	/**
+	 * Makes an array of spells
+	 * @return the spells on the field in array form
+	 */
 	public Object[] spellsToArray() {
 		return fieldSpells.toArray();
 	}
@@ -111,13 +119,21 @@ public class Field extends AbstractCardCollection {
 		return false;
 	}
 	
+	/**
+	 * Checks if monsters array is full
+	 * @return true if full
+	 */
 	public boolean monsterIsFull() {
 		if(sizeMonsters() == MAX_CARDS_MONSTER) {
 			return true;
-		}//TODO consider making this one method with spellIsFull
+		}
 		return false;
 	}
 	
+	/**
+	 *  Checks if spells array is full
+	 * @return true if full
+	 */
 	public boolean spellIsFull() {
 		if(sizeSpells() == MAX_CARDS_EFFECTS) {
 			return true;
@@ -125,14 +141,25 @@ public class Field extends AbstractCardCollection {
 		return false;
 	}
 	
+	/**
+	 *  Gets the size of the monster array
+	 * @return size of monster array
+	 */
 	public int sizeMonsters() {
 		return fieldMonster.size();
 	}
 	
+	/**
+	 * Gets the size of the spells array
+	 * @return size of spell array
+	 */
 	public int sizeSpells() {
 		return fieldSpells.size();
 	}
-	
+	/**
+	 * Removes object from its list
+	 * @return true if removed
+	 */
 	@Override
 	public boolean remove(Object o) {
 		if(contains(o)) {
@@ -145,6 +172,11 @@ public class Field extends AbstractCardCollection {
 		return false;
 	}
 	
+	
+	/**
+	 * checks if all the cards in the collection are in the list
+	 * @return true if collection is contained  
+	 */
 	@Override
 	public boolean containsAll(Collection<?> c) {
 		int size = 0;
@@ -162,6 +194,10 @@ public class Field extends AbstractCardCollection {
 	}
 
 	@Override
+	/**
+	 * Remove all elements in a collection form a list
+	 * @return true once all elements are removed
+	 */
 	public boolean removeAll(Collection<?> c) {
 		if(containsAll(c)) {
 			for(Object card: c) {
@@ -174,6 +210,10 @@ public class Field extends AbstractCardCollection {
 		return false;
 	}
 	
+	/**
+	 * Add all the elements in a collection to a this list
+	 * @return true if successful
+	 */
 	@Override
 	public boolean addAll(Collection<? extends AbstractCard> c) {
 		for(AbstractCard card:c) {
@@ -205,7 +245,10 @@ public class Field extends AbstractCardCollection {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	/**
+	 * Destroys all cards
+	 */
 	@Override
 	public CardCollection destroyAllCards() {
 		CardCollection c = (CardCollection) new ArrayList<AbstractCard>();
@@ -225,7 +268,10 @@ public class Field extends AbstractCardCollection {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	/**
+	 * Destroys all monsters on the field
+	 */
     public void destroyAllMonsters() {
         this.fieldMonster = new ArrayList<AbstractMonster>();
     }

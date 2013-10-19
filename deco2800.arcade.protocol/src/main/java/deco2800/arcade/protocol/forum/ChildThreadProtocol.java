@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import deco2800.arcade.model.forum.ChildThread;
-import deco2800.arcade.model.forum.ForumUser;
 
 /**
  * Protocol class designed for communicating ChildThread instance. 

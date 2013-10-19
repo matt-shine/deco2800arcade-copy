@@ -22,6 +22,7 @@ import deco2800.arcade.model.forum.ParentThread;
  * <p>
  * Features:
  * <ul>
+ * 	<li>Most methods will be called by ForumListener.</li>
  * 	<li>PreparedStatement for all query and update command.</li>
  * 	<li>One commit algorithm for every functions (methods). I.e. if a function
  * 	has multiple update commands (i.e. change DB states), it commits the change 
@@ -29,6 +30,7 @@ import deco2800.arcade.model.forum.ParentThread;
  * 	<li>Forum uses the user information from PlayerStorage.</li>
  * 	<li>Most query results are ordered by PK on descending. So, threads 
  * 	are retrieved from latest to oldest (i.e. high id to low id).</li>
+ *  <li>Use resetTables() and dropTables() with cautions.</li>
  * </ul>
  * 
  * @author Junya, Team Forum
@@ -1192,6 +1194,47 @@ public class ForumStorage {
 			st.close();
 			st = con.prepareStatement(query2);
 			st.setInt(1, pid);
+			rs = st.executeQuery();
+			while (rs.next()) {
+				result += rs.getInt("total");
+			}
+			rs.close();
+			st.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseException("Fail to get total votes: " + e.getMessage());
+		} finally {
+			try {
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				throw new DatabaseException("Fail to close the connection: " + e.getMessage());
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Return sum of vote values of all threads.
+	 * 
+	 * @return int, Sum of votes
+	 * @throws DatabaseException
+	 */
+	public int countAllVotes() throws DatabaseException {
+		String query = "SELECT SUM(vote) AS total FROM parent_thread";
+		String query2 = "SELECT SUM(vote) AS total FROM child_thread";
+		int result = 0;
+
+		Connection con = Database.getConnection();
+		try {
+			PreparedStatement st = con.prepareStatement(query);
+			ResultSet rs = st.executeQuery();
+			while (rs.next()) {
+				result += rs.getInt("total");
+			}
+			rs.close();
+			st.close();
+			st = con.prepareStatement(query2);
 			rs = st.executeQuery();
 			while (rs.next()) {
 				result += rs.getInt("total");

@@ -1,8 +1,12 @@
 package deco2800.arcade.protocol.forum;
 
-import deco2800.arcade.model.forum.*;
-
+/**
+ * Response for ParentThreadRequest.<br>
+ * pThread is not in form of ParentThread instance.
+ * 
+ * @author Junya, Team Forum
+ */
 public class ParentThreadResponse {
-	public ParentThread pThread;
+	public ParentThreadProtocol pThread;
 	public String error;
 }

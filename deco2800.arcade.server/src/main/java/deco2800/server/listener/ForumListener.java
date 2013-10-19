@@ -11,6 +11,16 @@ import deco2800.server.database.ForumStorage;
 
 /**
  * ForumListener models listener for forum's server service.
+ * <p>
+ * Spec:
+ * <ul>
+ * 	<li>If error, it is set on response.error.</li>
+ * 	<li>response.errro generally contains result of request.</li>
+ *  <li>Catch DatabaseException and append it to response.error.</li>
+ *  <li>For sending ParentThread, ChildThread and ForumUser instances, convert 
+ *  them to ParentThreadProtocol, ChildThreadProtocol and ForumUserProtocol 
+ *  instead. It is to allow Kryo's field serializer. </li>
+ * </ul>
  * 
  * @author Junya, Team Forum
  * @see deco2800.arcade.protocol.forum.*
@@ -23,7 +33,7 @@ public class ForumListener extends Listener {
 	@Override
 	public void received(Connection connection, Object object) {
 		super.received(connection, object);
-		System.out.println("Some request is received (debug purpose)");
+		//System.out.println("Some request is received (debug purpose)");
 		if (object instanceof ForumTestRequest){
 			/* For test */
 			ForumTestRequest request = (ForumTestRequest) object;
@@ -56,6 +66,30 @@ public class ForumListener extends Listener {
 			} finally {
 				connection.sendTCP(response);
 			}
+		} else if (object instanceof CountVoteRequest){
+			/* Count total vote having specific condition. See CountVoteRequest for detail */
+			CountVoteRequest request = (CountVoteRequest) object;
+			CountVoteResponse response = new CountVoteResponse();
+			response.error = "";
+			response.result = -1;
+			try {
+				if (request.countType == "all") {
+					response.result = ArcadeServer.instance().getForumStorage()
+							.countAllVotes();
+				} else if (request.countType == "parent") {
+					response.result = ArcadeServer.instance().getForumStorage()
+							.countParentThreadVotes(request.id);
+				} else if (request.countType == "user") {
+					response.result = ArcadeServer.instance().getForumStorage()
+							.countUserVote(request.id);
+				} else {
+					response.error = "Invalid count type (whether all, parent or user)";
+				}
+			} catch (DatabaseException e) {
+				response.error = "Fail CountVoteRequest, " + e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+			}
 		} else if (object instanceof AddVoteRequest) {
 			/* For both parent and child thread */
 			AddVoteRequest request = (AddVoteRequest) object;
@@ -81,7 +115,7 @@ public class ForumListener extends Listener {
 				if (pThread == null) {
 					response.error = "No result";
 				} else {
-					response.pThread = pThread;
+					response.pThread = ParentThreadProtocol.getParentThreadProtocol(pThread);
 				}
 			} catch (DatabaseException e) {
 				e.printStackTrace();
@@ -145,6 +179,25 @@ public class ForumListener extends Listener {
 			} finally {
 				connection.sendTCP(response);
 			}
+		} else if (object instanceof GetChildThreadRequest) {
+			/* Get a child thread having a particular cid */
+			GetChildThreadRequest request = (GetChildThreadRequest) object;
+			GetChildThreadResponse response = new GetChildThreadResponse();
+			response.result = null;
+			response.error = "";
+			try {
+				ChildThread thread = ArcadeServer.instance().getForumStorage()
+						.getChildThread(request.cid);
+				if (thread == null) {
+					response.error = "No result found";
+				} else {
+					response.result = ChildThreadProtocol.getChildThreadProtocol(thread);
+				}
+			} catch (DatabaseException e) {
+				response.error = "Fail GetChildThreadRequest, " + e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+			}
 		} else if (object instanceof GetChildThreadsRequest) {
 			/* Get child threads with passing conditions */
 			GetChildThreadsRequest request = (GetChildThreadsRequest) object;
@@ -171,12 +224,18 @@ public class ForumListener extends Listener {
 			}
 		
 		} else if (object instanceof DeleteRequest) {
-			/* Delete parent_thread record for given pid, and sends error if occur */
+			/* Delete thread record for given id and thread type, and sends error if occur */
 			DeleteRequest request = (DeleteRequest) object;
 			DeleteResponse response = new DeleteResponse();
 			response.error = "";
 			try {
-				ArcadeServer.instance().getForumStorage().deleteParentThread(request.pid);
+				if (request.threadType == "parent") {
+					ArcadeServer.instance().getForumStorage().deleteParentThread(request.id);
+				} else if (request.threadType == "child") {
+					ArcadeServer.instance().getForumStorage().deleteChildThread(request.id);
+				} else {
+					response.error = "Invalid threadType (only parent or child)";
+				}
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();
 			} finally {
@@ -197,6 +256,19 @@ public class ForumListener extends Listener {
 			} finally {
 				connection.sendTCP(response);
 			}
+		} else if (object instanceof InsertChildThreadRequest) {
+			/* Insert a new child thread */
+			InsertChildThreadRequest request = (InsertChildThreadRequest) object;
+			InsertChildThreadResponse response = new InsertChildThreadResponse();
+			response.error = "";
+			try {
+				ArcadeServer.instance().getForumStorage()
+						.insertChildThread(request.message, request.createdBy, request.pThread);
+			} catch (DatabaseException e) {
+				response.error = "Fail InsertChildTheradRequest, " + e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+			}
 		} else if (object instanceof UpdateParentThreadRequest) {
 			/* Update parent thread, pid is not updatable */
 			UpdateParentThreadRequest request = (UpdateParentThreadRequest) object;
@@ -207,6 +279,19 @@ public class ForumListener extends Listener {
 						request.pid, request.newTopic, request.newMessage, request.newCategory, request.newTags);
 			} catch (DatabaseException e) {
 				response.error = e.getMessage();
+			} finally {
+				connection.sendTCP(response);
+			}
+		} else if (object instanceof UpdateChildThreadRequest) {
+			/* Update a child thread having a cid. Only message attr is updatable */
+			UpdateChildThreadRequest request = (UpdateChildThreadRequest) object;
+			UpdateChildThreadResponse response = new UpdateChildThreadResponse();
+			response.error = "";
+			try {
+				ArcadeServer.instance().getForumStorage().updateChildThread(
+						request.cid, request.newMessage);
+			} catch (DatabaseException e) {
+				response.error = "Fail UpdateChildThreadRequest, " + e.getMessage();
 			} finally {
 				connection.sendTCP(response);
 			}

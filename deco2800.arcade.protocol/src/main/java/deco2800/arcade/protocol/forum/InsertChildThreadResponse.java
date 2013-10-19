@@ -1,10 +1,10 @@
 package deco2800.arcade.protocol.forum;
 
 /**
- * Response for DeleteRequest. Only set error.
+ * Response for InsertChildThreadRequest.
  * 
  * @author Junya, Team Forum
  */
-public class DeleteResponse {
+public class InsertChildThreadResponse {
 	public String error;
 }

@@ -3,6 +3,8 @@ package deco2800.arcade.deerforest.GUI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
@@ -35,55 +37,75 @@ public class DeckBuilderInputProcessor implements InputProcessor {
     private boolean zoomed;
     private boolean gameStarted;
 	
-	final String[] AreaKeys = {"deckZone", "zoomZone", "cardZone"};
+	final String[] AreaKeys = {"DeckZone", "ZoomZone", "CardZone"};
 	
 	public DeckBuilderInputProcessor(DeckBuilder deckBuilder, DeckBuilderScreen deckBuilderView) {
 		this.game = deckBuilder;
 		this.view = deckBuilderView;
-		//this.gameStarted = false;
+		this.gameStarted = false;
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		
+		 if(!gameStarted) {
+			 loadAll();
+	         gameStarted = true;
+	         return true;
+	        }
 		if(keycode == Keys.NUM_0){
 			DeerForestSingletonGetter.getDeerForest().changeScreen("game");
+			return true;
+		}
+		if(keycode == Keys.SHIFT_LEFT){
+			if(currentSelection != null) {
+				 view.setSpriteToArea(currentSelection, "ZoomZone");
+			}
 		}
         return false;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int x, int y) {
-		if(!gameStarted) {
-			loadAll();
-			gameStarted = true;
-		}
-
 		return false;
 	}
 
 	@Override
 	public boolean scrolled(int amount) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		
-		return false;
+		System.out.println("Touch Down");
+		//Check it was a single click
+        if(button != Buttons.LEFT) return false;
+    	
+    	//Get the current Selection at point if it exists
+        System.out.println("got here");
+        currentSelection = null;
+        if(BuilderSpriteMover.checkIntersection(x,y)!= null) {
+        	currentSelection = BuilderSpriteMover.checkIntersection(x, y);
+        }
+    	System.out.println("Current selection is: " + currentSelection);
+    	System.out.println("Current selection area is: " + currentSelection.getArea());
+    	//There is a new currentSelection, set its parameters accordingly
+    	if(currentSelection != null) {
+    		BuilderSpriteMover.setCurrentSelectionData(x,y);
+    		return true;
+    	} else {
+    		//TODO set highlighted zones
+    		return true;
+    	}
 	}
 
 	@Override
@@ -102,7 +124,7 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 	public boolean touchUp(int x, int y, int pointer, int button) {
 		if(dragged && button == Buttons.LEFT) {
 			
-			if(SpriteLogic.setCurrentSelectionToRectangle(currentSelection.getBoundingRectangle())) {
+			if(BuilderSpriteMover.setCurrentSelectionToRectangle(currentSelection.getBoundingRectangle())) {
 				//successfully moved card
 				//Do stuff with model here
 				String oldArea = currentSelection.getArea();
@@ -114,7 +136,7 @@ public class DeckBuilderInputProcessor implements InputProcessor {
     
 			} else {
 				//card was not moved, set it back to original position
-				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelection.getOriginZone(), "Deck");
+				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelection.getOriginZone(), currentSelection.getArea());
 				System.out.println("got here\n");
 	    		view.getArena().setSpriteToZone(currentSelection, r);
 			}
@@ -141,16 +163,33 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 			//update currentSelection to be the drawn card
 			currentSelection = new BuilderSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
 		    currentSelection.setCard(c);
-			/*//set the current selection data*/
-		    view.setSpriteToArea(currentSelection, "Deck");
+		    currentSelection.setArea("DeckZone");
+			//set the current selection data
+		    view.setSpriteToArea(currentSelection, "DeckZone");
  
 		    //Set to hand rectangle
-			Rectangle r = view.getArena().getAvailableZones("Deck").get(0);
-			BuilderSpriteMover.setCurrentSelectionToRectangle(r);
+			Rectangle r = view.getArena().getAvailableZones("DeckZone").get(0);
+			BuilderSpriteMover.setCurrentSelectionToRectangle(r);	
+		}
+		
+		for(int i = 0; i < 7; i++) {
+			AbstractCard c = game.getModel().cards.draw();
 			
+			currentSelection = new BuilderSprite(view.manager.get(c.getPictureFilePath(), Texture.class));
+		    currentSelection.setCard(c);
+		    currentSelection.setArea("CardZone");
+		    
+		    
+		    view.setSpriteToArea(currentSelection, "CardZone");
+		    Rectangle r = view.getArena().getAvailableZones("CardZone").get(0);
+			BuilderSpriteMover.setCurrentSelectionToRectangle(r);
 		}
 	}
 	
+	 public void setOffset(float x, float y) {
+	    	xClickOffset = x;
+	    	yClickOffset = y;
+	    }
 	
 }
 

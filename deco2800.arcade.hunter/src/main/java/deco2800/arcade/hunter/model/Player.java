@@ -306,7 +306,7 @@ public class Player extends Entity {
 				death.play(Hunter.State.getPreferencesManager().getVolume());
 			}
 			this.state = State.DEAD;
-			velocity = new Vector2(0,0);
+			Hunter.State.playerVelocity = new Vector2(0,0);
 			deathTime = System.currentTimeMillis();
 			this.currAnim = deathAnimation();
 			dead = true;
@@ -315,7 +315,7 @@ public class Player extends Entity {
 
 	@Override
 	public void draw(SpriteBatch batch, float stateTime) {
-		if (invulnerable){
+		if (invulnerable) {
 			Texture inv = new Texture("textures/invulnerability.png");
 			batch.draw(inv,getX()-10,getY()-10,getWidth()+20,getHeight()+20);
 		}

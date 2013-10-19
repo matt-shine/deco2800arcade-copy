@@ -28,53 +28,210 @@ public class Tower extends Mortal implements Ranged {
 	private int armour;
 	// The death (explosion) sprites this tower uses.
 	private List<Sprite> sprDeath;
+	// The type of the tower
+	private TowerType type;
+	// The attackRate of the tower.
+	private double attackRate;
+	// The range of the tower.
+	private double range;
+	// The projectile the tower fires.
+	private Projectile projectile;
+	// The current target of the tower.
+	private GridObject target = null;
+	// The shooting sprites of the tower.
+	private List<Sprite> sprShooting;
 	
-	
-	public Tower(int maxHealth, int health, int armour, int x, int y, Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprDying, List<Sprite> sprDeath) {
+	/**
+	 * The Tower Constructor.
+	 * @param maxHealth
+	 * 			The maximum health
+	 * @param armour
+	 * 			The armour
+	 * @param x
+	 * 			The x coordinate
+	 * @param y
+	 * 			The y coordinate 
+	 * @param grid
+	 * 			The grid it occupies
+	 * @param team
+	 * 			The team it's on
+	 * @param type
+	 * 			The tower type
+	 * @param attackRate
+	 * 			The number of attacks per second
+	 * @param range
+	 * 			The range at which it can acquire a target
+	 * @param projectile
+	 * 			The projectile it shoots
+	 * @param sprStanding
+	 * 			The in order list of Standing sprites
+	 * @param sprShooting
+	 * 			The in order list of Shooting sprites
+	 * @param sprDying
+	 * 			The in order list of Dying sprites
+	 * @param sprDeath
+	 * 			The in order list of Death sprites
+	 */
+	public Tower(int maxHealth, int armour, int x, int y, Grid grid, Team team, TowerType type, double attackRate, double range, Projectile projectile, List<Sprite> sprStanding, List<Sprite> sprShooting, List<Sprite> sprDying, List<Sprite> sprDeath) {
 		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDying, sprDeath);
-		this.health = health;
-		this.sprDeath = sprDeath;
-		// TODO Auto-generated constructor stub
+		this.health = maxHealth;
+		this.type = type;
+		this.attackRate = attackRate;
+		this.range = range;
+		this.projectile = projectile;
+		this.sprShooting = sprShooting;
+	}
+	
+	// Getters
+	/**
+	 * The maximum health of the tower.
+	 */
+	public int maxHealth() {
+		return maxHealth;
+	}
+	
+	/**
+	 * The current health of the tower.
+	 */
+	public int health() {
+		return health;
 	}
 
-	// Returns the category type of the tower.
+	/**
+	 * The armour of the tower.
+	 */
+	public int armour() {
+		return armour;
+	}
+
+	/**
+	 * The Death sprites of the tower.
+	 */
+	public List<Sprite> sprDeath() {
+		return sprDeath;
+	}
+
+	/**
+	 * The Tower Type of the tower.
+	 */
 	public TowerType type() {
-		return null;
+		return type;
 	}
 
-	@Override
-	public float attackRate() {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * The number of attacks per second the tower can make.
+	 */
+	public double attackRate() {
+		return attackRate;
 	}
 
-	@Override
+	/**
+	 * The range at which a tower can acquire a target.
+	 */
+	public double range() {
+		return range;
+	}
+
+	/**
+	 * The projectile the tower uses
+	 */
+	public Projectile projectile() {
+		return projectile;
+	}
+
+	/**
+	 * The target the tower currently has.
+	 */
+	public GridObject target() {
+		return target;
+	}
+
+	/**
+	 * The list of sprites for the shooting animation.
+	 */
+	public List<Sprite> shootingSprites() {
+		return sprShooting;
+	}
+	
+	//Setters
+	/**
+	 * Sets the maximum health of the tower.
+	 */
+	public void maxHealth(int health) {
+		this.maxHealth = health;
+	}
+
+	/**
+	 * Sets the current health of the tower.
+	 */
+	public void health(int health) {
+		this.health = health;
+	}
+
+	/**
+	 * Sets the armour of the tower.
+	 */
+	public void armour(int armour) {
+		this.armour = armour;
+	}
+
+	/**
+	 * Sets the list of Death sprites for the tower.
+	 */
+	public void sprDeath(List<Sprite> sprites) {
+		this.sprDeath = sprites;
+	}
+
+	/**
+	 * Sets the Tower Type of the tower.
+	 */
+	public void type(TowerType type) {
+		this.type = type;
+	}
+
+	/**
+	 * Sets the number of attacks per second the tower can make.
+	 */
+	public void attackRate(double rate) {
+		this.attackRate = rate;
+	}
+
+	/**
+	 * Sets the range at which a tower can acquire a target.
+	 */
+	public void range(double range) {
+		this.range = range;
+	}
+
+	/**
+	 * Sets the projectile the tower shoots.
+	 */
+	public void projectile(Projectile projectile) {
+		this.projectile = projectile;
+	}
+
+	/**
+	 * Sets the current target of the tower
+	 */
+	public void target(GridObject target) {
+		this.target = target;
+	}
+
+	/**
+	 * Sets the list of sprites for the shooting animation
+	 */
+	public void shootingSprites(List<Sprite> sprites) {
+		this.sprShooting = sprites;
+	}
+	
+	//Methods
+	
+
+	/**
+	 * The method for firing a single projectile at a target.
+	 */
 	public void shoot() {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public float range() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Projectile projectile() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public GridObject target() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Sprite> shootingSprites() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

@@ -41,6 +41,10 @@ public class Projectile extends GridObject {
 	 *            The speed and direction of the object in pixels per second,
 	 *            represented as a vector
 	 * @param range
+	 * @param team
+	 * @param sprStanding
+	 * @param damage
+	 * @param penetration
 	 */
 	public Projectile(int x, int y, Grid grid, Vector2 speed, float range, Team team, List<Sprite> sprStanding, int damage, int penetration) {
 		super(x, y, grid, team, sprStanding);

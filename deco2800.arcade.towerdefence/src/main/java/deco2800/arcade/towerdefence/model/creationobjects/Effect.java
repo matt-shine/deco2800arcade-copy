@@ -19,6 +19,13 @@ public class Effect {
 	private final double amount;
 	
 	// Constructor
+	/**
+	 * The Effect Constructor.
+	 * @param name
+	 * 			Name the effect.
+	 * @param amount
+	 * 			Set the amount of the effect.
+	 */
 	public Effect(String name, int amount){
 		this.name = name;
 		this.amount = amount;

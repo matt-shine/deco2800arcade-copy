@@ -21,7 +21,7 @@ public interface Ranged {
 	 * 
 	 * @return The attack rate of the object in attacks per second.
 	 */
-	public float attackRate();
+	public double attackRate();
 
 	/**
 	 * Fire a projectile from your own position at another.
@@ -34,7 +34,7 @@ public interface Ranged {
 	 * 
 	 * @return The maximum range of projectiles created by this object.
 	 */
-	public float range();
+	public double range();
 
 	/**
 	 * Returns the projectile that the GridObject currently fires.

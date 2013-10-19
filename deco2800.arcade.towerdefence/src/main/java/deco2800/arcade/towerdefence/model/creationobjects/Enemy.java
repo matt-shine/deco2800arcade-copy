@@ -31,8 +31,41 @@ public class Enemy extends Mobile implements Melee {
 	private List<Sprite> sprAttacking; 
 
 	// Constructor
+	/**
+	 * The Enemy constructor.
+	 * @param maxHealth
+	 * 			The maximum health
+	 * @param armour
+	 * 			The armour
+	 * @param x
+	 * 			The x coordinate
+	 * @param y
+	 * 			The y coordinate
+	 * @param speed
+	 * 			The movement speed in pixels per second
+	 * @param grid
+	 * 			The grid it occupies
+	 * @param team
+	 * 			The team it's on
+	 * @param attackRate
+	 * 			The number of attacks per second
+	 * @param damage
+	 * 			The damage per attack
+	 * @param penetration
+	 * 			The amount of armour the attack ignores
+	 * @param sprStanding
+	 * 			The in order list of Standing Sprites
+	 * @param sprMoving
+	 * 			The in order list of Movement Sprites
+	 * @param sprDying
+	 * 			The in order list of Dying Sprites
+	 * @param sprDeath
+	 * 			The in order list of Death Sprites
+	 * @param sprAttacking
+	 * 			The in order list of Attacking Sprites
+	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath, List<Sprite> sprAttacking, double attackRate, int damage, int penetration) {
+			Grid grid, Team team, double attackRate, int damage, int penetration, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath, List<Sprite> sprAttacking) {
 		super(maxHealth, armour, x, y, speed, grid, team, sprStanding, sprMoving, sprDeath, sprDeath);
 		this.sprAttacking = sprAttacking;
 		this.attackRate = attackRate;

@@ -33,6 +33,8 @@ public class Enemy extends Mobile implements Melee {
 	// The enemies anger statistic, for how likely it is to stop pathing and
 	// attack a different team object randomly.
 	private double anger;
+	// The bounty collected for killing the enemy
+	private int bounty;
 
 	// Constructor
 	/**
@@ -71,10 +73,12 @@ public class Enemy extends Mobile implements Melee {
 	 * @param anger
 	 *            How likely the enemy is to stop pathing and attack nearest
 	 *            other-team object.
+	 * @param bounty
+	 *            The bounty collected for killing the enemy
 	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
 			Grid grid, Team team, double attackRate, int damage,
-			int penetration, double anger, List<Sprite> sprStanding,
+			int penetration, double anger, int bounty, List<Sprite> sprStanding,
 			List<Sprite> sprMoving, List<Sprite> sprDying,
 			List<Sprite> sprDeath, List<Sprite> sprAttacking) {
 		super(maxHealth, armour, x, y, speed, grid, team, sprStanding,
@@ -84,6 +88,7 @@ public class Enemy extends Mobile implements Melee {
 		this.damage = damage;
 		this.penetration = penetration;
 		this.anger = anger;
+		this.bounty = bounty;
 	}
 
 	// Getters
@@ -113,6 +118,13 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public double anger() {
 		return anger;
+	}
+	
+	/**
+	 * Returns the bounty collection on the enemy.
+	 */
+	public int bounty() {
+		return bounty;
 	}
 
 	/**
@@ -165,6 +177,13 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public void anger(double anger) {
 		this.anger = anger;
+	}
+	
+	/**
+	 * Sets the bounty collected on this enemy.
+	 */
+	public void bounty(int bounty) {
+		this.bounty = bounty;
 	}
 
 	/**

@@ -36,6 +36,11 @@ public class Tower extends Mortal implements Ranged {
 	private double range;
 	// The projectile the tower fires.
 	private Projectile projectile;
+	// The cost to build the base tower.
+	private int baseCost;
+	// The cost to upgrade each level of the tower.
+	private List<Integer> upgradeCost;
+	// The cost to upgrade the
 	// The current target of the tower.
 	private GridObject target = null;
 	// The shooting sprites of the tower.
@@ -64,6 +69,10 @@ public class Tower extends Mortal implements Ranged {
 	 *            The range at which it can acquire a target
 	 * @param projectile
 	 *            The projectile it shoots
+	 * @param baseCost
+	 *            The cost to build the base tower
+	 * @param upgradeCost
+	 *            A list of upgrade costs for each level of the tower
 	 * @param sprStanding
 	 *            The in order list of Standing sprites
 	 * @param sprShooting
@@ -73,8 +82,9 @@ public class Tower extends Mortal implements Ranged {
 	 */
 	public Tower(int maxHealth, int armour, int x, int y, Grid grid, Team team,
 			TowerType type, double attackRate, double range,
-			Projectile projectile, List<Sprite> sprStanding,
-			List<Sprite> sprShooting, List<Sprite> sprDeath) {
+			Projectile projectile, int baseCost, List<Integer> upgradeCost,
+			List<Sprite> sprStanding, List<Sprite> sprShooting,
+			List<Sprite> sprDeath) {
 		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
 		this.health = maxHealth;
 		this.type = type;
@@ -82,6 +92,8 @@ public class Tower extends Mortal implements Ranged {
 		this.range = range;
 		this.projectile = projectile;
 		this.sprShooting = sprShooting;
+		this.baseCost = baseCost;
+		this.upgradeCost = upgradeCost;
 	}
 
 	// Getters
@@ -140,7 +152,22 @@ public class Tower extends Mortal implements Ranged {
 	public Projectile projectile() {
 		return projectile;
 	}
-
+	
+	/**
+	 * The base cost of the tower
+	 */
+	public int baseCost() {
+		return baseCost;
+	}
+	
+	/**
+	 * The upgrade cost of the tower
+	 * Index as level.
+	 */
+	public List<Integer> upgradeCost() {
+		return upgradeCost;
+	}
+	
 	/**
 	 * The target the tower currently has.
 	 */
@@ -211,6 +238,21 @@ public class Tower extends Mortal implements Ranged {
 	public void projectile(Projectile projectile) {
 		this.projectile = projectile;
 	}
+	/**
+	 * Sets the base cost of the tower
+	 */
+	public void baseCost(int cost) {
+		this.baseCost = cost;
+	}
+	
+	/**
+	 * Sets the upgrade cost of the tower
+	 * Index as level.
+	 */
+	public void upgradeCost(List<Integer> costList) {
+		this.upgradeCost = costList;
+	}
+	
 
 	/**
 	 * Sets the current target of the tower

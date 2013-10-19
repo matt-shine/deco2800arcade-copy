@@ -15,7 +15,10 @@ public class PlayerScore {
 	ArrayList<Integer> scores;
 	
 	private NetworkClient networkClient;
-	HighscoreClient highScorePlayer;
+	
+	public HighscoreClient highScorePlayer1;
+	public HighscoreClient highScorePlayer2;
+	public HighscoreClient highScorePlayer3;
 	
 	GuessTheWord game;
 	Player player;
@@ -27,17 +30,23 @@ public class PlayerScore {
 		
 		scores =  new ArrayList<Integer>();
 		
-//		highScorePlayer = new HighscoreClient("BENNY","GuessTheWord", networkClient);
+		highScorePlayer1 = new HighscoreClient(player.getUsername(),"GuessTheWord", networkClient);
+		highScorePlayer2 = new HighscoreClient(player.getUsername(),"GuessTheWord", networkClient);
+		highScorePlayer3 = new HighscoreClient(player.getUsername(),"GuessTheWord", networkClient);
 	}
 	
-	public void countScore(){
-		highScorePlayer.storeScore(game.getterSetter.getLevel(), game.getterSetter.getScore() );
+	public void countScore(HighscoreClient highScorePlayer){
+		highScorePlayer.storeScore("Number", game.getterSetter.getScore() );
 	}
 	
 	public void getHighScore(){
-		List<Highscore> topPlayers = highScorePlayer.getGameTopPlayers(10, true, game.getterSetter.getLevel());
+		List<Highscore> topPlayers1 = highScorePlayer1.getGameTopPlayers(5, true, "Number");
+		List<Highscore> topPlayers2 = highScorePlayer2.getGameTopPlayers(5, true, "Number");
+		List<Highscore> topPlayers3 = highScorePlayer3.getGameTopPlayers(5, true, "Number");
 //		System.out.println(topPlayers);
-		highScorePlayer.printHighscores(topPlayers);
+		highScorePlayer1.printHighscores(topPlayers1);
+		highScorePlayer2.printHighscores(topPlayers2);
+		highScorePlayer3.printHighscores(topPlayers3);
 	}
 
 }

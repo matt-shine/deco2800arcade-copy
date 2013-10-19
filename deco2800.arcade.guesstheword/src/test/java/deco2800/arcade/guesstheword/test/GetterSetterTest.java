@@ -10,36 +10,6 @@ import static org.junit.Assert.*;
 public class GetterSetterTest {
 
 	@Test
-	public void testButtonGetSet(){
-		GetterSetter gs = new GetterSetter();
-		
-		gs.setButton1("A"); 
-		gs.setButton2("B");
-		
-		assertEquals("A", gs.getButton1());
-		assertEquals("B", gs.getButton2());
-	}
-	
-	@Test
-	public void testTextFieldGetSet(){
-		GetterSetter gs = new GetterSetter();
-		
-		gs.setText1("A"); 
-		gs.setText2("B");
-		gs.setText3("C");
-		gs.setText4("D");
-		gs.setText5("E");
-		gs.setText6("F");
-		
-		assertEquals("A", gs.getText1());
-		assertEquals("B", gs.getText2());
-		assertEquals("C", gs.getText3());
-		assertEquals("D", gs.getText4());
-		assertEquals("E", gs.getText5());
-		assertEquals("F", gs.getText6());
-	}
-	
-	@Test
 	public void testLevelGetSet(){
 		GetterSetter gs = new GetterSetter();
 		gs.setLevel("LEVEL 1");

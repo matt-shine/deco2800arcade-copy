@@ -148,7 +148,7 @@ public class GameScreen implements Screen {
 			this.level = "LEVEL 1";	
 			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
 			hm = game.picture.getLevel1();
-			gameTime = 5;		// 60 secs for level 1
+			gameTime = 60;		// 60 secs for level 1
 			
 		}else if(level.equalsIgnoreCase("Level 2 - 5 letters")){
 			this.level = "LEVEL 2";
@@ -249,7 +249,6 @@ public class GameScreen implements Screen {
 		 if(occur){
 			 String []spilt = word.split("");
 			 for(int i = 0; i <= word.length() ; i ++){
-				 System.out.println(spilt[i] + " @ " + i );
 				 if(spilt[i].equalsIgnoreCase(input)){
 					 
 					 if(i == 1){
@@ -509,14 +508,14 @@ public class GameScreen implements Screen {
 	 * */
 	public Window getWindow(){
 		// Set Timer to stop
-		HashMap<String, HashMap<String, Texture>> hm = null ;
-		if(level.equalsIgnoreCase("Level 1")){
-			hm = game.picture.getLevel1();
-		}else if(level.equalsIgnoreCase("Level 2")){
-			hm = game.picture.getLevel2();
-		}else if(level.equalsIgnoreCase("Level 3")){
-			hm = game.picture.getLevel3();
-		}
+//		HashMap<String, HashMap<String, Texture>> hm = null ;
+//		if(level.equalsIgnoreCase("Level 1")){
+//			hm = game.picture.getLevel1();
+//		}else if(level.equalsIgnoreCase("Level 2")){
+//			hm = game.picture.getLevel2();
+//		}else if(level.equalsIgnoreCase("Level 3")){
+//			hm = game.picture.getLevel3();
+//		}
 		
 		Object[] categories = hm.keySet().toArray();
 		final List categoryList =  new List(categories , skin);
@@ -535,14 +534,14 @@ public class GameScreen implements Screen {
 				// Clear all the task in the timer
 				gm.timer(0);
 				
-				HashMap<String, HashMap<String, Texture>> hm = null ;
-				if(level.equalsIgnoreCase("Level 1")){
-					hm = game.picture.getLevel1();
-				}else if(level.equalsIgnoreCase("Level 2")){
-					hm = game.picture.getLevel2();
-				}else if(level.equalsIgnoreCase("Level 3")){
-					hm = game.picture.getLevel3();
-				}
+//				HashMap<String, HashMap<String, Texture>> hm = null ;
+//				if(level.equalsIgnoreCase("Level 1")){
+//					hm = game.picture.getLevel1();
+//				}else if(level.equalsIgnoreCase("Level 2")){
+//					hm = game.picture.getLevel2();
+//				}else if(level.equalsIgnoreCase("Level 3")){
+//					hm = game.picture.getLevel3();
+//				}
 				String category = categoryList.getSelection();
 				String word =  "" + hm.get(category).keySet().toArray()[0];
 				Texture texture = hm.get(category).get(word);

@@ -1,5 +1,7 @@
 package deco2800.arcade.guesstheword.GUI;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
@@ -21,7 +23,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.guesstheword.gameplay.GameModel;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
+import deco2800.arcade.utils.AsyncFuture;
 
 public class MainScreen implements Screen {
 	
@@ -39,7 +46,7 @@ public class MainScreen implements Screen {
 	private TextButton settingsButton;
 	private TextButton achieveButton;
 	
-	TextField text;
+	private TextField achieveText;
 	
 	// setup the dimensions of the menu buttons
     private static final float BUTTON_WIDTH = 300f;
@@ -107,7 +114,7 @@ public class MainScreen implements Screen {
 		
 		batch = new SpriteBatch();
 		
-		texture = new Texture(Gdx.files.internal("mainScreen.png"));
+		texture = new Texture(Gdx.files.internal("GuessTheWordMainScreen.png"));
 		
 		BitmapFont font =  new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 		LabelStyle ls = new LabelStyle();
@@ -136,22 +143,19 @@ public class MainScreen implements Screen {
 		achieveButton = new TextButton("Achievement " , skin);
 		achieveButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-				text.setMessageText("HI THERE");
+				game.playerScore.getHighScore();
+				AchievementClient achClient = game.getAchievementClient();
+				AsyncFuture<AchievementProgress> playerProgress = achClient.getProgressForPlayer(game.getPlayer());
+				AsyncFuture<ArrayList<Achievement>> achievements = achClient.getAchievementsForGame(game.getGame());
+
+				for(Achievement ach  : achievements.get())
+					System.out.println(ach);
+				achieveText.setMessageText("Your Achievement: ");
 			}
 		});
 		
-		
-		
-		
-		text = new TextField("", skin);
-		text.setMessageText("");
-		text.setTextFieldListener(new TextFieldListener() {
-
-            @Override
-            public void keyTyped(TextField textField, char key) {
-                    Gdx.app.log("Test for keys", "" + key);
-            }
-        });
+		achieveText = new TextField("", skin);
+		achieveText.setMessageText("");
 
 		
 		// Creating of the table to store the buttons and labels
@@ -167,7 +171,7 @@ public class MainScreen implements Screen {
 		mainTable.add(achieveButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
 		
 		mainTable.row();
-		mainTable.add(text).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
+		mainTable.add(achieveText).width(BUTTON_WIDTH).height(BUTTON_HEIGHT + 60F).padBottom(5);
 		
 		stage.addActor(mainTable);
 		

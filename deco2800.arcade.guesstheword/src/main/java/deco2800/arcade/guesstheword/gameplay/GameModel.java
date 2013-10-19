@@ -121,7 +121,7 @@ public class GameModel {
 				gameScreen.clearInputText();
 				gameScreen.setGameContext();
 				
-//				game.playerScore.countScore();
+				setHighScoreCounter();
 				
 				count = 0; 
 			}else {
@@ -131,8 +131,8 @@ public class GameModel {
 				gameScreen.scoreLabel.setText("Score : " + score);
 				game.getterSetter.setScore(score);
 				
-			
-//				game.incrementAchievement("guesstheword.animals");
+				setAchievement(category);
+				
 				nextWord(answer, category);
 				hintTaken = false;
 				
@@ -144,6 +144,28 @@ public class GameModel {
 		}
 	}
 	
+	private void setAchievement(String category){
+		if(category.equalsIgnoreCase("Animals"))
+			game.incrementAchievement("guesstheword.animals");
+		if(category.equalsIgnoreCase("Brands"))
+			game.incrementAchievement("guesstheword.brands");
+		if(category.equalsIgnoreCase("Countries"))
+			game.incrementAchievement("guesstheword.countries");
+		if(category.equalsIgnoreCase("Sports"))
+			game.incrementAchievement("guesstheword.sports");
+		if(category.equalsIgnoreCase("Transports"))
+			game.incrementAchievement("guesstheword.transports");
+	}
+	
+	private void setHighScoreCounter(){
+		String level = game.getterSetter.getLevel();
+		if(level.equalsIgnoreCase("Level 1"))
+			game.playerScore.countScore(game.playerScore.highScorePlayer1);
+		else if(level.equalsIgnoreCase("Level 2"))
+			game.playerScore.countScore(game.playerScore.highScorePlayer2);
+		if(level.equalsIgnoreCase("Level 3"))
+			game.playerScore.countScore(game.playerScore.highScorePlayer3);
+	}
 	
 	//timer method
 	public void timer(int time){

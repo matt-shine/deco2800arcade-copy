@@ -88,11 +88,11 @@ public class TestAchievementStorage {
 	Player testplayer = new Player(1, "Bob", "default.png");
 	Player testplayer2 = new Player(2, "Bobbie", "default.png");
 	
-	@Test
-	public void testNum() throws DatabaseException{
-		int num = achievementStorage.numPlayerWithAchievement("pong.winGame");
-		System.out.println(num);
-	}
+//	@Test
+//	public void testNum() throws DatabaseException{
+//		int num = achievementStorage.numPlayerWithAchievement("pong.winGame");
+//		System.out.println(num);
+//	}
 	
 //	/**
 //	 * Test for AchievementsForIDs method

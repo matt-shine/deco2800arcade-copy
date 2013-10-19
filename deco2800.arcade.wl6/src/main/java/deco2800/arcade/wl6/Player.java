@@ -8,7 +8,7 @@ import deco2800.arcade.wl6.WL6Meta.KEY_TYPE;
 
 public class Player extends Mob {
 
-    public static final float SPEED = 3f;
+    public static final float SPEED = 0.05f;
 
     
     private int STARTING_HEALTH = 100;
@@ -17,10 +17,10 @@ public class Player extends Mob {
     private HashSet<Integer> guns = new HashSet<Integer>();
     private int ammo = 16;
     private HashSet<KEY_TYPE> keys = new HashSet<KEY_TYPE>();
-	
     
-
-
+    
+    
+    
 	public Player(int uid) {
         super(uid);
         setHealth(STARTING_HEALTH);
@@ -219,6 +219,8 @@ public class Player extends Mob {
         return damage;
     }
 	
+
+    
 }
 
 

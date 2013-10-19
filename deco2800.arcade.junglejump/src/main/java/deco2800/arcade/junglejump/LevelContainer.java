@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 import deco2800.arcade.junglejump.GUI.junglejump;
@@ -17,7 +18,7 @@ import deco2800.arcade.junglejump.GUI.junglejump;
  */
 public class LevelContainer {
 	static ArrayList<Level> levels;
-	public static int currentLevel;
+	private static int currentLevel;
 	public static int currentWorld;
 	private static int levelAmount;
 	private static int worldAmount;
@@ -28,10 +29,10 @@ public class LevelContainer {
 	 */
 	public LevelContainer() {
 		levels = new ArrayList<Level>();
-		currentLevel = 0;
+		setCurrentLevel(0);
 		currentWorld = 0;
 		levelAmount = 5;
-		worldAmount = 3;
+		worldAmount = 1;
 		
 		// Read level from file
 		for(int i=0;i<worldAmount;i++) {
@@ -84,7 +85,7 @@ public class LevelContainer {
 		        			level.addPlatform(p);
 		        			bananaCounter++;
 	        		}
-	        		if(c!='*') {
+	        		if(c!='*' && c!= '.') {
 	        			p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);
 	        		}
@@ -112,20 +113,20 @@ public class LevelContainer {
 	public static void nextLevel() {
 		System.out.println("loading next level");
 		clearCurrentLevel();
-		currentLevel++;
-		if(currentLevel > levelAmount-1) {
-			currentLevel = 0;
+		setCurrentLevel(getCurrentLevel() + 1);
+		if(getCurrentLevel() > levelAmount-1) {
+			setCurrentLevel(0);
 			currentWorld++;
 			if(currentWorld > worldAmount-1) {
 				currentWorld = 0;
 			}
 			junglejump.world = currentWorld;
-			junglejump.gameBackground = new Texture(("junglejumpassets/world" + (currentWorld+1) + "/background.png"));
-			junglejump.worldNumText = new Texture(("junglejumpassets/" + (currentWorld + 1) + ".png"));
+			junglejump.gameBackground = new Texture(Gdx.files.internal("world" + (currentWorld+1) + "/background.png"));
+			junglejump.worldNumText = new Texture(Gdx.files.internal((currentWorld + 1) + ".png"));
 		}
-		junglejump.currentLevel = getLevel(currentLevel);
+		junglejump.currentLevel = getLevel(getCurrentLevel());
 		//currentLevel = newLevel;
-		junglejump.levelNumText = new Texture(("junglejumpassets/" + (currentLevel + 1) + ".png"));
+		junglejump.levelNumText = new Texture(Gdx.files.internal((getCurrentLevel() + 1) + ".png"));
 		junglejump.monkeyX = junglejump.monkeyDefaultX;
 		junglejump.monkeyY = junglejump.monkeyDefaultY;
 		return;
@@ -153,9 +154,17 @@ public class LevelContainer {
 	}
 	
 	public static void clearCurrentLevel() {
-		for (Platform p : getLevel(currentLevel).getPlatforms()) {
+		for (Platform p : getLevel(getCurrentLevel()).getPlatforms()) {
 			p.setX(p.getX()+1000);
 		}
+	}
+
+	public static int getCurrentLevel() {
+		return currentLevel;
+	}
+
+	public static void setCurrentLevel(int currentLevel) {
+		LevelContainer.currentLevel = currentLevel;
 	}
 	
 

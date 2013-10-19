@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.log4j.BasicConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,8 @@ public class Pack {
      * @param args
      */
     public static void main(String[] args) {
-    	 
+    	//Configure log4j
+    	BasicConfigurator.configure();
 		// Create the release folder
 		logger.debug("Creating directory: {}", releaseFolder);
 		if (PackageUtils.createDirectory(releaseFolder)) {

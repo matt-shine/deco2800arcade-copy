@@ -5,5 +5,7 @@ public enum MultiGameRequestType {
 	NEW,
 	JOIN,
 	DESTROY,
+	MATCHMAKING,
+	ENDMM
 
 }

@@ -1,70 +1,73 @@
 package deco2800.server.webserver;
 
+import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.TreeSet;
-
 import org.simpleframework.http.Response;
-
 import deco2800.arcade.model.Achievement;
 import deco2800.arcade.model.Game;
 import deco2800.server.ArcadeServer;
+import deco2800.server.database.DatabaseException;
 
 public class AchievementResponder implements WebResponder {
 	
-	public void respond( Response response ) throws Exception {
-		
+	public AchievementResponder() {
+		super();
+	}
+	
+	public void respond( Response response, String param) throws IOException, DatabaseException {
 		PrintStream body = response.getPrintStream();
-		long time = System.currentTimeMillis();
-
-		response.setValue("Content-Type", "text/html");
-		response.setValue("Server", "HelloWorld/1.0 (Simple 4.0)");
-		response.setDate("Date", time);
-		response.setDate("Last-Modified", time);
+		
+        ArcadeWebserver.setResponseValues(response, "text/html");
 		
 		String bodyString = "";
 		
-		Comparator<Game> alphabetical = new Comparator<Game>() {  
-            @Override  
-            public int compare(Game o1, Game o2) {  
-                int rval = Integer.valueOf( ( o1.name ).compareTo( o2.name) );  
-                if (rval != 0) return rval;  
-                return o1.compareTo(o2);  
-            }  
-        };
-		
-		TreeSet<Game> games = new TreeSet<Game>( alphabetical );
+		// Get all of the games from the database and store them alphabetically
+		TreeSet<Game> games = new TreeSet<Game>( ArcadeWebserver.alphabeticalGameComparator() );
 		games.addAll( ArcadeServer.instance().getGameStorageDatabase().getServerGames() );
 		
-		bodyString = FileReader.readFile( "webserver/html/template.html", Charset.forName("UTF-8" ) );
-		String contentString = "<h1 class='text center'>Achievements</h1>";
 		
+		bodyString = FileReader.readFileUtf8( "webserver/html/template.html" );
+		
+		String contentString = "<h1 class='text center'>Achievements</h1>";
 		
 		for ( Game game : games ) {
 			
 			ArrayList<Achievement> achievements = ArcadeServer.instance().getAchievementStorage().achievementsForGame( game.id );
-			
 			if ( achievements.size() == 0 ) {
 				continue;
 			}
 			
-			contentString += FileReader.readFile( "webserver/html/_game_achievements.html", Charset.forName("UTF-8" ) );
+			/* For every game that has achievements listed in the database, add the 
+			 * game_achievements partial to the content. This will be filled in with
+			 * the relevant values.
+			 */
 			
+			contentString += FileReader.readFileUtf8( "webserver/html/_game_achievements.html" );
+			
+			// Construct a new String representing one table row per achievement
 			String gameAchievements = "";
 			for ( Achievement achievement : achievements ) {
-				gameAchievements += String.format( "<tr><td>%s</td><td class='text left'>%s</td></tr>", 
+				gameAchievements += String.format( "<tr><td class='achievement-icon-holder'><img src='achievement_icon/%s' class='achievement-icon'></td><td>%s</td><td class='text left'>%s</td></tr>", 
+				        achievement.icon.replace( "/", "-" ),
 						achievement.name, 
 						achievement.description );
 			}
 			
+			/* Replace the name in the template, as well as the table body with the
+			 * rows constructed above. Note that this is replacing over the whole content,
+			 * but at any one time the #{{}} fields will only exist for the most recent,
+			 * as they are replaced as each game's achievements are added.
+			 */
 			contentString = contentString.replace( "#{{gamename}}", String.valueOf( game.name ) );
 			contentString = contentString.replace( "#{{tablebody}}", String.valueOf( gameAchievements ) );
 			
 		}
+
+		// Put the constructed content into the template and close the stream
 		bodyString = bodyString.replace( "#{{content}}", contentString );
-	
+
 		body.println( bodyString );
 		body.close();
 	}

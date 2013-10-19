@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
+  <interface id="1" language="java" name="deco2800.arcade.towerdefence.model.Controllable" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Controllable.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="63" width="140" x="2182" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <enumeration id="2" language="java" name="deco2800.arcade.towerdefence.model.Direction" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Direction.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="225" width="140" x="646" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="3" language="java" name="deco2800.arcade.towerdefence.model.Effect" project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Effect.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="81" width="140" x="1097" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="deco2800.arcade.towerdefence.model.Grid" project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Grid.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="603" width="231" x="826" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="deco2800.arcade.towerdefence.model.GridObject" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/GridObject.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="747" width="229" x="1277" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="deco2800.arcade.towerdefence.model.Mobile" project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Mobile.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="261" width="175" x="1081" y="1269"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="deco2800.arcade.towerdefence.model.Projectile" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Projectile.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="243" width="190" x="2362" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="8" language="java" name="deco2800.arcade.towerdefence.model.Ranged" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Ranged.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="171" width="169" x="1546" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="9" language="java" name="deco2800.arcade.towerdefence.controller.Ship" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/controller/Ship.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="279" width="188" x="1954" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="10" language="java" name="deco2800.arcade.towerdefence.model.Team" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Team.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="171" width="140" x="466" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <interface id="11" language="java" name="deco2800.arcade.towerdefence.model.Melee" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Melee.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="153" width="155" x="1277" y="1943"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <interface id="12" language="java" name="deco2800.arcade.towerdefence.model.Tower" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Tower.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="81" width="140" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <enumeration id="13" language="java" name="deco2800.arcade.towerdefence.model.TowerType" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/TowerType.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="189" width="142" x="2592" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="14" language="java" name="deco2800.arcade.towerdefence.model.Mortal" project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Mortal.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="405" width="158" x="1098" y="824"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="15" language="java" name="deco2800.arcade.towerdefence.model.TowerDefence" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/TowerDefence.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="405" width="205" x="221" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="deco2800.arcade.towerdefence.model.Enemy" project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Enemy.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="333" width="177" x="1277" y="1570"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="17" language="java" name="deco2800.arcade.towerdefence.model.GameAction" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/GameAction.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="207" width="159" x="1755" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <realization id="18">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="11"/>  
+  </realization>  
+  <generalization id="19">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="20">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <association id="21">    
+    <bendpoint x="1286" y="1269"/>    
+    <bendpoint x="1286" y="824"/>    
+    <end type="SOURCE" refId="16" navigable="false">      
+      <attribute id="22" name="target"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="14"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

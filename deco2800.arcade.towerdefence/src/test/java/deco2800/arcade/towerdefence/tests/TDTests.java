@@ -5,8 +5,8 @@ import org.junit.Test;
 
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.towerdefence.*;
-import deco2800.arcade.towerdefence.pathfinding.Path;
+import deco2800.arcade.towerdefence.model.*;
+import deco2800.arcade.towerdefence.model.pathfinding.Path;
 
 public class TDTests {
 

@@ -17,7 +17,7 @@ public class RegisterScreen implements Screen {
 
     private Skin skin;
     private RegisterScreenStage stage;
-	private ArcadeUI arcadeUI;
+        private ArcadeUI arcadeUI;
 
     public RegisterScreen(ArcadeUI ui) {
         arcadeUI = ui;
@@ -60,11 +60,11 @@ public class RegisterScreen implements Screen {
 
         registerButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-            	if (!passwordText.getText().equals(passwordTextCheck.getText()) || passwordText.getText().equals("")) {
-            		errorLabel.setVisible(true);
-            	} else {
-            		ArcadeSystem.registerUser(usernameText.getText(), passwordText.getText());
-            	}
+                    if (!passwordText.getText().equals(passwordTextCheck.getText()) || passwordText.getText().equals("")) {
+                            errorLabel.setVisible(true);
+                    } else {
+                            ArcadeSystem.registerUser(usernameText.getText(), passwordText.getText());
+                    }
             }
         });
         cancelButton.addListener(new ChangeListener() {

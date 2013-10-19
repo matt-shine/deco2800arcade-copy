@@ -16,133 +16,132 @@ import deco2800.arcade.hunter.Hunter;
 
 /**
  * A Hunter game for use in the Arcade
- * 
+ *
  * @author Nessex, DLong94
- * 
  */
 public class GameOverScreen implements Screen {
-	private Hunter hunter;
-	private Stage stage;
-	private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-	private Texture background;
-	private SpriteBatch batch;
-	
-	public GameOverScreen(Hunter p, float distance, int score, int killCount) {
-		hunter = p;
-		stage= new Stage();
-		ArcadeInputMux.getInstance().addProcessor(stage);
-		
-		Texture.setEnforcePotImages(false);
-		background = new Texture("textures/mainmenu.png");
-		batch = new SpriteBatch();
-		
-		System.out.println(score);
-		Table table = new Table(skin);
-		table.setFillParent(true);
-		table.padRight(400f);
-		table.padTop(400f);
-		stage.addActor(table);
-				
-		//set table defaults
-		table.defaults().spaceBottom(20);
-		table.columnDefaults(0).colspan(2);
-		
-		
-		table.add("GAME OVER").colspan(2);
-		table.row();
-		
-		table.add("Distance Travelled: ");
-		table.add(String.valueOf(distance)).colspan(2);
-		table.row();
-		
-		table.add("Score: ");
-		table.add(String.valueOf(score)).colspan(2);
-		table.row();
-		
-		table.add("Kills: ");
-		table.add(String.valueOf(killCount) + " Animals").colspan(2);
-		table.row();
-		
-		TextButton playButton = new TextButton("Play Again", skin);
-		playButton.addListener(new ChangeListener() {
+    private Hunter hunter;
+    private Stage stage;
+    private Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+    private Texture background;
+    private SpriteBatch batch;
 
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-        		System.out.println("Play Again");
-        		hunter.setScreen(new GameScreen(hunter));
-        		stage.clear();
-        	}
+    public GameOverScreen(Hunter p, float distance, int score, int killCount) {
+        hunter = p;
+        stage = new Stage();
+        ArcadeInputMux.getInstance().addProcessor(stage);
+
+        Texture.setEnforcePotImages(false);
+        background = new Texture("textures/mainmenu.png");
+        batch = new SpriteBatch();
+
+        System.out.println(score);
+        Table table = new Table(skin);
+        table.setFillParent(true);
+        table.padRight(400f);
+        table.padTop(400f);
+        stage.addActor(table);
+
+        //set table defaults
+        table.defaults().spaceBottom(20);
+        table.columnDefaults(0).colspan(2);
+
+
+        table.add("GAME OVER").colspan(2);
+        table.row();
+
+        table.add("Distance Travelled: ");
+        table.add(String.valueOf(distance)).colspan(2);
+        table.row();
+
+        table.add("Score: ");
+        table.add(String.valueOf(score)).colspan(2);
+        table.row();
+
+        table.add("Kills: ");
+        table.add(String.valueOf(killCount) + " Animals").colspan(2);
+        table.row();
+
+        TextButton playButton = new TextButton("Play Again", skin);
+        playButton.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Play Again");
+                hunter.setScreen(new GameScreen(hunter));
+                stage.clear();
+            }
         });
-		
-		TextButton backButton = new TextButton("Back to main menu", skin);
+
+        TextButton backButton = new TextButton("Back to main menu", skin);
         backButton.addListener(new ChangeListener() {
 
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-        		System.out.println("Going back to the main menu!");
-        		hunter.setScreen(new MenuScreen(hunter));
-        		stage.clear();
-        	}
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Going back to the main menu!");
+                hunter.setScreen(new MenuScreen(hunter));
+                stage.clear();
+            }
         });
-        
-        table.add(backButton).size(300,70);
+
+        table.add(backButton).size(300, 70);
         table.row();
-		
-		
-	}
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void render(float delta) {
-		// Black background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
 
-		batch.begin();
-		drawBackground();
-		batch.end();
-		
-		Gdx.input.setInputProcessor(stage);
-		stage.act(delta);
-		stage.draw();
-	}
+    }
 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+    @Override
+    public void render(float delta) {
+        // Black background
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-	}
+        batch.begin();
+        drawBackground();
+        batch.end();
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
+        Gdx.input.setInputProcessor(stage);
+        stage.act(delta);
+        stage.draw();
+    }
 
-	}
+    @Override
+    public void resize(int width, int height) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
 
-	private void drawBackground(){
-		batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
-	}
+    }
+
+    @Override
+    public void show() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private void drawBackground() {
+        batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+    }
 }

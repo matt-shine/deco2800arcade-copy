@@ -11,40 +11,42 @@ import deco2800.arcade.hunter.screens.GameScreen;
 
 import java.util.ArrayList;
 
-public class MapEntity extends Entity{
+public class MapEntity extends Entity {
 
 	private Texture text;
-	
+
 	private String classType = "MapEntity";
-	
+
 	private int moveSpeed;
-	
+
 	private String Type;
-	
+
 	private GameScreen gameScreen;
-	
-	public MapEntity(Vector2 pos, float width, float height, String file,Texture texture , GameScreen game){
+
+	public MapEntity(Vector2 pos, float width, float height, String file,
+			Texture texture, GameScreen game) {
 		super(pos, width, height);
 		this.text = texture;
-		if (file.equals("arrow")){
+		if (file.equals("arrow")) {
 			moveSpeed = 40;
-		}else{
+		} else {
 			moveSpeed = 0;
 		}
 		this.Type = file;
 		this.gameScreen = game;
 	}
-	
-	public String getEntityType(){
+
+	public String getEntityType() {
 		return Type;
 	}
-	
+
 	@Override
-	public void update(float delta){
-		if (moveSpeed != 0){
-			setX(getX()+moveSpeed);
+	public void update(float delta) {
+		if (moveSpeed != 0) {
+			setX(getX() + moveSpeed);
 		}
 	}
+
 	/**
 	 * Checks for collisions
 	 */
@@ -55,8 +57,9 @@ public class MapEntity extends Entity{
 			if (this.getX() <= 0)
 				collisions.add(new EntityCollision(this, null,
 						CollisionType.MAP_ENTITY_C_LEFT_EDGE));
-			if (e.getType().equals("Animal")){
-				collisions.add(new EntityCollision(this,e,CollisionType.MAP_ENTITY_C_ANIMAL));
+			if (e.getType().equals("Animal")) {
+				collisions.add(new EntityCollision(this, e,
+						CollisionType.MAP_ENTITY_C_ANIMAL));
 			}
 		}
 		return collisions;
@@ -67,19 +70,19 @@ public class MapEntity extends Entity{
 	 */
 	@Override
 	public void handleCollision(Entity e, EntityCollection entities) {
-		if (e == null){
+		if (e == null) {
 			entities.remove(this);
 		}
 	}
-	
+
 	@Override
-	public String getType(){
+	public String getType() {
 		return classType;
 	}
-	
+
 	@Override
-	public void draw(SpriteBatch batch, float stateTime){
-		batch.draw(text,getX(),getY(),64,32);
+	public void draw(SpriteBatch batch, float stateTime) {
+		batch.draw(text, getX(), getY(), 64, 32);
 	}
 
 }

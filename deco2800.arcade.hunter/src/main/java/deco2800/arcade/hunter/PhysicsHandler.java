@@ -14,7 +14,7 @@ public class PhysicsHandler {
      * Checks for entity collisions
      */
     public static void checkEntityCollisions(EntityCollection entities) {
-		/*
+        /*
 		 * Make a list of collision events
 		 * At the end, process them all one after the other
 		 * Precedence should be
@@ -45,25 +45,23 @@ public class PhysicsHandler {
         }
     }
 
-    
-	/**
-	 * Checks the collision of entities with the map
-	 * 
-	 * @param entities
-	 *            An entity collection that map collision will be checked for
-	 * @param foregroundLayer
-	 *            The foreground layer that is colliding with the entities
-	 */
-	public static void checkMapCollisions(EntityCollection entities,
-			ForegroundLayer foregroundLayer) {
-		// Check map collisions for every entity that can collide with the map
-		// (should be player, animals & projectiles)
 
-		// Move the item so that it no longer intersects with the map
+    /**
+     * Checks the collision of entities with the map
+     *
+     * @param entities        An entity collection that map collision will be checked for
+     * @param foregroundLayer The foreground layer that is colliding with the entities
+     */
+    public static void checkMapCollisions(EntityCollection entities,
+                                          ForegroundLayer foregroundLayer) {
+        // Check map collisions for every entity that can collide with the map
+        // (should be player, animals & projectiles)
+
+        // Move the item so that it no longer intersects with the map
         Iterator<Entity> i = entities.iterator();
-		while (i.hasNext()) {
+        while (i.hasNext()) {
             Entity e = i.next();
-			e.getCollider().clear();
+            e.getCollider().clear();
 
             int mid, colTop;
             mid = (int) (e.getX() + (e.getWidth() / 2));
@@ -81,6 +79,6 @@ public class PhysicsHandler {
 //                System.out.println("Animal: ("+ e.getX() + ", " + e.getY() + ")");
 //                i.remove();
 //            }
-		}
-	}
+        }
+    }
 }

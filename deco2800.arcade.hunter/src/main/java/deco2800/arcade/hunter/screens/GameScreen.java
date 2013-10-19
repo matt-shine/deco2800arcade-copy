@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.hunter.EntityHandler;
 import deco2800.arcade.hunter.Hunter;
@@ -26,167 +25,165 @@ import java.util.Random;
 
 /**
  * A Hunter game for use in the Arcade
- * 
+ *
  * @author Nessex, DLong94
- * 
  */
 public class GameScreen implements Screen {
-	private OrthographicCamera camera;
-	private Hunter hunter;
-	private EntityCollection entities = new EntityCollection();
-	private Player player;
-	private BackgroundLayer backgroundLayer;
-	private SpriteLayer spriteLayer;
-	private ForegroundLayer foregroundLayer;
-	private float speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
-	private SpriteBatch batch = new SpriteBatch();
-	private SpriteBatch staticBatch = new SpriteBatch();
-	private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
-	public EntityHandler entityHandler;
-	private Music musicResource;
-	private float stateTime;	
-	private float counter;
-	private int multiplier;
-	private long animalTime;
-	private long itemTime;
-	private long mapEntityTime;
-	private long attackTime;
-	
-	public GameScreen(Hunter hunter) {
-	
-		
-		this.hunter = hunter;
-		
-		// Initialise camera
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, Hunter.State.screenWidth, Hunter.State.screenHeight);
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		
+    private OrthographicCamera camera;
+    private Hunter hunter;
+    private EntityCollection entities = new EntityCollection();
+    private Player player;
+    private BackgroundLayer backgroundLayer;
+    private SpriteLayer spriteLayer;
+    private ForegroundLayer foregroundLayer;
+    private float speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
+    private SpriteBatch batch = new SpriteBatch();
+    private SpriteBatch staticBatch = new SpriteBatch();
+    private BitmapFont font = new BitmapFont(); //Can specify font here if we don't want to use the default
+    public EntityHandler entityHandler;
+    private Music musicResource;
+    private float stateTime;
+    private float counter;
+    private int multiplier;
+    private long animalTime;
+    private long itemTime;
+    private long mapEntityTime;
+    private long attackTime;
+
+    public GameScreen(Hunter hunter) {
+
+
+        this.hunter = hunter;
+
+        // Initialise camera
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Hunter.State.screenWidth, Hunter.State.screenHeight);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
         //Generate random seed and feed it to the random number generator here.
         //If you want to make it work the same as a previous run, manually set the seed at the start
         Hunter.State.randomGenerator = new Random((long) (Math.random() * Long.MAX_VALUE));
 
         int numPanes = (int) (Math.ceil(Hunter.State.screenWidth / (double) Config.PANE_SIZE_PX) + 1);
         foregroundLayer = new ForegroundLayer(1, numPanes, this);
-		backgroundLayer = new BackgroundLayer(0, this);
-		spriteLayer = new SpriteLayer((float) 0.6, this);
+        backgroundLayer = new BackgroundLayer(0, this);
+        spriteLayer = new SpriteLayer((float) 0.6, this);
 
-		entityHandler = new EntityHandler(entities);
-		
-		// Spawn entities
-		player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
-		Animal animal = new Animal(new Vector2(800, 10*Config.TILE_SIZE), 128, 128, false,"hippo", entityHandler.getAnimalAnimation("hippo"), this);
-		Animal prey = new Animal(new Vector2(700,10*Config.TILE_SIZE), 128, 128,true,"lion", entityHandler.getAnimalAnimation("lion"), this);
-		Items item = new Items(new Vector2(Config.TILE_SIZE*6, 5*Config.TILE_SIZE), 64, 64, "Invulnerability",entityHandler.getItemTexture("Invulnerability"),this);
+        entityHandler = new EntityHandler(entities);
 
-		entities.add(player);
-		hunter.incrementAchievement("hunter.beginner");
-		entities.add(animal);
-		entities.add(prey);
-		entities.add(item);
-		
-		// Plays the music
-		if(Hunter.State.getPreferencesManager().isMusicEnabled() && Hunter.State.getPreferencesManager().isSoundEnabled()){
-			FileHandle musicFile = Gdx.files.internal("gamemusic.mp3");
-			musicResource = Gdx.audio.newMusic(musicFile);
-			musicResource.setVolume(hunter.getPreferencesManager().getVolume());
-			musicResource.setLooping(true);
-			musicResource.play();
-		}
-		
-		stateTime = 0f;
-		multiplier = 1;
-		animalTime = 0;
-		itemTime = 0;
-		mapEntityTime = 0;
-		attackTime = 0;
-		
-		hunter.incrementAchievement("hunter.beginnings");
-		hunter.incrementAchievement("hunter.smallsteps");
-		hunter.incrementAchievement("hunter.expert");
-	}
+        // Spawn entities
+        player = new Player(new Vector2(128, 5 * Config.TILE_SIZE), 64, 128, this);
+        Animal animal = new Animal(new Vector2(800, 10 * Config.TILE_SIZE), 128, 128, false, "hippo", entityHandler.getAnimalAnimation("hippo"), this);
+        Animal prey = new Animal(new Vector2(700, 10 * Config.TILE_SIZE), 128, 128, true, "lion", entityHandler.getAnimalAnimation("lion"), this);
+        Items item = new Items(new Vector2(Config.TILE_SIZE * 6, 5 * Config.TILE_SIZE), 64, 64, "Invulnerability", entityHandler.getItemTexture("Invulnerability"), this);
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
+        entities.add(player);
+        hunter.incrementAchievement("hunter.beginner");
+        entities.add(animal);
+        entities.add(prey);
+        entities.add(item);
+
+        // Plays the music
+        if (Hunter.State.getPreferencesManager().isMusicEnabled() && Hunter.State.getPreferencesManager().isSoundEnabled()) {
+            FileHandle musicFile = Gdx.files.internal("gamemusic.mp3");
+            musicResource = Gdx.audio.newMusic(musicFile);
+            musicResource.setVolume(hunter.getPreferencesManager().getVolume());
+            musicResource.setLooping(true);
+            musicResource.play();
+        }
+
+        stateTime = 0f;
+        multiplier = 1;
+        animalTime = 0;
+        itemTime = 0;
+        mapEntityTime = 0;
+        attackTime = 0;
+
+        hunter.incrementAchievement("hunter.beginnings");
+        hunter.incrementAchievement("hunter.smallsteps");
+        hunter.incrementAchievement("hunter.expert");
+    }
+
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
         batch.dispose();
         staticBatch.dispose();
         musicResource.dispose();
         font.dispose();
-	}
+    }
 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	/**
-	 * Increases the game speed
-	 * 
-	 * @param delta
-	 *            The current delta of the game
-	 */
-	private void increaseGameSpeed(float delta) {
-		speedIncreaseCountdown -= delta;
+    /**
+     * Increases the game speed
+     *
+     * @param delta The current delta of the game
+     */
+    private void increaseGameSpeed(float delta) {
+        speedIncreaseCountdown -= delta;
 
-		if (speedIncreaseCountdown <= 0) {
-			speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
+        if (speedIncreaseCountdown <= 0) {
+            speedIncreaseCountdown = Config.SPEED_INCREASE_COUNTDOWN_START;
 
-			if (Hunter.State.gameSpeed < Config.MAX_SPEED) {
-				Hunter.State.gameSpeed++;
-			}
-		}
-	}
+            if (Hunter.State.gameSpeed < Config.MAX_SPEED) {
+                Hunter.State.gameSpeed++;
+            }
+        }
+    }
 
-	@Override
-	public void render(float delta) {
-		if (!Hunter.State.paused) {
-			pollInput();
+    @Override
+    public void render(float delta) {
+        if (!Hunter.State.paused) {
+            pollInput();
 
-			stateTime += Gdx.graphics.getDeltaTime();
-			
-			increaseGameSpeed(delta);
+            stateTime += Gdx.graphics.getDeltaTime();
 
-			moveCamera();
+            increaseGameSpeed(delta);
 
-			entities.updateAll(delta);
+            moveCamera();
 
-			PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
-			PhysicsHandler.checkEntityCollisions(entities);
+            entities.updateAll(delta);
 
-			backgroundLayer.update(delta, camera.position);
-			spriteLayer.update(delta, camera.position);
-			foregroundLayer.update(delta, camera.position);
-			
-			if (animalTime + 2500 <= System.currentTimeMillis()){
-				if (Hunter.State.randomGenerator.nextFloat() >= 0.5){
-					createAnimals();
-				}
-				animalTime = System.currentTimeMillis();
-			}
-			if (itemTime + 4500 <= System.currentTimeMillis()){
-				if (Hunter.State.randomGenerator.nextFloat() >= 0.5){
-					createItems();
-				}
-				itemTime = System.currentTimeMillis();
-			}
-			if (mapEntityTime + 4000 <= System.currentTimeMillis()){
-				if (Hunter.State.randomGenerator.nextFloat() >= 0.5){
-					createMapEntity();
-				}
-				mapEntityTime = System.currentTimeMillis();
-			}
-			
-			
-		}
+            PhysicsHandler.checkMapCollisions(entities, foregroundLayer);
+            PhysicsHandler.checkEntityCollisions(entities);
+
+            backgroundLayer.update(delta, camera.position);
+            spriteLayer.update(delta, camera.position);
+            foregroundLayer.update(delta, camera.position);
+
+            if (animalTime + 2500 <= System.currentTimeMillis()) {
+                if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
+                    createAnimals();
+                }
+                animalTime = System.currentTimeMillis();
+            }
+            if (itemTime + 4500 <= System.currentTimeMillis()) {
+                if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
+                    createItems();
+                }
+                itemTime = System.currentTimeMillis();
+            }
+            if (mapEntityTime + 4000 <= System.currentTimeMillis()) {
+                if (Hunter.State.randomGenerator.nextFloat() >= 0.5) {
+                    createMapEntity();
+                }
+                mapEntityTime = System.currentTimeMillis();
+            }
+
+
+        }
         //Draw everything
         staticBatch.begin();
         backgroundLayer.draw(staticBatch);
@@ -203,36 +200,36 @@ public class GameScreen implements Screen {
         staticBatch.begin();
         drawGameUI(staticBatch);
         staticBatch.end();
-	}
-	
-	/**
-	 * @param m - Integer of multiplier to be set to
-	 */
-	public void setMultiplier(int m){
-		multiplier = m;
-	}
-	
-	/**
-	 * @param score - Adds integer of player score
-	 */
-	public void addScore(int score){
-		player.addScore(score);
-	}
-	
-	/**
-	 * Adds another animal killed
-	 */
-	public void addAnimalKilled(){
-		player.addAnimalKilled();
-	}
-	
-	/**
-	 * @return EntityCollection of entities in the game screen
-	 */
-	public EntityCollection getEntites(){
-		return entities;
-	}
-	
+    }
+
+    /**
+     * @param m - Integer of multiplier to be set to
+     */
+    public void setMultiplier(int m) {
+        multiplier = m;
+    }
+
+    /**
+     * @param score - Adds integer of player score
+     */
+    public void addScore(int score) {
+        player.addScore(score);
+    }
+
+    /**
+     * Adds another animal killed
+     */
+    public void addAnimalKilled() {
+        player.addAnimalKilled();
+    }
+
+    /**
+     * @return EntityCollection of entities in the game screen
+     */
+    public EntityCollection getEntites() {
+        return entities;
+    }
+
 	/*
 	 * 
 	 * Creates New Entities
@@ -245,7 +242,7 @@ public class GameScreen implements Screen {
 	private void createMapEntity() {
 		String[] mapents = {"bomb", "net", "spike trap", "deathShroom"};
 		String mapent = mapents[Hunter.State.randomGenerator.nextInt(4)];
-		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),64,64, "net", entityHandler.getMapEntity("net"), this));
+		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),64,32, mapent, entityHandler.getMapEntity(mapent), this));
 	}
 	
 	/**
@@ -299,127 +296,132 @@ public class GameScreen implements Screen {
 	 * Drawing Static Game UI
 	 * 
 	 */
-	
-	/**
-	 * Draws the lives of the player on screen
-	 * 
-	 * @param batch SpriteBatch to use for drawing.
-	 */
-	private void drawGameUI(SpriteBatch batch) {
-		drawLives(batch);
-		drawScore(batch);
-		drawDistance(batch);
-		drawWeaponAmmo(batch);
-	}
 
-	/**
-	 * Draws the player's score on to the screen
-	 * @param batch SpriteBatch to use for drawing.
-	 */
-	private void drawScore(SpriteBatch batch) {
-		int x = Hunter.State.screenWidth / 2;
-		int y = Hunter.State.screenHeight - 16;
-		CharSequence scoreText = Integer.toString(player.getCurrentScore())+ "     X " + multiplier + " MULTIPLIER";
-		font.draw(batch, scoreText, x, y);
-	}
-	
-	/**
-	 * Draws the distance the player has travelled
-	 * @param batch SpriteBatch to use for drawing.
-	 */
-	private void drawDistance(SpriteBatch batch) {
-		int x = 16;
-		int y = Hunter.State.screenHeight - 16;
-		CharSequence scoreText = Float.toString(player.getCurrentDistance()) + "m";
-		font.draw(batch, scoreText, x, y);
-	}
-	
-	/**
-	  * Draws the amount of lives the player has left
-	  * @param batch SpriteBatch to use for drawing.
-	  */
-	private void drawLives(SpriteBatch batch) {
-		Texture lives = new Texture("textures/lives.png");
-		TextureRegion life = new TextureRegion(lives);
-		for (int x = 1; x <= player.getLives(); x++) {
-			batch.draw(life,
-					(Hunter.State.screenWidth - (x * (life.getRegionWidth() / 2f + 16))),
-					(Hunter.State.screenHeight - (life.getRegionHeight() / 2f) - 16),
+    /**
+     * Draws the lives of the player on screen
+     *
+     * @param batch SpriteBatch to use for drawing.
+     */
+    private void drawGameUI(SpriteBatch batch) {
+        drawLives(batch);
+        drawScore(batch);
+        drawDistance(batch);
+        drawWeaponAmmo(batch);
+    }
+
+    /**
+     * Draws the player's score on to the screen
+     *
+     * @param batch SpriteBatch to use for drawing.
+     */
+    private void drawScore(SpriteBatch batch) {
+        int x = Hunter.State.screenWidth / 2;
+        int y = Hunter.State.screenHeight - 16;
+        CharSequence scoreText = Integer.toString(player.getCurrentScore()) + "     X " + multiplier + " MULTIPLIER";
+        font.draw(batch, scoreText, x, y);
+    }
+
+    /**
+     * Draws the distance the player has travelled
+     *
+     * @param batch SpriteBatch to use for drawing.
+     */
+    private void drawDistance(SpriteBatch batch) {
+        int x = 16;
+        int y = Hunter.State.screenHeight - 16;
+        CharSequence scoreText = Float.toString(player.getCurrentDistance()) + "m";
+        font.draw(batch, scoreText, x, y);
+    }
+
+    /**
+     * Draws the amount of lives the player has left
+     *
+     * @param batch SpriteBatch to use for drawing.
+     */
+    private void drawLives(SpriteBatch batch) {
+        Texture lives = new Texture("textures/lives.png");
+        TextureRegion life = new TextureRegion(lives);
+        for (int x = 1; x <= player.getLives(); x++) {
+            batch.draw(life,
+                    (Hunter.State.screenWidth - (x * (life.getRegionWidth() / 2f + 16))),
+                    (Hunter.State.screenHeight - (life.getRegionHeight() / 2f) - 16),
                     life.getRegionWidth() / 2f, life.getRegionHeight() / 2f);
-		}
-	}
-	
-	/**
-	  * Draws ammo left on the player's weapon
-	  * @param batch SpriteBatch to use for drawing.
-	  */
-	private void drawWeaponAmmo(SpriteBatch batch){
-		int x = 16;
-		int y = 16;
-		CharSequence ammoText = "Ammo: " + player.getWeaponAmmo();
-		font.draw(batch, ammoText, x, y);
-	}
-	
-	/**
-	 * Moves the cameras along with the player
-	 */
-	private void moveCamera() {
-		camera.position.set(player.getX() - (player.getWidth() / 2)
-				+ Hunter.State.screenWidth / 3, player.getY()
-				- (player.getHeight() / 2) + Hunter.State.screenHeight / 3, 0);
+        }
+    }
 
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-	}
+    /**
+     * Draws ammo left on the player's weapon
+     *
+     * @param batch SpriteBatch to use for drawing.
+     */
+    private void drawWeaponAmmo(SpriteBatch batch) {
+        int x = 16;
+        int y = 16;
+        CharSequence ammoText = "Ammo: " + player.getWeaponAmmo();
+        font.draw(batch, ammoText, x, y);
+    }
 
-	/**
-	 * Returns foreground layer
-	 * 
-	 * @return ForegroundLayer of the game
-	 */
-	public ForegroundLayer getForeground() {
-		return foregroundLayer;
-	}
+    /**
+     * Moves the cameras along with the player
+     */
+    private void moveCamera() {
+        camera.position.set(player.getX() - (player.getWidth() / 2)
+                + Hunter.State.screenWidth / 3, player.getY()
+                - (player.getHeight() / 2) + Hunter.State.screenHeight / 3, 0);
 
-	/**
-	 * Ends the game
-	 */
-	public void gameOver(){
-		musicResource.stop();
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+    }
+
+    /**
+     * Returns foreground layer
+     *
+     * @return ForegroundLayer of the game
+     */
+    public ForegroundLayer getForeground() {
+        return foregroundLayer;
+    }
+
+    /**
+     * Ends the game
+     */
+    public void gameOver() {
+        musicResource.stop();
 //		hunter.highscore.addMultiScoreItem("Distance", (int)player.getCurrentDistance());
 //		hunter.highscore.addMultiScoreItem("Number", player.getCurrentScore());
 //		hunter.highscore.sendMultiScoreItems();
-		hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(),player.getCurrentScore(),player.getAnimalsKilled()));
-	}
-	
-	/**
-	 * Removes the entity from the entity from the GameScreen
-	 * @param e - Entity to be removed
-	 */
-	public void removeEntity(Entity e){
-		entities.remove(e);
-	}
-	
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+        hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(), player.getCurrentScore(), player.getAnimalsKilled()));
+    }
 
-	}
+    /**
+     * Removes the entity from the entity from the GameScreen
+     *
+     * @param e - Entity to be removed
+     */
+    public void removeEntity(Entity e) {
+        entities.remove(e);
+    }
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
+    @Override
+    public void resize(int width, int height) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	public GameClient getGameReference() {
-		// TODO Auto-generated method stub
-		return hunter;
-	}
+    @Override
+    public void show() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public GameClient getGameReference() {
+        // TODO Auto-generated method stub
+        return hunter;
+    }
 }

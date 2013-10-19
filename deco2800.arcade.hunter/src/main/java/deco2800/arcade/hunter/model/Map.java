@@ -5,37 +5,37 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
 public abstract class Map {
-	protected Vector2 offset = new Vector2();
-	protected float speedModifier;
+    protected Vector2 offset = new Vector2();
+    protected float speedModifier;
 
-	protected Map(float speedModifier) {
-		this.speedModifier = speedModifier;
-	}
+    protected Map(float speedModifier) {
+        this.speedModifier = speedModifier;
+    }
 
-	public abstract void update(float delta, Vector3 cameraPos);
+    public abstract void update(float delta, Vector3 cameraPos);
 
-	public abstract void draw(SpriteBatch batch);
+    public abstract void draw(SpriteBatch batch);
 
-	/**
-	 * @return xOffset
-	 */
-	public float getXOffset() {
-		return offset.x;
-	}
+    /**
+     * @return xOffset
+     */
+    public float getXOffset() {
+        return offset.x;
+    }
 
-	/**
-	 * Returns yOffset
-	 * 
-	 * @return float yOffset
-	 */
-	public float getYOffset() {
-		return offset.y;
-	}
+    /**
+     * Returns yOffset
+     *
+     * @return float yOffset
+     */
+    public float getYOffset() {
+        return offset.y;
+    }
 
-	/**
-	 * @param speedModifier
-	 */
-	public void setSpeedModifier(float speedModifier) {
-		this.speedModifier = speedModifier;
-	}
+    /**
+     * @param speedModifier
+     */
+    public void setSpeedModifier(float speedModifier) {
+        this.speedModifier = speedModifier;
+    }
 }

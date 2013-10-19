@@ -17,35 +17,36 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ForegroundLayer extends Map {
-	private ArrayList<MapPane> panes;
-	private int paneCount; //How many panes should we keep loaded at a time, should be the number that can fit on the screen plus one
+    private ArrayList<MapPane> panes;
+    private int paneCount; //How many panes should we keep loaded at a time, should be the number that can fit on the screen plus one
     private MapType currentType = MapType.GRASS;
 
     //Key is one of the MapType enums, value is a list of pane objects which can be instantiated
     private HashMap<MapType, ArrayList<MapPane>> mapPanes = new HashMap<MapType, ArrayList<MapPane>>();
-	
+
     private GameScreen gameScreen;
-	/**
+
+    /**
      * @param speedModifier How fast the pane should move relative to the camera. 1 is the same speed as the camera.
-	 * @param paneCount map panes to keep loaded at a time
-	 * @param gameScreen 
-	 */
-	public ForegroundLayer(float speedModifier, int paneCount, GameScreen gameScreen) {
-		super(speedModifier);
-		this.paneCount = paneCount;
-		this.gameScreen = gameScreen;
+     * @param paneCount     map panes to keep loaded at a time
+     * @param gameScreen
+     */
+    public ForegroundLayer(float speedModifier, int paneCount, GameScreen gameScreen) {
+        super(speedModifier);
+        this.paneCount = paneCount;
+        this.gameScreen = gameScreen;
 
         loadPanes(Gdx.files.internal("maps/maplist.txt"));
-		
-		panes = new ArrayList<MapPane>(paneCount);
-		while (panes.size() < this.paneCount) {
-			panes.add(getRandomPane());
-		}
-	}
-	
-	public ArrayList<MapPane> getPanes() {
-		return new ArrayList<MapPane>(panes);
-	}
+
+        panes = new ArrayList<MapPane>(paneCount);
+        while (panes.size() < this.paneCount) {
+            panes.add(getRandomPane());
+        }
+    }
+
+    public ArrayList<MapPane> getPanes() {
+        return new ArrayList<MapPane>(panes);
+    }
 
     /**
      * Load a set of panes from a given file into the mapPanes HashMap above
@@ -92,77 +93,80 @@ public class ForegroundLayer extends Map {
             e.printStackTrace();  //Todo, more detail here?
         }
     }
-	
-	/**
-	 * Get a random map pane of the requested type
-	 * @return new MapPane
-	 */
-	private MapPane getRandomPane() {
+
+    /**
+     * Get a random map pane of the requested type
+     *
+     * @return new MapPane
+     */
+    private MapPane getRandomPane() {
         ArrayList<MapPane> typePanes = mapPanes.get(this.currentType);
 
         return typePanes.get(Hunter.State.randomGenerator.nextInt(typePanes.size()));
-	}
-	
-	/**
-	 * Update the state of the map, should be called each time the main render loop is called
-	 * @param delta delta time of the render loop
-	 * @param cameraPos current camera position
-	 */
-	public void update(float delta, Vector3 cameraPos) {
-		if (cameraPos.x - Config.PANE_SIZE_PX * 2 > offset.x) {
-			offset.x += Config.PANE_SIZE_PX;
+    }
+
+    /**
+     * Update the state of the map, should be called each time the main render loop is called
+     *
+     * @param delta     delta time of the render loop
+     * @param cameraPos current camera position
+     */
+    public void update(float delta, Vector3 cameraPos) {
+        if (cameraPos.x - Config.PANE_SIZE_PX * 2 > offset.x) {
+            offset.x += Config.PANE_SIZE_PX;
 
             if (offset.x > (currentType.ordinal() + 1) * Config.PANES_PER_TYPE * Config.PANE_SIZE_PX) {
                 if (currentType.ordinal() < MapType.values().length - 1) {
                     currentType = MapType.values()[(currentType.ordinal() + 1)];
                 }
             }
-			
-			offset.y += (panes.get(0).getEndOffset() - panes.get(1).getStartOffset());
-			
-			panes.remove(0);
-			panes.add(getRandomPane());
-		}
-	}
 
-	@Override
-	public void draw(SpriteBatch batch) {
-		// TODO Auto-generated method stub
-		
-		float yOffset = this.offset.y;
-		//REPLACE TODO with getPaneOffset()
-		for (int i = 0; i < panes.size(); i++) {
-			if (i != 0) {
-				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset());
-			}
+            offset.y += (panes.get(0).getEndOffset() - panes.get(1).getStartOffset());
+
+            panes.remove(0);
+            panes.add(getRandomPane());
+        }
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        // TODO Auto-generated method stub
+
+        float yOffset = this.offset.y;
+        //REPLACE TODO with getPaneOffset()
+        for (int i = 0; i < panes.size(); i++) {
+            if (i != 0) {
+                yOffset += (panes.get(i - 1).getEndOffset() - panes.get(i).getStartOffset());
+            }
 
             batch.draw(panes.get(i).getBgRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
             batch.draw(panes.get(i).getFgRendered(), i * Config.PANE_SIZE_PX + offset.x, yOffset);
-		}		
-	}
-	
-	/*
-	 * Pane y offset relative to the main map offset
-	 */
-	public int getPaneOffset(int paneIndex) {
-		int yOffset = (int) this.offset.y;
-		
-		if (paneIndex == 0) {
-			return yOffset;
-		} else if (paneIndex > 0 && paneIndex <= paneCount) {
-			for (int i = 1; i <= paneIndex; i++) {
-				yOffset += (panes.get(i-1).getEndOffset() - panes.get(i).getStartOffset());
-			}
-			
-			return yOffset;
-		} else {
-			System.out.println("DEBUG: Should never get to here");
-			return 0;
-		}
-	}
+        }
+    }
+
+    /*
+     * Pane y offset relative to the main map offset
+     */
+    public int getPaneOffset(int paneIndex) {
+        int yOffset = (int) this.offset.y;
+
+        if (paneIndex == 0) {
+            return yOffset;
+        } else if (paneIndex > 0 && paneIndex <= paneCount) {
+            for (int i = 1; i <= paneIndex; i++) {
+                yOffset += (panes.get(i - 1).getEndOffset() - panes.get(i).getStartOffset());
+            }
+
+            return yOffset;
+        } else {
+            System.out.println("DEBUG: Should never get to here");
+            return 0;
+        }
+    }
 
     /**
      * Get the pane at a given X offset
+     *
      * @param x x offset to check
      * @return pane index for the given x offset, -1 if the coordinate does not correspond to a valid pane
      */
@@ -176,6 +180,7 @@ public class ForegroundLayer extends Map {
 
     /**
      * Find the column that corresponds to a given x coordinate
+     *
      * @param x in pixel coordinates
      * @return corresponding column number
      */
@@ -186,38 +191,40 @@ public class ForegroundLayer extends Map {
         }
         return -1;
     }
-	
-	/**
-	 * Get the collision tile at a given world-space coordinate
-	 * @param x x coordinate
-	 * @param y y coordinate
-	 * @return collision tile type, or -1 if the given location is out of bounds
-	 */
-	public int getCollisionTileAt(float x, float y) {
-		int tileOffsetY;
-		int pane = getPane(x);
-		
-		int tileX, tileY;
-		
-		if (pane != -1) {
-			tileOffsetY = (int) (y - getPaneOffset(pane));
-		} else {
-			//Player is out of bounds
-			return -1;
-		}
-		
-		tileX = getColumn(x);
-		tileY = tileOffsetY / Config.TILE_SIZE;
-		
-		if (tileX == -1 || tileY < 0 || tileY >= Config.PANE_SIZE) {
-			return -2;
-		}
 
-		return panes.get(pane).getCollisionTile(tileX, tileY);
-	}
+    /**
+     * Get the collision tile at a given world-space coordinate
+     *
+     * @param x x coordinate
+     * @param y y coordinate
+     * @return collision tile type, or -1 if the given location is out of bounds
+     */
+    public int getCollisionTileAt(float x, float y) {
+        int tileOffsetY;
+        int pane = getPane(x);
+
+        int tileX, tileY;
+
+        if (pane != -1) {
+            tileOffsetY = (int) (y - getPaneOffset(pane));
+        } else {
+            //Player is out of bounds
+            return -1;
+        }
+
+        tileX = getColumn(x);
+        tileY = tileOffsetY / Config.TILE_SIZE;
+
+        if (tileX == -1 || tileY < 0 || tileY >= Config.PANE_SIZE) {
+            return -2;
+        }
+
+        return panes.get(pane).getCollisionTile(tileX, tileY);
+    }
 
     /**
      * Get the y position of the pixel above the top collision tile
+     *
      * @param x the x position of the column to check
      * @return -1 if there is no top collision tile
      */
@@ -270,13 +277,14 @@ public class ForegroundLayer extends Map {
 
     /**
      * Get the nearest empty column for a given row, up to a maximum of Config.PANE_SIZE tiles away
-     * @param x position to consider as the origin
+     *
+     * @param x   position to consider as the origin
      * @param row row to test
      * @return a pixel number (x position) within the nearest empty tile. -1 if no such tile is found
      */
     public int getNearestEmptyColumn(float x, float row) {
         //Whether or not we check the right tile first
-        boolean rightFirst =  x % Config.TILE_SIZE > Config.TILE_SIZE / 2;
+        boolean rightFirst = x % Config.TILE_SIZE > Config.TILE_SIZE / 2;
 
         for (int i = 0; i < Config.PANE_SIZE; i++) {
             int left = getCollisionTileAt(x - (i * Config.TILE_SIZE), row);

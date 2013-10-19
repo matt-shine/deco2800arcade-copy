@@ -242,7 +242,7 @@ public class GameScreen implements Screen {
 	private void createMapEntity() {
 		String[] mapents = {"bomb", "net", "spike trap", "deathShroom"};
 		String mapent = mapents[Hunter.State.randomGenerator.nextInt(4)];
-		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),64,32, mapent, entityHandler.getMapEntity(mapent), this));
+		entities.add(new MapEntity(new Vector2(player.getX() + Hunter.State.screenWidth, getForeground().getColumnTop(player.getX() + Hunter.State.screenWidth)),entityHandler.getMapEntity(mapent).getWidth(),entityHandler.getMapEntity(mapent).getHeight(), mapent, entityHandler.getMapEntity(mapent), this));
 	}
 	
 	/**
@@ -387,10 +387,21 @@ public class GameScreen implements Screen {
      */
     public void gameOver() {
         musicResource.stop();
-//		hunter.highscore.addMultiScoreItem("Distance", (int)player.getCurrentDistance());
-//		hunter.highscore.addMultiScoreItem("Number", player.getCurrentScore());
-//		hunter.highscore.sendMultiScoreItems();
-        hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(), player.getCurrentScore(), player.getAnimalsKilled()));
+        try{
+	        if (hunter.highscore.getUserHighScore(true, "Number").score <= player.getCurrentScore()){
+	        	hunter.highscore.storeScore("Number", player.getCurrentScore());
+	        }
+	        if (hunter.highscore.getUserHighScore(true, "Distance").score <= (int)player.getCurrentDistance()){
+				hunter.highscore.addMultiScoreItem("Distance", (int)player.getCurrentDistance());
+				hunter.highscore.sendMultiScoreItems();
+	        }
+        }catch(NullPointerException npe){
+        	hunter.highscore.storeScore("Number", player.getCurrentScore());
+        	hunter.highscore.addMultiScoreItem("Distance", (int)player.getCurrentDistance());
+			hunter.highscore.sendMultiScoreItems();
+        }finally{
+        	hunter.setScreen(new GameOverScreen(hunter, player.getCurrentDistance(), player.getCurrentScore(), player.getAnimalsKilled()));
+        }
     }
 
     /**

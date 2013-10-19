@@ -133,10 +133,6 @@ public class BlackjackTable extends Thread {
 		} catch (InterruptedException e) {
 		}
 		dealcards();
-		for (int i = 0; i < Playerarray.size(); i++) {
-			if (Playerarray.get(i) != null) {
-			}
-		}
 		if (playercount(Playerarray) == 0) {
 			state = 0;
 		}
@@ -154,6 +150,9 @@ public class BlackjackTable extends Thread {
 		for (int i = 0; i < Playerarray.size(); i++) {
 			if (Playerarray.get(i) != null) {
 			token = Playerarray.get(i).username;
+			GameStatusUpdate update = new GameStatusUpdate();
+			update.message = "turn|" + token;
+			broadcastGameStatusUpdate(update);
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -238,18 +237,28 @@ public class BlackjackTable extends Thread {
 		dealerHand.add(card);
 		card = deck.getCard();
 		dealerHand.add(card);
+		GameStatusUpdate update = new GameStatusUpdate();
+		update.message = "dealcards";
+		broadcastGameStatusUpdate(update);
 	}
 	
 	public void dealer() {
 		while (totalhandNum(dealerHand) <= 16) {
 			dealerHand.add(deck.getCard());
 		}
+		GameStatusUpdate update = new GameStatusUpdate();
+		update.message = "dealer";
+		broadcastGameStatusUpdate(update);
 	}
 	
 	public void takeSeat(BlackjackUser user, int seatposition) {
 		if (JoiningPlayers.get(seatposition) == null && Playerarray.get(seatposition) == null) {
 			JoiningPlayers.set(seatposition, user);
 			Watchers.remove(user);
+			GameStatusUpdate update = new GameStatusUpdate();
+			update.message = "takeseat|" + seatposition;
+			update.username = user.username;
+			broadcastGameStatusUpdate(update);
 			if (state == 0) {
 				interrupt();
 			}
@@ -294,6 +303,10 @@ public class BlackjackTable extends Thread {
 		player.bet = amount;
 		player.chippile = player.chippile - player.bet;
 		numofplayersbet += 1; 
+		GameStatusUpdate update = new GameStatusUpdate();
+		update.message = "bet|" + player.bet;
+		update.username = player.username;
+		broadcastGameStatusUpdate(update);
 	}
 	
 	public void hit(BlackjackPlayer player) {
@@ -303,11 +316,11 @@ public class BlackjackTable extends Thread {
 		if (totalhandNum(player.hand) > 21) {
 			interrupt();
 		}
+		GameStatusUpdate update = new GameStatusUpdate();
+		update.message = "hit";
+		update.username = player.username;
+		broadcastGameStatusUpdate(update);
 		}
-		else {
-		}
-		Connection c = null;
-		//c.sendTCP(new GameStatusUpdate());
 	}
 	
 	public void stay(BlackjackPlayer player) {
@@ -326,6 +339,10 @@ public class BlackjackTable extends Thread {
 				player.has_split = false;
 				
 			}
+			GameStatusUpdate update = new GameStatusUpdate();
+			update.message = "stay";
+			update.username = player.username;
+			broadcastGameStatusUpdate(update);
 		}
 	}
 	
@@ -333,8 +350,23 @@ public class BlackjackTable extends Thread {
 		if (token == player.username) {
 		player.bet += doubledownamount;
 		player.hand.add(deck.getCard());
+		GameStatusUpdate update = new GameStatusUpdate();
+		update.message = "doubledown|" + doubledownamount;
+		update.username = player.username;
+		broadcastGameStatusUpdate(update);
 		interrupt();
 		}
+	}
+	
+	public void split(BlackjackPlayer player) {
+		player.split_hand.add(player.hand.get(0));
+		player.hand.remove(0);
+		player.split_bet = player.bet;
+		player.has_split = true;
+		GameStatusUpdate update = new GameStatusUpdate();
+		update.message = "split";
+		update.username = player.username;
+		broadcastGameStatusUpdate(update);
 	}
 	
 	public int totalhandNum(ArrayList<String> Hand) {
@@ -413,15 +445,40 @@ public class BlackjackTable extends Thread {
 		// TODO Auto-generated method stub
 		if (update.message.equals("hit")) {
 			for (int i = 0; i < Playerarray.size(); i++) {
+				if (Playerarray.get(i) != null) {
 				BlackjackPlayer Player = Playerarray.get(i);
 				if (Player.username == update.username) {
 					hit(Player);
 					return;
 				}
+				}
+			}
+		}
+		if (update.message.equals("stay")) {
+			for (int i = 0; i < Playerarray.size(); i++) {
+				if (Playerarray.get(i) != null) {
+				BlackjackPlayer Player = Playerarray.get(i);
+				if (Player.username == update.username) {
+					stay(Player);
+					return;
+				}
+				}
+			}
+		}
+		if (update.message.equals("split")) {
+			for (int i = 0; i < Playerarray.size(); i++) {
+				if (Playerarray.get(i) != null) {
+				BlackjackPlayer Player = Playerarray.get(i);
+				if (Player.username == update.username) {
+					split(Player);
+					return;
+				}
+				}
 			}
 		}
 		if (update.message.contains("bet")) {
 			for (int i = 0; i < Playerarray.size(); i++) {
+				if (Playerarray.get(i) != null) {
 				BlackjackPlayer Player = Playerarray.get(i);
 				String[] splitmsg = update.message.split("|");
 				String betamount = splitmsg[1];
@@ -429,9 +486,11 @@ public class BlackjackTable extends Thread {
 					bet(Player,Integer.parseInt(betamount));
 					return;
 				}
+				}
 		}
 		if (update.message.contains("doubledown")) {
 			for (int i = 0; i < Playerarray.size(); i++) {
+				if (Playerarray.get(i) != null) {
 				BlackjackPlayer Player = Playerarray.get(i);
 				String[] splitmsg = update.message.split("|");
 				String betamount = splitmsg[1];
@@ -440,15 +499,18 @@ public class BlackjackTable extends Thread {
 					return;
 				}
 			 }
+			}
 	 	  }
 		if (update.message.contains("takeseat")) {
-			for (int i = 0; i < Playerarray.size(); i++) {
-				BlackjackPlayer Player = Playerarray.get(i);
+			for (int i = 0; i < JoiningPlayers.size(); i++) {
+				if (JoiningPlayers.get(i) != null) {
+				BlackjackUser user = JoiningPlayers.get(i);
 				String[] splitmsg = update.message.split("|");
 				String seatno = splitmsg[1];
-				if (Player.username == update.username) {
-					takeSeat(Player,Integer.parseInt(seatno));
+				if (user.username == update.username) {
+					takeSeat(user,Integer.parseInt(seatno));
 					return;
+				}
 				}
 			 }
 	 	  }

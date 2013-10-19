@@ -219,7 +219,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 // Commented out for lag
 		/* ACHIEVEMENT STUFF */
-		AchievementClient achClient = this.getAchievementClient();
+		/*AchievementClient achClient = this.getAchievementClient();
 		Game myGame = this.getGame();
 
 		achievementArray = new ArrayList<Achievement>();
@@ -238,7 +238,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementNameFont        = new BitmapFont(false);
 		achievementDescriptionFont = new BitmapFont(false);
 		achievementThresholdFont   = new BitmapFont(false);
-		achievementIconTexture     = new Texture(("monkeySit.png"));
+		achievementIconTexture     = new Texture(("monkeySit.png"));*/
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();
@@ -409,8 +409,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.draw(levelNumText, 125, 5, 30, 30);
 			batch.draw(worldNumText, 85, 5, 30, 30);
 			batch.draw(livesNumText, 85, 30, 30, 30);
-			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
-			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
+			//achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
+			//achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
 
 			batch.end();
 			camera.update();
@@ -421,7 +421,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		case PAUSE:
 			batch.setProjectionMatrix(camera.combined);
 			batch.begin();
-			achievementTitleFont.draw(batch, "PAUSED", SCREENWIDTH/2, SCREENHEIGHT/2);
+			//achievementTitleFont.draw(batch, "PAUSED", SCREENWIDTH/2, SCREENHEIGHT/2);
 			batch.end();         
 			break;
 		case CONTINUE:
@@ -441,8 +441,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL10.GL_BLEND);
 			batchContinue.begin();
-			achievementTitleFont.draw(batchContinue, "Are you sure you want to continue?", 240, 200);
-			achievementTitleFont.draw(batchContinue, "Y or N?", 310, 150);
+			//achievementTitleFont.draw(batchContinue, "Are you sure you want to continue?", 240, 200);
+			//achievementTitleFont.draw(batchContinue, "Y or N?", 310, 150);
 
 			batchContinue.end();
 			camera.update();
@@ -558,7 +558,7 @@ public class junglejump extends GameClient implements InputProcessor {
 					p.visible = false;
 					// TODO change this to a function to count bananas
 					BANANAS_FOUND++;
-					System.out.println(BANANAS_FOUND/2);
+					System.out.println(BANANAS_FOUND);
 					p.setY(10000);
 					
 					// Play banana sound
@@ -672,7 +672,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		game = new Game();
 		game.id = "junglejump";
 		game.name = "Jungle Jump";
-		game.description = "Help Jay find Jay's Jane"; // Nathaniel for fun.
+		game.description = "Help Jay find Jay's Jane";
 	}
 
 	public Game getGame() {

@@ -81,12 +81,11 @@ public class LevelContainer {
 	        		Platform p;
 	        		if(c == 'b') {
 	        				level.addBanana(); // false means not found
-	        				p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+	        				p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 		        			level.addPlatform(p);
 		        			bananaCounter++;
-	        		}
-	        		if(c!='*' && c!= '.') {
-	        			p = new Platform(c, false, (x*xLength), (y*xLength), xLength, yLength);
+	        		} else if(c!='*' && c!= '.') {
+	        			p = new Platform(c, (x*xLength), (y*xLength), xLength, yLength);
 	        			level.addPlatform(p);
 	        		}
 	        	}

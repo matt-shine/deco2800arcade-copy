@@ -116,10 +116,7 @@ public class ScoreScreen implements Screen {
         HighscoreClient player = new HighscoreClient(game.getPlayerName(), "Burning Skies", networkClient);
         
         topPlayers = player.getGameTopPlayers(10, true, "Number");
-
-        System.out.println(topPlayers.get(0).playerName);
-        System.out.println(topPlayers.get(0).score);
-        
+       
         stage = new Stage(width, height, true);
 	
         ArcadeInputMux.getInstance().addProcessor(stage);

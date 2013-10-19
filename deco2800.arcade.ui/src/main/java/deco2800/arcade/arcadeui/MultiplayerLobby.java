@@ -51,6 +51,10 @@ public class MultiplayerLobby implements Screen {
 	ArrayList<ActiveMatchDetails> matches;
 	private Player player;
 	public String name;
+	
+	Texture bg;
+	Sprite bgSprite;
+	SpriteBatch batch;
 
 	public MultiplayerLobby(ArcadeUI ui, Player player) {
 		System.out.println(ui);
@@ -339,6 +343,9 @@ public class MultiplayerLobby implements Screen {
 		// Gdx.gl.glClearColor(0.9f, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
+		batch.begin();
+		bgSprite.draw(batch);
+		batch.end();
 
 		if (Gdx.input.isKeyPressed(Keys.B)) {
 			//dispose();

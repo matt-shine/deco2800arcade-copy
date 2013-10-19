@@ -1,6 +1,6 @@
 package deco2800.arcade.pacman;
 
-public class TeleportTile extends Tile {
+public final class TeleportTile extends Tile {
 
 	private Tile target;
 	private Tile[][] grid;

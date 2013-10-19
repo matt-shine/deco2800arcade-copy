@@ -171,8 +171,8 @@ public class Pacman extends GameClient {
 			game = new Game();
 			game.id = "Pacman";
 			game.name = "Pacman";
-			game.description = "An implementation of the classic arcade game Pac-"
-			+ "man." + System.getProperty("line.separator") + "Still in progress- additional " + 
+			game.description = "An implementation of the classic arcade game Pac-man." + 
+			System.getProperty("line.separator") + "Still in progress- additional " + 
 			"features may be added later.";
 			// game.icon- to be added later once the icon part is fully implemented
 		} 

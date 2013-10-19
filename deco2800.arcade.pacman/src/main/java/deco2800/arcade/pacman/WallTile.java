@@ -2,7 +2,7 @@ package deco2800.arcade.pacman;
 
 import java.util.ArrayList;
 
-public class WallTile extends Tile {
+public final class WallTile extends Tile {
 
 	//Game map should be 28x31 tiles
 	/** A char representing the type of wallTile. Same char used in file  

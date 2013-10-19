@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 
-public class PacChar extends Mover{
+public final class PacChar extends Mover{
 	
 	// Describes the current state of pacman- starts IDLE
 	public enum PacState {

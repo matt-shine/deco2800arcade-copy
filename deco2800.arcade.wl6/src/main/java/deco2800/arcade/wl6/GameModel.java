@@ -21,6 +21,8 @@ public class GameModel {
 
     // The name of the current level
     private String currentLevel = "nothing";
+    private String nextLevel = null;
+    private String levelAfterSecret = null;
 
     // The player
     private Player player = null;
@@ -45,7 +47,8 @@ public class GameModel {
 
 	private int difficulty = 1;
 
-
+	private boolean suspendInit = false;
+	
 
     public GameModel() {
     }
@@ -57,20 +60,28 @@ public class GameModel {
      * @param level
      */
     public void goToLevel(String level) {
-        //create the map
+        //create the new level
+        doodads.clear();
+
         if (!currentLevel.equals(level)) {
             currentMap = new Level(loadFile("wl6maps/" + level + ".json"));
         }
 
         currentLevel = level;
-
-        for (Doodad d : doodads) {
-        	this.destroyDoodad(d);
-        }
-        waypoints = new WL6Meta.DIRS[64][64];
+        nextLevel = null;
         
-        MapProcessor.processEverything(this);
 
+        waypoints = new WL6Meta.DIRS[64][64];
+        collisionGrid = new CollisionGrid();
+        
+        suspendInit = true;
+        MapProcessor.processEverything(this);
+        suspendInit = false;
+        
+        for (Doodad d : doodads) {
+        	d.init(this);
+        }
+        
         player = new Player(MapProcessor.doodadID());
         player.setPos(spawn);
         player.setAngle(this.spawnAngle);
@@ -143,7 +154,9 @@ public class GameModel {
      */
     public void addDoodad(Doodad doodad) {
         doodads.add(doodad);
-        doodad.init(this);
+        if (!suspendInit) {
+        	doodad.init(this);
+        }
     }
 
 
@@ -170,8 +183,8 @@ public class GameModel {
         waypoints[x][y] = angle;
     }
 
-    public WL6Meta.DIRS[][] getWapoints() {
-        return waypoints.clone();
+    public WL6Meta.DIRS getWaypoint(int x, int y) {
+        return waypoints[x][y];
     }
 
 
@@ -199,7 +212,9 @@ public class GameModel {
      * Call this before ticking.
      */
     public void beginTick() {
-        //nothing to do yet
+        if (nextLevel != null) {
+        	goToLevel(nextLevel);
+        }
     }
 
 
@@ -210,6 +225,7 @@ public class GameModel {
         for (Doodad d : toDelete) {
             doodads.remove(d);
         }
+        toDelete.clear();
     }
 
     /**
@@ -256,21 +272,25 @@ public class GameModel {
 	 * if current level = 1-7 : current level++
 	 * if current level = 8 : current level = b
 	 * if current level = b : chapter++, current level = 1
-	 * if current level = s : current level = 2
+	 * if current level = s : current level = levelAfterSecret
 	 */
 	public void nextLevel() {
 		if (getLevelInChapter().equals("b")) {
 			if (getChapter().equals("6")) {
-				goToLevel("e1l1");
+				nextLevel = "e1l1";
 			} else {
-				goToLevel("e" + (Integer.parseInt(getChapter()) + 1) + "l1");
+				nextLevel = "e" + (Integer.parseInt(getChapter()) + 1) + "l1";
 			}
 		} else if (getLevelInChapter().equals("s")) {
-			goToLevel("e" + getChapter() + "l2");
+			if (levelAfterSecret != null) {
+				nextLevel = levelAfterSecret;
+			} else {
+				nextLevel = "e" + getChapter() + "l1";
+			}
 		} else if (getLevelInChapter().equals("8")) {
-			goToLevel("e" + getChapter() + "boss");
+			nextLevel = "e" + getChapter() + "boss";
 		} else {
-			goToLevel("e" + getChapter() + "l" + (Integer.parseInt(getLevelInChapter()) + 1));
+			nextLevel = "e" + getChapter() + "l" + (Integer.parseInt(getLevelInChapter()) + 1);
 		}
 	}
 
@@ -279,7 +299,9 @@ public class GameModel {
 	 * go to the secret level
 	 */
 	public void secretLevel() {
-		goToLevel("e" + (Integer.parseInt(getChapter())) + "secret");
+		nextLevel();
+		levelAfterSecret = nextLevel;
+		nextLevel = "e" + (Integer.parseInt(getChapter())) + "secret";
 	}
 
 

@@ -21,6 +21,10 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
+ * This page generates differently based upon the parameter 'featuredGame'
+ * given to it upon instantiation. It will load the game's name, description
+ * and icon based upon it, and display other Players reviews and ratings at the
+ * side of the screen, as well as the game's average rating.
  * @author Addison Gourluck
  */
 public class StoreGame implements Screen, StoreScreen {
@@ -28,11 +32,12 @@ public class StoreGame implements Screen, StoreScreen {
 	private Stage stage = new Stage();
 	private static Game featured;
 	private ArcadeUI arcadeUI;
-	private int rating = 0;
+	private int rating; // The rating of the feature game.
 	
 	/**
 	 * @author Addison Gourluck
-	 * @param ui
+	 * @param ArcadeUI ui
+	 * @param Game featuredGame
 	 */
 	public StoreGame(ArcadeUI ui, Game featuredGame) {
 		featured = featuredGame;
@@ -46,7 +51,7 @@ public class StoreGame implements Screen, StoreScreen {
 		final Label ratingTitle = new Label("Ratings + Reviews", skin, "default-28");
 		final Label ratingScore = new Label("0.0", skin, "rating-score");
 		final Label ratingScoreText = new Label("Average Rating", skin, "default-14");
-		final Table star_bg = new Table();
+		final Table starbg = new Table();
 		final Button homeButton = new Button(skin, "home");
 		final Button buyButton = new Button(skin, "buy");
 		final Button reviewButton = new Button(skin, "review");
@@ -65,7 +70,7 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		// Title of the featured game, located center of screen.
 		gameTitle.setSize(380, 40);
-		gameTitle.setPosition(96, 513);
+		gameTitle.setPosition(96, 515);
 		stage.addActor(gameTitle);
 		
 		// Main text body, located in center of screen.
@@ -115,7 +120,7 @@ public class StoreGame implements Screen, StoreScreen {
 		buyButton.setPosition(298, 335);
 		stage.addActor(buyButton);
 		
-		// Static Element (Variable Listener). Checkable, to add/remove from wishlist
+		// Static Element (Variable Listener). Checkable, to add/remove from wishlist.
 		wishButton.setSize(158, 62);
 		wishButton.setPosition(443, 335);
 		stage.addActor(wishButton);
@@ -125,14 +130,15 @@ public class StoreGame implements Screen, StoreScreen {
 		reviewButton.setPosition(863, 335);
 		stage.addActor(reviewButton);
 		
-		skin.add("star_bg", new Texture(Gdx.files.internal("store/big_stars.png")));
-		star_bg.setBackground(skin.getDrawable("star_bg"));
-		star_bg.setColor(0.5f, 0.5f, 0.5f, 1);
-		star_bg.setPosition(881, 414);
-		star_bg.setSize(142, 23);
-		stage.addActor(star_bg);
+		// Grey stars background for star rating.
+		skin.add("starbg", new Texture(Gdx.files.internal("store/big_stars.png")));
+		starbg.setBackground(skin.getDrawable("starbg"));
+		starbg.setColor(0.5f, 0.5f, 0.5f, 1);
+		starbg.setPosition(881, 414);
+		starbg.setSize(142, 23);
+		stage.addActor(starbg);
 		
-		placeRatingStars(stage, skin);
+		placeRatingStars();
 		
 		homeButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
@@ -149,7 +155,7 @@ public class StoreGame implements Screen, StoreScreen {
 		
 		wishButton.addListener(new ChangeListener() {
 			public void changed(ChangeEvent event, Actor actor) {
-				System.out.println("wish");
+				System.out.println("wishlist");
 			}
 		});
 		
@@ -160,16 +166,21 @@ public class StoreGame implements Screen, StoreScreen {
 		});
 	}
 	
-	private void placeRatingStars(Stage stage, Skin skin) {
+	/**
+	 * Places 5 invisible checkboxs over each other, which will highlight on
+	 * mouseover, and stay highlighted on mouseclick.
+	 * @author Addison Gourluck
+	 */
+	private void placeRatingStars() {
 		for (int i = 5; i >= 1; --i) {
 			final CheckBox star = new CheckBox("", skin, "star" + i);
 			star.setSize(i * 28.4f, 23);
-			star.setName("star" + i);
+			star.setName("S" + i);
 			star.setPosition(882, 413);
-			
+			// Listener to change rating when a star is changed.
 			star.addListener(new ChangeListener() {
 				public void changed(ChangeEvent event, Actor actor) {
-					rating = (int)actor.getName().toCharArray()[4] - 48;
+					rating = (int)actor.getName().charAt(1) - 48;
 					System.out.println("pressed star " + rating);
 				}
 			});
@@ -226,12 +237,17 @@ public class StoreGame implements Screen, StoreScreen {
 	public Game getSelected() {
 		return featured;
 	}
-
+	
 	@Override
-	public boolean buyTokens(int amount, Game game) {
+	public boolean buyTokens(int amount) {
 		return false;
 	}
-
+	
+	@Override
+	public boolean buyGame(Game game) {
+		return false;
+	}
+	
 	@Override
 	public void setSelected(String game) {
 		for (Game search : ArcadeSystem.getArcadeGames()) {
@@ -240,5 +256,10 @@ public class StoreGame implements Screen, StoreScreen {
 				return;
 			}
 		}
+	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
 	}
 }

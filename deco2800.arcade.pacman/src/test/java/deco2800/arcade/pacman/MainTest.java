@@ -59,7 +59,7 @@ public class MainTest {
 	public void mapFileExists() {
 		gameMap.readMap(model.getMapName());
 	}	
-		
+	
 	/** Checks to see if the multiplexer still exists properly */
 	@Test
 	public void checkMultiplexerExists() {

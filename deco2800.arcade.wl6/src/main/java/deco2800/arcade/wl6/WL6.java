@@ -22,7 +22,6 @@ public class WL6 extends GameClient {
 
     MainGameScreen gameScreen;
     MenuScreen menuScreen;
-    @SuppressWarnings("unused")
     SplashScreen splashScreen;
 
     public static int MAP_DIM = 64;
@@ -78,7 +77,7 @@ public class WL6 extends GameClient {
         gameScreen = new MainGameScreen(this);
         menuScreen = new MenuScreen(this);
         splashScreen = new SplashScreen(this);
-        this.setScreen(menuScreen);
+        this.setScreen(splashScreen);
 
         super.create();
 

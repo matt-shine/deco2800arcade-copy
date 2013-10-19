@@ -387,6 +387,12 @@ public class SnakeLadder extends GameClient {
 		player5.storeScore("Number", 1093);
 		
 	}
-
+	private static final Game game;
+	static {
+		game = new Game();
+		game.id = "snakeLadder";
+		game.name = "Snakes & Ladders";
+		game.description = "Many snakes and ladders."; 
+	}
 }
 

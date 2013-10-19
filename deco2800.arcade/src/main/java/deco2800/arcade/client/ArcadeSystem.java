@@ -1,5 +1,8 @@
 package deco2800.arcade.client;
 
+import deco2800.arcade.client.network.listener.NetworkListener;
+import deco2800.arcade.model.Game;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -75,13 +78,30 @@ public class ArcadeSystem {
 		return arcade.findPlayableGames();
 	}
 
-	/**
-	 * Login to arcade
-	 * 
-	 * @param username: User to login
-	 */
+    /**
+     * Debug login command
+     * @param username User to login
+     */
 	public static void login(String username) {
-		arcade.connectAsUser(username);
+		arcade.connectAsUser(username, "");
+	}
+	
+	/**
+     * Login to arcade
+     * @param username User to login
+     * @param password password for login
+     */
+	public static void login(String username, String password) {
+		arcade.connectAsUser(username, password);
+	}
+	
+	/**
+     * Login to arcade
+     * @param username User to login
+     * @param password password for login
+     */
+	public static void registerUser(String username, String password) {
+		arcade.registerAsUser(username, password);
 	}
 
 	/**
@@ -98,6 +118,15 @@ public class ArcadeSystem {
 	 */
 	public static boolean isLoggedIn() {
 		return arcade.hasPlayer();
+	}
+	
+	/**
+     * Adds listener to client
+	 * @param listener 
+     * @return true if logged in, false otherwise
+     */
+	public static void addListener(NetworkListener listener) {
+		arcade.getClient().addListener(listener);
 	}
 
 	/**

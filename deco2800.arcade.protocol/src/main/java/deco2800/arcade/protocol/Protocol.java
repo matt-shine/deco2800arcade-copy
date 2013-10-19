@@ -72,8 +72,6 @@ import deco2800.arcade.protocol.replay.PushEventRequest;
 import deco2800.arcade.protocol.replay.PushEventResponse;
 import deco2800.arcade.protocol.replay.StartSessionRequest;
 import deco2800.arcade.protocol.replay.StartSessionResponse;
-import deco2800.arcade.protocol.replay.demo.ReplayRequest;
-import deco2800.arcade.protocol.replay.demo.ReplayResponse;
 import deco2800.arcade.protocol.replay.types.Session;
 import deco2800.arcade.model.Achievement;
 
@@ -131,8 +129,6 @@ public class Protocol {
 		kryo.register(GetScoreResponse.class);
 		
 		//Replay messages
-		kryo.register(ReplayRequest.class);
-		kryo.register(ReplayResponse.class);
 		kryo.register(StartSessionRequest.class);
 		kryo.register(StartSessionResponse.class);
 		kryo.register(EndSessionRequest.class);

@@ -1,5 +1,9 @@
 package deco2800.arcade.arcadeui.store;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 
@@ -11,6 +15,27 @@ public class Utilities {
 	 * @author Addison Gourluck
 	 */
 	static Utilities helper = new Utilities();
+	
+	/**
+	 * This method will add all of the images from the logos/ folder into the
+	 * skin given to it. If any of them are missing, default is laoded instead.
+	 * 
+	 * @author Addison Gourluck
+	 * @param Skin skin
+	 */
+	public void loadIcons(Skin skin) {
+		// Load the logo for all of the games (or default), and store them
+		// in the skin, with their name as their key.
+		for (Game gamename : ArcadeSystem.getArcadeGames()) {
+			try {
+				skin.add(gamename.id, new Texture(Gdx.files.internal("logos/"
+						+ gamename.id.toLowerCase() + ".png")));
+			} catch (Exception e) {
+				skin.add(gamename.id, new Texture
+						(Gdx.files.internal("logos/default.png")));
+			}
+		}
+	}
 	
 	/**
 	 * This method will return the game with the name that matches most closely.

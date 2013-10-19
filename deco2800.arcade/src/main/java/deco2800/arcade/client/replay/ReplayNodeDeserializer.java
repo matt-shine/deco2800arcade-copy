@@ -13,8 +13,8 @@ public class ReplayNodeDeserializer implements JsonDeserializer<ReplayNode> {
 	 * convert a JSON formatted string into a ReplayNode object.
 	 */
 	@Override
-	public ReplayNode deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-			throws JsonParseException {
+	public ReplayNode deserialize(JsonElement json, Type typeOfT, 
+			JsonDeserializationContext context) {
 		// Convert the element to an object, which can be parsed
 	    JsonObject jsonObject = json.getAsJsonObject();
 	    

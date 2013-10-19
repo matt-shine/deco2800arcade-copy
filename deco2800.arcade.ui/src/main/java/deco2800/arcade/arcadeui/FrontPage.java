@@ -1,384 +1,276 @@
 package deco2800.arcade.arcadeui;
 
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 
-import deco2800.arcade.arcadeui.store.StoreHome;
-import deco2800.arcade.client.Arcade;
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.ArcadeInputMux;
-import deco2800.arcade.client.ArcadeSystem;
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.model.Player;
-
-//adee added
-import deco2800.arcade.arcadeui.Overlay.*;
-import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.arcadeui.store.StoreScreen;
-import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.model.Game.InternalGame;
 @ArcadeGame(id="frontpage")
 public class FrontPage implements Screen {
 	
-	private class FrontPageStage extends Stage {}
+	private static Stage stage = new Stage();
+	private static Skin skin = new Skin(Gdx.files.internal("loginSkin.json"));
+	private ArcadeUI arcadeUI;
 	
-    public static Skin skin;
-    private static FrontPageStage stage;
-	
-    private float funds;
-    private int tokens;
-    
-    //need to get values for
+	private static String[] friends = {"adeleen", "alina", "moji", "will"};
+	private static String pName = "<USERNAME>";
+	private static int pCredits = 165;
 
-    private static int creditVal = 0;
-    private String[] onlineFriends = {"adeleen", "alina", "moji", "will"};
-    private int nFriends = onlineFriends.length;
-    private static String uName = "Adeleen Pavia";
+	private final static Label menuInfo = new Label("Loading...", skin, "cgothic");
 
-    private String game1 = "Chess";
-    private String game2 = "Pong";
-    private String game3 = "Snakes and Ladders";
-    
-    public static String pName = "<USERNAME>";
-    
-    private boolean bclicked;
-    private ArcadeUI arcadeUI;
-    
-    Texture bg;
-    Texture mB;
-    Texture rP;
-    Sprite bgSprite;
-    Sprite mbSprite;
-    Sprite rpSprite;
-    
-    SpriteBatch batch;
-    
-    public FrontPage(ArcadeUI ui) {
-    	//FIXME big method
-        arcadeUI = ui;
-        skin = new Skin(Gdx.files.internal("loginSkin.json"));
-        skin.add("background", new Texture("homescreen_bg.png"));
-        skin.add("menuBar", new Texture("menuBar.png"));
-        skin.add("recentBar", new Texture("recent.png"));
-        skin.add("chatOverlay", new Texture("overlayPopUp.png"));
-        stage = new FrontPageStage();
-        
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setBackground(skin.getDrawable("background"));
-        stage.addActor(table);
-        
-        bg = new Texture("homescreen_bg.png");
-        bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        bgSprite = new Sprite(bg);
-        batch = new SpriteBatch();
-        
-        mB = new Texture("menuBar.png");
-        mB.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        mbSprite = new Sprite(mB);
-        
-        rP = new Texture("recent.png");
-        rP.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        rpSprite = new Sprite(rP);
-        
-       
-        
-        
-        //Text Buttons
-        final TextButton storeButton = new TextButton("Store", skin, "green");
-        //skin.add("Store", new Texture("homescreen_bg.png"));
-        final TextButton chatButton = new TextButton("Chat", skin);
-        final TextButton libraryButton = new TextButton("Library", skin, "magenta");
-        final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
-       
-        //buttons for recent games
-        final TextButton recentgame1 = new TextButton(game1, skin, "blue");
-        final TextButton recentgame2 = new TextButton(game2, skin, "blue");
-        final TextButton recentgame3 = new TextButton(game3, skin, "blue");
-        
-        final Table recentTable = new Table();
-        //recentTable.setFillParent(true);
-        recentTable.setBackground(skin.getDrawable("recentBar"));
-        recentTable.setSize(400, 800);
-    	recentTable.setPosition(75, 0);
-    	
-        //Top Box Labels
-        final Label logo = new Label("VAPOR", skin, "cgothic");
-        logo.setAlignment(Align.left);
-        
-        //Bottom Box Labels
-        final Label divider2 = new Label("|", skin, "cgothic");
-        divider2.setAlignment(Align.right);
-        final Label chatLink = new Label("Online (" + nFriends +")" , skin, "cgothic");
-        chatLink.setAlignment(Align.right);
-        
-        final int bWidth = 300;
-        final int bHeight = 300;
-        final int bX = 150;
-        final int bY = 220;
-        final int enlarge = 50;
-        final int bX2= bX + bWidth + (enlarge);
-        final int bX3= bX + 2*(bWidth + enlarge);
- 
-        
-        //make button sizes and positioning
-        
-        
-        recentButton.setSize(bWidth, bHeight);        
-        recentButton.setPosition(bX, bY);
-        
-        //recent games, 1 2 and 3
-        recentgame1.setSize(bWidth - 50, bHeight - 50);   //250px x 250px     
-        recentgame1.setPosition(bX + 25, bY + 250); 
-       
-        
-        recentgame2.setSize(bWidth - 50, bHeight - 50);        
-        recentgame2.setPosition(bX + 25, bY);
-        
-        recentgame3.setSize(bWidth - 50, bHeight - 50);        
-        recentgame3.setPosition(bX + 25, bY - 250);
-       
-        
-        libraryButton.setSize(bWidth, bHeight);
-        libraryButton.setPosition(bX2, bY);
-        
-        storeButton.setSize(bWidth, bHeight);
-        storeButton.setPosition(bX3, bY);
-        
-        
-        //adding panel for top and bottom bar
-//        final Table topBox = new Table();
-        final Table bottomBox = new Table();
-        
-        
-        //set bottom bar properties
-        bottomBox.setSize(1279, 30);
-        bottomBox.setPosition(0, 0);
-        bottomBox.setColor(255, 255, 255, 1);
-        bottomBox.setBackground(skin.getDrawable("menuBar"));
-        
-        //add bottom labels
-        
-        bottomBox.add(divider2).width(1100).pad(20);
-        bottomBox.add(chatLink).width(100);
-        
-        //adding to stage
-        stage.addActor(bottomBox);
-        
-        /*ONLY TESTING */
-        final TextButton chatButtonx = new TextButton("Online (" + nFriends + ")", skin, "magenta");
-        chatButtonx.setSize(150, 50);
-        chatButtonx.setPosition(640, 580);
-        
-        stage.addActor(chatButtonx);
-        chatButtonx.addListener((new ChangeListener() {
-		    public void changed (ChangeEvent event, Actor actor) {
-		    	displayChat();
-		    //	arcadeUI.render();
-		    }
-		}));
-        /*testing end*/
-        
-        
-        // Icon event listeners, mouseOver and mouseClick
-        recentButton.addListener((new ClickListener() {        	
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
-           		//recentButton.setSize(bWidth + enlarge,  bHeight + enlarge);
-            	//recentButton.setPosition(bX - (enlarge/2), bY-(enlarge/2));
-            	
-            	//get original width and height and X and Y positions 
-           		float cSizeX = recentButton.getWidth();
-           		float cSizeY = recentButton.getHeight();
-           		float cPosX = recentButton.getX();
-           		float cPosY = recentButton.getY();
-           		
-           		recentButton.setSize(cSizeX + enlarge, cSizeY + enlarge);
-            	recentButton.setPosition(cPosX - (enlarge/2), cPosY - (enlarge/2));
-           		recentButton.setText(null);
-               	recentButton.setText("Recently Played");
-            		
-            		 			     			
-           
-            }
-            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-            	/*recentButton.setSize(bWidth, bHeight);
-				recentButton.setPosition(bX, bY);	
-            	recentButton.setPosition(recentButton.getX() + (enlarge/2), recentButton.getY() + (enlarge/2));*/
-            	
-            	//get original position and shrink
-            	float cSizeX = recentButton.getWidth();
-           		float cSizeY = recentButton.getHeight();
-           		float cPosX = recentButton.getX();
-           		float cPosY = recentButton.getY();
-           		
-           		recentButton.setSize(cSizeX - enlarge, cSizeY - enlarge);
-           		recentButton.setPosition(cPosX + (enlarge/2), cPosY + (enlarge/2));
-           		recentButton.setText(null);
-            	recentButton.setText("Recently Played");
-            }
-        }));   
-        
-	    
-		recentButton.addListener((new ChangeListener() {
-		    public void changed (ChangeEvent event, Actor actor) {
-		    	recentButton.remove();
-		    	
-		    	stage.addActor(recentTable);
-    			stage.addActor(recentgame1);
-    			stage.addActor(recentgame2);
-    			stage.addActor(recentgame3);
-    			recentTable.setZIndex(1);
-    			recentgame1.setZIndex(2);
-		    	recentgame2.setZIndex(2);
-		    	recentgame3.setZIndex(2);
-    			
-		    	
-		    }
-		})); 
-       
-        libraryButton.addListener((new ClickListener() {        	
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	    	
-           		 libraryButton.setSize(bWidth + enlarge,  bHeight + enlarge);
-           		 libraryButton.setPosition(bX2 -(enlarge/2), bY-(enlarge/2));	
-           		 libraryButton.setText(null);
-           		 libraryButton.setText("Library");
-            	 
-            }
-            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-            	libraryButton.setSize(bWidth, bHeight);
-            	libraryButton.setPosition(bX2, bY);
-            	libraryButton.setText(null);
-            	libraryButton.setText("Library");
-            }}));   
-        
-	    libraryButton.addListener((new ChangeListener() {
-	        public void changed (ChangeEvent event, Actor actor) {
-	        	ArcadeSystem.goToGame("gamelibrary");
-	        }
-	    })); 
-	    
-        
-        storeButton.addListener((new ClickListener() {        	
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {	
-            	  
-       			storeButton.setSize(bWidth + enlarge,  bHeight + enlarge);
-         		storeButton.setPosition(bX3 -(enlarge/2), bY-(enlarge/2));			     			
-         		storeButton.setText(null);
-         		storeButton.setText("Store");
-            }
-            public void exit (InputEvent event, float x, float y, int pointer, Actor fromActor){
-            	storeButton.setSize(bWidth, bHeight);
-                storeButton.setPosition(bX3, bY);
-                storeButton.setText(null);
-     			storeButton.setText("Store");
-            }}));   
-        
-        storeButton.addListener((new ChangeListener() {	
-            public void changed (ChangeEvent event, Actor actor) {
-            	arcadeUI.setScreen(arcadeUI.store);
-            }
-        })); 
-        
+	public FrontPage(ArcadeUI ui) {
+		arcadeUI = ui;
 		
-        
-        //adding to stage
-        stage.addActor(recentButton);
-        stage.addActor(libraryButton);
-        stage.addActor(storeButton);
-        
-        
-    }
-   
-    //FIXME Making the label dynamic
-    //FIXME Better implementation
-    
-    public static void setName(String playerName){
+		skin.add("background", new Texture("homescreen_bg.png"));
+		skin.add("menubar", new Texture("menuBar.png"));
+		skin.add("recent", new Texture("recent.png"));
+		for (Game gamename : ArcadeSystem.getArcadeGames()) {
+			try {
+				skin.add(gamename.id, new Texture(Gdx.files.internal("logos/"
+						+ gamename.id.toLowerCase() + ".png")));
+			} catch (Exception e) {
+				skin.add(gamename.id, new Texture
+						(Gdx.files.internal("logos/default.png")));
+			}
+		}
+		
+		final Table bg = new Table();
+		final Table menubar = new Table();
+		final Table bottomBar = new Table();
+		final Label vaporTitle = new Label("VAPOR", skin, "cgothic");
+		final TextButton recentButton = new TextButton("Recently Played", skin, "blue");
+		final TextButton libraryButton = new TextButton("Library", skin, "magenta");
+		final TextButton storeButton = new TextButton("Store", skin, "green");
+		final TextButton friendsButton = new TextButton("Friends [" + friends.length + "]", skin, "magenta");
+		
+		final Table recent_bg = new Table();
+		
+		// The background for the front page.
+		bg.setFillParent(true);
+		bg.setBackground(skin.getDrawable("background"));
+		stage.addActor(bg);
+		
+		// The MenuBar at the top of the front page.
+		menubar.setBackground(skin.getDrawable("menubar"));
+		menubar.setSize(1280, 30);
+		menubar.setPosition(0, 690);
+		stage.addActor(menubar);
+		
+		// The word "Vapor" at the top left of the MenuBar.
+		vaporTitle.setSize(100, 25);
+		vaporTitle.setPosition(15, 695);
+		stage.addActor(vaporTitle);
+		
+		// The text at the right of the top MenuBar.
+		menuInfo.setSize(500, 25);
+		menuInfo.setPosition(780, 695);
+		menuInfo.setAlignment(Align.right);
+		stage.addActor(menuInfo);
+
+		// The MenuBar at the bottom of the front page.
+		bottomBar.setSize(1280, 30);
+		bottomBar.setPosition(0, 0);
+		bottomBar.setBackground(skin.getDrawable("menubar"));
+		stage.addActor(bottomBar);
+		
+		recentButton.setSize(300, 300);
+		recentButton.setPosition(120, 200);
+		stage.addActor(recentButton);
+		
+		libraryButton.setSize(300, 300);
+		libraryButton.setPosition(490, 200);
+		stage.addActor(libraryButton);
+
+		storeButton.setSize(300, 300);
+		storeButton.setPosition(860, 200);
+		stage.addActor(storeButton);
+		
+		friendsButton.setSize(200, 50);
+		friendsButton.setPosition(540, 550);
+		stage.addActor(friendsButton);
+		
+		recent_bg.setSize(300, 660);
+		recent_bg.setPosition(120, 30);
+		recent_bg.setBackground(skin.getDrawable("recent"));
+		
+		generate_game(recent_bg);
+		
+		final int grow = 20; // The size the Buttons grow by. (Even number please);
+		
+		friendsButton.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				toggleChat();
+			}
+		});
+		
+		// Icon event listeners, mouseOver and mouseClick
+		recentButton.addListener(new ClickListener() {
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+		   		recentButton.setSize(recentButton.getWidth() + grow, recentButton.getWidth() + grow);
+		   		recentButton.setPosition(recentButton.getX() - grow/2, recentButton.getY() - grow/2);
+		   		recentButton.setText(null);
+		   		recentButton.setText("Recently Played");
+			}
+			public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor){
+		   		recentButton.setSize(recentButton.getWidth() - grow, recentButton.getWidth() - grow);
+		   		recentButton.setPosition(recentButton.getX() + grow/2, recentButton.getY() + grow/2);
+		   		recentButton.setText(null);
+		   		recentButton.setText("Recently Played");
+			}
+			public void clicked(InputEvent event, float x, float y) {
+				recentButton.remove();
+				stage.addActor(recent_bg);
+//				
+//				mouse_out.addListener(new ClickListener() {
+//					public void clicked(InputEvent event, float x, float y) {
+//						recent_bg.remove();
+//						stage.addActor(recentButton);
+//					}
+//				});
+			}
+		});
+		
+		/**
+		 * @author Adeleen
+		 * This function listens for a click outside the text boxes. It checks
+		 * if 'Recently Played' button is on the stage, if not, its add it to stage
+		 */
+		stage.addListener(new ClickListener() {
+			public void clicked(InputEvent event, float x, float y) {
+				//checking for clicks at specific coordinates in the screen
+				if (x < 120 || x > 420) {
+					//Checking for 'Recently Played' Button is not on stage
+					if (!stage.getActors().contains(recentButton, true)) {
+						recent_bg.remove();
+						stage.addActor(recentButton);
+					}
+				}
+			}
+		});
+	   
+		libraryButton.addListener(new ClickListener() {			
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+		   		libraryButton.setSize(libraryButton.getWidth() + grow, libraryButton.getWidth() + grow);
+		   		libraryButton.setPosition(libraryButton.getX() - grow/2, libraryButton.getY() - grow/2);
+		   		libraryButton.setText(null);
+		   		libraryButton.setText("Library");
+			}
+			public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor){
+		   		libraryButton.setSize(libraryButton.getWidth() - grow, libraryButton.getWidth() - grow);
+		   		libraryButton.setPosition(libraryButton.getX() + grow/2, libraryButton.getY() + grow/2);
+		   		libraryButton.setText(null);
+		   		libraryButton.setText("Library");
+			}
+			public void clicked(InputEvent event, float x, float y) {
+				ArcadeSystem.goToGame("gamelibrary");
+			}
+		});
+		
+		storeButton.addListener(new ClickListener() {			
+			public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+		   		storeButton.setSize(storeButton.getWidth() + grow, storeButton.getWidth() + grow);
+		   		storeButton.setPosition(storeButton.getX() - grow/2, storeButton.getY() - grow/2);
+		   		storeButton.setText(null);
+		   		storeButton.setText("Store");
+			}
+			public void exit(InputEvent event, float x, float y, int pointer, Actor fromActor){
+		   		storeButton.setSize(storeButton.getWidth() - grow, storeButton.getWidth() - grow);
+		   		storeButton.setPosition(storeButton.getX() + grow/2, storeButton.getY() + grow/2);
+		   		storeButton.setText(null);
+		   		storeButton.setText("Store");
+			}
+			public void clicked(InputEvent event, float x, float y) {
+				arcadeUI.setScreen(arcadeUI.store);
+			}
+		});
+	}
+	
+	private void generate_game(Table recent_bg) {
+		Set<Game>gamesList1 = ArcadeSystem.getArcadeGames();
+		for (int i = 0; i < 3; i++) {
+			final Game myGame = (Game)gamesList1.toArray()[i];
+			final TextButton recent = new TextButton("\n\n\n\n\n\n\n" + myGame.name, skin, "blue");
+			recent.setSize(220, 220);
+			recent.setPosition(40, i * 220);
+			recent_bg.addActor(recent);
+
+		 	final Button recentIcon = new Button(skin.getDrawable(myGame.id));
+		 	recentIcon.setName("recenticon");
+		 	recentIcon.setSize(140, 140);
+			recentIcon.setPosition(40, 50);
+			recent.addActor(recentIcon);
+			
+			recent.addListener(new ChangeListener() {
+				public void changed(ChangeEvent event, Actor actor) {
+					ArcadeSystem.goToGame(myGame.id);
+				}
+			}); 
+			
+			recentIcon.addListener(new ChangeListener() {
+				public void changed(ChangeEvent event, Actor actor) {
+					ArcadeSystem.goToGame(myGame.id);
+				}
+			});
+		}
+	}
+
+	public static void setName(String playerName) {
 		pName = playerName;
-		System.out.println("Logged in as:" + " " + pName);
-		uName = pName;
-		
-		//Top Box Labels
-        final Label logo = new Label("VAPOR", skin, "cgothic");
-        logo.setAlignment(Align.left);
-        
-        final Label username = new Label(pName , skin, "cgothic");
-        
-        if (username.getText() != pName){
-        	System.out.println("Label is null");
-        	
-        	username.setText(pName);
-        }
-        
-        username.setAlignment(Align.right);
-        
-        final Label credits = new Label( creditVal + " Credits", skin, "cgothic");
-        credits.setAlignment(Align.right);
-        final Label divider = new Label("|", skin, "cgothic");
-        divider.setAlignment(Align.right);
-        
-        final Table topBox = new Table();
-        
-        //set panel sizes and positions
-        topBox.setSize(1279, 30);
-        topBox.setPosition(1, 690);
-        topBox.setColor(255, 255, 255, 1);
-        topBox.setBackground(skin.getDrawable("menuBar"));
-        
-        //set top bar labels
-        topBox.add(logo).width(500);
-        topBox.add(username).width(615);
-        topBox.add(divider).width(5).pad(20);
-        topBox.add(credits).width(100);
-        
-        stage.addActor(topBox);
-		
-    }
-    
-    public void displayChat(){
-    	Table chatTable = new Table();
-        //table.setFillParent(true);
-        chatTable.setBackground(skin.getDrawable("menuBar"));
-        chatTable.setPosition(1060 , 50);
-        chatTable.setSize(200, nFriends * 30);
-        stage.addActor(chatTable);
-        System.out.println("i got here");
-    	for (int i=0; i < nFriends; i++){
-    		Label user = new Label(onlineFriends[i], skin, "cgothic");
-    		chatTable.add(user).width(80);
-    	}
-    }
-   
+		menuInfo.setText(pName + " | " + pCredits + " Credits");
+	}
+	
+	public static void setCredits(int credits) {
+		pCredits = credits;
+	}
+	
+	public static String[] getFriends() {
+		return friends; // REALLY BAD. HOPEFULLY TEMPORARY.
+	}
+	
+	public static String[] getOnlineFriends() {
+		String[] onlineFriends = null;
+		/*for (Player friend : friends) {
+			if (friend.isOnline()) {
+			}
+		}*/
+		// I Don't know^, do some sort of sorcery. Friends are NOT static, unchanging
+		// or permanent strings, they are of the Player class, and we need to return
+		// a List of Players to be able to do anything other than show their names.-Add
+		return onlineFriends;
+	}
+	
+	private void toggleChat() {
+		// Haven't figured out how to toggle this yet. -Addison
+		Table chatTable = new Table();
+		chatTable.setBackground(skin.getDrawable("menubar"));
+		chatTable.setPosition(1060 , 30);
+		chatTable.setSize(200, (getFriends().length * 30) + 20);
+		stage.addActor(chatTable);
+		for (int i = 0; i < getFriends().length; i++){
+			Label friend = new Label(getFriends()[i], skin, "cgothic");
+			friend.setSize(200, 50);
+			friend.setPosition(1080, 30 * (i + 1));
+			stage.addActor(friend);
+		}
+	}
+	
 	@Override
 	public void show() {
 		ArcadeInputMux.getInstance().addProcessor(stage);
@@ -388,27 +280,20 @@ public class FrontPage implements Screen {
 	public void render(float arg0) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		batch.begin();
-		bgSprite.draw(batch);
-		batch.end();
-		
-        stage.act(Gdx.graphics.getDeltaTime());
-        stage.draw();
-        Table.drawDebug(stage);  // Shows table debug lines
-        
+		stage.act(Gdx.graphics.getDeltaTime());
+		stage.draw();
 	}
 	
 	@Override
 	public void dispose() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
-        stage.dispose();
-        skin.dispose();
+		stage.dispose();
+		skin.dispose();
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override
 	public void hide() {
-        ArcadeInputMux.getInstance().removeProcessor(stage);
+		ArcadeInputMux.getInstance().removeProcessor(stage);
 	}
 	
 	@Override

@@ -23,11 +23,6 @@ public class Buttons {
 		font = new BitmapFont();
 		font.setScale(2);
 		batch = new SpriteBatch();
-		
-		/*ButtonSingle a = new ButtonSingle(1, 1, "Quit", Color.RED, yPos, xPos, BUTTONWIDTH, BUTTONHEIGHT);
-		buttons.add(a);
-		ButtonSingle b = new ButtonSingle(2, 2, "Replay", Color.RED, yPos - BUTTONHEIGHT, xPos, BUTTONWIDTH, BUTTONHEIGHT);
-		buttons.add(b);*/
 	}
 	
 	public void AddButtonsFromList(ArrayList<String> listToAddFrom) {

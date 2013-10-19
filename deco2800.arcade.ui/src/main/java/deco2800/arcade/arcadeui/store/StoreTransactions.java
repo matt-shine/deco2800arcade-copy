@@ -251,4 +251,9 @@ public class StoreTransactions implements Screen, StoreScreen {
 	public void setSelected(String game) {
 		// No selected game for transactions screen.
 	}
+	
+	@Override
+	public boolean addWishlist(Game game) {
+		return true;
+	}
 }

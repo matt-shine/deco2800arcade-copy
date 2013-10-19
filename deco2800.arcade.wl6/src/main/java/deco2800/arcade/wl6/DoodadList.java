@@ -394,10 +394,10 @@ public class DoodadList {
                     new DoodadInfo(),
 
                     //126: SS 1 (Standing)
-                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.RIGHT, null),  // FIXME Not complete
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 2, DIRS.RIGHT, null),  // FIXME Not complete
 
                     //127: SS 1 (Standing)
-                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.UP, null),  // FIXME Not complete
+                    new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 2, DIRS.UP, null),  // FIXME Not complete
 
                     //128: SS 1 (Standing)
                     new DoodadInfo(true, "lemongrab", 0, 0, 0, 1, EnemyType.SS, 0, DIRS.LEFT, null),  // FIXME Not complete

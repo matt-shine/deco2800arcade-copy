@@ -78,7 +78,15 @@ public class GameModel {
         
         endTick();
         
+        Player oldPlayer = player;
         player = new Player(MapProcessor.doodadID());
+        if (oldPlayer != null) {
+        	 player.setAmmo(oldPlayer.getAmmo());
+             player.setPoints(oldPlayer.getPoints());
+             player.setHealth(oldPlayer.getHealth());
+             player.setGuns(oldPlayer.getGuns());
+             player.setCurrentGun(oldPlayer.getCurrentGun());
+        }
         player.setPos(spawn);
         player.setAngle(this.spawnAngle);
         this.addDoodad(player);
@@ -101,7 +109,7 @@ public class GameModel {
      * Restart the level
      */
     public void reset() {
-        goToLevel(currentLevel);
+    	this.nextLevel = currentLevel;
     }
 
 

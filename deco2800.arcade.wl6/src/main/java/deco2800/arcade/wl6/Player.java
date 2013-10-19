@@ -1,5 +1,6 @@
 package deco2800.arcade.wl6;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.badlogic.gdx.math.Vector2;
@@ -172,6 +173,13 @@ public class Player extends Mob {
 		
 	}
 	
+	public HashSet<Integer> getGuns() {
+		return new HashSet<Integer>(guns);
+	}
+	
+	public void setGuns(HashSet<Integer> newGuns) {
+		guns = new HashSet<Integer>(newGuns);
+	}
 	
 	public void addKey(KEY_TYPE k) {
 		keys.add(k);

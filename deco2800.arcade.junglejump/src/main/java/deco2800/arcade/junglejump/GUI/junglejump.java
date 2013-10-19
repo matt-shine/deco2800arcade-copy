@@ -778,9 +778,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			// Climb down
 			if (gameState != GameState.INPROGRESS) {
 				if (butY > QUIT) {
-					menuSound.start();
+					//menuSound.start();
 					butY -= 37.5;
-					menuSound.stop();
+					//menuSound.stop();
 				}
 			}
 		}

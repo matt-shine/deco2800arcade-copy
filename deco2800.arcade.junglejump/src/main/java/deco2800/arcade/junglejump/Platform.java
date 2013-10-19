@@ -209,7 +209,7 @@ public class Platform {
 	public void setActive() {
 		if(this.platType == '^') {
 			// Play banana sound
-			URL path = this.getClass().getResource("/");
+			/*URL path = this.getClass().getResource("/");
 			try{ 
 				String resource = path.toString().replace(".arcade/build/classes/main/", 
 						".arcade.junglejump/src/main/").replace("file:", "") + 
@@ -224,7 +224,7 @@ public class Platform {
 			} catch (Exception e) {
 				Gdx.app.log(junglejump.messages,
 						"Audio File for Banana Music Not Found");
-			}
+			}*/
 			LevelContainer.nextLevel();
 		}
 		if(this.platType == 'j') {
@@ -233,7 +233,7 @@ public class Platform {
 		if(this.platType == 'x') {
 			junglejump.killMonkey();
 		}
-		//this.active = true;
+		this.active = true;
 	}
 	
 }

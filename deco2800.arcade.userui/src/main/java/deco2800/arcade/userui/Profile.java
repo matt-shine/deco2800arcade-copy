@@ -6,15 +6,12 @@ import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
-import deco2800.arcade.model.Game.InternalGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.userui.controller.ControllerMain;
-import deco2800.arcade.userui.view.AddFriendScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
 
-@InternalGame
-@ArcadeGame(id="profileui")
+@ArcadeGame(id = "profileui")
 public class Profile extends GameClient {
 	
 	public Profile(Player player, NetworkClient networkClient) {

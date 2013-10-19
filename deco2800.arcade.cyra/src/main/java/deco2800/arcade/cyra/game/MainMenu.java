@@ -19,6 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import deco2800.arcade.cyra.world.Sounds;
 
+/** This class controls the components that make up the main menu - buttons,
+ * images, texts and draw them onto the GameScreen.
+ *
+ * @author Game Over
+ */
 public class MainMenu extends AbstractScreen{
 	Stage stage;
 	BitmapFont blackFont;

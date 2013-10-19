@@ -71,7 +71,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static int deaths = 0;
 
 	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE, PAUSE
 	}
 
 	int monkeyLength = 35;
@@ -420,12 +420,19 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.draw(levelNumText, 125, 5, 30, 30);
 			batch.draw(worldNumText, 85, 5, 30, 30);
 			batch.draw(livesNumText, 85, 30, 30, 30);
+			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
 
 			batch.end();
 			camera.update();
 			super.render();
 			break;
 		case GAMEOVER:
+			break;
+		case PAUSE:
+			batch.setProjectionMatrix(camera.combined);
+			batch.begin();
+			achievementTitleFont.draw(batch, "PAUSED", SCREENWIDTH/2, SCREENHEIGHT/2);
+			batch.end();
 			break;
 		case CONTINUE:
 			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
@@ -756,6 +763,11 @@ public class junglejump extends GameClient implements InputProcessor {
 					butY -= 37.5;
 					menuSound.stop();
 				}
+			}
+		}
+		if (keycode == Keys.P) {
+			if (gameState == GameState.PAUSE || gameState == GameState.INPROGRESS) {
+				gameState = (gameState != GameState.PAUSE) ? GameState.PAUSE : GameState.INPROGRESS;
 			}
 		}
 		return true;

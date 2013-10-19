@@ -252,19 +252,4 @@ public class Platform {
 		//this.active = true;
 	}
 	
-	/**
-	 * Sets the platform to no longer be active
-	 */
-	public void setInactive() {
-		this.active = false;
-	}
-	
-	/**
-	 * What happens each frame when platform is active.
-	 * Does nothing on standard platform
-	 */
-	public void onActive() {
-		return;
-	}
-	
 }

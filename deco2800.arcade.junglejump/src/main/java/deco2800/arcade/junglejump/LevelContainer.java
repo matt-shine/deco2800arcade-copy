@@ -32,7 +32,7 @@ public class LevelContainer {
 		setCurrentLevel(0);
 		currentWorld = 0;
 		levelAmount = 5;
-		worldAmount = 1;
+		worldAmount = 5;
 		
 		// Read level from file
 		for(int i=0;i<worldAmount;i++) {

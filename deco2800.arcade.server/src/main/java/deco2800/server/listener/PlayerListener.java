@@ -48,14 +48,17 @@ public class PlayerListener extends Listener {
 			} else if (object instanceof FriendInvitesUpdateRequest) {
 				FriendInvitesUpdateRequest request = (FriendInvitesUpdateRequest) object;
 				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
-				request.
+				if(request.isAdd()) {
+					pdm.addFriendRequest(request.getPlayerID(), request.getFriendID());
+				} else {
+					pdm.removeFriend(request.getPlayerID(), request.getFriendID());
+				}
 				
-
 			} else if (object instanceof FriendsUpdateRequest) {
 				FriendsUpdateRequest request = (FriendsUpdateRequest) object;
 				PlayerDatabaseManager pdm = new PlayerDatabaseManager();
 				if(request.isAdd()){
-					pdm.addFriend(request.getPlayerID(), request.getFriendID());
+					pdm.acceptFriendRequest(request.getPlayerID(), request.getFriendID());
 				} else {
 					pdm.removeFriend(request.getPlayerID(), request.getFriendID());
 				}

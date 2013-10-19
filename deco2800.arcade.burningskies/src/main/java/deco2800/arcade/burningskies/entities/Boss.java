@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.burningskies.Configuration;
 import deco2800.arcade.burningskies.entities.bullets.BossPattern;
 import deco2800.arcade.burningskies.screen.PlayScreen;
 
@@ -18,7 +19,7 @@ public class Boss extends Enemy {
 	
 	public Boss(PlayScreen screen, PlayerShip player) {
 		super(bossMaxHealth, tex, 
-		new Vector2(640, 880), new Vector2(0,0), screen, player, 10000000000L);
+		new Vector2(640, 880), new Vector2(0,0), screen, player, 10000000000L, Configuration.getDifficulty());
 
 		pattern = new BossPattern(this, player, screen);
 	}

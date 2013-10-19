@@ -1,4 +1,4 @@
-package deco2800.arcade.breakout;
+package deco2800.arcade.breakout.screens;
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
 
@@ -20,11 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import deco2800.arcade.breakout.Breakout;
 import deco2800.arcade.client.ArcadeSystem;
 
 
  
-public class HelpScreen2 implements Screen  {
+public class HelpScreen1 implements Screen  {
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -41,40 +42,13 @@ public class HelpScreen2 implements Screen  {
 	   ImageButton backbutton;
 	  
 	  
-	HelpScreen2(final Breakout game) {
+	public HelpScreen1(final Breakout game) {
 		
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
-		texture = new Texture(Gdx.files.classpath("imgs/HelpScreen2.png"));
-		tex = new Texture(Gdx.files.classpath("imgs/button.png"));
-		TextureRegion[][] tmp = TextureRegion.split(tex, 130, 45);
+		texture = new Texture(Gdx.files.classpath("imgs/HelpScreen1.png"));
 		
-	    //backbutton
-	    backbuttonUp=tmp[2][2];
-	    backbuttonDown=tmp[2][3];
-	    backup = new TextureRegionDrawable(backbuttonUp);
-	    backdown = new TextureRegionDrawable(backbuttonDown);
-	    backbutton = new ImageButton(backup, backdown);
-	    backbutton.setPosition(0, 590);
-	   // backbutton.setSize(700f, 550f);
-	    backbutton.addListener(new InputListener(){
-	    	   public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { //touch down method is needed for the rest to work
-	        		
-	        		return true; 
-	        	}
-	        	
-	        	public void touchUp(InputEvent event, float x, float y, int pointer, int button) { //on button release do this
-	        		game.setScreen(game.MenuScreen); 
-	        		
-	        	}}
-	    	   );
-	  
-	  
-	       stage = new Stage(480, 640, true);
-	       //Gdx.input.setInputProcessor(stage);
-	     
-	      stage.addActor(backbutton);
 	     
 	}
 	
@@ -104,7 +78,11 @@ public class HelpScreen2 implements Screen  {
 	@Override
 	public void render(float arg0) {
 		
-
+		
+		if(Gdx.input.isButtonPressed(Buttons.LEFT)) {
+			
+			game.setScreen(game.getHelpscreen2());
+		}
 	
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		 Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
@@ -112,8 +90,7 @@ public class HelpScreen2 implements Screen  {
 		 batch.begin();
 			batch.draw(texture, 0, 0);
 			batch.end();
-			stage.act();
-		       stage.draw();
+			
 	       
 	}
 

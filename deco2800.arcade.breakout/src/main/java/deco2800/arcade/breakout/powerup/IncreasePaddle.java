@@ -4,8 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import deco2800.arcade.breakout.GameScreen;
+import deco2800.arcade.breakout.screens.GameScreen;
 
+/**
+ * Increases the paddle size for the increase paddle powerup
+ * @author Carlie Smits
+ *
+ */
 public class IncreasePaddle extends Powerup{
 
 	private final String img = "increasepaddle.png";

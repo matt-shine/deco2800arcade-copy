@@ -1,4 +1,4 @@
-package deco2800.arcade.breakout;
+package deco2800.arcade.breakout.screens;
 
 import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
 
@@ -8,14 +8,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import deco2800.arcade.breakout.Breakout;
+import deco2800.arcade.client.ArcadeInputMux;
 
 
  
 public class SplashScreen implements Screen  {
-	private OrthographicCamera camera;
 	private final Breakout game;
 	private final SpriteBatch batch;
 	private final Texture texture;
@@ -26,20 +27,18 @@ public class SplashScreen implements Screen  {
 	/**
 	 * Constructor
 	 */
-	SplashScreen(final Breakout game) {
+	public SplashScreen(final Breakout game) {
 		this.game = game;
 		batch = new SpriteBatch();
 		Texture.setEnforcePotImages(false);
 		texture = new Texture(Gdx.files.classpath("imgs/splashscreen.png"));
 	}
 		
-		
 
 	@Override
 	public void render(float delta) {
 		if (Gdx.input.isKeyPressed(Keys.SPACE)) {
-		
-			game.setScreen(game.MenuScreen);
+			game.setScreen(game.getMenuScreen());
 		}
 
 		Gdx.gl.glClear(GL_COLOR_BUFFER_BIT);
@@ -66,7 +65,6 @@ public class SplashScreen implements Screen  {
 
 	@Override
 	public void show() {
-		
 	}
 
 	@Override

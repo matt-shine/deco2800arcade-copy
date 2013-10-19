@@ -1,5 +1,8 @@
 package deco2800.arcade.towerdefence.model.creationclasses;
 
+import java.util.concurrent.TimeUnit;
+import java.lang.Math;
+
 /**
  * This is the class of the effect that a GridObject can apply to another
  * GridObject(s) Instantiating this and placing it in a GridObject's effect list
@@ -180,13 +183,39 @@ public class Effect {
 
 	/**
 	 * Set a damage over time on a tower.
+	 * Duration is truncated using floor.
+	 * This will only stack up to the stacking limit.
 	 */
 	public void dotTower(Tower target, int duration) {
-		for (int i=0; i<duration; i++){
+		// Get the number of effects stacked
+		int stacks = target.effectStacks();
+		if (stacks == target.effectStackingLimit()) {
+			//do nothing;
+			return;
+		}
+		// Start the effect
+		// increment the effect stack
+		target.effectStacks(stacks + 1);
+		// loop over it for duration truncated seconds
+		for (int i = 0; i < Math.floor(duration); i++) {
 			int currentHealth = target.health();
 			target.health((int) (currentHealth - amount));
-			//wait 1000ms
+			// wait 1000ms
+			try {
+				TimeUnit.MILLISECONDS.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		// status finished
+		// decrement the effect stack
+		if (target.effectStacks() != 0) {
+			target.effectStacks(stacks - 1);
+		} else {
+			target.effectStacks(0);
 		}
 	}
+	
+	
 
 }

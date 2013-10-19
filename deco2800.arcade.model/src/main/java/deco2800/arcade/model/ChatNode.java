@@ -1,11 +1,14 @@
 package deco2800.arcade.model;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * A ChatNode is a single chat instance. It contains the participants of the
@@ -26,6 +29,7 @@ public class ChatNode extends JLabel {
 	public ChatNode(List<Integer> chatParticipants) {
 		participants = new ArrayList<Integer>(chatParticipants);
 		chatHistory = new ArrayDeque<String>();
+		setUpLabel();
 	}
 
 	/**
@@ -36,6 +40,14 @@ public class ChatNode extends JLabel {
 	public ChatNode(int participant) {
 		participants = new ArrayList<Integer>();
 		participants.add(participant);
+		setUpLabel();
+	}
+	
+	private void setUpLabel() {
+		setBackground(Color.WHITE);
+		setOpaque(true);
+		setHorizontalAlignment(SwingConstants.CENTER);
+		setPreferredSize(new Dimension(250, 50));
 	}
 
 	public int getID() {

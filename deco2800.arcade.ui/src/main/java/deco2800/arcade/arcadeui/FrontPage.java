@@ -117,12 +117,8 @@ public class FrontPage implements Screen {
             table.setBackground(skin.getDrawable("background"));
             stage.addActor(table);
             
-            Table trial = new Table();
-          //  trial.setFillParent(true);
-            trial.setBackground(skin.getDrawable("toolTip"));
-            trial.setPosition(950,580);
-            trial.setSize(200, 100);
-            stage.addActor(trial);
+          
+            
             
             //Text Buttons
             final TextButton storeButton = new TextButton("Store", skin, "green");
@@ -363,7 +359,15 @@ public class FrontPage implements Screen {
         final Button settingsIcon = new Button(skin.getDrawable("settingsIcon"));
        // recentIcon.setName("recenticon");
         settingsIcon.setSize(15, 15);
-     
+        settingsIcon.addListener((new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+        	  Table trial = new Table();
+                  trial.setBackground(skin.getDrawable("toolTip"));
+                  trial.setPosition(950,580);
+                  trial.setSize(200, 100);
+		stage.addActor(trial);
+            }
+        })); 
         final Table topBox = new Table();
         
         //set panel sizes and positions

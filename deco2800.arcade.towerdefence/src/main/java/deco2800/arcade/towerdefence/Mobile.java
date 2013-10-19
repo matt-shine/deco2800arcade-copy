@@ -159,12 +159,13 @@ public abstract class Mobile extends Mortal {
 		Step current;
 		// Infinite loop - continue while path is being followed
 		while (true) {
-			for (int i = 0; i < path.getLength(); i++) {
+			int i;
+			for (i = 0; i < path.getLength(); i++) {
 				current = path.getStep(i);
 				// Make a vector based on the current position and next step
 				// position
-				if (!moving(positionInTiles().add(current.getX(),
-						current.getY()))) {
+				if (!moving((new Vector2(current.getX(), current.getY())
+						.sub(positionInTiles())))) {
 					path = grid.pathfinder.findPath(this,
 							(int) this.positionInTiles().x,
 							(int) this.positionInTiles().y, 50, 50);
@@ -172,6 +173,9 @@ public abstract class Mobile extends Mortal {
 				}
 			}
 			// Mobile object has reached the target, what do TODO
+			if (i == path.getLength()) {
+				break;
+			}
 		}
 	}
 
@@ -194,21 +198,20 @@ public abstract class Mobile extends Mortal {
 	 */
 	public boolean moving(Vector2 vector) {
 		// Check for block in given direction
-		if (grid.blocked(this, (int) positionInTiles().add(vector).x, (int) positionInTiles()
-				.add(vector).y)) {
+		if (grid.blocked(this, (int) positionInTiles().add(vector).x,
+				(int) positionInTiles().add(vector).y)) {
 			// Grid is blocked return false to indicate a new path should be
 			// found
 			return false;
 		}
 		// Move it from this grid position to the next one
-		grid.moveObject(this, positionInTiles(), positionInTiles().add(vector));
+		grid.moveObject(this, positionInTiles().add(vector));
 
 		// Go into a wait-while loop changing the position 30 times per second
-		int distance = grid.getTileSize();
 		long t0, t1;
+		float distance = grid.getTileSize()*vector.len();
 		Vector2 addVector = vector.mul((float) speed / 33);
 		for (float i = 0; i < distance; i += addVector.len()) {
-			System.out.println("addvector len: " + addVector.len() + " i: " + i + " distance: "+ distance);
 			t0 = System.currentTimeMillis();
 			t1 = t0;
 			// Move

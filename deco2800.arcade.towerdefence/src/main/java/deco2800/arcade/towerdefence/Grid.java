@@ -37,7 +37,13 @@ public class Grid implements TileBasedMap {
 	private Ship ship;
 	// The pathfinder used by objects in the grid
 	public AStarPathFinder pathfinder;
+<<<<<<< HEAD
 	
+=======
+	// The target of pathfinding movement (portal)
+	private Vector2 targetPosition;
+
+>>>>>>> New test
 	// Constructor
 	/**
 	 * Instantiates a grid with a unique UUID, length, width and name.
@@ -52,8 +58,10 @@ public class Grid implements TileBasedMap {
 	 *            The size of each grid tile, in pixels
 	 * @param ship
 	 *            The ship which this grid belongs to
+	 * @param targetPosition
+	 *            A vector representing the target (portal)
 	 */
-	public Grid(int width, int depth, String name, int tileSize, Ship ship) {
+	public Grid(int width, int depth, String name, int tileSize, Ship ship, Vector2 targetPosition) {
 		id = UUID.randomUUID();
 		this.width = width;
 		this.depth = depth;
@@ -70,6 +78,7 @@ public class Grid implements TileBasedMap {
 				gridContents.get(i).add(new ArrayList<GridObject>());
 			}
 		}
+		this.targetPosition = targetPosition;
 	}
 
 	// Getters
@@ -108,7 +117,7 @@ public class Grid implements TileBasedMap {
 	public UUID id() {
 		return this.id;
 	}
-	
+
 	/**
 	 * Get the width of the grid, in tiles.
 	 * 
@@ -160,17 +169,19 @@ public class Grid implements TileBasedMap {
 	public void name(String newName) {
 		this.name = newName;
 	}
-	
+
 	/**
 	 * Sets the size of the tiles to the given value.
-	 * @param tileSize The new tile size.
+	 * 
+	 * @param tileSize
+	 *            The new tile size.
 	 */
-	public void tileSize(int tileSize){
+	public void tileSize(int tileSize) {
 		this.tileSize = tileSize;
-		this.gridWidth = width/tileSize;
-		this.gridDepth = depth/tileSize;
+		this.gridWidth = width / tileSize;
+		this.gridDepth = depth / tileSize;
 	}
-	
+
 	/**
 	 * Get the ship which this grid belongs to.
 	 * 
@@ -179,8 +190,8 @@ public class Grid implements TileBasedMap {
 	public Ship ship() {
 		return ship;
 	}
-	
-	//Methods
+
+	// Methods
 	public void pathFinderVisited(int x, int y) {
 		// do nothing - not needed
 
@@ -264,10 +275,10 @@ public class Grid implements TileBasedMap {
 	 * @param newPosition
 	 *            The position to move the object to
 	 */
-	public void moveObject(GridObject object, Vector2 position,
-			Vector2 newPosition) {
+	public void moveObject(GridObject object, Vector2 newPosition) {
 		// Remove it from the old position
-		gridContents.get((int) position.x).get((int) position.y).remove(object);
+		gridContents.get((int) object.positionInTiles().x).get((int) object.positionInTiles().y).remove(object);
+		
 		// Add it to the new one
 		gridContents.get((int) newPosition.x).get((int) newPosition.y)
 				.add(object);

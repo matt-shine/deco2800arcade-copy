@@ -54,13 +54,13 @@ public class TDTests {
 
 	@Test
 	public void gridTest() {
-		Grid grid = new Grid(200, 200, "grid", 20, null);
+		Grid grid = new Grid(200, 200, "grid", 20, null, null);
 		GridObject object = new GridObject(0, 0, grid);
 		// Check the object can be placed
 		Assert.assertTrue(grid.buildObject(object));
 		Assert.assertEquals(1, grid.getGridContents(0,0).size());
 		//Move the object
-		grid.moveObject(object, new Vector2(0,0), new Vector2(1,1));
+		grid.moveObject(object, new Vector2(1,1));
 		Assert.assertEquals(0, grid.getGridContents(0,0).size());
 		Assert.assertEquals(1, grid.getGridContents(1,1).size());
 		//Try building something on top of an alien - should be at 3,3 due to tilesize
@@ -76,9 +76,20 @@ public class TDTests {
 	
 	@Test
 	public void mobileTest(){
-		Grid grid = new Grid(200, 200, "grid", 20, null);
-		Enemy mobile = new Enemy(10, 10, 0, 0, 5, grid);
-		mobile.moving(new Vector2(1,1));
+		//Create the grid and enemy to use
+		Grid grid = new Grid(200, 200, "grid", 20, null, new Vector2(19, 19));
+		Enemy mobile = new Enemy(10, 10, 0, 0, 20, grid);
+		grid.buildObject(mobile);
+		//Test moving the object
+		((Mobile) grid.getGridContents(0, 0).get(0)).moving(new Vector2(1,1));
+		Assert.assertTrue(grid.getGridContents(0,0).size() == 0);
 		Assert.assertTrue(grid.getGridContents(1,1).size() == 1);
+		//Give the object a path
+		Path path = new Path();
+		path.appendStep(2, 2);
+		((Mobile) grid.getGridContents(1, 1).get(0)).path(path);
+		((Mobile) grid.getGridContents(1, 1).get(0)).followPath();
+		Assert.assertTrue(grid.getGridContents(1,1).size() == 0);
+		Assert.assertTrue(grid.getGridContents(2,2).size() == 1);
 	}
 }

@@ -124,6 +124,10 @@ public class Platform {
 			this.width = 50;
 			this.height = 50;
 			break;
+		case '_': // Building roof
+			platformType = "roof";
+			this.height = 40;
+			break;
 		default:
 			platformType = "branch";
 			break;

@@ -405,7 +405,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			} else if (!leap && !sit && !((!movingLeft && !movingRight) || (movingLeft && movingRight))) {
 				batch.draw(monkeyRun1, monkeyX, monkeyY, 50, 50);
 			}
-			for (Platform p : currentLevel.getPlatforms()) {
+			int size = currentLevel.platformAmount();
+			for (int i = 0; i < size; i++) {
+				Platform p = currentLevel.getPlatforms().get(i);
 				// Place platform onto screen
 				if(p.getX() >= 1000) {
 					p.setX(p.getX()-1000);
@@ -471,7 +473,9 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	public static void drawLevel() {
 		batch.begin();
-		for (Platform p : currentLevel.getPlatforms()) {
+		int size = currentLevel.platformAmount();
+		for (int i = 0; i < size; i++) {
+			Platform p = currentLevel.getPlatforms().get(i);
 			batch.draw(p.getTexture(), p.getX(), p.getY(), p.getWidth(), p.getHeight());
 		}
 		batch.end();
@@ -497,7 +501,9 @@ public class junglejump extends GameClient implements InputProcessor {
 	}
 
 	public boolean isOnPlatform(float x, float y) {
-		for (Platform p : currentLevel.getPlatforms()) {
+		int size = currentLevel.platformAmount();
+		for (int i = 0; i < size; i++) {
+			Platform p = currentLevel.getPlatforms().get(i);
 			// Check x and y are within the platform boundaries and monkey is on it
 			if (p.platType != '=' && x > (p.getX() - monkeyLength)
 					&& x < (p.getX()+p.getWidth() - 10)

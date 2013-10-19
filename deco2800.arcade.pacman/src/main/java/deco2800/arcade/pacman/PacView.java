@@ -37,6 +37,7 @@ public class PacView {
 	private GameMap gameMap;
 	private PacChar player;
 	private Ghost blinky;
+	private Ghost pinky;
 	
 	
 	/** TODO make the gameMap the model and have them added on to that in 
@@ -81,6 +82,7 @@ public class PacView {
 		this.gameMap = model.getGameMap();
 		this.player = model.getPlayer();
 		this.blinky = model.getBlinky();
+		this.pinky = model.getPinky();
 	}
 	
 	/**
@@ -104,12 +106,6 @@ public class PacView {
 	    //testing bitmap text print
 //	    scoreText.setColor(Color.WHITE);
 //	    scoreText.draw(batch, "Pacman!", 10, 10);
-	    
-	    // TODO move this check elsewhere check if pacman is trying to move into a wall
-	    // this stops him even if no key is pressed
-//	    if (!player.checkNoWallCollision(player.getTile())) {
-//			player.setCurrentState(PacState.IDLE);
-//		}
 	    
 	    //end the drawing
 	    batch.end();
@@ -201,6 +197,8 @@ public class PacView {
 		// TODO NOTE CURRENTLY ONLY DRAWS RED GHOST WHICHEVER GHOST IT IS
 		batch.draw(ghostFrames[0][blinky.getSpritePos()], blinky.getDrawX(), 
 				blinky.getDrawY(), blinky.getWidth(), blinky.getHeight());
+		batch.draw(ghostFrames[0][pinky.getSpritePos()], pinky.getDrawX(), 
+				pinky.getDrawY(), pinky.getWidth(), pinky.getHeight());
 	}
 	
 	private void drawPacman() {

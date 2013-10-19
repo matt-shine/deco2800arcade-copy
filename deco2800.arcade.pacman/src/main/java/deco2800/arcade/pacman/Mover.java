@@ -136,9 +136,12 @@ public abstract class Mover {
 					this.setScore(this.getScore() + 10);
 				}
 			}
-		} else if (tile.getClass() == TeleportTile.class){
-//			this.drawX = ((TeleportTile) tile).getTargetX();
-//			this.drawY = ((TeleportTile) tile).getTargetY();
+		} 
+		if (nextTile(tile, 1).getClass() == TeleportTile.class){
+//			System.out.println("\ngetTargetX: " + ((TeleportTile) nextTile(tile, 1)).getTargetX());
+//			this.drawX = ((TeleportTile) nextTile(tile, 1)).getTargetX();
+//			System.out.println("\ngetTargetY: " + ((TeleportTile) nextTile(tile, 1)).getTargetY());
+//			this.drawY = ((TeleportTile) nextTile(tile, 1)).getTargetY();
 		}
 //		System.out.println("score: " + this.getScore());
 //		displayScore(this); // This is broken at the moment

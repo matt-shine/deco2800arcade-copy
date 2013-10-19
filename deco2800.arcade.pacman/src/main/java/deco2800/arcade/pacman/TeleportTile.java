@@ -28,10 +28,10 @@ public class TeleportTile extends Tile {
 	}
 
 	public int getTargetX(){
-		return gameMap.getTilePos(target).getX();	
+		return gameMap.getTilePos(target).getX() * this.sideLength;	
 	}
 	public int getTargetY(){
-		return gameMap.getTilePos(target).getY();	
+		return gameMap.getTilePos(target).getY() * this.sideLength;	
 	}
 	
 	public void setTarget(Tile target) {

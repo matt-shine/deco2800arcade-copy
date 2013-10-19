@@ -158,7 +158,6 @@ public class Ghost extends Mover {
 		double dist;
 		int distx = targetx - startx;
 		int disty = targety - starty;
-		System.out.println("distx: " + distx + " disty: " + disty);
 		dist = sqrt((distx * distx + disty * disty));
 		return dist;
 	}
@@ -220,7 +219,6 @@ public class Ghost extends Mover {
 		List<Double> dists = new ArrayList<Double>();
 
 		for (Tile tTile : testTiles) {
-			System.out.println("target: " + target + "tTile: " + tTile );
 			tempDist = calcDist(target, tTile);
 			dists.add(tempDist);
 		}

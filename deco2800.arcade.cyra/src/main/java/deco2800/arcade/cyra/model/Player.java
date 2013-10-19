@@ -4,6 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+
+/** Player class describes the behaviours, actions and traits of the  
+ * character sprite controlled by user.
+ * 
+ * @author Game Over
+ */
 public class Player extends MovableEntity{
 	
 	public enum State {

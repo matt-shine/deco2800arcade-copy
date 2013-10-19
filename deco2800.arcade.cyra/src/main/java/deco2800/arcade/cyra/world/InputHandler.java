@@ -9,8 +9,13 @@ import deco2800.arcade.cyra.model.Player.State;
 import deco2800.arcade.cyra.model.Player;
 import deco2800.arcade.cyra.model.Sword;
 
+/** InputHandler class describes the Controller component in this game's MVC 
+ * model. It handles user input and run the appropriate action associated with
+ * that specific input.
+ * 
+ * @author Game Over
+ */
 public class InputHandler implements InputProcessor{
-
 	World world;
 	Player ship;
 	Sword sword;

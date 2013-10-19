@@ -20,6 +20,9 @@ public class XMLReader {
 	
 	public AccoladeContainer getAccolades(String fileLocation){
 		Accolade temp;
+		Element element;
+		String tmpName, tmpMessage, tmpPopupMessage, tmpUnit, tmpTag, tmpImagePath;
+		int tmpPopup;
 		//The container to be stored to
 		AccoladeContainer accoladeContainer = new AccoladeContainer();
 		try {
@@ -34,13 +37,18 @@ public class XMLReader {
                 
                 if (accolades !=null && accolades.getLength() > 0){
                 	for(int x = 0; x < accolades.getLength(); x++){
-                		//THIS IS WHERE THE MAGIC HAPPENS
-                		Node accolade = accolades.item(x);
+                		element = (Element) accolades.item(x);
+                		//Repeat for each eccential field
+                		tmpName = element.getElementsByTagName("name").item(0).getTextContent();
+                					//getTextContent();
                 		//temp = new Accolade();
+                		
                 		//TODO create accolade after reading in from xml
                 		/** make the accolade without ID
                 		 * if the xml has an id, then assign it afterwards
                 		 */
+                				//getString("name");
+                		
                 	}//END OF FOR
                 }//END OF IF
                 

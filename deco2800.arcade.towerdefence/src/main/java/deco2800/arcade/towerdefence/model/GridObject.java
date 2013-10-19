@@ -37,7 +37,11 @@ public class GridObject {
 	protected List<Sprite> sprStanding;
 	// The team this object belongs to.
 	protected Team team;
-
+	// The maximum number of effects that can be stacked on this GridObject.
+	private final static int effectStackingLimit = 15; 
+	// The number of effects applied to this GridObject.
+	private int effectStacks = 0;
+	
 	// Constructor
 	/**
 	 * The GridObject constructor.
@@ -141,7 +145,6 @@ public class GridObject {
 		return id;
 	}
 
-
 	/**
 	 * Return the side the object is affiliated with, for score and avoiding
 	 * friendly-fire.
@@ -150,6 +153,20 @@ public class GridObject {
 	 */
 	public Team team() {
 		return team;
+	}
+	
+	/**
+	 * Return the effect stacking limit of the GridObject.
+	 */
+	public int effectStackingLimit() {
+		return effectStackingLimit;
+	}
+	
+	/**
+	 * Return the number of effects currently applied to the GridObject.
+	 */
+	public int effectStacks() {
+		return effectStacks;
 	}
 
 	// Setters
@@ -241,6 +258,13 @@ public class GridObject {
 	 */
 	public void team(Team team) {
 		this.team = team;
+	}
+	
+	/**
+	 * Set the number of effects currently applied to this GridObject.
+	 */
+	public void effectStacks(int amount) {
+		this.effectStacks = amount;
 	}
 
 	// Methods

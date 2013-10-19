@@ -29,6 +29,8 @@ public class Enemy extends Mobile implements Melee {
 	private GridObject target;
 	// The sprites for the melee attacking animation.
 	private List<Sprite> sprAttacking; 
+	// The enemies anger statistic, for how likely it is to stop pathing and attack a different team object randomly.
+	private double anger;
 
 	// Constructor
 	/**
@@ -63,14 +65,17 @@ public class Enemy extends Mobile implements Melee {
 	 * 			The in order list of Death Sprites
 	 * @param sprAttacking
 	 * 			The in order list of Attacking Sprites
+	 * @param anger
+	 * 			How likely the enemy is to stop pathing and attack nearest other-team object.
 	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid, Team team, double attackRate, int damage, int penetration, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath, List<Sprite> sprAttacking) {
+			Grid grid, Team team, double attackRate, int damage, int penetration, double anger, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath, List<Sprite> sprAttacking) {
 		super(maxHealth, armour, x, y, speed, grid, team, sprStanding, sprMoving, sprDying, sprDeath);
 		this.sprAttacking = sprAttacking;
 		this.attackRate = attackRate;
 		this.damage = damage;
 		this.penetration = penetration;
+		this.anger = anger;
 	}
 
 	// Getters
@@ -93,6 +98,13 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public int penetration() {
 		return penetration;
+	}
+	
+	/**
+	 * Returns the amount of anger the enemy has.
+	 */
+	public double anger() {
+		return anger;
 	}
 
 	/**
@@ -138,6 +150,13 @@ public class Enemy extends Mobile implements Melee {
 	 */
 	public void penetration(int pen) {
 		this.penetration = pen;
+	}
+	
+	/**
+	 * Sets the amount of anger the enemy has.
+	 */
+	public void anger(double anger) {
+		this.anger = anger;
 	}
 
 	/**

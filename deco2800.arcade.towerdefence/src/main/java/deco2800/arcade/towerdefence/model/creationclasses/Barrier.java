@@ -11,12 +11,13 @@ import deco2800.arcade.towerdefence.model.Team;
 /**
  * Models GridObjects that are designed as walls or barriers to GridObjects.
  * Essentially the same as Mortal, new class for appropriate name.
+ * 
  * @author hadronn
- *
+ * 
  */
 public class Barrier extends Mortal {
-	//Fields
-	
+	// Fields
+
 	/**
 	 * The constructor for Barrier.
 	 * 
@@ -35,11 +36,11 @@ public class Barrier extends Mortal {
 			Team team, List<Sprite> sprStanding, List<Sprite> sprDeath) {
 		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
 	}
-	
-	//Getters
-	
-	//Setters
-	
-	//Methods
+
+	// Getters
+
+	// Setters
+
+	// Methods
 
 }

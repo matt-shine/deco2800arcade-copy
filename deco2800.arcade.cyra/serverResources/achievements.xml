@@ -1,5 +1,5 @@
 <achievements>
-	<achievement id="cyra.opengame">
+	<achievement id="cyra.pressbutton">
         <name>Open the game</name>
         <description>Open the game!</description>
         <awardThreshold>1</awardThreshold>

@@ -875,6 +875,10 @@ public class World {
 				
 	}
 	
+	public void testAch() {
+		game.incrementAchievement("cyra.pressbutton");
+	}
+	
 
 	public void resetLevel() {
 		at.addToTime( (int)time );

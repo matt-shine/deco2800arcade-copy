@@ -39,6 +39,9 @@ public class InputHandler implements InputProcessor{
 	public boolean keyDown(int keycode) {
 		
 		switch(keycode){
+			case Keys.S:
+				world.testAch();
+				break;
 			case Keys.A:
 				world.testOverlay("pressed a");
 				break;

@@ -29,7 +29,7 @@ public class Cyra extends GameClient {
 		super(player, networkClient);
 		this.networkClient = networkClient; //this is a bit of a hack
         this.achievementClient = new AchievementClient(networkClient);
-        this.incrementAchievement("cyra.opengame");
+        //this.incrementAchievement("cyra.opengame");
 	}
 
     

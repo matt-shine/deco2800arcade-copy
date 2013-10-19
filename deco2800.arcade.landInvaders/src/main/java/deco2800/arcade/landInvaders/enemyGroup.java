@@ -41,7 +41,7 @@ public class enemyGroup {
 		for (int n = 0; n < rowNum; n++) {
 			temp = new enemy[rowEnemyNum];
 			for (int i = 0; i < rowEnemyNum; i++) {
-				temp[i] = new enemy(100 + i * 100, 100 + n * 70, EsizeW, EsizeH, img);
+				temp[i] = new enemy(100 + i * 100, 100 + n * 90, EsizeW, EsizeH, img);
 
 			}
 			lists[n] = temp;

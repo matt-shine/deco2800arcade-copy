@@ -28,6 +28,7 @@ public class Invaders extends JFrame implements Runnable {
 	private int healthBar;
 	private int score;
 	private int totalLevel;
+	private boolean isPause;
 
 	private ArrayList<blockWall> WallList;
 	private ArrayList<tankshot> shots;
@@ -45,6 +46,7 @@ public class Invaders extends JFrame implements Runnable {
 		healthBar = 3;
 		score = 0;
 		totalLevel = 1;
+		isPause = true;
 
 		setGameImg("/tank/");
 		imgString = "/tank/";
@@ -261,6 +263,7 @@ public class Invaders extends JFrame implements Runnable {
 		boolean createWall =false;
 		if(bglevel != 3 && level ==1){
 			bglevel ++;
+			createWall = true;
 			
 		}
 		if(bglevel ==3 && level ==1){
@@ -268,11 +271,17 @@ public class Invaders extends JFrame implements Runnable {
 		}
 		shots = new ArrayList<tankshot>();
 		Eshots = new ArrayList<enemyShot>();
-		if(bglevel==1) imgString = "/tank/";
-		if(bglevel==2) imgString = "/plane/";
+		if(bglevel==1) {
+			imgString = "/tank/";
+		}
+		if(bglevel==2){
+			imgString = "/plane/";
+
+		}
 		if(bglevel==3){
 			imgString = "/ship/";
 			bglevel = 1;
+
 		}
 		
 		if(createWall==true){
@@ -316,7 +325,7 @@ public class Invaders extends JFrame implements Runnable {
 	@Override
 	public void run() {
 		int count = 0;
-		while (true) {
+		while (isPause) {
 			tank.tankMove();
 			try {
 				Thread.sleep(50);

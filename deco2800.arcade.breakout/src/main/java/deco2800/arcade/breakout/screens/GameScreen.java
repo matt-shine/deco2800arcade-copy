@@ -118,8 +118,7 @@ public class GameScreen implements Screen  {
 	
 	public GameScreen(final Breakout game) {
 		this.levelSystem = new Level();
-		resetScore();
-		setLives(3);
+		
 		this.game = game;
 		this.player = game.playerName();
 		this.powerupManager = new PowerupManager(this);
@@ -130,6 +129,8 @@ public class GameScreen implements Screen  {
 		Texture.setEnforcePotImages(false);
 		//background = new Texture(Gdx.files.classpath("imgs/background.png"));
 		// Sets the display size
+		resetScore();
+		setLives(3);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 
@@ -445,6 +446,7 @@ public class GameScreen implements Screen  {
 		if (achieve != null){
 			achieve.dispose();
 		}
+		gameoverstatus = null;
 		powerupManager.dispose();
 		
 	}

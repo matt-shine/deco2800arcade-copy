@@ -20,7 +20,8 @@ public class GameOverState extends GameState {
 		if (Gdx.input.isTouched() || Gdx.input.isButtonPressed(Keys.SPACE)) {
 			context.dispose();
 			context.bumpCount++;
-			ArcadeSystem.goToGame(ArcadeSystem.UI);
+			context.setMenuScreen();
+			//ArcadeSystem.goToGame(ArcadeSystem.UI);
 		}
 
 	}

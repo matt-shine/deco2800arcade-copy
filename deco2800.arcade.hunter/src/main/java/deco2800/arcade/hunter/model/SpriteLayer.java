@@ -18,7 +18,7 @@ import java.util.Iterator;
 public class SpriteLayer extends Map {
     private ArrayList<TextureRegion> treeSprites = new ArrayList<TextureRegion>();
     private ArrayList<TextureRegion> cloudSprites = new ArrayList<TextureRegion>();
-	private EntityCollection clouds = new EntityCollection();
+    private EntityCollection clouds = new EntityCollection();
     private EntityCollection trees = new EntityCollection();
 
     private float CHANCE_OF_CLOUDS = 0.05f;
@@ -32,9 +32,9 @@ public class SpriteLayer extends Map {
         return new Vector2(randX, randY);
     }
 
-	public SpriteLayer(float speedModifier, GameScreen gameScreen) {
-		super(speedModifier);
-		this.gameScreen = gameScreen;
+    public SpriteLayer(float speedModifier, GameScreen gameScreen) {
+        super(speedModifier);
+        this.gameScreen = gameScreen;
 
         for (int c = 1; c <= 5; c++) {
             cloudSprites.add(new TextureRegion(new Texture(Gdx.files.internal("textures/sprites/cloud" + c + ".png"))));
@@ -73,8 +73,8 @@ public class SpriteLayer extends Map {
         return (float) (Hunter.Config.CLOUD_MIN_SPEED + (Math.random() * ((Hunter.Config.CLOUD_MAX_SPEED - Hunter.Config.CLOUD_MIN_SPEED) + 1)));
     }
 
-	public void update(float delta, Vector3 cameraPos) {
-		// TODO Auto-generated method stub
+    public void update(float delta, Vector3 cameraPos) {
+        // TODO Auto-generated method stub
 
         //Remove clouds that are off the left edge of the screen, update the position of the cloud
         Iterator<Entity> cl = clouds.iterator();
@@ -120,11 +120,11 @@ public class SpriteLayer extends Map {
             trees.getById(id).setY(gameScreen.getForeground().getColumnTop(treeLocation.x) - Hunter.Config.TILE_SIZE * 3);
             //gameScreen.getForeground().getColumnTop(treeLocation.x + sprite.getRegionWidth() / 2) - Hunter.Config.TILE_SIZE);
         }
-	}
+    }
 
-	@Override
-	public void draw(SpriteBatch batch) {
-		// TODO Auto-generated method stub
+    @Override
+    public void draw(SpriteBatch batch) {
+        // TODO Auto-generated method stub
         for (int c : clouds.idSet()) {
             batch.draw(cloudSprites.get(c % cloudSprites.size()), clouds.getById(c).getX(), clouds.getById(c).getY());
         }
@@ -132,7 +132,7 @@ public class SpriteLayer extends Map {
         for (int t : trees.idSet()) {
             TextureRegion treeSprite = treeSprites.get(t % treeSprites.size());
             Entity tree = trees.getById(t);
-            batch.draw(treeSprite, tree.getX(), tree.getY(), treeSprite.getRegionWidth() * ((BackgroundSprite)tree).speedModifier, treeSprite.getRegionHeight() * ((BackgroundSprite)tree).speedModifier);
+            batch.draw(treeSprite, tree.getX(), tree.getY(), treeSprite.getRegionWidth() * ((BackgroundSprite) tree).speedModifier, treeSprite.getRegionHeight() * ((BackgroundSprite) tree).speedModifier);
         }
-	}
+    }
 }

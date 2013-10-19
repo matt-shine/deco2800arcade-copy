@@ -13,17 +13,16 @@ import java.util.Random;
 
 @ArcadeGame(id = "hunter")
 public class Hunter extends PlatformerGame {
-	private static PreferencesManager prefManage;
-	public HighscoreClient highscore;
-	
-	
+    private static PreferencesManager prefManage;
+    public HighscoreClient highscore;
 
-	public final static class Config {
+
+    public final static class Config {
         public final static int TILE_SIZE = 64;
-		public final static int PANE_SIZE = 16;
-		public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
-		public final static int MAX_SPEED = 1024;
-		public final static int SPEED_INCREASE_COUNTDOWN_START = 128;
+        public final static int PANE_SIZE = 16;
+        public final static int PANE_SIZE_PX = TILE_SIZE * PANE_SIZE;
+        public final static int MAX_SPEED = 1024;
+        public final static int SPEED_INCREASE_COUNTDOWN_START = 128;
         public final static int PANES_PER_TYPE = 4; //Number of map panes each map type should be used for
 
         public final static float CLOUD_MIN_SPEED = 0.3f;
@@ -42,7 +41,7 @@ public class Hunter extends PlatformerGame {
         public static int screenWidth = 1280;
         public static int screenHeight = 720;
         public static int gameSpeed = 512;
-        public static float gravity = 2*9.81f;
+        public static float gravity = 2 * 9.81f;
         public static Random randomGenerator;
         /**
          * Velocity of the player
@@ -51,75 +50,76 @@ public class Hunter extends PlatformerGame {
         public static Vector2 playerVelocity = new Vector2(1, 0);
 
         public static PreferencesManager getPreferencesManager() {
-    		return prefManage;
-    	}
-	}
-	
-	private static final Game game;
-	static {
-		game = new Game();
-		game.id = "hunter";
-		game.name = "Hunter Game";
-		game.description = "A 2D platformer running game where you hunt animals before they eat you!";
-	}
+            return prefManage;
+        }
+    }
+
+    private static final Game game;
+
+    static {
+        game = new Game();
+        game.id = "hunter";
+        game.name = "Hunter Game";
+        game.description = "A 2D platformer running game where you hunt animals before they eat you!";
+    }
 
     @Override
     public Game getGame() {
         return game;
     }
 
-	public Hunter(Player player, NetworkClient networkClient) {
-		super(player, networkClient);
-		prefManage = new PreferencesManager();
+    public Hunter(Player player, NetworkClient networkClient) {
+        super(player, networkClient);
+        prefManage = new PreferencesManager();
 //		highscore = new HighscoreClient(player.getName(),"Hunter",networkClient);
         State.paused = false;
-	}
+    }
 
-	/**
-	 * Returns the preferences manager of the game which stores all the player configurable option
-	 * settings
-	 * 
-	 * @return PreferencesManager
-	 */
-	public PreferencesManager getPreferencesManager() {
-		return prefManage;
-	}
+    /**
+     * Returns the preferences manager of the game which stores all the player configurable option
+     * settings
+     *
+     * @return PreferencesManager
+     */
+    public PreferencesManager getPreferencesManager() {
+        return prefManage;
+    }
 
-	@Override
-	public void create() {
-		this.getOverlay().setListeners(new Screen() {
-			@Override
-			public void hide() {
-				// Unpause your game here
+    @Override
+    public void create() {
+        this.getOverlay().setListeners(new Screen() {
+            @Override
+            public void hide() {
+                // Unpause your game here
                 State.paused = false;
-			}
+            }
 
-			@Override
-			public void show() {
-				// Pause your game here
+            @Override
+            public void show() {
+                // Pause your game here
                 State.paused = true;
-			}
+            }
 
-			@Override
-			public void pause() {
-			}
+            @Override
+            public void pause() {
+            }
 
-			@Override
-			public void render(float arg0) {
-			}
+            @Override
+            public void render(float arg0) {
+            }
 
-			@Override
-			public void resize(int arg0, int arg1) {
-			}
+            @Override
+            public void resize(int arg0, int arg1) {
+            }
 
-			@Override
-			public void resume() {
-			}
+            @Override
+            public void resume() {
+            }
 
-			@Override
-			public void dispose() {
-			}
-		});
-		setScreen(new SplashScreen(this));
-	}
+            @Override
+            public void dispose() {
+            }
+        });
+        setScreen(new SplashScreen(this));
+    }
 }

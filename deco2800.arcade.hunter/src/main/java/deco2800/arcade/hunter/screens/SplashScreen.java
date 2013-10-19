@@ -10,77 +10,76 @@ import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.hunter.Hunter;
 
 public class SplashScreen implements Screen {
-	
-	private Hunter hunter;
-	private Stage stage;
-	
-	private Image splashImage;
-	
-	
-	public SplashScreen(Hunter h){
-		hunter = h;
-		stage = new Stage();
-		ArcadeInputMux.getInstance().addProcessor(stage);
-		Texture text = new Texture("textures/splashscreen.png");
-		
-		splashImage = new Image(text);
-		splashImage.setFillParent(true);
-		
-		splashImage.getColor().a = 0f;
-		
-		
-		splashImage.addAction(Actions.sequence(Actions.fadeIn(0.75f), Actions.delay(0.5f), Actions.fadeOut(0.75f),
-			new RunnableAction() {
-				public void run() {
-					hunter.setScreen(new MenuScreen(hunter));
-				}
-			})
-		);
-		
-		stage.addActor(splashImage);
-	}
-	
-	
 
-	@Override
-	public void render(float delta) {
-		stage.act(delta);
-		stage.draw();
-	}
+    private Hunter hunter;
+    private Stage stage;
 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
-		
-	}
+    private Image splashImage;
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
-		
-	}
 
-	@Override
-	public void hide() {
-		dispose();
-	}
+    public SplashScreen(Hunter h) {
+        hunter = h;
+        stage = new Stage();
+        ArcadeInputMux.getInstance().addProcessor(stage);
+        Texture text = new Texture("textures/splashscreen.png");
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
-		
-	}
+        splashImage = new Image(text);
+        splashImage.setFillParent(true);
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
-		
-	}
+        splashImage.getColor().a = 0f;
 
-	@Override
-	public void dispose() {
-		//stage.dispose();
-	}
-	
+
+        splashImage.addAction(Actions.sequence(Actions.fadeIn(0.75f), Actions.delay(0.5f), Actions.fadeOut(0.75f),
+                new RunnableAction() {
+                    public void run() {
+                        hunter.setScreen(new MenuScreen(hunter));
+                    }
+                })
+        );
+
+        stage.addActor(splashImage);
+    }
+
+
+    @Override
+    public void render(float delta) {
+        stage.act(delta);
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void show() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void hide() {
+        dispose();
+    }
+
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void dispose() {
+        //stage.dispose();
+    }
+
 
 }

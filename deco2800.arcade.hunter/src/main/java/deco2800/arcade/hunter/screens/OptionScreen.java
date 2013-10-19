@@ -14,167 +14,166 @@ import deco2800.arcade.hunter.Hunter;
 
 public class OptionScreen implements Screen {
 
-	private Hunter game;
-	private Stage stage;
-	private boolean music;
-	private boolean sound;
-	private float volume;
-	private Skin skin;
-	private Texture background;
-	private SpriteBatch batch;
-	
-	public OptionScreen(Hunter p){
-		game = p;
-		stage = new Stage();
-		ArcadeInputMux.getInstance().addProcessor(stage);
-		
-		Texture.setEnforcePotImages(false);
-		background = new Texture("textures/mainmenu.png");
-		batch = new SpriteBatch();
-		
-		getPreferences();
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
-		
-		Table table = new Table(skin);
-		table.setFillParent(true);
-		table.padRight(600f);
-		table.padTop(200f);
-		stage.addActor(table);
-		
-		//set table defaults
-		table.defaults().spaceBottom(20);
-		table.columnDefaults(0).colspan(3);
-		table.add("Options Menu").colspan(3);
-		table.row();
-		
-		//Add a music checkbox to the table		
-		final CheckBox musicCheckBox = new CheckBox("", skin);
-		musicCheckBox.setChecked(music);
-		musicCheckBox.addListener(new ChangeListener(){
+    private Hunter game;
+    private Stage stage;
+    private boolean music;
+    private boolean sound;
+    private float volume;
+    private Skin skin;
+    private Texture background;
+    private SpriteBatch batch;
 
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				music = musicCheckBox.isChecked();
-				game.getPreferencesManager().setMusicEnabled(music);
-				System.out.println("Change music preference!");
-			}
-			
-		});
-		table.add("Music");
-		table.add(musicCheckBox).colspan(2);
-		table.row();
-		
-		//adds a sound checkbox to the table
-		final CheckBox soundCheckBox = new CheckBox("",skin);
-		soundCheckBox.setChecked(sound);
-		soundCheckBox.addListener(new ChangeListener(){
+    public OptionScreen(Hunter p) {
+        game = p;
+        stage = new Stage();
+        ArcadeInputMux.getInstance().addProcessor(stage);
 
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-				sound = soundCheckBox.isChecked();
-				game.getPreferencesManager().setSoundEnabled(sound);
-				System.out.println("Changed sound preference!");
-			}
-		});
-		
-		table.add("Sound");
-		table.add(soundCheckBox).colspan(2);
-		table.row();
-		
-		//adds a slider for volume
-		Slider volumeSlider = new Slider( 0f, 1f, 0.1f, false, skin);
-		volumeSlider.setValue(volume);
-        volumeSlider.addListener( new ChangeListener() {
+        Texture.setEnforcePotImages(false);
+        background = new Texture("textures/mainmenu.png");
+        batch = new SpriteBatch();
+
+        getPreferences();
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+
+        Table table = new Table(skin);
+        table.setFillParent(true);
+        table.padRight(600f);
+        table.padTop(200f);
+        stage.addActor(table);
+
+        //set table defaults
+        table.defaults().spaceBottom(20);
+        table.columnDefaults(0).colspan(3);
+        table.add("Options Menu").colspan(3);
+        table.row();
+
+        //Add a music checkbox to the table
+        final CheckBox musicCheckBox = new CheckBox("", skin);
+        musicCheckBox.setChecked(music);
+        musicCheckBox.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                music = musicCheckBox.isChecked();
+                game.getPreferencesManager().setMusicEnabled(music);
+                System.out.println("Change music preference!");
+            }
+
+        });
+        table.add("Music");
+        table.add(musicCheckBox).colspan(2);
+        table.row();
+
+        //adds a sound checkbox to the table
+        final CheckBox soundCheckBox = new CheckBox("", skin);
+        soundCheckBox.setChecked(sound);
+        soundCheckBox.addListener(new ChangeListener() {
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                sound = soundCheckBox.isChecked();
+                game.getPreferencesManager().setSoundEnabled(sound);
+                System.out.println("Changed sound preference!");
+            }
+        });
+
+        table.add("Sound");
+        table.add(soundCheckBox).colspan(2);
+        table.row();
+
+        //adds a slider for volume
+        Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        volumeSlider.setValue(volume);
+        volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(
-                ChangeEvent event,
-                Actor actor )
-            {
-                volume = ( (Slider) actor ).getValue();
+                    ChangeEvent event,
+                    Actor actor) {
+                volume = ((Slider) actor).getValue();
                 game.getPreferencesManager().setVolume(volume);
-                System.out.println("Volume is changed to"  + volume);
+                System.out.println("Volume is changed to" + volume);
             }
-        } );
-        
+        });
+
         table.add("Volume");
         table.add(volumeSlider).colspan(2);
         table.row();
-        
+
         //Add a back to main menu button
         TextButton backButton = new TextButton("Back to main menu", skin);
         backButton.addListener(new ChangeListener() {
 
-			@Override
-			public void changed(ChangeEvent event, Actor actor) {
-        		System.out.println("Going back to the main menu!");
-        		game.setScreen(new MenuScreen(game));
-        		stage.clear();
-        	}
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                System.out.println("Going back to the main menu!");
+                game.setScreen(new MenuScreen(game));
+                stage.clear();
+            }
         });
-        
-        table.add(backButton).size(300,70);
+
+        table.add(backButton).size(300, 70);
         table.row();
-	}
+    }
 
-	private void getPreferences() {
-		/* Loads the preferences from a file */
-		music = game.getPreferencesManager().isMusicEnabled();
-		System.out.println(music);
-		sound = game.getPreferencesManager().isSoundEnabled();
-		System.out.println(sound);
-		volume = game.getPreferencesManager().getVolume();
-		System.out.println(volume);
-	}
+    private void getPreferences() {
+        /* Loads the preferences from a file */
+        music = game.getPreferencesManager().isMusicEnabled();
+        System.out.println(music);
+        sound = game.getPreferencesManager().isSoundEnabled();
+        System.out.println(sound);
+        volume = game.getPreferencesManager().getVolume();
+        System.out.println(volume);
+    }
 
-	@Override
-	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		batch.begin();
-		drawBackground();
-		batch.end();
-		
-		Gdx.input.setInputProcessor(stage);
-		stage.act(delta);
-		stage.draw();
-	}
+        batch.begin();
+        drawBackground();
+        batch.end();
 
-	@Override
-	public void resize(int width, int height) {
-		stage.setViewport(width, height, true);
-	}
+        Gdx.input.setInputProcessor(stage);
+        stage.act(delta);
+        stage.draw();
+    }
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
+    @Override
+    public void resize(int width, int height) {
+        stage.setViewport(width, height, true);
+    }
 
-	}
+    @Override
+    public void show() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void hide() {
-		dispose();
-	}
+    }
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
+    @Override
+    public void hide() {
+        dispose();
+    }
 
-	}
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void dispose() {
-		stage.dispose();
-		ArcadeInputMux.getInstance().removeProcessor(stage);
-	}
+    }
 
-	private void drawBackground(){
-		batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
-	}
+    @Override
+    public void dispose() {
+        stage.dispose();
+        ArcadeInputMux.getInstance().removeProcessor(stage);
+    }
+
+    private void drawBackground() {
+        batch.draw(background, 0f, 0f, Hunter.State.screenWidth, Hunter.State.screenHeight, 0, 0, background.getWidth(), background.getHeight(), false, false);
+    }
 }

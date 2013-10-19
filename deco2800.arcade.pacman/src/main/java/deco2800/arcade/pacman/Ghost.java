@@ -101,9 +101,7 @@ public class Ghost extends Mover {
 			spritePos = 5;
 		} else if (facing == Dir.DOWN) {
 			spritePos = 7;
-		} else {
-			facing = Dir.LEFT;
-		}
+		} 
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
 		int corr = 0;

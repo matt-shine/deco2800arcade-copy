@@ -1,15 +1,9 @@
 
 package deco2800.arcade.pacman;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class PacChar extends Mover{
 	
@@ -42,7 +36,7 @@ public class PacChar extends Mover{
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
-		moveDist = 2;
+		moveDist = 1;
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		

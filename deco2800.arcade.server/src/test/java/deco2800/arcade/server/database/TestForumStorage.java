@@ -205,6 +205,8 @@ public class TestForumStorage {
 		this.forumStorage.addVote(1, "child", 2);
 		assertEquals(4, this.forumStorage.countParentThreadVotes(1));
 		assertEquals(1, this.forumStorage.countParentThreadVotes(2));
+		assertEquals(5, this.forumStorage.countUserVote(1));
+		assertEquals(5, this.forumStorage.countAllVotes());
 	}
 	
 	private IDataSet getDataSet() throws DataSetException, IOException {

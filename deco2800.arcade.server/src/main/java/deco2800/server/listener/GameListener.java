@@ -80,9 +80,6 @@ public class GameListener extends Listener {
 				//Find the user sessions using the host username
 				if (userConnections.containsKey(username)){
 					//Get the set of connections for the game session
-					if (gameServers.containsKey(gameId)) {
-						gameServers.get(gameId).receive(connection, gameStatusUpdate);
-					}
 
 					Set<Connection> connections = userConnections.get(username);
 					for (Connection connect : connections){

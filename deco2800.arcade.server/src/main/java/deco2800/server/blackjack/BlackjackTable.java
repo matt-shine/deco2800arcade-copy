@@ -13,7 +13,8 @@ import org.apache.derby.impl.sql.execute.CardinalityCounter;
 import com.esotericsoftware.kryonet.Connection;
 import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
-import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.protocol.game.CasinoServerUpdate;
+import deco2800.arcade.protocol.game.CasinoServerUpdate;
 
 /**
  * The Blackjack table that people play and connect to.
@@ -147,9 +148,9 @@ public class BlackjackTable extends Thread {
 		for (int i = 0; i < Playerarray.size(); i++) {
 			if (Playerarray.get(i) != null) {
 			token = Playerarray.get(i).username;
-			GameStatusUpdate update = new GameStatusUpdate();
+			CasinoServerUpdate update = new CasinoServerUpdate();
 			update.message = "turn|" + token;
-			broadcastGameStatusUpdate(update);
+			broadcastCasinoServerUpdate(update);
 			try {
 				wait();
 			} catch (InterruptedException e) {
@@ -234,36 +235,36 @@ public class BlackjackTable extends Thread {
 		dealerHand.add(card);
 		card = deck.getCard();
 		dealerHand.add(card);
-		GameStatusUpdate update = new GameStatusUpdate();
+		CasinoServerUpdate update = new CasinoServerUpdate();
 		update.message = "dealcards";
-		broadcastGameStatusUpdate(update);
+		broadcastCasinoServerUpdate(update);
 	}
 	
 	public void dealer() {
 		while (totalhandNum(dealerHand) <= 16) {
 			dealerHand.add(deck.getCard());
 		}
-		GameStatusUpdate update = new GameStatusUpdate();
+		CasinoServerUpdate update = new CasinoServerUpdate();
 		update.message = "dealer";
-		broadcastGameStatusUpdate(update);
+		broadcastCasinoServerUpdate(update);
 	}
 	
 	public void takeSeat(BlackjackUser user, int seatposition) {
 		if (JoiningPlayers.get(seatposition) == null && Playerarray.get(seatposition) == null) {
 			JoiningPlayers.set(seatposition, user);
 			Watchers.remove(user);
-			GameStatusUpdate update = new GameStatusUpdate();
+			CasinoServerUpdate update = new CasinoServerUpdate();
 			update.message = "takeseat|" + seatposition;
 			update.username = user.username;
-			broadcastGameStatusUpdate(update);
+			broadcastCasinoServerUpdate(update);
 			if (state == 0) {
 				interrupt();
 			}
 		}
 		else {
-			GameStatusUpdate msg = new GameStatusUpdate();
+			CasinoServerUpdate msg = new CasinoServerUpdate();
 			msg.message = "Seat is taken";
-			sendGameStatusUpdate(msg, user.username);
+			sendCasinoServerUpdate(msg, user.username);
 		}
 	}
 	
@@ -281,10 +282,10 @@ public class BlackjackTable extends Thread {
 		player.bet = amount;
 		player.chippile = player.chippile - player.bet;
 		numofplayersbet += 1; 
-		GameStatusUpdate update = new GameStatusUpdate();
+		CasinoServerUpdate update = new CasinoServerUpdate();
 		update.message = "bet|" + player.bet;
 		update.username = player.username;
-		broadcastGameStatusUpdate(update);
+		broadcastCasinoServerUpdate(update);
 	}
 	
 	public void hit(BlackjackPlayer player) {
@@ -294,10 +295,10 @@ public class BlackjackTable extends Thread {
 		if (totalhandNum(player.hand) > 21) {
 			interrupt();
 		}
-		GameStatusUpdate update = new GameStatusUpdate();
+		CasinoServerUpdate update = new CasinoServerUpdate();
 		update.message = "hit";
 		update.username = player.username;
-		broadcastGameStatusUpdate(update);
+		broadcastCasinoServerUpdate(update);
 		}
 	}
 	
@@ -317,10 +318,10 @@ public class BlackjackTable extends Thread {
 				player.has_split = false;
 				
 			}
-			GameStatusUpdate update = new GameStatusUpdate();
+			CasinoServerUpdate update = new CasinoServerUpdate();
 			update.message = "stay";
 			update.username = player.username;
-			broadcastGameStatusUpdate(update);
+			broadcastCasinoServerUpdate(update);
 		}
 	}
 	
@@ -328,10 +329,10 @@ public class BlackjackTable extends Thread {
 		if (token == player.username) {
 		player.bet += doubledownamount;
 		player.hand.add(deck.getCard());
-		GameStatusUpdate update = new GameStatusUpdate();
+		CasinoServerUpdate update = new CasinoServerUpdate();
 		update.message = "doubledown|" + doubledownamount;
 		update.username = player.username;
-		broadcastGameStatusUpdate(update);
+		broadcastCasinoServerUpdate(update);
 		interrupt();
 		}
 	}
@@ -341,10 +342,10 @@ public class BlackjackTable extends Thread {
 		player.hand.remove(0);
 		player.split_bet = player.bet;
 		player.has_split = true;
-		GameStatusUpdate update = new GameStatusUpdate();
+		CasinoServerUpdate update = new CasinoServerUpdate();
 		update.message = "split";
 		update.username = player.username;
-		broadcastGameStatusUpdate(update);
+		broadcastCasinoServerUpdate(update);
 	}
 	
 	public int totalhandNum(ArrayList<String> Hand) {
@@ -389,7 +390,7 @@ public class BlackjackTable extends Thread {
 	 * Broadcasts a game status update to all players
 	 * @param the message to be sent
 	 */
-	public void broadcastGameStatusUpdate(GameStatusUpdate message) {
+	public void broadcastCasinoServerUpdate(CasinoServerUpdate message) {
 		Iterator<Map.Entry<String, Connection>> iter = players.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry<String, Connection> person = (Map.Entry<String, Connection>)iter.next();
@@ -403,7 +404,7 @@ public class BlackjackTable extends Thread {
 	 * @param the message to be sent
 	 * @param the username of the person
 	 */
-	public void sendGameStatusUpdate(GameStatusUpdate message, String username) {
+	public void sendCasinoServerUpdate(CasinoServerUpdate message, String username) {
 		if (players.containsKey(username)) {
 			players.get(username).sendTCP(message);
 		}
@@ -438,7 +439,7 @@ public class BlackjackTable extends Thread {
 		return betLimit;
 	}
 	
-	public void receiveMessage(GameStatusUpdate update) {
+	public void receiveMessage(CasinoServerUpdate update) {
 		// TODO Auto-generated method stub
 		if (update.message.equals("hit")) {
 			for (int i = 0; i < Playerarray.size(); i++) {

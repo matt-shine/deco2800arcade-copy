@@ -2,15 +2,17 @@ package deco2800.server.blackjack;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.esotericsoftware.kryonet.Connection;
-import deco2800.arcade.protocol.game.GameStatusUpdate;
+
+import deco2800.arcade.protocol.game.CasinoServerUpdate;
 import deco2800.server.GameServer;
 
 /**
  * BlackjackServer is the controller of all Blackjack tables.
  * It handles adding tables and players to tables.
  */
-public class BlackjackServer implements GameServer{
+public class BlackjackServer implements GameServer {
 	
 	List<BlackjackTable> tables;
 	static int MAX_PLAYERS = 5;
@@ -85,12 +87,11 @@ public class BlackjackServer implements GameServer{
 		return table;
 	}
 
-	@Override
 	/**
 	 * Receives an event from a player.  The server will then action
 	 * appropriately.
 	 */
-	public void receive(Connection connection, GameStatusUpdate update) {
+	public void receive(Connection connection, CasinoServerUpdate update) {
 		// TODO Auto-generated method stub
 		if (update.message.equals("addme#20")) {
 			addPlayerToTable(connection, update.username, 25);

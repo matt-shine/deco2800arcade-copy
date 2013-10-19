@@ -35,26 +35,17 @@ import deco2800.arcade.accolades.AccoladeSystem;
  */
 @ArcadeGame(id = "Breakout")
 public class Breakout extends GameClient {
-<<<<<<< HEAD
-	public SplashScreen splashScreen;
-	public GameScreen gamescreen;
-	public MenuScreen MenuScreen;
-	public LevelScreen1 LevelScreen1;
-	public LevelScreen2 LevelScreen2;
-	public HelpScreen1 helpscreen1;
-	public ModelScreen modelscreen;
-	public HelpScreen2 helpscreen2;
-=======
-	SplashScreen splashScreen;
-	GameScreen gamescreen;
-	MenuScreen MenuScreen;
-	LevelScreen1 LevelScreen1;
-	LevelScreen2 LevelScreen2;
-	HelpScreen1 helpscreen1;
-	RankingScreen RankingScreen;
-	//ModelScreen modelscreen;
-	HelpScreen2 helpscreen2;
->>>>>>> master
+
+		SplashScreen splashScreen;
+		GameScreen gamescreen;
+		MenuScreen MenuScreen;
+		LevelScreen1 LevelScreen1;
+		LevelScreen2 LevelScreen2;
+		HelpScreen1 helpscreen1;
+		RankingScreen RankingScreen;
+		//ModelScreen modelscreen;
+		HelpScreen2 helpscreen2;
+
 
 
 	/*
@@ -129,14 +120,11 @@ public class Breakout extends GameClient {
 		LevelScreen1=new LevelScreen1(this);
 		LevelScreen2=new LevelScreen2(this);
 		helpscreen1=new HelpScreen1(this);
-		helpscreen2=new HelpScreen2(this);
-<<<<<<< HEAD
-		
+		helpscreen2=new HelpScreen2(this);		
 		modelscreen=new ModelScreen(this);
-=======
 		RankingScreen=new RankingScreen(this);
 		//modelscreen=new ModelScreen(this);
->>>>>>> master
+
 		setScreen(splashScreen);
 		HighscoreClient player1 = new HighscoreClient(player, "Breakout", networkClient);
 	}

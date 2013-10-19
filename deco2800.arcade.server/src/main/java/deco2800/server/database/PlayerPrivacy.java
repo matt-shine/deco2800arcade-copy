@@ -339,4 +339,44 @@ public class PlayerPrivacy {
 			}
 		}
 	}
+	
+	/**
+	 * Drops all tables from the database for clean testing.
+	 */
+	public void dropTables() throws DatabaseException {
+		
+		if (!initialised) {
+			initialise();
+		}
+		
+		Connection connection = Database.getConnection();
+		
+		Statement statement = null;
+		ResultSet resultSet = null;
+		try {
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("DROP TABLE *;");
+
+		} catch (SQLException e) {
+			 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+			 logger.error(e.getStackTrace().toString());
+			throw new DatabaseException(
+					"Unable to drop tables from the database.", e);
+		} finally {
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				 Logger logger = LoggerFactory.getLogger(PlayerPrivacy.class);
+				 logger.error(e.getStackTrace().toString());
+			}
+		}
+	}
 }

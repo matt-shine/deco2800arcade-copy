@@ -3,9 +3,13 @@ package deco2800.arcade.deerforest.GUI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.NetworkClient;
 
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
@@ -37,9 +41,15 @@ public class DeerForest extends GameClient {
 	static DeckBuilder deckBuilder;
 	static DeckBuilderScreen deckBuilderView;
 	static DeckBuilderInputProcessor deckInputProcessor;
+	
+	static Logger logger;
+	
+	private NetworkClient networkClient;
+	static HighscoreClient playerScore;
 
 	public DeerForest(Player player, NetworkClient networkClient){
 		super(player, networkClient);
+		this.networkClient = networkClient;
 	}
 
     /**
@@ -71,6 +81,11 @@ public class DeerForest extends GameClient {
 		// Set the menu as the screen
 		changeScreen("menu");
 		
+		// Create the logger
+		logger = Logger.getLogger("GUILogger");
+		
+		// Initialise the highscore client
+		playerScore = new HighscoreClient(getPlayer().getUsername(), "DeerForest", networkClient);
     }
 
     /**
@@ -267,7 +282,7 @@ public class DeerForest extends GameClient {
         try {
             spellEffect1 = new SpellEffect(typeEffects1, effectCategory1, effectParams1);
         } catch (Exception e) {
-            System.out.println("Error making effect battery");
+            DeerForest.logger.info("Error making effect battery");
             spellEffect1 = null;
         }
         String filePath1 = "DeerForestAssets/battery.png";
@@ -294,7 +309,7 @@ public class DeerForest extends GameClient {
         try {
             spellEffect2 = new SpellEffect(typeEffects2, effectCategory2, effectParams2);
         } catch (Exception e) {
-            System.out.println("Error making effect sword");
+            DeerForest.logger.info("Error making effect sword");
             spellEffect2 = null;
         }
         String filePath2 = "DeerForestAssets/sword of light.png";

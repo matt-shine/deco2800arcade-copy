@@ -588,7 +588,7 @@ public class Arena extends Sprite {
 		for(String key : zones.keySet()) {
 			for(Rectangle zone : zones.get(key).keySet()) {
 				if(zones.get(key).get(zone) != null) {
-					System.out.println("key is: " + key + "Map is: " + zones.get(key).get(zone));
+					DeerForest.logger.info("key is: " + key + "Map is: " + zones.get(key).get(zone));
 				}
 			}
 		}

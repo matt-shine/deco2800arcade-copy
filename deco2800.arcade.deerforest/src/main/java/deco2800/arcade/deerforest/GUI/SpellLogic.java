@@ -76,7 +76,7 @@ public class SpellLogic {
      * @param spell the spell that was activated
      */
     public void activateSpell(int player, AbstractSpell spell, ExtendedSprite sprite) {
-        System.out.println("ACTIVATED SPELL");
+        DeerForest.logger.info("ACTIVATED SPELL");
         SpellEffect effects = spell.getSpellEffect();
         this.currentSpell = spell;
         this.currentSprite = sprite;
@@ -235,7 +235,7 @@ public class SpellLogic {
         }
         //Check if selected card is in right area
         if(!possibleDestroy.contains(card)) {
-            System.out.println("Wrong area");
+            DeerForest.logger.info("Wrong area");
             return false;
         }
         //See if the selected card is valid to be destroyed
@@ -262,9 +262,9 @@ public class SpellLogic {
             view.removeSprite(s);
             view.getArena().removeSprite(s);
         } else {
-            System.out.println("Not valid");
-            System.out.println("Selection was: " + s);
-            System.out.println("Selection was: " + s.getCard());
+            DeerForest.logger.info("Not valid");
+            DeerForest.logger.info("Selection was: " + s);
+            DeerForest.logger.info("Selection was: " + s.getCard());
         }
         //If effect requires no interaction then keep going
         if(!doDestroy(effectQueue.get(effectType))) {
@@ -310,7 +310,7 @@ public class SpellLogic {
         }
         //Check if selected card is in right area
         if(!possibleBuff.contains(card)) {
-            System.out.println("Wrong area");
+            DeerForest.logger.info("Wrong area");
             return false;
         }
         //See if the selected card is valid to be destroyed
@@ -349,9 +349,9 @@ public class SpellLogic {
                 view.getArena().removeSprite(s);
             }
         } else {
-            System.out.println("Not valid");
-            System.out.println("Selection was: " + s);
-            System.out.println("Selection was: " + s.getCard());
+            DeerForest.logger.info("Not valid");
+            DeerForest.logger.info("Selection was: " + s);
+            DeerForest.logger.info("Selection was: " + s.getCard());
         }
         //If effect requires no interaction then keep going
         if(!doMonster(effectQueue.get(effectType))) {
@@ -556,7 +556,7 @@ public class SpellLogic {
         int canDestroy = 0;
         for(AbstractCard card : new ArrayList<AbstractCard>(possibleDestroy)) {
             //If can destroy any then increase counter
-            System.out.println("Card: " + card);
+            DeerForest.logger.info("Card: " + card);
             if(this.destroyType.isEmpty()) {
                 canDestroy++;
                 continue;
@@ -612,7 +612,7 @@ public class SpellLogic {
      */
     private boolean doDraw(List<Integer> effectParameters) {
 
-        System.out.println("Before setting stuff");
+        DeerForest.logger.info("Before setting stuff");
         view.setEffectMessage("Currently performing a draw effect" + System.getProperty("line.separator") +
                 "You must discard " + effectParameters.get(1) + " cards before" + System.getProperty("line.separator") +
                 "You must discard " +  effectParameters.get(2) + " cards after");
@@ -728,7 +728,7 @@ public class SpellLogic {
         int canBuff = 0;
         for(AbstractCard card : new ArrayList<AbstractCard>(possibleMonsters)) {
             //If can destroy any then increase counter
-            System.out.println("Card: " + card);
+            DeerForest.logger.info("Card: " + card);
             if(this.monsterType.isEmpty()) {
                 canBuff++;
                 continue;
@@ -752,7 +752,7 @@ public class SpellLogic {
             effectParameters.set(0, canBuff);
         }
 
-        System.out.println("Before setting stuff");
+        DeerForest.logger.info("Before setting stuff");
         if(this.monsterType == null || this.monsterType.isEmpty()) {
             view.setEffectMessage("Currently performing a monster alter effect" + System.getProperty("line.separator") +
                     "You must alter " + effectParameters.get(0) + " monsters" + System.getProperty("line.separator") +

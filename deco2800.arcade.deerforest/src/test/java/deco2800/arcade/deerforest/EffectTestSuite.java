@@ -42,7 +42,6 @@ public class EffectTestSuite {
 			assertEquals(lowerBounds.getAttackType(), "Fire");
 			assertNull(lowerBounds.affectsTypes());
 		} catch (IncorrectEffectException e) {
-			System.out.println(e);
 			fail("Attack bounds was considered an incorrect effect");
 		}
 	}
@@ -125,7 +124,6 @@ public class EffectTestSuite {
 			assertEquals(upperBounds.getAttackType(), "Water");
 			assertEquals(upperBounds.affectsTypes(), effectTypes);
 		} catch (IncorrectEffectException e) {
-			System.out.println(e);
 			fail("Attack bounds was considered an incorrect effect");
 		}
 		

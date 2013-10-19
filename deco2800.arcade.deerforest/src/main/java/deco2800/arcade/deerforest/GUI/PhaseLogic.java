@@ -28,7 +28,7 @@ public class PhaseLogic {
 
         //Check if card has already battled
         if(currentSelection.hasAttacked()) {
-            System.out.println("Already Battled");
+            DeerForest.logger.info("Already Battled");
             return;
         }
 
@@ -85,9 +85,9 @@ public class PhaseLogic {
             int defendingPlayer = game.getCurrentPlayer()==1?2:1;
 
             if(!game.moveCards(defendingPlayer, cardToMove, "Field", "Graveyard")) {
-                System.out.println("Didn't Move, cardToMove was: " + cardToMove + " defendingPlayer: " + defendingPlayer);
+                DeerForest.logger.info("Didn't Move, cardToMove was: " + cardToMove + " defendingPlayer: " + defendingPlayer);
             } else {
-                System.out.println("Did Move, cardToMove was: " + cardToMove + " defendingPlayer: " + defendingPlayer);
+                DeerForest.logger.info("Did Move, cardToMove was: " + cardToMove + " defendingPlayer: " + defendingPlayer);
             }
 
             //Remove card from view
@@ -102,7 +102,7 @@ public class PhaseLogic {
                 area = "P2MonsterZone";
             }
             if(view.getSpriteMap().get(area).isEmpty()) {
-                System.out.println("Wiped monsters");
+                DeerForest.logger.info("Wiped monsters");
                 ((Field) game.getCardCollection(defendingPlayer, "Field")).destroyAllMonsters();
             }
         }
@@ -110,7 +110,7 @@ public class PhaseLogic {
         //Show battle
         view.setBattleSprites(s1, s2, m1.getAttack());
 
-        System.out.println("Card health: " + m2.getCurrentHealth());
+        DeerForest.logger.info("Card health: " + m2.getCurrentHealth());
 
         s1.setHasAttacked(true);
     }
@@ -124,12 +124,12 @@ public class PhaseLogic {
      */
     public static void doDirectBattle(int player, ExtendedSprite s1) {
 
-        System.out.println("Direct attack Player: " + player + " s1: " + s1);
+        DeerForest.logger.info("Direct attack Player: " + player + " s1: " + s1);
 
         MainGame game = DeerForestSingletonGetter.getDeerForest().mainGame;
         MainGameScreen view = DeerForestSingletonGetter.getDeerForest().view;
 
-        System.out.println("Card attached to sprite: " + s1.getCard());
+        DeerForest.logger.info("Card attached to sprite: " + s1.getCard());
 
         AbstractMonster m = null;
 

@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
 import deco2800.arcade.deerforest.models.cards.AbstractMonster;
@@ -465,6 +466,15 @@ public class MainGameScreen implements Screen {
     private void drawVictory() {
         //Show victorious player if exists
         if(game.getPlayerLP(1) <= 0) {
+        	
+            // Give the game win achievement
+            if (DeerForestSingletonGetter.getDeerForest() != null) {
+    			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.winGame");
+    		}
+            
+            // Store the score (turns taken to win?)
+            DeerForest.playerScore.storeScore("Number", MainInputProcessor.turns);
+        	
             game.batch.begin();
             ExtendedSprite s = new ExtendedSprite(manager.get("DeerForestAssets/Player2Victory.png", Texture.class));
             s.setScale(Gdx.graphics.getWidth()/(2*s.getWidth()), Gdx.graphics.getHeight() / (2*s.getHeight()));
@@ -630,7 +640,7 @@ public class MainGameScreen implements Screen {
      */
 	public void printSpriteMap() {
 		for(String key : spriteMap.keySet()) {
-			System.out.println("Key: " + key + " list: " + spriteMap.get(key));
+			DeerForest.logger.info("Key: " + key + " list: " + spriteMap.get(key));
 		}
 	}
 

@@ -34,6 +34,9 @@ public class MainInputProcessor implements InputProcessor {
     private boolean gameFinished;
     private boolean drawn;
     private boolean gameStarted;
+    
+    private int cardsDrawn;
+    static int turns;
 
     SpellLogic spellHandler;
 
@@ -56,6 +59,8 @@ public class MainInputProcessor implements InputProcessor {
         this.gameStarted = false;
         //Set up a spellLogic handler
         spellHandler = new SpellLogic(game, view, this);
+        
+        cardsDrawn = 0;
 	}
 
     /**
@@ -159,6 +164,22 @@ public class MainInputProcessor implements InputProcessor {
         if(!drawn && game.getPhase().equals("DrawPhase")) {
             if(view.deckAtPoint(x, y)) {
                 doDraw();
+                
+                cardsDrawn++;
+                DeerForest.logger.info("Cards drawn: " + cardsDrawn);
+                
+                if (cardsDrawn == 30) {
+            		// Give the draw master card achievement
+            		if (DeerForestSingletonGetter.getDeerForest() != null) {
+            			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.drawMaster");
+            		}
+                }
+                
+        		// Give the draw card achievement
+        		if (DeerForestSingletonGetter.getDeerForest() != null) {
+        			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.draw");
+        		}
+                
                 this.drawn = true;
             }
         }
@@ -338,7 +359,7 @@ public class MainInputProcessor implements InputProcessor {
         if(game.getPhase().equals("BattlePhase")) {
             CardCollection field = game.getCardCollection(1, "Field");
             field.addAll(game.getCardCollection(2, "Field"));
-            System.out.println(new ArrayList<AbstractCard>(field));
+            DeerForest.logger.info(new ArrayList<AbstractCard>(field).toString());
         }
 
         view.setPhaseDisplayed(false);
@@ -356,6 +377,9 @@ public class MainInputProcessor implements InputProcessor {
         currentSelection = null;
         view.setPhaseDisplayed(false);
         view.setHighlightedZones(new ArrayList<Rectangle>());
+        
+        // Increment the number of turns
+        turns++;
     }
 
     /**
@@ -418,6 +442,7 @@ public class MainInputProcessor implements InputProcessor {
 		//Set to hand rectangle
 		Rectangle r = view.getArena().getAvailableZones(player, false, false).get(0);
 		SpriteLogic.setCurrentSelectionToRectangle(r);
+		
 	}
 
     /**

@@ -180,9 +180,9 @@ public class MainGame extends Game {
 
         boolean b = model.moveCards(player, cards, srcCards, destCards);
         if(!b) {
-            System.out.println("Error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+            DeerForest.logger.info("Error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
         } else {
-            System.out.println("No error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+            DeerForest.logger.info("No error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
         }
 		return b;
 	}
@@ -195,6 +195,12 @@ public class MainGame extends Game {
         this.effectsMuted = !effectsMuted;
         if(bgLoop.isPlaying()) {
             bgLoop.pause();
+            
+         // Give the sweet silence card achievement
+    		if (DeerForestSingletonGetter.getDeerForest() != null) {
+    			DeerForestSingletonGetter.getDeerForest().incrementAchievement("deerforest.sweetSilence");
+    		}        
+            
         } else {
             bgLoop.play();
         }

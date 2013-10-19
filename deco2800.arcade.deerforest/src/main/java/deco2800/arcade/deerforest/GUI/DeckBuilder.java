@@ -90,9 +90,9 @@ public class DeckBuilder extends Game {
 
         boolean b = model.moveCards(cards, srcCards, destCards);
         if(!b) {
-            System.out.println("Error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+            DeerForest.logger.warning("Error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
         } else {
-            System.out.println("No error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
+            DeerForest.logger.info("No error moving with cards: " + cards + " srcCards: " + srcCards + " destCards: " + destCards);
         }
 		return b;
 	}

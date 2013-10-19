@@ -11,8 +11,9 @@ import deco2800.arcade.towerdefence.model.Mobile;
 import deco2800.arcade.towerdefence.model.Team;
 
 /**
- * The class for enemies invading the ship. Every enemy is able to use Melee, but only some will be able to use Ranged.
- * Those that are Ranged should extend Enemy and implement Ranged.
+ * The class for enemies invading the ship. Every enemy is able to use Melee,
+ * but only some will be able to use Ranged. Those that are Ranged should extend
+ * Enemy and implement Ranged.
  * 
  * @author hadronn
  * 
@@ -28,49 +29,56 @@ public class Enemy extends Mobile implements Melee {
 	// The current target.
 	private GridObject target;
 	// The sprites for the melee attacking animation.
-	private List<Sprite> sprAttacking; 
-	// The enemies anger statistic, for how likely it is to stop pathing and attack a different team object randomly.
+	private List<Sprite> sprAttacking;
+	// The enemies anger statistic, for how likely it is to stop pathing and
+	// attack a different team object randomly.
 	private double anger;
 
 	// Constructor
 	/**
 	 * The Enemy constructor.
+	 * 
 	 * @param maxHealth
-	 * 			The maximum health
+	 *            The maximum health
 	 * @param armour
-	 * 			The armour
+	 *            The armour
 	 * @param x
-	 * 			The x coordinate
+	 *            The x coordinate
 	 * @param y
-	 * 			The y coordinate
+	 *            The y coordinate
 	 * @param speed
-	 * 			The movement speed in pixels per second
+	 *            The movement speed in pixels per second
 	 * @param grid
-	 * 			The grid it occupies
+	 *            The grid it occupies
 	 * @param team
-	 * 			The team it's on
+	 *            The team it's on
 	 * @param attackRate
-	 * 			The number of attacks per second
+	 *            The number of attacks per second
 	 * @param damage
-	 * 			The damage per attack
+	 *            The damage per attack
 	 * @param penetration
-	 * 			The amount of armour the attack ignores
+	 *            The amount of armour the attack ignores
 	 * @param sprStanding
-	 * 			The in order list of Standing Sprites
+	 *            The in order list of Standing Sprites
 	 * @param sprMoving
-	 * 			The in order list of Movement Sprites
+	 *            The in order list of Movement Sprites
 	 * @param sprDying
-	 * 			The in order list of Dying Sprites
+	 *            The in order list of Dying Sprites
 	 * @param sprDeath
-	 * 			The in order list of Death Sprites
+	 *            The in order list of Death Sprites
 	 * @param sprAttacking
-	 * 			The in order list of Attacking Sprites
+	 *            The in order list of Attacking Sprites
 	 * @param anger
-	 * 			How likely the enemy is to stop pathing and attack nearest other-team object.
+	 *            How likely the enemy is to stop pathing and attack nearest
+	 *            other-team object.
 	 */
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid, Team team, double attackRate, int damage, int penetration, double anger, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath, List<Sprite> sprAttacking) {
-		super(maxHealth, armour, x, y, speed, grid, team, sprStanding, sprMoving, sprDying, sprDeath);
+			Grid grid, Team team, double attackRate, int damage,
+			int penetration, double anger, List<Sprite> sprStanding,
+			List<Sprite> sprMoving, List<Sprite> sprDying,
+			List<Sprite> sprDeath, List<Sprite> sprAttacking) {
+		super(maxHealth, armour, x, y, speed, grid, team, sprStanding,
+				sprMoving, sprDying, sprDeath);
 		this.sprAttacking = sprAttacking;
 		this.attackRate = attackRate;
 		this.damage = damage;
@@ -99,7 +107,7 @@ public class Enemy extends Mobile implements Melee {
 	public int penetration() {
 		return penetration;
 	}
-	
+
 	/**
 	 * Returns the amount of anger the enemy has.
 	 */
@@ -151,7 +159,7 @@ public class Enemy extends Mobile implements Melee {
 	public void penetration(int pen) {
 		this.penetration = pen;
 	}
-	
+
 	/**
 	 * Sets the amount of anger the enemy has.
 	 */

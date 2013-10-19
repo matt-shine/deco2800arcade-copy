@@ -7,11 +7,11 @@ import java.util.UUID;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-import deco2800.arcade.towerdefence.model.creationclasses.Effect;
+import deco2800.arcade.towerdefence.model.effects.Effect;
 
 /**
- * The class for an object that can be created on a grid, required to be
- * unique when instantiated.
+ * The class for an object that can be created on a grid, required to be unique
+ * when instantiated.
  * 
  * @author hadronn
  * 
@@ -22,7 +22,7 @@ public class GridObject {
 	// The grid this object is on.
 	protected Grid grid;
 	// The position of this object on the grid.
-	protected Vector2 position = new Vector2();
+	protected Vector2 position;
 	// Whether the object is visible.
 	private boolean visible = true;
 	// The list of status effects this GridObject can apply.
@@ -38,10 +38,10 @@ public class GridObject {
 	// The team this object belongs to.
 	protected Team team;
 	// The maximum number of effects that can be stacked on this GridObject.
-	private final static int effectStackingLimit = 15; 
+	private final static int effectStackingLimit = 15;
 	// The number of effects applied to this GridObject.
 	private int effectStacks = 0;
-	
+
 	// Constructor
 	/**
 	 * The GridObject constructor.
@@ -53,7 +53,8 @@ public class GridObject {
 	 * @param grid
 	 *            The grid the object belongs to.
 	 */
-	public GridObject(int x, int y, Grid grid, Team team, List<Sprite> sprStanding) {
+	public GridObject(int x, int y, Grid grid, Team team,
+			List<Sprite> sprStanding) {
 		this.position = new Vector2(x, y);
 		this.grid = grid;
 		this.id = UUID.randomUUID();
@@ -154,14 +155,14 @@ public class GridObject {
 	public Team team() {
 		return team;
 	}
-	
+
 	/**
 	 * Return the effect stacking limit of the GridObject.
 	 */
 	public int effectStackingLimit() {
 		return effectStackingLimit;
 	}
-	
+
 	/**
 	 * Return the number of effects currently applied to the GridObject.
 	 */
@@ -259,7 +260,7 @@ public class GridObject {
 	public void team(Team team) {
 		this.team = team;
 	}
-	
+
 	/**
 	 * Set the number of effects currently applied to this GridObject.
 	 */
@@ -320,8 +321,8 @@ public class GridObject {
 	 */
 	public Vector2 positionInTiles() {
 		Vector2 tilesPosition = new Vector2(position);
-		tilesPosition.x /= grid.getTileSize();
-		tilesPosition.y /= grid.getTileSize();
+		tilesPosition.x = (position.x / grid.getTileSize());
+		tilesPosition.y = (position.y /= grid.getTileSize());
 		return tilesPosition;
 	}
 

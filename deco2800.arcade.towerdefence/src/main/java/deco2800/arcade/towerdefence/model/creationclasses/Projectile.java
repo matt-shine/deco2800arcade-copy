@@ -1,5 +1,7 @@
 package deco2800.arcade.towerdefence.model.creationclasses;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,11 +9,13 @@ import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.Grid;
 import deco2800.arcade.towerdefence.model.GridObject;
+import deco2800.arcade.towerdefence.model.Mortal;
 import deco2800.arcade.towerdefence.model.Team;
+import deco2800.arcade.towerdefence.model.effects.Effect;
 
 /**
- * The class for GridObjects that can fly on any angle from a source
- * GridObject towards its target.
+ * The class for GridObjects that can fly on any angle from a source GridObject
+ * towards its target.
  * 
  * @author hadronn
  * 
@@ -26,6 +30,10 @@ public class Projectile extends GridObject {
 	private Vector2 speed;
 	// The projectile's range
 	private float range;
+	// The projectile's explosion radius, the number of Grid squares outward
+	// around the colliding GridObject that are damaged.
+	// 0 means no area of effect, just the one square.
+	private int explosionRadius;
 
 	// Constructor
 	/**
@@ -46,12 +54,15 @@ public class Projectile extends GridObject {
 	 * @param damage
 	 * @param penetration
 	 */
-	public Projectile(int x, int y, Grid grid, Vector2 speed, float range, Team team, List<Sprite> sprStanding, int damage, int penetration) {
+	public Projectile(int x, int y, Grid grid, Vector2 speed, float range,
+			Team team, List<Sprite> sprStanding, int damage, int penetration,
+			int explosionRadius) {
 		super(x, y, grid, team, sprStanding);
 		this.speed = speed;
 		this.range = range;
 		this.damage = damage;
 		this.penetration = penetration;
+		this.explosionRadius = explosionRadius;
 	}
 
 	// Getters
@@ -74,6 +85,14 @@ public class Projectile extends GridObject {
 		return penetration;
 	}
 
+	/**
+	 * Returns the number of squares around the colliding GridObject that also
+	 * take damage.
+	 */
+	public int explosionRadius() {
+		return explosionRadius;
+	}
+
 	// Setters
 	/**
 	 * Set the damage this projectile inflicts on collision.
@@ -93,6 +112,14 @@ public class Projectile extends GridObject {
 	 */
 	public void penetration(int penetration) {
 		this.penetration = penetration;
+	}
+
+	/**
+	 * Set the number of squares around the colliding GridObject that also take
+	 * damage.
+	 */
+	public void explosionRadius(int amount) {
+		this.explosionRadius = amount;
 	}
 
 	// Methods
@@ -120,4 +147,60 @@ public class Projectile extends GridObject {
 		// do nothing for now TODO
 	}
 
+	/**
+	 * Models collision and damage calculations when the projectile strikes a
+	 * GridObject.
+	 */
+	private void collide(GridObject collidingObject) {
+		// create a hit list
+		List<GridObject> hitList = new ArrayList<GridObject>();
+		// determine targets hit with explosionRadius
+		int r = explosionRadius;
+		// find the tile the colldingObject is sitting on.
+		Vector2 centreTile = collidingObject.positionInTiles();
+		// find the top left square of the area to hit.
+		Vector2 startingTile = new Vector2(centreTile.x - r, centreTile.y - r);
+		// iterate through squares r away from centre tile
+		for (int i = 0; i <= r; i++) {
+			for (int j = 0; j <= r; j++) {
+				// make an iterator for the contents of the square
+				Iterator<GridObject> contents = grid.getGridContents(
+						(int) (startingTile.x + i), (int) (startingTile.y + j))
+						.iterator();
+				// iterate through
+				while (contents.hasNext()) {
+					GridObject element = contents.next();
+					// check for friendly fire
+					if (element.team() != this.team()
+							&& element instanceof Mortal) {
+						// not friendly fire, can bleed so add to hit list.
+						hitList.add(element);
+					}
+				}
+			}
+		}
+		// hit list created
+		for (int i = 0; i < hitList.size(); i++) {
+			// apply damage
+			((Mortal) hitList.get(i)).takeDamage(damage);
+		}
+		// apply any effects in effects list
+		// check it has effects
+		if (this.canApplyStatusEffects()) {
+			// Get the list of effects
+			List<Effect> effectList = this.effects();
+			// For every effect in the list
+			for (int i = 0; i < effectList.size(); i++) {
+				// Get the effect
+				Effect effect = effectList.get(i);
+				for (int j = 0; j < hitList.size(); i++) {
+					// get the object
+					GridObject hit = hitList.get(j);
+					// apply the effect to the object
+
+				}
+			}
+		}
+
+	}
 }

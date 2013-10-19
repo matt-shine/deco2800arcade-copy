@@ -1,7 +1,8 @@
 package deco2800.arcade.towerdefence.model;
 
 /**
- * A simple enumeration of possible movement directions for a GridObject on a Grid.
+ * A simple enumeration of possible movement directions for a GridObject on a
+ * Grid.
  * 
  * @author hadronn
  * 

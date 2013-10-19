@@ -9,7 +9,8 @@ import deco2800.arcade.towerdefence.model.pathfinding.Path;
 import deco2800.arcade.towerdefence.model.pathfinding.Path.Step;
 
 /**
- * The abstract class for objects that can move to different positions on the grid.
+ * The abstract class for objects that can move to different positions on the
+ * grid.
  * 
  * @author hadronn
  * 
@@ -43,7 +44,8 @@ public class Mobile extends Mortal {
 	 *            The grid the object belongs to
 	 */
 	public Mobile(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath) {
+			Grid grid, Team team, List<Sprite> sprStanding,
+			List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath) {
 		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
 		this.speed = speed;
 		this.sprMoving = sprMoving;
@@ -59,7 +61,7 @@ public class Mobile extends Mortal {
 	public List<Sprite> sprMoving() {
 		return sprMoving;
 	}
-	
+
 	/**
 	 * Returns the GridObject's sprites to animate dying.
 	 * 
@@ -89,7 +91,7 @@ public class Mobile extends Mortal {
 	public void sprMoving(List<Sprite> sprites) {
 		this.sprMoving = sprites;
 	}
-	
+
 	/**
 	 * Sets the GridObject's sprites to animate dying.
 	 * 
@@ -99,7 +101,7 @@ public class Mobile extends Mortal {
 	public void sprDying(List<Sprite> sprites) {
 		this.sprDying = sprites;
 	}
-	
+
 	/**
 	 * Set the path to the given path.
 	 * 
@@ -109,8 +111,8 @@ public class Mobile extends Mortal {
 	public void path(Path path) {
 		this.path = path;
 	}
-	
-	public void speed(double speed){
+
+	public void speed(double speed) {
 		this.speed = speed;
 	}
 
@@ -173,7 +175,7 @@ public class Mobile extends Mortal {
 
 		// Go into a wait-while loop changing the position 30 times per second
 		long t0, t1;
-		float distance = grid.getTileSize()*vector.len();
+		float distance = grid.getTileSize() * vector.len();
 		Vector2 addVector = vector.mul((float) speed / 33);
 		for (float i = 0; i < distance; i += addVector.len()) {
 			t0 = System.currentTimeMillis();

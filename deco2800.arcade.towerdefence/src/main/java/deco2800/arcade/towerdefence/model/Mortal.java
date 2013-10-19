@@ -5,9 +5,8 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * The class for mortal objects. Will be the majority of interesting
- * objects. Can die through game mechanics and have curious attributes such as
- * health.
+ * The class for mortal objects. Will be the majority of interesting objects.
+ * Can die through game mechanics and have curious attributes such as health.
  * 
  * @author hadronn
  * 
@@ -38,7 +37,8 @@ public class Mortal extends GridObject {
 	 * @param grid
 	 *            The grid the object belongs to
 	 */
-	public Mortal(int maxHealth, int armour, int x, int y, Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprDeath) {
+	public Mortal(int maxHealth, int armour, int x, int y, Grid grid,
+			Team team, List<Sprite> sprStanding, List<Sprite> sprDeath) {
 		super(x, y, grid, team, sprStanding);
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
@@ -82,7 +82,7 @@ public class Mortal extends GridObject {
 	public List<Sprite> sprDeath() {
 		return sprDeath;
 	}
-	
+
 	// Setters
 	/**
 	 * Sets the maximum health of the Mortal. If current health is above this
@@ -117,7 +117,7 @@ public class Mortal extends GridObject {
 	public void armour(int armour) {
 		this.armour = armour;
 	}
-	
+
 	/**
 	 * Sets the death sprites of the Mortal.
 	 * 

@@ -14,8 +14,8 @@ public class TDTests {
 
 	@Test
 	public void EnemyDamageTest() {
-		Enemy unarmoured = new Enemy(50, 0, 0, 0, 0.0, null, null, 0, 0, 0, null, null, null, null, null);
-		Enemy armoured = new Enemy(50, 10, 0, 0, 0.0, null, null, 0, 0, 0, null, null, null, null, null);
+		Enemy unarmoured = new Enemy(50, 0, 0, 0, 0.0, null, null, 0, 0, 0, 0, null, null, null, null, null);
+		Enemy armoured = new Enemy(50, 10, 0, 0, 0.0, null, null, 0, 0, 0, 0, null, null, null, null, null);
 
 		// Damage the unarmoured Enemy with a non-penetrating attack
 		unarmoured.takeDamage(25);
@@ -40,7 +40,7 @@ public class TDTests {
 
 	@Test
 	public void EnemyHealingTest() {
-		Enemy meatbag = new Enemy(50, 0, 0, 0, 0.0, null, null, 0, 0, 0, null, null, null, null, null);
+		Enemy meatbag = new Enemy(50, 0, 0, 0, 0.0, null, null, 0, 0, 0, 0, null, null, null, null, null);
 		// Try healing from maximum health
 		meatbag.heal(100);
 		Assert.assertEquals(50, meatbag.health());
@@ -67,7 +67,7 @@ public class TDTests {
 		Assert.assertEquals(1, grid.getGridContents(1,1).size());
 		//Try building something on top of an alien - should be at 3,3 due to tilesize
 		//Place the alien
-		Enemy testAlien = new Enemy(5, 5, 60, 60, 5, grid, null, 0, 0, 0, null, null, null, null, null);
+		Enemy testAlien = new Enemy(5, 5, 60, 60, 5, grid, null, 0, 0, 0, 0, null, null, null, null, null);
 		grid.buildObject(testAlien);
 		Assert.assertEquals(1, grid.getGridContents(3,3).size());
 		//Build something on it
@@ -80,7 +80,7 @@ public class TDTests {
 	public void mobileTest(){
 		//Create the grid and enemy to use
 		Grid grid = new Grid(200, 200, "grid", 20, null, new Vector2(19, 19));
-		Enemy mobile = new Enemy(10, 10, 0, 0, 20, grid, null, 0, 0, 0, null, null, null, null, null);
+		Enemy mobile = new Enemy(10, 10, 0, 0, 20, grid, null, 0, 0, 0, 0, null, null, null, null, null);
 		grid.buildObject(mobile);
 		//Test moving the object
 		((Mobile) grid.getGridContents(0, 0).get(0)).moving(new Vector2(1,1));

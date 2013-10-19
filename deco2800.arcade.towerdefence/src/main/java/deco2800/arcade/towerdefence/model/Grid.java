@@ -31,8 +31,10 @@ public class Grid implements TileBasedMap {
 	private int gridWidth, gridDepth;
 	// A 3 dimensional Array of the following format
 	// (x, y, GridObject).
-	// If an area is meant to be blocked entirely initialise a "Blocked" GridObject and place it inside the gridContents.
-	// For any grid the blocked areas should be hard-coded and loaded from a file on load.
+	// If an area is meant to be blocked entirely initialise a "Blocked"
+	// GridObject and place it inside the gridContents.
+	// For any grid the blocked areas should be hard-coded and loaded from a
+	// file on load.
 	private List<List<List<GridObject>>> gridContents;
 	// The ship that is using this grid
 	private Ship ship;
@@ -58,7 +60,8 @@ public class Grid implements TileBasedMap {
 	 * @param targetPosition
 	 *            A vector representing the target (portal)
 	 */
-	public Grid(int width, int depth, String name, int tileSize, Ship ship, Vector2 targetPosition) {
+	public Grid(int width, int depth, String name, int tileSize, Ship ship,
+			Vector2 targetPosition) {
 		id = UUID.randomUUID();
 		this.width = width;
 		this.depth = depth;
@@ -133,9 +136,10 @@ public class Grid implements TileBasedMap {
 	public int getHeightInTiles() {
 		return gridDepth;
 	}
-	
+
 	/**
 	 * Get the position of the portal to Earth.
+	 * 
 	 * @return
 	 */
 	public Vector2 targetPosition() {
@@ -196,23 +200,25 @@ public class Grid implements TileBasedMap {
 	public Ship ship() {
 		return ship;
 	}
-	
+
 	/**
 	 * Get the pathfinder used for this grid.
+	 * 
 	 * @return The pathfinder in use.
 	 */
-	public AStarPathFinder pathfinder(){
+	public AStarPathFinder pathfinder() {
 		return pathfinder;
 	}
-	
+
 	/**
 	 * Set the position of the portal to Earth.
+	 * 
 	 * @param position
 	 */
 	public void targetPosition(Vector2 position) {
 		this.targetPosition = position;
 	}
-	
+
 	// Methods
 	public void pathFinderVisited(int x, int y) {
 		// do nothing - not needed
@@ -270,8 +276,8 @@ public class Grid implements TileBasedMap {
 	 * false, otherwise return true and modify the gridContents appropriately.
 	 * 
 	 * @param object
-	 *            The alien to place. Its coordinates are determined via
-	 *            the position of the object.
+	 *            The alien to place. Its coordinates are determined via the
+	 *            position of the object.
 	 */
 	public boolean placeAlien(Enemy object) {
 		int x, y;
@@ -294,7 +300,6 @@ public class Grid implements TileBasedMap {
 		return true;
 	}
 
-	
 	/**
 	 * Get the contents of the specified grid location
 	 * 
@@ -329,8 +334,9 @@ public class Grid implements TileBasedMap {
 	 */
 	public void moveObject(GridObject object, Vector2 newPosition) {
 		// Remove it from the old position
-		gridContents.get((int) object.positionInTiles().x).get((int) object.positionInTiles().y).remove(object);
-		
+		gridContents.get((int) object.positionInTiles().x)
+				.get((int) object.positionInTiles().y).remove(object);
+
 		// Add it to the new one
 		gridContents.get((int) newPosition.x).get((int) newPosition.y)
 				.add(object);

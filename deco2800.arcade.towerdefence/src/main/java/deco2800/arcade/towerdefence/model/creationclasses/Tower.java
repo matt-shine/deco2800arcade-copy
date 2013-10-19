@@ -40,37 +40,41 @@ public class Tower extends Mortal implements Ranged {
 	private GridObject target = null;
 	// The shooting sprites of the tower.
 	private List<Sprite> sprShooting;
-	
+
 	/**
 	 * The Tower Constructor.
+	 * 
 	 * @param maxHealth
-	 * 			The maximum health
+	 *            The maximum health
 	 * @param armour
-	 * 			The armour
+	 *            The armour
 	 * @param x
-	 * 			The x coordinate
+	 *            The x coordinate
 	 * @param y
-	 * 			The y coordinate 
+	 *            The y coordinate
 	 * @param grid
-	 * 			The grid it occupies
+	 *            The grid it occupies
 	 * @param team
-	 * 			The team it's on
+	 *            The team it's on
 	 * @param type
-	 * 			The tower type
+	 *            The tower type
 	 * @param attackRate
-	 * 			The number of attacks per second
+	 *            The number of attacks per second
 	 * @param range
-	 * 			The range at which it can acquire a target
+	 *            The range at which it can acquire a target
 	 * @param projectile
-	 * 			The projectile it shoots
+	 *            The projectile it shoots
 	 * @param sprStanding
-	 * 			The in order list of Standing sprites
+	 *            The in order list of Standing sprites
 	 * @param sprShooting
-	 * 			The in order list of Shooting sprites
+	 *            The in order list of Shooting sprites
 	 * @param sprDeath
-	 * 			The in order list of Death sprites
+	 *            The in order list of Death sprites
 	 */
-	public Tower(int maxHealth, int armour, int x, int y, Grid grid, Team team, TowerType type, double attackRate, double range, Projectile projectile, List<Sprite> sprStanding, List<Sprite> sprShooting, List<Sprite> sprDeath) {
+	public Tower(int maxHealth, int armour, int x, int y, Grid grid, Team team,
+			TowerType type, double attackRate, double range,
+			Projectile projectile, List<Sprite> sprStanding,
+			List<Sprite> sprShooting, List<Sprite> sprDeath) {
 		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
 		this.health = maxHealth;
 		this.type = type;
@@ -79,7 +83,7 @@ public class Tower extends Mortal implements Ranged {
 		this.projectile = projectile;
 		this.sprShooting = sprShooting;
 	}
-	
+
 	// Getters
 	/**
 	 * The maximum health of the tower.
@@ -87,7 +91,7 @@ public class Tower extends Mortal implements Ranged {
 	public int maxHealth() {
 		return maxHealth;
 	}
-	
+
 	/**
 	 * The current health of the tower.
 	 */
@@ -150,8 +154,8 @@ public class Tower extends Mortal implements Ranged {
 	public List<Sprite> shootingSprites() {
 		return sprShooting;
 	}
-	
-	//Setters
+
+	// Setters
 	/**
 	 * Sets the maximum health of the tower.
 	 */
@@ -221,15 +225,14 @@ public class Tower extends Mortal implements Ranged {
 	public void shootingSprites(List<Sprite> sprites) {
 		this.sprShooting = sprites;
 	}
-	
-	//Methods
-	
+
+	// Methods
 
 	/**
 	 * The method for firing a single projectile at a target.
 	 */
 	public void shoot() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -221,6 +221,6 @@ public class MenuScreen extends JFrame{
 	}
 
 	public static void main (String args[]) throws IOException {
-		MenuScreen w = new MenuScreen();
+		stageClear w = new stageClear();
 	}
 }

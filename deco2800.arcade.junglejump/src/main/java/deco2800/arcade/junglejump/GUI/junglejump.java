@@ -426,6 +426,15 @@ public class junglejump extends GameClient implements InputProcessor {
 		case GAMEOVER:
 			break;
 		case CONTINUE:
+			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			batch.setProjectionMatrix(camera.combined);
+			shapeRenderer.setProjectionMatrix(camera.combined);
+			batch.begin();
+			// Load Previous game? If yes, continue to game, if not go back to menu.
+			batch.end();
+			camera.update();
+			super.render();
 			break;
 		case ACHIEVEMENTS:
 			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);

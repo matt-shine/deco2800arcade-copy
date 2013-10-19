@@ -148,8 +148,8 @@ public class Projectile extends GridObject {
 	}
 
 	/**
-	 * Models collision and damage calculations when the projectile strikes a
-	 * GridObject.
+	 * Models collision, effect application and damage calculations when the
+	 * projectile strikes a GridObject.
 	 */
 	private void collide(GridObject collidingObject) {
 		// create a hit list
@@ -160,10 +160,10 @@ public class Projectile extends GridObject {
 		Vector2 centreTile = collidingObject.positionInTiles();
 		// find the top left square of the area to hit.
 		Vector2 startingTile = new Vector2(centreTile.x - r, centreTile.y - r);
-		// iterate through squares r away from centre tile
+		// iterate through squares r away from centre tile in a square
 		for (int i = 0; i <= r; i++) {
 			for (int j = 0; j <= r; j++) {
-				// make an iterator for the contents of the square
+				// make an iterator for the contents of each square
 				Iterator<GridObject> contents = grid.getGridContents(
 						(int) (startingTile.x + i), (int) (startingTile.y + j))
 						.iterator();
@@ -180,27 +180,29 @@ public class Projectile extends GridObject {
 			}
 		}
 		// hit list created
-		for (int i = 0; i < hitList.size(); i++) {
-			// apply damage
-			((Mortal) hitList.get(i)).takeDamage(damage);
-		}
-		// apply any effects in effects list
-		// check it has effects
-		if (this.canApplyStatusEffects()) {
+		// if has projectile has no effects just apply damage
+		if (!this.canApplyStatusEffects()) {
+			// iterate through hitList
+			for (int i = 0; i < hitList.size(); i++) {
+				((Mortal) hitList.get(i)).takeDamage(damage);
+			}
+		} else {
 			// Get the list of effects
 			List<Effect> effectList = this.effects();
-			// For every effect in the list
+			// iterate through effectList
 			for (int i = 0; i < effectList.size(); i++) {
 				// Get the effect
 				Effect effect = effectList.get(i);
+				// iterate through hitList
 				for (int j = 0; j < hitList.size(); i++) {
-					// get the object
-					GridObject hit = hitList.get(j);
-					// apply the effect to the object
-
+					// get the GridObject
+					GridObject victim = hitList.get(j);
+					// apply the effect to the victim
+					effect.function(victim);
+					// and then apply damage
+					((Mortal) hitList.get(i)).takeDamage(damage);
 				}
 			}
 		}
-
 	}
 }

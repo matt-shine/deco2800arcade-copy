@@ -70,20 +70,23 @@ public class MainTest {
 	 * Checks if the map file is formatted correctly
 	 */
 	public void mapFormattedCorrectly() {
-		String[] lineArray = getLines();
-		int startPoint = lineArray[0].contains("VSYM") ? 1 : 0;
-		char[] result;
-		String allowedChars = "ACDEFHacdefh13456890RSXZWYxzwyJLKMrsBpbP gG2QT7";
-		for (int i = startPoint; i < lineArray.length; i++) {
-			result = lineArray[i].toCharArray();
-			for (int j = 0; j < lineArray[i].length(); j++) {
-				Character c = result[j];
-				if (!allowedChars.contains(c.toString())) {
-					System.out.println(c.toString());
-					fail("Character in file which is not allowed");
+		String[][] lineArrays = getLines();
+		for (int x = 0; x < lineArrays.length; x++) {
+			int startPoint = lineArrays[x][0].contains("VSYM") ? 1 : 0;
+			char[] result;
+			String allowedChars = "ACDEFHacdefh13456890RSXZWYxzwyJLKMrsBpbP gG2QT7";
+			for (int i = startPoint; i < lineArrays[x].length; i++) {
+				result = lineArrays[x][i].toCharArray();
+				for (int j = 0; j < lineArrays[x][i].length(); j++) {
+					Character c = result[j];
+					if (!allowedChars.contains(c.toString())) {
+						System.out.println(c.toString());
+						fail("Character in file which is not allowed");
+					}
 				}
-			}
-		}				
+			}			
+		}
+			
 	}
 	
 	@Test
@@ -92,17 +95,32 @@ public class MainTest {
 	 * Note that this doesn't actually check if symbols were changed appropriately
 	 */
 	public void checkVsymNoticed() {
-		String file = model.getMapName();
-		String[] lineArray = getLines();
-		int startPoint = lineArray[0].contains("VSYM") ? 1 : 0;
-		for (int i = startPoint; i < gameMap.readMap(file).size() && i < lineArray.length; i++) {
-			Assert.assertEquals(gameMap.readMap(file).get(i).length, lineArray[i].length()*2);
-		}
+		String file; 
+		String[][] lineArrays = getLines();
+		for (int x = 0; x < lineArrays.length; x++) {
+			int startPoint = lineArrays[x][0].contains("VSYM") ? 1 : 0;
+			switch(x) {			
+			case 1: file = "levelMap.txt";
+			case 2: file = "testMap.txt";
+			default: file = model.getMapName();
+			}
+			for (int i = startPoint; i < gameMap.readMap(file).size() && i < lineArrays[x].length; i++) {
+				int multiplier = startPoint == 1 ? 2:1;
+				Assert.assertEquals(gameMap.readMap(file).get(i).length, lineArrays[x][i].length()* multiplier);
+			}
+		}		
 	}
 	/** Helper method for map file tests */
-	private String[] getLines() {
-		String contents = Gdx.files.internal(model.getMapName()).readString();
-		return contents.split(System.getProperty("line.separator"));		
+	private String[][] getLines() {
+		String[][] files = new String[3][];
+		String[] contents = new String[3];
+		contents[0] = Gdx.files.internal(model.getMapName()).readString(); //current map
+		contents[1] = Gdx.files.internal("levelMap.txt").readString(); //vsym map
+		contents[2] = Gdx.files.internal("testMap.txt").readString(); //nonvsym map
+		for (int i=0; i < contents.length; i++) {
+			files[i] = contents[i].split(System.getProperty("line.separator"));		
+		}
+		return files;
 	}
 	
 	/** Checks to see if the multiplexer works properly */

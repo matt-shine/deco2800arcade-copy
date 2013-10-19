@@ -15,6 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.network.NetworkClient;
@@ -62,6 +67,11 @@ public class MultiplayerLobby implements Screen {
 		shapeRenderer = new ShapeRenderer();
 		stage = new Stage();
 		ArcadeInputMux.getInstance().addProcessor(stage);
+		
+		bg = new Texture("homescreen_bg.png");
+		bg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		bgSprite = new Sprite(bg);
+		batch = new SpriteBatch();
 
 		/* Add player to servers list of lobby users */
 		ArcadeSystem.addPlayerToLobby();
@@ -118,15 +128,20 @@ public class MultiplayerLobby implements Screen {
 
 		final TextField chatfield = new TextField("", skin);
 		chatfield.setMessageText("Enter Chat");
-
+		
+		final Table table8 = new Table();
 		final Table table4 = new Table();
 		final Table table = new Table();
 		final Table table2 = new Table();
 		final Table table3 = new Table();
 		final Table table5 = new Table();
 		final Table bettingButtonTable = new Table();
-
+		final Table table7 = new Table();
 		Table chattable = new Table();
+		
+		final TextButton chatback = new TextButton("", skin, "green");
+		
+		final TextButton joinback = new TextButton("", skin, "green");
 
 		table.setFillParent(true);
 		table2.setFillParent(true);
@@ -135,18 +150,28 @@ public class MultiplayerLobby implements Screen {
 		table4.setFillParent(true);
 		table5.setFillParent(true);
 		bettingButtonTable.setFillParent(true);
+		table7.setFillParent(true);
+		table8.setFillParent(true);
 
 		table3.setBackground(skin.getDrawable("background"));
 
 		// Add tables to stage.
 		stage.addActor(table3);
+		stage.addActor(table8);
 		stage.addActor(table5);
 		stage.addActor(chattable);
 		stage.addActor(table2);
 		stage.addActor(table);
 		stage.addActor(bettingButtonTable);
+		stage.addActor(table7);
 
 		bettingButtonTable.center().top().right();
+		
+		table8.center().left();
+		table8.add(joinback).width(950).height(390);
+		
+		table7.center().right();
+		table7.add(chatback).padRight(0).width(340).height(390);
 
 		// Add tables and set position.
 		table3.add(chatfield).width(200).height(35).padLeft(960).padTop(440);
@@ -165,6 +190,9 @@ public class MultiplayerLobby implements Screen {
 				.padTop(600);
 
 		table.add(button2).width(300).height(40).padLeft(20).padTop(600);
+		
+		bettingButtonTable.add(label).width(80).height(40).padRight(560)
+				.padTop(25);
 
 		bettingButtonTable.add(bettingButton).width(40).height(40).padRight(50)
 				.padTop(25);
@@ -310,13 +338,7 @@ public class MultiplayerLobby implements Screen {
 
 		// Gdx.gl.glClearColor(0.9f, 0, 0, 1);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		/*
-		 * shapeRenderer.begin(ShapeType.FilledRectangle);
-		 * 
-		 * shapeRenderer.filledRect(50, 100, 1280 - 100, 720 - 200);
-		 * 
-		 * shapeRenderer.end();
-		 */
+		
 
 		if (Gdx.input.isKeyPressed(Keys.B)) {
 			//dispose();
@@ -407,7 +429,7 @@ public class MultiplayerLobby implements Screen {
 		
 		table6.clear();
 		table6.center().right();
-		table6.add(chatfield2).padRight(20).width(300).height(350).padTop(50);
+		table6.add(chatfield2).padRight(20).width(300).height(345).padTop(23);
 		table6.row();
 		table6.add(" ").padRight(200);
 	}

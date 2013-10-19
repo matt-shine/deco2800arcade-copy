@@ -92,6 +92,9 @@ public class FrontPage implements Screen {
             skin.add("menuBar", new Texture("menuBar.png"));
             skin.add("recentBar", new Texture("recent.png"));
             skin.add("chatOverlay", new Texture("overlayPopUp.png"));
+            skin.add("settingsIcon", new Texture("settings.png"));
+            skin.add("toolTip", new Texture("tooltip.png"));
+            skin.add("toolTipHover", new Texture("tooltip_hover.png"));
             stage = new FrontPageStage();
             
             
@@ -113,6 +116,13 @@ public class FrontPage implements Screen {
             table.setFillParent(true);
             table.setBackground(skin.getDrawable("background"));
             stage.addActor(table);
+            
+            Table trial = new Table();
+          //  trial.setFillParent(true);
+            trial.setBackground(skin.getDrawable("toolTip"));
+            trial.setPosition(950,580);
+            trial.setSize(200, 100);
+            stage.addActor(trial);
             
             //Text Buttons
             final TextButton storeButton = new TextButton("Store", skin, "green");
@@ -350,6 +360,10 @@ public class FrontPage implements Screen {
         final Label divider = new Label("|", skin, "cgothic");
         divider.setAlignment(Align.right);
         
+        final Button settingsIcon = new Button(skin.getDrawable("settingsIcon"));
+       // recentIcon.setName("recenticon");
+        settingsIcon.setSize(15, 15);
+     
         final Table topBox = new Table();
         
         //set panel sizes and positions
@@ -359,9 +373,10 @@ public class FrontPage implements Screen {
         topBox.setBackground(skin.getDrawable("menuBar"));
         
         //set top bar labels
-        topBox.add(logo).width(500);
+        topBox.add(logo).width(465);
         topBox.add(username).width(615);
-        topBox.add(divider).width(5).pad(20);
+        topBox.add(settingsIcon).width(15).height(15).padLeft(10);
+        topBox.add(divider).width(5).pad(15);
         topBox.add(credits).width(100);
         
         stage.addActor(topBox);

@@ -685,7 +685,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			if (butY == NEW_GAME) {
 				monkeyX = monkeyDefaultX;
 				monkeyY = monkeyDefaultY;
-				this.getCurrentCont().setCurrentLevel(0);
+				//this.getCurrentCont().setCurrentLevel(0);
+				currentCont = new LevelContainer();
+				currentLevel = getCurrentCont().getLevel(getCurrentCont().getCurrentLevel());
 				gameState = GameState.INPROGRESS;
 			}
 			if (butY == ACHIEVEMENTS) {

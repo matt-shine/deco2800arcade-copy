@@ -29,6 +29,12 @@ public class RemoveFriend {
 		
 	}
 
+	/**
+	 *  Removes the username of friend inputed
+	 *  The user must exist in your list to be removed,
+	 *  else action is ignored
+	 *  
+	 */
 	class RemoveFriendListener implements ActionListener{
 
 		@Override
@@ -41,6 +47,10 @@ public class RemoveFriend {
 		
 	}
 	
+	/**
+	 * The actions are dismissed and view is closed
+	 *
+	 */
 	class CancelListener implements ActionListener{
 
 		@Override

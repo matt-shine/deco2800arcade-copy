@@ -11,9 +11,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 public class Model {
-	
-	public Player player;
-	
+		
 	//Game Logos
 	public ImageIcon astrosonicLogo = new ImageIcon("assets/images/logos/Astrosonic.png");
 	public ImageIcon chessLogo = new ImageIcon("assets/images/logos/chess.png");
@@ -32,13 +30,17 @@ public class Model {
 	public static final Game LANDINVADERS;
 	public static final Game PACMAN;
 	
+	//Status Values
 	public String status = "online";
 	public ImageIcon statusIcon = new ImageIcon("assets/images/online.png");
+	
 	public Friends friends;
 	public AchievementClient achievements;
 	public ArcadeSystem arcadesystem;
+	public Player player;
 	
 	static {
+		
 		PONG = new Game();
 		PONG.id = "pong";
 		PONG.name = "Pong";

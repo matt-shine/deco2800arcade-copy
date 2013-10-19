@@ -350,7 +350,7 @@ public class EditScreen extends JFrame{
 
 	}
 
-	/**
+	/*
 	 * Event Listeners for Buttons
 	 */
 

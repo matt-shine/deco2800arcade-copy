@@ -26,14 +26,11 @@ public class ControllerMain {
 	private InviteScreen inviteView;
 	private AchievementScreen achievementView;
 	private Model theModel;
-
-	//Logger
-	static Logger log = Logger.getLogger(UserScreen.class);
 	
 	/**
 	 * Controller for the main profile page
-	 * @param theModel
-	 * @param userView
+	 * @param theModel The Model
+	 * @param userView The Main Profile Screen
 	 */
 	public ControllerMain(Model theModel, UserScreen userView) {
 		
@@ -56,12 +53,18 @@ public class ControllerMain {
 			
 	}
 	
+	/**
+	 *  Update status Icon using value stored in Model
+	 */
 	public void checkstatus(){
 		
 		userView.setStatus(theModel.getStatusIcon());
 
 	}
-	
+
+	/**
+	 *  Open on the Edit Page
+	 */
 	class EditListener implements ActionListener{
 
 		@Override
@@ -75,6 +78,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Home Page
+	 */
 	public class HomeListener implements ActionListener{
 
 		@Override
@@ -88,6 +94,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the Forum Page
+	 */
 	class ForumListener implements ActionListener{
 
 		@Override
@@ -100,6 +109,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the Game Store
+	 */
 	class StoreListener implements ActionListener{
 
 		@Override
@@ -112,6 +124,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Library
+	 */
 	class LibraryListener implements ActionListener{
 
 		@Override
@@ -124,6 +139,10 @@ public class ControllerMain {
 		
 	}
 	
+	
+	/**
+	 *  Return to Main Profile Page
+	 */
 	class MyProfileListener implements ActionListener{
 
 		@Override
@@ -135,6 +154,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Opens the Add Friends Screen
+	 */
 	class AddFriendListener implements ActionListener{
 
 		@Override
@@ -149,6 +171,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Opens the Remove Friends Screen
+	 */
 	class RemoveFriendListener implements ActionListener{
 
 		@Override
@@ -163,6 +188,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Opens the Status Selection Screen
+	 */
 	class StatusListener implements ActionListener{
 
 		@Override
@@ -177,6 +205,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Navigates to the achievements page
+	 */
 	class AchievementListener implements ActionListener{
 
 		@Override
@@ -191,6 +222,9 @@ public class ControllerMain {
 		
 	}
 	
+	/**
+	 *  Lists the invites of the User
+	 */
 	class InviteListener implements ActionListener{
 
 		@Override

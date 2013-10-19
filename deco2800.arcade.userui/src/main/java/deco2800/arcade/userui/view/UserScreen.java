@@ -1,11 +1,8 @@
 package deco2800.arcade.userui.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -395,7 +392,7 @@ public class UserScreen extends JFrame{
 	
 	/**
 	 *  Creates a panel displaying the most recently played games.
-	 *  (Up to 6 can be showed at a time)
+	 *  (Up to 3 can be showed at a time)
 	 */
 	public void addhistorypanel(){
 				
@@ -588,8 +585,8 @@ public class UserScreen extends JFrame{
 	}
 	
 	/**
-	 * 
-	 * @param icon
+	 * Set the status button to specified ImageIcon
+	 * @param icon ImageIcon of status
 	 */
 	public void setStatus(ImageIcon icon){
 		
@@ -598,12 +595,6 @@ public class UserScreen extends JFrame{
 	}
 	
 	public void updateFriends(){
-		
-	}
-	
-	public void buttonhover(){
-		
-		forumlink.setBackground(Color.red);
 		
 	}
 	

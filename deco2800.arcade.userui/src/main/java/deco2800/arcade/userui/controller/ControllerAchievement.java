@@ -11,11 +11,12 @@ import deco2800.arcade.userui.view.AchievementScreen;
 import deco2800.arcade.userui.view.StatusScreen;
 import deco2800.arcade.userui.view.UserScreen;
 
+/**
+ * Class used for the Achievement Controller
+ * 
+ */
 public class ControllerAchievement {
-	/**
-	 * Public class for the Achievement Controller
-	 * 
-	 */
+	
 	private AchievementScreen achievementView;
 	private StatusScreen statusView;
 	private Model theModel;
@@ -23,12 +24,13 @@ public class ControllerAchievement {
 	
 	static Logger log = Logger.getAnonymousLogger();
 	
+	/**
+	 * Controller for the achievement page
+	 * @param theModel The Model
+	 * @param achievementView The achievement screen
+	 */
 	public ControllerAchievement(Model theModel, AchievementScreen achievementView){
-		/**
-		 * Controller for the achievement page
-		 * @param theModel
-		 * @param achievementView
-		 */
+		
 		this.theModel = theModel;
 		this.achievementView = achievementView;
 		
@@ -44,12 +46,18 @@ public class ControllerAchievement {
 		
 	}
 	
+	/**
+	 *  Update status Icon using value stored in Model
+	 */
 	public void checkstatus(){
 
 		achievementView.setStatus(theModel.getStatusIcon());
 
 	}
 
+	/**
+	 *  Opens up the Edit Page
+	 */
 	class EditListener implements ActionListener{
 
 		@Override
@@ -60,6 +68,9 @@ public class ControllerAchievement {
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Home Page
+	 */
 	public class HomeListener implements ActionListener{
 
 		@Override
@@ -72,6 +83,9 @@ public class ControllerAchievement {
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Forum 
+	 */
 	class ForumListener implements ActionListener{
 
 		@Override
@@ -84,6 +98,9 @@ public class ControllerAchievement {
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Store
+	 */
 	class StoreListener implements ActionListener{
 
 		@Override
@@ -96,6 +113,9 @@ public class ControllerAchievement {
 		
 	}
 	
+	/**
+	 *  Navigates to the Arcade Library
+	 */
 	class LibraryListener implements ActionListener{
 
 		@Override
@@ -107,6 +127,9 @@ public class ControllerAchievement {
 		
 	}
 	
+	/**
+	 *  Returns back to Main Profile Page
+	 */
 	class MyProfileListener implements ActionListener{
 
 		@Override
@@ -122,18 +145,9 @@ public class ControllerAchievement {
 		
 	}
 	
-	class FriendListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			
-			//Add Friend to List
-			log.info("Add Friend Button");
-			
-		}
-		
-	}
-	
+	/**
+	 *  Opens Status Selection Screen
+	 */
 	class StatusListener implements ActionListener{
 
 		@Override
@@ -147,17 +161,20 @@ public class ControllerAchievement {
 		
 	}
 	
+	/**
+	 *  Branch checks selected game and updates the AchievementScreen
+	 *  to reflect the game's name, description, logo and achievements.
+	 */
 	class SelectListener implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 
-			//Calls the method to set achievement list based on game selection
-			//achievementView.setAchievementList();
 			if (achievementView.getGameSelection() == "Pong"){
 				achievementView.setGameName(theModel.PONG.getName());
 				achievementView.setGameDescription(theModel.PONG.getDescription());
 				achievementView.setGameLogo(theModel.pacmanlogo);
+				//achievementView.setAchievementList(Pong);
 			} else if (achievementView.getGameSelection() == "Chess"){
 				achievementView.setGameName(theModel.CHESS.getName());
 				achievementView.setGameDescription(theModel.CHESS.getDescription());

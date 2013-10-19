@@ -34,7 +34,7 @@ public class TestFriendStorage {
 	 * This method is run once when this class is instantiated
 	 * @throws Exception
 	 */
-	@BeforeClass
+	//@BeforeClass
 	public static void setUpClass() throws ClassNotFoundException {
 		 databaseTester = new JdbcDatabaseTester(
 					"org.apache.derby.jdbc.EmbeddedDriver",
@@ -60,7 +60,7 @@ public class TestFriendStorage {
 	 * This method is run once before each test case.
 	 * @throws Exception
 	 */
-	@Before
+	//@Before
 	public void setUp() throws Exception {
 		playerStorage = new PlayerStorage();
 		playerStorage.initialise();
@@ -81,7 +81,7 @@ public class TestFriendStorage {
 	 * Allow DBUnit to clean up after the test case (restore the database to its pre-testing state)
 	 * @throws Exception
 	 */
-	@After
+	//@After
 	public void  tearDown() throws Exception {
 		databaseTester.onTearDown();
 	}

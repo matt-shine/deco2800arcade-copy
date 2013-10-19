@@ -22,6 +22,10 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 
 /**
+ * The Store's wishlist page, featuring the currently logged in users games
+ * wishlist, and all of their ratings. From this page they can search to
+ * navigate to any other games page, and can click on any game to bring up the
+ * transactions screen.
  * @author Addison Gourluck
  */
 public class StoreWishlist implements Screen, StoreScreen {
@@ -42,7 +46,7 @@ public class StoreWishlist implements Screen, StoreScreen {
 		
 		final Table bg = new Table();
 		final Button homeButton = new Button(skin, "home");
-		final Label Title = new Label("Wish List", skin, "default-34");
+		final Label title = new Label("Wish List", skin, "default-34");
 		final Button searchButton = new Button(skin, "search");
 		final TextField searchField = new TextField("", skin);
 		final Label searchResult = new Label("", skin);
@@ -60,9 +64,9 @@ public class StoreWishlist implements Screen, StoreScreen {
 		stage.addActor(homeButton);
 		
 		// Title "Buy More Coins", located center of screen.
-		Title.setSize(380, 40);
-		Title.setPosition(96, 515);
-		stage.addActor(Title);
+		title.setSize(380, 40);
+		title.setPosition(96, 515);
+		stage.addActor(title);
 		
 		// Entry field for search term. Will update the featured game, as well.
 		// as the search result located below it.

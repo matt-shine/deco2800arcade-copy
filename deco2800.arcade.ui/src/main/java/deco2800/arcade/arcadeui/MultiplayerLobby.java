@@ -50,7 +50,7 @@ public class MultiplayerLobby implements Screen {
 		System.out.println(ui);
 		arcadeUI = ui;
 		this.player = player;
-		// lobby = this;
+		this.lobby = this;
 	}
 
 	public void show() {
@@ -184,7 +184,7 @@ public class MultiplayerLobby implements Screen {
 				table2.add(button5).width(130).height(20).padTop(5);
 				table2.row();
 
-				button5.addListener(new JoinGameListener(matchId, lobby));
+				button5.addListener(new JoinGameListener(matchId, matches.get(i).gameId, lobby));
 			}
 		}
 
@@ -211,7 +211,7 @@ public class MultiplayerLobby implements Screen {
 						table2.add(button5).width(130).height(20).padTop(5);
 						table2.row();
 
-						button5.addListener(new JoinGameListener(matchId, lobby));
+						button5.addListener(new JoinGameListener(matchId, matches.get(i).gameId, lobby));
 					}
 				}
 			}
@@ -375,11 +375,15 @@ public class MultiplayerLobby implements Screen {
 		this.player = player;
 	}
 
-	public void joinGame(int matchId) {
+	public void joinGame(int matchId, String gameId) {
 		JoinLobbyMatchRequest request = new JoinLobbyMatchRequest();
 		request.matchId = matchId;
 		request.playerID = arcadeUI.getPlayer().getID();
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
+		ArcadeSystem.setMultiplayerEnabled(true);
+		ArcadeSystem.setGameWaiting(true);
+		arcadeUI.setScreen(arcadeUI.getWait());
+		ArcadeSystem.goToGame(gameId);
 	}
 	
 	public void chat(String message) {

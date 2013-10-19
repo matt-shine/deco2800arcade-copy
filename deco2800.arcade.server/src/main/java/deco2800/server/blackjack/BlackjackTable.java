@@ -11,9 +11,11 @@ import java.util.TimerTask;
 import org.apache.derby.impl.sql.execute.CardinalityCounter;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.client.network.NetworkClient;
 
 /**
  * The Blackjack table that people play and connect to.
@@ -30,6 +32,10 @@ public class BlackjackTable extends Thread {
 	private ArrayList<BlackjackPlayer> Playerarray;
 	public BlackjackDeck deck;
 	private Timer gametimer;
+	private String token;
+	private boolean betsplaced;
+	private int numofplayersbet;
+	private NetworkClient NetworkClient;
 	/**
 	 * Creates a new Blackjack table.
 	 * Default method and should not be used.
@@ -63,10 +69,12 @@ public class BlackjackTable extends Thread {
 		betLimit = _betLimit;
 		deck = new BlackjackDeck();
 		deck.shuffle();
-		System.out.println(deck.deck);
 		dealerHand = new ArrayList<String>();
 		gametimer = new Timer();
 		state = 0;
+		token = null;
+		betsplaced = false;
+		numofplayersbet = 0;
 	}
 	
 	public synchronized void run() {
@@ -76,10 +84,7 @@ public class BlackjackTable extends Thread {
 		}
 	
 	private void state0() {
-		//this is supposed to just wait till an outside function calls interrupt
-		//then change to state 1 which basically adds the joiningplayers to main player array
-		//not sure what's happening here exactly as far as waiting for user response, need to talk to group about this
-		System.out.println("STATE IS 0");
+		//this is supposed to just wait till sitdown calls interrupt
 		try {
 			wait();
 		} catch (InterruptedException e) {
@@ -89,9 +94,8 @@ public class BlackjackTable extends Thread {
 	}
 	
 	private void state1() {
-		System.out.println("STATE IS 1");
 		addPlayersToTable();
-		if (Playerarray.size() == 0) {
+		if (playercount(Playerarray) == 0) {
 			state = 0;
 			switchstates();
 		}
@@ -102,7 +106,6 @@ public class BlackjackTable extends Thread {
 	}
 
 	private void state2() {
-		System.out.println("STATE IS 2");
 		gametimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -111,7 +114,7 @@ public class BlackjackTable extends Thread {
 					if (Playerarray.get(i) != null) {
 						BlackjackPlayer player = Playerarray.get(i);
 					if (player.bet == 0) {
-						Playerarray.add(i, null);
+						Playerarray.set(i, null);
 						Watchers.add(player);
 					}
 					}
@@ -119,13 +122,22 @@ public class BlackjackTable extends Thread {
 				interrupt();
 			}
 		}, 60000);
+		while (betsplaced == false) {
+			if (numofplayersbet == playercount(Playerarray)) {
+				betsplaced = true;
+				interrupt();
+			}
+		}
 		try {
 			wait();
 		} catch (InterruptedException e) {
-			System.out.println("TEST INTERRUPT FOR SECOND STATE");
 		}
 		dealcards();
-		if (Playerarray.isEmpty() == true) {
+		for (int i = 0; i < Playerarray.size(); i++) {
+			if (Playerarray.get(i) != null) {
+			}
+		}
+		if (playercount(Playerarray) == 0) {
 			state = 0;
 		}
 		else {
@@ -135,35 +147,47 @@ public class BlackjackTable extends Thread {
 	}
 
 	private void state3() {
-		System.out.println("STATE IS 3");
-		for (int i = 0; i == Playerarray.size(); i++) {
-			//assign token to player 1
-			//only player with token can interact with table thread
-			//player interacts with game until either the timer runs out 
-			//or they call the stay or bust function
-			//stay function passes the token to the next player
+		//only player with token can interact with table thread
+		//player interacts with game until either the timer runs out 
+		//or they call the stay or bust function
+		//stay function passes the token to the next player
+		for (int i = 0; i < Playerarray.size(); i++) {
+			if (Playerarray.get(i) != null) {
+			token = Playerarray.get(i).username;
+			try {
+				wait();
+			} catch (InterruptedException e) {
+			}
+			gametimer.schedule(new TimerTask() {
+				public void run() {
+				interrupt();
+				}
+				}, 60000);
+			}
 		}
 		state = 4;
 		switchstates();
 	}
 
 	private void state4() {
-		System.out.println("STATE IS 4");
 		dealer();
 		state = 5;
 		switchstates();
 	}
 
 	private void state5() {
-		System.out.println("STATE IS 5");
 		for (int i = 0; i < Playerarray.size(); i++) {
+			if (Playerarray.get(i) != null) {
 			Playerarray.get(i).hand.clear();
 			if (totalhandNum(Playerarray.get(i).hand) > totalhandNum(dealerHand) && totalhandNum(Playerarray.get(i).hand) <= 21) {
 				Playerarray.get(i).chippile += Playerarray.get(i).bet*3;
 			}
 			Playerarray.get(i).bet = 0;
 		}
+		}
 		dealerHand.clear();
+		numofplayersbet = 0;
+		betsplaced = false;
 		state = 1;
 		switchstates();
 	}
@@ -197,18 +221,21 @@ public class BlackjackTable extends Thread {
 			players.remove(username);
 		}
 		players.put(username, connection);
-		//adds player to watchers array
-		//500 default value for credits at this point
-		//credit info storage for players? needs to be sorted
-		Watchers.add(new BlackjackUser(username, 500, connection));
+		//Watchers.add(new BlackjackUser(username, 500, connection));
 	}
 	
 	public void dealcards() {
 		String card;
 		for (int i = 0; i < Playerarray.size(); i++) {
+			if (Playerarray.get(i) != null) {
 			card = deck.getCard();
 			Playerarray.get(i).hand.add(card);
+			card = deck.getCard();
+			Playerarray.get(i).hand.add(card);
+			}
 		}
+		card = deck.getCard();
+		dealerHand.add(card);
 		card = deck.getCard();
 		dealerHand.add(card);
 	}
@@ -219,21 +246,28 @@ public class BlackjackTable extends Thread {
 		}
 	}
 	
-	public void takeSeat(BlackjackPlayer player, int seatposition) {
-		if (JoiningPlayers.get(seatposition) == null) {
-			JoiningPlayers.set(seatposition, player);
+	public void takeSeat(BlackjackUser user, int seatposition) {
+		if (JoiningPlayers.get(seatposition) == null && Playerarray.get(seatposition) == null) {
+			JoiningPlayers.set(seatposition, user);
+			Watchers.remove(user);
+			if (state == 0) {
+				interrupt();
+			}
 		}
 		else {
-			//sendGameStatusUpdate("Seat is Taken", player.username)
-			//How do i instantiate GameStatusUpdate?
+			GameStatusUpdate msg = new GameStatusUpdate();
+			msg.message = "Seat is taken";
+			sendGameStatusUpdate(msg, user.username);
 		}
-		System.out.println(JoiningPlayers);
 	}
 	
 	public void addPlayersToTable() {
 		for (int i = 0; i < JoiningPlayers.size(); i++) {
+			if (JoiningPlayers.get(i) != null) {
 			BlackjackPlayer newPlayer = new BlackjackPlayer(JoiningPlayers.get(i));
-				Playerarray.add(i, newPlayer);
+				JoiningPlayers.set(i, null);
+				Playerarray.set(i, newPlayer);
+			}
 		}
 	}
 	
@@ -256,6 +290,53 @@ public class BlackjackTable extends Thread {
 		return result;
 	}
 	
+	public void bet(BlackjackPlayer player, int amount){
+		player.bet = amount;
+		player.chippile = player.chippile - player.bet;
+		numofplayersbet += 1; 
+	}
+	
+	public void hit(BlackjackPlayer player) {
+		if (token == player.username) {
+ 		String card = deck.getCard();
+		player.hand.add(card);	
+		if (totalhandNum(player.hand) > 21) {
+			interrupt();
+		}
+		}
+		else {
+		}
+		Connection c = null;
+		//c.sendTCP(new GameStatusUpdate());
+	}
+	
+	public void stay(BlackjackPlayer player) {
+		if (token == player.username) {
+			if (!player.has_split) {
+				interrupt();	
+			}
+			else {
+				String card = player.split_hand.get(0);
+				player.split_hand = player.hand;
+				player.hand.clear();
+				player.hand.add(card);
+				int bet = player.split_bet;
+				player.split_bet = player.bet;
+				player.bet = bet;
+				player.has_split = false;
+				
+			}
+		}
+	}
+	
+	public void doubleDown(BlackjackPlayer player, int doubledownamount){
+		if (token == player.username) {
+		player.bet += doubledownamount;
+		player.hand.add(deck.getCard());
+		interrupt();
+		}
+	}
+	
 	public int totalhandNum(ArrayList<String> Hand) {
 		int result = 0;
 		for (int i = 0; i < Hand.size(); i++) {
@@ -263,6 +344,18 @@ public class BlackjackTable extends Thread {
 		}
 		return result;
 	}
+	
+	public int playercount(ArrayList Array) {
+		int result = 0;
+		for (int i = 0; i < Array.size(); i++) {
+			if (Array.get(i) != null) {
+				result += 1;
+			}
+		}
+		return result;
+	}
+	
+	
 	/**
 	 * Broadcasts a game status update to all players
 	 * @param the message to be sent
@@ -299,6 +392,15 @@ public class BlackjackTable extends Thread {
 		return players;
 	}
 	
+	public boolean containsUser(String username) {
+		boolean result = false;
+		if (players.containsKey(username)) {
+		result = true;
+		}
+		return result;
+		
+	}
+	
 	/**
 	 * Provides the betting limit of the table.
 	 * @return the betting limit
@@ -306,10 +408,50 @@ public class BlackjackTable extends Thread {
 	public int getBetLimit() {
 		return betLimit;
 	}
-
-	public void addUser(BlackjackUser user) {
-		JoiningPlayers.add(user);
-	}
 	
-
+	public void receiveMessage(GameStatusUpdate update) {
+		// TODO Auto-generated method stub
+		if (update.message.equals("hit")) {
+			for (int i = 0; i < Playerarray.size(); i++) {
+				BlackjackPlayer Player = Playerarray.get(i);
+				if (Player.username == update.username) {
+					hit(Player);
+					return;
+				}
+			}
+		}
+		if (update.message.contains("bet")) {
+			for (int i = 0; i < Playerarray.size(); i++) {
+				BlackjackPlayer Player = Playerarray.get(i);
+				String[] splitmsg = update.message.split("|");
+				String betamount = splitmsg[1];
+				if (Player.username == update.username) {
+					bet(Player,Integer.parseInt(betamount));
+					return;
+				}
+		}
+		if (update.message.contains("doubledown")) {
+			for (int i = 0; i < Playerarray.size(); i++) {
+				BlackjackPlayer Player = Playerarray.get(i);
+				String[] splitmsg = update.message.split("|");
+				String betamount = splitmsg[1];
+				if (Player.username == update.username) {
+					doubleDown(Player,Integer.parseInt(betamount));
+					return;
+				}
+			 }
+	 	  }
+		if (update.message.contains("takeseat")) {
+			for (int i = 0; i < Playerarray.size(); i++) {
+				BlackjackPlayer Player = Playerarray.get(i);
+				String[] splitmsg = update.message.split("|");
+				String seatno = splitmsg[1];
+				if (Player.username == update.username) {
+					takeSeat(Player,Integer.parseInt(seatno));
+					return;
+				}
+			 }
+	 	  }
+		}
+	}
 }

@@ -7,8 +7,6 @@ import com.esotericsoftware.kryonet.Connection;
 public class BlackjackUser {
 
 	String username;
-	int credits;
-	int clientid;
 	int chippile;
 	Connection connection;
 	
@@ -16,12 +14,11 @@ public class BlackjackUser {
 		this.username = "default";
 	}
 	
-	public BlackjackUser(String username, int credits, Connection connection) {
+	public BlackjackUser(String username, int chippile, Connection connection) {
 		
 		this.username = username;
-		this.credits = credits;
 		this.connection = connection;
-		this.chippile = 500;
+		this.chippile = chippile;
 	}
 	
 }

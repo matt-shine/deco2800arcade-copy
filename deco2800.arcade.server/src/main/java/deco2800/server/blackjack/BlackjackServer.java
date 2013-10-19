@@ -74,6 +74,16 @@ public class BlackjackServer implements GameServer{
 	public String toString() {
 		return "I am a BlackjackServer.";
 	}
+	
+	public BlackjackTable FindTable(String Username) {
+		BlackjackTable table = null;
+		for (int i = 0; i <tables.size(); i++) {
+			if( tables.get(i).containsUser(Username)) {
+				table = tables.get(i);
+			}
+		}
+		return table;
+	}
 
 	@Override
 	/**
@@ -84,6 +94,10 @@ public class BlackjackServer implements GameServer{
 		// TODO Auto-generated method stub
 		if (update.message.equals("addme#20")) {
 			addPlayerToTable(connection, update.username, 25);
+		}
+		else {
+			BlackjackTable table = FindTable(update.username);
+			table.receiveMessage(update);
 		}
 	}
 	

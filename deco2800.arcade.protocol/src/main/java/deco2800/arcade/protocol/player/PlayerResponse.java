@@ -6,6 +6,12 @@ import deco2800.arcade.protocol.BlockingMessage;
 public class PlayerResponse extends BlockingMessage {
 
 	private Player player;
+	
+	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public PlayerResponse(){
+	}
 
 	public Player getPlayer() {
 		return player;

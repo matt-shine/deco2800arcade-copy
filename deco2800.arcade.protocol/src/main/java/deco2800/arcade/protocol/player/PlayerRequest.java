@@ -6,6 +6,12 @@ public class PlayerRequest extends BlockingMessage {
 
 	private int playerID;
 
+	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public PlayerRequest(){
+	}
+	
 	public int getPlayerID() {
 		return playerID;
 	}

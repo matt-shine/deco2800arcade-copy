@@ -44,6 +44,11 @@ public class Player extends User {
 
 	private LibraryStyle libraryStyle;
 
+	/**
+	 * Zero-arg Constructor for Kryo
+	 */
+	public Player(){
+	}
 
 	@Deprecated
 	/**

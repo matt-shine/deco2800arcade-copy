@@ -267,7 +267,7 @@ public class Arcade extends JFrame {
 	public void connectAsUser(String username) {
 
 		/**
-		 * We should have our playerID at this point (connectAsUser(int playerID)), but alas, we do not.
+		 * We should have our playerID at this point (connectAsUser(int playerID, String username)), but alas, we do not.
 		 * Until that is ready, we will use a random ID as follows.
 		 * 
 		 */
@@ -282,18 +282,14 @@ public class Arcade extends JFrame {
 		
 		PlayerClient pc = new PlayerClient(this.client);
 		Player myPlayer = pc.loadPlayer(myID);
-		if (myPlayer != null){
-			System.out.println("my ID is: " + myPlayer.getID());
-			System.out.println("my Username is: " + myPlayer.getUsername());
-			System.out.println("my Email is: " + myPlayer.getEmail());
-			System.out.println("my Friends are: " + myPlayer.getFriends());
-		} else { //As previously mentioned, due to playerID shortages at this time, a null Player is almost guaranteed
+		if (myPlayer == null){  //As previously mentioned, due to playerID shortages at this time, a null Player is almost guaranteed
 			List<String> details = new ArrayList<String>();
 			details.add("debug");
-			details.add("debug smith");
+			details.add("Debug Smith");
 			details.add("debug@arcade.com");
 			details.add("debugging");
 			details.add("debugger 4 lyfe");
+			details.add("21");
 			Set<User> friendsSet = new HashSet<User>();
 			friendsSet.add(new User(1));
 			Set<User> invitesSet = new HashSet<User>();
@@ -304,6 +300,11 @@ public class Arcade extends JFrame {
 			boolean[] privacy = {false, false, false, false, false, false, false};
 			myPlayer = new Player(myID, null, details, friendsSet, invitesSet, blockedSet, gameSet, privacy);
 		}
+		
+		System.out.println("my ID is: " + myPlayer.getID());
+		System.out.println("my Username is: " + myPlayer.getUsername());
+		System.out.println("my Name is: " + myPlayer.getName());
+		System.out.println("my Email is: " + myPlayer.getEmail());
 		
 		this.player = myPlayer;
 		this.communicationNetwork.loggedIn(this.player);
@@ -337,16 +338,6 @@ public class Arcade extends JFrame {
 		 * chat.add(777); //debug2 this.communicationNetwork.createChat(chat); }
 		 */
 
-		// TODO FIX THIS!! - Causing Errors when logging in see
-		// https://github.com/UQdeco2800/deco2800-2013/commit/78eb3e0ddb617b3dec3e74a55fab5b47d1b7abd0#commitcomment-4285661
-		/*boolean[] privacy = { false, false, false, false, false, false, false,
-				false };
-		this.player = new Player(0, username, "", privacy);*/
-
-		// This method has been removed from the deprecated Player(...); Waiting
-		// for new Player(...) method to be created.
-		// this.player.setUsername(username);
-
 		// TODO move this call to be internal to Packman class
 		// TODO iterate over actual game ids rather than just
 		// using pong
@@ -361,9 +352,7 @@ public class Arcade extends JFrame {
 		if (getCurrentGame() != null) {
 			getCurrentGame().setPlayer(this.player);
 			getCurrentGame().setThisNetworkClient(this.client);
-
 		}
-
 
 		// This is how you fetch game JARs
 		// fetchGameJar("pong", "1.0");

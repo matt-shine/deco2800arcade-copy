@@ -285,7 +285,7 @@ public class PlayerStorage {
 	}
 	
 	/**
-	 * TEMPORARY: Add's a player to the database
+	 * TEMPORARY: Add a player to the database
 	 * @param playerID
 	 * @param username
 	 * @throws DatabaseException

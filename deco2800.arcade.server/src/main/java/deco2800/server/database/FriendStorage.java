@@ -32,7 +32,6 @@ public class FriendStorage {
 		//Get a connection to the database
 		Connection connection = Database.getConnection();
 
-		ResultSet resultSet = null;
 		try {
 			ResultSet tableData = connection.getMetaData().getTables(null, null, "FRIENDS", null);
 			

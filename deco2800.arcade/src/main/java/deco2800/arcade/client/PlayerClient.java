@@ -14,6 +14,7 @@ public class PlayerClient extends NetworkListener {
 	
 	public PlayerClient(NetworkClient networkClient) {
 		//TODO
+		this.networkClient = networkClient;
 	}
 
 	public void setNetworkClient(NetworkClient client) {

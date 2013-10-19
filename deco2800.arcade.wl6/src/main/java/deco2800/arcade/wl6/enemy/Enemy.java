@@ -290,8 +290,6 @@ public class Enemy extends Mob {
     		
     	} while (WL6Meta.hasSolidBlockAt((int) d.getBlockPos().x, (int) d.getBlockPos().y, g.getMap()));
     	
-    	System.out.println("drop has " + ammoDrop + " ammo and is at " + d.getPos());
-    		
     	g.addDoodad(d);
     }
     

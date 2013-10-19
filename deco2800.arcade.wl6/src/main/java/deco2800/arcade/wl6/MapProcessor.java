@@ -78,6 +78,12 @@ public class MapProcessor {
                     key.setPos(new Vector2(i + 0.5f, j + 0.5f));
                     model.addDoodad(key);
 
+                } else if (id == WL6Meta.ENDGAME) {
+                	
+                    LevelEnd end = new LevelEnd(doodadID());
+                    end.setPos(new Vector2(i + 0.5f, j + 0.5f));
+                    model.addDoodad(end);
+
                 } else {
 
                     //everything else

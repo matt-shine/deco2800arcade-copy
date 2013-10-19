@@ -12,8 +12,6 @@ public class Mob extends Doodad {
     private Vector2 vel = new Vector2();
     private Random rand;
     private int health;
-    private float BB_SIZE = 0.4f;
-
 
     public Mob(int uid) {
         super(uid);
@@ -51,10 +49,10 @@ public class Mob extends Doodad {
     public boolean move(GameModel model, Vector2 vec) {
 
         Vector2 targetPos = this.getPos().add(vec);
-        int x1 = (int) Math.floor(targetPos.x - BB_SIZE / 2);
-        int y1 = (int) Math.floor(targetPos.y - BB_SIZE / 2);
-        int x2 = (int) Math.floor(targetPos.x + BB_SIZE / 2);
-        int y2 = (int) Math.floor(targetPos.y + BB_SIZE / 2);
+        int x1 = (int) Math.floor(targetPos.x - getBoundingBoxSide() / 2);
+        int y1 = (int) Math.floor(targetPos.y - getBoundingBoxSide() / 2);
+        int x2 = (int) Math.floor(targetPos.x + getBoundingBoxSide() / 2);
+        int y2 = (int) Math.floor(targetPos.y + getBoundingBoxSide() / 2);
 
         for (int x = x1; x <= x2; x++) {
             for (int y = y1; y <= y2; y++) {
@@ -155,6 +153,10 @@ public class Mob extends Doodad {
     
     public Random getRand() {
     	return rand;
+    }
+    
+    public float getBoundingBoxSide() {
+    	return 0.4f;
     }
 
 }

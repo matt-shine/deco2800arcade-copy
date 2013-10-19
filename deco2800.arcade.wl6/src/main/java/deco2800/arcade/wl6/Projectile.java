@@ -69,4 +69,10 @@ public class Projectile extends Mob {
 	}
 	
 	
+	
+	@Override
+    public float getBoundingBoxSide() {
+    	return 0.02f;
+    }
+
 }

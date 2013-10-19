@@ -23,6 +23,7 @@ public class WL6Meta {
     public static final int SILVERKEY = 44;
     public static final int SECRET_DOOR = 98;
     public static final int SECRET_ELEVATOR = 107;
+    public static final int ENDGAME = 99;
 
 
     public static enum DIRS {

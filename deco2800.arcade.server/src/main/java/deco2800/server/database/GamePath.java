@@ -25,6 +25,11 @@ public class GamePath {
 				statement.execute("CREATE TABLE GAMEPATH(gameID INT PRIMARY KEY,"
 								+ "path VARCHAR(200) NOT NULL,"
 								+ "md5Hash LONG VARCHAR NOT NULL)");
+				/* hard coded insert of the games into the table
+				 * this should be done dynamically however due to other
+				 * tables being hard coded I've had to as well
+				 */
+				insertGame(0, "pong-1.0.tar.gz");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,7 +104,7 @@ public class GamePath {
 	 * @throws DatabaseException
 	 *          If SQLException occurs
 	 */
-	public void insertGame(int gameID,String gamePath) throws DatabaseException{
+	public void insertGame(int gameID, String gamePath) throws DatabaseException{
 		Connection connection = Database.getConnection();
 
 		String gameMd5 = PackageUtils.genMD5(gamePath);

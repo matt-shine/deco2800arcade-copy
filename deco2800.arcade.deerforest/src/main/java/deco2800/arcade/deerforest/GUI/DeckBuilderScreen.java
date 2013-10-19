@@ -58,9 +58,9 @@ public class DeckBuilderScreen implements Screen {
 		//create map of sprites
 		spriteMap = new HashMap<String, Set<BuilderSprite>>();
 		
-		spriteMap.put("Card", new HashSet<BuilderSprite>());
-	    spriteMap.put("Deck", new HashSet<BuilderSprite>());
-	    spriteMap.put("Zoom", new HashSet<BuilderSprite>());
+		spriteMap.put("CardZone", new HashSet<BuilderSprite>());
+	    spriteMap.put("DeckZone", new HashSet<BuilderSprite>());
+	    spriteMap.put("ZoomZone", new HashSet<BuilderSprite>());
 		
 	}
 
@@ -73,7 +73,7 @@ public class DeckBuilderScreen implements Screen {
         deck.addAll(deckBuilder.getModel().deck);
         ArrayList<AbstractCard> decks = new ArrayList<AbstractCard>(deck);
         for(AbstractCard card : decks) {
-            manager.load(card.getPictureFilePath(), Texture.class);
+            manager.load(Gdx.files.classpath(card.getPictureFilePath()).toString(), Texture.class);
         }
 	}
 	

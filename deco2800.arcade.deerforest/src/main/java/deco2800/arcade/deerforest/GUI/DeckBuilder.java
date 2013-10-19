@@ -64,16 +64,16 @@ public class DeckBuilder extends Game {
 		CardCollection srcCards = null;
 		CardCollection destCards = null;
 		
-		if(oldLocation.contains("Deck")) {
-			srcCards = model.getCardCollection("Deck");
-		} else if(oldLocation.contains("Card")) {
-			srcCards = model.getCardCollection("Card");
+		if(oldLocation.contains("DeckZone")) {
+			srcCards = model.getCardCollection("DeckZone");
+		} else if(oldLocation.contains("CardZone")) {
+			srcCards = model.getCardCollection("CardZone");
 		} 
 		
-		if(newLocation.contains("Deck")) {
-			destCards = model.getCardCollection("Deck");
-		} else if(newLocation.contains("Card")) {
-			destCards = model.getCardCollection("Card");
+		if(newLocation.contains("DeckZone")) {
+			destCards = model.getCardCollection("DeckZone");
+		} else if(newLocation.contains("CardZone")) {
+			destCards = model.getCardCollection("CardZone");
 		} 
 
         boolean b = model.moveCards(cards, srcCards, destCards);

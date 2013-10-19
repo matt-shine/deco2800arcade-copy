@@ -3,24 +3,16 @@ package deco2800.arcade.deerforest.models.gameControl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Rectangle;
-
-import deco2800.arcade.deerforest.GUI.ExtendedSprite;
-import deco2800.arcade.deerforest.GUI.SpriteLogic;
 import deco2800.arcade.deerforest.models.cardContainers.CardCollection;
 import deco2800.arcade.deerforest.models.cardContainers.Deck;
-import deco2800.arcade.deerforest.models.cardContainers.Field;
-import deco2800.arcade.deerforest.models.cardContainers.Graveyard;
-import deco2800.arcade.deerforest.models.cardContainers.Hand;
 import deco2800.arcade.deerforest.models.cards.AbstractCard;
-import deco2800.arcade.deerforest.models.cards.FireMonster;
-import deco2800.arcade.deerforest.models.cards.WaterMonster;
+
 
 public class DeckSystem {
 	
+	//TODO implement get functions
 	public Deck deck;
-	private Deck cards;
+	public Deck cards;
 	
 	public DeckSystem(Deck playerDeck, Deck cards) {
 		this.deck = playerDeck;
@@ -34,11 +26,11 @@ public class DeckSystem {
      */
 	public CardCollection getCardCollection(String area) {
 		
-		if(area.contains("Card")) {
+		if(area.contains("CardZone")) {
 			return cards;
-		} else if(area.contains("Deck")) {
+		} else if(area.contains("DeckZone")) {
 			return deck;
-		}
+		} 
 		
 		return null;
 	}

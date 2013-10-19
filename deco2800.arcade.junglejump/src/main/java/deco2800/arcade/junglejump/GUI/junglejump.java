@@ -219,7 +219,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 // Commented out for lag
 		/* ACHIEVEMENT STUFF */
-		/*AchievementClient achClient = this.getAchievementClient();
+		AchievementClient achClient = this.getAchievementClient();
 		Game myGame = this.getGame();
 
 		achievementArray = new ArrayList<Achievement>();
@@ -238,7 +238,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		achievementNameFont        = new BitmapFont(false);
 		achievementDescriptionFont = new BitmapFont(false);
 		achievementThresholdFont   = new BitmapFont(false);
-		achievementIconTexture     = new Texture(("monkeySit.png"));*/
+		achievementIconTexture     = new Texture(("monkeySit.png"));
 
 		Gdx.app.log(junglejump.messages, "Launching Game");
 		camera = new OrthographicCamera();

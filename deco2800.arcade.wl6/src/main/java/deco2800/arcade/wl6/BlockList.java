@@ -98,74 +98,74 @@ public class BlockList {
                     //28: grey brick with sign
                     new BlockInfo(true, "greybricksign"),
 
-                    //29: nothing
-                    new BlockInfo(),
+                    //29: brown weave
+                    new BlockInfo(true, "brown"),
 
-                    //30: nothing
-                    new BlockInfo(),
+                    //30: brown weave / blood
+                    new BlockInfo(true, "brown"),
 
-                    //31: nothing
-                    new BlockInfo(),
+                    //31: brown weave / blood 2
+                    new BlockInfo(true, "brown"),
 
-                    //32: nothing
-                    new BlockInfo(),
+                    //32: brown weave / blood 2
+                    new BlockInfo(true, "brown"),
 
-                    //33: nothing
-                    new BlockInfo(),
+                    //33: stained glass
+                    new BlockInfo(true, "glass"),
 
-                    //34: nothing
-                    new BlockInfo(),
+                    //34: blue wall / skull
+                    new BlockInfo(true, "icewall"),
 
-                    //35: nothing
-                    new BlockInfo(),
+                    //35: grey 1
+                    new BlockInfo(true, "greybrick"),
 
-                    //36: nothing
-                    new BlockInfo(),
+                    //36: blue / swastika
+                    new BlockInfo(true, "icewall"),
 
-                    //37: nothing
-                    new BlockInfo(),
+                    //37: grey vent
+                    new BlockInfo(true, "greybrick"),
 
-                    //38: nothing
-                    new BlockInfo(),
+                    //38: grey hitler
+                    new BlockInfo(true, "greybrick"),
 
-                    //39: nothing
-                    new BlockInfo(),
+                    //39: grey 2
+                    new BlockInfo(true, "greybrick"),
 
-                    //40: nothing
-                    new BlockInfo(),
+                    //40: blue wall
+                    new BlockInfo(true, "icewall"),
 
-                    //41: nothing
-                    new BlockInfo(),
+                    //41: blue brick with sign
+                    new BlockInfo(true, "icewall"),
 
-                    //42: nothing
-                    new BlockInfo(),
+                    //42: brown marble
+                    new BlockInfo(true, "brown"),
 
-                    //43: nothing
-                    new BlockInfo(),
+                    //43: grey map
+                    new BlockInfo(true, "greybrick"),
 
-                    //44: nothing
-                    new BlockInfo(),
+                    //44: brown stone
+                    new BlockInfo(true, "brown"),
 
-                    //45: nothing
-                    new BlockInfo(),
+                    //45: brown stone
+                    new BlockInfo(true, "brown"),
 
-                    //46: nothing
-                    new BlockInfo(),
+                    //46: brown marble
+                    new BlockInfo(true, "brown"),
 
-                    //47: nothing
-                    new BlockInfo(),
+                    //47: brown marble / flag
+                    new BlockInfo(true, "brown"),
 
-                    //48: nothing
-                    new BlockInfo(),
+                    //48: wood panel
+                    new BlockInfo(true, "wood"),
 
-                    //49: nothing
-                    new BlockInfo(),
+                    //49: grey / hitler
+                    new BlockInfo(true, "greybrick"),
 
                     //50: fake door
                     new BlockInfo(true, "doorfake"),
 
                     //51: side of door
-                    new BlockInfo(),
+                    new BlockInfo(true, "unknown"),
 
                     //53: fake locked door
                     new BlockInfo(true, "doorlockedfake"),

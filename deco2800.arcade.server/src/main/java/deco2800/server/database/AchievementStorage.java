@@ -19,8 +19,9 @@ import deco2800.server.database.ImageStorage;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import org.slf4j.*;
+
 import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.*;
 
 
 /**
@@ -31,66 +32,67 @@ public class AchievementStorage {
     private static Logger logger = LoggerFactory.getLogger(AchievementStorage.class);
 	
     /**
-     * Creates the Achievement table and sets initialised to TRUE on completion
+     * Creates the Achievement tables and sets initialised to TRUE on completion
      * 
      * @throws	DatabaseException	If SQLException occurs. 
      */
     public  void initialise() throws DatabaseException{
-
-	//Get a connection to the database
-	Connection connection = Database.getConnection();
-	//Set up logger
-	PropertyConfigurator.configure("src/main/resources/log4j.properties");
-
-		
-	try {
-	    ResultSet tableData = connection.getMetaData().getTables(null, null,
-								     "ACHIEVEMENTS", null);
-	    if (!tableData.next()){
-		logger.info("No achievements table in AchievementStorage database, creating table now...");
-		Statement statement = connection.createStatement();
-		statement.execute("CREATE TABLE ACHIEVEMENTS(id VARCHAR(255) PRIMARY KEY," +
-				  "NAME VARCHAR(30) NOT NULL," +
-				  "DESCRIPTION VARCHAR(100) NOT NULL," +
-				  "ICON VARCHAR(255) NOT NULL," +
-				  "THRESHOLD INT NOT NULL)");
-		logger.info("achievements table successfully created.");
-	    }
+	
+		//Get a connection to the database
+		Connection connection = Database.getConnection();
+		//TODO This is a hack to ensure serverLog messages go where I want them rather
+		//then getting caught by replay teams logger and printed to console, to be removed
+		//when I hear back from them about merging our loggers into a serverLogger -Josh Team null
+		PropertyConfigurator.configure("src/main/resources/log4j.properties");
 			
-	    ResultSet awardedAchievementData = connection.getMetaData().getTables(null, null,
-										  "AWARDED_ACHIEVEMENT", null);
-	    if (!awardedAchievementData.next()){
-		logger.info("No awarded_achievement table in AchievementStorage database, creating table now...");
-		Statement awardedAchievementStmt = connection.createStatement();
-		awardedAchievementStmt.execute("CREATE TABLE AWARDED_ACHIEVEMENT(" + 
-					       "id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1," +
-					       "INCREMENT BY 1)," +
-					       "playerID INT NOT NULL," +
-					       "achievementID VARCHAR(255) NOT NULL)");
-		logger.info("awarded_achievement table successfully created.");
-	    }
-			
-	    ResultSet playerAchievementData = connection.getMetaData().getTables(null, null,
-										 "PLAYER_ACHIEVEMENT", null);
-	    if (!playerAchievementData.next()){
-		logger.info("No playerAchievementData table in AchievementStorage database, creating table now...");
-		Statement playerAchievementStatement = connection.createStatement();
-		playerAchievementStatement.execute("CREATE TABLE PLAYER_ACHIEVEMENT(" +
-						   "id INT PRIMARY KEY " +
-						   "GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
-						   "playerID INT NOT NULL," +
-						   "achievementID VARCHAR(255) NOT NULL," +
-						   "PROGRESS INT NOT NULL," +
-						   "FOREIGN KEY (achievementID) REFERENCES ACHIEVEMENTS(id))");
-		logger.info("playerAchievementData table successfully created.");
-	    }
-	    logger.info("Achivement Storage sucessfully initialised.");
-	}
-	catch (SQLException e) {
-	    e.printStackTrace();
-	    logger.error("Unable to create achievements tables in database");
-	    throw new DatabaseException("Unable to create achievements tables", e);
-	}
+		try {
+		    ResultSet tableData = connection.getMetaData().getTables(null, null,
+									     "ACHIEVEMENTS", null);
+		    if (!tableData.next()){
+			logger.info("No achievements table in AchievementStorage database, creating table now...");
+			Statement statement = connection.createStatement();
+			statement.execute("CREATE TABLE ACHIEVEMENTS(id VARCHAR(255) PRIMARY KEY," +
+					  "NAME VARCHAR(30) NOT NULL," +
+					  "DESCRIPTION VARCHAR(100) NOT NULL," +
+					  "ICON VARCHAR(255) NOT NULL," +
+					  "THRESHOLD INT NOT NULL)");
+			logger.info("achievements table successfully created.");
+		    }
+				
+		    ResultSet awardedAchievementData = connection.getMetaData().getTables(null, null,
+											  "AWARDED_ACHIEVEMENT", null);
+		    if (!awardedAchievementData.next()){
+			logger.info("No awarded_achievement table in AchievementStorage database, creating table now...");
+			Statement awardedAchievementStmt = connection.createStatement();
+			awardedAchievementStmt.execute("CREATE TABLE AWARDED_ACHIEVEMENT(" + 
+						       "id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY(START WITH 1," +
+						       "INCREMENT BY 1)," +
+						       "playerID INT NOT NULL," +
+						       "achievementID VARCHAR(255) NOT NULL)");
+			logger.info("awarded_achievement table successfully created.");
+		    }
+				
+		    ResultSet playerAchievementData = connection.getMetaData().getTables(null, null,
+											 "PLAYER_ACHIEVEMENT", null);
+		    if (!playerAchievementData.next()){
+			logger.info("No playerAchievementData table in AchievementStorage database, creating table now...");
+			Statement playerAchievementStatement = connection.createStatement();
+			playerAchievementStatement.execute("CREATE TABLE PLAYER_ACHIEVEMENT(" +
+							   "id INT PRIMARY KEY " +
+							   "GENERATED ALWAYS AS IDENTITY(START WITH 1, INCREMENT BY 1)," +
+							   "playerID INT NOT NULL," +
+							   "achievementID VARCHAR(255) NOT NULL," +
+							   "PROGRESS INT NOT NULL," +
+							   "FOREIGN KEY (achievementID) REFERENCES ACHIEVEMENTS(id))");
+			logger.info("playerAchievementData table successfully created.");
+		    }
+		    logger.info("Achivement Storage sucessfully initialised.");
+		}
+		catch (SQLException e) {
+		    e.printStackTrace();
+		    logger.error("Unable to create achievements tables in database");
+		    throw new DatabaseException("Unable to create achievements tables", e);
+		}
     }
 
     private ImageStorage imageStorage;

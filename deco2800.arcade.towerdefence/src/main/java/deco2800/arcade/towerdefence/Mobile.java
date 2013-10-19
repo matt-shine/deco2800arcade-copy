@@ -9,7 +9,7 @@ import deco2800.arcade.towerdefence.pathfinding.Path;
 import deco2800.arcade.towerdefence.pathfinding.Path.Step;
 
 /**
- * The interface for objects that can move to different positions on the grid.
+ * The abstract class for objects that can move to different positions on the grid.
  * 
  * @author hadronn
  * 
@@ -18,14 +18,8 @@ public abstract class Mobile extends Mortal {
 	// Fields
 	// The GridObject's speed in pixels per second.
 	private double speed;
-	// The GridObject's sprites to animate movement down.
-	private List<Sprite> downMovingSprites;
-	// The GridObject's sprites to animate movement left.
-	private List<Sprite> leftMovingSprites;
-	// The GridObject's sprites to animate movement up.
-	private List<Sprite> upMovingSprites;
-	// The GridObject's sprites to animate movement right.
-	private List<Sprite> rightMovingSprites;
+	// The GridObject's sprites to animate movement in any Direction.
+	private List<Sprite> sprMoving;
 	// THe path the object is following
 	private Path path;
 
@@ -58,35 +52,8 @@ public abstract class Mobile extends Mortal {
 	 * 
 	 * @return The sprites used in the downwards moving animation
 	 */
-	public List<Sprite> downMovingSprites() {
-		return downMovingSprites;
-	}
-
-	/**
-	 * Returns the GridObject's sprites to animate movement left.
-	 * 
-	 * @return The sprites used in the left moving animation
-	 */
-	public List<Sprite> leftMovingSprites() {
-		return leftMovingSprites;
-	}
-
-	/**
-	 * Returns the GridObject's sprites to animate movement up.
-	 * 
-	 * @return The sprites used in the up moving animation
-	 */
-	public List<Sprite> upMovingSprites() {
-		return upMovingSprites;
-	}
-
-	/**
-	 * Returns the GridObject's sprites to animate movement right.
-	 * 
-	 * @return The sprites used in the right moving animation
-	 */
-	public List<Sprite> rightMovingSprites() {
-		return rightMovingSprites;
+	public List<Sprite> sprMoving() {
+		return sprMoving;
 	}
 
 	/**
@@ -101,45 +68,15 @@ public abstract class Mobile extends Mortal {
 
 	// Setters
 	/**
-	 * Sets the GridObject's sprites to animate movement down.
+	 * Sets the GridObject's sprites to animate movement in any Direction.
 	 * 
 	 * @param downMovingSprites
 	 *            The new list of sprites to use for the down moving animation.
 	 */
-	public void downMovingSprites(List<Sprite> downMovingSprites) {
-		this.downMovingSprites = downMovingSprites;
+	public void sprMoving(List<Sprite> sprites) {
+		this.sprMoving = sprites;
 	}
-
-	/**
-	 * Sets the GridObject's sprites to animate movement left.
-	 * 
-	 * @param leftMovingSprites
-	 *            The new list of sprites to use for the left moving animation.
-	 */
-	public void leftMovingSprites(List<Sprite> leftMovingSprites) {
-		this.leftMovingSprites = leftMovingSprites;
-	}
-
-	/**
-	 * Sets the GridObject's sprites to animate movement up.
-	 * 
-	 * @param upMovingSprites
-	 *            The new list of sprites to use for the up moving animation.
-	 */
-	public void rightMovingSprites(List<Sprite> upMovingSprites) {
-		this.upMovingSprites = upMovingSprites;
-	}
-
-	/**
-	 * Sets the GridObject's sprites to animate movement right.
-	 * 
-	 * @param rightMovingSprites
-	 *            The new list of sprites to use for the right moving animation.
-	 */
-	public void movingSprites(List<Sprite> rightMovingSprites) {
-		this.rightMovingSprites = rightMovingSprites;
-	}
-
+	
 	/**
 	 * Set the path to the given path.
 	 * 
@@ -223,27 +160,5 @@ public abstract class Mobile extends Mortal {
 		}
 		// Moved to the next tile successfully
 		return true;
-	}
-
-	/**
-	 * Return the correct sprite as the GridObject moves using
-	 * <direction>MovingSprites getters in the class.
-	 * 
-	 * TODO Implement returning correct sprite based structure below using
-	 * facing and phase of movement 0, 1 or 2.
-	 * 
-	 * 0 begin movement, 1 continue movement, 2 end movement.
-	 * 
-	 * Can simply cycle the 3 phases for each 1 square moved For example if
-	 * facing is left and we are moving to the next Grid square then we'd want
-	 * to continue cycling being careful to match the distance and speed so the
-	 * animation ends on phase 2 at destination. Should be taken care of by
-	 * cycling once per square moved.
-	 * 
-	 * E.g. returned at some point in movement: return leftMovingSprites(1);
-	 */
-	public Sprite MovingSprite(Direction facing, int phase) {
-		return null;
-
 	}
 }

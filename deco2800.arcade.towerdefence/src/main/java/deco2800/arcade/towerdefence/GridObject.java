@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * The interface for an object that can be created on a grid, required to be
+ * The class for an object that can be created on a grid, required to be
  * unique when instantiated.
  * 
  * @author hadronn

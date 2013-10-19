@@ -5,7 +5,7 @@ import java.util.List;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 /**
- * The interface for mortal objects. Will be the majority of interesting
+ * The class for mortal objects. Will be the majority of interesting
  * objects. Can die through game mechanics and have curious attributes such as
  * health.
  * 

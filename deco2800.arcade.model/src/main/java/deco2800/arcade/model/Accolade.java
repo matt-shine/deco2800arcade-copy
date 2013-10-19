@@ -14,12 +14,12 @@ public class Accolade {
 	//TODO move the container specific overrides to the AccoladeContainer class	
 	
 	//BASE variables - IE the accolade must at the very least have these
-	private int id, popup;
+	private int id, popup,gameID;
 	private double modifier;
 	private String name, message, popupMessage, unit, tag, imagePath;
 	//OPTIONAL variables - these are assigned as needed through .setX commands
 	private int value;
-	private String gameID, resolvedMessage;
+	private String resolvedMessage;
 	private Accolade next, prev; //FOR THE ACCOLADECONTAINER
 	
 	
@@ -60,7 +60,7 @@ public class Accolade {
 		return this;
 	}
 	
-	public Accolade setGameID(String gameID){
+	public Accolade setGameID(int gameID){
 		this.gameID = gameID;
 		return this;
 	}
@@ -74,7 +74,7 @@ public class Accolade {
 		return this.value;
 	}
 	
-	public String getGameID(){
+	public int getGameID(){
 		//TODO add in error throwing for a nullpointer exception
 		return this.gameID;
 	}

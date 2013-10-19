@@ -48,7 +48,7 @@ public class AccoladeStorage{
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE ACCOLADES(" +
 						"ID INT PRIMARY KEY, " +
-						"GAMEID VARCHAR(30) NOT NULL," +
+						"GAMEID INT NOT NULL," +
 						"VALUE INT NOT NULL, " +
 						"NAME VARCHAR(30) NOT NULL, " +
 						"DESCRIPTION VARCHAR(100) NOT NULL, " +
@@ -84,7 +84,7 @@ public class AccoladeStorage{
 			if (!tableData.next()) {
 				Statement statement = connection.createStatement();
 				statement.execute("CREATE TABLE GAME_ACCOLADES(" + 
-							"ID VARCHAR(30) NOT NULL," +
+							"ID INT NOT NULL," +
 							"ACCOLADEID INT," +
 							"FOREIGN KEY(ACCOLADEID) REFERENCES ACCOLADES(ID))");
 
@@ -135,7 +135,7 @@ public class AccoladeStorage{
 									resultSet.getString("imagepath")
 									).setID(accoladeID
 									).setValue(resultSet.getInt("value")
-									).setGameID(resultSet.getString("gameID")
+									).setGameID(resultSet.getInt("gameID")
 									);							
 			}
 		} catch (SQLException e) {
@@ -211,7 +211,7 @@ public class AccoladeStorage{
 	 * @throws SQLException
 	 * 
 	 */
-	public AccoladeContainer getAccoladesByGameID(String gameID) throws DatabaseException{
+	public AccoladeContainer getAccoladesByGameID(int gameID) throws DatabaseException{
 		if (!initialised) {
 			initialise();
 		}

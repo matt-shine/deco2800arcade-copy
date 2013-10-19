@@ -45,6 +45,7 @@ public class MultiplayerLobby implements Screen {
 	private MultiplayerLobby lobby;
 	ArrayList<ActiveMatchDetails> matches;
 	private Player player;
+	public String name;
 
 	public MultiplayerLobby(ArcadeUI ui, Player player) {
 		System.out.println(ui);
@@ -287,13 +288,6 @@ public class MultiplayerLobby implements Screen {
 				String message = chatfield.getText();
 				System.out.println("You Said: " + chatfield.getText());
 
-				//Label chat = new Label(chatfield.getText(), skin2);
-
-				//table5.clear();
-				//table5.center().right();
-				//table5.add(chat).padRight(200);
-				//table5.row();
-				// table5.add(" ").padRight(200);
 				chat(message);
 				chatfield.setText("");
 				
@@ -400,13 +394,22 @@ public class MultiplayerLobby implements Screen {
 		String message = request.message;
 		String username = request.username;
 		System.out.println(username + ": " + message);
-		/*Label chat = new Label(username + ": " + chatfield.getText(), skin2);
 
-		table5.clear();
-		table5.center().right();
-		table5.add(chat).padRight(200);
-		table5.row();
-		table5.add(" ").padRight(200);*/
+		name = username + ": " + message;
+	
+		final TextField chatfield2 = new TextField(name, skin2);
+		chatfield2.setText(name);
+
+		final Table table6 = new Table(skin2);
+
+		table6.setFillParent(true);
+		stage.addActor(table6);
+		
+		table6.clear();
+		table6.center().right();
+		table6.add(chatfield2).padRight(20).width(300).height(350).padTop(50);
+		table6.row();
+		table6.add(" ").padRight(200);
 	}
 
 

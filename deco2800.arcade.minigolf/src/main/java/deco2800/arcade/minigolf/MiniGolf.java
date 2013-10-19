@@ -116,7 +116,7 @@ public class MiniGolf extends GameClient {
 	private static final Game game;
 	static {
 		game = new Game();
-		game.id = "minigolf";
+		game.id = "MiniGolf";
 		game.name = "MiniGolf";
 		game.description = "Search for buried treasure";
 	}

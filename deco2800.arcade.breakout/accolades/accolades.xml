@@ -1,0 +1,20 @@
+<game>
+<title>Breakout</title>>
+<dblocation>game.breakout</dblocation>
+<accolades>
+    <accolade>
+        
+        <refcode>XXXX</refcode> 
+        <title>Paddle Bumps</title>
+        <string>The equivalent of $VALUE $UNIT Paddle Bumps </string>
+        <unit>"pushes"</unit>
+        <modifier> "$VALUE MOD(1)" </modifier> 
+            #this will be a relative location to both your game client and the serverresource
+        <image></image>   
+            #When the value reaches a multiple of this, the popup occurs
+        <popup>50</popup>
+        <accoladeString>"You've bounced the ball back $VALUE times!"</accoladeString>
+
+</accolade>
+</accolades>
+</game>

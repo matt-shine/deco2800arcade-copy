@@ -1,5 +1,7 @@
 package deco2800.arcade.model;
 import java.util.*;
+
+import javax.sql.rowset.*;
  
 public class AccoladeContainer implements Iterable<Accolade> {
  
@@ -14,7 +16,6 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * create an empty Accolade container
      */
     public AccoladeContainer() {
-
         this.size = 0;
         this.head = null;
         this.tail = null;
@@ -24,6 +25,7 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * TODO implmenet server communication and return non-dummydata
      */
     public void populateAccoladesPlayer(int playerID){
+    	//TODO implement populateAccoladesPlayer
     	this.playerID = playerID;
     	BUILDDUMMYDATA();
     }
@@ -32,14 +34,21 @@ public class AccoladeContainer implements Iterable<Accolade> {
      * TODO implmenet server communication and return non-dummydata
      */
     public void populateAccoladesGame(int gameID){
+    	//TODO implement the populateAccoldesGame
     	this.gameID = gameID;
     	BUILDDUMMYDATA();
+    }
+    
+    public AccoladeContainer setGameID(int gameID){
+    	this.gameID =  gameID;
+    	return this;
     }
     
     /**Clears the list of accolades ready for repopulation
      */
     public void clearAccolades(){
     	/** TODO implement stub*/
+    	this.size = 0;
     	head = null;
     	tail = null;
     	//current = null;
@@ -47,13 +56,24 @@ public class AccoladeContainer implements Iterable<Accolade> {
  
     /**
      * this is probably going to be a private class since most of the Accolade
-     * building will be internal and automated.
-     */
-    public void addAccolade(int ID, int Value,
-            String Name, String String, String Unit, int Modifier, String Tag,
-            String Image) {
-        Accolade accolade = new Accolade(ID, Value, Name, String, Unit, Modifier,
-                Tag, Image);
+     * building will be internal and automated. The return allows it to easily have the value and id assigned
+     * 
+	 * @param ID The accolade ID.
+	 * @param Value The progress of the accolade.
+	 * @param Name The plain name identifier
+	 * @param String The display string that will be used to make toString
+	 * @param Unit The unit to be used as part of toString
+	 * @param modifier This is to modify the accolade into something interesting,
+	 * 			say grenades as tonnes of TNT or something similar
+	 * @param tag Combined tag that is used as part of Global_Accolades.Table
+	 * @param popup When the accolade is a multiple of this a message overlays on screen
+	 * @param popupMessage The message to appear onscreeen
+	 * @param image The location of the associated accolade image.
+	 */
+    public Accolade addAccolade(String name, String message, int popup, String popupMessage, 
+			double modifier, String unit, String tag, String imagePath) {
+        Accolade accolade = new Accolade(name, message, popup, popupMessage, 
+    			 modifier, unit, tag, imagePath);
         if (!hasHead()) {
             //current for enumeration
             head = accolade;
@@ -61,27 +81,36 @@ public class AccoladeContainer implements Iterable<Accolade> {
             tail.setNext(accolade);
         }
         this.tail = accolade;
-        size++;
+        this.size++;
+		return accolade;
+    }
+    /** TODO implement this sodding thing
+    public WebRowSet toWebRowSet(){
+
+    	return tnew rowSet;
+    }
+    **/
+    /**
+     * Add accolade into accolade container
+     */
+    public void add(Accolade a) {
+        if (!hasHead()) {
+            //current for enumeration
+            head = a;
+        } else {
+            tail.setNext(a);
+        }
+        this.tail = a;
+        this.size++;
     }
  
     /**
      * Testing stuff *
      */
     public void BUILDDUMMYDATA() {
-    	
+    	//TODO REMOVE THIS
 //Accolade accolade = new Accolade(ID,Value,Name,String,Unit,Modifier,Tag,Image);
-        addAccolade(001, 100, "Grenades exploded",
-                "The player has detonated $VALUE $UNIT of grenades.", "megatones", 4,
-                "explosions", "/images/accolades/grandes.img");
-        addAccolade(001, 100, "grenades Exploded",
-                "The player has run a total of $VALUE $UNIT", "football fields", 13 ,
-                "running", "/images/accolades/feet.img");
-        addAccolade(002, 200, "grenades Exploded",
-                "$VALUE $UNIT worth of narcodics have been snorted.", "grams", 10,
-                "drugs", "/images/accolades/grandes.img");
-        addAccolade(003, 300, "grenades Exploded",
-                "The player has detonated $VALUE $UNIT", "grnades", 4,
-                "explosions", "/images/accolades/grandes.img");
+    	//TODO Add in the dumb data stuff
     }
     public int getGameID(){
     	return this.gameID;
@@ -95,15 +124,15 @@ public class AccoladeContainer implements Iterable<Accolade> {
     }
  
     public boolean isEmpty() {
-        return size == 0;
+        return this.size == 0;
     }
  
-    private boolean hasHead() {
+    public boolean hasHead() {
         return head != null;
     }
  
-    private boolean hasTail() {
-        return tail == null;
+    public boolean hasTail() {
+        return tail != null;
     }
  
     public Iterator<Accolade> iterator() {

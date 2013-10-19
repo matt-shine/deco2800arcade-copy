@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 
@@ -103,6 +102,16 @@ public class Controller extends KeyAdapter{
 						PBullet pbullet2 =
 							new PBullet(pplane.x + 5, pplane.y + 50, 8, 15);
 						pbullets.add(pbullet2);	
+					}else if(PPlane.isFired && DestoryNum > 30){
+						PBullet pbullet3 =
+								new PBullet(pplane.x + 37, pplane.y + 50, 8, 15);
+						pbullets.add(pbullet3);
+						PBullet pbullet4 =
+							new PBullet(pplane.x + 3, pplane.y + 50, 8, 15);
+						pbullets.add(pbullet4);
+						PBullet pbullet5 =
+								new PBullet(pplane.x + 20, pplane.y + 50, 8, 15);
+						pbullets.add(pbullet5);
 					}
 					count ++;
 					for(int i = 0; i < pbullets.size(); i++){
@@ -169,16 +178,9 @@ public class Controller extends KeyAdapter{
 	
 	public void JudgeLife(){
 		if(!pplane.isAlive()){
-			int result = JOptionPane.showConfirmDialog(gamePanel, 
-					"Try again? :D","OK",JOptionPane.YES_OPTION);
-			if(result == 0){
-				newGame();
-			}else{
 				System.exit(0);
-			}
-			
+				}
 		}
-	}
 	
 	public void newGame(){
 		bangs.clear();		   		

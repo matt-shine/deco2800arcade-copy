@@ -9,6 +9,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.lwjgl.util.Point;
 import org.mockito.Mockito;
 
 import com.badlogic.gdx.Gdx;
@@ -53,6 +54,7 @@ public class GameMapTest {
 	public void testInit() {
 		GameMap map = new GameMap(1280, 720, 4);
 		Assert.assertEquals(new ArrayList<WallTile>(), map.getGhostDoors());
+		Assert.assertEquals(16, map.getTileSideLength());
 		Assert.assertEquals(1280, map.SCREEN_WIDTH);
 		Assert.assertEquals(720, map.SCREEN_HEIGHT);
 	}
@@ -116,8 +118,8 @@ public class GameMapTest {
 	}
 	
 	@Test
-	/** Tests the createTiles() method */
-	public void testGridSize() {
+	/** Tests the grid */
+	public void testGrid() {
 		GameMap map = new GameMap(1280, 720, 4);
 		map.createTiles(map.readMap("levelMap.txt"));
 		Tile[][] grid = map.getGrid();
@@ -139,9 +141,23 @@ public class GameMapTest {
 		Assert.assertEquals(ghostDoors, map.getGhostDoors());
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
-				Assert.assertNotNull(grid[i][j]);
+				Assert.assertNotNull(grid[i][j]);				
+				Assert.assertEquals(new Point(i,j), map.getTilePos(grid[i][j]));
+				int s = map.getTileSideLength();
+				Assert.assertEquals(new Point(i*s + 416, j*s + 112), map.getTileCoords(grid[i][j]));
 			}
 		}
 	}
-
+	
+	@Test
+	/** Tests finding of Mover current tiles */
+	public void testMoverTileFinding() {
+		GameMap map = new GameMap(1280, 720, 4);
+		map.createTiles(map.readMap("levelMap.txt"));
+		Tile[][] grid = map.getGrid();
+		Assert.assertEquals(grid[14][7], map.findMoverTile(model.getPlayer()));
+		Assert.assertEquals(grid[12][17], map.findMoverTile(model.getBlinky()));
+		Assert.assertEquals(grid[15][17], map.findMoverTile(model.getPinky()));
+	}
+	
 }

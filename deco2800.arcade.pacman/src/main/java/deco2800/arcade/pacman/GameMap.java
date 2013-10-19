@@ -23,7 +23,7 @@ public class GameMap {
 	private Tile fruitRight; // the right tile that fruit appears on
 	private int hOffset;
 	private int vOffset;
-	private final int tileSideLength = 16;// length of side of square- should be
+	private final int tileSideLength; // length of side of square- should be
 	// same for all tiles in a GameMap
 	public final int SCREEN_HEIGHT;
 	public final int SCREEN_WIDTH;
@@ -35,6 +35,7 @@ public class GameMap {
 		this.SCREEN_HEIGHT = SCREEN_HEIGHT;
 		this.SCREEN_WIDTH = SCREEN_WIDTH;
 		ghostStarts = new Tile[numGhosts];
+		tileSideLength = 16;
 	}
 	
 
@@ -116,6 +117,8 @@ public class GameMap {
 			// !, @, #, $ are the 4 ghost starting positions
 			case '!': replacer = "@"; break;
 			case '#': replacer = "$"; break;
+			case '@': replacer = "!"; break;
+			case '$': replacer = "#"; break;
 			}
 			if (replacer !=  null) {
 				reverse.replace(i, i+1, replacer);

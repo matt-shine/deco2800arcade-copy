@@ -44,10 +44,12 @@ public class Ghost extends Mover {
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
 		// set up ghost to be drawn in the right place- this is defintely right
-		drawX = gameMap.getTileCoords(currentTile).getX() + 8; // drawX % 16 was
+		//NOEWSDY I altered the +8 to nothing because when he starts in the ghost pen
+		// he otherwise ends up on a wallTile
+		drawX = gameMap.getTileCoords(currentTile).getX(); // drawX % 16 was
 																// 6, so make it
 																// 8
-		drawY = gameMap.getTileCoords(currentTile).getY() + 8; // was 0, so make
+		drawY = gameMap.getTileCoords(currentTile).getY(); // was 0, so make
 																// it 8
 
 		facing = Dir.LEFT;

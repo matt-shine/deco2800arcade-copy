@@ -1,5 +1,9 @@
 package deco2800.arcade.towerdefence;
 
+import java.util.List;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
+
 /**
  * The interface for mortal objects. Will be the majority of interesting
  * objects. Can die through game mechanics and have curious attributes such as
@@ -16,6 +20,10 @@ public class Mortal extends GridObject {
 	private int health;
 	// The armour the alien has.
 	private int armour;
+	// The dying sprites this object uses.
+	private List<Sprite> sprDying;
+	// The death sprites this object uses.
+	private List<Sprite> sprDeath;
 
 	// Constructor
 	/**
@@ -66,7 +74,25 @@ public class Mortal extends GridObject {
 	public int armour() {
 		return armour;
 	}
+	
+	/**
+	 * Return the dying sprites of the mortal.
+	 * 
+	 * @return The dying sprites of the object.
+	 */
+	public List<Sprite> sprDying() {
+		return sprDying;
+	}
 
+	/**
+	 * Return the death sprites of the mortal.
+	 * 
+	 * @return The death sprites of the object.
+	 */
+	public List<Sprite> sprDeath() {
+		return sprDeath;
+	}
+	
 	// Setters
 	/**
 	 * Sets the maximum health of the Mortal. If current health is above this
@@ -100,6 +126,26 @@ public class Mortal extends GridObject {
 	 */
 	public void armour(int armour) {
 		this.armour = armour;
+	}
+	
+	/**
+	 * Sets the dying sprites of the Mortal.
+	 * 
+	 * @param sprites
+	 *            The new sprite list.
+	 */
+	public void sprDying(List<Sprite> sprites) {
+		this.sprDying = sprites;
+	}
+	
+	/**
+	 * Sets the death sprites of the Mortal.
+	 * 
+	 * @param sprites
+	 *            The new sprite list.
+	 */
+	public void sprDeath(List<Sprite> sprites) {
+		this.sprDeath = sprites;
 	}
 
 	// Methods

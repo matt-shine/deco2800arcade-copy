@@ -32,9 +32,7 @@ public class GridObject {
 	// The direction the object is facing.
 	private Direction facing;
 	// The standing sprites this object uses.
-	private List<Sprite> standingSprites;
-	// The death sprite this object uses.
-	private List<Sprite> deathSprites;
+	private List<Sprite> sprStanding;
 	// The team this object belongs to.
 	private Team team;
 
@@ -121,12 +119,12 @@ public class GridObject {
 	}
 
 	/**
-	 * Returns the ArrayList of sprites for the object.
+	 * Returns the List of sprites for the object.
 	 * 
 	 * @return A List of sprites for the standing animation.
 	 */
 	public List<Sprite> sprites() {
-		return standingSprites;
+		return sprStanding;
 	}
 
 	/**
@@ -138,34 +136,6 @@ public class GridObject {
 		return id;
 	}
 
-	/**
-	 * Returns the sprite to display based on a direction when the object is
-	 * still.
-	 * 
-	 * TODO implement this method according to the structure below so that it
-	 * returns the correct sprite for a facing.
-	 * 
-	 * index - sprite 0 - standing facing down 1 - standing facing left 2 -
-	 * standing facing up 3 - standing facing right
-	 * 
-	 * sprites().get(0) would return facing down sprite
-	 * 
-	 * @param facing
-	 *            The direction to get the sprite for.
-	 * @return The sprite for the given direction.
-	 */
-	public Sprite standingSprite(Direction facing) {
-		return null;
-	}
-
-	/**
-	 * Returns the sprites to display on death.
-	 * 
-	 * @return A List of sprites for the death animation.
-	 */
-	public List<Sprite> deathSprites() {
-		return deathSprites;
-	}
 
 	/**
 	 * Return the side the object is affiliated with, for score and avoiding
@@ -254,18 +224,8 @@ public class GridObject {
 	 * @param standingSprites
 	 *            The new standing sprites for the object
 	 */
-	public void standingSprites(List<Sprite> standingSprites) {
-		this.standingSprites = standingSprites;
-	}
-
-	/**
-	 * Set the array list of death sprites this object uses.
-	 * 
-	 * @param deathSprites
-	 *            The new death sprites for the object.
-	 */
-	public void deathSprites(List<Sprite> deathSprites) {
-		this.deathSprites = deathSprites;
+	public void standingSprites(List<Sprite> sprites) {
+		this.sprStanding = sprites;
 	}
 
 	/**
@@ -348,8 +308,6 @@ public class GridObject {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((deathSprites == null) ? 0 : deathSprites.hashCode());
 		result = prime * result + ((effects == null) ? 0 : effects.hashCode());
 		result = prime * result + ((facing == null) ? 0 : facing.hashCode());
 		result = prime * result + ((grid == null) ? 0 : grid.hashCode());
@@ -359,7 +317,7 @@ public class GridObject {
 		result = prime * result
 				+ ((position == null) ? 0 : position.hashCode());
 		result = prime * result
-				+ ((standingSprites == null) ? 0 : standingSprites.hashCode());
+				+ ((sprStanding == null) ? 0 : sprStanding.hashCode());
 		result = prime * result + ((team == null) ? 0 : team.hashCode());
 		result = prime * result + (visible ? 1231 : 1237);
 		return result;

@@ -32,7 +32,7 @@ public class PacChar extends Mover{
 		width = widthVal;
 		height = heightVal;
 		updatePosition();
-		moveDist = 1;
+		moveDist = 2;
 		currentTile.addMover(this);
 		//System.out.println(this);
 //		animation not necessary unless Pacman moving		
@@ -93,8 +93,9 @@ public class PacChar extends Mover{
     			facing = Dir.LEFT;
     		}
 //			checkTile(this.nextTile(currentTile, 1));
-			updatePosition();
     	} 
+		updatePosition();
+		checkGhostCollision(currentTile);
 	}
 	
 	
@@ -103,7 +104,7 @@ public class PacChar extends Mover{
 		if (colList.size() > 1) {
 			for (int i=0; i < colList.size(); i++) {
 				if (colList.get(i).getClass() == Ghost.class) {
-					System.out.println("Pacman hit a ghost!");
+					System.out.println("(*&(*&Pacman hit a ghost!");
 					//TODO some death thing
 					this.setCurrentState(PacState.DEAD);
 				}

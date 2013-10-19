@@ -45,10 +45,9 @@ public abstract class Mover {
 		Tile newTile = gameMap.findMoverTile(this);
 		// Pacman has moved!
 		if (!currentTile.equals(newTile)) {
-			//System.out.println(this.getClass() + " Current is " + currentTile + ", new is "
-			//		+ newTile);
 			currentTile.removeMover(this);
 			currentTile = newTile;
+			if (this.getClass() == PacChar.class) System.out.println("\n[!] PacChar updated position!!\n");
 			// Update the way pacman is shown to be facing
 			
 			currentTile.addMover(this);
@@ -111,7 +110,6 @@ public abstract class Mover {
 		int x = gameMap.getTilePos(tile).getX();
 		int y = gameMap.getTilePos(tile).getY();
 		Tile[][] grid = gameMap.getGrid();
-		//System.out.println(x + ", " + y);
 		switch(this.getFacing()) {
 		case LEFT: x -= 1; break;
 		case RIGHT: x += 1; break;

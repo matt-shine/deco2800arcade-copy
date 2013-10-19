@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.util.Point;
+
+import deco2800.arcade.pacman.PacChar.PacState;
 import static java.lang.Math.*;
 
 public class Ghost extends Mover {
@@ -39,7 +41,8 @@ public class Ghost extends Mover {
 		case CLYDE: num = 3; break;
 		default: num = 0; break;
 		}
-		currentTile = gameMap.getGhostStarts()[num];
+//		currentTile = gameMap.getGhostStarts()[num];  //This is the actual starting positon in pen
+		currentTile = gameMap.getFruitRight(); // For testing purposes
 		// makes the previous tile the one to right, since he's facing left
 		Point current = gameMap.getTilePos(currentTile);
 		previousTile = gameMap.getGrid()[current.getX() + 1][current.getY()];
@@ -77,12 +80,6 @@ public class Ghost extends Mover {
 	public void prepareDraw() {
 		spritePos = 3;
 		ghost_move();
-		// if ((drawX % 16 == 6) && (drawY % 16 == 0)) {
-		// facing = getDirection(currentTile);
-		// targetTile = getTargetTile();
-		// } else{
-		// //STOP MOVEMENT
-		// }
 		if (facing == Dir.RIGHT) {
 			spritePos = 1;
 		} else if (facing == Dir.UP) {
@@ -90,6 +87,13 @@ public class Ghost extends Mover {
 		} else if (facing == Dir.DOWN) {
 			spritePos = 7;
 		} 
+		
+		// Check ghost wall collision
+		if (!this.checkNoWallCollision(this.getTile())){
+//			currentState = GhostState.SCATTER;
+			facing = Dir.LEFT;
+		}
+		
 		// checks if ghost is moving, and if so keeps him moving in that
 		// direction
 		int corr = 0;
@@ -157,6 +161,7 @@ public class Ghost extends Mover {
 		double dist;
 		int distx = targetx - startx;
 		int disty = targety - starty;
+		System.out.println("distx: " + distx + " disty: " + disty);
 		dist = sqrt((distx * distx + disty * disty));
 		return dist;
 	}
@@ -178,9 +183,9 @@ public class Ghost extends Mover {
 		int currentX = currentPoint.getX();
 		int currentY = currentPoint.getY();
 		
-		int upY = currentY - 1;
+		int upY = currentY + 1;
 		int leftX = currentX - 1;
-		int downY = currentY + 1;
+		int downY = currentY - 1;
 		int rightX = currentX + 1;
 
 		Tile upTile = gameMap.getGrid()[currentX][upY];
@@ -191,13 +196,13 @@ public class Ghost extends Mover {
 		if (this.nextTile(this.currentTile, 1, Dir.UP).getClass() != WallTile.class &&
 				!this.nextTile(this.currentTile, 1, Dir.UP).equals(previousTile)){
 			testTiles.add(upTile);
-		} else if (this.nextTile(this.currentTile, 1, Dir.DOWN).getClass() != WallTile.class &&
+		} if (this.nextTile(this.currentTile, 1, Dir.DOWN).getClass() != WallTile.class &&
 				!this.nextTile(this.currentTile, 1, Dir.DOWN).equals(previousTile)){
 			testTiles.add(downTile);
-		} else if (this.nextTile(this.currentTile, 1, Dir.LEFT).getClass() != WallTile.class &&
+		} if (this.nextTile(this.currentTile, 1, Dir.LEFT).getClass() != WallTile.class &&
 				!this.nextTile(this.currentTile, 1, Dir.LEFT).equals(previousTile)){
 			testTiles.add(leftTile);
-		} else if (this.nextTile(this.currentTile, 1, Dir.RIGHT).getClass() != WallTile.class &&
+		} if (this.nextTile(this.currentTile, 1, Dir.RIGHT).getClass() != WallTile.class &&
 				!this.nextTile(this.currentTile, 1, Dir.RIGHT).equals(previousTile)){
 			testTiles.add(rightTile);
 		}
@@ -218,10 +223,11 @@ public class Ghost extends Mover {
 		List<Double> dists = new ArrayList<Double>();
 
 		for (Tile temp : testTiles) {
+			System.out.println("current: " + current + "temp: " + temp );
 			tempDist = calcDist(current, temp);
 			dists.add(tempDist);
 		}
-
+		System.out.println(dists);
 		return dists;
 	}
 
@@ -259,12 +265,13 @@ public class Ghost extends Mover {
 	}
 
 	/**
-	 * Returns the next tile. uses other methods to determine the tile.
+	 * Returns the next immediate tile for the Ghost to move to.
 	 */
 
 	public Tile getNextTile() {
 		List<Tile> testTiles = getTestTiles(currentTile);
-		List<Double> dists = getDists(testTiles, currentTile);
+		List<Double> dists = getDists(testTiles, this.targetTile);
+		System.out.println(dists);
 		// int Tilenum = -1;
 		int tileNum = 0;
 		double dist = 9999;

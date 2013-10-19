@@ -45,7 +45,7 @@ public class LoginScreen implements Screen {
         table.setBackground(skin.getDrawable("background"));
         stage.addActor(table);
 
-        final Label tempLabel = new Label("To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with any username:admin password:admin", skin);  // Temporary label to display a message
+        final Label tempLabel = new Label("To access the multiplayer lobby\nlogin with username:multi\nTo proceed as normal\nlogin with username:admin password:admin", skin);  // Temporary label to display a message
         tempLabel.setAlignment(Align.center);
         final Label errorLabel = new Label("", skin, "error");
         errorLabel.setAlignment(Align.center);

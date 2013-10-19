@@ -973,6 +973,7 @@ public class MultiGamelist2 implements Screen {
 		arcadeUI.getNetworkClient().sendNetworkObject(request);
 		arcadeUI.setScreen(arcadeUI.getLobby());
 		ArcadeSystem.setGameWaiting(true);
+		ArcadeSystem.setMultiplayerEnabled(true);
 		arcadeUI.setScreen(arcadeUI.getWait());
 		ArcadeSystem.goToGame(gameId);
 

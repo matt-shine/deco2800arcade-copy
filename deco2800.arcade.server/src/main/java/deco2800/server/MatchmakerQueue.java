@@ -132,12 +132,6 @@ public class MatchmakerQueue {
 	public void checkForGame(NewMultiGameRequest request, Connection connection) {
 		int playerID = request.playerID;
 		String gameId = request.gameId;
-		try {
-			System.out.println("Rating: "
-					+ database.getPlayerRating(playerID, gameId));
-		} catch (DatabaseException e) {
-			e.printStackTrace();
-		}
 		// Search for an appropriate game for the user to join
 		for (int i = 0; i < queuedUsers.size(); i++) {
 			if (!gameId.equals(queuedUsers.get(i).get(0))) {
@@ -172,19 +166,17 @@ public class MatchmakerQueue {
 	 * 
 	 * @param gameId: The ID of the game to be played
 	 */
-	public void addLobbyGame(int player1Id, int player2Id,
+	public int addLobbyGame(int player1Id, int player2Id,
 			Connection player1Connection, Connection player2Connection,
 			String gameId) {
 		MultiplayerServer gameServer = new MultiplayerServer(player1Id,
 				player2Id, player1Connection, player2Connection, gameId,
 				serverNumber);
 		activeServers.put(serverNumber, gameServer);
-		NewMultiSessionResponse session = new NewMultiSessionResponse();
-		session.sessionId = serverNumber;
 		serverNumber++;
-		session.gameId = gameId;
-		player1Connection.sendTCP(session);
-		player2Connection.sendTCP(session);
+		return serverNumber - 1;
+		//player1Connection.sendTCP(session);
+		//player2Connection.sendTCP(session);
 	}
 
 	/**

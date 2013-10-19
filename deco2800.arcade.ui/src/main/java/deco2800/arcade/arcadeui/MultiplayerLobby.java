@@ -370,14 +370,10 @@ public class MultiplayerLobby implements Screen {
 	}
 
 	public void joinGame(int matchId, String gameId) {
-		JoinLobbyMatchRequest request = new JoinLobbyMatchRequest();
-		request.matchId = matchId;
-		request.playerID = arcadeUI.getPlayer().getID();
-		arcadeUI.getNetworkClient().sendNetworkObject(request);
 		ArcadeSystem.setMultiplayerEnabled(true);
 		ArcadeSystem.setGameWaiting(true);
 		arcadeUI.setScreen(arcadeUI.getWait());
-		ArcadeSystem.goToGame(gameId);
+		ArcadeSystem.goToGame(gameId, matchId);		
 	}
 	
 	public void chat(String message) {

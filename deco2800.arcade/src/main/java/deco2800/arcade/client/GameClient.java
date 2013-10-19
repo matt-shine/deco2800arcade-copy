@@ -29,6 +29,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	protected List<GameOverListener> gameOverListeners;
 	private int multiplayerOn = 0;
 	private int multiplayerSession;
+	private int lobbySession = -1;
 	private ApplicationListener overlay = null;
 	private UIOverlay overlayBridge = null;
 	private boolean overlayInitialised = false;
@@ -279,7 +280,9 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 	public void setMultiSession(int session) {
 		multiplayerSession = session;
+		System.out.println("Got session");
 		if (getMPHost()) {
+			System.out.println("Starting Pong");
 			startMultiplayerGame();
 		}
 	}
@@ -290,10 +293,19 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 
 	public void setHost(boolean host) {
 		this.host = host;
+		System.out.println("HOST: " + host);
 	}
 	
 	public boolean getMPHost() {
 		return host;
+	}
+	
+	public void setLobbySession(int lobby) {
+		lobbySession = lobby;
+	}
+	
+	public int getLobbySession() {
+		return lobbySession;
 	}
 	
 	public void startMultiplayerGame() {
@@ -310,6 +322,7 @@ public abstract class GameClient extends com.badlogic.gdx.Game implements Achiev
 	
 	public void displayChat(LobbyMessageResponse response) {
 	}
+	
 	
 	
 }

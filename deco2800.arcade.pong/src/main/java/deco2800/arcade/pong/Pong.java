@@ -18,6 +18,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
+import deco2800.arcade.protocol.lobby.JoinLobbyMatchRequest;
 import deco2800.arcade.protocol.multiplayerGame.GameStateUpdateRequest;
 import deco2800.arcade.protocol.multiplayerGame.MultiGameRequestType;
 import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
@@ -196,8 +197,10 @@ public class Pong extends GameClient {
 			System.out.println(ach.toString());
 		}
 		// Multiplayer Game waiting for opponent
-		if (ArcadeSystem.isGameWaiting()) {
-			requestMultiplayerGame();
+		if (ArcadeSystem.isGameWaiting() && ArcadeSystem.isMatchMaking()) {
+			requestMatchmakingGame();
+		} else if (ArcadeSystem.isGameWaiting() && getLobbySession() != -1) {
+			requestLobbyGame();
 		}
 
 	}
@@ -337,7 +340,9 @@ public class Pong extends GameClient {
 		if (getMPHost() || !ArcadeSystem.isMultiplayerEnabled()) {
 			getBall().randomizeVelocity();
 			Ball ball = getBall();
-			sendInitState();
+			if (ArcadeSystem.isMultiplayerEnabled()) {
+				sendInitState();
+			}
 			gameState = new InProgressState();
 			statusMessage = null;
 		}
@@ -391,7 +396,7 @@ public class Pong extends GameClient {
 	/**
 	 * Sends a request to the server to start a Multiplayer Matchmaking game
 	 */
-	private void requestMultiplayerGame() {
+	private void requestMatchmakingGame() {
 		NewMultiGameRequest request = new NewMultiGameRequest();
 		request.playerID = this.getPlayer().getID();
 		request.gameId = this.getGame().getID();
@@ -399,15 +404,22 @@ public class Pong extends GameClient {
 		networkClient.sendNetworkObject(request);
 	}
 
+	private void requestLobbyGame() {
+		JoinLobbyMatchRequest request = new JoinLobbyMatchRequest();
+		request.matchId = getLobbySession();
+		request.playerID = getPlayer().getID();
+		networkClient.sendNetworkObject(request);
+	}
+	
 	/**
 	 * Starts the Multiplayer Game once an opponent is found
 	 */
 	public void startMultiplayerGame() {
+		System.out.println("Pong started");
 		getBall().randomizeVelocity();
 		if (getMPHost()) {
 			long time = System.currentTimeMillis();
-			while (time + 3000 > System.currentTimeMillis())
-				;
+			while (time + 3000 > System.currentTimeMillis());
 			sendInitState();
 		}
 		gameState = new InProgressState();
@@ -456,6 +468,7 @@ public class Pong extends GameClient {
 	public void updateGameState(GameStateUpdateRequest request) {
 		// The first request will contain information about the ball
 		if (request.initial == true) {
+			System.out.println("init game start");
 			startMultiplayerGame();
 			getBall().setVelocity((Vector2) request.stateChange);
 			return;

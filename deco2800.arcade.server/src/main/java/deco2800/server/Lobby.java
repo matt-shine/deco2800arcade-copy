@@ -20,7 +20,6 @@ import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponseType;
 import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
-import deco2800.arcade.protocol.multiplayerGame.NewMultiGameRequest;
 
 /**
  * The Lobby class - Singleton Pattern.
@@ -89,10 +88,6 @@ public class Lobby {
 					this.matchIdCounter);
 			this.matchIdCounter++;
 			lobbyGames.add(match);
-			CreateMatchResponse response = new CreateMatchResponse();
-			response.matchId = match.getMatchId();
-			connection.sendTCP(response);
-
 			this.sendGamesToLobbyUsers();
 		}
 	}
@@ -106,13 +101,17 @@ public class Lobby {
 			connection.sendTCP(response);
 		} else {
 			/* Match found */
-			MatchmakerQueue.instance().addLobbyGame(match.getHostPlayerId(),
-					playerId, match.getHostConnection(), connection,
+			int sessionID = MatchmakerQueue.instance().addLobbyGame(playerId,
+					match.getHostPlayerId(), connection, match.getHostConnection(),
 					match.getGameId());
 			this.lobbyGames.remove(match);
 			JoinLobbyMatchResponse response = new JoinLobbyMatchResponse();
 			response.responseType = JoinLobbyMatchResponseType.OK;
+			response.session = sessionID;
+			response.host = true;
 			connection.sendTCP(response);
+			response.host = false;
+			match.getHostConnection().sendTCP(response);
 		}
 	}
 

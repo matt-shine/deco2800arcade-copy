@@ -12,8 +12,15 @@ import deco2800.arcade.protocol.lobby.JoinLobbyMatchResponse;
 import deco2800.arcade.protocol.lobby.LobbyMessageRequest;
 import deco2800.arcade.protocol.lobby.LobbyMessageResponse;
 import deco2800.arcade.protocol.lobby.RemovedMatchDetails;
+import deco2800.arcade.protocol.multiplayerGame.NewMultiSessionResponse;
 
 public class LobbyListener extends NetworkListener {
+	
+	Arcade arcade;
+	
+	public LobbyListener(Arcade arcade) {
+		this.arcade = arcade;
+	}
 	
 	@Override
 	public void connected(Connection connection) {
@@ -59,7 +66,11 @@ public class LobbyListener extends NetworkListener {
 			case NOTFOUND:
 				break;
 			case OK:
-				break;
+				System.out.println("GOT SESSION");
+				int sessionId = ((JoinLobbyMatchResponse) object).session;
+				arcade.getCurrentGame().setHost(((JoinLobbyMatchResponse) object).host);
+				arcade.getCurrentGame().setMultiSession(sessionId);			
+				ArcadeSystem.setGameWaiting(false);
 			default:
 				break;
 			

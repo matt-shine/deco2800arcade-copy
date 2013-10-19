@@ -253,7 +253,7 @@ public class Arcade extends JFrame {
 				.addListener(new CommunicationListener(communicationNetwork));
 		this.client.addListener(new PackmanListener());
 		this.client.addListener(new MultiplayerListener(this));
-		this.client.addListener(new LobbyListener());
+		this.client.addListener(new LobbyListener(this));
 		this.client.addListener(new LibraryResponseListener());
 	}
 	

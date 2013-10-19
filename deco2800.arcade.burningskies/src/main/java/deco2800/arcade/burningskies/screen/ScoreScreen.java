@@ -157,17 +157,17 @@ public class ScoreScreen implements Screen {
 	    stage.addActor(localLabel);
 	    stage.addActor(globalLabel);
 	    
-	    int localScoreLimit = localScoresMap.size();
-	    int globalScoreLimit = topPlayers.size();
+	    int localScoreLimit = Math.min(5, localScoresMap.size());
+	    int globalScoreLimit = Math.min(5, topPlayers.size());
 	    		
-	    for (int i = 0; i < localScoreLimit; i++) {	    
+	    for (int i = 0; i < localScoreLimit; i++) {	   
 	    	stage.addActor(localNameLabelArray[i]);
 	    	stage.addActor(localScoreLabelArray[i]);
 	    }
 	    
-	    for (int i = 0; i < globalScoreLimit; i++) {	    
-	    	stage.addActor(globalNameLabelArray[i]);
-	    	stage.addActor(globalScoreLabelArray[i]);
+	    for (int j = 0; j < globalScoreLimit; j++) {
+	    	stage.addActor(globalNameLabelArray[j]);
+	    	stage.addActor(globalScoreLabelArray[j]);
 	    }
 	    
 	    background.toBack();    

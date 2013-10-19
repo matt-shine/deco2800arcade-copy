@@ -138,6 +138,7 @@ public class junglejump extends GameClient implements InputProcessor {
 
 	Music themeMusic;
 	Clip menuSound, jump, die, levelup, loselife, collect;
+	private SpriteBatch batchContinue;
 
 	public static void main(String[] args) {
 		ArcadeSystem.goToGame("junglejump");
@@ -257,6 +258,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, SCREENWIDTH, SCREENHEIGHT);
 		batch = new SpriteBatch();
+		batchContinue = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 
 		// add the overlay listeners
@@ -426,12 +428,20 @@ public class junglejump extends GameClient implements InputProcessor {
 		case GAMEOVER:
 			break;
 		case CONTINUE:
-			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
+//			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 			batch.setProjectionMatrix(camera.combined);
-			shapeRenderer.setProjectionMatrix(camera.combined);
+//			shapeRenderer.setProjectionMatrix(camera.combined);
 			batch.begin();
 			// Load Previous game? If yes, continue to game, if not go back to menu.
+			Gdx.gl.glEnable(GL10.GL_BLEND);
+			Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			shapeRenderer.begin(ShapeType.FilledRectangle);
+			shapeRenderer.filledRect(280, 100, 300, 100, Color.BLUE,
+					Color.BLUE, Color.BLUE, Color.BLUE);
+			shapeRenderer.end();
+			Gdx.gl.glDisable(GL10.GL_BLEND);
+			achievementTitleFont.draw(batch, "Are you sure you want to continue?", 290, 90);
 			batch.end();
 			camera.update();
 			super.render();

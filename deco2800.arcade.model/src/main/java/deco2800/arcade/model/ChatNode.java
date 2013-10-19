@@ -41,6 +41,7 @@ public class ChatNode {
 		participants.add(participant);
 	}
 
+
 	public int getID() {
 		return participants.hashCode();
 	}

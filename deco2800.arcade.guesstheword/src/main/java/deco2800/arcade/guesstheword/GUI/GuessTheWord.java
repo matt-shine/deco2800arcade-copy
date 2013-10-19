@@ -10,6 +10,8 @@ import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.guesstheword.gameplay.Achievements;
 import deco2800.arcade.guesstheword.gameplay.GetterSetter;
 import deco2800.arcade.guesstheword.gameplay.Pictures;
+import deco2800.arcade.guesstheword.gameplay.PlayerScore;
+import deco2800.arcade.guesstheword.gameplay.WordShuffler;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
@@ -24,14 +26,15 @@ public class GuessTheWord extends GameClient{
 	private AchievementClient achievementClient;
 	private Player player;
 	
-	GetterSetter getterSetter;
-	Pictures picture;
+	public GetterSetter getterSetter;
+	public Pictures picture;
+	public PlayerScore playerScore;
 	
 	Screen splashScreen;
 	Screen mainScreen;
 	Screen gameScreen;
 	Screen settingsScreen;
-	Screen acheivementScreen;
+//	Screen acheivementScreen;
 	Skin skin;
 
 
@@ -41,12 +44,13 @@ public class GuessTheWord extends GameClient{
 		this.player = player;
 		this.networkClient = networkClient;
 		this.achievementClient = new AchievementClient(networkClient);
-//		Achievements.createAchievementInstance(this);
+		playerScore =  new PlayerScore(this,player,networkClient);
 	}
 	
 	@Override
 	public void create() {
-		getterSetter = new GetterSetter();
+		getterSetter = new GetterSetter();		
+		
 		loadGamePicture();
 		
 		skin = new Skin(Gdx.files.internal("uiskin.json"));

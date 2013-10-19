@@ -41,9 +41,9 @@ public class SettingScreen implements Screen{
 		playButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				String s = list.getSelection();
-				//System.out.println(s);
+				System.out.println(s);
 				game.getterSetter.setLevel(s);
-				game.setScreen(game.gameScreen);
+				game.setScreen(new GameScreen(game));
 			}
 		});
 		

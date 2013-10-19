@@ -1,6 +1,7 @@
 package deco2800.arcade.guesstheword.GUI;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
@@ -16,94 +17,37 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
+import deco2800.arcade.guesstheword.gameplay.GameModel;
 
 public class MainScreen implements Screen {
 	
 	private final GuessTheWord game;
 	private final Skin skin;
-	private final Stage stage;
-	private final Label titleLabel;
-	private final Texture texture;
-	private final SpriteBatch batch;
+	private Stage stage;
 	
-	private final TextButton startButton;
-	private final TextButton settingsButton;
-	private final TextButton achieveButton;
+	private GameModel gm;
 	
-
+	private Texture texture;
+	private SpriteBatch batch;
+	
+	private Label titleLabel;
+	private TextButton startButton;
+	private TextButton settingsButton;
+	private TextButton achieveButton;
+	
+	TextField text;
 	
 	// setup the dimensions of the menu buttons
     private static final float BUTTON_WIDTH = 300f;
     private static final float BUTTON_HEIGHT = 60f;
     
-	MainScreen(final GuessTheWord game){
+	public MainScreen(final GuessTheWord game){
 		this.game = game;
 		this.skin = game.skin;
-		this.stage = new Stage();
-	
-		batch = new SpriteBatch();
-		
-		texture = new Texture(Gdx.files.internal("mainScreen.png"));
-
-		titleLabel = new Label("Welcome to Guess The Word!" , skin);
-		titleLabel.setFontScale(2);
-		
-		startButton = new TextButton("Click to Play" , skin);
-		startButton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
-				clearLabel();
-				clearTextfield();
-				//Users will start the game in a default mode
-				game.getterSetter.setLevel("Default");
-				System.out.println("Changing to Game Screen");
-				game.setScreen(game.gameScreen);
-			}
-		});
-		settingsButton = new TextButton("Game Settings" , skin);
-		settingsButton.addListener(new ChangeListener() {
-			public void changed (ChangeEvent event, Actor actor) {
-				System.out.println("Changing to Settings Screen");
-				clearLabel();
-				clearTextfield();
-				game.setScreen(game.settingsScreen);
-			}
-		});
-		
-		achieveButton = new TextButton("Achievement " , skin);
-//		achieveButton.addListener(new ChangeListener() {
-//			public void changed (ChangeEvent event, Actor actor) {
-//				game.setScreen(game.acheivementScreen);
-//			}
-//		});
-		
-		// Creating of the table to store the buttons and labels
-		Table mainTable =  new Table();
-		mainTable.setFillParent(true);
-
-		mainTable.add(titleLabel).padBottom(15);
-		mainTable.row();
-		mainTable.add(startButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
-		mainTable.row();
-		mainTable.add(settingsButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
-		mainTable.row();
-		mainTable.add(achieveButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
-
-		stage.addActor(mainTable);
-	}
-	
-	private void clearLabel(){
-		game.getterSetter.setScore(0);
-		game.getterSetter.setLevel("");
-	}
-	
-	private void clearTextfield(){
-		game.getterSetter.setText1("");
-		game.getterSetter.setText2("");
-		game.getterSetter.setText3("");
-		game.getterSetter.setText4("");
-		game.getterSetter.setText5("");
-		game.getterSetter.setText6("");
 	}
 	
 	
@@ -119,13 +63,14 @@ public class MainScreen implements Screen {
 		
 		stage.act(arg0);
 		stage.draw();
-
 	}
 
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
 		stage.dispose();
+		batch.dispose();
+		texture.dispose();
 	}
 
 	@Override
@@ -156,8 +101,77 @@ public class MainScreen implements Screen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		
+		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
+		
+		batch = new SpriteBatch();
+		
+		texture = new Texture(Gdx.files.internal("mainScreen.png"));
+		
+		BitmapFont font =  new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
+		LabelStyle ls = new LabelStyle();
+		ls.font = font;
+		
+		titleLabel = new Label("Welcome to Guess The Word!" , ls);
+
+		
+		startButton = new TextButton("Click to Play" , skin);
+		startButton.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				//Users will start the game in a default mode
+				game.getterSetter.setLevel("Default");
+				System.out.println("Changing to Game Screen");
+				game.setScreen(new GameScreen(game));
+			}
+		});
+		settingsButton = new TextButton("Game Settings" , skin);
+		settingsButton.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				System.out.println("Changing to Settings Screen");
+				game.setScreen(game.settingsScreen);
+			}
+		});
+		
+		achieveButton = new TextButton("Achievement " , skin);
+		achieveButton.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				text.setMessageText("HI THERE");
+			}
+		});
+		
+		
+		
+		
+		text = new TextField("", skin);
+		text.setMessageText("");
+		text.setTextFieldListener(new TextFieldListener() {
+
+            @Override
+            public void keyTyped(TextField textField, char key) {
+                    Gdx.app.log("Test for keys", "" + key);
+            }
+        });
+
+		
+		// Creating of the table to store the buttons and labels
+		Table mainTable =  new Table();
+		mainTable.setFillParent(true);
+
+		mainTable.add(titleLabel).padBottom(15);
+		mainTable.row();
+		mainTable.add(startButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
+		mainTable.row();
+		mainTable.add(settingsButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
+		mainTable.row();
+		mainTable.add(achieveButton).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
+		
+		mainTable.row();
+		mainTable.add(text).width(BUTTON_WIDTH).height(BUTTON_HEIGHT).padBottom(5);
+		
+		stage.addActor(mainTable);
+		
 	}
+	
 
 }

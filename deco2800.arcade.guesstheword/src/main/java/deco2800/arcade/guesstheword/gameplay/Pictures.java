@@ -198,11 +198,11 @@ public class Pictures {
 		Texture squash1 = new Texture("Images/level3/sports/squash/squash_1.png");
 		Texture skiing1 = new Texture("Images/level3/sports/skiing/skiing_1.png");
 		HashMap<String, Texture> sportsMap3 = new HashMap<String, Texture>();
-		sportsMap.put("BOXING" , boxing1);
-		sportsMap.put("DIVING" , diving1); 
-		sportsMap.put("KARATE" , karate1);
-		sportsMap.put("SQUASH" , squash1); 
-		sportsMap.put("SKIING" , skiing1); 
+		sportsMap3.put("BOXING" , boxing1);
+		sportsMap3.put("DIVING" , diving1); 
+		sportsMap3.put("KARATE" , karate1);
+		sportsMap3.put("SQUASH" , squash1); 
+		sportsMap3.put("SKIING" , skiing1); 
 //		System.out.println(sportsMap3.keySet());
 		
 		//Transport textures level 1

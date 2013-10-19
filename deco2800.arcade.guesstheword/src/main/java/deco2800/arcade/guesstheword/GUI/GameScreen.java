@@ -5,9 +5,7 @@ import java.util.HashMap;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -24,14 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.Timer.Task;
 
-import deco2800.arcade.client.GameClient;
-import deco2800.arcade.guesstheword.gameplay.Achievements;
+import deco2800.arcade.guesstheword.gameplay.GameModel;
 import deco2800.arcade.guesstheword.gameplay.WordShuffler;
-import deco2800.arcade.model.Achievement;
-import deco2800.arcade.model.Game;
 
 public class GameScreen implements Screen {
 
@@ -46,56 +39,101 @@ public class GameScreen implements Screen {
 	private RightPanel rightPanel;
 	private LeftPanel leftPanel;
 	private WordShuffler word;
+	private GameModel gm;
 
 	// The letters buttons for the games
 	private TextButton button1, button2, button3, button4, button5, 
 	button6	, button7, button8, button9, button10 , backButton, playButton;
 	
 	// The letters textfield for the game
-	private TextField textfield1, textfield2, textfield3, 
+	public TextField textfield1, textfield2, textfield3, 
 					  textfield4, textfield5, textfield6;  
 	
-	private Label scoreLabel, levelLabel;
+	public Label scoreLabel, levelLabel;
+	
 	private LabelStyle labelStyle;
 	
 	private ScrollPane scrollpane;
 	
-	private final BitmapFont font;
-	
-	private HashMap<String, HashMap<String, Texture>> hm;
-	private ArrayList<TextButton> buttonList;
-	private ArrayList<Integer> lettersKeyed;
 	private ArrayList<String> catList;
 	
-    private String[] breakword;
-    
-    private Boolean hintTaken = false ;
-    
     private int score = 0;     
-    private int  count = 0;
-    private int  hintPosition ;
-    
-    private float gametime = 0;    
+    private int gameTime = 0;
     
 //    private long startTime = System.currentTimeMillis();
 	private Texture backGroudTexture;
 	
-	String level;
+	public String level;
+	
+	//PUBLC VARIABLES
+	public HashMap<String, HashMap<String, Texture>> hm;
+	public ArrayList<TextButton> buttonList;
 
 	GameScreen(final GuessTheWord game){
 		this.game = game;
 		this.skin = game.skin;
 		batch =  new SpriteBatch();
 		stage =  new Stage();
-		
-		font = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
 
 		//Creating Instances of the wordshuffler class 
 		word =  new WordShuffler();
 		
+		gm =  new GameModel(game, this, word);
+
 		hm = new HashMap<String, HashMap<String, Texture>>();
-		lettersKeyed = new ArrayList<Integer>();
+		buttonList = new ArrayList<TextButton>();
 		catList = new ArrayList<String>();
+	}
+	
+	
+	@Override
+	public void render(float arg0) {
+		Gdx.gl.glClearColor( 0f, 0f, 75f, 70f );
+        Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+
+        // Draw the background 
+        batch.begin();
+		batch.draw(backGroudTexture, 0, 0, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight());
+		batch.end();
+		
+		
+		gm.checkKeyboardInputs();	
+
+		stage.act(Gdx.graphics.getDeltaTime());
+		stage.draw();
+		picturePanel =  new PicturePanel();
+	}
+	@Override
+	public void dispose() {
+		backGroudTexture.dispose();
+		batch.dispose();
+		skin.dispose();
+		stage.dispose();
+	}
+
+	@Override
+	public void hide() {
+	}
+
+	@Override
+	public void pause() {
+	}
+
+	@Override
+	public void resize(int arg0, int arg1) {
+	}
+
+	@Override
+	public void resume() {
+	}
+	
+	@Override
+	public void show() { 
+		setLevel();
+		createGameScreen();
+		gm.checkButtons();
+		Gdx.input.setInputProcessor(stage);
 	}
 
 	/**
@@ -104,70 +142,28 @@ public class GameScreen implements Screen {
 	 * */
 	private void setLevel(){		
 		String level = game.getterSetter.getLevel();
-		catList.add(game.getterSetter.getCategory());
-		
 		if(level.equalsIgnoreCase("Level 1 - 4 letters") 
 				|| level.equalsIgnoreCase("Default")){
+			
 			this.level = "LEVEL 1";	
 			backGroudTexture = new Texture(Gdx.files.internal("level1Screen.png"));
 			hm = game.picture.getLevel1();
-			gametime = 5; // 60 secs for level 1
+			gameTime = 5;		// 60 secs for level 1
 			
 		}else if(level.equalsIgnoreCase("Level 2 - 5 letters")){
 			this.level = "LEVEL 2";
 			backGroudTexture = new Texture(Gdx.files.internal("level2Screen.png"));
 			hm = game.picture.getLevel2();
-			gametime = 52; // 50 secs for level 2
+			gameTime = 50; // 50 secs for level 2
 			
 		}else if(level.equalsIgnoreCase("Level 3 - 6 letters")){
 			this.level = "LEVEL 3";
 			backGroudTexture = new Texture(Gdx.files.internal("level3Screen.png"));
 			hm = game.picture.getLevel3();
-			gametime = 42; // 40 secs for level 3  , 5 sec for testing purposes
+			gameTime = 40; // 40 secs for level 3  , 5 sec for testing purposes
 		}
 	}// end of setLevel()
 	
-	/**
-	 * This method will set the  timer for the game.
-	 * When the duration is up, the next word will be shown, 
-	 * irregardless of correct or wrong answer. No points will be awarded.
-	 * 
-	 * */
-	public void timer(){
-		System.out.println("Timer started!!!");
-		Timer.schedule(new Task(){
-		    @Override
-		    public void run() {
-		    	System.out.println("Timer UP!!!");
-		    	nextWord(game.getterSetter.getCategoryItem(),
-		    			game.getterSetter.getCategory());
-		    }
-		}, gametime);
-	}
-	
-	private void setGameContext(){
-		
-		Object[] cat =  hm.keySet().toArray();
-		
-		//Random select a category!
-		int num = new Random().nextInt(hm.size() - 1); 
-		if(catList.contains(cat[num])){
-			num = new Random().nextInt(hm.size() - 1); 
-		}
-
-		//Retrieving of category and texture.
-		String category = "" + hm.keySet().toArray()[num];
-		String categoryItem = "" + hm.get(category).keySet().toArray()[0];
-		Texture texture = hm.get(category).get(categoryItem);
-		
-		game.getterSetter.setCategory(category);
-		game.getterSetter.setCategoryItem(categoryItem);
-		game.getterSetter.setTexture(texture);
-
-		checkButtons();
-		
-		System.out.println(category);
-	}
 	
 	/**
 	 * Create the GameScreen, there are 4 main panels to the screen. 
@@ -178,25 +174,30 @@ public class GameScreen implements Screen {
 	 * 
 	 * */
 	private void createGameScreen(){
-		
+
+		//Initialise the Panels
 		buttonPanel =  new ButtonPanel();
 		rightPanel = new RightPanel();
 		leftPanel = new LeftPanel();
 		
 		Table rootTable =  new Table();
 		rootTable.setFillParent(true);
-
+		
+		//font
+		BitmapFont font = new BitmapFont(Gdx.files.internal("whitefont.fnt"), false);
+		// Label Style for the labels
 		labelStyle = new LabelStyle();
 		labelStyle.font = font;
-		
+				
+		// LEVEL LABEL
 		levelLabel = new Label(level, labelStyle);
-		
+
+		// BACK BUTTON
 		backButton =  new TextButton("Back", skin);
-		
 		backButton.addListener(new ChangeListener(){
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
-
+				clearEverything();
 				game.setScreen(game.mainScreen);
 			}});
 		
@@ -210,328 +211,128 @@ public class GameScreen implements Screen {
 		setGameContext();
 	}
 	
-	
-	private void checkKeyboardInputs(){
-		// Checking of A-Z inputs. 
-		if(Gdx.input.isKeyPressed(Input.Keys.A)){
-			CheckLetter(Input.Keys.A , "A");			
-		}else if(Gdx.input.isKeyPressed(Input.Keys.B)){
-			CheckLetter(Input.Keys.B , "B");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.C)){
-			CheckLetter(Input.Keys.C , "C");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-			CheckLetter(Input.Keys.D , "D");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.E)){
-			CheckLetter(Input.Keys.E , "E");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.F)){
-			CheckLetter(Input.Keys.F , "F");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.G)){
-			CheckLetter(Input.Keys.G , "G");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.H)){
-			CheckLetter(Input.Keys.H , "H");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.I)){
-			CheckLetter(Input.Keys.I , "I");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.J)){
-			CheckLetter(Input.Keys.J , "J");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.K)){
-			CheckLetter(Input.Keys.K , "K");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.L)){
-			CheckLetter(Input.Keys.L , "L");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.M)){
-			CheckLetter(Input.Keys.M , "M");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.N)){
-			CheckLetter(Input.Keys.N , "N");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.O)){
-			CheckLetter(Input.Keys.O , "O");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.P)){
-			CheckLetter(Input.Keys.P , "P");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.Q)){
-			CheckLetter(Input.Keys.Q , "Q");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.R)){
-			CheckLetter(Input.Keys.R , "R");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.S)){
-			CheckLetter(Input.Keys.S , "S");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.T)){
-			CheckLetter(Input.Keys.T , "T");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.U)){
-			CheckLetter(Input.Keys.U , "U");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.V)){
-			CheckLetter(Input.Keys.V , "V");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.W)){
-			CheckLetter(Input.Keys.W , "W");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.X)){
-			CheckLetter(Input.Keys.X , "X");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.Y)){
-			CheckLetter(Input.Keys.Y , "Y");
-		}else if(Gdx.input.isKeyPressed(Input.Keys.Z)){
-			CheckLetter(Input.Keys.Z , "Z");
-		}
+	public void setGameContext(){
+		System.out.println(hm);
+		game.getterSetter.setLevel(level);
+		Object[] cat =  hm.keySet().toArray();
 		
-		// BACKSPACE - to clear all the textfields.
-		if(Gdx.input.isKeyPressed(Input.Keys.BACKSPACE)){ 
-			// If user used hint then the hint will not be cleared. 
-			if(hintTaken == true){
-				String let = "";
-				if(hintPosition == 1){
-					game.getterSetter.setText2("");
-					game.getterSetter.setText3("");
-					game.getterSetter.setText4("");
-					game.getterSetter.setText5("");
-					game.getterSetter.setText6("");
-					
-					let = game.getterSetter.getText1();
-				}
-				if(hintPosition == 2){
-					game.getterSetter.setText1("");
-					game.getterSetter.setText3("");
-					game.getterSetter.setText4("");
-					game.getterSetter.setText5("");
-					game.getterSetter.setText6("");
-					
-					let = game.getterSetter.getText2();
-				}
-				if(hintPosition == 3){
-					game.getterSetter.setText1("");
-					game.getterSetter.setText2("");
-					game.getterSetter.setText4("");
-					game.getterSetter.setText5("");
-					game.getterSetter.setText6("");
-					
-					let = game.getterSetter.getText3();
-				}
-				if(hintPosition == 4){
-					game.getterSetter.setText1("");
-					game.getterSetter.setText2("");
-					game.getterSetter.setText3("");
-					game.getterSetter.setText5("");
-					game.getterSetter.setText6("");
-					
-					let = game.getterSetter.getText4();
-				}
-				if(hintPosition == 5){
-					game.getterSetter.setText1("");
-					game.getterSetter.setText2("");
-					game.getterSetter.setText3("");
-					game.getterSetter.setText4("");
-					game.getterSetter.setText6("");
-					
-					let = game.getterSetter.getText5();
-				}
-				if(hintPosition == 6){
-					game.getterSetter.setText1("");
-					game.getterSetter.setText2("");
-					game.getterSetter.setText3("");
-					game.getterSetter.setText4("");
-					game.getterSetter.setText5("");
-					
-					let = game.getterSetter.getText6();
-				}
-				
-				for(int i = 0; i < buttonList.size(); i++){	
-					if(let.equalsIgnoreCase(
-							buttonList.get(i).getText().toString())){
-						buttonList.get(i).setText("");
-					}else 
-						buttonList.get(i).setText(breakword[i]);
-				}
-				
-			}else {
-				clearInputText();
-				for(int i = 0; i < buttonList.size(); i++){
-				buttonList.get(i).setText(breakword[i]);
-				}	
-				
-			}
-		} 
-		
-		// back to main menu
-		if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-			System.out.println("Back to MainScreen");
-			clearInputText();
-			// Clear all the task in the timer
-			System.out.println(Timer.instance.toString());
-			Timer.instance.stop();
-			Timer.instance.clear();
-			game.setScreen(game.mainScreen);
-		} 
-		
-		// ENTER - check answers
-		if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-			System.out.println("Check answers");
-			checkAnswer();
-		} 
-		
-		// F1 - HINT
-		if(Gdx.input.isKeyPressed(Input.Keys.F1)){
-			System.out.println("Hint used, Points - 5");
-			
-			// User can only use hint for once!
-			if(hintTaken == false){
-				hintPosition = getHints();
-				hintTaken = true;
-			}
+		//Random select a category!
+		int num = new Random().nextInt(hm.size() - 1); 
+		if(!catList.isEmpty()){
+			if( catList.contains(cat[num])  )
+				num = new Random().nextInt(hm.size() - 1); 
 		}
-		
-		// F2 - CATEGORY
-		if(Gdx.input.isKeyPressed(Input.Keys.F2)){
-			getWindow().setVisible(true);
-			System.out.println("Change Category");
-			
-			// Stop the timer
-//			Timer.instance.stop();
-		}
-		
-		
-	}// end of check keyboards method 
-	
-	// this method will check the button clicked and 
-	// empty the button text. 
-	private void CheckLetter(int key, String letter){
-		if(lettersKeyed.contains(key)){
-			lettersKeyed.clear();
-			getInputText(letter);
-			for(TextButton btn : buttonList){	
-				if(letter.equalsIgnoreCase(btn.getText().toString())){
-					btn.setText("");
-				}
-			}
-		}else{
-			lettersKeyed.add(key);
-		}
-	}
-	
-	/**
-	 * The method will provide the user with hint. The hint will be generated
-	 * from the string of word and the hint will be placed in the correct order
-	 * in the text field. 
-	 * 
-	 * @return the position which textfield contain the hint.*/
-	private int getHints(){
-		// For each hint, 5 points will be deducted
-		score -= 5;
-		String actualWord = game.getterSetter.getCategoryItem();
-		String hint = word.getHint(actualWord.toCharArray());
-		
-		for(TextButton btn : buttonList){	
-			if(hint.equalsIgnoreCase(btn.getText().toString())){
-				btn.setText("");
-			}
-		}
-		int position = actualWord.indexOf(hint) + 1;
-		if(position == 1){
-			game.getterSetter.setText1(hint);
-		}
-		if(position == 2){
-			game.getterSetter.setText2(hint);
-		}	
-		if(position == 3){
-			game.getterSetter.setText3(hint);
-		}
-		if(position == 4){
-			game.getterSetter.setText4(hint);
-		}
-		if(position == 5){
-			game.getterSetter.setText5(hint);
-		}
-		if(position == 6){
-			game.getterSetter.setText6(hint);
-		}
-		System.out.println("Hint provided, " +  hint + " @ positon " + position);
-		return position;
-		
-	}
-	/**
-	 * This method will check the answer in which the user type. 
-	 * */
-	private void checkAnswer(){
-		StringBuilder userAnswer = new StringBuilder();
-		userAnswer.append(textfield1.getText());
-		userAnswer.append(textfield2.getText());
-		userAnswer.append(textfield3.getText());
-		userAnswer.append(textfield4.getText()); 
-		
-		if(level.equalsIgnoreCase("Level 2")){
-			userAnswer.append(textfield5.getText());
-		}
-		if(level.equalsIgnoreCase("Level 3")){
-			userAnswer.append(textfield5.getText());
-			userAnswer.append(textfield6.getText());
-		}
-		String answer = game.getterSetter.getCategoryItem();
-		if(userAnswer.toString().equalsIgnoreCase(answer)){
-			count ++;
-			String category = game.getterSetter.getCategory();
-//			String word = game.getterSetter.getCategoryItem();
-			
-			if(count > 5){
-				clearInputText();
-				setGameContext();
-				
-				count = 0; 
-			}else {
-				score += 10;
-				scoreLabel.setText("Score: " + score);
-				game.incrementAchievement("guesstheword.animals");
 
-				nextWord(answer, category);
-
-			}
-		}else{
-			clearInputText();
-			for(int i = 0; i < buttonList.size(); i++){
-				//System.out.print(breakword[i]+ " ");
-				buttonList.get(i).setText(breakword[i]);
-			}
-		}
-	}
-	
-	// Search for the next word. used by check answers and timer. 
-	private void nextWord(String answer ,  String category){
-		// Changing of word, then the hint is reset
-		hintTaken = false;
-		Texture newTexture = null;
-		Object[] next = null;
-
-		next = hm.get(category).keySet().toArray();
+		//Retrieving of category and texture.
+		String category = "" + hm.keySet().toArray()[num];
+		catList.add(category);
 		
-		for(int i = 0; i < next.length-1; i ++){
-			if(next[i].equals(answer)){
-				
-				newTexture = hm.get(category).get(next[i+1]);
-				answer = next[i+1].toString();
-				game.getterSetter.setCategoryItem(answer);
-				game.getterSetter.setTexture(newTexture);
-				clearInputText();
-				checkButtons();
-				break;
-			}// end of nested if
-		}// end of  for loop
+		String categoryItem = "" + hm.get(category).keySet().toArray()[0];
+		Texture texture = hm.get(category).get(categoryItem);
+		
+		game.getterSetter.setCategory(category);
+		game.getterSetter.setCategoryItem(categoryItem);
+		game.getterSetter.setTexture(texture);
+
+		gm.generateWord(categoryItem);
+		gm.checkButtons();
+		gm.timer(gameTime);
+		System.out.println(category + "  " + game.getterSetter.getCategoryItem() );
 	}
 	
 	
 	// SET TEXTFIELD BASED ON INPUT.
-	private void getInputText(String input){
-		if(game.getterSetter.getText1().isEmpty())
-			game.getterSetter.setText1(input);
-		else if(game.getterSetter.getText2().isEmpty())
-			game.getterSetter.setText2(input);
-		else if(game.getterSetter.getText3().isEmpty())
-			game.getterSetter.setText3(input);
-		else if(game.getterSetter.getText4().isEmpty())
-			game.getterSetter.setText4(input);
-		else if(game.getterSetter.getText5().isEmpty())
-			game.getterSetter.setText5(input);
-		else if(game.getterSetter.getText6().isEmpty())
-			game.getterSetter.setText6(input);
+	public void getInputText(String input){
+		String word = game.getterSetter.getCategoryItem();
+		Boolean occur = gm.checkWordOccurance(word);
+		 
+		 if(occur){
+			 String []spilt = word.split("");
+			 for(int i = 0; i <= word.length() ; i ++){
+				 System.out.println(spilt[i] + " @ " + i );
+				 if(spilt[i].equalsIgnoreCase(input)){
+					 
+					 if(i == 1){
+						 textfield1.setMessageText(input);
+						 spilt[i] = "";
+						 break;
+					 }
+					 if(i == 2){
+						textfield2.setMessageText(input);
+						spilt[i] = "";
+						break;
+					 }
+					if(i == 3){
+						textfield3.setMessageText(input);
+						spilt[i] = "";
+						break;
+					}
+					if(i == 4){
+						textfield4.setMessageText(input);
+						spilt[i] = "";
+						break;
+					}
+					if(i == 5){
+						textfield5.setMessageText(input);
+						spilt[i] = "";
+						break;
+					}
+					if(i == 6){
+						textfield6.setMessageText(input);
+						spilt[i] = "";
+						break;
+					 }
+						 
+				 }
+			 }//end of for loop
+		 }else{
+			 
+			 if(textfield1.getMessageText().isEmpty())
+					textfield1.setMessageText(input);
+				else if(textfield2.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield4.getMessageText())
+						&& !input.equalsIgnoreCase(textfield5.getMessageText())
+						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
+					textfield2.setMessageText(input);
+				else if(textfield3.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield2.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield4.getMessageText())
+						&& !input.equalsIgnoreCase(textfield5.getMessageText())
+						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
+					textfield3.setMessageText(input);
+				else if(textfield4.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield2.getMessageText())
+						&& !input.equalsIgnoreCase(textfield5.getMessageText())
+						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
+					textfield4.setMessageText(input);
+				else if(textfield5.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield4.getMessageText())
+						&& !input.equalsIgnoreCase(textfield2.getMessageText())
+						&& !input.equalsIgnoreCase(textfield6.getMessageText()))
+					textfield5.setMessageText(input);
+				else if(textfield6.getMessageText().isEmpty() && !input.equalsIgnoreCase(textfield1.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield3.getMessageText()) 
+						&& !input.equalsIgnoreCase(textfield4.getMessageText())
+						&& !input.equalsIgnoreCase(textfield5.getMessageText())
+						&& !input.equalsIgnoreCase(textfield2.getMessageText()))
+					textfield6.setMessageText(input);
+		 }// end of if else (occur)
+	}
+	private void clearEverything(){
+		levelLabel.clearActions();
+		scoreLabel.clearActions();
 	}
 	
-	private void clearInputText(){
-		game.getterSetter.setText1("");
-		game.getterSetter.setText2("");
-		game.getterSetter.setText3("");
-		game.getterSetter.setText4("");
-		game.getterSetter.setText5("");
-		game.getterSetter.setText6("");
+	public void clearInputText(){
+		textfield1.setMessageText("");
+		textfield2.setMessageText("");
+		textfield3.setMessageText("");
+		textfield4.setMessageText("");
+		textfield5.setMessageText("");
+		textfield6.setMessageText("");
 	}
 
 	//----------RIGHT PANEL-------------//
@@ -540,7 +341,7 @@ public class GameScreen implements Screen {
 		
 		RightPanel(){
 			this.setFillParent(true);
-			scoreLabel =  new Label("Score: 0" , skin);
+			scoreLabel =  new Label("Score : " + score , skin);
 			this.add(scoreLabel).padBottom(30).width(100).row();
 			
 //			timeLabel = new Label("Time: " , skin);
@@ -562,6 +363,20 @@ public class GameScreen implements Screen {
 			textfield5 =  new TextField("",skin); 
 			textfield6 =  new TextField("",skin); 
 			
+			textfield1.setMessageText("");
+			textfield2.setMessageText("");
+			textfield3.setMessageText("");
+			textfield4.setMessageText("");
+			textfield5.setMessageText("");
+			textfield6.setMessageText("");
+			
+			textfield1.setDisabled(true);
+			textfield2.setDisabled(true);
+			textfield3.setDisabled(true);
+			textfield4.setDisabled(true);
+			textfield5.setDisabled(true);
+			textfield6.setDisabled(true);
+
 			//Default level - Level 1 with 4 textfields.
 			this.add(textfield1).width(50).height(50).spaceBottom(30);
 			this.add(textfield2).width(50).height(50).spaceBottom(30);
@@ -574,9 +389,7 @@ public class GameScreen implements Screen {
 				this.add(textfield6).width(50).height(50).spaceBottom(30);
 			}
 			this.row();
-			
-			buttonList = new ArrayList<TextButton>();
-			
+//			buttonList = new ArrayList<TextButton>();
 			button1 =  new TextButton("" , skin);
 			button2 =  new TextButton("" , skin);	
 			button3 =  new TextButton("" , skin);
@@ -599,6 +412,8 @@ public class GameScreen implements Screen {
 			buttonList.add(button9);
 			buttonList.add(button10);
 			
+			buttonListeners();
+			
 			this.add(button1).width(70).height(50);
 			this.add(button2).width(70).height(50);
 			this.add(button3).width(70).height(50);
@@ -610,40 +425,12 @@ public class GameScreen implements Screen {
 			this.add(button8).width(70).height(50);
 			this.add(button9).width(70).height(50);
 			this.add(button10).width(70).height(50);
-			
-			buttonListeners();
 		}
 	}
 	
 	/**
-	 * Method to set the textfield based on user input. 
-	 * */
-	private void checkTextfield(){	
-		textfield1.setText(game.getterSetter.getText1()); 
-		textfield2.setText(game.getterSetter.getText2()); 
-		textfield3.setText(game.getterSetter.getText3());
-		textfield4.setText(game.getterSetter.getText4()); 
-		textfield5.setText(game.getterSetter.getText5());
-		textfield6.setText(game.getterSetter.getText6()); 
-	}// end of checkTextfield
-	
-	/**
-	 * Method to set the buttons text based on the word generated.
-	 * */
-	private void checkButtons(){
-		String category =  game.getterSetter.getCategoryItem();
-		
-		breakword = word.breakWord(category);
-			
-		for(int i = 0; i < buttonList.size(); i++){
-			buttonList.get(i).setText(breakword[i]);
-		}
-	}//end of checkButtons
-	
-	/**
 	 * Method where all the buttons listeners are created. */
 	private void buttonListeners(){
-		
 		for(final TextButton btn : buttonList){
 			btn.addListener(new ChangeListener(){
 			@Override
@@ -661,18 +448,18 @@ public class GameScreen implements Screen {
 	 * @param button -  the button that is clicked
 	 * */
 	private void getButtonText(TextButton button){
-		if(game.getterSetter.getText1().isEmpty())
-			game.getterSetter.setText1("" + button.getText());
-		else if(game.getterSetter.getText2().isEmpty())
-			game.getterSetter.setText2("" + button.getText());
-		else if(game.getterSetter.getText3().isEmpty())
-			game.getterSetter.setText3("" + button.getText());
-		else if(game.getterSetter.getText4().isEmpty())
-			game.getterSetter.setText4("" + button.getText());
-		else if(game.getterSetter.getText5().isEmpty())
-			game.getterSetter.setText5("" + button.getText());
-		else if(game.getterSetter.getText6().isEmpty())
-			game.getterSetter.setText6("" + button.getText());
+		if(textfield1.getMessageText().isEmpty())
+			textfield1.setMessageText("" + button.getText());
+		else if(textfield2.getMessageText().isEmpty())
+			textfield2.setMessageText("" + button.getText());
+		else if(textfield3.getMessageText().isEmpty())
+			textfield3.setMessageText("" + button.getText());
+		else if(textfield4.getMessageText().isEmpty())
+			textfield4.setMessageText("" + button.getText());
+		else if(textfield5.getMessageText().isEmpty())
+			textfield5.setMessageText("" + button.getText());
+		else if(textfield6.getMessageText().isEmpty())
+			textfield6.setMessageText("" + button.getText());
 	}
 
 	//----------PICTURE PANEL-------------//
@@ -720,9 +507,8 @@ public class GameScreen implements Screen {
 	 * 
 	 * @return Category Window
 	 * */
-	private Window getWindow(){
-		hintTaken = false;
-		
+	public Window getWindow(){
+		// Set Timer to stop
 		HashMap<String, HashMap<String, Texture>> hm = null ;
 		if(level.equalsIgnoreCase("Level 1")){
 			hm = game.picture.getLevel1();
@@ -747,8 +533,7 @@ public class GameScreen implements Screen {
 			public void changed(ChangeEvent arg0, Actor arg1) {
 				
 				// Clear all the task in the timer
-				Timer.instance.stop();
-				Timer.instance.clear();
+				gm.timer(0);
 				
 				HashMap<String, HashMap<String, Texture>> hm = null ;
 				if(level.equalsIgnoreCase("Level 1")){
@@ -767,9 +552,9 @@ public class GameScreen implements Screen {
 				catList.add(category);	
 				
 				clearInputText();
-				checkButtons();
+				gm.checkButtons();
+				gm.timer(5);
 				
-				Timer.instance.start();
 				 getWindow().setVisible(false);
 			}});
 		
@@ -780,65 +565,5 @@ public class GameScreen implements Screen {
 		
 		return categoryWindow;
 	}
-	
-	@Override
-	public void render(float arg0) {
-		Gdx.gl.glClearColor( 0f, 0f, 75f, 70f );
-        Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
-        
-        // Draw the background 
-        batch.begin();
-		batch.draw(backGroudTexture, 0, 0, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight());
-		batch.end();
-		
-		
-		checkKeyboardInputs();	
-		
-		checkTextfield();
-		
-		stage.act(Gdx.graphics.getDeltaTime());
-		stage.draw();
-		picturePanel =  new PicturePanel();
-	}
-	
-	@Override
-	public void show() { 
-		setLevel();
-		createGameScreen();
-		checkButtons();
-		Gdx.input.setInputProcessor(stage);
-		
-//		Timer.instance.start();
-//		System.out.println("Start Timer Instance: " + Timer.instance.toString());
-		
-		
-		
-	}
-	
-	@Override
-	public void dispose() {
-		backGroudTexture.dispose();
-		batch.dispose();
-		skin.dispose();
-		stage.dispose();
-	}
-
-	@Override
-	public void hide() {
-	}
-
-	@Override
-	public void pause() {
-	}
-
-	@Override
-	public void resize(int arg0, int arg1) {
-	}
-
-	@Override
-	public void resume() {
-	}
-
 
 }// end of GameScreen

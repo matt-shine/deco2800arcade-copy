@@ -126,15 +126,6 @@ public class Ghost extends Mover {
 		}
 	}
 
-	// private void ghost_move() {
-	// if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
-	// facing = getDirection();
-	// updateTargetTile();
-	// } else {
-	// // Don't move!!
-	// }
-	// }
-
 	public String toString() {
 		return ghostName + " at (" + midX + ", " + midY + ") drawn at {"
 				+ drawX + ", " + drawY + "}, " + currentState + " in "
@@ -176,8 +167,6 @@ public class Ghost extends Mover {
 		int targetx = targetPoint.getX();
 		int targety = targetPoint.getY();
 		double dist;
-//		int distx = startx - targetx;
-//		int disty = starty - targety;
 		int distx = targetx - startx;
 		int disty = targety - starty;
 		dist = sqrt((distx * distx + disty * disty));
@@ -196,13 +185,11 @@ public class Ghost extends Mover {
 	 * @return
 	 */
 	public List<Tile> getTestTiles(Tile current) {
-		System.out.println("Get me some test tiles STAT!");
 		Point currentPoint = gameMap.getTilePos(current);
 		List<Tile> testTiles = new ArrayList<Tile>();
 		int currentX = currentPoint.getX();
 		int currentY = currentPoint.getY();
 		
-		System.out.println("In getTestTiles, about to check wall coll");
 		int upY = currentY - 1;
 		int leftX = currentX - 1;
 		int downY = currentY + 1;
@@ -212,25 +199,6 @@ public class Ghost extends Mover {
 		Tile leftTile = gameMap.getGrid()[leftX][currentY];
 		Tile downTile = gameMap.getGrid()[currentX][downY];
 		Tile rightTile = gameMap.getGrid()[rightX][currentY];
-
-//		if ((checkNoWallCollision(upTile) && 
-//				!upTile.equals(previousTile))) {
-//				testTiles.add(upTile);
-//		} else if (checkNoWallCollision(leftTile) && 
-//				!leftTile.equals(previousTile)) {
-//				testTiles.add(leftTile);
-//		} else if (checkNoWallCollision(downTile) && 
-//				!downTile.equals(previousTile)) {
-//				testTiles.add(downTile);
-//		} else if (checkNoWallCollision(rightTile)) {
-//			if (!rightTile.equals(previousTile)) {
-//				testTiles.add(rightTile);
-//			}
-//		} else {
-//			//Something's not right here, no where to move...
-//			System.out.println("<<GetTestTiles>> no valid directions!");
-//			this.setCurrentState(GhostState.DEAD);
-//		}
 		
 		if (this.nextTile(this.currentTile, 1, Dir.UP).getClass() != WallTile.class &&
 				!this.nextTile(this.currentTile, 1, Dir.UP).equals(previousTile)){
@@ -246,11 +214,7 @@ public class Ghost extends Mover {
 			testTiles.add(rightTile);
 		}
 		
-		if (testTiles.size() == 0) {
-			System.out.println("BAD! testTiles is empty!");
-		} else {
-			System.out.println("All is well! testTiles not empty!");
-		}
+		System.out.println("List of test tiles: " + testTiles);
 		return testTiles;
 	}
 
@@ -292,16 +256,16 @@ public class Ghost extends Mover {
 		System.out.println("<<getDirection>> current: [" + currentX +
 				 "," + currentY + "]  next: [" + nextX + "," + nextY + "]");
 		if (nextX > currentX) {
-			System.out.println("\t next tile is RIGHT");
+			System.out.println("    next tile is RIGHT");
 			return Dir.RIGHT;
 		} else if (nextX < currentX) {
-			System.out.println("\t next tile is LEFT");
+			System.out.println("    next tile is LEFT");
 			return Dir.LEFT;
 		} else if (nextY > currentY) {
-			System.out.println("\t next tile is UP");
+			System.out.println("    next tile is UP");
 			return Dir.UP;
 		} else {
-			System.out.println("\t next tile is DOWN");
+			System.out.println("    next tile is DOWN");
 			return Dir.DOWN;
 		}
 	}
@@ -318,12 +282,6 @@ public class Ghost extends Mover {
 		double dist = 9999;
 		double temp;
 
-		if (testTiles.size() == 0) {
-			System.out.println("SHIT: testTiles is empty");
-		} else {
-			System.out.println("OKAY: testTiles NOT empty...");
-		}
-
 		for (int i = 0; i < dists.size(); i++) {
 			temp = dists.get(i);
 			if (temp < dist) {
@@ -335,11 +293,12 @@ public class Ghost extends Mover {
 	}
 
 	private void ghost_move() {
-		System.out.println(this + " drawX % 16: " + drawX % 16
-				+ "drawY % 16: " + drawY % 16);
+		updateTargetTile();
+//		System.out.println(this + " drawX % 16: " + drawX % 16
+//				+ " drawY % 16: " + drawY % 16);
+		facing = getDirection();
 		if ((drawX % 16 == 8) && (drawY % 16 == 8)) {
-			facing = getDirection();
-			updateTargetTile();
+//			facing = getDirection();
 		} else {
 //			System.out.println("Well I'm a ghost and I'm floaatingg freeeee");
 //			facing = getDirection();

@@ -2,6 +2,7 @@ package deco2800.arcade.burningskies;
 
 import java.util.ArrayList;
 
+import deco2800.arcade.burningskies.entities.GodPowerUp;
 import deco2800.arcade.burningskies.entities.HealthPowerUp;
 import deco2800.arcade.burningskies.entities.PatternPowerUp;
 import deco2800.arcade.burningskies.entities.PowerUp;
@@ -26,6 +27,7 @@ public class PowerUpGenerator {
 	 * @ensure X != null || Y != null
 	 */
 	public void randomPowerUp(float X, float Y) {
+		 powers.add(new GodPowerUp(X, Y));
 		 powers.add(new HealthPowerUp(X, Y)); //Cannot avoid this as X,Y 
 		 powers.add(new SpeedPowerUp(X, Y));  //positions always change.
 		 powers.add(new UpgradePowerUp(X, Y));

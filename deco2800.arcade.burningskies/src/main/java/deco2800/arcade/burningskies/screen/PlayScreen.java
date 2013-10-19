@@ -60,6 +60,7 @@ public class PlayScreen implements Screen
 	private float healthBarX = (float) (width * 0.985);
 	private float healthBarY = height/2 - (healthBarHeight)/2;
 	
+	private int noDeaths = 0;
 	private int lives = 3;
 	private float lifePositionX = 10;
 	private float lifePositionY = height - 70;
@@ -82,7 +83,7 @@ public class PlayScreen implements Screen
 	private float levelTimer = 0f;
 	
 	
-	public PlayScreen( BurningSkies game){
+	public PlayScreen(BurningSkies game){
 		this.game = game;
 	}	
 	 
@@ -121,6 +122,7 @@ public class PlayScreen implements Screen
     	ArcadeInputMux.getInstance().addProcessor(processor);
     	
     	sp = new SpawnList(this);
+    
     }
     
     @Override
@@ -138,6 +140,10 @@ public class PlayScreen implements Screen
     	if(!game.isPaused()) {
     		
     		if(!player.isAlive()) {
+    			this.noDeaths++;
+    			if (noDeaths == 1) {
+    				game.incrementAchievement("burningskies.die");
+    			}
     			respawnTimer -= delta;
     			if(respawnTimer <= 0) {
     				stage.addActor(player);
@@ -216,41 +222,41 @@ public class PlayScreen implements Screen
 					i--;
 					player.damage(e.getHealth());
 				}
-			}	
-    	} 
-    	    	
+			}
+    	}    	
     	// Draws the map
-    	stage.draw();
-    	
-    	for (int i = 0; i < lives; i++) {
-	    	batch.begin();
-	    	batch.draw(lifeIcon, lifePositionX + lifePositionOffset*i, lifePositionY);
-	    	batch.end();
-    	}
-    	
-    	healthBar.begin(ShapeType.FilledRectangle);
-    	
-//    	score += 131;
-    	health = player.getHealth();
-    	lives = player.getLives();
-    	scoreLabel.setText("Scores: " + score);
-    	
-    	healthBarHeight = Math.max(0, healthBarStaticHeight * (player.getHealth()/player.getMaxHealth()) );
-    	
-//    	System.out.println("health: " + healthBarHeight + ",  player health: " + player.getHealth()  );
-    	
-    	if (player.getHealth() <= (player.getMaxHealth()/4) ) {
-    		healthBar.setColor(healthBarRed);
-    	} else if (player.getHealth() > (player.getMaxHealth()/4) && player.getHealth() <= (player.getMaxHealth()*3/4)) {
-    		healthBar.setColor(healthBarOrange);
-    	} else {
-    		healthBar.setColor(healthBarGreen);
-    	}
-    	
-    	healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
-    	healthBar.end();
-    }
-    
+	    stage.draw();
+	    	
+	    for (int i = 0; i < lives; i++) {
+		    batch.begin();
+		    batch.draw(lifeIcon, lifePositionX + lifePositionOffset*i, lifePositionY);
+		    batch.end();
+	    }
+	    	
+	    healthBar.begin(ShapeType.FilledRectangle);
+	    	
+	//    score += 131;
+	    health = player.getHealth();
+	    lives = player.getLives();
+	    scoreLabel.setText("Scores: " + score);
+	    	
+	    healthBarHeight = Math.max(0, healthBarStaticHeight * (player.getHealth()/player.getMaxHealth()) );
+	    	
+	//    System.out.println("health: " + healthBarHeight + ",  player health: " + player.getHealth()  );
+	    	
+	   	if (player.getHealth() <= (player.getMaxHealth()/4) ) {
+	   		healthBar.setColor(healthBarRed);
+	   	} else if (player.getHealth() > (player.getMaxHealth()/4) && player.getHealth() <= (player.getMaxHealth()*3/4)) {
+	    	healthBar.setColor(healthBarOrange);
+	    } else {
+	    	healthBar.setColor(healthBarGreen);
+	    }
+	    	
+	    healthBar.filledRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);    	
+	    healthBar.end();
+  
+	}
+	    
     private boolean outOfBounds(Entity e) {
     	// are we in bounds? if not, goodbye
 		float left = e.getX() + e.getWidth();
@@ -261,7 +267,7 @@ public class PlayScreen implements Screen
 		} 
 		return false;
     }
-    
+	    
     @Override
     public void resize(int width, int height) {
     }

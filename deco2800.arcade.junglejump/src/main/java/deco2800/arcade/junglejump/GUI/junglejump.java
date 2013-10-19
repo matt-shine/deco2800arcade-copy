@@ -108,8 +108,8 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static int lives = 3;
 
 //	public int currentLevelIndex = 0;
-	static LevelContainer currentCont = new LevelContainer();
-	public static Level currentLevel = currentCont.getLevel(currentCont.currentLevel);
+	private static LevelContainer currentCont = new LevelContainer();
+	public static Level currentLevel = getCurrentCont().getLevel(getCurrentCont().getCurrentLevel());
 //	public static int currentWorld = 0;
 
 	public static float monkeyDefaultX;
@@ -421,6 +421,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.draw(worldNumText, 85, 5, 30, 30);
 			batch.draw(livesNumText, 85, 30, 30, 30);
 			achievementTitleFont.draw(batch, "Press P to PAUSE", SCREENWIDTH-250, SCREENHEIGHT-10);
+			achievementTitleFont.draw(batch, "BACKSPACE for MENU", SCREENWIDTH-250, SCREENHEIGHT-30);
 
 			batch.end();
 			camera.update();
@@ -432,7 +433,7 @@ public class junglejump extends GameClient implements InputProcessor {
 			batch.setProjectionMatrix(camera.combined);
 			batch.begin();
 			achievementTitleFont.draw(batch, "PAUSED", SCREENWIDTH/2, SCREENHEIGHT/2);
-			batch.end();
+			batch.end();         
 			break;
 		case CONTINUE:
 			Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
@@ -679,9 +680,12 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.ENTER) {
 			if (butY == QUIT) {
-				super.dispose();
+				this.dispose();
 			}
 			if (butY == NEW_GAME) {
+				monkeyX = monkeyDefaultX;
+				monkeyY = monkeyDefaultY;
+				this.getCurrentCont().setCurrentLevel(0);
 				gameState = GameState.INPROGRESS;
 			}
 			if (butY == ACHIEVEMENTS) {
@@ -693,7 +697,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.BACKSPACE) {
 			// pressed backspace
-			if (gameState == GameState.ACHIEVEMENTS) {
+			if (gameState == GameState.ACHIEVEMENTS || gameState == GameState.INPROGRESS) {
 				// load main menu
 				gameState = GameState.AT_MENU;
 			}
@@ -747,7 +751,7 @@ public class junglejump extends GameClient implements InputProcessor {
 		}
 		if (keycode == Keys.Y) {
 			if (gameState == GameState.CONTINUE) {
-				
+				gameState = GameState.INPROGRESS;
 			}
 		}
 		if (keycode == Keys.N) {
@@ -834,6 +838,14 @@ public class junglejump extends GameClient implements InputProcessor {
 	public boolean touchUp(int arg0, int arg1, int arg2, int arg3) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public static LevelContainer getCurrentCont() {
+		return currentCont;
+	}
+
+	public static void setCurrentCont(LevelContainer currentCont) {
+		junglejump.currentCont = currentCont;
 	}
 
 }

@@ -61,7 +61,7 @@ public class Level {
 			//for (int i =0; i<map.layers.get(x).getWidth(); i++) {
 			for (int i =0; i<250; i++) {
 				for (int j = 0; j< 5; j++) {
-					System.out.println("Lyar= "+x+ " ("+i+","+(map.height-j-1)+") = "+map.layers.get(x).tiles[j][i]);
+					//System.out.println("Lyar= "+x+ " ("+i+","+(map.height-j-1)+") = "+map.layers.get(x).tiles[j][i]);
 				}
 			}
 		}

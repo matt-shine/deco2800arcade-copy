@@ -5,8 +5,6 @@ package deco2800.arcade.cyra.world;
 import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.tiled.TiledLayer;
@@ -15,8 +13,27 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+
 import deco2800.arcade.cyra.game.Cyra;
-import deco2800.arcade.cyra.model.*;
+import deco2800.arcade.cyra.model.AchievementsTracker;
+import deco2800.arcade.cyra.model.Block;
+import deco2800.arcade.cyra.model.BlockMaker;
+import deco2800.arcade.cyra.model.Bullet;
+import deco2800.arcade.cyra.model.BulletHomingDestructible;
+import deco2800.arcade.cyra.model.BulletSimple;
+import deco2800.arcade.cyra.model.CutsceneObject;
+import deco2800.arcade.cyra.model.Enemy;
+import deco2800.arcade.cyra.model.EnemySpawner;
+import deco2800.arcade.cyra.model.LaserBeam;
+import deco2800.arcade.cyra.model.MovableEntity;
+import deco2800.arcade.cyra.model.MovablePlatform;
+import deco2800.arcade.cyra.model.MovablePlatformAttachment;
+import deco2800.arcade.cyra.model.MovablePlatformSpawner;
+import deco2800.arcade.cyra.model.Player;
+import deco2800.arcade.cyra.model.RandomizedEnemySpawner;
+import deco2800.arcade.cyra.model.ResultsScreen;
+import deco2800.arcade.cyra.model.Sword;
+import deco2800.arcade.cyra.model.Zombie;
 
 /** World class controls all objects in the specified level including any collisions
  * and links Object references where needed

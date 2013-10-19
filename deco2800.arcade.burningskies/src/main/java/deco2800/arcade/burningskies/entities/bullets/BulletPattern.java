@@ -12,7 +12,7 @@ public abstract class BulletPattern extends Actor {
 	protected boolean firing;
 	protected float interval; // how often bullets are fired
 	protected PlayScreen screen; // so we can spawn things
-	private float timer;
+	protected float timer;
 	private Vector2 lastEmit; // lag compensation on movement of emitter
 	private Vector2 thisEmit = new Vector2();
 	
@@ -53,10 +53,10 @@ public abstract class BulletPattern extends Actor {
 		timer += delta;
 		if(timer < interval) return;
 		float x = 0, y = 0, timeDiff;
-		thisEmit.x = emitter.getX() + emitter.getWidth()/2;
-		thisEmit.y = emitter.getY() + emitter.getHeight()/2;
+		thisEmit.x = emitter.getCenterX();
+		thisEmit.y = emitter.getCenterY();
 		if(lastEmit == null) lastEmit = new Vector2(thisEmit);
-		// Compensate for frame drops - it happens always, bloody java
+		// Compensate for frame drops - it happens always, bloody GC
 		int loop = (int) Math.floor(timer / interval) - 1;
 		for(int i=0;i<=loop;i++) {
 			timeDiff = timer-delta-i*interval;

@@ -13,8 +13,10 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Paddle {
 
-	private static final float WIDTH = 128f;
+	private float width = 128f;
 	private static final float HEIGHT = 20f;
+	private static final float STANDARDWIDTH = 128f;
+	
 
 	Rectangle paddleShape = new Rectangle();
 	
@@ -26,8 +28,28 @@ public abstract class Paddle {
 	public Paddle(Vector2 position) {
 		this.paddleShape.x = position.x;
 		this.paddleShape.y = position.y;
-		this.paddleShape.width = WIDTH;
+		this.paddleShape.width = width;
 		this.paddleShape.height = HEIGHT;
+	}
+	
+	public float getStandardWidth() {
+		return STANDARDWIDTH;
+	}
+	
+	public void decreaseSize() {
+		this.paddleShape.width = getPaddleShapeWidth()/2;
+	}
+	
+	public void increaseSize() {
+		this.paddleShape.width = getPaddleShapeWidth()*2;
+	}
+	
+	public float getPaddleShapeWidth() {
+		return this.paddleShape.width;
+	}
+	
+	public void resizePaddle() {
+			this.paddleShape.width = getWidth();
 	}
 	
 	// Getter method for the paddles x position
@@ -42,7 +64,13 @@ public abstract class Paddle {
 	
 	// Getter method for the paddles width
 	public float getWidth() {
-		return WIDTH;
+		return width;
+	}
+	
+	//Sets the width
+	public void setWidth(float width) {
+		this.width = width;
+		resizePaddle();
 	}
 
 	/**
@@ -57,7 +85,7 @@ public abstract class Paddle {
 	 * @param render
 	 */
 	public void render(ShapeRenderer render) {
-		render.setColor(0.7f, 0.7f, 0.7f, 0.5f);
+		render.setColor(1f, 1f, 1f, 0.5f);
 		render.filledRect(paddleShape.x, paddleShape.y, paddleShape.width,
 				paddleShape.height);
 	}

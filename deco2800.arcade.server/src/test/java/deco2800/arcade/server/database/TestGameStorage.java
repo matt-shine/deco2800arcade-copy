@@ -10,15 +10,16 @@ import org.junit.Test;
 //This should work in the arcade build, else it is incorrect.
 /**
  * JUnit tests for gamestorage
- * Works as a stand alone test for game storage, but can cause issues in the arcade build 
- * when not commented out
- * To run: uncomment and run as a JUnit test
+ * If these tests fail it probably means your database has been cached
+ *  and isn't initialising with the proper columns.
+ *      - Try Ending any server resources/processes,
+ *      - Restarting your machine
  * @author Steven Sheriff
  * @see deco2800.arcade.server.database.GameStorage
  */
 public class TestGameStorage {
 
-	/*@Test
+	//@Test
 	public void testBoundaries() throws DatabaseException {
 		GameStorage gs = new GameStorage();
 		gs.initialise();
@@ -38,11 +39,11 @@ public class TestGameStorage {
 	public void testOutOfBound() throws SQLException, DatabaseException {
 		GameStorage gs = new GameStorage();
 		gs.initialise();
-		Assert.assertEquals(null,gs.getGameDescription(20));
-		Assert.assertEquals(null,gs.getGameName(20));
-		Assert.assertEquals(0,gs.getGamePrice(20));
-		Assert.assertEquals(null,gs.getGameID(20));
-		Assert.assertEquals(null,gs.getIconPath(20));
+		Assert.assertEquals(null,gs.getGameDescription(21));
+		Assert.assertEquals(null,gs.getGameName(21));
+		Assert.assertEquals(0,gs.getGamePrice(21));
+		Assert.assertEquals(null,gs.getGameID(21));
+		Assert.assertEquals(null,gs.getIconPath(21));
 		
-	}*/
+	}
 }

@@ -18,7 +18,10 @@ public class Ball {
 	// width of the ball
 	public static final float WIDTH = 20f;
 	public static final float INITIALSPEED = 400;
-	public static final float MAX_X_VELOCITY = 800f;
+	public static float MAX_X_VELOCITY = 800f;
+	private float multiplier = 1;
+	
+	
 	// velocity of the ball
 	Vector2 velocity = new Vector2();
 	// Circle representing ball
@@ -37,6 +40,7 @@ public class Ball {
 		ballCirc.x = Breakout.SCREENWIDTH / 2 - Ball.WIDTH / 2 + 64;
 		ballCirc.y = 35 + ballCirc.radius;
 		ballCirc.radius = WIDTH/2;
+		setColor(0.7f, 0.7f, 0.7f, 0.5f);
 	}
 	
 	// Getter method for the balls X position
@@ -58,11 +62,11 @@ public class Ball {
 	// Setter method for the X Velocity of the ball
 	public void setXVelocity(float newVelocity) {
 		if (newVelocity > MAX_X_VELOCITY) {
-			this.velocity.x = MAX_X_VELOCITY;
+			this.velocity.x = multiplier * MAX_X_VELOCITY;
 			return;
 		}
 		if (newVelocity < -MAX_X_VELOCITY) {
-			this.velocity.x = -MAX_X_VELOCITY;
+			this.velocity.x = -MAX_X_VELOCITY * multiplier;
 			return;
 		}
 		this.velocity.x = newVelocity;
@@ -72,6 +76,7 @@ public class Ball {
 	public void reset(Vector2 paddlePos) {
 		velocity.x = 0;
 		velocity.y = 0;
+		multiplier = 1;
 		ballCirc.x = paddlePos.x - Ball.WIDTH / 2 + 64;
 		ballCirc.y = paddlePos.y + 25 + ballCirc.radius;
 	}
@@ -114,15 +119,15 @@ public class Ball {
 			cosAngle *= 1.5;
 		}
 		float pX = paddle.getPaddleX();
-		float pWidth = paddle.getWidth();
+		float pWidth = paddle.getPaddleShapeWidth();
 		float bX = ballCirc.x;
 		float newVelocity = 0f;
 		// Handles the ball if it hits the left end of the paddle
-		if (bX < pX + pWidth/7) {
+		if (bX < pX + 2*pWidth/9) {
 			newVelocity = - (Math.abs(getXVelocity()) + 100 + 80
 					* cosAngle);
 		// Handles the ball if it hits between the left end and the middle	
-		} else if (bX >= pX + pWidth/7 && bX < pX + 3*pWidth/7) {
+		} else if (bX >= pX + 2*pWidth/9 && bX < pX + 4*pWidth/9) {
 			if (getXVelocity() < 0) {
 				newVelocity = (getXVelocity() + 40
 					* cosAngle);
@@ -131,11 +136,11 @@ public class Ball {
 						* cosAngle);
 			}
 		// Handles the ball if it hit in the middle of the paddle	
-		} else if (bX >= pX + 3*pWidth/7 && bX < pX + 4*pWidth/7) {
+		} else if (bX >= pX + 4*pWidth/9 && bX < pX + 5*pWidth/9) {
 			newVelocity = (getXVelocity()
 					* Math.abs(cosAngle));
 		// Handles the ball if it hits between the right end and the middle
-		} else if (bX >= pX + 4*pWidth/7 && bX < pX + 6*pWidth/7) {
+		} else if (bX >= pX + 5*pWidth/9 && bX < pX + 7*pWidth/9) {
 			if (getXVelocity() < 0) {
 				newVelocity = (getXVelocity() + 40
 					* cosAngle);
@@ -145,7 +150,7 @@ public class Ball {
 						* cosAngle);
 			}
 		// Handles the ball if it hits the right end of the paddle
-		} else if (bX >= pX + 6*pWidth/7 && bX <= pX + pWidth) {
+		} else if (bX >= pX + 7*pWidth/9 && bX <= pX + pWidth) {
 			newVelocity = 100 + (Math.abs(getXVelocity()) + 80
 					* cosAngle);
 		}
@@ -153,12 +158,14 @@ public class Ball {
 	}
 
 	// Reverse the X direction
-	public void bounceX() {
+	public void bounceX(int offset) {
+		this.ballCirc.x += offset;
 		velocity.x *= -1;
 	}
 
 	// Reverse the Y direction
-	public void bounceY() {
+	public void bounceY(int offset) {
+		this.ballCirc.y += offset;
 		velocity.y *= -1;
 	}
 	
@@ -188,5 +195,15 @@ public class Ball {
 		velocity.x = xFactor;
 		velocity.y = yFactor + 200;
 	}
+	
+	/**
+	 * Method for powerup to slow the ball
+	 */
+	public void slowBall () {
+		this.multiplier = 0.7f;
+		this.velocity.y *= multiplier;
+	}
+	
+	
 
 }

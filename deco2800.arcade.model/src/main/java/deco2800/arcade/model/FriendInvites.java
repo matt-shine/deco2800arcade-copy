@@ -1,6 +1,5 @@
 package deco2800.arcade.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -9,17 +8,13 @@ import java.util.Set;
  * @author Leggy
  * 
  */
-public class FriendInvites {
-
-	private Set<User> friendInvites;
-	private int updatedID;
-	private boolean added;
+public class FriendInvites extends UserSet{
 
 	/**
 	 * Creates a new FriendInvites.
 	 */
 	public FriendInvites() {
-		this.friendInvites = new HashSet<User>();
+		super();
 	}
 
 	/**
@@ -30,7 +25,7 @@ public class FriendInvites {
 	 *            The FriendInvites instance to be copied.
 	 */
 	public FriendInvites(FriendInvites f) {
-		this.friendInvites = new HashSet<User>(f.friendInvites);
+		super(f);
 	}
 
 	/**
@@ -39,7 +34,7 @@ public class FriendInvites {
 	 * @return Returns a Set representation of this.
 	 */
 	public Set<User> getSet() {
-		return new HashSet<User>(friendInvites);
+		return super.getSet();
 	}
 
 	/**
@@ -49,21 +44,18 @@ public class FriendInvites {
 	 *            The User to be added.
 	 */
 	public void add(User user) {
-		if (!contains(user)) {
-			this.friendInvites.add(new User(user));
-			updatedID = user.getID();
-			added = true;
-		}
+		super.add(user);
 	}
 	
 	/**
-	 * Adds a Set of Users to this.
+	 * Adds a Set of Users to this. THIS METHOD IS NOT TO BE USED FOR PURPOSES
+	 * OTHER THAN LOADING PLAYER DATA FROM DATABASE.
 	 * 
 	 * @param user
 	 *            The Set of Users to be added.
 	 */
 	public void addAll(Set<User> user) {
-		this.friendInvites.addAll(user);
+		super.addAll(user);
 	}
 
 	/**
@@ -73,11 +65,7 @@ public class FriendInvites {
 	 *            The User to be removed.
 	 */
 	public void remove(User user) {
-		if (contains(user)) {
-			this.friendInvites.remove(new User(user));
-			updatedID = user.getID();
-			added = false;
-		}
+		super.remove(user);
 	}
 
 	/**
@@ -88,7 +76,7 @@ public class FriendInvites {
 	 * @return Returns true if the User is in this, false otherwise.
 	 */
 	public boolean contains(User user) {
-		return this.friendInvites.contains(new User(user));
+		return super.contains(user);
 	}
 	
 	/**
@@ -97,7 +85,7 @@ public class FriendInvites {
 	 * @return Returns the ID of the field in the most recent change.
 	 */
 	public int getUpdatedID() {
-		return updatedID;
+		return super.getUpdatedID();
 	}
 
 	/**
@@ -107,6 +95,6 @@ public class FriendInvites {
 	 *         was a deletion.
 	 */
 	public boolean getAdded() {
-		return added;
+		return super.getAdded();
 	}
 }

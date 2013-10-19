@@ -1,6 +1,8 @@
 package deco2800.arcade.pong;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -18,12 +20,11 @@ import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.highscores.Highscore;
 import deco2800.arcade.client.highscores.HighscoreClient;
 import deco2800.arcade.client.network.NetworkClient;
 import deco2800.arcade.client.AchievementClient;
 
-
-import java.util.ArrayList;
 import deco2800.arcade.model.Achievement;
 
 /**
@@ -75,26 +76,14 @@ public class Pong extends GameClient {
 		players[0] = player.getUsername();
 		players[1] = "Player 2"; //TODO eventually the server may send back the opponent's actual username
         this.networkClient = networkClient; //this is a bit of a hack
-        this.achievementClient = new AchievementClient(networkClient);
+        //this.achievementClient = new AchievementClient(networkClient);
 
         
-        //These methods are just used for testing HighscoreClient 
-        
+        //These calls are just used for testing HighscoreClient 
         //Creating new HighscoreClient connection
-        HighscoreClient hsd = new HighscoreClient("Dylan", "Connect4", networkClient);
+        HighscoreClient hsd = new HighscoreClient(player.getUsername(), "Pong", networkClient);
         
-        //Single score
-        //hsd.storeScore("Number", 1290193);
-        
-        //Multiple scores
-        //hsd.addMultiScoreItem("Number", 123345);
-        //hsd.addMultiScoreItem("Distance", 123456543);
-        //hsd.sendMultiScoreItems();
-        
-        
-        //Getting scores
-        	//Not done yet.
-		System.out.println("Request ID: " + hsd.responseTest(1));
+        //hsd.storeScore("Number", 1234567890);
 	}
 	
 	/**
@@ -102,8 +91,6 @@ public class Pong extends GameClient {
 	 */
 	@Override
 	public void create() {
-		
-        
         //add the overlay listeners
         this.getOverlay().setListeners(new Screen() {
 
@@ -182,12 +169,7 @@ public class Pong extends GameClient {
 		gameState = new ReadyState();
 		statusMessage = "Click to start!";
 		
-        // achievements demo
-        AchievementClient achClient = getAchievementClient();
-        ArrayList<Achievement> achievements = achClient.achievementsForGame(getGame());
-        for(Achievement ach : achievements) {
-            System.out.println(ach.toString());
-        }
+        
 	}
 
 	@Override
@@ -275,7 +257,7 @@ public class Pong extends GameClient {
 		    //If the local player has won, send an achievement
 		    if (winner == 0) {
 		    	incrementAchievement("pong.winGame");
-                incrementAchievement("pong.master");
+			incrementAchievement("pong.master");
 		    }
 		} else {
 			// No winner yet, get ready for another point

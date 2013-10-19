@@ -1,4 +1,4 @@
-package deco2800.server.database;
+ package deco2800.server.database;
 
 import java.util.HashSet;
 import java.util.List;
@@ -59,6 +59,24 @@ public class PlayerDatabaseManager {
 	public void updateBio(int playerID, String bio) {
 		try {
 			playerStorage.updateBio(playerID, bio);
+		} catch (DatabaseException e) {
+			// TODO Error catch?
+		}
+	}
+	
+	/**
+	 * Updates the players age to that provided.
+	 * 
+	 * @param playerID
+	 *            The Player's playerID.
+	 * @param age
+	 *            The Player's new age
+	 * @require age is valid, that is it obeys all restrictions imposed by the
+	 *          Player class. Player with playerID exists.
+	 */
+	public void updateAge(int playerID, String age) {
+		try {
+			playerStorage.updateAge(playerID, age);
 		} catch (DatabaseException e) {
 			// TODO Error catch?
 		}

@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import deco2800.arcade.client.ArcadeInputMux;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.model.Game;
 import deco2800.arcade.model.LibraryStyle;
@@ -64,7 +66,7 @@ public class GridScreen implements Screen, LibraryScreen {
      * Setup required styles
      */
     private void styleSetup() {
-        libSkin = new Skin(Gdx.files.internal("libSkin.json"));
+        libSkin = new Skin(Gdx.files.classpath("Assets/libSkin.json"));
     }
 
     /**
@@ -74,13 +76,13 @@ public class GridScreen implements Screen, LibraryScreen {
 
         stage = new Stage();
         batch = new SpriteBatch();
-        splashTexture = new Texture("Assets/splashscreen-grid.jpg");
-        gridTexture = new Texture("Assets/gridbk.png");
+        splashTexture = new Texture(Gdx.files.classpath("Assets/splashscreen-grid.jpg"));
+        gridTexture = new Texture(Gdx.files.classpath("Assets/gridbk.png"));
         image = new Image(splashTexture);
         stage.addActor(image);
 
-        listIconTexture = new Texture("Assets/list-icon.png");
-        gridIconTexture = new Texture("Assets/grid-icon.png");
+        listIconTexture = new Texture(Gdx.files.classpath("Assets/list-icon.png"));
+        gridIconTexture = new Texture(Gdx.files.classpath("Assets/grid-icon.png"));
         listImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(listIconTexture)));
         gridImageButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(gridIconTexture)));
 
@@ -170,7 +172,14 @@ public class GridScreen implements Screen, LibraryScreen {
         stage.addActor(homeButton);
         stage.addActor(storeButton);
         stage.addActor(userProfileButton);
-        Gdx.input.setInputProcessor(stage);
+        
+        //you cannot use this method
+        //Gdx.input.setInputProcessor(stage);
+        //use this instead
+        ArcadeInputMux.getInstance().addProcessor(stage);
+        //you need to remove this listener when you're done with it.
+        //-Simon
+        
     }
 
     @Override
@@ -210,6 +219,7 @@ public class GridScreen implements Screen, LibraryScreen {
 
     @Override
     public void dispose() {
+    	ArcadeInputMux.getInstance().removeProcessor(stage);
         stage.dispose();
         batch.dispose();
     }

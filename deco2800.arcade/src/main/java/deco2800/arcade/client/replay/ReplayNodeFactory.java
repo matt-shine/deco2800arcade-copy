@@ -10,14 +10,20 @@ public class ReplayNodeFactory {
     private static Map<String, String[]> lookupEvents = new HashMap<String, String[]>();
 
     /**
+	 * Ensures that the class can never be instantiated
+	 */
+	private ReplayNodeFactory() {
+		
+	}
+	
+    /**
      * Create a replay node from a registered event name.
      * @param eName
      * @param eData An array of data corresponding to registered keys, or use varargs.
-     * @return
+     * @return the ReplayNode that was created.
      * @throws Exception
      */
     public static ReplayNode createReplayNode(String eName, Object... eData)
-            throws ReplayItemDataInvalidException
     {
         HashMap<String, ReplayItem> data = new HashMap<String, ReplayItem>();
         ReplayItem riTemp;

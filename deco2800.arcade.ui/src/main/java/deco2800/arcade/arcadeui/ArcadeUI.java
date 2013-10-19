@@ -1,5 +1,7 @@
 package deco2800.arcade.arcadeui;
 
+import deco2800.arcade.arcadeui.store.StoreHome;
+import deco2800.arcade.arcadeui.store.StoreScreen;
 import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -19,10 +21,12 @@ import deco2800.arcade.model.Player;
 public class ArcadeUI extends GameClient {
 	
 	LoginScreen login = null;
-	StoreScreen store = null;
+	StoreHome store = null;
 	HomeScreen home = null;
     FrontPage main = null;
     RegisterScreen register = null;
+    MultiplayerLobby lobby = null;
+    BettingWindow betting = null;
 
 	public ArcadeUI(Player player, NetworkClient networkClient) {
 		super(player, networkClient);
@@ -38,20 +42,31 @@ public class ArcadeUI extends GameClient {
 
         // Initialise the different screens.
         login = new LoginScreen(this);
-        home = new HomeScreen();
-        store = new StoreScreen();
-        main = new FrontPage();
+
+        home = new HomeScreen(this);
+        store = new StoreHome(this);
+        main = new FrontPage(this);
+
         register = new RegisterScreen(this);
+        lobby = new MultiplayerLobby(this);
+        betting = new BettingWindow(this);
 
         // Check to see if a user is logged in.
         if (ArcadeSystem.isLoggedIn()) {
-            this.setScreen(home);
+            this.setScreen(main);
         } else {
             this.setScreen(login);
+        }
+        
+        if (ArcadeSystem.isMultiplayerEnabled()) {
+        	this.setScreen(lobby);
         }
 
         super.create();
     }
+    
+    
+    
 
 	@Override
 	public void dispose() {
@@ -83,5 +98,19 @@ public class ArcadeUI extends GameClient {
 	public Game getGame() {
 		return game;
 	}
-		
+	
+	public HomeScreen getHome() {
+		return home;
+	}
+	
+	public StoreHome getStore() {
+		return store;
+	}
+	
+	public MultiplayerLobby getLobby() {
+		return lobby;
+	}
+	public BettingWindow getBetting() {
+		return betting;
+	}
 }

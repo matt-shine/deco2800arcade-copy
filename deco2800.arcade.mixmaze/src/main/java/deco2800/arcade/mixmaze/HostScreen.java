@@ -32,7 +32,7 @@ class HostScreen extends LocalScreen {
 
 	@Override
 	protected void newGame() {
-		model = new MixMazeModel(5, BEGINNER, 60*2);
+		model = new MixMazeModel(5, BEGINNER, 60 * 2);
 		isConnected = false;
 
 		os = new ObjectSpace();
@@ -56,9 +56,9 @@ class HostScreen extends LocalScreen {
 		}
 		model.getPlayer(1).addViewer(p1);
 		model.getPlayer(2).addViewer(p2);
-		setupTimer();
-		startGame();
 		client.sendTCP("signal: game started");
+		setupTimer(model.getGameMaxTime());
+		startGame();
 	}
 
 	static void register(EndPoint endPoint) {
@@ -71,12 +71,12 @@ class HostScreen extends LocalScreen {
 		kryo.register(PlayerModel.Action.class);
 		kryo.register(ItemModel.Type.class);
 		/*
-		kryo.register(IllegalStateException.class);
-		kryo.register(IllegalArgumentException.class);
-		*/
+		 * kryo.register(IllegalStateException.class);
+		 * kryo.register(IllegalArgumentException.class);
+		 */
 	}
 
-	public class HostListener extends Listener {
+	private class HostListener extends Listener {
 
 		public void received(Connection c, Object o) {
 			if (o instanceof String) {
@@ -85,8 +85,7 @@ class HostScreen extends LocalScreen {
 				logger.debug("string received: {}", msg);
 				if ("request: game model".equals(msg)) {
 					sendModel(c);
-				} else if ("response: client viewers"
-						.equals(msg)) {
+				} else if ("response: client viewers".equals(msg)) {
 					recvViewers(c);
 					client = c;
 					isConnected = true;
@@ -106,20 +105,17 @@ class HostScreen extends LocalScreen {
 
 			for (int j = 0; j < boardSize; j++)
 				for (int i = 0; i < boardSize; i++) {
-					t = ObjectSpace.getRemoteObject(c,
-							1700 + j*100 + i,
+					t = ObjectSpace.getRemoteObject(c, 1700 + j * 100 + i,
 							TileModelObserver.class);
 					((RemoteObject) t).setNonBlocking(true);
 					((RemoteObject) t).setTransmitExceptions(false);
 					model.getBoardTile(i, j).addObserver(t);
 				}
 
-			p1 = ObjectSpace.getRemoteObject(c, 101,
-					PlayerModelObserver.class);
+			p1 = ObjectSpace.getRemoteObject(c, 101, PlayerModelObserver.class);
 			((RemoteObject) p1).setNonBlocking(true);
 			((RemoteObject) p1).setTransmitExceptions(false);
-			p2 = ObjectSpace.getRemoteObject(c, 102,
-					PlayerModelObserver.class);
+			p2 = ObjectSpace.getRemoteObject(c, 102, PlayerModelObserver.class);
 			((RemoteObject) p2).setNonBlocking(true);
 			((RemoteObject) p2).setTransmitExceptions(false);
 		}

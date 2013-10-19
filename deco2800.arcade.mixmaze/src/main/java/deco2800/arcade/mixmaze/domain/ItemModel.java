@@ -9,7 +9,20 @@ public abstract class ItemModel {
 	 * Item types
 	 */
 	public enum Type {
-		BRICK, PICK, TNT, UNKNOWN, NONE
+		/** Brick */
+		BRICK,
+
+		/** Pick */
+		PICK,
+
+		/** TNT */
+		TNT,
+
+		/** Unrecognised item */
+		UNKNOWN,
+
+		/** Not an item */
+		NONE
 	}
 
 	/** The type of this item */
@@ -17,8 +30,9 @@ public abstract class ItemModel {
 
 	/**
 	 * Constructor
-	 *
-	 * @param type	the item type
+	 * 
+	 * @param type
+	 *            the item type
 	 */
 	protected ItemModel(Type type) {
 		this.type = type;
@@ -26,7 +40,7 @@ public abstract class ItemModel {
 
 	/**
 	 * Returns the type of this item.
-	 *
+	 * 
 	 * @return the type
 	 */
 	Type getType() {

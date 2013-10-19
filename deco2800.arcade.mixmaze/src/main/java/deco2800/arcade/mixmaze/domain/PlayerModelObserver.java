@@ -1,6 +1,5 @@
 package deco2800.arcade.mixmaze.domain;
 
-
 public interface PlayerModelObserver {
 
 	void updateScore(int score);

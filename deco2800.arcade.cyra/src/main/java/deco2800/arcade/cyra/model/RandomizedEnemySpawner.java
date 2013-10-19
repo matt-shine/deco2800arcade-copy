@@ -97,7 +97,7 @@ public class RandomizedEnemySpawner {
 							}
 							if (!collision) {
 								es.getPosition().y = yChange;
-								System.out.println("Spawning new from randomized at "+ es.getPosition() + "campos="+cam.position.x+" camview="+cam.viewportWidth);
+								//System.out.println("Spawning new from randomized at "+ es.getPosition() + "campos="+cam.position.x+" camview="+cam.viewportWidth);
 								output = es.spawnNewIfPossible();
 								break;
 							}
@@ -105,10 +105,10 @@ public class RandomizedEnemySpawner {
 					}
 					es.getPosition().y = originalY;
 					if (output != null) {
-						System.out.println("Spawning!!!!");
+						//System.out.println("Spawning!!!!");
 						break;
 					} else {
-						System.out.println("returned enemy was null");
+						//System.out.println("returned enemy was null");
 					}
 				}
 				return output;

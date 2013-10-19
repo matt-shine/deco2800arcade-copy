@@ -1,7 +1,24 @@
 package deco2800.arcade.chess;
 
+//import deco2800.arcade.chess.screen.HelpScreen;
+//import deco2800.arcade.chess.MenuScreen;
+import deco2800.arcade.chess.SplashScreen;
+import deco2800.arcade.client.AchievementClient;
+import deco2800.arcade.client.ArcadeInputMux;
+import deco2800.arcade.client.ArcadeSystem;
 import deco2800.arcade.client.GameClient;
+import deco2800.arcade.client.UIOverlay;
+import deco2800.arcade.client.UIOverlay.PopupMessage;
 import deco2800.arcade.client.network.NetworkClient;
+import deco2800.arcade.client.highscores.HighscoreClient;
+import deco2800.arcade.client.network.listener.ReplayListener;
+import deco2800.arcade.client.replay.ReplayEventListener;
+import deco2800.arcade.client.replay.ReplayHandler;
+import deco2800.arcade.client.replay.ReplayNode;
+import deco2800.arcade.client.replay.ReplayNodeFactory;
+import deco2800.arcade.model.Achievement;
+import deco2800.arcade.model.AchievementProgress;
+import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.chess.pieces.King;
@@ -12,8 +29,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -22,28 +42,49 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.Input.Keys;
 
 @ArcadeGame(id = "chess")
-public class Chess extends GameClient implements InputProcessor {
-	//FIXME class needs tidying up
-	
+public class Chess extends GameClient implements InputProcessor, Screen {
+	private static final Game game;
+	public List<int []> pieces = new ArrayList<int []>();
+	static {
+		game = new Game();
+		game.id = "chess";
+		game.name = "Chess";
+		game.description = "A game of Chess, where players duke it out dubbed " +
+				"a team white or black with the aim of " +
+				"the game being to capture the enemy's king, " +
+				"this is called 'CheckMate'."; 
+	}
+	private ReplayHandler replayHandler;
+	private ReplayListener replayListener;
 	// This shows whether a piece is selected and ready to move.
 	boolean moving = false;
-	Piece movingPiece = null;
-
+	static Piece movingPiece = null;
+	static boolean isReplaying = false;
 	// Sprite offsets
 	int horizOff = SCREENWIDTH / 2 - 256;
 	int verticOff = SCREENHEIGHT / 2 - 256;
 	int pieceHorizOff = 24;
 	int pieceVerticOff = 24;
-
+	boolean flag = true;
+	private String info;
+	BitmapFont gameInfo;
+	
 	// Piece positions
-	// x-co-ords
 	int[] whiteRook1Pos, whiteKnight1Pos, whiteBishop1Pos, whiteKingPos,
 			whiteQueenPos, whiteBishop2Pos, whiteKnight2Pos, whiteRook2Pos;
 	int[] blackRook1Pos, blackKnight1Pos, blackBishop1Pos, blackKingPos,
@@ -53,19 +94,17 @@ public class Chess extends GameClient implements InputProcessor {
 	int[] blackPawn0Pos, blackPawn1Pos, blackPawn2Pos, blackPawn3Pos,
 			blackPawn4Pos, blackPawn5Pos, blackPawn6Pos, blackPawn7Pos;
 
-	Board board;
-	
+	static Board board;
+
 	boolean players_move;
 	boolean playing;
-	Piece piece = new King(false);
-	private String[] players = new String[2]; // The names of the players: the
-												// local player is always
-												// players[0]
+	private String[] players = new String[2];
 
 	private OrthographicCamera camera;
 
 	private InputMultiplexer inputMultiplexer = new InputMultiplexer(this);
 
+	private static boolean recording;
 	public static final int SCREENHEIGHT = 720;
 	public static final int SCREENWIDTH = 1280;
 	public static final int NUM_1 = 8, NUM_2 = 9, NUM_3 = 10, NUM_4 = 11;
@@ -75,6 +114,17 @@ public class Chess extends GameClient implements InputProcessor {
 
 	private Texture chessBoard;
 
+	// Buttons and screens
+	private TextButton replayButton, startreplayButton, backButton,
+			newGameButton, newGameButtonEasy, newGameButtonHard;
+	private Stage stage;
+	private BitmapFont BmFontA, BmFontB;
+	private TextureAtlas map;
+	private Skin skin;
+	Texture splashTexture;
+	Texture splashTexture2;
+	Sprite splashSprite;
+
 	private Sprite blackBishop1, blackBishop2, blackRook1, blackRook2,
 			blackKnight1, blackKnight2, blackKing, blackQueen, blackPawn0,
 			blackPawn1, blackPawn2, blackPawn3, blackPawn4, blackPawn5,
@@ -82,13 +132,30 @@ public class Chess extends GameClient implements InputProcessor {
 			whiteRook2, whiteKnight1, whiteKnight2, whiteKing, whiteQueen,
 			whitePawn0, whitePawn1, whitePawn2, whitePawn3, whitePawn4,
 			whitePawn5, whitePawn6, whitePawn7;
-	
+
 	private int loadedStyle;
 	private ArrayList<String> styles;
 
+	// Stores the instance of the UIOverlay
+	private UIOverlay Overlay;
+
+	// Tracks whether the game is paused
+	boolean paused = false;
+	// Tracks level of single player mode
+	boolean EasyComputerOpponent;
+	boolean HardComputerOpponent;
+
+	// Tracks if multiplayer is on
+	boolean Multiplayer = false;
+
 	// Network client for communicating with the server.
 	// Should games reuse the client of the arcade somehow? Probably!
-	private NetworkClient networkClient;	
+	private NetworkClient networkClient;
+
+	public SplashScreen splashScreen;
+	public MenuScreen menuScreen;
+
+	private HashMap<Piece, int[]> pieceMaps = new HashMap<Piece, int[]>();
 
 	/**
 	 * Initialises a new game
@@ -96,44 +163,66 @@ public class Chess extends GameClient implements InputProcessor {
 	public Chess(Player player, NetworkClient networkClient) {
 
 		super(player, networkClient);
+
 		initPiecePos();
 		board = new Board();
 		movePieceGraphic();
-		this.networkClient = networkClient; // this is a bit of a hack
+		splashScreen = new SplashScreen(this);
+		menuScreen = new MenuScreen(this);
+		setScreen(splashScreen);
+		this.networkClient = networkClient;
 		players[0] = player.getUsername();
-		players[1] = "Player 2"; // TODO eventually the server may send back the
-									// opponent's actual username
-		
+		players[1] = "Player 2";
+		// setup highscore client
+		HighscoreClient player1 = new HighscoreClient(players[0], "chess",
+				networkClient);
+		// replay stuff
+		replayHandler = new ReplayHandler(this.networkClient);
+		replayListener = new ReplayListener(replayHandler);
+		this.networkClient.addListener(replayListener);
+
+		// Set up the movePiece event to take a piece id, target_x position and
+		// target_y position
+
+		replayHandler.addReplayEventListener(initReplayEventListener());
+		ReplayNodeFactory.registerEvent("movePiece", new String[] { "start_x",
+				"start_y", "target_x", "target_y" });
+
+		// True means AI is playing, false if it isn't
+		// EasyComputerOpponent = false;
+
 		URL resource = this.getClass().getResource("/");
-		
-		String path = resource.toString().replace(".arcade/build/classes/main/", 
-				".arcade.chess/src/main/").replace("file:", "") + 
-				"resources/imgs/styles.txt";
-		
+
+		/*String path = resource
+				.toString()
+				.replace(".arcade/build/classes/main/",
+						".arcade.chess/src/main/").replace("file:", "")
+				+ "resources/imgs/styles.txt";*/
+
 		styles = new ArrayList<String>();
-		
-	    try {
-	    	BufferedReader br = new BufferedReader(new FileReader(path));
-	        String line = br.readLine();
 
-	        while (line != null) {
-	            styles.add(line);
-	            line = br.readLine();
-	        }
-	        br.close();
-	    } catch (FileNotFoundException e) {
-	    	System.out.println(e.getMessage());
-	    } catch (IOException e) {
-	    	System.out.println(e.getMessage());
+		try {
+			BufferedReader br = Gdx.files.internal("imgs/styles.txt").reader(512);
+			String line = br.readLine();
+
+			while (line != null) {
+				styles.add(line);
+				line = br.readLine();
+			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			System.err.println(e.getMessage());
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
 		}
-	    
-	    loadedStyle = 0;	    
 
+		loadedStyle = 2;
 	}
 
 	@Override
 	public void create() {
 		super.create();
+
 		// Initialise camera
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false);
@@ -144,40 +233,47 @@ public class Chess extends GameClient implements InputProcessor {
 		font.setScale(2);
 		batch = new SpriteBatch();
 
+		info = "White teams turn";
+		gameInfo = new BitmapFont();
+
 		Texture.setEnforcePotImages(false);
 
+		// Add in correct multiplexer
 		inputMultiplexer.addProcessor(this);
-		Gdx.input.setInputProcessor(inputMultiplexer);
+		ArcadeInputMux.getInstance().addProcessor(inputMultiplexer);
+
+		Overlay = this.getOverlay();
 
 		// load the images for the droplet and the bucket, 512x512 pixels each
-		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
+		chessBoard = new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/board.png"));
 
 		// Pieces
-		blackBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black B.png")));
-		blackRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black R.png")));
-		blackKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black N.png")));
-		blackKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black K.png")));
-		blackQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black Q.png")));
-		blackPawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black P.png")));
+		blackBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black B.png")));
+		blackRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black R.png")));
+		blackKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black N.png")));
+		blackKing = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black K.png")));
+		blackQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black Q.png")));
+		blackPawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black P.png")));
 
-		whiteBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White B.png")));
-		whiteRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White R.png")));
-		whiteKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White N.png")));
-		whiteKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White K.png")));
-		whiteQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White Q.png")));
-		whitePawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White P.png")));
+		whiteBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White B.png")));
+		whiteRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White R.png")));
+		whiteKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White N.png")));
+		whiteKing = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White K.png")));
+		whiteQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White Q.png")));
+		whitePawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White P.png")));
 
 		whiteRook2 = whiteRook1;
 		whiteBishop2 = whiteBishop1;
@@ -200,31 +296,92 @@ public class Chess extends GameClient implements InputProcessor {
 		blackPawn5 = blackPawn0;
 		blackPawn6 = blackPawn0;
 		blackPawn7 = blackPawn0;
-		
+
 		this.getOverlay().setListeners(new Screen() {
 			@Override
 			public void hide() {
 			}
-		
+
 			@Override
 			public void show() {
 			}
-			
+
 			@Override
-			public void pause() {}
+			public void pause() {
+
+			}
+
 			@Override
 			public void render(float arg0) {
 			}
-			@Override
-			public void resize(int arg0, int arg1) {}
-			@Override
-			public void resume() {}
-			@Override
-			public void dispose() {}
-		});
 
-		
-		
+			@Override
+			public void resize(int arg0, int arg1) {
+			}
+
+			@Override
+			public void resume() {
+			}
+
+			@Override
+			public void dispose() {
+			}
+		});
+		makeButtons();
+		replayHandler.startSession("chess", player.getUsername());
+		// Pause game and wait for connection if multiplayer is selected
+		if (Multiplayer) {
+			paused = true;
+		}
+	}
+
+	private static ReplayEventListener initReplayEventListener() {
+		return new ReplayEventListener() {
+			public void replayEventReceived(String eType, ReplayNode eData) {
+				System.out.println("Got event!");
+
+				// Built in event types
+				if (eType.equals("node_pushed")) {
+					System.out.println(eType);
+					System.out.println(eData);
+				}
+				if (eType.equals("event_pushed")) {
+					System.out.println(eType);
+				}
+				if (eType.equals("replay_reset")) {
+					System.out.println("replay reset");
+				}
+				if (eType.equals("playback_complete")) {
+					System.out.println("playback finished");
+					isReplaying = false;
+				}
+
+				// Custom events
+
+				if (eType.equals("movePiece")) {
+					int startx = eData.getItemForString("start_x").intVal();
+					int starty = eData.getItemForString("start_y").intVal();
+					System.out.println("Move from: " + startx + "," + starty);
+					for (Piece piece : board.findActivePieces()) {
+						if (board.findPiece(piece)[0] == startx
+								&& board.findPiece(piece)[1] == starty) {
+							int[] movement = {
+									eData.getItemForString("target_x").intVal(),
+									eData.getItemForString("target_y").intVal() };
+
+							board.movePiece(piece, movement);
+
+							break;
+						}
+					}
+				}
+
+				if (eType.equals("playback_complete")) {
+					System.out.println("playback finished");
+
+				}
+			}
+		};
 	}
 
 	/**
@@ -232,26 +389,50 @@ public class Chess extends GameClient implements InputProcessor {
 	 */
 	@Override
 	public void render() {
-		// Pieces
+		Gdx.graphics.getGLCommon().glClear(
+				GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+		batch.begin();
+		int height = Chess.SCREENHEIGHT;
 
-		// White background
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-
+		batch.draw(splashTexture, 0, 0);
+		batch.draw(splashTexture2, 0, (float) ((float) height * 0.88));
+		gameInfo.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		if (board.whoseTurn()) {
+			info = "Black teams turn";
+		} else {
+			info = "White teams turn";
+		}
+		gameInfo.draw(batch, info, 600, 70);
+		batch.end();
 		// tell the camera to update its matrices.
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
-
 		drawPieces();
+		stage.draw();
+
+		if (moving) {
+			showPossibleMoves(movingPiece);
+		}
+
+		if (isReplaying) {
+			movePieceGraphic();
+			replayHandler.runLoop();
+		}
 
 		super.render();
 
 	}
 
+	public void reset() {
+		board = new Board();
+		movePieceGraphic();
+		drawButton();
+	}
+
 	@Override
 	public void resize(int arg0, int arg1) {
-		super.resize(arg0, arg1);
+		// super.resize(arg0, arg1);
 	}
 
 	@Override
@@ -260,10 +441,32 @@ public class Chess extends GameClient implements InputProcessor {
 	}
 
 	/**
-	 * Ends the game
+	 * Ends the game and allows replay if the last game was recorded
 	 */
-	private void finishGame() {
+	private void finishGame(boolean loser, boolean stalemate) {
+		System.err.println("GAME OVER");
+		// loser was black i.e. not this player, increment achievement
+		// if ((loser == true) && (!stalemate)) {
+		// this.incrementAchievement("chess.winGame");
+		// }
 
+		if (recording) {
+			drawButton();
+			replayHandler.endCurrentSession();
+			replayHandler.finishRecording();
+			stage.addActor(replayButton);
+			board = new Board();
+			movePieceGraphic();
+			replayButton.setVisible(true);
+			recording = false;
+		} else {
+			// reset board
+			board = new Board();
+			movePieceGraphic();
+			drawButton();
+		}
+
+		return;
 	}
 
 	/**
@@ -287,19 +490,33 @@ public class Chess extends GameClient implements InputProcessor {
 
 	}
 
+	public void startReplay(int num) {
+		replayHandler.playbackLastSession();
+		isReplaying = true;
+	}
+
 	@Override
 	public boolean keyDown(int arg0) {
-
-		if(arg0 == Keys.SHIFT_LEFT) {
-			if(loadedStyle == styles.size()-1) {
+		if (arg0 == Keys.CONTROL_LEFT) {
+			if (loadedStyle == styles.size() - 1) {
 				loadedStyle = 0;
 			} else {
 				loadedStyle++;
 			}
-			
+
 			setPiecePics();
 			drawPieces();
 		}
+
+		if (arg0 == Keys.T) {
+			paused = !paused;
+			onPause();
+		}
+
+		if (arg0 == Keys.G) {
+			createPopup("WORKING");
+		}
+
 		return true;
 	}
 
@@ -329,31 +546,105 @@ public class Chess extends GameClient implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		if (!moving) {
-			movingPiece = checkSquare(x, y);
-			try {
-				if (board.isNullPiece(movingPiece)) {
-					return false;
+		if (!paused) {
+			if (!moving) {
+				movingPiece = checkSquare(x, y);
+				try {
+					if (board.isNullPiece(movingPiece)) {
+						return false;
+					}
+					if (movingPiece.getTeam() == board.whoseTurn()) {
+						moving = true;
+						showPossibleMoves(movingPiece);
+						return true;
+					}
+				} catch (NullPointerException e) {
+					System.err.println("No valid square selected");
 				}
-				if (movingPiece.getTeam() == board.whoseTurn()) {
-					moving = true;
+				return false;
+			} else {
+				int[] newPos = determineSquare(x, y);
+				int[] prevPos = board.findPiece(movingPiece);
+				if (board.movePiece(movingPiece, newPos)) {
+					if (recording) {
+						replayHandler.pushEvent(ReplayNodeFactory
+								.createReplayNode("movePiece", prevPos[0],
+										prevPos[1], newPos[0], newPos[1]));
+
+					}
+					movePieceGraphic();
+
+					// Push the move that was just performed
+					moving = false;
+					System.out.println(7);
+					// if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						if (!board.whoseTurn()) {
+							// player1.logLoss(); <- this is not working
+						} else {
+							// player1.logWin(); <- this is not working
+						}
+						if (recording) {
+							replayHandler.pushEvent(ReplayNodeFactory
+									.createReplayNode("movePiece", prevPos[0],
+											prevPos[1], newPos[0], newPos[1]));
+						}
+						this.finishGame(board.whoseTurn(), false);
+					}
+					/*
+					 * If the easy computer opponent is playing, and black teams
+					 * turn (computer controlled team)
+					 */
+					if (EasyComputerOpponent && board.whoseTurn()) {
+						Piece AIPiece = board.chooseAIPiece();
+						List<int[]> allowed = board.allowedMoves(AIPiece);
+						System.out.println("AI is: " + AIPiece);
+						System.out.println("Allowed Moves: ");
+						for (int[] move : allowed) {
+							System.out.print("[" + move[0] + ", " + move[1]
+									+ "], ");
+						}
+						System.out.println("");
+						List<int[]> removed = board.removeCheckMoves(AIPiece);
+						System.out.println("Allowed Moves check removed: ");
+						for (int[] move : removed) {
+							System.out.print("[" + move[0] + ", " + move[1]
+									+ "], ");
+						}
+						System.out.println("");
+						int[] prevAI = board.findPiece(AIPiece);
+						board.moveAIPieceEasy(AIPiece);
+						int[] newAI = board.findPiece(AIPiece);
+						if (recording) {
+							replayHandler.pushEvent(ReplayNodeFactory
+									.createReplayNode("movePiece", prevAI[0],
+											prevAI[1], newAI[0], newAI[1]));
+						}
+						movePieceGraphic();
+
+					}
+					// if team in checkmate, gameover, log win/loss
+					if (board.checkForCheckmate(board.whoseTurn())) {
+						if (!board.whoseTurn()) {
+							// player1.logLoss(); <- this is not working
+						} else {
+							// player1.logWin(); <- this is not working
+						}
+						this.finishGame(board.whoseTurn(), false);
+					}
+					if (board.checkForStaleMate(board.whoseTurn())) {
+						this.finishGame(board.whoseTurn(), true);
+					}
 					return true;
 				}
-			} catch (NullPointerException e) {
-				System.err.println("No valid square selected");
-			}
-			return false;
-		} else {
-			int[] newPos = determineSquare(x, y);
-			if (board.movePiece(movingPiece, newPos)) {
-				movePieceGraphic();
+
+				movingPiece = board.nullPiece;
 				moving = false;
-				return true;
+				return false;
+
 			}
-			movingPiece = board.nullPiece;
-			moving = false;
-			return false;
 		}
+		return true;
 
 	}
 
@@ -382,6 +673,13 @@ public class Chess extends GameClient implements InputProcessor {
 	private Piece checkSquare(int x, int y) {
 
 		int[] square = determineSquare(x, y);
+
+		if (square[0] < 0) {
+			return null;
+		} else if (square[1] < 0) {
+			return null;
+		}
+
 		Piece onSquare;
 
 		try {
@@ -393,7 +691,17 @@ public class Chess extends GameClient implements InputProcessor {
 		return onSquare;
 	}
 
-	private int[] determineSquare(int x, int y) {
+	/**
+	 * Determine the square that was clicked on.
+	 * 
+	 * @param x
+	 *            x co-ordinate of the mouse click
+	 * @param y
+	 *            y co-ordinate of the mouse click
+	 * @return An int[] represent the [row, column] of the square that was
+	 *         clicked
+	 */
+	public int[] determineSquare(int x, int y) {
 		int xSquare = -1;
 		int ySquare = -1;
 
@@ -446,6 +754,31 @@ public class Chess extends GameClient implements InputProcessor {
 
 		int[] returnValue = { xSquare, ySquare };
 		return returnValue;
+	}
+
+	public void startMultiplayerGame() {
+		paused = false;
+	}
+
+	private void showPossibleMoves(Piece piece) {
+		startreplayButton.remove();
+		replayButton.remove();
+		List<int[]> possibleMoves = board.removeCheckMoves(movingPiece);
+		Sprite allowedSquare = new Sprite(new Texture(
+				Gdx.files.classpath("imgs/spot2.png")));
+		List<Sprite> neededPics = new ArrayList<Sprite>();
+
+		for (int i = 0; i < possibleMoves.size(); i++) {
+			neededPics.add(allowedSquare);
+			int xcoord = pieceHorizOff + horizOff + (59)
+					* possibleMoves.get(i)[1];
+			int ycoord = pieceVerticOff + verticOff + (59)
+					* possibleMoves.get(i)[0];
+			batch.begin();
+			batch.draw(neededPics.get(i), xcoord, ycoord);
+			batch.end();
+		}
+
 	}
 
 	/**
@@ -520,6 +853,7 @@ public class Chess extends GameClient implements InputProcessor {
 		blackPawn6Pos = pos30;
 		int[] pos31 = { 435 + horizOff, 380 + verticOff };
 		blackPawn7Pos = pos31;
+	
 	}
 
 	/**
@@ -663,188 +997,371 @@ public class Chess extends GameClient implements InputProcessor {
 
 		}
 
+		int blackCount = 0;
 		for (Piece piece : board.blackGraveyard) {
 			if (piece.equals(board.blackRook1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackRook1);
 				blackRook1Pos[0] = (horizOff - 59);
-				blackRook1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackRook1));
+				if (blackCount > 8) {
+					blackRook1Pos[0] -= 59;
+				}
+				blackRook1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackRook1)) % (59 * 8));
 			} else if (piece.equals(board.blackKnight1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackKnight1);
 				blackKnight1Pos[0] = (horizOff - 59);
-				blackKnight1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackKnight1));
+				if (blackCount > 8) {
+					blackKnight1Pos[0] -= 59;
+				}
+				blackKnight1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard
+								.indexOf(board.blackKnight1)) % (59 * 8));
 			} else if (piece.equals(board.blackBishop1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackBishop1);
 				blackBishop1Pos[0] = (horizOff - 59);
-				blackBishop1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackBishop1));
+				if (blackCount > 8) {
+					blackBishop1Pos[0] -= 59;
+				}
+				blackBishop1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard
+								.indexOf(board.blackBishop1)) % (59 * 8));
 			} else if (piece.equals(board.blackQueen)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackQueen);
 				blackQueenPos[0] = (horizOff - 59);
-				blackQueenPos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackQueen));
+				if (blackCount > 8) {
+					blackQueenPos[0] -= 59;
+				}
+				blackQueenPos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackQueen)) % (59 * 8));
 			} else if (piece.equals(board.blackKing)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackKing);
 				blackKingPos[0] = (horizOff - 59);
-				blackKingPos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackKing));
+				if (blackCount > 8) {
+					blackKingPos[0] -= 59;
+				}
+				blackKingPos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackKing)) % (59 * 8));
 			} else if (piece.equals(board.blackBishop2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackBishop2);
 				blackBishop2Pos[0] = (horizOff - 59);
-				blackBishop2Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackBishop2));
+				if (blackCount > 8) {
+					blackBishop2Pos[0] -= 59;
+				}
+				blackBishop2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard
+								.indexOf(board.blackBishop2)) % (59 * 8));
 			} else if (piece.equals(board.blackKnight2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackKnight2);
 				blackKnight2Pos[0] = (horizOff - 59);
-				blackKnight2Pos[1] = (verticOff + pieceVerticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackKnight2));
+				if (blackCount > 8) {
+					blackKnight2Pos[0] -= 59;
+				}
+				blackKnight2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard
+								.indexOf(board.blackKnight2)) % (59 * 8));
 			} else if (piece.equals(board.blackRook2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackRook2);
 				blackRook2Pos[0] = (horizOff - 59);
-				blackRook2Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackRook2));
+				if (blackCount > 8) {
+					blackRook2Pos[0] -= 59;
+				}
+				blackRook2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackRook2)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn1)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn0);
 				blackPawn0Pos[0] = (horizOff - 59);
-				blackPawn0Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn1));
+				if (blackCount > 8) {
+					blackPawn0Pos[0] -= 59;
+				}
+				blackPawn0Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn1)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn2)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn1);
 				blackPawn1Pos[0] = (horizOff - 59);
-				blackPawn1Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn2));
+				if (blackCount > 8) {
+					blackPawn1Pos[0] -= 59;
+				}
+				blackPawn1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn2)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn3)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn2);
 				blackPawn2Pos[0] = (horizOff - 59);
-				blackPawn2Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn3));
+				if (blackCount > 8) {
+					blackPawn2Pos[0] -= 59;
+				}
+				blackPawn2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn3)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn4)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn3);
 				blackPawn3Pos[0] = (horizOff - 59);
-				blackPawn3Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn4));
+				if (blackCount > 8) {
+					blackPawn3Pos[0] -= 59;
+				}
+				blackPawn3Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn4)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn5)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn4);
 				blackPawn4Pos[0] = (horizOff - 59);
-				blackPawn4Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn5));
+				if (blackCount > 8) {
+					blackPawn4Pos[0] -= 59;
+				}
+				blackPawn4Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn5)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn6)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn5);
 				blackPawn5Pos[0] = (horizOff - 59);
-				blackPawn5Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn6));
+				if (blackCount > 8) {
+					blackPawn5Pos[0] -= 59;
+				}
+				blackPawn5Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn6)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn7)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn6);
 				blackPawn6Pos[0] = (horizOff - 59);
-				blackPawn6Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn7));
+				if (blackCount > 8) {
+					blackPawn6Pos[0] -= 59;
+				}
+				blackPawn6Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn7)) % (59 * 8));
 			} else if (piece.equals(board.blackPawn8)) {
+				blackCount++;
 				int gravePos = board.blackGraveyard.indexOf(blackPawn7);
 				blackPawn7Pos[0] = (horizOff - 59);
-				blackPawn7Pos[1] = (pieceVerticOff + verticOff + 59 * board.blackGraveyard
-						.indexOf(board.blackPawn8));
+				if (blackCount > 8) {
+					blackPawn7Pos[0] -= 59;
+				}
+				blackPawn7Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.blackGraveyard.indexOf(board.blackPawn8)) % (59 * 8));
 			}
 		}
-
+		int whiteCount = 0;
 		for (Piece piece : board.whiteGraveyard) {
 			if (piece.equals(board.whiteRook1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteRook1);
 				whiteRook1Pos[0] = (horizOff + 512);
-				whiteRook1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteRook1));
+				if (whiteCount > 8) {
+					whiteRook1Pos[0] += 59;
+				}
+				whiteRook1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whiteRook1)) % (59 * 8));
 			} else if (piece.equals(board.whiteKnight1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteKnight1);
 				whiteKnight1Pos[0] = (horizOff + 512);
-				whiteKnight1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteKnight1));
+				if (whiteCount > 8) {
+					whiteKnight1Pos[0] += 59;
+				}
+				whiteKnight1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard
+								.indexOf(board.whiteKnight1)) % (59 * 8));
 			} else if (piece.equals(board.whiteBishop1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteBishop1);
 				whiteBishop1Pos[0] = (horizOff + 512);
-				whiteBishop1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteBishop1));
+				if (whiteCount > 8) {
+					whiteBishop1Pos[0] += 59;
+				}
+				whiteBishop1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard
+								.indexOf(board.whiteBishop1)) % (59 * 8));
 			} else if (piece.equals(board.whiteQueen)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteQueen);
 				whiteQueenPos[0] = (horizOff + 512);
-				whiteQueenPos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteQueen));
+				if (whiteCount > 8) {
+					whiteQueenPos[0] += 59;
+				}
+				whiteQueenPos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whiteQueen)) % (59 * 8));
 			} else if (piece.equals(board.whiteKing)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteKing);
 				whiteKingPos[0] = (horizOff + 512);
-				whiteKingPos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteKing));
+				if (whiteCount > 8) {
+					whiteKingPos[0] += 59;
+				}
+				whiteKingPos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whiteKing)) % (59 * 8));
 			} else if (piece.equals(board.whiteBishop2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteBishop2);
 				whiteBishop2Pos[0] = (horizOff + 512);
-				whiteBishop2Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteBishop2));
+				if (whiteCount > 8) {
+					whiteBishop2Pos[0] += 59;
+				}
+				whiteBishop2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard
+								.indexOf(board.whiteBishop2)) % (59 * 8));
 			} else if (piece.equals(board.whiteKnight2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteKnight2);
 				whiteKnight2Pos[0] = (horizOff + 512);
-				whiteKnight2Pos[1] = (verticOff + pieceVerticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteKnight2));
+				if (whiteCount > 8) {
+					whiteKnight2Pos[0] += 59;
+				}
+				whiteKnight2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard
+								.indexOf(board.whiteKnight2)) % (59 * 8));
 			} else if (piece.equals(board.whiteRook2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whiteRook2);
 				whiteRook2Pos[0] = (horizOff + 512);
-				whiteRook2Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whiteRook2));
+				if (whiteCount > 8) {
+					whiteRook2Pos[0] += 59;
+				}
+				whiteRook2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whiteRook2)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn1)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn0);
 				whitePawn0Pos[0] = (horizOff + 512);
-				whitePawn0Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn1));
+				if (whiteCount > 8) {
+					whitePawn0Pos[0] += 59;
+				}
+				whitePawn0Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn1)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn2)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn1);
 				whitePawn1Pos[0] = (horizOff + 512);
-				whitePawn1Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn2));
+				if (whiteCount > 8) {
+					whitePawn1Pos[0] += 59;
+				}
+				whitePawn1Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn2)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn3)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn2);
 				whitePawn2Pos[0] = (horizOff + 512);
-				whitePawn2Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn3));
+				if (whiteCount > 8) {
+					whitePawn2Pos[0] += 59;
+				}
+				whitePawn2Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn3)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn4)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn3);
 				whitePawn3Pos[0] = (horizOff + 512);
-				whitePawn3Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn4));
+				if (whiteCount > 8) {
+					whitePawn3Pos[0] += 59;
+				}
+				whitePawn3Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn4)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn5)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn4);
 				whitePawn4Pos[0] = (horizOff + 512);
-				whitePawn4Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn5));
+				if (whiteCount > 8) {
+					whitePawn4Pos[0] += 59;
+				}
+				whitePawn4Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn5)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn6)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn5);
 				whitePawn5Pos[0] = (horizOff + 512);
-				whitePawn5Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn6));
+				if (whiteCount > 8) {
+					whitePawn5Pos[0] += 59;
+				}
+				whitePawn5Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn6)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn7)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn6);
 				whitePawn6Pos[0] = (horizOff + 512);
-				whitePawn6Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn7));
+				if (whiteCount > 8) {
+					whitePawn6Pos[0] += 59;
+				}
+				whitePawn6Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn7)) % (59 * 8));
 			} else if (piece.equals(board.whitePawn8)) {
+				whiteCount++;
 				int gravePos = board.whiteGraveyard.indexOf(whitePawn7);
 				whitePawn7Pos[0] = (horizOff + 512);
-				whitePawn7Pos[1] = (pieceVerticOff + verticOff + 59 * board.whiteGraveyard
-						.indexOf(board.whitePawn8));
+				if (whiteCount > 8) {
+					whitePawn7Pos[0] += 59;
+				}
+				whitePawn7Pos[1] = pieceVerticOff
+						+ verticOff
+						+ ((59 * board.whiteGraveyard.indexOf(board.whitePawn8)) % (59 * 8));
 			}
 		}
 
 	}
 
-	private void drawPieces() {
-		whiteRook2 = whiteRook1; whiteBishop2 = whiteBishop1; 
-		whiteKnight2 = whiteKnight1; blackBishop2 = blackBishop1;
-		blackKnight2 = blackKnight1; blackRook2 = blackRook1;
-		whitePawn1 = whitePawn0; whitePawn2 = whitePawn0;
-		whitePawn3 = whitePawn0; whitePawn4 = whitePawn0;
-		whitePawn5 = whitePawn0; whitePawn6 = whitePawn0;
-		whitePawn7 = whitePawn0; blackPawn1 = blackPawn0;
-		blackPawn2 = blackPawn0; blackPawn3 = blackPawn0;
-		blackPawn4 = blackPawn0; blackPawn5 = blackPawn0;
-		blackPawn6 = blackPawn0; blackPawn7 = blackPawn0;
-		
+	private void getPieceCoords(Piece piece) {
+
+	}
+
+	void drawPieces() {
+		whiteRook2 = whiteRook1;
+		whiteBishop2 = whiteBishop1;
+		whiteKnight2 = whiteKnight1;
+		blackBishop2 = blackBishop1;
+		blackKnight2 = blackKnight1;
+		blackRook2 = blackRook1;
+		whitePawn1 = whitePawn0;
+		whitePawn2 = whitePawn0;
+		whitePawn3 = whitePawn0;
+		whitePawn4 = whitePawn0;
+		whitePawn5 = whitePawn0;
+		whitePawn6 = whitePawn0;
+		whitePawn7 = whitePawn0;
+		blackPawn1 = blackPawn0;
+		blackPawn2 = blackPawn0;
+		blackPawn3 = blackPawn0;
+		blackPawn4 = blackPawn0;
+		blackPawn5 = blackPawn0;
+		blackPawn6 = blackPawn0;
+		blackPawn7 = blackPawn0;
+
 		camera.update();
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		batch.setProjectionMatrix(camera.combined);
@@ -890,47 +1407,282 @@ public class Chess extends GameClient implements InputProcessor {
 		batch.draw(blackPawn6, blackPawn6Pos[0], blackPawn6Pos[1]);
 		batch.draw(blackPawn7, blackPawn7Pos[0], blackPawn7Pos[1]);
 		batch.end();
-	}
-	
-	private void setPiecePics() {
-		chessBoard = new Texture(Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/board.png"));
-		
-		blackBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black B.png")));
-		blackRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black R.png")));
-		blackKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black N.png")));
-		blackKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black K.png")));
-		blackQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black Q.png")));
-		blackPawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/Black P.png")));
-		whiteBishop1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White B.png")));
-		whiteRook1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White R.png")));
-		whiteKnight1 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White N.png")));
-		whiteKing = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White K.png")));
-		whiteQueen = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White Q.png")));
-		whitePawn0 = new Sprite(new Texture(
-				Gdx.files.classpath("imgs/" + styles.get(loadedStyle) + "/White P.png")));
-	}
-	
-	private String[] readLines(String filename) throws IOException {
-        FileReader fileReader = new FileReader(filename);
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-        ArrayList<String> lines = new ArrayList<String>();
-        String line = null;
-        while ((line = bufferedReader.readLine()) != null) {
-            lines.add(line);
-        }
-        bufferedReader.close();
-        return lines.toArray(new String[lines.size()]);
-    }
+		// Im sorry i just made an even more awfulling long code longer
 
+	}
+
+	private void setPiecePics() {
+		chessBoard = new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/board.png"));
+
+		blackBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black B.png")));
+		blackRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black R.png")));
+		blackKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black N.png")));
+		blackKing = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black K.png")));
+		blackQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black Q.png")));
+		blackPawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/Black P.png")));
+		whiteBishop1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White B.png")));
+		whiteRook1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White R.png")));
+		whiteKnight1 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White N.png")));
+		whiteKing = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White K.png")));
+		whiteQueen = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White Q.png")));
+		whitePawn0 = new Sprite(new Texture(Gdx.files.classpath("imgs/"
+				+ styles.get(loadedStyle) + "/White P.png")));
+	}
+
+	private String[] readLines(String filename) throws IOException {
+		FileReader fileReader = new FileReader(filename);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+		ArrayList<String> lines = new ArrayList<String>();
+		String line = null;
+		while ((line = bufferedReader.readLine()) != null) {
+			lines.add(line);
+		}
+		bufferedReader.close();
+		return lines.toArray(new String[lines.size()]);
+	}
+
+	private void onPause() {
+
+		if (paused) {
+			createPopup("Game is paused");
+		} else {
+			createPopup("Game is active");
+		}
+
+	}
+
+	private void createPopup(final String message) {
+		Overlay.addPopup(new UIOverlay.PopupMessage() {
+
+			@Override
+			public String getMessage() {
+				return message;
+			}
+
+		});
+	}
+
+	@Override
+	public void hide() {
+
+	}
+
+	@Override
+	public void render(float arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void show() {
+		drawButton();
+	}
+
+	public void makeButtons() {
+		splashTexture = new Texture(Gdx.files.internal("chessMenu.png"));
+		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashTexture2 = new Texture(Gdx.files.internal("chessTitle.png"));
+		splashTexture2.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		splashSprite = new Sprite(splashTexture);
+		// moves sprite to centre of screen
+		splashSprite.setX(Gdx.graphics.getWidth() / 2
+				- (splashSprite.getWidth() / 2));
+		splashSprite.setY(Gdx.graphics.getHeight() / 2
+				- (splashSprite.getHeight() / 2));
+		batch = new SpriteBatch();
+		map = new TextureAtlas("b.pack");
+		skin = new Skin();
+		skin.addRegions(map);
+		BmFontA = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
+				false);
+		BmFontB = new BitmapFont(Gdx.files.internal("imgs/gameFont2.fnt"),
+				false);
+
+		int width = Chess.SCREENWIDTH;
+		int height = Chess.SCREENHEIGHT;
+
+		stage = new Stage(width, height, true);
+
+		ArcadeInputMux.getInstance().addProcessor(stage);
+
+		TextButtonStyle style = new TextButtonStyle();
+		style.up = skin.getDrawable("buttonnormal");
+		style.down = skin.getDrawable("buttonpressed");
+		style.font = BmFontB;
+
+		backButton = new TextButton("Quit to Menu", style);
+		backButton.setWidth(200);
+		backButton.setHeight(50);
+		backButton.setX((float) (width * 0.02));
+		backButton.setY((float) (height * 0.02));
+
+		replayButton = new TextButton("Replay", style);
+		replayButton.setWidth(200);
+		replayButton.setHeight(50);
+		replayButton.setX((float) (width * 0.78));
+		replayButton.setY((float) (height * 0.68));
+
+		startreplayButton = new TextButton("Record The Next Game", style);
+		startreplayButton.setWidth(300);
+		startreplayButton.setHeight(50);
+		startreplayButton.setX((float) (width * 0.6));
+		startreplayButton.setY((float) (height * 0.02));
+
+		newGameButton = new TextButton("Start New Game", style);
+		newGameButton.setWidth(200);
+		newGameButton.setHeight(50);
+		newGameButton.setX((float) (width * 0.78));
+		newGameButton.setY((float) (height * 0.28));
+
+		newGameButtonEasy = new TextButton("Easy Computer Game", style);
+		newGameButtonEasy.setWidth(300);
+		newGameButtonEasy.setHeight(50);
+		newGameButtonEasy.setX((float) (width * 0.02));
+		newGameButtonEasy.setY((float) (height * 0.70));
+
+		newGameButtonHard = new TextButton("Hard Computer Game", style);
+		newGameButtonHard.setWidth(300);
+		newGameButtonHard.setHeight(50);
+		newGameButtonHard.setX((float) (width * 0.02));
+		newGameButtonHard.setY((float) (height * 0.60));
+	}
+
+	public void drawButton() {
+		makeButtons();
+		backButton.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				setScreen(menuScreen);
+			}
+		});
+		replayButton.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				drawButton();
+				try {
+					board = new Board();
+					movePieceGraphic();
+					recording = false;
+					// replayHandler.endCurrentSession();
+					replayHandler.playbackLastSession();
+					isReplaying = true;
+
+				} catch (NullPointerException e) {
+					System.out.println("nothing to replay");
+				}
+			}
+		});
+		// record the next game
+		startreplayButton.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+
+				try {
+					recording = true;
+					replayHandler.startRecording();
+				} catch (Exception e) {
+					System.out.println("Already Recording");
+				}
+
+			}
+		});
+		newGameButton.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				drawButton();
+				if (recording) {
+					replayHandler.endCurrentSession();
+					replayHandler.finishRecording();
+					replayButton.setVisible(true);
+				}
+				EasyComputerOpponent = false;
+				HardComputerOpponent = false;
+				recording = false;
+				board = new Board();
+				movePieceGraphic();
+			}
+		});
+		newGameButtonEasy.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				drawButton();
+				if (recording) {
+					replayHandler.endCurrentSession();
+					replayHandler.finishRecording();
+					replayButton.setVisible(true);
+				}
+				EasyComputerOpponent = true;
+				HardComputerOpponent = false;
+				recording = false;
+				board = new Board();
+				movePieceGraphic();
+
+			}
+		});
+		newGameButtonHard.addListener(new InputListener() {
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				return true;
+			}
+
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				drawButton();
+				if (recording) {
+					replayHandler.endCurrentSession();
+					replayHandler.finishRecording();
+					replayButton.setVisible(true);
+				}
+				HardComputerOpponent = true;
+				EasyComputerOpponent = false;
+				recording = false;
+				board = new Board();
+				movePieceGraphic();
+			}
+		});
+		stage.addActor(replayButton);
+		replayButton.setVisible(false);
+		stage.addActor(backButton);
+		stage.addActor(startreplayButton);
+		stage.addActor(newGameButton);
+		stage.addActor(newGameButtonEasy);
+		stage.addActor(newGameButtonHard);
+	}
 }

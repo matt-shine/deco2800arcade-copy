@@ -118,14 +118,67 @@ public class CreditStorage {
 	/**
 	 * Deduct a number of credits from the user's account
 	 * 
+	 * @author Addison Gourluck
 	 * @param playerID
 	 *            The user from whose account the credits should be deducted
 	 * @param numCredits
 	 *            The number of credits to deduct
+	 * @throws DatabaseException 
 	 */
-	public void deductUserCredits(int playerID, int numCredits) {
-		// TODO implement me!
-		throw new UnsupportedOperationException("Not yet implemented");
+	public void deductUserCredits(int playerID, int numCredits)
+			throws DatabaseException {
+		if (!initialised) {
+			initialise();
+		}
+		
+		Connection connection = Database.getConnection();
+		Statement stmt = null;
+		ResultSet resultSet = null;
+		
+		try {
+			if (numCredits < 1) {
+				throw new DatabaseException("Quantity to deduct is less than 1.");
+			}
+			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);
+			
+			// first retrieve the current users's current balance
+			resultSet = stmt.executeQuery("SELECT * FROM CREDITS WHERE id="
+					+ playerID + "");
+			if (resultSet.next()) {
+				int oldBalance = resultSet.getInt("CREDITS");
+				// check that user's credits will not become negative
+				if (numCredits > oldBalance) {
+					throw new DatabaseException("playerID has insufficient funds");
+				}
+				// then decrement it and set it
+				resultSet.updateInt("CREDITS", oldBalance - numCredits);
+				resultSet.updateRow();
+			} else {
+				throw new DatabaseException("playerID has no balance");
+			}
+			if (resultSet.next()) {
+				throw new DatabaseException("Two entries for user!");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			// clean up JDBC objects
+			try {
+				if (resultSet != null) {
+					resultSet.close();
+				}
+				if (stmt != null) {
+					stmt.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -139,7 +192,6 @@ public class CreditStorage {
 	 */
 	public void addUserCredits(int playerID, int numCredits)
 			throws DatabaseException {
-
 		if (!initialised) {
 			initialise();
 		}
@@ -149,6 +201,9 @@ public class CreditStorage {
 		ResultSet resultSet = null;
 
 		try {
+			if (numCredits < 1) {
+				throw new DatabaseException("Quantity to add is less than 1.");
+			}
 			stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					ResultSet.CONCUR_UPDATABLE);
 			// first retrieve the current users's current balance
@@ -184,6 +239,5 @@ public class CreditStorage {
 				e.printStackTrace();
 			}
 		}
-
 	}
 }

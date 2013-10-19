@@ -6,6 +6,7 @@ import org.junit.Test;
 import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.towerdefence.model.*;
+import deco2800.arcade.towerdefence.model.creationobjects.Enemy;
 import deco2800.arcade.towerdefence.model.pathfinding.Path;
 import deco2800.arcade.towerdefence.model.pathfinding.Path.Step;
 
@@ -13,8 +14,8 @@ public class TDTests {
 
 	@Test
 	public void EnemyDamageTest() {
-		Enemy unarmoured = new Enemy(50, 0, 0, 0, 0.0, null);
-		Enemy armoured = new Enemy(50, 10, 0, 0, 0.0, null);
+		Enemy unarmoured = new Enemy(50, 0, 0, 0, 0.0, null, null, 0, 0, 0, null, null, null, null, null);
+		Enemy armoured = new Enemy(50, 10, 0, 0, 0.0, null, null, 0, 0, 0, null, null, null, null, null);
 
 		// Damage the unarmoured Enemy with a non-penetrating attack
 		unarmoured.takeDamage(25);
@@ -39,7 +40,7 @@ public class TDTests {
 
 	@Test
 	public void EnemyHealingTest() {
-		Enemy meatbag = new Enemy(50, 0, 0, 0, 0.0, null);
+		Enemy meatbag = new Enemy(50, 0, 0, 0, 0.0, null, null, 0, 0, 0, null, null, null, null, null);
 		// Try healing from maximum health
 		meatbag.heal(100);
 		Assert.assertEquals(50, meatbag.health());
@@ -56,7 +57,7 @@ public class TDTests {
 	@Test
 	public void gridTest() {
 		Grid grid = new Grid(200, 200, "grid", 20, null, null);
-		GridObject object = new GridObject(0, 0, grid);
+		GridObject object = new GridObject(0, 0, grid, null, null);
 		// Check the object can be placed
 		Assert.assertTrue(grid.buildObject(object));
 		Assert.assertEquals(1, grid.getGridContents(0,0).size());
@@ -66,11 +67,11 @@ public class TDTests {
 		Assert.assertEquals(1, grid.getGridContents(1,1).size());
 		//Try building something on top of an alien - should be at 3,3 due to tilesize
 		//Place the alien
-		Enemy testAlien = new Enemy(5, 5, 60, 60, 5, grid);
+		Enemy testAlien = new Enemy(5, 5, 60, 60, 5, grid, null, 0, 0, 0, null, null, null, null, null);
 		grid.buildObject(testAlien);
 		Assert.assertEquals(1, grid.getGridContents(3,3).size());
 		//Build something on it
-		Assert.assertFalse(grid.buildObject(new GridObject(60, 60, grid)));
+		Assert.assertFalse(grid.buildObject(new GridObject(60, 60, grid, null, null)));
 		//Check if a tile is blocked for pathing purposes
 		Assert.assertTrue(grid.blocked(testAlien, 1, 1));
 	}
@@ -79,7 +80,7 @@ public class TDTests {
 	public void mobileTest(){
 		//Create the grid and enemy to use
 		Grid grid = new Grid(200, 200, "grid", 20, null, new Vector2(19, 19));
-		Enemy mobile = new Enemy(10, 10, 0, 0, 20, grid);
+		Enemy mobile = new Enemy(10, 10, 0, 0, 20, grid, null, 0, 0, 0, null, null, null, null, null);
 		grid.buildObject(mobile);
 		//Test moving the object
 		((Mobile) grid.getGridContents(0, 0).get(0)).moving(new Vector2(1,1));

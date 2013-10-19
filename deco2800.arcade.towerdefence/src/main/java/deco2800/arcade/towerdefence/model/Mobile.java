@@ -14,13 +14,15 @@ import deco2800.arcade.towerdefence.model.pathfinding.Path.Step;
  * @author hadronn
  * 
  */
-public abstract class Mobile extends Mortal {
+public class Mobile extends Mortal {
 	// Fields
 	// The GridObject's speed in pixels per second.
 	private double speed;
 	// The GridObject's sprites to animate movement in any Direction.
 	private List<Sprite> sprMoving;
-	// THe path the object is following
+	// The The GridObject's sprites to animate dying.
+	private List<Sprite> sprDying;
+	// The path the object is following
 	private Path path;
 
 	// Constructor
@@ -41,19 +43,30 @@ public abstract class Mobile extends Mortal {
 	 *            The grid the object belongs to
 	 */
 	public Mobile(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid) {
-		super(maxHealth, armour, x, y, grid);
+			Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath) {
+		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDeath);
 		this.speed = speed;
+		this.sprMoving = sprMoving;
+		this.sprDying = sprDying;
 	}
 
 	// Getters
 	/**
-	 * Returns the GridObject's sprites to animate movement down.
+	 * Returns the GridObject's sprites to animate movement in any Direction.
 	 * 
-	 * @return The sprites used in the downwards moving animation
+	 * @return The sprites used in the moving animation
 	 */
 	public List<Sprite> sprMoving() {
 		return sprMoving;
+	}
+	
+	/**
+	 * Returns the GridObject's sprites to animate dying.
+	 * 
+	 * @return The sprites used in the dying animation
+	 */
+	public List<Sprite> sprDying() {
+		return sprDying;
 	}
 
 	/**
@@ -75,6 +88,16 @@ public abstract class Mobile extends Mortal {
 	 */
 	public void sprMoving(List<Sprite> sprites) {
 		this.sprMoving = sprites;
+	}
+	
+	/**
+	 * Sets the GridObject's sprites to animate dying.
+	 * 
+	 * @param sprites
+	 *            The new list of sprites to use for the dying animation.
+	 */
+	public void sprDying(List<Sprite> sprites) {
+		this.sprDying = sprites;
 	}
 	
 	/**

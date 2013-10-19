@@ -7,6 +7,8 @@ import java.util.UUID;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.towerdefence.model.creationobjects.Effect;
+
 /**
  * The class for an object that can be created on a grid, required to be
  * unique when instantiated.
@@ -22,19 +24,19 @@ public class GridObject {
 	// The position of this object on the grid.
 	protected Vector2 position = new Vector2();
 	// Whether the object is visible.
-	private boolean visible;
+	private boolean visible = true;
 	// The list of status effects this GridObject can apply.
 	private List<Effect> effects = new ArrayList<Effect>();
 	// Whether this object has collision.
-	private boolean physical;
+	private boolean physical = true;
 	// The opaqueness of the object as a percentage.
 	private int opaqueness = 100;
 	// The direction the object is facing.
-	private Direction facing;
+	private Direction facing = Direction.S;
 	// The standing sprites this object uses.
-	private List<Sprite> sprStanding;
+	protected List<Sprite> sprStanding;
 	// The team this object belongs to.
-	private Team team;
+	protected Team team;
 
 	// Constructor
 	/**
@@ -47,9 +49,12 @@ public class GridObject {
 	 * @param grid
 	 *            The grid the object belongs to.
 	 */
-	public GridObject(int x, int y, Grid grid) {
+	public GridObject(int x, int y, Grid grid, Team team, List<Sprite> sprStanding) {
 		this.position = new Vector2(x, y);
 		this.grid = grid;
+		this.id = UUID.randomUUID();
+		this.team = team;
+		this.sprStanding = sprStanding;
 	}
 
 	// Getters

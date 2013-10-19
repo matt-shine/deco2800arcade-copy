@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import deco2800.arcade.towerdefence.model.creationobjects.Projectile;
+
 /**
  * The interface for GridObjects that can shoot projectiles at a position
  * (probably at another GridObject).
@@ -19,7 +21,7 @@ public interface Ranged {
 	 * 
 	 * @return The attack rate of the object in attacks per second.
 	 */
-	public float attackRate();
+	public double attackRate();
 
 	/**
 	 * Fire a projectile from your own position at another.
@@ -32,7 +34,7 @@ public interface Ranged {
 	 * 
 	 * @return The maximum range of projectiles created by this object.
 	 */
-	public float range();
+	public double range();
 
 	/**
 	 * Returns the projectile that the GridObject currently fires.

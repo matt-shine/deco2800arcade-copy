@@ -14,14 +14,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
  */
 public class Mortal extends GridObject {
 	// Fields
-	// The maximum health the alien can have.
+	// The maximum health the GridObject can have.
 	private int maxHealth;
-	// The current health the alien has.
+	// The current health the GridObject has.
 	private int health;
-	// The armour the alien has.
+	// The armour the GridObject has.
 	private int armour;
-	// The dying sprites this object uses.
-	private List<Sprite> sprDying;
 	// The death sprites this object uses.
 	private List<Sprite> sprDeath;
 
@@ -40,11 +38,12 @@ public class Mortal extends GridObject {
 	 * @param grid
 	 *            The grid the object belongs to
 	 */
-	public Mortal(int maxHealth, int armour, int x, int y, Grid grid) {
-		super(x, y, grid);
+	public Mortal(int maxHealth, int armour, int x, int y, Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprDeath) {
+		super(x, y, grid, team, sprStanding);
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
 		this.armour = armour;
+		this.sprDeath = sprDeath;
 	}
 
 	// Getters
@@ -73,15 +72,6 @@ public class Mortal extends GridObject {
 	 */
 	public int armour() {
 		return armour;
-	}
-	
-	/**
-	 * Return the dying sprites of the mortal.
-	 * 
-	 * @return The dying sprites of the object.
-	 */
-	public List<Sprite> sprDying() {
-		return sprDying;
 	}
 
 	/**
@@ -126,16 +116,6 @@ public class Mortal extends GridObject {
 	 */
 	public void armour(int armour) {
 		this.armour = armour;
-	}
-	
-	/**
-	 * Sets the dying sprites of the Mortal.
-	 * 
-	 * @param sprites
-	 *            The new sprite list.
-	 */
-	public void sprDying(List<Sprite> sprites) {
-		this.sprDying = sprites;
 	}
 	
 	/**

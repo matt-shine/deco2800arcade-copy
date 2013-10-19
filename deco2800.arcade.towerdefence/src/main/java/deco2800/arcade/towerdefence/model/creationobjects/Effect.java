@@ -1,4 +1,7 @@
-package deco2800.arcade.towerdefence.model;
+package deco2800.arcade.towerdefence.model.creationobjects;
+
+import deco2800.arcade.towerdefence.model.GridObject;
+import deco2800.arcade.towerdefence.model.Mobile;
 
 /**
  * This is the class of the effect that a GridObject can apply to another GridObject(s)
@@ -16,6 +19,13 @@ public class Effect {
 	private final double amount;
 	
 	// Constructor
+	/**
+	 * The Effect Constructor.
+	 * @param name
+	 * 			Name the effect.
+	 * @param amount
+	 * 			Set the amount of the effect.
+	 */
 	public Effect(String name, int amount){
 		this.name = name;
 		this.amount = amount;

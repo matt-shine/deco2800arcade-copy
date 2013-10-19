@@ -72,7 +72,7 @@ public class WL6InputProcessor implements InputProcessor {
         
         //shoot
         if (c == Keys.SPACE) {
-        	model.getPlayer().shoot(model);
+        	model.getPlayer().shoot(model, true);
         }
         
 
@@ -144,6 +144,11 @@ public class WL6InputProcessor implements InputProcessor {
     	model.getPlayer().setAngle(model.getPlayer().getAngle() +
     			((left ? 1 : 0) + (right ? -1 : 0)) * 2);
     	updatePlayerSpeed();
+    	
+    	if (Gdx.input.isKeyPressed(Keys.SPACE)) {
+    		model.getPlayer().shoot(model, false);
+    	}
+    	
     }
     
 

@@ -165,11 +165,10 @@ public class DoodadList {
                     DoodadInfo.ammoPickup("ammo", 8, 0),
 
                     //50: "small gun"
-                    //don't know what the difference between this and machine gun is
-                    DoodadInfo.gunPickup("machinegun", 1, 0),
+                    DoodadInfo.gunPickup("machinegun", 2, 0),
 
-                    //51: machine gun
-                    DoodadInfo.gunPickup("machinegun", 1, 0),
+                    //51: chain gun
+                    DoodadInfo.gunPickup("chaingun", 3, 0),
 
                     //52: cross
                     DoodadInfo.treasurePickup("worm", 100, 1),

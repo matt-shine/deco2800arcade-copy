@@ -24,7 +24,35 @@ import deco2800.arcade.hunter.Hunter;
  * @author Nessex, DLong94
  */
 public class MenuScreen implements Screen {
-    private Hunter hunter;
+	private Hunter hunter;
+		
+	private Stage stage;
+	
+	private SpriteBatch batch;
+	
+	private Texture background;
+	
+	public MenuScreen(Hunter p){
+		hunter = p;
+		Texture.setEnforcePotImages(false);
+		background = new Texture("textures/mainmenu.png");
+		//Set up stage
+		stage = new Stage();
+		batch = new SpriteBatch();
+		
+		ArcadeInputMux.getInstance().addProcessor(stage);
+		
+		Table table = new Table();
+		table.padRight(400f);
+		table.padTop(300f);
+		table.setFillParent(true);
+		stage.addActor(table);
+		
+		//Add play button to the table
+		Button playButton = new Button(new TextureRegionDrawable(new TextureRegion(new Texture("textures/playbutton.png"))));
+		playButton.setSize(300, 80);
+		//implement listener to the button
+		playButton.addListener(new ChangeListener() {
 
     private Stage stage;
 

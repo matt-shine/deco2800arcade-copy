@@ -38,8 +38,8 @@ public class GameOverScreen implements Screen {
         System.out.println(score);
         Table table = new Table(skin);
         table.setFillParent(true);
-        table.padRight(600f);
-        table.padTop(200f);
+        table.padRight(400f);
+        table.padTop(400f);
         stage.addActor(table);
 
         //set table defaults

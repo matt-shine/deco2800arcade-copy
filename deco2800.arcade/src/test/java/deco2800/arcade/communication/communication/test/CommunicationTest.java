@@ -3,6 +3,7 @@ package deco2800.arcade.communication.communication.test;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Before;
@@ -12,7 +13,9 @@ import com.esotericsoftware.kryonet.Connection;
 
 import deco2800.arcade.client.network.listener.CommunicationListener;
 import deco2800.arcade.communication.CommunicationNetwork;
+import deco2800.arcade.communication.CommunicationView;
 import deco2800.arcade.model.Player;
+import deco2800.arcade.protocol.communication.ChatHistory;
 import deco2800.arcade.protocol.communication.TextMessage;
 
 public class CommunicationTest {
@@ -22,6 +25,8 @@ public class CommunicationTest {
 	private CommunicationNetwork comm1, comm2, comm3;
 
 	private CommunicationListener listener1, listener2, listener3;
+
+	private CommunicationView view;
 
 	@Before
 	public void initialise() {
@@ -58,9 +63,14 @@ public class CommunicationTest {
 		player3 = new Player(235, "THIS IS NOT A VALID PATH.html", info3, null,
 				null, null, null, privset);
 
+		view = new CommunicationView();
+
 		comm1 = new CommunicationNetwork(player1, null);
+		comm1.loggedIn(player1, view);
 		comm2 = new CommunicationNetwork(player2, null);
+		comm2.loggedIn(player2, view);
 		comm3 = new CommunicationNetwork(player3, null);
+		comm3.loggedIn(player3, view);
 		listener1 = new CommunicationListener(comm1);
 		listener2 = new CommunicationListener(comm2);
 		listener3 = new CommunicationListener(comm3);
@@ -82,7 +92,7 @@ public class CommunicationTest {
 	/**
 	 * Tests the creating of a node and adding participants into it.
 	 */
-	//@Test
+	@Test
 	public void initChat() {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
@@ -98,7 +108,7 @@ public class CommunicationTest {
 	 * Need to update this to use the CommuncationNetwork inviteUser method once
 	 * NetworkClient mock is working
 	 */
-	//@Test
+	@Test
 	public void addAndRemove() {
 		List<Integer> chatParticipants = new ArrayList<Integer>();
 		chatParticipants.add(player1.getID());
@@ -124,45 +134,19 @@ public class CommunicationTest {
 	 * Tests the chat history. Mostly just tests the transferring of ChatHistory
 	 * object between CommunicationListener -> CommunicationNetwork
 	 */
-//	@Test
-//	public void chatHistory() {
-//		Connection connection = null;
-//		ChatHistory chathistory = new ChatHistory();
-//		HashMap<Integer, List<String>> history = new HashMap<Integer, List<String>>();
-//		List<String> chat1 = new ArrayList<String>();
-//		List<String> chat2 = new ArrayList<String>();
-//		List<String> chat3 = new ArrayList<String>();
-//
-//		chat1.add("This is a test1");
-//		chat1.add("This is a test2");
-//		chat2.add("This is not a test");
-//		chat2.add("The cake is a lie");
-//		chat3.add("Aquaman is the best");
-//
-//		history.put(123, chat1);
-//		history.put(234, chat2);
-//		chathistory.updateChatHistory(history);
-//		chathistory.updateChatHistory(123, chat3);
-//		listener1.received(connection, chathistory);
-//		listener2.received(connection, chathistory);
-//
-//		assertEquals(chathistory.getChatHistory(123),
-//				comm1.getChatHistory(comm1.getPlayer().getID()));
-//		assertEquals(chathistory.getChatHistory(234),
-//				comm1.getChatHistory(comm2.getPlayer().getID()));
-//		assertEquals(chathistory.getChatHistory(123),
-//				comm2.getChatHistory(comm1.getPlayer().getID()));
-//		assertEquals(chathistory.getChatHistory(234),
-//				comm2.getChatHistory(comm2.getPlayer().getID()));
-//
-//	}
+	//@Test
+	public void chatHistory() {
+		ChatHistory chathistory = new ChatHistory();
+		HashMap<Integer, List<String>> history = new HashMap<Integer, List<String>>();
+
+	}
 
 	/**
 	 * Test currently calls the listeners recieved method manually, once proper
 	 * sending has been set up this should be done automatically. Must change
 	 * test when this happens.
 	 */
-	//@Test
+	@Test
 	public void sendMessage() {
 		Connection connection = null;
 
@@ -193,40 +177,19 @@ public class CommunicationTest {
 		listener1.received(connection, message2);
 		listener2.received(connection, message1);
 		listener3.received(connection, message2);
-
-		/**
-		 * What happened here?
-		 * 
-		 * Changes:
-		 * 
-		 * 1. currentChat in communicationNetwork can be null now (it is not an error, it means you don't have a chat window open)
-		 * 2. communicationNetwork requires a communicationView to be not null in receiveTextMessage
-		 * 
-		 */		
 		
 		// Tests two methods of getting data (using chatID
 		// (participants.hashcode()) and using current chat (the chat that the
 		// last message recieved belongs to.
 		assertEquals(comm1.getCurrentChats().get(message1.getChatID()).getID(),
 				comm2.getCurrentChats().get(message1.getChatID()).getID());
-		
-		//assertEquals(comm1.getCurrentChats().get(message2.getChatID()).getID(),comm3.getCurrentChat().getID());
-
 		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
 				.getParticipants(),
 				comm2.getCurrentChats().get(message1.getChatID())
 						.getParticipants());
-		//assertEquals(comm1.getCurrentChats().get(message2.getChatID()).getParticipants(), comm3.getCurrentChat().getParticipants());
-
-		/*
 		assertEquals(comm1.getCurrentChats().get(message1.getChatID())
-				.getText(), comm2.getCurrentChats().get(message1.getChatID())
-				.getText());
-		*/
-		
-		//This replaces the commented out test above (.getText() shouldn't be used, it isn't part of ChatNode)
-		assertEquals(comm1.getCurrentChats().get(message1.getChatID()).getChatHistory().toString(), comm2.getCurrentChats().get(message1.getChatID()).getChatHistory().toString());
-		
-		//assertEquals(comm1.getCurrentChats().get(message2.getChatID()).getParticipants(), comm3.getCurrentChat().getParticipants());
+				.getChatHistory().toString(),
+				comm2.getCurrentChats().get(message1.getChatID())
+						.getChatHistory().toString());
 	}
 }

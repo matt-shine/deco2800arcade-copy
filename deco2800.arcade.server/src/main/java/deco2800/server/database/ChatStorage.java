@@ -33,7 +33,7 @@ public class ChatStorage {
 			if(chatStorage.get(playerID).containsKey(nodeID)) {
 				ChatNode node = chatStorage.get(playerID).get(nodeID);
 				node.addMessage(chatLine);
-			} else {
+			} else { // Fairly certain test does not cover this branch yet 
 				ChatNode node = new ChatNode(textMessage.getRecipients());
 				node.addMessage(chatLine);
 				chatStorage.get(playerID).put(nodeID, node);

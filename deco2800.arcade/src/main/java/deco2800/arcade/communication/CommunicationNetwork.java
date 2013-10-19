@@ -190,7 +190,7 @@ public class CommunicationNetwork {
 	public void receiveChatHistory(ChatHistory receivedHistory) {
 		chatNodes = receivedHistory.getChatHistory();		
 		for (Entry<Integer, ChatNode> entry : chatNodes.entrySet()) {
-			view.addChatNode(entry.getValue(), "who sent this?"); //This doesn't know who sent it yet
+			view.addChatNode(entry.getValue(), entry.getValue().getChatHistory().peek().substring(entry.getValue().getChatHistory().peek().indexOf('-') + 2, entry.getValue().getChatHistory().peek().indexOf(':')-1)); //This doesn't know who sent it yet
 		}
 	}
 	

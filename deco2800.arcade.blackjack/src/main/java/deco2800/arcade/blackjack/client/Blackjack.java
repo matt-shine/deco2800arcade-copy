@@ -18,6 +18,7 @@ import deco2800.arcade.model.Game;
 import deco2800.arcade.model.Game.ArcadeGame;
 import deco2800.arcade.model.Player;
 import deco2800.arcade.protocol.achievement.AddAchievementRequest;
+import deco2800.arcade.protocol.game.CasinoServerUpdate;
 import deco2800.arcade.protocol.game.GameStatusUpdate;
 import deco2800.arcade.client.GameClient;
 import deco2800.arcade.client.network.NetworkClient;
@@ -79,6 +80,11 @@ public class Blackjack extends GameClient {
 	@Override
 	public void create() {
 		super.create();
+		
+		CasinoServerUpdate msg = new CasinoServerUpdate();
+		msg.username = "test";
+		msg.message = "message test";
+		this.networkClient.sendNetworkObject(msg);
 		
 		//Initialise camera
 		camera = new OrthographicCamera();

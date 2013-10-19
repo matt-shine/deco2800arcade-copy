@@ -92,7 +92,9 @@ public class BlackjackServer implements GameServer {
 	 * appropriately.
 	 */
 	public void receive(Connection connection, CasinoServerUpdate update) {
-		// TODO Auto-generated method stub
+		
+		System.out.println("Received update: " + update.username + "|" + update.message);
+		// TODO Auto-generated method stub 
 		if (update.message.equals("addme#20")) {
 			addPlayerToTable(connection, update.username, 25);
 		}

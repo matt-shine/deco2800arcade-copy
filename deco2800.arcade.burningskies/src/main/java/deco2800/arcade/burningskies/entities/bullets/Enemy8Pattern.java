@@ -12,8 +12,6 @@ import deco2800.arcade.burningskies.screen.PlayScreen;
 public class Enemy8Pattern extends BulletPattern {
 	
 	private static Texture image = new Texture(Gdx.files.internal("images/bullets/bullet_2.png"));
-	private Vector2 lastEmit; // lag compensation on movement of emitter
-	private Vector2 thisEmit = new Vector2();
 
 	private PlayerShip player;
 	
@@ -31,25 +29,4 @@ public class Enemy8Pattern extends BulletPattern {
 		screen.addBullet(bullet);
 		bullet.act(lag);
 	}
-
-//	@Override
-//	public void onRender(float delta) {
-//		if(!firing) return;
-//		timer += delta;
-//		if(timer < interval) return;
-//		float x = 0, y = 0, timeDiff;
-//		thisEmit.x = emitter.getCenterX();
-//		thisEmit.y = emitter.getCenterY();
-//		if(lastEmit == null) lastEmit = new Vector2(thisEmit);
-//		// Compensate for frame drops - it happens always, bloody GC
-//		int loop = (int) Math.floor(timer / interval) - 1;
-//		for(int i=0;i<=loop;i++) {
-//			timeDiff = timer-delta-i*interval;
-//			x = thisEmit.x - timeDiff/timer*((thisEmit.x - lastEmit.x));
-//			y = thisEmit.y - timeDiff/timer*((thisEmit.y - lastEmit.y));
-//			fire(timeDiff, x, y);
-//		}
-//		timer = timer % interval;
-//		lastEmit.set(thisEmit);
-//	}
 }

@@ -9,9 +9,9 @@ import deco2800.arcade.burningskies.screen.PlayScreen;
 public class Enemy8 extends Enemy {
 	
 	private Enemy8Pattern pattern;
-	float timer = 0f;
 	float interval =3f;
 	float length = 0.25f;
+	float timer = interval;
 	
 	public Enemy8(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
 		super(health, image, pos, dir, screen, player, points);
@@ -29,18 +29,16 @@ public class Enemy8 extends Enemy {
 	@Override
 	public void onRender(float delta) {
 		super.onRender(delta);
-		move(delta);
-		timer += delta;
-		if(timer > interval) {
-			pattern.start();
+		timer -= delta;
+		if(timer <= 0) {
+			if(pattern.isFiring()) {
+				pattern.stop();
+				timer += interval;
+			} else {
+				pattern.start();
+				timer += length;
+			}
 		}
-	    if (pattern.isFiring()) {
-	    	fire(delta);
-	    	pattern.stop();
-	    }
-	    if (timer >= (interval + length)) {
-	    	timer = timer % (interval + length);
-	    }	
 	}
 }
 

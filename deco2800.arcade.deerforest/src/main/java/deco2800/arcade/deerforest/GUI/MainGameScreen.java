@@ -539,16 +539,10 @@ public class MainGameScreen implements Screen {
 	}
 	
 	public int getWidth() {
-        if(Gdx.graphics == null) {
-            return 0;
-        }
 		return Gdx.graphics.getWidth();
 	}
 	
 	public int getHeight() {
-        if(Gdx.graphics == null) {
-            return 0;
-        }
 		return Gdx.graphics.getHeight();
 	}
 

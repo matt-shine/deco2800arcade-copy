@@ -197,7 +197,7 @@ public class DeckBuilderScreen implements Screen {
 	 */
 	public void printSpriteMap() {
 		for(String key : spriteMap.keySet()) {
-			System.out.println("Key: " + key + " list: " + spriteMap.get(key));
+			DeerForest.logger.info("Key: " + key + " list: " + spriteMap.get(key));
 		}
 	}
 	

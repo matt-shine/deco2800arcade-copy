@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 public abstract class AbstractEffect {
 
@@ -145,6 +146,8 @@ public abstract class AbstractEffect {
 	private List<String> effectCategories;
 	private List<? extends List<Integer>> effectParams;
 	
+	static Logger logger;
+	
 	/**
 	 * Initializes an abstract effect with the types it effects, the type of 
 	 * effect it is and how that effect is parameterized
@@ -182,6 +185,9 @@ public abstract class AbstractEffect {
 		this.typeEffects = typeEffects;
 		this.effectCategories = effectCategories;
 		this.effectParams = effectParams;
+		
+		// Create the effects logger
+		logger = Logger.getLogger("EffectLogger");
 		
 	}
 
@@ -344,36 +350,36 @@ public abstract class AbstractEffect {
 		try {
 			//check amount of cards is valid
 			if(params.get(0) < 0) {
-                System.out.println("amount problem");
+                logger.info("amount problem");
 				return false;
 			}
 			//check location of cards is valid
 			if(params.get(1) < 0 || params.get(1) > 1) {
-                System.out.println("location problem");
+                logger.info("location problem");
 				return false;
 			}
 			//check player affected is valid
 			if(params.get(2) < 0 || params.get(2) > 3) {
-                System.out.println("player problem");
+                logger.info("player problem");
 				return false;
 			}
             //check category of card affected is valid
 			if(params.get(3) < 0 || params.get(3) > 2) {
-                System.out.println("category problem");
+                logger.info("category problem");
 				return false;
 			}
             //check frequency is valid
 			if(params.get(4) < 0 || params.get(4) > 3) {
-                System.out.println("frequency problem");
+                logger.info("frequency problem");
 				return false;
 			}
 			//check type of card affected is valid
 			if(params.get(5) < 0 || params.get(5) > 5) {
-                System.out.println("type problem");
+                logger.info("type problem");
 				return false;
 			}
 		} catch(IndexOutOfBoundsException e) {
-            System.out.println("index problem");
+            logger.info("index problem");
 			return false;
 		}
 		

@@ -115,7 +115,7 @@ public class DeckBuilderInputProcessor implements InputProcessor {
 			} else {
 				//card was not moved, set it back to original position
 				Rectangle r = view.getArena().emptyZoneAtRectangle(currentSelection.getOriginZone(), "Deck");
-				System.out.println("got here\n");
+				DeerForest.logger.info("got here\n");
 	    		view.getArena().setSpriteToZone(currentSelection, r);
 			}
 			//Reset current selection 

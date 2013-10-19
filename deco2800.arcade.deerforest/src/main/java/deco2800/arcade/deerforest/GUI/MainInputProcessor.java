@@ -338,7 +338,7 @@ public class MainInputProcessor implements InputProcessor {
         if(game.getPhase().equals("BattlePhase")) {
             CardCollection field = game.getCardCollection(1, "Field");
             field.addAll(game.getCardCollection(2, "Field"));
-            System.out.println(new ArrayList<AbstractCard>(field));
+            DeerForest.logger.info(new ArrayList<AbstractCard>(field).toString());
         }
 
         view.setPhaseDisplayed(false);

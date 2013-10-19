@@ -95,8 +95,6 @@ public class DeckTest {
 	@Test
 	public void cardsTest() {
 		
-		System.out.println(d.cards());
-		
 		// Create a List of cards
 		List<AbstractCard> list = new ArrayList<AbstractCard>();
 		

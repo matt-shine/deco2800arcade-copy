@@ -1,8 +1,14 @@
-package deco2800.arcade.towerdefence.model;
+package deco2800.arcade.towerdefence.model.creationobjects;
 
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
+import deco2800.arcade.towerdefence.model.Grid;
+import deco2800.arcade.towerdefence.model.GridObject;
+import deco2800.arcade.towerdefence.model.Melee;
+import deco2800.arcade.towerdefence.model.Mobile;
+import deco2800.arcade.towerdefence.model.Team;
 
 /**
  * The class for enemies invading the ship. Every enemy is able to use Melee, but only some will be able to use Ranged.
@@ -26,8 +32,12 @@ public class Enemy extends Mobile implements Melee {
 
 	// Constructor
 	public Enemy(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid) {
-		super(maxHealth, armour, x, y, speed, grid);
+			Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath, List<Sprite> sprAttacking, double attackRate, int damage, int penetration) {
+		super(maxHealth, armour, x, y, speed, grid, team, sprStanding, sprMoving, sprDeath, sprDeath);
+		this.sprAttacking = sprAttacking;
+		this.attackRate = attackRate;
+		this.damage = damage;
+		this.penetration = penetration;
 	}
 
 	// Getters

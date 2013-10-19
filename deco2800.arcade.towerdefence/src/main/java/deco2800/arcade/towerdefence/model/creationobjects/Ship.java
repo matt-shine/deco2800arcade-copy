@@ -1,8 +1,10 @@
-package deco2800.arcade.towerdefence.model;
+package deco2800.arcade.towerdefence.model.creationobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 
+import deco2800.arcade.towerdefence.model.Grid;
+import deco2800.arcade.towerdefence.model.GridObject;
 import deco2800.arcade.towerdefence.view.GameScreen;
 
 /**

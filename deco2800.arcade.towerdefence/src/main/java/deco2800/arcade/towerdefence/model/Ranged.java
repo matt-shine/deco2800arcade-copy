@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import deco2800.arcade.towerdefence.model.creationobjects.Projectile;
+
 /**
  * The interface for GridObjects that can shoot projectiles at a position
  * (probably at another GridObject).

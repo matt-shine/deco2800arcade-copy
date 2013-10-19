@@ -14,7 +14,7 @@ import deco2800.arcade.towerdefence.model.pathfinding.Path.Step;
  * @author hadronn
  * 
  */
-public abstract class Mobile extends Mortal {
+public class Mobile extends Mortal {
 	// Fields
 	// The GridObject's speed in pixels per second.
 	private double speed;
@@ -41,9 +41,10 @@ public abstract class Mobile extends Mortal {
 	 *            The grid the object belongs to
 	 */
 	public Mobile(int maxHealth, int armour, int x, int y, double speed,
-			Grid grid) {
-		super(maxHealth, armour, x, y, grid);
+			Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprMoving, List<Sprite> sprDying, List<Sprite> sprDeath) {
+		super(maxHealth, armour, x, y, grid, team, sprStanding, sprDying, sprDeath);
 		this.speed = speed;
+		this.sprMoving = sprMoving;
 	}
 
 	// Getters

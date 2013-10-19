@@ -1,6 +1,13 @@
-package deco2800.arcade.towerdefence.model;
+package deco2800.arcade.towerdefence.model.creationobjects;
 
+import java.util.List;
+
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+
+import deco2800.arcade.towerdefence.model.Grid;
+import deco2800.arcade.towerdefence.model.GridObject;
+import deco2800.arcade.towerdefence.model.Team;
 
 /**
  * The class for GridObjects that can fly on any angle from a source
@@ -35,10 +42,12 @@ public class Projectile extends GridObject {
 	 *            represented as a vector
 	 * @param range
 	 */
-	public Projectile(int x, int y, Grid grid, Vector2 speed, float range) {
-		super(x, y, grid);
+	public Projectile(int x, int y, Grid grid, Vector2 speed, float range, Team team, List<Sprite> sprStanding, int damage, int penetration) {
+		super(x, y, grid, team, sprStanding);
 		this.speed = speed;
 		this.range = range;
+		this.damage = damage;
+		this.penetration = penetration;
 	}
 
 	// Getters

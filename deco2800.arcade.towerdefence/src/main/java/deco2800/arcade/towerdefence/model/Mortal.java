@@ -21,7 +21,7 @@ public class Mortal extends GridObject {
 	// The armour the alien has.
 	private int armour;
 	// The dying sprites this object uses.
-	private List<Sprite> sprDying;
+	protected List<Sprite> sprDying;
 	// The death sprites this object uses.
 	private List<Sprite> sprDeath;
 
@@ -40,11 +40,13 @@ public class Mortal extends GridObject {
 	 * @param grid
 	 *            The grid the object belongs to
 	 */
-	public Mortal(int maxHealth, int armour, int x, int y, Grid grid) {
-		super(x, y, grid);
+	public Mortal(int maxHealth, int armour, int x, int y, Grid grid, Team team, List<Sprite> sprStanding, List<Sprite> sprDying, List<Sprite> sprDeath) {
+		super(x, y, grid, team, sprStanding);
 		this.maxHealth = maxHealth;
 		this.health = maxHealth;
 		this.armour = armour;
+		this.sprDying = sprDying;
+		this.sprDeath = sprDeath;
 	}
 
 	// Getters

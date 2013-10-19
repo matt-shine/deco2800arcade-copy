@@ -86,9 +86,10 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <class id="9" language="java" name="deco2800.arcade.towerdefence.model.Ship" project="deco2800.arcade.towerdefence" 
-    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/Ship.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
+  <class id="9" language="java" name="deco2800.arcade.towerdefence.model.creationobjects.Ship" 
+    project="deco2800.arcade.towerdefence" 
+    file="/deco2800.arcade.towerdefence/src/main/java/deco2800/arcade/towerdefence/model/creationobjects/Ship.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
     <position height="279" width="188" x="1954" y="37"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

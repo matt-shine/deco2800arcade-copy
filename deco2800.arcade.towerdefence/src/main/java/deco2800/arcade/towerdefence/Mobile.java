@@ -86,6 +86,10 @@ public abstract class Mobile extends Mortal {
 	public void path(Path path) {
 		this.path = path;
 	}
+	
+	public void speed(double speed){
+		this.speed = speed;
+	}
 
 	// Methods
 	/**

@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Enemy extends Mobile implements Melee {
 	// Fields
 	// The number of attacks per second the enemy can do.
-	private float attackRate;
+	private double attackRate;
 	// The amount of damage the enemy can inflict with an attack.
 	private int damage;
 	// The amount of armour the enemy's attack ignores.
@@ -34,7 +34,7 @@ public class Enemy extends Mobile implements Melee {
 	/**
 	 * Returns the attacks per second the enemy can make.
 	 */
-	public float attackRate() {
+	public double attackRate() {
 		return attackRate;
 	}
 
@@ -73,7 +73,7 @@ public class Enemy extends Mobile implements Melee {
 	 * @param ar
 	 *            The new attack rate, in attacks per second
 	 */
-	public void attackRate(float ar) {
+	public void attackRate(double ar) {
 		this.attackRate = ar;
 	}
 

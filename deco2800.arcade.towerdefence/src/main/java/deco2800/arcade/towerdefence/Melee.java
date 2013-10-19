@@ -17,7 +17,7 @@ public interface Melee {
 	 * 
 	 * @return The number of attacks per second as a floating point number.
 	 */
-	public float attackRate();
+	public double attackRate();
 
 	/**
 	 * Returns the damage of an attack

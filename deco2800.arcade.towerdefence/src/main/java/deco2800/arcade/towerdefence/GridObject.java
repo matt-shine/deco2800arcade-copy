@@ -24,7 +24,7 @@ public class GridObject {
 	// Whether the object is visible.
 	private boolean visible;
 	// The list of status effects this GridObject can apply.
-	private ArrayList<Effect> effects = new ArrayList<Effect>();
+	private List<Effect> effects = new ArrayList<Effect>();
 	// Whether this object has collision.
 	private boolean physical;
 	// The opaqueness of the object as a percentage.

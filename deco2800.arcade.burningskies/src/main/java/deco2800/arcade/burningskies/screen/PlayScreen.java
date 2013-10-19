@@ -152,14 +152,13 @@ public class PlayScreen implements Screen
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
     	
     	if(!game.isPaused()) {
-    		
     		if(!player.isAlive()) {
-    			this.noDeaths++;
-    			if (noDeaths == 1) {
-    				game.incrementAchievement("burningskies.die");
-    			}
     			respawnTimer -= delta;
     			if(respawnTimer <= 0) {
+    				this.noDeaths++;
+        			if (noDeaths == 1) {
+        				game.incrementAchievement("burningskies.die");
+        			}
     				stage.addActor(player);
     				if (lives > 0) {
     					player.respawn();
@@ -176,6 +175,7 @@ public class PlayScreen implements Screen
     			}
     		} else {
     			levelTimer += delta;
+    			score += 131;
     		}
     		//TODO: PRESS B TO SPAWN BOSS, REMOVE AFTER DEBUG
     		if(!bossActive && (levelTimer > 60 || Gdx.input.isKeyPressed(Keys.B))) { //unleash the beast
@@ -247,7 +247,6 @@ public class PlayScreen implements Screen
 		    batch.draw(lifeIcon, lifePositionX + lifePositionOffset*i, lifePositionY);
 		    batch.end();
 	    }
-	    score += 131;
 	    
 	    healthBar.begin(ShapeType.FilledRectangle);
 	    health = player.getHealth();

@@ -36,18 +36,23 @@ public class Animal extends Entity {
 	 * The type of animal
 	 */
 	private Type hunt;
-
+	
+	/**
+	 * The Class type of the entity
+	 */
 	private String classType = "Animal";
-
-
+	
+	/**
+	 * Boolean of whether the animal loops
+	 */
 	private boolean animLoop;
-
+	//Timer for death
 	private long deathTimer;
-	
+	//Entities list which the Animal is under
 	private EntityCollection entities;
-	
+	//GameScreen in which the Animal is located
 	private GameScreen gameScreen;
-
+	//String of type of Animal
 	private String animal;
 	
 	public Animal(Vector2 pos, float width, float height, boolean hunted,
@@ -55,7 +60,11 @@ public class Animal extends Entity {
 		super(pos, width, height);
 		setX(pos.x);
 		setY(pos.y);
-		currAnim = anim;
+		this.currAnim = anim;
+		this.gameScreen = game;
+		this.animal = animalType;
+		this.entities = gameScreen.getEntites();
+		//Determines whether it is a predator or a prey
 		if (animalType.equals("zebra")) {
 			hunt = Type.PREY;
 			moveSpeed = 4;
@@ -63,11 +72,9 @@ public class Animal extends Entity {
 			hunt = Type.PREDATOR;
 			moveSpeed = -2;
 		}
-		this.gameScreen = game;
-		this.animal = animalType;
-		entities = gameScreen.getEntites();
 	}
-
+	
+	
 	private enum State {
 		MOVING, DEAD, IDLE
 	}
@@ -77,13 +84,14 @@ public class Animal extends Entity {
 	}
 
 	public void update(float delta) {
-		if (moveSpeed != 0) {
-			// updates position of enemy
-			setX(getX() + moveSpeed);
-		}
-
+		
+		// updates x position of the animal
+		setX(getX() + moveSpeed);
+		
+		//updates y position of the animal
 		setY(getY() - Hunter.State.gravity);
 		
+		//Removes the entity after a certain period, determined by deathTimer and timeout.
 		if(this.state == State.DEAD){
 			if (deathTimer + Hunter.Config.PLAYER_BLINK_TIMEOUT <= System.currentTimeMillis()){
 				Iterator it = entities.iterator();
@@ -114,9 +122,14 @@ public class Animal extends Entity {
 		return hunt;
 	}
 
+	/**
+	 * Returns boolean of a dead state.
+	 * @return Boolean - Whether the animal is in a dead state
+	 */
 	public boolean isDead(){
 		return state == State.DEAD;
 	}
+	
 	public void dead(){
 		//draw a dead animal sprite
 		//play sound

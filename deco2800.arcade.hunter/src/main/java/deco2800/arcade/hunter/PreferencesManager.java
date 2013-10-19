@@ -11,7 +11,11 @@ public class PreferencesManager {
 
 	public PreferencesManager() {
 	}
-
+	
+	/**
+	 * Loads the preferences of the map
+	 * @return Preferences
+	 */
 	public Preferences getPreferences() {
 		return Gdx.app.getPreferences("hunter");
 	}

@@ -12,10 +12,9 @@ public class EntityHandler {
 	 * Creates Entities
 	 */
 	private EntityCollection entities;
-	
-	private HashMap<String,Animation> animalAnims;
-	private HashMap<String,Texture> itemTextures;
-	private HashMap<String,Texture> mapEntityTextures;
+	private HashMap<String,Animation> animalAnims; //Animation HashMap for animals
+	private HashMap<String,Texture> itemTextures; //Texture HashMap for items
+	private HashMap<String,Texture> mapEntityTextures; //Texture HashMap for MapEntities
 	
 	
 	public EntityHandler(EntityCollection entities){
@@ -28,6 +27,9 @@ public class EntityHandler {
 		loadMapEntities();
 	}
 	
+	/**
+	 * Loads all the animal animations into the game
+	 */
 	private void loadAnimals(){
 		String[] anims= {"hippo","lion","zebra"};
 		for (String x: anims){
@@ -50,6 +52,10 @@ public class EntityHandler {
 		
 	}
 	
+	
+	/**
+	 * Loads all the item textures 
+	 */
 	private void loadItems(){
 		String[] textures = {"DoublePoints", "ExtraLife", "Invulnerability", "Coin","Bow","Spear","Trident"};
 		for (String x:textures){
@@ -58,6 +64,9 @@ public class EntityHandler {
 		}
 	}
 	
+	/**
+	 * Loads all the map entity textures
+	 */
 	private void loadMapEntities(){
 		String[] textures = {"arrow", "spike trap"};
 		for (String x: textures){
@@ -66,14 +75,28 @@ public class EntityHandler {
 		}
 	}
 	
+	/**
+	 * Returns an animal animation
+	 * @param animal - The animal animation required
+	 * @return Animation of the animal
+	 */
 	public Animation getAnimalAnimation(String animal){
 		return animalAnims.get(animal);
 	}
-	
+	 /**
+	  * Returns an item texture
+	  * @param item - The item texture that is specified
+	  * @return Texture of the item
+	  */
 	public Texture getItemTexture(String item){
 		return itemTextures.get(item);
 	}
 	
+	/**
+	 * Returns a Map Entity texture
+	 * @param map - The  map entity texture required
+	 * @return Texture of the map entity
+	 */
 	public Texture getMapEntity(String map){
 		return mapEntityTextures.get(map);
 	}

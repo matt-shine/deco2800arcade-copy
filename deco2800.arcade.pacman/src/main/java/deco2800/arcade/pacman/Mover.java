@@ -82,7 +82,25 @@ public abstract class Mover {
 			}
 		}
 		return grid[x][y];
-		
+	}
+	/**
+	 * Returns the next tile in the direction Mover is facing.
+	 * @param tile, offset
+	 * @return Tile
+	 */
+	public Tile nextTile(Tile tile, int offset, Dir dir){
+		int x = gameMap.getTilePos(tile).getX();
+		int y = gameMap.getTilePos(tile).getY();
+		Tile[][] grid = gameMap.getGrid();
+
+		switch(dir) {
+		case LEFT: x -= offset; break;
+		case RIGHT: x += offset; break;
+		case UP: y += offset; break;
+		case DOWN: y -= offset; break;
+		case TEST: break;
+		}
+		return grid[x][y];
 	}
 	
 	/**

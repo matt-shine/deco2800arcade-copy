@@ -410,7 +410,7 @@ public class Player extends Entity {
 				}
 			}
 		} else if(e.getType().equals("MapEntity") && !((MapEntity) e).getEntityType().equals("arrow")){
-			if (!invulnerable && !blink){
+			if (!invulnerable && !blink && !dead){
 				if (Hunter.State.getPreferencesManager().isSoundEnabled()){
 					hurt.play(Hunter.State.getPreferencesManager().getVolume());
 				}

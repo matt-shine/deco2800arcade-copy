@@ -37,8 +37,8 @@ public class OptionScreen implements Screen {
 		
 		Table table = new Table(skin);
 		table.setFillParent(true);
-		table.padRight(600f);
-		table.padTop(200f);
+		table.padRight(450f);
+		table.padTop(300f);
 		stage.addActor(table);
 		
 		//set table defaults

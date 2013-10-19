@@ -12,13 +12,13 @@ public interface StoreScreen {
     /**
      * Disable background and create pop-up for transactions.
      */
-    public void popup();
+    void popup();
 
     /**
      * Get currently logged in player.
-     * @return Player currentPlayer
+     * @return Player
      */
-    public Player getPlayer();
+    Player getPlayer();
 
     /**
      * Set selected game, which will be the current focus of the store.
@@ -29,19 +29,33 @@ public interface StoreScreen {
      * PROFILE: N/A
      * @param String game
      */
-    public void setSelected(String game);
+    void setSelected(String game);
     
     /**
      * Get selected game, which is the current focus of the store.
      * @return Game
      */
-    public Game getSelected();
+    Game getSelected();
 
     /**
-     * Adds 'amount' tokens to players account, for the game 'game'.
-     * @return boolean success
+     * Adds 'amount' tokens to players account.
+     * @return boolean
      * @param int amount
+     */
+    boolean buyTokens(int amount);
+    
+    /**
+     * Buys 'game' on players account.
+     * @return boolean
      * @param Game game
      */
-    public boolean buyTokens(int amount, Game game);
+    boolean buyGame(Game game);
+    
+    /**
+     * Adds/removes 'game' to current players wishlist. Returns true upon
+     * adding, and false upon removing.
+     * @return boolean
+     * @param Game game
+     */
+    boolean addWishlist(Game game);
 }

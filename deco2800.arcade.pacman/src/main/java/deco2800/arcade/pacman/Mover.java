@@ -91,7 +91,7 @@ public abstract class Mover {
 	}
 
 	/**
-	 * Returns the next tile in the direction pacman is facing.
+	 * Returns the next tile in the direction Mover is facing.
 	 * @param tile
 	 * @return
 	 */
@@ -109,21 +109,7 @@ public abstract class Mover {
 		}
 		return grid[x][y];
 	}
-	
-	public Tile getTestTile(Tile current, Dir direction) {
-		int x = gameMap.getTilePos(current).getX();
-		int y = gameMap.getTilePos(current).getY();
-		Tile[][] grid = gameMap.getGrid();
-		switch(direction) {
-		case LEFT: x -= 1; break;
-		case RIGHT: x += 1; break;
-		case UP: y += 1; break;
-		case DOWN: y -= 1; break;
-		case TEST: break;
-		}
-		return grid[x][y];
-	}
-	
+
 	
 	/**
 	 * On movement, check if the Mover has 'eaten' a dot and update score accordingly.
@@ -132,16 +118,20 @@ public abstract class Mover {
 	 * @param tile
 	 */
 	public void checkTile(Tile tile){
+		if (this.getClass() != PacChar.class) return; // Only Pac man can use special tiles!
 		if (tile.getClass() == DotTile.class) {
 			if (!((DotTile) tile).isEaten()) {
-				((DotTile) tile).eaten();
+				((DotTile) tile).dotEaten();
 				if (((DotTile) tile).isEnergiser()) {
 					this.setScore(this.getScore() + 50);
 				} else {
 					this.setScore(this.getScore() + 10);
 				}
 			}
-		} 
+		} else if (tile.getClass() == TeleportTile.class){
+			this.drawX = 1;
+			this.drawY = 2;
+		}
 //		System.out.println("score: " + this.getScore());
 //		displayScore(this); // This is broken at the moment
 	}

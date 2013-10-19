@@ -2,6 +2,7 @@
 package deco2800.arcade.junglejump;
 
 import java.io.File;
+import com.badlogic.gdx.*;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -26,6 +27,7 @@ public class Platform {
 	}
 	private world currentWorld;
 	public char platType;
+	public String platformType = "";
 	
 	/**
 	 * Platform constructor
@@ -38,7 +40,6 @@ public class Platform {
 		this.yPos = pY;
 		this.active = false;
 		this.inverted = flipped;
-		currentWorld = world.WORLD_ONE; // Placeholder 
 		platType = type;
 		setTexture(type);
 	}
@@ -48,7 +49,7 @@ public class Platform {
 		this.width = 40;
 		this.height = 40;
 		
-		String platformType = "";
+		//String platformType = "";
 		switch(type) {
 		case '-': 
 			platformType = "branch";
@@ -101,7 +102,8 @@ public class Platform {
 			break;
 		}
 		
-		platText = new Texture("junglejumpassets/world1/" + platformType + ".png");
+		platText = new Texture(Gdx.files.internal("world" + (junglejump.world + 1) + 
+				"/" + platformType + ".png"));
 		
 	}
 	
@@ -125,6 +127,7 @@ public class Platform {
 			// World 3 texture
 			break;
 		} */
+		platText = new Texture("junglejumpassets/world" + (junglejump.world + 1) + "/" + platformType + ".png");
 		return this.platText;
 	}
 	

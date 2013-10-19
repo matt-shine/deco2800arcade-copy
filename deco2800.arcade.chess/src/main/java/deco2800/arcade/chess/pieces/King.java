@@ -4,45 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import deco2800.arcade.chess.Board;
-public class King implements Piece {
+import deco2800.arcade.chess.FixedSizeList;
+public class King extends Piece {
 
-	
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (active ? 1231 : 1237);
-		result = prime * result + (firstMove ? 1231 : 1237);
-		result = prime * result + preference;
-		result = prime * result + (team ? 1231 : 1237);
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		King other = (King) obj;
-		if (active != other.active)
-			return false;
-		if (firstMove != other.firstMove)
-			return false;
-		if (preference != other.preference)
-			return false;
-		if (team != other.team)
-			return false;
-		return true;
-	}
-
-	boolean team;
-	boolean firstMove;
-	boolean active;
-	int preference;
 	boolean isChecked;
 
 	/**
@@ -51,60 +15,12 @@ public class King implements Piece {
 	 * @param team
 	 */
 	public King(boolean team) {
-		this.team = team;
-		this.firstMove = false;
-		this.active = true;
+		super(team, 0);
+		isChecked = false;
 		this.preference = 6;
 	}
 
-	@Override
-	public void deActivate() {
-		active = false;
-
-	}
-
-	@Override
-	public void reActivate() {
-		active = true;
-
-	}
-
-	public String toString() {
-		String toString = "";
-
-		if (!team) {
-			toString += "white ";
-		} else {
-			toString += "black ";
-		}
-
-		toString += "King";
-
-		return toString;
-	}
-
-	@Override
-	public boolean getTeam() {
-		return this.team;
-	}
-
-	@Override
-	public boolean getFirstMove() {
-		return this.firstMove;
-	}
-
-	@Override
-	public boolean getActiveState() {
-		return this.active;
-	}
-
-	@Override
-	public int getPreference() {
-		return this.preference;
-	}
-
-	@Override
-	public List<int[]> possibleMoves(int[] currentPos) {
+	public List<int[]> possibleMoves(int[] currentPos, FixedSizeList<FixedSizeList<Piece>> board_state) {
 		List<int[]> moves = new ArrayList<int[]>();
 		int x = currentPos[0];// current row position
 		int y = currentPos[1];// current column position
@@ -160,7 +76,29 @@ public class King implements Piece {
 			moves.remove(g);
 			moves.remove(h);
 		}
-		return moves;
+		
+		List<int[]> allowableMoves = new ArrayList<int[]>();
+		
+		for (int i = 0; i < moves.size(); i++) {
+			// If the space is unoccupied add to list of allowable
+			if (!occupiedSpace(board_state, moves.get(i))) {
+				allowableMoves.add(moves.get(i));
+			} else {
+				// If the space is occupied check by which team
+				int occx = moves.get(i)[0];
+				int occy = moves.get(i)[1];
+				List<Piece> row = board_state.get(occx);
+				Piece onSquare = row.get(occy);
+				// If piece on the space is on opposing team add to
+				// allowable
+				if (getTeam() != onSquare.getTeam()) {
+					allowableMoves.add(moves.get(i));
+				}
+			}
+		}
+		
+		
+		return allowableMoves;
 	}
 
 	public boolean isChecked() {
@@ -185,18 +123,49 @@ public class King implements Piece {
 			}
 		}
 	}
+	
+	public String toString() {
+		String toString = "";
 
-	public ArrayList<int[]> getChecks(Board board) {
+		if (!team) {
+			toString += "white ";
+		} else {
+			toString += "black ";
+		}
 
-		@SuppressWarnings("unused")
-		ArrayList<int[]> possibleChecks = new ArrayList<int[]>();
-		return null;
+		toString += "King";
 
+		return toString;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (active ? 1231 : 1237);
+		result = prime * result + (firstMove ? 1231 : 1237);
+		result = prime * result + preference;
+		result = prime * result + (team ? 1231 : 1237);
+		return result;
 	}
 
 	@Override
-	public void hasMoved() {
-		// TODO Auto-generated method stub
-		
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		King other = (King) obj;
+		if (active != other.active)
+			return false;
+		if (firstMove != other.firstMove)
+			return false;
+		if (preference != other.preference)
+			return false;
+		if (team != other.team)
+			return false;
+		return true;
 	}
 }

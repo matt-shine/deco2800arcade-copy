@@ -15,10 +15,10 @@ public class AccoladeSystem {
 	//ServerCommunicator server = new ServerCommunicator();
 		
 	
-	private HashMap<String,Integer> nameIDPairs;
-	private HashMap<Integer,int[]> localAccolades; //progress for popupevent
-	private HashMap<Integer,WatchedAccolade> watchedVariables; //Prepared variables ready for scheduling
-	private HashMap<Integer, TimedPush> timerTasks; //timertasks recreated when the timer begins
+	private Map<String,Integer> nameIDPairs;
+	private Map<Integer,int[]> localAccolades; //progress for popupevent
+	private Map<Integer,WatchedAccolade> watchedVariables; //Prepared variables ready for scheduling
+	private Map<Integer, TimedPush> timerTasks; //timertasks recreated when the timer begins
 	private Timer timer;
 	private ResultSet serverData; 
 	private int playerID;
@@ -26,8 +26,8 @@ public class AccoladeSystem {
 	private boolean timerRunning = false; 
 	
 	//when progress%popup = 0 a popup is overlayed on screen
-	private final int PROGRESS = 0;
-	private final int POPUP=1;
+	private static final int PROGRESS = 0;
+	private static final int POPUP=1;
 	
 	
 	

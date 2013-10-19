@@ -71,7 +71,7 @@ public class junglejump extends GameClient implements InputProcessor {
 	public static int deaths = 0;
 
 	private enum GameState {
-		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS
+		AT_MENU, INPROGRESS, GAMEOVER, ACHIEVEMENTS, CONTINUE
 	}
 
 	int monkeyLength = 35;
@@ -425,6 +425,8 @@ public class junglejump extends GameClient implements InputProcessor {
 			break;
 		case GAMEOVER:
 			break;
+		case CONTINUE:
+			break;
 		case ACHIEVEMENTS:
 			Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -653,6 +655,9 @@ public class junglejump extends GameClient implements InputProcessor {
 			}
 			if (butY == ACHIEVEMENTS) {
 				gameState = GameState.ACHIEVEMENTS;
+			}
+			if (butY == CONTINUE) {
+				gameState = GameState.CONTINUE;
 			}
 		}
 		if (keycode == Keys.BACKSPACE) {

@@ -10,7 +10,7 @@ public class BoringEnemy extends Enemy {
 	
 	public BoringEnemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen,
 			PlayerShip player, long points, int difficulty) {
-		super(health, image, pos, dir, screen, player, points);
+		super(health, image, pos, dir, screen, player, points, difficulty);
 
 		homing = true;
 		if (difficulty < 3) {

@@ -29,6 +29,8 @@ public class Enemy extends Ship {
 
 	private long points;
 	
+	private int difficulty;
+	
 	private PlayScreen screen;
 	
 	private PowerUpGenerator powerGenerator;
@@ -37,7 +39,8 @@ public class Enemy extends Ship {
 	private static Texture secret = new Texture(Gdx.files.internal("images/ships/secret2.cim"));
 	private static Texture secret2 = new Texture(Gdx.files.internal("images/ships/secret3.cim"));
 	
-	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen, PlayerShip player, long points) {
+	public Enemy(int health, Texture image, Vector2 pos, Vector2 dir, PlayScreen screen,
+			PlayerShip player, long points, int difficulty) {
 		super(health, (screen.zalgo() == 0)? image: secret, pos);
 		// this is a lot of effort for one simple easter egg
 		if(this instanceof Boss && screen.zalgo() != 0) {
@@ -51,6 +54,7 @@ public class Enemy extends Ship {
 		this.position = pos;
 		this.currentDirVel = dir;
 		this.points = points;
+		this.difficulty = difficulty;
 		this.powerGenerator = new PowerUpGenerator(this.screen);
 		
 		dirAccel.set(0,0);
@@ -73,7 +77,7 @@ public class Enemy extends Ship {
 		if(getStage() != null) {
 			getStage().addActor(new Explosion(getX() + getWidth()/2,getY() + getHeight()/2, 1));
 			// Randomly drop powerups
-			if(Math.random() <= 0.05) {
+			if(Math.random() <= (0.05 - (0.01*(difficulty-1)))) {
 				powerGenerator.randomPowerUp(getCenterX(), getCenterY());
 			}
 		}

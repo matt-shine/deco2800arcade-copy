@@ -72,6 +72,10 @@ public class BettingLobby implements Screen {
 		Table titleTable = new Table();
 		titleTable.setFillParent(true);
 		stage.addActor(titleTable);
+		
+		final Table gamesTable = new Table();
+		gamesTable.setFillParent(true);
+		stage.addActor(gamesTable);
 
 		Label gameLabel = new Label("Games to bet on:", skin);
 		Label betLabel = new Label("Bets made:", skin);
@@ -109,18 +113,17 @@ public class BettingLobby implements Screen {
 				if (matches.size() > 0) {
 					for (int i = 0; i < matches.size(); i++) {
 						Label matchLabel = new Label("GameId: "
-								+ matches.get(i).gameId, skin2);
+								+ matches.get(i).gameId, skin);
 						Label player = new Label("Player: "
-								+ matches.get(i).hostPlayerId, skin2);
+								+ matches.get(i).hostPlayerId, skin);
 						final TextButton button5 = new TextButton("Join", skin);
 						final int matchId = matches.get(i).matchId;
 
-						table2.center().left();
-						table2.add(matchLabel).width(130).padTop(5)
-								.padLeft(150);
-						table2.add(player).width(130).padTop(5).padLeft(130);
-						table2.add(button5).width(130).height(20).padTop(5);
-						table2.row();
+						gamesTable.center().left();
+						gamesTable.add(matchLabel).width(130).padTop(5).padLeft(150);
+						gamesTable.add(player).width(130).padTop(5).padLeft(130);
+						gamesTable.add(button5).width(130).height(20).padTop(5);
+						gamesTable.row();
 
 						button5.addListener(new JoinGameListener(matchId, lobby));
 					}

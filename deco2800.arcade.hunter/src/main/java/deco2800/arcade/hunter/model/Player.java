@@ -177,49 +177,44 @@ public class Player extends Entity {
     public void update(float delta) {
         // Everything depends on everything else here, may have to rearrange, or
         // even double up on checks
+        if (state != State.DEAD) {
+            setX(getX() + delta * Hunter.State.playerVelocity.x);
+            setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
+            setY(getY() + getJumpVelocity());
 
-        setX(getX() + delta * Hunter.State.playerVelocity.x);
-        setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
-        setY(getY() + getJumpVelocity());
+            if (collider.top && Hunter.State.playerVelocity.y > 0) {
+                setJumpVelocity(0);
+            }
 
-        if (collider.top && Hunter.State.playerVelocity.y > 0) {
-            setJumpVelocity(0);
+            if (collider.bottom && Hunter.State.playerVelocity.y < 0) {
+                setJumpVelocity(0);
+                setY(gamescreen.getForeground().getColumnTop(getX()));
+            }
+
+            if (collider.right) {
+                Hunter.State.playerVelocity.x = 0;
+            } else if (Hunter.State.playerVelocity.x < Hunter.State.gameSpeed) {
+                Hunter.State.playerVelocity.x += 100 * delta;
+            }
+
+            // Update the player state
+            // Pretending the DEAD state doesn't exist for now... TODO
+            if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
+                Hunter.State.playerVelocity.y = 0;
+                this.state = State.RUNNING;
+                currAnim = runAnimation();
+            } else if (Hunter.State.playerVelocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
+                this.state = State.JUMPING;
+                currAnim = jumpAnimation();
+            } else if (Hunter.State.playerVelocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
+                this.state = State.FALLING;
+                currAnim = fallAnimation();
+            }
+
+            score += 100 * delta * multiplier;
         }
-
-        if (collider.bottom && Hunter.State.playerVelocity.y < 0) {
-            setJumpVelocity(0);
-            setY(gamescreen.getForeground().getColumnTop(getX()));
-        }
-
-        if (collider.right) {
-            Hunter.State.playerVelocity.x = 0;
-        } else if (Hunter.State.playerVelocity.x < Hunter.State.gameSpeed) {
-            Hunter.State.playerVelocity.x += 100 * delta;
-        }
-
-        setX(getX() + delta * Hunter.State.playerVelocity.x);
-
-        setJumpVelocity(getJumpVelocity() - delta * Hunter.State.gravity);
-        setY(getY() + getJumpVelocity());
-
         checkDist();
         checkTimers();
-
-        // Update the player state
-        // Pretending the DEAD state doesn't exist for now... TODO
-        if (isGrounded() && this.state != State.ATTACK && this.state != State.DAMAGED && this.state != State.DEAD) {
-            Hunter.State.playerVelocity.y = 0;
-            this.state = State.RUNNING;
-            currAnim = runAnimation();
-        } else if (Hunter.State.playerVelocity.y > 0 && this.state != State.ATTACK && this.state != State.DEAD) {
-            this.state = State.JUMPING;
-            currAnim = jumpAnimation();
-        } else if (Hunter.State.playerVelocity.y < -1 && this.state != State.ATTACK && this.state != State.DEAD) {
-            this.state = State.FALLING;
-            currAnim = fallAnimation();
-        }
-
-        score += 100 * delta * multiplier;
     }
 
     /**

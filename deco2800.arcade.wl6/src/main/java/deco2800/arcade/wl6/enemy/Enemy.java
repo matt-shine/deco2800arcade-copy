@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 
 import deco2800.arcade.wl6.GameModel;
 import deco2800.arcade.wl6.Mob;
+import deco2800.arcade.wl6.Player;
+import deco2800.arcade.wl6.Projectile;
 import deco2800.arcade.wl6.WL6Meta;
 
 import java.util.ArrayList;
@@ -79,13 +81,13 @@ public class Enemy extends Mob {
         
         stateTime += gameModel.delta();
         if (stateTime > 1 && nextState != null) {
-            this.addInstantStateChange(nextState);
+            this.instantStateChange(nextState);
             nextState = null;
         }
         
         
         if (canSee(gameModel.getPlayer(), gameModel)){
-        	addDelayedStateChange(STATES.ATTACK);
+        	delayedStateChange(STATES.ATTACK);
         }
         
         
@@ -96,13 +98,13 @@ public class Enemy extends Mob {
 
         
         if (state == STATES.ATTACK) {
-            doDamage(gameModel);
-            addInstantStateChange(STATES.CHASE);
-            addDelayedStateChange(STATES.ATTACK);
+        	shootAtPlayer(gameModel);
+            instantStateChange(STATES.CHASE);
+            delayedStateChange(STATES.ATTACK);
         }
 
         if (this.getHealth() <= 0) {
-        	addInstantStateChange(STATES.DIE);
+        	instantStateChange(STATES.DIE);
         	this.setTextureName("grave");
         	this.setVel(new Vector2(0, 0));
         }
@@ -128,19 +130,30 @@ public class Enemy extends Mob {
      * Tells the enemy to change states
      * @param state state to change the enemy to
      */
-    public void addDelayedStateChange(STATES state) {
+    public void delayedStateChange(STATES state) {
     	if (nextState != state) {
-	        this.state = state;
+	        nextState = state;
 	        stateTime = 0;
     	}
     }
     
     
-    public void addInstantStateChange(STATES state) {
+    public void instantStateChange(STATES state) {
         this.state = state;
+        nextState = null;
         stateTime = 0;
     }
 
+    
+    public void shootAtPlayer(GameModel g) {
+    	Player p = g.getPlayer();
+    	Projectile bullet = new Projectile(0, 10, true, "worm");
+    	g.addDoodad(bullet);
+    	bullet.setPos(this.getPos());
+    	bullet.setVel(p.getPos().sub(bullet.getPos()).nor().mul(0.5f));
+    }
+    
+    
     // follow patrol path
     public void path() {
     	
@@ -171,8 +184,8 @@ public class Enemy extends Mob {
             d = d * 2;
         }
         if (feelsPain()) {
-        	addInstantStateChange(STATES.PAIN);
-        	addDelayedStateChange(STATES.CHASE);
+        	instantStateChange(STATES.PAIN);
+        	delayedStateChange(STATES.CHASE);
         	setHealth(getHealth() - d);
         }
         else {

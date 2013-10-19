@@ -42,12 +42,12 @@ public class GameModel {
     // Delta time
     private float delta = 0;
 
-    // Doodads to delete
+    // Doodads to delete or add
     private ArrayList<Doodad> toDelete = new ArrayList<Doodad>();
+    private ArrayList<Doodad> toAdd = new ArrayList<Doodad>();
 
 	private int difficulty = 1;
 
-	private boolean suspendInit = false;
 	
 
     public GameModel() {
@@ -74,13 +74,9 @@ public class GameModel {
         waypoints = new WL6Meta.DIRS[64][64];
         collisionGrid = new CollisionGrid();
         
-        suspendInit = true;
         MapProcessor.processEverything(this);
-        suspendInit = false;
         
-        for (Doodad d : doodads) {
-        	d.init(this);
-        }
+        endTick();
         
         player = new Player(MapProcessor.doodadID());
         player.setPos(spawn);
@@ -89,6 +85,7 @@ public class GameModel {
     }
 
 
+    
 
     /**
      * The level name
@@ -153,10 +150,7 @@ public class GameModel {
      * @param doodad
      */
     public void addDoodad(Doodad doodad) {
-        doodads.add(doodad);
-        if (!suspendInit) {
-        	doodad.init(this);
-        }
+        toAdd.add(doodad);
     }
 
 
@@ -222,10 +216,19 @@ public class GameModel {
      * Call this after finishing ticking.
      */
     public void endTick() {
-        for (Doodad d : toDelete) {
+    	
+    	for (Doodad d : toDelete) {
             doodads.remove(d);
         }
         toDelete.clear();
+        
+        
+        for (Doodad d : toAdd) {
+            doodads.add(d);
+            d.init(this);
+        }
+        toAdd.clear();
+        
     }
 
     /**

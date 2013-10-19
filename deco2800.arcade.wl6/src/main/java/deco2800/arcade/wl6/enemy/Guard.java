@@ -16,11 +16,11 @@ public class Guard extends Enemy {
         this.setAngle(WL6Meta.dirToAngle(d.direction));
         if (!d.pathing) {
             setPathing(false);
-            addInstantStateChange(STATES.STAND);
+            instantStateChange(STATES.STAND);
         }
         else {
             setPathing(true);
-            addInstantStateChange(STATES.PATH);
+            instantStateChange(STATES.PATH);
         }
         setPathSpeed(512);
         setChaseSpeed(1536);

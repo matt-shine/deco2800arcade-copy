@@ -13,7 +13,7 @@ public class Dog extends Enemy {
         setHealth(STARTING_HEALTH);
         setFaceDir(d.direction);
         setPathing(true);
-        addInstantStateChange(STATES.PATH);
+        instantStateChange(STATES.PATH);
         setPathSpeed(1500);
         setChaseSpeed(1536);
         setPain(false);

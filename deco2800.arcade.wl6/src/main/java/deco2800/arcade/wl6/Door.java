@@ -29,9 +29,9 @@ public class Door extends Doodad {
         while (itr.hasNext()) {
 			Doodad d = itr.next();
 			if (d instanceof Mob) {
-				if (((Mob) d).getPos().dst(this.getPos()) < 1.5f) {
-					shouldOpenEnemy = (d instanceof Enemy);
-					shouldOpenPlayer = (d instanceof Player);
+				if (d.getPos().dst(this.getPos()) < 1.5f) {
+					shouldOpenEnemy = shouldOpenEnemy || (d instanceof Enemy);
+					shouldOpenPlayer = shouldOpenPlayer || (d instanceof Player);
 				}
 			}
 		}

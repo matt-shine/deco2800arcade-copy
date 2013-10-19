@@ -48,7 +48,7 @@ public class Mob extends Doodad {
      * @param vec
      * @return
      */
-    private boolean move(GameModel model, Vector2 vec) {
+    public boolean move(GameModel model, Vector2 vec) {
 
         Vector2 targetPos = this.getPos().add(vec);
         int x1 = (int) Math.floor(targetPos.x - BB_SIZE / 2);
